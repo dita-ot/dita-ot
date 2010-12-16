@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!--
+ | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ *-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:group name="javaClass">
+    <xs:sequence>
+      <xs:element ref="javaClass"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaClassDetail">
+    <xs:sequence>
+      <xs:element ref="javaClassDetail"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaClassDef">
+    <xs:sequence>
+      <xs:element ref="javaClassDef"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaFinalClass">
+    <xs:sequence>
+      <xs:element ref="javaFinalClass"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaAbstractClass">
+    <xs:sequence>
+      <xs:element ref="javaAbstractClass"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaStaticClass">
+    <xs:sequence>
+      <xs:element ref="javaStaticClass"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaClassAccess">
+    <xs:sequence>
+      <xs:element ref="javaClassAccess"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaBaseClass">
+    <xs:sequence>
+      <xs:element ref="javaBaseClass"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaImplementedInterface">
+    <xs:sequence>
+      <xs:element ref="javaImplementedInterface"/>
+    </xs:sequence>
+  </xs:group>
+
+</xs:schema>

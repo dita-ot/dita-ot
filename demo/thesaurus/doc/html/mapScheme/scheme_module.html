@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<meta name="copyright" content="(C) Copyright 2005" />
+<meta name="DC.rights.owner" content="(C) Copyright 2005" />
+<meta content="public" name="security" />
+<meta content="index,follow" name="Robots" />
+<meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' />
+<meta content="reference" name="DC.Type" />
+<meta name="DC.Title" content="Scheme map" />
+<meta name="abstract" content="You define the relationships between subjects including both hierarchies and associations in the scheme map." />
+<meta name="description" content="You define the relationships between subjects including both hierarchies and associations in the scheme map." />
+<meta scheme="URI" name="DC.Relation" content="../mapScheme/hasInstance.html" />
+<meta scheme="URI" name="DC.Relation" content="../mapScheme/hasKind.html" />
+<meta scheme="URI" name="DC.Relation" content="../mapScheme/hasNarrower.html" />
+<meta scheme="URI" name="DC.Relation" content="../mapScheme/hasPart.html" />
+<meta scheme="URI" name="DC.Relation" content="../mapScheme/relatedSubjects.html" />
+<meta scheme="URI" name="DC.Relation" content="../mapScheme/schemeref.html" />
+<meta scheme="URI" name="DC.Relation" content="../mapScheme/subjAltLabel.html" />
+<meta scheme="URI" name="DC.Relation" content="../mapScheme/subjAltSymbol.html" />
+<meta scheme="URI" name="DC.Relation" content="../mapScheme/subjectdef.html" />
+<meta scheme="URI" name="DC.Relation" content="../mapScheme/subjectHead.html" />
+<meta scheme="URI" name="DC.Relation" content="../mapScheme/subjectmeta.html" />
+<meta scheme="URI" name="DC.Relation" content="../mapScheme/subjectRel.html" />
+<meta scheme="URI" name="DC.Relation" content="../mapScheme/subjectRelHeader.html" />
+<meta scheme="URI" name="DC.Relation" content="../mapScheme/subjectRelTable.html" />
+<meta scheme="URI" name="DC.Relation" content="../mapScheme/subjectRole.html" />
+<meta scheme="URI" name="DC.Relation" content="../mapScheme/subjectScheme.html" />
+<meta scheme="URI" name="DC.Relation" content="../mapScheme/subjHiddenLabel.html" />
+<meta scheme="URI" name="DC.Relation" content="../mapScheme/subjPrefLabel.html" />
+<meta scheme="URI" name="DC.Relation" content="../mapScheme/subjPrefSymbol.html" />
+<meta content="XHTML" name="DC.Format" />
+<meta content="scheme_module" name="DC.Identifier" />
+<meta content="en-us" name="DC.Language" />
+<link href="C:\Work\dita\dost0.1\DITA-OT1.1.1\demo\thesaurus\out\doc\commonltr.css" type="text/css" rel="stylesheet" />
+<title>Scheme map</title>
+</head>
+<body id="scheme_module"><a name="scheme_module"><!-- --></a>
+
+
+<h1 class="topictitle1">Scheme map</h1>
+
+
+<div><p>You define the relationships between subjects including both hierarchies
+and associations in the scheme map.</p>
+
+<div class="section"><h4 class="sectiontitle">Description</h4><p>You define a taxonomy by organizing
+the subjects in a hierarchy, referring to subject topics with the <a href="subjectdef.html">subjectdef</a> element. </p>
+<p>The scheme map also
+expresses associations between subjects such as use of one subject by another
+subject. To express associations, you use the <a href="relatedSubjects.html">relatedSubjects</a> or <a href="subjectRelTable.html">subjectRelTable</a> table.</p>
+</div>
+
+<div class="example"><h4 class="sectiontitle">Example</h4><p>The following example shows a scheme that
+identifies the Installing and Configuring subjects as special kinds of user
+action subjects. The example also identifies Security and Utilization as special
+kinds of user concerns. </p>
+<pre>&lt;subjectScheme title="Sample taxonomy" id="taxonomyScheme"&gt;
+    &lt;subjectdef href="action.xml" navtitle="Action"&gt;
+        &lt;subjectdef href="installing.xml" navtitle="Installing"/&gt;
+        &lt;subjectdef href="configuring.xml" navtitle="Configuring"/&gt;
+        ...
+    &lt;subjectdef href="concern.xml" navtitle="Concern"&gt;
+        &lt;subjectdef href="security.xml" navtitle="Security"/&gt;
+        &lt;subjectdef href="utilization.xml" navtitle="Resource utilization"/&gt;
+        ...</pre>
+</div>
+
+</div>
+
+<div>
+<ul class="ullinks">
+<li class="ulchildlink"><strong><a href="../mapScheme/hasInstance.html">hasInstance</a></strong><br />
+Specifies that the contained hierarchy expresses INSTANCE-OF relationships between subjects.</li>
+<li class="ulchildlink"><strong><a href="../mapScheme/hasKind.html">hasKind</a></strong><br />
+Specifies that the contained hierarchy expresses KIND-OF relationships between subjects.</li>
+<li class="ulchildlink"><strong><a href="../mapScheme/hasNarrower.html">hasNarrower</a></strong><br />
+Specifies that the contained hierarchy indicates a general-purpose, NARROWER-THAN relationship between subjects.</li>
+<li class="ulchildlink"><strong><a href="../mapScheme/hasPart.html">hasPart</a></strong><br />
+Specifies that the contained hierarchy expresses PART-OF relationships between subjects.</li>
+<li class="ulchildlink"><strong><a href="../mapScheme/relatedSubjects.html">relatedSubjects</a></strong><br />
+Specifies an associative relationship for the contained subjects.</li>
+<li class="ulchildlink"><strong><a href="../mapScheme/schemeref.html">schemeref</a></strong><br />
+Refers to a related scheme.</li>
+<li class="ulchildlink"><strong><a href="../mapScheme/subjAltLabel.html">subjAltLabel</a></strong><br />
+A synonym for the subject within the scheme.</li>
+<li class="ulchildlink"><strong><a href="../mapScheme/subjAltSymbol.html">subjAltSymbol</a></strong><br />
+An alternative symbol used to represent the subject within the scheme.</li>
+<li class="ulchildlink"><strong><a href="../mapScheme/subjectdef.html">subjectdef</a></strong><br />
+Within a scheme, refers to a topic that defines a formal subject.</li>
+<li class="ulchildlink"><strong><a href="../mapScheme/subjectHead.html">subjectHead</a></strong><br />
+Specifies a collection of subjects and assigns a title to the collection.</li>
+<li class="ulchildlink"><strong><a href="../mapScheme/subjectmeta.html">subjectmeta</a></strong><br />
+Overrides or extends the standard labels or symbols for a subject.</li>
+<li class="ulchildlink"><strong><a href="../mapScheme/subjectRel.html">subjectRel</a></strong><br />
+Defines an association between subjects where the members of the association play different roles.</li>
+<li class="ulchildlink"><strong><a href="../mapScheme/subjectRelHeader.html">subjectRelHeader</a></strong><br />
+Specifies the roles played by subjects in associations.</li>
+<li class="ulchildlink"><strong><a href="../mapScheme/subjectRelTable.html">subjectRelTable</a></strong><br />
+Specifies structured associations between subjects.</li>
+<li class="ulchildlink"><strong><a href="../mapScheme/subjectRole.html">subjectRole</a></strong><br />
+Specifies a role for the contained subjects.</li>
+<li class="ulchildlink"><strong><a href="../mapScheme/subjectScheme.html">subjectScheme</a></strong><br />
+Organizes subjects into a taxonomy for processing or display.</li>
+<li class="ulchildlink"><strong><a href="../mapScheme/subjHiddenLabel.html">subjHiddenLabel</a></strong><br />
+An name that can be applied to the subject within the scheme but shouldn't be presented to the user.</li>
+<li class="ulchildlink"><strong><a href="../mapScheme/subjPrefLabel.html">subjPrefLabel</a></strong><br />
+A preferred label for the subject within the scheme.</li>
+<li class="ulchildlink"><strong><a href="../mapScheme/subjPrefSymbol.html">subjPrefSymbol</a></strong><br />
+A preferred icon for representing the subject within the scheme.</li>
+</ul>
+</div>
+</body>
+</html>

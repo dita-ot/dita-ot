@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\..\dtd\reference.dtd">
+<reference id="subjectScheme" outputclass="element" xml:lang="en-us">
+<title>subjectScheme</title>
+<shortdesc>Organizes subjects into a taxonomy for processing or display.</shortdesc>
+<refbody>
+<section><title>Description</title><p>Like other DITA maps, the scheme organizes
+references to topics. In the case of the scheme, however, the references refer
+to topics that have been defined as formal subjects. The scheme can express
+hierarchical relationships between these subjects or associative relationships.
+See also <xref format="html" href="http://www.w3.org/TR/swbp-skos-core-guide/#secscheme">http://www.w3.org/TR/swbp-skos-core-guide/#secscheme</xref
+>/<?Pub Caret?></p></section>
+<section conref="../packagedef.xml#subjectScheme-reference/subjectScheme-containedBy-section"></section>
+<section conref="../packagedef.xml#subjectScheme-reference/subjectScheme-contains-section"></section>
+<section conref="../packagedef.xml#subjectScheme-reference/subjectScheme-contentModel-section"></section>
+<section conref="../packagedef.xml#subjectScheme-reference/subjectScheme-attList-section"></section>
+<section conref="../packagedef.xml#subjectScheme-reference/subjectScheme-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001424?>

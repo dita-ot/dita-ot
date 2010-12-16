@@ -1,0 +1,130 @@
+/*
+ | (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
+*/
+
+elementref {
+  display: block;
+  margin-top: 6pt;
+  margin-bottom: 9pt;
+  font-family: sans-serif;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+elementname {
+  display: block;
+  margin-top: 16pt;
+  margin-bottom: 9pt;
+  font-size: 20pt;
+  font-weight: bold;
+  color: #000000;
+}
+
+elementdesc {
+  display: block;
+  margin-left: 12pt;
+}
+
+/* general setup for section-like divisions and exhibits */
+purpose, containedby, contains, attributes, examples, syntax {
+  margin-bottom: 12pt;
+  display: block;
+}
+
+purpose:before {
+  display: block;
+  font-weight: bold;
+  content: "Purpose: ";
+}
+
+containedby:before {
+  display: block;
+  font-weight: bold;
+  content: "Contained by: ";
+}
+
+contains:before {
+  display: block;
+  font-weight: bold;
+  content: "Contains: ";
+}
+
+examples:before {
+  display: block;
+  font-weight: bold;
+  content: "Examples: ";
+}
+
+syntax:before {
+  display: block;
+  font-weight: bold;
+  content: "Syntax: ";
+}
+
+attributes:before {
+  display: block;
+  font-weight: bold;
+  content: "Attributes: Name - Description - Data type - Default value - Required?(y/n)";
+}
+
+attlist {
+  display: table;
+}
+
+attribute {
+  display: table-row;
+}
+
+attname {
+  display: table-cell;
+    border: thin inset gray; 
+}
+
+attdesc {
+  display: table-cell;
+    border: thin inset gray; 
+}
+
+attdefvalue {
+  display: table-cell;
+    border: thin inset gray; 
+}
+
+attrequired {
+  display: table-cell;
+    border: thin inset gray; 
+}
+
+atttype {
+  display: table-cell;
+    border: thin inset gray; 
+}
+
+boolean[state="yes"]:before {
+  display: inline;
+  font-weight: bold;
+  content: "Yes";
+}
+
+boolean[state="no"]:before {
+  display: inline;
+  content: "No";
+}
+
+boolean[state="NA"]:before {
+  display: inline;
+  content: "Not Applicable";
+}
+
+state:before {
+  color: red;
+  content: attr(value);
+}
+
+comment {
+  font-style: italic;
+}
+
+xref[href] {
+/*  link: target(href);*/
+}

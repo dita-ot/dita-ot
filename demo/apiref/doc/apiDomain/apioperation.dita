@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="apioperation" outputclass="element" xml:lang="en-us">
+<title>apioperation</title>
+<shortdesc>The &lt;apioperation> element is a reference to an operation. </shortdesc>
+<refbody>
+<section><title>Description</title><p>This element can be used to reference
+an operation from another DITA topic type.</p> <?Pub Caret1?></section>
+<example><title>Example</title><codeblock>&lt;task id="httpxml">
+  &lt;title>Getting an XML file through an HTTP connection&lt;/title>
+  &lt;taskbody>
+    &lt;steps>
+    &lt;step>&lt;cm>Open the connection&lt;/cm>
+      &lt;info>You use &lt;apioperation keyref="com.ibm.xtools.patterns.framework.uml2.PlugletException.notify">Notify method&lt;/apioperation> 
+      in a VB6 application.&lt;/info>
+    &lt;/step>
+    ...
+    &lt;/steps>
+  &lt;/taskbody>
+&lt;/task></codeblock></example>
+<section conref="../packagedef.dita#apioperation-reference/apioperation-containedBy-section"></section>
+<section conref="../packagedef.dita#apioperation-reference/apioperation-contains-section"></section>
+<section conref="../packagedef.dita#apioperation-reference/apioperation-contentModel-section"></section>
+<section conref="../packagedef.dita#apioperation-reference/apioperation-attList-section"></section>
+<section conref="../packagedef.dita#apioperation-reference/apioperation-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001550?>

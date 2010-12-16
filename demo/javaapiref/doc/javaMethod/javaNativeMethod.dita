@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaNativeMethod" outputclass="element" xml:lang="en-us">
+<title>javaNativeMethod</title>
+<shortdesc>The &lt;javaNativeMethod> element flags that the method as implemented
+in code is native for the platform.</shortdesc>
+<refbody>
+<section><title>Description</title><p>Possible alternative definitions of
+the method declaration are the javaFinalMethod, javaNativeMethod, and  javaSyncronizedMethod
+elements. The &lt;javaNativeMethod> element must not be used with the &lt;javaAbstractMethod>
+element. This element has the following predefined attributes: <i>name ="native"</i> and <i>value
+="native"</i>.<?Pub Caret1?> </p></section>
+<example> <title>Example</title>Click on the following link to open the Java
+API topic type example in  <object classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11"
+codebase="hhctrl.ocx#Version=4,73,8412,0" codetype="VIEWASTEXT" height="100"
+id="hhctrl" type="application/x-oleobject" width="300">
+<param name="Command" value="ShortCut"/>
+<param name="Text" value="Text: DITA "/>
+<param name="Item1" value=",../samples/java/PlugletException.dita,"/></object><codeblock>&lt;javaMethod id="com.ibm.xtools.pluglets.engine.OutputStream">
+   &lt;apiName>getInstance&lt;/apiName>
+   &lt;shortdesc>Native is a singleton class.&lt;/shortdesc>
+   &lt;javaMethodDetail>
+      &lt;javaMethodDef>
+        &lt;javaStaticMethod/>
+        &lt;javaNativeMethod/>
+        &lt;javaMethodAccess value="public"/>
+        &lt;javaReturn>
+          &lt;javaMethodClass href=".../api/java/platform/Native.html" format="html" 
+            scope="local">Native&lt;/javaMethodClass>
+        &lt;/javaReturn>
+     &lt;/javaMethodDef>
+     &lt;apiDesc>Use this method to create a Native object.&lt;/apiDesc>
+   &lt;/javaMethodDetail>
+&lt;/javaMethod></codeblock></example>
+<section><title>Processing Expectations</title><image href="images/javaNativeMethod.jpg"
+placement="inline"><alt></alt></image></section>
+<section conref="../packagedef.dita#javaNativeMethod-reference/javaNativeMethod-containedBy-section"></section>
+<section conref="../packagedef.dita#javaNativeMethod-reference/javaNativeMethod-contains-section"></section>
+<section conref="../packagedef.dita#javaNativeMethod-reference/javaNativeMethod-contentModel-section"></section>
+<section conref="../packagedef.dita#javaNativeMethod-reference/javaNativeMethod-attList-section"></section>
+<section conref="../packagedef.dita#javaNativeMethod-reference/javaNativeMethod-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000002694?>

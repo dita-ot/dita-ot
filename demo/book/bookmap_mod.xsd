@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+	<!-- ======= IMPORT - XML attributes and namespace ======= -->
+    <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../../schema/xml.xsd"/>
+    <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="../../schema/ditaarch.xsd"/>
+  
+   <xs:element name="bookmap" type="bookmap.class" />
+   <xs:element name="bkbasicinfo" type="bkbasicinfo.class" />
+   <xs:element name="bkinfo" type="bkinfo.class" />
+   <xs:element name="booktitle" type="booktitle.class" />
+   <xs:element name="booksubtitle" type="booksubtitle.class" />
+   <xs:element name="bookabstract" type="bookabstract.class" />
+
+   <xs:element name="draftintro" type="draftintro.class"  />
+   <xs:element name="abstract" type="abstract.class"  />
+   <xs:element name="dedication" type="dedication.class"  />
+   <xs:element name="preface" type="preface.class"  />
+   <xs:element name="chapter" type="chapter.class"  />
+   <xs:element name="appendix" type="appendix.class"  />
+   <xs:element name="notices" type="notices.class"  />
+   <xs:element name="amendments" type="amendments.class" />
+   <xs:element name="part" type="part.class"  />
+   <xs:element name="colophon" type="colophon.class" />
+   
+   <xs:element name="divinfo" type="divinfo.class" />
+   <xs:element name="divtitle" type="divtitle.class" />
+   
+   <xs:complexType name="bookmap.class">
+     		<xs:sequence>
+     		  <xs:choice minOccurs="0">
+     		  	<xs:group ref="bkbasicinfo" />
+     		  	<xs:group ref="bkinfo"  />
+			  </xs:choice>
+			  <xs:group ref="draftintro"  minOccurs="0" />
+			  <xs:group ref="abstract"   minOccurs="0"/>
+			  <xs:group ref="dedication"   minOccurs="0"/>
+			  <xs:group ref="preface"   minOccurs="0"/>
+		    <xs:group ref="chapter"  minOccurs="0" maxOccurs="unbounded"/>
+		      <xs:choice>
+		      	<xs:sequence>
+		      		<xs:group ref="appendix"   minOccurs="0" maxOccurs="unbounded"/>
+		      		<xs:group ref="notices"   minOccurs="0"/>
+		      		<xs:group ref="amendments"   minOccurs="0"/>
+		      	</xs:sequence>
+		      	<xs:group ref="part"   minOccurs="0" maxOccurs="unbounded"/>
+		      </xs:choice>
+		      <xs:group ref="colophon"  minOccurs="0" />
+		    </xs:sequence>
+		    <xs:attribute name="title" type="xs:string" />
+		    <xs:attribute name="id" type="xs:ID" />
+		    <xs:attribute ref="xml:lang"/>
+		     <xs:attribute ref="ditaarch:DITAArchVersion"/>
+		    <xs:attributeGroup ref="global-atts" />    
+		    <xs:attribute ref="class" default="- map/map bookmap/bookmap " />
+   </xs:complexType>
+
+	<xs:complexType name="bkbasicinfo.class">
+     		<xs:sequence>
+		      <xs:group ref="booktitle"  minOccurs="0"/>
+		      <xs:group ref="booksubtitle"  minOccurs="0"/>
+		      <xs:group ref="bookabstract"  minOccurs="0"/>
+		      <xs:group ref="author" minOccurs="0" maxOccurs="unbounded"/>
+		      <xs:group ref="publisher" minOccurs="0"/>
+		      <xs:group ref="copyright" minOccurs="0" maxOccurs="unbounded"/>
+		      <xs:group ref="critdates" minOccurs="0"/>
+		      <xs:group ref="permissions" minOccurs="0"/>
+		      <xs:group ref="audience" minOccurs="0" maxOccurs="unbounded"/>
+		      <xs:group ref="category" minOccurs="0" maxOccurs="unbounded"/>
+		      <xs:group ref="keywords" minOccurs="0" maxOccurs="unbounded"/>
+		      <xs:group ref="prodinfo" minOccurs="0" maxOccurs="unbounded"/>
+		      <xs:group ref="othermeta" minOccurs="0" maxOccurs="unbounded"/>
+		    </xs:sequence>
+		    <xs:attributeGroup ref="global-atts" />
+		    <xs:attribute ref="class" default="- map/topicmeta bookmap/bkbasicinfo " />
+   </xs:complexType>
+   
+   <xs:complexType name="bkinfo.class">
+		    <xs:attribute name="id" type="xs:ID"/>
+		    <xs:attribute name="href" type="xs:string"/>
+		    <xs:attribute name="conref" type="xs:string"/>
+		    <xs:attributeGroup ref="global-atts" />
+		    <xs:attribute ref="class" default="- map/topicref bookmap/bkinfo " />
+   </xs:complexType>
+
+	<xs:complexType name="booktitle.class">
+     <xs:simpleContent>
+      <xs:extension base="xs:string">
+		    <xs:attributeGroup ref="global-atts" />
+		    <xs:attribute ref="class" default="- map/linktext bookmap/booktitle " />
+     	</xs:extension>
+     </xs:simpleContent>
+   </xs:complexType>
+   
+   <xs:complexType name="booksubtitle.class">
+     <xs:simpleContent>
+      <xs:extension base="xs:string">
+		    <xs:attributeGroup ref="global-atts" />
+		    <xs:attribute ref="class" default="- map/searchtitle bookmap/booksubtitle" />
+     	</xs:extension>
+     </xs:simpleContent>
+   </xs:complexType>
+   
+   <xs:complexType name="bookabstract.class">
+     <xs:simpleContent>
+      <xs:extension base="xs:string">
+		    <xs:attributeGroup ref="global-atts" />
+		    <xs:attribute ref="class" default="- map/shortdesc bookmap/bookabstract " />
+     	</xs:extension>
+     </xs:simpleContent>
+   </xs:complexType>
+   
+   <xs:complexType name="draftintro.class">
+     		<xs:sequence>
+		      <xs:group ref="divinfo"  minOccurs="0" />
+	        <xs:group ref="topicref" maxOccurs="unbounded"/>
+		    </xs:sequence>
+		    <xs:attribute name="navtitle" type="xs:string" />
+		    <xs:attribute name="id" type="xs:ID"/>
+		    <xs:attribute name="href" type="xs:string"/>
+		    <xs:attribute name="conref" type="xs:string"/>
+		    <xs:attribute name="toc" type="yesno-att.class"/>
+		    <xs:attribute name="print" type="yesno-att.class"/>
+		    <xs:attributeGroup ref="global-atts" />
+		    <xs:attribute ref="class" default="- map/topicref bookmap/draftintro " />
+   </xs:complexType>
+   
+   <xs:complexType name="divinfo.class">
+     		<xs:sequence>
+		      <xs:group ref="divtitle" />
+		      <xs:group ref="shortdesc" />
+		      <xs:group ref="author" minOccurs="0" maxOccurs="unbounded"/>
+		      <xs:group ref="publisher" minOccurs="0"/>
+		      <xs:group ref="copyright" minOccurs="0" maxOccurs="unbounded"/>
+		      <xs:group ref="critdates" minOccurs="0"/>
+		      <xs:group ref="permissions" minOccurs="0"/>
+		      <xs:group ref="audience" minOccurs="0" maxOccurs="unbounded"/>
+		      <xs:group ref="category" minOccurs="0" maxOccurs="unbounded"/>
+		      <xs:group ref="keywords" minOccurs="0" maxOccurs="unbounded"/>
+		      <xs:group ref="prodinfo" minOccurs="0" maxOccurs="unbounded"/>
+		      <xs:group ref="othermeta" minOccurs="0" maxOccurs="unbounded"/>
+		    </xs:sequence>
+		    <xs:attributeGroup ref="global-atts" />
+		    <xs:attribute ref="class" default="- map/topicmeta bookmap/divinfo " />
+   </xs:complexType>
+   
+   <xs:complexType name="divtitle.class">
+     <xs:simpleContent>
+      <xs:extension base="xs:string">
+     		<xs:attributeGroup ref="global-atts" />
+		    <xs:attribute ref="class" default="- map/linktext bookmap/divtitle " />
+     	</xs:extension>
+     </xs:simpleContent>
+   </xs:complexType>
+   
+   <xs:complexType name="abstract.class">
+		    <xs:attribute name="navtitle" type="xs:string" />
+		    <xs:attribute name="id" type="xs:ID"/>
+		    <xs:attribute name="href" type="xs:string"/>
+		    <xs:attribute name="conref" type="xs:string"/>
+		    <xs:attribute name="toc" type="yesno-att.class"/>
+		    <xs:attribute name="print" type="yesno-att.class"/>
+		    <xs:attributeGroup ref="global-atts" />
+		    <xs:attribute ref="class" default="- map/topicref bookmap/abstract " />
+   </xs:complexType>
+   
+   <xs:complexType name="dedication.class">
+		    <xs:attribute name="navtitle" type="xs:string" />
+		    <xs:attribute name="id" type="xs:ID"/>
+		    <xs:attribute name="href" type="xs:string"/>
+		    <xs:attribute name="conref" type="xs:string"/>
+		    <xs:attribute name="toc" type="yesno-att.class"/>
+		    <xs:attribute name="print" type="yesno-att.class"/>
+		    <xs:attributeGroup ref="global-atts" />
+		    <xs:attribute ref="class" default="- map/topicref bookmap/dedication " />
+   </xs:complexType>
+   
+   <xs:complexType name="preface.class">
+     		<xs:sequence>
+		      <xs:group ref="divinfo" minOccurs="0" />
+     			<xs:group ref="topicref" minOccurs="0" maxOccurs="unbounded"/>
+		    </xs:sequence>
+		    <xs:attribute name="navtitle" type="xs:string"/>
+		    <xs:attribute name="id" type="xs:ID"/>
+		    <xs:attribute name="href" type="xs:string"/>
+		    <xs:attribute name="conref" type="xs:string"/>
+		    <xs:attribute name="toc" type="yesno-att.class"/>
+		    <xs:attribute name="print" type="yesno-att.class"/>
+		    <xs:attributeGroup ref="global-atts" />
+		    <xs:attribute ref="class" default="- map/topicref bookmap/preface " />
+   </xs:complexType>
+   
+   <xs:complexType name="chapter.class">
+     		<xs:sequence>
+		      <xs:group ref="divinfo" minOccurs="0" />
+	        <xs:group ref="topicref" maxOccurs="unbounded"/>
+		    </xs:sequence>
+		    <xs:attribute name="navtitle" type="xs:string" />
+		    <xs:attribute name="id" type="xs:ID"/>
+		    <xs:attribute name="href" type="xs:string"/>
+		    <xs:attribute name="conref" type="xs:string"/>
+		    <xs:attribute name="toc" type="yesno-att.class"/>
+		    <xs:attribute name="print" type="yesno-att.class"/>
+		    <xs:attributeGroup ref="global-atts" />
+		    <xs:attribute ref="class" default="- map/topicref bookmap/chapter " />
+   </xs:complexType>
+   
+   <xs:complexType name="appendix.class">
+     		<xs:sequence>
+		      <xs:group ref="divinfo" minOccurs="0" />
+	        <xs:group ref="topicref" maxOccurs="unbounded"/>
+		    </xs:sequence>
+		    <xs:attribute name="navtitle" type="xs:string" />
+		    <xs:attribute name="id" type="xs:ID"/>
+		    <xs:attribute name="href" type="xs:string"/>
+		    <xs:attribute name="conref" type="xs:string"/>
+		    <xs:attribute name="toc" type="yesno-att.class"/>
+		    <xs:attribute name="print" type="yesno-att.class"/>
+		    <xs:attributeGroup ref="global-atts" />
+		    <xs:attribute ref="class" default="- map/topicref bookmap/appendix " />
+   </xs:complexType>
+   
+   <xs:complexType name="notices.class">
+     		<xs:sequence>
+		      <xs:group ref="divinfo" minOccurs="0" />
+	        <xs:group ref="topicref" maxOccurs="unbounded"/>
+		    </xs:sequence>
+		    <xs:attribute name="navtitle" type="xs:string" />
+		    <xs:attribute name="id" type="xs:ID"/>
+		    <xs:attribute name="href" type="xs:string"/>
+		    <xs:attribute name="conref" type="xs:string"/>
+		    <xs:attribute name="toc" type="yesno-att.class"/>
+		    <xs:attribute name="print" type="yesno-att.class"/>
+		    <xs:attributeGroup ref="global-atts" />
+		    <xs:attribute ref="class" default="- map/topicref bookmap/notices " />
+   </xs:complexType>
+   
+   <xs:complexType name="amendments.class">
+		    <xs:attribute name="navtitle" type="xs:string" />
+		    <xs:attribute name="id" type="xs:ID"/>
+		    <xs:attribute name="href" type="xs:string"/>
+		    <xs:attribute name="conref" type="xs:string"/>
+		    <xs:attribute name="toc" type="yesno-att.class"/>
+		    <xs:attribute name="print" type="yesno-att.class"/>
+		    <xs:attributeGroup ref="global-atts" />
+		    <xs:attribute ref="class" default="- map/topicref bookmap/amendments " />
+   </xs:complexType>
+   
+   <xs:complexType name="part.class">
+     		<xs:sequence>
+     		<xs:group ref="divinfo" minOccurs="0" />
+     		<xs:choice>
+		      <xs:group ref="chapter" minOccurs="0" />
+		      <xs:sequence>
+		        <xs:group ref="appendix" minOccurs="0" maxOccurs="unbounded"/>
+		        <xs:group ref="notices" minOccurs="0"/>
+		        <xs:group ref="amendments" minOccurs="0"/>
+		      </xs:sequence>
+		    </xs:choice>
+		    </xs:sequence>
+		    <xs:attribute name="navtitle" type="xs:string" />
+		    <xs:attribute name="id" type="xs:ID"/>
+		    <xs:attribute name="href" type="xs:string"/>
+		    <xs:attribute name="conref" type="xs:string"/>
+		    <xs:attribute name="toc" type="yesno-att.class"/>
+		    <xs:attribute name="print" type="yesno-att.class"/>
+		    <xs:attributeGroup ref="global-atts" />
+		    <xs:attribute ref="class" default="- map/topicref bookmap/part " />
+   </xs:complexType>
+   
+   <xs:complexType name="colophon.class">
+		    <xs:attribute name="navtitle" type="xs:string" />
+		    <xs:attribute name="id" type="xs:ID"/>
+		    <xs:attribute name="href" type="xs:string"/>
+		    <xs:attribute name="conref" type="xs:string"/>
+		    <xs:attribute name="toc" type="yesno-att.class"/>
+		    <xs:attribute name="print" type="yesno-att.class"/>
+		    <xs:attributeGroup ref="global-atts" />
+		    <xs:attribute ref="class" default="- map/topicref bookmap/colophon " />
+   </xs:complexType>
+   
+   
+</xs:schema>

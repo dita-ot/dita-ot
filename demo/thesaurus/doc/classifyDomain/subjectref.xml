@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\..\dtd\reference.dtd">
+<reference id="subjectref" outputclass="element" xml:lang="en-us">
+<title>subjectref</title>
+<shortdesc>Identifies a secondary subject covered by a content topic.</shortdesc><?Pub Caret1?>
+<refbody>
+<section conref="../packagedef.xml#subjectref-reference/subjectref-containedBy-section"></section>
+<section conref="../packagedef.xml#subjectref-reference/subjectref-contains-section"></section>
+<section conref="../packagedef.xml#subjectref-reference/subjectref-contentModel-section"></section>
+<section conref="../packagedef.xml#subjectref-reference/subjectref-attList-section"></section>
+<section conref="../packagedef.xml#subjectref-reference/subjectref-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000000905?>

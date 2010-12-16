@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaFieldAccess" outputclass="element" xml:lang="en-us">
+<title>javaFieldAccess</title>
+<shortdesc>The &lt;javaFieldAccess> element provides within the <i>FieldModifiers<sup>opt</sup></i> the
+elements for the variable of a class type.</shortdesc>
+<refbody>
+<section><title>Description</title>The variables of a class type are introduced
+by field declarations. The access modifiers are <i>public</i>, <i>protected</i>,
+and <i>private</i>.  </section><?Pub Caret1?>
+<example> <title>Example</title>Click on the following link to open the Java
+API topic type example in  <object classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11"
+codebase="hhctrl.ocx#Version=4,73,8412,0" codetype="VIEWASTEXT" height="100"
+id="hhctrl" type="application/x-oleobject" width="100">
+<param name="Command" value="ShortCut"/>
+<param name="Text" value="Text: DITA "/>
+<param name="Item1" value=",../samples/java/AbstractImportEngineTask.dita,"/>
+</object><codeblock>&lt;javaField id="java.awt.Font">
+   &lt;apiName>NAME&lt;/apiName>
+   &lt;shortdesc>The logical name of this Font as it is passed to the constructor.&lt;/shortdesc>
+   &lt;javaFieldDetail>
+     &lt;javaFieldDef>
+        &lt;javaFieldAccess value="protected"/>
+        &lt;javaFieldClass href="http:">String&lt;/javaFieldClass>
+     &lt;/javaFieldDef>
+   &lt;/javaFieldDetail>
+   &lt;related-links>
+     &lt;link href="http://java.sun.com/../font.html#getName" format="html" scope="external">
+        &lt;linktext>getName()&lt;/linktext>
+     &lt;/link>
+   &lt;/related-links>
+&lt;/javaField></codeblock></example>
+<section><title>Processing Expectations</title><image href="images/javaFieldAccessMod.jpg"
+placement="inline"><alt></alt></image></section>
+<section conref="../packagedef.dita#javaFieldAccess-reference/javaFieldAccess-containedBy-section"></section>
+<section conref="../packagedef.dita#javaFieldAccess-reference/javaFieldAccess-contains-section"></section>
+<section conref="../packagedef.dita#javaFieldAccess-reference/javaFieldAccess-contentModel-section"></section>
+<section conref="../packagedef.dita#javaFieldAccess-reference/javaFieldAccess-attList-section"></section>
+<section conref="../packagedef.dita#javaFieldAccess-reference/javaFieldAccess-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000002464?>

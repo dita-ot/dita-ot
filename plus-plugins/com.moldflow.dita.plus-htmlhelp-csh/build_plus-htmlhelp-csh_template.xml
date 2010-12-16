@@ -1,0 +1,58 @@
+<project name="plus-htmlhelp-csh">
+
+  <dirname property="plus-htmlhelp-csh.dir" file="${ant.file.plus-htmlhelp-csh}"/>
+
+  <target name="plus-htmlhelp-csh.init">
+    <condition property="plus-htmlhelp-csh.alias.required">
+      <isset property="plus.htmlhelp.csh"/>
+    </condition>
+  </target>
+
+
+  <target name="plus-htmlhelp-csh.alias.map" depends="plus-htmlhelp-csh.init" if="plus-htmlhelp-csh.alias.required" >
+    <xslt style="${plus-htmlhelp-csh.dir}/xsl/map2alias-shell.xsl"
+      basedir="${dita.temp.dir}"
+      destdir="${dita.temp.dir}"
+      includes="${user.input.file}"
+      filenameparameter="CURRENTFILE"
+      filedirparameter="CURRENTDIR"
+      scanincludeddirectories="no"
+      classpathref="dost.class.path">
+      <param name="MODULENAME" expression="${dita.map.filename.root}" if="dita.map.filename.root" />
+      <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+      <globmapper from="*" to="*.alias"/>
+      <dita:extension
+        xmlns:dita="http://dita-ot.sourceforge.net"
+        behavior="org.dita.dost.platform.InsertAction"
+        id="plus-htmlhelp-csh.alias.map.param"/>
+    </xslt>
+  </target>
+  
+  <target name="plus-htmlhelp-csh.alias.topics" depends="plus-htmlhelp-csh.init" if="plus-htmlhelp-csh.alias.required">
+    <xslt style="${plus-htmlhelp-csh.dir}/xsl/topic2alias-shell.xsl"
+      basedir="${dita.temp.dir}"
+      destdir="${dita.temp.dir}"
+      includes="${fullditatopiclist} ${chunkedtopiclist}"
+      filenameparameter="CURRENTFILE"
+      filedirparameter="CURRENTDIR"
+      scanincludeddirectories="no"
+      classpathref="dost.class.path">
+      <param name="MODULENAME" expression="${dita.map.filename.root}" if="dita.map.filename.root" />
+      <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+      <globmapper from="*" to="*.alias"/>
+      <dita:extension
+        xmlns:dita="http://dita-ot.sourceforge.net"
+        behavior="org.dita.dost.platform.InsertAction"
+        id="plus-htmlhelp-csh.alias.topics.param"/>
+    </xslt>
+  </target>
+
+  <target name="plus-htmlhelp-csh.alias" 
+     depends="plus-htmlhelp-csh.alias.map,plus-htmlhelp-csh.alias.topics" if="plus-htmlhelp-csh.alias.required">
+    <concat destfile="${output.dir}/alias.h">
+      <fileset dir="${dita.temp.dir}" includes="**/*.alias"/>
+    </concat>
+  </target>
+
+
+</project>

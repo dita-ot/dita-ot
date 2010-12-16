@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+  Sourceforge.net. See the accompanying license.txt file for 
+  applicable licenses.-->
+  <!--
+    | (C) Copyright IBM Corporation 2006. All Rights Reserved.
+    *-->
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"
+  prefer="public">
+  
+  <public publicId="-//W3C//DTD XHTML 1.0 Strict//EN" uri="dtd/xhtml1-strict.dtd"/>
+    <public publicId="-//W3C//DTD XHTML 1.0 Transitional//EN" uri="dtd/xhtml1-transitional.dtd"/>
+    <public publicId="-//W3C//DTD XHTML 1.0 Frameset//EN" uri="dtd/xhtml1-frameset.dtd"/>
+    <public publicId="-//W3C//ENTITIES Latin 1 for XHTML//EN" uri="dtd/xhtml-lat1.ent"/>
+    <public publicId="-//W3C//ENTITIES Symbols for XHTML//EN" uri="dtd/xhtml-symbol.ent"/>
+    <public publicId="-//W3C//ENTITIES Special for XHTML//EN" uri="dtd/xhtml-special.ent"/>
+  
+</catalog>

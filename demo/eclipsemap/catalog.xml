@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+  Sourceforge.net. See the accompanying license.txt file for 
+  applicable licenses.-->
+  <!--
+    | (C) Copyright IBM Corporation 2006. All Rights Reserved.
+    *-->
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"
+  prefer="public">
+  
+  <public publicId="-//IBM//DTD DITA Eclipse Map Collection//EN"
+    uri="dtd/eclipsemap.dtd"/>
+      
+  <public publicId="-//IBM//ELEMENTS DITA Eclipse Map Collection//EN"
+    uri="dtd/plugin.mod"/>
+  
+  <public publicId="-//IBM//ENTITIES DITA Eclipse Map Collection//EN"
+    uri="dtd/plugin.ent"/>
+  
+</catalog>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\..\dtd\reference.dtd">
+<reference id="hasInstance" outputclass="element" xml:lang="en-us">
+<title>hasInstance</title>
+<shortdesc>Specifies that the contained hierarchy expresses INSTANCE-OF relationships
+between subjects.</shortdesc>
+<refbody>
+<section><title>Description</title><p>In an INSTANCE-OF hierar<?Pub Caret?>chy,
+the child subject is a specific entity or object and the parent subject is
+a type, kind, or class of entity or object. For example, New York City is
+a specific instance of a city.</p></section>
+<section conref="../packagedef.xml#hasInstance-reference/hasInstance-containedBy-section"></section>
+<section conref="../packagedef.xml#hasInstance-reference/hasInstance-contains-section"></section>
+<section conref="../packagedef.xml#hasInstance-reference/hasInstance-contentModel-section"></section>
+<section conref="../packagedef.xml#hasInstance-reference/hasInstance-attList-section"></section>
+<section conref="../packagedef.xml#hasInstance-reference/hasInstance-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001211?>

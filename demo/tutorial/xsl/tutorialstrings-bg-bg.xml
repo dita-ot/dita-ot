@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file in the
+     main toolkit package for applicable licenses.-->
+<!-- (C) Copyright IBM Corporation 2005, 2009 All Rights Reserved. -->
+<strings xml:lang="bg-bg">        <!-- Bulgarian -->
+
+  <str name="tutorialNext">Следващ</str>
+  <str name="tutorialPrevious">Предишен</str>
+  <str name="Modules in this tutorial">Модули в този самоучител</str>
+  <str name="Lessons in this tutorial">Уроци в този самоучител</str>
+  <str name="Lessons in this module">Уроци в този модул</str>
+
+</strings>

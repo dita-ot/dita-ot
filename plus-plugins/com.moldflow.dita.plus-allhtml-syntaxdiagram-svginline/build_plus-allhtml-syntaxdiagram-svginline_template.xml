@@ -1,0 +1,68 @@
+<project name="plus-allhtml-syntaxdiagram-svginline">
+
+  <target name="plus-allhtml-syntaxdiagram-svginline.init" depends="plus-allhtml-syntaxdiagram.init">
+    <!-- Syntax Diagram format to be placed into XHTML output.
+         Choices: svginline, svgraster, svgobject. -->
+    <condition property="plus.syntaxdiagram.format" value="svginline">
+      <not>
+        <isset property="plus.syntaxdiagram.format"/>
+      </not>
+    </condition>
+
+    <!-- Default location for CSS that applies to syntaxdiagrams. -->
+    <condition property="plus-allhtml-syntaxdiagram-svginline.csspath" value="${user.csspath}">
+      <and>
+        <equals arg1="${plus.syntaxdiagram.format}" arg2="svginline"/>
+        <not><isset property="plus-allhtml-syntaxdiagram-svginline.csspath"/></not>
+      </and>
+    </condition>
+
+    <!-- Default location for Javascript that processes syntaxdiagrams,
+         relative to out dir. -->
+    <condition property="plus-allhtml-syntaxdiagram-svginline.jspath" value="js/syntaxdiagram-svg/">
+      <and>
+        <equals arg1="${plus.syntaxdiagram.format}" arg2="svginline"/>
+        <not><isset property="plus-allhtml-syntaxdiagram-svginline.jspath"/></not>
+      </and>
+    </condition>
+
+    <!-- JavaScript code location for dynamic syntax diagrams. -->
+    <condition property="plus-allhtml-syntaxdiagram-svginline.js.destination" value="${output.dir}/${plus-allhtml-syntaxdiagram-svginline.jspath}">
+      <and>
+        <equals arg1="${plus.syntaxdiagram.format}" arg2="svginline"/>
+        <not><isset property="plus-allhtml-syntaxdiagram-svginline.js.destination"/></not>
+      </and>
+    </condition>
+
+    <!-- CSS location for dynamic syntax diagrams -->
+    <condition property="plus-allhtml-syntaxdiagram-svginline.css.destination" value="${user.csspath.real}">
+      <and>
+        <equals arg1="${plus.syntaxdiagram.format}" arg2="svginline"/>
+        <not><isset property="plus-allhtml-syntaxdiagram-svginline.css.destination"/></not>
+      </and>
+    </condition>
+
+  </target>
+
+  <target name="plus-allhtml-syntaxdiagram-svginline.copy-files" depends="plus-allhtml-syntaxdiagram-svginline.init,
+     syntaxdiagram2svg.copy-files.init,
+     plus-allhtml-syntaxdiagram-svginline.copy-files.js,
+     plus-allhtml-syntaxdiagram-svginline.copy-files.css">
+  </target>
+
+  <target name="plus-allhtml-syntaxdiagram-svginline.copy-files.js" if="plus-allhtml-syntaxdiagram-svginline.js.destination">
+    <copy todir="${plus-allhtml-syntaxdiagram-svginline.js.destination}">
+      <fileset dir="${syntaxdiagram2svg.js.root}" includes="*.js"/>
+    </copy>
+    <xslt in="${syntaxdiagram2svg.constants}"
+        out="${plus-allhtml-syntaxdiagram-svginline.js.destination}/constants.js"
+        style="${syntaxdiagram2svg.dir}/xsl/make-constants.xsl"/>
+  </target>
+
+  <target name="plus-allhtml-syntaxdiagram-svginline.copy-files.css" if="plus-allhtml-syntaxdiagram-svginline.css.destination">
+    <copy todir="${plus-allhtml-syntaxdiagram-svginline.css.destination}">
+      <fileset dir="${syntaxdiagram2svg.css.root}" includes="*.css"/>
+    </copy>
+  </target>
+
+</project>

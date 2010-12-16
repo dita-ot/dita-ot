@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<meta name="copyright" content="(C) Copyright 2005" />
+<meta name="DC.rights.owner" content="(C) Copyright 2005" />
+<meta content="public" name="security" />
+<meta content="index,follow" name="Robots" />
+<meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' />
+<meta content="reference" name="DC.Type" />
+<meta name="DC.Title" content="apiImpl" />
+<meta name="abstract" content="The &lt;apiImpl&gt; element describes the classifier implementation for specific forms, including class, data type, interface, component, and other API items." />
+<meta name="description" content="The &lt;apiImpl&gt; element describes the classifier implementation for specific forms, including class, data type, interface, component, and other API items." />
+<meta scheme="URI" name="DC.Relation" content="../apiRef/apiDetail.html" />
+<meta scheme="URI" name="DC.Relation" content="../apiClassifier/apiClassifierDetail.html" />
+<meta scheme="URI" name="DC.Relation" content="../apiOperation/apiOperationDetail.html" />
+<meta scheme="URI" name="DC.Relation" content="../apiValue/apiValueDetail.html" />
+<meta content="XHTML" name="DC.Format" />
+<meta content="apiImpl" name="DC.Identifier" />
+<meta content="en-us" name="DC.Language" />
+<link href="C:\Work\dita\dost0.1\DITA-OT1.1.1\demo\apiref\out\doc\commonltr.css" type="text/css" rel="stylesheet" />
+<title>apiImpl</title>
+</head>
+<body id="apiImpl"><a name="apiImpl"><!-- --></a>
+
+
+<h1 class="topictitle1">apiImpl</h1>
+
+
+<div><p>The &lt;apiImpl&gt; element describes the classifier implementation
+for specific forms, including class, data type, interface, component, and
+other API items.</p>
+
+<div class="section"><h4 class="sectiontitle">Description</h4><p>The &lt;apiImpl&gt; element can contain
+code fragments or other source code for generating the supporting code for
+the interface (especially for functions and methods). The processing expectation
+is that the &lt;apiImpl&gt; element is hidden from the audience the implementation
+should not be exposed to.</p>
+</div>
+
+<div class="example"><h4 class="sectiontitle">Example</h4> <p>The following example shows a simple &lt;apiImpl&gt;
+element  for a VisualBasic property:</p>
+<pre>&lt;apiValue&gt;
+       &lt;apiValueDetail&gt;
+           &lt;apiValueDef&gt;
+              &lt;apiDefNote&gt;
+                   Returns the IRXEModel object to which the element belongs.
+              &lt;/apiDefNote&gt;
+           &lt;/apiValueDef&gt;
+       &lt;/apiValueDetail&gt;
+       &lt;apiImpl&gt;Statement&lt;/apiImpl&gt;
+   &lt;/apiValue&gt;
+</pre>
+</div>
+
+<div class="elementContainedBy"><h4 class="sectiontitle">Contained by</h4><p id="apiImpl__N50DBB"><a name="apiImpl__N50DBB"><!-- --></a><a href="../apiClassifier/apiClassifierDetail.html">apiClassifierDetail</a>, <a href="../apiRef/apiDetail.html">apiDetail</a>, <a href="../apiOperation/apiOperationDetail.html">apiOperationDetail</a>, <a href="../apiValue/apiValueDetail.html">apiValueDetail</a></p>
+</div>
+<div class="elementContains"><h4 class="sectiontitle">Contains</h4><p id="apiImpl__N50DE6"><a name="apiImpl__N50DE6"><!-- --></a><span class="keyword">apiname</span>, <span class="keyword">b</span>, <span class="keyword">boolean</span>, <span class="keyword">cite</span>, <span class="keyword">cmdname</span>, <span class="keyword">codeblock</span>, <span class="keyword">codeph</span>, <span class="keyword">dl</span>, <span class="keyword">draft-comment</span>, <span class="keyword">fig</span>, <span class="keyword">filepath</span>, <span class="keyword">fn</span>, <span class="keyword">i</span>, <span class="keyword">image</span>, <span class="keyword">imagemap</span>, <span class="keyword">indexterm</span>, <span class="keyword">indextermref</span>, <span class="keyword">keyword</span>, <span class="keyword">lines</span>, <span class="keyword">lq</span>, <span class="keyword">menucascade</span>, <span class="keyword">msgblock</span>, <span class="keyword">msgnum</span>, <span class="keyword">msgph</span>, <span class="keyword">note</span>, <span class="keyword">object</span>, <span class="keyword">ol</span>, <span class="keyword">option</span>, <span class="keyword">p</span>, <span class="keyword">parml</span>, <span class="keyword">parmname</span>, <span class="keyword">ph</span>, <span class="keyword">pre</span>, <span class="keyword">q</span>, <span class="keyword">required-cleanup</span>, <span class="keyword">screen</span>, <span class="keyword">simpletable</span>, <span class="keyword">sl</span>, <span class="keyword">state</span>, <span class="keyword">sub</span>, <span class="keyword">sup</span>, <span class="keyword">synph</span>, <span class="keyword">syntaxdiagram</span>, <span class="keyword">systemoutput</span>, <span class="keyword">table</span>, <span class="keyword">term</span>, <span class="keyword">tm</span>, <span class="keyword">tt</span>, <span class="keyword">u</span>, <span class="keyword">uicontrol</span>, <span class="keyword">ul</span>, <span class="keyword">userinput</span>, <span class="keyword">varname</span>, <span class="keyword">wintitle</span>, <span class="keyword">xref</span></p>
+</div>
+<div class="elementContentModel"><h4 class="sectiontitle">Content model</h4><p id="apiImpl__N50F3F"><a name="apiImpl__N50F3F"><!-- --></a>
+  (text data or <span class="keyword">ph</span> or <span class="keyword">codeph</span> or <span class="keyword">synph</span> or <span class="keyword">filepath</span> or <span class="keyword">msgph</span> or <span class="keyword">userinput</span> or <span class="keyword">systemoutput</span> or <span class="keyword">b</span> or <span class="keyword">u</span> or <span class="keyword">i</span> or <span class="keyword">tt</span> or <span class="keyword">sup</span> or <span class="keyword">sub</span> or <span class="keyword">uicontrol</span> or <span class="keyword">menucascade</span> or <span class="keyword">term</span> or <span class="keyword">xref</span> or <span class="keyword">cite</span> or <span class="keyword">q</span> or <span class="keyword">boolean</span> or <span class="keyword">state</span> or <span class="keyword">keyword</span> or <span class="keyword">option</span> or <span class="keyword">parmname</span> or <span class="keyword">apiname</span> or <span class="keyword">cmdname</span> or <span class="keyword">msgnum</span> or <span class="keyword">varname</span> or <span class="keyword">wintitle</span> or <span class="keyword">tm</span> or <span class="keyword">p</span> or <span class="keyword">lq</span> or <span class="keyword">note</span> or <span class="keyword">dl</span> or <span class="keyword">parml</span> or <span class="keyword">ul</span> or <span class="keyword">ol</span> or <span class="keyword">sl</span> or <span class="keyword">pre</span> or <span class="keyword">codeblock</span> or <span class="keyword">msgblock</span> or <span class="keyword">screen</span> or <span class="keyword">lines</span> or <span class="keyword">fig</span> or <span class="keyword">syntaxdiagram</span> or <span class="keyword">imagemap</span> or <span class="keyword">image</span> or <span class="keyword">object</span> or <span class="keyword">table</span> or <span class="keyword">simpletable</span> or <span class="keyword">draft-comment</span> or <span class="keyword">required-cleanup</span> or <span class="keyword">fn</span> or <span class="keyword">indextermref</span> or <span class="keyword">indexterm</span>)
+<em>(any number)</em></p>
+</div>
+<div class="elementAttList" />
+<div class="elementClassValue"><h4 class="sectiontitle">Inheritance</h4><p id="apiImpl__N510A5"><a name="apiImpl__N510A5"><!-- --></a>topic/<span class="keyword">section</span> reference/<span class="keyword">section</span></p>
+</div>
+</div>
+
+<div>
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../apiRef/apiDetail.html" title="The &lt;apiDetail&gt; element provides the most general representation for reference documentation detail about an API item. This element is the main container for the detailed content.">apiDetail</a></div>
+</div>
+
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../apiClassifier/apiClassifierDetail.html" title="The &lt;apiClassifierDetail&gt; element provides detailed information about the structure and behavior of the classifier.">apiClassifierDetail</a></div>
+</div>
+
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../apiOperation/apiOperationDetail.html" title="The &lt;apiOperationDetail&gt; element provides the detailed information about the interface to the operation.">apiOperationDetail</a></div>
+</div>
+
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../apiValue/apiValueDetail.html" title="The &lt;apiValueDetail&gt; element provides the detailed information about the access to the value.">apiValueDetail</a></div>
+</div>
+</div>
+</body>
+</html>

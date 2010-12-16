@@ -1,0 +1,69 @@
+<project name="plus-allhtml-treediagram-svginline">
+
+  <target name="plus-allhtml-treediagram-svginline.init" depends="plus-allhtml-treediagram.init">
+    <!-- Syntax Diagram format to be placed into XHTML output.
+         Choices: svginline, svgraster, svgobject. -->
+    <condition property="plus.treediagram.format" value="svginline">
+      <not>
+        <isset property="plus.treediagram.format"/>
+      </not>
+    </condition>
+
+    <!-- Default location for CSS that applies to treediagrams,
+         relative to root of output dir. -->
+    <condition property="plus-allhtml-treediagram-svginline.csspath" value="${user.csspath}">
+      <and>
+        <equals arg1="${plus.treediagram.format}" arg2="svginline"/>
+        <not><isset property="plus-allhtml-treediagram-svginline.csspath"/></not>
+      </and>
+    </condition>
+
+    <!-- Default location for Javascript that processes treediagrams,
+         relative to root of output dir. -->
+    <condition property="plus-allhtml-treediagram-svginline.jspath" value="js/treediagram-svg/">
+      <and>
+        <equals arg1="${plus.treediagram.format}" arg2="svginline"/>
+        <not><isset property="plus-allhtml-treediagram-svginline.jspath"/></not>
+      </and>
+    </condition>
+
+    <!-- JavaScript code location for dynamic tree diagrams (inline). -->
+    <condition property="plus-allhtml-treediagram-svginline.js.destination" value="${output.dir}/${plus-allhtml-treediagram-svginline.jspath}">
+      <and>
+        <equals arg1="${plus.treediagram.format}" arg2="svginline"/>
+        <not><isset property="plus-allhtml-treediagram-svginline.js.destination"/></not>
+      </and>
+    </condition>
+
+    <!-- CSS location for dynamic tree diagrams (inline) -->
+    <condition property="plus-allhtml-treediagram-svginline.css.destination" value="${user.csspath.real}">
+      <and>
+        <equals arg1="${plus.treediagram.format}" arg2="svginline"/>
+        <not><isset property="plus-allhtml-treediagram-svginline.css.destination"/></not>
+      </and>
+    </condition>
+
+  </target>
+
+  <target name="plus-allhtml-treediagram-svginline.copy-files" depends="plus-allhtml-treediagram-svginline.init,
+     treediagram2svg.copy-files.init,
+     plus-allhtml-treediagram-svginline.copy-files.js,
+     plus-allhtml-treediagram-svginline.copy-files.css">
+  </target>
+
+  <target name="plus-allhtml-treediagram-svginline.copy-files.js" if="plus-allhtml-treediagram-svginline.js.destination">
+    <copy todir="${plus-allhtml-treediagram-svginline.js.destination}">
+      <fileset dir="${treediagram2svg.js.root}" includes="*.js"/>
+    </copy>
+    <xslt in="${treediagram2svg.constants}"
+        out="${plus-allhtml-treediagram-svginline.js.destination}/constants.js"
+        style="${treediagram2svg.dir}/xsl/make-constants.xsl"/>
+  </target>
+
+  <target name="plus-allhtml-treediagram-svginline.copy-files.css" if="plus-allhtml-treediagram-svginline.css.destination">
+    <copy todir="${plus-allhtml-treediagram-svginline.css.destination}">
+      <fileset dir="${treediagram2svg.css.root}" includes="*.css"/>
+    </copy>
+  </target>
+
+</project>

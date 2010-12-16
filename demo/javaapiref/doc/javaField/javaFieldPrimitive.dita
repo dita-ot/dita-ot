@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaFieldPrimitive" outputclass="element" xml:lang="en-us">
+<title>javaFieldPrimitive</title>
+<shortdesc>The &lt;javaFieldPrimitive> element specifies within the <i>Data
+Type</i> declaration  that the field must have a value of the specified primitive
+type, such as <i>int</i>.</shortdesc>
+<refbody>
+<section><title>Description</title><p>The variables in the Java language can
+have a <i>primitive</i> or <i>reference</i> data type. Arrays, classes, and
+interfaces are <i>reference</i> types and represented by the &lt;javaFieldClass>
+and &lt;javaFieldInterface> elements. In contrast, the value of a reference
+type variable is a reference to the actual value or set of values represented
+by the variable. This element has the following predefined attributes:<i> name
+="type"</i> and <i>value ="boolean | byte | char | double | float | int |
+long | short"</i> . </p><?Pub Caret1?></section>
+<example> <title>Example</title>Click on the following link to open the Java
+API topic type example in  <object classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11"
+codebase="hhctrl.ocx#Version=4,73,8412,0" codetype="VIEWASTEXT" height="100"
+id="hhctrl" type="application/x-oleobject" width="100">
+<param name="Command" value="ShortCut"/>
+<param name="Text" value="Text:   DITA "/>
+<param name="Item1" value=",../samples/java/IImportEngineTask.dita,"/></object><codeblock>&lt;javaField id="com.ibm.xtools.ras.impord.engine.tasks.IImportEngineTask">
+   &lt;apiName>PRIORITY_MAX&lt;/apiName>
+   &lt;shortDesc>The maximum value of the priority attribute.&lt;/shortDesc>
+   &lt;javaFieldDetail>
+      &lt;javaFieldDef>
+         &lt;javaFinalField/>
+         &lt;javaStaticField/>
+         &lt;javaFieldAccess value="public" />
+         &lt;javaFieldPrimitive name=”type” value=”int”/>
+      &lt;/javaFieldDef>
+   &lt;/javaFieldDetail>
+   &lt;related-links>
+       &lt;link href=”http://java.sun.com/values.html#PRIORITY_MAX”
+            format=”html” scope=”external”>
+           &lt;linktext>Constant Field Values&lt;/linktext>
+       &lt;/link>
+    &lt;/related-links>
+&lt;/javaField></codeblock></example>
+<section><title>Processing Expectations</title><image href="images/javaFieldPrimitive.jpg"
+placement="inline"><alt></alt></image></section>
+<section conref="../packagedef.dita#javaFieldPrimitive-reference/javaFieldPrimitive-containedBy-section"></section>
+<section conref="../packagedef.dita#javaFieldPrimitive-reference/javaFieldPrimitive-contains-section"></section>
+<section conref="../packagedef.dita#javaFieldPrimitive-reference/javaFieldPrimitive-contentModel-section"></section>
+<section conref="../packagedef.dita#javaFieldPrimitive-reference/javaFieldPrimitive-attList-section"></section>
+<section conref="../packagedef.dita#javaFieldPrimitive-reference/javaFieldPrimitive-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000003033?>

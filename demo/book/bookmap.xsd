@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <!-- ======= INCLUDE ======= -->
+  <xs:include schemaLocation="../../schema/map.mod"/>
+  <xs:include schemaLocation="../../schema/map.grp"/>
+  <xs:include schemaLocation="bookmap_grp.xsd"/>
+  <xs:redefine schemaLocation="bookmap_mod.xsd">
+    <xs:complexType name="bookmap.class">
+      <xs:complexContent>
+        <xs:extension base="bookmap.class">
+          <xs:attribute name="domains" type="xs:string" default=""/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:redefine>
+  <!--  ================ INFO TYPE MODEL GROUP =====================  -->
+  <!-- This should be done in a _domains.xsd schema docuement -->
+</xs:schema>

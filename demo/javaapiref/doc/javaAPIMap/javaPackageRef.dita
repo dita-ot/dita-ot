@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="javaPackageRef" outputclass="element" xml:lang="en-us">
+<title>javaPackageRef</title>
+<shortdesc>This element provides a Java package topic type as a link in a
+DITA map.</shortdesc>
+<refbody>
+<section><title>Description</title><p>A &lt;javaPackageRef &gt; can contain other &lt;javaPackageRef
+&gt; elements, allowing you to express navigation or table-of-contents hierarchies,
+as well as implying relationships between the containing &lt;javaClassRef&gt;, &lt;javaInterface&gt;, &lt;javaException&gt;
+and &lt;javaError&gt; elements and its children.</p></section>
+<example> <title>Example</title>Click on the following link to open the Java
+API topic type example in  <object classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11" codebase="hhctrl.ocx#Version=4,73,8412,0" codetype="VIEWASTEXT" height="100" id="hhctrl" name="Sample" type="application/x-oleobject" width="100">
+<param name="Command" value="ShortCut"/>
+<param name="Text" value="Text:  DITA "/>
+<param name="Item61" value=",../samples/java/javaAPIMap.ditamap,"/></object><codeblock>&lt;javaPackageRef navtitle="Package com.ibm.xtools.patterns.framework.uml2"
+              href="com.ibm.xtools.patterns.framework.uml2.dita" locktitle="yes"&gt;
+     &lt;javaClassRef navtitle="UmlnotationPlugin.Implementation Class" href="UmlnotationPlugin.Implementation.dita"&gt;
+     &lt;/javaClassRef&gt;
+     &lt;javaClassRef navtitle="UMLDiagramResourceUti Class" href="UMLDiagramResourceUtil.dita"&gt;
+     &lt;/javaClassRef&gt;
+&lt;/javaPackageRef&gt;</codeblock> </example>
+
+<section conref="../packagedef.dita#javaPackageRef-reference/javaPackageRef-containedBy-section"/><section conref="../packagedef.dita#javaPackageRef-reference/javaPackageRef-contains-section"/><section conref="../packagedef.dita#javaPackageRef-reference/javaPackageRef-contentModel-section"/><section conref="../packagedef.dita#javaPackageRef-reference/javaPackageRef-attList-section"/><section conref="../packagedef.dita#javaPackageRef-reference/javaPackageRef-classValue-section"/></refbody>
+</reference>

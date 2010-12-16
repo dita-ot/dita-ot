@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<meta name="copyright" content="(C) Copyright 2005" />
+<meta name="DC.rights.owner" content="(C) Copyright 2005" />
+<meta content="public" name="security" />
+<meta content="index,follow" name="Robots" />
+<meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' />
+<meta content="apiOperation" name="DC.Type" />
+<meta name="DC.Title" content="read" />
+<meta name="abstract" content="Read the specified quantity of data from a file into a variable." />
+<meta name="description" content="Read the specified quantity of data from a file into a variable." />
+<meta content="XHTML" name="DC.Format" />
+<meta content="read" name="DC.Identifier" />
+<link href="commonltr.css" type="text/css" rel="stylesheet" />
+<link href="ibmapiref.css" type="text/css" rel="stylesheet" />
+<title>read</title>
+</head>
+<body id="read"><a name="read"><!-- --></a>
+
+
+<h1 class="topictitle1">read</h1>
+
+
+
+<h4 class="sectiontitle">Syntax</h4><pre class="apiSyntaxText">read <span class="itemname">FILEHANDLE</span>, <span class="itemname">SCALAR</span>, <span class="itemname">LENGTH</span>, <span class="itemname">OFFSET</span>
+read <span class="itemname">FILEHANDLE</span>, <span class="itemname">SCALAR</span>, <span class="itemname">LENGTH</span></pre><table class="itemdefs"><tr class="itemdef"><td valign="top" class="itemdefname">FILEHANDLE</td><td valign="top" class="itemdefnote">The identifier for the file from which the data is read.</td></tr><tr class="itemdef"><td valign="top" class="itemdefname">SCALAR</td><td valign="top" class="itemdefnote">The name of the variable where the data is stored after reading.</td></tr><tr class="itemdef"><td valign="top" class="itemdefname">LENGTH</td><td valign="top" class="itemdefnote">The number of characters of data to read.</td></tr><tr class="itemdef"><td valign="top" class="itemdefname">OFFSET</td><td valign="top" class="itemdefnote">The number of characters from the start of the file prior to the
+data to be read.</td></tr></table>
+<div class="apiDescription">The <span class="+ topic/xref pr-d/xref api-d/apioperation ">read</span> function returns the number
+of characters actually read, 0 at end of file, or undef if there was an error
+(in the latter case $! is also set). The <span class="+ topic/xref pr-d/xref api-d/apivalue ">SCALAR</span> variable
+will be grown or shrunk so that the last character actually read is the last
+character of the scalar after the read.<p>An <span class="+ topic/xref pr-d/xref api-d/apivalue ">OFFSET</span> may
+be specified to place the read data at some place in the string other than
+the beginning. A negative <span class="+ topic/xref pr-d/xref api-d/apivalue ">OFFSET</span> specifies placement
+at that many characters counting backwards from the end of the string. A positive <span class="+ topic/xref pr-d/xref api-d/apivalue ">OFFSET</span> greater
+than the length of <span class="+ topic/xref pr-d/xref api-d/apivalue ">SCALAR</span> results in the string being
+padded to the required size with "\0" bytes before the result of the read
+is appended.</p>
+</div>
+<hr />
+<div class="nested1" id="rs"><a name="rs"><!-- --></a>
+<h2 class="topictitle2">INPUT_RECORD_SEPARATOR</h2>
+
+
+
+<h4 class="sectiontitle">Syntax</h4><pre class="apiSyntaxText">$INPUT_RECORD_SEPARATOR
+$RS
+$/</pre>
+<div class="apiDescription">The input record separator defines what a <span class="q">"line"</span> is (newline
+by default). The input record separator treats empty lines as a terminator
+if set to the null string. An empty line cannot contain any spaces or tabs.
+You may set it to a multi-character string to match a multi-character terminator,
+or to undef to read through the end of file. <p>Setting it to "\n\n" means
+something slightly different than setting to "", if the file contains consecutive
+empty lines. Setting to "" will treat two or more consecutive empty lines
+as a single empty line. Setting to "\n\n" will blindly assume that the next
+input character belongs to the next paragraph, even if it's a newline. (Mnemonic:
+/ delimits line boundaries when quoting poetry.)</p>
+</div>
+<hr />
+<div>
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="IO.html" title="Load various IO modules.">IO</a></div>
+</div>
+</div>
+</div>
+
+
+</body>
+</html>

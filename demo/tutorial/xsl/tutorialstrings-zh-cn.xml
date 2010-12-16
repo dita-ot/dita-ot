@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file in the
+     main toolkit package for applicable licenses.-->
+<!-- (C) Copyright IBM Corporation 2005, 2009 All Rights Reserved. -->
+<strings xml:lang="zh-cn">        <!-- Simplified Chinese -->
+
+  <str name="tutorialNext">下一课</str>
+  <str name="tutorialPrevious">上一课</str>
+  <str name="Modules in this tutorial">本教程中的模块</str>
+  <str name="Lessons in this tutorial">本教程中的课程</str>
+  <str name="Lessons in this module">本模块中的课程</str>
+
+</strings>

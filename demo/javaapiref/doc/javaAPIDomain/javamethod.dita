@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javamethod" outputclass="element" xml:lang="en-us">
+<title>javamethod</title>
+<shortdesc>The &lt;javamethod> element is a reference to a Java method. </shortdesc>
+<refbody>
+<section><title>Description</title><p>The &lt;javamethod> element can be used
+to reference a Java method from another topic type. </p></section>
+<example><title>Example</title><codeblock>&lt;task id="httpxml">
+  &lt;title>Getting an XML file through an HTTP connection&lt;/title>
+  &lt;taskbody>
+    &lt;steps>
+    &lt;step>&lt;cm>Open the connection&lt;/cm>
+      &lt;info>You can use 
+        &lt;javamethod href="IDefaultComponentExportDataModel#IDefault/getManifest">
+           getManifest method (IDefaultComponentExportDataModel interface)
+        &lt;/javamethod> 
+        in a Java application.
+      &lt;/info>
+    &lt;/step>
+   &lt;/steps>
+  &lt;/taskbody>
+&lt;/task></codeblock></example>
+<section conref="../packagedef.dita#javamethod-reference/javamethod-containedBy-section"></section>
+<section conref="../packagedef.dita#javamethod-reference/javamethod-contains-section"></section>
+<section conref="../packagedef.dita#javamethod-reference/javamethod-contentModel-section"></section>
+<section conref="../packagedef.dita#javamethod-reference/javamethod-attList-section"></section>
+<section conref="../packagedef.dita#javamethod-reference/javamethod-classValue-section"></section>
+</refbody>
+</reference>

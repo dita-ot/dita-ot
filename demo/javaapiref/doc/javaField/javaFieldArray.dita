@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="javaFieldArray" outputclass="element" xml:lang="en-us">
+<title>javaFieldArray</title>
+<shortdesc>The &lt;javaFieldArray&gt; element specifies within the <i>Data Type</i> declaration
+that  the return value of the field as an array.</shortdesc>
+<refbody>
+
+<example> <title>Example</title>Click on the following link to open the Java
+API topic type example in  <object classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11" codebase="hhctrl.ocx#Version=4,73,8412,0" codetype="VIEWASTEXT" height="100" id="hhctrl" type="application/x-oleobject" width="100">
+<param name="Command" value="ShortCut"/>
+<param name="Text" value="Text:  DITA "/>
+<param name="Item1" value=",../samples/java/IImportEngineTask.dita,"/></object><codeblock>&lt;javaField id="com.ibm.xtools.ras.impord.engine.tasks.IImportEngineTask"&gt;
+   &lt;apiName&gt;table&lt;/apiName&gt;
+   &lt;shortdesc&gt;The two-dimensional array of integers (i.e. the table)&lt;/shortdesc&gt;
+   &lt;javaFieldDetail&gt;
+     &lt;javaFieldDef&gt;
+       &lt;javaFieldAccess value="protected"/&gt;
+       &lt;javaFieldPrimitive name="type" value="int"/&gt;
+       &lt;javaFieldArray value="2"/&gt;
+     &lt;/javaFieldDef&gt;
+   &lt;/javaFieldDetail&gt;
+&lt;/javaField&gt;
+
+&lt;javaField id="com.ibm.xtools.ras.impord.engine.tasks.IImportEngineTask"&gt;
+   &lt;apiName&gt;valueRange&lt;/apiName&gt;
+   &lt;shortdesc&gt;The range of values within each column&lt;/shortdesc&gt;
+   &lt;javaFieldDetail&gt;
+      &lt;javaFieldDef&gt;
+         &lt;javaFieldAccess value="protected"/&gt;
+         &lt;javaFieldPrimitive name="type" value="int"/&gt;
+         &lt;javaFieldArray value="1"/&gt;
+      &lt;/javaFieldDef&gt;
+   &lt;/javaFieldDetail&gt;
+&lt;/javaField&gt;</codeblock> </example>
+<section><title>Processing Expectations</title><image href="images/javaFieldArray.jpg" placement="inline">
+<alt/></image></section>
+<section conref="../packagedef.dita#javaFieldArray-reference/javaFieldArray-containedBy-section"/><section conref="../packagedef.dita#javaFieldArray-reference/javaFieldArray-contains-section"/><section conref="../packagedef.dita#javaFieldArray-reference/javaFieldArray-contentModel-section"/><section conref="../packagedef.dita#javaFieldArray-reference/javaFieldArray-attList-section"/><section conref="../packagedef.dita#javaFieldArray-reference/javaFieldArray-classValue-section"/></refbody>
+</reference>

@@ -1,0 +1,12 @@
+<plugin id="com.moldflow.dita.plus-eclipsehelp-topics-twopass">
+
+  <require plugin="com.moldflow.dita.doctype.xhtml"/>
+  <require plugin="com.moldflow.dita.plus-transtype-eclipsehelp"/>
+
+  <template file="build_plus-eclipsehelp-topics-twopass_template.xml"/>
+  <template file="xsl/stage1-html-shell_template.xsl"/>
+  <template file="xsl/stage2-html-shell_template.xsl"/>
+
+  <feature extension="dita.conductor.target.relative" value="build.xml" type="file"/>
+  <feature extension="depend.plus-transtype-eclipsehelp.topics.dispatch" value="plus-eclipsehelp-topics-twopass.dispatch" type="text"/>
+</plugin>

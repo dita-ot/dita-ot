@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ *-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:group name="schemeref">
+    <xs:sequence>
+      <xs:element ref="schemeref"/>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="hasNarrower">
+    <xs:sequence>
+      <xs:element ref="hasNarrower"/>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="hasKind">
+    <xs:sequence>
+      <xs:element ref="hasKind"/>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="hasPart">
+    <xs:sequence>
+      <xs:element ref="hasPart"/>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="hasInstance">
+    <xs:sequence>
+      <xs:element ref="hasInstance"/>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="subjectHead">
+    <xs:sequence>
+      <xs:element ref="subjectHead"/>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="subjectdef">
+    <xs:sequence>
+      <xs:element ref="subjectdef"/>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="subjectmeta">
+    <xs:sequence>
+      <xs:element ref="subjectmeta"/>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="subjPrefLabel">
+    <xs:sequence>
+      <xs:element ref="subjPrefLabel"/>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="subjAltLabel">
+    <xs:sequence>
+      <xs:element ref="subjAltLabel"/>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="subjHiddenLabel">
+    <xs:sequence>
+      <xs:element ref="subjHiddenLabel"/>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="subjPrefSymbol">
+    <xs:sequence>
+      <xs:element ref="subjPrefSymbol"/>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="subjAltSymbol">
+    <xs:sequence>
+      <xs:element ref="subjAltSymbol"/>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="relatedSubjects">
+    <xs:sequence>
+      <xs:element ref="relatedSubjects"/>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="subjectRelTable">
+    <xs:sequence>
+      <xs:element ref="subjectRelTable"/>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="subjectRelHeader">
+    <xs:sequence>
+      <xs:element ref="subjectRelHeader"/>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="subjectRel">
+    <xs:sequence>
+      <xs:element ref="subjectRel"/>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="subjectRole">
+    <xs:sequence>
+      <xs:element ref="subjectRole"/>
+    </xs:sequence>
+  </xs:group>
+</xs:schema>

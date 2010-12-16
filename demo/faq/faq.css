@@ -1,0 +1,92 @@
+/*
+ | (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
+*/
+
+faq {
+  display: block;
+  margin-top: 6pt;
+  margin-bottom: 9pt;
+  font-family: sans-serif;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+faq>title {
+  display: block;
+  margin-top: 16pt;
+  margin-bottom: 9pt;
+  font-size: 20pt;
+  font-weight: bold;
+  color: #000001;
+}
+
+faqgroup>title {
+  display: block;
+  font-weight: bold;
+  font-style: normal;
+  margin-bottom: 1em;
+}
+
+faqitem {
+  display: block;
+  margin-left: 1em;
+  margin-bottom: 1em;
+}
+
+faqans {
+  display: block;
+  margin-bottom: 0.5em;
+  line-height:    125%;
+}
+
+faqquest {
+  display: block;
+  font-style: italic;
+  margin-bottom: 0.5em;
+  line-height:    125%;
+}
+
+keyword {
+  font-family: Courier, Monospace;
+}
+
+faqprop {
+  display: block;
+  background-color: #EEEEEE;
+  padding-top: 0.25em;
+  padding-right: 0.25em;
+  padding-left: 0.25em;
+  padding-bottom: 0.25em;
+}
+
+faqquest, faqans {
+  display: list-item;
+  list-style-type: none;
+}
+
+faqquest:before {
+  content: "Q: ";
+  font-weight: bold;
+}
+
+faqans:before {
+  content: "A: ";
+  font-weight: bold;
+}
+
+name:before {
+  content: "Name: ";
+  font-weight: bold;
+  color: #990000;
+}
+
+name, ownerEmail {
+  display: block;
+}
+
+ownerEmail:before {
+  display: block;
+  font-weight: bold;
+  content: "Email: "attr(href);
+  color: #990000;
+}

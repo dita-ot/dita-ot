@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\..\dtd\reference.dtd">
+<reference id="hiddenLabel" outputclass="element" xml:lang="en-us">
+<title>hiddenLabel</title>
+<shortdesc>An name that is sometimes applied to the subject but shouldn't
+be presented to the user. </shortdesc>
+<refbody>
+<section><title>Description</title><p>Y<?Pub Caret1?>ou might regard acronyms
+or misspellings as hidden labels if these aren't correct ways to reference
+it. See also <xref format="html" href="http://www.w3.org/TR/swbp-skos-core-guide/#sechidden">http://www.w3.org/TR/swbp-skos-core-guide/#sechidden</xref
+>.</p></section>
+<section conref="../packagedef.xml#hiddenLabel-reference/hiddenLabel-containedBy-section"></section>
+<section conref="../packagedef.xml#hiddenLabel-reference/hiddenLabel-contains-section"></section>
+<section conref="../packagedef.xml#hiddenLabel-reference/hiddenLabel-contentModel-section"></section>
+<section conref="../packagedef.xml#hiddenLabel-reference/hiddenLabel-attList-section"></section>
+<section conref="../packagedef.xml#hiddenLabel-reference/hiddenLabel-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001256?>

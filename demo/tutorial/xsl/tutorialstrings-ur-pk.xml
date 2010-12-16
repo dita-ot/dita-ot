@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file in the
+     main toolkit package for applicable licenses.-->
+<!-- (C) Copyright IBM Corporation 2005, 2009 All Rights Reserved. -->
+<strings xml:lang="ur-pk">        <!-- Urdu -->
+
+  <str name="tutorialNext">اگلا</str>
+  <str name="tutorialPrevious">سابقہ</str>
+  <str name="Modules in this tutorial">تربیتی کورس کے اجزاء</str>
+  <str name="Lessons in this tutorial">اس تربیتی کورس کے اسباق</str>
+  <str name="Lessons in this module">اس جزء کے اسباق</str>
+
+</strings>

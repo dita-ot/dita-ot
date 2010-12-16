@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="reference_F16A859F9B0E426B8BB110ECFA794EAA">
+  <title><keyword>plus-anyhtml-topics-twopass</keyword></title>
+
+  <shortdesc>The <keyword>plus-anyhtml-topics-twopass</keyword> plugin depends on the existence of any one of the two-pass topic-to-(X)HTML plugins. Plugins that require two-pass topic processing but are not fussy about which HTML-based output being produced can depend on <keyword>plus-anyhtml-topics-twopass</keyword> and know that at least one transform will use them.</shortdesc>
+
+  <refbody>  
+  <section id="section_1ED97B49069548D2931AC1152152F57B"><title>Plugin ID</title><p><apiname>com.moldflow.dita.plus-anyhtml-topics-twopass</apiname></p></section><section id="section_7F6DEEA4E1E5488586C8FF7C57D2F169"><title>Prerequisite plugins</title><ul id="ul_0B933A1C52A64D7184DA6015365D7FB7"><li id="li_4075D23FB26C4B039FF173AE5E1E593F"><apiname>com.moldflow.dita.plus-html-topics-twopass</apiname> or <apiname>com.moldflow.dita.plus-xhtml-topics-twopass</apiname> or <apiname>com.moldflow.dita.plus-htmlhelp-topics-twopass</apiname> or <apiname>com.moldflow.dita.plus-eclipsehelp-topics-twopass</apiname></li></ul></section><section id="section_E9B277640879405C81E175FD55792C70"><title>XSLT requirements</title><p>None.</p></section><section id="section_79304AD677314F11BE689B842F0F16FB"><title>Ant requirements</title><p>None.</p></section><section id="section_5862E90B644642CCA38E345D69240316"><title>Java requirements</title><p>None.</p></section><section id="section_1490F6131D504A26859B66608759EFE0"><title>Limitations</title><p>None.</p>
+</section></refbody>
+</reference>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="apiSyntaxText" outputclass="element" xml:lang="en-us">
+<title>apiSyntaxText</title>
+<shortdesc>The &lt;apiSyntaxText&gt; element provides the representation in the
+programming language for the declared interface for the API item.</shortdesc>
+<refbody>
+<section><title>Description</title><p>In the &lt;apiDef&gt; element,
+the &lt;apiSyntaxText&gt; element can supplement or replace the semantic declaration
+of the same interface. When a specialization provides a complete representation
+of the interface within a specialized &lt;apiDef&gt; element, the &lt;apiSyntaxText&gt;
+element can be omitted. The Java DITA API reference takes this approach. </p></section>
+<example><title>Example</title>The following example shows a simple &lt;apiSyntaxText&gt;
+element for a Visual Basic statement:<codeblock>&lt;apiClassifier id="rational.xde" outputclass="statement" platform="vb"&gt;
+    &lt;apiName&gt;TestImplements&lt;/apiName&gt;
+    &lt;shortdesc&gt;Specifies one or more interfaces or interface members.&lt;/shortdesc&gt;
+    &lt;apiClassifierDetail&gt;
+       &lt;apiSyntax platform="vb"&gt;
+        &lt;apiSyntaxText&gt;Implements &lt;apiItemName&gt;IRXEAbstraction&lt;/apiItemName&gt; &lt;apiItemName&gt;TestImplements&lt;/apiItemName&gt;[, …]&lt;apiRelation
+        &lt;/apiSyntaxText&gt;
+        &lt;apiSyntaxItem&gt;
+          &lt;apiItemName&gt;IRXEAbstraction&lt;/apiItemName&gt;
+          &lt;apiDefNote&gt;Required. An interface whose properties, methods, and events will be 
+             implemented by corresponding members in the class or structure.&lt;/apiDefNote&gt;
+        &lt;/apiSyntaxItem&gt;
+        &lt;apiSyntaxItem&gt;
+         &lt;apiItemName&gt;TestImplements&lt;/apiItemName&gt;
+           &lt;apiDefNote&gt;Required. The member of an interface that is being implemented.&lt;/apiDefNote&gt;
+        &lt;/apiSyntaxItem&gt;
+      &lt;/apiSyntax&gt;
+      &lt;apiDesc&gt;...&lt;/apiDesc&gt;
+&lt;/apiClassifier&gt;</codeblock></example>
+
+<section conref="../packagedef.dita#apiSyntaxText-reference/apiSyntaxText-containedBy-section"/><section conref="../packagedef.dita#apiSyntaxText-reference/apiSyntaxText-contains-section"/><section conref="../packagedef.dita#apiSyntaxText-reference/apiSyntaxText-contentModel-section"/><section conref="../packagedef.dita#apiSyntaxText-reference/apiSyntaxText-attList-section"/><section conref="../packagedef.dita#apiSyntaxText-reference/apiSyntaxText-classValue-section"/></refbody>
+</reference>

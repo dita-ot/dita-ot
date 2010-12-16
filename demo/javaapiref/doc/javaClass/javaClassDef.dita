@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="javaClassDef" outputclass="element" xml:lang="en-us">
+<title>javaClassDef</title>
+<shortdesc>The &lt;javaClassDef&gt; element represents the Java class declaration.</shortdesc>
+<refbody>
+<section><title>Description</title><p>A class declaration specifies a new
+named reference type, for example: <simpletable>
+<strow>
+<stentry><lines><b>ClassDeclaration:</b>
+      <i>ClassModifiers<sup>opt</sup></i>   class Identifier   <i>Super<sup>opt</sup>  Interface<sup>opt</sup></i>    ClassBody</lines></stentry>
+</strow>
+</simpletable>A class declaration can include the following modifiers: <i>public</i>, <i>abstract</i>, <i>static</i>,
+or <i>final</i> and can be represented by the &lt;javaClassAccess&gt; element.
+The class modifiers precede the class keyword in the class definition. </p></section>
+<section conref="../packagedef.dita#javaClassDef-reference/javaClassDef-containedBy-section"/><section conref="../packagedef.dita#javaClassDef-reference/javaClassDef-contains-section"/><section conref="../packagedef.dita#javaClassDef-reference/javaClassDef-contentModel-section"/><section conref="../packagedef.dita#javaClassDef-reference/javaClassDef-attList-section"/><section conref="../packagedef.dita#javaClassDef-reference/javaClassDef-classValue-section"/></refbody>
+</reference>

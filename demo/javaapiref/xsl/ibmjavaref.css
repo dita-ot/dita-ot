@@ -1,0 +1,149 @@
+/***
+ * (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ ***/
+DIV.apiDescription {
+  display:        block;
+  margin-bottom:  1.2em;
+}
+P.apiSignature {
+}
+P.javaClassDef {
+}
+P.javaMethodDetailHeader {
+  font-weight:     bold;
+  margin-left:     1.2em;
+  margin-bottom:   0em;
+  padding-bottom:  0em;
+}
+P.signatureSummary,
+SPAN.signatureSummary {
+  font-family: MS Courier New, Courier, monospace;
+}
+P.javaMethodSignature {
+  font-family: MS Courier New, Courier, monospace;
+}
+P.javaMethodDetail,
+P.javaConstructorDetail {
+  background-color:  #CCCCFF;
+  border:            .05em solid black;
+  font-family:       Verdana, Arial, Helvetica, sans-serif;
+  font-weight:       bold;
+}
+
+SPAN.apiName {
+}
+SPAN.apiRelation {
+}
+SPAN.javaClassAccess_access {
+}
+SPAN.javaInterfaceName,
+SPAN.javaClassName,
+SPAN.javaMethodName {
+  font-weight:  bold;
+}
+SPAN.javaMethodAccess_access {
+}
+SPAN.javaParamPrimitive_type {
+}
+
+TABLE.baseSummary,
+TABLE.packageSubpackageSummary,
+TABLE.packageInterfaceSummary,
+TABLE.packageClassSummary,
+TABLE.constructorSummary,
+TABLE.fieldSummary,
+TABLE.methodSummary {
+  width:            100%;
+  margin-bottom:    .6em;
+  border-collapse:  collapse;
+}
+TABLE.methodParameters,
+TABLE.methodReturns,
+TABLE.methodExceptions {
+  margin-top:   0em;
+  padding-top:  0em;
+  margin-left:  2.5em;
+}
+TABLE.methodParameters TD {
+  vertical-align:  top;
+}
+TH.apiSummaryHead {
+  font-family:       Verdana, Arial, Helvetica, sans-serif;
+  padding:           .1em;
+  background-color:  #CCCCFF;
+  border:            .05em solid black;
+}
+TABLE.baseSummary TD,
+TABLE.constructorSummary TD,
+TABLE.fieldSummary TD,
+TABLE.methodSummary TD {
+  padding:  .1em;
+  border:   .05em solid gray;
+}
+TABLE.packageSubpackageSummary TD,
+TABLE.packageInterfaceSummary TD,
+TABLE.packageClassSummary TD {
+  padding-top:     .1em;
+  padding-left:    .1em;
+  padding-right:   .1em;
+  padding-bottom:  .6em;
+  border:          .05em solid gray;
+}
+TD.apiPackageListName {
+  text-align:      left;
+  width:           15%;
+}
+TD.apiPackageListDesc {
+}
+TD.apiDatatype {
+  font-family: MS Courier New, Courier, monospace;
+  text-align:  right;
+  width:       15%;
+}
+TD.paramListing {
+  font-family: MS Courier New, Courier, monospace;
+  text-align:  right;
+}
+TD.exceptionListing {
+  text-align:  right;
+}
+A.headPackage {
+  font-size:       smaller;
+  text-decoration: none;
+  color:           black;
+}
+A.headPackage:link {
+  text-decoration: none;
+  color:           black;
+}
+A.headPackage:visited {
+  text-decoration: none;
+  color:           black;
+}
+A.headPackage:hover {
+  text-decoration: underline;
+  color:           black;
+}
+A.baseHeader {
+  text-decoration: none;
+  color:           black;
+}
+A.baseHeader:link {
+  text-decoration: none;
+  color:           black;
+}
+A.baseHeader:visited {
+  text-decoration: none;
+  color:           black;
+}
+A.baseHeader:hover {
+  text-decoration: underline;
+  color:           black;
+}
+DIV.methodDescription {
+  margin-left: 1.2em;
+}
+H3.packageDescriptionHead {
+  font-size:   larger;
+  font-weight: bold;
+}

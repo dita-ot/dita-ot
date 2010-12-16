@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="apiValue_module" outputclass="module" xml:lang="en-us">
+<title>apiValue module</title>
+<shortdesc>Defines a subordinate container to the &lt;apiOperation> element
+for generic topic types such as constants, variables, enumerations, structures,
+or other named values.</shortdesc>
+<refbody>
+<section><title>Description</title><p>The named values can be
+nested as part of a classifier or package interface.  </p></section>
+<example><title>Example</title><p>The following example shows a simple &lt;apiValue>
+element for Visual Basic parameters:</p><codeblock><![CDATA[<apiOperation id=”com.ibm.xtools”>
+]]></codeblock><codeblock><![CDATA[<apiValue id="startWriteAction">
+   <apiName>theNameOPT</apiName>
+   <apiValueDetail>
+      <apiValueDef>
+         <apiQualifier name="type" value="string"/>
+          <apiValueClassifier href="../string.html" type="html" scope="local">
+              String
+          </apiValueClassifier>
+          <apiDefNote>A string that provides the name to assign to the action. 
+             Providing a valid value for this parameter is optional.
+           </apiDefNote>
+      </apiValueDef>
+    </apiValueDetail>
+</apiValue>
+<apiValue id="startWriteAction">
+   <apiName>delimiterOPT</apiName>
+   <apiValueDetail>
+      <apiValueDef>
+         <apiQualifier name="parameter" value="delimiterOPT"/>
+          <apiValueClassifier
+              href="../string.html" type="html" scope="local">
+              String
+          </apiValueClassifier>
+          <apiDefNote>
+             A string that provides the text that you want to use to separate the stereotype
+             names. Providing a valid value for this parameter is optional.
+           </apiDefNote>
+      </apiValueDef>
+    </apiValueDetail>
+</apiValue>
+]]></codeblock><codeblock><![CDATA[</apiOperation>
+]]></codeblock></example>
+</refbody>
+</reference>

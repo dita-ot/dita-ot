@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+ | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ *-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:group name="apiClassifier">
+    <xs:sequence>
+      <xs:element ref="apiClassifier"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="apiClassifierDetail">
+    <xs:sequence>
+      <xs:element ref="apiClassifierDetail"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="apiClassifierDef">
+    <xs:sequence>
+      <xs:element ref="apiClassifierDef"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="apiBaseClassifier">
+    <xs:sequence>
+      <xs:element ref="apiBaseClassifier"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="apiClassifierMember">
+    <xs:sequence>
+      <xs:element ref="apiClassifierMember"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="apiOtherClassifier">
+    <xs:sequence>
+      <xs:element ref="apiOtherClassifier"/>
+    </xs:sequence>
+  </xs:group>
+</xs:schema>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+<!DOCTYPE apiPackage PUBLIC "-//IBM//DTD DITA API Package Type//EN"
+"dtd/apiPackage.dtd">
+-->
+<!--
+ | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ *-->
+
+<!--vocabulary declarations-->
+<!ENTITY % pr-d-dec PUBLIC "-//OASIS//ENTITIES DITA Programming Domain//EN"
+  "../../../dtd/programmingDomain.ent">
+  %pr-d-dec;
+<!ENTITY % sw-d-dec PUBLIC "-//OASIS//ENTITIES DITA Software Domain//EN"
+  "../../../dtd/softwareDomain.ent">
+  %sw-d-dec;
+<!ENTITY % ui-d-dec PUBLIC "-//OASIS//ENTITIES DITA User Interface Domain//EN"
+  "../../../dtd/uiDomain.ent">
+  %ui-d-dec;
+<!ENTITY % ut-d-dec PUBLIC "-//OASIS//ENTITIES DITA Utilities Domain//EN" 
+  "../../../dtd/utilitiesDomain.ent">
+  %ut-d-dec;
+<!ENTITY % hi-d-dec PUBLIC "-//OASIS//ENTITIES DITA Highlight Domain//EN" 
+  "../../../dtd/highlightDomain.ent">
+  %hi-d-dec;
+<!ENTITY % api-d-dec PUBLIC "-//IBM//ENTITIES DITA API Domain//EN"
+  "apiDomain.ent">
+  %api-d-dec;
+
+<!--vocabulary substitution-->
+<!ENTITY % pre          "pre     | %pr-d-pre;     | %sw-d-pre;     | 
+                                   %ui-d-pre;"                       >
+<!ENTITY % keyword      "keyword | %pr-d-keyword; | %sw-d-keyword; |
+                                   %ui-d-keyword;"                   >
+<!ENTITY % ph           "ph      | %pr-d-ph;      | %sw-d-ph;      | 
+                                    %hi-d-ph;     | %ui-d-ph;"       >
+<!ENTITY % fig          "fig     | %pr-d-fig;     | %ut-d-fig;"      >
+<!ENTITY % dl           "dl      | %pr-d-dl;"                        >
+<!ENTITY % xref         "xref    | %api-d-xref;"                     >
+
+<!--Declare the domains-->
+<!ENTITY included-domains "&ui-d-att; &hi-d-att; &pr-d-att; &sw-d-att;
+                           &ut-d-att; &api-d-att;">
+
+<!--Topic nesting uses defaults-->
+
+<!ENTITY % topicDefns PUBLIC "-//OASIS//ENTITIES DITA Topic Definitions//EN"
+  "../../../dtd/topicDefn.ent">
+  %topicDefns;
+
+<!--Embed the base topic module to define the base elements-->
+<!ENTITY % topic-type PUBLIC "-//OASIS//ELEMENTS DITA Topic//EN"
+  "../../../dtd/topic.mod">
+  %topic-type;
+
+<!--Embed the base reference module to define the base elements-->
+<!ENTITY % reference-type PUBLIC "-//OASIS//ELEMENTS DITA Reference//EN"
+  "../../../dtd/reference.mod">
+  %reference-type;
+
+<!--Embed the base API module to define the base elements-->
+<!ENTITY % apiref-typemod PUBLIC "-//IBM//ELEMENTS DITA API Reference//EN"
+  "apiRef.mod">
+  %apiref-typemod;
+
+<!--Embed the API module to get the generic API Package elements-->
+<!ENTITY % apipackage-typemod PUBLIC "-//IBM//ELEMENTS DITA API Package//EN"
+  "apiPackage.mod">
+  %apipackage-typemod;
+
+<!--Embed the API module to get the generic API Classifier elements-->
+<!ENTITY % apiclass-typemod PUBLIC "-//IBM//ELEMENTS DITA API Classifier//EN"
+  "apiClassifier.mod">
+  %apiclass-typemod;
+
+<!--Embed the API module to get the generic API Operation elements-->
+<!ENTITY % apioperation-typemod PUBLIC "-//IBM//ELEMENTS DITA API Operation//EN"
+  "apiOperation.mod">
+  %apioperation-typemod;
+
+<!--Embed the API module to get the generic API Value elements-->
+<!ENTITY % apivalue-typemod PUBLIC "-//IBM//ELEMENTS DITA API Value//EN"
+  "apiValue.mod">
+  %apivalue-typemod;
+
+<!--vocabulary definitions-->
+<!ENTITY % pr-d-def PUBLIC "-//OASIS//ELEMENTS DITA Programming Domain//EN"
+  "../../../dtd/programmingDomain.mod">
+  %pr-d-def;
+<!ENTITY % hi-d-def PUBLIC "-//OASIS//ELEMENTS DITA Highlight Domain//EN" 
+  "../../../dtd/highlightDomain.mod"                                               >
+  %hi-d-def;
+<!ENTITY % sw-d-def PUBLIC "-//OASIS//ELEMENTS DITA Software Domain//EN"
+  "../../../dtd/softwareDomain.mod">
+  %sw-d-def;
+<!ENTITY % ui-d-def PUBLIC "-//OASIS//ELEMENTS DITA User Interface Domain//EN"
+  "../../../dtd/uiDomain.mod">
+  %ui-d-def;
+<!ENTITY % ut-d-def PUBLIC "-//OASIS//ELEMENTS DITA Utilities Domain//EN" 
+  "../../../dtd/utilitiesDomain.mod">
+  %ut-d-def;
+<!ENTITY % api-d-def PUBLIC "-//IBM//ELEMENTS DITA API Domain//EN"
+  "apiDomain.mod">
+  %api-d-def;
+

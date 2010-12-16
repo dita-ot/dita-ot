@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\..\dtd\reference.dtd">
+<reference id="subjectHead" outputclass="element" xml:lang="en-us">
+<title>subjectHead</title>
+<shortdesc>Specifies a collection of subjects and assigns a title to the collection. </shortdesc>
+<refbody>
+<section><title>Description</title><p>A subject head helps to organize the
+subjects but doesn't classify your content topics. See also <xref format="html"
+href="http://www.w3.org/TR/swbp-skos-core-guide/#seclabelledcollections">http://www.w3.org/TR/swbp-skos-core-guide/#seclabelledcollections</xref>.</p
+><?Pub Caret1?></section>
+<section conref="../packagedef.xml#subjectHead-reference/subjectHead-containedBy-section"></section>
+<section conref="../packagedef.xml#subjectHead-reference/subjectHead-contains-section"></section>
+<section conref="../packagedef.xml#subjectHead-reference/subjectHead-contentModel-section"></section>
+<section conref="../packagedef.xml#subjectHead-reference/subjectHead-attList-section"></section>
+<section conref="../packagedef.xml#subjectHead-reference/subjectHead-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001250?>

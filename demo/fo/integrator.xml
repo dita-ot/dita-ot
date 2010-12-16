@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  
+  <!-- test to see where the fo plugin is located, plugins or demo -->
+  <available file="${dita.dir}/plugins/fo/build.xml" property="pdf2.dir" value="plugins"/>
+  <condition property="pdf2.dir" value="demo">
+    <not>
+      <isset property="pdf2.dir"/>
+    </not>
+  </condition>
+  
+  <target name="dita2pdf2" depends="pdfswitch-warning, dita-preprocess, map2pdf2, topic2pdf2"/> 
+  
+  <condition property="pdftranstype">
+    <equals arg1="${transtype}" arg2="pdf" casesensitive="false"></equals>
+  </condition>
+    
+  <target name="pdfswitch-warning" if="pdftranstype">
+    <echo>/------------------------------------------\</echo>
+    <echo>| PLEASE NOTE: YOU ARE USING THE FO PLUGIN |</echo>
+    <echo>| If you want the old pdf transtype, use   |</echo>
+    <echo>| the "legacypdf" transtype instead.       |</echo>
+    <echo>\------------------------------------------/</echo>
+  </target>
+  
+  <target name="topic2pdf2" if="noMap" depends="dita-preprocess">
+	<ant dir="${dita.dir}/${pdf2.dir}/fo" target="preview.topic.pdf">
+		<property name="caller.dir" value="${basedir}"/>
+	</ant>
+  </target>
+
+  <target name="map2pdf2" unless="noMap" depends="dita-preprocess">
+  	<dirname property="dita.temp.dir.fullpath" file="${dita.temp.dir}${file.separator}dummy.file"/>
+    <pipeline message="topicmerge" module="TopicMerge"
+              inputmap="${dita.temp.dir.fullpath}${file.separator}${user.input.file}"
+              tempdir="${dita.temp.dir.fullpath}"
+              extparam="output=${dita.temp.dir.fullpath}${file.separator}${dita.map.filename.root}_MERGED.xml;style=${dita.dir}/${pdf2.dir}/fo/xsl/common/topicmerge.xsl">
+    </pipeline>
+
+    <ant dir="${dita.dir}/${pdf2.dir}/fo" target="publish.map.pdf">
+        <property name="caller.dir" value="${basedir}"/>
+    </ant>
+  </target>
+</project>

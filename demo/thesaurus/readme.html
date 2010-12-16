@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Taxonomy Specialization</title>
+</head>
+<body><div><h1>Taxonomy Specialization</h1>
+<p><strong>Purpose:</strong>
+The Taxonomy (thesaurus) specialization defines formal subjects and
+the relationships between those subjects so you can classify what 
+your content is about.  For a more detailed explanation, see the 
+article at 
+<a href="http://www-128.ibm.com/developerworks/xml/library/x-dita10/">http://www-128.ibm.com/developerworks/xml/library/x-dita10/</a>.</p>
+<p>You can view the <a href="doc/frameset.html">reference
+documentation</a> for the taxonomy specialization.</p>
+<div><h2>Building</h2>
+<p>The Taxonomy specialization provides the conductor.xml file to
+extend the base Ant targets with the following build targets:</p>
+<dl>
+<dt>associateMap2skos</dt>
+<dd>Build an association DITA map to convert a taxonomy scheme map and
+classification map to SKOS.</dd>
+<dt>content2xhtml</dt>
+<dd>Build the topic content for a taxonomy scheme map and
+classification map to HTML.</dd>
+<dt>subjects2html</dt>
+<dd>Build a catalog for a taxonomy scheme map as HTML.</dd>
+</dl>
+<p>The run-ant.xml file executes these build targets on the sample
+content. See the conductor.xml file for lower level targets.</p>
+<p>You should run the sample Ant build from the base directory for the DITA
+Open Toolkit, using a relative path to the Taxonomy specialization:</p>
+<pre>ant -f demo\thesaurus\install_plugin.xml
+ant -f demo\thesaurus\run_ant.xml <i>optionalTarget</i></pre>
+<p>You need only execute the install_plugin.xml file after initial
+installation or update of any plugin.</p>
+</div>
+<div><h2>Contents</h2><p>The specialization includes subdirectories
+with the following contents:</p><dl>
+<dt>doc</dt>
+<dd>The source files and output for the documentation.</dd>
+<dt>dtd</dt>
+<dd>DTDs for the document type for the taxonomy specialization.</dd>
+<dt>out</dt>
+<dd>Formatted sample output files from the Ant build.</dd>
+<dt>sample</dt>
+<dd>Source files for an example of subjects and classified content.</dd>
+<dt>xsd</dt>
+<dd>XML Schemas for the document type for the taxonomy specialization.</dd>
+<dt>xsl</dt>
+<dd>Transforms for producing the output of the Ant build.</dd>
+</dl></div>
+<div><h2>Contributors</h2><p>Erik Hennum, Colin Bird, and
+Robert D Anderson</p>
+</div>
+</div>
+</body>
+</html>

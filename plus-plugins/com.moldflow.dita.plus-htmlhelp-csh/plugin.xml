@@ -1,0 +1,13 @@
+<plugin id="com.moldflow.dita.plus-htmlhelp-csh">
+  
+  <require plugin="com.moldflow.dita.plus-htmlhelp-hhp-modular"/>
+
+  <template file="build_plus-htmlhelp-csh_template.xml"/>
+  <template file="xsl/map2alias-shell_template.xsl"/>
+  <template file="xsl/topic2alias-shell_template.xsl"/>
+
+  <feature extension="dita.conductor.target.relative" value="build.xml" type="file"/>
+  <feature extension="depend.plus-transtype-htmlhelp.map.basic.hhp.pre" value="plus-htmlhelp-csh.alias" type="text" />
+  <feature extension="xsl.plus-transtype-htmlhelp.map2hhp" value="xsl/map2hhp.xsl" type="file"/>
+
+</plugin>

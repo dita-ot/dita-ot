@@ -1,0 +1,29 @@
+<project name="plus-allhtml-mathml-svginline">
+
+  <target name="plus-allhtml-mathml-svginline.init" depends="plus-allhtml-mathml.init">
+    <!-- MathML format to be placed into XHTML output. -->
+    <condition property="plus.mathml.format" value="svginline">
+      <not>
+        <isset property="plus.mathml.format"/>
+      </not>
+    </condition>
+
+    <condition property="plus-allhtml-mathml-svginline.mathml2svg.required">
+      <and>
+        <equals arg1="${plus.mathml.format}" arg2="svginline"/>
+        <available classname="com.moldflow.jeuclid.ant.MathML2SVG" classpathref="dost.class.path"/>
+      </and>
+    </condition>
+  </target>
+
+  <target name="plus-allhtml-mathml-svginline.call" if="plus-allhtml-mathml-svginline.mathml2svg.required">
+    <taskdef name="mathml2svg" classname="com.moldflow.jeuclid.ant.MathML2SVG" classpathref="dost.class.path">
+    </taskdef>
+
+    <mathml2svg toDir="${dita.temp.dir}" size="14" baselineExtension=".baseline">
+      <fileset dir="${dita.temp.dir}" includes="**/*.mml" />
+      <globmapper from="*.mml" to="*.svg"/>
+    </mathml2svg>
+  </target>
+
+</project>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="javaPackageDetail" xml:lang="en-us">
+<title>javaPackageDetail</title>
+<shortdesc>The &lt;javaPackageDetail&gt; element provides detailed information
+about the Java package. </shortdesc>
+<refbody>
+<section><title>Description</title><p>In the &lt;javaPackageDetail&gt;
+element, the &lt;example&gt; and &lt;section&gt; elements are provided to describe
+the Java package overview. </p><p/></section>
+<section conref="../packagedef.dita#javaPackageDetail-reference/javaPackageDetail-containedBy-section"/><section conref="../packagedef.dita#javaPackageDetail-reference/javaPackageDetail-contains-section"/><section conref="../packagedef.dita#javaPackageDetail-reference/javaPackageDetail-contentModel-section"/><section conref="../packagedef.dita#javaPackageDetail-reference/javaPackageDetail-attList-section"/><section conref="../packagedef.dita#javaPackageDetail-reference/javaPackageDetail-classValue-section"/></refbody>
+</reference>

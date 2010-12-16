@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\..\dtd\reference.dtd">
+<reference id="subjectdef" outputclass="element" xml:lang="en-us">
+<title>subjectdef</title>
+<shortdesc>Within a scheme, refers to a topic that defines a formal subject. </shortdesc>
+<refbody>
+<section><title>Description</title><?Pub Caret?><p>You can use the navtitle
+and locktitle attributes to specify a preferred label for the subject within
+the scheme that is different from the default preferred label specified in
+the subject topic. The <xref href="subjectmeta.xml" type="reference"></xref> element
+provides other ways of overriding the default definition of the subject for
+the scheme.</p></section>
+<section conref="../packagedef.xml#subjectdef-reference/subjectdef-containedBy-section"></section>
+<section conref="../packagedef.xml#subjectdef-reference/subjectdef-contains-section"></section>
+<section conref="../packagedef.xml#subjectdef-reference/subjectdef-contentModel-section"></section>
+<section conref="../packagedef.xml#subjectdef-reference/subjectdef-attList-section"></section>
+<section conref="../packagedef.xml#subjectdef-reference/subjectdef-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001315?>

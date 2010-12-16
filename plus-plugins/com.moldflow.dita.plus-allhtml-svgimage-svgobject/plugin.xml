@@ -1,0 +1,19 @@
+<plugin id="com.moldflow.dita.plus-allhtml-svgimage-svgobject">
+
+  <require plugin="com.moldflow.dita.plus-allhtml-svgimage"/>
+  <require plugin="com.moldflow.dita.plus-allhtml-svgobject"/>
+
+  <template file="build_plus-allhtml-svgimage-svgobject_template.xml"/>
+
+  <feature extension="dita.conductor.target.relative" value="build.xml" type="file"/>
+
+  <feature extension="xsl.plus-xhtml-topics-twopass.stage1" value="xsl/svgimage.xsl" type="file"/>
+  <feature extension="xsl.plus-html-topics-twopass.stage1" value="xsl/svgimage.xsl" type="file"/>
+  <feature extension="xsl.plus-htmlhelp-topics-twopass.stage1" value="xsl/svgimage.xsl" type="file"/>
+  <feature extension="xsl.plus-eclipsehelp-topics-twopass.stage1" value="xsl/svgimage.xsl" type="file"/>
+
+  <feature extension="depend.plus-eclipsehelp-topics-twopass.stage1.pre" value="plus-allhtml-svgimage-svgobject.before.stage1" type="text"/>
+  <feature extension="depend.plus-htmlhelp-topics-twopass.stage1.pre" value="plus-allhtml-svgimage-svgobject.before.stage1" type="text"/>
+  <feature extension="depend.plus-xhtml-topics-twopass.stage1.pre" value="plus-allhtml-svgimage-svgobject.before.stage1" type="text"/>
+  <feature extension="depend.plus-html-topics-twopass.stage1.pre" value="plus-allhtml-svgimage-svgobject.before.stage1" type="text"/>
+</plugin>

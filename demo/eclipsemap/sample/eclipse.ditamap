@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE plugin PUBLIC "-//IBM//DTD DITA Eclipse Map Collection//EN"
+ "../dtd/eclipsemap.dtd">
+<plugin id="com.ibm.eclipsetest.doc" title="The Famed Eclipse Specialization"><?Pub Caret?>
+<pluginmeta>
+<providerName>IBM</providerName>
+<plugininfo>
+<pluginname>My Component system</pluginname>
+<vrmlist>
+<vrm version="1.0"/>
+<vrm version="2.0"/></vrmlist>
+</plugininfo>
+</pluginmeta>
+<primarytocref href="componentA.ditamap"></primarytocref>
+<tocref href="componentB.ditamap">
+<tocrefmeta>
+<extradir content="extraDir/"/></tocrefmeta>
+</tocref>
+<tocref href="comprels.ditamap" print="no" toc="no"></tocref>
+ <tocref format="xml" href="non-dita.xml"></tocref>
+<indexExtension format="xml" href="extendindex.xml"></indexExtension>
+<indexExtension href="extendindexDitamap.ditamap"></indexExtension>
+<contextExtension href="extendContext.xml">
+<contextInfo>
+<extensionName content="extension name!!!"/>
+<contextPlugin content="context.plugin"/></contextInfo>
+</contextExtension>
+<contentExtension>
+<contentProducer>
+<extensionName content="ThisIsMyExtensionName"/>
+<producerClass content="This is my content"/>
+<parameter content="param content" name="paramName"/></contentProducer>
+</contentExtension>
+<extension>
+<extensionMeta>
+<extensionPoint content="org.eclipse.new.thingie"/>
+<extensionName content="extensionName"/>
+<othermeta content="othercontent" name="othername"/></extensionMeta>
+</extension> 
+</plugin>
+<?Pub *0000001520?>

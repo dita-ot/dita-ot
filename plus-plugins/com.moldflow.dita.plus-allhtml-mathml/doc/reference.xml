@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="reference_plus-allhtml-mathml">
+    <title><keyword>plus-allhtml-mathml</keyword></title>
+    <shortdesc>The <keyword>plus-allhtml-mathml</keyword> plugin contains all base code common to
+        plugins that process MathML in DITA documents.</shortdesc>
+    <refbody>
+        <section>
+            <title>Plugin ID</title>
+            <p><apiname>com.moldflow.dita.plus-allhtml-mathml</apiname></p>
+        </section>
+        <section>
+            <title>Prerequisite plugins</title>
+            <ul>
+                <li><apiname>com.moldflow.dita.plus-transtype-anyhtml</apiname></li>
+                <li><apiname>com.moldflow.dita.specialization.mathml2</apiname></li>
+            </ul>
+        </section>
+        <section id="section_E9B277640879405C81E175FD55792C70">
+            <title>XSLT requirements</title>
+            <p>An XSLT 1.0 or later processor.</p>
+        </section>
+        <section id="section_79304AD677314F11BE689B842F0F16FB">
+            <title>Ant requirements</title>
+            <p>Ant 1.6 or later.</p>
+        </section>
+        <section id="section_5862E90B644642CCA38E345D69240316">
+            <title>Java requirements</title>
+            <p>None.</p>
+        </section>
+        <section id="section_1490F6131D504A26859B66608759EFE0">
+            <title>Limitations</title>
+            <p>None.</p>
+        </section>
+        <table id="table_88E41E91DE074FA3BFB2209B742D8BB3">
+            <title>Ant properties defined in <keyword>plus-allhtml-mathml</keyword></title>
+            <tgroup cols="3">
+                <colspec colnum="1" colname="col1" colwidth="1.00*"/>
+                <colspec colname="col02" colnum="2" colwidth="1.29*"/>
+                <colspec colnum="3" colname="col2" colwidth="1.34*"/>
+                <thead>
+                    <row>
+                        <entry colname="col1">Name</entry>
+                        <entry colname="col02">Value</entry>
+                        <entry colname="col2">Description</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry colname="col1">
+                            <keyword>plus.mathml.format</keyword>
+                        </entry>
+                        <entry colname="col02"/>
+                        <entry colname="col2">Format to use when processing MathML. This is used by
+                            plugins that depend on <keyword>plus-allhtml-mathml</keyword> to choose
+                            a plugin that will do the processing.</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+    </refbody>
+</reference>

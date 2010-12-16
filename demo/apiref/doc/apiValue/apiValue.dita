@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="apiValue" outputclass="element" xml:lang="en-us">
+<title>apiValue</title>
+<shortdesc>The &lt;apiValue&gt; element specifies a collection futures, such
+as constants, variables, enumerations, structures, or other named
+values.</shortdesc>
+<refbody>
+<section><title>Description</title><p>This element requires an ID attribute
+as an anchor point. This ID is the target for references by &lt;link&gt; , &lt;xref&gt;,
+or other internal specialization type elements that refer to the &lt;apiRef&gt;
+element content (conref and keyref attributes). Use a unique key such as fully
+qualified classifier name for the named API reference. For instance, the full
+name of a method contains the method name that is qualified by the name of
+the class that provides the method and by the name of the package that, in
+turn, provides the class. You provide the name in the API reference topic.
+The fully qualified name is generated based on the API items that contain
+this item. </p></section>
+<section conref="../packagedef.dita#apiValue-reference/apiValue-containedBy-section"/><section conref="../packagedef.dita#apiValue-reference/apiValue-contains-section"/><section conref="../packagedef.dita#apiValue-reference/apiValue-contentModel-section"/><section conref="../packagedef.dita#apiValue-reference/apiValue-attList-section"/><section conref="../packagedef.dita#apiValue-reference/apiValue-classValue-section"/></refbody>
+</reference>

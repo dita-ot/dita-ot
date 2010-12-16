@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "../../../../dtd/task.dtd">
+<task id="spraypaint" xml:lang="en-us"><title>Spray painting</title>
+<taskbody><context><p>The garage is a good place to spray paint. </p></context><steps><step><cmd>Move the car out of the garage to avoid getting paint on it.</cmd></step><step><cmd>Place newspaper, cardboard, or a drop-cloth on the garage floor.</cmd></step><step><cmd>Place the object to be painted on the covered area.</cmd></step><step><cmd>Follow the directions on the paint can to paint the object.</cmd></step><step><cmd>Let the paint dry thoroughly before you move the object.</cmd></step></steps></taskbody>
+<related-links>
+<link href="../paint.xml" type="concept"><linktext>Paint</linktext></link>
+</related-links>
+</task>

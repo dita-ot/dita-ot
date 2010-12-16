@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="javaParam" outputclass="element" xml:lang="en-us">
+<title>javaParam</title>
+<shortdesc>The &lt;javaParam&gt; element represents the definition of the parameter.</shortdesc>
+<refbody>
+<section><title>Description</title><p>Each parameter consists of a type that
+can be preceded by the final modifier and an identifier that can be followed
+by brackets that specifies the name of the parameter: </p><simpletable>
+<strow>
+<stentry><lines><b>FormalParameter:</b>
+       	<i>final<sup>opt</sup></i> Type VariableDeclaratorId
+</lines></stentry>
+</strow>
+</simpletable></section>
+<section conref="../packagedef.dita#javaParam-reference/javaParam-containedBy-section"/><section conref="../packagedef.dita#javaParam-reference/javaParam-contains-section"/><section conref="../packagedef.dita#javaParam-reference/javaParam-contentModel-section"/><section conref="../packagedef.dita#javaParam-reference/javaParam-attList-section"/><section conref="../packagedef.dita#javaParam-reference/javaParam-classValue-section"/></refbody>
+</reference>

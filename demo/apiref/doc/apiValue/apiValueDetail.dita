@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="apiValueDetail" outputclass="element" xml:lang="en-us">
+<title>apiValueDetail</title>
+<shortdesc>The &lt;apiValueDetail&gt;  element provides the detailed information
+about the access to the value.</shortdesc>
+<refbody>
+<section><title>Description</title><p>The &lt;apiValueDetail&gt; element provides
+a set of topic elements for describing in detail  a constant, variable, parameter,
+enumeration, structure, or other named value. </p></section>
+<section conref="../packagedef.dita#apiValueDetail-reference/apiValueDetail-containedBy-section"/><section conref="../packagedef.dita#apiValueDetail-reference/apiValueDetail-contains-section"/><section conref="../packagedef.dita#apiValueDetail-reference/apiValueDetail-contentModel-section"/><section conref="../packagedef.dita#apiValueDetail-reference/apiValueDetail-attList-section"/><section conref="../packagedef.dita#apiValueDetail-reference/apiValueDetail-classValue-section"/></refbody>
+</reference>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+
+<!--
+ | ** THIS FILE IS NOT A DITA DOCUMENT. IT CONTAINS LANGUAGE REPLACEMENTS
+ | ** FOR GENERATED TEXT IN DITA TRANSFORMS.
+ *-->
+<strings>
+
+<!-- English US version -->
+<str xml:lang="en-us" name="Question">Question</str>
+<str xml:lang="en-us" name="Answer">Answer</str> 
+
+<!-- Spanish Spain version -->
+<str xml:lang="es-es" name="Question">Pregunta</str>
+<str xml:lang="es-es" name="Answer">Respuesta</str> 
+
+<!-- German Germany version -->
+<str xml:lang="de-de" name="Question">Frage</str>
+<str xml:lang="de-de" name="Answer">Antwort</str> 
+
+</strings> 

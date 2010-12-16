@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="apiItemName" outputclass="element" xml:lang="en-us">
+<title>apiItemName</title>
+<shortdesc>The &lt;apiItemName&gt; element provides the name for substructure
+of an interface such as parameter of an operation or subfield of a method.</shortdesc>
+<refbody>
+<section><title>Description</title><p>The &lt;apiItemName&gt; element has the
+following attributes: <i>keyref</i> and <i>outputclass</i>. </p><p>For
+example, if the description of the API item is not available, you must provide
+the name of the related API item inside the &lt;apiDefItem&gt; element and the
+fully qualified name of the element in the <i>keyref </i>attribute.</p></section>
+<example> <title>Example</title><p>The following example shows a simple &lt;apiItemName&gt;
+element for a Visual Basic method: </p><codeblock>&lt;apiOperation id="com.ibm.xtools.rational.xde" outputclass=”IRXEAbstraction”&gt;
+     &lt;apiName&gt;&lt;/apiName&gt;
+     &lt;shortdesc&gt;&lt;/shortdesc&gt;
+     &lt;apiOperationDetail&gt;
+     &lt;apiOperationDef&gt;
+         
+         &lt;apiParam&gt;
+           &lt;apiType name="type" value="int"/&gt;
+           &lt;apiArray name="array" value="array"/&gt;
+           &lt;apiItemName&gt;num&lt;/apiItemName&gt;
+         &lt;/apiParam&gt;
+         &lt;apiParam&gt;
+           &lt;apiType name="type" value="string"/&gt;
+           &lt;apiItemName&gt;map&lt;/apiItemName&gt;
+           &lt;apiDefItem&gt;Contains mapping of SQL type names.&lt;/apiDefItem&gt;
+         &lt;/apiParam&gt;
+      &lt;/apiOperationDef&gt;
+   &lt;/apiOperationDetail
+&lt;/apiOperation&gt;</codeblock> </example>
+<section conref="../packagedef.dita#apiItemName-reference/apiItemName-containedBy-section"/><section conref="../packagedef.dita#apiItemName-reference/apiItemName-contains-section"/><section conref="../packagedef.dita#apiItemName-reference/apiItemName-contentModel-section"/><section conref="../packagedef.dita#apiItemName-reference/apiItemName-attList-section"/><section conref="../packagedef.dita#apiItemName-reference/apiItemName-classValue-section"/></refbody>
+</reference>

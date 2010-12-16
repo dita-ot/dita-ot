@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\..\dtd\reference.dtd">
+<reference id="prefLabel" outputclass="element" xml:lang="en-us">
+<title>prefLabel</title>
+<shortdesc>The standard name for the subject. </shortdesc>
+<refbody>
+<section><title>Description</title><p>If you don't supply a preferred label,
+the topic title is used as the preferred label. </p></section>
+<section conref="../packagedef.xml#prefLabel-reference/prefLabel-containedBy-section"><?Pub Caret1?></section>
+<section conref="../packagedef.xml#prefLabel-reference/prefLabel-contains-section"></section>
+<section conref="../packagedef.xml#prefLabel-reference/prefLabel-contentModel-section"></section>
+<section conref="../packagedef.xml#prefLabel-reference/prefLabel-attList-section"></section>
+<section conref="../packagedef.xml#prefLabel-reference/prefLabel-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001010?>

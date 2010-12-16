@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file in the
+     main toolkit package for applicable licenses.-->
+<!-- (C) Copyright IBM Corporation 2005, 2009 All Rights Reserved. -->
+<strings xml:lang="pt-pt">        <!-- PT Portuguese -->
+
+  <str name="tutorialNext">Seguinte</str>
+  <str name="tutorialPrevious">Anterior</str>
+  <str name="Modules in this tutorial">Módulos neste tutorial</str>
+  <str name="Lessons in this tutorial">Lições neste tutorial</str>
+  <str name="Lessons in this module">Lições neste módulo</str>
+
+</strings>

@@ -1,0 +1,83 @@
+<!--  
+ | (C) Copyright IBM Corporation 2001, 2005. All Rights Reserved.
+ |
+ | The Darwin Information Typing Architecture (DITA) was orginated by
+ | IBM's XML Workgroup and ID Workbench tools team.
+ |
+ | Refer to this file by the following public identfier or an appropriate
+ | system identifier:
+ |
+ |   PUBLIC "-//IBM//ENTITIES DITA Topic Class//EN"
+ |
+ | Release history (vrm):
+ |   1.0.0 Initial release on developerWorks, March 2001 (dita00.zip)
+ |   1.0.1 fix 1 on developerWorks, October 2001 (dita01.zip)
+ |   1.0.2 consolidated redesign December 2001
+ |   1.0.3 fix 1, dtd freeze for UCD-1 January 2002
+ |   1.1.0 Release 1 March 2002 (dita10.zip)
+ |   1.1.1 Release 1.1 December 2002
+ |   1.1.2 Release 1.2 June 2003
+ |   1.1.3 Release 1.3 March 2004: bug fixes and map updates
+ |   1.1.3a bug fix: cut keyword def from meta_xml; paste into topic.mod unchanged, put into map.dtd with no tm
+ *-->
+
+<!ATTLIST topic %global-atts; class CDATA "- topic/topic ">
+<!ATTLIST title %global-atts; class CDATA "- topic/title ">
+<!ATTLIST titlealts %global-atts; class CDATA "- topic/titlealts ">
+<!ATTLIST navtitle %global-atts; class CDATA "- topic/navtitle ">
+<!ATTLIST searchtitle %global-atts; class CDATA "- topic/searchtitle ">
+<!ATTLIST shortdesc %global-atts; class CDATA "- topic/shortdesc ">
+<!ATTLIST body %global-atts; class CDATA "- topic/body ">
+<!ATTLIST no-topic-nesting %global-atts; class CDATA "- topic/no-topic-nesting ">
+<!ATTLIST section %global-atts; class CDATA "- topic/section ">
+<!ATTLIST example %global-atts; class CDATA "- topic/example ">
+<!ATTLIST desc %global-atts; class CDATA "- topic/desc ">
+<!ATTLIST prolog %global-atts; class CDATA "- topic/prolog ">
+<!ATTLIST metadata %global-atts; class CDATA "- topic/metadata ">
+<!ATTLIST p %global-atts; class CDATA "- topic/p ">
+<!ATTLIST note %global-atts; class CDATA "- topic/note ">
+<!ATTLIST lq %global-atts; class CDATA "- topic/lq ">
+<!ATTLIST q %global-atts; class CDATA "- topic/q ">
+<!ATTLIST ul %global-atts; class CDATA "- topic/ul ">
+<!ATTLIST ol %global-atts; class CDATA "- topic/ol ">
+<!ATTLIST li %global-atts; class CDATA "- topic/li ">
+<!ATTLIST itemgroup %global-atts; class CDATA "- topic/itemgroup ">
+<!ATTLIST dl %global-atts; class CDATA "- topic/dl ">
+<!ATTLIST dlhead %global-atts; class CDATA "- topic/dlhead ">
+<!ATTLIST dthd %global-atts; class CDATA "- topic/dthd ">
+<!ATTLIST ddhd %global-atts; class CDATA "- topic/ddhd ">
+<!ATTLIST dlentry %global-atts; class CDATA "- topic/dlentry ">
+<!ATTLIST dt %global-atts; class CDATA "- topic/dt ">
+<!ATTLIST dd %global-atts; class CDATA "- topic/dd ">
+<!ATTLIST fig %global-atts; class CDATA "- topic/fig ">
+<!ATTLIST figgroup %global-atts; class CDATA "- topic/figgroup ">
+<!ATTLIST pre %global-atts; class CDATA "- topic/pre ">
+<!ATTLIST lines %global-atts; class CDATA "- topic/lines ">
+<!ATTLIST keyword %global-atts; class CDATA "- topic/keyword ">
+<!ATTLIST term %global-atts; class CDATA "- topic/term ">
+<!ATTLIST ph %global-atts; class CDATA "- topic/ph ">
+<!ATTLIST tm %global-atts; class CDATA "- topic/tm ">
+<!ATTLIST boolean %global-atts; class CDATA "- topic/boolean ">
+<!ATTLIST state %global-atts; class CDATA "- topic/state ">
+<!ATTLIST image %global-atts; class CDATA "- topic/image ">
+<!ATTLIST object %global-atts; class CDATA "- topic/object ">
+<!ATTLIST param %global-atts; class CDATA "- topic/param ">
+<!ATTLIST simpletable %global-atts; class CDATA "- topic/simpletable ">
+<!ATTLIST sthead %global-atts; class CDATA "- topic/sthead ">
+<!ATTLIST strow %global-atts; class CDATA "- topic/strow ">
+<!ATTLIST stentry %global-atts; class CDATA "- topic/stentry ">
+<!ATTLIST draft-comment %global-atts; class CDATA "- topic/draft-comment ">
+<!ATTLIST required-cleanup %global-atts; class CDATA "- topic/required-cleanup ">
+<!ATTLIST fn %global-atts; class CDATA "- topic/fn ">
+<!ATTLIST indextermref %global-atts; class CDATA "- topic/indextermref ">
+<!ATTLIST cite %global-atts; class CDATA "- topic/cite ">
+<!ATTLIST xref %global-atts; class CDATA "- topic/xref ">
+<!ATTLIST related-links %global-atts; class CDATA "- topic/related-links ">
+<!ATTLIST link %global-atts; class CDATA "- topic/link ">
+<!ATTLIST linktext %global-atts; class CDATA "- topic/linktext ">
+<!ATTLIST linklist %global-atts; class CDATA "- topic/linklist ">
+<!ATTLIST linkpool %global-atts; class CDATA "- topic/linkpool ">
+<!ATTLIST linkinfo %global-atts; class CDATA "- topic/linkinfo ">
+<!ATTLIST sl %global-atts; class CDATA "- topic/sl ">
+<!ATTLIST sli %global-atts; class CDATA "- topic/sli ">
+<!ATTLIST alt %global-atts; class CDATA "- topic/alt ">

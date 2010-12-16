@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="apiSyntaxItem" outputclass="element" xml:lang="en-us">
+<title>apiSyntaxItem</title>
+<shortdesc>The &lt;apiSyntaxItem&gt; element provides the programming language
+representation of the declared interface for the API item.</shortdesc>
+<refbody>
+<section><title>Description</title>In the &lt;apiDef&gt; element, the &lt;apiSyntaxItem&gt;
+element can supplement or replace the semantic declaration of the same interface.
+When a specialization provides a complete representation of the interface
+within a specialized &lt;apiDef&gt; element, the &lt;apiSyntaxItem&gt; element is
+omitted. The Java DITA API reference takes this approach. </section>
+<example><title>Example</title>The following example shows an &lt;apiSyntaxItem&gt;
+element for a Visual Basic function:<codeblock>&lt;apiClassifier id="com.ibm.xtools.rational.xde"&gt;
+    &lt;apiName&gt;IRXEAbstraction&lt;/apiName&gt;
+    &lt;shortdesc&gt;
+      Represents a semantic mapping between elements that characterize the
+same concept.
+    &lt;/shortdesc&gt;
+    &lt;apiClassifierDetail &gt; 
+      &lt;apiSyntax&gt;
+         &lt;apiSyntaxText&gt;IRXEAbstraction&lt;/apiSyntaxText&gt;
+      &lt;/apiSyntax&gt; 
+&lt;/apiClassifier&gt;
+</codeblock></example>
+
+<section conref="../packagedef.dita#apiSyntaxItem-reference/apiSyntaxItem-containedBy-section"/><section conref="../packagedef.dita#apiSyntaxItem-reference/apiSyntaxItem-contains-section"/><section conref="../packagedef.dita#apiSyntaxItem-reference/apiSyntaxItem-contentModel-section"/><section conref="../packagedef.dita#apiSyntaxItem-reference/apiSyntaxItem-attList-section"/><section conref="../packagedef.dita#apiSyntaxItem-reference/apiSyntaxItem-classValue-section"/></refbody>
+</reference>

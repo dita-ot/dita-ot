@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="apiArray" outputclass="element" xml:lang="en-us">
+<title>apiArray</title>
+<shortdesc>The &lt;apiArray&gt; element specifies any type parts, classifier
+or data within an interface where required. </shortdesc>
+<refbody>
+<section><title>Description</title><p>You can nest the &lt;apiArray&gt; element
+for multidimensional arrays. The &lt;apiArray&gt; element has the
+following attributes: <i>name="arraysize"</i> and <i>value="n"</i>, where
+"n" is the length of the array encapsulated in the object. </p></section>
+<example> <title>Example</title><p>The following examples show how the &lt;apiArray
+value="n"/&gt; element is used for a Visual Basic method: </p><codeblock>&lt;apiOperation id="rational.xde"&gt;
+     &lt;apiName&gt;getIntArray&lt;/apiName&gt;
+     &lt;shortdesc&gt;Retrieve the contents of the SQL array designated by the object.&lt;/shortdesc&gt;
+     &lt;apiOperationDetail&gt;
+     &lt;apiOperationDef&gt;
+         &lt;apiReturn&gt;
+           &lt;apiType name="type" value="int"/&gt;
+           &lt;apiArray value="2"/&gt; 
+         &lt;/apiReturn&gt;
+         &lt;apiQualifier name="access" value="public"/&gt;
+      &lt;/apiOperationDef&gt;
+   &lt;/apiOperationDetail
+&lt;/apiOperation&gt;</codeblock><p>The following are examples of the &lt;apiArray
+value="n"/&gt; element use for a Visual Basic parameter: </p><codeblock>&lt;apiOperation id="rational.xde"&gt;
+     &lt;apiName&gt;&lt;/apiName&gt;
+     &lt;shortdesc&gt;&lt;/shortdesc&gt;
+     &lt;apiOperationDetail&gt;
+       &lt;apiOperationDef&gt;
+         &lt;apiParam&gt;
+           &lt;apiType name="type" value="int"/&gt;
+           &lt;apiArray value="1"/&gt;
+           &lt;apiItemName&gt;num&lt;/apiItemName&gt;
+         &lt;/apiParam&gt;
+         &lt;apiParam&gt;
+           &lt;apiType name="type" value="string"/&gt;
+           &lt;apiItemName&gt;map&lt;/apiItemName&gt;
+           &lt;apiDefItem&gt;contains mapping of SQL type names&lt;/apiDefItem&gt;
+         &lt;/apiParam&gt;
+      &lt;/apiOperationDef&gt;
+   &lt;/apiOperationDetail
+&lt;/apiOperation&gt;</codeblock></example>
+<section conref="../packagedef.dita#apiArray-reference/apiArray-containedBy-section"/><section conref="../packagedef.dita#apiArray-reference/apiArray-contains-section"/><section conref="../packagedef.dita#apiArray-reference/apiArray-contentModel-section"/><section conref="../packagedef.dita#apiArray-reference/apiArray-attList-section"/><section conref="../packagedef.dita#apiArray-reference/apiArray-classValue-section"/></refbody>
+</reference>

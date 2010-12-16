@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+
+<!DOCTYPE faq PUBLIC "-//IBM//DTD DITA FAQ//EN" "faq_shell.dtd">
+
+<faq id="ditafaq" xml:lang="en-us"><title>About DITA</title>
+<faqbody>
+<faqgroup><title>Designing Specializations</title>
+    <faqlist>
+    <faqitem>
+        <faqquest>How do I create a specialization?</faqquest>
+        <faqans>Create a DTD module in which the DTD elements derive from elements in an existing DTD module.</faqans>
+        <faqprop>
+                
+                <ownerEmail href="mailto:jsmith@a.company.com"><name>Jane Smith</name></ownerEmail>
+        </faqprop>
+    </faqitem>
+    <faqitem>
+        <faqquest>Which element should be the basis for my specialized element?</faqquest>
+        <faqans>You should look for a base element that
+            <ol>
+            <li>Has a more general meaning that also applies to your content</li>
+            <li>Can accomodate the substructure   of your content.</li>
+            </ol>
+            <p>For example, this specialization is based on the <keyword>simpletable</keyword> element, which models information with a repeating substructure.</p>
+        </faqans>
+    </faqitem>
+    </faqlist>
+</faqgroup>
+<faqgroup><title>Processing Specializations</title>
+    <faqlist>
+    <faqitem>
+        <faqquest>How do I format my specialization?</faqquest>
+        <faqans>First, consider whether the default formatting for the base elements meets your requirements.  If not, create a new XSLT script that imports the base XSLT script and provides the special formatting for your specialized elements. </faqans>
+    </faqitem>
+    <faqitem>
+        <faqquest>What if  another DITA user needs to reuse my content but doesn't have my specialization?</faqquest>
+        <faqans>DITA provides a built-in generalization process that automatically promotes your specialized elements to the base elements that the other user already has.</faqans>
+    </faqitem>
+    </faqlist>
+</faqgroup>
+</faqbody>
+</faq>

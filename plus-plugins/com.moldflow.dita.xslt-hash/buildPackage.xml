@@ -1,0 +1,11 @@
+<project name="build-java" default="package-jar">
+  <target name="compile">
+    <mkdir dir="build"/>
+    <javac srcdir="src" destdir="build" includes="**/*.java" target="1.5" source="1.5"/>
+  </target>
+
+  <target name="package-jar" depends="compile">
+    <mkdir dir="lib"/>
+    <jar destfile="lib/xslt-hash.jar" basedir="build" includes="**/*.class" />
+  </target>
+</project>

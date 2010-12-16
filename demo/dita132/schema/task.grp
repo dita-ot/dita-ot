@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+  <xs:group name="task">
+  	<xs:sequence>
+  	  <xs:element ref="task" />
+  	</xs:sequence>
+  </xs:group>
+  
+  <xs:group name="taskbody">
+  	<xs:sequence>
+  	  <xs:element ref="taskbody" />
+  	</xs:sequence>
+  </xs:group>
+  
+  <xs:group name="prereq">
+  	<xs:sequence>
+  	  <xs:element ref="prereq" />
+  	</xs:sequence>
+  </xs:group>
+  
+  <xs:group name="context">
+  	<xs:sequence>
+  	  <xs:element ref="context" />
+  	</xs:sequence>
+  </xs:group>
+  
+  <xs:group name="result">
+  	<xs:sequence>
+  	  <xs:element ref="result" />
+  	</xs:sequence>
+  </xs:group>
+  
+  <xs:group name="postreq">
+  	<xs:sequence>
+  	  <xs:element ref="postreq" />
+  	</xs:sequence>
+  </xs:group>
+  
+  <xs:group name="choice">
+  	<xs:sequence>
+  	  <xs:element ref="choice" />
+  	</xs:sequence>
+  </xs:group>
+  
+  <xs:group name="step">
+  	<xs:sequence>
+  	  <xs:element ref="step" />
+  	</xs:sequence>
+  </xs:group>
+  
+  <xs:group name="substep">
+  	<xs:sequence>
+  	  <xs:element ref="substep" />
+  	</xs:sequence>
+  </xs:group>
+  
+  <xs:group name="steps-unordered">
+  	<xs:sequence>
+  	  <xs:element ref="steps-unordered" />
+  	</xs:sequence>
+  </xs:group>
+  
+  <xs:group name="choices">
+  	<xs:sequence>
+  	  <xs:element ref="choices" />
+  	</xs:sequence>
+  </xs:group>
+  
+  <xs:group name="steps">
+  	<xs:sequence>
+  	  <xs:element ref="steps" />
+  	</xs:sequence>
+  </xs:group>
+  
+  <xs:group name="substeps">
+  	<xs:sequence>
+  	  <xs:element ref="substeps" />
+  	</xs:sequence>
+  </xs:group>
+  
+  <xs:group name="cmd">
+  	<xs:sequence>
+  	  <xs:element ref="cmd" />
+  	</xs:sequence>
+  </xs:group>
+  
+  <xs:group name="info">
+  	<xs:sequence>
+  	  <xs:element ref="info" />
+  	</xs:sequence>
+  </xs:group>
+  
+  <xs:group name="tutorialinfo">
+  	<xs:sequence>
+  	  <xs:element ref="tutorialinfo" />
+  	</xs:sequence>
+  </xs:group>
+  
+  <xs:group name="stepxmp">
+  	<xs:sequence>
+  	  <xs:element ref="stepxmp" />
+  	</xs:sequence>
+  </xs:group>
+  
+  <xs:group name="stepresult">
+  	<xs:sequence>
+  	  <xs:element ref="stepresult" />
+  	</xs:sequence>
+  </xs:group>
+  
+  <xs:group name="choicetable">
+  	<xs:sequence>
+  	  <xs:element ref="choicetable" />
+  	</xs:sequence>
+  </xs:group>
+  
+  <xs:group name="chhead">
+  	<xs:sequence>
+  	  <xs:element ref="chhead" />
+  	</xs:sequence>
+  </xs:group>
+  
+  <xs:group name="chrow">
+  	<xs:sequence>
+  	  <xs:element ref="chrow" />
+  	</xs:sequence>
+  </xs:group>
+  
+  <xs:group name="choption">
+  	<xs:sequence>
+  	  <xs:element ref="task" />
+  	</xs:sequence>
+  </xs:group>
+  
+  <xs:group name="chdesc">
+  	<xs:sequence>
+  	  <xs:element ref="task" />
+  	</xs:sequence>
+  </xs:group>
+  
+  <xs:group name="choptionhd">
+  	<xs:sequence>
+  	  <xs:element ref="task" />
+  	</xs:sequence>
+  </xs:group>
+  
+  <xs:group name="chdeschd">
+  	<xs:sequence>
+  	  <xs:element ref="task" />
+  	</xs:sequence>
+  </xs:group>
+  
+</xs:schema>

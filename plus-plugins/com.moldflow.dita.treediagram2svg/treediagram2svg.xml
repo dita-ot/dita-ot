@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="treediagram2svg">
+
+    <target name="treediagram2svg.copy-files.init">
+      <dirname property="treediagram2svg.dir" file="${ant.file.treediagram2svg}"/>
+      <condition property="treediagram2svg.js.root" value="${treediagram2svg.dir}/js">
+        <not>
+          <isset property="treediagram2svg.js.root"/>
+        </not>
+      </condition>
+      <condition property="treediagram2svg.css.root" value="${treediagram2svg.dir}/css">
+        <not>
+          <isset property="treediagram2svg.css.root"/>
+        </not>
+      </condition>
+      <condition property="treediagram2svg.resource.root" value="${treediagram2svg.dir}/resource">
+        <not>
+          <isset property="treediagram2svg.resource.root"/>
+        </not>
+      </condition>
+      <condition property="treediagram2svg.constants" value="${treediagram2svg.resource.root}/constants.xml">
+        <not>
+          <isset property="treediagram2svg.constants"/>
+        </not>
+      </condition>
+    </target>
+
+</project>

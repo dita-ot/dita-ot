@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaAPIMap" outputclass="element" xml:lang="en-us">
+<title>javaAPIMap module</title>
+<shortdesc>This element provides the name of an application programming interface
+(API).</shortdesc>
+<refbody>
+<section><title>Description</title>It is contained by the apiRef element.
+This element is used for:</section><?Pub Caret1?>
+<example> <title>Example</title><codeblock><![CDATA[<javaField id="IRXEAbstraction">
+<apiName>IID</apiName>
+<shortdesc>....</shortdesc>
+</javaField>
+
+<javaParameter id="testParam2">
+<apiName>testParam2</apiName>
+<shortdesc>....</shortdesc>
+</javaParameter>
+]]></codeblock> </example>
+</refbody>
+</reference>
+<?Pub *0000000829?>

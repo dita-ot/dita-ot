@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="apiRef_module" outputclass="module" xml:lang="en-us">
+<title>apiRef module</title>
+<shortdesc>Provides the structure and elements for non language specific API
+reference topic types. </shortdesc>
+<refbody>
+<section><title>Description</title>The primary purpose of the API item topic
+is to provide a basis for sharing elements among more specialized API item
+topics.</section>
+<example><title>Example</title><codeblock><![CDATA[<apiRef id="">
+   <apiName></apiName>
+   <shortdesc></shortdesc>
+   <apiDetail></apiDetail>
+</apiRef>]]></codeblock></example>
+</refbody>
+</reference>

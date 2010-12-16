@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<meta name="copyright" content="(C) Copyright 2005" />
+<meta name="DC.rights.owner" content="(C) Copyright 2005" />
+<meta content="public" name="security" />
+<meta content="index,follow" name="Robots" />
+<meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' />
+<meta content="reference" name="DC.Type" />
+<meta name="DC.Title" content="javaClassDef" />
+<meta name="abstract" content="The &lt;javaClassDef&gt; element represents the Java class declaration." />
+<meta name="description" content="The &lt;javaClassDef&gt; element represents the Java class declaration." />
+<meta scheme="URI" name="DC.Relation" content="../javaClass/javaClassDetail.html" />
+<meta scheme="URI" name="DC.Relation" content="../javaClass/javaFinalClass.html" />
+<meta scheme="URI" name="DC.Relation" content="../javaClass/javaAbstractClass.html" />
+<meta scheme="URI" name="DC.Relation" content="../javaClass/javaStaticClass.html" />
+<meta scheme="URI" name="DC.Relation" content="../javaClass/javaClassAccess.html" />
+<meta scheme="URI" name="DC.Relation" content="../javaClass/javaBaseClass.html" />
+<meta scheme="URI" name="DC.Relation" content="../javaClass/javaImplementedInterface.html" />
+<meta content="XHTML" name="DC.Format" />
+<meta content="javaClassDef" name="DC.Identifier" />
+<meta content="en-us" name="DC.Language" />
+<link href="C:\Work\dita\dost0.1\DITA-OT1.1.1\demo\javaapiref\out\doc\commonltr.css" type="text/css" rel="stylesheet" />
+<title>javaClassDef</title>
+</head>
+<body id="javaClassDef"><a name="javaClassDef"><!-- --></a>
+
+
+<h1 class="topictitle1">javaClassDef</h1>
+
+
+<div><p>The &lt;javaClassDef&gt; element represents the Java class declaration.</p>
+
+<div class="section"><h4 class="sectiontitle">Description</h4><div class="p">A class declaration specifies a new
+named reference type, for example: <table summary="" cellspacing="0" cellpadding="4" border="1" class="simpletableborder">
+<tr>
+<td valign="top"><p><strong>ClassDeclaration:</strong><br />
+      <em>ClassModifiers<sup>opt</sup></em>   class Identifier   <em>Super<sup>opt</sup>  Interface<sup>opt</sup></em>    ClassBody</p>
+</td>
+
+</tr>
+
+</table>
+A class declaration can include the following modifiers: <em>public</em>, <em>abstract</em>, <em>static</em>,
+or <em>final</em> and can be represented by the &lt;javaClassAccess&gt; element.
+The class modifiers precede the class keyword in the class definition. </div>
+</div>
+
+<div class="elementContainedBy"><h4 class="sectiontitle">Contained by</h4><p id="javaClassDef__N507BE"><a name="javaClassDef__N507BE"><!-- --></a><a href="../javaClass/javaClassDetail.html">javaClassDetail</a></p>
+</div>
+<div class="elementContains"><h4 class="sectiontitle">Contains</h4><p id="javaClassDef__N507D4"><a name="javaClassDef__N507D4"><!-- --></a><a href="../javaClass/javaAbstractClass.html">javaAbstractClass</a>, <a href="../javaClass/javaBaseClass.html">javaBaseClass</a>, <a href="../javaClass/javaClassAccess.html">javaClassAccess</a>, <a href="../javaClass/javaFinalClass.html">javaFinalClass</a>, <a href="../javaClass/javaImplementedInterface.html">javaImplementedInterface</a>, <a href="../javaClass/javaStaticClass.html">javaStaticClass</a></p>
+</div>
+<div class="elementContentModel"><h4 class="sectiontitle">Content model</h4><p id="javaClassDef__N5080D"><a name="javaClassDef__N5080D"><!-- --></a>
+  (
+  (<a href="../javaClass/javaFinalClass.html">javaFinalClass</a>)
+<em>(optional)</em> then 
+  (<a href="../javaClass/javaAbstractClass.html">javaAbstractClass</a>)
+<em>(optional)</em> then 
+  (<a href="../javaClass/javaStaticClass.html">javaStaticClass</a>)
+<em>(optional)</em> then 
+  (<a href="../javaClass/javaClassAccess.html">javaClassAccess</a>)
+<em>(optional)</em> then 
+  (<a href="../javaClass/javaBaseClass.html">javaBaseClass</a>)
+<em>(optional)</em> then 
+  (<a href="../javaClass/javaImplementedInterface.html">javaImplementedInterface</a>)
+<em>(any number)</em>)
+</p>
+</div>
+<div class="elementAttList" />
+<div class="elementClassValue"><h4 class="sectiontitle">Inheritance</h4><p id="javaClassDef__N50872"><a name="javaClassDef__N50872"><!-- --></a>topic/<span class="keyword">section</span> reference/<span class="keyword">section</span> apiRef/<span class="keyword">apiDef</span> apiClassifier/<span class="keyword">apiClassifierDef</span></p>
+</div>
+</div>
+
+<div>
+<ul class="ullinks">
+<li class="ulchildlink"><strong><a href="../javaClass/javaFinalClass.html">javaFinalClass</a></strong><br />
+The &lt;javaFinalClass&gt; element provides a flag within the ClassModifiersopt for classes that cannot be subclassed.</li>
+<li class="ulchildlink"><strong><a href="../javaClass/javaAbstractClass.html">javaAbstractClass</a></strong><br />
+The &lt;javaAbstractClass&gt; element supplies the ClassModifiersopt for the class and identifies that the class is an abstract class.</li>
+<li class="ulchildlink"><strong><a href="../javaClass/javaStaticClass.html">javaStaticClass</a></strong><br />
+The &lt;javaStaticClass&gt; element declares in the ClassModifiersopt that a nested class is static.</li>
+<li class="ulchildlink"><strong><a href="../javaClass/javaClassAccess.html">javaClassAccess</a></strong><br />
+The &lt;javaClassAccess&gt; element provides the ClassModifiersopt for the declaration of the class access values.</li>
+<li class="ulchildlink"><strong><a href="../javaClass/javaBaseClass.html">javaBaseClass</a></strong><br />
+The &lt;javaBaseClass&gt; element within the Superopt declaration specifies the direct superclass of the current class.</li>
+<li class="ulchildlink"><strong><a href="../javaClass/javaImplementedInterface.html">javaImplementedInterface</a></strong><br />
+The &lt;javaImplementedInterface&gt; element provides within the Interfaceopt the name of the super interface implemented by this class.</li>
+</ul>
+
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../javaClass/javaClassDetail.html" title="The &lt;javaClassDetail&gt; element provides detailed information about the structure and behaviors of the Java class.">javaClassDetail</a></div>
+</div>
+</div>
+</body>
+</html>

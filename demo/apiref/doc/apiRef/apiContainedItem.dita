@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="apiContainedItem" outputclass="element" xml:lang="en-us">
+<title>apiContainedItem</title>
+<shortdesc>This element supplies the link to the contained item.</shortdesc>
+<refbody>
+<section><title>Description</title>It is contained by the apiLinks element.
+This<?Pub Caret?> element has the following added attributes: href, keyref,
+format, scope (local | peer | external), outputclass.</section>
+</refbody>
+</reference>
+<?Pub *0000000618?>

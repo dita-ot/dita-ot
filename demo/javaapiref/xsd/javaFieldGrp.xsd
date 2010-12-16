@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<!--
+ | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ *-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:group name="javaField">
+    <xs:sequence>
+      <xs:element ref="javaField"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaFieldDetail">
+    <xs:sequence>
+      <xs:element ref="javaFieldDetail"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaFieldDef">
+    <xs:sequence>
+      <xs:element ref="javaFieldDef"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaFinalField">
+    <xs:sequence>
+      <xs:element ref="javaFinalField"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaStaticField">
+    <xs:sequence>
+      <xs:element ref="javaStaticField"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaTransientField">
+    <xs:sequence>
+      <xs:element ref="javaTransientField"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaVolatileField">
+    <xs:sequence>
+      <xs:element ref="javaVolatileField"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaFieldAccess">
+    <xs:sequence>
+      <xs:element ref="javaFieldAccess"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaFieldClass">
+    <xs:sequence>
+      <xs:element ref="javaFieldClass"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaFieldInterface">
+    <xs:sequence>
+      <xs:element ref="javaFieldInterface"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaFieldPrimitive">
+    <xs:sequence>
+      <xs:element ref="javaFieldPrimitive"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaFieldArray">
+    <xs:sequence>
+      <xs:element ref="javaFieldArray"/>
+    </xs:sequence>
+  </xs:group>
+</xs:schema>

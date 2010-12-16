@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="api-domain_module" outputclass="module" xml:lang="en-us">
+<title>api-domain reference module</title>
+<shortdesc>Defines the elements referring to API items within API topics or
+other DITA topic types, such as concept or task. </shortdesc>
+<refbody>
+<section><title>Description</title>The api-domain topic type packages several
+elements, such as &lt;apioperation> or &lt;apipackage> elements. These elements
+allow the writer a consistent way to reference other topic types operations
+or packages. <p></p><p>The api-domain topic contains the following
+elements:</p></section>
+</refbody>
+</reference>

@@ -1,0 +1,12 @@
+<plugin id="com.moldflow.dita.plus-xhtml-topics-twopass">
+
+  <require plugin="com.moldflow.dita.doctype.xhtml"/>
+  <require plugin="com.moldflow.dita.plus-transtype-xhtml"/>
+
+  <template file="build_plus-xhtml-topics-twopass_template.xml"/>
+  <template file="xsl/stage1-xhtml-shell_template.xsl"/>
+  <template file="xsl/stage2-xhtml-shell_template.xsl"/>
+
+  <feature extension="dita.conductor.target.relative" value="build.xml" type="file"/>
+  <feature extension="depend.plus-transtype-xhtml.topics.dispatch" value="plus-xhtml-topics-twopass.dispatch" type="text"/>
+</plugin>

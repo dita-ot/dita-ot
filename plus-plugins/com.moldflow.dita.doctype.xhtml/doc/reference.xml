@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="reference_svgobject"><title>
+        <keyword>doctype.xhtml</keyword></title>
+    <abstract>
+        <shortdesc>The <keyword>doctype.xhtml</keyword> plugin is a convenience plugin which
+            contains the XHTML DTDs and adds them to the catalog.</shortdesc>
+        <p>These DTDs are used in the second stage of two-pass topic processing, where the input is
+            XHTML.</p>
+    </abstract>
+    <refbody>
+        <section>
+            <title>Plugin ID</title>
+            <p><apiname>com.moldflow.dita.doctype.xhtml</apiname></p>
+        </section>
+    </refbody></reference>

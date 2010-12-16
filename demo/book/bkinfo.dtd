@@ -1,0 +1,7 @@
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+
+<!ENTITY % topic-type PUBLIC "-//OASIS//ELEMENTS DITA Topic//EN" "../../dtd/topic.mod">
+  %topic-type;
+
+<!ENTITY % bkinfo-typemod PUBLIC "-//IBM//ELEMENTS DITA Book Information//EN" "bkinfo.mod">
+  %bkinfo-typemod;

@@ -1,0 +1,55 @@
+<project name="plus-allhtml-svgimage-svginline">
+  
+  <dirname property="plus-allhtml-svgimage-svginline.dir" file="${ant.file.plus-allhtml-svgimage-svginline}"/>
+
+  <target name="plus-allhtml-svgimage-svginline.before.stage1" 
+    dita:depends="plus-allhtml-svgimage-svginline.init,plus-allhtml-svgimage-svginline.svgimage.copy"
+    xmlns:dita="http://dita-ot.sourceforge.net"
+    dita:extension="depends org.dita.dost.platform.InsertDependsAction"
+  />
+
+  <target name="plus-allhtml-svgimage-svginline.init">
+    <!-- <image> tags in DITA source.
+         Choices: direct, inline, svgobject, svgraster. -->
+    <condition property="plus.svgimage.format" value="svginline">
+      <not>
+        <isset property="plus.svgimage.format"/>
+      </not>
+    </condition>
+  </target>
+
+  <!-- Count if there are any images at all, to prevent empty includes attribute on count.svgimage -->
+  <target name="plus-allhtml-svgimage-svginline.check-imagelist-empty">
+    <condition property="plus-allhtml-svgimage-svginline.imagelist-not-empty">
+      <and>
+        <isset property="imagelist"/>
+        <not><equals arg1="${imagelist}" arg2=""/></not>
+      </and>
+    </condition>
+  </target>
+
+  <!-- Count if there are any SVG images in the source file set. -->
+  <target name="plus-allhtml-svgimage-svginline.count.svgimage" depends="plus-allhtml-svgimage-svginline.check-imagelist-empty" if="plus-allhtml-svgimage-svginline.imagelist-not-empty">
+    <fileset id="plus-allhtml-svgimage-svginline.count.svgimage.id" dir="${user.input.dir}" includes="${imagelist}">
+      <filename name="**/*.svg"/>
+    </fileset>
+    <pathconvert property="plus-allhtml-svgimage-svginline.exist.svgimage" setonempty="false" refid="plus-allhtml-svgimage-svginline.count.svgimage.id"/>
+    <condition property="plus-allhtml-svgimage-svginline.copy.required">
+      <and>
+        <equals arg1="${plus.svgimage.format}" arg2="svginline"/>
+        <isset property="plus-allhtml-svgimage-svginline.exist.svgimage"/>
+      </and>
+    </condition>
+  </target>
+
+  <!-- Copy SVG images to temp directory so that svgimage.xsl has access to their width/height.
+       copy-files target already copies them to the output directory. -->
+  <target name="plus-allhtml-svgimage-svginline.svgimage.copy" depends="plus-allhtml-svgimage-svginline.count.svgimage" if="plus-allhtml-svgimage-svginline.copy.required">
+    <copy todir="${dita.temp.dir}">
+      <fileset dir="${user.input.dir}" includes="${imagelist}">
+        <filename name="**/*.svg"/>
+      </fileset>
+    </copy>
+  </target>
+
+</project>

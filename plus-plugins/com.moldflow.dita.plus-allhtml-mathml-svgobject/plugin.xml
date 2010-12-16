@@ -1,0 +1,29 @@
+<plugin id="com.moldflow.dita.plus-allhtml-mathml-svgobject">
+
+  <require plugin="com.moldflow.dita.plus-allhtml-mathml"/>
+  <require plugin="com.moldflow.dita.plus-allhtml-svgobject"/>
+  <require plugin="com.moldflow.dita.mathml2svg"/>
+
+  <template file="build_plus-allhtml-mathml-svgobject_template.xml"/>
+
+  <feature extension="dita.conductor.target.relative" value="build.xml" type="file"/>
+
+  <feature extension="xsl.plus-eclipsehelp-topics-twopass.stage1" value="xsl/xhtml.xsl" type="file"/>
+  <feature extension="xsl.plus-htmlhelp-topics-twopass.stage1" value="xsl/xhtml.xsl" type="file"/>
+  <feature extension="xsl.plus-html-topics-twopass.stage1" value="xsl/xhtml.xsl" type="file"/>
+  <feature extension="xsl.plus-xhtml-topics-twopass.stage1" value="xsl/xhtml.xsl" type="file"/>
+
+  <feature extension="depend.plus-eclipsehelp-topics-twopass.stage1.pre" value="plus-allhtml-mathml-svgobject.init" type="text"/>
+  <feature extension="depend.plus-eclipsehelp-topics-twopass.stage1.post" value="plus-allhtml-mathml-svgobject.call" type="text"/>
+
+  <feature extension="depend.plus-htmlhelp-topics-twopass.stage1.pre" value="plus-allhtml-mathml-svgobject.init" type="text"/>
+  <feature extension="depend.plus-htmlhelp-topics-twopass.stage1.post" value="plus-allhtml-mathml-svgobject.call" type="text"/>
+
+  <feature extension="depend.plus-html-topics-twopass.stage1.pre" value="plus-allhtml-mathml-svgobject.init" type="text"/>
+  <feature extension="depend.plus-html-topics-twopass.stage1.post" value="plus-allhtml-mathml-svgobject.call" type="text"/>
+
+  <feature extension="depend.plus-xhtml-topics-twopass.stage1.pre" value="plus-allhtml-mathml-svgobject.init" type="text"/>
+  <feature extension="depend.plus-xhtml-topics-twopass.stage1.post" value="plus-allhtml-mathml-svgobject.call" type="text"/>
+
+  <feature extension="depend.plus-allhtml-svgobject.make-static.pre" value="plus-allhtml-mathml-svgobject.call" type="text"/>
+</plugin>

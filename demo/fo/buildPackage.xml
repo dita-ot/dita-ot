@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<project name="build_FO_plugin" default="package-plugin" basedir=".">
+  <description>Build jar for FO output</description>
+
+  <property name="src.dir" location="src/"/>
+  <property name="lib.dir" location="lib/"/>
+  <property name="bin.dir" location="bin/"/>
+  <property name="package.output.dir" location="../../build"/>
+  <property name="package.file" value="fo.zip"/>
+  
+  <property name="classpath.dir" location="../../dev/lib"/>
+  <property name="fo.lib.dir" location="demo/fo/lib"/>	
+  
+  <property name="fo.jar" location="${lib.dir}/fo.jar" />
+  <property name="ant.jar" location="${classpath.dir}/ant162.jar" />
+  <property name="resolver.jar" location="${lib.dir}/resolver.jar" />
+  <property name="icu4j.jar" location="${lib.dir}/icu4j.jar" />
+  <property name="xep.jar" location="${lib.dir}/xep/lib/xep.jar" />
+
+  <path id="build.class.path">
+    <pathelement location="${ant.jar}" />
+    <pathelement location="${resolver.jar}" />
+    <pathelement location="${icu4j.jar}" />
+    <pathelement location="${xep.jar}" />
+  </path>
+
+  <!--We will only build the XEP classes if XEP is in the build.class.path-->
+  <available classname="com.renderx.xep.FOTarget" property="xep-available">
+    <classpath refid="build.class.path"/>
+  </available>
+
+  <target name="clean-java">
+    <delete dir="${bin.dir}"/>
+    <delete file="${fo.jar}"/>
+  </target>
+	
+  <target name="init-java" depends="clean-java">
+    <mkdir dir="${bin.dir}"/>
+  </target>
+
+  <target name="check-icu4j">
+    <available classname="com.ibm.icu.text.Collator" property="icu4j-available">
+      <classpath refid="build.class.path"/>
+    </available>
+    <fail unless="icu4j-available" message="In order to build fo.jar, icu4j.jar must be present in the lib directory."/>
+  </target>
+	
+  <target name="build-java" depends="init-java, check-icu4j, build-xep-java">
+    <javac srcdir="${src.dir}" destdir="${bin.dir}"
+      debug="on" excludes="com/idiominc/ws/opentopic/fo/xep/**"
+      source="1.5" target="1.5">
+      <classpath refid="build.class.path"/>
+    </javac>
+  </target>
+
+  <target name="build-xep-java" depends="init-java" if="xep-available">
+    <javac srcdir="${src.dir}/com/idiominc/ws/opentopic/fo/xep/"
+           destdir="${bin.dir}"
+           source="1.5" target="1.5"
+      debug="on">
+      <classpath refid="build.class.path"/>
+    </javac>
+  </target>
+  
+  <target name="package-java" depends="build-java">    
+    <jar destfile="${fo.jar}" basedir="${bin.dir}" includes="**" />
+  </target>
+
+  <target name="init-package" depends="clean-package">
+    <mkdir dir="${package.output.dir}"/>    
+  </target>
+
+  <target name="clean-package">
+    <delete file="${package.output.dir}/${package.file}"/>
+  </target>
+ 
+  <target name="package-plugin" depends="package-java,init-package">
+    <zip destfile="${package.output.dir}/${package.file}">
+      <zipfileset dir="." includes="*.xml" prefix="fo"/>
+      <zipfileset file="README.txt" prefix="fo"/>
+      <zipfileset dir="cfg" excludes="**/CVS" prefix="fo/cfg"/>
+      <zipfileset dir="lib" excludes="**/CVS xep/** icu4j.jar" prefix="fo/lib"/>
+      <zipfileset dir="xsl" excludes="**/CVS" prefix="fo/xsl"/>
+      <zipfileset dir="Customization" excludes="**/CVS" prefix="fo/Customization"/>
+      <zipfileset dir="src" prefix="fo"/>
+    </zip>
+  </target>
+</project>

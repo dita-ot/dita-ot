@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\..\dtd\reference.dtd">
+<reference id="subjectCell" outputclass="element" xml:lang="en-us">
+<title>subjectCell</title>
+<shortdesc>Specifies subjects for a constrained classification of content
+topics.</shortdesc><?Pub Caret1?>
+<refbody>
+<section><title>Description</title><p>This cell can be empty in the <xref
+href="topicSubjectHeader.xml" type="reference"></xref> element but must identify
+the classified topics within the <xref href="topicSubjectRow.xml"></xref> element.</p><p>Within
+the <xref href="topicSubjectHeader.xml" type="reference"></xref> element,
+the <keyword>subjectCell</keyword> element specifies a constraint on the classifying
+subjects in the column. For a facet classification, the <keyword>subjectCell</keyword> element
+specifies the top subject for a facet category. </p><p>Within the <xref href="topicSubjectRow.xml"></xref> element,
+the <keyword>subjectCell</keyword> element specifies the subjects that classify
+the content topics in the <xref href="topicCell.xml" type="reference"></xref> element
+within the same row. If a header row specifies a constraint for the column,
+the subjects in the cell must conform to that constraint. For a facet classification,
+the subjects must appear within the hierarchy for the facet category in a
+scheme. </p><p>Use the <xref href="topicsubject.xml"></xref> element if the
+subject is the primary subject for the content topics. Otherwise, use the <xref
+href="subjectref.xml"></xref> element. </p><note>Each content subject can
+only have one primary subject. </note></section>
+<section conref="../packagedef.xml#subjectCell-reference/subjectCell-containedBy-section"></section>
+<section conref="../packagedef.xml#subjectCell-reference/subjectCell-contains-section"></section>
+<section conref="../packagedef.xml#subjectCell-reference/subjectCell-contentModel-section"></section>
+<section conref="../packagedef.xml#subjectCell-reference/subjectCell-attList-section"></section>
+<section conref="../packagedef.xml#subjectCell-reference/subjectCell-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000002238?>

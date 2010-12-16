@@ -1,0 +1,7 @@
+<xslt>
+
+      <!-- Syntax Diagram parameters. -->
+      <param name="plus-syntaxdiagram-format" expression="${plus.syntaxdiagram.format}" if="plus.syntaxdiagram.format"/>
+
+
+</xslt>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE apiClassifier PUBLIC "-//IBM//DTD DITA API Classifier Reference Type//EN"
+ "../dtd/apiClassifier.dtd">
+<apiClassifier id="FileHandle">
+<apiName>FileHandle class</apiName>
+<shortdesc>Supply object methods for filehandles.</shortdesc>
+<apiClassifierDetail>
+<apiSyntax>
+<apiSyntaxText>my $fh = new FileHandle(<apiItemName>name</apiItemName>, <apiItemName>mode</apiItemName>);</apiSyntaxText>
+<apiSyntaxItem>
+<apiItemName>name</apiItemName>
+<apiDefNote>The filename for the accessed file.</apiDefNote>
+</apiSyntaxItem>
+<apiSyntaxItem>
+<apiItemName>mode</apiItemName>
+<apiDefNote>How the file is accessed including <synph>r</synph> for read and <synph>w</synph> for
+write.</apiDefNote>
+</apiSyntaxItem>
+</apiSyntax>
+<apiDesc>The FileHandle class manages input and output operations for files.
+When the object is scavenged, the file is closed.</apiDesc>
+<example><pre>my @lines;
+my $fh = new FileHandle("filename.txt", "r");
+if (defined $fh) {
+	@lines = $fh->getlines();
+	undef $fh;
+}</pre><p>The example opens a text file, reads all of the lines from the file
+into an array, and closes the file.</p></example>
+</apiClassifierDetail>
+<apiValue id="autoflush">
+<apiName>autoflush variable</apiName>
+<shortdesc></shortdesc>
+<apiValueDetail>
+<apiSyntax>
+<apiSyntaxText>$fh->autoflush = <apiItemName>expression</apiItemName>;</apiSyntaxText>
+<apiSyntaxItem>
+<apiItemName>expression</apiItemName>
+<apiDefNote>0 to flush output only on request, 1 to flush output after every
+write.</apiDefNote>
+</apiSyntaxItem>
+</apiSyntax>
+</apiValueDetail>
+</apiValue>
+<apiValue id="input_record_separator">
+<apiName>input_record_separator variable</apiName>
+<shortdesc>The input record separator, which is a newline by default. </shortdesc>
+<apiValueDetail>
+<apiSyntax>
+<apiSyntaxText>$fh->input_record_separator = undef;</apiSyntaxText>
+</apiSyntax>
+<apiDesc>You can set input_record_separator to a multi-character string to
+match a multi-character terminator or to <synph>undef</synph> to read through
+the end of file. </apiDesc>
+</apiValueDetail>
+</apiValue>
+<apiOperation id="print">
+<apiName>print subroutine</apiName>
+<shortdesc>Prints a string or a list of strings to a file.</shortdesc>
+<apiOperationDetail>
+<apiSyntax>
+<apiSyntaxText>$fh->print(<apiItemName>string</apiItemName>, ...);</apiSyntaxText>
+<apiSyntaxItem>
+<apiItemName>string</apiItemName>
+<apiDefNote>One or more strings for printing to the file.</apiDefNote>
+</apiSyntaxItem>
+</apiSyntax>
+</apiOperationDetail>
+</apiOperation>
+<apiOperation id="printf">
+<apiName>printf subroutine</apiName>
+<shortdesc>Prints a string to a file formatted by the usual conventions of
+the C library function.</shortdesc>
+<apiOperationDetail>
+<apiSyntax>
+<apiSyntaxText>$fh->printf(<apiItemName>format</apiItemName>, <apiItemName>string</apiItemName>, ...);</apiSyntaxText>
+<apiSyntaxItem>
+<apiItemName>format</apiItemName>
+<apiDefNote>A string with tokens for interpolating and formatting strings.</apiDefNote>
+</apiSyntaxItem>
+<apiSyntaxItem>
+<apiItemName>string</apiItemName>
+<apiDefNote>One or more strings to interpolate.</apiDefNote>
+</apiSyntaxItem>
+</apiSyntax>
+</apiOperationDetail>
+</apiOperation>
+<apiOperation id="getline">
+<apiName>getline subroutine</apiName>
+<shortdesc>Yields the next line from that file (the newline, if any, included).</shortdesc>
+<apiOperationDetail>
+<apiSyntax>
+<apiSyntaxText>$fh->getline;</apiSyntaxText>
+</apiSyntax>
+</apiOperationDetail>
+</apiOperation>
+<apiOperation id="getlines">
+<apiName>getlines subroutine</apiName>
+<shortdesc>Reads all of the remaining lines from a file as a list.</shortdesc>
+<apiOperationDetail>
+<apiSyntax>
+<apiSyntaxText>$fh->getlines;</apiSyntaxText>
+</apiSyntax>
+</apiOperationDetail>
+</apiOperation>
+</apiClassifier>

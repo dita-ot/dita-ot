@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\..\dtd\reference.dtd">
+<reference id="subjectNote" outputclass="element" xml:lang="en-us">
+<title>subjectNote</title>
+<shortdesc>A miscellaneous public or private note about the subject definition.</shortdesc>
+<refbody>
+<section><title>Description</title><p>Use the <keyword>subjectNote</keyword> element
+only if none of the other subject definition notes has the right connotations.
+You can also specialize new kinds of notes about subjects from the <keyword>subjectNote</keyword> element.
+See also <xref format="html" href="http://www.w3.org/TR/swbp-skos-core-guide/#secdocumentation">http://www.w3.org/TR/swbp-skos-core-guide/#secdocumentation</xref
+>.</p></section>
+<section conref="../packagedef.xml#subjectNote-reference/subjectNote-containedBy-section"><?Pub Caret1?></section>
+<section conref="../packagedef.xml#subjectNote-reference/subjectNote-contains-section"></section>
+<section conref="../packagedef.xml#subjectNote-reference/subjectNote-contentModel-section"></section>
+<section conref="../packagedef.xml#subjectNote-reference/subjectNote-attList-section"></section>
+<section conref="../packagedef.xml#subjectNote-reference/subjectNote-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001377?>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaclass" outputclass="element" xml:lang="en-us">
+<title>javaclass</title>
+<shortdesc>The &lt;javaclass> element is a reference to a Java class.  </shortdesc>
+<refbody>
+<section><title>Description</title><p>The &lt;javaclass> element can be used
+to reference a Java class from another topic type, such as concept or task. </p></section>
+<example><title>Example</title><codeblock>&lt;task id="httpxml">
+  &lt;title>Getting an XML file through an HTTP connection&lt;/title>
+  &lt;taskbody>
+    &lt;steps>
+    &lt;step>&lt;cm>Open the connection&lt;/cm>
+      &lt;info>You can use &lt;javaclass keyref="com.ibm.xtools.patterns.framework.uml2.AbstractImportEngineTask">AbstractImportEngineTask class&lt;/javaclass> 
+      in a Java application.&lt;/info>
+    &lt;/step>
+    ...
+    &lt;/steps>
+  &lt;/taskbody>
+&lt;/task></codeblock></example>
+<section conref="../packagedef.dita#javaclass-reference/javaclass-containedBy-section"></section>
+<section conref="../packagedef.dita#javaclass-reference/javaclass-contains-section"></section>
+<section conref="../packagedef.dita#javaclass-reference/javaclass-contentModel-section"></section>
+<section conref="../packagedef.dita#javaclass-reference/javaclass-attList-section"></section>
+<section conref="../packagedef.dita#javaclass-reference/javaclass-classValue-section"></section>
+</refbody>
+</reference>

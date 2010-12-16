@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+    Sourceforge.net. See the accompanying license.txt file for 
+    applicable licenses.-->
+    <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
+    <project name="dita2legacypdf" default="dita2legacypdf">
+        <!--<property name="transtype" value="pdf"/>
+        
+        <import file="build_init.xml" />
+        <import file="build_preprocess.xml" />-->
+        
+        <target name="dita2legacypdf"
+            depends="build-init, preprocess, map2legacypdf, topic2legacypdf">
+        </target>
+        
+        <target name="topic2legacypdf" if="noMap">
+            <antcall target="dita.topic.fo">
+                <param name="input"
+                    value="${dita.temp.dir}${file.separator}${user.input.file}" />
+                <param name="output"
+                    value="${dita.map.output.dir}${file.separator}${dita.topic.filename.root}.fo" />
+            </antcall>
+            <antcall target="dita.fo2pdf">
+                <param name="input"
+                    value="${dita.map.output.dir}${file.separator}${dita.topic.filename.root}.fo" />
+                <param name="output"
+                    value="${dita.map.output.dir}${file.separator}${dita.topic.filename.root}.pdf" />
+            </antcall>
+        </target>
+        
+        <target name="map2legacypdf" unless="noMap">
+            <antcall target="dita.map.fo">
+                <param name="input"
+                    value="${dita.temp.dir}${file.separator}${user.input.file}" />
+                <param name="output"
+                    value="${dita.map.output.dir}${file.separator}${dita.map.filename.root}.fo" />
+            </antcall>
+            <antcall target="dita.fo2pdf">
+                <param name="input"
+                    value="${dita.map.output.dir}${file.separator}${dita.map.filename.root}.fo" />
+                <param name="output"
+                    value="${dita.map.output.dir}${file.separator}${dita.map.filename.root}.pdf" />
+            </antcall>
+        </target>
+        
+        <!-- Build XSL-FO output from ditamap -->
+        <target name="dita.map.fo"
+            description="Build XSL-FO output from ditamap">
+            <condition property="args.xsl"
+                value="${dita.script.dir}${file.separator}dita2fo-shell.xsl">
+                <not>
+                    <isset property="args.xsl" />
+                </not>
+            </condition>
+            <dirname file="${dita.temp.dir}${file.separator}${user.input.file}"
+                property="dita.merged.dir" />
+            <xslt processor="trax" in="${input}"
+                out="${dita.merged.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
+                style="${dita.script.dir}${file.separator}topicmerge.xsl">
+                <!--<xmlcatalog refid="dita.catalog" />-->
+            </xslt>
+            <xslt processor="trax"
+                in="${dita.merged.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
+                out="${output}" style="${args.xsl}">
+                <!--<xmlcatalog refid="dita.catalog" />-->
+                <param name="output-related-links"
+                    expression="${args.fo.output.rel.links}"
+                    if="args.fo.output.rel.links" />
+                <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
+                <param name="DRAFT" expression="${args.draft}" if="args.draft" />
+                <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl" />
+                <param name="dflt-ext" expression="${fo.img.ext}" if="fo.img.ext" />
+            </xslt>
+        </target>
+        
+        <!-- Build PDF from FO using FOP, need to include FOP, Avalon, 
+            and Batik relevant jar files in CLASSPATH -->
+        <target name="dita.fo2pdf" if="hasFOP"
+            description="Build PDF from FO using FOP">
+            <property name="fop.home" value="${dita.dir}/demo/legacypdf"/>
+            <taskdef name="fop" classname="org.apache.fop.tools.anttasks.Fop" >
+                <classpath>
+                    <fileset dir="${fop.home}/lib">
+                        <include name="*.jar"/>
+                    </fileset>
+                    <fileset dir="${dita.dir}/lib">
+                        <include name="*.jar"/>
+                    </fileset>
+                </classpath>
+            </taskdef>
+            <antcall target="dita.fo2pdf.userconfig" />
+            <antcall target="dita.fo2pdf.nouserconfig" />
+        </target>
+        
+        <target name="dita.fo2pdf.userconfig" if="args.fo.userconfig">
+            <fop format="application/pdf" basedir="${input}" fofile="${input}"
+                outfile="${output}" messagelevel="info"
+                userconfig="${args.fo.userconfig}">
+            </fop>
+        </target>
+        
+        <target name="dita.fo2pdf.nouserconfig" unless="args.fo.userconfig">
+            <fop format="application/pdf" basedir="${input}" fofile="${input}"
+                outfile="${output}" messagelevel="info">
+            </fop>
+        </target>
+        
+        <!-- Build XSL-FO output from dita topic -->
+        <target name="dita.topic.fo"
+            description="Build XSL-FO output from dita topic">
+            <condition property="args.xsl"
+                value="${dita.script.dir}${file.separator}dita2fo-shell.xsl">
+                <not>
+                    <isset property="args.xsl" />
+                </not>
+            </condition>
+            <xslt processor="trax" in="${input}" out="${output}"
+                style="${args.xsl}">
+                <!--<xmlcatalog refid="dita.catalog" />-->
+                <param name="output-related-links"
+                    expression="${args.fo.output.rel.links}"
+                    if="args.fo.output.rel.links" />
+                <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
+                <param name="DRAFT" expression="${args.draft}" if="args.draft" />
+                <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl" />
+                <param name="dflt-ext" expression="${fo.img.ext}" if="fo.img.ext" />
+            </xslt>
+        </target>
+        
+    </project>

@@ -1,0 +1,25 @@
+<plugin id="com.moldflow.dita.plus-allhtml-encoding">
+
+  <require plugin="com.moldflow.dita.plus-transtype-anyhtml"/>
+  <require plugin="com.moldflow.dita.plus-allhtml-xhtml-namespace" importance="optional"/>
+
+  <template file="build_plus-allhtml-encoding_template.xml"/>
+
+  <feature extension="dita.conductor.target.relative" value="build.xml" type="file"/>
+  
+  <feature extension="plus.topics.xhtml.param" value="insert-ant-html.xsl" type="file"/>
+  <feature extension="plus.topics.html.param" value="insert-ant-html.xsl" type="file"/>
+  <feature extension="xsl.plus-transtype-xhtml.topics.basic" value="xsl/xhtml.xsl" type="file"/>
+  <feature extension="xsl.plus-transtype-html.topics.basic" value="xsl/html.xsl" type="file"/>
+  <feature extension="xsl.plus-transtype-htmlhelp.topics.basic" value="xsl/html.xsl" type="file"/>
+  <feature extension="xsl.plus-transtype-eclipsehelp.topics.basic" value="xsl/xhtml.xsl" type="file"/>
+
+  <feature extension="plus-eclipsehelp-topics-twopass.stage2.param" value="insert-ant-html.xsl" type="file"/>
+  <feature extension="plus-htmlhelp-topics-twopass.stage2.param" value="insert-ant-html.xsl" type="file"/>
+  <feature extension="plus-html-topics-twopass.stage2.param" value="insert-ant-html.xsl" type="file"/>
+  <feature extension="plus-xhtml-topics-twopass.stage2.param" value="insert-ant-html.xsl" type="file"/>
+  <feature extension="xsl.plus-eclipsehelp-topics-twopass.stage2" value="xsl/xhtml-stage2.xsl" type="file"/>
+  <feature extension="xsl.plus-htmlhelp-topics-twopass.stage2" value="xsl/html-stage2.xsl" type="file"/>
+  <feature extension="xsl.plus-html-topics-twopass.stage2" value="xsl/html-stage2.xsl" type="file"/>
+  <feature extension="xsl.plus-xhtml-topics-twopass.stage2" value="xsl/xhtml-stage2.xsl" type="file"/>
+</plugin>

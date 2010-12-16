@@ -1,0 +1,144 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+
+<!DOCTYPE faq PUBLIC "-//IBM//DTD DITA FAQ//EN" "faq_shell.dtd" [
+]>
+<faq id="ditafaq">
+  <title>Frequently Asked Questions about the Darwin Information Typing Architecture</title>
+  <shortdesc>The Frequently Asked Questions for DITA have been collected from questions asked on the DITA Forum and among other communities. Some of the answers reflect DITA Best Practices.</shortdesc>
+  <faqbody>
+    <faqgroup>
+      <title>General DITA questions </title>
+      <faqlist>
+        <faqitem>
+          <faqquest>Why is &quot;Darwin&quot; in the name of this architecture?</faqquest>
+          <faqans>The entire name of the architecture has this combined explanation: <ol>
+              <li><ph>Darwin:</ph> it uses the principles of specialization and inheritance</li>
+              <li><ph>Information Typing:</ph> it capitalizes on the semantics of topics (concept, task, reference) and of content (messages, typed phrases, semantic tables)</li>
+              <li><ph>Architecture:</ph> it provides vertical headroom (new applications) and edgewise extension (specialization into new types) for information</li>
+            </ol><p> This architecture supports the proper construction of specialized DTDs from any higher-level DTD or schema. The base DTD is ditabase DTD, which contains an archetype topic structure and three additional peer topics that are typed specializations from the basic topic: concept, task, and reftopic. The principles of specialization and inheritance resemble the principle of variation in species proposed by Charles Darwin. So the name reminds us of the key extensibility mechanism inherent in the architecture. </p></faqans>
+        </faqitem>
+        <faqitem>
+          <faqquest>Where can I learn more about topic-oriented writing and user assistance?</faqquest>
+          <faqans>Look over the topic architecture FAQs below, and then try the following two introductory sites on information architectures: <lines xml:space="preserve">
+Argus Center for Information Architecture
+10 Questions about Information Architecture
+</lines></faqans>
+        </faqitem>
+        <faqitem>
+          <faqquest>How does DITA differ from DocBook?</faqquest>
+          <faqans>It&apos;s important to recognize that DocBook and DITA take fundamentally different approaches. <p> DocBook was originally designed for a single, continuous technical narrative (where the narrative might be of article, book, or multi-volume length). Through transforms, DocBook can chunk this technical narrative into topics to provide support for Web sites and other information sets. Because the goal of the DocBook DTD is to handle all standard requirements for technical documentation, the usage model encourages customization to exclude elements that aren&apos;t local requirements. The usage model supports but discourages local extensions because of the potential for unknown new elements to break tool support and interoperability. </p><p> By contrast, DITA was designed for discrete technical topics. DITA collects topics into information sets, potentially using filtering criteria. The core DITA information types are not intended to cover all requirements but, instead, provide a base for meeting new requirements through extension. Extension is encouraged, but new elements must be recognizable as specializations of existing elements. Through generalization, DITA provides for tool reuse and interoperability. </p><p> Each approach has its strengths. DocBook would be the likely choice for a technical narrative. DITA would be the likely choice for large, complex collections of topics or for applications that require both extensibility and interoperability. Technical communications groups might want to experiment with both packages to determine which approach is better suited for their processes and outputs. </p></faqans>
+        </faqitem>
+        <faqitem>
+          <faqquest>How will changes to the DTD be made and controlled?</faqquest>
+          <faqans>The Darwin Information Typing Architecture was first introduced in April 2001. Since then users have discussed issues about the DITA within IBM and on the DITA forum, and various changes have evolved, leading to a major refresh a year later. The design will slow down so that the interested user community -- you! -- can focus on learning about and using DITA. <p>Use the DITA forum to discuss the use of the DITA DTDs and style sheets. The read-me document lists several known limitations, but doubtless others await discovery as you use the DTDs. Through discussion in the DITA forum, the significant ideas will be identified and applied to subsequent refreshes of the package. The forum will be actively monitored by the DITA project&apos;s architects, Don Day and Michael Priestley, among others.</p></faqans>
+        </faqitem>
+        <faqitem>
+          <faqquest>May I use this DTD in my own company?</faqquest>
+          <faqans>Yes, we encourage you to use it.</faqans>
+        </faqitem>
+        <faqitem>
+          <faqquest>Is DITA integrated into any IBM products?</faqquest>
+          <faqans>Yes. We have several projects underway that are using DITA. The purpose of those projects is to continue to validate the DITA architecture and use the DTD in a product development environment. </faqans>
+        </faqitem>
+        <faqitem>
+          <faqquest>Is there an XML schema for the DITA DTDs?</faqquest>
+          <faqans>
+            <p>Yes, the DITA toolkit provides both DTD and XML Schema representations of the architecture. The basic concepts of DITA are not tied to implementation. Both schemas and DTDs can be used to define specializable DITA elements.</p>
+          </faqans>
+        </faqitem>
+      </faqlist>
+    </faqgroup>
+    <faqgroup>
+      <title>The topic architecture of DITA </title>
+      <faqlist>
+        <faqitem>
+          <faqquest>What is a topic? </faqquest>
+          <faqans>A topic is a chunk of information organized around a single subject. Structurally, it is a title followed by text and images, optionally organized into sections. Topics can be of many different types, the most common being concepts, tasks, and reference. </faqans>
+        </faqitem>
+        <faqitem>
+          <faqquest>Why topics? </faqquest>
+          <faqans>DITA is based on topics because they are the optimal size to allow reuse in different delivery contexts without affecting a writer&apos;s efficiency. If we choose a smaller unit, the writer needs to check the unit in all its contexts to make sure that information flows correctly. If we choose a larger unit, the information cannot be easily reassembled into structures that different delivery contexts (such as a Web site or a book) require. A topic is large enough to be self contained from a writer&apos;s point of view but small enough to reuse effectively in whatever higher-level structure a particular delivery context requires. </faqans>
+        </faqitem>
+        <faqitem>
+          <faqquest>What is the topic structure in the architecture? </faqquest>
+          <faqans>The topic structure is the result of some conditions that we established for the document architecture: <ol>
+              <li><ph>&lt;topic&gt;</ph> is the container for a single non-nesting body and any number of nesting topics.</li>
+              <li><ph>&lt;title&gt;</ph> provides self-description, consistent with guidelines for authoring.</li>
+              <li><ph>&lt;body&gt;</ph> is the container for paragraph-level content and any number of non-nesting sections.</li>
+            </ol><p> A topic can be augmented by a prolog, a short description, and other optional metadata. These conditions lead to the following structure: </p><pre xml:space="preserve">
+&lt;!ELEMENT topic (title, titlealts?, shortdesc?, prolog?, body,
+                    related-links?, (%info-types;)*)&gt;
+ </pre><p> See the Sample topic, and its explanation, The structure of a DITA topic.</p></faqans>
+        </faqitem>
+        <faqitem>
+          <faqquest>What is &quot;progressive disclosure&quot; in a topic? </faqquest>
+          <faqans>Because each topic has a title and short description in addition to its full content, applications can provide progressive disclosure. For example, a user can hover over a link to see its short description and then decide whether to follow the link for the rest of the topic. Progressive disclosure also allows topics to be meaningfully browsed in a variety of viewing contexts, whether full-screen browsers, integrated help panes, infopops, or PDA screens. The application can disclose as much information as the context supports, letting the user decide where and how to drill down to more content. </faqans>
+        </faqitem>
+        <faqitem>
+          <faqquest>Can topics be nested? </faqquest>
+          <faqans>Topics can be nested to create larger document structures. However, the nesting always occurs outside the content boundary, so that child and parent topics can be easily separated and reused in different contexts (see The structure of a DITA topic). Here is a sample nesting structure: <pre xml:space="preserve">
+&lt;topic&gt;
+&lt;title&gt;A general topic&lt;/title&gt;
+  &lt;shortdesc&gt;This general topic is pretty general.&lt;/shortdesc&gt;
+  &lt;body&gt;&lt;p&gt;General topics are not very specific. They are useful for
+  the big picture, but they don&apos;t get into details in the same way as
+  more specific topics.&lt;/p&gt;&lt;/body&gt;
+  &lt;topic&gt;
+    &lt;title&gt;A specific topic&lt;/title&gt;
+    &lt;shortdesc&gt;This is a more specific topic.&lt;/shortdesc&gt;
+    &lt;body&gt;&lt;p&gt;Specifically, this is more specific.&lt;/p&gt;&lt;/body&gt;
+  &lt;/topic&gt;
+&lt;/topic&gt;
+</pre><p> You can author topics either as nested structures or as individual stand-alone documents. In the latter case, you assemble the documents into nested structures as required, such as when delivering printed or printable information that has a part and chapter hierarchy.</p><p>The nested structure gives a sequence and hierarchy of topics within a topic collection. In a Web environment you could disassemble this structure into individual topics and preserve the hierarchy in a generated navigation map or table of contents. However, if the Web is the main delivery vehicle, you might want to author the topics as separate documents and then apply several tables of contents to the same collection of topics.</p></faqans>
+        </faqitem>
+        <faqitem>
+          <faqquest>What is an information type? </faqquest>
+          <faqans>An information type describes a category of topics, such as concepts, tasks, or reference. Typically, different information types support different kinds of content. For example, a task typically has a set of steps, whereas a reference topic has a set of customary sections, such as syntax, properties, and usage. </faqans>
+        </faqitem>
+        <faqitem>
+          <faqquest>Why information types? </faqquest>
+          <faqans>With information types, you can divide topics into categories that you can manage and keep consistent more easily than without information types. Information types also make it easier for users to find the information that they are looking for: how-to information in a task versus background information in a concept versus detailed specifications in a reference topic. </faqans>
+        </faqitem>
+        <faqitem>
+          <faqquest>What is specialization? </faqquest>
+          <faqans>Specialization is the process of creating new categories of topics, or information types, as well as new categories of elements, or domain types. You can define these new types using the existing ones as a base. For example, a product group might identify three main types of reference topic -- messages, utilities, and APIs -- and define three domains -- networking, programming, and databases. By creating a specialized topic type for each kind of reference information, and creating a domain type for each kind of subject, the product architect can ensure that each type of topic has the appropriate structures and content. In addition, the specialized topics make XML-aware search more useful, because users can make fine-grained distinctions. For example, a user could search for xyz only in messages or only in APIs, as well as searching for xyz across reference topics in general. <p> Rules govern how to specialize safely: Each new information type must map to an existing one, and new information types must be more restrictive than the existing one in the content that they allow. With such specialization, new information types can use generic processing streams for translation, print, and Web publishing. Although a product group can override or extend these processes, they get the full range of existing processes by default, without any extra work or maintenance. The DITA specialization articles outline the rules for each kind of specialization (topic type and domain type). </p></faqans>
+        </faqitem>
+      </faqlist>
+    </faqgroup>
+    <faqgroup>
+      <title>Tips and techniques</title>
+      <faqlist>
+        <faqitem>
+          <faqquest>How can I combine several topics into a single document?</faqquest>
+          <faqans>The DITA design has a unified content reuse mechanism by which an element can replace itself with the content of a like element elsewhere, either in the current topic or in a separate topic that shares the same content models. The distinction between reusable content and reusing content, which is enshrined in the file entity scheme, disappears: Any element with an ID, in any DITA topic, is reusable by conref. <p> DITA&apos;s conref &quot;transclusion&quot; mechanism is similar to the SGML conref mechanism, which uses an empty element as a reference to a complete element elsewhere. However, DITA requires that at least a minimal content model for the referencing element be present, and performs checks during processing to ensure that the replacement element is valid in its new context. This mechanism goes beyond standard XInclude, in that content can be incorporated only when it is equivalent: If there is a mismatch between the reusing and reused element types, the conref is not resolved. It also goes beyond standard entity reuse, in that it allows the reused content to be in a valid XML file with a DTD. The net result is that reused content gets validated at authoring time, rather than at reuse time, catching problems at their source.</p><p> Content referencing can be used at any scope of elements in a DITA document, from a keyword phrase that contains only PCDATA to a whole topic with other nested topics. Conref can cross file boundaries, using the same syntax as that of the href attribute on the xref element. If your authoring DTD allows topic nesting, you can create a set of minimal child topics and then use their conref attributes to pull in content from fully populated topics in other files.</p></faqans>
+        </faqitem>
+        <faqitem>
+          <faqquest>What if my information doesn&apos;t break down into topics?</faqquest>
+          <faqans>Most information can be broken down into topics (headings and content). However, if your information requires a more seamless flow of information across topic boundaries, don&apos;t use this architecture. </faqans>
+        </faqitem>
+        <faqitem>
+          <faqquest>When should I specialize?</faqquest>
+          <faqans>Create specialized topics when you have a restrictive category of topics that you want to keep consistent and that your users want to distinguish from other categories. Create specialized domains when you have a set of elements that you want available across several of your topic types. Be sure to specialize from the correct base: For example, categories of reference topics should specialize &lt;reference&gt;, categories of tasks should specialize &lt;task&gt;, and domain types should always specialize either &lt;topic&gt; or another domain type. If you need to allow more content structures than the base types allow, you can specialize directly from topic, or form your own base type. However, the lower down in the hierarchy that you can specialize, the better; you can then take advantage of any transforms or processes that have been developed for the more general categories that you specialize from. </faqans>
+        </faqitem>
+        <faqitem>
+          <faqquest>How do I specialize?</faqquest>
+          <faqans>You need to identify the differences between your new type of information and the more general type that you are specializing from. After you have identified the differences, you create a DTD file to declare the new elements that you require. Create another module to declare a set of mapping attributes for the new elements that point to the generic element types that they specialize. Then add import statements in the DTD file to bring in the mapping module and any ancestor modules. Finally, add a line that redefines the information types entity to include your new type. You now have a customized DTD. <p> When you specialize a domain, you need to first determine what elements must be specialized for the domain. Then you write an entity declaration file to list the specialized elements, along with their topic types and domain types. Next, you create a file where you define both the elements that are introduced for the domain and the specialization hierarchy. Finally, you write the shell DTD to combine the domain with topics and other domains. </p><p> These processes are described in more detail in the documents Specializing topics in DITA and Specializing domains in DITA.</p></faqans>
+        </faqitem>
+        <faqitem>
+          <faqquest>How do I extend specialization-aware transforms?</faqquest>
+          <faqans>See the article on specializing topic types.</faqans>
+        </faqitem>
+        <faqitem>
+          <faqquest>Can I use HTML in this DTD?</faqquest>
+          <faqans>Yes. Many writers have had at least some experience with HTML as a markup language. Therefore the base DITA DTD incorporates as many HTML elements as are useful for the type of technical information for which topics might be used. In addition, we have defined a subset of XHTML for which there is a very simple transformation into the DITA format -- often with no change to many content elements! In fact, if you can load an XHTML document into the same editor as an XML DITA document, you can probably copy and paste long stretches of the XHTML content directly into the topic. Regardless, to gain the real advantage of XML, you should use the semantics of the DTD. </faqans>
+        </faqitem>
+        <faqitem>
+          <faqquest>Where can I see the DITA DTD in use?</faqquest>
+          <faqans>Right here! The original documents that accompany this proposal were authored in XML using the ditabase DTD.</faqans>
+        </faqitem>
+      </faqlist>
+    </faqgroup>
+  </faqbody>
+</faq>
+

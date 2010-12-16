@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE javaAPIMap PUBLIC "-//IBM//DTD DITA Java API Reference Map//EN"
+ "../dtd/javaAPIMap.dtd">
+<javaAPIMap title="RXE">
+<javaPackageRef href="javaPackage1.dita">
+<javaInterfaceRef href="javaInterface1.dita"></javaInterfaceRef>
+<javaInterfaceRef href="javaInterface2.dita"></javaInterfaceRef>
+<javaClassRef href="javaClass1.dita"></javaClassRef>
+<javaClassRef href="javaClass2.dita"></javaClassRef>
+<javaExceptionClassRef href="javaException1.dita"></javaExceptionClassRef>
+</javaPackageRef>
+</javaAPIMap>

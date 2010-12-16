@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="apiType" outputclass="element" xml:lang="en-us">
+<title>apiType</title>
+<shortdesc>The &lt;apiType&gt; element specifies a type defined by the language
+itself that is part of the declared interface to this API item. </shortdesc>
+<refbody>
+<section><title>Description</title><p> This element requires the name and
+value attributes. The name attribute is a "type". Use the value attribute
+for the value of the flag, for example, "function", "interface" and other
+values. </p><p> For
+example, in Java API specialization the &lt;apiType&gt; element can be the &lt;javaReturnPrimitive&gt;
+element for a method, the &lt;javaParamPrimitive&gt; element for a parameter,
+or the &lt;javaFieldPrimitive&gt; for a field. </p></section>
+<example> <title>Example</title><p>The following example shows a simple &lt;apiType&gt;
+element for a Visual Basic method: </p><codeblock>&lt;apiOperation id="com.ibm.xtools.rational.xde" outputclass=”IRXEAbstraction”&gt;
+   &lt;apiOperationDetail&gt;
+      &lt;apiReturnDef&gt;
+         &lt;apiType name="type" value="function"/&gt;
+         &lt;apiQualifier name="access" value="public"/&gt;
+      &lt;/apiReturnDef&gt;
+   &lt;/apiOperationDetail
+&lt;/apiOperation&gt;</codeblock><p>The following example shows a simple &lt;apiType&gt;
+element for a Visual Basic property: </p><codeblock>&lt;apiValueDetail&gt;
+      &lt;apiValueDef&gt;
+         &lt;apiType name="type" value="interface"/&gt;
+         &lt;apiQualifier name="access" value="public"/&gt;
+         &lt;apiValueClassifier href="../IRXEModel.html" format="html"&gt;IRXEModel&lt;/apiValueClassifier&gt;
+         &lt;apiRelation&gt;IRXEAbstarction&lt;/apiRelation&gt;
+       &lt;/apiValueDef&gt;
+       &lt;apiDesc&gt;&lt;note&gt;You must have an open read action before calling this property.&lt;/note&gt;&lt;/apiDesc&gt;
+   &lt;/apiValueDetail&gt;</codeblock></example>
+<section conref="../packagedef.dita#apiType-reference/apiType-containedBy-section"/><section conref="../packagedef.dita#apiType-reference/apiType-contains-section"/><section conref="../packagedef.dita#apiType-reference/apiType-contentModel-section"/><section conref="../packagedef.dita#apiType-reference/apiType-attList-section"/><section conref="../packagedef.dita#apiType-reference/apiType-classValue-section"/></refbody>
+</reference>

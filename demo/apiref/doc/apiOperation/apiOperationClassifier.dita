@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="apiOperationClassifier" outputclass="element" xml:lang="en-us">
+<title>apiOperationClassifier</title>
+<shortdesc>The &lt;apiOperationClassifier> element identifies a returned value
+that is an instance of a classifier, for example, the class of the returned
+object.</shortdesc>
+<refbody>
+<section><title>Description</title>The &lt;apiOperationClassifier> is not
+restricted to the type of return values; it can be the type of a parameter
+or event. It is a return value only when it appears within &lt;apiReturn>.
+This element can provide an <i>href</i> attribute if the description of the
+API item is available. If the description is not available, the &lt;apiOperationClassifier>
+element can provide the name of the API item in its contents. <ul>
+<li>If you use an <i>href</i> attribute to a DITA API topic that describes
+the related API item, you do not need any other attributes.</li>
+</ul><ul>
+<li>If you provide an <i>href</i> attribute to some other format (such as
+HTML), you need to provide the name of the related API item inside the &lt;apiOperationClassifier>
+element.</li>
+</ul><ul>
+<li>If you cannot provide an <i>href</i> attribute (for instance, if the description
+of the related API item might not be available), you must provide the name
+of the related API item inside the &lt;apiOperationClassifier> element and
+the fully qualified name of the element in the<i> keyref</i> attribute. The <i>keyref</i> attribute
+must provide a unique key such as a fully qualified classifier name for the
+named API item.</li>
+</ul> </section>
+<example><title>Example</title><p>The following example shows an &lt;apiOperationClassifier>
+item for a Visual Basic method:<?Pub Caret?>  </p><codeblock>&lt;apiOperation id="rational.xde.getApplicableStereotypesAsString">
+   &lt;apiName>getApplicableStereotypesAsString&lt;/apiName>
+   &lt;shortDesc>Returns a string that specifies the stereotype associated with the element.&lt;/shortDesc>
+   &lt;apiOperationDetail>
+     &lt;apiOperationDef>
+      &lt;apiImpl>Method&lt;/apiImpl>
+          &lt;apiType name="type" value="Function"/>
+          &lt;apiQualifier name="access" value="public"/>
+          &lt;apiOperationClassifier href=”String.dita”>String&lt;/apiOperationClassifier>
+          &lt;apiDefNote>Returns a string that specifies the stereotypes.&lt;/apiDefNote>
+      &lt;/apiOperationDef>
+      &lt;apiDesc>This property searches all the profiles in the model.&lt;/apiDesc>
+    &lt;/apiOperationDetail>
+ &lt;/apiOperation></codeblock></example>
+<section conref="../packagedef.dita#apiOperationClassifier-reference/apiOperationClassifier-containedBy-section"></section>
+<section conref="../packagedef.dita#apiOperationClassifier-reference/apiOperationClassifier-contains-section"></section>
+<section conref="../packagedef.dita#apiOperationClassifier-reference/apiOperationClassifier-contentModel-section"></section>
+<section conref="../packagedef.dita#apiOperationClassifier-reference/apiOperationClassifier-attList-section"></section>
+<section conref="../packagedef.dita#apiOperationClassifier-reference/apiOperationClassifier-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000003339?>

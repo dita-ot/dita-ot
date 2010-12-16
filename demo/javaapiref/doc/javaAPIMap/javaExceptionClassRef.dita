@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaExceptionClassRef" outputclass="element" xml:lang="en-us">
+<title>javaExceptionClassRef</title>
+<shortdesc>This element provides a Java exception class topic type as a link
+in a DITA map. </shortdesc>
+<refbody>
+<section><title>Description</title><p>A &lt;javaExceptionClassRef > can contain
+&lt;topicref> and &lt;topicmeta> elements, allowing you to express navigation
+or table-of-contents hierarchies, as well as implying relationships between
+the containing topicref and its children.  <?Pub Caret?></p></section>
+<example> <title>Example</title><codeblock>&lt;javaPackageRef navtitle="Package com.ibm.xtools.pluglets" id="com.ibm.xtools.patterns.pluglet"
+        href="com.ibm.xtools.pluglets.dita" locktitle="yes">
+     &lt;javaClassRef navtitle="PlugletCompiler Class" href="PlugletCompiler.dita">
+     &lt;/javaClassRef>
+     &lt;javaExceptionClassRef navtitle="PlugletException Class" href="PlugletException.dita">
+     &lt;/javaExceptionClassRef>
+&lt;/javaPackageRef></codeblock> </example>
+<section conref="../packagedef.dita#javaExceptionClassRef-reference/javaExceptionClassRef-containedBy-section"></section>
+<section conref="../packagedef.dita#javaExceptionClassRef-reference/javaExceptionClassRef-contains-section"></section>
+<section conref="../packagedef.dita#javaExceptionClassRef-reference/javaExceptionClassRef-contentModel-section"></section>
+<section conref="../packagedef.dita#javaExceptionClassRef-reference/javaExceptionClassRef-attList-section"></section>
+<section conref="../packagedef.dita#javaExceptionClassRef-reference/javaExceptionClassRef-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001831?>

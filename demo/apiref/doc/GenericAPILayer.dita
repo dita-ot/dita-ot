@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="apiReferenceDoc" outputclass="moduleset" xml:lang="en-us">
+<title>Generic API topic types</title>
+<shortdesc>The generic API topic types describe any application programming
+interface (API) library and can serve as a basis for deriving more specialized
+topic types for specific languages or other library environments.</shortdesc>
+<refbody>
+<section><title>Description</title><p>The general-purpose topic types layer
+can be specialized to provide language-specific or environment-specific topic
+types for an API reference. You should use the most specific set of topic
+types that match the language or environment for your library. For example,
+use the Java API topic type for Java language.</p><p>The API
+reference provides the following set of general purpose topic types for describing
+the interface provided by programmable libraries:</p></section>
+</refbody>
+</reference>

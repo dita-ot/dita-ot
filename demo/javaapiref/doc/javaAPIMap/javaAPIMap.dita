@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="javaAPIMap" outputclass="element" xml:lang="en-us">
+<title>javaAPIMap</title>
+<shortdesc>The &lt;javaAPIMap&gt; element provides the name of the Java API Reference
+and all the elements necessary to describe the package, or set of packages,
+and its components.</shortdesc>
+<refbody>
+<section><title>Description</title><p>The containing element for a map is
+the &lt;javaAPIMap&gt; element, which can take title and id attributes. Within
+the &lt;javaAPIMap&gt;, use the &lt;javaPackageRef&gt;, &lt;topicmeta&gt; and &lt;reltable&gt;
+elements to add and organize references to the topics. </p></section>
+<section conref="../packagedef.dita#javaAPIMap-reference/javaAPIMap-containedBy-section"/><section conref="../packagedef.dita#javaAPIMap-reference/javaAPIMap-contains-section"/><section conref="../packagedef.dita#javaAPIMap-reference/javaAPIMap-contentModel-section"/><section conref="../packagedef.dita#javaAPIMap-reference/javaAPIMap-attList-section"/><section conref="../packagedef.dita#javaAPIMap-reference/javaAPIMap-classValue-section"/></refbody>
+</reference>

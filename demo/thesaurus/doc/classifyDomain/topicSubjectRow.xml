@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\..\dtd\reference.dtd">
+<reference id="topicSubjectRow" outputclass="element" xml:lang="en-us">
+<title>topicSubjectRow</title>
+<shortdesc>Classifies one or more topics with a structured set of subjects.</shortdesc><?Pub Caret1?>
+<refbody>
+<section><title>Description</title><p>The first cell within the row contains
+one or more content topics. The remaining cells specify the subjects that
+classify the content topics. These subjects must conform to the constraints
+for their column as specified by the <xref href="topicSubjectHeader.xml"
+type="reference"></xref> element. </p></section>
+<section conref="../packagedef.xml#topicSubjectRow-reference/topicSubjectRow-containedBy-section"></section>
+<section conref="../packagedef.xml#topicSubjectRow-reference/topicSubjectRow-contains-section"></section>
+<section conref="../packagedef.xml#topicSubjectRow-reference/topicSubjectRow-contentModel-section"></section>
+<section conref="../packagedef.xml#topicSubjectRow-reference/topicSubjectRow-attList-section"></section>
+<section conref="../packagedef.xml#topicSubjectRow-reference/topicSubjectRow-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001321?>

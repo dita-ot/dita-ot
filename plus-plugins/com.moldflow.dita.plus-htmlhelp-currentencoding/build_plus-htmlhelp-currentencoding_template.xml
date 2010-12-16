@@ -1,0 +1,57 @@
+<project name="plus-htmlhelp-currentencoding">
+
+  <target name="plus-htmlhelp-currentencoding.defaultencoding" unless="plus.htmlhelp.encoding">
+    <taskdef name="get-current-encoding" classname="com.moldflow.ant.CurrentEncoding"  classpathref="dost.class.path"/>
+    <get-current-encoding property="plus.htmlhelp.encoding"/>
+  </target>
+
+  <target name="plus-htmlhelp-currentencoding.hhp.convert" depends="plus-htmlhelp-currentencoding.hhp.defaultencoding">
+      <!-- Transform the HHP into the codepage expected by hhc.exe. -->
+      <move filtering="yes" file="${output.dir}${file.separator}${dita.map.filename.root}.hhp"
+            tofile="${output.dir}${file.separator}${dita.map.filename.root}.hhp.encoded"
+            encoding="utf-8" outputencoding="${plus.htmlhelp.hhp.encoding}"
+      />
+      <move file="${output.dir}${file.separator}${dita.map.filename.root}.hhp.encoded"
+            tofile="${output.dir}${file.separator}${dita.map.filename.root}.hhp"
+      />
+  </target>
+
+  <target name="plus-htmlhelp-currentencoding.hhp.defaultencoding" unless="plus.htmlhelp.hhp.encoding">
+    <property name="plus.htmlhelp.hhp.encoding" value="${plus.htmlhelp.encoding}"/>
+  </target>
+
+  <target name="plus-htmlhelp-currentencoding.hhc.convert" depends="plus-htmlhelp-currentencoding.hhc.defaultencoding">
+      <!-- Transform the HHC into the codepage expected by hhc.exe. -->
+      <move filtering="yes" file="${output.dir}${file.separator}${dita.map.filename.root}.hhc"
+            tofile="${output.dir}${file.separator}${dita.map.filename.root}.hhc.encoded"
+            encoding="utf-8" outputencoding="${plus.htmlhelp.hhc.encoding}"
+      />
+      <move file="${output.dir}${file.separator}${dita.map.filename.root}.hhc.encoded"
+            tofile="${output.dir}${file.separator}${dita.map.filename.root}.hhc"
+      />
+  </target>
+
+  <target name="plus-htmlhelp-currentencoding.hhc.defaultencoding" unless="plus.htmlhelp.hhc.encoding">
+    <property name="plus.htmlhelp.hhc.encoding" value="${plus.htmlhelp.encoding}"/>
+  </target>
+
+  <target name="plus-htmlhelp-currentencoding.hhk.convert" depends="plus-htmlhelp-currentencoding.hhk.defaultencoding">
+      <!-- Transform the HHK into the codepage expected by hhc.exe. -->
+      <move filtering="yes" file="${output.dir}${file.separator}${dita.map.filename.root}.hhk"
+            tofile="${output.dir}${file.separator}${dita.map.filename.root}.hhk.encoded"
+            encoding="utf-8" outputencoding="${plus.htmlhelp.hhk.encoding}"
+      />
+      <move file="${output.dir}${file.separator}${dita.map.filename.root}.hhk.encoded"
+            tofile="${output.dir}${file.separator}${dita.map.filename.root}.hhk"
+      />
+  </target>
+
+  <target name="plus-htmlhelp-currentencoding.hhk.defaultencoding" unless="plus.htmlhelp.hhk.encoding">
+    <property name="plus.htmlhelp.hhk.encoding" value="${plus.htmlhelp.encoding}"/>
+  </target>
+
+  <target name="plus-htmlhelp-currentencoding.topics.defaultencoding" unless="plus.topics.encoding">
+    <property name="plus.topics.encoding" value="${plus.htmlhelp.encoding}"/>
+  </target>
+
+</project>

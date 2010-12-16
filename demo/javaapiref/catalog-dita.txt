@@ -1,0 +1,14 @@
+PUBLIC "-//IBM//DTD DITA Java API Reference Map//EN" "demo/javaapiref/dtd/javaAPIMap.dtd"
+PUBLIC "-//IBM//DTD DITA Java API Package Reference Type//EN" "demo/javaapiref/dtd/javaPackage.dtd"
+PUBLIC "-//IBM//DTD DITA Java API Class Reference Type//EN" "demo/javaapiref/dtd/javaClass.dtd"
+PUBLIC "-//IBM//DTD DITA Java API Interface Reference Type//EN" "demo/javaapiref/dtd/javaInterface.dtd"
+
+PUBLIC "-//IBM//ELEMENTS DITA Java API Reference Map//EN" "demo/javaapiref/dtd/javaAPIMap.mod"
+PUBLIC "-//IBM//ELEMENTS DITA Java API Package//EN" "demo/javaapiref/dtd/javaPackage.mod"
+PUBLIC "-//IBM//ELEMENTS DITA Java API Class//EN" "demo/javaapiref/dtd/javaClass.mod"
+PUBLIC "-//IBM//ELEMENTS DITA Java API Interface//EN" "demo/javaapiref/dtd/javaInterface.mod"
+PUBLIC "-//IBM//ELEMENTS DITA Java API Field//EN" "demo/javaapiref/dtd/javaField.mod"
+PUBLIC "-//IBM//ELEMENTS DITA Java API Method//EN" "demo/javaapiref/dtd/javaMethod.mod"
+
+PUBLIC "-//IBM//ENTITIES DITA Java API Domain//EN" "demo/javaapiref/dtd/javaAPIDomain.ent"
+PUBLIC "-//IBM//ELEMENTS DITA Java API Domain//EN" "demo/javaapiref/dtd/javaAPIDomain.mod"

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+ This file is part of the DITA Open Toolkit project hosted on
+ Sourceforge.net. See the accompanying license.txt file for
+ applicable licenses.
+ 
+ (C) Copyright Shawn McKenzie, 2007. All Rights Reserved.
+ *-->
+<?xml-stylesheet href="../../../../xsl/ditaview_shell.xsl" type="text/xsl"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "../../../../dtd/concept.dtd">
+<concept id="tocjs_install" xml:lang="en-us">
+ <title>Installing tocjs</title>
+ <conbody>
+  <p>The tocjs plugin is designed to be integrated into the DITA Open Toolkit so that you have
+    <codeph>tocjs</codeph> as a registered transtype. This transtype can then be used in conjunction
+   with the XHTML output. This plugin has been tested (somewhat) on the 1.2.2 toolkit version, but
+   it works with the 1.3 versions as well. There are some known issues, and likely many unknown
+   issues. Please report any issues to smckenzie23@gmail.com. You may also be able to find people
+   who can help on the dita-users Yahoo! Group. You can also find the latest version of the tocjs
+   plugin in the files area of the dita-users Yahoo! group.</p>
+ </conbody>
+ <related-links>
+  <link href="http://tech.groups.yahoo.com/group/dita-users/files/Demos/" scope="external"
+   format="html">
+   <linktext>Download tocjs</linktext>
+   <desc>http://tech.groups.yahoo.com/group/dita-users/files/Demos/</desc>
+  </link>
+  <link scope="external" href="mailto:smckenzie23@gmail.com">
+   <linktext>Email Shawn McKenzie</linktext>
+  </link>
+ </related-links>
+</concept>

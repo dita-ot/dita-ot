@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaInterface" outputclass="element" xml:lang="en-us">
+<title>javaInterface module</title>
+<shortdesc>Defines all the elements that are necessary to describe an API
+interface. </shortdesc>
+<refbody>
+<section><title>Description</title><p>The javaInterface topic type contains
+the elements necessary to show the name of the interface and the short description
+of the interface. It also contains the elements that are necessary to describe
+the interface syntax and the interface use description. The members of a Java
+interface have the following categories: constants, fields, methods, events,
+and constructors.</p><p>The members of the interface include the following
+categories: constants, fields, methods, events, and constructors.</p></section>
+<example> <title>Example</title><codeblock><![CDATA[<javaInterface id="">
+    <apiName></apiName>
+    <shortdesc></shortdesc>
+    <javaInterfaceDetail></javaInterfaceDetail>
+</javaClass>]]></codeblock></example>
+<section><title>Processing Expectations</title><image href="images/javaInterface.jpg">
+<alt>Processing Expectations</alt></image></section>
+</refbody>
+</reference>

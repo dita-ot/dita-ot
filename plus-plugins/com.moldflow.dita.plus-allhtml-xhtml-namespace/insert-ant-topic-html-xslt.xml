@@ -1,0 +1,6 @@
+<xslt>
+
+      <param name="XHTML-NAMESPACE" expression="${plus.xhtml.namespace}" if="plus.xhtml.namespace"/>
+
+
+</xslt>

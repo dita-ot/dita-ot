@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:group name="table">
+    <xs:sequence>
+      <xs:element ref="table"/>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="tgroup">
+    <xs:sequence>
+      <xs:element ref="tgroup"/>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="colspec">
+    <xs:sequence>
+      <xs:element ref="colspec"/>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="spanspec">
+    <xs:sequence>
+      <xs:element ref="spanspec"/>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="thead">
+    <xs:sequence>
+      <xs:element ref="thead"/>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="tfoot">
+    <xs:sequence>
+      <xs:element ref="tfoot"/>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="tbody">
+    <xs:sequence>
+      <xs:element ref="tbody"/>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="row">
+    <xs:sequence>
+      <xs:element ref="row"/>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="entry">
+    <xs:sequence>
+      <xs:element ref="entry"/>
+    </xs:sequence>
+  </xs:group>
+
+
+
+</xs:schema>

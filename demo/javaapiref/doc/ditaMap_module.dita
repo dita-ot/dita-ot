@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="ditaMap_module" outputclass="element" xml:lang="en-us">
+<title>DITAMap API Module<?Pub Caret?></title>
+<shortdesc>This element provides describe the relationships within a collection
+of specialization topics of an application programming interface (API).</shortdesc>
+<refbody>
+<section><title>Description</title><p> Maps can be used to drive processing
+for the collection (for example, transforming all the referenced topics into
+HTML, or producing a PDF for the collection), generate navigation files (for
+example, Eclipse or HTML Help tables of contents), and manage the related
+links among the topics. </p> The topics can be organized into subdirectories
+(for example, a /universal directory, /java/ directory, /java/interface/ and
+/java/class, and so on). The topic directories can be nested to any level,
+as long as the map is defined at a level that contains them all.<dl><dlentry>
+<dt></dt>
+<dd><dl><dlentry>
+<dt><b>Universal API Specialization:</b></dt>
+<dd>apiPackage, apiClassifier, apiOperation, and apiValue topic types. </dd>
+</dlentry></dl><dl><dlentry>
+<dt><b>Java API Specialization:</b></dt>
+<dd>javaPackage, javaClass, javaInterface, javaMethod and javaField topic
+types. </dd>
+</dlentry></dl><dl><dlentry>
+<dt><b>C++ API Specialization:</b></dt>
+<dd>Library, Header, Namespace, Class, Typesdef, Structure, Union, Function,
+Method, Constant, Enumeration , Member Variable and Parameter topic types. </dd>
+</dlentry></dl></dd>
+</dlentry></dl></section>
+</refbody>
+</reference>
+<?Pub *0000001695?>

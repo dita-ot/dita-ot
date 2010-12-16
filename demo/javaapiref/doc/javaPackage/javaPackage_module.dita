@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaPackage_module" outputclass="module" xml:lang="en-us">
+<title>javaPackage module</title>
+<shortdesc>Provides all the elements that describe the items in a Java API
+package.</shortdesc>
+<refbody>
+<section><title>Description</title><p> The javaPackage topic type contains
+the reference elements to subpackages, classes, and interfaces. Within a javaPackage
+topic type, you can create a <b>New Document Type</b> by clicking <menucascade>
+<uicontrol>File</uicontrol><uicontrol>New</uicontrol></menucascade> from the
+Epic Editor menu. The HTML output file contains and displays the short descriptions
+for all component classes and interfaces. The short descriptions are inherited
+from the short description for that class or interface during the transformation
+from XML to HTML. </p></section>
+<example> <title>Example</title><codeblock><![CDATA[<javaPackage id="">
+   <apiName></apiName>
+   <shortdesc></shortdesc>
+   <javaPackageDetail>
+      <apiDesc></apiDesc>
+   </javaPackageDetail>
+</javaPackage>
+]]></codeblock></example>
+<section><title>Processing Expectations</title><image href="images/javaPackage.jpg">
+<alt></alt></image></section>
+</refbody>
+</reference>

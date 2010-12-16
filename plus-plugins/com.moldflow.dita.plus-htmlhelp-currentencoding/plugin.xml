@@ -1,0 +1,19 @@
+<plugin id="com.moldflow.dita.plus-htmlhelp-currentencoding">
+
+  <require plugin="com.moldflow.dita.plus-allhtml-encoding"/>
+
+  <template file="build_plus-htmlhelp-currentencoding_template.xml"/>
+
+  <feature extension="dita.conductor.lib.import" value="lib/currentencoding.jar" type="file"/>
+
+  <feature extension="dita.conductor.target.relative" value="build.xml" type="file"/>
+
+  <feature extension="depend.plus-transtype-htmlhelp.map.basic.pre" value="plus-htmlhelp-currentencoding.defaultencoding" type="text"/>
+  <feature extension="depend.plus-transtype-htmlhelp.map.basic.hhp.post" value="plus-htmlhelp-currentencoding.hhp.convert" type="text"/>
+  <feature extension="depend.plus-transtype-htmlhelp.map.basic.hhc.post" value="plus-htmlhelp-currentencoding.hhc.convert" type="text"/>
+  <feature extension="depend.plus-transtype-htmlhelp.map.basic.hhk.post" value="plus-htmlhelp-currentencoding.hhk.convert" type="text"/>
+
+  <feature extension="depend.plus-transtype-htmlhelp.topics.basic.pre" value="plus-htmlhelp-currentencoding.topics.defaultencoding" type="text"/>
+
+  <feature extension="depend.plus-htmlhelp-topics-twopass.stage2.pre" value="plus-htmlhelp-currentencoding.topics.defaultencoding" type="text"/>
+</plugin>

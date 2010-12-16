@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\..\dtd\reference.dtd">
+<reference id="subjAltLabel" outputclass="element" xml:lang="en-us">
+<title>subjAltLabel</title>
+<shortdesc>A synonym for the subject within the scheme.</shortdesc><?Pub Caret1?>
+<refbody>
+<section><title>Description</title><p>If any alternative labels are specified
+within the scheme, they are used instead of the alternative labels specified
+with the <xref href="../subjectDomain/altLabel.xml" type="reference"></xref> element
+in the subject topic.</p></section>
+<section conref="../packagedef.xml#subjAltLabel-reference/subjAltLabel-containedBy-section"></section>
+<section conref="../packagedef.xml#subjAltLabel-reference/subjAltLabel-contains-section"></section>
+<section conref="../packagedef.xml#subjAltLabel-reference/subjAltLabel-contentModel-section"></section>
+<section conref="../packagedef.xml#subjAltLabel-reference/subjAltLabel-attList-section"></section>
+<section conref="../packagedef.xml#subjAltLabel-reference/subjAltLabel-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001192?>

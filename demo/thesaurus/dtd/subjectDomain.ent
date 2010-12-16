@@ -1,0 +1,5 @@
+<!--
+ | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ *-->
+<!ENTITY % subject-d-section "subjectDetail">
+<!ENTITY subject-d-att "(topic subject-d)">

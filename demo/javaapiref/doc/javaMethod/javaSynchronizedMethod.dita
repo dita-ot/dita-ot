@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaSynchronizedMethod" outputclass="element" xml:lang="en-us">
+<title>javaSynchronizedMethod</title>
+<shortdesc>The &lt;javaSynchronizedMethod> element within the <i>MethodModifiers<sup>opt</sup></i> declaration
+provides the declaration for a synchronized method.</shortdesc>
+<refbody>
+<section><title>Description</title><p>Possible alternative definitions of
+the method declaration are the javaFinalMethod, javaNativeMethod, and  javaSyncronizedMethod
+elements. </p><p> The &lt;javaSynchronizedMethod> element has the following
+predefined attributes: <i>name ="Synchronized"</i> and  <i>value ="Synchronized"</i>. </p><?Pub Caret1?></section>
+<example> <title>Example</title>Click on the following link to open the Java
+API topic type example in  <object classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11"
+codebase="hhctrl.ocx#Version=4,73,8412,0" codetype="VIEWASTEXT" height="100"
+id="hhctrl" type="application/x-oleobject" width="100">
+<param name="Command" value="ShortCut"/>
+<param name="Text" value="Text: DITA "/>
+<param name="Item1" value=",../samples/java/IImportEngineTask.dita,"/></object><codeblock>&lt;javaMethod id="com.ibm.tasks.IImportEngineTask">
+   &lt;apiName>addObject&lt;/apiName>
+   &lt;shortdesc>Add a specific object.&lt;/shortdesc>
+   &lt;javaMethodDetail>
+     &lt;javaMethodDef>
+       &lt;javaSynchronizedMethod/>
+       &lt;javaMethodAccess value="public"/>
+       &lt;javaReturn>
+         &lt;javaMethodPrimitive value="boolean"/>
+         &lt;apiDefNote>True if the collection has changed, false otherwise.&lt;/apiDefNote>
+       &lt;/javaReturn>
+       &lt;javaParam>
+         &lt;javaMethodClass>Object&lt;/javaMethodClass>
+         &lt;apiItemName>obj&lt;/apiItemName>
+         &lt;apiDefNote>new element in the collection if it has not already been part of it&lt;/apiDefNote>
+       &lt;/javaParam>
+    &lt;/javaMethodDef>
+    &lt;apiDesc>Only objects of type Collectable can be added to this collection.
+      If the object is already an element of this collection, it is still contained
+      only once in the collection (Set semantics).&lt;/apiDesc>
+  &lt;/javaMethodDetail>
+&lt;/javaMethod></codeblock></example>
+<section><title>Processing Expectations</title><image href="images/javaSynchronizedMethod.jpg"
+placement="inline"><alt></alt></image></section>
+<section conref="../packagedef.dita#javaSynchronizedMethod-reference/javaSynchronizedMethod-containedBy-section"></section>
+<section conref="../packagedef.dita#javaSynchronizedMethod-reference/javaSynchronizedMethod-contains-section"></section>
+<section conref="../packagedef.dita#javaSynchronizedMethod-reference/javaSynchronizedMethod-contentModel-section"></section>
+<section conref="../packagedef.dita#javaSynchronizedMethod-reference/javaSynchronizedMethod-attList-section"></section>
+<section conref="../packagedef.dita#javaSynchronizedMethod-reference/javaSynchronizedMethod-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000003138?>

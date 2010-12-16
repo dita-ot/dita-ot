@@ -1,0 +1,9 @@
+<plugin id="com.moldflow.dita.plus-transtype-htmlhelp">
+  <require plugin="com.moldflow.dita.plus-allhtml-topic2html"/>
+  <template file="build_plus-transtype-htmlhelp_template.xml"/>
+  <template file="xsl/map2hhc_template.xsl"/>
+  <template file="xsl/map2hhp_template.xsl"/>
+  <template file="xsl/dita2html-shell_template.xsl"/>
+  <feature extension="dita.conductor.transtype.check" value="htmlhelp+" type="txt"/>
+  <feature extension="dita.conductor.target.relative" value="build.xml" type="file"/>
+</plugin>

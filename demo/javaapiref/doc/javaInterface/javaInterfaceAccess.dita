@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaInterfaceAccess" outputclass="element" xml:lang="en-us">
+<title>javaInterfaceAccess</title>
+<shortdesc>The &lt;javaInterfaceAccess> element provides the <i>InterfaceModifiers<sup>opt</sup></i> for
+the interface access values declaration.</shortdesc>
+<refbody>
+<section><title>Description</title><p>The <i>protected</i> and <i>private</i> access
+modifiers pertain only to member interfaces within a directly enclosing class
+declaration.  The syntax of the interface includes the declarations for the
+public modifiers, such as <i>public</i>, <i>protected</i>, or <i>private</i>. </p><?Pub Caret1?></section>
+<example> <title>Example</title>Click on the following link to open the Java
+API topic type example in  <object classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11"
+codebase="hhctrl.ocx#Version=4,73,8412,0" codetype="VIEWASTEXT" height="100"
+id="hhctrl" name="Sample" type="application/x-oleobject" width="100">
+<param name="Command" value="ShortCut"/>
+<param name="Text" value="Text: DITA "/>
+<param name="Item1" value=",../samples/java/IImportEngineTask.dita,"/></object><codeblock>&lt;javaInterface id="com.ibm.xtools.ras.impord.engine.tasks">
+    &lt;apiName>IImportEngineTask&lt;/apiName>
+    &lt;shortdesc>A unit of work executed during the import operation by the RAS import service.&lt;/shortdesc>
+    &lt;javaInterfaceDetail>
+	    &lt;javaInterfaceDef>	
+	       &lt;javaInterfaceAccess/>
+      &lt;/javaInterfaceDef>
+      &lt;apiDesc> The work unit is executed in one of four distinct phases. 
+               This interface is intended to be implemented by clients.&lt;/apiDesc>
+    &lt;/javaInterfaceDetail>
+    &lt;related-links>
+        &lt;link>
+           &lt;linktext>"The reference documentation for the 'importEngineTask' extension point"&lt;/desc>
+        &lt;/link>
+        &lt;link keyref="com.ibm.xtools.ras.impord.engine.tasks.AbstractImportEngineTask">
+           &lt;linktext>AbstractImportEngineTask&lt;/linktext>
+        &lt;/link>
+     &lt;/related-links>
+&lt;/javaInterface></codeblock></example>
+<section><title>Processing Expectations</title><image href="images/javaInterfaceAccess.jpg"
+placement="inline"><alt></alt></image></section>
+<section conref="../packagedef.dita#javaInterfaceAccess-reference/javaInterfaceAccess-containedBy-section"></section>
+<section conref="../packagedef.dita#javaInterfaceAccess-reference/javaInterfaceAccess-contains-section"></section>
+<section conref="../packagedef.dita#javaInterfaceAccess-reference/javaInterfaceAccess-contentModel-section"></section>
+<section conref="../packagedef.dita#javaInterfaceAccess-reference/javaInterfaceAccess-attList-section"></section>
+<section conref="../packagedef.dita#javaInterfaceAccess-reference/javaInterfaceAccess-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000002985?>

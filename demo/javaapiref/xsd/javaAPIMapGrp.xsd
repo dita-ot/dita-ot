@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+ | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ *-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:group name="javaAPIMap">
+    <xs:sequence>
+      <xs:element ref="javaAPIMap"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaPackageRef">
+    <xs:sequence>
+      <xs:element ref="javaPackageRef"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaInterfaceRef">
+    <xs:sequence>
+      <xs:element ref="javaInterfaceRef"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaClassRef">
+    <xs:sequence>
+      <xs:element ref="javaClassRef"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaExceptionClassRef">
+    <xs:sequence>
+      <xs:element ref="javaExceptionClassRef"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaErrorClassRef">
+    <xs:sequence>
+      <xs:element ref="javaErrorClassRef"/>
+    </xs:sequence>
+  </xs:group>
+</xs:schema>

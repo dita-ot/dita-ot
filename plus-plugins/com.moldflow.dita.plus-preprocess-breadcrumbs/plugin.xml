@@ -1,0 +1,7 @@
+<plugin id="com.moldflow.dita.plus-preprocess-breadcrumbs">
+
+  <feature extension="dita.xsl.maplink" value="xsl/preprocess/maplink.xsl" type="file"/>
+
+  <feature extension="dita.preprocess.maplink.param" value="insert-ant-preprocess-maplink-xslt.xml" type="file"/>
+
+</plugin>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="apiRef" outputclass="element" xml:lang="en-us">
+<title>apiRef</title>
+<shortdesc>The &lt;apiRef&gt; element is the top-level element for generic API
+reference topic type.</shortdesc>
+<refbody>
+<section><title>Description</title><p>The &lt;apiRef&gt; element provides the
+common structure and elements for generic API reference topic types. This
+element requires an ID attribute as an anchor point. This ID is the target
+for references by &lt;link&gt; or &lt;xref&gt; elements (<i>conref</i> attribute),
+and for other internal specialization elements that refer to this &lt;apiRef&gt;
+content. Use a unique key such as fully qualified package name for the named
+API reference. </p></section>
+<section conref="../packagedef.dita#apiRef-reference/apiRef-containedBy-section"/><section conref="../packagedef.dita#apiRef-reference/apiRef-contains-section"/><section conref="../packagedef.dita#apiRef-reference/apiRef-contentModel-section"/><section conref="../packagedef.dita#apiRef-reference/apiRef-attList-section"/><section conref="../packagedef.dita#apiRef-reference/apiRef-classValue-section"/></refbody>
+</reference>

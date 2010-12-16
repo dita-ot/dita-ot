@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<constants>
+    <!-- Margin around entire diagram (top-level element). -->
+    <scalar name="diagram_margin_topbottom">5</scalar>
+    <scalar name="diagram_margin_sides">5</scalar>
+    
+    <!-- Space inside boxes that contain text. -->
+    <scalar name="box_padding_vertical">4</scalar>
+    <scalar name="box_padding_horizontal">4</scalar>
+    
+    <!-- Corner radius for boxes, per element. -->
+    <array name="box_corner_radius">
+        <scalar name="kwd">3</scalar>
+        <scalar name="var">3</scalar>
+        <scalar name="delim">3</scalar>
+        <scalar name="oper">3</scalar>
+        <scalar name="sep">3</scalar>
+        <scalar name="repsep">3</scalar>
+        <scalar name="fragref">0</scalar>
+        <scalar name="groupcomp">3</scalar>
+    </array>
+    
+    <!-- Horizontal padding between elements inside a box. -->
+    <array name="box_medial_padding">
+        <scalar name="kwd">0</scalar>
+        <scalar name="var">0</scalar>
+        <scalar name="delim">0</scalar>
+        <scalar name="oper">0</scalar>
+        <scalar name="sep">0</scalar>
+        <scalar name="repsep">0</scalar>
+        <scalar name="fragref">0</scalar>
+        <scalar name="groupcomp">2</scalar>
+    </array>
+    
+    <!--- Line curvature -->
+    <scalar name="loop_corner_radius">10</scalar>
+    <scalar name="decision_corner_radius">5</scalar>
+    
+    <!-- Arrow head. -->
+    <scalar name="arrow_size">5</scalar>
+    
+    <!-- Arrow lengths for initial, middle and end of sequences. -->
+    <scalar name="sequence_join_length_initial">10</scalar>
+    <scalar name="sequence_join_length_medial">15</scalar>
+    <scalar name="sequence_join_length_final">10</scalar>
+    
+    <scalar name="loop_join_length_initial">10</scalar>
+    <scalar name="loop_join_length_final">10</scalar>
+
+    <scalar name="decision_join_length_initial">10</scalar>
+    <scalar name="decision_join_length_final">10</scalar>
+    
+    <!-- Vertical spacing between loop and return path. -->
+    <scalar name="loop_row_padding">10</scalar>
+    <!-- Vertical spacing between choices. -->
+    <scalar name="decision_row_padding">6</scalar>
+    
+    <!-- Vertical spacing between split diagram rows. -->
+    <scalar name="diagram_row_padding">15</scalar>
+    
+    <!-- Line-wrapping lengh and indent. -->
+    <scalar name="diagram_wrap_width">700</scalar>
+    <scalar name="diagram_wrap_indent">30</scalar>
+    
+    <!-- Maximum diagram size, in SVG pixels. -->
+    <scalar name="diagram_max_width">650</scalar>
+    <scalar name="diagram_max_height">1000</scalar>
+    <!-- One SVG pixel is this many units for the container.   Try "0.28" and "in" for 90 DPI print output. -->
+    <scalar name="diagram_scale">1</scalar>
+    <string name="diagram_unit">px</string>
+    
+    <!-- Padding on either side of note callout in notecontainer. -->
+    <scalar name="note_padding_sides">2</scalar>
+    
+    <!-- Move text down by this amount. -->
+    <scalar name="text_baseline_shift">3</scalar>
+    <!-- Move note callout up by this amount.  -->
+    <scalar name="note_baseline_shift">5</scalar>
+    
+</constants>

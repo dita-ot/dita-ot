@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<!--
+ | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ *-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:group name="javaMethod">
+    <xs:sequence>
+      <xs:element ref="javaMethod"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaMethodDetail">
+    <xs:sequence>
+      <xs:element ref="javaMethodDetail"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaMethodDef">
+    <xs:sequence>
+      <xs:element ref="javaMethodDef"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaFinalMethod">
+    <xs:sequence>
+      <xs:element ref="javaFinalMethod"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaAbstractMethod">
+    <xs:sequence>
+      <xs:element ref="javaAbstractMethod"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaStaticMethod">
+    <xs:sequence>
+      <xs:element ref="javaStaticMethod"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaNativeMethod">
+    <xs:sequence>
+      <xs:element ref="javaNativeMethod"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaSynchronizedMethod">
+    <xs:sequence>
+      <xs:element ref="javaSynchronizedMethod"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaMethodAccess">
+    <xs:sequence>
+      <xs:element ref="javaMethodAccess"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaMethodClass">
+    <xs:sequence>
+      <xs:element ref="javaMethodClass"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaMethodInterface">
+    <xs:sequence>
+      <xs:element ref="javaMethodInterface"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaMethodPrimitive">
+    <xs:sequence>
+      <xs:element ref="javaMethodPrimitive"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaMethodArray">
+    <xs:sequence>
+      <xs:element ref="javaMethodArray"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaReturn">
+    <xs:sequence>
+      <xs:element ref="javaReturn"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaVoid">
+    <xs:sequence>
+      <xs:element ref="javaVoid"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaConstructorDef">
+    <xs:sequence>
+      <xs:element ref="javaConstructorDef"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaParam">
+    <xs:sequence>
+      <xs:element ref="javaParam"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaException">
+    <xs:sequence>
+      <xs:element ref="javaException"/>
+    </xs:sequence>
+  </xs:group>
+</xs:schema>

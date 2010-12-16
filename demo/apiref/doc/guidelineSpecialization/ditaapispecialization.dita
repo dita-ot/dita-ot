@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE concept PUBLIC "-//IBM//DTD DITA Concept//EN"
+ "..\dtd\concept.dtd">
+<?Pub Inc?>
+<concept id="ditaapispecialization" xml:lang="en-us">
+<title>DITA API specialization</title>
+<shortdesc>The DITA API specialization documentation describes the Darwin
+Information Typing Architecture (DITA) specialization for application programming
+interfaces (APIs) topic types. </shortdesc>
+<conbody>
+<p>The documentation describes the XML elements that can be used to document
+generic and Java API libraries using the DITA API topic types. </p>
+<p>If you have any questions related to the content, contact <?Pub Caret?>Mariana
+Alupului (malupulu@us.ibm.com).</p>
+</conbody>
+</concept>
+<?Pub *0000000780?>

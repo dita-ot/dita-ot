@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="javaMethodArray" outputclass="element" xml:lang="en-us">
+<title>javaMethodArray</title>
+<shortdesc>The &lt;javaMethodArray&gt; element specifies a parameter or return value of
+the method or constructor as an array.  </shortdesc>
+<refbody>
+<section><title>Description</title><p>Array objects encapsulate a group of
+variables that do not have individual names. The values are accessed by using
+positive integer index values. </p></section>
+<example> <title>Example</title>Click on the following link to open the Java
+API topic type example in  <object classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11" codebase="hhctrl.ocx#Version=4,73,8412,0" codetype="VIEWASTEXT" height="100" id="hhctrl" name="Sample" type="application/x-oleobject" width="100">
+<param name="Command" value="ShortCut"/>
+<param name="Text" value="Text: DITA "/>
+<param name="Item1" value=",../samples/java/PlugletException.dita"/></object><codeblock>&lt;javaMethod id="com.ibm.xtools.pluglets.engine.PlugletException"&gt;
+   &lt;apiName&gt;getIntArray&lt;/apiName&gt;
+   &lt;shortdesc&gt;Retrieves the contents of the SQL array designated by the object.&lt;/shortdesc&gt;
+   &lt;javaMethodDetail&gt;
+     &lt;javaMethodDef&gt;
+       &lt;javaMethodAccess value="public"/&gt;
+       &lt;javaReturn&gt;
+         &lt;javaMethodPrimitive name="type" value="int"/&gt;
+         &lt;javaMethodArray value="1"/&gt;
+         &lt;apiDefNote&gt;An array containing count elements starting at index.&lt;/apiDefNote&gt;
+       &lt;/javaReturn&gt;
+       &lt;javaParam&gt;
+          &lt;javaMethodPrimitive value="long"/&gt;
+          &lt;apiItemName&gt;index&lt;/apiItemName&gt;
+          &lt;apiDefNote&gt;the index of first element to be returned.&lt;/apiDefNote&gt;
+       &lt;/javaParam&gt;
+       &lt;javaParam&gt;
+          &lt;javaMethodPrimitive value="int"/&gt;
+          &lt;apiItemName&gt;count&lt;/apiItemName&gt;
+          &lt;apiDefNote&gt;the number of elements to be returned.&lt;/apiDefNote&gt;
+       &lt;/javaParam&gt;
+     &lt;/javaMethodDef&gt;
+   &lt;/javaMethodDetail&gt;
+&lt;/javaMethod&gt;</codeblock> </example>
+<section><title>Processing Expectations</title><image href="images/javaReturnArraySize.jpg" placement="inline">
+<alt/></image></section>
+<section conref="../packagedef.dita#javaMethodArray-reference/javaMethodArray-containedBy-section"/><section conref="../packagedef.dita#javaMethodArray-reference/javaMethodArray-contains-section"/><section conref="../packagedef.dita#javaMethodArray-reference/javaMethodArray-contentModel-section"/><section conref="../packagedef.dita#javaMethodArray-reference/javaMethodArray-attList-section"/><section conref="../packagedef.dita#javaMethodArray-reference/javaMethodArray-classValue-section"/></refbody>
+</reference>

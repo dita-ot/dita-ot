@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>API Reference Specialization</title>
+</head>
+<body><div><h1>API Reference Specialization</h1>
+<p><strong>Purpose:</strong>
+The API Reference specialization provides a general-purpose basis for
+documenting callable programming libraries.  
+The design of API Reference is based loosely on the principle objects from the
+<a href="http://download.eclipse.org/tools/emf/2.2.0/javadoc/org/eclipse/emf/ecore/package-summary.html">eCore metamodel</a>
+of the <a href="http://www.eclipse.org/emf/">Eclipse Modeling Framework (EMF)</a>.
+The API Reference can used to create basic API documentation or can be
+specialized for a programming language or library type to make it
+easier to write complete and accurate documentation for such libraries.
+The Java API Reference provides an example of how to extend 
+the API Reference specialization for the libraries of a specific 
+programming language. </p>
+<p>You can view the <a href="doc/frameset.html">reference
+documentation</a> for the API Reference specialization.</p>
+<div><h2>Building</h2>
+<p>The API Reference specialization provides the conductor.xml file 
+to extend the base Ant targets with the following build targets:</p>
+<dl>
+<dt>apiref2xhtml</dt>
+<dd>Build the API map for a package to XHTML.</dd>
+</dl>
+<p>The run-ant.xml file executes this build targets on the sample
+content.</p>
+<p>You should run the sample Ant build from the base directory for the DITA
+Open Toolkit, using a relative path to the API Reference specialization:</p>
+<pre>ant -f demo\apiref\install_plugin.xml
+ant -f demo\apiref\run_ant.xml <i>optionalTarget</i></pre>
+<p>You need only execute the install_plugin.xml file after initial
+installation or update of any plugin.</p>
+</div>
+<div><h2>Contents</h2><p>The specialization includes subdirectories
+with the following contents:</p><dl>
+<dt>doc</dt>
+<dd>The source files and output for the documentation.</dd>
+<dt>dtd</dt>
+<dd>DTDs for the document type for the API Reference specialization.</dd>
+<dt>out</dt>
+<dd>Formatted sample output files from the Ant build.</dd>
+<dt>sample</dt>
+<dd>Source files for an example of package content.</dd>
+<dt>xsd</dt>
+<dd>XML Schemas for the document type for the API Reference specialization.</dd>
+<dt>xsl</dt>
+<dd>Transforms for producing the output of the Ant build.</dd>
+</dl></div>
+<div><h2>Contributors</h2><p>Erik Hennum, Dennis Grace, Mariana Alupului, 
+Michael Priestley, Michelle C Carey, Nigel Hopper, Rob Pierce, and 
+Robert D Anderson</p>
+</div>
+</div>
+</body>
+</html>

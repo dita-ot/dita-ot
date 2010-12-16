@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="apiSyntaxText" outputclass="element" xml:lang="en-us">
+<title>apiSyntaxText</title>
+<shortdesc>The &lt;apiSyntaxText&gt; element provides the representation in the
+programming language for the declared interface for the API item.</shortdesc>
+<refbody>
+<section><title>Description</title><p>In the &lt;apiDef&gt; element, the &lt;apiSyntaxText&gt;
+element can supplement or replace the semantic declaration of the same interface.
+When a specialization provides a complete representation of the interface
+within a specialized &lt;apiDef&gt; element, the &lt;apiSyntaxText&gt; element can
+be omitted. The Java DITA API reference takes this approach. </p></section>
+<example><title>Example</title>The following example shows a simple &lt;apiSyntaxText&gt;
+element for a Visual Basic method:<codeblock>&lt;apiOperationDetail&gt;
+      &lt;apiImpl&gt;Method&lt;/apiImpl&gt;
+      &lt;apiSyntax&gt;
+         &lt;apiSyntaxText&gt;
+            Public Function getApplicableStereotypesAsString( &lt;┘
+            &lt;apiItemName&gt;delimiterOPT&lt;/apiItemName&gt; &lt;┘
+            As String) &lt;┘
+            As String &lt;┘
+         &lt;/apiSyntaxText&gt;
+         &lt;apiSyntaxItem&gt;
+           &lt;apiItemName&gt;delimiterOPT&lt;/apiItemName&gt;
+           &lt;apiDefNote&gt;A string that provides the text that you want to use 
+              to separate the stereotype names.&lt;/apiDefNote&gt;
+         &lt;/apiSyntaxItem&gt;
+         &lt;apiSyntaxItem&gt;
+           &lt;apiItemName&gt;string&lt;/apiItemName&gt;
+           &lt;apiDefNote&gt;One or more strings to interpolate.&lt;/apiDefNote&gt;
+         &lt;/apiSyntaxItem&gt;
+      &lt;/apiSyntax&gt;
+&lt;/apiOperationDetail&gt;</codeblock></example>
+
+<section conref="../packagedef.dita#apiSyntaxText-reference/apiSyntaxText-containedBy-section"/><section conref="../packagedef.dita#apiSyntaxText-reference/apiSyntaxText-contains-section"/><section conref="../packagedef.dita#apiSyntaxText-reference/apiSyntaxText-contentModel-section"/><section conref="../packagedef.dita#apiSyntaxText-reference/apiSyntaxText-attList-section"/><section conref="../packagedef.dita#apiSyntaxText-reference/apiSyntaxText-classValue-section"/></refbody>
+</reference>

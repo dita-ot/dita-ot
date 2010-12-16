@@ -1,0 +1,12 @@
+<plugin id="com.moldflow.dita.plus-htmlhelp-hhp-windows-configfile">
+  <require plugin="com.moldflow.dita.plus-htmlhelp-hhp-modular"/>
+
+  <feature extension="dita.conductor.target.relative" value="build.xml" type="file"/>
+
+  <feature extension="plus.htmlhelp.map2hhp.param" value="insert-ant-htmlhelp-map2hhp-xslt.xml" type="file"/>
+
+  <feature extension="depend.plus-transtype-htmlhelp.map.basic.hhp.pre"
+      value="plus-htmlhelp-hhp-windows-configfile.make-url" type="text"/>
+
+  <feature extension="xsl.plus-transtype-htmlhelp.map2hhp" value="xsl/map2hhp.xsl" type="file"/>
+</plugin>

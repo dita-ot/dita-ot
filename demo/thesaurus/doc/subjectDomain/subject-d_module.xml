@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\..\dtd\reference.dtd">
+<reference id="subject-d_module" outputclass="module" xml:lang="en-us">
+<title>Subject definition topic</title>
+<shortdesc>You create a subject topic by providing a formal definition for
+a concept.</shortdesc>
+<refbody>
+<section><title>Description</title><p>The formal definition consists of a <xref
+href="subjectDetail.xml"></xref> <?Pub Caret?>section that specifies the
+labels and icons for representing the subject and the notes defining the subject
+coverage or recording its modification.</p></section>
+<example><title>Example</title><p>Here is an example of a definition of the
+Configuring subject:</p><codeblock>&lt;concept id="configuring"&gt;
+    &lt;title&gt;Configuring&lt;/title&gt;
+    &lt;shortdesc&gt;You configure components to set up or refine your solution.&lt;/shortdesc&gt;
+    &lt;conbody&gt;
+        &lt;p&gt;You don't have to get the best configuration the first time....&lt;/p&gt;
+        &lt;subjectDetail&gt;
+            &lt;subjectLabels>
+                &lt;altLabel>Setting up&lt;/altLabel>
+            &lt;/subjectLabels>
+            &lt;scopeNote&gt;Administrative actions performed after installation...&lt;/scopeNote&gt;
+        &lt;/subjectDetail&gt;
+    &lt;/conbody&gt;
+&lt;/concept&gt;</codeblock></example>
+</refbody>
+</reference>
+<?Pub *0000001459?>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<constants>
+    <!-- Margin around entire diagram (top-level element). -->
+    <scalar name="diagram_margin_topbottom">5</scalar>
+    <scalar name="diagram_margin_sides">5</scalar>
+    <scalar name="diagram_margin_forest">5</scalar>
+    
+    <!-- Space inside boxes that contain text. -->
+    <scalar name="box_padding_vertical">4</scalar>
+    <scalar name="box_padding_horizontal">4</scalar>
+    
+    <scalar name="box_corner_radius">0</scalar>
+    
+    <!-- Row spacing. -->
+    <scalar name="y_spacing">40</scalar>
+    
+    <!-- Minimum horizontal gap between siblings and cousins. -->
+    <array name="x_spacing">
+        <!-- Level 0 (siblings) -->
+        <scalar name="0">15</scalar>
+        <!-- Level 1 (first cousins) -->
+        <scalar name="1">25</scalar>
+    </array>
+    <!-- All other degrees of removal. -->
+    <scalar name="x_spacing_default">35</scalar>
+    
+    <!-- Maximum diagram size, in SVG pixels. -->
+    <scalar name="diagram_max_width">650</scalar>
+    <scalar name="diagram_max_height">1000</scalar>
+    <!-- One SVG pixel is this many units for the container.   Try "0.28" and "in" for 90 DPI print output. -->
+    <scalar name="diagram_scale">1</scalar>
+    <string name="diagram_unit">px</string>
+    
+</constants>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="apiClassifier" outputclass="element" xml:lang="en-us">
+<title>apiclassifier</title>
+<shortdesc>The &lt;apiclassifier> element is a reference to a classifier. </shortdesc>
+<refbody>
+<section><title>Description</title><p>The &lt;apiclassifier> element can be
+used to reference a classifier from another DITA topic type. </p></section><?Pub Caret1?>
+<example><title>Example</title><codeblock>&lt;task id="httpxml">
+  &lt;title>Getting an XML file through an HTTP connection&lt;/title>
+  &lt;taskbody>
+    &lt;steps>
+    &lt;step>&lt;cm>Open the connection.&lt;/cm>
+      &lt;info>You use &lt;apiclassifier keyref="java.net.URLConnection">URLConnection&lt;/apiclassifier> 
+      in a Java application.&lt;/info>
+    &lt;/step>
+    ...
+    &lt;/steps>
+  &lt;/taskbody>
+&lt;/task></codeblock></example>
+<section conref="../packagedef.dita#apiclassifier-reference/apiclassifier-containedBy-section"></section>
+<section conref="../packagedef.dita#apiclassifier-reference/apiclassifier-contains-section"></section>
+<section conref="../packagedef.dita#apiclassifier-reference/apiclassifier-contentModel-section"></section>
+<section conref="../packagedef.dita#apiclassifier-reference/apiclassifier-attList-section"></section>
+<section conref="../packagedef.dita#apiclassifier-reference/apiclassifier-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001545?>

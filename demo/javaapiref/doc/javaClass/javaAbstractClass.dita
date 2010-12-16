@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="apiName" outputclass="element" xml:lang="en-us">
+<title>javaAbstractClass</title>
+<shortdesc>The &lt;javaAbstractClass> element supplies the <i>ClassModifiers<sup>opt</sup></i> for
+the class and identifies that the class is an abstract class.</shortdesc>
+<refbody>
+<section><title>Description</title><p>An abstract class is a class that is
+incomplete or a class that is considered incomplete. Only abstract classes
+can have abstract methods, which are methods that are declared but not yet
+implemented. The &lt;javaAbstractClass> element must not be used in conjunction
+with the &lt;javaFinalClass> element. <?Pub Caret?> </p></section>
+<example> <title>Example</title>Click on the following link to open the Java
+API topic type example in <object classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11"
+codebase="hhctrl.ocx#Version=4,73,8412,0" codetype="VIEWASTEXT" height="100"
+id="hhctrl" type="application/x-oleobject" width="100">
+<param name="Command" value="ShortCut"/>
+<param name="Text" value="Text: DITA"/>
+<param name="Item1" value=",../samples/java/AbstractImportEngineTask.dita,"/>
+</object><codeblock>&lt;javaClass id="com.ibm.xtools.ras.impord.engine.tasks">
+    &lt;apiName>AbstractImportEngineTask&lt;/apiName>
+    &lt;shortdesc>
+       Repesents the abstract base class that implements all the get and set methods 
+       required by the IImportEngineTask interface alleviating any child
+       import tasks from being forced to duplicate this functionality.
+    &lt;/shortdesc>
+	  &lt;javaClassDetail>
+		&lt;javaClassDef>
+		   &lt;javaAbstractClass/>
+           &lt;javaClassAccess value="public"/>
+		   &lt;javaBaseClass href="../Object.html" format=”html” scope=”external”>
+                java.lang.Object
+           &lt;/javaBaseClass>
+           &lt;javaImplementedInterface href=”IImportEngineTask.dita”>IImportEngineTask&lt;/javaImplementedInterface>
+       &lt;/javaClassDef>	
+	   &lt;apiDesc>This leaves only the main execute method to be implemented by any sub classes.&lt;/apiDesc>
+	&lt;/javaClassDetail>
+&lt;/javaClass></codeblock></example>
+<section><title>Processing Expectations</title><image href="images/javaAbstractClass.jpg"
+placement="inline"><alt></alt></image></section>
+<section conref="../packagedef.dita#javaAbstractClass-reference/javaAbstractClass-containedBy-section"></section>
+<section conref="../packagedef.dita#javaAbstractClass-reference/javaAbstractClass-contains-section"></section>
+<section conref="../packagedef.dita#javaAbstractClass-reference/javaAbstractClass-contentModel-section"></section>
+<section conref="../packagedef.dita#javaAbstractClass-reference/javaAbstractClass-attList-section"></section>
+<section conref="../packagedef.dita#javaAbstractClass-reference/javaAbstractClass-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000002998?>

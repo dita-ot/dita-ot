@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\..\dtd\reference.dtd">
+<reference id="prefSymbol" outputclass="element" xml:lang="en-us">
+<title>prefSymbol</title>
+<shortdesc>A standard symbol used to represent this subject</shortdesc>
+<refbody>
+<section><title>Description</title><p>The symbol should be an icon rather
+than a depiction (which you would provide instead with the <keyword>object</keyword> element
+in the subject topic). <?Pub Caret?>See also <xref format="html" href="http://www.w3.org/TR/swbp-skos-core-guide/#secsymbol">http://www.w3.org/TR/swbp-skos-core-guide/#secsymbol</xref
+>.</p></section>
+<section conref="../packagedef.xml#prefSymbol-reference/prefSymbol-containedBy-section"></section>
+<section conref="../packagedef.xml#prefSymbol-reference/prefSymbol-contains-section"></section>
+<section conref="../packagedef.xml#prefSymbol-reference/prefSymbol-contentModel-section"></section>
+<section conref="../packagedef.xml#prefSymbol-reference/prefSymbol-attList-section"></section>
+<section conref="../packagedef.xml#prefSymbol-reference/prefSymbol-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001249?>

@@ -1,0 +1,12 @@
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+
+<!--vocabulary attributes (must be declared ahead of the dtds, which puts @domains first in order) -->
+<!ENTITY included-domains "">
+
+<!--Embed map to get generic elements -->
+<!ENTITY % map-type PUBLIC "-//OASIS//Elements DITA Map//EN" "../../dtd/map.mod">
+  %map-type;
+
+<!--Embed bookmap to get specific elements -->
+<!ENTITY % bookmap-type PUBLIC "-//OASIS//Elements DITA BookMap//EN" "bookmap.mod">
+  %bookmap-type;

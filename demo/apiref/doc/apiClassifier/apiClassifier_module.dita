@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="apiClassifier_module" outputclass="module" xml:lang="en-us">
+<title>apiClassifier module</title>
+<shortdesc>Defines a top-level container for the generic topic types such
+as class, interface, typedef, or other named construct for typing values.</shortdesc>
+<refbody>
+<section><title>Description</title>This element specifies a collection of
+features, such as attributes, methods, values, and operations. <p>In the apiClassifier
+topic type, you can create a <b>New Document Type</b> by clicking <menucascade>
+<uicontrol>File</uicontrol><uicontrol>New</uicontrol></menucascade> from the
+Epic Editor menu for creating and publishing API classifier documentation.</p></section>
+<example><title>Example</title><p>The following example shows an &lt;apiClassifier>
+element used for an Visual Basic interface:</p><codeblock><![CDATA[<apiClassifier id="rational.xde" outputclass="statement" platform="vb">
+    <apiName>TestImplements</apiName>
+    <shortdesc>Specifies one or more interfaces or interface members.</shortdesc>
+    <apiClassifierDetail>
+      <apiSyntax platform="vb">
+        <apiSyntaxText>Implements <apiItemName>IRXEAbstraction</apiItemName> 
+                          <apiItemName>TestImplements</apiItemName>[name, …]<apiRelation
+        </apiSyntaxText>
+        <apiSyntaxItem>
+          <apiItemName>IRXEAbstraction</apiItemName>
+          <apiDefNote>Required. An interface whose properties, methods, and events will be 
+             implemented by corresponding members in the class or structure.</apiDefNote>
+        </apiSyntaxItem>
+        <apiSyntaxItem>
+         <apiItemName>TestImplements</apiItemName>
+           <apiDefNote>Required. The member of an interface that is being implemented.</apiDefNote>
+        </apiSyntaxItem>
+        <apiSyntaxItem id="nameParam">
+           <apiItemName>name</apiItemName>
+              <apiDefNote>The name for the created interface member.</apiDefNote>
+        </apiSyntaxItem>
+     </apiSyntax>
+     <apiDesc>An interface is a collection of prototypes representing the members 
+         (properties, methods and events) the interface encapsulates.</apiDesc>
+</apiClassifier>]]></codeblock></example>
+</refbody>
+</reference>

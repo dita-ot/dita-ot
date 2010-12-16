@@ -1,0 +1,10 @@
+<xslt>
+
+      <!-- SVG-object parameters. -->
+      <param name="plus-svgobject-format" expression="${plus.svgobject.format}" if="plus.svgobject.format"/>
+      <param name="plus-svgobject-raster-mimetype" expression="${plus.svgobject.raster.mimetype}" if="plus.svgobject.raster.mimetype"/>
+      <param name="plus-svgobject-object-convert-to-path" expression="${plus.svgobject.object.convert-to-path}" if="plus.svgobject.object.convert-to-path"/>
+      <param name="plus-svgobject-raster-imagemap" expression="${plus.svgobject.raster.imagemap}" if="plus.svgobject.raster.imagemap"/>
+      <param name="plus-svgobject-path" expression="${plus.svgobject.path}" if="plus.svgobject.path"/>
+
+</xslt>

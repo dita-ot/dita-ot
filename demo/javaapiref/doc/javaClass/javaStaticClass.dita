@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaStaticClass" outputclass="element" xml:lang="en-us">
+<title>javaStaticClass</title>
+<shortdesc>The &lt;javaStaticClass> element declares in the <i>ClassModifiers<sup>opt</sup></i> that
+a nested class is static.</shortdesc>
+<refbody>
+<section><title>Description</title><p>An inner class is a nested class that
+is not explicitly or implicitly declared static. The &lt;javaStaticClass>
+element has the following predefined attributes: name ="<i>static</i>" and
+ value ="<i>static</i>". </p></section><?Pub Caret1?>
+<example> <title>Example</title>Click on the following link to open the Java
+API topic type example in <object classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11"
+codebase="hhctrl.ocx#Version=4,73,8412,0" codetype="VIEWASTEXT" height="100"
+id="hhctrl" type="application/x-oleobject" width="100">
+<param name="Command" value="ShortCut"/>
+<param name="Text" value="Text: DITA"/>
+<param name="Item1" value=",../samples/java/Doc/apiPackage/apiClassifier/UmlnotationPlugin.Implementation.dita,"/>
+</object><codeblock>&lt;javaClass id="com.ibm.umlnotation">
+    &lt;apiName>UmlnotationPlugin.Implementation&lt;/apiName>
+    &lt;shortdesc>The actual implementation of the Eclipse Plugin.&lt;/shortdesc>
+    &lt;javaClassDetail>
+	     &lt;javaClassDef>
+           &lt;javaStaticClass/>
+	         &lt;javaClassAccess value="public"/>
+           &lt;javaBaseClass href=”org.eclipse.EMFPlugin.EclipsePlugin”>
+                     org.eclipse.EMFPlugin.EclipsePlugin&lt;/javaBaseClass>
+           &lt;javaImplementedInterface>org.osgi.framework.BundleActivator&lt;/javaImplementedInterface>
+           &lt;javaImplementedInterface href=”org.eclipse.core.Logger”>Logger&lt;/javaImplementedInterface>
+           &lt;javaImplementedInterface href=”../ResourceLocator.html" format=”html”>
+               ResourceLocator
+           &lt;/javaImplementedInterface>
+    &lt;/javaClassDef>
+    &lt;section>
+        &lt;title>Enclosing class:&lt;/title>
+        &lt;xref href="../UmlnotationPlugin.html" format="html">UmlnotationPlugin&lt;/xref>
+    &lt;/section>
+  &lt;/javaClassDetail>
+&lt;/javaClass></codeblock></example>
+<section><title>Processing Expectations</title><image href="images/javaStaticClass.jpg"
+placement="inline"><alt></alt></image></section>
+<section conref="../packagedef.dita#javaStaticClass-reference/javaStaticClass-containedBy-section"></section>
+<section conref="../packagedef.dita#javaStaticClass-reference/javaStaticClass-contains-section"></section>
+<section conref="../packagedef.dita#javaStaticClass-reference/javaStaticClass-contentModel-section"></section>
+<section conref="../packagedef.dita#javaStaticClass-reference/javaStaticClass-attList-section"></section>
+<section conref="../packagedef.dita#javaStaticClass-reference/javaStaticClass-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000003026?>

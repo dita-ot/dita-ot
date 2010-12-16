@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin id="com.moldflow.dita.svgobject">
+  <feature extension="dita.conductor.lib.import" value="lib/svgrenderingtranscoder.jar" type="file"/>
+</plugin>

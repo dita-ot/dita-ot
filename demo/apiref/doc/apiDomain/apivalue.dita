@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="apiValue" outputclass="element" xml:lang="en-us">
+<title>apivalue</title>
+<shortdesc>The &lt;apivalue> element is a reference to a value. </shortdesc>
+<refbody>
+<section><title>Description</title><p>This element can be used to reference
+a value from another DITA topic type. </p></section><?Pub Caret1?>
+<example><title>Example</title><codeblock>&lt;task id="httpxml">
+  &lt;title>Getting an XML file through an HTTP connection.&lt;/title>
+  &lt;taskbody>
+    &lt;steps>
+    &lt;step>&lt;cm>Open the connection&lt;/cm>
+      &lt;info>You use &lt;apivalue keyref="com.ibm.xtools.patterns.framework.uml2.IDefaultComponentExportDataModel.IID">IID field&lt;/apivalue> 
+      in a Java application&lt;/info>.
+    &lt;/step>
+    ...
+    &lt;/steps>
+  &lt;/taskbody>
+&lt;/task></codeblock></example>
+<section conref="../packagedef.dita#apivalue-reference/apivalue-containedBy-section"></section>
+<section conref="../packagedef.dita#apivalue-reference/apivalue-contains-section"></section>
+<section conref="../packagedef.dita#apivalue-reference/apivalue-contentModel-section"></section>
+<section conref="../packagedef.dita#apivalue-reference/apivalue-attList-section"></section>
+<section conref="../packagedef.dita#apivalue-reference/apivalue-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001491?>

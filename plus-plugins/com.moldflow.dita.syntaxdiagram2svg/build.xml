@@ -1,0 +1,3 @@
+<project>
+  <import file="syntaxdiagram2svg.xml"/>
+</project>

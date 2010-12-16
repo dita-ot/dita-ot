@@ -1,0 +1,4 @@
+This DITA release includes an implementation of the topic architecture in
+XML Schema. The DTDs are still the canonical representation of DITA.  The
+design pattern for the DITA Schemas is based on the W3C XML Schema 1.0
+Specification and may be subject to change in the future.

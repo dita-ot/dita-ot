@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<meta name="copyright" content="(C) Copyright 2005" />
+<meta name="DC.rights.owner" content="(C) Copyright 2005" />
+<meta content="public" name="security" />
+<meta content="index,follow" name="Robots" />
+<meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' />
+<meta content="apiClassifier" name="DC.Type" />
+<meta name="DC.Title" content="FileHandle class" />
+<meta name="abstract" content="Supply object methods for filehandles." />
+<meta name="description" content="Supply object methods for filehandles." />
+<meta content="XHTML" name="DC.Format" />
+<meta content="FileHandle" name="DC.Identifier" />
+<link href="commonltr.css" type="text/css" rel="stylesheet" />
+<link href="ibmapiref.css" type="text/css" rel="stylesheet" />
+<title>FileHandle class</title>
+</head>
+<body id="FileHandle"><a name="FileHandle"><!-- --></a>
+
+
+<h1 class="topictitle1">FileHandle class</h1>
+
+
+
+<h4 class="sectiontitle">Syntax</h4><pre class="apiSyntaxText">my $fh = new FileHandle(<span class="itemname">name</span>, <span class="itemname">mode</span>);</pre><table class="itemdefs"><tr class="itemdef"><td valign="top" class="itemdefname">name</td><td valign="top" class="itemdefnote">The filename for the accessed file.</td></tr><tr class="itemdef"><td valign="top" class="itemdefname">mode</td><td valign="top" class="itemdefnote">How the file is accessed including <span class="synph">r</span> for read and <span class="synph">w</span> for
+write.</td></tr></table>
+<div class="apiDescription">The FileHandle class manages input and output operations for files.
+When the object is scavenged, the file is closed.</div>
+<div class="example"><h4 class="sectiontitle">Example</h4><pre>my @lines;
+my $fh = new FileHandle("filename.txt", "r");
+if (defined $fh) {
+	@lines = $fh-&gt;getlines();
+	undef $fh;
+}</pre>
+<p>The example opens a text file, reads all of the lines from the file
+into an array, and closes the file.</p>
+</div>
+
+<hr />
+<div class="nested1" id="autoflush"><a name="autoflush"><!-- --></a>
+<h2 class="topictitle2">autoflush variable</h2>
+
+
+
+<h4 class="sectiontitle">Syntax</h4><pre class="apiSyntaxText">$fh-&gt;autoflush = <span class="itemname">expression</span>;</pre><table class="itemdefs"><tr class="itemdef"><td valign="top" class="itemdefname">expression</td><td valign="top" class="itemdefnote">0 to flush output only on request, 1 to flush output after every
+write.</td></tr></table>
+<hr />
+<div>
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="IO.html" title="Load various IO modules.">IO</a></div>
+</div>
+</div>
+</div>
+
+<div class="nested1" id="input_record_separator"><a name="input_record_separator"><!-- --></a>
+<h2 class="topictitle2">input_record_separator variable</h2>
+
+
+
+<h4 class="sectiontitle">Syntax</h4><pre class="apiSyntaxText">$fh-&gt;input_record_separator = undef;</pre>
+<div class="apiDescription">You can set input_record_separator to a multi-character string to
+match a multi-character terminator or to <span class="synph">undef</span> to read through
+the end of file. </div>
+<hr />
+</div>
+
+<div class="nested1" id="print"><a name="print"><!-- --></a>
+<h2 class="topictitle2">print subroutine</h2>
+
+
+
+<h4 class="sectiontitle">Syntax</h4><pre class="apiSyntaxText">$fh-&gt;print(<span class="itemname">string</span>, ...);</pre><table class="itemdefs"><tr class="itemdef"><td valign="top" class="itemdefname">string</td><td valign="top" class="itemdefnote">One or more strings for printing to the file.</td></tr></table>
+<hr />
+</div>
+
+<div class="nested1" id="printf"><a name="printf"><!-- --></a>
+<h2 class="topictitle2">printf subroutine</h2>
+
+
+
+<h4 class="sectiontitle">Syntax</h4><pre class="apiSyntaxText">$fh-&gt;printf(<span class="itemname">format</span>, <span class="itemname">string</span>, ...);</pre><table class="itemdefs"><tr class="itemdef"><td valign="top" class="itemdefname">format</td><td valign="top" class="itemdefnote">A string with tokens for interpolating and formatting strings.</td></tr><tr class="itemdef"><td valign="top" class="itemdefname">string</td><td valign="top" class="itemdefnote">One or more strings to interpolate.</td></tr></table>
+<hr />
+</div>
+
+<div class="nested1" id="getline"><a name="getline"><!-- --></a>
+<h2 class="topictitle2">getline subroutine</h2>
+
+
+
+<h4 class="sectiontitle">Syntax</h4><pre class="apiSyntaxText">$fh-&gt;getline;</pre>
+<hr />
+</div>
+
+<div class="nested1" id="getlines"><a name="getlines"><!-- --></a>
+<h2 class="topictitle2">getlines subroutine</h2>
+
+
+
+<h4 class="sectiontitle">Syntax</h4><pre class="apiSyntaxText">$fh-&gt;getlines;</pre>
+<hr />
+</div>
+
+
+</body>
+</html>

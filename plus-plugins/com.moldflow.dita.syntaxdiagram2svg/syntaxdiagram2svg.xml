@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="syntaxdiagram2svg">
+
+    <target name="syntaxdiagram2svg.copy-files.init">
+      <dirname property="syntaxdiagram2svg.dir" file="${ant.file.syntaxdiagram2svg}"/>
+      <condition property="syntaxdiagram2svg.js.root" value="${syntaxdiagram2svg.dir}/js">
+        <not>
+          <isset property="syntaxdiagram2svg.js.root"/>
+        </not>
+      </condition>
+      <condition property="syntaxdiagram2svg.css.root" value="${syntaxdiagram2svg.dir}/css">
+        <not>
+          <isset property="syntaxdiagram2svg.css.root"/>
+        </not>
+      </condition>
+      <condition property="syntaxdiagram2svg.resource.root" value="${syntaxdiagram2svg.dir}/resource">
+        <not>
+          <isset property="syntaxdiagram2svg.resource.root"/>
+        </not>
+      </condition>
+      <condition property="syntaxdiagram2svg.constants" value="${syntaxdiagram2svg.resource.root}/constants.xml">
+        <not>
+          <isset property="syntaxdiagram2svg.constants"/>
+        </not>
+      </condition>
+    </target>
+
+</project>

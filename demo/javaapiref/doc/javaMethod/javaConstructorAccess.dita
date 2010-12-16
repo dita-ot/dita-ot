@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="javaMethodAccess" outputclass="element" xml:lang="en-us">
+<title>javaMethodAccess</title>
+<shortdesc>The &lt;javaMethodAccess&gt; element within the <i>MethodModifiers<sup>opt</sup></i> declarations
+provides the access modifiers <i>public</i>, <i>protected</i>, or <i>private</i>. </shortdesc>
+<refbody>
+<section><title>Description</title><p>The access modifiers of the method include
+the declarations for the public modifiers, such as <i>public</i>, <i>protected</i>,
+or <i>private</i>.  </p></section>
+<example> <title>Example</title>Click on the following link to open the Java
+API topic type example in  <object classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11" codebase="hhctrl.ocx#Version=4,73,8412,0" codetype="VIEWASTEXT" height="100" id="hhctrl" type="application/x-oleobject" width="300">
+<param name="Command" value="ShortCut"/>
+<param name="Text" value="Text: DITA "/>
+<param name="Item1" value=",../samples/java/PlugletCompiler.dita,"/></object><codeblock>&lt;javaMethod id="com.ibm.xtools.PlugletCompiler,ExportPlugin"&gt;
+   &lt;apiName&gt;ExportPlugin&lt;/apiName&gt;
+   &lt;shortdesc&gt;The constructor. [Eclipse 3.0]&lt;/shortdesc&gt;
+   &lt;javaMethodDetail&gt;
+     &lt;javaConstructorDef&gt;
+        &lt;javaMethodAccess value="public"/&gt;
+     &lt;/javaConstructorDef&gt;
+     &lt;apiDesc&gt;Bundles have to have a default constructor. &lt;/apiDesc&gt;
+   &lt;/javaMethodDetail&gt;
+   &lt;related-links&gt;
+     &lt;link href="plugin.plugin.dita" scope="local"&gt;
+       &lt;linktext&gt;Plugin.Plugin()&lt;/linktext&gt;
+     &lt;/link&gt;
+    &lt;/related-links&gt;
+&lt;/javaMethod&gt;</codeblock></example>
+<section><title>Processing Expectations</title><image href="images/javaConstructorAccessMod.jpg" placement="inline">
+<alt>Java Constructor</alt></image></section>
+<section conref="../packagedef.dita#javaMethodAccess-reference/javaMethodAccess-containedBy-section"/><section conref="../packagedef.dita#javaMethodAccess-reference/javaMethodAccess-contains-section"/><section conref="../packagedef.dita#javaMethodAccess-reference/javaMethodAccess-contentModel-section"/><section conref="../packagedef.dita#javaMethodAccess-reference/javaMethodAccess-attList-section"/><section conref="../packagedef.dita#javaMethodAccess-reference/javaMethodAccess-classValue-section"/></refbody>
+</reference>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\..\dtd\reference.dtd">
+<reference id="relatedSubjects" outputclass="element" xml:lang="en-us">
+<title>relatedSubjects</title>
+<shortdesc>Specifies an associative relationship for the contained subjects.</shortdesc><?Pub Caret1?>
+<refbody>
+<section><title>Description</title><p>The type of association can be indicated
+by the title, by a reference to a subject topic that defines the association,
+or by specializing the <keyword>relatedSubjects</keyword> element to define
+the relationship. Such specializations can express roles by requiring specialized
+topics in specific positions. See also <xref format="html" href="http://www.w3.org/TR/swbp-skos-core-guide/#secassociative">http://www.w3.org/TR/swbp-skos-core-guide/#secassociative</xref
+>.</p></section>
+<section conref="../packagedef.xml#relatedSubjects-reference/relatedSubjects-containedBy-section"></section>
+<section conref="../packagedef.xml#relatedSubjects-reference/relatedSubjects-contains-section"></section>
+<section conref="../packagedef.xml#relatedSubjects-reference/relatedSubjects-contentModel-section"></section>
+<section conref="../packagedef.xml#relatedSubjects-reference/relatedSubjects-attList-section"></section>
+<section conref="../packagedef.xml#relatedSubjects-reference/relatedSubjects-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001492?>

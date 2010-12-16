@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="apiOperationDef" outputclass="element" xml:lang="en-us">
+<title>apiOperationDef</title>
+<shortdesc>The &lt;apiOperationDef&gt; element declares the interface of an
+operation that does not construct an object but, instead, returns values or
+performs actions. </shortdesc>
+<refbody>
+<section conref="../packagedef.dita#apiOperationDef-reference/apiOperationDef-containedBy-section"></section>
+<section conref="../packagedef.dita#apiOperationDef-reference/apiOperationDef-contains-section"></section>
+<section conref="../packagedef.dita#apiOperationDef-reference/apiOperationDef-contentModel-section"></section>
+<section conref="../packagedef.dita#apiOperationDef-reference/apiOperationDef-attList-section"></section>
+<section conref="../packagedef.dita#apiOperationDef-reference/apiOperationDef-classValue-section"></section>
+</refbody>
+</reference>

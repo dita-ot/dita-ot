@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaField_module" outputclass="module" xml:lang="en-us">
+<title>javaField module </title>
+<shortdesc>Describes the elements necessary to show the name of the component
+fields and the short description of the field.</shortdesc>
+<refbody>
+<section><title>Description</title><p>The javaField module describes the elements
+necessary to show the component fields by inserting the &lt;javaField> element
+in javaClass or javaInterface elements. <?Pub Caret?>A class body can contain
+declarations of the members of the class, such as fields, classes, interfaces,
+and methods. </p></section>
+<example> <title>Example</title><codeblock><![CDATA[<javaField id="">
+    <apiName></apiName>
+    <shortdesc></shortdesc>
+    <javaFieldDetail></javaFieldDetail>
+</javaField>]]></codeblock></example>
+<section><title>Processing Expectations</title><image href="images/javaField.jpg">
+<alt></alt></image></section>
+</refbody>
+</reference>
+<?Pub *0000001121?>

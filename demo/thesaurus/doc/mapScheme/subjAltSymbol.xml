@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\..\dtd\reference.dtd">
+<reference id="subjAltSymbol" outputclass="element" xml:lang="en-us">
+<title>subjAltSymbol</title>
+<shortdesc>An alternative symbol used to represent the subject within the
+scheme.</shortdesc>
+<refbody>
+<section><title>Description</title><p>If any alternative symbols are specified
+within the scheme, they are used instead of the alternative symbols specified
+with the <xref href="../subjectDomain/altSymbol.xml" type="reference"></xref> element
+in the subject topic.</p></section><?Pub Caret?>
+<section conref="../packagedef.xml#subjAltSymbol-reference/subjAltSymbol-containedBy-section"></section>
+<section conref="../packagedef.xml#subjAltSymbol-reference/subjAltSymbol-contains-section"></section>
+<section conref="../packagedef.xml#subjAltSymbol-reference/subjAltSymbol-contentModel-section"></section>
+<section conref="../packagedef.xml#subjAltSymbol-reference/subjAltSymbol-attList-section"></section>
+<section conref="../packagedef.xml#subjAltSymbol-reference/subjAltSymbol-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001232?>

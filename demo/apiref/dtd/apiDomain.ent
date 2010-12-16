@@ -1,0 +1,6 @@
+<!--
+ | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ *-->
+
+<!ENTITY % api-d-xref "apipackage | apiclassifier | apioperation | apivalue">
+<!ENTITY api-d-att "(topic pr-d api-d)">

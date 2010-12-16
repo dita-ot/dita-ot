@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="apiClassifierDef" outputclass="element" xml:lang="en-us">
+<title>apiClassifierDef</title>
+<shortdesc>The &lt;apiClassifierDef> element represents the definition of
+the classifier.</shortdesc>
+<refbody>
+<section><title>Description</title><p>A class definition describes the rules
+by which objects behave. These objects are referred to as "instances" of that
+class. When a specialization does not provide a complete representation of
+the interface within a specialized &lt;apiClassifierDef> element, you can<?Pub Caret?>
+use the &lt;apiSyntax> element.</p></section>
+<section conref="../packagedef.dita#apiClassifierDef-reference/apiClassifierDef-containedBy-section"></section>
+<section conref="../packagedef.dita#apiClassifierDef-reference/apiClassifierDef-contains-section"></section>
+<section conref="../packagedef.dita#apiClassifierDef-reference/apiClassifierDef-contentModel-section"></section>
+<section conref="../packagedef.dita#apiClassifierDef-reference/apiClassifierDef-attList-section"></section>
+<section conref="../packagedef.dita#apiClassifierDef-reference/apiClassifierDef-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001343?>

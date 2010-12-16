@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ *-->
+<project name="apiref" default="all" basedir="..\..">
+    <import file="${basedir}${file.separator}integrator.xml"/>
+
+	<target name="all" depends="integrate"/>
+</project>

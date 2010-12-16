@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="javaConstructorDef" outputclass="element" xml:lang="en-us">
+<title>javaConstructorDef</title>
+<shortdesc>The &lt;javaConstructorDef&gt; element provides the constructor declaration
+and is structured like a method declaration that has no result type.</shortdesc>
+<refbody>
+<section><title>Description</title><p>A constructor creates an
+object that is an instance of a class:<simpletable>
+<strow>
+<stentry><lines><b>ConstructorDeclaration::</b>
+        <b>ConstructorModifiers<sup>opt</sup></b>   <b>ConstructorDeclarator</b>  
+                  <i>Throws<sup>opt</sup></i>     ConstructorBody
+</lines><lines><b>ConstructorModifiers:</b>
+       public protected private
+</lines></stentry>
+</strow>
+</simpletable>The access modifiers values are <i>public</i>, <i>protected</i>,
+and <i>private</i>. Compilation errors occur if the same modifier appears
+more than once in a constructor declaration, or if a constructor declaration
+has more than one of the access modifier values. <simpletable>
+<strow>
+<stentry><lines><b>ConstructorDeclarator:</b>
+       SimpleTypeName ( FormalParameterList<sup>opt</sup> ) 
+</lines></stentry>
+</strow>
+</simpletable>The SimpleTypeName in the ConstructorDeclarator must be the
+simple name of the class that contains the constructor declaration. The <i>Throws<sup>opt</sup></i> clause
+for a constructor is identical in structure and behavior to the throws clause
+for a method.</p><p>Unlike methods, a constructor cannot be <i>abstract</i>, <i>static</i>, <i>final</i>, <i>native</i>,
+or <i>synchronized</i>. </p></section>
+
+<section conref="../packagedef.dita#javaConstructorDef-reference/javaConstructorDef-containedBy-section"/><section conref="../packagedef.dita#javaConstructorDef-reference/javaConstructorDef-contains-section"/><section conref="../packagedef.dita#javaConstructorDef-reference/javaConstructorDef-contentModel-section"/><section conref="../packagedef.dita#javaConstructorDef-reference/javaConstructorDef-attList-section"/><section conref="../packagedef.dita#javaConstructorDef-reference/javaConstructorDef-classValue-section"/></refbody>
+</reference>

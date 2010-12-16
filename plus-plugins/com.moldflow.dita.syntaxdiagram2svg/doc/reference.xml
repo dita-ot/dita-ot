@@ -1,0 +1,262 @@
+<?xml version="1.0"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="reference_syntaxdiagram2svg"><title><keyword>syntaxdiagram2svg</keyword>
+    </title><abstract>
+        <shortdesc>The <keyword>syntaxdiagram2svg</keyword> plugin provides code for rendering
+            syntax diagrams from the DITA programming domain as dynamic SVG.</shortdesc>
+        <p>This plugin is not strictly part of the Plus plugins, though it was developed in parallel
+            with them.  It is possible to use this plugin independently in your own transformation
+            by importing the XSLT template <filepath>xsl/syntaxdiagram2svg.xsl</filepath>.</p>
+    </abstract><refbody>
+        <section>
+            <title>Plugin ID</title>
+            <p><apiname>com.moldflow.dita.syntaxdiagram2svg</apiname></p>
+        </section>
+        <section>
+            <title>XSLT requirements</title>
+            <p>An XSLT 1.0 or later processor.</p>
+        </section>
+        <section id="section_79304AD677314F11BE689B842F0F16FB">
+            <title>Ant requirements</title>
+            <p>Ant 1.6.5 or later.</p>
+        </section>
+        <table id="table_88E41E91DE074FA3BFB2209B742D8BB3">
+            <title>Ant properties defined in <keyword>syntaxdiagram2svg</keyword></title>
+            <tgroup cols="3">
+                <colspec colnum="1" colname="col1" colwidth="1.00*"/>
+                <colspec colname="col02" colnum="2" colwidth="1.29*"/>
+                <colspec colnum="3" colname="col2" colwidth="1.34*"/>
+                <thead>
+                    <row>
+                        <entry colname="col1">Name</entry>
+                        <entry colname="col02">Value</entry>
+                        <entry colname="col2">Description</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry colname="col1">
+                            <keyword>syntaxdiagram2svg.dir</keyword>
+                        </entry>
+                        <entry colname="col02"/>
+                        <entry colname="col2">Absolute path of directory where plugin is
+                        installed.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <keyword>syntaxdiagram2svg.js.root</keyword>
+                        </entry>
+                        <entry colname="col02">
+                            <filepath>js</filepath> in plugin directory.</entry>
+                        <entry colname="col2">Path to the JavaScript files used by the
+                        plugin.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <keyword>syntaxdiagram2svg.css.root</keyword>
+                        </entry>
+                        <entry colname="col02">
+                            <filepath>css</filepath> in plugin directory.</entry>
+                        <entry colname="col2">Path to the CSS files used by the plugin.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <keyword>syntaxdiagram2svg.resource.root</keyword>
+                        </entry>
+                        <entry colname="col02">
+                            <filepath>resource</filepath> in plugin directory.</entry>
+                        <entry colname="col2">Path to the resource directory used by the
+                        plugin</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <keyword>syntaxdiagram2svg.constants</keyword>
+                        </entry>
+                        <entry colname="col02">
+                            <filepath>constants.xml</filepath> in resource directory.</entry>
+                        <entry colname="col2">Path to an XML file that the <filepath
+                                >make-constants.xsl</filepath> stylesheet uses to produce <filepath
+                                >constants.js</filepath>.</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <table id="table_EC511B34E89F4EC69E65EABCB42E136D">
+            <title>Plugin extension points used by <keyword>syntaxdiagram2svg</keyword></title>
+            <tgroup cols="3">
+                <colspec colnum="1" colname="col1" colwidth="1.06*"/>
+                <colspec colnum="2" colname="col2" colwidth="1.00*"/>
+                <colspec colnum="3" colname="col3" colwidth="1.52*"/>
+                <thead>
+                    <row>
+                        <entry colname="col1">Extension point</entry>
+                        <entry colname="col2">Value</entry>
+                        <entry colname="col3">Description</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry colname="col1">
+                            <keyword>syntaxdiagram2svg.pull.xsl</keyword>
+                        </entry>
+                        <entry colname="col2">
+                            <filepath>xsl/syntaxdiagram2svg.xsl</filepath>
+                        </entry>
+                        <entry colname="col3">Code that uses this plugin must import this extension
+                            point to obtain the XSLT templates that transform the syntax diagram
+                            into SVG.</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <table id="table_1A6935C1FAF94CC387A042D4F487071D">
+            <title>Callable Ant targets defined in <keyword>syntaxdiagram2svg</keyword></title>
+            <tgroup cols="3">
+                <colspec colnum="1" colname="col1" colwidth="1.00*"/>
+                <colspec colnum="2" colname="col2" colwidth="1.11*"/>
+                <colspec colnum="3" colname="col3" colwidth="1.27*"/>
+                <thead>
+                    <row>
+                        <entry colname="col1">Target</entry>
+                        <entry colname="col2">Parameters</entry>
+                        <entry colname="col3">Description</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry colname="col1">
+                            <keyword>syntaxdiagram2svg.copy-files.init</keyword>
+                        </entry>
+                        <entry colname="col2">None.</entry>
+                        <entry colname="col3">Depend on this target to set the properties <keyword
+                                >syntaxdiagram2svg.dir</keyword>, <keyword
+                            >syntaxdiagram2svg.js.root</keyword>, <keyword
+                                >syntaxdiagram2svg.css.root</keyword>, <keyword
+                                >syntaxdiagram2svg.resource.root</keyword>, and <keyword
+                                >syntaxdiagram2svg.constants</keyword>. </entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <table id="table_403B6AE1A51F4DD688A483BC4F2F0240">
+            <title>Callable XSLT templates defined in <keyword>syntaxdiagram2svg</keyword></title>
+            <tgroup cols="3">
+                <colspec colnum="1" colname="col1" colwidth="1.00*"/>
+                <colspec colnum="2" colname="col2" colwidth="1.13*"/>
+                <colspec colnum="3" colname="col3" colwidth="1.06*"/>
+                <thead>
+                    <row>
+                        <entry colname="col1">Template</entry>
+                        <entry colname="col2">Parameters</entry>
+                        <entry colname="col3">Description</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>&lt;xsl:template name="syntaxdiagram2svg:create-svg-document"
+                                xmlns:syntaxdiagram2svg="http://www.moldflow.com/namespace/2008/syntaxdiagram2svg"></codeph>
+                        </entry>
+                        <entry colname="col2">
+                            <dl>
+                                <dlentry>
+                                    <dt>
+                                        <codeph>JSPATH</codeph>
+                                    </dt>
+                                    <dd>Path from generated HTML document to directory containing
+                                        JavaScript files. By default, <codeph>js</codeph>.</dd>
+                                </dlentry>
+                                <dlentry>
+                                    <dt>
+                                        <codeph>CSSPATH</codeph>
+                                    </dt>
+                                    <dd>Path from generated HTML document to directory containing
+                                        the CSS file. By default, <codeph>css</codeph>.</dd>
+                                </dlentry>
+                                <dlentry>
+                                    <dt><codeph>BASEPATH</codeph></dt>
+                                    <dd>Base URI that any hyperlinks in the syntax diagram markup
+                                        will be resolved against. By default, the empty string,
+                                        which makes the base URI the same as the output
+                                    document.</dd>
+                                </dlentry>
+                            </dl>
+                        </entry>
+                        <entry colname="col3">Outputs a complete SVG document, replete with
+                            xml-stylesheet processing instruction.<p>Call with a <keyword
+                                    >syntaxdiagram</keyword> element as the context
+                        node.</p></entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>&lt;xsl:template name="syntaxdiagram2svg:create-svg-element"
+                                xmlns:syntaxdiagram2svg="http://www.moldflow.com/namespace/2008/syntaxdiagram2svg"></codeph>
+                        </entry>
+                        <entry colname="col2">None.</entry>
+                        <entry colname="col3">Outputs an SVG fragment that is part of a larger XML
+                                document.<p>Call with a <keyword>syntaxdiagram</keyword> element as
+                                the context node.</p></entry>
+                    </row>
+                    <row>
+                        <entry><codeph>&lt;xsl:template name="syntaxdiagram2svg:gen-user-scripts"
+                                xmlns:syntaxdiagram2svg="http://www.moldflow.com/namespace/2008/syntaxdiagram2svg"></codeph></entry>
+                        <entry>
+                            <dl>
+                                <dlentry>
+                                    <dt>
+                                        <codeph>JSPATH</codeph>
+                                    </dt>
+                                    <dd>Path from generated HTML document to directory containing
+                                        JavaScript files. By default, <codeph>js</codeph>.</dd>
+                                </dlentry>
+                            </dl>
+                        </entry>
+                        <entry>Outputs the document fragment that loads the JavaScript references
+                            used by the dynamic SVG.</entry>
+                    </row>
+                    <row>
+                        <entry><codeph>&lt;xsl:template name="syntaxdiagram2svg:gen-user-styles"
+                                xmlns:syntaxdiagram2svg="http://www.moldflow.com/namespace/2008/syntaxdiagram2svg"></codeph></entry>
+                        <entry>
+                            <dl>
+                                <dlentry>
+                                    <dt>
+                                        <codeph>CSSPATH</codeph>
+                                    </dt>
+                                    <dd>Path from generated HTML document to directory containing
+                                        the CSS file. By default, <codeph>css</codeph>.</dd>
+                                </dlentry>
+                            </dl>
+                        </entry>
+                        <entry>Outputs the processing instruction that loads the CSS references used
+                            by the dynamic SVG.</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <table id="table_403B6AE1A51F4DD688A483BC4F2F0240">
+            <title>XSLT variables defined in <keyword>syntaxdiagram2svg</keyword></title>
+            <tgroup cols="3">
+                <colspec colnum="1" colname="col1" colwidth="1.00*"/>
+                <colspec colnum="2" colname="col2" colwidth="1.13*"/>
+                <colspec colnum="3" colname="col3" colwidth="1.06*"/>
+                <thead>
+                    <row>
+                        <entry colname="col1">Variable</entry>
+                        <entry colname="col2">Value</entry>
+                        <entry colname="col3">Description</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>&lt;xsl:variable name="syntaxdiagram2svg:css-filename
+                                xmlns:syntaxdiagram2svg="http://www.moldflow.com/namespace/2008/syntaxdiagram2svg"></codeph>
+                        </entry>
+                        <entry colname="col2"><codeph>syntaxdiagram.css</codeph></entry>
+                        <entry colname="col3">Name of CSS file used by dynamic SVG.</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+    </refbody></reference>

@@ -1,0 +1,640 @@
+<?xml version="1.0"?>
+
+<!-- 
+Copyright © 2005 by Idiom Technologies, Inc. All rights reserved. 
+IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
+and WORLDSTART are trademarks of Idiom Technologies, Inc. All other 
+trademarks are the property of their respective owners. 
+
+IDIOM TECHNOLOGIES, INC. IS DELIVERING THE SOFTWARE "AS IS," WITH 
+ABSOLUTELY NO WARRANTIES WHATSOEVER, WHETHER EXPRESS OR IMPLIED,  AND IDIOM
+TECHNOLOGIES, INC. DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING
+BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
+PURPOSE AND WARRANTY OF NON-INFRINGEMENT. IDIOM TECHNOLOGIES, INC. SHALL NOT
+BE LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL, COVER, PUNITIVE, EXEMPLARY,
+RELIANCE, OR CONSEQUENTIAL DAMAGES (INCLUDING BUT NOT LIMITED TO LOSS OF 
+ANTICIPATED PROFIT), ARISING FROM ANY CAUSE UNDER OR RELATED TO  OR ARISING 
+OUT OF THE USE OF OR INABILITY TO USE THE SOFTWARE, EVEN IF IDIOM
+TECHNOLOGIES, INC. HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. 
+
+Idiom Technologies, Inc. and its licensors shall not be liable for any
+damages suffered by any person as a result of using and/or modifying the
+Software or its derivatives. In no event shall Idiom Technologies, Inc.'s
+liability for any damages hereunder exceed the amounts received by Idiom
+Technologies, Inc. as a result of this transaction.
+
+These terms and conditions supersede the terms and conditions in any
+licensing agreement to the extent that such terms and conditions conflict
+with those set forth herein.
+-->
+
+<project name="dita.build"  basedir=".">
+	<!--Added by William on 2009-11-23 for bug:2893745 start -->
+	<import file="../../build_init.xml"/>
+	<!--Added by William on 2009-11-23 for bug:2893745 end -->
+	
+    <property name="customization.dir" value="${basedir}/Customization"/>
+    <property file="${customization.dir}/build.properties"/>
+
+    <property name="ot.dir" value="${basedir}/../.."/>
+    <property name="lib.dir" value="${ot.dir}/lib"/>
+    <property name="fo.lib.dir" value="${basedir}/lib"/>
+    <property name="xep.dir" value="${fo.lib.dir}/xep"/>
+    <property name="merged.file" value="${dita.map.filename.root}_MERGED.xml" />
+
+	<!-- configure FO engines -->
+	<!-- default is FOP.  Can be changed here, or with pdf.formatter property. -->
+	<property name="pdf.formatter" value="fop"/>
+	
+	<property name="fop.home" value="${basedir}/fop"/>
+	
+	<!--Added by William on 2009-11-23 for bug:2893745 start -->
+	<condition property="hasFopLib">
+	   <available classname="org.apache.fop.tools.anttasks.Fop">
+		 <classpath id="project.classpath">  
+		 	<fileset dir="${fop.home}">
+		 		<include name="build/fop.jar"/>   
+		 		<include name="lib/*.jar"/>
+		 		<include name="build/fop-hyph.jar"/>   
+		 	</fileset>
+		 </classpath>  
+		</available>
+	</condition>
+	<!--Added by William on 2009-11-23 for bug:2893745 end -->
+	
+	<condition property="use.xep.pdf.formatter">
+		<equals arg1="${pdf.formatter}" arg2="xep"/>
+	</condition>
+	<condition property="use.ah.pdf.formatter">
+		<equals arg1="${pdf.formatter}" arg2="ah"/>
+	</condition>
+	<condition property="use.fop.pdf.formatter">
+		<not>
+          <or>
+            <isset property="use.xep.pdf.formatter"/>
+            <isset property="use.ah.pdf.formatter"/>
+          </or>
+        </not>
+	</condition>
+	<!--Added by William on 2009-11-23 for bug:2893745 start -->
+	<target name="checkFOPLib">
+	  <dita-ot-fail id="DOTA010E">
+		<condition>
+			<and>
+				<not>
+					<isset property="hasFopLib"/>
+				</not>
+				<isset property="use.fop.pdf.formatter"/>
+			</and>
+		</condition>
+	  </dita-ot-fail>
+	</target>
+	<!--Added by William on 2009-11-23 for bug:2893745 end -->
+	
+	<!-- dita.temp.dir can be an absolute or relative path. Handle both. -->
+    <available property="work.dir" value="${dita.temp.dir}"
+        file="${dita.temp.dir}" type="dir" />
+    <condition property="work.dir" value="${caller.dir}/${dita.temp.dir}">
+        <not>
+            <isset property="work.dir"/>
+        </not>
+    </condition>
+
+    <property name="artwork.dir" value="${dita.map.output.dir}"/>
+    <property name="disableRelatedLinks" value="yes"/>
+    
+    <condition property="file.protocol.prefix" value="file://">
+        <os family="unix"/>
+    </condition>
+
+    <condition property="file.protocol.prefix" value="file:/">
+        <not>
+            <isset property="file.protocol.prefix"/>
+        </not>
+    </condition>
+
+    <property name="xml.catalog.files" value="${customization.dir}/catalog.xml;${basedir}/cfg/catalog.xml"/>
+    
+    <condition property="xep.config.file" value = "${custom.xep.config}">
+        <isset property="custom.xep.config"/>
+    </condition>
+    <condition property="xep.config.file" value = "${xep.dir}/xep.xml">
+        <not><isset property="custom.xep.config"/></not>
+    </condition>
+
+    <property name="xsl.dir" value="${basedir}/xsl"/>
+    <property name="xsl.fo.dir" value="${basedir}/xsl/fo"/>
+    <property name="xsl.fo.diff.dir" value="${basedir}/xsl/fo/diff"/>
+    <property name="xsl.common.dir" value="${basedir}/xsl/common"/>
+    <property name="cfg.dir" value="${basedir}/cfg"/>
+    <property name="cfg.fo.dir" value="${basedir}/cfg/fo"/>
+    <property name="cfg.common.dir" value="${basedir}/cfg/common"/>
+    <property name="dtd.dir" value="${basedir}/dtd"/>
+
+    <!-- WS runtime properties -->
+    <property file="${cfg.common.dir}/properties/${document.locale}.properties"/>
+
+	<property name="saxon.resolver.command.line" value="-warnings:silent -x:org.apache.xml.resolver.tools.ResolvingXMLReader -y:org.apache.xml.resolver.tools.ResolvingXMLReader -r:org.apache.xml.resolver.tools.CatalogResolver"/>
+
+    <path id="project.class.path">
+        <pathelement path="${java.class.path}"/>
+    	<fileset dir="${lib.dir}/saxon">
+    	   <include name="**/*.jar"/>
+    	</fileset>
+
+    	<!--
+        <pathelement location="${lib.dir}/xml-apis.jar"/>
+        <pathelement location="${lib.dir}/xercesImpl.jar"/>
+        -->
+        <pathelement location="${lib.dir}/resolver.jar"/>
+        <pathelement location="${lib.dir}/icu4j.jar"/>        
+        <pathelement location="${fo.lib.dir}/fo.jar"/>
+    </path>
+
+    <path id="xep.class.path">
+        <fileset dir="${xep.dir}/lib" includes="**/*.jar"/>
+        <pathelement location="${fo.lib.dir}/fo.jar"/>
+    </path>
+
+    <target name="preview.topic.pdf">
+        <antcall target="transform.topic2pdf">
+            <param name="inputFile" value="${work.dir}/${user.input.file}"/>
+            <param name="outputFile" 
+                value="${dita.map.output.dir}/${dita.topic.filename.root}.pdf"/>
+            <param name="buildDir" value="${work.dir}"/>
+            <param name="artworkPrefix" value="${artwork.dir}"/>
+            <param name="xep.failOnError" value="false"/>
+        </antcall>
+    </target>
+    
+    <target name="publish.map.pdf">
+    	<echo message="current target:publish.map.pdf"/>
+    	<!--
+    	<echo message="dita.temp.dir=${dita.temp.dir} work.dir=${work.dir}"/>
+    	<echo message="dita.dir=${dita.dir}"/>
+    	<echo message="basedir=${basedir}"/>
+    	-->
+        <antcall target="transform.topic2pdf">
+            <param name="inputFile" value="${work.dir}/${merged.file}"/>
+            <param name="outputFile" 
+                value="${dita.map.output.dir}/${dita.map.filename.root}.pdf"/>
+            <param name="buildDir" value="${work.dir}"/>
+            <param name="artworkPrefix" value="${artwork.dir}"/>
+            <param name="xep.failOnError" value="false"/>
+        </antcall>
+    </target>
+
+    <target name="transform.topic2fo">
+        <taskdef classname="com.idiominc.ws.opentopic.fo.index2.IndexPreprocessorTask" name="index-preprocess"
+            classpathref="project.class.path"/>
+        <taskdef classname="com.idiominc.ws.opentopic.fo.i18n.PreprocessorTask" name="i18n-preprocess"
+            classpathref="project.class.path"/>
+        <taskdef name="dita-version" classname="com.idiominc.ws.opentopic.xsl.extension.DitaVersion"
+            classpathref="project.class.path"/>
+        <taskdef name="detect-lang" classname="com.suite.sol.ditaot.DetectLang"
+            classpathref="project.class.path"/>
+
+        <dita-version documentPath="${inputFile}"/>
+
+        <!-- Set document.locale from xml:lang -->
+        <!-- The map takes precedence, followed by the first topic -->
+        <detect-lang documentPath="${inputFile}"/>
+
+        <condition property="document.locale" value="en_US">
+            <not><isset property="document.locale"></isset></not>
+        </condition>
+
+        <echo>Using document.locale=${document.locale}
+        </echo>
+
+        <condition property="formatter.specific.ext" value="_axf">
+            <equals arg1="ah" arg2="${pdf.formatter}"/>
+        </condition>
+        
+        <condition property="formatter.specific.ext" value="">
+            <not><isset property="formatter.specific.ext"></isset></not>
+        </condition>
+
+        <condition property="args.bookmark.style" value="">
+            <not><isset property="args.bookmark.style"></isset></not>
+        </condition>
+
+        <condition property="args.chapter.layout" value="">
+            <not><isset property="args.chapter.layout"></isset></not>
+        </condition>
+
+        <condition property="args.fo.include.rellinks" value="">
+            <not><isset property="args.fo.include.rellinks"></isset></not>
+        </condition>
+
+        <condition property="args.draft" value="no">
+            <not><isset property="args.draft"></isset></not>
+        </condition>
+
+        <condition property="publish.required.cleanup" value="${args.draft}">
+          <and>
+            <not><isset property="publish.required.cleanup"/></not>
+            <isset property="args.draft"/>
+          </and>
+        </condition>
+
+        <condition property="args.gen.task.lbl" value="">
+            <not><isset property="args.gen.task.lbl"></isset></not>
+        </condition>
+    	<!--Added by William on 2010-06-21 for bug:3012392 start -->
+    	<!-- use customized xsl file for pdf transform.-->
+    	<condition property="temp.transformation.file" value="${caller.dir}/${args.xsl.pdf}">
+    		<isset property="args.xsl.pdf"/>
+    	</condition>
+    	<!--Added by William on 2010-06-21 for bug:3012392 end -->
+    	
+        <condition property="temp.transformation.file" value="${xsl.fo.dir}/topic2fo_shell_1.0${formatter.specific.ext}.xsl">
+    		<and>
+	        	<not>
+	    			<isset property="temp.transformation.file"/>
+	    		</not>
+	        	<or>
+		            <equals arg1="${ws.runtime.publishing.map.dita.version}" arg2="1.0"/>
+		            <equals arg1="${ws.runtime.publishing.map.dita.version}" arg2="1.1"/>
+		            <equals arg1="${ws.runtime.publishing.map.dita.version}" arg2="1.2"/>
+				</or>
+    	    </and>
+        </condition>
+
+        <condition property="temp.transformation.file" value="${xsl.fo.dir}/topic2fo_shell${formatter.specific.ext}.xsl">
+            <not>
+                <isset property="temp.transformation.file"/>
+            </not>
+        </condition>
+    	
+        <condition property="index.config.file" value="${customization.dir}/common/index/${document.locale}.xml">
+            <available file="${customization.dir}/common/index/${document.locale}.xml"/>
+        </condition>
+        
+        <condition property="index.config.file" value="${cfg.dir}/common/index/${document.locale}.xml">
+            <not>
+                <isset property="index.config.file"/>
+            </not>
+        </condition>
+        
+        <index-preprocess
+            input="${inputFile}"
+            output="${buildDir}/stage1.xml"
+            indexConfig="${index.config.file}"
+            locale="${document.locale}"
+            catalogs="${xml.catalog.files}">
+        </index-preprocess>
+        
+        <!--makeurl seems to output file:/C: style instead of file:///C:, but
+            xep, fop, and ah all accept it.-->
+        <makeurl property="artworkPrefixUrl" file="${artworkPrefix}" />
+
+        <!--Decide which version of saxon to use.-->
+        <available classname="net.sf.saxon.Transform" property="fo.saxon.classname" value="net.sf.saxon.Transform" classpathref="project.class.path"/>
+        <property name="fo.saxon.classname" value="com.icl.saxon.StyleSheet"/>
+        
+    	<!-- must fork or catalog resolution will fail due to sharing of -->
+    	<!-- resolver and catalogs with the Open Toolkit -->
+  			<echo message="Java maximum memory=${maxJavaMemory}"/>
+        <java classname="${fo.saxon.classname}" classpathref="project.class.path" fork="true"
+        	maxmemory="${maxJavaMemory}"
+        	>
+        	  <jvmarg line="${baseJVMArgLine}"/>
+            <arg line='-o:"${buildDir}/stage2.fo"'/>
+            <arg line="${saxon.resolver.command.line}"/>
+            <arg line='"${buildDir}/stage1.xml"'/>
+            <arg line='"${temp.transformation.file}"'/>
+            <arg line='"locale=${document.locale}"'/>
+            <arg line='"customizationDir=${customization.dir}"'/>
+            <arg line='"DRAFT=${args.draft}"'/>
+            <arg line='"artworkPrefix=${artworkPrefixUrl}"'/>
+            <arg line='"fileProtocolPrefix=${file.protocol.prefix}"'/>
+            <arg line='"publishRequiredCleanup=${publish.required.cleanup}"'/>
+            <arg line='"disableRelatedLinks=${disableRelatedLinks}"'/>
+            <arg line='"antArgsBookmarkStyle=${args.bookmark.style}"'/>
+            <arg line='"antArgsChapterLayout=${args.chapter.layout}"'/>
+            <arg line='"antArgsIncludeRelatedLinks=${args.fo.include.rellinks}"'/>
+            <arg line='"antArgsGenerateTaskLabels=${args.gen.task.lbl}"'/>
+        	<arg line='"pdfFormatter=${pdf.formatter}"'/>
+            <sysproperty key="xml.catalog.files" value="${xml.catalog.files}"/>
+        </java>
+                
+        <condition property="i18n.config.file" 
+            value="${customization.dir}/fo/i18n/${document.locale}.xml">
+            <available file="${customization.dir}/fo/i18n/${document.locale}.xml"/>
+        </condition>
+
+        <condition property="i18n.config.file" 
+            value="${cfg.fo.dir}/i18n/${document.locale}.xml">
+            <not>
+                <isset property="i18n.config.file"/>
+            </not>
+        </condition>
+
+        <i18n-preprocess
+            input="${buildDir}/stage2.fo"
+            output="${buildDir}/stage3.fo"
+            config="${i18n.config.file}"
+            catalogs="${xml.catalog.files}">
+        </i18n-preprocess>
+
+
+        <java classname="${fo.saxon.classname}" classpathref="project.class.path" fork="true"
+        	maxmemory="${maxJavaMemory}"
+				>
+      	  	<jvmarg line="${baseJVMArgLine}"/>
+            <arg line='-o:"${outputFile}"'/>
+            <arg line="${saxon.resolver.command.line}"/>
+            <arg line='"${buildDir}/stage3.fo"'/>
+            <arg line='"${xsl.fo.dir}/i18n-postprocess.xsl"'/>
+            <sysproperty key="xml.catalog.files" value="${xml.catalog.files}"/>
+        </java>
+    </target>
+
+    <target name="transform.topic2pdf">
+        <antcall target="copyCoreArtwork">
+            <param name="coreArtworkDestinationDir" value="${artwork.dir}"/>
+        </antcall>
+    	
+    	
+    	<!--Change path of ${inputFile} into url-->
+    	<makeurl file="${inputFile}" property="inputfile.url" validate="true"/>
+    	
+        <antcall target="transform.topic2fo">
+            <param name="inputFile" value="${inputfile.url}"/>
+            <param name="outputFile" value="${dita.map.output.dir}/topic.fo"/>
+            <param name="buildDir" value="${buildDir}"/>
+            <param name="artworkPrefix" value="${artworkPrefix}"/>
+            <param name="imageInfoFile" value="${imageInfoFile}"/>
+        </antcall>
+
+        <antcall target="transform.fo2pdf">
+            <param name="inputFile" value="${dita.map.output.dir}/topic.fo"/>
+            <param name="outputFile" value="${outputFile}"/>
+            <param name="xep.failOnError" value="${xep.failOnError}"/>
+        </antcall>
+    	
+    	<antcall target="delete.fo2pdf.topic.fo"/>
+    </target>
+
+    <target name="delete.fo2pdf.topic.fo" unless="retain.topic.fo">
+        <delete>
+            <!--Deleting the stage files isn't necessary, since it will be cleaned by
+                clean-temp, and is useful for debugging.-->
+            <!--<fileset dir="${buildDir}" includes="stage?.*"/>-->
+            <fileset dir="${dita.map.output.dir}" includes="topic.fo"/>
+        </delete>
+    </target>
+
+    <target name="transform.fo2pdf">
+        <antcall target="transform.fo2pdf.xep">
+            <param name="inputFile" value="${dita.map.output.dir}/topic.fo"/>
+            <param name="outputFile" value="${outputFile}"/>
+            <param name="xep.failOnError" value="${xep.failOnError}"/>
+        </antcall>
+        <antcall target="transform.fo2pdf.ah">
+            <param name="inputFile" value="${dita.map.output.dir}/topic.fo"/>
+            <param name="outputFile" value="${outputFile}"/>
+        </antcall>
+        <antcall target="transform.fo2pdf.fop">
+            <param name="inputFile" value="${dita.map.output.dir}/topic.fo"/>
+            <param name="outputFile" value="${outputFile}"/>
+        </antcall>
+    </target>
+
+	<!-- run XEP -->
+	<target name="transform.fo2pdf.xep" if="use.xep.pdf.formatter">
+        <java classname="com.idiominc.ws.opentopic.fo.xep.Runner" 
+            resultproperty="errCode" failonerror="${xep.failOnError}" 
+        	fork="true"
+        	maxmemory="${maxJavaMemory}"
+				>
+      	  <jvmarg line="${baseJVMArgLine}"/>
+            <arg line='"${inputFile}" "${outputFile}" failOnError=${xep.failOnError}'/>
+            <classpath refid="xep.class.path"/>
+            <sysproperty key="com.renderx.xep.CONFIG" value="${xep.config.file}"/>
+        </java>
+        <condition property="xepExitedOnError" value="true">
+          <not>
+             <equals arg1="${errCode}" arg2="0"/>
+          </not>
+        </condition>
+	</target>
+
+    <!--Set up and run Antenna House-->
+    <target name="transform.fo2pdf.ah" if="use.ah.pdf.formatter">
+        <condition property="has.axf.option">
+          <and>
+            <not>
+              <equals arg1="${env.AXF_OPT}" arg2=""/>
+            </not>
+            <available file="${env.AXF_OPT}"/>
+          </and>
+        </condition>
+        
+        <!--We try to hunt for Antenna House in different directories.
+            This should really be set externally, but we're incorporating
+            existing Antenna House tools which provided this feature.  -->
+        
+        <condition property="axf.path" value="${env.AXF_DIR}">
+          <and>
+            <isset property="env.AXF_DIR"/>
+            <or>
+              <available file="${env.AXF_DIR}/run.sh"/>
+              <available file="${env.AXF_DIR}/XSLCmd.exe"/>
+              <available file="${env.AXF_DIR}/AHFCmd.exe"/>
+            </or>
+          </and>
+        </condition>
+        <!-- NOTE: At present, there is no Antenna House V6 or V53, and the OT developers
+             do not know of a plan for either. They are added here so that if either
+             one is released, the Antenna House detection here will continue to work.
+             This plan is based on the V52 update, which caused some OT users to lose 
+             Antenna House function until this code was updated. -->
+        <condition property="axf.path" value="C:\Program Files\AntennaHouse\AHFormatterV6">
+          <and>
+            <not><isset property="axf.path"/></not>
+            <available file="C:\Program Files\AntennaHouse\AHFormatterV6\AHFCmd.exe"/>
+          </and>
+        </condition>
+        <condition property="axf.path" value="C:\Program Files\AntennaHouse\AHFormatterV53">
+          <and>
+            <not><isset property="axf.path"/></not>
+            <available file="C:\Program Files\AntennaHouse\AHFormatterV53\AHFCmd.exe"/>
+          </and>
+        </condition>
+        <condition property="axf.path" value="C:\Program Files\AntennaHouse\AHFormatterV52">
+          <and>
+            <not><isset property="axf.path"/></not>
+            <available file="C:\Program Files\AntennaHouse\AHFormatterV52\AHFCmd.exe"/>
+          </and>
+        </condition>
+        <condition property="axf.path" value="C:\Program Files\AntennaHouse\AHFormatterV51">
+          <and>
+            <not><isset property="axf.path"/></not>
+            <available file="C:\Program Files\AntennaHouse\AHFormatterV51\AHFCmd.exe"/>
+          </and>
+        </condition>
+        <condition property="axf.path" value="C:\Program Files\AntennaHouse\AHFormatterV5">
+          <and>
+            <not><isset property="axf.path"/></not>
+            <available file="C:\Program Files\AntennaHouse\AHFormatterV5\AHFCmd.exe"/>
+          </and>
+        </condition>
+        <condition property="axf.path" value="C:\Program Files\Antenna\XSLFormatterV43">
+          <and>
+            <not><isset property="axf.path"/></not>
+            <available file="C:\Program Files\Antenna\XSLFormatterV43\XSLCmd.exe"/>
+          </and>
+        </condition>
+        <condition property="axf.path" value="C:\Program Files\Antenna\XSLFormatterV42">
+          <and>
+            <not><isset property="axf.path"/></not>
+            <available file="C:\Program Files\Antenna\XSLFormatterV42\XSLCmd.exe"/>
+          </and>
+        </condition>
+        <condition property="axf.path" value="C:\Program Files\Antenna\XSLFormatterV41">
+          <and>
+            <not><isset property="axf.path"/></not>
+            <available file="C:\Program Files\Antenna\XSLFormatterV41\XSLCmd.exe"/>
+          </and>
+        </condition>
+        <!-- NOTE: Adding V6 and V53 as a guess where the next version will install,
+                   to try and make this code forward compatible. Basing it on the
+                   known install location of V52. Also adding V51 based on the 
+                   known V52 location (V51 support was missing as of the V52 release).
+                   The _64 values are used for 64 bit machines, and values without _64
+                   are for 32 bit machines. -->
+        <condition property="axf.path" value="/usr/AHFormatterV6_64">
+          <and>
+            <not><isset property="axf.path"/></not>
+            <available file="/usr/AHFormatterV6_64/run.sh" value="/usr/AHFormatterV6_64"/>
+          </and>
+        </condition>
+        <condition property="axf.path" value="/usr/AHFormatterV6">
+          <and>
+            <not><isset property="axf.path"/></not>
+            <available file="/usr/AHFormatterV6/run.sh" value="/usr/AHFormatterV6"/>
+          </and>
+        </condition>
+        <condition property="axf.path" value="/usr/AHFormatterV53_64">
+          <and>
+            <not><isset property="axf.path"/></not>
+            <available file="/usr/AHFormatterV53_64/run.sh" value="/usr/AHFormatterV53_64"/>
+          </and>
+        </condition>
+        <condition property="axf.path" value="/usr/AHFormatterV53">
+          <and>
+            <not><isset property="axf.path"/></not>
+            <available file="/usr/AHFormatterV53/run.sh" value="/usr/AHFormatterV53"/>
+          </and>
+        </condition>
+        <condition property="axf.path" value="/usr/AHFormatterV52_64">
+          <and>
+            <not><isset property="axf.path"/></not>
+            <available file="/usr/AHFormatterV52_64/run.sh" value="/usr/AHFormatterV52_64"/>
+          </and>
+        </condition>
+        <condition property="axf.path" value="/usr/AHFormatterV52">
+          <and>
+            <not><isset property="axf.path"/></not>
+            <available file="/usr/AHFormatterV52/run.sh" value="/usr/AHFormatterV52"/>
+          </and>
+        </condition>
+        <condition property="axf.path" value="/usr/AHFormatterV51">
+          <and>
+            <not><isset property="axf.path"/></not>
+            <available file="/usr/AHFormatterV51/run.sh" value="/usr/AHFormatterV51"/>
+          </and>
+        </condition>
+        <condition property="axf.path" value="/usr/AHFormatterV5">
+          <and>
+            <not><isset property="axf.path"/></not>
+            <available file="/usr/AHFormatterV5/run.sh" value="/usr/AHFormatterV5"/>
+          </and>
+        </condition>
+        <condition property="axf.path" value="/usr/XSLFormatterV43">
+          <and>
+            <not><isset property="axf.path"/></not>
+            <available file="/usr/XSLFormatterV43/run.sh"/>
+          </and>
+        </condition>
+        
+        <!-- run.sh on Linux, AHFCmd.exe or XSLCmd.exe on Windows -->
+        <condition property="fo.ah.program.name" value="run.sh">
+          <os family="unix"/>
+        </condition>
+        <condition property="fo.ah.program.name" value="AHFCmd.exe">
+            <available file="${axf.path}/AHFCmd.exe"/>
+        </condition>        
+        <condition property="fo.ah.program.name" value="XSLCmd.exe">
+          <not>
+            <isset property="fo.ah.program.name" />
+          </not>
+        </condition>
+        <antcall target="transform.fo2pdf.ah.nooption"/>
+        <antcall target="transform.fo2pdf.ah.hasoption"/>
+    </target>
+
+    <target name="transform.fo2pdf.ah.nooption" unless="has.axf.option">
+        <exec executable="${axf.path}/${fo.ah.program.name}" resultproperty="errCode" logerror="true">
+            <arg value="-d"/>
+            <arg value="${inputFile}"/>
+            <arg value="-o"/>
+            <arg value="${outputFile}"/>
+            <arg value="-extlevel"/>
+            <arg value="4"/>
+            <arg value="-peb"/>
+            <arg value="1"/>
+        </exec>
+    </target>
+    
+    <target name="transform.fo2pdf.ah.hasoption" if="has.axf.option">
+        <exec executable="${axf.path}/${fo.ah.program.name}" resultproperty="errCode" logerror="true">
+            <arg value="-d"/>
+            <arg value="${inputFile}"/>
+            <arg value="-o"/>
+            <arg value="${outputFile}"/>
+            <arg value="-extlevel"/>
+            <arg value="4"/>
+            <arg value="-peb"/>
+            <arg value="1"/>            
+            <arg value="-i"/>
+            <arg value="${env.AXF_OPT}"/>
+        </exec>
+    </target>
+	
+	<!--Run FOP-->
+	<target name="transform.fo2pdf.fop" if="use.fop.pdf.formatter">
+		<!--Check fop lib-->
+		<antcall target="checkFOPLib"/>
+		<taskdef name="fop" classname="org.apache.fop.tools.anttasks.Fop">
+		  <classpath>
+		    <fileset dir="${fop.home}/lib">
+		      <include name="*.jar"/>
+		    </fileset>
+		    <fileset dir="${fop.home}/build">
+		      <include name="fop.jar"/>
+		      <include name="fop-hyph.jar" />
+		    </fileset>
+		  </classpath>
+		</taskdef>
+
+	    <fop format="application/pdf" fofile="${inputFile}" basedir="${dita.map.output.dir}"
+	      outfile="${outputFile}" messagelevel="info" relativebase="true"
+	      force="true" userconfig="${fop.home}/conf/fop.xconf">
+	    </fop>
+	</target>
+
+    <target name="copyCoreArtwork">
+        <copy todir="${coreArtworkDestinationDir}/Configuration/OpenTopic"
+            failonerror="false">
+            <fileset dir="${basedir}" includes="cfg/common/artwork/**/*.*"/>
+        </copy>
+        <copy todir="${coreArtworkDestinationDir}/Customization/OpenTopic" 
+            failonerror="false">
+            <fileset dir="${customization.dir}" includes="common/artwork/**/*.*"/>
+        </copy>
+    </target>    
+
+</project>

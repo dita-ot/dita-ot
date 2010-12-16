@@ -1,0 +1,53 @@
+<project name="plus-allhtml-svgimage-svgobject">
+  
+  <dirname property="plus-allhtml-svgimage-svgobject.dir" file="${ant.file.plus-allhtml-svgimage-svgobject}"/>
+
+  <target name="plus-allhtml-svgimage-svgobject.before.stage1" 
+    dita:depends="plus-allhtml-svgimage-svgobject.init,plus-allhtml-svgimage-svgobject.svgimage.copy"
+    xmlns:dita="http://dita-ot.sourceforge.net"
+    dita:extension="depends org.dita.dost.platform.InsertDependsAction"
+  />
+
+  <target name="plus-allhtml-svgimage-svgobject.init">
+    <condition property="plus.svgimage.format" value="svgobject">
+      <not>
+        <isset property="plus.svgimage.format"/>
+      </not>
+    </condition>
+  </target>
+
+  <!-- Count if there are any images at all, to prevent empty includes attribute on count.svgimage -->
+  <target name="plus-allhtml-svgimage-svgobject.check-imagelist-empty">
+    <condition property="plus-allhtml-svgimage-svgobject.imagelist-not-empty">
+      <and>
+        <isset property="imagelist"/>
+        <not><equals arg1="${imagelist}" arg2=""/></not>
+      </and>
+    </condition>
+  </target>
+
+  <!-- Count if there are any SVG images in the source file set. -->
+  <target name="plus-allhtml-svgimage-svgobject.count.svgimage" depends="plus-allhtml-svgimage-svgobject.check-imagelist-empty" if="plus-allhtml-svgimage-svgobject.imagelist-not-empty">
+    <fileset id="plus-allhtml-svgimage-svgobject.count.svgimage.id" dir="${user.input.dir}" includes="${imagelist}">
+      <filename name="**/*.svg"/>
+    </fileset>
+    <pathconvert property="plus-allhtml-svgimage-svgobject.exist.svgimage" setonempty="false" refid="plus-allhtml-svgimage-svgobject.count.svgimage.id"/>
+    <condition property="plus-allhtml-svgimage-svgobject.copy.required">
+      <and>
+        <equals arg1="${plus.svgimage.format}" arg2="svgobject"/>
+        <isset property="plus-allhtml-svgimage-svgobject.exist.svgimage"/>
+      </and>
+    </condition>
+  </target>
+
+  <!-- Copy SVG images to temp directory so that svgimage.xsl has access to them.
+       copy-files target already copies them to the output directory. -->
+  <target name="plus-allhtml-svgimage-svgobject.svgimage.copy" depends="plus-allhtml-svgimage-svgobject.count.svgimage" if="plus-allhtml-svgimage-svgobject.copy.required">
+    <copy todir="${dita.temp.dir}">
+      <fileset dir="${user.input.dir}" includes="${imagelist}">
+        <filename name="**/*.svg"/>
+      </fileset>
+    </copy>
+  </target>
+
+</project>

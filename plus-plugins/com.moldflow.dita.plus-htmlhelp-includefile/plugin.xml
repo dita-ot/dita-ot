@@ -1,0 +1,11 @@
+<plugin id="com.moldflow.dita.plus-htmlhelp-includefile">
+  <require plugin="com.moldflow.dita.plus-transtype-htmlhelp"/>
+  
+  <template file="build_plus-htmlhelp-includefile_template.xml"/>
+
+  <feature extension="dita.conductor.target.relative" value="build.xml" type="file"/>
+
+  <feature extension="depend.plus-transtype-htmlhelp.compile.pre" value="plus-htmlhelp-includefile.set-includefile" type="text"/>
+  <feature extension="depend.plus-transtype-htmlhelp.map.basic.hhp.pre" value="plus-htmlhelp-includefile.set-includefile" type="text"/>
+
+</plugin>

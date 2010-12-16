@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file in the
+     main toolkit package for applicable licenses.-->
+<!-- (C) Copyright IBM Corporation 2005, 2009 All Rights Reserved. -->
+<strings xml:lang="ar-eg">        <!-- Arabic -->
+
+  <str name="tutorialNext">انتانê</str>
+  <str name="tutorialPrevious">انسابâ</str>
+  <str name="Modules in this tutorial">أجزاء اندنêن انتظنêهê</str>
+  <str name="Lessons in this tutorial">اندرèس لê çذا اندنêن انتظنêهê</str>
+  <str name="Lessons in this module">اندرèس لê çذا انجزء</str>
+
+</strings>

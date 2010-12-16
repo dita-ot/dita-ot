@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+
+
+<!DOCTYPE enote PUBLIC "-//IBM//DTD DITA eNote//EN" "enote_shell.dtd">
+<enote id="asdf">
+  <subject>How to compose an eNote</subject>
+  <notedetail>
+    <noteheader>
+      <From>
+        <recipient href="dond@us.ibm.com">Don Day</recipient>
+      </From>
+      <To>
+        <recipient href="ehennum@us.ibm.com">Erik Hennum</recipient>
+        <recipient href="john_hunt@us.ibm.com">John Hunt</recipient>
+      </To>
+      <Cc>
+        <recipient href="dschell@us.ibm.com">Dave A Schell</recipient>
+      </Cc>
+      <Bcc>
+        <recipient href="dschell@us.ibm.com">Dave A Schell</recipient>
+      </Bcc>
+    <Date>2004-03-24</Date><delivery><Importance value="high"/><ReturnReceipt state="yes"/></delivery><references><InReplyTo href="OF910137D5.CFA24150-ON87256E60.0062F17A-88256E60.00639864@LocalDomain"/></references></noteheader>
+    <notebody>
+      <p>To compose an eNote, you perform the following actions:</p>
+    <ul><li>Address the the eNote to recipients.</li><li>Set the delivery options.</li><li>Add any attachments.</li><li>Send the note.</li></ul><p>This demonstrates a mix of record-oriented data fields and discourse-oriented document content, by the way.</p></notebody>
+  </notedetail>
+</enote>
+

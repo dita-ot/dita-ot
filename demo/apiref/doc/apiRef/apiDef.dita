@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="apiDef" outputclass="element" xml:lang="en-us">
+<title>apiDef</title>
+<shortdesc>The &lt;apiDef&gt; element provides the most general representation
+of the declared syntax.</shortdesc>
+<refbody>
+<section><title>Description</title><p>In the &lt;apiDef&gt; element, the &lt;state&gt;, &lt;keyword&gt;,
+and &lt;ph&gt; elements are provided to support this specialization.</p><p/></section>
+<section conref="../packagedef.dita#apiDef-reference/apiDef-containedBy-section"/><section conref="../packagedef.dita#apiDef-reference/apiDef-contains-section"/><section conref="../packagedef.dita#apiDef-reference/apiDef-contentModel-section"/><section conref="../packagedef.dita#apiDef-reference/apiDef-attList-section"/><section conref="../packagedef.dita#apiDef-reference/apiDef-classValue-section"/></refbody>
+</reference>

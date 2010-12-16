@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaAbstractMethod" outputclass="element" xml:lang="en-us">
+<title>javaAbstractMethod</title>
+<shortdesc>The &lt;javaAbstractMethod> element is used within the <i>MethodModifiers<sup>opt</sup></i> declaration
+to indicate that the method must be implemented in a subclass.</shortdesc>
+<refbody>
+<section><title>Description</title><p>An abstract method declaration provides
+the signature, but it does not provide an implementation. A possible alternative
+definitions of the method declaration is javaSyncronizedMethod element. Do
+not use the &lt;javaAbstractMethod> element with the &lt;javaNativeMethod>,
+&lt;javaStaticMethod>, and &lt;javaFinalMethod> elements. </p></section><?Pub Caret1?>
+<example> <title>Example</title>Click on the following link to open the Java
+API topic type example in  <object classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11"
+codebase="hhctrl.ocx#Version=4,73,8412,0" codetype="VIEWASTEXT" height="100"
+id="hhctrl" name="Sample" type="application/x-oleobject" width="100">
+<param name="Command" value="ShortCut"/>
+<param name="Text" value="Text: DITA "/>
+<param name="Item1" value=",../samples/java/UmlnotationPlugin.Implementation.dita,"/>
+</object><codeblock>&lt;javaMethod id="com.ibm.xtools.UML2">
+   &lt;apiName>create_input_stream&lt;/apiName>
+   &lt;shortdesc>Returns an input stream with the same buffer.&lt;/shortdesc>
+   &lt;javaMethodDetail>
+     &lt;javaMethodDef>
+       &lt;javaAbstractMethod/>
+       &lt;javaMethodAccess value="public"/>
+       &lt;javaReturn>
+          &lt;javaMethodClass href="../CORBA/InputStream.html"
+               format="html" scope="external">InputStream&lt;/javaMethodClass>
+          &lt;apiDefNote>an input stream with the same buffer.&lt;/apiDefNote>
+       &lt;/javaReturn>
+     &lt;/javaMethodDef>
+   &lt;/javaMethodDetail>
+&lt;/javaMethod></codeblock></example>
+<section><title>Processing Expectations</title><image href="images/javaAbstarctMethod.jpg"
+placement="inline"><alt></alt></image></section>
+<section conref="../packagedef.dita#javaAbstractMethod-reference/javaAbstractMethod-containedBy-section"></section>
+<section conref="../packagedef.dita#javaAbstractMethod-reference/javaAbstractMethod-contains-section"></section>
+<section conref="../packagedef.dita#javaAbstractMethod-reference/javaAbstractMethod-contentModel-section"></section>
+<section conref="../packagedef.dita#javaAbstractMethod-reference/javaAbstractMethod-attList-section"></section>
+<section conref="../packagedef.dita#javaAbstractMethod-reference/javaAbstractMethod-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000002780?>

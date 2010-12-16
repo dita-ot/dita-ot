@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="apiReturn" outputclass="element" xml:lang="en-us">
+<title>apiReturn</title>
+<shortdesc>The &lt;apiReturn&gt; element can return a typed value such as
+an integer or object classifier.</shortdesc>
+<refbody>
+<section><title>Description</title><p>In the &lt;apiReturn&gt; element, the &lt;state&gt;, &lt;keyword&gt;,
+and &lt;ph&gt; elements are provided to support unexpected contingencies within
+the value to return. </p></section>
+<example><title>Example</title><p>The following example shows an &lt;apiReturn&gt;
+element for a Visual Basic method. </p><codeblock>&lt;apiOperation id="com.ibm.xtools.rational.xde"&gt;
+   &lt;apiName&gt;getApplicableStereotypesAsString&lt;/apiName&gt;
+   &lt;apiOperationDef&gt;
+       &lt;apiReturn&gt;
+          &lt;apiOperationClassifier href=”String.dita”&gt;String&lt;/apiOperationClassifier&gt;
+          &lt;apiDefNote&gt;
+              Returns a string that specifies the stereotypes that can be associated
+              with the extensible element.
+          &lt;/apiDefNote&gt;
+       &lt;/apiOperationDef&gt;
+      &lt;apiReturn&gt;
+   &lt;/apiOperationDetail&gt;
+&lt;/apiOperation&gt;</codeblock></example>
+<section><title></title></section>
+<section conref="../packagedef.dita#apiReturn-reference/apiReturn-containedBy-section"></section>
+<section conref="../packagedef.dita#apiReturn-reference/apiReturn-contains-section"></section>
+<section conref="../packagedef.dita#apiReturn-reference/apiReturn-contentModel-section"></section>
+<section conref="../packagedef.dita#apiReturn-reference/apiReturn-attList-section"></section>
+<section conref="../packagedef.dita#apiReturn-reference/apiReturn-classValue-section"></section>
+</refbody>
+</reference>

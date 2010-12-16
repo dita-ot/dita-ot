@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<meta name="copyright" content="(C) Copyright 2005" />
+<meta name="DC.rights.owner" content="(C) Copyright 2005" />
+<meta content="public" name="security" />
+<meta content="index,follow" name="Robots" />
+<meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' />
+<meta content="reference" name="DC.Type" />
+<meta name="DC.Title" content="apiRelation" />
+<meta name="abstract" content="The &lt;apiRelation&gt; element specifies a related API item that is part of the declared interface to this API item." />
+<meta name="description" content="The &lt;apiRelation&gt; element specifies a related API item that is part of the declared interface to this API item." />
+<meta scheme="URI" name="DC.Relation" content="../apiRef/apiSyntaxText.html" />
+<meta scheme="URI" name="DC.Relation" content="../apiRef/apiDef.html" />
+<meta scheme="URI" name="DC.Relation" content="../apiClassifier/apiClassifierMember.html" />
+<meta scheme="URI" name="DC.Relation" content="../apiClassifier/apiClassifierDef.html" />
+<meta scheme="URI" name="DC.Relation" content="../apiOperation/apiReturn.html" />
+<meta scheme="URI" name="DC.Relation" content="../apiOperation/apiParam.html" />
+<meta scheme="URI" name="DC.Relation" content="../apiOperation/apiEvent.html" />
+<meta scheme="URI" name="DC.Relation" content="../apiOperation/apiOperationDefItem.html" />
+<meta scheme="URI" name="DC.Relation" content="../apiOperation/apiOperationDef.html" />
+<meta scheme="URI" name="DC.Relation" content="../apiOperation/apiConstructorDef.html" />
+<meta scheme="URI" name="DC.Relation" content="../apiValue/apiValueMember.html" />
+<meta content="XHTML" name="DC.Format" />
+<meta content="apiRelation" name="DC.Identifier" />
+<meta content="en-us" name="DC.Language" />
+<link href="C:\Work\dita\dost0.1\DITA-OT1.1.1\demo\apiref\out\doc\commonltr.css" type="text/css" rel="stylesheet" />
+<title>apiRelation</title>
+</head>
+<body id="apiRelation"><a name="apiRelation"><!-- --></a>
+
+
+<h1 class="topictitle1">apiRelation</h1>
+
+
+<div><p>The &lt;apiRelation&gt; element specifies a related API item that
+is part of the declared interface to this API item.</p>
+
+<div class="section"><h4 class="sectiontitle">Description</h4><p>This element can provide an href attribute
+if the description of the API item is available. If the description is not
+available, the &lt;apiRelation&gt; element provides the name of the API item
+in its contents.</p>
+<div class="p"><ul>
+<li>If you use an href attribute in a DITA API topic that describes the related
+API item, you do not need any other attributes. </li>
+
+</ul>
+<ul>
+<li>If you provide an href attribute to some other format (such as HTML),
+you must provide the name of the related API item inside the &lt;apiRelation&gt;
+element.</li>
+
+</ul>
+<ul>
+<li>If you cannot provide an href attribute (for instance, if the description
+of the related API item is not available), you must provide the name of the
+related API item inside the &lt;apiRelation&gt; element and the fully qualified
+name of the element in the keyref attribute. The keyref attribute should provide
+a unique key such as a fully qualified classifier name for the named API item.</li>
+
+</ul>
+</div>
+</div>
+
+<div class="example"><h4 class="sectiontitle">Example</h4><p>The following example shows a simple &lt;apiRelation&gt;
+element:</p>
+<pre>&lt;apiRef id="IRXEAfterCloseFile"&gt;
+   &lt;apiName&gt;getApplicableStereotypesAsString&lt;/apiName&gt;
+   &lt;shortdesc&gt;The test function&lt;/shortdesc&gt;
+   &lt;apiDetail&gt;
+      &lt;apiDef&gt;
+         &lt;apiRelation href="pluglet/IRXEAfterCloseFile.dita"/&gt;
+      &lt;/apiDef&gt;
+   &lt;/apiDetail&gt;
+&lt;/apiRef&gt;</pre>
+</div>
+
+<div class="elementContainedBy"><h4 class="sectiontitle">Contained by</h4><p id="apiRelation__N514FF"><a name="apiRelation__N514FF"><!-- --></a><a href="../apiClassifier/apiClassifierDef.html">apiClassifierDef</a>, <a href="../apiClassifier/apiClassifierMember.html">apiClassifierMember</a>, <a href="../apiOperation/apiConstructorDef.html">apiConstructorDef</a>, <a href="../apiRef/apiDef.html">apiDef</a>, <a href="../apiRef/apiDefItem.html">apiDefItem</a>, <a href="../apiOperation/apiEvent.html">apiEvent</a>, <a href="../apiOperation/apiOperationDef.html">apiOperationDef</a>, <a href="../apiOperation/apiOperationDefItem.html">apiOperationDefItem</a>, <a href="../apiOperation/apiParam.html">apiParam</a>, <a href="../apiOperation/apiReturn.html">apiReturn</a>, <a href="../apiRef/apiSyntaxText.html">apiSyntaxText</a>, <a href="../apiValue/apiValueDef.html">apiValueDef</a>, <a href="../apiValue/apiValueMember.html">apiValueMember</a></p>
+</div>
+<div class="hideSection" />
+<div class="elementContentModel"><h4 class="sectiontitle">Content model</h4><p id="apiRelation__N5156F"><a name="apiRelation__N5156F"><!-- --></a>
+  (text data)
+<em>(any number)</em></p>
+</div>
+<div class="elementAttList" />
+<div class="elementClassValue"><h4 class="sectiontitle">Inheritance</h4><p id="apiRelation__N5158B"><a name="apiRelation__N5158B"><!-- --></a>topic/<span class="keyword">xref</span> reference/<span class="keyword">xref</span></p>
+</div>
+</div>
+
+<div>
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../apiRef/apiSyntaxText.html" title="The &lt;apiSyntaxText&gt; element provides the representation in the programming language for the declared interface for the API item.">apiSyntaxText</a></div>
+</div>
+
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../apiRef/apiDef.html" title="The &lt;apiDef&gt; element provides the most general representation of the declared syntax.">apiDef</a></div>
+</div>
+
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../apiClassifier/apiClassifierMember.html" title="The &lt;apiClassifierMember&gt; element specifies that the classifier member is a substructure field of the classifier.">apiClassifierMember</a></div>
+</div>
+
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../apiClassifier/apiClassifierDef.html" title="The &lt;apiClassifierDef&gt; element represents the definition of the classifier.">apiClassifierDef</a></div>
+</div>
+
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../apiOperation/apiReturn.html" title="The &lt;apiReturn&gt; element can return a typed value such as an integer or object classifier.">apiReturn</a></div>
+</div>
+
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../apiOperation/apiParam.html" title="The &lt;apiParam&gt; element provides the definitions for the values that can be passed to parameters.">apiParam</a></div>
+</div>
+
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../apiOperation/apiEvent.html" title="The &lt;apiEvent&gt; element identifies an event action that is an instance of a classifier.">apiEvent</a></div>
+</div>
+
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../apiOperation/apiOperationDefItem.html" title="The &lt;apiOperationDefItem&gt; element is the specialization of the &lt;apiDefItem&gt; element to support classifier references and to distinguish returns, parameters, and events.">apiOperationDefItem</a></div>
+</div>
+
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../apiOperation/apiOperationDef.html" title="The &lt;apiOperationDef&gt; element declares the interface of an operation that does not construct an object but, instead, returns values or performs actions.">apiOperationDef</a></div>
+</div>
+
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../apiOperation/apiConstructorDef.html" title="The &lt;javaConstructorDef&gt; element provides the constructor declaration.">apiConstructorDef</a></div>
+</div>
+
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../apiValue/apiValueMember.html" title="The &lt;apiValueMember&gt; element provides the detailed information about the access to the value.">apiValueMember</a></div>
+</div>
+</div>
+</body>
+</html>

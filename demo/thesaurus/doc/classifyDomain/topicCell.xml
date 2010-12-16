@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\..\dtd\reference.dtd">
+<reference id="topicCell" outputclass="element" xml:lang="en-us">
+<title>topicCell</title>
+<shortdesc>Contains one or more content topics that are classified by the
+subjects in the row.</shortdesc><?Pub Caret1?>
+<refbody>
+<section><title>Description</title><p>This cell can be empty in the <xref
+href="topicSubjectHeader.xml" type="reference"></xref> element but must identify
+the classified topics within the <xref href="topicSubjectRow.xml"></xref> element.</p></section>
+<section conref="../packagedef.xml#topicCell-reference/topicCell-containedBy-section"></section>
+<section conref="../packagedef.xml#topicCell-reference/topicCell-contains-section"></section>
+<section conref="../packagedef.xml#topicCell-reference/topicCell-contentModel-section"></section>
+<section conref="../packagedef.xml#topicCell-reference/topicCell-attList-section"></section>
+<section conref="../packagedef.xml#topicCell-reference/topicCell-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001172?>

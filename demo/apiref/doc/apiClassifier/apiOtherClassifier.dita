@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="apiOtherClassifier" outputclass="element" xml:lang="en-us">
+<title>apiOtherClassifier</title>
+<shortdesc>The &lt;apiOtherClassifier> element provides the type for a member
+classifier.</shortdesc>
+<refbody>
+<section><title>Description</title><p></p><p>The &lt;apiOtherClassifier> element
+can provide an <i>href</i> attribute if the description of the API item is
+available. If the description is not available, the &lt;apiOtherClassifier>
+element can provide the name of the API item in its contents. <ul>
+<li>If you use an <i>href</i> attribute to a DITA API topic that describes
+the related API item, you do not need any other attributes.</li>
+</ul><ul>
+<li>If you provide an <i>href</i> attribute to some other format (such as
+HTML), you need to supply the name of the related API item inside the &lt;apiOtherClassifier>
+element.</li>
+</ul><ul>
+<li>If you cannot provide an <i>href</i> (for instance, if the description
+of the related API item might not be available), you must provide the name
+of the related API item inside the &lt;apiOtherClassifier> element and the
+fully qualified name of the element in the <i>keyref</i> attribute. The <i>keyref </i>attribute
+must provide a unique key such as a fully qualified classifier name for the
+named API item.</li>
+</ul></p></section>
+<example><title>Example</title> The following example shows a simple &lt;apiOtherClassifier>
+element for a VB.NET API class:<?Pub Caret?><codeblock>&lt;apiClassifier id="rational.xde" outputclass="class" platform="vb">
+    &lt;apiName>RXEAbstractClass&lt;/apiName>
+    &lt;shortdesc>Specifies one or more interfaces or interface members that will be implemented
+        in the class or structure definition in which it appears.&lt;/shortdesc>
+    &lt;apiClassifierDetail>
+       &lt;apiClassifierDef>
+			&lt;!–
+          Public MustInherit Class RXEAbstractClass
+       –>
+          &lt;apiQualifier name="access" value="public"/>
+          &lt;apiBaseClassifier>
+            &lt;apiItemName href=”IRXEClass”>IRXEClass&lt;/apiItemName>
+            &lt;apiDefNote>Required. A class whose properties, methods, and events will be
+                implemented by corresponding members in a class or structure.&lt;/apiDefNote>
+          &lt;/apiBaseClassifier>
+          &lt;apiOtherClassifier>
+            &lt;apiItemName href=”RXEAbstractClass”>RXEAbstractClass&lt;/apiItemName>
+            &lt;apiDefNote>Required. A class whose properties, methods, and events will be
+                implemented by corresponding members in a class or structure.&lt;/apiDefNote>
+          &lt;/apiOtherClassifier>
+          &lt;apiClassifierMember>&lt;apiItemName>RXEAbstraction&lt;/apiItemName>
+          &lt;/apiClassifierMember>
+       &lt;/apiClassifierDef>
+	&lt;/apiClassifierDetail>
+&lt;/apiClassifier></codeblock></example>
+<section conref="../packagedef.dita#apiOtherClassifier-reference/apiOtherClassifier-containedBy-section"></section>
+<section conref="../packagedef.dita#apiOtherClassifier-reference/apiOtherClassifier-contains-section"></section>
+<section conref="../packagedef.dita#apiOtherClassifier-reference/apiOtherClassifier-contentModel-section"></section>
+<section conref="../packagedef.dita#apiOtherClassifier-reference/apiOtherClassifier-attList-section"></section>
+<section conref="../packagedef.dita#apiOtherClassifier-reference/apiOtherClassifier-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000003595?>

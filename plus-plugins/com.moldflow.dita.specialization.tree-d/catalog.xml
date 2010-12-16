@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE catalog PUBLIC "-//OASIS//DTD Entity Resolution XML Catalog V1.0//EN" "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd">
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="public">
+    <public publicId="-//Moldflow//ENTITIES DITA 1.1 Tree Domain 1//EN" uri="dtd/treeDomain1.ent"/>
+    <system systemId="http://www.moldflow.com/schema/dtd/dita/1.1/tree/1/treeDomain1.ent" uri="dtd/treeDomain1.ent"/>
+    <public publicId="-//Moldflow//ELEMENTS DITA 1.1 Tree Domain 1//EN" uri="dtd/treeDomain1.mod"/>
+    <system systemId="http://www.moldflow.com/schema/dtd/dita/1.1/tree/1/treeDomain1.mod" uri="dtd/treeDomain1.mod"/>
+</catalog>

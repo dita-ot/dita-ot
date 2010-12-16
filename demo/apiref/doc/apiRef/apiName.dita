@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="apiName" outputclass="element" xml:lang="en-us">
+<title>apiName</title>
+<shortdesc>The &lt;apiName&gt; element provides the name of an application programming
+interface (API).</shortdesc>
+<refbody>
+<section><title>Description</title><p>The &lt;apiName&gt; element
+is contained not only by the &lt;apiRef&gt; element, but also by all specialized
+API topic types.  </p></section>
+<example> <title>Example</title><codeblock>&lt;javaField id="IRXEAbstraction"&gt;
+   &lt;apiName&gt;IID&lt;/apiName&gt;
+   &lt;shortdesc&gt;....&lt;/shortdesc&gt;
+&lt;/javaField&gt;</codeblock><codeblock>&lt;apiValue id="parameter"&gt;
+   &lt;apiName&gt;theNameOPT&lt;/apiName&gt;
+   
+&lt;/javaParameter&gt;
+</codeblock><codeblock>&lt;javaPackage&gt;
+	 &lt;apiName&gt;com.ibm.xtools.patterns.framework.uml2&lt;/apiName&gt;
+   &lt;shortdesc&gt;....&lt;/shortdesc&gt;
+&lt;javaPackage&gt;</codeblock><codeblock>&lt;javaMethod&gt;
+	 &lt;apiName&gt;getPriority&lt;/apiName&gt;
+   &lt;shortdesc&gt;....&lt;/shortdesc&gt;
+&lt;javaMethod&gt;</codeblock></example>
+
+<section conref="../packagedef.dita#apiName-reference/apiName-containedBy-section"/><section conref="../packagedef.dita#apiName-reference/apiName-contains-section"/><section conref="../packagedef.dita#apiName-reference/apiName-contentModel-section"/><section conref="../packagedef.dita#apiName-reference/apiName-attList-section"/><section conref="../packagedef.dita#apiName-reference/apiName-classValue-section"/></refbody>
+</reference>

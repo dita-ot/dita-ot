@@ -1,0 +1,16 @@
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+
+<!--Specify the topics that can be included within a FAQ topic-->
+<!ENTITY % faq-info-types "faq">
+
+<!--Specify the domain-specific vocabulary modules (none here,
+    but real version would probably provide some vocabulary)-->
+<!ENTITY included-domains "">
+
+<!--Embed the base topic module to define the base elements-->
+<!ENTITY % topic-type PUBLIC "-//OASIS//ELEMENTS DITA Topic//EN" "../../dtd/base/dtd/topic.mod">
+  %topic-type;
+
+<!--Embed the faq module to get the faq elements-->
+<!ENTITY % faq-typemod PUBLIC "-//IBM//ELEMENTS DITA FAQ//EN" "faq.mod">
+  %faq-typemod;

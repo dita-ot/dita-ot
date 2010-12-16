@@ -1,0 +1,10 @@
+<project name="build-java" default="package-jar">
+  <target name="compile">
+    <mkdir dir="build"/>
+    <javac srcdir="src" destdir="build" includes="**/*.java" target="1.5" source="1.5"/>
+  </target>
+
+  <target name="package-jar" depends="compile">
+    <jar destfile="lib/mml2svg.jar" basedir="build" includes="**/*.class" />
+  </target>
+</project>

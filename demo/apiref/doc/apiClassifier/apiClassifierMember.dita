@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="apiClassifierMember" outputclass="element" xml:lang="en-us">
+<title>apiClassifierMember</title>
+<shortdesc>The &lt;apiClassifierMember&gt; element specifies that the classifier
+member is a substructure field of the classifier. </shortdesc>
+<refbody>
+<section><title>Description</title><p>The &lt;apiClassifierMember&gt; element
+is an object that is contained in a set (or more) of classes. A class can
+be derived from more than one base class. In a multiple-inheritance model
+(where classes are derived from more than one base class), the base classes
+are specified using the &lt;apiClassifierMember&gt; element.</p></section>
+<section conref="../packagedef.dita#apiClassifierMember-reference/apiClassifierMember-containedBy-section"/><section conref="../packagedef.dita#apiClassifierMember-reference/apiClassifierMember-contains-section"/><section conref="../packagedef.dita#apiClassifierMember-reference/apiClassifierMember-contentModel-section"/><section conref="../packagedef.dita#apiClassifierMember-reference/apiClassifierMember-attList-section"/><section conref="../packagedef.dita#apiClassifierMember-reference/apiClassifierMember-classValue-section"/></refbody>
+</reference>

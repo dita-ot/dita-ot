@@ -1,0 +1,16 @@
+<plugin id="com.moldflow.dita.plus-allhtml-mathml-inline">
+
+  <require plugin="com.moldflow.dita.plus-allhtml-mathml"/>
+  <require plugin="com.moldflow.dita.plus-allhtml-xhtml-namespace"/>
+
+  <template file="build_plus-allhtml-mathml-inline_template.xml"/>
+
+  <feature extension="dita.conductor.target.relative" value="build.xml" type="file"/>
+
+  <feature extension="xsl.plus-eclipsehelp-topics-twopass.stage1" value="xsl/xhtml.xsl" type="file"/>
+  <feature extension="xsl.plus-xhtml-topics-twopass.stage1" value="xsl/xhtml.xsl" type="file"/>
+
+  <feature extension="depend.plus-eclipsehelp-topics-twopass.stage1.pre" value="plus-allhtml-mathml-inline.init" type="text"/>
+  <feature extension="depend.plus-xhtml-topics-twopass.stage1.pre" value="plus-allhtml-mathml-inline.init" type="text"/>
+
+</plugin>

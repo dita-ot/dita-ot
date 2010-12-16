@@ -1,0 +1,11 @@
+<project name="plus-allhtml-xhtml-namespace">
+
+  <target name="plus-allhtml-xhtml-namespace.init">
+    <condition property="plus.xhtml.namespace" value="http://www.w3.org/1999/xhtml">
+      <not>
+        <isset property="plus.xhtml.namespace"/>
+      </not>
+    </condition>
+  </target>
+
+</project>

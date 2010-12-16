@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaFinalClass" outputclass="element" xml:lang="en-us">
+<title>javaFinalClass</title>
+<shortdesc>The &lt;javaFinalClass> element provides a flag within the <i>ClassModifiers<sup>opt</sup></i> for
+classes that cannot be subclassed.</shortdesc>
+<refbody>
+<section><title>Description</title><p>A class can be declared final if its
+definition is complete and no subclasses are required. A class cannot be declared
+as both abstract and final. The &lt;javaFinalClass> element should not be
+used with the &lt;javaAbstractClass> element.  This element is the specialization
+of the apiQualifier element from the generic topic types<?Pub Caret?>. </p></section>
+<example> <title>Example</title>Click on the following link to open the Java
+API topic type example in <object classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11"
+codebase="hhctrl.ocx#Version=4,73,8412,0" codetype="VIEWASTEXT" height="100"
+id="hhctrl" type="application/x-oleobject" width="100">
+<param name="Command" value="ShortCut"/>
+<param name="Text" value="Text: DITA"/>
+<param name="Item1" value=",../samples/java/UMLDiagramResourceUtil.dita,"/>
+</object><codeblock>&lt;javaClass id="com.ibm.xtools.viz.ui.UMLDiagramResourceUtil">
+   &lt;apiName>UMLDiagramResourceUtil&lt;/apiName>
+   &lt;shortdesc>Represents an utility class that exposes UML diagram resource lifecycle
+        operations and provides access to the modeling platform.&lt;/shortdesc>
+   &lt;javaClassDetail>
+	  &lt;javaClassDef>
+		&lt;javaFinalClass/>
+        &lt;javaClassAccess value="public"/>
+        &lt;javaBaseClass href="http://java.sun.com/../Object.html" format=”html” 
+         scope=”external”>java.lang.Object&lt;/javaBaseClass>
+     &lt;/javaClassDef>
+	 &lt;apiDesc>API clients should not instantiate this class.&lt;/apiDesc>
+   &lt;/javaClassDetail>
+&lt;/javaClass></codeblock></example>
+<section><title>Processing Expectations</title><image href="images/javaFinalClass.jpg"
+placement="inline"></image></section>
+<section conref="../packagedef.dita#javaFinalClass-reference/javaFinalClass-containedBy-section"></section>
+<section conref="../packagedef.dita#javaFinalClass-reference/javaFinalClass-contains-section"></section>
+<section conref="../packagedef.dita#javaFinalClass-reference/javaFinalClass-contentModel-section"></section>
+<section conref="../packagedef.dita#javaFinalClass-reference/javaFinalClass-attList-section"></section>
+<section conref="../packagedef.dita#javaFinalClass-reference/javaFinalClass-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000002713?>

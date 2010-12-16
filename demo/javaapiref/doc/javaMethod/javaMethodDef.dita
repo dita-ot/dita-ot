@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="javaMethodDef" outputclass="element" xml:lang="en-us">
+<title>javaMethodDef</title>
+<shortdesc>The &lt;javaMethodDef&gt; element provides the elements for the method
+or constructor declaration, the return value of the method or constructor,
+the definition of the parameters, and the exceptions thrown by the execution
+of the method. </shortdesc>
+<refbody>
+<section><title>Description</title><p>A method declares the executable code
+that can be invoked when passing a fixed number of values as arguments: <simpletable>
+<strow>
+<stentry><lines><b>MethodDeclaration:</b>
+       <i>MethodModifiers<sup>opt</sup></i>   <b>ResultType</b>  <b>MethodDeclarator</b>   <i><b>Throws</b><sup>opt</sup></i>    ClassBody 
+<b>MethodModifier:</b>
+        public protected private
+       abstract static final synchronized native
+<b>ResultType:</b>
+        Type (class interface primitive array) void
+<b>Throws:</b>
+       throws ClassType, ClassTypeList</lines></stentry>
+</strow>
+</simpletable></p></section>
+<section conref="../packagedef.dita#javaMethodDef-reference/javaMethodDef-containedBy-section"/><section conref="../packagedef.dita#javaMethodDef-reference/javaMethodDef-contains-section"/><section conref="../packagedef.dita#javaMethodDef-reference/javaMethodDef-contentModel-section"/><section conref="../packagedef.dita#javaMethodDef-reference/javaMethodDef-attList-section"/><section conref="../packagedef.dita#javaMethodDef-reference/javaMethodDef-classValue-section"/></refbody>
+</reference>

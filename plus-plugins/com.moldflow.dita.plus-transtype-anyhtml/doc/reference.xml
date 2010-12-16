@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="reference_plus-transtype-anyhtml">
+    <title><keyword>plus-transtype-anyhtml</keyword></title>
+    <shortdesc>The <keyword>plus-transtype-anyhtml</keyword> plugin is a convenience plugin that
+        depends on one or more of the HTML-based transtypes <keyword>plus-transtype-xhtml</keyword>,
+            <keyword>plus-transtype-html</keyword>, <keyword>plus-transtype-htmlhelp</keyword> or
+            <keyword>plus-transtype-eclipsehelp</keyword>.  Plugins that require at least one
+        HTML-based transformation can depend on <keyword
+    >plus-transtype-anyhtml</keyword>.</shortdesc>
+</reference>

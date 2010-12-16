@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "../../../../dtd/task.dtd">
+<task id="shovellingsnow" xml:lang="en-us"><title>Shovelling snow</title>
+<taskbody><context><p>Keep your driveway and sidewalks clear of snow and ice by shovelling after 
+any snowfall.</p></context><steps><step><cmd>Get the shovel out of the garage</cmd></step><step><cmd>Shovel the driveway, starting at the garage door and working out to the 
+  street.</cmd></step><step><cmd>Shovel the sidewalk in front of your house.</cmd></step><step><cmd>Shovel the walk to your front door.</cmd></step></steps></taskbody>
+<related-links>
+<link href="../snowshovel.xml" type="concept"><linktext>Snow shovel</linktext></link>
+</related-links>
+</task>

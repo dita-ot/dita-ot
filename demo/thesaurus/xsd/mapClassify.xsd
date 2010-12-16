@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ *-->
+<xs:schema
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified"
+    xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+
+  <xs:include schemaLocation="classifyDomain.xsd"/>
+
+  <xs:include schemaLocation="../../../schema/mapGroupMod.xsd" />
+
+ <xs:redefine schemaLocation="../../../schema/mapGrp.xsd">
+  <xs:group name="topicref">
+    <xs:choice>
+      <xs:group ref="topicref"/>
+      <xs:group ref="mapgroup-d-topicref"/>
+      <xs:group ref="classify-d-topicref"/>
+    </xs:choice>
+  </xs:group>
+
+  <xs:group name="reltable">
+    <xs:choice>
+      <xs:group ref="reltable"/>
+      <xs:group ref="classify-d-reltable"/>
+    </xs:choice>
+  </xs:group>
+ </xs:redefine>
+
+  <xs:redefine schemaLocation="../../../schema/mapMod.xsd" >
+  	<xs:complexType name="map.class">
+  		<xs:complexContent>
+  			<xs:extension base="map.class">
+  				<xs:attribute name="domains" type="xs:string" default="(map mapgroup-d) (map classify-d)"/>
+  			</xs:extension>
+  		</xs:complexContent>
+  	</xs:complexType>
+  </xs:redefine>
+
+</xs:schema>

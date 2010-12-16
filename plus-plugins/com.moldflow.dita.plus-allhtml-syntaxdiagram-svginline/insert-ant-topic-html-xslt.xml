@@ -1,0 +1,8 @@
+<xslt>
+
+      <!-- Syntax Diagram parameters. -->
+      <param name="plus-allhtml-syntaxdiagram-svginline-csspath" expression="${plus-allhtml-syntaxdiagram-svginline.csspath}" if="plus-allhtml-syntaxdiagram-svginline.csspath"/>
+      <param name="plus-allhtml-syntaxdiagram-svginline-jspath" expression="${plus-allhtml-syntaxdiagram-svginline.jspath}" if="plus-allhtml-syntaxdiagram-svginline.jspath"/>
+
+
+</xslt>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaBaseInterface" outputclass="element" xml:lang="en-us">
+<title>javaBaseInterface</title>
+<shortdesc>The &lt;javaBaseInterface> element specifies in the <i>ExtendsInterfaces<sup>opt</sup></i> that
+the interface is the direct super interface of the current interface. </shortdesc>
+<refbody>
+<section><title>Description</title><p><?Pub Caret1?> The <i>keyref</i> attribute
+must provide a unique key such as a fully qualified class name for the named
+API item. </p></section>
+<example> <title>Example</title>Click on the following link to open the Java
+API topic type example in  <object classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11"
+codebase="hhctrl.ocx#Version=4,73,8412,0" codetype="VIEWASTEXT" height="100"
+id="hhctrl" name="Sample" type="application/x-oleobject" width="100">
+<param name="Command" value="ShortCut"/>
+<param name="Text" value="Text: DITA"/>
+<param name="Item1" value=",../samples/java/IDefaultComponentExportDataModel.dita,"/>
+</object><codeblock>&lt;javaInterface id="com.ibm.xtools.ras.export.data">
+    &lt;apiName>IDefaultComponentExportDataModel&lt;/apiName>
+    &lt;shortdesc>This interface holds all the data that is needed to export a RAS asset by using the default component profile.&lt;/shortdesc>
+    &lt;javaInterfaceDetail>
+	     &lt;javaInterfaceDef>
+           &lt;javaBaseInterface keyref=”com.ibm.xtools.ras.export.data.IDefaultExportDataModel”>
+              IDefaultExportDataModel
+           &lt;/javaBaseInterface>
+		      &lt;javaInterfaceAccess value="public"/>
+       &lt;/javaInterfaceDef>
+       &lt;apiDesc>
+           It represents the model part of the model-view-controller implementation
+           of the RAS export service. Although it can be, it's not intended to be
+           implemented by clients. 
+        &lt;/apiDesc>
+    &lt;/javaInterfaceDetail>
+&lt;/javaInterface></codeblock></example>
+<section><title>Processing Expectations</title><image href="images/javaBaseInterface.jpg"
+placement="inline"><alt></alt></image></section>
+<section conref="../packagedef.dita#javaBaseInterface-reference/javaBaseInterface-containedBy-section"></section>
+<section conref="../packagedef.dita#javaBaseInterface-reference/javaBaseInterface-contains-section"></section>
+<section conref="../packagedef.dita#javaBaseInterface-reference/javaBaseInterface-contentModel-section"></section>
+<section conref="../packagedef.dita#javaBaseInterface-reference/javaBaseInterface-attList-section"></section>
+<section conref="../packagedef.dita#javaBaseInterface-reference/javaBaseInterface-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000002785?>

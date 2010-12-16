@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!--
+ | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ *-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:group name="apiPackage">
+    <xs:sequence>
+      <xs:element ref="apiPackage"/>
+    </xs:sequence>
+  </xs:group>
+
+  
+</xs:schema>

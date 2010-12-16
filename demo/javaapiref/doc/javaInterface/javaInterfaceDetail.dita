@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaInterfaceDetail" outputclass="element" xml:lang="en-us">
+<title>javaInterfaceDetail</title>
+<shortdesc>The &lt;javaInterfaceDetail> element can contain the Java interface
+definition, the Java API description, examples, and other sections. </shortdesc>
+<refbody>
+<section><title>Description</title><p>In the &lt;javaInterfaceDetail> element,
+the &lt;example> and &lt;section> elements provide support for the current
+specific API reference. </p></section>
+<section conref="../packagedef.dita#javaInterfaceDetail-reference/javaInterfaceDetail-containedBy-section"></section>
+<section conref="../packagedef.dita#javaInterfaceDetail-reference/javaInterfaceDetail-contains-section"></section>
+<section conref="../packagedef.dita#javaInterfaceDetail-reference/javaInterfaceDetail-contentModel-section"></section>
+<section conref="../packagedef.dita#javaInterfaceDetail-reference/javaInterfaceDetail-attList-section"></section>
+<section conref="../packagedef.dita#javaInterfaceDetail-reference/javaInterfaceDetail-classValue-section"></section>
+</refbody>
+</reference>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="apiItemRef" outputclass="element" xml:lang="en-us">
+<title>apiItemRef</title>
+<shortdesc>This element provides a application programming interface (API)
+class topic type as a link in a DITA map.</shortdesc>
+<refbody>
+<section><title>Description</title><p>A &lt;apiItemRef> can contain &lt;topicref>
+and &lt;topicmeta> elements, allowing you to express navigation or table-of-contents
+hierarchies, as well as implying relationships between the containing topicref
+and its children.  </p></section>
+<example> <title>Example</title><codeblock>&lt;apiItemRef navtitle="IRXEAbstraction Object" href="apiPackage/apiClassifier/irxeabstraction.dita"
+         type="apiClassifier" locktitle="yes" platform="vb6" product="rxe">
+    &lt;apiItemRef navtitle="IRXEAbstraction Members" href="apiPackage/irxeabstractionPM.dita"
+            type="apiPackage" locktitle="yes">
+         &lt;apiItemRef navtitle="addStereotypeByString Method (IRXEAbstraction Interface)"
+            href="apiPackage/apiClassifier/apiOperation/addStereotypeByString.dita" locktitle="yes">
+         &lt;/apiItemRef>
+         &lt;apiItemRef navtitle="Application Property (IRXEAbstraction Interface)" 
+            href="apiPackage/apiClassifier/apiOperation/Application.dita">
+         &lt;/apiItemRef>
+
+&lt;/apiItemRef>
+&lt;/apiItemRef></codeblock> </example>
+<section conref="../packagedef.dita#apiItemRef-reference/apiItemRef-containedBy-section"><?Pub Caret1?></section>
+<section conref="../packagedef.dita#apiItemRef-reference/apiItemRef-contains-section"></section>
+<section conref="../packagedef.dita#apiItemRef-reference/apiItemRef-contentModel-section"></section>
+<section conref="../packagedef.dita#apiItemRef-reference/apiItemRef-attList-section"></section>
+<section conref="../packagedef.dita#apiItemRef-reference/apiItemRef-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000002055?>

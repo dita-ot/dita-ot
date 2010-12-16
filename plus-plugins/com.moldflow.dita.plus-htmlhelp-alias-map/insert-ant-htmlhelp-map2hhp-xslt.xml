@@ -1,0 +1,4 @@
+<xslt>
+  <param name="HELPALIAS" expression="${plus.htmlhelp.alias.absolute}" if="plus.htmlhelp.alias.absolute"/>
+  <param name="HELPMAP" expression="${plus.htmlhelp.map.absolute}" if="plus.htmlhelp.map.absolute"/>
+</xslt>

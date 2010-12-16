@@ -1,0 +1,10 @@
+PUBLIC "-//IBM//DTD DITA Reference Subject//EN" "demo/thesaurus/dtd/referenceSubject.dtd"
+PUBLIC "-//IBM//DTD DITA Concept Subject//EN" "demo/thesaurus/dtd/conceptSubject.dtd"
+PUBLIC "-//IBM//DTD DITA Subject Scheme Map//EN" "demo/thesaurus/dtd/mapScheme.dtd"
+PUBLIC "-//IBM//DTD DITA Classify Map//EN" "demo/thesaurus/dtd/mapClassify.dtd"
+
+PUBLIC "-//IBM//ELEMENTS DITA Subject Domain//EN" "demo/thesaurus/dtd/subjectDomain.mod"
+PUBLIC "-//IBM//ELEMENTS DITA Map Subject Scheme//EN" "demo/thesaurus/dtd/scheme.mod"
+
+PUBLIC "-//IBM//ENTITIES DITA Subject Domain//EN" "demo/thesaurus/dtd/subjectDomain.ent"
+PUBLIC "-//IBM//ENTITIES DITA Map Subject Classification Domain//EN" "demo/thesaurus/dtd/classifyDomain.ent"

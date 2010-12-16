@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE apiClassifier PUBLIC "-//IBM//DTD DITA API Classifier Reference Type//EN"
+ "../dtd/apiClassifier.dtd">
+<apiClassifier id="MultiLanguage">
+<apiName>Document interface</apiName>
+<shortdesc>Represents the entire HTML or XML document. Conceptually, it is
+the root of the document tree, and provides the primary access to the document's
+data.</shortdesc>
+<apiClassifierDetail>
+<apiDesc>Since elements, text nodes, comments, processing instructions, etc.
+cannot exist outside the context of a Document, the Document interface also
+contains the factory methods needed to create these objects. The Node objects
+created have a ownerDocument attribute which associates them with the Document
+within whose context they were created.</apiDesc>
+<example><pre platform="java">Document doc = docBuilder.newDocument();
+Attr attr = doc.createAttribute("name");</pre><pre platform="vb">Dim xmlDoc As New Msxml2.DOMDocument30
+Dim newAtt As IXMLDOMAttribute
+Set newAtt = xmlDoc.createAttribute("name")</pre><p>The example creates a
+document object and attribute object.</p></example>
+</apiClassifierDetail>
+<apiOperation id="createAttribute">
+<apiName>createAttribute() method</apiName>
+<shortdesc>Creates an Attr of the given name. </shortdesc>
+<apiOperationDetail>
+<apiSyntax platform="java">
+<apiSyntaxText><apiItemName>Attr</apiItemName> createAttribute(String <apiItemName>name</apiItemName>) throws <apiRelation
+keyref="org.w3c.dom.DOMException">DOMException</apiRelation></apiSyntaxText>
+<apiSyntaxItem>
+<apiItemName>Attr</apiItemName>
+<apiDefNote id="attributeParamDesc">The returned <apiclassifier keyref="org.w3c.dom.Attr">Attr</apiclassifier> object.</apiDefNote>
+</apiSyntaxItem>
+<apiSyntaxItem id="nameParam">
+<apiItemName>name</apiItemName>
+<apiDefNote>The name for the created attribute.</apiDefNote>
+</apiSyntaxItem>
+</apiSyntax>
+<apiSyntax platform="vb">
+<apiSyntaxText>Sub createAttribute(<apiItemName>name</apiItemName>, <apiItemName>mode</apiItemName>) Returns <apiItemName>IXMLDOMAttribute</apiItemName
+></apiSyntaxText>
+<apiSyntaxItem conref="#createAttribute/nameParam"></apiSyntaxItem>
+<apiSyntaxItem>
+<apiItemName>mode</apiItemName>
+<apiDefNote>The read / write mode for the created attribute.</apiDefNote>
+</apiSyntaxItem>
+<apiSyntaxItem>
+<apiItemName>IXMLDOMAttribute</apiItemName>
+<apiDefNote conref="#createAttribute/attributeParamDesc"></apiDefNote>
+</apiSyntaxItem>
+</apiSyntax>
+<apiDesc>After creation, the <apiclassifier keyref="org.w3c.dom.Attr">Attr</apiclassifier> instance
+can be set on an <apiclassifier keyref="org.w3c.dom.Element">Element</apiclassifier> instance
+using the <apioperation keyref="org.w3c.dom.Element.setAttributeNode">setAttributeNode</apioperation> method.</apiDesc>
+</apiOperationDetail>
+</apiOperation>
+</apiClassifier>
