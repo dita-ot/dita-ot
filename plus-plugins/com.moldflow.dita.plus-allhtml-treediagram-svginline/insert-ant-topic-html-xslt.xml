@@ -1,8 +1,0 @@
-<xslt>
-
-      <!-- Tree Diagram parameters. -->
-      <param name="plus-allhtml-treediagram-svginline-csspath" expression="${plus-allhtml-treediagram-svginline.csspath}" if="plus-allhtml-treediagram-svginline.csspath"/>
-      <param name="plus-allhtml-treediagram-svginline-jspath" expression="${plus-allhtml-treediagram-svginline.jspath}" if="plus-allhtml-treediagram-svginline.jspath"/>
-
-
-</xslt>

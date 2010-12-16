@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- This file is part of the DITA Open Toolkit project hosted on 
-     Sourceforge.net. See the accompanying license.txt file in the
-     main toolkit package for applicable licenses.-->
-<!-- (C) Copyright IBM Corporation 2006 All Rights Reserved. -->
-<!DOCTYPE musicCollection PUBLIC "-//RDA//DTD DITA Musical Reference//EN"
- "music.dtd">
-<musicCollection xml:lang="en-us">
-</musicCollection>

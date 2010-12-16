@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<plugin id="org.dita.legacypdf">
-    <!--<feature extension="dita.conductor.lib.import" value="fo.jar" type="file"/>-->
-    <feature extension="dita.conductor.transtype.check" value="legacypdf" type="value"/>
-    <feature extension="dita.conductor.target" value="integrator.xml" type="file"/>
-</plugin>

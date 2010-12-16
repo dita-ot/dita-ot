@@ -1,7 +1,0 @@
-topic DIVS7 - NO_COUNT sans-serif normal black 10 NO_UNDER sans-serif normal blue 12 NO_UNDER PREFIX OID_TITLE SRC_CONTENT
-task DIVS7 - NO_COUNT sans-serif normal black 10 NO_UNDER sans-serif normal blue 12 NO_UNDER PREFIX OID_TITLE SRC_CONTENT
-concept DIVS7 - NO_COUNT sans-serif normal black 10 NO_UNDER sans-serif normal blue 12 NO_UNDER PREFIX OID_TITLE SRC_CONTENT
-reference DIVS7 - NO_COUNT sans-serif normal black 10 NO_UNDER sans-serif normal blue 12 NO_UNDER PREFIX OID_TITLE SRC_CONTENT
-section DIVS7 - NO_COUNT sans-serif bold black 10 NO_UNDER sans-serif bold teal 12 NO_UNDER PREFIX OID_TITLE SRC_CONTENT
-example DIVS7 - NO_COUNT sans-serif bold black 10 NO_UNDER sans-serif bold teal 12 NO_UNDER PREFIX OID_TITLE SRC_CONTENT
-refsyn  DIVS7 - NO_COUNT sans-serif bold black 10 NO_UNDER sans-serif bold teal 12 NO_UNDER PREFIX OID_TITLE SRC_CONTENT

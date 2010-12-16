@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"
- "../../../dtd/map.dtd">
-<map title="Associating scheme and classification using a map">
-  <topicref href="garageScheme.ditamap" format="ditamap" type="scheme"/>
-  <topicref href="garageClassify.ditamap" format="ditamap"/>
-</map>

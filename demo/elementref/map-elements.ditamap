@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
-<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "../../dtd/map.dtd">
-<map title="Element reference for the map dtd">
-	<topicref href="map.xml"/>
-      <topicref href="topicref.xml"/>
-</map>

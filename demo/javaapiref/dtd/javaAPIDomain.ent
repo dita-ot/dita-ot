@@ -1,6 +1,0 @@
-<!--
- | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
- *-->
-
-<!ENTITY % javaapi-d-xref "javapackage | javaclass | javainterface | javafield | javamethod">
-<!ENTITY javaapi-d-att "(topic pr-d api-d javaapi-d)">
