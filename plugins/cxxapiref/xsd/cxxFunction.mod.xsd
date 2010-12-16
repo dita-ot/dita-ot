@@ -1,0 +1,840 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ================================================================= -->
+<!-- HEADER -->
+<!-- ================================================================= -->
+<!-- MODULE:    C++ Function DTD -->
+<!-- VERSION:   0.6.0 -->
+<!-- DATE:      May 2009 -->
+<!---->
+<!-- ================================================================= -->
+<!-- ================================================================= -->
+<!-- PUBLIC DOCUMENT TYPE DEFINITION -->
+<!-- TYPICAL INVOCATION -->
+<!---->
+<!--
+  Refer to this file by the following public identifier or an 
+        appropriate system identifier 
+  PUBLIC "-//NOKIA//DTD DITA C++ API Function Reference Type v0.6.0//EN"
+        Delivered as file "cxxFunction.dtd"
+-->
+<!-- ================================================================= -->
+<!-- SYSTEM:     Darwin Information Typing Architecture (DITA) -->
+<!---->
+<!-- PURPOSE:    C++ API Reference for Functions -->
+<!---->
+<!-- ORIGINAL CREATION DATE: -->
+<!-- November 2009 -->
+<!---->
+<!-- Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies). -->
+<!-- All rights reserved. -->
+<!---->
+<!-- Change History (latest at top): -->
+<!-- +++++++++++++++++++++++++++++++ -->
+<!-- 2010-05-14 PaulRoss: Fixed templates. -->
+<!-- 2010-02-16 VOG: Updated. -->
+<!-- 2010-02-10 PaulRoss: Updated. -->
+<!-- 2009-11-16 PaulRoss: Initial design. -->
+<!---->
+<!-- ================================================================= -->
+<!--
+  Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+  All rights reserved.
+-->
+<!-- ============ Hooks for domain extension ============ -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="../../../schema/base/xsd/ditaarch.xsd"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../../../schema/base/xsd/xml.xsd"/>
+  <xs:group name="cxxFunctionDetail">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionDetail"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxFunctionDefinition">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionDefinition"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxFunctionDeclaredType">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionDeclaredType"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxFunctionReturnType">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionReturnType"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxFunctionScopedName">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionScopedName"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxFunctionPrototype">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionPrototype"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxFunctionNameLookup">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionNameLookup"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxFunctionReimplemented">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionReimplemented"/>
+    </xs:sequence>
+  </xs:group>
+  <!-- Parameters -->
+  <xs:group name="cxxFunctionParameters">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionParameters"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxFunctionParameter">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionParameter"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxFunctionParameterDeclaredType">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionParameterDeclaredType"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxFunctionParameterDeclarationName">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionParameterDeclarationName"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxFunctionParameterDefinitionName">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionParameterDefinitionName"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxFunctionParameterDefaultValue">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionParameterDefaultValue"/>
+    </xs:sequence>
+  </xs:group>
+  <!-- Storage class specifiers and other qualifiers. -->
+  <xs:group name="cxxFunctionAccessSpecifier">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionAccessSpecifier"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxFunctionStorageClassSpecifierExtern">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionStorageClassSpecifierExtern"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxFunctionStorageClassSpecifierStatic">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionStorageClassSpecifierStatic"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxFunctionStorageClassSpecifierMutable">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionStorageClassSpecifierMutable"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxFunctionConst">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionConst"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxFunctionExplicit">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionExplicit"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxFunctionInline">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionInline"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxFunctionVirtual">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionVirtual"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxFunctionPureVirtual">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionPureVirtual"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxFunctionConstructor">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionConstructor"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxFunctionDestructor">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionDestructor"/>
+    </xs:sequence>
+  </xs:group>
+  <!-- Location information -->
+  <xs:group name="cxxFunctionAPIItemLocation">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionAPIItemLocation"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxFunctionDeclarationFile">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionDeclarationFile"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxFunctionDeclarationFileLine">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionDeclarationFileLine"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxFunctionDefinitionFile">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionDefinitionFile"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxFunctionDefinitionFileLineStart">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionDefinitionFileLineStart"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxFunctionDefinitionFileLineEnd">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionDefinitionFileLineEnd"/>
+    </xs:sequence>
+  </xs:group>
+  <!-- Templates -->
+  <xs:group name="cxxFunctionTemplateParameters">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionTemplateParameters"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxFunctionTemplateParameter">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionTemplateParameter"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxFunctionTemplateParameterType">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionTemplateParameterType"/>
+    </xs:sequence>
+  </xs:group>
+  <!-- ============ Hooks for shell DTD ============ -->
+  <xs:group name="cxxFunction-types-default">
+    <xs:sequence>
+      <xs:element ref="no-topic-nesting"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxFunction-info-types">
+    <xs:sequence>
+      <xs:group ref="cxxFunction-types-default"/>
+    </xs:sequence>
+  </xs:group>
+  <!-- ============ Topic specializations ============ -->
+  <xs:element name="cxxFunction">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="apiName"/>
+        <xs:group minOccurs="0" ref="shortdesc"/>
+        <xs:group minOccurs="0" ref="prolog"/>
+        <xs:group ref="cxxFunctionDetail"/>
+        <xs:group minOccurs="0" ref="related-links"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="cxxFunction-info-types"/>
+      </xs:sequence>
+      <xs:attribute name="id" use="required" type="xs:ID"/>
+      <xs:attribute name="conref"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attributeGroup ref="arch-atts"/>
+      <xs:attribute name="domains" default="(topic ui-d) (topic hi-d) (topic pr-d) (topic sw-d)                            (topic ut-d) (topic pr-d api-d) (topic pr-d api-d cxxapi-d)"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/topic reference/reference apiRef/apiRef apiOperation/apiOperation cxxFunction/cxxFunction "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxFunctionDetail">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="cxxFunctionDefinition"/>
+        <xs:group minOccurs="0" ref="apiDesc"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="example"/>
+          <xs:group ref="section"/>
+          <xs:group ref="apiImpl"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attributeGroup ref="id-atts"/>
+      <xs:attribute name="translate">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/body reference/refbody apiRef/apiDetail apiOperation/apiOperationDetail cxxFunction/cxxFunctionDetail "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxFunctionDefinition">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="cxxFunctionAccessSpecifier"/>
+        <xs:group minOccurs="0" ref="cxxFunctionStorageClassSpecifierExtern"/>
+        <xs:group minOccurs="0" ref="cxxFunctionStorageClassSpecifierStatic"/>
+        <xs:group minOccurs="0" ref="cxxFunctionStorageClassSpecifierMutable"/>
+        <xs:group minOccurs="0" ref="cxxFunctionConst"/>
+        <xs:group minOccurs="0" ref="cxxFunctionExplicit"/>
+        <xs:group minOccurs="0" ref="cxxFunctionInline"/>
+        <xs:group minOccurs="0" ref="cxxFunctionVirtual"/>
+        <xs:group minOccurs="0" ref="cxxFunctionPureVirtual"/>
+        <xs:group minOccurs="0" ref="cxxFunctionConstructor"/>
+        <xs:group minOccurs="0" ref="cxxFunctionDestructor"/>
+        <xs:group minOccurs="0" ref="cxxFunctionDeclaredType"/>
+        <xs:group minOccurs="0" ref="cxxFunctionReturnType"/>
+        <xs:group minOccurs="0" ref="cxxFunctionScopedName"/>
+        <xs:group minOccurs="0" ref="cxxFunctionPrototype"/>
+        <xs:group minOccurs="0" ref="cxxFunctionNameLookup"/>
+        <xs:group minOccurs="0" ref="cxxFunctionReimplemented"/>
+        <xs:group minOccurs="0" ref="cxxFunctionTemplateParameters"/>
+        <xs:group minOccurs="0" ref="cxxFunctionParameters"/>
+        <xs:group minOccurs="0" ref="apiDefNote"/>
+        <xs:group minOccurs="0" ref="cxxFunctionAPIItemLocation"/>
+      </xs:sequence>
+      <xs:attribute name="spectitle"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/section reference/section apiRef/apiDef apiOperation/apiOperationDef cxxFunction/cxxFunctionDefinition "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxFunctionAccessSpecifier">
+    <xs:complexType>
+      <xs:attribute name="name" default="access">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="access"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" default="public">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="public"/>
+            <xs:enumeration value="protected"/>
+            <xs:enumeration value="private"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiOperation/apiQualifier cxxFunction/cxxFunctionAccessSpecifier "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxFunctionDeclaredType">
+    <xs:complexType mixed="true">
+      <xs:group minOccurs="0" maxOccurs="unbounded" ref="apiRelation"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiOperation/apiDefItem cxxFunction/cxxFunctionDeclaredType "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxFunctionScopedName">
+    <xs:complexType mixed="true">
+      <xs:attribute name="href"/>
+      <xs:attribute name="keyref"/>
+      <xs:attribute name="type"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/keyword reference/keyword apiRef/apiItemName apiOperation/apiItemName cxxFunction/cxxFunctionScopedName "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxFunctionPrototype">
+    <xs:complexType mixed="true">
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiOperation/apiDefItem cxxFunction/cxxFunctionPrototype "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxFunctionNameLookup">
+    <xs:complexType mixed="true">
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiOperation/apiDefItem cxxFunction/cxxFunctionNameLookup "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxFunctionReimplemented">
+    <xs:complexType mixed="true">
+      <xs:attribute name="href"/>
+      <xs:attribute name="keyref"/>
+      <xs:attribute name="type"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="format"/>
+      <xs:attribute name="scope">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="local"/>
+            <xs:enumeration value="peer"/>
+            <xs:enumeration value="external"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/xref reference/xref apiRef/apiRelation apiOperation/apiRelation cxxFunction/cxxFunctionReimplemented "/>
+    </xs:complexType>
+  </xs:element>
+  <!-- Function Parameters -->
+  <xs:element name="cxxFunctionParameters">
+    <xs:complexType>
+      <xs:group minOccurs="0" maxOccurs="unbounded" ref="cxxFunctionParameter"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiOperation/apiDefItem cxxFunction/cxxFunctionParameters "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxFunctionParameter">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="cxxFunctionParameterDeclaredType"/>
+        <xs:group minOccurs="0" ref="cxxFunctionParameterDeclarationName"/>
+        <xs:group minOccurs="0" ref="cxxFunctionParameterDefinitionName"/>
+        <xs:group minOccurs="0" ref="cxxFunctionParameterDefaultValue"/>
+        <xs:group minOccurs="0" ref="apiDefNote"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiOperation/apiDefItem cxxFunction/cxxFunctionParameter "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxFunctionParameterDeclaredType">
+    <xs:complexType mixed="true">
+      <xs:group minOccurs="0" maxOccurs="unbounded" ref="apiRelation"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiOperation/apiDefItem cxxFunction/cxxFunctionParameterDeclaredType "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxFunctionParameterDeclarationName">
+    <xs:complexType mixed="true">
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="-  topic/keyword reference/keyword apiRef/apiItemName apiOperation/apiItemName cxxFunction/cxxFunctionParameterDeclarationName "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxFunctionParameterDefinitionName">
+    <xs:complexType mixed="true">
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/keyword reference/keyword apiRef/apiItemName apiOperation/apiItemName cxxFunction/cxxFunctionParameterDefinitionName "/>
+    </xs:complexType>
+  </xs:element>
+  <!-- TODO: This encloses PCDATA but linkifyTextDITA() is called. -->
+  <xs:element name="cxxFunctionParameterDefaultValue">
+    <xs:complexType mixed="true">
+      <xs:group minOccurs="0" maxOccurs="unbounded" ref="apiRelation"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiData apiOperation/apiData cxxFunction/cxxFunctionParameterDefaultValue "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxFunctionReturnType">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="cxxFunctionDeclaredType"/>
+        <xs:group minOccurs="0" ref="apiDefNote"/>
+      </xs:sequence>
+      <xs:attribute name="keyref"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiOperation/apiDefItem cxxFunction/cxxFunctionReturnType "/>
+    </xs:complexType>
+  </xs:element>
+  <!-- Storage class specifiers and other qualifiers. -->
+  <xs:element name="cxxFunctionStorageClassSpecifierExtern">
+    <xs:complexType>
+      <xs:attribute name="name" default="extern">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="extern"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" default="extern">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="extern"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiOperation/apiQualifier cxxFunction/cxxFunctionStorageClassSpecifierExtern "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxFunctionStorageClassSpecifierStatic">
+    <xs:complexType>
+      <xs:attribute name="name" default="static">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="static"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" default="static">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="static"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiOperation/apiQualifier cxxFunction/cxxFunctionStorageClassSpecifierStatic "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxFunctionStorageClassSpecifierMutable">
+    <xs:complexType>
+      <xs:attribute name="name" default="mutable">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="mutable"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" default="mutable">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="mutable"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiOperation/apiQualifier cxxFunction/cxxFunctionStorageClassSpecifierMutable "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxFunctionConst">
+    <xs:complexType>
+      <xs:attribute name="name" default="const">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="const"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" default="const">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="const"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiOperation/apiQualifier cxxFunction/cxxFunctionConst "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxFunctionVolatile">
+    <xs:complexType>
+      <xs:attribute name="name" default="volatile">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="volatile"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" default="volatile">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="volatile"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiOperation/apiQualifier cxxFunction/cxxFunctionVolatile "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxFunctionExplicit">
+    <xs:complexType>
+      <xs:attribute name="name" default="explicit">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="explicit"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" default="explicit">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="explicit"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiOperation/apiQualifier cxxFunction/cxxFunctionExplicit "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxFunctionInline">
+    <xs:complexType>
+      <xs:attribute name="name" default="inline">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="inline"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" default="inline">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="inline"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiOperation/apiQualifier cxxFunction/cxxFunctionInline "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxFunctionConstructor">
+    <xs:complexType>
+      <xs:attribute name="name" default="constructor">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="constructor"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" default="constructor">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="constructor"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiOperation/apiQualifier cxxFunction/cxxFunctionConstructor "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxFunctionDestructor">
+    <xs:complexType>
+      <xs:attribute name="name" default="destructor">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="destructor"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" default="destructor">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="destructor"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiOperation/apiQualifier cxxFunction/cxxFunctionDestructor "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxFunctionVirtual">
+    <xs:complexType>
+      <xs:attribute name="name" default="virtual">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="virtual"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" default="virtual">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="virtual"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiOperation/apiQualifier cxxFunction/cxxFunctionVirtual "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxFunctionPureVirtual">
+    <xs:complexType>
+      <xs:attribute name="name" default="pure virtual">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="pure virtual"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" default="pure virtual">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="pure virtual"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiOperation/apiQualifier cxxFunction/cxxFunctionPureVirtual "/>
+    </xs:complexType>
+  </xs:element>
+  <!-- Location information -->
+  <xs:element name="cxxFunctionAPIItemLocation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="cxxFunctionDeclarationFile"/>
+        <xs:group ref="cxxFunctionDeclarationFileLine"/>
+        <xs:group minOccurs="0" ref="cxxFunctionDefinitionFile"/>
+        <xs:group minOccurs="0" ref="cxxFunctionDefinitionFileLineStart"/>
+        <xs:group minOccurs="0" ref="cxxFunctionDefinitionFileLineEnd"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiOperation/apiDefItem cxxFunction/cxxFunctionAPIItemLocation "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxFunctionDeclarationFile">
+    <xs:complexType>
+      <xs:attribute name="name" default="filePath">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="filePath"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" use="required"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiOperation/apiQualifier cxxFunction/cxxFunctionDeclarationFile "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxFunctionDeclarationFileLine">
+    <xs:complexType>
+      <xs:attribute name="name" default="lineNumber">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="lineNumber"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" use="required"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiOperation/apiQualifier cxxFunction/cxxFunctionDeclarationFileLine "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxFunctionDefinitionFile">
+    <xs:complexType>
+      <xs:attribute name="name" default="filePath">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="filePath"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" use="required"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiOperation/apiQualifier cxxFunction/cxxFunctionDefinitionFile "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxFunctionDefinitionFileLineStart">
+    <xs:complexType>
+      <xs:attribute name="name" default="lineNumber">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="lineNumber"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" use="required"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiOperation/apiQualifier cxxFunction/cxxFunctionDefinitionFileLineStart "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxFunctionDefinitionFileLineEnd">
+    <xs:complexType>
+      <xs:attribute name="name" default="lineNumber">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="lineNumber"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" use="required"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiOperation/apiQualifier cxxFunction/cxxFunctionDefinitionFileLineEnd "/>
+    </xs:complexType>
+  </xs:element>
+  <!-- Templates -->
+  <xs:element name="cxxFunctionTemplateParameters">
+    <xs:complexType>
+      <xs:group maxOccurs="unbounded" ref="cxxFunctionTemplateParameter"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiOperation/apiDefItem cxxFunction/cxxFunctionTemplateParameters "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxFunctionTemplateParameter">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="cxxFunctionTemplateParameterType"/>
+        <xs:group minOccurs="0" ref="apiDefNote"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiOperation/apiDefItem cxxFunction/cxxFunctionTemplateParameter "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxFunctionTemplateParameterType">
+    <xs:complexType mixed="true">
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiOperation/apiDefItem cxxFunction/cxxFunctionTemplateParameterType "/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
+<!-- ============ Class attributes for type ancestry ============ -->
+<!-- Type information -->
+<!-- Operation qualifiers -->
+<!-- Location elements -->
+<!-- Parameter elements -->
+<!-- Templates -->

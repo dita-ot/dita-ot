@@ -125,7 +125,15 @@
   </xs:group>
   
   <xs:attributeGroup name="domains-att">
-    <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic abbrev-d)"/>
+    <xs:attribute name="domains" type="xs:string" 
+                           default="(topic abbrev-d)
+                                           (topic hazard-d)
+                                           (topic hi-d)
+                                           (topic indexing-d)                                           
+                                           (topic pr-d) 
+                                           (topic sw-d)
+                                           (topic ui-d) 
+                                           (topic ut-d)"/>
   </xs:attributeGroup>
 
 </xs:schema>

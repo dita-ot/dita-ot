@@ -1,0 +1,591 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2010, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<?Pub Sty _display FontColor="red"?>
+<?Pub Inc?>
+<reference id="antscript" xml:lang="en-us">
+<title>Ant tasks and scripts</title>
+<shortdesc>This topic describes detailed Ant tasks and scripts.</shortdesc>
+<refbody>
+<section><p>The build process including pre-process can be called
+by using an Ant script. The most important Ant script files are called <filepath>build.xml</filepath>, <filepath>build_general.xml</filepath>,
+and <filepath>build_preprocess.xml</filepath>; together they define
+common pre-processing and output transformation routines, as well
+as extension points that allow DITA-OT Plug-ins to add to this common
+processing.</p></section>
+<section><p>The following table lists many general parameters to the
+DITA-OT transforms.</p><table id="dita.param.general"><title>General
+Parameter Table</title>
+<tgroup cols="3"><colspec align="left" colname="col1" colwidth="1*"/>
+<colspec align="left" colname="col2" colwidth="4*"/><colspec align="left"
+colname="col3" colwidth="1*"/>
+<thead>
+<row>
+<entry>Parameter </entry>
+<entry>Description</entry>
+<entry>Required</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry>basedir</entry>
+<entry>                       <ph id="basedir">The path of the working
+directory for transformations,                          it will be
+the base of relative paths specified by other parameters.</ph>   
+                    <note id="basedir-note"><ul>
+<li>If input is relative, it will be set relative to the current directory.</li>
+<li>In Ant scripts, the default is that specified in the Ant buildfile.</li>
+<li>In Java command line, the default is current directory.</li>
+</ul>                       </note>                     </entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>dita.dir</entry>
+<entry>                       <ph id="ditadir">The absolute path of
+the toolkit's home directory.</ph>                      </entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.input</entry>
+<entry>                       <ph id="argsinput">The path and name
+of the input file.                          This argument should be
+in the same upper or lower case                          with the
+filename on file system.</ph>                       <note
+id="argsinput-note">This parameter must be provided              
+           if <tt>dita.input</tt> and <tt>dita.input.dirname</tt> 
+                        not be provided.</note>                  
+  </entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>dita.input</entry>
+<entry>                       <ph id="ditainput">The name of the input
+file .</ph>                       <note id="ditainput-note">This parameter
+must be provided                          if <tt>args.input</tt> not
+be provided. And this                          parameter must be used
+together with the                          <tt>dita.input.dirname</tt> parameter.
+The result of                          this combination is equivalent
+to use only the                          <tt>args.input</tt> parameter.
+It is an alternative way                          to specify the path
+and name of the input file.                          <i><b>DEPRECATED</b> -
+use <codeph>args.input</codeph>                            instead.</i></note> 
+                   </entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>dita.input.dirname</entry>
+<entry>                       <ph id="ditainputdirname">The input
+directory which                          contains the input file.</ph> 
+                     <note id="ditainputdirname-note">This parameter
+must be                          provided if <tt>args.input</tt> not
+be provided. And                          this parameter must be used
+together with the                          <tt>dita.input</tt> parameter.
+The result of this                          combination is equivalent
+to use only the                          <tt>args.input</tt> parameter.
+It is an alternative way                          to specify the path
+and name of the input file.                         <i><b>DEPRECATED</b> -
+use <codeph>args.input</codeph>                            instead.</i></note> 
+                   </entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>dita.temp.dir</entry>
+<entry>                       <ph id="tempdir">The directory of the
+temporary files.                          The default is 'temp'.</ph> 
+                   </entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>output.dir</entry>
+<entry>                       <ph id="outputdir">The path of the output
+directory.</ph>                     </entry>
+<entry>Yes</entry>
+</row>
+<row>
+<entry>dita.extname</entry>
+<entry>                       <ph id="ditaextname">The file extension
+name of the input                          topic files, for example,
+'.xml' or '.dita'. The                          default is '.xml'.</ph> 
+                   </entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.xsl</entry>
+<entry>                       <ph id="argsxsl">The xsl file to replace
+the default xsl                          file. It will replace dita2docbook.xsl
+in docbook                          transformation, dita2fo-shell.xsl
+in pdf                          transformation, dita2xhtml.xsl in
+xhtml/eclipsehelp                          transformation, dita2rtfImpl.xsl
+                        in word transformation and dita2html.xsl in
+javahelp/htmlhelp                          transformation.</ph>  
+                  </entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>dita.input.valfile</entry>
+<entry>                       <ph id="inputvalfile">The name of the
+file containing                          <i>filter/flagging/revision </i>information.</ph> 
+                   </entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.draft</entry>
+<entry>                       <ph id="argsdraft">Default "hide draft &amp;
+required-cleanup                          content" processing parameter
+(<q>no</q>= hide                          them); <q>no</q> and <q>yes</q> are
+valid values;                          non-<q>yes</q> is ignored.</ph> 
+                   </entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.artlbl</entry>
+<entry>                       <ph id="argsartlbl">Default "output
+artwork                          filenames" processing parameter; <q>no</q>and
+                         <q>yes</q>are valid values; non-<q>yes</q> is
+                         ignored.</ph>                     </entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>clean.temp</entry>
+<entry>                       <ph id="cleantemp">The parameter to
+specify whether to clean                          the temp directory
+before each build. Only "no" and "yes"                          are
+valid values. The default is yes.</ph>                     </entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.logdir</entry>
+<entry>                       <ph id="argslogdir">The directory used
+to keep generated                          log files. Default will
+be output directory.</ph>                       <note
+id="argslogdir-note">If several transforms running               
+          batchly, e.g., ant all:                         <ul>
+<li>If the user has specified a common logdir for all            
+                 transformations, it will be used as log directory.</li>
+<li>If the user hasn't specified a common dir for all            
+                 transformations:                             <ul>
+<li>If all transformations have same output directory,           
+                      the common output direcory will be used as log
+                                 directory.</li>
+<li>If there is no same output directory for all                 
+                transformations, the <codeph>basedir</codeph> will
+be used as                                  default log directory.</li>
+</ul></li>
+</ul>                                               </note>      
+              </entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>validate</entry>
+<entry>                       <ph id="validate">The parameter to specify
+whether the ditamap/dita/xml                        files to be validated.
+Only "true" and "false" are valid values. The default is true. </ph> 
+                     <note id="validate-note">It is not recommended
+to turn off the validation function ,                        which
+will cause unexpected error during transformation.               
+                     </note>                     </entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>outer.control</entry>
+<entry>                       <ph id="outercontrol">The parameter
+to specify how to respond to the overflowing dita/topic files. Only
+"fail", "warn" and "quiet" are valid values. The default is warn. </ph> 
+                     <note id="outercontrol-note">The detailed introduction:
+                       	<ul>
+<li><i>fail</i>: Fail quickly if files are going to be generated/copied
+outside of that directory</li>
+<li><i>warn</i>: Complete if files will be generated/copied outside,
+but log a warning</li>
+<li><i>quiet</i>: Quietly finish with only those files (no warning
+or error)</li>
+</ul>                       </note>                     </entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>generate.copy.outer</entry>
+<entry>                       <ph id="generatecopyouter">The parameter
+to specify how to deal with the overflowing dita/topic files. Only
+"1", "2" and "3" are valid values. The default is 1. </ph>       
+               <note id="generatecopyouter-note">The detailed introduction:
+                       	<ul>
+<li><i>1</i>: Only generate/copy files that fit within the designated
+output directory.</li>
+<li><i>2</i>: Generate/copy all files, even those that will end up
+outside of the output directory.</li>
+<li><i>3</i>: the old solution,adjust the input.dir according to the
+referenced files. (not default option any more but keep this as the
+option of backward compatibility).</li>
+</ul>                       </note>                     </entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>onlytopic.in.map</entry>
+<entry>                       <ph id="onlytopicinmap">The parameter
+to specify whether the referenced dita/topic files which are not referenced
+by ditamap files should be resolved. Only "true" and "false" are valid
+values. The default is false. </ph>                     </entry>
+<entry>No</entry>
+</row>
+</tbody>
+</tgroup>
+</table></section>
+<section><p>The following table lists general parameters that apply
+to the various HTML and XHTML based output formats.</p><table
+id="dita.param.htmlgeneral"><title>General Parameter Table for   
+              Tasks(dita2xhtml,dita2htmlhelp,dita2javahelp,dita2eclipsehelp)</title>
+<tgroup cols="3"><colspec align="left" colname="col1" colwidth="1*"/>
+<colspec align="left" colname="col2" colwidth="4*"/><colspec align="left"
+colname="col3" colwidth="1*"/>
+<thead>
+<row>
+<entry>Parameter </entry>
+<entry>Description</entry>
+<entry>Required</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry>args.indexshow</entry>
+<entry>                       <ph id="indexshow">The parameter to
+specify whether each                          index entry should display
+within the body of the text                          itself. Only
+"no" and "yes" are valid values.</ph>                     </entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.copycss</entry>
+<entry>                       <ph id="copycss">The parameter to specify
+whether copy user                          specified css files to
+the directory specified by                          <codeph>{args.outdir}${args.csspath}</codeph>.
+                         "no" and "yes" are valid values. Default
+is "no".</ph>                     </entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.outext</entry>
+<entry>                       <ph id="outext">The output file extension
+name for                          generated xhtml files. Typically,
+'.html' or '.htm' can                          be used as the extension
+name for the generated xhtml                          files. You can
+also specify other extension name. The                          default
+is '.html'.</ph>                     </entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.css</entry>
+<entry>                       <ph id="argscss">User specified css
+file, it can be a                          local file or remote file
+from website.</ph>                       <note id="argscss-note">If <codeph>${args.csspath}</codeph> 
+                        is an URL, the <codeph>${args.css}</codeph> should
+be a                          filepath relative to the URL.</note> 
+                   </entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.cssroot</entry>
+<entry>                       <ph id="argscssroot">The root directory
+of user specified css file.</ph>                       <note
+id="argscssroot-note">If this parameter is set,                  
+       the <codeph>${args.css}</codeph> should be a              
+           filepath relative to <codeph>args.cssroot</codeph>.</note> 
+                   </entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.csspath</entry>
+<entry>                       <ph id="csspath">The path for css reference.
+Default is no path.</ph>                       <note id="csspath-note"> 
+                       <ul>
+<li>If <codeph>${args.csspath}</codeph> is an URL like path,     
+                        it should starts with <codeph>http://</codeph> or
+                             <codeph>https://</codeph>. For example:
+                             <codeph>http://www.ibm.com/css</codeph>.</li>
+<li>Local absolute paths is not supported for                    
+         <codeph>${args.csspath}</codeph>.</li>
+<li>Use '<codeph>/</codeph>' as the path separator               
+              and don't append separator at last.                
+             For example: <codeph>css/mycss</codeph>.</li>
+</ul>                       </note>                     </entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.hdf</entry>
+<entry>                       <ph id="argshdf">The name of the file
+containing XHTML to                          be placed in the HEAD
+area.</ph>                     </entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.hdr</entry>
+<entry>                       <ph id="argshdr">The name of the file
+containing XHTML to                          be placed in the BODY
+running-heading area.</ph>                     </entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.ftr</entry>
+<entry>                       <ph id="argsftr">The name of the file
+containing XHTML to                          be placed in the BODY
+running-footing area.</ph>                     </entry>
+<entry>No</entry>
+</row>
+</tbody>
+</tgroup>
+</table></section>
+<section><p>Several additional parameters are available for other
+output formats. </p><p><b>XHTML (no navigation)</b><table><title>Parameters
+for the dita2xhtml target</title>
+<tgroup cols="3"><colspec align="center" colname="col1" colwidth="1*"/>
+<colspec align="center" colname="col2" colwidth="4*"/><colspec
+align="center" colname="col3" colwidth="1*"/>
+<thead>
+<row>
+<entry>Parameter                    </entry>
+<entry>Description</entry>
+<entry>Required</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry>args.xhtml.toc</entry>
+<entry align="left">                     <ph id="xhtmltoc">The root
+file name of the output xhtml toc                      file in xhtml
+transformation. The default is 'index'.</ph>                   </entry>
+<entry>No</entry>
+</row>
+</tbody>
+</tgroup>
+</table></p><p><b>Eclipse help output</b><table><title>Parameters
+for the dita2eclipsehelp target</title>
+<tgroup cols="3"><colspec align="center" colname="col1" colwidth="1*"/>
+<colspec align="center" colname="col2" colwidth="4*"/><colspec
+align="center" colname="col3" colwidth="1*"/>
+<thead>
+<row>
+<entry>Parameter </entry>
+<entry>Description</entry>
+<entry>Required</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry>args.eclipsehelp.toc</entry>
+<entry align="left">                     <ph id="eclipsehelptoc">The
+root file name of the output                        eclipsehelp toc
+file in eclipsehelp transformation.                        The default
+is the name of input ditamap file.</ph>                   </entry>
+<entry>No</entry>
+</row>
+<row id="argsprovider">
+<entry>args.eclipse.provider</entry>
+<entry align="left">                       <ph id="eclipseprovider">The
+provider name of the eclipse help output. The default value is DITA.</ph> 
+                   </entry>
+<entry>No</entry>
+</row>
+<row id="argsversion">
+<entry>args.eclipse.version</entry>
+<entry align="left">                       <ph id="eclipseversion">The
+version number of the eclipse help output. The default value is 1.0</ph> 
+                   </entry>
+<entry>No</entry>
+</row>
+</tbody>
+</tgroup>
+</table></p><p><b>Eclipse Content (also known as normalized or dynamic
+DITA)</b><table><title>Parameters for the dita2eclipsecontent target</title>
+<tgroup cols="3"><colspec align="center" colname="col1" colwidth="1*"/>
+<colspec align="center" colname="col2" colwidth="4*"/><colspec
+align="center" colname="col3" colwidth="1*"/>
+<thead>
+<row>
+<entry>Parameter </entry>
+<entry>Description</entry>
+<entry>Required</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry>args.eclipsecontent.toc</entry>
+<entry align="left">                     <ph id="eclipsecontenttoc">The
+root file name of the output                        Eclipse content
+provider toc file in eclipsecontent transformation.              
+         The default is the name of input ditamap file.</ph>     
+             </entry>
+<entry>No</entry>
+</row>
+<row conref="#antscript/argsprovider">
+<entry></entry>
+<entry></entry>
+<entry></entry>
+</row>
+<row conref="#antscript/argsversion">
+<entry></entry>
+<entry></entry>
+<entry></entry>
+</row>
+</tbody>
+</tgroup>
+</table></p><p><b>HTML Help</b><table><title>Parameters for the dita2htmlhelp
+target</title>
+<tgroup cols="3"><colspec align="center" colname="col1" colwidth="1*"/>
+<colspec align="center" colname="col2" colwidth="4*"/><colspec
+align="center" colname="col3" colwidth="1*"/>
+<thead>
+<row>
+<entry>Parameter </entry>
+<entry>Description</entry>
+<entry>Required</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry>args.dita.locale</entry>
+<entry align="left"><ph id="ditalocale">The locale used for      
+                    sorting indexterms. If no locale specified,  
+                       the first occurrence of "xml-lang" will be
+used as                          default locale; If no "xml-lang"
+found, "en-us" will                          be used by default.</ph></entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.htmlhelp.includefile</entry>
+<entry align="left"><ph id="htmlhelpincludefile">                
+      The parameter to specify the file that need to be included 
+                     by the HTMLHelp output.</ph></entry>
+<entry>No</entry>
+</row>
+</tbody>
+</tgroup>
+</table></p><p><b>Java Help</b><table><title>Parameters for the dita2javahelp
+target</title>
+<tgroup cols="3"><colspec align="center" colname="col1" colwidth="1*"/>
+<colspec align="center" colname="col2" colwidth="4*"/><colspec
+align="center" colname="col3" colwidth="1*"/>
+<thead>
+<row>
+<entry>Parameter </entry>
+<entry>Description</entry>
+<entry>Required</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry>args.javahelp.toc</entry>
+<entry align="left">                       <ph id="javahelptoc">The
+root file name of the output                          javahelp toc
+file in javahelp transformation.                          The default
+is the name of input ditamap file.</ph>                     </entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.javahelp.map</entry>
+<entry align="left">                       <ph id="javahelpmap">The
+root file name of the output                          javahelp map
+file in javahelp transformation.                          The default
+is the name of input ditamap file.</ph>                     </entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.dita.locale</entry>
+<entry align="left"><ph conref="#antscript/ditalocale"></ph></entry>
+<entry>No</entry>
+</row>
+</tbody>
+</tgroup>
+</table></p><p><b>RTF output</b>: The transform from DITA to Word
+RTF does not support the <tt>args.artlbl</tt> parameter from the general
+parameters table.</p><?Pub Caret 104?><p><b>Legacy PDF output</b>:
+The default PDF output, which was initially developed as a plug-in
+to the toolkit, is not described here. The following parameters are
+only for the older PDF transform, now known as the "legacypdf" transform. <table>
+<title>Parameters to the LEGACY PDF TRANSFORM dita2legacypdf</title>
+<tgroup cols="3"><colspec align="center" colname="col1" colwidth="1*"/>
+<colspec align="center" colname="col2" colwidth="4*"/><colspec
+align="center" colname="col3" colwidth="1*"/>
+<thead>
+<row>
+<entry>Parameter                    </entry>
+<entry>Description</entry>
+<entry>Required</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry>args.fo.img.ext</entry>
+<entry align="left">                     <ph id="foimgext">The extension
+name of image file in pdf transformation.                      Only
+'.jpg', '.gif' are valid value. The default is '.jpg'.</ph>      
+              <note id="foimgextnote">Only one extension supported
+in the same                        transformation, image files with
+other extensions will be renamed                        to the specified
+extension.</note></entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.fo.output.rel.links</entry>
+<entry align="left"><ph id="fooutputrellinks">The parameter to specify
+                       whether output related links in pdf transformation.
+                       "yes" and "no" are valid values. Default is
+"no".</ph>                       <note id="fooutputrellinks-note">Any
+value that is not                          "yes" is regarded as "no".</note> 
+                   </entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.fo.userconfig</entry>
+<entry align="left"><ph id="fouserconfig">The parameter to specify
+                       the user configuration file for FOP.</ph> 
+                   </entry>
+<entry>No</entry>
+</row>
+</tbody>
+</tgroup>
+</table></p></section>
+<section>       <title>Sample ant script</title>       <p>These ant
+scripts are in <codeph>samples/ant_sample</codeph> directory.    
+     They are simple and easy to learn. From these files, you can
+learn how          to write your own Ant script to build your own
+process.</p>       <p>Here is a sample template for writing an Ant
+script that executes transformation to xhtml in <codeph>samples/ant_samples</codeph> directory:<codeblock>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;project name="@PROJECT.NAME@_xhtml" default="@DELIVERABLE.NAME@2xhtml" basedir=".">
+
+  &lt;property name="dita.dir" value="${basedir}${file.separator}..${file.separator}.."/>
+ 
+  &lt;import file="${dita.dir}${file.separator}integrator.xml"/>
+
+  &lt;target name="@DELIVERABLE.NAME@2xhtml" depends="integrate">
+    &lt;ant antfile="${dita.dir}${file.separator}build.xml" target="init">
+      &lt;!-- please refer to the toolkit's document for supported parameters, and 
+           specify them base on your needs -->
+      &lt;property name="args.input" value="@DITA.INPUT@"/>
+      &lt;property name="output.dir" value="@OUTPUT.DIR@"/>
+      &lt;property name="transtype" value="xhtml"/>
+    &lt;/ant>
+  &lt;/target>
+
+&lt;/project></codeblock></p><p>To use this template, modify the following
+items:<ul>
+<li>Replace <codeph>@PROJECT.NAME@</codeph> with the name of your
+project, such as "MyDocs".</li>
+<li>Replace <codeph>@DELIVERABLE.NAME@</codeph> with the name of your
+deliverable, such as "installDocs".</li>
+<li>Replace <codeph>@DITA.INPUT@</codeph> with the name of your input
+file (using either a full path or a relative path from the location
+of this template).</li>
+<li>Replace <codeph>@OUTPUT.DIR@</codeph> with the desired output
+directory (using either a full path or a relative path from the location
+of this template).</li>
+</ul></p><p>Once you have updated these items, you can run your build
+with the following command:<codeblock>ant -f samples/ant_sample/template_xhtml.xml</codeblock></p><p>The
+build will convert your input file to XHTML. Note that the build directly
+calls the Ant script "build.xml", which is a common entry point for
+DITA-OT builds; it in turn imports all of the scripts mentioned above.</p><note>To
+get a more accurate error reporting about the transformation, you
+may add the command-line option <codeph>-logger org.dita.dost.log.DITAOTBuildLogger</codeph> after
+your Ant command.</note>     </section>
+</refbody>
+</reference>
+<?Pub *0000024648?>

@@ -12,10 +12,13 @@
 
     <target name="dita2htmlhelp"
             unless="noMap"
-        depends="build-init, preprocess, copy-css, 
+    	depends="build-init, preprocess, copy-css, 
                      dita.topics.html, dita.inner.topics.html, dita.outer.topics.html">
         <antcall target="dita.map.htmlhelp"></antcall>
-        <antcall target="compile.HTML.Help"></antcall>
+    	
+        <antcall target="dita.htmlhelp.convertlang"></antcall>
+		
+    	<antcall target="compile.HTML.Help"></antcall>
     </target>
 
     <target name="dita.map.htmlhelp"
@@ -124,6 +127,26 @@
             inputmap="${user.input.file}"
             extparam="output=${output.dir}${file.separator}${dita.map.filename.root}.hhk;targetext=${out.ext};indextype=htmlhelp;${index.ext.param.encoding}" />
     </target>
+	
+	<target name="dita.htmlhelp.convertlang">
+		<taskdef name="check-lang" classname="org.dita.dost.util.CheckLang">
+			<classpath refid="dost.jar.path" />
+		</taskdef>
+		<taskdef name="convert-lang" classname="org.dita.dost.util.ConvertLang">
+			<classpath refid="dost.jar.path" />
+		</taskdef>
+		
+		<check-lang message="Check Language"
+			basedir="${basedir}"
+		    tempdir="${dita.temp.dir}"
+			inputmap="${user.input.file}"
+			outputdir="${output.dir}"/>
+		
+		<convert-lang message="Convert Language"
+			basedir="${basedir}"
+			outputdir="${output.dir}"
+			langcode="${htmlhelp.locale}"/>
+	</target>
 
     <target name="compile.HTML.Help"
             if="HTMLHelpCompiler"

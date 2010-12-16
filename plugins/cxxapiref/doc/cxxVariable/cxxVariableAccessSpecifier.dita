@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxVariableAccessSpecifier">
+    <title>cxxVariableAccessSpecifier</title>
+    <shortdesc>The &lt;cxxVariableAccessSpecifier&gt; element specifies the level of access the variable has.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The &lt;cxxVariableAccessSpecifier&gt; element must contain the attributes <i>name</i> and <i>value</i>. By
+            default <i>name</i> is set to "access" and cannot be altered. The <i>value</i> attribute can be one of three 
+            values, public, protected and private. The default for <i>value</i> is "public".</p>
+            <p>&lt;cxxVariableAccessSpecifier&gt; has no child elements.</p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxVariableAccessSpecifier value="private" /&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxVariableAccessSpecifier-reference/cxxVariableAccessSpecifier-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxVariableAccessSpecifier-reference/cxxVariableAccessSpecifier-contains-section"/>
+        <section conref="../packagedef.dita#cxxVariableAccessSpecifier-reference/cxxVariableAccessSpecifier-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxVariableAccessSpecifier-reference/cxxVariableAccessSpecifier-attList-section"/>
+        <section conref="../packagedef.dita#cxxVariableAccessSpecifier-reference/cxxVariableAccessSpecifier-classValue-section"/>
+    </refbody>
+</reference>

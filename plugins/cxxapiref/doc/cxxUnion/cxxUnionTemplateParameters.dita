@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxUnionTemplateParameters">
+    <title>cxxUnionTemplateParameters</title>
+    <shortdesc>The &lt;cxxUnionTemplateParameters&gt; element contains a set of union parameters.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The &lt;cxxUnionTemplateParameters&gt; element contains one or more &lt;cxxUnionTemplateParameter&gt; 
+            elements. Each of which describes a union parameter. &lt;cxxUnionTemplateParameters&gt; is declared within 
+            &lt;cxxUnionDefinition&gt;</p>
+        </section>
+        <example><title>Example</title>
+         <codeblock>&lt;cxxUnionTemplateParameters&gt;
+  &lt;cxxUnionTemplateParameter&gt;
+    &lt;cxxUnionTemplateParameterType&gt;typename T&lt;/cxxUnionTemplateParameterType&gt;
+    &lt;apiDefNote&gt;The type of the first function object. &lt;/apiDefNote&gt;
+  &lt;/cxxUnionTemplateParameter&gt;
+  &lt;cxxUnionTemplateParameter&gt;
+    &lt;cxxUnionTemplateParameterType&gt;typename U&lt;/cxxUnionTemplateParameterType&gt;
+    &lt;apiDefNote&gt;The type of the second function object. &lt;/apiDefNote&gt;
+  &lt;/cxxUnionTemplateParameter&gt;
+&lt;/cxxUnionTemplateParameters&gt;</codeblock>
+        </example>          
+        <section conref="../packagedef.dita#cxxUnionTemplateParameters-reference/cxxUnionTemplateParameters-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxUnionTemplateParameters-reference/cxxUnionTemplateParameters-contains-section"/>
+        <section conref="../packagedef.dita#cxxUnionTemplateParameters-reference/cxxUnionTemplateParameters-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxUnionTemplateParameters-reference/cxxUnionTemplateParameters-attList-section"/>
+        <section conref="../packagedef.dita#cxxUnionTemplateParameters-reference/cxxUnionTemplateParameters-classValue-section"/>
+    </refbody>
+</reference>

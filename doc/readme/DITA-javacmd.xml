@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2010, v.4002-->
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "..\dtd\concept.dtd">
+<?Pub Sty _display FontColor="red"?>
+<concept id="usingparameterbuildingtool" xml:lang="en-us">
+<title>Building DITA output with Java command line</title>
+<shortdesc>The DITA Open Toolkit provides a Java command line interface
+as an alternative for users with little knowledge of Ant. Most parameters
+available to the Ant builds are also available using the Java command
+line.</shortdesc>
+<conbody>
+<note>This information is currently being integrated with the parameter
+information in the Ant Quick Start Guide. Newer information on Java
+and Ant parameters can be found in that document here: <xref
+href="../quickstartguide/reference/dita-ot_ant_properties.dita"></xref></note><?Pub
+Caret 153?>
+<note>The Java command line interface is simply a wrapper around the
+Ant interface; it takes the simplified parameters as input, converts
+them to Ant parameters, and then runs an Ant build. This means that
+in general, applications embedding the toolkit are better off simply
+calling Ant directly. For individual builds, the additional Java overhead
+is minimal, but for repeated or server based builds, it the extra
+memory usage may become more of an issue.</note>
+<section>       <title>Running a Java based build.</title><p>If you
+are using the "Full Easy Install" package, running the startcmd batch
+file will set up a build environment for you and put you in the correct
+directory. If you are not using this method, you must set up all of
+your tools (Ant, XSLT, FOP, etc) before running the build.</p><ol>
+<li>Change into the DITA Open Toolkit installation directory.</li>
+<li>On the command line, enter the following command:            <codeblock>java -jar lib/dost.jar /i:samples/sequence.ditamap /outdir:out /transtype:xhtml</codeblock></li>
+</ol><p>This particular example creates a properties file, and then
+calls Ant          using this properties to build the sample <codeph>sequence.ditamap</codeph> file
+to XHTML. The output is placed in the out/ directory. You can add
+other          parameters to this properties file and then run the
+build directly from Ant; see <xref
+href="#usingparameterbuildingtool/javacmdinterface"></xref> for  
+       details on additional parameters.</p><p>Note:         <ol>
+<li>In this example, the character slash preceded by a space is the
+separator for each parameter.</li>
+<li>Currently, the parameters <codeph>/filter</codeph>, <codeph>/ftr</codeph>,
+             <codeph>/hdr</codeph>, and <codeph>/hdf</codeph> require
+an absolute path.</li>
+<li>The properties file is saved in the <codeph>${args.logdir}</codeph> directory.
+             The following command provides an example using this
+properties file:             <codeblock>ant -f conductor.xml -propertyfile ${args.logdir}/property.temp</codeblock> 
+         </li>
+<li>To see a list of all supported parameters from the Java command
+line, run the following command with no additional parameters:<codeblock>java -jar lib/dost.jar</codeblock></li>
+</ol></p>     </section>
+<section>       <title>Supported parameters</title><p>The following
+table lists many supported parameters that you can set with this tool.
+The equivalent Ant parameter names are specified within braces. To
+get a full list of parameters, run the following command with no additional
+options: <codeph>ava -jar lib/dost.jar</codeph></p><table
+id="javacmdinterface"><title>Table of supported parameters</title>
+<tgroup cols="2"><colspec colname="col1"/><colspec colname="col2"/>
+<thead>
+<row valign="bottom">
+<entry colname="col1" colsep="1" rowsep="1">Parameter</entry>
+<entry colname="col2">Description</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry colname="col1" colsep="1" rowsep="1">                  <i>/basedir</i>:{basedir}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/basedir"></ph>              
+  <note conref="DITA-antscript.xml#antscript/basedir-note"></note> 
+             </entry>
+</row>
+<row>
+<entry colname="col1" colsep="1" rowsep="1">                  <i>/ditadir</i>:{dita.dir}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/ditadir"></ph>               </entry>
+</row>
+<row>
+<entry colname="col1" colsep="1" rowsep="1">                  <i>/i</i>:{args.input}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/argsinput"></ph>            
+    <note conref="DITA-antscript.xml#antscript/argsinput-note"></note> 
+             </entry>
+</row>
+<row>
+<entry colname="col1"><i>/if</i>:{dita.input}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/ditainput"></ph>            
+    <note conref="DITA-antscript.xml#antscript/ditainput-note"></note> 
+             </entry>
+</row>
+<row>
+<entry colname="col1"><i>/id</i>:{dita.input.dirname}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/ditainputdirname"></ph>     
+           <note
+conref="DITA-antscript.xml#antscript/ditainputdirname-note"></note> 
+             </entry>
+</row>
+<row>
+<entry colname="col1"><i>/outdir</i>:{output.dir}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/outputdir"></ph>            
+  </entry>
+</row>
+<row>
+<entry colname="col1"><i>/tempdir</i>:{dita.temp.dir}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/tempdir"></ph>               </entry>
+</row>
+<row>
+<entry colname="col1"><i>/ditaext</i>:{dita.extname}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/ditaextname"></ph>          
+    </entry>
+</row>
+<row>
+<entry colname="col1"><i>/transtype</i>:{transtype}</entry>
+<entry colname="col2">The transformation type. Currently, the    
+             supported values include xhtml, pdf, javahelp, eclipsehelp,
+                 htmlhelp, eclipsecontent, troff, wordrtf and docbook.</entry>
+</row>
+<row>
+<entry colname="col1"><i>/filter</i>:{dita.input.valfile}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/inputvalfile"></ph>         
+     </entry>
+</row>
+<row>
+<entry colname="col1"><i>/draft</i>:{args.draft}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/argsdraft"></ph>            
+  </entry>
+</row>
+<row>
+<entry colname="col1"><i>/artlbl</i>:{args.artlbl}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/argsartlbl"></ph>           
+   </entry>
+</row>
+<row>
+<entry colname="col1"><i>/ftr</i>:{args.ftr}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/argsftr"></ph>               </entry>
+</row>
+<row>
+<entry colname="col1"><i>/hdr</i>:{args.hdr}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/argshdr"></ph>               </entry>
+</row>
+<row>
+<entry colname="col1"><i>/hdf</i>:{args.hdf}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/argshdf"></ph>               </entry>
+</row>
+<row>
+<entry colname="col1"><i>/csspath</i>:{args.csspath}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/csspath"></ph>              
+  <note conref="DITA-antscript.xml#antscript/csspath-note"></note> 
+             </entry>
+</row>
+<row>
+<entry colname="col1"><i>/css</i>:{args.css}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/argscss"></ph>              
+  <note conref="DITA-antscript.xml#antscript/argscss-note"></note> 
+             </entry>
+</row>
+<row>
+<entry colname="col1"><i>/cssroot</i>:{args.cssroot}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/argscssroot"></ph>          
+      <note conref="DITA-antscript.xml#antscript/argscssroot-note"></note> 
+             </entry>
+</row>
+<row>
+<entry colname="col1"><i>/copycss</i>:{args.copycss}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/copycss"></ph>               </entry>
+</row>
+<row>
+<entry colname="col1"><i>/indexshow</i>:{args.indexshow}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/indexshow"></ph>            
+  </entry>
+</row>
+<row>
+<entry colname="col1"><i>/outext</i>:{args.outext}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/outext"></ph>               </entry>
+</row>
+<row>
+<entry colname="col1"><i>/xsl</i>:{args.xsl}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/argsxsl"></ph>               </entry>
+</row>
+<row>
+<entry colname="col1"><i>/cleantemp</i>:{clean.temp}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/cleantemp"></ph>            
+  </entry>
+</row>
+<row>
+<entry colname="col1"><i>/foimgext</i>:{args.fo.img.ext}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/foimgext"></ph>             
+   <note conref="DITA-antscript.xml#antscript/foimgextnote"></note> 
+             </entry>
+</row>
+<row>
+<entry colname="col1"><i>/javahelptoc</i>:{args.javahelp.toc}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/javahelptoc"></ph>          
+    </entry>
+</row>
+<row>
+<entry colname="col1"><i>/javahelpmap</i>:{args.javahelp.map}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/javahelpmap"></ph>          
+    </entry>
+</row>
+<row>
+<entry colname="col1"><i>/eclipsehelptoc</i>:{args.eclipsehelp.toc}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/eclipsehelptoc"></ph>       
+       </entry>
+</row>
+<row>
+<entry colname="col1"><i>/eclipsecontenttoc</i>:{args.eclipsecontent.toc}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/eclipsecontenttoc"></ph>    
+          </entry>
+</row>
+<row>
+<entry colname="col1"><i>/provider</i>:{args.eclipse.provider}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/eclipseprovider"></ph>      
+        </entry>
+</row>
+<row>
+<entry colname="col1"><i>/version</i>:{args.eclipse.version}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/eclipseversion"></ph>       
+       </entry>
+</row>
+<row>
+<entry colname="col1"><i>/xhtmltoc</i>:{args.xhtml.toc}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/xhtmltoc"></ph>             
+ </entry>
+</row>
+<row>
+<entry colname="col1"><i>/logdir</i>:{args.logdir}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/argslogdir"></ph>           
+     <note conref="DITA-antscript.xml#antscript/argslogdir-note"></note> 
+             </entry>
+</row>
+<row>
+<entry colname="col1"><i>/ditalocale</i>:{args.dita.locale}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/ditalocale"></ph>           
+   </entry>
+</row>
+<row>
+<entry colname="col1"><i>/fooutputrellinks</i>:{args.fo.output.rel.links}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/fooutputrellinks"></ph>     
+           <note
+conref="DITA-antscript.xml#antscript/fooutputrellinks-note"></note> 
+             </entry>
+</row>
+<row>
+<entry colname="col1"><i>/fouserconfig</i>:{args.fo.userconfig}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/fouserconfig"></ph>         
+     </entry>
+</row>
+<row>
+<entry colname="col1"><i>/htmlhelpincludefile</i>:{args.htmlhelp.includefile}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/htmlhelpincludefile"></ph>  
+            </entry>
+</row>
+<row>
+<entry colname="col1"><i>/validate</i>:{validate}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/validate"></ph>             
+   <note conref="DITA-antscript.xml#antscript/validate-note"></note> 
+             </entry>
+</row>
+<row>
+<entry colname="col1"><i>/outercontrol</i>:{outer.control}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/outercontrol"></ph>         
+       <note conref="DITA-antscript.xml#antscript/outercontrol-note"></note> 
+             </entry>
+</row>
+<row>
+<entry colname="col1"><i>/generateouter</i>:{generate.copy.outer}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/generatecopyouter"></ph>    
+            <note
+conref="DITA-antscript.xml#antscript/generatecopyouter-note"></note> 
+             </entry>
+</row>
+<row>
+<entry colname="col1"><i>/onlytopicinmap</i>:{onlytopic.in.map}</entry>
+<entry colname="col2">                 <ph
+conref="DITA-antscript.xml#antscript/onlytopicinmap"></ph>       
+       </entry>
+</row>
+</tbody>
+</tgroup>
+</table>     </section>
+<section>       <title>Enhanced command line help</title>       <p> 
+       You can find the version of toolkit and the usage of the command
+line from the         command line help by using the following commands: <lines>
+          <codeph rev="r3">java -jar lib/dost.jar <b>-version</b>
+          </codeph>
+          <codeph rev="r3">java -jar lib/dost.jar <b>-h</b>
+          </codeph>
+        </lines>       </p>       <p rev="r5">You can see the brief
+description of the supported parameters in the command line      
+  window when you type a specific command. For example, <codeph rev="r3">java
+-jar lib/dost.jar <b>-h</b></codeph></p>     </section>
+</conbody>
+</concept>
+<?Pub *0000013750?>

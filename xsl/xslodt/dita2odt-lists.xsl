@@ -26,27 +26,32 @@
   xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0"
   xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0"
   xmlns:prodtools="http://www.ibm.com/xmlns/prodtools"
+  xmlns:random="org.dita.dost.util.RandomUtils" exclude-result-prefixes="random"
   version="1.0">
 
 <xsl:template match="*[contains(@class,' topic/ul ')]">
-  
-  <xsl:call-template name="render_list">
-    <xsl:with-param name="list_style" select="'list_style'"/>
-  </xsl:call-template>
-  
+
+        <!-- render list -->
+        <xsl:call-template name="render_list">
+          <xsl:with-param name="list_style" select="'list_style'"/>
+        </xsl:call-template>
+        
 </xsl:template>
   
 <xsl:template match="*[contains(@class,' topic/ol ')]">
   
+  <!-- render list -->
   <xsl:call-template name="render_list">
-    <xsl:with-param name="list_style" select="'ordered_list_style'"></xsl:with-param>
+    <xsl:with-param name="list_style" select="'ordered_list_style'"/>
   </xsl:call-template>
   
 </xsl:template>
   
 <xsl:template match="*[contains(@class,' topic/sl ')]">
+  
+  <!-- render list -->
   <xsl:call-template name="render_list">
-    <xsl:with-param name="list_style" select="'list_style'"></xsl:with-param>
+    <xsl:with-param name="list_style" select="'list_style'"/>
   </xsl:call-template>
   
 </xsl:template>
@@ -77,30 +82,12 @@
 </xsl:template>
 
 <xsl:template match="*|text()" mode="create_list_item">
-  <xsl:choose>
-    <!-- for tags that are not allowed under list -->
-    <xsl:when test="contains(@class, ' topic/p ') or contains(@class, ' topic/note ') or contains(@class, ' topic/table ') 
-      or contains(@class, ' topic/simpletable ') or contains(@class, ' task/choicetable ')">
-        <xsl:if test=". = ../*[1]">
-          <!-- for list item number calculation. -->
-          <!-- 
-          <xsl:element name="text:p"/>
-          -->
-       </xsl:if>
-      <xsl:apply-templates select="."/>
-    </xsl:when>
-    
-    <xsl:otherwise>
-        <xsl:apply-templates select="."/>
-    </xsl:otherwise>
-  </xsl:choose>
+  <xsl:apply-templates select="."/>
 </xsl:template>
   
 <xsl:template name="block-sli">
   <xsl:element name="text:list-item">
-    <xsl:element name="text:p">
       <xsl:apply-templates/>
-    </xsl:element>
   </xsl:element>
 </xsl:template>
   
@@ -108,6 +95,7 @@
 <!-- definition list -->
 <xsl:template match="*[contains(@class,' topic/dl ')]">
   
+  <!-- render list -->
   <xsl:call-template name="render_list">
     <xsl:with-param name="list_style" select="'list_style'"/>
   </xsl:call-template>
@@ -167,24 +155,37 @@
 
 <!-- DL heading, term -->
 <xsl:template match="*[contains(@class,' topic/dthd ')]" name="topic.dthd">
+  
   <xsl:element name="text:p">
-  <xsl:element name="text:span">
-    <xsl:attribute name="text:style-name">bold</xsl:attribute>
-    <xsl:apply-templates/>
+    <xsl:attribute name="text:style-name">bold_paragraph</xsl:attribute>
+    <xsl:element name="text:span">
+      <!-- start add flagging styles -->
+      <xsl:apply-templates select="." mode="start-add-odt-flags"/>
+      
+      <xsl:apply-templates/>
+      
+      <!-- end add flagging styles -->
+      <xsl:apply-templates select="." mode="end-add-odt-flags"/>
+    </xsl:element>
   </xsl:element>
-  <xsl:element name="text:line-break"/>
-  </xsl:element>
+  
 </xsl:template>
   
 <!-- DL heading, description -->
 <xsl:template match="*[contains(@class,' topic/ddhd ')]" name="topic.ddhd">
+  
+  
   <xsl:element name="text:p">
-    <xsl:element name="text:span">
-      <xsl:attribute name="text:style-name">bold</xsl:attribute>
-      <xsl:element name="text:tab"/>
-      <xsl:apply-templates/>
-    </xsl:element>
-    <xsl:element name="text:line-break"/>
+    <xsl:attribute name="text:style-name">bold_paragraph</xsl:attribute>
+      <xsl:element name="text:span">
+        <!-- start add flagging styles -->
+        <xsl:apply-templates select="." mode="start-add-odt-flags"/>
+        
+        <xsl:element name="text:tab"/>
+        <xsl:apply-templates/>
+        <!-- end add flagging styles -->
+        <xsl:apply-templates select="." mode="end-add-odt-flags"/>
+      </xsl:element>
   </xsl:element>
 </xsl:template>
 
@@ -198,11 +199,20 @@
 
 <!-- for dt tag -->
 <xsl:template match="*[contains(@class, ' topic/dt ')]">
+
+  
   <xsl:element name="text:p">
-    <xsl:element name="text:span">
-      <xsl:attribute name="text:style-name">bold</xsl:attribute>
-      <xsl:apply-templates/>
-    </xsl:element>
+      <xsl:attribute name="text:style-name">bold_paragraph</xsl:attribute>
+      <xsl:element name="text:span">
+        <!-- start add flagging styles -->
+        <xsl:apply-templates select="." mode="start-add-odt-flags"/>
+        
+        <xsl:apply-templates/>
+        
+        <!-- end add flagging styles -->
+        <xsl:apply-templates select="." mode="end-add-odt-flags"/>	
+        
+      </xsl:element>
   </xsl:element>
 </xsl:template>
 
@@ -210,8 +220,18 @@
 <xsl:template match="*[contains(@class, ' topic/dd ')]">
   
   <xsl:element name="text:p">
-    <xsl:element name="text:tab"/>
-      <xsl:apply-templates/>
+    <xsl:element name="text:span">
+      
+      <!-- start add flagging styles -->
+      <xsl:apply-templates select="." mode="start-add-odt-flags"/>
+      
+      <xsl:element name="text:tab"/>
+        <xsl:apply-templates/>
+      
+      <!-- end add flagging styles -->
+      <xsl:apply-templates select="." mode="end-add-odt-flags"/>
+      
+    </xsl:element>
   </xsl:element>
   
 </xsl:template>

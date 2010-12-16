@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxFunctionParameterDefaultValue">
+    <title>cxxFunctionParameterDefaultValue</title>
+    <shortdesc>Describes any default value that the function parameter has.</shortdesc>
+    <refbody>
+        <section id="section_56C91D58B7D04E349E22E6B80FDDE0B6">
+            <title>Description</title><p>Describes any default value that the function parameter has.
+            </p><p>See ISO/IEC 14882:2003(E) 8.3.5 Functions [dcl.fct]
+and 8.3.6 Default arguments [dcl.fct.default]</p>
+        </section>
+        <section conref="../packagedef.dita#cxxFunctionParameterDefaultValue-reference/cxxFunctionParameterDefaultValue-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxFunctionParameterDefaultValue-reference/cxxFunctionParameterDefaultValue-contains-section"/>
+        <section conref="../packagedef.dita#cxxFunctionParameterDefaultValue-reference/cxxFunctionParameterDefaultValue-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxFunctionParameterDefaultValue-reference/cxxFunctionParameterDefaultValue-attList-section"/>
+        <section conref="../packagedef.dita#cxxFunctionParameterDefaultValue-reference/cxxFunctionParameterDefaultValue-classValue-section"/>
+    </refbody>
+</reference>

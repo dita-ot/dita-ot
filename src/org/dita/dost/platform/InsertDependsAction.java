@@ -8,6 +8,8 @@ package org.dita.dost.platform;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 
+import org.dita.dost.util.StringUtils;
+
 /**
  * InsertDependsAction implements IAction.
  * Parses an attribute value containing comma-separated identifiers.
@@ -59,7 +61,11 @@ public class InsertDependsAction implements IAction {
 		}
 		if (result.length() != 0)
 		{
-			return " " + localname + "=\"" + result.toString() + "\"";
+			final StringBuilder buf = new StringBuilder();
+			
+			buf.append(" ").append(localname).append("=\"")
+				.append(StringUtils.escapeXML(result.toString())).append("\"");
+			return buf.toString();
 		}
 		else
 		{

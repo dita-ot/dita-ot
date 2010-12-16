@@ -81,8 +81,11 @@ public class FilterUtils {
 			|| checkExclude(Constants.ELEMENT_NAME_PRODUCT, 
 				atts.getValue(Constants.ELEMENT_NAME_PRODUCT))
 			|| checkExclude(Constants.ELEMENT_NAME_OTHERPROPS, 
-				atts.getValue(Constants.ELEMENT_NAME_OTHERPROPS));
-
+				atts.getValue(Constants.ELEMENT_NAME_OTHERPROPS))
+			//Added by William on 2010-07-16 for bug:3030317 start	
+			|| checkExclude(Constants.ELEMENT_NAME_PROPS, 
+				atts.getValue(Constants.ELEMENT_NAME_PROPS));
+			//Added by William on 2010-07-16 for bug:3030317 end
 		
 		if(extProps == null){
 			return ret;

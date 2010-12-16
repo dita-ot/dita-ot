@@ -6,6 +6,29 @@
 <project name="ditaot-init" basedir=".">
   <!--<import file="catalog-ant.xml"/>-->
 
+	<!-- Default maximum memory to give to forked Java processes.
+	
+	     Set this higher either in another Ant script or on the
+	     Ant command line using the -D parameter, e.g.:
+	     
+	     ant -DmaxJavaMemory=4G
+	     
+	     Memory values are integers followed by "M" for megabytes,
+	     "G" for gigabytes.
+	     
+	     On 32-bit systems, the largest memory setting will be somewhere
+	     between 1500M and 2000M depending on your system.
+	     
+	     64-bit JVMs can use essentially unlimited memory.
+	     
+	     For memory-intensive process (very large maps), 
+	     2 or 3 gigabytes should be more than sufficient. 
+	     
+	     This value is used in the @maxmemory attribute the of the Ant
+	     <java> task.
+	  -->
+	<property name="maxJavaMemory" value="500m"/>
+
   <dirname property="ant.file.ditaot-init.dir" file="${ant.file.ditaot-init}" />
 
   <!-- First try to initialize ${dita.dir} using the special 
@@ -25,6 +48,58 @@
       <isset property="dita.dir" />
     </not>
   </condition>
+	
+	<!-- Determine the Java architecture and set the JVM arguments
+	     appropriately.
+	     
+	     Note that the Java architecture is determined by how the
+	     JVM is started, so it is possible for the base Ant
+	     JVM to have been started in 32-bit mode on a 64-bit machine.
+	     
+	     The is64bit and is32bit properties are mutually exclusive.
+	     
+	  -->
+	<condition property="is64bit">
+		<!-- NOTE: The following is not a complete list but should cover
+		           most of the systems Open Toolkit users are likely
+		           to use. Add more values as they become known.
+		  -->
+		<or>
+			<os arch="x86_64"/>
+			<os arch="amd64"/>
+			<os arch="ppc64"/>
+		</or>
+  </condition>
+	
+	<condition property="is32bit">
+		<isfalse value="${is64bit}"/>
+  </condition>
+	
+	
+	<!-- For 64-bit machines, the value -d64 runs the
+	     the JVM in 64-bit mode. This parameter cannot
+	     be specified on 32-bit machines (that is, you cannot
+	     specify -d32 on a 32-bit machine, you get an "unrecognized
+	     option error in that case).
+	  -->
+	<condition property="jvmArchFlag"
+	  value="-d64"
+	  else="">
+		<istrue value="${is64bit}"/>
+	</condition>
+
+	<!-- Base JVM argument line to use with any forked Java processes.
+	
+	     Sets the JVM architecture.
+	     
+	     Use like so:
+	     
+	     <java ...>
+	       <jvmarg line="${baseJVMArgLine}"/>
+	       ...
+	     </java>
+	  -->
+	<property name="baseJVMArgLine" value="${jvmArchFlag} -Xmx${maxJavaMemory}"/>
 
   <path id="dost.jar.path">
     <pathelement
@@ -49,6 +124,11 @@
   <!-- Add by Alan to refacter:URIResolver Date2009-08-07 -->
   <taskdef name="config-URIResolver"
   	classname="org.dita.dost.resolver.URIResolverConfigTask">
+  	<classpath refid="dost.jar.path"/>
+  </taskdef>
+	
+  <taskdef name="dita-ot-version"
+  	classname="org.dita.dost.util.AntVersion">
   	<classpath refid="dost.jar.path"/>
   </taskdef>
 
@@ -95,7 +175,7 @@
 
   <!-- Changed by Alan to refacter:URIResolver Date2009-08-07 -->
   <target name="build-init"
-    depends="start-process, init-logger, init-URIResolver, use-init, check-arg, output-msg" />
+    depends="start-process, init-logger, init-URIResolver, use-init, output-version, check-arg, output-msg" />
     
   <target name="start-process" description="Processing started" />
 
@@ -130,6 +210,11 @@
         <pathelement location="${dita.dir}/demo/legacypdf/lib/fop.jar"/>
       </classpath>
     </available>
+  </target>
+	
+  <target name="output-version">
+  	<dita-ot-version/>
+  	<echo level="info">Version: ${otversion} ${milestone}</echo>
   </target>
 
   <!-- property value validation begin -->
@@ -180,7 +265,20 @@
         </and>
       </condition>
     </dita-ot-fail>
-
+  	
+  	<!--Added by William on 2010-06-21 for bug:3012392 start -->
+    <dita-ot-fail id="DOTA066F" params="%1=${args.xsl.pdf}">
+      <condition>
+        <and>
+          <isset property="args.xsl.pdf" />
+          <not>
+            <available file="${args.xsl.pdf}" type="file" />
+          </not>
+        </and>
+      </condition>
+    </dita-ot-fail>
+  	<!--Added by William on 2010-06-21 for bug:3012392 start -->
+  	
     <dita-ot-fail id="DOTA004F" params="%1=${dita.extname}">
       <condition>
         <not>
@@ -295,7 +393,30 @@
 	      </not>
   	</condition>
   	<!--Added by William on 2009-11-17 for bug:2893493 start-->
-    
+  	<!-- Added on 2010-08-24 for bug:2994593 enable grammar pool caching by default start-->
+  	<condition property="args.grammar.cache"
+  	      value="yes">
+  		      <not>
+  		        <isset property="args.grammar.cache" />
+  		      </not>
+  	</condition> 	
+  	<!-- Added on 2010-08-24 for bug:2994593 enable grammar pool caching by default end-->
+  	
+  	<!-- Added on 2010-11-16 for bug:3086552 enable system id setting in XMLReader.parse start-->
+  	<condition property="args.xml.systemid.set"
+  	      value="yes">
+  		      <not>
+  		        <isset property="args.xml.systemid.set" />
+  		      </not>
+  	</condition> 	
+  	<!-- Added on 2010-11-16 for bug:3086552 enable system id setting in XMLReader.parse end-->
+  	
+  	<condition property="args.odt.img.embed"
+  	  	      value="yes">
+  	  		      <not>
+  	  		        <isset property="args.odt.img.embed"/>
+  	  		      </not>
+  	</condition>
   	<condition property="clean_temp">
       <and>
         <isset property="clean.temp" />
@@ -448,6 +569,8 @@
     <echo level="info">* clean.temp = ${clean.temp}</echo>
     <echo level="info">* xslt.parser = ${xslt.parser}</echo>
     <echo level="info">*****************************************************************</echo>
+  	<echoproperties regex="^(arg|preprocess|dita)" taskname="echo" failonerror="false"/>
+  	<echo level="info">*****************************************************************</echo>
   </target>
 
   <target name="output-msg" depends="output-deprecated-msg, output-css-warn-message"/>

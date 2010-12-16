@@ -64,6 +64,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:import href="ui-domain.xsl"/>
 
     <xsl:import href="static-content.xsl"/>
+    <xsl:import href="glossary.xsl"/>
 
     <dita:extension id="dita.xsl.xslfo" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
 
@@ -78,6 +79,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:param name="artworkPrefix"/>
     <xsl:param name="fileProtocolPrefix"/>
     <xsl:param name="publishRequiredCleanup"/>
+    <xsl:param name="DRAFT"/>
     <xsl:param name="disableRelatedLinks" select="'yes'"/>
     <xsl:param name="pdfFormatter" select="'fop'"/>
 

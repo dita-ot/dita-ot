@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxFunctionPrototype">
+    <title>cxxFunctionPrototype</title>
+    <shortdesc>Provides a "visual"  representation of the function declaration.</shortdesc>
+    <refbody>
+        <section id="section_DE1E6C58B2CD4C54A96EE20CA3A138E4">
+            <title>Description</title><p>This element provides a "visual"  representation of the function declaration as PCDATA.
+The are no semantics applied to the content but the intention is that the content should look as similar as possible to the function declaration in source code.</p>
+        </section>
+        <section conref="../packagedef.dita#cxxFunctionPrototype-reference/cxxFunctionPrototype-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxFunctionPrototype-reference/cxxFunctionPrototype-contains-section"/>
+        <section conref="../packagedef.dita#cxxFunctionPrototype-reference/cxxFunctionPrototype-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxFunctionPrototype-reference/cxxFunctionPrototype-attList-section"/>
+        <section conref="../packagedef.dita#cxxFunctionPrototype-reference/cxxFunctionPrototype-classValue-section"/>
+    </refbody>
+</reference>

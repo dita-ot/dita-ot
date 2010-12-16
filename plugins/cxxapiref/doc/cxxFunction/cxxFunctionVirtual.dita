@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxFunctionVirtual">
+    <title>cxxFunctionVirtual</title>
+    <shortdesc>Identifies a function as <i>virtual</i>.</shortdesc>
+    <refbody>
+        <section id="section_0E81D25D7F2B4098810B33BA884653C5">
+            <title>Description</title><p>Identifies a functions that is <i>virtual</i>.
+This element has two mandatory attributes; name and value 
+that default to <tt>"virtual"</tt>.
+            </p><p>The virtual specifier shall only be used in declarations of nonstatic class member functions that appear within a member-specification of a class declaration; see ISO/IEC 14882:2003(E) 10.3.
+Virtual functions [class.virtual].</p>
+        </section>
+        <section conref="../packagedef.dita#cxxFunctionVirtual-reference/cxxFunctionVirtual-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxFunctionVirtual-reference/cxxFunctionVirtual-contains-section"/>
+        <section conref="../packagedef.dita#cxxFunctionVirtual-reference/cxxFunctionVirtual-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxFunctionVirtual-reference/cxxFunctionVirtual-attList-section"/>
+        <section conref="../packagedef.dita#cxxFunctionVirtual-reference/cxxFunctionVirtual-classValue-section"/>
+    </refbody>
+</reference>

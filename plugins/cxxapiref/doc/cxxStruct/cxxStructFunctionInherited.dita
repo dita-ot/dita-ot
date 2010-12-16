@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxStructFunctionInherited">
+    <title>cxxStructFunctionInherited</title>
+    <shortdesc>The &lt;cxxStructFunctionInherited&gt; element within &lt;cxxStructInheritsDetail&gt; provides the name of a function inherited by a struct.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The text in this element is the fully qualified name of the function that has been inherited. There are no mandatory attributes.</p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>	&lt;cxxStructInherits&gt;
+		&lt;cxxStructInheritsDetail&gt;
+			&lt;cxxStructFunctionInherited href=&quot;GUID-7ACD666B-ABB9-3E78-9B16-784E2645856D.xml&quot;&gt;TMediaPswdNotifyBase::MmcPassword&lt;/cxxStructFunctionInherited&gt;        
+			&lt;cxxStructEnumeratorInherited href=&quot;GUID-7ACD666B-ABB9-3E78-9B16-784E2645856D.xml&quot;&gt;TMediaPswdNotifyBase::ECTMmcPassword&lt;/cxxStructEnumeratorInherited&gt;
+			&lt;cxxStructVariableInherited href=&quot;GUID-7ACD666B-ABB9-3E78-9B16-784E2645856D.xml&quot;&gt;TMediaPswdNotifyBase::iCT&lt;/cxxStructVariableInherited&gt;
+			&lt;cxxStructEnumerationInherited href=&quot;GUID-7ACD666B-ABB9-3E78-9B16-784E2645856D.xml&quot;&gt;TMediaPswdNotifyBase:TCardType&lt;/cxxStructEnumerationInherited&gt;
+		&lt;/cxxStructInheritsDetail&gt;
+	&lt;/cxxStructInherits&gt;</codeblock>
+        </example>	        
+        <section conref="../packagedef.dita#cxxStructFunctionInherited-reference/cxxStructFunctionInherited-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxStructFunctionInherited-reference/cxxStructFunctionInherited-contains-section"/>
+        <section conref="../packagedef.dita#cxxStructFunctionInherited-reference/cxxStructFunctionInherited-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxStructFunctionInherited-reference/cxxStructFunctionInherited-attList-section"/>
+        <section conref="../packagedef.dita#cxxStructFunctionInherited-reference/cxxStructFunctionInherited-classValue-section"/>
+    </refbody>
+</reference>

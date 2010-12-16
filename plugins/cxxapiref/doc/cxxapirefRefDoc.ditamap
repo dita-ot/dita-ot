@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+-->
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map title="C++ API Specialization">
+	<topicref href="cxxAPILayer.dita" navtitle="C++ API topic types" print="yes" status="new" toc="yes" type="reference">		
+
+		<topicref href="cxxAPIDomain/cxxAPIDomain_module.dita" type="reference">
+			<topicref href="cxxAPIDomain\cxxapi-d-xref.dita" navtitle="cxxapi-d-xref" type="reference"/>
+			<topicref href="cxxAPIDomain\cxxclass.dita" navtitle="cxxclass" type="reference"/>
+			<topicref href="cxxAPIDomain\cxxdefine.dita" navtitle="cxxdefine" type="reference"/>
+			<topicref href="cxxAPIDomain\cxxenumeration.dita" navtitle="cxxenumeration" type="reference"/>
+			<topicref href="cxxAPIDomain\cxxfile.dita" navtitle="cxxfile" type="reference"/>
+			<topicref href="cxxAPIDomain\cxxfunction.dita" navtitle="cxxfunction" type="reference"/>
+			<topicref href="cxxAPIDomain\cxxstruct.dita" navtitle="cxxstruct" type="reference"/>
+			<topicref href="cxxAPIDomain\cxxtypedef.dita" navtitle="cxxtypedef" type="reference"/>
+			<topicref href="cxxAPIDomain\cxxunion.dita" navtitle="cxxunion" type="reference"/>
+			<topicref href="cxxAPIDomain\cxxvariable.dita" navtitle="cxxvariable" type="reference"/>		
+		</topicref>
+		
+		<topicref href="cxxAPIMap/cxxAPIMap_module.dita" type="reference">
+			<topicref href="cxxAPIMap\cxxAPIMap.dita" navtitle="cxxAPIMap" type="reference"/>
+			<topicref href="cxxAPIMap\cxxClassRef.dita" navtitle="cxxClassRef" type="reference"/>
+			<topicref href="cxxAPIMap\cxxDefineRef.dita" navtitle="cxxDefineRef" type="reference"/>
+			<topicref href="cxxAPIMap\cxxEnumerationRef.dita" navtitle="cxxEnumerationRef" type="reference"/>
+			<topicref href="cxxAPIMap\cxxFileRef.dita" navtitle="cxxFileRef" type="reference"/>
+			<topicref href="cxxAPIMap\cxxFunctionRef.dita" navtitle="cxxFunctionRef" type="reference"/>
+			<topicref href="cxxAPIMap\cxxStructRef.dita" navtitle="cxxStructRef" type="reference"/>
+			<topicref href="cxxAPIMap\cxxTypedefRef.dita" navtitle="cxxTypedefRef" type="reference"/>
+			<topicref href="cxxAPIMap\cxxUnionRef.dita" navtitle="cxxUnionRef" type="reference"/>
+			<topicref href="cxxAPIMap\cxxVariableRef.dita" navtitle="cxxVariableRef" type="reference"/>		
+		</topicref>		
+
+		<topicref href="cxxClass/cxxClass_module.dita" type="reference">
+			<topicref href="cxxClass\cxxClass.dita" navtitle="cxxClass" type="reference"/>
+			<topicref href="cxxClass\cxxClassAbstract.dita" navtitle="cxxClassAbstract" type="reference"/>
+			<topicref href="cxxClass\cxxClassAccessSpecifier.dita" navtitle="cxxClassAccessSpecifier" type="reference"/>
+			<topicref href="cxxClass\cxxClassAPIItemLocation.dita" navtitle="cxxClassAPIItemLocation" type="reference"/>
+			<topicref href="cxxClass\cxxClassBaseClass.dita" navtitle="cxxClassBaseClass" type="reference"/>
+			<topicref href="cxxClass\cxxClassBaseStruct.dita" navtitle="cxxClassBaseStruct" type="reference"/>
+			<topicref href="cxxClass\cxxClassBaseUnion.dita" navtitle="cxxClassBaseUnion" type="reference"/>
+			<topicref href="cxxClass\cxxClassDeclarationFile.dita" navtitle="cxxClassDeclarationFile" type="reference"/>
+			<topicref href="cxxClass\cxxClassDeclarationFileLine.dita" navtitle="cxxClassDeclarationFileLine" type="reference"/>
+			<topicref href="cxxClass\cxxClassDefinition.dita" navtitle="cxxClassDefinition" type="reference"/>
+			<topicref href="cxxClass\cxxClassDefinitionFile.dita" navtitle="cxxClassDefinitionFile" type="reference"/>
+			<topicref href="cxxClass\cxxClassDefinitionFileLineEnd.dita" navtitle="cxxClassDefinitionFileLineEnd" type="reference"/>
+			<topicref href="cxxClass\cxxClassDefinitionFileLineStart.dita" navtitle="cxxClassDefinitionFileLineStart" type="reference"/>
+			<topicref href="cxxClass\cxxClassDerivation.dita" navtitle="cxxClassDerivation" type="reference"/>
+			<topicref href="cxxClass\cxxClassDerivationAccessSpecifier.dita" navtitle="cxxClassDerivationAccessSpecifier" type="reference"/>
+			<topicref href="cxxClass\cxxClassDerivations.dita" navtitle="cxxClassDerivations" type="reference"/>
+			<topicref href="cxxClass\cxxClassDerivationVirtual.dita" navtitle="cxxClassDerivationVirtual" type="reference"/>
+			<topicref href="cxxClass\cxxClassDetail.dita" navtitle="cxxClassDetail" type="reference"/>
+			<topicref href="cxxClass\cxxClassEnumerationInherited.dita" navtitle="cxxClassEnumerationInherited" type="reference"/>
+			<topicref href="cxxClass\cxxClassEnumeratorInherited.dita" navtitle="cxxClassEnumeratorInherited" type="reference"/>
+			<topicref href="cxxClass\cxxClassFunctionInherited.dita" navtitle="cxxClassFunctionInherited" type="reference"/>
+			<topicref href="cxxClass\cxxClassInherits.dita" navtitle="cxxClassInherits" type="reference"/>
+			<topicref href="cxxClass\cxxClassInheritsDetail.dita" navtitle="cxxClassInheritsDetail" type="reference"/>
+			<topicref href="cxxClass\cxxClassNested.dita" navtitle="cxxClassNested" type="reference"/>
+			<topicref href="cxxClass\cxxClassNestedClass.dita" navtitle="cxxClassNestedClass" type="reference"/>
+			<topicref href="cxxClass\cxxClassNestedDetail.dita" navtitle="cxxClassNestedDetail" type="reference"/>
+			<topicref href="cxxClass\cxxClassNestedStruct.dita" navtitle="cxxClassNestedStruct" type="reference"/>
+			<topicref href="cxxClass\cxxClassNestedUnion.dita" navtitle="cxxClassNestedUnion" type="reference"/>
+			<topicref href="cxxClass\cxxClassTemplateParameter.dita" navtitle="cxxClassTemplateParameter" type="reference"/>
+			<topicref href="cxxClass\cxxClassTemplateParameters.dita" navtitle="cxxClassTemplateParameters" type="reference"/>
+			<topicref href="cxxClass\cxxClassTemplateParameterType.dita" navtitle="cxxClassTemplateParameterType" type="reference"/>
+			<topicref href="cxxClass\cxxClassVariableInherited.dita" navtitle="cxxClassVariableInherited" type="reference"/>
+		</topicref>		
+		
+		<topicref href="cxxDefine/cxxDefine_module.dita" type="reference">
+			<topicref href="cxxDefine\cxxDefine.dita" navtitle="cxxDefine" type="reference"/>
+			<topicref href="cxxDefine\cxxDefineAccessSpecifier.dita" navtitle="cxxDefineAccessSpecifier" type="reference"/>
+			<topicref href="cxxDefine\cxxDefineAPIItemLocation.dita" navtitle="cxxDefineAPIItemLocation" type="reference"/>
+			<topicref href="cxxDefine\cxxDefineDeclarationFile.dita" navtitle="cxxDefineDeclarationFile" type="reference"/>
+			<topicref href="cxxDefine\cxxDefineDeclarationFileLine.dita" navtitle="cxxDefineDeclarationFileLine" type="reference"/>
+			<topicref href="cxxDefine\cxxDefineDefinition.dita" navtitle="cxxDefineDefinition" type="reference"/>
+			<topicref href="cxxDefine\cxxDefineDetail.dita" navtitle="cxxDefineDetail" type="reference"/>
+			<topicref href="cxxDefine\cxxDefineNameLookup.dita" navtitle="cxxDefineNameLookup" type="reference"/>
+			<topicref href="cxxDefine\cxxDefineParameter.dita" navtitle="cxxDefineParameter" type="reference"/>
+			<topicref href="cxxDefine\cxxDefineParameterDeclarationName.dita" navtitle="cxxDefineParameterDeclarationName" type="reference"/>
+			<topicref href="cxxDefine\cxxDefineParameters.dita" navtitle="cxxDefineParameters" type="reference"/>
+			<topicref href="cxxDefine\cxxDefinePrototype.dita" navtitle="cxxDefinePrototype" type="reference"/>
+			<topicref href="cxxDefine\cxxDefineReimplemented.dita" navtitle="cxxDefineReimplemented" type="reference"/>
+		</topicref>				
+		
+		<topicref href="cxxEnumeration/cxxEnumeration_module.dita" type="reference">
+			<topicref href="cxxEnumeration\cxxEnumeration.dita" navtitle="cxxEnumeration" type="reference"/>
+			<topicref href="cxxEnumeration\cxxEnumerationAccessSpecifier.dita" navtitle="cxxEnumerationAccessSpecifier" type="reference"/>
+			<topicref href="cxxEnumeration\cxxEnumerationAPIItemLocation.dita" navtitle="cxxEnumerationAPIItemLocation" type="reference"/>
+			<topicref href="cxxEnumeration\cxxEnumerationDeclarationFile.dita" navtitle="cxxEnumerationDeclarationFile" type="reference"/>
+			<topicref href="cxxEnumeration\cxxEnumerationDeclarationFileLine.dita" navtitle="cxxEnumerationDeclarationFileLine" type="reference"/>
+			<topicref href="cxxEnumeration\cxxEnumerationDefinition.dita" navtitle="cxxEnumerationDefinition" type="reference"/>
+			<topicref href="cxxEnumeration\cxxEnumerationDefinitionFile.dita" navtitle="cxxEnumerationDefinitionFile" type="reference"/>
+			<topicref href="cxxEnumeration\cxxEnumerationDefinitionFileLineEnd.dita" navtitle="cxxEnumerationDefinitionFileLineEnd" type="reference"/>
+			<topicref href="cxxEnumeration\cxxEnumerationDefinitionFileLineStart.dita" navtitle="cxxEnumerationDefinitionFileLineStart" type="reference"/>
+			<topicref href="cxxEnumeration\cxxEnumerationDetail.dita" navtitle="cxxEnumerationDetail" type="reference"/>
+			<topicref href="cxxEnumeration\cxxEnumerationNameLookup.dita" navtitle="cxxEnumerationNameLookup" type="reference"/>
+			<topicref href="cxxEnumeration\cxxEnumerationPrototype.dita" navtitle="cxxEnumerationPrototype" type="reference"/>
+			<topicref href="cxxEnumeration\cxxEnumerationReimplemented.dita" navtitle="cxxEnumerationReimplemented" type="reference"/>
+			<topicref href="cxxEnumeration\cxxEnumerationScopedName.dita" navtitle="cxxEnumerationScopedName" type="reference"/>
+			<topicref href="cxxEnumeration\cxxEnumerator.dita" navtitle="cxxEnumerator" type="reference"/>
+			<topicref href="cxxEnumeration\cxxEnumeratorAPIItemLocation.dita" navtitle="cxxEnumeratorAPIItemLocation" type="reference"/>
+			<topicref href="cxxEnumeration\cxxEnumeratorDeclarationFile.dita" navtitle="cxxEnumeratorDeclarationFile" type="reference"/>
+			<topicref href="cxxEnumeration\cxxEnumeratorDeclarationFileLine.dita" navtitle="cxxEnumeratorDeclarationFileLine" type="reference"/>
+			<topicref href="cxxEnumeration\cxxEnumeratorInitialiser.dita" navtitle="cxxEnumeratorInitialiser" type="reference"/>
+			<topicref href="cxxEnumeration\cxxEnumeratorNameLookup.dita" navtitle="cxxEnumeratorNameLookup" type="reference"/>
+			<topicref href="cxxEnumeration\cxxEnumeratorPrototype.dita" navtitle="cxxEnumeratorPrototype" type="reference"/>
+			<topicref href="cxxEnumeration\cxxEnumerators.dita" navtitle="cxxEnumerators" type="reference"/>
+			<topicref href="cxxEnumeration\cxxEnumeratorScopedName.dita" navtitle="cxxEnumeratorScopedName" type="reference"/>		
+		</topicref>						
+		
+		<topicref href="cxxFile/cxxFile_module.dita" type="reference">
+			<topicref href="cxxFile\cxxFile.dita" navtitle="cxxFile" type="reference"/>
+			<topicref href="cxxFile\cxxFileAPIItemLocation.dita" navtitle="cxxFileAPIItemLocation" type="reference"/>
+			<topicref href="cxxFile\cxxFileDeclarationFile.dita" navtitle="cxxFileDeclarationFile" type="reference"/>
+		</topicref>				
+
+		<topicref href="cxxFunction/cxxFunction_module.dita" type="reference">
+			<topicref href="cxxFunction\cxxFunction.dita" navtitle="cxxFunction" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionAccessSpecifier.dita" navtitle="cxxFunctionAccessSpecifier" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionAPIItemLocation.dita" navtitle="cxxFunctionAPIItemLocation" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionConst.dita" navtitle="cxxFunctionConst" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionConstructor.dita" navtitle="cxxFunctionConstructor" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionDeclarationFile.dita" navtitle="cxxFunctionDeclarationFile" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionDeclarationFileLine.dita" navtitle="cxxFunctionDeclarationFileLine" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionDeclaredType.dita" navtitle="cxxFunctionDeclaredType" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionDefinition.dita" navtitle="cxxFunctionDefinition" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionDefinitionFile.dita" navtitle="cxxFunctionDefinitionFile" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionDefinitionFileLineEnd.dita" navtitle="cxxFunctionDefinitionFileLineEnd" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionDefinitionFileLineStart.dita" navtitle="cxxFunctionDefinitionFileLineStart" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionDestructor.dita" navtitle="cxxFunctionDestructor" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionDetail.dita" navtitle="cxxFunctionDetail" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionExplicit.dita" navtitle="cxxFunctionExplicit" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionInline.dita" navtitle="cxxFunctionInline" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionNameLookup.dita" navtitle="cxxFunctionNameLookup" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionParameter.dita" navtitle="cxxFunctionParameter" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionParameterDeclarationName.dita" navtitle="cxxFunctionParameterDeclarationName" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionParameterDeclaredType.dita" navtitle="cxxFunctionParameterDeclaredType" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionParameterDefaultValue.dita" navtitle="cxxFunctionParameterDefaultValue" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionParameterDefinitionName.dita" navtitle="cxxFunctionParameterDefinitionName" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionParameters.dita" navtitle="cxxFunctionParameters" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionPrototype.dita" navtitle="cxxFunctionPrototype" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionPureVirtual.dita" navtitle="cxxFunctionPureVirtual" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionReimplemented.dita" navtitle="cxxFunctionReimplemented" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionReturnType.dita" navtitle="cxxFunctionReturnType" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionScopedName.dita" navtitle="cxxFunctionScopedName" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionStorageClassSpecifierExtern.dita" navtitle="cxxFunctionStorageClassSpecifierExtern" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionStorageClassSpecifierMutable.dita" navtitle="cxxFunctionStorageClassSpecifierMutable" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionStorageClassSpecifierStatic.dita" navtitle="cxxFunctionStorageClassSpecifierStatic" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionTemplateParameter.dita" navtitle="cxxFunctionTemplateParameter" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionTemplateParameters.dita" navtitle="cxxFunctionTemplateParameters" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionTemplateParameterType.dita" navtitle="cxxFunctionTemplateParameterType" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionVirtual.dita" navtitle="cxxFunctionVirtual" type="reference"/>
+			<topicref href="cxxFunction\cxxFunctionVolatile.dita" navtitle="cxxFunctionVolatile" type="reference"/>
+		</topicref>				
+
+		<topicref href="cxxStruct/cxxStruct_module.dita" type="reference">
+			<topicref href="cxxStruct\cxxStruct.dita" navtitle="cxxStruct" type="reference"/>
+			<topicref href="cxxStruct\cxxStructAbstract.dita" navtitle="cxxStructAbstract" type="reference"/>
+			<topicref href="cxxStruct\cxxStructAccessSpecifier.dita" navtitle="cxxStructAccessSpecifier" type="reference"/>
+			<topicref href="cxxStruct\cxxStructAPIItemLocation.dita" navtitle="cxxStructAPIItemLocation" type="reference"/>
+			<topicref href="cxxStruct\cxxStructBaseClass.dita" navtitle="cxxStructBaseClass" type="reference"/>
+			<topicref href="cxxStruct\cxxStructBaseStruct.dita" navtitle="cxxStructBaseStruct" type="reference"/>
+			<topicref href="cxxStruct\cxxStructBaseUnion.dita" navtitle="cxxStructBaseUnion" type="reference"/>
+			<topicref href="cxxStruct\cxxStructDeclarationFile.dita" navtitle="cxxStructDeclarationFile" type="reference"/>
+			<topicref href="cxxStruct\cxxStructDeclarationFileLine.dita" navtitle="cxxStructDeclarationFileLine" type="reference"/>
+			<topicref href="cxxStruct\cxxStructDefinition.dita" navtitle="cxxStructDefinition" type="reference"/>
+			<topicref href="cxxStruct\cxxStructDefinitionFile.dita" navtitle="cxxStructDefinitionFile" type="reference"/>
+			<topicref href="cxxStruct\cxxStructDefinitionFileLineEnd.dita" navtitle="cxxStructDefinitionFileLineEnd" type="reference"/>
+			<topicref href="cxxStruct\cxxStructDefinitionFileLineStart.dita" navtitle="cxxStructDefinitionFileLineStart" type="reference"/>
+			<topicref href="cxxStruct\cxxStructDerivation.dita" navtitle="cxxStructDerivation" type="reference"/>
+			<topicref href="cxxStruct\cxxStructDerivationAccessSpecifier.dita" navtitle="cxxStructDerivationAccessSpecifier" type="reference"/>
+			<topicref href="cxxStruct\cxxStructDerivations.dita" navtitle="cxxStructDerivations" type="reference"/>
+			<topicref href="cxxStruct\cxxStructDerivationVirtual.dita" navtitle="cxxStructDerivationVirtual" type="reference"/>
+			<topicref href="cxxStruct\cxxStructDetail.dita" navtitle="cxxStructDetail" type="reference"/>
+			<topicref href="cxxStruct\cxxStructEnumerationInherited.dita" navtitle="cxxStructEnumerationInherited" type="reference"/>
+			<topicref href="cxxStruct\cxxStructEnumeratorInherited.dita" navtitle="cxxStructEnumeratorInherited" type="reference"/>
+			<topicref href="cxxStruct\cxxStructFunctionInherited.dita" navtitle="cxxStructFunctionInherited" type="reference"/>
+			<topicref href="cxxStruct\cxxStructInherits.dita" navtitle="cxxStructInherits" type="reference"/>
+			<topicref href="cxxStruct\cxxStructInheritsDetail.dita" navtitle="cxxStructInheritsDetail" type="reference"/>
+			<topicref href="cxxStruct\cxxStructNested.dita" navtitle="cxxStructNested" type="reference"/>
+			<topicref href="cxxStruct\cxxStructNestedClass.dita" navtitle="cxxStructNestedClass" type="reference"/>
+			<topicref href="cxxStruct\cxxStructNestedDetail.dita" navtitle="cxxStructNestedDetail" type="reference"/>
+			<topicref href="cxxStruct\cxxStructNestedStruct.dita" navtitle="cxxStructNestedStruct" type="reference"/>
+			<topicref href="cxxStruct\cxxStructNestedUnion.dita" navtitle="cxxStructNestedUnion" type="reference"/>
+			<topicref href="cxxStruct\cxxStructTemplateParameter.dita" navtitle="cxxStructTemplateParameter" type="reference"/>
+			<topicref href="cxxStruct\cxxStructTemplateParameters.dita" navtitle="cxxStructTemplateParameters" type="reference"/>
+			<topicref href="cxxStruct\cxxStructTemplateParameterType.dita" navtitle="cxxStructTemplateParameterType" type="reference"/>
+			<topicref href="cxxStruct\cxxStructVariableInherited.dita" navtitle="cxxStructVariableInherited" type="reference"/>
+		</topicref>				
+
+		<topicref href="cxxTypedef/cxxTypedef_module.dita" type="reference">
+			<topicref href="cxxTypedef\cxxTypedef.dita" navtitle="cxxTypedef" type="reference"/>
+			<topicref href="cxxTypedef\cxxTypedefAccessSpecifier.dita" navtitle="cxxTypedefAccessSpecifier" type="reference"/>
+			<topicref href="cxxTypedef\cxxTypedefAPIItemLocation.dita" navtitle="cxxTypedefAPIItemLocation" type="reference"/>
+			<topicref href="cxxTypedef\cxxTypedefDeclarationFile.dita" navtitle="cxxTypedefDeclarationFile" type="reference"/>
+			<topicref href="cxxTypedef\cxxTypedefDeclarationFileLine.dita" navtitle="cxxTypedefDeclarationFileLine" type="reference"/>
+			<topicref href="cxxTypedef\cxxTypedefDeclaredType.dita" navtitle="cxxTypedefDeclaredType" type="reference"/>
+			<topicref href="cxxTypedef\cxxTypedefDefinition.dita" navtitle="cxxTypedefDefinition" type="reference"/>
+			<topicref href="cxxTypedef\cxxTypedefDetail.dita" navtitle="cxxTypedefDetail" type="reference"/>
+			<topicref href="cxxTypedef\cxxTypedefNameLookup.dita" navtitle="cxxTypedefNameLookup" type="reference"/>
+			<topicref href="cxxTypedef\cxxTypedefPrototype.dita" navtitle="cxxTypedefPrototype" type="reference"/>
+			<topicref href="cxxTypedef\cxxTypedefReimplemented.dita" navtitle="cxxTypedefReimplemented" type="reference"/>
+			<topicref href="cxxTypedef\cxxTypedefScopedName.dita" navtitle="cxxTypedefScopedName" type="reference"/>
+		</topicref>				
+
+		<topicref href="cxxUnion/cxxUnion_module.dita" type="reference">
+			<topicref href="cxxUnion\cxxUnion.dita" navtitle="cxxUnion" type="reference"/>
+			<topicref href="cxxUnion\cxxUnionAbstract.dita" navtitle="cxxUnionAbstract" type="reference"/>
+			<topicref href="cxxUnion\cxxUnionAccessSpecifier.dita" navtitle="cxxUnionAccessSpecifier" type="reference"/>
+			<topicref href="cxxUnion\cxxUnionAPIItemLocation.dita" navtitle="cxxUnionAPIItemLocation" type="reference"/>
+			<topicref href="cxxUnion\cxxUnionDeclarationFile.dita" navtitle="cxxUnionDeclarationFile" type="reference"/>
+			<topicref href="cxxUnion\cxxUnionDeclarationFileLine.dita" navtitle="cxxUnionDeclarationFileLine" type="reference"/>
+			<topicref href="cxxUnion\cxxUnionDefinition.dita" navtitle="cxxUnionDefinition" type="reference"/>
+			<topicref href="cxxUnion\cxxUnionDefinitionFile.dita" navtitle="cxxUnionDefinitionFile" type="reference"/>
+			<topicref href="cxxUnion\cxxUnionDefinitionFileLineEnd.dita" navtitle="cxxUnionDefinitionFileLineEnd" type="reference"/>
+			<topicref href="cxxUnion\cxxUnionDefinitionFileLineStart.dita" navtitle="cxxUnionDefinitionFileLineStart" type="reference"/>
+			<topicref href="cxxUnion\cxxUnionDetail.dita" navtitle="cxxUnionDetail" type="reference"/>
+			<topicref href="cxxUnion\cxxUnionNested.dita" navtitle="cxxUnionNested" type="reference"/>
+			<topicref href="cxxUnion\cxxUnionNestedClass.dita" navtitle="cxxUnionNestedClass" type="reference"/>
+			<topicref href="cxxUnion\cxxUnionNestedDetail.dita" navtitle="cxxUnionNestedDetail" type="reference"/>
+			<topicref href="cxxUnion\cxxUnionNestedStruct.dita" navtitle="cxxUnionNestedStruct" type="reference"/>
+			<topicref href="cxxUnion\cxxUnionNestedUnion.dita" navtitle="cxxUnionNestedUnion" type="reference"/>
+			<topicref href="cxxUnion\cxxUnionTemplateParameter.dita" navtitle="cxxUnionTemplateParameter" type="reference"/>
+			<topicref href="cxxUnion\cxxUnionTemplateParameters.dita" navtitle="cxxUnionTemplateParameters" type="reference"/>
+			<topicref href="cxxUnion\cxxUnionTemplateParameterType.dita" navtitle="cxxUnionTemplateParameterType" type="reference"/>
+		</topicref>				
+
+		<topicref href="cxxVariable/cxxVariable_module.dita" type="reference">
+			<topicref href="cxxVariable\cxxVariable.dita" navtitle="cxxVariable" type="reference"/>
+			<topicref href="cxxVariable\cxxVariableAccessSpecifier.dita" navtitle="cxxVariableAccessSpecifier" type="reference"/>
+			<topicref href="cxxVariable\cxxVariableAPIItemLocation.dita" navtitle="cxxVariableAPIItemLocation" type="reference"/>
+			<topicref href="cxxVariable\cxxVariableConst.dita" navtitle="cxxVariableConst" type="reference"/>
+			<topicref href="cxxVariable\cxxVariableDeclarationFile.dita" navtitle="cxxVariableDeclarationFile" type="reference"/>
+			<topicref href="cxxVariable\cxxVariableDeclarationFileLine.dita" navtitle="cxxVariableDeclarationFileLine" type="reference"/>
+			<topicref href="cxxVariable\cxxVariableDeclaredType.dita" navtitle="cxxVariableDeclaredType" type="reference"/>
+			<topicref href="cxxVariable\cxxVariableDefinition.dita" navtitle="cxxVariableDefinition" type="reference"/>
+			<topicref href="cxxVariable\cxxVariableDetail.dita" navtitle="cxxVariableDetail" type="reference"/>
+			<topicref href="cxxVariable\cxxVariableNameLookup.dita" navtitle="cxxVariableNameLookup" type="reference"/>
+			<topicref href="cxxVariable\cxxVariablePrototype.dita" navtitle="cxxVariablePrototype" type="reference"/>
+			<topicref href="cxxVariable\cxxVariableReimplemented.dita" navtitle="cxxVariableReimplemented" type="reference"/>
+			<topicref href="cxxVariable\cxxVariableScopedName.dita" navtitle="cxxVariableScopedName" type="reference"/>
+			<topicref href="cxxVariable\cxxVariableStorageClassSpecifierExtern.dita" navtitle="cxxVariableStorageClassSpecifierExtern" type="reference"/>
+			<topicref href="cxxVariable\cxxVariableStorageClassSpecifierMutable.dita" navtitle="cxxVariableStorageClassSpecifierMutable" type="reference"/>
+			<topicref href="cxxVariable\cxxVariableStorageClassSpecifierStatic.dita" navtitle="cxxVariableStorageClassSpecifierStatic" type="reference"/>
+			<topicref href="cxxVariable\cxxVariableVolatile.dita" navtitle="cxxVariableVolatile" type="reference"/>
+		</topicref>				
+		
+	</topicref>
+</map>

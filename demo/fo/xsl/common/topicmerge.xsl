@@ -36,6 +36,7 @@ See the accompanying license.txt file for applicable licenses.
 <xsl:stylesheet version="1.1"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:exsl="http://exslt.org/common"
+                xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
  	            extension-element-prefixes="exsl">
 
     <xsl:output indent="no"/>
@@ -74,31 +75,79 @@ See the accompanying license.txt file for applicable licenses.
 			</xsl:when>
 			<xsl:when test="(normalize-space(@href) = '') and 
                             (normalize-space(@navtitle) != '' or *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')])">
-				<xsl:variable name="isNotTopicRef">
-					<xsl:call-template name="isNotTopicRef">
-						<xsl:with-param name="class" select="@class"/>
-					</xsl:call-template>
-				</xsl:variable>
-				<xsl:if test="contains($isNotTopicRef,'false')">
-					<topic id="{generate-id()}" class="- topic/topic ">
-						<title class=" topic/title ">
-                            <xsl:choose>
-                                <xsl:when test="*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')]">
-                                    <xsl:copy-of select="*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')]/text()|
+                <xsl:choose>
+                    <xsl:when test="contains(@class,' bookmap/backmatter ')
+                                    or contains(@class,' bookmap/booklists ')
+                                    or contains(@class,' bookmap/frontmatter ')">
+                        <xsl:apply-templates mode="build-tree"/>
+                    </xsl:when>
+                    <xsl:when test="contains(@class,' bookmap/toc ')">
+                        <ot-placeholder:toc>
+                            <xsl:apply-templates mode="build-tree"/>
+                        </ot-placeholder:toc>
+                    </xsl:when>
+                    <xsl:when test="contains(@class,' bookmap/indexlist ')">
+                        <ot-placeholder:indexlist>
+                            <xsl:apply-templates mode="build-tree"/>
+                        </ot-placeholder:indexlist>
+                    </xsl:when>
+                    <xsl:when test="contains(@class,' bookmap/glossarylist ')">
+                        <ot-placeholder:glossarylist>
+                            <xsl:apply-templates mode="build-tree"/>
+                        </ot-placeholder:glossarylist>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:variable name="isNotTopicRef">
+                            <xsl:call-template name="isNotTopicRef">
+                                <xsl:with-param name="class" select="@class"/>
+                            </xsl:call-template>
+                        </xsl:variable>
+                        <xsl:if test="contains($isNotTopicRef,'false')">
+                            <topic id="{generate-id()}" class="- topic/topic ">
+                                <title class=" topic/title ">
+                                    <xsl:choose>
+                                        <xsl:when test="*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')]">
+                                            <xsl:copy-of select="*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')]/text()|
                                                          *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')]/*"/>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:value-of select="@navtitle"/>
-                                </xsl:otherwise>
-                            </xsl:choose>
-						</title>
-						<body class=" topic/body "/>
-						<xsl:apply-templates mode="build-tree"/>
-					</topic>
-				</xsl:if>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:value-of select="@navtitle"/>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </title>
+                                <body class=" topic/body "/>
+                                <xsl:apply-templates mode="build-tree"/>
+                            </topic>
+                        </xsl:if>
+                    </xsl:otherwise>
+                </xsl:choose>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:apply-templates mode="build-tree"/>
+                <xsl:choose>
+                    <xsl:when test="contains(@class,' bookmap/backmatter ')
+                                    or contains(@class,' bookmap/booklists ')
+                                    or contains(@class,' bookmap/frontmatter ')">
+                        <xsl:apply-templates mode="build-tree"/>
+                    </xsl:when>
+                    <xsl:when test="contains(@class,' bookmap/toc ')">
+                        <ot-placeholder:toc>
+                            <xsl:apply-templates mode="build-tree"/>
+                        </ot-placeholder:toc>
+                    </xsl:when>
+                    <xsl:when test="contains(@class,' bookmap/indexlist ')">
+                        <ot-placeholder:indexlist>
+                            <xsl:apply-templates mode="build-tree"/>
+                        </ot-placeholder:indexlist>
+                    </xsl:when>
+                    <xsl:when test="contains(@class,' bookmap/glossarylist ')">
+                        <ot-placeholder:glossarylist>
+                            <xsl:apply-templates mode="build-tree"/>
+                        </ot-placeholder:glossarylist>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:apply-templates mode="build-tree"/>
+                    </xsl:otherwise>
+                </xsl:choose>
 			</xsl:otherwise>
 		</xsl:choose>
     </xsl:template>
@@ -234,21 +283,16 @@ See the accompanying license.txt file for applicable licenses.
 		<xsl:choose>
 			<xsl:when test="contains($class,' bookmap/abbrevlist ')"/>
 			<xsl:when test="contains($class,' bookmap/amendments ')"/>
-			<xsl:when test="contains($class,' bookmap/backmatter ')"/>
+			
 			<xsl:when test="contains($class,' bookmap/bookabstract ')"/>
 			<xsl:when test="contains($class,' bookmap/booklist ')"/>
-			<xsl:when test="contains($class,' bookmap/booklists ')"/>
+            
 			<xsl:when test="contains($class,' bookmap/colophon ')"/>
 			<xsl:when test="contains($class,' bookmap/dedication ')"/>
-			<xsl:when test="contains($class,' bookmap/figurelist ')"/>
-			<xsl:when test="contains($class,' bookmap/frontmatter ')"/>
-			<xsl:when test="contains($class,' bookmap/indexlist ')"/>
 			<xsl:when test="contains($class,' bookmap/tablelist ')"/>
-			<xsl:when test="contains($class,' bookmap/toc ')"/>
 			<xsl:when test="contains($class,' bookmap/trademarklist ')"/>
-			<xsl:when test="contains($class,' bookmap/glossarylist ') and not(*)">
-                <!-- When glossarylist has children, don't treat it as an empty non-topic -->
-            </xsl:when>
+            <xsl:when test="contains($class,' bookmap/figurelist ')"/>
+            
 			<xsl:otherwise>
 				<xsl:value-of select="'false'"/>
 			</xsl:otherwise>

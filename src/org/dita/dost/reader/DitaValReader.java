@@ -72,6 +72,10 @@ public class DitaValReader extends AbstractXMLReader {
 	
 	private Element schemeRoot = null;
 	
+	//Added on 2010-08-24 for bug:3086552 start
+	private static boolean setSystemid = true;
+	//Added on 2010-08-24 for bug:3086552 end
+	
 	/**
 	 * Default constructor of DitaValReader class.
 	 */
@@ -99,7 +103,11 @@ public class DitaValReader extends AbstractXMLReader {
 		}
 		
 	}
-
+	//Added on 2010-08-24 for bug:3086552 start
+	public static void initXMLReader(boolean arg_setSystemid) {
+		setSystemid= arg_setSystemid;
+	}
+	//Added on 2010-08-24 for bug:3086552 end
 	/**
 	 * @see org.dita.dost.reader.AbstractReader#read(java.lang.String)
 	 */
@@ -107,8 +115,18 @@ public class DitaValReader extends AbstractXMLReader {
 		ditaVal = input;
 
 		try {
+			
 			reader.setErrorHandler(new DITAOTXMLErrorHandler(ditaVal));
-			reader.parse(new InputSource(new FileInputStream(input)));
+			//Added on 2010-08-24 for bug:3086552 start
+			File file = new File(input);
+			InputSource is = new InputSource(new FileInputStream(file));
+			//Set the system ID
+			if(setSystemid)
+				//is.setSystemId(URLUtil.correct(file).toString());
+				is.setSystemId(file.toURI().toURL().toString());
+			//Added on 2010-08-24 for bug:3086552 end
+			reader.parse(is); 
+			
 		} catch (Exception e) {
 			logger.logException(e);
 		}

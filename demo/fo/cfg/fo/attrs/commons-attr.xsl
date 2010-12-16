@@ -108,7 +108,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="font-family">Sans</xsl:attribute>
         <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
         <xsl:attribute name="margin-top">10pt</xsl:attribute>
-        <xsl:attribute name="margin-left">25pt</xsl:attribute>
+        <xsl:attribute name="margin-left"><xsl:value-of select="$side-col-width"/></xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
         <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
     </xsl:attribute-set>
@@ -119,7 +119,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="topic.topic.topic.topic.topic.title">
         <xsl:attribute name="font-family">Sans</xsl:attribute>
         <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
-        <xsl:attribute name="margin-left">25pt</xsl:attribute>
+        <xsl:attribute name="margin-left"><xsl:value-of select="$side-col-width"/></xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
         <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
     </xsl:attribute-set>
@@ -130,7 +130,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="topic.topic.topic.topic.topic.topic.title">
         <xsl:attribute name="font-family">Sans</xsl:attribute>
         <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
-        <xsl:attribute name="margin-left">25pt</xsl:attribute>
+        <xsl:attribute name="margin-left"><xsl:value-of select="$side-col-width"/></xsl:attribute>
         <xsl:attribute name="font-style">italic</xsl:attribute>
         <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
     </xsl:attribute-set>
@@ -191,17 +191,17 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="body__toplevel">
-        <xsl:attribute name="margin-left">25pt</xsl:attribute>
+        <xsl:attribute name="margin-left"><xsl:value-of select="$side-col-width"/></xsl:attribute>
         <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="body__secondLevel">
-        <xsl:attribute name="margin-left">25pt</xsl:attribute>
+        <xsl:attribute name="margin-left"><xsl:value-of select="$side-col-width"/></xsl:attribute>
         <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="body">
-        <xsl:attribute name="margin-left">25pt</xsl:attribute>
+        <xsl:attribute name="margin-left"><xsl:value-of select="$side-col-width"/></xsl:attribute>
         <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 

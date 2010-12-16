@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxTypedefAccessSpecifier">
+    <title>cxxTypedefAccessSpecifier</title>
+    <shortdesc>The &lt;cxxTypedefAccessSpecifier&gt; element describes the level of access the typedef allows.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The &lt;cxxTypedefAccessSpecifier&gt; element does not have any children. &lt;cxxTypedefAccessSpecifier&gt; 
+            uses the attribute <i>value</i> to describe the level of access a typedef has. <i>value</i> 
+            can be set to "public", "protected" or "private"; the default is "public". </p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxTypedefAccessSpecifier value="public"/&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxTypedefAccessSpecifier-reference/cxxTypedefAccessSpecifier-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxTypedefAccessSpecifier-reference/cxxTypedefAccessSpecifier-contains-section"/>
+        <section conref="../packagedef.dita#cxxTypedefAccessSpecifier-reference/cxxTypedefAccessSpecifier-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxTypedefAccessSpecifier-reference/cxxTypedefAccessSpecifier-attList-section"/>
+        <section conref="../packagedef.dita#cxxTypedefAccessSpecifier-reference/cxxTypedefAccessSpecifier-classValue-section"/>
+    </refbody>
+</reference>

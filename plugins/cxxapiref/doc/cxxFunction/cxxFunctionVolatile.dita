@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxFunctionVolatile">
+    <title>cxxFunctionVolatile</title>
+    <shortdesc>Used to describe a function with a <tt>volatile</tt> <i>cv-qualifier</i>.
+    </shortdesc>
+    <refbody>
+        <section id="section_B63FF10B2B1042BA83D4D0A8EFBA42D6">
+            <title>Description</title><p>This element is present when the function has a <tt>volatile</tt>
+                <i>cv-qualifier</i>
+. This has two mandatory attributes; name and value (see example below).</p><p>See ISO/IEC 14882:2003(E) 7.1.5.1 The cv-qualifiers [dcl.type.cv]</p>
+        </section>
+        <example id="example_3360D444B3304F9E9E519513D9221AE0">
+            <title>Example</title><p>Given this code:</p>
+            <codeblock>struct X {
+    void g() volatile;
+};</codeblock><p>Then function <tt>g</tt> would have the <tt>cxxFunctionVolatile</tt>
+element:</p>
+            <codeblock>&lt;cxxFunctionVolatile /&gt;</codeblock><p>If the mandatory attributes are present they must be set thus:</p>
+            <codeblock>&lt;cxxFunctionVolatile name="volatile" value="volatile" /&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxFunctionVolatile-reference/cxxFunctionVolatile-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxFunctionVolatile-reference/cxxFunctionVolatile-contains-section"/>
+        <section conref="../packagedef.dita#cxxFunctionVolatile-reference/cxxFunctionVolatile-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxFunctionVolatile-reference/cxxFunctionVolatile-attList-section"/>
+        <section conref="../packagedef.dita#cxxFunctionVolatile-reference/cxxFunctionVolatile-classValue-section"/>
+    </refbody>
+</reference>

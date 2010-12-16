@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxVariableDetail">
+    <title>cxxVariableDetail</title>
+    <shortdesc>The &lt;cxxVariableDetail&gt; element provides detailed information
+about the structure and behaviors of a C++ variable. </shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The &lt;cxxVariableDetail&gt; element is defined within &lt;cxxVariable&gt;. 
+            In &lt;cxxVariableDetail&gt; the &lt;example&gt; and &lt;section&gt; 
+            elements are provided to support the current specific C++ API reference.</p>
+        </section>
+        <section conref="../packagedef.dita#cxxVariableDetail-reference/cxxVariableDetail-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxVariableDetail-reference/cxxVariableDetail-contains-section"/>
+        <section conref="../packagedef.dita#cxxVariableDetail-reference/cxxVariableDetail-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxVariableDetail-reference/cxxVariableDetail-attList-section"/>
+        <section conref="../packagedef.dita#cxxVariableDetail-reference/cxxVariableDetail-classValue-section"/>
+    </refbody>
+</reference>

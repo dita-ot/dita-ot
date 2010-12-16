@@ -557,9 +557,10 @@ name="gen-linktxt"/>\s8 \f2\fs24\ul\cf1}}}\s8
 <xsl:call-template name="gen-txt"><xsl:with-param name="txt" select="."/></xsl:call-template>
 </xsl:when>
 <xsl:otherwise>
-  <xsl:if test="starts-with(.,' ') and not(normalize-space(.)='')"><xsl:text> </xsl:text></xsl:if><xsl:call-template name="get-ascii">
+  <xsl:if test="normalize-space(substring(., 1, 1))='' and not(normalize-space(.)='')"><xsl:text> </xsl:text></xsl:if><xsl:call-template name="get-ascii">
     <xsl:with-param name="txt"><xsl:value-of select="normalize-space(.)"/></xsl:with-param>
-  </xsl:call-template><xsl:if test="substring(.,string-length(.))=' ' and not(normalize-space(.)='')"><xsl:text> </xsl:text></xsl:if>
+  </xsl:call-template><xsl:if test="normalize-space(substring(.,
+    string-length(.), 1))='' and not(normalize-space(.)='')"><xsl:text> </xsl:text></xsl:if>
 </xsl:otherwise>
 </xsl:choose>
 </xsl:template>

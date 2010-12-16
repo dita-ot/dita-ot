@@ -1,0 +1,1322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2010, v.4002-->
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+ "../dtd/topic.dtd">
+<?Pub Sty _display FontColor="red"?>
+<topic id="ditareleasehistory" xml:lang="en-us">
+<title>DITA complete release history</title>
+<shortdesc>This document lists major changes and new features by release,
+going back to the beginning of the toolkit. </shortdesc>
+<body>
+<section id="rel1.5.2"><title>DITA Open Toolkit Release 1.5.2</title><ul>
+<li><b>Release date</b>: December 10, 2010</li>
+<li><b>Supports</b>: DITA 1.0 through 1.2</li>
+<li><b>Download at</b>: <xref format="html"
+href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Stable%20Release/"
+scope="external">DITA-OT Latest Stable Build</xref></li>
+<li><b>Which package is for me?</b> See <xref format="html"
+href="http://dita.xml.org/freelinking/DITA-OT%2520Packages"
+scope="external">DITA-OT Packages</xref>. </li>
+</ul><p>Release 1.5.2 is a maintenance release based on the final
+version of the DITA 1.2 standard. In addition to tweaks to match late
+changes in the standard, version 1.5.2 contains many enhancements,
+user patches, bug fixes, and significant updates to the documentation.</p><p>Release
+1.5.2 was developed using a series of test builds released to the
+community every three weeks. Each item in the list below indicates
+which test build first contained the update. The eighth build was
+the final build, released as the DITA-OT 1.5.2 final stable build.</p><p>[General
+Enhancements]</p><ol>
+<li>Include final version of DITA 1.2 schemas and DTDs</li>
+<li>Minor updates to DITA 1.2 support added in earlier releases, to
+ensure compliance with the final standard</li>
+<li>Overhaul of documentation to remove outdated material</li>
+<li>Reorganization of doc directory to highlight new and important
+info</li>
+</ol><p>[11 SourceForge Enhancements Added]</p><?Pub Caret 4?><ol>
+<li>2797337 Support for ODF output transform (Prototype added in version
+1.5.1, updates in each 1.5.2 Milestone, transform complete in Milestone
+7)</li>
+<li>3021544 Preserve DITA elements in XHTML class by default (Milestone
+1) </li>
+<li>3019853 Create new "textonly" output method for use by any transform
+(Milestone 1) </li>
+<li>3012392 PDF transformation should allow args.xsl style override
+(Milestone 1) </li>
+<li>2882123 Add Ant Quick Start Guide to DITA-OT (Updated in each
+Milestone after 3)</li>
+<li>3086936 Add extension points for TOC output (Eclipse TOC, HTML
+Help TOC and Project, HTML TOC) (Milestone 6) </li>
+<li>3079610  Add current OT version to log (Milestone 6) </li>
+<li>1520909 HTML Help requires appropriate codepage (Milestone 6) </li>
+<li>3125994 Allow PDF index conf. to be overridden in Customization
+(Milestone 7)</li>
+<li>3125983 Create a basic glossary implementation for PDF (Milestone
+7)</li>
+<li>3109395 Add parameter for Eclipse symbolic name (Milestone 8)</li>
+</ol><p>[SourceForge Patches Added]</p><ol>
+<li>3058008 Refactor chunk module for cleaner code (Milestone 4)  </li>
+<li>3067681  Add class to ordered child links (Milestone 5) </li>
+<li>3064412  Integrator fails to escape XML correctly (Milestone 5)
+ </li>
+<li>3062765  Fix unit test file paths to be platform dependent (Milestone
+5)  </li>
+<li>2949860 PDF build.xml with args for JVM memory and architecture
+(Milestone 6)  </li>
+<li>3077935 Plug-in ignore in Integrator (Milestone 6)  </li>
+<li>3065050 Common logging interface (Milestone 6)  </li>
+<li>3063318 ChunkModule refactoring (Milestone 6)  </li>
+<li>3061100 Define AbstractPipelineInput's function (Milestone 6) </li>
+<li>3102905 Move supported image extensions to configuration file
+(Milestone 7) </li>
+<li>3097518 Show effective property values (Milestone 8) </li>
+<li>3101335 apiMap.mod missing from catalog (Milestone 8)</li>
+</ol><p>[SourceForge Bugs Fixed]</p><ol>
+<li>2928582 commonTopicProcessing template prolog processing out of
+order (Milestone 1)   </li>
+<li>2823221 version of Xalan-J inconsistent (Milestone 1)   </li>
+<li>3023642 Invalid @colname generated in nested table (Milestone
+1)   </li>
+<li>3016739 Chunking mixes up &lt;link> to topic in reltable (Milestone
+1)   </li>
+<li>3020314 Chunk output includes index terms in navtitles (Milestone
+1)   </li>
+<li>3020313 Chunk processor adds &lt;topicref> before &lt;topicmeta>
+(Milestone 1)   </li>
+<li>3031513 Nested table processing in pdf2 (Milestone 2)   </li>
+<li>3030317 Filtering doesn't work on @rev or @props attributes (Milestone
+2)   </li>
+<li>3028650 Replace xs:float with xs:double in Plus plugins (Milestone
+2)</li>
+<li>3022847 PDF transform gives Java exceptions for spaces in dir
+name (Milestone 2)   </li>
+<li>3032950 Scale is not correctly computed in XHTML transforms (Milestone
+2)   </li>
+<li>3033141 dita.xml.properties file not closed after generating (Milestone
+2)</li>
+<li>3034445 "CURRENDIR" typo in plus-plugins ( Checked in to CVS during
+Milestone 3)   </li>
+<li>3034489 Remove all occurrences of &lt;xmlcatalog> from plus-plugins
+( Checked in to CVS during Milestone 3)   </li>
+<li>3035816 When creating .chm, .hhp-file is missing a line-break
+(Milestone 3)   </li>
+<li>3036222 RTF transform not editable with Word 2007 (Milestone 3)
+  </li>
+<li>3036985 Infinite recursivity in replaceString template (Milestone
+3)   </li>
+<li>3038941 Link with &amp;amp; breaks in abstract (Milestone 3) 
+ </li>
+<li>3039017 Comments in PDF plugin files are confusing (Milestone
+3)   </li>
+<li>3058124 Toolkit Allows Unescaped URLs, doesn't handle escaped
+ones (Milestone 4)   </li>
+<li>3056939 Conref of keyref-based xref results in xref with no href
+(Milestone 4)   </li>
+<li>3052913 Multiple levels of keyref in map not resolved (Milestone
+4)   </li>
+<li>3052904 Keydef with no href causes hard failure (Milestone 4)
+  </li>
+<li>3052156 Object with data that starts with slash breaks image copying
+(Milestone 4)   </li>
+<li>3044861 Inappropriate warning for resource-only topic to graphic
+(Milestone 4)   </li>
+<li>3042978 @copy-to and @chunk on topichead gives file not found
+(Milestone 4)   </li>
+<li>3016994 The included-domains entity cannot be used in document
+(Milestone 4)   </li>
+<li>2994593 Transformation breaks when DITA Topics contain entity
+refs (Milestone 4)   </li>
+<li>3028894 no support for title in plugin.xml file (Milestone 4)
+  </li>
+<li>3065853  Indent from &lt;title> gets displayed in TOC (PDF) (Milestone
+5)   </li>
+<li>3065486  CURRENTFILE not aware of DITAEXT (Milestone 5)   </li>
+<li>3065422  Wrong filename and filedir parameters for eclipse xsl
+(Milestone 5)   </li>
+<li>3063533  Adjacent words get glued together using DITA to RTF (Milestone
+5)   </li>
+<li>3062912  Messages extension damages custom message formatting
+(Milestone 5)   </li>
+<li>3059256  Peer links break with missing format or wrong extension
+(Milestone 5)   </li>
+<li>2972393 Need to parameterize maxmemory and VM args for forked
+JVMs (Milestone 6)   </li>
+<li>3060269 Problem displaying French content TOC in CHM output (Milestone
+6)   </li>
+<li>3038412 zh-CN file for PDF puts English strings in output (partial
+fix) (Milestone 6)   </li>
+<li>3079676 &lt;navtitle> contents included in PDF output (Updated
+so that &lt;navtitle> in a topic will only appear when the draft parameter
+is set to 'yes') (Milestone 6)   </li>
+<li>3004895 XHTML output for &lt;draft-comment> should use class attribute
+(Milestone 6)   </li>
+<li>2794487 No Easy Way to Override/Extend HTML TOC Navtitle Generation
+(Milestone 6)   </li>
+<li>3088314 Need to clarify many error messages (Milestone 6)   </li>
+<li>3095233 Shortdesc metadata missing when using abstract (Milestone
+6)   </li>
+<li>3081597 conkeyref accepts values in conref style (Milestone 6)
+  </li>
+<li>3081459 fragment generation without plugin fails (Milestone 6)
+  </li>
+<li>3073262 missing terminating quote in bundle version (Milestone
+6)   </li>
+<li>2832863 &lt;group> elements in catalogs don't work for all editors
+(Milestone 6) </li>
+<li>3038933 Troff output drops prereq links (Milestone 7)</li>
+<li>3098975 Disable Output Escaping Should Not Be Used (Milestone
+7)</li>
+<li>3102827 Allow a way to specify recognized image extensions (Milestone
+7)</li>
+<li>3102219 Unexpected character code in Japanese string definition
+(Milestone 7)</li>
+<li>3101964 Unnecessary XML declaration in HHP and HHC (Milestone
+7)</li>
+<li>3095233 Shortdesc metadata missing when using abstract (Milestone
+7)</li>
+<li>3097409 PDF should skip empty columns in property tables (Milestone
+7)</li>
+<li>3090803 PDF fails when chunk specified and topic appears twice
+(Milestone 7)</li>
+<li>3102845 Japanese character-set definition (Milestone 7)</li>
+<li>3103488 Update Saxon command line args for IDIOM PDF build.xml
+(Milestone 7)</li>
+<li>3026627 side-col-width variable has no effect (Milestone 7)</li>
+<li>3126007 TOC entries not properly indented in PDF (Milestone 7)</li>
+<li>3109616 Update PDF plug-in to check for latest Antenna House dirs
+(Milestone 8)</li>
+<li>3056040 problematic Bundle-Version test in eclipseMap (Milestone
+8)</li>
+<li>3029074 Index file not generated by default for Eclipse Help (Milestone
+8)</li>
+<li>3086552 XMLReader.parse does not correctly receive the XML system
+ID (Milestone 8)</li>
+<li>3110418 Duplicate @colname generated for entry (Milestone 8)</li>
+<li>3114353 Java sun.* packages should not be used (Milestone 8)</li>
+</ol><note>SourceForge bugs, patches, and RFEs listed above can be
+found in SourceForge Bugs, Patches, and RFE tracker pages: <ul>
+<li>Bugs tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725074
+</pre></li>
+<li>Patches tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725076
+</pre></li>
+<li>RFE tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725077
+</pre></li>
+</ul></note></section>
+<section id="rel1.5.1"><title>DITA OT Release 1.5.1</title><ul>
+<li><b>Release date</b>: June 18, 2010</li>
+<li><b>Supports</b>: DITA 1.0 through 1.2 (Committee Draft 02 level)</li>
+<li><b>Download at</b>: <xref format="html"
+href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Stable%20Release/"
+scope="external">DITA-OT Latest Stable Build</xref></li>
+<li><b>Which package is for me?</b> See <xref format="html"
+href="http://dita.xml.org/freelinking/DITA-OT%2520Packages"
+scope="external">DITA-OT Packages</xref>. </li>
+</ul><p>Release 1.5.1 is a maintenance release based on Committee
+Draft 01 of the DITA 1.2 standard. This is the same version of the
+standard used for the DITA 1.2 Public Review. Release 1.5.1 contains
+many fixes and minor enhancements. It also includes a preview of a
+new output transform to the Open Document Format; this transform will
+be completed in a later release.</p><p>Release 1.5.1 was developed
+using a series of test builds released to the community every three
+weeks. Each item in the list below indicates which test build first
+contained the update. There were seven total test builds.</p><p>[General
+Enhancements]</p><ol>
+<li>Update to latest copy of DITA 1.2 Draft DTDs and Schemas (last
+update in Milestone 5)</li>
+</ol><p>[14 SourceForge Enhancements Added]</p><ol>
+<li>2797337 Support for ODF output transform (first prototype available
+in Milestone 2, further updates in each milestone)</li>
+<li>2703335 Reduce duplicated code in XHTML &lt;note> processing (Milestone
+3)</li>
+<li>2976463 Provide finer grained control of links in PDF (include
+reltable and in-topic links, without parent/child links) (Milestone
+4)</li>
+<li>2971536 New Java options for existing Ant parameters (Milestone
+4)</li>
+<li>2979084 Obey the "args.draft" parameter (Milestone 5)</li>
+<li>2990783 allow caller-provided IndexTermCollection (Milestone 6
+contains the core code updates; M7 contains the full enhancement)</li>
+<li>3001750 Shortdesc from map should override link description in
+PDF (Milestone 7)</li>
+<li>3004305 Notes with type="warning" need styling / localization
+in XHTML (Milestone 7)</li>
+<li>3004859 "eclipsecontent" transform should drop debug info (Milestone
+7)</li>
+<li>2892706 Don't delete the FO file (new option to preserve topic.fo)
+(Milestone 7)</li>
+<li>2928584 Add general model for end-of-topic processing in PDF (Milestone
+7)</li>
+<li>3006675 Support new DITA 1.2 &lt;stepsection> element in PDF (Milestone
+7)</li>
+<li>3006847 Add generated task headers to PDF (using the option that
+works for XHTML in DITA-OT 1.5) (Milestone 7)</li>
+<li>2987769  Add support for Eclipse Help index redirects (Milestone
+7)</li>
+</ol><p>[2 SourceForge Patches Added]</p><ol>
+<li>2914475 Use Xerces Grammar Pool to Improve Performance (Milestone
+1)</li>
+<li>2991688 Refine package build Ant (Milestone 6)</li>
+</ol><p>[46 SourceForge Bugs Fixed]</p><ol>
+<li>2916469 @locktitle not respected by preprocessor (Milestone 1)</li>
+<li>2917809 need empty lib/saxon directory for minimum and standard
+pkg. (Milestone 1)</li>
+<li>2925636 Build fails when excluded section contains a table (Milestone
+1)</li>
+<li>2926417 Absolute file: URLs are not resolved. (Milestone 1)</li>
+<li>2930109 Move meta module pushes content into peer topic. (Milestone
+1)</li>
+<li>1852808 args.css requires dummy file. (Milestone 1)</li>
+<li>2952956 Imagemap processing drops outputclass from image (Milestone
+3)</li>
+<li>2953706 Minor improvements to "garage" samples (Milestone 3)</li>
+<li>2961909 /onlytopicinmap does not respect conref (Milestone 3)</li>
+<li>2957456 conkeyref breaks when topic is in subdir (Milestone 3)</li>
+<li>2962813 stepsection throws off numbering in links to steps (Milestone
+3)</li>
+<li>2959588 Template Processor Doesn't handle XSLT atts that require
+' (Milestone 3)</li>
+<li>2914574 plus-htmlhelp-alias-map: using same extension point twice
+(Milestone 3)</li>
+<li>2957938 coderef not working everytime (Milestone 3)</li>
+<li>2962781 html documentation out of date (Milestone 3)</li>
+<li>2952956 refactored XSL code in ut-d.xsl (Milestone 3)</li>
+<li>2954819 NullPointer while processing simple BookMap (Milestone
+3)</li>
+<li>2954154 Updated default version from 1.0 to 1.0.0 (Milestone 3)</li>
+<li>2970471 XSLFO test for @compact wrong (Milestone 4 for PDF, Milestone
+5 for LegacyPDF)</li>
+<li>2972043 Setting onlytopicinmap causes a blank imagelist (Milestone
+4)</li>
+<li>2974667 Integrator adds spaces into XML Catalog entries (Milestone
+4)</li>
+<li>2986492 Duplicate parameter in XHTML code (Milestone 5)</li>
+<li>2982485 Cannot read a document that was written during the same
+transform (Milestone 5)</li>
+<li>2981216 &lt;tm> @tmclass requires IBM-specific values (Milestone
+5)</li>
+<li>2979361 Java stack traces in OT log (Milestone 5)</li>
+<li>2979328 Output parameters info at INFO level (Milestone 5)</li>
+<li>2978858 keyref processing doesn't respect basedir (Milestone 5)</li>
+<li>2990162 Conref to elements in same DITA file throw parsing errors
+(Milestone 6)</li>
+<li>3000677 msgph and systemoutput should use &lt;samp> instead of &lt;tt>
+(Milestone 7)</li>
+<li>3004220 &lt;tm> elements dropped when keyref text resolved (Milestone
+7)</li>
+<li>2987322 Navtitle attribute of glossarylist breaks PDF (Milestone
+7)</li>
+<li>2916474 Inappropriate match on mapgroup/topichead in PDF code
+(Milestone 7)</li>
+<li>2916408 Topichead with &lt;navtitle> not processed same as @navtitle
+in PDF (Milestone 7)</li>
+<li>3006443 CSS for prereq links indents prereq element (Milestone
+7)</li>
+<li>2607892 (Plus Plug-in) plus-allhtml-encoding: map x-windows-950
+to Big5 (Milestone 7)</li>
+<li>2385466 Handle @font-family="inherit" (Milestone 7)</li>
+<li>2928540 Shortdesc should align with body in PDF (use topic__shortdesc)
+(Milestone 7)</li>
+<li>1839827 PDF does not properly process &lt;xref> to &lt;li> elements
+(Milestone 7)</li>
+<li>2521819 PDF topic title widowed due to fo:marker placed in separate
+block (Milestone 7)</li>
+<li>1385654 docbook/topic2db.xsl - better linking support (Milestone
+7)</li>
+<li>3004550 Conkeyref does not work if key referenced is not in same
+folder (Milestone 7)</li>
+<li>3004060 keyref/id not producing link in PDF output (Milestone
+7)</li>
+<li>3001705 conkeyref doesn't work across ditamaps (Milestone 7)</li>
+<li>3000604 Legacy PDF: empty @column-number causes errors (Milestone
+7)</li>
+<li>3013079 Keyref handling does not respect scope="external" (Final
+build)</li>
+<li>3005748 XHTML: Topics w/ @print set to "printonly" are included
+(Final build)</li>
+</ol><note>SourceForge bugs, patches, and RFEs listed above can be
+found in SourceForge Bugs, Patches, and RFE tracker pages: <ul>
+<li>Bugs tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725074
+</pre></li>
+<li>Patches tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725076
+</pre></li>
+<li>RFE tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725077
+</pre></li>
+</ul></note></section>
+<section id="rel1.5">       <title>DITA OT release 1.5</title>   
+   <p>Release 1.5 is a major release based on the new DITA 1.2 draft
+standard.         It contains full support for DITA 1.2 draft as defined
+in the fall of 2009         (prior to public review).</p>       <p>In
+addition to DITA 1.2 support, release 1.5 contains the following updates,
+        which are available in Milestone 21 or earlier of the DITA-OT
+test builds:       </p>       <p>[General Enhancements]</p>       <ol>
+<li>New parameter to generate output for only the topics referenced
+in a map</li>
+<li>Use fileparameter in Ant 1.7 to replace processing instruction
+in intermediate dita files</li>
+<li>Determine the version of DITA-OT via the class org.dita.dost.util.Version</li>
+<li>Remove duplicate ids in PDF topicmerge</li>
+<li>Move Notices before the TOC, suppress in the TOC and suppress
+the second copy after the TOC</li>
+<li>Include @scope="peer" condition when creating rel-links. </li>
+</ol>       <p>[SourceForge Enhancements Added]</p>       <ol>
+<li>2859612 Add support for Serbian (Latin)</li>
+<li>2845278 Add Ant parameters for XSLT parameters</li>
+<li>2824371 Support Hindi and Urdu for XHTML output</li>
+<li>2790755 Process in unique temp directories (Designed to allow
+multiple builds to take place at once)</li>
+<li>2780998 startcmd.sh: Run the user's shell, not sh</li>
+<li>2698921 Add a way to set attributes on &lt;body&gt;</li>
+<li>2120219 Add PDF to the supported image</li>
+<li>2002857 homeID in javahelp .hs file is not set</li>
+<li>1725284 add support for headings for sections within task (XHTML
+only)</li>
+<li>1623246 Support RFC4646 language tags in Index modules</li>
+<li>1367897 Xref content generation enforces formatting choices</li>
+<li>2882109 Convert named PDF templates to mode template</li>
+<li>2883406 Add extension point for modifying PDF link text</li>
+<li>2882870 Add parameter to control PDF Chapter style</li>
+<li>2882103 Provide hook for specializations to add custom headers</li>
+<li>2882072 Add parameter to control PDF bookmarks (default collapsed)</li>
+</ol>       <p>[93 SourceForge Bugs Fixed]</p>       <ol>
+<li>2860433 Keyref on &lt;image&gt; fails to resolve</li>
+<li>2860199 Chunk to-content in submap resulting in missing output</li>
+<li>2860168 Suppress data and data-about in PDF output</li>
+<li>2857167 conrefImpl.xsl 1.6.4.13 has duplicate variable decls</li>
+<li>2856742 Problem of keys attribute in nested topicref elements</li>
+<li>2854546 Peer xref leads to invalid destination error in PDF</li>
+<li>2849200 Style on ditaval prop or revprop is ignored</li>
+<li>2846111 Unnecessary text generated for external xref</li>
+<li>2845598 1.5-M18-demo/fo/Customization pdf.formatter</li>
+<li>2842753 catalog-dita.xml has invalid entries</li>
+<li>2839035 Chunk code cannot parse xref with &amp;</li>
+<li>2832696 Move meta module pushes content into non-DITA file</li>
+<li>2829350 Build_demo.xml places files in incorrect directory</li>
+<li>2826143 Move meta module discards link text</li>
+<li>2824907 1.5 M17 Bug - FileNotFoundException export.xml eclipsehelp</li>
+<li>2819853 missing nested indexterm after 3rd</li>
+<li>2815492 PDF: keep-with-next on shortdesc</li>
+<li>2815485 Prolog indexterm not processed properly for PDF</li>
+<li>2813082 Eclipse help MANIFEST.MF filename wrong case, needs CRLF</li>
+<li>2811980 pdf2: japanese translate for generated page number of
+a ref</li>
+<li>2811358 Incorrect entry@colname in middle file at PDF generation</li>
+<li>2804442 Bad param name in prereq-fmt template's call to sect-heading</li>
+<li>2799543 Child links in HTML Help output are wrong</li>
+<li>2797030 Chunking fails with bookmap</li>
+<li>2796614 Leading slash breaks PLUGINS_ROOT usage for Eclipse help</li>
+<li>2791696 reltable DITA 1.2 (#12048)</li>
+<li>2791345 Topicmeta searchtitles in map not used in topic</li>
+<li>2791278 Keyref Resolution Fails for Non-Descendant Topics</li>
+<li>2790807 Demo code should use new PDF output</li>
+<li>2788069 Topicmerge does not handle copy-to properly</li>
+<li>2788069 Topicmerge does not handle copy-to properly</li>
+<li>2782503 Extra space before bullet list in xhtml output DITA-OT
+1.4.3</li>
+<li>2774128 startcmd.sh is encoded with DOS line endings in v1.5 M13</li>
+<li>2759964 HTML outputs filters conditional topics poorly</li>
+<li>2759964 HTML outputs filters conditional topics poorly</li>
+<li>2748371 Revision + ID gives XSL error</li>
+<li>2739236 plus-allhtml-svgobject handles &lt;alt&gt; badly</li>
+<li>2724090 XHTML: conreffed by-reference footnotes break w/ chunking</li>
+<li>2723928 gen-toc template not matching properly</li>
+<li>2723715 Itemgroup sets @id when element is not open</li>
+<li>2712074 XHTML: chunk=to-content on map breaks by-reference footnotes</li>
+<li>2706725 Single quote inserted in empty table cells in FO</li>
+<li>2696229 FO plugin code incompatible with Saxon 9 (OT1.4.3 default)</li>
+<li>2696191 Java libraries missing from 1.4.3 distributions</li>
+<li>2647292 HTML stylesheets should style &lt;wintitle&gt; and &lt;filepath&gt;</li>
+<li>2629271 maplink: should not modify href if scope=external</li>
+<li>2629256 mapref: should not modify href if scope=external</li>
+<li>2573681 Move link module does extra processing</li>
+<li>2547437 zh_TW.properties and zh_CN.properties contents are mixed
+up</li>
+<li>2418932 toc attribute does not work for references to ditamaps</li>
+<li>2317681 Extra files generated when many topics are chunked to
+one</li>
+<li>2317581 inline formatting in shortdesc</li>
+<li>1931457 Need to identify transtype during XHTML output step</li>
+<li>1629094 docbook creates empty simplelists</li>
+<li>1628936 transtype=docbook does not handle publisher and copyright
+element</li>
+<li>2849078 Problems using keyrefs with DITA OT 1.5 M19 - ID: 2849078</li>
+<li>2875373 tm in linktext is dropped</li>
+<li>2870935 keyref within topics ignore @copy-to attributes</li>
+<li>2873560 SWF flash not defined as resources to be copied</li>
+<li>2872954 Conref push not working at map level</li>
+<li>2871009 Temp directory leaves behind single directory and file</li>
+<li>2866322 Generated links have bad URLs</li>
+<li>2873654 PDF missing rules for new DITA 1.2 content elements</li>
+<li>2872988 Bad relcolwidth crashes PDF output</li>
+<li>2866204 Topicref with keyref fails to produce output</li>
+<li>2878446 Issue with ampersand in xrefs in attributes</li>
+<li>1629096 docbook creates invalid varlistentry</li>
+<li>2871326 Cannot use different TOC titles for same topic in PDF</li>
+<li>1880097 PDF2 ingnores contents of &lt;xref&gt; elements</li>
+<li>1815571 Invalid property in fo:table-body</li>
+<li>2879171 Shortdesc &amp; Abstract formatting is incorrect for PDF</li>
+<li>2882085 Obsolete code in PDF plug-in should be removed</li>
+<li>2661418 make the TOC in pdf2 output link to topics in pdf</li>
+<li>2871017 eclipsehelp plugin.xml invalid in 1.5M20</li>
+<li>2887331 chunk="to-content" on a sub-map causes path error</li>
+<li>2891736 indexterm in topicref level are copied into topic/prolog</li>
+<li>2893316 This is a bug in the integrator.xml</li>
+<li>2893493 ${clean.temp} is not set to true per documentation</li>
+<li>2893664 ampersand entity with conref actions causes build to fail</li>
+<li>2893924 htmlhelp transtype requires video plugin</li>
+<li>1628937 Rename supportingboth.ditaand.xmlinaditamap.dita</li>
+<li>1771123 Inappropriate Message 018 On type= value</li>
+<li>1819660 Eclipse Help issue producing toc file.</li>
+<li>1848313 ditaval file sent to XSLT not URL</li>
+<li>1897542 Chunk to-content may need to rewrite topic IDs</li>
+<li>2875946 PDF: table @pgwide semantics not implemented</li>
+<li>2893745 missing fop's file/directory in standard package</li>
+<li>2900047 map2htmtoc.xsl doesn't allow for extension of root template</li>
+<li>2900417 html transform does not use image/@scale properly</li>
+<li>2906957 Update Eclipse plugin DTDs and packaging</li>
+<li>2796964 Use xml:lang for generated text in PDF</li>
+<li>2860596 PullPrologIndexTerms selection too wide, Removed spurious
+pullPrologIndexTerms in section/title</li>
+<li>1852733 Image "scale" attribute is ignored</li>
+</ol>       <p>[4 SourceForge Patches Added]</p>       <ol>
+<li>2790337 Add extension points to related-links code</li>
+<li>2778178 Flagging code duplicates XSL</li>
+<li>2715750 plus-transtype-htmlhelp: support alternate compilers</li>
+<li>2804311 Feature value trim test bug</li>
+</ol>       <note>SourceForge bugs, patches, and RFEs listed above
+can be found in SourceForge Bugs, Patches, and RFE tracker pages: <ul>
+<li>Bugs tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725074
+        </pre></li>
+<li>Patches tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725076
+        </pre></li>
+<li>RFE tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725077
+        </pre></li>
+</ul></note>     </section>
+<section>       <title>DITA OT release 1.4.3</title>       <p>Release
+1.4.3 is a maintenance release and is intended to be the last    
+    released based fully on DITA 1.1. It contains a significant amount
+of         preview function for the upcoming DITA 1.2 standard, but
+the DITA 1.2         document types must be specifically referenced
+in order to use this         capability.       </p>       <p>The 1.4.3
+release contains the following major updates:</p>       <ol>
+<li>The PDF codebase switched from the older deprecated code to the
+           plugin previously known as PDF2. Running a build with the
+transform           type PDF or PDF2 will now run the new code. To
+continue using the           older code, set your transform type to
+"legacypdf".</li>
+<li>The PDF plugin now runs with FOP, as well as with the latest version
+          of Saxon.</li>
+<li>The Full Easy Install package now ships with Saxon 9B instead
+of           with Xalan, and code in the DITA-OT package has been
+updated to work           with Saxon 9B.</li>
+<li>The Full Easy Install package updates the versions of many open
+          source libraries (including Ant and FOP)</li>
+<li>RFE 1982567 Allow spaces in DITA file names</li>
+<li>Preview function for the majority of the upcoming OASIS DITA 1.2
+          standard, including everything from milestone builds one
+through           twelve of DITA-OT 1.5 </li>
+</ol>       <p>[10 SF Enhancements Added]</p>       <ol>
+<li>1982567 Allow spaces in DITA file names</li>
+<li>2631145 dita2htmlImpl.xsl should not define doctype</li>
+<li>2562718 Rename the ant directory to avoid naming collisions with
+ant</li>
+<li>2314086 Let maplink generate &lt;linklist&gt; elements</li>
+<li>2258659 Extend integrator to allow addition of messages.</li>
+<li>2117337 Customize Integrator to integrate custom directories</li>
+<li>2074933 Make index output for new transtypes more extensible</li>
+<li>1995667 Add plugin extension points to preprocess pipeline</li>
+<li>1972537 Let users specify reloadstylesheet on xslt tasks</li>
+<li>1803199 Allow ability to include class ancestry in XHTML class
+attribute</li>
+</ol>       <p>[4 SourceForge Patches Added]</p>       <ol>
+<li>1996733 Structure Ant &lt;pipeline&gt; better</li>
+<li>1796007 Refactor of related links HTML for specialized processing</li>
+<li>1947566 pdf2: allow XEP to be installed elsewhere</li>
+<li>2477370 Refactor of conrefImpl.xsl</li>
+</ol>       <p>[31 SF Bugs Fixed]</p>       <ol>
+<li>2008294 End flag does not work in ditaval</li>
+<li>2078563 Keyref not working for external links</li>
+<li>2027170 maprefImpl.xsl removes part of class attr from topichead</li>
+<li>2027058 Topichead element stops map processing in ChunkMapReader</li>
+<li>2001268 DITA-OT documentation wants JDK 1.4</li>
+<li>2008317 Chunking one topic from a large file hogs memory</li>
+<li>2219479 &lt;prodinfo&gt; subelement associations are lost in HTML
+output</li>
+<li>2340727 No link in TOC to topics in ditabase</li>
+<li>2317627 Chunking map to create one file should use map file name</li>
+<li>2143078 Relcolwidth not respected in choicetable</li>
+<li>1995223 bookmap: bookmeta->bookrights information is not generated</li>
+<li>1990167 reltable doesn't generate external links correctly</li>
+<li>1953553 FO 1.4.2 plugin: Inconsistent display of "on page" in
+xref</li>
+<li>1951879 Link generation is disabled for bookmaps</li>
+<li>1997171 topic body suppressed in chapter topics</li>
+<li>2417980 Toolkit should support both versions of Serbian lang code</li>
+<li>1947817 Extra topics appear in PDF output when using reltables</li>
+<li>2004588 Image alt text needs space normalized</li>
+<li>1954463 Conditional processing multiple PDFs in the same JVM</li>
+<li>2061301 Useless import of xslt4j stops dost.jar being built</li>
+<li>2317659 Chunking "by-topic" does not work</li>
+<li>1955211 Footnotes-by-reference rendered naively</li>
+<li>2010062 Spaces dropped in indexterm that has keyword</li>
+<li>2607496 USEINDEX=no breaks HTML Help HHP</li>
+<li>2570118 &lt;xref&gt; without href drops content</li>
+<li>2414891 Map contains wrong reference after chunking</li>
+<li>2010092 example or section title can be orphaned in PDF2</li>
+<li>1999117 Ubuntu 8.04 | startcmd.sh doesn't work</li>
+<li>2020317 Many duplicated id in xxx_MERGED.xml in PDF2 output.</li>
+<li>2614006 Conref processing ignores -dita-use-conref-target</li>
+<li>1727863 &lt;groupchoice&gt; has an extra "|" character</li>
+</ol>       <note>SourceForge bugs, patches, and RFEs listed above
+can be found in SourceForge Bugs, Patches, and RFE tracker pages: <ul>
+<li>Bugs tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725074
+        </pre></li>
+<li>Patches tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725076
+        </pre></li>
+<li>RFE tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725077
+        </pre></li>
+</ul></note>     </section>
+<section>       <title>DITA OT release 1.4.2.1</title>       <p>Release
+1.4.2.1 is a full build to provide an urgent fix to fix the      
+ following critical problem which users found in release 1.4.2.</p> 
+     <ol>
+<li>SF Bug 1956231 OSGI Manifest for eclipsehelp transtype contains
+spaces.</li>
+</ol>       <p>For this fix, we have updated xsl/map2pluginImpl.xsl
+to prevent        generating extra spaces at the head of every line
+in OSGI manifest        file of eclipse help output.</p>     </section>
+<section>       <title>DITA OT release 1.4.2</title>       <p>Release
+1.4.2 is a maintenance release to fix defects and make patches   
+    based on release 1.4.1</p>       <p>Release 1.4.2 comes in three
+versions:</p>       <ol>
+<li>Minimal package contains only the core processing code.</li>
+<li>Standard package contains the core processing code, plus demos,
+        documentation, and samples.</li>
+<li>Full "easy install" package contains the standard package plus
+        external libraries useful for many toolkit processes (such
+as         Xalan and ANT), plus a batch file to setup a local environment.</li>
+</ol>       <p>[39 SF Bugs Fixed]</p>       <ol>
+<li>1945824 Index-see works for "ru-ru" but not for "ru"</li>
+<li>1944245 Null pointer error with complex filename</li>
+<li>1923519 Conrefs in nested, conreffed topics don't work</li>
+<li>1911285 files.txt is not up-to-date</li>
+<li>1906954 Constants.ANT_INVOKER_EXT_PARAM_OUTPUTDIR resulted in
+null ...</li>
+<li>1903830 Error when collection-type=sequence in map</li>
+<li>1903626 Topicref to Glossentry With Topicmeta Throws Null Pointer</li>
+<li>1900907 Documentation of generateouter command-line param is incorrect</li>
+<li>1900427 TIFF file format not a supported type</li>
+<li>1898810 Problem running ant with DITA-OT in path with Latin char</li>
+<li>1897358 Compiling CHM's in sequence results in errant index entries</li>
+<li>1894561 wordrtf not correctly handling p inside li</li>
+<li>1893234 Java TopicMerge removes processing instruction</li>
+<li>1868423 Null pointer exception when a PI is at the end of the
+file</li>
+<li>1857405 chunk processing fails when no section element</li>
+<li>1855047 startup.sh fails under OS X</li>
+<li>1849346 FO file generated from DITA MAP not valid</li>
+<li>1843652 Image referenced in map is not found, topicmerge breaks</li>
+<li>1843583 Extra bullet in TOC for topicref with no href or navtitle</li>
+<li>1839765 index-sort-as not used, content appears in index</li>
+<li>1908306 Index entry for external resource is ignored</li>
+<li>1908293 HTML Help index contains extra anchor</li>
+<li>1900916 Pointer to CSS is Incorrect in index.html</li>
+<li>1898451 HTML titles should be space-normalized for CHM consumption</li>
+<li>1898228 Table desc not being processed</li>
+<li>1897551 maplink is unawareof chunk to-content</li>
+<li>1893461 map file href handling</li>
+<li>1889918 Index link goes with wrong entry</li>
+<li>1883907 IndexTermReader class doesn't handle specialized titles</li>
+<li>1873401 XHTML: colsep in last column when @frame=none</li>
+<li>1872434 _merge.xml missing metadata</li>
+<li>1868047 htmlhelp path in demo ant script is fixed</li>
+<li>1864247 PIs missing from ditamaps in temp dir</li>
+<li>1857282 path to css output is not correct</li>
+<li>1848355 gen-list wants class on &lt;foreign&gt; descendants</li>
+<li>1843693 Bad XREF syntax gives confusing message about unique_193</li>
+<li>1841175 Need to clean up doc/ directory (remove invalid items)</li>
+<li>1832800 Empty end-range indexterm causes eclipse error</li>
+<li>1606387 Shortdesc &amp; Abstract formatting is incorrect for XHTML</li>
+</ol>       <p>[3 SF Patches Added]</p>       <ol>
+<li>1930220 Simplify flag templates</li>
+<li>1876118 Add plug-in support for string resource-files</li>
+<li>1818318 Path to HTML Help compiler on x64 Windows</li>
+</ol>       <p>[6 SF Enhancements Added]</p>       <ol>
+<li>1855523 Pass dost.class.path to XSLT tasks</li>
+<li>1827322 Let plugins add their own template files</li>
+<li>1825843 Let plugins add dependencies to Ant targets</li>
+<li>1824466 Subclass ImportAction</li>
+<li>1782256 Let plugins not have to choose to go in "demo" or "plugins"</li>
+<li>1859421 Add plug-in support for string resource-files</li>
+</ol>       <note>SourceForge bugs, patches, and RFEs listed above
+can be found in SourceForge Bugs, Patches, and RFE tracker pages: <ul>
+<li>Bugs tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725074
+        </pre></li>
+<li>Patches tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725076
+        </pre></li>
+<li>RFE tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725077
+        </pre></li>
+</ul></note>     </section>
+<section>       <title>DITA OT release 1.4.1</title>       <p>Release
+1.4.1 is a maintenance release to fix defects and make patches   
+    based on release 1.4.</p>       <p>[23 SF Bugs Fixed]</p>    
+  <ol>
+<li>1833801 Infinite loop in MapMetaReader</li>
+<li>1833796 move-meta-entries creates invalid XML</li>
+<li>1827055 Dita 1.4 move metadata method failing</li>
+<li>1819663 XHTML processing add &amp;nbsp; in output files.</li>
+<li>1815155 Using xref moves output directory</li>
+<li>1807808 Java TopicMerge calling XSLT transformer with URL not
+file</li>
+<li>1806728 Merge doesn't normalize filenames</li>
+<li>1806130 chunk module wraps long lines</li>
+<li>1806081 &lt;dita&gt; without class attribute triggers warning</li>
+<li>1803190 XHTML: processing &lt;xref&gt; to &lt;a title=&quot;&quot;&gt;</li>
+<li>1803183 XHTML: &lt;b&gt; and &lt;xref&gt; within &lt;pre&gt;</li>
+<li>1796207 topicmeta in ditamap causes build failure</li>
+<li>1782109 Title input to Help Compiler invalid for taskbook example</li>
+<li>1779066 [DOTX031E] Errors</li>
+<li>1770571 Chunk &quot;to-content&quot; on map not implemented</li>
+<li>1732678 Map without DOCTYPE declaration produces odd error</li>
+<li>1675195 No Error Location for Titleless Topic</li>
+<li>1639672 The Toolkit does not properly support valid xml:lang values.</li>
+<li>1639344 Xref : topicpull : the spectitle not used as linktext</li>
+<li>1628937 Rename supportingboth.ditaand.xmlinaditamap.dita</li>
+<li>1584187 Bookmap 1.1: &lt;title&gt; element breaks topicmerge</li>
+<li>1563093 Difficult to find location of error</li>
+<li>1505172 foimgext Considered Harmful</li>
+</ol>       <p>[5 SF Patches Added]</p>       <ol>
+<li>1741302 Prevent indexterm crash with two-letter language codes</li>
+<li>1630214 HTML Help HHP generator: Language tag</li>
+<li>1498936 Failure when moving links with embedded mathml</li>
+<li>1481586 CSS for ditamap-to-HTML TOC</li>
+<li>1457541 xref to elements fails within topics in PDF</li>
+</ol>       <p>[5 SF RFE Added]</p>       <ol>
+<li>1764910 Allow greater control over the output directory</li>
+<li>1764905 Allow option to build only topics listed in the map</li>
+<li>1725280 Improve error reporting in general</li>
+<li>1686939 Make dita.list into an XML file</li>
+<li>1676947 Integration points for passing params to XSL</li>
+</ol>       <note>SourceForge bugs, patches, and RFEs listed above
+can be found in SourceForge Bugs, Patches, and RFE tracker pages: <ul>
+<li>Bugs tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725074
+        </pre></li>
+<li>Patches tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725076
+        </pre></li>
+<li>RFE tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725077
+        </pre></li>
+</ul></note>     </section>
+<section>       <title>DITA OT release 1.4</title>       <p>Release
+1.4 is a major release to add new functions, fulfill new       requirements,
+make some function enhancements and fix bugs over release       1.3.1.
+Available since August 1, 2007</p>       <p>       The DITA-OT Release
+1.4 contains full support for the OASIS DITA 1.1 standard.      This
+completes the preliminary support added in the 1.3 and 1.3.1 versions
+of      the toolkit. New and improved items for 1.1 are listed under
+[Improvements]      below. Support for the new bookmap standard is
+available in the latest version      of the FO plug-in, which uses
+the "pdf2" transform type; it will be released      together with
+or soon after the release of DITA-OT 1.4. The deprecated "pdf"   
+  transform type has not been updated for the new bookmap.       Together
+with DITA 1.1 support, the toolkit development team has improved 
+    error reporting so that build failures are more accurately reported
+at the end      of the build. Error handling will continue to improve
+in future releases.       Release 1.4 comes in two versions. The full
+version contains several external      packages that are useful or
+critical to running the toolkit, such as Xalan and      the XML Catalog
+resolver. The smaller package contains only core toolkit code.   
+   NOTE ABOUT DEPRECATED CODE: changes for the new DITAVAL standard
+required      a change to code in dita2htmlImpl.xsl. The "flagit"
+named template is deprecated      and will not work with the new ditaval
+format. Overrides to this step should be      updated to use "start-flagit"
+and "end-flagit". The flagit template will continue      to work with
+the old ditaval but will generate a warning for each call.       </p> 
+     <p>       Changes:       <ol>
+<li>           <p>Release 1.4 improves the processing of DITA documents
+using XML Schemas.            One was able to process these type of
+documents in Release 1.3.1 but it            meant that the schema
+location had to have the ablsolute location of the            schema
+in order for the Toolkit properly.</p>           <p>DITA 1.1 introduces
+the use of URNs to normatively identify the schemas            used
+for validation.  The URNs have the following desing pattern      
+    "urn:oasis:names:tc:dita:xsd:&lt;schemaDocument&gt;:1.1". You
+should use these in            as the value for the attribute xsi:noNamespaceSchemaLocation.</p> 
+       </li>
+</ol>       </p>       <p>[13 Improvements]</p>       <ol>
+<li>Support &lt;title&gt; in map </li>
+<li>Ignore Index-base in default processing</li>
+<li>Retrieve the link text from abstract element.</li>
+<li>Format shortdesc in abstract appropriately</li>
+<li>Add standard code to allow overrides to easily process generalized
+version of unknown and foreign element </li>
+<li>Support @dir on every element</li>
+<li>Refactor mapref resolution</li>
+<li>Support generalization and re-specialization of unknown/foreign
+elements</li>
+<li>Replace Move Index module with new Move Metadata module</li>
+<li>New DITAVAL standard support</li>
+<li>New chunk attribute support</li>
+<li>Support XML Schema validated instance document processing using
+XML Catalogs</li>
+</ol>       <p>[17 SF Bugs Fixed]</p>       <ol>
+<li>1700561 Null Pointer Exception on Missing domain= Attribute</li>
+<li>1733264 pretty.xsl is broken</li>
+<li>1619074 table in step screws up following steps for HTML generation</li>
+<li>1728700 GenMapAndTopicList keeps filtering when called a second
+time</li>
+<li>1732562 DitaWriter.java can duplicate @xtrf and @xtrc</li>
+<li>1733108 Update Bookmap sample files to DITA 1.1</li>
+<li>1706263 Conrefing from a map to topic is not working properly</li>
+<li>1677620 Non-DITA file is treated as DITA in pre-process</li>
+<li>1717471 Links show up more than once</li>
+<li>1712543 gen-list-without-flagging : NullPointerException</li>
+<li>1652892 Invalid hdr/ftr arg value causes build failure</li>
+<li>1647950 PIs in DITA source are dropped in the processing pipeline</li>
+<li>1644559 Force Toolkit to use private catalog to allow schemas
+to work properly</li>
+<li>1642138 Move javamerge target out of build_template.xml</li>
+<li>1643155 Map TOC is HTML even for transtype="xhtml"</li>
+<li>1637564 topicpull breaks specializations of xref</li>
+<li>1676968 Plugins adding to classpath break when basedir != dita.dir</li>
+</ol>       <note>SourceForge bugs, patches, and RFEs listed above
+can be found in SourceForge Bugs, Patches, and RFE tracker pages: <ul>
+<li>Bugs tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725074
+        </pre></li>
+<li>Patches tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725076
+        </pre></li>
+<li>RFE tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725077
+        </pre></li>
+</ul></note>     </section>
+<section>       <title>DITA OT release 1.3.1</title>       <p>Release
+1.3.1 is a maintenance release to fix defects and make patches based
+on release 1.3.</p>       <p>[15 SF Bugs Fixed]</p>       <ol>
+<li>SF Bug 1385642 docbook/topic2db.xsl - shortdesc</li>
+<li>SF Bug 1528638 wordrtf does not correctly number steps</li>
+<li>SF Bug 1562518 Flag is confusing when a list is mixed with text</li>
+<li>SF Bug 1563665 Should use CSS to honor rowsep and colsep in table
+entries</li>
+<li>SF Bug 1567117 Xref to footnote is not resolved correctly </li>
+<li>SF Bug 1569671 &lt;reltable&gt; in nested map creates bogus TOC
+entries</li>
+<li>SF Bug 1573996 Plugins do not work in plugins directory</li>
+<li>SF Bug 1574011 Spaces in a file name prevent XHTML output</li>
+<li>SF Bug 1584186 Bookmap 1.1: &lt;title&gt; element duplicated in
+mappull</li>
+<li>SF Bug 1588039 Conref domain checking is sub-par</li>
+<li>SF Bug 1588624 OT v1.3 map2hhc.xsl error</li>
+<li>SF Bug 1597444 Java topicmerge breaks when text contains less-than</li>
+<li>SF Bug 1597473 Nothing references common.css</li>
+<li>SF Bug 1598109 Java topicmerge does not rewrite image/@href</li>
+<li>SF Bug 1598230 jhindexer of JavaHelp breaks Search Index for DITAOT
+content</li>
+</ol>       <note>SourceForge bugs, patches, and RFEs listed above
+can be found in SourceForge Bugs, Patches, and RFE tracker pages: <ul>
+<li>Bugs tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725074
+        </pre></li>
+<li>Patches tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725076
+        </pre></li>
+<li>RFE tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725077
+        </pre></li>
+</ul></note>     </section>
+<section>       <title>DITA OT release 1.3</title>       <p><b>OASIS
+DITA 1.1 support</b></p>       <p>Things to know about OASIS DITA
+1.1 support in this release:</p>       <ol>
+<li>DITA-OT 1.3 provides preliminary processing support for the upcoming
+OASIS DITA 1.1 specification (see <xref format="html"
+href="http://wiki.oasis-open.org/dita/Roadmap_for_DITA_development"
+scope="external">http://wiki.oasis-open.org/dita/Roadmap_for_DITA_development</xref>).
+Because the proposed OASIS DITA 1.1 DTDs and Schemas are fully backwards
+compatible with the latest DITA 1.0.1 DTDs and Schemas, the 1.3 Toolkit
+provides the proposed 1.1 materials as the default DTDs for processing.
+The XML Catalog resolution maps any references for DITA 1.0 doctypes
+to the 1.1 DTDs, for example. All processing ordinarily dependent
+on the 1.0 definition continues to work as usual, and any documents
+that make use of the newer 1.1-based elements or attributes will be
+supported with specific new processing function (such as base support
+for the new &lt;data&gt; element). <i>Documents created with the proposed
+OASIS DITA 1.1 DTDs are the only ones ever likely to have features
+that invoke the specific new 1.1-based processing support</i>.<note
+type="important">Because this support is based on a yet-to-be-approved
+version of the proposed OASIS DITA 1.1 specification, if you choose
+to investigate any1.1-based function, be aware that the 1.1 implementation
+in this version of the Toolkit is preliminary and very much forward-looking.
+Upon final approval of the DITA 1.1 standard, Toolkit developers will,
+of course, review our implementation to make certain that it conforms
+to the defined level of reference implementation.</note></li>
+<li>Related to the DITA 1.1 preliminary implementation, the much-discussed
+bookmap updates for DITA 1.1 will be provided as override capabilities
+for the FO plugin (Idiom&apos;s donation). Note that:<ul>
+<li>The FO demo transform code at the 1.2.2 level is still included
+in the DITA 1.3 package, but is now deprecated.</li>
+<li>To get the FO updates for 1.3, grab the FO plug-in at its next
+update, which should be shortly after the 1.3 core Toolkit code is
+released. </li>
+<li>The updated FO plug-in will be usable with FOP as well as with
+XEP. </li>
+</ul></li>
+</ol>       <p><b>Changes</b></p>       <p>The DITA Open Toolkit team
+understands the need for stability in essential APIs in the Toolit.
+This verson of the toolkit provides some strategic updates that correct
+some long-overdue faults in the original implementation. Necessarily,
+there are some changes to note: </p>       <ol>
+<li><u>Change to build.xml: </u>To make the DITA processing environment
+more like other Ant-driven build environments, the original build.xml
+has been renamed as build_demo.xml. The current build.xml in this
+release is now the normal ANT script entrance for starting a transformation.
+If you have created Ant tasks that tried to work around the former
+build.xml architecture, those might need to be revised to take advantage
+of the separated function.</li>
+<li><u>Change to command line invocations: </u>The &quot;Ant refactoring&quot;
+exercise for this release has changed some previously documented Ant
+calls for running demos. This change enables better use of the Ant
+modules for power users who need to integrate the Toolkit into programming
+build environments such as Eclipse, but the change affects some documentation.
+This is a permanent change that should remain stable from now on.
+Wherever you see an older instruction like &quot;c:\dita-ot&gt;ant
+all&quot;, you now need to indicate the component that contains the
+demos, so you would type &quot;c:\dita-ot&gt;ant all -f build_demo.xml&quot;. </li>
+<li><u>Separation of demo targets from formal component targets: </u>Another
+effect of the Ant refactoring is that the internal programming targets
+will now be displayed when you type &quot;ant -p&quot;. To see both
+those programmings targets and the demos that are part of this component,
+type &quot;c:\dita-ot&gt;ant -p -f build_demo.xml&quot;. To run just
+one of the demos that you see in the resulting list, dita.faq for
+example, type &quot;c:\dita-ot&gt;ant dita.faq -f build_demo.xml&quot;. </li>
+<li><u>Classpath update to enable catalog resolver: </u>This release
+now includes the Apache catalog resolver for improved lookup of DTDs
+by any of the Toolkit components. The fullpackage version of the Toolkit
+sets up these variables for each session. For the regular (smaller)
+version of the Toolkit, you need to include lib and lib\resource\resolver.jar
+into your classpath. For example if your CLASSPATH is like: <pre>c:\dita-ot\lib\dost.jar</pre><p>you
+need to change it to: </p><pre>c:\dita-ot\lib;c:\dita-ot\lib\dost.jar;c:\dita-ot\lib\resolver.jar</pre><p>At
+any time, the full version can be used like a normal installation
+as long as you update the system variables either in the evironment
+settings or in a batch file that sets up the shell environment. </p></li>
+<li><u>License bundling: </u>To reduce the duplication of builds on
+Sourceforge in which the only difference was the license provided
+in each, both the Apache and CPL licenses are included in root directory
+of the Toolkit. Use the one that applies to your situation.</li>
+<li><u>Two install options: </u>Two download versions are now offered.
+The smaller one is for updating existing installations or for reuse
+in embedded applications that already provide the other processing
+components--business as usual. A new package with &quot;fullpackage&quot;
+in the name now incorporates the essential processing modules to create
+a processing environment for new users and evaluators that requires
+nothing more than to unzip the file into an appropriate directory
+and then click on a &quot;start&quot; batch file. A new document in
+its root directory (an output of doc/EvaluateOT.dita, <q>Evaluating
+the DITA Open Toolkit (fullpackage version)</q>) informs new users
+how to install and use the Toolkit for the first time.</li>
+<li><u>Other enhancements: </u>The public design discussions that
+fed into the final selection and architectures for this release are
+documented at the DITA Focus Area in a topic called <q>DITA OT 1.3
+Issues tracking</q> (<xref format="html"
+href="http://dita.xml.org/node/1282" scope="external">http://dita.xml.org/node/1282</xref>).</li>
+</ol>       <p><b>[7 Improvements]</b></p>       <ol>
+<li>Preliminary support for OASIS DITA 1.1 </li>
+<li>Support ICU in index sorting </li>
+<li>Integrate with Eclipse </li>
+<li>Refactor Ant script for easy override </li>
+<li>Topicmerge reimplementation in JAVA </li>
+<li>Enable XML Catalog Resolver </li>
+<li>Full package distribution (was GUI/usability)</li>
+</ol>       <p><b>[21 SF Bugs Fixed]</b></p>       <ol>
+<li>SF Bug 1582506 Docbook cannot handle &lt;author&gt; </li>
+<li>SF Bug 1548189 Sections should not jump to &lt;h4&gt; for Accessibility
+reasons </li>
+<li>SF Bug 1548180 Spaces dropped from index terms </li>
+<li>SF Bug 1548154 XHTML index links should go to the topic </li>
+<li>SF Bug 1545038 CommandLineInvoker is unfriendly towards spaces </li>
+<li>SF Bug 1541055 topicref @id incorrectly uses NMTOKEN type </li>
+<li>SF Bug 1530443 dost.jar relies on the incorrect behavior of Xerces </li>
+<li>SF Bug 1473029 Syntax code makes overrides difficult </li>
+<li>SF Bug 1470101 Metadata in topics is left out of XHTML headers </li>
+<li>SF Bug 1470077 Choicetable headers create attribute inside attribute </li>
+<li>SF Bug 1470057 Step template creates attributes after creating
+tags </li>
+<li>SF Bug 1465947 &lt;topichead&gt; without children the whole branch
+to disappear </li>
+<li>SF Bug 1465941 Keywords defined in map are ignored if &lt;topicref&gt;
+contains t </li>
+<li>SF Bug 1465866 Problems in catalog-dita.txt </li>
+<li>SF Bug 1460447 &lt;morerows&gt; not well supported in pdf tranformation. </li>
+<li>SF Bug 1457187 &apos;copy-to&apos; doesn&apos;t actually copy
+files </li>
+<li>SF Bug 1454835 OT renders files referenced via conref only </li>
+<li>SF Bug 1427808 Should be easier to modify link attributes in XHTML </li>
+<li>SF Bug 1422182 @colname renaming needs to apply to @namest and
+@nameend </li>
+<li>SF Bug 1417820 fo and docbook outputs can\&apos;t handle deep
+topic dirs </li>
+<li>SF Bug 1368997 PDF Vertical list of author redundancy </li>
+</ol>       <p><b>[1 SF Patch Added]</b></p>       <ol>
+<li>SF Patch 1503296 Refactor of HTMLHelp inifiles creation</li>
+</ol>       <p><b>[1 SF RFE Added]</b></p>       <ol>
+<li>SF RFE 1160960 Enh: Toolkit should work with both both *.dita
+and *.xml</li>
+</ol>       <note>SourceForge bugs, patches, and RFEs listed above
+can be found in SourceForge Bugs, Patches, and RFE tracker pages: <ul>
+<li>Bugs tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725074
+        </pre></li>
+<li>Patches tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725076
+        </pre></li>
+<li>RFE tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725077
+        </pre></li>
+</ul></note>     </section>
+<section>       <title>DITA OT release 1.2.2</title>       <p>Release
+1.2.2 is a maintenance release to fix defects and make patches based
+on release 1.2.1.</p>       <p>         <b>Improvements</b>      
+  <ol>
+<li>Chinese support in WORD RTF</li>
+<li>Improve plug-in architecture in plug-in dependency handling</li>
+</ol>       </p>       <p>         <b>SF Changes</b>         <ol>
+<li>SF Bug 1461642  Relative paths in toolkit.</li>
+<li>SF Bug 1463756  TROFF output is not usable</li>
+<li>SF Bug 1459527  Properties elements should generate default headings</li>
+<li>SF Bug 1457552  FO gen-toc does not work right for ditamaps and
+bookmaps</li>
+<li>SF Bug 1430983  Specialized indexterm does not generate entries
+in index</li>
+<li>SF Bug 1363055  Shortdesc disappears when optional body is removed</li>
+<li>SF Bug 1368403  The dita2docbook transformation lacks support
+for args.xsl</li>
+<li>SF Bug 1405184  Note template for XHTML should be easier to override</li>
+<li>SF Bug 1407646  Map titles are not used in print outputs</li>
+<li>SF Bug 1409960  No page numbers in PDF toc</li>
+<li>SF Bug 1459790  Related Links omitted when map references file#topicid</li>
+<li>SF Bug 1428015  Topicmerge.xsl should leave indentation alone</li>
+<li>SF Bug 1429400  FO output should allow more external links</li>
+<li>SF Bug 1405169  Space inside XHTML note title affects CSS presentation</li>
+<li>SF Bug 1402377  Updated translations for Icelandic</li>
+<li>SF Bug 1366845  XRefs do not generate page numbers</li>
+<li>SF Patch 1326450 Make ${basedir} mine</li>
+<li>SF Patch 1328264 FOP task userconfig file</li>
+<li>SF Patch 1385636 Tweaks to docbook/topic2db.xsl</li>
+<li>SF Patch 1435584 Recognize more image extensions</li>
+<li>SF Patch 1444900 Add template for getting input file URI</li>
+<li>SF Patch 1460419 Add a new parameter /cssroot:{args.cssroot}</li>
+<li>SF Patch 1460441 map2hhp [FILES] include</li>
+<li>SF RFE 1400140 Add a new parameter /cssroot:{args.cssroot}</li>
+</ol>       </p>     </section>
+<section>       <title>DITA OT release 1.2.1</title>       <p>Release
+1.2.1 is a maintenance release to fix defects and make patches based
+on release 1.2.</p>       <p>         <b>Improvements</b>         <ol>
+<li>Corrupt table generated in WORD RTF is fixed</li>
+<li>Pictures are merged into the WORD RTF instead of creating links
+to them</li>
+<li>lq element is supported in WORD RTF</li>
+<li>Generated text can be translated to different languages in WORD
+RTF</li>
+<li>In WORD RTF, if no &lt;choptionhd&gt; given, head will be generated
+in table</li>
+</ol>       </p>       <p>         <b>SF Changes</b>         <ol>
+<li>SF Bug 1460451 Spaces preserving methods are different among tags.</li>
+<li>SF Bug 1460449 Nested list can not be well supported.</li>
+<li>SF Bug 1460445 h2d stylesheet cannot handle HTML files within
+namespace.</li>
+<li>SF Bug 1431229 hardcoded path in MessageUtils.java</li>
+<li>SF Bug 1408477 &lt;desc&gt; element is not handled inside xref
+for XHTML</li>
+<li>SF Bug 1398867 ampersands in hrefs (on xref and link) cause build
+to fail</li>
+<li>SF Bug 1326439 filtered-out indexterms leak into index through
+dita.list </li>
+<li>SF Bug 1408487 Short description is not retrieved for &lt;xref&gt;
+element</li>
+<li>SF Bug 1407454 XHTML processing for &lt;alt&gt; is incomplete </li>
+<li>SF Bug 1405221 Some table frames ignored in dita-&gt;xhtml </li>
+<li>SF Bug 1414398 Cannot set provider for Eclipse help transformation </li>
+<li>SF RFE 1448712 add support for /plugins directory in plug-in architecture</li>
+</ol>       </p>     </section>
+<section>       <title>DITA OT release 1.2</title>       <p>DITA open
+toolkit Release 1.2 is a major release to add new functions, fulfill
+new requirements, make some function enhancements and fix bugs over
+release 1.1.2.1.</p>       <p><b>Important Change</b> DITA-OT 1.2
+offers new error handling and logging system. If you invoke your transformation
+by using java command line where new error handling and logging system
+is mandatory, you need to set the <varname>CLASSPATH</varname> Environment
+Variable for <codeph>dost.jar</codeph>. If you invoke your transformation
+by using an ant script, you need to do one more step after the setting
+above. That is adding a parameter in your command to invoke an ant
+script. For example, use <userinput>ant -f ant\sample_xhtml.xml -logger
+org.dita.dost.log.DITAOTBuildLogger</userinput> instead of <userinput>ant
+-f ant\sample_xhtml.xml</userinput> to start a transformation defined
+in ant script file ant\sample_xhtml.xml. </p>       <p>         <b>New
+Functions</b>         <ol>
+<li>             <b>New plugin archiecture</b>             <p>DITA
+Open Toolkit 1.2 provides a new function to help users to download,
+install and use plug-ins and help developers create new plug-ins for
+DITA Open Toolkit.</p>           </li>
+<li>             <b>Transformation to wordrtf</b>             <p>DITA
+Open Toolkit 1.2 provides DITA to Word transforming function to transform
+DITA source files to output in <tm tmclass="special"
+tmowner="Microsoft Corporation" tmtype="reg" trademark="Microsoft">Microsoft</tm> Word
+RTF file.</p>           </li>
+<li>             <b>HTML to DITA migration tool</b>             <p>DITA
+Open Toolkit 1.2 provides a HTML to DITA migration tool, which migrates
+HTML files to DITA files. This migration tool originally comes from
+the developerWorks publication of Robert D. Anderson&apos;s how-to
+articles with the original h2d code.</p>           </li>
+<li>             <b>Problem determination and log analysis</b>   
+         <p>In DITA Open Toolkit 1.2, a new logging method is supported
+to log messages both on the screen and into the log file. The messages
+on the screen present user with the status information, warning, error,
+and fatal error messages. The messages in the log file present user
+with more detailed information about the transformation process. By
+analyzing these messages, user can know what cause the problem and
+how to solve it.</p>           </li>
+<li>             <b>Open DITA User Guide for conditional processing</b> 
+           <p>In DITA Open Toolkit 1.2, a new user guide which can
+help users to use conditional processing is added to toolkit document.</p> 
+         </li>
+<li>             <b>Include the OASIS version langref</b>        
+    <p>In DITA Open Toolkit 1.2, a new OASIS version of language reference
+for DITA standard is added to toolkit document.</p>           </li>
+<li>             <b>Document adapt to OASIS DITA 1.0.1 DTDs</b>  
+          <p>DITA DTD files are updated to 1.0.1 version in DITA Open
+Toolkit 1.2.</p>           </li>
+</ol>       </p>       <p>         <b>Other Changes</b>         <ol>
+<li>SF Bug 1304545 Some folders were copied to DITA-OT&apos;s root
+directory</li>
+<li>SF Bug 1328689 Stylesheet links in HTML emitted with local filesystem
+paths</li>
+<li>SF Bug 1333481 Mapref function does not work for maps in another
+directory</li>
+<li>SF Bug 1343963 Blank index.html generated for ditamap contains
+only reltabe</li>
+<li>SF Bug 1344486 java.io.EOFException thrown out when reading ditaval
+file</li>
+<li>SF Bug 1347669 Path Spec. in nested DITA maps</li>
+<li>SF Bug 1357139 filtering behavior doesn&apos;t conform to spec</li>
+<li>SF Bug 1358619 The property.temp file gets cleaned out by default</li>
+<li>SF Bug 1366843 XRefs do not generate proper links in FO/PDF</li>
+<li>SF Bug 1367636 dita2fo-elems.xsl has strange line breaks</li>
+<li>SF RFE 1296133 Enable related-links in PDF output</li>
+<li>SF RFE 1326377 Add a /dbg or /debug flag for diagnostic info</li>
+<li>SF RFE 1331727 Toolkit need to run on JDK 1.5.x(only support to
+run under Sun JDK 1.5 with saxon in normal case)</li>
+<li>SF RFE 1357054 Be more friendly towards relative directories</li>
+<li>SF RFE 1357906 Provide a default output directory</li>
+<li>SF RFE 1368073 Enable plugins for DITA open toolkit</li>
+<li>SF RFE 1379518 Clearer error messages and improved exception handling</li>
+<li>SF RFE 1379523 DITA to Rich Text Format (.rtf) file</li>
+<li>SF RFE 1382482 plugin architecture of DITA-OT</li>
+</ol>       </p>     </section>
+<section>       <title>DITA OT release 1.1.2.1</title>       <p>Release
+1.1.2.1 is a full build to provide an urgent fix to fix the following
+critical problem which users found in release 1.1.2.</p>       <p> 
+       <ul>
+<li>SF Bug 1345600 The build process failed when run &quot;Ant all&quot;
+in release 1.1.2</li>
+</ul>       </p>       <p>For this fix, we have restored all the source
+DITA files in &apos;doc&apos; and directories in the binary packages.</p> 
+     <p>Note that the original parameter &quot;args.eclipse.toc&quot;
+in &quot;Ant tasks and script&quot; was separated to &quot;args.eclipsehelp.toc&quot;
+for DITA-to-Eclipse help transformation, and &quot;args.eclipsecontent.toc&quot;
+for DITA-to-dynamic Eclipse content transformation.</p>       <p>Another
+issue is that we found there is a mismatch in the document and the
+toolkit behavior when you are trying to use the following command <codeblock>ant -f conductor.xml -propertyfile ${dita.temp.dir}/property.temp.</codeblock> Now
+we have updated the documentation. Please refer to the topic &apos;Building
+DITA output with Java command line&apos; on our website for more details.</p> 
+     <p>These updates do not affect standard operation of the toolkit.
+The main goal of this minor release to enable new users of the toolkit
+to run the installation verification tests without failure.</p>  
+  </section>
+<section>       <title>DITA OT release 1.1.2</title>       <p>Release
+1.1.2 is a maintenance release to fix defects and make patches based
+on release 1.1.1. </p>       <p>But there are certain limitations
+and unfixed bugs in this release, such as, <ul>
+<li>Bug 1343963 Blank index.html generated for ditamap contains only
+reltabe</li>
+<li>Bug 1344486 java.io.EOFException thrown out when reading ditaval
+file</li>
+</ul> Please check the current &apos;open&apos; bugs on the SourceForge
+bugs tracker. </p>       <p>         <b>Changes</b>         <ol>
+<li>SF Bug 1297355: Multilevel HTML Help popup shows filenames</li>
+<li>SF Bug 1297657: Update for Supported Parameters page</li>
+<li>SF Bug 1304859: Toolkit disallows repetition of topic ID within
+map</li>
+<li>SF Bug 1306361: Fatal error in published ditamap example</li>
+<li>SF Bug 1306363: common.css not compiled with htmlhelp</li>
+<li>SF Bug 1311788: DTD references not resolved</li>
+<li>SF Bug 1314081: Fix catalog entries in catalag-ant.xml for OASIS
+DTDs</li>
+<li>SF Bug 1323435: wrong system id for html output used in validation</li>
+<li>SF Bug 1323486: HTML Help subterm indexes not sorted</li>
+<li>SF Bug 1325290: JavaHelp output does not work for Russian</li>
+<li>SF Bug 1325277: File missing from the map causes abend</li>
+<li>SF Patch 1253783: dita2fo-links relative hrefs</li>
+<li>SF Patch 1324387: In xslfo, groupchoice var prints extra | delimiter</li>
+<li>SF RFE 1324990: Installation Guide</li>
+</ol>       </p>       <b>Parameter Changes</b>       <p>         <ol>
+<li>The original parameter &quot;args.eclipse.toc&quot; in &quot;Ant
+tasks and script&quot; was separated to &quot;args.eclipsehelp.toc&quot;
+for dita2eclipsehelp transformation, and &quot;args.eclipsecontent.toc&quot;
+for dita2eclipsecontent transformation.</li>
+<li>Several parameters were added to the java command line interface,
+including &quot;/javahelptoc&quot;,&quot;/javahelpmap&quot;,&quot;/eclipsehelptoc&quot;,&quot;/eclipsecontenttoc&quot;,&quot;/xhtmltoc&quot;.</li>
+</ol>       </p>       <b>Other Changes</b>       <p> Change to the &quot;doc&quot;
+directory, except &quot;doc\langref&quot; directory: <ol>
+<li>The source dita files and the generated HTML, CHM, and PDF files
+were separated into separate downloads.</li>
+<li>The source package contains the source dita files.</li>
+<li>The binary package contains the generated HTML, CHM, and PDF files.</li>
+</ol></p>     </section>
+<section>       <title>DITA OT release 1.1.1</title>       <p>Release
+1.1.1 is a maintenance release to fix defects and make patches based
+on release 1.1. </p>       <p>For patch 1284023, we are changing the
+name of the jar lib file from dost1.0.jar back to dost.jar because
+we believe we need to keep the jar file name consistent through various
+releases.</p>       <p>         <b>Changes</b>         <ol>
+<li>SF Bug 1196409: HTMLHelp output does not reference CSS</li>
+<li>SF Bug 1272687: extra &quot;../&quot; link generated by topicgroup</li>
+<li>SF Bug 1273751: revision flag using unavailable pictures </li>
+<li>SF Bug 1273816: Index generation doesn&apos;t cope with multilevel
+well </li>
+<li>SF Bug 1281900: Unnecessary comment and href typo</li>
+<li>SF Bug 1283600: unecessary space in document cause invalid parameter
+of Ant </li>
+<li>SF Bug 1283644: multipul document($FILTERFILE,/) doesn&apos;t
+work (XALAN) </li>
+<li>SF Patch 1251609: pretargets xsl directory needs to use ${dita.script.dir} </li>
+<li>SF Patch 1252441: Files in temp directory not deleted before build</li>
+<li>SF Patch 1253785: Inline images in dita2fo-elems</li>
+<li>SF Patch 1284023: change the name of jar file and remove the version
+name </li>
+</ol>       </p>     </section>
+<section>       <title>DITA OT release 1.1</title>       <p>Release
+1.1 is a major release to add new functions, fulfill new requirements,
+make some function enhancements and fix bugs over release 1.0.2.</p> 
+     <p>         <ol>
+<li>             <b>Adaptation to the new OASIS DITA standard</b> 
+           <p>Release 1.1 implements the new OASIS DITA 1.0 standard
+for DITA DTDs and Schemas.</p>             <p>DTDs of the previous
+release locate in the directory <b>dtd/dita132</b> and schemas of
+the previous release locate in the directory <b>schema/dita132</b>. </p> 
+         </li>
+<li>             <b>Transformation to troff</b>             <p>Release
+1.1 supports new troff output. Troff output looks like Linux man page
+output.</p>           </li>
+<li>             <b>XML catalog support</b>             <p>An XML
+catalog, which can consist of several catalog entry files, is a logical
+structure that describes mapping information between public IDs and
+URLs of DTD files. A catalog entry file is an XML file that includes
+a group of catalog entries. If you want to know more about XML catalog,
+please refer<xref href="xmlcatalog.xml">XML Catalog</xref>.</p>  
+          <p>A catalog entry can be used to locate a unified resource
+identifier (URI) reference for a certain resource such as a DTD file.
+An external entity&apos;s public identifier is used for mapping to
+the URI reference. The URI of any system identifier can be ignored.</p> 
+         </li>
+<li>             <b>Topicref referring to a nested topic</b>     
+       <p>The href attribute of the topicref is extended to quote
+a nested topic in a dita file.</p>             <p>For example, in
+previous releases, href attribute is set like: href = &quot;xxx.dita&quot;;
+in release 1.1, href attribute can be set like: href = &quot;xxx.dita#abc.dita&quot;.</p> 
+         </li>
+<li>             <b>Globalization support</b>             <p>Release
+1.1 supports over 20 popular languages within the content of dita
+files. And it also provides translation function for DITA keywords
+to over 20 languages. Currently this globalization support fully applies
+to Eclipse Help and XHTML transformations, and partially applies to
+other transformations.</p>           </li>
+<li>             <b>Accessibility support</b>             <p>Accessibility
+support is now partially applies to PDF and XHTML transformations.</p> 
+         </li>
+<li>             <b>Eclipse Content Provider Support</b>         
+   <p>Please refer to <xref href="eclipseconprov.xml">Eclipse Content
+Provider</xref> for detail information.</p>           </li>
+<li>             <b>Index information in output</b>             <p>The
+output of HTML Help and Java Help transformations contain index information
+now.</p>           </li>
+<li>             <b>Mapref function</b>             <p>Mapref refers
+to a special usage of the <tt>&lt;topicref&gt;</tt> element as a reference
+to another ditamap file. This allows you to manage the overall ditamap
+file more easily. A large ditamap file can thus be broken down into
+several ditamap files, making it easier for the user to manage the
+overall logical structure. On the other hand, this mechanism also
+increases the reusability of those ditamap files. If you want to know
+more about mapref, please refer <xref href="mapref.xml">Mapref</xref>.</p> 
+         </li>
+<li>             <b>TOC generation for Eclipse Help transformation</b> 
+           <p>TOC generation now supported in transformation to Eclipse
+Help. Eclipse.</p>           </li>
+<li>             <b>Helpset generation for Java Help transformation</b> 
+           <p>Helpset generation now supported in transformation to
+Java Help.</p>           </li>
+<li>             <b>New parameters supported in Java commands</b> 
+           <p>In Java commands: /indexshow, /outext, /copycss, /xsl,
+/tempdir.</p>           </li>
+<li>             <b>New parameters supported in Ant scripts</b>  
+          <p>In Ant scripts: args.indexshow, args.outext, args.copycss,
+args.xsl, dita.temp.dir</p>           </li>
+</ol>       </p>       <p>         <b>Other Changes</b>         <ol>
+<li>SF bug 1220569: Add XML Schema processing to DITA-OT</li>
+<li>SF bug 1220644: Prompted ant--image does not link for single topic
+to PDF</li>
+<li>SF bug 1229058: Add schema validation loading file for processing</li>
+<li>SF RFE 1176855: Ant must be run from toolkit directory</li>
+<li>SF RFE 1183482: Copy pre-existing html to output dir</li>
+<li>SF RFE 1183490: Provide argument to specify the location of temp
+dir</li>
+<li>SF RFE 1201242: override capability</li>
+</ol>       </p>     </section>
+<section>       <title>DITA OT release 1.0.2</title>       <p>Release
+1.0.2 is a maintenance release to fix defects and adds some minor
+enhancements in release 1.0.1.</p>       <p>         <b>Changes</b> 
+       <ol>
+<li>SF Bug 1181950: format attribute should be set to &apos;dita&apos;
+for dita topic</li>
+<li>SF RFE 1183487: Document the usage of footer property</li>
+<li>SF RFE 1198847: command line interface support</li>
+<li>SF RFE 1198850: architecture document update</li>
+<li>SF RFE 1200410: need explanation for dita.list</li>
+<li>SF RFE 1201175: XML catalog support</li>
+<li>SF Patch 1176909: Add template for getting image URI</li>
+</ol>       </p>     </section>
+<section>       <title>DITA OT release 1.0.1</title>       <p>Release
+1.0.1 is a maintenance release to fix defects and adds some minor
+enhancements in release 1.0.</p>       <p>         <b>Changes</b> 
+       <ol>
+<li>Committer: maplink.xsl doesn&apos;t generate related links for
+second level referred topic </li>
+<li>Committer: avoid infinite loop of conref</li>
+<li>SF Bug 1160964: Can&apos;t point above the directory which contains
+the map file</li>
+<li>SF Bug 1163523: Broken XPath expression in mappull.xsl</li>
+<li>SF Bug 1168974: useless DRAFT param in FO transformation</li>
+<li>SF Bug 1173162: generate null internal link destination in fo
+transformation</li>
+<li>SF Bug 1173164: Not correctly use document() in dita2fo-links.xsl</li>
+<li>SF Bug 1173663: All base directories are DITA-OT 1.0</li>
+<li>SF Patch 1163561: XLST match patterns test for element names</li>
+<li>SF Patch 1165068: FO hyperlinks and FOP-generated PDF bookmarks</li>
+<li>SF Patch 1174012: Modification to sequence.ditamap</li>
+</ol>       </p>     </section>
+<section>       <title>DITA OT release 1.0</title>       <p>The initial
+release of the Open Sourced DITA Toolkit introduces major architectural
+changes from the previous, developerWorks version of the Toolkit. </p> 
+     <p>         <b>New features</b>         <ol>
+<li>A new, Java-based processing architecture that supports single-threaded
+execution throughout.</li>
+<li>Ant-based orchestration of the processing environment, from preprocessing
+to transformation to any required post-processing.</li>
+<li>A pre-processor core that supports conditional processing and
+conref resolution.</li>
+<li>Map-driven processing that generates links for transformed topics.</li>
+<li>A new DITA to HTML transform that replaces the previous topic2html_Impl.xsl
+core transform. This new core is based on requirements for high-volume
+usage within IBM for the past several years.</li>
+</ol>       </p>       <p>Ant-driven processing means that you can
+integrate the DITA processing tools into a seamless pipeline within
+supportive environments such as Eclipse.</p>       <p>The DTDs and
+Schemas in this version are based on those in the previous dita132
+package with bug fixes. The DITA OS Toolkit will later support the
+OASIS 1.0 specification in its public review form.</p>     </section>
+<section>       <title>DITA history on developerWorks (pre-Open Source)</title> 
+     <p>Versions of the toolkit prior to Open Source are in the developerWorks
+XML Zone at this address: <xref format="html"
+href="http://www-106.ibm.com/developerworks/xml/library/x-dita6/x-dita_downloads.html">DITA
+Downloads</xref> Change logs for those versions are within the Readme
+files in each distribution.</p>     </section>
+</body>
+</topic>
+<?Pub *0000075039?>

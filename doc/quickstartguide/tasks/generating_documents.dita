@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2010, v.4002-->
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN"
+ "task.dtd">
+<?Pub Sty _display FontColor="red"?>
+<task id="about_generatingdocuments" xml:lang="en-us">
+<title>Generating Documents with DITA-OT</title>
+<shortdesc>How to generate documents from the command line with DITA
+OT.    </shortdesc>
+<taskbody>
+<steps>
+<step><cmd>Open a command prompt.  		  </cmd></step>
+<step><cmd>Change directories to where the DITA-OT is installed on
+your 			 machine.  		  </cmd></step>
+<step><cmd>Enter the following command:  		  </cmd><stepresult>  			 <codeph>startcmd.bat</codeph> Another
+command prompt appears with DITA-OT in the title bar, as 			 shown
+in the following figure:  			 <p><image align="center" height="250"
+href="../images/DITA-OTCommandPrompt.gif" width="350"></image>  			 </p> 
+		  </stepresult></step>
+<step><cmd>Enter the following command and press the Enter key:  		
+ </cmd><stepresult>  			 <codeph>ant -f <i>buildfile target</i></codeph> 
+			 <p>The following table describes this command.</p> 			 <table>
+<tgroup cols="2"><colspec colname="col1" colnum="1" colwidth="1.00*"/>
+<colspec colname="col2" colnum="2" colwidth="2.15*"/>
+<thead>
+<row>
+<entry colname="col1">Syntax  						</entry>
+<entry colname="col2">Description  						</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry colname="col1">ant  						</entry>
+<entry colname="col2">Starts the Ant build tool installed as part
+of DITA-OT.  						</entry>
+</row>
+<row>
+<entry colname="col1">-f buildfile  						</entry>
+<entry colname="col2">Specifies the build file containing 						 
+instructions on how to compile your document project. If the build
+file is not 						  in the current directory, you must specify the
+path to the file.  						</entry>
+</row>
+<row>
+<entry colname="col1">target  						</entry>
+<entry colname="col2">Specifies the desired output type of 						
+ the document project. DITA Open Toolkit supports the following targets:
+ 						  <p>  						  <ul>
+<li><codeph>dita2PDF  								</codeph>  							 </li>
+<li><codeph>dita2xhtml</codeph>  							 </li>
+<li><codeph>dita2htmlhelp</codeph>  							 </li>
+<li><codeph>dita2eclipsehelp</codeph>  							 </li>
+<li><codeph>dita2eclipsecontent</codeph>  							 </li>
+<li><codeph>dita2rtf</codeph> 							 </li>
+<li><codeph>dita2javahelp</codeph>  							 </li>
+<li><codeph>dita2troff</codeph>  							 </li>
+</ul>  						  </p>  						</entry>
+</row>
+</tbody>
+</tgroup>
+</table>   			 <p>DITA-OT displays a lot of output in the console
+window, including 				whether the build failed or succeeded at the
+end of the output.  			 </p>  			 <p><image align="center" height="200"
+href="../images/CommandPromptOutputSuccess2.gif" width="350"><alt>DITA-OT
+Build Success Message  				  </alt></image></p><?Pub Caret 1?>  			 <p>When
+your build is unsuccessful, the error message may be difficult to
+find in the 				copious output.  If you have not configured your console
+window most of the 				early output may have already scrolled off
+the screen.  If you add an Ant property, 				<codeph>-logger</codeph> to
+the command line invocation, DITA-OT will save the output 				to a
+log file that you can study after the build finishes. 			</p> 			 <p>See <xref
+href="using_DITAOTBuildLogger.dita">Using the DITA-OT Build Logger></xref> 				for
+information about logging DITA-OT build messages to a log file rather
+than the 				console window.  			 </p>  		  </stepresult></step>
+</steps>
+</taskbody>
+</task>
+<?Pub *0000003534?>

@@ -9,8 +9,13 @@
  */
 package org.dita.dost.platform;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -32,6 +37,11 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Zhang, Yuan Peng
  */
 public class Integrator {
+		
+	/** Feature name for supported image extensions. */
+	public static final String FEAT_IMAGE_EXTENSIONS = "dita.image.extensions";
+	public static final String FEAT_VALUE_SEPARATOR = ",";
+	
 	/**
 	 * Plugin table which contains detected plugins.
 	 */
@@ -44,7 +54,9 @@ public class Integrator {
 	private DITAOTJavaLogger logger;
 	private Set<String> loadedPlugin = null;
 	private Hashtable<String,String> featureTable = null;
-        private File propertiesFile = null;
+    private File propertiesFile = null;
+        
+    private Properties properties = null;
 	
 	private void initTemplateSet(){
 		templateSet = new HashSet<String>(Constants.INT_16);
@@ -64,6 +76,10 @@ public class Integrator {
 		templateSet.add("xsl/preprocess/maplink_template.xsl");
 		templateSet.add("xsl/preprocess/mapref_template.xsl");
 		templateSet.add("xsl/preprocess/mappull_template.xsl");
+		templateSet.add("xsl/map2eclipse_template.xsl");
+		templateSet.add("xsl/map2hhc_template.xsl");
+		templateSet.add("xsl/map2hhp_template.xsl");
+		templateSet.add("xsl/map2htmtoc_template.xsl");
 		templateSet.add("xsl/map2plugin_template.xsl");
 		templateSet.add("xsl/preprocess/conref_template.xsl");
 		templateSet.add("xsl/preprocess/topicpull_template.xsl");
@@ -78,7 +94,7 @@ public class Integrator {
 		}
 
                 // Read the properties file, if it exists.
-                Properties properties = new Properties();
+		        properties = new Properties();
                 if (propertiesFile != null) {
                   try {
                     FileInputStream propertiesStream = new FileInputStream(propertiesFile);
@@ -93,10 +109,16 @@ public class Integrator {
                 {
                   // Set reasonable defaults.
                   properties.setProperty("plugindirs", "plugins;demo");
+                  properties.setProperty("plugin.ignores", "");
                 }
         
                 // Get the list of plugin directories from the properties.
                 String[] pluginDirs = properties.getProperty("plugindirs").split(";");
+                
+                Set<String> pluginIgnores = new HashSet<String>();
+                if (properties.getProperty("plugin.ignores") != null) {
+                	pluginIgnores.addAll(Arrays.asList(properties.getProperty("plugin.ignores").split(";")));
+                }
                 
                 for (int j = 0; j < pluginDirs.length; j++)
                 {
@@ -106,8 +128,9 @@ public class Integrator {
 		  pluginFiles = pluginDir.listFiles();
  
 		  for (int i=0; (pluginFiles != null) && (i < pluginFiles.length); i++){
+			File f = pluginFiles[i]; 
 			File descFile = new File(pluginFiles[i],"plugin.xml");
-			if (pluginFiles[i].isDirectory() && descFile.exists()){
+			if (pluginFiles[i].isDirectory() && !pluginIgnores.contains(f.getName()) && descFile.exists()){
 				descSet.add(descFile);
 			}
 		  }
@@ -135,7 +158,47 @@ public class Integrator {
 			templateFile = new File(ditaDir,(String) setIter.next());
 			fileGen.generate(templateFile.getAbsolutePath());
 		}
+		
+		// Added on 2010-11-09 for bug 3102827: Allow a way to specify recognized image extensions -- start
+		// generate configuration properties
+		final Properties configuration = new Properties();
+		//image extensions
+		final Set<String> imgExts = new HashSet<String>();
+		
+		for (final String ext: properties.getProperty(Constants.CONF_SUPPORTED_IMAGE_EXTENSIONS, "").split(Constants.CONF_LIST_SEPARATOR)) {
+			final String e = ext.trim();
+			if (e.length() != 0) {
+				imgExts.add(e);
+			} 
+		}
+		if (featureTable.containsKey(FEAT_IMAGE_EXTENSIONS)) {
+			for (final String ext: featureTable.get(FEAT_IMAGE_EXTENSIONS).split(FEAT_VALUE_SEPARATOR)) {
+				final String e = ext.trim();
+				if (e.length() != 0) {
+					imgExts.add(e);
+				}
+			}
+		}
+		configuration.put(Constants.CONF_SUPPORTED_IMAGE_EXTENSIONS, StringUtils.assembleString(imgExts, Constants.CONF_LIST_SEPARATOR));
+		OutputStream out = null;
+		try {
+			out = new BufferedOutputStream(new FileOutputStream(
+					new File(ditaDir, "lib" + File.separator + Constants.CONF_PROPERTIES)));
+			configuration.store(out, "DITA-OT runtime configuration");
+		} catch (Exception e) {
+			logger.logException(e);
+			//throw new RuntimeException("Failed to write configuration properties: " + e.getMessage(), e);
+		} finally {
+			if (out != null) {
+				try {
+					out.close();
+				} catch (IOException e) {
+					logger.logException(e);
+				}
+			}
+		}
 	}
+	// Added on 2010-11-09 for bug 3102827: Allow a way to specify recognized image extensions -- end
 	
 	//load the plug-ins and aggregate them by feature and fill into feature table
 	private boolean loadPlugin (String plugin)

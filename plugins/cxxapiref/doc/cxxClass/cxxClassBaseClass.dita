@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "..\..\..\reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxClassBaseClass">
+	<title>cxxClassBaseClass</title>
+	<shortdesc>The &lt;cxxClassBaseClass&gt; element declares inheritance from a base class in a class derivation.</shortdesc>
+	<refbody>
+		<section>
+			<title>Description</title>
+			<p>Used within a &lt;cxxClassDerivation&gt; element to declare inheritance from a base class.</p>
+		</section>
+		<example><title>Example</title>
+		<codeblock>&lt;cxxClassDerivation&gt;
+    &lt;cxxClassDerivationAccessSpecifier value="public"/&gt;
+    &lt;cxxClassBaseClass href="class_base"&gt;Base&lt;/cxxClassBaseClass&gt;
+&lt;/cxxClassDerivation&gt;</codeblock>
+		</example>
+		<section conref="../packagedef.dita#cxxClassBaseClass-reference/cxxClassBaseClass-containedBy-section"/>
+		<section conref="../packagedef.dita#cxxClassBaseClass-reference/cxxClassBaseClass-contains-section"/>
+		<section conref="../packagedef.dita#cxxClassBaseClass-reference/cxxClassBaseClass-contentModel-section"/>
+		<section conref="../packagedef.dita#cxxClassBaseClass-reference/cxxClassBaseClass-attList-section"/>
+		<section conref="../packagedef.dita#cxxClassBaseClass-reference/cxxClassBaseClass-classValue-section"/>
+	</refbody>
+</reference>

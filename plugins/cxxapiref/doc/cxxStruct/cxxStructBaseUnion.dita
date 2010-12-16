@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "..\..\..\reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxStructBaseUnion">
+	<title>cxxStructBaseUnion</title>
+	<shortdesc>The &lt;cxxStructBaseUnion&gt; element declares inheritance from a base union in a struct derivation.</shortdesc>
+	<refbody>
+		<section>
+			<title>Description</title>
+			<p>Used within a &lt;cxxStructDerivation&gt; element to declare inheritance from a base union.</p>
+		</section>
+		<example><title>Example</title>
+		<codeblock>&lt;cxxStructDerivation&gt;
+    &lt;cxxStructDerivationAccessSpecifier value="public"/&gt;
+    &lt;cxxStructBaseUnion href="union_base"&gt;Base&lt;/cxxStructBaseUnion&gt;
+&lt;/cxxStructDerivation&gt;</codeblock>
+		</example>
+		<section conref="../packagedef.dita#cxxStructBaseUnion-reference/cxxStructBaseUnion-containedBy-section"/>
+		<section conref="../packagedef.dita#cxxStructBaseUnion-reference/cxxStructBaseUnion-contains-section"/>
+		<section conref="../packagedef.dita#cxxStructBaseUnion-reference/cxxStructBaseUnion-contentModel-section"/>
+		<section conref="../packagedef.dita#cxxStructBaseUnion-reference/cxxStructBaseUnion-attList-section"/>
+		<section conref="../packagedef.dita#cxxStructBaseUnion-reference/cxxStructBaseUnion-classValue-section"/>
+	</refbody>
+</reference>

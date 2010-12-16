@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxEnumerationAPIItemLocation">
+    <title>cxxEnumerationAPIItemLocation</title>
+    <shortdesc>The &lt;cxxEnumerationAPIItemLocation&gt; element describes the location of an enumeration in the original C++ source code.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The &lt;cxxEnumerationAPIItemLocation&gt; element must contain the location of the 
+            API declaration using &lt;cxxEnumerationDeclarationFile&gt; and &lt;cxxEnumerationDeclarationFileLine&gt;; 
+            the location of the API definition is optional.</p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxEnumerationAPIItemLocation&gt;
+    &lt;cxxEnumerationDeclarationFile name="filePath" value="C:/src/include/w32adll.h"/&gt;
+    &lt;cxxEnumerationDeclarationFileLine name="lineNumber" value="1072"/&gt;
+&lt;/cxxEnumerationAPIItemLocation&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxEnumerationAPIItemLocation-reference/cxxEnumerationAPIItemLocation-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxEnumerationAPIItemLocation-reference/cxxEnumerationAPIItemLocation-contains-section"/>
+        <section conref="../packagedef.dita#cxxEnumerationAPIItemLocation-reference/cxxEnumerationAPIItemLocation-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxEnumerationAPIItemLocation-reference/cxxEnumerationAPIItemLocation-attList-section"/>
+        <section conref="../packagedef.dita#cxxEnumerationAPIItemLocation-reference/cxxEnumerationAPIItemLocation-classValue-section"/>
+    </refbody>
+</reference>

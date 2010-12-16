@@ -1,34 +1,31 @@
 package org.dita.dost.junit;
+import static org.junit.Assert.assertEquals;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.index.IndexTerm;
-import org.dita.dost.index.IndexTermTarget;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
-import org.dita.dost.writer.IDitaTranstypeIndexWriter;
 import org.dita.dost.writer.JavaHelpIndexWriter;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
 public class TestJavaHelpIndexWriter {
 	JavaHelpIndexWriter javahelpindexwriter =new JavaHelpIndexWriter();
-	String filenameout="test-stub/TestJavaHelpIndexWriter/javahelpindexwriteroutput.xml";
+	String filenameout="test-stub" + File.separator + "TestJavaHelpIndexWriter" + File.separator + "javahelpindexwriteroutput.xml";
 	FileOutputStream fileoutputstream;
 	Collection collection = new ArrayList();
 	IndexTerm indexterm1=new IndexTerm();
 	IndexTerm indexterm2=new IndexTerm();
-	File javahelpindexwriterfile =new File("test-stub/TestJavaHelpIndexWriter/javahelpindexwriteroutput.xml");
-	File comparejavahelpindexwriterfile=new File("test-stub/TestJavaHelpIndexWriter/comparejavahelpindexwriteroutput.xml");
+	File javahelpindexwriterfile =new File("test-stub" + File.separator + "TestJavaHelpIndexWriter" + File.separator + "javahelpindexwriteroutput.xml");
+	File comparejavahelpindexwriterfile=new File("test-stub" + File.separator + "TestJavaHelpIndexWriter" + File.separator + "comparejavahelpindexwriteroutput.xml");
 	@Test
 	public void testwrite() throws DITAOTException, UnsupportedEncodingException, FileNotFoundException
 	{

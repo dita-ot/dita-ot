@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxFunction">
+    <title>cxxFunction</title>
+    <shortdesc>Contains all the elements needed to describe the declaration of a   C++ function (or <i>member</i> function).</shortdesc>
+    <refbody>
+        <section id="section_B20A7D521E3842829C774491FDD670A5">
+            <title>Description</title><p>The <tt>&lt;cxxFunction&gt;</tt> element requires
+an ID attribute as an anchor point; this ID must always be specified. The
+ID attribute is referenced by the <i>conref</i> attribute from internal applications
+that refer to the  <tt>&lt;cxxFunctiion&gt;</tt> element content. The elements <tt>&lt;apiName&gt;</tt> 
+and <tt>&lt;cxxFunctionDetail&gt;</tt> are required for this top-level container. 
+            </p><p>
+                <?xm-replace_text Paragraph ?>
+            </p>
+        </section>
+        <example id="example_F38D1539002D4528B2FBC2B42EB2AECA">
+            <title>Example</title><p>The following illustrates a typical (global) function:</p>
+            <codeblock>&lt;cxxFunction id="test__class_8h_1a27a789a5aabed6e0e0d79ce0fd02b937"&gt;
+  &lt;apiName&gt;SearchBuffer&lt;/apiName&gt;
+  &lt;cxxFunctionDetail&gt;
+    &lt;cxxFunctionDefinition&gt;
+      &lt;cxxFunctionAccessSpecifier value="public"/&gt;
+      &lt;cxxFunctionStorageClassSpecifierStatic/&gt;
+      &lt;cxxFunctionDeclaredType&gt;int&lt;/cxxFunctionDeclaredType&gt;
+      &lt;cxxFunctionScopedName/&gt;
+      &lt;cxxFunctionPrototype&gt;static int SearchBuffer(const char *aBuffer, char c, int i)&lt;/cxxFunctionPrototype&gt;
+      &lt;cxxFunctionNameLookup&gt;SearchBuffer(const char *,char,int)&lt;/cxxFunctionNameLookup&gt;
+      &lt;cxxFunctionParameters&gt;
+        &lt;cxxFunctionParameter&gt;
+          &lt;cxxFunctionParameterDeclaredType&gt;const char *&lt;/cxxFunctionParameterDeclaredType&gt;
+          &lt;cxxFunctionParameterDeclarationName&gt;aBuffer&lt;/cxxFunctionParameterDeclarationName&gt;
+          &lt;apiDefNote&gt;The buffer to search. &lt;/apiDefNote&gt;
+        &lt;/cxxFunctionParameter&gt;
+        &lt;cxxFunctionParameter&gt;
+          &lt;cxxFunctionParameterDeclaredType&gt;char&lt;/cxxFunctionParameterDeclaredType&gt;
+          &lt;cxxFunctionParameterDeclarationName&gt;c&lt;/cxxFunctionParameterDeclarationName&gt;
+          &lt;apiDefNote&gt;the character to search for. &lt;/apiDefNote&gt;
+        &lt;/cxxFunctionParameter&gt;
+        &lt;cxxFunctionParameter&gt;
+          &lt;cxxFunctionParameterDeclaredType&gt;int&lt;/cxxFunctionParameterDeclaredType&gt;
+          &lt;cxxFunctionParameterDeclarationName&gt;i&lt;/cxxFunctionParameterDeclarationName&gt;
+          &lt;apiDefNote&gt;The start position. &lt;/apiDefNote&gt;
+        &lt;/cxxFunctionParameter&gt;
+      &lt;/cxxFunctionParameters&gt;
+      &lt;apiDefNote&gt;The index in the buffer or -1 if not found or i is &amp;gt;= the buffer length. &lt;/apiDefNote&gt;
+      &lt;cxxFunctionAPIItemLocation&gt;
+        &lt;cxxFunctionDeclarationFile name="filePath" value="C:/wip/sysdoc/tools/Doxygen/branches/DITA/test/PaulRo/cxxApiExamples/src/test_class.h"/&gt;
+        &lt;cxxFunctionDeclarationFileLine name="lineNumber" value="14"/&gt;
+      &lt;/cxxFunctionAPIItemLocation&gt;
+    &lt;/cxxFunctionDefinition&gt;
+    &lt;apiDesc&gt;
+      &lt;p&gt;Searches a buffer for a character from a start position in the buffer. &lt;/p&gt;
+    &lt;/apiDesc&gt;
+  &lt;/cxxFunctionDetail&gt;
+&lt;/cxxFunction&gt;
+            </codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxFunction-reference/cxxFunction-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxFunction-reference/cxxFunction-contains-section"/>
+        <section conref="../packagedef.dita#cxxFunction-reference/cxxFunction-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxFunction-reference/cxxFunction-attList-section"/>
+        <section conref="../packagedef.dita#cxxFunction-reference/cxxFunction-classValue-section"/>
+    </refbody>
+</reference>

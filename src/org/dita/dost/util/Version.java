@@ -9,7 +9,7 @@
  */
 package org.dita.dost.util;
 /**
- * Version class, show the version of dita-ot.
+ * Version class, show the version of dita-ot in java code.
  * @author William
  *
  */

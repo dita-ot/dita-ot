@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxVariableDefinition">
+    <title>cxxVariableDefinition</title>
+    <shortdesc>The &lt;cxxVariableDefinition&gt; element specifies the variable definition.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p> The &lt;cxxVariableDefinition&gt; element is a container for many optional elements that describe a C++ variable. 
+            All elements within &lt;cxxVariableDefinition&gt; are optional. 
+            </p>           
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxVariableDefinition&gt;
+    &lt;cxxVariableAccessSpecifier value="public"/&gt;
+    &lt;cxxVariableDeclaredType&gt;
+        &lt;apiRelation href="class_t_request_status.xml#class_t_request_status"&gt;TRequestStatus&lt;/apiRelation&gt;
+    &lt;/cxxVariableDeclaredType&gt;
+    &lt;cxxVariableScopedName&gt;CActive&lt;/cxxVariableScopedName&gt;
+    &lt;cxxVariablePrototype&gt;TRequestStatus iStatus&lt;/cxxVariablePrototype&gt;
+    &lt;cxxVariableNameLookup&gt;CActive::iStatus&lt;/cxxVariableNameLookup&gt;
+    &lt;cxxVariableAPIItemLocation&gt;
+        &lt;cxxVariableDeclarationFile name="filePath" value="C:/src/include/e32base.h"/&gt;
+        &lt;cxxVariableDeclarationFileLine name="lineNumber" value="1664"/&gt;
+    &lt;/cxxVariableAPIItemLocation&gt;
+&lt;/cxxVariableDefinition&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxVariableDefinition-reference/cxxVariableDefinition-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxVariableDefinition-reference/cxxVariableDefinition-contains-section"/>
+        <section conref="../packagedef.dita#cxxVariableDefinition-reference/cxxVariableDefinition-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxVariableDefinition-reference/cxxVariableDefinition-attList-section"/>
+        <section conref="../packagedef.dita#cxxVariableDefinition-reference/cxxVariableDefinition-classValue-section"/>
+    </refbody>
+</reference>

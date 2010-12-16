@@ -59,7 +59,7 @@
   <target name="plus-xhtml-topics-twopass.stage2.all" if="old.transform">
     <xslt processor="trax" basedir="${dita.temp.dir}" destdir="${output.dir}" includes="${fullditatopiclist} ${chunkedtopiclist}" extension="${out.ext}" style="${plus-xhtml-topics-twopass.dir}/xsl/stage2-xhtml-shell.xsl" classpathref="dost.class.path">
       <dita:extension id="plus-xhtml-topics-twopass.stage2.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
-      <xmlcatalog refid="dita.catalog"/>
+      
     </xslt>
   </target>
 
@@ -68,14 +68,14 @@
       <regexpmapper from="^(${tempdirToinputmapdir.relative.value})(.*?)(\.(xml|dita))$$"
         to="\2${out.ext}"/>
       <dita:extension id="plus-xhtml-topics-twopass.stage2.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
-      <xmlcatalog refid="dita.catalog"/>
+      
     </xslt>
   </target>
 
   <target name="plus-xhtml-topics-twopass.stage2.outer" depends="checkouterTransform" if="outer.transform">
     <xslt processor="trax" basedir="${dita.temp.dir}" destdir="${output.dir}${file.separator}${uplevels}" includes="${outditafileslist}" extension="${out.ext}" style="${plus-xhtml-topics-twopass.dir}/xsl/stage2-xhtml-shell.xsl" classpathref="dost.class.path">
       <dita:extension id="plus-xhtml-topics-twopass.stage2.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
-      <xmlcatalog refid="dita.catalog"/>
+      
     </xslt>
   </target>
   

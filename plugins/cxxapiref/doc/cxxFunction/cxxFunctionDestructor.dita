@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxFunctionDestructor">
+    <title>cxxFunctionDestructor</title>
+    <shortdesc>Identifies a function as a destructor.</shortdesc>
+    <refbody>
+        <section id="section_0861CE2409554319B647CA303CC4664D">
+            <title>Description</title><p>This element is present when the function is a destructor. This has two mandatory attributes; name and value 
+that default to <tt>"destructor"</tt>.</p><p>A function that uses the <tt>cxxFunctionDestructor</tt> element shall not use the <tt>cxxFunctionConstructor</tt> element
+            </p><p>See ISO/IEC 14882:2003(E) 12.4 Destructors [class.dtor]</p>
+        </section>
+        <section conref="../packagedef.dita#cxxFunctionDestructor-reference/cxxFunctionDestructor-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxFunctionDestructor-reference/cxxFunctionDestructor-contains-section"/>
+        <section conref="../packagedef.dita#cxxFunctionDestructor-reference/cxxFunctionDestructor-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxFunctionDestructor-reference/cxxFunctionDestructor-attList-section"/>
+        <section conref="../packagedef.dita#cxxFunctionDestructor-reference/cxxFunctionDestructor-classValue-section"/>
+    </refbody>
+</reference>

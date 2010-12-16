@@ -12,7 +12,7 @@
     <xsl:param name="plus-allhtml-syntaxdiagram-svgobject-csspath" select="''"/>
     <xsl:param name="plus-allhtml-syntaxdiagram-svgobject-jspath" select="''"/>
 
-    <xsl:param name="CURRENDIR"/>
+    <xsl:param name="CURRENTDIR"/>
     <xsl:param name="CURRENTFILE"/>
 
     <!-- Entry point. -->

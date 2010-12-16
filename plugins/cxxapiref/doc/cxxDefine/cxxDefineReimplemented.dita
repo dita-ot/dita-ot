@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxDefineReimplemented">
+    <title>cxxDefineReimplemented</title>
+    <shortdesc>The &lt;cxxDefineReimplemented&gt; element identifies defines that have been re-implemented.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>This identifies and links to defines that have been re-implemented.</p>
+            <p>&lt;cxxDefineReimplemented&gt; has no compulsatory attributes, but can contain the attributes 
+            <i>keyref</i>, <i>type</i>, <i>format</i> and <i>scope</i>. <i>scope</i> can be set to one of three 
+            values, "local", "peer" or "external". </p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxDefineReimplemented href="class_c_active.xml#class_c_active_1a4bb7613b"&gt;CActive::iSpare&lt;/cxxDefineReimplemented&gt;</codeblock>
+        </example>        
+        <section conref="../packagedef.dita#cxxDefineReimplemented-reference/cxxDefineReimplemented-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxDefineReimplemented-reference/cxxDefineReimplemented-contains-section"/>
+        <section conref="../packagedef.dita#cxxDefineReimplemented-reference/cxxDefineReimplemented-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxDefineReimplemented-reference/cxxDefineReimplemented-attList-section"/>
+        <section conref="../packagedef.dita#cxxDefineReimplemented-reference/cxxDefineReimplemented-classValue-section"/>
+    </refbody>
+</reference>

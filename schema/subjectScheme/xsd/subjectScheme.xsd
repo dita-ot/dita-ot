@@ -24,8 +24,14 @@
 <!-- ============================================================= -->
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+<!--  Map domains  -->
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:mapGroupMod.xsd:1.2" />
-  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:tblDeclGrp.xsd:1.2"/>
+ <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:tblDeclGrp.xsd:1.2"/>
+
+  <!-- base domains -->
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:highlightDomain.xsd:1.2"/>
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:utilitiesDomain.xsd:1.2"/>
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:hazardstatementDomain.xsd:1.2"/>
  
  <!-- =================  MODULE INLCUDE DEFINITION  ==================  -->
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:commonElementMod.xsd:1.2"/>
@@ -34,8 +40,33 @@
  <!-- ======= MetaData elements, plus keyword and indexterm ======= -->
  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:metaDeclMod.xsd:1.2"/>
   
-  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:commonElementGrp.xsd:1.2"/>
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:metaDeclGrp.xsd:1.2"/>
+  
+  <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:commonElementGrp.xsd:1.2">
+     
+   <xs:group name="ph">
+      <xs:choice>
+        <xs:group ref="ph"/>
+        <xs:group ref="hi-d-ph" />
+      </xs:choice>
+    </xs:group>
+
+    
+    <xs:group name="fig">
+      <xs:choice>
+        <xs:group ref="fig"/>
+        <xs:group ref="ut-d-fig" />
+      </xs:choice>
+    </xs:group >
+    
+    <xs:group name="note">
+      <xs:choice>
+        <xs:group ref="note"/>
+        <xs:group ref="hazard-d-note"/>
+      </xs:choice>
+    </xs:group >
+   
+ </xs:redefine>
     
   <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:mapGrp.xsd:1.2">
   <xs:group name="topicref">
@@ -51,7 +82,12 @@
   <xs:include schemaLocation="urn:oasis:names:tc:dita:spec:classification:xsd:subjectSchemeGrp.xsd:1.2" />
   
   <xs:attributeGroup name="domains-att">
-    <xs:attribute name="domains" type="xs:string" default="(map mapgroup-d) (map subjectScheme)"/>
+    <xs:attribute name="domains" type="xs:string" 
+                           default="(map mapgroup-d) 
+                                            (map subjectScheme)
+                                            (topic hazard-d)
+                                            (topic hi-d)  
+                                            (topic ut-d)"/>
   </xs:attributeGroup>
   
 </xs:schema>

@@ -161,6 +161,7 @@
   <xs:attributeGroup name="topichead.attributes">
         <xs:attribute name="navtitle" type="xs:string"/>
         <xs:attribute name="outputclass" type="xs:string"/>
+        <xs:attribute name="copy-to" type="xs:string"/>
         <xs:attribute name="keys" type="xs:string"/>
         <xs:attributeGroup ref="topicref-atts" />
         <xs:attributeGroup ref="univ-atts"/>

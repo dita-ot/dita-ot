@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxUnion">
+    <title>cxxUnion</title>
+    <shortdesc>The &lt;cxxUnion&gt; element provides the name of the C++ API
+union, all the elements necessary to describe the members that are introduced
+by the union declaration.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The &lt;cxxUnion&gt; element requires
+an ID attribute as an anchor point; this ID must always be specified. The
+ID attribute is referenced by the <i>conref</i> attribute and internal applications
+that refer to the  &lt;cxxUnion&gt; element content. The elements &lt;apiName&gt; 
+and &lt;cxxUnionDetail&gt; are required for this top-level container. </p>
+        </section>
+        <example><title>Example</title>
+        <codeblock>&lt;cxxUnion id=&quot;union_comms_packer_1_1_t_union&quot;&gt;
+	&lt;apiName&gt;CommsFW::TCFLegacyMessagePacker::TUnion&lt;/apiName&gt;
+	&lt;cxxUnionDetail&gt;
+		&lt;cxxUnionDefinition&gt;
+			&lt;cxxUnionAccessSpecifier value=&quot;private&quot;/&gt;
+			&lt;cxxUnionAPIItemLocation&gt;
+				&lt;cxxUnionDeclarationFile name=&quot;filePath&quot; value=&quot;C:/src/include/elements/cftransportmsg.h&quot;/&gt;
+				&lt;cxxUnionDeclarationFileLine name=&quot;lineNumber&quot; value=&quot;59&quot;/&gt;
+				&lt;cxxUnionDefinitionFile name=&quot;filePath&quot; value=&quot;C:/src/include/elements/cftransportmsg.h&quot;/&gt;
+				&lt;cxxUnionDefinitionFileLineStart name=&quot;lineNumber&quot; value=&quot;58&quot;/&gt;
+				&lt;cxxUnionDefinitionFileLineEnd name=&quot;lineNumber&quot; value=&quot;70&quot;/&gt;
+			&lt;/cxxUnionAPIItemLocation&gt;
+		&lt;/cxxUnionDefinition&gt;
+		&lt;apiDesc/&gt;
+	&lt;/cxxUnionDetail&gt;
+	&lt;cxxUnionNested&gt;
+		&lt;cxxUnionNestedDetail&gt;
+			&lt;cxxUnionNestedStruct href=&quot;struct_comms_package.xml#struct_package&quot;&gt;CommsFW::TCFLegacyMessagePacker::TUnion::TLegacyPackage&lt;/cxxUnionNestedStruct&gt;
+			&lt;cxxUnionNestedStruct href=&quot;struct_comms_package.xml#struct_package&quot;&gt;CommsFW::TCFLegacyMessagePacker::TUnion::TPackage&lt;/cxxUnionNestedStruct&gt;
+		&lt;/cxxUnionNestedDetail&gt;
+	&lt;/cxxUnionNested&gt;
+&lt;/cxxUnion&gt;</codeblock>
+        </example>        
+        <section conref="../packagedef.dita#cxxUnion-reference/cxxUnion-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxUnion-reference/cxxUnion-contains-section"/>
+        <section conref="../packagedef.dita#cxxUnion-reference/cxxUnion-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxUnion-reference/cxxUnion-attList-section"/>
+        <section conref="../packagedef.dita#cxxUnion-reference/cxxUnion-classValue-section"/>
+    </refbody>
+</reference>

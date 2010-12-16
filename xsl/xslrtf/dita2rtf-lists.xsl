@@ -74,7 +74,7 @@
 \par\pard\plain \qj \fi-420\li<xsl:value-of select="$li-num"/><xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl</xsl:if>\jclisttab\tx<xsl:value-of select="$li-num"/>\ls<xsl:value-of select="$listnum"/><xsl:if test="$depth &gt; 0">\ilvl<xsl:value-of select="$depth"/></xsl:if><xsl:text> </xsl:text><xsl:if test="@importance='optional'"><xsl:call-template name="getStringRTF"><xsl:with-param name="stringName" select="'Optional'"/></xsl:call-template><xsl:call-template name="getStringRTF"><xsl:with-param name="stringName" select="'ColonSymbol'"/></xsl:call-template><xsl:text> </xsl:text></xsl:if><xsl:if test="@importance='required'"><xsl:call-template name="getStringRTF"><xsl:with-param name="stringName" select="'Required'"/></xsl:call-template><xsl:call-template name="getStringRTF"><xsl:with-param name="stringName" select="'ColonSymbol'"/></xsl:call-template><xsl:text> </xsl:text></xsl:if><xsl:apply-templates/></xsl:template>
 
 <xsl:template name="gen-list-table">
-{\*\listtable <xsl:apply-templates select="descendant::*[contains(@class,' topic/ol ') or contains(@class,' topic/ul ')][1]" mode="gen-list-table"/>}
+{\*\listtables <xsl:apply-templates select="descendant::*[contains(@class,' topic/ol ') or contains(@class,' topic/ul ')][1]" mode="gen-list-table"/>}
 </xsl:template>
 	
 <xsl:template match="*[contains(@class,' topic/ol ')]" mode="gen-list-table">

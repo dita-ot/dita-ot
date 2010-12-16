@@ -31,11 +31,13 @@ Other modes can be found within the code, and may or may not prove useful for ov
 
 <xsl:stylesheet version="1.0" 
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
                 xmlns:mappull="http://dita-ot.sourceforge.net/ns/200704/mappull"
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
-                exclude-result-prefixes="mappull ditamsg">
+                exclude-result-prefixes="dita-ot mappull ditamsg">
   <xsl:import href="../common/output-message.xsl"/>
   <xsl:import href="../common/dita-utilities.xsl"/>
+  <xsl:import href="../common/dita-textonly.xsl"/>
   <!-- Define the error message prefix identifier -->
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
   <!-- The directory where the map resides, starting with root -->
@@ -592,6 +594,9 @@ Other modes can be found within the code, and may or may not prove useful for ov
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
+      <!-- skip resource-only image files -->
+      <xsl:when test="($format='jpg' or $format='jpeg' or $format='tiff' or $format='gif'
+        or $format='eps' or $format='svg' or $format='tif') and @processing-role='resource-only'"/>
       <xsl:when test="not($format='#none#' or $format='dita' or $format='DITA')">
         <xsl:apply-templates select="." mode="mappull:get-navtitle-for-non-dita"/>
       </xsl:when>
@@ -838,6 +843,9 @@ Other modes can be found within the code, and may or may not prove useful for ov
             <xsl:when test="$scope='peer'">
               <xsl:apply-templates select="." mode="mappull:get-linktext_peer-dita"/>
             </xsl:when>
+            <!-- skip resource-only image files -->
+            <xsl:when test="($format='jpg' or $format='jpeg' or $format='tiff' or $format='gif'
+              or $format='eps' or $format='svg' or $format='tif') and @processing-role='resource-only'"/>
             <xsl:when test="not($format='#none#' or $format='dita' or $format='DITA')">
               <xsl:apply-templates select="." mode="mappull:get-linktext-for-non-dita"/>
             </xsl:when>
@@ -1037,43 +1045,9 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:apply-templates select="." mode="mappull:linktext-fallback"/>
   </xsl:template>
 
-  <!-- Text-only templates are used when the element content must go into an attribute.
-       When not possible, such as with images, determine appropriate text. -->
-  <xsl:template match="*[contains(@class,' topic/image ')]" mode="text-only">
-    <xsl:choose>
-      <xsl:when test="*[contains(@class,' topic/alt ')]">
-        <xsl:apply-templates mode="text-only"/>
-      </xsl:when>
-      <xsl:when test="@alt">
-        <xsl:value-of select="@alt"/>
-      </xsl:when>
-    </xsl:choose>
-  </xsl:template>
-  <xsl:template match="*[contains(@class,' topic/boolean ')]" mode="text-only">
-    <xsl:value-of select="name()"/>
-    <xsl:text>: </xsl:text>
-    <xsl:value-of select="@state"/>
-  </xsl:template>
-  <xsl:template match="*[contains(@class,' topic/state ')]" mode="text-only">
-    <xsl:value-of select="name()"/>
-    <xsl:text>: </xsl:text>
-    <xsl:value-of select="@name"/>
-    <xsl:text>=</xsl:text>
-    <xsl:value-of select="@value"/>
-  </xsl:template>
-  <xsl:template match="*[contains(@class,' topic/indexterm ')]" mode="text-only"/>
-  <xsl:template match="*[contains(@class, ' ui-d/menucascade ')]" mode="text-only">
-    <xsl:apply-templates select="*" mode="text-only"/>
-  </xsl:template>
-  <xsl:template match="*[contains(@class, ' ui-d/uicontrol ')]" mode="text-only">
-    <xsl:if
-      test="parent::*[contains(@class,' ui-d/menucascade ')] and preceding-sibling::*[contains(@class, ' ui-d/uicontrol ')]">
-      <xsl:text> &gt; </xsl:text>
-    </xsl:if>
-    <xsl:apply-templates select="*|text()" mode="text-only"/>
-  </xsl:template>
-  <xsl:template match="*" mode="text-only">
-    <xsl:apply-templates select="text()|*" mode="text-only"/>
+  <xsl:template match="*|text()|processing-instruction()" mode="text-only">
+    <!-- Redirect to common dita-ot module -->
+    <xsl:apply-templates select="." mode="dita-ot:text-only"/>
   </xsl:template>
   <xsl:template match="*|@*|comment()|processing-instruction()|text()">
     <xsl:copy>

@@ -8,6 +8,7 @@ package org.dita.dost.platform;
 import java.util.Iterator;
 
 import org.dita.dost.util.Constants;
+import org.dita.dost.util.StringUtils;
 /**
  * CheckTranstypeAction class.
  *
@@ -33,7 +34,7 @@ public class CheckTranstypeAction extends ImportAction {
 		while(iter.hasNext()){
 			value = iter.next();
 			retBuf.append("<not><equals arg1=\"${transtype}\" arg2=\"")
-				.append(value).append("\" casesensitive=\"false\"/></not>");
+				.append(StringUtils.escapeXML(value)).append("\" casesensitive=\"false\"/></not>");
 		}
 		return retBuf.toString();
 	}

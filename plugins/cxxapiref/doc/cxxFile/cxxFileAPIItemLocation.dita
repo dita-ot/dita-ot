@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxFileAPIItemLocation">
+    <title>cxxFileAPIItemLocation</title>
+    <shortdesc>The &lt;cxxFileAPIItemLocation&gt; element is a container for the element that describes the 
+    location of the file containing the global APIs.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The &lt;cxxFileAPIItemLocation&gt; element is contained within the element &lt;cxxFile&gt;. 
+            &lt;cxxFileAPIItemLocation&gt; contains the element &lt;cxxFileDeclarationFile&gt;, which describes the 
+            location of the declaration file.</p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>	&lt;cxxFileAPIItemLocation&gt;
+		&lt;cxxFileDeclarationFile name="filePath" value="C:/src/include/cfshared.h"/&gt;
+	&lt;/cxxFileAPIItemLocation&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxFileAPIItemLocation-reference/cxxFileAPIItemLocation-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxFileAPIItemLocation-reference/cxxFileAPIItemLocation-contains-section"/>
+        <section conref="../packagedef.dita#cxxFileAPIItemLocation-reference/cxxFileAPIItemLocation-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxFileAPIItemLocation-reference/cxxFileAPIItemLocation-attList-section"/>
+        <section conref="../packagedef.dita#cxxFileAPIItemLocation-reference/cxxFileAPIItemLocation-classValue-section"/>
+    </refbody>
+</reference>

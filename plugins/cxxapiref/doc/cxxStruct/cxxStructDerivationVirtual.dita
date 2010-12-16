@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "..\..\..\reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxStructDerivationVirtual">
+	<title>cxxStructDerivationVirtual</title>
+	<shortdesc>The &lt;cxxStructDerivationVirtual&gt; element indicates if inheritance is declared as virtual.</shortdesc>
+	<refbody>
+		<section>
+			<title>Description</title>
+			<p>The &lt;cxxStructDerivationVirtual&gt; element is contained within a &lt;cxxStructDerivation&gt; element. 
+            The name attribute must be set to virtual and the value attribute must be set to true.
+            The base referered to by the &lt;cxxStructDerivationVirtual&gt; element is indicated by using either a &lt;cxxStructBaseStruct&gt;, &lt;cxxStructBaseStruct&gt; or &lt;cxxStructBaseUnion&gt; element as a sibling of &lt;cxxStructDerivationVirtual&gt;.</p>
+		</section>
+		<example><title>Example</title>
+		<codeblock>&lt;cxxStructDerivations&gt;
+	&lt;cxxStructDerivation&gt;
+		&lt;cxxStructDerivationVirtual name="virtual" value="true"/&gt;
+		&lt;cxxStructDerivationAccessSpecifier value="public"/&gt;
+		&lt;cxxStructBaseStruct href="struct_base"&gt;Base&lt;/cxxStructBaseStruct&gt;
+	&lt;/cxxStructDerivation&gt;
+	...
+&lt;/cxxStructDerivations&gt;</codeblock>
+		</example>	        
+		<section conref="../packagedef.dita#cxxStructDerivationVirtual-reference/cxxStructDerivationVirtual-containedBy-section"/>
+		<section conref="../packagedef.dita#cxxStructDerivationVirtual-reference/cxxStructDerivationVirtual-contains-section"/>
+		<section conref="../packagedef.dita#cxxStructDerivationVirtual-reference/cxxStructDerivationVirtual-contentModel-section"/>
+		<section conref="../packagedef.dita#cxxStructDerivationVirtual-reference/cxxStructDerivationVirtual-attList-section"/>
+		<section conref="../packagedef.dita#cxxStructDerivationVirtual-reference/cxxStructDerivationVirtual-classValue-section"/>
+	</refbody>
+</reference>

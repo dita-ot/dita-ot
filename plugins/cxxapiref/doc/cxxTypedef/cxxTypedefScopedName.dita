@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxTypedefScopedName">
+    <title>cxxTypedefScopedName</title>
+    <shortdesc>The scope of the typedef i.e. the declaration of the enclosing namespace/class/struct/union.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title><p>This element describe the declaration (qualified name lookup) of the enclosing namespace/class/struct/union.</p><p>See ISO/IEC 14882:2003(E) Section 3.3 Declarative regions and scopes [basic.scope]</p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxTypedefDefinition&gt;
+    &lt;cxxTypedefAccessSpecifier value=&quot;public&quot; /&gt;
+    &lt;cxxTypedefDeclaredType&gt;
+        &lt;apiRelation href=&quot;GUID-F312F79C-AEE3-33F7-8487-FFA727B190BE.xml&quot;&gt;Messages::TMessageSigVoid&lt;/apiRelation&gt;&amp;lt; ECFTierGetDataCollectors, TCFDataCollector::ERealmId &amp;gt;&lt;/cxxTypedefDeclaredType&gt;
+    &lt;cxxTypedefScopedName&gt;ESock::TCFDataCollector&lt;/cxxTypedefScopedName&gt;
+    &lt;cxxTypedefPrototype&gt;Messages::TMessageSigVoid&amp;lt; ECFTierGetDataCollectors, TCFDataCollector::ERealmId &amp;gt; TTierGetDataCollectors&lt;/cxxTypedefPrototype&gt;
+    &lt;cxxTypedefNameLookup&gt;ESock::TCFDataCollector::TTierGetDataCollectors&lt;/cxxTypedefNameLookup&gt;
+    &lt;cxxTypedefAPIItemLocation&gt;
+        &lt;cxxTypedefDeclarationFile name=&quot;filePath&quot; value=&quot;s:/epoc32/include/platform/comms-infras/ss_nodemessages_tiermanager.h&quot; /&gt;
+        &lt;cxxTypedefDeclarationFileLine name=&quot;lineNumber&quot; value=&quot;175&quot; /&gt;
+    &lt;/cxxTypedefAPIItemLocation&gt;
+&lt;/cxxTypedefDefinition&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxTypedefScopedName-reference/cxxTypedefScopedName-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxTypedefScopedName-reference/cxxTypedefScopedName-contains-section"/>
+        <section conref="../packagedef.dita#cxxTypedefScopedName-reference/cxxTypedefScopedName-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxTypedefScopedName-reference/cxxTypedefScopedName-attList-section"/>
+        <section conref="../packagedef.dita#cxxTypedefScopedName-reference/cxxTypedefScopedName-classValue-section"/>
+    </refbody>
+</reference>

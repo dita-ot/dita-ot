@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxFunctionParameterDeclaredType">
+    <title>cxxFunctionParameterDeclaredType</title>
+    <shortdesc>Describes the type of a function parameter.</shortdesc>
+    <refbody>
+        <section id="section_E80368701A86472A8D96583AA29ED2A5">
+            <title>Description</title><p>Describes the type of a function parameter.</p>
+        </section>
+        <section conref="../packagedef.dita#cxxFunctionParameterDeclaredType-reference/cxxFunctionParameterDeclaredType-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxFunctionParameterDeclaredType-reference/cxxFunctionParameterDeclaredType-contains-section"/>
+        <section conref="../packagedef.dita#cxxFunctionParameterDeclaredType-reference/cxxFunctionParameterDeclaredType-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxFunctionParameterDeclaredType-reference/cxxFunctionParameterDeclaredType-attList-section"/>
+        <section conref="../packagedef.dita#cxxFunctionParameterDeclaredType-reference/cxxFunctionParameterDeclaredType-classValue-section"/>
+    </refbody>
+</reference>

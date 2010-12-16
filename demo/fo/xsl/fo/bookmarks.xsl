@@ -87,6 +87,8 @@ See the accompanying license.txt file for applicable licenses.
               <xsl:with-param name="topicNumber" select="$topicNumber"/>
             </xsl:call-template>
         </xsl:variable>
+        <!-- normalize the title bug:3065853 -->
+        <xsl:variable name="normalizedTitle" select="normalize-space($topicTitle)"/>
         <xsl:variable name="mapTopic">
             <xsl:copy-of select="$map//*[@id = $id]"/>
         </xsl:variable>
@@ -99,7 +101,7 @@ See the accompanying license.txt file for applicable licenses.
                         <xsl:attribute name="starting-state">hide</xsl:attribute>
                     </xsl:if>
             		<fo:bookmark-title>
-                		<xsl:value-of select="$topicTitle"/>
+                		<xsl:value-of select="$normalizedTitle"/>
             		</fo:bookmark-title>
             		<xsl:apply-templates mode="bookmark"/>
         		</fo:bookmark>

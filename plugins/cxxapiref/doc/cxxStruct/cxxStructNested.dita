@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxStructNested">
+    <title>cxxStructNested</title>
+    <shortdesc>
+     The &lt;cxxStructNested&gt; element within &lt;cxxStruct&gt; contains &lt;cxxStructNestedDetail&gt; which gives details of nested members of this C++ struct
+    </shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>&lt;cxxStructNested&gt; contains one mandatory &lt;cxxStructNestedDetail&gt; element and no attributes.</p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>	&lt;cxxStructNested&gt;
+    &lt;cxxStructNestedDetail&gt;
+        &lt;cxxStructNestedClass href=&quot;GUID-A7A472B9-220C-3068-B459-625D6D48456F.xml&quot;&gt;RMobileSmsMessaging::TMobileSmsAttributesV1&lt;/cxxStructNestedClass&gt;
+        &lt;cxxStructNestedStruct href=&quot;GUID-4617BF7F-C631-376C-8D14-522D71A61188.xml&quot;&gt;RMobileSmsMessaging::TMobileSmsCapsV1&lt;/cxxStructNestedClass&gt;
+        &lt;cxxStructNestedUnion href=&quot;GUID-1252BF3C-4BCC-327E-8734-107D85B5C066.xml&quot;&gt;RMobileSmsMessaging::TMobileSmsCdmaSendAttributesV4&lt;/cxxStructNestedClass&gt;
+    &lt;/cxxStructNestedDetail&gt;
+&lt;/cxxStructNested&gt;</codeblock>
+        </example>        
+        <section conref="../packagedef.dita#cxxStructNested-reference/cxxStructNested-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxStructNested-reference/cxxStructNested-contains-section"/>
+        <section conref="../packagedef.dita#cxxStructNested-reference/cxxStructNested-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxStructNested-reference/cxxStructNested-attList-section"/>
+        <section conref="../packagedef.dita#cxxStructNested-reference/cxxStructNested-classValue-section"/>
+    </refbody>
+</reference>

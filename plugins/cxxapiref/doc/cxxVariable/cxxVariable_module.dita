@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="cxxVariable_module" outputclass="module" xml:lang="en-us">
+	<title>cxxVariable module</title>
+	<shortdesc>Defines a top-level container for all the elements necessary to describe a variable.</shortdesc>
+	<refbody>
+		<section>
+			<title>Description</title>	
+            <p>The &lt;cxxVariable&gt; topic type contains elements necessary to show 
+            the name of the variable, a short description and the variable definition.</p>
+            <p>Common elements used to describe a variable are:</p>
+            <ul>
+            <li>cxxVariableAccessSpecifier</li>
+            <li>cxxVariableDeclaredType</li>
+            <li>cxxVariableScopedName</li>
+            <li>cxxVariablePrototype</li>
+            <li>cxxVariableNameLookup</li>
+            <li>cxxVariableAPIItemLocation</li>
+            </ul>
+            <p>The cxxVariable topic contains the following elements: </p>            
+		</section>
+	</refbody>
+</reference>

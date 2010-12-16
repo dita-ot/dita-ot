@@ -9,13 +9,16 @@
  */
 package org.dita.dost.util;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
 import java.util.StringTokenizer;
 
 import org.dita.dost.log.DITAOTJavaLogger;
@@ -33,6 +36,76 @@ public class FileUtils {
 	 */
 	private FileUtils(){
 	}
+	
+	private static DITAOTJavaLogger logger = new DITAOTJavaLogger();
+	
+	// Added on 2010-11-09 for bug 3102827: Allow a way to specify recognized image extensions -- start
+	/**
+	 * Configuration properties.
+	 * 
+	 * <p>If configuration file is not found e.g. during integration,
+	 * the properties object will be an empty.</p> 
+	 */
+	private final static Properties configuration = new Properties();
+	static {
+		BufferedInputStream configurationInputStream = null;
+		try {
+			File configurationFile = new File("lib"+ File.separator + Constants.CONF_PROPERTIES);
+			if(configurationFile.exists()) 
+				configurationInputStream = new BufferedInputStream(new FileInputStream(configurationFile));
+			
+			if (configurationInputStream != null) {
+				configuration.load(configurationInputStream);
+			}
+		} catch (IOException e) {
+			logger.logException(e);
+		} finally {
+			if (configurationInputStream != null) {
+				try {
+					configurationInputStream.close();
+				} catch (IOException ex) {
+					logger.logException(ex);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Supported image extensions.
+	 */
+	private final static List<String> supportedImageExtensions = new ArrayList<String>();
+	static {
+		final String imageExtensions = configuration.getProperty(Constants.CONF_SUPPORTED_IMAGE_EXTENSIONS);
+		if (imageExtensions != null && imageExtensions.length()>0) {
+			for (final String ext: imageExtensions.split(";")) {
+				supportedImageExtensions.add(ext);
+			}
+		} else {
+			supportedImageExtensions.add(Constants.FILE_EXTENSION_JPG);
+			supportedImageExtensions.add(Constants.FILE_EXTENSION_GIF);
+			supportedImageExtensions.add(Constants.FILE_EXTENSION_EPS);
+			supportedImageExtensions.add(Constants.FILE_EXTENSION_JPEG);
+			supportedImageExtensions.add(Constants.FILE_EXTENSION_PNG);
+			supportedImageExtensions.add(Constants.FILE_EXTENSION_SVG);
+			supportedImageExtensions.add(Constants.FILE_EXTENSION_TIFF);
+			supportedImageExtensions.add(Constants.FILE_EXTENSION_TIF);			
+		}
+	}
+	
+	/**
+	 * Supported extensions.
+	 */
+	private final static List<String> supportedExtensions = new ArrayList<String>();
+	static {
+		supportedExtensions.addAll(supportedImageExtensions);
+		supportedExtensions.add(Constants.FILE_EXTENSION_DITA);
+		supportedExtensions.add(Constants.FILE_EXTENSION_DITAMAP);
+		supportedExtensions.add(Constants.FILE_EXTENSION_XML);
+		supportedExtensions.add(Constants.FILE_EXTENSION_HTML);
+		supportedExtensions.add(Constants.FILE_EXTENSION_PDF);
+		supportedExtensions.add(Constants.FILE_EXTENSION_SWF);
+	}
+	// Added on 2010-11-09 for bug 3102827: Allow a way to specify recognized image extensions -- end
 
 	/**
 	 * Return if the file is a html file by extension.
@@ -43,6 +116,32 @@ public class FileUtils {
 		return (lcasefn.endsWith(Constants.FILE_EXTENSION_HTML) || lcasefn
 				.endsWith(Constants.FILE_EXTENSION_HTM));
 	}
+	/**
+	 * Return if the file is a hhp file by extension.
+	 * @param lcasefn file name
+	 * @return true if is hhp file and false otherwise
+	 */
+	public static boolean isHHPFile(String lcasefn) {
+		return (lcasefn.endsWith(Constants.FILE_EXTENSION_HHP));
+	}
+	/**
+	 * Return if the file is a hhc file by extension.
+	 * @param lcasefn file name
+	 * @return true if is hhc file and false otherwise
+	 */
+	public static boolean isHHCFile(String lcasefn) {
+		return (lcasefn.endsWith(Constants.FILE_EXTENSION_HHC));
+	}
+	/**
+	 * Return if the file is a hhk file by extension.
+	 * @param lcasefn file name
+	 * @return true if is hhk file and false otherwise
+	 */
+	public static boolean isHHKFile(String lcasefn) {
+		return (lcasefn.endsWith(Constants.FILE_EXTENSION_HHK));
+	}
+	
+	
 	
 	/**
 	 * Return if the file is a pdf file by its extension.
@@ -106,14 +205,24 @@ public class FileUtils {
 	 * @return true if is supported image and false otherwise
 	 */
 	public static boolean isSupportedImageFile(String lcasefn) {
-		return lcasefn.endsWith(Constants.FILE_EXTENSION_JPG)
+		
+		// Modified on 2010-11-09 for bug 3102827: Allow a way to specify recognized image extensions -- start	
+		/*return lcasefn.endsWith(Constants.FILE_EXTENSION_JPG)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_GIF)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_EPS)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_JPEG)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_PNG)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_SVG)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_TIFF)
-				|| lcasefn.endsWith(Constants.FILE_EXTENSION_TIF);
+				|| lcasefn.endsWith(Constants.FILE_EXTENSION_TIF);*/
+		
+		for (String ext: supportedImageExtensions) {
+			if (lcasefn.endsWith(ext)) {
+				return true;
+			}
+		}
+		return false;
+		// Modified on 2010-11-09 for bug 3102827: Allow a way to specify recognized image extensions -- start
 	}
 
 	/**
@@ -141,7 +250,9 @@ public class FileUtils {
 			logger.logWarn(MessageUtils.getMessage("DOTJ027W", params).toString());
 		}
 */		
-		return lcasefn.endsWith(Constants.FILE_EXTENSION_DITA)
+		// Modified on 2010-11-09 for bug 3102827: Allow a way to specify recognized image extensions -- start
+		
+		/*return lcasefn.endsWith(Constants.FILE_EXTENSION_DITA)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_DITAMAP)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_XML)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_JPG)
@@ -154,9 +265,17 @@ public class FileUtils {
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_TIFF)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_TIF)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_PDF)
-				|| lcasefn.endsWith(Constants.FILE_EXTENSION_SWF);
+				|| lcasefn.endsWith(Constants.FILE_EXTENSION_SWF);*/
+		
+		for (String ext: supportedExtensions) {
+			if (lcasefn.endsWith(ext)) {
+				return true;
+			}
+		}
+		return false;
+		// Modified on 2010-11-09 for bug 3102827: Allow a way to specify recognized image extensions -- end
 	}
-
+	
 	/**
 	 * Get the path of topicFile relative to the input map.
 	 * In fact this method can be used to calculate any path of topicFile related to the first parameter.
@@ -424,7 +543,6 @@ public class FileUtils {
 			}
 			fos.flush();
 		} catch (IOException ex) {
-			DITAOTJavaLogger logger = new DITAOTJavaLogger();
 			//removed by Alan on Date:2009-11-02 for Work Item:#1590 start
 			/*logger.logWarn("Failed to copy file from '" + src + "' to '"
 					+ target + "'");*/
@@ -440,7 +558,6 @@ public class FileUtils {
 					fos.close();
 				}
 			} catch (Exception e) {
-				DITAOTJavaLogger logger = new DITAOTJavaLogger();
 				logger.logException(e);
 			}
 		}

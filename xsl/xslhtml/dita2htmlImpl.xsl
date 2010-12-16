@@ -16,11 +16,13 @@
 
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
                 xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
                 xmlns:exsl="http://exslt.org/common"
-                exclude-result-prefixes="dita2html ditamsg exsl java"
-                xmlns:java="org.dita.dost.util.ImgUtils">
+                xmlns:java="org.dita.dost.util.ImgUtils"
+                xmlns:url="org.dita.dost.util.URLUtils"
+                exclude-result-prefixes="dita-ot dita2html ditamsg exsl java url">
 
 
 
@@ -28,6 +30,7 @@
 <xsl:import href="../common/output-message.xsl"/>
 <xsl:import href="../common/dita-utilities.xsl"/>
 <xsl:import href="../common/related-links.xsl"/>
+<xsl:import href="../common/dita-textonly.xsl"/>
 <xsl:import href="flag-old.xsl"/>
 <xsl:include href="get-meta.xsl"/>
 <xsl:include href="rel-links.xsl"/>
@@ -56,7 +59,7 @@
 <xsl:param name="CSSPATH"/>
 
 <!-- Preserve DITA class ancestry in XHTML output; values are 'yes' or 'no' -->
-<xsl:param name="PRESERVE-DITA-CLASS" select="'no'"/>
+<xsl:param name="PRESERVE-DITA-CLASS" select="'yes'"/>
 
 <!-- the file name containing XHTML to be placed in the HEAD area
      (file name and extension only - no path). -->
@@ -150,7 +153,7 @@
             <xsl:text>file://</xsl:text><xsl:value-of select="concat($BASEDIR, '/', $OUTPUTDIR, '/')"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:text>file:/</xsl:text><xsl:value-of select="concat($BASEDIR, '/', $OUTPUTDIR, '/')"/>
+            <xsl:text>file:/</xsl:text><xsl:value-of select="translate(concat($BASEDIR, '/', $OUTPUTDIR, '/'), '\', '/')"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:otherwise>
@@ -298,15 +301,26 @@
 </xsl:template>
 
 <xsl:template name="gen-topic">
+  <xsl:param name="nestlevel">
+      <xsl:choose>
+          <!-- Limit depth for historical reasons, could allow any depth. Previously limit was 5. -->
+          <xsl:when test="count(ancestor::*[contains(@class,' topic/topic ')]) > 9">9</xsl:when>
+          <xsl:otherwise><xsl:value-of select="count(ancestor::*[contains(@class,' topic/topic ')])"/></xsl:otherwise>
+      </xsl:choose>
+  </xsl:param>
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
  <xsl:choose>
    <xsl:when test="parent::dita and not(preceding-sibling::*)">
      <!-- Do not reset xml:lang if it is already set on <html> -->
-     <xsl:apply-templates select="." mode="set-output-class"/>
+     <!-- Moved outputclass to the body tag -->
    </xsl:when>
-   <xsl:otherwise><xsl:call-template name="commonattributes"/></xsl:otherwise>
+   <xsl:otherwise>
+     <xsl:call-template name="commonattributes">
+       <xsl:with-param name="default-output-class" select="concat('nested',$nestlevel)"/>
+     </xsl:call-template>
+   </xsl:otherwise>
  </xsl:choose>
  <xsl:call-template name="gen-toc-id"/>
   <xsl:call-template name="gen-style">
@@ -1083,24 +1097,25 @@
     <xsl:call-template name="getrules"/>
   </xsl:variable>
 <li>
- <!-- handle non-compact list items -->
- <xsl:if test="parent::*/@compact='no'">
-  <xsl:attribute name="class">liexpand</xsl:attribute>
- </xsl:if>
-  <xsl:call-template name="commonattributes"/>
+  <xsl:choose>
+    <xsl:when test="parent::*/@compact='no'">
+      <xsl:attribute name="class">liexpand</xsl:attribute>
+      <!-- handle non-compact list items -->
+      <xsl:call-template name="commonattributes">
+        <xsl:with-param name="default-output-class" select="'liexpand'"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="commonattributes"/>
+    </xsl:otherwise>
+  </xsl:choose>
   <xsl:call-template name="gen-style">
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="setidaname"/>
-  <xsl:call-template name="start-flagit">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-  </xsl:call-template>
-  <xsl:call-template name="revblock">
+  <xsl:apply-templates select="." mode="outputContentsWithFlags">
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-  </xsl:call-template>
-  <xsl:call-template name="end-flagit">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-  </xsl:call-template>
+  </xsl:apply-templates>
 </li><xsl:value-of select="$newline"/>
 </xsl:template>
 <!-- simple list item -->
@@ -1126,15 +1141,9 @@
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="setidaname"/>
-  <xsl:call-template name="start-flagit">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-  </xsl:call-template>
-  <xsl:call-template name="revblock">
+  <xsl:apply-templates select="." mode="outputContentsWithFlags">
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-  </xsl:call-template>
-  <xsl:call-template name="end-flagit">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-  </xsl:call-template>
+  </xsl:apply-templates>
 </li><xsl:value-of select="$newline"/>
 </xsl:template>
 
@@ -1728,8 +1737,10 @@
       </xsl:variable>
 
       <xsl:variable name="entry-file" select="concat($WORKDIR, $PATH2PROJ, substring-before($target, '.'), $DITAEXT)"/>
+      <xsl:variable name="entry-file-uri" select="url:getURL($entry-file)"/>
+      
       <!-- Save glossary entry file contents into a variable to workaround the infamous putDocumentCache error in Xalan -->
-      <xsl:variable name="entry-file-contents" select="document($entry-file, /)"/>
+      <xsl:variable name="entry-file-contents" select="document($entry-file-uri, /)"/>
       <!-- Glossary id defined in <glossentry> -->
       <xsl:variable name="glossid">
         <xsl:value-of select="substring-after($updatedTarget, '#')"/>
@@ -2172,19 +2183,17 @@
 <!-- Add by Alan for Bug:#2900417 on Date: 2009-11-23 begin -->
 <!-- AM: handling for scale attribute -->
 <xsl:template match="*[contains(@class,' topic/image ')]/@scale">
-    <xsl:variable name="height">
+    <xsl:variable name="width">
       <xsl:choose>
         <xsl:when test="not(contains(../@href,'://'))">
-          <!-- AM: currently dost.jar returns the height in function getWidth instead of width -->
           <xsl:value-of select="java:getWidth($OUTPUTDIR, string(../@href))"/>
         </xsl:when>
         <xsl:otherwise/>
       </xsl:choose>
     </xsl:variable>
-    <xsl:variable name="width">
+    <xsl:variable name="height">
       <xsl:choose>
         <xsl:when test="not(contains(../@href,'://'))">
-          <!-- AM: currently dost.jar returns the width in function getHeight instead of height -->
           <xsl:value-of select="java:getHeight($OUTPUTDIR, string(../@href))"/>
         </xsl:when>
         <xsl:otherwise/>
@@ -2192,10 +2201,10 @@
     </xsl:variable>
     <xsl:if test="not(../@width) and not(../@height)">
       <xsl:attribute name="height">
-        <xsl:value-of select="number($height) * number(.) div 100"/>
+        <xsl:value-of select="floor(number($height) * number(.) div 100)"/>
       </xsl:attribute>
       <xsl:attribute name="width">
-        <xsl:value-of select="number($width) * number(.) div 100"/>
+        <xsl:value-of select="floor(number($width) * number(.) div 100)"/>
       </xsl:attribute>
     </xsl:if>
 </xsl:template>
@@ -2356,6 +2365,7 @@
    </xsl:otherwise>
  </xsl:choose>
 </xsl:template>
+
 <xsl:template match="*[contains(@class,' topic/table ')]" mode="table-fmt">
   <xsl:value-of select="$newline"/>
   <!-- special case for IE & NS for frame & no rules - needs to be a double table -->
@@ -2868,7 +2878,7 @@
   <xsl:choose>
     <!-- When entry is empty, output a blank -->
     <xsl:when test="not(*|text()|processing-instruction())">
-      <xsl:text disable-output-escaping="yes">&amp;#xA0;</xsl:text>  <!-- nbsp -->
+      <xsl:text>&#160;</xsl:text>  <!-- nbsp -->
     </xsl:when>
     <xsl:otherwise>
       <xsl:variable name="revtest">
@@ -2916,6 +2926,8 @@
   </xsl:choose>
 </xsl:template>
 
+<!-- Starting with the first colspec, add up the total width for
+     this table. Width of a column is given in units: 1*, 43* 5*, etc -->
 <xsl:template match="*[contains(@class,' topic/colspec ')]" mode="count-colwidth">
   <xsl:param name="totalwidth">0</xsl:param> <!-- Total counted width so far -->
   <xsl:variable name="thiswidth">            <!-- Width of this column -->
@@ -3006,7 +3018,13 @@
       <xsl:with-param name="startposition" select="$entrystartpos"/>
     </xsl:call-template>
   </xsl:variable>
-
+  <!-- The test cell can be any of the following:
+       * completely before the header range (ignore id)
+       * completely after the header range (ignore id)
+       * completely within the header range (save id)
+       * partially before, partially within (save id)
+       * partially within, partially after (save id)
+       * completely surrounding the header range (save id) -->
   <xsl:choose>
     <!-- Ignore this header cell if it  starts after the tbody cell we are testing -->
     <xsl:when test="number($endmatch) &lt; number($entrystartpos)"/>
@@ -3270,7 +3288,12 @@
   </tr><xsl:value-of select="$newline"/>
 </xsl:template>
 
-
+<!-- Output the ID for a simpletable entry, when it is specified. If no ID is specified,
+     and this is a header row, generate an ID. The entry is considered a header entry
+     when the it is inside <sthead>, or when it is in the column specified in the keycol
+     attribute on <simpletable>
+     NOTE: It references simpletable with parent::*/parent::* in order to avoid problems
+     with nested simpletables. -->
 <xsl:template name="output-stentry-id">
   <!-- Find the position in this row -->
   <xsl:variable name="thiscolnum"><xsl:number level="single" count="*"/></xsl:variable>
@@ -3286,7 +3309,13 @@
   </xsl:choose>
 </xsl:template>
 
-
+<!-- Output the headers attribute for screen readers. If specified, it should match both
+     of the following:
+     * the <stentry> with the same position in the sthead
+     * the <stentry> that is in the key column (specified in @keycol on simpletable)
+     Note: This function is not called within sthead, so sthead never gets headers.
+     NOTE: I reference simpletable with parent::*/parent::* in order to avoid problems
+     with nested simpletables. -->
 <xsl:template name="set.stentry.headers">
   <xsl:if test="parent::*/parent::*/@keycol | parent::*/parent::*/*[contains(@class,' topic/sthead ')]">
       <xsl:variable name="thiscolnum"><xsl:number level="single" count="*"/></xsl:variable>
@@ -3540,7 +3569,7 @@
    <xsl:value-of select="@specentry"/>
   </xsl:when>
   <xsl:when test="not(*|text()|processing-instruction())">
-    <xsl:text disable-output-escaping="yes">&amp;#xA0;</xsl:text>  <!-- nbsp -->
+    <xsl:text>&#160;</xsl:text>  <!-- nbsp -->
   </xsl:when>
   <xsl:otherwise>
    <xsl:apply-templates/>
@@ -3634,17 +3663,30 @@
 
 <!-- =========== REQUIRED CLEANUP and REVIEW COMMENT =========== -->
 
+<xsl:template match="*[contains(@class,' topic/required-cleanup ')]" mode="default-required-cleanup-style">
+  <xsl:attribute name="style">
+    <xsl:text>background-color: #FFFF99; color:#CC3333; border: 1pt black solid;</xsl:text>
+  </xsl:attribute>
+</xsl:template>
+
+<xsl:template match="*[contains(@class,' topic/draft-comment ')]" mode="default-draft-comment-style">
+  <xsl:attribute name="style">
+    <xsl:text>background-color: #99FF99; border: 1pt black solid;</xsl:text>
+  </xsl:attribute>
+</xsl:template>
+
 <xsl:template match="*[contains(@class,' topic/required-cleanup ')]" name="topic.required-cleanup">
  <xsl:if test="$DRAFT='yes'">
    <xsl:variable name="flagrules">
      <xsl:call-template name="getrules"/>
    </xsl:variable>
    <xsl:apply-templates select="." mode="ditamsg:required-cleanup-in-content"/>
-  <div style="background-color: #FFFF99; color:#CC3333; border: 1pt black solid;">
+  <div>
    <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="gen-style">
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
+    <xsl:apply-templates select="." mode="default-required-cleanup-style"/>
     <xsl:call-template name="setidaname"/>
     <xsl:call-template name="start-flagit">
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
@@ -3675,11 +3717,12 @@
      <xsl:call-template name="getrules"/>
    </xsl:variable>
    <xsl:apply-templates select="." mode="ditamsg:draft-comment-in-content"/>
-  <div style="background-color: #99FF99; border: 1pt black solid;">
+  <div>
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="gen-style">
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
+    <xsl:apply-templates select="." mode="default-draft-comment-style"/>
     <xsl:call-template name="setidaname"/>
     <xsl:call-template name="start-flagit">
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
@@ -3739,9 +3782,6 @@
    </xsl:choose>
  </xsl:if>
 </xsl:template>
-<!-- Index terms which may be inside of ph elements should not appear in text-only mode -->
-<xsl:template match="*[contains(@class,' topic/indexterm ')]" mode="text-only"/>
-
 
 <xsl:template match="*[contains(@class,' topic/indextermref ')]"/>
 
@@ -4075,31 +4115,9 @@
 <!-- named templates for labels and titles related to topic structures -->
 
 <!-- test processors for HTML title element -->
-<xsl:template match="*" mode="text-only">
-  <xsl:apply-templates select="text()|*" mode="text-only"/>
-</xsl:template>
-<!-- for artwork in a title, get the alt text -->
-<xsl:template match="*[contains(@class,' topic/image ')]" mode="text-only">
-  <xsl:choose>
-    <xsl:when test="*[contains(@class,' topic/alt ')]"><xsl:apply-templates mode="text-only"/></xsl:when>
-    <xsl:when test="@alt"><xsl:value-of select="@alt"/></xsl:when>
-  </xsl:choose>
-</xsl:template>
-<!-- for boolean in a title, set the text -->
-<xsl:template match="*[contains(@class,' topic/boolean ')]" mode="text-only">
-  <xsl:value-of select="name()"/><xsl:text>: </xsl:text><xsl:value-of select="@state"/>
-</xsl:template>
-<!-- for state in a title, set the text -->
-<xsl:template match="*[contains(@class,' topic/state ')]" mode="text-only">
-  <xsl:value-of select="name()"/><xsl:text>: </xsl:text><xsl:value-of select="@name"/><xsl:text>=</xsl:text><xsl:value-of select="@value"/>
-</xsl:template>
-<!-- Footnote as text-only should just create the number -->
-<xsl:template match="*[contains(@class,' topic/fn ')]" mode="text-only">
-  <xsl:variable name="fnid"><xsl:number from="/" level="any"/></xsl:variable>
-  <xsl:choose>
-    <xsl:when test="@callout">(<xsl:value-of select="@callout"/>)</xsl:when>
-    <xsl:otherwise>(<xsl:value-of select="$fnid"/>)</xsl:otherwise>
-  </xsl:choose>
+<xsl:template match="*|text()|processing-instruction()" mode="text-only">
+  <!-- Redirect to common dita-ot module -->
+  <xsl:apply-templates select="." mode="dita-ot:text-only"/>
 </xsl:template>
 
 <!-- Process a section heading - H4 based on: 1) title element 2) @spectitle attr -->
@@ -4179,7 +4197,9 @@
   </xsl:param>
   <xsl:element name="{$headLevel}">
     <xsl:attribute name="class">sectiontitle</xsl:attribute>
-    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="commonattributes">
+      <xsl:with-param name="default-output-class" select="'sectiontitle'"/>
+    </xsl:call-template>
     <xsl:apply-templates/>
   </xsl:element>
 </xsl:template>
@@ -4495,7 +4515,7 @@
     <img src="tip-ing.jpg" alt="tip-ing.jpg"/> <!-- this should be an xsl:choose with the approved list and a selection method-->
     <!-- add any other required positioning controls, if needed, but must be valid in the location
          from which the call to this template was made -->
-    <xsl:text disable-output-escaping="yes">&amp;#xA0;</xsl:text>
+    <xsl:text>&#160;</xsl:text>  <!-- nbsp -->
   </xsl:if>
 </xsl:template>
 
@@ -4718,12 +4738,12 @@
     <title>
       <xsl:call-template name="gen-user-panel-title-pfx"/> <!-- hook for a user-XSL title prefix -->
       <!-- use the searchtitle unless there's no value - else use title -->
-      <xsl:variable name="schtitle"><xsl:value-of select="/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/titlealts ')]/*[contains(@class,' topic/searchtitle ')]"/></xsl:variable>
-      <xsl:variable name="ditaschtitle"><xsl:value-of select="/dita/*[contains(@class,' topic/topic ')][1]/*[contains(@class,' topic/titlealts ')]/*[contains(@class,' topic/searchtitle ')]"/></xsl:variable>
+      <xsl:variable name="schtitle"><xsl:apply-templates select="/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/titlealts ')]/*[contains(@class,' topic/searchtitle ')]" mode="text-only"/></xsl:variable>
+      <xsl:variable name="ditaschtitle"><xsl:apply-templates select="/dita/*[contains(@class,' topic/topic ')][1]/*[contains(@class,' topic/titlealts ')]/*[contains(@class,' topic/searchtitle ')]" mode="text-only"/></xsl:variable>
       <xsl:variable name="maintitle"><xsl:apply-templates select="/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]" mode="text-only"/></xsl:variable>
       <xsl:variable name="ditamaintitle"><xsl:apply-templates select="/dita/*[contains(@class,' topic/topic ')][1]/*[contains(@class,' topic/title ')]" mode="text-only"/></xsl:variable>
       <!-- edited by William on 2009-05-18 for searchtitle bug start -->
-      <xsl:variable name="mapschtitle"><xsl:value-of select="/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/titlealts ')]/*[contains(@class,' map/searchtitle ')]"/></xsl:variable>
+      <xsl:variable name="mapschtitle"><xsl:apply-templates select="/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/titlealts ')]/*[contains(@class,' map/searchtitle ')]" mode="text-only"/></xsl:variable>
       <!-- edited by William on 2009-05-18 for searchtitile bug end -->
       <xsl:choose>
         <xsl:when test="string-length($schtitle)>'0'"><xsl:value-of select="normalize-space($schtitle)"/></xsl:when>
@@ -4780,6 +4800,10 @@
       <xsl:call-template name="generateBreadcrumbs"/>
       <xsl:call-template name="gen-user-header"/>  <!-- include user's XSL running header here -->
       <xsl:call-template name="processHDR"/>
+      <xsl:if test="$INDEXSHOW='yes'">
+        <xsl:apply-templates select="/*/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/keywords ')]/*[contains(@class,' topic/indexterm ')] |
+                                     /dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/keywords ')]/*[contains(@class,' topic/indexterm ')]"/>
+      </xsl:if>
       <!-- Include a user's XSL call here to generate a toc based on what's a child of topic -->
       <xsl:call-template name="gen-user-sidetoc"/>
       <xsl:apply-templates/> <!-- this will include all things within topic; therefore, -->

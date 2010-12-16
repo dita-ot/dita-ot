@@ -9,6 +9,7 @@ import java.util.Iterator;
 
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.StringUtils;
 /**
  * ImportAntLibAction class.
  *
@@ -40,11 +41,11 @@ public class ImportAntLibAction extends ImportAction {
 			if(FileUtils.isAbsolutePath(resolvedValue)){
 				// if resolvedValue is absolute path
 				retBuf.append("<pathelement location=\"");
-				retBuf.append(resolvedValue);
+				retBuf.append(StringUtils.escapeXML(resolvedValue));
 				retBuf.append("\"/>");
 			}else{// if resolvedValue is relative path
 				retBuf.append("<pathelement location=\"${dita.dir}${file.separator}");
-				retBuf.append(resolvedValue);
+				retBuf.append(StringUtils.escapeXML(resolvedValue));
 				retBuf.append("\"/>");
 			}
 		}

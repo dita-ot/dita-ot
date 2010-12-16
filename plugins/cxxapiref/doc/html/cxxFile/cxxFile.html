@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="copyright" content="(C) Copyright 2005"/>
+<meta name="DC.rights.owner" content="(C) Copyright 2005"/>
+<meta name="DC.Type" content="reference"/>
+<meta name="DC.Title" content="cxxFile"/>
+<meta name="abstract" content="The &lt;cxxFile&gt; element contains all the global APIs of a component."/>
+<meta name="description" content="The &lt;cxxFile&gt; element contains all the global APIs of a component."/>
+<meta name="DC.Relation" scheme="URI" content="../cxxFile/cxxFile_module.html"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="cxxFile"/>
+<meta name="DC.Language" content="en-us"/>
+<link rel="stylesheet" type="text/css" href="../commonltr.css"/>
+<title>cxxFile</title>
+<link rel="stylesheet" type="text/css" href="../nokiacxxref.css"/></head>
+<body class="element" id="cxxFile"><a name="cxxFile"><!-- --></a>
+
+
+    <h1 class="topictitle1">cxxFile</h1>
+
+    
+    <div><p>The &lt;cxxFile&gt; element contains all the global APIs of a component.</p>
+
+        <div class="section"><h2 class="sectiontitle">Description</h2>
+            
+            <p>&lt;cxxFile&gt; requires the attribute <em>id</em> so that it may be linked to from other topics.</p>
+
+            <p>The &lt;cxxFile&gt; element must contain the file name within the element &lt;apiname&gt;. &lt;cxxFile&gt; 
+            can also contain zero or more of the following elements to describe global APIs:</p>
+
+            <ul>
+                <li>&lt;cxxFunction&gt;</li>
+
+                <li>&lt;cxxDefine&gt;</li>
+
+                <li>&lt;cxxVariable&gt;</li>
+
+                <li>&lt;cxxEnumeration&gt;</li>
+
+                <li>&lt;cxxTypedef&gt;</li>
+
+            </ul>
+
+            <p>&lt;cxxFile&gt; must contain the element &lt;cxxFileAPIItemLocation&gt; to give the path to the file 
+            being described.</p>
+
+        </div>
+
+        <div class="example"><h2 class="sectiontitle">Example</h2>
+        <pre class="codeblock">&lt;cxxFile id="commsdebugutility_8h"&gt;
+	&lt;apiName&gt;commsdebugutility.h&lt;/apiName&gt;
+	&lt;cxxVariable id="commsdebugutility_8h_1a176351e3ce0f0e736bc6a7d8e2dcda59"&gt;
+		&lt;apiName&gt;KLogBufferSize&lt;/apiName&gt;
+		&lt;cxxVariableDetail&gt;
+			...
+		&lt;/cxxVariableDetail&gt;
+	&lt;/cxxVariable&gt;
+	&lt;cxxFileAPIItemLocation&gt;
+		&lt;cxxFileDeclarationFile name="filePath" value="C:/src/include/comms-infras/commsdebugutility.h"/&gt;
+	&lt;/cxxFileAPIItemLocation&gt;
+&lt;/cxxFile&gt;</pre>
+
+        </div>
+
+        <div class="elementContainedBy"><h2 class="sectiontitle">Contained by</h2>
+
+<p id="cxxFile__d5428e5493"><a name="cxxFile__d5428e5493"><!-- --></a>
+</p>
+
+</div>
+
+        <div class="elementContains"><h2 class="sectiontitle">Contains</h2>
+
+<p id="cxxFile__d5428e5502"><a name="cxxFile__d5428e5502"><!-- --></a>
+<span class="keyword">apiName</span>, 
+<span class="keyword">apiSyntax</span>, 
+<a href="cxxFileAPIItemLocation.html" title="The &lt;cxxFileAPIItemLocation&gt; element is a container for the element that describes the location of the file containing the global APIs.">cxxFileAPIItemLocation</a> 
+<span class="keyword">prolog</span>, 
+<span class="keyword">related-links</span>, 
+<span class="keyword">shortdesc</span>, 
+</p>
+
+</div>
+
+        <div class="elementContentModel"><h2 class="sectiontitle">Content Model</h2>
+
+<p id="cxxFile__d5428e5530"><a name="cxxFile__d5428e5530"><!-- --></a>
+(<span class="keyword">apiSyntax</span>, 
+  then  
+<span class="keyword">apiName</span>, 
+  then  
+<span class="keyword">shortdesc</span>, 
+  then  
+<span class="keyword">prolog</span>, 
+  then  
+<span class="keyword">related-links</span>, 
+  then  
+<a href="cxxFileAPIItemLocation.html" title="The &lt;cxxFileAPIItemLocation&gt; element is a container for the element that describes the location of the file containing the global APIs.">cxxFileAPIItemLocation</a> 
+)</p>
+
+</div>
+
+        <div class="elementAttList"/>
+
+        <div class="elementClassValue"><h2 class="sectiontitle">Inheritance</h2>
+
+<p id="cxxFile__d5428e5560"><a name="cxxFile__d5428e5560"><!-- --></a>
+ topic/<span class="keyword">topic</span> reference/<span class="keyword">reference</span> apiRef/<span class="keyword">apiRef</span> apiPackage/<span class="keyword">apiPackage</span> cxxFile/<span class="keyword">cxxFile</span></p>
+
+</div>
+
+    </div>
+
+<div>
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../cxxFile/cxxFile_module.html" title="The cxxFile module defines a top-level container for all the elements necessary to describe the global APIs of a component">cxxFile module</a></div>
+</div>
+</div>
+
+</body>
+</html>

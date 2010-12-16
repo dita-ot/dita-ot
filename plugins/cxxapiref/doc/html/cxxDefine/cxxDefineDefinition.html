@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="copyright" content="(C) Copyright 2005"/>
+<meta name="DC.rights.owner" content="(C) Copyright 2005"/>
+<meta name="DC.Type" content="reference"/>
+<meta name="DC.Title" content="cxxDefineDefinition"/>
+<meta name="abstract" content="The &lt;cxxDefineDefinition&gt; element is defined within &lt;cxxDefineDetail&gt;. &lt;cxxDefineDefinition&gt; represents the C++ define declaration."/>
+<meta name="description" content="The &lt;cxxDefineDefinition&gt; element is defined within &lt;cxxDefineDetail&gt;. &lt;cxxDefineDefinition&gt; represents the C++ define declaration."/>
+<meta name="DC.Relation" scheme="URI" content="../cxxDefine/cxxDefine_module.html"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="cxxDefineDefinition"/>
+<meta name="DC.Language" content="en-us"/>
+<link rel="stylesheet" type="text/css" href="../commonltr.css"/>
+<title>cxxDefineDefinition</title>
+<link rel="stylesheet" type="text/css" href="../nokiacxxref.css"/></head>
+<body class="element" id="cxxDefineDefinition"><a name="cxxDefineDefinition"><!-- --></a>
+
+
+    <h1 class="topictitle1">cxxDefineDefinition</h1>
+
+    
+    <div><p>The &lt;cxxDefineDefinition&gt; element is defined within &lt;cxxDefineDetail&gt;. 
+    &lt;cxxDefineDefinition&gt; represents the C++ define declaration.</p>
+
+        <div class="section"><h2 class="sectiontitle">Description</h2>
+            
+            <p>A define declaration specifies a new named reference type. 
+            A define declaration can include <em>public</em> members which is 
+            represented by the &lt;cxxDefineAccessSpecifier&gt; element.</p>
+
+        </div>
+
+        <div class="example"><h2 class="sectiontitle">Example</h2>
+            
+            <pre class="codeblock">&lt;cxxDefineDefinition&gt;
+    &lt;cxxDefineAccessSpecifier value="public"/&gt;
+    &lt;cxxDefinePrototype&gt;#define ENABLE_NETWORKING_PERFMETRICS&lt;/cxxDefinePrototype&gt;
+    &lt;cxxDefineNameLookup&gt;ENABLE_NETWORKING_PERFMETRICS&lt;/cxxDefineNameLookup&gt;
+    &lt;cxxDefineParameters/&gt;
+    &lt;cxxDefineAPIItemLocation&gt;
+        &lt;cxxDefineDeclarationFile name="filePath" value="C:/EPOC/master/sf/os/commsfw/src/cfperfmetrics.cpp"/&gt;
+        &lt;cxxDefineDeclarationFileLine name="lineNumber" value="17"/&gt;
+    &lt;/cxxDefineAPIItemLocation&gt;
+&lt;/cxxDefineDefinition&gt;</pre>
+
+        </div>
+
+        <div class="elementContainedBy"><h2 class="sectiontitle">Contained by</h2>
+
+<p id="cxxDefineDefinition__d3191e2981"><a name="cxxDefineDefinition__d3191e2981"><!-- --></a>
+<a href="cxxDefineDetail.html" title="The &lt;cxxDefineDetail&gt; element provides detailed information about the structure and behaviors of the C++ define.">cxxDefineDetail</a> 
+</p>
+
+</div>
+
+        <div class="elementContains"><h2 class="sectiontitle">Contains</h2>
+
+<p id="cxxDefineDefinition__d3191e2993"><a name="cxxDefineDefinition__d3191e2993"><!-- --></a>
+<a href="cxxDefineAPIItemLocation.html" title="The &lt;cxxDefineAPIItemLocation&gt; element is defined within &lt;cxxDefineDefinition&gt;. &lt;cxxDefineAPIItemLocation&gt; specifies the location of the API.">cxxDefineAPIItemLocation</a> 
+<a href="cxxDefineAccessSpecifier.html" title="The &lt;cxxDefineAccessSpecifier&gt; element describes the level of access the define allows.">cxxDefineAccessSpecifier</a> 
+<a href="cxxDefineNameLookup.html" title="Provides a unique identifier of the define.">cxxDefineNameLookup</a> 
+<a href="cxxDefineParameters.html" title="Element that contains information about the define identifier-list.">cxxDefineParameters</a> 
+<a href="cxxDefinePrototype.html" title="The &lt;cxxDefinePrototype&gt; element specifies the define declaration.">cxxDefinePrototype</a> 
+<a href="cxxDefineReimplemented.html" title="The &lt;cxxDefineReimplemented&gt; element identifies defines that have been re-implemented.">cxxDefineReimplemented</a> 
+</p>
+
+</div>
+
+        <div class="elementContentModel"><h2 class="sectiontitle">Content Model</h2>
+
+<p id="cxxDefineDefinition__d3191e3021"><a name="cxxDefineDefinition__d3191e3021"><!-- --></a>
+(<a href="cxxDefineAccessSpecifier.html" title="The &lt;cxxDefineAccessSpecifier&gt; element describes the level of access the define allows.">cxxDefineAccessSpecifier</a> 
+(<em>optional</em>)
+  then  
+<a href="cxxDefinePrototype.html" title="The &lt;cxxDefinePrototype&gt; element specifies the define declaration.">cxxDefinePrototype</a> 
+(<em>optional</em>)
+  then  
+<a href="cxxDefineNameLookup.html" title="Provides a unique identifier of the define.">cxxDefineNameLookup</a> 
+(<em>optional</em>)
+  then  
+<a href="cxxDefineReimplemented.html" title="The &lt;cxxDefineReimplemented&gt; element identifies defines that have been re-implemented.">cxxDefineReimplemented</a> 
+(<em>optional</em>)
+  then  
+<a href="cxxDefineParameters.html" title="Element that contains information about the define identifier-list.">cxxDefineParameters</a> 
+(<em>optional</em>)
+  then  
+<a href="cxxDefineAPIItemLocation.html" title="The &lt;cxxDefineAPIItemLocation&gt; element is defined within &lt;cxxDefineDefinition&gt;. &lt;cxxDefineAPIItemLocation&gt; specifies the location of the API.">cxxDefineAPIItemLocation</a> 
+(<em>optional</em>)
+)</p>
+
+</div>
+
+        <div class="elementAttList"/>
+
+        <div class="elementClassValue"><h2 class="sectiontitle">Inheritance</h2>
+
+<p id="cxxDefineDefinition__d3191e3070"><a name="cxxDefineDefinition__d3191e3070"><!-- --></a>
+ topic/<span class="keyword">section</span> reference/<span class="keyword">section</span> apiRef/<span class="keyword">apiDef</span> apiOperation/<span class="keyword">apiOperationDef</span> cxxDefine/<span class="keyword">cxxDefineDefinition</span></p>
+
+</div>
+
+    </div>
+
+<div>
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../cxxDefine/cxxDefine_module.html" title="Defines a top-level container for all the elements necessary to describe a define.">cxxDefine module</a></div>
+</div>
+</div>
+
+</body>
+</html>

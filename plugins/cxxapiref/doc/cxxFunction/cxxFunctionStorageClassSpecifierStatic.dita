@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxFunctionStorageClassSpecifierStatic">
+    <title>cxxFunctionStorageClassSpecifierStatic</title>
+    <shortdesc>Describes a function with static linkage.</shortdesc>
+    <refbody>
+        <section id="section_1DF536E3C50F48C999179427B73E7FFC">
+            <title>Description</title><p>This element is present when the function has static linkage. it has two mandatory attributes; name and value (see example below).</p><p>See ISO/IEC 14882:2003(E) 7.1.1 Storage class specifiers [dcl.stc] and 3.5 Program and linkage [basic.link]</p>
+        </section>
+        <example id="example_877A24BA9ADC42B4A1C079AEBF511A85">
+            <title>Example</title><p>Given this code:</p>
+            <codeblock>static char* f();</codeblock><p>Then function <tt>f</tt> would have the
+element:</p>
+            <codeblock>&lt;cxxFunctionStorageClassSpecifierStatic/&gt;</codeblock><p>If the mandatory attributes are present they must be set thus:</p>
+            <codeblock>&lt;cxxFunctionStorageClassSpecifierStatic name="static" value="static"/&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxFunctionStorageClassSpecifierStatic-reference/cxxFunctionStorageClassSpecifierStatic-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxFunctionStorageClassSpecifierStatic-reference/cxxFunctionStorageClassSpecifierStatic-contains-section"/>
+        <section conref="../packagedef.dita#cxxFunctionStorageClassSpecifierStatic-reference/cxxFunctionStorageClassSpecifierStatic-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxFunctionStorageClassSpecifierStatic-reference/cxxFunctionStorageClassSpecifierStatic-attList-section"/>
+        <section conref="../packagedef.dita#cxxFunctionStorageClassSpecifierStatic-reference/cxxFunctionStorageClassSpecifierStatic-classValue-section"/>
+    </refbody>
+</reference>

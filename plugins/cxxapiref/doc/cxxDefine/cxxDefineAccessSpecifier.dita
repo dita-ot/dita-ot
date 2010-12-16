@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxDefineAccessSpecifier">
+    <title>cxxDefineAccessSpecifier</title>
+    <shortdesc>The &lt;cxxDefineAccessSpecifier&gt; element describes the level of access the define allows.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The &lt;cxxDefineAccessSpecifier&gt; element does not have any children. &lt;cxxDefineAccessSpecifier&gt; 
+            uses the attribute <i>value</i> to describe the level of access a define has. <i>value</i> 
+            is fixed to "public". </p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxDefineAccessSpecifier value="public"/&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxDefineAccessSpecifier-reference/cxxDefineAccessSpecifier-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxDefineAccessSpecifier-reference/cxxDefineAccessSpecifier-contains-section"/>
+        <section conref="../packagedef.dita#cxxDefineAccessSpecifier-reference/cxxDefineAccessSpecifier-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxDefineAccessSpecifier-reference/cxxDefineAccessSpecifier-attList-section"/>
+        <section conref="../packagedef.dita#cxxDefineAccessSpecifier-reference/cxxDefineAccessSpecifier-classValue-section"/>
+    </refbody>
+</reference>

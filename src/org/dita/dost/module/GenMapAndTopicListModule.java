@@ -39,6 +39,7 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.reader.GenListModuleReader;
+import org.dita.dost.reader.GrammarPoolManager;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.DelayConrefUtils;
 import org.dita.dost.util.FileUtils;
@@ -197,7 +198,14 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 	
 	private String moduleEndMsg = "GenMapAndTopicListModule.execute(): Execution time: ";
 	
+	//Added on 2010-08-24 for bug:2994593 start
+	/** use grammar pool cache */
+	private String gramcache = "yes";
+	//Added on 2010-08-24 for bug:2994593 end
 	
+	//Added on 2010-08-24 for bug:3086552 start
+	private boolean setSystemid = true; 
+	//Added on 2010-08-24 for bug:3086552 end
 	/**
 	 * Create a new instance and do the initialization.
 	 * 
@@ -251,8 +259,14 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		try {
 			fileLogger.logInfo(moduleStartMsg);
 			parseInputParameters(input);
+			
+			//set grammar pool flag
+			GrammarPoolManager.setGramCache(gramcache);
 
-			GenListModuleReader.initXMLReader(ditaDir,xmlValidate,rootFile);
+			GenListModuleReader.initXMLReader(ditaDir,xmlValidate,rootFile, setSystemid);
+			//Added on 2010-08-24 for bug:3086552 start
+			DitaValReader.initXMLReader(setSystemid);
+			//Added on 2010-08-24 for bug:3086552 end
 			
 			// first parse filter file for later use
 			parseFilterFile();
@@ -312,12 +326,23 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
         transtype = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE);
         //Added by William on 2009-07-18 for req #12014 start
         
+        gramcache = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_EXT_PARAM_GRAMCACHE);
+        
 		if(valueOfValidate!=null){
 			if("false".equalsIgnoreCase(valueOfValidate))
 				xmlValidate=false;
 			else
 				xmlValidate=true;
 		}
+		
+		//Added on 2010-08-24 for bug:3086552 start
+		String setSystemid_tmp = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_EXT_PARAN_SETSYSTEMID);
+		if(setSystemid_tmp.equals("yes")) {
+			setSystemid = true;
+		} else {
+			setSystemid = false;
+		}
+		//Added on 2010-08-24 for bug:3086552 end
 		
 		//For the output control
 		OutputUtils.setGeneratecopyouter(hashIO.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER));
@@ -590,7 +615,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 			}else{
 				updateUplevels(key);
 				// add the ditamap where it is defined.
-				try {
+				/*try {
 					keydef.write("<keydef ");
 					keydef.write("keys=\""+key+"\" ");
 					keydef.write("href=\""+value+"\" ");
@@ -600,7 +625,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 				} catch (IOException e) {
 
 					javaLogger.logException(e);
-				}
+				}*/
 				
 				keysDefMap.put(key, value+"("+currentFile+")");
 			}
@@ -1093,8 +1118,9 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 				 * In ant, all the file separator should be slash, so we need to replace
 				 * all the back slash with slash.
 				 */
-				int index=file.indexOf("=");
+				int index=file.indexOf(Constants.EQUAL);
 				if(index!=-1){
+					//keyname
 					String to=file.substring(0,index);
 					String source=file.substring(index+1);
 					
@@ -1109,30 +1135,37 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 							.replaceAll(Constants.DOUBLE_BACK_SLASH,
 									Constants.SLASH);
 							
+							StringBuffer result = new StringBuffer(repStr);
+							
 							//move the prefix position
 							//maps/target_topic_1=topics/target-topic-a.xml(root-map-01.ditamap)-->
 							//target_topic_1=topics/target-topic-a.xml(maps/root-map-01.ditamap)
 							if(!"".equals(prefix)){
 								String prefix1 = prefix.replace("\\", "/");
 								if(repStr.indexOf(prefix1)!=-1){
-									StringBuffer sb = new StringBuffer();
-									sb.append(repStr.substring(prefix1.length()));
-									sb.insert(sb.lastIndexOf("(")+1, prefix1);
+									result = new StringBuffer();
+									result.append(repStr.substring(prefix1.length()));
+									result.insert(result.lastIndexOf(Constants.LEFT_BRACKET)+1, prefix1);
 									//Added by William on 2010-06-08 for bug:3013079 start
 									//if this key definition refer to a external resource
 									if(exKeyDefMap.containsKey(to)){
-										int pos = sb.indexOf(prefix1);
-										sb.delete(pos, pos + prefix1.length());
+										int pos = result.indexOf(prefix1);
+										result.delete(pos, pos + prefix1.length());
 									}
 									//Added by William on 2010-06-08 for bug:3013079 end
 									
-									newSet.add(sb.toString());
+									newSet.add(result.toString());
 								}
 							}else{
 								//no prefix
-								newSet.add(repStr);
+								newSet.add(result.toString());
 							}
 						//TODO Added by William on 2009-05-14 for keyref bug end
+							
+						//Added by William on 2010-06-10 for bug:3013545 start
+						writeKeyDef(to, result);
+						//Added by William on 2010-06-10 for bug:3013545 end
+							
 					}else{
 						//other case do nothing
 						newSet.add(FileUtils.removeRedundantNames(new StringBuffer(prefix).append(to).toString())
@@ -1179,6 +1212,34 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		set.clear();
 		newSet.clear();
 	}
+	
+	//Added by William on 2010-06-10 for bug:3013545 start
+	/** Write keydef into keydef.xml.
+	 * @param keyName key name.
+	 * @param result keydef.
+	 */
+	private void writeKeyDef(String keyName, StringBuffer result) {
+		try {
+			int equalIndex = result.indexOf(Constants.EQUAL);
+			int leftBracketIndex = result.lastIndexOf(Constants.LEFT_BRACKET);
+			int rightBracketIndex = result.lastIndexOf(Constants.RIGHT_BRACKET);
+			//get href
+			String href = result.substring(equalIndex + 1, leftBracketIndex);
+			//get source file
+			String sourcefile = 
+				result.substring(leftBracketIndex + 1, rightBracketIndex);
+			keydef.write("<keydef ");
+			keydef.write("keys=\""+ keyName +"\" ");
+			keydef.write("href=\""+ href +"\" ");
+			keydef.write("source=\""+ sourcefile +"\"/>");
+			keydef.write("\n");
+			keydef.flush();
+		} catch (IOException e) {
+
+			javaLogger.logException(e);
+		}
+	}
+	//Added by William on 2010-06-10 for bug:3013545 end
 	
 	/**
 	 * add FlagImangesSet to Properties, which needn't to change the dir level, just ouput to the ouput dir.

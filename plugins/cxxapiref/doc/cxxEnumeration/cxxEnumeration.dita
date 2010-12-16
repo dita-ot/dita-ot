@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxEnumeration">
+    <title>cxxEnumeration</title>
+    <shortdesc>The &lt;cxxEnumeration&gt; element contains all the elements needed to describe the declaration of a C++ enumeration.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The &lt;cxxEnumeration&gt; element requires
+an <i>id</i> attribute as an anchor point; id must always be specified. The
+id attribute is referenced by the <i>conref</i> attribute from internal applications
+that refer to the &lt;cxxFunctiion&gt; element content. The elements &lt;apiName&gt; 
+and &lt;cxxEnumerationDetail&gt; are required for this top-level container. </p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxEnumeration id="class_b_trace_1a289a8c50777f50be7f2d0535670c1e8d"&gt;
+    &lt;apiName&gt;THeaderStructure&lt;/apiName&gt;
+    &lt;cxxEnumerationDetail&gt;
+        &lt;cxxEnumerationDefinition&gt;
+            &lt;cxxEnumerationAccessSpecifier value="public"/&gt;
+            &lt;cxxEnumerationScopedName&gt;BTrace&lt;/cxxEnumerationScopedName&gt;
+            &lt;cxxEnumerationPrototype&gt;THeaderStructure&lt;/cxxEnumerationPrototype&gt;
+            &lt;cxxEnumerationNameLookup&gt;BTrace:THeaderStructure&lt;/cxxEnumerationNameLookup&gt;
+            &lt;cxxEnumerators&gt;
+                &lt;cxxEnumerator id="class_b_trace_1a289a8c50777f50be7f2d0535670c1e8daacb3d2fc73e5d51e0cfe218fe61a4a64"&gt;
+                    &lt;apiName&gt;ESizeIndex&lt;/apiName&gt;
+                    &lt;cxxEnumeratorScopedName&gt;BTrace&lt;/cxxEnumeratorScopedName&gt;
+                    &lt;cxxEnumeratorPrototype&gt;ESizeIndex = 0&lt;/cxxEnumeratorPrototype&gt;
+                    &lt;cxxEnumeratorNameLookup&gt;BTrace::ESizeIndex&lt;/cxxEnumeratorNameLookup&gt;
+                    &lt;cxxEnumeratorInitialiser value="0"/&gt;
+                    &lt;cxxEnumeratorAPIItemLocation&gt;
+                        &lt;cxxEnumeratorDeclarationFile name="filePath" value="C:/src/include/e32btrace.h"/&gt;
+                        &lt;cxxEnumeratorDeclarationFileLine name="lineNumber" value="177"/&gt;
+                    &lt;/cxxEnumeratorAPIItemLocation&gt;
+                    &lt;apiDesc&gt;
+                        &lt;p&gt;Size of record in bytes. &lt;/p&gt;
+                    &lt;/apiDesc&gt;
+                &lt;/cxxEnumerator&gt;
+                &lt;cxxEnumerator id="class_b_trace_1a289a8c50777f50be7f2d0535670c1e8da88aa2174423cbfd0a14b6bc857e06745"&gt;
+                    &lt;apiName&gt;EFlagsIndex&lt;/apiName&gt;
+                    &lt;cxxEnumeratorScopedName&gt;BTrace&lt;/cxxEnumeratorScopedName&gt;
+                    &lt;cxxEnumeratorPrototype&gt;EFlagsIndex = 1&lt;/cxxEnumeratorPrototype&gt;
+                    &lt;cxxEnumeratorNameLookup&gt;BTrace::EFlagsIndex&lt;/cxxEnumeratorNameLookup&gt;
+                    &lt;cxxEnumeratorInitialiser value="1"/&gt;
+                    &lt;cxxEnumeratorAPIItemLocation&gt;
+                        &lt;cxxEnumeratorDeclarationFile name="filePath" value="C:/src/include/e32btrace.h"/&gt;
+                        &lt;cxxEnumeratorDeclarationFileLine name="lineNumber" value="190"/&gt;
+                    &lt;/cxxEnumeratorAPIItemLocation&gt;
+                    &lt;apiDesc&gt;
+                        &lt;p&gt;Bitfield of flags from enum TFlags. E.g. to detect if a timestamp is present in the record, code like this could be used. &lt;codeblock&gt;			TUint8* record; // pointer to trace record
+        if(record[BTrace::EFlagsIndex]&amp;BTrace::ETimestampPresent)
+            TimestampPresent();
+        else
+            TimestampNotPresent();&lt;/codeblock&gt; &lt;/p&gt;
+                    &lt;/apiDesc&gt;
+                &lt;/cxxEnumerator&gt;
+            &lt;/cxxEnumerators&gt;
+            &lt;cxxEnumerationAPIItemLocation&gt;
+                &lt;cxxEnumerationDeclarationFile name="filePath" value="C:/src/include/e32btrace.h"/&gt;
+                &lt;cxxEnumerationDeclarationFileLine name="lineNumber" value="173"/&gt;
+                &lt;cxxEnumerationDefinitionFile name="filePath" value="C:/EPOC/master/sf/os/commsfw/serialserver/c32serialserver/CCOMM/CC_CLI.CPP"/&gt;
+                &lt;cxxEnumerationDefinitionFileLineStart name="lineNumber" value="172"/&gt;
+                &lt;cxxEnumerationDefinitionFileLineEnd name="lineNumber" value="201"/&gt;
+            &lt;/cxxEnumerationAPIItemLocation&gt;
+        &lt;/cxxEnumerationDefinition&gt;
+        &lt;apiDesc&gt;
+            &lt;p&gt;Byte indices into the trace header for specific fields. &lt;/p&gt;
+        &lt;/apiDesc&gt;
+    &lt;/cxxEnumerationDetail&gt;
+&lt;/cxxEnumeration&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxEnumeration-reference/cxxEnumeration-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxEnumeration-reference/cxxEnumeration-contains-section"/>
+        <section conref="../packagedef.dita#cxxEnumeration-reference/cxxEnumeration-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxEnumeration-reference/cxxEnumeration-attList-section"/>
+        <section conref="../packagedef.dita#cxxEnumeration-reference/cxxEnumeration-classValue-section"/>
+    </refbody>
+</reference>

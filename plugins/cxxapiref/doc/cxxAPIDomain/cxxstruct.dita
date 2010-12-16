@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxstruct">
+    <title>cxxstruct</title>
+    <shortdesc>The &lt;cxxstruct&gt; element is a reference to a C++ struct.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The &lt;cxxstruct&gt; element can be used to reference a C++ struct from another topic type. </p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;task id="connectionsxml"&gt;
+  &lt;title&gt;Connections&lt;/title&gt;
+  &lt;taskbody&gt;
+
+    &lt;steps&gt;
+    &lt;step&gt;&lt;cm&gt;Open the connection&lt;/cm&gt;
+      &lt;info&gt;You can use &lt;cxxstruct keyref="structkey"&gt;sConnection struct&lt;/cxxstruct&gt; 
+      in a C++ application.&lt;/info&gt;
+
+    &lt;/step&gt;
+    ...
+    &lt;/steps&gt;
+  &lt;/taskbody&gt;
+&lt;/task&gt;</codeblock>
+        </example>            
+        <section conref="../packagedef.dita#cxxstruct-reference/cxxstruct-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxstruct-reference/cxxstruct-contains-section"/>
+        <section conref="../packagedef.dita#cxxstruct-reference/cxxstruct-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxstruct-reference/cxxstruct-attList-section"/>
+        <section conref="../packagedef.dita#cxxstruct-reference/cxxstruct-classValue-section"/>
+    </refbody>
+</reference>

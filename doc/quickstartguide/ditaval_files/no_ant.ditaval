@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
+<val>
+     <prop att='otherprops' val='ant' action='exclude' />
+</val>

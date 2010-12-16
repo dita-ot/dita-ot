@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2010, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<?Pub Sty _display FontColor="red"?>
+<reference id="relnote" xml:lang="en-us">
+<title>DITA Open Toolkit release notes</title>
+<shortdesc>This document contains the release notes for the 1.5 series
+of DITA Open Toolkit releases.</shortdesc>
+<refbody>
+<section conref="DITA-changes.xml#ditareleasehistory/rel1.5.2"></section><?Pub
+Caret -1?>
+<section conref="DITA-changes.xml#ditareleasehistory/rel1.5.1"></section>
+<section conref="DITA-changes.xml#ditareleasehistory/rel1.5"></section>
+<section><title>Older releases</title><p>For a list of updates and
+changes in every release since version 1.0 of the DITA Open Toolkit,
+see <xref href="DITA-changes.xml"></xref>.</p></section>
+</refbody>
+</reference>
+<?Pub *0000000884?>

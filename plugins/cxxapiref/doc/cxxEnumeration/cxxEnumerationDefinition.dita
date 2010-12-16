@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxEnumerationDefinition">
+    <title>cxxEnumerationDefinition</title>
+    <shortdesc>The &lt;cxxEnumerationDefinition&gt; element is defined within &lt;cxxEnumerationDetail&gt;. 
+    &lt;cxxEnumerationDefinition&gt; represents the C++ enumeration declaration.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title><p>An enumeration declaration specifies a new named reference type. 
+            An enumeration declaration can include the following members: <i>public</i>, <i>protected</i> 
+            or <i>private</i>, this is represented by the &lt;cxxEnumerationAccessSpecifier&gt; element.</p>
+            <p>&lt;cxxEnumerationDefinition&gt; requires the element &lt;cxxEnumerationAPIItemLocation&gt; as its child.</p>
+        </section>
+        <example><title>Example</title>
+        <codeblock>&lt;cxxEnumerationDefinition&gt;
+			&lt;cxxEnumerationAccessSpecifier value="public"/&gt;
+			&lt;cxxEnumerationAPIItemLocation&gt;
+				&lt;cxxEnumerationDeclarationFile name="filePath" value="C:/src/include/e32base.h"/&gt;
+				&lt;cxxEnumerationDeclarationFileLine name="lineNumber" value="2812"/&gt;
+				&lt;cxxEnumerationDefinitionFile name="filePath" value="C:/src/include/e32base.h"/&gt;
+				&lt;cxxEnumerationDefinitionFileLineStart name="lineNumber" value="2784"/&gt;
+				&lt;cxxEnumerationDefinitionFileLineEnd name="lineNumber" value="2854"/&gt;
+			&lt;/cxxEnumerationAPIItemLocation&gt;
+		&lt;/cxxEnumerationDefinition&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxEnumerationDefinition-reference/cxxEnumerationDefinition-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxEnumerationDefinition-reference/cxxEnumerationDefinition-contains-section"/>
+        <section conref="../packagedef.dita#cxxEnumerationDefinition-reference/cxxEnumerationDefinition-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxEnumerationDefinition-reference/cxxEnumerationDefinition-attList-section"/>
+        <section conref="../packagedef.dita#cxxEnumerationDefinition-reference/cxxEnumerationDefinition-classValue-section"/>
+    </refbody>
+</reference>

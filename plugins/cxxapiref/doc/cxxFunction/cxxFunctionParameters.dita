@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxFunctionParameters">
+    <title>cxxFunctionParameters</title>
+    <shortdesc>Element that contains information about the function <i>parameter-declaration-clause</i>.</shortdesc>
+    <refbody>
+        <section id="section_ECD16DFA14C4446D832BFA86259E7F46">
+            <title>Description</title><p>This element that contains information about the function <i>parameter-declaration-clause</i> that describes any function parameters.
+            </p><p>See ISO/IEC 14882:2003(E) 8.3.5 Functions [dcl.fct]</p>
+        </section>
+        <example id="example_5010C29323334FAABBF69B680B70A5A5">
+            <title>Example</title><p>Given this code:</p>
+            <codeblock>/*!
+ Copies bytes from a source memory area to a destination memory area,
+ where both areas may not overlap.
+ @param dest The memory area to copy to.
+ @param src  The memory area to copy from.
+ @param n    The number of bytes to copy
+ */
+void memcpy(void *dest, const void *src, size_t n); 
+            </codeblock><p>Then function <tt>memcpy</tt> would have the <tt>cxxFunctionParameters</tt>
+element:</p>
+            <codeblock>&lt;cxxFunctionParameters&gt;
+  &lt;cxxFunctionParameter&gt;
+    &lt;cxxFunctionParameterDeclaredType&gt;void *&lt;/cxxFunctionParameterDeclaredType&gt;
+    &lt;cxxFunctionParameterDeclarationName&gt;dest&lt;/cxxFunctionParameterDeclarationName&gt;
+    &lt;apiDefNote&gt;The memory area to copy to. &lt;/apiDefNote&gt;
+  &lt;/cxxFunctionParameter&gt;
+  &lt;cxxFunctionParameter&gt;
+    &lt;cxxFunctionParameterDeclaredType&gt;const void *&lt;/cxxFunctionParameterDeclaredType&gt;
+    &lt;cxxFunctionParameterDeclarationName&gt;src&lt;/cxxFunctionParameterDeclarationName&gt;
+    &lt;apiDefNote&gt;The memory area to copy from. &lt;/apiDefNote&gt;
+  &lt;/cxxFunctionParameter&gt;
+  &lt;cxxFunctionParameter&gt;
+    &lt;cxxFunctionParameterDeclaredType&gt;size_t&lt;/cxxFunctionParameterDeclaredType&gt;
+    &lt;cxxFunctionParameterDeclarationName&gt;n&lt;/cxxFunctionParameterDeclarationName&gt;
+    &lt;apiDefNote&gt;The number of bytes to copy &lt;/apiDefNote&gt;
+  &lt;/cxxFunctionParameter&gt;
+&lt;/cxxFunctionParameters&gt;
+            </codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxFunctionParameters-reference/cxxFunctionParameters-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxFunctionParameters-reference/cxxFunctionParameters-contains-section"/>
+        <section conref="../packagedef.dita#cxxFunctionParameters-reference/cxxFunctionParameters-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxFunctionParameters-reference/cxxFunctionParameters-attList-section"/>
+        <section conref="../packagedef.dita#cxxFunctionParameters-reference/cxxFunctionParameters-classValue-section"/>
+    </refbody>
+</reference>

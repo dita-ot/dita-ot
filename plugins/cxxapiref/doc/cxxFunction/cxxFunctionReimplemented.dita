@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxFunctionReimplemented">
+    <title>cxxFunctionReimplemented</title>
+    <shortdesc>Identifies functions that have been re-implemented.</shortdesc>
+    <refbody>
+        <section id="section_AD5E15B318C246D1BDBA2AA51E2126EE">
+            <title>Description</title><p>This identifies and links to functions that have been re-implemented.</p>
+        </section>
+        <example id="example_4DB812CBD9A647AC915CD83DE660A628">
+            <title>Example</title><p>Given this code:</p>
+            <codeblock>class Base
+{
+public:
+    void f();
+};
+
+class Derived : public Base
+{
+public:
+    void f();
+};
+            </codeblock><p>Then function <tt>Derived::f</tt> would have the <tt>cxxFunctionReimplemented</tt>
+
+element thus:</p>
+            <codeblock>&lt;cxxFunctionReimplemented href="class_base.xml#class_base_1a1b981706372d75125af29b377d33ba66"&gt;Base::f()&lt;/cxxFunctionReimplemented&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxFunctionReimplemented-reference/cxxFunctionReimplemented-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxFunctionReimplemented-reference/cxxFunctionReimplemented-contains-section"/>
+        <section conref="../packagedef.dita#cxxFunctionReimplemented-reference/cxxFunctionReimplemented-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxFunctionReimplemented-reference/cxxFunctionReimplemented-attList-section"/>
+        <section conref="../packagedef.dita#cxxFunctionReimplemented-reference/cxxFunctionReimplemented-classValue-section"/>
+    </refbody>
+</reference>

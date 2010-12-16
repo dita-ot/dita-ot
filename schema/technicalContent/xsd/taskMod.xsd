@@ -22,7 +22,6 @@
 <!-- ============================================================= -->
  <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
   <!-- ==================== Import Section ======================= -->
-   <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"/>
    <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"/>
 
     <xs:annotation>
@@ -213,7 +212,7 @@
       </xs:documentation>
     </xs:annotation>
     <xs:complexType>
-      <xs:complexContent>
+      <xs:complexContent mixed="true">
         <xs:extension base="stepsection.class">
           <xs:attribute ref="class" default="- topic/li     task/stepsection "/>
         </xs:extension>
@@ -745,9 +744,10 @@
    
    <xs:group name="steps-unordered.content">
      <xs:sequence>
-       <xs:choice minOccurs="1" maxOccurs="unbounded">
-      <xs:group ref="step" />
-    </xs:choice>
+       <xs:sequence maxOccurs="unbounded">
+         <xs:group ref="stepsection" minOccurs="0"/>
+         <xs:group ref="step" />
+       </xs:sequence>
      </xs:sequence>
    </xs:group>
    

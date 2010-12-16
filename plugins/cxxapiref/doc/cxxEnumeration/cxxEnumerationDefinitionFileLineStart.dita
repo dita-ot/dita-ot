@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxEnumerationDefinitionFileLineStart">
+    <title>cxxEnumerationDefinitionFileLineStart</title>
+    <shortdesc>The &lt;cxxEnumerationDefinitionFileLineStart&gt; element specifies the beginning of the enumeration definition.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title><p>The &lt;cxxEnumerationDefinitionFileLineStart&gt; element is defined within &lt;cxxEnumerationAPIItemLocation&gt;. 
+            It contains the line number that the enumeration definition begins on. The element is empty but for the required attributes <i>name</i> 
+            and <i>value</i>. The attribute <i>name</i> must be set to "lineNumber". The attribute <i>value</i> is set to the line number 
+            where enumeration definition begins.</p>
+        </section>
+        <example><title>Example</title>
+        <codeblock>&lt;cxxEnumerationAPIItemLocation&gt;
+    &lt;cxxEnumerationDeclarationFile name=&quot;filePath&quot; value=&quot;C:/src/include/gdi.h&quot;/&gt;
+    &lt;cxxEnumerationDeclarationFileLine name=&quot;lineNumber&quot; value=&quot;1720&quot;/&gt;
+    &lt;cxxEnumerationDefinitionFile name=&quot;filePath&quot; value=&quot;C:/src/master/sf/mw/animation/src/SpriteAnimationServer.cpp&quot;/&gt;
+    &lt;cxxEnumerationDefinitionFileLineStart name=&quot;lineNumber&quot; value=&quot;1719&quot;/&gt;
+    &lt;cxxEnumerationDefinitionFileLineEnd name=&quot;lineNumber&quot; value=&quot;1727&quot;/&gt;
+&lt;/cxxEnumerationAPIItemLocation&gt;</codeblock>
+        </example>        
+        <section conref="../packagedef.dita#cxxEnumerationDefinitionFileLineStart-reference/cxxEnumerationDefinitionFileLineStart-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxEnumerationDefinitionFileLineStart-reference/cxxEnumerationDefinitionFileLineStart-contains-section"/>
+        <section conref="../packagedef.dita#cxxEnumerationDefinitionFileLineStart-reference/cxxEnumerationDefinitionFileLineStart-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxEnumerationDefinitionFileLineStart-reference/cxxEnumerationDefinitionFileLineStart-attList-section"/>
+        <section conref="../packagedef.dita#cxxEnumerationDefinitionFileLineStart-reference/cxxEnumerationDefinitionFileLineStart-classValue-section"/>
+    </refbody>
+</reference>

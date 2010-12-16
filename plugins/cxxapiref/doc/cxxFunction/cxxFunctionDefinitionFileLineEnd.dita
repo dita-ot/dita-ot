@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxFunctionDefinitionFileLineEnd">
+    <title>cxxFunctionDefinitionFileLineEnd</title>
+    <shortdesc>Identifies the line number in file that contains the end of the definition of the function.</shortdesc>
+    <refbody>
+        <section id="section_DEA0C3F6559646C2ADACCFC797EDC122">
+            <title>Description</title><p>This identifies the line number in file that contains the end of the definition of the function. This has two attributes; name (always has a value "lineNumber
+") and value.</p><p>Note: ISO/IEC 14882:2003(E) 16.4 Line control [cpp.line] means that line numbers start from 1.</p>
+        </section>
+        <example id="example_9D2AF813F2AF434EAF2C7146F2EBFB84">
+            <title>Example</title><p/>
+            <codeblock>&lt;cxxFunctionDefinitionFileLineEnd name="lineNumber" value="7"/&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxFunctionDefinitionFileLineEnd-reference/cxxFunctionDefinitionFileLineEnd-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxFunctionDefinitionFileLineEnd-reference/cxxFunctionDefinitionFileLineEnd-contains-section"/>
+        <section conref="../packagedef.dita#cxxFunctionDefinitionFileLineEnd-reference/cxxFunctionDefinitionFileLineEnd-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxFunctionDefinitionFileLineEnd-reference/cxxFunctionDefinitionFileLineEnd-attList-section"/>
+        <section conref="../packagedef.dita#cxxFunctionDefinitionFileLineEnd-reference/cxxFunctionDefinitionFileLineEnd-classValue-section"/>
+    </refbody>
+</reference>

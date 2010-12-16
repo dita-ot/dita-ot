@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxFunctionAPIItemLocation">
+    <title>cxxFunctionAPIItemLocation</title>
+    <shortdesc>Describes the location of a function in the original C++ source code.</shortdesc>
+    <refbody>
+        <section id="section_58479B29DC4E4A5DB978B65C636F387A">
+            <title>Description</title><p>Describes the location of a function in the original C++ source code.</p>
+        </section>
+        <example id="example_85FA9ADE455D48D9A46A4FFDE65EBF81">
+            <title>Example</title><p>Given this code in <filepath>inc/a.h</filepath>:</p>
+            <codeblock>/**
+@param aBuf The buffer
+*/
+void g(const char* aBuf=0);
+            </codeblock><p>And this code in <filepath>src/a.cpp</filepath>:</p>
+            <codeblock>#include "a.h"
+
+void g(const char* aBuffer)
+{
+	// Implementation
+}
+            </codeblock>
+            <p>Then function <tt>g</tt> would have the <tt>cxxFunctionAPIItemLocation</tt>
+element:</p>
+            <codeblock>&lt;cxxFunctionAPIItemLocation&gt;
+  &lt;cxxFunctionDeclarationFile name="filePath" value="inc/a.h"/&gt;
+  &lt;cxxFunctionDeclarationFileLine name="lineNumber" value="5"/&gt;
+  &lt;cxxFunctionDefinitionFile name="filePath" value="src/a.cpp"/&gt;
+  &lt;cxxFunctionDefinitionFileLineStart name="lineNumber" value="4"/&gt;
+  &lt;cxxFunctionDefinitionFileLineEnd name="lineNumber" value="7"/&gt;
+&lt;/cxxFunctionAPIItemLocation&gt;
+            </codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxFunctionAPIItemLocation-reference/cxxFunctionAPIItemLocation-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxFunctionAPIItemLocation-reference/cxxFunctionAPIItemLocation-contains-section"/>
+        <section conref="../packagedef.dita#cxxFunctionAPIItemLocation-reference/cxxFunctionAPIItemLocation-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxFunctionAPIItemLocation-reference/cxxFunctionAPIItemLocation-attList-section"/>
+        <section conref="../packagedef.dita#cxxFunctionAPIItemLocation-reference/cxxFunctionAPIItemLocation-classValue-section"/>
+    </refbody>
+</reference>

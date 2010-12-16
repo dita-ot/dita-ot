@@ -18,6 +18,7 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -25,6 +26,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.Stack;
+import java.util.Map.Entry;
 
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
 import org.dita.dost.exception.DITAOTException;
@@ -109,6 +111,11 @@ public class GenListModuleReader extends AbstractXMLReader {
 	/** Map of key definitions */
 	private Map<String, String> keysDefMap = null;
 	
+	//Added on 20100826 for bug:3052913 start
+	//Map to store multi-level keyrefs
+	private Map<String, String>keysRefMap = null;
+	//Added on 20100826 for bug:3052913 end
+	
 	/** Flag for conrefpush   */
 	private boolean hasconaction = false;  
 	
@@ -123,6 +130,11 @@ public class GenListModuleReader extends AbstractXMLReader {
     
     /** chunk nesting level */
     private int chunkLevel = 0;
+    
+    //Added by William on 2010-06-17 for bug:3016739 start
+    /** mark topics in reltables */
+    private int relTableLevel = 0;
+    //Added by William on 2010-06-17 for bug:3016739 end
     
     /** chunk to-navigation level */
     private int chunkToNavLevel = 0;
@@ -145,6 +157,10 @@ public class GenListModuleReader extends AbstractXMLReader {
 	private String currentFile=null;
 	
 	private static String rootFilePath=null;
+	
+	//Added on 2010-08-24 for bug:3086552 start
+	private static boolean setSystemid = true;
+	//Added on 2010-08-24 for bug:3086552 end
 	
     private Stack<String> processRoleStack; // stack for @processing-role value
     private int processRoleLevel; // Depth inside a @processing-role parent
@@ -247,6 +263,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		ignoredCopytoSourceSet = new HashSet<String>(Constants.INT_16);
 		outDitaFilesSet=new HashSet<String>(Constants.INT_64);
 		keysDefMap = new HashMap<String, String>();
+		keysRefMap = new HashMap<String, String>();
 		
 		exKeysDefMap = new HashMap<String, String>();
 		
@@ -293,7 +310,7 @@ public class GenListModuleReader extends AbstractXMLReader {
      * @param rootFile input file
 	 * @throws SAXException parsing exception
      */
-	public static void initXMLReader(String ditaDir,boolean validate,String rootFile) throws SAXException {
+	public static void initXMLReader(String ditaDir,boolean validate,String rootFile, boolean arg_setSystemid) throws SAXException {
 		DITAOTJavaLogger javaLogger=new DITAOTJavaLogger();
 		if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
 			// The default sax driver is set to xerces's sax driver
@@ -319,6 +336,9 @@ public class GenListModuleReader extends AbstractXMLReader {
 		
 		CatalogUtils.setDitaDir(ditaDir);
 		catalogMap = CatalogUtils.getCatalog(ditaDir);
+		//Added on 2010-08-24 for bug:3086552 start
+		setSystemid= arg_setSystemid;
+		//Added on 2010-08-24 for bug:3086552 end
 	}
 
 	/**
@@ -335,6 +355,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		excludedLevel = 0;
 		foreignLevel = 0;
 		chunkLevel = 0;
+		relTableLevel = 0;
 		chunkToNavLevel = 0;
 		topicGroupLevel = 0;
 		isValidInput = false;
@@ -348,6 +369,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		ignoredCopytoSourceSet.clear();
 		outDitaFilesSet.clear();
 		keysDefMap.clear();
+		keysRefMap.clear();
 		exKeysDefMap.clear();
 		schemeSet.clear();
 		schemeRefSet.clear();
@@ -559,7 +581,14 @@ public class GenListModuleReader extends AbstractXMLReader {
 		currentFile=file.getAbsolutePath();
 		
 		reader.setErrorHandler(new DITAOTXMLErrorHandler(file.getName()));
-		reader.parse(new InputSource(new FileInputStream(file)));	
+		//Added on 2010-08-24 for bug:3086552 start
+		InputSource is = new InputSource(new FileInputStream(file));
+		//Set the system ID
+		if(setSystemid)
+			//is.setSystemId(URLUtil.correct(file).toString());
+		    is.setSystemId(file.toURI().toURL().toString());
+		//Added on 2010-08-24 for bug:3086552 end
+		reader.parse(is); 
 	}
 
 	@Override
@@ -783,6 +812,15 @@ public class GenListModuleReader extends AbstractXMLReader {
 		} else if(atts.getValue(Constants.ATTRIBUTE_NAME_CHUNK) != null) {
 			chunkLevel++;
 		}
+		//Added by William on 2010-6-17 for bug:3016739 start
+		if(relTableLevel > 0) {
+			relTableLevel ++;
+		} else if(attrValue != null && 
+				attrValue.indexOf(Constants.ATTR_CLASS_VALUE_RELTABLE) != -1){
+			relTableLevel++;
+		}
+		//Added by William on 2010-6-17 for bug:3016739 end
+		
 		
 		if(chunkToNavLevel > 0) {
 			chunkToNavLevel++;
@@ -1068,6 +1106,8 @@ public class GenListModuleReader extends AbstractXMLReader {
 			shouldAppendEndTag = false;
 		}
 		//Added by William on 2009-07-15 for req #12014 end
+		//update keysDefMap for multi-level keys for bug:3052913
+		checkMultiLevelKeys(keysDefMap, keysRefMap);
 	}
 
 	/**
@@ -1111,6 +1151,12 @@ public class GenListModuleReader extends AbstractXMLReader {
 		if (chunkLevel > 0) {
 			chunkLevel--;
 		}
+		
+		//Added by William on 2010-06-17 for bug:3016739 start
+		if (relTableLevel > 0) {
+			relTableLevel--;
+		}
+		//Added by William on 2010-06-17 for bug:3016739 end
 		
 		if (chunkToNavLevel > 0) {
 			chunkToNavLevel--;
@@ -1188,7 +1234,11 @@ public class GenListModuleReader extends AbstractXMLReader {
 		String attrScope = atts.getValue(Constants.ATTRIBUTE_NAME_SCOPE);
 		String attrFormat = atts.getValue(Constants.ATTRIBUTE_NAME_FORMAT);
 		String attrType = atts.getValue(Constants.ATTRIBUTE_NAME_TYPE);
-
+		
+		//Added on 20100830 for bug:3052156 start
+		String codebase = atts.getValue(Constants.ATTRIBUTE_NAME_CODEBASE);
+		//Added on 20100830 for bug:3052156 end
+		
 		if (attrValue == null) {
 			return;
 		}
@@ -1213,6 +1263,9 @@ public class GenListModuleReader extends AbstractXMLReader {
 		if(Constants.ATTRIBUTE_NAME_KEYS.equals(attrName) && !attrValue.equals(Constants.STRING_EMPTY)){
 			
 			String target = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
+			
+			String keyRef = atts.getValue(Constants.ATTRIBUTE_NAME_KEYREF);
+			
 			//Added by William on 2009-10-15 for ampersand bug:2878492 start
 			if(target != null){
 				target = StringUtils.escapeXML(target);
@@ -1225,7 +1278,12 @@ public class GenListModuleReader extends AbstractXMLReader {
 				target = copy_to;
 			}
 			//Added by Alan for bug ID: 2870935 on Date: 2009-10-10 end
-			
+			//Added on 20100825 for bug:3052904 start
+			//avoid NullPointException
+			if(target == null){
+				target = "";
+			}
+			//Added on 20100825 for bug:3052904 end
 			//store the target
 			String temp = target;
 			
@@ -1250,6 +1308,9 @@ public class GenListModuleReader extends AbstractXMLReader {
 							target = FileUtils.normalizeDirectory(currentDir, target);
 							keysDefMap.put(key, target + tail);
 						}
+					}else if(!StringUtils.isEmptyString(keyRef)){
+						//store multi-level keys.
+						keysRefMap.put(key, keyRef);
 					}else{
 						// target is null or empty, it is useful in the future when consider the content of key definition
 						keysDefMap.put(key, "");
@@ -1298,11 +1359,22 @@ public class GenListModuleReader extends AbstractXMLReader {
 		}
 		//Added by William on 2010-01-05 for bug:2926417 end
 		File target=new File(attrValue);
-		if(target.isAbsolute()){
+		if(target.isAbsolute() && 
+			!Constants.ATTRIBUTE_NAME_DATA.equals(attrName)){
 			attrValue=FileUtils.getRelativePathFromMap(rootFilePath,attrValue);
+		//for object tag bug:3052156
+		}else if(Constants.ATTRIBUTE_NAME_DATA.equals(attrName)){
+			if(!StringUtils.isEmptyString(codebase)){
+				filename = FileUtils.normalizeDirectory(codebase, attrValue);
+			}else{
+				filename = FileUtils.normalizeDirectory(currentDir, attrValue);	
+			}
+		}else{
+			//noraml process.
+			filename = FileUtils.normalizeDirectory(currentDir, attrValue);
 		}
 		
-		filename = FileUtils.normalizeDirectory(currentDir, attrValue);
+		
 		try{
 			filename = URLDecoder.decode(filename, Constants.UTF8);
 		}catch(UnsupportedEncodingException e){
@@ -1389,13 +1461,21 @@ public class GenListModuleReader extends AbstractXMLReader {
 				&& FileUtils.isTopicFile(filename) && canResolved()) {
 			hrefTargets.add(new File(filename).getPath());
 			toOutFile(new File(filename).getPath());
-			String pathWithoutID = FileUtils.resolveFile(currentDir, attrValue);
-			if (chunkLevel > 0 && chunkToNavLevel == 0 && topicGroupLevel == 0) {
-				chunkTopicSet.add(pathWithoutID);
+			//use filename instead(It has already been resolved before-hand) bug:3058124
+			//String pathWithoutID = FileUtils.resolveFile(currentDir, attrValue);
+			if (chunkLevel > 0 && chunkToNavLevel == 0 && topicGroupLevel == 0 && relTableLevel == 0) {
+				chunkTopicSet.add(filename);
 			} else {
-				hrefTopicSet.add(pathWithoutID);
+				hrefTopicSet.add(filename);
 			}
 		}
+		
+		//Added on 20100827 for bug:3052156 start
+		//add a warning message for outer files refered by @data
+		/*if(Constants.ATTRIBUTE_NAME_DATA.equals(attrName)){
+			toOutFile(new File(filename).getPath());
+		}*/
+		//Added on 20100827 for bug:3052156 end
 		
 		/*
 		 * Collect only conref target topic files.
@@ -1457,6 +1537,61 @@ public class GenListModuleReader extends AbstractXMLReader {
 		}
 	}
 	
+	//Added on 20100826 for bug:3052913 start
+	//get multi-level keys list
+	private List<String> getKeysList(String key, Map<String, String> keysRefMap) {
+		
+		List<String> list = new ArrayList<String>();
+		
+		//Iterate the map to look for multi-level keys
+		Iterator<Entry<String, String>> iter = keysRefMap.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry<String, String> entry = iter.next();
+			//Multi-level key found
+			if(entry.getValue().equals(key)){
+				//add key into the list
+				String entryKey = entry.getKey();
+				list.add(entryKey);
+				//still have multi-level keys
+				if(keysRefMap.containsValue(entryKey)){
+					//rescuive point
+					List<String> tempList = getKeysList(entryKey, keysRefMap);
+					list.addAll(tempList);
+				}
+			}
+		}
+		
+		return list;
+	}
+	//update keysDefMap for multi-level keys
+	private void checkMultiLevelKeys(Map<String, String> keysDefMap,
+			Map<String, String> keysRefMap) {
+		
+		String key = null;
+		String value = null;
+		//tempMap storing values to avoid ConcurrentModificationException
+		Map<String, String> tempMap = new HashMap<String, String>();
+		Iterator<Entry<String, String>> iter = keysDefMap.entrySet().iterator();
+		
+		while (iter.hasNext()) {
+			Map.Entry<String, String> entry = iter.next();
+			key = entry.getKey();
+			value = entry.getValue();
+			//there is multi-level keys exist.
+			if(keysRefMap.containsValue(key)){
+				//get multi-level keys
+				 List<String> keysList = getKeysList(key, keysRefMap);
+				 for (String multikey : keysList) {
+					 //update tempMap
+					 tempMap.put(multikey, value);
+				}
+			}
+		}
+		//update keysDefMap.
+		keysDefMap.putAll(tempMap);
+	}
+	//Added on 20100826 for bug:3052913 end
+
 	private boolean isOutFile(String toCheckPath) {
 		if (!toCheckPath.startsWith(".."))
 			return false;

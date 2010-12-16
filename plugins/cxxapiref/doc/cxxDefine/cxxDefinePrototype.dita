@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxDefinePrototype">
+    <title>cxxDefinePrototype</title>
+    <shortdesc>The &lt;cxxDefinePrototype&gt; element specifies the define declaration.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>This element provides a "visual" representation of the define declaration as PCDATA.
+            The are no semantics applied to the content but the intention is that the content should 
+            look as similar as possible to the define declaration in source code.</p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxDefinePrototype&gt;#define ENABLE_NETWORKING_PERFMETRICS&lt;/cxxDefinePrototype&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxDefinePrototype-reference/cxxDefinePrototype-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxDefinePrototype-reference/cxxDefinePrototype-contains-section"/>
+        <section conref="../packagedef.dita#cxxDefinePrototype-reference/cxxDefinePrototype-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxDefinePrototype-reference/cxxDefinePrototype-attList-section"/>
+        <section conref="../packagedef.dita#cxxDefinePrototype-reference/cxxDefinePrototype-classValue-section"/>
+    </refbody>
+</reference>

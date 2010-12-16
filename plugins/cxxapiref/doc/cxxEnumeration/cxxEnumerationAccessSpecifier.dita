@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxEnumerationAccessSpecifier">
+    <title>cxxEnumerationAccessSpecifier</title>
+    <shortdesc>The &lt;cxxEnumerationAccessSpecifier&gt; element describes the access specifier for the enumeration.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The element contains the optional <i>name</i> and <i>value</i> attributes. The <i>name</i> attribute 
+            can only be set to "access". The <i>value</i> attribute must be either public, protected or private, it 
+            defaults to "public".</p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxEnumerationAccessSpecifier value="public"/&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxEnumerationAccessSpecifier-reference/cxxEnumerationAccessSpecifier-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxEnumerationAccessSpecifier-reference/cxxEnumerationAccessSpecifier-contains-section"/>
+        <section conref="../packagedef.dita#cxxEnumerationAccessSpecifier-reference/cxxEnumerationAccessSpecifier-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxEnumerationAccessSpecifier-reference/cxxEnumerationAccessSpecifier-attList-section"/>
+        <section conref="../packagedef.dita#cxxEnumerationAccessSpecifier-reference/cxxEnumerationAccessSpecifier-classValue-section"/>
+    </refbody>
+</reference>

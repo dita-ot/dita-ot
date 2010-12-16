@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "..\..\..\reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxClassDerivationVirtual">
+	<title>cxxClassDerivationVirtual</title>
+	<shortdesc>The &lt;cxxClassDerivationVirtual&gt; element indicates if inheritance is declared as virtual.</shortdesc>
+	<refbody>
+		<section>
+			<title>Description</title>
+			<p>The &lt;cxxClassDerivationVirtual&gt; element is contained within a &lt;cxxClassDerivation&gt; element. 
+            The name attribute must be set to virtual and the value attribute must be set to true. 
+            The base referered to by the &lt;cxxClassDerivationVirtual&gt; element is indicated by using either a &lt;cxxClassBaseClass&gt;, &lt;cxxClassBaseStruct&gt; or &lt;cxxClassBaseUnion&gt; element as a sibling of &lt;cxxClassDerivationVirtual&gt;.</p>
+		</section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxClassDerivation&gt;
+    &lt;cxxClassDerivationVirtual  name=&quot;virtual&quot; value=&quot;true&quot;/&gt;            
+	&lt;cxxClassDerivationAccessSpecifier value="public"/&gt;
+	&lt;cxxClassBaseClass href="class_base"&gt;Base&lt;/cxxClassBaseClass&gt;
+&lt;/cxxClassDerivation&gt;</codeblock>
+        </example>        
+		<section conref="../packagedef.dita#cxxClassDerivationVirtual-reference/cxxClassDerivationVirtual-containedBy-section"/>
+		<section conref="../packagedef.dita#cxxClassDerivationVirtual-reference/cxxClassDerivationVirtual-contains-section"/>
+		<section conref="../packagedef.dita#cxxClassDerivationVirtual-reference/cxxClassDerivationVirtual-contentModel-section"/>
+		<section conref="../packagedef.dita#cxxClassDerivationVirtual-reference/cxxClassDerivationVirtual-attList-section"/>
+		<section conref="../packagedef.dita#cxxClassDerivationVirtual-reference/cxxClassDerivationVirtual-classValue-section"/>
+	</refbody>
+</reference>

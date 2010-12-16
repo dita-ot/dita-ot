@@ -20,7 +20,7 @@ import static org.junit.Assert.assertEquals;
 public class TestPropertiesWriter {
 	
 	public  static PropertiesWriter propertieswriter= new PropertiesWriter();
-	private static String tempDir = "test-stub/TestPropertiesWriter/";
+	private static String tempDir = "test-stub" + File.separator + "TestPropertiesWriter" + File.separator;
     @Test
     public void testwrite()throws DITAOTException, FileNotFoundException, IOException
     {
@@ -35,10 +35,10 @@ public class TestPropertiesWriter {
 		propertieswriter.setContent(content);		
 		propertieswriter.write(outputFile.getAbsolutePath());
 		propertieswriter.writeToXML(xmlDitalist.getAbsolutePath());
-		String ditalist="test-stub/TestPropertiesWriter/dita.list";
-		String compareditalist="test-stub/TestPropertiesWriter/compareofdita.list";
-		String ditalistproperties="test-stub/TestPropertiesWriter/dita.xml.properties";
-		String compareditalistproperties="test-stub/TestPropertiesWriter/compareofdita.xml.properties";
+		String ditalist="test-stub" + File.separator + "TestPropertiesWriter" + File.separator + "dita.list";
+		String compareditalist="test-stub" + File.separator + "TestPropertiesWriter" + File.separator + "compareofdita.list";
+		String ditalistproperties="test-stub" + File.separator + "TestPropertiesWriter" + File.separator + "dita.xml.properties";
+		String compareditalistproperties="test-stub" + File.separator + "TestPropertiesWriter" + File.separator + "compareofdita.xml.properties";
 		File ditalistfile=new File (ditalist);
 		File compareditalistfile=new File (compareditalist);
 		File ditalistpropertiesfile=new File (ditalistproperties);

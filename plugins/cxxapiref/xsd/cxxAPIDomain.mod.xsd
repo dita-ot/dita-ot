@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+  All rights reserved.
+  
+  Generated from APIdomain.script
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="../../../schema/base/xsd/ditaarch.xsd"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../../../schema/base/xsd/xml.xsd"/>
+  <xs:element name="cxxfile" substitutionGroup="cxxapi-d-xref">
+    <xs:complexType mixed="true">
+      <xs:attribute name="href"/>
+      <xs:attribute name="keyref"/>
+      <xs:attribute name="type"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="format"/>
+      <xs:attribute name="scope">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="local"/>
+            <xs:enumeration value="peer"/>
+            <xs:enumeration value="external"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="+ topic/xref pr-d/xref api-d/apipackage cxxapi-d/cxxfile "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxclass" substitutionGroup="cxxapi-d-xref">
+    <xs:complexType mixed="true">
+      <xs:attribute name="href"/>
+      <xs:attribute name="keyref"/>
+      <xs:attribute name="type"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="format"/>
+      <xs:attribute name="scope">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="local"/>
+            <xs:enumeration value="peer"/>
+            <xs:enumeration value="external"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="+ topic/xref pr-d/xref api-d/apipackage cxxapi-d/cxxclass "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxstruct" substitutionGroup="cxxapi-d-xref">
+    <xs:complexType mixed="true">
+      <xs:attribute name="href"/>
+      <xs:attribute name="keyref"/>
+      <xs:attribute name="type"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="format"/>
+      <xs:attribute name="scope">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="local"/>
+            <xs:enumeration value="peer"/>
+            <xs:enumeration value="external"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="+ topic/xref pr-d/xref api-d/apipackage cxxapi-d/cxxstruct "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxunion" substitutionGroup="cxxapi-d-xref">
+    <xs:complexType mixed="true">
+      <xs:attribute name="href"/>
+      <xs:attribute name="keyref"/>
+      <xs:attribute name="type"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="format"/>
+      <xs:attribute name="scope">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="local"/>
+            <xs:enumeration value="peer"/>
+            <xs:enumeration value="external"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="+ topic/xref pr-d/xref api-d/apipackage cxxapi-d/cxxunion "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxfunction" substitutionGroup="cxxapi-d-xref">
+    <xs:complexType mixed="true">
+      <xs:attribute name="href"/>
+      <xs:attribute name="keyref"/>
+      <xs:attribute name="type"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="format"/>
+      <xs:attribute name="scope">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="local"/>
+            <xs:enumeration value="peer"/>
+            <xs:enumeration value="external"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="+ topic/xref pr-d/xref api-d/apipackage cxxapi-d/cxxfunction "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxdefine" substitutionGroup="cxxapi-d-xref">
+    <xs:complexType mixed="true">
+      <xs:attribute name="href"/>
+      <xs:attribute name="keyref"/>
+      <xs:attribute name="type"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="format"/>
+      <xs:attribute name="scope">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="local"/>
+            <xs:enumeration value="peer"/>
+            <xs:enumeration value="external"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="+ topic/xref pr-d/xref api-d/apipackage cxxapi-d/cxxdefine "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxtypedef" substitutionGroup="cxxapi-d-xref">
+    <xs:complexType mixed="true">
+      <xs:attribute name="href"/>
+      <xs:attribute name="keyref"/>
+      <xs:attribute name="type"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="format"/>
+      <xs:attribute name="scope">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="local"/>
+            <xs:enumeration value="peer"/>
+            <xs:enumeration value="external"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="+ topic/xref pr-d/xref api-d/apipackage cxxapi-d/cxxtypedef "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxvariable" substitutionGroup="cxxapi-d-xref">
+    <xs:complexType mixed="true">
+      <xs:attribute name="href"/>
+      <xs:attribute name="keyref"/>
+      <xs:attribute name="type"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="format"/>
+      <xs:attribute name="scope">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="local"/>
+            <xs:enumeration value="peer"/>
+            <xs:enumeration value="external"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="+ topic/xref pr-d/xref api-d/apipackage cxxapi-d/cxxvariable "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxenumeration">
+    <xs:complexType mixed="true">
+      <xs:attribute name="href"/>
+      <xs:attribute name="keyref"/>
+      <xs:attribute name="type"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="format"/>
+      <xs:attribute name="scope">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="local"/>
+            <xs:enumeration value="peer"/>
+            <xs:enumeration value="external"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="+ topic/xref pr-d/xref api-d/apipackage cxxapi-d/cxxenumeration "/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

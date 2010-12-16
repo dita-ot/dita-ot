@@ -14,6 +14,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -71,6 +72,10 @@ public class DitaWriter extends AbstractXMLWriter {
     private static final String ATTRIBUTE_XTRF = "xtrf";
     
     private Document root = null;
+    
+  //Added on 2010-08-24 for bug:3086552 start
+    private static boolean setSystemid = true;
+  //Added on 2010-08-24 for bug:3086552 end
     
     private static boolean checkDITAHREF(Attributes atts){
     	String classValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
@@ -270,6 +275,18 @@ public class DitaWriter extends AbstractXMLWriter {
     private Stack<List> colSpecStack; 
     //Added by William on 2009-11-27 for bug:1846993 embedded table bug end
     
+    //Added by William on 2010-07-01 for bug:3023642 start
+    //stack to store rowNum
+    private Stack<Integer> rowNumStack;
+    //stack to store columnNumber
+    private Stack<Integer> columnNumberStack;
+    //stack to store columnNumberEnd
+    private Stack<Integer> columnNumberEndStack;
+    //stack to store rowsMap
+    private Stack<Map<String, Integer>> rowsMapStack;
+    //Added by William on 2010-07-01 for bug:3023642 end
+    
+    
     //Added by William on 2009-06-30 for colname bug:2811358 start
     //store row number
     private int rowNumber;
@@ -343,6 +360,12 @@ public class DitaWriter extends AbstractXMLWriter {
         colSpec = null;
         //initial the stack
         colSpecStack = new Stack<List>();
+        //added by William on 20100701 for bug:3023642 start
+        rowNumStack = new Stack<Integer>();
+        columnNumberStack = new Stack<Integer>();
+        columnNumberEndStack = new Stack<Integer>();
+        rowsMapStack = new Stack<Map<String,Integer>>();
+        //added by William on 20100701 for bug:3023642 end
         
         props = null;
         validateMap = null;
@@ -371,7 +394,7 @@ public class DitaWriter extends AbstractXMLWriter {
      * @param validate whether validate
      * @throws SAXException SAXException
      */
-	public static void initXMLReader(String ditaDir,boolean validate) throws SAXException {
+	public static void initXMLReader(String ditaDir,boolean validate, boolean arg_setSystemid) throws SAXException {
 		DITAOTJavaLogger logger=new DITAOTJavaLogger();
 		if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
 			// The default sax driver is set to xerces's sax driver
@@ -395,6 +418,7 @@ public class DitaWriter extends AbstractXMLWriter {
 		AbstractXMLReader.setGrammarPool(reader, GrammarPoolManager.getGrammarPool());
 		CatalogUtils.setDitaDir(ditaDir);
 		catalogMap = CatalogUtils.getCatalog(ditaDir);
+		setSystemid= arg_setSystemid;
 	}
     
 	@Override
@@ -463,11 +487,15 @@ public class DitaWriter extends AbstractXMLWriter {
 		        	attValue = atts.getValue(i);		        	
 		        }else{
 		        	attValue = replaceHREF(attQName, atts);
+		        	//added on 2010-09-02 for bug:3058124(decode escaped string)
+		        	attValue = URLDecoder.decode(attValue, Constants.UTF8);
 		        }
 		        
 		    } else if (Constants.ATTRIBUTE_NAME_CONREF.equals(attQName)){
 		                                    
 		        attValue = replaceCONREF(atts);
+		        //added on 2010-09-02 for bug:3058124(decode escaped string)
+		        attValue = URLDecoder.decode(attValue, Constants.UTF8);
 		    } else {
 		        attValue = atts.getValue(i);
 		    }
@@ -490,106 +518,115 @@ public class DitaWriter extends AbstractXMLWriter {
 		    	}else if(slashIndex != -1){
 		    		keyIndex = slashIndex;
 		    	}
-		    	if(keyIndex != -1){
-		    		//get keyref value
-		    		String key = attValue.substring(0,keyIndex);
-		    		String target;
-		    		if(!key.equals(Constants.STRING_EMPTY) && keys.containsKey(key)){
-		    			
-		    			//target = FileUtils.replaceExtName(target);
-		    			//Added by William on 2009-06-25 for #12014 start
-		    			//get key's href
-		    			String value = keys.get(key);
-		    			String href = value.substring(0, value.lastIndexOf(Constants.LEFT_BRACKET));
-		    			
-		    			//Added by William on 2010-02-25 for bug:2957456 start
-		    			String updatedHref = updateHref(href);
-		    			//Added by William on 2010-02-25 for bug:2957456 end
-			    		
-		    			//get element/topic id
-			    		String id = attValue.substring(keyIndex+1);
-			    		
-			    		boolean idExported = false;
-			    		boolean keyrefExported = false;
-			    		List<Boolean> list = null;
-			    		if(transtype.equals(Constants.INDEX_TYPE_ECLIPSEHELP)){
-				    		 list = DelayConrefUtils.getInstance().checkExport(href, id, key, tempDir);
-				    		 idExported = list.get(0).booleanValue();
-				    		 keyrefExported = list.get(1).booleanValue();
-			    		}
-			    		//both id and key are exported and transtype is eclipsehelp
-		    			if(idExported && keyrefExported 
-		    					&& transtype.equals(Constants.INDEX_TYPE_ECLIPSEHELP)){
-		    			//remain the conkeyref attribute.
-		    				copyAttribute("conkeyref", attValue);
-		    			//Added by William on 2009-06-25 for #12014 end
-		    			}else {
-		    				//normal process
-		    				target = updatedHref;
-		    				//Added by William on 2010-05-17 for conkeyrefbug:3001705 start
-		    				//only replace extension name of topic files.
-		    				target = replaceExtName(target);
-			    			//Added by William on 2010-05-17 for conkeyrefbug:3001705 end
-			    			String tail ;
-			    			if(sharpIndex == -1 ){
-			    				if(target.indexOf(Constants.SHARP) == -1)
-			    					//change to topic id
-			    					tail = attValue.substring(keyIndex).replaceAll(Constants.SLASH, Constants.SHARP);
-			    				else
-			    					//change to element id
-			    					tail = attValue.substring(keyIndex);
-			    			}else {
-			    				//change to topic id
-			    				tail = attValue.substring(keyIndex);
-			    				//replace the topic id defined in the key's href 
-			    				if(target.indexOf(Constants.SHARP) != -1){
-			    					target = target.substring(0,target.indexOf(Constants.SHARP));
-			    				}
-			    			}
-			    			copyAttribute("conref", target + tail);
-			    			conkeyrefValid = true;
-		    			}
-		    		}else{
-		    			Properties prop = new Properties();
-		    			prop.setProperty("%1", attValue);
-		    			logger.logError(MessageUtils.getMessage("DOTJ046E", prop).toString());
-		    		}
-		    	}else{
-		    		//conkeyref just has keyref
-		    		if(keys.containsKey(attValue)){
-		    			//get key's href
-		    			String value = keys.get(attValue);
-		    			String href = value.substring(0, value.lastIndexOf(Constants.LEFT_BRACKET));
-		    			
-		    			//Added by William on 2010-02-25 for bug:2957456 start
-		    			String updatedHref = updateHref(href);
-		    			//Added by William on 2010-02-25 for bug:2957456 end
-		
-		    			//Added by William on 2009-06-25 for #12014 start
-		    			String id = null;
-		    			
-		    			List<Boolean> list = DelayConrefUtils.getInstance().checkExport(href, id, attValue, tempDir);
-		    			boolean keyrefExported = list.get(1).booleanValue();
-		    			//key is exported and transtype is eclipsehelp
-		    			if(keyrefExported && transtype.equals(Constants.INDEX_TYPE_ECLIPSEHELP)){
-		    			//remain the conkeyref attribute.
-		    				copyAttribute("conkeyref", attValue);
-		    			//Added by William on 2009-06-25 for #12014 end
-		    			}else{
-		    				//e.g conref = c.xml
-		    				String target = updatedHref;
-		    				//Added by William on 2010-05-17 for conkeyrefbug:3001705 start
-		    				target = replaceExtName(target);
-		    				//Added by William on 2010-05-17 for conkeyrefbug:3001705 end
-		    				copyAttribute("conref", target);
+		    	//conkeyref only accept values such as "key" or "key/id"
+		    	//bug:3081597
+		    	if(sharpIndex == -1){
+			    	if(keyIndex != -1){
+			    		//get keyref value
+			    		String key = attValue.substring(0,keyIndex);
+			    		String target;
+			    		if(!key.equals(Constants.STRING_EMPTY) && keys.containsKey(key)){
 			    			
-			    			conkeyrefValid = true;
-		    			}
-		    		}else{
-		    			Properties prop = new Properties();
-		    			prop.setProperty("%1", attValue);
-		    			logger.logError(MessageUtils.getMessage("DOTJ046E", prop).toString());
-		    		}	
+			    			//target = FileUtils.replaceExtName(target);
+			    			//Added by William on 2009-06-25 for #12014 start
+			    			//get key's href
+			    			String value = keys.get(key);
+			    			String href = value.substring(0, value.lastIndexOf(Constants.LEFT_BRACKET));
+			    			
+			    			//Added by William on 2010-02-25 for bug:2957456 start
+			    			String updatedHref = updateHref(href);
+			    			//Added by William on 2010-02-25 for bug:2957456 end
+				    		
+			    			//get element/topic id
+				    		String id = attValue.substring(keyIndex+1);
+				    		
+				    		boolean idExported = false;
+				    		boolean keyrefExported = false;
+				    		List<Boolean> list = null;
+				    		if(transtype.equals(Constants.INDEX_TYPE_ECLIPSEHELP)){
+					    		 list = DelayConrefUtils.getInstance().checkExport(href, id, key, tempDir);
+					    		 idExported = list.get(0).booleanValue();
+					    		 keyrefExported = list.get(1).booleanValue();
+				    		}
+				    		//both id and key are exported and transtype is eclipsehelp
+			    			if(idExported && keyrefExported 
+			    					&& transtype.equals(Constants.INDEX_TYPE_ECLIPSEHELP)){
+			    			//remain the conkeyref attribute.
+			    				copyAttribute("conkeyref", attValue);
+			    			//Added by William on 2009-06-25 for #12014 end
+			    			}else {
+			    				//normal process
+			    				target = updatedHref;
+			    				//Added by William on 2010-05-17 for conkeyrefbug:3001705 start
+			    				//only replace extension name of topic files.
+			    				target = replaceExtName(target);
+				    			//Added by William on 2010-05-17 for conkeyrefbug:3001705 end
+				    			String tail ;
+				    			if(sharpIndex == -1 ){
+				    				if(target.indexOf(Constants.SHARP) == -1)
+				    					//change to topic id
+				    					tail = attValue.substring(keyIndex).replaceAll(Constants.SLASH, Constants.SHARP);
+				    				else
+				    					//change to element id
+				    					tail = attValue.substring(keyIndex);
+				    			}else {
+				    				//change to topic id
+				    				tail = attValue.substring(keyIndex);
+				    				//replace the topic id defined in the key's href 
+				    				if(target.indexOf(Constants.SHARP) != -1){
+				    					target = target.substring(0,target.indexOf(Constants.SHARP));
+				    				}
+				    			}
+				    			copyAttribute("conref", target + tail);
+				    			conkeyrefValid = true;
+			    			}
+			    		}else{
+			    			Properties prop = new Properties();
+			    			prop.setProperty("%1", attValue);
+			    			logger.logError(MessageUtils.getMessage("DOTJ046E", prop).toString());
+			    		}
+			    	}else{
+			    		//conkeyref just has keyref
+			    		if(keys.containsKey(attValue)){
+			    			//get key's href
+			    			String value = keys.get(attValue);
+			    			String href = value.substring(0, value.lastIndexOf(Constants.LEFT_BRACKET));
+			    			
+			    			//Added by William on 2010-02-25 for bug:2957456 start
+			    			String updatedHref = updateHref(href);
+			    			//Added by William on 2010-02-25 for bug:2957456 end
+			
+			    			//Added by William on 2009-06-25 for #12014 start
+			    			String id = null;
+			    			
+			    			List<Boolean> list = DelayConrefUtils.getInstance().checkExport(href, id, attValue, tempDir);
+			    			boolean keyrefExported = list.get(1).booleanValue();
+			    			//key is exported and transtype is eclipsehelp
+			    			if(keyrefExported && transtype.equals(Constants.INDEX_TYPE_ECLIPSEHELP)){
+			    			//remain the conkeyref attribute.
+			    				copyAttribute("conkeyref", attValue);
+			    			//Added by William on 2009-06-25 for #12014 end
+			    			}else{
+			    				//e.g conref = c.xml
+			    				String target = updatedHref;
+			    				//Added by William on 2010-05-17 for conkeyrefbug:3001705 start
+			    				target = replaceExtName(target);
+			    				//Added by William on 2010-05-17 for conkeyrefbug:3001705 end
+			    				copyAttribute("conref", target);
+				    			
+				    			conkeyrefValid = true;
+			    			}
+			    		}else{
+			    			Properties prop = new Properties();
+			    			prop.setProperty("%1", attValue);
+			    			logger.logError(MessageUtils.getMessage("DOTJ046E", prop).toString());
+			    		}	
+			    	}
+		    	}else{
+		    		//invalid conkeyref value
+		    		Properties prop = new Properties();
+	    			prop.setProperty("%1", attValue);
+	    			logger.logError(MessageUtils.getMessage("DOTJ046E", prop).toString());
 		    	}
 		    }
 		    
@@ -669,12 +706,24 @@ public class DitaWriter extends AbstractXMLWriter {
 		//copy the element name
 		output.write(Constants.LESS_THAN + qName);
 		if (Constants.ELEMENT_NAME_TGROUP.equals(qName)){
-			columnNumber = 1; // initialize the column number
-		    columnNumberEnd = 0;//totally columns
+			
 		    //Edited by William on 2009-11-27 for bug:1846993 start
+		    //push into the stack.
+		    if(colSpec!=null){
+		    	colSpecStack.push(colSpec);
+			    rowNumStack.push(rowNumber);
+			    columnNumberStack.push(columnNumber);
+			    columnNumberEndStack.push(columnNumberEnd);
+			    rowsMapStack.push(rowsMap);
+		    }
+		    
+		    columnNumber = 1; // initialize the column number
+		    columnNumberEnd = 0;//totally columns
+		    rowsMap = new HashMap<String, Integer>();
+		    //new table initialize the col list
 		    colSpec = new ArrayList<String>(Constants.INT_16);
-		    //pushed into the stack.
-		    colSpecStack.push(colSpec);
+		    //new table initialize the col list
+		    rowNumber = 0;
 		    //Edited by William on 2009-11-27 for bug:1846993 end
 		}else if(Constants.ELEMENT_NAME_ROW.equals(qName)) {
 		    columnNumber = 1; // initialize the column number
@@ -711,17 +760,12 @@ public class DitaWriter extends AbstractXMLWriter {
 			}
 			columnNumberEnd = getEndNumber(atts, columnNumber);*/
 			
+			
+			
 			//Added by William on 2009-06-30 for colname bug:2811358 start
+			//Changed on 2010-11-19 for duplicate colname bug:3110418 start
 			columnNumber = getStartNumber(atts, columnNumberEnd);
-			//if has morerows attribute
-			if(atts.getValue(Constants.ATTRIBUTE_NAME_MOREROWS)!=null){
-				String pos = String.valueOf(rowNumber) + String.valueOf(columnNumber);
-				//total span rows
-				int total = Integer.parseInt(atts.getValue(Constants.ATTRIBUTE_NAME_MOREROWS))+
-				rowNumber;
-				rowsMap.put(pos, Integer.valueOf(total));
-				
-			}
+
 			
 			if(columnNumber > columnNumberEnd){
 				//The first row
@@ -738,68 +782,52 @@ public class DitaWriter extends AbstractXMLWriter {
 					//flag show whether former row spans rows
 					boolean spanRows = false;
 					int offset = 0;
-					//search from first row
-					for(int row=1;row<rowNumber;row++){
-						String pos = String.valueOf(row) + String.valueOf(columnNumber);
-						if(rowsMap.containsKey(pos)){
-							//get total span rows
-							int totalSpanRows = rowsMap.get(pos).intValue();
-							if(rowNumber <= totalSpanRows){
-								spanRows = true;
-								offset ++;
-								break;
+					int currentCol = columnNumber;
+					while(currentCol<=totalColumns) {
+						int previous_offset=offset;
+						//search from first row
+						for(int row=1;row<rowNumber;row++){
+							String pos = String.valueOf(row) + String.valueOf(currentCol);
+							if(rowsMap.containsKey(pos)){
+								//get total span rows
+								int totalSpanRows = rowsMap.get(pos).intValue();
+								if(rowNumber <= totalSpanRows){
+									spanRows = true;
+									offset ++;
+								}
 							}
 						}
+						
+						if(offset>previous_offset) {
+							currentCol = columnNumber + offset;
+							previous_offset=offset;
+						} else {
+							break;
+						}
+	
 					}
-					//if former row doesn't span rows
-					if(!spanRows){
-						copyAttribute(Constants.ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL+columnNumber);
-						if (atts.getValue(Constants.ATTRIBUTE_NAME_NAMEST) != null){
-							copyAttribute(Constants.ATTRIBUTE_NAME_NAMEST, COLUMN_NAME_COL+columnNumber);
-						}
-						if (atts.getValue(Constants.ATTRIBUTE_NAME_NAMEEND) != null){
-							copyAttribute(Constants.ATTRIBUTE_NAME_NAMEEND, COLUMN_NAME_COL+getEndNumber(atts, columnNumber));
-						}
-					//if former row spans rows	
-					}else{
-						//neigbouring column may also span rows
-						//flag show whether meet nearest column which doesn't span rows
-						boolean shouldStopSearch = false;
-						for(int col = columnNumber + 1; col <= totalColumns; col++){
-							if(shouldStopSearch){
-								break;
-							}
-							for(int row = 1; row < rowNumber; row++){
-								String pos = String.valueOf(row) + String.valueOf(col);
-								if(rowsMap.containsKey(pos)){
-									//get total span rows
-									int totalSpanRows = rowsMap.get(pos).intValue();
-									if(rowNumber <= totalSpanRows){
-										offset ++;
-										//move to the next colum
-										break;
-									}
-								}
-								//meet the first column span no rows
-								if(row == rowNumber -1){
-									//should stop search
-									shouldStopSearch = true; 
-								}
-							}
-							
-						}
-						//adjust the col name
-						copyAttribute(Constants.ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL+(columnNumber+offset));
-						if (atts.getValue(Constants.ATTRIBUTE_NAME_NAMEST) != null){
-							copyAttribute(Constants.ATTRIBUTE_NAME_NAMEST, COLUMN_NAME_COL+(columnNumber+offset));
-						}
-						if (atts.getValue(Constants.ATTRIBUTE_NAME_NAMEEND) != null){
-							copyAttribute(Constants.ATTRIBUTE_NAME_NAMEEND, COLUMN_NAME_COL+getEndNumber(atts, (columnNumber+offset)));
-						}
+					columnNumber = columnNumber+offset;
+					//if has morerows attribute
+					if(atts.getValue(Constants.ATTRIBUTE_NAME_MOREROWS)!=null){
+						String pos = String.valueOf(rowNumber) + String.valueOf(columnNumber);
+						//total span rows
+						int total = Integer.parseInt(atts.getValue(Constants.ATTRIBUTE_NAME_MOREROWS))+
+						rowNumber;
+						rowsMap.put(pos, Integer.valueOf(total));
+						
+					}
+					
+					copyAttribute(Constants.ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL+columnNumber);
+					if (atts.getValue(Constants.ATTRIBUTE_NAME_NAMEST) != null){
+						copyAttribute(Constants.ATTRIBUTE_NAME_NAMEST, COLUMN_NAME_COL+columnNumber);
+					}
+					if (atts.getValue(Constants.ATTRIBUTE_NAME_NAMEEND) != null){
+						copyAttribute(Constants.ATTRIBUTE_NAME_NAMEEND, COLUMN_NAME_COL+getEndNumber(atts, columnNumber));
 					}
 				}
 			}
 			columnNumberEnd = getEndNumber(atts, columnNumber);
+			//Changed on 2010-11-19 for duplicate colname bug:3110418 end
 			//Added by William on 2009-06-30 for colname bug:2811358 end
 		}
 	}
@@ -867,13 +895,30 @@ public class DitaWriter extends AbstractXMLWriter {
         //Added by William on 2009-11-27 for bug:1846993 embedded table bug start
         //note the tag shouldn't be excluded by filter file(bug:2925636 )
         if(Constants.ELEMENT_NAME_TGROUP.equals(qName) && !exclude){
-        	colSpecStack.pop();
+        	//colSpecStack.pop();
+        	//rowNumStack.pop();
         	//has tgroup tag
         	if(!colSpecStack.isEmpty()){
+        		
         		colSpec = colSpecStack.peek();
+        		rowNumber = rowNumStack.peek().intValue();
+        		columnNumber = columnNumberStack.peek().intValue();
+        		columnNumberEnd = columnNumberEndStack.peek().intValue();
+        		rowsMap = rowsMapStack.peek();
+        		
+        		colSpecStack.pop();
+            	rowNumStack.pop();
+            	columnNumberStack.pop();
+            	columnNumberEndStack.pop();
+            	rowsMapStack.pop();
+            	
         	}else{
         		//no more tgroup tag
         		colSpec = null;
+        		rowNumber = 0;
+        		columnNumber = 1;
+        		columnNumberEnd = 0;
+        		rowsMap = null;
         	}
         }
         //Added by William on 2009-11-27 for bug:1846993 embedded table bug end
@@ -1223,8 +1268,16 @@ public class DitaWriter extends AbstractXMLWriter {
             // start to parse the file and direct to output in the temp
             // directory
             reader.setErrorHandler(new DITAOTXMLErrorHandler(traceFilename));
-            reader.parse(new InputSource(new FileInputStream(new File(traceFilename))));
-            
+          //Added on 2010-08-24 for bug:3086552 start
+            File file = new File(traceFilename);
+            InputSource is = new InputSource(new FileInputStream(file));
+    		//set system id bug:3086552
+            if(setSystemid)
+            	//is.setSystemId(URLUtil.correct(file).toString());
+            	is.setSystemId(file.toURI().toURL().toString());
+            	
+          //Added on 2010-08-24 for bug:3086552 end
+            reader.parse(is);
             output.close();
         } catch (Exception e) {
         	e.printStackTrace();

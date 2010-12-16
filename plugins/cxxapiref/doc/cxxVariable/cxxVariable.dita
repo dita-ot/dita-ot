@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxVariable">
+    <title>cxxVariable</title>
+    <shortdesc>The &lt;cxxVariable&gt; element contains the elements necessary to describe a variable.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The &lt;cxxVariable&gt; element requires the <i>id</i> attribute so that it can be referenced 
+            by other topics. &lt;cxxVariable&gt; also requires an &lt;apiname&gt; element to specify the variable 
+            name, the the &lt;cxxVariableDetail&gt; element to hold the variable description.</p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxClass id="a_class"&gt;
+    &lt;apiName&gt;AClass&lt;/apiName&gt;
+    &lt;cxxClassDetail&gt;
+        ...
+    &lt;/cxxClassDetail&gt;
+    &lt;cxxFunction id="a_class_1a0cd89cbef4c7224dab024bfa3182b99e"&gt;
+        ...
+    &lt;/cxxFunction&gt;
+    &lt;cxxVariable id="a_class_1ae0375"&gt;
+        &lt;apiName&gt;iFunctions&lt;/apiName&gt;
+        &lt;cxxVariableDetail&gt;
+            &lt;cxxVariableDefinition&gt;
+                &lt;cxxVariableAccessSpecifier value="protected"/&gt;
+                &lt;cxxVariableDeclaredType&gt;
+                    &lt;apiRelation href="a_class_general_functions.xml#class_m_anim_general_functions"&gt;MAnimGeneralFunctions&lt;/apiRelation&gt; *&lt;/cxxVariableDeclaredType&gt;
+                &lt;cxxVariableScopedName&gt;CAnim&lt;/cxxVariableScopedName&gt;
+                &lt;cxxVariablePrototype&gt;MAnimGeneralFunctions * iFunctions&lt;/cxxVariablePrototype&gt;
+                &lt;cxxVariableNameLookup&gt;CAnim::iFunctions&lt;/cxxVariableNameLookup&gt;
+                &lt;cxxVariableAPIItemLocation&gt;
+                    &lt;cxxVariableDeclarationFile name="filePath" value="C:/src/include/w32adll.h"/&gt;
+                    &lt;cxxVariableDeclarationFileLine name="lineNumber" value="908"/&gt;
+                &lt;/cxxVariableAPIItemLocation&gt;
+            &lt;/cxxVariableDefinition&gt;
+            &lt;apiDesc&gt;
+                &lt;p&gt;Pointer to a class containing functions implemented by the window server.&lt;/p&gt;
+                &lt;p&gt;These are available to any &lt;xref href="a_class.xml#a_class"&gt;CAnim&lt;/xref&gt; derived class.&lt;/p&gt;
+                &lt;p&gt;Note that this value is automatically set for you by the animation framework. You do not need to assign a value to this pointer.&lt;/p&gt;
+            &lt;/apiDesc&gt;
+        &lt;/cxxVariableDetail&gt;
+    &lt;/cxxVariable&gt;
+    &lt;cxxClassInherits&gt;
+        ...
+    &lt;/cxxClassInherits&gt;
+&lt;/cxxClass&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxVariable-reference/cxxVariable-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxVariable-reference/cxxVariable-contains-section"/>
+        <section conref="../packagedef.dita#cxxVariable-reference/cxxVariable-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxVariable-reference/cxxVariable-attList-section"/>
+        <section conref="../packagedef.dita#cxxVariable-reference/cxxVariable-classValue-section"/>
+    </refbody>
+</reference>

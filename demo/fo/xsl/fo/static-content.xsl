@@ -85,6 +85,13 @@ See the accompanying license.txt file for applicable licenses.
 <!--        <xsl:call-template name="insertPrefaceLastFooter"/>-->
     </xsl:template>
 
+    <xsl:template name="insertGlossaryStaticContents">
+        <xsl:call-template name="insertGlossaryOddFooter"/>
+        <xsl:call-template name="insertGlossaryEvenFooter"/>
+        <xsl:call-template name="insertGlossaryOddHeader"/>
+        <xsl:call-template name="insertGlossaryEvenHeader"/>
+    </xsl:template>
+
     <xsl:template name="insertBodyOddHeader">
 
         <fo:static-content flow-name="odd-body-header">
@@ -718,6 +725,84 @@ See the accompanying license.txt file for applicable licenses.
                         </heading>
                         <pagenum>
                             <fo:inline xsl:use-attribute-sets="__body__even__footer__pagenum">
+                                <fo:page-number/>
+                            </fo:inline>
+                        </pagenum>
+                    </xsl:with-param>
+                </xsl:call-template>
+            </fo:block>
+        </fo:static-content>
+
+    </xsl:template>
+
+    <xsl:template name="insertGlossaryOddHeader">
+        <fo:static-content flow-name="odd-glossary-header">
+            <fo:block xsl:use-attribute-sets="__glossary__odd__header">
+                <xsl:call-template name="insertVariable">
+                    <xsl:with-param name="theVariableID" select="'Glossary odd header'"/>
+                    <xsl:with-param name="theParameters">
+                        <prodname>
+                            <xsl:value-of select="$productName"/>
+                        </prodname>
+                        <pagenum>
+                            <fo:inline xsl:use-attribute-sets="__glossary__odd__header__pagenum">
+                                <fo:page-number/>
+                            </fo:inline>
+                        </pagenum>
+                    </xsl:with-param>
+                </xsl:call-template>
+            </fo:block>
+        </fo:static-content>
+
+    </xsl:template>
+
+    <xsl:template name="insertGlossaryEvenHeader">
+        <fo:static-content flow-name="even-glossary-header">
+            <fo:block xsl:use-attribute-sets="__glossary__even__header">
+                <xsl:call-template name="insertVariable">
+                    <xsl:with-param name="theVariableID" select="'Glossary even header'"/>
+                    <xsl:with-param name="theParameters">
+                        <prodname>
+                            <xsl:value-of select="$productName"/>
+                        </prodname>
+                        <pagenum>
+                            <fo:inline xsl:use-attribute-sets="__glossary__even__header__pagenum">
+                                <fo:page-number/>
+                            </fo:inline>
+                        </pagenum>
+                    </xsl:with-param>
+                </xsl:call-template>
+            </fo:block>
+        </fo:static-content>
+
+    </xsl:template>
+
+    <xsl:template name="insertGlossaryOddFooter">
+        <fo:static-content flow-name="odd-glossary-footer">
+            <fo:block xsl:use-attribute-sets="__glossary__odd__footer">
+                <xsl:call-template name="insertVariable">
+                    <xsl:with-param name="theVariableID" select="'Glossary odd footer'"/>
+                    <xsl:with-param name="theParameters">
+                        <pagenum>
+                            <fo:inline xsl:use-attribute-sets="__glossary__odd__footer__pagenum">
+                                <fo:page-number/>
+                            </fo:inline>
+                        </pagenum>
+                    </xsl:with-param>
+                </xsl:call-template>
+            </fo:block>
+        </fo:static-content>
+
+    </xsl:template>
+
+    <xsl:template name="insertGlossaryEvenFooter">
+        <fo:static-content flow-name="even-glossary-footer">
+            <fo:block xsl:use-attribute-sets="__glossary__even__footer">
+                <xsl:call-template name="insertVariable">
+                    <xsl:with-param name="theVariableID" select="'Glossary even footer'"/>
+                    <xsl:with-param name="theParameters">
+                        <pagenum>
+                            <fo:inline xsl:use-attribute-sets="__glossary__even__footer__pagenum">
                                 <fo:page-number/>
                             </fo:inline>
                         </pagenum>

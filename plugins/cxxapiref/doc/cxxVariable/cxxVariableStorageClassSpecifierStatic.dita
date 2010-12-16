@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxVariableStorageClassSpecifierStatic">
+    <title>cxxVariableStorageClassSpecifierStatic</title>
+    <shortdesc>The &lt;cxxVariableStorageClassSpecifierStatic&gt; element marks this variable as static.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The &lt;cxxVariableStorageClassSpecifierStatic&gt; element has no children.
+            &lt;cxxVariableStorageClassSpecifierStatic&gt; can have the fixed attributes <i>name</i> and <i>value</i> both 
+            of which are set to "static".</p>
+        </section>
+        <example><title>Example</title>
+        <codeblock>&lt;cxxVariableDefinition&gt;
+    &lt;cxxVariableAccessSpecifier value=&quot;private&quot;/&gt;
+    &lt;cxxVariableStorageClassSpecifierStatic/&gt;
+    &lt;cxxVariableDeclaredType&gt;const &lt;apiRelation href=&quot;e32def_8h.xml#e32def_8h_1a8094a5c8ef3bcf6221e5ff6405127d34&quot;&gt;TText&lt;/apiRelation&gt; *const&lt;/cxxVariableDeclaredType&gt;
+    &lt;cxxVariableScopedName&gt;GlyphSample&lt;/cxxVariableScopedName&gt;
+    &lt;cxxVariablePrototype&gt;static const TText *const KTScript2GlyphSample[]&lt;/cxxVariablePrototype&gt;
+    &lt;cxxVariableNameLookup&gt;GlyphSample::KTScript2GlyphSample&lt;/cxxVariableNameLookup&gt;
+    &lt;cxxVariableAPIItemLocation&gt;
+        &lt;cxxVariableDeclarationFile name=&quot;filePath&quot; value=&quot;C:/epoc32/include/graphics/gdi/glyphsample.h&quot;/&gt;
+        &lt;cxxVariableDeclarationFileLine name=&quot;lineNumber&quot; value=&quot;53&quot;/&gt;
+    &lt;/cxxVariableAPIItemLocation&gt;
+&lt;/cxxVariableDefinition&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxVariableStorageClassSpecifierStatic-reference/cxxVariableStorageClassSpecifierStatic-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxVariableStorageClassSpecifierStatic-reference/cxxVariableStorageClassSpecifierStatic-contains-section"/>
+        <section conref="../packagedef.dita#cxxVariableStorageClassSpecifierStatic-reference/cxxVariableStorageClassSpecifierStatic-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxVariableStorageClassSpecifierStatic-reference/cxxVariableStorageClassSpecifierStatic-attList-section"/>
+        <section conref="../packagedef.dita#cxxVariableStorageClassSpecifierStatic-reference/cxxVariableStorageClassSpecifierStatic-classValue-section"/>
+    </refbody>
+</reference>

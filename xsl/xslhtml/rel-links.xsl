@@ -215,7 +215,7 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 -->
 <xsl:template name="ol-child-links">
      <xsl:if test="descendant::*[contains(@class, ' topic/link ')][@role='child' or @role='descendant'][parent::*/@collection-type='sequence'][not(ancestor::*[contains(@class, ' topic/linklist ')])]">
-     <xsl:value-of select="$newline"/><ol><xsl:value-of select="$newline"/>
+     <xsl:value-of select="$newline"/><ol class="olchildlinks"><xsl:value-of select="$newline"/>
        <!--once you've tested that at least one child/descendant exists, apply templates to only the unique ones-->
           <xsl:apply-templates select="descendant::*
           [generate-id(.)=generate-id(key('link',concat(ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id, ' ', @href,@type,@role,@platform,@audience,@importance,@outputclass,@keyref,@scope,@format,@otherrole,@product,@otherprops,@rev,@class,child::*))[1])]
@@ -456,7 +456,7 @@ Children are displayed in a numbered list, with the target title as the cmd and 
   <xsl:choose>
     <xsl:when test="normalize-space(@href)='' or not(@href)"/>
     <!-- For non-DITA formats - use the href as is -->
-    <xsl:when test="(not(@format) and (@type='external' or @scope='external' or @scope='peer')) or (@format and not(@format='dita' or @format='DITA'))">
+    <xsl:when test="(not(@format) and (@type='external' or @scope='external')) or (@format and not(@format='dita' or @format='DITA'))">
       <xsl:value-of select="@href"/>
     </xsl:when>
     <!-- For DITA - process the internal href -->
@@ -466,8 +466,11 @@ Children are displayed in a numbered list, with the target title as the cmd and 
       </xsl:call-template>
     </xsl:when>
     <!-- It's to a DITA file - process the file name (adding the html extension)
-         and process the rest of the href -->
-    <xsl:when test="contains(@href,$DITAEXT)">
+    and process the rest of the href -->
+    <!-- for local links respect dita.extname extension 
+      and for peer links accept both .xml and .dita bug:3059256-->
+    <xsl:when test="((not(@scope) or @scope='local') and contains(@href,$DITAEXT)) or
+      (@scope='peer' and (contains(@href,'.xml') or contains(@href,'.dita')))">
       <!-- Added this variable to support href values such as "com.example.dita.stuff/topic.dita". These
            previously generated the output extension after the first .dita -->
       <xsl:variable name="hrefBeforeExtension">

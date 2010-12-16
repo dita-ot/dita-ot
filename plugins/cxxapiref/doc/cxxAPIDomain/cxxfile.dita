@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxfile">
+    <title>cxxfile</title>
+    <shortdesc>The &lt;cxxfile&gt; element is a reference to a C++ file.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The &lt;cxxfile&gt; element can be used to reference a C++ file from another topic type. </p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;task id="connectionsxml"&gt;
+  &lt;title&gt;Connections&lt;/title&gt;
+  &lt;taskbody&gt;
+
+    &lt;steps&gt;
+    &lt;step&gt;&lt;cm&gt;Open the connection&lt;/cm&gt;
+      &lt;info&gt;Details for the connection class are in the &lt;cxxfile keyref="connectionfile"&gt;connection file&lt;/cxxfile&gt; 
+      &lt;/info&gt;
+
+    &lt;/step&gt;
+    ...
+    &lt;/steps&gt;
+  &lt;/taskbody&gt;
+&lt;/task&gt;</codeblock>
+        </example>            
+        <section conref="../packagedef.dita#cxxfile-reference/cxxfile-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxfile-reference/cxxfile-contains-section"/>
+        <section conref="../packagedef.dita#cxxfile-reference/cxxfile-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxfile-reference/cxxfile-attList-section"/>
+        <section conref="../packagedef.dita#cxxfile-reference/cxxfile-classValue-section"/>
+    </refbody>
+</reference>

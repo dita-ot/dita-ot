@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxStructDefinitionFile">
+    <title>cxxStructDefinitionFile</title>
+    <shortdesc>The &lt;cxxStructDefinitionFile&gt; element is defined within &lt;cxxStructAPIItemLocation&gt;. 
+    &lt;cxxStructDefinitionFile&gt; specifies the file in which the API definition is present.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The element &lt;cxxStructDefinitionFile&gt; is empty but for the required 
+            attributes <i>name</i> and <i>value</i>. <i>name</i> is always "filePath" and <i>value</i> is the actual file path.</p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxStructDefinition&gt;
+    &lt;cxxStructAccessSpecifier value=&quot;public&quot; /&gt;
+    &lt;cxxStructAPIItemLocation&gt;
+        &lt;cxxStructDeclarationFile name=&quot;filePath&quot; value=&quot;s:/sf/os/commsfw/commsconfig/commsdatabaseshim/commdbshim/SCDB/CDBTABLE.CPP&quot; /&gt;
+        &lt;cxxStructDeclarationFileLine name=&quot;lineNumber&quot; value=&quot;37&quot; /&gt;
+        &lt;cxxStructDefinitionFile name=&quot;filePath&quot; value=&quot;s:/sf/os/commsfw/commsconfig/commsdatabaseshim/commdbshim/SCDB/CDBTABLE.CPP&quot; /&gt;
+        &lt;cxxStructDefinitionFileLineStart name=&quot;lineNumber&quot; value=&quot;36&quot; /&gt;
+        &lt;cxxStructDefinitionFileLineEnd name=&quot;lineNumber&quot; value=&quot;41&quot; /&gt;
+    &lt;/cxxStructAPIItemLocation&gt;
+&lt;/cxxStructDefinition&gt;</codeblock>
+        </example>        
+        <section conref="../packagedef.dita#cxxStructDefinitionFile-reference/cxxStructDefinitionFile-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxStructDefinitionFile-reference/cxxStructDefinitionFile-contains-section"/>
+        <section conref="../packagedef.dita#cxxStructDefinitionFile-reference/cxxStructDefinitionFile-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxStructDefinitionFile-reference/cxxStructDefinitionFile-attList-section"/>
+        <section conref="../packagedef.dita#cxxStructDefinitionFile-reference/cxxStructDefinitionFile-classValue-section"/>
+    </refbody>
+</reference>

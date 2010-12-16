@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxFunctionTemplateParameterType">
+    <title>cxxFunctionTemplateParameterType</title>
+    <shortdesc>Describes the type of the template parameter.</shortdesc>
+    <refbody>
+        <section id="section_045CE732230348DDB678C984ADAA2347">
+            <title>Description</title><p>Describes the type of the template parameter.
+The PCDATA is not decomposed semantically
+any further.</p><p>See ISO/IEC 14882:2003(E) 14.1 Template parameters [temp.param]</p>
+        </section>
+        <section conref="../packagedef.dita#cxxFunctionTemplateParameterType-reference/cxxFunctionTemplateParameterType-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxFunctionTemplateParameterType-reference/cxxFunctionTemplateParameterType-contains-section"/>
+        <section conref="../packagedef.dita#cxxFunctionTemplateParameterType-reference/cxxFunctionTemplateParameterType-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxFunctionTemplateParameterType-reference/cxxFunctionTemplateParameterType-attList-section"/>
+        <section conref="../packagedef.dita#cxxFunctionTemplateParameterType-reference/cxxFunctionTemplateParameterType-classValue-section"/>
+    </refbody>
+</reference>

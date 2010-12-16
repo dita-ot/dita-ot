@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxUnionNestedDetail">
+    <title>cxxUnionNestedDetail</title>
+    <shortdesc>The &lt;cxxUnionNestedDetail&gt; element provides details about the nested members of a C++ union.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>In the &lt;cxxUnionNestedDetail&gt; element, the &lt;cxxUnionNestedClass&gt;, &lt;cxxUnionNestedUnion&gt; and 
+            &lt;cxxUnionNestedStruct&gt; elements are provided to indicate all members that can be nested by a C++ union. 
+            &lt;cxxUnionNestedDetail&gt; must have at least one of these child elements and each one can occur multiple times.</p>
+        </section>
+        <example><title>Example</title>
+        <codeblock>&lt;cxxUnionNested&gt;
+    &lt;cxxUnionNestedDetail&gt;
+        &lt;cxxUnionNestedStruct href=&quot;struct_comms.xml#struct_comms_package&quot;&gt;CommsFW::TCFLegacyMessagePacker::TUnion::TLegacyPackage&lt;/cxxUnionNestedStruct&gt;
+        &lt;cxxUnionNestedStruct href=&quot;struct_comms.xml#struct_comms_package&quot;&gt;CommsFW::TCFLegacyMessagePacker::TUnion::TPackage&lt;/cxxUnionNestedStruct&gt;
+    &lt;/cxxUnionNestedDetail&gt;
+&lt;/cxxUnionNested&gt;</codeblock>
+        </example> 
+        <section conref="../packagedef.dita#cxxUnionNestedDetail-reference/cxxUnionNestedDetail-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxUnionNestedDetail-reference/cxxUnionNestedDetail-contains-section"/>
+        <section conref="../packagedef.dita#cxxUnionNestedDetail-reference/cxxUnionNestedDetail-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxUnionNestedDetail-reference/cxxUnionNestedDetail-attList-section"/>
+        <section conref="../packagedef.dita#cxxUnionNestedDetail-reference/cxxUnionNestedDetail-classValue-section"/>
+    </refbody>
+</reference>

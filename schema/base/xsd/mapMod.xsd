@@ -28,7 +28,6 @@
  <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
 
    <!-- ======= IMPORT - XML attributes and namespace ======= -->
-   <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"/>
    <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"/>
 
   <!-- STRUCTURAL MEMBERS ======================================================== -->
@@ -156,16 +155,16 @@
    <xs:group name="map.content">
      <xs:sequence>
        <xs:sequence>
-      <xs:group ref="title" minOccurs="0" />
-      <xs:group ref="topicmeta" minOccurs="0" />
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group ref="navref" />
-        <xs:group ref="anchor" />
-        <xs:group ref="topicref" />
-        <xs:group ref="reltable" />
-        <xs:group ref="data.elements.incl" />
-      </xs:choice>      
-    </xs:sequence>
+         <xs:group ref="title" minOccurs="0" />
+         <xs:group ref="topicmeta" minOccurs="0" />
+         <xs:choice minOccurs="0" maxOccurs="unbounded">
+           <xs:group ref="navref" />
+           <xs:group ref="anchor" />
+           <xs:group ref="topicref" />
+           <xs:group ref="reltable" />
+           <xs:group ref="data.elements.incl" />
+         </xs:choice>      
+       </xs:sequence>
      </xs:sequence>
    </xs:group>
    
@@ -589,9 +588,10 @@
    
    <xs:group name="linktext.content">
      <xs:sequence>
-       <xs:sequence minOccurs="0" maxOccurs="unbounded">
+       <xs:choice minOccurs="0" maxOccurs="unbounded">
       <xs:group ref="words.cnt"/>
-    </xs:sequence>
+      <xs:group ref="ph"/>
+    </xs:choice>
      </xs:sequence>
    </xs:group>
    

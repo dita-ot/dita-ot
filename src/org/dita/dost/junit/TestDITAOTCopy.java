@@ -17,14 +17,14 @@ public class TestDITAOTCopy {
 	@Test
 	public void testexecute() throws BuildException
 	{
-		ditaotcopy.setIncludes("test-stub\\testbuild.xml");
+		ditaotcopy.setIncludes("test-stub" + File.separator + "testbuild.xml");
 		ditaotcopy.setTodir("test-stub");
 		ditaotcopy.setRelativePaths(relativepath);
 		ditaotcopy.execute();
 
 		
-		 String FileName="test-stub\\testbuild.xml";
-	      String DestFileName="test-stub\\testbuildaaa.xml";
+		 String FileName="test-stub" + File.separator + "testbuild.xml";
+	      String DestFileName="test-stub" + File.separator + "testbuildaaa.xml";
 	       File myFile=new File(FileName);
 	       File mydestFile=new File(DestFileName);
 

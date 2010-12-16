@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxFunctionDefinition">
+    <title>cxxFunctionDefinition</title>
+    <shortdesc>Describes all of the details of a C++ function declaration.
+    </shortdesc>
+    <refbody>
+        <section id="section_D08C628A44AB4AEBADA1E0CFA39335BE">
+            <title>Description</title><p>The <tt>&lt;cxxFunctionDefinition&gt;</tt>
+element describes all of the detail of a C++ function declaration including the <i>function type</i>, parameter declarations and const-volatile specifier. It also contains information about accessibilty, virtualness and so on.  
+            </p>
+            <p>The content model reflects the underlying complexity of C++ function declarations.</p>
+        </section>
+        <section conref="../packagedef.dita#cxxFunctionDefinition-reference/cxxFunctionDefinition-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxFunctionDefinition-reference/cxxFunctionDefinition-contains-section"/>
+        <section conref="../packagedef.dita#cxxFunctionDefinition-reference/cxxFunctionDefinition-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxFunctionDefinition-reference/cxxFunctionDefinition-attList-section"/>
+        <section conref="../packagedef.dita#cxxFunctionDefinition-reference/cxxFunctionDefinition-classValue-section"/>
+    </refbody>
+</reference>

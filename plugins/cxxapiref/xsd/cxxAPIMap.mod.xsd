@@ -1,0 +1,849 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+  All rights reserved.
+  
+  Generated from APIMap.script
+  
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="../../../schema/base/xsd/ditaarch.xsd"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../../../schema/base/xsd/xml.xsd"/>
+  <xs:group name="cxxFileRef">
+    <xs:sequence>
+      <xs:element ref="cxxFileRef"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxClassRef">
+    <xs:sequence>
+      <xs:element ref="cxxClassRef"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxStructRef">
+    <xs:sequence>
+      <xs:element ref="cxxStructRef"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxUnionRef">
+    <xs:sequence>
+      <xs:element ref="cxxUnionRef"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxDefineRef">
+    <xs:sequence>
+      <xs:element ref="cxxDefineRef"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxFunctionRef">
+    <xs:sequence>
+      <xs:element ref="cxxFunctionRef"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxTypedefRef">
+    <xs:sequence>
+      <xs:element ref="cxxTypedefRef"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxVariableRef">
+    <xs:sequence>
+      <xs:element ref="cxxVariableRef"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxEnumerationRef">
+    <xs:sequence>
+      <xs:element ref="cxxEnumerationRef"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="cxxAPIMap">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="topicmeta"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="topicref"/>
+          <xs:group ref="cxxFileRef"/>
+          <xs:group ref="cxxClassRef"/>
+          <xs:group ref="cxxStructRef"/>
+          <xs:group ref="cxxUnionRef"/>
+        </xs:choice>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="reltable"/>
+      </xs:sequence>
+      <xs:attribute name="title"/>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="anchorref"/>
+      <xs:attributeGroup ref="topicref-atts"/>
+      <xs:attributeGroup ref="select-atts"/>
+      <xs:attribute name="translate">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attributeGroup ref="arch-atts"/>
+      <xs:attribute name="domains" default="(map mapgroup-d)"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- map/map apiMap/apiMap cxxAPIMap/cxxAPIMap "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxFileRef">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="topicmeta"/>
+        <xs:group minOccurs="0" ref="cxxDefineRef"/>
+        <xs:group minOccurs="0" ref="cxxEnumerationRef"/>
+        <xs:group minOccurs="0" ref="cxxFunctionRef"/>
+        <xs:group minOccurs="0" ref="cxxTypedefRef"/>
+        <xs:group minOccurs="0" ref="cxxVariableRef"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="topicref"/>
+      </xs:sequence>
+      <xs:attribute name="navtitle"/>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="href"/>
+      <xs:attribute name="keyref"/>
+      <xs:attribute name="query"/>
+      <xs:attribute name="conref"/>
+      <xs:attribute name="copy-to"/>
+      <xs:attribute name="collection-type">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="choice"/>
+            <xs:enumeration value="unordered"/>
+            <xs:enumeration value="sequence"/>
+            <xs:enumeration value="family"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="type" default="cxxFile"/>
+      <xs:attribute name="scope">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="local"/>
+            <xs:enumeration value="peer"/>
+            <xs:enumeration value="external"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="locktitle">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="format"/>
+      <xs:attribute name="linking">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="targetonly"/>
+            <xs:enumeration value="sourceonly"/>
+            <xs:enumeration value="normal"/>
+            <xs:enumeration value="none"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="toc">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="print">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="search">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="chunk"/>
+      <xs:attributeGroup ref="select-atts"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- map/topicref apiMap/apiItemRef cxxAPIMap/cxxFileRef "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxClassRef">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="topicmeta"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="cxxClassRef"/>
+          <xs:group ref="cxxStructRef"/>
+          <xs:group ref="cxxUnionRef"/>
+        </xs:choice>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="topicref"/>
+      </xs:sequence>
+      <xs:attribute name="navtitle"/>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="href"/>
+      <xs:attribute name="keyref"/>
+      <xs:attribute name="query"/>
+      <xs:attribute name="conref"/>
+      <xs:attribute name="copy-to"/>
+      <xs:attribute name="collection-type">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="choice"/>
+            <xs:enumeration value="unordered"/>
+            <xs:enumeration value="sequence"/>
+            <xs:enumeration value="family"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="type" default="cxxClass"/>
+      <xs:attribute name="scope">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="local"/>
+            <xs:enumeration value="peer"/>
+            <xs:enumeration value="external"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="locktitle">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="format"/>
+      <xs:attribute name="linking">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="targetonly"/>
+            <xs:enumeration value="sourceonly"/>
+            <xs:enumeration value="normal"/>
+            <xs:enumeration value="none"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="toc">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="print">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="search">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="chunk"/>
+      <xs:attributeGroup ref="select-atts"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- map/topicref apiMap/apiItemRef cxxAPIMap/cxxClassRef "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxStructRef">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="topicmeta"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="cxxClassRef"/>
+          <xs:group ref="cxxStructRef"/>
+          <xs:group ref="cxxUnionRef"/>
+        </xs:choice>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="topicref"/>
+      </xs:sequence>
+      <xs:attribute name="navtitle"/>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="href"/>
+      <xs:attribute name="keyref"/>
+      <xs:attribute name="query"/>
+      <xs:attribute name="conref"/>
+      <xs:attribute name="copy-to"/>
+      <xs:attribute name="collection-type">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="choice"/>
+            <xs:enumeration value="unordered"/>
+            <xs:enumeration value="sequence"/>
+            <xs:enumeration value="family"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="type" default="cxxStruct"/>
+      <xs:attribute name="scope">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="local"/>
+            <xs:enumeration value="peer"/>
+            <xs:enumeration value="external"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="locktitle">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="format"/>
+      <xs:attribute name="linking">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="targetonly"/>
+            <xs:enumeration value="sourceonly"/>
+            <xs:enumeration value="normal"/>
+            <xs:enumeration value="none"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="toc">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="print">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="search">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="chunk"/>
+      <xs:attributeGroup ref="select-atts"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- map/topicref apiMap/apiItemRef cxxAPIMap/cxxStructRef "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxUnionRef">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="topicmeta"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="cxxClassRef"/>
+          <xs:group ref="cxxStructRef"/>
+          <xs:group ref="cxxUnionRef"/>
+        </xs:choice>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="topicref"/>
+      </xs:sequence>
+      <xs:attribute name="navtitle"/>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="href"/>
+      <xs:attribute name="keyref"/>
+      <xs:attribute name="query"/>
+      <xs:attribute name="conref"/>
+      <xs:attribute name="copy-to"/>
+      <xs:attribute name="collection-type">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="choice"/>
+            <xs:enumeration value="unordered"/>
+            <xs:enumeration value="sequence"/>
+            <xs:enumeration value="family"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="type" default="cxxUnion"/>
+      <xs:attribute name="scope">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="local"/>
+            <xs:enumeration value="peer"/>
+            <xs:enumeration value="external"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="locktitle">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="format"/>
+      <xs:attribute name="linking">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="targetonly"/>
+            <xs:enumeration value="sourceonly"/>
+            <xs:enumeration value="normal"/>
+            <xs:enumeration value="none"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="toc">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="print">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="search">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="chunk"/>
+      <xs:attributeGroup ref="select-atts"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- map/topicref apiMap/apiItemRef cxxAPIMap/cxxUnionRef "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxFunctionRef">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="topicmeta"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="topicref"/>
+      </xs:sequence>
+      <xs:attribute name="navtitle"/>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="href"/>
+      <xs:attribute name="keyref"/>
+      <xs:attribute name="query"/>
+      <xs:attribute name="conref"/>
+      <xs:attribute name="copy-to"/>
+      <xs:attribute name="collection-type">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="choice"/>
+            <xs:enumeration value="unordered"/>
+            <xs:enumeration value="sequence"/>
+            <xs:enumeration value="family"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="type" default="cxxFunction"/>
+      <xs:attribute name="scope">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="local"/>
+            <xs:enumeration value="peer"/>
+            <xs:enumeration value="external"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="locktitle">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="format"/>
+      <xs:attribute name="linking">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="targetonly"/>
+            <xs:enumeration value="sourceonly"/>
+            <xs:enumeration value="normal"/>
+            <xs:enumeration value="none"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="toc">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="print">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="search">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="chunk"/>
+      <xs:attributeGroup ref="select-atts"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- map/topicref apiMap/apiItemRef cxxAPIMap/cxxFunctionRef "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxVariableRef">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="topicmeta"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="topicref"/>
+      </xs:sequence>
+      <xs:attribute name="navtitle"/>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="href"/>
+      <xs:attribute name="keyref"/>
+      <xs:attribute name="query"/>
+      <xs:attribute name="conref"/>
+      <xs:attribute name="copy-to"/>
+      <xs:attribute name="collection-type">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="choice"/>
+            <xs:enumeration value="unordered"/>
+            <xs:enumeration value="sequence"/>
+            <xs:enumeration value="family"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="type" default="cxxVariable"/>
+      <xs:attribute name="scope">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="local"/>
+            <xs:enumeration value="peer"/>
+            <xs:enumeration value="external"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="locktitle">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="format"/>
+      <xs:attribute name="linking">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="targetonly"/>
+            <xs:enumeration value="sourceonly"/>
+            <xs:enumeration value="normal"/>
+            <xs:enumeration value="none"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="toc">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="print">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="search">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="chunk"/>
+      <xs:attributeGroup ref="select-atts"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- map/topicref apiMap/apiItemRef cxxAPIMap/cxxVariableRef "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxDefineRef">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="topicmeta"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="topicref"/>
+      </xs:sequence>
+      <xs:attribute name="navtitle"/>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="href"/>
+      <xs:attribute name="keyref"/>
+      <xs:attribute name="query"/>
+      <xs:attribute name="conref"/>
+      <xs:attribute name="copy-to"/>
+      <xs:attribute name="collection-type">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="choice"/>
+            <xs:enumeration value="unordered"/>
+            <xs:enumeration value="sequence"/>
+            <xs:enumeration value="family"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="type" default="cxxDefine"/>
+      <xs:attribute name="scope">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="local"/>
+            <xs:enumeration value="peer"/>
+            <xs:enumeration value="external"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="locktitle">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="format"/>
+      <xs:attribute name="linking">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="targetonly"/>
+            <xs:enumeration value="sourceonly"/>
+            <xs:enumeration value="normal"/>
+            <xs:enumeration value="none"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="toc">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="print">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="search">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="chunk"/>
+      <xs:attributeGroup ref="select-atts"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- map/topicref apiMap/apiItemRef cxxAPIMap/cxxDefineRef "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxEnumerationRef">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="topicmeta"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="topicref"/>
+      </xs:sequence>
+      <xs:attribute name="navtitle"/>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="href"/>
+      <xs:attribute name="keyref"/>
+      <xs:attribute name="query"/>
+      <xs:attribute name="conref"/>
+      <xs:attribute name="copy-to"/>
+      <xs:attribute name="collection-type">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="choice"/>
+            <xs:enumeration value="unordered"/>
+            <xs:enumeration value="sequence"/>
+            <xs:enumeration value="family"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="type" default="cxxEnumerator"/>
+      <xs:attribute name="scope">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="local"/>
+            <xs:enumeration value="peer"/>
+            <xs:enumeration value="external"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="locktitle">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="format"/>
+      <xs:attribute name="linking">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="targetonly"/>
+            <xs:enumeration value="sourceonly"/>
+            <xs:enumeration value="normal"/>
+            <xs:enumeration value="none"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="toc">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="print">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="search">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="chunk"/>
+      <xs:attributeGroup ref="select-atts"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- map/topicref apiMap/apiItemRef cxxAPIMap/cxxEnumerationRef "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxTypedefRef">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="topicmeta"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="topicref"/>
+      </xs:sequence>
+      <xs:attribute name="navtitle"/>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="href"/>
+      <xs:attribute name="keyref"/>
+      <xs:attribute name="query"/>
+      <xs:attribute name="conref"/>
+      <xs:attribute name="copy-to"/>
+      <xs:attribute name="collection-type">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="choice"/>
+            <xs:enumeration value="unordered"/>
+            <xs:enumeration value="sequence"/>
+            <xs:enumeration value="family"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="type" default="cxxTypedef"/>
+      <xs:attribute name="scope">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="local"/>
+            <xs:enumeration value="peer"/>
+            <xs:enumeration value="external"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="locktitle">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="format"/>
+      <xs:attribute name="linking">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="targetonly"/>
+            <xs:enumeration value="sourceonly"/>
+            <xs:enumeration value="normal"/>
+            <xs:enumeration value="none"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="toc">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="print">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="search">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="chunk"/>
+      <xs:attributeGroup ref="select-atts"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- map/topicref apiMap/apiItemRef cxxAPIMap/cxxTypedefRef "/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
+<!-- ============ Class attributes for type ancestry ============ -->

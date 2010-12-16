@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxDefineNameLookup">
+    <title>cxxDefineNameLookup</title>
+    <shortdesc>Provides a unique identifier of the define.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>This element provides a way of  uniquely identifying a define in a body of DITA XML that 
+            describes a body of C++ source code.</p><p>Implementations are free to write what they want in 
+            this elements PCDATA but a "good" implementation would place some premium on the following:<ul>
+                    <li>The text would be unique within a set of DITA XML files.</li>
+                    <li>The text would be human readable.</li>
+                    <li>The text would generally follow the lookup techniques use in the C++ standard (ISO/IEC 14882:2003(E)).</li>
+                    <li>Any encoding used would be reversible.</li>
+                </ul>
+            </p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxDefineNameLookup&gt;ENABLE_NETWORKING_PERFMETRICS&lt;/cxxDefineNameLookup&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxDefineNameLookup-reference/cxxDefineNameLookup-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxDefineNameLookup-reference/cxxDefineNameLookup-contains-section"/>
+        <section conref="../packagedef.dita#cxxDefineNameLookup-reference/cxxDefineNameLookup-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxDefineNameLookup-reference/cxxDefineNameLookup-attList-section"/>
+        <section conref="../packagedef.dita#cxxDefineNameLookup-reference/cxxDefineNameLookup-classValue-section"/>
+    </refbody>
+</reference>

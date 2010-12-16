@@ -15,7 +15,9 @@
   xmlns:exsl="http://exslt.org/common" 
   xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"
   xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
-  exclude-result-prefixes="exsl dita2html ditamsg">
+  xmlns:styleUtils="org.dita.dost.util.StyleUtils"
+  xmlns:imgUtils="org.dita.dost.util.ImgUtils"
+  exclude-result-prefixes="exsl dita2html ditamsg styleUtils imgUtils">
 
  <!-- ========== Flagging with flags & revisions ========== -->
  
@@ -89,10 +91,12 @@
   </xsl:call-template>
  </xsl:if>
   <xsl:if test="@platform and not($FILTERFILE='')">
+   
   <xsl:call-template name="gen-prop">
    <xsl:with-param name="flag-att" select="'platform'"/>
    <xsl:with-param name="flag-att-val" select="@platform"/>
   </xsl:call-template>
+   
  </xsl:if>
   <xsl:if test="@product and not($FILTERFILE='')">
   <xsl:call-template name="gen-prop">
@@ -538,50 +542,6 @@
    <xsl:when test="$FILTERDOC/val/prop[@att=$flag-att][@val=$firstflag][@action='flag']">
     <xsl:copy-of select="$FILTERDOC/val/prop[@att=$flag-att][@val=$firstflag][@action='flag']"/>
    </xsl:when>
-   <!-- Added by William on 2009-06-01 for flag process start-->
-   <xsl:when test="$FILTERDOC/val/prop[@att=$flag-att][not(@val=$firstflag)][@action='flag']">
-    
-    <xsl:for-each select="$FILTERDOC/val/prop[@att=$flag-att][not(@val=$firstflag)][@action='flag']">
-           <!-- get the val -->
-           <xsl:variable name="val">
-                    <xsl:apply-templates select="." mode="getVal"/>
-           </xsl:variable>
-           <!-- get the backcolor -->
-           <xsl:variable name="backcolor">
-                     <xsl:apply-templates select="." mode="getBgcolor"/>
-           </xsl:variable>
-           <!-- get the color -->
-           <xsl:variable name="color">
-                  <xsl:apply-templates select="." mode="getColor"/>
-           </xsl:variable>
-           <!-- get the style -->
-           <xsl:variable name="style">
-            <xsl:apply-templates select="." mode="getStyle"/>
-           </xsl:variable>
-           <!-- get child node -->
-           <xsl:variable name="childnode">
-                   <xsl:apply-templates select="." mode="getChildNode"/>
-           </xsl:variable>
-           <!-- get the location of schemekeydef.xml -->
-           <xsl:variable name="KEYDEF-FILE">
-                 <xsl:value-of select="concat($WORKDIR,$PATH2PROJ,'schemekeydef.xml')"/>
-          </xsl:variable>
-          <!--keydef.xml contains the val  -->
-          <xsl:if test="(document($KEYDEF-FILE, /)//*[@keys=$val])">
-            <!-- copy needed elements -->
-              <xsl:apply-templates select="(document($KEYDEF-FILE, /)//*[@keys=$val])" mode="copy-element">
-                 <xsl:with-param name="att" select="$flag-att"/>
-                 <xsl:with-param name="bgcolor" select="$backcolor"/>
-                 <xsl:with-param name="fcolor" select="$color"/>
-                 <xsl:with-param name="style" select="$style"/>
-                 <xsl:with-param name="value" select="$val"/>
-                 <xsl:with-param name="flag" select="$firstflag"/>
-                 <xsl:with-param name="childnodes" select="$childnode"/>
-              </xsl:apply-templates>
-           </xsl:if>
-        </xsl:for-each>
-   </xsl:when>
-   <!-- Added by William on 2009-06-01 for flag process end-->
    <xsl:otherwise/> <!-- that flag not active -->
   </xsl:choose>
   
@@ -1157,6 +1117,8 @@
 <!-- output the beginning revision graphic & ALT text -->
 <xsl:template name="start-rev-art">
  <xsl:param name="deltaname"/>
+ <!-- zdihua -->
+ <!-- 
   <img src="{$PATH2PROJ}{$deltaname}">
   <xsl:attribute name='alt'>
    <xsl:call-template name="getString">
@@ -1164,17 +1126,105 @@
    </xsl:call-template>
   </xsl:attribute>
  </img>
+ -->
+ <xsl:choose> <!-- Ensure there's an image to get, otherwise don't insert anything -->
+  <xsl:when test="$deltaname">
+   <xsl:variable name="imgsrc" select="$deltaname"/>
+   
+   <xsl:variable name="type">
+    <xsl:choose>
+     <xsl:when test="not(contains($imgsrc,'://'))">
+      <xsl:value-of select="imgUtils:getType(string($imgsrc))"/>
+     </xsl:when>
+     <xsl:otherwise/>
+    </xsl:choose>
+   </xsl:variable>
+   
+   <xsl:variable name="height">
+    <xsl:choose>
+     <xsl:when test="not(contains($imgsrc,'://'))">
+      <xsl:value-of select="number(imgUtils:getHeightODT($OUTPUTDIR, string($imgsrc)) div 96)"/>
+     </xsl:when>
+     <xsl:otherwise/>
+    </xsl:choose>
+   </xsl:variable>
+   <xsl:variable name="width">
+    <xsl:choose>
+     <xsl:when test="not(contains($imgsrc,'://'))">
+      <xsl:value-of select="number(imgUtils:getWidthODT($OUTPUTDIR, string($imgsrc)) div 96)"/>
+     </xsl:when>
+     <xsl:otherwise/>
+    </xsl:choose>
+   </xsl:variable>
+   
+   <xsl:call-template name="draw_image_odt">
+    <xsl:with-param name="height" select="$height"/>
+    <xsl:with-param name="type" select="$type"/>
+    <xsl:with-param name="width" select="$width"/>
+    <xsl:with-param name="imgsrc" select="$imgsrc"/>
+    <xsl:with-param name="alttext" select="'Start of change'"/>
+   </xsl:call-template>
+  </xsl:when>
+  
+  <xsl:otherwise>
+   <xsl:call-template name="getString">
+    <xsl:with-param name="stringName" select="'Start of change'"/>
+   </xsl:call-template>
+  </xsl:otherwise>
+ </xsl:choose>
+ 
 </xsl:template>
 <!-- output the ending revision graphic & ALT text -->
 <xsl:template name="end-rev-art">
  <xsl:param name="deltaname"/>
- <img src="{$PATH2PROJ}{$deltaname}">
-  <xsl:attribute name='alt'>
+ 
+ <xsl:choose> <!-- Ensure there's an image to get, otherwise don't insert anything -->
+  <xsl:when test="$deltaname">
+   <xsl:variable name="imgsrc" select="$deltaname"/>
+   
+   <xsl:variable name="type">
+    <xsl:choose>
+     <xsl:when test="not(contains($imgsrc,'://'))">
+      <xsl:value-of select="imgUtils:getType(string($imgsrc))"/>
+     </xsl:when>
+     <xsl:otherwise/>
+    </xsl:choose>
+   </xsl:variable>
+   
+   <xsl:variable name="height">
+    <xsl:choose>
+     <xsl:when test="not(contains($imgsrc,'://'))">
+      <xsl:value-of select="number(imgUtils:getHeightODT($OUTPUTDIR, string($imgsrc)) div 96)"/>
+     </xsl:when>
+     <xsl:otherwise/>
+    </xsl:choose>
+   </xsl:variable>
+   <xsl:variable name="width">
+    <xsl:choose>
+     <xsl:when test="not(contains($imgsrc,'://'))">
+      <xsl:value-of select="number(imgUtils:getWidthODT($OUTPUTDIR, string($imgsrc)) div 96)"/>
+     </xsl:when>
+     <xsl:otherwise/>
+    </xsl:choose>
+   </xsl:variable>
+   
+   <xsl:call-template name="draw_image_odt">
+    <xsl:with-param name="height" select="$height"/>
+    <xsl:with-param name="type" select="$type"/>
+    <xsl:with-param name="width" select="$width"/>
+    <xsl:with-param name="imgsrc" select="$imgsrc"/>
+    <xsl:with-param name="alttext" select="'End of change'"/>
+   </xsl:call-template>
+  </xsl:when>
+  
+  <xsl:otherwise>
    <xsl:call-template name="getString">
     <xsl:with-param name="stringName" select="'End of change'"/>
    </xsl:call-template>
-  </xsl:attribute>
- </img>
+  </xsl:otherwise>
+ </xsl:choose>
+ 
+ 
 </xsl:template>
 
 <!-- Use @rev to find the first active flagged revision.
@@ -1399,44 +1449,46 @@
   <xsl:choose> <!-- Ensure there's an image to get, otherwise don't insert anything -->
    <xsl:when test="startflag/@imageref">
     <xsl:variable name="imgsrc" select="startflag/@imageref"/>
-    <img>
-     <xsl:attribute name="src">
-      <xsl:if test="string-length($PATH2PROJ) > 0"><xsl:value-of select="$PATH2PROJ"/></xsl:if>
-      <!-- 
-      <xsl:call-template name="get-file-name">
-       <xsl:with-param name="file-path" select="$imgsrc"/>
-      </xsl:call-template>
-      -->
-      <xsl:value-of select="$imgsrc"/>
-     </xsl:attribute>
-     <xsl:if test="startflag/alt-text">
-      <xsl:attribute name="alt">
-       <xsl:value-of select="startflag/alt-text"/>
-      </xsl:attribute>
-     </xsl:if>     
-    </img>
+    
+    <xsl:variable name="type">
+     <xsl:choose>
+      <xsl:when test="not(contains($imgsrc,'://'))">
+       <xsl:value-of select="imgUtils:getType(string($imgsrc))"/>
+      </xsl:when>
+      <xsl:otherwise/>
+     </xsl:choose>
+    </xsl:variable>
+    
+    <xsl:variable name="height">
+     <xsl:choose>
+      <xsl:when test="not(contains($imgsrc,'://'))">
+       <xsl:value-of select="number(imgUtils:getHeightODT($OUTPUTDIR, string($imgsrc)) div 96)"/>
+      </xsl:when>
+      <xsl:otherwise/>
+     </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="width">
+     <xsl:choose>
+      <xsl:when test="not(contains($imgsrc,'://'))">
+       <xsl:value-of select="number(imgUtils:getWidthODT($OUTPUTDIR, string($imgsrc)) div 96)"/>
+      </xsl:when>
+      <xsl:otherwise/>
+     </xsl:choose>
+    </xsl:variable>
+    
+    <xsl:call-template name="draw_image_odt">
+     <xsl:with-param name="height" select="$height"/>
+     <xsl:with-param name="type" select="$type"/>
+     <xsl:with-param name="width" select="$width"/>
+     <xsl:with-param name="imgsrc" select="$imgsrc"/>
+     <xsl:with-param name="alttext" select="startflag/alt-text"/>
+    </xsl:call-template>
    </xsl:when>
+   
    <xsl:when test="startflag/alt-text">
     <xsl:value-of select="startflag/alt-text"/>
    </xsl:when>
-   <xsl:when test="@img">
-    <!-- output the flag -->
-    <xsl:variable name="imgsrc" select="@img"/>    
-    <img>
-     <xsl:attribute name="src">
-      <xsl:if test="string-length($PATH2PROJ) > 0"><xsl:value-of select="$PATH2PROJ"/></xsl:if>
-      <!--
-      <xsl:call-template name="get-file-name">
-       <xsl:with-param name="file-path" select="$imgsrc"/>
-      </xsl:call-template>
-      -->
-      <xsl:value-of select="$imgsrc"/>
-     </xsl:attribute>
-     <xsl:attribute name="alt"> <!-- always insert an ALT - if it's blank, assume the user didn't want to fill it. -->
-      <xsl:value-of select="@alt"/>
-     </xsl:attribute>
-    </img>
-   </xsl:when>
+   
    <xsl:otherwise/> <!-- that flag not active -->
   </xsl:choose>
   <xsl:apply-templates select="following-sibling::prop[1]" mode="start-flagit"/>
@@ -1453,22 +1505,40 @@
   <xsl:choose> <!-- Ensure there's an image to get, otherwise don't insert anything -->
    <xsl:when test="endflag/@imageref">
     <xsl:variable name="imgsrc" select="endflag/@imageref"/>
-    <img>
-     <xsl:attribute name="src">
-      <xsl:if test="string-length($PATH2PROJ) > 0"><xsl:value-of select="$PATH2PROJ"/></xsl:if>
-      <!--
-      <xsl:call-template name="get-file-name">
-       <xsl:with-param name="file-path" select="$imgsrc"/>
-      </xsl:call-template>
-      -->
-      <xsl:value-of select="$imgsrc"/>
-     </xsl:attribute>
-     <xsl:if test="endflag/alt-text">
-      <xsl:attribute name="alt">
-       <xsl:value-of select="endflag/alt-text"/>
-      </xsl:attribute>
-     </xsl:if>     
-    </img>
+    
+    <xsl:variable name="type">
+     <xsl:choose>
+      <xsl:when test="not(contains($imgsrc,'://'))">
+       <xsl:value-of select="imgUtils:getType(string($imgsrc))"/>
+      </xsl:when>
+      <xsl:otherwise/>
+     </xsl:choose>
+    </xsl:variable>
+    
+    <xsl:variable name="height">
+     <xsl:choose>
+      <xsl:when test="not(contains($imgsrc,'://'))">
+       <xsl:value-of select="number(imgUtils:getHeightODT($OUTPUTDIR, string($imgsrc)) div 96)"/>
+      </xsl:when>
+      <xsl:otherwise/>
+     </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="width">
+     <xsl:choose>
+      <xsl:when test="not(contains($imgsrc,'://'))">
+       <xsl:value-of select="number(imgUtils:getWidthODT($OUTPUTDIR, string($imgsrc)) div 96)"/>
+      </xsl:when>
+      <xsl:otherwise/>
+     </xsl:choose>
+    </xsl:variable>
+    
+    <xsl:call-template name="draw_image_odt">
+     <xsl:with-param name="height" select="$height"/>
+     <xsl:with-param name="type" select="$type"/>
+     <xsl:with-param name="width" select="$width"/>
+     <xsl:with-param name="imgsrc" select="$imgsrc"/>
+     <xsl:with-param name="alttext" select="endflag/alt-text"/>
+    </xsl:call-template>
    </xsl:when>
    <xsl:when test="endflag/alt-text">
     <xsl:value-of select="endflag/alt-text"/>
@@ -1493,6 +1563,8 @@
     <xsl:with-param name="msgsev">W</xsl:with-param>
    </xsl:call-template>
  </xsl:template>
+ 
+ 
 
 
 <!-- ===================================================================== -->

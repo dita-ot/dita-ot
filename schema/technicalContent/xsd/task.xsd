@@ -25,14 +25,17 @@
 
   <!-- Add the domains to the base topic XML Schema -->
   <!--  ================ TOPIC DOMAINS =====================  -->
+  <!-- Tech content domains -->
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:programmingDomain.xsd:1.2"/>
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:softwareDomain.xsd:1.2"/>
-  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:highlightDomain.xsd:1.2"/>
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:uiDomain.xsd:1.2"/>
-  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:utilitiesDomain.xsd:1.2"/>
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:indexingDomain.xsd:1.2"/>
-  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:hazardstatementDomain.xsd:1.2"/>
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:abbreviateDomain.xsd:1.2" />
+  
+  <!-- Base domains -->
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:highlightDomain.xsd:1.2"/>
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:utilitiesDomain.xsd:1.2"/>
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:hazardstatementDomain.xsd:1.2"/>
   
   <!--  ================ GROUP DEFINITIONS =====================  -->
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:taskGrp.xsd:1.2" />
@@ -122,7 +125,18 @@
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:topicMod.xsd:1.2" />  
 
   <xs:attributeGroup name="domains-att">
-     <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic task) (topic task strictTaskbody-c)  (topic abbrev-d)"/>
+     <xs:attribute name="domains" type="xs:string" 
+                            default="(topic abbrev-d)
+                                            (topic hi-d) 
+                                            (topic indexing-d) 
+                                            (topic hazard-d)
+                                            (topic pr-d)
+                                            (topic sw-d)                                             
+                                            (topic ui-d)
+                                            (topic ut-d) 
+                                            (topic task) 
+                                            (topic task strictTaskbody-c)  
+                                            "/>
   </xs:attributeGroup>
 
 

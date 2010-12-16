@@ -41,6 +41,7 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Map//EN"                            -->
 <!--    2007.12.01 EK:  Reformatted DTD modules for DITA 1.2       -->
 <!--    2008.02.01 RDA: Added Delayed Resolution domain            -->
 <!--    2008.02.12 RDA: Modify imbeds to use specific 1.2 version  -->
+<!--    2010.09.20 RDA: Add topic-based domains                    -->
 <!-- ============================================================= -->
 
 
@@ -73,6 +74,40 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Map//EN"                            -->
          "glossrefDomain.ent"                                                       
 >%glossref-d-dec;
 
+<!ENTITY % hi-d-dec     
+  PUBLIC "-//OASIS//ENTITIES DITA 1.2 Highlight Domain//EN" 
+         "../../base/dtd/highlightDomain.ent"
+>%hi-d-dec;
+
+<!ENTITY % ut-d-dec     
+  PUBLIC "-//OASIS//ENTITIES DITA 1.2 Utilities Domain//EN" 
+         "../../base/dtd/utilitiesDomain.ent"                                                
+>%ut-d-dec;
+
+<!ENTITY % hazard-d-dec     
+  PUBLIC "-//OASIS//ENTITIES DITA 1.2 Hazard Statement Domain//EN" 
+         "../../base/dtd/hazardstatementDomain.ent"
+>%hazard-d-dec;
+
+<!ENTITY % abbrev-d-dec     
+  PUBLIC "-//OASIS//ENTITIES DITA 1.2 Abbreviated Form Domain//EN" 
+         "abbreviateDomain.ent"
+>%abbrev-d-dec;
+
+<!ENTITY % pr-d-dec     
+  PUBLIC "-//OASIS//ENTITIES DITA 1.2 Programming Domain//EN" 
+         "programmingDomain.ent"                                              
+>%pr-d-dec;
+
+<!ENTITY % sw-d-dec     
+  PUBLIC "-//OASIS//ENTITIES DITA 1.2 Software Domain//EN" 
+         "softwareDomain.ent"                                                 
+>%sw-d-dec;
+
+<!ENTITY % ui-d-dec     
+  PUBLIC "-//OASIS//ENTITIES DITA 1.2 User Interface Domain//EN" 
+         "uiDomain.ent"                                                       
+>%ui-d-dec;
 
 <!-- ============================================================= -->
 <!--                    DOMAIN ATTRIBUTE DECLARATIONS              -->
@@ -86,7 +121,10 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Map//EN"                            -->
                         the name of the domain(s) in which the
                         extension was declared                     -->
 <!ENTITY % keywords     "keywords | 
-                         %delay-d-keywords;
+                         %delay-d-keywords; |
+                         %pr-d-keyword; | 
+                         %sw-d-keyword; |
+                         %ui-d-keyword;
                         ">
 <!ENTITY % topicref     "topicref | 
                          (%mapgroup-d-topicref;) |
@@ -94,6 +132,30 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Map//EN"                            -->
                         ">
 <!ENTITY % index-base   "index-base | 
                          %indexing-d-index-base;
+                        ">
+<!ENTITY % pre          "pre | 
+                         %pr-d-pre; | 
+                         %sw-d-pre; | 
+                         %ui-d-pre;
+                        ">
+<!ENTITY % ph           "ph | 
+                         %hi-d-ph; | 
+                         %pr-d-ph; | 
+                         %sw-d-ph; | 
+                         %ui-d-ph;
+                        ">
+<!ENTITY % term         "term | 
+                         %abbrev-d-term;
+                        ">
+<!ENTITY % fig          "fig |
+                         %pr-d-fig; |
+                         %ut-d-fig;
+                        ">
+<!ENTITY % dl           "dl | 
+                         %pr-d-dl;
+                        ">
+<!ENTITY % note         "note | 
+                         %hazard-d-note;
                         ">
 
 <!-- ============================================================= -->
@@ -117,6 +179,13 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Map//EN"                            -->
                          &mapgroup-d-att; 
                          &indexing-d-att;
                          &glossref-d-att;
+                         &hi-d-att; 
+                         &ut-d-att; 
+                         &hazard-d-att;
+                         &abbrev-d-att;
+                         &pr-d-att; 
+                         &sw-d-att;
+                         &ui-d-att;
                         ">
 
 <!-- ============================================================= -->
@@ -157,5 +226,40 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Map//EN"                            -->
   PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Glossary Reference Domain//EN" 
          "glossrefDomain.mod"
 >%glossref-d-def;
+
+<!ENTITY % hi-d-def     
+  PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Highlight Domain//EN" 
+         "../../base/dtd/highlightDomain.mod"
+>%hi-d-def;
+
+<!ENTITY % ut-d-def     
+  PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Utilities Domain//EN" 
+         "../../base/dtd/utilitiesDomain.mod"
+>%ut-d-def;
+
+<!ENTITY % hazard-d-def     
+  PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Hazard Statement Domain//EN" 
+         "../../base/dtd/hazardstatementDomain.mod"
+>%hazard-d-def;
+
+<!ENTITY % abbrev-d-def     
+  PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Abbreviated Form Domain//EN" 
+         "abbreviateDomain.mod"
+>%abbrev-d-def;
+
+<!ENTITY % ui-d-def     
+  PUBLIC "-//OASIS//ELEMENTS DITA 1.2 User Interface Domain//EN" 
+         "uiDomain.mod"
+>%ui-d-def;
+
+<!ENTITY % pr-d-def     
+  PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Programming Domain//EN" 
+         "programmingDomain.mod"
+>%pr-d-def;
+
+<!ENTITY % sw-d-def     
+  PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Software Domain//EN" 
+         "softwareDomain.mod"
+>%sw-d-def;
 
 <!-- ================== End DITA Map DTD  ======================== -->

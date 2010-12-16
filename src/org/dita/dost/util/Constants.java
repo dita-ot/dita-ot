@@ -62,6 +62,12 @@ public abstract class Constants {
     public static final String FILE_EXTENSION_HTML = ".html";
     /**.htm extension.*/
     public static final String FILE_EXTENSION_HTM = ".htm";
+    /**.hhp extension.*/
+    public static final String FILE_EXTENSION_HHP = ".hhp";
+    /**.hhc extension.*/
+    public static final String FILE_EXTENSION_HHC = ".hhc";
+    /**.hhk extension.*/
+    public static final String FILE_EXTENSION_HHK = ".hhk";
     /**.jpg extension.*/
     public static final String FILE_EXTENSION_JPG = ".jpg";
     //Added by William on 2009-10-10 for resources bug:2873560 start
@@ -101,6 +107,12 @@ public abstract class Constants {
     public static final String ELEMENT_NAME_TOPICREF = "topicref";
     /**topicmeta element.*/
     public static final String ELEMENT_NAME_TOPICMETA = "topicmeta";
+    /**linktext element.*/
+    public static final String ELEMENT_NAME_LINKTEXT = "linktext";
+    /**navtitle element.*/
+    public static final String ELEMENT_NAME_NAVTITLE = "navtitle";
+    /**shortdesc element.*/
+    public static final String ELEMENT_NAME_SHORTDESC = "shortdesc";
     /**keywords element.*/
     public static final String ELEMENT_NAME_KEYWORDS = "keywords";
     /**maplinks element.*/
@@ -127,6 +139,12 @@ public abstract class Constants {
     public static final String ELEMENT_NAME_PRODUCT = "product";
     /**otherprops element.*/
     public static final String ELEMENT_NAME_OTHERPROPS = "otherprops";
+    //Added by William on 2010-07-16 for bug:3030317 start	
+    /**props element.*/
+    public static final String ELEMENT_NAME_PROPS = "props";
+    /**rev element.*/
+    public static final String ELEMENT_NAME_REV = "rev";
+    //Added by William on 2010-07-16 for bug:3030317 start	
     /**tgroup element.*/
     public static final String ELEMENT_NAME_TGROUP = "tgroup";
     /**row element.*/
@@ -174,6 +192,10 @@ public abstract class Constants {
     public static final String ATTRIBUTE_NAME_NAVTITLE = "navtitle";
     /**format attribute.*/
     public static final String ATTRIBUTE_NAME_FORMAT = "format";
+    /**charset attribute.*/
+    public static final String ATTRIBUTE_NAME_CHARSET = "charset";
+    /**charset attribute.*/
+    public static final String ATTRIBUTE_NAME_LANG = "lang";
     /**att attribute.*/
     public static final String ATTRIBUTE_NAME_ATT = "att";
     /**val attribute.*/
@@ -208,6 +230,8 @@ public abstract class Constants {
     public static final String ATTRIBUTE_NAME_COPY_TO = "copy-to";
     /**data attribute.*/
     public static final String ATTRIBUTE_NAME_DATA = "data";
+    /**codebase attribute.*/
+    public static final String ATTRIBUTE_NAME_CODEBASE = "codebase";
     /**imageref attribute.*/
     public static final String ATTRIBUTE_NAME_IMAGEREF = "imageref";
     /**start attribute.*/
@@ -234,7 +258,12 @@ public abstract class Constants {
     /**
      * Constant for value of attribute format in dita files.
      */
-    public static final String ATTRIBUTE_FORMAT_VALUE_DITA = "dita";    
+    /** Constants for format attribute value dita*/
+    public static final String ATTRIBUTE_FORMAT_VALUE_DITA = "dita";
+    /** Constants for format attribute value html*/
+    public static final String ATTRIBUTE_FORMAT_VALUE_HTML = "html";
+    /** Constants for format attribute value windows*/
+    public static final String ATTRIBUTE_FORMAT_VALUE_WINDOWS = "windows";
     
     /** Constants for index type(javahelp).*/
     public static final String INDEX_TYPE_JAVAHELP = "javahelp";
@@ -361,6 +390,9 @@ public abstract class Constants {
     public static final String ANT_INVOKER_EXT_PARAM_VALIDATE="validate";
     /**Constants for extensive params used in ant invoker(outputdir).*/
     public static final String ANT_INVOKER_EXT_PARAM_OUTPUTDIR="outputdir";
+    /**Constants for extensive params used in ant invoker(gramcache).*/
+    public static final String ANT_INVOKER_EXT_PARAM_GRAMCACHE="gramcache";
+    public static final String ANT_INVOKER_EXT_PARAN_SETSYSTEMID="setsystemid";
     /**Constants for file separator.*/
     public static final String FILE_SEPARATOR = File.separator;
     /**Constants for line separator.*/
@@ -411,7 +443,9 @@ public abstract class Constants {
     /**CDATA_HEAD.*/
     public static final String CDATA_HEAD = "<![CDATA[";    
     /**CDATA_END.*/
-    public static final String CDATA_END = "]]>";    
+    public static final String CDATA_END = "]]>";
+    /**DOCTYPE_HEAD.*/
+    public static final String DOCTYPE_HEAD = "<!DOCTYPE ";
     /**META_HEAD.*/
     public static final String META_HEAD = "<metadata class=\"- topic/metadata \">";    
     /**META_END.*/
@@ -541,6 +575,10 @@ public abstract class Constants {
 	public static final String ATTR_CLASS_VALUE_DATA = " topic/data ";
 	/**ATTR_CLASS_VALUE_DATAABOUT.*/
 	public static final String ATTR_CLASS_VALUE_DATAABOUT = " topic/data-about ";
+	/**ATTR_CLASS_VALUE_DRAFTCOMMENT.*/
+	public static final String ATTR_CLASS_VALUE_DRAFTCOMMENT = " topic/draft-comment ";
+	/**ATTR_CLASS_VALUE_REQUIREDCLEANUP.*/
+	public static final String ATTR_CLASS_VALUE_REQUIREDCLEANUP = " topic/required-cleanup ";
 	/**ATTR_CLASS_VALUE_FOREIGN.*/
 	public static final String ATTR_CLASS_VALUE_FOREIGN = " topic/foreign ";
 	/**ATTR_CLASS_VALUE_UNKNOWN.*/
@@ -631,6 +669,15 @@ public abstract class Constants {
 	/**pluginId.xml to store the plugin id.*/
 	public static final String FILE_NAME_PLUGIN_XML = "pluginId.xml";
 	//Added by William on 2009-06-24 for req #12014 start
+	
+	// Added on 2010-11-09 for bug 3102827: Allow a way to specify recognized image extensions -- start
+	/** Configuration filename. */
+	public static final String CONF_PROPERTIES = "configuration.properties";
+	/** Configuration value separator. */
+	public static final String CONF_LIST_SEPARATOR = ";";
+	/** Property name for supported image extensions. */
+	public static final String CONF_SUPPORTED_IMAGE_EXTENSIONS = "supported_image_extensions";
+	// Added on 2010-11-09 for bug 3102827: Allow a way to specify recognized image extensions -- end
 	
     /**
      * Instances should NOT be constructed in standard programming.

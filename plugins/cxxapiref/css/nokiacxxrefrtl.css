@@ -1,0 +1,45 @@
+h4.sectiontitle {
+  font-size: smaller;
+}
+span.platformSyntax {
+  color: black;
+}
+pre.apiSyntaxText {
+  padding-right: 1.2em;
+}
+span.itemname {
+  font-style: italic;
+}
+table.itemdefs {
+  border-collapse: collapse;
+  padding: .1em;
+  border: 0;
+}
+tr.itemdefs {
+}
+td.itemdefname {
+  padding-right: 1.2em;
+  padding-left: 1em;
+  padding-top: 0.33em;
+  text-align: left;
+  font-style: italic;
+}
+td.itemdefnote {
+}
+tr.platformItem TD {
+  color: black;
+}
+span.platformItem {
+  color: black;
+}
+p.platformExample {
+  padding-right: 1.2em;
+  padding-bottom: 0em;
+  margin-bottom: 0em;
+  font-weight: bold;
+  font-size: smaller;
+  color: black;
+}
+div.example pre {
+  padding-left: 1.2em;
+}

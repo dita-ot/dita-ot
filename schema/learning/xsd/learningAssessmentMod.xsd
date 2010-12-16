@@ -24,7 +24,6 @@
 <!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" elementFormDefault="qualified" attributeFormDefault="unqualified">
   <!-- ==================== Import Section ======================= -->
-  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"/>
   <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"/>
   
   <xs:annotation>
@@ -51,10 +50,14 @@
       <xs:enumeration value="required"/>
     </xs:restriction>
   </xs:simpleType>
+  
   <xs:group name="learningAssessment-info-types">
-    <xs:choice>
-      <xs:group ref="no-topic-nesting"/>
-    </xs:choice>
+    <xs:sequence>
+      <xs:choice>
+        <xs:group ref="no-topic-nesting"/>
+        <xs:group ref="info-types"/>
+      </xs:choice>
+    </xs:sequence>
   </xs:group>
   <!-- Element declarations for learningAssessment.mod -->
   

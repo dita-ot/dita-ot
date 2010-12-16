@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxFunctionDefinitionFileLineStart">
+    <title>cxxFunctionDefinitionFileLineStart</title>
+    <shortdesc>Identifies the line number in file that contains the start of the definition of the function.
+    </shortdesc>
+    <refbody>
+        <section id="section_BE315DC4AD5F468B96F2F4A6431CCFAD">
+            <title>Description</title><p>This identifies the line number in file that contains the start of the definition of the function. This has two attributes; name (always has a value "lineNumber
+") and value.</p><p>Note: ISO/IEC 14882:2003(E) 16.4 Line control [cpp.line] means that line numbers start from 1.</p>
+        </section>
+        <example id="example_AEA1AF2177FC44E2B5AAB6BAF8181D4C">
+            <title>Example</title><p/>
+            <codeblock>&lt;cxxFunctionDefinitionFileLineStart name="lineNumber" value="4"/&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxFunctionDefinitionFileLineStart-reference/cxxFunctionDefinitionFileLineStart-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxFunctionDefinitionFileLineStart-reference/cxxFunctionDefinitionFileLineStart-contains-section"/>
+        <section conref="../packagedef.dita#cxxFunctionDefinitionFileLineStart-reference/cxxFunctionDefinitionFileLineStart-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxFunctionDefinitionFileLineStart-reference/cxxFunctionDefinitionFileLineStart-attList-section"/>
+        <section conref="../packagedef.dita#cxxFunctionDefinitionFileLineStart-reference/cxxFunctionDefinitionFileLineStart-classValue-section"/>
+    </refbody>
+</reference>

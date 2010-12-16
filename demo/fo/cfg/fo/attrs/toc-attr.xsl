@@ -176,4 +176,19 @@ See the accompanying license.txt file for applicable licenses.
          <xsl:attribute name="border-left">solid 1px black</xsl:attribute>
     </xsl:attribute-set>
 
+    <xsl:attribute-set name="__toc__topic__content__glossary">
+        <xsl:attribute name="last-line-end-indent">-22pt</xsl:attribute>
+        <xsl:attribute name="end-indent">22pt</xsl:attribute>
+        <xsl:attribute name="text-indent">-.2in</xsl:attribute>
+        <xsl:attribute name="text-align">left</xsl:attribute>
+        <xsl:attribute name="text-align-last">justify</xsl:attribute>
+        <xsl:attribute name="font-size">14pt</xsl:attribute>
+        <xsl:attribute name="font-weight">bold</xsl:attribute>
+        <xsl:attribute name="padding-top">20pt</xsl:attribute>
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="__toc__indent__glossary">
+        <xsl:attribute name="margin-left">72pt</xsl:attribute>
+    </xsl:attribute-set>
+
 </xsl:stylesheet>

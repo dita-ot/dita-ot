@@ -30,9 +30,8 @@
     <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:highlightDomain.xsd:1.2"/>
     <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:utilitiesDomain.xsd:1.2"/>
     <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:indexingDomain.xsd:1.2"/>
-    <xs:include schemaLocation="urn:oasis:names:tc:dita:spec:learning:xsd:learningInteractionBaseDomain.xsd:1.2"/>
-    <xs:include schemaLocation="urn:oasis:names:tc:dita:spec:learning:xsd:learningDomain.xsd:1.2"/>
     <xs:include schemaLocation="urn:oasis:names:tc:dita:spec:learning:xsd:learningMetadataDomain.xsd:1.2" />
+    <xs:include schemaLocation="urn:oasis:names:tc:dita:spec:learning:xsd:learningDomain.xsd:1.2"/>
 
 
     <!--  ================ GROUP DEFINITIONS =====================  -->
@@ -60,20 +59,11 @@
                 <xs:group ref="hi-d-ph"/>
             </xs:choice>
         </xs:group>
-
-      
-  <xs:group name="lcInteractionBase">
-      <xs:choice>
-        <xs:group ref="lcInteractionBase"/> 
-        <xs:group ref="learning-d-lcInteractionBase"/>
-      </xs:choice>
-    </xs:group>
-    
+   
     <xs:group name="fig">
       <xs:choice>
         <xs:group ref="fig"/>
         <xs:group ref="ut-d-fig"/>
-        <xs:group ref="learning-d-fig"/>        
       </xs:choice>
     </xs:group>
       
@@ -99,6 +89,17 @@
             </xs:choice>
         </xs:group>
     </xs:redefine>
+  
+  
+   <xs:redefine schemaLocation="urn:oasis:names:tc:dita:spec:learning:xsd:learningInteractionBaseDomain.xsd:1.2">
+     <xs:group name="lcInteractionBase">
+      <xs:choice>
+        <xs:group ref="lcInteractionBase"/>
+        <xs:group ref="learning-d-lcInteractionBase"/>
+      </xs:choice>
+    </xs:group>
+  </xs:redefine>
+  
     <!--  ================ INFO TYPES =====================  -->
       <xs:include schemaLocation="urn:oasis:names:tc:dita:spec:learning:xsd:learningContentGrp.xsd:1.2"/>
       <xs:include schemaLocation="urn:oasis:names:tc:dita:spec:learning:xsd:learningBaseGrp.xsd:1.2"/>
@@ -129,34 +130,36 @@
     </xs:redefine>
     <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:conceptMod.xsd:1.2">
         <xs:group name="concept-info-types">
-            <xs:sequence>
+            <xs:choice>
                 <xs:group ref="info-types"/>
-            </xs:sequence>
+            </xs:choice>
         </xs:group>
     </xs:redefine>
 
 
     <xs:redefine schemaLocation="urn:oasis:names:tc:dita:spec:learning:xsd:learningContentMod.xsd:1.2">
         <xs:group name="learningContent-info-types">
+            <xs:choice>
+                <xs:group ref="info-types"/>
+            </xs:choice>
+        </xs:group>
+      
+        <xs:group name="learningContent.content">
             <xs:sequence>
-               <xs:group ref="learningContent-info-types"/>
-                <xs:choice minOccurs="0" maxOccurs="unbounded">
-                    <xs:element ref="topic"/>
-                    <xs:element ref="task"/>
-                    <xs:element ref="concept"/>
-                    <xs:element ref="reference"/>
-                </xs:choice>
-                <xs:element ref="learningAssessment" minOccurs="0"/>
+              <xs:group ref="learningContent.content"/>
+               <xs:element ref="learningAssessment" minOccurs="0"/>
                 <xs:element ref="learningSummary" minOccurs="0"/>
             </xs:sequence>
         </xs:group>
     </xs:redefine>
+     
+     
 
     <xs:redefine schemaLocation="urn:oasis:names:tc:dita:spec:learning:xsd:learningAssessmentMod.xsd:1.2">
         <xs:group name="learningAssessment-info-types">
-            <xs:sequence>
+            <xs:choice>
                 <xs:group ref="info-types"/>
-            </xs:sequence>
+            </xs:choice>
         </xs:group>
     </xs:redefine>
 
@@ -171,15 +174,29 @@
     <xs:include schemaLocation="urn:oasis:names:tc:dita:spec:learning:xsd:learningBaseMod.xsd:1.2"/>
 
 
-    <xs:group name="info-types">
-        <xs:choice>
-            <xs:group ref="no-topic-nesting"/>
-        </xs:choice>
-    </xs:group>
+  <xs:group name="info-types">
+      <xs:choice>
+        <xs:element ref="topic"/>
+        <xs:element ref="task"/>
+        <xs:element ref="concept"/>
+        <xs:element ref="reference"/>
+      </xs:choice>
+     </xs:group>
 
     <xs:attributeGroup name="domains-att">
         <xs:attribute name="domains" type="xs:string"
-            default="(topic hi-d)  (topic ut-d) (topic indexing-d) (topic learningmeta-d) (topic learningInteractionBase-d learning-d) (topic learningBase+learningInteractionBase-d learningContent)  (topic learningBase+learningInteractionBase-d learningAssessment) (topic learningBase+learningInteractionBase-d learningSummary) (topic learningBase+learningInteractionBase-d) (topic concept) (topic task) (topic reference)"
+                              default="(topic hi-d)  
+                                              (topic indexing-d) 
+                                              (topic ut-d)
+                                              (topic learningmeta-d) 
+                                              (topic learningInteractionBase-d learning-d) 
+                                              (topic learningBase+learningInteractionBase-d)
+                                              (topic learningBase+learningInteractionBase-d learningAssessment)
+                                              (topic learningBase+learningInteractionBase-d learningContent)  
+                                              (topic learningBase+learningInteractionBase-d learningSummary) 
+                                              (topic concept) 
+                                              (topic reference)
+                                              (topic task)"
         />
     </xs:attributeGroup>
 

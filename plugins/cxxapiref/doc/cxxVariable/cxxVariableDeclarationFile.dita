@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxVariableDeclarationFile">
+    <title>cxxVariableDeclarationFile</title>
+    <shortdesc>The &lt;cxxVariableDeclarationFile&gt; element is defined within &lt;cxxVariableAPIItemLocation&gt;. 
+    &lt;cxxVariableDeclarationFile&gt; specifies the file in which the API declaration is present.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title><p>The element &lt;cxxVariableDeclarationFile&gt; is 
+            empty but for the required attributes <i>name</i> and <i>value</i>. Name is always 
+            "filePath" and <i>value</i> is the path to the declaration file.</p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxVariableAPIItemLocation&gt;
+    &lt;cxxVariableDeclarationFile name="filePath" value="C:/src/include/e32base.h"/&gt;
+    &lt;cxxVariableDeclarationFileLine name="lineNumber" value="1664"/&gt;
+&lt;/cxxVariableAPIItemLocation&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxVariableDeclarationFile-reference/cxxVariableDeclarationFile-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxVariableDeclarationFile-reference/cxxVariableDeclarationFile-contains-section"/>
+        <section conref="../packagedef.dita#cxxVariableDeclarationFile-reference/cxxVariableDeclarationFile-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxVariableDeclarationFile-reference/cxxVariableDeclarationFile-attList-section"/>
+        <section conref="../packagedef.dita#cxxVariableDeclarationFile-reference/cxxVariableDeclarationFile-classValue-section"/>
+    </refbody>
+</reference>

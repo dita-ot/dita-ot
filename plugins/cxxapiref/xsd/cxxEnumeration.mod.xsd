@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ================================================================= -->
+<!-- HEADER -->
+<!-- ================================================================= -->
+<!-- MODULE:    C++ Enumeration DTD -->
+<!-- VERSION:   0.6.0 -->
+<!-- DATE:      May 2009 -->
+<!---->
+<!-- ================================================================= -->
+<!-- ================================================================= -->
+<!-- PUBLIC DOCUMENT TYPE DEFINITION -->
+<!-- TYPICAL INVOCATION -->
+<!---->
+<!--
+  Refer to this file by the following public identifier or an 
+        appropriate system identifier 
+  PUBLIC "-//NOKIA//DTD DITA C++ API Enumeration Reference Type v0.6.0//EN"
+        Delivered as file "cxxEnumeration.dtd"
+-->
+<!-- ================================================================= -->
+<!-- SYSTEM:     Darwin Information Typing Architecture (DITA) -->
+<!---->
+<!-- PURPOSE:    C++ API Reference for Enumation and Enumerators -->
+<!---->
+<!-- ORIGINAL CREATION DATE: -->
+<!-- November 2009 -->
+<!---->
+<!-- Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies). -->
+<!-- All rights reserved. -->
+<!---->
+<!-- Change History (latest at top): -->
+<!-- +++++++++++++++++++++++++++++++ -->
+<!-- 2010-02-16 VOG: Updated. -->
+<!-- 2010-02-10 PaulRoss: Updated. -->
+<!-- 2009-11-16 PaulRoss: Initial design. -->
+<!---->
+<!-- ================================================================= -->
+<!--
+  Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+  All rights reserved.
+-->
+<!-- ============ Hooks for domain extension ============ -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="../../../schema/base/xsd/ditaarch.xsd"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../../../schema/base/xsd/xml.xsd"/>
+  <xs:group name="cxxEnumerationDetail">
+    <xs:sequence>
+      <xs:element ref="cxxEnumerationDetail"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxEnumerationDefinition">
+    <xs:sequence>
+      <xs:element ref="cxxEnumerationDefinition"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxEnumerationAccessSpecifier">
+    <xs:sequence>
+      <xs:element ref="cxxEnumerationAccessSpecifier"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxEnumerationScopedName">
+    <xs:sequence>
+      <xs:element ref="cxxEnumerationScopedName"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxEnumerationPrototype">
+    <xs:sequence>
+      <xs:element ref="cxxEnumerationPrototype"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxEnumerationNameLookup">
+    <xs:sequence>
+      <xs:element ref="cxxEnumerationNameLookup"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxEnumerationReimplemented">
+    <xs:sequence>
+      <xs:element ref="cxxEnumerationReimplemented"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxEnumerator">
+    <xs:sequence>
+      <xs:element ref="cxxEnumerator"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxEnumerators">
+    <xs:sequence>
+      <xs:element ref="cxxEnumerators"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxEnumeratorScopedName">
+    <xs:sequence>
+      <xs:element ref="cxxEnumeratorScopedName"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxEnumeratorPrototype">
+    <xs:sequence>
+      <xs:element ref="cxxEnumeratorPrototype"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxEnumeratorNameLookup">
+    <xs:sequence>
+      <xs:element ref="cxxEnumeratorNameLookup"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxEnumeratorInitialiser">
+    <xs:sequence>
+      <xs:element ref="cxxEnumeratorInitialiser"/>
+    </xs:sequence>
+  </xs:group>
+  <!-- Location information -->
+  <xs:group name="cxxEnumerationAPIItemLocation">
+    <xs:sequence>
+      <xs:element ref="cxxEnumerationAPIItemLocation"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxEnumerationDeclarationFile">
+    <xs:sequence>
+      <xs:element ref="cxxEnumerationDeclarationFile"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxEnumerationDeclarationFileLine">
+    <xs:sequence>
+      <xs:element ref="cxxEnumerationDeclarationFileLine"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxEnumerationDefinitionFile">
+    <xs:sequence>
+      <xs:element ref="cxxEnumerationDefinitionFile"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxEnumerationDefinitionFileLineStart">
+    <xs:sequence>
+      <xs:element ref="cxxEnumerationDefinitionFileLineStart"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxEnumerationDefinitionFileLineEnd">
+    <xs:sequence>
+      <xs:element ref="cxxEnumerationDefinitionFileLineEnd"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxEnumeratorAPIItemLocation">
+    <xs:sequence>
+      <xs:element ref="cxxEnumeratorAPIItemLocation"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxEnumeratorDeclarationFile">
+    <xs:sequence>
+      <xs:element ref="cxxEnumeratorDeclarationFile"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxEnumeratorDeclarationFileLine">
+    <xs:sequence>
+      <xs:element ref="cxxEnumeratorDeclarationFileLine"/>
+    </xs:sequence>
+  </xs:group>
+  <!-- ============ Hooks for shell DTD ============ -->
+  <xs:group name="cxxEnumeration-types-default">
+    <xs:sequence>
+      <xs:element ref="no-topic-nesting"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxEnumeration-info-types">
+    <xs:sequence>
+      <xs:group ref="cxxEnumeration-types-default"/>
+    </xs:sequence>
+  </xs:group>
+  <!-- TODO: Check this. -->
+  <!-- ============ Topic specializations ============ -->
+  <xs:element name="cxxEnumeration">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="apiName"/>
+        <xs:group minOccurs="0" ref="shortdesc"/>
+        <xs:group minOccurs="0" ref="prolog"/>
+        <xs:group ref="cxxEnumerationDetail"/>
+        <xs:group minOccurs="0" ref="related-links"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="cxxEnumeration-info-types"/>
+      </xs:sequence>
+      <xs:attribute name="id" use="required" type="xs:ID"/>
+      <xs:attribute name="conref"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attributeGroup ref="arch-atts"/>
+      <xs:attribute name="domains" default="(topic ui-d) (topic hi-d) (topic pr-d) (topic sw-d)                            (topic ut-d) (topic pr-d api-d) (topic pr-d api-d cxxapi-d)"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/topic reference/reference apiRef/apiRef apiValue/apiValue cxxEnumeration/cxxEnumeration "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxEnumerationDetail">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="cxxEnumerationDefinition"/>
+        <xs:group minOccurs="0" ref="apiDesc"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="example"/>
+          <xs:group ref="section"/>
+          <xs:group ref="apiImpl"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attributeGroup ref="id-atts"/>
+      <xs:attribute name="translate">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/body reference/refbody apiRef/apiDetail apiValue/apiValueDetail cxxEnumeration/cxxEnumerationDetail "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxEnumerationDefinition">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="cxxEnumerationAccessSpecifier"/>
+        <xs:group minOccurs="0" ref="cxxEnumerationScopedName"/>
+        <xs:group minOccurs="0" ref="cxxEnumerationPrototype"/>
+        <xs:group minOccurs="0" ref="cxxEnumerationNameLookup"/>
+        <xs:group minOccurs="0" ref="cxxEnumerationReimplemented"/>
+        <xs:group minOccurs="0" ref="cxxEnumerators"/>
+        <xs:group minOccurs="0" ref="cxxEnumerationAPIItemLocation"/>
+      </xs:sequence>
+      <xs:attribute name="spectitle"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/section reference/section apiRef/apiDef apiValue/apiValueDef cxxEnumeration/cxxEnumerationDefinition "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxEnumerationAccessSpecifier">
+    <xs:complexType>
+      <xs:attribute name="name" default="access">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="access"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" default="public">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="public"/>
+            <xs:enumeration value="protected"/>
+            <xs:enumeration value="private"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiValue/apiQualifier cxxEnumeration/cxxEnumerationAccessSpecifier "/>
+    </xs:complexType>
+  </xs:element>
+  <!-- cxxEnumerationScopedName need keyrefs and it can refer to other types (if not a fundemental type) -->
+  <xs:element name="cxxEnumerationScopedName">
+    <xs:complexType mixed="true">
+      <xs:attribute name="href"/>
+      <xs:attribute name="keyref"/>
+      <xs:attribute name="type"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/keyword reference/keyword apiRef/apiItemName apiValue/apiItemName cxxEnumeration/cxxEnumerationScopedName "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxEnumerationPrototype">
+    <xs:complexType mixed="true">
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiValue/apiDefItem cxxEnumeration/cxxEnumerationPrototype "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxEnumerationNameLookup">
+    <xs:complexType mixed="true">
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiValue/apiDefItem cxxEnumeration/cxxEnumerationNameLookup "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxEnumerationReimplemented">
+    <xs:complexType mixed="true">
+      <xs:attribute name="href"/>
+      <xs:attribute name="keyref"/>
+      <xs:attribute name="type"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/xref reference/xref apiRef/apiRelation apiValue/apiRelation cxxEnumeration/cxxEnumerationReimplemented "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxEnumerationAPIItemLocation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="cxxEnumerationDeclarationFile"/>
+        <xs:group ref="cxxEnumerationDeclarationFileLine"/>
+        <xs:group ref="cxxEnumerationDefinitionFile"/>
+        <xs:group ref="cxxEnumerationDefinitionFileLineStart"/>
+        <xs:group ref="cxxEnumerationDefinitionFileLineEnd"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiValue/apiDefItem cxxEnumeration/cxxEnumerationAPIItemLocation "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxEnumerationDeclarationFile">
+    <xs:complexType>
+      <xs:attribute name="name" default="filePath">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="filePath"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" use="required"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiValue/apiQualifier cxxEnumeration/cxxEnumerationDeclarationFile "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxEnumerationDeclarationFileLine">
+    <xs:complexType>
+      <xs:attribute name="name" default="lineNumber">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="lineNumber"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" use="required"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiValue/apiQualifier cxxEnumeration/cxxEnumerationDeclarationFileLine "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxEnumerationDefinitionFile">
+    <xs:complexType>
+      <xs:attribute name="name" default="filePath">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="filePath"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" use="required"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiValue/apiQualifier cxxEnumeration/cxxEnumerationDefinitionFile "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxEnumerationDefinitionFileLineStart">
+    <xs:complexType>
+      <xs:attribute name="name" default="lineNumber">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="lineNumber"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" use="required"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiValue/apiQualifier cxxEnumeration/cxxEnumerationDefinitionFileLineStart "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxEnumerationDefinitionFileLineEnd">
+    <xs:complexType>
+      <xs:attribute name="name" default="lineNumber">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="lineNumber"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" use="required"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiValue/apiQualifier cxxEnumeration/cxxEnumerationDefinitionFileLineEnd "/>
+    </xs:complexType>
+  </xs:element>
+  <!-- Enumerator elements -->
+  <xs:element name="cxxEnumerators">
+    <xs:complexType>
+      <xs:group minOccurs="0" maxOccurs="unbounded" ref="cxxEnumerator"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiValue/apiDefItem cxxEnumeration/cxxEnumerators "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxEnumerator">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="apiName"/>
+        <xs:group minOccurs="0" ref="cxxEnumeratorScopedName"/>
+        <xs:group minOccurs="0" ref="cxxEnumeratorPrototype"/>
+        <xs:group minOccurs="0" ref="cxxEnumeratorNameLookup"/>
+        <xs:group minOccurs="0" ref="cxxEnumeratorInitialiser"/>
+        <xs:group minOccurs="0" ref="cxxEnumeratorAPIItemLocation"/>
+        <xs:group minOccurs="0" ref="apiDesc"/>
+      </xs:sequence>
+      <xs:attribute name="spectitle"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiValue/apiDefItem cxxEnumeration/cxxEnumerator "/>
+    </xs:complexType>
+  </xs:element>
+  <!-- cxxEnumeratorScopedName need keyrefs and it can refer to other types (if not a fundemental type) -->
+  <xs:element name="cxxEnumeratorScopedName">
+    <xs:complexType mixed="true">
+      <xs:attribute name="href"/>
+      <xs:attribute name="keyref"/>
+      <xs:attribute name="type"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/keyword reference/keyword apiRef/apiItemName apiValue/apiItemName cxxEnumeration/cxxEnumeratorScopedName "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxEnumeratorPrototype">
+    <xs:complexType mixed="true">
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiValue/apiDefItem cxxEnumeration/cxxEnumeratorPrototype "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxEnumeratorNameLookup">
+    <xs:complexType mixed="true">
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiValue/apiDefItem cxxEnumeration/cxxEnumeratorNameLookup "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxEnumeratorInitialiser">
+    <xs:complexType>
+      <xs:attribute name="name" default="value">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="value"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" use="required"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiData apiValue/apiData cxxEnumeration/cxxEnumeratorInitialiser "/>
+    </xs:complexType>
+  </xs:element>
+  <!-- Enumerator - location information -->
+  <xs:element name="cxxEnumeratorAPIItemLocation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="cxxEnumeratorDeclarationFile"/>
+        <xs:group ref="cxxEnumeratorDeclarationFileLine"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiValue/apiDefItem cxxEnumeration/cxxEnumeratorAPIItemLocation "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxEnumeratorDeclarationFile">
+    <xs:complexType>
+      <xs:attribute name="name" default="filePath">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="filePath"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" use="required"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiValue/apiQualifier cxxEnumeration/cxxEnumeratorDeclarationFile "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxEnumeratorDeclarationFileLine">
+    <xs:complexType>
+      <xs:attribute name="name" default="lineNumber">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="lineNumber"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" use="required"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiValue/apiQualifier cxxEnumeration/cxxEnumeratorDeclarationFileLine "/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
+<!-- ============ Class attributes for type ancestry ============ -->
+<!-- Enumeration -->
+<!-- Enumeration elements -->
+<!-- Enumerators -->
+<!-- Enumerator elements -->
+<!-- Relation elements -->

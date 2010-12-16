@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="copyright" content="(C) Copyright 2005"/>
+<meta name="DC.rights.owner" content="(C) Copyright 2005"/>
+<meta name="DC.Type" content="reference"/>
+<meta name="DC.Title" content="cxxClass"/>
+<meta name="abstract" content="The &lt;cxxClass&gt; element provides the name of the C++ API class, all the elements necessary to describe the members that are introduced by the class declaration, and the members inherited from the direct base class."/>
+<meta name="description" content="The &lt;cxxClass&gt; element provides the name of the C++ API class, all the elements necessary to describe the members that are introduced by the class declaration, and the members inherited from the direct base class."/>
+<meta name="DC.Relation" scheme="URI" content="../cxxClass/cxxClass_module.html"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="cxxClass"/>
+<meta name="DC.Language" content="en-us"/>
+<link rel="stylesheet" type="text/css" href="../commonltr.css"/>
+<title>cxxClass</title>
+<link rel="stylesheet" type="text/css" href="../nokiacxxref.css"/></head>
+<body class="element" id="cxxClass"><a name="cxxClass"><!-- --></a>
+
+
+    <h1 class="topictitle1">cxxClass</h1>
+
+    
+    <div><p>The &lt;cxxClass&gt; element provides the name of the C++ API
+class, all the elements necessary to describe the members that are introduced
+by the class declaration, and the members inherited from the direct base class.</p>
+
+        <div class="section"><h2 class="sectiontitle">Description</h2>
+            
+            <p>The &lt;cxxClass&gt; element requires
+an ID attribute as an anchor point; this ID must always be specified. The
+ID attribute is referenced by the <em>conref</em> attribute and internal applications
+that refer to the  &lt;cxxClass&gt; element content. The elements &lt;apiName&gt; 
+and &lt;cxxClassDetail&gt; are required for this top-level container. </p>
+
+        </div>
+
+        <div class="example"><h2 class="sectiontitle">Example</h2>
+        <pre class="codeblock">&lt;cxxClass id="class_c_array_fix_flat_3_01_t_uid_01_4"&gt;
+	&lt;apiName&gt;CArrayFixFlat&amp;lt; TUid &amp;gt;&lt;/apiName&gt;
+	&lt;cxxClassDetail&gt;
+		&lt;cxxClassDefinition&gt;
+			&lt;cxxClassAccessSpecifier value="public"/&gt;
+			&lt;cxxClassDerivations&gt;
+				&lt;cxxClassDerivation&gt;
+					&lt;cxxClassDerivationAccessSpecifier value="public"/&gt;
+					&lt;cxxClassBaseClass href="class_c_array_fix.xml#class_c_array_fix"&gt;CArrayFix&amp;lt; TUid &amp;gt;&lt;/cxxClassBaseClass&gt;
+				&lt;/cxxClassDerivation&gt;
+			&lt;/cxxClassDerivations&gt;
+			&lt;cxxClassAPIItemLocation&gt;
+				&lt;cxxClassDeclarationFile name="filePath" value="C:/src/include/e32base.h"/&gt;
+				&lt;cxxClassDeclarationFileLine name="lineNumber" value="531"/&gt;
+				&lt;cxxClassDefinitionFile name="filePath" value="C:/src/include/e32base.h"/&gt;
+				&lt;cxxClassDefinitionFileLineStart name="lineNumber" value="521"/&gt;
+				&lt;cxxClassDefinitionFileLineEnd name="lineNumber" value="536"/&gt;
+			&lt;/cxxClassAPIItemLocation&gt;
+		&lt;/cxxClassDefinition&gt;
+		&lt;apiDesc&gt;
+			&lt;p&gt;Template specialisation base class for arrays of &lt;xref href="class_t_uid.xml#class_t_uid"&gt;TUid&lt;/xref&gt; types implemented in a flat dynamic buffer.&lt;/p&gt;
+			&lt;p&gt;
+				&lt;xref href="class_t_uid.xml#class_t_uid"&gt;TUid&lt;/xref&gt; &lt;/p&gt;
+		&lt;/apiDesc&gt;
+	&lt;/cxxClassDetail&gt;
+	&lt;cxxFunction id="class_c_array_fix_flat_3_01_t_uid_01_4_1afd277b81e961b25f35b92dbc90f8d97c"&gt;
+		&lt;apiName&gt;SetReserveL&lt;/apiName&gt;
+		&lt;cxxFunctionDetail&gt;
+			&lt;cxxFunctionDefinition&gt;
+				&lt;cxxFunctionAccessSpecifier value="public"/&gt;
+				&lt;cxxFunctionInline/&gt;
+				&lt;cxxFunctionDeclaredType&gt;void&lt;/cxxFunctionDeclaredType&gt;
+				&lt;cxxFunctionScopedName&gt;CArrayFixFlat&amp;lt; TUid &amp;gt;&lt;/cxxFunctionScopedName&gt;
+				&lt;cxxFunctionPrototype&gt;inline void SetReserveL(TInt aCount)&lt;/cxxFunctionPrototype&gt;
+				&lt;cxxFunctionNameLookup&gt;CArrayFixFlat&amp;lt; TUid &amp;gt;::SetReserveL(TInt)&lt;/cxxFunctionNameLookup&gt;
+				&lt;cxxFunctionParameters&gt;
+					&lt;cxxFunctionParameter&gt;
+						&lt;cxxFunctionParameterDeclaredType&gt;
+							&lt;apiRelation href="e32def_8h.xml#e32def_8h_1abb88f5378e8305d934297176fe5fa298"&gt;TInt&lt;/apiRelation&gt;
+						&lt;/cxxFunctionParameterDeclaredType&gt;
+						&lt;cxxFunctionParameterDeclarationName&gt;aCount&lt;/cxxFunctionParameterDeclarationName&gt;
+						&lt;apiDefNote&gt;The total number of elements for which space is to be reserved.&lt;/apiDefNote&gt;
+					&lt;/cxxFunctionParameter&gt;
+				&lt;/cxxFunctionParameters&gt;
+				&lt;cxxFunctionAPIItemLocation&gt;
+					&lt;cxxFunctionDeclarationFile name="filePath" value="C:/src/include/e32base.h"/&gt;
+					&lt;cxxFunctionDeclarationFileLine name="lineNumber" value="535"/&gt;
+					&lt;cxxFunctionDefinitionFile name="filePath" value="C:/src/master/sf/mw/classicui/animation/src/SpriteAnimationServer.cpp"/&gt;
+					&lt;cxxFunctionDefinitionFileLineStart name="lineNumber" value="1137"/&gt;
+					&lt;cxxFunctionDefinitionFileLineEnd name="lineNumber" value="1157"/&gt;
+				&lt;/cxxFunctionAPIItemLocation&gt;
+			&lt;/cxxFunctionDefinition&gt;
+			&lt;apiDesc&gt;
+				&lt;p&gt;Reserves space in the array buffer.&lt;/p&gt;
+				&lt;p&gt;If necessary, the array buffer is allocated or re-allocated so that it can accommodate the specified number of &lt;xref href="class_t_uid.xml#class_t_uid"&gt;TUid&lt;/xref&gt; elements.&lt;/p&gt;
+				&lt;p&gt;After a successful call to this function, elements can be added to the array and the process is guaranteed not to fail for lack of memory - provided the total number of elements does not exceed the specified number.&lt;/p&gt;
+				&lt;p&gt;This function does not increase the number of elements in the array; i.e. the member function &lt;xref href="class_c_array_fix_base.xml#class_c_array_fix_base_1ad5bc874aceea074862134dc8e4937faa"&gt;CArrayFixBase::Count()&lt;/xref&gt; returns the same value both before and after a call to this function.&lt;/p&gt;
+				&lt;p&gt;
+					&lt;b&gt;panic&lt;/b&gt;
+				&lt;/p&gt;
+				&lt;p&gt;E32USER-CBase 27, if aCount is less than the current number of elements in the array. &lt;/p&gt;
+			&lt;/apiDesc&gt;
+		&lt;/cxxFunctionDetail&gt;
+	&lt;/cxxFunction&gt;    
+	&lt;cxxFunction id="class_c_array_fix_flat_3_01_t_uid_01_4_1a78b3dd428f88a9f9f693911129e9eb51"&gt;
+		...
+	&lt;/cxxFunction&gt;
+	&lt;cxxFunction id="class_c_array_fix_flat_3_01_t_uid_01_4_1a3b0a085b65c307ad4937a6c7c4bb767a"&gt;
+		...
+	&lt;/cxxFunction&gt;
+	&lt;cxxClassInherits&gt;
+		&lt;cxxClassInheritsDetail&gt;
+			&lt;cxxClassFunctionInherited href="class_c_array_fix.xml#class_c_array_fix_1ab18347f8849b6dfe174c57bbdccdc3a6"&gt;CArrayFix&amp;lt; TUid &amp;gt;::AppendL(const TUid &amp;amp;)&lt;/cxxClassFunctionInherited&gt;
+			&lt;cxxClassFunctionInherited href="class_c_array_fix.xml#class_c_array_fix_1a98b10e4a4f97fd76a722e33afd3b8ee3"&gt;CArrayFix&amp;lt; TUid &amp;gt;::AppendL(const TUid &amp;amp;,TInt)&lt;/cxxClassFunctionInherited&gt;
+			...
+		&lt;/cxxClassInheritsDetail&gt;
+	&lt;/cxxClassInherits&gt;
+&lt;/cxxClass&gt;</pre>
+
+        </div>
+        
+        <div class="elementContainedBy"><h2 class="sectiontitle">Contained by</h2>
+
+<p id="cxxClass__d1227e128"><a name="cxxClass__d1227e128"><!-- --></a>
+</p>
+
+</div>
+
+        <div class="elementContains"><h2 class="sectiontitle">Contains</h2>
+
+<p id="cxxClass__d1227e137"><a name="cxxClass__d1227e137"><!-- --></a>
+<span class="keyword">apiName</span>, 
+<a href="cxxClassDetail.html" title="The &lt;cxxClassDetail&gt; element provides detailed information about the structure and behaviors of the C++ class.">cxxClassDetail</a> 
+<a href="cxxClassInherits.html" title="The &lt;cxxClassInherits&gt; element is inside the &lt;cxxClass&gt; element. It contains &lt;cxxClassInheritsDetail&gt; which gives details of inherited members of the C++ class">cxxClassInherits</a> 
+<a href="cxxClassNested.html" title="The &lt;cxxClassNested&gt; element within &lt;cxxClass&gt; contains &lt;cxxClassNestedDetail&gt; which gives details of nested members of this C++ class">cxxClassNested</a> 
+<a href="../cxxDefine/cxxDefine.html" title="The &lt;cxxDefine&gt; element provides the name of the C++ API define, all the elements necessary to describe the members that are introduced by the define declaration.">cxxDefine</a> 
+<a href="../cxxEnumeration/cxxEnumeration.html" title="The &lt;cxxEnumeration&gt; element contains all the elements needed to describe the declaration of a C++ enumeration.">cxxEnumeration</a> 
+<a href="../cxxFunction/cxxFunction.html" title="Contains all the elements needed to describe the declaration of a C++ function (or member function).">cxxFunction</a> 
+<a href="../cxxTypedef/cxxTypedef.html" title="The &lt;cxxTypedef&gt; element provides the name of the C++ API typedef, all the elements necessary to describe the members that are introduced by the typedef declaration.">cxxTypedef</a> 
+<a href="../cxxVariable/cxxVariable.html" title="The &lt;cxxVariable&gt; element contains the elements necessary to describe a variable.">cxxVariable</a> 
+<span class="keyword">prolog</span>, 
+<span class="keyword">related-links</span>, 
+<span class="keyword">shortdesc</span>, 
+</p>
+
+</div>
+
+        <div class="elementContentModel"><h2 class="sectiontitle">Content Model</h2>
+
+<p id="cxxClass__d1227e184"><a name="cxxClass__d1227e184"><!-- --></a>
+(<span class="keyword">apiName</span>, 
+  then  
+<span class="keyword">shortdesc</span>, 
+  then  
+<span class="keyword">prolog</span>, 
+  then  
+<a href="cxxClassDetail.html" title="The &lt;cxxClassDetail&gt; element provides detailed information about the structure and behaviors of the C++ class.">cxxClassDetail</a> 
+  then  
+<span class="keyword">related-links</span>, 
+  then  
+((<a href="cxxClassNested.html" title="The &lt;cxxClassNested&gt; element within &lt;cxxClass&gt; contains &lt;cxxClassNestedDetail&gt; which gives details of nested members of this C++ class">cxxClassNested</a> 
+ or 
+<a href="../cxxFunction/cxxFunction.html" title="Contains all the elements needed to describe the declaration of a C++ function (or member function).">cxxFunction</a> 
+ or 
+<a href="../cxxDefine/cxxDefine.html" title="The &lt;cxxDefine&gt; element provides the name of the C++ API define, all the elements necessary to describe the members that are introduced by the define declaration.">cxxDefine</a> 
+ or 
+<a href="../cxxVariable/cxxVariable.html" title="The &lt;cxxVariable&gt; element contains the elements necessary to describe a variable.">cxxVariable</a> 
+ or 
+<a href="../cxxEnumeration/cxxEnumeration.html" title="The &lt;cxxEnumeration&gt; element contains all the elements needed to describe the declaration of a C++ enumeration.">cxxEnumeration</a> 
+ or 
+<a href="../cxxTypedef/cxxTypedef.html" title="The &lt;cxxTypedef&gt; element provides the name of the C++ API typedef, all the elements necessary to describe the members that are introduced by the typedef declaration.">cxxTypedef</a> 
+(any number)
+)
+)  then  
+<a href="cxxClassInherits.html" title="The &lt;cxxClassInherits&gt; element is inside the &lt;cxxClass&gt; element. It contains &lt;cxxClassInheritsDetail&gt; which gives details of inherited members of the C++ class">cxxClassInherits</a> 
+(<em>any number</em>)
+)</p>
+
+</div>
+
+        <div class="elementAttList"/>
+
+        <div class="elementClassValue"><h2 class="sectiontitle">Inheritance</h2>
+
+<p id="cxxClass__d1227e236"><a name="cxxClass__d1227e236"><!-- --></a>
+ topic/<span class="keyword">topic</span> reference/<span class="keyword">reference</span> apiRef/<span class="keyword">apiRef</span> apiClassifier/<span class="keyword">apiClassifier</span> cxxClass/<span class="keyword">cxxClass</span></p>
+
+</div>
+
+    </div>
+
+<div>
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../cxxClass/cxxClass_module.html" title="Defines a top-level container for all the elements necessary to describe an C++ API class.">cxxClass module</a></div>
+</div>
+</div>
+
+</body>
+</html>

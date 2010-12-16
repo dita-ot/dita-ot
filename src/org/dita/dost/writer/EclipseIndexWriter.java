@@ -44,6 +44,8 @@ public class EclipseIndexWriter extends AbstractExtendDitaWriter implements Abst
 	
 	private DITAOTJavaLogger javaLogger = null;
 	
+	private String targetExt = Constants.FILE_EXTENSION_HTML;
+	
 	/** 
      * Boolean to indicate when we are processing indexsee and child elements
 	 */
@@ -104,6 +106,7 @@ public class EclipseIndexWriter extends AbstractExtendDitaWriter implements Abst
 		if (((AbstractExtendDitaWriter)this).getPipelineHashIO() != null){
 			
         	indexsee = new Boolean(((AbstractExtendDitaWriter)this).getPipelineHashIO().getAttribute("eclipse.indexsee")).booleanValue();
+        	targetExt = ((AbstractExtendDitaWriter)this).getPipelineHashIO().getAttribute(Constants.ANT_INVOKER_EXT_PARAM_TARGETEXT);
         	
         }
 		
@@ -195,12 +198,12 @@ public class EclipseIndexWriter extends AbstractExtendDitaWriter implements Abst
     		fileName = aFileName.substring(0,index); 
     		fileExtIndex = fileName.lastIndexOf(Constants.DOT);
     		return (fileExtIndex != -1)
-    			? fileName.substring(0, fileExtIndex) + Constants.FILE_EXTENSION_HTML + aFileName.substring(index)
+    			? fileName.substring(0, fileExtIndex) + targetExt + aFileName.substring(index)
     			: aFileName;
     	} else {
     		fileExtIndex = aFileName.lastIndexOf(Constants.DOT);
     		return (fileExtIndex != -1)
-    			? (aFileName.substring(0, fileExtIndex) + Constants.FILE_EXTENSION_HTML) 
+    			? (aFileName.substring(0, fileExtIndex) + targetExt) 
     			: aFileName;
     	}
     }

@@ -56,6 +56,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map//EN"
 <!--    2008.02.12 RDA: Modify imbeds to use specific 1.2 version  -->
 <!--    2008.02.12 RDA: Add navtitle to topicmeta                  -->
 <!--    2008.02.13 RDA: Create .content and .attributes entities   -->
+<!--    2010.09.20 RDA: Bring linktext content in sync with topic  -->
 <!-- ============================================================= -->
 
 
@@ -560,7 +561,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map//EN"
 
 <!--                    LONG NAME: Link Text                       -->
 <!ENTITY % linktext.content
-                       "(%words.cnt;)*"
+                       "(%words.cnt; |
+                         %ph;)*"
 >
 <!ENTITY % linktext.attributes
              "outputclass 

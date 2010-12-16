@@ -33,6 +33,17 @@
  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:indexingDomain.xsd:1.2" />
  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:delayResolutionDomain.xsd:1.2" />
  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:glossrefDomain.xsd:1.2" />
+  
+       <!-- Tech content domains -->
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:programmingDomain.xsd:1.2"/>
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:softwareDomain.xsd:1.2"/>
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:uiDomain.xsd:1.2"/>
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:abbreviateDomain.xsd:1.2" />
+  
+  <!-- Base domains -->
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:highlightDomain.xsd:1.2"/>
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:utilitiesDomain.xsd:1.2"/>
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:hazardstatementDomain.xsd:1.2"/>
 
   
  <!--  ================ GROUP DEFINITIONS =====================  -->
@@ -44,6 +55,7 @@
       </xs:choice>
     </xs:group>
   </xs:redefine>
+
  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:tblDeclGrp.xsd:1.2"/>
  
  <!-- =================  MODULE INLCUDE DEFINITION  ==================  -->
@@ -72,12 +84,77 @@
     <xs:group ref="indexing-d-index-base"/>
    </xs:choice>
   </xs:group>
+   
+   <xs:group name="keyword">
+        <xs:choice>
+          <xs:group ref="keyword"/>
+          <xs:group ref="pr-d-keyword" />
+          <xs:group ref="ui-d-keyword" />
+          <xs:group ref="sw-d-keyword" />
+        </xs:choice>
+      </xs:group>
+      
+      <xs:group name="ph">
+        <xs:choice>
+          <xs:group ref="ph"/>
+          <xs:group ref="pr-d-ph" />
+          <xs:group ref="ui-d-ph" />
+          <xs:group ref="hi-d-ph" />
+          <xs:group ref="sw-d-ph" />
+        </xs:choice>
+      </xs:group>
+      
+      <xs:group name="pre">
+        <xs:choice>
+          <xs:group ref="pre"/>
+          <xs:group ref="pr-d-pre" />
+          <xs:group ref="ui-d-pre" />
+          <xs:group ref="sw-d-pre" />
+        </xs:choice>
+      </xs:group>
+      
+      
+      <xs:group name="dl">
+        <xs:choice>
+          <xs:group ref="dl"/>
+          <xs:group ref="pr-d-dl"/>
+        </xs:choice >
+      </xs:group >
+      
+      
+      <xs:group name="fig">
+        <xs:choice>
+          <xs:group ref="fig"/>
+          <xs:group ref="pr-d-fig"/>
+          <xs:group ref="ut-d-fig" />
+        </xs:choice>
+      </xs:group >
+      
+      <xs:group name="note">
+        <xs:choice>
+          <xs:group ref="note"/>
+          <xs:group ref="hazard-d-note"/>
+        </xs:choice>
+      </xs:group >
+   
  </xs:redefine>
 
  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:mapMod.xsd:1.2" />
 
   <xs:attributeGroup name="domains-att">
-    <xs:attribute name="domains" type="xs:string" default="(map mapgroup-d) (topic indexing-d) (topic delay-d) (map glossref-d)"/>
+    <xs:attribute name="domains" type="xs:string" 
+                           default="(map glossref-d)
+                                          (map mapgroup-d)  
+                                          (topic abbrev-d)
+                                          (topic delay-d)
+                                          (topic hi-d) 
+                                          (topic indexing-d) 
+                                          (topic hazard-d)
+                                          (topic pr-d)
+                                          (topic sw-d)                                             
+                                          (topic ui-d)
+                                          (topic ut-d)
+                                          "/>
   </xs:attributeGroup>
 
 </xs:schema>

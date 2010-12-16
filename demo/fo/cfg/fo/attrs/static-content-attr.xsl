@@ -212,4 +212,42 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="font-weight">bold</xsl:attribute>
     </xsl:attribute-set>
 
+    <xsl:attribute-set name="__glossary__odd__footer">
+        <xsl:attribute name="text-align">right</xsl:attribute>
+        <xsl:attribute name="margin-right">10pt</xsl:attribute>
+        <xsl:attribute name="margin-bottom">10pt</xsl:attribute>
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="__glossary__odd__footer__pagenum">
+        <xsl:attribute name="font-weight">bold</xsl:attribute>
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="__glossary__even__footer">
+        <xsl:attribute name="margin-left">10pt</xsl:attribute>
+        <xsl:attribute name="margin-bottom">10pt</xsl:attribute>
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="__glossary__even__footer__pagenum">
+        <xsl:attribute name="font-weight">bold</xsl:attribute>
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="__glossary__odd__header">
+        <xsl:attribute name="text-align">right</xsl:attribute>
+        <xsl:attribute name="margin-right">10pt</xsl:attribute>
+        <xsl:attribute name="margin-top">10pt</xsl:attribute>
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="__glossary__odd__header__pagenum">
+        <xsl:attribute name="font-weight">bold</xsl:attribute>
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="__glossary__even__header">
+        <xsl:attribute name="margin-left">10pt</xsl:attribute>
+        <xsl:attribute name="margin-top">10pt</xsl:attribute>
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="__glossary__even__header__pagenum">
+        <xsl:attribute name="font-weight">bold</xsl:attribute>
+    </xsl:attribute-set>
+
 </xsl:stylesheet>

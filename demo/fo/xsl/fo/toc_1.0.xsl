@@ -37,8 +37,9 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:opentopic="http://www.idiominc.com/opentopic"
     xmlns:exslf="http://exslt.org/functions"
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
+    xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
     extension-element-prefixes="exsl"
-    exclude-result-prefixes="opentopic exslf opentopic-func"
+    exclude-result-prefixes="opentopic exslf opentopic-func ot-placeholder"
     version='1.1'>
 
     <xsl:include href="../../cfg/fo/attrs/toc-attr.xsl"/>
@@ -96,5 +97,28 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="*[contains(@class, ' topic/topic ')][opentopic-func:determineTopicType() = 'topicTocList']"  mode="toc" priority="10"/>
     <xsl:template match="*[contains(@class, ' topic/topic ')][opentopic-func:determineTopicType() = 'topicIndexList']"  mode="toc" priority="10"/>
+    
+    <xsl:template match="ot-placeholder:glossarylist" mode="toc">
+        <fo:block xsl:use-attribute-sets="__toc__indent__glossary">
+            <fo:block xsl:use-attribute-sets="__toc__topic__content__glossary">
+                <fo:basic-link internal-destination="ID_GLOSSARY_00-0F-EA-40-0D-4D" xsl:use-attribute-sets="__toc__link">
+                  
+                        <fo:inline xsl:use-attribute-sets="__toc__title" keep-together.within-line="always" margin-right=".2in">
+                            <xsl:call-template name="insertVariable">
+                                <xsl:with-param name="theVariableID" select="'Glossary'"/>
+                            </xsl:call-template>
+                        </fo:inline>
+
+                        <fo:inline margin-left="-.2in" keep-together.within-line="always">
+                            <fo:leader xsl:use-attribute-sets="__toc__leader"/>
+                            <fo:page-number-citation ref-id="ID_GLOSSARY_00-0F-EA-40-0D-4D"/>
+                        </fo:inline>
+                 
+                </fo:basic-link>
+            </fo:block>
+       </fo:block>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class, ' glossentry/glossentry ')]" mode="toc" priority="10"/>
 
 </xsl:stylesheet>

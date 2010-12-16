@@ -4,12 +4,17 @@
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <project name="dita2odt" default="dita2odt">
-  <property name="transtype" value="odt"/>
-  
-  <property name="odt.suffix" value=".odt" />
-  
+	
   <import file="build_init.xml" />
-  <import file="build_preprocess.xml" />
+  <import file="build_preprocess.xml" />	
+  
+  <property name="transtype" value="odt"/>
+  <property name="odt.suffix" value=".odt" />
+  <condition property="args.odt.include.rellinks" value="none">
+     <not><isset property="args.odt.include.rellinks"></isset></not>
+  </condition>
+	
+  
 <!--  
   <target name="dita2odt"
     depends="build-init, preprocess, map2odt, topic2odt,
@@ -55,8 +60,6 @@
   <!-- Build odt content.xml from DITA -->
   <target name="dita.map.odt" description="Build odt content.xml file">
   	
-  	<property name="disableRelatedLinks" value="yes"/>
-  	
     <condition property="args.xsl"
       value="${dita.script.dir}${file.separator}dita2odt.xsl">
       <not>
@@ -64,15 +67,7 @@
       </not>
     </condition>
     <dirname file="${output}" property="dita.odt.outputdir" />
-  	<!--create topic merge file -->
-  	<!--
-  	<xslt processor="trax" in="${input}"
-  	      out="${dita.temp.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
-  	      classpathref="dost.class.path"
-  	      style="${dita.script.dir}${file.separator}topicmerge.xsl">
-  	      
-  	</xslt>
-  	-->  	
+  	<!--create topic merge file -->  	
   	<dirname property="dita.temp.dir.fullpath" file="${dita.temp.dir}${file.separator}dummy.file"/>
   	<pipeline message="topicmerge" module="TopicMerge"
   	              inputmap="${dita.temp.dir.fullpath}${file.separator}${user.input.file}"
@@ -82,14 +77,22 @@
   	<!--create content.xml -->
   	<!--Change path of ${dita.input.valfile} into url-->
   	<makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
-    <xslt processor="trax"
+    <xslt processor="trax" basedir="${dita.temp.dir}"
       in="${dita.temp.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
       classpathref="dost.class.path"
-      out="${output}" style="${args.xsl}">
+      out="${output}" style="${args.xsl}" 
+      filenameparameter="FILENAME"
+      filedirparameter="FILEDIR">
+      <param name="BASEDIR" expression="${basedir}"/>
+      <param name="TEMPDIR" expression="${dita.temp.dir}"/>
+      <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="DRAFT" expression="${args.draft}" if="args.draft" />
       <param name="FILTERFILE" expression="${dita.input.valfile.url}" if="dita.input.valfile" />
       <param name="OUTPUTDIR" expression="${dita.odt.outputdir}" />
-      <param name="disableRelatedLinks" expression="${disableRelatedLinks}"/>
+      <param name="disableRelatedLinks" expression="${args.odt.include.rellinks}"/>
+      <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow"/>
+      <param name="DBG" expression="${args.debug}" if="args.debug"/>
+      <param name="ODTIMGEMBED" expression="${args.odt.img.embed}" if="args.odt.img.embed"/>
       <!--<xmlcatalog refid="dita.catalog" />-->
     </xslt>
   </target>
@@ -104,12 +107,21 @@
     <dirname file="${output}" property="dita.odt.outputdir" />
   	<!--Change path of ${dita.input.valfile} into url-->
   	<makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
-    <xslt processor="trax" in="${input}" out="${output}"
+    <xslt processor="trax" in="${input}" out="${output}" basedir="${dita.temp.dir}"
       classpathref="dost.class.path"
-      style="${args.xsl}">
+      style="${args.xsl}"
+      filenameparameter="FILENAME"
+      filedirparameter="FILEDIR">
+      <param name="BASEDIR" expression="${basedir}"/>
+      <param name="TEMPDIR" expression="${dita.temp.dir}"/>
+      <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="DRAFT" expression="${args.draft}" if="args.draft" />
       <param name="FILTERFILE" expression="${dita.input.valfile.url}" if="dita.input.valfile" />
       <param name="OUTPUTDIR" expression="${dita.odt.outputdir}" />
+      <param name="disableRelatedLinks" expression="${args.odt.include.rellinks}"/>
+      <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow"/>
+      <param name="DBG" expression="${args.debug}" if="args.debug"/>
+      <param name="ODTIMGEMBED" expression="${args.odt.img.embed}" if="args.odt.img.embed"/>
       <!--<xmlcatalog refid="dita.catalog" />-->
     </xslt>
   </target>
@@ -135,7 +147,7 @@
   </target>
 	
   <target name="dita.out.odt.manifest.file"
-    description="Build odt Manifest.xml file">
+    description="Build odt manifest.xml file">
     <xslt processor="trax"
       in="${dita.temp.dir}${file.separator}${user.input.file}"
       out="${dita.map.output.dir}${file.separator}META-INF${file.separator}manifest.xml"
@@ -149,8 +161,7 @@
      description="Package into odt file">
 	   	<zip destfile="${dita.map.output.dir}/${dita.topic.filename.root}${odt.suffix}"
 	   		basedir="${dita.map.output.dir}" 
-	   		excludes="**/*.list, **/*.log, **/*.temp, **/*.properties, **/*.odt, 
-	   		**/*.jpg, **/*.gif, **/*.png">
+	   		excludes="**/*.list, **/*.log, **/*.temp, **/*.properties, **/*.odt">
 	   	</zip>
    </target>
    <target name="dita.odt.package.map" unless="noMap" depends="map2odt, 
@@ -158,8 +169,7 @@
     description="Package into odt file">
 	   	<zip destfile="${dita.map.output.dir}/${dita.map.filename.root}${odt.suffix}"
 	   		basedir="${dita.map.output.dir}"
-	   		excludes="**/*.list, **/*.log, **/*.temp, **/*.properties, **/*.odt, 
-	   		**/*.jpg, **/*.gif, **/*.png"/>
+	   		excludes="**/*.list, **/*.log, **/*.temp, **/*.properties, **/*.odt"/>
    </target>
    <target name="clean-up-out-dir">
    	<delete failonerror="yes" includeemptydirs="true" dir="${dita.map.output.dir}"

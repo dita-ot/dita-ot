@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2010, v.4002-->
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "..\dtd\concept.dtd">
+<?Pub Sty _display FontColor="red"?>
+<concept id="dita2word" xml:lang="en-us">
+<title>DITA to Word output transform</title>
+<conbody>
+<p>The DITA Open Toolkit release 1.2 or above provides a DITA to Word
+transforming function to transform DITA source files to output in <tm
+tmclass="special" tmowner="Microsoft Corporation" tmtype="reg"
+trademark="Microsoft">Microsoft</tm> Word RTF file. The whole structure
+of the output file is the same as the structure designed in the ditamap
+file of the DITA source files.</p>
+<p>To avoid losing files in the final output, make sure the ditamap
+file contains all topics which are cross referenced from within any
+individual topics.</p>
+<section><title>Transforming DITA to Word output</title><p>You can
+use an ant script to transform DITA source files to word output. See <xref
+href="ascript.xml#ascript"></xref> for more details.</p><p>You can
+also use the <tm tmclass="special" tmowner="Sun Microsystems, Inc."
+tmtype="tm" trademark="Java">Java</tm> command for transform. See <xref
+href="jcomm.xml#jcomm"></xref> for more details.</p></section>
+<section><title>Limitations</title><p>There are several limitations
+of the current DITA to Word transforming tool when processing. See <xref
+href="DITA-limitations.xml"></xref> for details.</p></section>
+</conbody>
+</concept><?Pub Caret -1?>
+<?Pub *0000001511?>

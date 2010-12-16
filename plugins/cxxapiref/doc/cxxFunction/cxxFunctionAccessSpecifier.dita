@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxFunctionAccessSpecifier">
+    <title>cxxFunctionAccessSpecifier</title>
+    <shortdesc>Describes the <i>access specifier</i> for the function ("public", "protected" or "private").</shortdesc>
+    <refbody>
+        <section id="section_2F9EE76882EF4B31B0AEA36D95999AD0">
+            <title>Description</title>
+            <p>The <tt>&lt;cxxFunctionAccessSpecifier&gt;</tt> describes the <i>access specifier</i> according to 
+            ISO/IEC 14882:2003(E) 11 Member access control [class.access].</p><p>The element has a <tt>name</tt> attribute 
+            that must be public, protected or private, it defaults to "public".</p>
+        </section>
+        <section conref="../packagedef.dita#cxxFunctionAccessSpecifier-reference/cxxFunctionAccessSpecifier-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxFunctionAccessSpecifier-reference/cxxFunctionAccessSpecifier-contains-section"/>
+        <section conref="../packagedef.dita#cxxFunctionAccessSpecifier-reference/cxxFunctionAccessSpecifier-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxFunctionAccessSpecifier-reference/cxxFunctionAccessSpecifier-attList-section"/>
+        <section conref="../packagedef.dita#cxxFunctionAccessSpecifier-reference/cxxFunctionAccessSpecifier-classValue-section"/>
+    </refbody>
+</reference>

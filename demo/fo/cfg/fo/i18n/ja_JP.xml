@@ -33,90 +33,70 @@ See the accompanying license.txt file for applicable licenses.
 
 <configuration>
 
-    <!--<alphabet char-set="Latin">
+    <alphabet char-set="Japanese">
         <character-set>
-            <character-range>
-                <start include="yes">&#x20;</start>
-                <end include="yes">&#x7F;</end>
-            </character-range>
-        </character-set>
-    </alphabet>-->
-
-    <!-- TODO Not sure. Correct range -->
-    <!--alphabet char-set="Japanese">
-        <character-set>
-            <character-range>
-                <start include="yes">&#x3000;</start>
-                <end include="yes">&#x30FF;</end>
-            </character-range>
-            <character-range>
-                <start include="yes">&#x3100;</start>
-                <end include="yes">&#x34FF;</end>
-            </character-range>
+            <!-- CJK Unified Ideographs -->
             <character-range>
                 <start include="yes">&#x4E00;</start>
-                <end include="yes">&#x9FFF;</end>
+                <end include="yes">&#x9FBF;</end>
             </character-range>
-			<character>&#xFF62;</character>
-			<character>&#xFF63;</character>
+            <!-- CJK Unified Ideographs Extension A -->
+            <character-range>
+                <start include="yes">&#x3400;</start>
+                <end include="yes">&#x4DBF;</end>
+            </character-range>
+            <!-- CJK Compatibility Ideographs (IBM extended for Japanese Windows) -->
+            <character-range>
+                <start include="yes">&#xFA0E;</start>
+                <end include="yes">&#xFA2D;</end>
+            </character-range>
+            <!-- Kanbun -->
+            <character-range>
+                <start include="yes">&#x3190;</start>
+                <end include="yes">&#x319F;</end>
+            </character-range>
+            <!-- CJK Symbols and Punctuation -->
+            <character-range>
+                <start include="yes">&#x3000;</start>
+                <end include="yes">&#x303F;</end>
+            </character-range>
+            <!-- Halfwidth and Fullwidth Forms -->
+            <character-range>
+                <start include="yes">&#xFF00;</start>
+                <end include="yes">&#xFFEF;</end>
+            </character-range>
+            <!-- Hiragana -->
+            <character-range>
+                <start include="yes">&#x3040;</start>
+                <end include="yes">&#x309F;</end>
+            </character-range>
+            <!-- Katakana -->
+            <character-range>
+                <start include="yes">&#x30A0;</start>
+                <end include="yes">&#x30FF;</end>
+            </character-range>
+            <!-- Katakana Phonetic Extensions -->
+            <character-range>
+                <start include="yes">&#x31F0;</start>
+                <end include="yes">&#x31FF;</end>
+            </character-range>
+            <!-- Arrows -->
+            <character-range>
+                <start include="yes">&#x2190;</start>
+                <end include="yes">&#x21FF;</end>
+            </character-range>
+            <!-- Roman numerals -->
+            <character-range>
+                <start include="yes">&#x2160;</start>
+                <end include="yes">&#x2183;</end>
+            </character-range>
+            <!-- Enclosed Alphanumerics -->
+            <character-range>
+                <start include="yes">&#x2460;</start>
+                <end include="yes">&#x24FF;</end>
+            </character-range>
         </character-set>
-    </alphabet-->
-    <alphabet char-set="Japanese">
-		<character-set>
-		<!-- CJK Unified Ideographs -->
-		<character-range>
-		<start include="yes">&#x4E00;</start>
-		<end include="yes">&#x9FBF;</end>
-		</character-range>
-		<!-- CJK Unified Ideographs Extension A -->
-		<character-range>
-		<start include="yes">&#x3400;</start>
-		<end include="yes">&#x4DBF;</end>
-		</character-range>
-		<!-- CJK Compatibility Ideographs (IBM extended for Japanese
-		Windows) -->
-		<character-range>
-		<start include="yes">&#xFA0E;</start>
-		<end include="yes">&#xFA2D;</end>
-		</character-range>
-		<!-- Kanbun -->
-		<character-range>
-		<start include="yes">&#x3190;</start>
-		<end include="yes">&#x319F;</end>
-		</character-range>
-		<!-- CJK Symbols and Punctuation -->
-		<character-range>
-		<start include="yes">&#x3000;</start>
-		<end include="yes">&#x303F;</end>
-		</character-range>
-		<!-- Halfwidth and Fullwidth Forms -->
-		<character-range>
-		<start include="yes">&#xFF00;</start>
-		<end include="yes">&#xFFEF;</end>
-		</character-range>
-		<!-- Hiragana -->
-		<character-range>
-		<start include="yes">&#x3040;</start>
-		<end include="yes">&#x309F;</end>
-		</character-range>
-		<!-- Katakana -->
-		<character-range>
-		<start include="yes">&#x30A0;</start>
-		<end include="yes">&#x30FF;</end>
-		</character-range>
-		<!-- Katakana Phonetic Extensions -->
-		<character-range>
-		<start include="yes">&#x31F0;</start>
-		<end include="yes">&#x31FF;</end>
-		</character-range>
-		<!-- Arrows -->
-		<character-range>
-		<start include="yes">&#x2190;</start>
-		<end include="yes">&#x21FF;</end>
-		</character-range>
-		</character-set>
-	</alphabet>
-    
+    </alphabet>
 
     <alphabet char-set="SymbolsSuperscript">
         <character-set>

@@ -47,7 +47,7 @@
     unless="preprocess.gen-list-without-flagging.skip">
     <pipeline message="Generate list." module="GenMapAndTopicList"
       basedir="${basedir}" inputmap="${args.input}"
-      tempdir="${dita.temp.dir}" extparam="ditadir=${dita.dir};validate=${validate};generatecopyouter=${generate.copy.outer};outercontrol=${outer.control};onlytopicinmap=${onlytopic.in.map};outputdir=${output.dir};transtype=${transtype}" />
+      tempdir="${dita.temp.dir}" extparam="ditadir=${dita.dir};validate=${validate};generatecopyouter=${generate.copy.outer};outercontrol=${outer.control};onlytopicinmap=${onlytopic.in.map};outputdir=${output.dir};transtype=${transtype};gramcache=${args.grammar.cache};setsystemid=${args.xml.systemid.set}" />
   </target>
 
   <target name="gen-list-with-flagging"
@@ -56,7 +56,7 @@
     <pipeline message="Generate list." module="GenMapAndTopicList"
       basedir="${basedir}" inputmap="${args.input}"
       tempdir="${dita.temp.dir}"
-      extparam="ditadir=${dita.dir};ditaval=${dita.input.valfile};validate=${validate};generatecopyouter=${generate.copy.outer};outercontrol=${outer.control};onlytopicinmap=${onlytopic.in.map};outputdir=${output.dir};transtype=${transtype}" />
+      extparam="ditadir=${dita.dir};ditaval=${dita.input.valfile};validate=${validate};generatecopyouter=${generate.copy.outer};outercontrol=${outer.control};onlytopicinmap=${onlytopic.in.map};outputdir=${output.dir};transtype=${transtype};gramcache=${args.grammar.cache};setsystemid=${args.xml.systemid.set}" />
   </target>
 
   <target name="gen-list-flag-check">
@@ -97,9 +97,11 @@
     <condition property="noMap">
       <equals arg1="${fullditamaplist}" arg2="" />
     </condition>
+  	<!--
     <condition property="noTopic">
       <equals arg1="${fullditatopiclist}" arg2="" />
     </condition>
+    -->
     <condition property="noImagelist">
       <equals arg1="${imagelist}" arg2="" />
     </condition>
@@ -123,7 +125,7 @@
     description="Debug input files">
     <pipeline message="Debug and filtering." module="DebugAndFilter"
       basedir="${basedir}" tempdir="${dita.temp.dir}"
-      extparam="ditaext=${dita.extname};ditadir=${dita.dir};validate=${validate};transtype=${transtype}"/>
+      extparam="ditaext=${dita.extname};ditadir=${dita.dir};validate=${validate};transtype=${transtype};setsystemid=${args.xml.systemid.set}"/>
   </target>
 
   <target name="debug-and-filter"
@@ -132,7 +134,7 @@
     description="Debug and filter input files">
     <pipeline message="Debug and filtering." module="DebugAndFilter"
       basedir="${basedir}" tempdir="${dita.temp.dir}"
-      extparam="ditaval=${dita.input.valfile};ditaext=${dita.extname};ditadir=${dita.dir};validate=${validate};transtype=${transtype}" />
+      extparam="ditaval=${dita.input.valfile};ditaext=${dita.extname};ditadir=${dita.dir};validate=${validate};transtype=${transtype};setsystemid=${args.xml.systemid.set}" />
   </target>
 
   <target name="debug-filter-flag-check">
@@ -355,7 +357,11 @@
       basedir="${basedir}" inputmap="${user.input.file}"
       tempdir="${dita.temp.dir}" 
       extparam="ditaext=${dita.ext};transtype=${transtype}"/>
-    <property file="${dita.temp.dir}${file.separator}dita.list" />
+  	
+  	<xmlpropertyreader file="${dita.temp.dir}${file.separator}dita.xml.properties"/>
+  	<condition property="noTopic">
+  	  	<equals arg1="${fullditatopiclist}" arg2="" />
+  	</condition>
   </target>
 
   <target name="chunk-check">

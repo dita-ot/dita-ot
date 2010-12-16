@@ -49,6 +49,8 @@
         <xsl:attribute name="table:name">
           <xsl:value-of select="concat('Table', $tablenameId)"/>
         </xsl:attribute>
+        <xsl:attribute name="table:style-name">table_style</xsl:attribute>
+        
         <xsl:variable name="colnumNum">
           <xsl:call-template name="count_columns_for_properties"/>
         </xsl:variable>
@@ -78,6 +80,8 @@
         <xsl:attribute name="table:name">
           <xsl:value-of select="concat('Table', $tablenameId)"/>
         </xsl:attribute>
+        <xsl:attribute name="table:style-name">table_style</xsl:attribute>
+        
         <xsl:variable name="colnumNum">
           <xsl:call-template name="count_columns_for_properties"/>
         </xsl:variable>

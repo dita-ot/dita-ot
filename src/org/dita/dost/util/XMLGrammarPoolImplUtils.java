@@ -20,16 +20,20 @@ import org.apache.xerces.xni.grammars.XMLGrammarDescription;
  * 
  */
 public class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
-
-
-	//
-	// Constructors
-	//
+	
+	private String gramCache = "yes";
+	
 
 	/** Constructs a grammar pool with a default number of buckets. */
 	public XMLGrammarPoolImplUtils() {
 		super();
-	} // <init>()
+	}
+	
+	/** Constructs a grammar pool with a default number of buckets. */
+	public XMLGrammarPoolImplUtils(String gramCache) {
+		super();
+		this.gramCache = gramCache;
+	}
 
 	/** Constructs a grammar pool with a specified number of buckets. */
 	public XMLGrammarPoolImplUtils(int initialCapacity) {
@@ -76,11 +80,18 @@ public class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
 	 */
 	public boolean equals(XMLGrammarDescription desc1,
 			XMLGrammarDescription desc2) {
-		if (desc1 instanceof XSDDescription && desc2 instanceof XSDDescription) {
-			return desc1.getLiteralSystemId()
-					.equals(desc2.getLiteralSystemId());
-		} else {
-			return desc1.equals(desc2);
+		//grammar pool caching enabled.
+		if ("yes".equals(gramCache)) {
+			if (desc1 instanceof XSDDescription
+					&& desc2 instanceof XSDDescription) {
+				return desc1.getLiteralSystemId().equals(
+						desc2.getLiteralSystemId());
+			} else {
+				return desc1.equals(desc2);
+			}
+		}else{
+			//disabled
+			return false;
 		}
 	}
 

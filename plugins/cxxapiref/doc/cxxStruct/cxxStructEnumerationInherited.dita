@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxStructEnumerationInherited">
+    <title>cxxStructEnumerationInherited</title>
+    <shortdesc>The &lt;cxxStructEnumerationInherited&gt; element within &lt;cxxStructInheritsDetail&gt; provides the name of an enumeration inherited by a struct.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The text in this element is the fully qualified name of enumeration that has been inherited. There are no mandatory attributes.</p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>	&lt;cxxStructInherits&gt;
+		&lt;cxxStructInheritsDetail&gt;
+			&lt;cxxStructEnumeratorInherited href=&quot;GUID-7ACD666B-ABB9-3E78-9B16-784E2645856D.xml&quot;&gt;TMediaPswdNotifyBase::ECTMmcPassword&lt;/cxxStructEnumeratorInherited&gt;
+			&lt;cxxStructVariableInherited href=&quot;GUID-7ACD666B-ABB9-3E78-9B16-784E2645856D.xml&quot;&gt;TMediaPswdNotifyBase::iCT&lt;/cxxStructVariableInherited&gt;
+			&lt;cxxStructEnumerationInherited href=&quot;GUID-7ACD666B-ABB9-3E78-9B16-784E2645856D.xml&quot;&gt;TMediaPswdNotifyBase:TCardType&lt;/cxxStructEnumerationInherited&gt;
+		&lt;/cxxStructInheritsDetail&gt;
+	&lt;/cxxStructInherits&gt;</codeblock>
+        </example>	        
+        <section conref="../packagedef.dita#cxxStructEnumerationInherited-reference/cxxStructEnumerationInherited-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxStructEnumerationInherited-reference/cxxStructEnumerationInherited-contains-section"/>
+        <section conref="../packagedef.dita#cxxStructEnumerationInherited-reference/cxxStructEnumerationInherited-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxStructEnumerationInherited-reference/cxxStructEnumerationInherited-attList-section"/>
+        <section conref="../packagedef.dita#cxxStructEnumerationInherited-reference/cxxStructEnumerationInherited-classValue-section"/>
+    </refbody>
+</reference>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxTypedefDeclarationFileLine">
+    <title>cxxTypedefDeclarationFileLine</title>
+    <shortdesc>The &lt;cxxTypedefDeclarationFileLine&gt; element is defined within &lt;cxxTypedefAPIItemLocation&gt;. 
+    &lt;cxxTypedefDeclarationFileLine&gt; specifies the line on which the API is declared</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The element &lt;cxxTypedefDeclarationFileLine&gt; is empty but for the required 
+            attributes <i>name</i> and <i>value</i>. Name is always <i>lineNumber</i></p>
+        </section>
+        <example><title>Example</title>
+        <codeblock>&lt;cxxTypedefAPIItemLocation&gt;
+				&lt;cxxTypedefDeclarationFile name="filePath" value="D:/src/include/headerfile.h"/&gt;
+				&lt;cxxTypedefDeclarationFileLine name="lineNumber" value="775"/&gt;
+				&lt;cxxTypedefDefinitionFile name="filePath" value="D:/src/include/headerfile.h"/&gt;
+			&lt;/cxxTypedefAPIItemLocation&gt;</codeblock>
+        </example>        
+        <section conref="../packagedef.dita#cxxTypedefDeclarationFileLine-reference/cxxTypedefDeclarationFileLine-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxTypedefDeclarationFileLine-reference/cxxTypedefDeclarationFileLine-contains-section"/>
+        <section conref="../packagedef.dita#cxxTypedefDeclarationFileLine-reference/cxxTypedefDeclarationFileLine-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxTypedefDeclarationFileLine-reference/cxxTypedefDeclarationFileLine-attList-section"/>
+        <section conref="../packagedef.dita#cxxTypedefDeclarationFileLine-reference/cxxTypedefDeclarationFileLine-classValue-section"/>
+    </refbody>
+</reference>

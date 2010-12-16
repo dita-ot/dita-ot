@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxClassDetail">
+    <title>cxxClassDetail</title>
+    <shortdesc>The &lt;cxxClassDetail&gt; element provides detailed information
+about the structure and behaviors of the C++ class. </shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The &lt;cxxClassDetail&gt; element is defined within &lt;cxxClass&gt;. 
+            In &lt;cxxClassDetail&gt; the &lt;example&gt; and &lt;section&gt; 
+            elements are provided to support the current specific C++ API reference. A class 
+            body can contain declarations of the members of the class, such as variables, 
+            classes, structs, and functions.</p>
+        </section>
+        <example><title>Example</title>
+        <codeblock>&lt;cxxClass id=&quot;class_c_array_fix_flat_3_01_t_uid_01_4&quot;&gt;
+	&lt;apiName&gt;CArrayFixFlat&amp;lt; TUid &amp;gt;&lt;/apiName&gt;
+	&lt;cxxClassDetail&gt;
+		&lt;cxxClassDefinition&gt;
+			&lt;cxxClassAccessSpecifier value=&quot;public&quot;/&gt;
+			&lt;cxxClassDerivations&gt;
+				&lt;cxxClassDerivation&gt;
+					&lt;cxxClassDerivationAccessSpecifier value=&quot;public&quot;/&gt;
+					&lt;cxxClassBaseClass href=&quot;class_c_array_fix.xml#class_c_array_fix&quot;&gt;CArrayFix&amp;lt; TUid &amp;gt;&lt;/cxxClassBaseClass&gt;
+				&lt;/cxxClassDerivation&gt;
+			&lt;/cxxClassDerivations&gt;
+			&lt;cxxClassAPIItemLocation&gt;
+				&lt;cxxClassDeclarationFile name=&quot;filePath&quot; value=&quot;C:/include/e32base.h&quot;/&gt;
+				&lt;cxxClassDeclarationFileLine name=&quot;lineNumber&quot; value=&quot;531&quot;/&gt;
+				&lt;cxxClassDefinitionFile name=&quot;filePath&quot; value=&quot;C:/include/e32base.h&quot;/&gt;
+				&lt;cxxClassDefinitionFileLineStart name=&quot;lineNumber&quot; value=&quot;521&quot;/&gt;
+				&lt;cxxClassDefinitionFileLineEnd name=&quot;lineNumber&quot; value=&quot;536&quot;/&gt;
+			&lt;/cxxClassAPIItemLocation&gt;
+		&lt;/cxxClassDefinition&gt;
+		&lt;apiDesc&gt;
+			&lt;p&gt;Template specialisation base class for arrays of &lt;xref href=&quot;class_t_uid.xml#class_t_uid&quot;&gt;TUid&lt;/xref&gt; types implemented in a flat dynamic buffer.&lt;/p&gt;
+			&lt;p&gt;
+				&lt;xref href=&quot;class_t_uid.xml#class_t_uid&quot;&gt;TUid&lt;/xref&gt; &lt;/p&gt;
+		&lt;/apiDesc&gt;
+	&lt;/cxxClassDetail&gt;
+	&lt;cxxFunction id=&quot;class_c_array_fix_flat_3_01_t_uid_01_4_1a3b0a085b65c307ad4937a6c7c4bb767a&quot;&gt;
+		&lt;apiName&gt;~CArrayFixFlat&lt;/apiName&gt;
+		&lt;cxxFunctionDetail&gt;
+			...
+		&lt;/cxxFunctionDetail&gt;
+	&lt;/cxxFunction&gt;
+	&lt;cxxFunction id=&quot;class_c_array_fix_flat_3_01_t_uid_01_4_1afd277b81e961b25f35b92dbc90f8d97c&quot;&gt;
+		&lt;apiName&gt;SetReserveL&lt;/apiName&gt;
+		&lt;cxxFunctionDetail&gt;
+            ...
+		&lt;/cxxFunctionDetail&gt;
+	&lt;/cxxFunction&gt;
+	&lt;cxxClassInherits&gt;
+		&lt;cxxClassInheritsDetail&gt;
+			...
+		&lt;/cxxClassInheritsDetail&gt;
+	&lt;/cxxClassInherits&gt;
+&lt;/cxxClass&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxClassDetail-reference/cxxClassDetail-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxClassDetail-reference/cxxClassDetail-contains-section"/>
+        <section conref="../packagedef.dita#cxxClassDetail-reference/cxxClassDetail-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxClassDetail-reference/cxxClassDetail-attList-section"/>
+        <section conref="../packagedef.dita#cxxClassDetail-reference/cxxClassDetail-classValue-section"/>
+    </refbody>
+</reference>

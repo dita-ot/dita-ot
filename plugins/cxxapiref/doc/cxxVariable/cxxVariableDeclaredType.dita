@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxVariableDeclaredType">
+    <title>cxxVariableDeclaredType</title>
+    <shortdesc>The &lt;cxxVariableDeclaredType&gt; element specifies the variable data type in the declaration.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The optional &lt;cxxVariableDeclaredType&gt; element contains any number of CDATA and &lt;apiRelation&gt; elements. 
+            The &lt;apiRelation&gt; elements provide links to the documentation of each data type in the declaration. </p>
+            <p>A CDATA field may be used to show any C++ keywords associated with the declaration e.g. const or static.</p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxVariableDeclaredType&gt;const &lt;apiRelation href="GUID-FC2F2B93-3D18-3BCC-9FD6-6BC6B240B667.xml"&gt;TUint&lt;/apiRelation&gt;&lt;/cxxVariableDeclaredType&gt;</codeblock>
+        </example>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxVariableDeclaredType&gt; 
+    &lt;apiRelation href="GUID-12C65B99-553E-35CA-B36F-2F77BFC972B3.xml"&gt;CArrayFixFlat&lt;/apiRelation&gt;&lt; &lt;apiRelation href="GUID-C8DA9E1C-33A6-33B3-8D75-6B5F6F3BA20F.xml"&gt;CProtocolBase&lt;/apiRelation&gt; * &gt; *
+&lt;/cxxVariableDeclaredType&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxVariableDeclaredType-reference/cxxVariableDeclaredType-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxVariableDeclaredType-reference/cxxVariableDeclaredType-contains-section"/>
+        <section conref="../packagedef.dita#cxxVariableDeclaredType-reference/cxxVariableDeclaredType-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxVariableDeclaredType-reference/cxxVariableDeclaredType-attList-section"/>
+        <section conref="../packagedef.dita#cxxVariableDeclaredType-reference/cxxVariableDeclaredType-classValue-section"/>
+    </refbody>
+</reference>

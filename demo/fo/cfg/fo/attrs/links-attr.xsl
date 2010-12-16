@@ -47,7 +47,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="related-links__content">
-        <xsl:attribute name="start-indent">25pt</xsl:attribute>
+        <xsl:attribute name="start-indent"><xsl:value-of select="$side-col-width"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="related-links.ul">
@@ -55,7 +55,7 @@ See the accompanying license.txt file for applicable licenses.
 		<xsl:attribute name="provisional-label-separation">1mm</xsl:attribute>
 		<xsl:attribute name="space-after.optimum">7pt</xsl:attribute>
 		<xsl:attribute name="space-before.optimum">7pt</xsl:attribute>
-		<xsl:attribute name="start-indent">25pt</xsl:attribute>
+		<xsl:attribute name="start-indent"><xsl:value-of select="$side-col-width"/></xsl:attribute>
 	</xsl:attribute-set>
 
     <xsl:attribute-set name="related-links.ul.li">
@@ -85,7 +85,7 @@ See the accompanying license.txt file for applicable licenses.
 		<xsl:attribute name="provisional-label-separation">1mm</xsl:attribute>
 		<xsl:attribute name="space-after.optimum">7pt</xsl:attribute>
 		<xsl:attribute name="space-before.optimum">7pt</xsl:attribute>
-		<xsl:attribute name="start-indent">25pt</xsl:attribute>
+		<xsl:attribute name="start-indent"><xsl:value-of select="$side-col-width"/></xsl:attribute>
 	</xsl:attribute-set>
 
     <xsl:attribute-set name="related-links.ol.li">

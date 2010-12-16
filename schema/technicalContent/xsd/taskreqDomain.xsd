@@ -23,9 +23,8 @@
 <!-- ============================================================= -->
 <!-- ================== DITA Machine Industry Task Domain  =================== -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
-   <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"/>
-   <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"/>
-  
+  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"/>
+
   <xs:annotation>
     <xs:appinfo>
       <dita:domainsModule xmlns:dita="http://dita.oasis-open.org/architecture/2005/">(topic task taskreq-d)</dita:domainsModule>
@@ -34,31 +33,31 @@
     
     </xs:documentation>
   </xs:annotation>
-  
-   <xs:group name="taskreq-d-prereq">
+
+  <xs:group name="taskreq-d-prereq">
     <xs:choice>
       <xs:group ref="prelreqs"/>
     </xs:choice>
   </xs:group>
-  
+
   <xs:group name="taskreq-d-postreq">
     <xs:choice>
       <xs:group ref="closereqs"/>
     </xs:choice>
   </xs:group>
-  
-   <xs:group name="prelreqs">
+
+  <xs:group name="prelreqs">
     <xs:choice>
       <xs:element ref="prelreqs"/>
     </xs:choice>
   </xs:group>
-  
+
   <xs:group name="closereqs">
     <xs:choice>
       <xs:element ref="closereqs"/>
     </xs:choice>
   </xs:group>
-  
+
   <xs:group name="reqconds">
     <xs:sequence>
       <xs:element ref="reqconds"/>
@@ -184,7 +183,7 @@
   <!-- ============================================================= -->
   <!-- LONG NAME: Preliminary Requirements -->
   <xs:complexType name="prelreqs.content">
-    <xs:sequence>
+     <xs:sequence>
       <xs:group minOccurs="0" ref="reqconds"/>
       <xs:group minOccurs="0" ref="reqpers"/>
       <xs:group minOccurs="0" ref="supequip"/>
@@ -272,7 +271,7 @@
   </xs:attributeGroup>
   <xs:element name="reqcond">
     <xs:complexType>
-      <xs:complexContent>
+      <xs:complexContent mixed="true">
         <xs:extension base="reqcond.content">
           <xs:attributeGroup ref="reqcond.attlist"/>
         </xs:extension>
@@ -295,7 +294,7 @@
   </xs:attributeGroup>
   <xs:element name="reqcontp">
     <xs:complexType>
-      <xs:complexContent>
+      <xs:complexContent mixed="true">
         <xs:extension base="reqcontp.content">
           <xs:attributeGroup ref="reqcontp.attlist"/>
         </xs:extension>
@@ -348,13 +347,15 @@
   </xs:attributeGroup>
   <xs:element name="personnel">
     <xs:complexType>
-      <xs:complexContent>
+      <xs:complexContent mixed="true">
         <xs:extension base="personnel.content">
           <xs:attributeGroup ref="personnel.attlist"/>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
+  
+  
   <xs:attributeGroup name="personnel.attlist">
     <xs:attributeGroup ref="personnel.attributes"/>
     <xs:attributeGroup ref="global-atts"/>
@@ -371,7 +372,7 @@
   </xs:attributeGroup>
   <xs:element name="perscat">
     <xs:complexType>
-      <xs:complexContent>
+      <xs:complexContent mixed="true">
         <xs:extension base="perscat.content">
           <xs:attributeGroup ref="perscat.attlist"/>
         </xs:extension>
@@ -394,7 +395,7 @@
   </xs:attributeGroup>
   <xs:element name="perskill">
     <xs:complexType>
-      <xs:complexContent>
+      <xs:complexContent mixed="true">
         <xs:extension base="perskill.content">
           <xs:attributeGroup ref="perskill.attlist"/>
         </xs:extension>
@@ -417,7 +418,7 @@
   </xs:attributeGroup>
   <xs:element name="esttime">
     <xs:complexType>
-      <xs:complexContent>
+      <xs:complexContent mixed="true">
         <xs:extension base="esttime.content">
           <xs:attributeGroup ref="esttime.attlist"/>
         </xs:extension>
@@ -514,7 +515,7 @@
   </xs:attributeGroup>
   <xs:element name="supequi">
     <xs:complexType>
-      <xs:complexContent>
+      <xs:complexContent mixed="true">
         <xs:extension base="supequi.content">
           <xs:attributeGroup ref="supequi.attlist"/>
         </xs:extension>
@@ -611,7 +612,7 @@
   </xs:attributeGroup>
   <xs:element name="supply">
     <xs:complexType>
-      <xs:complexContent>
+      <xs:complexContent mixed="true">
         <xs:extension base="supply.content">
           <xs:attributeGroup ref="supply.attlist"/>
         </xs:extension>
@@ -708,7 +709,7 @@
   </xs:attributeGroup>
   <xs:element name="spare">
     <xs:complexType>
-      <xs:complexContent>
+      <xs:complexContent mixed="true">
         <xs:extension base="spare.content">
           <xs:attributeGroup ref="spare.attlist"/>
         </xs:extension>
@@ -773,7 +774,7 @@
   </xs:attributeGroup>
   <xs:element name="safecond">
     <xs:complexType>
-      <xs:complexContent>
+      <xs:complexContent mixed="true">
         <xs:extension base="safecond.content">
           <xs:attributeGroup ref="safecond.attlist"/>
         </xs:extension>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxClassInheritsDetail">
+    <title>cxxClassInheritsDetail</title>
+    <shortdesc>
+        The &lt;cxxClassInheritsDetail&gt; element provides details about the inherited members of a C++ class. 
+    </shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>
+            In the &lt;cxxClassInheritsDetail&gt; element, the &lt;cxxClassFunctionInherited&gt;, &lt;cxxClassVariableInherited&gt;, &lt;cxxClassEnumerationInherited&gt; and &lt;cxxClassEnumeratorInherited&gt; elements are provided to indicate the members that are inherited by a C++ class. &lt;cxxClassInheritsDetail&gt; must have at least one of these child elements and each one can occur multiple times.
+            </p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxClassInherits&gt;
+    &lt;cxxClassInheritsDetail&gt;
+        &lt;cxxClassFunctionInherited href=&quot;file.xml&quot;&gt;CActive::CActive(TInt)&lt;/cxxClassFunctionInherited&gt;
+        &lt;cxxClassEnumeratorInherited href=&quot;file.xml&quot;&gt;CActive::EPriorityHigh&lt;/cxxClassEnumeratorInherited&gt;
+        &lt;cxxClassVariableInherited href=&quot;file.xml&quot;&gt;CActive::iStatus&lt;/cxxClassVariableInherited&gt;
+        &lt;cxxClassEnumerationInherited href=&quot;file.xml&quot;&gt;CActive:TPriority&lt;/cxxClassEnumerationInherited&gt;        
+    &lt;/cxxClassInheritsDetail&gt;
+&lt;/cxxClassInherits&gt;</codeblock>
+        </example>        
+        <section conref="../packagedef.dita#cxxClassInheritsDetail-reference/cxxClassInheritsDetail-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxClassInheritsDetail-reference/cxxClassInheritsDetail-contains-section"/>
+        <section conref="../packagedef.dita#cxxClassInheritsDetail-reference/cxxClassInheritsDetail-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxClassInheritsDetail-reference/cxxClassInheritsDetail-attList-section"/>
+        <section conref="../packagedef.dita#cxxClassInheritsDetail-reference/cxxClassInheritsDetail-classValue-section"/>
+    </refbody>
+</reference>

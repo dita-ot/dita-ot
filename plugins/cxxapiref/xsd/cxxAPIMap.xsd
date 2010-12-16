@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ================================================================= -->
+<!-- HEADER -->
+<!-- ================================================================= -->
+<!-- MODULE:    C++ Map DTD -->
+<!-- VERSION:   0.6.0 -->
+<!-- DATE:      May 2009 -->
+<!---->
+<!-- ================================================================= -->
+<!-- ================================================================= -->
+<!-- PUBLIC DOCUMENT TYPE DEFINITION -->
+<!-- TYPICAL INVOCATION -->
+<!---->
+<!--
+  Refer to this file by the following public identifier or an 
+        appropriate system identifier 
+  PUBLIC "-//NOKIA//DTD DITA C++ API XXX Reference Type v0.6.0//EN"
+        Delivered as file "cxxXXX.dtd"
+-->
+<!-- ================================================================= -->
+<!-- SYSTEM:     Darwin Information Typing Architecture (DITA) -->
+<!---->
+<!-- PURPOSE:    C++ API Reference for Map -->
+<!---->
+<!-- ORIGINAL CREATION DATE: -->
+<!-- November 2009 -->
+<!---->
+<!-- Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies). -->
+<!-- All rights reserved. -->
+<!---->
+<!-- Change History (latest at top): -->
+<!-- +++++++++++++++++++++++++++++++ -->
+<!-- 2010-02-10 PaulRoss: Updated. -->
+<!-- 2009-11-16 PaulRo Initial design. -->
+<!---->
+<!-- ================================================================= -->
+<!-- <!DOCTYPE cxxAPIMap PUBLIC "-//NOKIA//DTD DITA C++ API Map Reference Type v0.6.0//EN" "dtd/cxxAPIMap.dtd" > -->
+<!-- vocabulary declarations -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+  <xs:include schemaLocation="mapgroup.ent.xsd"/>
+  <xs:include schemaLocation="map.mod.xsd"/>
+  <xs:include schemaLocation="apiMap.mod.xsd"/>
+  <xs:include schemaLocation="cxxAPIMap.mod.xsd"/>
+  <xs:include schemaLocation="mapgroup.mod.xsd"/>
+  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="../../../schema/base/xsd/ditaarch.xsd"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../../../schema/base/xsd/xml.xsd"/>
+  <!--
+    vocabulary substitution (one for each extended base element,
+    with the name of the domain(s) in which the extension was declared)
+  -->
+  <xs:group name="topicref">
+    <xs:choice>
+      <xs:element ref="topicref"/>
+      <xs:element ref="mapgroup-d-topicref"/>
+    </xs:choice>
+  </xs:group>
+  <!-- vocabulary attributes (must be declared ahead of the dtds, which puts @domains first in order) -->
+  <!-- Embed map to get generic elements -->
+  <!-- vocabulary definitions -->
+  <xs:complexType name="any" mixed="true">
+    <xs:sequence>
+      <xs:any minOccurs="0" maxOccurs="unbounded" processContents="strict"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

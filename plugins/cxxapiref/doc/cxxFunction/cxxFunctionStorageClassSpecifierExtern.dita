@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxFunctionStorageClassSpecifierExtern">
+    <title>cxxFunctionStorageClassSpecifierExtern</title>
+    <shortdesc>Identifies functions that have external linkage.</shortdesc>
+    <refbody>
+        <section id="section_711D12C3FEC64379B6021CE4D3354E9C">
+            <title>Description</title><p>This element is present when the function has external linkage. it has two mandatory attributes; name and value (see example below).</p><p>See ISO/IEC 14882:2003(E) 7.1.1 Storage class specifiers [dcl.stc] and 3.5 Program and linkage [basic.link]</p>
+        </section>
+        <example id="example_D9B6943C809F45DF9360F4C9F202BF8A">
+            <title>Example</title><p>Given this code:</p>
+            <codeblock>extern void m();</codeblock><p>Then function <tt>m</tt> would have the <tt>cxxFunctionStorageClassSpecifierExtern</tt>
+element:</p>
+            <codeblock>&lt;cxxFunctionStorageClassSpecifierExtern/&gt;</codeblock><p>If the mandatory attributes are present they must be set thus:</p>
+            <codeblock>&lt;cxxFunctionStorageClassSpecifierExtern name="extern" value="extern"/&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxFunctionStorageClassSpecifierExtern-reference/cxxFunctionStorageClassSpecifierExtern-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxFunctionStorageClassSpecifierExtern-reference/cxxFunctionStorageClassSpecifierExtern-contains-section"/>
+        <section conref="../packagedef.dita#cxxFunctionStorageClassSpecifierExtern-reference/cxxFunctionStorageClassSpecifierExtern-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxFunctionStorageClassSpecifierExtern-reference/cxxFunctionStorageClassSpecifierExtern-attList-section"/>
+        <section conref="../packagedef.dita#cxxFunctionStorageClassSpecifierExtern-reference/cxxFunctionStorageClassSpecifierExtern-classValue-section"/>
+    </refbody>
+</reference>

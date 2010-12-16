@@ -30,6 +30,8 @@
   <!-- CONTENT: Description - shortdesc -->
   <xsl:apply-templates select="*[contains(@class,' topic/shortdesc ')] |
                                self::dita/*[1]/*[contains(@class,' topic/shortdesc ')]" mode="gen-metadata"/>
+  <xsl:apply-templates select="*[contains(@class,' topic/abstract ')] |
+                               self::dita/*[1]/*[contains(@class,' topic/abstract ')]" mode="gen-shortdesc-metadata"/>
 
   <!-- CONTENT: Source - prolog/source/@href -->
   <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/source ')]/@href |
@@ -183,6 +185,25 @@
     <xsl:attribute name="content"><xsl:value-of select="normalize-space($shortmeta)"/></xsl:attribute>
   </meta>
   <xsl:value-of select="$newline"/>
+</xsl:template>
+
+<xsl:template match="*[contains(@class,' topic/abstract ')]" mode="gen-shortdesc-metadata">
+  <xsl:variable name="shortmeta">
+    <xsl:for-each select="*[contains(@class,' topic/shortdesc ')]">
+      <xsl:text> </xsl:text>
+      <xsl:apply-templates select="*|text()" mode="text-only"/>
+    </xsl:for-each>
+  </xsl:variable>
+  <xsl:if test="normalize-space($shortmeta)!=''">
+    <meta name="abstract">
+      <xsl:attribute name="content"><xsl:value-of select="normalize-space($shortmeta)"/></xsl:attribute>
+    </meta>
+    <xsl:value-of select="$newline"/>
+    <meta name="description">
+      <xsl:attribute name="content"><xsl:value-of select="normalize-space($shortmeta)"/></xsl:attribute>
+    </meta>
+    <xsl:value-of select="$newline"/>
+  </xsl:if>
 </xsl:template>
 
 <!-- CONTENT: Source - prolog/source/@href -->

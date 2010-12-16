@@ -33,6 +33,7 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Base Map//EN"                       -->
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->
 <!--  UPDATES:                                                     -->
+<!--    2010.09.20 RDA: Add topic-based domains                    -->
 <!-- ============================================================= -->
 
 
@@ -60,6 +61,20 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Base Map//EN"                       -->
          "delayResolutionDomain.ent"                                                       
 >%delay-d-dec;
 
+<!ENTITY % hi-d-dec     
+  PUBLIC "-//OASIS//ENTITIES DITA 1.2 Highlight Domain//EN" 
+         "highlightDomain.ent"
+>%hi-d-dec;
+
+<!ENTITY % ut-d-dec     
+  PUBLIC "-//OASIS//ENTITIES DITA 1.2 Utilities Domain//EN" 
+         "utilitiesDomain.ent"                                                
+>%ut-d-dec;
+
+<!ENTITY % hazard-d-dec     
+  PUBLIC "-//OASIS//ENTITIES DITA 1.2 Hazard Statement Domain//EN" 
+         "hazardstatementDomain.ent"
+>%hazard-d-dec;
 <!-- ============================================================= -->
 <!--                    DOMAIN ATTRIBUTE DECLARATIONS              -->
 <!-- ============================================================= -->
@@ -79,6 +94,15 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Base Map//EN"                       -->
                         ">
 <!ENTITY % index-base   "index-base | 
                          %indexing-d-index-base;
+                        ">
+<!ENTITY % ph           "ph | 
+                         %hi-d-ph;
+                        ">
+<!ENTITY % fig          "fig |
+                         %ut-d-fig;
+                        ">
+<!ENTITY % note         "note | 
+                         %hazard-d-note;
                         ">
 
 <!-- ============================================================= -->
@@ -101,7 +125,9 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Base Map//EN"                       -->
                         "&delay-d-att;
                          &mapgroup-d-att; 
                          &indexing-d-att;
-                        ">
+                         &hi-d-att; 
+                         &ut-d-att; 
+                         &hazard-d-att;">
 
 <!-- ============================================================= -->
 <!--                    MAP ELEMENT INTEGRATION                    -->
@@ -136,5 +162,20 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Base Map//EN"                       -->
   PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Delayed Resolution Domain//EN" 
          "delayResolutionDomain.mod"
 >%delay-d-def;
+
+<!ENTITY % hi-d-def     
+  PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Highlight Domain//EN" 
+         "highlightDomain.mod"
+>%hi-d-def;
+
+<!ENTITY % ut-d-def     
+  PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Utilities Domain//EN" 
+         "utilitiesDomain.mod"
+>%ut-d-def;
+
+<!ENTITY % hazard-d-def     
+  PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Hazard Statement Domain//EN" 
+         "hazardstatementDomain.mod"
+>%hazard-d-def;
 
 <!-- ================== End DITA Map DTD  ======================== -->

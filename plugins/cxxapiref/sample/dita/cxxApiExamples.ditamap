@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!DOCTYPE cxxAPIMap PUBLIC "-//NOKIA//DTD DITA C++ API Map Reference Type v0.6.0//EN" "dtd/cxxAPIMap.dtd" >
+<cxxAPIMap id="cxxApiExamples" title="cxxApiExamples">
+	<cxxStructRef href="struct_point.xml#struct_point" navtitle="Point"/>
+	<cxxClassRef href="class_test_class.xml#class_test_class" navtitle="TestClass">
+		<cxxClassRef href="class_test_class_1_1inner.xml#class_test_class_1_1inner" navtitle="TestClass::inner"/>
+	</cxxClassRef>
+	<cxxFileRef href="test__class_8h.xml#test__class_8h" navtitle="test_class.h"/><!-- 
+Doxygen version: 1.6.3-20100418_dita_0.1.60
+ -->
+</cxxAPIMap>

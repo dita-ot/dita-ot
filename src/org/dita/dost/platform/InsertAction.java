@@ -122,7 +122,7 @@ public class InsertAction extends DefaultHandler implements IAction, LexicalHand
 			retBuf.append("<"+qName);
 			for (int i = 0; i < attLen; i++){
 				retBuf.append(" ").append(attributes.getQName(i)).append("=\"");
-				retBuf.append(attributes.getValue(i)).append("\"");
+				retBuf.append(StringUtils.escapeXML(attributes.getValue(i))).append("\"");
 			}
 			//Added by Jason on 2010-05-09 for bug:2974667 start
 			if(("public".equals(localName) ||
@@ -142,7 +142,8 @@ public class InsertAction extends DefaultHandler implements IAction, LexicalHand
 	 * @see org.xml.sax.ContentHandler#characters(char[], int, int)
 	 */
 	public void characters(char[] ch, int start, int length) throws SAXException {
-		retBuf.append(ch, start, length);
+		final char[] esc = StringUtils.escapeXML(ch, start, length).toCharArray();
+		retBuf.append(esc, 0, esc.length);
 	}
 
 	/**
@@ -156,8 +157,9 @@ public class InsertAction extends DefaultHandler implements IAction, LexicalHand
 				 !"system".equals(localName) &&
 				 !"uri".equals(localName))
 		){
-		//edited by william on 2010-03-23 for bug:2974667 start
-			retBuf.append(Constants.LINE_SEPARATOR);
+		//edited by william on 2010-03-23 for bug:2974667 end
+			//remove line break bug:3062912
+			//retBuf.append(Constants.LINE_SEPARATOR);
 			retBuf.append("</"+qName+">");
 		}
 	}

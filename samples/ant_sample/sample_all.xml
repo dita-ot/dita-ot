@@ -23,9 +23,10 @@
   <import file="sample_htmlhelp.xml"/>
   <import file="sample_pdf.xml"/>
   <import file="sample_docbook.xml"/>
+  <import file="sample_odt.xml"/>
   
   <!-- invoke all of the sample targets -->
   <target name="all" 
-    depends="sample2xhtml, sample2eclipsehelp, sample2javahelp, sample2htmlhelp, sample2pdf, sample2docbook" 
+    depends="sample2xhtml, sample2eclipsehelp, sample2javahelp, sample2htmlhelp, sample2pdf, sample2docbook,sample2odt" 
     />
 </project>

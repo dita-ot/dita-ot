@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxStructAPIItemLocation">
+    <title>cxxStructAPIItemLocation</title>
+    <shortdesc>The &lt;cxxStructAPIItemLocation&gt; element is defined within &lt;cxxStructDefinition&gt;. 
+    &lt;cxxStructAPIItemLocation&gt; specifies the location of the API.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title><p>The &lt;cxxStructAPIItemLocation&gt; element must contain the location of the 
+            API declaration using &lt;cxxStructDeclarationFile&gt; and &lt;cxxStructDeclarationFileLine&gt;; the location of the API definition is optional.</p>
+        </section>
+        <example><title>Example</title>
+        <codeblock>&lt;cxxStructAPIItemLocation&gt;
+				&lt;cxxStructDeclarationFile name="filePath" value="D:/src/include/headerfile.h"/&gt;
+				&lt;cxxStructDeclarationFileLine name="lineNumber" value="775"/&gt;
+				&lt;cxxStructDefinitionFile name="filePath" value="D:/src/include/headerfile.h"/&gt;
+				&lt;cxxStructDefinitionFileLineStart name="lineNumber" value="765"/&gt;
+				&lt;cxxStructDefinitionFileLineEnd name="lineNumber" value="787"/&gt;
+			&lt;/cxxStructAPIItemLocation&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxStructAPIItemLocation-reference/cxxStructAPIItemLocation-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxStructAPIItemLocation-reference/cxxStructAPIItemLocation-contains-section"/>
+        <section conref="../packagedef.dita#cxxStructAPIItemLocation-reference/cxxStructAPIItemLocation-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxStructAPIItemLocation-reference/cxxStructAPIItemLocation-attList-section"/>
+        <section conref="../packagedef.dita#cxxStructAPIItemLocation-reference/cxxStructAPIItemLocation-classValue-section"/>
+    </refbody>
+</reference>

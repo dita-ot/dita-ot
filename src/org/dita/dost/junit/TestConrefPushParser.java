@@ -78,14 +78,14 @@ public class TestConrefPushParser {
 		 *	</li>
 		 * </ol>
 		 */
-		reader.read("test-stub/conrefpush_stub.xml");
+		reader.read("test-stub" + File.separator + "conrefpush_stub.xml");
 		Set<Map.Entry<String, Hashtable<String, String>>> pushSet = (Set<Map.Entry<String, Hashtable<String,String>>>) reader.getContent().getCollection();
 		Iterator<Map.Entry<String, Hashtable<String,String>>> iter = pushSet.iterator();
 		try {
 			if(iter.hasNext()){
 				Map.Entry<String, Hashtable<String,String>> entry = iter.next();
 				// initialize the parsed file
-				FileUtils.copyFile(new File("test-stub/conrefpush_stub2_backup.xml"), new File(entry.getKey()));
+				FileUtils.copyFile(new File("test-stub" + File.separator + "conrefpush_stub2_backup.xml"), new File(entry.getKey()));
 				Content content = new ContentImpl();
 				content.setValue(entry.getValue());
 				parser.setContent(content);

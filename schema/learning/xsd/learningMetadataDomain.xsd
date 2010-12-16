@@ -143,7 +143,7 @@
         <xs:complexType>
           <xs:complexContent>
             <xs:extension base="lcLom.class">
-                <xs:attribute ref="class" default="+ topic/metadata learning-d/lcLom "/>
+                <xs:attribute ref="class" default="+ topic/metadata learningmeta-d/lcLom "/>
             </xs:extension>
         </xs:complexContent>
         </xs:complexType>

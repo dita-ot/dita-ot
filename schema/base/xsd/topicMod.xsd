@@ -26,7 +26,6 @@
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
   <!-- ==================== Import Section ======================= -->
-  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"/>
   <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"/>
 
   <!-- these are common for some classes of resources and exhibits -->  
@@ -52,43 +51,58 @@
   <!-- txt.incl is appropriate for any mixed content definitions (those that have PCDATA) -->
   <!-- the context for blocks is implicitly an InfoMaster "containing_division" -->
   <!-- <!ENTITY % body.cnt             "%basic.block;|%required-cleanup;"> -->
-  <xs:group name="body.cnt">
+    <xs:group name="body.cnt">
+    <xs:sequence>
     <xs:choice>
       <xs:group ref="basic.block"/>
       <xs:group ref="required-cleanup"/>
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group ref="draft-comment" />
-        <xs:group ref="data.elements.incl"/>
-        <xs:group ref="foreign.unknown.incl"/>
-      </xs:choice>
+      <xs:group ref="draft-comment" />
+      <xs:group ref="data.elements.incl"/>
+      <xs:group ref="foreign.unknown.incl"/>
     </xs:choice>
+      </xs:sequence>
   </xs:group>
 
-  <!-- <!ENTITY % section.cnt          "#PCDATA | %basic.ph; | %basic.block; | %title; |  %txt.incl;"> -->
-  <xs:group name="section.cnt">
+  <xs:group name="example.cnt">
+    <xs:sequence>
     <xs:choice>
       <xs:group ref="basic.ph"/>
       <xs:group ref="basic.block"/>
       <xs:group ref="title"/>
       <xs:group ref="txt.incl"/>
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group ref="data.elements.incl"/>
-        <xs:group ref="foreign.unknown.incl"/>
-      </xs:choice>
+      <xs:group ref="data.elements.incl"/>
+      <xs:group ref="foreign.unknown.incl"/>
     </xs:choice>
+    </xs:sequence>
+  </xs:group>
+
+  <!-- <!ENTITY % section.cnt          "#PCDATA | %basic.ph; | %basic.block; | %title; |  %txt.incl;"> -->
+  <xs:group name="section.cnt">
+    <xs:sequence>
+    <xs:choice>
+      <xs:group ref="basic.ph"/>
+      <xs:group ref="basic.block"/>
+      <xs:group ref="title"/>
+      <xs:group ref="sectiondiv"/>
+      <xs:group ref="txt.incl"/>
+      <xs:group ref="data.elements.incl"/>
+      <xs:group ref="foreign.unknown.incl"/>
+    </xs:choice>
+      </xs:sequence>
   </xs:group>
 
   <!-- <!ENTITY % section.notitle.cnt  "#PCDATA | %basic.ph; | %basic.block; |             %txt.incl;"> -->
   <xs:group name="section.notitle.cnt">
+    <xs:sequence>
     <xs:choice>
       <xs:group ref="basic.ph"/>
       <xs:group ref="basic.block"/>
+      <xs:group ref="sectiondiv"/>
       <xs:group ref="txt.incl"/>
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group ref="data.elements.incl"/>
-        <xs:group ref="foreign.unknown.incl"/>
-      </xs:choice>
+      <xs:group ref="data.elements.incl"/>
+      <xs:group ref="foreign.unknown.incl"/>
     </xs:choice>
+      </xs:sequence>
   </xs:group>
 
   
@@ -492,7 +506,7 @@
   <xs:group name="example.content">
     <xs:sequence>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="section.cnt" minOccurs="0"/>
+      <xs:group ref="example.cnt" minOccurs="0"/>
     </xs:choice>
     </xs:sequence>
   </xs:group>

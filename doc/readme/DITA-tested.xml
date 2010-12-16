@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2010, v.4002-->
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+ "../dtd/topic.dtd">
+<topic id="testedplatformsandtools" xml:lang="en-us">
+<title>Tested platforms and tools</title>
+<titlealts>
+<navtitle>Tested Platforms and tools</navtitle>
+</titlealts>
+<shortdesc>See which tools and platforms have been used in testing
+the DITA      processing system.</shortdesc>
+<body>
+<p>The DITA processing system has been tested against the following
+       platforms and tools:</p>
+<simpletable>
+<strow>
+<stentry>Tested OS:</stentry>
+<stentry>Windows XP, SLES 10</stentry>
+</strow>
+<strow>
+<stentry>Tested XSLT processor:</stentry>
+<stentry>Xalan-J 2.6, Xalan-J 2.7, Saxon 6.5, Saxon 9<note>XSLT 2.0
+standard is not officially supported yet, due to the reliance by some
+users on Xalan.</note></stentry><?Pub Caret 24?>
+</strow>
+<strow>
+<stentry>Tested JDK:</stentry>
+<stentry>IBM 1.5, 1.6; SUN 1.5, 1.6</stentry>
+</strow>
+<strow>
+<stentry>Tested Ant:</stentry>
+<stentry>Ant 1.7.1</stentry>
+</strow>
+</simpletable>
+</body>
+</topic>
+<?Pub *0000001113?>

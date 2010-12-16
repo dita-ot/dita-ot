@@ -26,6 +26,8 @@
           location="demo/apiref/dtd/apiOperation.mod"/>
   <dtd publicId="-//IBM//ELEMENTS DITA API Value//EN"
           location="demo/apiref/dtd/apiValue.mod"/>
+  <dtd publicId="-//IBM//ELEMENTS DITA API Reference Map//EN"
+          location="dtd/apiMap.mod"/>      
 
   <dtd publicId="-//IBM//ENTITIES DITA API Domain//EN"
           location="demo/apiref/dtd/apiDomain.ent"/>

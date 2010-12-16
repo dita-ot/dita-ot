@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxTypedefReimplemented">
+    <title>cxxTypedefReimplemented</title>
+    <shortdesc>Identifies typedefs that have been re-implemented.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title><p>This identifies and links to typedefs that have been re-implemented.</p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxTypedefReimplemented href="class_c_active.xml#class_c_active_1a4bb7613b"&gt;CActive::dSpare&lt;/cxxTypedefReimplemented&gt;</codeblock>
+        </example>           
+        <section conref="../packagedef.dita#cxxTypedefReimplemented-reference/cxxTypedefReimplemented-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxTypedefReimplemented-reference/cxxTypedefReimplemented-contains-section"/>
+        <section conref="../packagedef.dita#cxxTypedefReimplemented-reference/cxxTypedefReimplemented-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxTypedefReimplemented-reference/cxxTypedefReimplemented-attList-section"/>
+        <section conref="../packagedef.dita#cxxTypedefReimplemented-reference/cxxTypedefReimplemented-classValue-section"/>
+    </refbody>
+</reference>

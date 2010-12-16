@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxEnumerators">
+    <title>cxxEnumerators</title>
+    <shortdesc>The &lt;cxxEnumerators&gt; element contains a &lt;cxxEnumerator&gt; element for each enumerator in an enumeration</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The &lt;cxxEnumerators&gt; element contains zero or more &lt;cxxEnumerator&gt; elements</p>
+        </section>
+        <example><title>Example</title>
+        <codeblock>&lt;cxxEnumerators&gt;
+    &lt;cxxEnumerator id=&quot;class_c_graphics_context_1aa83437963ec92f7c4bef2ca1fe1d841faa74134e0c09d1d944bd4ef7c274511ae&quot;&gt;
+        &lt;apiName&gt;ELeft&lt;/apiName&gt;
+        &lt;cxxEnumeratorScopedName&gt;CGraphicsContext&lt;/cxxEnumeratorScopedName&gt;
+        &lt;cxxEnumeratorPrototype&gt;ELeft&lt;/cxxEnumeratorPrototype&gt;
+        &lt;cxxEnumeratorNameLookup&gt;CGraphicsContext::ELeft&lt;/cxxEnumeratorNameLookup&gt;
+        &lt;cxxEnumeratorAPIItemLocation&gt;
+            &lt;cxxEnumeratorDeclarationFile name=&quot;filePath&quot; value=&quot;C:/src/include/gdi.h&quot;/&gt;
+            &lt;cxxEnumeratorDeclarationFileLine name=&quot;lineNumber&quot; value=&quot;1722&quot;/&gt;
+        &lt;/cxxEnumeratorAPIItemLocation&gt;
+        &lt;apiDesc&gt;
+            &lt;p&gt;Text is left-aligned. &lt;/p&gt;
+        &lt;/apiDesc&gt;
+    &lt;/cxxEnumerator&gt;
+    &lt;cxxEnumerator id=&quot;class_c_graphics_context_1aa83437963ec92f7c4bef2ca1fe1d841faf9bbbaae3b62083e453a204ca381aff7&quot;&gt;
+        &lt;apiName&gt;ECenter&lt;/apiName&gt;
+        &lt;cxxEnumeratorScopedName&gt;CGraphicsContext&lt;/cxxEnumeratorScopedName&gt;
+        &lt;cxxEnumeratorPrototype&gt;ECenter&lt;/cxxEnumeratorPrototype&gt;
+        &lt;cxxEnumeratorNameLookup&gt;CGraphicsContext::ECenter&lt;/cxxEnumeratorNameLookup&gt;
+        &lt;cxxEnumeratorAPIItemLocation&gt;
+            &lt;cxxEnumeratorDeclarationFile name=&quot;filePath&quot; value=&quot;C:/src/include/gdi.h&quot;/&gt;
+            &lt;cxxEnumeratorDeclarationFileLine name=&quot;lineNumber&quot; value=&quot;1724&quot;/&gt;
+        &lt;/cxxEnumeratorAPIItemLocation&gt;
+        &lt;apiDesc&gt;
+            &lt;p&gt;Text is centred. &lt;/p&gt;
+        &lt;/apiDesc&gt;
+    &lt;/cxxEnumerator&gt;
+    &lt;cxxEnumerator id=&quot;class_c_graphics_context_1aa83437963ec92f7c4bef2ca1fe1d841fa6567b3e91e6ce82151d21d2617ac1694&quot;&gt;
+        &lt;apiName&gt;ERight&lt;/apiName&gt;
+        &lt;cxxEnumeratorScopedName&gt;CGraphicsContext&lt;/cxxEnumeratorScopedName&gt;
+        &lt;cxxEnumeratorPrototype&gt;ERight&lt;/cxxEnumeratorPrototype&gt;
+        &lt;cxxEnumeratorNameLookup&gt;CGraphicsContext::ERight&lt;/cxxEnumeratorNameLookup&gt;
+        &lt;cxxEnumeratorAPIItemLocation&gt;
+            &lt;cxxEnumeratorDeclarationFile name=&quot;filePath&quot; value=&quot;C:/src/include/gdi.h&quot;/&gt;
+            &lt;cxxEnumeratorDeclarationFileLine name=&quot;lineNumber&quot; value=&quot;1727&quot;/&gt;
+        &lt;/cxxEnumeratorAPIItemLocation&gt;
+        &lt;apiDesc&gt;
+            &lt;p&gt;Text is right-aligned. &lt;/p&gt;
+        &lt;/apiDesc&gt;
+    &lt;/cxxEnumerator&gt;
+&lt;/cxxEnumerators&gt;</codeblock>
+        </example>        
+        <section conref="../packagedef.dita#cxxEnumerators-reference/cxxEnumerators-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxEnumerators-reference/cxxEnumerators-contains-section"/>
+        <section conref="../packagedef.dita#cxxEnumerators-reference/cxxEnumerators-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxEnumerators-reference/cxxEnumerators-attList-section"/>
+        <section conref="../packagedef.dita#cxxEnumerators-reference/cxxEnumerators-classValue-section"/>
+    </refbody>
+</reference>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxClassDefinition">
+    <title>cxxClassDefinition</title>
+    <shortdesc>The &lt;cxxClassDefinition&gt; element is defined within &lt;cxxClassDetail&gt;. 
+    &lt;cxxClassDefinition&gt; represents the C++ class declaration.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title><p>A class declaration specifies a new named reference type. 
+            A class declaration can include the following members: <i>public</i>, <i>protected</i> 
+            or <i>private</i>, this is represented by the &lt;cxxClassAccessSpecifier&gt; element.</p>
+            <p>&lt;cxxClassDefinition&gt; requires the element &lt;cxxClassAPIItemLocation&lt; as it's child.</p>
+        </section>
+        <example><title>Example</title>
+        <codeblock>&lt;cxxClassDefinition&gt;
+			&lt;cxxClassAccessSpecifier value="public"/&gt;
+			&lt;cxxClassDerivations&gt;
+				&lt;cxxClassDerivation&gt;
+					&lt;cxxClassDerivationAccessSpecifier value="public"/&gt;
+					&lt;cxxClassBaseClass href="class_c_base.xml#class_c_base"&gt;CBase&lt;/cxxClassBaseClass&gt;
+				&lt;/cxxClassDerivation&gt;
+			&lt;/cxxClassDerivations&gt;
+			&lt;cxxClassAPIItemLocation&gt;
+				&lt;cxxClassDeclarationFile name="filePath" value="C:/src/include/e32base.h"/&gt;
+				&lt;cxxClassDeclarationFileLine name="lineNumber" value="2812"/&gt;
+				&lt;cxxClassDefinitionFile name="filePath" value="C:/src/include/e32base.h"/&gt;
+				&lt;cxxClassDefinitionFileLineStart name="lineNumber" value="2784"/&gt;
+				&lt;cxxClassDefinitionFileLineEnd name="lineNumber" value="2854"/&gt;
+			&lt;/cxxClassAPIItemLocation&gt;
+		&lt;/cxxClassDefinition&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxClassDefinition-reference/cxxClassDefinition-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxClassDefinition-reference/cxxClassDefinition-contains-section"/>
+        <section conref="../packagedef.dita#cxxClassDefinition-reference/cxxClassDefinition-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxClassDefinition-reference/cxxClassDefinition-attList-section"/>
+        <section conref="../packagedef.dita#cxxClassDefinition-reference/cxxClassDefinition-classValue-section"/>
+    </refbody>
+</reference>

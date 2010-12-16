@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!DOCTYPE cxxFile PUBLIC "-//NOKIA//DTD DITA C++ API File Reference Type v0.6.0//EN" "dtd/cxxFile.dtd" >
+<cxxFile id="test__class_8h">
+	<apiName>test_class.h</apiName>
+	<cxxFunction id="test__class_8h_1a27a789a5aabed6e0e0d79ce0fd02b937">
+		<apiName>SearchBuffer</apiName>
+		<cxxFunctionDetail>
+			<cxxFunctionDefinition>
+				<cxxFunctionAccessSpecifier value="public"/>
+				<cxxFunctionStorageClassSpecifierStatic/>
+				<cxxFunctionDeclaredType>int</cxxFunctionDeclaredType>
+				<cxxFunctionScopedName/>
+				<cxxFunctionPrototype>static int SearchBuffer(const char *aBuffer, char c, int i)</cxxFunctionPrototype>
+				<cxxFunctionNameLookup>SearchBuffer(const char *,char,int)</cxxFunctionNameLookup>
+				<cxxFunctionParameters>
+					<cxxFunctionParameter>
+						<cxxFunctionParameterDeclaredType>const char *</cxxFunctionParameterDeclaredType>
+						<cxxFunctionParameterDeclarationName>aBuffer</cxxFunctionParameterDeclarationName>
+						<apiDefNote>The buffer to search. </apiDefNote>
+					</cxxFunctionParameter>
+					<cxxFunctionParameter>
+						<cxxFunctionParameterDeclaredType>char</cxxFunctionParameterDeclaredType>
+						<cxxFunctionParameterDeclarationName>c</cxxFunctionParameterDeclarationName>
+						<apiDefNote>the character to search for. </apiDefNote>
+					</cxxFunctionParameter>
+					<cxxFunctionParameter>
+						<cxxFunctionParameterDeclaredType>int</cxxFunctionParameterDeclaredType>
+						<cxxFunctionParameterDeclarationName>i</cxxFunctionParameterDeclarationName>
+						<apiDefNote>The start position. </apiDefNote>
+					</cxxFunctionParameter>
+				</cxxFunctionParameters>
+				<apiDefNote>The index in the buffer or -1 if not found or i is &gt;= the buffer length. </apiDefNote>
+				<cxxFunctionAPIItemLocation>
+					<cxxFunctionDeclarationFile name="filePath" value="C:/wip/sysdoc/tools/Doxygen/branches/DITA/test/PaulRo/cxxApiExamples/src/test_class.h"/>
+					<cxxFunctionDeclarationFileLine name="lineNumber" value="14"/>
+				</cxxFunctionAPIItemLocation>
+			</cxxFunctionDefinition>
+			<apiDesc>
+				<p>Searches a buffer for a character from a start position in the buffer. </p>
+			</apiDesc>
+		</cxxFunctionDetail>
+	</cxxFunction>
+	<cxxTypedef id="test__class_8h_1a3e5884d818280f416b0bebd501b54328">
+		<apiName>PointType</apiName>
+		<cxxTypedefDetail>
+			<cxxTypedefDefinition>
+				<cxxTypedefAccessSpecifier value="public"/>
+				<cxxTypedefDeclaredType>struct <apiRelation href="struct_point.xml#struct_point">Point</apiRelation></cxxTypedefDeclaredType>
+				<cxxTypedefScopedName/>
+				<cxxTypedefPrototype>struct Point PointType</cxxTypedefPrototype>
+				<cxxTypedefNameLookup>PointType</cxxTypedefNameLookup>
+				<cxxTypedefAPIItemLocation>
+					<cxxTypedefDeclarationFile name="filePath" value="C:/wip/sysdoc/tools/Doxygen/branches/DITA/test/PaulRo/cxxApiExamples/src/test_class.h"/>
+					<cxxTypedefDeclarationFileLine name="lineNumber" value="22"/>
+				</cxxTypedefAPIItemLocation>
+			</cxxTypedefDefinition>
+			<apiDesc>
+				<p>A structure that represents a single point. </p>
+			</apiDesc>
+		</cxxTypedefDetail>
+	</cxxTypedef>
+	<cxxVariable id="test__class_8h_1afca1c85e4479517662b30aaccdd15ee1">
+		<apiName>Origin</apiName>
+		<cxxVariableDetail>
+			<cxxVariableDefinition>
+				<cxxVariableAccessSpecifier value="public"/>
+				<cxxVariableDeclaredType>
+					<apiRelation href="struct_point.xml#struct_point">PointType</apiRelation>
+				</cxxVariableDeclaredType>
+				<cxxVariableScopedName/>
+				<cxxVariablePrototype>PointType Origin</cxxVariablePrototype>
+				<cxxVariableNameLookup>Origin</cxxVariableNameLookup>
+				<cxxVariableAPIItemLocation>
+					<cxxVariableDeclarationFile name="filePath" value="C:/wip/sysdoc/tools/Doxygen/branches/DITA/test/PaulRo/cxxApiExamples/src/test_class.h"/>
+					<cxxVariableDeclarationFileLine name="lineNumber" value="25"/>
+				</cxxVariableAPIItemLocation>
+			</cxxVariableDefinition>
+			<apiDesc>
+				<p>Global structure that defines the origin </p>
+			</apiDesc>
+		</cxxVariableDetail>
+	</cxxVariable>
+	<cxxFileAPIItemLocation>
+		<cxxFileDeclarationFile name="filePath" value="C:/wip/sysdoc/tools/Doxygen/branches/DITA/test/PaulRo/cxxApiExamples/src/test_class.h"/>
+	</cxxFileAPIItemLocation>
+</cxxFile>

@@ -21,10 +21,10 @@
 <!--    2009.05.05 EAS:  Added navtitle element.  Moved shortdesc element declaration to mapMod.xsd and topicMod.xsd.  -->
 <!--    2009.05.05 EAS:  Moved metadata to metaDeclMod.xsd  -->
 <!-- ============================================================= -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xml="http://www.w3.org/XML/1998/namespace">
-	
-      <!--  Import the XML Schema that contains the defiinitions for xml:lang and xml:space attributes -->
-	<xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"/>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<!--  Import the XML Schema that contains the defiinitions for xml:lang and xml:space attributes -->
+    <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2" />
 	<xs:attributeGroup name="display-atts">
 		<xs:annotation>
 			<xs:documentation>Display attributes is a parameter entity declaration in the topic
@@ -403,7 +403,7 @@
 			<xs:group ref="foreign.unknown.incl"/>
 		</xs:choice>
 	</xs:group>
-	<!-- <!ENTITY % ph.cnt               "#PCDATA | %basic.ph; | %image;              | %txt.incl; | %data.elements.incl; | %foreign.unknown.incl;"> -->
+	<!-- <!ENTITY % ph.cnt               "#PCDATA | %basic.ph; | %image;              | %; | %data.elements.incl; | %foreign.unknown.incl;"> -->
 	<xs:group name="ph.cnt">
 		<xs:choice>
 			<xs:group ref="basic.ph"/>
@@ -683,7 +683,7 @@
 	</xs:attributeGroup>
 	<xs:element name="keyword">
 		<xs:annotation>
-            <xs:documentation>The &lt;<keyword>keyword</keyword>> element identifies a keyword
+			<xs:documentation>The &lt;<keyword>keyword</keyword>> element identifies a keyword
                 or token, such as a single value from an enumerated list, the name of a command
                 or parameter, or a lookup key for a message (contrast with <xref href="term.xml">term</xref>).
             </xs:documentation>
@@ -757,7 +757,7 @@
         of DITA to apply specific processing or formatting to marked up phrases.</xs:documentation>
 		</xs:annotation>
 		<xs:complexType mixed="true">
-			<xs:complexContent>
+			<xs:complexContent mixed="true">
 				<xs:extension base="ph.class">
 					<xs:attribute ref="class" default="- topic/ph "/>
 				</xs:extension>
@@ -796,7 +796,7 @@
       </xs:documentation>
 		</xs:annotation>
 		<xs:complexType mixed="true">
-			<xs:complexContent>
+			<xs:complexContent mixed="true">
 				<xs:extension base="term.class">
 					<xs:attribute ref="class" default="- topic/term "/>
 				</xs:extension>
@@ -828,7 +828,7 @@
 	</xs:attributeGroup>
 	<xs:element name="text">
 		<xs:complexType mixed="true">
-			<xs:complexContent>
+			<xs:complexContent mixed="true">
 				<xs:extension base="text.class">
 					<xs:attribute ref="class" default="- topic/text "/>
 				</xs:extension>
@@ -860,7 +860,7 @@
       </xs:documentation>
 		</xs:annotation>
 		<xs:complexType mixed="true">
-			<xs:complexContent>
+			<xs:complexContent mixed="true">
 				<xs:extension base="tm.class">
 					<xs:attribute ref="class" default="- topic/tm "/>
 				</xs:extension>
@@ -899,7 +899,7 @@
 	</xs:simpleType>
 	<xs:element name="boolean">
 		<xs:annotation>
-      <xs:documentation>( Deprecated ) - The &lt;<keyword>boolean</keyword>&gt; element is used to express
+			<xs:documentation>( Deprecated ) - The &lt;<keyword>boolean</keyword>&gt; element is used to express
         one of two opposite values, such as yes or no, on or off, true or false, high
         or low, and so forth. The element itself is empty; the value of the element
         is stored in its <keyword>state</keyword> attribute, and
@@ -968,7 +968,7 @@
       </xs:documentation>
 		</xs:annotation>
 		<xs:complexType mixed="true">
-			<xs:complexContent>
+			<xs:complexContent mixed="true">
 				<xs:extension base="p.class">
 					<xs:attribute ref="class" default="- topic/p "/>
 				</xs:extension>
@@ -1004,7 +1004,7 @@
       </xs:documentation>
 		</xs:annotation>
 		<xs:complexType mixed="true">
-			<xs:complexContent>
+			<xs:complexContent mixed="true">
 				<xs:extension base="lq.class">
 					<xs:attribute ref="class" default="- topic/lq "/>
 				</xs:extension>
@@ -1083,7 +1083,7 @@
       </xs:documentation>
 		</xs:annotation>
 		<xs:complexType mixed="true">
-			<xs:complexContent>
+			<xs:complexContent mixed="true">
 				<xs:extension base="note.class">
 					<xs:attribute ref="class" default="- topic/note "/>
 				</xs:extension>
@@ -1138,7 +1138,7 @@
       </xs:documentation>
 		</xs:annotation>
 		<xs:complexType mixed="true">
-			<xs:complexContent>
+			<xs:complexContent mixed="true">
 				<xs:extension base="q.class">
 					<xs:attribute ref="class" default="- topic/q "/>
 				</xs:extension>
@@ -1282,7 +1282,7 @@
       </xs:documentation>
 		</xs:annotation>
 		<xs:complexType mixed="true">
-			<xs:complexContent>
+			<xs:complexContent mixed="true">
 				<xs:extension base="sli.class">
 					<xs:attribute ref="class" default="- topic/sli "/>
 				</xs:extension>
@@ -1317,7 +1317,7 @@
       </xs:documentation>
 		</xs:annotation>
 		<xs:complexType mixed="true">
-			<xs:complexContent>
+			<xs:complexContent mixed="true">
 				<xs:extension base="li.class">
 					<xs:attribute ref="class" default="- topic/li "/>
 				</xs:extension>
@@ -1350,7 +1350,7 @@
         elements that occur inside a list item, definition, or parameter definition.</xs:documentation>
 		</xs:annotation>
 		<xs:complexType mixed="true">
-			<xs:complexContent>
+			<xs:complexContent mixed="true">
 				<xs:extension base="itemgroup.class">
 					<xs:attribute ref="class" default="- topic/itemgroup "/>
 				</xs:extension>
@@ -1458,7 +1458,7 @@
       </xs:documentation>
 		</xs:annotation>
 		<xs:complexType mixed="true">
-			<xs:complexContent>
+			<xs:complexContent mixed="true">
 				<xs:extension base="ddhd.class">
 					<xs:attribute ref="class" default="- topic/ddhd "/>
 				</xs:extension>
@@ -1490,7 +1490,7 @@
         the column of terms in a description list.</xs:documentation>
 		</xs:annotation>
 		<xs:complexType mixed="true">
-			<xs:complexContent>
+			<xs:complexContent mixed="true">
 				<xs:extension base="dthd.class">
 					<xs:attribute ref="class" default="- topic/dthd "/>
 				</xs:extension>
@@ -1557,7 +1557,7 @@
       </xs:documentation>
 		</xs:annotation>
 		<xs:complexType mixed="true">
-			<xs:complexContent>
+			<xs:complexContent mixed="true">
 				<xs:extension base="dt.class">
 					<xs:attribute ref="class" default="- topic/dt "/>
 				</xs:extension>
@@ -1590,7 +1590,7 @@
       </xs:documentation>
 		</xs:annotation>
 		<xs:complexType mixed="true">
-			<xs:complexContent>
+			<xs:complexContent mixed="true">
 				<xs:extension base="dd.class">
 					<xs:attribute ref="class" default="- topic/dd "/>
 				</xs:extension>
@@ -1714,7 +1714,7 @@
       </xs:documentation>
 		</xs:annotation>
 		<xs:complexType mixed="true">
-			<xs:complexContent>
+			<xs:complexContent mixed="true">
 				<xs:extension base="pre.class">
 					<xs:attribute ref="class" default="- topic/pre "/>
 				</xs:extension>
@@ -1753,7 +1753,7 @@
       </xs:documentation>
 		</xs:annotation>
 		<xs:complexType mixed="true">
-			<xs:complexContent>
+			<xs:complexContent mixed="true">
 				<xs:extension base="lines.class">
 					<xs:attribute ref="class" default="- topic/lines "/>
 				</xs:extension>
@@ -1817,7 +1817,7 @@
 		</xs:sequence>
 	</xs:group>
 	<xs:attributeGroup name="image.attributes">
-		<xs:attribute name="href" type="xs:string" />
+		<xs:attribute name="href" type="xs:string"/>
 		<xs:attribute name="keyref" type="xs:string"/>
 		<xs:attribute name="alt" type="xs:string"/>
 		<xs:attribute name="longdescref" type="xs:string"/>
@@ -1855,7 +1855,7 @@
       </xs:documentation>
 		</xs:annotation>
 		<xs:complexType mixed="true">
-			<xs:complexContent>
+			<xs:complexContent mixed="true">
 				<xs:extension base="alt.class">
 					<xs:attribute ref="class" default="- topic/alt "/>
 				</xs:extension>
@@ -2047,9 +2047,8 @@
 	</xs:attributeGroup>
 	<xs:element name="strow">
 		<xs:annotation>
-      <xs:documentation>The &lt;<keyword>simpletable</keyword>> row (&lt;<keyword>strow</keyword>>)
-        element specifies a row in a simple table, like row in a conventional <xref
-          href="table.xml">table</xref>.
+			<xs:documentation>The &lt;<keyword>simpletable</keyword>> row (&lt;<keyword>strow</keyword>>)
+        element specifies a row in a simple table, like row in a conventional <xref href="table.xml">table</xref>.
       </xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
@@ -2080,7 +2079,7 @@
 	</xs:attributeGroup>
 	<xs:element name="stentry">
 		<xs:annotation>
-      <xs:documentation>The simpletable entry (&lt;stentry>) element represents a single
+			<xs:documentation>The simpletable entry (&lt;stentry>) element represents a single
         table cell, like &lt;entry> in &lt;table>. You can place any number of stentry
         cells in either an <xref href="sthead.xml">sthead</xref> element
         (for headings) or <xref href="strow.xml">strow</xref> element (for
@@ -2088,7 +2087,7 @@
       </xs:documentation>
 		</xs:annotation>
 		<xs:complexType mixed="true">
-			<xs:complexContent>
+			<xs:complexContent mixed="true">
 				<xs:extension base="stentry.class">
 					<xs:attribute ref="class" default="- topic/stentry "/>
 				</xs:extension>
@@ -2128,7 +2127,7 @@
             </xs:documentation>
 		</xs:annotation>
 		<xs:complexType mixed="true">
-			<xs:complexContent>
+			<xs:complexContent mixed="true">
 				<xs:extension base="draft-comment.class">
 					<xs:attribute ref="class" default="- topic/draft-comment "/>
 				</xs:extension>
@@ -2168,7 +2167,7 @@
             </xs:documentation>
 		</xs:annotation>
 		<xs:complexType mixed="true">
-			<xs:complexContent>
+			<xs:complexContent mixed="true">
 				<xs:extension base="required-cleanup.class">
 					<xs:attribute ref="class" default="- topic/required-cleanup "/>
 				</xs:extension>
@@ -2203,7 +2202,7 @@
             </xs:documentation>
 		</xs:annotation>
 		<xs:complexType mixed="true">
-			<xs:complexContent>
+			<xs:complexContent mixed="true">
 				<xs:extension base="fn.class">
 					<xs:attribute ref="class" default="- topic/fn "/>
 				</xs:extension>
@@ -2266,7 +2265,7 @@
             </xs:documentation>
 		</xs:annotation>
 		<xs:complexType mixed="true">
-			<xs:complexContent>
+			<xs:complexContent mixed="true">
 				<xs:extension base="cite.class">
 					<xs:attribute ref="class" default="- topic/cite "/>
 				</xs:extension>
@@ -2303,7 +2302,7 @@
             </xs:documentation>
 		</xs:annotation>
 		<xs:complexType mixed="true">
-			<xs:complexContent>
+			<xs:complexContent mixed="true">
 				<xs:extension base="xref.class">
 					<xs:attribute ref="class" default="- topic/xref "/>
 				</xs:extension>
@@ -2334,7 +2333,6 @@
 		<xs:attributeGroup ref="univ-atts"/>
 		<xs:attributeGroup ref="global-atts"/>
 	</xs:attributeGroup>
-
 	<xs:element name="longdescref">
 		<xs:complexType>
 			<xs:complexContent>
@@ -2345,17 +2343,15 @@
 		</xs:complexType>
 	</xs:element>
 	<xs:complexType name="longdescref.class">
-               <xs:sequence>
-                  <xs:group ref="longdescref.content"/>
-                </xs:sequence>
+		<xs:sequence>
+			<xs:group ref="longdescref.content"/>
+		</xs:sequence>
 		<xs:attributeGroup ref="longdescref.attributes"/>
 	</xs:complexType>
-	
-        <xs:group name="longdescref.content">
+	<xs:group name="longdescref.content">
 		<xs:sequence/>
 	</xs:group>
-	
-<xs:attributeGroup name="longdescref.attributes">
+	<xs:attributeGroup name="longdescref.attributes">
 		<xs:attribute name="href" type="xs:string"/>
 		<xs:attribute name="keyref" type="xs:string"/>
 		<xs:attribute name="type" type="xs:string"/>
@@ -2410,7 +2406,7 @@
           or to harvest properties for automated processing. </xs:documentation>
 		</xs:annotation>
 		<xs:complexType mixed="true">
-			<xs:complexContent>
+			<xs:complexContent mixed="true">
 				<xs:extension base="data.class">
 					<xs:attribute ref="class" default="- topic/data "/>
 				</xs:extension>
@@ -2436,7 +2432,8 @@
 	</xs:attributeGroup>
 	<xs:element name="data-about">
 		<xs:annotation>
-        <xs:documentation><p>The &lt;<keyword>data-about</keyword>> element identifies the subject
+			<xs:documentation>
+				<p>The &lt;<keyword>data-about</keyword>> element identifies the subject
           of a property when the subject isn't associated with the context in which
           the property is specified. The property itself is expressed by the &lt;<keyword>data</keyword>>
           element. The &lt;<keyword>data-about</keyword>> element handles exception
@@ -2444,10 +2441,12 @@
           subject of the property. The &lt;<keyword>data-about</keyword>> element is
           particularly useful as a basis for specialization in combination with the &lt;<keyword>data</keyword>>
           element.</p>
-          <p><note type="important">Don't use the &lt;<keyword>data-about</keyword>>
+				<p>
+					<note type="important">Don't use the &lt;<keyword>data-about</keyword>>
             element to identify the object of a property. The <keyword>href</keyword> attribute
-            of the &lt;<keyword>data</keyword>> element serves that purpose.</note></p>
-        </xs:documentation>
+            of the &lt;<keyword>data</keyword>> element serves that purpose.</note>
+				</p>
+			</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
 			<xs:complexContent>
@@ -2529,7 +2528,7 @@
       </xs:documentation>
 		</xs:annotation>
 		<xs:complexType mixed="true">
-			<xs:complexContent>
+			<xs:complexContent mixed="true">
 				<xs:extension base="indexterm.class">
 					<xs:attribute ref="class" default="- topic/indexterm "/>
 				</xs:extension>
@@ -2564,7 +2563,7 @@
         element. It does not in itself have any meaning and should be ignored in processing.</xs:documentation>
 		</xs:annotation>
 		<xs:complexType mixed="true">
-			<xs:complexContent>
+			<xs:complexContent mixed="true">
 				<xs:extension base="index-base.class">
 					<xs:attribute ref="class" default="- topic/index-base "/>
 				</xs:extension>
@@ -2691,7 +2690,7 @@
       </xs:documentation>
 		</xs:annotation>
 		<xs:complexType mixed="true">
-			<xs:complexContent>
+			<xs:complexContent mixed="true">
 				<xs:extension base="navtitle.class">
 					<xs:attribute ref="class" default="- topic/navtitle "/>
 				</xs:extension>

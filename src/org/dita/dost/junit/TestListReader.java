@@ -1,6 +1,7 @@
 package org.dita.dost.junit;
 
 import static org.junit.Assert.assertEquals;
+import java.io.File;
 import org.dita.dost.reader.ListReader;
 import org.dita.dost.resolver.DitaURIResolverFactory;
 import org.junit.Test;
@@ -9,9 +10,9 @@ import org.junit.Test;
 public class TestListReader {
 	public static ListReader listreader;
 	public static DitaURIResolverFactory ditaurlresolverfactory =new DitaURIResolverFactory();
-	String path="test-stub/TestListReader/xhtml/";
+	String path="test-stub" + File.separator + "TestListReader" + File.separator + "xhtml" + File.separator;
 	String filename="dita.xml.properties";
-	String userinputfile="C:/DITA-OT1.5/SAXONIBMJDK/testcase/12014/../../testdata/12014";
+	String userinputfile="C:" + File.separator + "DITA-OT1.5" + File.separator + "SAXONIBMJDK" + File.separator + "testcase" + File.separator + "12014" + File.separator + ".." + File.separator + ".." + File.separator + "testdata" + File.separator + "12014";
 	String userinputmap="map1.ditamap";
 	String subjectschemelist="[cvf.ditamap]";
 	

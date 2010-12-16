@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxVariableConst">
+    <title>cxxVariableConst</title>
+    <shortdesc>The &lt;cxxVariableConst&gt; element contains optional const information.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The &lt;cxxVariableConst&gt; element resides within the &lt;cxxVariableDefinition&gt; element. 
+            The cxxVariableConst element has no children but must have the attributes <i>name</i> and <i>value</i>. 
+            <i>name</i> and <i>value</i> are both set to "const".</p>
+        </section>
+        <example><title>Example</title>
+        <codeblock>&lt;cxxVariableDefinition&gt;
+    &lt;cxxVariableAccessSpecifier value=&quot;public&quot;/&gt;
+    &lt;cxxVariableConst/&gt;
+    &lt;cxxVariableDeclaredType&gt;IMPORT_C const &lt;apiRelation href=&quot;e32def_8h.xml#e32def_8h_1a9357a8e9552b6131a89fb3de94bff80a&quot;&gt;TInt8&lt;/apiRelation&gt;&lt;/cxxVariableDeclaredType&gt;
+    &lt;cxxVariableScopedName/&gt;
+    &lt;cxxVariablePrototype&gt;IMPORT_C const TInt8 KLinkedFontDrive&lt;/cxxVariablePrototype&gt;
+    &lt;cxxVariableNameLookup&gt;KLinkedFontDrive&lt;/cxxVariableNameLookup&gt;
+    &lt;cxxVariableAPIItemLocation&gt;
+        &lt;cxxVariableDeclarationFile name=&quot;filePath&quot; value=&quot;C:/src/include/fntstore.h&quot;/&gt;
+        &lt;cxxVariableDeclarationFileLine name=&quot;lineNumber&quot; value=&quot;66&quot;/&gt;
+    &lt;/cxxVariableAPIItemLocation&gt;
+&lt;/cxxVariableDefinition&gt;</codeblock>
+        </example>        
+        <section conref="../packagedef.dita#cxxVariableConst-reference/cxxVariableConst-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxVariableConst-reference/cxxVariableConst-contains-section"/>
+        <section conref="../packagedef.dita#cxxVariableConst-reference/cxxVariableConst-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxVariableConst-reference/cxxVariableConst-attList-section"/>
+        <section conref="../packagedef.dita#cxxVariableConst-reference/cxxVariableConst-classValue-section"/>
+    </refbody>
+</reference>

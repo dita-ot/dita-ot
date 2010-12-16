@@ -461,4 +461,66 @@ public class StringUtils {
 		}
 		//added by William on 2009-11-26 for bug:1628937 end
 		
+		/**
+		 * Get max value.
+		 */
+		public static Integer getMax(Integer ul_depth, Integer ol_depth, Integer sl_depth, 
+				Integer dl_depth, Integer table_depth, Integer stable_depth){
+			
+			int unDepth = ul_depth;
+			int olDepth = ol_depth;
+			int slDepth = sl_depth;
+			int dlDepth = dl_depth;
+			int tableDepth = table_depth;
+			int stableDepth = stable_depth;
+			
+			int max = unDepth;
+			if(olDepth > max){
+				max = olDepth;
+			}
+			if(slDepth > max){
+				max = slDepth;
+			}
+			if(dlDepth > max){
+				max = dlDepth;
+			}
+			if(tableDepth > max){
+				max = tableDepth;
+			}
+			if(stableDepth > max){
+				max = stableDepth;
+			}
+			
+			return max;
+			
+		}
+		
+		/**
+		 * Get max value.
+		 */
+		public static Integer getMax(Integer fn_depth, Integer list_depth, Integer dlist_depth, Integer table_depth, Integer stable_depth){
+			
+			int fnDepth = fn_depth;
+			int listDepth = list_depth;
+			int dlistDepth = dlist_depth;
+			int tableDepth = table_depth;
+			int stableDepth = stable_depth;
+			
+			int max = fnDepth;
+			if(listDepth > max){
+				max = listDepth;
+			}
+			if(dlistDepth > max){
+				max = dlistDepth;
+			}
+			if(tableDepth > max){
+				max = tableDepth;
+			}
+			if(stableDepth > max){
+				max = stableDepth;
+			}
+			
+			return max;
+			
+		}
 }

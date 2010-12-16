@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2010, v.4002-->
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"
+ "map.dtd">
+<?Pub Sty _display FontColor="red"?>
+<map xml:lang="en-us">
+<topicref collection-type="family" href="DITA-OTProjectHome.xml">
+<topicref href="admin/DITA-OTProjectGoals.xml" locktitle="yes"
+navtitle="Goals and objectives"></topicref>
+<topicref format="html"
+href="http://sourceforge.net/news/?group_id=132728" locktitle="yes"
+navtitle="News" scope="external"></topicref>
+</topicref>
+<topichead navtitle="Ant Quick Start Guide">
+<topicref format="ditamap"
+href="ant-quick-start-guide-for-ditaot.ditamap"></topicref>
+</topichead>
+<topichead navtitle="Additional introductory material">
+<topicref conref="DITA-readme.ditamap#DITA-doc"></topicref>
+</topichead>
+<topichead navtitle="Development Documents">
+<topicref href="dev_ref/DITA-OTArchitecture.xml" locktitle="yes"
+navtitle="Complete Process Architecture"></topicref>
+<topicref href="dev_ref/DITA-OTPreprocess.xml" locktitle="yes"
+navtitle="Preprocess Architecture"></topicref><?Pub Caret -2?>
+<topicref href="dev_ref/DITA-OTGenListModule.xml" locktitle="yes"
+navtitle="Java Module Architecture"></topicref>
+<topicref format="ditamap" href="dev_ref/doc.ditamap" locktitle="yes"
+navtitle="DITA to Word RTF Transformation"></topicref>
+</topichead>
+<topichead navtitle="Project Management">
+<topicref href="admin/DevelopmentProcess.xml" locktitle="yes"
+navtitle="Development Process"></topicref>
+<topicref href="admin/ContributionPolicy.xml" locktitle="yes"
+navtitle="Contribution Policy"></topicref>
+<topicref href="admin/ContributionForm.xml"
+navtitle="Contribution Questionnaire Form"></topicref>
+<topicref href="admin/BugFixGuidelines-NoCLA.xml"
+navtitle="Bug Fix Guidelines" toc="no"></topicref>
+</topichead>
+<topichead navtitle="Resources">
+<topicref format="html"
+href="http://dita.xml.org/wiki/the-dita-open-toolkit"
+navtitle="Project page at dita.xml.org" scope="external"></topicref>
+<topicref format="html" href="http://groups.yahoo.com/group/dita-users/"
+navtitle="Yahoo! Group: dita-users" scope="external"></topicref>
+<topicref format="html" href="http://www.oasis-open.org/committees/dita/"
+navtitle="OASIS DITA Technical Committee " scope="external"></topicref>
+<topicref href="articles/DITA-dWarticles.xml"
+navtitle="DITA developerWorks articles"></topicref>
+</topichead>
+</map>
+<?Pub *0000002407?>

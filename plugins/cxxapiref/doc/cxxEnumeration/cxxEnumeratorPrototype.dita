@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxEnumeratorPrototype">
+    <title>cxxEnumeratorPrototype</title>
+    <shortdesc>Provides a "visual"  representation of the enumerator declaration.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title><p>This element provides a "visual" representation of the enumerator declaration as PCDATA.
+The are no semantics applied to the content but the intention is that the content should look as similar as possible to the enumerator declaration in source code.</p>
+        </section>
+
+        <section conref="../packagedef.dita#cxxEnumeratorPrototype-reference/cxxEnumeratorPrototype-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxEnumeratorPrototype-reference/cxxEnumeratorPrototype-contains-section"/>
+        <section conref="../packagedef.dita#cxxEnumeratorPrototype-reference/cxxEnumeratorPrototype-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxEnumeratorPrototype-reference/cxxEnumeratorPrototype-attList-section"/>
+        <section conref="../packagedef.dita#cxxEnumeratorPrototype-reference/cxxEnumeratorPrototype-classValue-section"/>
+    </refbody>
+</reference>

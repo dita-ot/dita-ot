@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxDefineDeclarationFile">
+    <title>cxxDefineDeclarationFile</title>
+    <shortdesc>The &lt;cxxDefineDeclarationFile&gt; element is defined within &lt;cxxDefineAPIItemLocation&gt;. 
+    &lt;cxxDefineDeclarationFile&gt; specifies the file in which the API declaration is present.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The element &lt;cxxDefineDeclarationFile&gt; is empty but for the required attributes <i>name</i> 
+            and <i>value</i>. <i>name</i> is always set to "filePath" and <i>value</i> is set to the file path.</p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxDefineDeclarationFile name="filePath" value="C:/EPOC/master/sf/os/commsfw/commsfw/src/cfperfmetrics.cpp"/&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxDefineDeclarationFile-reference/cxxDefineDeclarationFile-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxDefineDeclarationFile-reference/cxxDefineDeclarationFile-contains-section"/>
+        <section conref="../packagedef.dita#cxxDefineDeclarationFile-reference/cxxDefineDeclarationFile-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxDefineDeclarationFile-reference/cxxDefineDeclarationFile-attList-section"/>
+        <section conref="../packagedef.dita#cxxDefineDeclarationFile-reference/cxxDefineDeclarationFile-classValue-section"/>
+    </refbody>
+</reference>

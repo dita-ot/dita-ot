@@ -16,8 +16,8 @@ import org.junit.Test;
 public class TestDitaValReader {
 	
 	public static DitaValReader reader;
-	private static String baseDir = "test-stub/DITA-OT1.5";
-	private static String tempDir = "DITAVAL/temp";
+	private static String baseDir = "test-stub" + File.separator + "DITA-OT1.5";
+	private static String tempDir = "DITAVAL" + File.separator + "temp";
 	
 	
 	@BeforeClass
@@ -33,8 +33,8 @@ public class TestDitaValReader {
 		PipelineHashIO pipelineInput = new PipelineHashIO();
 		
 		String inputDir = "DITAVAL";
-		String inputMap = "DITAVAL/DITAVAL_testdata1.ditamap";
-		String outDir = "DITAVAL/out";
+		String inputMap = "DITAVAL" + File.separator + "DITAVAL_testdata1.ditamap";
+		String outDir = "DITAVAL" + File.separator + "out";
 		pipelineInput.setAttribute("inputmap", inputMap);
 		pipelineInput.setAttribute("basedir", baseDir);
 		pipelineInput.setAttribute("inputdir", inputDir);
@@ -49,8 +49,8 @@ public class TestDitaValReader {
 		pipelineInput.setAttribute("generatecopyouter", "1");
 		pipelineInput.setAttribute("outercontrol", "warn");
 		pipelineInput.setAttribute("onlytopicinmap", "false");
-		pipelineInput.setAttribute("ditalist", tempDir + "/dita.list");
-		pipelineInput.setAttribute("maplinks", tempDir + "/maplinks.unordered");
+		pipelineInput.setAttribute("ditalist", tempDir + File.separator + "dita.list");
+		pipelineInput.setAttribute("maplinks", tempDir + File.separator + "maplinks.unordered");
 		pipelineInput.setAttribute("transtype", "xhtml");
 		facade.execute("GenMapAndTopicList", pipelineInput);
 		
@@ -60,7 +60,7 @@ public class TestDitaValReader {
 	@Test
 	public void testRead() throws DITAOTException{
 		
-		reader.read(baseDir+"/DITAVAL/DITAVAL_1.ditaval");		
+		reader.read(baseDir+ File.separator + "DITAVAL" + File.separator + "DITAVAL_1.ditaval");		
 		HashMap map = reader.getFilterMap();
 		assertEquals("include", map.get("audience=Cindy"));
 		assertEquals("flag", map.get("produt=p1"));

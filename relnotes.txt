@@ -1,5 +1,125 @@
 (c) Copyright IBM Corp. 2004, 2010 All Rights Reserved.
 
+     DITA OT release 1.5.2
+     
+     Release 1.5.2 is a maintenance release based on the final
+     version of the DITA 1.2 standard.  In addition to tweaks to 
+     match late changes in the standard, version 1.5.2 contains 
+     many enhancements, user patches, bug fixes, and significant 
+     updates to the documentation.
+     
+     Release 1.5.2 was developed using a series of test builds 
+     released to the community every three weeks. Each item in the list
+     below indicates which test build first contained the update.  The
+     eighth public build was the final build, released as the 
+     DITA-OT 1.5.2 final stable build.
+
+     [General Enhancements]
+     * Include final version of DITA 1.2 schemas and DTDs
+     * Minor updates to DITA 1.2 support added in earlier releases, to
+       ensure compliance with the final standard
+     * Overhaul of documentation to remove outdated material
+     * Reorganization of doc directory to highlight new and important info
+     
+     [11 SourceForge Enhancements Added]
+     * 2797337 Support for ODF output transform (Prototype added in version 1.5.1, 
+               updates in each 1.5.2 Milestone, transform complete in Milestone 7)
+     * 3019853 Create new "textonly" output method for use by any transform (Milestone 1)
+     * 3012392 PDF transformation should allow args.xsl style override (Milestone 1)
+     * 3021544 Preserve DITA elements in XHTML class by default (Milestone 1)
+	 * 2882123 Add Ant Quick Start Guide to DITA-OT (Updated in each Milestone after 3)
+	 * 3079610 Add current OT version to log (Milestone 6)
+     * 3086936 Add extension points for TOC output (Eclipse TOC, HTML Help TOC and
+               Project, HTML TOC) (Milestone 6)
+     * 1520909 HTML Help requires appropriate codepage (Milestone 6)
+     * 3125994 Allow PDF index conf. to be overridden in Customization (Milestone 7)
+     * 3125983 Create a basic glossary implementation for PDF (Milestone 7)
+     * 3109395 Add parameter for Eclipse symbolic name (Milestone 8)
+     
+     [12 SourceForge Patches Added]
+     * 3058008 Refactor chunk module for cleaner code (Milestone 4)
+     * 3064412 Integrator fails to escape XML correctly (Milestone 5)
+     * 3062765 Fix unit test file paths to be platform dependent (Milestone 5)
+     * 3067681 Add class to ordered child links (Milestone 5)
+     * 3063318 ChunkModule refactoring (Milestone 6)
+     * 3061100 Define AbstractPipelineInput's function (Milestone 6)
+     * 3065050 Common logging interface (Milestone 6)
+     * 3077935 Plug-in ignore in Integrator (Milestone 6) 
+     * 2949860 PDF build.xml with args for JVM memory and architecture (Milestone 6) 
+     * 3102905 Move supported image extensions to configuration file (Milestone 7)
+     * 3097518 Show effective property values (Milestone 8)
+     * 3101335 apiMap.mod missing from catalog (Milestone 8) 
+      
+     [65 SourceForge Bugs Fixed] 
+     * 2928582 commonTopicProcessing template prolog processing out of order (Milestone 1)
+     * 2823221 version of Xalan-J inconsistent (Milestone 1)
+     * 3023642 Invalid @colname generated in nested table (Milestone 1)
+     * 3016739 Chunking mixes up <link> to topic in reltable (Milestone 1)
+     * 3020314 Chunk output includes index terms in navtitles (Milestone 1)
+     * 3020313 Chunk processor adds <topicref> before <topicmeta> (Milestone 1)
+     * 3031513 Nested table processing in pdf2 (Milestone 2)
+     * 3030317 Filtering doesn't work on @rev or @props attributes (Milestone 2)
+     * 3028650 Replace xs:float with xs:double in Plus plugins (Milestone 2)
+     * 3022847 PDF transform gives Java exceptions for spaces in dir name (Milestone 2)     
+     * 3032950 Scale is not correctly computed in XHTML transforms (Milestone 2)
+     * 3033141 dita.xml.properties file not closed after generating (Milestone 2)
+     * 3035816 When creating .chm, .hhp-file is missing a line-break (Milestone 3)
+     * 3036222 RTF transform not editable with Word 2007 (Milestone 3)
+     * 3036985 Infinite recursivity in replaceString template (Milestone 3)
+     * 3034445 "CURRENDIR" typo in plus-plugins (Checked in during milestone 3)
+     * 3034489 Remove all occurrences of <xmlcatalog> from plus-plugins (Checked in during milestone 3)
+     * 3038941 Link with &amp; breaks in abstract (Milestone 3)
+     * 3039017 Comments in PDF plugin files are confusing (Milestone 3)
+     * 3058124 Toolkit Allows Unescaped URLs, doesn't handle escaped ones (Milestone 4)
+     * 3056939 Conref of keyref-based xref results in xref with no href (Milestone 4)
+     * 3052913 Multiple levels of keyref in map not resolved (Milestone 4)
+     * 3052904 Keydef with no href causes hard failure (Milestone 4)
+     * 3052156 Object with data that starts with slash breaks image copying (Milestone 4)
+     * 3044861 Inappropriate warning for resource-only topic to graphic (Milestone 4)
+     * 3042978 @copy-to and @chunk on topichead gives file not found (Milestone 4)
+     * 3016994 The included-domains entity cannot be used in document (Milestone 4)
+     * 2994593 Transformation breaks when DITA Topics contain entity refs (Milestone 4)
+     * 3028894 no support for title in plugin.xml file (Milestone 4)
+     * 3065853 Indent from <title> gets displayed in TOC (PDF) (Milestone 5)
+     * 3065486 CURRENTFILE not aware of DITAEXT (Milestone 5)
+     * 3065422 Wrong filename and filedir parameters for eclipse xsl (Milestone 5)
+     * 3063533 Adjacent words get glued together using DITA to RTF (Milestone 5)
+     * 3062912 Messages extension damages custom message formatting (Milestone 5)
+     * 3059256 Peer links break with missing format or wrong extension (Milestone 5)
+     * 2972393 Need to parameterize maxmemory and VM args for forked JVMs (Milestone 6)
+     * 3060269 Problem displaying French content TOC in CHM (Milestone 6)
+     * 3038412 zh-CN file for PDF puts English strings in output (partial fix) (Milestone 6)  
+	 * 3079676 <navtitle> contents included in PDF output (Updated so that <navtitle> in a
+	           topic will only appear when the draft parameter is set to 'yes')(Milestone 6)
+     * 3004895 XHTML output for <draft-comment> should use class attribute (Milestone 6)
+     * 2794487 No Easy Way to Override/Extend HTML Navtitle Generation (Milestone 6)
+     * 3088314 Need to clarify many error messages (Milestone 6)
+     * 3081597 conkeyref accepts values in conref style (Milestone 6)
+     * 3081459 fragment generation without plugin fails (Milestone 6) 
+     * 3073262 missing terminating quote in bundle version (Milestone 6)
+     * 2832863 <group> elements in catalogs don't work for all editors (Milestone 6)
+     * 3038933 Troff output drops prereq links (Milestone 7)
+     * 3098975 Disable Output Escaping Should Not Be Used (Milestone 7)
+     * 3102827 Allow a way to specify recognized image extensions (Milestone 7)
+     * 3102219 Unexpected character code in Japanese string definition (Milestone 7)
+     * 3102845 Japanese character-set definition (Milestone 7)
+     * 3103488 Update Saxon command line args for IDIOM PDF build.xml (Milestone 7)
+     * 3101964 Unnecessary XML declaration in HHP and HHC (Milestone 7)
+     * 3095233 Shortdesc metadata missing when using abstract (Milestone 7)
+     * 3097409 PDF should skip empty columns in property tables (Milestone 7)
+     * 3090803 PDF fails when chunk specified and topic appears twice (Milestone 7)
+     * 3026627 side-col-width variable has no effect (Milestone 7)
+     * 3126007 TOC entries not properly indented in PDF (Milestone 7)
+     * 3109616 Update PDF plug-in to check for latest Antenna House dirs (Milestone 8)
+     * 3056040 problematic Bundle-Version test in eclipseMap (Milestone 8)
+     * 3029074 Index file not generated by default for Eclipse Help (Milestone 8)
+     * 3086552 XMLReader.parse does not correctly receive the XML system ID (Milestone 8)
+     * 3110418 Duplicate @colname generated for entry (Milestone 8)
+     * 3114353 Java sun.* packages should not be used (Milestone 8)
+
+     
+====================================================================================
+
      DITA OT release 1.5.1
      
      Release 1.5.1 is a maintenance release based on Committee Draft 01

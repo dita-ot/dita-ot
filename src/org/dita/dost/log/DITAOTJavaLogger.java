@@ -10,11 +10,11 @@
 package org.dita.dost.log;
 import org.dita.dost.util.LogUtils;
 /**
- * Class description goes here.
+ * Logger to standard output and error.
  * 
  * @author Wu, Zhi Qiang
  */
-public class DITAOTJavaLogger {
+public class DITAOTJavaLogger implements DITAOTLogger {
 	private static boolean debugMode = false;
 	
 	/**

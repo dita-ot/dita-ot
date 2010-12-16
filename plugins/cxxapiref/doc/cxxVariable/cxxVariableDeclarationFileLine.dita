@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxVariableDeclarationFileLine">
+    <title>cxxVariableDeclarationFileLine</title>
+    <shortdesc>The &lt;cxxVariableDeclarationFileLine&gt; element is defined within &lt;cxxVariableAPIItemLocation&gt;. 
+    &lt;cxxVariableDeclarationFileLine&gt; specifies the line on which the API is declared.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The element &lt;cxxVariableDeclarationFileLine&gt; is empty but for the required 
+            attributes <i>name</i> and <i>value</i>. The <i>name</i> attribute is always "lineNumber" 
+            and <i>value</i> is the line number which the variable is declared on.</p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxVariableAPIItemLocation&gt;
+    &lt;cxxVariableDeclarationFile name="filePath" value="C:/src/include/e32base.h"/&gt;
+    &lt;cxxVariableDeclarationFileLine name="lineNumber" value="1664"/&gt;
+&lt;/cxxVariableAPIItemLocation&gt;</codeblock>
+        </example>        
+        <section conref="../packagedef.dita#cxxVariableDeclarationFileLine-reference/cxxVariableDeclarationFileLine-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxVariableDeclarationFileLine-reference/cxxVariableDeclarationFileLine-contains-section"/>
+        <section conref="../packagedef.dita#cxxVariableDeclarationFileLine-reference/cxxVariableDeclarationFileLine-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxVariableDeclarationFileLine-reference/cxxVariableDeclarationFileLine-attList-section"/>
+        <section conref="../packagedef.dita#cxxVariableDeclarationFileLine-reference/cxxVariableDeclarationFileLine-classValue-section"/>
+    </refbody>
+</reference>

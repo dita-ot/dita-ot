@@ -1,6 +1,19 @@
 <?xml version="1.0" ?>
+<!--             (C) Copyright OASIS Open 2005, 2010.              -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<!--                                                               -->
+
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
 
+
+  <!-- Catalog for Dita XSDs -->
+  <!-- It includes both SYSTEM and URI catalog declerations.  
+       - The SYSTEM declarations are used by the Apache Catalog Resolver.
+       - The URI declarations are the proper declerations as per the OASIS Entity 
+       Resolution Committee.  They are included in case some entity resolves adhere
+       to the spec to resolve the location of the schemas.
+  -->
 
   <group xml:base="base/xsd/">
 
@@ -109,10 +122,10 @@
     <uri name="urn:oasis:names:tc:dita:xsd:topicMod.xsd:1.x" uri="topicMod.xsd" />
     <uri name="urn:oasis:names:tc:dita:xsd:topicMod.xsd:1.2" uri="topicMod.xsd" />
     
-    <uri name="topicMod.xsd" uri="topicMod.xsd"/>
-    <uri name="urn:oasis:names:tc:dita:xsd:topicMod.xsd" uri="topicMod.xsd"/>
-    <uri name="urn:oasis:names:tc:dita:xsd:topicMod.xsd:1.x" uri="topicMod.xsd"/>
-    <uri name="urn:oasis:names:tc:dita:xsd:topicMod.xsd:1.2" uri="topicMod.xsd"/>
+    <uri name="basetopic.xsd" uri="basetopic.xsd"/>
+    <uri name="urn:oasis:names:tc:dita:xsd:basetopic.xsd" uri="basetopic.xsd"/>
+    <uri name="urn:oasis:names:tc:dita:xsd:basetopic.xsd:1.x" uri="basetopic.xsd"/>
+    <uri name="urn:oasis:names:tc:dita:xsd:basetopic.xsd:1.2" uri="basetopic.xsd"/>
     
     <uri name="topicGrp.xsd" uri="topicGrp.xsd"/>
     <uri name="urn:oasis:names:tc:dita:xsd:topicGrp.xsd" uri="topicGrp.xsd"/>
@@ -208,13 +221,16 @@
 
   </group>
 
+  <!-- Document types and modules used by the Technical Content package -->
   <group xml:base="technicalContent/xsd/">
 
+    <!-- Topic for use in the technical content package -->
     <system systemId="topic.xsd" uri="topic.xsd"/>
     <system systemId="urn:oasis:names:tc:dita:xsd:topic.xsd" uri="topic.xsd"/>
     <system systemId="urn:oasis:names:tc:dita:xsd:topic.xsd:1.x" uri="topic.xsd"/>
     <system systemId="urn:oasis:names:tc:dita:xsd:topic.xsd:1.2" uri="topic.xsd"/>
     
+    <!-- Map for use in the technical content package -->
     <system systemId="map.xsd" uri="map.xsd"/>
     <system systemId="urn:oasis:names:tc:dita:xsd:map.xsd" uri="map.xsd"/>
     <system systemId="urn:oasis:names:tc:dita:xsd:map.xsd:1.x" uri="map.xsd"/>
@@ -224,6 +240,11 @@
     <system systemId="urn:oasis:names:tc:dita:xsd:ditabase.xsd" uri="ditabase.xsd"/>
     <system systemId="urn:oasis:names:tc:dita:xsd:ditabase.xsd:1.x" uri="ditabase.xsd"/>
     <system systemId="urn:oasis:names:tc:dita:xsd:ditabase.xsd:1.2" uri="ditabase.xsd"/>
+    
+    <system systemId="ditabaseMod.xsd" uri="ditabaseMod.xsd" />
+    <system systemId="urn:oasis:names:tc:dita:xsd:ditabaseMod.xsd" uri="ditabaseMod.xsd" />
+    <system systemId="urn:oasis:names:tc:dita:xsd:ditabaseMod.xsd:1.x" uri="ditabaseMod.xsd" />
+    <system systemId="urn:oasis:names:tc:dita:xsd:ditabaseMod.xsd:1.2" uri="ditabaseMod.xsd" />
 
     <system systemId="concept.xsd" uri="concept.xsd"/>
     <system systemId="urn:oasis:names:tc:dita:xsd:concept.xsd" uri="concept.xsd"/>
@@ -373,6 +394,11 @@
     <uri name="urn:oasis:names:tc:dita:xsd:ditabase.xsd:1.x" uri="ditabase.xsd"/>
     <uri name="urn:oasis:names:tc:dita:xsd:ditabase.xsd:1.2" uri="ditabase.xsd"/>
 
+    <uri name="ditabaseMod.xsd" uri="ditabaseMod.xsd" />
+    <uri name="urn:oasis:names:tc:dita:xsd:ditabaseMod.xsd" uri="ditabaseMod.xsd" />
+    <uri name="urn:oasis:names:tc:dita:xsd:ditabaseMod.xsd:1.x" uri="ditabaseMod.xsd" />
+    <uri name="urn:oasis:names:tc:dita:xsd:ditabaseMod.xsd:1.2" uri="ditabaseMod.xsd" />
+
     <uri name="concept.xsd" uri="concept.xsd"/>
     <uri name="urn:oasis:names:tc:dita:xsd:concept.xsd" uri="concept.xsd"/>
     <uri name="urn:oasis:names:tc:dita:xsd:concept.xsd:1.x" uri="concept.xsd"/>
@@ -418,6 +444,7 @@
     <uri name="urn:oasis:names:tc:dita:xsd:taskMod.xsd:1.x" uri="taskMod.xsd"/>
     <uri name="urn:oasis:names:tc:dita:xsd:taskMod.xsd:1.2" uri="taskMod.xsd"/>
     
+    <!-- Constraints in the technical content package -->
     <uri name="strictTaskbodyConstraintMod.xsd"       uri="strictTaskbodyConstraintMod.xsd"/>
     <uri name="urn:oasis:names:tc:dita:xsd:strictTaskbodyConstraintMod.xsd"       uri="strictTaskbodyConstraintMod.xsd"/>
     <uri name="urn:oasis:names:tc:dita:xsd:strictTaskbodyConstraintMod.xsd:1.x"       uri="strictTaskbodyConstraintMod.xsd"/>
@@ -507,6 +534,7 @@
 
   </group>
 
+  <!-- Bookmap document type and module -->
   <group xml:base="bookmap/xsd/">
 
     <system systemId="bookmap.xsd" uri="bookmap.xsd"/>
@@ -541,6 +569,7 @@
 
   </group>
 
+  <!-- Domain for representing XNAL address information -->
   <group xml:base="xnal/xsd/">
 
     <system systemId="xnalDomain.xsd" uri="xnalDomain.xsd"/>
@@ -555,6 +584,7 @@
 
   </group>
 
+  <!-- Modules and topic types from the OASIS DITA Learning Subcommittee -->
   <group xml:base="learning/xsd/">
 
     <system systemId="learningInteractionBaseDomain.xsd" uri="learningInteractionBaseDomain.xsd"/>
@@ -737,10 +767,10 @@
     <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningContentMod.xsd:1.x"      uri="learningContentMod.xsd"/>
     <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningContentMod.xsd:1.2"      uri="learningContentMod.xsd"/>
     
-    <uri name="learningDitabase.xsd"      uri="learningBookmap.xsd"/>
-    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningDitabase.xsd"      uri="learningBookmap.xsd"/>
-    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningDitabase.xsd:1.x"      uri="learningBookmap.xsd"/>
-    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningDitabase.xsd:1.2"      uri="learningBookmap.xsd"/>
+    <uri name="learningBookmap.xsd"      uri="learningBookmap.xsd"/>
+    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningBookmap.xsd"      uri="learningBookmap.xsd"/>
+    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningBookmap.xsd:1.x"      uri="learningBookmap.xsd"/>
+    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningBookmap.xsd:1.2"      uri="learningBookmap.xsd"/>
     
     <uri name="learningMap.xsd"      uri="learningMap.xsd"/>
     <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningMap.xsd"      uri="learningMap.xsd"/>
@@ -799,6 +829,7 @@
      
   </group>
 
+  <!-- Subject scheme package for controlled vocabularies -->
   <group xml:base="subjectScheme/xsd/">
     <system systemId="subjectScheme.xsd"       uri="subjectScheme.xsd"/>
     <system systemId="urn:oasis:names:tc:dita:spec:classification:xsd:subjectScheme.xsd"       uri="subjectScheme.xsd"/>
@@ -853,6 +884,7 @@
 
   </group>
 
+  <!-- Modules and document types from the OASIS DITA Machine Industry Subcommittee -->
   <group xml:base="machineryIndustry/xsd/">
     <system systemId="machineryTask.xsd"      uri="machineryTask.xsd"/>
     <system systemId="urn:oasis:names:tc:dita:spec:machinery:xsd:machineryTask.xsd"      uri="machineryTask.xsd"/>
@@ -884,6 +916,7 @@
     <uri name="urn:oasis:names:tc:dita:spec:machinery:xsd:machineryTaskbodyConstraintIntMod.xsd:1.x" uri="machineryTaskbodyConstraintIntMod.xsd"/>
     <uri name="urn:oasis:names:tc:dita:spec:machinery:xsd:machineryTaskbodyConstraintIntMod.xsd:1.2" uri="machineryTaskbodyConstraintIntMod.xsd"/>
   </group>
+  <!-- DITAVal package for conditional processing -->
   <group xml:base="ditaval/xsd/">
       <system systemId="ditaval.xsd"      uri="ditaval.xsd"/>
       <system systemId="urn:oasis:names:tc:dita:xsd:ditaval.xsd"      uri="ditaval.xsd"/>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxVariableReimplemented">
+    <title>cxxVariableReimplemented</title>
+    <shortdesc>The &lt;cxxVariableReimplemented&gt; element identifies variables that have been re-implemented.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>This identifies and links to variables that have been re-implemented.</p>
+            <p>&lt;cxxVariableReimplemented&gt; has no compulsatory attributes.</p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxVariableReimplemented href="class_c_active.xml#class_c_active_1a4bb76130b67b5430b3b736194df7edeb"&gt;CActive::iSpare&lt;/cxxVariableReimplemented&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxVariableReimplemented-reference/cxxVariableReimplemented-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxVariableReimplemented-reference/cxxVariableReimplemented-contains-section"/>
+        <section conref="../packagedef.dita#cxxVariableReimplemented-reference/cxxVariableReimplemented-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxVariableReimplemented-reference/cxxVariableReimplemented-attList-section"/>
+        <section conref="../packagedef.dita#cxxVariableReimplemented-reference/cxxVariableReimplemented-classValue-section"/>
+    </refbody>
+</reference>

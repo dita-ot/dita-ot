@@ -121,7 +121,16 @@
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:topicMod.xsd:1.2" />  
 
   <xs:attributeGroup name="domains-att">
-     <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic task) (topic abbrev-d)"/>
+     <xs:attribute name="domains" type="xs:string" 
+                            default="(topic abbrev-d)
+                                          (topic hazard-d)
+                                          (topic hi-d)
+                                          (topic indexing-d)                                           
+                                          (topic pr-d) 
+                                          (topic sw-d)
+                                          (topic ui-d) 
+                                          (topic ut-d)
+                                          (topic task)"/>
   </xs:attributeGroup>
 
 

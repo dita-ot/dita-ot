@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxFile">
+    <title>cxxFile</title>
+    <shortdesc>The &lt;cxxFile&gt; element contains all the global APIs of a component.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>&lt;cxxFile&gt; requires the attribute <i>id</i> so that it may be linked to from other topics.</p>
+            <p>The &lt;cxxFile&gt; element must contain the file name within the element &lt;apiname&gt;. &lt;cxxFile&gt; 
+            can also contain zero or more of the following elements to describe global APIs:</p>
+            <ul>
+                <li>&lt;cxxFunction&gt;</li>
+                <li>&lt;cxxDefine&gt;</li>
+                <li>&lt;cxxVariable&gt;</li>
+                <li>&lt;cxxEnumeration&gt;</li>
+                <li>&lt;cxxTypedef&gt;</li>
+            </ul>
+            <p>&lt;cxxFile&gt; must contain the element &lt;cxxFileAPIItemLocation&gt; to give the path to the file 
+            being described.</p>
+        </section>
+        <example><title>Example</title>
+        <codeblock>&lt;cxxFile id="commsdebugutility_8h"&gt;
+	&lt;apiName&gt;commsdebugutility.h&lt;/apiName&gt;
+	&lt;cxxVariable id="commsdebugutility_8h_1a176351e3ce0f0e736bc6a7d8e2dcda59"&gt;
+		&lt;apiName&gt;KLogBufferSize&lt;/apiName&gt;
+		&lt;cxxVariableDetail&gt;
+			...
+		&lt;/cxxVariableDetail&gt;
+	&lt;/cxxVariable&gt;
+	&lt;cxxFileAPIItemLocation&gt;
+		&lt;cxxFileDeclarationFile name="filePath" value="C:/src/include/comms-infras/commsdebugutility.h"/&gt;
+	&lt;/cxxFileAPIItemLocation&gt;
+&lt;/cxxFile&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxFile-reference/cxxFile-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxFile-reference/cxxFile-contains-section"/>
+        <section conref="../packagedef.dita#cxxFile-reference/cxxFile-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxFile-reference/cxxFile-attList-section"/>
+        <section conref="../packagedef.dita#cxxFile-reference/cxxFile-classValue-section"/>
+    </refbody>
+</reference>

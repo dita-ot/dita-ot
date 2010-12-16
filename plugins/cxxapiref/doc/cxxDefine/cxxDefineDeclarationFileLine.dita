@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxDefineDeclarationFileLine">
+    <title>cxxDefineDeclarationFileLine</title>
+    <shortdesc>The &lt;cxxDefineDeclarationFileLine&gt; element is defined within &lt;cxxDefineAPIItemLocation&gt;. 
+    &lt;cxxDefineDeclarationFileLine&gt; specifies the line on which the API is declared</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The element &lt;cxxDefineDeclarationFileLine&gt; is empty but for the required 
+            attributes <i>name</i> and <i>value</i>. <i>name</i> is always set to "lineNumber" 
+            and <i>value</i> is set to the line number that the item appears on.</p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxDefineAPIItemLocation&gt;
+    &lt;cxxDefineDeclarationFile name=&quot;filePath&quot; value=&quot;C:/src/SCOMM/cs_roles.cpp&quot;/&gt;
+    &lt;cxxDefineDeclarationFileLine name=&quot;lineNumber&quot; value=&quot;35&quot;/&gt;
+&lt;/cxxDefineAPIItemLocation&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxDefineDeclarationFileLine-reference/cxxDefineDeclarationFileLine-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxDefineDeclarationFileLine-reference/cxxDefineDeclarationFileLine-contains-section"/>
+        <section conref="../packagedef.dita#cxxDefineDeclarationFileLine-reference/cxxDefineDeclarationFileLine-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxDefineDeclarationFileLine-reference/cxxDefineDeclarationFileLine-attList-section"/>
+        <section conref="../packagedef.dita#cxxDefineDeclarationFileLine-reference/cxxDefineDeclarationFileLine-classValue-section"/>
+    </refbody>
+</reference>

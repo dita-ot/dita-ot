@@ -29,7 +29,7 @@
       <dita:domainsModule xmlns:dita="http://dita.oasis-open.org/architecture/2005/">(topic ut-d)</dita:domainsModule>
     </xs:appinfo>
     <xs:documentation> 
-    
+      <!--  place holder for documentation -->
     </xs:documentation>
   </xs:annotation>
 

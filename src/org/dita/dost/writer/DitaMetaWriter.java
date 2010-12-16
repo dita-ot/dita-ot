@@ -333,9 +333,16 @@ public class DitaMetaWriter extends AbstractXMLWriter {
 		output.write("<"+elem.getNodeName());
 		NamedNodeMap attrMap = elem.getAttributes();
 		for (int i = 0; i<attrMap.getLength(); i++){
-			output.write(" "+attrMap.item(i).getNodeName()
-					+"=\""+attrMap.item(i).getNodeValue()
+			//edited on 2010-08-04 for bug:3038941 start
+			//get node name
+			String nodeName = attrMap.item(i).getNodeName();
+			//escape entity to avoid entity resolving
+			String nodeValue = StringUtils.escapeXML(attrMap.item(i).getNodeValue());
+			//write into target file
+			output.write(" "+ nodeName
+					+"=\""+ nodeValue
 					+"\"");
+			//edited on 2010-08-04 for bug:3038941 end
 		}
 		output.write(">");
 		NodeList children = elem.getChildNodes();

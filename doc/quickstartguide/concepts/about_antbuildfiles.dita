@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2010, v.4002-->
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "concept.dtd">
+<?Pub Sty _display FontColor="red"?>
+<concept id="about_DITAOT-build-files" xml:lang="en-us">
+<title>Writing Ant Build Files DITA-OT</title>
+<shortdesc>Learning how buildfiles tell Ant what and how to compile.
+  </shortdesc>
+<conbody>
+<section>   <p>The sample Ant build scripts provided by the DITA-OT
+may not be adequate to meet the needs of your documentation project.
+ 	This topic describes how to customize the default scripts and write
+your own.</p>   <title>Customize the Default Ant Script</title> 		<p>The
+DITA Open Toolkit contains sample build files for both the DITA-OT
+and sample documentation.  Writers new to the toolkit 			use the <codeph>sample_all.xml</codeph> Ant
+build script to create all the sample documents that come with DITA-OT.
+ The 			toolkit also contains build scripts for individual ouput types,
+such as <codeph>sample_pdf.xml</codeph>. You can modify 			just one
+or two Ant properties in these scripts for your own documentation.
+		</p> 		<p>Here is the Ant project definition from <codeph>template_pdf.xml</codeph> 		</p> 		<p><image
+align="left" height="400" href="../images/samplepdfbuildfile.gif"
+width="400"></image>  		</p> 		<p>You simply change the values of
+the following properties to match the values used in your project:
+		<ul>
+<li>Project name: The root element in an Ant build file.</li>
+<li>Target name: Must be one of the DITA-OT targets listed in <xref
+href="../reference/dita-ot_ant_properties.dita"></xref></li>
+</ul> 		However, the toolkit's scripts assume that your input files
+are located in same directory structure used by the DITA-OT samples.
+		</p>    </section>
+<section>    <title>Write Your Own Ant Script</title> 		<p>The default
+build script may not meet the needs of your project for a range of
+reasons:</p> 		<ul>
+<li>You want to add additional Ant properties not used in the 		 
+ sample template, such XSL and DTD properties to assist your debugging
+efforts.</li>
+<li>Your content files may not have the same directory structure as
+the samples.</li>
+<li>You want to place the output files in a different directory.</li>
+</ul> 		   <p>You need to cutomize or write your own build file for
+these use cases.  For example, each target 			for this guide's build
+script uses a separate value for <codeph>dita.temp.dir</codeph> to
+assist debugging 			for a specific output types. 		</p> 		<p>Here
+is the beginning of the ant script that produced this document: 		</p> 		<p><image
+align="left" height="400" href="../images/mybuildfile.gif" width="400">
+</image>  		</p> 		<p><xref
+href="../reference/dita-ot_ant_properties.dita"></xref> contains a
+short list of the most basic Ant properties used by DITA-OT. Use these
+		properties to customize your document's build script for your needs.</p><?Pub
+Caret 1?> 	</section>
+</conbody>
+<related-links>
+<link href="about_ant.dita" scope="local"></link>
+<link href="../reference/dita-ot_ant_properties.dita" scope="local">
+</link>
+</related-links>
+</concept>
+<?Pub *0000003137?>

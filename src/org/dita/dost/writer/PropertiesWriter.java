@@ -52,6 +52,9 @@ public class PropertiesWriter implements AbstractWriter {
 			fileOutputStream = new FileOutputStream(filename);
 			prop.store(fileOutputStream, null);
 			fileOutputStream.flush();
+			//Added by William on 2010-07-23 for bug:3033141 start
+			fileOutputStream.close();
+			//Added by William on 2010-07-23 for bug:3033141 end
 		} catch (Exception e) {
 			throw new DITAOTException(e);
 		} finally {
@@ -75,6 +78,10 @@ public class PropertiesWriter implements AbstractWriter {
         try{
         	os=new FileOutputStream(filename);
         	prop.storeToXML(os, null);
+        	//Added by William on 2010-07-23 for bug:3033141 start
+        	os.flush();
+        	os.close();
+        	//Added by William on 2010-07-23 for bug:3033141 end
         }catch(IOException ioe){
         	throw new DITAOTException(ioe);
         }

@@ -23,8 +23,6 @@
 <!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
     
-    <!--  Import the XML Schema that contains the defiinitions for xml:lang and xml:space attributes -->
-    <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"/>
     
     <!-- <!ENTITY % learningInteractionBase-d-att "(topic learningInteractionBase-d)"> -->
    <xs:annotation>

@@ -309,7 +309,64 @@ See the accompanying license.txt file for applicable licenses.
                     region-name="odd-index-footer"/>
             </fo:simple-page-master>
 
+            <!--GLOSSARY simple masters-->
 
+            <fo:simple-page-master
+                master-name="glossary-first"
+                page-width="{$page-width}"
+                page-height="{$page-height}">
+                <fo:region-body
+                    margin-top="{$page-margin-top}"
+                    margin-bottom="{$page-margin-bottom}"
+                    margin-left="{$page-margin-left}"
+                    margin-right="{$page-margin-right}">
+                </fo:region-body>
+                <fo:region-before extent="{$page-margin-top}"
+                    display-align="before"
+                    region-name="odd-glossary-header"/>
+                <fo:region-after extent="{$page-margin-bottom}"
+                    display-align="after"
+                    region-name="odd-glossary-footer"/>
+            </fo:simple-page-master>
+
+            <fo:simple-page-master
+                master-name="glossary-even"
+                page-width="{$page-width}"
+                page-height="{$page-height}">
+                <fo:region-body
+                    margin-top="{$page-margin-top}"
+                    margin-bottom="{$page-margin-bottom}"
+                    margin-left="{$page-margin-left}"
+                    margin-right="{$page-margin-right}">
+                </fo:region-body>
+                <fo:region-before extent="{$page-margin-top}"
+                    display-align="before"
+                    region-name="even-glossary-header"/>
+                <fo:region-after extent="{$page-margin-bottom}"
+                    display-align="after"
+                    region-name="even-glossary-footer"/>
+            </fo:simple-page-master>
+
+            <fo:simple-page-master
+                master-name="glossary-odd"
+                page-width="{$page-width}"
+                page-height="{$page-height}">
+                <fo:region-body
+                    margin-top="{$page-margin-top}"
+                    margin-bottom="{$page-margin-bottom}"
+                    margin-left="{$page-margin-left}"
+                    margin-right="{$page-margin-right}">
+                </fo:region-body>
+                <fo:region-before extent="{$page-margin-top}"
+                    display-align="before"
+                    region-name="odd-glossary-header"/>
+                <fo:region-after extent="{$page-margin-bottom}"
+                    display-align="after"
+                    region-name="odd-glossary-footer"/>
+            </fo:simple-page-master>
+
+
+            <!--Sequences-->
             <fo:page-sequence-master master-name="toc-sequence">
                 <fo:repeatable-page-master-alternatives>
                     <fo:conditional-page-master-reference master-reference="toc-first" odd-or-even="odd" page-position="first"/>
@@ -349,6 +406,14 @@ See the accompanying license.txt file for applicable licenses.
                     <fo:conditional-page-master-reference master-reference="front-matter-last" page-position="last" odd-or-even="even" blank-or-not-blank="blank"/>
                     <fo:conditional-page-master-reference master-reference="front-matter-even" odd-or-even="even"/>
                     <fo:conditional-page-master-reference master-reference="front-matter-odd" odd-or-even="odd"/>
+                </fo:repeatable-page-master-alternatives>
+            </fo:page-sequence-master>
+
+            <fo:page-sequence-master master-name="glossary-sequence">
+                <fo:repeatable-page-master-alternatives>
+                    <fo:conditional-page-master-reference page-position="first" master-reference="glossary-first" odd-or-even="odd"/>
+                    <fo:conditional-page-master-reference master-reference="glossary-odd" odd-or-even="odd" />
+                    <fo:conditional-page-master-reference master-reference="glossary-even" odd-or-even="even"/>
                 </fo:repeatable-page-master-alternatives>
             </fo:page-sequence-master>
 

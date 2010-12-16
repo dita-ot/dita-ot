@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="copyright" content="(C) Copyright 2005"/>
+<meta name="DC.rights.owner" content="(C) Copyright 2005"/>
+<meta name="DC.Type" content="reference"/>
+<meta name="DC.Title" content="cxxFunctionTemplateParameters"/>
+<meta name="abstract" content="Collects together the template parameters for template functions."/>
+<meta name="description" content="Collects together the template parameters for template functions."/>
+<meta name="DC.Relation" scheme="URI" content="../cxxFunction/cxxFunction_module.html"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="cxxFunctionTemplateParameters"/>
+<meta name="DC.Language" content="en-us"/>
+<link rel="stylesheet" type="text/css" href="../commonltr.css"/>
+<title>cxxFunctionTemplateParameters</title>
+<link rel="stylesheet" type="text/css" href="../nokiacxxref.css"/></head>
+<body class="element" id="cxxFunctionTemplateParameters"><a name="cxxFunctionTemplateParameters"><!-- --></a>
+
+
+    <h1 class="topictitle1">cxxFunctionTemplateParameters</h1>
+
+    
+    <div><p>Collects together the template parameters for template functions.</p>
+
+        <div class="section" id="cxxFunctionTemplateParameters__section_BB16EAA97F01427CAFFFB15C63DEAC8D"><a name="cxxFunctionTemplateParameters__section_BB16EAA97F01427CAFFFB15C63DEAC8D"><!-- --></a><h2 class="sectiontitle">Description</h2>
+            <p>Collects together the template parameters for template functions.</p>
+<p>See ISO/IEC 14882:2003(E) 14.1 Template parameters [temp.param]</p>
+
+        </div>
+
+        <div class="example" id="cxxFunctionTemplateParameters__example_7637310D62AB4BDB88913D5B7CC94BDC"><a name="cxxFunctionTemplateParameters__example_7637310D62AB4BDB88913D5B7CC94BDC"><!-- --></a><h2 class="sectiontitle">Example</h2>
+            <p>Given this code:</p>
+
+            <pre class="codeblock">/**
+ @tparam T The type of the first function object.
+ @tparam U The type of the second function object.
+ @return 1 on success, 0 on failure.
+ */
+template&lt;typename T, typename U&gt;
+int templateFunction(T&amp; x, U&amp; y)
+{
+} 
+            </pre>
+<p>Then function <tt>templateFunction
+                </tt> would have the <tt>cxxFunctionTemplateParameters</tt>
+element:</p>
+
+            <pre class="codeblock">&lt;cxxFunctionTemplateParameters&gt;
+  &lt;cxxFunctionTemplateParameter&gt;
+    &lt;cxxFunctionTemplateParameterType&gt;typename T&lt;/cxxFunctionTemplateParameterType&gt;
+    &lt;apiDefNote&gt;The type of the first function object. &lt;/apiDefNote&gt;
+  &lt;/cxxFunctionTemplateParameter&gt;
+  &lt;cxxFunctionTemplateParameter&gt;
+    &lt;cxxFunctionTemplateParameterType&gt;typename U&lt;/cxxFunctionTemplateParameterType&gt;
+    &lt;apiDefNote&gt;The type of the second function object. &lt;/apiDefNote&gt;
+  &lt;/cxxFunctionTemplateParameter&gt;
+&lt;/cxxFunctionTemplateParameters&gt;
+            </pre>
+<p>If the mandatory attributes are present they must be set thus:</p>
+
+            <pre class="codeblock">&lt;cxxFunctionStorageClassSpecifierExtern name="extern" value="extern"/&gt;</pre>
+
+        </div>
+
+        <div class="elementContainedBy"><h2 class="sectiontitle">Contained by</h2>
+
+<p id="cxxFunctionTemplateParameters__d5618e8523"><a name="cxxFunctionTemplateParameters__d5618e8523"><!-- --></a>
+<a href="cxxFunctionDefinition.html" title="Describes all of the details of a C++ function declaration.">cxxFunctionDefinition</a> 
+</p>
+
+</div>
+
+        <div class="elementContains"><h2 class="sectiontitle">Contains</h2>
+
+<p id="cxxFunctionTemplateParameters__d5618e8535"><a name="cxxFunctionTemplateParameters__d5618e8535"><!-- --></a>
+<a href="cxxFunctionTemplateParameter.html" title="Contains the type of the template parameter and any documentation associated with that parameter.">cxxFunctionTemplateParameter</a> 
+</p>
+
+</div>
+
+        <div class="elementContentModel"><h2 class="sectiontitle">Content Model</h2>
+
+<p id="cxxFunctionTemplateParameters__d5618e8547"><a name="cxxFunctionTemplateParameters__d5618e8547"><!-- --></a>
+<a href="cxxFunctionTemplateParameter.html" title="Contains the type of the template parameter and any documentation associated with that parameter.">cxxFunctionTemplateParameter</a> 
+(<em>at least 1</em>)
+</p>
+
+</div>
+
+        <div class="elementAttList"/>
+
+        <div class="elementClassValue"><h2 class="sectiontitle">Inheritance</h2>
+
+<p id="cxxFunctionTemplateParameters__d5618e8564"><a name="cxxFunctionTemplateParameters__d5618e8564"><!-- --></a>
+ topic/<span class="keyword">ph</span> reference/<span class="keyword">ph</span> apiRef/<span class="keyword">apiDefItem</span> apiOperation/<span class="keyword">apiDefItem</span> cxxFunction/<span class="keyword">cxxFunctionTemplateParameters</span></p>
+
+</div>
+
+    </div>
+
+<div>
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../cxxFunction/cxxFunction_module.html" title="The cxxFunction module describes C++ functions, including member functions.">cxxFunction module</a></div>
+</div>
+</div>
+
+</body>
+</html>

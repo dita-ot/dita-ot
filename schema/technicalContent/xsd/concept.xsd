@@ -47,7 +47,6 @@
   <!-- ======= MetaData elements, plus keyword and indexterm ======= -->
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:metaDeclMod.xsd:1.2"/>
   
-  
   <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:commonElementGrp.xsd:1.2">
     <xs:group name="keyword">
       <xs:choice>
@@ -121,6 +120,8 @@
   
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:topicMod.xsd:1.2" />  
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:conceptMod.xsd:1.2" />
+  
+  
   	
 
   <!--  ================ INFO-TYPES DEFINITION =====================  -->
@@ -130,7 +131,16 @@
 
 <!--  ================ DOMAINS ATTRIBUTE DEFINITION =====================  -->
   <xs:attributeGroup name="domains-att">
-    <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic concept) (topic abbrev-d)"/>
+    <xs:attribute name="domains" type="xs:string" 
+                          default="(topic abbrev-d)
+                                          (topic hazard-d)
+                                          (topic hi-d)
+                                          (topic indexing-d)                                           
+                                          (topic pr-d) 
+                                          (topic sw-d)
+                                          (topic ui-d) 
+                                          (topic ut-d)
+                                          (topic concept)"/>
   </xs:attributeGroup>
    
 </xs:schema>

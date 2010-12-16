@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxFunctionInline">
+    <title>cxxFunctionInline</title>
+    <shortdesc>Identifies the funciton as <i>inline</i>.</shortdesc>
+    <refbody>
+        <section id="section_82FEC7C5337342A287392F97853085B6">
+            <title>Description</title><p>A function declaration with an inline specifier declares an inline function.</p><p>See ISO/IEC 14882:2003(E) 7.1.2 Function specifiers [dcl.fct.spec]</p>
+        </section>
+        <section conref="../packagedef.dita#cxxFunctionInline-reference/cxxFunctionInline-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxFunctionInline-reference/cxxFunctionInline-contains-section"/>
+        <section conref="../packagedef.dita#cxxFunctionInline-reference/cxxFunctionInline-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxFunctionInline-reference/cxxFunctionInline-attList-section"/>
+        <section conref="../packagedef.dita#cxxFunctionInline-reference/cxxFunctionInline-classValue-section"/>
+    </refbody>
+</reference>

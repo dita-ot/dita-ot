@@ -1,0 +1,447 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ================================================================= -->
+<!-- HEADER -->
+<!-- ================================================================= -->
+<!-- MODULE:    C++ Variables DTD -->
+<!-- VERSION:   0.6.0 -->
+<!-- DATE:      May 2009 -->
+<!---->
+<!-- ================================================================= -->
+<!-- ================================================================= -->
+<!-- PUBLIC DOCUMENT TYPE DEFINITION -->
+<!-- TYPICAL INVOCATION -->
+<!---->
+<!--
+  Refer to this file by the following public identifier or an 
+        appropriate system identifier 
+  PUBLIC "-//NOKIA//DTD DITA C++ API Variable Reference Type v0.6.0//EN"
+        Delivered as file "cxxVariable.dtd"
+-->
+<!-- ================================================================= -->
+<!-- SYSTEM:     Darwin Information Typing Architecture (DITA) -->
+<!---->
+<!-- PURPOSE:    C++ API Reference for Variables -->
+<!---->
+<!-- ORIGINAL CREATION DATE: -->
+<!-- November 2009 -->
+<!---->
+<!-- Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies). -->
+<!-- All rights reserved. -->
+<!---->
+<!-- Change History (latest at top): -->
+<!-- +++++++++++++++++++++++++++++++ -->
+<!-- 2010-02-16 VOG: Updated. -->
+<!-- 2010-02-10 PaulRoss: Updated. -->
+<!-- 2009-11-16 PaulRoss: Initial design. -->
+<!---->
+<!-- ================================================================= -->
+<!--
+  Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+  All rights reserved.
+-->
+<!-- ============ Hooks for domain extension ============ -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="../../../schema/base/xsd/ditaarch.xsd"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../../../schema/base/xsd/xml.xsd"/>
+  <xs:group name="cxxVariableDetail">
+    <xs:sequence>
+      <xs:element ref="cxxVariableDetail"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxVariableDefinition">
+    <xs:sequence>
+      <xs:element ref="cxxVariableDefinition"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxVariableAccessSpecifier">
+    <xs:sequence>
+      <xs:element ref="cxxVariableAccessSpecifier"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxVariableDeclaredType">
+    <xs:sequence>
+      <xs:element ref="cxxVariableDeclaredType"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxVariableScopedName">
+    <xs:sequence>
+      <xs:element ref="cxxVariableScopedName"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxVariablePrototype">
+    <xs:sequence>
+      <xs:element ref="cxxVariablePrototype"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxVariableNameLookup">
+    <xs:sequence>
+      <xs:element ref="cxxVariableNameLookup"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxVariableReimplemented">
+    <xs:sequence>
+      <xs:element ref="cxxVariableReimplemented"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxVariableStorageClassSpecifierExtern">
+    <xs:sequence>
+      <xs:element ref="cxxVariableStorageClassSpecifierExtern"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxVariableStorageClassSpecifierStatic">
+    <xs:sequence>
+      <xs:element ref="cxxVariableStorageClassSpecifierStatic"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxVariableStorageClassSpecifierMutable">
+    <xs:sequence>
+      <xs:element ref="cxxVariableStorageClassSpecifierMutable"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxVariableConst">
+    <xs:sequence>
+      <xs:element ref="cxxVariableConst"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxVariableVolatile">
+    <xs:sequence>
+      <xs:element ref="cxxVariableVolatile"/>
+    </xs:sequence>
+  </xs:group>
+  <!-- Location information -->
+  <xs:group name="cxxVariableAPIItemLocation">
+    <xs:sequence>
+      <xs:element ref="cxxVariableAPIItemLocation"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxVariableDeclarationFile">
+    <xs:sequence>
+      <xs:element ref="cxxVariableDeclarationFile"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxVariableDeclarationFileLine">
+    <xs:sequence>
+      <xs:element ref="cxxVariableDeclarationFileLine"/>
+    </xs:sequence>
+  </xs:group>
+  <!-- ============ Hooks for shell DTD ============ -->
+  <xs:group name="cxxVariable-types-default">
+    <xs:sequence>
+      <xs:element ref="no-topic-nesting"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxVariable-info-types">
+    <xs:sequence>
+      <xs:group ref="cxxVariable-types-default"/>
+    </xs:sequence>
+  </xs:group>
+  <!-- ============ Topic specializations ============ -->
+  <xs:element name="cxxVariable">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="apiName"/>
+        <xs:group minOccurs="0" ref="shortdesc"/>
+        <xs:group minOccurs="0" ref="prolog"/>
+        <xs:group ref="cxxVariableDetail"/>
+        <xs:group minOccurs="0" ref="related-links"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="cxxVariable-info-types"/>
+      </xs:sequence>
+      <xs:attribute name="id" use="required" type="xs:ID"/>
+      <xs:attribute name="conref"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attributeGroup ref="arch-atts"/>
+      <xs:attribute name="domains" default="(topic ui-d) (topic hi-d) (topic pr-d) (topic sw-d)                            (topic ut-d) (topic pr-d api-d) (topic pr-d api-d cxxapi-d)"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/topic reference/reference apiRef/apiRef apiValue/apiValue cxxVariable/cxxVariable "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxVariableDetail">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="cxxVariableDefinition"/>
+        <xs:group minOccurs="0" ref="apiDesc"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="example"/>
+          <xs:group ref="section"/>
+          <xs:group ref="apiImpl"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attributeGroup ref="id-atts"/>
+      <xs:attribute name="translate">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/body reference/refbody apiRef/apiDetail apiValue/apiValueDetail cxxVariable/cxxVariableDetail "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxVariableDefinition">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="cxxVariableAccessSpecifier"/>
+        <xs:group minOccurs="0" ref="cxxVariableStorageClassSpecifierExtern"/>
+        <xs:group minOccurs="0" ref="cxxVariableStorageClassSpecifierStatic"/>
+        <xs:group minOccurs="0" ref="cxxVariableStorageClassSpecifierMutable"/>
+        <xs:group minOccurs="0" ref="cxxVariableConst"/>
+        <xs:group minOccurs="0" ref="cxxVariableVolatile"/>
+        <xs:group minOccurs="0" ref="cxxVariableDeclaredType"/>
+        <xs:group minOccurs="0" ref="cxxVariableScopedName"/>
+        <xs:group minOccurs="0" ref="cxxVariablePrototype"/>
+        <xs:group minOccurs="0" ref="cxxVariableNameLookup"/>
+        <xs:group minOccurs="0" ref="cxxVariableReimplemented"/>
+        <xs:group minOccurs="0" ref="cxxVariableAPIItemLocation"/>
+      </xs:sequence>
+      <xs:attribute name="spectitle"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/section reference/section apiRef/apiDef apiValue/apiValueDef cxxVariable/cxxVariableDefinition "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxVariableAccessSpecifier">
+    <xs:complexType>
+      <xs:attribute name="name" default="access">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="access"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" default="public">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="public"/>
+            <xs:enumeration value="protected"/>
+            <xs:enumeration value="private"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiValue/apiQualifier cxxVariable/cxxVariableAccessSpecifier "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxVariableDeclaredType">
+    <xs:complexType mixed="true">
+      <xs:group minOccurs="0" maxOccurs="unbounded" ref="apiRelation"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiValue/apiDefItem cxxVariable/cxxVariableDeclaredType "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxVariableScopedName">
+    <xs:complexType mixed="true">
+      <xs:attribute name="href"/>
+      <xs:attribute name="keyref"/>
+      <xs:attribute name="type"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/keyword reference/keyword apiRef/apiItemName apiValue/apiItemName cxxVariable/cxxVariableScopedName "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxVariablePrototype">
+    <xs:complexType mixed="true">
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiValue/apiDefItem cxxVariable/cxxVariablePrototype "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxVariableNameLookup">
+    <xs:complexType mixed="true">
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiValue/apiDefItem cxxVariable/cxxVariableNameLookup "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxVariableReimplemented">
+    <xs:complexType mixed="true">
+      <xs:attribute name="href"/>
+      <xs:attribute name="keyref"/>
+      <xs:attribute name="type"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="format"/>
+      <xs:attribute name="scope">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="local"/>
+            <xs:enumeration value="peer"/>
+            <xs:enumeration value="external"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/xref reference/xref apiRef/apiRelation apiValue/apiRelation cxxVariable/cxxVariableReimplemented "/>
+    </xs:complexType>
+  </xs:element>
+  <!-- Storage class specifiers and other qualifiers. -->
+  <xs:element name="cxxVariableStorageClassSpecifierExtern">
+    <xs:complexType>
+      <xs:attribute name="name" default="extern">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="extern"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" default="extern">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="extern"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiValue/apiQualifier  cxxVariable/cxxVariableStorageClassSpecifierExtern "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxVariableStorageClassSpecifierStatic">
+    <xs:complexType>
+      <xs:attribute name="name" default="static">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="static"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" default="static">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="static"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiValue/apiQualifier cxxVariable/cxxVariableStorageClassSpecifierStatic "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxVariableStorageClassSpecifierMutable">
+    <xs:complexType>
+      <xs:attribute name="name" default="mutable">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="mutable"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" default="mutable">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="mutable"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiValue/apiQualifier cxxVariable/cxxVariableStorageClassSpecifierMutable "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxVariableConst">
+    <xs:complexType>
+      <xs:attribute name="name" default="const">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="const"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" default="const">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="const"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiValue/apiQualifier cxxVariable/cxxVariableConst "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxVariableVolatile">
+    <xs:complexType>
+      <xs:attribute name="name" default="volatile">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="volatile"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" default="volatile">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="volatile"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiValue/apiQualifier cxxVariable/cxxVariableVolatile "/>
+    </xs:complexType>
+  </xs:element>
+  <!-- Location information -->
+  <xs:element name="cxxVariableAPIItemLocation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="cxxVariableDeclarationFile"/>
+        <xs:group ref="cxxVariableDeclarationFileLine"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiValue/apiDefItem cxxVariable/cxxVariableAPIItemLocation"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxVariableDeclarationFile">
+    <xs:complexType>
+      <xs:attribute name="name" default="filePath">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="filePath"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" use="required"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiValue/apiQualifier cxxVariable/cxxVariableDeclarationFile "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxVariableDeclarationFileLine">
+    <xs:complexType>
+      <xs:attribute name="name" default="lineNumber">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="lineNumber"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" use="required"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiValue/apiQualifier cxxVariable/cxxVariableDeclarationFileLine "/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
+<!-- ============ Class attributes for type ancestry ============ -->
+<!-- Relation elements -->

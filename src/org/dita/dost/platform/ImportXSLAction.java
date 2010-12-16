@@ -9,6 +9,7 @@ import java.util.Iterator;
 
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.StringUtils;
 /**
  * ImportXSLAction class.
  *
@@ -36,9 +37,9 @@ public class ImportXSLAction extends ImportAction {
 			value = iter.next();
 			retBuf.append(Constants.LINE_SEPARATOR);
 			retBuf.append("<xsl:import href=\"");				
-			retBuf.append(
+			retBuf.append(StringUtils.escapeXML(
 					FileUtils.getRelativePathFromMap(
-							templateFilePath, value));
+							templateFilePath, value)));
 			retBuf.append("\"/>");
 		}
 		return retBuf.toString();

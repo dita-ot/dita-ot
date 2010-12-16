@@ -155,6 +155,10 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 	
 	private String inputDir = null;
 	
+	//Added on 2010-08-24 for bug:3086552 start
+	private boolean setSystemid = true;
+	//Added on 2010-08-24 for bug:3086552 end
+	
 	private DITAOTFileLogger fileLogger = DITAOTFileLogger.getInstance();
 	/**
 	 * Default Construtor.
@@ -183,6 +187,16 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 			//get transtype
 			String transtype = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE);
 			//Added by William on 2009-07-18 for req #12014 start
+			
+			//Added on 2010-08-24 for bug:3086552 start
+			String setSystemid_tmp = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_EXT_PARAN_SETSYSTEMID);
+			if(setSystemid_tmp.equals("yes")) {
+				setSystemid = true;
+			} else {
+				setSystemid = false;
+			}
+			DitaValReader.initXMLReader(setSystemid);
+			//Added on 2010-08-24 for bug:3086552 end
 			
 			inputDir = null;
 			String filePathPrefix = null;
@@ -231,7 +245,7 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 					else
 						xmlValidate=true;
 				}
-				DitaWriter.initXMLReader(ditaDir,xmlValidate);
+				DitaWriter.initXMLReader(ditaDir,xmlValidate, setSystemid);
 			} catch (SAXException e) {
 				throw new DITAOTException(e.getMessage(), e);
 			}

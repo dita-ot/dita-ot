@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxFunctionDefinitionFile">
+    <title>cxxFunctionDefinitionFile</title>
+    <shortdesc>Identifies the path to the file that contains the definition of the function.
+    </shortdesc>
+    <refbody>
+        <section id="section_BC079DD2CD5E43C68960B002ED7EA326">
+            <title>Description</title><p>This identifies the path to the file that contains the definition
+ of the funcition.
+This has two attributes; name (always has a value "filePath") and value.</p>
+        </section>
+        <example id="example_379697BA35D6469F94348F38D9BD640B">
+            <title>Example</title><p/>
+            <codeblock>&lt;cxxFunctionDefinitionFile name="filePath" value="inc/a.h"/&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxFunctionDefinitionFile-reference/cxxFunctionDefinitionFile-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxFunctionDefinitionFile-reference/cxxFunctionDefinitionFile-contains-section"/>
+        <section conref="../packagedef.dita#cxxFunctionDefinitionFile-reference/cxxFunctionDefinitionFile-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxFunctionDefinitionFile-reference/cxxFunctionDefinitionFile-attList-section"/>
+        <section conref="../packagedef.dita#cxxFunctionDefinitionFile-reference/cxxFunctionDefinitionFile-classValue-section"/>
+    </refbody>
+</reference>

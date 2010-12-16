@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="copyright" content="(C) Copyright 2005"/>
+<meta name="DC.rights.owner" content="(C) Copyright 2005"/>
+<meta name="DC.Type" content="reference"/>
+<meta name="DC.Title" content="cxxVariable"/>
+<meta name="abstract" content="The &lt;cxxVariable&gt; element contains the elements necessary to describe a variable."/>
+<meta name="description" content="The &lt;cxxVariable&gt; element contains the elements necessary to describe a variable."/>
+<meta name="DC.Relation" scheme="URI" content="../cxxVariable/cxxVariable_module.html"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="cxxVariable"/>
+<meta name="DC.Language" content="en-us"/>
+<link rel="stylesheet" type="text/css" href="../commonltr.css"/>
+<title>cxxVariable</title>
+<link rel="stylesheet" type="text/css" href="../nokiacxxref.css"/></head>
+<body class="element" id="cxxVariable"><a name="cxxVariable"><!-- --></a>
+
+
+    <h1 class="topictitle1">cxxVariable</h1>
+
+    
+    <div><p>The &lt;cxxVariable&gt; element contains the elements necessary to describe a variable.</p>
+
+        <div class="section"><h2 class="sectiontitle">Description</h2>
+            
+            <p>The &lt;cxxVariable&gt; element requires the <em>id</em> attribute so that it can be referenced 
+            by other topics. &lt;cxxVariable&gt; also requires an &lt;apiname&gt; element to specify the variable 
+            name, the the &lt;cxxVariableDetail&gt; element to hold the variable description.</p>
+
+        </div>
+
+        <div class="example"><h2 class="sectiontitle">Example</h2>
+            
+            <pre class="codeblock">&lt;cxxClass id="a_class"&gt;
+    &lt;apiName&gt;AClass&lt;/apiName&gt;
+    &lt;cxxClassDetail&gt;
+        ...
+    &lt;/cxxClassDetail&gt;
+    &lt;cxxFunction id="a_class_1a0cd89cbef4c7224dab024bfa3182b99e"&gt;
+        ...
+    &lt;/cxxFunction&gt;
+    &lt;cxxVariable id="a_class_1ae0375"&gt;
+        &lt;apiName&gt;iFunctions&lt;/apiName&gt;
+        &lt;cxxVariableDetail&gt;
+            &lt;cxxVariableDefinition&gt;
+                &lt;cxxVariableAccessSpecifier value="protected"/&gt;
+                &lt;cxxVariableDeclaredType&gt;
+                    &lt;apiRelation href="a_class_general_functions.xml#class_m_anim_general_functions"&gt;MAnimGeneralFunctions&lt;/apiRelation&gt; *&lt;/cxxVariableDeclaredType&gt;
+                &lt;cxxVariableScopedName&gt;CAnim&lt;/cxxVariableScopedName&gt;
+                &lt;cxxVariablePrototype&gt;MAnimGeneralFunctions * iFunctions&lt;/cxxVariablePrototype&gt;
+                &lt;cxxVariableNameLookup&gt;CAnim::iFunctions&lt;/cxxVariableNameLookup&gt;
+                &lt;cxxVariableAPIItemLocation&gt;
+                    &lt;cxxVariableDeclarationFile name="filePath" value="C:/src/include/w32adll.h"/&gt;
+                    &lt;cxxVariableDeclarationFileLine name="lineNumber" value="908"/&gt;
+                &lt;/cxxVariableAPIItemLocation&gt;
+            &lt;/cxxVariableDefinition&gt;
+            &lt;apiDesc&gt;
+                &lt;p&gt;Pointer to a class containing functions implemented by the window server.&lt;/p&gt;
+                &lt;p&gt;These are available to any &lt;xref href="a_class.xml#a_class"&gt;CAnim&lt;/xref&gt; derived class.&lt;/p&gt;
+                &lt;p&gt;Note that this value is automatically set for you by the animation framework. You do not need to assign a value to this pointer.&lt;/p&gt;
+            &lt;/apiDesc&gt;
+        &lt;/cxxVariableDetail&gt;
+    &lt;/cxxVariable&gt;
+    &lt;cxxClassInherits&gt;
+        ...
+    &lt;/cxxClassInherits&gt;
+&lt;/cxxClass&gt;</pre>
+
+        </div>
+
+        <div class="elementContainedBy"><h2 class="sectiontitle">Contained by</h2>
+
+<p id="cxxVariable__d11749e13763"><a name="cxxVariable__d11749e13763"><!-- --></a>
+<a href="../cxxUnion/cxxUnion.html" title="The &lt;cxxUnion&gt; element provides the name of the C++ API union, all the elements necessary to describe the members that are introduced by the union declaration.">cxxUnion</a> 
+<a href="../cxxClass/cxxClass.html" title="The &lt;cxxClass&gt; element provides the name of the C++ API class, all the elements necessary to describe the members that are introduced by the class declaration, and the members inherited from the direct base class.">cxxClass</a> 
+<a href="../cxxStruct/cxxStruct.html" title="The &lt;cxxStruct&gt; element provides the name of the C++ API struct, all the elements necessary to describe the members that are introduced by the struct declaration, and the members inherited from the direct base struct.">cxxStruct</a> 
+</p>
+
+</div>
+
+        <div class="elementContains"><h2 class="sectiontitle">Contains</h2>
+
+<p id="cxxVariable__d11749e13781"><a name="cxxVariable__d11749e13781"><!-- --></a>
+<span class="keyword">apiName</span>, 
+<a href="cxxVariableDetail.html" title="The &lt;cxxVariableDetail&gt; element provides detailed information about the structure and behaviors of a C++ variable.">cxxVariableDetail</a> 
+<span class="keyword">no-topic-nesting</span>, 
+<span class="keyword">prolog</span>, 
+<span class="keyword">related-links</span>, 
+<span class="keyword">shortdesc</span>, 
+</p>
+
+</div>
+
+        <div class="elementContentModel"><h2 class="sectiontitle">Content Model</h2>
+
+<p id="cxxVariable__d11749e13809"><a name="cxxVariable__d11749e13809"><!-- --></a>
+(<span class="keyword">apiName</span>, 
+  then  
+<span class="keyword">shortdesc</span>, 
+  then  
+<span class="keyword">prolog</span>, 
+  then  
+<a href="cxxVariableDetail.html" title="The &lt;cxxVariableDetail&gt; element provides detailed information about the structure and behaviors of a C++ variable.">cxxVariableDetail</a> 
+  then  
+<span class="keyword">related-links</span>, 
+  then  
+(<span class="keyword">no-topic-nesting</span>, 
+
+))</p>
+
+</div>
+
+        <div class="elementAttList"/>
+
+        <div class="elementClassValue"><h2 class="sectiontitle">Inheritance</h2>
+
+<p id="cxxVariable__d11749e13839"><a name="cxxVariable__d11749e13839"><!-- --></a>
+ topic/<span class="keyword">topic</span> reference/<span class="keyword">reference</span> apiRef/<span class="keyword">apiRef</span> apiValue/<span class="keyword">apiValue</span> cxxVariable/<span class="keyword">cxxVariable</span></p>
+
+</div>
+
+    </div>
+
+<div>
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../cxxVariable/cxxVariable_module.html" title="Defines a top-level container for all the elements necessary to describe a variable.">cxxVariable module</a></div>
+</div>
+</div>
+
+</body>
+</html>
