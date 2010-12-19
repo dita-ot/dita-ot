@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!-- Author: Rob Justice -->
 <!-- Date: 6/26/10 																						-->
 <!-- You must run the startcmd.bat file in the DITA-OT toolkit directory to set environment variables 		-->
@@ -8,8 +8,9 @@
 <project name="antquickstartguide" default="pdf2" basedir=".">
 	<!-- Set project-specific environment variables 														-->
 	<property environment = "env"/>
-	<property name="toolkit_dir" value="${env.DITA_DIR}" />
-	<import file="${toolkit_dir}/integrator.xml"/>
+	<!-- <property name="toolkit_dir" value="${env.DITA_DIR}" /> -->
+  <property name="DITA_DIR" value="${env.DITA_DIR}"/>
+	<import file="${DITA_DIR}/integrator.xml"/>
 	<property name="args.logdir" value="../logs"/>
 
 	<!-- Specifies file types for your content and image files.  Change these values if you use  			-->
@@ -34,14 +35,14 @@
 	<!-- You can easily provide topic-level filtering of your projects by using a different .ditamap		-->
 	<!-- file.  This option may be easier for some documentation projects than content-level filtering,		-->
 	<!-- creating a separate .ditaval file and inserting otherprops attributes in your content files.		-->
-	<property name="map_dir" value="../maps" />
+	<property name="map_dir" value="../.." />
 	<property name="MAP_file" value="${map_dir}/ant-quick-start-guide-for-ditaot.ditamap"/>
 	
 	<!-- The outer.control property suppresses certain trivial errors in the log.							--> 
 	<!-- <property name="outer.control" value="quiet" />	-->	
 
 	<target name="dita2pdf2">
-			<ant antfile="${toolkit_dir}/conductor.xml" target="init">
+			<ant antfile="${DITA_DIR}/conductor.xml" target="init">
 				<property name="transtype" value="pdf2"/>
 				<property name="args.input" value="${MAP_file}"/>
 				<property name="dita.temp.dir" value="${outdir}/temp_pdf"/>
@@ -52,7 +53,7 @@
 	
 	<!-- Target for creating Microsoft HTML Help system.													-->
 	<target name="dita2htmlhelp" depends="integrate">
-		<ant antfile="${toolkit_dir}/conductor.xml" target="init">
+		<ant antfile="${DITA_DIR}/conductor.xml" target="init">
 			<property name="transtype" value="htmlhelp"/>
 			<property name="args.input" value="${MAP_file}"/>
 			<property name="output.dir" value="${outdir}/htmlhelp"/>
@@ -66,18 +67,19 @@
 	
 	<!-- Target for creating XHTML documentation.															-->
 	<target name="dita2xhtml" depends="integrate">
-		<ant antfile="${toolkit_dir}/conductor.xml" target="init">
+		<ant antfile="${DITA_DIR}/conductor.xml" target="init">
 			<property name="transtype" value="xhtml"/>
 			<property name="args.input" value="${MAP_file}"/>
 			<property name="dita.temp.dir" value="${outdir}/temp_xhtml"/>
 			<property name="args.outext" value=".html"/>
 			<property name="args.xhtml.toc" value="index"/>
 			<property name="output.dir" value="${outdir}/xhtml"/>
+			<property name="outer.control" value="quiet"/>
 		</ant>
 	</target>
 	<!-- Target for Eclipse plugin 																			-->
 	<target name="dita2eclipsecontent">
-		<ant antfile="${toolkit_dir}/conductor.xml" target="init">
+		<ant antfile="${DITA_DIR}/conductor.xml" target="init">
 			<property name="args.input" value="${MAP_file}"/>
 			<property name="output.dir" value="${outdir}/eclipsecontent"/>
 			<property name="dita.temp.dir" value="${outdir}/temp_eclipsecontent"/>
@@ -88,7 +90,7 @@
 	</target>
 	<!-- Target for Eclipse Help system																		-->
 	<target name="dita2eclipsehelp">
-		<ant antfile="${toolkit_dir}/conductor.xml" target="init">
+		<ant antfile="${DITA_DIR}/conductor.xml" target="init">
 			<property name="args.input" value="${MAP_file}"/>
 			<property name="output.dir" value="${outdir}/eclipsehelp"/>
 			<property name="dita.temp.dir" value="${outdir}/temp_eclipsehelp"/>

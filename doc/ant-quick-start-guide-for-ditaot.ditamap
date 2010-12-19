@@ -63,11 +63,8 @@
 <chapter>
 	<topicref navtitle="Best Practices" href="quickstartguide/topics/best-practices.dita" toc="yes"/>
 </chapter>
-<chapter navtitle="Glossary">
-	<topicref format="dita" href="quickstartguide/glossary/ditaot.dita" type="glossentry" toc="no"/>
-	<topicref format="dita" href="quickstartguide/glossary/buildtool.dita" type="glossentry" toc="no"/>
-	<topicref format="dita" href="quickstartguide/glossary/eclipse.dita" type="glossentry" toc="no"/>
-	<topicref format="dita" href="quickstartguide/glossary/troff.dita" type="glossentry" toc="no"/>
+<chapter>
+  <topicref navtitle="Glossary" href="quickstartguide/glossary/glossary.dita" toc="yes"/>
 </chapter>
 <backmatter>
 <booklists>
