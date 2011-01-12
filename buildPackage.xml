@@ -11,9 +11,9 @@
   <property name="HTMLHelpCompiler" value="C:\Program Files\HTML Help Workshop\hhc.exe"/>  
   <property name="package.output.dir" location="${basedir}/build\"/>
   <property name="package.name.root" value="DITA-OT"/>
-  <property name="version" value="1.5.2"/>
+  <property name="version" value="1.5.3"/>
   <!--This property should be edited manually in each milestone release?-->
-  <property name="milestone" value="08"/>
+  <property name="milestone" value="01"/>
 	
   <property name="src.dir" location="${basedir}"/>
   <property name="java.dir" location="${src.dir}/src/"/>
