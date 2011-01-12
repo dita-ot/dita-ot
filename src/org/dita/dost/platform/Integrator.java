@@ -46,7 +46,7 @@ public class Integrator {
 	 * Plugin table which contains detected plugins.
 	 */
 	public static Hashtable<String,Features> pluginTable = null;
-	private Set<String> templateSet = null;
+	private Set<String> templateSet = new HashSet<String>(Constants.INT_16);
 	private String ditaDir;
 	private String basedir;
 	private Set<File> descSet;
@@ -58,33 +58,7 @@ public class Integrator {
         
     private Properties properties = null;
 	
-	private void initTemplateSet(){
-		templateSet = new HashSet<String>(Constants.INT_16);
-		templateSet.add("catalog-dita_template.xml");
-		templateSet.add("build_template.xml");
-		templateSet.add("build_general_template.xml");
-		templateSet.add("build_dita2eclipsehelp_template.xml");
-		templateSet.add("build_preprocess_template.xml");
-		templateSet.add("resource/messages_template.xml");
-		templateSet.add("xsl/common/allstrings_template.xml");
-		templateSet.add("xsl/dita2xhtml_template.xsl");
-		templateSet.add("xsl/dita2rtf_template.xsl");
-		templateSet.add("xsl/dita2odt_template.xsl");
-		templateSet.add("xsl/dita2dynamicdita_template.xsl");
-		templateSet.add("xsl/dita2fo-shell_template.xsl");
-		templateSet.add("xsl/dita2docbook_template.xsl");
-		templateSet.add("xsl/preprocess/maplink_template.xsl");
-		templateSet.add("xsl/preprocess/mapref_template.xsl");
-		templateSet.add("xsl/preprocess/mappull_template.xsl");
-		templateSet.add("xsl/map2eclipse_template.xsl");
-		templateSet.add("xsl/map2hhc_template.xsl");
-		templateSet.add("xsl/map2hhp_template.xsl");
-		templateSet.add("xsl/map2htmtoc_template.xsl");
-		templateSet.add("xsl/map2plugin_template.xsl");
-		templateSet.add("xsl/preprocess/conref_template.xsl");
-		templateSet.add("xsl/preprocess/topicpull_template.xsl");
-	}
-
+	
 	/**
 	 * Execute point of Integrator.
 	 */
@@ -114,11 +88,18 @@ public class Integrator {
         
                 // Get the list of plugin directories from the properties.
                 String[] pluginDirs = properties.getProperty("plugindirs").split(";");
-                
+                                
                 Set<String> pluginIgnores = new HashSet<String>();
                 if (properties.getProperty("plugin.ignores") != null) {
                 	pluginIgnores.addAll(Arrays.asList(properties.getProperty("plugin.ignores").split(";")));
                 }
+                
+            	for (final String tmpl: properties.getProperty(Constants.CONF_TEMPLATES, "").split(";")) {
+        			final String t = tmpl.trim();
+        			if (t.length() != 0) {
+        				templateSet.add(t);
+        			} 
+        		}
                 
                 for (int j = 0; j < pluginDirs.length; j++)
                 {
@@ -292,7 +273,6 @@ public class Integrator {
 	 * Default Constructor.
 	 */
 	public Integrator() {
-		initTemplateSet();
 		pluginTable = new Hashtable<String,Features>(Constants.INT_16);
 		descSet = new HashSet<File>(Constants.INT_16);
 		loadedPlugin = new HashSet<String>(Constants.INT_16);

@@ -678,7 +678,9 @@ public abstract class Constants {
 	/** Property name for supported image extensions. */
 	public static final String CONF_SUPPORTED_IMAGE_EXTENSIONS = "supported_image_extensions";
 	// Added on 2010-11-09 for bug 3102827: Allow a way to specify recognized image extensions -- end
-	
+	/** Property name for template files. */
+	public static final String CONF_TEMPLATES = "templates";
+
     /**
      * Instances should NOT be constructed in standard programming.
      */
