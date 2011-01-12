@@ -193,14 +193,14 @@ public class IndexTermReader extends AbstractXMLReader {
 				!Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processRoleStack.peek())) {
 			if (!insideSortingAs && !termStack.empty()) {
 				IndexTerm indexTerm = (IndexTerm) termStack.peek();
-				temp = StringUtils.restoreEntity(temp);
+				temp = StringUtils.escapeXML(temp);
 				indexTerm.setTermName(StringUtils.setOrAppend(indexTerm.getTermName(), temp, false));
 			} else if (insideSortingAs && temp.length() > 0) {
 				IndexTerm indexTerm = (IndexTerm) termStack.peek();
-				temp = StringUtils.restoreEntity(temp);
+				temp = StringUtils.escapeXML(temp);
 				indexTerm.setTermKey(StringUtils.setOrAppend(indexTerm.getTermKey(), temp, false));
 			} else if (inTitleElement) {
-				temp = StringUtils.restoreEntity(temp);
+				temp = StringUtils.escapeXML(temp);
 				//Always append space if: <title>abc<ph/>df</title>
 				//Updated with SF 2010062 - should only add space if one is in source
 				title = StringUtils.setOrAppend(title, temp, false);

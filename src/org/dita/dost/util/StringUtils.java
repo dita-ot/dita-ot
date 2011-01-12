@@ -229,23 +229,7 @@ public class StringUtils {
     	return (propsBuffer.length() > 0) ? propsBuffer.substring(Constants.INT_1) : null;
 	}
 	
-	/**
-	 * Restores standard XML entities such as &amp; to the string.
-	 * These entities were resolved by the parser but must be
-	 * written back out as entities.
-	 * @param s entity
-	 * @return String with &, <, >, ', and " converted to XML entities
-	 */
-	public static String restoreEntity(String s) {
-		String localEntity = s;
-		localEntity = StringUtils.replaceAll(localEntity, "&", "&amp;");
-		localEntity = StringUtils.replaceAll(localEntity, "<", "&lt;");
-		localEntity = StringUtils.replaceAll(localEntity, ">", "&gt;");		
-		localEntity = StringUtils.replaceAll(localEntity, "'", "&apos;");
-		localEntity = StringUtils.replaceAll(localEntity, "\"", "&quot;");
-		
-		return localEntity;
-	}
+	
 	
 	/**
 	 * Restore map.
