@@ -499,6 +499,60 @@ with those set forth herein.
             <available file="C:\Program Files\Antenna\XSLFormatterV41\XSLCmd.exe"/>
           </and>
         </condition>
+    	
+        <!-- NOTE: Repeated all of the above trial conditions using "C:\Program Files (x86)"
+                        instead of "C:\Program Files". AnntenaHouse installs under
+                        C:\Program Files (x86) for 64-bit Windows operating systems.
+        -->
+        <condition property="axf.path" value="C:\Program Files (x86)\AntennaHouse\AHFormatterV6">
+            <and>
+                <not><isset property="axf.path"/></not>
+                <available file="C:\Program Files (x86)\AntennaHouse\AHFormatterV6\AHFCmd.exe"/>
+            </and>
+        </condition>
+        <condition property="axf.path" value="C:\Program Files (x86)\AntennaHouse\AHFormatterV53">
+            <and>
+                <not><isset property="axf.path"/></not>
+                <available file="C:\Program Files (x86)\AntennaHouse\AHFormatterV53\AHFCmd.exe"/>
+            </and>
+        </condition>
+        <condition property="axf.path" value="C:\Program Files (x86)\AntennaHouse\AHFormatterV52">
+            <and>
+                <not><isset property="axf.path"/></not>
+                <available file="C:\Program Files (x86)\AntennaHouse\AHFormatterV52\AHFCmd.exe"/>
+            </and>
+        </condition>
+        <condition property="axf.path" value="C:\Program Files (x86)\AntennaHouse\AHFormatterV51">
+            <and>
+                <not><isset property="axf.path"/></not>
+                <available file="C:\Program Files (x86)\AntennaHouse\AHFormatterV51\AHFCmd.exe"/>
+            </and>
+        </condition>
+        <condition property="axf.path" value="C:\Program Files (x86)\AntennaHouse\AHFormatterV5">
+            <and>
+                <not><isset property="axf.path"/></not>
+                <available file="C:\Program Files (x86)\AntennaHouse\AHFormatterV5\AHFCmd.exe"/>
+            </and>
+        </condition>
+        <condition property="axf.path" value="C:\Program Files (x86)\Antenna\XSLFormatterV43">
+            <and>
+                <not><isset property="axf.path"/></not>
+                <available file="C:\Program Files (x86)\Antenna\XSLFormatterV43\XSLCmd.exe"/>
+            </and>
+        </condition>
+        <condition property="axf.path" value="C:\Program Files (x86)\Antenna\XSLFormatterV42">
+            <and>
+                <not><isset property="axf.path"/></not>
+                <available file="C:\Program Files (x86)\Antenna\XSLFormatterV42\XSLCmd.exe"/>
+            </and>
+        </condition>
+        <condition property="axf.path" value="C:\Program Files (x86)\Antenna\XSLFormatterV41">
+            <and>
+                <not><isset property="axf.path"/></not>
+                <available file="C:\Program Files (x86)\Antenna\XSLFormatterV41\XSLCmd.exe"/>
+            </and>
+        </condition>
+
         <!-- NOTE: Adding V6 and V53 as a guess where the next version will install,
                    to try and make this code forward compatible. Basing it on the
                    known install location of V52. Also adding V51 based on the 
