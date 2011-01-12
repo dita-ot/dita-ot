@@ -3650,7 +3650,7 @@
   <xsl:variable name="callout"><xsl:value-of select="@callout"/></xsl:variable>
   <xsl:variable name="convergedcallout">
     <xsl:choose>
-      <xsl:when test="string-length($callout)>'0'"><xsl:value-of select="$callout"/></xsl:when>
+      <xsl:when test="string-length($callout)> 0"><xsl:value-of select="$callout"/></xsl:when>
       <xsl:otherwise><xsl:value-of select="$fnid"/></xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -4262,7 +4262,7 @@
     <xsl:variable name="callout"><xsl:value-of select="@callout"/></xsl:variable>
     <xsl:variable name="convergedcallout">
       <xsl:choose>
-        <xsl:when test="string-length($callout)>'0'"><xsl:value-of select="$callout"/></xsl:when>
+        <xsl:when test="string-length($callout)> 0"><xsl:value-of select="$callout"/></xsl:when>
         <xsl:otherwise><xsl:value-of select="$fnid"/></xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
@@ -4746,13 +4746,13 @@
       <xsl:variable name="mapschtitle"><xsl:apply-templates select="/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/titlealts ')]/*[contains(@class,' map/searchtitle ')]" mode="text-only"/></xsl:variable>
       <!-- edited by William on 2009-05-18 for searchtitile bug end -->
       <xsl:choose>
-        <xsl:when test="string-length($schtitle)>'0'"><xsl:value-of select="normalize-space($schtitle)"/></xsl:when>
+        <xsl:when test="string-length($schtitle)> 0"><xsl:value-of select="normalize-space($schtitle)"/></xsl:when>
         <!-- edited by William on 2009-05-18 for searchtitle bug start -->
-        <xsl:when test="string-length($mapschtitle)>'0'"><xsl:value-of select="normalize-space($mapschtitle)"/></xsl:when>
+        <xsl:when test="string-length($mapschtitle)> 0"><xsl:value-of select="normalize-space($mapschtitle)"/></xsl:when>
         <!-- edited by William on 2009-05-18 for searchtitile bug end -->
-        <xsl:when test="string-length($ditaschtitle)>'0'"><xsl:value-of select="normalize-space($ditaschtitle)"/></xsl:when>
+        <xsl:when test="string-length($ditaschtitle)> 0"><xsl:value-of select="normalize-space($ditaschtitle)"/></xsl:when>
         <xsl:when test="string-length($maintitle)>'0'"><xsl:value-of select="normalize-space($maintitle)"/></xsl:when>
-        <xsl:when test="string-length($ditamaintitle)>'0'"><xsl:value-of select="normalize-space($ditamaintitle)"/></xsl:when>
+        <xsl:when test="string-length($ditamaintitle)> 0"><xsl:value-of select="normalize-space($ditamaintitle)"/></xsl:when>
         <xsl:otherwise><xsl:text>***</xsl:text>
           <xsl:apply-templates select="." mode="ditamsg:no-title-for-topic"/>
         </xsl:otherwise>
