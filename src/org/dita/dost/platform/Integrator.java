@@ -45,7 +45,7 @@ public class Integrator {
 	/**
 	 * Plugin table which contains detected plugins.
 	 */
-	public static Hashtable<String,Features> pluginTable = null;
+	public  Hashtable<String,Features> pluginTable = null;
 	private Set<String> templateSet = new HashSet<String>(Constants.INT_16);
 	private String ditaDir;
 	private String basedir;
@@ -262,8 +262,10 @@ public class Integrator {
 
 	private void parseDesc(File descFile) {
 		try{
-			reader.setContentHandler(new DescParser(descFile.getParent()));
+			final DescParser parser = new DescParser(descFile.getParent());
+			reader.setContentHandler(parser);
 			reader.parse(descFile.getAbsolutePath());
+			pluginTable.put(parser.getPluginId(), parser.getFeatures());
 		}catch(Exception e){
 			logger.logException(e);
 		}		

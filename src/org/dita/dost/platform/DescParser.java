@@ -19,7 +19,6 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class DescParser extends DefaultHandler{
 	private String currentPlugin = null;
-	private String currentElement = null;
 	private Features features = null;
 	
 	/**
@@ -35,55 +34,38 @@ public class DescParser extends DefaultHandler{
 	 * @param location location
 	 */
 	public DescParser(String location) {
+		super();
 		features = new Features(location);
 	}
 	
 	/**
-	 * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
+	 * Process configuration start element.
 	 */
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-		currentElement = qName;
-		if( "plugin".equals(currentElement) ){
+		if( "plugin".equals(qName) ){
 			currentPlugin = attributes.getValue("id");
-		} else if ("feature".equals(currentElement)){
+		} else if ("feature".equals(qName)){
 			features.addFeature(attributes.getValue("extension"), attributes.getValue("value"), attributes.getValue("type"));
-		} else if ("require".equals(currentElement)){
+		} else if ("require".equals(qName)){
 			features.addRequire(attributes.getValue("plugin"), attributes.getValue("importance"));
-		} else if ("meta".equals(currentElement)){
+		} else if ("meta".equals(qName)){
 			features.addMeta(attributes.getValue("type"), attributes.getValue("value"));
-		} else if ("template".equals(currentElement)){
+		} else if ("template".equals(qName)){
 			features.addTemplate(attributes.getValue("file"));
 		}
 	}
-
+	
 	/**
-	 * @see org.xml.sax.ContentHandler#endDocument()
+	 * Get plug-in features.
+	 * 
+	 * @return plug-in features
 	 */
-	public void endDocument() throws SAXException {
-		Integrator.pluginTable.put(currentPlugin, features);
+	public Features getFeatures() {
+		return features;
 	}
-
-	/**
-	 * @see org.xml.sax.ContentHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
-	 */
-	public void endElement(String uri, String localName, String qName) throws SAXException {
-		currentElement = null;
-	}
-
-	/**
-	 * @see org.xml.sax.ContentHandler#startDocument()
-	 */
-	public void startDocument() throws SAXException {
-		// TODO Auto-generated method stub
-		super.startDocument();
-	}
-
-	/**
-	 * @see org.xml.sax.ContentHandler#characters(char[], int, int)
-	 */
-	public void characters(char[] ch, int start, int length) throws SAXException {
-		// TODO Auto-generated method stub
-		super.characters(ch, start, length);
+	
+	public String getPluginId() {
+		return currentPlugin; 
 	}
 	
 }
