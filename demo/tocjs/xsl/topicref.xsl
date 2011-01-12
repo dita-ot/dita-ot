@@ -156,6 +156,15 @@
       </xsl:if>
 
       <!-- Need to deal with topicgroup elements that are used for navigation purposes -->
+      <xsl:if test="topicgroup">
+        <xsl:for-each select="*[contains(@class,' map/topicref ')]">
+          <xsl:apply-templates>
+            <xsl:with-param name="parent" select="$self"/>
+            <xsl:with-param name="contentwin" select="$contentwin"/>
+          </xsl:apply-templates>
+        </xsl:for-each>
+      </xsl:if>
+      
     </xsl:if>
   </xsl:template>
 
