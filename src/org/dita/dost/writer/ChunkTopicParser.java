@@ -1177,6 +1177,22 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 			            }else{
 			                ditaFileOutput.write(PI_WORKDIR_HEAD + Constants.SLASH + new File(outputFileName).getParent() + PI_END);
 			            }
+						
+						//Added on 20101210 for bug:3126578 start
+						if ((conflictTable.get(outputFileName)!=null)){
+							String relativePath = FileUtils
+									.getRelativePathFromMap(filePath
+											+ Constants.SLASH + "stub.ditamap",
+											conflictTable.get(outputFileName));
+							String path2project = FileUtils
+									.getPathtoProject(relativePath);
+							if (null==path2project){
+								path2project="";
+							}
+							ditaFileOutput.write("<?path2project "
+									+ path2project + "?>");
+						}
+						//Added on 20101210 for bug:3126578 end
 					}
 					if (needWriteDitaTag) ditaFileOutput.write("<dita>");
 					//write the final result to the output file
