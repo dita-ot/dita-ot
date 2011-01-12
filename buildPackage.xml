@@ -78,8 +78,11 @@
   	
     <javac srcdir="${build.dir}" destdir="${bin.dir}" 
       excludes="com/**,org/dita/dost/junit/**, org/dita/dost/invoker/JavaInvoker.java"
-      debug="on" source="1.5" target="1.5">
-      <classpath location="${lib.dir}/resolver.jar"></classpath>
+      debug="on" source="1.5" target="1.5">     
+    	<classpath> 
+    	  <pathelement location="${lib.dir}/resolver.jar"/> 
+    	  <pathelement location="${lib.dir}/commons-codec-1.4.jar"/> 
+    	</classpath> 
     </javac>
   	<delete dir="${build.dir}" includeemptydirs="yes"/>
   </target>
