@@ -4933,15 +4933,17 @@
       <xsl:when test="contains($target,'://')">
         <xsl:value-of select="$target"/>
       </xsl:when>
+      <!-- edited  on 2010-12-17 for keyref bug:3114411 start-->
       <xsl:when test="contains($target,'#')">
-        <xsl:value-of select="concat($desDir, substring-before(substring-before($target,'#'),'.'),$OUTEXT,'#',substring-after($target,'#'))"/>
+        <xsl:value-of select="concat($PATH2PROJ, substring-before(substring-before($target,'#'),'.'),$OUTEXT,'#',substring-after($target,'#'))"/>
       </xsl:when>
       <xsl:when test="$target = ''">
         <xsl:value-of select="$OUTEXT"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="concat($desDir, substring-before($target,'.'),$OUTEXT)"/>
+        <xsl:value-of select="concat($PATH2PROJ, substring-before($target,'.'),$OUTEXT)"/>
       </xsl:otherwise>
+      <!-- edited  on 2010-12-17 for keyref bug:3114411 end-->
     </xsl:choose>
   </xsl:template>
 
