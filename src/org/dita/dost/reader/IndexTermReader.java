@@ -158,6 +158,11 @@ public class IndexTermReader extends AbstractXMLReader {
 		//used for store the new String
 		StringBuffer sb = new StringBuffer();
 		for(char c : chars){
+			// Strip out tab characters from indexterm
+			if(c=='\t'){
+				//unwanted tab character, ignore it
+				continue;
+			}
 			//when a whitespace is met
 			if(c==' '){
 				//this is the first whitespace
