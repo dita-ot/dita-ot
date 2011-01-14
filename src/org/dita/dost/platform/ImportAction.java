@@ -22,8 +22,11 @@ import org.dita.dost.util.Constants;
  * @author Zhang, Yuan Peng
  */
 public abstract class ImportAction implements IAction {
-	protected Set<String> valueSet = null;
-	protected Hashtable<String,String> paramTable = null;
+	
+	/** Action values. */
+	protected final Set<String> valueSet;
+	/** Action parameters. */
+	protected final Hashtable<String,String> paramTable;
 	
 	/**
 	 * Default Constructor.
@@ -36,34 +39,32 @@ public abstract class ImportAction implements IAction {
 	/**
 	 * get result.
 	 * @return result
-	 * @see org.dita.dost.platform.IAction#getResult()
 	 */
+	@Override
 	public abstract String getResult();
 
 	/**
 	 * set input.
 	 * @param input input
-	 * @see org.dita.dost.platform.IAction#setInput(java.lang.String)
 	 */
-	public void setInput(String input) {
-		StringTokenizer inputTokenizer = new StringTokenizer(input,",");
+	@Override
+	public void setInput(final String input) {
+		final StringTokenizer inputTokenizer = new StringTokenizer(input, Integrator.FEAT_VALUE_SEPARATOR);
 		while(inputTokenizer.hasMoreElements()){
-			valueSet.add((String) inputTokenizer.nextElement());
+			valueSet.add(inputTokenizer.nextToken());
 		}
 	}
 
 	/**
 	 * Set the input parameters.
 	 * @param param param
-	 * @see org.dita.dost.platform.IAction#setParam(java.lang.String)
 	 */
-	public void setParam(String param) {
-		StringTokenizer paramTokenizer = new StringTokenizer(param,";");
-		String paramExpression = null;
-		int index;
+	@Override
+	public void setParam(final String param) {
+		final StringTokenizer paramTokenizer = new StringTokenizer(param, Integrator.PARAM_VALUE_SEPARATOR);
 		while(paramTokenizer.hasMoreElements()){
-			paramExpression = (String) paramTokenizer.nextElement();
-			index = paramExpression.indexOf("=");
+			final String paramExpression = paramTokenizer.nextToken();
+			final int index = paramExpression.indexOf(Integrator.PARAM_NAME_SEPARATOR);
 			if(index > 0){
 				paramTable.put(paramExpression.substring(0,index),
 						paramExpression.substring(index+1));
@@ -74,7 +75,8 @@ public abstract class ImportAction implements IAction {
 	 * Set the feature table.
 	 * @param h hastable
 	 */
-	public void setFeatures(Hashtable<String,String> h) {
+	@Override
+	public void setFeatures(final Hashtable<String,String> h) {
 		
 	}
 

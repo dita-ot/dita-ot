@@ -5,8 +5,6 @@
  */
 package org.dita.dost.platform;
 
-import java.util.Iterator;
-
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
@@ -16,7 +14,7 @@ import org.dita.dost.util.StringUtils;
  */
 public class ImportXSLAction extends ImportAction {
 
-	private StringBuffer retBuf = null;
+	private final StringBuffer retBuf;
 	/**
 	 * Constructor.
 	 */
@@ -28,13 +26,10 @@ public class ImportXSLAction extends ImportAction {
 	 * get result.
 	 * @return result
 	 */
+	@Override
 	public String getResult() {
-		Iterator<String> iter;
-		String templateFilePath = paramTable.get("template");
-		String value = null;
-		iter = valueSet.iterator();
-		while(iter.hasNext()){
-			value = iter.next();
+		final String templateFilePath = paramTable.get(FileGenerator.PARAM_TEMPLATE);
+		for (final String value: valueSet) {
 			retBuf.append(Constants.LINE_SEPARATOR);
 			retBuf.append("<xsl:import href=\"");				
 			retBuf.append(StringUtils.escapeXML(

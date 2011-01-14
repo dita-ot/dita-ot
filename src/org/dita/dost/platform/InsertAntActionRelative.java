@@ -31,24 +31,23 @@ public class InsertAntActionRelative extends InsertActionRelative implements
 	public InsertAntActionRelative() {
 		super();
 	}
-	/**
-	 * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
-	 */
-	public void startElement(String uri, String localName, String qName,
-			Attributes attributes) throws SAXException {
+
+	@Override
+	public void startElement(final String uri, final String localName, final String qName,
+			final Attributes attributes) throws SAXException {
 		if(elemLevel != 0){
-			int attLen = attributes.getLength();
+			final int attLen = attributes.getLength();
 			retBuf.append(Constants.LINE_SEPARATOR);
-			retBuf.append("<"+qName);
+			retBuf.append("<").append(qName);
 			for (int i = 0; i < attLen; i++){
 				if ("import".equals(localName) && "file".equals(attributes.getQName(i))
 						&& !FileUtils.isAbsolutePath(attributes.getValue(i))) {
 					// Rewrite file path to be local to its final resting place.
-				    File targetFile = new File(
+				    final File targetFile = new File(
 				    		new File(currentFile).getParentFile(),
 				    		attributes.getValue(i));
-				    String pastedURI = FileUtils.getRelativePathFromMap(
-				    		(String) paramTable.get("template"),
+				    final String pastedURI = FileUtils.getRelativePathFromMap(
+				    		paramTable.get(FileGenerator.PARAM_TEMPLATE),
 				    		targetFile.toString());
 					retBuf.append(" ").append(attributes.getQName(i)).append("=\"");
 					retBuf.append(StringUtils.escapeXML(pastedURI)).append("\"");

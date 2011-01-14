@@ -50,11 +50,11 @@ public class XmlPropertyTask extends Task {
 	private File src;
 	private String prefix = "";
 	private boolean validate = false;
-	private boolean collapseAttributes = false;
+	private final boolean collapseAttributes = false;
 	private File rootDirectory = null;
-	private FileUtils fileUtils = FileUtils.getFileUtils();
-	private XMLCatalog xmlCatalog = new XMLCatalog();
-	private Properties props = new Properties();
+	private final FileUtils fileUtils = FileUtils.getFileUtils();
+	private final XMLCatalog xmlCatalog = new XMLCatalog();
+	private final Properties props = new Properties();
 	
     // XML loading and saving methods for Properties
 
@@ -83,6 +83,7 @@ public class XmlPropertyTask extends Task {
 	 * Initializes the task.
 	 */
 
+	@Override
 	public void init() {
 		super.init();
 		xmlCatalog.setProject(getProject());
@@ -101,10 +102,11 @@ public class XmlPropertyTask extends Task {
 	 * @todo validate the source file is valid before opening, print a better error message
 	 * @todo add a verbose level log message listing the name of the file being loaded
 	 */
+	@Override
 	public void execute() throws BuildException {
 
 		if (getFile() == null) {
-			String msg = "XmlProperty task requires a file attribute";
+			final String msg = "XmlProperty task requires a file attribute";
 			throw new BuildException(msg);
 		}
 
@@ -117,34 +119,34 @@ public class XmlPropertyTask extends Task {
 				log("Unable to find property file: " + src.getAbsolutePath(),
 						Project.MSG_VERBOSE);
 			}
-		}catch(SAXException se){
+		}catch(final SAXException se){
 			throw new BuildException(se);
-		} catch (IOException ioe) {
+		} catch (final IOException ioe) {
 			// I/O error
 			throw new BuildException(ioe);
 		}
 	}
 
-	private void load( InputStream in) throws IOException,SAXException{
-        Document doc = null;
-        doc = getLoadingDoc(in);
-        Element propertiesElement = (Element)doc.getChildNodes().item(1);
-        String xmlVersion = propertiesElement.getAttribute("version");
-        if (xmlVersion.compareTo(EXTERNAL_XML_VERSION) > 0)
-            throw new SAXException(
+	private void load( final InputStream in) throws IOException,SAXException{
+        final Document doc = getLoadingDoc(in);
+        final Element propertiesElement = (Element)doc.getChildNodes().item(1);
+        final String xmlVersion = propertiesElement.getAttribute("version");
+        if (xmlVersion.compareTo(EXTERNAL_XML_VERSION) > 0) {
+			throw new SAXException(
                 "Exported Properties file format version " + xmlVersion +
                 " is not supported. This java installation can read" +
                 " versions " + EXTERNAL_XML_VERSION + " or older. You" +
                 " may need to install a newer version of JDK.");
-        NodeList entries = propertiesElement.getChildNodes();
-        int numEntries = entries.getLength();
-        int start = numEntries > 0 && 
+		}
+        final NodeList entries = propertiesElement.getChildNodes();
+        final int numEntries = entries.getLength();
+        final int start = numEntries > 0 && 
             entries.item(0).getNodeName().equals("comment") ? 1 : 0;
         for (int i=start; i<numEntries; i++) {
-            Element entry = (Element)entries.item(i);
+            final Element entry = (Element)entries.item(i);
             if (entry.hasAttribute("key")) {
-                Node n = entry.getFirstChild();
-                String val = (n == null) ? "" : n.getNodeValue();
+                final Node n = entry.getFirstChild();
+                final String val = (n == null) ? "" : n.getNodeValue();
                 props.setProperty(entry.getAttribute("key"), val);
                 addProperty(entry.getAttribute("key"),val,null);
             }
@@ -152,25 +154,26 @@ public class XmlPropertyTask extends Task {
 
 	}
 
-	static Document getLoadingDoc(InputStream in) throws SAXException,
+	static Document getLoadingDoc(final InputStream in) throws SAXException,
 			IOException {
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setIgnoringElementContentWhitespace(true);
 		dbf.setValidating(true);
 		dbf.setCoalescing(true);
 		dbf.setIgnoringComments(true);
 		try {
-			DocumentBuilder db = dbf.newDocumentBuilder();
+			final DocumentBuilder db = dbf.newDocumentBuilder();
 			db.setEntityResolver(new Resolver());
 			db.setErrorHandler(new EH());
-			InputSource is = new InputSource(in);
+			final InputSource is = new InputSource(in);
 			return db.parse(is);
-		} catch (ParserConfigurationException x) {
+		} catch (final ParserConfigurationException x) {
 			throw new Error(x);
 		}
 	}
     private static class Resolver implements EntityResolver {
-        public InputSource resolveEntity(String pid, String sid)
+        @Override
+		public InputSource resolveEntity(final String pid, final String sid)
             throws SAXException
         {
             if (sid.equals(PROPS_DTD_URI)) {
@@ -184,13 +187,16 @@ public class XmlPropertyTask extends Task {
     }
 
     private static class EH implements ErrorHandler {
-        public void error(SAXParseException x) throws SAXException {
+        @Override
+		public void error(final SAXParseException x) throws SAXException {
             throw x;
         }
-        public void fatalError(SAXParseException x) throws SAXException {
+        @Override
+		public void fatalError(final SAXParseException x) throws SAXException {
             throw x;
         }
-        public void warning(SAXParseException x) throws SAXException {
+        @Override
+		public void warning(final SAXParseException x) throws SAXException {
             throw x;
         }
     }
@@ -198,7 +204,7 @@ public class XmlPropertyTask extends Task {
 	 * Actually add the given property/value to the project
 	 * after writing a log message.
 	 */
-	private void addProperty(String name, String value, String id) {
+	private void addProperty(final String name, final String value, final String id) {
 		String msg = name + ":" + value;
 		if (id != null) {
 			msg += ("(id=" + id + ")");
@@ -214,7 +220,7 @@ public class XmlPropertyTask extends Task {
 	 * The XML file to parse; required.
 	 * @param src the file to parse
 	 */
-	public void setFile(File src) {
+	public void setFile(final File src) {
 		this.src = src;
 	}
 
@@ -222,7 +228,7 @@ public class XmlPropertyTask extends Task {
 	 * the prefix to prepend to each property.
 	 * @param prefix the prefix to prepend to each property
 	 */
-	public void setPrefix(String prefix) {
+	public void setPrefix(final String prefix) {
 		this.prefix = prefix.trim();
 	}
 
@@ -230,7 +236,7 @@ public class XmlPropertyTask extends Task {
 	 * flag to validate the XML file; optional, default false.
 	 * @param validate if true validate the XML file, default false
 	 */
-	public void setValidate(boolean validate) {
+	public void setValidate(final boolean validate) {
 		this.validate = validate;
 	}
 
@@ -239,7 +245,7 @@ public class XmlPropertyTask extends Task {
 	 * Ignored if semanticAttributes is not set to true.
 	 * @param rootDirectory the directory.
 	 */
-	public void setRootDirectory(File rootDirectory) {
+	public void setRootDirectory(final File rootDirectory) {
 		this.rootDirectory = rootDirectory;
 	}
 
@@ -247,7 +253,7 @@ public class XmlPropertyTask extends Task {
 	 * add an XMLCatalog as a nested element; optional.
 	 * @param catalog the XMLCatalog to use
 	 */
-	public void addConfiguredXMLCatalog(XMLCatalog catalog) {
+	public void addConfiguredXMLCatalog(final XMLCatalog catalog) {
 		xmlCatalog.addConfiguredXMLCatalog(catalog);
 	}
 
@@ -292,7 +298,7 @@ public class XmlPropertyTask extends Task {
 	 * Let project resolve the file - or do it ourselves if
 	 * rootDirectory has been set.
 	 */
-	private File resolveFile(String fileName) {
+	private File resolveFile(final String fileName) {
 		if (rootDirectory == null) {
 			return getProject().resolveFile(fileName);
 		}

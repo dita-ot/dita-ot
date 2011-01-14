@@ -18,8 +18,11 @@ import org.dita.dost.util.StringUtils;
  */
 public class InsertDependsAction implements IAction {
 
-	private Hashtable<String,String> paramTable = null;
+	/** Action parameters. */
+	private final Hashtable<String,String> paramTable;
+	/** Action value. */
 	private String value;
+	/** Plug-in features. */
 	private Hashtable<String,String> featureTable = null;
 	/**
 	 * Constructor.
@@ -31,31 +34,32 @@ public class InsertDependsAction implements IAction {
 	 * Get result.
 	 * @return result
 	 */
+	@Override
 	public String getResult() {
-		String localname = paramTable.get("localname");
-		StringBuffer result = new StringBuffer();
+		final String localname = paramTable.get(FileGenerator.PARAM_LOCALNAME);
+		final StringBuffer result = new StringBuffer();
 		
 		// Parse the attribute value into comma-separated pieces.
-		StringTokenizer valueTokenizer = new StringTokenizer(value, ",");
+		final StringTokenizer valueTokenizer = new StringTokenizer(value, Integrator.FEAT_VALUE_SEPARATOR);
 		while (valueTokenizer.hasMoreElements())
 		{
-			String token = ((String) valueTokenizer.nextElement()).trim();
+			final String token = valueTokenizer.nextToken().trim();
 			
 			// Pieces which are surrounded with braces are extension points.
 			if (token.startsWith("{") && token.endsWith("}"))
 			{
-				String extension = token.substring(1, token.length() - 1);
-				String extensionInputs = (String)featureTable.get(extension);
+				final String extension = token.substring(1, token.length() - 1);
+				final String extensionInputs = featureTable.get(extension);
 				if (extensionInputs != null)
 				{
-					if (result.length() != 0) { result.append(","); }
+					if (result.length() != 0) { result.append(Integrator.FEAT_VALUE_SEPARATOR); }
 					result.append(extensionInputs);
 				}
 			}
 			else
 			{
 				// Other pieces are literal.
-				if (result.length() != 0) { result.append(","); }
+				if (result.length() != 0) { result.append(Integrator.FEAT_VALUE_SEPARATOR); }
 				result.append(token);
 			}
 		}
@@ -75,23 +79,21 @@ public class InsertDependsAction implements IAction {
 	/**
 	 * Set input.
 	 * @param input input
-	 * @see org.dita.dost.platform.IAction#setInput(java.lang.String)
 	 */
-	public void setInput(String input) {
+	@Override
+	public void setInput(final String input) {
 		value = input;
 	}
 	/**
 	 * Set the input parameters.
 	 * @param param param
-	 * @see org.dita.dost.platform.IAction#setParam(java.lang.String)
 	 */
-	public void setParam(String param) {
-		StringTokenizer paramTokenizer = new StringTokenizer(param,";");
-		String paramExpression = null;
-		int index;
+	@Override
+	public void setParam(final String param) {
+		final StringTokenizer paramTokenizer = new StringTokenizer(param, Integrator.PARAM_VALUE_SEPARATOR);
 		while(paramTokenizer.hasMoreElements()){
-			paramExpression = (String) paramTokenizer.nextElement();
-			index = paramExpression.indexOf("=");
+			final String paramExpression = paramTokenizer.nextToken();
+			final int index = paramExpression.indexOf(Integrator.PARAM_NAME_SEPARATOR);
 			if(index > 0){
 				paramTable .put(paramExpression.substring(0,index),
 						paramExpression.substring(index+1));
@@ -102,7 +104,8 @@ public class InsertDependsAction implements IAction {
 	 * Set the feature table.
 	 * @param h hastable
 	 */
-	public void setFeatures(Hashtable<String,String> h) {
+	@Override
+	public void setFeatures(final Hashtable<String,String> h) {
 		featureTable = h;
 	}
 

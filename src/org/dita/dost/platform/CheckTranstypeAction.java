@@ -5,8 +5,6 @@
  */
 package org.dita.dost.platform;
 
-import java.util.Iterator;
-
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.StringUtils;
 /**
@@ -15,7 +13,7 @@ import org.dita.dost.util.StringUtils;
  */
 public class CheckTranstypeAction extends ImportAction {
 
-	private StringBuffer retBuf = null;
+	private final StringBuffer retBuf;
 	/**
 	 * Constructor.
 	 */
@@ -27,12 +25,9 @@ public class CheckTranstypeAction extends ImportAction {
 	 * Get result.
 	 * @return result
 	 */
+	@Override
 	public String getResult() {
-		Iterator<String> iter;
-		String value = null;
-		iter = valueSet.iterator();
-		while(iter.hasNext()){
-			value = iter.next();
+		for (final String value: valueSet) {
 			retBuf.append("<not><equals arg1=\"${transtype}\" arg2=\"")
 				.append(StringUtils.escapeXML(value)).append("\" casesensitive=\"false\"/></not>");
 		}

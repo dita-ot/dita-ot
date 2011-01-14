@@ -17,6 +17,7 @@ import java.util.Iterator;
  */
 public abstract class InsertActionRelative extends InsertAction implements IAction {
 
+	/** Current processing file. */
 	protected String currentFile;
 	/**
 	 * Constructor.
@@ -28,15 +29,15 @@ public abstract class InsertActionRelative extends InsertAction implements IActi
 	 * Return the result.
 	 * @return result
 	 */
+	@Override
 	public String getResult() {
-		Iterator<String> iter;
-		iter = fileNameSet.iterator();
+		final Iterator<String> iter = fileNameSet.iterator();
 		try{
 			while(iter.hasNext()){
 				currentFile = iter.next();
 				reader.parse(currentFile);
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 	       	logger.logException(e);
 		}
 		return retBuf.toString();

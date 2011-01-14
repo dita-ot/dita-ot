@@ -18,7 +18,8 @@ import java.util.StringTokenizer;
  *
  */
 public class PluginRequirement {
-	private ArrayList<String> plugins;
+	private static final String REQUIREMENT_SEPARATOR = "|";
+	private final ArrayList<String> plugins;
 	private boolean required;
 	/**
 	 * Constructor.
@@ -31,8 +32,8 @@ public class PluginRequirement {
 	 * Add plugins.
 	 * @param s plugins name
 	 */
-	public void addPlugins(String s) {
-		StringTokenizer t = new StringTokenizer(s, "|");
+	public void addPlugins(final String s) {
+		final StringTokenizer t = new StringTokenizer(s, REQUIREMENT_SEPARATOR);
 		while (t.hasMoreTokens()) {
 			plugins.add(t.nextToken());
 		}
@@ -41,7 +42,7 @@ public class PluginRequirement {
 	 * Set require.
 	 * @param r require
 	 */
-	public void setRequired(boolean r) {
+	public void setRequired(final boolean r) {
 		required = r;
 	}
 	/**
@@ -62,6 +63,7 @@ public class PluginRequirement {
 	 * To String.
 	 * @return string
 	 */
+	@Override
 	public String toString() {
 		return plugins.toString();
 	}

@@ -26,17 +26,18 @@ import org.dita.dost.util.FileUtils;
  * @author Zhang, Yuan Peng
  */
 public class Features {
-	private String location = null;
-	private Hashtable<String,String> featureTable;
-	private List<PluginRequirement> requireList;
-	private Hashtable<String,String> metaTable;
-	private List<String> templateList;
+	private final String location;
+	private final Hashtable<String,String> featureTable;
+	private final List<PluginRequirement> requireList;
+	private final Hashtable<String,String> metaTable;
+	private final List<String> templateList;
 
 	/**
 	 * Default constructor.
 	 */
 	public Features() {
 		super();
+		location = null;
 		featureTable = new Hashtable<String,String>(Constants.INT_16);
 		requireList = new ArrayList<PluginRequirement>(Constants.INT_8);
 		metaTable = new Hashtable<String,String>(Constants.INT_16);
@@ -48,7 +49,7 @@ public class Features {
 	 * Constructor init location. 
 	 * @param location location
 	 */
-	public Features(String location) {
+	public Features(final String location) {
 		this.location = location;
 		featureTable = new Hashtable<String,String>(Constants.INT_16);
 		requireList = new ArrayList<PluginRequirement>(Constants.INT_8);
@@ -69,7 +70,7 @@ public class Features {
 	 * @param id feature id
 	 * @return feature name
 	 */
-	public String getFeature(String id){
+	public String getFeature(final String id){
 		return featureTable.get(id);
 	}
 	
@@ -87,18 +88,18 @@ public class Features {
 	 * @param value feature value
 	 * @param type feature type
 	 */
-	public void addFeature(String id, String value, String type){
-		StringTokenizer valueTokenizer = new StringTokenizer(value,",");
-		StringBuffer valueBuffer = new StringBuffer();
+	public void addFeature(final String id, final String value, final String type){
+		final StringTokenizer valueTokenizer = new StringTokenizer(value, Integrator.FEAT_VALUE_SEPARATOR);
+		final StringBuffer valueBuffer = new StringBuffer();
 		while(valueTokenizer.hasMoreElements()){
-			String valueElement = (String) valueTokenizer.nextElement();
+			final String valueElement = valueTokenizer.nextToken();
 			if(valueElement!=null && valueElement.trim().length() != 0){
 				if("file".equals(type) && !FileUtils.isAbsolutePath(valueElement)){
 					valueBuffer.append(location).append(File.separatorChar);
 				}
 				valueBuffer.append(valueElement.trim());
 				if(valueTokenizer.hasMoreElements()){
-					valueBuffer.append(",");
+					valueBuffer.append(Integrator.FEAT_VALUE_SEPARATOR);
 				}
 			}
 		}
@@ -109,8 +110,8 @@ public class Features {
 	 * Add the required feature id.
 	 * @param id feature id
 	 */
-	public void addRequire(String id){
-		PluginRequirement requirement = new PluginRequirement();
+	public void addRequire(final String id){
+		final PluginRequirement requirement = new PluginRequirement();
 		requirement.addPlugins(id);
 		requireList.add(requirement);
 	}
@@ -120,8 +121,8 @@ public class Features {
 	 * @param id feature id
 	 * @param importance importance
 	 */
-	public void addRequire(String id, String importance){
-		PluginRequirement requirement = new PluginRequirement();
+	public void addRequire(final String id, final String importance){
+		final PluginRequirement requirement = new PluginRequirement();
 		requirement.addPlugins(id);
 		if (importance != null) {
 			requirement.setRequired(importance.equals("required"));
@@ -142,7 +143,7 @@ public class Features {
 	 * @param type type
 	 * @param value value
 	 */
-	public void addMeta(String type, String value){
+	public void addMeta(final String type, final String value){
 		metaTable.put(type, value);
 	}
 	
@@ -151,7 +152,7 @@ public class Features {
 	 * @param type type
 	 * @return meat info
 	 */
-	public String getMeta(String type){
+	public String getMeta(final String type){
 		return metaTable.get(type);
 	}
 	
@@ -159,7 +160,7 @@ public class Features {
 	 * Add a template.
 	 * @param file file name
 	 */
-	public void addTemplate(String file){
+	public void addTemplate(final String file){
 		templateList.add(file);
 	}
 	/**

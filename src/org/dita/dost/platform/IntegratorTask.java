@@ -21,7 +21,7 @@ import org.dita.dost.util.StringUtils;
  */
 public class IntegratorTask extends Task {
 
-	private Integrator adaptee;
+	private final Integrator adaptee;
 	
 	/**
 	 * Default Constructor.
@@ -34,9 +34,7 @@ public class IntegratorTask extends Task {
 		adaptee = new Integrator();
 	}
 
-	/**
-	 * @see org.apache.tools.ant.Task#execute()
-	 */
+	@Override
 	public void execute() throws BuildException {
 		adaptee.execute();
 	}
@@ -53,7 +51,7 @@ public class IntegratorTask extends Task {
 	 * Set the basedir.
 	 * @param basedir basedir
 	 */
-	public void setBasedir(String basedir) {
+	public void setBasedir(final String basedir) {
 		adaptee.setBasedir(basedir);
 	}
 	
@@ -69,7 +67,7 @@ public class IntegratorTask extends Task {
 	 * Set the ditaDir.
 	 * @param ditaDir ditaDir
 	 */
-	public void setDitadir(String ditaDir) {
+	public void setDitadir(final String ditaDir) {
 		adaptee.setDitaDir(ditaDir);
 	}
 
@@ -85,7 +83,7 @@ public class IntegratorTask extends Task {
 	 * Set the properties file.
 	 * @param propertiesFile propertiesFile
 	 */
-	public void setProperties(File propertiesFile) {
+	public void setProperties(final File propertiesFile) {
 		adaptee.setProperties(propertiesFile);
 	}
 

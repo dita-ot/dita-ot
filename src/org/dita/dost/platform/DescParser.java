@@ -19,7 +19,7 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class DescParser extends DefaultHandler{
 	private String currentPlugin = null;
-	private Features features = null;
+	private final Features features;
 	
 	/**
 	 * DescParser Constructor.
@@ -33,7 +33,7 @@ public class DescParser extends DefaultHandler{
 	 * Constructor initialize Feature with location.
 	 * @param location location
 	 */
-	public DescParser(String location) {
+	public DescParser(final String location) {
 		super();
 		features = new Features(location);
 	}
@@ -41,7 +41,8 @@ public class DescParser extends DefaultHandler{
 	/**
 	 * Process configuration start element.
 	 */
-	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+	@Override
+	public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
 		if( "plugin".equals(qName) ){
 			currentPlugin = attributes.getValue("id");
 		} else if ("feature".equals(qName)){
@@ -64,6 +65,11 @@ public class DescParser extends DefaultHandler{
 		return features;
 	}
 	
+	/**
+	 * Get plugin ID.
+	 * 
+	 * @return plugin ID, <code>null</code> if not defined
+	 */
 	public String getPluginId() {
 		return currentPlugin; 
 	}

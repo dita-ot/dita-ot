@@ -30,10 +30,17 @@ import org.xml.sax.helpers.XMLReaderFactory;
  */
 public class FileGenerator extends DefaultHandler {
 	
-	private XMLReader reader = null;
-	private DITAOTJavaLogger logger = null;
+	public static final String PARAM_LOCALNAME = "localname";
+	public static final String PARAM_TEMPLATE = "template";
+
+	private static final String DITA_OT_NS = "http://dita-ot.sourceforge.net";
+	
+	private final XMLReader reader;
+	private final DITAOTJavaLogger logger;
 	private OutputStreamWriter output = null;
-	private Hashtable<String,String> featureTable = null;
+	/** Plug-in features. */
+	private final Hashtable<String,String> featureTable;
+	/** Template file. */
 	private String templateFileName = null;
 
 	/**
@@ -47,7 +54,7 @@ public class FileGenerator extends DefaultHandler {
 	 * Constructor init featureTable.
 	 * @param featureTbl featureTbl
 	 */
-	public FileGenerator(Hashtable<String,String> featureTbl) {
+	public FileGenerator(final Hashtable<String,String> featureTbl) {
 		this.featureTable = featureTbl;
 		output = null;
 		templateFileName = null;	
@@ -65,8 +72,8 @@ public class FileGenerator extends DefaultHandler {
             //reader.setFeature(Constants.FEATURE_VALIDATION, true); 
             //reader.setFeature(Constants.FEATURE_VALIDATION_SCHEMA, true);
 
-        } catch (Exception e) {
-        	logger.logException(e);
+        } catch (final Exception e) {
+        	throw new RuntimeException("Failed to initialize parser: " + e.getMessage(), e);
         }
 	}
 	
@@ -74,9 +81,9 @@ public class FileGenerator extends DefaultHandler {
 	 * Generator the output file.
 	 * @param fileName filename
 	 */
-	public void generate(String fileName){
+	public void generate(final String fileName){
 		FileOutputStream fileOutput = null;
-		File outputFile = new File(fileName.substring(0,
+		final File outputFile = new File(fileName.substring(0,
 				fileName.lastIndexOf("_template")) + 
 				fileName.substring(fileName.lastIndexOf('.')));
 		templateFileName = fileName;
@@ -85,85 +92,83 @@ public class FileGenerator extends DefaultHandler {
 			fileOutput = new FileOutputStream(outputFile);
 	        output = new OutputStreamWriter(fileOutput, Constants.UTF8);
 			reader.parse(fileName);
-		} catch (Exception e){
+		} catch (final Exception e){
 			logger.logException(e);
 		}finally {
-            try {
-                fileOutput.close();
-            }catch (Exception e) {
-            	logger.logException(e);
-            }
+			if (fileOutput != null) {
+	            try {
+	                fileOutput.close();
+	            }catch (final Exception e) {
+	            	logger.logException(e);
+	            }
+			}
         }
 	}
 
-	/**
-	 * @see org.xml.sax.ContentHandler#characters(char[], int, int)
-	 */
-	public void characters(char[] ch, int start, int length) throws SAXException {
+	@Override
+	public void characters(final char[] ch, final int start, final int length) throws SAXException {
 		try{
 			output.write(StringUtils.escapeXML(ch,start,length));
-		}catch (Exception e) {
+		}catch (final Exception e) {
         	logger.logException(e);
         }
 	}
 
-	/**
-	 * @see org.xml.sax.ContentHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
-	 */
-	public void endElement(String uri, String localName, String qName) throws SAXException {
+	@Override
+	public void endElement(final String uri, final String localName, final String qName) throws SAXException {
 		try{
-			if(!("http://dita-ot.sourceforge.net".equals(uri) && "extension".equals(localName))){
-				output.write("</"+qName+">");
+			if(!(DITA_OT_NS.equals(uri) && "extension".equals(localName))){
+				output.write("</");
+				output.write(qName);
+				output.write(">");
 			}
-		}catch (Exception e) {
+		}catch (final Exception e) {
         	logger.logException(e);
         }
 	}
 
-	/**
-	 * @see org.xml.sax.ContentHandler#ignorableWhitespace(char[], int, int)
-	 */
-	public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
+	@Override
+	public void ignorableWhitespace(final char[] ch, final int start, final int length) throws SAXException {
 		try{
 			output.write(ch,start,length);
-		}catch (Exception e) {
+		}catch (final Exception e) {
         	logger.logException(e);
         }
 	}
 
-	/**
-	 * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
-	 */
-	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+	@Override
+	public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
 		IAction action = null;
 		String input = null;
 		try{
-			if("http://dita-ot.sourceforge.net".equals(uri) && "extension".equals(localName)){
+			if(DITA_OT_NS.equals(uri) && "extension".equals(localName)){
 				// Element extension: <dita:extension id="extension-point" behavior="classname"/>
 				action = (IAction)Class.forName(attributes.getValue("behavior")).newInstance();
-				action.setParam("template="+templateFileName+";extension="+attributes.getValue("id"));
-				input = (String)featureTable.get(attributes.getValue("id"));
+				action.setParam(PARAM_TEMPLATE + Integrator.PARAM_NAME_SEPARATOR + templateFileName + Integrator.PARAM_VALUE_SEPARATOR
+						+ "extension" + Integrator.PARAM_NAME_SEPARATOR + attributes.getValue("id"));
+				input = featureTable.get(attributes.getValue("id"));
 				if(input!=null){
 					action.setFeatures(featureTable);
 					action.setInput(input);
 					output.write(action.getResult());
 				}
 			}else{
-				int attLen = attributes.getLength();
-				output.write("<"+qName);
+				final int attLen = attributes.getLength();
+				output.write("<");
+				output.write(qName);
 				for(int i = 0; i < attLen; i++){
-					if ("http://dita-ot.sourceforge.net".equals(attributes.getURI(i)))
+					if (DITA_OT_NS.equals(attributes.getURI(i)))
 					{
 						// Attribute extension: <element dita:extension="localname classname ..." dita:localname="...">
 						if (!("extension".equals(attributes.getLocalName(i))))
 						{
-							String extensions = attributes.getValue("http://dita-ot.sourceforge.net", "extension");
-							StringTokenizer extensionTokenizer = new StringTokenizer(extensions);
+							final String extensions = attributes.getValue(DITA_OT_NS, "extension");
+							final StringTokenizer extensionTokenizer = new StringTokenizer(extensions);
 							// Get the classname that implements this localname.
 							while (extensionTokenizer.hasMoreTokens())
 							{
-								String thisExtension = extensionTokenizer.nextToken();
-								String thisExtensionClass = extensionTokenizer.nextToken();
+								final String thisExtension = extensionTokenizer.nextToken();
+								final String thisExtensionClass = extensionTokenizer.nextToken();
 								if (thisExtension.equals(attributes.getLocalName(i)))
 								{
 									action = (IAction)Class.forName(thisExtensionClass).newInstance();
@@ -171,13 +176,14 @@ public class FileGenerator extends DefaultHandler {
 								}
 							}
 							action.setFeatures(featureTable);
-							action.setParam("template="+templateFileName+";localname="+attributes.getLocalName(i));
+							action.setParam(PARAM_TEMPLATE + Integrator.PARAM_NAME_SEPARATOR + templateFileName + Integrator.PARAM_VALUE_SEPARATOR
+									+ PARAM_LOCALNAME + Integrator.PARAM_NAME_SEPARATOR + attributes.getLocalName(i));
 							action.setInput(attributes.getValue(i));
 							output.write(action.getResult());
 						}
 					}
 					else if (attributes.getQName(i).startsWith("xmlns:") &&
-							"http://dita-ot.sourceforge.net".equals(attributes.getValue(i)))
+							DITA_OT_NS.equals(attributes.getValue(i)))
 					{
 						// Ignore xmlns:dita.
 					}
@@ -198,25 +204,23 @@ public class FileGenerator extends DefaultHandler {
 				}
 				output.write(">");
 			}
-		}catch(Exception e){
+		}catch(final Exception e){
 			logger.logException(e);
 		}
 	}
 
-	/**
-	 * @see org.xml.sax.ContentHandler#endDocument()
-	 */
+	@Override
 	public void endDocument() throws SAXException {
 		try{
 			output.flush();
 			output.close();
-		}catch(Exception e){
+		}catch(final Exception e){
 			logger.logException(e);
 		}
 		
 	}
 	@Override
-	public void skippedEntity(String name) throws SAXException {
+	public void skippedEntity(final String name) throws SAXException {
 		// TODO Auto-generated method stub
 		System.out.println(name);
 	}
