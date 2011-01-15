@@ -11,6 +11,8 @@ import org.dita.dost.module.ContentImpl;
 import org.dita.dost.util.Constants;
 
 import org.dita.dost.writer.PropertiesWriter;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.dita.dost.exception.DITAOTException;
 
@@ -19,30 +21,34 @@ import static org.junit.Assert.assertEquals;
 
 public class TestPropertiesWriter {
 	
-	public  static PropertiesWriter propertieswriter= new PropertiesWriter();
-	private static String tempDir = "test-stub" + File.separator + "TestPropertiesWriter" + File.separator;
+	private final File tempDir = new File(System.getProperty("java.io.tmpdir"));
+	private final File resourceDir = new File("test-stub" + File.separator + "TestPropertiesWriter");
+	
+	private File outputFile;
+	private File xmlDitalist;
+	
+	@Before
+	public void setUp() {
+		outputFile = new File(tempDir, Constants.FILE_NAME_DITA_LIST);
+    	xmlDitalist = new File(tempDir, Constants.FILE_NAME_DITA_LIST_XML);
+	}
+	
     @Test
-    public void testwrite()throws DITAOTException, FileNotFoundException, IOException
-    {
-    	File outputFile = new File(tempDir, Constants.FILE_NAME_DITA_LIST);
-    	File xmlDitalist=new File(tempDir, Constants.FILE_NAME_DITA_LIST_XML);
-    	File inputfile=new File(tempDir,Constants.FILE_NAME_EXPORT_XML);
-    	Properties prop = new Properties();
-    	prop.load(new FileInputStream (inputfile));
-    	Content content = new ContentImpl();
+    public void testwrite() throws DITAOTException, FileNotFoundException, IOException {
+    	final File inputfile = new File(resourceDir,Constants.FILE_NAME_EXPORT_XML);
+    	final Properties prop = new Properties();
+    	prop.loadFromXML(new FileInputStream (inputfile));
+    	final Content content = new ContentImpl();
     	content.setValue(prop);
-    	
+    	final PropertiesWriter propertieswriter = new PropertiesWriter();
 		propertieswriter.setContent(content);		
 		propertieswriter.write(outputFile.getAbsolutePath());
 		propertieswriter.writeToXML(xmlDitalist.getAbsolutePath());
-		String ditalist="test-stub" + File.separator + "TestPropertiesWriter" + File.separator + "dita.list";
-		String compareditalist="test-stub" + File.separator + "TestPropertiesWriter" + File.separator + "compareofdita.list";
-		String ditalistproperties="test-stub" + File.separator + "TestPropertiesWriter" + File.separator + "dita.xml.properties";
-		String compareditalistproperties="test-stub" + File.separator + "TestPropertiesWriter" + File.separator + "compareofdita.xml.properties";
-		File ditalistfile=new File (ditalist);
-		File compareditalistfile=new File (compareditalist);
-		File ditalistpropertiesfile=new File (ditalistproperties);
-		File compareditalistpropertiesfile=new File(compareditalistproperties);
+		
+		final File ditalistfile=new File(tempDir, Constants.FILE_NAME_DITA_LIST);		
+		final File compareditalistfile=new File(resourceDir, "compareofdita.list");
+		final File ditalistpropertiesfile=new File(tempDir, Constants.FILE_NAME_DITA_LIST_XML);
+		final File compareditalistpropertiesfile=new File(resourceDir,  "compareofdita.xml.properties");
 		  if(!ditalistfile.exists())
 	        { 
 	            System.err.println("Can't Find " + ditalistfile);
@@ -61,10 +67,10 @@ public class TestPropertiesWriter {
           }
 	        try 
 	        {
-	            BufferedReader ditalistbuf = new BufferedReader(new FileReader(ditalistfile));
-	            BufferedReader compareditalistbuf= new BufferedReader(new FileReader(compareditalistfile));
-	            BufferedReader ditalistpropertiesfilebuf= new BufferedReader(new FileReader(ditalistpropertiesfile));
-	            BufferedReader compareditalistpropertiesfilebuf= new BufferedReader(new FileReader(compareditalistpropertiesfile));
+	            final BufferedReader ditalistbuf = new BufferedReader(new FileReader(ditalistfile));
+	            final BufferedReader compareditalistbuf= new BufferedReader(new FileReader(compareditalistfile));
+	            final BufferedReader ditalistpropertiesfilebuf= new BufferedReader(new FileReader(ditalistpropertiesfile));
+	            final BufferedReader compareditalistpropertiesfilebuf= new BufferedReader(new FileReader(compareditalistpropertiesfile));
 	            String str;
 	            String st1="";
 	            ditalistbuf.readLine();
@@ -103,10 +109,16 @@ public class TestPropertiesWriter {
 	            compareditalistpropertiesfilebuf.close();
 	            assertEquals(st3,st4);
 	        } 
-	        catch (IOException e) 
+	        catch (final IOException e) 
 	        {
 	            e.getStackTrace();
 	        }
-		
     }
+    
+    @After
+    public void tearDown() {
+//        outputFile.delete();
+//    	xmlDitalist.delete();
+    }
+    
 }

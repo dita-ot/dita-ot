@@ -13,23 +13,22 @@ import org.dita.dost.resolver.DitaURIResolverFactory;
 import org.junit.Test;
 
 public class TestKeyrefReader {
-	public static KeyrefReader keyrefreader = new KeyrefReader();
-	Set <String> set=new HashSet<String> ();
-	File keyrefreadercompare=new File("test-stub" + File.separator + "keyrefreaderCompare.xml");
-	BufferedReader reader=null;
-	String content1;
+	
+	File keyrefreadercompare = new File("test-stub" + File.separator + "keyrefreaderCompare.xml");
+	
 	@Test
-	public void TestKeyrefReader() throws FileNotFoundException
+	public void testKeyrefReader() throws FileNotFoundException
 	{
 	    String path=System.getProperty("user.dir");
 		DitaURIResolverFactory.setPath(path);
 		String filename = "test-stub" + File.separator + "keyrefreader.xml";
+		StringBuilder content1 = new StringBuilder();
+		BufferedReader reader = null;
 		try{
 			reader=new BufferedReader(new FileReader(keyrefreadercompare));
 			String line;
-			content1="";
 			while((line=reader.readLine())!=null)
-				content1+=line+"";
+				content1.append(line);
 		   }
 		catch(IOException e)
 		{
@@ -46,16 +45,17 @@ public class TestKeyrefReader {
 				e.printStackTrace();
 			}
 		}
+		final Set <String> set=new HashSet<String> ();
 		set.add("blatview");
 		set.add("blatfeference");
 		set.add("blatintro");
+		final KeyrefReader keyrefreader = new KeyrefReader();
 		keyrefreader.setKeys(set);
 		keyrefreader.read(filename);
 		Content content = keyrefreader.getContent();
-		keyrefreader.getContent();
-        String string1;
-        string1=content.getValue().toString();
-		assertEquals(content1,string1);
+		//keyrefreader.getContent();
+        final String string1 = content.getValue().toString();
+		assertEquals(content1.toString(), string1);
 	
 	}
 	

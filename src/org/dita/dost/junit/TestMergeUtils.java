@@ -17,6 +17,7 @@ public class TestMergeUtils {
 	@BeforeClass
 	public static void setUp() {
 		mergeUtils=MergeUtils.getInstance();
+		mergeUtils.reset();
 	}
 	
 	@Test

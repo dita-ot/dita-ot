@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA 1.2 Task//EN" "../demo/dita12/dtd12/technicalContent/dtd/task.dtd">
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA 1.2 Task//EN" "../dtd/technicalContent/dtd/task.dtd">
 <task id="topicID" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
     <title>This is a topic for pushAfter between specialization DTD</title>
     

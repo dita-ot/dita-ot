@@ -1,10 +1,12 @@
 package org.dita.dost.junit;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.Arrays;
 import java.util.Properties;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -15,6 +17,7 @@ import org.dita.dost.module.GenMapAndTopicListModule;
 import org.dita.dost.pipeline.AbstractFacade;
 import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
+import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -69,6 +72,7 @@ public class TestGenMapAndTopicListModule {
 		pipelineInput.setAttribute("onlytopicinmap", "false");
 		pipelineInput.setAttribute("ditalist", tempDir + File.separator + "dita.list");
 		pipelineInput.setAttribute("maplinks", tempDir + File.separator + "maplinks.unordered");
+		pipelineInput.setAttribute(Constants.ANT_INVOKER_EXT_PARAN_SETSYSTEMID, "no");
 		
 	}
 	
@@ -138,8 +142,15 @@ public class TestGenMapAndTopicListModule {
 		assertTrue(properties.containsKey("topics" + File.separator + "target-topic-a.xml"));
 		
 		properties.load(new FileInputStream(tempDir+ File.separator + "dita.list"));
-		assertEquals("topics" + File.separator + "xreffin-topic-1.xml,maps" + File.separator + "root-map-01.ditamap,topics" + File.separator + "target-topic-c.xml,topics" + File.separator + "target-topic-a.xml", 
-				properties.getProperty("fullditamapandtopiclist"));
+		final String[] expFullditamapandtopiclist = {
+				"topics" + File.separator + "xreffin-topic-1.xml",
+				"maps" + File.separator + "root-map-01.ditamap",
+				"topics" + File.separator + "target-topic-c.xml",
+				"topics" + File.separator + "target-topic-a.xml" };
+		final String[] actFullditamapandtopiclist = properties.getProperty("fullditamapandtopiclist").split(",");
+		Arrays.sort(expFullditamapandtopiclist);
+		Arrays.sort(actFullditamapandtopiclist);
+		assertArrayEquals(expFullditamapandtopiclist, actFullditamapandtopiclist);
 		
 		properties.load(new FileInputStream(tempDir+ File.separator + "fullditamapandtopic.list"));
 		assertTrue(properties.containsKey("topics" + File.separator + "xreffin-topic-1.xml"));
@@ -171,8 +182,8 @@ public class TestGenMapAndTopicListModule {
 		Element elem = document.getDocumentElement();
 		NodeList nodeList = elem.getElementsByTagName("keydef");
 		String[]keys ={"target_topic_2","target_topic_1"};
-		String[]href ={".." + File.separator + "topics" + File.separator + "target-topic-c.xml",".." + File.separator + "topics" + File.separator + "target-topic-a.xml"};
-		String[]source ={"root-map-01.ditamap","root-map-01.ditamap"};
+		String[]href ={"topics" + File.separator + "target-topic-c.xml","topics" + File.separator + "target-topic-a.xml"};
+		String[]source ={"maps" + File.separator + "root-map-01.ditamap","maps" + File.separator + "root-map-01.ditamap"};
 		
 		for(int i = 0; i< nodeList.getLength();i++){
 			assertEquals(keys[i],

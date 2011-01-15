@@ -16,14 +16,14 @@ public class TestImgUtils {
 	public void testgetwidth()
 	{
 		
-		assertEquals(95,(ImgUtils.getWidth("test-stub" + File.separator, "img.jpg")));
+		assertEquals(135,(ImgUtils.getWidth("test-stub" + File.separator, "img.jpg")));
 		
 	}
 	
 	@Test
 	public void testgetheight()
 	{
-		assertEquals(135,(ImgUtils.getHeight("test-stub" + File.separator, "img.jpg")));
+		assertEquals(95,(ImgUtils.getHeight("test-stub" + File.separator, "img.jpg")));
 	}
 
 	

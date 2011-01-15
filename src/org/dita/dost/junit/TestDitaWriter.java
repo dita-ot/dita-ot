@@ -72,6 +72,7 @@ public class TestDitaWriter {
 		pipelineInput.setAttribute("maplinks", tempDir + File.separator + "maplinks.unordered");
 		pipelineInput.setAttribute("transtype", "xhtml");
 		pipelineInput.setAttribute("ditaval", ditavalFile);
+		pipelineInput.setAttribute(Constants.ANT_INVOKER_EXT_PARAN_SETSYSTEMID, "no");
 		
 		
 		

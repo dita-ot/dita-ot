@@ -9,6 +9,8 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.DitaValReader;
+import org.dita.dost.util.Constants;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -52,6 +54,7 @@ public class TestDitaValReader {
 		pipelineInput.setAttribute("ditalist", tempDir + File.separator + "dita.list");
 		pipelineInput.setAttribute("maplinks", tempDir + File.separator + "maplinks.unordered");
 		pipelineInput.setAttribute("transtype", "xhtml");
+		pipelineInput.setAttribute(Constants.ANT_INVOKER_EXT_PARAN_SETSYSTEMID, "no");
 		facade.execute("GenMapAndTopicList", pipelineInput);
 		
 		
