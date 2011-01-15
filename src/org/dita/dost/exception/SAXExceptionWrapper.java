@@ -14,48 +14,58 @@ import org.xml.sax.SAXParseException;
 
 /**
  * SAXExceptionWrapper which wrapper the SAXParseException.
+ * 
  * @author wxzhang
- *
  */
 public class SAXExceptionWrapper extends SAXParseException {
-	/** generated serial id. */
+	
+	/** Generated serial id. */
 	private static final long serialVersionUID = -8266265000662519966L;
-	/** message & location. */
-	String messageWithLocation=null;
-	/** saxParseExcetpion. */
-	SAXParseException saxParseExcetpion =null;
-	/** source file where the exception is thrown. */
-	String sourceFile=null;
-	/**Constructor.
+	/** Message & location. */
+	String messageWithLocation;
+	/** SAX parse exception. */
+	SAXParseException saxParseException;
+	/** Source file where the exception is thrown. */
+	String sourceFile;
+	
+	/**
+	 * Constructor.
+	 * 
 	 * @param message message
 	 * @param locator locator
 	 */
-	public SAXExceptionWrapper(String message, Locator locator) {
+	public SAXExceptionWrapper(final String message, final Locator locator) {
 		super(message, locator);
 	}
 
-	/**Constructor.
+	/**
+	 * Constructor.
+	 * 
 	 * @param message message
 	 * @param locator locator
 	 * @param e Exception
 	 */
-	public SAXExceptionWrapper(String message, Locator locator, Exception e) {
+	public SAXExceptionWrapper(final String message, final Locator locator, final Exception e) {
 		super(message, locator, e);
 	}
 
-	/**Constructor.
+	/**
+	 * Constructor.
+	 * 
 	 * @param message message
 	 * @param publicId public id
 	 * @param systemId systemId
 	 * @param lineNumber lineNumber
 	 * @param columnNumber columnNumber
 	 */
-	public SAXExceptionWrapper(String message, String publicId,
-			String systemId, int lineNumber, int columnNumber) {
+	public SAXExceptionWrapper(final String message, final String publicId,
+			final String systemId, final int lineNumber, final int columnNumber) {
 		super(message, publicId, systemId, lineNumber, columnNumber);
 	}
 
-	/**Constructor.
+	/**
+	 * Constructor.
+	 * 
 	 * @param message message
 	 * @param publicId publicId
 	 * @param systemId systemId
@@ -63,30 +73,36 @@ public class SAXExceptionWrapper extends SAXParseException {
 	 * @param columnNumber columnNumber
 	 * @param e Exception
 	 */
-	public SAXExceptionWrapper(String message, String publicId,
-			String systemId, int lineNumber, int columnNumber, Exception e) {
+	public SAXExceptionWrapper(final String message, final String publicId,
+			final String systemId, final int lineNumber, final int columnNumber, final Exception e) {
 		super(message, publicId, systemId, lineNumber, columnNumber, e);
 	}
+	
 	/**
 	 * Constructor.
+	 * 
 	 * @param file file
 	 * @param inner SAXParseException
 	 */
-	public SAXExceptionWrapper(String file,SAXParseException inner){
+	public SAXExceptionWrapper(final String file, final SAXParseException inner) {
 		super(inner.getMessage(), inner.getPublicId(), inner.getSystemId(), inner.getLineNumber(), inner.getColumnNumber(), inner.getException());
-		saxParseExcetpion=inner;
-		sourceFile=file;
+		saxParseException = inner;
+		sourceFile = file;
 	}
+	
 	/**
 	 * Retrieve the error message.
-	 * @return String
+	 * 
+	 * @return error message
 	 */
+	@Override
 	public String getMessage(){
-		StringBuffer buff=new StringBuffer();
-		buff.append(sourceFile + " ");
-		buff.append("Line "+saxParseExcetpion.getLineNumber());
+		final StringBuffer buff = new StringBuffer();
+		buff.append(sourceFile);
+		buff.append(" Line ");
+		buff.append(saxParseException.getLineNumber());
 		buff.append(":");
-		buff.append(saxParseExcetpion.getMessage());
+		buff.append(saxParseException.getMessage());
 		buff.append(System.getProperty("line.separator"));
 
 		return buff.toString();

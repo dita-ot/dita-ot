@@ -8,21 +8,25 @@
  * (c) Copyright IBM Corp. 2005 All Rights Reserved.
  */
 package org.dita.dost.exception;
+
 import org.dita.dost.log.MessageBean;
+
 /**
  * Exception class for DITAOT, used to handle exceptions in Java modules.
  *
  * @author Wu, Zhi Qiang
  */
 public class DITAOTException extends Exception {
+	
 	/** serial version. */
 	private static final long serialVersionUID = -7505646495801170017L;
 	/** message bean. */
 	private MessageBean messageBean = null;
 	/** capture flag. */
 	private boolean captured = false;
+	
 	/**
-	 * Constructs a new DITAOTException with <code>null</code> 
+	 * Constructs a new DITAOTException with {@code null} 
 	 * as its detail message.
 	 */
 	public DITAOTException() {
@@ -34,7 +38,7 @@ public class DITAOTException extends Exception {
 	 * 
 	 * @param message the detail message
 	 */
-	public DITAOTException(String message) {
+	public DITAOTException(final String message) {
 		this(message, null);
 	}
 
@@ -43,7 +47,7 @@ public class DITAOTException extends Exception {
      * 
 	 * @param cause the cause 
 	 */
-	public DITAOTException(Throwable cause) {
+	public DITAOTException(final Throwable cause) {
 		this((String) null, cause);
 	}
 
@@ -54,7 +58,7 @@ public class DITAOTException extends Exception {
 	 * @param message the detail message.
 	 * @param cause the cause 
 	 */
-	public DITAOTException(String message, Throwable cause) {
+	public DITAOTException(final String message, final Throwable cause) {
 		super(message, cause);
 	}
 	
@@ -66,12 +70,13 @@ public class DITAOTException extends Exception {
 	 * @param cause the cause 
 	 * @param message the detail message.
 	 */
-	public DITAOTException(MessageBean msgBean, Throwable cause, String message) {
+	public DITAOTException(final MessageBean msgBean, final Throwable cause, final String message) {
 		super(message, cause);
 		messageBean = msgBean;
 	}
 	/**
 	 * Retrieve the MessageBean.
+	 * 
 	 * @return MessageBean
 	 */
 	public MessageBean getMessageBean() {
@@ -79,17 +84,18 @@ public class DITAOTException extends Exception {
 	}
 	/**
 	 * To check whether the current exception has already been captured before.
-	 * @return true if the exception has already solved,else false
+	 * 
+	 * @return {@code true} if the exception has already solved, else {@code false}
 	 */
 	public boolean alreadyCaptured() {
 		return captured;
 	}
 	/**
 	 * To set the exception's status whether it is needed to solve.
-     * @param isCaptured boolean
 	 * 
+     * @param isCaptured boolean
 	 */
-	public void setCaptured(boolean isCaptured) {
+	public void setCaptured(final boolean isCaptured) {
 		captured = isCaptured;
 	}
 	
