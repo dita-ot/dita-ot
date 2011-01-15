@@ -14,6 +14,9 @@ import org.junit.Test;
 
 public class TestFileUtils {
 
+	private static final String LINE_SEPARATOR_WINDOWS = "\\";
+	private static final String LINE_SEPARATOR_UNIX = "/";
+
 	@Test
 	public void testIsHTMLFile() {
 
@@ -110,52 +113,77 @@ public class TestFileUtils {
 
 	@Test
 	public void testResolveTopic() {
-		assertEquals("c:\\dir\\file.xml", FileUtils.resolveTopic("c:\\dir","file.xml"));
-		assertEquals("c:\\dir\\file.xml#topicid", FileUtils.resolveTopic("c:\\dir","file.xml#topicid"));
-		assertEquals("c:\\file.xml", FileUtils.resolveTopic("c:\\dir","..\\file.xml"));
-		assertEquals("\\file.xml", FileUtils.resolveTopic("","file.xml"));
-		assertEquals("file.xml", FileUtils.resolveTopic(null,"file.xml"));
+		if (File.separator.equals(LINE_SEPARATOR_WINDOWS)) {
+			assertEquals("c:\\dir\\file.xml", FileUtils.resolveTopic("c:\\dir","file.xml"));
+			assertEquals("c:\\dir\\file.xml#topicid", FileUtils.resolveTopic("c:\\dir","file.xml#topicid"));
+			assertEquals("c:\\file.xml", FileUtils.resolveTopic("c:\\dir","..\\file.xml"));
+			assertEquals("\\file.xml", FileUtils.resolveTopic("","file.xml"));
+			assertEquals("file.xml", FileUtils.resolveTopic(null,"file.xml"));
+		} else {
+			assertEquals("/dir/file.xml", FileUtils.resolveTopic("/dir","file.xml"));
+			assertEquals("/dir/file.xml#topicid", FileUtils.resolveTopic("/dir","file.xml#topicid"));
+			assertEquals("/file.xml", FileUtils.resolveTopic("/dir","../file.xml"));
+			assertEquals("/file.xml", FileUtils.resolveTopic("","file.xml"));
+			assertEquals("file.xml", FileUtils.resolveTopic(null,"file.xml"));
+		}
 	}
 
 	@Test
 	public void testResolveFile() {
-		assertEquals("c:\\dir\\file.xml", FileUtils.resolveFile("c:\\dir","file.xml"));
-		assertEquals("c:\\dir\\file.xml", FileUtils.resolveFile("c:\\dir","file.xml#topicid"));
-		assertEquals("c:\\file.xml", FileUtils.resolveFile("c:\\dir","..\\file.xml"));
-		assertEquals("\\file.xml", FileUtils.resolveFile("","file.xml"));
-		assertEquals("file.xml", FileUtils.resolveFile(null,"file.xml"));
+		if (File.separator.equals(LINE_SEPARATOR_WINDOWS)) {
+			assertEquals("c:\\dir\\file.xml", FileUtils.resolveFile("c:\\dir","file.xml"));
+			assertEquals("c:\\dir\\file.xml", FileUtils.resolveFile("c:\\dir","file.xml#topicid"));
+			assertEquals("c:\\file.xml", FileUtils.resolveFile("c:\\dir","..\\file.xml"));
+			assertEquals("\\file.xml", FileUtils.resolveFile("","file.xml"));
+			assertEquals("file.xml", FileUtils.resolveFile(null,"file.xml"));
+		} else {
+			assertEquals("/dir/file.xml", FileUtils.resolveFile("/dir","file.xml"));
+			assertEquals("/dir/file.xml", FileUtils.resolveFile("/dir","file.xml#topicid"));
+			assertEquals("/file.xml", FileUtils.resolveFile("/dir","../file.xml"));
+			assertEquals("/file.xml", FileUtils.resolveFile("","file.xml"));
+			assertEquals("file.xml", FileUtils.resolveFile(null,"file.xml"));
+		}
 	}
 
 	@Test
 	public void testNormalizeDirectory() {
-		assertEquals("c:\\dir1\\dir2\\file.xml",FileUtils.normalizeDirectory("c:\\dir1", "dir2\\file.xml"));
-		assertEquals("c:\\dir1\\file.xml",FileUtils.normalizeDirectory("c:\\dir1\\dir2", "..\\file.xml"));
-		assertEquals("\\file.xml",FileUtils.normalizeDirectory("", "\\file.xml#topicid"));
-		//should be c:\\file.xml?
-		assertEquals("\\c:\\file.xml",FileUtils.normalizeDirectory("", "c:\\file.xml"));
-		assertEquals("c:\\file.xml",FileUtils.normalizeDirectory(null, "c:\\file.xml#topicid"));
+		if (File.separator.equals(LINE_SEPARATOR_WINDOWS)) {
+			assertEquals("c:\\dir1\\dir2\\file.xml",FileUtils.normalizeDirectory("c:\\dir1", "dir2\\file.xml"));
+			assertEquals("c:\\dir1\\file.xml",FileUtils.normalizeDirectory("c:\\dir1\\dir2", "..\\file.xml"));
+			assertEquals("\\file.xml",FileUtils.normalizeDirectory("", "\\file.xml#topicid"));
+			//should be c:\\file.xml?
+			assertEquals("\\c:\\file.xml",FileUtils.normalizeDirectory("", "c:\\file.xml"));
+			assertEquals("c:\\file.xml",FileUtils.normalizeDirectory(null, "c:\\file.xml#topicid"));
+		} else {
+			assertEquals("/dir1/dir2/file.xml",FileUtils.normalizeDirectory("/dir1", "dir2/file.xml"));
+			assertEquals("/dir1/file.xml",FileUtils.normalizeDirectory("/dir1/dir2", "../file.xml"));
+			assertEquals("/file.xml",FileUtils.normalizeDirectory("", "/file.xml#topicid"));
+			//should be /file.xml?
+			assertEquals("/file.xml",FileUtils.normalizeDirectory("", "/file.xml"));
+			assertEquals("/file.xml",FileUtils.normalizeDirectory(null, "/file.xml#topicid"));
+		}
 	}
 
 	@Test
 	public void testRemoveRedundantNamesStringString() {
-		assertEquals("a\\c\\file.xml",FileUtils.removeRedundantNames("a\\b\\..\\c\\file.xml", File.separator));
-		assertEquals("a\\b\\file.xml",FileUtils.removeRedundantNames("a\\.\\b\\.\\file.xml", File.separator));
-		assertEquals("..\\a\\file.xml",FileUtils.removeRedundantNames("..\\a\\file.xml", File.separator));
-		assertEquals("..\\file.xml", FileUtils.removeRedundantNames("a\\..\\..\\file.xml", File.separator));
-		assertEquals("file.xml", FileUtils.removeRedundantNames("a\\b\\..\\..\\file.xml", File.separator));
-		assertEquals("\\a\\b\\file.xml", FileUtils.removeRedundantNames("\\a\\.\\b\\c\\..\\file.xml", File.separator));
+		assertEquals("a\\c\\file.xml",FileUtils.removeRedundantNames("a\\b\\..\\c\\file.xml", LINE_SEPARATOR_WINDOWS));
+		assertEquals("a\\b\\file.xml",FileUtils.removeRedundantNames("a\\.\\b\\.\\file.xml", LINE_SEPARATOR_WINDOWS));
+		assertEquals("..\\a\\file.xml",FileUtils.removeRedundantNames("..\\a\\file.xml", LINE_SEPARATOR_WINDOWS));
+		assertEquals("..\\file.xml", FileUtils.removeRedundantNames("a\\..\\..\\file.xml", LINE_SEPARATOR_WINDOWS));
+		assertEquals("file.xml", FileUtils.removeRedundantNames("a\\b\\..\\..\\file.xml", LINE_SEPARATOR_WINDOWS));
+		assertEquals("\\a\\b\\file.xml", FileUtils.removeRedundantNames("\\a\\.\\b\\c\\..\\file.xml", LINE_SEPARATOR_WINDOWS));
 	}
 
 	@Test
 	public void testIsAbsolutePath() {
-		if(File.separator.endsWith("\\")){
+		if(File.separator.endsWith(LINE_SEPARATOR_WINDOWS)){
 			assertTrue(FileUtils.isAbsolutePath("C:\\\\file.xml"));
 			assertTrue(FileUtils.isAbsolutePath("c:\\\\file.xml"));
 			assertFalse(FileUtils.isAbsolutePath(""));
 			assertFalse(FileUtils.isAbsolutePath(" "));
 			assertFalse(FileUtils.isAbsolutePath("\\dic\\file.xml"));
 			assertFalse(FileUtils.isAbsolutePath("file.xml"));
-		}else if(File.separator.endsWith("/")){
+		}else if(File.separator.endsWith(LINE_SEPARATOR_UNIX)){
 			assertTrue(FileUtils.isAbsolutePath("/file.xml"));
 			assertFalse(FileUtils.isAbsolutePath("file.xml"));
 		}else {
@@ -190,9 +218,9 @@ public class TestFileUtils {
 
 	@Test
 	public void testFileExists() {
-		assertTrue(FileUtils.fileExists("test-stub\\ibmrnr.txt"));
-		assertTrue(FileUtils.fileExists("test-stub\\ibmrnr.txt#topicid"));
-		assertFalse(FileUtils.fileExists("test-stub\\ibmrnr"));
+		assertTrue(FileUtils.fileExists("test-stub" + File.separator + "ibmrnr.txt"));
+		assertTrue(FileUtils.fileExists("test-stub" + File.separator + "ibmrnr.txt#topicid"));
+		assertFalse(FileUtils.fileExists("test-stub" + File.separator + "ibmrnr"));
 	}
 
 }
