@@ -94,8 +94,12 @@
     <copy todir="${bin.dir}">
     	<fileset dir="${java.dir}" includes="**/*.properties"/>
     </copy>
-    <jar destfile="${dost.jar}" basedir="${bin.dir}" manifest="manifest.mf"
-           includes="**" />
+    <jar destfile="${dost.jar}" basedir="${bin.dir}"
+           includes="**">
+      <manifest>
+        <attribute name="Main-Class" value="org.dita.dost.invoker.CommandLineInvoker"/>
+      </manifest>
+    </jar>
   </target>
   
   <patternset id="pattern.package.minimum">
