@@ -1,28 +1,46 @@
 package org.dita.dost.writer;
 import static org.junit.Assert.assertEquals;
 import java.io.File;
+import java.io.IOException;
+
+import org.dita.dost.TestUtils;
 import org.dita.dost.module.ContentImpl;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.writer.CHMIndexWriter;
 public class TestCHMIndexWriter {
+	
+	private File tempDir;
+	
 	public static CHMIndexWriter chmindexwriter = new CHMIndexWriter();
 	public static ContentImpl content = new ContentImpl();
+	
+	@Before
+	public void setUp() throws IOException, DITAOTException {
+		tempDir = TestUtils.createTempDir(getClass());
+	}
 	
 	@Test
 	public void testgetIndexFileName(){
 		
 		
-		assertEquals("test-stub" + File.separator + "a.xml.hhk",(chmindexwriter.getIndexFileName("test-stub" + File.separator + "a.xml")));
+		assertEquals(new File(tempDir, "a.xml.hhk").getAbsolutePath(),
+				     (chmindexwriter.getIndexFileName(new File(tempDir,"a.xml").getAbsolutePath())));
 
 	}
 	
 	@Test(expected = DITAOTException.class)
 	public void testwrite() throws DITAOTException
 	{
-		String filename = "test-stub" + File.separator + "a.xml";
+		String filename = new File(tempDir, "a.xml").getAbsolutePath();
 		chmindexwriter.write(filename);
 	}
 	
+	@After
+	public void tearDown() throws IOException {
+		TestUtils.forceDelete(tempDir);
+	}
 
 }

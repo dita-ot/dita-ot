@@ -1,6 +1,7 @@
 package org.dita.dost.writer;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
@@ -8,9 +9,11 @@ import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import static org.junit.Assert.assertEquals;
 
+import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
@@ -18,28 +21,41 @@ import org.dita.dost.reader.ConrefPushReader;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.writer.ConrefPushParser;
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 public class TestConrefPushParser {
 	
-	public static ConrefPushParser parser;
+	private final File resourceDir = new File("test-stub");
+	private File tempDir;
+	private File inputFile; 
 	
-	public static ConrefPushReader reader;
+	public ConrefPushParser parser;
+	public ConrefPushReader reader;
 	
-	@BeforeClass
-	public static void setUp(){
+	@Before
+	public void setUp() throws IOException{
+		tempDir = TestUtils.createTempDir(getClass());
+
+		inputFile = new File(tempDir, "conrefpush_stub.xml"); 
+		FileUtils.copyFile(new File(resourceDir, "conrefpush_stub.xml"),
+				           inputFile);
+		FileUtils.copyFile(new File(resourceDir, "conrefpush_stub2.xml"),
+						   new File(tempDir, "conrefpush_stub2.xml"));
+		
 		parser = new ConrefPushParser();
 		reader = new ConrefPushReader();
 	}
 	
 	@Test
-	public void testWrite() throws DITAOTException{
+	public void testWrite() throws DITAOTException, ParserConfigurationException, SAXException, IOException{
 		/*
 		 * the part of content of conrefpush_stub2.xml is
 		 * <ol>
@@ -78,14 +94,14 @@ public class TestConrefPushParser {
 		 *	</li>
 		 * </ol>
 		 */
-		reader.read("test-stub" + File.separator + "conrefpush_stub.xml");
+		reader.read(inputFile.getAbsolutePath());
 		Set<Map.Entry<String, Hashtable<String, String>>> pushSet = (Set<Map.Entry<String, Hashtable<String,String>>>) reader.getContent().getCollection();
 		Iterator<Map.Entry<String, Hashtable<String,String>>> iter = pushSet.iterator();
-		try {
 			if(iter.hasNext()){
 				Map.Entry<String, Hashtable<String,String>> entry = iter.next();
 				// initialize the parsed file
-				FileUtils.copyFile(new File("test-stub" + File.separator + "conrefpush_stub2_backup.xml"), new File(entry.getKey()));
+				FileUtils.copyFile(new File(resourceDir, "conrefpush_stub2_backup.xml"),
+								   new File(entry.getKey()));
 				Content content = new ContentImpl();
 				content.setValue(entry.getValue());
 				parser.setContent(content);
@@ -135,9 +151,6 @@ public class TestConrefPushParser {
 				}
 
 			}
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 	
 	private String nodeToString(Element elem){
@@ -161,6 +174,11 @@ public class TestConrefPushParser {
 		}
 		stringBuffer.append("</").append(elem.getNodeName()).append(Constants.GREATER_THAN);
 		return stringBuffer.toString();
+	}
+
+	@After
+	public void tearDown() throws IOException {
+		TestUtils.forceDelete(tempDir);
 	}
 	
 }

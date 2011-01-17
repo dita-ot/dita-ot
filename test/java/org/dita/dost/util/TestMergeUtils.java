@@ -5,6 +5,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.File;
+
 import org.dita.dost.util.MergeUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -13,6 +15,8 @@ import org.junit.Test;
 
 public class TestMergeUtils {
 
+	private final File resourceDir = new File("test-stub");
+	
 	public static MergeUtils mergeUtils;
 	@BeforeClass
 	public static void setUp() {
@@ -80,7 +84,7 @@ public class TestMergeUtils {
 	@Test
 	public void testGetFirstTopicId() {
 		//assertEquals("task",mergeUtils.getFirstTopicId("stub.xml", "TEST_STUB"));
-		assertEquals("task",mergeUtils.getFirstTopicId("stub.xml", "test-stub",false));
+		assertEquals("task",mergeUtils.getFirstTopicId("stub.xml", resourceDir.getAbsolutePath(),false));
 		
 	}
 	

@@ -5,11 +5,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
@@ -18,8 +20,10 @@ import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.util.Constants;
+import org.dita.dost.util.TestDITAOTCopy;
 import org.dita.dost.writer.DitaWriter;
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -28,37 +32,35 @@ import org.w3c.dom.NodeList;
 
 public class TestDitaWriter {
 	
-	public static DitaWriter writer;
+	private final File resourceDir = new File("test-stub");
+	private File tempDir;
+	
+	public DitaWriter writer;
 	//get catalog file.
-	//private static String ditaDir = "C:/jia/DITA-OT1.5";
+	//private String ditaDir = "C:/jia/DITA-OT1.5";
 	
-	private static String baseDir = "test-stub" + File.separator + "DITA-OT1.5";
-	private static String tempDir = "DITAVAL" + File.separator + "temp";
-	private static String inputDir = "DITAVAL";
-	private static String inputMap = "DITAVAL" + File.separator + "DITAVAL_testdata1.ditamap";
-	private static String outDir = "DITAVAL" + File.separator + "out";
-	private static String ditavalFile = inputDir + File.separator + "DITAVAL_1.ditaval";
+	private final File baseDir = new File(resourceDir, "DITA-OT1.5");
+	//private String tempDir = "DITAVAL" + File.separator + "temp";
+	private final File inputDir = new File("DITAVAL");
+	private final File inputMap = new File(inputDir, "DITAVAL_testdata1.ditamap");
+	private final File outDir = new File(tempDir, "out");
+	private final File ditavalFile = new File(inputDir, "DITAVAL_1.ditaval");
 	
 	
-	private static PipelineHashIO pipelineInput;
+	private PipelineHashIO pipelineInput;
 
-	@BeforeClass
-	public static void setUp() throws Exception {
-		
-		//Create the temp dir
-		File dir = new File(baseDir, tempDir);
-		if(!dir.exists()){
-			dir.mkdir();
-		}
+	@Before
+	public void setUp() throws Exception {
+		tempDir = TestUtils.createTempDir(getClass());
 		
 		PipelineFacade facade = new PipelineFacade();
 		pipelineInput = new PipelineHashIO();
 		
-		pipelineInput.setAttribute("inputmap", inputMap);
-		pipelineInput.setAttribute("basedir", baseDir);
-		pipelineInput.setAttribute("inputdir", inputDir);
-		pipelineInput.setAttribute("outputdir", outDir);
-		pipelineInput.setAttribute("tempDir", tempDir);
+		pipelineInput.setAttribute("inputmap", inputMap.getPath());
+		pipelineInput.setAttribute("basedir", baseDir.getAbsolutePath());
+		pipelineInput.setAttribute("inputdir", inputDir.getPath());
+		pipelineInput.setAttribute("outputdir", outDir.getAbsolutePath());
+		pipelineInput.setAttribute("tempDir", tempDir.getAbsolutePath());
 		pipelineInput.setAttribute("ditadir", "");
 		pipelineInput.setAttribute("ditaext", ".xml");
 		pipelineInput.setAttribute("indextype", "xhtml");
@@ -68,17 +70,17 @@ public class TestDitaWriter {
 		pipelineInput.setAttribute("generatecopyouter", "1");
 		pipelineInput.setAttribute("outercontrol", "warn");
 		pipelineInput.setAttribute("onlytopicinmap", "false");
-		pipelineInput.setAttribute("ditalist", tempDir + File.separator + "dita.list");
-		pipelineInput.setAttribute("maplinks", tempDir + File.separator + "maplinks.unordered");
+		pipelineInput.setAttribute("ditalist", new File(tempDir, "dita.list").getAbsolutePath());
+		pipelineInput.setAttribute("maplinks", new File(tempDir, "maplinks.unordered").getAbsolutePath());
 		pipelineInput.setAttribute("transtype", "xhtml");
-		pipelineInput.setAttribute("ditaval", ditavalFile);
+		pipelineInput.setAttribute("ditaval", ditavalFile.getPath());
 		pipelineInput.setAttribute(Constants.ANT_INVOKER_EXT_PARAN_SETSYSTEMID, "no");
 		
 		
 		
 		facade.execute("GenMapAndTopicList", pipelineInput);
 		
-		String ditaDir = new File(baseDir, "").getAbsolutePath();
+		String ditaDir = baseDir.getAbsolutePath();
 		DitaWriter.initXMLReader(ditaDir, false, true);
 		
 		writer = new DitaWriter();
@@ -110,12 +112,11 @@ public class TestDitaWriter {
 		assertEquals("include", map.get("product=key3"));
         
         Content content = new ContentImpl();
-        String tempDir1 = new File(baseDir, tempDir).getAbsolutePath();
-		content.setValue(tempDir1);
+        content.setValue(tempDir.getAbsolutePath());
 		writer.setContent(content);
 		//C:\jia\DITA-OT1.5\DITAVAL|img.dita
-		String filePathPrefix = new File(baseDir, inputDir).getAbsolutePath() + Constants.STICK;
-		String filePath = new File(baseDir, inputDir + File.separator + "keyword.dita").getAbsolutePath();
+		String filePathPrefix = new File(baseDir, inputDir.getPath()).getAbsolutePath() + Constants.STICK;
+		String filePath = new File(baseDir, new File(inputDir, "keyword.dita").getPath()).getAbsolutePath();
 		DebugAndFilterModule.extName = ".xml";
 		writer.write(filePathPrefix + "keyword.dita");
 		
@@ -146,7 +147,7 @@ public class TestDitaWriter {
 		
 		try {
 			builder = factory.newDocumentBuilder();
-			String filePath1 = new File(baseDir, tempDir + File.separator + "keyword.xml").getAbsolutePath();
+			String filePath1 = new File(tempDir, "keyword.xml").getAbsolutePath();
 			Document document = builder.parse(filePath1);
 			Element elem = document.getDocumentElement();
 			NodeList nodeList = elem.getElementsByTagName("keyword");
@@ -165,4 +166,10 @@ public class TestDitaWriter {
 			
 		}
 	}
+	
+	@After
+	public void tearDown() throws IOException {
+		TestUtils.forceDelete(tempDir);
+	}
+	
 }

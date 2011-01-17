@@ -7,52 +7,51 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.TopicMergeModule;
 import org.dita.dost.pipeline.AbstractFacade;
 import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 
 public class TestTopicMergeModule {
-	public static TopicMergeModule module;
 	
-	private static AbstractFacade facade;
+	private final File resourceDir = new File("test-stub", "TestTopicMergeModule");
+	private File tempDir;
 	
-	private static PipelineHashIO pipelineInput;
-	File ditalistfile=new File ("test-stub" + File.separator + "TestTopicMergeModule" + File.separator + "compare.xml");
-	File tobecomparefile=new File ("test-stub" + File.separator + "TestTopicMergeModule" + File.separator + "out" + File.separator + "tobecompared.xml");
+	public TopicMergeModule module;
 	
-	@BeforeClass
-	public static void setUp(){
-		
-		
+	private AbstractFacade facade;
+	
+	private PipelineHashIO pipelineInput;
+	final File ditalistfile = new File (resourceDir, "compare.xml");
+	File tobecomparefile;
+	
+	@Before
+	public void setUp() throws IOException {
+		tempDir = TestUtils.createTempDir(getClass());
 		
 		facade = new PipelineFacade();
 		pipelineInput = new PipelineHashIO();
 		
-		String baseDir = "test-stub" + File.separator + "TestTopicMergeModule";
-		String tempDir = "test-stub" + File.separator + "TestTopicMergeModule" + File.separator + "temp";
-		String inputDir = "test-stub" + File.separator + "TestTopicMergeModule" + File.separator + "input";
+		final File tempDir = new File(resourceDir, "temp");
+		final File inputDir = new File(resourceDir, "input");
 		
-		String inputMap = inputDir + File.separator + "test.ditamap";
+		final File inputMap = new File(inputDir, "test.ditamap");
 		
-		String outDir = "test-stub" + File.separator + "TestTopicMergeModule" + File.separator + "out";
-		String outputmap=outDir + File.separator + "tobecompared.xml";
-		//Create the temp dir
-		File dir = new File(baseDir, tempDir);
-		if(!dir.exists()){
-			dir.mkdir();
-		}
+		final File outDir = new File(resourceDir, "out");
+		tobecomparefile = new File(tempDir, "tobecompared.xml");
 		
-		pipelineInput.setAttribute("inputmap", inputMap);
-		pipelineInput.setAttribute("basedir", baseDir);
-		pipelineInput.setAttribute("inputdir", inputDir);
-		pipelineInput.setAttribute("output", outputmap);
-		pipelineInput.setAttribute("outputdir", outDir);
-		pipelineInput.setAttribute("tempDir", tempDir);
+		pipelineInput.setAttribute("inputmap", inputMap.getPath());
+		pipelineInput.setAttribute("basedir", resourceDir.getPath());
+		pipelineInput.setAttribute("inputdir", inputDir.getPath());
+		pipelineInput.setAttribute("output", tobecomparefile.getPath());
+		pipelineInput.setAttribute("outputdir", outDir.getPath());
+		pipelineInput.setAttribute("tempDir", tempDir.getPath());
 		pipelineInput.setAttribute("ditadir", "");
 		pipelineInput.setAttribute("ditaext", ".xml");
 		pipelineInput.setAttribute("indextype", "xhtml");
@@ -62,47 +61,24 @@ public class TestTopicMergeModule {
 		pipelineInput.setAttribute("generatecopyouter", "1");
 		pipelineInput.setAttribute("outercontrol", "warn");
 		pipelineInput.setAttribute("onlytopicinmap", "false");
-		pipelineInput.setAttribute("ditalist", tempDir + File.separator + "dita.list");
-		pipelineInput.setAttribute("maplinks", tempDir + File.separator + "maplinks.unordered");
+		pipelineInput.setAttribute("ditalist", new File(tempDir, "dita.list").getPath());
+		pipelineInput.setAttribute("maplinks", new File(tempDir, "maplinks.unordered").getPath());
 		
 	}
 	
 	@Test
 	public void testtopicmergemodule() throws DITAOTException, IOException
 	{
-		
-		try
-		{
-				TopicMergeModule topicmergemodule=new TopicMergeModule();
-		        topicmergemodule.execute(pipelineInput);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		
-	    }finally
-	    {
-	    	BufferedReader topicmergemodulebuf = new BufferedReader(new FileReader(ditalistfile));
-	    	BufferedReader tobecomparedfilebuf = new BufferedReader(new FileReader(tobecomparefile));
-	    	String str;
-            String st1="";
-            topicmergemodulebuf.readLine();
-            while ((str = topicmergemodulebuf.readLine()) != null) 
-            {      
-            	st1=st1+str;
-            }
-          
-            topicmergemodulebuf.close();
-            String ste;
-            String st2="";
-            tobecomparedfilebuf.readLine();
-            while ((ste = tobecomparedfilebuf.readLine()) != null) 
-            {       
-            	st2=st2+ste;
-            }
-          
-            tobecomparedfilebuf.close();
-           assertEquals(st1,st2);
-	    }
+		TopicMergeModule topicmergemodule = new TopicMergeModule();
+        topicmergemodule.execute(pipelineInput);
 
+		assertEquals(TestUtils.readFileToString(ditalistfile, true),
+					 TestUtils.readFileToString(tobecomparefile, true));
     }
+
+	@After
+	public void tearDown() throws IOException {
+		TestUtils.forceDelete(tempDir);
+	}
+
 }

@@ -6,12 +6,14 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Properties;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.GenMapAndTopicListModule;
 import org.dita.dost.pipeline.AbstractFacade;
@@ -19,7 +21,8 @@ import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -27,40 +30,25 @@ import org.w3c.dom.NodeList;
 
 public class TestGenMapAndTopicListModule {
 	
-	public static GenMapAndTopicListModule module;
+	private final File resourceDir = new File("test-stub");
+	private File tempDir;
 	
-	private static AbstractFacade facade;
+	private final File baseDir = new File(resourceDir, "DITA-OT1.5");
 	
-	private static PipelineHashIO pipelineInput;
-	
-	//public static ConrefPushReader reader;
-	
-	@BeforeClass
-	public static void setUp(){
+	@Before
+	public void setUp() throws IOException, DITAOTException {
+		tempDir = TestUtils.createTempDir(getClass());
+				
+		final File inputDir = new File("keyrefs", "maps_parallel_to_topics" + File.separator + "maps");
+		final File inputMap = new File(inputDir, "root-map-01.ditamap");
+		final File outDir = new File(tempDir, "out");
 		
-		
-		
-		facade = new PipelineFacade();
-		pipelineInput = new PipelineHashIO();
-		
-		String baseDir = "test-stub" + File.separator + "DITA-OT1.5";
-		String tempDir = "keyrefs" + File.separator + "maps_parallel_to_topics" + File.separator + "temp";
-		String inputDir = "keyrefs" + File.separator + "maps_parallel_to_topics" + File.separator + "maps";
-		
-		String inputMap = inputDir +  File.separator + "root-map-01.ditamap";
-		String outDir = "keyrefs" + File.separator + "maps_parallel_to_topics" + File.separator + "out";
-		
-		//Create the temp dir
-		File dir = new File(baseDir, tempDir);
-		if(!dir.exists()){
-			dir.mkdir();
-		}
-		
-		pipelineInput.setAttribute("inputmap", inputMap);
-		pipelineInput.setAttribute("basedir", baseDir);
-		pipelineInput.setAttribute("inputdir", inputDir);
-		pipelineInput.setAttribute("outputdir", outDir);
-		pipelineInput.setAttribute("tempDir", tempDir);
+		final PipelineHashIO pipelineInput = new PipelineHashIO();
+		pipelineInput.setAttribute("inputmap", inputMap.getPath());
+		pipelineInput.setAttribute("basedir", baseDir.getAbsolutePath());
+		pipelineInput.setAttribute("inputdir", inputDir.getPath());
+		pipelineInput.setAttribute("outputdir", outDir.getPath());
+		pipelineInput.setAttribute("tempDir", tempDir.getPath());
 		pipelineInput.setAttribute("ditadir", "");
 		pipelineInput.setAttribute("ditaext", ".xml");
 		pipelineInput.setAttribute("indextype", "xhtml");
@@ -70,73 +58,48 @@ public class TestGenMapAndTopicListModule {
 		pipelineInput.setAttribute("generatecopyouter", "1");
 		pipelineInput.setAttribute("outercontrol", "warn");
 		pipelineInput.setAttribute("onlytopicinmap", "false");
-		pipelineInput.setAttribute("ditalist", tempDir + File.separator + "dita.list");
-		pipelineInput.setAttribute("maplinks", tempDir + File.separator + "maplinks.unordered");
+		pipelineInput.setAttribute("ditalist", new File(tempDir, "dita.list").getPath());
+		pipelineInput.setAttribute("maplinks", new File(tempDir, "maplinks.unordered").getPath());
 		pipelineInput.setAttribute(Constants.ANT_INVOKER_EXT_PARAN_SETSYSTEMID, "no");
 		
+		final AbstractFacade facade = new PipelineFacade();
+		facade.execute("GenMapAndTopicList", pipelineInput);
 	}
 	
 	@Test
-	public void testExecute() throws DITAOTException{
-		try {
-			String baseDir = "test-stub" + File.separator + "DITA-OT1.5";
-			String tempDir = pipelineInput.getAttribute("tempDir");
-			
-			
-			facade.execute("GenMapAndTopicList", pipelineInput);
-			tempDir = new File(baseDir, tempDir).getAbsolutePath();
-			
-			assertTrue(FileUtils.fileExists(tempDir));
-			
-			//File existence test
-			assertTrue(FileUtils.fileExists(tempDir + File.separator + "canditopics.list"));
-			assertTrue(FileUtils.fileExists(tempDir + File.separator + "coderef.list"));
-			assertTrue(FileUtils.fileExists(tempDir + File.separator + "conref.list"));
-			assertTrue(FileUtils.fileExists(tempDir + File.separator + "conrefpush.list"));
-			assertTrue(FileUtils.fileExists(tempDir + File.separator + "conreftargets.list"));
-			assertTrue(FileUtils.fileExists(tempDir + File.separator + "copytosource.list"));
-			assertTrue(FileUtils.fileExists(tempDir + File.separator + "copytotarget2sourcemap.list"));
-			assertTrue(FileUtils.fileExists(tempDir + File.separator + "dita.list"));
-			assertTrue(FileUtils.fileExists(tempDir + File.separator + "dita.xml.properties"));
-			assertTrue(FileUtils.fileExists(tempDir + File.separator + "flagimage.list"));
-			assertTrue(FileUtils.fileExists(tempDir + File.separator + "fullditamap.list"));
-			assertTrue(FileUtils.fileExists(tempDir + File.separator + "fullditamapandtopic.list"));
-			assertTrue(FileUtils.fileExists(tempDir + File.separator + "fullditatopic.list"));
-			assertTrue(FileUtils.fileExists(tempDir + File.separator + "hrefditatopic.list"));
-			assertTrue(FileUtils.fileExists(tempDir + File.separator + "hreftargets.list"));
-			assertTrue(FileUtils.fileExists(tempDir + File.separator + "html.list"));
-			assertTrue(FileUtils.fileExists(tempDir + File.separator + "image.list"));
-			assertTrue(FileUtils.fileExists(tempDir + File.separator + "key.list"));
-			assertTrue(FileUtils.fileExists(tempDir + File.separator + "keydef.xml"));
-			assertTrue(FileUtils.fileExists(tempDir + File.separator + "keyref.list"));
-			assertTrue(FileUtils.fileExists(tempDir + File.separator + "outditafiles.list"));
-			assertTrue(FileUtils.fileExists(tempDir + File.separator + "relflagimage.list"));
-			assertTrue(FileUtils.fileExists(tempDir + File.separator + "resourceonly.list"));
-			assertTrue(FileUtils.fileExists(tempDir + File.separator + "skipchunk.list"));
-			assertTrue(FileUtils.fileExists(tempDir + File.separator + "subtargets.list"));
-			assertTrue(FileUtils.fileExists(tempDir + File.separator + "usr.input.file.list"));
-			
-			
-			
-			/*DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = factory.newDocumentBuilder();*/
-			
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+	public void testTempContents() throws DITAOTException{
+			assertTrue(new File(tempDir, "canditopics.list").exists());
+			assertTrue(new File(tempDir, "coderef.list").exists());
+			assertTrue(new File(tempDir, "conref.list").exists());
+			assertTrue(new File(tempDir, "conrefpush.list").exists());
+			assertTrue(new File(tempDir, "conreftargets.list").exists());
+			assertTrue(new File(tempDir, "copytosource.list").exists());
+			assertTrue(new File(tempDir, "copytotarget2sourcemap.list").exists());
+			assertTrue(new File(tempDir, "dita.list").exists());
+			assertTrue(new File(tempDir, "dita.xml.properties").exists());
+			assertTrue(new File(tempDir, "flagimage.list").exists());
+			assertTrue(new File(tempDir, "fullditamap.list").exists());
+			assertTrue(new File(tempDir, "fullditamapandtopic.list").exists());
+			assertTrue(new File(tempDir, "fullditatopic.list").exists());
+			assertTrue(new File(tempDir, "hrefditatopic.list").exists());
+			assertTrue(new File(tempDir, "hreftargets.list").exists());
+			assertTrue(new File(tempDir, "html.list").exists());
+			assertTrue(new File(tempDir, "image.list").exists());
+			assertTrue(new File(tempDir, "key.list").exists());
+			assertTrue(new File(tempDir, "keydef.xml").exists());
+			assertTrue(new File(tempDir, "keyref.list").exists());
+			assertTrue(new File(tempDir, "outditafiles.list").exists());
+			assertTrue(new File(tempDir, "relflagimage.list").exists());
+			assertTrue(new File(tempDir, "resourceonly.list").exists());
+			assertTrue(new File(tempDir, "skipchunk.list").exists());
+			assertTrue(new File(tempDir, "subtargets.list").exists());
+			assertTrue(new File(tempDir, "usr.input.file.list").exists());
 	}
+		
 	@Test
 	public void testFileContent() throws Exception{
-		
-		String baseDir = "test-stub" + File.separator + "DITA-OT1.5";
-		String tempDir = pipelineInput.getAttribute("tempDir");
-		tempDir = new File(baseDir, tempDir).getAbsolutePath();
-		
 		Properties properties = new Properties();
-		properties.load(new FileInputStream(tempDir+ File.separator + "canditopics.list"));
+		properties.load(new FileInputStream(tempDir + File.separator + "canditopics.list"));
 		assertTrue(properties.containsKey("topics" + File.separator + "xreffin-topic-1.xml"));
 		assertTrue(properties.containsKey("topics" + File.separator + "target-topic-c.xml"));
 		assertTrue(properties.containsKey("topics" + File.separator + "target-topic-a.xml"));
@@ -206,4 +169,10 @@ public class TestGenMapAndTopicListModule {
 		assertTrue(properties.containsKey("maps" + File.separator + "root-map-01.ditamap"));
 		
 	}
+
+	@After
+	public void tearDown() throws IOException {
+		TestUtils.forceDelete(tempDir);
+	}
+
 }

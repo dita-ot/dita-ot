@@ -1,70 +1,48 @@
 package org.dita.dost.util;
+
 import static org.junit.Assert.assertEquals;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 
 import org.apache.tools.ant.BuildException;
+import org.dita.dost.TestUtils;
 import org.dita.dost.util.DITAOTCopy;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 public class TestDITAOTCopy {
 	
-	public static DITAOTCopy ditaotcopy= new DITAOTCopy();
-	String relativepath="testbuildaaa.xml";
+	private final File resourceDir = new File("test-stub");
+	private File tempDir;
+	
+	private File mydestFile;
+	private File myFile;
+	
+	@Before
+	public void setUp() throws IOException {
+		tempDir = TestUtils.createTempDir(getClass());
+		myFile = new File(tempDir, "testbuild.xml");
+		FileUtils.copyFile(new File(resourceDir, "testbuild.xml"), myFile);
+		mydestFile = new File(tempDir, "testbuildaaa.xml");
+	}
 	
 	@Test
-	public void testexecute() throws BuildException
+	public void testexecute() throws BuildException, IOException
 	{
-		ditaotcopy.setIncludes("test-stub" + File.separator + "testbuild.xml");
-		ditaotcopy.setTodir("test-stub");
-		ditaotcopy.setRelativePaths(relativepath);
-		ditaotcopy.execute();
-
-		
-		 String FileName="test-stub" + File.separator + "testbuild.xml";
-	      String DestFileName="test-stub" + File.separator + "testbuildaaa.xml";
-	       File myFile=new File(FileName);
-	       File mydestFile=new File(DestFileName);
-
-	      
-	       ditaotcopy.setRelativePaths(relativepath); 
+		DITAOTCopy ditaotcopy= new DITAOTCopy();
+		ditaotcopy.setIncludes(myFile.getPath());
+		ditaotcopy.setTodir(tempDir.getPath());
+	       ditaotcopy.setRelativePaths(mydestFile.getName()); 
 	       ditaotcopy.execute();
-	       if(!myFile.exists())
-	        { 
-	            System.err.println("Can't Find " + FileName);
-	        }
-
-	        try 
-	        {
-	            BufferedReader in = new BufferedReader(new FileReader(myFile));
-	            BufferedReader in1= new BufferedReader(new FileReader(mydestFile));
-	            String str;
-	            String std="";
-	            while ((str = in.readLine()) != null) 
-	            {       
-	            	std=std+str;
-	            }
-	          
-	            in.close();
-	            String ste;
-	            String stj="";
-	            while ((ste = in1.readLine()) != null) 
-	            {       
-	            	stj=stj+ste;
-	            }
-	          
-	            in.close();
-	            assertEquals(stj,std);
-	        } 
-	        catch (IOException e) 
-	        {
-	            e.getStackTrace();
-	        }
-	        
-		
+	       
+        assertEquals(TestUtils.readFileToString(myFile),
+                     TestUtils.readFileToString(mydestFile));
 	}
 
+	@After
+	public void tearDown() throws IOException {
+		TestUtils.forceDelete(tempDir);
+	}
 	
 }
