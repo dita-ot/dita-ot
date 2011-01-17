@@ -1,4 +1,4 @@
-package org.dita.dost.junit;
+package org.dita.dost.invoker;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.invoker.CommandLineInvoker;

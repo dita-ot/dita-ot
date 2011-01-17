@@ -1,4 +1,4 @@
-package org.dita.dost.junit;
+package org.dita.dost.util;
 
 import java.util.Locale;
 import org.dita.dost.util.DITAOTCollator;

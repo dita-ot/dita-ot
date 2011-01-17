@@ -1,4 +1,4 @@
-package org.dita.dost.junit;
+package org.dita.dost.reader;
 
 import static org.junit.Assert.assertEquals;
 import java.io.File;

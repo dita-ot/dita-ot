@@ -1,4 +1,4 @@
-package org.dita.dost.junit;
+package org.dita.dost.module;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertArrayEquals;

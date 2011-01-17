@@ -1,4 +1,4 @@
-package org.dita.dost.junit;
+package org.dita.dost.writer;
 import java.io.File;
 import org.dita.dost.writer.CHMIndexWriter;
 import org.dita.dost.writer.EclipseIndexWriter;
