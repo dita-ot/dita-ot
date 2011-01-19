@@ -197,7 +197,7 @@
       <xsl:when test="string(number($units))!='NaN' and string(number($numeric-value))!='NaN'">
         <!-- Since $units is a number, the input was unitless, so we default
           the unit to pixels and just return the input value -->
-        <xsl:value-of select="number(round(concat($numeric-value,$units)))"/>
+        <xsl:value-of select="round(number(concat($numeric-value,$units)))"/>
       </xsl:when>
       <xsl:when test="string(number($numeric-value))='NaN'">
         <!-- If the input isn't valid, just return 100% -->

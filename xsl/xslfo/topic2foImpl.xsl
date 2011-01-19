@@ -286,16 +286,16 @@
       <xsl:value-of select="/dita/*[contains(@class,' topic/topic ')][1]/*[contains(@class,' topic/title ')]"/>
     </xsl:variable>
     <xsl:choose>
-      <xsl:when test="string-length($schtitle)&gt;'0'">
+      <xsl:when test="string-length($schtitle) &gt; 0">
         <xsl:value-of select="$schtitle"/>
       </xsl:when>
-      <xsl:when test="string-length($ditaschtitle)&gt;'0'">
+      <xsl:when test="string-length($ditaschtitle) &gt; 0">
         <xsl:value-of select="$ditaschtitle"/>
       </xsl:when>
-      <xsl:when test="string-length($maintitle)&gt;'0'">
+      <xsl:when test="string-length($maintitle) &gt; 0">
         <xsl:value-of select="$maintitle"/>
       </xsl:when>
-      <xsl:when test="string-length($ditamaintitle)&gt;'0'">
+      <xsl:when test="string-length($ditamaintitle) &gt; 0">
         <xsl:value-of select="$ditamaintitle"/>
       </xsl:when>
       <xsl:otherwise>
