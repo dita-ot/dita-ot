@@ -1,30 +1,73 @@
 package org.dita.dost.invoker;
 
+import static org.junit.Assert.assertTrue;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
+
+import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.invoker.CommandLineInvoker;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 public class TestCmdInvoker {
 
-	@Test(expected = DITAOTException.class)
+	private final PrintStream originalOut = System.out;
+	
+	private File tempDir;
+	private String tempArg;
+	
+	@Before
+	public void setUp() throws IOException {
+		tempDir = TestUtils.createTempDir(getClass());
+		tempArg = "/tempdir:" + tempDir.getAbsolutePath();
+	}
+	
+	@Test
 	public void testProcessArguments() throws Exception {
-		String input[]={"/i:abc.ditamap","/transtypexhtml"};
-		CommandLineInvoker test = new CommandLineInvoker();
-		test.processArguments(input);
-	}
-	
-	@Test(expected = DITAOTException.class)
-	public void testProcessArgsWrongParam() throws Exception {
-		String input[]={"/i:abc.ditamap","/abc:def"};
-		CommandLineInvoker test = new CommandLineInvoker();		
-		test.processArguments(input);
-	}
-	
-	@Test(expected = DITAOTException.class)
-	public void testProcessArgsEmptyValue() throws Exception {
-		String input[]={"/i:"};
-		CommandLineInvoker test = new CommandLineInvoker();
+		final String input[] = { "/i:abc.ditamap", "/transtype:xhtml", tempArg };
+		final CommandLineInvoker test = new CommandLineInvoker();
 		test.processArguments(input);
 	}
 
+	@Test(expected = DITAOTException.class)
+	public void testProcessArgsWrongParam() throws Exception {
+		final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+		final String input[] = { "/i:abc.ditamap", "/abc:def" };
+		final CommandLineInvoker test = new CommandLineInvoker();
+		try {
+			System.setOut(new PrintStream(outContent));
+			test.processArguments(input);
+		} catch (final DITAOTException e) {
+			throw e;
+		} finally {
+			System.setOut(originalOut);
+			assertTrue(outContent.size() > 0);
+		}
+	}
+
+	@Test(expected = DITAOTException.class)
+	public void testProcessArgsEmptyValue() throws Exception {
+		final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+		final String input[] = { "/i:" };
+		final CommandLineInvoker test = new CommandLineInvoker();
+		try {
+			System.setOut(new PrintStream(outContent));
+			test.processArguments(input);
+		} catch (final DITAOTException e) {
+			throw e;
+		} finally {
+			System.setOut(originalOut);
+			assertTrue(outContent.size() > 0);
+		}
+	}
+
+	@After
+	public void tearDown() throws IOException {
+		TestUtils.forceDelete(tempDir);
+	}
+	
 }
