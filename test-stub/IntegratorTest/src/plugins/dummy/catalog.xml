@@ -1,0 +1,15 @@
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+
+  <public publicId="foo" uri="bar.dtd"/>
+  <system systemId="foo.dtd" uri="bar.dtd"/>
+  <uri name="foo" uri="bar.dtd"/>
+  <nextCatalog catalog="foo.xml"/>
+  <delegateURI uriStartString="foo" catalog="bar.xml"/>
+  <delegateSystem systemIdStartString="foo" catalog="bar.xml"/>
+  <delegatePublic publicIdStartString="foo" catalog="bar.xml"/>
+  <rewriteSystem systemIdStartString="foo" rewritePrefix="bar"/>
+  <rewriteURI uriStartString="foo" rewritePrefix="bar"/>
+  <rewriteSystem systemIdStartString="foo" rewritePrefix="file:///bar"/>
+  <rewriteURI uriStartString="foo" rewritePrefix="file:///bar"/>
+
+</catalog>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin id="dummy">
+           
+  <feature extension="CheckTranstypeAction" value="foo,bar,baz" type="text"/>
+  <feature extension="ImportAntLibAction" value="foo.jar,bar.jar,baz.jar" type="file"/>  
+  <feature extension="ImportStringsAction" value="foo.xml" type="file"/>
+  <feature extension="ImportXSLAction" value="foo.xsl" type="file"/>
+  <feature extension="InsertAction" value="build.xml" type="file"/>
+  <feature extension="InsertAntActionRelative" value="build.xml" type="file"/>
+  <feature extension="InsertCatalogActionRelative" value="catalog.xml" type="file"/>
+  <feature extension="InsertDependsAction" value="foo,bar" type="text"/>
+  
+  <template file="xsl/shell_template.xsl"/>
+  <feature extension="ImportXSLAction.plugin" value="../../xsl/foo.xsl" type="file"/>
+           
+</plugin>
