@@ -69,7 +69,6 @@ public class InsertAction extends DefaultHandler implements IAction, LexicalHand
         }
 	}
 
-	@Override
 	public void setInput(final String input) {
 		final StringTokenizer inputTokenizer = new StringTokenizer(input, Integrator.FEAT_VALUE_SEPARATOR);
 		while(inputTokenizer.hasMoreElements()){
@@ -77,7 +76,6 @@ public class InsertAction extends DefaultHandler implements IAction, LexicalHand
 		}
 	}
 
-	@Override
 	public void setParam(final String param) {
 		final StringTokenizer paramTokenizer = new StringTokenizer(param, Integrator.PARAM_VALUE_SEPARATOR);
 		while(paramTokenizer.hasMoreElements()){
@@ -90,7 +88,6 @@ public class InsertAction extends DefaultHandler implements IAction, LexicalHand
 		}		
 	}
 
-	@Override
 	public String getResult() {
 		try{
 			for (final String fileName: fileNameSet) {
@@ -158,45 +155,37 @@ public class InsertAction extends DefaultHandler implements IAction, LexicalHand
 		elemLevel = 0;
 	}
 
-	@Override
 	public void setFeatures(final Hashtable<String,String> h) {
 		
 	}
 	
 	//added by Alan for bug: #2893316 on Date: 2009-11-09 begin
-	@Override
 	public void startCDATA() throws SAXException {
 		retBuf.append(Constants.CDATA_HEAD);
 
 	}
 
-	@Override
 	public void endCDATA() throws SAXException {
 		retBuf.append(Constants.CDATA_END);
 	}
 
-	@Override
 	public void startDTD(final String name, final String publicId, final String systemId)
 			throws SAXException {
 		// nop;
 	}
 
-	@Override
 	public void endDTD() throws SAXException {
 		// nop;
 	}
 
-	@Override
 	public void startEntity(final String name) throws SAXException {
 		// nop;
 	}
 
-	@Override
 	public void endEntity(final String name) throws SAXException {
 		// nop;
 	}
 
-	@Override
 	public void comment(final char[] ch, final int start, final int length) throws SAXException {
 		// nop;
 	}

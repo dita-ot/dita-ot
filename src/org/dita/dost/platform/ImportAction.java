@@ -40,14 +40,12 @@ public abstract class ImportAction implements IAction {
 	 * get result.
 	 * @return result
 	 */
-	@Override
 	public abstract String getResult();
 
 	/**
 	 * set input.
 	 * @param input input
 	 */
-	@Override
 	public void setInput(final String input) {
 		final StringTokenizer inputTokenizer = new StringTokenizer(input, Integrator.FEAT_VALUE_SEPARATOR);
 		while(inputTokenizer.hasMoreElements()){
@@ -59,7 +57,6 @@ public abstract class ImportAction implements IAction {
 	 * Set the input parameters.
 	 * @param param param
 	 */
-	@Override
 	public void setParam(final String param) {
 		final StringTokenizer paramTokenizer = new StringTokenizer(param, Integrator.PARAM_VALUE_SEPARATOR);
 		while(paramTokenizer.hasMoreElements()){
@@ -75,7 +72,6 @@ public abstract class ImportAction implements IAction {
 	 * Set the feature table.
 	 * @param h hastable
 	 */
-	@Override
 	public void setFeatures(final Hashtable<String,String> h) {
 		
 	}

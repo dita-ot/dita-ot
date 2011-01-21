@@ -172,8 +172,7 @@ public class XmlPropertyTask extends Task {
 		}
 	}
     private static class Resolver implements EntityResolver {
-        @Override
-		public InputSource resolveEntity(final String pid, final String sid)
+        public InputSource resolveEntity(final String pid, final String sid)
             throws SAXException
         {
             if (sid.equals(PROPS_DTD_URI)) {
@@ -187,16 +186,13 @@ public class XmlPropertyTask extends Task {
     }
 
     private static class EH implements ErrorHandler {
-        @Override
-		public void error(final SAXParseException x) throws SAXException {
+        public void error(final SAXParseException x) throws SAXException {
             throw x;
         }
-        @Override
-		public void fatalError(final SAXParseException x) throws SAXException {
+        public void fatalError(final SAXParseException x) throws SAXException {
             throw x;
         }
-        @Override
-		public void warning(final SAXParseException x) throws SAXException {
+        public void warning(final SAXParseException x) throws SAXException {
             throw x;
         }
     }

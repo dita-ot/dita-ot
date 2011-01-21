@@ -17,7 +17,6 @@ public class DummyPipelineModule implements AbstractPipelineModule {
 	/**
 	 * @return always returns {@link #exp}
 	 */
-	@Override
 	public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException {
 		return exp;
 	}

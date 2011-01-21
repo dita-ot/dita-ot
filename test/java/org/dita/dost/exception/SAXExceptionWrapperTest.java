@@ -10,19 +10,15 @@ import org.xml.sax.SAXParseException;
 public class SAXExceptionWrapperTest {
 
 	private final Locator l = new Locator() {
-		@Override
 		public int getColumnNumber() {
 			return 1;
 		}
-		@Override
 		public int getLineNumber() {
 			return 3;
 		}
-		@Override
 		public String getPublicId() {
 			return "publicId";
 		}
-		@Override
 		public String getSystemId() {
 			return "systemId";
 		}
