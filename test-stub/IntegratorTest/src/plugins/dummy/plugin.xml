@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <plugin id="dummy">
+  
+  <require plugin="base" importance="required"/>
+    
+  <meta type="foo" value="bar"/>
            
   <feature extension="CheckTranstypeAction" value="foo,bar,baz" type="text"/>
   <feature extension="ImportAntLibAction" value="foo.jar,bar.jar,baz.jar" type="file"/>  
@@ -12,5 +16,5 @@
   
   <template file="xsl/shell_template.xsl"/>
   <feature extension="ImportXSLAction.plugin" value="../../xsl/foo.xsl" type="file"/>
-           
+  
 </plugin>

@@ -1,0 +1,177 @@
+package org.dita.dost.platform;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.junit.Test;
+
+public class FeaturesTest {
+
+	@Test
+	public void testFeatures() {
+		assertNotNull(new Features());
+	}
+
+	@Test
+	public void testFeaturesString() {
+		assertNotNull(new Features("base"));
+	}
+
+	@Test
+	public void testGetLocation() {
+		assertNull(new Features().getLocation());
+		assertEquals("base", new Features("base").getLocation());
+	}
+
+	@Test
+	public void testGetFeature() {
+		final Features f = new Features("base");
+		f.addFeature("foo", "bar", null);
+		
+		assertEquals("bar", f.getFeature("foo"));
+	}
+
+	@Test
+	public void testGetAllFeatures() {
+		final Features f = new Features("base");
+		f.addFeature("foo", "bar", null);
+		f.addFeature("foo", "baz", null);
+		f.addFeature("bar", "qux", null);
+		
+		final Map<String, String> exp = new HashMap<String,String>();
+		exp.put("foo", "baz");
+		exp.put("bar", "qux");
+		
+		assertEquals(exp.entrySet(), f.getAllFeatures());
+	}
+
+	@Test
+	public void testAddFeature() {
+		final Features f = new Features("base");
+		try {
+			f.addFeature("foo", null, null);
+			fail();
+		} catch (NullPointerException e) {}
+		f.addFeature("foo", " bar, baz ", null);
+		assertEquals("bar,baz", f.getFeature("foo"));
+		f.addFeature("foo", "bar, baz", "file");
+		assertEquals("base/bar,base/baz", f.getFeature("foo"));
+	}
+
+	@Test
+	public void testAddRequireString() {
+		final Features f = new Features();
+		f.addRequire("foo");
+		try {
+			f.addRequire(null);
+			fail();
+		} catch (NullPointerException e) {}
+	}
+
+	@Test
+	public void testAddRequireStringString() {
+		final Features f = new Features();
+		f.addRequire("foo");
+		f.addRequire("foo", null);
+		try {
+			f.addRequire(null, null);
+			fail();
+		} catch (NullPointerException e) {}
+	}
+
+	@Test
+	public void testGetRequireListIter() {
+		final Features f = new Features();
+		f.addRequire("foo | bar ");
+		f.addRequire("baz", "unrequired");
+		f.addRequire("qux", "required");
+		
+		final Map<List<String>, Boolean> act = new HashMap<List<String>, Boolean>();
+		final Iterator<PluginRequirement> requirements = f.getRequireListIter();
+		while (requirements.hasNext()) {
+			final PluginRequirement requirement = requirements.next();			
+			final List<String> plugins = new ArrayList<String>();
+			for (final Iterator<String> ps = requirement.getPlugins(); ps.hasNext();) {
+				plugins.add(ps.next());
+			}
+			Collections.sort(plugins);
+			act.put(plugins, requirement.getRequired());
+		}
+		
+		final Map<List<String>, Boolean> exp = new HashMap<List<String>, Boolean>();
+		exp.put(Arrays.asList(new String[] {" bar ", "foo "}), Boolean.TRUE);
+		exp.put(Arrays.asList(new String[] {"baz"}), Boolean.FALSE);
+		exp.put(Arrays.asList(new String[] {"qux"}), Boolean.TRUE);
+
+		assertEquals(exp, act);
+	}
+
+	@Test
+	public void testAddMeta() {
+		final Features f = new Features();
+		f.addMeta("foo", "bar");
+		f.addMeta("foo", "baz");
+		f.addMeta("bar", "baz");
+		try {
+			f.addMeta("bar", null);
+			fail();
+		} catch (NullPointerException e) {}
+	}
+
+	@Test
+	public void testGetMeta() {
+		final Features f = new Features();
+		f.addMeta("foo", "bar");
+		f.addMeta("foo", "baz");
+		f.addMeta("bar", "baz");
+		
+		assertEquals("baz", f.getMeta("foo"));
+		assertEquals("baz", f.getMeta("bar"));
+		assertNull(f.getMeta("qux"));
+	}
+
+	@Test
+	public void testAddTemplate() {
+		final Features f = new Features();
+		f.addTemplate("foo");
+		f.addTemplate("foo");
+		f.addTemplate("bar");
+		f.addTemplate(null);
+	}
+
+	@Test
+	public void testGetAllTemplates() {
+		final Features f = new Features();
+		f.addTemplate("foo");
+		f.addTemplate("foo");
+		f.addTemplate("bar");
+		f.addTemplate(null);
+		
+		final List<String> act = f.getAllTemplates();
+		Collections.sort(act, new Comparator<String>() {
+			@Override
+			public int compare(String arg0, String arg1) {
+				if (arg0 == null && arg1 == null) return 0;
+				else if (arg0 == null) return 1;
+				else if (arg1 == null) return -1;
+				else return arg0.compareTo(arg1);
+			}
+		});		
+		assertArrayEquals(new String[] {"bar", "foo", "foo", null},
+		          		  act.toArray(new String[0]));
+	}
+
+}
