@@ -1,18 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dummy xmlns:dita="http://dita-ot.sourceforge.net"
-       xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<project xmlns:dita="http://dita-ot.sourceforge.net">
     
-  <dita:extension id="CheckTranstypeAction"
-                  behavior="org.dita.dost.platform.CheckTranstypeAction"/>
-  <dita:extension id="ImportAntLibAction"
-                  behavior="org.dita.dost.platform.ImportAntLibAction"/>  
-  <dita:extension id="ImportStringsAction"
-                  behavior="org.dita.dost.platform.ImportStringsAction"/>  
+  <target name="init">
+    <fail>
+      <condition>
+        <and>
+          <dita:extension id="CheckTranstypeAction"
+                          behavior="org.dita.dost.platform.CheckTranstypeAction"/>
+        </and>
+      </condition>
+    </fail>
+  </target>
+  
+  <path id="classpath">
+    <dita:extension id="ImportAntLibAction"
+                    behavior="org.dita.dost.platform.ImportAntLibAction"/>
+  </path>
+  
   <dita:extension id="InsertAction"
                   behavior="org.dita.dost.platform.InsertAction"/>
+  
   <dita:extension id="InsertAntActionRelative"
-                  behavior="org.dita.dost.platform.InsertAntActionRelative"/>  
-  <target dita:depends="{InsertDependsAction},baz"
+                  behavior="org.dita.dost.platform.InsertAntActionRelative"/>
+  
+  <target name="run"
+          dita:depends="{InsertDependsAction}, process"
           dita:extension="depends org.dita.dost.platform.InsertDependsAction"/>
   
-</dummy>
+  <target name="process"/>
+
+</project>

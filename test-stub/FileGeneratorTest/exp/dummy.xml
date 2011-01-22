@@ -1,0 +1,7 @@
+<dummy>
+    
+  <foo bar='baz'>quz</foo>
+
+  <target foo='bar'></target>
+  
+</dummy>
