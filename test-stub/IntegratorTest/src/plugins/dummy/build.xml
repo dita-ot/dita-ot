@@ -1,0 +1,4 @@
+<project>
+  <target name="dummy.init"/>
+  <target name="dummy"/>
+</project>
