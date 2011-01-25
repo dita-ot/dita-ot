@@ -13,6 +13,8 @@ import org.dita.dost.util.Constants;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
+
 import org.dita.dost.util.FileUtils;
 import java.io.File;
 
@@ -26,43 +28,34 @@ import java.io.File;
  * @author Deborah Pickett
  *
  */
-public class InsertAntActionRelative extends InsertActionRelative implements
+public class InsertAntActionRelative extends InsertAction implements
 		IAction {
-
-	/**
-	 * Constructor.
-	 */
-	public InsertAntActionRelative() {
-		super();
-	}
 
 	@Override
 	public void startElement(final String uri, final String localName, final String qName,
 			final Attributes attributes) throws SAXException {
-		if(elemLevel != 0){
-			final int attLen = attributes.getLength();
-			retBuf.append(Constants.LINE_SEPARATOR);
-			retBuf.append("<").append(qName);
-			for (int i = 0; i < attLen; i++){
-				if ("import".equals(localName) && "file".equals(attributes.getQName(i))
-						&& !FileUtils.isAbsolutePath(attributes.getValue(i))) {
-					// Rewrite file path to be local to its final resting place.
-				    final File targetFile = new File(
-				    		new File(currentFile).getParentFile(),
-				    		attributes.getValue(i));
-				    final String pastedURI = FileUtils.getRelativePathFromMap(
-				    		paramTable.get(FileGenerator.PARAM_TEMPLATE),
-				    		targetFile.toString());
-					retBuf.append(" ").append(attributes.getQName(i)).append("=\"");
-					retBuf.append(StringUtils.escapeXML(pastedURI)).append("\"");
-				}
-				else {
-					retBuf.append(" ").append(attributes.getQName(i)).append("=\"");
-					retBuf.append(StringUtils.escapeXML(attributes.getValue(i))).append("\"");
-				}
+		final AttributesImpl attrBuf = new AttributesImpl();
+
+		final int attLen = attributes.getLength();
+		for (int i = 0; i < attLen; i++){
+			String value;
+			if ("import".equals(localName) && "file".equals(attributes.getQName(i))
+					&& !FileUtils.isAbsolutePath(attributes.getValue(i))) {
+				// Rewrite file path to be local to its final resting place.
+			    final File targetFile = new File(
+			    		new File(currentFile).getParentFile(),
+			    		attributes.getValue(i));
+			    value = FileUtils.getRelativePathFromMap(
+			    		paramTable.get(FileGenerator.PARAM_TEMPLATE),
+			    		targetFile.toString());
 			}
-			retBuf.append(">");
+			else {
+				value = attributes.getValue(i);
+			}
+			attrBuf.addAttribute(attributes.getURI(i), attributes.getLocalName(i),
+  		             attributes.getQName(i), attributes.getType(i), value);
 		}
-		elemLevel ++;
+
+		super.startElement(uri, localName, qName, attrBuf);
 	}
 }

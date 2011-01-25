@@ -72,17 +72,9 @@ public class FileGeneratorTest {
                 inputs.add(inputTokenizer.nextToken());
             }
         }
-        public void setParam(final String param) {
-            final StringTokenizer paramTokenizer = new StringTokenizer(param, Integrator.PARAM_VALUE_SEPARATOR);
-            while(paramTokenizer.hasMoreElements()){
-                final String paramExpression = paramTokenizer.nextToken();
-                final int index = paramExpression.indexOf(Integrator.PARAM_NAME_SEPARATOR);
-                if(index > 0){
-                    params.put(paramExpression.substring(0,index),
-                               paramExpression.substring(index+1));
-                }
-            }    
-        }
+        public void addParam(final String name, final String value) {
+    		params.put(name, value);
+    	}
         public void setFeatures(Hashtable<String, String> features) {
             this.features = features;
         }

@@ -9,7 +9,6 @@
  */
 package org.dita.dost.platform;
 
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.StringUtils;
 /**
  * CheckTranstypeAction class.
@@ -17,20 +16,13 @@ import org.dita.dost.util.StringUtils;
  */
 public class CheckTranstypeAction extends ImportAction {
 
-	private final StringBuffer retBuf;
-	/**
-	 * Constructor.
-	 */
-	public CheckTranstypeAction() {
-		super();
-		retBuf = new StringBuffer(Constants.INT_1024);
-	}
 	/**
 	 * Get result.
 	 * @return result
 	 */
 	@Override
 	public String getResult() {
+		final StringBuilder retBuf = new StringBuilder();
 		for (final String value: valueSet) {
 			retBuf.append("<not><equals arg1=\"${transtype}\" arg2=\"")
 				.append(StringUtils.escapeXML(value)).append("\" casesensitive=\"false\"/></not>");

@@ -22,10 +22,11 @@ public interface IAction {
 	 */
 	void setInput(String input);
 	/**
-	 * Set the input parameters.
-	 * @param param param
+	 * Add input parameter.
+	 * @param name parameter name
+	 * @param value parameter value
 	 */
-	void setParam(String param);
+	void addParam(String name, String value);
 	/**
 	 * Return the result.
 	 * @return result

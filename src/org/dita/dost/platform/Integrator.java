@@ -72,13 +72,22 @@ public class Integrator {
                 // Read the properties file, if it exists.
 		        properties = new Properties();
                 if (propertiesFile != null) {
+                  FileInputStream propertiesStream = null;
                   try {
-                    final FileInputStream propertiesStream = new FileInputStream(propertiesFile);
+                    propertiesStream = new FileInputStream(propertiesFile);
                     properties.load(propertiesStream);
                   }
                   catch (final Exception e)
                   {
         	     logger.logException(e);
+                  } finally {
+                	  if (propertiesStream != null) {
+                		  try {
+                			  propertiesStream.close();
+                		  } catch (IOException e) {
+                			  logger.logException(e);
+                		  }
+                	  }
                   }
                 }
                 else

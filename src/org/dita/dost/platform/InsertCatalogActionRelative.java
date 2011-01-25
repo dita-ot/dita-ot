@@ -13,6 +13,8 @@ import org.dita.dost.util.Constants;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
+
 import org.dita.dost.util.FileUtils;
 
 import java.io.File;
@@ -30,61 +32,42 @@ import java.io.File;
  * @author Deborah Pickett
  *
  */
-public class InsertCatalogActionRelative extends InsertActionRelative implements
+public class InsertCatalogActionRelative extends InsertAction implements
 		IAction {
-
-	/**
-	 * Constructor.
-	 */
-	public InsertCatalogActionRelative() {
-		super();
-	}
 
 	@Override
 	public void startElement(final String uri, final String localName, final String qName,
 			final Attributes attributes) throws SAXException {
-		if(elemLevel != 0){
-			final int attLen = attributes.getLength();
-			retBuf.append(Constants.LINE_SEPARATOR);
-			retBuf.append("<").append(qName);
-			for (int i = 0; i < attLen; i++){
-				if ((("public".equals(localName) ||
-						"system".equals(localName) ||
-						"uri".equals(localName)) && "uri".equals(attributes.getQName(i)) ||
-				    ("nextCatalog".equals(localName) ||
-						"delegateURI".equals(localName) ||
-						"delegateSystem".equals(localName) ||
-						"delegatePublic".equals(localName)) && "catalog".equals(attributes.getQName(i)) ||
-				    ("rewriteSystem".equals(localName) ||
-						"rewriteURI".equals(localName)) && "rewritePrefix".equals(attributes.getQName(i)))
-						&& attributes.getValue(i).indexOf(Constants.COLON) == -1) {
-					// Rewrite URI to be local to its final resting place.
-				    final File targetFile = new File(
-				    		new File(currentFile).getParentFile(),
-				    		attributes.getValue(i));
-				    final String pastedURI = FileUtils.getRelativePathFromMap(
-				    		paramTable.get(FileGenerator.PARAM_TEMPLATE),
-				    		targetFile.toString());
-					retBuf.append(" ").append(attributes.getQName(i)).append("=\"");
-					retBuf.append(StringUtils.escapeXML(pastedURI)).append("\"");
-				}
-				else {
-					retBuf.append(" ").append(attributes.getQName(i)).append("=\"");
-					retBuf.append(StringUtils.escapeXML(attributes.getValue(i))).append("\"");
-				}
-			}
-			//Added by William on 2010-03-23 for bug:2974667 start
-			if(("public".equals(localName) ||
+		final AttributesImpl attrBuf = new AttributesImpl();
+
+		final int attLen = attributes.getLength();
+		for (int i = 0; i < attLen; i++){
+			String value;
+			if ((("public".equals(localName) ||
 					"system".equals(localName) ||
-					"uri".equals(localName))){
-				retBuf.append("/>");
+					"uri".equals(localName)) && "uri".equals(attributes.getQName(i)) ||
+			    ("nextCatalog".equals(localName) ||
+					"delegateURI".equals(localName) ||
+					"delegateSystem".equals(localName) ||
+					"delegatePublic".equals(localName)) && "catalog".equals(attributes.getQName(i)) ||
+			    ("rewriteSystem".equals(localName) ||
+					"rewriteURI".equals(localName)) && "rewritePrefix".equals(attributes.getQName(i)))
+					&& attributes.getValue(i).indexOf(Constants.COLON) == -1) {
+				// Rewrite URI to be local to its final resting place.
+			    final File targetFile = new File(
+			    		new File(currentFile).getParentFile(),
+			    		attributes.getValue(i));
+			    value = FileUtils.getRelativePathFromMap(
+			    		paramTable.get(FileGenerator.PARAM_TEMPLATE),
+			    		targetFile.toString());
 			}
-			//Added by William on 2010-03-23 for bug:2974667 end
-			else{
-				retBuf.append(">");
+			else {
+			    value = attributes.getValue(i);
 			}
-			
+			attrBuf.addAttribute(attributes.getURI(i), attributes.getLocalName(i),
+		             attributes.getQName(i), attributes.getType(i), value);
 		}
-		elemLevel ++;
+
+		super.startElement(uri, localName, qName, attrBuf);
 	}
 }

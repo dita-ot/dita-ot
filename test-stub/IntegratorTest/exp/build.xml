@@ -1,5 +1,6 @@
 <project>
 
+  <!-- initialization -->
   <target name="init">
     <fail>
       <condition>
@@ -24,9 +25,14 @@
     <pathelement location="${dita.dir}${file.separator}plugins/dummy/baz.jar"/>
   </path>
 
-  <property name="dummy" value="dummy"/>
+  <!-- property -->
+  <property name="dummy">foo &lt;bar&gt; baz</property>
 
-  <target name="dummy.init"/>
+  <!-- initialization -->
+  <target name="dummy.init">
+    <echo>foo &lt;bar&gt; baz</echo>
+  </target>
+  <!-- process -->
   <target name="dummy"/>
 
   <target name="run" depends="dummy.init,dummy,process"/>

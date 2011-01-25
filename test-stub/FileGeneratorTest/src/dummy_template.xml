@@ -7,4 +7,21 @@
   <target dita:foo="attribute"
           dita:extension="foo org.dita.dost.platform.FileGeneratorTest$AttributeAction"/>
   
+  <target name="help">
+    <echo>&quot;</echo>
+    <echo>&apos;</echo>
+    <echo>&lt;</echo>
+    <echo>&gt;</echo>
+    <echo>&amp;</echo>
+    <echo>"</echo>
+    <echo>'</echo>
+    <echo message="&quot;"/>
+    <echo message="&apos;"/>
+    <echo message="&lt;"/>
+    <echo message="&gt;"/>
+    <echo message="&amp;"/>
+    <echo message="'"/>
+    <echo message='"'/>
+  </target>
+
 </dummy>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:dita="http://dita-ot.sourceforge.net">
     
+  <!-- initialization -->
   <target name="init">
     <fail>
       <condition>

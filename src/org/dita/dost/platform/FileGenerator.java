@@ -21,6 +21,7 @@ import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
+import org.xml.sax.ext.DefaultHandler2;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
@@ -28,7 +29,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * Generate outputfile with templates.
  * @author Zhang, Yuan Peng
  */
-public class FileGenerator extends DefaultHandler {
+public class FileGenerator extends DefaultHandler2 {
 	
 	public static final String PARAM_LOCALNAME = "localname";
 	public static final String PARAM_TEMPLATE = "template";
@@ -67,7 +68,7 @@ public class FileGenerator extends DefaultHandler {
             }
             reader = XMLReaderFactory.createXMLReader();
             reader.setContentHandler(this);
-            //reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
+            reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
             reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
             //reader.setFeature(Constants.FEATURE_VALIDATION, true); 
             //reader.setFeature(Constants.FEATURE_VALIDATION_SCHEMA, true);
@@ -144,8 +145,8 @@ public class FileGenerator extends DefaultHandler {
 			if(DITA_OT_NS.equals(uri) && "extension".equals(localName)){
 				// Element extension: <dita:extension id="extension-point" behavior="classname"/>
 				action = (IAction)Class.forName(attributes.getValue("behavior")).newInstance();
-				action.setParam(PARAM_TEMPLATE + Integrator.PARAM_NAME_SEPARATOR + templateFileName + Integrator.PARAM_VALUE_SEPARATOR
-						+ "extension" + Integrator.PARAM_NAME_SEPARATOR + attributes.getValue("id"));
+				action.addParam(PARAM_TEMPLATE, templateFileName);
+				action.addParam("extension", attributes.getValue("id"));
 				input = featureTable.get(attributes.getValue("id"));
 				if(input!=null){
 					action.setFeatures(featureTable);
@@ -176,8 +177,8 @@ public class FileGenerator extends DefaultHandler {
 								}
 							}
 							action.setFeatures(featureTable);
-							action.setParam(PARAM_TEMPLATE + Integrator.PARAM_NAME_SEPARATOR + templateFileName + Integrator.PARAM_VALUE_SEPARATOR
-									+ PARAM_LOCALNAME + Integrator.PARAM_NAME_SEPARATOR + attributes.getLocalName(i));
+							action.addParam(PARAM_TEMPLATE, templateFileName);
+							action.addParam(PARAM_LOCALNAME, attributes.getLocalName(i));
 							action.setInput(attributes.getValue(i));
 							output.write(action.getResult());
 						}
@@ -187,19 +188,12 @@ public class FileGenerator extends DefaultHandler {
 					{
 						// Ignore xmlns:dita.
 					}
-					//Added by William on 2010-02-22 for bug:2950588 start
-					else if(attributes.getValue(i).contains("\"")){
-						output.write(" ");
-						output.write(new StringBuffer(attributes.getQName(i)).append("='").
-								append(attributes.getValue(i)).append("'").toString());
-					}
-					//Added by William on 2010-02-22 for bug:2950588 end
 					else
 					{
 						// Normal attribute.
 						output.write(" ");
 						output.write(new StringBuffer(attributes.getQName(i)).append("=\"").
-								append(attributes.getValue(i)).append("\"").toString());
+								append(StringUtils.escapeXML(attributes.getValue(i))).append("\"").toString());
 					}
 				}
 				output.write(">");
@@ -221,10 +215,18 @@ public class FileGenerator extends DefaultHandler {
 	}
 	@Override
 	public void skippedEntity(final String name) throws SAXException {
-		// TODO Auto-generated method stub
-		System.out.println(name);
+		logger.logError("Skipped entity " + name);
 	}
 	
-
+	@Override
+	public void comment(final char[] ch, final int start, final int length) throws SAXException {
+		try{
+    		output.write("<!--");
+    		output.write(ch, start, length);
+    		output.write("-->");
+		}catch(final Exception e){
+			logger.logException(e);
+		}
+	}
 	
 }

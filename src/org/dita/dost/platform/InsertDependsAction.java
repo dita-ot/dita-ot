@@ -86,20 +86,8 @@ public class InsertDependsAction implements IAction {
 	public void setInput(final String input) {
 		value = input;
 	}
-	/**
-	 * Set the input parameters.
-	 * @param param param
-	 */
-	public void setParam(final String param) {
-		final StringTokenizer paramTokenizer = new StringTokenizer(param, Integrator.PARAM_VALUE_SEPARATOR);
-		while(paramTokenizer.hasMoreElements()){
-			final String paramExpression = paramTokenizer.nextToken();
-			final int index = paramExpression.indexOf(Integrator.PARAM_NAME_SEPARATOR);
-			if(index > 0){
-				paramTable .put(paramExpression.substring(0,index),
-						paramExpression.substring(index+1));
-			}
-		}	
+	public void addParam(final String name, final String value) {
+		paramTable.put(name, value);
 	}
 	/**
 	 * Set the feature table.

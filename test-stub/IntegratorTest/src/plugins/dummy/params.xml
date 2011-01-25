@@ -1,3 +1,4 @@
 <project>
-  <property name="dummy" value="dummy"/>
+  <!-- property -->
+  <property name="dummy">foo <![CDATA[<bar>]]> baz</property>
 </project>
