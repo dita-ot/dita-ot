@@ -3,6 +3,10 @@
  * Sourceforge.net. See the accompanying license.txt file for 
  * applicable licenses.
  */
+
+/*
+ * (c) Copyright IBM Corp. 2010 All Rights Reserved.
+ */
 package org.dita.dost.util;
 /**
  * This class is for converting charset and escaping 

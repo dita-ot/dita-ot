@@ -1,3 +1,9 @@
+/*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
 /**
  * Copyright (c) 2009 Really Strategies, Inc.
  */

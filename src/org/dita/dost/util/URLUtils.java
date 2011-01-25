@@ -4,7 +4,9 @@
  * applicable licenses.
  */
 
-
+/*
+ * (c) Copyright IBM Corp. 2010 All Rights Reserved.
+ */
 package org.dita.dost.util;
 
 import java.io.File;
