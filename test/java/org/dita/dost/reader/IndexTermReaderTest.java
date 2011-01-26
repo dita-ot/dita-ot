@@ -53,6 +53,7 @@ public class IndexTermReaderTest {
     @Test
     public void testExtractIndexTerm() throws SAXException {
         final IndexTermCollection indexTermCollection = IndexTermCollection.getInstantce();
+        indexTermCollection.clear();
         if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
             StringUtils.initSaxDriver();
         }
