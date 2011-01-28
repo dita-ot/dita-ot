@@ -143,48 +143,10 @@ public class IndexTermReader extends AbstractXMLReader {
 	 */
 	public void characters(char[] ch, int start, int length)
 			throws SAXException {
-		//SF Bug 2010062: Do not trim white space from text nodes. Convert newline
-		//                to space, but leave all spaces. Also do not drop space-only nodes.
-		//String temp = new String(ch, start, length).trim();
-		//boolean withSpace = (ch[start] == '\n' || temp.startsWith(Constants.LINE_SEPARATOR));
-		String temp = new String(ch, start, length);
-		if (ch[start] == '\n' || temp.startsWith(Constants.LINE_SEPARATOR)) {
-			temp = " " + temp.substring(1);
-		}
-		//TODO Added by William on 2009-05-22 for space bug:2793836 start
-		//used for store the space
-		char[] chars = temp.toCharArray();
-		char flag = '\n';
-		//used for store the new String
-		StringBuffer sb = new StringBuffer();
-		for(char c : chars){
-			// Strip out tab characters from indexterm
-			if(c=='\t'){
-				//unwanted tab character, ignore it
-				continue;
-			}
-			//when a whitespace is met
-			if(c==' '){
-				//this is the first whitespace
-				if(flag!=' '){
-					//put it in the result string
-					sb.append(c);
-					//store the space in the flag
-					flag = c;
-				}else{
-					//abundant space, ignore it
-					continue;
-				}
-			//the consecutive whitespace is interrupted
-			}else{
-				//put it in the result string
-				sb.append(c);
-				//clear the flag
-				flag = c;	
-			}
-		}
-		temp = sb.toString();
-		//TODO Added by William on 2009-05-22 for space bug:2793836 end
+		StringBuilder tempBuf = new StringBuilder(length);
+		tempBuf.append(ch, start, length);
+		normalizeAndCollapseWhitespace(tempBuf);
+		String temp = tempBuf.toString();
 		
 		/*
 		 * For title info
@@ -194,13 +156,16 @@ public class IndexTermReader extends AbstractXMLReader {
 			if (!insideSortingAs && !termStack.empty()) {
 				IndexTerm indexTerm = (IndexTerm) termStack.peek();
 				temp = StringUtils.escapeXML(temp);
+				temp = trimSpaceAtStart(temp, indexTerm.getTermName());
 				indexTerm.setTermName(StringUtils.setOrAppend(indexTerm.getTermName(), temp, false));
 			} else if (insideSortingAs && temp.length() > 0) {
 				IndexTerm indexTerm = (IndexTerm) termStack.peek();
 				temp = StringUtils.escapeXML(temp);
+				temp = trimSpaceAtStart(temp, indexTerm.getTermKey());
 				indexTerm.setTermKey(StringUtils.setOrAppend(indexTerm.getTermKey(), temp, false));
 			} else if (inTitleElement) {
 				temp = StringUtils.escapeXML(temp);
+				temp = trimSpaceAtStart(temp, title);
 				//Always append space if: <title>abc<ph/>df</title>
 				//Updated with SF 2010062 - should only add space if one is in source
 				title = StringUtils.setOrAppend(title, temp, false);
@@ -564,5 +529,46 @@ public class IndexTermReader extends AbstractXMLReader {
 			updateIndexTermTargetName(subterm);
 		}
 	}
+
+	/** Whitespace normalization state. */
+	private enum WhiteSpaceState { WORD, SPACE };
 	
+	/**
+	 * Normalize and collapse whitespaces from string buffer.
+	 * 
+	 * @param strBuffer The string buffer.
+	 */
+	private void normalizeAndCollapseWhitespace(StringBuilder strBuffer){
+		WhiteSpaceState currentState = WhiteSpaceState.WORD;
+		for (int i = strBuffer.length() - 1; i >= 0; i--) {
+			char currentChar = strBuffer.charAt(i);
+			if (Character.isWhitespace(currentChar)) {
+				if (currentState == WhiteSpaceState.SPACE) {
+					strBuffer.delete(i, i + 1);
+				} else if(currentChar != ' ') {
+					strBuffer.replace(i, i + 1, " ");
+				}
+				currentState = WhiteSpaceState.SPACE;
+			} else {
+				currentState = WhiteSpaceState.WORD;
+			}
+		}
+	}
+
+	/**
+	 * Trim whitespace from start of the string.
+	 * 
+	 * @param temp
+	 * @param termName
+	 * @return
+	 */
+	private String trimSpaceAtStart(final String temp, final String termName) {
+		if(termName != null && termName.charAt(termName.length() - 1) == ' ') {
+			if(temp.charAt(0) == ' ') {
+				return temp.substring(1);
+			}
+		}
+		return temp;
+	}
+
 }

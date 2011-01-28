@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -81,16 +82,10 @@ public class IndexTermReaderTest {
         final List<IndexTerm> exp = new ArrayList<IndexTerm>();
         exp.add(generateIndexTerms(target, "Primary", "Secondary", "Tertiary"));
         exp.add(generateIndexTerms(target, "Primary normalized", "Secondary normalized", "Tertiary normalized"));
-        // The following exhibits a bug in IndexTermReader
-        exp.add(generateIndexTerms(target, " Primary unnormalized "));
-        final IndexTerm exception = generateIndexTerm(null, " Primary unnormalized  ");
-        exception.addSubTerm(generateIndexTerm(target, " Secondary unnormalized "));
-        final IndexTerm secondException = generateIndexTerm(null, " Secondary unnormalized  ");
-        secondException.addSubTerm(generateIndexTerm(target, " Tertiary unnormalized "));
-        exception.addSubTerm(secondException);
-        exp.add(exception);
+        exp.add(generateIndexTerms(target, " Primary unnormalized ", " Secondary unnormalized ", " Tertiary unnormalized "));
         
-        assertEquals(exp, act);
+        assertEquals(new HashSet<IndexTerm>(exp),
+                     new HashSet<IndexTerm>(act));
     }
 
     @After
