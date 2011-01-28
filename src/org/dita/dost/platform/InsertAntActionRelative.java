@@ -9,14 +9,12 @@
  */
 package org.dita.dost.platform;
 
-import org.dita.dost.util.Constants;
-import org.dita.dost.util.StringUtils;
+import java.io.File;
+
+import org.dita.dost.util.FileUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
-
-import org.dita.dost.util.FileUtils;
-import java.io.File;
 
 /**
  * InsertAntActionRelative inserts the children of the root element of an XML document
