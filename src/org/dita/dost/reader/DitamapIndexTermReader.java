@@ -55,14 +55,17 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 
 	private DITAOTJavaLogger javaLogger = null;
 	//Added by William on 2010-04-26 for ref:2990783 start
-	private IndexTermCollection result = IndexTermCollection.getInstantce();
+	private IndexTermCollection result;
 	// assumes index terms have been moved by preprocess
 	private boolean indexMoved = true; 
 	//Added by William on 2010-04-26 for ref:2990783 end
 	
 	/**
 	 * Create a new instance of sax handler for ditamap.
+	 * 
+	 * @deprecated use {@link #DitamapIndexTermReader(IndexTermCollection, boolean)} instead
 	 */
+	@Deprecated
 	public DitamapIndexTermReader() {
 		super();
 		elementStack = new Stack();
@@ -71,6 +74,9 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 		indexSeeSpecList = new ArrayList(Constants.INT_16);
 		indexSeeAlsoSpecList = new ArrayList(Constants.INT_16);
 		javaLogger = new DITAOTJavaLogger();
+		if (result == null) {
+		    result = IndexTermCollection.getInstantce();
+		}
 	}
 	//Added by William on 2010-04-26 for ref:2990783 start
 	public DitamapIndexTermReader(IndexTermCollection result, boolean indexMoved) {

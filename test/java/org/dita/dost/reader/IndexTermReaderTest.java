@@ -52,11 +52,12 @@ public class IndexTermReaderTest {
 
     @Test
     public void testExtractIndexTerm() throws SAXException {
+        final IndexTermCollection indexTermCollection = IndexTermCollection.getInstantce();
         if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
             StringUtils.initSaxDriver();
         }
         final File target = new File(tempDir, "concept.html");
-        final IndexTermReader handler = new IndexTermReader();
+        final IndexTermReader handler = new IndexTermReader(indexTermCollection);
         handler.setTargetFile(target.getAbsolutePath());
         final XMLReader xmlReader = XMLReaderFactory.createXMLReader();
         xmlReader.setContentHandler(handler);
@@ -77,7 +78,7 @@ public class IndexTermReaderTest {
             }
         }		
         @SuppressWarnings("unchecked")
-        final List<IndexTerm> act = IndexTermCollection.getInstantce().getTermList();
+        final List<IndexTerm> act = indexTermCollection.getTermList();
 
         final List<IndexTerm> exp = new ArrayList<IndexTerm>();
         exp.add(generateIndexTerms(target, "Primary", "Secondary", "Tertiary"));

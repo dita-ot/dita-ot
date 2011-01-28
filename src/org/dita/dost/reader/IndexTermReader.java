@@ -88,7 +88,7 @@ public class IndexTermReader extends AbstractXMLReader {
 	private DITAOTJavaLogger javaLogger = null;
 	
 	//Added by William on 2010-04-26 for ref:2990783 start
-	private IndexTermCollection result = IndexTermCollection.getInstantce();
+	private IndexTermCollection result;
 	//Added by William on 2010-04-26 for ref:2990783 end
 	
 	//Added by William on 2010-04-26 for ref:2990783 start
@@ -100,7 +100,10 @@ public class IndexTermReader extends AbstractXMLReader {
 	
 	/**
 	 * Constructor.
+	 * 
+	 * @deprecated use {@link #IndexTermReader(IndexTermCollection)} instead
 	 */
+	@Deprecated
 	public IndexTermReader() {
 		termStack = new Stack<IndexTerm>();
 		topicIdStack = new Stack<String>();
@@ -115,6 +118,9 @@ public class IndexTermReader extends AbstractXMLReader {
 		processRoleStack = new Stack<String>();
 		processRoleLevel = 0;
 		javaLogger = new DITAOTJavaLogger();
+		if (result == null) {
+		    result = IndexTermCollection.getInstantce();
+		}
 	}
 
 	/**

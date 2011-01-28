@@ -60,6 +60,7 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 	private List<String> ditamapList = null;
 
 	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+	private IndexTermCollection indexTermCollection;
 
 	/**
 	 * Create a default instance.
@@ -73,12 +74,13 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 	 */
 	public AbstractPipelineOutput execute(AbstractPipelineInput input)
 			throws DITAOTException {
+	    indexTermCollection = IndexTermCollection.getInstantce(); 
 		try {
-			IndexTermCollection.getInstantce().clear();
+			indexTermCollection.clear();
 			parseAndValidateInput(input);
 			extractIndexTerm();
-			IndexTermCollection.getInstantce().sort();
-			IndexTermCollection.getInstantce().outputTerms();
+			indexTermCollection.sort();
+			indexTermCollection.outputTerms();
 		} catch (Exception e) {
 			javaLogger.logException(e);
 		}
@@ -163,11 +165,11 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 		outputRoot = (lastIndexOfDot == -1) ? output : output.substring(0,
 				lastIndexOfDot);
 
-		IndexTermCollection.getInstantce().setOutputFileRoot(outputRoot);
-		IndexTermCollection.getInstantce().setIndexType(indextype);
-		IndexTermCollection.getInstantce().setIndexClass(indexclass);
+		indexTermCollection.setOutputFileRoot(outputRoot);
+		indexTermCollection.setIndexType(indextype);
+		indexTermCollection.setIndexClass(indexclass);
 		//RFE 2987769 Eclipse index-see 
-		IndexTermCollection.getInstantce().setPipelineHashIO(hashIO);
+		indexTermCollection.setPipelineHashIO(hashIO);
 
 		if (encoding != null && encoding.trim().length() > 0) {
 			IndexTerm.setTermLocale(StringUtils.getLocale(encoding));
@@ -179,8 +181,8 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 		int ditamapNum = ditamapList.size();
 		FileInputStream inputStream = null;
 		XMLReader xmlReader = null;
-		IndexTermReader handler = new IndexTermReader();
-		DitamapIndexTermReader ditamapIndexTermReader = new DitamapIndexTermReader();
+		IndexTermReader handler = new IndexTermReader(indexTermCollection);
+		DitamapIndexTermReader ditamapIndexTermReader = new DitamapIndexTermReader(indexTermCollection, true);
 
 		if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
 			// The default sax driver is set to xerces's sax driver
