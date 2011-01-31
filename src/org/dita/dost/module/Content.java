@@ -25,6 +25,7 @@ public interface Content {
      * @return collection
      * 
      */
+	@SuppressWarnings("rawtypes")
     Collection getCollection();
 
     /**
@@ -41,6 +42,7 @@ public interface Content {
      * @param collection collection
      * 
      */
+    @SuppressWarnings("rawtypes")
     void setCollection(Collection collection);
 
     /**

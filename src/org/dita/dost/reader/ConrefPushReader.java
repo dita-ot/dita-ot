@@ -11,6 +11,7 @@ package org.dita.dost.reader;
 
 import java.io.File;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Properties;
 
 import org.dita.dost.log.DITAOTJavaLogger;

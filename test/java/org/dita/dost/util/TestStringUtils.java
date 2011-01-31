@@ -14,6 +14,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -26,10 +28,10 @@ public class TestStringUtils {
 	@Test
 	public void testAssembleString() {
 		String result = null;
-		ArrayList<String> input = new ArrayList<String>();
-		result = StringUtils.assembleString(null, ";");
+		Collection<Object> input = new ArrayList<Object>();
+		result = StringUtils.assembleString((Collection<Object>) null, ";");
 		assertEquals("", result);
-		result = StringUtils.assembleString(new ArrayList<String>(), ";");
+		result = StringUtils.assembleString(Collections.emptyList(), ";");
 		assertEquals("", result);
 		input.add("first");
 		input.add("second");
@@ -83,11 +85,11 @@ public class TestStringUtils {
 
 	@Test
 	public void testRestoreMap() {
-		Map expected = new HashMap();
+		Map<String, String> expected = new HashMap<String, String>();
 		expected.put("abc", "def");
 		expected.put("ghi", "jkl");
 		expected.put("mno", "pqr");
-		Map result = StringUtils.restoreMap("abc=def,ghi=jkl,mno=pqr");
+		Map<String, String> result = StringUtils.restoreMap("abc=def,ghi=jkl,mno=pqr");
 		assertEquals(expected, result);
 	}
 

@@ -25,9 +25,9 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class MergeUtils {
 
 	private static MergeUtils instance = null;
-	private Hashtable idMap;
+	private Hashtable<String, String> idMap;
 	private int index;
-	private Set visitSet;
+	private Set<String> visitSet;
 	private DITAOTJavaLogger logger = null;
 	
 	/**
@@ -36,8 +36,8 @@ public class MergeUtils {
 	private MergeUtils() {
 		super();
 		// TODO Auto-generated constructor stub
-		idMap = new Hashtable();
-		visitSet = new HashSet(Constants.INT_256);
+		idMap = new Hashtable<String, String>();
+		visitSet = new HashSet<String>(Constants.INT_256);
 		logger = new DITAOTJavaLogger();
 		index = 0;
 	}

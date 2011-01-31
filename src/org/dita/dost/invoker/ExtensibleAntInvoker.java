@@ -47,7 +47,7 @@ public class ExtensibleAntInvoker extends Task {
 		javaLogger = new DITAOTJavaLogger();
 		pipeline = new PipelineFacade();
 		pipelineInput = new PipelineHashIO();
-		params = new ArrayList();
+		params = new ArrayList<Param>();
 	}
 	/**
 	 * set base dir.

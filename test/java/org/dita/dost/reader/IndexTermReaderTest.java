@@ -77,8 +77,7 @@ public class IndexTermReaderTest {
                     fail(e.getMessage());
                 }
             }
-        }		
-        @SuppressWarnings("unchecked")
+        }
         final List<IndexTerm> act = indexTermCollection.getTermList();
 
         final List<IndexTerm> exp = new ArrayList<IndexTerm>();

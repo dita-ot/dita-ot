@@ -42,7 +42,7 @@ public class TestUtils {
 	 * @return temporary directory
 	 * @throws IOException if creating directory failed
 	 */
-	public static File createTempDir(final Class testClass) throws IOException {
+	public static File createTempDir(final Class<?> testClass) throws IOException {
 		final File tempDir = new File(System.getProperty("java.io.tmpdir"),
 									 testClass.getName());
 		if (!tempDir.exists() && !tempDir.mkdirs()) {

@@ -54,8 +54,8 @@ public class MoveLinksModule implements AbstractPipelineModule {
         String maplinksFile = ((PipelineHashIO)input).getAttribute(Constants.ANT_INVOKER_PARAM_MAPLINKS);
         MapLinksReader indexReader = new MapLinksReader();
 		DitaLinksWriter indexInserter = new DitaLinksWriter();
-		Set mapSet;
-		Iterator i;
+		Set<Map.Entry<String, String>> mapSet;
+		Iterator<Map.Entry<String, String>> i;
         
         indexReader.setMatch(new StringBuffer(Constants.ELEMENT_NAME_MAPLINKS)
                 .append(Constants.SLASH).append(Constants.ELEMENT_NAME_LINKPOOL)
@@ -63,11 +63,11 @@ public class MoveLinksModule implements AbstractPipelineModule {
                 .toString());
         
         indexReader.read(maplinksFile);
-        mapSet = (Set) indexReader.getContent().getCollection();
+        mapSet = (Set<Map.Entry<String, String>>) indexReader.getContent().getCollection();
 
         i = mapSet.iterator();
         while (i.hasNext()) {
-            Map.Entry entry = (Map.Entry) i.next();
+            Map.Entry<String, String> entry = i.next();
             content.setValue(entry.getValue());
             indexInserter.setContent(content);
             indexInserter.write((String) entry.getKey());

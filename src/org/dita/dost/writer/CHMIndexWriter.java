@@ -35,7 +35,7 @@ public class CHMIndexWriter extends AbstractExtendDitaWriter implements Abstract
 	//RFE 2987769 Eclipse index-see - Added extends AbstractExtendedDitaWriter
 	
 	/** List of indexterms */
-    private List termList = null;
+    private List<IndexTerm> termList = null;
 
     /**
      * Default Constructor.
@@ -47,7 +47,7 @@ public class CHMIndexWriter extends AbstractExtendDitaWriter implements Abstract
      * @see org.dita.dost.writer.AbstractWriter#setContent(org.dita.dost.module.Content)
      */
     public void setContent(Content content) {
-        termList = (List) content.getCollection();
+        termList = (List<IndexTerm>) content.getCollection();
     }
 
     /**
@@ -107,8 +107,8 @@ public class CHMIndexWriter extends AbstractExtendDitaWriter implements Abstract
      * @param printWriter
      */
     private void outputIndexTerm(IndexTerm term, PrintWriter printWriter) {
-        List targets = term.getTargetList();
-        List subTerms = term.getSubTerms();
+        List<IndexTermTarget> targets = term.getTargetList();
+        List<IndexTerm> subTerms = term.getSubTerms();
         int targetNum = targets.size();
         int subTermNum = subTerms.size();
 
@@ -164,11 +164,11 @@ public class CHMIndexWriter extends AbstractExtendDitaWriter implements Abstract
      * The list of targets to store the result found
      */
 	private void findTargets(IndexTerm term) {
-		List subTerms = term.getSubTerms();
-		List subTargets = null;
+		List<IndexTerm> subTerms = term.getSubTerms();
+		List<IndexTermTarget> subTargets = null;
 		if (subTerms != null && ! subTerms.isEmpty()){
 			for (int i = 0; i < subTerms.size(); i++){
-				IndexTerm subTerm = (IndexTerm) subTerms.get(i);
+				IndexTerm subTerm = subTerms.get(i);
 				subTargets = subTerm.getTargetList();
 				if (subTargets != null && !subTargets.isEmpty()){
 				// edited by William on 2009-07-13 for indexterm bug:2819853 start

@@ -33,7 +33,7 @@ import org.dita.dost.util.StringUtils;
 public class ListReader implements AbstractReader {
 
     private LinkedList<String> refList;
-    private ContentImpl content;
+    private Content content;
     private Map<String, String> copytoMap = new HashMap<String, String>();
     private Set<String> schemeSet = new HashSet<String>();
     private String inputMap;

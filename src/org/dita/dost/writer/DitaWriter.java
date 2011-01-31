@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -272,7 +273,7 @@ public class DitaWriter extends AbstractXMLWriter {
     private int columnNumberEnd; //columnNumberEnd is the end value for current entry
     //Added by William on 2009-11-27 for bug:1846993 embedded table bug start
     //stack to store colspec list
-    private Stack<List> colSpecStack; 
+    private Stack<List<String>> colSpecStack; 
     //Added by William on 2009-11-27 for bug:1846993 embedded table bug end
     
     //Added by William on 2010-07-01 for bug:3023642 start
@@ -359,7 +360,7 @@ public class DitaWriter extends AbstractXMLWriter {
         tempDir = null;
         colSpec = null;
         //initial the stack
-        colSpecStack = new Stack<List>();
+        colSpecStack = new Stack<List<String>>();
         //added by William on 20100701 for bug:3023642 start
         rowNumStack = new Stack<Integer>();
         columnNumberStack = new Stack<Integer>();
@@ -858,7 +859,6 @@ public class DitaWriter extends AbstractXMLWriter {
     }
 
     
-	@SuppressWarnings("unchecked")
 	@Override
     public void endElement(String uri, String localName, String qName)
             throws SAXException {

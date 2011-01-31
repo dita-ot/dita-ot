@@ -30,7 +30,7 @@ public class CatalogParser implements ContentHandler{
 
     private String dtdBase;
     private String schemaBase; 
-    private HashMap map;
+    private HashMap<String, String> map;
     
     /**
      * Automatically generated constructor: CatalogParser.
@@ -46,7 +46,7 @@ public class CatalogParser implements ContentHandler{
      * @param catalogMap catalogMap
      * @param ditaDir ditaDir
      */
-    public CatalogParser(HashMap catalogMap, String ditaDir) {
+    public CatalogParser(HashMap<String, String> catalogMap, String ditaDir) {
         map = catalogMap;
         catalogDir = ditaDir;
         dtdBase = null;

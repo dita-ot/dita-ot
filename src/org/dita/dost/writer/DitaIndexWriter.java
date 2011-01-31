@@ -46,15 +46,15 @@ public class DitaIndexWriter extends AbstractXMLWriter {
     private String indexEntries;
     private String lastMatchTopic;
     private DITAOTJavaLogger logger;
-    private List matchList; // topic path that topicIdList need to match
+    private List<String> matchList; // topic path that topicIdList need to match
     private boolean needResolveEntity;
     private OutputStreamWriter output;
     private XMLReader reader;
     private boolean startTopic; //whether to insert links at this topic
-    private List topicIdList; // array list that is used to keep the hierarchy of topic id
+    private List<String> topicIdList; // array list that is used to keep the hierarchy of topic id
     private boolean insideCDATA;
     private boolean hasWritten;
-    private ArrayList topicSpecList = new ArrayList();
+    private ArrayList<String> topicSpecList = new ArrayList<String>();
     private int topicLevel = -1;
 
 
@@ -63,7 +63,7 @@ public class DitaIndexWriter extends AbstractXMLWriter {
      */
     public DitaIndexWriter() {
         super();
-        topicIdList = new ArrayList(Constants.INT_16);
+        topicIdList = new ArrayList<String>(Constants.INT_16);
         firstMatchTopic = null;
         hasMetadataTillNow = false;
         hasPrologTillNow = false;
@@ -117,8 +117,8 @@ public class DitaIndexWriter extends AbstractXMLWriter {
         
         int matchSize = matchList.size();
         int ancestorSize = topicIdList.size();
-        ListIterator matchIterator = matchList.listIterator();
-        ListIterator ancestorIterator = topicIdList.listIterator(ancestorSize
+        ListIterator<String> matchIterator = matchList.listIterator();
+        ListIterator<String> ancestorIterator = topicIdList.listIterator(ancestorSize
                 - matchSize);
         String match;
         String ancestor;
@@ -128,8 +128,8 @@ public class DitaIndexWriter extends AbstractXMLWriter {
 		}
         
         while (matchIterator.hasNext()) {
-            match = (String) matchIterator.next();
-            ancestor = (String) ancestorIterator.next();
+            match = matchIterator.next();
+            ancestor = ancestorIterator.next();
             if (!match.equals(ancestor)) {
                 return false;
             }
@@ -269,7 +269,7 @@ public class DitaIndexWriter extends AbstractXMLWriter {
     }
     private void setMatch(String match) {
 		int index = 0;
-        matchList = new ArrayList(Constants.INT_16);
+        matchList = new ArrayList<String>(Constants.INT_16);
         
         firstMatchTopic = (match.indexOf(Constants.SLASH) != -1) ? match.substring(0, match.indexOf('/')) : match;
 

@@ -63,9 +63,9 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class DitaMetaWriter extends AbstractXMLWriter {
 	private String firstMatchTopic;
 	private String lastMatchTopic;
-    private Hashtable metaTable;
+    private Hashtable<String, Node> metaTable;
     private DITAOTJavaLogger logger;
-    private List matchList; // topic path that topicIdList need to match
+    private List<String> matchList; // topic path that topicIdList need to match
     private boolean needResolveEntity;
     private Writer output;
     private OutputStreamWriter ditaFileOutput;
@@ -74,13 +74,13 @@ public class DitaMetaWriter extends AbstractXMLWriter {
     private boolean startTopic; //whether to insert links at this topic
     private boolean startDOM; // whether to cache the current stream into a buffer for building DOM tree
     private boolean hasWritten; // whether metadata has been written
-    private List topicIdList; // array list that is used to keep the hierarchy of topic id
+    private List<String> topicIdList; // array list that is used to keep the hierarchy of topic id
     private boolean insideCDATA;
-    private ArrayList topicSpecList;
+    private ArrayList<String> topicSpecList;
     
-    private static Hashtable moveTable;
+    private static Hashtable<String, String> moveTable;
     static{
-    	moveTable = new Hashtable(Constants.INT_32);
+    	moveTable = new Hashtable<String, String>(Constants.INT_32);
     	moveTable.put(Constants.ATTR_CLASS_VALUE_MAP_SEARCHTITLE,"titlealts/searchtitle");
     	moveTable.put(Constants.ATTR_CLASS_VALUE_AUDIENCE,"prolog/metadata/audience");
     	moveTable.put(Constants.ATTR_CLASS_VALUE_AUTHOR,"prolog/author");
@@ -101,10 +101,10 @@ public class DitaMetaWriter extends AbstractXMLWriter {
     	moveTable.put(Constants.ATTR_CLASS_VALUE_UNKNOWN,"prolog/unknown");  	
     }
     
-    private static HashSet uniqueSet;
+    private static HashSet<String> uniqueSet;
 	
 	static{
-		uniqueSet = new HashSet(Constants.INT_16);
+		uniqueSet = new HashSet<String>(Constants.INT_16);
 		uniqueSet.add(Constants.ATTR_CLASS_VALUE_CRITDATES);
 		uniqueSet.add(Constants.ATTR_CLASS_VALUE_PERMISSIONS);
 		uniqueSet.add(Constants.ATTR_CLASS_VALUE_PUBLISHER);
@@ -112,10 +112,10 @@ public class DitaMetaWriter extends AbstractXMLWriter {
 		uniqueSet.add(Constants.ATTR_CLASS_VALUE_MAP_SEARCHTITLE);
 	}
 
-	private static Hashtable compareTable;
+	private static Hashtable<String, Integer> compareTable;
 	
 	static{
-		compareTable = new Hashtable(Constants.INT_32);
+		compareTable = new Hashtable<String, Integer>(Constants.INT_32);
 		compareTable.put("titlealts", new Integer(1));
 		compareTable.put("navtitle", new Integer(2));
 		compareTable.put("searchtitle", new Integer(3));
@@ -148,8 +148,8 @@ public class DitaMetaWriter extends AbstractXMLWriter {
      */
     public DitaMetaWriter() {
         super();
-        topicIdList = new ArrayList(Constants.INT_16);
-        topicSpecList = new ArrayList(Constants.INT_16);
+        topicIdList = new ArrayList<String>(Constants.INT_16);
+        topicSpecList = new ArrayList<String>(Constants.INT_16);
 
         metaTable = null;
         matchList = null;
@@ -199,8 +199,8 @@ public class DitaMetaWriter extends AbstractXMLWriter {
         
         int matchSize = matchList.size();
         int ancestorSize = topicIdList.size();
-        ListIterator matchIterator = matchList.listIterator();
-        ListIterator ancestorIterator = topicIdList.listIterator(ancestorSize
+        ListIterator<String> matchIterator = matchList.listIterator();
+        ListIterator<String> ancestorIterator = topicIdList.listIterator(ancestorSize
                 - matchSize);
         String match;
         String ancestor;
@@ -286,10 +286,10 @@ public class DitaMetaWriter extends AbstractXMLWriter {
 	    	
 	    	Node root = doc.getDocumentElement();
 	    	
-	    	Iterator iter = metaTable.entrySet().iterator();
+	    	Iterator<Map.Entry<String, Node>> iter = metaTable.entrySet().iterator();
 	    	
 	    	while (iter.hasNext()){
-	    		Map.Entry entry = (Map.Entry)iter.next();
+	    		Map.Entry<String, Node> entry = (Map.Entry<String, Node>)iter.next();
 	    		moveMeta(entry,root);
 	    	}
 	    		    	
@@ -362,7 +362,7 @@ public class DitaMetaWriter extends AbstractXMLWriter {
 		output.write("</"+elem.getNodeName()+">");
 	}
 
-	private void moveMeta(Entry entry, Node root) {
+	private void moveMeta(Entry<String, Node> entry, Node root) {
 		// TODO Auto-generated method stub
 		String metaPath = (String)moveTable.get(entry.getKey());
 		if (metaPath == null){
@@ -492,11 +492,11 @@ public class DitaMetaWriter extends AbstractXMLWriter {
 
 	@Override
     public void setContent(Content content) {
-        metaTable = (Hashtable) content.getValue();
+        metaTable = (Hashtable<String, Node>) content.getValue();
     }
     private void setMatch(String match) {
 		int index = 0;
-        matchList = new ArrayList(Constants.INT_16);
+        matchList = new ArrayList<String>(Constants.INT_16);
         
         firstMatchTopic = (match.indexOf(Constants.SLASH) != -1) ? match.substring(0, match.indexOf('/')) : match;
 

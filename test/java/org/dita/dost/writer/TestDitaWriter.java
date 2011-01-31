@@ -105,7 +105,7 @@ public class TestDitaWriter {
         DitaValReader filterReader = new DitaValReader();
         filterReader.read(ditavalFile);
         
-        HashMap map = filterReader.getFilterMap();
+        HashMap<String, String> map = filterReader.getFilterMap();
 		assertEquals("include", map.get("audience=Cindy"));
 		assertEquals("flag", map.get("produt=p1"));
 		assertEquals("exclude", map.get("product=ABase_ph"));

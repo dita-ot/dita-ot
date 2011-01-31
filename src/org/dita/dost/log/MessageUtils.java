@@ -31,7 +31,7 @@ import org.w3c.dom.NodeList;
  * @author Wu, Zhi Qiang
  */
 public class MessageUtils {
-	private static Hashtable hashTable = null;
+	private static Hashtable<String, MessageBean> hashTable = null;
 	private static String messageFile = null;
 	private static DITAOTJavaLogger fileLogger = new DITAOTJavaLogger();
 	private static String defaultResource = "resource/messages.xml";
@@ -88,7 +88,7 @@ public class MessageUtils {
 		// always assign a new instance to hashTable to avoid 
 		// to reload this method again and again when messages 
 		// loading failed.
-		hashTable = new Hashtable();
+		hashTable = new Hashtable<String, MessageBean>();
 		
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory
@@ -197,7 +197,7 @@ public class MessageUtils {
 	public static MessageBean getMessage(String id, Properties prop) {		
 		String reason = null;
 		String response = null;
-		Iterator iter = null;
+		Iterator<Object> iter = null;
 		MessageBean messageBean = getMessage(id);
 		
 		if (prop == null || prop.size() == 0) {

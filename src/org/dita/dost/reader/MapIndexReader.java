@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
@@ -64,7 +65,7 @@ public class MapIndexReader extends AbstractXMLReader {
         }
         return false;
     }
-    private List ancestorList;
+    private List<String> ancestorList;
     private String filePath = null;
     private String filePathName = null;
     private String firstMatchElement;
@@ -73,14 +74,14 @@ public class MapIndexReader extends AbstractXMLReader {
     private String lastMatchElement;
     private int level;
     private DITAOTJavaLogger logger;
-    private HashMap map;
+    private HashMap<String, String> map;
     private boolean match;
 
     /*
      * meta shows whether the event is in metadata when using sax to parse
      * ditmap file.
      */
-    private List matchList;
+    private List<String> matchList;
     private boolean needResolveEntity;
     private XMLReader reader;
     private String topicPath;
@@ -92,9 +93,9 @@ public class MapIndexReader extends AbstractXMLReader {
      */
     public MapIndexReader() {
         super();
-        map = new HashMap();
-        ancestorList = new ArrayList(Constants.INT_16);
-        matchList = new ArrayList(Constants.INT_16);
+        map = new HashMap<String, String>();
+        ancestorList = new ArrayList<String>(Constants.INT_16);
+        matchList = new ArrayList<String>(Constants.INT_16);
         indexEntries = new StringBuffer(Constants.INT_1024);
         firstMatchElement = null;
         lastMatchElement = null;
@@ -144,14 +145,14 @@ public class MapIndexReader extends AbstractXMLReader {
     private boolean checkMatch() {
         int matchSize = matchList.size();
         int ancestorSize = ancestorList.size();
-        ListIterator matchIterator = matchList.listIterator();
-        ListIterator ancestorIterator = ancestorList.listIterator(ancestorSize
+        ListIterator<String> matchIterator = matchList.listIterator();
+        ListIterator<String> ancestorIterator = ancestorList.listIterator(ancestorSize
                 - matchSize);
         String currentMatchString;
         String ancestor;
         while (matchIterator.hasNext()) {
-            currentMatchString = (String) matchIterator.next();
-            ancestor = (String) ancestorIterator.next();
+            currentMatchString = matchIterator.next();
+            ancestor = ancestorIterator.next();
             if (!currentMatchString.equals(ancestor)) {
                 return false;
             }

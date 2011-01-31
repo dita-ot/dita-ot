@@ -38,7 +38,7 @@ import org.dita.dost.util.Constants;
 public class EclipseIndexWriter extends AbstractExtendDitaWriter implements AbstractWriter, IDitaTranstypeIndexWriter {
 	
 	/** List of indexterms */
-	private List termList = null;
+	private List<IndexTerm> termList = null;
 	
 	private String filepath = null;
 	
@@ -52,7 +52,7 @@ public class EclipseIndexWriter extends AbstractExtendDitaWriter implements Abst
 	private boolean inIndexsee = false;
 	
 	/** List of index terms used to search for see references. */ 
-	private List termCloneList = null;
+	private List<IndexTerm> termCloneList = null;
 	
 	
 	/**
@@ -68,7 +68,7 @@ public class EclipseIndexWriter extends AbstractExtendDitaWriter implements Abst
 	 * @param content The content to output
 	 */
 	public void setContent(Content content) {
-		termList = (List) content.getCollection();
+		termList = (List<IndexTerm>) content.getCollection();
 	}
 	
 	/**
@@ -160,7 +160,7 @@ public class EclipseIndexWriter extends AbstractExtendDitaWriter implements Abst
 	 */
     private void outputIndexTerm(IndexTerm term, PrintWriter printWriter, boolean indexsee) {
         
-    	List subTerms = term.getSubTerms();
+    	List<IndexTerm> subTerms = term.getSubTerms();
         int subTermNum = subTerms.size();
         
         outputIndexTermStartElement (term, printWriter, indexsee);
@@ -237,7 +237,7 @@ public class EclipseIndexWriter extends AbstractExtendDitaWriter implements Abst
 	 */
 	private void outputIndexEntry(IndexTerm term, PrintWriter printWriter) {
 
-		List targets = term.getTargetList();
+		List<IndexTermTarget> targets = term.getTargetList();
 		int targetNum = targets.size();
 		
 		boolean foundIndexTerm = false;
@@ -360,7 +360,7 @@ public class EclipseIndexWriter extends AbstractExtendDitaWriter implements Abst
 
 	private void outputIndexEntryEclipseIndexsee(IndexTerm term,
 			PrintWriter printWriter) {
-		List targets = term.getTargetList();
+		List<IndexTermTarget> targets = term.getTargetList();
 		int targetNum = targets.size();
 
 		// Index-see and index-see-also terms should also generate links to its
@@ -368,7 +368,7 @@ public class EclipseIndexWriter extends AbstractExtendDitaWriter implements Abst
 		// Otherwise, the term won't be displayed in the index tab.
 		if (targets != null && !targets.isEmpty()) {
 			for (int i = 0; i < targetNum; i++) {
-				IndexTermTarget target = (IndexTermTarget) targets.get(i);
+				IndexTermTarget target = targets.get(i);
 				String targetUri = target.getTargetURI();
 				String targetName = target.getTargetName();
 				if (targetUri == null) {
@@ -404,13 +404,13 @@ public class EclipseIndexWriter extends AbstractExtendDitaWriter implements Abst
 	 * @return List The deep cloned list 
 	 */
 	
-	private List cloneIndextermList (List termList){
-		 List termListClone = new ArrayList (termList.size());
+	private List<IndexTerm> cloneIndextermList (List<IndexTerm> termList){
+		 List<IndexTerm> termListClone = new ArrayList<IndexTerm>(termList.size());
 	        
 	        
 	     if (termList != null && !termList.isEmpty()){
 		    for (int i = 0; i < termList.size(); i++) {
-		     	termListClone.add((IndexTerm) termList.get(i));
+		     	termListClone.add(termList.get(i));
 	         }
 	     }
 	    return termListClone;

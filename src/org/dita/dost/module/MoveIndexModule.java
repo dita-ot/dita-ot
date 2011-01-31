@@ -59,8 +59,8 @@ public class MoveIndexModule implements AbstractPipelineModule {
 	 */
     public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException {
     	String mapFile;
-    	Set mapSet;
-		Iterator i;
+    	Set<Map.Entry<String, String>> mapSet;
+		Iterator<Map.Entry<String, String>> i;
 		String targetFileName;
 		MapIndexReader indexReader = new MapIndexReader();
 		DitaIndexWriter indexInserter = new DitaIndexWriter();
@@ -88,10 +88,10 @@ public class MoveIndexModule implements AbstractPipelineModule {
 			indexReader.read(new File(tempDir, fileName).getAbsolutePath());  
 		}
 		
-		mapSet = (Set) indexReader.getContent().getCollection();
+		mapSet = (Set<Map.Entry<String, String>>) indexReader.getContent().getCollection();
 		i = mapSet.iterator();
         while (i.hasNext()) {
-            Map.Entry entry = (Map.Entry) i.next();
+        	Map.Entry<String, String> entry = i.next();
             targetFileName = (String) entry.getKey();
             targetFileName = targetFileName.indexOf(Constants.SHARP) != -1 
             				? targetFileName.substring(0, targetFileName.indexOf(Constants.SHARP))

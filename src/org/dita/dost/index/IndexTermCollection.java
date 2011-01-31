@@ -39,7 +39,7 @@ public class IndexTermCollection {
 	/** The collection of index terms. */
 	private static IndexTermCollection collection = null;
 	/** The list of all index term. */
-	private List termList = new ArrayList(Constants.INT_16);
+	private List<IndexTerm> termList = new ArrayList<IndexTerm>(Constants.INT_16);
 
 	/** The type of index term. */
 	private String indexType = null;
@@ -150,7 +150,7 @@ public class IndexTermCollection {
 	 * 
 	 * @return term list
 	 */
-	public List getTermList() {
+	public List<IndexTerm> getTermList() {
 		return termList;
 	}
 
@@ -169,7 +169,7 @@ public class IndexTermCollection {
 		 * Sort all the terms recursively
 		 */
 		for (int i = 0; i < termListSize; i++) {
-			IndexTerm term = (IndexTerm) termList.get(i);
+			IndexTerm term = termList.get(i);
 			term.sortSubTerms();
 		}
 
@@ -189,10 +189,10 @@ public class IndexTermCollection {
 		
 		if (indexClass != null && indexClass.length() > 0) {
 			//Instantiate the class value 
-			Class anIndexClass = null;
+			Class<?> anIndexClass = null;
 			try {
 				anIndexClass = Class.forName( indexClass );
-				abstractWriter = (AbstractWriter)anIndexClass.newInstance();
+				abstractWriter = (AbstractWriter) anIndexClass.newInstance();
 				indexWriter = (IDitaTranstypeIndexWriter)anIndexClass.newInstance();
 				
 				//RFE 2987769 Eclipse index-see

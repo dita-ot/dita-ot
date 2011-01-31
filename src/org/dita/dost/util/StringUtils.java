@@ -44,8 +44,8 @@ public class StringUtils {
 	 *            Description of the Parameter
 	 * @return java.lang.String
 	 */
-	@SuppressWarnings("unchecked")
-	public static String assembleString(Collection coll, String delim) {
+	@SuppressWarnings("rawtypes")
+    public static String assembleString(Collection coll, String delim) {
 		StringBuffer buff = new StringBuffer(Constants.INT_256);
 		Iterator iter = null;
 
@@ -55,7 +55,7 @@ public class StringUtils {
 
 		iter = coll.iterator();
 		while (iter.hasNext()) {
-			buff.append(iter.next());
+			buff.append(iter.next().toString());
 
 			if (iter.hasNext()) {
 				buff.append(delim);

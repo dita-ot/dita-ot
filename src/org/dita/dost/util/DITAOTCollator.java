@@ -23,7 +23,7 @@ import org.dita.dost.log.DITAOTJavaLogger;
  * @author Wu, Zhi Qiang
  */
 public class DITAOTCollator implements Comparator {
-	static HashMap cache = new HashMap();
+	static HashMap<Locale, DITAOTCollator> cache = new HashMap<Locale, DITAOTCollator>();
 	
 	/**
 	 * Return the DITAOTCollator instance, Locale.US is default.
@@ -85,7 +85,7 @@ public class DITAOTCollator implements Comparator {
 	 * @param locale
 	 */
 	private void init(Locale locale) {
-		Class c = null;
+		Class<?> c = null;
 		
 		try {
 			c = Class.forName("com.ibm.icu.text.Collator");

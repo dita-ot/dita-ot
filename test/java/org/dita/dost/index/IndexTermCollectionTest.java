@@ -94,7 +94,6 @@ public class IndexTermCollectionTest {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
     @Test
 	public void testGetTermList() {
 		final IndexTermCollection i = IndexTermCollection.getInstantce();

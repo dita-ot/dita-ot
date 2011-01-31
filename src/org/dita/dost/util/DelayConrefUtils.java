@@ -273,8 +273,8 @@ public class DelayConrefUtils {
 		Element properties = (Element) doc.appendChild(doc
 				.createElement("properties"));
 
-		Set keys = prop.keySet();
-		Iterator i = keys.iterator();
+		Set<Object> keys = prop.keySet();
+		Iterator<Object> i = keys.iterator();
 		while (i.hasNext()) {
 			String key = (String) i.next();
 			Element entry = (Element) properties.appendChild(doc

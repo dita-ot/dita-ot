@@ -20,7 +20,7 @@ import java.util.HashMap;
  */
 public class PipelineHashIO implements AbstractPipelineInput,
         AbstractPipelineOutput {
-    private HashMap hash;
+    private HashMap<String, String> hash;
 
 
     /**
@@ -28,7 +28,7 @@ public class PipelineHashIO implements AbstractPipelineInput,
      */
     public PipelineHashIO() {
         super();
-        hash = new HashMap();
+        hash = new HashMap<String, String>();
     }
 
     /**
@@ -49,7 +49,7 @@ public class PipelineHashIO implements AbstractPipelineInput,
      */
     public String getAttribute(String name) {
         String value = null;
-        value = (String) hash.get(name);
+        value = hash.get(name);
         return value;
     }
 }

@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
@@ -265,7 +266,7 @@ public class MapLinksReader extends AbstractXMLReader {
      */
     public Content getContent() {
 
-        ContentImpl result = new ContentImpl();
+    	ContentImpl result = new ContentImpl();
         result.setCollection( map.entrySet());
         return result;
     }

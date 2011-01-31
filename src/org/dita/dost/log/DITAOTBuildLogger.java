@@ -106,7 +106,7 @@ public class DITAOTBuildLogger implements BuildLogger {
 	/** Time of the start of the build */
 	private long startTime = System.currentTimeMillis();
 	/** Set which contains already captured exceptions */
-	private HashSet exceptionsCaptured=new HashSet();
+	private HashSet<Throwable> exceptionsCaptured=new HashSet<Throwable>();
 	/**
 	 * Constructor to init logger.
 	 * 

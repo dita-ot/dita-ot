@@ -37,19 +37,19 @@ import org.xml.sax.SAXException;
 
 public class DitamapIndexTermReader extends AbstractXMLReader {
 	/** The stack used to store elements */
-	private Stack elementStack = null;
+	private Stack<Object> elementStack = null;
 	
 	/** List used to store all the specialized index terms */
-	private List indexTermSpecList = null;
+	private List<String> indexTermSpecList = null;
 	
 	/** List used to store all the specialized topicref tags */
-	private List topicrefSpecList = null;
+	private List<String> topicrefSpecList = null;
 	
 	/** List used to store all the specialized index-see tags */
-	private List indexSeeSpecList = null;
+	private List<String> indexSeeSpecList = null;
 	
 	/** List used to store all the specialized index-see-also tags */
-	private List indexSeeAlsoSpecList = null;
+	private List<String> indexSeeAlsoSpecList = null;
 	
 	private String mapPath = null;
 
@@ -68,11 +68,11 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 	@Deprecated
 	public DitamapIndexTermReader() {
 		super();
-		elementStack = new Stack();
-		indexTermSpecList = new ArrayList(Constants.INT_16);
-		topicrefSpecList = new ArrayList(Constants.INT_16);
-		indexSeeSpecList = new ArrayList(Constants.INT_16);
-		indexSeeAlsoSpecList = new ArrayList(Constants.INT_16);
+		elementStack = new Stack<Object>();
+		indexTermSpecList = new ArrayList<String>(Constants.INT_16);
+		topicrefSpecList = new ArrayList<String>(Constants.INT_16);
+		indexSeeSpecList = new ArrayList<String>(Constants.INT_16);
+		indexSeeAlsoSpecList = new ArrayList<String>(Constants.INT_16);
 		javaLogger = new DITAOTJavaLogger();
 		if (result == null) {
 		    result = IndexTermCollection.getInstantce();

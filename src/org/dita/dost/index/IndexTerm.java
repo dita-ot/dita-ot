@@ -32,7 +32,7 @@ public class IndexTerm implements Comparable {
     private String termName = null;
 
     /** The target list of the indexterm. */
-    private List targetList = null;
+    private List<IndexTermTarget> targetList = null;
 
     /** The sorting termKey of the indexterm, default will be the term name. */
     private String termKey = null;
@@ -44,13 +44,13 @@ public class IndexTerm implements Comparable {
     private String end=null;
     
     /** The sub indexterms contained by this indexterm. */
-    private List subTerms = null;
+    private List<IndexTerm> subTerms = null;
     
     /** The prefix added to the term name (such as IndexTerm_Prefix_See or IndexTerm_Prefix_See_Also). */
     private String termPrefix = null;
 
     /** The list of rtl locale.*/
-    private static ArrayList rtlLocaleList = null;
+    private static ArrayList<String> rtlLocaleList = null;
     
     /** 
      * The boolean to show whether current term is leaf term
@@ -61,7 +61,7 @@ public class IndexTerm implements Comparable {
     
     //initialization for rtlLocaleList
     static{
-    	rtlLocaleList = new ArrayList(Constants.INT_2);
+    	rtlLocaleList = new ArrayList<String>(Constants.INT_2);
     	rtlLocaleList.add("ar_EG");
     	rtlLocaleList.add("he_IL");
     }
@@ -70,8 +70,8 @@ public class IndexTerm implements Comparable {
      * Constructor.
      */
     public IndexTerm() {
-        subTerms = new ArrayList(Constants.INT_1);
-        targetList = new ArrayList(Constants.INT_1);
+        subTerms = new ArrayList<IndexTerm>(Constants.INT_1);
+        targetList = new ArrayList<IndexTermTarget>(Constants.INT_1);
     }
 
     /**
@@ -131,7 +131,7 @@ public class IndexTerm implements Comparable {
      * 
      * @return sub term list
      */
-    public List getSubTerms() {
+    public List<IndexTerm> getSubTerms() {
         return subTerms;
     }
     
@@ -183,7 +183,7 @@ public class IndexTerm implements Comparable {
         }
 
         for (; i < subTermNum; i++) {
-            IndexTerm subTerm = (IndexTerm) subTerms.get(i);
+            IndexTerm subTerm = subTerms.get(i);
 
             if (subTerm.equals(term)) {
                 return;
@@ -208,7 +208,7 @@ public class IndexTerm implements Comparable {
      *  
      * @param terms terms list
      */
-    public void addSubTerms(List terms) {
+    public void addSubTerms(List<IndexTerm> terms) {
     	int subTermsNum = 0;
     	if (terms == null) {
     		return;
@@ -216,7 +216,7 @@ public class IndexTerm implements Comparable {
     	
     	subTermsNum = terms.size();
     	for (int i = 0; i < subTermsNum; i++) {
-    		addSubTerm((IndexTerm) terms.get(i));
+    		addSubTerm(terms.get(i));
     	}
     }
 
@@ -276,7 +276,7 @@ public class IndexTerm implements Comparable {
         if (subTerms != null && subTermNum > 0) {
             Collections.sort(subTerms);
             for (int i = 0; i < subTermNum; i++) {
-                IndexTerm subTerm = (IndexTerm) subTerms.get(i);
+                IndexTerm subTerm = subTerms.get(i);
                 subTerm.sortSubTerms();
             }
         }
@@ -298,7 +298,7 @@ public class IndexTerm implements Comparable {
      * 
      * @return Returns the targetList.
      */
-    public List getTargetList() {
+    public List<IndexTermTarget> getTargetList() {
         return targetList;
     }
 
@@ -318,7 +318,7 @@ public class IndexTerm implements Comparable {
      * 
      * @param targets list of targets
      */
-    public void addTargets(List targets) {
+    public void addTargets(List<IndexTermTarget> targets) {
     	int targetNum = 0;
     	
     	if (targets == null) {
@@ -327,7 +327,7 @@ public class IndexTerm implements Comparable {
     	
         targetNum = targets.size();
         for (int i = 0; i < targetNum; i++) {
-            addTarget((IndexTermTarget) targets.get(i));
+            addTarget(targets.get(i));
         }
     }
 
@@ -402,7 +402,7 @@ public class IndexTerm implements Comparable {
 	public void updateSubTerm(){
 		if (subTerms.size()==1){
 			// if there is only one subterm, it is necessary to update
-			IndexTerm term = (IndexTerm)subTerms.get(0); // get the only subterm
+			IndexTerm term = subTerms.get(0); // get the only subterm
 			if (term.getTermPrefix()!= null &&
 					Constants.IndexTerm_Prefix_See.equalsIgnoreCase(term.getTermPrefix().trim())){ //$NON-NLS-1$
 				//if the only subterm is index-see update it to index-see-also
