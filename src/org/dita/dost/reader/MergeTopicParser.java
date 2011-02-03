@@ -57,8 +57,10 @@ public class MergeTopicParser extends AbstractXMLReader {
 				reader.setContentHandler(this);
 				reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
 			}
-			if(topicInfo == null){
-				topicInfo = new StringBuffer(Constants.INT_1024);
+			synchronized(this) {
+    			if(topicInfo == null){
+    				topicInfo = new StringBuffer(Constants.INT_1024);
+    			}
 			}
 			
 			content = new ContentImpl();

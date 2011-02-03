@@ -550,15 +550,19 @@ public class FileUtils {
 			logger.logException(ex);
 			
 		} finally {
-			try {
-				if (fis != null){
-					fis.close();
-				}
-				if (fos != null){
-					fos.close();
-				}
-			} catch (Exception e) {
-				logger.logException(e);
+			if (fis != null) {
+    			try {
+    				fis.close();
+    			} catch (Exception e) {
+    				logger.logException(e);
+    			}
+			}
+			if (fos != null) {
+    			try {
+    				fos.close();
+    			} catch (Exception e) {
+    				logger.logException(e);
+    			}
 			}
 		}
 	}

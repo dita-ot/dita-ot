@@ -103,7 +103,7 @@ public class FilePathToURI {
 		// We saw some non-ASCII character
 		if (i < len) {
 			// Get UTF-8 bytes for the remaining sub-string
-			byte[] bytes = null;
+			byte[] bytes;
 			byte b;
 			try {
 				bytes = path.substring(i).getBytes("UTF-8");

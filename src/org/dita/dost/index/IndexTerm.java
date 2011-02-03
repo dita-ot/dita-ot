@@ -227,21 +227,17 @@ public class IndexTerm implements Comparable {
      * @return boolean
      */
     public boolean equals(Object o) {
-        IndexTerm it = (IndexTerm) o;
+        if (!(o instanceof IndexTerm)) {
+            return false;
+        } else if (o == this) {
+            return true;
+        }
+    	IndexTerm it = (IndexTerm) o;
         boolean eqTermName;
         boolean eqTermKey;
         boolean eqTargetList;
         boolean eqSubTerms;
         boolean eqTermPrefix;
-
-        if (o == this) {
-            return true;
-        }
-
-        if (!(o instanceof IndexTerm)) {
-            return false;
-        }
-        
 
         eqTermName =  termName == it.getTermName() || termName != null && termName.equals(it.getTermName());
         eqTermPrefix = termPrefix == it.getTermPrefix() || termPrefix != null && termPrefix.equals(it.getTermPrefix());

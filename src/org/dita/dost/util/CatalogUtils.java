@@ -34,7 +34,7 @@ public class CatalogUtils {
     /**logger to log informations.*/
     private static DITAOTJavaLogger logger = new DITAOTJavaLogger();
     /**apache catalogResolver.*/
-    public static CatalogResolver catalogResolver = null;
+    private static CatalogResolver catalogResolver = null;
     /**directory to find catalog-dita.xml.*/
 	private static String ditaDir;
     /**
@@ -50,7 +50,7 @@ public class CatalogUtils {
      * @return catalog map
      * 
      */
-    public static HashMap<String, String> getCatalog(String ditaDir) {
+    public static synchronized HashMap<String, String> getCatalog(String ditaDir) {
 		if (map != null) {
 			return map;
 		}
@@ -78,7 +78,7 @@ public class CatalogUtils {
      * Set directory to find catalog-dita.xml.
      * @param ditaDir ditaDir
      */
-    public static void setDitaDir(String ditaDir){
+    public static synchronized void setDitaDir(String ditaDir){
     	catalogResolver=null;
     	CatalogUtils.ditaDir=ditaDir;
     }
@@ -96,7 +96,7 @@ public class CatalogUtils {
      * Get CatalogResolver.
      * @return CatalogResolver
      */
-    public static CatalogResolver getCatalogResolver() {
+    public static synchronized CatalogResolver getCatalogResolver() {
         if (catalogResolver == null) {
             CatalogManager manager = new CatalogManager();
             manager.setIgnoreMissingProperties(true);

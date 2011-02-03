@@ -87,7 +87,6 @@ public class StringUtils {
 	public static String escapeXML(char[] chars, int offset, int length){
 		StringBuffer escaped = new StringBuffer();
 		
-		String test = new String(chars,offset, length);
         int end = offset + length;
         for (int i = offset; i < end; ++i) {
             char c = chars[i];
@@ -376,7 +375,7 @@ public class StringUtils {
 				
 				if (underscoreIndex == -1){
 					language = tempString;
-				}else if (underscoreIndex == 2 | underscoreIndex == 3){
+				}else if (underscoreIndex == 2 || underscoreIndex == 3){
 					//check is first subtag is two or three characters in length.
 					language = tempString.substring(0, underscoreIndex);
 				}

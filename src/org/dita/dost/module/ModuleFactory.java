@@ -39,7 +39,7 @@ public class ModuleFactory {
 	 * 
 	 * @return ModuleFactory
 	 */
-	public static ModuleFactory instance() {
+	public static synchronized ModuleFactory instance() {
 		if (moduleFactory == null) {
 			moduleFactory = new ModuleFactory();
 		}

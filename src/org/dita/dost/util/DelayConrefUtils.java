@@ -59,7 +59,7 @@ public class DelayConrefUtils {
 	 * Return the DelayConrefUtils instance. Singleton.
 	 * @return DelayConrefUtils
 	 */
-	public static DelayConrefUtils getInstance(){
+	public static synchronized DelayConrefUtils getInstance(){
 		if(instance == null){
 			instance = new DelayConrefUtils();
 		}

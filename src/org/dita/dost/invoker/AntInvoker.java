@@ -33,8 +33,6 @@ public class AntInvoker extends Task {
 	private final static String KEY_VALUE_PAIR_SEPARATOR = ";";
 	/**equal sign.*/
 	private final static String KEY_VALUE_EQUAL_SIGN = "=";
-	/**logger.*/
-	private DITAOTJavaLogger javaLogger = null;
 	/**pipeline.*/
 	private PipelineFacade pipeline;
 	/**hashIO.*/
@@ -47,7 +45,6 @@ public class AntInvoker extends Task {
 		super();
 		pipeline = new PipelineFacade();
 		pipelineInput = new PipelineHashIO();
-		javaLogger = new DITAOTJavaLogger();
 	}
 
 	/**

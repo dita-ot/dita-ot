@@ -13,6 +13,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -190,7 +192,11 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 				if (topicSpecSet.contains(qName) && 
 						separate && !fileWriterStack.isEmpty()){
 					// if it is end of topic and separate is true
-					output.close();
+					try {
+						output.close();
+					} catch (IOException e) {
+						logger.logException(e);
+					}
 					output = (OutputStreamWriter)fileWriterStack.pop();
 					outputFile = (String)outputFileNameStack.pop();
 					stub.getParentNode().removeChild(stub);
@@ -308,7 +314,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 					if(StringUtils.isEmptyString(idValue) || FileUtils.fileExists(newFileName)) {
 						String t = newFileName;
 						newFileName = FileUtils.resolveFile(filePath,"Chunk"
-								+new Integer(Math.abs(random.nextInt())).toString())+ditaext;
+								+ random.nextInt(Integer.MAX_VALUE)) + ditaext;
 						conflictTable.put(newFileName, t);
 					} 
 					outputFile = newFileName;
@@ -428,7 +434,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 							String oldAttrValue = attrValue;
 							// Added on 2010-11-12 for bug 3090803 end
 							Random random = new Random();
-							attrValue = "unique_"+new Integer(Math.abs(random.nextInt())).toString();
+							attrValue = "unique_" + random.nextInt(Integer.MAX_VALUE);
 							topicID.add(attrValue);
 							// Added on 2010-11-12 for bug 3090803 start
 							currentParsingFileTopicIDChangeTable.put(oldAttrValue, attrValue);
@@ -550,13 +556,15 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 		//instead of genlist module and debugandfilter module, so the list should be updated.
 		//and this method is used to update the list file. 
 		Properties property = new Properties();
+		InputStream in = null;
 		FileOutputStream output = null;
 		FileOutputStream xmlDitaList = null;
 		String key = null;
 		String filename = null;
 		BufferedWriter bufferedWriter = null;
 		try{
-			property.loadFromXML(new FileInputStream(new File(FileUtils.resolveFile(filePath,Constants.FILE_NAME_DITA_LIST_XML))));
+			in = new FileInputStream(new File(FileUtils.resolveFile(filePath,Constants.FILE_NAME_DITA_LIST_XML)));
+			property.loadFromXML(in);
 			output = new FileOutputStream(new File(FileUtils.resolveFile(filePath, Constants.FILE_NAME_DITA_LIST)));
 			xmlDitaList = new FileOutputStream(new File(FileUtils.resolveFile(filePath, Constants.FILE_NAME_DITA_LIST_XML)));
 			String copytosourcelist[] = property.getProperty(Constants.COPYTO_SOURCE_LIST).split(Constants.COMMA);
@@ -582,38 +590,49 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 			filename = Constants.COPYTO_SOURCE_LIST.substring(Constants.INT_0, Constants.COPYTO_SOURCE_LIST
 					.lastIndexOf("list"))
 					+ ".list";
-			bufferedWriter = new BufferedWriter(
-					new OutputStreamWriter(new FileOutputStream(new File(FileUtils.resolveFile(filePath, filename)
-							))));
-			while(it.hasNext()){
-				key = it.next();
-				temp.append(key);
-				if(it.hasNext())
-					temp.append(Constants.COMMA);
-					bufferedWriter.append("\n");
-			}
-			property.setProperty(Constants.COPYTO_SOURCE_LIST, temp.toString());
-			bufferedWriter.flush();
+			
+			try {
+    			bufferedWriter = new BufferedWriter(
+    					new OutputStreamWriter(new FileOutputStream(new File(FileUtils.resolveFile(filePath, filename)
+    							))));
+    			while(it.hasNext()){
+    				key = it.next();
+    				temp.append(key);
+    				if(it.hasNext())
+    					temp.append(Constants.COMMA);
+    					bufferedWriter.append("\n");
+    			}
+    			property.setProperty(Constants.COPYTO_SOURCE_LIST, temp.toString());
+    			bufferedWriter.flush();
+    		} finally {
+    			if (bufferedWriter != null) {
+    				bufferedWriter.close();
+    			}
+    		}
 			
 			temp = new StringBuffer();
 			it = copytotarget2source.keySet().iterator();
 			filename = Constants.COPYTO_TARGET_TO_SOURCE_MAP_LIST.substring(Constants.INT_0, Constants.COPYTO_TARGET_TO_SOURCE_MAP_LIST
 					.lastIndexOf("list"))
 					+ ".list";
-			bufferedWriter = new BufferedWriter(
-					new OutputStreamWriter(new FileOutputStream(new File(FileUtils.resolveFile(filePath, filename)
-							))));
-			while(it.hasNext()){
-				key = it.next();
-				temp.append(key).append(Constants.EQUAL).append(copytotarget2source.get(key));
-				bufferedWriter.append(key).append(Constants.EQUAL).append(copytotarget2source.get(key));
-				if(it.hasNext())
-					temp.append(Constants.COMMA);
-					bufferedWriter.append("\n");
+			bufferedWriter = null;
+			try {
+    			bufferedWriter = new BufferedWriter(
+    					new OutputStreamWriter(new FileOutputStream(new File(FileUtils.resolveFile(filePath, filename)
+    							))));
+    			while(it.hasNext()){
+    				key = it.next();
+    				temp.append(key).append(Constants.EQUAL).append(copytotarget2source.get(key));
+    				bufferedWriter.append(key).append(Constants.EQUAL).append(copytotarget2source.get(key));
+    				if(it.hasNext())
+    					temp.append(Constants.COMMA);
+    					bufferedWriter.append("\n");
+    			}
+    			property.setProperty(Constants.COPYTO_TARGET_TO_SOURCE_MAP_LIST, temp.toString());
+    			bufferedWriter.flush();
+			} finally {
+				bufferedWriter.close();
 			}
-			property.setProperty(Constants.COPYTO_TARGET_TO_SOURCE_MAP_LIST, temp.toString());
-			bufferedWriter.flush();
-			bufferedWriter.close();
 			
     		property.store(output, null);
     		property.storeToXML(xmlDitaList, null);
@@ -623,7 +642,29 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 			/*logger.logWarn(e.toString());*/
 			logger.logException(e);
 			//edited by Alan on Date:2009-11-02 for Work Item:#1590 end
-		}
+		} finally {
+        	if (in != null) {
+        		try {
+        			in.close();
+        		} catch (IOException e) {
+        			logger.logException(e);
+        		}
+        	}
+        	if (output != null) {
+        		try {
+        			output.close();
+        		} catch (IOException e) {
+        			logger.logException(e);
+        		}
+        	}
+        	if (xmlDitaList != null) {
+        		try {
+        			xmlDitaList.close();
+        		} catch (IOException e) {
+        			logger.logException(e);
+        		}
+        	}
+        }
 	}
 	
 	private void separateChunk(Element element) {
@@ -728,7 +769,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 					Random random = new Random();
 					String t = outputFileName;
 					outputFileName = FileUtils.resolveFile(filePath,"Chunk"
-							+new Integer(Math.abs(random.nextInt())).toString())+ditaext;
+							+ random.nextInt(Integer.MAX_VALUE)) + ditaext;
 					conflictTable.put(outputFileName, t);
 					dotchunk = false;
 				}
@@ -934,7 +975,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 							// use randomly generated file name
 							Random random = new Random();
 							outputFileName = FileUtils.resolveFile(filePath,"Chunk"
-									+new Integer(Math.abs(random.nextInt())).toString())+ditaext;
+									+ random.nextInt(Integer.MAX_VALUE)) + ditaext;
 						}
 						
 						// Check if there is any conflict
@@ -943,7 +984,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 							String t = outputFileName;
 							Random random = new Random();
 							outputFileName = FileUtils.resolveFile(filePath,"Chunk"
-									+new Integer(Math.abs(random.nextInt())).toString())+ditaext;
+									+ random.nextInt(Integer.MAX_VALUE)) +ditaext;
 							conflictTable.put(outputFileName, t);
 						}
 						// add newly generated file to changTable
@@ -1049,13 +1090,13 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 						// use randomly generated file name
 						Random random = new Random();
 						outputFileName = FileUtils.resolveFile(filePath,"Chunk"
-								+new Integer(Math.abs(random.nextInt())).toString())+ditaext;
+								+ random.nextInt(Integer.MAX_VALUE)) + ditaext;
 						// Check if there is any conflict
 						if(FileUtils.fileExists(outputFileName)
 						   && !classValue.contains(Constants.ATTR_CLASS_VALUE_MAP)) {
 							String t = outputFileName;
 							outputFileName = FileUtils.resolveFile(filePath,"Chunk"
-									+new Integer(Math.abs(random.nextInt())).toString())+ditaext;
+									+ random.nextInt(Integer.MAX_VALUE)) + ditaext;
 							conflictTable.put(outputFileName, t);
 						}
 					}
@@ -1166,40 +1207,44 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 					
 										
 					FileOutputStream fileOutput = new FileOutputStream(outputFileName);
-					OutputStreamWriter ditaFileOutput = new OutputStreamWriter(fileOutput, Constants.UTF8);
-					if (outputFileName.equals(changeTable.get(outputFileName))){
-						// if the output file is newly generated file
-						// write the xml header and workdir PI into new file
-						ditaFileOutput.write(Constants.XML_HEAD);
-						if(Constants.OS_NAME.toLowerCase().indexOf(OS_NAME_WINDOWS)==-1)
-			            {
-			                ditaFileOutput.write(PI_WORKDIR_HEAD + new File(outputFileName).getParent() + PI_END);
-			            }else{
-			                ditaFileOutput.write(PI_WORKDIR_HEAD + Constants.SLASH + new File(outputFileName).getParent() + PI_END);
-			            }
-						
-						//Added on 20101210 for bug:3126578 start
-						if ((conflictTable.get(outputFileName)!=null)){
-							String relativePath = FileUtils
-									.getRelativePathFromMap(filePath
-											+ Constants.SLASH + "stub.ditamap",
-											conflictTable.get(outputFileName));
-							String path2project = FileUtils
-									.getPathtoProject(relativePath);
-							if (null==path2project){
-								path2project="";
-							}
-							ditaFileOutput.write("<?path2project "
-									+ path2project + "?>");
-						}
-						//Added on 20101210 for bug:3126578 end
+					OutputStreamWriter ditaFileOutput = null;
+					try {
+    					ditaFileOutput = new OutputStreamWriter(fileOutput, Constants.UTF8);
+    					if (outputFileName.equals(changeTable.get(outputFileName))){
+    						// if the output file is newly generated file
+    						// write the xml header and workdir PI into new file
+    						ditaFileOutput.write(Constants.XML_HEAD);
+    						if(Constants.OS_NAME.toLowerCase().indexOf(OS_NAME_WINDOWS)==-1)
+    			            {
+    			                ditaFileOutput.write(PI_WORKDIR_HEAD + new File(outputFileName).getParent() + PI_END);
+    			            }else{
+    			                ditaFileOutput.write(PI_WORKDIR_HEAD + Constants.SLASH + new File(outputFileName).getParent() + PI_END);
+    			            }
+    						
+    						//Added on 20101210 for bug:3126578 start
+    						if ((conflictTable.get(outputFileName)!=null)){
+    							String relativePath = FileUtils
+    									.getRelativePathFromMap(filePath
+    											+ Constants.SLASH + "stub.ditamap",
+    											conflictTable.get(outputFileName));
+    							String path2project = FileUtils
+    									.getPathtoProject(relativePath);
+    							if (null==path2project){
+    								path2project="";
+    							}
+    							ditaFileOutput.write("<?path2project "
+    									+ path2project + "?>");
+    						}
+    						//Added on 20101210 for bug:3126578 end
+    					}
+    					if (needWriteDitaTag) ditaFileOutput.write("<dita>");
+    					//write the final result to the output file
+    					ditaFileOutput.write(((StringWriter)output).getBuffer().toString());
+    					if (needWriteDitaTag) ditaFileOutput.write("</dita>");
+    					ditaFileOutput.flush();
+					} finally {
+						ditaFileOutput.close();	
 					}
-					if (needWriteDitaTag) ditaFileOutput.write("<dita>");
-					//write the final result to the output file
-					ditaFileOutput.write(((StringWriter)output).getBuffer().toString());
-					if (needWriteDitaTag) ditaFileOutput.write("</dita>");
-					ditaFileOutput.flush();
-					ditaFileOutput.close();
 					// restore back original output
 					output = tempWriter;
 					topicID = tempTopicID;

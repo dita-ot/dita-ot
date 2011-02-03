@@ -46,7 +46,7 @@ public class MergeUtils {
 	 * Return the MergeUtils instance. Singleton.
 	 * @return MergeUtils
 	 */
-	public static MergeUtils getInstance(){
+	public static synchronized MergeUtils getInstance(){
 		if(instance == null){
 			instance = new MergeUtils();
 		}

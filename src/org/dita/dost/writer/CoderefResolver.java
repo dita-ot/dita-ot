@@ -12,6 +12,7 @@ package org.dita.dost.writer;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.HashSet;
 import java.util.Properties;
@@ -173,13 +174,23 @@ public class CoderefResolver extends AbstractXMLWriter {
 					String codeFile = FileUtils.normalizeDirectory(
 							currentFile.getParentFile().getAbsolutePath(), hrefValue);
 					if (new File(codeFile).exists()){
-						FileReader codeReader = new FileReader(new File(codeFile));
-						char[] buffer = new char[Constants.INT_1024 * Constants.INT_4];
-						int len;
-						while((len = codeReader.read(buffer)) != -1){
-							output.write(StringUtils.escapeXML(buffer, 0, len));
+						FileReader codeReader = null;
+						try {
+							codeReader = new FileReader(new File(codeFile));
+    						char[] buffer = new char[Constants.INT_1024 * Constants.INT_4];
+    						int len;
+    						while((len = codeReader.read(buffer)) != -1){
+    							output.write(StringUtils.escapeXML(buffer, 0, len));
+    						}
+						} finally {
+							if (codeReader != null) {
+								try {
+									codeReader.close();
+								} catch (IOException e) {
+									logger.logException(e);
+								}
+							}
 						}
-						codeReader.close();
 					}else{
 						//report error of href target is not valid
 					}

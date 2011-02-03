@@ -14,7 +14,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -997,14 +999,23 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		
 		prop.put("user.input.file.listfile", "usr.input.file.list");
 		File inputfile=new File(tempDir,"usr.input.file.list");
+		Writer bufferedWriter = null;
 		try {
-			BufferedWriter bufferedWriter=new BufferedWriter(new OutputStreamWriter(new FileOutputStream(inputfile)));
+			bufferedWriter=new BufferedWriter(new OutputStreamWriter(new FileOutputStream(inputfile)));
 			bufferedWriter.write(prefix+inputFile);
 			bufferedWriter.flush();
 		} catch (FileNotFoundException e) {
 			javaLogger.logException(e);
 		} catch (IOException e) {
 			javaLogger.logException(e);
+		} finally {
+			if (bufferedWriter != null) {
+				try {
+	                bufferedWriter.close();
+                } catch (IOException e) {
+                	javaLogger.logException(e);
+                }
+			}
 		}
 		
 		//add out.dita.files,tempdirToinputmapdir.relative.value to solve the output problem
@@ -1094,12 +1105,21 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 			prop.setProperty(key, value);
 		}
 		File outputFile = new File(tempDir, filename);
+		OutputStream os = null;
 		try {
-			FileOutputStream os = new FileOutputStream(outputFile);
+			os = new FileOutputStream(outputFile);
 			prop.storeToXML(os, null);
 			os.close();
 		} catch (IOException e) {
 			this.javaLogger.logException(e);
+		} finally {
+			if (os != null) {
+    			try {
+    				os.close();
+    			} catch (Exception e) {
+    				javaLogger.logException(e);
+    			}
+			}
 		}
 	}
 
@@ -1189,8 +1209,9 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		String fileKey=key.substring(0,key.lastIndexOf("list"))+"file";
 		prop.put(fileKey, key.substring(0, key.lastIndexOf("list"))+".list");
 		File list = new File(tempDir, prop.getProperty(fileKey));
+		Writer bufferedWriter = null;
 		try {
-			BufferedWriter bufferedWriter=new BufferedWriter(new OutputStreamWriter(new FileOutputStream(list)));
+			bufferedWriter=new BufferedWriter(new OutputStreamWriter(new FileOutputStream(list)));
 			Iterator<String> it=newSet.iterator();
 			while(it.hasNext()){
 				bufferedWriter.write((String)it.next());
@@ -1203,6 +1224,14 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 			javaLogger.logException(e);
 		} catch (IOException e) {
 			javaLogger.logException(e);
+		} finally {
+			if (bufferedWriter != null) {
+				try {
+	                bufferedWriter.close();
+                } catch (IOException e) {
+	                javaLogger.logException(e);
+                }
+			}
 		}
 		
 		value = StringUtils.assembleString(newSet, Constants.COMMA);
@@ -1273,8 +1302,9 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		String fileKey=key.substring(0,key.lastIndexOf("list"))+"file";
 		prop.put(fileKey, key.substring(0, key.lastIndexOf("list"))+".list");
 		File list = new File(tempDir, prop.getProperty(fileKey));
+		Writer bufferedWriter = null;
 		try {
-			BufferedWriter bufferedWriter=new BufferedWriter(new OutputStreamWriter(new FileOutputStream(list)));
+			bufferedWriter=new BufferedWriter(new OutputStreamWriter(new FileOutputStream(list)));
 			Iterator<String> it=newSet.iterator();
 			while(it.hasNext()){
 				bufferedWriter.write((String)it.next());
@@ -1287,6 +1317,14 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			if (bufferedWriter != null) {
+				try {
+	                bufferedWriter.close();
+                } catch (IOException e) {
+	                javaLogger.logException(e);
+                }
+			}
 		}
 		
 

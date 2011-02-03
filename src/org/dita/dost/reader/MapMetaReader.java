@@ -42,7 +42,7 @@ import org.w3c.dom.NodeList;
 public class MapMetaReader implements AbstractReader {
 	private static final String INTERNET_LINK_MARK = "://";
 	
-	private static Hashtable<String, Hashtable<String, Element>> resultTable = null;
+	private static Hashtable<String, Hashtable<String, Element>> resultTable = new Hashtable<String, Hashtable<String, Element>>(Constants.INT_16);
 	
 	private static HashSet<String> uniqueSet;
 	
@@ -140,7 +140,7 @@ public class MapMetaReader implements AbstractReader {
 		super();
 		javaLogger = new DITAOTJavaLogger();
 		globalMeta = new Hashtable<String, Element>(Constants.INT_16);
-        resultTable = new Hashtable<String, Hashtable<String, Element>>(Constants.INT_16);
+		resultTable.clear();
 	}
 	/**
 	 * read map files.

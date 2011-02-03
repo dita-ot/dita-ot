@@ -10,9 +10,12 @@
 package org.dita.dost.writer;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Properties;
 
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.Content;
 
 import java.io.*;
@@ -27,6 +30,7 @@ import java.io.*;
 public class PropertiesWriter implements AbstractWriter {
 	/** Properties used to output */
 	private Properties prop = null;
+	private final DITAOTLogger logger = new DITAOTJavaLogger();
 
 	/**
 	 * Default Constructor.
@@ -84,6 +88,14 @@ public class PropertiesWriter implements AbstractWriter {
         	//Added by William on 2010-07-23 for bug:3033141 end
         }catch(IOException ioe){
         	throw new DITAOTException(ioe);
-        }
+        } finally {
+			if (os != null) {
+				try {
+	                os.close();
+                } catch (IOException e) {
+                	logger.logException(e);
+                }
+			}
+		}
 	}
 }

@@ -18,6 +18,7 @@ package org.dita.dost.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 import java.util.Set;
 
@@ -70,11 +71,15 @@ public class CheckLang extends Task {
 		//File object of dita.xml.properties
 	    File xmlDitalist=new File(tempdir,Constants.FILE_NAME_DITA_LIST_XML);
 	    Properties prop = new Properties();
+	    InputStream in = null;
 	    try{
-	    	if(xmlDitalist.exists())
-	    		prop.loadFromXML(new FileInputStream(xmlDitalist));
-	    	else 
-	    		prop.load(new FileInputStream(ditalist));
+	    	if(xmlDitalist.exists()) {
+	    		in = new FileInputStream(xmlDitalist);
+	    		prop.loadFromXML(in);
+	    	} else {
+	    		in = new FileInputStream(ditalist);
+	    		prop.load(in);
+	    	}
 		}catch(IOException e){
 			String msg = null;
 			params.put("%1", ditalist);
@@ -82,7 +87,15 @@ public class CheckLang extends Task {
 			/*msg = new StringBuffer(msg).append(Constants.LINE_SEPARATOR)
 					.append(e.toString()).toString();*/
 			logger.logError(msg);
-		}
+		} finally {
+        	if (in != null) {
+        		try {
+        			in.close();
+        		} catch (IOException e) {
+        			logger.logException(e);
+        		}
+        	}
+        }
 		
 		LangParser parser = new LangParser();
 

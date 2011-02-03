@@ -9,9 +9,11 @@
  */
 package org.dita.dost.util;
 
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Properties;
 
 import javax.xml.transform.TransformerException;
@@ -92,18 +94,30 @@ public class ListUtils {
 	 * @throws IOException IOException
 	 * @deprecated -never used right now
 	 */
+	@Deprecated
 	public static void storeList(String name, String base, boolean isXML, Properties properties) throws IOException{
+		OutputStream in = null;
 		try {
 			InputStream source = URIResolverAdapter.convertTOInputStream(DitaURIResolverFactory.getURIResolver().resolve(name, base));
+			in = new FileOutputStream(name);
 			if(isXML){
-				properties.storeToXML(new FileOutputStream(name), null);
+				properties.storeToXML(in, null);
 			}
 			else{
-				properties.store(new FileOutputStream(name), null);
+				properties.store(in, null);
 			}
 		} catch (TransformerException e) {
 			DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 			javaLogger.logException(e);
-		}
+		} finally {
+        	if (in != null) {
+        		try {
+        			in.close();
+        		} catch (IOException e) {
+        			DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+        			javaLogger.logException(e);
+        		}
+        	}
+        }
 	}
 }

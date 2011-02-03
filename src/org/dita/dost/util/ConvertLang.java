@@ -27,6 +27,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -345,9 +346,7 @@ public class ConvertLang extends Task {
     public void execute(){
     	
     	logger.logInfo(message);
-    	
-    	Properties params = new Properties();
-    	
+    	    	
     	//ensure outdir is absolute
 		if (!new File(outputdir).isAbsolute()) {
 			outputdir = new File(basedir, outputdir).getAbsolutePath();
@@ -636,16 +635,18 @@ public class ConvertLang extends Task {
 				FileUtils.isHHKFile(inputFile.getName())){
 			
 			String fileName = inputFile.getAbsolutePath();
+			BufferedReader reader = null;
+			Writer writer = null;
 			try {
 				//prepare for the input and output
 				FileInputStream inputStream = new FileInputStream(inputFile);
 				InputStreamReader streamReader = new InputStreamReader(inputStream, Constants.UTF8);
-				BufferedReader reader = new BufferedReader(streamReader);
-				
+				reader = new BufferedReader(streamReader);
+									
 				File outputFile = new File(fileName + Constants.FILE_EXTENSION_TEMP);
 				FileOutputStream outputStream = new FileOutputStream(outputFile);
 				OutputStreamWriter streamWriter = new OutputStreamWriter(outputStream, Constants.UTF8);
-				BufferedWriter writer = new BufferedWriter(streamWriter);
+				writer = new BufferedWriter(streamWriter);
 				
 				String value = reader.readLine();
 				while(value != null){
@@ -677,9 +678,7 @@ public class ConvertLang extends Task {
 						writer.write(Constants.LINE_SEPARATOR);
 					}
 					value = reader.readLine();
-				}
-				writer.close();
-				reader.close();
+				} 
 				//delete old file
 				if (!inputFile.delete()) {
 					Properties prop = new Properties();
@@ -704,6 +703,17 @@ public class ConvertLang extends Task {
 				logger.logException(e);
 			} catch (IOException e) {
 				logger.logException(e);
+			} finally {
+				try {
+					writer.close();
+				} catch (IOException e) {
+					logger.logException(e);
+				}
+				try {
+					reader.close();
+				} catch (IOException e) {
+					logger.logException(e);
+				}
 			}
 		}
 	}
@@ -742,12 +752,14 @@ public class ConvertLang extends Task {
 			String fileName = inputFile.getAbsolutePath();
 			//get new charset
 			String charset = charsetMap.get(Constants.ATTRIBUTE_FORMAT_VALUE_WINDOWS);
+			BufferedReader reader = null;
+			BufferedWriter writer = null;
 			try {
 				//prepare for the input and output
 				FileInputStream inputStream = new FileInputStream(inputFile);
 				InputStreamReader streamReader = new InputStreamReader(inputStream, charset);
 				//wrapped into reader
-				BufferedReader reader = new BufferedReader(streamReader);
+				reader = new BufferedReader(streamReader);
 				
 				File outputFile = new File(fileName + Constants.FILE_EXTENSION_TEMP);
 				FileOutputStream outputStream = new FileOutputStream(outputFile);
@@ -755,7 +767,7 @@ public class ConvertLang extends Task {
 				//convert charset
 				OutputStreamWriter streamWriter = new OutputStreamWriter(outputStream, charset);
 				//wrapped into writer
-				BufferedWriter writer = new BufferedWriter(streamWriter);
+				writer = new BufferedWriter(streamWriter);
 				
 				String value = reader.readLine();
 				while(value != null){
@@ -822,6 +834,21 @@ public class ConvertLang extends Task {
 				logger.logException(e);
 			} catch (IOException e) {
 				logger.logException(e);
+			} finally {
+				if (reader != null) {
+					try {
+		                reader.close();
+	                } catch (IOException e) {
+	                	logger.logException(e);
+	                }
+				}
+				if (writer != null) {
+					try {
+		                writer.close();
+	                } catch (IOException e) {
+	                	logger.logException(e);
+	                }
+				}
 			}
 			
 			
@@ -831,12 +858,14 @@ public class ConvertLang extends Task {
 
 	private void convertEntityAndCharset(File inputFile, String format) {
 		String fileName = inputFile.getAbsolutePath();
+		BufferedReader reader = null;
+		BufferedWriter writer = null;
 		try {
 			//prepare for the input and output
 			FileInputStream inputStream = new FileInputStream(inputFile);
 			InputStreamReader streamReader = new InputStreamReader(inputStream, Constants.UTF8);
 			//wrapped into reader
-			BufferedReader reader = new BufferedReader(streamReader);
+			reader = new BufferedReader(streamReader);
 			
 			File outputFile = new File(fileName + Constants.FILE_EXTENSION_TEMP);
 			FileOutputStream outputStream = new FileOutputStream(outputFile);
@@ -845,7 +874,7 @@ public class ConvertLang extends Task {
 			//convert charset
 			OutputStreamWriter streamWriter = new OutputStreamWriter(outputStream, charset);
 			//wrapped into writer
-			BufferedWriter writer = new BufferedWriter(streamWriter);
+			writer = new BufferedWriter(streamWriter);
 			
 			//read a character
 			int charCode = reader.read();
@@ -889,6 +918,21 @@ public class ConvertLang extends Task {
 			logger.logException(e);
 		} catch (IOException e) {
 			logger.logException(e);
+		} finally {
+			if (reader != null) {
+				try {
+	                reader.close();
+                } catch (IOException e) {
+                	logger.logException(e);
+                }
+			}
+			if (writer != null) {
+				try {
+	                writer.close();
+                } catch (IOException e) {
+                	logger.logException(e);
+                }
+			}
 		}
 	}
 

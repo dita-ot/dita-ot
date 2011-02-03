@@ -301,7 +301,7 @@ public class IndexTermReader extends AbstractXMLReader {
 		if(topicIdStack.peek() == null){
 			fragment = null;
 		}else{
-			fragment = topicIdStack.peek().toString();
+			fragment = topicIdStack.peek();
 		}
 
 		if (title != null) {
@@ -524,7 +524,7 @@ public class IndexTermReader extends AbstractXMLReader {
 								null:
 								uri.substring(indexOfSharp+1);
 			if(fragment != null && titleMap.containsKey(fragment)){
-				target.setTargetName(titleMap.get(fragment).toString());
+				target.setTargetName(titleMap.get(fragment));
 			}else{
 				target.setTargetName(defaultTitle);
 			}

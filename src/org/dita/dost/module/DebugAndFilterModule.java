@@ -16,6 +16,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,6 +38,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTFileLogger;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
@@ -121,14 +123,15 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 		String files[] = list.split(
 				Constants.COMMA);
 		String filename = "";
-		if (listName == "user.input.file") {
+		if (listName.equals("user.input.file")) {
 			filename = "user.input.file.list";
 		} else
 			filename = listName.substring(Constants.INT_0, listName
 					.lastIndexOf("list"))
 					+ ".list";
+		Writer bufferedWriter = null;
 		try {
-			BufferedWriter bufferedWriter = new BufferedWriter(
+			bufferedWriter = new BufferedWriter(
 					new OutputStreamWriter(new FileOutputStream(new File(
 							tempDir, filename))));
 			if(files.length>0){
@@ -143,6 +146,15 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			if (bufferedWriter != null) {
+				try {
+					bufferedWriter.close();
+				} catch (IOException e) {
+					final DITAOTLogger logger = new DITAOTJavaLogger();
+					logger.logException(e);
+				}
+			}
 		}
 	}
 	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
@@ -340,7 +352,7 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
         return null;
     }
     
-    private class InternalEntityResolver implements EntityResolver {
+    private static class InternalEntityResolver implements EntityResolver {
 
 		private HashMap<String, String> catalogMap = null;
 		
@@ -368,13 +380,21 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
     	Map<String, Set<String>> graph = new HashMap<String, Set<String>>();
     	if (!inputFile.exists()) return graph;
 		Properties prop = new Properties();
-		
+		FileInputStream in = null;
 		try {
-			FileInputStream in = new FileInputStream(inputFile);
+			in = new FileInputStream(inputFile);
 			prop.loadFromXML(in);
 			in.close();
 		} catch (IOException e) {
 			this.javaLogger.logException(e);
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					javaLogger.logException(e);
+				}
+			}
 		}
 		
 		Iterator<Object> it = prop.keySet().iterator();
@@ -582,11 +602,13 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 
     private void updateList(String tempDir){
     	Properties property = new Properties();
+    	FileInputStream in = null;
     	FileOutputStream output = null;
     	FileOutputStream xmlDitalist=null;
     	try{
+    		in = new FileInputStream( new File(tempDir, Constants.FILE_NAME_DITA_LIST_XML));
     		//property.load(new FileInputStream( new File(tempDir, Constants.FILE_NAME_DITA_LIST)));
-    		property.loadFromXML(new FileInputStream( new File(tempDir, Constants.FILE_NAME_DITA_LIST_XML)));
+    		property.loadFromXML(in);
     		for (int i = 0; i < PROPERTY_UPDATE_LIST.length; i ++){
     			updateProperty(PROPERTY_UPDATE_LIST[i], property);
     		}
@@ -600,11 +622,26 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
     	} catch (Exception e){
     		javaLogger.logException(e);
     	} finally{
-    		try{
-    			output.close();
-    			xmlDitalist.close();
-    		}catch(IOException e){
-				javaLogger.logException(e);
+    		if (in != null) {
+        		try{
+        			in.close();
+        		}catch(IOException e){
+    				javaLogger.logException(e);
+        		}
+    		}
+    		if (output != null) {
+        		try{
+        			output.close();
+        		}catch(IOException e){
+    				javaLogger.logException(e);
+        		}
+    		}
+    		if (xmlDitalist != null) {
+        		try{
+        			xmlDitalist.close();
+        		}catch(IOException e){
+    				javaLogger.logException(e);
+        		}
     		}
     	}
     	
@@ -647,12 +684,21 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 			prop.setProperty(key, value);
 		}
 		File outputFile = new File(tempDir, filename);
+		FileOutputStream os = null;
 		try {
-			FileOutputStream os = new FileOutputStream(outputFile, false);
+			os = new FileOutputStream(outputFile, false);
 			prop.storeToXML(os, null);
 			os.close();
 		} catch (IOException e) {
 			this.javaLogger.logException(e);
+		} finally {
+			if (os != null) {
+				try {
+					os.close();
+				} catch (IOException e) {
+					javaLogger.logException(e);
+				}
+			}
 		}
 	}
     //Added by William on 2010-04-16 for cvf flag support end

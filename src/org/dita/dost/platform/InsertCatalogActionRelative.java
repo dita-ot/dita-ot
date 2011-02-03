@@ -30,8 +30,7 @@ import org.xml.sax.helpers.AttributesImpl;
  * @author Deborah Pickett
  *
  */
-public class InsertCatalogActionRelative extends InsertAction implements
-		IAction {
+public class InsertCatalogActionRelative extends InsertAction {
 
 	@Override
 	public void startElement(final String uri, final String localName, final String qName,

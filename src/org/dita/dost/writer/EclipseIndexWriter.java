@@ -11,6 +11,7 @@ package org.dita.dost.writer;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -103,10 +104,10 @@ public class EclipseIndexWriter extends AbstractExtendDitaWriter implements Abst
 		boolean indexsee = false;
 		
 		//RFE 2987769 Eclipse index-see
-		if (((AbstractExtendDitaWriter)this).getPipelineHashIO() != null){
+		if (this.getPipelineHashIO() != null){
 			
-        	indexsee = new Boolean(((AbstractExtendDitaWriter)this).getPipelineHashIO().getAttribute("eclipse.indexsee")).booleanValue();
-        	targetExt = ((AbstractExtendDitaWriter)this).getPipelineHashIO().getAttribute(Constants.ANT_INVOKER_EXT_PARAM_TARGETEXT);
+        	indexsee = Boolean.valueOf(this.getPipelineHashIO().getAttribute("eclipse.indexsee"));
+        	targetExt = this.getPipelineHashIO().getAttribute(Constants.ANT_INVOKER_EXT_PARAM_TARGETEXT);
         	
         }
 		
@@ -139,13 +140,23 @@ public class EclipseIndexWriter extends AbstractExtendDitaWriter implements Abst
 	/**
 	 * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
 	 */
-	public void write(String filename) throws DITAOTException {			
+	public void write(String filename) throws DITAOTException {
+		OutputStream out = null;
 		try {
-			write(new FileOutputStream(filename));
+			out = new FileOutputStream(filename);
+			write(out);
 		} catch (Exception e) {			
 			javaLogger.logError(e.getMessage());
 			e.printStackTrace(); 
 			throw new DITAOTException(e);
+		} finally {
+			if (out != null) {
+				try {
+	                out.close();
+                } catch (IOException e) {
+                	javaLogger.logException(e);
+                }
+			}
 		}
 	}
 	

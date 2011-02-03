@@ -11,6 +11,8 @@ package org.dita.dost.reader;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 import java.util.Stack;
 import java.util.StringTokenizer;
@@ -236,11 +238,15 @@ public class MergeMapParser extends AbstractXMLReader {
 		Properties property = new Properties();
 	    File ditalist = new File(tempdir, Constants.FILE_NAME_DITA_LIST);
         File xmlDitalist = new File(tempdir, Constants.FILE_NAME_DITA_LIST_XML);
+        InputStream in = null;
         try{
-	        if(xmlDitalist.exists())
-	        	property.loadFromXML(new FileInputStream(xmlDitalist));
-	        else 
-	        	property.loadFromXML(new FileInputStream(ditalist));
+	        if(xmlDitalist.exists()) {
+	        	in = new FileInputStream(xmlDitalist);
+	        	property.loadFromXML(in);
+	        } else {
+	        	in = new FileInputStream(ditalist);
+	        	property.loadFromXML(in);
+	        }
 	        String hrefTargetList = property.getProperty(Constants.HREF_TARGET_LIST);
 	        String resourceOnlySet = property.getProperty(Constants.RESOURCE_ONLY_LIST);
 	        resourceOnlySet = (resourceOnlySet == null ? "" : resourceOnlySet);
@@ -274,7 +280,15 @@ public class MergeMapParser extends AbstractXMLReader {
 			}
         }catch (Exception e){
         	logger.logException(e);
-        }		
+        } finally {
+        	if (in != null) {
+        		try {
+        			in.close();
+        		} catch (IOException e) {
+        			logger.logException(e);
+        		}
+        	}
+        }
 	}
 
 }

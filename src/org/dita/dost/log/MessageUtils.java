@@ -48,7 +48,7 @@ public class MessageUtils {
 	 * Internal Singleton getInstance() method, for Classloader to locate the CLASSPATH
 	 * @return
 	 */
-	private static MessageUtils getInstance(){
+	private static synchronized MessageUtils getInstance(){
 		if(utils == null){
 			utils = new MessageUtils();
 		}

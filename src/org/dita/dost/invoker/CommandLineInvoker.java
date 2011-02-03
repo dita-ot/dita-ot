@@ -308,7 +308,7 @@ public class CommandLineInvoker {
 	 */
 	public void startAnt() throws IOException {
 		List<String> cmd = new ArrayList<String>(Constants.INT_8);
-		String[] cmds = null;
+		String[] cmds;
 		
 		cmd.add(getCommandRunner());
 		cmd.add("-f");
@@ -360,11 +360,22 @@ public class CommandLineInvoker {
 			reader.close();
 		}
 		
-		reader = new BufferedReader(new InputStreamReader(antProcess
-				.getErrorStream()));
-		for (String line = reader.readLine(); line != null; line = reader
-				.readLine()) {
-			System.err.println(line);
+		reader = null;
+		try {
+    		reader = new BufferedReader(new InputStreamReader(antProcess
+    				.getErrorStream()));
+    		for (String line = reader.readLine(); line != null; line = reader
+    				.readLine()) {
+    			System.err.println(line);
+    		}
+		} finally {
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (IOException e) {
+					javaLogger.logException(e);
+				}
+			}
 		}
 	}
 	/**

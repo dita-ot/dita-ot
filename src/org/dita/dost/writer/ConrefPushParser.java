@@ -14,6 +14,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.util.HashSet;
@@ -243,11 +245,15 @@ public class ConrefPushParser extends AbstractXMLWriter {
 		FileOutputStream xmloutput = null;
 		// this is used to update the conref.list file.
 		BufferedWriter bufferedWriter =null;
+		InputStream in = null;
 		try{
-			if(ditaxmlFile.exists())
-				properties.loadFromXML(new FileInputStream(ditaxmlFile));
-			else 
-				properties.load(new FileInputStream(ditaFile));
+			if(ditaxmlFile.exists()) {
+				in = new FileInputStream(ditaxmlFile);
+				properties.loadFromXML(in);
+			} else {
+				in = new FileInputStream(ditaFile);
+				properties.load(in);
+			}
 			
 			String conreflist[] = properties.getProperty("conreflist").split(Constants.COMMA);
 			// get the reletivePath from tempDir
@@ -260,18 +266,43 @@ public class ConrefPushParser extends AbstractXMLWriter {
 			StringBuffer stringBuffer = new StringBuffer();
 			stringBuffer.append(properties.getProperty("conreflist")).append(Constants.COMMA).append(reletivePath);
 			properties.setProperty("conreflist", stringBuffer.toString());
-			output = new FileOutputStream (new File(tempDir, Constants.FILE_NAME_DITA_LIST));
-			xmloutput = new FileOutputStream(new File(tempDir, Constants.FILE_NAME_DITA_LIST_XML));
-			properties.store(output, null);
-			properties.storeToXML(xmloutput, null);
-			bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(tempDir,"conref.list"))));
-			for(String str: conreflist){
-				bufferedWriter.append(str).append("\n");
+			try {
+    			output = new FileOutputStream (new File(tempDir, Constants.FILE_NAME_DITA_LIST));
+    			properties.store(output, null);
+			} finally {
+				if (output != null) {
+					output.close();
+				}
 			}
-			bufferedWriter.append(reletivePath);
-			bufferedWriter.close();
+			try {
+    			xmloutput = new FileOutputStream(new File(tempDir, Constants.FILE_NAME_DITA_LIST_XML));
+    			properties.storeToXML(xmloutput, null);
+			} finally {
+				if (xmloutput != null) {
+					xmloutput.close();
+				} 
+			}
+			try {
+    			bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(tempDir,"conref.list"))));
+    			for(String str: conreflist){
+    				bufferedWriter.append(str).append("\n");
+    			}
+    			bufferedWriter.append(reletivePath);
+			} finally {
+				if (bufferedWriter != null) {
+					bufferedWriter.close();
+				}
+			}
 		}catch (Exception e){
 			javaLogger.logException(e);
+		} finally {
+			if (in != null) {
+				try {
+	                in.close();
+                } catch (IOException e) {
+                	javaLogger.logException(e);
+                }
+			}
 		}
 
 	}
@@ -389,7 +420,7 @@ public class ConrefPushParser extends AbstractXMLWriter {
 							NamedNodeMap namedNodeMap = elem.getAttributes();
 							for(int t=0; t<namedNodeMap.getLength(); t++){
 								//write the attributes to new generated element
-								if(namedNodeMap.item(t).getNodeName() == "conref" && namedNodeMap.item(t).getNodeValue() != ""){
+								if(namedNodeMap.item(t).getNodeName().equals("conref") && !namedNodeMap.item(t).getNodeValue().isEmpty()){
 									hasConref = true;
 								}
 								stringBuffer.append(Constants.STRING_BLANK).append(namedNodeMap.item(t).getNodeName()).
@@ -443,14 +474,14 @@ public class ConrefPushParser extends AbstractXMLWriter {
 		String classValue = elem.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
 		String generalizedElemName = elem.getNodeName();
 		if(classValue != null){
-			if(classValue.contains(type) && type != Constants.STRING_BLANK){
+			if(classValue.contains(type) && !type.equals(Constants.STRING_BLANK)){
 				generalizedElemName = classValue.substring(classValue.indexOf("/") +1 , classValue.indexOf(Constants.STRING_BLANK, classValue.indexOf("/"))).trim();
 			}
 		}
 		stringBuffer.append(Constants.LESS_THAN).append(generalizedElemName);
 		NamedNodeMap namedNodeMap = elem.getAttributes();
 		for(int i=0; i<namedNodeMap.getLength(); i++){
-			if(namedNodeMap.item(i).getNodeName() == "conref" && namedNodeMap.item(i).getNodeValue() != ""){
+			if(namedNodeMap.item(i).getNodeName().equals("conref") && !namedNodeMap.item(i).getNodeValue().isEmpty()){
 				hasConref = true;
 			}
 			stringBuffer.append(Constants.STRING_BLANK).append(namedNodeMap.item(i).getNodeName()).
@@ -532,7 +563,7 @@ public class ConrefPushParser extends AbstractXMLWriter {
 							//there is a "pushafter" action for an ancestor element.
 							//we need to push the levelForPushAfter to stack before
 							//initialize it.
-							levelForPushAfterStack.push(new Integer(levelForPushAfter));
+							levelForPushAfterStack.push(levelForPushAfter);
 							contentForPushAfterStack.push(contentForPushAfter);
 						}else{
 							hasPushafter = true;

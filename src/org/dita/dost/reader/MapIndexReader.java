@@ -67,7 +67,6 @@ public class MapIndexReader extends AbstractXMLReader {
     }
     private List<String> ancestorList;
     private String filePath = null;
-    private String filePathName = null;
     private String firstMatchElement;
     private StringBuffer indexEntries;
     private File inputFile;
@@ -261,7 +260,6 @@ public class MapIndexReader extends AbstractXMLReader {
             needResolveEntity = true;
             inputFile = new File(filename);
             filePath = inputFile.getParent();
-            filePathName = inputFile.getPath();
             if(indexEntries.length() != 0){
 				//delete all the content in indexEntries
 				indexEntries = new StringBuffer(Constants.INT_1024);

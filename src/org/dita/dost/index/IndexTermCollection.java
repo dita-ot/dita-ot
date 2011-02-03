@@ -68,7 +68,7 @@ public class IndexTermCollection {
 	 * @return Singleton IndexTermCollection instance
 	 * @author Marshall
 	 */
-	public static IndexTermCollection getInstantce(){
+	public static synchronized IndexTermCollection getInstantce(){
 		if(collection == null){
 			collection = new IndexTermCollection();
 		}

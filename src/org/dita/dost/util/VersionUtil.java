@@ -22,8 +22,6 @@ public class VersionUtil {
 	private final String milestone = "@@MILESTONE@@";
 
 	private final String otversion = "@@OTVERSION@@";
-
-	private DITAOTJavaLogger logger = new DITAOTJavaLogger();
 	
 
 	/**

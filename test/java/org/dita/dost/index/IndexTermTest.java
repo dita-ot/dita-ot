@@ -183,10 +183,7 @@ public class IndexTermTest {
 		assertTrue(simple.equals(s));
 		assertFalse(simple.equals(nested));
 		assertFalse(simple.equals(null));
-		try {
-			assertFalse(simple.equals(""));
-			fail();
-		} catch (ClassCastException e) {}
+		assertFalse(simple.equals(""));
 	}
 
 	@Test

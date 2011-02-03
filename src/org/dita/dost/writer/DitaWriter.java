@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -71,8 +72,6 @@ public class DitaWriter extends AbstractXMLWriter {
     //To check whether the attribute of XTRC and XTRF have existed
     private static final String ATTRIBUTE_XTRC = "xtrc";
     private static final String ATTRIBUTE_XTRF = "xtrf";
-    
-    private Document root = null;
     
   //Added on 2010-08-24 for bug:3086552 start
     private static boolean setSystemid = true;
@@ -425,7 +424,6 @@ public class DitaWriter extends AbstractXMLWriter {
 	@Override
     public void characters(char[] ch, int start, int length)
             throws SAXException {
-    	String test = new String(ch, start, length);
         if (!exclude && needResolveEntity) { 
         	// exclude shows whether it's excluded by filtering
         	// isEntity shows whether it's an entity.
@@ -1103,13 +1101,12 @@ public class DitaWriter extends AbstractXMLWriter {
         this.validateAttributeValues(qName, atts);
         
         if (counterMap.containsKey(qName)) {
-            value = (Integer) counterMap.get(qName);
-            nextValue = new Integer(value.intValue()+1);
-            counterMap.put(qName, nextValue);
+            value = counterMap.get(qName);
+            nextValue = value + 1;
         } else {
-            nextValue = new Integer(Constants.INT_1);
-            counterMap.put(qName, nextValue);
+            nextValue = 1;
         }
+        counterMap.put(qName, nextValue);
 
         if (exclude) {
             // If it is the start of a child of an excluded tag, level increase
@@ -1176,17 +1173,28 @@ public class DitaWriter extends AbstractXMLWriter {
     		File ditafile = new File(tempDir, Constants.FILE_NAME_DITA_LIST);
     		File ditaxmlfile = new File(tempDir, Constants.FILE_NAME_DITA_LIST_XML);
     		
+    		InputStream in = null;
     		try{
     		if(ditaxmlfile.exists()){
-    			prop.loadFromXML(new FileInputStream(ditaxmlfile));
+    			in = new FileInputStream(ditaxmlfile);
+    			prop.loadFromXML(in);
     		}else{
-    			prop.load(new FileInputStream(ditafile));
+    			in = new FileInputStream(ditafile);
+    			prop.load(in);
     		}
     		}catch (Exception e) {
     			logger.logException(e);
+    		} finally {
+    			if (in != null) {
+    				try {
+    	                in.close();
+                    } catch (IOException e) {
+                    	logger.logException(e);
+                    }
+    			}
     		}
     		
-    		if(prop.getProperty(Constants.KEY_LIST) != ""){
+    		if(!prop.getProperty(Constants.KEY_LIST).isEmpty()){
 	    		String[] keylist = prop.getProperty(Constants.KEY_LIST).split(Constants.COMMA);
 	    		String key;
 	    		String value;
@@ -1409,8 +1417,8 @@ public class DitaWriter extends AbstractXMLWriter {
 	 * Set extension name.
 	 * @param extName extension name
 	 */
-	public void setExtName(String extName) {
-		this.extName = extName;
+	public synchronized void setExtName(String extName) {
+		DitaWriter.extName = extName;
 	}
 	//Added by Alan Date:2009-08-04 --end
 	

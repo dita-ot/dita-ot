@@ -116,29 +116,29 @@ public class DitaMetaWriter extends AbstractXMLWriter {
 	
 	static{
 		compareTable = new Hashtable<String, Integer>(Constants.INT_32);
-		compareTable.put("titlealts", new Integer(1));
-		compareTable.put("navtitle", new Integer(2));
-		compareTable.put("searchtitle", new Integer(3));
-		compareTable.put("abstract", new Integer(4));
-		compareTable.put("shortdesc", new Integer(5));
-		compareTable.put("prolog", new Integer(6));
-		compareTable.put("author", new Integer(7));
-		compareTable.put("source", new Integer(8));
-		compareTable.put("publisher", new Integer(9));
-		compareTable.put("copyright", new Integer(10));
-		compareTable.put("critdates", new Integer(11));
-		compareTable.put("permissions", new Integer(12));
-		compareTable.put("metadata", new Integer(13));
-		compareTable.put("audience", new Integer(14));
-		compareTable.put("category", new Integer(15));
-		compareTable.put("keywords", new Integer(16));
-		compareTable.put("prodinfo", new Integer(17));
-		compareTable.put("othermeta", new Integer(18));
-		compareTable.put("resourceid", new Integer(19));
-		compareTable.put("data", new Integer(20));
-		compareTable.put("data-about", new Integer(21));
-		compareTable.put("foreign", new Integer(22));
-		compareTable.put("unknown", new Integer(23));		
+		compareTable.put("titlealts", 1);
+		compareTable.put("navtitle", 2);
+		compareTable.put("searchtitle", 3);
+		compareTable.put("abstract", 4);
+		compareTable.put("shortdesc", 5);
+		compareTable.put("prolog", 6);
+		compareTable.put("author", 7);
+		compareTable.put("source", 8);
+		compareTable.put("publisher", 9);
+		compareTable.put("copyright", 10);
+		compareTable.put("critdates", 11);
+		compareTable.put("permissions", 12);
+		compareTable.put("metadata", 13);
+		compareTable.put("audience", 14);
+		compareTable.put("category", 15);
+		compareTable.put("keywords", 16);
+		compareTable.put("prodinfo", 17);
+		compareTable.put("othermeta", 18);
+		compareTable.put("resourceid", 19);
+		compareTable.put("data", 20);
+		compareTable.put("data-about", 21);
+		compareTable.put("foreign", 22);
+		compareTable.put("unknown", 23);
 	}
 
 
@@ -196,7 +196,9 @@ public class DitaMetaWriter extends AbstractXMLWriter {
     
 //  check whether the hierarchy of current node match the matchList
     private boolean checkMatch() {    	
-        
+		if (matchList == null){
+			return true;
+		}        
         int matchSize = matchList.size();
         int ancestorSize = topicIdList.size();
         ListIterator<String> matchIterator = matchList.listIterator();
@@ -204,10 +206,6 @@ public class DitaMetaWriter extends AbstractXMLWriter {
                 - matchSize);
         String match;
         String ancestor;
-        
-		if (matchList == null){
-			return true;
-		}
         
         while (matchIterator.hasNext()) {
             match = (String) matchIterator.next();

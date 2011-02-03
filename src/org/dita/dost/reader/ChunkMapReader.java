@@ -101,7 +101,7 @@ public class ChunkMapReader implements AbstractReader {
 					ProcessingInstruction pi = (ProcessingInstruction) node;
 					if (pi.getNodeName() == "workdir") {
 						workdir = pi;
-					} else if (pi.getNodeName() == "path2project") {
+					} else if (pi.getNodeName().equals("path2project")) {
 						path2proj = pi;
 					}
 				}
@@ -134,7 +134,7 @@ public class ChunkMapReader implements AbstractReader {
 				File newFile = new File(inputFile.getParentFile().getAbsolutePath(),newFilename);
 				if (newFile.exists()) {
 					newFilename = "Chunk"
-							+new Integer(Math.abs(random.nextInt())).toString()+ditaext;
+							+ random.nextInt(Integer.MAX_VALUE) + ditaext;
 					String oldpath = newFile.getAbsolutePath();
 					newFile = new File(FileUtils.resolveFile(inputFile.getParentFile().getAbsolutePath(), newFilename));
 					// Mark up the possible name changing, in case that references might be updated.
@@ -401,7 +401,7 @@ public class ChunkMapReader implements AbstractReader {
 			//create navref element
 			Element navref = node.getOwnerDocument().createElement("navref");
 			Random random = new Random();
-			String newMapFile = "MAPCHUNK"+Math.abs(random.nextInt())+".ditamap";
+			String newMapFile = "MAPCHUNK" + random.nextInt(Integer.MAX_VALUE) + ".ditamap";
 			navref.setAttribute("mapref",newMapFile);
 			//replace node with navref
 			node.getParentNode().replaceChild(navref,node);

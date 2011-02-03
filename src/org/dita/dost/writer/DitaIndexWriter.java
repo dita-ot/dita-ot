@@ -114,7 +114,9 @@ public class DitaIndexWriter extends AbstractXMLWriter {
     
 //  check whether the hierarchy of current node match the matchList
     private boolean checkMatch() {    	
-        
+		if (matchList == null){
+			return true;
+		}
         int matchSize = matchList.size();
         int ancestorSize = topicIdList.size();
         ListIterator<String> matchIterator = matchList.listIterator();
@@ -122,11 +124,7 @@ public class DitaIndexWriter extends AbstractXMLWriter {
                 - matchSize);
         String match;
         String ancestor;
-        
-		if (matchList == null){
-			return true;
-		}
-        
+                
         while (matchIterator.hasNext()) {
             match = matchIterator.next();
             ancestor = ancestorIterator.next();

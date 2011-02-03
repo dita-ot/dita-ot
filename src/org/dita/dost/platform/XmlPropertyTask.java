@@ -109,12 +109,13 @@ public class XmlPropertyTask extends Task {
 			final String msg = "XmlProperty task requires a file attribute";
 			throw new BuildException(msg);
 		}
-
+		InputStream in = null;
 		try {
 			log("Loading " + src.getAbsolutePath(), Project.MSG_VERBOSE);
 
 			if (src.exists()) {
-				load(new FileInputStream(src));
+				in = new FileInputStream(src);
+				load(in);
 			} else {
 				log("Unable to find property file: " + src.getAbsolutePath(),
 						Project.MSG_VERBOSE);
@@ -124,6 +125,14 @@ public class XmlPropertyTask extends Task {
 		} catch (final IOException ioe) {
 			// I/O error
 			throw new BuildException(ioe);
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					log(e, Project.MSG_ERR);
+				}
+			}
 		}
 	}
 

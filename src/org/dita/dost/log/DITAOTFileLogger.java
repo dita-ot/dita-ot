@@ -45,7 +45,7 @@ public class DITAOTFileLogger implements DITAOTLogger {
 	 * Get the DITAOTFileLogger instance. Singleton.
 	 * @return DITAOTFileLogger logger
 	 */
-	public static DITAOTFileLogger getInstance() {
+	public static synchronized DITAOTFileLogger getInstance() {
 		if (logger == null) {
 			logger = new DITAOTFileLogger();
 		}

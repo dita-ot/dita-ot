@@ -180,11 +180,11 @@ public class ConrefPushReader extends AbstractXMLReader {
 					pushType = null;
 				}
 			}
-		}else if (pushcontent != null && pushcontent.length() > 0 && level == 0){
+		}//else if (pushcontent != null && pushcontent.length() > 0 && level == 0){
 			//if there is no element with conaction="mark" after 
 			//one with conaction="pushbefore", report syntax error
 			
-		}
+		//}
 	}	
 	/**
 	 * replace content.

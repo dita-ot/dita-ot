@@ -15,6 +15,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -86,14 +87,25 @@ public class ChunkModule implements AbstractPipelineModule {
 	    mapReader.setup(ditaext, transtype);
 		
 	    Properties prop = new Properties();
+	    InputStream in = null;
 	    try{
 	    	if(xmlDitalist.exists()) {
-				prop.loadFromXML(new FileInputStream(xmlDitalist));
+	    		in = new FileInputStream(xmlDitalist);
+				prop.loadFromXML(in);
 			} else {
-				prop.load(new FileInputStream(ditalist));
+				in = new FileInputStream(ditalist);
+				prop.load(in);
 			}
 		}catch(IOException ioe){
 			throw new DITAOTException(ioe);
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					javaLogger.logException(e);
+				}
+			}
 		}
 		String mapFile = new File(tempDir, prop.getProperty(Constants.INPUT_DITAMAP)).getAbsolutePath();   
 		try{
@@ -139,15 +151,26 @@ public class ChunkModule implements AbstractPipelineModule {
         File ditalist=new File(tempDir, Constants.FILE_NAME_DITA_LIST);
         File xmlDitalist=new File(tempDir, Constants.FILE_NAME_DITA_LIST_XML);
 	    Properties prop = new Properties();
+	    InputStream in = null;
 	    try{
 	    	if(xmlDitalist.exists()) {
-				prop.loadFromXML(new FileInputStream(xmlDitalist));
+	    		in = new FileInputStream(xmlDitalist);
+				prop.loadFromXML(in);
 			} else {
-				prop.load(new FileInputStream(ditalist));
+				in = new FileInputStream(ditalist);
+				prop.load(in);
 			}
 	    }catch(IOException io){
 	    	logger.logError(io.getMessage());
-	    }
+	    } finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					logger.logException(e);
+				}
+			}
+		}
 	    TopicRefWriter topicRefWriter=new TopicRefWriter();
 		topicRefWriter.setContent(changeTable);
 		topicRefWriter.setup(conflictTable);
@@ -174,14 +197,25 @@ public class ChunkModule implements AbstractPipelineModule {
 	    File ditalist=new File(tempDir,Constants.FILE_NAME_DITA_LIST);
 	    File xmlDitalist=new File(tempDir,Constants.FILE_NAME_DITA_LIST_XML);
 	    Properties prop = new Properties();
+	    InputStream in = null;
 		try{
 	    	if(xmlDitalist.exists()) {
-	    		prop.loadFromXML(new FileInputStream(xmlDitalist));
+	    		in = new FileInputStream(xmlDitalist);
+	    		prop.loadFromXML(in);
 	    	} else { 
-	    		prop.load(new FileInputStream(ditalist));
+	    		in = new FileInputStream(ditalist);
+	    		prop.load(in);
 	    	}
 		}catch(IOException ex){
 			logger.logException(ex);
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					logger.logException(e);
+				}
+			}
 		}
 		
 		Set<String> hrefTopics = StringUtils.restoreSet((String)prop.getProperty(Constants.HREF_TOPIC_LIST));
@@ -227,9 +261,9 @@ public class ChunkModule implements AbstractPipelineModule {
 		Set<String> ditamapList = StringUtils.restoreSet((String)prop.getProperty(Constants.FULL_DITAMAP_LIST));
 		for (Map.Entry<String, String> entry: changeTable.entrySet()) {
 			String oldFile=entry.getKey();
-			if(entry.getValue().toString().equals(oldFile)){
+			if(entry.getValue().equals(oldFile)){
 				//newly chunked file
-				String newChunkedFile=entry.getValue().toString();
+				String newChunkedFile=entry.getValue();
 				newChunkedFile=FileUtils.getRelativePathFromMap(xmlDitalist.getAbsolutePath(), newChunkedFile);
 				String extName=getExtName(newChunkedFile);
 				if(extName!=null && !extName.equalsIgnoreCase("DITAMAP")){
@@ -267,14 +301,14 @@ public class ChunkModule implements AbstractPipelineModule {
 		// conflictTable and try to resolve file name conflicts.
 		for (Map.Entry<String,String> entry: changeTable.entrySet()) {
 			String oldFile = entry.getKey();
-			if (entry.getValue().toString().equals(oldFile)) {
+			if (entry.getValue().equals(oldFile)) {
 				// original topic file
 				String targetPath = conflictTable.get(entry.getKey());
 				if (targetPath != null) {
 					File target = new File(targetPath);
 					if (!FileUtils.fileExists(target.getAbsolutePath())) {
 						// newly chunked file
-						File from = new File(entry.getValue().toString());
+						File from = new File(entry.getValue());
 						String relativePath = FileUtils.getRelativePathFromMap(xmlDitalist.getAbsolutePath(), from.getAbsolutePath());
 						//ensure the rename
 						target.delete();

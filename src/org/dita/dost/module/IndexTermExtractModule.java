@@ -12,6 +12,7 @@ package org.dita.dost.module;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -127,9 +128,10 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 		
 		baseInputDir = tempDir;		
 		ditalist = new File(tempDir, "dita.list").getAbsolutePath();
-
+		InputStream in = null;
 		try {
-			prop.load(new FileInputStream(ditalist));
+			in = new FileInputStream(ditalist);
+			prop.load(in);
 		} catch (Exception e) {
 			String msg = null;
 			params.put("%1", ditalist);
@@ -137,6 +139,14 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 			msg = new StringBuffer(msg).append(Constants.LINE_SEPARATOR)
 					.append(e.toString()).toString();
 			throw new DITAOTException(msg, e);
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					javaLogger.logException(e);
+				}
+			}
 		}
 
 		/*
