@@ -190,7 +190,7 @@ public class KeyrefPaser extends AbstractXMLWriter {
 		elemName = new Stack<String>();
 		hasSubElem = new Stack<Boolean>();
 		try {
-			parser = XMLReaderFactory.createXMLReader();
+			parser = StringUtils.getXMLReader();
 			parser.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
 			parser.setFeature(Constants.FEATURE_NAMESPACE, true);
 			parser.setContentHandler(this);

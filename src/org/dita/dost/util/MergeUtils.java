@@ -173,12 +173,7 @@ public class MergeUtils {
 		}
 		parser = new TopicIdParser(firstTopicId);
 		try{
-            if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
-                //The default sax driver is set to xerces's sax driver
-            	StringUtils.initSaxDriver();
-            }
-            
-            reader = XMLReaderFactory.createXMLReader();
+            reader = StringUtils.getXMLReader();
             reader.setContentHandler(parser);
             
             if(useCatalog){

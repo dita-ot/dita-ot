@@ -1274,17 +1274,9 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 		this.ditaext  = ditaext;
 		this.conflictTable = conflictTable;
 		logger=new DITAOTJavaLogger();
-		if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
-			// The default sax driver is set to xerces's sax driver
-			StringUtils.initSaxDriver();
-		}
 		
 		try {
-			if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
-                //The default sax driver is set to xerces's sax driver
-            	StringUtils.initSaxDriver();
-            }
-            reader = XMLReaderFactory.createXMLReader();
+            reader = StringUtils.getXMLReader();
             reader.setContentHandler(this);
             reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
             reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
@@ -1339,11 +1331,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 		
 		parser = new TopicIdParser(firstTopicId);
 		try{
-            if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
-                //The default sax driver is set to xerces's sax driver
-            	StringUtils.initSaxDriver();
-            }
-            reader = XMLReaderFactory.createXMLReader();
+            reader = StringUtils.getXMLReader();
             reader.setContentHandler(parser);            
             reader.parse(absolutePathToFile);
         }catch (Exception e){

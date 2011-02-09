@@ -27,10 +27,6 @@ public class IntegratorTask extends Task {
 	 * Default Constructor.
 	 */
 	public IntegratorTask() {
-		if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
-            //The default sax driver is set to xerces's sax driver
-			StringUtils.initSaxDriver();
-        }
 		adaptee = new Integrator();
 	}
 

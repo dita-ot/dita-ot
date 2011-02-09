@@ -66,11 +66,7 @@ public abstract class AbstractXMLReader implements AbstractReader,
 		}
 	
 		DITAOTJavaLogger javaLogger=new DITAOTJavaLogger();
-		if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
-			// The default sax driver is set to xerces's sax driver
-			StringUtils.initSaxDriver();
-		}
-		XMLReader reader = XMLReaderFactory.createXMLReader();
+		XMLReader reader = StringUtils.getXMLReader();
 		reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
 		if(validate==true){
 			reader.setFeature(Constants.FEATURE_VALIDATION, true);

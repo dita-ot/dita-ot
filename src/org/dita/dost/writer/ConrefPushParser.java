@@ -144,7 +144,7 @@ public class ConrefPushParser extends AbstractXMLWriter {
 		contentForPushAfterStack = new Stack<String>();
 		needResolveEntity = true;
 		try{
-			parser = XMLReaderFactory.createXMLReader();
+			parser = StringUtils.getXMLReader();
 			parser.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
 			parser.setFeature(Constants.FEATURE_NAMESPACE, true);
 			parser.setContentHandler(this);

@@ -57,12 +57,8 @@ public class MergeMapParser extends AbstractXMLReader {
 	public MergeMapParser() {
 		logger = new DITAOTJavaLogger();
 		try{
-			if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
-				//The default sax driver is set to xerces's sax driver
-				StringUtils.initSaxDriver();
-			}
 			if(reader == null){
-				reader = XMLReaderFactory.createXMLReader();
+				reader = StringUtils.getXMLReader();
 				reader.setContentHandler(this);
 				reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
 			}

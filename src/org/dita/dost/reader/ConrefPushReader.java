@@ -96,7 +96,7 @@ public class ConrefPushReader extends AbstractXMLReader {
 		pushtable = new Hashtable<String, Hashtable<String,String>>();
 		javaLogger = new DITAOTJavaLogger();
 		try{
-			reader = XMLReaderFactory.createXMLReader();
+			reader = StringUtils.getXMLReader();
 			reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
 			reader.setFeature(Constants.FEATURE_NAMESPACE, true);
 			

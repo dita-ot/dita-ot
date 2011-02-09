@@ -54,13 +54,10 @@ public class IndexTermReaderTest {
     public void testExtractIndexTerm() throws SAXException {
         final IndexTermCollection indexTermCollection = IndexTermCollection.getInstantce();
         indexTermCollection.clear();
-        if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
-            StringUtils.initSaxDriver();
-        }
         final File target = new File(tempDir, "concept.html");
         final IndexTermReader handler = new IndexTermReader(indexTermCollection);
         handler.setTargetFile(target.getAbsolutePath());
-        final XMLReader xmlReader = XMLReaderFactory.createXMLReader();
+        final XMLReader xmlReader = StringUtils.getXMLReader();
         xmlReader.setContentHandler(handler);
         final File source = new File(resourceDir, "concept.dita");
         FileInputStream inputStream = null;

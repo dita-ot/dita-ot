@@ -94,11 +94,7 @@ public class DitaValReader extends AbstractXMLReader {
 		bindingMap = new HashMap<String, HashMap<String, HashSet<Element>>>();
 		
 		try {
-			if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
-				// The default sax driver is set to xerces's sax driver
-				StringUtils.initSaxDriver();
-			}
-			reader = XMLReaderFactory.createXMLReader();
+			reader = StringUtils.getXMLReader();
 			reader.setContentHandler(this);
 		} catch (Exception e) {
 			logger.logException(e);

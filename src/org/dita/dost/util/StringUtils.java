@@ -18,6 +18,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
+
 import org.dita.dost.log.DITAOTJavaLogger;
 
 /**
@@ -314,7 +318,10 @@ public class StringUtils {
 	
 	/**
 	 * Init sax driver info.
+	 * 
+	 * @deprecated use {@link #getXMLReader} instead to get the preferred SAX parser
 	 */
+	@Deprecated
 	public static void initSaxDriver(){
 		//The default sax driver is set to xerces's sax driver
 		DITAOTJavaLogger logger = new DITAOTJavaLogger();
@@ -342,6 +349,41 @@ public class StringUtils {
 		
 	}
 	
+	/**
+     * Get preferred SAX parser.
+     * 
+     * Preferred XML readers are in order:
+     * 
+     * <ol>
+     *   <li>{@link Constants.SAX_DRIVER_DEFAULT_CLASS}</li>
+     *   <li>{@link Constants.SAX_DRIVER_SUN_HACK_CLASS}</li>
+     *   <li>{@link Constants.SAX_DRIVER_CRIMSON_CLASS}</li>
+     * </ol>
+     * 
+     * @return XML parser instance.
+	 * @throws SAXException if instantiating XMLReader failed
+     */
+    public static XMLReader getXMLReader() throws SAXException {
+        if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) != null) {
+            return XMLReaderFactory.createXMLReader();
+        }
+        try {
+            Class.forName(Constants.SAX_DRIVER_DEFAULT_CLASS);
+            return XMLReaderFactory.createXMLReader(Constants.SAX_DRIVER_DEFAULT_CLASS);
+        } catch (ClassNotFoundException e) {
+            try {
+                Class.forName(Constants.SAX_DRIVER_SUN_HACK_CLASS);
+                return XMLReaderFactory.createXMLReader(Constants.SAX_DRIVER_SUN_HACK_CLASS);
+            } catch (ClassNotFoundException ex) {
+                try {
+                    Class.forName(Constants.SAX_DRIVER_CRIMSON_CLASS);
+                    return XMLReaderFactory.createXMLReader(Constants.SAX_DRIVER_CRIMSON_CLASS);
+                } catch (ClassNotFoundException exc){
+                    return XMLReaderFactory.createXMLReader();
+                }
+            }
+        }
+    }
 
 		/**
 		 * Return a Java Locale object.

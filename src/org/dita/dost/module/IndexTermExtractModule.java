@@ -194,12 +194,7 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 		IndexTermReader handler = new IndexTermReader(indexTermCollection);
 		DitamapIndexTermReader ditamapIndexTermReader = new DitamapIndexTermReader(indexTermCollection, true);
 
-		if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
-			// The default sax driver is set to xerces's sax driver
-			StringUtils.initSaxDriver();
-		}
-
-		xmlReader = XMLReaderFactory.createXMLReader();
+		xmlReader = StringUtils.getXMLReader();
 
 		try {
 			xmlReader.setContentHandler(handler);

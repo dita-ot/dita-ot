@@ -282,10 +282,7 @@ public class Integrator {
 		featureTable = new Hashtable<String,String>(Constants.INT_16);
 		logger = new DITAOTJavaLogger();
 		try {
-            if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
-                StringUtils.initSaxDriver();
-            }
-            reader = XMLReaderFactory.createXMLReader();            
+            reader = StringUtils.getXMLReader();
         } catch (final Exception e) {
         	throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }

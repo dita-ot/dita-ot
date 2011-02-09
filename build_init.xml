@@ -203,6 +203,30 @@
   </target>
   
   <target name="use-init" depends="use-init.envhhcdir,use-init.hhcdir">
+    <condition property="xml.parser" value="XMLReader ${org.xml.sax.driver}">
+      <and>
+        <isset property="org.xml.sax.driver"/>
+        <not><isset property="xml.parser"/></not>
+      </and>
+    </condition>
+    <condition property="xml.parser" value="Xerces">
+      <and>
+        <available classname="org.apache.xerces.parsers.SAXParser"/>
+        <not><isset property="xml.parser"/></not>
+      </and>
+    </condition>
+    <condition property="xml.parser" value="Xerces in Sun JDK 1.5">
+      <and>
+        <available classname="com.sun.org.apache.xerces.internal.parsers.SAXParser"/>
+        <not><isset property="xml.parser"/></not>
+      </and>
+    </condition>
+    <condition property="xml.parser" value="Crimson">
+      <and>
+        <available classname="org.apache.crimson.parser.XMLReaderImpl"/>
+        <not><isset property="xml.parser"/></not>
+      </and>
+    </condition>
     <available classname="net.sf.saxon.StyleSheet" property="hasSaxon" />
     <available classname="net.sf.saxon.Transform" property="hasSaxon" />
     <available classname="org.apache.fop.tools.anttasks.Fop" property="hasFOP">
@@ -571,6 +595,8 @@
     <echo level="info">*****************************************************************</echo>
   	<echoproperties regex="^(arg|preprocess|dita)" taskname="echo" failonerror="false"/>
   	<echo level="info">*****************************************************************</echo>
+    <echo level="info">* Using ${xml.parser}</echo>
+    <echo level="info">*****************************************************************</echo>
   </target>
 
   <target name="output-msg" depends="output-deprecated-msg, output-css-warn-message"/>

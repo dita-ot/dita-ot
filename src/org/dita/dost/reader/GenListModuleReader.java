@@ -312,17 +312,13 @@ public class GenListModuleReader extends AbstractXMLReader {
      */
 	public static void initXMLReader(String ditaDir,boolean validate,String rootFile, boolean arg_setSystemid) throws SAXException {
 		DITAOTJavaLogger javaLogger=new DITAOTJavaLogger();
-		if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
-			// The default sax driver is set to xerces's sax driver
-			StringUtils.initSaxDriver();
-		}
 		
 		//to check whether the current parsing file's href value is out of inputmap.dir
 		rootDir=new File(rootFile).getAbsoluteFile().getParent();
 		rootDir = FileUtils.removeRedundantNames(rootDir);
 		rootFilePath=new File(rootFile).getAbsolutePath();
 		rootFilePath = FileUtils.removeRedundantNames(rootFilePath);
-		reader = XMLReaderFactory.createXMLReader();
+		reader = StringUtils.getXMLReader();
 		reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
 		if(validate==true){
 			reader.setFeature(Constants.FEATURE_VALIDATION, true);

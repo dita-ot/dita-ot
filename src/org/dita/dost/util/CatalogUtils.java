@@ -59,12 +59,8 @@ public class CatalogUtils {
 		
 		map = new HashMap<String, String>();
 		CatalogParser parser = new CatalogParser(map, ditaDir);
-		if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
-			// The default sax driver is set to xerces's sax driver
-			StringUtils.initSaxDriver();
-		}	
 		try {
-			XMLReader reader = XMLReaderFactory.createXMLReader();
+			XMLReader reader = StringUtils.getXMLReader();
 			reader.setContentHandler(parser);
 			reader.parse(catalogFilePath);
 		} catch (Exception e) {

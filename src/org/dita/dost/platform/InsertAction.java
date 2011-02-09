@@ -50,11 +50,7 @@ public class InsertAction extends DefaultHandler2 implements IAction {
 		retBuf = new StringBuffer(Constants.INT_4096);
 		paramTable = new Hashtable<String,String>();
 		try {
-            if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
-                //The default sax driver is set to xerces's sax driver
-            	StringUtils.initSaxDriver();
-            }
-            reader = XMLReaderFactory.createXMLReader();
+            reader = StringUtils.getXMLReader();
             reader.setContentHandler(this);
             reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
             //added by Alan for bug: #2893316 on Date: 2009-11-09 begin

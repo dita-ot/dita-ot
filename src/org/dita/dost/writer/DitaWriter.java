@@ -396,14 +396,10 @@ public class DitaWriter extends AbstractXMLWriter {
      */
 	public static void initXMLReader(String ditaDir,boolean validate, boolean arg_setSystemid) throws SAXException {
 		DITAOTJavaLogger logger=new DITAOTJavaLogger();
-		if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
-			// The default sax driver is set to xerces's sax driver
-			StringUtils.initSaxDriver();
-		}
 		
 		try {
 			
-			reader = XMLReaderFactory.createXMLReader();
+			reader = StringUtils.getXMLReader();
 			AbstractXMLReader.setGrammarPool(reader, null);
  			
             reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
