@@ -68,7 +68,7 @@
           <!-- if no XREF content, use @HREF, & put out a warning -->
           <xsl:choose>
             <xsl:when test="*[contains(@class, ' topic/xref ')]">
-              <xsl:variable name="alttext"><xsl:apply-templates select="*[contains(@class, ' topic/xref ')]" mode="text-only"/></xsl:variable>
+              <xsl:variable name="alttext"><xsl:apply-templates select="*[contains(@class, ' topic/xref ')]/node()[not(contains(@class, ' topic/desc '))]" mode="text-only"/></xsl:variable>
               <xsl:attribute name="alt"><xsl:value-of select="normalize-space($alttext)"/></xsl:attribute>
               <xsl:attribute name="title"><xsl:value-of select="normalize-space($alttext)"/></xsl:attribute>
             </xsl:when>
