@@ -132,8 +132,8 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:copy-of select="$map//*[@id = $id]"/>
         </xsl:variable>
 
-        <xsl:if test="$mapTopic/*[position() = $topicNumber]//*[contains(@class, ' map/shortdesc ')]">
-            <xsl:copy-of select="$mapTopic/*[position() = $topicNumber]/*[contains(@class, ' map/shortdesc ')]"/>
+        <xsl:if test="$mapTopic/*[position() = $topicNumber]/*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')]">
+            <xsl:copy-of select="$mapTopic/*[position() = $topicNumber]/*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')]"/>
         </xsl:if>
     </xsl:template>
 
