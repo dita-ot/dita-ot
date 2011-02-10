@@ -1298,7 +1298,7 @@ See the accompanying license.txt file for applicable licenses.
       <xsl:choose>
         <xsl:when test="$number-relwidths &lt; $number-cells">
           <xsl:apply-templates select="." mode="fix-relcolwidth">
-            <xsl:with-param name="update-relcolwidth" select="concat($update-relcolwidth,' *1')"/>
+            <xsl:with-param name="update-relcolwidth" select="concat($update-relcolwidth,' 1*')"/>
             <xsl:with-param name="number-cells" select="$number-cells"/>
             <xsl:with-param name="number-relwidths" select="$number-relwidths+1"/>
           </xsl:apply-templates>
