@@ -184,6 +184,22 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:copy>
     </xsl:template>
     
+  <!-- Linkless topicref or topichead -->
+  <xsl:template match="*[contains(@class,' map/topicref ')][not(@href)]" priority="5">
+    <xsl:param name="newid"/>
+    <xsl:copy>
+      <xsl:attribute name="id">
+        <xsl:value-of select="generate-id()"/>
+      </xsl:attribute>
+      <xsl:apply-templates select="@*">
+        <xsl:with-param name="newid" select="$newid"/>
+      </xsl:apply-templates>
+      <xsl:apply-templates select="*|text()|processing-instruction()">
+        <xsl:with-param name="newid" select="$newid"/>
+      </xsl:apply-templates>
+    </xsl:copy>
+  </xsl:template>
+    
     <xsl:template match="*[contains(@class,' map/topicref ')]/@id" priority="5"/>
 
     <xsl:template match="@href">
