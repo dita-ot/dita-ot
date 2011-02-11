@@ -93,7 +93,8 @@ public class TopicMergeModule implements AbstractPipelineModule {
 			}
 			if (style != null){
 				TransformerFactory factory = TransformerFactory.newInstance();
-				Transformer transformer = factory.newTransformer(new StreamSource(new FileInputStream(style)));
+				final File styleFile = new File(style);
+				Transformer transformer = factory.newTransformer(new StreamSource(styleFile.toURI().toString()));
 				transformer.transform(new StreamSource(midStream), new StreamResult(new FileOutputStream(new File(out))));
 			}else{
 				output = new OutputStreamWriter(new FileOutputStream(out),Constants.UTF8);
