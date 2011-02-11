@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin id="dummy">
+  
+  <require plugin="foo" importance="required"/>
+  <require plugin="bar"/>
+  <require plugin="baz" importance="optional"/>
+  
+  <meta type="foo" value="bar"/>
+  <meta type="baz" value="qux"/>
+  <meta type="baz" value="quxx"/>
+  
+  <feature extension="type_text" value="foo, bar"/>
+
+  <feature extension="multiple_type_text" value="foo"/>
+  <feature extension="multiple_type_text" value="bar"/>
+
+  <feature extension="type_file" value="foo, bar" type="file"/>
+  
+  <feature extension="multiple_type_file" value="foo" type="file"/>
+  <feature extension="multiple_type_file" value="bar" type="file"/>
+  
+  <feature extension="file" file="foo, bar"/>
+  
+  <feature extension="multiple_file" file="foo"/>
+  <feature extension="multiple_file" file="bar"/>
+  
+  <template file="xsl/shell_template.xsl"/>
+  <template file="xsl/shell2_template.xsl"/>
+  
+</plugin>

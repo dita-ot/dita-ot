@@ -18,6 +18,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import org.xml.sax.Attributes;
+import org.xml.sax.helpers.AttributesImpl;
+
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 
@@ -87,14 +90,40 @@ public class Features {
 	 * @param id feature id
 	 * @param value feature value
 	 * @param type feature type
+	 * @deprecated use {@link #addFeature(String, Attributes)} instead
 	 */
-	public void addFeature(final String id, final String value, final String type){
+	@Deprecated
+	public void addFeature(final String id, final String value, final String type) {
+		final AttributesImpl atts = new AttributesImpl();
+		atts.addAttribute("", "value", "value", "CDATA", value);
+		atts.addAttribute("", "type", "type", "CDATA", type);
+		addFeature(id, atts);
+	}
+	
+	/**
+	 * Add feature to the feature table.
+	 * @param id feature id
+	 * @param attributes configuration element attributes
+	 */
+	public final void addFeature(final String id, final Attributes attributes){
+		boolean isFile;
+		String value = attributes.getValue("file");
+		if (value != null) {
+			isFile = true;
+		} else {
+			value = attributes.getValue("value");
+			isFile = "file".equals(attributes.getValue("type"));
+		}
 		final StringTokenizer valueTokenizer = new StringTokenizer(value, Integrator.FEAT_VALUE_SEPARATOR);
 		final StringBuffer valueBuffer = new StringBuffer();
+		if (featureTable.containsKey(id)) {
+			valueBuffer.append(featureTable.get(id));
+			valueBuffer.append(Integrator.FEAT_VALUE_SEPARATOR);
+		}
 		while(valueTokenizer.hasMoreElements()){
 			final String valueElement = valueTokenizer.nextToken();
 			if(valueElement!=null && valueElement.trim().length() != 0){
-				if("file".equals(type) && !FileUtils.isAbsolutePath(valueElement)){
+				if(isFile && !FileUtils.isAbsolutePath(valueElement)){
 					valueBuffer.append(location).append(File.separatorChar);
 				}
 				valueBuffer.append(valueElement.trim());

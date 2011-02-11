@@ -46,7 +46,7 @@ public class DescParser extends DefaultHandler{
 		if( "plugin".equals(qName) ){
 			currentPlugin = attributes.getValue("id");
 		} else if ("feature".equals(qName)){
-			features.addFeature(attributes.getValue("extension"), attributes.getValue("value"), attributes.getValue("type"));
+			features.addFeature(attributes.getValue("extension"), attributes);
 		} else if ("require".equals(qName)){
 			features.addRequire(attributes.getValue("plugin"), attributes.getValue("importance"));
 		} else if ("meta".equals(qName)){
