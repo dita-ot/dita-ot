@@ -61,7 +61,7 @@ public class FeaturesTest {
 		f.addFeature("bar", "qux", null);
 		
 		final Map<String, String> exp = new HashMap<String,String>();
-		exp.put("foo", "baz");
+		exp.put("foo", "bar,baz");
 		exp.put("bar", "qux");
 		
 		assertEquals(exp.entrySet(), f.getAllFeatures());
@@ -77,7 +77,7 @@ public class FeaturesTest {
 		f.addFeature("foo", " bar, baz ", null);
 		assertEquals("bar,baz", f.getFeature("foo"));
 		f.addFeature("foo", "bar, baz", "file");
-		assertEquals("base/bar,base/baz", f.getFeature("foo"));
+		assertEquals("bar,baz,base/bar,base/baz", f.getFeature("foo"));
 	}
 
 	@Test
