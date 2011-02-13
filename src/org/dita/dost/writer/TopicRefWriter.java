@@ -28,7 +28,6 @@ import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 
 /**
@@ -346,7 +345,22 @@ public class TopicRefWriter extends AbstractXMLWriter {
 		if (checkDITAHREF(atts)) {
 				// replace the href value if it's referenced topic is extracted.
 			String rootPathName=currentFilePathName;
-			String changeTarget=(String)changeTable.get(FileUtils.resolveFile(currentFilePath, attValue));
+			// Added on 20110125 for bug:Chunking remaps in-file <xref> to invalid value - ID: 3162808   start 
+			String changeTargetkey=FileUtils.resolveFile(currentFilePath, attValue);
+			if (attValue.indexOf(Constants.SHARP) != -1) {
+				if (attValue.indexOf(Constants.SLASH) != -1) {
+					changeTargetkey = changeTargetkey
+							+ attValue.substring(attValue
+									.lastIndexOf(Constants.SHARP), attValue
+									.lastIndexOf(Constants.SLASH));
+				} else {
+					changeTargetkey = changeTargetkey
+							+ attValue.substring(attValue
+									.lastIndexOf(Constants.SHARP));
+				}
+			}			
+			String changeTarget=(String)changeTable.get(changeTargetkey);
+			// Added on 20110125 for bug:Chunking remaps in-file <xref> to invalid value - ID: 3162808   end 
 			String elementID=getElementID(attValue);
 			String pathtoElem = 
 				attValue.contains(Constants.SHARP) ? attValue.substring(attValue.indexOf(Constants.SHARP)+1) : "";
