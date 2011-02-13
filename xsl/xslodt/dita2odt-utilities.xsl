@@ -371,7 +371,7 @@
     </xsl:variable>
     
     <xsl:variable name="max_depth">
-      <xsl:value-of select="stringUtils:getMax($fn_depth, $list_depth, $dlist_depth, $table_depth, $stable_depth)"/>
+      <xsl:value-of select="stringUtils:getMax(string($fn_depth), string($list_depth), string($dlist_depth), string($table_depth), string($stable_depth))"/>
     </xsl:variable>
     
     <!-- if the table is under p(direct child) -->
@@ -725,7 +725,7 @@
     </xsl:variable>
     
     <xsl:variable name="max_depth">
-      <xsl:value-of select="stringUtils:getMax($fn_depth, $list_depth, $dlist_depth, $table_depth, $stable_depth)"/>
+      <xsl:value-of select="stringUtils:getMax(string($fn_depth), string($list_depth), string($dlist_depth), string($table_depth), string($stable_depth))"/>
     </xsl:variable>
     
     

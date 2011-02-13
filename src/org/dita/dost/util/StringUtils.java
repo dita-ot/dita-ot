@@ -489,15 +489,15 @@ public class StringUtils {
 		/**
 		 * Get max value.
 		 */
-		public static Integer getMax(Integer ul_depth, Integer ol_depth, Integer sl_depth, 
-				Integer dl_depth, Integer table_depth, Integer stable_depth){
+		public static Integer getMax(String ul_depth, String ol_depth, String sl_depth, 
+				String dl_depth, String table_depth, String stable_depth){
 			
-			int unDepth = ul_depth;
-			int olDepth = ol_depth;
-			int slDepth = sl_depth;
-			int dlDepth = dl_depth;
-			int tableDepth = table_depth;
-			int stableDepth = stable_depth;
+			int unDepth = Integer.parseInt(ul_depth);
+			int olDepth = Integer.parseInt(ol_depth);
+			int slDepth = Integer.parseInt(sl_depth);
+			int dlDepth = Integer.parseInt(dl_depth);
+			int tableDepth = Integer.parseInt(table_depth);
+			int stableDepth = Integer.parseInt(stable_depth);
 			
 			int max = unDepth;
 			if(olDepth > max){
@@ -523,13 +523,13 @@ public class StringUtils {
 		/**
 		 * Get max value.
 		 */
-		public static Integer getMax(Integer fn_depth, Integer list_depth, Integer dlist_depth, Integer table_depth, Integer stable_depth){
+		public static Integer getMax(String fn_depth, String list_depth, String dlist_depth, String table_depth, String stable_depth){
 			
-			int fnDepth = fn_depth;
-			int listDepth = list_depth;
-			int dlistDepth = dlist_depth;
-			int tableDepth = table_depth;
-			int stableDepth = stable_depth;
+			int fnDepth = Integer.parseInt(fn_depth);
+			int listDepth = Integer.parseInt(list_depth);
+			int dlistDepth = Integer.parseInt(dlist_depth);
+			int tableDepth = Integer.parseInt(table_depth);
+			int stableDepth = Integer.parseInt(stable_depth);
 			
 			int max = fnDepth;
 			if(listDepth > max){
