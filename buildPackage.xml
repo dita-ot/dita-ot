@@ -12,7 +12,7 @@
   <property name="package.name.root" value="DITA-OT"/>
   <property name="version" value="1.5.3"/>
   <!--This property should be edited manually in each milestone release?-->
-  <property name="milestone" value="01"/>
+  <property name="milestone" value="02"/>
 
   <property name="src.dir" location="${basedir}"/>
   <property name="java.dir" location="${src.dir}/src/"/>
