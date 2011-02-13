@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -48,15 +49,27 @@ public class FileUtils {
 	 */
 	private final static Properties configuration = new Properties();
 	static {
-		BufferedInputStream configurationInputStream = null;
-		try {
-			File configurationFile = new File("lib"+ File.separator + Constants.CONF_PROPERTIES);
-			if(configurationFile.exists()) 
-				configurationInputStream = new BufferedInputStream(new FileInputStream(configurationFile));
-			
-			if (configurationInputStream != null) {
-				configuration.load(configurationInputStream);
-			}
+		//BufferedInputStream configurationInputStream = null;
+		InputStream configurationInputStream = null;
+		try {			
+			 ClassLoader loader = FileUtils.class.getClassLoader();
+			 configurationInputStream =loader.getResourceAsStream(Constants.CONF_PROPERTIES);
+			 if (configurationInputStream != null) {
+			 		 configuration.load(configurationInputStream);
+			 		//System.out.println("The configuration file path is:" + configurationInputStream.toString());
+			 		//System.out.println("Supported image ext:" +configuration.getProperty(Constants.CONF_SUPPORTED_IMAGE_EXTENSIONS));
+			 } else {
+				 //try to find the configuration file from the lib folder from current working dir
+				 File configurationFile = new File("lib"+ File.separator + Constants.CONF_PROPERTIES);
+				 if(configurationFile.exists()) 
+					 	configurationInputStream = new BufferedInputStream(new FileInputStream(configurationFile));
+				 
+				 if (configurationInputStream != null) {
+						configuration.load(configurationInputStream); 
+				 }
+			 }
+			 
+
 		} catch (IOException e) {
 			logger.logException(e);
 		} finally {
