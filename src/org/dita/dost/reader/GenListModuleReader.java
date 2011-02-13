@@ -48,7 +48,6 @@ import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 
 /**
@@ -1431,7 +1430,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 						(atts.getValue(Constants.ATTRIBUTE_NAME_CHUNK)!=null && atts.getValue(Constants.ATTRIBUTE_NAME_CHUNK).contains("to-content")) )
 				&& !Constants.ATTRIBUTE_NAME_CONREF.equals(attrName)
 				&& !Constants.ATTRIBUTE_NAME_COPY_TO.equals(attrName) && 
-				(canResolved() || FileUtils.isSupportedImageFile(filename))) {
+				(canResolved() || FileUtils.isSupportedImageFile(filename.toLowerCase()))) {
 			//edited by william on 2009-08-06 for bug:2832696 start
 			if(attrFormat!=null){
 				nonConrefCopytoTargets.add(filename + Constants.STICK + attrFormat);
