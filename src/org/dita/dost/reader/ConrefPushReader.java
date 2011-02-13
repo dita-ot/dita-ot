@@ -11,7 +11,6 @@ package org.dita.dost.reader;
 
 import java.io.File;
 import java.util.Hashtable;
-import java.util.Map;
 import java.util.Properties;
 
 import org.dita.dost.log.DITAOTJavaLogger;
@@ -24,7 +23,6 @@ import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 /**
  * Class for reading conref push content.
  *

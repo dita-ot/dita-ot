@@ -28,7 +28,6 @@ import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 /**
  * CoderefResolver class, resolving 
  * coderef attribute in topic file.

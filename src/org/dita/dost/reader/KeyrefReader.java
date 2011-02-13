@@ -25,7 +25,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 /**
  * KeyrefReader class which reads ditamap file to collect key definitions.
  *

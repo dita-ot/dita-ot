@@ -10,10 +10,9 @@
 package org.dita.dost.platform;
 
 import java.io.File;
+
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
-import org.dita.dost.util.Constants;
-import org.dita.dost.util.StringUtils;
 
 /**
  * Task run by ant scripts, invoking Task.

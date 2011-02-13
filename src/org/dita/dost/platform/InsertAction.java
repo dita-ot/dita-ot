@@ -10,7 +10,6 @@
 package org.dita.dost.platform;
 
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -22,7 +21,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.ext.DefaultHandler2;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
  * InsertAction implements IAction and insert the resource 

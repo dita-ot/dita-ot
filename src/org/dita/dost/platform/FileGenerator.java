@@ -22,7 +22,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.ext.DefaultHandler2;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
  * Generate outputfile with templates.

@@ -16,7 +16,6 @@ import java.util.Set;
 
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
  * Utility that topic merge utilize. 
