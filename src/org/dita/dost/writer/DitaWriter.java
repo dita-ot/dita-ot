@@ -17,7 +17,6 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -40,14 +39,12 @@ import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.OutputUtils;
 import org.dita.dost.util.StringUtils;
-import org.w3c.dom.Document;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 
 
@@ -1190,7 +1187,7 @@ public class DitaWriter extends AbstractXMLWriter {
     			}
     		}
     		
-    		if(!prop.getProperty(Constants.KEY_LIST).isEmpty()){
+    		if(prop.getProperty(Constants.KEY_LIST).length()!=0){
 	    		String[] keylist = prop.getProperty(Constants.KEY_LIST).split(Constants.COMMA);
 	    		String key;
 	    		String value;

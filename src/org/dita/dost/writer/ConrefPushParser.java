@@ -43,7 +43,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 /**
  * This class is for writing conref push contents into
  * specific files.
@@ -420,7 +419,7 @@ public class ConrefPushParser extends AbstractXMLWriter {
 							NamedNodeMap namedNodeMap = elem.getAttributes();
 							for(int t=0; t<namedNodeMap.getLength(); t++){
 								//write the attributes to new generated element
-								if(namedNodeMap.item(t).getNodeName().equals("conref") && !namedNodeMap.item(t).getNodeValue().isEmpty()){
+								if(namedNodeMap.item(t).getNodeName().equals("conref") && namedNodeMap.item(t).getNodeValue().length()!=0){
 									hasConref = true;
 								}
 								stringBuffer.append(Constants.STRING_BLANK).append(namedNodeMap.item(t).getNodeName()).
@@ -481,7 +480,7 @@ public class ConrefPushParser extends AbstractXMLWriter {
 		stringBuffer.append(Constants.LESS_THAN).append(generalizedElemName);
 		NamedNodeMap namedNodeMap = elem.getAttributes();
 		for(int i=0; i<namedNodeMap.getLength(); i++){
-			if(namedNodeMap.item(i).getNodeName().equals("conref") && !namedNodeMap.item(i).getNodeValue().isEmpty()){
+			if(namedNodeMap.item(i).getNodeName().equals("conref") && namedNodeMap.item(i).getNodeValue().length()!=0){
 				hasConref = true;
 			}
 			stringBuffer.append(Constants.STRING_BLANK).append(namedNodeMap.item(i).getNodeName()).
