@@ -679,6 +679,10 @@ public class ConvertLang extends Task {
 					}
 					value = reader.readLine();
 				} 
+				
+				writer.close();
+				reader.close();
+				
 				//delete old file
 				if (!inputFile.delete()) {
 					Properties prop = new Properties();
@@ -703,18 +707,7 @@ public class ConvertLang extends Task {
 				logger.logException(e);
 			} catch (IOException e) {
 				logger.logException(e);
-			} finally {
-				try {
-					writer.close();
-				} catch (IOException e) {
-					logger.logException(e);
-				}
-				try {
-					reader.close();
-				} catch (IOException e) {
-					logger.logException(e);
-				}
-			}
+			} 
 		}
 	}
 	
@@ -834,24 +827,7 @@ public class ConvertLang extends Task {
 				logger.logException(e);
 			} catch (IOException e) {
 				logger.logException(e);
-			} finally {
-				if (reader != null) {
-					try {
-		                reader.close();
-	                } catch (IOException e) {
-	                	logger.logException(e);
-	                }
-				}
-				if (writer != null) {
-					try {
-		                writer.close();
-	                } catch (IOException e) {
-	                	logger.logException(e);
-	                }
-				}
-			}
-			
-			
+			} 
 		}
 		
 	}
@@ -918,22 +894,7 @@ public class ConvertLang extends Task {
 			logger.logException(e);
 		} catch (IOException e) {
 			logger.logException(e);
-		} finally {
-			if (reader != null) {
-				try {
-	                reader.close();
-                } catch (IOException e) {
-                	logger.logException(e);
-                }
-			}
-			if (writer != null) {
-				try {
-	                writer.close();
-                } catch (IOException e) {
-                	logger.logException(e);
-                }
-			}
-		}
+		} 
 	}
 
 	public void setBasedir(String basedir) {
