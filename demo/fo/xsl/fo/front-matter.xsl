@@ -153,7 +153,9 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:for-each>
                 </fo:marker>
             </xsl:if>
-            <fo:inline id="{@id}"/>
+            <fo:inline>
+                <xsl:call-template name="commonattributes"/>
+            </fo:inline>
             <fo:inline id="{concat('_OPENTOPIC_TOC_PROCESSING_', generate-id())}"/>
             <fo:block>
                 <xsl:attribute name="border-bottom">3pt solid black</xsl:attribute>

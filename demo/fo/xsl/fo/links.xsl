@@ -225,7 +225,9 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/xref ')]">
-        <fo:inline id="{@id}"/>
+        <fo:inline>
+            <xsl:call-template name="commonattributes"/>
+        </fo:inline>
 
 		<xsl:variable name="destination" select="opentopic-func:getDestinationId(@href)"/>
 		<xsl:variable name="element" select="key('key_anchor',$destination)[1]"/>

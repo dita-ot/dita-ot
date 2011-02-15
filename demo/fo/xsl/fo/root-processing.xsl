@@ -82,7 +82,9 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:variable name="topicNumbers">
         <xsl:for-each select="//*[contains(@class, ' topic/topic ') and not(contains(@class, ' bkinfo/bkinfo '))]">
-            <topic id="{@id}" guid="{generate-id()}"/>
+            <topic guid="{generate-id()}">
+                <xsl:call-template name="commonattributes"/>
+            </topic>
         </xsl:for-each>
     </xsl:variable>
 

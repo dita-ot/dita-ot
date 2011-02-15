@@ -34,7 +34,8 @@ version="1.1">
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' glossentry/glossentry ')]">
-        <fo:block id="{@id}">
+        <fo:block>
+            <xsl:call-template name="commonattributes"/>
             <fo:block>
                 <xsl:attribute name="id">
                     <xsl:value-of select="concat('_OPENTOPIC_TOC_PROCESSING_', generate-id())"/>

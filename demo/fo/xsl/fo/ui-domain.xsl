@@ -47,32 +47,37 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:text> &gt; </xsl:text>
             </xsl:if>
         </xsl:if>
-        <fo:inline xsl:use-attribute-sets="uicontrol" id="{@id}">
+        <fo:inline xsl:use-attribute-sets="uicontrol">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' ui-d/wintitle ')]">
-        <fo:inline xsl:use-attribute-sets="wintitle" id="{@id}">
+        <fo:inline xsl:use-attribute-sets="wintitle">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' ui-d/menucascade ')]">
-        <fo:inline xsl:use-attribute-sets="menucascade" id="{@id}">
+        <fo:inline xsl:use-attribute-sets="menucascade">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' ui-d/shortcut ')]">
-        <fo:inline xsl:use-attribute-sets="shortcut" id="{@id}">
+        <fo:inline xsl:use-attribute-sets="shortcut">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' ui-d/screen ')]">
         <xsl:call-template name="generateAttrLabel"/>
-        <fo:block xsl:use-attribute-sets="screen" id="{@id}">
+        <fo:block xsl:use-attribute-sets="screen">
+            <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="setScale"/>
             <!-- rules have to be applied within the scope of the PRE box; else they start from page margin! -->
             <xsl:if test="contains(@frame,'top')">

@@ -295,9 +295,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:call-template name="insertBodyStaticContents"/>
             <fo:flow flow-name="xsl-region-body">
                 <fo:block xsl:use-attribute-sets="topic">
-                    <xsl:attribute name="id">
-                        <xsl:value-of select="@id"/>
-                    </xsl:attribute>
+                    <xsl:call-template name="commonattributes"/>
                     <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
                         <fo:marker marker-class-name="current-topic-number">
                             <xsl:number format="1"/>
@@ -350,9 +348,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:call-template name="insertBodyStaticContents"/>
             <fo:flow flow-name="xsl-region-body">
                 <fo:block xsl:use-attribute-sets="topic">
-                    <xsl:attribute name="id">
-                        <xsl:value-of select="@id"/>
-                    </xsl:attribute>
+                    <xsl:call-template name="commonattributes"/>
                     <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
                         <fo:marker marker-class-name="current-topic-number">
                             <xsl:number format="1"/>
@@ -405,9 +401,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:call-template name="insertBodyStaticContents"/>
             <fo:flow flow-name="xsl-region-body">
                 <fo:block xsl:use-attribute-sets="topic">
-                    <xsl:attribute name="id">
-                        <xsl:value-of select="@id"/>
-                    </xsl:attribute>
+                    <xsl:call-template name="commonattributes"/>
                     <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
                         <fo:marker marker-class-name="current-topic-number">
                             <xsl:number format="I"/>
@@ -475,9 +469,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:call-template name="insertBodyStaticContents"/>
             <fo:flow flow-name="xsl-region-body">
                 <fo:block xsl:use-attribute-sets="topic">
-                    <xsl:attribute name="id">
-                        <xsl:value-of select="@id"/>
-                    </xsl:attribute>
+                    <xsl:call-template name="commonattributes"/>
                     <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
                         <fo:marker marker-class-name="current-topic-number">
                             <xsl:number format="1"/>
@@ -711,7 +703,8 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="attrSet2" select="concat($attrSet1, '__content')"/>
-        <fo:block id="{@id}">
+        <fo:block>
+            <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="processAttrSetReflection">
                 <xsl:with-param name="attrSet" select="$attrSet1"/>
                 <xsl:with-param name="path" select="'../../cfg/fo/attrs/commons-attr.xsl'"/>
@@ -766,19 +759,22 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/section ')]/*[contains(@class,' topic/title ')]">
-        <fo:block xsl:use-attribute-sets="section.title" id="{@id}">
+        <fo:block xsl:use-attribute-sets="section.title">
+            <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="getTitle"/>
         </fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/example ')]/*[contains(@class,' topic/title ')]">
-        <fo:block xsl:use-attribute-sets="example.title" id="{@id}">
+        <fo:block xsl:use-attribute-sets="example.title">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/fig ')]/*[contains(@class,' topic/title ')]">
-        <fo:block xsl:use-attribute-sets="fig.title" id="{@id}">
+        <fo:block xsl:use-attribute-sets="fig.title">
+            <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="insertVariable">
                 <xsl:with-param name="theVariableID" select="'Figure'"/>
                 <xsl:with-param name="theParameters">
@@ -839,7 +835,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/term ')]">
-        <fo:inline xsl:use-attribute-sets="term" id="{@id}">
+        <fo:inline xsl:use-attribute-sets="term">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
     </xsl:template>
@@ -1110,7 +1107,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>-->
 
     <xsl:template match="*[contains(@class, ' concept/conbody ')]">
-        <fo:block xsl:use-attribute-sets="conbody" id="{@id}">
+        <fo:block xsl:use-attribute-sets="conbody">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
@@ -1178,13 +1176,15 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>-->
 
     <xsl:template match="*[contains(@class, ' reference/refbody ')]">
-        <fo:block xsl:use-attribute-sets="refbody" id="{@id}">
+        <fo:block xsl:use-attribute-sets="refbody">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' reference/refsyn ')]">
-        <fo:block xsl:use-attribute-sets="refsyn" id="{@id}">
+        <fo:block xsl:use-attribute-sets="refsyn">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
@@ -1232,7 +1232,8 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class,' topic/titlealts ')]">
       <xsl:if test="$DRAFT='yes'">
         <xsl:if test="*">
-          <fo:block xsl:use-attribute-sets="titlealts" id="{@id}">
+          <fo:block xsl:use-attribute-sets="titlealts">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
           </fo:block>
         </xsl:if>
@@ -1240,7 +1241,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/navtitle ')]">
-        <fo:block xsl:use-attribute-sets="navtitle" id="{@id}">
+        <fo:block xsl:use-attribute-sets="navtitle">
+            <xsl:call-template name="commonattributes"/>
             <fo:inline xsl:use-attribute-sets="navtitle__label">
                 <xsl:call-template name="insertVariable">
                     <xsl:with-param name="theVariableID" select="'Navigation title'"/>
@@ -1255,7 +1257,8 @@ See the accompanying license.txt file for applicable licenses.
          to a single value in DITA 2.0, but for now, recognize both. -->
     <xsl:template match="*[contains(@class,' topic/titlealts ')]/*[contains(@class,' topic/searchtitle ')] | 
                          *[contains(@class,' topic/titlealts ')]/*[contains(@class,' map/searchtitle ')]">
-        <fo:block xsl:use-attribute-sets="searchtitle" id="{@id}">
+        <fo:block xsl:use-attribute-sets="searchtitle">
+            <xsl:call-template name="commonattributes"/>
             <fo:inline xsl:use-attribute-sets="searchtitle__label">
                 <xsl:call-template name="insertVariable">
                     <xsl:with-param name="theVariableID" select="'Search title'"/>
@@ -1269,7 +1272,8 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class,' map/topicmeta ')]/*[contains(@class,' map/searchtitle ')]"/>
 
     <xsl:template match="*[contains(@class,' topic/abstract ')]">
-        <fo:block id="{@id}">
+        <fo:block>
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
@@ -1312,7 +1316,8 @@ See the accompanying license.txt file for applicable licenses.
         </fo:block-->
         <!--Bug 2928540: use attribute set topic__shortdesc instead of shortdesc -->
         <!--compare the length of shortdesc with the got max chars-->
-        <fo:block xsl:use-attribute-sets="topic__shortdesc" id="{@id}">
+        <fo:block xsl:use-attribute-sets="topic__shortdesc">
+            <xsl:call-template name="commonattributes"/>
             <!-- If the shortdesc is sufficiently short, add keep-with-next. -->
             <xsl:if test="string-length(.) &lt;= $maxCharsInShortDesc">
                 <!-- Low-strength keep to avoid conflict with keeps on titles. -->
@@ -1324,7 +1329,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*" mode="format-shortdesc-as-inline">
-        <fo:inline xsl:use-attribute-sets="shortdesc" id="{@id}">
+        <fo:inline xsl:use-attribute-sets="shortdesc">
+            <xsl:call-template name="commonattributes"/>
             <xsl:if test="preceding-sibling::* | preceding-sibling::text()">
                 <xsl:text> </xsl:text>
             </xsl:if>
@@ -1401,7 +1407,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/bodydiv ')]">
-        <fo:block id="{@id}">
+        <fo:block>
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
@@ -1414,26 +1421,30 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/section ')]">
-        <fo:block xsl:use-attribute-sets="section" id="{@id}">
+        <fo:block xsl:use-attribute-sets="section">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates select="." mode="dita2xslfo:section-heading"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/sectiondiv ')]">
-        <fo:block id="{@id}">
+        <fo:block>
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/example ')]">
-        <fo:block xsl:use-attribute-sets="example" id="{@id}">
+        <fo:block xsl:use-attribute-sets="example">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/desc ')]">
-        <fo:inline xsl:use-attribute-sets="desc" id="{@id}">
+        <fo:inline xsl:use-attribute-sets="desc">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
     </xsl:template>
@@ -1467,7 +1478,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/p ')]">
-        <fo:block xsl:use-attribute-sets="p" id="{@id}">
+        <fo:block xsl:use-attribute-sets="p">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
@@ -1476,7 +1488,8 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:apply-templates select="." mode="placeNoteContent"/>
     </xsl:template>
     <xsl:template match="*" mode="placeNoteContent">
-        <fo:block xsl:use-attribute-sets="note" id="{@id}">
+        <fo:block xsl:use-attribute-sets="note">
+            <xsl:call-template name="commonattributes"/>
             <fo:inline xsl:use-attribute-sets="note__label">
                 <xsl:choose>
                     <xsl:when test="@type='note' or not(@type)">
@@ -1606,7 +1619,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/lq ')]">
-        <fo:block id="{@id}">
+        <fo:block>
+            <xsl:call-template name="commonattributes"/>
             <xsl:choose>
                 <xsl:when test="@href or @reftitle">
                     <xsl:call-template name="processAttrSetReflection">
@@ -1658,7 +1672,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/q ')]">
-        <fo:inline xsl:use-attribute-sets="q" id="{@id}">
+        <fo:inline xsl:use-attribute-sets="q">
+            <xsl:call-template name="commonattributes"/>
             <xsl:text>&#x201C;</xsl:text>
             <xsl:apply-templates/>
             <xsl:text>&#x201D;</xsl:text>
@@ -1666,14 +1681,16 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/fig ')]">
-        <fo:block xsl:use-attribute-sets="fig" id="{@id}">
+        <fo:block xsl:use-attribute-sets="fig">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates select="*[not(contains(@class,' topic/title '))]"/>
             <xsl:apply-templates select="*[contains(@class,' topic/title ')]"/>
         </fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/figgroup ')]">
-        <fo:inline xsl:use-attribute-sets="figgroup" id="{@id}">
+        <fo:inline xsl:use-attribute-sets="figgroup">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
     </xsl:template>
@@ -1683,7 +1700,8 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:variable name="attrSets">
             <xsl:call-template name="setFrame"/>
         </xsl:variable>
-        <fo:block xsl:use-attribute-sets="pre" id="{@id}">
+        <fo:block xsl:use-attribute-sets="pre">
+            <xsl:call-template name="commonattributes"/>
             <!--TODO: $attrSets contains space-separated names!! Check if this actually works. -->
             <xsl:call-template name="processAttrSetReflection">
                 <xsl:with-param name="attrSet" select="$attrSets"/>
@@ -1725,7 +1743,8 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:variable name="attrSets">
             <xsl:call-template name="setFrame"/>
         </xsl:variable>
-        <fo:block xsl:use-attribute-sets="lines" id="{@id}">
+        <fo:block xsl:use-attribute-sets="lines">
+            <xsl:call-template name="commonattributes"/>
             <!--TODO: $attrSets contains space-separated names!! Check if this actually works. -->
             <xsl:call-template name="processAttrSetReflection">
                 <xsl:with-param name="attrSet" select="$attrSets"/>
@@ -1738,25 +1757,29 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- The text element has no default semantics or formatting -->
     <xsl:template match="*[contains(@class,' topic/text ')]">
-        <fo:inline id="{@id}">
+        <fo:inline>
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/keyword ')]">
-        <fo:inline xsl:use-attribute-sets="keyword" id="{@id}">
+        <fo:inline xsl:use-attribute-sets="keyword">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/ph ')]">
-        <fo:inline xsl:use-attribute-sets="ph" id="{@id}">
+        <fo:inline xsl:use-attribute-sets="ph">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/boolean ')]">
-        <fo:inline xsl:use-attribute-sets="boolean" id="{@id}">
+        <fo:inline xsl:use-attribute-sets="boolean">
+            <xsl:call-template name="commonattributes"/>
             <xsl:value-of select="name()"/>
             <xsl:text>: </xsl:text>
             <xsl:value-of select="@state"/>
@@ -1764,7 +1787,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/state ')]">
-        <fo:inline xsl:use-attribute-sets="state" id="{@id}">
+        <fo:inline xsl:use-attribute-sets="state">
+            <xsl:call-template name="commonattributes"/>
             <xsl:value-of select="name()"/>
             <xsl:text>: </xsl:text>
             <xsl:value-of select="@name"/>
@@ -1774,7 +1798,9 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' ut-d/imagemap ')]">
-        <fo:inline id="{@id}"/>
+        <fo:inline>
+            <xsl:call-template name="commonattributes"/>
+        </fo:inline>
         <xsl:apply-templates select="*[contains(@class,' topic/image ')]"/>
         <fo:list-block xsl:use-attribute-sets="ol">
             <xsl:apply-templates select="*[contains(@class,' ut-d/area ')]"/>
@@ -1782,7 +1808,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' ut-d/area ')]">
-        <fo:list-item xsl:use-attribute-sets="ol.li" id="{@id}">
+        <fo:list-item xsl:use-attribute-sets="ol.li">
+            <xsl:call-template name="commonattributes"/>
             <fo:list-item-label xsl:use-attribute-sets="ol.li__label">
                 <fo:block xsl:use-attribute-sets="ol.li__label__content">
                     <xsl:call-template name="insertVariable">
@@ -1826,7 +1853,8 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:choose>
             <xsl:when test="not(@placement = 'inline')">
 <!--                <fo:float xsl:use-attribute-sets="image__float">-->
-                    <fo:block xsl:use-attribute-sets="image__block" id="{@id}">
+                    <fo:block xsl:use-attribute-sets="image__block">
+                        <xsl:call-template name="commonattributes"/>
                         <xsl:call-template name="placeImage">
                             <xsl:with-param name="imageAlign" select="@align"/>
                             <xsl:with-param name="href" select="@href"/>
@@ -1837,7 +1865,8 @@ See the accompanying license.txt file for applicable licenses.
 <!--                </fo:float>-->
             </xsl:when>
             <xsl:otherwise>
-                <fo:inline xsl:use-attribute-sets="image__inline" id="{@id}">
+                <fo:inline xsl:use-attribute-sets="image__inline">
+                    <xsl:call-template name="commonattributes"/>
                     <xsl:call-template name="placeImage">
                         <xsl:with-param name="imageAlign" select="@align"/>
                         <xsl:with-param name="href" select="@href"/>
@@ -1931,18 +1960,21 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/object ')]">
-        <fo:inline xsl:use-attribute-sets="object" id="{@id}">
+        <fo:inline xsl:use-attribute-sets="object">
+            <xsl:call-template name="commonattributes"/>
         </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/param ')]">
-        <fo:inline xsl:use-attribute-sets="param" id="{@id}">
+        <fo:inline xsl:use-attribute-sets="param">
+            <xsl:call-template name="commonattributes"/>
         </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/draft-comment ')]">
         <xsl:if test="$publishRequiredCleanup = 'yes' or $DRAFT='yes'">
-            <fo:block xsl:use-attribute-sets="draft-comment" id="{@id}">
+            <fo:block xsl:use-attribute-sets="draft-comment">
+                <xsl:call-template name="commonattributes"/>
                 <fo:block xsl:use-attribute-sets="draft-comment__label">
             Disposition:
                     <xsl:value-of select="@disposition"/> /
@@ -1956,7 +1988,8 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="*[contains(@class,' topic/required-cleanup ')]">
         <xsl:if test="$publishRequiredCleanup = 'yes' or $DRAFT='yes'">
-            <fo:inline xsl:use-attribute-sets="required-cleanup" id="{@id}">
+            <fo:inline xsl:use-attribute-sets="required-cleanup">
+                <xsl:call-template name="commonattributes"/>
                 <fo:inline xsl:use-attribute-sets="required-cleanup__label">
                     <xsl:call-template name="insertVariable">
                         <xsl:with-param name="theVariableID" select="'Required-Cleanup'"/>
@@ -1993,7 +2026,9 @@ See the accompanying license.txt file for applicable licenses.
                 </fo:block>
         -->
 
-        <fo:inline id="{@id}"/>
+        <fo:inline>
+            <xsl:call-template name="commonattributes"/>
+        </fo:inline>
         <fo:footnote>
             <xsl:choose>
               <xsl:when test="not(@id)">
@@ -2045,18 +2080,22 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/indexterm ')]">
-        <fo:inline  id="{@id}"/>
+        <fo:inline>
+            <xsl:call-template name="commonattributes"/>
+        </fo:inline>
         <xsl:apply-templates/>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/indextermref ')]">
-        <fo:inline xsl:use-attribute-sets="indextermref" id="{@id}">
+        <fo:inline xsl:use-attribute-sets="indextermref">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/cite ')]">
-        <fo:inline xsl:use-attribute-sets="cite" id="{@id}">
+        <fo:inline xsl:use-attribute-sets="cite">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
     </xsl:template>
@@ -2087,6 +2126,11 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="id">
             <xsl:value-of select="."/>
         </xsl:attribute>
+    </xsl:template>
+
+    <!-- Process common attributes -->
+    <xsl:template name="commonattributes">
+      <xsl:apply-templates select="@id"/>
     </xsl:template>
 
 </xsl:stylesheet>

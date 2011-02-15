@@ -47,7 +47,8 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:call-template name="getTableScale"/>
         </xsl:variable>
 
-        <fo:block xsl:use-attribute-sets="table" id="{@id}">
+        <fo:block xsl:use-attribute-sets="table">
+            <xsl:call-template name="commonattributes"/>
             <xsl:if test="not($scale = '')">
                 <xsl:attribute name="font-size"><xsl:value-of select="concat($scale, '%')"/></xsl:attribute>
             </xsl:if>
@@ -56,7 +57,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/table ')]/*[contains(@class,' topic/title ')]">
-        <fo:block xsl:use-attribute-sets="table.title" id="{@id}">
+        <fo:block xsl:use-attribute-sets="table.title">
+            <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="insertVariable">
                 <xsl:with-param name="theVariableID" select="'Table'"/>
                 <xsl:with-param name="theParameters">
@@ -83,7 +85,8 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:variable>
 
         <xsl:variable name="table">
-            <fo:table xsl:use-attribute-sets="table.tgroup" id="{@id}">
+            <fo:table xsl:use-attribute-sets="table.tgroup">
+                <xsl:call-template name="commonattributes"/>
 
                 <xsl:call-template name="displayAtts">
                     <xsl:with-param name="element" select=".."/>
@@ -136,31 +139,36 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/thead ')]">
-        <fo:table-header xsl:use-attribute-sets="tgroup.thead" id="{@id}">
+        <fo:table-header xsl:use-attribute-sets="tgroup.thead">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:table-header>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/tbody ')]">
-        <fo:table-body xsl:use-attribute-sets="tgroup.tbody" id="{@id}">
+        <fo:table-body xsl:use-attribute-sets="tgroup.tbody">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:table-body>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/thead ')]/*[contains(@class, ' topic/row ')]">
-        <fo:table-row xsl:use-attribute-sets="thead.row" id="{@id}">
+        <fo:table-row xsl:use-attribute-sets="thead.row">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:table-row>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/tbody ')]/*[contains(@class, ' topic/row ')]">
-        <fo:table-row xsl:use-attribute-sets="tbody.row" id="{@id}">
+        <fo:table-row xsl:use-attribute-sets="tbody.row">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:table-row>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/thead ')]/*[contains(@class, ' topic/row ')]/*[contains(@class, ' topic/entry ')]">
-        <fo:table-cell xsl:use-attribute-sets="thead.row.entry" id="{@id}">
+        <fo:table-cell xsl:use-attribute-sets="thead.row.entry">
+            <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="applySpansAttrs"/>
             <xsl:call-template name="applyAlignAttrs"/>
             <xsl:call-template name="generateTableEntryBorder"/>
@@ -171,7 +179,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/tbody ')]/*[contains(@class, ' topic/row ')]/*[contains(@class, ' topic/entry ')]">
-        <fo:table-cell xsl:use-attribute-sets="tbody.row.entry" id="{@id}">
+        <fo:table-cell xsl:use-attribute-sets="tbody.row.entry">
+            <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="applySpansAttrs"/>
             <xsl:call-template name="applyAlignAttrs"/>
             <xsl:call-template name="generateTableEntryBorder"/>
