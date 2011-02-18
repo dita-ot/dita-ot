@@ -345,21 +345,30 @@ public class TopicRefWriter extends AbstractXMLWriter {
 		if (checkDITAHREF(atts)) {
 				// replace the href value if it's referenced topic is extracted.
 			String rootPathName=currentFilePathName;
-			// Added on 20110125 for bug:Chunking remaps in-file <xref> to invalid value - ID: 3162808   start 
-			String changeTargetkey=FileUtils.resolveFile(currentFilePath, attValue);
-			if (attValue.indexOf(Constants.SHARP) != -1) {
-				if (attValue.indexOf(Constants.SLASH) != -1) {
+			// Added on 20110125 for bug:Chunking remaps in-file <xref> to
+			// invalid value - ID: 3162808 start
+			String changeTargetkey = FileUtils.resolveFile(currentFilePath,
+					attValue);
+			String changeTarget = (String) changeTable.get(changeTargetkey);
+ 
+			final int sharpIndex = attValue.lastIndexOf(Constants.SHARP);
+			if (sharpIndex != -1) {
+				final int slashIndex = attValue.indexOf(Constants.SLASH,
+						sharpIndex);
+				if (slashIndex != -1) {
 					changeTargetkey = changeTargetkey
-							+ attValue.substring(attValue
-									.lastIndexOf(Constants.SHARP), attValue
-									.lastIndexOf(Constants.SLASH));
+							+ attValue.substring(sharpIndex, slashIndex);
 				} else {
 					changeTargetkey = changeTargetkey
-							+ attValue.substring(attValue
-									.lastIndexOf(Constants.SHARP));
+							+ attValue.substring(sharpIndex);
 				}
-			}			
-			String changeTarget=(String)changeTable.get(changeTargetkey);
+				String changeTarget_with_elemt = (String) changeTable
+						.get(changeTargetkey);
+				if (changeTarget_with_elemt != null) {
+					changeTarget = changeTarget_with_elemt;
+				}
+			}				
+			
 			// Added on 20110125 for bug:Chunking remaps in-file <xref> to invalid value - ID: 3162808   end 
 			String elementID=getElementID(attValue);
 			String pathtoElem = 
