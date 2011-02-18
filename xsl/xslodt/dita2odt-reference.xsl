@@ -41,9 +41,14 @@
 <!-- Simple Table -->
   <xsl:template match="*[contains(@class,' reference/properties ')]">
   
-  <xsl:variable name="tablenameId" select="random:getRandomNum()"/>
+  	<xsl:variable name="tablenameId" select="random:getRandomNum()"/>
     
-  <xsl:choose>
+    <!-- start flagging --> 
+  	<xsl:apply-templates select="." mode="start-add-odt-flags">
+      <xsl:with-param name="family" select="'_table'"/>
+    </xsl:apply-templates>  
+  	
+  	<xsl:choose>
     <xsl:when test="parent::*[contains(@class, ' reference/refbody ')]">
       <xsl:element name="table:table">
         <xsl:attribute name="table:name">
@@ -103,6 +108,11 @@
     
   </xsl:choose>
   <text:p/>
+  
+  <!-- end flagging -->
+  <xsl:apply-templates select="." mode="end-add-odt-flags">
+      <xsl:with-param name="family" select="'_table'"/>
+  </xsl:apply-templates>
 </xsl:template>  
   
 <xsl:template match="*[contains(@class, ' reference/proptypehd ')]
