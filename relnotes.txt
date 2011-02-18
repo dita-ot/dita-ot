@@ -19,6 +19,10 @@
 	 [General Enhancements]
 	 
      [SourceForge Enhancements Added]
+     * 3177971 Improve plugin configuration file (Milestone 2)
+     * 3167087 Reduce static variable usage in Java code (In process)
+     * 3126848 Repository cleanup (In process)
+     * 3158929 Java clean-up(In process)
      
      [SourceForge Patches Added]
      * 3123507 String concat in map2plugin (Milestone 1)
@@ -30,12 +34,29 @@
      * 3142967 IndexTermReader leaves tab characters in terms (Milestone 1)
      * 3140543 Add missing Commons Codec JAR into compile classpath for buildPackage.xml (Milestone 1)
      * 3087664 Clean plugin configuration parser (Milestone 1)
+     * 3145258 Plug-in integrator code clean-up (Milestone 2)
+     * 3147226 Use common directory layout for Junit (Milestone 2)    
+     * 3062765 Fix unit test file paths to be platform dependent (Milestone 2)
+     * 3164523 Refactor platform Java code (Milestone 2)
+     * 3160801 Improve unit test coverage (In process)
      
      [SourceForge Bugs Fixed] 
      * 3114411 keyref links don't work for HTML Help (Milestone 1)
      * 3126578 Chunking Issues in DITA 1.5.1 (Milestone 1)
      * 3109616 More Antenna House Path Problems (Milestone 1)
-
+     * 3155375 Incorrect way to specify recognized image extensions(Milestone 2)
+     * 3157890 Navtitle Construction Does not Preserve Markup (Milestone 2)
+     * 3155848 xml decl in ditaval file not closed properly (Milestone 2)
+     * 3162808 Chunking remaps in-file <xref> to invalid value (Milestone 2)
+     * 3164866 Upper letter estensions (Milestone 2)
+     * 3165307 Add boilerplate to Java files (Milestone 2)
+     * 2793836 CHM Index terms come out with extra spaces (Milestone 2)
+     * 3165762 Initializer XMLReader without modifying system variables (Milestone 2)
+     * 3175328 Imagemap alt text gets extra text (Milestone 2)
+     * 3085106 FO: topicmerge drops id on map/topicref without href. (Milestone 2)
+     * 3147328 Error in commons.xsl: getTopicrefShortdesc (Milestone 2)
+     * 3130724 Error in tables.xsl: fix-relcolwidth (Milestone 2)
+     * 3159001 Clean unit tests (In progress)
      
 ====================================================================================
 
