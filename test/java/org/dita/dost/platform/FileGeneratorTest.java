@@ -12,6 +12,7 @@ package org.dita.dost.platform;
 import static org.junit.Assert.assertEquals;
 
 import org.dita.dost.TestUtils;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.FileUtils;
 
 import java.io.File;
@@ -79,6 +80,9 @@ public class FileGeneratorTest {
             this.features = features;
         }
         public abstract String getResult();
+        public void setLogger(final DITAOTLogger logger) {
+            // NOOP
+        }
     } 
     
     public static class ElementAction extends AbstractAction {

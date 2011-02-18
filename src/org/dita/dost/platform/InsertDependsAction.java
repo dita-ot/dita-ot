@@ -12,6 +12,7 @@ package org.dita.dost.platform;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.StringUtils;
 
 /**
@@ -28,6 +29,8 @@ public class InsertDependsAction implements IAction {
 	private String value;
 	/** Plug-in features. */
 	private Hashtable<String,String> featureTable = null;
+	private DITAOTLogger logger;
+	
 	/**
 	 * Constructor.
 	 */
@@ -97,4 +100,8 @@ public class InsertDependsAction implements IAction {
 		featureTable = h;
 	}
 
+    public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
+	
 }

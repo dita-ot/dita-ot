@@ -24,6 +24,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
@@ -52,7 +53,7 @@ public class Integrator {
 	private String basedir;
 	private final Set<File> descSet;
 	private final XMLReader reader;
-	private final DITAOTJavaLogger logger;
+	private DITAOTLogger logger;
 	private final Set<String> loadedPlugin;
 	private final Hashtable<String,String> featureTable;
     private File propertiesFile;
@@ -64,6 +65,9 @@ public class Integrator {
 	 * Execute point of Integrator.
 	 */
 	public void execute() {
+	    if (logger == null) {
+	        logger = new DITAOTJavaLogger();
+	    }
 		if (!new File(ditaDir).isAbsolute()) {
 			ditaDir = new File(basedir, ditaDir).getAbsolutePath();
 		}
@@ -131,6 +135,7 @@ public class Integrator {
 	private void integrate() {
 		//Collect information for each feature id and generate a feature table.
 		final FileGenerator fileGen = new FileGenerator(featureTable);
+		fileGen.setLogger(logger);
 		for (final String currentPlugin: pluginTable.keySet()) {
 			loadPlugin (currentPlugin);
 		}
@@ -138,6 +143,7 @@ public class Integrator {
 		//generate the files from template
 		for (final String template: templateSet) {
 			final File templateFile = new File(ditaDir, template);
+			logger.logDebug("Process template " + templateFile.getPath());
 			fileGen.generate(templateFile.getAbsolutePath());
 		}
 		
@@ -164,8 +170,9 @@ public class Integrator {
 		configuration.put(Constants.CONF_SUPPORTED_IMAGE_EXTENSIONS, StringUtils.assembleString(imgExts, Constants.CONF_LIST_SEPARATOR));
 		OutputStream out = null;
 		try {
-			out = new BufferedOutputStream(new FileOutputStream(
-					new File(ditaDir, "lib" + File.separator + Constants.CONF_PROPERTIES)));
+		    final File outFile = new File(ditaDir, "lib" + File.separator + Constants.CONF_PROPERTIES);
+		    logger.logDebug("Generate configuration properties " + outFile.getPath());
+			out = new BufferedOutputStream(new FileOutputStream(outFile));
 			configuration.store(out, "DITA-OT runtime configuration");
 		} catch (final Exception e) {
 			logger.logException(e);
@@ -255,6 +262,7 @@ public class Integrator {
 	private void parsePlugin() {
 		if(!descSet.isEmpty()){
 			for (final File descFile: descSet) {
+			    logger.logDebug("Read plugin configuration " + descFile.getPath());
 				parseDesc(descFile);
 			}
 		}
@@ -279,7 +287,6 @@ public class Integrator {
 		descSet = new HashSet<File>(Constants.INT_16);
 		loadedPlugin = new HashSet<String>(Constants.INT_16);
 		featureTable = new Hashtable<String,String>(Constants.INT_16);
-		logger = new DITAOTJavaLogger();
 		try {
             reader = StringUtils.getXMLReader();
         } catch (final Exception e) {
@@ -333,6 +340,14 @@ public class Integrator {
 	 */
 	public void setProperties(final File propertiesfile) {
 		this.propertiesFile = propertiesfile;
+	}
+	
+	/**
+	 * Set logger.
+	 * @param logger logger instance
+	 */
+	public void setLogger(final DITAOTLogger logger) {
+	    this.logger = logger;
 	}
 	
 	/**

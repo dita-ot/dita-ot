@@ -11,6 +11,8 @@ package org.dita.dost.platform;
 
 import java.util.Hashtable;
 
+import org.dita.dost.log.DITAOTLogger;
+
 /**
  * Interface. 
  * @author Zhang, Yuan Peng
@@ -37,4 +39,9 @@ public interface IAction {
 	 * @param h hastable
 	 */
 	void setFeatures(Hashtable<String,String> h);
+	/**
+     * Set logger.
+     * @param logger logger instance
+     */
+    public void setLogger(DITAOTLogger logger);
 }

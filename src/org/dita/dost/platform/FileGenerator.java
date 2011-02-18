@@ -16,6 +16,7 @@ import java.util.Hashtable;
 import java.util.StringTokenizer;
 
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
@@ -35,7 +36,7 @@ public class FileGenerator extends DefaultHandler2 {
 	private static final String DITA_OT_NS = "http://dita-ot.sourceforge.net";
 	
 	private final XMLReader reader;
-	private final DITAOTJavaLogger logger;
+	private DITAOTLogger logger;
 	private OutputStreamWriter output = null;
 	/** Plug-in features. */
 	private final Hashtable<String,String> featureTable;
@@ -57,7 +58,6 @@ public class FileGenerator extends DefaultHandler2 {
 		this.featureTable = featureTbl;
 		output = null;
 		templateFileName = null;	
-		logger = new DITAOTJavaLogger();
 		
 		try {
             reader = StringUtils.getXMLReader();
@@ -73,10 +73,21 @@ public class FileGenerator extends DefaultHandler2 {
 	}
 	
 	/**
+     * Set logger.
+     * @param logger logger instance
+     */
+    public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
+	
+	/**
 	 * Generator the output file.
 	 * @param fileName filename
 	 */
 	public void generate(final String fileName){
+	    if (logger == null) {
+	        logger = new DITAOTJavaLogger();
+	    }
 		FileOutputStream fileOutput = null;
 		final File outputFile = new File(fileName.substring(0,
 				fileName.lastIndexOf("_template")) + 
@@ -139,6 +150,7 @@ public class FileGenerator extends DefaultHandler2 {
 			if(DITA_OT_NS.equals(uri) && "extension".equals(localName)){
 				// Element extension: <dita:extension id="extension-point" behavior="classname"/>
 				action = (IAction)Class.forName(attributes.getValue("behavior")).newInstance();
+				action.setLogger(logger);
 				action.addParam(PARAM_TEMPLATE, templateFileName);
 				action.addParam("extension", attributes.getValue("id"));
 				input = featureTable.get(attributes.getValue("id"));
@@ -170,6 +182,7 @@ public class FileGenerator extends DefaultHandler2 {
 									break;
 								}
 							}
+							action.setLogger(logger);
 							action.setFeatures(featureTable);
 							action.addParam(PARAM_TEMPLATE, templateFileName);
 							action.addParam(PARAM_LOCALNAME, attributes.getLocalName(i));

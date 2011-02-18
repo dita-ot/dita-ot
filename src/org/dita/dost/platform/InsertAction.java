@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
@@ -30,7 +31,7 @@ import org.xml.sax.ext.DefaultHandler2;
 public class InsertAction extends DefaultHandler2 implements IAction {
 
 	protected final XMLReader reader;
-	protected final DITAOTJavaLogger logger;
+	protected DITAOTLogger logger;
 	protected final Set<String> fileNameSet;
 	protected final StringBuffer retBuf;
 	protected final Hashtable<String,String> paramTable;
@@ -91,6 +92,10 @@ public class InsertAction extends DefaultHandler2 implements IAction {
 	public void setFeatures(final Hashtable<String,String> h) {
 		// NOOP
 	}
+	
+    public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
 
 	@Override
 	public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {

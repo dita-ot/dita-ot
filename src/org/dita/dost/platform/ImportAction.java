@@ -14,6 +14,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.Constants;
 
 /**
@@ -27,6 +28,7 @@ public abstract class ImportAction implements IAction {
 	protected final Set<String> valueSet;
 	/** Action parameters. */
 	protected final Hashtable<String,String> paramTable;
+	private DITAOTLogger logger;
 	
 	/**
 	 * Default Constructor.
@@ -63,5 +65,9 @@ public abstract class ImportAction implements IAction {
 	public void setFeatures(final Hashtable<String,String> h) {
 		
 	}
+	
+	public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
 
 }

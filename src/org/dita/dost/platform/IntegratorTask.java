@@ -14,6 +14,8 @@ import java.io.File;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
+import org.dita.dost.log.DITAOTAntLogger;
+
 /**
  * Task run by ant scripts, invoking Task.
  * @author Zhang, Yuan Peng
@@ -31,6 +33,10 @@ public class IntegratorTask extends Task {
 
 	@Override
 	public void execute() throws BuildException {
+	    final DITAOTAntLogger logger = new DITAOTAntLogger(getProject());
+	    logger.setTarget(getOwningTarget());
+	    logger.setTask(this);
+	    adaptee.setLogger(logger);
 		adaptee.execute();
 	}
 
