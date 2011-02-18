@@ -24,7 +24,6 @@ import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.MergeMapParser;
 import org.dita.dost.util.Constants;
 
@@ -49,23 +48,19 @@ public class TopicMergeModule implements AbstractPipelineModule {
 	 * @return null
 	 * @throws DITAOTException exception
 	 */
-	public AbstractPipelineOutput execute(AbstractPipelineInput input)
+	public AbstractPipelineOutput execute(final AbstractPipelineInput input)
 			throws DITAOTException {
 		// TODO Auto-generated method stub
-		String ditaInput = ((PipelineHashIO) input)
+		final String ditaInput = input
 		.getAttribute(Constants.ANT_INVOKER_PARAM_INPUTMAP);
-		String style = ((PipelineHashIO) input)
+		final String style = input
 		.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_STYLE);
-		String out = ((PipelineHashIO) input)
+		final String out = input
 		.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_OUTPUT);
-		String tempdir = ((PipelineHashIO) input)
+		final String tempdir = input
 		.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
-		OutputStreamWriter output = null;
-		DITAOTJavaLogger logger = new DITAOTJavaLogger();
-		MergeMapParser mapParser = new MergeMapParser();
-		String midResult = null;
-		StringReader midStream = null;
-		File outputDir = null;
+		final DITAOTJavaLogger logger = new DITAOTJavaLogger();
+		final MergeMapParser mapParser = new MergeMapParser();
 		
 		if (ditaInput == null || !new File(ditaInput).exists()){
 			logger.logError(MessageUtils.getMessage("DOTJ025E").toString());
@@ -80,27 +75,28 @@ public class TopicMergeModule implements AbstractPipelineModule {
 		
 
 		mapParser.read(ditaInput+"|"+tempdir);
-		midResult = new StringBuffer(Constants.XML_HEAD).append(
+		final String midResult = new StringBuffer(Constants.XML_HEAD).append(
 				"<dita-merge xmlns:ditaarch=\"http://dita.oasis-open.org/architecture/2005/\">")
 			.append(((StringBuffer)mapParser.getContent().getValue())).append("</dita-merge>").toString();
-		midStream = new StringReader(midResult);
+		final StringReader midStream = new StringReader(midResult);
 		
+		OutputStreamWriter output = null;
 		try{
-			outputDir = new File(out).getParentFile();
+		    final File outputDir = new File(out).getParentFile();
 			if (!outputDir.exists()){
 				outputDir.mkdirs();
 			}
 			if (style != null){
-				TransformerFactory factory = TransformerFactory.newInstance();
+				final TransformerFactory factory = TransformerFactory.newInstance();
 				final File styleFile = new File(style);
-				Transformer transformer = factory.newTransformer(new StreamSource(styleFile.toURI().toString()));
+				final Transformer transformer = factory.newTransformer(new StreamSource(styleFile.toURI().toString()));
 				transformer.transform(new StreamSource(midStream), new StreamResult(new FileOutputStream(new File(out))));
 			}else{
 				output = new OutputStreamWriter(new FileOutputStream(out),Constants.UTF8);
 				output.write(midResult);
 				output.flush();
 			}
-		}catch (Exception e){
+		}catch (final Exception e){
 			//use java logger to log the exception
 			logger.logException(e);
 		}finally{
@@ -109,7 +105,7 @@ public class TopicMergeModule implements AbstractPipelineModule {
 					output.close();
 				}
 				midStream.close();
-			}catch (Exception e){
+			}catch (final Exception e){
 				//use java logger to log the exception
 				logger.logException(e);
 			}

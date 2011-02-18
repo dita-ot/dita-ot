@@ -21,7 +21,6 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.ConrefPushReader;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.ListUtils;
@@ -40,10 +39,10 @@ public class ConrefPushModule implements AbstractPipelineModule {
 	 * @return output
 	 * @throws DITAOTException exception
 	 */
-	public AbstractPipelineOutput execute(AbstractPipelineInput input)
+	public AbstractPipelineOutput execute(final AbstractPipelineInput input)
 			throws DITAOTException {
-		String tempDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
-		String basedir = ((PipelineHashIO) input)
+		String tempDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
+		final String basedir = input
 		.getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
 		
 		if (! new File(tempDir).isAbsolute()){
@@ -53,25 +52,25 @@ public class ConrefPushModule implements AbstractPipelineModule {
 		Properties properties = null;
 		try{
 			properties = ListUtils.getDitaList();
-		}catch(IOException e){
-			DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+		}catch(final IOException e){
+			final DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 			javaLogger.logException(e);
 		}
 
-		Set<String> conrefpushlist = StringUtils.restoreSet(properties.getProperty(Constants.CONREF_PUSH_LIST));
-		ConrefPushReader reader = new ConrefPushReader();
-		for(String fileName:conrefpushlist){
+		final Set<String> conrefpushlist = StringUtils.restoreSet(properties.getProperty(Constants.CONREF_PUSH_LIST));
+		final ConrefPushReader reader = new ConrefPushReader();
+		for(final String fileName:conrefpushlist){
 			//FIXME: this reader calculate parent directory
 			reader.read(new File(tempDir,fileName).getAbsolutePath());
 		}
 		
-		Set<Map.Entry<String, Hashtable<String, String>>> pushSet = (Set<Map.Entry<String, Hashtable<String,String>>>) reader.getContent().getCollection();
-		Iterator<Map.Entry<String, Hashtable<String,String>>> iter = pushSet.iterator();
+		final Set<Map.Entry<String, Hashtable<String, String>>> pushSet = (Set<Map.Entry<String, Hashtable<String,String>>>) reader.getContent().getCollection();
+		final Iterator<Map.Entry<String, Hashtable<String,String>>> iter = pushSet.iterator();
 		
 		while(iter.hasNext()){
-			Map.Entry<String, Hashtable<String,String>> entry = iter.next();
-			ConrefPushParser parser = new ConrefPushParser();
-			Content content = new ContentImpl();
+			final Map.Entry<String, Hashtable<String,String>> entry = iter.next();
+			final ConrefPushParser parser = new ConrefPushParser();
+			final Content content = new ContentImpl();
 			content.setValue(entry.getValue());
 			parser.setContent(content);
 			//pass the tempdir to ConrefPushParser

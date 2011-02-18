@@ -81,9 +81,9 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 	public static String extName = null;
     private static String tempDir = "";
 	
-    private static void updateProperty (String listName, Properties property){
-    	StringBuffer result = new StringBuffer(Constants.INT_1024);
-    	String propValue = property.getProperty(listName);
+    private static void updateProperty (final String listName, final Properties property){
+    	final StringBuffer result = new StringBuffer(Constants.INT_1024);
+    	final String propValue = property.getProperty(listName);
 		String file;
 		int equalIndex;
 		int fileExtIndex;
@@ -117,18 +117,19 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
     		}
 
     	}
-    	String list = result.substring(Constants.INT_1);
+    	final String list = result.substring(Constants.INT_1);
 		property.setProperty(listName, list);
 
-		String files[] = list.split(
+		final String files[] = list.split(
 				Constants.COMMA);
 		String filename = "";
 		if (listName.equals("user.input.file")) {
 			filename = "user.input.file.list";
-		} else
-			filename = listName.substring(Constants.INT_0, listName
+		} else {
+            filename = listName.substring(Constants.INT_0, listName
 					.lastIndexOf("list"))
 					+ ".list";
+        }
 		Writer bufferedWriter = null;
 		try {
 			bufferedWriter = new BufferedWriter(
@@ -137,27 +138,28 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 			if(files.length>0){
 				for (int i = 0; i < files.length; i++) {
 					bufferedWriter.write(files[i]);
-					if (i < files.length - 1)
-						bufferedWriter.write("\n");
+					if (i < files.length - 1) {
+                        bufferedWriter.write("\n");
+                    }
 					bufferedWriter.flush();
 				}
 			}
-		} catch (FileNotFoundException e) {
+		} catch (final FileNotFoundException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		} finally {
 			if (bufferedWriter != null) {
 				try {
 					bufferedWriter.close();
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					final DITAOTLogger logger = new DITAOTJavaLogger();
 					logger.logException(e);
 				}
 			}
 		}
 	}
-	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+	private final DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 	
 	private boolean xmlValidate=true;
 	
@@ -171,7 +173,7 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 	private boolean setSystemid = true;
 	//Added on 2010-08-24 for bug:3086552 end
 	
-	private DITAOTFileLogger fileLogger = DITAOTFileLogger.getInstance();
+	private final DITAOTFileLogger fileLogger = DITAOTFileLogger.getInstance();
 	/**
 	 * Default Construtor.
 	 *
@@ -183,25 +185,25 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
      * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
      * 
      */
-    public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException {
+    public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
     	
-    	Date executeStartTime = TimingUtils.getNowTime();
-    	String msg = "DebugAndFilterModule.execute(): Starting...";
+    	final Date executeStartTime = TimingUtils.getNowTime();
+    	final String msg = "DebugAndFilterModule.execute(): Starting...";
     	fileLogger.logInfo(msg);
     	
         try {
-			String baseDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
-			String ditavalFile = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_DITAVAL);
-			tempDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
-			String ext = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_DITAEXT);
-			ditaDir=((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_EXT_PARAM_DITADIR);
+			final String baseDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
+			String ditavalFile = input.getAttribute(Constants.ANT_INVOKER_PARAM_DITAVAL);
+			tempDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
+			final String ext = input.getAttribute(Constants.ANT_INVOKER_PARAM_DITAEXT);
+			ditaDir=input.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_DITADIR);
 			//Added by William on 2009-07-18 for req #12014 start
 			//get transtype
-			String transtype = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE);
+			final String transtype = input.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE);
 			//Added by William on 2009-07-18 for req #12014 start
 			
 			//Added on 2010-08-24 for bug:3086552 start
-			String setSystemid_tmp = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_EXT_PARAN_SETSYSTEMID);
+			final String setSystemid_tmp = input.getAttribute(Constants.ANT_INVOKER_EXT_PARAN_SETSYSTEMID);
 			if(setSystemid_tmp.equals("yes")) {
 				setSystemid = true;
 			} else {
@@ -212,7 +214,7 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 			
 			inputDir = null;
 			String filePathPrefix = null;
-			ListReader listReader = new ListReader();
+			final ListReader listReader = new ListReader();
 			LinkedList<String> parseList = null;
 			Content content;
 			DitaWriter fileWriter;
@@ -239,7 +241,7 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 			if (!new File(inputDir).isAbsolute()) {
 				inputDir = new File(baseDir, inputDir).getAbsolutePath();
 			}
-			DitaValReader filterReader = new DitaValReader();
+			final DitaValReader filterReader = new DitaValReader();
 			
 			if (ditavalFile!=null){
 			    filterReader.read(ditavalFile);
@@ -250,15 +252,16 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 			    //FilterUtils.setFilterMap(null);
 			}
 			try{
-				String valueOfValidate=((PipelineHashIO) input).getAttribute("validate");
+				final String valueOfValidate=input.getAttribute("validate");
 				if(valueOfValidate!=null){
-					if("false".equalsIgnoreCase(valueOfValidate))
-						xmlValidate=false;
-					else
-						xmlValidate=true;
+					if("false".equalsIgnoreCase(valueOfValidate)) {
+                        xmlValidate=false;
+                    } else {
+                        xmlValidate=true;
+                    }
 				}
 				DitaWriter.initXMLReader(ditaDir,xmlValidate, setSystemid);
-			} catch (SAXException e) {
+			} catch (final SAXException e) {
 				throw new DITAOTException(e.getMessage(), e);
 			}
 
@@ -277,17 +280,17 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 			    filePathPrefix = inputDir + Constants.STICK;
 			}
 			
-			Map<String, Set<String>> dic = readMapFromXML(Constants.FILE_NAME_SUBJECT_DICTIONARY);
+			final Map<String, Set<String>> dic = readMapFromXML(Constants.FILE_NAME_SUBJECT_DICTIONARY);
 			
 			while (!parseList.isEmpty()) {
-				String filename = (String) parseList.removeLast();
-				String message = "DebugAndFilterModule.execute(): Handling file " + filename + "...";
+				final String filename = parseList.removeLast();
+				final String message = "DebugAndFilterModule.execute(): Handling file " + filename + "...";
 				fileLogger.logInfo(message);
 				
-				Set<String> schemaSet = dic.get(filename);
+				final Set<String> schemaSet = dic.get(filename);
 				filterReader.reset();
 				if (schemaSet != null) {
-			        Iterator<String> iter = schemaSet.iterator();
+			        final Iterator<String> iter = schemaSet.iterator();
 			        while (iter.hasNext()) {
 			        	filterReader.loadSubjectScheme(FileUtils.resolveFile(
 			        			DebugAndFilterModule.tempDir, iter.next())+".subm");
@@ -336,13 +339,14 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 			//Added by William on 2010-04-16 for cvf flag support end
 			
 			// reload the property for processing of copy-to
-			File xmlListFile=new File(tempDir, Constants.FILE_NAME_DITA_LIST_XML);
-			if(xmlListFile.exists())
-				listReader.read(xmlListFile.getAbsolutePath());
-			else
-				listReader.read(new File(tempDir, Constants.FILE_NAME_DITA_LIST).getAbsolutePath());
+			final File xmlListFile=new File(tempDir, Constants.FILE_NAME_DITA_LIST_XML);
+			if(xmlListFile.exists()) {
+                listReader.read(xmlListFile.getAbsolutePath());
+            } else {
+                listReader.read(new File(tempDir, Constants.FILE_NAME_DITA_LIST).getAbsolutePath());
+            }
 			performCopytoTask(tempDir, listReader.getCopytoMap());
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			System.err.println("Exception doing debug and filter module processing: ");
 			e.printStackTrace();
 		} finally {
@@ -356,17 +360,17 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 
 		private HashMap<String, String> catalogMap = null;
 		
-		public InternalEntityResolver(HashMap<String, String> map) {
+		public InternalEntityResolver(final HashMap<String, String> map) {
 			this.catalogMap = map;
 		}
 		
-		public InputSource resolveEntity(String publicId, String systemId)
+		public InputSource resolveEntity(final String publicId, final String systemId)
 				throws SAXException, IOException {
 			if (catalogMap.get(publicId) != null) {
-				File dtdFile = new File((String) catalogMap.get(publicId));
+				final File dtdFile = new File(catalogMap.get(publicId));
 				return new InputSource(dtdFile.getAbsolutePath());
 			}else if (catalogMap.get(systemId) != null){
-				File schemaFile = new File((String) catalogMap.get(systemId));
+				final File schemaFile = new File(catalogMap.get(systemId));
 				return new InputSource(schemaFile.getAbsolutePath());
 			}
 
@@ -375,32 +379,34 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 		
 	}
     
-    private Map<String, Set<String>> readMapFromXML(String filename) {
-    	File inputFile = new File(tempDir, filename);
-    	Map<String, Set<String>> graph = new HashMap<String, Set<String>>();
-    	if (!inputFile.exists()) return graph;
-		Properties prop = new Properties();
+    private Map<String, Set<String>> readMapFromXML(final String filename) {
+    	final File inputFile = new File(tempDir, filename);
+    	final Map<String, Set<String>> graph = new HashMap<String, Set<String>>();
+    	if (!inputFile.exists()) {
+            return graph;
+        }
+		final Properties prop = new Properties();
 		FileInputStream in = null;
 		try {
 			in = new FileInputStream(inputFile);
 			prop.loadFromXML(in);
 			in.close();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			this.javaLogger.logException(e);
 		} finally {
 			if (in != null) {
 				try {
 					in.close();
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					javaLogger.logException(e);
 				}
 			}
 		}
 		
-		Iterator<Object> it = prop.keySet().iterator();
+		final Iterator<Object> it = prop.keySet().iterator();
 		while (it.hasNext()) {
-			String key = (String)it.next();
-			String value = prop.getProperty(key);
+			final String key = (String)it.next();
+			final String value = prop.getProperty(key);
 			graph.put(key, StringUtils.restoreSet(value, Constants.COMMA));
 		}
 		
@@ -409,42 +415,46 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 	
 	private void outputSubjectScheme() throws DITAOTException {
 		
-		Map<String, Set<String>> graph = readMapFromXML(Constants.FILE_NAME_SUBJECT_RELATION);
+		final Map<String, Set<String>> graph = readMapFromXML(Constants.FILE_NAME_SUBJECT_RELATION);
 		
-		Queue<String> queue = new LinkedList<String>();
-		Set<String> visitedSet = new HashSet<String>();
-		Iterator<Map.Entry<String, Set<String>>> graphIter = graph.entrySet().iterator();
+		final Queue<String> queue = new LinkedList<String>();
+		final Set<String> visitedSet = new HashSet<String>();
+		final Iterator<Map.Entry<String, Set<String>>> graphIter = graph.entrySet().iterator();
 		if (graphIter.hasNext()) {
-			Map.Entry<String, Set<String>> entry = graphIter.next();
+			final Map.Entry<String, Set<String>> entry = graphIter.next();
 			queue.offer(entry.getKey());
 		}
 		
 		try {
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = factory.newDocumentBuilder();
+			final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			final DocumentBuilder builder = factory.newDocumentBuilder();
 			builder.setEntityResolver(new InternalEntityResolver(
 					CatalogUtils.getCatalog(ditaDir)));
 			
 			while (!queue.isEmpty()) {
-				String parent = queue.poll();
-				Set<String> children = graph.get(parent);
+				final String parent = queue.poll();
+				final Set<String> children = graph.get(parent);
 				
-				if (children != null)
-					queue.addAll(children);
-				if ("ROOT".equals(parent) || visitedSet.contains(parent)) continue;
+				if (children != null) {
+                    queue.addAll(children);
+                }
+				if ("ROOT".equals(parent) || visitedSet.contains(parent)) {
+                    continue;
+                }
 				visitedSet.add(parent);
 				String tmprel = FileUtils.getRelativePathFromMap(inputMap, parent);
 				tmprel = FileUtils.resolveFile(DebugAndFilterModule.tempDir, tmprel)+".subm";
 				Document parentRoot = null;
-				if (!FileUtils.fileExists(tmprel))
-					parentRoot = builder.parse(new InputSource(new FileInputStream(parent)));
-				else
-					parentRoot = builder.parse(new InputSource(new FileInputStream(tmprel)));
+				if (!FileUtils.fileExists(tmprel)) {
+                    parentRoot = builder.parse(new InputSource(new FileInputStream(parent)));
+                } else {
+                    parentRoot = builder.parse(new InputSource(new FileInputStream(tmprel)));
+                }
 				if (children != null) {
-					Iterator<String> child = children.iterator();
+					final Iterator<String> child = children.iterator();
 					while (child.hasNext()) {
-						String childpath = child.next();
-						Document childRoot = builder.parse(new InputSource(new FileInputStream(childpath)));
+						final String childpath = child.next();
+						final Document childRoot = builder.parse(new InputSource(new FileInputStream(childpath)));
 						mergeScheme(parentRoot, childRoot);
 						String rel = FileUtils.getRelativePathFromMap(inputMap, childpath);
 						rel = FileUtils.resolveFile(DebugAndFilterModule.tempDir, rel)+".subm";
@@ -457,35 +467,37 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 				rel = FileUtils.resolveFile(DebugAndFilterModule.tempDir, rel)+".subm";
 				generateScheme(rel, parentRoot);
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			javaLogger.logException(e);
 			throw new DITAOTException(e);
 		}
 		
 	}
 	
-	private void mergeScheme(Document parentRoot, Document childRoot) {
-		Queue<Element> pQueue = new LinkedList<Element>();
+	private void mergeScheme(final Document parentRoot, final Document childRoot) {
+		final Queue<Element> pQueue = new LinkedList<Element>();
 		pQueue.offer(parentRoot.getDocumentElement());
 		
 		while (!pQueue.isEmpty()) {
-			Element pe = pQueue.poll();
+			final Element pe = pQueue.poll();
 			NodeList pList = pe.getChildNodes();
 			for (int i = 0; i < pList.getLength(); i++) {
-				Node node = pList.item(i);
-				if (node.getNodeType() == Node.ELEMENT_NODE)
-					pQueue.offer((Element)node);
+				final Node node = pList.item(i);
+				if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    pQueue.offer((Element)node);
+                }
 			}
 			
 			String value = pe.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
 			if (StringUtils.isEmptyString(value) 
-					|| !value.contains(Constants.ATTR_CLASS_VALUE_SUBJECT_DEF))
-				continue;
+					|| !value.contains(Constants.ATTR_CLASS_VALUE_SUBJECT_DEF)) {
+                continue;
+            }
 			
 			if (!StringUtils.isEmptyString(
 					value = pe.getAttribute(Constants.ATTRIBUTE_NAME_KEYREF))) {
 				// extend child scheme
-				Element target = searchForKey(childRoot.getDocumentElement(), value);
+				final Element target = searchForKey(childRoot.getDocumentElement(), value);
 				if (target == null) {
 					/* 
 					 * TODO: we have a keyref here to extend into child scheme, but can't
@@ -500,26 +512,28 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 				// target found
 				pList = pe.getChildNodes();
 				for (int i = 0; i < pList.getLength(); i++) {
-					Node tmpnode = childRoot.importNode(pList.item(i), false);
+					final Node tmpnode = childRoot.importNode(pList.item(i), false);
 					if (tmpnode.getNodeType() == Node.ELEMENT_NODE
 							&& searchForKey(target, 
-									((Element)tmpnode).getAttribute(Constants.ATTRIBUTE_NAME_KEYS)) != null)
-						continue;
+									((Element)tmpnode).getAttribute(Constants.ATTRIBUTE_NAME_KEYS)) != null) {
+                        continue;
+                    }
 					target.appendChild(tmpnode);
 				}
 				
 			} else if (!StringUtils.isEmptyString(
 					value = pe.getAttribute(Constants.ATTRIBUTE_NAME_KEYS))) {
 				// merge into parent scheme
-				Element target = searchForKey(childRoot.getDocumentElement(), value);
+				final Element target = searchForKey(childRoot.getDocumentElement(), value);
 				if (target != null) {
 					pList = target.getChildNodes();
 					for (int i = 0; i < pList.getLength(); i++) {
-						Node tmpnode = parentRoot.importNode(pList.item(i), false);
+						final Node tmpnode = parentRoot.importNode(pList.item(i), false);
 						if (tmpnode.getNodeType() == Node.ELEMENT_NODE
 								&& searchForKey(pe, 
-										((Element)tmpnode).getAttribute(Constants.ATTRIBUTE_NAME_KEYS)) != null)
-							continue;
+										((Element)tmpnode).getAttribute(Constants.ATTRIBUTE_NAME_KEYS)) != null) {
+                            continue;
+                        }
 						pe.appendChild(tmpnode);
 					}
 				}
@@ -527,45 +541,56 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 		}
 	}
 	
-	private Element searchForKey(Element root, String key) {
-		if (root == null || StringUtils.isEmptyString(key)) return null;
-		Queue<Element> queue = new LinkedList<Element>();
+	private Element searchForKey(final Element root, final String key) {
+		if (root == null || StringUtils.isEmptyString(key)) {
+            return null;
+        }
+		final Queue<Element> queue = new LinkedList<Element>();
 		queue.offer(root);
 		
 		while (!queue.isEmpty()) {
-			Element pe = queue.poll();
-			NodeList pchildrenList = pe.getChildNodes();
+			final Element pe = queue.poll();
+			final NodeList pchildrenList = pe.getChildNodes();
 			for (int i = 0; i < pchildrenList.getLength(); i++) {
-				Node node = pchildrenList.item(i);
-				if (node.getNodeType() == Node.ELEMENT_NODE)
-					queue.offer((Element)node);
+				final Node node = pchildrenList.item(i);
+				if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    queue.offer((Element)node);
+                }
 			}
 			
 			String value = pe.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
 			if (StringUtils.isEmptyString(value) 
-					|| !value.contains(Constants.ATTR_CLASS_VALUE_SUBJECT_DEF))
-				continue;
+					|| !value.contains(Constants.ATTR_CLASS_VALUE_SUBJECT_DEF)) {
+                continue;
+            }
 			
 			value = pe.getAttribute(Constants.ATTRIBUTE_NAME_KEYS);
-			if (StringUtils.isEmptyString(value)) continue;
+			if (StringUtils.isEmptyString(value)) {
+                continue;
+            }
 			
-			if (value.equals(key)) return pe;
+			if (value.equals(key)) {
+                return pe;
+            }
 		}
 		return null;
 	}
 	
-	private void generateScheme(String filename, Document root) throws DITAOTException {
+	private void generateScheme(final String filename, final Document root) throws DITAOTException {
 		try {
-			FileOutputStream file = new FileOutputStream(new File(filename));
-			StreamResult res = new StreamResult(file);
-			DOMSource ds = new DOMSource(root);
-			TransformerFactory tff = TransformerFactory.newInstance();
-			Transformer tf = tff.newTransformer();
+			final FileOutputStream file = new FileOutputStream(new File(filename));
+			final StreamResult res = new StreamResult(file);
+			final DOMSource ds = new DOMSource(root);
+			final TransformerFactory tff = TransformerFactory.newInstance();
+			final Transformer tf = tff.newTransformer();
 			tf.transform(ds, res);
-			if (res.getOutputStream() != null)
-				res.getOutputStream().close();
-			if (file != null) file.close();
-		} catch (Exception e) {
+			if (res.getOutputStream() != null) {
+                res.getOutputStream().close();
+            }
+			if (file != null) {
+                file.close();
+            }
+		} catch (final Exception e) {
 			javaLogger.logException(e);
 			throw new DITAOTException(e);
 		}
@@ -575,14 +600,14 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
     /*
      * Execute copy-to task, generate copy-to targets base on sources
      */
-	private void performCopytoTask(String tempDir, Map<String, String> copytoMap) {
-        Iterator<Map.Entry<String, String>> iter = copytoMap.entrySet().iterator();
+	private void performCopytoTask(final String tempDir, final Map<String, String> copytoMap) {
+        final Iterator<Map.Entry<String, String>> iter = copytoMap.entrySet().iterator();
         while (iter.hasNext()) {
-        	Map.Entry<String, String> entry = iter.next();
-        	String copytoTarget = (String) entry.getKey();
-        	String copytoSource = (String) entry.getValue();        	
-        	File srcFile = new File(tempDir, copytoSource);
-        	File targetFile = new File(tempDir, copytoTarget);
+        	final Map.Entry<String, String> entry = iter.next();
+        	final String copytoTarget = entry.getKey();
+        	final String copytoSource = entry.getValue();        	
+        	final File srcFile = new File(tempDir, copytoSource);
+        	final File targetFile = new File(tempDir, copytoTarget);
         	
         	if (targetFile.exists()) {
         		//edited by Alan on Date:2009-11-02 for Work Item:#1590 start
@@ -590,7 +615,7 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 						.logWarn(new StringBuffer("Copy-to task [copy-to=\"")
 								.append(copytoTarget)
 								.append("\"] which points to an existed file was ignored.").toString());*/
-        		Properties prop = new Properties();
+        		final Properties prop = new Properties();
         		prop.setProperty("%1", copytoTarget);
         		javaLogger.logWarn(MessageUtils.getMessage("DOTX064W", prop).toString());
         		//edited by Alan on Date:2009-11-02 for Work Item:#1590 end
@@ -600,8 +625,8 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
         }
 	}
 
-    private void updateList(String tempDir){
-    	Properties property = new Properties();
+    private void updateList(final String tempDir){
+    	final Properties property = new Properties();
     	FileInputStream in = null;
     	FileOutputStream output = null;
     	FileOutputStream xmlDitalist=null;
@@ -609,8 +634,8 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
     		in = new FileInputStream( new File(tempDir, Constants.FILE_NAME_DITA_LIST_XML));
     		//property.load(new FileInputStream( new File(tempDir, Constants.FILE_NAME_DITA_LIST)));
     		property.loadFromXML(in);
-    		for (int i = 0; i < PROPERTY_UPDATE_LIST.length; i ++){
-    			updateProperty(PROPERTY_UPDATE_LIST[i], property);
+    		for (final String element : PROPERTY_UPDATE_LIST) {
+    			updateProperty(element, property);
     		}
     		
     		output = new FileOutputStream(new File(tempDir, Constants.FILE_NAME_DITA_LIST));
@@ -619,27 +644,27 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
     		property.storeToXML(xmlDitalist, null);
     		output.flush();
     		xmlDitalist.flush();
-    	} catch (Exception e){
+    	} catch (final Exception e){
     		javaLogger.logException(e);
     	} finally{
     		if (in != null) {
         		try{
         			in.close();
-        		}catch(IOException e){
+        		}catch(final IOException e){
     				javaLogger.logException(e);
         		}
     		}
     		if (output != null) {
         		try{
         			output.close();
-        		}catch(IOException e){
+        		}catch(final IOException e){
     				javaLogger.logException(e);
         		}
     		}
     		if (xmlDitalist != null) {
         		try{
         			xmlDitalist.close();
-        		}catch(IOException e){
+        		}catch(final IOException e){
     				javaLogger.logException(e);
         		}
     		}
@@ -648,15 +673,15 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
     }
     
     //Added by William on 2010-04-16 for cvf flag support start
-    private void updateDictionary(String tempDir){
+    private void updateDictionary(final String tempDir){
     	//orignal map
-    	Map<String, Set<String>> dic = readMapFromXML(Constants.FILE_NAME_SUBJECT_DICTIONARY);
+    	final Map<String, Set<String>> dic = readMapFromXML(Constants.FILE_NAME_SUBJECT_DICTIONARY);
     	//result map
-    	Map<String, Set<String>> resultMap = new HashMap<String, Set<String>>();
+    	final Map<String, Set<String>> resultMap = new HashMap<String, Set<String>>();
     	//Iterate the orignal map
-    	Iterator<Map.Entry<String, Set<String>>> itr = dic.entrySet().iterator();
+    	final Iterator<Map.Entry<String, Set<String>>> itr = dic.entrySet().iterator();
     	while (itr.hasNext()) {
-			Map.Entry<String, java.util.Set<String>> entry =  itr.next();
+			final Map.Entry<String, java.util.Set<String>> entry =  itr.next();
 			//filename will be checked.
 			String filename = entry.getKey();
 			if(FileUtils.isTopicFile(filename)){
@@ -673,29 +698,31 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
     		
     }
     //Method for writing a map into xml file.
-    private void writeMapToXML(Map<String, Set<String>> m, String filename) {
-		if (m == null) return;
-		Properties prop = new Properties();
-		Iterator<Map.Entry<String, Set<String>>> iter = m.entrySet().iterator();
+    private void writeMapToXML(final Map<String, Set<String>> m, final String filename) {
+		if (m == null) {
+            return;
+        }
+		final Properties prop = new Properties();
+		final Iterator<Map.Entry<String, Set<String>>> iter = m.entrySet().iterator();
 		while (iter.hasNext()) {
-			Map.Entry<String, Set<String>> entry = iter.next();
-			String key = entry.getKey();
-			String value = StringUtils.assembleString(entry.getValue(), Constants.COMMA);
+			final Map.Entry<String, Set<String>> entry = iter.next();
+			final String key = entry.getKey();
+			final String value = StringUtils.assembleString(entry.getValue(), Constants.COMMA);
 			prop.setProperty(key, value);
 		}
-		File outputFile = new File(tempDir, filename);
+		final File outputFile = new File(tempDir, filename);
 		FileOutputStream os = null;
 		try {
 			os = new FileOutputStream(outputFile, false);
 			prop.storeToXML(os, null);
 			os.close();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			this.javaLogger.logException(e);
 		} finally {
 			if (os != null) {
 				try {
 					os.close();
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					javaLogger.logException(e);
 				}
 			}

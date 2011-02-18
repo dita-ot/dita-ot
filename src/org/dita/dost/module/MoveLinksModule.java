@@ -29,7 +29,7 @@ import org.dita.dost.writer.DitaLinksWriter;
  * @author Zhang, Yuan Peng
  */
 public class MoveLinksModule implements AbstractPipelineModule {
-    private ContentImpl content;
+    private final ContentImpl content;
 
 
     /**
@@ -49,11 +49,11 @@ public class MoveLinksModule implements AbstractPipelineModule {
 	 * @return null
 	 * @throws DITAOTException exception
 	 */
-    public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException {
+    public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
 
-        String maplinksFile = ((PipelineHashIO)input).getAttribute(Constants.ANT_INVOKER_PARAM_MAPLINKS);
-        MapLinksReader indexReader = new MapLinksReader();
-		DitaLinksWriter indexInserter = new DitaLinksWriter();
+        final String maplinksFile = input.getAttribute(Constants.ANT_INVOKER_PARAM_MAPLINKS);
+        final MapLinksReader indexReader = new MapLinksReader();
+		final DitaLinksWriter indexInserter = new DitaLinksWriter();
 		Set<Map.Entry<String, String>> mapSet;
 		Iterator<Map.Entry<String, String>> i;
         
@@ -67,10 +67,10 @@ public class MoveLinksModule implements AbstractPipelineModule {
 
         i = mapSet.iterator();
         while (i.hasNext()) {
-            Map.Entry<String, String> entry = i.next();
+            final Map.Entry<String, String> entry = i.next();
             content.setValue(entry.getValue());
             indexInserter.setContent(content);
-            indexInserter.write((String) entry.getKey());
+            indexInserter.write(entry.getKey());
         }
         return null;
     }

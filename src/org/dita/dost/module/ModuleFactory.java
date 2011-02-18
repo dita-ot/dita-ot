@@ -53,19 +53,19 @@ public class ModuleFactory {
 	 * @return AbstractPipelineModule
 	 * @throws DITAOTException DITAOTException
 	 */
-	public AbstractPipelineModule createModule(String moduleName)
+	public AbstractPipelineModule createModule(final String moduleName)
 			throws DITAOTException {
-		String module = packagePrefix + moduleName + "Module";
+		final String module = packagePrefix + moduleName + "Module";
 		
 		try {
 			return (AbstractPipelineModule) Class.forName(
 					module).newInstance();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			String msg = null;
-			Properties params = new Properties();
+			final Properties params = new Properties();
 
 			params.put("%1", module);
-			MessageBean msgBean=MessageUtils.getMessage("DOTJ005F", params);
+			final MessageBean msgBean=MessageUtils.getMessage("DOTJ005F", params);
 			msg = msgBean.toString();
 
 			throw new DITAOTException(msgBean,e,msg);	

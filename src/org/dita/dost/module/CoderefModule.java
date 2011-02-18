@@ -17,7 +17,6 @@ import java.util.Set;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.ListUtils;
 import org.dita.dost.util.StringUtils;
@@ -39,10 +38,10 @@ public class CoderefModule implements AbstractPipelineModule {
 	 * @return null
 	 * @throws DITAOTException exception
 	 */
-	public AbstractPipelineOutput execute(AbstractPipelineInput input)
+	public AbstractPipelineOutput execute(final AbstractPipelineInput input)
 			throws DITAOTException {
-		String baseDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
-		String tempDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
+		final String baseDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
+		String tempDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
         if (!new File(tempDir).isAbsolute()) {
         	tempDir = new File(baseDir, tempDir).getAbsolutePath();
         }
@@ -50,13 +49,13 @@ public class CoderefModule implements AbstractPipelineModule {
     	Properties properties = null;
     	try{
     		properties = ListUtils.getDitaList();
-    	}catch(IOException e){
+    	}catch(final IOException e){
     		throw new DITAOTException(e);
     	}
     	
-    	Set<String> codereflist=StringUtils.restoreSet(properties.getProperty(Constants.CODEREF_LIST));		
-		CoderefResolver writer = new CoderefResolver();
-		for (String fileName : codereflist) {
+    	final Set<String> codereflist=StringUtils.restoreSet(properties.getProperty(Constants.CODEREF_LIST));		
+		final CoderefResolver writer = new CoderefResolver();
+		for (final String fileName : codereflist) {
 			//FIXME:This writer deletes and renames files, have to 
 			writer.write(new File(tempDir,fileName).getAbsolutePath()); 
 		}

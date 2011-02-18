@@ -29,7 +29,7 @@ import org.dita.dost.util.Constants;
  */
 public class EscapeUnicodeModule implements AbstractPipelineModule {
 	
-	private DITAOTLogger logger = new DITAOTJavaLogger();
+	private final DITAOTLogger logger = new DITAOTJavaLogger();
 	
 	/**
 	 * Entry point of EscapeUnicodeModule.
@@ -38,19 +38,19 @@ public class EscapeUnicodeModule implements AbstractPipelineModule {
 	 * @return null
 	 * @throws DITAOTException exception
 	 */
-	public AbstractPipelineOutput execute(AbstractPipelineInput input)
+	public AbstractPipelineOutput execute(final AbstractPipelineInput input)
 			throws DITAOTException {
-		String inputFile = ((PipelineHashIO)input).getAttribute(Constants.ANT_INVOKER_EXT_PARAM_INPUT);
-		String outputFile = ((PipelineHashIO)input).getAttribute(Constants.ANT_INVOKER_EXT_PARAM_OUTPUT);
+		final String inputFile = input.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_INPUT);
+		final String outputFile = input.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_OUTPUT);
 
 		//Transliterator transliterator = Transliterator.getInstance("Any-Hex/C");
 		//initTransliterator(transliterator);
 
-		File file = new File(outputFile);
+		final File file = new File(outputFile);
 		if (!file.exists()) {
 			try {
 				file.createNewFile();
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				throw new RuntimeException(e);
 			}
 		}
@@ -79,34 +79,34 @@ public class EscapeUnicodeModule implements AbstractPipelineModule {
 				//fw.append(transliterator.transliterate(data));
 			}
 			fw.flush();			
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new RuntimeException(e);
 		} finally {
 			if (fw != null) {
     			try {
     				fw.close();
-    			} catch (Exception e) {
+    			} catch (final Exception e) {
     				logger.logException(e);
     			}
 			}
 			if (br != null) {
     			try {
     				br.close();
-    			} catch (Exception e) {
+    			} catch (final Exception e) {
     				logger.logException(e);
     			}
 			}
 			if (is != null) {
     			try {
     				is.close();
-    			} catch (Exception e) {
+    			} catch (final Exception e) {
     				logger.logException(e);
     			}
 			}
 			if (fi != null) {
     			try {
     				fi.close();
-    			} catch (Exception e) {
+    			} catch (final Exception e) {
     				logger.logException(e);
     			}
 			}

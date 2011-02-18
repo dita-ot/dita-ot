@@ -59,7 +59,7 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 	/** The list of ditamap files */
 	private List<String> ditamapList = null;
 
-	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+	private final DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 	private IndexTermCollection indexTermCollection;
 
 	/**
@@ -72,7 +72,7 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 	 * 
 	 * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
 	 */
-	public AbstractPipelineOutput execute(AbstractPipelineInput input)
+	public AbstractPipelineOutput execute(final AbstractPipelineInput input)
 			throws DITAOTException {
 	    indexTermCollection = IndexTermCollection.getInstantce(); 
 		try {
@@ -81,39 +81,38 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 			extractIndexTerm();
 			indexTermCollection.sort();
 			indexTermCollection.outputTerms();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			javaLogger.logException(e);
 		}
 
 		return null;
 	}
 
-	private void parseAndValidateInput(AbstractPipelineInput input)
+	private void parseAndValidateInput(final AbstractPipelineInput input)
 			throws DITAOTException {
 		StringTokenizer tokenizer = null;
-		Properties prop = new Properties();
+		final Properties prop = new Properties();
 		String outputRoot = null;
 		int lastIndexOfDot;
 		String ditalist;
 		String resource_only_list;
-		Properties params = new Properties();
-		PipelineHashIO hashIO = (PipelineHashIO) input;
+		final Properties params = new Properties();
 		
-		String baseDir = hashIO
+		final String baseDir = input
 				.getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
-		String tempDir = ((PipelineHashIO)input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
-		String output = hashIO
+		String tempDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
+		String output = input
 				.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_OUTPUT);
-		String encoding = hashIO
+		final String encoding = input
 				.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_ENCODING);
-		String indextype = hashIO
+		final String indextype = input
 				.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_INDEXTYPE);
 		
-		String indexclass = hashIO
+		final String indexclass = input
 				.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_INDEXCLASS);
 		
-		inputMap = hashIO.getAttribute(Constants.ANT_INVOKER_PARAM_INPUTMAP);
-		targetExt = hashIO
+		inputMap = input.getAttribute(Constants.ANT_INVOKER_PARAM_INPUTMAP);
+		targetExt = input
 				.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_TARGETEXT);
 		
 
@@ -131,7 +130,7 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 		try {
 			in = new FileInputStream(ditalist);
 			prop.load(in);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			String msg = null;
 			params.put("%1", ditalist);
 			msg = MessageUtils.getMessage("DOTJ011E", params).toString();
@@ -142,7 +141,7 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 			if (in != null) {
 				try {
 					in.close();
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					javaLogger.logException(e);
 				}
 			}
@@ -156,18 +155,20 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 		resource_only_list = prop.getProperty(Constants.RESOURCE_ONLY_LIST, "");
 		topicList = new ArrayList<String>(tokenizer.countTokens());
 		while (tokenizer.hasMoreTokens()) {
-			String t = tokenizer.nextToken();
-			if (!resource_only_list.contains(t))
-				topicList.add(t);
+			final String t = tokenizer.nextToken();
+			if (!resource_only_list.contains(t)) {
+                topicList.add(t);
+            }
 		}
 
 		tokenizer = new StringTokenizer(prop
 				.getProperty(Constants.FULL_DITAMAP_LIST), Constants.COMMA);
 		ditamapList = new ArrayList<String>(tokenizer.countTokens());
 		while (tokenizer.hasMoreTokens()) {
-			String t = tokenizer.nextToken();
-			if (!resource_only_list.contains(t))
-				ditamapList.add(t);
+			final String t = tokenizer.nextToken();
+			if (!resource_only_list.contains(t)) {
+                ditamapList.add(t);
+            }
 		}
 		
 		lastIndexOfDot = output.lastIndexOf(".");
@@ -178,7 +179,7 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 		indexTermCollection.setIndexType(indextype);
 		indexTermCollection.setIndexClass(indexclass);
 		//RFE 2987769 Eclipse index-see 
-		indexTermCollection.setPipelineHashIO(hashIO);
+		indexTermCollection.setPipelineHashIO((PipelineHashIO) input);
 
 		if (encoding != null && encoding.trim().length() > 0) {
 			IndexTerm.setTermLocale(StringUtils.getLocale(encoding));
@@ -186,12 +187,12 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 	}
 
 	private void extractIndexTerm() throws SAXException {
-		int topicNum = topicList.size();
-		int ditamapNum = ditamapList.size();
+		final int topicNum = topicList.size();
+		final int ditamapNum = ditamapList.size();
 		FileInputStream inputStream = null;
 		XMLReader xmlReader = null;
-		IndexTermReader handler = new IndexTermReader(indexTermCollection);
-		DitamapIndexTermReader ditamapIndexTermReader = new DitamapIndexTermReader(indexTermCollection, true);
+		final IndexTermReader handler = new IndexTermReader(indexTermCollection);
+		final DitamapIndexTermReader ditamapIndexTermReader = new DitamapIndexTermReader(indexTermCollection, true);
 
 		xmlReader = StringUtils.getXMLReader();
 
@@ -203,7 +204,7 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 				String targetPathFromMap;
 				String targetPathFromMapWithoutExt;
 				handler.reset();
-				target = (String) topicList.get(i);
+				target = topicList.get(i);
 				targetPathFromMap = FileUtils.getRelativePathFromMap(
 						inputMap, target);
 				targetPathFromMapWithoutExt = targetPathFromMap
@@ -223,9 +224,9 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 							new File(baseInputDir, target));
 					xmlReader.parse(new InputSource(inputStream));
 					inputStream.close();
-				} catch (Exception e) {					
-					Properties params = new Properties();
-					StringBuffer buff=new StringBuffer();
+				} catch (final Exception e) {					
+					final Properties params = new Properties();
+					final StringBuffer buff=new StringBuffer();
 					String msg = null;
 					params.put("%1", target);
 					msg = MessageUtils.getMessage("DOTJ013E", params).toString();
@@ -236,8 +237,8 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 			xmlReader.setContentHandler(ditamapIndexTermReader);
 
 			for (int j = 0; j < ditamapNum; j++) {
-				String ditamap = (String) ditamapList.get(j);
-				String currentMapPathName = FileUtils.getRelativePathFromMap(
+				final String ditamap = ditamapList.get(j);
+				final String currentMapPathName = FileUtils.getRelativePathFromMap(
 						inputMap, ditamap);
 				String mapPathFromInputMap = "";
 
@@ -258,8 +259,8 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 							ditamap));
 					xmlReader.parse(new InputSource(inputStream));
 					inputStream.close();
-				} 	catch (Exception e) {
-					Properties params = new Properties();
+				} 	catch (final Exception e) {
+					final Properties params = new Properties();
 					String msg = null;
 					params.put("%1", ditamap);
 					msg = MessageUtils.getMessage("DOTJ013E", params).toString();
@@ -271,7 +272,7 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 			if (inputStream != null) {
 				try {
 					inputStream.close();
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					javaLogger.logException(e);
 				}
 

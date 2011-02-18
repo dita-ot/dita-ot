@@ -37,7 +37,7 @@ import org.dita.dost.writer.DitaIndexWriter;
  */
 public class MoveIndexModule implements AbstractPipelineModule {
 
-    private ContentImpl content;
+    private final ContentImpl content;
     private DITAOTJavaLogger logger = null;
 
     /**
@@ -57,15 +57,14 @@ public class MoveIndexModule implements AbstractPipelineModule {
 	 * @return null
 	 * @throws DITAOTException exception
 	 */
-    public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException {
-    	String mapFile;
+    public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
     	Set<Map.Entry<String, String>> mapSet;
 		Iterator<Map.Entry<String, String>> i;
 		String targetFileName;
-		MapIndexReader indexReader = new MapIndexReader();
-		DitaIndexWriter indexInserter = new DitaIndexWriter();
-		String baseDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
-    	String tempDir = ((PipelineHashIO)input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
+		final MapIndexReader indexReader = new MapIndexReader();
+		final DitaIndexWriter indexInserter = new DitaIndexWriter();
+		final String baseDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
+    	String tempDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
     	
 		if (!new File(tempDir).isAbsolute()) {
         	tempDir = new File(baseDir, tempDir).getAbsolutePath();
@@ -78,12 +77,12 @@ public class MoveIndexModule implements AbstractPipelineModule {
 		Properties properties = null;
 		try{
 			properties = ListUtils.getDitaList();
-		}catch(IOException e){
+		}catch(final IOException e){
 			throw new DITAOTException(e);
 		}
 		
-		Set<String> fullditamaplist = StringUtils.restoreSet(properties.getProperty(Constants.FULL_DITAMAP_LIST));
-		for(String fileName : fullditamaplist){
+		final Set<String> fullditamaplist = StringUtils.restoreSet(properties.getProperty(Constants.FULL_DITAMAP_LIST));
+		for(final String fileName : fullditamaplist){
 			//FIXME: this reader needs parent directory for further process
 			indexReader.read(new File(tempDir, fileName).getAbsolutePath());  
 		}
@@ -91,8 +90,8 @@ public class MoveIndexModule implements AbstractPipelineModule {
 		mapSet = (Set<Map.Entry<String, String>>) indexReader.getContent().getCollection();
 		i = mapSet.iterator();
         while (i.hasNext()) {
-        	Map.Entry<String, String> entry = i.next();
-            targetFileName = (String) entry.getKey();
+        	final Map.Entry<String, String> entry = i.next();
+            targetFileName = entry.getKey();
             targetFileName = targetFileName.indexOf(Constants.SHARP) != -1 
             				? targetFileName.substring(0, targetFileName.indexOf(Constants.SHARP))
             				: targetFileName;
@@ -100,10 +99,10 @@ public class MoveIndexModule implements AbstractPipelineModule {
                     targetFileName.endsWith(Constants.FILE_EXTENSION_XML)){
                 content.setValue(entry.getValue());
                 indexInserter.setContent(content);
-                if (FileUtils.fileExists((String) entry.getKey())){
-                    indexInserter.write((String) entry.getKey());
+                if (FileUtils.fileExists(entry.getKey())){
+                    indexInserter.write(entry.getKey());
                 }else{
-                    logger.logError(" ERROR FILE DOES NOT EXIST " + (String) entry.getKey());
+                    logger.logError(" ERROR FILE DOES NOT EXIST " + entry.getKey());
                 }
 
             }

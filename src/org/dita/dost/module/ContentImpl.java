@@ -59,7 +59,7 @@ public class ContentImpl implements Content {
      * @param col collection
      */
     @SuppressWarnings("rawtypes")
-    public void setCollection(Collection col) {
+    public void setCollection(final Collection col) {
         this.collection = col;
     }
 
@@ -68,7 +68,7 @@ public class ContentImpl implements Content {
      * Set the object-like content.
      * @param obj object
      */
-    public void setValue(Object obj) {
+    public void setValue(final Object obj) {
         this.object = obj;
     }
 }
