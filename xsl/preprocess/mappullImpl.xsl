@@ -31,6 +31,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
 
 <xsl:stylesheet version="1.0" 
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:fn="http://www.w3.org/2005/xpath-functions"
                 xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
                 xmlns:mappull="http://dita-ot.sourceforge.net/ns/200704/mappull"
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
@@ -612,19 +613,19 @@ Other modes can be found within the code, and may or may not prove useful for ov
             test="document($file,/)//*[contains(@class, $classval)][@id=$topicid]/*[contains(@class, ' topic/titlealts ')]/*[contains(@class, ' topic/navtitle ')]">
             <xsl:apply-templates
               select="(document($file,/)//*[contains(@class, $classval)][@id=$topicid])[1]/*[contains(@class, ' topic/titlealts ')]/*[contains(@class, ' topic/navtitle ')]"
-              mode="text-only"/>
+              mode="get-title-content"/>
           </xsl:when>
           <xsl:when
             test="document($file,/)//*[contains(@class, $classval)][@id=$topicid]/*[contains(@class, ' topic/title ')]">
             <xsl:apply-templates
               select="(document($file,/)//*[contains(@class, $classval)][@id=$topicid])[1]/*[contains(@class, ' topic/title ')]"
-              mode="text-only"/>
+              mode="get-title-content"/>
           </xsl:when>
           <xsl:when
             test="document($file,/)//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class, ' topic/title ')]">
             <xsl:apply-templates
               select="(document($file,/)//*[contains(@class, ' topic/topic ')][@id=$topicid])[1]/*[contains(@class, ' topic/title ')]"
-              mode="text-only"/>
+              mode="get-title-content"/>
           </xsl:when>
           <xsl:otherwise>
             <xsl:apply-templates select="." mode="mappull:navtitle-fallback"/>
@@ -638,13 +639,13 @@ Other modes can be found within the code, and may or may not prove useful for ov
             test="document($file,/)//*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/titlealts ')]/*[contains(@class, ' topic/navtitle ')]">
             <xsl:apply-templates
               select="(document($file,/)//*[contains(@class, ' topic/topic ')])[1]/*[contains(@class, ' topic/titlealts ')]/*[contains(@class, ' topic/navtitle ')]"
-              mode="text-only"/>
+              mode="get-title-content"/>
           </xsl:when>
           <xsl:when
             test="document($file,/)//*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/title ')]">
             <xsl:apply-templates
               select="(document($file,/)//*[contains(@class, ' topic/topic ')])[1]/*[contains(@class, ' topic/title ')]"
-              mode="text-only"/>
+              mode="get-title-content"/>
           </xsl:when>
           <xsl:otherwise>
             <xsl:apply-templates select="." mode="mappull:navtitle-fallback"/>
@@ -732,7 +733,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
       </xsl:choose>
     </xsl:variable>
     <xsl:variable name="navtitle">
-      <xsl:value-of select="normalize-space($navtitle-not-normalized)"/>
+      <xsl:copy-of select="$navtitle-not-normalized"/>
     </xsl:variable>
 
 
@@ -751,7 +752,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
                 <xsl:with-param name="classval"><xsl:value-of select="$classval"/></xsl:with-param>
                 <xsl:with-param name="scope"><xsl:value-of select="$scope"/></xsl:with-param>
                 <xsl:with-param name="format"><xsl:value-of select="$format"/></xsl:with-param>
-                <xsl:with-param name="navtitle"><xsl:value-of select="$navtitle"/></xsl:with-param>
+                <xsl:with-param name="navtitle"><xsl:copy-of select="$navtitle"/></xsl:with-param>
               </xsl:call-template>
             </xsl:for-each>
           </xsl:copy>
@@ -767,7 +768,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
             <xsl:with-param name="classval"><xsl:value-of select="$classval"/></xsl:with-param>
             <xsl:with-param name="scope"><xsl:value-of select="$scope"/></xsl:with-param>
             <xsl:with-param name="format"><xsl:value-of select="$format"/></xsl:with-param>
-            <xsl:with-param name="navtitle"><xsl:value-of select="$navtitle"/></xsl:with-param>
+            <xsl:with-param name="navtitle"><xsl:copy-of select="$navtitle"/></xsl:with-param>
           </xsl:call-template>
         </topicmeta>
       </xsl:otherwise>
@@ -992,7 +993,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:choose>
       <xsl:when test="not($navtitle='#none#')">
         <navtitle class="- topic/navtitle ">
-          <xsl:value-of select="$navtitle"/>
+          <xsl:copy-of select="$navtitle"/>
         </navtitle>
       </xsl:when>
       <xsl:otherwise>
@@ -1055,6 +1056,9 @@ Other modes can be found within the code, and may or may not prove useful for ov
     </xsl:copy>
   </xsl:template>
 
+
+ 
+  
   <!--following template is here to make sure topicmeta gets copied in cases where the topicref has no href (and therefore the getstuff template isn't called-->
   <xsl:template match="*[contains(@class, ' map/topicref ')]/*[contains(@class, ' map/topicmeta ')]">
     <!--<xsl:variable name="format">
@@ -1256,6 +1260,55 @@ Other modes can be found within the code, and may or may not prove useful for ov
   <xsl:template match="*" mode="mappull:add-usershortdesc-PI">
     <xsl:processing-instruction name="ditaot">usershortdesc</xsl:processing-instruction>
   </xsl:template>
+ 
+  <!-- Added on 20110125 for bug:Navtitle Construction Does not Preserve Markup - ID: 3157890  start -->
+  <xsl:template match="*[contains(@class,' topic/title ')]|*[contains(@class, ' topic/navtitle ')]" mode="get-title-content">    
+    <xsl:apply-templates select="*|comment()|processing-instruction()|text()" />  
+  </xsl:template>
   
-
+ 
+  
+  <xsl:template match="text() [ancestor::*[contains(@class,' topic/title ')]|ancestor::*[contains(@class,' topic/navtitle ')]]" >
+    <xsl:variable name="text_value">
+      <xsl:value-of select="."/>
+    </xsl:variable>
+    
+    <xsl:variable name="pre-text">
+      <xsl:choose>   
+        <xsl:when test="starts-with($text_value,'&#10; ')">
+          <xsl:value-of select=" concat('&#10; ',normalize-space($text_value))"/>
+        </xsl:when>
+        <xsl:otherwise>
+           <xsl:choose>
+             <xsl:when test="starts-with($text_value,'&#10;')">
+               <xsl:value-of select="concat('&#10;',normalize-space($text_value))"/>
+             </xsl:when>
+             <xsl:otherwise>
+               <xsl:choose>
+                 <xsl:when test=" starts-with($text_value,' ')">
+                   <xsl:value-of select="concat(' ',normalize-space($text_value))"/>
+                 </xsl:when>
+                 <xsl:otherwise >
+                   <xsl:value-of select="normalize-space($text_value)"/>                   
+                 </xsl:otherwise>
+               </xsl:choose>               
+             </xsl:otherwise>
+           </xsl:choose>          
+        </xsl:otherwise>
+      </xsl:choose>    
+    </xsl:variable>
+   
+    <xsl:variable name="end-text">
+      <xsl:if test=" fn:ends-with($text_value,' ')">
+        <xsl:value-of select="' '"/>
+      </xsl:if>
+    </xsl:variable>
+    
+    <xsl:variable name="elem-txt">
+         <xsl:value-of select=" concat($pre-text,$end-text)"/>
+    </xsl:variable>
+ 
+    <xsl:value-of select="$elem-txt"/>
+  </xsl:template>
+  <!-- Added on 20110125 for bug:Navtitle Construction Does not Preserve Markup - ID: 3157890  end -->
 </xsl:stylesheet>
