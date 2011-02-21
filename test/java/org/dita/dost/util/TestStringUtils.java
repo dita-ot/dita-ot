@@ -13,6 +13,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -82,6 +83,25 @@ public class TestStringUtils {
 		result = StringUtils.replaceAll("abababa", "aba", "c");
 		assertEquals("cbc", result);
 	}
+	
+	@Test
+	public void testGetAscii() {
+	    assertEquals("\\'66\\'6f\\'6f", StringUtils.getAscii("foo"));
+	    byte[] nonAscii = "äöå".getBytes(Charset.defaultCharset());
+	    final StringBuilder buf = new StringBuilder();
+	    for (final byte b: nonAscii) {
+	        final String s = Integer.toHexString((int) b);
+	        buf.append('\\').append('\'').append(s.substring(s.length() - 2));
+	    }
+	    assertEquals(buf.toString(), StringUtils.getAscii("äöå"));
+	}
+	
+	@Test
+	public void testGetExtProps() {
+	    assertEquals("props foo,props bar", StringUtils.getExtProps("a(props foo) a(props bar)"));
+	    assertEquals("props bar,props qux", StringUtils.getExtProps("(topic foo) a(props bar) (topic baz) a(props qux)"));
+	    assertEquals("props   foo", StringUtils.getExtProps("  a(props   foo  )   "));
+	}
 
 	@Test
 	public void testRestoreMap() {
@@ -129,5 +149,26 @@ public class TestStringUtils {
 		Locale result3 = StringUtils.getLocale("zh-cn-gb2312");
 		assertEquals(expected3, result3);
 	}
-
+	
+	@Test
+	public void testGetFileName() {
+	    assertEquals("foo.bar", StringUtils.getFileName("foo.bar.baz", "."));
+	    assertEquals("foo", StringUtils.getFileName("foo.bar", "."));
+	    assertEquals("foo", StringUtils.getFileName("foo", "."));
+	}
+	
+	@Test
+	public void testGetMaxFive() {
+	    assertEquals(Integer.valueOf(5), StringUtils.getMax("1", "2", "3", "4", "5"));
+	    assertEquals(Integer.valueOf(5), StringUtils.getMax("5", "4", "3", "2", "1"));
+	    assertEquals(Integer.valueOf(5), StringUtils.getMax("5", "5", "5", "5", "5"));
+	}
+	
+	@Test
+    public void testGetMaxSix() {
+        assertEquals(Integer.valueOf(6), StringUtils.getMax("1", "2", "3", "4", "5", "6"));
+        assertEquals(Integer.valueOf(6), StringUtils.getMax("6", "5", "4", "3", "2", "1"));
+        assertEquals(Integer.valueOf(6), StringUtils.getMax("6", "6", "6", "6", "6", "6"));
+    }
+	
 }
