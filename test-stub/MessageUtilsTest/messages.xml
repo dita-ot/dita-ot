@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages>
+  <message id="XXX123F" type="FATAL">
+    <reason>Fatal reason.</reason>
+    <response>Fatal response.</response>
+  </message>
+  <message id="XXX234E" type="ERROR">
+    <reason>Error %1 reason %2.</reason>
+    <response>Error %1 response %2.</response>
+  </message>
+</messages>
