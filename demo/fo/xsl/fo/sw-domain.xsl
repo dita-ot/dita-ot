@@ -35,8 +35,6 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     version="1.0">
 
-    <xsl:include href="../../cfg/fo/attrs/sw-domain-attr.xsl"/>
-
     <xsl:template match="*[contains(@class,' sw-d/msgph ')]">
       <fo:inline xsl:use-attribute-sets="msgph">
         <xsl:call-template name="commonattributes"/>

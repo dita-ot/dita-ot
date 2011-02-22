@@ -41,10 +41,6 @@ See the accompanying license.txt file for applicable licenses.
     exclude-result-prefixes="opentopic exsl opentopic-index dita2xslfo"
     version="1.1">
 
-
-    <xsl:include href="../../cfg/fo/attrs/commons-attr.xsl"/>
-    <xsl:include href="../../cfg/fo/attrs/lists-attr.xsl"/>
-
     <!--  In order to not process any data under opentopic:map  -->
     <xsl:template match="opentopic:map"/>
     

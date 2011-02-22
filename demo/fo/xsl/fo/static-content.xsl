@@ -35,8 +35,6 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     version="1.1">
 
-    <xsl:import href="../../cfg/fo/attrs/static-content-attr.xsl"/>
-
     <xsl:template name="insertBodyStaticContents">
         <xsl:call-template name="insertBodyFootnoteSeparator"/>
         <xsl:call-template name="insertBodyOddFooter"/>

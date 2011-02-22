@@ -49,8 +49,6 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:choose>
     </xsl:param>
 
-    <xsl:include href="../../cfg/fo/attrs/task-elements-attr.xsl"/>
-
     <xsl:template name="processTask">
         <xsl:apply-templates select="." mode="processTask"/>
     </xsl:template>

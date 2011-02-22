@@ -7,9 +7,6 @@ xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
 exclude-result-prefixes="ot-placeholder"
 version="1.1">
 
-
-    <xsl:include href="../../cfg/fo/attrs/glossary-attr.xsl"/>
-
     <xsl:template match="ot-placeholder:glossarylist">
     
             <fo:page-sequence master-reference="glossary-sequence" xsl:use-attribute-sets="__force__page__count">

@@ -35,8 +35,6 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     version="1.0">
 
-    <xsl:include href="../../cfg/fo/attrs/ui-domain-attr.xsl"/>
-
     <xsl:template match="*[contains(@class,' ui-d/uicontrol ')]">
         <!-- insert an arrow before all but the first uicontrol in a menucascade -->
         <xsl:if test="ancestor::*[contains(@class,' ui-d/menucascade ')]">

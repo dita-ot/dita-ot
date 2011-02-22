@@ -42,8 +42,6 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
     exclude-result-prefixes="opentopic-index exsl comparer rx opentopic-func exslf">
 
-    <xsl:include href="../../cfg/fo/attrs/index-attr.xsl"/>
-
     <!-- *************************************************************** -->
     <!-- Create index templates                                          -->
     <!-- *************************************************************** -->

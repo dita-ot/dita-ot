@@ -41,7 +41,6 @@ See the accompanying license.txt file for applicable licenses.
     exclude-result-prefixes="opentopic-func exslf exsl dita2xslfo"
     version="1.1">
 
-    <xsl:include href="../../cfg/fo/attrs/tables-attr.xsl"/>
     <xsl:variable name="tableAttrs" select="'../../cfg/fo/attrs/tables-attr.xsl'"/>
 
     <xsl:param name="tableSpecNonProportional" select="'false'"/>

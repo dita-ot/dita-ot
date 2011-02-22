@@ -44,8 +44,6 @@ See the accompanying license.txt file for applicable licenses.
 	<xsl:import href="../../../../xsl/common/output-message.xsl"/>
 	<xsl:variable name="msgprefix">DOTX</xsl:variable>
 	<!-- added by William on 2009-10-26 for bug:1880097 end -->
-    
-	<xsl:include href="../../cfg/fo/attrs/links-attr.xsl"/>
 	
     <xsl:key name="key_anchor" match="*[@id][not(contains(@class,' map/topicref '))]" use="@id"/>
 <!--[not(contains(@class,' map/topicref '))]-->

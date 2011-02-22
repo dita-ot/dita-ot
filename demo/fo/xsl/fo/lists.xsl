@@ -38,8 +38,6 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     version="1.1">
 
-    <xsl:include href="../../cfg/fo/attrs/lists-attr.xsl"/>
-
     <xsl:template match="*[contains(@class,' topic/linklist ')]/*[contains(@class,' topic/title ')]">
       <fo:block xsl:use-attribute-sets="linklist.title">
         <xsl:apply-templates/>

@@ -46,31 +46,45 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:import href="../../cfg/fo/attrs/basic-settings.xsl"/>
     <xsl:import href="../../cfg/fo/layout-masters.xsl"/>
+    <xsl:import href="../../cfg/fo/attrs/links-attr.xsl"/>
     <xsl:import href="links.xsl"/>
+    <xsl:import href="../../cfg/fo/attrs/lists-attr.xsl"/>
     <xsl:import href="lists.xsl"/>
+    <xsl:import href="../../cfg/fo/attrs/tables-attr.xsl"/>
     <xsl:import href="tables.xsl"/>
     <xsl:import href="tables_1.0.xsl"/>
     <xsl:import href="root-processing.xsl"/>
+    <xsl:import href="../../cfg/fo/attrs/commons-attr.xsl"/>
     <xsl:import href="commons.xsl"/>
     <xsl:import href="commons_1.0.xsl"/>
+    <xsl:import href="../../cfg/fo/attrs/toc-attr.xsl"/>
     <xsl:import href="toc.xsl"/>
     <xsl:import href="toc_1.0.xsl"/>
     <xsl:import href="bookmarks.xsl"/>
     <xsl:import href="bookmarks_1.0.xsl"/>
+    <xsl:import href="../../cfg/fo/attrs/index-attr.xsl"/>
     <xsl:import href="index.xsl"/>
     <xsl:import href="index_1.0.xsl"/>
+    <xsl:import href="../../cfg/fo/attrs/front-matter-attr.xsl"/>
     <xsl:import href="front-matter.xsl"/>
     <xsl:import href="front-matter_1.0.xsl"/>
     <xsl:import href="preface.xsl"/>
 
+    <xsl:import href="../../cfg/fo/attrs/task-elements-attr.xsl"/>
     <xsl:import href="task-elements.xsl"/>
 
+    <xsl:import href="../../cfg/fo/attrs/sw-domain-attr.xsl"/>
     <xsl:import href="sw-domain.xsl"/>
+    <xsl:import href="../../cfg/fo/attrs/pr-domain-attr.xsl"/>
     <xsl:import href="pr-domain.xsl"/>
+    <xsl:import href="../../cfg/fo/attrs/hi-domain-attr.xsl"/>
     <xsl:import href="hi-domain.xsl"/>
+    <xsl:import href="../../cfg/fo/attrs/ui-domain-attr.xsl"/>
     <xsl:import href="ui-domain.xsl"/>
 
+    <xsl:import href="../../cfg/fo/attrs/static-content-attr.xsl"/>
     <xsl:import href="static-content.xsl"/>
+    <xsl:import href="../../cfg/fo/attrs/glossary-attr.xsl"/>
     <xsl:import href="glossary.xsl"/>
 
     <dita:extension id="dita.xsl.xslfo" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>

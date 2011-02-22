@@ -42,10 +42,6 @@ See the accompanying license.txt file for applicable licenses.
     exclude-result-prefixes="opentopic exsl opentopic-index exslf opentopic-func"
     version="1.1">
 
-
-    <xsl:include href="../../cfg/fo/attrs/commons-attr.xsl"/>
-    <xsl:include href="../../cfg/fo/attrs/lists-attr.xsl"/>
-
     <!-- BS: Template owerwrited to define new topic types (List's),
     to create special processing for any of list you should use <template name="processUnknowTopic"/>
     example below.-->

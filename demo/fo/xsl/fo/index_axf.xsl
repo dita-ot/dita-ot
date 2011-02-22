@@ -14,8 +14,6 @@ xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
 extension-element-prefixes="exsl"
 exclude-result-prefixes="opentopic-index opentopic">
 
-<xsl:include href="../../cfg/fo/attrs/index-attr_axf.xsl" />
-
 <xsl:template name="createIndex" >
     <xsl:comment>Antenna House Index support</xsl:comment>
     <xsl:if test="//opentopic-index:index.groups//opentopic-index:index.entry">

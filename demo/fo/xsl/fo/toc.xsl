@@ -39,8 +39,6 @@ See the accompanying license.txt file for applicable licenses.
     exclude-result-prefixes="opentopic"
     version='1.1'>
 
-    <xsl:include href="../../cfg/fo/attrs/toc-attr.xsl"/>
-
     <xsl:variable name="map" select="//opentopic:map"/>
 
     <xsl:template name="createTocHeader">

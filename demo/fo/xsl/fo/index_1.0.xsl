@@ -42,8 +42,6 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
     exclude-result-prefixes="opentopic-index exsl comparer rx opentopic-func exslf">
 
-    <xsl:include href="../../cfg/fo/attrs/index-attr.xsl"/>
-
     <xsl:template name="createIndex">
         <xsl:if test="(//opentopic-index:index.groups//opentopic-index:index.entry) and (count($index-entries//opentopic-index:index.entry) &gt; 0) and ($pdfFormatter = 'xep')">
             <xsl:variable name="index">

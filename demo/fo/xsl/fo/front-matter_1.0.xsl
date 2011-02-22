@@ -37,8 +37,6 @@ See the accompanying license.txt file for applicable licenses.
     exclude-result-prefixes="opentopic"
     version="1.1">
 
-    <xsl:include href="../../cfg/fo/attrs/front-matter-attr.xsl"/>
-
     <xsl:variable name="map" select="//opentopic:map"/>
 
     <xsl:template name="createFrontMatter">

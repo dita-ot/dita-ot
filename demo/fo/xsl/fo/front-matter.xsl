@@ -37,8 +37,6 @@ See the accompanying license.txt file for applicable licenses.
     exclude-result-prefixes="opentopic"
     version="1.1">
 
-    <xsl:include href="../../cfg/fo/attrs/front-matter-attr.xsl"/>
-
     <xsl:template name="createFrontMatter">
         <fo:page-sequence master-reference="front-matter" format="i" xsl:use-attribute-sets="__force__page__count">
             <xsl:call-template name="insertFrontMatterStaticContents"/>
