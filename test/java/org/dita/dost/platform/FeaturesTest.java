@@ -16,6 +16,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -36,18 +37,18 @@ public class FeaturesTest {
 
 	@Test
 	public void testFeaturesString() {
-		assertNotNull(new Features("base"));
+		assertNotNull(new Features(new File("base")));
 	}
 
 	@Test
 	public void testGetLocation() {
 		assertNull(new Features().getLocation());
-		assertEquals("base", new Features("base").getLocation());
+		assertEquals(new File("base"), new Features(new File("base")).getLocation());
 	}
 
 	@Test
 	public void testGetFeature() {
-		final Features f = new Features("base");
+		final Features f = new Features(new File("base"));
 		f.addFeature("foo", "bar", null);
 		
 		assertEquals("bar", f.getFeature("foo"));
@@ -55,7 +56,7 @@ public class FeaturesTest {
 
 	@Test
 	public void testGetAllFeatures() {
-		final Features f = new Features("base");
+		final Features f = new Features(new File("base"));
 		f.addFeature("foo", "bar", null);
 		f.addFeature("foo", "baz", null);
 		f.addFeature("bar", "qux", null);
@@ -69,7 +70,7 @@ public class FeaturesTest {
 
 	@Test
 	public void testAddFeature() {
-		final Features f = new Features("base");
+		final Features f = new Features(new File("base"));
 		try {
 			f.addFeature("foo", null, null);
 			fail();

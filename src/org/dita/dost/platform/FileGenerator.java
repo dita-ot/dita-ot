@@ -34,6 +34,7 @@ public class FileGenerator extends DefaultHandler2 {
 	public static final String PARAM_TEMPLATE = "template";
 
 	private static final String DITA_OT_NS = "http://dita-ot.sourceforge.net";
+	private static final String TEMPLATE_PREFIX = "_template.";
 	
 	private final XMLReader reader;
 	private DITAOTLogger logger;
@@ -41,7 +42,7 @@ public class FileGenerator extends DefaultHandler2 {
 	/** Plug-in features. */
 	private final Hashtable<String,String> featureTable;
 	/** Template file. */
-	private String templateFileName = null;
+	private File templateFile;
 
 	/**
 	 * Default Constructor.
@@ -57,7 +58,7 @@ public class FileGenerator extends DefaultHandler2 {
 	public FileGenerator(final Hashtable<String,String> featureTbl) {
 		this.featureTable = featureTbl;
 		output = null;
-		templateFileName = null;	
+		templateFile = null;
 		
 		try {
             reader = StringUtils.getXMLReader();
@@ -84,20 +85,18 @@ public class FileGenerator extends DefaultHandler2 {
 	 * Generator the output file.
 	 * @param fileName filename
 	 */
-	public void generate(final String fileName){
+	public void generate(final File fileName){
 	    if (logger == null) {
 	        logger = new DITAOTJavaLogger();
 	    }
 		FileOutputStream fileOutput = null;
-		final File outputFile = new File(fileName.substring(0,
-				fileName.lastIndexOf("_template")) + 
-				fileName.substring(fileName.lastIndexOf('.')));
-		templateFileName = fileName;
+		final File outputFile = removeTemplatePrefix(fileName);
+		templateFile = fileName;
 				
 		try{
 			fileOutput = new FileOutputStream(outputFile);
 	        output = new OutputStreamWriter(fileOutput, Constants.UTF8);
-			reader.parse(fileName);
+			reader.parse(fileName.toURI().toString());
 		} catch (final Exception e){
 			logger.logException(e);
 		}finally {
@@ -110,6 +109,17 @@ public class FileGenerator extends DefaultHandler2 {
 			}
         }
 	}
+
+    private File removeTemplatePrefix(final File templateFile) {
+        final String f = templateFile.getAbsolutePath();
+        int i = f.lastIndexOf(TEMPLATE_PREFIX);
+        if (i != -1) {
+            return new File(f.substring(0, i)
+                    + f.substring(i + TEMPLATE_PREFIX.length() - 1));
+        } else {
+            throw new IllegalArgumentException("File " + templateFile + " does not contain template prefix");
+        }
+    }
 
 	@Override
 	public void characters(final char[] ch, final int start, final int length) throws SAXException {
@@ -151,7 +161,7 @@ public class FileGenerator extends DefaultHandler2 {
 				// Element extension: <dita:extension id="extension-point" behavior="classname"/>
 				action = (IAction)Class.forName(attributes.getValue("behavior")).newInstance();
 				action.setLogger(logger);
-				action.addParam(PARAM_TEMPLATE, templateFileName);
+				action.addParam(PARAM_TEMPLATE, templateFile.getAbsolutePath());
 				action.addParam("extension", attributes.getValue("id"));
 				input = featureTable.get(attributes.getValue("id"));
 				if(input!=null){
@@ -184,7 +194,7 @@ public class FileGenerator extends DefaultHandler2 {
 							}
 							action.setLogger(logger);
 							action.setFeatures(featureTable);
-							action.addParam(PARAM_TEMPLATE, templateFileName);
+							action.addParam(PARAM_TEMPLATE, templateFile.getAbsolutePath());
 							action.addParam(PARAM_LOCALNAME, attributes.getLocalName(i));
 							action.setInput(attributes.getValue(i));
 							output.write(action.getResult());

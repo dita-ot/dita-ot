@@ -44,7 +44,7 @@ public class IntegratorTask extends Task {
 	 * Return the basedir.
 	 * @return basedir
 	 */
-	public String getBasedir() {
+	public File getBasedir() {
 		return adaptee.getBasedir();
 	}
 	
@@ -52,7 +52,7 @@ public class IntegratorTask extends Task {
 	 * Set the basedir.
 	 * @param basedir basedir
 	 */
-	public void setBasedir(final String basedir) {
+	public void setBasedir(final File basedir) {
 		adaptee.setBasedir(basedir);
 	}
 	
@@ -60,7 +60,7 @@ public class IntegratorTask extends Task {
 	 * Return the ditaDir.
 	 * @return ditaDir
 	 */
-	public String getDitadir() {
+	public File getDitadir() {
 		return adaptee.getDitaDir();
 	}
 
@@ -68,7 +68,7 @@ public class IntegratorTask extends Task {
 	 * Set the ditaDir.
 	 * @param ditaDir ditaDir
 	 */
-	public void setDitadir(final String ditaDir) {
+	public void setDitadir(final File ditaDir) {
 		adaptee.setDitaDir(ditaDir);
 	}
 

@@ -28,7 +28,7 @@ public abstract class ImportAction implements IAction {
 	protected final Set<String> valueSet;
 	/** Action parameters. */
 	protected final Hashtable<String,String> paramTable;
-	private DITAOTLogger logger;
+	protected DITAOTLogger logger;
 	
 	/**
 	 * Default Constructor.

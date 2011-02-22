@@ -29,7 +29,7 @@ import org.dita.dost.util.FileUtils;
  * @author Zhang, Yuan Peng
  */
 public class Features {
-	private final String location;
+	private final File location;
 	private final Hashtable<String,String> featureTable;
 	private final List<PluginRequirement> requireList;
 	private final Hashtable<String,String> metaTable;
@@ -52,7 +52,7 @@ public class Features {
 	 * Constructor init location. 
 	 * @param location location
 	 */
-	public Features(final String location) {
+	public Features(final File location) {
 		this.location = location;
 		featureTable = new Hashtable<String,String>(Constants.INT_16);
 		requireList = new ArrayList<PluginRequirement>(Constants.INT_8);
@@ -64,7 +64,7 @@ public class Features {
 	 * Return the feature location.
 	 * @return location
 	 */
-	public String getLocation(){
+	public File getLocation(){
 		return location;
 	}
 	

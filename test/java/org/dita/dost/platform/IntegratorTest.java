@@ -47,15 +47,15 @@ public class IntegratorTest {
 	public void testGetBasedir() {
 		final Integrator i = new Integrator();
 		assertNull(i.getBasedir());
-		i.setBasedir("foo");
-		assertEquals("foo", i.getBasedir());
+		i.setBasedir(new File("foo"));
+		assertEquals(new File("foo"), i.getBasedir());
 	}
 
 	@Test
 	public void testSetBasedir() {
 		final Integrator i = new Integrator();
-		i.setBasedir("foo");
-		assertEquals("foo", i.getBasedir());
+		i.setBasedir(new File("foo"));
+		assertEquals(new File("foo"), i.getBasedir());
 		i.setBasedir(null);
 		assertNull(i.getBasedir());
 	}
@@ -64,15 +64,15 @@ public class IntegratorTest {
 	public void testGetDitaDir() {
 		final Integrator i = new Integrator();
 		assertNull(i.getDitaDir());
-		i.setDitaDir("foo");
-		assertEquals("foo", i.getDitaDir());
+		i.setDitaDir(new File("foo"));
+		assertEquals(new File("foo"), i.getDitaDir());
 	}
 
 	@Test
 	public void testSetDitaDir() {
 		final Integrator i = new Integrator();
-		i.setDitaDir("foo");
-		assertEquals("foo", i.getDitaDir());
+		i.setDitaDir(new File("foo"));
+		assertEquals(new File("foo"), i.getDitaDir());
 		i.setDitaDir(null);
 		assertNull(i.getDitaDir());
 	}
@@ -102,8 +102,8 @@ public class IntegratorTest {
 		}
 		
 		final Integrator i = new Integrator();
-		i.setBasedir(tempDir.getAbsolutePath());
-		i.setDitaDir(tempDir.getAbsolutePath());
+		i.setBasedir(tempDir);
+		i.setDitaDir(tempDir);
 		i.setProperties(new File(tempDir, "integrator.properties"));
 		i.execute();
 		

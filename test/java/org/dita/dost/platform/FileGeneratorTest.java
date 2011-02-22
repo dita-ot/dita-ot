@@ -52,7 +52,7 @@ public class FileGeneratorTest {
     @Test
     public void testGenerate() throws IOException {
         final FileGenerator f = new FileGenerator(features);
-        f.generate(tempFile.getAbsolutePath());
+        f.generate(tempFile);
         
         assertEquals(TestUtils.readFileToString(new File(resourceDir, "exp" + File.separator + "dummy.xml")),
                      TestUtils.readFileToString(new File(tempDir, "dummy.xml")));

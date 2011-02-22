@@ -49,8 +49,8 @@ public class Integrator {
 	 */
 	private final  Hashtable<String,Features> pluginTable;
 	private final Set<String> templateSet = new HashSet<String>(Constants.INT_16);
-	private String ditaDir;
-	private String basedir;
+	private File ditaDir;
+	private File basedir;
 	private final Set<File> descSet;
 	private final XMLReader reader;
 	private DITAOTLogger logger;
@@ -68,8 +68,8 @@ public class Integrator {
 	    if (logger == null) {
 	        logger = new DITAOTJavaLogger();
 	    }
-		if (!new File(ditaDir).isAbsolute()) {
-			ditaDir = new File(basedir, ditaDir).getAbsolutePath();
+		if (!ditaDir.isAbsolute()) {
+			ditaDir = new File(basedir, ditaDir.getPath());
 		}
 
                 // Read the properties file, if it exists.
@@ -116,7 +116,7 @@ public class Integrator {
         		}
                 
                 for (final String pluginDir2 : pluginDirs) {
-		  final File pluginDir = new File(ditaDir + File.separatorChar + pluginDir2);
+		  final File pluginDir = new File(ditaDir, pluginDir2);
 		  final File[] pluginFiles = pluginDir.listFiles();
  
 		  for (int i=0; (pluginFiles != null) && (i < pluginFiles.length); i++){
@@ -144,7 +144,7 @@ public class Integrator {
 		for (final String template: templateSet) {
 			final File templateFile = new File(ditaDir, template);
 			logger.logDebug("Process template " + templateFile.getPath());
-			fileGen.generate(templateFile.getAbsolutePath());
+			fileGen.generate(templateFile);
 		}
 		
 		// Added on 2010-11-09 for bug 3102827: Allow a way to specify recognized image extensions -- start
@@ -270,7 +270,7 @@ public class Integrator {
 
 	private void parseDesc(final File descFile) {
 		try{
-			final DescParser parser = new DescParser(descFile.getParent());
+			final DescParser parser = new DescParser(descFile.getParentFile());
 			reader.setContentHandler(parser);
 			reader.parse(descFile.getAbsolutePath());
 			pluginTable.put(parser.getPluginId(), parser.getFeatures());
@@ -298,7 +298,7 @@ public class Integrator {
 	 * Return the basedir.
 	 * @return String
 	 */
-	public String getBasedir() {
+	public File getBasedir() {
 		return basedir;
 	}
 
@@ -306,7 +306,7 @@ public class Integrator {
 	 * Set the basedir.
 	 * @param baseDir baseDir
 	 */
-	public void setBasedir(final String baseDir) {
+	public void setBasedir(final File baseDir) {
 		this.basedir = baseDir;
 	}
 	
@@ -314,7 +314,7 @@ public class Integrator {
 	 * Return the ditaDir.
 	 * @return ditaDir
 	 */
-	public String getDitaDir() {
+	public File getDitaDir() {
 		return ditaDir;
 	}
 
@@ -322,7 +322,7 @@ public class Integrator {
 	 * Set the ditaDir.
 	 * @param ditadir ditaDir
 	 */
-	public void setDitaDir(final String ditadir) {
+	public void setDitaDir(final File ditadir) {
 		this.ditaDir = ditadir;
 	}
 	
@@ -357,8 +357,7 @@ public class Integrator {
 	public static void main(final String[] args) {
 		final Integrator abc = new Integrator();
 		final File currentDir = new File(".");
-		final String currentPath = currentDir.getAbsolutePath();
-		abc.setDitaDir(currentPath.substring(0,currentPath.lastIndexOf(Constants.FILE_SEPARATOR)));
+		abc.setDitaDir(currentDir);
 		abc.setProperties(new File("integrator.properties"));
 		abc.execute();
 	}

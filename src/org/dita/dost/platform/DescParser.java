@@ -9,6 +9,8 @@
  */
 package org.dita.dost.platform;
 
+import java.io.File;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -33,7 +35,7 @@ public class DescParser extends DefaultHandler{
 	 * Constructor initialize Feature with location.
 	 * @param location location
 	 */
-	public DescParser(final String location) {
+	public DescParser(final File location) {
 		super();
 		features = new Features(location);
 	}

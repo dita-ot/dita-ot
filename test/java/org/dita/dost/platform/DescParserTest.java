@@ -28,7 +28,7 @@ public class DescParserTest {
     
     final File base = new File("base");
     final String basePrefix = base.getPath() + File.separator;
-    final DescParser p = new DescParser(base.getPath());
+    final DescParser p = new DescParser(base);
     
     @Before
     public void setUp() throws Exception {

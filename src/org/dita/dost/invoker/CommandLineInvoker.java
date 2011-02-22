@@ -457,7 +457,7 @@ public class CommandLineInvoker {
 		try {
 			invoker.processArguments(args);
 			if (invoker.getReadyToRun()) {
-				integrator.setDitaDir(invoker.getDitaDir());
+				integrator.setDitaDir(new File(invoker.getDitaDir()));
 				integrator.setProperties(new File("integrator.properties"));
 				integrator.execute();
 				invoker.startAnt();
