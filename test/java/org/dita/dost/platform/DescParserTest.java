@@ -26,9 +26,9 @@ public class DescParserTest {
 
     private final File resourceDir = new File("test-stub", DescParserTest.class.getSimpleName());
     
-    final File base = new File("base");
+    final File base = new File("base", "plugins");
     final String basePrefix = base.getPath() + File.separator;
-    final DescParser p = new DescParser(base);
+    final DescParser p = new DescParser(base, base.getParentFile());
     
     @Before
     public void setUp() throws Exception {

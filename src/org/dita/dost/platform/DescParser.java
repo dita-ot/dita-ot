@@ -25,19 +25,20 @@ public class DescParser extends DefaultHandler{
 	
 	/**
 	 * DescParser Constructor.
-	 *
+	 * @deprecated use {@link #DescParser(File, File)} instead
 	 */
+	@Deprecated
 	public DescParser(){
-		this(null);
+		this(null, null);
 	}
 	
 	/**
 	 * Constructor initialize Feature with location.
 	 * @param location location
 	 */
-	public DescParser(final File location) {
+	public DescParser(final File location, final File ditaDir) {
 		super();
-		features = new Features(location);
+		features = new Features(location, ditaDir);
 	}
 	
 	/**

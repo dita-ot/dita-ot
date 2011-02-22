@@ -28,6 +28,7 @@ import java.util.StringTokenizer;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.xml.sax.helpers.AttributesImpl;
 
 public class FileGeneratorTest {
 
@@ -40,6 +41,21 @@ public class FileGeneratorTest {
         features.put("element", "foo,bar,baz");
         features.put("attribute", "foo,bar,baz");
     }
+    private final static Map<String, Features> plugins = new HashMap<String, Features>();
+    static {   
+        final Features a = new Features(null, null);
+        final AttributesImpl aAtts = new AttributesImpl();
+        aAtts.addAttribute("", "value", "value", "CDATA", "foo,bar,baz");
+        aAtts.addAttribute("", "type", "type", "CDATA", "text");
+        a.addFeature("element", aAtts);
+        plugins.put("a", a);
+        final Features b = new Features(null, null);
+        final AttributesImpl bAtts = new AttributesImpl();
+        bAtts.addAttribute("", "value", "value", "CDATA", "foo,bar,baz");
+        bAtts.addAttribute("", "type", "type", "CDATA", "text");
+        b.addFeature("attribute", bAtts);
+        plugins.put("b", b);
+    }
     
     @Before
     public void setUp() throws Exception {
@@ -51,7 +67,7 @@ public class FileGeneratorTest {
 
     @Test
     public void testGenerate() throws IOException {
-        final FileGenerator f = new FileGenerator(features);
+        final FileGenerator f = new FileGenerator(features, plugins);
         f.generate(tempFile);
         
         assertEquals(TestUtils.readFileToString(new File(resourceDir, "exp" + File.separator + "dummy.xml")),
@@ -66,7 +82,7 @@ public class FileGeneratorTest {
     private static abstract class AbstractAction implements IAction {
         protected List<String> inputs = new ArrayList<String>();
         protected Map<String, String> params = new HashMap<String, String>();
-        protected Hashtable<String, String> features;
+        protected Map<String, Features> features;
         public void setInput(final String input) {
             final StringTokenizer inputTokenizer = new StringTokenizer(input, Integrator.FEAT_VALUE_SEPARATOR);
             while(inputTokenizer.hasMoreElements()){
@@ -76,7 +92,7 @@ public class FileGeneratorTest {
         public void addParam(final String name, final String value) {
     		params.put(name, value);
     	}
-        public void setFeatures(Hashtable<String, String> features) {
+        public void setFeatures(Map<String, Features> features) {
             this.features = features;
         }
         public abstract String getResult();
@@ -94,7 +110,7 @@ public class FileGeneratorTest {
             assertEquals(paramsExp, params);
             final List<String> inputExp = Arrays.asList(new String[] {"foo", "bar", "baz"});
             assertEquals(inputExp, inputs);
-            assertEquals(FileGeneratorTest.features, features);
+            assertEquals(FileGeneratorTest.plugins, features);
             return "<foo bar='baz'>quz</foo>";
         }
     }
@@ -108,7 +124,7 @@ public class FileGeneratorTest {
             assertEquals(paramsExp, params);
             final List<String> inputExp = Arrays.asList(new String[] {"attribute"});
             assertEquals(inputExp, inputs);
-            assertEquals(FileGeneratorTest.features, features);
+            assertEquals(FileGeneratorTest.plugins, features);
             return " foo='bar'";
         }
     }

@@ -11,6 +11,7 @@ package org.dita.dost.platform;
 
 import java.util.Hashtable;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -39,6 +40,8 @@ public class InsertAction extends DefaultHandler2 implements IAction {
 	protected boolean inCdataSection = false;
 	/** Current processing file. */
 	protected String currentFile;
+	/** Plug-in features. */
+    private Map<String, Features> featureTable = null;
 	
 	/**
 	 * Default Constructor.
@@ -89,8 +92,8 @@ public class InsertAction extends DefaultHandler2 implements IAction {
 		return retBuf.toString();
 	}
 
-	public void setFeatures(final Hashtable<String,String> h) {
-		// NOOP
+	public void setFeatures(final Map<String, Features> h) {
+	    featureTable = h;
 	}
 	
     public void setLogger(final DITAOTLogger logger) {
@@ -176,4 +179,5 @@ public class InsertAction extends DefaultHandler2 implements IAction {
 		inCdataSection = false;
 	}
 	//added by Alan for bug: #2893316 on Date: 2009-11-09 end
+	
 }

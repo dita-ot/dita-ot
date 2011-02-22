@@ -11,6 +11,7 @@ package org.dita.dost.platform;
 
 import java.util.Hashtable;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -29,6 +30,8 @@ public abstract class ImportAction implements IAction {
 	/** Action parameters. */
 	protected final Hashtable<String,String> paramTable;
 	protected DITAOTLogger logger;
+	/** Plug-in features. */
+    protected Map<String, Features> featureTable = null;
 	
 	/**
 	 * Default Constructor.
@@ -62,8 +65,8 @@ public abstract class ImportAction implements IAction {
 	 * Set the feature table.
 	 * @param h hastable
 	 */
-	public void setFeatures(final Hashtable<String,String> h) {
-		
+	public void setFeatures(final Map<String, Features> h) {
+	    this.featureTable = h;
 	}
 	
 	public void setLogger(final DITAOTLogger logger) {

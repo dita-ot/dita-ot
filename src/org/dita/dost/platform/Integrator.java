@@ -15,10 +15,13 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -47,10 +50,11 @@ public class Integrator {
 	/**
 	 * Plugin table which contains detected plugins.
 	 */
-	private final  Hashtable<String,Features> pluginTable;
+	private final Map<String,Features> pluginTable;
 	private final Set<String> templateSet = new HashSet<String>(Constants.INT_16);
 	private File ditaDir;
 	private File basedir;
+	/** Plugin configuration file. */
 	private final Set<File> descSet;
 	private final XMLReader reader;
 	private DITAOTLogger logger;
@@ -132,9 +136,12 @@ public class Integrator {
 		integrate();
 	}
 
+	/**
+	 * Generate and process plugin files.
+	 */
 	private void integrate() {
 		//Collect information for each feature id and generate a feature table.
-		final FileGenerator fileGen = new FileGenerator(featureTable);
+		final FileGenerator fileGen = new FileGenerator(featureTable, pluginTable);
 		fileGen.setLogger(logger);
 		for (final String currentPlugin: pluginTable.keySet()) {
 			loadPlugin (currentPlugin);
@@ -193,7 +200,7 @@ public class Integrator {
 	 * Load the plug-ins and aggregate them by feature and fill into feature table.
 	 * 
 	 * @param plugin plugin ID
-	 * @return <code>true</code> if plugin loaded, otherwise <code>false</code>
+	 * @return <code>true</code> if plugin was loaded, otherwise <code>false</code>
 	 */
 	private boolean loadPlugin (final String plugin)
 	{
@@ -227,8 +234,6 @@ public class Integrator {
 	 * @return <code>true</code> if plugin can be loaded, otherwise <code>false</code>
 	 */
 	private boolean checkPlugin(final String currentPlugin) {
-		
-		final Properties prop = new Properties();		
 		final Features pluginFeatures = pluginTable.get(currentPlugin);
 		final Iterator<PluginRequirement> iter = pluginFeatures.getRequireListIter();
 		//check whether dependcy is satisfied
@@ -250,6 +255,7 @@ public class Integrator {
 			}
 			if (!anyPluginFound && requirement.getRequired()) {
 				//not contain any plugin required by current plugin
+			    final Properties prop = new Properties();
 				prop.put("%1",requirement.toString());
 				prop.put("%2",currentPlugin);
 				logger.logWarn(MessageUtils.getMessage("DOTJ020W",prop).toString());
@@ -259,6 +265,9 @@ public class Integrator {
 		return true;
 	}
 
+	/**
+	 * Parse plugin configuration files.
+	 */
 	private void parsePlugin() {
 		if(!descSet.isEmpty()){
 			for (final File descFile: descSet) {
@@ -268,9 +277,13 @@ public class Integrator {
 		}
 	}
 
+	/**
+	 * Parse plugin configuration file
+	 * @param descFile plugin configuration
+	 */
 	private void parseDesc(final File descFile) {
 		try{
-			final DescParser parser = new DescParser(descFile.getParentFile());
+			final DescParser parser = new DescParser(descFile.getParentFile(), ditaDir);
 			reader.setContentHandler(parser);
 			reader.parse(descFile.getAbsolutePath());
 			pluginTable.put(parser.getPluginId(), parser.getFeatures());
@@ -283,7 +296,7 @@ public class Integrator {
 	 * Default Constructor.
 	 */
 	public Integrator() {
-		pluginTable = new Hashtable<String,Features>(Constants.INT_16);
+		pluginTable = new HashMap<String,Features>(Constants.INT_16);
 		descSet = new HashSet<File>(Constants.INT_16);
 		loadedPlugin = new HashSet<String>(Constants.INT_16);
 		featureTable = new Hashtable<String,String>(Constants.INT_16);
@@ -296,7 +309,7 @@ public class Integrator {
 
 	/**
 	 * Return the basedir.
-	 * @return String
+	 * @return base directory
 	 */
 	public File getBasedir() {
 		return basedir;
@@ -304,7 +317,7 @@ public class Integrator {
 
 	/**
 	 * Set the basedir.
-	 * @param baseDir baseDir
+	 * @param baseDir base directory
 	 */
 	public void setBasedir(final File baseDir) {
 		this.basedir = baseDir;
@@ -312,7 +325,7 @@ public class Integrator {
 	
 	/**
 	 * Return the ditaDir.
-	 * @return ditaDir
+	 * @return dita directory
 	 */
 	public File getDitaDir() {
 		return ditaDir;
@@ -320,7 +333,7 @@ public class Integrator {
 
 	/**
 	 * Set the ditaDir.
-	 * @param ditadir ditaDir
+	 * @param ditadir dita directory
 	 */
 	public void setDitaDir(final File ditadir) {
 		this.ditaDir = ditadir;
@@ -328,7 +341,7 @@ public class Integrator {
 	
 	/**
 	 * Return the properties file.
-	 * @return file
+	 * @return properties file
 	 */
 	public File getProperties() {
 		return propertiesFile;
@@ -336,7 +349,7 @@ public class Integrator {
 
 	/**
 	 * Set the properties file.
-	 * @param propertiesfile propertiesfile
+	 * @param propertiesfile properties file
 	 */
 	public void setProperties(final File propertiesfile) {
 		this.propertiesFile = propertiesfile;
@@ -348,6 +361,28 @@ public class Integrator {
 	 */
 	public void setLogger(final DITAOTLogger logger) {
 	    this.logger = logger;
+	}
+	
+	/**
+	 * Get all and combine extension values
+	 * 
+	 * @param featureTable plugin features
+	 * @param extension extension ID
+	 * @return combined extension value, {@code null} if no value available
+	 */
+	static final String getValue(final Map<String, Features> featureTable, final String extension) {
+        final List<String> buf = new ArrayList<String>();
+        for (final Features f: featureTable.values()) {
+            final String v = f.getFeature(extension);
+            if (v != null) {
+                buf.add(v);
+            }
+        }
+        if (buf.isEmpty()) {
+            return null;
+        } else {
+            return StringUtils.assembleString(buf, ",");
+        }
 	}
 	
 	/**

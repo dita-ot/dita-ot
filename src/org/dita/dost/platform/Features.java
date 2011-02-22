@@ -30,6 +30,7 @@ import org.dita.dost.util.FileUtils;
  */
 public class Features {
 	private final File location;
+	private final File ditaDir;
 	private final Hashtable<String,String> featureTable;
 	private final List<PluginRequirement> requireList;
 	private final Hashtable<String,String> metaTable;
@@ -37,10 +38,14 @@ public class Features {
 
 	/**
 	 * Default constructor.
+	 * 
+	 * @deprecated use {@link #Features(File, File)} instead
 	 */
+	@Deprecated
 	public Features() {
 		super();
 		location = null;
+		ditaDir = null;
 		featureTable = new Hashtable<String,String>(Constants.INT_16);
 		requireList = new ArrayList<PluginRequirement>(Constants.INT_8);
 		metaTable = new Hashtable<String,String>(Constants.INT_16);
@@ -51,9 +56,11 @@ public class Features {
 	/**
 	 * Constructor init location. 
 	 * @param location location
+	 * @param ditaDir base directory
 	 */
-	public Features(final File location) {
+	public Features(final File location, final File ditaDir) {
 		this.location = location;
+		this.ditaDir = ditaDir;
 		featureTable = new Hashtable<String,String>(Constants.INT_16);
 		requireList = new ArrayList<PluginRequirement>(Constants.INT_8);
 		metaTable = new Hashtable<String,String>(Constants.INT_16);
@@ -66,6 +73,14 @@ public class Features {
 	 */
 	public File getLocation(){
 		return location;
+	}
+	
+	/**
+	 * Get DITA-OT base directory
+	 * @return base directory
+	 */
+	public File getDitaDir() {
+	    return ditaDir;
 	}
 	
 	/**

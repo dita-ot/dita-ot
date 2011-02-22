@@ -37,18 +37,18 @@ public class FeaturesTest {
 
 	@Test
 	public void testFeaturesString() {
-		assertNotNull(new Features(new File("base")));
+		assertNotNull(new Features(new File("base", "plugins"), new File("base")));
 	}
 
 	@Test
 	public void testGetLocation() {
 		assertNull(new Features().getLocation());
-		assertEquals(new File("base"), new Features(new File("base")).getLocation());
+		assertEquals(new File("base", "plugins"), new Features(new File("base", "plugins"), new File("base")).getLocation());
 	}
 
 	@Test
 	public void testGetFeature() {
-		final Features f = new Features(new File("base"));
+		final Features f = new Features(new File("base", "plugins"), new File("base"));
 		f.addFeature("foo", "bar", null);
 		
 		assertEquals("bar", f.getFeature("foo"));
@@ -56,7 +56,7 @@ public class FeaturesTest {
 
 	@Test
 	public void testGetAllFeatures() {
-		final Features f = new Features(new File("base"));
+		final Features f = new Features(new File("base", "plugins"), new File("base"));
 		f.addFeature("foo", "bar", null);
 		f.addFeature("foo", "baz", null);
 		f.addFeature("bar", "qux", null);
@@ -70,7 +70,7 @@ public class FeaturesTest {
 
 	@Test
 	public void testAddFeature() {
-		final Features f = new Features(new File("base"));
+		final Features f = new Features(new File("base", "plugins"), new File("base"));
 		try {
 			f.addFeature("foo", null, null);
 			fail();
@@ -78,7 +78,10 @@ public class FeaturesTest {
 		f.addFeature("foo", " bar, baz ", null);
 		assertEquals("bar,baz", f.getFeature("foo"));
 		f.addFeature("foo", "bar, baz", "file");
-		assertEquals("bar,baz,base/bar,base/baz", f.getFeature("foo"));
+		assertEquals("bar,baz,"
+				+ "base" + File.separator + "plugins" + File.separator + "bar,"
+				+ "base" + File.separator + "plugins" + File.separator + "baz",
+			f.getFeature("foo"));
 	}
 
 	@Test

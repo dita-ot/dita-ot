@@ -9,7 +9,7 @@
  */
 package org.dita.dost.platform;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 import org.dita.dost.log.DITAOTLogger;
 
@@ -38,7 +38,7 @@ public interface IAction {
 	 * Set the feature table.
 	 * @param h hastable
 	 */
-	void setFeatures(Hashtable<String,String> h);
+	void setFeatures(Map<String, Features> h);
 	/**
      * Set logger.
      * @param logger logger instance

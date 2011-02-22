@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.dita.dost.log.DITAOTJavaLogger;
@@ -40,7 +41,8 @@ public class FileGenerator extends DefaultHandler2 {
 	private DITAOTLogger logger;
 	private OutputStreamWriter output = null;
 	/** Plug-in features. */
-	private final Hashtable<String,String> featureTable;
+	private final Map<String,String> featureTable;
+	private final Map<String, Features> pluginTable;
 	/** Template file. */
 	private File templateFile;
 
@@ -48,15 +50,16 @@ public class FileGenerator extends DefaultHandler2 {
 	 * Default Constructor.
 	 */
 	public FileGenerator() {
-		this(null);
+		this(null, null);
 	}
 
 	/**
 	 * Constructor init featureTable.
 	 * @param featureTbl featureTbl
 	 */
-	public FileGenerator(final Hashtable<String,String> featureTbl) {
+	public FileGenerator(final Hashtable<String,String> featureTbl, final Map<String,Features> pluginTable) {
 		this.featureTable = featureTbl;
+		this.pluginTable = pluginTable;
 		output = null;
 		templateFile = null;
 		
@@ -155,20 +158,19 @@ public class FileGenerator extends DefaultHandler2 {
 	@Override
 	public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
 		IAction action = null;
-		String input = null;
 		try{
 			if(DITA_OT_NS.equals(uri) && "extension".equals(localName)){
 				// Element extension: <dita:extension id="extension-point" behavior="classname"/>
 				action = (IAction)Class.forName(attributes.getValue("behavior")).newInstance();
 				action.setLogger(logger);
 				action.addParam(PARAM_TEMPLATE, templateFile.getAbsolutePath());
-				action.addParam("extension", attributes.getValue("id"));
-				input = featureTable.get(attributes.getValue("id"));
-				if(input!=null){
-					action.setFeatures(featureTable);
-					action.setInput(input);
-					output.write(action.getResult());
+				final String extension = attributes.getValue("id");
+				action.addParam("extension", extension);
+				if(featureTable.containsKey(extension)){
+					action.setInput(featureTable.get(extension));
 				}
+				action.setFeatures(pluginTable);
+				output.write(action.getResult());
 			}else{
 				final int attLen = attributes.getLength();
 				output.write("<");
@@ -193,7 +195,7 @@ public class FileGenerator extends DefaultHandler2 {
 								}
 							}
 							action.setLogger(logger);
-							action.setFeatures(featureTable);
+							action.setFeatures(pluginTable);
 							action.addParam(PARAM_TEMPLATE, templateFile.getAbsolutePath());
 							action.addParam(PARAM_LOCALNAME, attributes.getLocalName(i));
 							action.setInput(attributes.getValue(i));
@@ -216,6 +218,7 @@ public class FileGenerator extends DefaultHandler2 {
 				output.write(">");
 			}
 		}catch(final Exception e){
+		    e.printStackTrace();
 			logger.logException(e);
 		}
 	}

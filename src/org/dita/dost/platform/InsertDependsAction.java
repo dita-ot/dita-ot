@@ -10,6 +10,7 @@
 package org.dita.dost.platform;
 
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.dita.dost.log.DITAOTLogger;
@@ -28,7 +29,7 @@ public class InsertDependsAction implements IAction {
 	/** Action value. */
 	private String value;
 	/** Plug-in features. */
-	private Hashtable<String,String> featureTable = null;
+	protected Map<String, Features> featureTable = null;
 	private DITAOTLogger logger;
 	
 	/**
@@ -55,7 +56,7 @@ public class InsertDependsAction implements IAction {
 			if (token.startsWith("{") && token.endsWith("}"))
 			{
 				final String extension = token.substring(1, token.length() - 1);
-				final String extensionInputs = featureTable.get(extension);
+				final String extensionInputs = Integrator.getValue(featureTable, extension);
 				if (extensionInputs != null)
 				{
 					if (result.length() != 0) { result.append(Integrator.FEAT_VALUE_SEPARATOR); }
@@ -96,12 +97,12 @@ public class InsertDependsAction implements IAction {
 	 * Set the feature table.
 	 * @param h hastable
 	 */
-	public void setFeatures(final Hashtable<String,String> h) {
+	public void setFeatures(final Map<String, Features> h) {
 		featureTable = h;
 	}
 
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
-	
+    
 }
