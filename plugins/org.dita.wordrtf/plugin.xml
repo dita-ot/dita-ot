@@ -6,4 +6,5 @@
 <plugin id="org.dita.wordrtf">
   <feature extension="dita.conductor.transtype.check" value="wordrtf"/>
   <feature extension="dita.conductor.target" file="conductor.xml"/>
+  <template file="../../xsl/dita2rtf_template.xsl"/>
 </plugin>

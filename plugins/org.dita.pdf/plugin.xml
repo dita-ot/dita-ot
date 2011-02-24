@@ -6,4 +6,5 @@
 <plugin id="org.dita.pdf">
   <feature extension="dita.conductor.transtype.check" value="pdf"/>
   <feature extension="dita.conductor.target" file="conductor.xml"/>
+  <template file="../../xsl/dita2fo-shell_template.xsl"/>
 </plugin>

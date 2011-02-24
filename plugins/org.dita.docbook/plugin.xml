@@ -6,4 +6,5 @@
 <plugin id="org.dita.docbook">
   <feature extension="dita.conductor.transtype.check" value="docbook"/>
   <feature extension="dita.conductor.target" file="conductor.xml"/>
+  <template file="../../xsl/dita2docbook_template.xsl"/>
 </plugin>

@@ -6,4 +6,5 @@
 <plugin id="org.dita.odt">
   <feature extension="dita.conductor.transtype.check" value="odt"/>
   <feature extension="dita.conductor.target" file="conductor.xml"/>
+  <template file="../../xsl/dita2odt_template.xsl"/>
 </plugin>
