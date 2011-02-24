@@ -6,4 +6,5 @@
 <plugin id="org.dita.eclipsehelp">
   <feature extension="dita.conductor.transtype.check" value="eclipsehelp"/>
   <require plugin="org.dita.xhtml"/>
+  <feature extension="dita.conductor.target" file="conductor.xml"/>
 </plugin>

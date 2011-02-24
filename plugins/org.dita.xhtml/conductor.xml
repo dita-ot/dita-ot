@@ -3,7 +3,7 @@
   Sourceforge.net. See the accompanying license.txt file for 
   applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2011 All Rights Reserved. -->
-<plugin id="org.dita.pdf">
-  <feature extension="dita.conductor.transtype.check" value="pdf"/>
-  <feature extension="dita.conductor.target" file="conductor.xml"/>
-</plugin>
+<project name="org.dita.xhtml.conductor">
+  <import file="build_general.xml"/>
+  <import file="build_dita2xhtml.xml"/>
+</project>

@@ -6,17 +6,6 @@
 <project name="DOST" default="init" basedir=".">
   <import file="build_init.xml"/>  
   <import file="build_preprocess.xml"/>
-  <import file="build_general.xml"/>    
-  <import file="build_dita2xhtml.xml"/>
-  <import file="build_dita2htmlhelp.xml"/>
-  <import file="build_dita2javahelp.xml"/>
-  <import file="build_dita2eclipsehelp.xml"/>
-  <import file="build_dita2eclipsecontent.xml"/>
-  <import file="build_dita2pdf.xml"/>
-  <import file="build_dita2wordrtf.xml"/>
-  <import file="build_dita2odt.xml"/>
-  <import file="build_dita2docbook.xml"/>
-  <import file="build_dita2troff.xml"/>
         
   <path id="dost.class.path">
     <dita:extension id="dita.conductor.lib.import" behavior="org.dita.dost.platform.ImportAntLibAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
