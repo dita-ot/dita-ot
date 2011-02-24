@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+  Sourceforge.net. See the accompanying license.txt file for 
+  applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2011 All Rights Reserved. -->
+<plugin id="org.dita.base">
+  <feature extension="dita.image.extensions" value=".gif"/>
+  <feature extension="dita.image.extensions" value=".eps"/>
+  <feature extension="dita.image.extensions" value=".jpg"/>
+  <feature extension="dita.image.extensions" value=".jpeg"/>
+  <feature extension="dita.image.extensions" value=".png"/>
+  <feature extension="dita.image.extensions" value=".svg"/>
+  <feature extension="dita.image.extensions" value=".tif"/>
+  <feature extension="dita.image.extensions" value=".tiff"/>
+  <feature extension="dita.image.extensions" value=".bmp"/>
+  <template file="../../catalog-dita_template.xml"/>
+  <template file="../../build_template.xml"/>
+  <template file="../../build_preprocess_template.xml"/>
+  <template file="../../resource/messages_template.xml"/>
+  <template file="../../xsl/common/allstrings_template.xml"/>
+  <template file="../../xsl/preprocess/maplink_template.xsl"/>
+  <template file="../../xsl/preprocess/mapref_template.xsl"/>
+  <template file="../../xsl/preprocess/mappull_template.xsl"/>
+  <template file="../../xsl/preprocess/conref_template.xsl"/>
+  <template file="../../xsl/preprocess/topicpull_template.xsl"/>
+</plugin>
