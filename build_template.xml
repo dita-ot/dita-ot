@@ -27,36 +27,6 @@
     <dita-ot-fail id="DOTA001F">
       <condition>
         <and>
-          <not>
-            <equals arg1="${transtype}" arg2="xhtml" casesensitive="false"/>
-          </not>
-          <not>
-            <equals arg1="${transtype}" arg2="eclipsehelp" casesensitive="false"/>
-          </not>
-          <not>
-            <equals arg1="${transtype}" arg2="javahelp" casesensitive="false"/>
-          </not>
-          <not>
-            <equals arg1="${transtype}" arg2="htmlhelp" casesensitive="false"/>
-          </not>
-          <not>
-            <equals arg1="${transtype}" arg2="pdf" casesensitive="false"/>
-          </not>
-          <not>
-            <equals arg1="${transtype}" arg2="docbook" casesensitive="false"/>
-          </not>
-          <not>
-            <equals arg1="${transtype}" arg2="eclipsecontent" casesensitive="false"/>
-          </not>
-          <not>
-            <equals arg1="${transtype}" arg2="troff" casesensitive="false"/>
-          </not>
-          <not>
-            <equals arg1="${transtype}" arg2="wordrtf" casesensitive="false"/>
-          </not>
-          <not>
-            <equals arg1="${transtype}" arg2="odt" casesensitive="false"/>
-          </not>
           <dita:extension id="dita.conductor.transtype.check" behavior="org.dita.dost.platform.CheckTranstypeAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
         </and>
       </condition>
