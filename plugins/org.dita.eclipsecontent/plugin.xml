@@ -5,5 +5,6 @@
 <!-- (c) Copyright IBM Corp. 2011 All Rights Reserved. -->
 <plugin id="org.dita.eclipsecontent">
   <feature extension="dita.conductor.transtype.check" value="eclipsecontent"/>
+  <feature extension="dita.conductor.target" file="conductor.xml"/>
   <template file="../../xsl/dita2dynamicdita_template.xsl"/>
 </plugin>
