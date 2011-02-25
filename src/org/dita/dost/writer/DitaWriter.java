@@ -28,7 +28,6 @@ import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
-import org.dita.dost.module.DebugAndFilterModule;
 import org.dita.dost.reader.AbstractXMLReader;
 import org.dita.dost.reader.GrammarPoolManager;
 import org.dita.dost.util.CatalogUtils;
@@ -1218,7 +1217,7 @@ public class DitaWriter extends AbstractXMLWriter {
                 .replace('/',File.separatorChar).replace('\\',File.separatorChar);
                 outputFilename.append((fileExtIndex == -1 || fileExtIndex <= index)
                 						?filename.substring(index+1)
-                						:filename.substring(index+1, fileExtIndex)+DebugAndFilterModule.extName);
+                						:filename.substring(index+1, fileExtIndex)+extName);
                 
                 //when it is not the old solution 3
                 if(OutputUtils.getGeneratecopyouter()!=OutputUtils.OLDSOLUTION){
@@ -1239,7 +1238,7 @@ public class DitaWriter extends AbstractXMLWriter {
                 traceFilename = filename;
                 outputFilename.append((fileExtIndex == -1)
                 					   ? filename
-                					   : filename.substring(0, fileExtIndex)+DebugAndFilterModule.extName);
+                					   : filename.substring(0, fileExtIndex)+extName);
                 if(OutputUtils.getGeneratecopyouter()!=OutputUtils.OLDSOLUTION){
             		if(isOutFile(traceFilename)){
             			

@@ -24,7 +24,6 @@ import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
-import org.dita.dost.module.DebugAndFilterModule;
 import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.DitaValReader;
@@ -126,7 +125,7 @@ public class TestDitaWriter {
 		//C:\jia\DITA-OT1.5\DITAVAL|img.dita
 		String filePathPrefix = new File(baseDir, inputDir.getPath()).getAbsolutePath() + Constants.STICK;
 		String filePath = new File(baseDir, new File(inputDir, "keyword.dita").getPath()).getAbsolutePath();
-		DebugAndFilterModule.extName = ".xml";
+		writer.setExtName(".xml");
 		writer.write(filePathPrefix + "keyword.dita");
 		
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
