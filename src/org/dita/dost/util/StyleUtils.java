@@ -274,12 +274,5 @@ public class StyleUtils {
 				}
 		
 	}
-	
-	
-	
-	
-	/*public static void main(String[] args) {
-		insertFlagStyleName("aa");
-		System.out.println(getFlagStyleName("aa"));
-	}*/
+
 }

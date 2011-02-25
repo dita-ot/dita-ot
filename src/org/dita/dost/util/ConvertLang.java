@@ -904,33 +904,6 @@ public class ConvertLang extends Task {
 	public void setLangcode(String langcode) {
 		this.langcode = langcode;
 	}
-	
-	/*public static void main(String[] args) {
-		//prepare for the input and output
-		FileInputStream inputStream;
-		try {
-			inputStream = new FileInputStream("C:/20101102/build3/DITA-OT1.5.2/odt_LineBreak/chmOut/DITA-articles.hhp");
-			InputStreamReader streamReader = new InputStreamReader(inputStream, Constants.UTF8);
-			BufferedReader reader = new BufferedReader(streamReader);
-			
-			String value = reader.readLine();
-			while(value != null){
-				System.out.println(value);
-				value = reader.readLine();
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		ConvertLang conv = new ConvertLang();
-		conv.setOutputdir("C:/20101102/build3/DITA-OT1.5.2/odt_LineBreak/chmOut/chmOutTest");
-		conv.setMessage("test");
-		conv.setLangcode("fr-fr");
-		conv.execute();
-		
-		
-	}*/
 
 	public void setMessage(String message) {
 		this.message = message;

@@ -19,18 +19,7 @@ import org.apache.tools.ant.Task;
  *
  */
 public class AntVersion extends Task{
-	
-	//private VersionUtil versionUtil = new VersionUtil();
 
-	/**
-	 * main function.
-	 * @param args input arguments from command line
-	 */
-	public static void main(String[] args) {
-		//System.out.println (fversion);
-
-	}
-	
 	/**
 	 * Task execute point.
 	 * @throws BuildException exception

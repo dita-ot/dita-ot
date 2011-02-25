@@ -267,17 +267,4 @@ public class URLUtils {
 		
 	}
 
-	
-	public static void main(String[] args) {
-		
-		File file =  new File("C:\\20100705\\DITA-OT1.5.2\\bug\\ab%20c.txt");
-		try {
-			URL url = correct(file);
-			System.out.println(url.toString());
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
 }
