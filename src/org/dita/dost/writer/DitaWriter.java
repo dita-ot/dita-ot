@@ -70,7 +70,7 @@ public class DitaWriter extends AbstractXMLWriter {
     private static final String ATTRIBUTE_XTRF = "xtrf";
     
   //Added on 2010-08-24 for bug:3086552 start
-    private static boolean setSystemid = true;
+    private boolean setSystemid = true;
   //Added on 2010-08-24 for bug:3086552 end
     
     private static boolean checkDITAHREF(Attributes atts){
@@ -262,7 +262,7 @@ public class DitaWriter extends AbstractXMLWriter {
     	return attValue;
     }
     private String absolutePath;
-    private static HashMap<String, String> catalogMap; //map that contains the information from XML Catalog
+    private HashMap<String, String> catalogMap; //map that contains the information from XML Catalog
     private List<String> colSpec;
     private int columnNumber; // columnNumber is used to adjust column name
     private int columnNumberEnd; //columnNumberEnd is the end value for current entry
@@ -325,9 +325,12 @@ public class DitaWriter extends AbstractXMLWriter {
 	private HashMap<String, HashMap<String, String>> defaultValueMap = null;
     
     /** XMLReader instance for parsing dita file */
-    private static XMLReader reader = null;
+    private XMLReader reader = null;
     /**
      * Default constructor of DitaWriter class.
+     * 
+     * {@link #initXMLReader(String, boolean, boolean)} must be called after
+     * construction to initialize XML parser.
      */
     public DitaWriter() {
         super();
@@ -366,22 +369,6 @@ public class DitaWriter extends AbstractXMLWriter {
         props = null;
         validateMap = null;
         logger = new DITAOTJavaLogger();
-        reader.setContentHandler(this);
-        
-        try {
-			reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
-			//Edited by william on 2009-11-8 for ampbug:2893664 start
-			reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
-			reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
-			//Edited by william on 2009-11-8 for ampbug:2893664 end
-		} catch (SAXNotRecognizedException e1) {
-			logger.logException(e1);
-		} catch (SAXNotSupportedException e1) {
-			logger.logException(e1);
-		}
-		
-		
-		reader.setEntityResolver(CatalogUtils.getCatalogResolver());
     }
 
     /**
@@ -390,22 +377,24 @@ public class DitaWriter extends AbstractXMLWriter {
      * @param validate whether validate
      * @throws SAXException SAXException
      */
-	public static void initXMLReader(String ditaDir,boolean validate, boolean arg_setSystemid) throws SAXException {
-		DITAOTJavaLogger logger=new DITAOTJavaLogger();
-		
+	public void initXMLReader(final String ditaDir, final boolean validate, final boolean arg_setSystemid) throws SAXException {
 		try {
-			
 			reader = StringUtils.getXMLReader();
 			AbstractXMLReader.setGrammarPool(reader, null);
  			
+            reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
+            reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
+            reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
             reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
             if(validate==true){
             	reader.setFeature(Constants.FEATURE_VALIDATION, true);
             	reader.setFeature(Constants.FEATURE_VALIDATION_SCHEMA, true);
             }
-			reader.setFeature(Constants.FEATURE_NAMESPACE, true);			
+			reader.setFeature(Constants.FEATURE_NAMESPACE, true);
+	        reader.setContentHandler(this);
+	        reader.setEntityResolver(CatalogUtils.getCatalogResolver());
 		} catch (Exception e) {
-			logger.logException(e);
+			throw new SAXException("Failed to initialize XML parser: " + e.getMessage(), e);
 		}
 		AbstractXMLReader.setGrammarPool(reader, GrammarPoolManager.getGrammarPool());
 		CatalogUtils.setDitaDir(ditaDir);

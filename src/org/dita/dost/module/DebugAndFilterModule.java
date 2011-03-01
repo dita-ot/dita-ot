@@ -83,10 +83,6 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
     private static void updateProperty (final String listName, final Properties property){
     	final StringBuffer result = new StringBuffer(Constants.INT_1024);
     	final String propValue = property.getProperty(listName);
-		String file;
-		int equalIndex;
-		int fileExtIndex;
-		StringTokenizer tokenizer = null;
 		
 		
     	if (propValue == null || Constants.STRING_EMPTY.equals(propValue.trim())){
@@ -94,12 +90,12 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
     		return;
     	}
     	
-    	tokenizer = new StringTokenizer(propValue,Constants.COMMA);
+    	final StringTokenizer tokenizer = new StringTokenizer(propValue,Constants.COMMA);
     	
     	while (tokenizer.hasMoreElements()){
-    		file = (String)tokenizer.nextElement();
-    		equalIndex = file.indexOf(Constants.EQUAL);
-    		fileExtIndex = file.lastIndexOf(Constants.DOT);
+    	    final String file = (String)tokenizer.nextElement();
+    	    final int equalIndex = file.indexOf(Constants.EQUAL);
+    	    final int fileExtIndex = file.lastIndexOf(Constants.DOT);
 
     		if(fileExtIndex != -1 &&
     				Constants.FILE_EXTENSION_DITAMAP.equalsIgnoreCase(file.substring(fileExtIndex))){
@@ -160,8 +156,6 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 	}
 	private final DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 	
-	private boolean xmlValidate=true;
-	
 	private String inputMap = null;
 	
 	private String ditaDir = null;
@@ -212,11 +206,6 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 			//Added on 2010-08-24 for bug:3086552 end
 			
 			inputDir = null;
-			String filePathPrefix = null;
-			final ListReader listReader = new ListReader();
-			LinkedList<String> parseList = null;
-			Content content;
-			DitaWriter fileWriter;
 
 
 			extName = ext.startsWith(Constants.DOT) ? ext : (Constants.DOT + ext);
@@ -227,10 +216,11 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 				ditavalFile = new File(baseDir, ditavalFile).getAbsolutePath();
 			}
 
+	        final ListReader listReader = new ListReader();
 			//null means default path: tempdir/dita.xml.properties
 			listReader.read(null);
 
-			parseList = (LinkedList<String>) listReader.getContent().getCollection();
+			final LinkedList<String> parseList = (LinkedList<String>) listReader.getContent().getCollection();
 			inputDir = (String) listReader.getContent().getValue();
 			inputMap = new File(inputDir + File.separator + listReader.getInputMap()).getAbsolutePath();
 			
@@ -242,6 +232,7 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 			}
 			final DitaValReader filterReader = new DitaValReader();
 			
+			Content content;
 			if (ditavalFile!=null){
 			    filterReader.read(ditavalFile);
 			    content = filterReader.getContent();
@@ -250,21 +241,14 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 			    content = new ContentImpl();
 			    //FilterUtils.setFilterMap(null);
 			}
+			final DitaWriter fileWriter = new DitaWriter();
 			try{
-				final String valueOfValidate=input.getAttribute("validate");
-				if(valueOfValidate!=null){
-					if("false".equalsIgnoreCase(valueOfValidate)) {
-                        xmlValidate=false;
-                    } else {
-                        xmlValidate=true;
-                    }
-				}
-				DitaWriter.initXMLReader(ditaDir,xmlValidate, setSystemid);
+			    final boolean xmlValidate = Boolean.valueOf(input.getAttribute("validate"));
+			    fileWriter.initXMLReader(ditaDir,xmlValidate, setSystemid);
 			} catch (final SAXException e) {
 				throw new DITAOTException(e.getMessage(), e);
 			}
-
-			fileWriter = new DitaWriter();
+			
 			content.setValue(tempDir);
 			fileWriter.setContent(content);
 			
@@ -275,6 +259,7 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 			//set transtype
 			fileWriter.setTranstype(transtype);
 			//added by William on 2009-07-18 for req #12014 end
+	        String filePathPrefix = null;
 			if(inputDir != null){
 			    filePathPrefix = inputDir + Constants.STICK;
 			}
@@ -357,7 +342,7 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
     
     private static class InternalEntityResolver implements EntityResolver {
 
-		private HashMap<String, String> catalogMap = null;
+		private final HashMap<String, String> catalogMap;
 		
 		public InternalEntityResolver(final HashMap<String, String> map) {
 			this.catalogMap = map;
