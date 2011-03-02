@@ -24,6 +24,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Stack;
 
+import org.xml.sax.helpers.AttributesImpl;
+
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
@@ -53,9 +55,6 @@ import org.xml.sax.XMLReader;
  */
 public class DitaWriter extends AbstractXMLWriter {
 
-    private static final String ATTRIBUTE_END = "\"";
-    private static final String ATTRIBUTE_XTRC_START = " xtrc=\"";
-    private static final String ATTRIBUTE_XTRF_START = " xtrf=\"";
     private static final String COLUMN_NAME_COL = "col";
     private static final String OS_NAME_WINDOWS = "windows";
     private static final String PI_PATH2PROJ_TARGET = "path2project";
@@ -417,25 +416,29 @@ public class DitaWriter extends AbstractXMLWriter {
     }
     
     /**
-	 * @param attQName
-	 * @param attValue
-	 * @throws IOException
+     * Write attribute to output.
+     * 
+	 * @param attQName attribute name
+	 * @param attValue attribute value that has been XML escaped
+	 * @throws IOException if writing to output failed
 	 */
     private void copyAttribute(String attQName, String attValue) throws IOException{
-    	output.write(new StringBuffer().append(Constants.STRING_BLANK)
-    			.append(attQName).append(Constants.EQUAL).append(Constants.QUOTATION)
-    			.append(attValue).append(Constants.QUOTATION).toString());
+    	output.write(Constants.STRING_BLANK);
+		output.write(attQName);
+		output.write(Constants.EQUAL);
+		output.write(Constants.QUOTATION);
+		output.write(attValue);
+		output.write(Constants.QUOTATION);
     }
-    
+        
     /**
+     * Process attribute values and output attributes.
      * 
-     */
-    
-    /**
-	 * @param atts
+     * @param qName current element qName
+	 * @param atts attributes of current element
 	 * @throws IOException
 	 */
-	private void copyElementAttribute(String qName, Attributes atts) throws IOException {
+	private void copyElementAttribute(String qName, AttributesImpl atts) throws IOException {
 		// copy the element's attributes    
 		int attsLen = atts.getLength();
 		 boolean conkeyrefValid = false;
@@ -443,9 +446,6 @@ public class DitaWriter extends AbstractXMLWriter {
 		    String attQName = atts.getQName(i);
 		    String attValue = atts.getValue(i);
 		    String nsUri = atts.getURI(i);
-		    
-		    //ignore the xtrf and xtrc attribute ,and not copy
-		    if(attQName.equals(ATTRIBUTE_XTRF)|| attQName.equals(ATTRIBUTE_XTRC))continue;
 		    
 		  //Probe for default values
 			if (StringUtils.isEmptyString(attValue) && this.defaultValueMap != null) {
@@ -675,13 +675,13 @@ public class DitaWriter extends AbstractXMLWriter {
 	}
 	
 	/**
+	 * Add element specific attributes and default attributes.
+	 * 
 	 * @param qName
 	 * @param atts
 	 * @throws IOException
 	 */
-	private void copyElementName(String qName, Attributes atts) throws IOException {
-		//copy the element name
-		output.write(Constants.LESS_THAN + qName);
+	private void copyElementName(String qName, AttributesImpl atts) throws IOException {
 		if (Constants.ELEMENT_NAME_TGROUP.equals(qName)){
 			
 		    //Edited by William on 2009-11-27 for bug:1846993 start
@@ -718,7 +718,7 @@ public class DitaWriter extends AbstractXMLWriter {
 			}
 			columnNumberEnd = columnNumber;
 			//change the col name of colspec
-			copyAttribute(Constants.ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL+columnNumber);
+			atts.addAttribute("", Constants.ATTRIBUTE_NAME_COLNAME, Constants.ATTRIBUTE_NAME_COLNAME, "CDATA", COLUMN_NAME_COL+columnNumber);
 			//Added by William on 2009-06-30 for colname bug:2811358 start
 			//total columns count
 			totalColumns = columnNumberEnd;
@@ -727,12 +727,12 @@ public class DitaWriter extends AbstractXMLWriter {
 			
 			/*columnNumber = getStartNumber(atts, columnNumberEnd);
 			if(columnNumber > columnNumberEnd){
-				copyAttribute(Constants.ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL+columnNumber);
+				atts.addAttribute("", Constants.ATTRIBUTE_NAME_COLNAME, Constants.ATTRIBUTE_NAME_COLNAME, "CDATA", COLUMN_NAME_COL+columnNumber);
 				if (atts.getValue(Constants.ATTRIBUTE_NAME_NAMEST) != null){
-					copyAttribute(Constants.ATTRIBUTE_NAME_NAMEST, COLUMN_NAME_COL+columnNumber);
+					atts.addAttribute("", Constants.ATTRIBUTE_NAME_NAMEST, Constants.ATTRIBUTE_NAME_NAMEST, "CDATA", COLUMN_NAME_COL+columnNumber);
 				}
 				if (atts.getValue(Constants.ATTRIBUTE_NAME_NAMEEND) != null){
-					copyAttribute(Constants.ATTRIBUTE_NAME_NAMEEND, COLUMN_NAME_COL+getEndNumber(atts, columnNumber));
+					atts.addAttribute("", Constants.ATTRIBUTE_NAME_NAMEEND, Constants.ATTRIBUTE_NAME_NAMEEND, "CDATA", COLUMN_NAME_COL+getEndNumber(atts, columnNumber));
 				}
 			}
 			columnNumberEnd = getEndNumber(atts, columnNumber);*/
@@ -747,12 +747,12 @@ public class DitaWriter extends AbstractXMLWriter {
 			if(columnNumber > columnNumberEnd){
 				//The first row
 				if(rowNumber == 1){
-					copyAttribute(Constants.ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL+columnNumber);
+					atts.addAttribute("", Constants.ATTRIBUTE_NAME_COLNAME, Constants.ATTRIBUTE_NAME_COLNAME, "CDATA", COLUMN_NAME_COL+columnNumber);
 					if (atts.getValue(Constants.ATTRIBUTE_NAME_NAMEST) != null){
-						copyAttribute(Constants.ATTRIBUTE_NAME_NAMEST, COLUMN_NAME_COL+columnNumber);
+						atts.addAttribute("", Constants.ATTRIBUTE_NAME_NAMEST, Constants.ATTRIBUTE_NAME_NAMEST, "CDATA", COLUMN_NAME_COL+columnNumber);
 					}
 					if (atts.getValue(Constants.ATTRIBUTE_NAME_NAMEEND) != null){
-						copyAttribute(Constants.ATTRIBUTE_NAME_NAMEEND, COLUMN_NAME_COL+getEndNumber(atts, columnNumber));
+						atts.addAttribute("", Constants.ATTRIBUTE_NAME_NAMEEND, Constants.ATTRIBUTE_NAME_NAMEEND, "CDATA", COLUMN_NAME_COL+getEndNumber(atts, columnNumber));
 					}
 				//other row
 				}else{
@@ -794,12 +794,12 @@ public class DitaWriter extends AbstractXMLWriter {
 						
 					}
 					
-					copyAttribute(Constants.ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL+columnNumber);
+					atts.addAttribute("", Constants.ATTRIBUTE_NAME_COLNAME, Constants.ATTRIBUTE_NAME_COLNAME, "CDATA", COLUMN_NAME_COL+columnNumber);
 					if (atts.getValue(Constants.ATTRIBUTE_NAME_NAMEST) != null){
-						copyAttribute(Constants.ATTRIBUTE_NAME_NAMEST, COLUMN_NAME_COL+columnNumber);
+						atts.addAttribute("", Constants.ATTRIBUTE_NAME_NAMEST, Constants.ATTRIBUTE_NAME_NAMEST, "CDATA", COLUMN_NAME_COL+columnNumber);
 					}
 					if (atts.getValue(Constants.ATTRIBUTE_NAME_NAMEEND) != null){
-						copyAttribute(Constants.ATTRIBUTE_NAME_NAMEEND, COLUMN_NAME_COL+getEndNumber(atts, columnNumber));
+						atts.addAttribute("", Constants.ATTRIBUTE_NAME_NAMEEND, Constants.ATTRIBUTE_NAME_NAMEEND, "CDATA", COLUMN_NAME_COL+getEndNumber(atts, columnNumber));
 					}
 				}
 			}
@@ -862,8 +862,9 @@ public class DitaWriter extends AbstractXMLWriter {
             }
         } else { // exclude shows whether it's excluded by filtering
             try {
-                output.write(Constants.LESS_THAN + Constants.SLASH 
-                        + qName + Constants.GREATER_THAN);
+                output.write(Constants.LESS_THAN + Constants.SLASH);
+                output.write(qName);
+                output.write(Constants.GREATER_THAN);
             } catch (Exception e) {
             	logger.logException(e);
             }
@@ -959,9 +960,13 @@ public class DitaWriter extends AbstractXMLWriter {
     	if (!exclude) { // exclude shows whether it's excluded by filtering
             try {
             	super.processingInstruction(target, data);
-            	String pi = (data != null) ? target + Constants.STRING_BLANK + data : target;
-                output.write(Constants.LESS_THAN + Constants.QUESTION 
-                        + pi + Constants.QUESTION + Constants.GREATER_THAN);
+            	output.write(Constants.LESS_THAN + Constants.QUESTION);
+            	output.write(target);
+            	if (data != null) {
+            	    output.write(Constants.STRING_BLANK);
+            	    output.write(data);
+            	}
+                output.write(Constants.QUESTION + Constants.GREATER_THAN);
             } catch (Exception e) {
             	logger.logException(e);
             }
@@ -1095,17 +1100,18 @@ public class DitaWriter extends AbstractXMLWriter {
                 level = 0;
             }else{
                 try {
-                	copyElementName(qName, atts);
-                    
-                    copyElementAttribute(qName, atts);
+                    output.write(Constants.LESS_THAN);
+                    output.write(qName);
+                    final AttributesImpl attsBuf = new AttributesImpl(atts);
+                	copyElementName(qName, attsBuf);
                     // write the xtrf and xtrc attributes which contain debug
                     // information if it is dita elements (elements not in foreign/unknown)
                     if (foreignLevel <= 1){
-                    	output.write(ATTRIBUTE_XTRF_START + traceFilename + ATTRIBUTE_END);
-                    	output.write(ATTRIBUTE_XTRC_START + qName + Constants.COLON + nextValue.toString() + ATTRIBUTE_END);
+                        attsBuf.addAttribute("", ATTRIBUTE_XTRF, ATTRIBUTE_XTRF, "CDATA", traceFilename);
+                        attsBuf.addAttribute("", ATTRIBUTE_XTRC, ATTRIBUTE_XTRC, "CDATA", qName + Constants.COLON + nextValue.toString());
                     }
+                    copyElementAttribute(qName, attsBuf);
                     output.write(Constants.GREATER_THAN);
-                    
                 } catch (Exception e) {
                 	logger.logException(e);
                 }// try
