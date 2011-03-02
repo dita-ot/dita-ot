@@ -58,9 +58,8 @@ public class DitaWriter extends AbstractXMLWriter {
     private static final String ATTRIBUTE_XTRF_START = " xtrf=\"";
     private static final String COLUMN_NAME_COL = "col";
     private static final String OS_NAME_WINDOWS = "windows";
-    private static final String PI_END = "?>";
-    private static final String PI_PATH2PROJ_HEAD = "<?path2project ";
-    private static final String PI_WORKDIR_HEAD = "<?workdir ";
+    private static final String PI_PATH2PROJ_TARGET = "path2project";
+    private static final String PI_WORKDIR_TARGET = "workdir";
     //To check the URL of href in topicref attribute
     private static final String NOT_LOCAL_URL="://";
     //To check whether the attribute of XTRC and XTRF have existed
@@ -1016,15 +1015,15 @@ public class DitaWriter extends AbstractXMLWriter {
             output.write(Constants.LINE_SEPARATOR);
             if(Constants.OS_NAME.toLowerCase().indexOf(OS_NAME_WINDOWS)==-1)
             {
-                output.write(PI_WORKDIR_HEAD + absolutePath + PI_END);
+                processingInstruction(PI_WORKDIR_TARGET, absolutePath);
             }else{
-                output.write(PI_WORKDIR_HEAD + Constants.SLASH + absolutePath + PI_END);
+                processingInstruction(PI_WORKDIR_TARGET, Constants.SLASH + absolutePath);
             }
             output.write(Constants.LINE_SEPARATOR);
             if(path2Project != null){
-            	output.write(PI_PATH2PROJ_HEAD + path2Project + PI_END);
+                processingInstruction(PI_PATH2PROJ_TARGET, path2Project);
             }else{
-            	output.write(PI_PATH2PROJ_HEAD + PI_END);
+                processingInstruction(PI_PATH2PROJ_TARGET, null);
             }
             output.write(Constants.LINE_SEPARATOR);
         } catch (Exception e) {
