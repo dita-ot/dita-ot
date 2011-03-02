@@ -19,8 +19,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import org.junit.After;
 import org.junit.Before;
@@ -98,10 +100,10 @@ public class DebugAndFilterModuleTest {
     @Test
     public void testGeneratedFiles() throws SAXException, IOException {
         final File[] files = {
-                new File("maps" + File.separator + "root-map-01.ditamap"),
-                new File("topics" + File.separator + "target-topic-a.xml"),
-                new File("topics" + File.separator + "target-topic-c.xml"),
-                new File("topics" + File.separator + "xreffin-topic-1.xml"),
+                new File("maps", "root-map-01.ditamap"),
+                new File("topics", "target-topic-a.xml"),
+                new File("topics", "target-topic-c.xml"),
+                new File("topics", "xreffin-topic-1.xml"),
         };
         final TestHandler handler = new TestHandler();
         final XMLReader parser = XMLReaderFactory.createXMLReader();
@@ -158,8 +160,9 @@ public class DebugAndFilterModuleTest {
     private class TestHandler implements ContentHandler {
 
         private File source;
-        private Map<String, Integer> counter = new HashMap<String, Integer>();
-        
+        private final Map<String, Integer> counter = new HashMap<String, Integer>();
+        private final Set<String> requiredProcessingInstructions = new HashSet<String>();
+                
         void setSource(final File source) {
             this.source = source;
         }
@@ -169,7 +172,13 @@ public class DebugAndFilterModuleTest {
         }
 
         public void endDocument() throws SAXException {
+            if (!requiredProcessingInstructions.isEmpty()) {
+                for (final String pi: requiredProcessingInstructions) {
+                    throw new AssertionError("Processing instruction " + pi + " not defined");
+                }
+            }
             counter.clear();
+            requiredProcessingInstructions.clear();
         }
 
         public void endElement(String arg0, String arg1, String arg2) throws SAXException {
@@ -186,7 +195,9 @@ public class DebugAndFilterModuleTest {
 
         public void processingInstruction(String arg0, String arg1)
                 throws SAXException {
-            // NOOP
+            if (requiredProcessingInstructions.contains(arg0)) {
+                requiredProcessingInstructions.remove(arg0);
+            }
         }
 
         public void setDocumentLocator(Locator arg0) {
@@ -198,7 +209,9 @@ public class DebugAndFilterModuleTest {
         }
 
         public void startDocument() throws SAXException {
-            // NOOP
+            requiredProcessingInstructions.add("path2project");
+            requiredProcessingInstructions.add("workdir");
+
         }
 
         public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
