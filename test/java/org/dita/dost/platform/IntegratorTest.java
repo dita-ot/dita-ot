@@ -110,16 +110,16 @@ public class IntegratorTest {
 		
 		assertEquals(getProperties(new File(expDir, "lib" + File.separator + Constants.CONF_PROPERTIES)),
 					 getProperties(new File(tempDir, "lib" + File.separator + Constants.CONF_PROPERTIES)));
-		assertEquals(TestUtils.readXmlToString(new File(expDir, "build.xml"), true),
-					 TestUtils.readXmlToString(new File(tempDir, "build.xml"), true));
-		assertEquals(TestUtils.readXmlToString(new File(expDir, "catalog.xml"), true),
-				     TestUtils.readXmlToString(new File(tempDir, "catalog.xml"), true));
-		assertEquals(TestUtils.readXmlToString(new File(expDir, "xsl" + File.separator + "shell.xsl"), true),
-			         TestUtils.readXmlToString(new File(tempDir, "xsl" + File.separator + "shell.xsl"), true));
-		assertEquals(TestUtils.readXmlToString(new File(expDir, "xsl" + File.separator + "common" + File.separator + "allstrings.xml"), true),
-		         	 TestUtils.readXmlToString(new File(tempDir, "xsl" + File.separator + "common" + File.separator + "allstrings.xml"), true));
-		assertEquals(TestUtils.readXmlToString(new File(expDir, "plugins" + File.separator + "dummy" + File.separator + "xsl" + File.separator + "shell.xsl"), true),
-					 TestUtils.readXmlToString(new File(tempDir, "plugins" + File.separator + "dummy" + File.separator + "xsl" + File.separator + "shell.xsl"), true));
+		assertEquals(TestUtils.readXmlToString(new File(expDir, "build.xml"), true, false),
+					 TestUtils.readXmlToString(new File(tempDir, "build.xml"), true, false));
+		assertEquals(TestUtils.readXmlToString(new File(expDir, "catalog.xml"), true, false),
+				     TestUtils.readXmlToString(new File(tempDir, "catalog.xml"), true, false));
+		assertEquals(TestUtils.readXmlToString(new File(expDir, "xsl" + File.separator + "shell.xsl"), true, false),
+			         TestUtils.readXmlToString(new File(tempDir, "xsl" + File.separator + "shell.xsl"), true, false));
+		assertEquals(TestUtils.readXmlToString(new File(expDir, "xsl" + File.separator + "common" + File.separator + "allstrings.xml"), true, false),
+		         	 TestUtils.readXmlToString(new File(tempDir, "xsl" + File.separator + "common" + File.separator + "allstrings.xml"), true, false));
+		assertEquals(TestUtils.readXmlToString(new File(expDir, "plugins" + File.separator + "dummy" + File.separator + "xsl" + File.separator + "shell.xsl"), true, false),
+					 TestUtils.readXmlToString(new File(tempDir, "plugins" + File.separator + "dummy" + File.separator + "xsl" + File.separator + "shell.xsl"), true, false));
 
 	}
 	

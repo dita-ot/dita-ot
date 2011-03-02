@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<topic id="keyword" xml:lang="en-us" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" ditaarch:DITAArchVersion="1.2">
+  <title>keyword</title>
+  <shortdesc>You maintain your solution to ensure that all components are operating at maximum
+    efficiency.</shortdesc>
+  <body>
+    <lines xml:space="preserve">
+      <keyword id="prodname1" product="key1">ThisProduct</keyword>
+      <keyword id="prodname2" product="key2">ThisProduct Deluxe</keyword>
+      <keyword id="prodname3" product="key3">AnthorProduct</keyword>
+    </lines>
+    <foreign>
+      <foo xmlns="http://example.com/foo">
+        xxx
+        <bar></bar>
+        xxx
+      </foo>
+    </foreign>
+    <table>
+      <tgroup cols="3">
+        <colspec colname="col1"/>
+        <colspec colname="col2"/>
+        <colspec colname="col3"/>
+        <tbody>
+          <row>
+            <entry colname="col1" namest="col1" nameend="col2"/>
+            <entry colname="col3"/>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+  </body>
+</topic>

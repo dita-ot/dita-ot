@@ -26,10 +26,13 @@ import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.dita.dost.util.FileUtils;
+
+import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.ext.LexicalHandler;
+import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.XMLFilterImpl;
 import org.xml.sax.helpers.XMLReaderFactory;
 
@@ -104,7 +107,7 @@ public class TestUtils {
 	 * @return contents of the file
 	 * @throws Exception if parsing the file failed
 	 */
-	public static String readXmlToString(final File file, final boolean normalize)
+	public static String readXmlToString(final File file, final boolean normalize, final boolean clean)
 			throws Exception {
 		final Writer std = new CharArrayWriter();
 		InputStream in = null;
@@ -115,6 +118,9 @@ public class TestUtils {
             if (normalize) {
             	t.setOutputProperty(OutputKeys.INDENT, "yes");
             	p = new NormalizingXMLFilterImpl(p);
+            }
+            if (clean) {
+                p = new CleaningXMLFilterImpl(p);
             }
             t.transform(new SAXSource(p, new InputSource(in)),
             			new StreamResult(std));
@@ -145,6 +151,31 @@ public class TestUtils {
 		
 	}
 	
+	private static class CleaningXMLFilterImpl extends XMLFilterImpl {
+        
+        CleaningXMLFilterImpl(final XMLReader parent) {
+            super(parent);
+        }
+        
+        @Override
+        public void startElement(final String uri, final String localName, final String qName,
+                final Attributes atts) throws SAXException {
+           final AttributesImpl attsBuf = new AttributesImpl(atts);
+           for (final String a: new String[] {"class", "domains", "xtrf", "xtrc"}) {
+               final int i = attsBuf.getIndex(a);
+               if (i != -1) {
+                   attsBuf.removeAttribute(i);
+               }
+           }
+           getContentHandler().startElement(uri, localName, qName, attsBuf); 
+        }
+        
+        @Override
+        public void processingInstruction(final String target, final String data) throws SAXException {
+            // Ignore
+        }
+        
+    }
 	
 	/**
 	 * Deletes a file. If file is a directory, delete it and all sub-directories.
