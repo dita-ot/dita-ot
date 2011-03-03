@@ -53,9 +53,6 @@ import org.xml.sax.XMLReader;
  */
 public class DitaWriter extends AbstractXMLWriter {
 
-    private static final String ATTRIBUTE_END = "\"";
-    private static final String ATTRIBUTE_XTRC_START = " xtrc=\"";
-    private static final String ATTRIBUTE_XTRF_START = " xtrf=\"";
     private static final String COLUMN_NAME_COL = "col";
     private static final String OS_NAME_WINDOWS = "windows";
     private static final String PI_PATH2PROJ_TARGET = "path2project";
@@ -422,9 +419,12 @@ public class DitaWriter extends AbstractXMLWriter {
 	 * @throws IOException
 	 */
     private void copyAttribute(String attQName, String attValue) throws IOException{
-    	output.write(new StringBuffer().append(Constants.STRING_BLANK)
-    			.append(attQName).append(Constants.EQUAL).append(Constants.QUOTATION)
-    			.append(attValue).append(Constants.QUOTATION).toString());
+    	output.write(Constants.STRING_BLANK);
+    	output.write(attQName);
+    	output.write(Constants.EQUAL);
+    	output.write(Constants.QUOTATION);
+    	output.write(attValue);
+    	output.write(Constants.QUOTATION);
     }
     
     /**
@@ -680,8 +680,6 @@ public class DitaWriter extends AbstractXMLWriter {
 	 * @throws IOException
 	 */
 	private void copyElementName(String qName, Attributes atts) throws IOException {
-		//copy the element name
-		output.write(Constants.LESS_THAN + qName);
 		if (Constants.ELEMENT_NAME_TGROUP.equals(qName)){
 			
 		    //Edited by William on 2009-11-27 for bug:1846993 start
@@ -862,8 +860,9 @@ public class DitaWriter extends AbstractXMLWriter {
             }
         } else { // exclude shows whether it's excluded by filtering
             try {
-                output.write(Constants.LESS_THAN + Constants.SLASH 
-                        + qName + Constants.GREATER_THAN);
+                output.write(Constants.LESS_THAN + Constants.SLASH);
+                output.write(qName);
+                output.write(Constants.GREATER_THAN);
             } catch (Exception e) {
             	logger.logException(e);
             }
@@ -959,9 +958,12 @@ public class DitaWriter extends AbstractXMLWriter {
     	if (!exclude) { // exclude shows whether it's excluded by filtering
             try {
             	super.processingInstruction(target, data);
-            	String pi = (data != null) ? target + Constants.STRING_BLANK + data : target;
-                output.write(Constants.LESS_THAN + Constants.QUESTION 
-                        + pi + Constants.QUESTION + Constants.GREATER_THAN);
+            	output.write(Constants.LESS_THAN + Constants.QUESTION);
+            	output.write(target);
+            	if (data != null) {
+            	    output.write(Constants.STRING_BLANK + data);
+            	}
+            	output.write(Constants.QUESTION + Constants.GREATER_THAN);
             } catch (Exception e) {
             	logger.logException(e);
             }
@@ -1095,14 +1097,16 @@ public class DitaWriter extends AbstractXMLWriter {
                 level = 0;
             }else{
                 try {
+                    output.write(Constants.LESS_THAN);
+                    output.write(qName);
                 	copyElementName(qName, atts);
                     
                     copyElementAttribute(qName, atts);
                     // write the xtrf and xtrc attributes which contain debug
                     // information if it is dita elements (elements not in foreign/unknown)
                     if (foreignLevel <= 1){
-                    	output.write(ATTRIBUTE_XTRF_START + traceFilename + ATTRIBUTE_END);
-                    	output.write(ATTRIBUTE_XTRC_START + qName + Constants.COLON + nextValue.toString() + ATTRIBUTE_END);
+                        copyAttribute(ATTRIBUTE_XTRF, traceFilename);
+                        copyAttribute(ATTRIBUTE_XTRC, qName + Constants.COLON + nextValue.toString());
                     }
                     output.write(Constants.GREATER_THAN);
                     
