@@ -43,6 +43,8 @@ import org.dita.dost.util.OutputUtils;
 public class DitaWriterTest {
     
     private static final File resourceDir = new File("test-stub", DitaWriterTest.class.getSimpleName());
+    private static final File srcDir = new File(resourceDir, "src");
+    private static final File expDir = new File(resourceDir, "exp");
     private static File tempDir;
     
     @BeforeClass
@@ -60,29 +62,45 @@ public class DitaWriterTest {
             }
         }
         
-        OutputUtils.setInputMapPathName(new File(resourceDir, "keyword.dita").getAbsolutePath());
-        
+        OutputUtils.setInputMapPathName(new File(srcDir, "main.ditamap").getAbsolutePath());
         final DitaWriter writer = new DitaWriter();
-        writer.initXMLReader(resourceDir.getAbsolutePath(), false, true);
-        final Content content = new ContentImpl();
-        content.setValue(tempDir.getAbsolutePath());
-        writer.setContent(content);
-        
-        //C:\jia\DITA-OT1.5\DITAVAL|img.dita
-        final String filePathPrefix = resourceDir.getAbsolutePath() + Constants.STICK;
+        writer.initXMLReader(srcDir.getAbsolutePath(), false, true);
         writer.setExtName(".xml");
-        writer.write(filePathPrefix + "keyword.dita");        
+        
+        for (final String f: new String[] {"main.ditamap", "keyword.dita"}) {
+            final Content content = new ContentImpl();
+            content.setValue(tempDir.getAbsolutePath());
+            writer.setContent(content);
+            writer.write(srcDir.getAbsolutePath() + Constants.STICK + f);
+        }
     }
     
     @Test
-    public void testGeneratedFiles() throws SAXException, IOException {
+    public void testGeneratedTopic() throws SAXException, IOException {
         final TestHandler handler = new TestHandler();
         final XMLReader parser = XMLReaderFactory.createXMLReader();
         parser.setContentHandler(handler);
         InputStream in = null;
         try {
             in = new FileInputStream(new File(tempDir, "keyword.xml"));
-            handler.setSource(new File(resourceDir, "keyword.dita"));
+            handler.setSource(new File(srcDir, "keyword.dita"));
+            parser.parse(new InputSource(in));
+        } finally {
+            if (in != null) {
+                in.close();
+            }
+        }
+    }
+    
+    @Test
+    public void testGeneratedMap() throws SAXException, IOException {
+        final TestHandler handler = new TestHandler();
+        final XMLReader parser = XMLReaderFactory.createXMLReader();
+        parser.setContentHandler(handler);
+        InputStream in = null;
+        try {
+            in = new FileInputStream(new File(tempDir, "main.ditamap"));
+            handler.setSource(new File(srcDir, "main.ditamap"));
             parser.parse(new InputSource(in));
         } finally {
             if (in != null) {
@@ -93,13 +111,15 @@ public class DitaWriterTest {
 
     @Test
     public void testWrite() throws Exception {
-        assertEquals(TestUtils.readXmlToString(new File(resourceDir, "keyword.xml"), true, true),
+        assertEquals(TestUtils.readXmlToString(new File(expDir, "keyword.xml"), true, true),
                      TestUtils.readXmlToString(new File(tempDir, "keyword.xml"), true, true));
+        assertEquals(TestUtils.readXmlToString(new File(expDir, "main.ditamap"), true, true),
+                     TestUtils.readXmlToString(new File(tempDir, "main.ditamap"), true, true));
     }
     
     @AfterClass
     public static void tearDown() throws IOException {
-        //TestUtils.forceDelete(tempDir);
+        TestUtils.forceDelete(tempDir);
     }
 
     

@@ -140,13 +140,13 @@ public class TestUtils {
 				
 		@Override
 		public void characters(final char[] ch, final int start, final int length) throws SAXException {
-			final char[] buf = new String(ch, start, length).trim().toCharArray();
-			getContentHandler().characters(buf, 0, buf.length);
+		    final char[] res = new String(ch, start, length).replaceAll("\\s+", " ").trim().toCharArray();
+            getContentHandler().characters(res, 0, res.length);
 		}
 		
 		@Override
 		public void ignorableWhitespace(final char[] ch, final int start, final int length) throws SAXException {
-			// NOOP
+		    //NOOP
 		}
 		
 	}
