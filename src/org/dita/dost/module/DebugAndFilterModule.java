@@ -77,7 +77,7 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 	/**
 	 * File extension of source file.
 	 */
-	public static String extName = null;
+	private static String extName = null;
     private static String tempDir = "";
 	
     private static void updateProperty (final String listName, final Properties property){

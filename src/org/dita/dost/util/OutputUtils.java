@@ -32,9 +32,9 @@ public final class OutputUtils {
 	/**old solution.*/
 	public static final int OLDSOLUTION=3;
 	/**Output Dir.*/
-	public static String OutputDir=null;
+	private static String OutputDir=null;
 	/**Input Map Dir.*/
-	public static String InputMapDir=null;
+	private static String InputMapDir=null;
 	
 	private OutputUtils(){
 		// leave blank as designed 
