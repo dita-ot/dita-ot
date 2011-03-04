@@ -135,7 +135,21 @@
   <xsl:value-of select="."/><xsl:text>/</xsl:text>
 </xsl:template>
 
-<xsl:template match="*[@conaction]" priority="10"/>
+<xsl:template match="@*"  mode="conaction-target">
+   <xsl:choose>
+       <xsl:when test="name()='conaction' or name()='conref'"></xsl:when>
+       <xsl:otherwise>
+         <xsl:copy/>
+       </xsl:otherwise>
+     </xsl:choose>
+</xsl:template>
+
+<xsl:template match="*[@conaction]" priority="10"> 
+  <xsl:copy>  
+    <xsl:apply-templates select="*|@*|comment()|processing-instruction()|text()" mode="conaction-target">     
+    </xsl:apply-templates>   
+  </xsl:copy>
+</xsl:template>
 
 <!--if something has a conref attribute, jump to the target if valid and continue applying templates-->
   
