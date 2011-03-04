@@ -538,6 +538,8 @@ public class ConrefPushParser extends AbstractXMLWriter {
 					}
 				}else if (atts.getValue(Constants.ATTRIBUTE_NAME_ID) != null){
 					String idPath = Constants.SHARP+topicId+Constants.SLASH+atts.getValue(Constants.ATTRIBUTE_NAME_ID);
+					String defaultidPath = Constants.SHARP+atts.getValue(Constants.ATTRIBUTE_NAME_ID);
+					String containkey =null;
 					//Added by William on 2009-10-10 for conrefPush bug:2872954 start
 					//enable conref push at map level
 					if(classValue != null && (classValue.contains(Constants.ATTR_CLASS_VALUE_TOPICREF)
@@ -548,16 +550,45 @@ public class ConrefPushParser extends AbstractXMLWriter {
 					}
 					//Added by William on 2009-10-10 for conrefPush bug:2872954 end
 					String classAttribute = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
+					boolean containpushbefore= false;
 					if (movetable.containsKey(idPath+Constants.STICK+"pushbefore")){
-						output.write(replaceElementName(classValue, movetable.remove(idPath+Constants.STICK+"pushbefore")));
+						containkey=idPath+Constants.STICK+"pushbefore";
+						containpushbefore = true;
+					}else if (movetable.containsKey(defaultidPath+Constants.STICK+"pushbefore")){
+						containkey=defaultidPath+Constants.STICK+"pushbefore";
+						containpushbefore = true;
 					}
-					if (movetable.containsKey(idPath+Constants.STICK+"pushreplace")){
-						output.write(replaceElementName(classValue, movetable.remove(idPath+Constants.STICK+"pushreplace")));
+					if (containpushbefore){
+						output.write(replaceElementName(classValue, movetable.remove(containkey)));
+					}
+						
+					
+					boolean containpushplace = false;
+					
+					if  (movetable.containsKey(idPath+Constants.STICK+"pushreplace")){
+						containkey=idPath+Constants.STICK+"pushreplace";
+						containpushplace = true;
+					}else if (movetable.containsKey(defaultidPath+Constants.STICK+"pushreplace")){
+						containkey = defaultidPath+Constants.STICK+"pushreplace";
+						containpushplace= true;
+					}
+					
+					if (containpushplace){
+						output.write(replaceElementName(classValue, movetable.remove(containkey)));
 						isReplaced = true;
 						level = 0;
 						level ++;
 					}
-					if (movetable.containsKey(idPath+Constants.STICK+"pushafter")){
+					
+					boolean containpushafter = false;
+					if  (movetable.containsKey(idPath+Constants.STICK+"pushafter")){
+						containkey= idPath + Constants.STICK+"pushafter";
+						containpushafter = true;
+					}else if (movetable.containsKey(defaultidPath+Constants.STICK+"pushafter")){
+						containpushafter= true;
+						containkey = defaultidPath+Constants.STICK+"pushafter";
+					}
+					if (containpushafter){
 						if (hasPushafter && levelForPushAfter > 0){
 							//there is a "pushafter" action for an ancestor element.
 							//we need to push the levelForPushAfter to stack before
@@ -569,7 +600,7 @@ public class ConrefPushParser extends AbstractXMLWriter {
 						}						
 						levelForPushAfter = 0;
 						levelForPushAfter ++;
-						contentForPushAfter = replaceElementName(classValue, movetable.remove(idPath + Constants.STICK+"pushafter"));
+						contentForPushAfter = replaceElementName(classValue, movetable.remove(containkey));
 						//The output for the pushcontent will be in endElement(...)
 					}
 				}
