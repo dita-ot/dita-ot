@@ -43,6 +43,8 @@ public class ConrefPushReader extends AbstractXMLReader {
 	filePath is useful to get the absolute path of the target file.*/
 	private String filePath = null; 
 	
+	/**keep the file name of  current file under parse */
+	private String parsefilename = null;
 	/**pushcontent is used to store the content copied to target
 	 in pushcontent href will be resolved if it is relative path
 	 if @conref is in pushconref the target name should be recorded so that it 
@@ -78,6 +80,7 @@ public class ConrefPushReader extends AbstractXMLReader {
 	 */
 	public void read(String filename) {
 		filePath = new File(filename).getParentFile().getAbsolutePath();
+		parsefilename = new File(filename).getName();
 		start = false;
 		pushcontent = new StringBuffer(Constants.INT_256);
 		pushType = null;
@@ -319,13 +322,19 @@ public class ConrefPushReader extends AbstractXMLReader {
 	 * @param pushcontent content
 	 * @param type push type
 	 */
-	private void addtoPushTable(String target, String pushcontent, String type) {
+	private void addtoPushTable(String target, String pushcontent, String type) {		
 		int sharpIndex = target.indexOf(Constants.SHARP);
 		if (sharpIndex == -1){
 			//if there is no '#' in target string, report error
 			Properties prop = new Properties();
 			prop.put("%1", target);
 			javaLogger.logError(MessageUtils.getMessage("DOTJ041E", prop).toString());
+		}
+		
+		if (sharpIndex == 0){
+			//means conref the file itself
+			target= this.parsefilename+target;
+			sharpIndex = target.indexOf(Constants.SHARP);
 		}
 		String key = FileUtils.resolveFile(filePath, target);
 		Hashtable<String, String> table = null;
