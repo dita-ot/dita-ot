@@ -130,6 +130,7 @@ public class MapLinksReader extends AbstractXMLReader {
 			reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
 			reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
 			//Added by william on 2009-11-8 for ampbug:2893664 end
+			reader.setFeature("http://xml.org/sax/features/namespaces", false);
         } catch (Exception e) {
         	logger.logException(e);
         }
