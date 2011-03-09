@@ -144,11 +144,18 @@
      </xsl:choose>
 </xsl:template>
 
+<!-- When content is pushed from one topic to another, it is still rendered in the original context.
+ Processors may delete empty the element that with the conaction="mark" attribute. -->
 <xsl:template match="*[@conaction]" priority="10"> 
-  <xsl:copy>  
-    <xsl:apply-templates select="*|@*|comment()|processing-instruction()|text()" mode="conaction-target">     
-    </xsl:apply-templates>   
-  </xsl:copy>
+  <xsl:variable name="conaction_value" select="@conaction"/>
+  <xsl:choose>
+    <xsl:when test="$conaction_value!='mark'">
+      <xsl:copy>  
+        <xsl:apply-templates select="@*" mode="conaction-target"/>
+        <xsl:apply-templates select="*|comment()|processing-instruction()|text()"/>     
+      </xsl:copy>
+    </xsl:when>
+  </xsl:choose>
 </xsl:template>
 
 <!--if something has a conref attribute, jump to the target if valid and continue applying templates-->
