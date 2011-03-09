@@ -19,10 +19,16 @@
 	 [General Enhancements]
 	 
      [SourceForge Enhancements Added]
-     * 3177971 Improve plugin configuration file (Milestone 2)
+     * 3177971 Improve plugin configuration file (Milestone 2)    
+     * 3178275 Add xsl:import extension point to PDF2 topic merge XSL (Milestone 3)
+     * 3182113 Add common attribute processing to PDF2 plugin (Milestone 3)
+     * 3185914 Improve integration loggin  (Milestone 3)
+     * 3189073 Plugin location should be available as Ant property  (Milestone 3)
+     * 3190356 Pluginize DITA-OT base configuration files (In process)
      * 3167087 Reduce static variable usage in Java code (In process)
      * 3126848 Repository cleanup (In process)
      * 3158929 Java clean-up(In process)
+     * 3197328 Refactor writers for cleaner XML serialization (In process)
      
      [SourceForge Patches Added]
      * 3123507 String concat in map2plugin (Milestone 1)
@@ -39,7 +45,8 @@
      * 3062765 Fix unit test file paths to be platform dependent (Milestone 2)
      * 3164523 Refactor platform Java code (Milestone 2)
      * 3160801 Improve unit test coverage (In process)
-     
+     * 3189026 Avoid strings where other types are more appropriate  (In process)
+         
      [SourceForge Bugs Fixed] 
      * 3114411 keyref links don't work for HTML Help (Milestone 1)
      * 3126578 Chunking Issues in DITA 1.5.1 (Milestone 1)
@@ -56,6 +63,12 @@
      * 3085106 FO: topicmerge drops id on map/topicref without href. (Milestone 2)
      * 3147328 Error in commons.xsl: getTopicrefShortdesc (Milestone 2)
      * 3130724 Error in tables.xsl: fix-relcolwidth (Milestone 2)
+     * 3174906 Normalize Map and Bookmap titles for JavaHelp output (Milestone 3)
+     * 3178361 Conkeyref push fails when equivalent conref push succeeds (Milestone 3)
+     * 3180681 PDF2: Inconsistent template import / include. (Milestone 3)
+     * 3191701 Conref Push to Same File Fails (Milestone 3)
+     * 3191704 Push Replace Results in Pushed element Being removed (Milestone 3)
+     * 3189883 MapLinksReader should not be namespace aware  (Milestone 3)
      * 3159001 Clean unit tests (In progress)
      
 ====================================================================================
