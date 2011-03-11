@@ -19,7 +19,7 @@ import org.xml.sax.SAXParseException;
  * 
  * @author wxzhang
  */
-public class DITAOTXMLErrorHandler implements ErrorHandler {
+public final class DITAOTXMLErrorHandler implements ErrorHandler {
 	
 	/**
 	 * The xml file where the error occured.

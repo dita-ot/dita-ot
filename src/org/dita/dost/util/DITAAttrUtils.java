@@ -30,7 +30,7 @@ import org.xml.sax.SAXException;
  * @author william
  *
  */
-public class DITAAttrUtils {
+public final class DITAAttrUtils {
 	
 	//List to store non-Print transtypes.
 	private List<String>nonPrintTranstype;

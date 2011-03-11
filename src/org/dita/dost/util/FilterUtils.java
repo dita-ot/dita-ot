@@ -25,7 +25,7 @@ import org.xml.sax.Attributes;
  * 
  * @author Wu, Zhi Qiang
  */
-public class FilterUtils {
+public final class FilterUtils {
 	private static HashMap<String, String> filterMap = null;
 	private static HashSet<String> notMappingRules=new HashSet<String>();
 	/**

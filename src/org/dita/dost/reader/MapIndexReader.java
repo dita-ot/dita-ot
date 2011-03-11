@@ -37,7 +37,7 @@ import org.xml.sax.XMLReader;
  * 
  * @author Zhang, Yuan Peng
  */
-public class MapIndexReader extends AbstractXMLReader {
+public final class MapIndexReader extends AbstractXMLReader {
     private static final String INTERNET_LINK_MARK = "://";
 
     // check whether the index entries we got is meaningfull and valid

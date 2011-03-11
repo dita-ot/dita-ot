@@ -29,7 +29,7 @@ import org.xml.sax.ext.DefaultHandler2;
  * Generate outputfile with templates.
  * @author Zhang, Yuan Peng
  */
-public class FileGenerator extends DefaultHandler2 {
+final class FileGenerator extends DefaultHandler2 {
 	
 	public static final String PARAM_LOCALNAME = "localname";
 	public static final String PARAM_TEMPLATE = "template";

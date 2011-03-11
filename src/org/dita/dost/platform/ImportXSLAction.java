@@ -16,7 +16,7 @@ import org.dita.dost.util.StringUtils;
  * ImportXSLAction class.
  *
  */
-public class ImportXSLAction extends ImportAction {
+final class ImportXSLAction extends ImportAction {
 
 	/**
 	 * get result.

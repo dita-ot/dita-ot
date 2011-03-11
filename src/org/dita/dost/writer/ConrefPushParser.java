@@ -48,7 +48,7 @@ import org.xml.sax.XMLReader;
  * specific files.
  *
  */
-public class ConrefPushParser extends AbstractXMLWriter {
+public final class ConrefPushParser extends AbstractXMLWriter {
 
 	/**table containing conref push contents.*/
 	private Hashtable<String, String> movetable = null;

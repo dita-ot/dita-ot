@@ -18,7 +18,7 @@ import org.dita.dost.util.Constants;
  * 
  * @author Wu, Zhi Qiang
  */
-public class TopicrefElement {
+public final class TopicrefElement {
     /** The href attribute of the topicref element. */
     private String href = null;
 

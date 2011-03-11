@@ -59,7 +59,7 @@ import org.xml.sax.XMLReader;
  * 
  * @author Zhang, Yuan Peng
  */
-public class DitaMetaWriter extends AbstractXMLWriter {
+public final class DitaMetaWriter extends AbstractXMLWriter {
 	private String firstMatchTopic;
 	private String lastMatchTopic;
     private Hashtable<String, Node> metaTable;

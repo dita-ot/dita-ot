@@ -61,7 +61,7 @@ import org.xml.sax.SAXParseException;
  * 
  * @author Wu, Zhi Qiang
  */
-public class GenMapAndTopicListModule implements AbstractPipelineModule {
+final class GenMapAndTopicListModule implements AbstractPipelineModule {
 	/** Set of all dita files */
 	private final Set<String> ditaSet;
 

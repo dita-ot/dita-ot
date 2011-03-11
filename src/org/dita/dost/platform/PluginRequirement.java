@@ -17,7 +17,7 @@ import java.util.StringTokenizer;
  * PluginRequirement class.
  *
  */
-public class PluginRequirement {
+final class PluginRequirement {
 	private static final String REQUIREMENT_SEPARATOR = "|";
 	private final ArrayList<String> plugins;
 	private boolean required;

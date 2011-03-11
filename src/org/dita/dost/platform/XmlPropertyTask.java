@@ -39,7 +39,7 @@ import org.xml.sax.SAXParseException;
  * @author wxzhang
  *
  */
-public class XmlPropertyTask extends Task {
+public final class XmlPropertyTask extends Task {
 
 	/**
 	 * 

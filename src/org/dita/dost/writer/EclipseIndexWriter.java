@@ -36,7 +36,7 @@ import org.dita.dost.util.Constants;
  *  
  *  @version 1.0 2006-10-17
  */
-public class EclipseIndexWriter extends AbstractExtendDitaWriter implements AbstractWriter, IDitaTranstypeIndexWriter {
+public final class EclipseIndexWriter extends AbstractExtendDitaWriter implements AbstractWriter, IDitaTranstypeIndexWriter {
 	
 	/** List of indexterms */
 	private List<IndexTerm> termList = null;

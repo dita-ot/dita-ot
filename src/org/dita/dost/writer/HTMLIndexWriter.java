@@ -36,7 +36,7 @@ import org.dita.dost.util.Constants;
  * these will be sorted based on locale as long as the xml:lang attribute is used.)
  *
  */
-public class HTMLIndexWriter extends AbstractExtendDitaWriter implements AbstractWriter, IDitaTranstypeIndexWriter {
+public final class HTMLIndexWriter extends AbstractExtendDitaWriter implements AbstractWriter, IDitaTranstypeIndexWriter {
     /** List of indexterms */
     private List<IndexTerm> termList = null;
     private final DITAOTLogger logger = new DITAOTJavaLogger();

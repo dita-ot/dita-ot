@@ -27,7 +27,7 @@ import org.dita.dost.writer.DitaLinksWriter;
  * 
  * @author Zhang, Yuan Peng
  */
-public class MoveLinksModule implements AbstractPipelineModule {
+final class MoveLinksModule implements AbstractPipelineModule {
     private final ContentImpl content;
 
 

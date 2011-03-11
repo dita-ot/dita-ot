@@ -19,7 +19,7 @@ import org.apache.xerces.xni.grammars.XMLGrammarDescription;
  * @author william
  * 
  */
-public class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
+public final class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
 	
 	private String gramCache = "yes";
 	

@@ -29,7 +29,7 @@ import org.xml.sax.ext.DefaultHandler2;
  * provided by plug-ins into the xsl files, ant scripts and xml catalog.
  * @author Zhang, Yuan Peng
  */
-public class InsertAction extends DefaultHandler2 implements IAction {
+class InsertAction extends DefaultHandler2 implements IAction {
 
 	protected final XMLReader reader;
 	protected DITAOTLogger logger;

@@ -54,7 +54,7 @@ import org.xml.sax.XMLReader;
  * 
  *
  */
-public class ChunkTopicParser extends AbstractXMLWriter {
+public final class ChunkTopicParser extends AbstractXMLWriter {
 
     private static final String OS_NAME_WINDOWS = "windows";
     private static final String PI_END = "?>";

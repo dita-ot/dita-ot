@@ -37,7 +37,7 @@ import org.xml.sax.XMLReader;
  * 
  * @author Zhang, Yuan Peng
  */
-public class MergeMapParser extends AbstractXMLReader {
+public final class MergeMapParser extends AbstractXMLReader {
 	private XMLReader reader = null;
 	private StringBuffer mapInfo = null;
 	private MergeTopicParser topicParser = null;

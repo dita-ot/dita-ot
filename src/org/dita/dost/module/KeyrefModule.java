@@ -30,7 +30,7 @@ import org.dita.dost.writer.KeyrefPaser;
  * Keyref Module.
  *
  */
-public class KeyrefModule implements AbstractPipelineModule {
+final class KeyrefModule implements AbstractPipelineModule {
 	
 	/**
 	 * Entry point of KeyrefModule.

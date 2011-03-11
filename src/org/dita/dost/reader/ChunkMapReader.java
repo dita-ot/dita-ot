@@ -44,7 +44,7 @@ import org.w3c.dom.Text;
  * ChunkMapReader class, read ditamap file for chunking.
  *
  */
-public class ChunkMapReader implements AbstractReader {
+public final class ChunkMapReader implements AbstractReader {
 	
 	private DITAOTJavaLogger javaLogger = null;
 	

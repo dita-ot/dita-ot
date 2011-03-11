@@ -18,7 +18,7 @@ import org.apache.tools.ant.Task;
  * @author William
  *
  */
-public class AntVersion extends Task{
+public final class AntVersion extends Task{
 
 	/**
 	 * Task execute point.

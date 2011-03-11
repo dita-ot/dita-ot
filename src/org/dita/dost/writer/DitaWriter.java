@@ -52,7 +52,7 @@ import org.xml.sax.XMLReader;
  * 
  * @author Zhang, Yuan Peng
  */
-public class DitaWriter extends AbstractXMLWriter {
+public final class DitaWriter extends AbstractXMLWriter {
 
     private static final String COLUMN_NAME_COL = "col";
     private static final String OS_NAME_WINDOWS = "windows";

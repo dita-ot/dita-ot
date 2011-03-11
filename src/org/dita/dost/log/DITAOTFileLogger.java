@@ -21,7 +21,7 @@ import org.dita.dost.util.Constants;
  * 
  * @author Wu, Zhi Qiang
  */
-public class DITAOTFileLogger implements DITAOTLogger {
+public final class DITAOTFileLogger implements DITAOTLogger {
 	private static DITAOTFileLogger logger = null;
 	
 	private File tmpLogFile = null;

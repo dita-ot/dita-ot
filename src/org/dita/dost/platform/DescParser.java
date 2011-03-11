@@ -19,7 +19,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * Parser to parse description file of plugin.
  * @author Zhang, Yuan Peng
  */
-public class DescParser extends DefaultHandler{
+final class DescParser extends DefaultHandler{
 	private String currentPlugin = null;
 	private final Features features;
 	

@@ -22,7 +22,7 @@ import org.dita.dost.log.DITAOTJavaLogger;
  *
  * @author Wu, Zhi Qiang
  */
-public class DITAOTCollator implements Comparator {
+public final class DITAOTCollator implements Comparator {
 	static HashMap<Locale, DITAOTCollator> cache = new HashMap<Locale, DITAOTCollator>();
 	
 	/**

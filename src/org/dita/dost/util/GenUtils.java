@@ -18,7 +18,7 @@ import org.dita.dost.log.DITAOTJavaLogger;
  * GenUtils class writing xml contents into xml files.
  *
  */
-public class GenUtils {
+public final class GenUtils {
 
 	private static StringBuffer buffer;
 	private static String outputFile;

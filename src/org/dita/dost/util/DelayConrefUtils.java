@@ -48,7 +48,7 @@ import org.xml.sax.SAXException;
  * @author william
  *
  */
-public class DelayConrefUtils {
+public final class DelayConrefUtils {
 	
 	private Document root = null;
 

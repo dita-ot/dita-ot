@@ -20,7 +20,7 @@ import org.dita.dost.log.DITAOTAntLogger;
  * Task run by ant scripts, invoking Task.
  * @author Zhang, Yuan Peng
  */
-public class IntegratorTask extends Task {
+public final class IntegratorTask extends Task {
 
 	private final Integrator adaptee;
 	

@@ -43,7 +43,7 @@ import org.xml.sax.XMLReader;
  * 
  * @author Wu, Zhi Qiang
  */
-public class IndexTermExtractModule implements AbstractPipelineModule {
+final class IndexTermExtractModule implements AbstractPipelineModule {
 	/** The input map */
 	private String inputMap = null;
 

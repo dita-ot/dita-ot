@@ -39,7 +39,7 @@ import org.xml.sax.XMLReader;
  * integration of the toolkit and different plug-ins.
  * @author Zhang, Yuan Peng
  */
-public class Integrator {
+public final class Integrator {
 		
 	/** Feature name for supported image extensions. */
 	public static final String FEAT_IMAGE_EXTENSIONS = "dita.image.extensions";

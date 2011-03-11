@@ -17,7 +17,7 @@ import org.xml.sax.SAXParseException;
  * 
  * @author wxzhang
  */
-public class SAXExceptionWrapper extends SAXParseException {
+public final class SAXExceptionWrapper extends SAXParseException {
 	
 	/** Generated serial id. */
 	private static final long serialVersionUID = -8266265000662519966L;

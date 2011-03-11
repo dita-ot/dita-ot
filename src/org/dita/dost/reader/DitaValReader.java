@@ -46,7 +46,7 @@ import org.xml.sax.XMLReader;
  * 
  * @author Zhang, Yuan Peng
  */
-public class DitaValReader extends AbstractXMLReader {
+public final class DitaValReader extends AbstractXMLReader {
 	private HashMap<String, String> filterMap;
 	
 	private HashMap<String, String> schemeFilterMap;

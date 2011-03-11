@@ -23,7 +23,7 @@ import org.dita.dost.util.Constants;
  * provided by plug-ins into the xsl files and ant scripts.
  * @author Zhang, Yuan Peng
  */
-public abstract class ImportAction implements IAction {
+abstract class ImportAction implements IAction {
 	
 	/** Action values. */
 	protected final Set<String> valueSet;

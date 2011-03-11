@@ -35,7 +35,7 @@ import org.dita.dost.writer.JavaHelpIndexWriter;
  * 
  * @author Wu, Zhi Qiang
  */
-public class IndexTermCollection {
+public final class IndexTermCollection {
 	/** The collection of index terms. */
 	private static IndexTermCollection collection = null;
 	/** The list of all index term. */

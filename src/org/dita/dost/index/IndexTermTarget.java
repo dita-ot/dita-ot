@@ -18,7 +18,7 @@ import org.dita.dost.util.Constants;
  * 
  * @author Wu, Zhi Qiang
  */
-public class IndexTermTarget {
+public final class IndexTermTarget {
     /** Name (title) of the target topic. */
     private String targetName = null;
 

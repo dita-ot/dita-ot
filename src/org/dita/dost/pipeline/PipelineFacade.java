@@ -20,7 +20,7 @@ import org.dita.dost.module.ModuleFactory;
  * @author Lian, Li
  * 
  */
-public class PipelineFacade implements AbstractFacade {
+public final class PipelineFacade implements AbstractFacade {
 
     /**
      * Automatically generated constructor: PipelineFacade.

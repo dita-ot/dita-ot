@@ -28,7 +28,7 @@ import org.dita.dost.util.FileUtils;
  * Collection of features.
  * @author Zhang, Yuan Peng
  */
-public class Features {
+final class Features {
 	private final File location;
 	private final File ditaDir;
 	private final Hashtable<String,String> featureTable;

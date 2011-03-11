@@ -27,7 +27,7 @@ import org.xml.sax.XMLReader;
  * @author Zhang, Yuan Peng
  */
 
-public class CatalogUtils {
+public final class CatalogUtils {
 	/**map to keep the resolved catalog mappings.*/
     private static HashMap<String, String> map=null;
     /**logger to log informations.*/

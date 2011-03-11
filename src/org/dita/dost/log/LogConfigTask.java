@@ -23,7 +23,7 @@ import org.dita.dost.log.MessageBean;
  * 
  * @author Wu, Zhi Qiang
  */
-public class LogConfigTask extends Task {
+public final class LogConfigTask extends Task {
 
 	private String logDir = null;
 	private String logFile = null;

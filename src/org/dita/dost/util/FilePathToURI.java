@@ -12,7 +12,7 @@ package org.dita.dost.util;
 /**
  * Used to escape a file path to a URI.
  */
-public class FilePathToURI {
+public final class FilePathToURI {
 	// Which ASCII characters need to be escaped
 	private static boolean gNeedEscaping[] = new boolean[128];
 	// The first hex character if a character needs to be escaped

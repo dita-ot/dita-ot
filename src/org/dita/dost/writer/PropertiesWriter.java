@@ -27,7 +27,7 @@ import java.io.*;
  * 
  * @author Wu, Zhi Qiang
  */
-public class PropertiesWriter implements AbstractWriter {
+public final class PropertiesWriter implements AbstractWriter {
 	/** Properties used to output */
 	private Properties prop = null;
 	private final DITAOTLogger logger = new DITAOTJavaLogger();

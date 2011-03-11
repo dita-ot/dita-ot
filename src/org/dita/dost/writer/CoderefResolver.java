@@ -33,7 +33,7 @@ import org.xml.sax.XMLReader;
  * coderef attribute in topic file.
  *
  */
-public class CoderefResolver extends AbstractXMLWriter {
+public final class CoderefResolver extends AbstractXMLWriter {
 	
 	private OutputStreamWriter output = null;
 	

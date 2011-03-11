@@ -24,7 +24,7 @@ import org.xml.sax.InputSource;
 /**
  * URIResolverAdapter class, convert source into inputsteam.
  */
-public class URIResolverAdapter {
+public final class URIResolverAdapter {
 	private URIResolverAdapter() {
 		// nop
 	}

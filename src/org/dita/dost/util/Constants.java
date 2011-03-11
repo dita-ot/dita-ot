@@ -18,7 +18,7 @@ import java.io.File;
  * 
  * @author Wu, Zhi Qiang
  */
-public abstract class Constants {
+public final class Constants {
     /**INT 0.*/
     public static final int INT_0 = 0;
     /**INT 1.*/

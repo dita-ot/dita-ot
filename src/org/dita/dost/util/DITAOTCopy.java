@@ -23,7 +23,7 @@ import org.dita.dost.log.DITAOTJavaLogger;
  *
  * @author Wu, Zhi Qiang
  */
-public class DITAOTCopy extends Task {
+public final class DITAOTCopy extends Task {
 	private String includes = null;
 	private String relativePaths = null;
 	private String destDir = null;  // the destination directory

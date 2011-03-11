@@ -36,7 +36,7 @@ import org.dita.dost.writer.PropertiesWriter;
  * @author Zhang, Yuan Peng
  */
 
-public class CommandLineInvoker {
+public final class CommandLineInvoker {
 	/** Map to store input parameters.*/
 	private static Map<String, String> paramMap = null;
     /**logger.*/

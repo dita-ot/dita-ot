@@ -21,7 +21,7 @@ import org.dita.dost.log.MessageBean;
  * @author Lian, Li
  * 
  */
-public class ModuleFactory {
+public final class ModuleFactory {
 	private static ModuleFactory moduleFactory = null;
 
 	private final String packagePrefix = "org.dita.dost.module.";

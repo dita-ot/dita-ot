@@ -27,7 +27,7 @@ import org.dita.dost.util.StringUtils;
  * @author Lian, Li
  * 
  */
-public class AntInvoker extends Task {
+public final class AntInvoker extends Task {
 
 	/**key value pair separator.*/
 	private final static String KEY_VALUE_PAIR_SEPARATOR = ";";

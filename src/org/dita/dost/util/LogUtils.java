@@ -16,7 +16,7 @@ package org.dita.dost.util;
  * @author wxzhang
  *
  */
-public class LogUtils {
+public final class LogUtils {
 	private static int numOfFatals=0;
 	private static int numOfErrors=0;
 	private static int numOfWarnings=0;

@@ -35,7 +35,7 @@ import org.xml.sax.XMLReader;
  * @author Zhang, Yuan Peng
  * 
  */
-public class DitaLinksWriter extends AbstractXMLWriter {
+public final class DitaLinksWriter extends AbstractXMLWriter {
     private String curMatchTopic;
     private boolean firstTopic; //Eric
 

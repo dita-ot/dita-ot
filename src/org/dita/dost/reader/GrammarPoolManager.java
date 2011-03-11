@@ -17,7 +17,7 @@ import org.dita.dost.util.XMLGrammarPoolImplUtils;
  * The grammar pool is managed as a ThreadLocal variable so it can
  * be used across Ant task invocations.
  */
-public class GrammarPoolManager {
+public final class GrammarPoolManager {
 	
 	//flag whether use grammar caching.
 	private static String gramCache;

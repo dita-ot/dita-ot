@@ -35,7 +35,7 @@ import org.xml.sax.SAXException;
  * @author Wu, Zhi Qiang
  */
 
-public class DitamapIndexTermReader extends AbstractXMLReader {
+public final class DitamapIndexTermReader extends AbstractXMLReader {
 	/** The stack used to store elements */
 	private Stack<Object> elementStack = null;
 	

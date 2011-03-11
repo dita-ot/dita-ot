@@ -20,7 +20,7 @@ import org.apache.tools.ant.taskdefs.condition.Condition;
  *
  * @author Wu, Zhi Qiang
  */
-public class IsAbsolute implements Condition {
+public final class IsAbsolute implements Condition {
 	private String path = null;
 	
 	/**

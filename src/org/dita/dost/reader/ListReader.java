@@ -30,7 +30,7 @@ import org.dita.dost.util.StringUtils;
  * 
  * @author Zhang, Yuan Peng
  */
-public class ListReader implements AbstractReader {
+public final class ListReader implements AbstractReader {
 
     private LinkedList<String> refList;
     private Content content;

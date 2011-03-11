@@ -29,7 +29,7 @@ import org.xml.sax.XMLReader;
  * KeyrefReader class which reads ditamap file to collect key definitions.
  *
  */
-public class KeyrefReader extends AbstractXMLReader {
+public final class KeyrefReader extends AbstractXMLReader {
 
 	protected static class KeyDef
 	{

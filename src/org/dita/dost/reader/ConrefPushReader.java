@@ -27,7 +27,7 @@ import org.xml.sax.XMLReader;
  * Class for reading conref push content.
  *
  */
-public class ConrefPushReader extends AbstractXMLReader {
+public final class ConrefPushReader extends AbstractXMLReader {
 	/** push table.*/
 	private Hashtable<String, Hashtable<String, String>> pushtable;
 	/** push table.*/

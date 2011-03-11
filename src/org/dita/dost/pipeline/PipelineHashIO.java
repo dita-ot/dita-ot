@@ -18,7 +18,7 @@ import java.util.HashMap;
  * @author Lian, Li
  * 
  */
-public class PipelineHashIO implements AbstractPipelineInput,
+public final class PipelineHashIO implements AbstractPipelineInput,
         AbstractPipelineOutput {
     private HashMap<String, String> hash;
 

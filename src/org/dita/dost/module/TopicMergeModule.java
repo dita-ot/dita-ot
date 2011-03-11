@@ -30,7 +30,7 @@ import org.dita.dost.util.Constants;
 /** 
  * The module handles topic merge in issues as PDF. 
  */
-public class TopicMergeModule implements AbstractPipelineModule {
+final class TopicMergeModule implements AbstractPipelineModule {
 	
 	/**
 	 * Default Constructor.

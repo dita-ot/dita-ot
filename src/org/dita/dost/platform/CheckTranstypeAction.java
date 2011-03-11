@@ -14,7 +14,7 @@ import org.dita.dost.util.StringUtils;
  * CheckTranstypeAction class.
  *
  */
-public class CheckTranstypeAction extends ImportAction {
+final class CheckTranstypeAction extends ImportAction {
 
 	/**
 	 * Get result.

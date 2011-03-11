@@ -24,7 +24,7 @@ import org.dita.dost.pipeline.PipelineHashIO;
  * @author Lian, Li
  * 
  */
-public class JavaInvoker {
+public final class JavaInvoker {
 	private static DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 	
 	/**

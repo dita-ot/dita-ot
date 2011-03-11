@@ -30,7 +30,7 @@ import org.w3c.dom.NodeList;
  * 
  * @author Wu, Zhi Qiang
  */
-public class MessageUtils {
+public final class MessageUtils {
 	private static Hashtable<String, MessageBean> hashTable = null;
 	private static String messageFile = null;
 	private static DITAOTJavaLogger fileLogger = new DITAOTJavaLogger();

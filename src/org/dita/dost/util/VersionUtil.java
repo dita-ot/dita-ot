@@ -17,7 +17,7 @@ import org.dita.dost.log.DITAOTJavaLogger;
  * @author william
  * 
  */
-public class VersionUtil {
+public final class VersionUtil {
 
 	private final String milestone = "@@MILESTONE@@";
 

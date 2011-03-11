@@ -18,7 +18,7 @@ import java.util.Random;
  * @author Zhang, Yuan Peng
  *
  */
-public class RandomUtils {
+public final class RandomUtils {
 	/**
 	 * Default Constructor
 	 *

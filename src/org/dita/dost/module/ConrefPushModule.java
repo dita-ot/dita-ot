@@ -31,7 +31,7 @@ import org.dita.dost.writer.ConrefPushParser;
  * 
  *
  */
-public class ConrefPushModule implements AbstractPipelineModule {
+final class ConrefPushModule implements AbstractPipelineModule {
 
 	/**
 	 * @see org.dita.dost.module.AbstractPipelineModule#execute(AbstractPipelineInput)

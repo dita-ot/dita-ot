@@ -58,7 +58,7 @@ import org.xml.sax.XMLReader;
  * 
  * @author Wu, Zhi Qiang
  */
-public class GenListModuleReader extends AbstractXMLReader {
+public final class GenListModuleReader extends AbstractXMLReader {
 	/** XMLReader instance for parsing dita file */
 	private static XMLReader reader = null;
 

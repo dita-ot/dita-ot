@@ -22,7 +22,7 @@ import org.dita.dost.util.StringUtils;
  * Identifiers inside braces are replaced with the plugin features for the corresponding extension point.
  * @author Deborah Pickett
  */
-public class InsertDependsAction implements IAction {
+final class InsertDependsAction implements IAction {
 
 	/** Action parameters. */
 	private final Hashtable<String,String> paramTable;

@@ -25,7 +25,7 @@ import org.dita.dost.writer.CoderefResolver;
  * Coderef Module class.
  *
  */
-public class CoderefModule implements AbstractPipelineModule {
+final class CoderefModule implements AbstractPipelineModule {
 	/**
 	 * Constructor.
 	 */

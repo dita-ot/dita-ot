@@ -15,7 +15,7 @@ import java.util.Date;
 /**
  *
  */
-public class TimingUtils {
+public final class TimingUtils {
 
 	public static String reportElapsedTime(Date startTime) {
 		long elapsedTime = Calendar.getInstance().getTime().getTime() - startTime.getTime();

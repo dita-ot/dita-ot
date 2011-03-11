@@ -28,7 +28,7 @@ import org.xml.sax.InputSource;
  * Usage: DitaURIResolverFactory.getURIResolver().resolve(href, base);
  * 
  */
-public class DitaURIResolverFactory {
+public final class DitaURIResolverFactory {
 	private static URIResolver resolver = null;
 	private static String path = null;
 	static {

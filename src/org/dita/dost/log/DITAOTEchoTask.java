@@ -21,7 +21,7 @@ import org.dita.dost.util.LogUtils;
  * 
  * @author Wu, Zhi Qiang
  */
-public class DITAOTEchoTask extends Echo {
+public final class DITAOTEchoTask extends Echo {
 	private String id = null;
 
 	private Properties prop = null;

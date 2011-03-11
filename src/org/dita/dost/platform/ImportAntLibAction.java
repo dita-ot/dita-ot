@@ -16,7 +16,7 @@ import org.dita.dost.util.StringUtils;
  * ImportAntLibAction class.
  *
  */
-public class ImportAntLibAction extends ImportAction {
+final class ImportAntLibAction extends ImportAction {
 
 	/**
 	 * get result.

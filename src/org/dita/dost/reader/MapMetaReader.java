@@ -39,7 +39,7 @@ import org.w3c.dom.NodeList;
  * MapMetaReader class which reads map meta data. 
  *
  */
-public class MapMetaReader implements AbstractReader {
+public final class MapMetaReader implements AbstractReader {
 	private static final String INTERNET_LINK_MARK = "://";
 	
 	private static Hashtable<String, Hashtable<String, Element>> resultTable = new Hashtable<String, Hashtable<String, Element>>(Constants.INT_16);

@@ -30,7 +30,7 @@ import org.apache.tools.ant.Task;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
 
-public class CheckLang extends Task {
+public final class CheckLang extends Task {
 
     private String basedir;
     

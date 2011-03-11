@@ -35,7 +35,7 @@ import org.xml.sax.XMLReader;
  * @author wxzhang
  * 
  */
-public class TopicRefWriter extends AbstractXMLWriter {
+public final class TopicRefWriter extends AbstractXMLWriter {
 
 	// To check the URL of href in topicref attribute
 	private static final String NOT_LOCAL_URL = "://";

@@ -16,7 +16,7 @@ import org.dita.dost.util.Constants;
  * 
  * @author Wu, Zhi Qiang
  */
-public class MessageBean {
+public final class MessageBean {
 	private String id = null;
 
 	private String type = null;

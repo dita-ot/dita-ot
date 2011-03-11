@@ -13,7 +13,7 @@ package org.dita.dost.util;
  * @author William
  *
  */
-public class Version {
+public final class Version {
 	
 	private static final String fversion = "@@VERSION@@";
 	

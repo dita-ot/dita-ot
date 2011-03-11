@@ -21,7 +21,7 @@ import org.dita.dost.exception.DITAOTException;
  *
  * @author Wu, Zhi Qiang
  */
-public class DITAOTFailTask extends Exit {
+public final class DITAOTFailTask extends Exit {
 	private String id = null;
 
 	private Properties prop = null;

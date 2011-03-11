@@ -26,7 +26,7 @@ import org.dita.dost.util.Constants;
 /**
  * This class replace all non-ASCII characters to their RTF Unicode-escaped forms. 
  */
-public class EscapeUnicodeModule implements AbstractPipelineModule {
+final class EscapeUnicodeModule implements AbstractPipelineModule {
 	
 	private final DITAOTLogger logger = new DITAOTJavaLogger();
 	

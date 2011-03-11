@@ -21,7 +21,7 @@ import org.xml.sax.XMLReader;
  * Utility that topic merge utilize. 
  * 
  */
-public class MergeUtils {
+public final class MergeUtils {
 
 	private static MergeUtils instance = null;
 	private Hashtable<String, String> idMap;

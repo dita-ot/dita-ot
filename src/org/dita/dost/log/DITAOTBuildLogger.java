@@ -30,7 +30,7 @@ import org.dita.dost.log.MessageBean;
  * 
  * @author Wu, Zhi Qiang
  */
-public class DITAOTBuildLogger implements BuildLogger {
+public final class DITAOTBuildLogger implements BuildLogger {
 
 	/**
 	 * Size of left-hand column for right-justified task name.

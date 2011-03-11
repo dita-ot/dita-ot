@@ -18,7 +18,7 @@ import java.util.StringTokenizer;
 /**
  * Corrects the URLs.
  */
-public class URLUtils {
+public final class URLUtils {
 	/**
 	 * Corrects the file to URL.
 	 * 

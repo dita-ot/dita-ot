@@ -37,7 +37,7 @@ import org.xml.sax.XMLReader;
  * 
  * @author Zhang, Yuan Peng
  */
-public class DitaIndexWriter extends AbstractXMLWriter {
+public final class DitaIndexWriter extends AbstractXMLWriter {
     private String firstMatchTopic;
     private boolean hasMetadataTillNow;// whether we have met <metadata> in <prolog> element
     private boolean hasPrologTillNow;// whether we have met <prolog> in this topic we want

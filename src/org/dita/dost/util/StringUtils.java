@@ -29,7 +29,7 @@ import org.dita.dost.log.DITAOTJavaLogger;
  * 
  * @author Wu, Zhi Qiang
  */
-public class StringUtils {
+public final class StringUtils {
 
 	//Edited by william on 2009-11-8 for ampbug:2893664 start
 	private static final String NOT_RESOLVE_ENTITY_LIST = "|lt|gt|quot|amp|";

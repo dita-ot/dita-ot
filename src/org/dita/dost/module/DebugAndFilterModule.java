@@ -67,7 +67,7 @@ import org.xml.sax.SAXException;
  * 
  * @author Zhang, Yuan Peng
  */
-public class DebugAndFilterModule implements AbstractPipelineModule {
+final class DebugAndFilterModule implements AbstractPipelineModule {
 	private static final String [] PROPERTY_UPDATE_LIST = {"user.input.file",Constants.HREF_TARGET_LIST,
 			Constants.CONREF_LIST,Constants.HREF_DITA_TOPIC_LIST,Constants.FULL_DITA_TOPIC_LIST,
 			Constants.FULL_DITAMAP_TOPIC_LIST,Constants.CONREF_TARGET_LIST,Constants.COPYTO_SOURCE_LIST,

@@ -18,7 +18,7 @@ import org.apache.tools.ant.Task;
  * URIResolverConfigTask to setup DitaURIResolverFactory.
  * @author Alan
  */
-public class URIResolverConfigTask extends Task {
+public final class URIResolverConfigTask extends Task {
 	private String basedir = null;
 	private String tempdir = null;
 	/**

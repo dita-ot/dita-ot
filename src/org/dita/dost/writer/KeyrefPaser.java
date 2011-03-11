@@ -46,7 +46,7 @@ import org.xml.sax.XMLReader;
  * KeyrefPaser class parsing keyref attribute.
  *
  */
-public class KeyrefPaser extends AbstractXMLWriter {
+public final class KeyrefPaser extends AbstractXMLWriter {
 
 	private XMLReader parser = null;
 

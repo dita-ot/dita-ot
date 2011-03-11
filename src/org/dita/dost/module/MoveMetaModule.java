@@ -35,7 +35,7 @@ import org.dita.dost.writer.DitaMetaWriter;
  * 
  * @author Zhang, Yuan Peng
  */
-public class MoveMetaModule implements AbstractPipelineModule {
+final class MoveMetaModule implements AbstractPipelineModule {
 
     private final ContentImpl content;
     private DITAOTJavaLogger logger = null;

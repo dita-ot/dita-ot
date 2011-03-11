@@ -30,7 +30,7 @@ import org.dita.dost.log.DITAOTJavaLogger;
  * 
  * @author Wu, Zhi Qiang
  */
-public class FileUtils {
+public final class FileUtils {
 	/**
 	 * Default Constructor
 	 *

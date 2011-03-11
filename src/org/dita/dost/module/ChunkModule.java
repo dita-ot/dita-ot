@@ -48,7 +48,7 @@ import org.w3c.dom.Element;
  * The chunking module class.
  *
  */
-public class ChunkModule implements AbstractPipelineModule {
+final class ChunkModule implements AbstractPipelineModule {
 
 	/**
 	 * Constructor.

@@ -30,7 +30,7 @@ import org.apache.commons.codec.binary.Base64;
  * @author Zhang, Yuan Peng
  *
  */
-public class ImgUtils {
+public final class ImgUtils {
 	/**
 	 * Default Constructor
 	 *

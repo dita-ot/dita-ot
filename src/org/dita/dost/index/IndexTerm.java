@@ -24,7 +24,7 @@ import org.dita.dost.util.DITAOTCollator;
  * 
  * @author Wu, Zhi Qiang
  */
-public class IndexTerm implements Comparable {
+public final class IndexTerm implements Comparable {
     /** The locale of  the indexterm, used for sorting. */
     private static Locale termLocale = null;
 

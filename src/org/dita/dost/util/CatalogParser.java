@@ -24,7 +24,7 @@ import org.xml.sax.SAXException;
  * @author Zhang, Yuan Peng
  */
 
-public class CatalogParser implements ContentHandler{
+public final class CatalogParser implements ContentHandler{
     private String catalogDir;
 
 

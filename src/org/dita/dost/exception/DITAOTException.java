@@ -16,7 +16,7 @@ import org.dita.dost.log.MessageBean;
  *
  * @author Wu, Zhi Qiang
  */
-public class DITAOTException extends Exception {
+public final class DITAOTException extends Exception {
 	
 	/** serial version. */
 	private static final long serialVersionUID = -7505646495801170017L;

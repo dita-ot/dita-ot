@@ -46,7 +46,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-public class ConvertLang extends Task {
+public final class ConvertLang extends Task {
 	// Added on 2010-11-05 for bug Unnecessary XML declaration in HHP and HHC - ID: 3101964 start
 	private static final String tag1 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 	private static final String tag2 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>[OPTIONS]";

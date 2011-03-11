@@ -14,7 +14,7 @@ import org.dita.dost.util.LogUtils;
  * 
  * @author Wu, Zhi Qiang
  */
-public class DITAOTJavaLogger implements DITAOTLogger {
+public final class DITAOTJavaLogger implements DITAOTLogger {
 	private static boolean debugMode = false;
 	
 	/**

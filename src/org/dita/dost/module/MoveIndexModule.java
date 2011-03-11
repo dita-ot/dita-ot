@@ -34,7 +34,7 @@ import org.dita.dost.writer.DitaIndexWriter;
  * 
  * @author Zhang, Yuan Peng
  */
-public class MoveIndexModule implements AbstractPipelineModule {
+final class MoveIndexModule implements AbstractPipelineModule {
 
     private final ContentImpl content;
     private DITAOTJavaLogger logger = null;

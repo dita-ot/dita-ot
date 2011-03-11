@@ -33,7 +33,7 @@ import org.xml.sax.SAXException;
  * 
  * @author Wu, Zhi Qiang
  */
-public class IndexTermReader extends AbstractXMLReader {
+public final class IndexTermReader extends AbstractXMLReader {
 	/** The target file under parsing */
 	private String targetFile = null;
 

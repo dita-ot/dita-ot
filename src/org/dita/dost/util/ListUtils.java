@@ -27,7 +27,7 @@ import org.dita.dost.resolver.URIResolverAdapter;
  * List Utils.
  *
  */
-public class ListUtils {
+public final class ListUtils {
 	/**
 	 * Private Constructor.
 	 */
