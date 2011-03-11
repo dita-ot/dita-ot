@@ -154,7 +154,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 			}
 		}
 	}
-	private final DITAOTLogger logger = new DITAOTJavaLogger();
+	private DITAOTLogger logger;
 	
 	private String inputMap = null;
 	
@@ -174,12 +174,18 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 	public DebugAndFilterModule(){
 	}
 
+	public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
+	
     /**
      * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
      * 
      */
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-    	
+        if (logger == null) {
+            throw new IllegalStateException("Logger not set");
+        }
     	final Date executeStartTime = TimingUtils.getNowTime();
     	final String msg = "DebugAndFilterModule.execute(): Starting...";
     	fileLogger.logInfo(msg);

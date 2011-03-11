@@ -33,7 +33,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTFileLogger;
-import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
@@ -161,7 +160,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 
 	private String prefix = "";
 
-	private final DITAOTLogger logger = new DITAOTJavaLogger();
+	private DITAOTLogger logger;
 
 	private GenListModuleReader reader;
 	
@@ -251,11 +250,18 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 		resourceOnlySet = new HashSet<String>(Constants.INT_128);
 	}
 
+	public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
+	
     /**
      * {@inheritDoc}
      */
 	public AbstractPipelineOutput execute(final AbstractPipelineInput input)
 			throws DITAOTException {
+	    if (logger == null) {
+            throw new IllegalStateException("Logger not set");
+        }
 		final Date startTime = TimingUtils.getNowTime();
 		
 		try {

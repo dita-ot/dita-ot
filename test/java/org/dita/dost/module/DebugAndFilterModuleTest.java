@@ -94,6 +94,7 @@ public class DebugAndFilterModuleTest {
         pipelineInput.setAttribute(Constants.ANT_INVOKER_EXT_PARAN_SETSYSTEMID, "yes");
 
         final AbstractFacade facade = new PipelineFacade();
+        facade.setLogger(new TestUtils.TestLogger());
         facade.execute("DebugAndFilter", pipelineInput);
     }
 

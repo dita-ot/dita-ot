@@ -15,6 +15,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.Constants;
@@ -26,12 +27,20 @@ import org.dita.dost.writer.CoderefResolver;
  *
  */
 final class CoderefModule implements AbstractPipelineModule {
+    
+    private DITAOTLogger logger;
+    
 	/**
 	 * Constructor.
 	 */
 	public CoderefModule() {
 		super();
 	}
+	
+	public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
+	
 	/**
 	 * Entry point of Coderef Module.
 	 * @param input Input parameters and resources.
@@ -40,6 +49,9 @@ final class CoderefModule implements AbstractPipelineModule {
 	 */
 	public AbstractPipelineOutput execute(final AbstractPipelineInput input)
 			throws DITAOTException {
+	    if (logger == null) {
+            throw new IllegalStateException("Logger not set");
+        }
 		final String baseDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
 		String tempDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
         if (!new File(tempDir).isAbsolute()) {

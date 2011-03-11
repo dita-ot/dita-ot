@@ -10,6 +10,7 @@
 package org.dita.dost.module;
 
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 
@@ -25,6 +26,8 @@ public interface AbstractPipelineModule {
 	/**
 	 * Start the process of this module with the input.
 	 * 
+	 * <p>{@link #setLogger(DITAOTLogger)} must be called before calling this method.</p>
+	 * 
 	 * @param input input
 	 * @return output
 	 * @author Lian, Li
@@ -33,4 +36,11 @@ public interface AbstractPipelineModule {
 	AbstractPipelineOutput execute(AbstractPipelineInput input)
 			throws DITAOTException;
 
+	/**
+	 * Set logger for module.
+	 * 
+	 * @param logger logger to use for log message
+	 */
+	public void setLogger(DITAOTLogger logger);
+	
 }

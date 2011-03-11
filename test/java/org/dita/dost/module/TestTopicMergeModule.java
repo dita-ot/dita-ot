@@ -80,6 +80,7 @@ public class TestTopicMergeModule {
 	public void testtopicmergemodule() throws DITAOTException, IOException
 	{
 		TopicMergeModule topicmergemodule = new TopicMergeModule();
+		topicmergemodule.setLogger(new TestUtils.TestLogger());
         topicmergemodule.execute(pipelineInput);
 
 		assertEquals(TestUtils.readFileToString(ditalistfile, true),

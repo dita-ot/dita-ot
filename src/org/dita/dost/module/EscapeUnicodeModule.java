@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
@@ -28,7 +27,11 @@ import org.dita.dost.util.Constants;
  */
 final class EscapeUnicodeModule implements AbstractPipelineModule {
 	
-	private final DITAOTLogger logger = new DITAOTJavaLogger();
+	private DITAOTLogger logger;
+	
+	public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
 	
 	/**
 	 * Entry point of EscapeUnicodeModule.
@@ -39,6 +42,9 @@ final class EscapeUnicodeModule implements AbstractPipelineModule {
 	 */
 	public AbstractPipelineOutput execute(final AbstractPipelineInput input)
 			throws DITAOTException {
+	    if (logger == null) {
+            throw new IllegalStateException("Logger not set");
+        }
 		final String inputFile = input.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_INPUT);
 		final String outputFile = input.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_OUTPUT);
 

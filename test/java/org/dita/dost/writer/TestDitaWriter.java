@@ -62,6 +62,7 @@ public class TestDitaWriter {
 		tempDir = TestUtils.createTempDir(getClass());
 		
 		final PipelineFacade facade = new PipelineFacade();
+		facade.setLogger(new TestUtils.TestLogger());
 		pipelineInput = new PipelineHashIO();
 		pipelineInput.setAttribute("inputmap", inputMap.getPath());
 		pipelineInput.setAttribute("basedir", baseDir.getAbsolutePath());

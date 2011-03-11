@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.MapLinksReader;
@@ -30,6 +31,7 @@ import org.dita.dost.writer.DitaLinksWriter;
 final class MoveLinksModule implements AbstractPipelineModule {
     private final ContentImpl content;
 
+    private DITAOTLogger logger;
 
     /**
      * Default constructor of MoveLinksModule class.
@@ -40,6 +42,9 @@ final class MoveLinksModule implements AbstractPipelineModule {
 
     }
 
+    public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
 
     /**
      * execution point of MoveLinksModule.
@@ -49,7 +54,9 @@ final class MoveLinksModule implements AbstractPipelineModule {
 	 * @throws DITAOTException exception
 	 */
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-
+        if (logger == null) {
+            throw new IllegalStateException("Logger not set");
+        }
         final String maplinksFile = input.getAttribute(Constants.ANT_INVOKER_PARAM_MAPLINKS);
         final MapLinksReader indexReader = new MapLinksReader();
 		final DitaLinksWriter indexInserter = new DitaLinksWriter();

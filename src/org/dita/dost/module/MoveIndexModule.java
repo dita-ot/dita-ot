@@ -17,7 +17,6 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
@@ -38,7 +37,7 @@ import org.dita.dost.writer.DitaIndexWriter;
 final class MoveIndexModule implements AbstractPipelineModule {
 
     private final ContentImpl content;
-    private DITAOTLogger logger = null;
+    private DITAOTLogger logger;
 
     /**
      * Default constructor of MoveIndexModule class.
@@ -46,8 +45,10 @@ final class MoveIndexModule implements AbstractPipelineModule {
     public MoveIndexModule() {
         super();
         content = new ContentImpl();
-        logger = new DITAOTJavaLogger();
-
+    }
+    
+    public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
     }
 
     /**
@@ -58,6 +59,9 @@ final class MoveIndexModule implements AbstractPipelineModule {
 	 * @throws DITAOTException exception
 	 */
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
+        if (logger == null) {
+            throw new IllegalStateException("Logger not set");
+        }
     	Set<Map.Entry<String, String>> mapSet;
 		Iterator<Map.Entry<String, String>> i;
 		String targetFileName;

@@ -16,6 +16,7 @@ import java.util.StringTokenizer;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTAntLogger;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.PipelineFacade;
@@ -144,6 +145,7 @@ public final class AntInvoker extends Task {
 	 * @throws BuildException Exception
 	 */
 	public void execute() throws BuildException {
+	    pipeline.setLogger(new DITAOTAntLogger(getProject()));
 		try {
 			pipeline.execute(pipelineInput.getAttribute("module"),
 					pipelineInput);

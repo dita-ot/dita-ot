@@ -10,6 +10,7 @@
 package org.dita.dost.module;
 
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.AbstractPipelineModule;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
@@ -28,6 +29,10 @@ public class DummyPipelineModule implements AbstractPipelineModule {
 	 */
 	public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException {
 		return exp;
+	}
+	
+	public void setLogger(final DITAOTLogger logger) {
+	    // NOOP
 	}
 	
 }

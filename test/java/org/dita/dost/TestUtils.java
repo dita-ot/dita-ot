@@ -25,6 +25,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.FileUtils;
 
 import org.xml.sax.Attributes;
@@ -214,6 +215,37 @@ public class TestUtils {
 				copy(s, new File(dst, s.getName()));
 			}
 		}
+	}
+
+	/**
+	 * DITA-OT logger that will throw an assertion error for error messages.
+	 */
+	public static class TestLogger implements DITAOTLogger {
+
+        public void logInfo(String msg) {
+            System.out.println(msg);
+        }
+
+        public void logWarn(String msg) {
+            System.err.println(msg);
+        }
+
+        public void logError(String msg) {
+            throw new AssertionError("Error message was thrown: " + msg);
+        }
+
+        public void logFatal(String msg) {
+            throw new AssertionError("Fatal message was thrown: " + msg);
+        }
+
+        public void logDebug(String msg) {
+            System.out.println(msg);
+        }
+
+        public void logException(Throwable t) {
+            throw new AssertionError("Throwable was thrown: " + t.getMessage());
+        }
+	    
 	}
 	
 }

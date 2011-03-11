@@ -20,7 +20,6 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
@@ -33,7 +32,7 @@ import org.dita.dost.util.Constants;
  */
 final class TopicMergeModule implements AbstractPipelineModule {
 	
-    private final DITAOTLogger logger = new DITAOTJavaLogger();
+    private DITAOTLogger logger;
     
 	/**
 	 * Default Constructor.
@@ -44,6 +43,10 @@ final class TopicMergeModule implements AbstractPipelineModule {
 		// TODO Auto-generated constructor stub
 	}
 	
+	public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
+	
 	/**
 	 * Entry point of TopicMergeModule.
 	 * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
@@ -53,7 +56,9 @@ final class TopicMergeModule implements AbstractPipelineModule {
 	 */
 	public AbstractPipelineOutput execute(final AbstractPipelineInput input)
 			throws DITAOTException {
-		// TODO Auto-generated method stub
+	    if (logger == null) {
+            throw new IllegalStateException("Logger not set");
+        }
 		final String ditaInput = input
 		.getAttribute(Constants.ANT_INVOKER_PARAM_INPUTMAP);
 		final String style = input

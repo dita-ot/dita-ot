@@ -21,7 +21,6 @@ import java.util.StringTokenizer;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.index.IndexTerm;
 import org.dita.dost.index.IndexTermCollection;
-import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
@@ -60,7 +59,7 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
 	/** The list of ditamap files */
 	private List<String> ditamapList = null;
 
-	private final DITAOTLogger logger = new DITAOTJavaLogger();
+	private DITAOTLogger logger;
 	private IndexTermCollection indexTermCollection;
 
 	/**
@@ -68,6 +67,10 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
 	 */
 	public IndexTermExtractModule() {
 	}
+	
+	public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
 
 	/**
 	 * 
@@ -75,6 +78,9 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
 	 */
 	public AbstractPipelineOutput execute(final AbstractPipelineInput input)
 			throws DITAOTException {
+	    if (logger == null) {
+            throw new IllegalStateException("Logger not set");
+        }
 	    indexTermCollection = IndexTermCollection.getInstantce(); 
 		try {
 			indexTermCollection.clear();

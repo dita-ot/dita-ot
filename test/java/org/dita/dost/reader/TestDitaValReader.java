@@ -41,6 +41,7 @@ public class TestDitaValReader {
 		reader = new DitaValReader();
 		
 		PipelineFacade facade = new PipelineFacade();
+		facade.setLogger(new TestUtils.TestLogger());
 		PipelineHashIO pipelineInput = new PipelineHashIO();
 		
 		final File inputDir = new File("DITAVAL");

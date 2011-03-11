@@ -17,7 +17,6 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
@@ -38,8 +37,8 @@ import org.dita.dost.writer.DitaMetaWriter;
  */
 final class MoveMetaModule implements AbstractPipelineModule {
 
-    private final ContentImpl content;
-    private DITAOTLogger logger = null;
+    private ContentImpl content;
+    private DITAOTLogger logger;
 
     /**
      * Default constructor of MoveMetaModule class.
@@ -47,7 +46,10 @@ final class MoveMetaModule implements AbstractPipelineModule {
     public MoveMetaModule() {
         super();
         content = new ContentImpl();
-        logger = new DITAOTJavaLogger();
+    }
+    
+    public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
     }
 
     /**
@@ -58,6 +60,9 @@ final class MoveMetaModule implements AbstractPipelineModule {
 	 * @throws DITAOTException exception
 	 */
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
+        if (logger == null) {
+            throw new IllegalStateException("Logger not set");
+        }
 		final String baseDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
     	String tempDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
        	

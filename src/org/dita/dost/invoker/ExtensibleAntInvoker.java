@@ -37,8 +37,6 @@ public final class ExtensibleAntInvoker extends Task {
 	/** Equal sign. */
 	private final static String KEY_VALUE_EQUAL_SIGN = "=";
 	
-	/** Logger. */
-	private DITAOTLogger logger;
 	/** Pipeline. */
 	private final PipelineFacade pipeline;
 	/** Pipeline input. */
@@ -191,7 +189,6 @@ public final class ExtensibleAntInvoker extends Task {
 	 * @throws BuildException exception
 	 */
 	public void execute() throws BuildException {
-	    logger = new DITAOTAntLogger(getProject());
 		if (getModule() == null) {
 			throw new BuildException("Module attribute must be specified");
 		}
@@ -213,6 +210,7 @@ public final class ExtensibleAntInvoker extends Task {
 			}
 		}
 
+		pipeline.setLogger(new DITAOTAntLogger(getProject()));
 		try {
 			pipeline.execute(getModule(), pipelineInput);
 		} catch (final DITAOTException e) {

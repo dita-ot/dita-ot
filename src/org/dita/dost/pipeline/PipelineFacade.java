@@ -10,6 +10,7 @@
 package org.dita.dost.pipeline;
 
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.AbstractPipelineModule;
 import org.dita.dost.module.ModuleFactory;
 
@@ -22,6 +23,8 @@ import org.dita.dost.module.ModuleFactory;
  */
 public final class PipelineFacade implements AbstractFacade {
 
+    private DITAOTLogger logger;
+    
     /**
      * Automatically generated constructor: PipelineFacade.
      */
@@ -47,12 +50,17 @@ public final class PipelineFacade implements AbstractFacade {
         ModuleFactory factory = ModuleFactory.instance();
         		
 		module = factory.createModule(pipelineModuleName);
+		module.setLogger(logger);
 		
         if (module != null) {
             return module.execute(input);
         }
 
         return null;
+    }
+    
+    public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
     }
 
 }

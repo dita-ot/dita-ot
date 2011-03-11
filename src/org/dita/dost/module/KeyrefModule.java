@@ -18,7 +18,6 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
@@ -33,7 +32,11 @@ import org.dita.dost.writer.KeyrefPaser;
  */
 final class KeyrefModule implements AbstractPipelineModule {
 	
-    private final DITAOTLogger logger = new DITAOTJavaLogger();
+    private DITAOTLogger logger;
+    
+    public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
     
 	/**
 	 * Entry point of KeyrefModule.
@@ -44,6 +47,9 @@ final class KeyrefModule implements AbstractPipelineModule {
 	 */
 	public AbstractPipelineOutput execute(final AbstractPipelineInput input)
 			throws DITAOTException {
+	    if (logger == null) {
+            throw new IllegalStateException("Logger not set");
+        }
 		String tempDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
 		
 		//Added by William on 2010-03-30 for bug:2978858 start

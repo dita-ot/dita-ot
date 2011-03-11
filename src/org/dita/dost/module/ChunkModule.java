@@ -33,7 +33,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
@@ -51,7 +50,7 @@ import org.w3c.dom.Element;
  */
 final class ChunkModule implements AbstractPipelineModule {
 
-    private final DITAOTLogger logger = new DITAOTJavaLogger();
+    private DITAOTLogger logger;
     
 	/**
 	 * Constructor.
@@ -59,6 +58,10 @@ final class ChunkModule implements AbstractPipelineModule {
 	public ChunkModule() {
 		super();
 	}
+	
+	public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
 
 	/**
 	 * Entry point of chunk module. Starting from map files, it parses and
@@ -71,6 +74,9 @@ final class ChunkModule implements AbstractPipelineModule {
 	 */
 	public AbstractPipelineOutput execute(final AbstractPipelineInput input)
 			throws DITAOTException {
+	    if (logger == null) {
+	        throw new IllegalStateException("Logger not set");
+	    }
 		String tempDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
 		final String ditaext = input.getAttribute(Constants.ANT_INVOKER_PARAM_DITAEXT);
 		final String transtype = input.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE);
