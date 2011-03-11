@@ -24,7 +24,6 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 final class DescParser extends DefaultHandler{
     
-    private final Map<String, ExtensionPoint> extensionPoints;
 	private String currentPlugin = null;
 	private final Features features;
 	
@@ -44,7 +43,6 @@ final class DescParser extends DefaultHandler{
 	public DescParser(final File location, final File ditaDir) {
 		super();
 		features = new Features(location, ditaDir);
-	    extensionPoints = new HashMap<String, ExtensionPoint>();
 	}
 	
 	/**
@@ -54,6 +52,7 @@ final class DescParser extends DefaultHandler{
 	public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
 		if( "plugin".equals(qName) ){
 			currentPlugin = attributes.getValue("id");
+			features.setPluginId(currentPlugin);
 		} else if ("extension-point".equals(qName)){
             addExtensionPoint(attributes);
 		} else if ("feature".equals(qName)){
@@ -66,16 +65,7 @@ final class DescParser extends DefaultHandler{
 			features.addTemplate(attributes.getValue("file"));
 		}
 	}
-	
-	/**
-	 * Get extension points
-	 * 
-	 * @return extension points, empty map if not extension points are defined
-	 */
-	public Map<String, ExtensionPoint> getExtensionPoints() {
-	    return Collections.unmodifiableMap(extensionPoints);
-	}
-	
+		
 	/**
 	 * Get plug-in features.
 	 * 
@@ -84,18 +74,7 @@ final class DescParser extends DefaultHandler{
 	public Features getFeatures() {
 		return features;
 	}
-	
-	/**
-	 * Get plugin ID.
-	 * 
-	 * @return plugin ID, <code>null</code> if not defined
-	 */
-	public String getPluginId() {
-		return currentPlugin; 
-	}
-	
-	// Private methods ---------------------------------------------------------
-	
+		
 	/**
      * Add extension point.
      * 
@@ -108,7 +87,6 @@ final class DescParser extends DefaultHandler{
             throw new NullPointerException("id attribute not set on extension-point");
         }
         final String name = atts.getValue("name");
-        extensionPoints.put(id, new ExtensionPoint(id, name, currentPlugin));
+        features.addExtensionPoint(new ExtensionPoint(id, name, currentPlugin));
     }
-	
 }

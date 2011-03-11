@@ -47,6 +47,30 @@ public class FeaturesTest {
 	}
 
 	@Test
+	public void testAddExtensionPoint() {
+	    final Features f = new Features(new File("base", "plugins"), new File("base"));
+	    final ExtensionPoint e = new ExtensionPoint("id", "name", "plugin");
+	    f.addExtensionPoint(e);
+	    try {
+	        f.addExtensionPoint(null);
+	        fail();
+	    } catch (final NullPointerException ex) {}
+	}
+
+   @Test
+    public void testGetExtensionPoints() {
+        final Features f = new Features(new File("base", "plugins"), new File("base"));
+        final ExtensionPoint e = new ExtensionPoint("id", "name", "plugin");
+        f.addExtensionPoint(e);
+        final ExtensionPoint e2 = new ExtensionPoint("id2", "name2", "plugin");
+        f.addExtensionPoint(e2);
+        
+        assertEquals(2, f.getExtensionPoints().size());
+        assertEquals(e, f.getExtensionPoints().get("id"));
+        assertEquals(e2, f.getExtensionPoints().get("id2"));
+    }
+	
+	@Test
 	public void testGetFeature() {
 		final Features f = new Features(new File("base", "plugins"), new File("base"));
 		f.addFeature("foo", "bar", null);

@@ -11,6 +11,8 @@ package org.dita.dost.platform;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -29,8 +31,11 @@ import org.dita.dost.util.FileUtils;
  * @author Zhang, Yuan Peng
  */
 final class Features {
+    
+    private String id;
 	private final File location;
 	private final File ditaDir;
+	private final Map<String, ExtensionPoint> extensionPoints;
 	private final Hashtable<String,String> featureTable;
 	private final List<PluginRequirement> requireList;
 	private final Hashtable<String,String> metaTable;
@@ -43,14 +48,7 @@ final class Features {
 	 */
 	@Deprecated
 	public Features() {
-		super();
-		location = null;
-		ditaDir = null;
-		featureTable = new Hashtable<String,String>(Constants.INT_16);
-		requireList = new ArrayList<PluginRequirement>(Constants.INT_8);
-		metaTable = new Hashtable<String,String>(Constants.INT_16);
-		templateList = new ArrayList<String>(Constants.INT_8);
-		// TODO Auto-generated constructor stub
+	    this(null, null);
 	}
 
 	/**
@@ -61,6 +59,7 @@ final class Features {
 	public Features(final File location, final File ditaDir) {
 		this.location = location;
 		this.ditaDir = ditaDir;
+		extensionPoints= new HashMap<String, ExtensionPoint>();
 		featureTable = new Hashtable<String,String>(Constants.INT_16);
 		requireList = new ArrayList<PluginRequirement>(Constants.INT_8);
 		metaTable = new Hashtable<String,String>(Constants.INT_16);
@@ -83,6 +82,18 @@ final class Features {
 	    return ditaDir;
 	}
 	
+	void setPluginId(final String id) {
+	    this.id = id;
+	}
+	
+	String getPluginId() {
+	    return id;
+	}
+	
+	Map<String, ExtensionPoint> getExtensionPoints() {
+	    return Collections.unmodifiableMap(extensionPoints);
+	}
+	
 	/**
 	 * Return the feature name by id.
 	 * @param id feature id
@@ -98,6 +109,10 @@ final class Features {
 	 */
 	public Set<Map.Entry<String,String>> getAllFeatures(){
 		return featureTable.entrySet();
+	}
+	
+	void addExtensionPoint(final ExtensionPoint extensionPoint) {
+	    extensionPoints.put(extensionPoint.id, extensionPoint);
 	}
 	
 	/**

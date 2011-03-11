@@ -51,7 +51,6 @@ public final class Integrator {
 	 * Plugin table which contains detected plugins.
 	 */
 	private final Map<String,Features> pluginTable;
-	private final Map<String, ExtensionPoint> extensionPoints;
 	private final Set<String> templateSet = new HashSet<String>(Constants.INT_16);
 	private File ditaDir;
 	private File basedir;
@@ -62,6 +61,7 @@ public final class Integrator {
 	private final Set<String> loadedPlugin;
 	private final Hashtable<String,String> featureTable;
     private File propertiesFile;
+    private final Set<String> extensionPoints;
         
     private Properties properties;
 	
@@ -209,7 +209,7 @@ public final class Integrator {
 			final Features pluginFeatures = pluginTable.get(plugin);
 			final Set<Map.Entry<String,String>> featureSet = pluginFeatures.getAllFeatures();
 			for (final Map.Entry<String,String> currentFeature: featureSet) {
-			    if (!extensionPoints.containsKey(currentFeature.getKey())) {
+			    if (!extensionPoints.contains(currentFeature.getKey())) {
                     logger.logDebug("Plug-in " + plugin + " uses an undefined extension point " + currentFeature.getKey());
                 }
 				if(featureTable.containsKey(currentFeature.getKey())){
@@ -290,8 +290,9 @@ public final class Integrator {
 			final DescParser parser = new DescParser(descFile.getParentFile(), ditaDir);
 			reader.setContentHandler(parser);
 			reader.parse(descFile.getAbsolutePath());
-			extensionPoints.putAll(parser.getExtensionPoints());
-			pluginTable.put(parser.getPluginId(), parser.getFeatures());
+			final Features f = parser.getFeatures();
+			extensionPoints.addAll(f.getExtensionPoints().keySet());
+			pluginTable.put(f.getPluginId(), f);
 		}catch(final Exception e){
 			logger.logException(e);
 		}		
@@ -301,11 +302,11 @@ public final class Integrator {
 	 * Default Constructor.
 	 */
 	public Integrator() {
-	    extensionPoints = new HashMap<String, ExtensionPoint>();
 		pluginTable = new HashMap<String,Features>(Constants.INT_16);
 		descSet = new HashSet<File>(Constants.INT_16);
 		loadedPlugin = new HashSet<String>(Constants.INT_16);
 		featureTable = new Hashtable<String,String>(Constants.INT_16);
+		extensionPoints = new HashSet<String>();
 		try {
             reader = StringUtils.getXMLReader();
         } catch (final Exception e) {

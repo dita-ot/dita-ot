@@ -95,9 +95,4 @@ public class DescParserTest {
         		f.getFeature("multiple_file"));
     }
     
-    @Test
-    public void testGetPluginId() {
-        assertEquals("dummy", p.getPluginId());
-    }
-
 }
