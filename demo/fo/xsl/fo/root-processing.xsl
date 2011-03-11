@@ -45,10 +45,6 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:value-of select="'cfg:fo/layout-masters.xml'"/>
     </xsl:variable>
 
-    <xsl:variable name="index-configuration">
-        <xsl:value-of select="concat('cfg:common/index/', $locale, '.xml')"/>
-    </xsl:variable>
-
     <xsl:variable name="mapType">
         <xsl:choose>
             <xsl:when test="/*[contains(@class, ' map/map ') and contains(@class, ' bookmap/bookmap ')]">
