@@ -433,6 +433,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 	 */
 	private void processWaitList() throws DITAOTException {
 		reader = new GenListModuleReader();
+		reader.setLogger(logger);
 		//Added by William on 2009-07-18 for req #12014 start
 		reader.setTranstype(transtype);
 		//Added by William on 2009-07-18 for req #12014 end

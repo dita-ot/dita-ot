@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 
+import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.Content;
 import org.dita.dost.reader.GenListModuleReader;
@@ -56,6 +57,7 @@ public class TestGenListModuleReader {
 			e.printStackTrace();
 		}
 		reader = new GenListModuleReader();
+		reader.setLogger(new TestUtils.TestLogger());
 	}
 
 	@Test

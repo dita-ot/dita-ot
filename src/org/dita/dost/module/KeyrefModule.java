@@ -100,6 +100,7 @@ final class KeyrefModule implements AbstractPipelineModule {
 			}
 		}
 		final KeyrefReader reader = new KeyrefReader();
+		reader.setLogger(logger);
 		reader.setTempDir(tempDir);
 		for(final String mapFile: maps.keySet()){
 			reader.setKeys(maps.get(mapFile));

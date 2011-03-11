@@ -38,7 +38,7 @@ public final class ListReader implements AbstractReader {
     private Map<String, String> copytoMap = new HashMap<String, String>();
     private Set<String> schemeSet = new HashSet<String>();
     private String inputMap;
-    private DITAOTLogger logger = new DITAOTJavaLogger();
+    private DITAOTLogger logger;
 
     /**
      * Default constructor of ListReader class.
@@ -104,6 +104,10 @@ public final class ListReader implements AbstractReader {
         return content;
     }
 
+    public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
+    
     /**
      * Return the copy-to map.
 	 * @return copy-to map

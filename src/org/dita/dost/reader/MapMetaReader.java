@@ -125,7 +125,7 @@ public final class MapMetaReader implements AbstractReader {
 		//Added by William on 2009-12-21 for bug:2916469 end
 	}
 
-	private DITAOTLogger logger = null;
+	private DITAOTLogger logger;
 	
 	private Hashtable<String, Element> globalMeta = null;
 	
@@ -139,7 +139,6 @@ public final class MapMetaReader implements AbstractReader {
 	 */
 	public MapMetaReader() {
 		super();
-		logger = new DITAOTJavaLogger();
 		globalMeta = new Hashtable<String, Element>(Constants.INT_16);
 		resultTable.clear();
 	}
@@ -211,6 +210,9 @@ public final class MapMetaReader implements AbstractReader {
         }
 	}
 
+	public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
 	
 	//added by Alan for bug ID:#2891736 on Date: 2009-11-16 begin
 	/**

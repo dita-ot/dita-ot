@@ -56,8 +56,6 @@ public final class DitaValReader extends AbstractXMLReader {
 
 	private XMLReader reader;
 
-	private DITAOTLogger logger;
-
 	private List<String> imageList = null;
 
 	private String ditaVal = null;
@@ -84,7 +82,6 @@ public final class DitaValReader extends AbstractXMLReader {
 		filterMap = new HashMap<String, String>();
 		schemeFilterMap = new HashMap<String, String>();
 		content = null;
-		logger = new DITAOTJavaLogger();
 		imageList = new ArrayList<String>(Constants.INT_256);
 		relFlagImageList= new ArrayList<String>(Constants.INT_256);
 		validValuesMap = new HashMap<String, HashMap<String, HashSet<String>>>();

@@ -67,6 +67,7 @@ final class ConrefPushModule implements AbstractPipelineModule {
 
 		final Set<String> conrefpushlist = StringUtils.restoreSet(properties.getProperty(Constants.CONREF_PUSH_LIST));
 		final ConrefPushReader reader = new ConrefPushReader();
+		reader.setLogger(logger);
 		for(final String fileName:conrefpushlist){
 			//FIXME: this reader calculate parent directory
 			reader.read(new File(tempDir,fileName).getAbsolutePath());

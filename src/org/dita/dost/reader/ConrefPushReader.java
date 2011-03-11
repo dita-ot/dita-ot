@@ -32,8 +32,6 @@ public final class ConrefPushReader extends AbstractXMLReader {
 	/** push table.*/
 	private Hashtable<String, Hashtable<String, String>> pushtable;
 	/** push table.*/
-	private DITAOTLogger logger = null;
-	/** push table.*/
 	private XMLReader reader = null;
 	//Added by william on 2009-11-8 for ampbug:2893664 start
 	/**whether an entity needs to be resolved or not flag. */
@@ -96,7 +94,6 @@ public final class ConrefPushReader extends AbstractXMLReader {
 	 */
 	public ConrefPushReader(){
 		pushtable = new Hashtable<String, Hashtable<String,String>>();
-		logger = new DITAOTJavaLogger();
 		try{
 			reader = StringUtils.getXMLReader();
 			reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);

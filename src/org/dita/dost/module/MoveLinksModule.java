@@ -59,6 +59,7 @@ final class MoveLinksModule implements AbstractPipelineModule {
         }
         final String maplinksFile = input.getAttribute(Constants.ANT_INVOKER_PARAM_MAPLINKS);
         final MapLinksReader indexReader = new MapLinksReader();
+        indexReader.setLogger(logger);
 		final DitaLinksWriter indexInserter = new DitaLinksWriter();
 		Set<Map.Entry<String, String>> mapSet;
 		Iterator<Map.Entry<String, String>> i;

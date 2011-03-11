@@ -68,6 +68,7 @@ final class TopicMergeModule implements AbstractPipelineModule {
 		final String tempdir = input
 		.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
 		final MergeMapParser mapParser = new MergeMapParser();
+		mapParser.setLogger(logger);
 		
 		if (ditaInput == null || !new File(ditaInput).exists()){
 			logger.logError(MessageUtils.getMessage("DOTJ025E").toString());

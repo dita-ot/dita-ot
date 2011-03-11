@@ -54,7 +54,6 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
 	
 	private String mapPath = null;
 
-	private DITAOTLogger logger = null;
 	//Added by William on 2010-04-26 for ref:2990783 start
 	private IndexTermCollection result;
 	// assumes index terms have been moved by preprocess
@@ -74,7 +73,6 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
 		topicrefSpecList = new ArrayList<String>(Constants.INT_16);
 		indexSeeSpecList = new ArrayList<String>(Constants.INT_16);
 		indexSeeAlsoSpecList = new ArrayList<String>(Constants.INT_16);
-		logger = new DITAOTJavaLogger();
 		if (result == null) {
 		    result = IndexTermCollection.getInstantce();
 		}

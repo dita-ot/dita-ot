@@ -89,6 +89,7 @@ final class ChunkModule implements AbstractPipelineModule {
 	    final File ditalist = new File(tempDir, Constants.FILE_NAME_DITA_LIST);
 	    final File xmlDitalist=new File(tempDir,Constants.FILE_NAME_DITA_LIST_XML);
 	    final ChunkMapReader mapReader = new ChunkMapReader();
+	    mapReader.setLogger(logger);
 	    mapReader.setup(ditaext, transtype);
 		
 	    final Properties prop = new Properties();

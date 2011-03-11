@@ -36,7 +36,6 @@ public final class MergeTopicParser extends AbstractXMLReader {
 	private String dirPath = null;
 	private String filePath = null;
 	private boolean isFirstTopicId = false;
-	private DITAOTLogger logger = null;
 
 	private XMLReader reader = null;
 	private String retId = null;
@@ -46,7 +45,6 @@ public final class MergeTopicParser extends AbstractXMLReader {
 	 * Default Constructor.
 	 */
 	public MergeTopicParser() {
-		logger = new DITAOTJavaLogger();
 		try{
 			if(reader == null){
 				reader = StringUtils.getXMLReader();

@@ -65,7 +65,7 @@ public abstract class AbstractXMLReader implements AbstractReader,
 			grammarPool = inGrammarPool;
 		}
 	
-		DITAOTJavaLogger javaLogger=new DITAOTJavaLogger();
+		final DITAOTLogger javaLogger=new DITAOTJavaLogger();
 		XMLReader reader = StringUtils.getXMLReader();
 		reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
 		if(validate==true){
@@ -90,7 +90,7 @@ public abstract class AbstractXMLReader implements AbstractReader,
 	 */
 	public static void setGrammarPool(XMLReader reader, XMLGrammarPool grammarPool) {
 		
-		DITAOTJavaLogger logger = new DITAOTJavaLogger();
+		final DITAOTLogger logger = new DITAOTJavaLogger();
 		if (grammarPool == null) {
 			grammarPool = GrammarPoolManager.getGrammarPool();
 		}
@@ -114,7 +114,7 @@ public abstract class AbstractXMLReader implements AbstractReader,
 		}
 	}
 	
-	protected DITAOTLogger logger = null;
+	protected DITAOTLogger logger;
 
 	/**
      * (non-Javadoc).
@@ -132,6 +132,11 @@ public abstract class AbstractXMLReader implements AbstractReader,
     public Content getContent() {
         return null;
     }
+    
+    public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
+
 
     /**
      * (non-Javadoc).

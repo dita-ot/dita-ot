@@ -42,7 +42,6 @@ public final class MergeMapParser extends AbstractXMLReader {
 	private XMLReader reader = null;
 	private StringBuffer mapInfo = null;
 	private MergeTopicParser topicParser = null;
-	private DITAOTLogger logger = null;
 	private MergeUtils util;
 	private ContentImpl content;
 	private String dirPath = null;
@@ -55,7 +54,6 @@ public final class MergeMapParser extends AbstractXMLReader {
 	 * Default Constructor.
 	 */
 	public MergeMapParser() {
-		logger = new DITAOTJavaLogger();
 		try{
 			if(reader == null){
 				reader = StringUtils.getXMLReader();

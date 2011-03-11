@@ -47,7 +47,7 @@ import org.w3c.dom.Text;
  */
 public final class ChunkMapReader implements AbstractReader {
 	
-	private DITAOTLogger logger = null;
+	private DITAOTLogger logger;
 	
 	private boolean chunkByTopic = false;
 	
@@ -75,7 +75,6 @@ public final class ChunkMapReader implements AbstractReader {
 	 */
 	public ChunkMapReader() {
 		super();
-		logger = new DITAOTJavaLogger();
 		chunkByTopic=false;// By default, processor should chunk by document.
 		changeTable = new LinkedHashMap<String, String>(Constants.INT_128);
 		refFileSet = new HashSet<String>(Constants.INT_128);
@@ -227,6 +226,10 @@ public final class ChunkMapReader implements AbstractReader {
 
 	}
 
+	public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
+	
 	private void outputMapFile(String file, Element root) {
 		
 		OutputStreamWriter output = null;

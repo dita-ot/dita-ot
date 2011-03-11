@@ -67,6 +67,7 @@ final class MoveMetaModule implements AbstractPipelineModule {
     	String tempDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
        	
 		final MapMetaReader metaReader = new MapMetaReader();
+		metaReader.setLogger(logger);
 		final DitaMetaWriter inserter = new DitaMetaWriter();
 
 		if (!new File(tempDir).isAbsolute()) {

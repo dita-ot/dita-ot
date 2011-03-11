@@ -43,7 +43,6 @@ public final class KeyrefReader extends AbstractXMLReader {
 			keyDefContent = new StringBuffer();
 		}
 	}
-	private DITAOTLogger logger;
 	
 	private XMLReader reader;
 	
@@ -62,7 +61,6 @@ public final class KeyrefReader extends AbstractXMLReader {
 	 * Constructor.
 	 */
 	public KeyrefReader(){
-		logger = new DITAOTJavaLogger();
 		keyDefTable = new Hashtable<String, String>();
 		keys = new HashSet<String>();
 		try {

@@ -85,9 +85,7 @@ public final class IndexTermReader extends AbstractXMLReader {
 	
 	/** Depth inside a "@processing-role" parent */
     private int processRoleLevel = 0;
-    
-	private DITAOTLogger logger = null;
-	
+    	
 	//Added by William on 2010-04-26 for ref:2990783 start
 	private IndexTermCollection result;
 	//Added by William on 2010-04-26 for ref:2990783 end
@@ -118,7 +116,6 @@ public final class IndexTermReader extends AbstractXMLReader {
 		titleMap = new HashMap<String, String>(Constants.INT_256);
 		processRoleStack = new Stack<String>();
 		processRoleLevel = 0;
-		logger = new DITAOTJavaLogger();
 		if (result == null) {
 		    result = IndexTermCollection.getInstantce();
 		}

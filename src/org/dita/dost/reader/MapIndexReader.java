@@ -71,7 +71,6 @@ public final class MapIndexReader extends AbstractXMLReader {
     private File inputFile;
     private String lastMatchElement;
     private int level;
-    private DITAOTLogger logger;
     private HashMap<String, String> map;
     private boolean match;
 
@@ -103,8 +102,6 @@ public final class MapIndexReader extends AbstractXMLReader {
         needResolveEntity = false;
         topicPath = null;
         inputFile = null; 
-        logger = new DITAOTJavaLogger();
-        
         
         try {
             reader = StringUtils.getXMLReader();

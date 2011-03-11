@@ -223,6 +223,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 			}
 
 	        final ListReader listReader = new ListReader();
+	        listReader.setLogger(logger);
 			//null means default path: tempdir/dita.xml.properties
 			listReader.read(null);
 

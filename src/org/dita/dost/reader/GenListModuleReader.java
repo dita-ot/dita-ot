@@ -147,8 +147,6 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	
 	private String props; // contains the attribution specialization from props
 	
-	private DITAOTLogger logger = null;
-	
 	/** Set of outer dita files */
 	private Set<String> outDitaFilesSet=null;
 	
@@ -284,7 +282,6 @@ public final class GenListModuleReader extends AbstractXMLReader {
 		
 		props = null;
 		reader.setContentHandler(this);
-		logger = new DITAOTJavaLogger();
 		try {
 			reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
 		} catch (SAXNotRecognizedException e1) {
