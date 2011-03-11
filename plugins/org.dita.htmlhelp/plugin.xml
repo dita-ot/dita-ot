@@ -4,6 +4,10 @@
   applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2011 All Rights Reserved. -->
 <plugin id="org.dita.htmlhelp">
+  <!-- extension points -->
+  <extension-point id="dita.xsl.htmlhelp.map2hhp" name="HTML Help project XSLT import"/>
+  <extension-point id="dita.xsl.htmlhelp.map2hhc" name="HTML Help content XSLT import"/>
+  <!-- extensions -->
   <feature extension="dita.conductor.transtype.check" value="htmlhelp"/>
   <require plugin="org.dita.xhtml"/>
   <feature extension="dita.conductor.target" file="conductor.xml"/>

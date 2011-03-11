@@ -51,6 +51,7 @@ public final class Integrator {
 	 * Plugin table which contains detected plugins.
 	 */
 	private final Map<String,Features> pluginTable;
+	private final Map<String, ExtensionPoint> extensionPoints;
 	private final Set<String> templateSet = new HashSet<String>(Constants.INT_16);
 	private File ditaDir;
 	private File basedir;
@@ -208,6 +209,9 @@ public final class Integrator {
 			final Features pluginFeatures = pluginTable.get(plugin);
 			final Set<Map.Entry<String,String>> featureSet = pluginFeatures.getAllFeatures();
 			for (final Map.Entry<String,String> currentFeature: featureSet) {
+			    if (!extensionPoints.containsKey(currentFeature.getKey())) {
+                    logger.logDebug("Plug-in " + plugin + " uses an undefined extension point " + currentFeature.getKey());
+                }
 				if(featureTable.containsKey(currentFeature.getKey())){
 					final String value = featureTable.remove(currentFeature.getKey());
 					featureTable.put(currentFeature.getKey(), 
@@ -286,6 +290,7 @@ public final class Integrator {
 			final DescParser parser = new DescParser(descFile.getParentFile(), ditaDir);
 			reader.setContentHandler(parser);
 			reader.parse(descFile.getAbsolutePath());
+			extensionPoints.putAll(parser.getExtensionPoints());
 			pluginTable.put(parser.getPluginId(), parser.getFeatures());
 		}catch(final Exception e){
 			logger.logException(e);
@@ -296,6 +301,7 @@ public final class Integrator {
 	 * Default Constructor.
 	 */
 	public Integrator() {
+	    extensionPoints = new HashMap<String, ExtensionPoint>();
 		pluginTable = new HashMap<String,Features>(Constants.INT_16);
 		descSet = new HashSet<File>(Constants.INT_16);
 		loadedPlugin = new HashSet<String>(Constants.INT_16);

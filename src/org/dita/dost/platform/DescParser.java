@@ -10,6 +10,9 @@
 package org.dita.dost.platform;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -20,6 +23,8 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author Zhang, Yuan Peng
  */
 final class DescParser extends DefaultHandler{
+    
+    private final Map<String, ExtensionPoint> extensionPoints;
 	private String currentPlugin = null;
 	private final Features features;
 	
@@ -39,6 +44,7 @@ final class DescParser extends DefaultHandler{
 	public DescParser(final File location, final File ditaDir) {
 		super();
 		features = new Features(location, ditaDir);
+	    extensionPoints = new HashMap<String, ExtensionPoint>();
 	}
 	
 	/**
@@ -48,6 +54,8 @@ final class DescParser extends DefaultHandler{
 	public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
 		if( "plugin".equals(qName) ){
 			currentPlugin = attributes.getValue("id");
+		} else if ("extension-point".equals(qName)){
+            addExtensionPoint(attributes);
 		} else if ("feature".equals(qName)){
 			features.addFeature(attributes.getValue("extension"), attributes);
 		} else if ("require".equals(qName)){
@@ -57,6 +65,15 @@ final class DescParser extends DefaultHandler{
 		} else if ("template".equals(qName)){
 			features.addTemplate(attributes.getValue("file"));
 		}
+	}
+	
+	/**
+	 * Get extension points
+	 * 
+	 * @return extension points, empty map if not extension points are defined
+	 */
+	public Map<String, ExtensionPoint> getExtensionPoints() {
+	    return Collections.unmodifiableMap(extensionPoints);
 	}
 	
 	/**
@@ -76,5 +93,22 @@ final class DescParser extends DefaultHandler{
 	public String getPluginId() {
 		return currentPlugin; 
 	}
+	
+	// Private methods ---------------------------------------------------------
+	
+	/**
+     * Add extension point.
+     * 
+     * @param atts extension point element attributes
+     * @throws NullPointerException if extension ID is {@code null}
+     */
+    private void addExtensionPoint(final Attributes atts) {
+        final String id = atts.getValue("id");
+        if (id == null) {
+            throw new NullPointerException("id attribute not set on extension-point");
+        }
+        final String name = atts.getValue("name");
+        extensionPoints.put(id, new ExtensionPoint(id, name, currentPlugin));
+    }
 	
 }
