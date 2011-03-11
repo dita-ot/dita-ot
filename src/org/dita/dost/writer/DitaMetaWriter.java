@@ -402,7 +402,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
 						// if there is no generalized tag corresponding this tag
 						Properties prop=new Properties();
 						prop.put("%1", name);
-						logger.logFatal(MessageUtils.getMessage("DOTJ038W", prop).toString());
+						logger.logError(MessageUtils.getMessage("DOTJ038E", prop).toString());
 						break;
 					}
 					if(currentIndex.compareTo(nextIndex) > 0){

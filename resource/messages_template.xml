@@ -248,7 +248,7 @@
     <response>Please make sure the input is normalized DITA with class attributes included, otherwise it will not be processed correctly.</response>
   </message>
   
-  <message id="DOTJ038W" type="ERROR">
+  <message id="DOTJ038E" type="ERROR">
     <reason>The tag "%1" is specialized from non-predefined metadata.</reason>
     <response>Please make sure that tag "%1" is specialized from some predefinded metadata tag.</response>
   </message>
