@@ -42,7 +42,6 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
 
     private HashMap<String, String> indexEntries;
     private Set<String> topicSet;
-    private DITAOTLogger logger;
     private boolean needResolveEntity;
     private OutputStreamWriter output;
     private XMLReader reader;
@@ -65,7 +64,6 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
         output = null;
         insideCDATA = false;
         topicSpecList = new ArrayList<String>(); //Eric
-        logger = new DITAOTJavaLogger();
         
         try {
             reader = StringUtils.getXMLReader();

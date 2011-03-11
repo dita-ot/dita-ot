@@ -35,8 +35,6 @@ import org.dita.dost.util.Constants;
  */
 public final class CHMIndexWriter extends AbstractExtendDitaWriter implements AbstractWriter, IDitaTranstypeIndexWriter {
     
-	private final DITAOTLogger logger = new DITAOTJavaLogger();
-	
 	//RFE 2987769 Eclipse index-see - Added extends AbstractExtendedDitaWriter
 	
 	/** List of indexterms */

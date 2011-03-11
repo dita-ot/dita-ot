@@ -51,8 +51,6 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 
 	private XMLReader parser = null;
 
-	private DITAOTLogger logger = null;
-
 	private OutputStreamWriter output = null;
 
 	private Content content;
@@ -179,7 +177,6 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 	 * Constructor.
 	 */
 	public KeyrefPaser() {
-		logger = new DITAOTJavaLogger();
 		keyrefLeval = 0;
 		//hasKeyref = false;
 		keyrefLevalStack = new Stack<Integer>();

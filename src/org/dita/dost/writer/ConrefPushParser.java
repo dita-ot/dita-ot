@@ -61,8 +61,6 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 	private Stack<String> idStack = null;
 	/**parser.*/
 	private XMLReader parser = null;
-	/**logger.*/
-	private DITAOTLogger logger = null;
 	/**output.*/
 	private OutputStreamWriter output = null;
 	//Added by william on 2009-11-8 for ampbug:2893664 start
@@ -138,7 +136,6 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 	 * Constructor.
 	 */
 	public ConrefPushParser(){
-		logger = new DITAOTJavaLogger();
 		topicSpecSet = new HashSet<String>();
 		levelForPushAfterStack = new Stack<Integer>();
 		contentForPushAfterStack = new Stack<String>();

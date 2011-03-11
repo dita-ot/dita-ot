@@ -9,6 +9,7 @@
  */
 package org.dita.dost.writer;
 
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.PipelineHashIO;
 
 //RFE 2987769 Eclipse index-see
@@ -16,7 +17,7 @@ import org.dita.dost.pipeline.PipelineHashIO;
 public abstract class AbstractExtendDitaWriter implements IExtendDitaWriter {
 	
 	private PipelineHashIO pipelineHashMap = null;
-
+	protected DITAOTLogger logger;
 
 	public PipelineHashIO getPipelineHashIO() {
 		
@@ -28,5 +29,9 @@ public abstract class AbstractExtendDitaWriter implements IExtendDitaWriter {
 		pipelineHashMap = hashIO;
 		
 	}
+	
+	public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
 
 }

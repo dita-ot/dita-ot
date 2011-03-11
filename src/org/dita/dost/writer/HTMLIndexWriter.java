@@ -39,7 +39,6 @@ import org.dita.dost.util.Constants;
 public final class HTMLIndexWriter extends AbstractExtendDitaWriter implements AbstractWriter, IDitaTranstypeIndexWriter {
     /** List of indexterms */
     private List<IndexTerm> termList = null;
-    private final DITAOTLogger logger = new DITAOTJavaLogger();
 
     /**
      * Default Constructor.

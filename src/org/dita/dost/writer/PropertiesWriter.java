@@ -30,13 +30,7 @@ import java.io.*;
 public final class PropertiesWriter implements AbstractWriter {
 	/** Properties used to output */
 	private Properties prop = null;
-	private final DITAOTLogger logger = new DITAOTJavaLogger();
-
-	/**
-	 * Default Constructor.
-	 */
-	public PropertiesWriter() {
-	}
+	private DITAOTLogger logger;
 
 	/**
 	 * 
@@ -71,6 +65,11 @@ public final class PropertiesWriter implements AbstractWriter {
 			}
 		}
 	}
+	
+	public void setLogger(final DITAOTLogger logger) {
+	    this.logger = logger;
+	}
+	
 	/**
 	 * Write into xml file.
 	 * @param filename xml file name

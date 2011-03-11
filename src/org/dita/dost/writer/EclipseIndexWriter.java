@@ -43,9 +43,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter implement
 	private List<IndexTerm> termList = null;
 	
 	private String filepath = null;
-	
-	private DITAOTLogger logger = null;
-	
+		
 	private String targetExt = Constants.FILE_EXTENSION_HTML;
 	
 	/** 
@@ -55,15 +53,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter implement
 	
 	/** List of index terms used to search for see references. */ 
 	private List<IndexTerm> termCloneList = null;
-	
-	
-	/**
-	 * Default constructor.
-	 */
-	public EclipseIndexWriter() {
-		logger = new DITAOTJavaLogger();
-	}
-	
+		
 	/**
 	 * Set the content for output.
      * 

@@ -64,7 +64,6 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
 	private String firstMatchTopic;
 	private String lastMatchTopic;
     private Hashtable<String, Node> metaTable;
-    private DITAOTLogger logger;
     private List<String> matchList; // topic path that topicIdList need to match
     private boolean needResolveEntity;
     private Writer output;
@@ -157,7 +156,6 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
         output = null;
         startTopic = false;
         insideCDATA = false;
-        logger = new DITAOTJavaLogger();
         
         try {
             reader = StringUtils.getXMLReader();

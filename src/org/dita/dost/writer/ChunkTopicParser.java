@@ -108,8 +108,6 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
     
     //siblingStub is similar to stub. The only different is it is used to insert generated topicref sibling to current topicref
     private Element siblingStub = null;
-    
-    DITAOTLogger logger = null;
 
 	private String ditaext = null;
 	
@@ -138,7 +136,6 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 		fileWriterStack = new Stack<Writer>();
 		stubStack = new Stack<Element>();
 		outputFileNameStack = new Stack<String>();
-		logger=new DITAOTJavaLogger();
 		topicID = new HashSet<String>();
 		copyto = new HashSet<String>();
 		copytoSource = new HashSet<String>();

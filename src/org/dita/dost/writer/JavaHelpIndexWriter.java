@@ -38,7 +38,6 @@ public final class JavaHelpIndexWriter extends AbstractExtendDitaWriter implemen
 	
 	/** List of indexterms */
 	private List<IndexTerm> termList = null;
-	private final DITAOTLogger logger = new DITAOTJavaLogger();
 	
 	/**
 	 * Default constructor.

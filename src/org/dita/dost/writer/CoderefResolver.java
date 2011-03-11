@@ -39,9 +39,7 @@ public final class CoderefResolver extends AbstractXMLWriter {
 	private OutputStreamWriter output = null;
 	
 	private XMLReader reader = null;
-	
-	private DITAOTLogger logger = null;
-	
+		
 	private File currentFile = null;
 	
 	private HashSet<String> coderefSpec = null;
@@ -49,9 +47,6 @@ public final class CoderefResolver extends AbstractXMLWriter {
 	 * Constructor.
 	 */
 	public CoderefResolver() {
-		// TODO Auto-generated constructor stub
-		logger = new DITAOTJavaLogger();
-		
 		coderefSpec = new HashSet<String>();
 		
 		try {

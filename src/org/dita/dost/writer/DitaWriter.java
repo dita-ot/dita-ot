@@ -299,7 +299,6 @@ public final class DitaWriter extends AbstractXMLWriter {
     private boolean exclude; // when exclude is true the tag will be excluded.
     private int foreignLevel; // foreign/unknown nesting level
     private int level;// level is used to count the element level in the filtering
-    private final DITAOTLogger logger;
     private boolean needResolveEntity; //check whether the entity need resolve.
     private OutputStreamWriter output;
     private String path2Project;
@@ -367,7 +366,6 @@ public final class DitaWriter extends AbstractXMLWriter {
         
         props = null;
         validateMap = null;
-        logger = new DITAOTJavaLogger();
     }
 
     /**

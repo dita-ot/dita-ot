@@ -45,7 +45,6 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
 
     private String indexEntries;
     private String lastMatchTopic;
-    private DITAOTLogger logger;
     private List<String> matchList; // topic path that topicIdList need to match
     private boolean needResolveEntity;
     private OutputStreamWriter output;
@@ -75,7 +74,6 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
         startTopic = false;
         insideCDATA = false;
         hasWritten = false;
-        logger = new DITAOTJavaLogger();
         
         try {
             reader = StringUtils.getXMLReader();
