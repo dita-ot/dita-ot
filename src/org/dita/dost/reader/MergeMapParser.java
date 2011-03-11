@@ -19,6 +19,7 @@ import java.util.StringTokenizer;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
@@ -41,7 +42,7 @@ public final class MergeMapParser extends AbstractXMLReader {
 	private XMLReader reader = null;
 	private StringBuffer mapInfo = null;
 	private MergeTopicParser topicParser = null;
-	private DITAOTJavaLogger logger = null;
+	private DITAOTLogger logger = null;
 	private MergeUtils util;
 	private ContentImpl content;
 	private String dirPath = null;

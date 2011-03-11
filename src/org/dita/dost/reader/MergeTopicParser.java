@@ -13,6 +13,7 @@ import java.io.File;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
 import org.dita.dost.util.Constants;
@@ -35,7 +36,7 @@ public final class MergeTopicParser extends AbstractXMLReader {
 	private String dirPath = null;
 	private String filePath = null;
 	private boolean isFirstTopicId = false;
-	private DITAOTJavaLogger logger = null;
+	private DITAOTLogger logger = null;
 
 	private XMLReader reader = null;
 	private String retId = null;

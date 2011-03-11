@@ -18,6 +18,7 @@ import java.util.Set;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.MapIndexReader;
@@ -37,7 +38,7 @@ import org.dita.dost.writer.DitaIndexWriter;
 final class MoveIndexModule implements AbstractPipelineModule {
 
     private final ContentImpl content;
-    private DITAOTJavaLogger logger = null;
+    private DITAOTLogger logger = null;
 
     /**
      * Default constructor of MoveIndexModule class.

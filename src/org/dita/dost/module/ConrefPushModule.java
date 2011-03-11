@@ -19,6 +19,7 @@ import java.util.Set;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.ConrefPushReader;
@@ -33,6 +34,8 @@ import org.dita.dost.writer.ConrefPushParser;
  */
 final class ConrefPushModule implements AbstractPipelineModule {
 
+    private final DITAOTLogger logger = new DITAOTJavaLogger();
+    
 	/**
 	 * @see org.dita.dost.module.AbstractPipelineModule#execute(AbstractPipelineInput)
 	 * @param input input
@@ -53,8 +56,7 @@ final class ConrefPushModule implements AbstractPipelineModule {
 		try{
 			properties = ListUtils.getDitaList();
 		}catch(final IOException e){
-			final DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
-			javaLogger.logException(e);
+			logger.logException(e);
 		}
 
 		final Set<String> conrefpushlist = StringUtils.restoreSet(properties.getProperty(Constants.CONREF_PUSH_LIST));

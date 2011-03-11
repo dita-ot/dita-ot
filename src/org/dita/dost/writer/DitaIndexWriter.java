@@ -19,6 +19,7 @@ import java.util.Properties;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.util.Constants;
@@ -44,7 +45,7 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
 
     private String indexEntries;
     private String lastMatchTopic;
-    private DITAOTJavaLogger logger;
+    private DITAOTLogger logger;
     private List<String> matchList; // topic path that topicIdList need to match
     private boolean needResolveEntity;
     private OutputStreamWriter output;

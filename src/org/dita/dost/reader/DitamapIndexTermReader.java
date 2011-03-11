@@ -19,6 +19,7 @@ import org.dita.dost.index.IndexTermCollection;
 import org.dita.dost.index.IndexTermTarget;
 import org.dita.dost.index.TopicrefElement;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
@@ -53,7 +54,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
 	
 	private String mapPath = null;
 
-	private DITAOTJavaLogger javaLogger = null;
+	private DITAOTLogger logger = null;
 	//Added by William on 2010-04-26 for ref:2990783 start
 	private IndexTermCollection result;
 	// assumes index terms have been moved by preprocess
@@ -73,7 +74,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
 		topicrefSpecList = new ArrayList<String>(Constants.INT_16);
 		indexSeeSpecList = new ArrayList<String>(Constants.INT_16);
 		indexSeeAlsoSpecList = new ArrayList<String>(Constants.INT_16);
-		javaLogger = new DITAOTJavaLogger();
+		logger = new DITAOTJavaLogger();
 		if (result == null) {
 		    result = IndexTermCollection.getInstantce();
 		}
@@ -166,7 +167,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
 					return;
 				}else{
 					indexTerm.setTermName("***");
-					javaLogger.logWarn(MessageUtils.getMessage("DOTJ014W").toString());
+					logger.logWarn(MessageUtils.getMessage("DOTJ014W").toString());
 				}
 			}
 			

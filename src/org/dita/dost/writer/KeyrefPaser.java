@@ -27,6 +27,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.util.Constants;
@@ -50,7 +51,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 
 	private XMLReader parser = null;
 
-	private DITAOTJavaLogger javaLogger = null;
+	private DITAOTLogger logger = null;
 
 	private OutputStreamWriter output = null;
 
@@ -178,7 +179,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 	 * Constructor.
 	 */
 	public KeyrefPaser() {
-		javaLogger = new DITAOTJavaLogger();
+		logger = new DITAOTJavaLogger();
 		keyrefLeval = 0;
 		//hasKeyref = false;
 		keyrefLevalStack = new Stack<Integer>();
@@ -194,7 +195,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 			parser.setFeature(Constants.FEATURE_NAMESPACE, true);
 			parser.setContentHandler(this);
 		} catch (Exception e) {
-			javaLogger.logException(e);
+			logger.logException(e);
 		}
 	}
 
@@ -212,7 +213,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 			output.write(StringUtils.escapeXML(ch, start, length));
 		} catch (IOException e) {
 
-			javaLogger.logException(e);
+			logger.logException(e);
 		}
 	}
 
@@ -222,12 +223,12 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 			output.flush();
 			output.close();
 		} catch (Exception e) {
-			javaLogger.logException(e);
+			logger.logException(e);
 		} finally {
 			try {
 				output.close();
 			} catch (Exception e) {
-				javaLogger.logException(e);
+				logger.logException(e);
 			}
 		}
 	}
@@ -338,7 +339,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 			output.write(Constants.GREATER_THAN);
 
 		} catch (Exception e) {
-			javaLogger.logException(e);
+			logger.logException(e);
 		}
 	}
 
@@ -348,7 +349,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 		try {
 			output.write(ch, start, length);
 		} catch (Exception e) {
-			javaLogger.logException(e);
+			logger.logException(e);
 		}
 	}
 
@@ -361,7 +362,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 			output.write(Constants.LESS_THAN + Constants.QUESTION + pi
 					+ Constants.QUESTION + Constants.GREATER_THAN);
 		} catch (Exception e) {
-			javaLogger.logException(e);
+			logger.logException(e);
 		}
 	}
 
@@ -514,7 +515,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 							// key does not exist.
 							Properties prop = new Properties();
 							prop.put("%1", atts.getValue("keyref"));
-							javaLogger
+							logger
 									.logInfo(MessageUtils.getMessage("DOTJ047I", prop)
 											.toString());
 						}
@@ -532,7 +533,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 							// key does not exist
 							Properties prop = new Properties();
 							prop.put("%1", atts.getValue("keyref"));
-							javaLogger
+							logger
 									.logInfo(MessageUtils.getMessage("DOTJ047I", prop)
 											.toString());
 						}
@@ -605,7 +606,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 					// key does not exist
 					Properties prop = new Properties();
 					prop.put("%1", atts.getValue("keyref"));
-					javaLogger
+					logger
 							.logInfo(MessageUtils.getMessage("DOTJ047I", prop)
 									.toString());;
 				}
@@ -631,7 +632,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 
 			output.flush();
 		} catch (IOException e) {
-			javaLogger.logException(e);
+			logger.logException(e);
 		}
 
 	}
@@ -651,24 +652,24 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 				Properties prop = new Properties();
 				prop.put("%1", inputFile.getPath());
 				prop.put("%2", outputFile.getPath());
-				javaLogger.logError(MessageUtils.getMessage("DOTJ009E", prop)
+				logger.logError(MessageUtils.getMessage("DOTJ009E", prop)
 						.toString());
 			}
 			if (!outputFile.renameTo(inputFile)) {
 				Properties prop = new Properties();
 				prop.put("%1", inputFile.getPath());
 				prop.put("%2", outputFile.getPath());
-				javaLogger.logError(MessageUtils.getMessage("DOTJ009E", prop)
+				logger.logError(MessageUtils.getMessage("DOTJ009E", prop)
 						.toString());
 			}
 
 		} catch (Exception e) {
-			javaLogger.logException(e);
+			logger.logException(e);
 		} finally {
 			try {
 				output.close();
 			} catch (Exception ex) {
-				javaLogger.logException(ex);
+				logger.logException(ex);
 			}
 		}
 
@@ -698,7 +699,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 			document = documentBuilder.parse(inputSource);
 			return document;
 		} catch (Exception e) {
-			javaLogger.logException(e);
+			logger.logException(e);
 			return document;
 		}
 	}

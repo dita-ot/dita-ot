@@ -154,7 +154,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 			}
 		}
 	}
-	private final DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+	private final DITAOTLogger logger = new DITAOTJavaLogger();
 	
 	private String inputMap = null;
 	
@@ -376,13 +376,13 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 			prop.loadFromXML(in);
 			in.close();
 		} catch (final IOException e) {
-			this.javaLogger.logException(e);
+			this.logger.logException(e);
 		} finally {
 			if (in != null) {
 				try {
 					in.close();
 				} catch (final IOException e) {
-					javaLogger.logException(e);
+					logger.logException(e);
 				}
 			}
 		}
@@ -452,7 +452,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 				generateScheme(rel, parentRoot);
 			}
 		} catch (final Exception e) {
-			javaLogger.logException(e);
+			logger.logException(e);
 			throw new DITAOTException(e);
 		}
 		
@@ -575,7 +575,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                 file.close();
             }
 		} catch (final Exception e) {
-			javaLogger.logException(e);
+			logger.logException(e);
 			throw new DITAOTException(e);
 		}
 	}
@@ -595,13 +595,13 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
         	
         	if (targetFile.exists()) {
         		//edited by Alan on Date:2009-11-02 for Work Item:#1590 start
-        		/*javaLogger
+        		/*logger
 						.logWarn(new StringBuffer("Copy-to task [copy-to=\"")
 								.append(copytoTarget)
 								.append("\"] which points to an existed file was ignored.").toString());*/
         		final Properties prop = new Properties();
         		prop.setProperty("%1", copytoTarget);
-        		javaLogger.logWarn(MessageUtils.getMessage("DOTX064W", prop).toString());
+        		logger.logWarn(MessageUtils.getMessage("DOTX064W", prop).toString());
         		//edited by Alan on Date:2009-11-02 for Work Item:#1590 end
         	}else{
         		FileUtils.copyFile(srcFile, targetFile);
@@ -629,27 +629,27 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
     		output.flush();
     		xmlDitalist.flush();
     	} catch (final Exception e){
-    		javaLogger.logException(e);
+    		logger.logException(e);
     	} finally{
     		if (in != null) {
         		try{
         			in.close();
         		}catch(final IOException e){
-    				javaLogger.logException(e);
+    				logger.logException(e);
         		}
     		}
     		if (output != null) {
         		try{
         			output.close();
         		}catch(final IOException e){
-    				javaLogger.logException(e);
+    				logger.logException(e);
         		}
     		}
     		if (xmlDitalist != null) {
         		try{
         			xmlDitalist.close();
         		}catch(final IOException e){
-    				javaLogger.logException(e);
+    				logger.logException(e);
         		}
     		}
     	}
@@ -701,13 +701,13 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 			prop.storeToXML(os, null);
 			os.close();
 		} catch (final IOException e) {
-			this.javaLogger.logException(e);
+			this.logger.logException(e);
 		} finally {
 			if (os != null) {
 				try {
 					os.close();
 				} catch (final IOException e) {
-					javaLogger.logException(e);
+					logger.logException(e);
 				}
 			}
 		}

@@ -14,6 +14,7 @@ import java.util.Hashtable;
 import java.util.Properties;
 
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
@@ -31,7 +32,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
 	/** push table.*/
 	private Hashtable<String, Hashtable<String, String>> pushtable;
 	/** push table.*/
-	private DITAOTJavaLogger javaLogger = null;
+	private DITAOTLogger logger = null;
 	/** push table.*/
 	private XMLReader reader = null;
 	//Added by william on 2009-11-8 for ampbug:2893664 start
@@ -87,7 +88,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
 		try{
 			reader.parse(filename);
 		}catch (Exception e) {
-			javaLogger.logException(e);
+			logger.logException(e);
 		}
 	}
 	/**
@@ -95,7 +96,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
 	 */
 	public ConrefPushReader(){
 		pushtable = new Hashtable<String, Hashtable<String,String>>();
-		javaLogger = new DITAOTJavaLogger();
+		logger = new DITAOTJavaLogger();
 		try{
 			reader = StringUtils.getXMLReader();
 			reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
@@ -108,7 +109,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
 			needResolveEntity = true;
 			//Added by william on 2009-11-8 for ampbug:2893664 end
 		}catch (Exception e) {
-			javaLogger.logException(e);
+			logger.logException(e);
 		}
 		reader.setContentHandler(this);
 	}
@@ -133,7 +134,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
 					Properties prop = new Properties();
 					prop.put("%1", atts.getValue("xtrf"));
 					prop.put("%2", atts.getValue("xtrc"));
-					javaLogger.logWarn(MessageUtils.getMessage("DOTJ044W",prop).toString());
+					logger.logWarn(MessageUtils.getMessage("DOTJ044W",prop).toString());
 				}
 				start = true;
 				level =0;
@@ -148,7 +149,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
 					Properties prop = new Properties();
 					prop.put("%1", atts.getValue("xtrf"));
 					prop.put("%2", atts.getValue("xtrc"));
-					javaLogger.logError(MessageUtils.getMessage("DOTJ039E", prop).toString());
+					logger.logError(MessageUtils.getMessage("DOTJ039E", prop).toString());
 				}else{
 					putElement(pushcontent, name, atts, true);
 					pushType = "pushafter";
@@ -162,7 +163,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
 					Properties prop = new Properties();
 					prop.put("%1", atts.getValue("xtrf"));
 					prop.put("%2", atts.getValue("xtrc"));
-					javaLogger.logError(MessageUtils.getMessage("DOTJ040E", prop).toString());
+					logger.logError(MessageUtils.getMessage("DOTJ040E", prop).toString());
 				}else{
 					pushType = "pushreplace";
 					putElement(pushcontent, name, atts, true);
@@ -275,7 +276,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
 				//if there is no '#' in target string, report error
 				Properties prop = new Properties();
 				prop.put("%1", target);
-				javaLogger.logError(MessageUtils.getMessage("DOTJ041E", prop).toString());
+				logger.logError(MessageUtils.getMessage("DOTJ041E", prop).toString());
 			}else{
 				String targetLoc = target.substring(sharpIndex + 1);
 				String id = "";
@@ -328,7 +329,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
 			//if there is no '#' in target string, report error
 			Properties prop = new Properties();
 			prop.put("%1", target);
-			javaLogger.logError(MessageUtils.getMessage("DOTJ041E", prop).toString());
+			logger.logError(MessageUtils.getMessage("DOTJ041E", prop).toString());
 		}
 		
 		if (sharpIndex == 0){
@@ -357,7 +358,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
 			if ("pushreplace".equalsIgnoreCase(type)){
 				Properties prop = new Properties();
 				prop.put("%1", target);
-				javaLogger.logError(MessageUtils.getMessage("DOTJ042E", prop).toString());
+				logger.logError(MessageUtils.getMessage("DOTJ042E", prop).toString());
 			}else{
 				table.put(targetLoc+addon, table.get(targetLoc+addon)+pushcontent);
 			}

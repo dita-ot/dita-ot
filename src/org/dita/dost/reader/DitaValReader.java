@@ -24,6 +24,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
@@ -55,7 +56,7 @@ public final class DitaValReader extends AbstractXMLReader {
 
 	private XMLReader reader;
 
-	private DITAOTJavaLogger logger;
+	private DITAOTLogger logger;
 
 	private List<String> imageList = null;
 

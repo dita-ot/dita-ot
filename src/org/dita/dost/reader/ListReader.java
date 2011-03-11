@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
 import org.dita.dost.util.Constants;
@@ -37,6 +38,7 @@ public final class ListReader implements AbstractReader {
     private Map<String, String> copytoMap = new HashMap<String, String>();
     private Set<String> schemeSet = new HashSet<String>();
     private String inputMap;
+    private DITAOTLogger logger = new DITAOTJavaLogger();
 
     /**
      * Default constructor of ListReader class.
@@ -58,7 +60,6 @@ public final class ListReader implements AbstractReader {
 		try {
 			propterties=ListUtils.getDitaList();
 		} catch (Exception e) {
-			DITAOTJavaLogger logger = new DITAOTJavaLogger();
 			logger.logException(e);
 		}
 		

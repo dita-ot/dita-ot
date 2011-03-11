@@ -32,6 +32,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.util.Constants;
@@ -63,7 +64,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
 	private String firstMatchTopic;
 	private String lastMatchTopic;
     private Hashtable<String, Node> metaTable;
-    private DITAOTJavaLogger logger;
+    private DITAOTLogger logger;
     private List<String> matchList; // topic path that topicIdList need to match
     private boolean needResolveEntity;
     private Writer output;

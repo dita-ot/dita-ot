@@ -21,6 +21,7 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
@@ -32,6 +33,8 @@ import org.dita.dost.util.Constants;
  */
 final class TopicMergeModule implements AbstractPipelineModule {
 	
+    private final DITAOTLogger logger = new DITAOTJavaLogger();
+    
 	/**
 	 * Default Constructor.
 	 *
@@ -59,7 +62,6 @@ final class TopicMergeModule implements AbstractPipelineModule {
 		.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_OUTPUT);
 		final String tempdir = input
 		.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
-		final DITAOTJavaLogger logger = new DITAOTJavaLogger();
 		final MergeMapParser mapParser = new MergeMapParser();
 		
 		if (ditaInput == null || !new File(ditaInput).exists()){

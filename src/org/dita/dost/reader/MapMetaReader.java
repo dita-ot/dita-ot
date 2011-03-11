@@ -26,6 +26,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
 import org.dita.dost.util.Constants;
@@ -124,7 +125,7 @@ public final class MapMetaReader implements AbstractReader {
 		//Added by William on 2009-12-21 for bug:2916469 end
 	}
 
-	private DITAOTJavaLogger javaLogger = null;
+	private DITAOTLogger logger = null;
 	
 	private Hashtable<String, Element> globalMeta = null;
 	
@@ -138,7 +139,7 @@ public final class MapMetaReader implements AbstractReader {
 	 */
 	public MapMetaReader() {
 		super();
-		javaLogger = new DITAOTJavaLogger();
+		logger = new DITAOTJavaLogger();
 		globalMeta = new Hashtable<String, Element>(Constants.INT_16);
 		resultTable.clear();
 	}
@@ -206,7 +207,7 @@ public final class MapMetaReader implements AbstractReader {
 			if (file != null) file.close();
         	
         }catch (Exception e){
-        	javaLogger.logException(e);
+        	logger.logException(e);
         }
 	}
 

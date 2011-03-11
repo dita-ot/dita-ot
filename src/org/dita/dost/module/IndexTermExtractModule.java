@@ -22,6 +22,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.index.IndexTerm;
 import org.dita.dost.index.IndexTermCollection;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
@@ -59,7 +60,7 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
 	/** The list of ditamap files */
 	private List<String> ditamapList = null;
 
-	private final DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+	private final DITAOTLogger logger = new DITAOTJavaLogger();
 	private IndexTermCollection indexTermCollection;
 
 	/**
@@ -82,7 +83,7 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
 			indexTermCollection.sort();
 			indexTermCollection.outputTerms();
 		} catch (final Exception e) {
-			javaLogger.logException(e);
+			logger.logException(e);
 		}
 
 		return null;
@@ -142,7 +143,7 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
 				try {
 					in.close();
 				} catch (final IOException e) {
-					javaLogger.logException(e);
+					logger.logException(e);
 				}
 			}
 		}
@@ -216,7 +217,7 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
 				try {
 					//removed by Alan on Date:2009-11-02 for Work Item:#1590 start
 					/*if(!new File(baseInputDir, target).exists()){
-						javaLogger.logWarn("Cannot find file "+ target);
+						logger.logWarn("Cannot find file "+ target);
 						continue;
 					}*/
 					//removed by Alan on Date:2009-11-02 for Work Item:#1590 end
@@ -230,7 +231,7 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
 					String msg = null;
 					params.put("%1", target);
 					msg = MessageUtils.getMessage("DOTJ013E", params).toString();
-					javaLogger.logError(buff.append(msg).append(e.getMessage()).toString());
+					logger.logError(buff.append(msg).append(e.getMessage()).toString());
 				}
 			}
 
@@ -251,7 +252,7 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
 				try {
 					//removed by Alan on Date:2009-11-02 for Work Item:#1590 start
 					/*if(!new File(baseInputDir, ditamap).exists()){
-						javaLogger.logWarn("Cannot find file "+ ditamap);
+						logger.logWarn("Cannot find file "+ ditamap);
 						continue;
 					}*/
 					//end by Alan on Date:2009-11-02 for Work Item:#1590 start
@@ -264,8 +265,8 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
 					String msg = null;
 					params.put("%1", ditamap);
 					msg = MessageUtils.getMessage("DOTJ013E", params).toString();
-					javaLogger.logError(msg);
-					javaLogger.logException(e);
+					logger.logError(msg);
+					logger.logException(e);
 				}
 			}
 		} finally {
@@ -273,7 +274,7 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
 				try {
 					inputStream.close();
 				} catch (final IOException e) {
-					javaLogger.logException(e);
+					logger.logException(e);
 				}
 
 			}

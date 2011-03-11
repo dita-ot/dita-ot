@@ -28,6 +28,7 @@ import java.util.Stack;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.reader.AbstractXMLReader;
@@ -147,7 +148,7 @@ public final class DitaWriter extends AbstractXMLWriter {
     	final String formatValue=attrs.getValue(ATTRIBUTE_NAME_FORMAT);
     	final String classValue=attrs.getValue(ATTRIBUTE_NAME_CLASS);
     	final String extOfHref=getExtName(valueOfHref);
-    	final DITAOTJavaLogger logger=new DITAOTJavaLogger();
+    	final DITAOTLogger logger=new DITAOTJavaLogger();
 		final Properties params = new Properties();
 		params.put("%1", hrefValue);	
 		if(notLocalURL(hrefValue)){
@@ -298,7 +299,7 @@ public final class DitaWriter extends AbstractXMLWriter {
     private boolean exclude; // when exclude is true the tag will be excluded.
     private int foreignLevel; // foreign/unknown nesting level
     private int level;// level is used to count the element level in the filtering
-    private final DITAOTJavaLogger logger;
+    private final DITAOTLogger logger;
     private boolean needResolveEntity; //check whether the entity need resolve.
     private OutputStreamWriter output;
     private String path2Project;

@@ -34,6 +34,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.ChunkMapReader;
@@ -50,6 +51,8 @@ import org.w3c.dom.Element;
  */
 final class ChunkModule implements AbstractPipelineModule {
 
+    private final DITAOTLogger logger = new DITAOTJavaLogger();
+    
 	/**
 	 * Constructor.
 	 */
@@ -71,8 +74,6 @@ final class ChunkModule implements AbstractPipelineModule {
 		String tempDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
 		final String ditaext = input.getAttribute(Constants.ANT_INVOKER_PARAM_DITAEXT);
 		final String transtype = input.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE);
-	    
-	    final DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 	    
         if (!new File(tempDir).isAbsolute()) {
     	    final String baseDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
@@ -101,7 +102,7 @@ final class ChunkModule implements AbstractPipelineModule {
 				try {
 					in.close();
 				} catch (final IOException e) {
-					javaLogger.logException(e);
+					logger.logException(e);
 				}
 			}
 		}
@@ -122,7 +123,7 @@ final class ChunkModule implements AbstractPipelineModule {
 				mapReader.read(mapFile);
 			}
 		}catch (final Exception e){
-			javaLogger.logException(e);
+			logger.logException(e);
 		}
 
 		final Content content = mapReader.getContent();
@@ -140,7 +141,6 @@ final class ChunkModule implements AbstractPipelineModule {
 	}
 	//update the href in ditamap and topic files
 	private void updateRefOfDita(final Content changeTable, final Hashtable<String, String> conflictTable, final AbstractPipelineInput input){
-	    final DITAOTJavaLogger logger=new DITAOTJavaLogger();
 	    String tempDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
         if (!new File(tempDir).isAbsolute()) {
     	    final String baseDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
@@ -185,7 +185,6 @@ final class ChunkModule implements AbstractPipelineModule {
 	
 	
 	private void updateList(final LinkedHashMap<String, String> changeTable, final Hashtable<String, String> conflictTable, final AbstractPipelineInput input){
-	    final DITAOTJavaLogger logger=new DITAOTJavaLogger();
 		String tempDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
         if (!new File(tempDir).isAbsolute()) {
     		final String baseDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);

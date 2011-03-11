@@ -19,6 +19,7 @@ import java.util.ListIterator;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
@@ -87,7 +88,7 @@ public final class MapLinksReader extends AbstractXMLReader {
     private File inputFile;
     private HashSet<String> lastMatchElement;
     private int level;
-    private DITAOTJavaLogger logger;
+    private DITAOTLogger logger;
     private HashMap<String, HashMap<String,String> > map;
     private boolean match;
 

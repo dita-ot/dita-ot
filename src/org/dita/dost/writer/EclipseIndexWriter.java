@@ -24,6 +24,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.index.IndexTerm;
 import org.dita.dost.index.IndexTermTarget;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.util.Constants;
@@ -43,7 +44,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter implement
 	
 	private String filepath = null;
 	
-	private DITAOTJavaLogger javaLogger = null;
+	private DITAOTLogger logger = null;
 	
 	private String targetExt = Constants.FILE_EXTENSION_HTML;
 	
@@ -60,7 +61,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter implement
 	 * Default constructor.
 	 */
 	public EclipseIndexWriter() {
-		javaLogger = new DITAOTJavaLogger();
+		logger = new DITAOTJavaLogger();
 	}
 	
 	/**
@@ -146,7 +147,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter implement
 			out = new FileOutputStream(filename);
 			write(out);
 		} catch (Exception e) {			
-			javaLogger.logError(e.getMessage());
+			logger.logError(e.getMessage());
 			e.printStackTrace(); 
 			throw new DITAOTException(e);
 		} finally {
@@ -154,7 +155,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter implement
 				try {
 	                out.close();
                 } catch (IOException e) {
-                	javaLogger.logException(e);
+                	logger.logException(e);
                 }
 			}
 		}
@@ -354,7 +355,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter implement
 			if (!foundIndexTerm && foundIndexsee && indexSeeRefTerm != null && !indexSeeRefTerm.equals("***")){
 				Properties prop=new Properties();
 				prop.put("%1", indexSeeRefTerm.trim());
-				javaLogger.logWarn(MessageUtils.getMessage("DOTJ050W", prop).toString());
+				logger.logWarn(MessageUtils.getMessage("DOTJ050W", prop).toString());
 				
 			}
 		}

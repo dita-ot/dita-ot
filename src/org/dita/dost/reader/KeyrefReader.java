@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.Stack;
 
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
 import org.dita.dost.resolver.DitaURIResolverFactory;
@@ -42,7 +43,7 @@ public final class KeyrefReader extends AbstractXMLReader {
 			keyDefContent = new StringBuffer();
 		}
 	}
-	private DITAOTJavaLogger javaLogger;
+	private DITAOTLogger logger;
 	
 	private XMLReader reader;
 	
@@ -61,7 +62,7 @@ public final class KeyrefReader extends AbstractXMLReader {
 	 * Constructor.
 	 */
 	public KeyrefReader(){
-		javaLogger = new DITAOTJavaLogger();
+		logger = new DITAOTJavaLogger();
 		keyDefTable = new Hashtable<String, String>();
 		keys = new HashSet<String>();
 		try {
@@ -69,7 +70,7 @@ public final class KeyrefReader extends AbstractXMLReader {
 			reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
 			reader.setFeature(Constants.FEATURE_NAMESPACE, true);
 		} catch (SAXException ex) {
-			javaLogger.logException(ex);
+			logger.logException(ex);
 		}
 		reader.setContentHandler(this);
 	}
@@ -122,7 +123,7 @@ public final class KeyrefReader extends AbstractXMLReader {
 			reader.parse(source);
 			//edit by Alan: by refactoring Adding URIResolver Date:2009-08-13 --end
 		} catch (Exception ex) {
-			javaLogger.logException(ex);
+			logger.logException(ex);
 		}
 	}
 	/**

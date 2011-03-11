@@ -20,6 +20,7 @@ import java.util.Properties;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.util.Constants;
@@ -42,7 +43,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 
 	private LinkedHashMap<String, String> changeTable = null;
 	private Hashtable<String, String> conflictTable = null;
-	private DITAOTJavaLogger logger = null;
+	private DITAOTLogger logger = null;
 	private OutputStreamWriter output;
 	private OutputStreamWriter ditaFileOutput;
 	private boolean needResolveEntity;
@@ -58,7 +59,6 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 	public TopicRefWriter() {
 		super();
 		output = null;
-		logger = null;
 		insideCDATA = false;
 		logger = new DITAOTJavaLogger();
 		

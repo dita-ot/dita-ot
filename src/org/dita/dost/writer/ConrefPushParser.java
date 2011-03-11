@@ -29,6 +29,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.util.Constants;
@@ -61,7 +62,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 	/**parser.*/
 	private XMLReader parser = null;
 	/**logger.*/
-	private DITAOTJavaLogger javaLogger = null;
+	private DITAOTLogger logger = null;
 	/**output.*/
 	private OutputStreamWriter output = null;
 	//Added by william on 2009-11-8 for ampbug:2893664 start
@@ -137,7 +138,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 	 * Constructor.
 	 */
 	public ConrefPushParser(){
-		javaLogger = new DITAOTJavaLogger();
+		logger = new DITAOTJavaLogger();
 		topicSpecSet = new HashSet<String>();
 		levelForPushAfterStack = new Stack<Integer>();
 		contentForPushAfterStack = new Stack<String>();
@@ -153,7 +154,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 			parser.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
 			//Added by william on 2009-11-8 for ampbug:2893664 end
 		}catch (Exception e) {
-			javaLogger.logException(e);
+			logger.logException(e);
 		}
 	}
 	/**
@@ -196,7 +197,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 					key = iterator.next();
 					prop.setProperty("%1", key.substring(0, key.indexOf(Constants.STICK)));
 					prop.setProperty("%2", filename);
-					javaLogger.logWarn(MessageUtils.getMessage("DOTJ043W", prop).toString());
+					logger.logWarn(MessageUtils.getMessage("DOTJ043W", prop).toString());
 				}
 			}
 			if(hasConref){
@@ -207,21 +208,21 @@ public final class ConrefPushParser extends AbstractXMLWriter {
             	Properties prop = new Properties();
             	prop.put("%1", inputFile.getPath());
             	prop.put("%2", outputFile.getPath());
-            	javaLogger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
+            	logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
             }
             if(!outputFile.renameTo(inputFile)){
             	Properties prop = new Properties();
             	prop.put("%1", inputFile.getPath());
             	prop.put("%2", outputFile.getPath());
-            	javaLogger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
+            	logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
             }
 		} catch (Exception e) {
-			javaLogger.logException(e);
+			logger.logException(e);
 		}finally{
 			try{
 				output.close();
 			}catch (Exception ex) {
-				javaLogger.logException(ex);
+				logger.logException(ex);
 			}
 		}
 		
@@ -293,13 +294,13 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 				}
 			}
 		}catch (Exception e){
-			javaLogger.logException(e);
+			logger.logException(e);
 		} finally {
 			if (in != null) {
 				try {
 	                in.close();
                 } catch (IOException e) {
-                	javaLogger.logException(e);
+                	logger.logException(e);
                 }
 			}
 		}
@@ -313,7 +314,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 			try{
 				output.write(StringUtils.escapeXML(ch, start, length));
 			}catch (Exception e) {
-				javaLogger.logException(e);
+				logger.logException(e);
 			}
 		}
 	}
@@ -335,7 +336,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 				output.write(name);
 				output.write(Constants.GREATER_THAN);
 			}catch (Exception e) {
-				javaLogger.logException(e);
+				logger.logException(e);
 			}
 		}
 		
@@ -348,7 +349,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 						output.write(contentForPushAfter);
 					}
 				}catch (Exception e) {
-					javaLogger.logException(e);
+					logger.logException(e);
 				}
 				if(!levelForPushAfterStack.isEmpty() &&
 						!contentForPushAfterStack.isEmpty()){
@@ -375,7 +376,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
                 output.write(Constants.LESS_THAN + Constants.QUESTION 
                         + pi + Constants.QUESTION + Constants.GREATER_THAN);
             } catch (Exception e) {
-            	javaLogger.logException(e);
+            	logger.logException(e);
             }
         }
 	}
@@ -625,7 +626,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 					output.write(Constants.GREATER_THAN);
 				}
 			}catch (Exception e) {
-				javaLogger.logException(e);
+				logger.logException(e);
 			}
 		}
 	}
@@ -637,12 +638,12 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 			output.flush();
 			output.close();
 		}catch (Exception e) {
-			javaLogger.logException(e);
+			logger.logException(e);
 		}finally{
 			try{
 				output.close();
 			}catch (Exception e) {
-				javaLogger.logException(e);
+				logger.logException(e);
 			}
 		}
 	}
@@ -654,7 +655,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 			try{
 				output.write(ch, start, length);
 			}catch (Exception e) {
-				javaLogger.logException(e);
+				logger.logException(e);
 			}
 		}
 	}

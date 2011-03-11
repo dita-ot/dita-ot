@@ -19,6 +19,7 @@ import java.util.Set;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.KeyrefReader;
@@ -32,6 +33,8 @@ import org.dita.dost.writer.KeyrefPaser;
  */
 final class KeyrefModule implements AbstractPipelineModule {
 	
+    private final DITAOTLogger logger = new DITAOTJavaLogger();
+    
 	/**
 	 * Entry point of KeyrefModule.
 	 * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
@@ -61,8 +64,7 @@ final class KeyrefModule implements AbstractPipelineModule {
 		try{
 			properties = ListUtils.getDitaList();
 		}catch(final Exception e){
-			final DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
-			javaLogger.logException(e);
+			logger.logException(e);
 		}
 
 		// maps of keyname and target 

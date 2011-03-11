@@ -14,6 +14,7 @@ import java.util.HashMap;
 
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.util.CatalogUtils;
@@ -113,7 +114,7 @@ public abstract class AbstractXMLReader implements AbstractReader,
 		}
 	}
 	
-	protected DITAOTJavaLogger javaLogger = null;
+	protected DITAOTLogger logger = null;
 
 	/**
      * (non-Javadoc).

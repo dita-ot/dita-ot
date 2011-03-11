@@ -25,6 +25,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
@@ -46,7 +47,7 @@ import org.w3c.dom.Text;
  */
 public final class ChunkMapReader implements AbstractReader {
 	
-	private DITAOTJavaLogger javaLogger = null;
+	private DITAOTLogger logger = null;
 	
 	private boolean chunkByTopic = false;
 	
@@ -74,7 +75,7 @@ public final class ChunkMapReader implements AbstractReader {
 	 */
 	public ChunkMapReader() {
 		super();
-		javaLogger = new DITAOTJavaLogger();
+		logger = new DITAOTJavaLogger();
 		chunkByTopic=false;// By default, processor should chunk by document.
 		changeTable = new LinkedHashMap<String, String>(Constants.INT_128);
 		refFileSet = new HashSet<String>(Constants.INT_128);
@@ -155,14 +156,14 @@ public final class ChunkMapReader implements AbstractReader {
 					newFileWriter.flush();
 					newFileWriter.close();
 				}catch (Exception e) {
-					javaLogger.logException(e);
+					logger.logException(e);
 				}finally{
 					try{
 						if(newFileWriter!=null){
 							newFileWriter.close();
 						}
 					}catch (Exception e) {
-						javaLogger.logException(e);
+						logger.logException(e);
 					}					
 				}
 				
@@ -211,17 +212,17 @@ public final class ChunkMapReader implements AbstractReader {
             	Properties prop = new Properties();
             	prop.put("%1", inputFile.getPath());
             	prop.put("%2", inputFile.getAbsolutePath()+".chunk");
-            	javaLogger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
+            	logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
             }
             if(!new File(inputFile.getAbsolutePath()+".chunk").renameTo(inputFile)){
             	Properties prop = new Properties();
             	prop.put("%1", inputFile.getPath());
             	prop.put("%2", inputFile.getAbsolutePath()+".chunk");
-            	javaLogger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
+            	logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
             }
 			
 		}catch (Exception e){
-			javaLogger.logException(e);
+			logger.logException(e);
 		}
 
 	}
@@ -247,14 +248,14 @@ public final class ChunkMapReader implements AbstractReader {
 		output.flush();
 		output.close();
 		}catch (Exception e) {
-			javaLogger.logException(e);
+			logger.logException(e);
 		}finally{
 			try{
 				if(output!=null){
 					output.close();
 				}
 			}catch (Exception e) {
-				javaLogger.logException(e);
+				logger.logException(e);
 			}
 		}
 	}
@@ -501,7 +502,7 @@ public final class ChunkMapReader implements AbstractReader {
 			chunkParser.setup(changeTable, conflictTable, refFileSet, elem, separate, chunkByTopic, ditaext);
 			chunkParser.write(filePath);
 		}catch (Exception e) {
-			javaLogger.logException(e);
+			logger.logException(e);
 		}
 	}
 

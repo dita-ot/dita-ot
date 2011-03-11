@@ -34,6 +34,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTFileLogger;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
@@ -160,7 +161,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 
 	private String prefix = "";
 
-	private final DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+	private final DITAOTLogger logger = new DITAOTJavaLogger();
 
 	private GenListModuleReader reader;
 	
@@ -410,9 +411,9 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 			export.write("<stub>");
 			//Added by William on 2009-06-25 for req #12014 end
 		} catch (final FileNotFoundException e) {
-			javaLogger.logException(e);
+			logger.logException(e);
 		} catch (final IOException e){
-			javaLogger.logException(e);
+			logger.logException(e);
 		}
 			
 		//Set the mapDir
@@ -468,10 +469,10 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 				
 			}else{
 				//edited by Alan on Date:2009-11-02 for Work Item:#1590 start
-				/*javaLogger.logWarn("Input file name is not valid DITA file name.");*/
+				/*logger.logWarn("Input file name is not valid DITA file name.");*/
 				final Properties prop = new Properties();
 				prop.put("%1", fileToParse);
-				javaLogger.logWarn(MessageUtils.getMessage("DOTJ021W", params).toString());
+				logger.logWarn(MessageUtils.getMessage("DOTJ021W", params).toString());
 				//edited by Alan on Date:2009-11-02 for Work Item:#1590 end
 			}
 
@@ -480,7 +481,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 				processParseResult(currentFile);
 				categorizeCurrentFile(currentFile);
 			} else if (!currentFile.equals(inputFile)) {
-				javaLogger.logWarn(MessageUtils.getMessage("DOTJ021W", params).toString());
+				logger.logWarn(MessageUtils.getMessage("DOTJ021W", params).toString());
 			}	
 		}catch(final SAXParseException sax){
 			
@@ -502,7 +503,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 				final StringBuffer buff=new StringBuffer();
 				msg = MessageUtils.getMessage("DOTJ013E", params).toString();
 				buff.append(msg).append(Constants.LINE_SEPARATOR).append(sax.getMessage());
-				javaLogger.logError(buff.toString());
+				logger.logError(buff.toString());
 		}
 		catch (final Exception e) {
 			
@@ -517,7 +518,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 			final StringBuffer buff=new StringBuffer();
 			msg = MessageUtils.getMessage("DOTJ013E", params).toString();
 			buff.append(msg).append(Constants.LINE_SEPARATOR).append(e.getMessage());
-			javaLogger.logError(buff.toString());
+			logger.logError(buff.toString());
 		}
 		
 		if (!reader.isValidInput() && currentFile.equals(inputFile)) {
@@ -581,11 +582,11 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 				buff.append(key);
 				buff.append("\"] which points to another copy-to target");
 				buff.append(" was ignored.");
-				javaLogger.logWarn(buff.toString());*/
+				logger.logWarn(buff.toString());*/
         		final Properties prop = new Properties();
         		prop.setProperty("%1", value);
         		prop.setProperty("%2", key);
-        		javaLogger.logWarn(MessageUtils.getMessage("DOTX065W", prop).toString());
+        		logger.logWarn(MessageUtils.getMessage("DOTX065W", prop).toString());
 				//edited by Alan on Date:2009-11-02 for Work Item:#1590 end
 				ignoredCopytoSourceSet.add(value);
 			} else {
@@ -610,7 +611,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 				prop.put("%1", key);
 				prop.put("%2", value);
 				prop.put("%3", currentFile);
-				javaLogger
+				logger
 						.logInfo(MessageUtils.getMessage("DOTJ048I", prop).toString());*/
 			}else{
 				updateUplevels(key);
@@ -624,7 +625,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 					keydef.flush();
 				} catch (IOException e) {
 
-					javaLogger.logException(e);
+					logger.logException(e);
 				}*/
 				
 				keysDefMap.put(key, value+"("+currentFile+")");
@@ -642,7 +643,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 					schemekeydef.flush();
 				} catch (final IOException e) {
 
-					javaLogger.logException(e);
+					logger.logException(e);
 				}
 			}
 			
@@ -1005,15 +1006,15 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 			bufferedWriter.write(prefix+inputFile);
 			bufferedWriter.flush();
 		} catch (final FileNotFoundException e) {
-			javaLogger.logException(e);
+			logger.logException(e);
 		} catch (final IOException e) {
-			javaLogger.logException(e);
+			logger.logException(e);
 		} finally {
 			if (bufferedWriter != null) {
 				try {
 	                bufferedWriter.close();
                 } catch (final IOException e) {
-                	javaLogger.logException(e);
+                	logger.logException(e);
                 }
 			}
 		}
@@ -1113,13 +1114,13 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 			prop.storeToXML(os, null);
 			os.close();
 		} catch (final IOException e) {
-			this.javaLogger.logException(e);
+			this.logger.logException(e);
 		} finally {
 			if (os != null) {
     			try {
     				os.close();
     			} catch (final Exception e) {
-    				javaLogger.logException(e);
+    				logger.logException(e);
     			}
 			}
 		}
@@ -1224,15 +1225,15 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 			bufferedWriter.flush();
 			bufferedWriter.close();
 		} catch (final FileNotFoundException e) {
-			javaLogger.logException(e);
+			logger.logException(e);
 		} catch (final IOException e) {
-			javaLogger.logException(e);
+			logger.logException(e);
 		} finally {
 			if (bufferedWriter != null) {
 				try {
 	                bufferedWriter.close();
                 } catch (final IOException e) {
-	                javaLogger.logException(e);
+	                logger.logException(e);
                 }
 			}
 		}
@@ -1268,7 +1269,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 			keydef.flush();
 		} catch (final IOException e) {
 
-			javaLogger.logException(e);
+			logger.logException(e);
 		}
 	}
 	//Added by William on 2010-06-10 for bug:3013545 end
@@ -1326,7 +1327,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 				try {
 	                bufferedWriter.close();
                 } catch (final IOException e) {
-	                javaLogger.logException(e);
+	                logger.logException(e);
                 }
 			}
 		}

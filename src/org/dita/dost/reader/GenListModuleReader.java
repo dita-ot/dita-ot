@@ -32,6 +32,7 @@ import org.apache.xerces.xni.grammars.XMLGrammarPool;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.CatalogUtils;
@@ -146,7 +147,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	
 	private String props; // contains the attribution specialization from props
 	
-	private DITAOTJavaLogger javaLogger = null;
+	private DITAOTLogger logger = null;
 	
 	/** Set of outer dita files */
 	private Set<String> outDitaFilesSet=null;
@@ -283,13 +284,13 @@ public final class GenListModuleReader extends AbstractXMLReader {
 		
 		props = null;
 		reader.setContentHandler(this);
-		javaLogger = new DITAOTJavaLogger();
+		logger = new DITAOTJavaLogger();
 		try {
 			reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
 		} catch (SAXNotRecognizedException e1) {
-			javaLogger.logException(e1);
+			logger.logException(e1);
 		} catch (SAXNotSupportedException e1) {
-			javaLogger.logException(e1);
+			logger.logException(e1);
 		}
 		
 		try {
@@ -834,7 +835,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 		if(attrValue==null && !Constants.ELEMENT_NAME_DITA.equals(localName)){
     		params.clear();
 			params.put("%1", localName);
-    		javaLogger.logInfo(MessageUtils.getMessage("DOTJ030I", params).toString());			
+    		logger.logInfo(MessageUtils.getMessage("DOTJ030I", params).toString());			
 		}		
 		
         if (attrValue != null && attrValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPIC) != -1){
@@ -842,7 +843,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
         	if(domains==null){
         		params.clear();
 				params.put("%1", localName);
-        		javaLogger.logInfo(MessageUtils.getMessage("DOTJ029I", params).toString());
+        		logger.logInfo(MessageUtils.getMessage("DOTJ029I", params).toString());
         	}else
         		props = StringUtils.getExtProps(domains);
         }        
@@ -1314,7 +1315,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 					Properties prop = new Properties();
 					prop.setProperty("%1", key);
 					prop.setProperty("%2", target);
-					javaLogger.logWarn(MessageUtils.getMessage("DOTJ045W", prop).toString());
+					logger.logWarn(MessageUtils.getMessage("DOTJ045W", prop).toString());
 				}
 				//restore target
 				target = temp;
@@ -1491,7 +1492,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 				buff.append("[WARN]: Copy-to task [href=\"\" copy-to=\"");
 				buff.append(filename);
 				buff.append("\"] was ignored.");
-				javaLogger.logWarn(buff.toString());
+				logger.logWarn(buff.toString());
 			} else if (copytoMap.get(filename) != null){
 				//edited by Alan on Date:2009-11-02 for Work Item:#1590 start
 				/*StringBuffer buff = new StringBuffer();
@@ -1505,7 +1506,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
         		Properties prop = new Properties();
         		prop.setProperty("%1", href);
         		prop.setProperty("%2", filename);
-        		javaLogger.logWarn(MessageUtils.getMessage("DOTX065W", prop).toString());
+        		logger.logWarn(MessageUtils.getMessage("DOTX065W", prop).toString());
 				//edited by Alan on Date:2009-11-02 for Work Item:#1590 end
 				ignoredCopytoSourceSet.add(href);
 			} else if (!(atts.getValue(Constants.ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(Constants.ATTRIBUTE_NAME_CHUNK).contains("to-content"))){
@@ -1640,7 +1641,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 				}
 				if (OutputUtils.getOutterControl().equals(OutputUtils.OUTTERCONTROL_WARN)){
 					String message=MessageUtils.getMessage("DOTJ036W",prop).toString();
-					javaLogger.logWarn(message);
+					logger.logWarn(message);
 				}
 				addToOutFilesSet(filename);
 			}

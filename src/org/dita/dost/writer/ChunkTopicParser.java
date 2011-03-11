@@ -32,6 +32,7 @@ import java.util.Stack;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.util.Constants;
@@ -108,7 +109,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
     //siblingStub is similar to stub. The only different is it is used to insert generated topicref sibling to current topicref
     private Element siblingStub = null;
     
-    DITAOTJavaLogger logger = null;
+    DITAOTLogger logger = null;
 
 	private String ditaext = null;
 	

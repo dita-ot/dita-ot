@@ -19,6 +19,7 @@ import org.dita.dost.index.IndexTerm;
 import org.dita.dost.index.IndexTermCollection;
 import org.dita.dost.index.IndexTermTarget;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.StringUtils;
@@ -85,7 +86,7 @@ public final class IndexTermReader extends AbstractXMLReader {
 	/** Depth inside a "@processing-role" parent */
     private int processRoleLevel = 0;
     
-	private DITAOTJavaLogger javaLogger = null;
+	private DITAOTLogger logger = null;
 	
 	//Added by William on 2010-04-26 for ref:2990783 start
 	private IndexTermCollection result;
@@ -117,7 +118,7 @@ public final class IndexTermReader extends AbstractXMLReader {
 		titleMap = new HashMap<String, String>(Constants.INT_256);
 		processRoleStack = new Stack<String>();
 		processRoleLevel = 0;
-		javaLogger = new DITAOTJavaLogger();
+		logger = new DITAOTJavaLogger();
 		if (result == null) {
 		    result = IndexTermCollection.getInstantce();
 		}
@@ -224,7 +225,7 @@ public final class IndexTermReader extends AbstractXMLReader {
 					return;
 				} else{
 					term.setTermName("***");
-					javaLogger.logWarn(MessageUtils.getMessage("DOTJ014W").toString());				
+					logger.logWarn(MessageUtils.getMessage("DOTJ014W").toString());				
 				}
 			}
 			
