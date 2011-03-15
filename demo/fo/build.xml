@@ -168,11 +168,11 @@ with those set forth herein.
     </target>
     
     <target name="publish.map.pdf">
-    	<echo message="current target:publish.map.pdf"/>
+      <echo level="info" message="current target:publish.map.pdf"/>
     	<!--
-    	<echo message="dita.temp.dir=${dita.temp.dir} work.dir=${work.dir}"/>
-    	<echo message="dita.dir=${dita.dir}"/>
-    	<echo message="basedir=${basedir}"/>
+    	<echo level="info" message="dita.temp.dir=${dita.temp.dir} work.dir=${work.dir}"/>
+    	<echo level="info" message="dita.dir=${dita.dir}"/>
+    	<echo level="info" message="basedir=${basedir}"/>
     	-->
         <antcall target="transform.topic2pdf">
             <param name="inputFile" value="${work.dir}/${merged.file}"/>
@@ -204,8 +204,7 @@ with those set forth herein.
             <not><isset property="document.locale"></isset></not>
         </condition>
 
-        <echo>Using document.locale=${document.locale}
-        </echo>
+        <echo level="info">Using document.locale=${document.locale}</echo>
 
         <condition property="formatter.specific.ext" value="_axf">
             <equals arg1="ah" arg2="${pdf.formatter}"/>
@@ -295,7 +294,7 @@ with those set forth herein.
         
     	<!-- must fork or catalog resolution will fail due to sharing of -->
     	<!-- resolver and catalogs with the Open Toolkit -->
-  			<echo message="Java maximum memory=${maxJavaMemory}"/>
+        <echo level="info" message="Java maximum memory=${maxJavaMemory}"/>
         <java classname="${fo.saxon.classname}" classpathref="project.class.path" fork="true"
         	maxmemory="${maxJavaMemory}"
         	>
