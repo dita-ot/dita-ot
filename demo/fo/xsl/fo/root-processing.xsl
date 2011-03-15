@@ -37,7 +37,6 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
     xmlns:opentopic="http://www.idiominc.com/opentopic"
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
-    xmlns:rx="http://www.renderx.com/XSL/Extensions"
     exclude-result-prefixes="opentopic-index opentopic opentopic-i18n opentopic-func"
     version="1.1">
     

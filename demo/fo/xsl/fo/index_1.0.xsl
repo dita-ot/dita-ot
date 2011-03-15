@@ -33,14 +33,13 @@ See the accompanying license.txt file for applicable licenses.
 
 <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
-    xmlns:rx="http://www.renderx.com/XSL/Extensions"
     xmlns:exsl="http://exslt.org/common"
     xmlns:exslf="http://exslt.org/functions"
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
     xmlns:comparer="com.idiominc.ws.opentopic.xsl.extension.CompareStrings"
     extension-element-prefixes="exsl"
     xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
-    exclude-result-prefixes="opentopic-index exsl comparer rx opentopic-func exslf">
+    exclude-result-prefixes="opentopic-index exsl comparer opentopic-func exslf">
 
     <xsl:template name="createIndex">
         <xsl:if test="(//opentopic-index:index.groups//opentopic-index:index.entry) and (count($index-entries//opentopic-index:index.entry) &gt; 0) and ($pdfFormatter = 'xep')">

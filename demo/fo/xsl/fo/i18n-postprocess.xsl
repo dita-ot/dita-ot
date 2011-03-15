@@ -38,8 +38,7 @@ See the accompanying license.txt file for applicable licenses.
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:opentopic-i18n="http://www.idiominc.com/opentopic/i18n"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
-				xmlns:rx="http://www.renderx.com/XSL/Extensions"
-                exclude-result-prefixes="opentopic-i18n rx">
+                exclude-result-prefixes="opentopic-i18n">
 
     <xsl:variable name="debug-enabled" select="true()"/>
     <xsl:variable name="warn-enabled" select="true()"/>
