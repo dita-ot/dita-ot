@@ -635,7 +635,6 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="__fo__root">
         <xsl:attribute name="font-family">Serif</xsl:attribute>
         <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
-        <xsl:attribute name="rx:link-back">true</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__force__page__count">

@@ -209,7 +209,12 @@ with those set forth herein.
         <condition property="formatter.specific.ext" value="_axf">
             <equals arg1="ah" arg2="${pdf.formatter}"/>
         </condition>
-        
+        <condition property="formatter.specific.ext" value="_xep">
+          <and>
+            <not><isset property="formatter.specific.ext"/></not>
+            <equals arg1="xep" arg2="${pdf.formatter}"/>
+          </and>
+        </condition>
         <condition property="formatter.specific.ext" value="">
             <not><isset property="formatter.specific.ext"></isset></not>
         </condition>
