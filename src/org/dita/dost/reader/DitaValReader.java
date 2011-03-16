@@ -48,9 +48,9 @@ import org.xml.sax.XMLReader;
  * @author Zhang, Yuan Peng
  */
 public final class DitaValReader extends AbstractXMLReader {
-	private HashMap<String, String> filterMap;
+	private final HashMap<String, String> filterMap;
 	
-	private HashMap<String, String> schemeFilterMap;
+	private final HashMap<String, String> schemeFilterMap;
 
 	private ContentImpl content;
 
@@ -91,7 +91,7 @@ public final class DitaValReader extends AbstractXMLReader {
 		try {
 			reader = StringUtils.getXMLReader();
 			reader.setContentHandler(this);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			logger.logException(e);
 		}
 		
@@ -111,16 +111,17 @@ public final class DitaValReader extends AbstractXMLReader {
 			
 			reader.setErrorHandler(new DITAOTXMLErrorHandler(ditaVal));
 			//Added on 2010-08-24 for bug:3086552 start
-			File file = new File(input);
-			InputSource is = new InputSource(new FileInputStream(file));
+			final File file = new File(input);
+			final InputSource is = new InputSource(new FileInputStream(file));
 			//Set the system ID
-			if(setSystemid)
-				//is.setSystemId(URLUtil.correct(file).toString());
+			if(setSystemid) {
+                //is.setSystemId(URLUtil.correct(file).toString());
 				is.setSystemId(file.toURI().toURL().toString());
+            }
 			//Added on 2010-08-24 for bug:3086552 end
 			reader.parse(is); 
 			
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			logger.logException(e);
 		}
 	}
@@ -150,9 +151,9 @@ public final class DitaValReader extends AbstractXMLReader {
 		}
 
 		if (Constants.ELEMENT_NAME_PROP.equals(qName)) {
-			String action = atts.getValue(Constants.ELEMENT_NAME_ACTION);
-			String attName = atts.getValue(Constants.ATTRIBUTE_NAME_ATT);
-			String attValue = atts.getValue(Constants.ATTRIBUTE_NAME_VAL);
+			final String action = atts.getValue(Constants.ELEMENT_NAME_ACTION);
+			final String attName = atts.getValue(Constants.ATTRIBUTE_NAME_ATT);
+			final String attValue = atts.getValue(Constants.ATTRIBUTE_NAME_VAL);
 			//first to check if the att attribute and val attribute are null 
 			//which is a default action for elements without mapping with the other filter val
 			String key=null;
@@ -171,13 +172,13 @@ public final class DitaValReader extends AbstractXMLReader {
 			}
 			
 			if (attName != null && attValue != null && bindingMap != null && !bindingMap.isEmpty()) {
-				HashMap<String, HashSet<Element>> schemeMap = bindingMap.get(attName);
+				final HashMap<String, HashSet<Element>> schemeMap = bindingMap.get(attName);
 				if (schemeMap != null && !schemeMap.isEmpty()) {
-					Iterator<HashSet<Element>> subTreeIter = schemeMap.values().iterator();
+					final Iterator<HashSet<Element>> subTreeIter = schemeMap.values().iterator();
 					while (subTreeIter.hasNext()) {
-						Iterator<Element> subTreeSet = subTreeIter.next().iterator();
+						final Iterator<Element> subTreeSet = subTreeIter.next().iterator();
 						while (subTreeSet.hasNext()) {
-							Element subRoot = this.searchForKey(subTreeSet.next(), attValue);
+							final Element subRoot = this.searchForKey(subTreeSet.next(), attValue);
 							if (subRoot != null && action != null) {
 								this.insertAction(subRoot, attName, action);
 							}
@@ -215,7 +216,7 @@ public final class DitaValReader extends AbstractXMLReader {
 		if (filterMap.get(key) == null) {
 			filterMap.put(key, action);
 		} else {
-			Properties prop = new Properties();
+			final Properties prop = new Properties();
 			prop.put("%1", key);
 			logger.logError(MessageUtils.getMessage("DOTJ007E", prop)
 					.toString());
@@ -223,25 +224,29 @@ public final class DitaValReader extends AbstractXMLReader {
 	}
 	
 	private void insertAction(Element subTree, String attName, String action) {
-		if (subTree == null || action == null) return;
+		if (subTree == null || action == null) {
+            return;
+        }
 		
-		LinkedList<Element> queue = new LinkedList<Element>();
+		final LinkedList<Element> queue = new LinkedList<Element>();
 		
 		// Skip the sub-tree root because it has been added already.
 		NodeList children = subTree.getChildNodes();
 		for (int i = 0; i < children.getLength(); i++) {
-			if (children.item(i).getNodeType() == Node.ELEMENT_NODE)
-				queue.offer((Element)children.item(i));
+			if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                queue.offer((Element)children.item(i));
+            }
 		}
 		
 		while (!queue.isEmpty()) {
-			Element node = queue.poll();
+			final Element node = queue.poll();
 			children = node.getChildNodes();
 			for (int i = 0; i < children.getLength(); i++) {
-				if (children.item(i).getNodeType() == Node.ELEMENT_NODE)
-					queue.offer((Element)children.item(i));
+				if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                    queue.offer((Element)children.item(i));
+                }
 			}
-			String attrValue = node.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
+			final String attrValue = node.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
 			if (attrValue != null && attrValue.contains(Constants.ATTR_CLASS_VALUE_SUBJECT_DEF)) {
 				String key = node.getAttribute(Constants.ATTRIBUTE_NAME_KEYS);
 				if (!StringUtils.isEmptyString(key)) {
@@ -310,20 +315,22 @@ public final class DitaValReader extends AbstractXMLReader {
 		//schemeFilterMap.clear();
 		
 		try {
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = factory.newDocumentBuilder();
-			Document doc = builder.parse(new InputSource(new FileInputStream(
+			final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			final DocumentBuilder builder = factory.newDocumentBuilder();
+			final Document doc = builder.parse(new InputSource(new FileInputStream(
 					new File(scheme))));
 			schemeRoot = doc.getDocumentElement();
-			if (schemeRoot == null) return;
-			NodeList rootChildren = schemeRoot.getChildNodes();
+			if (schemeRoot == null) {
+                return;
+            }
+			final NodeList rootChildren = schemeRoot.getChildNodes();
 			for (int i = 0; i < rootChildren.getLength(); i++) {
 				if (rootChildren.item(i).getNodeType() == Node.ELEMENT_NODE) {
 					Element node = (Element)rootChildren.item(i);
 					String attrValue = node.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
 					if (attrValue != null
 							&& attrValue.contains(Constants.ATTR_CLASS_VALUE_ENUMERATION_DEF)) {
-						NodeList enumChildren = node.getChildNodes();
+						final NodeList enumChildren = node.getChildNodes();
 						String elementName = "*";
 						String attributeName = null;
 						for (int j = 0; j < enumChildren.getLength(); j++) {
@@ -344,7 +351,7 @@ public final class DitaValReader extends AbstractXMLReader {
 								} else if (attrValue != null
 										&& attrValue.contains(Constants.ATTR_CLASS_VALUE_DEFAULT_SUBJECT)) {
 									// Put default values.
-									String keyValue = node.getAttribute(Constants.ATTRIBUTE_NAME_KEYREF);
+									final String keyValue = node.getAttribute(Constants.ATTRIBUTE_NAME_KEYREF);
 									if (keyValue != null) {
 										HashMap<String, String> S = defaultValueMap.get(attributeName);
 										if (S == null) {
@@ -358,10 +365,11 @@ public final class DitaValReader extends AbstractXMLReader {
 									// Search for attributeName in schemeRoot
 									String keyValue = node
 											.getAttribute(Constants.ATTRIBUTE_NAME_KEYREF);
-									if (StringUtils.isEmptyString(keyValue))
-										keyValue = node
+									if (StringUtils.isEmptyString(keyValue)) {
+                                        keyValue = node
 												.getAttribute(Constants.ATTRIBUTE_NAME_KEYS);
-									Element subTree = searchForKey(schemeRoot,
+                                    }
+									final Element subTree = searchForKey(schemeRoot,
 											keyValue);
 									if (subTree != null) {
 										HashMap<String, HashSet<Element>> S = bindingMap
@@ -370,8 +378,9 @@ public final class DitaValReader extends AbstractXMLReader {
 											S = new HashMap<String, HashSet<Element>>();
 										}
 										HashSet<Element> A = S.get(elementName);
-										if (A == null)
-											A = new HashSet<Element>();
+										if (A == null) {
+                                            A = new HashSet<Element>();
+                                        }
 										if (!A.contains(subTree)) {
 											// Add sub-tree to valid values map
 											this.putValuePairsIntoMap(subTree, elementName, attributeName);
@@ -386,35 +395,40 @@ public final class DitaValReader extends AbstractXMLReader {
 					}
 				}
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			this.logger.logException(e);
 		}
 	}
 	
 	private void putValuePairsIntoMap(Element subtree, String elementName, String attName) {
-		if (subtree == null || attName == null) return;
+		if (subtree == null || attName == null) {
+            return;
+        }
 		
 		HashMap<String, HashSet<String>> valueMap = this.validValuesMap.get(attName);
-		if (valueMap == null)
-			valueMap = new HashMap<String, HashSet<String>>();
+		if (valueMap == null) {
+            valueMap = new HashMap<String, HashSet<String>>();
+        }
 		
 		HashSet<String> valueSet = valueMap.get(elementName);
-		if (valueSet == null) 
-			valueSet = new HashSet<String>();
+		if (valueSet == null) {
+            valueSet = new HashSet<String>();
+        }
 		
-		LinkedList<Element> queue = new LinkedList<Element>();
+		final LinkedList<Element> queue = new LinkedList<Element>();
 		queue.offer(subtree);
 		
 		while (!queue.isEmpty()) {
-			Element node = queue.poll();
-			NodeList children = node.getChildNodes();
+			final Element node = queue.poll();
+			final NodeList children = node.getChildNodes();
 			for (int i = 0; i < children.getLength(); i++) {
-				if (children.item(i).getNodeType() == Node.ELEMENT_NODE)
-					queue.offer((Element)children.item(i));
+				if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                    queue.offer((Element)children.item(i));
+                }
 			}
-			String attrValue = node.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
+			final String attrValue = node.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
 			if (attrValue != null && attrValue.contains(Constants.ATTR_CLASS_VALUE_SUBJECT_DEF)) {
-				String key = node.getAttribute(Constants.ATTRIBUTE_NAME_KEYS);
+				final String key = node.getAttribute(Constants.ATTRIBUTE_NAME_KEYS);
 				if (!StringUtils.isEmptyString(key)) {
 					valueSet.add(key);
 				}
@@ -425,19 +439,22 @@ public final class DitaValReader extends AbstractXMLReader {
 	}
     
 	private Element searchForKey(Element root, String keyValue) {
-		if (root == null || keyValue == null) return null;
-		LinkedList<Element> queue = new LinkedList<Element>();
+		if (root == null || keyValue == null) {
+            return null;
+        }
+		final LinkedList<Element> queue = new LinkedList<Element>();
 		queue.add(root);
 		while (!queue.isEmpty()) {
-			Element node = queue.removeFirst();
-			NodeList children = node.getChildNodes();
+			final Element node = queue.removeFirst();
+			final NodeList children = node.getChildNodes();
 			for (int i = 0; i < children.getLength(); i++) {
-				if (children.item(i).getNodeType() == Node.ELEMENT_NODE)
-					queue.add((Element)children.item(i));
+				if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                    queue.add((Element)children.item(i));
+                }
 			}
-			String attrValue = node.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
+			final String attrValue = node.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
 			if (attrValue != null && attrValue.contains(Constants.ATTR_CLASS_VALUE_SUBJECT_DEF)) {
-				String key = node.getAttribute(Constants.ATTRIBUTE_NAME_KEYS);
+				final String key = node.getAttribute(Constants.ATTRIBUTE_NAME_KEYS);
 				if (keyValue.equals(key)) {
 					return node;
 				}

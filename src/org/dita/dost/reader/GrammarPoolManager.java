@@ -29,7 +29,7 @@ public final class GrammarPoolManager {
 		    //set grammar caching flag
 		    
 		}
-		catch (Exception e) {
+		catch (final Exception e) {
 			System.out.println("Failed to create Xerces grammar pool for caching DTDs and schemas");
 		}
 		grammarPool.set(pool);
@@ -38,7 +38,7 @@ public final class GrammarPoolManager {
 
 	private static ThreadLocal<XMLGrammarPool> grammarPool = new ThreadLocal<XMLGrammarPool>() {
 		protected synchronized XMLGrammarPool initialvalue() {
-			XMLGrammarPool grammarPool = initializeGrammarPool();
+			final XMLGrammarPool grammarPool = initializeGrammarPool();
 			set(grammarPool);
 			return grammarPool;
 		}
@@ -54,8 +54,9 @@ public final class GrammarPoolManager {
 	 */
 	public static XMLGrammarPool getGrammarPool() {
 		XMLGrammarPool pool = grammarPool.get();
-		if (pool == null)
-			pool = initializeGrammarPool();
+		if (pool == null) {
+            pool = initializeGrammarPool();
+        }
 		return pool;
 	}
 

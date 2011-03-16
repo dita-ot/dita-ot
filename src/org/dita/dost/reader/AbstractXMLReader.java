@@ -66,13 +66,13 @@ public abstract class AbstractXMLReader implements AbstractReader,
 		}
 	
 		final DITAOTLogger javaLogger=new DITAOTJavaLogger();
-		XMLReader reader = StringUtils.getXMLReader();
+		final XMLReader reader = StringUtils.getXMLReader();
 		reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
 		if(validate==true){
 			reader.setFeature(Constants.FEATURE_VALIDATION, true);
 			reader.setFeature(Constants.FEATURE_VALIDATION_SCHEMA, true);
 		}else{
-			String msg=MessageUtils.getMessage("DOTJ037W").toString();
+			final String msg=MessageUtils.getMessage("DOTJ037W").toString();
 			javaLogger.logWarn(msg);
 		}
 		setGrammarPool(reader, grammarPool);
@@ -100,16 +100,16 @@ public abstract class AbstractXMLReader implements AbstractReader,
 								"http://apache.org/xml/properties/internal/grammar-pool",
 								grammarPool);
 				
-				String msg = "Using Xerces grammar pool for DTD and schema caching.";
+				final String msg = "Using Xerces grammar pool for DTD and schema caching.";
 				logger.logInfo(msg);
 				
-			} catch (Exception e) {
-				String msg = "Failed to setXerces grammar pool for parser: "
+			} catch (final Exception e) {
+				final String msg = "Failed to setXerces grammar pool for parser: "
 					+ e.getMessage();
 				logger.logInfo(msg);
 			}
 		} else {
-			String msg = "grammar pool is null";
+			final String msg = "grammar pool is null";
 			logger.logInfo(msg);
 		}
 	}
