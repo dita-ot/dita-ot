@@ -446,9 +446,7 @@ public final class MapMetaReader implements AbstractReader {
 		}
 		
 	}
-	/**
-	 * @see  org.dita.dost.reader.AbstractReader#getContent()
-	 */
+
 	public Content getContent() {
 		final ContentImpl result = new ContentImpl();
         result.setCollection( resultTable.entrySet());

@@ -101,9 +101,8 @@ public final class DitaValReader extends AbstractXMLReader {
 		setSystemid= arg_setSystemid;
 	}
 	//Added on 2010-08-24 for bug:3086552 end
-	/**
-	 * @see org.dita.dost.reader.AbstractReader#read(java.lang.String)
-	 */
+	
+	@Override
 	public void read(String input) {
 		ditaVal = input;
 
@@ -126,21 +125,14 @@ public final class DitaValReader extends AbstractXMLReader {
 		}
 	}
 
-	/**
-	 * @see org.dita.dost.reader.AbstractReader#getContent()
-	 */
+	@Override
 	public Content getContent() {
 		content = new ContentImpl();
 		content.setCollection(filterMap.entrySet());
 		return content;
 	}
 	
-
-	/**
-	 * @see org.xml.sax.ContentHandler#startElement(java.lang.String,
-	 *      java.lang.String, java.lang.String, org.xml.sax.Attributes)
-	 * 
-	 */
+	@Override
 	public void startElement(String uri, String localName, String qName,
 			Attributes atts) throws SAXException {
 		String flagImage = null;

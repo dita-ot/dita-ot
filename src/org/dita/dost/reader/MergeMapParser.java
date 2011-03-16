@@ -77,17 +77,13 @@ public final class MergeMapParser extends AbstractXMLReader {
 		}
 	}
 
-	/**
-	 * @see org.dita.dost.reader.AbstractReader#getContent()
-	 */
+	@Override
 	public Content getContent() {
 		content.setValue(mapInfo.append((StringBuffer)topicParser.getContent().getValue()));
 		return content;
 	}
 
-	/**
-	 * @see org.dita.dost.reader.AbstractReader#read(java.lang.String)
-	 */
+	@Override
 	public void read(String ditaInput) {
 		try{
 			String filename;
@@ -108,10 +104,7 @@ public final class MergeMapParser extends AbstractXMLReader {
 		}
 	}
 
-	
-	/**
-	 * @see org.xml.sax.ContentHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
-	 */
+	@Override
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		if (processLevel > 0) {
 			String value = processStack.peek();
@@ -129,20 +122,15 @@ public final class MergeMapParser extends AbstractXMLReader {
 		.append(qName)
 		.append(Constants.GREATER_THAN);
 	}
-
 	
-	/**
-	 * @see org.xml.sax.ContentHandler#characters(char[], int, int)
-	 */
+	@Override
 	public void characters(char[] ch, int start, int length) throws SAXException {
 		if (processStack.empty() || !Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processStack.peek())){
 			mapInfo.append(StringUtils.escapeXML(ch, start, length));
 		}
 	}
 
-	/**
-	 * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
-	 */
+	@Override
 	public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
 		final String attrValue = atts.getValue(Constants.ATTRIBUTE_NAME_PROCESSING_ROLE);
 	    if (attrValue != null) {
@@ -211,6 +199,7 @@ public final class MergeMapParser extends AbstractXMLReader {
 		mapInfo.append(Constants.GREATER_THAN);
 		
 	}
+	
 	@Override
 	public void processingInstruction(String target, String data)
 			throws SAXException {

@@ -85,9 +85,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
 	}
 	//Added by William on 2010-04-26 for ref:2990783 end
 
-	/**
-	 * @see org.xml.sax.helpers.DefaultHandler#characters(char[], int, int)
-	 */
+	@Override
 	public void characters(char[] ch, int start, int length)
 			throws SAXException {
 		//SF Bug 2010062: Do not trim white space from text nodes. Convert newline
@@ -143,10 +141,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
 
 	}
 
-	/**
-	 * @see org.xml.sax.helpers.DefaultHandler#endElement(java.lang.String,
-	 *      java.lang.String, java.lang.String)
-	 */
+	@Override
 	public void endElement(String uri, String localName, String qName)
 			throws SAXException {
 		if (topicrefSpecList.contains(localName)) {
@@ -251,10 +246,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
 		}
 	}
 
-	/**
-	 * @see org.xml.sax.helpers.DefaultHandler#startElement(java.lang.String,
-	 *      java.lang.String, java.lang.String, org.xml.sax.Attributes)
-	 */
+	@Override
 	public void startElement(String uri, String localName, String qName,
 			Attributes attributes) throws SAXException {
 		final String classAttr = attributes.getValue(Constants.ATTRIBUTE_NAME_CLASS);

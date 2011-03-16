@@ -1088,7 +1088,6 @@ public final class GenListModuleReader extends AbstractXMLReader {
 
 	/**
 	 * Clean up.
-	 * @see org.dita.dost.reader.AbstractXMLReader#endDocument()
 	 */
 	@Override
 	public void endDocument() throws SAXException {
@@ -1109,7 +1108,6 @@ public final class GenListModuleReader extends AbstractXMLReader {
 
 	/**
 	 * Check if the current file is a ditamap with "@processing-role=resource-only".
-	 * @see org.dita.dost.reader.AbstractXMLReader#startDocument()
 	 */
 	@Override
 	public void startDocument() throws SAXException {
@@ -1122,9 +1120,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 		}
 	}
 
-	/**
-	 * @see org.dita.dost.reader.AbstractXMLReader#endElement(java.lang.String, java.lang.String, java.lang.String)
-	 */
+	@Override
 	public void endElement(String uri, String localName, String qName) throws SAXException {		
 		
 		//subject scheme

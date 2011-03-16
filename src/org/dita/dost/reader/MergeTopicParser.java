@@ -70,26 +70,17 @@ public final class MergeTopicParser extends AbstractXMLReader {
 		topicInfo.delete(0, topicInfo.length());
 	}
 
-
-
-	/**
-	 * @see org.xml.sax.ContentHandler#characters(char[], int, int)
-	 */
+	@Override
 	public void characters(char[] ch, int start, int length) throws SAXException {
 		topicInfo.append(StringUtils.escapeXML(ch, start, length));
 	}
 
-
-	/**
-	 * @see org.xml.sax.ContentHandler#endDocument()
-	 */
+	@Override
 	public void endDocument() throws SAXException {
-		
+	    // NOOP
 	}
 
-	/**
-	 * @see org.xml.sax.ContentHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
-	 */
+	@Override
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		// Skip redundant <dita> tags.
 		if (Constants.ELEMENT_NAME_DITA.equalsIgnoreCase(qName)) {
@@ -100,17 +91,12 @@ public final class MergeTopicParser extends AbstractXMLReader {
 		.append(qName)
 		.append(Constants.GREATER_THAN);
 	}
-
 	
-	/**
-	 * @see org.dita.dost.reader.AbstractReader#getContent()
-	 */
+	@Override
 	public Content getContent() {
 		content.setValue(topicInfo);
 		return content;
 	}
-
-
 
 	/**
 	 * @param classValue
@@ -230,16 +216,12 @@ public final class MergeTopicParser extends AbstractXMLReader {
 		}
 	}
 
-	/**
-	 * @see org.xml.sax.ContentHandler#startDocument()
-	 */
+	@Override
 	public void startDocument() throws SAXException {
 		isFirstTopicId = true;
 	}
 
-	/**
-	 * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
-	 */
+	@Override
 	public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
 		//write the start element of topic parsing logic;
 		String classValue = null;
@@ -308,14 +290,11 @@ public final class MergeTopicParser extends AbstractXMLReader {
 		topicInfo.append(Constants.GREATER_THAN);
 	}
 
-
-
 	private String handleLocalHref(String attValue) {
 		String pathFromMap;
         pathFromMap = FileUtils.resolveTopic(new File(filePath).getParent(),attValue);
         return pathFromMap;
 	}
-
 
 	@Override
 	public void processingInstruction(String target, String data)

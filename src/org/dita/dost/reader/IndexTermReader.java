@@ -142,9 +142,7 @@ public final class IndexTermReader extends AbstractXMLReader {
 		titleMap.clear();
 	}
 
-	/**
-	 * @see org.xml.sax.helpers.DefaultHandler#characters(char[], int, int)
-	 */
+	@Override
 	public void characters(char[] ch, int start, int length)
 			throws SAXException {
 		final StringBuilder tempBuf = new StringBuilder(length);
@@ -177,9 +175,7 @@ public final class IndexTermReader extends AbstractXMLReader {
 		}
 	}
 	
-	/**
-	 * @see org.dita.dost.reader.AbstractXMLReader#endDocument()
-	 */
+	@Override
 	public void endDocument() throws SAXException {
 		final int size = indexTermList.size();
 		updateIndexTermTargetName();
@@ -192,10 +188,7 @@ public final class IndexTermReader extends AbstractXMLReader {
 		}
 	}
 
-	/**
-	 * @see org.xml.sax.helpers.DefaultHandler#endElement(java.lang.String,
-	 *      java.lang.String, java.lang.String)
-	 */
+	@Override
 	public void endElement(String uri, String localName, String qName)
 			throws SAXException {
 		
@@ -316,10 +309,7 @@ public final class IndexTermReader extends AbstractXMLReader {
 		return target;
 	}
 
-	/**
-	 * @see org.xml.sax.helpers.DefaultHandler#startElement(java.lang.String,
-	 *      java.lang.String, java.lang.String, org.xml.sax.Attributes)
-	 */
+	@Override
 	public void startElement(String uri, String localName, String qName,
 			Attributes attributes) throws SAXException {
 		

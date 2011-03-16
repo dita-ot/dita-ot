@@ -135,10 +135,7 @@ public final class MapLinksReader extends AbstractXMLReader {
 
     }
 
-    /**
-     * @see org.xml.sax.ContentHandler#characters(char[], int, int)
-     * 
-     */
+    @Override
     public void characters(char[] ch, int start, int length)
             throws SAXException {
 
@@ -168,10 +165,7 @@ public final class MapLinksReader extends AbstractXMLReader {
         return true;
     }
 
-	/**
-     * @see org.xml.sax.ext.LexicalHandler#endCDATA()
-     * 
-     */
+    @Override
     public void endCDATA() throws SAXException {
     	if (match && validHref){
     		indexEntries.append(Constants.CDATA_END);
@@ -179,10 +173,7 @@ public final class MapLinksReader extends AbstractXMLReader {
 	    
 	}
 
-    /**
-     * @see org.xml.sax.ContentHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
-     * 
-     */
+    @Override
     public void endElement(String uri, String localName, String qName)
             throws SAXException {
 
@@ -243,20 +234,14 @@ public final class MapLinksReader extends AbstractXMLReader {
         }
     }
 
-	/**
-     * @see org.xml.sax.ext.LexicalHandler#endEntity(java.lang.String)
-     * 
-     */
+    @Override
     public void endEntity(String name) throws SAXException {
 		if(!needResolveEntity){
 			needResolveEntity = true;
 		}
 	}
 
-    /**
-     * @see org.dita.dost.reader.AbstractReader#getContent()
-     * 
-     */
+    @Override
     public Content getContent() {
 
     	final ContentImpl result = new ContentImpl();
@@ -264,10 +249,7 @@ public final class MapLinksReader extends AbstractXMLReader {
         return result;
     }
 
-    /**
-     * @see org.xml.sax.ContentHandler#ignorableWhitespace(char[], int, int)
-     * 
-     */
+    @Override
     public void ignorableWhitespace(char[] ch, int start, int length)
             throws SAXException {
 
@@ -278,11 +260,7 @@ public final class MapLinksReader extends AbstractXMLReader {
         }
     }
 
-
-    /**
-     * @see org.dita.dost.reader.AbstractReader#read(java.lang.String)
-     * 
-     */
+    @Override
     public void read(String filename) {
 
         if (matchList.isEmpty()) {
@@ -338,10 +316,7 @@ public final class MapLinksReader extends AbstractXMLReader {
         matchList.add(sb.toString());
     }
 
-	/**
-     * @see org.xml.sax.ext.LexicalHandler#startCDATA()
-     * 
-     */
+    @Override
     public void startCDATA() throws SAXException {
     	if (match && validHref){
     		indexEntries.append(Constants.CDATA_HEAD);
@@ -349,18 +324,13 @@ public final class MapLinksReader extends AbstractXMLReader {
 	    
 	}
 
-	/**
-     * @see org.xml.sax.ext.LexicalHandler#startDTD(java.lang.String, java.lang.String, java.lang.String)
-     * 
-     */
+    @Override
     public void startDTD(String name, String publicId, String systemId)
 			throws SAXException {
+        // NOOP
 	}
 
-    /**
-     * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
-     * 
-     */
+    @Override
     public void startElement(String uri, String localName, String qName,
             Attributes atts) throws SAXException {
     	final int attsLen = atts.getLength();
@@ -434,10 +404,7 @@ public final class MapLinksReader extends AbstractXMLReader {
         }
     }
 
-	/**
-     * @see org.xml.sax.ext.LexicalHandler#startEntity(java.lang.String)
-     * 
-     */
+    @Override
     public void startEntity(String name) throws SAXException {
 		needResolveEntity = StringUtils.checkEntity(name);
 		if (match && !needResolveEntity && validHref) {

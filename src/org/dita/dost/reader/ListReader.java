@@ -50,11 +50,6 @@ public final class ListReader implements AbstractReader {
         content.setCollection(refList);
     }
 
-
-    /**
-     * @see org.dita.dost.reader.AbstractReader#read(java.lang.String)
-     * 
-     */
     public void read(String filename) {
     	Properties propterties = null; 	
 		try {
@@ -96,10 +91,6 @@ public final class ListReader implements AbstractReader {
         
     }
 
-    /**
-     * @see org.dita.dost.reader.AbstractReader#getContent()
-     * 
-     */
     public Content getContent() {
         return content;
     }
