@@ -43,9 +43,9 @@ import org.w3c.dom.NodeList;
 public final class MapMetaReader implements AbstractReader {
 	private static final String INTERNET_LINK_MARK = "://";
 	
-	private static Hashtable<String, Hashtable<String, Element>> resultTable = new Hashtable<String, Hashtable<String, Element>>(Constants.INT_16);
+	private Hashtable<String, Hashtable<String, Element>> resultTable = new Hashtable<String, Hashtable<String, Element>>(Constants.INT_16);
 	
-	private static HashSet<String> uniqueSet;
+	private static final HashSet<String> uniqueSet;
 	
 	static{
 		uniqueSet = new HashSet<String>(Constants.INT_16);
@@ -56,7 +56,7 @@ public final class MapMetaReader implements AbstractReader {
 		uniqueSet.add(Constants.ATTR_CLASS_VALUE_MAP_SEARCHTITLE);
 	}
 	
-	private static HashSet<String> cascadeSet;
+	private static final HashSet<String> cascadeSet;
 	
 	static{
 		cascadeSet = new HashSet<String>(Constants.INT_16);
@@ -70,7 +70,7 @@ public final class MapMetaReader implements AbstractReader {
 		cascadeSet.add(Constants.ATTR_CLASS_VALUE_PUBLISHER);
 	}
 	
-	private static HashSet<String> metaSet;
+	private static final HashSet<String> metaSet;
 	
 	static{
 		metaSet = new HashSet<String>(Constants.INT_16);
@@ -93,7 +93,7 @@ public final class MapMetaReader implements AbstractReader {
 		metaSet.add(Constants.ATTR_CLASS_VALUE_UNKNOWN);
 	}
 	
-	private static Vector<String> metaPos;
+	private static final Vector<String> metaPos;
 	
 	static {
 		metaPos = new Vector<String>(Constants.INT_16);

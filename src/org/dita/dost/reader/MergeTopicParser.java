@@ -31,7 +31,7 @@ import org.xml.sax.XMLReader;
  * @author Zhang, Yuan Peng
  */
 public final class MergeTopicParser extends AbstractXMLReader {
-	private static StringBuffer topicInfo = null;
+	private StringBuffer topicInfo = null;
 	private ContentImpl content;
 	private String dirPath = null;
 	private String filePath = null;
