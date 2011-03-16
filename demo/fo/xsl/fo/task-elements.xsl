@@ -216,11 +216,11 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:variable name="actual-step-count" select="number(count(preceding-sibling::*[contains(@class, ' task/step ')])+1)"/>
         <fo:list-item xsl:use-attribute-sets="steps.step">
             <fo:list-item-label xsl:use-attribute-sets="steps.step__label">
-                <xsl:if test="preceding-sibling::*[contains(@class, ' task/step ')] | following-sibling::*[contains(@class, ' task/step ')]">
-                    <fo:block xsl:use-attribute-sets="steps.step__label__content">
-                        <fo:inline>
-                            <xsl:call-template name="commonattributes"/>
-                        </fo:inline>
+                <fo:block xsl:use-attribute-sets="steps.step__label__content">
+                    <fo:inline>
+                        <xsl:call-template name="commonattributes"/>
+                    </fo:inline>
+                    <xsl:if test="preceding-sibling::*[contains(@class, ' task/step ')] | following-sibling::*[contains(@class, ' task/step ')]">
                         <xsl:call-template name="insertVariable">
                             <xsl:with-param name="theVariableID" select="'Ordered List Number'"/>
                             <xsl:with-param name="theParameters">
@@ -229,8 +229,8 @@ See the accompanying license.txt file for applicable licenses.
                                 </number>
                             </xsl:with-param>
                         </xsl:call-template>
-                    </fo:block>
-                </xsl:if>
+                    </xsl:if>
+                </fo:block>
             </fo:list-item-label>
 
             <fo:list-item-body xsl:use-attribute-sets="steps.step__body">
