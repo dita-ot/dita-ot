@@ -17,8 +17,8 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 
+import org.junit.After;
 import org.dita.dost.util.MergeUtils;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -26,18 +26,16 @@ import org.junit.Test;
 public class TestMergeUtils {
 
 	private final File resourceDir = new File("test-stub");
-	
 	public static MergeUtils mergeUtils;
+	
 	@BeforeClass
 	public static void setUp() {
-		mergeUtils=MergeUtils.getInstance();
-		mergeUtils.reset();
+		mergeUtils = new MergeUtils();
 	}
-	
-	@Test
-	public void testGetInstance(){
-		//test if this class is singleton
-		assertEquals(mergeUtils, MergeUtils.getInstance());
+
+	@After
+	public void reset() {
+	    mergeUtils.reset();
 	}
 	
 	@Test
@@ -48,14 +46,14 @@ public class TestMergeUtils {
 		assertTrue(mergeUtils.findId("dir/dir1/a.xml#topicid"));
 		assertFalse(mergeUtils.findId("topicid"));
 		assertFalse(mergeUtils.findId("dir/a.xml#topicid"));
-		
 	}
 	
 
 	@Test
 	public void testAddIdString() {
 		assertEquals(null, mergeUtils.addId(null));
-		assertEquals("unique_3", mergeUtils.addId("a.xml#topicid"));
+		assertEquals("unique_1", mergeUtils.addId("a.xml#topicid"));
+		assertEquals("unique_2", mergeUtils.addId("a.xml#topicid2"));
 		assertNull(mergeUtils.addId(null));
 	}
 
@@ -66,8 +64,11 @@ public class TestMergeUtils {
 
 	@Test
 	public void testGetIdValue() {
+	    mergeUtils.addId("a.xml#topicid");
+	    mergeUtils.addId("a.xml#topicid2");
 		assertEquals(null, mergeUtils.getIdValue(null));
-		assertEquals("unique_3", mergeUtils.getIdValue("a.xml#topicid"));
+		assertEquals("unique_1", mergeUtils.getIdValue("a.xml#topicid"));
+		assertEquals("unique_2", mergeUtils.getIdValue("a.xml#topicid2"));
 		assertEquals(null, mergeUtils.getIdValue(" "));
 	}
 
@@ -95,12 +96,8 @@ public class TestMergeUtils {
 	@Test
 	public void testGetFirstTopicId() {
 		//assertEquals("task",mergeUtils.getFirstTopicId("stub.xml", "TEST_STUB"));
-		assertEquals("task",mergeUtils.getFirstTopicId("stub.xml", resourceDir.getAbsolutePath(),false));
-		
+		assertEquals("task", MergeUtils.getFirstTopicId("stub.xml", resourceDir.getAbsolutePath(),false));
+		assertEquals("task", MergeUtils.getFirstTopicId("stub.xml", resourceDir.getAbsolutePath(), true));
 	}
 	
-	@AfterClass
-	public static void destroy(){
-		//do nothing
-	}
 }

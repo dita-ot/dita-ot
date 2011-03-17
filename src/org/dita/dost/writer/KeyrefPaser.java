@@ -778,8 +778,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 	private String getFirstTopicId(File topicFile) {
 		String path = topicFile.getParent();
 		String name = topicFile.getName();
-		MergeUtils util = MergeUtils.getInstance();
-		String topicId = util.getFirstTopicId(name, path, false);
+		String topicId = MergeUtils.getFirstTopicId(name, path, false);
 		return topicId;
 	}
 	//Insert topic id into href 

@@ -43,8 +43,10 @@ public final class MergeTopicParser extends AbstractXMLReader {
 	
 	/**
 	 * Default Constructor.
+	 * 
+	 * @param util merge utility
 	 */
-	public MergeTopicParser() {
+	public MergeTopicParser(final MergeUtils util) {
 		try{
 			if(reader == null){
 				reader = StringUtils.getXMLReader();
@@ -58,9 +60,9 @@ public final class MergeTopicParser extends AbstractXMLReader {
 			}
 			
 			content = new ContentImpl();
-			util = MergeUtils.getInstance();
+			this.util = util;
 		}catch (final Exception e){
-			logger.logException(e);
+			throw new RuntimeException("Failed to initialize merge topic parse: " + e.getMessage(), e);
 		}
 	}
 	/**

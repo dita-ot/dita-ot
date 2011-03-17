@@ -15,41 +15,28 @@ import java.util.Hashtable;
 import java.util.Set;
 
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
+
 import org.xml.sax.XMLReader;
 
 /**
- * Utility that topic merge utilize. 
- * 
+ * Utility that topic merge utilize. An instance can be reused by calling
+ * {@link #reset()} between uses.
  */
 public final class MergeUtils {
 
-	private static MergeUtils instance = null;
 	private final Hashtable<String, String> idMap;
 	private int index;
 	private final Set<String> visitSet;
-	private DITAOTJavaLogger logger = null;
 	
 	/**
 	 * Default Constructor
 	 */
-	private MergeUtils() {
+	public MergeUtils() {
 		super();
-		// TODO Auto-generated constructor stub
 		idMap = new Hashtable<String, String>();
 		visitSet = new HashSet<String>(Constants.INT_256);
-		logger = new DITAOTJavaLogger();
 		index = 0;
-	}
-
-	/**
-	 * Return the MergeUtils instance. Singleton.
-	 * @return MergeUtils
-	 */
-	public static synchronized MergeUtils getInstance(){
-		if(instance == null){
-			instance = new MergeUtils();
-		}
-		return instance;
 	}
 	
 	/**
@@ -152,7 +139,8 @@ public final class MergeUtils {
 	 * @param useCatalog whether use catalog file for validation
 	 * @return topic id
 	 */
-	public String getFirstTopicId(final String path, final String dir, final boolean useCatalog){
+	public static String getFirstTopicId(final String path, final String dir, final boolean useCatalog){
+	    final DITAOTLogger logger = new DITAOTJavaLogger();
 		String localPath = path;
 		String localDir = dir;
 		final StringBuffer firstTopicId = new StringBuffer();

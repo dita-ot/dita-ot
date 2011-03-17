@@ -66,14 +66,13 @@ public final class MergeMapParser extends AbstractXMLReader {
 			
 			processStack = new Stack<String>();
 			processLevel = 0;
-			
-			topicParser = new MergeTopicParser();
-			topicParser.reset();
+
+	        util = new MergeUtils();
+			topicParser = new MergeTopicParser(util);
+			topicParser.setLogger(logger);
 			content = new ContentImpl();
-			util = MergeUtils.getInstance();
-			util.reset();
 		}catch (final Exception e){
-			logger.logException(e);
+			throw new RuntimeException("Failed to initialize merge map parser: " + e.getMessage(), e);
 		}
 	}
 
