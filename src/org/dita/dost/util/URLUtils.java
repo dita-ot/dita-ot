@@ -29,7 +29,7 @@ public final class URLUtils {
 	 * @exception MalformedURLException
 	 *                when the argument is null.
 	 */
-	public static URL correct(File file) throws MalformedURLException {
+	public static URL correct(final File file) throws MalformedURLException {
 		if (file == null) {
 			throw new MalformedURLException("The url is null");
 		}
@@ -46,7 +46,7 @@ public final class URLUtils {
 	 * @exception MalformedURLException
 	 *                when the argument is null.
 	 */
-	public static URL correct(URL url) throws MalformedURLException {
+	public static URL correct(final URL url) throws MalformedURLException {
 		if (url == null) {
 			throw new MalformedURLException("The url is null");
 		}
@@ -60,7 +60,7 @@ public final class URLUtils {
 	 *            the string to be decoded
 	 * @return the decoded string
 	 */
-	public static String uncorrect(String s) {
+	public static String uncorrect(final String s) {
 		if (s == null) {
 			return null;
 		}
@@ -68,25 +68,25 @@ public final class URLUtils {
 			// Optimization, nothing to uncorrect here
 			return s;
 		}
-		StringBuffer sbuf = new StringBuffer();
-		int l = s.length();
+		final StringBuffer sbuf = new StringBuffer();
+		final int l = s.length();
 		int ch = -1;
 		int b = 0, sumb = 0;
 		boolean applyUTF8dec = false;
 
 		for (int i = 0, more = -1; i < l; i++) {
 			// Get next byte b from URL segment s
-			char current = s.charAt(i);
+			final char current = s.charAt(i);
 			ch = current;
 			switch (ch) {
 			case '%':
 				if (i + 2 < s.length()) {
 					// Avoid java.lang.StringIndexOutOfBoundsException...
 					ch = s.charAt(++i);
-					int hb = (Character.isDigit((char) ch) ? ch - '0'
+					final int hb = (Character.isDigit((char) ch) ? ch - '0'
 							: 10 + Character.toLowerCase((char) ch) - 'a') & 0xF;
 					ch = s.charAt(++i);
-					int lb = (Character.isDigit((char) ch) ? ch - '0'
+					final int lb = (Character.isDigit((char) ch) ? ch - '0'
 							: 10 + Character.toLowerCase((char) ch) - 'a') & 0xF;
 					b = (hb << 4) | lb;
 					applyUTF8dec = true;
@@ -146,19 +146,19 @@ public final class URLUtils {
 	 * @return The canonical or absolute file, or null if the protocol is not
 	 *         file.
 	 */
-	public static File getCanonicalFileFromFileUrl(URL url) {
+	public static File getCanonicalFileFromFileUrl(final URL url) {
 		File file = null;
 		if (url == null) {
 			throw new NullPointerException("The URL cannot be null.");
 		}
 		if ("file".equals(url.getProtocol())) {
-			String fileName = url.getFile();
-			String path = URLUtils.uncorrect(fileName);
+			final String fileName = url.getFile();
+			final String path = URLUtils.uncorrect(fileName);
 			file = new File(path);
 
 			try {
 				file = file.getCanonicalFile();
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				// Does not exist.
 				file = file.getAbsoluteFile();
 			}
@@ -183,12 +183,12 @@ public final class URLUtils {
 	 *            query.
 	 * @return The corrected URL.
 	 */
-	public static String correct(String url, boolean forceCorrection) {
+	public static String correct(String url, final boolean forceCorrection) {
 		if (url == null) {
 			return null;
 		}
 
-		String initialUrl = url;
+		final String initialUrl = url;
 
 		// If there is a % that means the URL was already corrected.
 		if (!forceCorrection && url.indexOf("%") != -1) {
@@ -199,7 +199,7 @@ public final class URLUtils {
 		// must not be corrected.
 		String reference = null;
 		if (!forceCorrection) {
-			int refIndex = url.lastIndexOf('#');
+			final int refIndex = url.lastIndexOf('#');
 			if (refIndex != -1) {
 				reference = FilePathToURI.filepath2URI(url.substring(refIndex + 1));
 				url = url.substring(0, refIndex);
@@ -209,14 +209,14 @@ public final class URLUtils {
 		// Buffer where eventual query string will be processed.
 		StringBuffer queryBuffer = null;
 		if (!forceCorrection) {
-			int queryIndex = url.indexOf('?');
+			final int queryIndex = url.indexOf('?');
 			if (queryIndex != -1) {
 				// We have a query
-				String query = url.substring(queryIndex + 1);
+				final String query = url.substring(queryIndex + 1);
 				url = url.substring(0, queryIndex);
 				queryBuffer = new StringBuffer(query.length());
 				// Tokenize by &
-				StringTokenizer st = new StringTokenizer(query, "&");
+				final StringTokenizer st = new StringTokenizer(query, "&");
 				while (st.hasMoreElements()) {
 					String token = st.nextToken();
 					token = FilePathToURI.filepath2URI(token);
@@ -250,15 +250,15 @@ public final class URLUtils {
 	 * 				URL
 	 * @author Zhang Di Hua
 	 */
-	public static String getURL(String fileName){
+	public static String getURL(final String fileName){
 		
 		if(fileName.startsWith("file:/")){
 			return fileName;
 		}else{
-			File file = new File(fileName);
+			final File file = new File(fileName);
 			try {
 				return file.toURI().toURL().toString();
-			} catch (MalformedURLException e) {
+			} catch (final MalformedURLException e) {
 				// TODO Auto-generated catch block
 				//e.printStackTrace();
 				return "";

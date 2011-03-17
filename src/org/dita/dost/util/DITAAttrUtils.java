@@ -33,9 +33,9 @@ import org.xml.sax.SAXException;
 public final class DITAAttrUtils {
 	
 	//List to store non-Print transtypes.
-	private List<String>nonPrintTranstype;
+	private final List<String>nonPrintTranstype;
 	
-	private List<String>excludeList;
+	private final List<String>excludeList;
 	
 	//Depth inside element for @print.
 	/*e.g for <a print="yes">
@@ -83,7 +83,7 @@ public final class DITAAttrUtils {
 	 * @param printValue value of print attribute.
 	 * @return whether the level is increased.
 	 */
-	public boolean increasePrintLevel(String printValue){
+	public boolean increasePrintLevel(final String printValue){
 		
 		if(printValue != null){
 			//@print = "printonly"
@@ -121,7 +121,7 @@ public final class DITAAttrUtils {
 	 * @param transtype String
 	 * @return boolean
 	 */
-	public boolean needExcludeForPrintAttri(String transtype){
+	public boolean needExcludeForPrintAttri(final String transtype){
 		
 		if(printLevel > 0 && nonPrintTranstype.contains(transtype)){
 			return true;
@@ -146,31 +146,36 @@ public final class DITAAttrUtils {
 	 * @param classValue class value for search.
 	 * @return element.
 	 */
-	public Element searchForNode(Element root, String searchKey, String attrName, 
-			String classValue) {
-		if (root == null || StringUtils.isEmptyString(searchKey)) return null;
-		Queue<Element> queue = new LinkedList<Element>();
+	public Element searchForNode(final Element root, final String searchKey, final String attrName, 
+			final String classValue) {
+		if (root == null || StringUtils.isEmptyString(searchKey)) {
+            return null;
+        }
+		final Queue<Element> queue = new LinkedList<Element>();
 		queue.offer(root);
 		
 		while (!queue.isEmpty()) {
-			Element pe = queue.poll();
-			NodeList pchildrenList = pe.getChildNodes();
+			final Element pe = queue.poll();
+			final NodeList pchildrenList = pe.getChildNodes();
 			for (int i = 0; i < pchildrenList.getLength(); i++) {
-				Node node = pchildrenList.item(i);
-				if (node.getNodeType() == Node.ELEMENT_NODE)
-					queue.offer((Element)node);
+				final Node node = pchildrenList.item(i);
+				if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    queue.offer((Element)node);
+                }
 			}
 			//whick kind of node to search
-			String clazzValue = pe.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
+			final String clazzValue = pe.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
 			
 			if (StringUtils.isEmptyString(clazzValue) 
-					|| !clazzValue.contains(classValue))
-				continue;
+					|| !clazzValue.contains(classValue)) {
+                continue;
+            }
 			
-			String value = pe.getAttribute(attrName);
+			final String value = pe.getAttribute(attrName);
 			
-			if (StringUtils.isEmptyString(value)) 
-				continue;
+			if (StringUtils.isEmptyString(value)) {
+                continue;
+            }
 			
 			if (searchKey.equals(value)){
 				return pe;
@@ -185,22 +190,22 @@ public final class DITAAttrUtils {
 	 * @param root root node
 	 * @return text value.
 	 */
-	public String getText(Node root){
+	public String getText(final Node root){
 		
-		StringBuffer result = new StringBuffer(Constants.INT_1024);
+		final StringBuffer result = new StringBuffer(Constants.INT_1024);
 		
 		if(root == null){
 			return "";
 		}else{
 			if(root.hasChildNodes()){
-				NodeList list = root.getChildNodes();
+				final NodeList list = root.getChildNodes();
 				for(int i = 0; i < list.getLength(); i++){
-					Node childNode = list.item(i);
+					final Node childNode = list.item(i);
 					if(childNode.getNodeType() == Node.ELEMENT_NODE){
-						Element e = (Element)childNode;
-						String value = e.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
+						final Element e = (Element)childNode;
+						final String value = e.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
 						if(!excludeList.contains(value)){
-							 String s = getText(e);
+							 final String s = getText(e);
 							 result.append(s);
 						}else{
 							continue;
@@ -223,22 +228,22 @@ public final class DITAAttrUtils {
 	 * @param absolutePathToFile topic file
 	 * @return element.
 	 */
-	public Element getTopicDoc(String absolutePathToFile){
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+	public Element getTopicDoc(final String absolutePathToFile){
+		final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder;
 		try {
 			builder = factory.newDocumentBuilder();
-			Document doc = builder.parse(absolutePathToFile);
-			Element root = doc.getDocumentElement();
+			final Document doc = builder.parse(absolutePathToFile);
+			final Element root = doc.getDocumentElement();
 			
 			return root;
-		} catch (ParserConfigurationException e) {
+		} catch (final ParserConfigurationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (SAXException e) {
+		} catch (final SAXException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -252,20 +257,20 @@ public final class DITAAttrUtils {
 	 * @param element input element
 	 * @return text value
 	 */
-	public String getChildElementValueOfTopicmeta(Element element, String classValue) {
+	public String getChildElementValueOfTopicmeta(final Element element, final String classValue) {
 		
 		//navtitle
 		String returnValue = null;
 		//has child nodes
 		if(element.hasChildNodes()){
 			//Get topicmeta element node
-			Element topicMeta = getElementNode(element, Constants.ATTR_CLASS_VALUE_TOPICMETA);
+			final Element topicMeta = getElementNode(element, Constants.ATTR_CLASS_VALUE_TOPICMETA);
 			//no topicmeta node
 			if(topicMeta == null){
 				return returnValue;
 			}
 			//Get element node
-			Element elem = getElementNode(topicMeta, classValue);
+			final Element elem = getElementNode(topicMeta, classValue);
 			//no navtitle node
 			if(elem == null){
 				return returnValue;
@@ -282,16 +287,16 @@ public final class DITAAttrUtils {
 	 * @param classValue @class
 	 * @return element node.
 	 */
-	public Element getElementNode(Element element, String classValue) {
+	public Element getElementNode(final Element element, final String classValue) {
 		
 		//Element child = null;
 		
-		NodeList list = element.getChildNodes();
+		final NodeList list = element.getChildNodes();
 		
 		for(int i = 0; i < list.getLength(); i++){
-			Node node = list.item(i);
+			final Node node = list.item(i);
 			if(node.getNodeType() == Node.ELEMENT_NODE){
-				Element child = (Element) node;
+				final Element child = (Element) node;
 				//node found
 				if(child.getAttribute(Constants.ATTRIBUTE_NAME_CLASS).contains(classValue)){
 					return child;

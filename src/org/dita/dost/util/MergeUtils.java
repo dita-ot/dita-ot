@@ -24,9 +24,9 @@ import org.xml.sax.XMLReader;
 public final class MergeUtils {
 
 	private static MergeUtils instance = null;
-	private Hashtable<String, String> idMap;
+	private final Hashtable<String, String> idMap;
 	private int index;
-	private Set<String> visitSet;
+	private final Set<String> visitSet;
 	private DITAOTJavaLogger logger = null;
 	
 	/**
@@ -63,27 +63,24 @@ public final class MergeUtils {
 	
 	/**
 	 * Find the topic id from idMap.
-	 * @param Id topic id
+	 * @param id topic id
 	 * @return true if find and false otherwise
 	 */
-	public boolean findId(String Id){
-		return (Id != null && idMap.containsKey(FileUtils.removeRedundantNames(Id.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
-				Constants.SLASH), Constants.SLASH)))
-			? true
-			: false;
+	public boolean findId(final String id){
+		return id != null && idMap.containsKey(FileUtils.removeRedundantNames(id.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
+				Constants.SLASH), Constants.SLASH));
 	}
 	
 	/**
 	 * Add topic id to the idMap.
-	 * @param Id topic id
+	 * @param id topic id
 	 * @return updated topic id
 	 */
-	public String addId (String Id){
-		String localId = Id;
-		if(Id == null){
+	public String addId (final String id){
+		if(id == null){
 			return null;
 		}
-		localId=Id.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
+		final String localId = id.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
 				Constants.SLASH);
 		index ++;
 		idMap.put(FileUtils.removeRedundantNames(localId, Constants.SLASH),"unique_"+Integer.toString(index));
@@ -92,29 +89,28 @@ public final class MergeUtils {
 
 	/**
 	 * Add topic id-value pairs to idMap.
-	 * @param Id id
-	 * @param Value value
+	 * @param id id
+	 * @param value value
 	 */
-	public void addId (String Id, String Value){
-		if(Id != null && Value != null){
-			String localId=Id.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
+	public void addId (final String id, final String value){
+		if(id != null && value != null){
+			final String localId=id.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
 					Constants.SLASH);
-			String localValue = Value.trim();
+			final String localValue = value.trim();
 			idMap.put(FileUtils.removeRedundantNames(localId, Constants.SLASH), localValue);
 		}		
 	}
 	
 	/**
 	 * Return the value corresponding to the id.
-	 * @param Id id
+	 * @param id id
 	 * @return value
 	 */
-	public String getIdValue (String Id){
-		String localId = Id;
-		if (Id==null){
-			return null;
-		}
-		localId = Id.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
+	public String getIdValue (final String id){
+	    if (id==null){
+            return null;
+        }
+	    final String localId = id.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
 				Constants.SLASH);
 		return (String) idMap.get(FileUtils.removeRedundantNames(localId, Constants.SLASH));
 	}
@@ -124,10 +120,9 @@ public final class MergeUtils {
 	 * @param path path
 	 * @return true if has been visited
 	 */
-	public boolean isVisited(String path){
-		int idx;
+	public boolean isVisited(final String path){
 		String localPath = path;
-		idx = path.indexOf(Constants.SHARP);
+		final int idx = path.indexOf(Constants.SHARP);
 		if(idx != -1){
 			localPath=localPath.substring(0,idx);
 		}
@@ -139,9 +134,9 @@ public final class MergeUtils {
 	 * Visit the path.
 	 * @param path path
 	 */
-	public void visit(String path){
+	public void visit(final String path){
 		String localPath = path;
-		int idx = path.indexOf(Constants.SHARP);
+		final int idx = path.indexOf(Constants.SHARP);
 		if(idx != -1){
 			localPath=localPath.substring(0,idx);
 		}
@@ -157,12 +152,10 @@ public final class MergeUtils {
 	 * @param useCatalog whether use catalog file for validation
 	 * @return topic id
 	 */
-	public String getFirstTopicId(String path, String dir, boolean useCatalog){
+	public String getFirstTopicId(final String path, final String dir, final boolean useCatalog){
 		String localPath = path;
 		String localDir = dir;
-		TopicIdParser parser;
-		XMLReader reader;
-		StringBuffer firstTopicId = new StringBuffer();
+		final StringBuffer firstTopicId = new StringBuffer();
 		
 		if(path != null && dir != null){
 			localPath = localPath.trim();
@@ -170,21 +163,21 @@ public final class MergeUtils {
 		}else{
 			return null;
 		}
-		parser = new TopicIdParser(firstTopicId);
+		final TopicIdParser parser = new TopicIdParser(firstTopicId);
 		try{
-            reader = StringUtils.getXMLReader();
+		    final XMLReader reader = StringUtils.getXMLReader();
             reader.setContentHandler(parser);
             
             if(useCatalog){
             	try {
         			Class.forName(Constants.RESOLVER_CLASS);
         			reader.setEntityResolver(CatalogUtils.getCatalogResolver());
-        		}catch (ClassNotFoundException e){
+        		}catch (final ClassNotFoundException e){
         			logger.logException(e);
         		}
             }
             reader.parse(localDir+File.separator+localPath);
-        }catch (Exception e){
+        }catch (final Exception e){
             logger.logException(e);
         }
 		return firstTopicId.toString();

@@ -41,21 +41,21 @@ public final class GenUtils {
 	 * Set output file.
 	 * @param file file
 	 */
-	public static void setOutput(String file){
+	public static void setOutput(final String file){
 		outputFile = file;
 	}
 	/**
 	 * Set start element.
 	 * @param name element name
 	 */
-	public static void startElement(String name){
+	public static void startElement(final String name){
 		buffer.append("<").append(name).append(">");
 	}
 	/**
 	 * Set end element.
 	 * @param name element name
 	 */
-	public static void endElement(String name){
+	public static void endElement(final String name){
 		buffer.append("</").append(name).append(">");
 	}
 	/**
@@ -63,14 +63,14 @@ public final class GenUtils {
 	 * @param name attribute name
 	 * @param value attribute value
 	 */
-	public static void addAttr(String name, String value){
+	public static void addAttr(final String name, final String value){
 		buffer.insert(buffer.lastIndexOf(">")," "+name+"=\""+value+"\"");
 	}
 	/**
 	 * Added text.
 	 * @param text text
 	 */
-	public static void addText(String text){
+	public static void addText(final String text){
 		buffer.append(text);
 	}
 	/**
@@ -83,12 +83,12 @@ public final class GenUtils {
 					new FileOutputStream(new File(outputFile)),Constants.UTF8);
 			output.write(buffer.toString());
 			output.flush();
-		} catch (Exception e) {
+		} catch (final Exception e) {
         	logger.logException(e);
         }finally {
             try{
                 output.close();
-            } catch (Exception e) {
+            } catch (final Exception e) {
             	logger.logException(e);
             }
         }

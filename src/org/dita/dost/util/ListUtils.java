@@ -43,7 +43,7 @@ public final class ListUtils {
 	 * @throws IOException IOException.
 	 */
 	public static Properties getDitaList() throws IOException{
-		Properties properties = new Properties();
+		final Properties properties = new Properties();
 		try{
 			InputStream source = URIResolverAdapter.convertTOInputStream(DitaURIResolverFactory.getURIResolver().resolve(Constants.FILE_NAME_DITA_LIST_XML, null));
 			if (source != null) {
@@ -53,8 +53,8 @@ public final class ListUtils {
 				source = URIResolverAdapter.convertTOInputStream(DitaURIResolverFactory.getURIResolver().resolve(Constants.FILE_NAME_DITA_LIST, null));
 				properties.load(source);
 			}			
-		}catch(TransformerException e){
-			DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+		}catch(final TransformerException e){
+			final DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 			javaLogger.logException(e);
 		}
 		return properties;
@@ -68,18 +68,18 @@ public final class ListUtils {
 	 * @return Properties
 	 * @throws IOException exception
 	 */
-	public static Properties loadList(String name, String base, boolean isXML) throws IOException{
-		Properties properties = new Properties();
+	public static Properties loadList(final String name, final String base, final boolean isXML) throws IOException{
+		final Properties properties = new Properties();
 		try {
-			InputStream source = URIResolverAdapter.convertTOInputStream(DitaURIResolverFactory.getURIResolver().resolve(name, base));
+			final InputStream source = URIResolverAdapter.convertTOInputStream(DitaURIResolverFactory.getURIResolver().resolve(name, base));
 			if(isXML){
 				properties.loadFromXML(source);
 			}
 			else{
 				properties.load(source);
 			}
-		} catch (TransformerException e) {
-			DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+		} catch (final TransformerException e) {
+			final DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 			javaLogger.logException(e);
 		}
 		return properties;
@@ -95,10 +95,10 @@ public final class ListUtils {
 	 * @deprecated -never used right now
 	 */
 	@Deprecated
-	public static void storeList(String name, String base, boolean isXML, Properties properties) throws IOException{
+	public static void storeList(final String name, final String base, final boolean isXML, final Properties properties) throws IOException{
 		OutputStream in = null;
 		try {
-			InputStream source = URIResolverAdapter.convertTOInputStream(DitaURIResolverFactory.getURIResolver().resolve(name, base));
+			final InputStream source = URIResolverAdapter.convertTOInputStream(DitaURIResolverFactory.getURIResolver().resolve(name, base));
 			in = new FileOutputStream(name);
 			if(isXML){
 				properties.storeToXML(in, null);
@@ -106,15 +106,15 @@ public final class ListUtils {
 			else{
 				properties.store(in, null);
 			}
-		} catch (TransformerException e) {
-			DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+		} catch (final TransformerException e) {
+			final DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 			javaLogger.logException(e);
 		} finally {
         	if (in != null) {
         		try {
         			in.close();
-        		} catch (IOException e) {
-        			DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+        		} catch (final IOException e) {
+        			final DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
         			javaLogger.logException(e);
         		}
         	}

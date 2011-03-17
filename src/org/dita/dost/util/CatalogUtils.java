@@ -49,20 +49,20 @@ public final class CatalogUtils {
      * @return catalog map
      * 
      */
-    public static synchronized HashMap<String, String> getCatalog(String ditaDir) {
+    public static synchronized HashMap<String, String> getCatalog(final String ditaDir) {
 		if (map != null) {
 			return map;
 		}
 		
-		String catalogFilePath = (ditaDir == null) ? Constants.FILE_NAME_CATALOG : ditaDir + File.separator + Constants.FILE_NAME_CATALOG;
+		final String catalogFilePath = (ditaDir == null) ? Constants.FILE_NAME_CATALOG : ditaDir + File.separator + Constants.FILE_NAME_CATALOG;
 		
 		map = new HashMap<String, String>();
-		CatalogParser parser = new CatalogParser(map, ditaDir);
+		final CatalogParser parser = new CatalogParser(map, ditaDir);
 		try {
-			XMLReader reader = StringUtils.getXMLReader();
+			final XMLReader reader = StringUtils.getXMLReader();
 			reader.setContentHandler(parser);
 			reader.parse(catalogFilePath);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			logger.logException(e);
 		}
 
@@ -73,7 +73,7 @@ public final class CatalogUtils {
      * Set directory to find catalog-dita.xml.
      * @param ditaDir ditaDir
      */
-    public static synchronized void setDitaDir(String ditaDir){
+    public static synchronized void setDitaDir(final String ditaDir){
     	catalogResolver=null;
     	CatalogUtils.ditaDir=ditaDir;
     }
@@ -93,7 +93,7 @@ public final class CatalogUtils {
      */
     public static synchronized CatalogResolver getCatalogResolver() {
         if (catalogResolver == null) {
-            CatalogManager manager = new CatalogManager();
+            final CatalogManager manager = new CatalogManager();
             manager.setIgnoreMissingProperties(true);
             manager.setUseStaticCatalog(false); // We'll use a private catalog.
             manager.setPreferPublic(true);
@@ -101,12 +101,12 @@ public final class CatalogUtils {
             //manager.setVerbosity(10);
             catalogResolver = new CatalogResolver(manager);
             
-            String catalogFilePath = getDitaDir() + Constants.FILE_NAME_CATALOG;
+            final String catalogFilePath = getDitaDir() + Constants.FILE_NAME_CATALOG;
 
-            Catalog catalog = catalogResolver.getCatalog();
+            final Catalog catalog = catalogResolver.getCatalog();
             try {
                 catalog.parseCatalog(catalogFilePath);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 logger.logException(e);
             }
         }

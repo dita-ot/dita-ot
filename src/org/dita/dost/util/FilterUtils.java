@@ -38,7 +38,7 @@ public final class FilterUtils {
 	 * Set the filter map.
 	 * @param filtermap The filterMap to set.
 	 */
-	public static void setFilterMap(HashMap<String, String> filtermap) {
+	public static void setFilterMap(final HashMap<String, String> filtermap) {
 		FilterUtils.filterMap = filtermap;
 	}
 	
@@ -57,7 +57,7 @@ public final class FilterUtils {
 	 * @return true if any one of attributes 'audience', 'platform', 
 	 * 'product', 'otherprops' was excluded.
 	 */
-	public static boolean needExclude(Attributes atts, String extProps) {
+	public static boolean needExclude(final Attributes atts, final String extProps) {
 		boolean ret = false;
 		boolean extRet = false;
 		StringTokenizer prop = null;
@@ -113,8 +113,9 @@ public final class FilterUtils {
 							|| attrPropsValue.indexOf(new StringBuffer(Constants.STRING_BLANK+propName).append("(").toString(), 0)!=-1){
 						propStart = attrPropsValue.indexOf(new StringBuffer(propName).append("(").toString());
 					}
-					if(propStart!=-1)
-						propStart=propStart+ propName.length() + 1;
+					if(propStart!=-1) {
+                        propStart=propStart+ propName.length() + 1;
+                    }
 					propEnd = attrPropsValue.indexOf(")", propStart);
 					if (propStart != -1 && propEnd != -1){
 						propValue = attrPropsValue.substring(propStart, propEnd).trim();
@@ -135,7 +136,7 @@ public final class FilterUtils {
 	 * @param attValue
 	 * @return
 	 */
-	private static boolean extCheckExclude(List<String> propList, String attValue){
+	private static boolean extCheckExclude(final List<String> propList, final String attValue){
 		int propListIndex = 0;
 		boolean hasNullAction = false;
 		boolean hasExcludeAction = false;
@@ -156,14 +157,14 @@ public final class FilterUtils {
 
 			attName = (String)propList.get(propListIndex);
 			while (tokenizer.hasMoreTokens()) {
-				String attSubValue = tokenizer.nextToken();
-				String filterKey = new StringBuffer().append(attName).append(
+				final String attSubValue = tokenizer.nextToken();
+				final String filterKey = new StringBuffer().append(attName).append(
 						Constants.EQUAL).append(attSubValue).toString();
-				String filterAction = (String) filterMap.get(filterKey);
+				final String filterAction = (String) filterMap.get(filterKey);
 				// no action will be considered as 'not exclude'
 				if (filterAction == null) {
 					//check Specified DefaultAction mapping this attribute's name
-					String attDefaultAction=(String) filterMap.get(attName);
+					final String attDefaultAction=(String) filterMap.get(attName);
 					if(attDefaultAction!=null){
 						//filterAction=attDefaultAction;
 						if(!Constants.FILTER_ACTION_EXCLUDE.equalsIgnoreCase(attDefaultAction)){
@@ -171,26 +172,30 @@ public final class FilterUtils {
 						}else{
 							hasExcludeAction=true;
 							if(hasNullAction==true){
-								if (checkExcludeOfGlobalDefaultAction()==true)
-									hasNullAction=false;
-								else 
-									return false;
+								if (checkExcludeOfGlobalDefaultAction()==true) {
+                                    hasNullAction=false;
+                                } else {
+                                    return false;
+                                }
 							}
 						}
 					}else{
 						if(hasExcludeAction==true){
-							if (checkExcludeOfGlobalDefaultAction()==false)
-								return false;
-						}else
-							hasNullAction=true;
+							if (checkExcludeOfGlobalDefaultAction()==false) {
+                                return false;
+                            }
+						} else {
+                            hasNullAction=true;
+                        }
 					}
 				}else if (Constants.FILTER_ACTION_EXCLUDE.equalsIgnoreCase(filterAction)) {
 					hasExcludeAction = true;
 					if(hasNullAction==true){
-						if (checkExcludeOfGlobalDefaultAction()==true)
-							hasNullAction=false;
-						else 
-							return false;
+						if (checkExcludeOfGlobalDefaultAction()==true) {
+                            hasNullAction=false;
+                        } else {
+                            return false;
+                        }
 					}
 				}else{
 					return false;
@@ -230,7 +235,7 @@ public final class FilterUtils {
 	 * @param attValue
 	 * @return
 	 */
-	private static boolean checkExclude(String attName, String attValue) {
+	private static boolean checkExclude(final String attName, final String attValue) {
 		StringTokenizer tokenizer;
 		
 		//for the special value :"" or " ",just ignore it
@@ -247,8 +252,8 @@ public final class FilterUtils {
 		tokenizer = new StringTokenizer(attValue,
 				Constants.STRING_BLANK);
 		while (tokenizer.hasMoreTokens()) {
-			String attSubValue = tokenizer.nextToken();
-			String filterKey = new StringBuffer().append(attName).append(
+			final String attSubValue = tokenizer.nextToken();
+			final String filterKey = new StringBuffer().append(attName).append(
 					Constants.EQUAL).append(attSubValue).toString();
 			String filterAction = (String) filterMap.get(filterKey);
 
@@ -256,15 +261,16 @@ public final class FilterUtils {
 			//if default action does not exists ,considered as "not exclude"
 			if (filterAction == null) {
 				//check Specified DefaultAction mapping this attribute's name
-				String attDefaultAction=(String) filterMap.get(attName);
+				final String attDefaultAction=(String) filterMap.get(attName);
 				if(attDefaultAction!=null){
 					filterAction=attDefaultAction;
 					if(!Constants.FILTER_ACTION_EXCLUDE.equalsIgnoreCase(attDefaultAction)){
 						return false;
 					}	
 				}else{
-					if(checkExcludeOfGlobalDefaultAction()==false)
-						return false;
+					if(checkExcludeOfGlobalDefaultAction()==false) {
+                        return false;
+                    }
 				}
 			}
 			// action is case insensitive
@@ -277,17 +283,18 @@ public final class FilterUtils {
 		return true;
 	}
 	private static boolean checkExcludeOfGlobalDefaultAction(){
-		String defaultAction=(String) filterMap.get(Constants.DEFAULT_ACTION);
-		if(defaultAction==null)
-			return false;
-		else {
-			if(!Constants.FILTER_ACTION_EXCLUDE.equalsIgnoreCase(defaultAction))
-				return false;	
-			else 
-				return true;
+		final String defaultAction=(String) filterMap.get(Constants.DEFAULT_ACTION);
+		if(defaultAction==null) {
+            return false;
+        } else {
+			if(!Constants.FILTER_ACTION_EXCLUDE.equalsIgnoreCase(defaultAction)) {
+                return false;
+            } else {
+                return true;
+            }
 		}
 	}
-	private static void checkRuleMapping(String attName, String attValue){
+	private static void checkRuleMapping(final String attName, final String attValue){
 		StringTokenizer tokenizer;
 		if (attValue == null || attValue.trim().length()==0 ) {
 			return ;
@@ -295,27 +302,27 @@ public final class FilterUtils {
 		tokenizer = new StringTokenizer(attValue,
 				Constants.STRING_BLANK);
 		while (tokenizer.hasMoreTokens()) {
-			String attSubValue = tokenizer.nextToken();
-			String filterKey = new StringBuffer().append(attName).append(
+			final String attSubValue = tokenizer.nextToken();
+			final String filterKey = new StringBuffer().append(attName).append(
 					Constants.EQUAL).append(attSubValue).toString();
-			String filterAction = (String) filterMap.get(filterKey);
+			final String filterAction = (String) filterMap.get(filterKey);
 			if(filterAction==null){
 				noRuleMapping(filterKey);
 			}
 		}
 	}
-	private static void noRuleMapping(String notMappingKey){
+	private static void noRuleMapping(final String notMappingKey){
 		if(!alreadyShowed(notMappingKey)){
 			showInfoOfNoRuleMapping(notMappingKey);
 		}
 	}
-	private static void showInfoOfNoRuleMapping(String notMappingKey){
-		Properties prop=new Properties();
+	private static void showInfoOfNoRuleMapping(final String notMappingKey){
+		final Properties prop=new Properties();
 		prop.put("%1", notMappingKey);
-		DITAOTJavaLogger javaLogger=new DITAOTJavaLogger();
+		final DITAOTJavaLogger javaLogger=new DITAOTJavaLogger();
 		javaLogger.logInfo(MessageUtils.getMessage("DOTJ031I", prop).toString());
 	}
-	private static boolean alreadyShowed(String notMappingKey){
+	private static boolean alreadyShowed(final String notMappingKey){
 		if(!notMappingRules.contains(notMappingKey)){
 			notMappingRules.add(notMappingKey);
 			return false;

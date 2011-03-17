@@ -53,7 +53,7 @@ public final class OutputUtils {
 	 * Set the outercontrol.
 	 * @param control control
 	 */	
-	public static void setOutterControl(String control){
+	public static void setOutterControl(final String control){
 		if(OUTTERCONTROL_FAIL.equalsIgnoreCase(control)){
 			outercontrol=OUTTERCONTROL_FAIL;
 			return;
@@ -78,7 +78,7 @@ public final class OutputUtils {
 	 * Set the onlytopicinmap.
 	 * @param flag onlytopicinmap flag
 	 */
-	public static void setOnlyTopicInMap(String flag){
+	public static void setOnlyTopicInMap(final String flag){
 		if("true".equalsIgnoreCase(flag)){
 			onlytopicinmap=true;
 		}else{
@@ -98,7 +98,7 @@ public final class OutputUtils {
 	 * Set the generatecopyouter.
 	 * @param flag generatecopyouter flag
 	 */
-	public static void setGeneratecopyouter(String flag){
+	public static void setGeneratecopyouter(final String flag){
 		if("2".equals(flag)){
 			generatecopyouter=GENERATEOUTTER;
 			return;
@@ -121,7 +121,7 @@ public final class OutputUtils {
 	 * Set output dir.
 	 * @param outputDir output dir
 	 */
-	public static void setOutputDir(String outputDir){
+	public static void setOutputDir(final String outputDir){
 		OutputDir=outputDir;
 	}
 	/**
@@ -135,7 +135,7 @@ public final class OutputUtils {
 	 * Set input map path.
 	 * @param inputMapDir input map path
 	 */
-	public static void setInputMapPathName(String inputMapDir){
+	public static void setInputMapPathName(final String inputMapDir){
 		InputMapDir=inputMapDir;
 	}
 }

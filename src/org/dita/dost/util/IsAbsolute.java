@@ -34,7 +34,7 @@ public final class IsAbsolute implements Condition {
 	 * Set the path.
 	 * @param pth The path to set.
 	 */
-	public void setPath(String pth) {
+	public void setPath(final String pth) {
 		this.path = pth;
 	}
 	

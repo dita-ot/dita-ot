@@ -37,12 +37,12 @@ public final class StyleUtils {
 	}
 	
 	//check hi-d style name
-	public static String insertHiStyleName(String styleName){
-		for(String item : hiStyleNameList){
+	public static String insertHiStyleName(final String styleName){
+		for(final String item : hiStyleNameList){
 			if(item.length() == styleName.length()){
 				//sort strings to remove order effect
-				String cp1 = sort(item);
-				String cp2 = sort(styleName);
+				final String cp1 = sort(item);
+				final String cp2 = sort(styleName);
 				
 				if(cp1.equals(cp2)){
 					return "true";
@@ -59,13 +59,13 @@ public final class StyleUtils {
 		return "false";
 	}
 	//get hi-d style name
-	public static String getHiStyleName(String styleName){
-		for(String item : hiStyleNameList){
+	public static String getHiStyleName(final String styleName){
+		for(final String item : hiStyleNameList){
 			
 			if(item.length() == styleName.length()){
 				//sort strings to remove order effect
-				String cp1 = sort(item);
-				String cp2 = sort(styleName);
+				final String cp1 = sort(item);
+				final String cp2 = sort(styleName);
 				
 				if(cp1.equals(cp2)){
 					return item;
@@ -82,13 +82,13 @@ public final class StyleUtils {
 		return styleName;
 	}
 	//sort string for compare.
-	private static String sort(String item) {
+	private static String sort(final String item) {
 		
-		char[] chars = item.toCharArray();
+		final char[] chars = item.toCharArray();
 		for(int i = 1; i < chars.length ; i++){
 			for(int j = 0; j < chars.length - 1 ; j++){
 				if(chars[j] > chars[j+1]){
-					char temp = chars[j];
+					final char temp = chars[j];
 					chars[j] = chars[j+1];
 					chars[j+1] = temp;
 				}
@@ -99,13 +99,13 @@ public final class StyleUtils {
 		
 	}
 	//store flagging style name
-	public static String insertFlagStyleName(String styleName){
+	public static String insertFlagStyleName(final String styleName){
 		flagStyleNameMap.put(styleName, styleName);
 		
 		return styleName;
 	}
 	//get flagging style name
-	public static String getFlagStyleName(String flagStyleName){
+	public static String getFlagStyleName(final String flagStyleName){
 		
 		if(flagStyleNameMap.containsKey(flagStyleName)){
 			return flagStyleNameMap.get(flagStyleName);
@@ -118,9 +118,9 @@ public final class StyleUtils {
 	//keyword colors:
 	//aqua, black, blue, fuchsia, gray, green, lime, maroon, 
 	//navy, olive, purple, red, silver, teal, white, and yellow
-	public static String getColor(String colorName){
+	public static String getColor(final String colorName){
 				
-				Map<String, String> colorMap = new HashMap<String, String>();
+				final Map<String, String> colorMap = new HashMap<String, String>();
 				//Store all css colors
 				colorMap.put("aliceblue", "f0f8ff");     
 				colorMap.put("antiquewhite",  "#faebd7");;     
@@ -263,7 +263,7 @@ public final class StyleUtils {
 				colorMap.put("yellow",   "#ffff00");     
 				colorMap.put("yellowgreen",  "#9acd32");
 				
-				String key = colorName.toLowerCase();
+				final String key = colorName.toLowerCase();
 				if(colorMap.containsKey(key)){
 					return colorMap.get(key);
 				}else if(key.startsWith(Constants.SHARP)){

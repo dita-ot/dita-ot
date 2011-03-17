@@ -47,14 +47,14 @@ public final class ImgUtils {
 	 * @return int -
 	 * 				The width of the picture in pixels.
 	 */
-	public static int getWidth (String dirName, String fileName){
-		DITAOTJavaLogger logger = new DITAOTJavaLogger();
-		File imgInput = new File(dirName+File.separatorChar+fileName);
+	public static int getWidth (final String dirName, final String fileName){
+		final DITAOTJavaLogger logger = new DITAOTJavaLogger();
+		final File imgInput = new File(dirName+File.separatorChar+fileName);
 		try {
-			BufferedImage img = ImageIO.read(imgInput);
+			final BufferedImage img = ImageIO.read(imgInput);
 			return img.getWidth();
-		}catch (Exception e){
-			Properties prop = new Properties();
+		}catch (final Exception e){
+			final Properties prop = new Properties();
         	prop.put("%1", dirName+File.separatorChar+fileName);
 			logger.logError(MessageUtils.getMessage("DOTJ021E", prop).toString());
 			logger.logException(e);
@@ -72,14 +72,14 @@ public final class ImgUtils {
 	 * @return int -
 	 * 				The height of the picture in pixels.
 	 */
-	public static int getHeight (String dirName, String fileName){
-		DITAOTJavaLogger logger = new DITAOTJavaLogger();
-		File imgInput = new File(dirName+File.separatorChar+fileName);
+	public static int getHeight (final String dirName, final String fileName){
+		final DITAOTJavaLogger logger = new DITAOTJavaLogger();
+		final File imgInput = new File(dirName+File.separatorChar+fileName);
 		try {
-			BufferedImage img = ImageIO.read(imgInput);
+			final BufferedImage img = ImageIO.read(imgInput);
 			return img.getHeight();
-		}catch (Exception e){
-			Properties prop = new Properties();
+		}catch (final Exception e){
+			final Properties prop = new Properties();
         	prop.put("%1", dirName+File.separatorChar+fileName);
 			logger.logError(MessageUtils.getMessage("DOTJ023E", prop).toString());
 			logger.logException(e);
@@ -97,14 +97,14 @@ public final class ImgUtils {
 	 * @return int -
 	 * 				The width of the picture in pixels.
 	 */
-	public static int getWidthODT (String dirName, String fileName){
-		DITAOTJavaLogger logger = new DITAOTJavaLogger();
-		File imgInput = new File(dirName+File.separatorChar+fileName);
+	public static int getWidthODT (final String dirName, final String fileName){
+		final DITAOTJavaLogger logger = new DITAOTJavaLogger();
+		final File imgInput = new File(dirName+File.separatorChar+fileName);
 		try {
-			BufferedImage img = ImageIO.read(imgInput);
+			final BufferedImage img = ImageIO.read(imgInput);
 			return img.getWidth();
-		}catch (Exception e){
-			Properties prop = new Properties();
+		}catch (final Exception e){
+			final Properties prop = new Properties();
 			prop.put("%1", dirName+File.separatorChar+fileName);
 			logger.logError(MessageUtils.getMessage("DOTJ021E", prop).toString());
 			logger.logException(e);
@@ -122,14 +122,14 @@ public final class ImgUtils {
 	 * @return int -
 	 * 				The height of the picture in pixels.
 	 */
-	public static int getHeightODT (String dirName, String fileName){
-		DITAOTJavaLogger logger = new DITAOTJavaLogger();
-		File imgInput = new File(dirName+File.separatorChar+fileName);
+	public static int getHeightODT (final String dirName, final String fileName){
+		final DITAOTJavaLogger logger = new DITAOTJavaLogger();
+		final File imgInput = new File(dirName+File.separatorChar+fileName);
 		try {
-			BufferedImage img = ImageIO.read(imgInput);
+			final BufferedImage img = ImageIO.read(imgInput);
 			return img.getHeight();
-		}catch (Exception e){
-			Properties prop = new Properties();
+		}catch (final Exception e){
+			final Properties prop = new Properties();
 			prop.put("%1", dirName+File.separatorChar+fileName);
 			logger.logError(MessageUtils.getMessage("DOTJ021E", prop).toString());
 			logger.logException(e);
@@ -147,14 +147,14 @@ public final class ImgUtils {
 	 * @return java.lang.String -
 	 * 				The Hexical binary of image data converted to String.
 	 */
-	public static String getBinData (String dirName, String fileName){
-		DITAOTJavaLogger logger = new DITAOTJavaLogger();
-		File imgInput = new File(dirName+File.separatorChar+fileName);
+	public static String getBinData (final String dirName, final String fileName){
+		final DITAOTJavaLogger logger = new DITAOTJavaLogger();
+		final File imgInput = new File(dirName+File.separatorChar+fileName);
 		FileInputStream binInput = null;
 		int bin;
 		try{
 			String binStr = null;
-			StringBuffer ret = new StringBuffer(Constants.INT_16*Constants.INT_1024);
+			final StringBuffer ret = new StringBuffer(Constants.INT_16*Constants.INT_1024);
 			binInput = new FileInputStream(imgInput);
 			bin = binInput.read();
 			while (bin != -1){
@@ -166,14 +166,14 @@ public final class ImgUtils {
 				bin = binInput.read();
 			}
 			return ret.toString();
-		}catch (Exception e){
+		}catch (final Exception e){
 			logger.logError(MessageUtils.getMessage("DOTJ021E").toString());
 			logger.logException(e);
 			return null;
 		}finally{
 			try{
 				binInput.close();
-			}catch(IOException ioe){
+			}catch(final IOException ioe){
 				logger.logException(ioe);
 			}
 		}
@@ -187,31 +187,31 @@ public final class ImgUtils {
 	 * 				The file name of the image file.
 	 * @return base64 encoded binary data.
 	 */
-	public static String getBASE64(String dirName, String fileName) {
-		DITAOTJavaLogger logger = new DITAOTJavaLogger();
-		File imgInput = new File(dirName+File.separatorChar+fileName);
+	public static String getBASE64(final String dirName, final String fileName) {
+		final DITAOTJavaLogger logger = new DITAOTJavaLogger();
+		final File imgInput = new File(dirName+File.separatorChar+fileName);
 		//BASE64Encoder encoder = new BASE64Encoder();
-		Base64 encoder = new Base64();
-		byte   buff[]=new   byte[(int)imgInput.length()];
+		final Base64 encoder = new Base64();
+		final byte   buff[]=new   byte[(int)imgInput.length()];
 		FileInputStream file = null;
 		try {
 			file = new FileInputStream(imgInput);
 			file.read(buff);
 			//String ret = encoder.encode(buff);
-			String ret = encoder.encodeToString(buff);
+			final String ret = encoder.encodeToString(buff);
 			return ret;
-		} catch (FileNotFoundException e) {
+		} catch (final FileNotFoundException e) {
 			logger.logError(MessageUtils.getMessage("DOTJ023E").toString());
 			logger.logException(e);
 			return null;
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			logger.logError(MessageUtils.getMessage("DOTJ023E").toString());
 			logger.logException(e);
 			return null;
 		}finally{
 			try{
 				file.close();
-			}catch(IOException ioe){
+			}catch(final IOException ioe){
 				logger.logException(ioe);
 			}
 		}
@@ -225,10 +225,10 @@ public final class ImgUtils {
 	 * @return int -
 	 * 				The type of the picture in RTF specification. (JPG or PNG)
 	 */
-	public static String getType (String fileName){
-		String name = fileName.toLowerCase();
-		DITAOTJavaLogger logger = new DITAOTJavaLogger();
-		Properties prop = new Properties();
+	public static String getType (final String fileName){
+		final String name = fileName.toLowerCase();
+		final DITAOTJavaLogger logger = new DITAOTJavaLogger();
+		final Properties prop = new Properties();
 		if (name.endsWith(".jpg")||name.endsWith(".jpeg")){
 			return "jpegblip";
 		}else if (name.endsWith(".gif")||name.endsWith(".png")){

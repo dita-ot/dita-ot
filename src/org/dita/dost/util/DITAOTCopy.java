@@ -27,7 +27,7 @@ public final class DITAOTCopy extends Task {
 	private String includes = null;
 	private String relativePaths = null;
 	private String destDir = null;  // the destination directory
-	private DITAOTJavaLogger logger = new DITAOTJavaLogger();
+	private final DITAOTJavaLogger logger = new DITAOTJavaLogger();
 	
 	/**
 	 * Default Constructor.
@@ -40,7 +40,7 @@ public final class DITAOTCopy extends Task {
 	 * Set the copy files.
 	 * @param incld The includes to set.
 	 */
-	public void setIncludes(String incld) {
+	public void setIncludes(final String incld) {
 		this.includes = incld;
 	}
 	
@@ -48,7 +48,7 @@ public final class DITAOTCopy extends Task {
      * Set the destination directory.
      * @param destdir the destination directory.
      */
-    public void setTodir(String destdir) {
+    public void setTodir(final String destdir) {
         this.destDir = destdir;
     }
     
@@ -56,7 +56,7 @@ public final class DITAOTCopy extends Task {
 	 * Set the relative path from output directory.
 	 * @param relPaths the relative path .
 	 */
-	public void setRelativePaths(String relPaths) {
+	public void setRelativePaths(final String relPaths) {
 		this.relativePaths = relPaths;
 	}
 
@@ -64,7 +64,7 @@ public final class DITAOTCopy extends Task {
 	 * @see org.apache.tools.ant.Task#execute()
 	 */
 	public void execute() throws BuildException {
-		FileUtils fileUitls = FileUtils.newFileUtils();
+		final FileUtils fileUitls = FileUtils.newFileUtils();
 		StringTokenizer tokenizer;
 		StringTokenizer pathTokenizer;
 		if (includes == null) {
@@ -74,13 +74,13 @@ public final class DITAOTCopy extends Task {
 		if (relativePaths == null) {
 			try {
 				while (tokenizer.hasMoreTokens()) {
-					File srcFile = new File(tokenizer.nextToken());
+					final File srcFile = new File(tokenizer.nextToken());
 					if (srcFile.exists()) {
-						File destFile = new File(destDir, srcFile.getName());
+						final File destFile = new File(destDir, srcFile.getName());
 						fileUitls.copyFile(srcFile, destFile);
 					}
 				}
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				logger.logException(e);
 			}
 		}else{
@@ -94,13 +94,13 @@ public final class DITAOTCopy extends Task {
 					if(destDir!=null && destDir.trim().length()>0){
 						realDest.append(destDir).append(File.separator).append(pathTokenizer.nextToken());
 					}
-					File srcFile = new File(tokenizer.nextToken());
+					final File srcFile = new File(tokenizer.nextToken());
 					if (srcFile.exists()) {
-						File destFile = new File(realDest.toString());
+						final File destFile = new File(realDest.toString());
 						fileUitls.copyFile(srcFile, destFile);
 					}
 				}
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				logger.logException(e);
 			}
 		}

@@ -17,8 +17,8 @@ import java.util.Date;
  */
 public final class TimingUtils {
 
-	public static String reportElapsedTime(Date startTime) {
-		long elapsedTime = Calendar.getInstance().getTime().getTime() - startTime.getTime();
+	public static String reportElapsedTime(final Date startTime) {
+		final long elapsedTime = Calendar.getInstance().getTime().getTime() - startTime.getTime();
 		if (elapsedTime < 500) {
 			return elapsedTime + " milliseconds";
 		} else if (elapsedTime < 60000) {

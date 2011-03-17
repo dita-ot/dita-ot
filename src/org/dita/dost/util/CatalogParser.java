@@ -25,12 +25,12 @@ import org.xml.sax.SAXException;
  */
 
 public final class CatalogParser implements ContentHandler{
-    private String catalogDir;
+    private final String catalogDir;
 
 
     private String dtdBase;
     private String schemaBase; 
-    private HashMap<String, String> map;
+    private final HashMap<String, String> map;
     
     /**
      * Automatically generated constructor: CatalogParser.
@@ -46,7 +46,7 @@ public final class CatalogParser implements ContentHandler{
      * @param catalogMap catalogMap
      * @param ditaDir ditaDir
      */
-    public CatalogParser(HashMap<String, String> catalogMap, String ditaDir) {
+    public CatalogParser(final HashMap<String, String> catalogMap, final String ditaDir) {
         map = catalogMap;
         catalogDir = ditaDir;
         dtdBase = null;
@@ -55,7 +55,7 @@ public final class CatalogParser implements ContentHandler{
     /** 
      * @see org.xml.sax.ContentHandler#characters(char[], int, int)
      */
-    public void characters(char[] ch, int start, int length)
+    public void characters(final char[] ch, final int start, final int length)
             throws SAXException {
     }
     
@@ -68,7 +68,7 @@ public final class CatalogParser implements ContentHandler{
     /** 
      * @see org.xml.sax.ContentHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
      */
-    public void endElement(String uri, String localName, String qName)
+    public void endElement(final String uri, final String localName, final String qName)
             throws SAXException {
         if ("group".equals(qName)){
             dtdBase = null;
@@ -78,32 +78,32 @@ public final class CatalogParser implements ContentHandler{
     /**
      * @see org.xml.sax.ContentHandler#endPrefixMapping(java.lang.String)
      */
-    public void endPrefixMapping(String prefix) throws SAXException {
+    public void endPrefixMapping(final String prefix) throws SAXException {
     }
     
     /**
      * @see org.xml.sax.ContentHandler#ignorableWhitespace(char[], int, int)
      */
-    public void ignorableWhitespace(char[] ch, int start, int length)
+    public void ignorableWhitespace(final char[] ch, final int start, final int length)
             throws SAXException {
     }
     
     /**
      * @see org.xml.sax.ContentHandler#processingInstruction(java.lang.String, java.lang.String)
      */
-    public void processingInstruction(String target, String data)
+    public void processingInstruction(final String target, final String data)
             throws SAXException {
     }
     
     /**
      * @see org.xml.sax.ContentHandler#setDocumentLocator(org.xml.sax.Locator)
      */
-    public void setDocumentLocator(Locator locator) {
+    public void setDocumentLocator(final Locator locator) {
     }
     /**
      * @see org.xml.sax.ContentHandler#skippedEntity(java.lang.String)
      */
-    public void skippedEntity(String name) throws SAXException {
+    public void skippedEntity(final String name) throws SAXException {
     }
     /**
      * @see org.xml.sax.ContentHandler#startDocument()
@@ -113,8 +113,8 @@ public final class CatalogParser implements ContentHandler{
     /**
      * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
      */
-    public void startElement(String uri, String localName, String qName,
-            Attributes atts) throws SAXException {
+    public void startElement(final String uri, final String localName, final String qName,
+            final Attributes atts) throws SAXException {
         /*if ("group".equals(qName)){
         	String xmlBase = atts.getValue("xml:base");
         	if(xmlBase!=null){
@@ -128,7 +128,7 @@ public final class CatalogParser implements ContentHandler{
         
         if ("public".equals(qName)){
         	
-        	String xmlBase = atts.getValue("xml:base");
+        	final String xmlBase = atts.getValue("xml:base");
         	if(xmlBase!=null){
         		if (xmlBase.indexOf("dtd")!=-1){
         			dtdBase = atts.getValue("xml:base");
@@ -141,7 +141,7 @@ public final class CatalogParser implements ContentHandler{
             map.put(atts.getValue("publicId"), absoluteLocalURI);
         }else if("system".equals(qName)){
         	
-        	String xmlBase = atts.getValue("xml:base");
+        	final String xmlBase = atts.getValue("xml:base");
         	if(xmlBase!=null){
         		if (xmlBase.indexOf("schema")!=-1){
         			schemaBase = atts.getValue("xml:base");
@@ -158,7 +158,7 @@ public final class CatalogParser implements ContentHandler{
     /**
      * @see org.xml.sax.ContentHandler#startPrefixMapping(java.lang.String, java.lang.String)
      */
-    public void startPrefixMapping(String prefix, String uri)
+    public void startPrefixMapping(final String prefix, final String uri)
             throws SAXException {
     }
 }

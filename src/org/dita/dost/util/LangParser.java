@@ -30,11 +30,11 @@ public final class LangParser extends DefaultHandler {
 	}
 	
 	@Override
-	public void startElement(String uri, String localName, String name,
-			Attributes attributes) throws SAXException {
+	public void startElement(final String uri, final String localName, final String name,
+			final Attributes attributes) throws SAXException {
         //String processedString;
-        String classAttr = attributes.getValue("class");
-        String langAttr = attributes.getValue("xml:lang");
+        final String classAttr = attributes.getValue("class");
+        final String langAttr = attributes.getValue("xml:lang");
 
         if(classAttr != null && langAttr != null) {
             if ((classAttr.indexOf(" map/map ") > -1) ||

@@ -49,8 +49,8 @@ public final class StringUtils {
 	 * @return java.lang.String
 	 */
 	@SuppressWarnings("rawtypes")
-    public static String assembleString(Collection coll, String delim) {
-		StringBuffer buff = new StringBuffer(Constants.INT_256);
+    public static String assembleString(final Collection coll, final String delim) {
+		final StringBuffer buff = new StringBuffer(Constants.INT_256);
 		Iterator iter = null;
 
 		if ((coll == null) || coll.isEmpty()) {
@@ -75,8 +75,8 @@ public final class StringUtils {
 	 * @param s value needed to be escaped
 	 * @return escaped value
 	 */
-	public static String escapeXML(String s){
-		char[] chars = s.toCharArray();
+	public static String escapeXML(final String s){
+		final char[] chars = s.toCharArray();
         return escapeXML(chars, 0, chars.length);
 	}
 	
@@ -88,12 +88,12 @@ public final class StringUtils {
 	 * @param length arrays lenth
 	 * @return escaped value
 	 */
-	public static String escapeXML(char[] chars, int offset, int length){
-		StringBuffer escaped = new StringBuffer();
+	public static String escapeXML(final char[] chars, final int offset, final int length){
+		final StringBuffer escaped = new StringBuffer();
 		
-        int end = offset + length;
+        final int end = offset + length;
         for (int i = offset; i < end; ++i) {
-            char c = chars[i];
+            final char c = chars[i];
 
             switch (c) {
             case '\'':
@@ -125,7 +125,7 @@ public final class StringUtils {
 	 * @param name entity name
 	 * @return entity
 	 */
-	public static String getEntity(String name) {
+	public static String getEntity(final String name) {
 	
 		return (name.startsWith("%")) ? (name + ";") : ("&" + name + ";");
 	}
@@ -136,7 +136,7 @@ public final class StringUtils {
 	 * @param name entity name
 	 * @return ture if this entity needs to be resolved
 	 */
-	public static boolean checkEntity(String name) {
+	public static boolean checkEntity(final String name) {
 		// check whether this entity need resolve
 		if (NOT_RESOLVE_ENTITY_LIST.indexOf(Constants.STICK + name.trim()
 				+ Constants.STICK) != -1 ||
@@ -164,7 +164,7 @@ public final class StringUtils {
 	 */
 	public static String replaceAll(final String input,
 			final String pattern, final String replacement) {
-		StringBuffer result = new StringBuffer();
+		final StringBuffer result = new StringBuffer();
 		int startIndex = 0;
 		int newIndex = 0;
 
@@ -184,14 +184,14 @@ public final class StringUtils {
 	 * @param inStr input string
 	 * @return asscii code
 	 */
-	public static String getAscii(String inStr){
-		byte [] input = inStr.getBytes();
+	public static String getAscii(final String inStr){
+		final byte [] input = inStr.getBytes();
 		/*byte [] output;
 		ByteArrayInputStream byteIS = new ByteArrayInputStream(input);
 		InputStreamReader reader = new InputStreamReader(byteIS,"UTF-8");
 		char [] cbuf = new char[Constants.INT_128];
 		int count = reader.read(cbuf);*/
-		StringBuffer ret = new StringBuffer(Constants.INT_1024);
+		final StringBuffer ret = new StringBuffer(Constants.INT_1024);
 		String strByte = null;
 		for(int i = 0; i < input.length; i++){
 			ret.append("\\\'");
@@ -219,8 +219,8 @@ public final class StringUtils {
 	 * @param domains input domain
 	 * @return prop
 	 */
-	public static String getExtProps (String domains){
-		StringBuffer propsBuffer = new StringBuffer();
+	public static String getExtProps (final String domains){
+		final StringBuffer propsBuffer = new StringBuffer();
     	int propsStart = domains.indexOf("a(props");
     	int propsEnd = domains.indexOf(")",propsStart);
     	while (propsStart != -1 && propsEnd != -1){
@@ -239,13 +239,13 @@ public final class StringUtils {
 	 * @param s input string
 	 * @return map created from string
 	 */
-	public static Map<String, String> restoreMap(String s) {
-		Map<String,String> copytoMap = new HashMap<String,String>();
-		StringTokenizer st = new StringTokenizer(s, Constants.COMMA);
+	public static Map<String, String> restoreMap(final String s) {
+		final Map<String,String> copytoMap = new HashMap<String,String>();
+		final StringTokenizer st = new StringTokenizer(s, Constants.COMMA);
 		
         while (st.hasMoreTokens()) {
-        	String entry = st.nextToken();
-        	int index = entry.indexOf('=');
+        	final String entry = st.nextToken();
+        	final int index = entry.indexOf('=');
         	copytoMap.put(entry.substring(0, index), entry.substring(index+1));
         }
         
@@ -257,7 +257,7 @@ public final class StringUtils {
 	 * @param s input string
 	 * @return string set
 	 */
-	public static Set<String> restoreSet(String s) {
+	public static Set<String> restoreSet(final String s) {
 		return restoreSet(s, Constants.COMMA);
 	}
 	
@@ -267,17 +267,17 @@ public final class StringUtils {
 	 * @param delim Delimiter to be used.
 	 * @return string set
 	 */
-	public static Set<String> restoreSet(String s, String delim) {
-		Set<String> copytoSet = new HashSet<String>();
+	public static Set<String> restoreSet(final String s, final String delim) {
+		final Set<String> copytoSet = new HashSet<String>();
 		
 		if (StringUtils.isEmptyString(s)) {
 			return copytoSet;
 		}
 		
-		StringTokenizer st = new StringTokenizer(s, delim);
+		final StringTokenizer st = new StringTokenizer(s, delim);
 		
 		while (st.hasMoreTokens()) {
-			String entry = st.nextToken();
+			final String entry = st.nextToken();
 			if (!StringUtils.isEmptyString(entry)) {
 				copytoSet.add(entry);
 			}
@@ -290,7 +290,7 @@ public final class StringUtils {
 	 * @param s input string
 	 * @return true if the string is null or ""
 	 */
-	public static boolean isEmptyString(String s){
+	public static boolean isEmptyString(final String s){
 		return (s == null || Constants.STRING_EMPTY.equals(s.trim()));
 	}
 	
@@ -302,7 +302,7 @@ public final class StringUtils {
 	 * @param withSpace whether insert a blank
 	 * @return processed string
 	 */
-	public static String setOrAppend(String target, String value, boolean withSpace){
+	public static String setOrAppend(final String target, final String value, final boolean withSpace){
 		if(target == null){
 			return value;
 		}if(value == null){
@@ -324,22 +324,22 @@ public final class StringUtils {
 	@Deprecated
 	public static void initSaxDriver(){
 		//The default sax driver is set to xerces's sax driver
-		DITAOTJavaLogger logger = new DITAOTJavaLogger();
+		final DITAOTJavaLogger logger = new DITAOTJavaLogger();
 		try {
 			Class.forName(Constants.SAX_DRIVER_DEFAULT_CLASS);
 			System.setProperty(Constants.SAX_DRIVER_PROPERTY,Constants.SAX_DRIVER_DEFAULT_CLASS);
 			logger.logInfo("Using XERCES.");
-		} catch (ClassNotFoundException e){
+		} catch (final ClassNotFoundException e){
 			try{
 				Class.forName(Constants.SAX_DRIVER_SUN_HACK_CLASS);
 				System.setProperty(Constants.SAX_DRIVER_PROPERTY,Constants.SAX_DRIVER_SUN_HACK_CLASS);
 				logger.logInfo("Using XERCES in SUN JDK 1.5");
-			}catch (ClassNotFoundException ex){
+			}catch (final ClassNotFoundException ex){
 				try {
 					Class.forName(Constants.SAX_DRIVER_CRIMSON_CLASS);
 					System.setProperty(Constants.SAX_DRIVER_PROPERTY,Constants.SAX_DRIVER_CRIMSON_CLASS);
 					logger.logInfo("Using CRIMSON");
-				}catch (ClassNotFoundException exc){
+				}catch (final ClassNotFoundException exc){
 					logger.logException(e);
 					logger.logException(ex);
 					logger.logException(exc);
@@ -370,15 +370,15 @@ public final class StringUtils {
         try {
             Class.forName(Constants.SAX_DRIVER_DEFAULT_CLASS);
             return XMLReaderFactory.createXMLReader(Constants.SAX_DRIVER_DEFAULT_CLASS);
-        } catch (ClassNotFoundException e) {
+        } catch (final ClassNotFoundException e) {
             try {
                 Class.forName(Constants.SAX_DRIVER_SUN_HACK_CLASS);
                 return XMLReaderFactory.createXMLReader(Constants.SAX_DRIVER_SUN_HACK_CLASS);
-            } catch (ClassNotFoundException ex) {
+            } catch (final ClassNotFoundException ex) {
                 try {
                     Class.forName(Constants.SAX_DRIVER_CRIMSON_CLASS);
                     return XMLReaderFactory.createXMLReader(Constants.SAX_DRIVER_CRIMSON_CLASS);
-                } catch (ClassNotFoundException exc){
+                } catch (final ClassNotFoundException exc){
                     return XMLReaderFactory.createXMLReader();
                 }
             }
@@ -391,7 +391,7 @@ public final class StringUtils {
 		 * @return locale
 		 */
 	
-		public static Locale getLocale(String anEncoding){
+		public static Locale getLocale(final String anEncoding){
 			Locale aLocale = null;
 			String country = null;
 			String language = null;
@@ -399,13 +399,13 @@ public final class StringUtils {
 			
 			//Tokenize the string using "-" as the token string as per IETF RFC4646 (superceeds RFC3066).
 			
-			StringTokenizer tokenizer = new StringTokenizer(anEncoding, "-");
+			final StringTokenizer tokenizer = new StringTokenizer(anEncoding, "-");
 			
 			//We need to know how many tokens we have so we can create a Locale object with the proper constructor.
-			int numberOfTokens = tokenizer.countTokens();
+			final int numberOfTokens = tokenizer.countTokens();
 			
 			if (numberOfTokens == 1) { 
-				String tempString = tokenizer.nextToken().toLowerCase();
+				final String tempString = tokenizer.nextToken().toLowerCase();
 				
 				//Note: Newer XML parsers should throw an error if the xml:lang value contains 
 				//underscore. But this is not guaranteed.
@@ -413,7 +413,7 @@ public final class StringUtils {
 				//Check to see if some one used "en_US" instead of "en-US".  
 				//If so, the first token will contain "en_US" or "xxx_YYYYYYYY". In this case,
 				//we will only grab the value for xxx. 
-				int underscoreIndex = tempString.indexOf("_");
+				final int underscoreIndex = tempString.indexOf("_");
 				
 				if (underscoreIndex == -1){
 					language = tempString;
@@ -427,7 +427,7 @@ public final class StringUtils {
 				
 				language = tokenizer.nextToken().toLowerCase();
 				
-				String subtag2 = tokenizer.nextToken();
+				final String subtag2 = tokenizer.nextToken();
 				//All country tags should be three characters or less.  
 				//If the subtag is longer than three characters, it assumes that 
 				//is a dialect or variant. 
@@ -446,7 +446,7 @@ public final class StringUtils {
 			} else if (numberOfTokens >= 3) {
 				
 				language = tokenizer.nextToken().toLowerCase();
-				String subtag2 = tokenizer.nextToken();
+				final String subtag2 = tokenizer.nextToken();
 				if (subtag2.length() <= 3){
 					country = subtag2.toUpperCase();
 				}else if (subtag2.length() > 3 && subtag2.length() <= 8){
@@ -476,8 +476,8 @@ public final class StringUtils {
 		 * @param marker delimiter
 		 * @return file's main name 
 		 */
-		public static String getFileName(String input, String marker){
-			int index = input.lastIndexOf(marker);
+		public static String getFileName(final String input, final String marker){
+			final int index = input.lastIndexOf(marker);
 			if(index != -1){
 				return input.substring(0, index);
 			}else{
@@ -489,15 +489,15 @@ public final class StringUtils {
 		/**
 		 * Get max value.
 		 */
-		public static Integer getMax(String ul_depth, String ol_depth, String sl_depth, 
-				String dl_depth, String table_depth, String stable_depth){
+		public static Integer getMax(final String ul_depth, final String ol_depth, final String sl_depth, 
+				final String dl_depth, final String table_depth, final String stable_depth){
 			
-			int unDepth = Integer.parseInt(ul_depth);
-			int olDepth = Integer.parseInt(ol_depth);
-			int slDepth = Integer.parseInt(sl_depth);
-			int dlDepth = Integer.parseInt(dl_depth);
-			int tableDepth = Integer.parseInt(table_depth);
-			int stableDepth = Integer.parseInt(stable_depth);
+			final int unDepth = Integer.parseInt(ul_depth);
+			final int olDepth = Integer.parseInt(ol_depth);
+			final int slDepth = Integer.parseInt(sl_depth);
+			final int dlDepth = Integer.parseInt(dl_depth);
+			final int tableDepth = Integer.parseInt(table_depth);
+			final int stableDepth = Integer.parseInt(stable_depth);
 			
 			int max = unDepth;
 			if(olDepth > max){
@@ -523,13 +523,13 @@ public final class StringUtils {
 		/**
 		 * Get max value.
 		 */
-		public static Integer getMax(String fn_depth, String list_depth, String dlist_depth, String table_depth, String stable_depth){
+		public static Integer getMax(final String fn_depth, final String list_depth, final String dlist_depth, final String table_depth, final String stable_depth){
 			
-			int fnDepth = Integer.parseInt(fn_depth);
-			int listDepth = Integer.parseInt(list_depth);
-			int dlistDepth = Integer.parseInt(dlist_depth);
-			int tableDepth = Integer.parseInt(table_depth);
-			int stableDepth = Integer.parseInt(stable_depth);
+			final int fnDepth = Integer.parseInt(fn_depth);
+			final int listDepth = Integer.parseInt(list_depth);
+			final int dlistDepth = Integer.parseInt(dlist_depth);
+			final int tableDepth = Integer.parseInt(table_depth);
+			final int stableDepth = Integer.parseInt(stable_depth);
 			
 			int max = fnDepth;
 			if(listDepth > max){

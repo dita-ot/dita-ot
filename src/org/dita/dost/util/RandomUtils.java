@@ -32,7 +32,7 @@ public final class RandomUtils {
 	 * 				Long random integer generated.
 	 */
 	public static long getRandomNum(){
-		Random generator = new Random();
+		final Random generator = new Random();
 		return generator.nextLong();
 	}
 }

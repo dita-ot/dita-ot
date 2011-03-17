@@ -52,7 +52,7 @@ public final class FileUtils {
 		//BufferedInputStream configurationInputStream = null;
 		InputStream configurationInputStream = null;
 		try {			
-			 ClassLoader loader = FileUtils.class.getClassLoader();
+			 final ClassLoader loader = FileUtils.class.getClassLoader();
 			 configurationInputStream =loader.getResourceAsStream(Constants.CONF_PROPERTIES);
 			 if (configurationInputStream != null) {
 			 		 configuration.load(configurationInputStream);
@@ -60,9 +60,10 @@ public final class FileUtils {
 			 		//System.out.println("Supported image ext:" +configuration.getProperty(Constants.CONF_SUPPORTED_IMAGE_EXTENSIONS));
 			 } else {
 				 //try to find the configuration file from the lib folder from current working dir
-				 File configurationFile = new File("lib"+ File.separator + Constants.CONF_PROPERTIES);
-				 if(configurationFile.exists()) 
-					 	configurationInputStream = new BufferedInputStream(new FileInputStream(configurationFile));
+				 final File configurationFile = new File("lib"+ File.separator + Constants.CONF_PROPERTIES);
+				 if(configurationFile.exists()) {
+                    configurationInputStream = new BufferedInputStream(new FileInputStream(configurationFile));
+                }
 				 
 				 if (configurationInputStream != null) {
 						configuration.load(configurationInputStream); 
@@ -70,13 +71,13 @@ public final class FileUtils {
 			 }
 			 
 
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			logger.logException(e);
 		} finally {
 			if (configurationInputStream != null) {
 				try {
 					configurationInputStream.close();
-				} catch (IOException ex) {
+				} catch (final IOException ex) {
 					logger.logException(ex);
 				}
 			}
@@ -125,7 +126,7 @@ public final class FileUtils {
 	 * @param lcasefn file name
 	 * @return true if is html file and false otherwise
 	 */
-	public static boolean isHTMLFile(String lcasefn) {
+	public static boolean isHTMLFile(final String lcasefn) {
 		return (lcasefn.endsWith(Constants.FILE_EXTENSION_HTML) || lcasefn
 				.endsWith(Constants.FILE_EXTENSION_HTM));
 	}
@@ -134,7 +135,7 @@ public final class FileUtils {
 	 * @param lcasefn file name
 	 * @return true if is hhp file and false otherwise
 	 */
-	public static boolean isHHPFile(String lcasefn) {
+	public static boolean isHHPFile(final String lcasefn) {
 		return (lcasefn.endsWith(Constants.FILE_EXTENSION_HHP));
 	}
 	/**
@@ -142,7 +143,7 @@ public final class FileUtils {
 	 * @param lcasefn file name
 	 * @return true if is hhc file and false otherwise
 	 */
-	public static boolean isHHCFile(String lcasefn) {
+	public static boolean isHHCFile(final String lcasefn) {
 		return (lcasefn.endsWith(Constants.FILE_EXTENSION_HHC));
 	}
 	/**
@@ -150,7 +151,7 @@ public final class FileUtils {
 	 * @param lcasefn file name
 	 * @return true if is hhk file and false otherwise
 	 */
-	public static boolean isHHKFile(String lcasefn) {
+	public static boolean isHHKFile(final String lcasefn) {
 		return (lcasefn.endsWith(Constants.FILE_EXTENSION_HHK));
 	}
 	
@@ -162,7 +163,7 @@ public final class FileUtils {
 	 * @return <code>TRUE</code> if lcasefn contains an extension of "pdf",
 	 *         <code>FALSE</code> otherwise.
 	 */
-	public static boolean isPDFFile(String lcasefn) {
+	public static boolean isPDFFile(final String lcasefn) {
 		return (lcasefn.endsWith(Constants.FILE_EXTENSION_PDF));
 	}
 	
@@ -173,7 +174,7 @@ public final class FileUtils {
 	 * @return <code>TRUE</code> if lcasefn contains an extension of "swf",
 	 *         <code>FALSE</code> otherwise.
 	 */
-	public static boolean isSWFile(String lcasefn) {
+	public static boolean isSWFile(final String lcasefn) {
 		return (lcasefn.endsWith(Constants.FILE_EXTENSION_SWF));
 	}
 	//Added by William on 2009-10-10 for resources bug:2873560 end
@@ -184,8 +185,9 @@ public final class FileUtils {
 	 * @return ture if is DITA file and false otherwise
 	 */
 	public static boolean isDITAFile(String lcasefn) {
-		if(lcasefn == null)
-			return false;
+		if(lcasefn == null) {
+            return false;
+        }
 		if (lcasefn.contains(Constants.SHARP)){
 			lcasefn = lcasefn.substring(0, lcasefn.indexOf(Constants.SHARP));
 		}
@@ -198,7 +200,7 @@ public final class FileUtils {
 	 * @param lcasefn file name
 	 * @return true if is dita file and false otherwise
 	 */
-	public static boolean isDITATopicFile(String lcasefn) {
+	public static boolean isDITATopicFile(final String lcasefn) {
 		return lcasefn.endsWith(Constants.FILE_EXTENSION_DITA)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_XML);
 	}
@@ -208,7 +210,7 @@ public final class FileUtils {
 	 * @param lcasefn file name
 	 * @return true if is ditamap file and false otherwise
 	 */
-	public static boolean isDITAMapFile(String lcasefn) {
+	public static boolean isDITAMapFile(final String lcasefn) {
 		return lcasefn.endsWith(Constants.FILE_EXTENSION_DITAMAP);
 	}
 
@@ -217,7 +219,7 @@ public final class FileUtils {
 	 * @param lcasefn filename
 	 * @return true if is supported image and false otherwise
 	 */
-	public static boolean isSupportedImageFile(String lcasefn) {
+	public static boolean isSupportedImageFile(final String lcasefn) {
 		
 		// Modified on 2010-11-09 for bug 3102827: Allow a way to specify recognized image extensions -- start	
 		/*return lcasefn.endsWith(Constants.FILE_EXTENSION_JPG)
@@ -229,7 +231,7 @@ public final class FileUtils {
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_TIFF)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_TIF);*/
 		
-		for (String ext: supportedImageExtensions) {
+		for (final String ext: supportedImageExtensions) {
 			if (lcasefn.endsWith(ext)) {
 				return true;
 			}
@@ -243,7 +245,7 @@ public final class FileUtils {
 	 * @param lcasefn filename
 	 * @return true if is topic file and false otherwise
 	 */
-	public static boolean isTopicFile(String lcasefn) {
+	public static boolean isTopicFile(final String lcasefn) {
 		if(StringUtils.isEmptyString(lcasefn)){
 			return false;
 		}
@@ -256,7 +258,7 @@ public final class FileUtils {
 	 * @param lcasefn filename
 	 * @return true is the target is valid and false otherwise
 	 */
-	public static boolean isValidTarget(String lcasefn) {
+	public static boolean isValidTarget(final String lcasefn) {
 		/*		DITA-OT can support space in file names from 6.5 2008
  * 		if(lcasefn.indexOf(Constants.STRING_BLANK)!=-1){
 			params.put("%1", lcasefn);
@@ -280,7 +282,7 @@ public final class FileUtils {
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_PDF)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_SWF);*/
 		
-		for (String ext: supportedExtensions) {
+		for (final String ext: supportedExtensions) {
 			if (lcasefn.endsWith(ext)) {
 				return true;
 			}
@@ -296,23 +298,23 @@ public final class FileUtils {
 	 * @param topicFilePathName topic file with file path
 	 * @return relative path
 	 */
-	public static String getRelativePathFromMap(String mapFilePathName,
-			String topicFilePathName) {
-		StringBuffer upPathBuffer = new StringBuffer(Constants.INT_128);
-		StringBuffer downPathBuffer = new StringBuffer(Constants.INT_128);
-		StringTokenizer mapTokenizer = new StringTokenizer(
+	public static String getRelativePathFromMap(final String mapFilePathName,
+			final String topicFilePathName) {
+		final StringBuffer upPathBuffer = new StringBuffer(Constants.INT_128);
+		final StringBuffer downPathBuffer = new StringBuffer(Constants.INT_128);
+		final StringTokenizer mapTokenizer = new StringTokenizer(
 				removeRedundantNames(mapFilePathName.replaceAll(Constants.DOUBLE_BACK_SLASH,Constants.SLASH),
 						Constants.SLASH),
 				Constants.SLASH);
-		StringTokenizer topicTokenizer = new StringTokenizer(
+		final StringTokenizer topicTokenizer = new StringTokenizer(
 				removeRedundantNames(topicFilePathName.replaceAll(Constants.DOUBLE_BACK_SLASH,Constants.SLASH),
 						Constants.SLASH),
 				Constants.SLASH);
 
 		while (mapTokenizer.countTokens() > 1
 				&& topicTokenizer.countTokens() > 1) {
-			String mapToken = mapTokenizer.nextToken();
-			String topicToken = topicTokenizer.nextToken();
+			final String mapToken = mapTokenizer.nextToken();
+			final String topicToken = topicTokenizer.nextToken();
 			boolean equals = false;
 			if (Constants.OS_NAME.toLowerCase().indexOf(Constants.OS_NAME_WINDOWS) != -1){
 				//if OS is Windows, we need to ignore case when comparing path names.
@@ -357,9 +359,9 @@ public final class FileUtils {
 	 * @param relativePath relative path
 	 * @return path relative to project
 	 */
-	public static String getPathtoProject (String relativePath){
-		StringTokenizer tokenizer = new StringTokenizer(relativePath, Constants.SLASH);
-		StringBuffer buffer = new StringBuffer();
+	public static String getPathtoProject (final String relativePath){
+		final StringTokenizer tokenizer = new StringTokenizer(relativePath, Constants.SLASH);
+		final StringBuffer buffer = new StringBuffer();
 		if (tokenizer.countTokens() == 1){
 			return null;
 		}else{
@@ -381,7 +383,7 @@ public final class FileUtils {
 	 * @param relativePath relative path
 	 * @return resolved topic file
 	 */
-	public static String resolveTopic(String rootPath, String relativePath) {
+	public static String resolveTopic(final String rootPath, final String relativePath) {
 		String begin = relativePath;
 		String end = "";
 	
@@ -402,7 +404,7 @@ public final class FileUtils {
 	 * @param relativePath relative path
 	 * @return resolved topic file
 	 */
-	public static String resolveFile(String rootPath, String relativePath) {
+	public static String resolveFile(final String rootPath, final String relativePath) {
 		String begin = relativePath;
 	
 		if (relativePath.indexOf("#") != -1) {
@@ -421,10 +423,10 @@ public final class FileUtils {
 	 * @param filepath file path
 	 * @return normalized path
 	 */
-	public static String normalizeDirectory(String basedir, String filepath) {
+	public static String normalizeDirectory(final String basedir, final String filepath) {
 		String normilizedPath = null;
-		int index = filepath.indexOf(Constants.SHARP);
-		String pathname = (index == -1) ? filepath : filepath.substring(0, index);
+		final int index = filepath.indexOf(Constants.SHARP);
+		final String pathname = (index == -1) ? filepath : filepath.substring(0, index);
 
 		/*
 		 * normilize file path using java.io.File
@@ -444,7 +446,7 @@ public final class FileUtils {
 	 * @param path input path
 	 * @return processed path
 	 */
-	public static String removeRedundantNames(String path) {
+	public static String removeRedundantNames(final String path) {
 		return removeRedundantNames(path, File.separator);
     }
 	
@@ -456,10 +458,10 @@ public final class FileUtils {
 	 * @param separator file separator
 	 * @return processed path
 	 */
-	public static String removeRedundantNames(String path, String separator) {
+	public static String removeRedundantNames(final String path, final String separator) {
         StringTokenizer tokenizer = null;
-        StringBuffer buff = new StringBuffer(path.length());
-        List<String> dirs = new LinkedList<String>();
+        final StringBuffer buff = new StringBuffer(path.length());
+        final List<String> dirs = new LinkedList<String>();
         Iterator<String> iter = null;
         int dirNum = 0;
         int i = 0;
@@ -469,7 +471,7 @@ public final class FileUtils {
          */
         tokenizer = new StringTokenizer(path, separator);
         while (tokenizer.hasMoreTokens()) {
-            String token = tokenizer.nextToken();
+            final String token = tokenizer.nextToken();
             if (!(".".equals(token))) {
 			    dirs.add(token);
             }
@@ -481,8 +483,8 @@ public final class FileUtils {
         dirNum = dirs.size();
         while (i < dirNum) {
         	if (i > 0) {
-        	  String lastDir = (String) dirs.get(i - 1);
-        	  String dir = (String) dirs.get(i);
+        	  final String lastDir = (String) dirs.get(i - 1);
+        	  final String dir = (String) dirs.get(i);
         	  if ("..".equals(dir) && !("..".equals(lastDir))) {
                   dirs.remove(i);
                   dirs.remove(i - 1);
@@ -521,7 +523,7 @@ public final class FileUtils {
      * @param path test path
      * @return true if path is absolute and false otherwise.
      */
-    public static boolean isAbsolutePath (String path) {
+    public static boolean isAbsolutePath (final String path) {
     	if (path == null || Constants.STRING_EMPTY.equals(path.trim())) {
     		return false;
     	}
@@ -542,10 +544,10 @@ public final class FileUtils {
      * @param src source file
      * @param target target file
      */
-    public static void copyFile(File src, File target) {
+    public static void copyFile(final File src, final File target) {
 		FileInputStream fis = null;
 		FileOutputStream fos = null;
-		byte[] buffer = new byte[Constants.INT_1024 * Constants.INT_4];
+		final byte[] buffer = new byte[Constants.INT_1024 * Constants.INT_4];
 		int len;
 		
 		try {
@@ -555,7 +557,7 @@ public final class FileUtils {
 				fos.write(buffer, 0, len);
 			}
 			fos.flush();
-		} catch (IOException ex) {
+		} catch (final IOException ex) {
 			//removed by Alan on Date:2009-11-02 for Work Item:#1590 start
 			/*logger.logWarn("Failed to copy file from '" + src + "' to '"
 					+ target + "'");*/
@@ -566,14 +568,14 @@ public final class FileUtils {
 			if (fis != null) {
     			try {
     				fis.close();
-    			} catch (Exception e) {
+    			} catch (final Exception e) {
     				logger.logException(e);
     			}
 			}
 			if (fos != null) {
     			try {
     				fos.close();
-    			} catch (Exception e) {
+    			} catch (final Exception e) {
     				logger.logException(e);
     			}
 			}
@@ -586,7 +588,7 @@ public final class FileUtils {
      * @param extName value used to replace with
      * @return replaced value
      */
-    public static String replaceExtName(String attValue, String extName){
+    public static String replaceExtName(final String attValue, final String extName){
     	String fileName;
         int fileExtIndex;
         int index;

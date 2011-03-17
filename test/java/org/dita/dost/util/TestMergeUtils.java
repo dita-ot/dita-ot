@@ -11,6 +11,7 @@ package org.dita.dost.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -55,6 +56,7 @@ public class TestMergeUtils {
 	public void testAddIdString() {
 		assertEquals(null, mergeUtils.addId(null));
 		assertEquals("unique_3", mergeUtils.addId("a.xml#topicid"));
+		assertNull(mergeUtils.addId(null));
 	}
 
 	@Test@Ignore

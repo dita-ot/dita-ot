@@ -26,10 +26,10 @@ public final class AntVersion extends Task{
 	 * @see org.apache.tools.ant.taskdefs.Echo#execute()
 	 */
 	public void execute() throws BuildException {
-		VersionUtil versionUtil = new VersionUtil();
+		final VersionUtil versionUtil = new VersionUtil();
 		
-		String otversion = versionUtil.getOtversion();
-		String milestone = versionUtil.getMilestone();
+		final String otversion = versionUtil.getOtversion();
+		final String milestone = versionUtil.getMilestone();
 		
 		//set current OT version into antscript REQ ID:3079610
 		this.setActiveProjectProperty("otversion", otversion);
@@ -41,8 +41,8 @@ public final class AntVersion extends Task{
      * Sets property in active ant project with name specified inpropertyName,
      * and value specified in propertyValue parameter
      */
-    private void setActiveProjectProperty(String propertyName, String propertyValue) {
-        Project activeProject = getProject();
+    private void setActiveProjectProperty(final String propertyName, final String propertyValue) {
+        final Project activeProject = getProject();
         if (activeProject != null) {
             activeProject.setProperty(propertyName, propertyValue);
         }
