@@ -285,12 +285,21 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:copy-of select="."/>
     </xsl:template>
 
+    <xsl:key name="duplicate-id"
+             match="*[not(contains(@class, ' topic/topic '))]/@id"
+             use="concat(ancestor::*[contains(@class, ' topic/topic ')][1]/@id, '|', .)"/>
+
     <xsl:template match="@id[not(parent::*[contains(@class, ' topic/topic ')])]">
         <xsl:param name="newid"/>
         <xsl:attribute name="id">
             <xsl:value-of select="$newid"/>
             <xsl:text>_Connect_42_</xsl:text>
             <xsl:value-of select="."/>
+            <xsl:variable name="current-id" select="concat(ancestor::*[contains(@class, ' topic/topic ')][1]/@id, '|', .)"/>
+            <xsl:if test="not(generate-id(.) = generate-id(key('duplicate-id', $current-id)[1]))">
+                <xsl:text>_</xsl:text>
+                <xsl:value-of select="generate-id()"/>
+            </xsl:if>
         </xsl:attribute>
     </xsl:template>
 
