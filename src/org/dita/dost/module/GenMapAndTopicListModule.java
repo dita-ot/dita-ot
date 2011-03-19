@@ -201,7 +201,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 	
 	//Added on 2010-08-24 for bug:2994593 start
 	/** use grammar pool cache */
-	private String gramcache = "yes";
+	private boolean gramcache = true;
 	//Added on 2010-08-24 for bug:2994593 end
 	
 	//Added on 2010-08-24 for bug:3086552 start
@@ -325,31 +325,15 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 		tempDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
 		ditaDir = input.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_DITADIR);
 		ditavalFile = input.getAttribute(Constants.ANT_INVOKER_PARAM_DITAVAL);
-		final String valueOfValidate=input.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_VALIDATE);
+		xmlValidate = Boolean.valueOf(input.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_VALIDATE));
 		
 		//Added by William on 2009-07-18 for req #12014 start
         //get transtype
         transtype = input.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE);
         //Added by William on 2009-07-18 for req #12014 start
         
-        gramcache = input.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_GRAMCACHE);
-        
-		if(valueOfValidate!=null){
-			if("false".equalsIgnoreCase(valueOfValidate)) {
-                xmlValidate=false;
-            } else {
-                xmlValidate=true;
-            }
-		}
-		
-		//Added on 2010-08-24 for bug:3086552 start
-		final String setSystemid_tmp = input.getAttribute(Constants.ANT_INVOKER_EXT_PARAN_SETSYSTEMID);
-		if(setSystemid_tmp.equals("yes")) {
-			setSystemid = true;
-		} else {
-			setSystemid = false;
-		}
-		//Added on 2010-08-24 for bug:3086552 end
+        gramcache = "yes".equalsIgnoreCase(input.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_GRAMCACHE));
+		setSystemid = "yes".equalsIgnoreCase(input.getAttribute(Constants.ANT_INVOKER_EXT_PARAN_SETSYSTEMID));
 		
 		//For the output control
 		OutputUtils.setGeneratecopyouter(input.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER));

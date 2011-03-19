@@ -20,7 +20,7 @@ import org.dita.dost.util.XMLGrammarPoolImplUtils;
 public final class GrammarPoolManager {
 	
 	//flag whether use grammar caching.
-	private static String gramCache;
+	private static boolean gramCache;
 
 	public static XMLGrammarPool initializeGrammarPool() {
 		XMLGrammarPool pool = null;
@@ -60,7 +60,7 @@ public final class GrammarPoolManager {
 		return pool;
 	}
 
-	public static void setGramCache(String gramCache) {
+	public static void setGramCache(final boolean gramCache) {
 		GrammarPoolManager.gramCache = gramCache;
 	}
 

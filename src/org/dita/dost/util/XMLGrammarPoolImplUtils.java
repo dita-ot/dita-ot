@@ -21,7 +21,7 @@ import org.apache.xerces.xni.grammars.XMLGrammarDescription;
  */
 public final class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
 	
-	private String gramCache = "yes";
+	private boolean gramCache = true;
 	
 
 	/** Constructs a grammar pool with a default number of buckets. */
@@ -30,7 +30,7 @@ public final class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
 	}
 	
 	/** Constructs a grammar pool with a default number of buckets. */
-	public XMLGrammarPoolImplUtils(final String gramCache) {
+	public XMLGrammarPoolImplUtils(final boolean gramCache) {
 		super();
 		this.gramCache = gramCache;
 	}
@@ -81,7 +81,7 @@ public final class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
 	public boolean equals(final XMLGrammarDescription desc1,
 			final XMLGrammarDescription desc2) {
 		//grammar pool caching enabled.
-		if ("yes".equals(gramCache)) {
+		if (gramCache) {
 			if (desc1 instanceof XSDDescription
 					&& desc2 instanceof XSDDescription) {
 				return desc1.getLiteralSystemId().equals(
