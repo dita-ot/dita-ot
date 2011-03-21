@@ -32,7 +32,6 @@ import java.util.Stack;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
-import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.util.Constants;
@@ -433,6 +432,18 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 							Random random = new Random();
 							attrValue = "unique_" + random.nextInt(Integer.MAX_VALUE);
 							topicID.add(attrValue);
+							
+							String tmpVal = changeTable.get(currentParsingFile+Constants.SHARP+idValue);
+							if (tmpVal!=null && tmpVal.equalsIgnoreCase(outputFile+Constants.SHARP+idValue)){
+								changeTable.put(currentParsingFile+Constants.SHARP+idValue,
+										outputFile+Constants.SHARP+attrValue);
+							}
+							
+							tmpVal = changeTable.get(currentParsingFile);
+							if (tmpVal!=null && tmpVal.equalsIgnoreCase(outputFile+Constants.SHARP+idValue)){
+								changeTable.put(currentParsingFile,
+										outputFile+Constants.SHARP+attrValue);
+							}
 							// Added on 2010-11-12 for bug 3090803 start
 							currentParsingFileTopicIDChangeTable.put(oldAttrValue, attrValue);
 							// Added on 2010-11-12 for bug 3090803 end

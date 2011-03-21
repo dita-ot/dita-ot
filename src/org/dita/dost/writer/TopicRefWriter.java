@@ -15,12 +15,11 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
-import org.dita.dost.log.DITAOTJavaLogger;
-import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.util.Constants;
@@ -51,6 +50,11 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 	private String currentFilePathName=null;
 	/** XMLReader instance for parsing dita file */
 	private  XMLReader reader = null;
+	
+	/**
+	 * using for rectify relative path of xml 
+	 */
+	private String fixpath= null;
 
 	/**
 	 * 
@@ -100,6 +104,12 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 			throws SAXException {
 		String pi;
 		try {
+			if (fixpath!=null&&target.equalsIgnoreCase("workdir")){	
+				String tmp = fixpath.substring(0,fixpath.lastIndexOf(Constants.SLASH));
+				if (!data.endsWith(tmp)){
+					data = data+File.separator+tmp;
+				}
+			}
 			pi = (data != null) ? target + Constants.STRING_BLANK + data
 					: target;
 			output.write(Constants.LESS_THAN + Constants.QUESTION + pi
@@ -380,6 +390,17 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 				}
 				changeTarget = (String)changeTable.get(absolutePath);
 			}
+			
+			
+			if (StringUtils.isEmptyString(changeTarget)) {
+				if (fixpath!=null && attValue.startsWith(this.fixpath)){
+					attValue = attValue.substring(fixpath.length());
+					changeTargetkey = FileUtils.resolveFile(currentFilePath,
+							attValue);
+					changeTarget = (String)changeTable.get(changeTargetkey);
+				}				
+			}
+			
 			if(!notTopicFormat(atts,attValue)){
 				if(changeTarget == null) {
 					return attValue;//no change
@@ -531,6 +552,15 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 		output.write(Constants.LESS_THAN + qName);
 	}
 
+	
+	
+	public void write (String tempDir, String topicfile,Map relativePath2fix) throws DITAOTException{
+		if (relativePath2fix.containsKey(topicfile)){
+			fixpath= (String)relativePath2fix.get(topicfile);
+		}
+		write(new File(tempDir,topicfile).getAbsolutePath());
+		fixpath= null;
+	}
 	/*
 	 * (non-Javadoc)
 	 * 

@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -52,6 +53,11 @@ final class ChunkModule implements AbstractPipelineModule {
 
     private DITAOTLogger logger;
     
+	/**
+	 *  using to save relative path when do rename action for newly chunked file
+	 */
+	final Map<String,String> relativePath2fix=new HashMap<String,String>();
+	
 	/**
 	 * Constructor.
 	 */
@@ -182,7 +188,7 @@ final class ChunkModule implements AbstractPipelineModule {
 		final StringTokenizer fullTopicList=new StringTokenizer(prop.getProperty(Constants.FULL_DITAMAP_TOPIC_LIST), Constants.COMMA);
 		try{
 			while(fullTopicList.hasMoreTokens()){
-				topicRefWriter.write(new File(tempDir,fullTopicList.nextToken()).getAbsolutePath());
+				topicRefWriter.write(tempDir,fullTopicList.nextToken(),this.relativePath2fix);
 			}
 		}catch(final DITAOTException ex){
 			logger.logException(ex);
@@ -313,7 +319,11 @@ final class ChunkModule implements AbstractPipelineModule {
 					if (!FileUtils.fileExists(target.getAbsolutePath())) {
 						// newly chunked file
 						final File from = new File(entry.getValue());
-						String relativePath = FileUtils.getRelativePathFromMap(xmlDitalist.getAbsolutePath(), from.getAbsolutePath());
+						String relativePath = FileUtils.getRelativePathFromMap(xmlDitalist.getAbsolutePath(), from.getAbsolutePath());						
+						String relativeTargetPath = FileUtils.getRelativePathFromMap(xmlDitalist.getAbsolutePath(), target.getAbsolutePath());					
+						if (relativeTargetPath.lastIndexOf(Constants.SLASH)!=-1){
+						   relativePath2fix.put(relativeTargetPath, relativeTargetPath.substring(0, relativeTargetPath.lastIndexOf(Constants.SLASH)+1));	
+						}						
 						//ensure the rename
 						target.delete();
 						//ensure the newly chunked file to the old one
