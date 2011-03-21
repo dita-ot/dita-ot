@@ -9,6 +9,7 @@
  */
 package org.dita.dost.platform;
 
+import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import static org.junit.Assert.*;
 
 import java.io.File;
@@ -16,6 +17,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+
+import org.custommonkey.xmlunit.XMLUnit;
+
+import org.xml.sax.InputSource;
 
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
@@ -107,19 +112,21 @@ public class IntegratorTest {
 		i.setProperties(new File(tempDir, "integrator.properties"));
 		i.execute();
 		
-		
 		assertEquals(getProperties(new File(expDir, "lib" + File.separator + Constants.CONF_PROPERTIES)),
 					 getProperties(new File(tempDir, "lib" + File.separator + Constants.CONF_PROPERTIES)));
-		assertEquals(TestUtils.readXmlToString(new File(expDir, "build.xml"), true, false),
-					 TestUtils.readXmlToString(new File(tempDir, "build.xml"), true, false));
-		assertEquals(TestUtils.readXmlToString(new File(expDir, "catalog.xml"), true, false),
-				     TestUtils.readXmlToString(new File(tempDir, "catalog.xml"), true, false));
-		assertEquals(TestUtils.readXmlToString(new File(expDir, "xsl" + File.separator + "shell.xsl"), true, false),
-			         TestUtils.readXmlToString(new File(tempDir, "xsl" + File.separator + "shell.xsl"), true, false));
-		assertEquals(TestUtils.readXmlToString(new File(expDir, "xsl" + File.separator + "common" + File.separator + "allstrings.xml"), true, false),
-		         	 TestUtils.readXmlToString(new File(tempDir, "xsl" + File.separator + "common" + File.separator + "allstrings.xml"), true, false));
-		assertEquals(TestUtils.readXmlToString(new File(expDir, "plugins" + File.separator + "dummy" + File.separator + "xsl" + File.separator + "shell.xsl"), true, false),
-					 TestUtils.readXmlToString(new File(tempDir, "plugins" + File.separator + "dummy" + File.separator + "xsl" + File.separator + "shell.xsl"), true, false));
+        XMLUnit.setNormalizeWhitespace(true);
+        XMLUnit.setIgnoreWhitespace(true);
+        XMLUnit.setIgnoreDiffBetweenTextAndCDATA(true);
+		assertXMLEqual(new InputSource(new File(expDir, "build.xml").toURI().toString()),
+		               new InputSource(new File(tempDir, "build.xml").toURI().toString()));
+		assertXMLEqual(new InputSource(new File(expDir, "catalog.xml").toURI().toString()),
+				       new InputSource(new File(tempDir, "catalog.xml").toURI().toString()));
+		assertXMLEqual(new InputSource(new File(expDir, "xsl" + File.separator + "shell.xsl").toURI().toString()),
+			           new InputSource(new File(tempDir, "xsl" + File.separator + "shell.xsl").toURI().toString()));
+		assertXMLEqual(new InputSource(new File(expDir, "xsl" + File.separator + "common" + File.separator + "allstrings.xml").toURI().toString()),
+		         	   new InputSource(new File(tempDir, "xsl" + File.separator + "common" + File.separator + "allstrings.xml").toURI().toString()));
+		assertXMLEqual(new InputSource(new File(expDir, "plugins" + File.separator + "dummy" + File.separator + "xsl" + File.separator + "shell.xsl").toURI().toString()),
+					   new InputSource(new File(tempDir, "plugins" + File.separator + "dummy" + File.separator + "xsl" + File.separator + "shell.xsl").toURI().toString()));
 
 	}
 	

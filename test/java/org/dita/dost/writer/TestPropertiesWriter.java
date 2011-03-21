@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 import org.dita.dost.TestUtils;
@@ -64,8 +65,24 @@ public class TestPropertiesWriter {
         assertEquals(TestUtils.readFileToString(ditalistfile, true),
         			 TestUtils.readFileToString(compareditalistfile, true));
 
-        assertEquals(TestUtils.readFileToString(ditalistpropertiesfile, true),
-   			 		 TestUtils.readFileToString(compareditalistpropertiesfile, true));
+        InputStream expStream = null;
+        InputStream actStream = null;
+        try {
+            final Properties exp = new Properties();
+            expStream = new FileInputStream(ditalistpropertiesfile);
+            exp.loadFromXML(expStream);
+            final Properties act = new Properties();
+            actStream = new FileInputStream(compareditalistpropertiesfile);
+            act.loadFromXML(actStream);
+            assertEquals(exp, act);
+        } finally {
+            if (expStream != null) {
+                expStream.close();
+            }
+            if (actStream != null) {
+                actStream.close();
+            }
+        }
     }
     
     @After
