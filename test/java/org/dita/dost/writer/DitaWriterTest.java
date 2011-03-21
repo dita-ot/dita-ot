@@ -9,6 +9,7 @@
  */
 package org.dita.dost.writer;
 
+import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
@@ -22,6 +23,17 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.NodeList;
+
+import org.w3c.dom.Element;
+
+import org.w3c.dom.Document;
+
+import org.custommonkey.xmlunit.XMLUnit;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -111,10 +123,28 @@ public class DitaWriterTest {
 
     @Test
     public void testWrite() throws Exception {
-        assertEquals(TestUtils.readXmlToString(new File(expDir, "keyword.xml"), true, true),
-                     TestUtils.readXmlToString(new File(tempDir, "keyword.xml"), true, true));
-        assertEquals(TestUtils.readXmlToString(new File(expDir, "main.ditamap"), true, true),
-                     TestUtils.readXmlToString(new File(tempDir, "main.ditamap"), true, true));
+        DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        Document keyword = clean(db.parse(new File(tempDir, "keyword.xml")));
+        
+        XMLUnit.setNormalizeWhitespace(true);
+        XMLUnit.setIgnoreWhitespace(true);
+        XMLUnit.setIgnoreDiffBetweenTextAndCDATA(true);
+        
+        assertXMLEqual(clean(db.parse(new File(expDir, "keyword.xml"))),
+                       clean(db.parse(new File(tempDir, "keyword.xml"))));
+        assertXMLEqual(clean(db.parse(new File(expDir, "main.ditamap"))),
+                       clean(db.parse(new File(tempDir, "main.ditamap"))));
+    }
+    
+    private Document clean(final Document d) {
+        final NodeList elems = d.getElementsByTagName("*");
+        for (int i = 0; i < elems.getLength(); i++) {
+            final Element e = (Element) elems.item(i);
+            for (final String a: new String[] {"class", "domains", "xtrf", "xtrc"}) {
+                e.removeAttribute(a);
+            }
+        }
+        return d;
     }
     
     @AfterClass

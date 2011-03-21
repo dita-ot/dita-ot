@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic [
+<!ENTITY ent 'entity'> 
+]>
+<topic class="- topic/topic ">
+foo
+&amp;&lt;
+&#x62;&#x61;&#x72;
+&ent;
+<!--foo & <-->
+<?foo bar & <?><?baz?>
+<![CDATA[bar & <]]>
+<empty/><empty with="attribute"/><parent>foo<child>bar</child>baz</parent></topic>
