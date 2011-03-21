@@ -14,11 +14,8 @@ import java.io.IOException;
 import java.util.Properties;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.Content;
-
-import java.io.*;
 
 /**
  * This class extends AbstractWriter, used to output content to properites file.

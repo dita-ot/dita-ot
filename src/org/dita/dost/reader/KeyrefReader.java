@@ -14,8 +14,6 @@ import java.util.Hashtable;
 import java.util.Set;
 import java.util.Stack;
 
-import org.dita.dost.log.DITAOTJavaLogger;
-import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
 import org.dita.dost.resolver.DitaURIResolverFactory;
@@ -46,7 +44,7 @@ public final class KeyrefReader extends AbstractXMLReader {
 	
 	private XMLReader reader;
 	
-	private final Hashtable<String, String> keyDefTable;
+	private Hashtable<String, String> keyDefTable;
 	
 	private Stack<KeyDef> keyDefs;
 	
@@ -67,7 +65,7 @@ public final class KeyrefReader extends AbstractXMLReader {
 			reader = StringUtils.getXMLReader();
 			reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
 			reader.setFeature(Constants.FEATURE_NAMESPACE, true);
-		} catch (final SAXException ex) {
+		} catch (SAXException ex) {
 			logger.logException(ex);
 		}
 		reader.setContentHandler(this);
@@ -76,9 +74,8 @@ public final class KeyrefReader extends AbstractXMLReader {
 	@Override
 	public void characters(char[] ch, int start, int length)
 			throws SAXException {
-		if(isStart()) {
-            keyDefAppend(StringUtils.escapeXML(ch, start, length));
-        }
+		if(isStart())
+			keyDefAppend(StringUtils.escapeXML(ch, start, length));
 	}
 
 
@@ -95,11 +92,10 @@ public final class KeyrefReader extends AbstractXMLReader {
 		if(isStart() && getKeyDefLevel() == 0){
 			// to the end of the key definition, set the flag false 
 			// and put the key definition to table.
-			final KeyDef keyDef = popKeyDef();
-			for(final String keyName: keyDef.key.split(" ")){
-				if(!keyName.equals("")) {
-                    keyDefTable.put(keyName, keyDef.keyDefContent.toString());
-                }
+			KeyDef keyDef = popKeyDef();
+			for(String keyName: keyDef.key.split(" ")){
+				if(!keyName.equals(""))
+				keyDefTable.put(keyName, keyDef.keyDefContent.toString());
 				
 			}
 		}
@@ -107,7 +103,7 @@ public final class KeyrefReader extends AbstractXMLReader {
 
 	@Override
 	public Content getContent() {
-		final Content content = new ContentImpl();
+		Content content = new ContentImpl();
 		content.setValue(keyDefTable);
 		return content;
 	}
@@ -119,10 +115,10 @@ public final class KeyrefReader extends AbstractXMLReader {
 		try {
 			//AlanChanged: by refactoring Adding URIResolver Date:2009-08-13 --begin
 			/* filename = tempDir + File.separator + filename; */
-			final InputSource source = URIResolverAdapter.convertToInputSource(DitaURIResolverFactory.getURIResolver().resolve(filename, null));			
+			InputSource source = URIResolverAdapter.convertToInputSource(DitaURIResolverFactory.getURIResolver().resolve(filename, null));			
 			reader.parse(source);
 			//edit by Alan: by refactoring Adding URIResolver Date:2009-08-13 --end
-		} catch (final Exception ex) {
+		} catch (Exception ex) {
 			logger.logException(ex);
 		}
 	}
@@ -137,13 +133,13 @@ public final class KeyrefReader extends AbstractXMLReader {
 	@Override
 	public void startElement(String uri, String localName, String name,
 			Attributes atts) throws SAXException {
-		final String classValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
-		final String keyName = atts.getValue(Constants.ATTRIBUTE_NAME_KEYS);
+		String classValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
+		String keyName = atts.getValue(Constants.ATTRIBUTE_NAME_KEYS);
 		if(keyName!=null && classValue.contains(" map/topicref ")){
 			
 			// if it has @keys and is valid.
 			boolean flag = false;
-			final String[] keyNames = keyName.split(" ");
+			String[] keyNames = keyName.split(" ");
 			int index = 0;
 			while(index < keyNames.length){
 				if(keys.contains(keyNames[index++])){
@@ -198,7 +194,7 @@ public final class KeyrefReader extends AbstractXMLReader {
 	}
 	private void keyDefAppend(String content)
 	{
-		for (final KeyDef keyDef : keyDefs)
+		for (KeyDef keyDef : keyDefs)
 		{
 			keyDef.keyDefContent.append(content);
 		}

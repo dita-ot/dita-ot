@@ -20,8 +20,6 @@ import java.util.List;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.index.IndexTerm;
 import org.dita.dost.index.IndexTermTarget;
-import org.dita.dost.log.DITAOTJavaLogger;
-import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.Content;
 import org.dita.dost.util.Constants;
 

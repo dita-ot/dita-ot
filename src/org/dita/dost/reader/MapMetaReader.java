@@ -14,8 +14,8 @@ import java.io.FileOutputStream;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Vector;
 import java.util.Map;
+import java.util.Vector;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -25,7 +25,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
-import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
@@ -43,9 +42,9 @@ import org.w3c.dom.NodeList;
 public final class MapMetaReader implements AbstractReader {
 	private static final String INTERNET_LINK_MARK = "://";
 	
-	private Hashtable<String, Hashtable<String, Element>> resultTable = new Hashtable<String, Hashtable<String, Element>>(Constants.INT_16);
+	private static Hashtable<String, Hashtable<String, Element>> resultTable = new Hashtable<String, Hashtable<String, Element>>(Constants.INT_16);
 	
-	private static final HashSet<String> uniqueSet;
+	private static HashSet<String> uniqueSet;
 	
 	static{
 		uniqueSet = new HashSet<String>(Constants.INT_16);
@@ -56,7 +55,7 @@ public final class MapMetaReader implements AbstractReader {
 		uniqueSet.add(Constants.ATTR_CLASS_VALUE_MAP_SEARCHTITLE);
 	}
 	
-	private static final HashSet<String> cascadeSet;
+	private static HashSet<String> cascadeSet;
 	
 	static{
 		cascadeSet = new HashSet<String>(Constants.INT_16);
@@ -70,7 +69,7 @@ public final class MapMetaReader implements AbstractReader {
 		cascadeSet.add(Constants.ATTR_CLASS_VALUE_PUBLISHER);
 	}
 	
-	private static final HashSet<String> metaSet;
+	private static HashSet<String> metaSet;
 	
 	static{
 		metaSet = new HashSet<String>(Constants.INT_16);
@@ -93,7 +92,7 @@ public final class MapMetaReader implements AbstractReader {
 		metaSet.add(Constants.ATTR_CLASS_VALUE_UNKNOWN);
 	}
 	
-	private static final Vector<String> metaPos;
+	private static Vector<String> metaPos;
 	
 	static {
 		metaPos = new Vector<String>(Constants.INT_16);
@@ -147,7 +146,7 @@ public final class MapMetaReader implements AbstractReader {
 	 * @param filename filename
 	 */
 	public void read(String filename) {
-		final File inputFile = new File(filename);
+		File inputFile = new File(filename);
         filePath = inputFile.getParent();
         inputFile.getPath();
         
@@ -156,16 +155,16 @@ public final class MapMetaReader implements AbstractReader {
         
         
         try{
-        	final DocumentBuilderFactory factory = DocumentBuilderFactory
+        	DocumentBuilderFactory factory = DocumentBuilderFactory
 			.newInstance();
-        	final DocumentBuilder builder = factory.newDocumentBuilder();
+        	DocumentBuilder builder = factory.newDocumentBuilder();
         	builder.setErrorHandler(new DITAOTXMLErrorHandler(filename));
         	doc = builder.parse(inputFile);
         	
-        	final Element root = doc.getDocumentElement();
-        	final NodeList list = root.getChildNodes();
+        	Element root = doc.getDocumentElement();
+        	NodeList list = root.getChildNodes();
         	for (int i = 0; i < list.getLength(); i++){
-        		final Node node = list.item(i);
+        		Node node = list.item(i);
         		Node classAttr = null;
         		if (node.getNodeType() == Node.ELEMENT_NODE){
         			classAttr = node.getAttributes().getNamedItem(Constants.ATTRIBUTE_NAME_CLASS);
@@ -185,9 +184,9 @@ public final class MapMetaReader implements AbstractReader {
 			// Indexterm elements with either start or end attribute should not been
 			// move to referenced dita file's prolog section.
 			// <!--start
-			for (final Hashtable<String, Element> resultTableEntry : resultTable.values()) {
-				for (final Map.Entry<String, Element> mapEntry : resultTableEntry.entrySet()) {
-					final String key = mapEntry.getKey();
+			for (Hashtable<String, Element> resultTableEntry : resultTable.values()) {
+				for (Map.Entry<String, Element> mapEntry : resultTableEntry.entrySet()) {
+					String key = mapEntry.getKey();
 					if (Constants.ATTR_CLASS_VALUE_KEYWORDS.equals(key)) {
 						removeIndexTermRecursive(mapEntry.getValue());
 					}
@@ -195,20 +194,17 @@ public final class MapMetaReader implements AbstractReader {
 			}
 			// end -->
         	
-			final FileOutputStream file = new FileOutputStream(inputFile.getCanonicalPath()+ ".temp");
-			final StreamResult res = new StreamResult(file);
-			final DOMSource ds = new DOMSource(doc);
-			final TransformerFactory tff = TransformerFactory.newInstance();
-			final Transformer tf = tff.newTransformer();
+			FileOutputStream file = new FileOutputStream(inputFile.getCanonicalPath()+ ".temp");
+			StreamResult res = new StreamResult(file);
+			DOMSource ds = new DOMSource(doc);
+			TransformerFactory tff = TransformerFactory.newInstance();
+			Transformer tf = tff.newTransformer();
 			tf.transform(ds, res);
-			if (res.getOutputStream() != null) {
-                res.getOutputStream().close();
-            }
-			if (file != null) {
-                file.close();
-            }
+			if (res.getOutputStream() != null)
+				res.getOutputStream().close();
+			if (file != null) file.close();
         	
-        }catch (final Exception e){
+        }catch (Exception e){
         	logger.logException(e);
         }
 	}
@@ -227,14 +223,14 @@ public final class MapMetaReader implements AbstractReader {
 		if (parent == null) {
 			return;
 		}
-		final NodeList children = parent.getChildNodes();
+		NodeList children = parent.getChildNodes();
 		Element child = null;
 		for (int i = 0; i < children.getLength(); i++) {
 			if(children.item(i).getNodeType() == Node.ELEMENT_NODE){
 				child = (Element) children.item(i);
-				final boolean isIndexTerm = child.getAttribute(Constants.ATTRIBUTE_NAME_CLASS).contains(Constants.ATTR_CLASS_VALUE_INDEXTERM);
-				final boolean hasStart = !StringUtils.isEmptyString(child.getAttribute(Constants.ATTRIBUTE_NAME_START));
-				final boolean hasEnd = !StringUtils.isEmptyString(child.getAttribute(Constants.ATTRIBUTE_NAME_END));
+				boolean isIndexTerm = child.getAttribute(Constants.ATTRIBUTE_NAME_CLASS).contains(Constants.ATTR_CLASS_VALUE_INDEXTERM);
+				boolean hasStart = !StringUtils.isEmptyString(child.getAttribute(Constants.ATTRIBUTE_NAME_START));
+				boolean hasEnd = !StringUtils.isEmptyString(child.getAttribute(Constants.ATTRIBUTE_NAME_END));
 				
 				if(isIndexTerm && (hasStart || hasEnd)){
 					parent.removeChild(child);
@@ -247,17 +243,17 @@ public final class MapMetaReader implements AbstractReader {
 	//added by Alan for bug ID:#2891736 on Date: 2009-11-16 end
 	
 	private void handleTopicref(Node topicref, Hashtable<String, Element> inheritance) {
-		final Node hrefAttr = topicref.getAttributes().getNamedItem(Constants.ATTRIBUTE_NAME_HREF);
-		final Node copytoAttr = topicref.getAttributes().getNamedItem(Constants.ATTRIBUTE_NAME_COPY_TO);
-		final Node scopeAttr = topicref.getAttributes().getNamedItem(Constants.ATTRIBUTE_NAME_SCOPE);
-    	final Node formatAttr = topicref.getAttributes().getNamedItem(Constants.ATTRIBUTE_NAME_FORMAT);
+		Node hrefAttr = topicref.getAttributes().getNamedItem(Constants.ATTRIBUTE_NAME_HREF);
+		Node copytoAttr = topicref.getAttributes().getNamedItem(Constants.ATTRIBUTE_NAME_COPY_TO);
+		Node scopeAttr = topicref.getAttributes().getNamedItem(Constants.ATTRIBUTE_NAME_SCOPE);
+    	Node formatAttr = topicref.getAttributes().getNamedItem(Constants.ATTRIBUTE_NAME_FORMAT);
 		Hashtable<String, Element> current = mergeMeta(null,inheritance,cascadeSet);
 		String topicPath = null;
 		Node metaNode = null;
     	
-    	final NodeList children = topicref.getChildNodes();
+    	NodeList children = topicref.getChildNodes();
 		for (int i = 0; i < children.getLength(); i++){
-			final Node node = children.item(i);
+			Node node = children.item(i);
     		Node classAttr = null;
     		if(node.getNodeType() == Node.ELEMENT_NODE){
     			classAttr = node.getAttributes().getNamedItem(Constants.ATTRIBUTE_NAME_CLASS);
@@ -296,23 +292,21 @@ public final class MapMetaReader implements AbstractReader {
 				if(resultTable.containsKey(topicPath)){
 	    			//if the result table already contains some result
 	    			//metadata for current topic path.
-					final Hashtable<String, Element> previous = resultTable.get(topicPath);
+					Hashtable<String, Element> previous = resultTable.get(topicPath);
 					resultTable.put(topicPath, mergeMeta(previous, current, metaSet));
 	    		}else{
 	    			resultTable.put(topicPath, current);
 	    		}
 				
-				final Hashtable<String, Element> metas = resultTable.get(topicPath);
+				Hashtable<String, Element> metas = resultTable.get(topicPath);
 				if (!metas.isEmpty()) {
-					if (metaNode != null) {
-                        topicref.removeChild(metaNode);
-                    }
-					final Element newMeta = doc.createElement(Constants.ELEMENT_NAME_TOPICMETA);
+					if (metaNode != null) topicref.removeChild(metaNode);
+					Element newMeta = doc.createElement(Constants.ELEMENT_NAME_TOPICMETA);
 					newMeta.setAttribute(Constants.ATTRIBUTE_NAME_CLASS, "-" + Constants.ATTR_CLASS_VALUE_TOPICMETA);
 					for (int i = 0; i < metaPos.size(); i++) {
-						final Node stub = (Node)metas.get(metaPos.get(i));
+						Node stub = (Node)metas.get(metaPos.get(i));
 						if (stub != null) {
-							final NodeList clist = stub.getChildNodes();
+							NodeList clist = stub.getChildNodes();
 							for (int j = 0; j < clist.getLength(); j++) {
 								newMeta.appendChild(topicref.getOwnerDocument().importNode(clist.item(j), true));
 							}
@@ -330,7 +324,7 @@ public final class MapMetaReader implements AbstractReader {
 
 	private Hashtable<String, Element> handleMeta(Node meta, Hashtable<String, Element> inheritance) {
 		
-		final Hashtable<String, Element> topicMetaTable = new Hashtable<String, Element>(Constants.INT_16);
+		Hashtable<String, Element> topicMetaTable = new Hashtable<String, Element>(Constants.INT_16);
 		
 		getMeta(meta, topicMetaTable);
 		
@@ -339,17 +333,17 @@ public final class MapMetaReader implements AbstractReader {
 	}
 	
 	private void getMeta(Node meta, Hashtable<String, Element> topicMetaTable){
-		final NodeList children = meta.getChildNodes();
+		NodeList children = meta.getChildNodes();
 		for(int i = 0; i < children.getLength(); i++){
-			final Node node = children.item(i);
+			Node node = children.item(i);
 			Node attr = null;
 			if(node.getNodeType() == Node.ELEMENT_NODE){
 				attr = node.getAttributes().getNamedItem(Constants.ATTRIBUTE_NAME_CLASS);
 			}
 			if (attr != null){
-				final String attrValue = attr.getNodeValue();
+				String attrValue = attr.getNodeValue();
 				// int number 1 is used to remove the first "-" or "+" character in class attribute
-				final String metaKey = attrValue.substring(1,
+				String metaKey = attrValue.substring(1,
 						attrValue.indexOf(Constants.STRING_BLANK,attrValue.indexOf(Constants.SLASH))+1 );
 				if (attrValue.contains(Constants.ATTR_CLASS_VALUE_METADATA)){
 					getMeta(node, topicMetaTable);
@@ -358,7 +352,7 @@ public final class MapMetaReader implements AbstractReader {
 					//use clone here to prevent the node is removed from original DOM tree;
 					((Element) topicMetaTable.get(metaKey)).appendChild(node.cloneNode(true));				
 				} else{
-					final Element stub = doc.createElement("stub");
+					Element stub = doc.createElement("stub");
 					// use clone here to prevent the node is removed from original DOM tree;
 					stub.appendChild(node.cloneNode(true));
 					topicMetaTable.put(metaKey, stub);
@@ -379,9 +373,9 @@ public final class MapMetaReader implements AbstractReader {
 			topicMetaTable = new Hashtable<String, Element>(Constants.INT_16);
 		}
 		Node item = null;
-		final Iterator<String> iter = enableSet.iterator();
+		Iterator<String> iter = enableSet.iterator();
 		while (iter.hasNext()){
-			final String key = (String)iter.next();
+			String key = (String)iter.next();
 			if (inheritance.containsKey(key)){
 				if(uniqueSet.contains(key) ){
 					if(!topicMetaTable.containsKey(key)){
@@ -396,12 +390,12 @@ public final class MapMetaReader implements AbstractReader {
 						//not necessary to do node type check here
 						//because inheritStub doesn't contains any node
 						//other than Element.
-						final Node stub = (Node) topicMetaTable.get(key);
-						final Node inheritStub = (Node) inheritance.get(key);
+						Node stub = (Node) topicMetaTable.get(key);
+						Node inheritStub = (Node) inheritance.get(key);
 						if (stub != inheritStub){
 							// Merge the value if stub does not equal to inheritStub
 							// Otherwise it will get into infinitive loop
-							final NodeList children = inheritStub.getChildNodes();
+							NodeList children = inheritStub.getChildNodes();
 							for(int i = 0; i < children.getLength(); i++){
 								item = children.item(i).cloneNode(true);
 								item = stub.getOwnerDocument().importNode(item,true);
@@ -419,16 +413,16 @@ public final class MapMetaReader implements AbstractReader {
 
 	private void handleGlobalMeta(Node metadata) {
 		
-		final NodeList children = metadata.getChildNodes();
+		NodeList children = metadata.getChildNodes();
 		for(int i = 0; i < children.getLength(); i++){
-			final Node node = children.item(i);
+			Node node = children.item(i);
 			Node attr = null;
 			if (node.getNodeType() == Node.ELEMENT_NODE){
 				attr = node.getAttributes().getNamedItem(Constants.ATTRIBUTE_NAME_CLASS);
 			}
 			if (attr != null){
-				final String attrValue = attr.getNodeValue();
-				final String metaKey = attrValue.substring(1,
+				String attrValue = attr.getNodeValue();
+				String metaKey = attrValue.substring(1,
 						attrValue.indexOf(Constants.STRING_BLANK,attrValue.indexOf(Constants.SLASH))+1 );
 				if (attrValue.contains(Constants.ATTR_CLASS_VALUE_METADATA)){
 					//proceed the metadata in <metadata>
@@ -438,7 +432,7 @@ public final class MapMetaReader implements AbstractReader {
 					//use clone here to prevent the node is removed from original DOM tree;
 					((Element) globalMeta.get(metaKey)).appendChild(node.cloneNode(true));
 				} else if(cascadeSet.contains(metaKey)){
-					final Element stub = doc.createElement("stub");
+					Element stub = doc.createElement("stub");
 					stub.appendChild(node.cloneNode(true));
 					globalMeta.put(metaKey, stub);
 				}
@@ -446,9 +440,11 @@ public final class MapMetaReader implements AbstractReader {
 		}
 		
 	}
-
+	/**
+	 * @see  org.dita.dost.reader.AbstractReader#getContent()
+	 */
 	public Content getContent() {
-		final ContentImpl result = new ContentImpl();
+		ContentImpl result = new ContentImpl();
         result.setCollection( resultTable.entrySet());
         return result;
 	}

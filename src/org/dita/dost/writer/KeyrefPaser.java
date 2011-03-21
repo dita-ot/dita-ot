@@ -26,8 +26,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTJavaLogger;
-import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.util.Constants;
@@ -75,18 +73,18 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 	private String filepath;
 
 	// It is the element set which does contain attribute href,
-	private static final Set<String> withHref = new HashSet<String>();
+	private static Set<String> withHref = new HashSet<String>();
 
 	// It is the element set which does not contain attribute href.
-	private static final Set<String> withOutHref = new HashSet<String>();
+	private static Set<String> withOutHref = new HashSet<String>();
 
 	// It is the attributes set which should not be copied from
 	// key definition to key reference which is <topicref>
-	private static final Set<String> no_copy = new HashSet<String>();
+	private static Set<String> no_copy = new HashSet<String>();
 
 	// It is the attributes set which should not be copied from
 	// key definition to key reference which is not <topicref>
-	private static final Set<String> no_copy_topic = new HashSet<String>();
+	private static Set<String> no_copy_topic = new HashSet<String>();
 
 	// It is used to store the target of the keys
 	// In the from the map <keys, target>.
@@ -778,7 +776,8 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 	private String getFirstTopicId(File topicFile) {
 		String path = topicFile.getParent();
 		String name = topicFile.getName();
-		String topicId = MergeUtils.getFirstTopicId(name, path, false);
+		MergeUtils util = MergeUtils.getInstance();
+		String topicId = util.getFirstTopicId(name, path, false);
 		return topicId;
 	}
 	//Insert topic id into href 
