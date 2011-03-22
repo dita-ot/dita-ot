@@ -2673,27 +2673,7 @@
         xml:base="schema/ditaval/xsd/"/>
       <uri name="urn:oasis:names:tc:dita:xsd:ditaval.xsd:1.2" uri="ditaval.xsd"
         xml:base="schema/ditaval/xsd/"/>
-  <!-- Demo/Experimental -->
-    <public publicId="-//IBM//DTD DITA Element Reference//EN"
-           uri="demo/elementref/elementref_shell.dtd"
-           xml:base=""/>
-   <public publicId="-//IBM//ELEMENTS DITA Element Reference//EN"
-           uri="demo/elementref/elementref.mod"
-           xml:base=""/>
-   <public publicId="-//IBM//DTD DITA FAQ//EN" uri="demo/faq/faq_shell.dtd" xml:base=""/>
-   <public publicId="-//IBM//ELEMENTS DITA FAQ//EN" uri="demo/faq/faq.mod" xml:base=""/>
-   <public publicId="-//IBM//DTD DITA eNote//EN" uri="demo/enote/enote_shell.dtd"
-           xml:base=""/>
-   <public publicId="-//IBM//ELEMENTS DITA eNote//EN" uri="demo/enote/enote.mod"
-           xml:base=""/>
-   <public publicId="-//IBM//DTD DITA BookMap//EN" uri="demo/book/bookmap.dtd" xml:base=""/>
-   <public publicId="-//IBM//ELEMENTS DITA BookMap//EN" uri="demo/book/bookmap.mod"
-           xml:base=""/>
-   <public publicId="-//IBM//DTD DITA Book Information//EN" uri="demo/book/bkinfo.dtd"
-           xml:base=""/>
-   <public publicId="-//IBM//ELEMENTS DITA Book Information//EN"
-           uri="demo/book/bkinfo.mod"
-           xml:base=""/>
+
    <dita:extension xmlns:dita="http://dita-ot.sourceforge.net" id="dita.specialization.catalog"
                    behavior="org.dita.dost.platform.InsertAction"/>
    <dita:extension xmlns:dita="http://dita-ot.sourceforge.net"
