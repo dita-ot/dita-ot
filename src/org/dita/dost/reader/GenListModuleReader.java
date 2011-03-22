@@ -159,10 +159,10 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	private static boolean setSystemid = true;
 	//Added on 2010-08-24 for bug:3086552 end
 	
-    private Stack<String> processRoleStack; // stack for @processing-role value
+    private final Stack<String> processRoleStack; // stack for @processing-role value
     private int processRoleLevel; // Depth inside a @processing-role parent
-    private Set<String> resourceOnlySet; // Topics with role of "resource-only"
-    private Set<String> crossSet;
+    private final Set<String> resourceOnlySet; // Topics with role of "resource-only"
+    private final Set<String> crossSet;
     private Set<String> schemeRefSet = null;
     
     /** Subject scheme document root */
@@ -189,23 +189,23 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	//refered topic id
 	private String topicId = "";
 	//Map to store plugin id
-	private Map<String, Set<String>> pluginMap = new HashMap<String, Set<String>>();
+	private final Map<String, Set<String>> pluginMap = new HashMap<String, Set<String>>();
     //transtype
     private String transtype;
     //Added by William on 2010-03-01 for update onlytopicinmap option start
     //Map to store referenced branches.
-    private Map<String, List<String>> vaildBranches;
+    private final Map<String, List<String>> vaildBranches;
     //int to mark referenced nested elements.
     private int level;
     //topicref stack
-    private Stack<String> topicrefStack;
+    private final Stack<String> topicrefStack;
     //store the primary ditamap file name.
     private String primaryDitamap = "";
     //Added by William on 2010-03-01 for update onlytopicinmap option end.
     
     //Added by William on 2010-06-01 for bug:3005748 start
     //Get DITAAttrUtil
-    private DITAAttrUtils ditaAttrUtils = DITAAttrUtils.getInstance();
+    private final DITAAttrUtils ditaAttrUtils = DITAAttrUtils.getInstance();
     //Added by William on 2010-06-01 for bug:3005748 end
     
     //Added by William on 2010-06-09 for bug:3013079 start
@@ -283,16 +283,16 @@ public final class GenListModuleReader extends AbstractXMLReader {
 		reader.setContentHandler(this);
 		try {
 			reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
-		} catch (SAXNotRecognizedException e1) {
+		} catch (final SAXNotRecognizedException e1) {
 			logger.logException(e1);
-		} catch (SAXNotSupportedException e1) {
+		} catch (final SAXNotSupportedException e1) {
 			logger.logException(e1);
 		}
 		
 		try {
 			Class.forName(Constants.RESOLVER_CLASS);
 			reader.setEntityResolver(CatalogUtils.getCatalogResolver());
-		}catch (ClassNotFoundException e){
+		}catch (final ClassNotFoundException e){
 			reader.setEntityResolver(this);
 		}
 		
@@ -307,7 +307,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	 * @throws SAXException parsing exception
      */
 	public static void initXMLReader(String ditaDir,boolean validate,String rootFile, boolean arg_setSystemid) throws SAXException {
-		DITAOTJavaLogger javaLogger=new DITAOTJavaLogger();
+		final DITAOTJavaLogger javaLogger=new DITAOTJavaLogger();
 		
 		//to check whether the current parsing file's href value is out of inputmap.dir
 		rootDir=new File(rootFile).getAbsoluteFile().getParent();
@@ -320,10 +320,10 @@ public final class GenListModuleReader extends AbstractXMLReader {
 			reader.setFeature(Constants.FEATURE_VALIDATION, true);
 			reader.setFeature(Constants.FEATURE_VALIDATION_SCHEMA, true);
 		}else{
-			String msg=MessageUtils.getMessage("DOTJ037W").toString();
+			final String msg=MessageUtils.getMessage("DOTJ037W").toString();
 			javaLogger.logWarn(msg);
 		}
-		XMLGrammarPool grammarPool = GrammarPoolManager.getGrammarPool();
+		final XMLGrammarPool grammarPool = GrammarPoolManager.getGrammarPool();
 		setGrammarPool(reader, grammarPool);
 		
 		CatalogUtils.setDitaDir(ditaDir);
@@ -428,7 +428,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	 * @return Returns allTargets.
 	 */
 	public Set<String> getNonCopytoResult() {
-		Set<String> nonCopytoSet = new HashSet<String>(Constants.INT_128);
+		final Set<String> nonCopytoSet = new HashSet<String>(Constants.INT_128);
 		
 		nonCopytoSet.addAll(nonConrefCopytoTargets);
 		nonCopytoSet.addAll(conrefTargets);
@@ -446,7 +446,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	 */
 	private void addCoderefFiles(Set<String> nonCopytoSet) {
 		
-		for(String filename : subsidiarySet){
+		for(final String filename : subsidiarySet){
 			//only activated on /generateout:3 & is out file.
 			if(isOutFile(filename) && OutputUtils.getGeneratecopyouter() 
 			  == OutputUtils.OLDSOLUTION){
@@ -574,11 +574,12 @@ public final class GenListModuleReader extends AbstractXMLReader {
 		
 		reader.setErrorHandler(new DITAOTXMLErrorHandler(file.getName()));
 		//Added on 2010-08-24 for bug:3086552 start
-		InputSource is = new InputSource(new FileInputStream(file));
+		final InputSource is = new InputSource(new FileInputStream(file));
 		//Set the system ID
-		if(setSystemid)
-			//is.setSystemId(URLUtil.correct(file).toString());
+		if(setSystemid) {
+            //is.setSystemId(URLUtil.correct(file).toString());
 		    is.setSystemId(file.toURI().toURL().toString());
+        }
 		//Added on 2010-08-24 for bug:3086552 end
 		reader.parse(is); 
 	}
@@ -587,10 +588,10 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	public void startElement(String uri, String localName, String qName,
 			Attributes atts) throws SAXException {
 		String domains = null;
-		Properties params = new Properties();
+		final Properties params = new Properties();
 		
 		//Added by William on 2010-06-01 for bug:3005748 start
-		String printValue = atts.getValue(Constants.ATTRIBUTE_NAME_PRINT);
+		final String printValue = atts.getValue(Constants.ATTRIBUTE_NAME_PRINT);
 		//increase element level for nested tags.
 		ditaAttrUtils.increasePrintLevel(printValue);
 		//Exclude the topic if it is needed.
@@ -600,7 +601,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 		//Added by William on 2010-06-01 for bug:3005748 end
 		
 		String attrValue = atts.getValue(Constants.ATTRIBUTE_NAME_PROCESSING_ROLE);
-		String href = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
+		final String href = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
 	    if (attrValue != null) {
 	        processRoleStack.push(attrValue);
 	        processRoleLevel++;
@@ -643,7 +644,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 				topicId = atts.getValue(Constants.ATTRIBUTE_NAME_ID);
 				//relpace place holder with first topic id
 				//Get relative file name
-				String filename = FileUtils.getRelativePathFromMap(
+				final String filename = FileUtils.getRelativePathFromMap(
 						rootFilePath, currentFile);
 				if(result.indexOf(filename + Constants.QUESTION) != -1){
 					result = new StringBuffer(result.toString().replace(filename + Constants.QUESTION, topicId));
@@ -661,7 +662,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 				if(pluginId == null){
 					pluginId = "org.sample.help.doc";
 				}
-				Set<String> set = StringUtils.restoreSet(pluginId);
+				final Set<String> set = StringUtils.restoreSet(pluginId);
 				pluginMap.put("pluginId", set);
 			}
 			
@@ -727,13 +728,13 @@ public final class GenListModuleReader extends AbstractXMLReader {
 						.contains(Constants.ATTR_CLASS_VALUE_ANCHORKEY)) {
 					// create keyref element in the StringBuffer
 					// TODO in topic file is no keys
-					String keyref = atts
+					final String keyref = atts
 							.getValue(Constants.ATTRIBUTE_NAME_KEYREF);
 					result.append("<keyref name=\"" + keyref + "\"/>");
 					// meet <anchorid> tag
 				} else if (attrValue.contains(Constants.ATTR_CLASS_VALUE_ANCHORID)) {
 					// create keyref element in the StringBuffer
-					String id = atts.getValue(Constants.ATTRIBUTE_NAME_ID);
+					final String id = atts.getValue(Constants.ATTRIBUTE_NAME_ID);
 					// If current file is a ditamap file
 					// The id can only be element id within a topic
 					if (FileUtils.isDITAMapFile(currentFile)) {
@@ -767,8 +768,9 @@ public final class GenListModuleReader extends AbstractXMLReader {
 		// Generate Scheme relationship graph
 		if (attrValue != null) {
 			if (attrValue.contains(Constants.ATTR_CLASS_VALUE_SUBJECT_SCHEME)) {
-				if (this.relationGraph == null)
-					this.relationGraph = new LinkedHashMap<String, Set<String>>();
+				if (this.relationGraph == null) {
+                    this.relationGraph = new LinkedHashMap<String, Set<String>>();
+                }
 				//Make it easy to do the BFS later.
 				Set<String> children = this.relationGraph.get("ROOT");
 				if (children == null || children.isEmpty()) {
@@ -783,8 +785,9 @@ public final class GenListModuleReader extends AbstractXMLReader {
 					children = new LinkedHashSet<String>();
 					this.relationGraph.put(currentFile, children);
 				}
-				if (href != null)
-					children.add(FileUtils.resolveFile(rootDir, href));
+				if (href != null) {
+                    children.add(FileUtils.resolveFile(rootDir, href));
+                }
 			}
 		}
 		
@@ -840,8 +843,9 @@ public final class GenListModuleReader extends AbstractXMLReader {
         		params.clear();
 				params.put("%1", localName);
         		logger.logInfo(MessageUtils.getMessage("DOTJ029I", params).toString());
-        	}else
-        		props = StringUtils.getExtProps(domains);
+        	} else {
+                props = StringUtils.getExtProps(domains);
+            }
         }        
 		
 		if (insideExcludedElement) {
@@ -879,21 +883,21 @@ public final class GenListModuleReader extends AbstractXMLReader {
 		//onlyTopicInMap is on.
 		if(OutputUtils.getOnlyTopicInMap() && this.canResolved()){
 			//Get class attribute value
-			String classValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
+			final String classValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
 			
 				//topicref(only defined in ditamap file.)
 				if(classValue.contains(Constants.ATTR_CLASS_VALUE_TOPICREF)){
 					
 					//get href attribute value.
-					String hrefValue = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
+					final String hrefValue = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
 					
 					//get conref attribute value.
-					String conrefValue = atts.getValue(Constants.ATTRIBUTE_NAME_CONREF);
+					final String conrefValue = atts.getValue(Constants.ATTRIBUTE_NAME_CONREF);
 					
 					//has href attribute and refer to ditamap file.
 					if(!StringUtils.isEmptyString(hrefValue)){
 						//exclude external resources
-						String attrScope = atts.getValue(Constants.ATTRIBUTE_NAME_SCOPE);
+						final String attrScope = atts.getValue(Constants.ATTRIBUTE_NAME_SCOPE);
 						if ("external".equalsIgnoreCase(attrScope)
 								|| "peer".equalsIgnoreCase(attrScope)
 								|| hrefValue.indexOf(Constants.COLON_DOUBLE_SLASH) != -1
@@ -901,7 +905,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 							return;
 						}
 						//normalize href value.
-						File target=new File(hrefValue);
+						final File target=new File(hrefValue);
 						//caculate relative path for href value.
 						String fileName = null;
 						if(target.isAbsolute()){
@@ -912,7 +916,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 						fileName = fileName.replaceAll(Constants.DOUBLE_BACK_SLASH,
 								Constants.SLASH);
 						
-						boolean canParse = parseBranch(atts, hrefValue, fileName);
+						final boolean canParse = parseBranch(atts, hrefValue, fileName);
 						if(!canParse){
 							return;
 						}else{
@@ -922,7 +926,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 					}else if(!StringUtils.isEmptyString(conrefValue)){
 						
 						//exclude external resources
-						String attrScope = atts.getValue(Constants.ATTRIBUTE_NAME_SCOPE);
+						final String attrScope = atts.getValue(Constants.ATTRIBUTE_NAME_SCOPE);
 						if ("external".equalsIgnoreCase(attrScope)
 								|| "peer".equalsIgnoreCase(attrScope)
 								|| conrefValue.indexOf(Constants.COLON_DOUBLE_SLASH) != -1
@@ -930,7 +934,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 							return;
 						}
 						//normalize href value.
-						File target=new File(conrefValue);
+						final File target=new File(conrefValue);
 						//caculate relative path for href value.
 						String fileName = null;
 						if(target.isAbsolute()){
@@ -942,7 +946,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 						fileName = fileName.replaceAll(Constants.DOUBLE_BACK_SLASH,
 								Constants.SLASH);
 				
-						boolean canParse = parseBranch(atts, conrefValue, fileName);
+						final boolean canParse = parseBranch(atts, conrefValue, fileName);
 						if(!canParse){
 							return;
 						}else{
@@ -974,7 +978,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	private boolean parseBranch(Attributes atts, String hrefValue, String fileName) {
 		//current file is primary ditamap file.
 		//parse every branch.
-		String currentFileRelative = FileUtils.getRelativePathFromMap(
+		final String currentFileRelative = FileUtils.getRelativePathFromMap(
 				rootFilePath, currentFile);
 		if(currentDir == null && currentFileRelative.equals(primaryDitamap)){
 			//add branches into map
@@ -983,11 +987,11 @@ public final class GenListModuleReader extends AbstractXMLReader {
 		}else{
 			//current file is a sub-ditamap one.
 			//get branch's id
-			String id = atts.getValue(Constants.ATTRIBUTE_NAME_ID);
+			final String id = atts.getValue(Constants.ATTRIBUTE_NAME_ID);
 			//this branch is not referenced
 			if(level == 0 && StringUtils.isEmptyString(id)){
 				//There is occassion that the whole ditamap should be parsed
-				boolean found = searchBrachesMap(id);
+				final boolean found = searchBrachesMap(id);
 				if(found){
 					//Add this branch into map for parsing.
 					addReferredBranches(hrefValue, fileName);
@@ -1007,7 +1011,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 			//This branch has an id but is a new one	
 			}else if(!StringUtils.isEmptyString(id)){
 				//search branches map.
-				boolean found = searchBrachesMap(id);
+				final boolean found = searchBrachesMap(id);
 				//branch is referenced
 				if(found){
 					//Add this branch into map for parsing.
@@ -1032,11 +1036,11 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	 */
 	private boolean searchBrachesMap(String id) {
 		//caculate relative path for current file.
-		String currentFileRelative = FileUtils.getRelativePathFromMap(
+		final String currentFileRelative = FileUtils.getRelativePathFromMap(
 				rootFilePath, currentFile);
 		//seach the map with id & current file name.
 		if(vaildBranches.containsKey(currentFileRelative)){
-			List<String> branchIdList = vaildBranches.get(currentFileRelative);
+			final List<String> branchIdList = vaildBranches.get(currentFileRelative);
 			//the branch is referenced.
 			if(branchIdList.contains(id)){
 				
@@ -1068,10 +1072,10 @@ public final class GenListModuleReader extends AbstractXMLReader {
 			branchId = hrefValue.substring(hrefValue.lastIndexOf(Constants.SHARP) + 1);
 			//The map contains the file name
 			if(vaildBranches.containsKey(fileName)){
-				List<String> branchIdList = vaildBranches.get(fileName);
+				final List<String> branchIdList = vaildBranches.get(fileName);
 				branchIdList.add(branchId);
 			}else{
-				List<String> branchIdList = new ArrayList<String>();
+				final List<String> branchIdList = new ArrayList<String>();
 				branchIdList.add(branchId);
 				vaildBranches.put(fileName, branchIdList);
 			}
@@ -1083,7 +1087,6 @@ public final class GenListModuleReader extends AbstractXMLReader {
 
 	/**
 	 * Clean up.
-	 * @see org.dita.dost.reader.AbstractXMLReader#endDocument()
 	 */
 	@Override
 	public void endDocument() throws SAXException {
@@ -1104,11 +1107,10 @@ public final class GenListModuleReader extends AbstractXMLReader {
 
 	/**
 	 * Check if the current file is a ditamap with "@processing-role=resource-only".
-	 * @see org.dita.dost.reader.AbstractXMLReader#startDocument()
 	 */
 	@Override
 	public void startDocument() throws SAXException {
-		String href = FileUtils.getRelativePathFromMap(rootFilePath, currentFile);
+		final String href = FileUtils.getRelativePathFromMap(rootFilePath, currentFile);
 		if (FileUtils.isDITAMapFile(currentFile)
 				&& resourceOnlySet.contains(href)
 				&& !crossSet.contains(href)) {
@@ -1117,9 +1119,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 		}
 	}
 
-	/**
-	 * @see org.dita.dost.reader.AbstractXMLReader#endElement(java.lang.String, java.lang.String, java.lang.String)
-	 */
+	@Override
 	public void endElement(String uri, String localName, String qName) throws SAXException {		
 		
 		//subject scheme
@@ -1206,10 +1206,10 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	public InputSource resolveEntity(String publicId, String systemId)
 			throws SAXException, IOException {
 		if (catalogMap.get(publicId) != null) {
-			File dtdFile = new File((String) catalogMap.get(publicId));
+			final File dtdFile = new File((String) catalogMap.get(publicId));
 			return new InputSource(dtdFile.getAbsolutePath());
 		}else if (catalogMap.get(systemId) != null){
-			File schemaFile = new File((String) catalogMap.get(systemId));
+			final File schemaFile = new File((String) catalogMap.get(systemId));
 			return new InputSource(schemaFile.getAbsolutePath());
 		}
 
@@ -1222,13 +1222,13 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	private void parseAttribute(Attributes atts, String attrName) throws SAXException {
 		String attrValue = atts.getValue(attrName);
 		String filename = null;
-		String attrClass = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
-		String attrScope = atts.getValue(Constants.ATTRIBUTE_NAME_SCOPE);
-		String attrFormat = atts.getValue(Constants.ATTRIBUTE_NAME_FORMAT);
-		String attrType = atts.getValue(Constants.ATTRIBUTE_NAME_TYPE);
+		final String attrClass = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
+		final String attrScope = atts.getValue(Constants.ATTRIBUTE_NAME_SCOPE);
+		final String attrFormat = atts.getValue(Constants.ATTRIBUTE_NAME_FORMAT);
+		final String attrType = atts.getValue(Constants.ATTRIBUTE_NAME_TYPE);
 		
 		//Added on 20100830 for bug:3052156 start
-		String codebase = atts.getValue(Constants.ATTRIBUTE_NAME_CODEBASE);
+		final String codebase = atts.getValue(Constants.ATTRIBUTE_NAME_CODEBASE);
 		//Added on 20100830 for bug:3052156 end
 		
 		if (attrValue == null) {
@@ -1256,7 +1256,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 			
 			String target = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
 			
-			String keyRef = atts.getValue(Constants.ATTRIBUTE_NAME_KEYREF);
+			final String keyRef = atts.getValue(Constants.ATTRIBUTE_NAME_KEYREF);
 			
 			//Added by William on 2009-10-15 for ampersand bug:2878492 start
 			if(target != null){
@@ -1265,7 +1265,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 			//Added by William on 2009-10-15 for ampersand bug:2878492 end
 			
 			//Added by Alan for bug ID: 2870935 on Date: 2009-10-10 begin
-			String copy_to = atts.getValue(Constants.ATTRIBUTE_NAME_COPY_TO);
+			final String copy_to = atts.getValue(Constants.ATTRIBUTE_NAME_COPY_TO);
 			if (!StringUtils.isEmptyString(copy_to)) {
 				target = copy_to;
 			}
@@ -1277,10 +1277,10 @@ public final class GenListModuleReader extends AbstractXMLReader {
 			}
 			//Added on 20100825 for bug:3052904 end
 			//store the target
-			String temp = target;
+			final String temp = target;
 			
 			// Many keys can be defined in a single definition, like keys="a b c", a, b and c are seperated by blank.
-			for(String key: attrValue.split(" ")){
+			for(final String key: attrValue.split(" ")){
 				if(!keysDefMap.containsKey(key) && !key.equals("")){
 					if(target != null && !target.equals(Constants.STRING_EMPTY)){
 						if(attrScope!=null && (attrScope.equals("external") || attrScope.equals("peer"))){
@@ -1295,8 +1295,9 @@ public final class GenListModuleReader extends AbstractXMLReader {
 								tail = target.substring(target.indexOf(Constants.SHARP));
 								target = target.substring(0, target.indexOf(Constants.SHARP));
 							}
-							if(new File(target).isAbsolute())
-								target = FileUtils.getRelativePathFromMap(rootFilePath, target);
+							if(new File(target).isAbsolute()) {
+                                target = FileUtils.getRelativePathFromMap(rootFilePath, target);
+                            }
 							target = FileUtils.normalizeDirectory(currentDir, target);
 							keysDefMap.put(key, target + tail);
 						}
@@ -1308,7 +1309,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 						keysDefMap.put(key, "");
 					}
 				}else{
-					Properties prop = new Properties();
+					final Properties prop = new Properties();
 					prop.setProperty("%1", key);
 					prop.setProperty("%2", target);
 					logger.logWarn(MessageUtils.getMessage("DOTJ045W", prop).toString());
@@ -1350,7 +1351,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 			}
 		}
 		//Added by William on 2010-01-05 for bug:2926417 end
-		File target=new File(attrValue);
+		final File target=new File(attrValue);
 		if(target.isAbsolute() && 
 			!Constants.ATTRIBUTE_NAME_DATA.equals(attrName)){
 			attrValue=FileUtils.getRelativePathFromMap(rootFilePath,attrValue);
@@ -1369,7 +1370,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 		
 		try{
 			filename = URLDecoder.decode(filename, Constants.UTF8);
-		}catch(UnsupportedEncodingException e){
+		}catch(final UnsupportedEncodingException e){
 			
 		}
 		
@@ -1391,7 +1392,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 						//attrValue has topicId
 						if(attrValue.lastIndexOf(Constants.SHARP) != -1){
 							//get the topicId position
-							int position = attrValue.lastIndexOf(Constants.SHARP);
+							final int position = attrValue.lastIndexOf(Constants.SHARP);
 							topicId = attrValue.substring(position + 1);
 						}else{
 							//get the first topicId(vaild href file)
@@ -1481,10 +1482,10 @@ public final class GenListModuleReader extends AbstractXMLReader {
 		// Collect copy-to (target,source) into hash map
 		if (Constants.ATTRIBUTE_NAME_COPY_TO.equals(attrName)
 				&& FileUtils.isTopicFile(filename)) {
-			String href = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
+			final String href = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
 			
 			if (StringUtils.isEmptyString(href)) {
-				StringBuffer buff = new StringBuffer();
+				final StringBuffer buff = new StringBuffer();
 				buff.append("[WARN]: Copy-to task [href=\"\" copy-to=\"");
 				buff.append(filename);
 				buff.append("\"] was ignored.");
@@ -1499,7 +1500,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 				buff.append("\"] which points to another copy-to target");
 				buff.append(" was ignored.");
 				javaLogger.logWarn(buff.toString());*/
-        		Properties prop = new Properties();
+        		final Properties prop = new Properties();
         		prop.setProperty("%1", href);
         		prop.setProperty("%2", filename);
         		logger.logWarn(MessageUtils.getMessage("DOTX065W", prop).toString());
@@ -1509,7 +1510,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 				copytoMap.put(filename, FileUtils.normalizeDirectory(currentDir, href));
 			}
 			
-			String pathWithoutID = FileUtils.resolveFile(currentDir, attrValue);
+			final String pathWithoutID = FileUtils.resolveFile(currentDir, attrValue);
 			if (chunkLevel > 0 && chunkToNavLevel == 0 && topicGroupLevel == 0) {
 				chunkTopicSet.add(pathWithoutID);
 			} else {
@@ -1533,21 +1534,21 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	//get multi-level keys list
 	private List<String> getKeysList(String key, Map<String, String> keysRefMap) {
 		
-		List<String> list = new ArrayList<String>();
+		final List<String> list = new ArrayList<String>();
 		
 		//Iterate the map to look for multi-level keys
-		Iterator<Entry<String, String>> iter = keysRefMap.entrySet().iterator();
+		final Iterator<Entry<String, String>> iter = keysRefMap.entrySet().iterator();
 		while (iter.hasNext()) {
-			Map.Entry<String, String> entry = iter.next();
+			final Map.Entry<String, String> entry = iter.next();
 			//Multi-level key found
 			if(entry.getValue().equals(key)){
 				//add key into the list
-				String entryKey = entry.getKey();
+				final String entryKey = entry.getKey();
 				list.add(entryKey);
 				//still have multi-level keys
 				if(keysRefMap.containsValue(entryKey)){
 					//rescuive point
-					List<String> tempList = getKeysList(entryKey, keysRefMap);
+					final List<String> tempList = getKeysList(entryKey, keysRefMap);
 					list.addAll(tempList);
 				}
 			}
@@ -1562,18 +1563,18 @@ public final class GenListModuleReader extends AbstractXMLReader {
 		String key = null;
 		String value = null;
 		//tempMap storing values to avoid ConcurrentModificationException
-		Map<String, String> tempMap = new HashMap<String, String>();
-		Iterator<Entry<String, String>> iter = keysDefMap.entrySet().iterator();
+		final Map<String, String> tempMap = new HashMap<String, String>();
+		final Iterator<Entry<String, String>> iter = keysDefMap.entrySet().iterator();
 		
 		while (iter.hasNext()) {
-			Map.Entry<String, String> entry = iter.next();
+			final Map.Entry<String, String> entry = iter.next();
 			key = entry.getKey();
 			value = entry.getValue();
 			//there is multi-level keys exist.
 			if(keysRefMap.containsValue(key)){
 				//get multi-level keys
-				 List<String> keysList = getKeysList(key, keysRefMap);
-				 for (String multikey : keysList) {
+				 final List<String> keysList = getKeysList(key, keysRefMap);
+				 for (final String multikey : keysList) {
 					 //update tempMap
 					 tempMap.put(multikey, value);
 				}
@@ -1585,24 +1586,27 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	//Added on 20100826 for bug:3052913 end
 
 	private boolean isOutFile(String toCheckPath) {
-		if (!toCheckPath.startsWith(".."))
-			return false;
-		else
-			return true;
+		if (!toCheckPath.startsWith("..")) {
+            return false;
+        } else {
+            return true;
+        }
 	}
 
 	private boolean isMapFile() {
-		String current=FileUtils.removeRedundantNames(currentFile);
-		if(FileUtils.isDITAMapFile(current))	
-			return true;
-		else
-			return false;
+		final String current=FileUtils.removeRedundantNames(currentFile);
+		if(FileUtils.isDITAMapFile(current)) {
+            return true;
+        } else {
+            return false;
+        }
 	}
 	private boolean canResolved(){
-		if ((OutputUtils.getOnlyTopicInMap() == false) || isMapFile() )
-			return true;
-		else
-			return false;
+		if ((OutputUtils.getOnlyTopicInMap() == false) || isMapFile() ) {
+            return true;
+        } else {
+            return false;
+        }
 	}
 	private void addToOutFilesSet(String hrefedFile) {
 		if (canResolved()) {
@@ -1625,18 +1629,18 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	*/
 	private void toOutFile(String filename) throws SAXException {
 		//the filename is a relative path from the dita input file
-		Properties prop=new Properties();
+		final Properties prop=new Properties();
 		prop.put("%1", FileUtils.normalizeDirectory(rootDir, filename));
 		prop.put("%2", FileUtils.removeRedundantNames(currentFile));
 		if ((OutputUtils.getGeneratecopyouter() == OutputUtils.NOT_GENERATEOUTTER) 
 				|| (OutputUtils.getGeneratecopyouter() == OutputUtils.GENERATEOUTTER)) {
 			if (isOutFile(filename)) {
 				if (OutputUtils.getOutterControl().equals(OutputUtils.OUTTERCONTROL_FAIL)){
-					MessageBean msgBean=MessageUtils.getMessage("DOTJ035F", prop);	
+					final MessageBean msgBean=MessageUtils.getMessage("DOTJ035F", prop);	
 					throw new SAXParseException(null,null,new DITAOTException(msgBean,null,msgBean.toString()));	
 				}
 				if (OutputUtils.getOutterControl().equals(OutputUtils.OUTTERCONTROL_WARN)){
-					String message=MessageUtils.getMessage("DOTJ036W",prop).toString();
+					final String message=MessageUtils.getMessage("DOTJ036W",prop).toString();
 					logger.logWarn(message);
 				}
 				addToOutFilesSet(filename);

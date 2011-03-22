@@ -75,7 +75,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
     private boolean insideCDATA;
     private ArrayList<String> topicSpecList;
     
-    private static Hashtable<String, String> moveTable;
+    private static final Hashtable<String, String> moveTable;
     static{
     	moveTable = new Hashtable<String, String>(Constants.INT_32);
     	moveTable.put(Constants.ATTR_CLASS_VALUE_MAP_SEARCHTITLE,"titlealts/searchtitle");
@@ -98,7 +98,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
     	moveTable.put(Constants.ATTR_CLASS_VALUE_UNKNOWN,"prolog/unknown");  	
     }
     
-    private static HashSet<String> uniqueSet;
+    private static final HashSet<String> uniqueSet;
 	
 	static{
 		uniqueSet = new HashSet<String>(Constants.INT_16);
@@ -109,7 +109,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
 		uniqueSet.add(Constants.ATTR_CLASS_VALUE_MAP_SEARCHTITLE);
 	}
 
-	private static Hashtable<String, Integer> compareTable;
+	private static final Hashtable<String, Integer> compareTable;
 	
 	static{
 		compareTable = new Hashtable<String, Integer>(Constants.INT_32);

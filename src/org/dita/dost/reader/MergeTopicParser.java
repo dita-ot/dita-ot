@@ -29,7 +29,7 @@ import org.xml.sax.XMLReader;
  * @author Zhang, Yuan Peng
  */
 public final class MergeTopicParser extends AbstractXMLReader {
-	private static StringBuffer topicInfo = null;
+	private StringBuffer topicInfo = null;
 	private ContentImpl content;
 	private String dirPath = null;
 	private String filePath = null;
@@ -41,8 +41,10 @@ public final class MergeTopicParser extends AbstractXMLReader {
 	
 	/**
 	 * Default Constructor.
+	 * 
+	 * @param util merge utility
 	 */
-	public MergeTopicParser() {
+	public MergeTopicParser(final MergeUtils util) {
 		try{
 			if(reader == null){
 				reader = StringUtils.getXMLReader();
@@ -56,9 +58,9 @@ public final class MergeTopicParser extends AbstractXMLReader {
 			}
 			
 			content = new ContentImpl();
-			util = MergeUtils.getInstance();
-		}catch (Exception e){
-			logger.logException(e);
+			this.util = util;
+		}catch (final Exception e){
+			throw new RuntimeException("Failed to initialize merge topic parse: " + e.getMessage(), e);
 		}
 	}
 	/**
@@ -68,26 +70,17 @@ public final class MergeTopicParser extends AbstractXMLReader {
 		topicInfo.delete(0, topicInfo.length());
 	}
 
-
-
-	/**
-	 * @see org.xml.sax.ContentHandler#characters(char[], int, int)
-	 */
+	@Override
 	public void characters(char[] ch, int start, int length) throws SAXException {
 		topicInfo.append(StringUtils.escapeXML(ch, start, length));
 	}
 
-
-	/**
-	 * @see org.xml.sax.ContentHandler#endDocument()
-	 */
+	@Override
 	public void endDocument() throws SAXException {
-		
+	    // NOOP
 	}
 
-	/**
-	 * @see org.xml.sax.ContentHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
-	 */
+	@Override
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		// Skip redundant <dita> tags.
 		if (Constants.ELEMENT_NAME_DITA.equalsIgnoreCase(qName)) {
@@ -98,17 +91,12 @@ public final class MergeTopicParser extends AbstractXMLReader {
 		.append(qName)
 		.append(Constants.GREATER_THAN);
 	}
-
 	
-	/**
-	 * @see org.dita.dost.reader.AbstractReader#getContent()
-	 */
+	@Override
 	public Content getContent() {
 		content.setValue(topicInfo);
 		return content;
 	}
-
-
 
 	/**
 	 * @param classValue
@@ -120,7 +108,7 @@ public final class MergeTopicParser extends AbstractXMLReader {
 		if(classValue != null 
 				&& classValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPIC)!=-1){
 			// Process the topic element id
-			String value = filePath+Constants.SHARP+attValue;
+			final String value = filePath+Constants.SHARP+attValue;
 			if(util.findId(value)){
 				topicInfo.append(Constants.STRING_BLANK)
 				.append("oid").append(Constants.EQUAL).append(Constants.QUOTATION)
@@ -176,10 +164,10 @@ public final class MergeTopicParser extends AbstractXMLReader {
 
 			
 			if(util.findId(topicId)){// topicId found 
-				String prefix = Constants.SHARP + util.getIdValue(topicId);
+				final String prefix = Constants.SHARP + util.getIdValue(topicId);
 				retAttValue = (index!=-1)? prefix + attValue.substring(index) : prefix;
 			}else{//topicId not found
-				String prefix = Constants.SHARP + util.addId(topicId);
+				final String prefix = Constants.SHARP + util.addId(topicId);
 				retAttValue = (index!=-1)? prefix + attValue.substring(index) : prefix;
 			}
 
@@ -215,35 +203,31 @@ public final class MergeTopicParser extends AbstractXMLReader {
 	 * @return updated id
 	 */
 	public String parse(String filename,String dir){
-		int index = filename.indexOf(Constants.SHARP);
+		final int index = filename.indexOf(Constants.SHARP);
 		dirPath = dir;
 		try{
 			filePath = (index != -1) ? filename.substring(0,index):filename;
 			reader.setErrorHandler(new DITAOTXMLErrorHandler(dir + File.separator + filePath));
 			reader.parse(dir + File.separator + filePath);
 			return retId;
-		}catch (Exception e){
+		}catch (final Exception e){
 			logger.logException(e);
 			return null;
 		}
 	}
 
-	/**
-	 * @see org.xml.sax.ContentHandler#startDocument()
-	 */
+	@Override
 	public void startDocument() throws SAXException {
 		isFirstTopicId = true;
 	}
 
-	/**
-	 * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
-	 */
+	@Override
 	public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
 		//write the start element of topic parsing logic;
 		String classValue = null;
 		String scopeValue = null;
 		String formatValue = null;
-		int attsLen = atts.getLength();
+		final int attsLen = atts.getLength();
 		int sharpIndex;
 		
 		// Skip redundant <dita> tags.
@@ -255,7 +239,7 @@ public final class MergeTopicParser extends AbstractXMLReader {
 		classValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);		
 		
 		for (int i = 0; i < attsLen; i++) {
-            String attQName = atts.getQName(i);
+            final String attQName = atts.getQName(i);
             String attValue = atts.getValue(i);
             
             if(Constants.ATTRIBUTE_NAME_ID.equals(attQName)){           	
@@ -306,19 +290,16 @@ public final class MergeTopicParser extends AbstractXMLReader {
 		topicInfo.append(Constants.GREATER_THAN);
 	}
 
-
-
 	private String handleLocalHref(String attValue) {
 		String pathFromMap;
         pathFromMap = FileUtils.resolveTopic(new File(filePath).getParent(),attValue);
         return pathFromMap;
 	}
 
-
 	@Override
 	public void processingInstruction(String target, String data)
 			throws SAXException {
-		String pi = (data != null) ? target + Constants.STRING_BLANK + data : target;
+		final String pi = (data != null) ? target + Constants.STRING_BLANK + data : target;
         topicInfo.append(Constants.LESS_THAN + Constants.QUESTION 
                 + pi + Constants.QUESTION + Constants.GREATER_THAN);
 	}

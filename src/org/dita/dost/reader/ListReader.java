@@ -32,10 +32,10 @@ import org.dita.dost.util.StringUtils;
  */
 public final class ListReader implements AbstractReader {
 
-    private LinkedList<String> refList;
-    private Content content;
+    private final LinkedList<String> refList;
+    private final Content content;
     private Map<String, String> copytoMap = new HashMap<String, String>();
-    private Set<String> schemeSet = new HashSet<String>();
+    private final Set<String> schemeSet = new HashSet<String>();
     private String inputMap;
     private DITAOTLogger logger;
 
@@ -49,16 +49,11 @@ public final class ListReader implements AbstractReader {
         content.setCollection(refList);
     }
 
-
-    /**
-     * @see org.dita.dost.reader.AbstractReader#read(java.lang.String)
-     * 
-     */
     public void read(String filename) {
     	Properties propterties = null; 	
 		try {
 			propterties=ListUtils.getDitaList();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			logger.logException(e);
 		}
 		
@@ -95,10 +90,6 @@ public final class ListReader implements AbstractReader {
         
     }
 
-    /**
-     * @see org.dita.dost.reader.AbstractReader#getContent()
-     * 
-     */
     public Content getContent() {
         return content;
     }
