@@ -2132,7 +2132,30 @@
 </xsl:template>
 
 <xsl:template name="topic-image">
-  <!-- now invoke the actual content and its alt text -->
+<xsl:variable name="isSVG" select="ends-with(@href, '.svg') or ends-with(@href, '.svgz')"/>
+<xsl:choose>
+      <xsl:when test="$isSVG">
+        <!--<object data="file.svg" type="image/svg+xml" width="500" height="200">-->
+        <!-- now invoke the actual content and its alt text -->
+        <xsl:element name="embed">
+          <xsl:call-template name="commonattributes">
+            <xsl:with-param name="default-output-class">
+              <xsl:if test="@placement='break'">
+                <!--Align only works for break-->
+                <xsl:choose>
+                  <xsl:when test="@align='left'">imageleft</xsl:when>
+                  <xsl:when test="@align='right'">imageright</xsl:when>
+                  <xsl:when test="@align='center'">imagecenter</xsl:when>
+                </xsl:choose>
+              </xsl:if>
+            </xsl:with-param>
+          </xsl:call-template>
+          <xsl:call-template name="setid"/>
+          <xsl:attribute name="src" select="@href"/>
+          <xsl:apply-templates select="@height|@width"/>
+        </xsl:element>
+      </xsl:when>
+<xsl:otherwise>
   <xsl:element name="img">
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class">
@@ -2168,6 +2191,8 @@
       </xsl:when>
     </xsl:choose>
   </xsl:element>
+</xsl:otherwise>
+</xsl:choose>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/alt ')]">
