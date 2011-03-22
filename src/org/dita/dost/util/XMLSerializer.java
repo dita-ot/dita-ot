@@ -9,6 +9,8 @@
  */
 package org.dita.dost.util;
 
+import static javax.xml.XMLConstants.*;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
@@ -46,7 +48,7 @@ public class XMLSerializer {
     private OutputStream outStream;
     private Writer outWriter;
 
-    private final Stack<String> elementStack = new Stack<String>();
+    private final Stack<QName> elementStack = new Stack<QName>();
     private AttributesImpl openAttributes;
     private boolean openStartElement;
 
@@ -65,7 +67,6 @@ public class XMLSerializer {
     }
 
     private TransformerHandler initializeTransformerHandler() throws TransformerFactoryConfigurationError {
-        final TransformerHandler t = null;
         final TransformerFactory tf = TransformerFactory.newInstance();
         if (tf.getFeature(SAXTransformerFactory.FEATURE)) {
             final SAXTransformerFactory stf = (SAXTransformerFactory) tf;
@@ -150,8 +151,29 @@ public class XMLSerializer {
      * @throws SAXException if processing the event failed
      */
     public void writeStartElement(final String qName) throws SAXException {
+        writeStartElement(null, qName);
+    }
+
+    /**
+     * Writer start element without attributes.
+     * 
+     * @param qName element QName
+     * @throws SAXException if processing the event failed
+     */
+    public void writeStartElement(final String uri, final String qName) throws SAXException {
         processStartElement();
-        elementStack.push(qName);
+        final QName res = new QName(uri, qName);
+        if (uri != null) {
+            boolean found = false;
+            for (final QName e: elementStack) {
+                if (e.uri.equals(res.uri) && e.prefix.equals(res.prefix)) {
+                    found = true;
+                    break;
+                }
+            }
+            res.newMapping = !found;
+        }
+        elementStack.push(res);
         openStartElement = true;
     }
 
@@ -176,9 +198,11 @@ public class XMLSerializer {
      */
     public void writeEndElement() throws SAXException {
         processStartElement();
-        final String qName = elementStack.pop();
-        transformer.endElement("", qName, qName);
-
+        final QName qName = elementStack.pop();
+        transformer.endElement(qName.uri, qName.localName, qName.prefix);
+        if (qName.newMapping) {
+            transformer.endPrefixMapping(qName.prefix);
+        }
     }
 
     /**
@@ -217,15 +241,41 @@ public class XMLSerializer {
         transformer.comment(ch, 0, ch.length);
     }
 
+    
     // Private methods ---------------------------------------------------------
-
+    
     private void processStartElement() throws SAXException {
         if (openStartElement) {
-            final String qName = elementStack.peek();
-            transformer.startElement("", qName, qName, openAttributes != null ? openAttributes : EMPTY_ATTS);
+            final QName qName = elementStack.peek();
+            if (qName.newMapping) {
+                transformer.startPrefixMapping(qName.prefix, qName.uri);
+            }
+            final Attributes atts = openAttributes != null ? openAttributes : EMPTY_ATTS;
+            transformer.startElement(qName.uri, qName.localName, qName.qName, atts);
             openStartElement = false;
             openAttributes = null;
         }
     }
-
+    
+    
+    // Private inner classes ---------------------------------------------------
+    
+    private static final class QName {
+        
+        final String uri;
+        final String localName;
+        final String prefix;
+        final String qName;
+        boolean newMapping;
+        
+        QName(final String uri, final String qName) {
+            final int i = qName.indexOf(':');
+            this.uri = uri != null ? uri : DEFAULT_NS_PREFIX;
+            this.localName = i != -1 ? qName.substring(i + 1) : qName;
+            this.prefix = i != -1 ? qName.substring(0, i) : DEFAULT_NS_PREFIX;
+            this.qName = qName;
+        }
+        
+    }
+    
 }

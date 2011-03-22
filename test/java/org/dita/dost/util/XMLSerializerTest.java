@@ -22,17 +22,11 @@ import java.io.StringWriter;
 import javax.xml.transform.sax.TransformerHandler;
 
 import org.custommonkey.xmlunit.XMLUnit;
-
-import com.sun.tools.internal.jxc.gen.config.AttributesImpl;
-
-import org.dita.dost.TestUtils;
 import org.dita.dost.util.XMLSerializer;
-
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 import org.xml.sax.SAXException;
-
 import org.junit.Test;
 
 public class XMLSerializerTest {
@@ -71,6 +65,14 @@ public class XMLSerializerTest {
         serializer.writeEndElement(); // child
         serializer.writeCharacters("baz");
         serializer.writeEndElement(); // parent
+        serializer.writeCharacters("\n");
+        serializer.writeStartElement("http://example.com/bar", "foo");
+        serializer.writeEndElement(); // foo
+        serializer.writeStartElement("http://example.com/baz", "ns:foo");
+        serializer.writeStartElement("http://example.com/baz", "ns:bar");
+        serializer.writeEndElement(); // ns:bar
+        serializer.writeEndElement(); // ns:foo
+        serializer.writeCharacters("\n");
         serializer.writeEndElement(); // topic
         serializer.writeEndDocument();
         serializer.close();
