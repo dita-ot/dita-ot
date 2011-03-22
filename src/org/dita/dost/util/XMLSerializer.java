@@ -12,7 +12,7 @@ package org.dita.dost.util;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
-import java.util.LinkedList;
+import java.util.Stack;
 
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
@@ -46,7 +46,7 @@ public class XMLSerializer {
     private OutputStream outStream;
     private Writer outWriter;
 
-    private final LinkedList<String> elementStack = new LinkedList<String>();
+    private final Stack<String> elementStack = new Stack<String>();
     private AttributesImpl openAttributes;
     private boolean openStartElement;
 
