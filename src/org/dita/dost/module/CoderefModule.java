@@ -67,6 +67,7 @@ final class CoderefModule implements AbstractPipelineModule {
     	
     	final Set<String> codereflist=StringUtils.restoreSet(properties.getProperty(Constants.CODEREF_LIST));		
 		final CoderefResolver writer = new CoderefResolver();
+		writer.setLogger(logger);
 		for (final String fileName : codereflist) {
 			//FIXME:This writer deletes and renames files, have to 
 			writer.write(new File(tempDir,fileName).getAbsolutePath()); 

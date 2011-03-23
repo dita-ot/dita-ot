@@ -68,6 +68,7 @@ final class MoveIndexModule implements AbstractPipelineModule {
 		final MapIndexReader indexReader = new MapIndexReader();
 		indexReader.setLogger(logger);
 		final DitaIndexWriter indexInserter = new DitaIndexWriter();
+		indexInserter.setLogger(logger);
 		final String baseDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
     	String tempDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
     	

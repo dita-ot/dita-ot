@@ -116,6 +116,7 @@ final class KeyrefModule implements AbstractPipelineModule {
 		parseList.addAll(conrefList);
 		for(final String file: parseList){
 			final KeyrefPaser parser = new KeyrefPaser();
+			parser.setLogger(logger);
 			parser.setContent(content);
 			parser.setTempDir(tempDir);
 			parser.setKeyMap(keymap);		

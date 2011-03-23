@@ -79,6 +79,7 @@ final class ConrefPushModule implements AbstractPipelineModule {
 		while(iter.hasNext()){
 			final Map.Entry<String, Hashtable<String,String>> entry = iter.next();
 			final ConrefPushParser parser = new ConrefPushParser();
+			parser.setLogger(logger);
 			final Content content = new ContentImpl();
 			content.setValue(entry.getValue());
 			parser.setContent(content);

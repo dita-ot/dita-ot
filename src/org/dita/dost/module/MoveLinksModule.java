@@ -61,6 +61,7 @@ final class MoveLinksModule implements AbstractPipelineModule {
         final MapLinksReader indexReader = new MapLinksReader();
         indexReader.setLogger(logger);
 		final DitaLinksWriter indexInserter = new DitaLinksWriter();
+		indexInserter.setLogger(logger);
 		Set<Map.Entry<String, String>> mapSet;
 		Iterator<Map.Entry<String, String>> i;
         

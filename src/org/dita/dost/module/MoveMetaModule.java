@@ -69,7 +69,7 @@ final class MoveMetaModule implements AbstractPipelineModule {
 		final MapMetaReader metaReader = new MapMetaReader();
 		metaReader.setLogger(logger);
 		final DitaMetaWriter inserter = new DitaMetaWriter();
-
+		inserter.setLogger(logger);
 		if (!new File(tempDir).isAbsolute()) {
         	tempDir = new File(baseDir, tempDir).getAbsolutePath();
         }

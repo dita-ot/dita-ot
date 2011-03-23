@@ -249,6 +249,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 			    //FilterUtils.setFilterMap(null);
 			}
 			final DitaWriter fileWriter = new DitaWriter();
+			fileWriter.setLogger(fileLogger);
 			try{
 			    final boolean xmlValidate = Boolean.valueOf(input.getAttribute("validate"));
 			    fileWriter.initXMLReader(ditaDir,xmlValidate, setSystemid);

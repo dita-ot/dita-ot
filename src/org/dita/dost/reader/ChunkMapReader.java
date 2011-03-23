@@ -506,6 +506,7 @@ public final class ChunkMapReader implements AbstractReader {
 		//set up ChunkTopicParser
 		try{
 			final ChunkTopicParser chunkParser = new ChunkTopicParser();
+			chunkParser.setLogger(logger);
 			chunkParser.setup(changeTable, conflictTable, refFileSet, elem, separate, chunkByTopic, ditaext);
 			chunkParser.write(filePath);
 		}catch (final Exception e) {

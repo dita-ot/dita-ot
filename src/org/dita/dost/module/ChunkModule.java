@@ -183,6 +183,7 @@ final class ChunkModule implements AbstractPipelineModule {
 			}
 		}
 	    final TopicRefWriter topicRefWriter=new TopicRefWriter();
+	    topicRefWriter.setLogger(logger);
 		topicRefWriter.setContent(changeTable);
 		topicRefWriter.setup(conflictTable);
 		final StringTokenizer fullTopicList=new StringTokenizer(prop.getProperty(Constants.FULL_DITAMAP_TOPIC_LIST), Constants.COMMA);
