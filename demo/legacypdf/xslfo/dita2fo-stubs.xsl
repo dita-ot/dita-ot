@@ -55,10 +55,10 @@
   <xsl:variable name="maintitle"><xsl:value-of select="/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]"/></xsl:variable>
   <xsl:variable name="ditamaintitle"><xsl:value-of select="/dita/*[contains(@class,' topic/topic ')][1]/*[contains(@class,' topic/title ')]"/></xsl:variable>
   <xsl:choose>
-    <xsl:when test="string-length($schtitle)>'0'"><xsl:value-of select="$schtitle"/></xsl:when>
-    <xsl:when test="string-length($ditaschtitle)>'0'"><xsl:value-of select="$ditaschtitle"/></xsl:when>
-    <xsl:when test="string-length($maintitle)>'0'"><xsl:value-of select="$maintitle"/></xsl:when>
-    <xsl:when test="string-length($ditamaintitle)>'0'"><xsl:value-of select="$ditamaintitle"/></xsl:when>
+    <xsl:when test="string-length($schtitle) > 0"><xsl:value-of select="$schtitle"/></xsl:when>
+    <xsl:when test="string-length($ditaschtitle) > 0"><xsl:value-of select="$ditaschtitle"/></xsl:when>
+    <xsl:when test="string-length($maintitle) > 0"><xsl:value-of select="$maintitle"/></xsl:when>
+    <xsl:when test="string-length($ditamaintitle) > 0"><xsl:value-of select="$ditamaintitle"/></xsl:when>
     <xsl:otherwise>
       <xsl:text>***</xsl:text>
       <xsl:call-template name="output-message">

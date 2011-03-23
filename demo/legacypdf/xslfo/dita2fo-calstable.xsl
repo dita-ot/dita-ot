@@ -157,7 +157,7 @@
   <xsl:template match="*[contains(@class,' topic/thead ')]/*[contains(@class,' topic/row ')]/*[contains(@class,' topic/entry ')]">
     <xsl:variable name="colnumval">
       <xsl:choose>
-        <xsl:when test="@colname">
+        <xsl:when test="ancestor::tgroup/colspec[@colname=current()/@colname]/@colnum">
           <xsl:value-of select="ancestor::tgroup/colspec[@colname=current()/@colname]/@colnum"/>
         </xsl:when>
         <xsl:when test="@colnum">
@@ -181,7 +181,7 @@
   <xsl:template match="*[contains(@class,' topic/tfoot ')]/*[contains(@class,' topic/row ')]/*[contains(@class,' topic/entry ')]">
     <xsl:variable name="colnumval">
       <xsl:choose>
-        <xsl:when test="@colname">
+        <xsl:when test="ancestor::tgroup/colspec[@colname=current()/@colname]/@colnum">
           <xsl:value-of select="ancestor::tgroup/colspec[@colname=current()/@colname]/@colnum"/>
         </xsl:when>
         <xsl:when test="@colnum">
@@ -202,7 +202,7 @@
   <xsl:template name="get-colnumval">
     <xsl:variable name="colnumval">
       <xsl:choose>
-        <xsl:when test="@colname">
+        <xsl:when test="ancestor::tgroup/colspec[@colname=current()/@colname]/@colnum">
           <xsl:value-of select="ancestor::tgroup/colspec[@colname=current()/@colname]/@colnum"/>
         </xsl:when>
         <xsl:when test="@colnum">
@@ -217,7 +217,7 @@
   <xsl:template match="*[contains(@class,' topic/tbody ')]/*[contains(@class,' topic/row ')]/*[contains(@class,' topic/entry ')]">
     <xsl:variable name="colnumval">
       <xsl:choose>
-        <xsl:when test="@colname">
+        <xsl:when test="ancestor::tgroup/colspec[@colname=current()/@colname]/@colnum">
           <xsl:value-of select="ancestor::tgroup/colspec[@colname=current()/@colname]/@colnum"/>
         </xsl:when>
         <xsl:when test="@colnum">
