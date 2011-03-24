@@ -280,5 +280,11 @@
   </xsl:choose>
 </xsl:template>
   
+  <!-- Template returns "true" if $text parameter string ends with the $with parameter string, and otherwise returns "false". -->
+  <xsl:template name="ends-with">
+    <xsl:param name="text"/>
+    <xsl:param name="with"/>
+    <xsl:value-of select="substring($text, string-length($text) - string-length($with) + 1) = $with"/>
+  </xsl:template>
   
 </xsl:stylesheet>

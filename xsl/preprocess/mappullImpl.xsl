@@ -31,7 +31,6 @@ Other modes can be found within the code, and may or may not prove useful for ov
 
 <xsl:stylesheet version="1.0" 
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:fn="http://www.w3.org/2005/xpath-functions"
                 xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
                 xmlns:mappull="http://dita-ot.sourceforge.net/ns/200704/mappull"
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
@@ -1299,7 +1298,13 @@ Other modes can be found within the code, and may or may not prove useful for ov
     </xsl:variable>
    
     <xsl:variable name="end-text">
-      <xsl:if test=" fn:ends-with(string($text_value),' ')">
+      <xsl:variable name="ends-with-space">
+        <xsl:call-template name="ends-with">
+          <xsl:with-param name="text" select="$text_value"/>
+          <xsl:with-param name="with" select="' '"/>
+        </xsl:call-template>
+      </xsl:variable>
+      <xsl:if test="$ends-with-space = 'true'">
         <xsl:value-of select="' '"/>
       </xsl:if>
     </xsl:variable>
