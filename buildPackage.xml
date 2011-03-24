@@ -264,7 +264,7 @@
           <include name="lib/dost.jar"/>
           <include name="lib/commons-logging-1.1.1.jar"/>
           <exclude name="startcmd.*"/>
-          <exclude name="buildPackage.xml"/>
+          <exclude name="buildPackage.*"/>
         </zipfileset>
       </zip>
       <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" compression="gzip" longfile="gnu">
@@ -273,7 +273,7 @@
           <include name="lib/dost.jar"/>
           <include name="lib/commons-logging-1.1.1.jar"/>
           <exclude name="startcmd.*"/>
-          <exclude name="buildPackage.xml"/>
+          <exclude name="buildPackage.*"/>
         </tarfileset>
       </tar>
     </sequential>
@@ -288,7 +288,7 @@
         <include name="lib/commons-logging-1.1.1.jar"/>
         <include name="lib/APACHE-LICENSE-2_0.html"/>
         <exclude name="startcmd.*"/>
-        <exclude name="buildPackage.xml"/>
+        <exclude name="buildPackage.*"/>
       </zipfileset>
     </zip>
     <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" compression="gzip" longfile="gnu">
@@ -298,7 +298,7 @@
         <include name="lib/commons-logging-1.1.1.jar"/>
         <include name="lib/APACHE-LICENSE-2_0.html"/>
         <exclude name="startcmd.*"/>
-        <exclude name="buildPackage.xml"/>
+        <exclude name="buildPackage.*"/>
       </tarfileset>
     </tar>
   </target>
@@ -312,7 +312,7 @@
         <patternset refid="pattern.package.ant"/>
         <include name="lib/APACHE-LICENSE-2_0.html"/>
         <include name="lib/ICU_License.html"/>
-        <exclude name="buildPackage.xml"/>
+        <exclude name="buildPackage.*"/>
       </zipfileset>
     </zip>
     <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" compression="gzip" longfile="gnu">
@@ -322,7 +322,7 @@
         <patternset refid="pattern.package.ant"/>
         <include name="lib/APACHE-LICENSE-2_0.html"/>
         <include name="lib/ICU_License.html"/>
-        <exclude name="buildPackage.xml"/>
+        <exclude name="buildPackage.*"/>
         <exclude name="startcmd.sh"/>
       </tarfileset>
       <tarfileset mode="755" dir="${basedir}" prefix="${package.name.root}${version}">
