@@ -7,12 +7,11 @@
 <project name="build_DITA-OT_package" default="build-all-packages" basedir=".">
   <description>Build source and binary packages for DITA Open Toolkit</description>
 
+  <property file="buildPackage.properties"/>
+
   <property name="HTMLHelpCompiler" value="C:\Program Files\HTML Help Workshop\hhc.exe"/>
-  <property name="package.output.dir" location="${basedir}/build\"/>
+  <property name="package.output.dir" location="${basedir}/build/"/>
   <property name="package.name.root" value="DITA-OT"/>
-  <property name="version" value="1.5.3"/>
-  <!--This property should be edited manually in each milestone release?-->
-  <property name="milestone" value="03"/>
 
   <property name="src.dir" location="${basedir}"/>
   <property name="java.dir" location="${src.dir}/src/"/>
@@ -91,6 +90,7 @@
     </copy>
     <jar destfile="${dost.jar}" basedir="${bin.dir}" includes="**">
       <manifest>
+        <attribute name="Implementation-Version" value="${version} M${milestone}"/>
         <attribute name="Main-Class" value="org.dita.dost.invoker.CommandLineInvoker"/>
       </manifest>
     </jar>
