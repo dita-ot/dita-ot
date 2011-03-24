@@ -16,6 +16,7 @@
 
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:fn="http://www.w3.org/2005/xpath-functions"
                 xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
                 xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
@@ -2132,7 +2133,7 @@
 </xsl:template>
 
 <xsl:template name="topic-image">
-<xsl:variable name="isSVG" select="ends-with(@href, '.svg') or ends-with(@href, '.svgz')"/>
+<xsl:variable name="isSVG" select="fn:ends-with(string(@href), '.svg') or fn:ends-with(string(@href), '.svgz')"/>
 <xsl:choose>
       <xsl:when test="$isSVG">
         <!--<object data="file.svg" type="image/svg+xml" width="500" height="200">-->
@@ -2151,7 +2152,7 @@
             </xsl:with-param>
           </xsl:call-template>
           <xsl:call-template name="setid"/>
-          <xsl:attribute name="src" select="@href"/>
+          <xsl:attribute name="src"><xsl:value-of select="@href"/></xsl:attribute>
           <xsl:apply-templates select="@height|@width"/>
         </xsl:element>
       </xsl:when>

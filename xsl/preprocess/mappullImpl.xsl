@@ -1299,7 +1299,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
     </xsl:variable>
    
     <xsl:variable name="end-text">
-      <xsl:if test=" fn:ends-with($text_value,' ')">
+      <xsl:if test=" fn:ends-with(string($text_value),' ')">
         <xsl:value-of select="' '"/>
       </xsl:if>
     </xsl:variable>
