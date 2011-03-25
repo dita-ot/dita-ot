@@ -9,6 +9,8 @@
  */
 package org.dita.dost.reader;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.util.Hashtable;
 import java.util.Properties;
@@ -16,12 +18,12 @@ import java.util.Properties;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
+
 /**
  * Class for reading conref push content.
  *
@@ -79,7 +81,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
 		filePath = new File(filename).getParentFile().getAbsolutePath();
 		parsefilename = new File(filename).getName();
 		start = false;
-		pushcontent = new StringBuffer(Constants.INT_256);
+		pushcontent = new StringBuffer(INT_256);
 		pushType = null;
 		try{
 			reader.parse(filename);
@@ -94,11 +96,11 @@ public final class ConrefPushReader extends AbstractXMLReader {
 		pushtable = new Hashtable<String, Hashtable<String,String>>();
 		try{
 			reader = StringUtils.getXMLReader();
-			reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
-			reader.setFeature(Constants.FEATURE_NAMESPACE, true);
+			reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
+			reader.setFeature(FEATURE_NAMESPACE, true);
 			
 			//Added by william on 2009-11-8 for ampbug:2893664 start
-			reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
+			reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
 			reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
 			reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
 			needResolveEntity = true;
@@ -172,7 +174,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
 					//we need to add target and content to pushtable		
 					replaceContent();
 					addtoPushTable(target, pushcontent.toString(), pushType);
-					pushcontent = new StringBuffer(Constants.INT_256);
+					pushcontent = new StringBuffer(INT_256);
 					target = null;
 					pushType = null;
 				}
@@ -194,7 +196,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
 		int nextindex = 0;
 		int hrefindex = pushcontent.indexOf("href=\"", index);
 		int conrefindex = pushcontent.indexOf("conref=\"", index);
-		final StringBuffer resultBuffer = new StringBuffer(Constants.INT_256);
+		final StringBuffer resultBuffer = new StringBuffer(INT_256);
 		if(hrefindex < 0 && conrefindex < 0){
 			return;
 		}
@@ -210,10 +212,10 @@ public final class ConrefPushReader extends AbstractXMLReader {
 				nextindex = conrefindex;
 			}
 			
-			final int valueindex = pushcontent.indexOf(Constants.QUOTATION,nextindex)+1;
+			final int valueindex = pushcontent.indexOf(QUOTATION,nextindex)+1;
 			resultBuffer.append(pushcontent.substring(index, valueindex));
-			resultBuffer.append(replaceURL(pushcontent.substring(valueindex, pushcontent.indexOf(Constants.QUOTATION, valueindex))));
-			index = pushcontent.indexOf(Constants.QUOTATION, valueindex);
+			resultBuffer.append(replaceURL(pushcontent.substring(valueindex, pushcontent.indexOf(QUOTATION, valueindex))));
+			index = pushcontent.indexOf(QUOTATION, valueindex);
 			
 			if(hrefindex > 0){
 				hrefindex = pushcontent.indexOf("href=\"", index);
@@ -240,13 +242,13 @@ public final class ConrefPushReader extends AbstractXMLReader {
 		//when copying it to pushcontent. True means remove and false means
 		//not remove.
 		int index = 0;
-		buf.append(Constants.LESS_THAN).append(elemName);
+		buf.append(LESS_THAN).append(elemName);
 		for (index=0; index < atts.getLength(); index++){
 			if (!removeConref || 
 					!"conref".equals(atts.getQName(index))&&
 							!"conaction".equals(atts.getQName(index))){
-				buf.append(Constants.STRING_BLANK);
-				buf.append(atts.getQName(index)).append(Constants.EQUAL).append(Constants.QUOTATION);
+				buf.append(STRING_BLANK);
+				buf.append(atts.getQName(index)).append(EQUAL).append(QUOTATION);
 				String value = atts.getValue(index);
 				//Added by william on 2009-11-8 for ampbug:2893664 start
 				value = StringUtils.escapeXML(value);
@@ -256,7 +258,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
 					// adjust href for pushbefore and replace					
 					value = replaceURL(value);
 				}
-				buf.append(value).append(Constants.QUOTATION);
+				buf.append(value).append(QUOTATION);
 			}
 			
 		}
@@ -264,9 +266,9 @@ public final class ConrefPushReader extends AbstractXMLReader {
 		//id attribute should only be added to the starting element
 		//which dosen't have id attribute set
 		if("pushreplace".equals(pushType) && 
-				atts.getValue(Constants.ATTRIBUTE_NAME_ID) == null &&
+				atts.getValue(ATTRIBUTE_NAME_ID) == null &&
 				level == 1){
-			final int sharpIndex = target.indexOf(Constants.SHARP);
+			final int sharpIndex = target.indexOf(SHARP);
 			if (sharpIndex == -1){
 				//if there is no '#' in target string, report error
 				final Properties prop = new Properties();
@@ -276,19 +278,19 @@ public final class ConrefPushReader extends AbstractXMLReader {
 				final String targetLoc = target.substring(sharpIndex + 1);
 				String id = "";
 				//has element id
-				if(targetLoc.contains(Constants.SLASH)){
-					id = targetLoc.substring(targetLoc.lastIndexOf(Constants.SLASH) + 1);
+				if(targetLoc.contains(SLASH)){
+					id = targetLoc.substring(targetLoc.lastIndexOf(SLASH) + 1);
 				}else{
 					id = targetLoc;
 				}
 				//add id attribute
-				buf.append(Constants.STRING_BLANK);
-				buf.append(Constants.ATTRIBUTE_NAME_ID).append(Constants.EQUAL).append(Constants.QUOTATION);
-				buf.append(id).append(Constants.QUOTATION);
+				buf.append(STRING_BLANK);
+				buf.append(ATTRIBUTE_NAME_ID).append(EQUAL).append(QUOTATION);
+				buf.append(id).append(QUOTATION);
 			}
 		}
 		//Added by William on 2009-10-10 for conrefPush bug:2872954 end
-		buf.append(Constants.GREATER_THAN);
+		buf.append(GREATER_THAN);
 	}
 	/**
 	 * 
@@ -301,7 +303,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
 		}else if(target == null || 
 				FileUtils.isAbsolutePath(value) ||
 				value.contains("://") ||
-				value.startsWith(Constants.SHARP)){
+				value.startsWith(SHARP)){
 			return value;
 		}else{
 			final String source = FileUtils.resolveFile(filePath, target);
@@ -319,7 +321,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
 	 * @param type push type
 	 */
 	private void addtoPushTable(String target, String pushcontent, String type) {		
-		int sharpIndex = target.indexOf(Constants.SHARP);
+		int sharpIndex = target.indexOf(SHARP);
 		if (sharpIndex == -1){
 			//if there is no '#' in target string, report error
 			final Properties prop = new Properties();
@@ -330,7 +332,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
 		if (sharpIndex == 0){
 			//means conref the file itself
 			target= this.parsefilename+target;
-			sharpIndex = target.indexOf(Constants.SHARP);
+			sharpIndex = target.indexOf(SHARP);
 		}
 		final String key = FileUtils.resolveFile(filePath, target);
 		Hashtable<String, String> table = null;
@@ -344,7 +346,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
 		}
 		
 		final String targetLoc = target.substring(sharpIndex);
-		final String addon = Constants.STICK+type;
+		final String addon = STICK+type;
 
 		if (table.containsKey(targetLoc+addon)){
 			//if there is something else push to the same target
@@ -377,7 +379,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
 			throws SAXException {
 		if (start){
 			level --;
-			pushcontent.append(Constants.LESS_THAN).append(Constants.SLASH).append(name).append(Constants.GREATER_THAN);
+			pushcontent.append(LESS_THAN).append(SLASH).append(name).append(GREATER_THAN);
 		}
 		if (level == 0){
 			//turn off start if we reach the end tag of staring element
@@ -388,7 +390,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
 				//if target == null we have already reported error in startElement;
 				if(target != null){
 					addtoPushTable(target, pushcontent.toString(), pushType);
-					pushcontent = new StringBuffer(Constants.INT_256);
+					pushcontent = new StringBuffer(INT_256);
 					target = null;
 					pushType = null;
 				}

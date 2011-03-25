@@ -9,6 +9,8 @@
  */
 package org.dita.dost.platform;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.util.Hashtable;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -17,7 +19,6 @@ import java.util.StringTokenizer;
 
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -47,16 +48,16 @@ class InsertAction extends DefaultHandler2 implements IAction {
 	 * Default Constructor.
 	 */
 	public InsertAction() {
-		fileNameSet = new LinkedHashSet<String>(Constants.INT_16);
+		fileNameSet = new LinkedHashSet<String>(INT_16);
 		logger = new DITAOTJavaLogger();
-		retBuf = new StringBuffer(Constants.INT_4096);
+		retBuf = new StringBuffer(INT_4096);
 		paramTable = new Hashtable<String,String>();
 		try {
             reader = StringUtils.getXMLReader();
             reader.setContentHandler(this);
-            reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
+            reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
             //added by Alan for bug: #2893316 on Date: 2009-11-09 begin
-            reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY, this);
+            reader.setProperty(LEXICAL_HANDLER_PROPERTY, this);
             //added by Alan for bug: #2893316 on Date: 2009-11-09 end
             
             //Edited by william on 2009-11-8 for ampbug:2893664 start
@@ -104,7 +105,7 @@ class InsertAction extends DefaultHandler2 implements IAction {
 	public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
 		if(elemLevel != 0){
 			final int attLen = attributes.getLength();
-			retBuf.append(Constants.LINE_SEPARATOR);
+			retBuf.append(LINE_SEPARATOR);
 			retBuf.append("<").append(qName);
 			for (int i = 0; i < attLen; i++){
 				retBuf.append(" ").append(attributes.getQName(i)).append("=\"");
@@ -145,7 +146,7 @@ class InsertAction extends DefaultHandler2 implements IAction {
 		){
 		//edited by william on 2010-03-23 for bug:2974667 end
 			//remove line break bug:3062912
-			//retBuf.append(Constants.LINE_SEPARATOR);
+			//retBuf.append(LINE_SEPARATOR);
 			retBuf.append("</").append(qName).append(">");
 		}
 	}
@@ -169,13 +170,13 @@ class InsertAction extends DefaultHandler2 implements IAction {
 	@Override
 	public void startCDATA() throws SAXException {
 		inCdataSection = true;
-		retBuf.append(Constants.CDATA_HEAD);
+		retBuf.append(CDATA_HEAD);
 
 	}
 
 	@Override
 	public void endCDATA() throws SAXException {
-		retBuf.append(Constants.CDATA_END);
+		retBuf.append(CDATA_END);
 		inCdataSection = false;
 	}
 	//added by Alan for bug: #2893316 on Date: 2009-11-09 end

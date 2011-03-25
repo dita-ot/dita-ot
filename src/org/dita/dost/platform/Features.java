@@ -9,6 +9,8 @@
  */
 package org.dita.dost.platform;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,7 +25,6 @@ import java.util.StringTokenizer;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
 
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 
 /**
@@ -60,10 +61,10 @@ final class Features {
 		this.location = location;
 		this.ditaDir = ditaDir;
 		extensionPoints= new HashMap<String, ExtensionPoint>();
-		featureTable = new Hashtable<String,String>(Constants.INT_16);
-		requireList = new ArrayList<PluginRequirement>(Constants.INT_8);
-		metaTable = new Hashtable<String,String>(Constants.INT_16);
-		templateList = new ArrayList<String>(Constants.INT_8);
+		featureTable = new Hashtable<String,String>(INT_16);
+		requireList = new ArrayList<PluginRequirement>(INT_8);
+		metaTable = new Hashtable<String,String>(INT_16);
+		templateList = new ArrayList<String>(INT_8);
 	}
 	
 	/**

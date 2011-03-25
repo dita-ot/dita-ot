@@ -9,11 +9,14 @@
  */
 package org.dita.dost.util;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 
 import org.dita.dost.log.DITAOTJavaLogger;
+
 /**
  * GenUtils class writing xml contents into xml files.
  *
@@ -35,7 +38,7 @@ public final class GenUtils {
 	 */
 	public static void clear(){
 		buffer = new StringBuffer();
-		buffer.append(Constants.XML_HEAD);
+		buffer.append(XML_HEAD);
 	}
 	/**
 	 * Set output file.
@@ -80,7 +83,7 @@ public final class GenUtils {
 		OutputStreamWriter output = null;
 		try{
 			output = new OutputStreamWriter(
-					new FileOutputStream(new File(outputFile)),Constants.UTF8);
+					new FileOutputStream(new File(outputFile)),UTF8);
 			output.write(buffer.toString());
 			output.flush();
 		} catch (final Exception e) {

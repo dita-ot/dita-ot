@@ -9,6 +9,8 @@
  */
 package org.dita.dost.util;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.StringTokenizer;
@@ -70,7 +72,7 @@ public final class DITAOTCopy extends Task {
 		if (includes == null) {
 			return;
 		}
-		tokenizer = new StringTokenizer(includes, Constants.COMMA);
+		tokenizer = new StringTokenizer(includes, COMMA);
 		if (relativePaths == null) {
 			try {
 				while (tokenizer.hasMoreTokens()) {
@@ -84,7 +86,7 @@ public final class DITAOTCopy extends Task {
 				logger.logException(e);
 			}
 		}else{
-			pathTokenizer = new StringTokenizer(relativePaths, Constants.COMMA);
+			pathTokenizer = new StringTokenizer(relativePaths, COMMA);
 			StringBuffer realDest=null;
 			try {
 				while (tokenizer.hasMoreTokens()) {

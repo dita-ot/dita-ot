@@ -9,6 +9,8 @@
  */
 package org.dita.dost.module;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
@@ -18,7 +20,6 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.ListUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.CoderefResolver;
@@ -52,8 +53,8 @@ final class CoderefModule implements AbstractPipelineModule {
 	    if (logger == null) {
             throw new IllegalStateException("Logger not set");
         }
-		final String baseDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
-		String tempDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
+		final String baseDir = input.getAttribute(ANT_INVOKER_PARAM_BASEDIR);
+		String tempDir = input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR);
         if (!new File(tempDir).isAbsolute()) {
         	tempDir = new File(baseDir, tempDir).getAbsolutePath();
         }
@@ -65,7 +66,7 @@ final class CoderefModule implements AbstractPipelineModule {
     		throw new DITAOTException(e);
     	}
     	
-    	final Set<String> codereflist=StringUtils.restoreSet(properties.getProperty(Constants.CODEREF_LIST));		
+    	final Set<String> codereflist=StringUtils.restoreSet(properties.getProperty(CODEREF_LIST));		
 		final CoderefResolver writer = new CoderefResolver();
 		writer.setLogger(logger);
 		for (final String fileName : codereflist) {

@@ -9,6 +9,8 @@
  */
 package org.dita.dost.writer;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -33,7 +35,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -46,7 +47,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-
 
 
 /*
@@ -77,42 +77,42 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
     
     private static final Hashtable<String, String> moveTable;
     static{
-    	moveTable = new Hashtable<String, String>(Constants.INT_32);
-    	moveTable.put(Constants.ATTR_CLASS_VALUE_MAP_SEARCHTITLE,"titlealts/searchtitle");
-    	moveTable.put(Constants.ATTR_CLASS_VALUE_AUDIENCE,"prolog/metadata/audience");
-    	moveTable.put(Constants.ATTR_CLASS_VALUE_AUTHOR,"prolog/author");
-    	moveTable.put(Constants.ATTR_CLASS_VALUE_CATEGORY,"prolog/metadata/category");
-    	moveTable.put(Constants.ATTR_CLASS_VALUE_COPYRIGHT,"prolog/copyright");
-    	moveTable.put(Constants.ATTR_CLASS_VALUE_CRITDATES,"prolog/critdates");
-    	moveTable.put(Constants.ATTR_CLASS_VALUE_DATA,"prolog/data");
-    	moveTable.put(Constants.ATTR_CLASS_VALUE_DATAABOUT,"prolog/data-about");
-    	moveTable.put(Constants.ATTR_CLASS_VALUE_FOREIGN,"prolog/foreign");
-    	moveTable.put(Constants.ATTR_CLASS_VALUE_KEYWORDS,"prolog/metadata/keywords");
-    	moveTable.put(Constants.ATTR_CLASS_VALUE_OTHERMETA,"prolog/metadata/othermeta");
-    	moveTable.put(Constants.ATTR_CLASS_VALUE_PERMISSIONS,"prolog/permissions");
-    	moveTable.put(Constants.ATTR_CLASS_VALUE_PRODINFO,"prolog/metadata/prodinfo");
-    	moveTable.put(Constants.ATTR_CLASS_VALUE_PUBLISHER,"prolog/publisher");
-    	moveTable.put(Constants.ATTR_CLASS_VALUE_RESOURCEID,"prolog/resourceid");
-    	moveTable.put(Constants.ATTR_CLASS_VALUE_MAP,"titlealts/searchtitle");
-    	moveTable.put(Constants.ATTR_CLASS_VALUE_SOURCE,"prolog/source");
-    	moveTable.put(Constants.ATTR_CLASS_VALUE_UNKNOWN,"prolog/unknown");  	
+    	moveTable = new Hashtable<String, String>(INT_32);
+    	moveTable.put(ATTR_CLASS_VALUE_MAP_SEARCHTITLE,"titlealts/searchtitle");
+    	moveTable.put(ATTR_CLASS_VALUE_AUDIENCE,"prolog/metadata/audience");
+    	moveTable.put(ATTR_CLASS_VALUE_AUTHOR,"prolog/author");
+    	moveTable.put(ATTR_CLASS_VALUE_CATEGORY,"prolog/metadata/category");
+    	moveTable.put(ATTR_CLASS_VALUE_COPYRIGHT,"prolog/copyright");
+    	moveTable.put(ATTR_CLASS_VALUE_CRITDATES,"prolog/critdates");
+    	moveTable.put(ATTR_CLASS_VALUE_DATA,"prolog/data");
+    	moveTable.put(ATTR_CLASS_VALUE_DATAABOUT,"prolog/data-about");
+    	moveTable.put(ATTR_CLASS_VALUE_FOREIGN,"prolog/foreign");
+    	moveTable.put(ATTR_CLASS_VALUE_KEYWORDS,"prolog/metadata/keywords");
+    	moveTable.put(ATTR_CLASS_VALUE_OTHERMETA,"prolog/metadata/othermeta");
+    	moveTable.put(ATTR_CLASS_VALUE_PERMISSIONS,"prolog/permissions");
+    	moveTable.put(ATTR_CLASS_VALUE_PRODINFO,"prolog/metadata/prodinfo");
+    	moveTable.put(ATTR_CLASS_VALUE_PUBLISHER,"prolog/publisher");
+    	moveTable.put(ATTR_CLASS_VALUE_RESOURCEID,"prolog/resourceid");
+    	moveTable.put(ATTR_CLASS_VALUE_MAP,"titlealts/searchtitle");
+    	moveTable.put(ATTR_CLASS_VALUE_SOURCE,"prolog/source");
+    	moveTable.put(ATTR_CLASS_VALUE_UNKNOWN,"prolog/unknown");  	
     }
     
     private static final HashSet<String> uniqueSet;
 	
 	static{
-		uniqueSet = new HashSet<String>(Constants.INT_16);
-		uniqueSet.add(Constants.ATTR_CLASS_VALUE_CRITDATES);
-		uniqueSet.add(Constants.ATTR_CLASS_VALUE_PERMISSIONS);
-		uniqueSet.add(Constants.ATTR_CLASS_VALUE_PUBLISHER);
-		uniqueSet.add(Constants.ATTR_CLASS_VALUE_SOURCE);
-		uniqueSet.add(Constants.ATTR_CLASS_VALUE_MAP_SEARCHTITLE);
+		uniqueSet = new HashSet<String>(INT_16);
+		uniqueSet.add(ATTR_CLASS_VALUE_CRITDATES);
+		uniqueSet.add(ATTR_CLASS_VALUE_PERMISSIONS);
+		uniqueSet.add(ATTR_CLASS_VALUE_PUBLISHER);
+		uniqueSet.add(ATTR_CLASS_VALUE_SOURCE);
+		uniqueSet.add(ATTR_CLASS_VALUE_MAP_SEARCHTITLE);
 	}
 
 	private static final Hashtable<String, Integer> compareTable;
 	
 	static{
-		compareTable = new Hashtable<String, Integer>(Constants.INT_32);
+		compareTable = new Hashtable<String, Integer>(INT_32);
 		compareTable.put("titlealts", 1);
 		compareTable.put("navtitle", 2);
 		compareTable.put("searchtitle", 3);
@@ -145,8 +145,8 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
      */
     public DitaMetaWriter() {
         super();
-        topicIdList = new ArrayList<String>(Constants.INT_16);
-        topicSpecList = new ArrayList<String>(Constants.INT_16);
+        topicIdList = new ArrayList<String>(INT_16);
+        topicSpecList = new ArrayList<String>(INT_16);
 
         metaTable = null;
         matchList = null;
@@ -158,8 +158,8 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
         try {
             reader = StringUtils.getXMLReader();
             reader.setContentHandler(this);
-            reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
-            reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
+            reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
+            reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
             //Edited by william on 2009-11-8 for ampbug:2893664 start
 			reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
 			reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
@@ -213,7 +213,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
     public void endCDATA() throws SAXException {
     	insideCDATA = false;
 	    try{
-	        output.write(Constants.CDATA_END);
+	        output.write(CDATA_END);
 	    }catch(Exception e){
 	    	logger.logException(e);
 	    }
@@ -249,8 +249,8 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
         		}
         	}        	
             
-            output.write(Constants.LESS_THAN + Constants.SLASH + qName
-                    + Constants.GREATER_THAN);
+            output.write(LESS_THAN + SLASH + qName
+                    + GREATER_THAN);
             
             
         } catch (Exception e) {
@@ -360,7 +360,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
 			// the processor need to neglect them.
 			return;
 		}
-		StringTokenizer token = new StringTokenizer(metaPath,Constants.SLASH);
+		StringTokenizer token = new StringTokenizer(metaPath,SLASH);
 		Node parent = null;
 		Node child = root;
 		Node current = null;
@@ -389,9 +389,9 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
 					if (currentIndex == null){
 						// if compareTable doesn't contains the number for current name
 						// change to generalized element name to search again
-						String classValue = ((Element)current).getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
-						String generalizedName = classValue.substring(classValue.indexOf(Constants.SLASH)+1);
-						generalizedName = generalizedName.substring(0, generalizedName.indexOf(Constants.STRING_BLANK));
+						String classValue = ((Element)current).getAttribute(ATTRIBUTE_NAME_CLASS);
+						String generalizedName = classValue.substring(classValue.indexOf(SLASH)+1);
+						generalizedName = generalizedName.substring(0, generalizedName.indexOf(STRING_BLANK));
 						currentIndex = (Integer)compareTable.get(generalizedName);
 					}
 					if(currentIndex==null){
@@ -414,7 +414,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
 				// if there is no such child under current element,
 				// create one
 				child = parent.getOwnerDocument().createElement(next);
-				((Element)child).setAttribute(Constants.ATTRIBUTE_NAME_CLASS,"- topic/"+next+" ");
+				((Element)child).setAttribute(ATTRIBUTE_NAME_CLASS,"- topic/"+next+" ");
 				
 				if (current == null ||
 						currentIndex == null || 
@@ -472,9 +472,9 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
             throws SAXException {
         String pi;
         try {
-            pi = (data != null) ? target + Constants.STRING_BLANK + data : target;
-            output.write(Constants.LESS_THAN + Constants.QUESTION 
-                    + pi + Constants.QUESTION + Constants.GREATER_THAN);
+            pi = (data != null) ? target + STRING_BLANK + data : target;
+            output.write(LESS_THAN + QUESTION 
+                    + pi + QUESTION + GREATER_THAN);
         } catch (Exception e) {
         	logger.logException(e);
         }
@@ -486,12 +486,12 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
     }
     private void setMatch(String match) {
 		int index = 0;
-        matchList = new ArrayList<String>(Constants.INT_16);
+        matchList = new ArrayList<String>(INT_16);
         
-        firstMatchTopic = (match.indexOf(Constants.SLASH) != -1) ? match.substring(0, match.indexOf('/')) : match;
+        firstMatchTopic = (match.indexOf(SLASH) != -1) ? match.substring(0, match.indexOf('/')) : match;
 
         while (index != -1) {
-            int end = match.indexOf(Constants.SLASH, index);
+            int end = match.indexOf(SLASH, index);
             if (end == -1) {
                 matchList.add(match.substring(index));
                 lastMatchTopic = match.substring(index);
@@ -516,7 +516,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
     public void startCDATA() throws SAXException {
     	insideCDATA = true;
 	    try{
-	        output.write(Constants.CDATA_HEAD);
+	        output.write(CDATA_HEAD);
 	    }catch(Exception e){
 	    	logger.logException(e);
 	    }
@@ -525,11 +525,11 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
     @Override
     public void startElement(String uri, String localName, String qName,
             Attributes atts) throws SAXException {
-    	String classAttrValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
+    	String classAttrValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
     	
         try {
         	if (classAttrValue != null && 
-        			classAttrValue.contains(Constants.ATTR_CLASS_VALUE_TOPIC) &&
+        			classAttrValue.contains(ATTR_CLASS_VALUE_TOPIC) &&
         			!topicSpecList.contains(qName)){
         		//add topic qName to topicSpecList
         		topicSpecList.add(qName);
@@ -537,10 +537,10 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
         	
         	if ( startTopic && !startDOM && classAttrValue != null && !hasWritten 
             		&&(
-            		classAttrValue.indexOf(Constants.ATTR_CLASS_VALUE_PROLOG)!= -1 || 
-            		classAttrValue.indexOf(Constants.ATTR_CLASS_VALUE_ABSTRACT)!= -1 || 
-            		classAttrValue.indexOf(Constants.ATTR_CLASS_VALUE_SHORTDESC)!= -1 ||
-            		classAttrValue.indexOf(Constants.ATTR_CLASS_VALUE_TITLEALTS)!= -1
+            		classAttrValue.indexOf(ATTR_CLASS_VALUE_PROLOG)!= -1 || 
+            		classAttrValue.indexOf(ATTR_CLASS_VALUE_ABSTRACT)!= -1 || 
+            		classAttrValue.indexOf(ATTR_CLASS_VALUE_SHORTDESC)!= -1 ||
+            		classAttrValue.indexOf(ATTR_CLASS_VALUE_TITLEALTS)!= -1
             		)){
             	startDOM = true;
             	output = strOutput;
@@ -548,9 +548,9 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
             }
             
             if ( startTopic && classAttrValue != null && !hasWritten &&(
-            		classAttrValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPIC)!= -1 || 
-            		classAttrValue.indexOf(Constants.ATTR_CLASS_VALUE_RELATED_LINKS)!= -1 || 
-            		classAttrValue.indexOf(Constants.ATTR_CLASS_VALUE_BODY)!= -1
+            		classAttrValue.indexOf(ATTR_CLASS_VALUE_TOPIC)!= -1 || 
+            		classAttrValue.indexOf(ATTR_CLASS_VALUE_RELATED_LINKS)!= -1 || 
+            		classAttrValue.indexOf(ATTR_CLASS_VALUE_BODY)!= -1
             		)){
             	if (startDOM){
             		startDOM = false;
@@ -563,9 +563,9 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
             	
             }
 
-            if ( !startTopic && !Constants.ELEMENT_NAME_DITA.equalsIgnoreCase(qName)){
-                if (atts.getValue(Constants.ATTRIBUTE_NAME_ID) != null){
-                    topicIdList.add(atts.getValue(Constants.ATTRIBUTE_NAME_ID));
+            if ( !startTopic && !ELEMENT_NAME_DITA.equalsIgnoreCase(qName)){
+                if (atts.getValue(ATTRIBUTE_NAME_ID) != null){
+                    topicIdList.add(atts.getValue(ATTRIBUTE_NAME_ID));
                 }else{
                     topicIdList.add("null");
                 }
@@ -589,7 +589,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
 
 	private void outputElement(String qName, Attributes atts) throws IOException {
 		int attsLen = atts.getLength();
-		output.write(Constants.LESS_THAN + qName);
+		output.write(LESS_THAN + qName);
 		for (int i = 0; i < attsLen; i++) {
 		    String attQName = atts.getQName(i);
 		    String attValue;
@@ -601,11 +601,11 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
 			//}
 		    attValue = StringUtils.escapeXML(attValue);
 		    
-		    output.write(new StringBuffer().append(Constants.STRING_BLANK)
-		    		.append(attQName).append(Constants.EQUAL).append(Constants.QUOTATION)
-		    		.append(attValue).append(Constants.QUOTATION).toString());
+		    output.write(new StringBuffer().append(STRING_BLANK)
+		    		.append(attQName).append(EQUAL).append(QUOTATION)
+		    		.append(attValue).append(QUOTATION).toString());
 		}
-		output.write(Constants.GREATER_THAN);
+		output.write(GREATER_THAN);
 	}
 
 	@Override
@@ -630,14 +630,14 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
 		FileOutputStream fileOutput = null;
 
         try {
-            if(filename.endsWith(Constants.SHARP)){
+            if(filename.endsWith(SHARP)){
             	// prevent the empty topic id causing error
             	filename = filename.substring(0, filename.length()-1);
             }
             
-            if(filename.lastIndexOf(Constants.SHARP)!=-1){
-                file = filename.substring(0,filename.lastIndexOf(Constants.SHARP));
-                topic = filename.substring(filename.lastIndexOf(Constants.SHARP)+1);
+            if(filename.lastIndexOf(SHARP)!=-1){
+                file = filename.substring(0,filename.lastIndexOf(SHARP));
+                topic = filename.substring(filename.lastIndexOf(SHARP)+1);
                 setMatch(topic);
                 startTopic = false;
             }else{
@@ -649,9 +649,9 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
         	hasWritten = false;
         	startDOM = false;
             inputFile = new File(file);
-            outputFile = new File(file + Constants.FILE_EXTENSION_TEMP);
+            outputFile = new File(file + FILE_EXTENSION_TEMP);
             fileOutput = new FileOutputStream(outputFile);
-            ditaFileOutput = new OutputStreamWriter(fileOutput, Constants.UTF8);
+            ditaFileOutput = new OutputStreamWriter(fileOutput, UTF8);
             strOutput = new StringWriter();
             output = ditaFileOutput;
 

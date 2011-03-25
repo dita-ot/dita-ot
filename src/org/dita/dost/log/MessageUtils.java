@@ -9,6 +9,8 @@
  */
 package org.dita.dost.log;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -17,7 +19,6 @@ import java.util.Properties;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -119,7 +120,7 @@ public final class MessageUtils {
 				hashTable.put(id, messageBean);
 			}
 		} catch (Exception e) {
-			StringBuffer buff = new StringBuffer(Constants.INT_128);
+			StringBuffer buff = new StringBuffer(INT_128);
 			
 			buff.append("  Failed to load messages from '");
 			buff.append(messageFile);

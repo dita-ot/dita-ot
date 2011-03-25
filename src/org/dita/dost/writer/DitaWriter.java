@@ -57,8 +57,8 @@ public final class DitaWriter extends AbstractXMLWriter {
 
     private static final String COLUMN_NAME_COL = "col";
     private static final String OS_NAME_WINDOWS = "windows";
-    private static final String PI_PATH2PROJ_TARGET = "path2project";
-    private static final String PI_WORKDIR_TARGET = "workdir";
+    public static final String PI_PATH2PROJ_TARGET = "path2project";
+    public static final String PI_WORKDIR_TARGET = "workdir";
     //To check the URL of href in topicref attribute
     private static final String NOT_LOCAL_URL="://";
     //To check whether the attribute of XTRC and XTRF have existed

@@ -9,6 +9,7 @@
  */
 package org.dita.dost.util;
 
+import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
 import java.util.HashMap;
@@ -18,8 +19,6 @@ import org.apache.xml.resolver.CatalogManager;
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.xml.sax.XMLReader;
-
-
 
 /**
  * General catalog file resolving utilities.
@@ -54,7 +53,7 @@ public final class CatalogUtils {
 			return map;
 		}
 		
-		final String catalogFilePath = (ditaDir == null) ? Constants.FILE_NAME_CATALOG : ditaDir + File.separator + Constants.FILE_NAME_CATALOG;
+		final String catalogFilePath = (ditaDir == null) ? FILE_NAME_CATALOG : ditaDir + File.separator + FILE_NAME_CATALOG;
 		
 		map = new HashMap<String, String>();
 		final CatalogParser parser = new CatalogParser(map, ditaDir);
@@ -101,7 +100,7 @@ public final class CatalogUtils {
             //manager.setVerbosity(10);
             catalogResolver = new CatalogResolver(manager);
             
-            final String catalogFilePath = getDitaDir() + Constants.FILE_NAME_CATALOG;
+            final String catalogFilePath = getDitaDir() + FILE_NAME_CATALOG;
 
             final Catalog catalog = catalogResolver.getCatalog();
             try {

@@ -9,6 +9,8 @@
  */
 package org.dita.dost.module;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -41,7 +43,6 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.reader.GenListModuleReader;
 import org.dita.dost.reader.GrammarPoolManager;
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.DelayConrefUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
@@ -215,39 +216,39 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 	 */
 	public GenMapAndTopicListModule() throws SAXException,
 			ParserConfigurationException {
-		ditaSet = new HashSet<String>(Constants.INT_128);
-		fullTopicSet = new HashSet<String>(Constants.INT_128);
-		fullMapSet = new HashSet<String>(Constants.INT_128);
-		hrefTopicSet = new HashSet<String>(Constants.INT_128);
-		hrefWithIDSet = new HashSet<String>(Constants.INT_128);
-		chunkTopicSet = new HashSet<String>(Constants.INT_128);
-		schemeSet = new HashSet<String>(Constants.INT_128);
-		hrefMapSet = new HashSet<String>(Constants.INT_128);
-		conrefSet = new HashSet<String>(Constants.INT_128);
-		imageSet = new HashSet<String>(Constants.INT_128);
-		flagImageSet = new LinkedHashSet<String>(Constants.INT_128);
-		htmlSet = new HashSet<String>(Constants.INT_128);
-		hrefTargetSet = new HashSet<String>(Constants.INT_128);
-		subsidiarySet = new HashSet<String>(Constants.INT_16);
+		ditaSet = new HashSet<String>(INT_128);
+		fullTopicSet = new HashSet<String>(INT_128);
+		fullMapSet = new HashSet<String>(INT_128);
+		hrefTopicSet = new HashSet<String>(INT_128);
+		hrefWithIDSet = new HashSet<String>(INT_128);
+		chunkTopicSet = new HashSet<String>(INT_128);
+		schemeSet = new HashSet<String>(INT_128);
+		hrefMapSet = new HashSet<String>(INT_128);
+		conrefSet = new HashSet<String>(INT_128);
+		imageSet = new HashSet<String>(INT_128);
+		flagImageSet = new LinkedHashSet<String>(INT_128);
+		htmlSet = new HashSet<String>(INT_128);
+		hrefTargetSet = new HashSet<String>(INT_128);
+		subsidiarySet = new HashSet<String>(INT_16);
 		waitList = new LinkedList<String>();
 		doneList = new LinkedList<String>();
-		conrefTargetSet = new HashSet<String>(Constants.INT_128);
-		nonConrefCopytoTargetSet = new HashSet<String>(Constants.INT_128);
+		conrefTargetSet = new HashSet<String>(INT_128);
+		nonConrefCopytoTargetSet = new HashSet<String>(INT_128);
 		copytoMap = new HashMap<String, String>();
-		copytoSourceSet = new HashSet<String>(Constants.INT_128);
-		ignoredCopytoSourceSet = new HashSet<String>(Constants.INT_128);
-		outDitaFilesSet=new HashSet<String>(Constants.INT_128);
-		relFlagImagesSet=new LinkedHashSet<String>(Constants.INT_128);
-		conrefpushSet = new HashSet<String>(Constants.INT_128);
+		copytoSourceSet = new HashSet<String>(INT_128);
+		ignoredCopytoSourceSet = new HashSet<String>(INT_128);
+		outDitaFilesSet=new HashSet<String>(INT_128);
+		relFlagImagesSet=new LinkedHashSet<String>(INT_128);
+		conrefpushSet = new HashSet<String>(INT_128);
 		keysDefMap = new HashMap<String, String>();
 		exKeyDefMap = new HashMap<String, String>();
-		keyrefSet = new HashSet<String>(Constants.INT_128);
-		coderefSet = new HashSet<String>(Constants.INT_128);
+		keyrefSet = new HashSet<String>(INT_128);
+		coderefSet = new HashSet<String>(INT_128);
 		
 		this.schemeDictionary = new HashMap<String, Set<String>>();
 		
 		//@processing-role
-		resourceOnlySet = new HashSet<String>(Constants.INT_128);
+		resourceOnlySet = new HashSet<String>(INT_128);
 	}
 
 	public void setLogger(final DITAOTLogger logger) {
@@ -318,34 +319,34 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 
 	private void parseInputParameters(final AbstractPipelineInput input) {
 		final String basedir = input
-				.getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
+				.getAttribute(ANT_INVOKER_PARAM_BASEDIR);
 		final String ditaInput = input
-				.getAttribute(Constants.ANT_INVOKER_PARAM_INPUTMAP);
+				.getAttribute(ANT_INVOKER_PARAM_INPUTMAP);
 
-		tempDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
-		ditaDir = input.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_DITADIR);
-		ditavalFile = input.getAttribute(Constants.ANT_INVOKER_PARAM_DITAVAL);
-		xmlValidate = Boolean.valueOf(input.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_VALIDATE));
+		tempDir = input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR);
+		ditaDir = input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR);
+		ditavalFile = input.getAttribute(ANT_INVOKER_PARAM_DITAVAL);
+		xmlValidate = Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAM_VALIDATE));
 		
 		//Added by William on 2009-07-18 for req #12014 start
         //get transtype
-        transtype = input.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE);
+        transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
         //Added by William on 2009-07-18 for req #12014 start
         
-        gramcache = "yes".equalsIgnoreCase(input.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_GRAMCACHE));
-		setSystemid = "yes".equalsIgnoreCase(input.getAttribute(Constants.ANT_INVOKER_EXT_PARAN_SETSYSTEMID));
+        gramcache = "yes".equalsIgnoreCase(input.getAttribute(ANT_INVOKER_EXT_PARAM_GRAMCACHE));
+		setSystemid = "yes".equalsIgnoreCase(input.getAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID));
 		
 		//For the output control
-		OutputUtils.setGeneratecopyouter(input.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER));
-		OutputUtils.setOutterControl(input.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_OUTTERCONTROL));
-		OutputUtils.setOnlyTopicInMap(input.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP));
+		OutputUtils.setGeneratecopyouter(input.getAttribute(ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER));
+		OutputUtils.setOutterControl(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTTERCONTROL));
+		OutputUtils.setOnlyTopicInMap(input.getAttribute(ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP));
 		
         //Set the OutputDir
-		final File path=new File(input.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_OUTPUTDIR));
+		final File path=new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR));
 		if(path.isAbsolute()) {
-            OutputUtils.setOutputDir(input.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_OUTPUTDIR));
+            OutputUtils.setOutputDir(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR));
         } else{
-			final StringBuffer buff=new StringBuffer(input.getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR)).append(File.separator).append(path);
+			final StringBuffer buff=new StringBuffer(input.getAttribute(ANT_INVOKER_PARAM_BASEDIR)).append(File.separator).append(path);
 			OutputUtils.setOutputDir(buff.toString());
 			
 		} 
@@ -396,7 +397,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 			// create the export file for exportanchors
 			// write the head
 			export = new OutputStreamWriter(new FileOutputStream(
-					new File(tempDir, Constants.FILE_NAME_EXPORT_XML)));
+					new File(tempDir, FILE_NAME_EXPORT_XML)));
 			export.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
 			export.write("<stub>");
 			//Added by William on 2009-06-25 for req #12014 end
@@ -493,7 +494,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 				}
 				final StringBuffer buff=new StringBuffer();
 				msg = MessageUtils.getMessage("DOTJ013E", params).toString();
-				buff.append(msg).append(Constants.LINE_SEPARATOR).append(sax.getMessage());
+				buff.append(msg).append(LINE_SEPARATOR).append(sax.getMessage());
 				logger.logError(buff.toString());
 		}
 		catch (final Exception e) {
@@ -508,7 +509,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 			}
 			final StringBuffer buff=new StringBuffer();
 			msg = MessageUtils.getMessage("DOTJ013E", params).toString();
-			buff.append(msg).append(Constants.LINE_SEPARATOR).append(e.getMessage());
+			buff.append(msg).append(LINE_SEPARATOR).append(e.getMessage());
 			logger.logError(buff.toString());
 		}
 		
@@ -660,7 +661,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
             }
 			children.addAll(reader.getSchemeSet());
 			//for Linux support
-			currentFile = currentFile.replace(Constants.BACK_SLASH, Constants.SLASH);
+			currentFile = currentFile.replace(BACK_SLASH, SLASH);
 			
 			this.schemeDictionary.put(currentFile, children);
 			final Set<String> hrfSet = reader.getHrefTargets();
@@ -669,7 +670,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 				String filename = it.next();
 				
 				//for Linux support
-				filename = filename.replace(Constants.BACK_SLASH, Constants.SLASH);
+				filename = filename.replace(BACK_SLASH, SLASH);
 				
 				children = this.schemeDictionary.get(filename);
 				if (children == null) {
@@ -726,12 +727,12 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 		String lcasefn = null;
 		String format = null;
 		//has format attribute set
-		if(file.contains(Constants.STICK)){
+		if(file.contains(STICK)){
 			//get lower case file name
-			lcasefn = file.substring(0, file.indexOf(Constants.STICK)).toLowerCase();
+			lcasefn = file.substring(0, file.indexOf(STICK)).toLowerCase();
 			//get format attribute
-			format = file.substring(file.indexOf(Constants.STICK)+1);
-			file = file.substring(0, file.indexOf(Constants.STICK));
+			format = file.substring(file.indexOf(STICK)+1);
+			file = file.substring(0, file.indexOf(STICK));
 		}else{
 			lcasefn = file.toLowerCase();
 		}
@@ -745,8 +746,8 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 		
 		if (FileUtils.isDITAFile(lcasefn)
 			&& (format == null ||
-			Constants.ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(format)||
-			Constants.ATTR_FORMAT_VALUE_DITAMAP.equalsIgnoreCase(format))) {
+			ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(format)||
+			ATTR_FORMAT_VALUE_DITAMAP.equalsIgnoreCase(format))) {
 			
 			addToWaitList(file);
 		}else if(!FileUtils.isSupportedImageFile(lcasefn)){
@@ -779,16 +780,16 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 	private void updateUplevels(String file) {
 		
 		//Added by william on 2009-08-06 for bug:2832696 start
-		if(file.contains(Constants.STICK)){
-			file = file.substring(0, file.indexOf(Constants.STICK));
+		if(file.contains(STICK)){
+			file = file.substring(0, file.indexOf(STICK));
 		}
 		//Added by william on 2009-08-06 for bug:2832696 end
 		
 		// for uplevels (../../)
 		//modified start by wxzhang 20070518
 		//".."-->"../"
-		final int lastIndex = FileUtils.removeRedundantNames(file).replaceAll(Constants.DOUBLE_BACK_SLASH,
-				Constants.SLASH).lastIndexOf("../");
+		final int lastIndex = FileUtils.removeRedundantNames(file).replaceAll(DOUBLE_BACK_SLASH,
+				SLASH).lastIndexOf("../");
 //		modified end by wxzhang 20070518
 		if (lastIndex != -1) {
 			final int newUplevels = lastIndex / 3  + 1;
@@ -823,7 +824,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 		int current=uplevels;
 		final StringBuffer buff=new StringBuffer();
 		while(current>0){
-			buff.append(".."+Constants.FILE_SEPARATOR);
+			buff.append(".."+FILE_SEPARATOR);
 			current--;
 		}
 		return buff.toString();
@@ -901,8 +902,8 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 
 	private void handleCopyto() {
 		final Map<String, String> tempMap = new HashMap<String, String>();
-		final Set<String> pureCopytoSources = new HashSet<String>(Constants.INT_128);
-		final Set<String> totalCopytoSources = new HashSet<String>(Constants.INT_128);
+		final Set<String> pureCopytoSources = new HashSet<String>(INT_128);
+		final Set<String> totalCopytoSources = new HashSet<String>(INT_128);
 		
 		/*
 		 * Validate copy-to map, remove those without valid sources
@@ -954,7 +955,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 		/*
 		 * Get pure conref targets
 		 */
-		final Set<String> pureConrefTargets = new HashSet<String>(Constants.INT_128);
+		final Set<String> pureConrefTargets = new HashSet<String>(INT_128);
 		final Iterator<String> iter = conrefTargetSet.iterator();
 		while (iter.hasNext()) {
 			final String target = iter.next();
@@ -975,11 +976,11 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 		final Properties prop = new Properties();
 		final PropertiesWriter writer = new PropertiesWriter();
 		final Content content = new ContentImpl();
-		final File outputFile = new File(tempDir, Constants.FILE_NAME_DITA_LIST);
-		final File xmlDitalist=new File(tempDir, Constants.FILE_NAME_DITA_LIST_XML);
+		final File outputFile = new File(tempDir, FILE_NAME_DITA_LIST);
+		final File xmlDitalist=new File(tempDir, FILE_NAME_DITA_LIST_XML);
 		final File dir = new File(tempDir);
-		final Set<String> copytoSet = new HashSet<String>(Constants.INT_128);
-		final Set<String> keysDefSet = new HashSet<String>(Constants.INT_128);
+		final Set<String> copytoSet = new HashSet<String>(INT_128);
+		final Set<String> keysDefSet = new HashSet<String>(INT_128);
 		Iterator<Entry<String, String>> iter = null;
 		
 		if (!dir.exists()) {
@@ -1016,31 +1017,31 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 		prop.put("tempdirToinputmapdir.relative.value", formatRelativeValue);
 		
 		prop.put("uplevels", getUpdateLevels());
-		addSetToProperties(prop, Constants.OUT_DITA_FILES_LIST, outDitaFilesSet);
+		addSetToProperties(prop, OUT_DITA_FILES_LIST, outDitaFilesSet);
 		
-		addSetToProperties(prop, Constants.FULL_DITAMAP_TOPIC_LIST, ditaSet);
-		addSetToProperties(prop, Constants.FULL_DITA_TOPIC_LIST, fullTopicSet);
-		addSetToProperties(prop, Constants.FULL_DITAMAP_LIST, fullMapSet);
-		addSetToProperties(prop, Constants.HREF_DITA_TOPIC_LIST, hrefTopicSet);
-		addSetToProperties(prop, Constants.CONREF_LIST, conrefSet);
-		addSetToProperties(prop, Constants.IMAGE_LIST, imageSet);
-		addSetToProperties(prop, Constants.FLAG_IMAGE_LIST, flagImageSet);
-		addSetToProperties(prop, Constants.HTML_LIST, htmlSet);
-		addSetToProperties(prop, Constants.HREF_TARGET_LIST, hrefTargetSet);
-		addSetToProperties(prop, Constants.HREF_TOPIC_LIST, hrefWithIDSet);
-		addSetToProperties(prop, Constants.CHUNK_TOPIC_LIST, chunkTopicSet);
-		addSetToProperties(prop, Constants.SUBJEC_SCHEME_LIST, schemeSet);
-		addSetToProperties(prop, Constants.CONREF_TARGET_LIST, conrefTargetSet);
-		addSetToProperties(prop, Constants.COPYTO_SOURCE_LIST, copytoSourceSet);
-		addSetToProperties(prop, Constants.SUBSIDIARY_TARGET_LIST, subsidiarySet);
-		addSetToProperties(prop, Constants.CONREF_PUSH_LIST, conrefpushSet);
-		addSetToProperties(prop, Constants.KEYREF_LIST, keyrefSet);
-		addSetToProperties(prop, Constants.CODEREF_LIST, coderefSet);
+		addSetToProperties(prop, FULL_DITAMAP_TOPIC_LIST, ditaSet);
+		addSetToProperties(prop, FULL_DITA_TOPIC_LIST, fullTopicSet);
+		addSetToProperties(prop, FULL_DITAMAP_LIST, fullMapSet);
+		addSetToProperties(prop, HREF_DITA_TOPIC_LIST, hrefTopicSet);
+		addSetToProperties(prop, CONREF_LIST, conrefSet);
+		addSetToProperties(prop, IMAGE_LIST, imageSet);
+		addSetToProperties(prop, FLAG_IMAGE_LIST, flagImageSet);
+		addSetToProperties(prop, HTML_LIST, htmlSet);
+		addSetToProperties(prop, HREF_TARGET_LIST, hrefTargetSet);
+		addSetToProperties(prop, HREF_TOPIC_LIST, hrefWithIDSet);
+		addSetToProperties(prop, CHUNK_TOPIC_LIST, chunkTopicSet);
+		addSetToProperties(prop, SUBJEC_SCHEME_LIST, schemeSet);
+		addSetToProperties(prop, CONREF_TARGET_LIST, conrefTargetSet);
+		addSetToProperties(prop, COPYTO_SOURCE_LIST, copytoSourceSet);
+		addSetToProperties(prop, SUBSIDIARY_TARGET_LIST, subsidiarySet);
+		addSetToProperties(prop, CONREF_PUSH_LIST, conrefpushSet);
+		addSetToProperties(prop, KEYREF_LIST, keyrefSet);
+		addSetToProperties(prop, CODEREF_LIST, coderefSet);
 		
 		//@processing-role
-		addSetToProperties(prop, Constants.RESOURCE_ONLY_LIST, resourceOnlySet);
+		addSetToProperties(prop, RESOURCE_ONLY_LIST, resourceOnlySet);
 		
-		addFlagImagesSetToProperties(prop,Constants.REL_FLAGIMAGE_LIST,relFlagImagesSet);
+		addFlagImagesSetToProperties(prop,REL_FLAGIMAGE_LIST,relFlagImagesSet);
 		
 		/*
 		 * Convert copyto map into set and output
@@ -1055,8 +1056,8 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 			final Map.Entry<String, String> entry = iter.next();
 			keysDefSet.add(entry.toString());
 		}
-		addSetToProperties(prop, Constants.COPYTO_TARGET_TO_SOURCE_MAP_LIST, copytoSet);
-		addSetToProperties(prop, Constants.KEY_LIST, keysDefSet);
+		addSetToProperties(prop, COPYTO_TARGET_TO_SOURCE_MAP_LIST, copytoSet);
+		addSetToProperties(prop, KEY_LIST, keysDefSet);
 		content.setValue(prop);
 		writer.setContent(content);
 		
@@ -1064,14 +1065,14 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 		writer.writeToXML(xmlDitalist.getAbsolutePath());
 		
 		// Output relation-graph
-		writeMapToXML(reader.getRelationshipGrap(), Constants.FILE_NAME_SUBJECT_RELATION);
+		writeMapToXML(reader.getRelationshipGrap(), FILE_NAME_SUBJECT_RELATION);
 		// Output topic-scheme dictionary
-		writeMapToXML(this.schemeDictionary, Constants.FILE_NAME_SUBJECT_DICTIONARY);
+		writeMapToXML(this.schemeDictionary, FILE_NAME_SUBJECT_DICTIONARY);
 		
 		//added by Willam on 2009-07-17 for req #12014 start
-		if(Constants.INDEX_TYPE_ECLIPSEHELP.equals(transtype)){
+		if(INDEX_TYPE_ECLIPSEHELP.equals(transtype)){
 			// Output plugin id
-			final File pluginIdFile = new File(tempDir, Constants.FILE_NAME_PLUGIN_XML);
+			final File pluginIdFile = new File(tempDir, FILE_NAME_PLUGIN_XML);
 			DelayConrefUtils.getInstance().writeMapToXML(reader.getPluginMap(),pluginIdFile);
 			//write the result into the file
 			final StringBuffer result = reader.getResult();
@@ -1095,7 +1096,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 		while (iter.hasNext()) {
 			final Map.Entry<String, Set<String>> entry = iter.next();
 			final String key = entry.getKey();
-			final String value = StringUtils.assembleString(entry.getValue(), Constants.COMMA);
+			final String value = StringUtils.assembleString(entry.getValue(), COMMA);
 			prop.setProperty(key, value);
 		}
 		final File outputFile = new File(tempDir, filename);
@@ -1119,7 +1120,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 
 	private void addSetToProperties(final Properties prop, final String key, final Set<String> set) {
 		String value = null;
-		final Set<String> newSet = new LinkedHashSet<String>(Constants.INT_128);
+		final Set<String> newSet = new LinkedHashSet<String>(INT_128);
 		final Iterator<String> iter = set.iterator();
 
 		while (iter.hasNext()) {
@@ -1132,7 +1133,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 				 * In ant, all the file separator should be slash, so we need to replace
 				 * all the back slash with slash.
 				 */
-				final int index=file.indexOf(Constants.EQUAL);
+				final int index=file.indexOf(EQUAL);
 				if(index!=-1){
 					//keyname
 					final String to=file.substring(0,index);
@@ -1140,14 +1141,14 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 					
 						//TODO Added by William on 2009-05-14 for keyref bug start
 						//When generating key.list
-						if(Constants.KEY_LIST.equals(key)){
+						if(KEY_LIST.equals(key)){
 							
 							final String repStr = FileUtils.removeRedundantNames(new StringBuffer(prefix).append(to).toString())
-							.replaceAll(Constants.DOUBLE_BACK_SLASH,
-									Constants.SLASH) + Constants.EQUAL +
+							.replaceAll(DOUBLE_BACK_SLASH,
+									SLASH) + EQUAL +
 									FileUtils.removeRedundantNames(new StringBuffer(prefix).append(source).toString())
-							.replaceAll(Constants.DOUBLE_BACK_SLASH,
-									Constants.SLASH);
+							.replaceAll(DOUBLE_BACK_SLASH,
+									SLASH);
 							
 							StringBuffer result = new StringBuffer(repStr);
 							
@@ -1159,7 +1160,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 								if(repStr.indexOf(prefix1)!=-1){
 									result = new StringBuffer();
 									result.append(repStr.substring(prefix1.length()));
-									result.insert(result.lastIndexOf(Constants.LEFT_BRACKET)+1, prefix1);
+									result.insert(result.lastIndexOf(LEFT_BRACKET)+1, prefix1);
 									//Added by William on 2010-06-08 for bug:3013079 start
 									//if this key definition refer to a external resource
 									if(exKeyDefMap.containsKey(to)){
@@ -1183,16 +1184,16 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 					}else{
 						//other case do nothing
 						newSet.add(FileUtils.removeRedundantNames(new StringBuffer(prefix).append(to).toString())
-							.replaceAll(Constants.DOUBLE_BACK_SLASH,
-									Constants.SLASH) + Constants.EQUAL +
+							.replaceAll(DOUBLE_BACK_SLASH,
+									SLASH) + EQUAL +
 									FileUtils.removeRedundantNames(new StringBuffer(prefix).append(source).toString())
-							.replaceAll(Constants.DOUBLE_BACK_SLASH,
-									Constants.SLASH));
+							.replaceAll(DOUBLE_BACK_SLASH,
+									SLASH));
 					}
 				}else{
 				newSet.add(FileUtils.removeRedundantNames(new StringBuffer(prefix).append(file).toString())
-						.replaceAll(Constants.DOUBLE_BACK_SLASH,
-								Constants.SLASH));
+						.replaceAll(DOUBLE_BACK_SLASH,
+								SLASH));
 				}
 			}
 		}
@@ -1229,7 +1230,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 			}
 		}
 		
-		value = StringUtils.assembleString(newSet, Constants.COMMA);
+		value = StringUtils.assembleString(newSet, COMMA);
 		prop.put(key, value);
 		
 		// clear set
@@ -1244,9 +1245,9 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 	 */
 	private void writeKeyDef(final String keyName, final StringBuffer result) {
 		try {
-			final int equalIndex = result.indexOf(Constants.EQUAL);
-			final int leftBracketIndex = result.lastIndexOf(Constants.LEFT_BRACKET);
-			final int rightBracketIndex = result.lastIndexOf(Constants.RIGHT_BRACKET);
+			final int equalIndex = result.indexOf(EQUAL);
+			final int leftBracketIndex = result.lastIndexOf(LEFT_BRACKET);
+			final int rightBracketIndex = result.lastIndexOf(RIGHT_BRACKET);
 			//get href
 			final String href = result.substring(equalIndex + 1, leftBracketIndex);
 			//get source file
@@ -1274,7 +1275,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 	 */
 	private void addFlagImagesSetToProperties(final Properties prop, final String key, final Set<String> set) {
 		String value = null;
-		final Set<String> newSet = new LinkedHashSet<String>(Constants.INT_128);
+		final Set<String> newSet = new LinkedHashSet<String>(INT_128);
 		final Iterator<String> iter = set.iterator();
 
 		while (iter.hasNext()) {
@@ -1288,8 +1289,8 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 				 * all the back slash with slash.
 				 */
 				newSet.add(FileUtils.removeRedundantNames(new StringBuffer().append(file).toString())
-						.replaceAll(Constants.DOUBLE_BACK_SLASH,
-								Constants.SLASH));
+						.replaceAll(DOUBLE_BACK_SLASH,
+								SLASH));
 			}
 		}
 
@@ -1324,7 +1325,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 		}
 		
 
-		value = StringUtils.assembleString(newSet, Constants.COMMA);
+		value = StringUtils.assembleString(newSet, COMMA);
 
 		prop.put(key, value);
 

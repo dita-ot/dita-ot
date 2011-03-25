@@ -8,13 +8,9 @@
  * (c) Copyright IBM Corp. 2010 All Rights Reserved.
  */
 package org.dita.dost.util;
-/**
- * This class is for get the first xml:lang value set in ditamap/topic files
- * 
- * @version 1.0 2010-09-30
- * 
- * @author Zhang Di Hua
- */
+
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -30,6 +26,13 @@ import org.apache.tools.ant.Task;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
 
+/**
+ * This class is for get the first xml:lang value set in ditamap/topic files
+ * 
+ * @version 1.0 2010-09-30
+ * 
+ * @author Zhang Di Hua
+ */
 public final class CheckLang extends Task {
 
     private String basedir;
@@ -67,9 +70,9 @@ public final class CheckLang extends Task {
 		
 		
 		//File object of dita.list
-		final File ditalist = new File(tempdir, Constants.FILE_NAME_DITA_LIST);
+		final File ditalist = new File(tempdir, FILE_NAME_DITA_LIST);
 		//File object of dita.xml.properties
-	    final File xmlDitalist=new File(tempdir,Constants.FILE_NAME_DITA_LIST_XML);
+	    final File xmlDitalist=new File(tempdir,FILE_NAME_DITA_LIST_XML);
 	    final Properties prop = new Properties();
 	    InputStream in = null;
 	    try{
@@ -84,7 +87,7 @@ public final class CheckLang extends Task {
 			String msg = null;
 			params.put("%1", ditalist);
 			msg = MessageUtils.getMessage("DOTJ011E", params).toString();
-			/*msg = new StringBuffer(msg).append(Constants.LINE_SEPARATOR)
+			/*msg = new StringBuffer(msg).append(LINE_SEPARATOR)
 					.append(e.toString()).toString();*/
 			logger.logError(msg);
 		} finally {
@@ -109,7 +112,7 @@ public final class CheckLang extends Task {
             if(!StringUtils.isEmptyString(langCode)){
             	setActiveProjectProperty("htmlhelp.locale", langCode);
             }else{
-            	final Set<String> topicList = StringUtils.restoreSet((String)prop.getProperty(Constants.FULL_DITA_TOPIC_LIST));
+            	final Set<String> topicList = StringUtils.restoreSet((String)prop.getProperty(FULL_DITA_TOPIC_LIST));
             	//parse topic files
             	for(final String topicFileName : topicList){
             		final File topicFile = new File(tempdir, topicFileName);

@@ -9,6 +9,8 @@
  */
 package org.dita.dost.module;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
@@ -25,7 +27,6 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.MergeMapParser;
-import org.dita.dost.util.Constants;
 
 /** 
  * The module handles topic merge in issues as PDF. 
@@ -60,13 +61,13 @@ final class TopicMergeModule implements AbstractPipelineModule {
             throw new IllegalStateException("Logger not set");
         }
 		final String ditaInput = input
-		.getAttribute(Constants.ANT_INVOKER_PARAM_INPUTMAP);
+		.getAttribute(ANT_INVOKER_PARAM_INPUTMAP);
 		final String style = input
-		.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_STYLE);
+		.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE);
 		final String out = input
-		.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_OUTPUT);
+		.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUT);
 		final String tempdir = input
-		.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
+		.getAttribute(ANT_INVOKER_PARAM_TEMPDIR);
 		final MergeMapParser mapParser = new MergeMapParser();
 		mapParser.setLogger(logger);
 		
@@ -83,7 +84,7 @@ final class TopicMergeModule implements AbstractPipelineModule {
 		
 
 		mapParser.read(ditaInput+"|"+tempdir);
-		final String midResult = new StringBuffer(Constants.XML_HEAD).append(
+		final String midResult = new StringBuffer(XML_HEAD).append(
 				"<dita-merge xmlns:ditaarch=\"http://dita.oasis-open.org/architecture/2005/\">")
 			.append(((StringBuffer)mapParser.getContent().getValue())).append("</dita-merge>").toString();
 		final StringReader midStream = new StringReader(midResult);
@@ -100,7 +101,7 @@ final class TopicMergeModule implements AbstractPipelineModule {
 				final Transformer transformer = factory.newTransformer(new StreamSource(styleFile.toURI().toString()));
 				transformer.transform(new StreamSource(midStream), new StreamResult(new FileOutputStream(new File(out))));
 			}else{
-				output = new OutputStreamWriter(new FileOutputStream(out),Constants.UTF8);
+				output = new OutputStreamWriter(new FileOutputStream(out),UTF8);
 				output.write(midResult);
 				output.flush();
 			}

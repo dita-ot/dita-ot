@@ -9,7 +9,7 @@
  */
 package org.dita.dost.log;
 
-import org.dita.dost.util.Constants;
+import static org.dita.dost.util.Constants.*;
 
 /**
  * Class description goes here.
@@ -125,7 +125,7 @@ public final class MessageBean {
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		StringBuffer buff = new StringBuffer(Constants.INT_256);
+		StringBuffer buff = new StringBuffer(INT_256);
 		
 		buff.append("[").append(id).append("]");
 		buff.append("[").append(type).append("] ");

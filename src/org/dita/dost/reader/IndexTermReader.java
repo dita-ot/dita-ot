@@ -9,6 +9,8 @@
  */
 package org.dita.dost.reader;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +21,6 @@ import org.dita.dost.index.IndexTerm;
 import org.dita.dost.index.IndexTermCollection;
 import org.dita.dost.index.IndexTermTarget;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -104,14 +105,14 @@ public final class IndexTermReader extends AbstractXMLReader {
 	public IndexTermReader() {
 		termStack = new Stack<IndexTerm>();
 		topicIdStack = new Stack<String>();
-		indexTermSpecList = new ArrayList<String>(Constants.INT_16);
-		indexSeeSpecList = new ArrayList<String>(Constants.INT_16);
-		indexSeeAlsoSpecList = new ArrayList<String>(Constants.INT_16);
-		indexSortAsSpecList = new ArrayList<String>(Constants.INT_16);
-		topicSpecList = new ArrayList<String>(Constants.INT_16);
-		titleSpecList = new ArrayList<String>(Constants.INT_16);
-		indexTermList = new ArrayList<IndexTerm>(Constants.INT_256);		
-		titleMap = new HashMap<String, String>(Constants.INT_256);
+		indexTermSpecList = new ArrayList<String>(INT_16);
+		indexSeeSpecList = new ArrayList<String>(INT_16);
+		indexSeeAlsoSpecList = new ArrayList<String>(INT_16);
+		indexSortAsSpecList = new ArrayList<String>(INT_16);
+		topicSpecList = new ArrayList<String>(INT_16);
+		titleSpecList = new ArrayList<String>(INT_16);
+		indexTermList = new ArrayList<IndexTerm>(INT_256);		
+		titleMap = new HashMap<String, String>(INT_256);
 		processRoleStack = new Stack<String>();
 		processRoleLevel = 0;
 		if (result == null) {
@@ -152,7 +153,7 @@ public final class IndexTermReader extends AbstractXMLReader {
 		 * For title info
 		 */
 		if (processRoleStack.isEmpty() || 
-				!Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processRoleStack.peek())) {
+				!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processRoleStack.peek())) {
 			if (!insideSortingAs && !termStack.empty()) {
 				final IndexTerm indexTerm = (IndexTerm) termStack.peek();
 				temp = StringUtils.escapeXML(temp);
@@ -197,7 +198,7 @@ public final class IndexTermReader extends AbstractXMLReader {
 				role = processRoleStack.pop();
 			}
 			processRoleLevel--;
-			if (Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY
+			if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY
 					.equalsIgnoreCase(role)) {
 				return;
 			}
@@ -300,7 +301,7 @@ public final class IndexTermReader extends AbstractXMLReader {
 			target.setTargetName(targetFile);
 		}
 		if(fragment != null) {
-            target.setTargetURI(targetFile + Constants.SHARP + fragment);
+            target.setTargetURI(targetFile + SHARP + fragment);
         } else {
             target.setTargetURI(targetFile);
         }
@@ -313,26 +314,26 @@ public final class IndexTermReader extends AbstractXMLReader {
 		
 		//Skip the topic if @processing-role="resource-only"
 		final String attrValue = attributes
-				.getValue(Constants.ATTRIBUTE_NAME_PROCESSING_ROLE);
+				.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE);
 		if (attrValue != null) {
 			processRoleStack.push(attrValue);
 			processRoleLevel++;
-			if (Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY
+			if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY
 					.equals(attrValue)) {
 				return;
 			}
 		} else if (processRoleLevel > 0) {
 			processRoleLevel++;
-			if (Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY
+			if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY
 					.equals(processRoleStack.peek())) {
 				return;
 			}
 		}
 		
-		final String classAttr = attributes.getValue(Constants.ATTRIBUTE_NAME_CLASS);
+		final String classAttr = attributes.getValue(ATTRIBUTE_NAME_CLASS);
 		
 		handleSpecialization(localName, classAttr);
-		parseTopic(localName, attributes.getValue(Constants.ATTRIBUTE_NAME_ID));
+		parseTopic(localName, attributes.getValue(ATTRIBUTE_NAME_ID));
 		//change parseIndexTerm(localName) to parseIndexTerm(localName,attributes)
 		parseIndexTerm(localName,attributes);
 		parseIndexSee(localName);
@@ -340,7 +341,7 @@ public final class IndexTermReader extends AbstractXMLReader {
 		
 		if (IndexTerm.getTermLocale() == null) {
 			final String xmlLang = attributes
-					.getValue(Constants.ATTRIBUTE_NAME_XML_LANG);
+					.getValue(ATTRIBUTE_NAME_XML_LANG);
 			
 			if (xmlLang != null) {
 				IndexTerm.setTermLocale(StringUtils.getLocale(xmlLang));
@@ -380,7 +381,7 @@ public final class IndexTermReader extends AbstractXMLReader {
 					parentTerm.updateSubTerm();
 				}
 			}
-			indexTerm.setTermPrefix(Constants.IndexTerm_Prefix_See_Also);
+			indexTerm.setTermPrefix(IndexTerm_Prefix_See_Also);
 			termStack.push(indexTerm);
 		}
 	}
@@ -392,13 +393,13 @@ public final class IndexTermReader extends AbstractXMLReader {
 			final IndexTerm indexTerm = new IndexTerm();
 			IndexTerm parentTerm = null;
 			
-			indexTerm.setTermPrefix(Constants.IndexTerm_Prefix_See);
+			indexTerm.setTermPrefix(IndexTerm_Prefix_See);
 			
 			if(!termStack.isEmpty()){
 				parentTerm = (IndexTerm)termStack.peek();
 				if(parentTerm.hasSubTerms()){
 					parentTerm.updateSubTerm();
-					indexTerm.setTermPrefix(Constants.IndexTerm_Prefix_See_Also);
+					indexTerm.setTermPrefix(IndexTerm_Prefix_See_Also);
 				}
 			}
 			termStack.push(indexTerm);
@@ -410,8 +411,8 @@ public final class IndexTermReader extends AbstractXMLReader {
 		// in the list.
 		if (indexTermSpecList.contains(localName)) {
 			final IndexTerm indexTerm = new IndexTerm();
-			indexTerm.setStartAttribute(attributes.getValue(Constants.ATTRIBUTE_NAME_END));
-			indexTerm.setEndAttribute(attributes.getValue(Constants.ATTRIBUTE_NAME_END));
+			indexTerm.setStartAttribute(attributes.getValue(ATTRIBUTE_NAME_END));
+			indexTerm.setEndAttribute(attributes.getValue(ATTRIBUTE_NAME_END));
 			
 			IndexTerm parentTerm = null;
 			if(!termStack.isEmpty()){
@@ -434,37 +435,37 @@ public final class IndexTermReader extends AbstractXMLReader {
 	private void handleSpecialization(String localName, String classAttr) {
 		if (classAttr == null) {
 			return;
-		} else if (classAttr.indexOf(Constants.ATTR_CLASS_VALUE_INDEXTERM) != -1) {
+		} else if (classAttr.indexOf(ATTR_CLASS_VALUE_INDEXTERM) != -1) {
 			// add the element name to the indexterm specialization element
 			// list if it does not already exist in that list.
 			if (!indexTermSpecList.contains(localName)) {
 				indexTermSpecList.add(localName);
 			}
-		} else if (classAttr.indexOf(Constants.ATTR_CLASS_VALUE_INDEXSEEALSO) != -1) {
+		} else if (classAttr.indexOf(ATTR_CLASS_VALUE_INDEXSEEALSO) != -1) {
 			// add the element name to the index-see-also specialization element
 			// list if it does not already exist in that list.
 			if (!indexSeeAlsoSpecList.contains(localName)) {
 				indexSeeAlsoSpecList.add(localName);
 			}
-		} else if (classAttr.indexOf(Constants.ATTR_CLASS_VALUE_INDEXSEE) != -1) {
+		} else if (classAttr.indexOf(ATTR_CLASS_VALUE_INDEXSEE) != -1) {
 			// add the element name to the index-see specialization element
 			// list if it does not already exist in that list.
 			if (!indexSeeSpecList.contains(localName)) {
 				indexSeeSpecList.add(localName);
 			}
-		} else if (classAttr.indexOf(Constants.ATTR_CLASS_VALUE_INDEXSORTAS) != -1) {
+		} else if (classAttr.indexOf(ATTR_CLASS_VALUE_INDEXSORTAS) != -1) {
 			// add the element name to the index-sort-as specialization element
 			// list if it does not already exist in that list.
 			if (!indexSortAsSpecList.contains(localName)) {
 				indexSortAsSpecList.add(localName);
 			}
-		} else if (classAttr.indexOf(Constants.ATTR_CLASS_VALUE_TOPIC) != -1) {
+		} else if (classAttr.indexOf(ATTR_CLASS_VALUE_TOPIC) != -1) {
 			//add the element name to the topic specialization element
 			// list if it does not already exist in that list.
 			if (!topicSpecList.contains(localName)) {
 				topicSpecList.add(localName);
 			}
-		} else if (classAttr.indexOf(Constants.ATTR_CLASS_VALUE_TITLE) != -1) {
+		} else if (classAttr.indexOf(ATTR_CLASS_VALUE_TITLE) != -1) {
 			//add the element name to the title specailization element list
 			// if it does not exist in that list.
 			if (!titleSpecList.contains(localName)){
@@ -507,8 +508,8 @@ public final class IndexTermReader extends AbstractXMLReader {
 		for(int i=0; i<targetSize; i++){
 			final IndexTermTarget target = (IndexTermTarget)indexterm.getTargetList().get(i);
 			final String uri = target.getTargetURI();
-			final int indexOfSharp = uri.lastIndexOf(Constants.SHARP);
-			final String fragment = (indexOfSharp == -1 || uri.endsWith(Constants.SHARP))?
+			final int indexOfSharp = uri.lastIndexOf(SHARP);
+			final String fragment = (indexOfSharp == -1 || uri.endsWith(SHARP))?
 								null:
 								uri.substring(indexOfSharp+1);
 			if(fragment != null && titleMap.containsKey(fragment)){

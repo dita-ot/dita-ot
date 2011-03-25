@@ -9,6 +9,8 @@
  */
 package org.dita.dost.writer;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -21,7 +23,6 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.index.IndexTerm;
 import org.dita.dost.index.IndexTermTarget;
 import org.dita.dost.module.Content;
-import org.dita.dost.util.Constants;
 
 /**
  * This class extends AbstractWriter, used to output IndexTerm list to CHM index
@@ -62,7 +63,7 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter implements A
         int termNum = termList.size();
 
         try {
-            printWriter = new PrintWriter(new OutputStreamWriter(outputStream, Constants.UTF8));
+            printWriter = new PrintWriter(new OutputStreamWriter(outputStream, UTF8));
 
             printWriter.println("<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML//EN\">");
             printWriter.println("<html>");

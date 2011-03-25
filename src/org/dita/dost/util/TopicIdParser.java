@@ -9,6 +9,8 @@
  */
 package org.dita.dost.util;
 
+import static org.dita.dost.util.Constants.*;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
@@ -85,9 +87,9 @@ public final class TopicIdParser implements ContentHandler {
 	public void startElement(final String uri, final String localName, final String qName,
 			final Attributes atts) throws SAXException {
 		if (isFirstId){
-			if (atts.getValue(Constants.ATTRIBUTE_NAME_ID)!=null){
+			if (atts.getValue(ATTRIBUTE_NAME_ID)!=null){
 				isFirstId = false;
-				firstId.append(atts.getValue(Constants.ATTRIBUTE_NAME_ID));
+				firstId.append(atts.getValue(ATTRIBUTE_NAME_ID));
 			}
 		}
 

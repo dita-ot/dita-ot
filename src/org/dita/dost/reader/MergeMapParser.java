@@ -9,6 +9,8 @@
  */
 package org.dita.dost.reader;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -21,7 +23,6 @@ import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.MergeUtils;
 import org.dita.dost.util.StringUtils;
@@ -56,10 +57,10 @@ public final class MergeMapParser extends AbstractXMLReader {
 			if(reader == null){
 				reader = StringUtils.getXMLReader();
 				reader.setContentHandler(this);
-				reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
+				reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
 			}
 			if(mapInfo == null){
-				mapInfo = new StringBuffer(Constants.INT_1024);
+				mapInfo = new StringBuffer(INT_1024);
 			}
 			
 			processStack = new Stack<String>();
@@ -84,9 +85,9 @@ public final class MergeMapParser extends AbstractXMLReader {
 	public void read(String ditaInput) {
 		try{
 			String filename;
-			if(ditaInput.contains(Constants.STICK)){
-				filename = ditaInput.substring(0, ditaInput.indexOf(Constants.STICK));
-				tempdir = ditaInput.substring(ditaInput.indexOf(Constants.STICK)+1);
+			if(ditaInput.contains(STICK)){
+				filename = ditaInput.substring(0, ditaInput.indexOf(STICK));
+				tempdir = ditaInput.substring(ditaInput.indexOf(STICK)+1);
 			}else{
 				filename = ditaInput;
 				tempdir = new File(filename).getParent();
@@ -110,99 +111,99 @@ public final class MergeMapParser extends AbstractXMLReader {
 			}
 			processLevel--;
 			
-			if (Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(value)) {
+			if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(value)) {
 				return;
 			}
 		}
-		mapInfo.append(Constants.LESS_THAN)
-		.append(Constants.SLASH)
+		mapInfo.append(LESS_THAN)
+		.append(SLASH)
 		.append(qName)
-		.append(Constants.GREATER_THAN);
+		.append(GREATER_THAN);
 	}
 	
 	@Override
 	public void characters(char[] ch, int start, int length) throws SAXException {
-		if (processStack.empty() || !Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processStack.peek())){
+		if (processStack.empty() || !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processStack.peek())){
 			mapInfo.append(StringUtils.escapeXML(ch, start, length));
 		}
 	}
 
 	@Override
 	public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
-		final String attrValue = atts.getValue(Constants.ATTRIBUTE_NAME_PROCESSING_ROLE);
+		final String attrValue = atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE);
 	    if (attrValue != null) {
 	        processStack.push(attrValue);
 	        processLevel++;
-	        if (Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(attrValue)) {
+	        if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(attrValue)) {
 	        	// @processing-role='resource-only'
 	        	return;
 	        }
 	    } else if (processLevel > 0) {
 	        processLevel++;
-	        if (Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processStack.peek())) {
+	        if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processStack.peek())) {
 	        	// Child of @processing-role='resource-only'
 	        	return;
 	        }
 	    }
 		
-		mapInfo.append(Constants.LESS_THAN).append(qName);
-		final String classValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
+		mapInfo.append(LESS_THAN).append(qName);
+		final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
 		
 		final int attsLen = atts.getLength();
 		for (int i = 0; i < attsLen; i++) {
             final String attQName = atts.getQName(i);
             String attValue = atts.getValue(i);
-            if(Constants.ATTRIBUTE_NAME_HREF.equals(attQName) 
+            if(ATTRIBUTE_NAME_HREF.equals(attQName) 
             		&& !StringUtils.isEmptyString(attValue)
             		&& classValue != null
-            		&& classValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPICREF)!=-1){
-                final String scopeValue = atts.getValue(Constants.ATTRIBUTE_NAME_SCOPE);
-        		final String formatValue = atts.getValue(Constants.ATTRIBUTE_NAME_FORMAT);
+            		&& classValue.indexOf(ATTR_CLASS_VALUE_TOPICREF)!=-1){
+                final String scopeValue = atts.getValue(ATTRIBUTE_NAME_SCOPE);
+        		final String formatValue = atts.getValue(ATTRIBUTE_NAME_FORMAT);
         		
         		if((scopeValue == null 
-    					|| Constants.ATTR_SCOPE_VALUE_LOCAL.equalsIgnoreCase(scopeValue))
+    					|| ATTR_SCOPE_VALUE_LOCAL.equalsIgnoreCase(scopeValue))
     					&& (formatValue == null 
-    							|| Constants.ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatValue))){
+    							|| ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatValue))){
         			final String ohref = attValue;
-                    final String copyToValue = atts.getValue(Constants.ATTRIBUTE_NAME_COPY_TO);
+                    final String copyToValue = atts.getValue(ATTRIBUTE_NAME_COPY_TO);
                     if (!StringUtils.isEmptyString(copyToValue)) {
                         attValue = copyToValue;
                     }
     				if (util.isVisited(attValue)){
-    					mapInfo.append(Constants.STRING_BLANK)
-            			.append("ohref").append(Constants.EQUAL).append(Constants.QUOTATION)
-            			.append(StringUtils.escapeXML(ohref)).append(Constants.QUOTATION);
+    					mapInfo.append(STRING_BLANK)
+            			.append("ohref").append(EQUAL).append(QUOTATION)
+            			.append(StringUtils.escapeXML(ohref)).append(QUOTATION);
     					
-    					attValue = new StringBuffer(Constants.SHARP).append(util.getIdValue(attValue)).toString();
+    					attValue = new StringBuffer(SHARP).append(util.getIdValue(attValue)).toString();
     				}else{
-    					mapInfo.append(Constants.STRING_BLANK)
-            			.append("ohref").append(Constants.EQUAL).append(Constants.QUOTATION)
-            			.append(StringUtils.escapeXML(ohref)).append(Constants.QUOTATION);
+    					mapInfo.append(STRING_BLANK)
+            			.append("ohref").append(EQUAL).append(QUOTATION)
+            			.append(StringUtils.escapeXML(ohref)).append(QUOTATION);
     					    					
     					//parse the topic
     					final String fileId = topicParser.parse(attValue,dirPath);
     					util.visit(attValue);
-    					attValue = new StringBuffer(Constants.SHARP).append(fileId).toString();
+    					attValue = new StringBuffer(SHARP).append(fileId).toString();
     				}
     			}
         		
             }
             
             //output all attributes
-            mapInfo.append(Constants.STRING_BLANK)
-            		.append(attQName).append(Constants.EQUAL).append(Constants.QUOTATION)
-            		.append(StringUtils.escapeXML(attValue)).append(Constants.QUOTATION);
+            mapInfo.append(STRING_BLANK)
+            		.append(attQName).append(EQUAL).append(QUOTATION)
+            		.append(StringUtils.escapeXML(attValue)).append(QUOTATION);
         }
-		mapInfo.append(Constants.GREATER_THAN);
+		mapInfo.append(GREATER_THAN);
 		
 	}
 	
 	@Override
 	public void processingInstruction(String target, String data)
 			throws SAXException {
-		final String pi = (data != null) ? target + Constants.STRING_BLANK + data : target;
-        mapInfo.append(Constants.LESS_THAN + Constants.QUESTION 
-                + pi + Constants.QUESTION + Constants.GREATER_THAN);
+		final String pi = (data != null) ? target + STRING_BLANK + data : target;
+        mapInfo.append(LESS_THAN + QUESTION 
+                + pi + QUESTION + GREATER_THAN);
 	}
 
 	@Override
@@ -211,8 +212,8 @@ public final class MergeMapParser extends AbstractXMLReader {
 		// compare visitedSet with the list
 		// if list item not in visitedSet then call MergeTopicParser to parse it
 		final Properties property = new Properties();
-	    final File ditalist = new File(tempdir, Constants.FILE_NAME_DITA_LIST);
-        final File xmlDitalist = new File(tempdir, Constants.FILE_NAME_DITA_LIST_XML);
+	    final File ditalist = new File(tempdir, FILE_NAME_DITA_LIST);
+        final File xmlDitalist = new File(tempdir, FILE_NAME_DITA_LIST_XML);
         InputStream in = null;
         try{
 	        if(xmlDitalist.exists()) {
@@ -222,14 +223,14 @@ public final class MergeMapParser extends AbstractXMLReader {
 	        	in = new FileInputStream(ditalist);
 	        	property.loadFromXML(in);
 	        }
-	        final String hrefTargetList = property.getProperty(Constants.HREF_TARGET_LIST);
-	        String resourceOnlySet = property.getProperty(Constants.RESOURCE_ONLY_LIST);
+	        final String hrefTargetList = property.getProperty(HREF_TARGET_LIST);
+	        String resourceOnlySet = property.getProperty(RESOURCE_ONLY_LIST);
 	        resourceOnlySet = (resourceOnlySet == null ? "" : resourceOnlySet);
-	        String skipTopicSet = property.getProperty(Constants.CHUNK_TOPIC_LIST);
+	        String skipTopicSet = property.getProperty(CHUNK_TOPIC_LIST);
 	        skipTopicSet = (skipTopicSet == null ? "" : skipTopicSet);
-	        String chunkedTopicSet = property.getProperty(Constants.CHUNKED_TOPIC_LIST);
+	        String chunkedTopicSet = property.getProperty(CHUNKED_TOPIC_LIST);
 	        chunkedTopicSet = (chunkedTopicSet == null ? "" : chunkedTopicSet);
-			final StringTokenizer tokenizer = new StringTokenizer(hrefTargetList,Constants.COMMA);
+			final StringTokenizer tokenizer = new StringTokenizer(hrefTargetList,COMMA);
 			while(tokenizer.hasMoreElements())
 			{
 			    String element = (String)tokenizer.nextElement();

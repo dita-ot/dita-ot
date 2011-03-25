@@ -9,6 +9,8 @@
  */
 package org.dita.dost.module;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
@@ -21,7 +23,6 @@ import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.MapIndexReader;
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.ListUtils;
 import org.dita.dost.util.StringUtils;
@@ -69,16 +70,16 @@ final class MoveIndexModule implements AbstractPipelineModule {
 		indexReader.setLogger(logger);
 		final DitaIndexWriter indexInserter = new DitaIndexWriter();
 		indexInserter.setLogger(logger);
-		final String baseDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
-    	String tempDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
+		final String baseDir = input.getAttribute(ANT_INVOKER_PARAM_BASEDIR);
+    	String tempDir = input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR);
     	
 		if (!new File(tempDir).isAbsolute()) {
         	tempDir = new File(baseDir, tempDir).getAbsolutePath();
         }
     	   		
-		indexReader.setMatch(new StringBuffer(Constants.ELEMENT_NAME_TOPICREF)
-        .append(Constants.SLASH).append(Constants.ELEMENT_NAME_TOPICMETA)
-        .append(Constants.SLASH).append(Constants.ELEMENT_NAME_KEYWORDS).toString());
+		indexReader.setMatch(new StringBuffer(ELEMENT_NAME_TOPICREF)
+        .append(SLASH).append(ELEMENT_NAME_TOPICMETA)
+        .append(SLASH).append(ELEMENT_NAME_KEYWORDS).toString());
 		
 		Properties properties = null;
 		try{
@@ -87,7 +88,7 @@ final class MoveIndexModule implements AbstractPipelineModule {
 			throw new DITAOTException(e);
 		}
 		
-		final Set<String> fullditamaplist = StringUtils.restoreSet(properties.getProperty(Constants.FULL_DITAMAP_LIST));
+		final Set<String> fullditamaplist = StringUtils.restoreSet(properties.getProperty(FULL_DITAMAP_LIST));
 		for(final String fileName : fullditamaplist){
 			//FIXME: this reader needs parent directory for further process
 			indexReader.read(new File(tempDir, fileName).getAbsolutePath());  
@@ -98,11 +99,11 @@ final class MoveIndexModule implements AbstractPipelineModule {
         while (i.hasNext()) {
         	final Map.Entry<String, String> entry = i.next();
             targetFileName = entry.getKey();
-            targetFileName = targetFileName.indexOf(Constants.SHARP) != -1 
-            				? targetFileName.substring(0, targetFileName.indexOf(Constants.SHARP))
+            targetFileName = targetFileName.indexOf(SHARP) != -1 
+            				? targetFileName.substring(0, targetFileName.indexOf(SHARP))
             				: targetFileName;
-            if (targetFileName.endsWith(Constants.FILE_EXTENSION_DITA) ||
-                    targetFileName.endsWith(Constants.FILE_EXTENSION_XML)){
+            if (targetFileName.endsWith(FILE_EXTENSION_DITA) ||
+                    targetFileName.endsWith(FILE_EXTENSION_XML)){
                 content.setValue(entry.getValue());
                 indexInserter.setContent(content);
                 if (FileUtils.fileExists(entry.getKey())){

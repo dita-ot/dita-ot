@@ -9,9 +9,11 @@
  */
 package org.dita.dost.platform;
 
-import org.dita.dost.util.Constants;
+import static org.dita.dost.util.Constants.*;
+
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
+
 /**
  * ImportStringsAction class.
  *
@@ -27,7 +29,7 @@ final class ImportStringsAction extends ImportAction {
 		final StringBuilder retBuf = new StringBuilder();
 		final String templateFilePath = paramTable.get(FileGenerator.PARAM_TEMPLATE);
 		for (final String value: valueSet) {
-			retBuf.append(Constants.LINE_SEPARATOR);
+			retBuf.append(LINE_SEPARATOR);
 			retBuf.append("<stringfile>");				
 			retBuf.append(StringUtils.escapeXML(
 					FileUtils.getRelativePathFromMap(

@@ -9,6 +9,8 @@
  */
 package org.dita.dost.reader;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
@@ -26,7 +28,6 @@ import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.w3c.dom.Document;
@@ -80,8 +81,8 @@ public final class DitaValReader extends AbstractXMLReader {
 		filterMap = new HashMap<String, String>();
 		schemeFilterMap = new HashMap<String, String>();
 		content = null;
-		imageList = new ArrayList<String>(Constants.INT_256);
-		relFlagImageList= new ArrayList<String>(Constants.INT_256);
+		imageList = new ArrayList<String>(INT_256);
+		relFlagImageList= new ArrayList<String>(INT_256);
 		validValuesMap = new HashMap<String, HashMap<String, HashSet<String>>>();
 		defaultValueMap = new HashMap<String, HashMap<String, String>>();
 		bindingMap = new HashMap<String, HashMap<String, HashSet<Element>>>();
@@ -134,27 +135,27 @@ public final class DitaValReader extends AbstractXMLReader {
 	public void startElement(String uri, String localName, String qName,
 			Attributes atts) throws SAXException {
 		String flagImage = null;
-		if(atts.getValue(Constants.ATTRIBUTE_NAME_IMG)!=null){
-			flagImage = atts.getValue(Constants.ATTRIBUTE_NAME_IMG);
-		}else if(atts.getValue(Constants.ATTRIBUTE_NAME_IMAGEREF)!=null){
-			flagImage = atts.getValue(Constants.ATTRIBUTE_NAME_IMAGEREF);
+		if(atts.getValue(ATTRIBUTE_NAME_IMG)!=null){
+			flagImage = atts.getValue(ATTRIBUTE_NAME_IMG);
+		}else if(atts.getValue(ATTRIBUTE_NAME_IMAGEREF)!=null){
+			flagImage = atts.getValue(ATTRIBUTE_NAME_IMAGEREF);
 		}
 
-		if (Constants.ELEMENT_NAME_PROP.equals(qName)) {
-			final String action = atts.getValue(Constants.ELEMENT_NAME_ACTION);
-			final String attName = atts.getValue(Constants.ATTRIBUTE_NAME_ATT);
-			final String attValue = atts.getValue(Constants.ATTRIBUTE_NAME_VAL);
+		if (ELEMENT_NAME_PROP.equals(qName)) {
+			final String action = atts.getValue(ELEMENT_NAME_ACTION);
+			final String attName = atts.getValue(ATTRIBUTE_NAME_ATT);
+			final String attValue = atts.getValue(ATTRIBUTE_NAME_VAL);
 			//first to check if the att attribute and val attribute are null 
 			//which is a default action for elements without mapping with the other filter val
 			String key=null;
 			if(attName==null){
-				key=Constants.DEFAULT_ACTION;
+				key=DEFAULT_ACTION;
 			}else 
 				if(attValue==null){
 					key=attName;//default action for the specified attribute
 				}
 				else{
-					key = attName + Constants.EQUAL + attValue;
+					key = attName + EQUAL + attValue;
 				}
 
 			if (action != null) {
@@ -236,11 +237,11 @@ public final class DitaValReader extends AbstractXMLReader {
                     queue.offer((Element)children.item(i));
                 }
 			}
-			final String attrValue = node.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
-			if (attrValue != null && attrValue.contains(Constants.ATTR_CLASS_VALUE_SUBJECT_DEF)) {
-				String key = node.getAttribute(Constants.ATTRIBUTE_NAME_KEYS);
+			final String attrValue = node.getAttribute(ATTRIBUTE_NAME_CLASS);
+			if (attrValue != null && attrValue.contains(ATTR_CLASS_VALUE_SUBJECT_DEF)) {
+				String key = node.getAttribute(ATTRIBUTE_NAME_KEYS);
 				if (!StringUtils.isEmptyString(key)) {
-					key = attName + Constants.EQUAL + key;
+					key = attName + EQUAL + key;
 					if (schemeFilterMap.get(key) == null) {
 						schemeFilterMap.put(key, action);
 					} 
@@ -317,31 +318,31 @@ public final class DitaValReader extends AbstractXMLReader {
 			for (int i = 0; i < rootChildren.getLength(); i++) {
 				if (rootChildren.item(i).getNodeType() == Node.ELEMENT_NODE) {
 					Element node = (Element)rootChildren.item(i);
-					String attrValue = node.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
+					String attrValue = node.getAttribute(ATTRIBUTE_NAME_CLASS);
 					if (attrValue != null
-							&& attrValue.contains(Constants.ATTR_CLASS_VALUE_ENUMERATION_DEF)) {
+							&& attrValue.contains(ATTR_CLASS_VALUE_ENUMERATION_DEF)) {
 						final NodeList enumChildren = node.getChildNodes();
 						String elementName = "*";
 						String attributeName = null;
 						for (int j = 0; j < enumChildren.getLength(); j++) {
 							if (enumChildren.item(j).getNodeType() == Node.ELEMENT_NODE) {
 								node = (Element)enumChildren.item(j);
-								attrValue = node.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
+								attrValue = node.getAttribute(ATTRIBUTE_NAME_CLASS);
 								if (attrValue != null 
-										&& attrValue.contains(Constants.ATTR_CLASS_VALUE_ELEMENT_DEF)) {
-									elementName = node.getAttribute(Constants.ATTRIBUTE_NAME_NAME);
+										&& attrValue.contains(ATTR_CLASS_VALUE_ELEMENT_DEF)) {
+									elementName = node.getAttribute(ATTRIBUTE_NAME_NAME);
 								} else if (attrValue != null
-										&& attrValue.contains(Constants.ATTR_CLASS_VALUE_ATTRIBUTE_DEF)) {
-									attributeName = node.getAttribute(Constants.ATTRIBUTE_NAME_NAME);
+										&& attrValue.contains(ATTR_CLASS_VALUE_ATTRIBUTE_DEF)) {
+									attributeName = node.getAttribute(ATTRIBUTE_NAME_NAME);
 									HashMap<String, HashSet<Element>> S = bindingMap.get(attributeName);
 									if (S == null) {
 										S = new HashMap<String, HashSet<Element>>();
 										bindingMap.put(attributeName, S);
 									}
 								} else if (attrValue != null
-										&& attrValue.contains(Constants.ATTR_CLASS_VALUE_DEFAULT_SUBJECT)) {
+										&& attrValue.contains(ATTR_CLASS_VALUE_DEFAULT_SUBJECT)) {
 									// Put default values.
-									final String keyValue = node.getAttribute(Constants.ATTRIBUTE_NAME_KEYREF);
+									final String keyValue = node.getAttribute(ATTRIBUTE_NAME_KEYREF);
 									if (keyValue != null) {
 										HashMap<String, String> S = defaultValueMap.get(attributeName);
 										if (S == null) {
@@ -351,13 +352,13 @@ public final class DitaValReader extends AbstractXMLReader {
 										defaultValueMap.put(attributeName, S);
 									}
 								} else if (attrValue != null
-										&& attrValue.contains(Constants.ATTR_CLASS_VALUE_SUBJECT_DEF)) {
+										&& attrValue.contains(ATTR_CLASS_VALUE_SUBJECT_DEF)) {
 									// Search for attributeName in schemeRoot
 									String keyValue = node
-											.getAttribute(Constants.ATTRIBUTE_NAME_KEYREF);
+											.getAttribute(ATTRIBUTE_NAME_KEYREF);
 									if (StringUtils.isEmptyString(keyValue)) {
                                         keyValue = node
-												.getAttribute(Constants.ATTRIBUTE_NAME_KEYS);
+												.getAttribute(ATTRIBUTE_NAME_KEYS);
                                     }
 									final Element subTree = searchForKey(schemeRoot,
 											keyValue);
@@ -416,9 +417,9 @@ public final class DitaValReader extends AbstractXMLReader {
                     queue.offer((Element)children.item(i));
                 }
 			}
-			final String attrValue = node.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
-			if (attrValue != null && attrValue.contains(Constants.ATTR_CLASS_VALUE_SUBJECT_DEF)) {
-				final String key = node.getAttribute(Constants.ATTRIBUTE_NAME_KEYS);
+			final String attrValue = node.getAttribute(ATTRIBUTE_NAME_CLASS);
+			if (attrValue != null && attrValue.contains(ATTR_CLASS_VALUE_SUBJECT_DEF)) {
+				final String key = node.getAttribute(ATTRIBUTE_NAME_KEYS);
 				if (!StringUtils.isEmptyString(key)) {
 					valueSet.add(key);
 				}
@@ -442,9 +443,9 @@ public final class DitaValReader extends AbstractXMLReader {
                     queue.add((Element)children.item(i));
                 }
 			}
-			final String attrValue = node.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
-			if (attrValue != null && attrValue.contains(Constants.ATTR_CLASS_VALUE_SUBJECT_DEF)) {
-				final String key = node.getAttribute(Constants.ATTRIBUTE_NAME_KEYS);
+			final String attrValue = node.getAttribute(ATTRIBUTE_NAME_CLASS);
+			if (attrValue != null && attrValue.contains(ATTR_CLASS_VALUE_SUBJECT_DEF)) {
+				final String key = node.getAttribute(ATTRIBUTE_NAME_KEYS);
 				if (keyValue.equals(key)) {
 					return node;
 				}

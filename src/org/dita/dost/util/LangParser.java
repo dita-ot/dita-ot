@@ -9,6 +9,8 @@
  */
 package org.dita.dost.util;
 
+import static org.dita.dost.util.Constants.*;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -33,12 +35,12 @@ public final class LangParser extends DefaultHandler {
 	public void startElement(final String uri, final String localName, final String name,
 			final Attributes attributes) throws SAXException {
         //String processedString;
-        final String classAttr = attributes.getValue("class");
-        final String langAttr = attributes.getValue("xml:lang");
+        final String classAttr = attributes.getValue(ATTRIBUTE_NAME_CLASS);
+        final String langAttr = attributes.getValue(ATTRIBUTE_NAME_XML_LANG);
 
         if(classAttr != null && langAttr != null) {
-            if ((classAttr.indexOf(" map/map ") > -1) ||
-                (classAttr.indexOf(" topic/topic ") > -1)) {
+            if ((classAttr.indexOf(ATTR_CLASS_VALUE_MAP) > -1) ||
+                (classAttr.indexOf(ATTR_CLASS_VALUE_TOPIC) > -1)) {
                     langCode = langAttr.toLowerCase();
             }
         }

@@ -9,6 +9,8 @@
  */
 package org.dita.dost.reader;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -20,7 +22,6 @@ import java.util.StringTokenizer;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.ListUtils;
 import org.dita.dost.util.StringUtils;
 
@@ -58,8 +59,8 @@ public final class ListReader implements AbstractReader {
 		}
 		
 		setList(propterties);			
-		schemeSet.addAll(StringUtils.restoreSet(propterties.getProperty(Constants.SUBJEC_SCHEME_LIST, "")));
-		inputMap = propterties.getProperty(Constants.INPUT_DITAMAP);
+		schemeSet.addAll(StringUtils.restoreSet(propterties.getProperty(SUBJEC_SCHEME_LIST, "")));
+		inputMap = propterties.getProperty(INPUT_DITAMAP);
 	}
     
     private void setList(Properties property){
@@ -73,16 +74,16 @@ public final class ListReader implements AbstractReader {
          * and restore the copy-to map
          */
         copytoMapEntries = property
-				.getProperty(Constants.COPYTO_TARGET_TO_SOURCE_MAP_LIST);
+				.getProperty(COPYTO_TARGET_TO_SOURCE_MAP_LIST);
         copytoMap = StringUtils.restoreMap(copytoMapEntries);
         
-        liststr = property.getProperty(Constants.FULL_DITAMAP_TOPIC_LIST)
-				+ Constants.COMMA
-				+ property.getProperty(Constants.CONREF_TARGET_LIST) 
-				+ Constants.COMMA
-				+ property.getProperty(Constants.COPYTO_SOURCE_LIST);
+        liststr = property.getProperty(FULL_DITAMAP_TOPIC_LIST)
+				+ COMMA
+				+ property.getProperty(CONREF_TARGET_LIST) 
+				+ COMMA
+				+ property.getProperty(COPYTO_SOURCE_LIST);
 				
-        tokenizer = new StringTokenizer(liststr,Constants.COMMA);
+        tokenizer = new StringTokenizer(liststr,COMMA);
                     
         while (tokenizer.hasMoreTokens()) {
         	refList.addFirst(tokenizer.nextToken());

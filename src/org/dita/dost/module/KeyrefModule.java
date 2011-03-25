@@ -9,6 +9,8 @@
  */
 package org.dita.dost.module;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,7 +24,6 @@ import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.KeyrefReader;
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.ListUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.KeyrefPaser;
@@ -50,11 +51,11 @@ final class KeyrefModule implements AbstractPipelineModule {
 	    if (logger == null) {
             throw new IllegalStateException("Logger not set");
         }
-		String tempDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
+		String tempDir = input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR);
 		
 		//Added by William on 2010-03-30 for bug:2978858 start
 		//get basedir
-		final String baseDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
+		final String baseDir = input.getAttribute(ANT_INVOKER_PARAM_BASEDIR);
 		//Added by William on 2010-03-30 for bug:2978858 end
 		
 		if (! new File(tempDir).isAbsolute()){
@@ -62,8 +63,8 @@ final class KeyrefModule implements AbstractPipelineModule {
 		}
 		
 		//Added by Alan Date:2009-08-04 --begin
-		final String ext = input.getAttribute(Constants.ANT_INVOKER_PARAM_DITAEXT);
-		final String extName = ext.startsWith(Constants.DOT) ? ext : (Constants.DOT + ext);
+		final String ext = input.getAttribute(ANT_INVOKER_PARAM_DITAEXT);
+		final String extName = ext.startsWith(DOT) ? ext : (DOT + ext);
 		//Added by Alan Date:2009-08-04 --end
 		
 		Properties properties = null;
@@ -80,21 +81,21 @@ final class KeyrefModule implements AbstractPipelineModule {
 		
 		// get the key definitions from the dita.list, and the ditamap where it is defined
 		// are not handle yet.
-		final String keylist = properties.getProperty(Constants.KEY_LIST);
+		final String keylist = properties.getProperty(KEY_LIST);
 		if(!StringUtils.isEmptyString(keylist)){
 			final Set<String> keys = StringUtils.restoreSet(keylist);
 			for(final String key: keys){
-				keymap.put(key.substring(0, key.indexOf(Constants.EQUAL)), 
-						key.substring(key.indexOf(Constants.EQUAL)+1, key.lastIndexOf("(")));
+				keymap.put(key.substring(0, key.indexOf(EQUAL)), 
+						key.substring(key.indexOf(EQUAL)+1, key.lastIndexOf("(")));
 				// map file which define the keys
 				final String map = key.substring(key.lastIndexOf("(") + 1, key.lastIndexOf(")"));
 				// put the keyname into corresponding map which defines it.
 				//a map file can define many keys
 				if(maps.containsKey(map)){
-					maps.get(map).add(key.substring(0,key.indexOf(Constants.EQUAL)));
+					maps.get(map).add(key.substring(0,key.indexOf(EQUAL)));
 				}else{
 					final HashSet<String> set = new HashSet<String>();
-					set.add(key.substring(0, key.indexOf(Constants.EQUAL)));
+					set.add(key.substring(0, key.indexOf(EQUAL)));
 					maps.put(map, set);
 				}
 			}
@@ -108,11 +109,11 @@ final class KeyrefModule implements AbstractPipelineModule {
 		}		
 		final Content content = reader.getContent();
 		//get files which have keyref attr
-		final Set<String> parseList = StringUtils.restoreSet(properties.getProperty(Constants.KEYREF_LIST));
+		final Set<String> parseList = StringUtils.restoreSet(properties.getProperty(KEYREF_LIST));
 		//Conref Module will change file's content, it is possible that tags with @keyref are copied in
 		//while keyreflist is hard update with xslt.
 		//bug:3056939
-		final Set<String> conrefList = StringUtils.restoreSet(properties.getProperty(Constants.CONREF_LIST));
+		final Set<String> conrefList = StringUtils.restoreSet(properties.getProperty(CONREF_LIST));
 		parseList.addAll(conrefList);
 		for(final String file: parseList){
 			final KeyrefPaser parser = new KeyrefPaser();

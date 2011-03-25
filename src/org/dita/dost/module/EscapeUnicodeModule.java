@@ -9,6 +9,8 @@
  */
 package org.dita.dost.module;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,7 +22,6 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.util.Constants;
 
 /**
  * This class replace all non-ASCII characters to their RTF Unicode-escaped forms. 
@@ -45,8 +46,8 @@ final class EscapeUnicodeModule implements AbstractPipelineModule {
 	    if (logger == null) {
             throw new IllegalStateException("Logger not set");
         }
-		final String inputFile = input.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_INPUT);
-		final String outputFile = input.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_OUTPUT);
+		final String inputFile = input.getAttribute(ANT_INVOKER_EXT_PARAM_INPUT);
+		final String outputFile = input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUT);
 
 		//Transliterator transliterator = Transliterator.getInstance("Any-Hex/C");
 		//initTransliterator(transliterator);

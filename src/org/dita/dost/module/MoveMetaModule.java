@@ -9,6 +9,8 @@
  */
 package org.dita.dost.module;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
@@ -22,7 +24,6 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.MapMetaReader;
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.ListUtils;
 import org.dita.dost.util.StringUtils;
@@ -63,8 +64,8 @@ final class MoveMetaModule implements AbstractPipelineModule {
         if (logger == null) {
             throw new IllegalStateException("Logger not set");
         }
-		final String baseDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
-    	String tempDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
+		final String baseDir = input.getAttribute(ANT_INVOKER_PARAM_BASEDIR);
+    	String tempDir = input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR);
        	
 		final MapMetaReader metaReader = new MapMetaReader();
 		metaReader.setLogger(logger);
@@ -81,7 +82,7 @@ final class MoveMetaModule implements AbstractPipelineModule {
 			throw new DITAOTException(e);
 		}
 		
-		final Set<String> fullditamaplist = StringUtils.restoreSet(properties.getProperty(Constants.FULL_DITAMAP_LIST));
+		final Set<String> fullditamaplist = StringUtils.restoreSet(properties.getProperty(FULL_DITAMAP_LIST));
 		for(String mapFile:fullditamaplist){
 			mapFile = new File(tempDir, mapFile).getAbsolutePath();
 			//FIXME: this reader gets the parent path of input file
@@ -110,11 +111,11 @@ final class MoveMetaModule implements AbstractPipelineModule {
         while (i.hasNext()) {
             final Map.Entry<?,?> entry = (Map.Entry<?,?>) i.next();
             targetFileName = (String) entry.getKey();
-            targetFileName = targetFileName.indexOf(Constants.SHARP) != -1 
-            				? targetFileName.substring(0, targetFileName.indexOf(Constants.SHARP))
+            targetFileName = targetFileName.indexOf(SHARP) != -1 
+            				? targetFileName.substring(0, targetFileName.indexOf(SHARP))
             				: targetFileName;
-            if (targetFileName.endsWith(Constants.FILE_EXTENSION_DITA) ||
-                    targetFileName.endsWith(Constants.FILE_EXTENSION_XML)){
+            if (targetFileName.endsWith(FILE_EXTENSION_DITA) ||
+                    targetFileName.endsWith(FILE_EXTENSION_XML)){
                 content.setValue(entry.getValue());
                 inserter.setContent(content);
                 if (FileUtils.fileExists((String) entry.getKey())){

@@ -9,6 +9,8 @@
  */
 package org.dita.dost.module;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -18,7 +20,6 @@ import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.MapLinksReader;
-import org.dita.dost.util.Constants;
 import org.dita.dost.writer.DitaLinksWriter;
 
 /**
@@ -57,7 +58,7 @@ final class MoveLinksModule implements AbstractPipelineModule {
         if (logger == null) {
             throw new IllegalStateException("Logger not set");
         }
-        final String maplinksFile = input.getAttribute(Constants.ANT_INVOKER_PARAM_MAPLINKS);
+        final String maplinksFile = input.getAttribute(ANT_INVOKER_PARAM_MAPLINKS);
         final MapLinksReader indexReader = new MapLinksReader();
         indexReader.setLogger(logger);
 		final DitaLinksWriter indexInserter = new DitaLinksWriter();
@@ -65,9 +66,9 @@ final class MoveLinksModule implements AbstractPipelineModule {
 		Set<Map.Entry<String, String>> mapSet;
 		Iterator<Map.Entry<String, String>> i;
         
-        indexReader.setMatch(new StringBuffer(Constants.ELEMENT_NAME_MAPLINKS)
-                .append(Constants.SLASH).append(Constants.ELEMENT_NAME_LINKPOOL)
-                .append(Constants.SLASH).append(Constants.ELEMENT_NAME_LINKLIST)
+        indexReader.setMatch(new StringBuffer(ELEMENT_NAME_MAPLINKS)
+                .append(SLASH).append(ELEMENT_NAME_LINKPOOL)
+                .append(SLASH).append(ELEMENT_NAME_LINKLIST)
                 .toString());
         
         indexReader.read(maplinksFile);

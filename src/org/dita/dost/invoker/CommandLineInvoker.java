@@ -9,6 +9,8 @@
  */
 package org.dita.dost.invoker;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +27,6 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
 import org.dita.dost.platform.Integrator;
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.Version;
 import org.dita.dost.writer.PropertiesWriter;
 
@@ -184,7 +185,7 @@ public final class CommandLineInvoker {
 			String javaArg = null;
 			String antArg = null;
 			String antArgValue = null;
-			int colonPos = arg.indexOf(Constants.COLON);
+			int colonPos = arg.indexOf(COLON);
 
 			if ("help".equals(arg) || "-h".equals(arg)) {
                 printUsage();
@@ -228,7 +229,7 @@ public final class CommandLineInvoker {
 
 			antArgValue = arg.substring(colonPos + 1);
 
-			if (Constants.STRING_EMPTY.equals(antArgValue.trim())) {
+			if (STRING_EMPTY.equals(antArgValue.trim())) {
 				String msg = null;
 				Properties params = new Properties();
 
@@ -268,11 +269,11 @@ public final class CommandLineInvoker {
 		} else {
 			java.text.DateFormat format = new java.text.SimpleDateFormat("yyyyMMddHHmmssSSS");
 			String timestamp = format.format(new java.util.Date());
-			prop.setProperty("dita.temp.dir", Constants.TEMP_DIR_DEFAULT + Constants.FILE_SEPARATOR
+			prop.setProperty("dita.temp.dir", TEMP_DIR_DEFAULT + FILE_SEPARATOR
 					+ "temp" + timestamp);
 			tempDir = prop.getProperty("dita.temp.dir");
 		}
-		//tempDir = prop.getProperty("dita.temp.dir", Constants.TEMP_DIR_DEFAULT);
+		//tempDir = prop.getProperty("dita.temp.dir", TEMP_DIR_DEFAULT);
 		tempPath = new File(tempDir);
 		if (!tempPath.isAbsolute()) {
 			tempPath = new File(baseDir, tempDir);
@@ -307,7 +308,7 @@ public final class CommandLineInvoker {
 	 * @throws IOException IOException
 	 */
 	public void startAnt() throws IOException {
-		List<String> cmd = new ArrayList<String>(Constants.INT_8);
+		List<String> cmd = new ArrayList<String>(INT_8);
 		String[] cmds;
 		
 		cmd.add(getCommandRunner());
@@ -332,7 +333,7 @@ public final class CommandLineInvoker {
 	 * @return String
 	 */
 	private static String getCommandRunner() {
-		return (Constants.OS_NAME.toLowerCase().indexOf(Constants.OS_NAME_WINDOWS) != -1)
+		return (OS_NAME.toLowerCase().indexOf(OS_NAME_WINDOWS) != -1)
 				? "ant.bat" 
 				: "ant";
 	}

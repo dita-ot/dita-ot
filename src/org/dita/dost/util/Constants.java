@@ -248,6 +248,8 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_KEYS = "keys";
     /**xtrf attribute.*/
     public static final String ATTRIBUTE_NAME_XTRF = "xtrf";
+    /**xtrc attribute.*/
+    public static final String ATTRIBUTE_NAME_XTRC = "xtrc";
     /**processing-role attribute.*/
     public static final String ATTRIBUTE_NAME_PROCESSING_ROLE = "processing-role";
     /**toc attribute.*/

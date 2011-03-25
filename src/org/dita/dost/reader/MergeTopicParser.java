@@ -9,12 +9,13 @@
  */
 package org.dita.dost.reader;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.MergeUtils;
 import org.dita.dost.util.StringUtils;
@@ -49,11 +50,11 @@ public final class MergeTopicParser extends AbstractXMLReader {
 			if(reader == null){
 				reader = StringUtils.getXMLReader();
 				reader.setContentHandler(this);
-				reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
+				reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
 			}
 			synchronized(this) {
     			if(topicInfo == null){
-    				topicInfo = new StringBuffer(Constants.INT_1024);
+    				topicInfo = new StringBuffer(INT_1024);
     			}
 			}
 			
@@ -83,13 +84,13 @@ public final class MergeTopicParser extends AbstractXMLReader {
 	@Override
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		// Skip redundant <dita> tags.
-		if (Constants.ELEMENT_NAME_DITA.equalsIgnoreCase(qName)) {
+		if (ELEMENT_NAME_DITA.equalsIgnoreCase(qName)) {
 			return;
 		}
-		topicInfo.append(Constants.LESS_THAN)
-		.append(Constants.SLASH)
+		topicInfo.append(LESS_THAN)
+		.append(SLASH)
 		.append(qName)
-		.append(Constants.GREATER_THAN);
+		.append(GREATER_THAN);
 	}
 	
 	@Override
@@ -106,18 +107,18 @@ public final class MergeTopicParser extends AbstractXMLReader {
 	private String handleID(String classValue, String attValue) {
 		String retAttValue = attValue;
 		if(classValue != null 
-				&& classValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPIC)!=-1){
+				&& classValue.indexOf(ATTR_CLASS_VALUE_TOPIC)!=-1){
 			// Process the topic element id
-			final String value = filePath+Constants.SHARP+attValue;
+			final String value = filePath+SHARP+attValue;
 			if(util.findId(value)){
-				topicInfo.append(Constants.STRING_BLANK)
-				.append("oid").append(Constants.EQUAL).append(Constants.QUOTATION)
-				.append(StringUtils.escapeXML(attValue)).append(Constants.QUOTATION);
+				topicInfo.append(STRING_BLANK)
+				.append("oid").append(EQUAL).append(QUOTATION)
+				.append(StringUtils.escapeXML(attValue)).append(QUOTATION);
 				retAttValue = util.getIdValue(value);
 			}else{
-				topicInfo.append(Constants.STRING_BLANK)
-				.append("oid").append(Constants.EQUAL).append(Constants.QUOTATION)
-				.append(StringUtils.escapeXML(attValue)).append(Constants.QUOTATION);
+				topicInfo.append(STRING_BLANK)
+				.append("oid").append(EQUAL).append(QUOTATION)
+				.append(StringUtils.escapeXML(attValue)).append(QUOTATION);
 				retAttValue = util.addId(value);           			
 			}
 			if(isFirstTopicId){
@@ -144,51 +145,51 @@ public final class MergeTopicParser extends AbstractXMLReader {
 		String retAttValue = attValue;
 		if (sharpIndex != -1){ // href value refer to an id in a topic
 			if(sharpIndex == 0){
-				pathFromMap = filePath.replaceAll(Constants.DOUBLE_BACK_SLASH, Constants.SLASH);
+				pathFromMap = filePath.replaceAll(DOUBLE_BACK_SLASH, SLASH);
 			}else{
-				pathFromMap = FileUtils.resolveTopic(new File(filePath).getParent(),attValue.substring(0,sharpIndex)).replaceAll(Constants.DOUBLE_BACK_SLASH, Constants.SLASH);
+				pathFromMap = FileUtils.resolveTopic(new File(filePath).getParent(),attValue.substring(0,sharpIndex)).replaceAll(DOUBLE_BACK_SLASH, SLASH);
 			}
 			
-			topicInfo.append(Constants.STRING_BLANK)
-			.append("ohref").append(Constants.EQUAL).append(Constants.QUOTATION)
+			topicInfo.append(STRING_BLANK)
+			.append("ohref").append(EQUAL).append(QUOTATION)
 			.append(pathFromMap)
 			.append(attValue.substring(sharpIndex))
-			.append(Constants.QUOTATION);
+			.append(QUOTATION);
 			
 			topicId = attValue.substring(sharpIndex);
-			slashIndex = topicId.indexOf(Constants.SLASH);
-			index = attValue.indexOf(Constants.SLASH, sharpIndex);
+			slashIndex = topicId.indexOf(SLASH);
+			index = attValue.indexOf(SLASH, sharpIndex);
 			topicId = (slashIndex != -1) 
 					? pathFromMap + topicId.substring(0, slashIndex)
 					: pathFromMap + topicId;
 
 			
 			if(util.findId(topicId)){// topicId found 
-				final String prefix = Constants.SHARP + util.getIdValue(topicId);
+				final String prefix = SHARP + util.getIdValue(topicId);
 				retAttValue = (index!=-1)? prefix + attValue.substring(index) : prefix;
 			}else{//topicId not found
-				final String prefix = Constants.SHARP + util.addId(topicId);
+				final String prefix = SHARP + util.addId(topicId);
 				retAttValue = (index!=-1)? prefix + attValue.substring(index) : prefix;
 			}
 
 		}else{ // href value refer to a topic
 			pathFromMap = FileUtils.resolveTopic(new File(filePath).getParent(),attValue);
 			    					
-			topicInfo.append(Constants.STRING_BLANK)
-			.append("ohref").append(Constants.EQUAL).append(Constants.QUOTATION)
+			topicInfo.append(STRING_BLANK)
+			.append("ohref").append(EQUAL).append(QUOTATION)
 			.append(pathFromMap)
-			.append(Constants.QUOTATION);
+			.append(QUOTATION);
 			
 			if(util.findId(pathFromMap)){
-				retAttValue = Constants.SHARP + util.getIdValue(pathFromMap);
+				retAttValue = SHARP + util.getIdValue(pathFromMap);
 			}else{
 				fileId = util.getFirstTopicId(pathFromMap, dirPath , false);
-				if (util.findId(pathFromMap + Constants.SHARP + fileId)){
-					util.addId(pathFromMap,util.getIdValue(pathFromMap + Constants.SHARP + fileId));
-					retAttValue = Constants.SHARP + util.getIdValue(pathFromMap + Constants.SHARP + fileId);
+				if (util.findId(pathFromMap + SHARP + fileId)){
+					util.addId(pathFromMap,util.getIdValue(pathFromMap + SHARP + fileId));
+					retAttValue = SHARP + util.getIdValue(pathFromMap + SHARP + fileId);
 				}else{
-					retAttValue = Constants.SHARP + util.addId(pathFromMap);
-					util.addId(pathFromMap + Constants.SHARP + fileId, util.getIdValue(pathFromMap));
+					retAttValue = SHARP + util.addId(pathFromMap);
+					util.addId(pathFromMap + SHARP + fileId, util.getIdValue(pathFromMap));
 				}
 				
 			}
@@ -203,7 +204,7 @@ public final class MergeTopicParser extends AbstractXMLReader {
 	 * @return updated id
 	 */
 	public String parse(String filename,String dir){
-		final int index = filename.indexOf(Constants.SHARP);
+		final int index = filename.indexOf(SHARP);
 		dirPath = dir;
 		try{
 			filePath = (index != -1) ? filename.substring(0,index):filename;
@@ -231,45 +232,45 @@ public final class MergeTopicParser extends AbstractXMLReader {
 		int sharpIndex;
 		
 		// Skip redundant <dita> tags.
-		if (Constants.ELEMENT_NAME_DITA.equalsIgnoreCase(qName)) {
+		if (ELEMENT_NAME_DITA.equalsIgnoreCase(qName)) {
 			return;
 		}
 		
-		topicInfo.append(Constants.LESS_THAN).append(qName);
-		classValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);		
+		topicInfo.append(LESS_THAN).append(qName);
+		classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);		
 		
 		for (int i = 0; i < attsLen; i++) {
             final String attQName = atts.getQName(i);
             String attValue = atts.getValue(i);
             
-            if(Constants.ATTRIBUTE_NAME_ID.equals(attQName)){           	
+            if(ATTRIBUTE_NAME_ID.equals(attQName)){           	
             	attValue = handleID(classValue, attValue);
             }
             
             if(classValue != null
-            		&& Constants.ATTRIBUTE_NAME_HREF.equals(attQName) 
+            		&& ATTRIBUTE_NAME_HREF.equals(attQName) 
             		&& attValue != null
-            		&& !Constants.STRING_EMPTY.equalsIgnoreCase(attValue)){
+            		&& !STRING_EMPTY.equalsIgnoreCase(attValue)){
             	//If the element has valid @class attribute and current attribute
             	//is valid @href
             	
-            	scopeValue = atts.getValue(Constants.ATTRIBUTE_NAME_SCOPE);
-        		formatValue = atts.getValue(Constants.ATTRIBUTE_NAME_FORMAT);
-        		sharpIndex = attValue.indexOf(Constants.SHARP);
+            	scopeValue = atts.getValue(ATTRIBUTE_NAME_SCOPE);
+        		formatValue = atts.getValue(ATTRIBUTE_NAME_FORMAT);
+        		sharpIndex = attValue.indexOf(SHARP);
         		
-//        		if (attValue.indexOf(Constants.SHARP) != -1){
-//        			attValue = attValue.substring(0, attValue.indexOf(Constants.SHARP));
+//        		if (attValue.indexOf(SHARP) != -1){
+//        			attValue = attValue.substring(0, attValue.indexOf(SHARP));
 //        		}
         		
         		if((scopeValue == null 
-    					|| Constants.ATTR_SCOPE_VALUE_LOCAL.equalsIgnoreCase(scopeValue))
-    					&& attValue.indexOf(Constants.COLON_DOUBLE_SLASH) == -1) {
+    					|| ATTR_SCOPE_VALUE_LOCAL.equalsIgnoreCase(scopeValue))
+    					&& attValue.indexOf(COLON_DOUBLE_SLASH) == -1) {
         			//The scope for @href is local
         			
-        			if((classValue.indexOf(Constants.ATTR_CLASS_VALUE_XREF) != -1
-        					|| classValue.indexOf(Constants.ATTR_CLASS_VALUE_LINK) != -1)
+        			if((classValue.indexOf(ATTR_CLASS_VALUE_XREF) != -1
+        					|| classValue.indexOf(ATTR_CLASS_VALUE_LINK) != -1)
         					&& (formatValue == null 
-    							|| Constants.ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatValue))){
+    							|| ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatValue))){
         				//local xref or link that refers to dita file
         				
         				attValue = handleLocalDita(sharpIndex, attValue);
@@ -283,11 +284,11 @@ public final class MergeTopicParser extends AbstractXMLReader {
             }
             
             //output all attributes
-            topicInfo.append(Constants.STRING_BLANK)
-            		.append(attQName).append(Constants.EQUAL).append(Constants.QUOTATION)
-            		.append(StringUtils.escapeXML(attValue)).append(Constants.QUOTATION);
+            topicInfo.append(STRING_BLANK)
+            		.append(attQName).append(EQUAL).append(QUOTATION)
+            		.append(StringUtils.escapeXML(attValue)).append(QUOTATION);
         }
-		topicInfo.append(Constants.GREATER_THAN);
+		topicInfo.append(GREATER_THAN);
 	}
 
 	private String handleLocalHref(String attValue) {
@@ -299,9 +300,9 @@ public final class MergeTopicParser extends AbstractXMLReader {
 	@Override
 	public void processingInstruction(String target, String data)
 			throws SAXException {
-		final String pi = (data != null) ? target + Constants.STRING_BLANK + data : target;
-        topicInfo.append(Constants.LESS_THAN + Constants.QUESTION 
-                + pi + Constants.QUESTION + Constants.GREATER_THAN);
+		final String pi = (data != null) ? target + STRING_BLANK + data : target;
+        topicInfo.append(LESS_THAN + QUESTION 
+                + pi + QUESTION + GREATER_THAN);
 	}
 	
 

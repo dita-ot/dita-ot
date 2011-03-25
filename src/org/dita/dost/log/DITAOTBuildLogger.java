@@ -9,6 +9,8 @@
  */
 package org.dita.dost.log;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -20,11 +22,11 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.util.DateUtils;
 import org.apache.tools.ant.util.StringUtils;
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.LogUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.apache.tools.ant.BuildException;
 import org.dita.dost.log.MessageBean;
+
 /**
  * Class description goes here.
  * 
@@ -305,7 +307,7 @@ public final class DITAOTBuildLogger implements BuildLogger {
 				&& !"".equals(event.getTarget().getName())) {
 			String desc = event.getTarget().getDescription();
 			String msg = desc + "...";
-			if (desc == null || Constants.STRING_EMPTY.equals(desc.trim())) {
+			if (desc == null || STRING_EMPTY.equals(desc.trim())) {
 				return;
 			}
 			printMessage(msg, out, Project.MSG_INFO);

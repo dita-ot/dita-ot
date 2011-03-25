@@ -9,6 +9,8 @@
  */
 package org.dita.dost.util;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -45,12 +47,12 @@ public final class ListUtils {
 	public static Properties getDitaList() throws IOException{
 		final Properties properties = new Properties();
 		try{
-			InputStream source = URIResolverAdapter.convertTOInputStream(DitaURIResolverFactory.getURIResolver().resolve(Constants.FILE_NAME_DITA_LIST_XML, null));
+			InputStream source = URIResolverAdapter.convertTOInputStream(DitaURIResolverFactory.getURIResolver().resolve(FILE_NAME_DITA_LIST_XML, null));
 			if (source != null) {
 				properties.loadFromXML(source);
 			}
 			else{
-				source = URIResolverAdapter.convertTOInputStream(DitaURIResolverFactory.getURIResolver().resolve(Constants.FILE_NAME_DITA_LIST, null));
+				source = URIResolverAdapter.convertTOInputStream(DitaURIResolverFactory.getURIResolver().resolve(FILE_NAME_DITA_LIST, null));
 				properties.load(source);
 			}			
 		}catch(final TransformerException e){

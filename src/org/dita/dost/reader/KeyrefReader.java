@@ -9,6 +9,8 @@
  */
 package org.dita.dost.reader;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
@@ -18,7 +20,6 @@ import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
 import org.dita.dost.resolver.DitaURIResolverFactory;
 import org.dita.dost.resolver.URIResolverAdapter;
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -63,8 +64,8 @@ public final class KeyrefReader extends AbstractXMLReader {
 		keys = new HashSet<String>();
 		try {
 			reader = StringUtils.getXMLReader();
-			reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
-			reader.setFeature(Constants.FEATURE_NAMESPACE, true);
+			reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
+			reader.setFeature(FEATURE_NAMESPACE, true);
 		} catch (final SAXException ex) {
 			logger.logException(ex);
 		}
@@ -85,10 +86,10 @@ public final class KeyrefReader extends AbstractXMLReader {
 			throws SAXException {
 		if(isStart()){
 			decKeyDefLevel();
-			keyDefAppend(Constants.LESS_THAN);
-			keyDefAppend(Constants.SLASH);
+			keyDefAppend(LESS_THAN);
+			keyDefAppend(SLASH);
 			keyDefAppend(name);
-			keyDefAppend(Constants.GREATER_THAN);
+			keyDefAppend(GREATER_THAN);
 		}
 		if(isStart() && getKeyDefLevel() == 0){
 			// to the end of the key definition, set the flag false 
@@ -135,8 +136,8 @@ public final class KeyrefReader extends AbstractXMLReader {
 	@Override
 	public void startElement(String uri, String localName, String name,
 			Attributes atts) throws SAXException {
-		final String classValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
-		final String keyName = atts.getValue(Constants.ATTRIBUTE_NAME_KEYS);
+		final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
+		final String keyName = atts.getValue(ATTRIBUTE_NAME_KEYS);
 		if(keyName!=null && classValue.contains(" map/topicref ")){
 			
 			// if it has @keys and is valid.
@@ -163,21 +164,21 @@ public final class KeyrefReader extends AbstractXMLReader {
 	private void putElement(String elemName,
 			Attributes atts) {
 		int index = 0;
-		keyDefAppend(Constants.LESS_THAN);
+		keyDefAppend(LESS_THAN);
 		keyDefAppend(elemName);
 		for (index=0; index < atts.getLength(); index++){
-			keyDefAppend(Constants.STRING_BLANK);
+			keyDefAppend(STRING_BLANK);
 			keyDefAppend(atts.getQName(index));
-			keyDefAppend(Constants.EQUAL);
-			keyDefAppend(Constants.QUOTATION);
+			keyDefAppend(EQUAL);
+			keyDefAppend(QUOTATION);
 			String value = atts.getValue(index);
 			//Added by William on 2009-10-15 for ampersand bug:2878492 start
 			value = StringUtils.escapeXML(value);
 			//Added by William on 2009-10-15 for ampersand bug:2878492 end
 			keyDefAppend(value);
-			keyDefAppend(Constants.QUOTATION);
+			keyDefAppend(QUOTATION);
 		}
-		keyDefAppend(Constants.GREATER_THAN);
+		keyDefAppend(GREATER_THAN);
 	}
 	/**
 	 * Set temp dir.

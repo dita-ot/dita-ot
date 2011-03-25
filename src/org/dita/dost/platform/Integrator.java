@@ -9,6 +9,8 @@
  */
 package org.dita.dost.platform;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,7 +31,6 @@ import java.util.Set;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.XMLReader;
@@ -51,7 +52,7 @@ public final class Integrator {
 	 * Plugin table which contains detected plugins.
 	 */
 	private final Map<String,Features> pluginTable;
-	private final Set<String> templateSet = new HashSet<String>(Constants.INT_16);
+	private final Set<String> templateSet = new HashSet<String>(INT_16);
 	private File ditaDir;
 	private File basedir;
 	/** Plugin configuration file. */
@@ -113,7 +114,7 @@ public final class Integrator {
                 	pluginIgnores.addAll(Arrays.asList(properties.getProperty("plugin.ignores").split(PARAM_VALUE_SEPARATOR)));
                 }
                 
-            	for (final String tmpl: properties.getProperty(Constants.CONF_TEMPLATES, "").split(PARAM_VALUE_SEPARATOR)) {
+            	for (final String tmpl: properties.getProperty(CONF_TEMPLATES, "").split(PARAM_VALUE_SEPARATOR)) {
         			final String t = tmpl.trim();
         			if (t.length() != 0) {
         				templateSet.add(t);
@@ -161,7 +162,7 @@ public final class Integrator {
 		//image extensions
 		final Set<String> imgExts = new HashSet<String>();
 		
-		for (final String ext: properties.getProperty(Constants.CONF_SUPPORTED_IMAGE_EXTENSIONS, "").split(Constants.CONF_LIST_SEPARATOR)) {
+		for (final String ext: properties.getProperty(CONF_SUPPORTED_IMAGE_EXTENSIONS, "").split(CONF_LIST_SEPARATOR)) {
 			final String e = ext.trim();
 			if (e.length() != 0) {
 				imgExts.add(e);
@@ -175,10 +176,10 @@ public final class Integrator {
 				}
 			}
 		}
-		configuration.put(Constants.CONF_SUPPORTED_IMAGE_EXTENSIONS, StringUtils.assembleString(imgExts, Constants.CONF_LIST_SEPARATOR));
+		configuration.put(CONF_SUPPORTED_IMAGE_EXTENSIONS, StringUtils.assembleString(imgExts, CONF_LIST_SEPARATOR));
 		OutputStream out = null;
 		try {
-		    final File outFile = new File(ditaDir, "lib" + File.separator + Constants.CONF_PROPERTIES);
+		    final File outFile = new File(ditaDir, "lib" + File.separator + CONF_PROPERTIES);
 		    logger.logDebug("Generate configuration properties " + outFile.getPath());
 			out = new BufferedOutputStream(new FileOutputStream(outFile));
 			configuration.store(out, "DITA-OT runtime configuration");
@@ -302,10 +303,10 @@ public final class Integrator {
 	 * Default Constructor.
 	 */
 	public Integrator() {
-		pluginTable = new HashMap<String,Features>(Constants.INT_16);
-		descSet = new HashSet<File>(Constants.INT_16);
-		loadedPlugin = new HashSet<String>(Constants.INT_16);
-		featureTable = new Hashtable<String,String>(Constants.INT_16);
+		pluginTable = new HashMap<String,Features>(INT_16);
+		descSet = new HashSet<File>(INT_16);
+		loadedPlugin = new HashSet<String>(INT_16);
+		featureTable = new Hashtable<String,String>(INT_16);
 		extensionPoints = new HashSet<String>();
 		try {
             reader = StringUtils.getXMLReader();

@@ -9,9 +9,11 @@
  */
 package org.dita.dost.platform;
 
-import org.dita.dost.util.Constants;
+import static org.dita.dost.util.Constants.*;
+
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
+
 /**
  * ImportXSLAction class.
  *
@@ -27,7 +29,7 @@ final class ImportXSLAction extends ImportAction {
 		final StringBuilder retBuf = new StringBuilder();
 		final String templateFilePath = paramTable.get(FileGenerator.PARAM_TEMPLATE);
 		for (final String value: valueSet) {
-			retBuf.append(Constants.LINE_SEPARATOR);
+			retBuf.append(LINE_SEPARATOR);
 			retBuf.append("<xsl:import href=\"");				
 			retBuf.append(StringUtils.escapeXML(
 					FileUtils.getRelativePathFromMap(

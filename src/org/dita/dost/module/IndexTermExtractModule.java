@@ -9,6 +9,8 @@
  */
 package org.dita.dost.module;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -28,7 +30,6 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.DitamapIndexTermReader;
 import org.dita.dost.reader.IndexTermReader;
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.InputSource;
@@ -106,21 +107,21 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
 		final Properties params = new Properties();
 		
 		final String baseDir = input
-				.getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
-		String tempDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
+				.getAttribute(ANT_INVOKER_PARAM_BASEDIR);
+		String tempDir = input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR);
 		String output = input
-				.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_OUTPUT);
+				.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUT);
 		final String encoding = input
-				.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_ENCODING);
+				.getAttribute(ANT_INVOKER_EXT_PARAM_ENCODING);
 		final String indextype = input
-				.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_INDEXTYPE);
+				.getAttribute(ANT_INVOKER_EXT_PARAM_INDEXTYPE);
 		
 		final String indexclass = input
-				.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_INDEXCLASS);
+				.getAttribute(ANT_INVOKER_EXT_PARAM_INDEXCLASS);
 		
-		inputMap = input.getAttribute(Constants.ANT_INVOKER_PARAM_INPUTMAP);
+		inputMap = input.getAttribute(ANT_INVOKER_PARAM_INPUTMAP);
 		targetExt = input
-				.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_TARGETEXT);
+				.getAttribute(ANT_INVOKER_EXT_PARAM_TARGETEXT);
 		
 
 		if (!new File(tempDir).isAbsolute()) {
@@ -141,7 +142,7 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
 			String msg = null;
 			params.put("%1", ditalist);
 			msg = MessageUtils.getMessage("DOTJ011E", params).toString();
-			msg = new StringBuffer(msg).append(Constants.LINE_SEPARATOR)
+			msg = new StringBuffer(msg).append(LINE_SEPARATOR)
 					.append(e.toString()).toString();
 			throw new DITAOTException(msg, e);
 		} finally {
@@ -158,8 +159,8 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
 		 * Parse topic list and ditamap list from the input dita.list file
 		 */
 		tokenizer = new StringTokenizer(prop
-				.getProperty(Constants.FULL_DITA_TOPIC_LIST), Constants.COMMA);
-		resource_only_list = prop.getProperty(Constants.RESOURCE_ONLY_LIST, "");
+				.getProperty(FULL_DITA_TOPIC_LIST), COMMA);
+		resource_only_list = prop.getProperty(RESOURCE_ONLY_LIST, "");
 		topicList = new ArrayList<String>(tokenizer.countTokens());
 		while (tokenizer.hasMoreTokens()) {
 			final String t = tokenizer.nextToken();
@@ -169,7 +170,7 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
 		}
 
 		tokenizer = new StringTokenizer(prop
-				.getProperty(Constants.FULL_DITAMAP_LIST), Constants.COMMA);
+				.getProperty(FULL_DITAMAP_LIST), COMMA);
 		ditamapList = new ArrayList<String>(tokenizer.countTokens());
 		while (tokenizer.hasMoreTokens()) {
 			final String t = tokenizer.nextToken();
@@ -249,9 +250,9 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
 						inputMap, ditamap);
 				String mapPathFromInputMap = "";
 
-				if (currentMapPathName.lastIndexOf(Constants.SLASH) != -1) {
+				if (currentMapPathName.lastIndexOf(SLASH) != -1) {
 					mapPathFromInputMap = currentMapPathName.substring(0,
-							currentMapPathName.lastIndexOf(Constants.SLASH));
+							currentMapPathName.lastIndexOf(SLASH));
 				}
 
 				ditamapIndexTermReader.setMapPath(mapPathFromInputMap);

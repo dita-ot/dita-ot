@@ -9,6 +9,8 @@
  */
 package org.dita.dost.util;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -50,7 +52,7 @@ public final class StringUtils {
 	 */
 	@SuppressWarnings("rawtypes")
     public static String assembleString(final Collection coll, final String delim) {
-		final StringBuffer buff = new StringBuffer(Constants.INT_256);
+		final StringBuffer buff = new StringBuffer(INT_256);
 		Iterator iter = null;
 
 		if ((coll == null) || coll.isEmpty()) {
@@ -138,11 +140,11 @@ public final class StringUtils {
 	 */
 	public static boolean checkEntity(final String name) {
 		// check whether this entity need resolve
-		if (NOT_RESOLVE_ENTITY_LIST.indexOf(Constants.STICK + name.trim()
-				+ Constants.STICK) != -1 ||
+		if (NOT_RESOLVE_ENTITY_LIST.indexOf(STICK + name.trim()
+				+ STICK) != -1 ||
 			//Edited by william on 2009-11-8 for ampbug:2893664 start
-			NOT_RESOLVE_ENTITY_CHAR.indexOf(Constants.STICK + name.trim()
-						+ Constants.STICK) != -1 ) {
+			NOT_RESOLVE_ENTITY_CHAR.indexOf(STICK + name.trim()
+						+ STICK) != -1 ) {
 			//Edited by william on 2009-11-8 for ampbug:2893664 end
 			return false;
 		}
@@ -189,9 +191,9 @@ public final class StringUtils {
 		/*byte [] output;
 		ByteArrayInputStream byteIS = new ByteArrayInputStream(input);
 		InputStreamReader reader = new InputStreamReader(byteIS,"UTF-8");
-		char [] cbuf = new char[Constants.INT_128];
+		char [] cbuf = new char[INT_128];
 		int count = reader.read(cbuf);*/
-		final StringBuffer ret = new StringBuffer(Constants.INT_1024);
+		final StringBuffer ret = new StringBuffer(INT_1024);
 		String strByte = null;
 		for(int i = 0; i < input.length; i++){
 			ret.append("\\\'");
@@ -224,12 +226,12 @@ public final class StringUtils {
     	int propsStart = domains.indexOf("a(props");
     	int propsEnd = domains.indexOf(")",propsStart);
     	while (propsStart != -1 && propsEnd != -1){
-    		propsBuffer.append(Constants.COMMA);
+    		propsBuffer.append(COMMA);
     		propsBuffer.append(domains.substring(propsStart+2,propsEnd).trim());
     		propsStart = domains.indexOf("a(props", propsEnd);
     		propsEnd = domains.indexOf(")",propsStart);
     	}
-    	return (propsBuffer.length() > 0) ? propsBuffer.substring(Constants.INT_1) : null;
+    	return (propsBuffer.length() > 0) ? propsBuffer.substring(INT_1) : null;
 	}
 	
 	
@@ -241,7 +243,7 @@ public final class StringUtils {
 	 */
 	public static Map<String, String> restoreMap(final String s) {
 		final Map<String,String> copytoMap = new HashMap<String,String>();
-		final StringTokenizer st = new StringTokenizer(s, Constants.COMMA);
+		final StringTokenizer st = new StringTokenizer(s, COMMA);
 		
         while (st.hasMoreTokens()) {
         	final String entry = st.nextToken();
@@ -258,7 +260,7 @@ public final class StringUtils {
 	 * @return string set
 	 */
 	public static Set<String> restoreSet(final String s) {
-		return restoreSet(s, Constants.COMMA);
+		return restoreSet(s, COMMA);
 	}
 	
 	/**
@@ -291,7 +293,7 @@ public final class StringUtils {
 	 * @return true if the string is null or ""
 	 */
 	public static boolean isEmptyString(final String s){
-		return (s == null || Constants.STRING_EMPTY.equals(s.trim()));
+		return (s == null || STRING_EMPTY.equals(s.trim()));
 	}
 	
 	/**
@@ -308,8 +310,8 @@ public final class StringUtils {
 		}if(value == null){
 			return target;
 		}else{
-			if(withSpace && !target.endsWith(Constants.STRING_BLANK)){
-				return target + Constants.STRING_BLANK + value;
+			if(withSpace && !target.endsWith(STRING_BLANK)){
+				return target + STRING_BLANK + value;
 			}else{
 				return target + value;
 			}
@@ -326,18 +328,18 @@ public final class StringUtils {
 		//The default sax driver is set to xerces's sax driver
 		final DITAOTJavaLogger logger = new DITAOTJavaLogger();
 		try {
-			Class.forName(Constants.SAX_DRIVER_DEFAULT_CLASS);
-			System.setProperty(Constants.SAX_DRIVER_PROPERTY,Constants.SAX_DRIVER_DEFAULT_CLASS);
+			Class.forName(SAX_DRIVER_DEFAULT_CLASS);
+			System.setProperty(SAX_DRIVER_PROPERTY,SAX_DRIVER_DEFAULT_CLASS);
 			logger.logInfo("Using XERCES.");
 		} catch (final ClassNotFoundException e){
 			try{
-				Class.forName(Constants.SAX_DRIVER_SUN_HACK_CLASS);
-				System.setProperty(Constants.SAX_DRIVER_PROPERTY,Constants.SAX_DRIVER_SUN_HACK_CLASS);
+				Class.forName(SAX_DRIVER_SUN_HACK_CLASS);
+				System.setProperty(SAX_DRIVER_PROPERTY,SAX_DRIVER_SUN_HACK_CLASS);
 				logger.logInfo("Using XERCES in SUN JDK 1.5");
 			}catch (final ClassNotFoundException ex){
 				try {
-					Class.forName(Constants.SAX_DRIVER_CRIMSON_CLASS);
-					System.setProperty(Constants.SAX_DRIVER_PROPERTY,Constants.SAX_DRIVER_CRIMSON_CLASS);
+					Class.forName(SAX_DRIVER_CRIMSON_CLASS);
+					System.setProperty(SAX_DRIVER_PROPERTY,SAX_DRIVER_CRIMSON_CLASS);
 					logger.logInfo("Using CRIMSON");
 				}catch (final ClassNotFoundException exc){
 					logger.logException(e);
@@ -355,29 +357,29 @@ public final class StringUtils {
      * Preferred XML readers are in order:
      * 
      * <ol>
-     *   <li>{@link Constants.SAX_DRIVER_DEFAULT_CLASS}</li>
-     *   <li>{@link Constants.SAX_DRIVER_SUN_HACK_CLASS}</li>
-     *   <li>{@link Constants.SAX_DRIVER_CRIMSON_CLASS}</li>
+     *   <li>{@link SAX_DRIVER_DEFAULT_CLASS}</li>
+     *   <li>{@link SAX_DRIVER_SUN_HACK_CLASS}</li>
+     *   <li>{@link SAX_DRIVER_CRIMSON_CLASS}</li>
      * </ol>
      * 
      * @return XML parser instance.
 	 * @throws SAXException if instantiating XMLReader failed
      */
     public static XMLReader getXMLReader() throws SAXException {
-        if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) != null) {
+        if (System.getProperty(SAX_DRIVER_PROPERTY) != null) {
             return XMLReaderFactory.createXMLReader();
         }
         try {
-            Class.forName(Constants.SAX_DRIVER_DEFAULT_CLASS);
-            return XMLReaderFactory.createXMLReader(Constants.SAX_DRIVER_DEFAULT_CLASS);
+            Class.forName(SAX_DRIVER_DEFAULT_CLASS);
+            return XMLReaderFactory.createXMLReader(SAX_DRIVER_DEFAULT_CLASS);
         } catch (final ClassNotFoundException e) {
             try {
-                Class.forName(Constants.SAX_DRIVER_SUN_HACK_CLASS);
-                return XMLReaderFactory.createXMLReader(Constants.SAX_DRIVER_SUN_HACK_CLASS);
+                Class.forName(SAX_DRIVER_SUN_HACK_CLASS);
+                return XMLReaderFactory.createXMLReader(SAX_DRIVER_SUN_HACK_CLASS);
             } catch (final ClassNotFoundException ex) {
                 try {
-                    Class.forName(Constants.SAX_DRIVER_CRIMSON_CLASS);
-                    return XMLReaderFactory.createXMLReader(Constants.SAX_DRIVER_CRIMSON_CLASS);
+                    Class.forName(SAX_DRIVER_CRIMSON_CLASS);
+                    return XMLReaderFactory.createXMLReader(SAX_DRIVER_CRIMSON_CLASS);
                 } catch (final ClassNotFoundException exc){
                     return XMLReaderFactory.createXMLReader();
                 }
@@ -461,8 +463,8 @@ public final class StringUtils {
 			}else {
 			  //return an warning or do nothing.  
 			  //The xml:lang attribute is empty.
-				aLocale = new Locale(Constants.LANGUAGE_EN,
-						Constants.COUNTRY_US);
+				aLocale = new Locale(LANGUAGE_EN,
+						COUNTRY_US);
 				
 			}
 	

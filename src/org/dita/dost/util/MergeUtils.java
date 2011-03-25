@@ -9,6 +9,8 @@
  */
 package org.dita.dost.util;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -35,7 +37,7 @@ public final class MergeUtils {
 	public MergeUtils() {
 		super();
 		idMap = new Hashtable<String, String>();
-		visitSet = new HashSet<String>(Constants.INT_256);
+		visitSet = new HashSet<String>(INT_256);
 		index = 0;
 	}
 	
@@ -54,8 +56,8 @@ public final class MergeUtils {
 	 * @return true if find and false otherwise
 	 */
 	public boolean findId(final String id){
-		return id != null && idMap.containsKey(FileUtils.removeRedundantNames(id.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
-				Constants.SLASH), Constants.SLASH));
+		return id != null && idMap.containsKey(FileUtils.removeRedundantNames(id.trim().replaceAll(DOUBLE_BACK_SLASH,
+				SLASH), SLASH));
 	}
 	
 	/**
@@ -67,10 +69,10 @@ public final class MergeUtils {
 		if(id == null){
 			return null;
 		}
-		final String localId = id.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
-				Constants.SLASH);
+		final String localId = id.trim().replaceAll(DOUBLE_BACK_SLASH,
+				SLASH);
 		index ++;
-		idMap.put(FileUtils.removeRedundantNames(localId, Constants.SLASH),"unique_"+Integer.toString(index));
+		idMap.put(FileUtils.removeRedundantNames(localId, SLASH),"unique_"+Integer.toString(index));
 		return "unique_"+Integer.toString(index);
 	}
 
@@ -81,10 +83,10 @@ public final class MergeUtils {
 	 */
 	public void addId (final String id, final String value){
 		if(id != null && value != null){
-			final String localId=id.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
-					Constants.SLASH);
+			final String localId=id.trim().replaceAll(DOUBLE_BACK_SLASH,
+					SLASH);
 			final String localValue = value.trim();
-			idMap.put(FileUtils.removeRedundantNames(localId, Constants.SLASH), localValue);
+			idMap.put(FileUtils.removeRedundantNames(localId, SLASH), localValue);
 		}		
 	}
 	
@@ -97,9 +99,9 @@ public final class MergeUtils {
 	    if (id==null){
             return null;
         }
-	    final String localId = id.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
-				Constants.SLASH);
-		return (String) idMap.get(FileUtils.removeRedundantNames(localId, Constants.SLASH));
+	    final String localId = id.trim().replaceAll(DOUBLE_BACK_SLASH,
+				SLASH);
+		return (String) idMap.get(FileUtils.removeRedundantNames(localId, SLASH));
 	}
 	
 	/**
@@ -109,12 +111,12 @@ public final class MergeUtils {
 	 */
 	public boolean isVisited(final String path){
 		String localPath = path;
-		final int idx = path.indexOf(Constants.SHARP);
+		final int idx = path.indexOf(SHARP);
 		if(idx != -1){
 			localPath=localPath.substring(0,idx);
 		}
-		return visitSet.contains(FileUtils.removeRedundantNames(localPath.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
-				Constants.SLASH), Constants.SLASH));
+		return visitSet.contains(FileUtils.removeRedundantNames(localPath.trim().replaceAll(DOUBLE_BACK_SLASH,
+				SLASH), SLASH));
 	}
 	
 	/**
@@ -123,12 +125,12 @@ public final class MergeUtils {
 	 */
 	public void visit(final String path){
 		String localPath = path;
-		final int idx = path.indexOf(Constants.SHARP);
+		final int idx = path.indexOf(SHARP);
 		if(idx != -1){
 			localPath=localPath.substring(0,idx);
 		}
-		visitSet.add(FileUtils.removeRedundantNames(localPath.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
-				Constants.SLASH), Constants.SLASH));
+		visitSet.add(FileUtils.removeRedundantNames(localPath.trim().replaceAll(DOUBLE_BACK_SLASH,
+				SLASH), SLASH));
 	}
 	
 	/**
@@ -158,7 +160,7 @@ public final class MergeUtils {
             
             if(useCatalog){
             	try {
-        			Class.forName(Constants.RESOLVER_CLASS);
+        			Class.forName(RESOLVER_CLASS);
         			reader.setEntityResolver(CatalogUtils.getCatalogResolver());
         		}catch (final ClassNotFoundException e){
         			logger.logException(e);

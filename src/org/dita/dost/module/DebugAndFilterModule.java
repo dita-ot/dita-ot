@@ -9,6 +9,8 @@
  */
 package org.dita.dost.module;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -45,7 +47,6 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.reader.ListReader;
 import org.dita.dost.util.CatalogUtils;
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.StringUtils;
@@ -68,12 +69,12 @@ import org.xml.sax.SAXException;
  * @author Zhang, Yuan Peng
  */
 final class DebugAndFilterModule implements AbstractPipelineModule {
-	private static final String [] PROPERTY_UPDATE_LIST = {"user.input.file",Constants.HREF_TARGET_LIST,
-			Constants.CONREF_LIST,Constants.HREF_DITA_TOPIC_LIST,Constants.FULL_DITA_TOPIC_LIST,
-			Constants.FULL_DITAMAP_TOPIC_LIST,Constants.CONREF_TARGET_LIST,Constants.COPYTO_SOURCE_LIST,
-			Constants.COPYTO_TARGET_TO_SOURCE_MAP_LIST,Constants.OUT_DITA_FILES_LIST,Constants.CONREF_PUSH_LIST,
-			Constants.KEYREF_LIST,Constants.CODEREF_LIST,Constants.CHUNK_TOPIC_LIST,Constants.HREF_TOPIC_LIST,
-			Constants.RESOURCE_ONLY_LIST};
+	private static final String [] PROPERTY_UPDATE_LIST = {"user.input.file",HREF_TARGET_LIST,
+			CONREF_LIST,HREF_DITA_TOPIC_LIST,FULL_DITA_TOPIC_LIST,
+			FULL_DITAMAP_TOPIC_LIST,CONREF_TARGET_LIST,COPYTO_SOURCE_LIST,
+			COPYTO_TARGET_TO_SOURCE_MAP_LIST,OUT_DITA_FILES_LIST,CONREF_PUSH_LIST,
+			KEYREF_LIST,CODEREF_LIST,CHUNK_TOPIC_LIST,HREF_TOPIC_LIST,
+			RESOURCE_ONLY_LIST};
 	/**
 	 * File extension of source file.
 	 */
@@ -81,47 +82,47 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
     private static String tempDir = "";
 	
     private static void updateProperty (final String listName, final Properties property){
-    	final StringBuffer result = new StringBuffer(Constants.INT_1024);
+    	final StringBuffer result = new StringBuffer(INT_1024);
     	final String propValue = property.getProperty(listName);
 		
 		
-    	if (propValue == null || Constants.STRING_EMPTY.equals(propValue.trim())){
+    	if (propValue == null || STRING_EMPTY.equals(propValue.trim())){
     		//if the propValue is null or empty
     		return;
     	}
     	
-    	final StringTokenizer tokenizer = new StringTokenizer(propValue,Constants.COMMA);
+    	final StringTokenizer tokenizer = new StringTokenizer(propValue,COMMA);
     	
     	while (tokenizer.hasMoreElements()){
     	    final String file = (String)tokenizer.nextElement();
-    	    final int equalIndex = file.indexOf(Constants.EQUAL);
-    	    final int fileExtIndex = file.lastIndexOf(Constants.DOT);
+    	    final int equalIndex = file.indexOf(EQUAL);
+    	    final int fileExtIndex = file.lastIndexOf(DOT);
 
     		if(fileExtIndex != -1 &&
-    				Constants.FILE_EXTENSION_DITAMAP.equalsIgnoreCase(file.substring(fileExtIndex))){
-    			result.append(Constants.COMMA).append(file);
+    				FILE_EXTENSION_DITAMAP.equalsIgnoreCase(file.substring(fileExtIndex))){
+    			result.append(COMMA).append(file);
     		} else if (equalIndex == -1 ){
     			//append one more comma at the beginning of property value
-    			result.append(Constants.COMMA).append(FileUtils.replaceExtName(file,extName));
+    			result.append(COMMA).append(FileUtils.replaceExtName(file,extName));
     		} else {
     			//append one more comma at the beginning of property value
-    			result.append(Constants.COMMA);
+    			result.append(COMMA);
     			result.append(FileUtils.replaceExtName(file.substring(0,equalIndex),extName));
-    			result.append(Constants.EQUAL);
+    			result.append(EQUAL);
     			result.append(FileUtils.replaceExtName(file.substring(equalIndex+1),extName));
     		}
 
     	}
-    	final String list = result.substring(Constants.INT_1);
+    	final String list = result.substring(INT_1);
 		property.setProperty(listName, list);
 
 		final String files[] = list.split(
-				Constants.COMMA);
+				COMMA);
 		String filename = "";
 		if (listName.equals("user.input.file")) {
 			filename = "user.input.file.list";
 		} else {
-            filename = listName.substring(Constants.INT_0, listName
+            filename = listName.substring(INT_0, listName
 					.lastIndexOf("list"))
 					+ ".list";
         }
@@ -191,18 +192,18 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
     	fileLogger.logInfo(msg);
     	
         try {
-			final String baseDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
-			String ditavalFile = input.getAttribute(Constants.ANT_INVOKER_PARAM_DITAVAL);
-			tempDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
-			final String ext = input.getAttribute(Constants.ANT_INVOKER_PARAM_DITAEXT);
-			ditaDir=input.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_DITADIR);
+			final String baseDir = input.getAttribute(ANT_INVOKER_PARAM_BASEDIR);
+			String ditavalFile = input.getAttribute(ANT_INVOKER_PARAM_DITAVAL);
+			tempDir = input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR);
+			final String ext = input.getAttribute(ANT_INVOKER_PARAM_DITAEXT);
+			ditaDir=input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR);
 			//Added by William on 2009-07-18 for req #12014 start
 			//get transtype
-			final String transtype = input.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE);
+			final String transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
 			//Added by William on 2009-07-18 for req #12014 start
 			
 			//Added on 2010-08-24 for bug:3086552 start
-			final String setSystemid_tmp = input.getAttribute(Constants.ANT_INVOKER_EXT_PARAN_SETSYSTEMID);
+			final String setSystemid_tmp = input.getAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID);
 			if(setSystemid_tmp.equals("yes")) {
 				setSystemid = true;
 			} else {
@@ -214,7 +215,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 			inputDir = null;
 
 
-			extName = ext.startsWith(Constants.DOT) ? ext : (Constants.DOT + ext);
+			extName = ext.startsWith(DOT) ? ext : (DOT + ext);
 			if (!new File(tempDir).isAbsolute()) {
 				tempDir = new File(baseDir, tempDir).getAbsolutePath();
 			}
@@ -269,10 +270,10 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 			//added by William on 2009-07-18 for req #12014 end
 	        String filePathPrefix = null;
 			if(inputDir != null){
-			    filePathPrefix = inputDir + Constants.STICK;
+			    filePathPrefix = inputDir + STICK;
 			}
 			
-			final Map<String, Set<String>> dic = readMapFromXML(Constants.FILE_NAME_SUBJECT_DICTIONARY);
+			final Map<String, Set<String>> dic = readMapFromXML(FILE_NAME_SUBJECT_DICTIONARY);
 			
 			while (!parseList.isEmpty()) {
 				final String filename = parseList.removeLast();
@@ -331,11 +332,11 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 			//Added by William on 2010-04-16 for cvf flag support end
 			
 			// reload the property for processing of copy-to
-			final File xmlListFile=new File(tempDir, Constants.FILE_NAME_DITA_LIST_XML);
+			final File xmlListFile=new File(tempDir, FILE_NAME_DITA_LIST_XML);
 			if(xmlListFile.exists()) {
                 listReader.read(xmlListFile.getAbsolutePath());
             } else {
-                listReader.read(new File(tempDir, Constants.FILE_NAME_DITA_LIST).getAbsolutePath());
+                listReader.read(new File(tempDir, FILE_NAME_DITA_LIST).getAbsolutePath());
             }
 			performCopytoTask(tempDir, listReader.getCopytoMap());
 		} catch (final Exception e) {
@@ -399,7 +400,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 		while (it.hasNext()) {
 			final String key = (String)it.next();
 			final String value = prop.getProperty(key);
-			graph.put(key, StringUtils.restoreSet(value, Constants.COMMA));
+			graph.put(key, StringUtils.restoreSet(value, COMMA));
 		}
 		
 		return graph;
@@ -407,7 +408,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 	
 	private void outputSubjectScheme() throws DITAOTException {
 		
-		final Map<String, Set<String>> graph = readMapFromXML(Constants.FILE_NAME_SUBJECT_RELATION);
+		final Map<String, Set<String>> graph = readMapFromXML(FILE_NAME_SUBJECT_RELATION);
 		
 		final Queue<String> queue = new LinkedList<String>();
 		final Set<String> visitedSet = new HashSet<String>();
@@ -480,14 +481,14 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                 }
 			}
 			
-			String value = pe.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
+			String value = pe.getAttribute(ATTRIBUTE_NAME_CLASS);
 			if (StringUtils.isEmptyString(value) 
-					|| !value.contains(Constants.ATTR_CLASS_VALUE_SUBJECT_DEF)) {
+					|| !value.contains(ATTR_CLASS_VALUE_SUBJECT_DEF)) {
                 continue;
             }
 			
 			if (!StringUtils.isEmptyString(
-					value = pe.getAttribute(Constants.ATTRIBUTE_NAME_KEYREF))) {
+					value = pe.getAttribute(ATTRIBUTE_NAME_KEYREF))) {
 				// extend child scheme
 				final Element target = searchForKey(childRoot.getDocumentElement(), value);
 				if (target == null) {
@@ -507,14 +508,14 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 					final Node tmpnode = childRoot.importNode(pList.item(i), false);
 					if (tmpnode.getNodeType() == Node.ELEMENT_NODE
 							&& searchForKey(target, 
-									((Element)tmpnode).getAttribute(Constants.ATTRIBUTE_NAME_KEYS)) != null) {
+									((Element)tmpnode).getAttribute(ATTRIBUTE_NAME_KEYS)) != null) {
                         continue;
                     }
 					target.appendChild(tmpnode);
 				}
 				
 			} else if (!StringUtils.isEmptyString(
-					value = pe.getAttribute(Constants.ATTRIBUTE_NAME_KEYS))) {
+					value = pe.getAttribute(ATTRIBUTE_NAME_KEYS))) {
 				// merge into parent scheme
 				final Element target = searchForKey(childRoot.getDocumentElement(), value);
 				if (target != null) {
@@ -523,7 +524,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 						final Node tmpnode = parentRoot.importNode(pList.item(i), false);
 						if (tmpnode.getNodeType() == Node.ELEMENT_NODE
 								&& searchForKey(pe, 
-										((Element)tmpnode).getAttribute(Constants.ATTRIBUTE_NAME_KEYS)) != null) {
+										((Element)tmpnode).getAttribute(ATTRIBUTE_NAME_KEYS)) != null) {
                             continue;
                         }
 						pe.appendChild(tmpnode);
@@ -550,13 +551,13 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                 }
 			}
 			
-			String value = pe.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
+			String value = pe.getAttribute(ATTRIBUTE_NAME_CLASS);
 			if (StringUtils.isEmptyString(value) 
-					|| !value.contains(Constants.ATTR_CLASS_VALUE_SUBJECT_DEF)) {
+					|| !value.contains(ATTR_CLASS_VALUE_SUBJECT_DEF)) {
                 continue;
             }
 			
-			value = pe.getAttribute(Constants.ATTRIBUTE_NAME_KEYS);
+			value = pe.getAttribute(ATTRIBUTE_NAME_KEYS);
 			if (StringUtils.isEmptyString(value)) {
                 continue;
             }
@@ -623,15 +624,15 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
     	FileOutputStream output = null;
     	FileOutputStream xmlDitalist=null;
     	try{
-    		in = new FileInputStream( new File(tempDir, Constants.FILE_NAME_DITA_LIST_XML));
-    		//property.load(new FileInputStream( new File(tempDir, Constants.FILE_NAME_DITA_LIST)));
+    		in = new FileInputStream( new File(tempDir, FILE_NAME_DITA_LIST_XML));
+    		//property.load(new FileInputStream( new File(tempDir, FILE_NAME_DITA_LIST)));
     		property.loadFromXML(in);
     		for (final String element : PROPERTY_UPDATE_LIST) {
     			updateProperty(element, property);
     		}
     		
-    		output = new FileOutputStream(new File(tempDir, Constants.FILE_NAME_DITA_LIST));
-    		xmlDitalist=new FileOutputStream(new File(tempDir,Constants.FILE_NAME_DITA_LIST_XML));
+    		output = new FileOutputStream(new File(tempDir, FILE_NAME_DITA_LIST));
+    		xmlDitalist=new FileOutputStream(new File(tempDir,FILE_NAME_DITA_LIST_XML));
     		property.store(output, null);
     		property.storeToXML(xmlDitalist, null);
     		output.flush();
@@ -667,7 +668,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
     //Added by William on 2010-04-16 for cvf flag support start
     private void updateDictionary(final String tempDir){
     	//orignal map
-    	final Map<String, Set<String>> dic = readMapFromXML(Constants.FILE_NAME_SUBJECT_DICTIONARY);
+    	final Map<String, Set<String>> dic = readMapFromXML(FILE_NAME_SUBJECT_DICTIONARY);
     	//result map
     	final Map<String, Set<String>> resultMap = new HashMap<String, Set<String>>();
     	//Iterate the orignal map
@@ -685,8 +686,8 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 		}
     	
     	//Write the updated map into the dictionary file
-    	this.writeMapToXML(resultMap, Constants.FILE_NAME_SUBJECT_DICTIONARY);
-    	//File inputFile = new File(tempDir, Constants.FILE_NAME_SUBJECT_DICTIONARY);
+    	this.writeMapToXML(resultMap, FILE_NAME_SUBJECT_DICTIONARY);
+    	//File inputFile = new File(tempDir, FILE_NAME_SUBJECT_DICTIONARY);
     		
     }
     //Method for writing a map into xml file.
@@ -699,7 +700,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 		while (iter.hasNext()) {
 			final Map.Entry<String, Set<String>> entry = iter.next();
 			final String key = entry.getKey();
-			final String value = StringUtils.assembleString(entry.getValue(), Constants.COMMA);
+			final String value = StringUtils.assembleString(entry.getValue(), COMMA);
 			prop.setProperty(key, value);
 		}
 		final File outputFile = new File(tempDir, filename);

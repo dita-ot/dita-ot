@@ -9,12 +9,13 @@
  */
 package org.dita.dost.index;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.DITAOTCollator;
 
 /**
@@ -61,7 +62,7 @@ public final class IndexTerm implements Comparable {
     
     //initialization for rtlLocaleList
     static{
-    	rtlLocaleList = new ArrayList<String>(Constants.INT_2);
+    	rtlLocaleList = new ArrayList<String>(INT_2);
     	rtlLocaleList.add("ar_EG");
     	rtlLocaleList.add("he_IL");
     }
@@ -70,8 +71,8 @@ public final class IndexTerm implements Comparable {
      * Constructor.
      */
     public IndexTerm() {
-        subTerms = new ArrayList<IndexTerm>(Constants.INT_1);
-        targetList = new ArrayList<IndexTermTarget>(Constants.INT_1);
+        subTerms = new ArrayList<IndexTerm>(INT_1);
+        targetList = new ArrayList<IndexTermTarget>(INT_1);
     }
 
     /**
@@ -176,8 +177,8 @@ public final class IndexTerm implements Comparable {
         int i = 0;
         int subTermNum = subTerms.size();
         
-        if (!Constants.IndexTerm_Prefix_See.equals(term.getTermPrefix()) && 
-        		!Constants.IndexTerm_Prefix_See_Also.equals(term.getTermPrefix())){
+        if (!IndexTerm_Prefix_See.equals(term.getTermPrefix()) && 
+        		!IndexTerm_Prefix_See_Also.equals(term.getTermPrefix())){
         	//if the term is not "index-see" or "index-see-also"
         	leaf = false;
         }
@@ -253,12 +254,12 @@ public final class IndexTerm implements Comparable {
      * @return hashcode
      */
     public int hashCode() {
-        int result = Constants.INT_17;
+        int result = INT_17;
 
-        result = Constants.INT_37 * result + termName.hashCode();
-        result = Constants.INT_37 * result + termKey.hashCode();
-        result = Constants.INT_37 * result + targetList.hashCode();
-        result = Constants.INT_37 * result + subTerms.hashCode();
+        result = INT_37 * result + termName.hashCode();
+        result = INT_37 * result + termKey.hashCode();
+        result = INT_37 * result + targetList.hashCode();
+        result = INT_37 * result + subTerms.hashCode();
 
         return result;
     }
@@ -341,7 +342,7 @@ public final class IndexTerm implements Comparable {
 	 * @return string
 	 */
 	public String toString() {
-		StringBuffer buffer = new StringBuffer(Constants.INT_128);
+		StringBuffer buffer = new StringBuffer(INT_128);
 		
 		buffer.append("{Term name: ").append(termName); //$NON-NLS-1$
 		buffer.append(", Term key: ").append(termKey); //$NON-NLS-1$
@@ -379,15 +380,15 @@ public final class IndexTerm implements Comparable {
 			return termName;
 		}else{
 			if (termLocale == null){
-				return termPrefix + Constants.STRING_BLANK + termName;
+				return termPrefix + STRING_BLANK + termName;
 			}else if (rtlLocaleList.contains(termLocale.toString())){
-				return termName + Constants.STRING_BLANK
+				return termName + STRING_BLANK
 				    + Messages.getString("IndexTerm." + termPrefix.toLowerCase().trim().replace(' ', '-'),
 				    		termLocale);
 			}else {
 				return Messages.getString("IndexTerm." + termPrefix.toLowerCase().trim().replace(' ', '-'),
 						termLocale)
-				    + Constants.STRING_BLANK + termName;
+				    + STRING_BLANK + termName;
 			}
 		}
 	}
@@ -400,9 +401,9 @@ public final class IndexTerm implements Comparable {
 			// if there is only one subterm, it is necessary to update
 			IndexTerm term = subTerms.get(0); // get the only subterm
 			if (term.getTermPrefix()!= null &&
-					Constants.IndexTerm_Prefix_See.equalsIgnoreCase(term.getTermPrefix().trim())){ //$NON-NLS-1$
+					IndexTerm_Prefix_See.equalsIgnoreCase(term.getTermPrefix().trim())){ //$NON-NLS-1$
 				//if the only subterm is index-see update it to index-see-also
-				term.setTermPrefix(Constants.IndexTerm_Prefix_See_Also); //$NON-NLS-1$
+				term.setTermPrefix(IndexTerm_Prefix_See_Also); //$NON-NLS-1$
 			}			
 		}
 	}

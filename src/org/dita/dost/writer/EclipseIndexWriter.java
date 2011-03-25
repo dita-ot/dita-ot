@@ -9,6 +9,8 @@
  */
 package org.dita.dost.writer;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -25,7 +27,6 @@ import org.dita.dost.index.IndexTerm;
 import org.dita.dost.index.IndexTermTarget;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
-import org.dita.dost.util.Constants;
 
 /**
  * This class extends AbstractWriter, used to output index term 
@@ -42,7 +43,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter implement
 	
 	private String filepath = null;
 		
-	private String targetExt = Constants.FILE_EXTENSION_HTML;
+	private String targetExt = FILE_EXTENSION_HTML;
 	
 	/** 
      * Boolean to indicate when we are processing indexsee and child elements
@@ -96,7 +97,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter implement
 		if (this.getPipelineHashIO() != null){
 			
         	indexsee = Boolean.valueOf(this.getPipelineHashIO().getAttribute("eclipse.indexsee"));
-        	targetExt = this.getPipelineHashIO().getAttribute(Constants.ANT_INVOKER_EXT_PARAM_TARGETEXT);
+        	targetExt = this.getPipelineHashIO().getAttribute(ANT_INVOKER_EXT_PARAM_TARGETEXT);
         	
         }
 		
@@ -190,18 +191,18 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter implement
         int fileExtIndex;
         int index;
     	
-    	index = aFileName.indexOf(Constants.SHARP);
+    	index = aFileName.indexOf(SHARP);
 		
-    	if (aFileName.startsWith(Constants.SHARP)){
+    	if (aFileName.startsWith(SHARP)){
     		return aFileName;
     	} else if (index != -1){
     		fileName = aFileName.substring(0,index); 
-    		fileExtIndex = fileName.lastIndexOf(Constants.DOT);
+    		fileExtIndex = fileName.lastIndexOf(DOT);
     		return (fileExtIndex != -1)
     			? fileName.substring(0, fileExtIndex) + targetExt + aFileName.substring(index)
     			: aFileName;
     	} else {
-    		fileExtIndex = aFileName.lastIndexOf(Constants.DOT);
+    		fileExtIndex = aFileName.lastIndexOf(DOT);
     		return (fileExtIndex != -1)
     			? (aFileName.substring(0, fileExtIndex) + targetExt) 
     			: aFileName;

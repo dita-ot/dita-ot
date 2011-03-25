@@ -9,6 +9,8 @@
  */
 package org.dita.dost.index;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,7 +22,6 @@ import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
 import org.dita.dost.pipeline.PipelineHashIO;
-import org.dita.dost.util.Constants;
 import org.dita.dost.writer.AbstractExtendDitaWriter;
 import org.dita.dost.writer.AbstractWriter;
 import org.dita.dost.writer.CHMIndexWriter;
@@ -39,7 +40,7 @@ public final class IndexTermCollection {
 	/** The collection of index terms. */
 	private static IndexTermCollection collection = null;
 	/** The list of all index term. */
-	private List<IndexTerm> termList = new ArrayList<IndexTerm>(Constants.INT_16);
+	private List<IndexTerm> termList = new ArrayList<IndexTerm>(INT_16);
 
 	/** The type of index term. */
 	private String indexType = null;
@@ -161,8 +162,8 @@ public final class IndexTermCollection {
 		int termListSize = termList.size();
 		if (IndexTerm.getTermLocale() == null ||
 				IndexTerm.getTermLocale().getLanguage().trim().length()==0) {
-			IndexTerm.setTermLocale(new Locale(Constants.LANGUAGE_EN,
-					Constants.COUNTRY_US));
+			IndexTerm.setTermLocale(new Locale(LANGUAGE_EN,
+					COUNTRY_US));
 		}
 
 		/*
@@ -228,14 +229,14 @@ public final class IndexTermCollection {
 		//Fallback to the old way of doing things.
 		else {
 
-			if (Constants.INDEX_TYPE_HTMLHELP.equalsIgnoreCase(indexType)) {
+			if (INDEX_TYPE_HTMLHELP.equalsIgnoreCase(indexType)) {
 				abstractWriter = new CHMIndexWriter();
 				buff.append(".hhk");
-			} else if (Constants.INDEX_TYPE_JAVAHELP
+			} else if (INDEX_TYPE_JAVAHELP
 					.equalsIgnoreCase(indexType)) {
 				abstractWriter = new JavaHelpIndexWriter();
 				buff.append("_index.xml");
-			} else if (Constants.INDEX_TYPE_ECLIPSEHELP
+			} else if (INDEX_TYPE_ECLIPSEHELP
 					.equalsIgnoreCase(indexType)) {
 				abstractWriter = new EclipseIndexWriter();
 				// We need to get rid of the ditamap or topic name in the URL

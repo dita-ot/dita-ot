@@ -9,6 +9,8 @@
  */
 package org.dita.dost.platform;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
@@ -18,7 +20,6 @@ import java.util.StringTokenizer;
 
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -66,10 +67,10 @@ final class FileGenerator extends DefaultHandler2 {
 		try {
             reader = StringUtils.getXMLReader();
             reader.setContentHandler(this);
-            reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
-            reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
-            //reader.setFeature(Constants.FEATURE_VALIDATION, true); 
-            //reader.setFeature(Constants.FEATURE_VALIDATION_SCHEMA, true);
+            reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
+            reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
+            //reader.setFeature(FEATURE_VALIDATION, true); 
+            //reader.setFeature(FEATURE_VALIDATION_SCHEMA, true);
 
         } catch (final Exception e) {
         	throw new RuntimeException("Failed to initialize parser: " + e.getMessage(), e);
@@ -98,7 +99,7 @@ final class FileGenerator extends DefaultHandler2 {
 				
 		try{
 			fileOutput = new FileOutputStream(outputFile);
-	        output = new OutputStreamWriter(fileOutput, Constants.UTF8);
+	        output = new OutputStreamWriter(fileOutput, UTF8);
 			reader.parse(fileName.toURI().toString());
 		} catch (final Exception e){
 			logger.logException(e);

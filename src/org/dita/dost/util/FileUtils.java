@@ -9,6 +9,8 @@
  */
 package org.dita.dost.util;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -53,14 +55,14 @@ public final class FileUtils {
 		InputStream configurationInputStream = null;
 		try {			
 			 final ClassLoader loader = FileUtils.class.getClassLoader();
-			 configurationInputStream =loader.getResourceAsStream(Constants.CONF_PROPERTIES);
+			 configurationInputStream =loader.getResourceAsStream(CONF_PROPERTIES);
 			 if (configurationInputStream != null) {
 			 		 configuration.load(configurationInputStream);
 			 		//System.out.println("The configuration file path is:" + configurationInputStream.toString());
-			 		//System.out.println("Supported image ext:" +configuration.getProperty(Constants.CONF_SUPPORTED_IMAGE_EXTENSIONS));
+			 		//System.out.println("Supported image ext:" +configuration.getProperty(CONF_SUPPORTED_IMAGE_EXTENSIONS));
 			 } else {
 				 //try to find the configuration file from the lib folder from current working dir
-				 final File configurationFile = new File("lib"+ File.separator + Constants.CONF_PROPERTIES);
+				 final File configurationFile = new File("lib"+ File.separator + CONF_PROPERTIES);
 				 if(configurationFile.exists()) {
                     configurationInputStream = new BufferedInputStream(new FileInputStream(configurationFile));
                 }
@@ -89,20 +91,20 @@ public final class FileUtils {
 	 */
 	private final static List<String> supportedImageExtensions = new ArrayList<String>();
 	static {
-		final String imageExtensions = configuration.getProperty(Constants.CONF_SUPPORTED_IMAGE_EXTENSIONS);
+		final String imageExtensions = configuration.getProperty(CONF_SUPPORTED_IMAGE_EXTENSIONS);
 		if (imageExtensions != null && imageExtensions.length()>0) {
 			for (final String ext: imageExtensions.split(";")) {
 				supportedImageExtensions.add(ext);
 			}
 		} else {
-			supportedImageExtensions.add(Constants.FILE_EXTENSION_JPG);
-			supportedImageExtensions.add(Constants.FILE_EXTENSION_GIF);
-			supportedImageExtensions.add(Constants.FILE_EXTENSION_EPS);
-			supportedImageExtensions.add(Constants.FILE_EXTENSION_JPEG);
-			supportedImageExtensions.add(Constants.FILE_EXTENSION_PNG);
-			supportedImageExtensions.add(Constants.FILE_EXTENSION_SVG);
-			supportedImageExtensions.add(Constants.FILE_EXTENSION_TIFF);
-			supportedImageExtensions.add(Constants.FILE_EXTENSION_TIF);			
+			supportedImageExtensions.add(FILE_EXTENSION_JPG);
+			supportedImageExtensions.add(FILE_EXTENSION_GIF);
+			supportedImageExtensions.add(FILE_EXTENSION_EPS);
+			supportedImageExtensions.add(FILE_EXTENSION_JPEG);
+			supportedImageExtensions.add(FILE_EXTENSION_PNG);
+			supportedImageExtensions.add(FILE_EXTENSION_SVG);
+			supportedImageExtensions.add(FILE_EXTENSION_TIFF);
+			supportedImageExtensions.add(FILE_EXTENSION_TIF);			
 		}
 	}
 	
@@ -112,12 +114,12 @@ public final class FileUtils {
 	private final static List<String> supportedExtensions = new ArrayList<String>();
 	static {
 		supportedExtensions.addAll(supportedImageExtensions);
-		supportedExtensions.add(Constants.FILE_EXTENSION_DITA);
-		supportedExtensions.add(Constants.FILE_EXTENSION_DITAMAP);
-		supportedExtensions.add(Constants.FILE_EXTENSION_XML);
-		supportedExtensions.add(Constants.FILE_EXTENSION_HTML);
-		supportedExtensions.add(Constants.FILE_EXTENSION_PDF);
-		supportedExtensions.add(Constants.FILE_EXTENSION_SWF);
+		supportedExtensions.add(FILE_EXTENSION_DITA);
+		supportedExtensions.add(FILE_EXTENSION_DITAMAP);
+		supportedExtensions.add(FILE_EXTENSION_XML);
+		supportedExtensions.add(FILE_EXTENSION_HTML);
+		supportedExtensions.add(FILE_EXTENSION_PDF);
+		supportedExtensions.add(FILE_EXTENSION_SWF);
 	}
 	// Added on 2010-11-09 for bug 3102827: Allow a way to specify recognized image extensions -- end
 
@@ -127,8 +129,8 @@ public final class FileUtils {
 	 * @return true if is html file and false otherwise
 	 */
 	public static boolean isHTMLFile(final String lcasefn) {
-		return (lcasefn.endsWith(Constants.FILE_EXTENSION_HTML) || lcasefn
-				.endsWith(Constants.FILE_EXTENSION_HTM));
+		return (lcasefn.endsWith(FILE_EXTENSION_HTML) || lcasefn
+				.endsWith(FILE_EXTENSION_HTM));
 	}
 	/**
 	 * Return if the file is a hhp file by extension.
@@ -136,7 +138,7 @@ public final class FileUtils {
 	 * @return true if is hhp file and false otherwise
 	 */
 	public static boolean isHHPFile(final String lcasefn) {
-		return (lcasefn.endsWith(Constants.FILE_EXTENSION_HHP));
+		return (lcasefn.endsWith(FILE_EXTENSION_HHP));
 	}
 	/**
 	 * Return if the file is a hhc file by extension.
@@ -144,7 +146,7 @@ public final class FileUtils {
 	 * @return true if is hhc file and false otherwise
 	 */
 	public static boolean isHHCFile(final String lcasefn) {
-		return (lcasefn.endsWith(Constants.FILE_EXTENSION_HHC));
+		return (lcasefn.endsWith(FILE_EXTENSION_HHC));
 	}
 	/**
 	 * Return if the file is a hhk file by extension.
@@ -152,7 +154,7 @@ public final class FileUtils {
 	 * @return true if is hhk file and false otherwise
 	 */
 	public static boolean isHHKFile(final String lcasefn) {
-		return (lcasefn.endsWith(Constants.FILE_EXTENSION_HHK));
+		return (lcasefn.endsWith(FILE_EXTENSION_HHK));
 	}
 	
 	
@@ -164,7 +166,7 @@ public final class FileUtils {
 	 *         <code>FALSE</code> otherwise.
 	 */
 	public static boolean isPDFFile(final String lcasefn) {
-		return (lcasefn.endsWith(Constants.FILE_EXTENSION_PDF));
+		return (lcasefn.endsWith(FILE_EXTENSION_PDF));
 	}
 	
 	//Added by William on 2009-10-10 for resources bug:2873560 start
@@ -175,7 +177,7 @@ public final class FileUtils {
 	 *         <code>FALSE</code> otherwise.
 	 */
 	public static boolean isSWFile(final String lcasefn) {
-		return (lcasefn.endsWith(Constants.FILE_EXTENSION_SWF));
+		return (lcasefn.endsWith(FILE_EXTENSION_SWF));
 	}
 	//Added by William on 2009-10-10 for resources bug:2873560 end
 	
@@ -188,8 +190,8 @@ public final class FileUtils {
 		if(lcasefn == null) {
             return false;
         }
-		if (lcasefn.contains(Constants.SHARP)){
-			lcasefn = lcasefn.substring(0, lcasefn.indexOf(Constants.SHARP));
+		if (lcasefn.contains(SHARP)){
+			lcasefn = lcasefn.substring(0, lcasefn.indexOf(SHARP));
 		}
 		
 		return isDITATopicFile(lcasefn) || isDITAMapFile(lcasefn);
@@ -201,8 +203,8 @@ public final class FileUtils {
 	 * @return true if is dita file and false otherwise
 	 */
 	public static boolean isDITATopicFile(final String lcasefn) {
-		return lcasefn.endsWith(Constants.FILE_EXTENSION_DITA)
-				|| lcasefn.endsWith(Constants.FILE_EXTENSION_XML);
+		return lcasefn.endsWith(FILE_EXTENSION_DITA)
+				|| lcasefn.endsWith(FILE_EXTENSION_XML);
 	}
 
 	/**
@@ -211,7 +213,7 @@ public final class FileUtils {
 	 * @return true if is ditamap file and false otherwise
 	 */
 	public static boolean isDITAMapFile(final String lcasefn) {
-		return lcasefn.endsWith(Constants.FILE_EXTENSION_DITAMAP);
+		return lcasefn.endsWith(FILE_EXTENSION_DITAMAP);
 	}
 
 	/**
@@ -222,14 +224,14 @@ public final class FileUtils {
 	public static boolean isSupportedImageFile(final String lcasefn) {
 		
 		// Modified on 2010-11-09 for bug 3102827: Allow a way to specify recognized image extensions -- start	
-		/*return lcasefn.endsWith(Constants.FILE_EXTENSION_JPG)
-				|| lcasefn.endsWith(Constants.FILE_EXTENSION_GIF)
-				|| lcasefn.endsWith(Constants.FILE_EXTENSION_EPS)
-				|| lcasefn.endsWith(Constants.FILE_EXTENSION_JPEG)
-				|| lcasefn.endsWith(Constants.FILE_EXTENSION_PNG)
-				|| lcasefn.endsWith(Constants.FILE_EXTENSION_SVG)
-				|| lcasefn.endsWith(Constants.FILE_EXTENSION_TIFF)
-				|| lcasefn.endsWith(Constants.FILE_EXTENSION_TIF);*/
+		/*return lcasefn.endsWith(FILE_EXTENSION_JPG)
+				|| lcasefn.endsWith(FILE_EXTENSION_GIF)
+				|| lcasefn.endsWith(FILE_EXTENSION_EPS)
+				|| lcasefn.endsWith(FILE_EXTENSION_JPEG)
+				|| lcasefn.endsWith(FILE_EXTENSION_PNG)
+				|| lcasefn.endsWith(FILE_EXTENSION_SVG)
+				|| lcasefn.endsWith(FILE_EXTENSION_TIFF)
+				|| lcasefn.endsWith(FILE_EXTENSION_TIF);*/
 		
 		for (final String ext: supportedImageExtensions) {
 			if (lcasefn.endsWith(ext)) {
@@ -249,8 +251,8 @@ public final class FileUtils {
 		if(StringUtils.isEmptyString(lcasefn)){
 			return false;
 		}
-		return lcasefn.endsWith(Constants.FILE_EXTENSION_DITA)
-				|| lcasefn.endsWith(Constants.FILE_EXTENSION_XML);
+		return lcasefn.endsWith(FILE_EXTENSION_DITA)
+				|| lcasefn.endsWith(FILE_EXTENSION_XML);
 	}
 
 	/**
@@ -260,27 +262,27 @@ public final class FileUtils {
 	 */
 	public static boolean isValidTarget(final String lcasefn) {
 		/*		DITA-OT can support space in file names from 6.5 2008
- * 		if(lcasefn.indexOf(Constants.STRING_BLANK)!=-1){
+ * 		if(lcasefn.indexOf(STRING_BLANK)!=-1){
 			params.put("%1", lcasefn);
 			logger.logWarn(MessageUtils.getMessage("DOTJ027W", params).toString());
 		}
 */		
 		// Modified on 2010-11-09 for bug 3102827: Allow a way to specify recognized image extensions -- start
 		
-		/*return lcasefn.endsWith(Constants.FILE_EXTENSION_DITA)
-				|| lcasefn.endsWith(Constants.FILE_EXTENSION_DITAMAP)
-				|| lcasefn.endsWith(Constants.FILE_EXTENSION_XML)
-				|| lcasefn.endsWith(Constants.FILE_EXTENSION_JPG)
-				|| lcasefn.endsWith(Constants.FILE_EXTENSION_GIF)
-				|| lcasefn.endsWith(Constants.FILE_EXTENSION_EPS)
-				|| lcasefn.endsWith(Constants.FILE_EXTENSION_HTML)
-				|| lcasefn.endsWith(Constants.FILE_EXTENSION_JPEG)
-				|| lcasefn.endsWith(Constants.FILE_EXTENSION_PNG)
-				|| lcasefn.endsWith(Constants.FILE_EXTENSION_SVG)
-				|| lcasefn.endsWith(Constants.FILE_EXTENSION_TIFF)
-				|| lcasefn.endsWith(Constants.FILE_EXTENSION_TIF)
-				|| lcasefn.endsWith(Constants.FILE_EXTENSION_PDF)
-				|| lcasefn.endsWith(Constants.FILE_EXTENSION_SWF);*/
+		/*return lcasefn.endsWith(FILE_EXTENSION_DITA)
+				|| lcasefn.endsWith(FILE_EXTENSION_DITAMAP)
+				|| lcasefn.endsWith(FILE_EXTENSION_XML)
+				|| lcasefn.endsWith(FILE_EXTENSION_JPG)
+				|| lcasefn.endsWith(FILE_EXTENSION_GIF)
+				|| lcasefn.endsWith(FILE_EXTENSION_EPS)
+				|| lcasefn.endsWith(FILE_EXTENSION_HTML)
+				|| lcasefn.endsWith(FILE_EXTENSION_JPEG)
+				|| lcasefn.endsWith(FILE_EXTENSION_PNG)
+				|| lcasefn.endsWith(FILE_EXTENSION_SVG)
+				|| lcasefn.endsWith(FILE_EXTENSION_TIFF)
+				|| lcasefn.endsWith(FILE_EXTENSION_TIF)
+				|| lcasefn.endsWith(FILE_EXTENSION_PDF)
+				|| lcasefn.endsWith(FILE_EXTENSION_SWF);*/
 		
 		for (final String ext: supportedExtensions) {
 			if (lcasefn.endsWith(ext)) {
@@ -300,23 +302,23 @@ public final class FileUtils {
 	 */
 	public static String getRelativePathFromMap(final String mapFilePathName,
 			final String topicFilePathName) {
-		final StringBuffer upPathBuffer = new StringBuffer(Constants.INT_128);
-		final StringBuffer downPathBuffer = new StringBuffer(Constants.INT_128);
+		final StringBuffer upPathBuffer = new StringBuffer(INT_128);
+		final StringBuffer downPathBuffer = new StringBuffer(INT_128);
 		final StringTokenizer mapTokenizer = new StringTokenizer(
-				removeRedundantNames(mapFilePathName.replaceAll(Constants.DOUBLE_BACK_SLASH,Constants.SLASH),
-						Constants.SLASH),
-				Constants.SLASH);
+				removeRedundantNames(mapFilePathName.replaceAll(DOUBLE_BACK_SLASH,SLASH),
+						SLASH),
+				SLASH);
 		final StringTokenizer topicTokenizer = new StringTokenizer(
-				removeRedundantNames(topicFilePathName.replaceAll(Constants.DOUBLE_BACK_SLASH,Constants.SLASH),
-						Constants.SLASH),
-				Constants.SLASH);
+				removeRedundantNames(topicFilePathName.replaceAll(DOUBLE_BACK_SLASH,SLASH),
+						SLASH),
+				SLASH);
 
 		while (mapTokenizer.countTokens() > 1
 				&& topicTokenizer.countTokens() > 1) {
 			final String mapToken = mapTokenizer.nextToken();
 			final String topicToken = topicTokenizer.nextToken();
 			boolean equals = false;
-			if (Constants.OS_NAME.toLowerCase().indexOf(Constants.OS_NAME_WINDOWS) != -1){
+			if (OS_NAME.toLowerCase().indexOf(OS_NAME_WINDOWS) != -1){
 				//if OS is Windows, we need to ignore case when comparing path names.
 				equals = mapToken.equalsIgnoreCase(topicToken);
 			}else{
@@ -324,15 +326,15 @@ public final class FileUtils {
 			}
 
 			if (!equals) {
-				if(mapToken.endsWith(Constants.COLON) ||
-						topicToken.endsWith(Constants.COLON)){
+				if(mapToken.endsWith(COLON) ||
+						topicToken.endsWith(COLON)){
 					//the two files are in different disks under Windows
 					return topicFilePathName;
 				}
 				upPathBuffer.append("..");
-				upPathBuffer.append(Constants.SLASH);
+				upPathBuffer.append(SLASH);
 				downPathBuffer.append(topicToken);
-				downPathBuffer.append(Constants.SLASH);
+				downPathBuffer.append(SLASH);
 				break;
 			}
 		}
@@ -341,13 +343,13 @@ public final class FileUtils {
 			mapTokenizer.nextToken();
 
 			upPathBuffer.append("..");
-			upPathBuffer.append(Constants.SLASH);
+			upPathBuffer.append(SLASH);
 		}
 
 		while (topicTokenizer.hasMoreTokens()) {
 			downPathBuffer.append(topicTokenizer.nextToken());
 			if (topicTokenizer.hasMoreTokens()) {
-				downPathBuffer.append(Constants.SLASH);
+				downPathBuffer.append(SLASH);
 			}
 		}
 
@@ -360,7 +362,7 @@ public final class FileUtils {
 	 * @return path relative to project
 	 */
 	public static String getPathtoProject (final String relativePath){
-		final StringTokenizer tokenizer = new StringTokenizer(relativePath, Constants.SLASH);
+		final StringTokenizer tokenizer = new StringTokenizer(relativePath, SLASH);
 		final StringBuffer buffer = new StringBuffer();
 		if (tokenizer.countTokens() == 1){
 			return null;
@@ -368,7 +370,7 @@ public final class FileUtils {
 			while(tokenizer.countTokens() > 1){
 				tokenizer.nextToken();
 				buffer.append("..");
-				buffer.append(Constants.SLASH);
+				buffer.append(SLASH);
 			}
 			return buffer.toString();
 		}
@@ -425,7 +427,7 @@ public final class FileUtils {
 	 */
 	public static String normalizeDirectory(final String basedir, final String filepath) {
 		String normilizedPath = null;
-		final int index = filepath.indexOf(Constants.SHARP);
+		final int index = filepath.indexOf(SHARP);
 		final String pathname = (index == -1) ? filepath : filepath.substring(0, index);
 
 		/*
@@ -524,15 +526,15 @@ public final class FileUtils {
      * @return true if path is absolute and false otherwise.
      */
     public static boolean isAbsolutePath (final String path) {
-    	if (path == null || Constants.STRING_EMPTY.equals(path.trim())) {
+    	if (path == null || STRING_EMPTY.equals(path.trim())) {
     		return false;
     	}
     	
-        if (Constants.FILE_SEPARATOR.equals ("/")) {
+        if (FILE_SEPARATOR.equals ("/")) {
             return path.startsWith ("/");
         }
         
-        if (Constants.FILE_SEPARATOR.equals ("\\") && path.length() > 2) {         
+        if (FILE_SEPARATOR.equals ("\\") && path.length() > 2) {         
         	return path.matches("[a-zA-Z]:\\\\.*");
         }
 
@@ -547,7 +549,7 @@ public final class FileUtils {
     public static void copyFile(final File src, final File target) {
 		FileInputStream fis = null;
 		FileOutputStream fos = null;
-		final byte[] buffer = new byte[Constants.INT_1024 * Constants.INT_4];
+		final byte[] buffer = new byte[INT_1024 * INT_4];
 		int len;
 		
 		try {
@@ -593,18 +595,18 @@ public final class FileUtils {
         int fileExtIndex;
         int index;
     	
-    	index = attValue.indexOf(Constants.SHARP);
+    	index = attValue.indexOf(SHARP);
 		
-    	if (attValue.startsWith(Constants.SHARP)){
+    	if (attValue.startsWith(SHARP)){
     		return attValue;
     	} else if (index != -1){
     		fileName = attValue.substring(0,index); 
-    		fileExtIndex = fileName.lastIndexOf(Constants.DOT);
+    		fileExtIndex = fileName.lastIndexOf(DOT);
     		return (fileExtIndex != -1)
     			? fileName.substring(0, fileExtIndex) + extName + attValue.substring(index)
     			: attValue;
     	} else {
-    		fileExtIndex = attValue.lastIndexOf(Constants.DOT);
+    		fileExtIndex = attValue.lastIndexOf(DOT);
     		return (fileExtIndex != -1)
     			? (attValue.substring(0, fileExtIndex) + extName) 
     			: attValue;
@@ -618,8 +620,8 @@ public final class FileUtils {
      */
     public static boolean fileExists (String filename){  //Eric
     	
-    	filename = filename.indexOf(Constants.SHARP) != -1 
-		? filename.substring(0, filename.indexOf(Constants.SHARP))
+    	filename = filename.indexOf(SHARP) != -1 
+		? filename.substring(0, filename.indexOf(SHARP))
 		: filename;
 		   
     	

@@ -9,6 +9,8 @@
  */
 package org.dita.dost.platform;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.util.Hashtable;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -16,7 +18,6 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.util.Constants;
 
 /**
  * ImportAction implements IAction and import the resource 
@@ -37,7 +38,7 @@ abstract class ImportAction implements IAction {
 	 * Default Constructor.
 	 */
 	public ImportAction() {
-		valueSet = new LinkedHashSet<String>(Constants.INT_16);
+		valueSet = new LinkedHashSet<String>(INT_16);
 		paramTable = new Hashtable<String,String>();
 	}
 	

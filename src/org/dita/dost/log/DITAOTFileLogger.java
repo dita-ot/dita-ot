@@ -9,12 +9,12 @@
  */
 package org.dita.dost.log;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-
-import org.dita.dost.util.Constants;
 
 /**
  * Logger to a log file.
@@ -75,7 +75,7 @@ public final class DITAOTFileLogger implements DITAOTLogger {
 			}
 			
 			if (tmpLogFile.renameTo(log)) {
-				StringBuffer buff = new StringBuffer(Constants.INT_256);
+				StringBuffer buff = new StringBuffer(INT_256);
 				buff.append("Log file '").append(logFile);
 				buff.append("' was generated successfully in directory '");
 				buff.append(logDir).append("'.");				

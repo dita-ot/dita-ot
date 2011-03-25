@@ -9,9 +9,10 @@
  */
 package org.dita.dost.platform;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -49,7 +50,7 @@ final class InsertCatalogActionRelative extends InsertAction {
 					"delegatePublic".equals(localName)) && "catalog".equals(attributes.getQName(i)) ||
 			    ("rewriteSystem".equals(localName) ||
 					"rewriteURI".equals(localName)) && "rewritePrefix".equals(attributes.getQName(i)))
-					&& attributes.getValue(i).indexOf(Constants.COLON) == -1) {
+					&& attributes.getValue(i).indexOf(COLON) == -1) {
 				// Rewrite URI to be local to its final resting place.
 			    final File targetFile = new File(
 			    		new File(currentFile).getParentFile(),

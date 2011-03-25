@@ -9,6 +9,8 @@
  */
 package org.dita.dost.writer;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -21,7 +23,6 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
@@ -50,8 +51,8 @@ public final class CoderefResolver extends AbstractXMLWriter {
 		try {
             reader = StringUtils.getXMLReader();
             reader.setContentHandler(this);
-            reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
-            reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
+            reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
+            reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
         } catch (Exception e) {
         	logger.logException(e);
         }
@@ -81,9 +82,9 @@ public final class CoderefResolver extends AbstractXMLWriter {
                      
             inputFile = new File(file);
             currentFile = inputFile;
-            outputFile = new File(file + Constants.FILE_EXTENSION_TEMP);
+            outputFile = new File(file + FILE_EXTENSION_TEMP);
             fileOutput = new FileOutputStream(outputFile);
-            output = new OutputStreamWriter(fileOutput, Constants.UTF8);
+            output = new OutputStreamWriter(fileOutput, UTF8);
             reader.setErrorHandler(new DITAOTXMLErrorHandler(file));
             reader.parse(file);
             output.flush();
@@ -141,9 +142,9 @@ public final class CoderefResolver extends AbstractXMLWriter {
 			throws SAXException {
 		try {
         	super.processingInstruction(target, data);
-        	String pi = (data != null) ? target + Constants.STRING_BLANK + data : target;
-            output.write(Constants.LESS_THAN + Constants.QUESTION 
-                    + pi + Constants.QUESTION + Constants.GREATER_THAN);
+        	String pi = (data != null) ? target + STRING_BLANK + data : target;
+            output.write(LESS_THAN + QUESTION 
+                    + pi + QUESTION + GREATER_THAN);
         } catch (Exception e) {
         	logger.logException(e);
         }
@@ -152,11 +153,11 @@ public final class CoderefResolver extends AbstractXMLWriter {
 	@Override
 	public void startElement(String uri, String localName, String name,
 			Attributes atts) throws SAXException {
-		String classValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
-		String hrefValue = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
+		String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
+		String hrefValue = atts.getValue(ATTRIBUTE_NAME_HREF);
 		try{
 			if (classValue != null
-					&& classValue.contains(Constants.ATTR_CLASS_VALUE_CODEREF)){
+					&& classValue.contains(ATTR_CLASS_VALUE_CODEREF)){
 				//TODO resolve coderef and pull in program content
 				coderefSpec.add(name);
 				if (hrefValue != null){
@@ -166,7 +167,7 @@ public final class CoderefResolver extends AbstractXMLWriter {
 						FileReader codeReader = null;
 						try {
 							codeReader = new FileReader(new File(codeFile));
-    						char[] buffer = new char[Constants.INT_1024 * Constants.INT_4];
+    						char[] buffer = new char[INT_1024 * INT_4];
     						int len;
     						while((len = codeReader.read(buffer)) != -1){
     							output.write(StringUtils.escapeXML(buffer, 0, len));
@@ -187,13 +188,13 @@ public final class CoderefResolver extends AbstractXMLWriter {
 					//report error of href attribute is null
 				}
 			}else{
-				output.write(Constants.LESS_THAN + name);
+				output.write(LESS_THAN + name);
 				for (int i=0; i<atts.getLength(); i++){
-					output.write(Constants.STRING_BLANK + atts.getQName(i)
-							+ Constants.EQUAL + Constants.QUOTATION
-							+ atts.getValue(i) + Constants.QUOTATION);
+					output.write(STRING_BLANK + atts.getQName(i)
+							+ EQUAL + QUOTATION
+							+ atts.getValue(i) + QUOTATION);
 				}
-				output.write(Constants.GREATER_THAN);
+				output.write(GREATER_THAN);
 			}
 		}catch (Exception e){
 			logger.logException(e);
@@ -205,8 +206,8 @@ public final class CoderefResolver extends AbstractXMLWriter {
 			throws SAXException {
 		try{
 			if(!coderefSpec.contains(name)){
-				output.write(Constants.LESS_THAN + Constants.SLASH 
-						+ name + Constants.GREATER_THAN);
+				output.write(LESS_THAN + SLASH 
+						+ name + GREATER_THAN);
 			}
 		}catch (Exception e){
 			logger.logException(e);

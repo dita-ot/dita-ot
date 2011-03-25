@@ -9,6 +9,8 @@
  */
 package org.dita.dost.module;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Hashtable;
@@ -22,7 +24,6 @@ import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.ConrefPushReader;
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.ListUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.ConrefPushParser;
@@ -50,9 +51,9 @@ final class ConrefPushModule implements AbstractPipelineModule {
 	    if (logger == null) {
             throw new IllegalStateException("Logger not set");
         }
-		String tempDir = input.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
+		String tempDir = input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR);
 		final String basedir = input
-		.getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
+		.getAttribute(ANT_INVOKER_PARAM_BASEDIR);
 		
 		if (! new File(tempDir).isAbsolute()){
 			tempDir = new File(basedir, tempDir).getAbsolutePath();
@@ -65,7 +66,7 @@ final class ConrefPushModule implements AbstractPipelineModule {
 			logger.logException(e);
 		}
 
-		final Set<String> conrefpushlist = StringUtils.restoreSet(properties.getProperty(Constants.CONREF_PUSH_LIST));
+		final Set<String> conrefpushlist = StringUtils.restoreSet(properties.getProperty(CONREF_PUSH_LIST));
 		final ConrefPushReader reader = new ConrefPushReader();
 		reader.setLogger(logger);
 		for(final String fileName:conrefpushlist){

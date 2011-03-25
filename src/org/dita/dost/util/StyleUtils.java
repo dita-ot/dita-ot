@@ -9,6 +9,8 @@
  */
 package org.dita.dost.util;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -266,7 +268,7 @@ public final class StyleUtils {
 				final String key = colorName.toLowerCase();
 				if(colorMap.containsKey(key)){
 					return colorMap.get(key);
-				}else if(key.startsWith(Constants.SHARP)){
+				}else if(key.startsWith(SHARP)){
 					//#rrggbb format
 					return key;
 				}else{

@@ -7,8 +7,9 @@
 /*
  * (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
  */
-
 package org.dita.dost.util;
+
+import static org.dita.dost.util.Constants.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
 /**
  * This util is used for check attributes/nodes of elements.
  * @author william
@@ -52,20 +54,20 @@ public final class DITAAttrUtils {
 	private DITAAttrUtils() {
 		
 		nonPrintTranstype = new ArrayList<String>();
-		nonPrintTranstype.add(Constants.TRANS_TYPE_ECLIPSECONTENT);
-		nonPrintTranstype.add(Constants.TRANS_TYPE_ECLIPSEHELP);
-		nonPrintTranstype.add(Constants.TRANS_TYPE_HTMLHELP);
-		nonPrintTranstype.add(Constants.TRANS_TYPE_JAVAHELP);
-		nonPrintTranstype.add(Constants.TRANS_TYPE_XHTML);
+		nonPrintTranstype.add(TRANS_TYPE_ECLIPSECONTENT);
+		nonPrintTranstype.add(TRANS_TYPE_ECLIPSEHELP);
+		nonPrintTranstype.add(TRANS_TYPE_HTMLHELP);
+		nonPrintTranstype.add(TRANS_TYPE_JAVAHELP);
+		nonPrintTranstype.add(TRANS_TYPE_XHTML);
 		
 		excludeList = new ArrayList<String>();
-		excludeList.add("-" + Constants.ATTR_CLASS_VALUE_INDEXTERM);
-		excludeList.add("-" + Constants.ATTR_CLASS_VALUE_DRAFTCOMMENT);
-		excludeList.add("-" + Constants.ATTR_CLASS_VALUE_REQUIREDCLEANUP);
-		excludeList.add("-" + Constants.ATTR_CLASS_VALUE_DATA);
-		excludeList.add("-" + Constants.ATTR_CLASS_VALUE_DATAABOUT);
-		excludeList.add("-" + Constants.ATTR_CLASS_VALUE_UNKNOWN);
-		excludeList.add("-" + Constants.ATTR_CLASS_VALUE_FOREIGN);
+		excludeList.add("-" + ATTR_CLASS_VALUE_INDEXTERM);
+		excludeList.add("-" + ATTR_CLASS_VALUE_DRAFTCOMMENT);
+		excludeList.add("-" + ATTR_CLASS_VALUE_REQUIREDCLEANUP);
+		excludeList.add("-" + ATTR_CLASS_VALUE_DATA);
+		excludeList.add("-" + ATTR_CLASS_VALUE_DATAABOUT);
+		excludeList.add("-" + ATTR_CLASS_VALUE_UNKNOWN);
+		excludeList.add("-" + ATTR_CLASS_VALUE_FOREIGN);
 		
 		printLevel = 0;
 		
@@ -87,7 +89,7 @@ public final class DITAAttrUtils {
 		
 		if(printValue != null){
 			//@print = "printonly"
-			if(Constants.ATTR_PRINT_VALUE_PRINT_ONLY.equals(printValue)){
+			if(ATTR_PRINT_VALUE_PRINT_ONLY.equals(printValue)){
 				printLevel ++ ;
 				return true;
 			//descendant elements
@@ -164,7 +166,7 @@ public final class DITAAttrUtils {
                 }
 			}
 			//whick kind of node to search
-			final String clazzValue = pe.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
+			final String clazzValue = pe.getAttribute(ATTRIBUTE_NAME_CLASS);
 			
 			if (StringUtils.isEmptyString(clazzValue) 
 					|| !clazzValue.contains(classValue)) {
@@ -192,7 +194,7 @@ public final class DITAAttrUtils {
 	 */
 	public String getText(final Node root){
 		
-		final StringBuffer result = new StringBuffer(Constants.INT_1024);
+		final StringBuffer result = new StringBuffer(INT_1024);
 		
 		if(root == null){
 			return "";
@@ -203,7 +205,7 @@ public final class DITAAttrUtils {
 					final Node childNode = list.item(i);
 					if(childNode.getNodeType() == Node.ELEMENT_NODE){
 						final Element e = (Element)childNode;
-						final String value = e.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
+						final String value = e.getAttribute(ATTRIBUTE_NAME_CLASS);
 						if(!excludeList.contains(value)){
 							 final String s = getText(e);
 							 result.append(s);
@@ -264,7 +266,7 @@ public final class DITAAttrUtils {
 		//has child nodes
 		if(element.hasChildNodes()){
 			//Get topicmeta element node
-			final Element topicMeta = getElementNode(element, Constants.ATTR_CLASS_VALUE_TOPICMETA);
+			final Element topicMeta = getElementNode(element, ATTR_CLASS_VALUE_TOPICMETA);
 			//no topicmeta node
 			if(topicMeta == null){
 				return returnValue;
@@ -298,7 +300,7 @@ public final class DITAAttrUtils {
 			if(node.getNodeType() == Node.ELEMENT_NODE){
 				final Element child = (Element) node;
 				//node found
-				if(child.getAttribute(Constants.ATTRIBUTE_NAME_CLASS).contains(classValue)){
+				if(child.getAttribute(ATTRIBUTE_NAME_CLASS).contains(classValue)){
 					return child;
 					//break;
 				}

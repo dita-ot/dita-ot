@@ -9,6 +9,8 @@
  */
 package org.dita.dost.util;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -95,7 +97,7 @@ public final class DelayConrefUtils {
 			//factory.setFeature("http://xml.org/sax/features/validation", false);
 			final DocumentBuilder builder = factory.newDocumentBuilder();
 			try {
-    			Class.forName(Constants.RESOLVER_CLASS);
+    			Class.forName(RESOLVER_CLASS);
     			builder.setEntityResolver(CatalogUtils.getCatalogResolver());
     		}catch (final ClassNotFoundException e){
     			builder.setEntityResolver(null);
@@ -116,10 +118,10 @@ public final class DelayConrefUtils {
                         queue.offer((Element)node);
                     }
 				}
-				final String classValue = pe.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
-				if(classValue!=null && classValue.contains(Constants.ATTR_CLASS_VALUE_TOPIC)){
+				final String classValue = pe.getAttribute(ATTRIBUTE_NAME_CLASS);
+				if(classValue!=null && classValue.contains(ATTR_CLASS_VALUE_TOPIC)){
 					//topic id found
-					if(pe.getAttribute(Constants.ATTRIBUTE_NAME_ID).equals(id)){
+					if(pe.getAttribute(ATTRIBUTE_NAME_ID).equals(id)){
 						return true;
 					}
 				}
@@ -147,7 +149,7 @@ public final class DelayConrefUtils {
 	 */
 	public List<Boolean> checkExport(String href, final String id, final String key, final String tempDir) {
 		//parsed export .xml to get exported elements
-		final String exportFile = (new File(tempDir, Constants.FILE_NAME_EXPORT_XML)).
+		final String exportFile = (new File(tempDir, FILE_NAME_EXPORT_XML)).
 		getAbsolutePath();
 		
 		boolean idExported = false;
@@ -159,7 +161,7 @@ public final class DelayConrefUtils {
 				//factory.setFeature("http://xml.org/sax/features/validation", false);
 				final DocumentBuilder builder = factory.newDocumentBuilder();
 				try {
-	    			Class.forName(Constants.RESOLVER_CLASS);
+	    			Class.forName(RESOLVER_CLASS);
 	    			builder.setEntityResolver(CatalogUtils.getCatalogResolver());
 	    		}catch (final ClassNotFoundException e){
 	    			builder.setEntityResolver(null);
@@ -167,9 +169,9 @@ public final class DelayConrefUtils {
 				root = builder.parse(new InputSource(new FileInputStream(exportFile)));
 			}
 			//if dita file's extension name is ".xml"
-			if(href.endsWith(Constants.FILE_EXTENSION_XML)){
+			if(href.endsWith(FILE_EXTENSION_XML)){
 				//change the extension to ".dita"
-				href = href.replace(Constants.FILE_EXTENSION_XML, Constants.FILE_EXTENSION_DITA);
+				href = href.replace(FILE_EXTENSION_XML, FILE_EXTENSION_DITA);
 			}
 			//get file node which contains the export node
 			final Element fileNode = searchForKey(root.getDocumentElement(), href, "file");
@@ -182,17 +184,17 @@ public final class DelayConrefUtils {
 						final Element child = (Element)node;
 						//compare keys
 						if(child.getNodeName().equals("keyref")&&
-						   child.getAttribute(Constants.ATTRIBUTE_NAME_NAME)
+						   child.getAttribute(ATTRIBUTE_NAME_NAME)
 						   .equals(key)){
 							keyrefExported = true;
 						//compare topic id
 						}else if(child.getNodeName().equals("topicid")&&
-							child.getAttribute(Constants.ATTRIBUTE_NAME_NAME)
+							child.getAttribute(ATTRIBUTE_NAME_NAME)
 							.equals(id)){
 							idExported = true;
 						//compare element id
 						}else if(child.getNodeName().equals("id")&&
-							child.getAttribute(Constants.ATTRIBUTE_NAME_NAME)
+							child.getAttribute(ATTRIBUTE_NAME_NAME)
 							.equals(id)){
 							idExported = true;
 						}
@@ -239,7 +241,7 @@ public final class DelayConrefUtils {
 				continue;
 			}
 			
-			value = pe.getAttribute(Constants.ATTRIBUTE_NAME_NAME);
+			value = pe.getAttribute(ATTRIBUTE_NAME_NAME);
 			if (StringUtils.isEmptyString(value)) {
                 continue;
             }
@@ -266,7 +268,7 @@ public final class DelayConrefUtils {
 			final Map.Entry<String, Set<String>> entry = iter.next();
 			final String key = entry.getKey();
 			final String value = StringUtils.assembleString(entry.getValue(),
-					Constants.COMMA);
+					COMMA);
 			prop.setProperty(key, value);
 		}
 		//File outputFile = new File(tempDir, filename);
