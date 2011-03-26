@@ -229,7 +229,7 @@ public final class CommandLineInvoker {
 
 			antArgValue = arg.substring(colonPos + 1);
 
-			if (STRING_EMPTY.equals(antArgValue.trim())) {
+			if (antArgValue.trim().length() == 0) {
 				String msg = null;
 				Properties params = new Properties();
 

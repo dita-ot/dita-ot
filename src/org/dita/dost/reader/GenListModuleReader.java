@@ -1253,7 +1253,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 		}
 				
 		// collect the key definitions
-		if(ATTRIBUTE_NAME_KEYS.equals(attrName) && !attrValue.equals(STRING_EMPTY)){
+		if(ATTRIBUTE_NAME_KEYS.equals(attrName) && attrValue.length() != 0){
 			
 			String target = atts.getValue(ATTRIBUTE_NAME_HREF);
 			
@@ -1283,7 +1283,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 			// Many keys can be defined in a single definition, like keys="a b c", a, b and c are seperated by blank.
 			for(final String key: attrValue.split(" ")){
 				if(!keysDefMap.containsKey(key) && !key.equals("")){
-					if(target != null && !target.equals(STRING_EMPTY)){
+					if(target != null && target.length() != 0){
 						if(attrScope!=null && (attrScope.equals("external") || attrScope.equals("peer"))){
 							//Added by William on 2010-06-09 for bug:3013079 start
 							//store external or peer resources.

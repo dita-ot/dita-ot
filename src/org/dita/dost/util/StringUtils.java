@@ -293,7 +293,7 @@ public final class StringUtils {
 	 * @return true if the string is null or ""
 	 */
 	public static boolean isEmptyString(final String s){
-		return (s == null || STRING_EMPTY.equals(s.trim()));
+		return (s == null || s.trim().length() == 0);
 	}
 	
 	/**

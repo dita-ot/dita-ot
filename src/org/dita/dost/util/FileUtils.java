@@ -526,7 +526,7 @@ public final class FileUtils {
      * @return true if path is absolute and false otherwise.
      */
     public static boolean isAbsolutePath (final String path) {
-    	if (path == null || STRING_EMPTY.equals(path.trim())) {
+    	if (path == null || path.trim().length() == 0) {
     		return false;
     	}
     	

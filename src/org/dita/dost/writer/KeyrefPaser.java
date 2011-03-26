@@ -443,7 +443,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 					// first resolve the keyref attribute
 					if (withHref.contains(classValue)) {
 						String target = keyMap.get(keyName);
-						if (target != null && !target.equals(STRING_EMPTY)) {
+						if (target != null && target.length() != 0) {
 							String target_output = target;
 							// if the scope equals local, the target should be verified that
 							// it exists, and add the href and scope to aSet.
@@ -501,7 +501,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 								output.write("\"");
 							}
 	
-						} else if(target.equals(STRING_EMPTY)){
+						} else if(target.length() == 0){
 							// Key definition does not carry an href or href equals "".
 							valid = true;
 							aset.add(ATTRIBUTE_NAME_SCOPE);

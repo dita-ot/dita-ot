@@ -487,7 +487,7 @@ public final class ChunkMapReader implements AbstractReader {
 				final String hrefValue = ((Element)current).getAttribute(ATTRIBUTE_NAME_HREF);
 				final String xtrfValue = ((Element)current).getAttribute(ATTRIBUTE_NAME_XTRF);
 				if(classValue.indexOf(ATTR_CLASS_VALUE_TOPICREF)!=-1){
-					if((!hrefValue.equals(STRING_EMPTY) &&
+					if((hrefValue.length() != 0 &&
 							!"generated_by_chunk".equals(xtrfValue) &&
 							! FileUtils.resolveFile(filePath,hrefValue)
 							.equals(changeTable.get(FileUtils.resolveFile(filePath,hrefValue)))) || 
@@ -499,7 +499,7 @@ public final class ChunkMapReader implements AbstractReader {
 						processTopicref(current);
 					//added by William on 2009-09-18 for chunk bug #2860199 start
 					//support topicref without href attribute
-					}else if(hrefValue.equals(STRING_EMPTY)){
+					}else if(hrefValue.length() == 0){
 						processTopicref(current);
 					}
 					//added by William on 2009-09-18 for chunk bug #2860199 end
@@ -524,7 +524,7 @@ public final class ChunkMapReader implements AbstractReader {
 	private void updateReltable(Element elem) {
 		final String hrefValue = elem.getAttribute(ATTRIBUTE_NAME_HREF);
 		String resulthrefValue = null;
-		if (!hrefValue.equals(STRING_EMPTY)){
+		if (hrefValue.length() != 0){
 			if(changeTable.containsKey(FileUtils.resolveFile(filePath,hrefValue))){
 				if (hrefValue.indexOf(SHARP)!=-1){
 					resulthrefValue=FileUtils.getRelativePathFromMap(filePath+SLASH+"stub.ditamap"

@@ -111,7 +111,7 @@ public final class DitaWriter extends AbstractXMLWriter {
         if(sharp_index != -1 && dot_index < sharp_index){
         	final String path = attValue.substring(0, sharp_index);
         	final String topic = attValue.substring(sharp_index);
-        	if(!path.equals(STRING_EMPTY)){
+        	if(path.length() != 0){
         		String relativePath;
         		final File target = new File(path);
         		if(target.isAbsolute()){
@@ -208,7 +208,7 @@ public final class DitaWriter extends AbstractXMLWriter {
             if(sharp_index != -1 && dot_index < sharp_index){
             	String path = attValue.substring(0, sharp_index);
             	final String topic = attValue.substring(sharp_index);
-            	if(!path.equals(STRING_EMPTY)){
+            	if(path.length() != 0){
             		String relativePath;
             		//Added by William on 2010-01-05 for bug:2926417 start
             		if(path.startsWith("file:/") && path.indexOf("file://") == -1){
@@ -492,7 +492,7 @@ public final class DitaWriter extends AbstractXMLWriter {
 		    }
 		    
 		    // replace conref with conkeyref(using key definition)
-		    if(ATTRIBUTE_NAME_CONKEYREF.equals(attQName) && !attValue.equals(STRING_EMPTY)){
+		    if(ATTRIBUTE_NAME_CONKEYREF.equals(attQName) && attValue.length() != 0){
 		    	final int sharpIndex = attValue.indexOf(SHARP);
 		    	final int slashIndex = attValue.indexOf(SLASH);
 		    	int keyIndex = -1;
@@ -508,7 +508,7 @@ public final class DitaWriter extends AbstractXMLWriter {
 			    		//get keyref value
 			    		final String key = attValue.substring(0,keyIndex);
 			    		String target;
-			    		if(!key.equals(STRING_EMPTY) && keys.containsKey(key)){
+			    		if(key.length() != 0 && keys.containsKey(key)){
 			    			
 			    			//target = FileUtils.replaceExtName(target);
 			    			//Added by William on 2009-06-25 for #12014 start

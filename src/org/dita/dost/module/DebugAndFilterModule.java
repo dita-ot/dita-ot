@@ -86,7 +86,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
     	final String propValue = property.getProperty(listName);
 		
 		
-    	if (propValue == null || STRING_EMPTY.equals(propValue.trim())){
+    	if (propValue == null || propValue.trim().length() == 0){
     		//if the propValue is null or empty
     		return;
     	}

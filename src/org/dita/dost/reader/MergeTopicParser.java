@@ -250,7 +250,7 @@ public final class MergeTopicParser extends AbstractXMLReader {
             if(classValue != null
             		&& ATTRIBUTE_NAME_HREF.equals(attQName) 
             		&& attValue != null
-            		&& !STRING_EMPTY.equalsIgnoreCase(attValue)){
+            		&& attValue.length() != 0){
             	//If the element has valid @class attribute and current attribute
             	//is valid @href
             	

@@ -307,7 +307,7 @@ public final class DITAOTBuildLogger implements BuildLogger {
 				&& !"".equals(event.getTarget().getName())) {
 			String desc = event.getTarget().getDescription();
 			String msg = desc + "...";
-			if (desc == null || STRING_EMPTY.equals(desc.trim())) {
+			if (desc == null || desc.trim().length() == 0) {
 				return;
 			}
 			printMessage(msg, out, Project.MSG_INFO);

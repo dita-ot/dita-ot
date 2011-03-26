@@ -210,7 +210,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
 		
 		final StringBuffer buffer = new StringBuffer();
 		if (!href.contains(COLON_DOUBLE_SLASH) && !FileUtils.isAbsolutePath(href)){
-			if (mapPath != null && !STRING_EMPTY.equals(mapPath)) {
+			if (mapPath != null && mapPath.length() != 0) {
 				buffer.append(mapPath);
 				buffer.append(SLASH);
 			}

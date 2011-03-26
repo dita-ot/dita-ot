@@ -687,7 +687,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 		boolean dotchunk = false;
 		
 		
-		if (!copytoValue.equals(STRING_EMPTY) && !chunkValue.contains("to-content")){
+		if (copytoValue.length() != 0 && !chunkValue.contains("to-content")){
 			if (hrefValue.indexOf(SHARP)!=-1){
 				parseFilePath = copytoValue + hrefValue.substring(hrefValue.indexOf(SHARP));
 			}else{
@@ -699,7 +699,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 		
 		// if @copy-to is processed in chunk module, the list file needs to be updated. 
 		// Because @copy-to should be included in fulltopiclist, and the source of coyy-to should be excluded in fulltopiclist.
-		if(!copytoValue.equals(STRING_EMPTY) && chunkValue.contains("to-content")){
+		if(copytoValue.length() != 0 && chunkValue.contains("to-content")){
 			copyto.add(copytoValue);
 			if(hrefValue.indexOf(SHARP) != -1){
 				copytoSource.add(hrefValue.substring(0, hrefValue.indexOf(SHARP)));
@@ -769,7 +769,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 					}
 					selectMethod = "select-document";
 				}
-				if (!copytoValue.equals(STRING_EMPTY)){
+				if (copytoValue.length() != 0){
 					// use @copy-to value as the new file name
 					outputFileName = FileUtils.resolveFile(filePath,copytoValue);
 				}
@@ -913,7 +913,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 		
 		try {			
 			//Get target chunk file name
-			if (!copytoValue.equals(STRING_EMPTY) && !chunkValue.contains("to-content")){
+			if (copytoValue.length() != 0 && !chunkValue.contains("to-content")){
 				if (hrefValue.indexOf(SHARP)!=-1){
 					parseFilePath = copytoValue + hrefValue.substring(hrefValue.indexOf(SHARP));
 				}else{
@@ -925,8 +925,8 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 			
 			// if @copy-to is processed in chunk module, the list file needs to be updated. 
 			// Because @copy-to should be included in fulltopiclist, and the source of coyy-to should be excluded in fulltopiclist.
-			if(!copytoValue.equals(STRING_EMPTY) && chunkValue.contains("to-content") 
-				&& ! hrefValue.equals(STRING_EMPTY)){
+			if(copytoValue.length() != 0 && chunkValue.contains("to-content") 
+				&& ! hrefValue.length() == 0){
 				copyto.add(copytoValue);
 				if(hrefValue.indexOf(SHARP) != -1){
 					copytoSource.add(hrefValue.substring(0, hrefValue.indexOf(SHARP)));
@@ -957,10 +957,10 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 							// No need to parse any file, just generate a stub output.
 							outputFileName = FileUtils.resolveFile(filePath, parseFilePath);
 							needWriteDitaTag = false;
-						} else if (!copytoValue.equals(STRING_EMPTY)){
+						} else if (copytoValue.length() != 0){
 							// use @copy-to value as the new file name
 							outputFileName = FileUtils.resolveFile(filePath,copytoValue);
-						} else if (!hrefValue.equals(STRING_EMPTY)) {
+						} else if (hrefValue.length() != 0) {
 							// try to use href value as the new file name
 							if (chunkValue.contains("select-topic") || chunkValue.contains("select-branch")) {
 								if (hrefValue.contains(SHARP)
