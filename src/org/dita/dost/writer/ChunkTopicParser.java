@@ -926,7 +926,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 			// if @copy-to is processed in chunk module, the list file needs to be updated. 
 			// Because @copy-to should be included in fulltopiclist, and the source of coyy-to should be excluded in fulltopiclist.
 			if(copytoValue.length() != 0 && chunkValue.contains("to-content") 
-				&& ! hrefValue.length() == 0){
+				&& hrefValue.length() != 0){
 				copyto.add(copytoValue);
 				if(hrefValue.indexOf(SHARP) != -1){
 					copytoSource.add(hrefValue.substring(0, hrefValue.indexOf(SHARP)));
