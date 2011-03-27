@@ -324,7 +324,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 		            {
 		                output.write(PI_WORKDIR_HEAD + filePath + PI_END);
 		            }else{
-		                output.write(PI_WORKDIR_HEAD + SLASH + filePath + PI_END);
+		                output.write(PI_WORKDIR_HEAD + UNIX_SEPARATOR + filePath + PI_END);
 		            }
 					changeTable.put(newFileName,newFileName);
 					if(idValue != null){
@@ -339,7 +339,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 					Element newChild = elem.getOwnerDocument()
 					.createElement(ELEMENT_NAME_TOPICREF);
 					newChild.setAttribute(ATTRIBUTE_NAME_HREF,
-							FileUtils.getRelativePathFromMap(filePath+SLASH+"stub.ditamap"
+							FileUtils.getRelativePathFromMap(filePath+UNIX_SEPARATOR+"stub.ditamap"
 									,newFileName));
 
 					newChild.setAttribute(ATTRIBUTE_NAME_CLASS,
@@ -796,11 +796,11 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 				//change the href value
 				if (StringUtils.isEmptyString(firstTopicID)) {
 					element.setAttribute(ATTRIBUTE_NAME_HREF,
-							FileUtils.getRelativePathFromMap(filePath+SLASH+"stub.ditamap"
+							FileUtils.getRelativePathFromMap(filePath+UNIX_SEPARATOR+"stub.ditamap"
 									,outputFileName) + (id == null ? "" : "#"+id));
 				} else {
 					element.setAttribute(ATTRIBUTE_NAME_HREF,
-							FileUtils.getRelativePathFromMap(filePath+SLASH+"stub.ditamap"
+							FileUtils.getRelativePathFromMap(filePath+UNIX_SEPARATOR+"stub.ditamap"
 									,outputFileName) + "#" + firstTopicID);
 				}
 				include = false;
@@ -1022,7 +1022,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 						changeTable.put(path, newpath);
 						// update current element's @href value
 						element.setAttribute(ATTRIBUTE_NAME_HREF,
-								FileUtils.getRelativePathFromMap(filePath+SLASH+"stub.ditamap"
+								FileUtils.getRelativePathFromMap(filePath+UNIX_SEPARATOR+"stub.ditamap"
 										,newpath));
 					}
 				
@@ -1063,7 +1063,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 						if(currentParsingFileTopicIDChangeTable.size()>0) {
 							String href = element.getAttribute(ATTRIBUTE_NAME_HREF);
 							href = href.replaceAll(DOUBLE_BACK_SLASH,
-									SLASH);
+									UNIX_SEPARATOR);
 							String pathtoElem = 
 								href.contains(SHARP) ? href.substring(href.indexOf(SHARP)+1) : "";
 							
@@ -1136,7 +1136,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 						//create a title-only topic when there is a title
 						if(!StringUtils.isEmptyString(navtitleValue)){
 							element.setAttribute(ATTRIBUTE_NAME_HREF,
-							FileUtils.getRelativePathFromMap(filePath+SLASH+"stub.ditamap", outputFileName));
+							FileUtils.getRelativePathFromMap(filePath+UNIX_SEPARATOR+"stub.ditamap", outputFileName));
 							//manually create a new topic chunk
 							StringBuffer buffer = new StringBuffer();
 							buffer.append("<topic id=\"topic\" class=\"- topic/topic \">")
@@ -1227,14 +1227,14 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
     			            {
     			                ditaFileOutput.write(PI_WORKDIR_HEAD + new File(outputFileName).getParent() + PI_END);
     			            }else{
-    			                ditaFileOutput.write(PI_WORKDIR_HEAD + SLASH + new File(outputFileName).getParent() + PI_END);
+    			                ditaFileOutput.write(PI_WORKDIR_HEAD + UNIX_SEPARATOR + new File(outputFileName).getParent() + PI_END);
     			            }
     						
     						//Added on 20101210 for bug:3126578 start
     						if ((conflictTable.get(outputFileName)!=null)){
     							String relativePath = FileUtils
     									.getRelativePathFromMap(filePath
-    											+ SLASH + "stub.ditamap",
+    											+ UNIX_SEPARATOR + "stub.ditamap",
     											conflictTable.get(outputFileName));
     							String path2project = FileUtils
     									.getPathtoProject(relativePath);

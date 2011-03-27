@@ -57,7 +57,7 @@ public final class MergeUtils {
 	 */
 	public boolean findId(final String id){
 		return id != null && idMap.containsKey(FileUtils.removeRedundantNames(id.trim().replaceAll(DOUBLE_BACK_SLASH,
-				SLASH), SLASH));
+				UNIX_SEPARATOR), UNIX_SEPARATOR));
 	}
 	
 	/**
@@ -70,9 +70,9 @@ public final class MergeUtils {
 			return null;
 		}
 		final String localId = id.trim().replaceAll(DOUBLE_BACK_SLASH,
-				SLASH);
+				UNIX_SEPARATOR);
 		index ++;
-		idMap.put(FileUtils.removeRedundantNames(localId, SLASH),"unique_"+Integer.toString(index));
+		idMap.put(FileUtils.removeRedundantNames(localId, UNIX_SEPARATOR),"unique_"+Integer.toString(index));
 		return "unique_"+Integer.toString(index);
 	}
 
@@ -84,9 +84,9 @@ public final class MergeUtils {
 	public void addId (final String id, final String value){
 		if(id != null && value != null){
 			final String localId=id.trim().replaceAll(DOUBLE_BACK_SLASH,
-					SLASH);
+					UNIX_SEPARATOR);
 			final String localValue = value.trim();
-			idMap.put(FileUtils.removeRedundantNames(localId, SLASH), localValue);
+			idMap.put(FileUtils.removeRedundantNames(localId, UNIX_SEPARATOR), localValue);
 		}		
 	}
 	
@@ -100,8 +100,8 @@ public final class MergeUtils {
             return null;
         }
 	    final String localId = id.trim().replaceAll(DOUBLE_BACK_SLASH,
-				SLASH);
-		return (String) idMap.get(FileUtils.removeRedundantNames(localId, SLASH));
+				UNIX_SEPARATOR);
+		return (String) idMap.get(FileUtils.removeRedundantNames(localId, UNIX_SEPARATOR));
 	}
 	
 	/**
@@ -116,7 +116,7 @@ public final class MergeUtils {
 			localPath=localPath.substring(0,idx);
 		}
 		return visitSet.contains(FileUtils.removeRedundantNames(localPath.trim().replaceAll(DOUBLE_BACK_SLASH,
-				SLASH), SLASH));
+				UNIX_SEPARATOR), UNIX_SEPARATOR));
 	}
 	
 	/**
@@ -130,7 +130,7 @@ public final class MergeUtils {
 			localPath=localPath.substring(0,idx);
 		}
 		visitSet.add(FileUtils.removeRedundantNames(localPath.trim().replaceAll(DOUBLE_BACK_SLASH,
-				SLASH), SLASH));
+				UNIX_SEPARATOR), UNIX_SEPARATOR));
 	}
 	
 	/**

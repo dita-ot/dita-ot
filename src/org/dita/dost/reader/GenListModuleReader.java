@@ -715,7 +715,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 						// filename = FileUtils.normalizeDirectory(currentDir,
 						// filename);
 						filename = filename.replace(BACK_SLASH,
-								SLASH);
+								UNIX_SEPARATOR);
 						// create file element in the StringBuffer
 						result.append("<file name=\"" + filename + "\">");
 						// if <exportanchors> is defined in metadata(topic),
@@ -915,7 +915,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 						fileName = FileUtils.normalizeDirectory(currentDir, hrefValue);
 						//change '\' to '/' for comparsion.
 						fileName = fileName.replaceAll(DOUBLE_BACK_SLASH,
-								SLASH);
+								UNIX_SEPARATOR);
 						
 						final boolean canParse = parseBranch(atts, hrefValue, fileName);
 						if(!canParse){
@@ -945,7 +945,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 						
 						//change '\' to '/' for comparsion.
 						fileName = fileName.replaceAll(DOUBLE_BACK_SLASH,
-								SLASH);
+								UNIX_SEPARATOR);
 				
 						final boolean canParse = parseBranch(atts, conrefValue, fileName);
 						if(!canParse){
@@ -1347,8 +1347,8 @@ public final class GenListModuleReader extends AbstractXMLReader {
 		if(attrValue.startsWith("file:/") && attrValue.indexOf("file://") == -1){
 			attrValue = attrValue.substring("file:/".length());
 			//Unix like OS
-			if(SLASH.equals(File.separator)){
-				attrValue = SLASH + attrValue;
+			if(UNIX_SEPARATOR.equals(File.separator)){
+				attrValue = UNIX_SEPARATOR + attrValue;
 			}
 		}
 		//Added by William on 2010-01-05 for bug:2926417 end
@@ -1389,7 +1389,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 					if(attrName.equals(ATTRIBUTE_NAME_HREF)){
 						topicHref = filename;
 						
-						topicHref = topicHref.replace(BACK_SLASH, SLASH);
+						topicHref = topicHref.replace(BACK_SLASH, UNIX_SEPARATOR);
 						//attrValue has topicId
 						if(attrValue.lastIndexOf(SHARP) != -1){
 							//get the topicId position

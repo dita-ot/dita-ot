@@ -527,11 +527,11 @@ public final class ChunkMapReader implements AbstractReader {
 		if (hrefValue.length() != 0){
 			if(changeTable.containsKey(FileUtils.resolveFile(filePath,hrefValue))){
 				if (hrefValue.indexOf(SHARP)!=-1){
-					resulthrefValue=FileUtils.getRelativePathFromMap(filePath+SLASH+"stub.ditamap"
+					resulthrefValue=FileUtils.getRelativePathFromMap(filePath+UNIX_SEPARATOR+"stub.ditamap"
 							,FileUtils.resolveFile(filePath,hrefValue))
 					+ hrefValue.substring(hrefValue.indexOf(SHARP)+1);
 				}else{
-					resulthrefValue=FileUtils.getRelativePathFromMap(filePath+SLASH+"stub.ditamap"
+					resulthrefValue=FileUtils.getRelativePathFromMap(filePath+UNIX_SEPARATOR+"stub.ditamap"
 							,FileUtils.resolveFile(filePath,hrefValue));
 				}
 				elem.setAttribute(ATTRIBUTE_NAME_HREF, resulthrefValue);

@@ -127,7 +127,7 @@ public final class DitaWriter extends AbstractXMLWriter {
         	}
         }
         if (attValue != null){
-        	attValue = attValue.replaceAll(DOUBLE_BACK_SLASH, SLASH);
+        	attValue = attValue.replaceAll(DOUBLE_BACK_SLASH, UNIX_SEPARATOR);
         }
         
         if(attValue.indexOf(FILE_EXTENSION_DITAMAP) == -1){
@@ -214,8 +214,8 @@ public final class DitaWriter extends AbstractXMLWriter {
             		if(path.startsWith("file:/") && path.indexOf("file://") == -1){
             			path = path.substring("file:/".length());
             			//Unix like OS
-                		if(SLASH.equals(File.separator)){
-                			path = SLASH + path;
+                		if(UNIX_SEPARATOR.equals(File.separator)){
+                			path = UNIX_SEPARATOR + path;
             			}
             		}
             		//Added by William on 2010-01-05 for bug:2926417 end
@@ -231,8 +231,8 @@ public final class DitaWriter extends AbstractXMLWriter {
         		if(attValue.startsWith("file:/") && attValue.indexOf("file://") == -1){
         			attValue = attValue.substring("file:/".length());
         			//Unix like OS
-            		if(SLASH.equals(File.separator)){
-            			attValue = SLASH + attValue;
+            		if(UNIX_SEPARATOR.equals(File.separator)){
+            			attValue = UNIX_SEPARATOR + attValue;
         			}
         		}
         		//Added by William on 2010-01-05 for bug:2926417 end
@@ -246,7 +246,7 @@ public final class DitaWriter extends AbstractXMLWriter {
              * replace all the backslash with slash in 
              * all href and conref attribute
              */     
-    		attValue = attValue.replaceAll(DOUBLE_BACK_SLASH, SLASH);
+    		attValue = attValue.replaceAll(DOUBLE_BACK_SLASH, UNIX_SEPARATOR);
     	} else {
     		return null;
     	}
@@ -672,10 +672,10 @@ public final class DitaWriter extends AbstractXMLWriter {
 		/*prefix = new File(prefix).getParent();
 		if(StringUtils.isEmptyString(prefix)){
 			updatedHref = href;
-			updatedHref = updatedHref.replace(BACK_SLASH, SLASH);
+			updatedHref = updatedHref.replace(BACK_SLASH, UNIX_SEPARATOR);
 		}else{
-			updatedHref = prefix + SLASH +href;
-			updatedHref = updatedHref.replace(BACK_SLASH, SLASH);
+			updatedHref = prefix + UNIX_SEPARATOR +href;
+			updatedHref = updatedHref.replace(BACK_SLASH, UNIX_SEPARATOR);
 		}*/
 		
 		return updatedHref;
@@ -1026,7 +1026,7 @@ public final class DitaWriter extends AbstractXMLWriter {
             {
                 processingInstruction(PI_WORKDIR_TARGET, absolutePath);
             }else{
-                processingInstruction(PI_WORKDIR_TARGET, SLASH + absolutePath);
+                processingInstruction(PI_WORKDIR_TARGET, UNIX_SEPARATOR + absolutePath);
             }
             output.write(LINE_SEPARATOR);
             if(path2Project != null){

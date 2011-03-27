@@ -343,7 +343,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 			 * attribute
 			 */
 			attValue = attValue.replaceAll(DOUBLE_BACK_SLASH,
-					SLASH);
+					UNIX_SEPARATOR);
 		} else {
 			return null;
 		}

@@ -256,7 +256,12 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_TOC = "toc";
     /**print attribute.*/
     public static final String ATTRIBUTE_NAME_PRINT = "print";
-        
+    
+    /** UNIX path separator. */
+    public static final String UNIX_SEPARATOR = "/";
+    /** Windows path separator. */
+    public static final String WINDOWS_SEPARATOR = "\\";
+    
     /**
      * Constant for value of attribute format in dita files.
      */

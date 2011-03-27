@@ -305,13 +305,13 @@ public final class FileUtils {
 		final StringBuffer upPathBuffer = new StringBuffer(INT_128);
 		final StringBuffer downPathBuffer = new StringBuffer(INT_128);
 		final StringTokenizer mapTokenizer = new StringTokenizer(
-				removeRedundantNames(mapFilePathName.replaceAll(DOUBLE_BACK_SLASH,SLASH),
-						SLASH),
-				SLASH);
+				removeRedundantNames(mapFilePathName.replaceAll(DOUBLE_BACK_SLASH,UNIX_SEPARATOR),
+						UNIX_SEPARATOR),
+				UNIX_SEPARATOR);
 		final StringTokenizer topicTokenizer = new StringTokenizer(
-				removeRedundantNames(topicFilePathName.replaceAll(DOUBLE_BACK_SLASH,SLASH),
-						SLASH),
-				SLASH);
+				removeRedundantNames(topicFilePathName.replaceAll(DOUBLE_BACK_SLASH,UNIX_SEPARATOR),
+						UNIX_SEPARATOR),
+				UNIX_SEPARATOR);
 
 		while (mapTokenizer.countTokens() > 1
 				&& topicTokenizer.countTokens() > 1) {
@@ -332,9 +332,9 @@ public final class FileUtils {
 					return topicFilePathName;
 				}
 				upPathBuffer.append("..");
-				upPathBuffer.append(SLASH);
+				upPathBuffer.append(UNIX_SEPARATOR);
 				downPathBuffer.append(topicToken);
-				downPathBuffer.append(SLASH);
+				downPathBuffer.append(UNIX_SEPARATOR);
 				break;
 			}
 		}
@@ -343,13 +343,13 @@ public final class FileUtils {
 			mapTokenizer.nextToken();
 
 			upPathBuffer.append("..");
-			upPathBuffer.append(SLASH);
+			upPathBuffer.append(UNIX_SEPARATOR);
 		}
 
 		while (topicTokenizer.hasMoreTokens()) {
 			downPathBuffer.append(topicTokenizer.nextToken());
 			if (topicTokenizer.hasMoreTokens()) {
-				downPathBuffer.append(SLASH);
+				downPathBuffer.append(UNIX_SEPARATOR);
 			}
 		}
 
@@ -362,7 +362,7 @@ public final class FileUtils {
 	 * @return path relative to project
 	 */
 	public static String getPathtoProject (final String relativePath){
-		final StringTokenizer tokenizer = new StringTokenizer(relativePath, SLASH);
+		final StringTokenizer tokenizer = new StringTokenizer(relativePath, UNIX_SEPARATOR);
 		final StringBuffer buffer = new StringBuffer();
 		if (tokenizer.countTokens() == 1){
 			return null;
@@ -370,7 +370,7 @@ public final class FileUtils {
 			while(tokenizer.countTokens() > 1){
 				tokenizer.nextToken();
 				buffer.append("..");
-				buffer.append(SLASH);
+				buffer.append(UNIX_SEPARATOR);
 			}
 			return buffer.toString();
 		}
