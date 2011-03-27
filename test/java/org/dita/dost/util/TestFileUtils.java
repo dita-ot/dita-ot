@@ -119,9 +119,13 @@ public class TestFileUtils {
 	@Test
 	public void testGetRelativePathFromMap() {
 		assertEquals("../a.dita",FileUtils.getRelativePathFromMap("c:/map/map.ditamap", "c:/a.dita"));
+	    assertEquals("../a.dita",FileUtils.getRelativePathFromMap("c:\\map\\map.ditamap", "c:\\a.dita"));
 		assertEquals("d:/a.dita",FileUtils.getRelativePathFromMap("c:/map.ditamap", "d:/a.dita"));
+		assertEquals("d:\\a.dita",FileUtils.getRelativePathFromMap("c:\\map.ditamap", "d:\\a.dita"));
 		assertEquals("a.dita", FileUtils.getRelativePathFromMap("c:/map1/map2/map.ditamap", "c:/map1/map2/a.dita"));
+		assertEquals("a.dita", FileUtils.getRelativePathFromMap("c:\\map1\\map2\\map.ditamap", "c:\\map1\\map2\\a.dita"));
 		assertEquals("../topic/a.dita",FileUtils.getRelativePathFromMap("c:/map1/map.ditamap", "c:/topic/a.dita"));
+		assertEquals("../topic/a.dita",FileUtils.getRelativePathFromMap("c:\\map1\\map.ditamap", "c:\\topic\\a.dita"));
 	}
 
 	@Test

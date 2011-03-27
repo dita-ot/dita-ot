@@ -127,7 +127,7 @@ public final class DitaWriter extends AbstractXMLWriter {
         	}
         }
         if (attValue != null){
-        	attValue = attValue.replaceAll(DOUBLE_BACK_SLASH, UNIX_SEPARATOR);
+        	attValue = attValue.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
         }
         
         if(attValue.indexOf(FILE_EXTENSION_DITAMAP) == -1){
@@ -246,7 +246,7 @@ public final class DitaWriter extends AbstractXMLWriter {
              * replace all the backslash with slash in 
              * all href and conref attribute
              */     
-    		attValue = attValue.replaceAll(DOUBLE_BACK_SLASH, UNIX_SEPARATOR);
+    		attValue = attValue.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
     	} else {
     		return null;
     	}
@@ -672,10 +672,10 @@ public final class DitaWriter extends AbstractXMLWriter {
 		/*prefix = new File(prefix).getParent();
 		if(StringUtils.isEmptyString(prefix)){
 			updatedHref = href;
-			updatedHref = updatedHref.replace(BACK_SLASH, UNIX_SEPARATOR);
+			updatedHref = updatedHref.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
 		}else{
 			updatedHref = prefix + UNIX_SEPARATOR +href;
-			updatedHref = updatedHref.replace(BACK_SLASH, UNIX_SEPARATOR);
+			updatedHref = updatedHref.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
 		}*/
 		
 		return updatedHref;

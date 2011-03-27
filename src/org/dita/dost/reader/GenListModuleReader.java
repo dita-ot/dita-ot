@@ -714,7 +714,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 						}
 						// filename = FileUtils.normalizeDirectory(currentDir,
 						// filename);
-						filename = filename.replace(BACK_SLASH,
+						filename = filename.replace(WINDOWS_SEPARATOR,
 								UNIX_SEPARATOR);
 						// create file element in the StringBuffer
 						result.append("<file name=\"" + filename + "\">");
@@ -914,7 +914,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 						}
 						fileName = FileUtils.normalizeDirectory(currentDir, hrefValue);
 						//change '\' to '/' for comparsion.
-						fileName = fileName.replaceAll(DOUBLE_BACK_SLASH,
+						fileName = fileName.replace(WINDOWS_SEPARATOR,
 								UNIX_SEPARATOR);
 						
 						final boolean canParse = parseBranch(atts, hrefValue, fileName);
@@ -944,7 +944,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 						fileName = FileUtils.normalizeDirectory(currentDir, conrefValue);
 						
 						//change '\' to '/' for comparsion.
-						fileName = fileName.replaceAll(DOUBLE_BACK_SLASH,
+						fileName = fileName.replace(WINDOWS_SEPARATOR,
 								UNIX_SEPARATOR);
 				
 						final boolean canParse = parseBranch(atts, conrefValue, fileName);
@@ -1389,7 +1389,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 					if(attrName.equals(ATTRIBUTE_NAME_HREF)){
 						topicHref = filename;
 						
-						topicHref = topicHref.replace(BACK_SLASH, UNIX_SEPARATOR);
+						topicHref = topicHref.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
 						//attrValue has topicId
 						if(attrValue.lastIndexOf(SHARP) != -1){
 							//get the topicId position

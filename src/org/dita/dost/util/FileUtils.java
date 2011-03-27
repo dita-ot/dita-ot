@@ -305,11 +305,11 @@ public final class FileUtils {
 		final StringBuffer upPathBuffer = new StringBuffer(INT_128);
 		final StringBuffer downPathBuffer = new StringBuffer(INT_128);
 		final StringTokenizer mapTokenizer = new StringTokenizer(
-				removeRedundantNames(mapFilePathName.replaceAll(DOUBLE_BACK_SLASH,UNIX_SEPARATOR),
+				removeRedundantNames(mapFilePathName.replace(WINDOWS_SEPARATOR,UNIX_SEPARATOR),
 						UNIX_SEPARATOR),
 				UNIX_SEPARATOR);
 		final StringTokenizer topicTokenizer = new StringTokenizer(
-				removeRedundantNames(topicFilePathName.replaceAll(DOUBLE_BACK_SLASH,UNIX_SEPARATOR),
+				removeRedundantNames(topicFilePathName.replace(WINDOWS_SEPARATOR,UNIX_SEPARATOR),
 						UNIX_SEPARATOR),
 				UNIX_SEPARATOR);
 

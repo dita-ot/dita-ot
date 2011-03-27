@@ -56,7 +56,7 @@ public final class MergeUtils {
 	 * @return true if find and false otherwise
 	 */
 	public boolean findId(final String id){
-		return id != null && idMap.containsKey(FileUtils.removeRedundantNames(id.trim().replaceAll(DOUBLE_BACK_SLASH,
+		return id != null && idMap.containsKey(FileUtils.removeRedundantNames(id.trim().replace(WINDOWS_SEPARATOR,
 				UNIX_SEPARATOR), UNIX_SEPARATOR));
 	}
 	
@@ -69,7 +69,7 @@ public final class MergeUtils {
 		if(id == null){
 			return null;
 		}
-		final String localId = id.trim().replaceAll(DOUBLE_BACK_SLASH,
+		final String localId = id.trim().replace(WINDOWS_SEPARATOR,
 				UNIX_SEPARATOR);
 		index ++;
 		idMap.put(FileUtils.removeRedundantNames(localId, UNIX_SEPARATOR),"unique_"+Integer.toString(index));
@@ -83,7 +83,7 @@ public final class MergeUtils {
 	 */
 	public void addId (final String id, final String value){
 		if(id != null && value != null){
-			final String localId=id.trim().replaceAll(DOUBLE_BACK_SLASH,
+			final String localId=id.trim().replace(WINDOWS_SEPARATOR,
 					UNIX_SEPARATOR);
 			final String localValue = value.trim();
 			idMap.put(FileUtils.removeRedundantNames(localId, UNIX_SEPARATOR), localValue);
@@ -99,7 +99,7 @@ public final class MergeUtils {
 	    if (id==null){
             return null;
         }
-	    final String localId = id.trim().replaceAll(DOUBLE_BACK_SLASH,
+	    final String localId = id.trim().replace(WINDOWS_SEPARATOR,
 				UNIX_SEPARATOR);
 		return (String) idMap.get(FileUtils.removeRedundantNames(localId, UNIX_SEPARATOR));
 	}
@@ -115,7 +115,7 @@ public final class MergeUtils {
 		if(idx != -1){
 			localPath=localPath.substring(0,idx);
 		}
-		return visitSet.contains(FileUtils.removeRedundantNames(localPath.trim().replaceAll(DOUBLE_BACK_SLASH,
+		return visitSet.contains(FileUtils.removeRedundantNames(localPath.trim().replace(WINDOWS_SEPARATOR,
 				UNIX_SEPARATOR), UNIX_SEPARATOR));
 	}
 	
@@ -129,7 +129,7 @@ public final class MergeUtils {
 		if(idx != -1){
 			localPath=localPath.substring(0,idx);
 		}
-		visitSet.add(FileUtils.removeRedundantNames(localPath.trim().replaceAll(DOUBLE_BACK_SLASH,
+		visitSet.add(FileUtils.removeRedundantNames(localPath.trim().replace(WINDOWS_SEPARATOR,
 				UNIX_SEPARATOR), UNIX_SEPARATOR));
 	}
 	

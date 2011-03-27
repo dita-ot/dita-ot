@@ -1062,7 +1062,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 						// Added on 2010-11-12 for bug 3090803 start
 						if(currentParsingFileTopicIDChangeTable.size()>0) {
 							String href = element.getAttribute(ATTRIBUTE_NAME_HREF);
-							href = href.replaceAll(DOUBLE_BACK_SLASH,
+							href = href.replace(WINDOWS_SEPARATOR,
 									UNIX_SEPARATOR);
 							String pathtoElem = 
 								href.contains(SHARP) ? href.substring(href.indexOf(SHARP)+1) : "";

@@ -661,7 +661,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
             }
 			children.addAll(reader.getSchemeSet());
 			//for Linux support
-			currentFile = currentFile.replace(BACK_SLASH, UNIX_SEPARATOR);
+			currentFile = currentFile.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
 			
 			this.schemeDictionary.put(currentFile, children);
 			final Set<String> hrfSet = reader.getHrefTargets();
@@ -670,7 +670,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 				String filename = it.next();
 				
 				//for Linux support
-				filename = filename.replace(BACK_SLASH, UNIX_SEPARATOR);
+				filename = filename.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
 				
 				children = this.schemeDictionary.get(filename);
 				if (children == null) {
@@ -788,7 +788,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 		// for uplevels (../../)
 		//modified start by wxzhang 20070518
 		//".."-->"../"
-		final int lastIndex = FileUtils.removeRedundantNames(file).replaceAll(DOUBLE_BACK_SLASH,
+		final int lastIndex = FileUtils.removeRedundantNames(file).replace(WINDOWS_SEPARATOR,
 				UNIX_SEPARATOR).lastIndexOf("../");
 //		modified end by wxzhang 20070518
 		if (lastIndex != -1) {
@@ -1144,10 +1144,10 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 						if(KEY_LIST.equals(key)){
 							
 							final String repStr = FileUtils.removeRedundantNames(new StringBuffer(prefix).append(to).toString())
-							.replaceAll(DOUBLE_BACK_SLASH,
+							.replace(WINDOWS_SEPARATOR,
 									UNIX_SEPARATOR) + EQUAL +
 									FileUtils.removeRedundantNames(new StringBuffer(prefix).append(source).toString())
-							.replaceAll(DOUBLE_BACK_SLASH,
+							.replace(WINDOWS_SEPARATOR,
 									UNIX_SEPARATOR);
 							
 							StringBuffer result = new StringBuffer(repStr);
@@ -1184,15 +1184,15 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 					}else{
 						//other case do nothing
 						newSet.add(FileUtils.removeRedundantNames(new StringBuffer(prefix).append(to).toString())
-							.replaceAll(DOUBLE_BACK_SLASH,
+							.replace(WINDOWS_SEPARATOR,
 									UNIX_SEPARATOR) + EQUAL +
 									FileUtils.removeRedundantNames(new StringBuffer(prefix).append(source).toString())
-							.replaceAll(DOUBLE_BACK_SLASH,
+							.replace(WINDOWS_SEPARATOR,
 									UNIX_SEPARATOR));
 					}
 				}else{
 				newSet.add(FileUtils.removeRedundantNames(new StringBuffer(prefix).append(file).toString())
-						.replaceAll(DOUBLE_BACK_SLASH,
+						.replace(WINDOWS_SEPARATOR,
 								UNIX_SEPARATOR));
 				}
 			}
@@ -1289,7 +1289,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 				 * all the back slash with slash.
 				 */
 				newSet.add(FileUtils.removeRedundantNames(new StringBuffer().append(file).toString())
-						.replaceAll(DOUBLE_BACK_SLASH,
+						.replace(WINDOWS_SEPARATOR,
 								UNIX_SEPARATOR));
 			}
 		}

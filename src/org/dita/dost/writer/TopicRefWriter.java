@@ -342,7 +342,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 			 * replace all the backslash with slash in all href and conref
 			 * attribute
 			 */
-			attValue = attValue.replaceAll(DOUBLE_BACK_SLASH,
+			attValue = attValue.replace(WINDOWS_SEPARATOR,
 					UNIX_SEPARATOR);
 		} else {
 			return null;
