@@ -11,7 +11,6 @@ package org.dita.dost.util;
 
 import static org.dita.dost.util.Constants.*;
 
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;

@@ -9,23 +9,21 @@
  */
 package org.dita.dost.log;
 
-import static org.dita.dost.util.Constants.*;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.StringReader;
 import java.util.HashSet;
+
 import org.apache.tools.ant.BuildEvent;
+import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.BuildLogger;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.util.DateUtils;
 import org.apache.tools.ant.util.StringUtils;
-import org.dita.dost.util.LogUtils;
 import org.dita.dost.exception.DITAOTException;
-import org.apache.tools.ant.BuildException;
-import org.dita.dost.log.MessageBean;
+import org.dita.dost.util.LogUtils;
 
 /**
  * Class description goes here.
