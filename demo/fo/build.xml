@@ -673,6 +673,7 @@ with those set forth herein.
 		    </fileset>
 		    <fileset dir="${fop.home}/build">
 		      <include name="fop.jar"/>
+		      <include name="fop-hyph.jar" />
 		    </fileset>
 		  </classpath>
 		</taskdef>
