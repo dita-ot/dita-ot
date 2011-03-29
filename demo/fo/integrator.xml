@@ -11,20 +11,8 @@
   </condition>
   -->
   
-  <target name="dita2pdf2" depends="pdfswitch-warning, dita-preprocess, map2pdf2, topic2pdf2"/> 
-  
-  <condition property="pdftranstype">
-    <equals arg1="${transtype}" arg2="pdf" casesensitive="false"></equals>
-  </condition>
-    
-  <target name="pdfswitch-warning" if="pdftranstype">
-    <echo level="info">/------------------------------------------\</echo>
-    <echo level="info">| PLEASE NOTE: YOU ARE USING THE FO PLUGIN |</echo>
-    <echo level="info">| If you want the old pdf transtype, use   |</echo>
-    <echo level="info">| the "legacypdf" transtype instead.       |</echo>
-    <echo level="info">\------------------------------------------/</echo>
-  </target>
-  
+  <target name="dita2pdf2" depends="dita-preprocess, map2pdf2, topic2pdf2"/> 
+        
   <target name="topic2pdf2" if="noMap" depends="dita-preprocess">
 	<ant dir="${dita.plugin.org.dita.pdf2.dir}" target="preview.topic.pdf">
 		<property name="caller.dir" value="${basedir}"/>

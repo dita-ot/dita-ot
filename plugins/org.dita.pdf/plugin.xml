@@ -4,11 +4,6 @@
   applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2011 All Rights Reserved. -->
 <plugin id="org.dita.pdf">
-  <!-- extension points -->
-  <extension-point id="dita.xsl.xslfo" name="PDF XSLT import"/>
-  <extension-point id="dita.xsl.fo" name="Legacy PDF XSLT import"/>
   <!-- extensions -->
   <feature extension="dita.conductor.transtype.check" value="pdf"/>
-  <feature extension="dita.conductor.target" file="conductor.xml"/>
-  <template file="../../xsl/dita2fo-shell_template.xsl"/>
 </plugin>

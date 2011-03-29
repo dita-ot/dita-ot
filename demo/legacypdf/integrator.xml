@@ -4,10 +4,6 @@
     applicable licenses.-->
     <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
     <project name="dita2legacypdf" default="dita2legacypdf">
-        <!--<property name="transtype" value="pdf"/>
-        
-        <import file="build_init.xml" />
-        <import file="build_preprocess.xml" />-->
         
         <target name="dita2legacypdf"
             depends="build-init, preprocess, map2legacypdf, topic2legacypdf">
@@ -47,7 +43,7 @@
         <target name="dita.map.fo"
             description="Build XSL-FO output from ditamap">
             <condition property="args.xsl"
-                value="${dita.script.dir}${file.separator}dita2fo-shell.xsl">
+                value="${dita.plugin.org.dita.legacypdf.dir}${file.separator}dita2fo-shell.xsl">
                 <not>
                     <isset property="args.xsl" />
                 </not>
@@ -77,10 +73,9 @@
             and Batik relevant jar files in CLASSPATH -->
         <target name="dita.fo2pdf" if="hasFOP"
             description="Build PDF from FO using FOP">
-            <property name="fop.home" value="${dita.dir}/demo/legacypdf"/>
             <taskdef name="fop" classname="org.apache.fop.tools.anttasks.Fop" >
                 <classpath>
-                    <fileset dir="${fop.home}/lib">
+                    <fileset dir="${dita.plugin.org.dita.legacypdf.dir}/lib">
                         <include name="*.jar"/>
                     </fileset>
                     <fileset dir="${dita.dir}/lib">
@@ -109,7 +104,7 @@
         <target name="dita.topic.fo"
             description="Build XSL-FO output from dita topic">
             <condition property="args.xsl"
-                value="${dita.script.dir}${file.separator}dita2fo-shell.xsl">
+                value="${dita.plugin.org.dita.legacypdf.dir}${file.separator}dita2fo-shell.xsl">
                 <not>
                     <isset property="args.xsl" />
                 </not>
