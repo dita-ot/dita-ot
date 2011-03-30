@@ -141,7 +141,7 @@
     	      xmlns:dita="http://dita-ot.sourceforge.net" 
     	      dita:extension="depends org.dita.dost.platform.InsertDependsAction" 
             description="Build Eclipse Help index file">
-    	  <echo> args.eclipsehelp.indexsee = ${args.eclipsehelp.indexsee} </echo>
+    	  <echo level="info"> args.eclipsehelp.indexsee = ${args.eclipsehelp.indexsee} </echo>
     	  <pipeline message="Extract index term."
             module="IndexTermExtract"
             basedir="${basedir}"
@@ -156,7 +156,7 @@
     	  xmlns:dita="http://dita-ot.sourceforge.net" 
     	  dita:extension="depends org.dita.dost.platform.InsertDependsAction" 
         description="Build Eclipse Help index file">
-    	  <echo> args.eclipsehelp.indexsee = ${args.eclipsehelp.indexsee} </echo>
+    	  <echo level="info"> args.eclipsehelp.indexsee = ${args.eclipsehelp.indexsee} </echo>
         <pipeline message="Extract index term."
             module="IndexTermExtract"
             basedir="${basedir}"
