@@ -24,11 +24,21 @@
      * 3182113 Add common attribute processing to PDF2 plugin (Milestone 3)
      * 3185914 Improve integration loggin  (Milestone 3)
      * 3189073 Plugin location should be available as Ant property  (Milestone 3)
+     * 3126848 Repository cleanup (Milestone 3)
+     * 3204188 Support for defining extension point (Milestone 4)
+     * 3213163 Clean PDF2 build and integration scripts (Milestone 4)
+     * 3227387 Need extension to pass user param to dita.map.xhtml.toc targ (Milestone 4)    
+     * 3231695 Use an XML serializer object for writing XML (Milestone 4)  
+     * 3256796  Remove lecagy PDF code from xsl (Milestone 4)
+     * 3033000 update to Apache FOP 1.0 release (In process) 
      * 3190356 Pluginize DITA-OT base configuration files (In process)
      * 3167087 Reduce static variable usage in Java code (In process)
-     * 3126848 Repository cleanup (In process)
-     * 3158929 Java clean-up(In process)
+     * 3158929 Java clean-up (In process)
+     * 3194917 Change Java API to be more final and non-public (In process)
      * 3197328 Refactor writers for cleaner XML serialization (In process)
+     * 3199755 Improve log integration (In process)     
+     * 3213324 Separate FOP/XEP/AXF stylesheets in PDF2 (In process)
+     
      
      [SourceForge Patches Added]
      * 3123507 String concat in map2plugin (Milestone 1)
@@ -69,7 +79,12 @@
      * 3191701 Conref Push to Same File Fails (Milestone 3)
      * 3191704 Push Replace Results in Pushed element Being removed (Milestone 3)
      * 3189883 MapLinksReader should not be namespace aware  (Milestone 3)
-     * 3159001 Clean unit tests (In progress)
+     * 3164587 Warnings issued by Saxon 9.3.0.4 when publishing to PDF (Milestone 3)
+     * 3159001 Clean unit tests (Milestone 4)  
+     * 3199985 @chunk : xrefs and links break (Milestone 4)
+     * 3206158 Inconsistent message DOTJ038W (Milestone 4)
+     * 3206373 Better handling of referenced SVG images (Milestone 4)
+     
      
 ====================================================================================
 
