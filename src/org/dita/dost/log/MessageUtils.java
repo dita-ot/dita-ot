@@ -80,7 +80,7 @@ public final class MessageUtils {
 	 * Load message from message file.
 	 * @param newMessageFile newMessageFile
 	 */
-	public static void loadMessages(String newMessageFile) {
+	public static void loadMessages(final String newMessageFile) {
 		if (!updateMessageFile(newMessageFile)) {
 			// this message file has been loaded
 			return;
@@ -92,24 +92,24 @@ public final class MessageUtils {
 		hashTable = new Hashtable<String, MessageBean>();
 		
 		try {
-			DocumentBuilderFactory factory = DocumentBuilderFactory
+			final DocumentBuilderFactory factory = DocumentBuilderFactory
 					.newInstance();
-			DocumentBuilder builder = factory.newDocumentBuilder();
-			Document doc = builder.parse(messageFile);
+			final DocumentBuilder builder = factory.newDocumentBuilder();
+			final Document doc = builder.parse(messageFile);
 
-			Element messages = doc.getDocumentElement();
-			NodeList messageList = messages.getElementsByTagName("message");
+			final Element messages = doc.getDocumentElement();
+			final NodeList messageList = messages.getElementsByTagName("message");
 
-			int messageListLength = messageList.getLength();
+			final int messageListLength = messageList.getLength();
 			for (int i = 0; i < messageListLength; i++) {
-				Element message = (Element) messageList.item(i);
-				Node reason = message.getElementsByTagName("reason").item(0);
-				Node response = message.getElementsByTagName("response")
+				final Element message = (Element) messageList.item(i);
+				final Node reason = message.getElementsByTagName("reason").item(0);
+				final Node response = message.getElementsByTagName("response")
 						.item(0);
 
-				MessageBean messageBean = new MessageBean();
-				NamedNodeMap attrs = message.getAttributes();
-				String id = attrs.getNamedItem("id").getNodeValue();
+				final MessageBean messageBean = new MessageBean();
+				final NamedNodeMap attrs = message.getAttributes();
+				final String id = attrs.getNamedItem("id").getNodeValue();
 
 				messageBean.setId(id);
 				messageBean.setType(attrs.getNamedItem("type").getNodeValue());
@@ -119,8 +119,8 @@ public final class MessageUtils {
 
 				hashTable.put(id, messageBean);
 			}
-		} catch (Exception e) {
-			StringBuffer buff = new StringBuffer(INT_128);
+		} catch (final Exception e) {
+			final StringBuffer buff = new StringBuffer(INT_128);
 			
 			buff.append("  Failed to load messages from '");
 			buff.append(messageFile);
@@ -135,7 +135,7 @@ public final class MessageUtils {
 		}
 	}
 
-	private static boolean updateMessageFile(String newMessageFile) {
+	private static boolean updateMessageFile(final String newMessageFile) {
 		String oldMessagePath = null;
 		String newMessagePath = null;
 
@@ -163,7 +163,7 @@ public final class MessageUtils {
 	 * @param id message di
 	 * @return messageBean
 	 */
-	public static MessageBean getMessage(String id) {
+	public static MessageBean getMessage(final String id) {
 		MessageBean message = null;
 		MessageBean hashMessage = null;
 		
@@ -195,11 +195,11 @@ public final class MessageUtils {
 	 * @param prop prop
 	 * @return MessageBean
 	 */
-	public static MessageBean getMessage(String id, Properties prop) {		
+	public static MessageBean getMessage(final String id, final Properties prop) {		
 		String reason = null;
 		String response = null;
 		Iterator<Object> iter = null;
-		MessageBean messageBean = getMessage(id);
+		final MessageBean messageBean = getMessage(id);
 		
 		if (prop == null || prop.size() == 0) {
 			return messageBean;
@@ -210,8 +210,8 @@ public final class MessageUtils {
 		iter = prop.keySet().iterator();
 
 		while (iter.hasNext()) {
-			String key = (String) iter.next();
-			String replacement = prop.getProperty(key);
+			final String key = (String) iter.next();
+			final String replacement = prop.getProperty(key);
 			reason = StringUtils.replaceAll(reason, key, replacement);
 			response = StringUtils.replaceAll(response, key, replacement);
 		}

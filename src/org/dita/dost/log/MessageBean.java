@@ -39,7 +39,7 @@ public final class MessageBean {
 	 * @param mbReason reason
 	 * @param mbResponse response
 	 */
-	public MessageBean(String mbId, String mbType, String mbReason, String mbResponse) {
+	public MessageBean(final String mbId, final String mbType, final String mbReason, final String mbResponse) {
 		this.id = mbId;
 		this.type = mbType;
 		this.reason = mbReason;
@@ -51,7 +51,7 @@ public final class MessageBean {
 	 * 
 	 * @param message message
 	 */
-	public MessageBean(MessageBean message) {
+	public MessageBean(final MessageBean message) {
 		this(message.getId(), message.getType(), message.getReason(), message.getResponse());
 	}
 	
@@ -67,7 +67,7 @@ public final class MessageBean {
 	 * Setter funciton of id.
 	 * @param mbId The id to set.          
 	 */
-	public void setId(String mbId) {
+	public void setId(final String mbId) {
 		this.id = mbId;
 	}
 
@@ -83,7 +83,7 @@ public final class MessageBean {
 	 * Setter function of reason.
 	 * @param mbReason The reason to set.           
 	 */
-	public void setReason(String mbReason) {
+	public void setReason(final String mbReason) {
 		this.reason = mbReason;
 	}
 
@@ -99,7 +99,7 @@ public final class MessageBean {
 	 * Setter function of response.
 	 * @param mbResponse The response to set.
 	 */
-	public void setResponse(String mbResponse) {
+	public void setResponse(final String mbResponse) {
 		this.response = mbResponse;
 	}
 
@@ -115,7 +115,7 @@ public final class MessageBean {
 	 * Setter function of type.
 	 * @param mbType The type to set.
 	 */
-	public void setType(String mbType) {
+	public void setType(final String mbType) {
 		this.type = mbType;
 	}
 
@@ -125,7 +125,7 @@ public final class MessageBean {
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		StringBuffer buff = new StringBuffer(INT_256);
+		final StringBuffer buff = new StringBuffer(INT_256);
 		
 		buff.append("[").append(id).append("]");
 		buff.append("[").append(type).append("] ");

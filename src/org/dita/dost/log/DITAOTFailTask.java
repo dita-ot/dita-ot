@@ -37,7 +37,7 @@ public final class DITAOTFailTask extends Exit {
 	 * @param identifier The id to set.
 	 * 
 	 */
-	public void setId(String identifier) {
+	public void setId(final String identifier) {
 		this.id = identifier;
 	}
 
@@ -45,12 +45,12 @@ public final class DITAOTFailTask extends Exit {
 	 * Set the parameters.
 	 * @param params The prop to set.          
 	 */
-	public void setParams(String params) {
-		StringTokenizer tokenizer = new StringTokenizer(params, ";");
+	public void setParams(final String params) {
+		final StringTokenizer tokenizer = new StringTokenizer(params, ";");
 		prop = new Properties();
 		while (tokenizer.hasMoreTokens()) {
-			String token = tokenizer.nextToken();
-			int pos = token.indexOf("=");
+			final String token = tokenizer.nextToken();
+			final int pos = token.indexOf("=");
 			this.prop.put(token.substring(0, pos), token.substring(pos + 1));
 		}
 	}
@@ -62,11 +62,11 @@ public final class DITAOTFailTask extends Exit {
 	 */
 	public void execute() throws BuildException {
 		initMessageFile();
-		MessageBean msgBean=MessageUtils.getMessage(id, prop);
+		final MessageBean msgBean=MessageUtils.getMessage(id, prop);
 		setMessage(msgBean.toString());
 		try{
 			super.execute();
-		}catch(BuildException ex){
+		}catch(final BuildException ex){
 			throw new BuildException(msgBean.toString(),new DITAOTException(msgBean,null,msgBean.toString()));
 		}
 	}
