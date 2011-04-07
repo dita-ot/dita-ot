@@ -107,17 +107,15 @@ public final class MessageUtils {
 				final Node response = message.getElementsByTagName("response")
 						.item(0);
 
-				final MessageBean messageBean = new MessageBean();
 				final NamedNodeMap attrs = message.getAttributes();
-				final String id = attrs.getNamedItem("id").getNodeValue();
 
-				messageBean.setId(id);
-				messageBean.setType(attrs.getNamedItem("type").getNodeValue());
-				messageBean.setReason(reason.getFirstChild().getNodeValue());
-				messageBean
-						.setResponse(response.getFirstChild().getNodeValue());
-
-				hashTable.put(id, messageBean);
+                final MessageBean messageBean = new MessageBean(
+                        attrs.getNamedItem("id").getNodeValue(),
+                        attrs.getNamedItem("type").getNodeValue(),
+                        reason.getFirstChild().getNodeValue(),
+                        response.getFirstChild().getNodeValue());
+                
+				hashTable.put(messageBean.getId(), messageBean);
 			}
 		} catch (final Exception e) {
 			final StringBuffer buff = new StringBuffer(INT_128);
@@ -164,26 +162,19 @@ public final class MessageUtils {
 	 * @return messageBean
 	 */
 	public static MessageBean getMessage(final String id) {
-		MessageBean message = null;
-		MessageBean hashMessage = null;
-		
 		if (hashTable == null) {
 			loadDefaultMessages();
 		}
 
-		hashMessage = (MessageBean) hashTable.get(id);
+	    final MessageBean hashMessage = (MessageBean) hashTable.get(id);
 		if (hashMessage != null) {
-			message = new MessageBean(hashMessage);
+			return new MessageBean(hashMessage);
 		}
 		
-		if (message == null) {
-			// return a empty message when no message found, 
-			// and notify the user with a warning message.
-			message = new MessageBean(id, "", "", "");
-			fileLogger.logWarn("  Can't find message for id: " + id);			
-		}
-		
-		return message;
+		// return a empty message when no message found,
+		// and notify the user with a warning message.
+	    fileLogger.logWarn("  Can't find message for id: " + id);
+		return new MessageBean(id, "", "", "");
 	}
 
 	/**
@@ -196,18 +187,15 @@ public final class MessageUtils {
 	 * @return MessageBean
 	 */
 	public static MessageBean getMessage(final String id, final Properties prop) {		
-		String reason = null;
-		String response = null;
-		Iterator<Object> iter = null;
 		final MessageBean messageBean = getMessage(id);
 		
 		if (prop == null || prop.size() == 0) {
 			return messageBean;
 		}
 		
-		reason = messageBean.getReason();
-		response = messageBean.getResponse();
-		iter = prop.keySet().iterator();
+		String reason = messageBean.getReason();
+		String response = messageBean.getResponse();
+		final Iterator<Object> iter = prop.keySet().iterator();
 
 		while (iter.hasNext()) {
 			final String key = (String) iter.next();
@@ -216,10 +204,7 @@ public final class MessageUtils {
 			response = StringUtils.replaceAll(response, key, replacement);
 		}
 
-		messageBean.setReason(reason);
-		messageBean.setResponse(response);
-
-		return messageBean;
+		return new MessageBean(messageBean.getId(), messageBean.getType(), reason, response);
 	}
 	
 }

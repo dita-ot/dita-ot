@@ -27,7 +27,10 @@ public final class MessageBean {
 
 	/**
 	 * Default constructor.
+	 * 
+	 * @deprecated use {@link #MessageBean(String, String, String, String)} with {@code null} arguments instead
 	 */
+	@Deprecated
 	public MessageBean() {
 		this(null, null, null, null);
 	}
@@ -65,8 +68,10 @@ public final class MessageBean {
 
 	/**
 	 * Setter funciton of id.
-	 * @param mbId The id to set.          
+	 * @param mbId The id to set.
+	 * @deprecated this setter will be removed in the future when the object is changed to be immutable
 	 */
+	@Deprecated
 	public void setId(final String mbId) {
 		this.id = mbId;
 	}
@@ -81,8 +86,10 @@ public final class MessageBean {
 
 	/**
 	 * Setter function of reason.
-	 * @param mbReason The reason to set.           
+	 * @param mbReason The reason to set.
+	 * @deprecated this setter will be removed in the future when the object is changed to be immutable
 	 */
+	@Deprecated
 	public void setReason(final String mbReason) {
 		this.reason = mbReason;
 	}
@@ -98,7 +105,9 @@ public final class MessageBean {
 	/**
 	 * Setter function of response.
 	 * @param mbResponse The response to set.
+	 * @deprecated this setter will be removed in the future when the object is changed to be immutable
 	 */
+	@Deprecated
 	public void setResponse(final String mbResponse) {
 		this.response = mbResponse;
 	}
@@ -114,7 +123,9 @@ public final class MessageBean {
 	/**
 	 * Setter function of type.
 	 * @param mbType The type to set.
+	 * @deprecated this setter will be removed in the future when the object is changed to be immutable
 	 */
+	@Deprecated
 	public void setType(final String mbType) {
 		this.type = mbType;
 	}
