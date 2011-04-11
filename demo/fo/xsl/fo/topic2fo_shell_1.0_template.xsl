@@ -73,6 +73,8 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:import href="static-content.xsl"/>
     <xsl:import href="glossary.xsl"/>
 
+    <xsl:import href="flagging.xsl"/>
+    
     <dita:extension id="dita.xsl.xslfo" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
 
     <xsl:import href="cfg:fo/attrs/custom.xsl"/>

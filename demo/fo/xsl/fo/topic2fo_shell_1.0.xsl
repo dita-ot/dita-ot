@@ -32,8 +32,9 @@
     <xsl:import href="static-content.xsl"></xsl:import>
     <xsl:import href="glossary.xsl"></xsl:import>
 
+    <xsl:import href="flagging.xsl"/>
     
-<xsl:import href="../../../music/xsl/songlist2xslfo.xsl"/>
+    <xsl:import href="../../../music/xsl/songlist2xslfo.xsl"/>
 
     <xsl:import href="cfg:fo/attrs/custom.xsl"></xsl:import>
     <xsl:import href="cfg:fo/xsl/custom.xsl"></xsl:import>
