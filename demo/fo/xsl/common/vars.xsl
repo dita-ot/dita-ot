@@ -37,24 +37,6 @@ See the accompanying license.txt file for applicable licenses.
  	extension-element-prefixes="exsl"
 	exclude-result-prefixes="opentopic-vars">
 
-    <xsl:template name="processVariableWithFormat">
-        <xsl:param name="variableNodes"/>
-        <xsl:param name="theParameters"/>
-        <xsl:param name="theVariableID"/>
-        <xsl:param name="theFormat"/>
-
-        <xsl:if test="count($variableNodes) = 0">
-            <xsl:message>
-                [WARN] Variable '<xsl:value-of select="$theVariableID"/>' with format '<xsl:value-of select="$theFormat"/>' not defined!
-            </xsl:message>
-        </xsl:if>             
-
-        <xsl:for-each select="$variableNodes[1]">
-            <xsl:call-template name="__processVariableBody">
-                <xsl:with-param name="theParameters" select="$theParameters"/>
-            </xsl:call-template>
-        </xsl:for-each>
-    </xsl:template>
 
     <xsl:template name="processVariableWithoutFormat">
         <xsl:param name="variableNodes"/>
@@ -70,7 +52,6 @@ See the accompanying license.txt file for applicable licenses.
 	<xsl:template name="insertVariable">
 		<xsl:param name="theVariableID"/>
 		<xsl:param name="theParameters"/>
-		<xsl:param name="theFormat"/>
 		<!-- We use the default $locale, unless there's an xml:lang attribute that applies to the current element. -->
         <xsl:variable name="currentLocale">
             <xsl:choose>
@@ -99,22 +80,10 @@ See the accompanying license.txt file for applicable licenses.
 	    </xsl:choose>
 	  </xsl:variable>
 	  <xsl:variable name="varsfile.document" select="document($varsfile.uri)"/>
-	  <xsl:choose>
-      <xsl:when test="normalize-space($theFormat)">
-        <xsl:call-template name="processVariableWithFormat">
-          <xsl:with-param name="variableNodes" select="$varsfile.document/opentopic-vars:vars/opentopic-vars:variable[(@id = $theVariableID) and (@format = $theFormat)]"/>
-          <xsl:with-param name="theParameters" select="$theParameters"/>
-          <xsl:with-param name="theVariableID" select="$theVariableID"/>
-          <xsl:with-param name="theFormat" select="$theFormat"/>
-        </xsl:call-template>
-			</xsl:when>
-			<xsl:otherwise>
-        <xsl:call-template name="processVariableWithoutFormat">
-          <xsl:with-param name="variableNodes" select="$varsfile.document/opentopic-vars:vars/opentopic-vars:variable[@id = $theVariableID]"/>
-          <xsl:with-param name="theParameters" select="$theParameters"/>
-        </xsl:call-template>
-			</xsl:otherwise>
-		</xsl:choose>
+    <xsl:call-template name="processVariableWithoutFormat">
+      <xsl:with-param name="variableNodes" select="$varsfile.document/opentopic-vars:vars/opentopic-vars:variable[@id = $theVariableID]"/>
+      <xsl:with-param name="theParameters" select="$theParameters"/>
+    </xsl:call-template>
 	</xsl:template>
 
 	<xsl:template name="__processVariableBody">
