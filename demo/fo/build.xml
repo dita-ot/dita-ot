@@ -165,6 +165,9 @@ with those set forth herein.
         <!-- WS runtime properties -->
         <property file="${cfg.common.dir}/properties/${document.locale}.properties"/>
 
+        <condition property="document.language" value="en">
+            <not><isset property="document.language"></isset></not>
+        </condition>
         <echo level="info">Using document.locale=${document.locale}</echo>
 
         <condition property="formatter.specific.ext" value="_axf">
@@ -233,13 +236,28 @@ with those set forth herein.
         </condition>
     	
         <condition property="index.config.file" value="${customization.dir}/common/index/${document.locale}.xml">
+          <and>
+            <not><isset property="index.config.file"/></not>
             <available file="${customization.dir}/common/index/${document.locale}.xml"/>
+          </and>
         </condition>
-        
         <condition property="index.config.file" value="${cfg.dir}/common/index/${document.locale}.xml">
-            <not>
-                <isset property="index.config.file"/>
-            </not>
+          <and>
+            <not><isset property="index.config.file"/></not>
+            <available file="${cfg.dir}/common/index/${document.locale}.xml"/>
+          </and>
+        </condition>
+        <condition property="index.config.file" value="${customization.dir}/common/index/${document.language}.xml">
+          <and>
+            <not><isset property="index.config.file"/></not>
+            <available file="${customization.dir}/common/index/${document.language}.xml"/>
+          </and>
+        </condition>
+        <condition property="index.config.file" value="${cfg.dir}/common/index/${document.language}.xml">
+          <and>
+            <not><isset property="index.config.file"/></not>
+            <available file="${cfg.dir}/common/index/${document.language}.xml"/>
+          </and>
         </condition>
         
         <index-preprocess
@@ -295,17 +313,30 @@ with those set forth herein.
         	<arg line='"pdfFormatter=${pdf.formatter}"'/>
             <sysproperty key="xml.catalog.files" value="${xml.catalog.files}"/>
         </java>
-                
-        <condition property="i18n.config.file" 
-            value="${customization.dir}/fo/i18n/${document.locale}.xml">
-            <available file="${customization.dir}/fo/i18n/${document.locale}.xml"/>
-        </condition>
 
-        <condition property="i18n.config.file" 
-            value="${cfg.fo.dir}/i18n/${document.locale}.xml">
-            <not>
-                <isset property="i18n.config.file"/>
-            </not>
+        <condition property="i18n.config.file" value="${customization.dir}/fo/i18n/${document.locale}.xml">
+          <and>
+            <not><isset property="i18n.config.file"/></not>
+            <available file="${customization.dir}/fo/i18n/${document.locale}.xml"/>
+          </and>
+        </condition>
+        <condition property="i18n.config.file" value="${cfg.fo.dir}/i18n/${document.locale}.xml">
+          <and>
+            <not><isset property="i18n.config.file"/></not>
+            <available file="${cfg.fo.dir}/i18n/${document.locale}.xml"/>
+          </and>
+        </condition>
+        <condition property="i18n.config.file" value="${customization.dir}/fo/i18n/${document.language}.xml">
+          <and>
+            <not><isset property="i18n.config.file"/></not>
+            <available file="${customization.dir}/fo/i18n/${document.language}.xml"/>
+          </and>
+        </condition>
+        <condition property="i18n.config.file" value="${cfg.fo.dir}/i18n/${document.language}.xml">
+          <and>
+            <not><isset property="i18n.config.file"/></not>
+            <available file="${cfg.fo.dir}/i18n/${document.language}.xml"/>
+          </and>
         </condition>
 
         <i18n-preprocess
