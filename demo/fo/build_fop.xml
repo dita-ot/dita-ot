@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+  Sourceforge.net. See the accompanying license.txt file for 
+  applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2011 All Rights Reserved. -->
+<project name="org.dita.pdf2.fop">
+
+  <property name="fop.home" value="${basedir}/fop"/>
+
+  <!--Added by William on 2009-11-23 for bug:2893745 start -->
+  <condition property="hasFopLib">
+    <available classname="org.apache.fop.tools.anttasks.Fop">
+      <classpath id="project.classpath">
+        <fileset dir="${fop.home}">
+          <include name="build/fop.jar"/>
+          <include name="lib/*.jar"/>
+          <include name="build/fop-hyph.jar"/>
+        </fileset>
+      </classpath>
+    </available>
+  </condition>
+  <!--Added by William on 2009-11-23 for bug:2893745 end -->
+
+  <!--Added by William on 2009-11-23 for bug:2893745 start -->
+  <target name="checkFOPLib">
+    <dita-ot-fail id="DOTA010E">
+      <condition>
+        <and>
+          <not>
+            <isset property="hasFopLib"/>
+          </not>
+          <isset property="use.fop.pdf.formatter"/>
+        </and>
+      </condition>
+    </dita-ot-fail>
+  </target>
+  <!--Added by William on 2009-11-23 for bug:2893745 end -->
+
+  <!--Run FOP-->
+  <target name="transform.fo2pdf.fop" if="use.fop.pdf.formatter">
+    <!--Check fop lib-->
+    <antcall target="checkFOPLib"/>
+    <taskdef name="fop" classname="org.apache.fop.tools.anttasks.Fop">
+      <classpath>
+        <fileset dir="${fop.home}/lib">
+          <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${fop.home}/build">
+          <include name="fop.jar"/>
+          <include name="fop-hyph.jar"/>
+        </fileset>
+      </classpath>
+    </taskdef>
+    <fop format="application/pdf" fofile="${inputFile}" basedir="${dita.map.output.dir}"
+      outfile="${outputFile}" messagelevel="info" relativebase="true" force="true"
+      userconfig="${fop.home}/conf/fop.xconf"/>
+  </target>
+
+</project>

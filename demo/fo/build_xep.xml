@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+  Sourceforge.net. See the accompanying license.txt file for 
+  applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2011 All Rights Reserved. -->
+<project name="org.dita.pdf2.xep">
+
+  <property name="xep.dir" value="${fo.lib.dir}/xep"/>
+
+  <condition property="xep.config.file" value="${custom.xep.config}">
+    <isset property="custom.xep.config"/>
+  </condition>
+  <condition property="xep.config.file" value="${xep.dir}/xep.xml">
+    <not>
+      <isset property="custom.xep.config"/>
+    </not>
+  </condition>
+
+  <path id="xep.class.path">
+    <fileset dir="${xep.dir}/lib" includes="**/*.jar"/>
+    <pathelement location="${fo.lib.dir}/fo.jar"/>
+  </path>
+
+  <!-- run XEP -->
+  <target name="transform.fo2pdf.xep" if="use.xep.pdf.formatter">
+    <java classname="com.idiominc.ws.opentopic.fo.xep.Runner" resultproperty="errCode"
+          failonerror="${xep.failOnError}" fork="true" maxmemory="${maxJavaMemory}">
+      <jvmarg line="${baseJVMArgLine}"/>
+      <arg line="&quot;${inputFile}&quot; &quot;${outputFile}&quot; failOnError=${xep.failOnError}"/>
+      <classpath refid="xep.class.path"/>
+      <sysproperty key="com.renderx.xep.CONFIG" value="${xep.config.file}"/>
+    </java>
+    <condition property="xepExitedOnError" value="true">
+      <not>
+        <equals arg1="${errCode}" arg2="0"/>
+      </not>
+    </condition>
+  </target>
+
+</project>
