@@ -18,6 +18,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
+import java.util.Map.Entry;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -152,7 +153,7 @@ public final class MapMetaReader implements AbstractReader {
         inputFile.getPath();
         
         //clear the history on global metadata table
-        globalMeta.clear();
+        globalMeta.clear();    	
         
         
         try{
@@ -299,7 +300,9 @@ public final class MapMetaReader implements AbstractReader {
 					final Hashtable<String, Element> previous = resultTable.get(topicPath);
 					resultTable.put(topicPath, mergeMeta(previous, current, metaSet));
 	    		}else{
-	    			resultTable.put(topicPath, current);
+	    			
+	    			resultTable.put(topicPath, cloneElementMap(current));
+
 	    		}
 				
 				final Hashtable<String, Element> metas = resultTable.get(topicPath);
@@ -325,6 +328,21 @@ public final class MapMetaReader implements AbstractReader {
 			}
 			//edited by william on 2009-08-06 for bug:2832696 end
 		}
+	}
+	private Hashtable<String, Element> cloneElementMap(Hashtable<String, Element> current) {
+		final Hashtable<String, Element> topicMetaTable = new Hashtable<String, Element>(INT_16);
+		for (final Entry<String, Element> topicMetaItem: current.entrySet()) {
+		    final Element inheritStub = doc.createElement("stub");
+		    final Node currentStub = topicMetaItem.getValue();
+		    final NodeList stubChildren = currentStub.getChildNodes();
+		    for (int i = 0; i < stubChildren.getLength(); i++){
+		        Node item = stubChildren.item(i).cloneNode(true);
+		        item = inheritStub.getOwnerDocument().importNode(item, true);
+		        inheritStub.appendChild(item);
+		    }
+		    topicMetaTable.put(topicMetaItem.getKey(), inheritStub);
+		}
+		return topicMetaTable;
 	}
 
 
