@@ -258,16 +258,24 @@ with those set forth herein.
         <available classname="net.sf.saxon.Transform" property="fo.saxon.classname" value="net.sf.saxon.Transform" classpathref="project.class.path"/>
         <property name="fo.saxon.classname" value="com.icl.saxon.StyleSheet"/>
         
+        <java classname="${fo.saxon.classname}" classpathref="project.class.path" fork="true">
+            <arg line='-o "${buildDir}/stage1a.xml"'/>
+            <arg line="${saxon.resolver.command.line}"/>
+            <arg line='"${buildDir}/stage1.xml"'/>
+            <arg line='"${xsl.fo.dir}/flagging-preprocess.xsl"'/>
+            <arg line='"filterFile=${dita.input.valfile}"'/>
+            <sysproperty key="xml.catalog.files" value="${xml.catalog.files}"/>
+        </java>
+        
     	<!-- must fork or catalog resolution will fail due to sharing of -->
     	<!-- resolver and catalogs with the Open Toolkit -->
         <echo level="info" message="Java maximum memory=${maxJavaMemory}"/>
         <java classname="${fo.saxon.classname}" classpathref="project.class.path" fork="true"
-        	maxmemory="${maxJavaMemory}"
-        	>
+        	maxmemory="${maxJavaMemory}">
         	  <jvmarg line="${baseJVMArgLine}"/>
             <arg line='-o:"${buildDir}/stage2.fo"'/>
             <arg line="${saxon.resolver.command.line}"/>
-            <arg line='"${buildDir}/stage1.xml"'/>
+            <arg line='"${buildDir}/stage1a.xml"'/>
             <arg line='"${temp.transformation.file}"'/>
             <arg line='"locale=${document.locale}"'/>
             <arg line='"customizationDir=${customization.dir}"'/>
