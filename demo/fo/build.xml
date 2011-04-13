@@ -97,9 +97,6 @@ with those set forth herein.
     <property name="cfg.common.dir" value="${basedir}/cfg/common"/>
     <property name="dtd.dir" value="${basedir}/dtd"/>
 
-    <!-- WS runtime properties -->
-    <property file="${cfg.common.dir}/properties/${document.locale}.properties"/>
-
 	<property name="saxon.resolver.command.line" value="-warnings:silent -x:org.apache.xml.resolver.tools.ResolvingXMLReader -y:org.apache.xml.resolver.tools.ResolvingXMLReader -r:org.apache.xml.resolver.tools.CatalogResolver"/>
 
     <path id="project.class.path">
@@ -164,6 +161,9 @@ with those set forth herein.
         <condition property="document.locale" value="en_US">
             <not><isset property="document.locale"></isset></not>
         </condition>
+      
+        <!-- WS runtime properties -->
+        <property file="${cfg.common.dir}/properties/${document.locale}.properties"/>
 
         <echo level="info">Using document.locale=${document.locale}</echo>
 
