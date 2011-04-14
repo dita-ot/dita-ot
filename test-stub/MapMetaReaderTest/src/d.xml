@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="d">
+  <title>d</title>
+  <prolog>
+    <author>topic author</author>
+    <source>topic source</source>
+    <publisher>topic publisher</publisher>
+    <copyright>
+      <copyryear year="2012"/>
+      <copyrholder>topic copyrholder</copyrholder>
+    </copyright>
+    <critdates>
+      <created date="2012"/>
+      <revised modified="2012"/>
+    </critdates>
+    <permissions view="topic permissins"/>
+    <metadata>
+      <audience/>
+      <category>topic category</category>
+      <keywords>
+        <keyword>topic keyword</keyword>
+      </keywords>
+      <prodinfo>
+        <prodname>topic prodnamefoo</prodname>
+        <vrmlist>
+          <vrm version="3.0"/>
+        </vrmlist>
+      </prodinfo>
+      <othermeta name="othermeta" content="topic othermeta"/>
+      <data>topic data</data>
+      <data-about>
+        <data>topic data</data>
+      </data-about>
+      <foreign>topic foreign</foreign>
+      <unknown>topic unknown</unknown>
+    </metadata>
+    <resourceid id="foo"/>
+    <data>topic datafoo</data>
+    <data-about>
+      <data>topic datafoo</data>
+    </data-about>
+    <foreign>topic foreign</foreign>
+    <unknown>topic unknown</unknown>    
+  </prolog>
+</topic>
