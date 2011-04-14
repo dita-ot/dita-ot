@@ -116,7 +116,10 @@ public final class Integrator {
         }
 
         for (final String pluginDir2 : pluginDirs) {
-            final File pluginDir = new File(ditaDir, pluginDir2);
+            File pluginDir = new File(pluginDir2);
+            if (!pluginDir.isAbsolute()) {
+                pluginDir = new File(ditaDir, pluginDir.getPath());
+            }
             final File[] pluginFiles = pluginDir.listFiles();
 
             for (int i = 0; (pluginFiles != null) && (i < pluginFiles.length); i++) {
