@@ -29,7 +29,10 @@
      * 3213163 Clean PDF2 build and integration scripts (Milestone 4)
      * 3227387 Need extension to pass user param to dita.map.xhtml.toc targ (Milestone 4)    
      * 3231695 Use an XML serializer object for writing XML (Milestone 4)  
-     * 3256796  Remove lecagy PDF code from xsl (Milestone 4)
+     * 3256796 Remove lecagy PDF code from xsl (Milestone 4)
+     * 3283638 Remove format attribute support from PDF2 vars (Milestone 5)
+     * 3285716 Clean up PDF2 build files (Milestone 5)
+     * 3286085 Add output and temp dir params to PDF2 (Milestone 5)
      * 3033000 update to Apache FOP 1.0 release (In process) 
      * 3190356 Pluginize DITA-OT base configuration files (In process)
      * 3167087 Reduce static variable usage in Java code (In process)
@@ -84,7 +87,8 @@
      * 3199985 @chunk : xrefs and links break (Milestone 4)
      * 3206158 Inconsistent message DOTJ038W (Milestone 4)
      * 3206373 Better handling of referenced SVG images (Milestone 4)
-     
+     * 3279539 Out of memory error from move-meta module (Milestone 5)
+     * 3281108 Fallback to $locale when xml:lang value is wrong format (Milestone 5)
      
 ====================================================================================
 
