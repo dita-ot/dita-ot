@@ -198,7 +198,7 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:when test="@char">
                     <xsl:value-of select="@char"/>
                 </xsl:when>
-                <xsl:when test="ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class,' topic/colspec ')][position() = $entryNumber]/@char">
+                <xsl:when test="ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class,' topic/colspec ')][position() = number($entryNumber)]/@char">
                     <xsl:value-of select="ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class,' topic/colspec ')][position() = $entryNumber]/@char"/>
                 </xsl:when>
             </xsl:choose>
@@ -208,7 +208,7 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:when test="@charoff">
                     <xsl:value-of select="@charoff"/>
                 </xsl:when>
-                <xsl:when test="ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class,' topic/colspec ')][position() = $entryNumber]/@charoff">
+                <xsl:when test="ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class,' topic/colspec ')][position() = number($entryNumber)]/@charoff">
                     <xsl:value-of select="ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class,' topic/colspec ')][position() = $entryNumber]/@charoff"/>
                 </xsl:when>
                 <xsl:otherwise>50</xsl:otherwise>
