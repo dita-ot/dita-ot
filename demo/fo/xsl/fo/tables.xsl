@@ -1282,7 +1282,7 @@ See the accompanying license.txt file for applicable licenses.
          Count the number of values in @relcolwidth (to add values if one is missing) -->
     <xsl:template match="*" mode="count-colwidths">
       <xsl:param name="relcolwidth" select="@relcolwidth"/>
-      <xsl:param name="count" select="'0'"/>
+      <xsl:param name="count" select="0"/>
       <xsl:choose>
         <xsl:when test="not(contains($relcolwidth,' '))">
           <xsl:value-of select="$count + 1"/>
@@ -1396,7 +1396,7 @@ See the accompanying license.txt file for applicable licenses.
          Fill in empty cells when one is missing from strow or sthead.
          Context for this call is strow or sthead. -->
     <xsl:template match="*" mode="fillInMissingSimpletableCells">
-      <xsl:param name="fill-in-count" select="'0'"/>
+      <xsl:param name="fill-in-count" select="0"/>
       <xsl:if test="$fill-in-count > 0">
         <fo:table-cell xsl:use-attribute-sets="strow.stentry">
             <xsl:call-template name="commonattributes"/>

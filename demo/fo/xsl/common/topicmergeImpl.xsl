@@ -166,7 +166,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:apply-templates select="@*[name() != 'id']"/>
             <xsl:variable name="new_id">
                 <xsl:choose>
-                    <xsl:when test="$idcount &gt; 0">
+                    <xsl:when test="number($idcount) &gt; 0">
                         <xsl:value-of select="concat(@id,'_ssol',$idcount)"/>
                     </xsl:when>
                     <xsl:otherwise>

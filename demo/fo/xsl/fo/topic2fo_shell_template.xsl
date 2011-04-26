@@ -109,7 +109,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:param name="antArgsGenerateTaskLabels"/>
 
     <!-- Remaining parameters are not passed in with the default Ant code. -->
-    <xsl:param name="tocMaximumLevel" select="'4'"/>
+    <xsl:param name="tocMaximumLevel" select="4"/>
     <xsl:param name="ditaVersion" select="'132'"/>
 
     <xsl:output method="xml" encoding="utf-8" indent="no"/>

@@ -1360,21 +1360,21 @@ See the accompanying license.txt file for applicable licenses.
         default font, page margins, or shortdesc attribute sets, you may need
         to change these values. -->
         <xsl:choose>
-            <xsl:when test="$locale = 'en_US' or $locale = 'fr_FR' ">
-                <xsl:value-of select="'360'"/>
+            <xsl:when test="$locale = 'en_US' or $locale = 'fr_FR'">
+                <xsl:value-of select="360"/>
             </xsl:when>
             <xsl:when test="$locale = 'ja_JP'">
-                <xsl:value-of select="'141'"/>
+                <xsl:value-of select="141"/>
             </xsl:when>
             <xsl:when test="$locale = 'zh_CN'">
-                <xsl:value-of select="'141'"/>
+                <xsl:value-of select="141"/>
             </xsl:when>
             <!-- Other languages require a template override to generate
             keep-with-next
             on shortdesc. Data was not available at the time this code released.
             -->
             <xsl:otherwise>
-                <xsl:value-of select="'0'"/>
+                <xsl:value-of select="0"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
