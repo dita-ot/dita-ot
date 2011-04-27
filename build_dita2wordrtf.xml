@@ -83,7 +83,10 @@
 
   <!-- added by Alan on Date: 2009-10-21 for RTF output encoding problem-->
   <target name="escapeUnicode">
-  	<pipeline message="Escape Unicode" module="EscapeUnicode" extparam="input=${input};output=${output}"/>
+    <pipeline message="Escape Unicode" module="EscapeUnicode">
+      <param name="input" value="${input}"/>
+      <param name="output" value="${output}"/>
+    </pipeline>
     <move file="${output}" tofile="${input}" overwrite="true"/>
     <delete file="${output}"/>
   </target>

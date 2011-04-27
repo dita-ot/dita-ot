@@ -78,8 +78,9 @@
   	<dirname property="dita.temp.dir.fullpath" file="${dita.temp.dir}${file.separator}dummy.file"/>
   	<pipeline message="topicmerge" module="TopicMerge"
   	              inputmap="${dita.temp.dir.fullpath}${file.separator}${user.input.file}"
-  	              tempdir="${dita.temp.dir.fullpath}"
-  	              extparam="output=${dita.temp.dir.fullpath}${file.separator}${dita.map.filename.root}_MERGED.xml;style=${dita.dir}/${odt.dir}/common/topicmerge.xsl">
+  	              tempdir="${dita.temp.dir.fullpath}">
+      <param name="output" location="${dita.temp.dir.fullpath}${file.separator}${dita.map.filename.root}_MERGED.xml"/>
+      <param name="style" location="${dita.dir}/${odt.dir}/common/topicmerge.xsl"/>
   	</pipeline>
   	<!--create content.xml -->
   	<!--Change path of ${dita.input.valfile} into url-->

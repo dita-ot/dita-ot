@@ -107,7 +107,7 @@
   </path>
 
   <taskdef name="pipeline"
-    classname="org.dita.dost.invoker.AntInvoker">
+    classname="org.dita.dost.invoker.ExtensibleAntInvoker">
     <classpath refid="dost.jar.path" />
   </taskdef>
 
@@ -507,19 +507,6 @@
     <condition property="args.logdir" value="${output.dir}">
       <not>
         <isset property="args.logdir" />
-      </not>
-    </condition>
-
-    <condition property="index.ext.param.encoding" value="">
-      <not>
-        <isset property="args.dita.locale" />
-      </not>
-    </condition>
-
-    <condition property="index.ext.param.encoding"
-      value="encoding=${args.dita.locale}">
-      <not>
-        <isset property="index.ext.param.encoding" />
       </not>
     </condition>
 
