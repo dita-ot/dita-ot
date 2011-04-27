@@ -209,12 +209,21 @@ with those set forth herein.
         <condition property="args.gen.task.lbl" value="">
             <not><isset property="args.gen.task.lbl"></isset></not>
         </condition>
-    	<!--Added by William on 2010-06-21 for bug:3012392 start -->
     	<!-- use customized xsl file for pdf transform.-->
+      <condition property="temp.transformation.file" value="${args.xsl.pdf}">
+        <and>
+          <isset property="args.xsl.pdf"/>
+          <available file="${args.xsl.pdf}" type="file"/>
+        </and>
+      </condition>
     	<condition property="temp.transformation.file" value="${caller.dir}/${args.xsl.pdf}">
-    		<isset property="args.xsl.pdf"/>
+    	  <and>
+    	    <not>
+    	      <isset property="temp.transformation.file"/>
+    	    </not>
+    	    <isset property="args.xsl.pdf"/>
+    	  </and>
     	</condition>
-    	<!--Added by William on 2010-06-21 for bug:3012392 end -->
     	
         <condition property="temp.transformation.file" value="${xsl.fo.dir}/topic2fo_shell_1.0${formatter.specific.ext}.xsl">
     		<and>
