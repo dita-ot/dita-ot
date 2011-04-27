@@ -61,10 +61,10 @@ import org.xml.sax.XMLReader;
  */
 public final class GenListModuleReader extends AbstractXMLReader {
 	/** XMLReader instance for parsing dita file */
-	private static XMLReader reader = null;
+	private XMLReader reader = null;
 
 	/** Map of XML catalog info */
-	private static HashMap<String, String> catalogMap = null;
+	private HashMap<String, String> catalogMap = null;
 
 	/** Basedir of the current parsing file */
 	private String currentDir = null;
@@ -150,14 +150,14 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	/** Set of outer dita files */
 	private Set<String> outDitaFilesSet=null;
 	
-	private static String rootDir = null;
+	private String rootDir = null;
 	
 	private String currentFile=null;
 	
-	private static String rootFilePath=null;
+	private String rootFilePath=null;
 	
 	//Added on 2010-08-24 for bug:3086552 start
-	private static boolean setSystemid = true;
+	private boolean setSystemid = true;
 	//Added on 2010-08-24 for bug:3086552 end
 	
     private final Stack<String> processRoleStack; // stack for @processing-role value
@@ -281,6 +281,11 @@ public final class GenListModuleReader extends AbstractXMLReader {
 		//currentElement = null;
 		
 		props = null;
+		try {
+            reader = StringUtils.getXMLReader();
+        } catch (SAXException e) {
+            throw new RuntimeException("Unable to create XML parser: " + e.getMessage(), e);
+        }
 		reader.setContentHandler(this);
 		try {
 			reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
@@ -307,22 +312,21 @@ public final class GenListModuleReader extends AbstractXMLReader {
      * @param rootFile input file
 	 * @throws SAXException parsing exception
      */
-	public static void initXMLReader(String ditaDir,boolean validate,String rootFile, boolean arg_setSystemid) throws SAXException {
-		final DITAOTJavaLogger javaLogger=new DITAOTJavaLogger();
+	public void initXMLReader(String ditaDir,boolean validate,String rootFile, boolean arg_setSystemid) throws SAXException {
+		//final DITAOTJavaLogger javaLogger=new DITAOTJavaLogger();
 		
 		//to check whether the current parsing file's href value is out of inputmap.dir
 		rootDir=new File(rootFile).getAbsoluteFile().getParent();
 		rootDir = FileUtils.removeRedundantNames(rootDir);
 		rootFilePath=new File(rootFile).getAbsolutePath();
 		rootFilePath = FileUtils.removeRedundantNames(rootFilePath);
-		reader = StringUtils.getXMLReader();
 		reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
 		if(validate==true){
 			reader.setFeature(FEATURE_VALIDATION, true);
 			reader.setFeature(FEATURE_VALIDATION_SCHEMA, true);
 		}else{
 			final String msg=MessageUtils.getMessage("DOTJ037W").toString();
-			javaLogger.logWarn(msg);
+			logger.logWarn(msg);
 		}
 		final XMLGrammarPool grammarPool = GrammarPoolManager.getGrammarPool();
 		setGrammarPool(reader, grammarPool);
@@ -1713,7 +1717,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	/**
 	 * @return the catalogMap
 	 */
-	public static HashMap<String, String> getCatalogMap() {
+	public HashMap<String, String> getCatalogMap() {
 		return catalogMap;
 	}
 

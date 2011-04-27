@@ -46,7 +46,8 @@ public class TestGenListModuleReader {
 		ditaDir = new File(baseDir, "").getAbsolutePath();
 		
 		boolean validate = false;
-		
+		reader = new GenListModuleReader();
+		reader.setLogger(new TestUtils.TestLogger());
 		try {
 			reader.initXMLReader(ditaDir, validate, new File(baseDir, rootFile).getCanonicalPath(), true);
 		} catch (SAXException e) {
@@ -56,8 +57,6 @@ public class TestGenListModuleReader {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		reader = new GenListModuleReader();
-		reader.setLogger(new TestUtils.TestLogger());
 	}
 
 	@Test

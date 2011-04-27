@@ -272,7 +272,9 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 			//set grammar pool flag
 			GrammarPoolManager.setGramCache(gramcache);
 
-			GenListModuleReader.initXMLReader(ditaDir,xmlValidate,rootFile, setSystemid);
+		    reader = new GenListModuleReader();
+		    reader.setLogger(logger);
+			reader.initXMLReader(ditaDir,xmlValidate,rootFile, setSystemid);
 			//Added on 2010-08-24 for bug:3086552 start
 			DitaValReader.initXMLReader(setSystemid);
 			//Added on 2010-08-24 for bug:3086552 end
@@ -417,8 +419,6 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 	 * 
 	 */
 	private void processWaitList() throws DITAOTException {
-		reader = new GenListModuleReader();
-		reader.setLogger(logger);
 		//Added by William on 2009-07-18 for req #12014 start
 		reader.setTranstype(transtype);
 		//Added by William on 2009-07-18 for req #12014 end
