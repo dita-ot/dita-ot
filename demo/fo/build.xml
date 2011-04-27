@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- 
 Copyright © 2005 by Idiom Technologies, Inc. All rights reserved. 
 IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
@@ -27,407 +26,379 @@ These terms and conditions supersede the terms and conditions in any
 licensing agreement to the extent that such terms and conditions conflict
 with those set forth herein.
 -->
+<project name="dita.build" basedir=".">
+  
+  <!--Added by William on 2009-11-23 for bug:2893745 start -->
+  <import file="../../build_init.xml"/>
+  <!--Added by William on 2009-11-23 for bug:2893745 end -->
 
-<project name="dita.build"  basedir=".">
-	<!--Added by William on 2009-11-23 for bug:2893745 start -->
-	<import file="../../build_init.xml"/>
-	<!--Added by William on 2009-11-23 for bug:2893745 end -->
-	
-    <property name="customization.dir" value="${basedir}/Customization"/>
-    <property file="${customization.dir}/build.properties"/>
+  <property name="customization.dir" value="${basedir}/Customization"/>
+  <property file="${customization.dir}/build.properties"/>
 
-    <property name="ot.dir" value="${basedir}/../.."/>
-    <property name="lib.dir" value="${ot.dir}/lib"/>
-    <property name="fo.lib.dir" value="${basedir}/lib"/>
-    <property name="merged.file" value="${dita.map.filename.root}_MERGED.xml" />
+  <property name="ot.dir" value="${basedir}/../.."/>
+  <property name="lib.dir" value="${ot.dir}/lib"/>
+  <property name="fo.lib.dir" value="${basedir}/lib"/>
+  <property name="merged.file" value="${dita.map.filename.root}_MERGED.xml"/>
 
-	<!-- configure FO engines -->
-	<!-- default is FOP.  Can be changed here, or with pdf.formatter property. -->
-	<property name="pdf.formatter" value="fop"/>
-	
+  <!-- configure FO engines -->
+  <!-- default is FOP.  Can be changed here, or with pdf.formatter property. -->
+  <property name="pdf.formatter" value="fop"/>
+
   <import file="${basedir}/build_fop.xml"/>
   <import file="${basedir}/build_axf.xml"/>
   <import file="${basedir}/build_xep.xml"/>
-	
-	<condition property="use.xep.pdf.formatter">
-		<equals arg1="${pdf.formatter}" arg2="xep"/>
-	</condition>
-	<condition property="use.ah.pdf.formatter">
-		<equals arg1="${pdf.formatter}" arg2="ah"/>
-	</condition>
-	<condition property="use.fop.pdf.formatter">
-		<not>
-          <or>
-            <isset property="use.xep.pdf.formatter"/>
-            <isset property="use.ah.pdf.formatter"/>
-          </or>
-        </not>
-	</condition>
-	
-	<!-- dita.temp.dir can be an absolute or relative path. Handle both. -->
-    <available property="work.dir" value="${dita.temp.dir}"
-        file="${dita.temp.dir}" type="dir" />
-    <condition property="work.dir" value="${caller.dir}/${dita.temp.dir}">
-        <not>
-            <isset property="work.dir"/>
-        </not>
+
+  <condition property="use.xep.pdf.formatter">
+    <equals arg1="${pdf.formatter}" arg2="xep"/>
+  </condition>
+  <condition property="use.ah.pdf.formatter">
+    <equals arg1="${pdf.formatter}" arg2="ah"/>
+  </condition>
+  <condition property="use.fop.pdf.formatter">
+    <not>
+      <or>
+        <isset property="use.xep.pdf.formatter"/>
+        <isset property="use.ah.pdf.formatter"/>
+      </or>
+    </not>
+  </condition>
+
+  <!-- dita.temp.dir can be an absolute or relative path. Handle both. -->
+  <available property="work.dir" value="${dita.temp.dir}" file="${dita.temp.dir}" type="dir"/>
+  <condition property="work.dir" value="${caller.dir}/${dita.temp.dir}">
+    <not><isset property="work.dir"/></not>
+  </condition>
+
+  <property name="artwork.dir" value="${dita.map.output.dir}"/>
+  <property name="disableRelatedLinks" value="yes"/>
+
+  <condition property="file.protocol.prefix" value="file://">
+    <os family="unix"/>
+  </condition>
+
+  <condition property="file.protocol.prefix" value="file:/">
+    <not><isset property="file.protocol.prefix"/></not>
+  </condition>
+
+  <property name="xml.catalog.files" value="${customization.dir}/catalog.xml;${basedir}/cfg/catalog.xml"/>
+
+  <property name="xsl.dir" value="${basedir}/xsl"/>
+  <property name="xsl.fo.dir" value="${basedir}/xsl/fo"/>
+  <property name="xsl.fo.diff.dir" value="${basedir}/xsl/fo/diff"/>
+  <property name="xsl.common.dir" value="${basedir}/xsl/common"/>
+  <property name="cfg.dir" value="${basedir}/cfg"/>
+  <property name="cfg.fo.dir" value="${basedir}/cfg/fo"/>
+  <property name="cfg.common.dir" value="${basedir}/cfg/common"/>
+  <property name="dtd.dir" value="${basedir}/dtd"/>
+
+  <property name="saxon.resolver.command.line"
+            value="-warnings:silent -x:org.apache.xml.resolver.tools.ResolvingXMLReader -y:org.apache.xml.resolver.tools.ResolvingXMLReader -r:org.apache.xml.resolver.tools.CatalogResolver"/>
+
+  <path id="project.class.path">
+    <pathelement path="${java.class.path}"/>
+    <fileset dir="${lib.dir}/saxon">
+      <include name="**/*.jar"/>
+    </fileset>
+    <!--
+    <pathelement location="${lib.dir}/xml-apis.jar"/>
+    <pathelement location="${lib.dir}/xercesImpl.jar"/>
+    -->
+    <pathelement location="${lib.dir}/resolver.jar"/>
+    <pathelement location="${lib.dir}/icu4j.jar"/>
+    <pathelement location="${fo.lib.dir}/fo.jar"/>
+  </path>
+
+  <target name="preview.topic.pdf">
+    <antcall target="transform.topic2pdf">
+      <param name="inputFile" value="${work.dir}/${user.input.file}"/>
+      <param name="outputFile" value="${dita.map.output.dir}/${dita.topic.filename.root}.pdf"/>
+      <param name="buildDir" value="${work.dir}"/>
+      <param name="artworkPrefix" value="${artwork.dir}"/>
+      <param name="xep.failOnError" value="false"/>
+    </antcall>
+  </target>
+
+  <target name="publish.map.pdf">
+    <echo level="info" message="current target:publish.map.pdf"/>
+    <!--
+    <echo level="info" message="dita.temp.dir=${dita.temp.dir} work.dir=${work.dir}"/>
+    <echo level="info" message="dita.dir=${dita.dir}"/>
+    <echo level="info" message="basedir=${basedir}"/>
+    -->
+    <antcall target="transform.topic2pdf">
+      <param name="inputFile" value="${work.dir}/${merged.file}"/>
+      <param name="outputFile" value="${dita.map.output.dir}/${dita.map.filename.root}.pdf"/>
+      <param name="buildDir" value="${work.dir}"/>
+      <param name="artworkPrefix" value="${artwork.dir}"/>
+      <param name="xep.failOnError" value="false"/>
+    </antcall>
+  </target>
+
+  <target name="transform.topic2fo">
+    <taskdef classname="com.idiominc.ws.opentopic.fo.index2.IndexPreprocessorTask"
+             name="index-preprocess" classpathref="project.class.path"/>
+    <taskdef classname="com.idiominc.ws.opentopic.fo.i18n.PreprocessorTask" name="i18n-preprocess"
+             classpathref="project.class.path"/>
+    <taskdef name="dita-version" classname="com.idiominc.ws.opentopic.xsl.extension.DitaVersion"
+             classpathref="project.class.path"/>
+    <taskdef name="detect-lang" classname="com.suite.sol.ditaot.DetectLang"
+             classpathref="project.class.path"/>
+
+    <dita-version documentPath="${inputFile}"/>
+
+    <!-- Set document.locale from xml:lang -->
+    <!-- The map takes precedence, followed by the first topic -->
+    <detect-lang documentPath="${inputFile}"/>
+
+    <condition property="document.locale" value="en_US">
+      <not><isset property="document.locale"/></not>
     </condition>
 
-    <property name="artwork.dir" value="${dita.map.output.dir}"/>
-    <property name="disableRelatedLinks" value="yes"/>
-    
-    <condition property="file.protocol.prefix" value="file://">
-        <os family="unix"/>
+    <!-- WS runtime properties -->
+    <property file="${cfg.common.dir}/properties/${document.locale}.properties"/>
+
+    <condition property="document.language" value="en">
+      <not><isset property="document.language"/></not>
+    </condition>
+    <echo level="info">Using document.locale=${document.locale}</echo>
+
+    <condition property="formatter.specific.ext" value="_axf">
+      <equals arg1="ah" arg2="${pdf.formatter}"/>
+    </condition>
+    <condition property="formatter.specific.ext" value="_xep">
+      <and>
+        <not><isset property="formatter.specific.ext"/></not>
+        <equals arg1="xep" arg2="${pdf.formatter}"/>
+      </and>
+    </condition>
+    <condition property="formatter.specific.ext" value="">
+      <not><isset property="formatter.specific.ext"/></not>
     </condition>
 
-    <condition property="file.protocol.prefix" value="file:/">
-        <not>
-            <isset property="file.protocol.prefix"/>
-        </not>
+    <condition property="args.bookmark.style" value="">
+      <not><isset property="args.bookmark.style"/></not>
     </condition>
 
-    <property name="xml.catalog.files" value="${customization.dir}/catalog.xml;${basedir}/cfg/catalog.xml"/>
-    
-    <property name="xsl.dir" value="${basedir}/xsl"/>
-    <property name="xsl.fo.dir" value="${basedir}/xsl/fo"/>
-    <property name="xsl.fo.diff.dir" value="${basedir}/xsl/fo/diff"/>
-    <property name="xsl.common.dir" value="${basedir}/xsl/common"/>
-    <property name="cfg.dir" value="${basedir}/cfg"/>
-    <property name="cfg.fo.dir" value="${basedir}/cfg/fo"/>
-    <property name="cfg.common.dir" value="${basedir}/cfg/common"/>
-    <property name="dtd.dir" value="${basedir}/dtd"/>
+    <condition property="args.chapter.layout" value="">
+      <not><isset property="args.chapter.layout"/></not>
+    </condition>
 
-	<property name="saxon.resolver.command.line" value="-warnings:silent -x:org.apache.xml.resolver.tools.ResolvingXMLReader -y:org.apache.xml.resolver.tools.ResolvingXMLReader -r:org.apache.xml.resolver.tools.CatalogResolver"/>
+    <condition property="args.fo.include.rellinks" value="">
+      <not><isset property="args.fo.include.rellinks"/></not>
+    </condition>
 
-    <path id="project.class.path">
-        <pathelement path="${java.class.path}"/>
-    	<fileset dir="${lib.dir}/saxon">
-    	   <include name="**/*.jar"/>
-    	</fileset>
+    <condition property="args.draft" value="no">
+      <not><isset property="args.draft"/></not>
+    </condition>
 
-    	<!--
-        <pathelement location="${lib.dir}/xml-apis.jar"/>
-        <pathelement location="${lib.dir}/xercesImpl.jar"/>
-        -->
-        <pathelement location="${lib.dir}/resolver.jar"/>
-        <pathelement location="${lib.dir}/icu4j.jar"/>        
-        <pathelement location="${fo.lib.dir}/fo.jar"/>
-    </path>
+    <condition property="publish.required.cleanup" value="${args.draft}">
+      <and>
+        <not><isset property="publish.required.cleanup"/></not>
+        <isset property="args.draft"/>
+      </and>
+    </condition>
 
-    <target name="preview.topic.pdf">
-        <antcall target="transform.topic2pdf">
-            <param name="inputFile" value="${work.dir}/${user.input.file}"/>
-            <param name="outputFile" 
-                value="${dita.map.output.dir}/${dita.topic.filename.root}.pdf"/>
-            <param name="buildDir" value="${work.dir}"/>
-            <param name="artworkPrefix" value="${artwork.dir}"/>
-            <param name="xep.failOnError" value="false"/>
-        </antcall>
-    </target>
-    
-    <target name="publish.map.pdf">
-      <echo level="info" message="current target:publish.map.pdf"/>
-    	<!--
-    	<echo level="info" message="dita.temp.dir=${dita.temp.dir} work.dir=${work.dir}"/>
-    	<echo level="info" message="dita.dir=${dita.dir}"/>
-    	<echo level="info" message="basedir=${basedir}"/>
-    	-->
-        <antcall target="transform.topic2pdf">
-            <param name="inputFile" value="${work.dir}/${merged.file}"/>
-            <param name="outputFile" 
-                value="${dita.map.output.dir}/${dita.map.filename.root}.pdf"/>
-            <param name="buildDir" value="${work.dir}"/>
-            <param name="artworkPrefix" value="${artwork.dir}"/>
-            <param name="xep.failOnError" value="false"/>
-        </antcall>
-    </target>
+    <condition property="args.gen.task.lbl" value="">
+      <not><isset property="args.gen.task.lbl"/></not>
+    </condition>
+    <!-- use customized xsl file for pdf transform.-->
+    <condition property="temp.transformation.file" value="${args.xsl.pdf}">
+      <and>
+        <isset property="args.xsl.pdf"/>
+        <available file="${args.xsl.pdf}" type="file"/>
+      </and>
+    </condition>
+    <condition property="temp.transformation.file" value="${caller.dir}/${args.xsl.pdf}">
+      <and>
+        <not><isset property="temp.transformation.file"/></not>
+        <isset property="args.xsl.pdf"/>
+      </and>
+    </condition>
 
-    <target name="transform.topic2fo">
-        <taskdef classname="com.idiominc.ws.opentopic.fo.index2.IndexPreprocessorTask" name="index-preprocess"
-            classpathref="project.class.path"/>
-        <taskdef classname="com.idiominc.ws.opentopic.fo.i18n.PreprocessorTask" name="i18n-preprocess"
-            classpathref="project.class.path"/>
-        <taskdef name="dita-version" classname="com.idiominc.ws.opentopic.xsl.extension.DitaVersion"
-            classpathref="project.class.path"/>
-        <taskdef name="detect-lang" classname="com.suite.sol.ditaot.DetectLang"
-            classpathref="project.class.path"/>
+    <condition property="temp.transformation.file" value="${xsl.fo.dir}/topic2fo_shell_1.0${formatter.specific.ext}.xsl">
+      <and>
+        <not><isset property="temp.transformation.file"/></not>
+        <or>
+          <equals arg1="${ws.runtime.publishing.map.dita.version}" arg2="1.0"/>
+          <equals arg1="${ws.runtime.publishing.map.dita.version}" arg2="1.1"/>
+          <equals arg1="${ws.runtime.publishing.map.dita.version}" arg2="1.2"/>
+        </or>
+      </and>
+    </condition>
+    <condition property="temp.transformation.file" value="${xsl.fo.dir}/topic2fo_shell${formatter.specific.ext}.xsl">
+      <not><isset property="temp.transformation.file"/></not>
+    </condition>
 
-        <dita-version documentPath="${inputFile}"/>
+    <condition property="index.config.file" value="${customization.dir}/common/index/${document.locale}.xml">
+      <and>
+        <not><isset property="index.config.file"/></not>
+        <available file="${customization.dir}/common/index/${document.locale}.xml"/>
+      </and>
+    </condition>
+    <condition property="index.config.file" value="${cfg.dir}/common/index/${document.locale}.xml">
+      <and>
+        <not><isset property="index.config.file"/></not>
+        <available file="${cfg.dir}/common/index/${document.locale}.xml"/>
+      </and>
+    </condition>
+    <condition property="index.config.file" value="${customization.dir}/common/index/${document.language}.xml">
+      <and>
+        <not><isset property="index.config.file"/></not>
+        <available file="${customization.dir}/common/index/${document.language}.xml"/>
+      </and>
+    </condition>
+    <condition property="index.config.file" value="${cfg.dir}/common/index/${document.language}.xml">
+      <and>
+        <not><isset property="index.config.file"/></not>
+        <available file="${cfg.dir}/common/index/${document.language}.xml"/>
+      </and>
+    </condition>
 
-        <!-- Set document.locale from xml:lang -->
-        <!-- The map takes precedence, followed by the first topic -->
-        <detect-lang documentPath="${inputFile}"/>
+    <index-preprocess input="${inputFile}" output="${buildDir}/stage1.xml"
+                      indexConfig="${index.config.file}" locale="${document.locale}"
+                      catalogs="${xml.catalog.files}"/> 
 
-        <condition property="document.locale" value="en_US">
-            <not><isset property="document.locale"></isset></not>
-        </condition>
-      
-        <!-- WS runtime properties -->
-        <property file="${cfg.common.dir}/properties/${document.locale}.properties"/>
+    <!--makeurl seems to output file:/C: style instead of file:///C:, but xep, fop, and ah all accept it.-->
+    <makeurl property="artworkPrefixUrl" file="${artworkPrefix}"/>
+    <makeurl property="dita.map.output.dir.url" file="${dita.map.output.dir}" validate="no"/>
+    <makeurl property="work.dir.url" file="${buildDir}" validate="no"/>
 
-        <condition property="document.language" value="en">
-            <not><isset property="document.language"></isset></not>
-        </condition>
-        <echo level="info">Using document.locale=${document.locale}</echo>
+    <!--Decide which version of saxon to use.-->
+    <available classname="net.sf.saxon.Transform" property="fo.saxon.classname"
+               value="net.sf.saxon.Transform" classpathref="project.class.path"/>
+    <property name="fo.saxon.classname" value="com.icl.saxon.StyleSheet"/>
 
-        <condition property="formatter.specific.ext" value="_axf">
-            <equals arg1="ah" arg2="${pdf.formatter}"/>
-        </condition>
-        <condition property="formatter.specific.ext" value="_xep">
-          <and>
-            <not><isset property="formatter.specific.ext"/></not>
-            <equals arg1="xep" arg2="${pdf.formatter}"/>
-          </and>
-        </condition>
-        <condition property="formatter.specific.ext" value="">
-            <not><isset property="formatter.specific.ext"></isset></not>
-        </condition>
+    <java classname="${fo.saxon.classname}" classpathref="project.class.path" fork="true">
+      <arg line='-o "${buildDir}/stage1a.xml"'/>
+      <arg line="${saxon.resolver.command.line}"/>
+      <arg line='"${buildDir}/stage1.xml"'/>
+      <arg line='"${xsl.fo.dir}/flagging-preprocess.xsl"'/>
+      <arg line='"filterFile=${dita.input.valfile}"'/>
+      <sysproperty key="xml.catalog.files" value="${xml.catalog.files}"/>
+    </java>
 
-        <condition property="args.bookmark.style" value="">
-            <not><isset property="args.bookmark.style"></isset></not>
-        </condition>
+    <!-- must fork or catalog resolution will fail due to sharing of -->
+    <!-- resolver and catalogs with the Open Toolkit -->
+    <echo level="info" message="Java maximum memory=${maxJavaMemory}"/>
+    <java classname="${fo.saxon.classname}" classpathref="project.class.path" fork="true"
+          maxmemory="${maxJavaMemory}">
+      <jvmarg line="${baseJVMArgLine}"/>
+      <arg line='-o:"${buildDir}/stage2.fo"'/>
+      <arg line="${saxon.resolver.command.line}"/>
+      <arg line='"${buildDir}/stage1a.xml"'/>
+      <arg line='"${temp.transformation.file}"'/>
+      <arg line='"locale=${document.locale}"'/>
+      <arg line='"customizationDir=${customization.dir}"'/>
+      <arg line='"DRAFT=${args.draft}"'/>
+      <arg line='"output.dir.url=${dita.map.output.dir.url}"'/>
+      <arg line='"work.dir.url=${work.dir.url}"'/>
+      <arg line='"artworkPrefix=${artworkPrefixUrl}"'/>
+      <arg line='"fileProtocolPrefix=${file.protocol.prefix}"'/>
+      <arg line='"publishRequiredCleanup=${publish.required.cleanup}"'/>
+      <arg line='"disableRelatedLinks=${disableRelatedLinks}"'/>
+      <arg line='"antArgsBookmarkStyle=${args.bookmark.style}"'/>
+      <arg line='"antArgsChapterLayout=${args.chapter.layout}"'/>
+      <arg line='"antArgsIncludeRelatedLinks=${args.fo.include.rellinks}"'/>
+      <arg line='"antArgsGenerateTaskLabels=${args.gen.task.lbl}"'/>
+      <arg line='"pdfFormatter=${pdf.formatter}"'/>
+      <sysproperty key="xml.catalog.files" value="${xml.catalog.files}"/>
+    </java>
 
-        <condition property="args.chapter.layout" value="">
-            <not><isset property="args.chapter.layout"></isset></not>
-        </condition>
+    <condition property="i18n.config.file" value="${customization.dir}/fo/i18n/${document.locale}.xml">
+      <and>
+        <not><isset property="i18n.config.file"/></not>
+        <available file="${customization.dir}/fo/i18n/${document.locale}.xml"/>
+      </and>
+    </condition>
+    <condition property="i18n.config.file" value="${cfg.fo.dir}/i18n/${document.locale}.xml">
+      <and>
+        <not><isset property="i18n.config.file"/></not>
+        <available file="${cfg.fo.dir}/i18n/${document.locale}.xml"/>
+      </and>
+    </condition>
+    <condition property="i18n.config.file" value="${customization.dir}/fo/i18n/${document.language}.xml">
+      <and>
+        <not><isset property="i18n.config.file"/></not>
+        <available file="${customization.dir}/fo/i18n/${document.language}.xml"/>
+      </and>
+    </condition>
+    <condition property="i18n.config.file" value="${cfg.fo.dir}/i18n/${document.language}.xml">
+      <and>
+        <not><isset property="i18n.config.file"/></not>
+        <available file="${cfg.fo.dir}/i18n/${document.language}.xml"/>
+      </and>
+    </condition>
 
-        <condition property="args.fo.include.rellinks" value="">
-            <not><isset property="args.fo.include.rellinks"></isset></not>
-        </condition>
+    <i18n-preprocess input="${buildDir}/stage2.fo" output="${buildDir}/stage3.fo"
+                     config="${i18n.config.file}" catalogs="${xml.catalog.files}"/> 
 
-        <condition property="args.draft" value="no">
-            <not><isset property="args.draft"></isset></not>
-        </condition>
+    <java classname="${fo.saxon.classname}" classpathref="project.class.path" fork="true"
+          maxmemory="${maxJavaMemory}">
+      <jvmarg line="${baseJVMArgLine}"/>
+      <arg line='-o:"${outputFile}"'/>
+      <arg line="${saxon.resolver.command.line}"/>
+      <arg line='"${buildDir}/stage3.fo"'/>
+      <arg line='"${xsl.fo.dir}/i18n-postprocess.xsl"'/>
+      <sysproperty key="xml.catalog.files" value="${xml.catalog.files}"/>
+    </java>
+  </target>
 
-        <condition property="publish.required.cleanup" value="${args.draft}">
-          <and>
-            <not><isset property="publish.required.cleanup"/></not>
-            <isset property="args.draft"/>
-          </and>
-        </condition>
+  <target name="transform.topic2pdf">
+    <antcall target="copyCoreArtwork">
+      <param name="coreArtworkDestinationDir" value="${artwork.dir}"/>
+    </antcall>
 
-        <condition property="args.gen.task.lbl" value="">
-            <not><isset property="args.gen.task.lbl"></isset></not>
-        </condition>
-    	<!-- use customized xsl file for pdf transform.-->
-      <condition property="temp.transformation.file" value="${args.xsl.pdf}">
-        <and>
-          <isset property="args.xsl.pdf"/>
-          <available file="${args.xsl.pdf}" type="file"/>
-        </and>
-      </condition>
-    	<condition property="temp.transformation.file" value="${caller.dir}/${args.xsl.pdf}">
-    	  <and>
-    	    <not>
-    	      <isset property="temp.transformation.file"/>
-    	    </not>
-    	    <isset property="args.xsl.pdf"/>
-    	  </and>
-    	</condition>
-    	
-        <condition property="temp.transformation.file" value="${xsl.fo.dir}/topic2fo_shell_1.0${formatter.specific.ext}.xsl">
-    		<and>
-	        	<not>
-	    			<isset property="temp.transformation.file"/>
-	    		</not>
-	        	<or>
-		            <equals arg1="${ws.runtime.publishing.map.dita.version}" arg2="1.0"/>
-		            <equals arg1="${ws.runtime.publishing.map.dita.version}" arg2="1.1"/>
-		            <equals arg1="${ws.runtime.publishing.map.dita.version}" arg2="1.2"/>
-				</or>
-    	    </and>
-        </condition>
+    <!--Change path of ${inputFile} into url-->
+    <makeurl file="${inputFile}" property="inputfile.url" validate="true"/>
 
-        <condition property="temp.transformation.file" value="${xsl.fo.dir}/topic2fo_shell${formatter.specific.ext}.xsl">
-            <not>
-                <isset property="temp.transformation.file"/>
-            </not>
-        </condition>
-    	
-        <condition property="index.config.file" value="${customization.dir}/common/index/${document.locale}.xml">
-          <and>
-            <not><isset property="index.config.file"/></not>
-            <available file="${customization.dir}/common/index/${document.locale}.xml"/>
-          </and>
-        </condition>
-        <condition property="index.config.file" value="${cfg.dir}/common/index/${document.locale}.xml">
-          <and>
-            <not><isset property="index.config.file"/></not>
-            <available file="${cfg.dir}/common/index/${document.locale}.xml"/>
-          </and>
-        </condition>
-        <condition property="index.config.file" value="${customization.dir}/common/index/${document.language}.xml">
-          <and>
-            <not><isset property="index.config.file"/></not>
-            <available file="${customization.dir}/common/index/${document.language}.xml"/>
-          </and>
-        </condition>
-        <condition property="index.config.file" value="${cfg.dir}/common/index/${document.language}.xml">
-          <and>
-            <not><isset property="index.config.file"/></not>
-            <available file="${cfg.dir}/common/index/${document.language}.xml"/>
-          </and>
-        </condition>
-        
-        <index-preprocess
-            input="${inputFile}"
-            output="${buildDir}/stage1.xml"
-            indexConfig="${index.config.file}"
-            locale="${document.locale}"
-            catalogs="${xml.catalog.files}">
-        </index-preprocess>
-        
-        <!--makeurl seems to output file:/C: style instead of file:///C:, but
-            xep, fop, and ah all accept it.-->
-        <makeurl property="artworkPrefixUrl" file="${artworkPrefix}" />
-        <makeurl property="dita.map.output.dir.url" file="${dita.map.output.dir}" validate="no"/>
-        <makeurl property="work.dir.url" file="${buildDir}" validate="no"/>
+    <antcall target="transform.topic2fo">
+      <param name="inputFile" value="${inputfile.url}"/>
+      <param name="outputFile" value="${dita.map.output.dir}/topic.fo"/>
+      <param name="buildDir" value="${buildDir}"/>
+      <param name="artworkPrefix" value="${artworkPrefix}"/>
+      <param name="imageInfoFile" value="${imageInfoFile}"/>
+    </antcall>
 
-        <!--Decide which version of saxon to use.-->
-        <available classname="net.sf.saxon.Transform" property="fo.saxon.classname" value="net.sf.saxon.Transform" classpathref="project.class.path"/>
-        <property name="fo.saxon.classname" value="com.icl.saxon.StyleSheet"/>
-        
-        <java classname="${fo.saxon.classname}" classpathref="project.class.path" fork="true">
-            <arg line='-o "${buildDir}/stage1a.xml"'/>
-            <arg line="${saxon.resolver.command.line}"/>
-            <arg line='"${buildDir}/stage1.xml"'/>
-            <arg line='"${xsl.fo.dir}/flagging-preprocess.xsl"'/>
-            <arg line='"filterFile=${dita.input.valfile}"'/>
-            <sysproperty key="xml.catalog.files" value="${xml.catalog.files}"/>
-        </java>
-        
-    	<!-- must fork or catalog resolution will fail due to sharing of -->
-    	<!-- resolver and catalogs with the Open Toolkit -->
-        <echo level="info" message="Java maximum memory=${maxJavaMemory}"/>
-        <java classname="${fo.saxon.classname}" classpathref="project.class.path" fork="true"
-        	maxmemory="${maxJavaMemory}">
-        	  <jvmarg line="${baseJVMArgLine}"/>
-            <arg line='-o:"${buildDir}/stage2.fo"'/>
-            <arg line="${saxon.resolver.command.line}"/>
-            <arg line='"${buildDir}/stage1a.xml"'/>
-            <arg line='"${temp.transformation.file}"'/>
-            <arg line='"locale=${document.locale}"'/>
-            <arg line='"customizationDir=${customization.dir}"'/>
-            <arg line='"DRAFT=${args.draft}"'/>
-            <arg line='"output.dir.url=${dita.map.output.dir.url}"'/>
-            <arg line='"work.dir.url=${work.dir.url}"'/>
-            <arg line='"artworkPrefix=${artworkPrefixUrl}"'/>
-            <arg line='"fileProtocolPrefix=${file.protocol.prefix}"'/>
-            <arg line='"publishRequiredCleanup=${publish.required.cleanup}"'/>
-            <arg line='"disableRelatedLinks=${disableRelatedLinks}"'/>
-            <arg line='"antArgsBookmarkStyle=${args.bookmark.style}"'/>
-            <arg line='"antArgsChapterLayout=${args.chapter.layout}"'/>
-            <arg line='"antArgsIncludeRelatedLinks=${args.fo.include.rellinks}"'/>
-            <arg line='"antArgsGenerateTaskLabels=${args.gen.task.lbl}"'/>
-        	<arg line='"pdfFormatter=${pdf.formatter}"'/>
-            <sysproperty key="xml.catalog.files" value="${xml.catalog.files}"/>
-        </java>
+    <antcall target="transform.fo2pdf">
+      <param name="inputFile" value="${dita.map.output.dir}/topic.fo"/>
+      <param name="outputFile" value="${outputFile}"/>
+      <param name="xep.failOnError" value="${xep.failOnError}"/>
+    </antcall>
 
-        <condition property="i18n.config.file" value="${customization.dir}/fo/i18n/${document.locale}.xml">
-          <and>
-            <not><isset property="i18n.config.file"/></not>
-            <available file="${customization.dir}/fo/i18n/${document.locale}.xml"/>
-          </and>
-        </condition>
-        <condition property="i18n.config.file" value="${cfg.fo.dir}/i18n/${document.locale}.xml">
-          <and>
-            <not><isset property="i18n.config.file"/></not>
-            <available file="${cfg.fo.dir}/i18n/${document.locale}.xml"/>
-          </and>
-        </condition>
-        <condition property="i18n.config.file" value="${customization.dir}/fo/i18n/${document.language}.xml">
-          <and>
-            <not><isset property="i18n.config.file"/></not>
-            <available file="${customization.dir}/fo/i18n/${document.language}.xml"/>
-          </and>
-        </condition>
-        <condition property="i18n.config.file" value="${cfg.fo.dir}/i18n/${document.language}.xml">
-          <and>
-            <not><isset property="i18n.config.file"/></not>
-            <available file="${cfg.fo.dir}/i18n/${document.language}.xml"/>
-          </and>
-        </condition>
+    <antcall target="delete.fo2pdf.topic.fo"/>
+  </target>
 
-        <i18n-preprocess
-            input="${buildDir}/stage2.fo"
-            output="${buildDir}/stage3.fo"
-            config="${i18n.config.file}"
-            catalogs="${xml.catalog.files}">
-        </i18n-preprocess>
+  <target name="delete.fo2pdf.topic.fo" unless="retain.topic.fo">
+    <delete>
+      <!--Deleting the stage files isn't necessary, since it will be cleaned by clean-temp, and is useful for debugging.-->
+      <!--<fileset dir="${buildDir}" includes="stage?.*"/>-->
+      <fileset dir="${dita.map.output.dir}" includes="topic.fo"/>
+    </delete>
+  </target>
 
+  <target name="transform.fo2pdf">
+    <antcall target="transform.fo2pdf.xep">
+      <param name="inputFile" value="${dita.map.output.dir}/topic.fo"/>
+      <param name="outputFile" value="${outputFile}"/>
+      <param name="xep.failOnError" value="${xep.failOnError}"/>
+    </antcall>
+    <antcall target="transform.fo2pdf.ah">
+      <param name="inputFile" value="${dita.map.output.dir}/topic.fo"/>
+      <param name="outputFile" value="${outputFile}"/>
+    </antcall>
+    <antcall target="transform.fo2pdf.fop">
+      <param name="inputFile" value="${dita.map.output.dir}/topic.fo"/>
+      <param name="outputFile" value="${outputFile}"/>
+    </antcall>
+  </target>
 
-        <java classname="${fo.saxon.classname}" classpathref="project.class.path" fork="true"
-        	maxmemory="${maxJavaMemory}"
-				>
-      	  	<jvmarg line="${baseJVMArgLine}"/>
-            <arg line='-o:"${outputFile}"'/>
-            <arg line="${saxon.resolver.command.line}"/>
-            <arg line='"${buildDir}/stage3.fo"'/>
-            <arg line='"${xsl.fo.dir}/i18n-postprocess.xsl"'/>
-            <sysproperty key="xml.catalog.files" value="${xml.catalog.files}"/>
-        </java>
-    </target>
-
-    <target name="transform.topic2pdf">
-        <antcall target="copyCoreArtwork">
-            <param name="coreArtworkDestinationDir" value="${artwork.dir}"/>
-        </antcall>
-    	
-    	
-    	<!--Change path of ${inputFile} into url-->
-    	<makeurl file="${inputFile}" property="inputfile.url" validate="true"/>
-    	
-        <antcall target="transform.topic2fo">
-            <param name="inputFile" value="${inputfile.url}"/>
-            <param name="outputFile" value="${dita.map.output.dir}/topic.fo"/>
-            <param name="buildDir" value="${buildDir}"/>
-            <param name="artworkPrefix" value="${artworkPrefix}"/>
-            <param name="imageInfoFile" value="${imageInfoFile}"/>
-        </antcall>
-
-        <antcall target="transform.fo2pdf">
-            <param name="inputFile" value="${dita.map.output.dir}/topic.fo"/>
-            <param name="outputFile" value="${outputFile}"/>
-            <param name="xep.failOnError" value="${xep.failOnError}"/>
-        </antcall>
-    	
-    	<antcall target="delete.fo2pdf.topic.fo"/>
-    </target>
-
-    <target name="delete.fo2pdf.topic.fo" unless="retain.topic.fo">
-        <delete>
-            <!--Deleting the stage files isn't necessary, since it will be cleaned by
-                clean-temp, and is useful for debugging.-->
-            <!--<fileset dir="${buildDir}" includes="stage?.*"/>-->
-            <fileset dir="${dita.map.output.dir}" includes="topic.fo"/>
-        </delete>
-    </target>
-
-    <target name="transform.fo2pdf">
-        <antcall target="transform.fo2pdf.xep">
-            <param name="inputFile" value="${dita.map.output.dir}/topic.fo"/>
-            <param name="outputFile" value="${outputFile}"/>
-            <param name="xep.failOnError" value="${xep.failOnError}"/>
-        </antcall>
-        <antcall target="transform.fo2pdf.ah">
-            <param name="inputFile" value="${dita.map.output.dir}/topic.fo"/>
-            <param name="outputFile" value="${outputFile}"/>
-        </antcall>
-        <antcall target="transform.fo2pdf.fop">
-            <param name="inputFile" value="${dita.map.output.dir}/topic.fo"/>
-            <param name="outputFile" value="${outputFile}"/>
-        </antcall>
-    </target>
-
-    <target name="copyCoreArtwork">
-        <copy todir="${coreArtworkDestinationDir}/Configuration/OpenTopic"
-            failonerror="false">
-            <fileset dir="${basedir}" includes="cfg/common/artwork/**/*.*"/>
-        </copy>
-        <copy todir="${coreArtworkDestinationDir}/Customization/OpenTopic" 
-            failonerror="false">
-            <fileset dir="${customization.dir}" includes="common/artwork/**/*.*"/>
-        </copy>
-    </target>    
+  <target name="copyCoreArtwork">
+    <copy todir="${coreArtworkDestinationDir}/Configuration/OpenTopic" failonerror="false">
+      <fileset dir="${basedir}" includes="cfg/common/artwork/**/*.*"/>
+    </copy>
+    <copy todir="${coreArtworkDestinationDir}/Customization/OpenTopic" failonerror="false">
+      <fileset dir="${customization.dir}" includes="common/artwork/**/*.*"/>
+    </copy>
+  </target>
 
 </project>

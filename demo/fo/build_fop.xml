@@ -26,9 +26,7 @@
     <dita-ot-fail id="DOTA010E">
       <condition>
         <and>
-          <not>
-            <isset property="hasFopLib"/>
-          </not>
+          <not><isset property="hasFopLib"/></not>
           <isset property="use.fop.pdf.formatter"/>
         </and>
       </condition>
@@ -52,8 +50,8 @@
       </classpath>
     </taskdef>
     <fop format="application/pdf" fofile="${inputFile}" basedir="${dita.map.output.dir}"
-      outfile="${outputFile}" messagelevel="info" relativebase="true" force="true"
-      userconfig="${fop.home}/conf/fop.xconf"/>
+         outfile="${outputFile}" messagelevel="info" relativebase="true" force="true"
+         userconfig="${fop.home}/conf/fop.xconf"/>
   </target>
 
 </project>

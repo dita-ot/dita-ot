@@ -11,9 +11,7 @@
     <isset property="custom.xep.config"/>
   </condition>
   <condition property="xep.config.file" value="${xep.dir}/xep.xml">
-    <not>
-      <isset property="custom.xep.config"/>
-    </not>
+    <not><isset property="custom.xep.config"/></not>
   </condition>
 
   <path id="xep.class.path">
@@ -31,9 +29,7 @@
       <sysproperty key="com.renderx.xep.CONFIG" value="${xep.config.file}"/>
     </java>
     <condition property="xepExitedOnError" value="true">
-      <not>
-        <equals arg1="${errCode}" arg2="0"/>
-      </not>
+      <not><equals arg1="${errCode}" arg2="0"/></not>
     </condition>
   </target>
 
