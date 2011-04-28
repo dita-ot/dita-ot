@@ -35,6 +35,9 @@ with those set forth herein.
   <property name="customization.dir" value="${basedir}/Customization"/>
   <property file="${customization.dir}/build.properties"/>
 
+  <property name="default.locale" value="en_US"/>
+  <property name="default.language" value="en"/>
+
   <property name="ot.dir" value="${basedir}/../.."/>
   <property name="lib.dir" value="${ot.dir}/lib"/>
   <property name="fo.lib.dir" value="${basedir}/lib"/>
@@ -150,14 +153,14 @@ with those set forth herein.
     <!-- The map takes precedence, followed by the first topic -->
     <detect-lang documentPath="${inputFile}"/>
 
-    <condition property="document.locale" value="en_US">
+    <condition property="document.locale" value="${default.locale}">
       <not><isset property="document.locale"/></not>
     </condition>
 
     <!-- WS runtime properties -->
     <property file="${cfg.common.dir}/properties/${document.locale}.properties"/>
 
-    <condition property="document.language" value="en">
+    <condition property="document.language" value="${default.language}">
       <not><isset property="document.language"/></not>
     </condition>
     <echo level="info">Using document.locale=${document.locale}</echo>
@@ -253,6 +256,9 @@ with those set forth herein.
         <available file="${cfg.dir}/common/index/${document.language}.xml"/>
       </and>
     </condition>
+    <condition property="index.config.file" value="${cfg.dir}/common/index/${default.language}.xml">
+      <not><isset property="index.config.file"/></not>
+    </condition>
 
     <index-preprocess input="${inputFile}" output="${buildDir}/stage1.xml"
                       indexConfig="${index.config.file}" locale="${document.locale}"
@@ -327,6 +333,9 @@ with those set forth herein.
         <not><isset property="i18n.config.file"/></not>
         <available file="${cfg.fo.dir}/i18n/${document.language}.xml"/>
       </and>
+    </condition>
+    <condition property="i18n.config.file" value="${cfg.fo.dir}/i18n/${default.language}.xml">
+      <not><isset property="i18n.config.file"/></not>
     </condition>
 
     <i18n-preprocess input="${buildDir}/stage2.fo" output="${buildDir}/stage3.fo"
