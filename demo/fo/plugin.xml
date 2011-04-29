@@ -4,7 +4,7 @@
   <extension-point id="dita.xsl.xslfo" name="PDF XSLT import"/>
   <extension-point id="org.dita.pdf2.xsl.topicmerge" name="PDF2 topic merge XSLT import"/>
   <!-- extensions -->
-  <feature extension="dita.conductor.lib.import" value="fo.jar" type="file"/>
+  <feature extension="dita.conductor.lib.import" value="lib/fo.jar" type="file"/>
   <feature extension="dita.conductor.transtype.check" value="pdf2" type="pdf"/>
   <feature extension="dita.conductor.target" value="integrator.xml" type="file"/>
   <template file="xsl/fo/topic2fo_shell_template.xsl"/>
