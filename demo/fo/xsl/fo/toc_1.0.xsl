@@ -93,8 +93,12 @@ See the accompanying license.txt file for applicable licenses.
         </fo:page-sequence>
     </xsl:template>
 
+    <!-- FIXME: EXSLT functions in patters do not work with Saxon 9.1-9.3, but do work with Saxon 6.5 and Xalan 2.7.
+                Disable templates until code can be refactored to work with Saxon 9.*. -->
+    <!--
     <xsl:template match="*[contains(@class, ' topic/topic ')][opentopic-func:determineTopicType() = 'topicTocList']"  mode="toc" priority="10"/>
     <xsl:template match="*[contains(@class, ' topic/topic ')][opentopic-func:determineTopicType() = 'topicIndexList']"  mode="toc" priority="10"/>
+    -->
     
     <xsl:template match="ot-placeholder:glossarylist" mode="toc">
         <fo:block xsl:use-attribute-sets="__toc__indent__glossary">
