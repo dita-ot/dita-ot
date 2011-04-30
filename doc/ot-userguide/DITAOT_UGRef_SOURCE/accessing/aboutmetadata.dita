@@ -15,8 +15,8 @@ See the accompanying license.txt file for applicable licenses.
 			<copyrholder>VR Communications, Inc.</copyrholder>
 		</copyright>
 		<critdates>
-			<created date="2006-June-10"/>
-			<revised modified="2007-April-10"/>
+			<created date="2006-06-10"/>
+			<revised modified="2007-04-10"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -47,8 +47,8 @@ See the accompanying license.txt file for applicable licenses.
 &lt;copyrholder&gt;VR Communications, Inc.&lt;/copyrholder&gt;
 &lt;/copyright&gt;
 &lt;critdates&gt;
-&lt;created date="2006-June-10"/&gt;
-&lt;revised modified="2007-April-03"/&gt;
+&lt;created date="2006-06-10"/&gt;
+&lt;revised modified="2007-04-03"/&gt;
 &lt;/critdates&gt;
 &lt;metadata&gt;
 &lt;keywords&gt;
@@ -84,8 +84,8 @@ See the accompanying license.txt file for applicable licenses.
 <b>&lt;meta content="OASIS (Organization for the Advancement of Structured Information Standards)" name="DC.Publisher" /&gt;</b>
 &lt;meta name="copyright" content="VR Communications, Inc. 2007" type="primary" /&gt;
 <b>&lt;meta name="DC.Rights.Owner" content="VR Communications, Inc. 2007" type="primary" /&gt;</b>
-<b>&lt;meta content="2006-June-10" name="DC.Date.Created" /&gt;</b>
-<b>&lt;meta content="2007-April-03" name="DC.Date.Modified" /&gt;</b>
+<b>&lt;meta content="2006-06-10" name="DC.Date.Created" /&gt;</b>
+<b>&lt;meta content="2007-04-03" name="DC.Date.Modified" /&gt;</b>
 <b>&lt;meta content="XHTML" name="DC.Format" /&gt;</b>
 <b>&lt;meta content="aboutmetadata" name="DC.Identifier" /&gt;</b>
 &lt;link href="../CSS/commonltr.css" type="text/css" rel="stylesheet" /&gt;
