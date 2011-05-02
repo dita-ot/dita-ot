@@ -112,7 +112,7 @@ with those set forth herein.
   </path>
 
   <target name="preview.topic.pdf">
-    <antcall target="transform.topic2pdf">
+    <antcall target="transform.topic2pdf" inheritrefs="true">
       <param name="inputFile" value="${work.dir}/${user.input.file}"/>
       <param name="outputFile" value="${dita.map.output.dir}/${dita.topic.filename.root}.pdf"/>
       <param name="buildDir" value="${work.dir}"/>
@@ -128,7 +128,7 @@ with those set forth herein.
     <echo level="info" message="dita.dir=${dita.dir}"/>
     <echo level="info" message="basedir=${basedir}"/>
     -->
-    <antcall target="transform.topic2pdf">
+    <antcall target="transform.topic2pdf" inheritrefs="true">
       <param name="inputFile" value="${work.dir}/${merged.file}"/>
       <param name="outputFile" value="${dita.map.output.dir}/${dita.map.filename.root}.pdf"/>
       <param name="buildDir" value="${work.dir}"/>
@@ -274,14 +274,12 @@ with those set forth herein.
                value="net.sf.saxon.Transform" classpathref="project.class.path"/>
     <property name="fo.saxon.classname" value="com.icl.saxon.StyleSheet"/>
 
-    <java classname="${fo.saxon.classname}" classpathref="project.class.path" fork="true">
-      <arg line='-o "${buildDir}/stage1a.xml"'/>
-      <arg line="${saxon.resolver.command.line}"/>
-      <arg line='"${buildDir}/stage1.xml"'/>
-      <arg line='"${xsl.fo.dir}/flagging-preprocess.xsl"'/>
-      <arg line='"filterFile=${dita.input.valfile}"'/>
-      <sysproperty key="xml.catalog.files" value="${xml.catalog.files}"/>
-    </java>
+    <xslt in="${buildDir}/stage1.xml" out="${buildDir}/stage1a.xml" style="${xsl.fo.dir}/flagging-preprocess.xsl">
+      <param name="filterFile" expression="${dita.input.valfile}" if="dita.input.valfile"/>
+      <xmlcatalog>
+        <catalogpath path="${xml.catalog.files}"/>
+      </xmlcatalog>
+    </xslt>
 
     <!-- must fork or catalog resolution will fail due to sharing of -->
     <!-- resolver and catalogs with the Open Toolkit -->
@@ -341,15 +339,11 @@ with those set forth herein.
     <i18n-preprocess input="${buildDir}/stage2.fo" output="${buildDir}/stage3.fo"
                      config="${i18n.config.file}" catalogs="${xml.catalog.files}"/> 
 
-    <java classname="${fo.saxon.classname}" classpathref="project.class.path" fork="true"
-          maxmemory="${maxJavaMemory}">
-      <jvmarg line="${baseJVMArgLine}"/>
-      <arg line='-o:"${outputFile}"'/>
-      <arg line="${saxon.resolver.command.line}"/>
-      <arg line='"${buildDir}/stage3.fo"'/>
-      <arg line='"${xsl.fo.dir}/i18n-postprocess.xsl"'/>
-      <sysproperty key="xml.catalog.files" value="${xml.catalog.files}"/>
-    </java>
+    <xslt in="${buildDir}/stage3.fo" out="${outputFile}" style="${xsl.fo.dir}/i18n-postprocess.xsl">
+      <xmlcatalog>
+        <catalogpath path="${xml.catalog.files}"/>
+      </xmlcatalog>
+    </xslt>
   </target>
 
   <target name="transform.topic2pdf">
@@ -360,7 +354,7 @@ with those set forth herein.
     <!--Change path of ${inputFile} into url-->
     <makeurl file="${inputFile}" property="inputfile.url" validate="true"/>
 
-    <antcall target="transform.topic2fo">
+    <antcall target="transform.topic2fo" inheritrefs="true">
       <param name="inputFile" value="${inputfile.url}"/>
       <param name="outputFile" value="${dita.map.output.dir}/topic.fo"/>
       <param name="buildDir" value="${buildDir}"/>
@@ -368,7 +362,7 @@ with those set forth herein.
       <param name="imageInfoFile" value="${imageInfoFile}"/>
     </antcall>
 
-    <antcall target="transform.fo2pdf">
+    <antcall target="transform.fo2pdf" inheritrefs="true">
       <param name="inputFile" value="${dita.map.output.dir}/topic.fo"/>
       <param name="outputFile" value="${outputFile}"/>
       <param name="xep.failOnError" value="${xep.failOnError}"/>

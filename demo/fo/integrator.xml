@@ -14,7 +14,7 @@
   <target name="dita2pdf2" depends="dita-preprocess, map2pdf2, topic2pdf2"/>
 
   <target name="topic2pdf2" if="noMap" depends="dita-preprocess">
-    <ant dir="${dita.plugin.org.dita.pdf2.dir}" target="preview.topic.pdf">
+    <ant dir="${dita.plugin.org.dita.pdf2.dir}" target="preview.topic.pdf" inheritrefs="true">
       <property name="caller.dir" value="${basedir}"/>
     </ant>
   </target>
@@ -28,7 +28,7 @@
       <param name="style" location="${dita.plugin.org.dita.pdf2.dir}/xsl/common/topicmerge.xsl"/>
     </pipeline>
 
-    <ant dir="${dita.plugin.org.dita.pdf2.dir}" target="publish.map.pdf">
+    <ant dir="${dita.plugin.org.dita.pdf2.dir}" target="publish.map.pdf" inheritrefs="true">
       <property name="caller.dir" value="${basedir}"/>
     </ant>
   </target>
