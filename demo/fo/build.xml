@@ -137,11 +137,14 @@ with those set forth herein.
     </antcall>
   </target>
 
-  <target name="transform.topic2fo">
-    <taskdef classname="com.idiominc.ws.opentopic.fo.index2.IndexPreprocessorTask"
-             name="index-preprocess" classpathref="project.class.path"/>
-    <taskdef classname="com.idiominc.ws.opentopic.fo.i18n.PreprocessorTask" name="i18n-preprocess"
-             classpathref="project.class.path"/>
+  <target name="transform.topic2fo"
+          depends="transform.topic2fo.init,
+                   transform.topic2fo.index,
+                   transform.topic2fo.flagging,
+                   transform.topic2fo.main,
+                   transform.topic2fo.i18n"/>
+    
+  <target name="transform.topic2fo.init">
     <taskdef name="dita-version" classname="com.idiominc.ws.opentopic.xsl.extension.DitaVersion"
              classpathref="project.class.path"/>
     <taskdef name="detect-lang" classname="com.suite.sol.ditaot.DetectLang"
@@ -231,7 +234,12 @@ with those set forth herein.
     <condition property="temp.transformation.file" value="${xsl.fo.dir}/topic2fo_shell${formatter.specific.ext}.xsl">
       <not><isset property="temp.transformation.file"/></not>
     </condition>
+  </target>
 
+  <target name="transform.topic2fo.index">
+    <taskdef classname="com.idiominc.ws.opentopic.fo.index2.IndexPreprocessorTask"
+             name="index-preprocess" classpathref="project.class.path"/>
+    
     <condition property="index.config.file" value="${customization.dir}/common/index/${document.locale}.xml">
       <and>
         <not><isset property="index.config.file"/></not>
@@ -263,24 +271,34 @@ with those set forth herein.
     <index-preprocess input="${inputFile}" output="${buildDir}/stage1.xml"
                       indexConfig="${index.config.file}" locale="${document.locale}"
                       catalogs="${xml.catalog.files}"/> 
+  </target>
 
-    <!--makeurl seems to output file:/C: style instead of file:///C:, but xep, fop, and ah all accept it.-->
-    <makeurl property="artworkPrefixUrl" file="${artworkPrefix}"/>
-    <makeurl property="dita.map.output.dir.url" file="${dita.map.output.dir}" validate="no"/>
-    <makeurl property="work.dir.url" file="${buildDir}" validate="no"/>
-
-    <!--Decide which version of saxon to use.-->
-    <available classname="net.sf.saxon.Transform" property="fo.saxon.classname"
-               value="net.sf.saxon.Transform" classpathref="project.class.path"/>
-    <property name="fo.saxon.classname" value="com.icl.saxon.StyleSheet"/>
-
+  <target name="transform.topic2fo.flagging"
+          depends="transform.topic2fo.flagging.filter,
+                   transform.topic2fo.flagging.no-filter"/>
+  <target name="transform.topic2fo.flagging.filter" if="dita.input.valfile">
     <xslt in="${buildDir}/stage1.xml" out="${buildDir}/stage1a.xml" style="${xsl.fo.dir}/flagging-preprocess.xsl">
       <param name="filterFile" expression="${dita.input.valfile}" if="dita.input.valfile"/>
       <xmlcatalog>
         <catalogpath path="${xml.catalog.files}"/>
       </xmlcatalog>
     </xslt>
+  </target>
+  <target name="transform.topic2fo.flagging.no-filter" unless="dita.input.valfile">
+    <copy file="${buildDir}/stage1.xml" tofile="${buildDir}/stage1a.xml"/>
+  </target>  
 
+  <target name="transform.topic2fo.main">
+    <!--makeurl seems to output file:/C: style instead of file:///C:, but xep, fop, and ah all accept it.-->
+    <makeurl property="artworkPrefixUrl" file="${artworkPrefix}"/>
+    <makeurl property="dita.map.output.dir.url" file="${dita.map.output.dir}" validate="no"/>
+    <makeurl property="work.dir.url" file="${buildDir}" validate="no"/>
+    
+    <!--Decide which version of saxon to use.-->
+    <available classname="net.sf.saxon.Transform" property="fo.saxon.classname"
+               value="net.sf.saxon.Transform" classpathref="project.class.path"/>
+    <property name="fo.saxon.classname" value="com.icl.saxon.StyleSheet"/>
+    
     <!-- must fork or catalog resolution will fail due to sharing of -->
     <!-- resolver and catalogs with the Open Toolkit -->
     <echo level="info" message="Java maximum memory=${maxJavaMemory}"/>
@@ -307,7 +325,12 @@ with those set forth herein.
       <arg line='"pdfFormatter=${pdf.formatter}"'/>
       <sysproperty key="xml.catalog.files" value="${xml.catalog.files}"/>
     </java>
+  </target>
 
+  <target name="transform.topic2fo.i18n">
+    <taskdef classname="com.idiominc.ws.opentopic.fo.i18n.PreprocessorTask" name="i18n-preprocess"
+             classpathref="project.class.path"/>
+    
     <condition property="i18n.config.file" value="${customization.dir}/fo/i18n/${document.locale}.xml">
       <and>
         <not><isset property="i18n.config.file"/></not>
