@@ -5,7 +5,7 @@
 <!-- for Ant, the Saxon XSL parser, and the CLASSPATH before running this build file. 						-->
 <!-- Verify that the DITA-OT dost.jar file is in your system's CLASSPATH. 									-->
 
-<project name="antquickstartguide" default="pdf2" basedir=".">
+<project name="antquickstartguide" default="dita2pdf" basedir=".">
 	<!-- Set project-specific environment variables 														-->
 	<property environment = "env"/>
 	<!-- <property name="toolkit_dir" value="${env.DITA_DIR}" /> -->
@@ -41,7 +41,7 @@
 	<!-- The outer.control property suppresses certain trivial errors in the log.							--> 
 	<!-- <property name="outer.control" value="quiet" />	-->	
 
-	<target name="dita2pdf2">
+	<target name="dita2pdf">
 			<ant antfile="${DITA_DIR}/conductor.xml" target="init">
 				<property name="transtype" value="pdf2"/>
 				<property name="args.input" value="${MAP_file}"/>

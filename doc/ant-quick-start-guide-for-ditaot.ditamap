@@ -53,7 +53,9 @@
 <chapter href="quickstartguide/chapters/chapter2.dita">
 	<topicref format="dita" href="quickstartguide/concepts/about_antbuildfiles.dita" navtitle="Writing Your Own DITA-OT Build File" toc="yes" type="concept"/>
 	<topicref format="dita" href="quickstartguide/reference/dita-ot_ant_properties.dita" otherprops="ant" navtitle="DITA-OT XSL Processing Properties" toc="yes" type="reference"/>
-	<topicref format="dita" href="quickstartguide/tasks/generating_documents.dita" navtitle="Generating Documents with DITA-OT" toc="yes" type="task"/>
+	<topicref format="dita" href="quickstartguide/tasks/generating_documents.dita" navtitle="Generating Documents with Ant" toc="yes" type="task"/>
+	<topicref format="dita" href="quickstartguide/concepts/about_javacmdinterface.dita" navtitle="Generating Documents with Java" toc="yes" type="concept"/>
+	<topicref format="dita" href="quickstartguide/tasks/generating_documentswithjava.dita" navtitle="About the Java Command Line Interface" toc="yes" type="task"/>
 	<topicref format="dita" href="quickstartguide/tasks/using_DITAOTBuildLogger.dita" type="task" toc="yes"/>
 </chapter>
 <chapter href="quickstartguide/chapters/chapter3.dita" toc="yes">

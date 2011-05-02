@@ -1,12 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--Arbortext, Inc., 1988-2010, v.4002-->
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN"
  "task.dtd">
 <?Pub Sty _display FontColor="red"?>
 <task id="about_generatingdocuments" xml:lang="en-us">
-<title>Generating Documents with DITA-OT</title>
-<shortdesc>How to generate documents from the command line with DITA
-OT.    </shortdesc>
+<title>Generating Documents with Ant</title>
+<shortdesc>How to generate documents from the command line with Ant.    </shortdesc>
 <taskbody>
 <steps>
 <step><cmd>Open a command prompt.  		  </cmd></step>
