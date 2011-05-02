@@ -277,8 +277,15 @@ with those set forth herein.
           depends="transform.topic2fo.flagging.filter,
                    transform.topic2fo.flagging.no-filter"/>
   <target name="transform.topic2fo.flagging.filter" if="dita.input.valfile">
+    <condition property="_org.dita.pdf2.valfile" value="${dita.input.valfile}">
+      <available file="${dita.input.valfile}" type="file"/>
+    </condition>
+    <condition property="_org.dita.pdf2.valfile" value="${caller.dir}/${dita.input.valfile}">
+      <not><isset property="_org.dita.pdf2.valfile"/></not>
+    </condition>
+    <makeurl property="_org.dita.pdf2.valfile.url" file="${_org.dita.pdf2.valfile}" validate="no"/>
     <xslt in="${buildDir}/stage1.xml" out="${buildDir}/stage1a.xml" style="${xsl.fo.dir}/flagging-preprocess.xsl">
-      <param name="filterFile" expression="${dita.input.valfile}" if="dita.input.valfile"/>
+      <param name="filterFile" expression="${_org.dita.pdf2.valfile.url}"/>
       <xmlcatalog>
         <catalogpath path="${xml.catalog.files}"/>
       </xmlcatalog>
