@@ -16,6 +16,7 @@
   <target name="topic2pdf2" if="noMap" depends="dita-preprocess">
     <ant dir="${dita.plugin.org.dita.pdf2.dir}" target="preview.topic.pdf" inheritrefs="true">
       <property name="caller.dir" value="${basedir}"/>
+      <property name="work.dir" location="${dita.temp.dir}"/>
     </ant>
   </target>
 
@@ -30,6 +31,7 @@
 
     <ant dir="${dita.plugin.org.dita.pdf2.dir}" target="publish.map.pdf" inheritrefs="true">
       <property name="caller.dir" value="${basedir}"/>
+      <property name="work.dir" location="${dita.temp.dir}"/>
     </ant>
   </target>
 </project>
