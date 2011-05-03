@@ -26,7 +26,6 @@
     <condition property="xep.failOnError" value="false">
       <not><isset property="xep.failOnError"/></not>
     </condition>
-    <echo>xep.failOnError: ${xep.failOnError}</echo>
     
     <java classname="com.idiominc.ws.opentopic.fo.xep.Runner" resultproperty="errCode"
           failonerror="${xep.failOnError}" fork="true" maxmemory="${maxJavaMemory}">
