@@ -376,26 +376,17 @@ with those set forth herein.
     </xslt>
   </target>
 
-  <target name="transform.topic2pdf">
-    <antcall target="copyCoreArtwork">
-      <param name="coreArtworkDestinationDir" value="${artwork.dir}"/>
-    </antcall>
-
+  <target name="transform.topic2pdf" depends="copyCoreArtwork">
     <!--Change path of ${inputFile} into url-->
     <makeurl file="${inputFile}" property="inputfile.url" validate="true"/>
 
     <antcall target="transform.topic2fo" inheritrefs="true">
       <param name="inputFile" value="${inputfile.url}"/>
       <param name="outputFile" value="${dita.map.output.dir}/topic.fo"/>
-      <param name="buildDir" value="${buildDir}"/>
-      <param name="artworkPrefix" value="${artworkPrefix}"/>
-      <param name="imageInfoFile" value="${imageInfoFile}"/>
     </antcall>
 
     <antcall target="transform.fo2pdf" inheritrefs="true">
-      <param name="inputFile" value="${dita.map.output.dir}/topic.fo"/>
-      <param name="outputFile" value="${outputFile}"/>
-      <param name="xep.failOnError" value="${xep.failOnError}"/>
+      <!--param name="inputFile" value="${dita.map.output.dir}/topic.fo"/-->
     </antcall>
 
     <antcall target="delete.fo2pdf.topic.fo"/>
@@ -412,24 +403,20 @@ with those set forth herein.
   <target name="transform.fo2pdf">
     <antcall target="transform.fo2pdf.xep">
       <param name="inputFile" value="${dita.map.output.dir}/topic.fo"/>
-      <param name="outputFile" value="${outputFile}"/>
-      <param name="xep.failOnError" value="${xep.failOnError}"/>
     </antcall>
     <antcall target="transform.fo2pdf.ah">
       <param name="inputFile" value="${dita.map.output.dir}/topic.fo"/>
-      <param name="outputFile" value="${outputFile}"/>
     </antcall>
     <antcall target="transform.fo2pdf.fop">
       <param name="inputFile" value="${dita.map.output.dir}/topic.fo"/>
-      <param name="outputFile" value="${outputFile}"/>
     </antcall>
   </target>
 
   <target name="copyCoreArtwork">
-    <copy todir="${coreArtworkDestinationDir}/Configuration/OpenTopic" failonerror="false">
+    <copy todir="${artwork.dir}/Configuration/OpenTopic" failonerror="false">
       <fileset dir="${basedir}" includes="cfg/common/artwork/**/*.*"/>
     </copy>
-    <copy todir="${coreArtworkDestinationDir}/Customization/OpenTopic" failonerror="false">
+    <copy todir="${artwork.dir}/Customization/OpenTopic" failonerror="false">
       <fileset dir="${customization.dir}" includes="common/artwork/**/*.*"/>
     </copy>
   </target>
