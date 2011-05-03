@@ -49,7 +49,7 @@
         </fileset>
       </classpath>
     </taskdef>
-    <fop format="application/pdf" fofile="${inputFile}" basedir="${dita.map.output.dir}"
+    <fop format="application/pdf" fofile="${dita.map.output.dir}/topic.fo" basedir="${dita.map.output.dir}"
          outfile="${outputFile}" messagelevel="info" relativebase="true" force="true"
          userconfig="${fop.home}/conf/fop.xconf"/>
   </target>

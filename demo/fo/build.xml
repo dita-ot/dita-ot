@@ -150,11 +150,13 @@ with those set forth herein.
     <taskdef name="detect-lang" classname="com.suite.sol.ditaot.DetectLang"
              classpathref="project.class.path"/>
 
-    <dita-version documentPath="${inputFile}"/>
+    <makeurl file="${inputFile}" property="inputFile.url" validate="true"/>
+
+    <dita-version documentPath="${inputFile.url}"/>
 
     <!-- Set document.locale from xml:lang -->
     <!-- The map takes precedence, followed by the first topic -->
-    <detect-lang documentPath="${inputFile}"/>
+    <detect-lang documentPath="${inputFile.url}"/>
 
     <condition property="document.locale" value="${default.locale}">
       <not><isset property="document.locale"/></not>
@@ -268,7 +270,7 @@ with those set forth herein.
       <not><isset property="index.config.file"/></not>
     </condition>
 
-    <index-preprocess input="${inputFile}" output="${buildDir}/stage1.xml"
+    <index-preprocess input="${inputFile.url}" output="${buildDir}/stage1.xml"
                       indexConfig="${index.config.file}" locale="${document.locale}"
                       catalogs="${xml.catalog.files}"/> 
   </target>
@@ -369,7 +371,7 @@ with those set forth herein.
     <i18n-preprocess input="${buildDir}/stage2.fo" output="${buildDir}/stage3.fo"
                      config="${i18n.config.file}" catalogs="${xml.catalog.files}"/> 
 
-    <xslt in="${buildDir}/stage3.fo" out="${outputFile}" style="${xsl.fo.dir}/i18n-postprocess.xsl">
+    <xslt in="${buildDir}/stage3.fo" out="${dita.map.output.dir}/topic.fo" style="${xsl.fo.dir}/i18n-postprocess.xsl">
       <xmlcatalog>
         <catalogpath path="${xml.catalog.files}"/>
       </xmlcatalog>
@@ -377,17 +379,9 @@ with those set forth herein.
   </target>
 
   <target name="transform.topic2pdf" depends="copyCoreArtwork">
-    <!--Change path of ${inputFile} into url-->
-    <makeurl file="${inputFile}" property="inputfile.url" validate="true"/>
+    <antcall target="transform.topic2fo" inheritrefs="true"/>
 
-    <antcall target="transform.topic2fo" inheritrefs="true">
-      <param name="inputFile" value="${inputfile.url}"/>
-      <param name="outputFile" value="${dita.map.output.dir}/topic.fo"/>
-    </antcall>
-
-    <antcall target="transform.fo2pdf" inheritrefs="true">
-      <!--param name="inputFile" value="${dita.map.output.dir}/topic.fo"/-->
-    </antcall>
+    <antcall target="transform.fo2pdf" inheritrefs="true"/>
 
     <antcall target="delete.fo2pdf.topic.fo"/>
   </target>
@@ -401,15 +395,9 @@ with those set forth herein.
   </target>
 
   <target name="transform.fo2pdf">
-    <antcall target="transform.fo2pdf.xep">
-      <param name="inputFile" value="${dita.map.output.dir}/topic.fo"/>
-    </antcall>
-    <antcall target="transform.fo2pdf.ah">
-      <param name="inputFile" value="${dita.map.output.dir}/topic.fo"/>
-    </antcall>
-    <antcall target="transform.fo2pdf.fop">
-      <param name="inputFile" value="${dita.map.output.dir}/topic.fo"/>
-    </antcall>
+    <antcall target="transform.fo2pdf.xep"/>
+    <antcall target="transform.fo2pdf.ah"/>
+    <antcall target="transform.fo2pdf.fop"/>
   </target>
 
   <target name="copyCoreArtwork">

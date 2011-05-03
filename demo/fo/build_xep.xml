@@ -24,7 +24,7 @@
     <java classname="com.idiominc.ws.opentopic.fo.xep.Runner" resultproperty="errCode"
           failonerror="${xep.failOnError}" fork="true" maxmemory="${maxJavaMemory}">
       <jvmarg line="${baseJVMArgLine}"/>
-      <arg line="&quot;${inputFile}&quot; &quot;${outputFile}&quot; failOnError=${xep.failOnError}"/>
+      <arg line="&quot;${dita.map.output.dir}/topic.fo&quot; &quot;${outputFile}&quot; failOnError=${xep.failOnError}"/>
       <classpath refid="xep.class.path"/>
       <sysproperty key="com.renderx.xep.CONFIG" value="${xep.config.file}"/>
     </java>
