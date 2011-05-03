@@ -5,22 +5,29 @@
 <!-- (c) Copyright IBM Corp. 2011 All Rights Reserved. -->
 <project name="org.dita.pdf2.xep">
 
-  <property name="xep.dir" value="${fo.lib.dir}/xep"/>
-
-  <condition property="xep.config.file" value="${custom.xep.config}">
-    <isset property="custom.xep.config"/>
-  </condition>
-  <condition property="xep.config.file" value="${xep.dir}/xep.xml">
-    <not><isset property="custom.xep.config"/></not>
-  </condition>
-
-  <path id="xep.class.path">
-    <fileset dir="${xep.dir}/lib" includes="**/*.jar"/>
-    <pathelement location="${fo.lib.dir}/fo.jar"/>
-  </path>
+  <target name="transform.fo2pdf.xep.init">
+    <property name="xep.dir" value="${fo.lib.dir}/xep"/>
+  
+    <condition property="xep.config.file" value="${custom.xep.config}">
+      <isset property="custom.xep.config"/>
+    </condition>
+    <condition property="xep.config.file" value="${xep.dir}/xep.xml">
+      <not><isset property="custom.xep.config"/></not>
+    </condition>
+  
+    <path id="xep.class.path">
+      <fileset dir="${xep.dir}/lib" includes="**/*.jar"/>
+      <pathelement location="${fo.lib.dir}/fo.jar"/>
+    </path>
+  </target>
 
   <!-- run XEP -->
-  <target name="transform.fo2pdf.xep" if="use.xep.pdf.formatter">
+  <target name="transform.fo2pdf.xep" depends="transform.fo2pdf.xep.init" if="use.xep.pdf.formatter">
+    <condition property="xep.failOnError" value="false">
+      <not><isset property="xep.failOnError"/></not>
+    </condition>
+    <echo>xep.failOnError: ${xep.failOnError}</echo>
+    
     <java classname="com.idiominc.ws.opentopic.fo.xep.Runner" resultproperty="errCode"
           failonerror="${xep.failOnError}" fork="true" maxmemory="${maxJavaMemory}">
       <jvmarg line="${baseJVMArgLine}"/>

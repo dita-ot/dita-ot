@@ -111,7 +111,6 @@ with those set forth herein.
       <param name="inputFile" value="${work.dir}/${user.input.file}"/>
       <param name="outputFile" value="${dita.map.output.dir}/${dita.topic.filename.root}.pdf"/>
       <param name="artworkPrefix" value="${artwork.dir}"/>
-      <param name="xep.failOnError" value="false"/>
     </antcall>
   </target>
 
@@ -120,7 +119,6 @@ with those set forth herein.
       <param name="inputFile" value="${work.dir}/${merged.file}"/>
       <param name="outputFile" value="${dita.map.output.dir}/${dita.map.filename.root}.pdf"/>
       <param name="artworkPrefix" value="${artwork.dir}"/>
-      <param name="xep.failOnError" value="false"/>
     </antcall>
   </target>
 
