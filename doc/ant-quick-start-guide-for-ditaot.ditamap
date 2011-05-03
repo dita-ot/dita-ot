@@ -29,9 +29,10 @@
 <urls/>
 </organizationinfo>
 </authorinformation>
+<keywords><keyword>1.5.3</keyword><keyword>DITA Open Toolkit</keyword><keyword>Quick Start Guide</keyword><keyword>DITA-OT</keyword></keywords>
 <prodinfo>
 <prodname></prodname>
-<vrmlist><vrm release="GA" version="Version 1.5.2"/></vrmlist>
+<vrmlist><vrm version="1.5.3"/></vrmlist>
 </prodinfo>
 <bookid><bookpartno/><booknumber/><maintainer/></bookid>
 <bookrights><copyrfirst><year>
