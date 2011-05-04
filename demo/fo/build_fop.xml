@@ -5,7 +5,7 @@
 <!-- (c) Copyright IBM Corp. 2011 All Rights Reserved. -->
 <project name="org.dita.pdf2.fop">
 
-  <property name="fop.home" value="${basedir}/fop"/>
+  <property name="fop.home" value="${dita.plugin.org.dita.pdf2.dir}/fop"/>
 
   <!--Added by William on 2009-11-23 for bug:2893745 start -->
   <condition property="hasFopLib">

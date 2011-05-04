@@ -1,26 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
 
-  <!-- test to see where the fo plugin is located, plugins or demo -->
-  <!--
-  <available file="${dita.dir}/plugins/fo/build.xml" property="pdf2.dir" value="plugins"/>
-  <condition property="pdf2.dir" value="demo">
-    <not>
-      <isset property="pdf2.dir"/>
-    </not>
-  </condition>
-  -->
+  <import file="build.xml"/>
 
   <target name="dita2pdf2" depends="dita-preprocess, map2pdf2, topic2pdf2"/>
 
-  <target name="topic2pdf2" if="noMap" depends="dita-preprocess">
-    <ant dir="${dita.plugin.org.dita.pdf2.dir}" target="preview.topic.pdf" inheritrefs="true">
-      <property name="caller.dir" value="${basedir}"/>
-      <property name="work.dir" location="${dita.temp.dir}"/>
-    </ant>
+  <target name="topic2pdf2" if="noMap">
+    <antcall target="preview.topic.pdf"/>
   </target>
 
-  <target name="map2pdf2" unless="noMap" depends="dita-preprocess">
+  <target name="map2pdf2" unless="noMap">
     <dirname property="dita.temp.dir.fullpath" file="${dita.temp.dir}${file.separator}dummy.file"/>
     <pipeline message="topicmerge" module="TopicMerge"
               inputmap="${dita.temp.dir.fullpath}${file.separator}${user.input.file}"
@@ -28,10 +17,7 @@
       <param name="output" location="${dita.temp.dir.fullpath}${file.separator}${dita.map.filename.root}_MERGED.xml"/>
       <param name="style" location="${dita.plugin.org.dita.pdf2.dir}/xsl/common/topicmerge.xsl"/>
     </pipeline>
-
-    <ant dir="${dita.plugin.org.dita.pdf2.dir}" target="publish.map.pdf" inheritrefs="true">
-      <property name="caller.dir" value="${basedir}"/>
-      <property name="work.dir" location="${dita.temp.dir}"/>
-    </ant>
+    <antcall target="publish.map.pdf"/>
   </target>
+  
 </project>

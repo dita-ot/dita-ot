@@ -6,7 +6,7 @@
   <!-- extensions -->
   <feature extension="dita.conductor.lib.import" value="lib/fo.jar" type="file"/>
   <feature extension="dita.conductor.transtype.check" value="pdf2" type="pdf"/>
-  <feature extension="dita.conductor.target" value="integrator.xml" type="file"/>
+  <feature extension="dita.conductor.target.relative" value="integrator.xml" type="file"/>
   <template file="xsl/fo/topic2fo_shell_template.xsl"/>
   <template file="xsl/fo/topic2fo_shell_1.0_template.xsl"/>
   <template file="xsl/common/topicmerge_template.xsl"/>
