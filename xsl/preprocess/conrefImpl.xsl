@@ -1241,7 +1241,8 @@
         <xsl:when test="contains($ORIGINAL-DOMAINS,concat(' ',$testModule,')'))">
           <xsl:value-of select="$testElement"/>
         </xsl:when>
-        <xsl:when test="$testModule='topic' or $testElement='map'"><xsl:value-of select="$testElement"/></xsl:when>
+        <xsl:when test="$testModule='topic' or $testModule='map'"><xsl:value-of select="$testElement"/></xsl:when>
+        
       </xsl:choose>
     </xsl:otherwise>
   </xsl:choose>
