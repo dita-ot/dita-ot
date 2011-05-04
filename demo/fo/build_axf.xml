@@ -213,7 +213,7 @@
   <target name="transform.fo2pdf.ah.nooption" unless="has.axf.option">
     <exec executable="${axf.path}/${fo.ah.program.name}" resultproperty="errCode" logerror="true">
       <arg value="-d"/>
-      <arg value="${inputFile}"/>
+      <arg value="${dita.map.output.dir}/topic.fo"/>
       <arg value="-o"/>
       <arg value="${outputFile}"/>
       <arg value="-extlevel"/>
@@ -226,7 +226,7 @@
   <target name="transform.fo2pdf.ah.hasoption" if="has.axf.option">
     <exec executable="${axf.path}/${fo.ah.program.name}" resultproperty="errCode" logerror="true">
       <arg value="-d"/>
-      <arg value="${inputFile}"/>
+      <arg value="${dita.map.output.dir}/topic.fo"/>
       <arg value="-o"/>
       <arg value="${outputFile}"/>
       <arg value="-extlevel"/>

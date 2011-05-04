@@ -5,7 +5,7 @@
 <!-- (c) Copyright IBM Corp. 2011 All Rights Reserved. -->
 <project name="org.dita.pdf2.fop">
 
-  <property name="fop.home" value="${basedir}/fop"/>
+  <property name="fop.home" value="${dita.plugin.org.dita.pdf2.dir}/fop"/>
 
   <!--Added by William on 2009-11-23 for bug:2893745 start -->
   <condition property="hasFopLib">
@@ -49,7 +49,7 @@
         </fileset>
       </classpath>
     </taskdef>
-    <fop format="application/pdf" fofile="${inputFile}" basedir="${dita.map.output.dir}"
+    <fop format="application/pdf" fofile="${dita.map.output.dir}/topic.fo" basedir="${dita.map.output.dir}"
          outfile="${outputFile}" messagelevel="info" relativebase="true" force="true"
          userconfig="${fop.home}/conf/fop.xconf"/>
   </target>

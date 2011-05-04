@@ -28,130 +28,121 @@ with those set forth herein.
 -->
 <project name="dita.build" basedir=".">
   
-  <!--Added by William on 2009-11-23 for bug:2893745 start -->
-  <import file="../../build_init.xml"/>
-  <!--Added by William on 2009-11-23 for bug:2893745 end -->
+  <import file="${dita.plugin.org.dita.pdf2.dir}/build_fop.xml"/>
+  <import file="${dita.plugin.org.dita.pdf2.dir}/build_axf.xml"/>
+  <import file="${dita.plugin.org.dita.pdf2.dir}/build_xep.xml"/>
 
-  <property name="customization.dir" value="${basedir}/Customization"/>
-  <property file="${customization.dir}/build.properties"/>
-
-  <property name="default.locale" value="en_US"/>
-  <property name="default.language" value="en"/>
-
-  <property name="ot.dir" value="${basedir}/../.."/>
-  <property name="lib.dir" value="${ot.dir}/lib"/>
-  <property name="fo.lib.dir" value="${basedir}/lib"/>
-  <property name="merged.file" value="${dita.map.filename.root}_MERGED.xml"/>
-
-  <!-- configure FO engines -->
-  <!-- default is FOP.  Can be changed here, or with pdf.formatter property. -->
-  <property name="pdf.formatter" value="fop"/>
-
-  <import file="${basedir}/build_fop.xml"/>
-  <import file="${basedir}/build_axf.xml"/>
-  <import file="${basedir}/build_xep.xml"/>
-
-  <condition property="use.xep.pdf.formatter">
-    <equals arg1="${pdf.formatter}" arg2="xep"/>
-  </condition>
-  <condition property="use.ah.pdf.formatter">
-    <equals arg1="${pdf.formatter}" arg2="ah"/>
-  </condition>
-  <condition property="use.fop.pdf.formatter">
-    <not>
-      <or>
-        <isset property="use.xep.pdf.formatter"/>
-        <isset property="use.ah.pdf.formatter"/>
-      </or>
-    </not>
-  </condition>
-
-  <!-- dita.temp.dir can be an absolute or relative path. Handle both. -->
-  <available property="work.dir" value="${dita.temp.dir}" file="${dita.temp.dir}" type="dir"/>
-  <condition property="work.dir" value="${caller.dir}/${dita.temp.dir}">
-    <not><isset property="work.dir"/></not>
-  </condition>
-
-  <property name="artwork.dir" value="${dita.map.output.dir}"/>
-  <property name="disableRelatedLinks" value="yes"/>
-
-  <condition property="file.protocol.prefix" value="file://">
-    <os family="unix"/>
-  </condition>
-
-  <condition property="file.protocol.prefix" value="file:/">
-    <not><isset property="file.protocol.prefix"/></not>
-  </condition>
-
-  <property name="xml.catalog.files" value="${customization.dir}/catalog.xml;${basedir}/cfg/catalog.xml"/>
-
-  <property name="xsl.dir" value="${basedir}/xsl"/>
-  <property name="xsl.fo.dir" value="${basedir}/xsl/fo"/>
-  <property name="xsl.fo.diff.dir" value="${basedir}/xsl/fo/diff"/>
-  <property name="xsl.common.dir" value="${basedir}/xsl/common"/>
-  <property name="cfg.dir" value="${basedir}/cfg"/>
-  <property name="cfg.fo.dir" value="${basedir}/cfg/fo"/>
-  <property name="cfg.common.dir" value="${basedir}/cfg/common"/>
-  <property name="dtd.dir" value="${basedir}/dtd"/>
-
-  <property name="saxon.resolver.command.line"
-            value="-warnings:silent -x:org.apache.xml.resolver.tools.ResolvingXMLReader -y:org.apache.xml.resolver.tools.ResolvingXMLReader -r:org.apache.xml.resolver.tools.CatalogResolver"/>
-
-  <path id="project.class.path">
-    <pathelement path="${java.class.path}"/>
-    <fileset dir="${lib.dir}/saxon">
-      <include name="**/*.jar"/>
-    </fileset>
-    <!--
-    <pathelement location="${lib.dir}/xml-apis.jar"/>
-    <pathelement location="${lib.dir}/xercesImpl.jar"/>
-    -->
-    <pathelement location="${lib.dir}/resolver.jar"/>
-    <pathelement location="${lib.dir}/icu4j.jar"/>
-    <pathelement location="${fo.lib.dir}/fo.jar"/>
-  </path>
-
-  <target name="preview.topic.pdf">
-    <antcall target="transform.topic2pdf">
-      <param name="inputFile" value="${work.dir}/${user.input.file}"/>
-      <param name="outputFile" value="${dita.map.output.dir}/${dita.topic.filename.root}.pdf"/>
-      <param name="buildDir" value="${work.dir}"/>
-      <param name="artworkPrefix" value="${artwork.dir}"/>
-      <param name="xep.failOnError" value="false"/>
-    </antcall>
+  <target name="transform.topic2pdf.init">
+    <property name="customization.dir" value="${dita.plugin.org.dita.pdf2.dir}/Customization"/>
+    <property file="${customization.dir}/build.properties"/>
+    
+    <property name="default.locale" value="en_US"/>
+    <property name="default.language" value="en"/>
+    
+    <property name="ot.dir" value="${dita.plugin.org.dita.pdf2.dir}/../.."/>
+    <property name="lib.dir" value="${ot.dir}/lib"/>
+    <property name="fo.lib.dir" value="${dita.plugin.org.dita.pdf2.dir}/lib"/>
+    <property name="merged.file" value="${dita.map.filename.root}_MERGED.xml"/>
+    
+    <!-- configure FO engines -->
+    <!-- default is FOP.  Can be changed here, or with pdf.formatter property. -->
+    <property name="pdf.formatter" value="fop"/>
+    
+    <condition property="use.xep.pdf.formatter">
+      <equals arg1="${pdf.formatter}" arg2="xep"/>
+    </condition>
+    <condition property="use.ah.pdf.formatter">
+      <equals arg1="${pdf.formatter}" arg2="ah"/>
+    </condition>
+    <condition property="use.fop.pdf.formatter">
+      <not>
+        <or>
+          <isset property="use.xep.pdf.formatter"/>
+          <isset property="use.ah.pdf.formatter"/>
+        </or>
+      </not>
+    </condition>
+    
+    <property name="artwork.dir" value="${dita.map.output.dir}"/>
+    <property name="disableRelatedLinks" value="yes"/>
+    
+    <condition property="file.protocol.prefix" value="file://">
+      <os family="unix"/>
+    </condition>
+    
+    <condition property="file.protocol.prefix" value="file:/">
+      <not><isset property="file.protocol.prefix"/></not>
+    </condition>
+    
+    <property name="xml.catalog.files" value="${customization.dir}/catalog.xml;${dita.plugin.org.dita.pdf2.dir}/cfg/catalog.xml"/>
+    
+    <property name="xsl.dir" value="${dita.plugin.org.dita.pdf2.dir}/xsl"/>
+    <property name="xsl.fo.dir" value="${dita.plugin.org.dita.pdf2.dir}/xsl/fo"/>
+    <property name="xsl.fo.diff.dir" value="${dita.plugin.org.dita.pdf2.dir}/xsl/fo/diff"/>
+    <property name="xsl.common.dir" value="${dita.plugin.org.dita.pdf2.dir}/xsl/common"/>
+    <property name="cfg.dir" value="${dita.plugin.org.dita.pdf2.dir}/cfg"/>
+    <property name="cfg.fo.dir" value="${dita.plugin.org.dita.pdf2.dir}/cfg/fo"/>
+    <property name="cfg.common.dir" value="${dita.plugin.org.dita.pdf2.dir}/cfg/common"/>
+    <property name="dtd.dir" value="${dita.plugin.org.dita.pdf2.dir}/dtd"/>
+    
+    <property name="saxon.resolver.command.line"
+      value="-warnings:silent -x:org.apache.xml.resolver.tools.ResolvingXMLReader -y:org.apache.xml.resolver.tools.ResolvingXMLReader -r:org.apache.xml.resolver.tools.CatalogResolver"/>
+    
+    <path id="project.class.path">
+      <pathelement path="${java.class.path}"/>
+      <fileset dir="${lib.dir}/saxon">
+        <include name="**/*.jar"/>
+      </fileset>
+      <!--
+        <pathelement location="${lib.dir}/xml-apis.jar"/>
+        <pathelement location="${lib.dir}/xercesImpl.jar"/>
+      -->
+      <pathelement location="${lib.dir}/resolver.jar"/>
+      <pathelement location="${lib.dir}/icu4j.jar"/>
+      <pathelement location="${fo.lib.dir}/fo.jar"/>
+    </path>
   </target>
 
-  <target name="publish.map.pdf">
-    <echo level="info" message="current target:publish.map.pdf"/>
-    <!--
-    <echo level="info" message="dita.temp.dir=${dita.temp.dir} work.dir=${work.dir}"/>
-    <echo level="info" message="dita.dir=${dita.dir}"/>
-    <echo level="info" message="basedir=${basedir}"/>
-    -->
-    <antcall target="transform.topic2pdf">
-      <param name="inputFile" value="${work.dir}/${merged.file}"/>
-      <param name="outputFile" value="${dita.map.output.dir}/${dita.map.filename.root}.pdf"/>
-      <param name="buildDir" value="${work.dir}"/>
-      <param name="artworkPrefix" value="${artwork.dir}"/>
-      <param name="xep.failOnError" value="false"/>
-    </antcall>
+  <target name="preview.topic.pdf"
+          depends="transform.topic2pdf.init,
+                   preview.topic.pdf.init,
+                   transform.topic2pdf"/>
+  <target name="preview.topic.pdf.init">
+    <property name="inputFile" location="${dita.temp.dir}/${user.input.file}"/>
+    <property name="outputFile" location="${dita.map.output.dir}/${dita.topic.filename.root}.pdf"/>
+    <property name="artworkPrefix" value="${artwork.dir}"/>
   </target>
 
-  <target name="transform.topic2fo">
-    <taskdef classname="com.idiominc.ws.opentopic.fo.index2.IndexPreprocessorTask"
-             name="index-preprocess" classpathref="project.class.path"/>
-    <taskdef classname="com.idiominc.ws.opentopic.fo.i18n.PreprocessorTask" name="i18n-preprocess"
-             classpathref="project.class.path"/>
+  <target name="publish.map.pdf"
+          depends="transform.topic2pdf.init,
+                   publish.map.pdf.init,
+                   transform.topic2pdf"/>
+  <target name="publish.map.pdf.init">
+    <property name="inputFile" location="${dita.temp.dir}/${merged.file}"/>
+    <property name="outputFile" location="${dita.map.output.dir}/${dita.map.filename.root}.pdf"/>
+    <property name="artworkPrefix" value="${artwork.dir}"/>
+  </target>
+
+  <target name="transform.topic2fo"
+          depends="transform.topic2fo.init,
+                   transform.topic2fo.index,
+                   transform.topic2fo.flagging,
+                   transform.topic2fo.main,
+                   transform.topic2fo.i18n"/>
+    
+  <target name="transform.topic2fo.init">
     <taskdef name="dita-version" classname="com.idiominc.ws.opentopic.xsl.extension.DitaVersion"
              classpathref="project.class.path"/>
     <taskdef name="detect-lang" classname="com.suite.sol.ditaot.DetectLang"
              classpathref="project.class.path"/>
 
-    <dita-version documentPath="${inputFile}"/>
+    <makeurl file="${inputFile}" property="inputFile.url" validate="true"/>
+
+    <dita-version documentPath="${inputFile.url}"/>
 
     <!-- Set document.locale from xml:lang -->
     <!-- The map takes precedence, followed by the first topic -->
-    <detect-lang documentPath="${inputFile}"/>
+    <detect-lang documentPath="${inputFile.url}"/>
 
     <condition property="document.locale" value="${default.locale}">
       <not><isset property="document.locale"/></not>
@@ -211,7 +202,7 @@ with those set forth herein.
         <available file="${args.xsl.pdf}" type="file"/>
       </and>
     </condition>
-    <condition property="temp.transformation.file" value="${caller.dir}/${args.xsl.pdf}">
+    <condition property="temp.transformation.file" value="${dita.plugin.org.dita.pdf2.dir}/${args.xsl.pdf}">
       <and>
         <not><isset property="temp.transformation.file"/></not>
         <isset property="args.xsl.pdf"/>
@@ -231,7 +222,12 @@ with those set forth herein.
     <condition property="temp.transformation.file" value="${xsl.fo.dir}/topic2fo_shell${formatter.specific.ext}.xsl">
       <not><isset property="temp.transformation.file"/></not>
     </condition>
+  </target>
 
+  <target name="transform.topic2fo.index">
+    <taskdef classname="com.idiominc.ws.opentopic.fo.index2.IndexPreprocessorTask"
+             name="index-preprocess" classpathref="project.class.path"/>
+    
     <condition property="index.config.file" value="${customization.dir}/common/index/${document.locale}.xml">
       <and>
         <not><isset property="index.config.file"/></not>
@@ -260,38 +256,53 @@ with those set forth herein.
       <not><isset property="index.config.file"/></not>
     </condition>
 
-    <index-preprocess input="${inputFile}" output="${buildDir}/stage1.xml"
+    <index-preprocess input="${inputFile.url}" output="${dita.temp.dir}/stage1.xml"
                       indexConfig="${index.config.file}" locale="${document.locale}"
                       catalogs="${xml.catalog.files}"/> 
+  </target>
 
+  <target name="transform.topic2fo.flagging"
+          depends="transform.topic2fo.flagging.filter,
+                   transform.topic2fo.flagging.no-filter"/>
+  <target name="transform.topic2fo.flagging.filter" if="dita.input.valfile">
+    <condition property="_org.dita.pdf2.valfile" value="${dita.input.valfile}">
+      <available file="${dita.input.valfile}" type="file"/>
+    </condition>
+    <condition property="_org.dita.pdf2.valfile" value="${dita.plugin.org.dita.pdf2.dir}/${dita.input.valfile}">
+      <not><isset property="_org.dita.pdf2.valfile"/></not>
+    </condition>
+    <makeurl property="_org.dita.pdf2.valfile.url" file="${_org.dita.pdf2.valfile}" validate="no"/>
+    <xslt in="${dita.temp.dir}/stage1.xml" out="${dita.temp.dir}/stage1a.xml" style="${xsl.fo.dir}/flagging-preprocess.xsl">
+      <param name="filterFile" expression="${_org.dita.pdf2.valfile.url}"/>
+      <xmlcatalog>
+        <catalogpath path="${xml.catalog.files}"/>
+      </xmlcatalog>
+    </xslt>
+  </target>
+  <target name="transform.topic2fo.flagging.no-filter" unless="dita.input.valfile">
+    <copy file="${dita.temp.dir}/stage1.xml" tofile="${dita.temp.dir}/stage1a.xml"/>
+  </target>  
+
+  <target name="transform.topic2fo.main">
     <!--makeurl seems to output file:/C: style instead of file:///C:, but xep, fop, and ah all accept it.-->
     <makeurl property="artworkPrefixUrl" file="${artworkPrefix}"/>
     <makeurl property="dita.map.output.dir.url" file="${dita.map.output.dir}" validate="no"/>
-    <makeurl property="work.dir.url" file="${buildDir}" validate="no"/>
-
+    <makeurl property="work.dir.url" file="${dita.temp.dir}" validate="no"/>
+    
     <!--Decide which version of saxon to use.-->
     <available classname="net.sf.saxon.Transform" property="fo.saxon.classname"
                value="net.sf.saxon.Transform" classpathref="project.class.path"/>
     <property name="fo.saxon.classname" value="com.icl.saxon.StyleSheet"/>
-
-    <java classname="${fo.saxon.classname}" classpathref="project.class.path" fork="true">
-      <arg line='-o "${buildDir}/stage1a.xml"'/>
-      <arg line="${saxon.resolver.command.line}"/>
-      <arg line='"${buildDir}/stage1.xml"'/>
-      <arg line='"${xsl.fo.dir}/flagging-preprocess.xsl"'/>
-      <arg line='"filterFile=${dita.input.valfile}"'/>
-      <sysproperty key="xml.catalog.files" value="${xml.catalog.files}"/>
-    </java>
-
+    
     <!-- must fork or catalog resolution will fail due to sharing of -->
     <!-- resolver and catalogs with the Open Toolkit -->
     <echo level="info" message="Java maximum memory=${maxJavaMemory}"/>
     <java classname="${fo.saxon.classname}" classpathref="project.class.path" fork="true"
           maxmemory="${maxJavaMemory}">
       <jvmarg line="${baseJVMArgLine}"/>
-      <arg line='-o:"${buildDir}/stage2.fo"'/>
+      <arg line='-o:"${dita.temp.dir}/stage2.fo"'/>
       <arg line="${saxon.resolver.command.line}"/>
-      <arg line='"${buildDir}/stage1a.xml"'/>
+      <arg line='"${dita.temp.dir}/stage1a.xml"'/>
       <arg line='"${temp.transformation.file}"'/>
       <arg line='"locale=${document.locale}"'/>
       <arg line='"customizationDir=${customization.dir}"'/>
@@ -309,7 +320,12 @@ with those set forth herein.
       <arg line='"pdfFormatter=${pdf.formatter}"'/>
       <sysproperty key="xml.catalog.files" value="${xml.catalog.files}"/>
     </java>
+  </target>
 
+  <target name="transform.topic2fo.i18n">
+    <taskdef classname="com.idiominc.ws.opentopic.fo.i18n.PreprocessorTask" name="i18n-preprocess"
+             classpathref="project.class.path"/>
+    
     <condition property="i18n.config.file" value="${customization.dir}/fo/i18n/${document.locale}.xml">
       <and>
         <not><isset property="i18n.config.file"/></not>
@@ -338,74 +354,40 @@ with those set forth herein.
       <not><isset property="i18n.config.file"/></not>
     </condition>
 
-    <i18n-preprocess input="${buildDir}/stage2.fo" output="${buildDir}/stage3.fo"
+    <i18n-preprocess input="${dita.temp.dir}/stage2.fo" output="${dita.temp.dir}/stage3.fo"
                      config="${i18n.config.file}" catalogs="${xml.catalog.files}"/> 
 
-    <java classname="${fo.saxon.classname}" classpathref="project.class.path" fork="true"
-          maxmemory="${maxJavaMemory}">
-      <jvmarg line="${baseJVMArgLine}"/>
-      <arg line='-o:"${outputFile}"'/>
-      <arg line="${saxon.resolver.command.line}"/>
-      <arg line='"${buildDir}/stage3.fo"'/>
-      <arg line='"${xsl.fo.dir}/i18n-postprocess.xsl"'/>
-      <sysproperty key="xml.catalog.files" value="${xml.catalog.files}"/>
-    </java>
+    <xslt in="${dita.temp.dir}/stage3.fo" out="${dita.map.output.dir}/topic.fo" style="${xsl.fo.dir}/i18n-postprocess.xsl">
+      <xmlcatalog>
+        <catalogpath path="${xml.catalog.files}"/>
+      </xmlcatalog>
+    </xslt>
   </target>
 
-  <target name="transform.topic2pdf">
-    <antcall target="copyCoreArtwork">
-      <param name="coreArtworkDestinationDir" value="${artwork.dir}"/>
-    </antcall>
-
-    <!--Change path of ${inputFile} into url-->
-    <makeurl file="${inputFile}" property="inputfile.url" validate="true"/>
-
-    <antcall target="transform.topic2fo">
-      <param name="inputFile" value="${inputfile.url}"/>
-      <param name="outputFile" value="${dita.map.output.dir}/topic.fo"/>
-      <param name="buildDir" value="${buildDir}"/>
-      <param name="artworkPrefix" value="${artworkPrefix}"/>
-      <param name="imageInfoFile" value="${imageInfoFile}"/>
-    </antcall>
-
-    <antcall target="transform.fo2pdf">
-      <param name="inputFile" value="${dita.map.output.dir}/topic.fo"/>
-      <param name="outputFile" value="${outputFile}"/>
-      <param name="xep.failOnError" value="${xep.failOnError}"/>
-    </antcall>
-
-    <antcall target="delete.fo2pdf.topic.fo"/>
-  </target>
+  <target name="transform.topic2pdf"
+          depends="copyCoreArtwork,
+                   transform.topic2fo,
+                   transform.fo2pdf,
+                   delete.fo2pdf.topic.fo"/>
 
   <target name="delete.fo2pdf.topic.fo" unless="retain.topic.fo">
     <delete>
       <!--Deleting the stage files isn't necessary, since it will be cleaned by clean-temp, and is useful for debugging.-->
-      <!--<fileset dir="${buildDir}" includes="stage?.*"/>-->
+      <!--<fileset dir="${dita.temp.dir}" includes="stage?.*"/>-->
       <fileset dir="${dita.map.output.dir}" includes="topic.fo"/>
     </delete>
   </target>
 
-  <target name="transform.fo2pdf">
-    <antcall target="transform.fo2pdf.xep">
-      <param name="inputFile" value="${dita.map.output.dir}/topic.fo"/>
-      <param name="outputFile" value="${outputFile}"/>
-      <param name="xep.failOnError" value="${xep.failOnError}"/>
-    </antcall>
-    <antcall target="transform.fo2pdf.ah">
-      <param name="inputFile" value="${dita.map.output.dir}/topic.fo"/>
-      <param name="outputFile" value="${outputFile}"/>
-    </antcall>
-    <antcall target="transform.fo2pdf.fop">
-      <param name="inputFile" value="${dita.map.output.dir}/topic.fo"/>
-      <param name="outputFile" value="${outputFile}"/>
-    </antcall>
-  </target>
+  <target name="transform.fo2pdf"
+          depends="transform.fo2pdf.xep,
+                   transform.fo2pdf.ah,
+                   transform.fo2pdf.fop"/>
 
   <target name="copyCoreArtwork">
-    <copy todir="${coreArtworkDestinationDir}/Configuration/OpenTopic" failonerror="false">
-      <fileset dir="${basedir}" includes="cfg/common/artwork/**/*.*"/>
+    <copy todir="${artwork.dir}/Configuration/OpenTopic" failonerror="false">
+      <fileset dir="${dita.plugin.org.dita.pdf2.dir}" includes="cfg/common/artwork/**/*.*"/>
     </copy>
-    <copy todir="${coreArtworkDestinationDir}/Customization/OpenTopic" failonerror="false">
+    <copy todir="${artwork.dir}/Customization/OpenTopic" failonerror="false">
       <fileset dir="${customization.dir}" includes="common/artwork/**/*.*"/>
     </copy>
   </target>
