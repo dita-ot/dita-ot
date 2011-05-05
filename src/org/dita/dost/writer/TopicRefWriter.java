@@ -348,6 +348,10 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 			return null;
 		}
 		
+		if (fixpath!=null && attValue.startsWith(this.fixpath)){
+			attValue = attValue.substring(fixpath.length());
+		}
+		
 		if(changeTable==null)
 			return attValue;
 		
@@ -393,14 +397,6 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 			}
 			
 			
-			if (StringUtils.isEmptyString(changeTarget)) {
-				if (fixpath!=null && attValue.startsWith(this.fixpath)){
-					attValue = attValue.substring(fixpath.length());
-					changeTargetkey = FileUtils.resolveFile(currentFilePath,
-							attValue);
-					changeTarget = (String)changeTable.get(changeTargetkey);
-				}				
-			}
 			
 			if(!notTopicFormat(atts,attValue)){
 				if(changeTarget == null) {
