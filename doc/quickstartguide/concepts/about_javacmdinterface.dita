@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="about_generatingdocumentswithjava">
+	<title>About the Java Command Line Interface</title>
+	<shortdesc>Introduction to using generating documents with Java</shortdesc>
+	<conbody>
+	  <p>The DITA Open Toolkit provides a Java interface for organizations that automate their
+	  document as part of a Java build.  However, the Java interface is a wrapper for the Ant interface,
+	  so you still must install Ant.  In addition, only a subset of the Ant properties are supported by
+	  the Java interface.
+	  </p>
+	  <p>Three of the Java properties are required:</p>
+	  <ul> 
+	  <li><codeph>/i</codeph>:  defines the location of the .ditamap file for your document</li>
+	  <li><codeph>/outdir</codeph>: defines the director where the output resides after DITA-OT finishes processing your project</li>
+	  <li><codeph>/transtype</codeph>: defines the type of document you want to generate for the project.</li>
+	  </ul>
+	  <p>For example, the following command instructs DITA-OT to build the samples project as a PDF in the <codeph>out</codeph> directory:</p>
+    <p><codeblock>java -jar lib/dost.jar /i:samples/sequence.ditamap /outdir:out /transtype:pdf</codeblock></p>
+    <p>See <xref href="../reference/dita-ot_ant_properties.dita" scope="local">Ant Build Properties for DITA-OT</xref> for descriptions of all supported properties.</p>
+	</conbody>
+</concept>
