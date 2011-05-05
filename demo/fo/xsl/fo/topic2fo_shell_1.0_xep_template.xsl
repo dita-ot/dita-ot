@@ -6,11 +6,12 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.1">
   
-  <xsl:import href="topic2fo_shell_1.0.xsl"/>
+  <xsl:import href="topic2fo_1.0.xsl"/>
 
   <xsl:import href="../../cfg/fo/attrs/commons-attr_xep.xsl"/>
-  
-  <!-- Honor user custmization. Import them twice. -->
+
+  <dita:extension id="dita.xsl.xslfo" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+
   <xsl:import href="cfg:fo/attrs/custom.xsl"/>
   <xsl:import href="cfg:fo/xsl/custom.xsl"/>
   

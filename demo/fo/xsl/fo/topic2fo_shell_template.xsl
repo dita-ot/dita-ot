@@ -32,90 +32,13 @@ See the accompanying license.txt file for applicable licenses.
 -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:fo="http://www.w3.org/1999/XSL/Format"
-    xmlns:opentopic-i18n="http://www.idiominc.com/opentopic/i18n"
-    xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
-    xmlns:opentopic="http://www.idiominc.com/opentopic"
-    xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
-    exclude-result-prefixes="opentopic-index opentopic opentopic-i18n opentopic-func"
-    version="1.1">
+                version="1.1">
 
-    <xsl:import href="../common/attr-set-reflection.xsl"/>
-    <xsl:import href="../common/vars.xsl"/>
+    <xsl:import href="topic2fo.xsl"/>
 
-    <xsl:import href="../../cfg/fo/attrs/basic-settings.xsl"/>
-    <xsl:import href="../../cfg/fo/layout-masters.xsl"/>
-    <xsl:import href="../../cfg/fo/attrs/links-attr.xsl"/>
-    <xsl:import href="links.xsl"/>
-    <xsl:import href="../../cfg/fo/attrs/lists-attr.xsl"/>
-    <xsl:import href="lists.xsl"/>
-    <xsl:import href="../../cfg/fo/attrs/tables-attr.xsl"/>
-    <xsl:import href="tables.xsl"/>
-    <xsl:import href="root-processing.xsl"/>
-    <xsl:import href="../../cfg/fo/attrs/commons-attr.xsl"/>
-    <xsl:import href="commons.xsl"/>
-    <xsl:import href="../../cfg/fo/attrs/toc-attr.xsl"/>
-    <xsl:import href="toc.xsl"/>
-    <xsl:import href="bookmarks.xsl"/>
-    <xsl:import href="../../cfg/fo/attrs/index-attr.xsl"/>
-    <xsl:import href="index.xsl"/>
-    <xsl:import href="../../cfg/fo/attrs/front-matter-attr.xsl"/>
-    <xsl:import href="front-matter.xsl"/>
-    <xsl:import href="preface.xsl"/>
-
-    <xsl:import href="../../cfg/fo/attrs/task-elements-attr.xsl"/>
-    <xsl:import href="task-elements.xsl"/>
-
-    <xsl:import href="../../cfg/fo/attrs/sw-domain-attr.xsl"/>
-    <xsl:import href="sw-domain.xsl"/>
-    <xsl:import href="../../cfg/fo/attrs/pr-domain-attr.xsl"/>
-    <xsl:import href="pr-domain.xsl"/>
-    <xsl:import href="../../cfg/fo/attrs/hi-domain-attr.xsl"/>
-    <xsl:import href="hi-domain.xsl"/>
-    <xsl:import href="../../cfg/fo/attrs/ui-domain-attr.xsl"/>
-    <xsl:import href="ui-domain.xsl"/>
-
-    <xsl:import href="../../cfg/fo/attrs/static-content-attr.xsl"/>
-    <xsl:import href="static-content.xsl"/>
-    <xsl:import href="../../cfg/fo/attrs/glossary-attr.xsl"/>
-    <xsl:import href="glossary.xsl"/>
-    
-    <xsl:import href="flagging.xsl"/>
-    
     <dita:extension id="dita.xsl.xslfo" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
 
     <xsl:import href="cfg:fo/attrs/custom.xsl"/>
     <xsl:import href="cfg:fo/xsl/custom.xsl"/>
-
-    <xsl:strip-space elements="menucascade uicontrol"/>
-
-    <!-- Parameters in the following group are always passed in from Ant. -->
-    <xsl:param name="locale"/>
-    <xsl:param name="customizationDir"/>
-    <xsl:param name="artworkPrefix"/>
-    <xsl:param name="fileProtocolPrefix"/>
-    <xsl:param name="publishRequiredCleanup"/>
-    <xsl:param name="DRAFT"/>
-    <xsl:param name="output.dir.url"/>
-    <xsl:param name="work.dir.url"/>
-    <xsl:param name="disableRelatedLinks" select="'yes'"/>
-    <xsl:param name="pdfFormatter" select="'fop'"/>
-
-    <!-- Parameters in the following group are passed in from Ant only to
-         change defaults for related XSLT parameters. -->
-    <xsl:param name="antArgsBookmarkStyle"/>
-    <xsl:param name="antArgsChapterLayout"/>
-    <xsl:param name="antArgsIncludeRelatedLinks"/>
-    <xsl:param name="antArgsGenerateTaskLabels"/>
-
-    <!-- Remaining parameters are not passed in with the default Ant code. -->
-    <xsl:param name="tocMaximumLevel" select="4"/>
-    <xsl:param name="ditaVersion" select="'132'"/>
-
-    <xsl:output method="xml" encoding="utf-8" indent="no"/>
-
-    <xsl:template match="/">
-        <xsl:call-template name="rootTemplate"/>
-    </xsl:template>
 
 </xsl:stylesheet>
