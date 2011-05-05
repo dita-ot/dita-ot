@@ -6,6 +6,13 @@
 <project name="org.dita.pdf2.xep">
 
   <target name="transform.fo2pdf.xep.init">
+    <condition property="use.xep.pdf.formatter">
+      <equals arg1="${pdf.formatter}" arg2="xep"/>
+    </condition>
+  </target>
+
+  <!-- run XEP -->
+  <target name="transform.fo2pdf.xep" depends="transform.fo2pdf.xep.init" if="use.xep.pdf.formatter">
     <property name="xep.dir" value="${fo.lib.dir}/xep"/>
   
     <condition property="xep.config.file" value="${custom.xep.config}">
@@ -19,10 +26,7 @@
       <fileset dir="${xep.dir}/lib" includes="**/*.jar"/>
       <pathelement location="${fo.lib.dir}/fo.jar"/>
     </path>
-  </target>
 
-  <!-- run XEP -->
-  <target name="transform.fo2pdf.xep" depends="transform.fo2pdf.xep.init" if="use.xep.pdf.formatter">
     <condition property="xep.failOnError" value="false">
       <not><isset property="xep.failOnError"/></not>
     </condition>

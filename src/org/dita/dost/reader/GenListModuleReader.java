@@ -294,12 +294,6 @@ public final class GenListModuleReader extends AbstractXMLReader {
 			logger.logException(e1);
 		}
 		
-		try {
-			Class.forName(RESOLVER_CLASS);
-			reader.setEntityResolver(CatalogUtils.getCatalogResolver());
-		}catch (final ClassNotFoundException e){
-			reader.setEntityResolver(this);
-		}
 		
 	}
 
@@ -335,6 +329,13 @@ public final class GenListModuleReader extends AbstractXMLReader {
 		//Added on 2010-08-24 for bug:3086552 start
 		setSystemid= arg_setSystemid;
 		//Added on 2010-08-24 for bug:3086552 end
+		
+		try {
+			Class.forName(RESOLVER_CLASS);
+			reader.setEntityResolver(CatalogUtils.getCatalogResolver());
+		}catch (final ClassNotFoundException e){
+			reader.setEntityResolver(this);
+		}
 	}
 
 	/**

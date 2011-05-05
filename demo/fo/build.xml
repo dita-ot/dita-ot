@@ -48,21 +48,6 @@ with those set forth herein.
     <!-- default is FOP.  Can be changed here, or with pdf.formatter property. -->
     <property name="pdf.formatter" value="fop"/>
     
-    <condition property="use.xep.pdf.formatter">
-      <equals arg1="${pdf.formatter}" arg2="xep"/>
-    </condition>
-    <condition property="use.ah.pdf.formatter">
-      <equals arg1="${pdf.formatter}" arg2="ah"/>
-    </condition>
-    <condition property="use.fop.pdf.formatter">
-      <not>
-        <or>
-          <isset property="use.xep.pdf.formatter"/>
-          <isset property="use.ah.pdf.formatter"/>
-        </or>
-      </not>
-    </condition>
-    
     <property name="artwork.dir" value="${dita.map.output.dir}"/>
     <property name="disableRelatedLinks" value="yes"/>
     

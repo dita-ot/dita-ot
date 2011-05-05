@@ -106,6 +106,10 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:copy>
     </xsl:template>
 
+    <xsl:template match="fo:instream-foreign-object//opentopic-i18n:text-fragment" priority="100">
+      <xsl:apply-templates/>
+    </xsl:template>
+
     <xsl:template match="opentopic-i18n:text-fragment">
         <xsl:variable name="fontFace" select="ancestor::*[@font-family][not(@font-family = 'inherit')][1]/@font-family"/>
         <xsl:variable name="charSet" select="@char-set"/>

@@ -1081,6 +1081,11 @@ public final class Constants {
 	public static final String ATTR_CLASS_VALUE_ANCHORID = DELAY_D_ANCHORID.matcher;
 	//Added by William on 2009-06-24 for req #12014 end
 	
+	public static final String ATTR_CLASS_VALUE_ANCHOR = " map/anchor ";
+	public static final String ATTR_CLASS_VALUE_NAVREF = " map/navref ";
+	public static final String ATTR_CLASS_VALUE_DATE = " topic/data ";
+	public static final String ATTR_CLASS_VALUE_DATEABOUT = " topic/data-about ";
+	
 	//Added by William on 2009-12-21 for bug:2916469 start
 	/**ATTR_CLASS_VALUE_NAVTITLE.*/
 	public static final String ATTR_CLASS_VALUE_NAVTITLE = TOPIC_NAVTITLE.matcher;

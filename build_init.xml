@@ -159,18 +159,18 @@
   <tstamp>
     <format property="current.date" pattern="yyyyMMddHHmmssSSS"/>
   </tstamp>
-  <property name="base.temp.dir" value="temp"/>
-  <property name="dita.temp.dir" value="${base.temp.dir}${file.separator}temp${current.date}" />
-  <property name="output.dir" value="out" />
+  <property name="base.temp.dir" location="${basedir}/temp"/>
+  <property name="dita.temp.dir" location="${base.temp.dir}${file.separator}temp${current.date}" />
+  <property name="output.dir" location="${basedir}/out" />
   <property name="dita.extname" value="xml" />
   <property name="dita.script.dir"
-    value="${dita.dir}${file.separator}xsl" />
+    location="${dita.dir}${file.separator}xsl" />
   <property name="dita.resource.dir"
-    value="${dita.dir}${file.separator}resource" />
+    location="${dita.dir}${file.separator}resource" />
   <property environment="env" />
   <property name="dita.empty" value="" />
   <property name="args.message.file"
-    value="${dita.dir}${file.separator}resource${file.separator}messages.xml" />
+    location="${dita.dir}${file.separator}resource${file.separator}messages.xml" />
   <!-- property values end -->
 
   <!-- Changed by Alan to refacter:URIResolver Date2009-08-07 -->
