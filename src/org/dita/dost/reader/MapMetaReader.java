@@ -268,7 +268,8 @@ public final class MapMetaReader implements AbstractReader {
     				classAttr.getNodeValue().indexOf(ATTR_CLASS_VALUE_TOPICMETA) != -1 &&
     				hrefAttr != null && hrefAttr.getNodeValue().indexOf(INTERNET_LINK_MARK) == -1
             		&& (scopeAttr == null || ATTR_SCOPE_VALUE_LOCAL.equalsIgnoreCase(scopeAttr.getNodeValue()))
-            		&& (formatAttr == null || ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatAttr.getNodeValue()))
+            		&& ((formatAttr == null || ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatAttr.getNodeValue()))
+            		|| (formatAttr == null || ATTR_FORMAT_VALUE_DITAMAP.equalsIgnoreCase(formatAttr.getNodeValue())))
     				){
     			//if this node is topicmeta and the parent topicref refers to a valid dita topic
     			metaNode = node;
@@ -291,7 +292,7 @@ public final class MapMetaReader implements AbstractReader {
 			}
 			
 			//edited by william on 2009-08-06 for bug:2832696 start
-			if((formatAttr == null || ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatAttr.getNodeValue()))
+			if(((formatAttr == null || ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatAttr.getNodeValue()))||(formatAttr == null || ATTR_FORMAT_VALUE_DITAMAP.equalsIgnoreCase(formatAttr.getNodeValue())))
 				&&(scopeAttr == null || ATTR_SCOPE_VALUE_LOCAL.equalsIgnoreCase(scopeAttr.getNodeValue()))
 				&&(hrefAttr.getNodeValue().indexOf(INTERNET_LINK_MARK) == -1)){
 				if(resultTable.containsKey(topicPath)){
