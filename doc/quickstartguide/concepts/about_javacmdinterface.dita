@@ -18,5 +18,6 @@
 	  <p>For example, the following command instructs DITA-OT to build the samples project as a PDF in the <codeph>out</codeph> directory:</p>
     <p><codeblock>java -jar lib/dost.jar /i:samples/sequence.ditamap /outdir:out /transtype:pdf</codeblock></p>
     <p>See <xref href="../reference/dita-ot_ant_properties.dita" scope="local">Ant Build Properties for DITA-OT</xref> for descriptions of all supported properties.</p>
+    <note type="tip">The Java interface for DITA-OT does not currently support multiple threads. If your automated build script requires multi-threaded programming, you must use the Ant interface instead.</note>
 	</conbody>
 </concept>
