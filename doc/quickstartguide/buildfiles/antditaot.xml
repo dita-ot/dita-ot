@@ -22,8 +22,8 @@
 	<!-- generation. The directory is shared by all targets and all temp files are deleted by default.  Set   -->
 	<!-- the clean.temp property to "no" if you want to read the content of the temp files to debug an error. -->
 	
-	<property name="output.dir" value="../output"/>
-	<property name="outdir" value ="../output"/>
+	<property name="output.dir" location="../output"/>
+	<property name="outdir" location ="../output"/>
 	<property name="clean.temp" value="no"/>
 	
 	<!-- The Apache FOP formatter does not support indexing for the dita2pdf2 transtype.  Set this property to "no" to --> 
