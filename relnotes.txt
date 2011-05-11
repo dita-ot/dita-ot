@@ -33,15 +33,17 @@
      * 3283638 Remove format attribute support from PDF2 vars (Milestone 5)
      * 3285716 Clean up PDF2 build files (Milestone 5)
      * 3286085 Add output and temp dir params to PDF2 (Milestone 5)
-     * 3033000 update to Apache FOP 1.0 release (In process) 
+     * 3293738 Use extensible pipeline task implementation (Milestone 6)
+     * 3271552 ${args.xsl.pdf} as an absolut path not supported (Milestone 6)
+     * 3033000 update to Apache FOP 1.0 release (Milestone 6) 
+     * 3213324 Separate FOP/XEP/AXF stylesheets in PDF2 (Milestone 6)  
      * 3190356 Pluginize DITA-OT base configuration files (In process)
      * 3167087 Reduce static variable usage in Java code (In process)
      * 3158929 Java clean-up (In process)
      * 3194917 Change Java API to be more final and non-public (In process)
-     * 3197328 Refactor writers for cleaner XML serialization (In process)
-     * 3199755 Improve log integration (In process)     
-     * 3213324 Separate FOP/XEP/AXF stylesheets in PDF2 (In process)
-     
+     * 3197328 Refactor writers for cleaner XML serialization (In process)   
+     * 3199755 Improve log integration (In process)       
+     * 3296040 Refactor PDF2 build files (In process)
      
      [SourceForge Patches Added]
      * 3123507 String concat in map2plugin (Milestone 1)
@@ -89,6 +91,12 @@
      * 3206373 Better handling of referenced SVG images (Milestone 4)
      * 3279539 Out of memory error from move-meta module (Milestone 5)
      * 3281108 Fallback to $locale when xml:lang value is wrong format (Milestone 5)
+     * 3286679 ODT output transform deletes too many files (Milestone 6)
+     * 3287609 Chunking rewrites image based on map directory (Milestone 6)
+     * 3288639 Conref code improperly generalizes map domain elements  (Milestone 6)
+     * 3294295 PDF2 indexing and I18N fails with missing languages (Milestone 6)
+     * 3294864 tocjs-demo: tocjs.ditamap is referencing a missing file (Milestone 6)
+
      
 ====================================================================================
 
