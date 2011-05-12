@@ -41,7 +41,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template name="createFrontMatter">
         <xsl:choose>
-            <xsl:when test="$ditaVersion &gt;= '1.1'">
+            <xsl:when test="$ditaVersion &gt;= 1.1">
                 <xsl:call-template name="createFrontMatter_1.0"/>
             </xsl:when>
             <xsl:otherwise>
