@@ -350,10 +350,14 @@ with those set forth herein.
   </target>
 
   <target name="transform.topic2pdf"
-          depends="copyCoreArtwork,
-                   transform.topic2fo,
-                   transform.fo2pdf,
-                   delete.fo2pdf.topic.fo"/>
+          xmlns:dita="http://dita-ot.sourceforge.net"
+          dita:extension="depends org.dita.dost.platform.InsertDependsAction"
+          dita:depends="copyCoreArtwork,
+                        transform.topic2fo,
+                        {depend.org.dita.pdf2.format.pre},
+                        transform.fo2pdf,
+                        {depend.org.dita.pdf2.format.post},
+                        delete.fo2pdf.topic.fo"/>
 
   <target name="delete.fo2pdf.topic.fo" unless="retain.topic.fo">
     <delete>
@@ -364,9 +368,12 @@ with those set forth herein.
   </target>
 
   <target name="transform.fo2pdf"
-          depends="transform.fo2pdf.xep,
-                   transform.fo2pdf.ah,
-                   transform.fo2pdf.fop"/>
+          xmlns:dita="http://dita-ot.sourceforge.net"
+          dita:extension="depends org.dita.dost.platform.InsertDependsAction"
+          dita:depends="transform.fo2pdf.xep,
+                        transform.fo2pdf.ah,
+                        transform.fo2pdf.fop,
+                        {depend.org.dita.pdf2.format}"/>
 
   <target name="copyCoreArtwork">
     <copy todir="${artwork.dir}/Configuration/OpenTopic" failonerror="false">
