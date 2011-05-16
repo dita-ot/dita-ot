@@ -1,21 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE glossgroup PUBLIC "-//OASIS//DTD DITA Glossary Group//EN" "glossgroup.dtd">
-<glossgroup id="glossary"> 
-  <title>Glossary</title>
+<!DOCTYPE glossgroup PUBLIC "-//OASIS//DTD DITA Glossary Group//EN" "glossentry.dtd">
     <glossentry id="buildtool" xml:lang="en">
       <glossterm>build tool</glossterm>
       <glossdef>A program used to compile other programs.</glossdef>
     </glossentry>
-    <glossentry id="dita-ot" xml:lang="en">
-      <glossterm>DITA-OT</glossterm>
-      <glossdef>DITA Open Toolkit, an implementation of the DITA XML standard.</glossdef>
-    </glossentry>
-    <glossentry id="eclipse" xml:lang="en">
-      <glossterm>eclipse</glossterm>
-      <glossdef>The Eclipse IDE, integrated development environment, an industry standard tool for Java software developers.</glossdef>
-    </glossentry>
-    <glossentry id="troff">
-      <glossterm>troff</glossterm>
-      <glossdef>A processor for the Unix-based groff text processor.</glossdef>
-    </glossentry>
-  </glossgroup>
