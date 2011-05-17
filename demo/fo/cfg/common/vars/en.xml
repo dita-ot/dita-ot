@@ -406,7 +406,13 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Glossary even header">
         <param ref-name="pagenum"/>&#xA0;|&#xA0;<param ref-name="prodname"/>&#xA0;|&#xA0;Glossary
     </variable>
-    
-    <!-- The heading string to put at the top of the Glossary -->
-    <variable id="Glossary">Glossary</variable>
+     
+     <!-- The heading string to put at the top of the Glossary -->
+     <variable id="Glossary">Glossary</variable>
+     
+     <!-- The heading string to put at the top of the List of Tables -->
+     <variable id="List of Tables">List of Tables</variable>
+     
+     <!-- The heading string to put at the top of the List of Figures -->
+     <variable id="List of Figures">List of Figures</variable>
 </vars>

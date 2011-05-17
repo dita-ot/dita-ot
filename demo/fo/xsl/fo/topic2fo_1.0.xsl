@@ -86,6 +86,8 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:import href="static-content.xsl"/>
     <xsl:import href="../../cfg/fo/attrs/glossary-attr.xsl"/>
     <xsl:import href="glossary.xsl"/>
+    <xsl:import href="../../cfg/fo/attrs/lot-lof-attr.xsl"/>
+    <xsl:import href="lot-lof.xsl"/>
     
     <xsl:import href="flagging.xsl"/>
     
