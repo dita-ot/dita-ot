@@ -249,6 +249,17 @@
     <exclude name="startcmd.*"/>
   </patternset>
 
+  <patternset id="pattern.package.doc">
+    <exclude name="**/*.hhp"/>
+    <exclude name="**/*.hhc"/>
+    <exclude name="**/*.hhk"/>
+    <exclude name="**/*.fo"/>
+    <exclude name="**/*.log"/>
+    <exclude name="**/*.list"/>
+    <exclude name="**/*.temp"/>
+    <exclude name="**/*.db"/>
+  </patternset>
+
   <target name="package-source">
     <fail unless="param.out.file">param.out.file not defined</fail>
     <property name="temp.dist.dir" location="${work.dir}/${param.out.file}/${package.name.root}${version}"/>
@@ -257,6 +268,11 @@
     <copy todir="${temp.dist.dir}">
       <fileset dir="${basedir}">
         <patternset refid="pattern.package.source"/>
+      </fileset>
+    </copy>
+    <copy todir="${temp.dist.dir}/doc">
+      <fileset dir="${doc.out.dir}">
+        <patternset refid="pattern.package.doc"/>
       </fileset>
     </copy>
     <ant antfile="${temp.dist.dir}/integrator.xml"/>
@@ -278,6 +294,7 @@
         <patternset refid="pattern.package.minimum"/>
       </fileset>
     </copy>
+    <!-- no documentation -->
     <ant antfile="${temp.dist.dir}/integrator.xml"/>
     <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
       <fileset dir="${work.dir}/${param.out.file}"/>
@@ -295,6 +312,11 @@
     <copy todir="${temp.dist.dir}">
       <fileset dir="${basedir}">
         <patternset refid="pattern.package.standard"/>
+      </fileset>
+    </copy>
+    <copy todir="${temp.dist.dir}/doc">
+      <fileset dir="${doc.out.dir}">
+        <patternset refid="pattern.package.doc"/>
       </fileset>
     </copy>
     <ant antfile="${temp.dist.dir}/integrator.xml"/>
@@ -316,6 +338,11 @@
         <patternset refid="pattern.package.full"/>
       </fileset>
     </copy>
+    <copy todir="${temp.dist.dir}/doc">
+      <fileset dir="${doc.out.dir}">
+        <patternset refid="pattern.package.doc"/>
+      </fileset>
+    </copy>
     <ant antfile="${temp.dist.dir}/integrator.xml"/>
     <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
       <fileset dir="${work.dir}/${param.out.file}"/>
@@ -330,13 +357,13 @@
     </tar>
   </target>
 
-  <target name="build-package-source" depends="package-java, update-doc, copy-updated-doc">
+  <target name="build-package-source" depends="package-java, update-doc">
     <antcall target="package-source">
       <param name="param.out.file" value="${source}"/>
     </antcall>
   </target>
 
-  <target name="build-package-binary" depends="package-java, update-doc, copy-updated-doc">
+  <target name="build-package-binary" depends="package-java, update-doc">
     <sequential>
       <antcall target="package-binary-full">
         <param name="param.out.file" value="${binary-big}"/>
@@ -439,18 +466,4 @@
       excludes="**/*.chm,**/*.pdf,**/*.css,images/*.*"/>
   </target>
 
-  <target name="copy-updated-doc">
-    <copy todir="${doc.dir}">
-      <fileset dir="${doc.out.dir}">
-        <exclude name="**/*.hhp"/>
-        <exclude name="**/*.hhc"/>
-        <exclude name="**/*.hhk"/>
-        <exclude name="**/*.fo"/>
-        <exclude name="**/*.log"/>
-        <exclude name="**/*.list"/>
-        <exclude name="**/*.temp"/>
-        <exclude name="**/*.db"/>
-      </fileset>
-    </copy>
-  </target>
 </project>
