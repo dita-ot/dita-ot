@@ -404,51 +404,83 @@
 
   <target name="update-doc">
     <ant antfile="${basedir}/integrator.xml" target="integrate"/>
-    <ant antfile="${basedir}/build_demo.xml" target="doc.articles.web">
-      <property name="dita.temp.dir" value="${work.dir}"/>
-      <property name="dita.output.dir" value="${out.dir}"/>
+    <!-- Articles -->
+    <ant antfile="${basedir}/build.xml">
+      <property name="args.input" location="${doc.dir}/articles/DITA-articles.ditamap"/>
+      <property name="output.dir" location="${doc.out.dir}/articles"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="base.temp.dir" location="${work.dir}"/>
     </ant>
-    <ant antfile="${basedir}/build_demo.xml" target="doc.articles.chm">
-      <property name="dita.temp.dir" value="${work.dir}"/>
-      <property name="dita.output.dir" value="${out.dir}"/>
+    <ant antfile="${basedir}/build.xml">
+      <property name="args.input" location="${doc.dir}/articles/DITA-articles.ditamap"/>
+      <property name="output.dir" location="${doc.out.dir}/articles"/>
+      <property name="transtype" value="htmlhelp"/>
+      <property name="base.temp.dir" location="${work.dir}"/>
     </ant>
-    <ant antfile="${basedir}/build_demo.xml" target="doc.articles.pdf">
+    <ant antfile="${basedir}/build.xml">
+      <property name="args.input" location="${doc.dir}/articles/DITA-articles.ditamap"/>
+      <property name="output.dir" location="${doc.out.dir}/articles"/>
+      <property name="transtype" value="pdf"/>
       <property name="args.fo.img.ext" value=".gif"/>
-      <property name="dita.temp.dir" value="${work.dir}"/>
-      <property name="dita.output.dir" value="${out.dir}"/>
+      <property name="base.temp.dir" location="${work.dir}"/>
     </ant>
-    <ant antfile="${basedir}/build_demo.xml" target="doc.installguide.web">
-      <property name="dita.temp.dir" value="${work.dir}"/>
-      <property name="dita.output.dir" value="${out.dir}"/>
+    <!-- Install guide -->
+    <ant antfile="${basedir}/build.xml">
+      <property name="args.input" location="${doc.dir}/ot-userguide/DITAOT_UGRef_SOURCE/installing/installing_map.ditamap"/>
+      <property name="output.dir" location="${doc.out.dir}/installguide"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="base.temp.dir" location="${work.dir}"/>
     </ant>
-    <ant antfile="${basedir}/build_demo.xml" target="doc.installguide.pdf">
+    <ant antfile="${basedir}/build.xml">
+      <property name="args.input" location="${doc.dir}/ot-userguide/DITAOT_UGRef_SOURCE/installing/installing_map.ditamap"/>
+      <property name="output.dir" location="${doc.out.dir}/installguide"/>
+      <property name="transtype" value="pdf"/>
       <property name="args.fo.img.ext" value=".gif"/>
-      <property name="dita.temp.dir" value="${work.dir}"/>
-      <property name="dita.output.dir" value="${out.dir}"/>
+      <property name="base.temp.dir" location="${work.dir}"/>
     </ant>
-    <ant antfile="${basedir}/build_demo.xml" target="doc.installguide.chm">
-      <property name="dita.temp.dir" value="${work.dir}"/>
-      <property name="dita.output.dir" value="${out.dir}"/>
+    <ant antfile="${basedir}/build.xml">
+      <property name="args.input" location="${doc.dir}/ot-userguide/DITAOT_UGRef_SOURCE/installing/installing_map.ditamap"/>
+      <property name="output.dir" location="${doc.out.dir}/installguide"/>
+      <property name="transtype" value="htmlhelp"/>
+      <property name="base.temp.dir" location="${work.dir}"/>
     </ant>
-    <ant antfile="build_demo.xml" target="doc.quickstartguide.pdf">
+    <!-- Quickstart guide -->
+    <ant antfile="${basedir}/build.xml">
+      <property name="args.input" location="${doc.dir}/ant-quick-start-guide-for-ditaot.ditamap"/>
+      <property name="output.dir" location="${doc.out.dir}"/>
+      <property name="transtype" value="pdf"/>
       <property name="args.fo.img.ext" value=".gif"/>
-      <property name="dita.temp.dir" value="${work.dir}"/>
-      <property name="dita.output.dir" value="${out.dir}"/>
+      <property name="base.temp.dir" location="${work.dir}"/>
     </ant>
-    <ant antfile="build_demo.xml" target="doc.quickstartguide.chm">
-      <property name="dita.temp.dir" value="${work.dir}"/>
-      <property name="dita.output.dir" value="${out.dir}"/>
+    <ant antfile="${basedir}/build.xml">
+      <property name="args.input" location="${doc.dir}/ant-quick-start-guide-for-ditaot.ditamap"/>
+      <property name="output.dir" location="${doc.out.dir}"/>
+      <property name="transtype" value="htmlhelp"/>
+      <property name="base.temp.dir" location="${work.dir}"/>
     </ant>
-    <!--ant antfile="${basedir}/build_demo.xml" target="doc.readme.web"/-->
-    <ant antfile="${basedir}/build_demo.xml" target="doc.readme.chm">
-      <property name="dita.temp.dir" value="${work.dir}"/>
-      <property name="dita.output.dir" value="${out.dir}"/>
+    <!-- Readme -->
+    <!--
+    <ant antfile="${basedir}/build.xml">
+      <property name="args.input" location="${doc.dir}/DITA-readme.ditamap"/>
+      <property name="output.dir" location="${doc.out.dir}"/>
+      <property name="transtype" value="html"/>
+      <property name="base.temp.dir" location="${work.dir}"/>
     </ant>
-    <ant antfile="${basedir}/build_demo.xml" target="doc.readme.pdf">
+    -->
+    <ant antfile="${basedir}/build.xml">
+      <property name="args.input" location="${doc.dir}/DITA-readme.ditamap"/>
+      <property name="output.dir" location="${doc.out.dir}"/>
+      <property name="transtype" value="htmlhelp"/>
+      <property name="base.temp.dir" location="${work.dir}"/>
+    </ant>
+    <ant antfile="${basedir}/build.xml">
+      <property name="args.input" location="${doc.dir}/DITA-readme.ditamap"/>
+      <property name="output.dir" location="${doc.out.dir}"/>
+      <property name="transtype" value="pdf"/>
       <property name="args.fo.img.ext" value=".jpg"/>
-      <property name="dita.temp.dir" value="${work.dir}"/>
-      <property name="dita.output.dir" value="${out.dir}"/>
+      <property name="base.temp.dir" location="${work.dir}"/>
     </ant>
+    <!-- delete unneeded files -->
     <delete failonerror="yes" includeemptydirs="true"
       dir="${doc.out.dir}${file.separator}articles"
       excludes="**/*.chm,**/*.pdf,**/*.html,**/*.css,image/*.*"/>
