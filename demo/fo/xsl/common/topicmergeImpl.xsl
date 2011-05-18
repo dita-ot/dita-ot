@@ -96,6 +96,16 @@ See the accompanying license.txt file for applicable licenses.
                             <xsl:apply-templates mode="build-tree"/>
                         </ot-placeholder:glossarylist>
                     </xsl:when>
+                    <xsl:when test="contains(@class,' bookmap/tablelist ')">
+                        <ot-placeholder:tablelist>
+                            <xsl:apply-templates mode="build-tree"/>
+                        </ot-placeholder:tablelist>
+                    </xsl:when>
+                    <xsl:when test="contains(@class,' bookmap/figurelist ')">
+                        <ot-placeholder:figurelist>
+                            <xsl:apply-templates mode="build-tree"/>
+                        </ot-placeholder:figurelist>
+                    </xsl:when>
                     <xsl:otherwise>
                         <xsl:variable name="isNotTopicRef">
                             <xsl:call-template name="isNotTopicRef">
@@ -143,6 +153,16 @@ See the accompanying license.txt file for applicable licenses.
                         <ot-placeholder:glossarylist>
                             <xsl:apply-templates mode="build-tree"/>
                         </ot-placeholder:glossarylist>
+                    </xsl:when>
+                    <xsl:when test="contains(@class,' bookmap/tablelist ')">
+                        <ot-placeholder:tablelist>
+                            <xsl:apply-templates mode="build-tree"/>
+                        </ot-placeholder:tablelist>
+                    </xsl:when>
+                    <xsl:when test="contains(@class,' bookmap/figurelist ')">
+                        <ot-placeholder:figurelist>
+                            <xsl:apply-templates mode="build-tree"/>
+                        </ot-placeholder:figurelist>
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:apply-templates mode="build-tree"/>

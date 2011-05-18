@@ -176,19 +176,38 @@ See the accompanying license.txt file for applicable licenses.
          <xsl:attribute name="border-left">solid 1px black</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__toc__topic__content__glossary">
-        <xsl:attribute name="last-line-end-indent">-22pt</xsl:attribute>
-        <xsl:attribute name="end-indent">22pt</xsl:attribute>
-        <xsl:attribute name="text-indent">-.2in</xsl:attribute>
-        <xsl:attribute name="text-align">left</xsl:attribute>
-        <xsl:attribute name="text-align-last">justify</xsl:attribute>
-        <xsl:attribute name="font-size">14pt</xsl:attribute>
+    <xsl:attribute-set name="__toc__topic__content__booklist" use-attribute-sets="__toc__topic__content">
+        <xsl:attribute name="font-size">12pt</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
-        <xsl:attribute name="padding-top">20pt</xsl:attribute>
     </xsl:attribute-set>
-
-    <xsl:attribute-set name="__toc__indent__glossary">
+    
+    <xsl:attribute-set name="__toc__indent__booklist" use-attribute-sets="__toc__indent">
         <xsl:attribute name="margin-left">72pt</xsl:attribute>
+        <xsl:attribute name="space-before">10pt</xsl:attribute>
+        <xsl:attribute name="space-after">10pt</xsl:attribute>
+    </xsl:attribute-set>
+    
+    <xsl:attribute-set name="__toc__topic__content__glossary" use-attribute-sets="__toc__topic__content__booklist">
+    </xsl:attribute-set>
+    
+    <xsl:attribute-set name="__toc__topic__content__lot" use-attribute-sets="__toc__topic__content__booklist">
+    </xsl:attribute-set>
+    
+    <xsl:attribute-set name="__toc__topic__content__lof" use-attribute-sets="__toc__topic__content__booklist">
+    </xsl:attribute-set>
+    
+    <xsl:attribute-set name="__toc__indent__glossary" use-attribute-sets="__toc__indent__booklist">
+    </xsl:attribute-set>
+    
+    <xsl:attribute-set name="__toc__indent__lot" use-attribute-sets="__toc__indent__booklist">
+    </xsl:attribute-set>
+    
+    <xsl:attribute-set name="__toc__indent__lof" use-attribute-sets="__toc__indent__booklist">
+    </xsl:attribute-set>
+    
+    <xsl:attribute-set name="__toc__item__right">
+        <xsl:attribute name="keep-together.within-line">always</xsl:attribute>
+        <xsl:attribute name="margin-left">0.01in</xsl:attribute>
     </xsl:attribute-set>
 
 </xsl:stylesheet>

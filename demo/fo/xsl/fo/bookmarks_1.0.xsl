@@ -105,7 +105,7 @@ See the accompanying license.txt file for applicable licenses.
             </fo:bookmark-tree>
         </xsl:if>
     </xsl:template>
-
+    
     <xsl:template match="ot-placeholder:glossarylist" mode="bookmark">
         <fo:bookmark internal-destination="ID_GLOSSARY_00-0F-EA-40-0D-4D">
             <xsl:if test="$bookmarkStyle!='EXPANDED'">
@@ -116,9 +116,43 @@ See the accompanying license.txt file for applicable licenses.
                     <xsl:with-param name="theVariableID" select="'Glossary'"/>
                 </xsl:call-template>
             </fo:bookmark-title>
-
+            
             <xsl:apply-templates mode="bookmark"/>
         </fo:bookmark>
+    </xsl:template>
+    
+    <xsl:template match="ot-placeholder:tablelist" mode="bookmark">
+        <xsl:if test="//*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ' )]">
+            <fo:bookmark internal-destination="ID_LOT_00-0F-EA-40-0D-4D">
+                <xsl:if test="$bookmarkStyle!='EXPANDED'">
+                    <xsl:attribute name="starting-state">hide</xsl:attribute>
+                </xsl:if>
+                <fo:bookmark-title>
+                    <xsl:call-template name="insertVariable">
+                        <xsl:with-param name="theVariableID" select="'List of Tables'"/>
+                    </xsl:call-template>
+                </fo:bookmark-title>
+                
+                <xsl:apply-templates mode="bookmark"/>
+            </fo:bookmark>
+        </xsl:if>
+    </xsl:template>
+    
+    <xsl:template match="ot-placeholder:figurelist" mode="bookmark">
+        <xsl:if test="//*[contains(@class, ' topic/fig ')]/*[contains(@class, ' topic/title ' )]">
+            <fo:bookmark internal-destination="ID_LOF_00-0F-EA-40-0D-4D">
+                <xsl:if test="$bookmarkStyle!='EXPANDED'">
+                    <xsl:attribute name="starting-state">hide</xsl:attribute>
+                </xsl:if>
+                <fo:bookmark-title>
+                    <xsl:call-template name="insertVariable">
+                        <xsl:with-param name="theVariableID" select="'List of Figures'"/>
+                    </xsl:call-template>
+                </fo:bookmark-title>
+                
+                <xsl:apply-templates mode="bookmark"/>
+            </fo:bookmark>
+        </xsl:if>
     </xsl:template>
 
     <!--<xsl:template match="*[contains(@class, ' topic/topic ')][opentopic-func:determineTopicType() = 'topicTocList']" mode="bookmark" priority="10"/>-->
