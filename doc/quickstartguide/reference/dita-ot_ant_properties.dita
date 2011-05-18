@@ -282,7 +282,7 @@ Allowed values are "yes" and "no".  Default is "no".</entry>
 "no". Default is "no".</entry>
 </row>
 <row>
-<entry><codeph>args.xhtml.class</codeph></entry>
+<entry><codeph>args.xhtml.toc.class</codeph></entry>
 <entry>NA</entry>
 <entry>String for a CSS class name attribute applied to the TOC (x)HTML
 output's &lt;body> element.  Found in map2htmltoc.xsl.</entry>
@@ -470,6 +470,11 @@ colname="col2" colwidth="125*"/><colspec colname="col3" colwidth="200*"/>
 </row>
 </thead>
 <tbody>
+  <row>
+    <entry><codeph>args.xhtml.contenttarget</codeph></entry>
+    <entry>NA</entry>
+    <entry>Specifies the content frame name where links from TOC are opened.</entry>
+  </row>
 <row>
 <entry colname="col1"><codeph>args.xhtml.toc</codeph></entry>
 <entry colname="col2"><codeph>/xhtmltoc</codeph></entry>
