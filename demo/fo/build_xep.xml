@@ -5,14 +5,80 @@
 <!-- (c) Copyright IBM Corp. 2011 All Rights Reserved. -->
 <project name="org.dita.pdf2.xep">
 
-  <target name="transform.fo2pdf.xep.init">
+  <target name="transform.fo2pdf.xep.test-use">
     <condition property="use.xep.pdf.formatter">
       <equals arg1="${pdf.formatter}" arg2="xep"/>
     </condition>
   </target>
 
+  <target name="transform.fo2pdf.xep.init" if="use.xep.pdf.formatter">
+    <condition property="use.xep.pdf.formatter">
+      <equals arg1="${pdf.formatter}" arg2="xep"/>
+    </condition>
+    
+    <!-- default output format -->
+    <condition property="xep.formatter.output-format" value="PDF">
+      <not><isset property="xep.formatter.output-format"/></not>
+    </condition>
+    <!-- output file extension -->
+    <condition property="xsl.formatter.ext" value=".ps">
+      <and>
+        <equals arg1="${xep.formatter.output-format}" arg2="PostScript"/>
+        <not><isset property="xsl.formatter.ext"/></not>
+      </and>
+    </condition>
+    <condition property="xsl.formatter.ext" value=".html">
+      <and>
+        <equals arg1="${xep.formatter.output-format}" arg2="XHTML"/>
+        <not><isset property="xsl.formatter.ext"/></not>
+      </and>
+    </condition>
+    <condition property="xsl.formatter.ext" value=".AT.xml">
+      <and>
+        <equals arg1="${xep.formatter.output-format}" arg2="XEP"/>
+        <not><isset property="xsl.formatter.ext"/></not>
+      </and>
+    </condition>
+    <!--condition property="xsl.formatter.ext" value=".AT.xml">
+      <and>
+        <equals arg1="${xep.formatter.output-format}" arg2="AT"/>
+        <not><isset property="xsl.formatter.ext"/></not>
+      </and>
+    </condition-->
+    <condition property="xsl.formatter.ext" value=".svg">
+      <and>
+        <equals arg1="${xep.formatter.output-format}" arg2="SVG"/>
+        <not><isset property="xsl.formatter.ext"/></not>
+      </and>
+    </condition>
+    <condition property="xsl.formatter.ext" value=".xps">
+      <and>
+        <equals arg1="${xep.formatter.output-format}" arg2="XPS"/>
+        <not><isset property="xsl.formatter.ext"/></not>
+      </and>
+    </condition>
+    <condition property="xsl.formatter.ext" value=".afp">
+      <and>
+        <equals arg1="${xep.formatter.output-format}" arg2="AFP"/>
+        <not><isset property="xsl.formatter.ext"/></not>
+      </and>
+    </condition>
+    <condition property="xsl.formatter.ext" value=".ppml">
+      <and>
+        <equals arg1="${xep.formatter.output-format}" arg2="PPML"/>
+        <not><isset property="xsl.formatter.ext"/></not>
+      </and>
+    </condition>
+    <condition property="xsl.formatter.ext" value=".pdf">
+      <and>
+        <equals arg1="${xep.formatter.output-format}" arg2="PDF"/>
+        <not><isset property="xsl.formatter.ext"/></not>
+      </and>
+    </condition>
+  </target>
+
   <!-- run XEP -->
-  <target name="transform.fo2pdf.xep" depends="transform.fo2pdf.xep.init" if="use.xep.pdf.formatter">
+  <target name="transform.fo2pdf.xep" depends="transform.fo2pdf.xep.test-use, transform.fo2pdf.xep.init" if="use.xep.pdf.formatter">
     <property name="xep.dir" value="${fo.lib.dir}/xep"/>
   
     <condition property="xep.config.file" value="${custom.xep.config}">
@@ -31,10 +97,17 @@
       <not><isset property="xep.failOnError"/></not>
     </condition>
     
+    <condition property="outputFile" value="${dita.map.output.dir}/${outputFile.base}${xsl.formatter.ext}">
+      <not><isset property="outputFile"/></not>
+    </condition>
+    
     <java classname="com.idiominc.ws.opentopic.fo.xep.Runner" resultproperty="errCode"
           failonerror="${xep.failOnError}" fork="true" maxmemory="${maxJavaMemory}">
       <jvmarg line="${baseJVMArgLine}"/>
-      <arg line="&quot;${dita.map.output.dir}/topic.fo&quot; &quot;${outputFile}&quot; failOnError=${xep.failOnError}"/>
+      <arg value="${dita.map.output.dir}/topic.fo"/>
+      <arg value="${outputFile}"/>
+      <arg value="failOnError=${xep.failOnError}"/>
+      <arg value="-${xep.formatter.output-format}"/>
       <classpath refid="xep.class.path"/>
       <sysproperty key="com.renderx.xep.CONFIG" value="${xep.config.file}"/>
     </java>

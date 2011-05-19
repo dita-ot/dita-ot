@@ -5,14 +5,76 @@
 <!-- (c) Copyright IBM Corp. 2011 All Rights Reserved. -->
 <project name="org.dita.pdf2.axf">
 
-  <target name="transform.fo2pdf.ah.init">
+  <target name="transform.fo2pdf.ah.test-use">
     <condition property="use.ah.pdf.formatter">
       <equals arg1="${pdf.formatter}" arg2="ah"/>
     </condition>
   </target>
 
+  <target name="transform.fo2pdf.ah.init" if="use.ah.pdf.formatter">
+    <!-- default output format -->
+    <condition property="axf.formatter.output-format" value="@PDF">
+      <not><isset property="axf.formatter.output-format"/></not>
+    </condition>
+    <!-- output file extension -->
+    <condition property="xsl.formatter.ext" value=".ps">
+      <and>
+        <equals arg1="${axf.formatter.output-format}" arg2="@PS"/>
+        <not><isset property="xsl.formatter.ext"/></not>
+      </and>
+    </condition>
+    <condition property="xsl.formatter.ext" value=".txt">
+      <and>
+        <equals arg1="${axf.formatter.output-format}" arg2="@TEXT"/>
+        <not><isset property="xsl.formatter.ext"/></not>
+      </and>
+    </condition>
+    <condition property="xsl.formatter.ext" value=".inx">
+      <and>
+        <equals arg1="${axf.formatter.output-format}" arg2="@INX"/>
+        <not><isset property="xsl.formatter.ext"/></not>
+      </and>
+    </condition>
+    <condition property="xsl.formatter.ext" value=".svg">
+      <and>
+        <equals arg1="${axf.formatter.output-format}" arg2="@SVG"/>
+        <not><isset property="xsl.formatter.ext"/></not>
+      </and>
+    </condition>
+    <condition property="xsl.formatter.ext" value=".mda">
+      <and>
+        <equals arg1="${axf.formatter.output-format}" arg2="@MODCA"/>
+        <not><isset property="xsl.formatter.ext"/></not>
+      </and>
+    </condition>
+    <condition property="xsl.formatter.ext" value=".mif">
+      <and>
+        <equals arg1="${axf.formatter.output-format}" arg2="@MIF"/>
+        <not><isset property="xsl.formatter.ext"/></not>
+      </and>
+    </condition>
+    <condition property="xsl.formatter.ext" value=".AT.xml">
+      <and>
+        <equals arg1="${axf.formatter.output-format}" arg2="@AreaTree"/>
+        <not><isset property="xsl.formatter.ext"/></not>
+      </and>
+    </condition>
+    <condition property="xsl.formatter.ext" value=".xps">
+      <and>
+        <equals arg1="${axf.formatter.output-format}" arg2="@XPS"/>
+        <not><isset property="xsl.formatter.ext"/></not>
+      </and>
+    </condition>
+    <condition property="xsl.formatter.ext" value=".pdf">
+      <and>
+        <equals arg1="${axf.formatter.output-format}" arg2="@PDF"/>
+        <not><isset property="xsl.formatter.ext"/></not>
+      </and>
+    </condition>
+  </target>
+
   <!--Set up and run Antenna House-->
-  <target name="transform.fo2pdf.ah" depends="transform.fo2pdf.ah.init" if="use.ah.pdf.formatter">
+  <target name="transform.fo2pdf.ah" depends="transform.fo2pdf.ah.test-use, transform.fo2pdf.ah.init" if="use.ah.pdf.formatter">
     <condition property="has.axf.option">
       <and>
         <not><equals arg1="${env.AXF_OPT}" arg2=""/></not>
@@ -212,6 +274,11 @@
     <condition property="fo.ah.program.name" value="XSLCmd.exe">
       <not><isset property="fo.ah.program.name"/></not>
     </condition>
+    
+    <condition property="outputFile" value="${dita.map.output.dir}/${outputFile.base}${axf.formatter.output-ext}">
+      <not><isset property="outputFile"/></not>
+    </condition>
+    
     <antcall target="transform.fo2pdf.ah.nooption"/>
     <antcall target="transform.fo2pdf.ah.hasoption"/>
   </target>
@@ -222,6 +289,8 @@
       <arg value="${dita.map.output.dir}/topic.fo"/>
       <arg value="-o"/>
       <arg value="${outputFile}"/>
+      <arg value="-p"/>
+      <arg value="${axf.formatter.output-format}"/>
       <arg value="-extlevel"/>
       <arg value="4"/>
       <arg value="-peb"/>
@@ -235,6 +304,8 @@
       <arg value="${dita.map.output.dir}/topic.fo"/>
       <arg value="-o"/>
       <arg value="${outputFile}"/>
+      <arg value="-p"/>
+      <arg value="${axf.formatter.output-format}"/>
       <arg value="-extlevel"/>
       <arg value="4"/>
       <arg value="-peb"/>
