@@ -15,7 +15,7 @@ the possibility of meeting the out of memory exception in the build process.
 As illustrated in the following figure, when you run the build in previous
 releases of DITA Open Toolkit, the build speed is slow and you are likely
 to get out of memory exception.<fig>
-<image href="outofmemory.jpg" placement="break"><alt>Out of memory exception</alt>
+<image href="images/outofmemory.jpg" placement="break"><alt>Out of memory exception</alt>
 </image>
 </fig></p>
 <p>With this enhanced topic merge feature, you will be less likely to meet

@@ -168,9 +168,6 @@
     <exclude name="doc/ot-userguide/**"/>
     <exclude name="doc/archive/**"/>
     <exclude name="doc/langref-dita1.1/**"/>
-    <exclude name="doc/ditaref-book.chm"/>
-    <exclude name="doc/ditaref-book.pdf"/>
-    <exclude name="doc/quickstartguide/logs/**"/>
     <exclude name="build.number"/>
     <exclude name=".*"/>
     <include name="lib/*.jar"/>
@@ -221,9 +218,6 @@
     <exclude name="doc/ot-userguide/**"/>
     <exclude name="doc/archive/**"/>
     <exclude name="doc/langref-dita1.1/**"/>
-    <exclude name="doc/ditaref-book.chm"/>
-    <exclude name="doc/ditaref-book.pdf"/>
-    <exclude name="doc/quickstartguide/logs/**"/>
     <exclude name="build.number"/>
     <exclude name=".*"/>
   </patternset>
