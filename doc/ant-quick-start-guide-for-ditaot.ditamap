@@ -40,10 +40,13 @@
 </bookmeta>
 <frontmatter>
 <booklists>
+<glossarylist>
+  <topicref format="ditamap" href="quickstartguide/glossary/glossary.ditamap"/>
+</glossarylist>
 <toc/>
 <tablelist navtitle="List of Tables" toc="no"/>
 </booklists>
-<topicref navtitle="Preface" href="quickstartguide/topics/preface.dita" toc="yes" type="topic"/>
+<topicref navtitle="Preface" href="quickstartguide/topics/preface.dita" toc="yes" type="topic" audience="end-user xslt-customizer build-scripter"/>
 </frontmatter>
 <chapter href="quickstartguide/chapters/chapter1.dita">
 	<topicref format="dita" href="quickstartguide/concepts/about_introduction.dita" navtitle="Introduction to Ant and DITA-OT" toc="yes" type="concept"/>
@@ -65,9 +68,6 @@
 </chapter>
 <chapter>
 	<topicref navtitle="Best Practices" href="quickstartguide/topics/best-practices.dita" toc="yes"/>
-</chapter>
-<chapter>
-  <topicref navtitle="Glossary" href="quickstartguide/glossary/glossary.dita" toc="yes"/>
 </chapter>
 <backmatter>
 <booklists>

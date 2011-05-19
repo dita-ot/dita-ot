@@ -12,6 +12,7 @@
   <property name="DITA_DIR" value="${env.DITA_DIR}"/>
 	<import file="${DITA_DIR}/integrator.xml"/>
 	<property name="args.logdir" value="../logs"/>
+	<property name="dita.input.valfile" value="../QSG.ditaval"/>
 
 	<!-- Specifies file types for your content and image files.  Change these values if you use  			-->
 	<!-- .xml rather than .dita for content, and .jpg or .png rather than .gif for images.       			-->
@@ -48,6 +49,7 @@
 				<property name="dita.temp.dir" value="${outdir}/temp_pdf"/>
 				<property name="output.dir" value="${outdir}/pdf"/>
 				<property name="outer.control" value="quiet"/>
+				<property name="clean.temp" value="yes"/>
 			</ant>
 	</target>
 	
