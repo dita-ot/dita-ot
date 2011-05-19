@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--Arbortext, Inc., 1988-2010, v.4002-->
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"
  "map.dtd">
@@ -13,10 +13,10 @@ navtitle="News" scope="external"></topicref>
 </topicref>
 <topichead navtitle="Ant Quick Start Guide">
 <mapref
-href="ant-quick-start-guide-for-ditaot.ditamap"></mapref>
+href="quickstartguide/ant-quick-start-guide-for-ditaot.ditamap"></mapref>
 </topichead>
 <topichead navtitle="Additional introductory material">
-<mapref href="DITA-readme.ditamap"></mapref>
+<mapref href="readme/DITA-readme.ditamap"></mapref>
 </topichead>
 <topichead navtitle="Development Documents">
 <topicref href="dev_ref/DITA-OTArchitecture.xml" locktitle="yes"
