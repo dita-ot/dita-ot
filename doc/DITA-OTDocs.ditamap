@@ -12,11 +12,11 @@ href="http://sourceforge.net/news/?group_id=132728" locktitle="yes"
 navtitle="News" scope="external"></topicref>
 </topicref>
 <topichead navtitle="Ant Quick Start Guide">
-<topicref format="ditamap"
-href="ant-quick-start-guide-for-ditaot.ditamap"></topicref>
+<mapref
+href="ant-quick-start-guide-for-ditaot.ditamap"></mapref>
 </topichead>
 <topichead navtitle="Additional introductory material">
-<topicref conref="DITA-readme.ditamap#DITA-doc"></topicref>
+<mapref href="DITA-readme.ditamap"></mapref>
 </topichead>
 <topichead navtitle="Development Documents">
 <topicref href="dev_ref/DITA-OTArchitecture.xml" locktitle="yes"
@@ -25,8 +25,8 @@ navtitle="Complete Process Architecture"></topicref>
 navtitle="Preprocess Architecture"></topicref><?Pub Caret -2?>
 <topicref href="dev_ref/DITA-OTGenListModule.xml" locktitle="yes"
 navtitle="Java Module Architecture"></topicref>
-<topicref format="ditamap" href="dev_ref/doc.ditamap" locktitle="yes"
-navtitle="DITA to Word RTF Transformation"></topicref>
+<mapref href="dev_ref/doc.ditamap" locktitle="yes"
+navtitle="DITA to Word RTF Transformation"></mapref>
 </topichead>
 <topichead navtitle="Project Management">
 <topicref href="admin/DevelopmentProcess.xml" locktitle="yes"

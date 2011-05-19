@@ -42,7 +42,7 @@ navtitle="Transfomring DITA to Word RTF"></topicref><?Pub Caret -1?>
 <topicref href="readme/DITA-h2d-java.xml"></topicref>
 </topicref>
 <topichead navtitle="Development Reference">
-<topicref format="ditamap" href="dev_ref/dev_ref.ditamap"></topicref>
+<mapref href="dev_ref/dev_ref.ditamap"></mapref>
 </topichead>
 </topicref>
 </map>

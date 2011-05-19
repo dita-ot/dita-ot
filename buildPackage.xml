@@ -4,7 +4,7 @@
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved. -->
 <!-- build whole bin and source package for DITA Open Toolkit -->
-<project name="build_DITA-OT_package" default="build-all-packages" basedir=".">
+<project name="build_DITA-OT_package" basedir=".">
   <description>Build source and binary packages for DITA Open Toolkit</description>
 
   <property file="buildPackage.properties"/>
@@ -59,7 +59,8 @@
     <delete dir="${bin.dir}"/>
   </target>
 
-  <target name="build-java" depends="init-java">
+  <target name="build-java" depends="compile"/>
+  <target name="compile" depends="init-java" description="Compile Java">
     <!-- Copying the files to a build directory before we modify the files -->
     <copy todir="${build.dir}">
       <fileset dir="${java.dir}" excludes="com/**,org/dita/dost/junit/**"/>
@@ -82,7 +83,8 @@
     <delete dir="${build.dir}" includeemptydirs="yes"/>
   </target>
 
-  <target name="package-java" depends="build-java">
+  <target name="package-java" depends="jar"/>
+  <target name="jar" depends="compile" description="Build Java libraries">
     <copy todir="${bin.dir}/resource/">
       <fileset dir="${resource.dir}" includes="messages.*"/>
     </copy>
@@ -168,9 +170,6 @@
     <exclude name="doc/ot-userguide/**"/>
     <exclude name="doc/archive/**"/>
     <exclude name="doc/langref-dita1.1/**"/>
-    <exclude name="doc/ditaref-book.chm"/>
-    <exclude name="doc/ditaref-book.pdf"/>
-    <exclude name="doc/quickstartguide/logs/**"/>
     <exclude name="build.number"/>
     <exclude name=".*"/>
     <include name="lib/*.jar"/>
@@ -221,9 +220,6 @@
     <exclude name="doc/ot-userguide/**"/>
     <exclude name="doc/archive/**"/>
     <exclude name="doc/langref-dita1.1/**"/>
-    <exclude name="doc/ditaref-book.chm"/>
-    <exclude name="doc/ditaref-book.pdf"/>
-    <exclude name="doc/quickstartguide/logs/**"/>
     <exclude name="build.number"/>
     <exclude name=".*"/>
   </patternset>
@@ -357,13 +353,13 @@
     </tar>
   </target>
 
-  <target name="build-package-source" depends="package-java, update-doc">
+  <target name="build-package-source" depends="jar, update-doc" description="Build source distribution package">
     <antcall target="package-source">
       <param name="param.out.file" value="${source}"/>
     </antcall>
   </target>
 
-  <target name="build-package-binary" depends="package-java, update-doc">
+  <target name="build-package-binary" depends="jar, update-doc" description="Build binary distribution packages">
     <sequential>
       <antcall target="package-binary-full">
         <param name="param.out.file" value="${binary-big}"/>
@@ -377,7 +373,7 @@
     </sequential>
   </target>
 
-  <target name="build-package-binary-with-buildnum" depends="package-java, update-doc">
+  <target name="build-package-binary-with-buildnum" depends="jar, update-doc">
     <buildnumber/>
     <tstamp>
       <format property="build.time" pattern="yyyyMMddhhmm"/>
@@ -396,7 +392,7 @@
   </target>
 
   <target name="build-all-packages"
-    depends="init-package, build-package-source, build-package-binary, cleanup"/>
+    depends="init-package, build-package-source, build-package-binary, cleanup" description="Build distribution packages"/>
 
   <target name="cleanup" unless="skip.cleanup">
     <delete dir="${work.dir}"/>
@@ -496,6 +492,14 @@
     <delete failonerror="yes" includeemptydirs="true"
       dir="${doc.out.dir}${file.separator}quickstartguide"
       excludes="**/*.chm,**/*.pdf,**/*.css,images/*.*"/>
+  </target>
+
+  <target name="doc" depends="update-doc" description="Build documentation">
+    <copy todir="${doc.dir}">
+      <fileset dir="${doc.out.dir}">
+        <patternset refid="pattern.package.doc"/>
+      </fileset>
+    </copy>
   </target>
 
 </project>

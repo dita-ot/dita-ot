@@ -14,7 +14,7 @@ of ANT, XSLT (currently 1.0) and Java to      implement transformation
 functions from DITA content (maps and topics) into      different
 deliverable formats </shortdesc>
 <body>
-<section>       <title>Pipeline structure</title>       <p></p>  
+<section>       <title>Pipeline structure</title>  
     <p>There are 2 stages of transformation, </p>       <ol>
 <li>           <xref href="DITA-OTPreprocess.xml">Pre-processing</xref> 
        </li>
@@ -26,18 +26,18 @@ etc. depending on what output user          selects. The pipeline
 consists of various modules which performs          different functions.
 Interface between modules are files in different          format.
 Here is the overview chart of the two-stage          transformation.</p> 
-     <p>         <image href="mainarch.gif"></image>       </p>  
+     <p>         <image href="images/mainarch.gif"></image>       </p>  
     <p>The whole pipeline is now controlled by one major Ant script
 named          'conductor.xml'. Pipeline modules are implemented using
 Ant tasks, XSLT          stylesheet or a Java Program. Most modules
 are implemented using XSLT          stylesheet. For those modules
 in the pipeline which are impossible or          very difficult to
 be implemented using XSLT stylesheet and Ant tasks,          we choose
-to use Java to implement them. </p>       <p></p>     </section>
+to use Java to implement them. </p>     </section>
 <section>       <title>Ant script</title>     </section>
 <p>There are four main Ant script files in DITA-OT. The relationship
 of the        files is illustrated as below.</p>
-<p>       <image href="ant_call.gif"></image>     </p>
+<p>       <image href="images/ant_call.gif"></image>     </p>
 <p>Conductor.xml acts as the interface that user customized Ant script
 can        call the targets in it. <table><title>Targets in conductor.xml</title>
 <tgroup cols="2"><colspec colname="col1"/><colspec colname="col2"/>
@@ -85,14 +85,14 @@ Ant script files.</p>
 used by        Ant.</p>
 <section>       <title>XSLT modules</title>     </section>
 <p>Here is the XSLT modules structure. </p>
-<p>       <image href="xsl_call.gif"></image>     </p>
+<p>       <image href="images/xsl_call.gif"></image>     </p>
 <p>The shell xsl files act like an interface for users or for Ant
 to call.        All of the shell xsl files lies in xsl directory.
 They are        dita2docbook.xsl, dita2fo-shell.xsl, dita2html.xsl,
 dita2xhtml.xsl,        topic2fo-shell.xsl and map2docbook.xsl.</p>
 <p>The xsl files which are responsible for Implentation and specialized
        transformation are in the following directories under xsl directory.</p>
-<p>       <table><title></title>
+<p>       <table>
 <tgroup cols="2"><colspec colname="col1"/><colspec colname="col2"/>
 <thead>
 <row valign="bottom">
