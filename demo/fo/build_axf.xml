@@ -82,10 +82,6 @@
       </and>
     </condition>
 
-    <!--We try to hunt for Antenna House in different directories.
-      This should really be set externally, but we're incorporating
-      existing Antenna House tools which provided this feature.  -->
-
     <condition property="axf.path" value="${env.AXF_DIR}">
       <and>
         <isset property="env.AXF_DIR"/>
@@ -96,184 +92,75 @@
         </or>
       </and>
     </condition>
-    <!-- NOTE: At present, there is no Antenna House V6 or V53, and the OT developers
-      do not know of a plan for either. They are added here so that if either
-      one is released, the Antenna House detection here will continue to work.
-      This plan is based on the V52 update, which caused some OT users to lose 
-      Antenna House function until this code was updated. -->
-    <condition property="axf.path" value="C:\Program Files\AntennaHouse\AHFormatterV6">
-      <and>
-        <not><isset property="axf.path"/></not>
-        <available file="C:\Program Files\AntennaHouse\AHFormatterV6\AHFCmd.exe"/>
-      </and>
-    </condition>
-    <condition property="axf.path" value="C:\Program Files\AntennaHouse\AHFormatterV53">
-      <and>
-        <not><isset property="axf.path"/></not>
-        <available file="C:\Program Files\AntennaHouse\AHFormatterV53\AHFCmd.exe"/>
-      </and>
-    </condition>
-    <condition property="axf.path" value="C:\Program Files\AntennaHouse\AHFormatterV52">
-      <and>
-        <not><isset property="axf.path"/></not>
-        <available file="C:\Program Files\AntennaHouse\AHFormatterV52\AHFCmd.exe"/>
-      </and>
-    </condition>
-    <condition property="axf.path" value="C:\Program Files\AntennaHouse\AHFormatterV51">
-      <and>
-        <not><isset property="axf.path"/></not>
-        <available file="C:\Program Files\AntennaHouse\AHFormatterV51\AHFCmd.exe"/>
-      </and>
-    </condition>
-    <condition property="axf.path" value="C:\Program Files\AntennaHouse\AHFormatterV5">
-      <and>
-        <not><isset property="axf.path"/></not>
-        <available file="C:\Program Files\AntennaHouse\AHFormatterV5\AHFCmd.exe"/>
-      </and>
-    </condition>
-    <condition property="axf.path" value="C:\Program Files\Antenna\XSLFormatterV43">
-      <and>
-        <not><isset property="axf.path"/></not>
-        <available file="C:\Program Files\Antenna\XSLFormatterV43\XSLCmd.exe"/>
-      </and>
-    </condition>
-    <condition property="axf.path" value="C:\Program Files\Antenna\XSLFormatterV42">
-      <and>
-        <not><isset property="axf.path"/></not>
-        <available file="C:\Program Files\Antenna\XSLFormatterV42\XSLCmd.exe"/>
-      </and>
-    </condition>
-    <condition property="axf.path" value="C:\Program Files\Antenna\XSLFormatterV41">
-      <and>
-        <not><isset property="axf.path"/></not>
-        <available file="C:\Program Files\Antenna\XSLFormatterV41\XSLCmd.exe"/>
-      </and>
-    </condition>
-
-    <!-- NOTE: Repeated all of the above trial conditions using "C:\Program Files (x86)"
-      instead of "C:\Program Files". AnntenaHouse installs under
-      C:\Program Files (x86) for 64-bit Windows operating systems.
-    -->
-    <condition property="axf.path" value="C:\Program Files (x86)\AntennaHouse\AHFormatterV6">
-      <and>
-        <not><isset property="axf.path"/></not>
-        <available file="C:\Program Files (x86)\AntennaHouse\AHFormatterV6\AHFCmd.exe"/>
-      </and>
-    </condition>
-    <condition property="axf.path" value="C:\Program Files (x86)\AntennaHouse\AHFormatterV53">
-      <and>
-        <not><isset property="axf.path"/></not>
-        <available file="C:\Program Files (x86)\AntennaHouse\AHFormatterV53\AHFCmd.exe"/>
-      </and>
-    </condition>
-    <condition property="axf.path" value="C:\Program Files (x86)\AntennaHouse\AHFormatterV52">
-      <and>
-        <not><isset property="axf.path"/></not>
-        <available file="C:\Program Files (x86)\AntennaHouse\AHFormatterV52\AHFCmd.exe"/>
-      </and>
-    </condition>
-    <condition property="axf.path" value="C:\Program Files (x86)\AntennaHouse\AHFormatterV51">
-      <and>
-        <not><isset property="axf.path"/></not>
-        <available file="C:\Program Files (x86)\AntennaHouse\AHFormatterV51\AHFCmd.exe"/>
-      </and>
-    </condition>
-    <condition property="axf.path" value="C:\Program Files (x86)\AntennaHouse\AHFormatterV5">
-      <and>
-        <not><isset property="axf.path"/></not>
-        <available file="C:\Program Files (x86)\AntennaHouse\AHFormatterV5\AHFCmd.exe"/>
-      </and>
-    </condition>
-    <condition property="axf.path" value="C:\Program Files (x86)\Antenna\XSLFormatterV43">
-      <and>
-        <not><isset property="axf.path"/></not>
-        <available file="C:\Program Files (x86)\Antenna\XSLFormatterV43\XSLCmd.exe"/>
-      </and>
-    </condition>
-    <condition property="axf.path" value="C:\Program Files (x86)\Antenna\XSLFormatterV42">
-      <and>
-        <not><isset property="axf.path"/></not>
-        <available file="C:\Program Files (x86)\Antenna\XSLFormatterV42\XSLCmd.exe"/>
-      </and>
-    </condition>
-    <condition property="axf.path" value="C:\Program Files (x86)\Antenna\XSLFormatterV41">
-      <and>
-        <not><isset property="axf.path"/></not>
-        <available file="C:\Program Files (x86)\Antenna\XSLFormatterV41\XSLCmd.exe"/>
-      </and>
-    </condition>
-
-    <!-- NOTE: Adding V6 and V53 as a guess where the next version will install,
-      to try and make this code forward compatible. Basing it on the
-      known install location of V52. Also adding V51 based on the 
-      known V52 location (V51 support was missing as of the V52 release).
-      The _64 values are used for 64 bit machines, and values without _64
-      are for 32 bit machines. -->
-    <condition property="axf.path" value="/usr/AHFormatterV6_64">
-      <and>
-        <not><isset property="axf.path"/></not>
-        <available file="/usr/AHFormatterV6_64/run.sh" value="/usr/AHFormatterV6_64"/>
-      </and>
-    </condition>
-    <condition property="axf.path" value="/usr/AHFormatterV6">
-      <and>
-        <not><isset property="axf.path"/></not>
-        <available file="/usr/AHFormatterV6/run.sh" value="/usr/AHFormatterV6"/>
-      </and>
-    </condition>
-    <condition property="axf.path" value="/usr/AHFormatterV53_64">
-      <and>
-        <not><isset property="axf.path"/></not>
-        <available file="/usr/AHFormatterV53_64/run.sh" value="/usr/AHFormatterV53_64"/>
-      </and>
-    </condition>
-    <condition property="axf.path" value="/usr/AHFormatterV53">
-      <and>
-        <not><isset property="axf.path"/></not>
-        <available file="/usr/AHFormatterV53/run.sh" value="/usr/AHFormatterV53"/>
-      </and>
-    </condition>
-    <condition property="axf.path" value="/usr/AHFormatterV52_64">
-      <and>
-        <not><isset property="axf.path"/></not>
-        <available file="/usr/AHFormatterV52_64/run.sh" value="/usr/AHFormatterV52_64"/>
-      </and>
-    </condition>
-    <condition property="axf.path" value="/usr/AHFormatterV52">
-      <and>
-        <not><isset property="axf.path"/></not>
-        <available file="/usr/AHFormatterV52/run.sh" value="/usr/AHFormatterV52"/>
-      </and>
-    </condition>
-    <condition property="axf.path" value="/usr/AHFormatterV51">
-      <and>
-        <not><isset property="axf.path"/></not>
-        <available file="/usr/AHFormatterV51/run.sh" value="/usr/AHFormatterV51"/>
-      </and>
-    </condition>
-    <condition property="axf.path" value="/usr/AHFormatterV5">
-      <and>
-        <not><isset property="axf.path"/></not>
-        <available file="/usr/AHFormatterV5/run.sh" value="/usr/AHFormatterV5"/>
-      </and>
-    </condition>
-    <condition property="axf.path" value="/usr/XSLFormatterV43">
-      <and>
-        <not><isset property="axf.path"/></not>
-        <available file="/usr/XSLFormatterV43/run.sh"/>
-      </and>
-    </condition>
 
     <!-- run.sh on Linux, AHFCmd.exe or XSLCmd.exe on Windows -->
     <condition property="fo.ah.program.name" value="run.sh">
-      <os family="unix"/>
+      <and>
+        <not><isset property="fo.ah.program.name"/></not>
+        <os family="unix"/>
+        <isset property="axf.path"/>
+        <available file="${axf.path}/run.sh"/>
+      </and>
     </condition>
     <condition property="fo.ah.program.name" value="AHFCmd.exe">
-      <available file="${axf.path}/AHFCmd.exe"/>
+      <and>
+        <not><isset property="fo.ah.program.name"/></not>
+        <isset property="axf.path"/>
+        <available file="${axf.path}/AHFCmd.exe"/>
+      </and>
     </condition>
     <condition property="fo.ah.program.name" value="XSLCmd.exe">
-      <not><isset property="fo.ah.program.name"/></not>
+      <and>
+        <not><isset property="fo.ah.program.name"/></not>
+        <isset property="axf.path"/>
+        <available file="${axf.path}/XSLCmd.exe"/>
+      </and>
     </condition>
+
+    <condition property="axf.cmd" value="${axf.path}/${fo.ah.program.name}">
+      <and>
+        <not><isset property="axf.cmd"/></not>
+        <isset property="axf.path"/>
+        <isset property="fo.ah.program.name"/>
+      </and>
+    </condition>
+    <!-- Fall back to brute force search -->
+    <pathconvert property="axf.cmd" setonempty="false">
+      <first>
+        <union>
+          <fileset dir="/Applications" includes="AntennaHouse/run.sh" erroronmissingdir="false"/>
+          <fileset dir="/usr" includes="AHFormatterV*/run.sh" erroronmissingdir="false"/>
+          <fileset dir="/usr" includes="XSLFormatterV*/run.sh" erroronmissingdir="false"/>
+          <fileset dir="C:\Program Files\AntennaHouse" erroronmissingdir="false">
+            <include name="AHFormatterV*\AHFCmd.exe"/>
+            <include name="AHFormatterV*\XSLCmd.exe"/>
+          </fileset>
+          <fileset dir="C:\Program Files\Antenna" erroronmissingdir="false">
+            <include name="AHFormatterV*\AHFCmd.exe"/>
+            <include name="AHFormatterV*\XSLCmd.exe"/>
+          </fileset>
+          <fileset dir="C:\Program Files (x86)\AntennaHouse" erroronmissingdir="false">
+            <include name="AHFormatterV*\AHFCmd.exe"/>
+            <include name="AHFormatterV*\XSLCmd.exe"/>
+          </fileset>
+          <fileset dir="C:\Program Files (x86)\Antenna" erroronmissingdir="false">
+            <include name="AHFormatterV*\AHFCmd.exe"/>
+            <include name="AHFormatterV*\XSLCmd.exe"/>
+          </fileset>
+        </union>
+      </first>
+    </pathconvert>
+    
+    <fail message="Unable to locate AXF, set property axf.path or axf.cmd">
+      <condition>
+        <not>
+          <and>
+            <isset property="axf.cmd"/>
+            <available file="${axf.cmd}" type="file"/>
+          </and>
+        </not>
+      </condition>
+    </fail>
     
     <condition property="outputFile" value="${dita.map.output.dir}/${outputFile.base}${xsl.formatter.ext}">
       <not><isset property="outputFile"/></not>
@@ -284,7 +171,7 @@
   </target>
 
   <target name="transform.fo2pdf.ah.nooption" unless="has.axf.option">
-    <exec executable="${axf.path}/${fo.ah.program.name}" resultproperty="errCode" logerror="true">
+    <exec executable="${axf.cmd}" resultproperty="errCode" logerror="true">
       <arg value="-d"/>
       <arg value="${dita.map.output.dir}/topic.fo"/>
       <arg value="-o"/>
@@ -299,7 +186,7 @@
   </target>
 
   <target name="transform.fo2pdf.ah.hasoption" if="has.axf.option">
-    <exec executable="${axf.path}/${fo.ah.program.name}" resultproperty="errCode" logerror="true">
+    <exec executable="${axf.cmd}" resultproperty="errCode" logerror="true">
       <arg value="-d"/>
       <arg value="${dita.map.output.dir}/topic.fo"/>
       <arg value="-o"/>
