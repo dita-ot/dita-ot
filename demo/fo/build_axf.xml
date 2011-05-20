@@ -275,7 +275,7 @@
       <not><isset property="fo.ah.program.name"/></not>
     </condition>
     
-    <condition property="outputFile" value="${dita.map.output.dir}/${outputFile.base}${axf.formatter.output-ext}">
+    <condition property="outputFile" value="${dita.map.output.dir}/${outputFile.base}${xsl.formatter.ext}">
       <not><isset property="outputFile"/></not>
     </condition>
     
