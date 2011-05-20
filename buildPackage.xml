@@ -4,7 +4,7 @@
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved. -->
 <!-- build whole bin and source package for DITA Open Toolkit -->
-<project name="build_DITA-OT_package" basedir=".">
+<project name="build_DITA-OT_package" default="build-all-packages" basedir=".">
   <description>Build source and binary packages for DITA Open Toolkit</description>
 
   <property file="buildPackage.properties"/>
