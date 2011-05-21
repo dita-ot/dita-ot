@@ -107,8 +107,9 @@ public class MessageBeanTest {
 
     @Test
     public void testToString() {
-        assertEquals("[null][null] null null", new MessageBean().toString());
+        assertEquals("[null][null] null", new MessageBean().toString());
         assertEquals("[foo][bar] baz qux", new MessageBean("foo", "bar", "baz", "qux").toString());
+        assertEquals("[foo][bar] baz", new MessageBean("foo", "bar", "baz", null).toString());
     }
 
 }

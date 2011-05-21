@@ -17,13 +17,13 @@ import static org.dita.dost.util.Constants.*;
  * @author Wu, Zhi Qiang
  */
 public final class MessageBean {
-	private String id = null;
+	private String id;
 
-	private String type = null;
+	private String type;
 
-	private String reason = null;
+	private String reason;
 
-	private String response = null;
+	private String response;
 
 	/**
 	 * Default constructor.
@@ -78,7 +78,7 @@ public final class MessageBean {
 
 	/**
 	 * Getter function of reason.
-	 * @return Returns the reason.
+	 * @return Returns the reason
 	 */
 	public String getReason() {
 		return reason;
@@ -96,7 +96,7 @@ public final class MessageBean {
 
 	/**
 	 * Getter function of response.
-	 * @return Returns the response.
+	 * @return Returns the response, {@code null} if not defined
 	 */
 	public String getResponse() {
 		return response;
@@ -141,7 +141,9 @@ public final class MessageBean {
 		buff.append("[").append(id).append("]");
 		buff.append("[").append(type).append("] ");
 		buff.append(reason);
-		buff.append(" ").append(response);
+		if (response != null) {
+		    buff.append(" ").append(response);
+		}
 		
 		return buff.toString();
 	}
