@@ -48,6 +48,11 @@ See the accompanying license.txt file for applicable licenses.
 
         <fo:block xsl:use-attribute-sets="table">
             <xsl:call-template name="commonattributes"/>
+            <xsl:if test="not(@id)">
+              <xsl:attribute name="id">
+                <xsl:call-template name="get-id"/>
+              </xsl:attribute>
+            </xsl:if>
             <xsl:if test="not($scale = '')">
                 <xsl:attribute name="font-size"><xsl:value-of select="concat($scale, '%')"/></xsl:attribute>
             </xsl:if>

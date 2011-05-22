@@ -59,7 +59,10 @@
 
     <fo:block xsl:use-attribute-sets="__lotf__indent">
       <fo:block xsl:use-attribute-sets="__lotf__content">
-        <fo:basic-link internal-destination="{@id}" xsl:use-attribute-sets="__toc__link">
+        <fo:basic-link xsl:use-attribute-sets="__toc__link">
+          <xsl:attribute name="internal-destination">
+            <xsl:call-template name="get-id"/>
+          </xsl:attribute>
           
           <fo:inline xsl:use-attribute-sets="__lotf__title" keep-together.within-line="always" margin-right=".2in">
             <xsl:call-template name="insertVariable">
@@ -81,14 +84,17 @@
           
           <fo:inline margin-left="-.2in" keep-together.within-line="always">
             <fo:leader xsl:use-attribute-sets="__lotf__leader"/>
-            <fo:page-number-citation ref-id="{@id}"/>
+            <fo:page-number-citation>
+              <xsl:attribute name="ref-id">
+                <xsl:call-template name="get-id"/>
+              </xsl:attribute>
+            </fo:page-number-citation>
           </fo:inline>
           
         </fo:basic-link>
       </fo:block>
     </fo:block>
   </xsl:template>
-
 
   <!--   LOF   -->
   
@@ -128,7 +134,10 @@
     
     <fo:block xsl:use-attribute-sets="__lotf__indent">
       <fo:block xsl:use-attribute-sets="__lotf__content">
-        <fo:basic-link internal-destination="{@id}" xsl:use-attribute-sets="__toc__link">
+        <fo:basic-link xsl:use-attribute-sets="__toc__link">
+          <xsl:attribute name="internal-destination">
+            <xsl:call-template name="get-id"/>
+          </xsl:attribute>
           
           <fo:inline xsl:use-attribute-sets="__lotf__title" keep-together.within-line="always" margin-right=".2in">
             <xsl:call-template name="insertVariable">
@@ -150,7 +159,11 @@
           
           <fo:inline margin-left="-.2in" keep-together.within-line="always">
             <fo:leader xsl:use-attribute-sets="__lotf__leader"/>
-            <fo:page-number-citation ref-id="{@id}"/>
+            <fo:page-number-citation>
+              <xsl:attribute name="ref-id">
+                <xsl:call-template name="get-id"/>
+              </xsl:attribute>
+            </fo:page-number-citation>
           </fo:inline>
           
         </fo:basic-link>

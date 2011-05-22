@@ -1679,6 +1679,11 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class,' topic/fig ')]">
         <fo:block xsl:use-attribute-sets="fig">
             <xsl:call-template name="commonattributes"/>
+            <xsl:if test="not(@id)">
+              <xsl:attribute name="id">
+                <xsl:call-template name="get-id"/>
+              </xsl:attribute>
+            </xsl:if>
             <xsl:apply-templates select="*[not(contains(@class,' topic/title '))]"/>
             <xsl:apply-templates select="*[contains(@class,' topic/title ')]"/>
         </fo:block>
@@ -2127,6 +2132,19 @@ See the accompanying license.txt file for applicable licenses.
     <!-- Process common attributes -->
     <xsl:template name="commonattributes">
       <xsl:apply-templates select="@id"/>
+    </xsl:template>
+
+    <!-- Get ID for an element, generate ID if not explicitly set. -->
+    <xsl:template name="get-id">
+      <xsl:param name="element" select="."/>
+      <xsl:choose>
+        <xsl:when test="$element/@id">
+          <xsl:value-of select="$element/@id"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="generate-id($element)"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:template>
 
 </xsl:stylesheet>
