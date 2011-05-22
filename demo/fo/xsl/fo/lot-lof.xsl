@@ -14,11 +14,29 @@
     version="1.1">
   
   <xsl:variable name="tableset">
-    <xsl:copy-of select="//*[contains (@class, ' topic/table ')][child::*[contains(@class, ' topic/title ' )]]" />
+    <xsl:for-each select="//*[contains (@class, ' topic/table ')][*[contains(@class, ' topic/title ' )]]">
+      <xsl:copy>
+        <xsl:copy-of select="@*"/>
+        <xsl:if test="not(@id)">
+          <xsl:attribute name="id">
+            <xsl:call-template name="get-id"/>
+          </xsl:attribute>
+        </xsl:if>
+      </xsl:copy>
+    </xsl:for-each>
   </xsl:variable>
   
   <xsl:variable name="figureset">
-    <xsl:copy-of select="//*[contains (@class, ' topic/fig ')][child::*[contains(@class, ' topic/title ' )]]" />
+    <xsl:for-each select="//*[contains (@class, ' topic/fig ')][*[contains(@class, ' topic/title ' )]]">
+      <xsl:copy>
+        <xsl:copy-of select="@*"/>
+        <xsl:if test="not(@id)">
+          <xsl:attribute name="id">
+            <xsl:call-template name="get-id"/>
+          </xsl:attribute>
+        </xsl:if>
+      </xsl:copy>
+    </xsl:for-each>
   </xsl:variable>
   
   
@@ -69,7 +87,9 @@
               <xsl:with-param name="theVariableID" select="'Table'"/>
               <xsl:with-param name="theParameters">
                 <number>
-                  <xsl:variable name="id" select="@id"/>
+                  <xsl:variable name="id">
+                    <xsl:call-template name="get-id"/>
+                  </xsl:variable>
                   <xsl:variable name="tableNumber">
                     <xsl:number format="1" value="count($tableset/*[@id = $id]/preceding-sibling::*) + 1" />
                   </xsl:variable>
@@ -144,7 +164,9 @@
               <xsl:with-param name="theVariableID" select="'Figure'"/>
               <xsl:with-param name="theParameters">
                 <number>
-                  <xsl:variable name="id" select="@id"/>
+                  <xsl:variable name="id">
+                    <xsl:call-template name="get-id"/>
+                  </xsl:variable>
                   <xsl:variable name="figureNumber">
                     <xsl:number format="1" value="count($figureset/*[@id = $id]/preceding-sibling::*) + 1" />
                   </xsl:variable>
