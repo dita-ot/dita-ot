@@ -1585,6 +1585,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class,' topic/note ')]">
         <xsl:variable name="noteType">
             <xsl:choose>
+                <xsl:when test="@type = 'other' and @othertype">
+                    <xsl:value-of select="@othertype"/>
+                </xsl:when>
                 <xsl:when test="@type">
                     <xsl:value-of select="@type"/>
                 </xsl:when>
@@ -1601,8 +1604,8 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:choose>
             <xsl:when test="not($noteImagePath = '')">
                 <fo:table xsl:use-attribute-sets="note__table">
-                    <fo:table-column column-number="1"/>
-                    <fo:table-column column-number="2"/>
+                    <fo:table-column xsl:use-attribute-sets="note__image__column"/>
+                    <fo:table-column xsl:use-attribute-sets="note__text__column"/>
                     <fo:table-body>
                         <fo:table-row>
                                 <fo:table-cell xsl:use-attribute-sets="note__image__entry">

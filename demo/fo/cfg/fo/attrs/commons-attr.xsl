@@ -308,6 +308,15 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="space-before">0.6em</xsl:attribute>
         <xsl:attribute name="space-after">0.6em</xsl:attribute>
     </xsl:attribute-set>
+  
+    <xsl:attribute-set name="note__image__column">
+        <xsl:attribute name="column-number">1</xsl:attribute>
+        <xsl:attribute name="column-width">32pt</xsl:attribute>
+    </xsl:attribute-set>
+  
+    <xsl:attribute-set name="note__text__column">
+      <xsl:attribute name="column-number">2</xsl:attribute>
+    </xsl:attribute-set>  
 
     <xsl:attribute-set name="note__image__entry">
         <xsl:attribute name="padding-right">5pt</xsl:attribute>
