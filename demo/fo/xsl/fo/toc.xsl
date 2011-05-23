@@ -42,8 +42,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:variable name="map" select="//opentopic:map"/>
 
     <xsl:template name="createTocHeader">
-        <fo:block xsl:use-attribute-sets="__toc__header">
-            <xsl:attribute name="id">ID_TOC_00-0F-EA-40-0D-4D</xsl:attribute>
+        <fo:block xsl:use-attribute-sets="__toc__header" id="{$id.toc}">
             <xsl:call-template name="insertVariable">
                 <xsl:with-param name="theVariableID" select="'Table of Contents'"/>
             </xsl:call-template>

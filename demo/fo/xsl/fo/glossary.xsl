@@ -14,8 +14,7 @@ version="1.1">
                 <fo:flow flow-name="xsl-region-body">
 
 
-                    <fo:block xsl:use-attribute-sets="__glossary__label">
-                        <xsl:attribute name="id">ID_GLOSSARY_00-0F-EA-40-0D-4D</xsl:attribute>
+                    <fo:block xsl:use-attribute-sets="__glossary__label" id="{$id.glossary}">
                         <xsl:call-template name="insertVariable">
                             <xsl:with-param name="theVariableID" select="'Glossary'"/>
                         </xsl:call-template>

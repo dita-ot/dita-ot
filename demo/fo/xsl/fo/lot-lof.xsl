@@ -60,8 +60,7 @@
   </xsl:template>
 
   <xsl:template name="createLOTHeader">
-    <fo:block xsl:use-attribute-sets="__lotf__heading">
-      <xsl:attribute name="id">ID_LOT_00-0F-EA-40-0D-4D</xsl:attribute>
+    <fo:block xsl:use-attribute-sets="__lotf__heading" id="{$id.lot}">
       <fo:marker marker-class-name="current-header">
         <xsl:call-template name="insertVariable">
           <xsl:with-param name="theVariableID" select="'List of Tables'"/>
@@ -137,8 +136,7 @@
   </xsl:template>
   
   <xsl:template name="createLOFHeader">
-    <fo:block xsl:use-attribute-sets="__lotf__heading">
-      <xsl:attribute name="id">ID_LOF_00-0F-EA-40-0D-4D</xsl:attribute>
+    <fo:block xsl:use-attribute-sets="__lotf__heading" id="{$id.lof}">
       <fo:marker marker-class-name="current-header">
         <xsl:call-template name="insertVariable">
           <xsl:with-param name="theVariableID" select="'List of Figures'"/>

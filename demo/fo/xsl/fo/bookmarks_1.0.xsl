@@ -56,7 +56,7 @@ See the accompanying license.txt file for applicable licenses.
                     <xsl:when test="($ditaVersion &gt;= 1.1) and $map//*[contains(@class,' bookmap/toc ')][@href]"/>
                     <xsl:when test="($ditaVersion &gt;= 1.1) and ($map//*[contains(@class,' bookmap/toc ')]
                         				or /*[contains(@class,' map/map ')][not(contains(@class,' bookmap/bookmap '))])">
-                        <fo:bookmark internal-destination="ID_TOC_00-0F-EA-40-0D-4D">
+                        <fo:bookmark internal-destination="{$id.toc}">
                             <fo:bookmark-title>
                                 <xsl:call-template name="insertVariable">
                                     <xsl:with-param name="theVariableID" select="'Table of Contents'"/>
@@ -66,7 +66,7 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:when>
 					<xsl:when test="$ditaVersion &gt;= 1.1"/>
                     <xsl:otherwise>
-                        <fo:bookmark internal-destination="ID_TOC_00-0F-EA-40-0D-4D">
+                        <fo:bookmark internal-destination="{$id.toc}">
                             <fo:bookmark-title>
                                 <xsl:call-template name="insertVariable">
                                     <xsl:with-param name="theVariableID" select="'Table of Contents'"/>
@@ -82,7 +82,7 @@ See the accompanying license.txt file for applicable licenses.
                         <xsl:when test="($ditaVersion &gt;= 1.1) and $map//*[contains(@class,' bookmap/indexlist ')][@href]"/>
                         <xsl:when test="($ditaVersion &gt;= 1.1) and ($map//*[contains(@class,' bookmap/indexlist ')]
                         				or /*[contains(@class,' map/map ')][not(contains(@class,' bookmap/bookmap '))])">
-                            <fo:bookmark internal-destination="ID_INDEX_00-0F-EA-40-0D-4D">
+                            <fo:bookmark internal-destination="{$id.index}">
                                 <fo:bookmark-title>
                                     <xsl:call-template name="insertVariable">
                                         <xsl:with-param name="theVariableID" select="'Index'"/>
@@ -92,7 +92,7 @@ See the accompanying license.txt file for applicable licenses.
                         </xsl:when>
                         <xsl:when test="$ditaVersion &gt;= 1.1"/>
                         <xsl:otherwise>
-                            <fo:bookmark internal-destination="ID_INDEX_00-0F-EA-40-0D-4D">
+                            <fo:bookmark internal-destination="{$id.index}">
                                 <fo:bookmark-title>
                                     <xsl:call-template name="insertVariable">
                                         <xsl:with-param name="theVariableID" select="'Index'"/>
@@ -107,7 +107,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
     
     <xsl:template match="ot-placeholder:glossarylist" mode="bookmark">
-        <fo:bookmark internal-destination="ID_GLOSSARY_00-0F-EA-40-0D-4D">
+        <fo:bookmark internal-destination="{$id.glossary}">
             <xsl:if test="$bookmarkStyle!='EXPANDED'">
                 <xsl:attribute name="starting-state">hide</xsl:attribute>
             </xsl:if>
@@ -123,7 +123,7 @@ See the accompanying license.txt file for applicable licenses.
     
     <xsl:template match="ot-placeholder:tablelist" mode="bookmark">
         <xsl:if test="//*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ' )]">
-            <fo:bookmark internal-destination="ID_LOT_00-0F-EA-40-0D-4D">
+            <fo:bookmark internal-destination="{$id.lot}">
                 <xsl:if test="$bookmarkStyle!='EXPANDED'">
                     <xsl:attribute name="starting-state">hide</xsl:attribute>
                 </xsl:if>
@@ -140,7 +140,7 @@ See the accompanying license.txt file for applicable licenses.
     
     <xsl:template match="ot-placeholder:figurelist" mode="bookmark">
         <xsl:if test="//*[contains(@class, ' topic/fig ')]/*[contains(@class, ' topic/title ' )]">
-            <fo:bookmark internal-destination="ID_LOF_00-0F-EA-40-0D-4D">
+            <fo:bookmark internal-destination="{$id.lof}">
                 <xsl:if test="$bookmarkStyle!='EXPANDED'">
                     <xsl:attribute name="starting-state">hide</xsl:attribute>
                 </xsl:if>

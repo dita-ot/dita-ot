@@ -78,8 +78,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:call-template name="insertIndexStaticContents"/>
 
             <fo:flow flow-name="xsl-region-body">
-                <fo:block xsl:use-attribute-sets="__index__label">
-                    <xsl:attribute name="id">ID_INDEX_00-0F-EA-40-0D-4D</xsl:attribute>
+                <fo:block xsl:use-attribute-sets="__index__label" id="{$id.index}">
                     <xsl:call-template name="insertVariable">
                         <xsl:with-param name="theVariableID" select="'Index'"/>
                     </xsl:call-template>

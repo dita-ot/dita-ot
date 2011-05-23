@@ -49,7 +49,7 @@ See the accompanying license.txt file for applicable licenses.
 
         <xsl:if test="count(exsl:node-set($bookmarks)/*) > 0">
             <fo:bookmark-tree>
-                <fo:bookmark internal-destination="ID_TOC_00-0F-EA-40-0D-4D">
+                <fo:bookmark internal-destination="{$id.toc}">
                     <xsl:if test="$bookmarkStyle!='EXPANDED'">
                         <xsl:attribute name="starting-state">hide</xsl:attribute>
                     </xsl:if>
@@ -62,7 +62,7 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:copy-of select="exsl:node-set($bookmarks)"/>
                 <!-- CC #6163  -->
                 <xsl:if test="(//opentopic-index:index.groups//opentopic-index:index.entry) and (count($index-entries//opentopic-index:index.entry) &gt; 0) ">
-                    <fo:bookmark internal-destination="ID_INDEX_00-0F-EA-40-0D-4D">
+                    <fo:bookmark internal-destination="{$id.index}">
                         <xsl:if test="$bookmarkStyle!='EXPANDED'">
                             <xsl:attribute name="starting-state">hide</xsl:attribute>
                         </xsl:if>
