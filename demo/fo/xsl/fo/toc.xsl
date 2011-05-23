@@ -112,11 +112,10 @@ See the accompanying license.txt file for applicable licenses.
                             <xsl:apply-templates select="$topicType" mode="toc-prefix-text">
                                 <xsl:with-param name="id" select="@id"/>
                             </xsl:apply-templates>
-                            <fo:inline xsl:use-attribute-sets="__toc__title" margin-right=".2in"
-                                       keep-together.within-line="always">
+                            <fo:inline xsl:use-attribute-sets="__toc__title">
                                 <xsl:value-of select="$topicTitle"/>
                             </fo:inline>
-                            <fo:inline margin-left="-.2in" keep-together.within-line="always">
+                            <fo:inline xsl:use-attribute-sets="__toc__page-number">
                                 <fo:leader xsl:use-attribute-sets="__toc__leader"/>
                                 <fo:page-number-citation>
                                   <xsl:attribute name="ref-id">

@@ -105,13 +105,13 @@ See the accompanying license.txt file for applicable licenses.
             <fo:block xsl:use-attribute-sets="__toc__topic__content__glossary">
                 <fo:basic-link internal-destination="{$id.glossary}" xsl:use-attribute-sets="__toc__link">
                     
-                    <fo:inline xsl:use-attribute-sets="__toc__title" keep-together.within-line="always" margin-right=".2in">
+                    <fo:inline xsl:use-attribute-sets="__toc__title">
                         <xsl:call-template name="insertVariable">
                             <xsl:with-param name="theVariableID" select="'Glossary'"/>
                         </xsl:call-template>
                     </fo:inline>
                     
-                    <fo:inline margin-left="-.2in" keep-together.within-line="always">
+                    <fo:inline xsl:use-attribute-sets="__toc__page-number">
                         <fo:leader xsl:use-attribute-sets="__toc__leader"/>
                         <fo:page-number-citation ref-id="{$id.glossary}"/>
                     </fo:inline>
@@ -127,13 +127,13 @@ See the accompanying license.txt file for applicable licenses.
                 <fo:block xsl:use-attribute-sets="__toc__topic__content__lot">
                     <fo:basic-link internal-destination="{$id.lot}" xsl:use-attribute-sets="__toc__link">
                         
-                        <fo:inline xsl:use-attribute-sets="__toc__title" keep-together.within-line="always" margin-right=".2in">
+                        <fo:inline xsl:use-attribute-sets="__toc__title">
                             <xsl:call-template name="insertVariable">
                                 <xsl:with-param name="theVariableID" select="'List of Tables'"/>
                             </xsl:call-template>
                         </fo:inline>
                         
-                        <fo:inline margin-left="-.2in" keep-together.within-line="always">
+                        <fo:inline xsl:use-attribute-sets="__toc__page-number">
                             <fo:leader xsl:use-attribute-sets="__toc__leader"/>
                             <fo:page-number-citation ref-id="{$id.lot}"/>
                         </fo:inline>
@@ -150,13 +150,13 @@ See the accompanying license.txt file for applicable licenses.
                 <fo:block xsl:use-attribute-sets="__toc__topic__content__lof">
                     <fo:basic-link internal-destination="{$id.lof}" xsl:use-attribute-sets="__toc__link">
                         
-                        <fo:inline xsl:use-attribute-sets="__toc__title" keep-together.within-line="always" margin-right=".2in">
+                        <fo:inline xsl:use-attribute-sets="__toc__title">
                             <xsl:call-template name="insertVariable">
                                 <xsl:with-param name="theVariableID" select="'List of Figures'"/>
                             </xsl:call-template>
                         </fo:inline>
                         
-                        <fo:inline margin-left="-.2in" keep-together.within-line="always">
+                        <fo:inline xsl:use-attribute-sets="__toc__page-number">
                             <fo:leader xsl:use-attribute-sets="__toc__leader"/>
                             <fo:page-number-citation ref-id="{$id.lof}"/>
                         </fo:inline>

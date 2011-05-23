@@ -81,7 +81,7 @@
             <xsl:call-template name="get-id"/>
           </xsl:attribute>
           
-          <fo:inline xsl:use-attribute-sets="__lotf__title" keep-together.within-line="always" margin-right=".2in">
+          <fo:inline xsl:use-attribute-sets="__lotf__title">
             <xsl:call-template name="insertVariable">
               <xsl:with-param name="theVariableID" select="'Table'"/>
               <xsl:with-param name="theParameters">
@@ -101,7 +101,7 @@
             </xsl:call-template>
           </fo:inline>
           
-          <fo:inline margin-left="-.2in" keep-together.within-line="always">
+          <fo:inline xsl:use-attribute-sets="__lotf__page-number">
             <fo:leader xsl:use-attribute-sets="__lotf__leader"/>
             <fo:page-number-citation>
               <xsl:attribute name="ref-id">
@@ -157,7 +157,7 @@
             <xsl:call-template name="get-id"/>
           </xsl:attribute>
           
-          <fo:inline xsl:use-attribute-sets="__lotf__title" keep-together.within-line="always" margin-right=".2in">
+          <fo:inline xsl:use-attribute-sets="__lotf__title">
             <xsl:call-template name="insertVariable">
               <xsl:with-param name="theVariableID" select="'Figure'"/>
               <xsl:with-param name="theParameters">
@@ -177,7 +177,7 @@
             </xsl:call-template>
           </fo:inline>
           
-          <fo:inline margin-left="-.2in" keep-together.within-line="always">
+          <fo:inline xsl:use-attribute-sets="__lotf__page-number">
             <fo:leader xsl:use-attribute-sets="__lotf__leader"/>
             <fo:page-number-citation>
               <xsl:attribute name="ref-id">
