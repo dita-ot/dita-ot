@@ -34,7 +34,7 @@ version="1.1">
             <xsl:call-template name="commonattributes"/>
             <fo:block>
                 <xsl:attribute name="id">
-                    <xsl:value-of select="concat('_OPENTOPIC_TOC_PROCESSING_', generate-id())"/>
+                    <xsl:call-template name="generate-toc-id"/>
                 </xsl:attribute>
                 <fo:block xsl:use-attribute-sets="__glossary__term">
                     <xsl:apply-templates select="*[contains(@class, ' glossentry/glossterm ')]/node()"/>

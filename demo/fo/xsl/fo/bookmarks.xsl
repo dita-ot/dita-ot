@@ -95,7 +95,10 @@ See the accompanying license.txt file for applicable licenses.
         <!-- added by William on 2009-05-11 for toc bug start -->
         <xsl:choose>
         	<xsl:when test="($mapTopic/*[position() = $topicNumber][@toc = 'yes' or not(@toc)]) or (not($mapTopic/*))">
-        		<fo:bookmark internal-destination="{concat('_OPENTOPIC_TOC_PROCESSING_', generate-id())}">
+        		<fo:bookmark>
+          		  <xsl:attribute name="internal-destination">
+          		      <xsl:call-template name="generate-toc-id"/>
+          		  </xsl:attribute>
                     <xsl:if test="$bookmarkStyle!='EXPANDED'">
                         <xsl:attribute name="starting-state">hide</xsl:attribute>
                     </xsl:if>

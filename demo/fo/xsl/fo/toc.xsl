@@ -105,7 +105,10 @@ See the accompanying license.txt file for applicable licenses.
             	<xsl:when test="($mapTopic/*[position() = $topicNumber][@toc = 'yes' or not(@toc)]) or (not($mapTopic/*) and $include = 'true')">
                     <fo:block xsl:use-attribute-sets="__toc__indent">
                         <xsl:variable name="tocItemContent">
-                          <fo:basic-link internal-destination="{concat('_OPENTOPIC_TOC_PROCESSING_', generate-id())}" xsl:use-attribute-sets="__toc__link">
+                          <fo:basic-link xsl:use-attribute-sets="__toc__link">
+                            <xsl:attribute name="internal-destination">
+                              <xsl:call-template name="generate-toc-id"/>
+                            </xsl:attribute>
                             <xsl:apply-templates select="$topicType" mode="toc-prefix-text">
                                 <xsl:with-param name="id" select="@id"/>
                             </xsl:apply-templates>
@@ -115,8 +118,11 @@ See the accompanying license.txt file for applicable licenses.
                             </fo:inline>
                             <fo:inline margin-left="-.2in" keep-together.within-line="always">
                                 <fo:leader xsl:use-attribute-sets="__toc__leader"/>
-                                <fo:page-number-citation
-                                        ref-id="{concat('_OPENTOPIC_TOC_PROCESSING_', generate-id())}"/>
+                                <fo:page-number-citation>
+                                  <xsl:attribute name="ref-id">
+                                    <xsl:call-template name="generate-toc-id"/>
+                                  </xsl:attribute>
+                                </fo:page-number-citation>
                             </fo:inline>
                         </fo:basic-link>
                         </xsl:variable>

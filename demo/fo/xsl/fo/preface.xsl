@@ -91,7 +91,11 @@ See the accompanying license.txt file for applicable licenses.
                         </fo:marker>
                     </xsl:if>
                     <fo:inline id="{@id}"/>
-                    <fo:inline id="{concat('_OPENTOPIC_TOC_PROCESSING_', generate-id())}"/>
+                    <fo:inline>
+                        <xsl:attribute name="id"">
+                            <xsl:call-template name="generate-toc-id"/>
+                        </xsl:attribute>
+                    </fo:inline>
                     <fo:block>
                         <xsl:attribute name="border-bottom">3pt solid black</xsl:attribute>
                         <xsl:attribute name="margin-bottom">1.4pc</xsl:attribute>

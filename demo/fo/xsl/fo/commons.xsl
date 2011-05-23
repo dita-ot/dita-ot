@@ -519,7 +519,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:param name="type"/>
         <fo:block>
             <xsl:attribute name="id">
-                <xsl:value-of select="concat('_OPENTOPIC_TOC_PROCESSING_', generate-id())"/>
+                <xsl:call-template name="generate-toc-id"/>
             </xsl:attribute>
             <xsl:choose>
                 <xsl:when test="$type = 'chapter'">
@@ -724,7 +724,13 @@ See the accompanying license.txt file for applicable licenses.
                     </fo:marker>
                 </xsl:if>
                 <fo:inline id="{parent::node()/@id}"/>
-                <fo:inline id="{concat('_OPENTOPIC_TOC_PROCESSING_', generate-id(..))}"/>
+                <fo:inline>
+                    <xsl:attribute name="id">
+                        <xsl:call-template name="generate-toc-id">
+                            <xsl:with-param name="element" select=".."/>
+                        </xsl:call-template>
+                    </xsl:attribute>
+                </fo:inline>
                 <!-- added by William on 2009-07-02 for indexterm bug:2815485 start-->
                 <xsl:call-template name="pullPrologIndexTerms"/>
                 <!-- added by William on 2009-07-02 for indexterm bug:2815485 end-->
@@ -2148,6 +2154,12 @@ See the accompanying license.txt file for applicable licenses.
           <xsl:value-of select="generate-id($element)"/>
         </xsl:otherwise>
       </xsl:choose>
+    </xsl:template>
+
+    <!-- Generate TOC ID -->
+    <xsl:template name="generate-toc-id">
+      <xsl:param name="element" select="."/>
+      <xsl:value-of select="concat('_OPENTOPIC_TOC_PROCESSING_', generate-id($element))"/>
     </xsl:template>
 
 </xsl:stylesheet>
