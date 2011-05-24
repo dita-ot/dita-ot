@@ -133,19 +133,19 @@
           <fileset dir="/usr" includes="XSLFormatterV*/run.sh" erroronmissingdir="false"/>
           <fileset dir="C:\Program Files\AntennaHouse" erroronmissingdir="false">
             <include name="AHFormatterV*\AHFCmd.exe"/>
-            <include name="AHFormatterV*\XSLCmd.exe"/>
+            <include name="XSLFormatterV*\XSLCmd.exe"/>
           </fileset>
           <fileset dir="C:\Program Files\Antenna" erroronmissingdir="false">
             <include name="AHFormatterV*\AHFCmd.exe"/>
-            <include name="AHFormatterV*\XSLCmd.exe"/>
+            <include name="XSLFormatterV*\XSLCmd.exe"/>
           </fileset>
           <fileset dir="C:\Program Files (x86)\AntennaHouse" erroronmissingdir="false">
             <include name="AHFormatterV*\AHFCmd.exe"/>
-            <include name="AHFormatterV*\XSLCmd.exe"/>
+            <include name="XSLFormatterV*\XSLCmd.exe"/>
           </fileset>
           <fileset dir="C:\Program Files (x86)\Antenna" erroronmissingdir="false">
             <include name="AHFormatterV*\AHFCmd.exe"/>
-            <include name="AHFormatterV*\XSLCmd.exe"/>
+            <include name="XSLFormatterV*\XSLCmd.exe"/>
           </fileset>
         </union>
       </first>
