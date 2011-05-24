@@ -43,6 +43,9 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:variable name="id.toc" select="'ID_TOC_00-0F-EA-40-0D-4D'"/>
     <xsl:variable name="id.index" select="'ID_INDEX_00-0F-EA-40-0D-4D'"/>
+    <xsl:variable name="id.lot" select="'ID_LOT_00-0F-EA-40-0D-4D'"/>
+    <xsl:variable name="id.lof" select="'ID_LOF_00-0F-EA-40-0D-4D'"/>
+    <xsl:variable name="id.glossary" select="'ID_GLOSSARY_00-0F-EA-40-0D-4D'"/>
 
     <!--  In order to not process any data under opentopic:map  -->
     <xsl:template match="opentopic:map"/>

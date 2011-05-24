@@ -42,10 +42,6 @@ See the accompanying license.txt file for applicable licenses.
     exclude-result-prefixes="opentopic exsl opentopic-index exslf opentopic-func"
     version="1.1">
 
-    <xsl:variable name="id.lot" select="'ID_LOT_00-0F-EA-40-0D-4D'"/>
-    <xsl:variable name="id.lof" select="'ID_LOF_00-0F-EA-40-0D-4D'"/>
-    <xsl:variable name="id.glossary" select="'ID_GLOSSARY_00-0F-EA-40-0D-4D'"/>
-
     <!-- BS: Template owerwrited to define new topic types (List's),
     to create special processing for any of list you should use <template name="processUnknowTopic"/>
     example below.-->
