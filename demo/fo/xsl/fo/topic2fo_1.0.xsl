@@ -39,7 +39,7 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
     xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
     exclude-result-prefixes="opentopic-index opentopic opentopic-i18n opentopic-func"
-    version="1.1">
+    version="2.0">
 
     <xsl:import href="../common/attr-set-reflection.xsl"/>
     <xsl:import href="../common/vars.xsl"/>

@@ -39,7 +39,7 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
     extension-element-prefixes="exsl"
     exclude-result-prefixes="opentopic-func exslf exsl dita2xslfo"
-    version="1.1">
+    version="2.0">
 
     <xsl:variable name="tableAttrs" select="'../../cfg/fo/attrs/tables-attr.xsl'"/>
 

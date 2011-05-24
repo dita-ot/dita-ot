@@ -11,7 +11,7 @@
     xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
     extension-element-prefixes="exsl"
     exclude-result-prefixes="opentopic exsl opentopic-index dita2xslfo ot-placeholder"
-    version="1.1">
+    version="2.0">
   
   <xsl:variable name="tableset">
     <xsl:for-each select="//*[contains (@class, ' topic/table ')][*[contains(@class, ' topic/title ' )]]">

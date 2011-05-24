@@ -7,7 +7,7 @@
     E-mail : info@antennahouse.com
     ============================================================
 -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
 
     <xsl:attribute-set name="__toc__mini__table">
         <xsl:attribute name="table-layout">fixed</xsl:attribute>

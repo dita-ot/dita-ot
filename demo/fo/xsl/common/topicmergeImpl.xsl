@@ -33,7 +33,7 @@ See the accompanying license.txt file for applicable licenses.
 
 <!-- An adaptation of the Toolkit topicmerge.xsl for FO plugin use. -->
 
-<xsl:stylesheet version="1.1"
+<xsl:stylesheet version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:exsl="http://exslt.org/common"
                 xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"

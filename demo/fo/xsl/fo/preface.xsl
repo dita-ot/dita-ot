@@ -37,7 +37,7 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:exsl="http://exslt.org/common"
     extension-element-prefixes="exsl"
     exclude-result-prefixes="opentopic exsl"
-    version="1.1">
+    version="2.0">
 
      <xsl:template name="processTopicPreface">
          <fo:page-sequence master-reference="body-sequence" format="i" xsl:use-attribute-sets="__force__page__count">

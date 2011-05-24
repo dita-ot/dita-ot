@@ -35,7 +35,7 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:opentopic="http://www.idiominc.com/opentopic"
     exclude-result-prefixes="opentopic"
-    version="1.1">
+    version="2.0">
 
     <xsl:variable name="map" select="//opentopic:map"/>
 
