@@ -7,9 +7,9 @@
   <extension-point id="depend.org.dita.pdf2.format" name="Formatting target"/>
   <extension-point id="depend.org.dita.pdf2.format.post" name="Formatting post-target"/>
   <!-- extensions -->
-  <feature extension="dita.conductor.lib.import" value="lib/fo.jar" type="file"/>
+  <feature extension="dita.conductor.lib.import" file="lib/fo.jar"/>
   <feature extension="dita.conductor.transtype.check" value="pdf2" type="pdf"/>
-  <feature extension="dita.conductor.target.relative" value="integrator.xml" type="file"/>
+  <feature extension="dita.conductor.target.relative" file="integrator.xml"/>
   <template file="build_template.xml"/>
   <template file="xsl/fo/topic2fo_shell_template.xsl"/>
   <template file="xsl/fo/topic2fo_shell_axf_template.xsl"/>

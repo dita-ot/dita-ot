@@ -7,9 +7,9 @@
   <feature extension="dita.specialization.catalog.relative"
       value="catalog-dita.xml" type="file"/>
   <feature extension="dita.xsl.xhtml"
-      value="xsl/apiref2xhtml.xsl" type="file"/>
+      file="xsl/apiref2xhtml.xsl"/>
   <feature extension="dita.conductor.target.relative"
-      value="conductor.xml" type="file"/>
+      file="conductor.xml"/>
   <feature extension="dita.xsl.strings"
-      value="xsl/apistrings.xml" type="file"/>
+      file="xsl/apistrings.xml"/>
 </plugin>

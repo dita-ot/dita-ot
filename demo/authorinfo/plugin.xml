@@ -6,6 +6,6 @@
 <plugin id="com.ibm.specialization.authorinfo">
   <!-- Extend the toolkit catalog to include DTDs. -->
   <feature extension="dita.specialization.catalog.relative"
-      value="catalog-dita.xml" type="file"/>
+      file="catalog-dita.xml"/>
 
 </plugin>
