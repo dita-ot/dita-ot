@@ -1,76 +1,26 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE bookmap PUBLIC "-//OASIS//DTD DITA BookMap//EN" "bookmap.dtd">
-<bookmap>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "../../dtd/technicalContent/dtd/map.dtd">
+<map>
 <title>Ant Quick Start Guide for DITA Open Toolkit</title>
-<bookmeta>
-<authorinformation>
-<personinfo>
-	<namedetails>
-		<personname>
-			<firstname>Robert</firstname>
-			<middlename/>
-			<lastname>Justice</lastname>
-			<generationidentifier/>
-			<otherinfo>Technical Writer</otherinfo>
-		</personname>
-	</namedetails>
-	<addressdetails/>
-	<contactnumbers/>
-	<emailaddresses>
-		<emailaddress>bit.writer@yahoo.com</emailaddress>
-	</emailaddresses>
-</personinfo>
-<organizationinfo><namedetails><organizationnamedetails>
-<organizationname></organizationname>
-</organizationnamedetails></namedetails>
-<addressdetails></addressdetails>
-<contactnumbers/>
-<emailaddresses><emailaddress></emailaddress></emailaddresses>
-<urls/>
-</organizationinfo>
-</authorinformation>
-<keywords><keyword>1.5.3</keyword><keyword>DITA Open Toolkit</keyword><keyword>Quick Start Guide</keyword><keyword>DITA-OT</keyword></keywords>
-<prodinfo>
-<prodname></prodname>
-<vrmlist><vrm version="1.5.3"/></vrmlist>
-</prodinfo>
-<bookid><bookpartno/><booknumber/><maintainer/></bookid>
-<bookrights><copyrfirst><year>
-</year></copyrfirst><copyrlast><year/></copyrlast><bookowner><organization/></bookowner></bookrights>
-</bookmeta>
-<frontmatter>
-<booklists>
-<glossarylist>
-  <topicref format="ditamap" href="quickstartguide/glossary/glossary.ditamap"/>
-</glossarylist>
-<toc/>
-<tablelist navtitle="List of Tables" toc="no"/>
-</booklists>
-<topicref navtitle="Preface" href="quickstartguide/topics/preface.dita" toc="yes" type="topic" audience="end-user xslt-customizer build-scripter"/>
-</frontmatter>
-<chapter href="quickstartguide/chapters/chapter1.dita">
-	<topicref format="dita" href="quickstartguide/concepts/about_introduction.dita" navtitle="Introduction to Ant and DITA-OT" toc="yes" type="concept"/>
-	<topicref format="dita" href="quickstartguide/concepts/about_ant.dita" otherprops="ant" navtitle="What is Ant?" toc="yes" type="concept"/>
-	<topicref format="dita" href="quickstartguide/concepts/about_dita-ot.dita" navtitle="What is DITA-OT?" toc="yes" type="concept"/>
-	<topicref format="dita" href="quickstartguide/concepts/about_whentouseDITAOT.dita" navtitle="When Should I Use DITA-OT" toc="yes" type="concept"/>
-</chapter>
-<chapter href="quickstartguide/chapters/chapter2.dita">
-	<topicref format="dita" href="quickstartguide/concepts/about_antbuildfiles.dita" navtitle="Writing Your Own DITA-OT Build File" toc="yes" type="concept"/>
-	<topicref format="dita" href="quickstartguide/reference/dita-ot_ant_properties.dita" otherprops="ant" navtitle="DITA-OT XSL Processing Properties" toc="yes" type="reference"/>
-	<topicref format="dita" href="quickstartguide/tasks/generating_documents.dita" navtitle="Generating Documents with Ant" toc="yes" type="task"/>
-	<topicref format="dita" href="quickstartguide/concepts/about_javacmdinterface.dita" navtitle="Generating Documents with Java" toc="yes" type="concept"/>
-	<topicref format="dita" href="quickstartguide/tasks/generating_documentswithjava.dita" navtitle="About the Java Command Line Interface" toc="yes" type="task"/>
-	<topicref format="dita" href="quickstartguide/tasks/using_DITAOTBuildLogger.dita" type="task" toc="yes"/>
-</chapter>
-<chapter href="quickstartguide/chapters/chapter3.dita" toc="yes">
-	<topicref format="dita" href="quickstartguide/concepts/about_documentgeneration.dita" otherprops="debugging" navtitle="Introducing DITA-OT Document Transformation" toc="yes" type="concept"/>
-	<topicref format="dita" href="quickstartguide/concepts/about_pdftransformation.dita" otherprops="debugging" navtitle="Introducing FO PlugIn" toc="yes" type="concept"/>
-</chapter>
-<chapter>
-	<topicref navtitle="Best Practices" href="quickstartguide/topics/best-practices.dita" toc="yes"/>
-</chapter>
-<backmatter>
-<booklists>
-</booklists>
-</backmatter>
-</bookmap>
+<topicref href="quickstartquide/chapters/chapter1.dita" toc="yes">
+	<topicref format="dita" href="quickstartquide/concepts/about_introduction.dita" navtitle="Introduction to Ant and DITA-OT" toc="yes" type="concept"/>
+	<topicref format="dita" href="quickstartguide/concepts/about_tookitroles.dita" navtitle="User Roles for the Toolkit" toc="yes" type="concept"/>
+	<topicref format="dita" href="quickstartquide/concepts/about_ant.dita" navtitle="What is Ant?" toc="yes" type="concept"/>
+	<topicref format="dita" href="quickstartquide/concepts/about_dita-ot.dita" navtitle="What is DITA-OT?" toc="yes" type="concept"/>
+	<topicref format="dita" href="quickstartquide/concepts/about_whentouseDITAOT.dita" navtitle="When Should I Use DITA-OT" toc="yes" type="concept"/>
+</topicref>
+<topicref href="quickstartquide/chapters/chapter2.dita" toc="yes">
+	<topicref format="dita" href="quickstartquide/concepts/about_antbuildfiles.dita" navtitle="Writing Your Own DITA-OT Build File" toc="yes" type="concept"/>
+	<topicref format="dita" href="quickstartquide/reference/dita-ot_ant_properties.dita" navtitle="DITA-OT XSL Processing Properties" toc="yes" type="reference"/>
+	<topicref format="dita" href="quickstartquide/tasks/generating_documents.dita" navtitle="Generating Documents with Ant" toc="yes" type="task"/>
+	<topicref format="dita" href="quickstartquide/concepts/about_javacmdinterface.dita" navtitle="Generating Documents with Java" toc="yes" type="concept"/>
+	<topicref format="dita" href="quickstartquide/tasks/generating_documentswithjava.dita" navtitle="About the Java Command Line Interface" toc="yes" type="task"/>
+	<topicref format="dita" href="quickstartquide/tasks/using_DITAOTBuildLogger.dita" type="task" toc="yes"/>
+</topicref>
+<topicref href="quickstartquide/chapters/chapter3.dita" toc="yes">
+	<topicref format="dita" href="quickstartquide/concepts/about_documentgeneration.dita" navtitle="" toc="yes" type="concept"/>
+</topicref>
+<topicref>
+	<topicref navtitle="Best Practices" href="quickstartquide/topics/best-practices.dita" toc="yes"/>
+</topicref>
+</map>
