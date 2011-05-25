@@ -11,14 +11,32 @@
     xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
     extension-element-prefixes="exsl"
     exclude-result-prefixes="opentopic exsl opentopic-index dita2xslfo ot-placeholder"
-    version="1.1">
+    version="2.0">
   
   <xsl:variable name="tableset">
-    <xsl:copy-of select="//*[contains (@class, ' topic/table ')][child::*[contains(@class, ' topic/title ' )]]" />
+    <xsl:for-each select="//*[contains (@class, ' topic/table ')][*[contains(@class, ' topic/title ' )]]">
+      <xsl:copy>
+        <xsl:copy-of select="@*"/>
+        <xsl:if test="not(@id)">
+          <xsl:attribute name="id">
+            <xsl:call-template name="get-id"/>
+          </xsl:attribute>
+        </xsl:if>
+      </xsl:copy>
+    </xsl:for-each>
   </xsl:variable>
   
   <xsl:variable name="figureset">
-    <xsl:copy-of select="//*[contains (@class, ' topic/fig ')][child::*[contains(@class, ' topic/title ' )]]" />
+    <xsl:for-each select="//*[contains (@class, ' topic/fig ')][*[contains(@class, ' topic/title ' )]]">
+      <xsl:copy>
+        <xsl:copy-of select="@*"/>
+        <xsl:if test="not(@id)">
+          <xsl:attribute name="id">
+            <xsl:call-template name="get-id"/>
+          </xsl:attribute>
+        </xsl:if>
+      </xsl:copy>
+    </xsl:for-each>
   </xsl:variable>
   
   
@@ -42,8 +60,7 @@
   </xsl:template>
 
   <xsl:template name="createLOTHeader">
-    <fo:block xsl:use-attribute-sets="__lotf__heading">
-      <xsl:attribute name="id">ID_LOT_00-0F-EA-40-0D-4D</xsl:attribute>
+    <fo:block xsl:use-attribute-sets="__lotf__heading" id="{$id.lot}">
       <fo:marker marker-class-name="current-header">
         <xsl:call-template name="insertVariable">
           <xsl:with-param name="theVariableID" select="'List of Tables'"/>
@@ -59,14 +76,19 @@
 
     <fo:block xsl:use-attribute-sets="__lotf__indent">
       <fo:block xsl:use-attribute-sets="__lotf__content">
-        <fo:basic-link internal-destination="{@id}" xsl:use-attribute-sets="__toc__link">
+        <fo:basic-link xsl:use-attribute-sets="__toc__link">
+          <xsl:attribute name="internal-destination">
+            <xsl:call-template name="get-id"/>
+          </xsl:attribute>
           
-          <fo:inline xsl:use-attribute-sets="__lotf__title" keep-together.within-line="always" margin-right=".2in">
+          <fo:inline xsl:use-attribute-sets="__lotf__title">
             <xsl:call-template name="insertVariable">
               <xsl:with-param name="theVariableID" select="'Table'"/>
               <xsl:with-param name="theParameters">
                 <number>
-                  <xsl:variable name="id" select="@id"/>
+                  <xsl:variable name="id">
+                    <xsl:call-template name="get-id"/>
+                  </xsl:variable>
                   <xsl:variable name="tableNumber">
                     <xsl:number format="1" value="count($tableset/*[@id = $id]/preceding-sibling::*) + 1" />
                   </xsl:variable>
@@ -79,16 +101,19 @@
             </xsl:call-template>
           </fo:inline>
           
-          <fo:inline margin-left="-.2in" keep-together.within-line="always">
+          <fo:inline xsl:use-attribute-sets="__lotf__page-number">
             <fo:leader xsl:use-attribute-sets="__lotf__leader"/>
-            <fo:page-number-citation ref-id="{@id}"/>
+            <fo:page-number-citation>
+              <xsl:attribute name="ref-id">
+                <xsl:call-template name="get-id"/>
+              </xsl:attribute>
+            </fo:page-number-citation>
           </fo:inline>
           
         </fo:basic-link>
       </fo:block>
     </fo:block>
   </xsl:template>
-
 
   <!--   LOF   -->
   
@@ -111,8 +136,7 @@
   </xsl:template>
   
   <xsl:template name="createLOFHeader">
-    <fo:block xsl:use-attribute-sets="__lotf__heading">
-      <xsl:attribute name="id">ID_LOF_00-0F-EA-40-0D-4D</xsl:attribute>
+    <fo:block xsl:use-attribute-sets="__lotf__heading" id="{$id.lof}">
       <fo:marker marker-class-name="current-header">
         <xsl:call-template name="insertVariable">
           <xsl:with-param name="theVariableID" select="'List of Figures'"/>
@@ -128,14 +152,19 @@
     
     <fo:block xsl:use-attribute-sets="__lotf__indent">
       <fo:block xsl:use-attribute-sets="__lotf__content">
-        <fo:basic-link internal-destination="{@id}" xsl:use-attribute-sets="__toc__link">
+        <fo:basic-link xsl:use-attribute-sets="__toc__link">
+          <xsl:attribute name="internal-destination">
+            <xsl:call-template name="get-id"/>
+          </xsl:attribute>
           
-          <fo:inline xsl:use-attribute-sets="__lotf__title" keep-together.within-line="always" margin-right=".2in">
+          <fo:inline xsl:use-attribute-sets="__lotf__title">
             <xsl:call-template name="insertVariable">
               <xsl:with-param name="theVariableID" select="'Figure'"/>
               <xsl:with-param name="theParameters">
                 <number>
-                  <xsl:variable name="id" select="@id"/>
+                  <xsl:variable name="id">
+                    <xsl:call-template name="get-id"/>
+                  </xsl:variable>
                   <xsl:variable name="figureNumber">
                     <xsl:number format="1" value="count($figureset/*[@id = $id]/preceding-sibling::*) + 1" />
                   </xsl:variable>
@@ -148,9 +177,13 @@
             </xsl:call-template>
           </fo:inline>
           
-          <fo:inline margin-left="-.2in" keep-together.within-line="always">
+          <fo:inline xsl:use-attribute-sets="__lotf__page-number">
             <fo:leader xsl:use-attribute-sets="__lotf__leader"/>
-            <fo:page-number-citation ref-id="{@id}"/>
+            <fo:page-number-citation>
+              <xsl:attribute name="ref-id">
+                <xsl:call-template name="get-id"/>
+              </xsl:attribute>
+            </fo:page-number-citation>
           </fo:inline>
           
         </fo:basic-link>

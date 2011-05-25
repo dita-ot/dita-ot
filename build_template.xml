@@ -4,6 +4,9 @@
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <project name="DOST" default="init" basedir=".">
+  
+  <property file="${basedir}/local.properties"/>
+  
   <import file="build_init.xml"/>  
   <import file="build_preprocess.xml"/>
         

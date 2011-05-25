@@ -3,7 +3,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:rx="http://www.renderx.com/XSL/Extensions"
-    version="1.0">
+    version="2.0">
 
   <xsl:attribute-set name ="__lotf__heading" use-attribute-sets="__toc__header">
   </xsl:attribute-set>
@@ -31,6 +31,13 @@
 
   <xsl:attribute-set name="__lotf__title" use-attribute-sets="__lotf__content">
     <xsl:attribute name="margin-left">1.5in</xsl:attribute>
+    <xsl:attribute name="margin-right">.2in</xsl:attribute>
+    <xsl:attribute name="keep-together.within-line">always</xsl:attribute>
+  </xsl:attribute-set>
+  
+  <xsl:attribute-set name="__lotf__page-number">
+    <xsl:attribute name="margin-left">-.2in</xsl:attribute>
+    <xsl:attribute name="keep-together.within-line">always</xsl:attribute>
   </xsl:attribute-set>
 
 </xsl:stylesheet>

@@ -49,7 +49,7 @@ See the accompanying license.txt file for applicable licenses.
 
         <xsl:if test="count(exsl:node-set($bookmarks)/*) > 0">
             <fo:bookmark-tree>
-                <fo:bookmark internal-destination="ID_TOC_00-0F-EA-40-0D-4D">
+                <fo:bookmark internal-destination="{$id.toc}">
                     <xsl:if test="$bookmarkStyle!='EXPANDED'">
                         <xsl:attribute name="starting-state">hide</xsl:attribute>
                     </xsl:if>
@@ -62,7 +62,7 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:copy-of select="exsl:node-set($bookmarks)"/>
                 <!-- CC #6163  -->
                 <xsl:if test="(//opentopic-index:index.groups//opentopic-index:index.entry) and (count($index-entries//opentopic-index:index.entry) &gt; 0) ">
-                    <fo:bookmark internal-destination="ID_INDEX_00-0F-EA-40-0D-4D">
+                    <fo:bookmark internal-destination="{$id.index}">
                         <xsl:if test="$bookmarkStyle!='EXPANDED'">
                             <xsl:attribute name="starting-state">hide</xsl:attribute>
                         </xsl:if>
@@ -95,7 +95,10 @@ See the accompanying license.txt file for applicable licenses.
         <!-- added by William on 2009-05-11 for toc bug start -->
         <xsl:choose>
         	<xsl:when test="($mapTopic/*[position() = $topicNumber][@toc = 'yes' or not(@toc)]) or (not($mapTopic/*))">
-        		<fo:bookmark internal-destination="{concat('_OPENTOPIC_TOC_PROCESSING_', generate-id())}">
+        		<fo:bookmark>
+          		  <xsl:attribute name="internal-destination">
+          		      <xsl:call-template name="generate-toc-id"/>
+          		  </xsl:attribute>
                     <xsl:if test="$bookmarkStyle!='EXPANDED'">
                         <xsl:attribute name="starting-state">hide</xsl:attribute>
                     </xsl:if>

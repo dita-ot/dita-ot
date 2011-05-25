@@ -32,7 +32,7 @@ interoperability between the OpenTopic FO transforms and the Open Toolkit.
 -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-	xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.1">
+	xmlns:fo="http://www.w3.org/1999/XSL/Format" version="2.0">
   <xsl:import href="topic2fo_shell.xsl"/>
   <xsl:param name="output-related-links"/>
 

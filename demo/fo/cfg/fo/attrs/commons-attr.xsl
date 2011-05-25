@@ -34,7 +34,7 @@ See the accompanying license.txt file for applicable licenses.
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:rx="http://www.renderx.com/XSL/Extensions"
-    version="1.0">
+    version="2.0">
 
     <xsl:attribute-set name="tm">
         <xsl:attribute name="border-left-width">0pt</xsl:attribute>
@@ -308,6 +308,15 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="space-before">0.6em</xsl:attribute>
         <xsl:attribute name="space-after">0.6em</xsl:attribute>
     </xsl:attribute-set>
+  
+    <xsl:attribute-set name="note__image__column">
+        <xsl:attribute name="column-number">1</xsl:attribute>
+        <xsl:attribute name="column-width">32pt</xsl:attribute>
+    </xsl:attribute-set>
+  
+    <xsl:attribute-set name="note__text__column">
+      <xsl:attribute name="column-number">2</xsl:attribute>
+    </xsl:attribute-set>  
 
     <xsl:attribute-set name="note__image__entry">
         <xsl:attribute name="padding-right">5pt</xsl:attribute>

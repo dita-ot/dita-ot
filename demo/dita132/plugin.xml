@@ -4,5 +4,5 @@
  *-->
 <plugin id="org.dita.specialization.dita132">
     <feature extension="dita.specialization.catalog.relative"
-      value="catalog.xml" type="file"/>
+      file="catalog.xml"/>
 </plugin>

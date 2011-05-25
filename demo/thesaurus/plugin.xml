@@ -4,7 +4,7 @@
  *-->
 <plugin id="org.dita.specialization.thesaurus">
   <feature extension="dita.specialization.catalog"
-      value="catalog-dita.xml" type="file"/>
+      file="catalog-dita.xml"/>
   <feature extension="dita.conductor.target"
-      value="conductor.xml" type="file"/>
+      file="conductor.xml"/>
 </plugin>

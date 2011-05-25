@@ -31,7 +31,7 @@ This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
 -->
 
-<xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:opentopic-vars="http://www.idiominc.com/opentopic/vars"
 	xmlns:exsl="http://exslt.org/common"
  	extension-element-prefixes="exsl"

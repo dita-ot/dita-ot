@@ -39,7 +39,13 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
     extension-element-prefixes="exsl"
     exclude-result-prefixes="opentopic exsl opentopic-index dita2xslfo"
-    version="1.1">
+    version="2.0">
+
+    <xsl:variable name="id.toc" select="'ID_TOC_00-0F-EA-40-0D-4D'"/>
+    <xsl:variable name="id.index" select="'ID_INDEX_00-0F-EA-40-0D-4D'"/>
+    <xsl:variable name="id.lot" select="'ID_LOT_00-0F-EA-40-0D-4D'"/>
+    <xsl:variable name="id.lof" select="'ID_LOF_00-0F-EA-40-0D-4D'"/>
+    <xsl:variable name="id.glossary" select="'ID_GLOSSARY_00-0F-EA-40-0D-4D'"/>
 
     <!--  In order to not process any data under opentopic:map  -->
     <xsl:template match="opentopic:map"/>
@@ -516,7 +522,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:param name="type"/>
         <fo:block>
             <xsl:attribute name="id">
-                <xsl:value-of select="concat('_OPENTOPIC_TOC_PROCESSING_', generate-id())"/>
+                <xsl:call-template name="generate-toc-id"/>
             </xsl:attribute>
             <xsl:choose>
                 <xsl:when test="$type = 'chapter'">
@@ -721,7 +727,13 @@ See the accompanying license.txt file for applicable licenses.
                     </fo:marker>
                 </xsl:if>
                 <fo:inline id="{parent::node()/@id}"/>
-                <fo:inline id="{concat('_OPENTOPIC_TOC_PROCESSING_', generate-id(..))}"/>
+                <fo:inline>
+                    <xsl:attribute name="id">
+                        <xsl:call-template name="generate-toc-id">
+                            <xsl:with-param name="element" select=".."/>
+                        </xsl:call-template>
+                    </xsl:attribute>
+                </fo:inline>
                 <!-- added by William on 2009-07-02 for indexterm bug:2815485 start-->
                 <xsl:call-template name="pullPrologIndexTerms"/>
                 <!-- added by William on 2009-07-02 for indexterm bug:2815485 end-->
@@ -1576,6 +1588,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class,' topic/note ')]">
         <xsl:variable name="noteType">
             <xsl:choose>
+                <xsl:when test="@type = 'other' and @othertype">
+                    <xsl:value-of select="@othertype"/>
+                </xsl:when>
                 <xsl:when test="@type">
                     <xsl:value-of select="@type"/>
                 </xsl:when>
@@ -1592,8 +1607,8 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:choose>
             <xsl:when test="not($noteImagePath = '')">
                 <fo:table xsl:use-attribute-sets="note__table">
-                    <fo:table-column column-number="1"/>
-                    <fo:table-column column-number="2"/>
+                    <fo:table-column xsl:use-attribute-sets="note__image__column"/>
+                    <fo:table-column xsl:use-attribute-sets="note__text__column"/>
                     <fo:table-body>
                         <fo:table-row>
                                 <fo:table-cell xsl:use-attribute-sets="note__image__entry">
@@ -1679,6 +1694,11 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class,' topic/fig ')]">
         <fo:block xsl:use-attribute-sets="fig">
             <xsl:call-template name="commonattributes"/>
+            <xsl:if test="not(@id)">
+              <xsl:attribute name="id">
+                <xsl:call-template name="get-id"/>
+              </xsl:attribute>
+            </xsl:if>
             <xsl:apply-templates select="*[not(contains(@class,' topic/title '))]"/>
             <xsl:apply-templates select="*[contains(@class,' topic/title ')]"/>
         </fo:block>
@@ -2127,6 +2147,25 @@ See the accompanying license.txt file for applicable licenses.
     <!-- Process common attributes -->
     <xsl:template name="commonattributes">
       <xsl:apply-templates select="@id"/>
+    </xsl:template>
+
+    <!-- Get ID for an element, generate ID if not explicitly set. -->
+    <xsl:template name="get-id">
+      <xsl:param name="element" select="."/>
+      <xsl:choose>
+        <xsl:when test="$element/@id">
+          <xsl:value-of select="$element/@id"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="generate-id($element)"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:template>
+
+    <!-- Generate TOC ID -->
+    <xsl:template name="generate-toc-id">
+      <xsl:param name="element" select="."/>
+      <xsl:value-of select="concat('_OPENTOPIC_TOC_PROCESSING_', generate-id($element))"/>
     </xsl:template>
 
 </xsl:stylesheet>

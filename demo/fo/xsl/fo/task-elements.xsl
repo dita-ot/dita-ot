@@ -39,7 +39,7 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
     extension-element-prefixes="exsl"
     exclude-result-prefixes="opentopic exsl opentopic-index dita2xslfo"
-    version="1.1">
+    version="2.0">
 
     <!-- Determines whether to generate titles for task sections. Values are YES and NO. -->
     <xsl:param name="GENERATE-TASK-LABELS">

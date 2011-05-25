@@ -33,7 +33,7 @@ See the accompanying license.txt file for applicable licenses.
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
-    version="1.0">
+    version="2.0">
 
     <xsl:attribute-set name="__body__odd__footer">
         <xsl:attribute name="text-align">right</xsl:attribute>

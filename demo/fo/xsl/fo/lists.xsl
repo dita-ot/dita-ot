@@ -36,7 +36,7 @@ See the accompanying license.txt file for applicable licenses.
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
-    version="1.1">
+    version="2.0">
 
     <xsl:template match="*[contains(@class,' topic/linklist ')]/*[contains(@class,' topic/title ')]">
       <fo:block xsl:use-attribute-sets="linklist.title">

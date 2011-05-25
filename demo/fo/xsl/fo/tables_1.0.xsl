@@ -35,7 +35,7 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:exsl="http://exslt.org/common"
     extension-element-prefixes="exsl"
-    version="1.1">
+    version="2.0">
 
     <xsl:variable name="tableAttrs" select="'../../cfg/fo/attrs/tables-attr.xsl'"/>
 
@@ -48,6 +48,11 @@ See the accompanying license.txt file for applicable licenses.
 
         <fo:block xsl:use-attribute-sets="table">
             <xsl:call-template name="commonattributes"/>
+            <xsl:if test="not(@id)">
+              <xsl:attribute name="id">
+                <xsl:call-template name="get-id"/>
+              </xsl:attribute>
+            </xsl:if>
             <xsl:if test="not($scale = '')">
                 <xsl:attribute name="font-size"><xsl:value-of select="concat($scale, '%')"/></xsl:attribute>
             </xsl:if>

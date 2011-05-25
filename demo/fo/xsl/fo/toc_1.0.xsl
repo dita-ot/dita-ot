@@ -103,17 +103,17 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="ot-placeholder:glossarylist" mode="toc">
         <fo:block xsl:use-attribute-sets="__toc__indent__glossary">
             <fo:block xsl:use-attribute-sets="__toc__topic__content__glossary">
-                <fo:basic-link internal-destination="ID_GLOSSARY_00-0F-EA-40-0D-4D" xsl:use-attribute-sets="__toc__link">
+                <fo:basic-link internal-destination="{$id.glossary}" xsl:use-attribute-sets="__toc__link">
                     
-                    <fo:inline xsl:use-attribute-sets="__toc__title" keep-together.within-line="always" margin-right=".2in">
+                    <fo:inline xsl:use-attribute-sets="__toc__title">
                         <xsl:call-template name="insertVariable">
                             <xsl:with-param name="theVariableID" select="'Glossary'"/>
                         </xsl:call-template>
                     </fo:inline>
                     
-                    <fo:inline margin-left="-.2in" keep-together.within-line="always">
+                    <fo:inline xsl:use-attribute-sets="__toc__page-number">
                         <fo:leader xsl:use-attribute-sets="__toc__leader"/>
-                        <fo:page-number-citation ref-id="ID_GLOSSARY_00-0F-EA-40-0D-4D"/>
+                        <fo:page-number-citation ref-id="{$id.glossary}"/>
                     </fo:inline>
                     
                 </fo:basic-link>
@@ -125,17 +125,17 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:if test="//*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ' )]">
             <fo:block xsl:use-attribute-sets="__toc__indent__lot">
                 <fo:block xsl:use-attribute-sets="__toc__topic__content__lot">
-                    <fo:basic-link internal-destination="ID_LOT_00-0F-EA-40-0D-4D" xsl:use-attribute-sets="__toc__link">
+                    <fo:basic-link internal-destination="{$id.lot}" xsl:use-attribute-sets="__toc__link">
                         
-                        <fo:inline xsl:use-attribute-sets="__toc__title" keep-together.within-line="always" margin-right=".2in">
+                        <fo:inline xsl:use-attribute-sets="__toc__title">
                             <xsl:call-template name="insertVariable">
                                 <xsl:with-param name="theVariableID" select="'List of Tables'"/>
                             </xsl:call-template>
                         </fo:inline>
                         
-                        <fo:inline margin-left="-.2in" keep-together.within-line="always">
+                        <fo:inline xsl:use-attribute-sets="__toc__page-number">
                             <fo:leader xsl:use-attribute-sets="__toc__leader"/>
-                            <fo:page-number-citation ref-id="ID_LOT_00-0F-EA-40-0D-4D"/>
+                            <fo:page-number-citation ref-id="{$id.lot}"/>
                         </fo:inline>
                         
                     </fo:basic-link>
@@ -148,17 +148,17 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:if test="//*[contains(@class, ' topic/fig ')]/*[contains(@class, ' topic/title ' )]">
             <fo:block xsl:use-attribute-sets="__toc__indent__lof">
                 <fo:block xsl:use-attribute-sets="__toc__topic__content__lof">
-                    <fo:basic-link internal-destination="ID_LOF_00-0F-EA-40-0D-4D" xsl:use-attribute-sets="__toc__link">
+                    <fo:basic-link internal-destination="{$id.lof}" xsl:use-attribute-sets="__toc__link">
                         
-                        <fo:inline xsl:use-attribute-sets="__toc__title" keep-together.within-line="always" margin-right=".2in">
+                        <fo:inline xsl:use-attribute-sets="__toc__title">
                             <xsl:call-template name="insertVariable">
                                 <xsl:with-param name="theVariableID" select="'List of Figures'"/>
                             </xsl:call-template>
                         </fo:inline>
                         
-                        <fo:inline margin-left="-.2in" keep-together.within-line="always">
+                        <fo:inline xsl:use-attribute-sets="__toc__page-number">
                             <fo:leader xsl:use-attribute-sets="__toc__leader"/>
-                            <fo:page-number-citation ref-id="ID_LOF_00-0F-EA-40-0D-4D"/>
+                            <fo:page-number-citation ref-id="{$id.lof}"/>
                         </fo:inline>
                         
                     </fo:basic-link>

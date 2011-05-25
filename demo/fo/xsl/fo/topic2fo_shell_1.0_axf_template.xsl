@@ -8,7 +8,7 @@
     ============================================================
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                version="1.1">
+                version="2.0">
   
   <xsl:import href="topic2fo_1.0.xsl"/>
 

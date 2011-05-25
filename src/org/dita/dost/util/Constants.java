@@ -810,6 +810,8 @@ public final class Constants {
     /** Constants for index type(eclipsehelp).*/
     public static final String INDEX_TYPE_ECLIPSEHELP = "eclipsehelp";
     
+    /** Constants for transform type(pdf).*/
+    public static final String TRANS_TYPE_PDF = "pdf";
     /** Constants for transform type(xhtml).*/
     public static final String TRANS_TYPE_XHTML = "xhtml";
     /** Constants for transform type(eclipsehelp).*/
@@ -1221,6 +1223,8 @@ public final class Constants {
 	/** Property name for supported image extensions. */
 	public static final String CONF_SUPPORTED_IMAGE_EXTENSIONS = "supported_image_extensions";
 	// Added on 2010-11-09 for bug 3102827: Allow a way to specify recognized image extensions -- end
+    /** Property name for print transtypes. */
+    public static final String CONF_PRINT_TRANSTYPES = "print_transtypes";
 	/** Property name for template files. */
 	public static final String CONF_TEMPLATES = "templates";
 

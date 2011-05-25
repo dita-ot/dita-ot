@@ -6,13 +6,13 @@
   <require plugin="org.dita.specialization.apiref"/>
   <feature extension="package.version" value="0.9.0"/>
   <feature extension="dita.specialization.catalog.relative"
-      value="catalog-dita.xml" type="file"/>
+      file="catalog-dita.xml"/>
   <feature extension="dita.xsl.xhtml"
-      value="xsl/javaref2xhtml.xsl" type="file"/>
+      file="xsl/javaref2xhtml.xsl"/>
   <feature extension="dita.conductor.target.relative"
-      value="conductor.xml" type="file"/>
+      file="conductor.xml"/>
   <feature extension="dita.xsl.strings"
-      value="xsl/javaapistrings.xml" type="file"/>
+      file="xsl/javaapistrings.xml"/>
   <feature extension="dita.xsl.topicpull"
-      value="xsl/topicpull.xsl" type="file"/>
+      file="xsl/topicpull.xsl"/>
 </plugin>

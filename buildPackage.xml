@@ -4,7 +4,7 @@
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved. -->
 <!-- build whole bin and source package for DITA Open Toolkit -->
-<project name="build_DITA-OT_package" basedir=".">
+<project name="build_DITA-OT_package" default="build-all-packages" basedir=".">
   <description>Build source and binary packages for DITA Open Toolkit</description>
 
   <property file="buildPackage.properties"/>
@@ -341,7 +341,12 @@
     </copy>
     <ant antfile="${temp.dist.dir}/integrator.xml"/>
     <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
-      <fileset dir="${work.dir}/${param.out.file}"/>
+      <zipfileset dir="${work.dir}/${param.out.file}">
+        <exclude name="*/startcmd.sh"/>
+      </zipfileset>
+      <zipfileset dir="${work.dir}/${param.out.file}" filemode="755">
+        <include name="*/startcmd.sh"/>
+      </zipfileset>
     </zip>
     <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" compression="gzip" longfile="gnu">
       <tarfileset dir="${work.dir}/${param.out.file}">

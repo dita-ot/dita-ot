@@ -42,61 +42,18 @@ public final class FileUtils {
 	
 	private static DITAOTJavaLogger logger = new DITAOTJavaLogger();
 	
-	// Added on 2010-11-09 for bug 3102827: Allow a way to specify recognized image extensions -- start
-	/**
-	 * Configuration properties.
-	 * 
-	 * <p>If configuration file is not found e.g. during integration,
-	 * the properties object will be an empty.</p> 
-	 */
-	private final static Properties configuration = new Properties();
-	static {
-		//BufferedInputStream configurationInputStream = null;
-		InputStream configurationInputStream = null;
-		try {			
-			 final ClassLoader loader = FileUtils.class.getClassLoader();
-			 configurationInputStream =loader.getResourceAsStream(CONF_PROPERTIES);
-			 if (configurationInputStream != null) {
-			 		 configuration.load(configurationInputStream);
-			 		//System.out.println("The configuration file path is:" + configurationInputStream.toString());
-			 		//System.out.println("Supported image ext:" +configuration.getProperty(CONF_SUPPORTED_IMAGE_EXTENSIONS));
-			 } else {
-				 //try to find the configuration file from the lib folder from current working dir
-				 final File configurationFile = new File("lib"+ File.separator + CONF_PROPERTIES);
-				 if(configurationFile.exists()) {
-                    configurationInputStream = new BufferedInputStream(new FileInputStream(configurationFile));
-                }
-				 
-				 if (configurationInputStream != null) {
-						configuration.load(configurationInputStream); 
-				 }
-			 }
-			 
-
-		} catch (final IOException e) {
-			logger.logException(e);
-		} finally {
-			if (configurationInputStream != null) {
-				try {
-					configurationInputStream.close();
-				} catch (final IOException ex) {
-					logger.logException(ex);
-				}
-			}
-		}
-	}
-	
 	/**
 	 * Supported image extensions.
 	 */
 	private final static List<String> supportedImageExtensions = new ArrayList<String>();
 	static {
-		final String imageExtensions = configuration.getProperty(CONF_SUPPORTED_IMAGE_EXTENSIONS);
+		final String imageExtensions = Configuration.configuration.get(CONF_SUPPORTED_IMAGE_EXTENSIONS);
 		if (imageExtensions != null && imageExtensions.length()>0) {
 			for (final String ext: imageExtensions.split(";")) {
 				supportedImageExtensions.add(ext);
 			}
 		} else {
+		    logger.logError("Failed to read supported image extensions from configuration, using defaults.");
 			supportedImageExtensions.add(FILE_EXTENSION_JPG);
 			supportedImageExtensions.add(FILE_EXTENSION_GIF);
 			supportedImageExtensions.add(FILE_EXTENSION_EPS);
