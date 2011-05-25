@@ -175,6 +175,15 @@ public final class Integrator {
             }
         }
         configuration.put(CONF_SUPPORTED_IMAGE_EXTENSIONS, StringUtils.assembleString(imgExts, CONF_LIST_SEPARATOR));
+        
+        // non-print transtypes
+        final Set<String> nonPrintTranstypes = new HashSet<String>();
+        final String nonPrintTranstypeValue = properties.getProperty(CONF_NON_PRINT_TRANSTYPES);
+        if (nonPrintTranstypeValue != null) {
+            nonPrintTranstypes.addAll(Arrays.asList(nonPrintTranstypeValue.split(PARAM_VALUE_SEPARATOR)));
+        }
+        configuration.put(CONF_NON_PRINT_TRANSTYPES, StringUtils.assembleString(nonPrintTranstypes, CONF_LIST_SEPARATOR));
+        
         OutputStream out = null;
         try {
             final File outFile = new File(ditaDir, "lib" + File.separator + CONF_PROPERTIES);

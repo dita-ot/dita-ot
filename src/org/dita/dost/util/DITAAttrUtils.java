@@ -13,6 +13,7 @@ import static org.dita.dost.util.Constants.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -20,6 +21,8 @@ import java.util.Queue;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+
+import org.dita.dost.log.DITAOTJavaLogger;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -34,10 +37,40 @@ import org.xml.sax.SAXException;
  */
 public final class DITAAttrUtils {
 	
-	//List to store non-Print transtypes.
-	private final List<String>nonPrintTranstype;
+	/** List of non-Print transtypes. */
+	private static final List<String> nonPrintTranstype;
+	static {
+	    final List<String> types = new ArrayList<String>();
+	    final String nonPrintTranstypes = Configuration.configuration.get(CONF_NON_PRINT_TRANSTYPES);
+        if (nonPrintTranstypes != null) {
+            if (nonPrintTranstypes.trim().length() > 0) {
+                for (final String transtype: nonPrintTranstypes.split(CONF_LIST_SEPARATOR)) {
+                    types.add(transtype.trim());
+                }
+            }
+        } else {
+            new DITAOTJavaLogger().logError("Failed to read non-print transtypes from configuration, using defaults.");
+            types.add(TRANS_TYPE_ECLIPSECONTENT);
+            types.add(TRANS_TYPE_ECLIPSEHELP);
+            types.add(TRANS_TYPE_HTMLHELP);
+            types.add(TRANS_TYPE_JAVAHELP);
+            types.add(TRANS_TYPE_XHTML);
+        }
+        nonPrintTranstype = Collections.unmodifiableList(types);
+	}
 	
-	private final List<String>excludeList;
+	private static final List<String> excludeList;
+	static {
+	    final List<String> el = new ArrayList<String>();
+        el.add("-" + ATTR_CLASS_VALUE_INDEXTERM);
+        el.add("-" + ATTR_CLASS_VALUE_DRAFTCOMMENT);
+        el.add("-" + ATTR_CLASS_VALUE_REQUIREDCLEANUP);
+        el.add("-" + ATTR_CLASS_VALUE_DATA);
+        el.add("-" + ATTR_CLASS_VALUE_DATAABOUT);
+        el.add("-" + ATTR_CLASS_VALUE_UNKNOWN);
+        el.add("-" + ATTR_CLASS_VALUE_FOREIGN);
+        excludeList = Collections.unmodifiableList(el);
+	}
 	
 	//Depth inside element for @print.
 	/*e.g for <a print="yes">
@@ -52,25 +85,7 @@ public final class DITAAttrUtils {
 	 * Constructor.
 	 */
 	private DITAAttrUtils() {
-		
-		nonPrintTranstype = new ArrayList<String>();
-		nonPrintTranstype.add(TRANS_TYPE_ECLIPSECONTENT);
-		nonPrintTranstype.add(TRANS_TYPE_ECLIPSEHELP);
-		nonPrintTranstype.add(TRANS_TYPE_HTMLHELP);
-		nonPrintTranstype.add(TRANS_TYPE_JAVAHELP);
-		nonPrintTranstype.add(TRANS_TYPE_XHTML);
-		
-		excludeList = new ArrayList<String>();
-		excludeList.add("-" + ATTR_CLASS_VALUE_INDEXTERM);
-		excludeList.add("-" + ATTR_CLASS_VALUE_DRAFTCOMMENT);
-		excludeList.add("-" + ATTR_CLASS_VALUE_REQUIREDCLEANUP);
-		excludeList.add("-" + ATTR_CLASS_VALUE_DATA);
-		excludeList.add("-" + ATTR_CLASS_VALUE_DATAABOUT);
-		excludeList.add("-" + ATTR_CLASS_VALUE_UNKNOWN);
-		excludeList.add("-" + ATTR_CLASS_VALUE_FOREIGN);
-		
 		printLevel = 0;
-		
 	}
 	/**
 	 * Get an instance.
