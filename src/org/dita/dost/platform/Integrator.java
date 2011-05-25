@@ -177,12 +177,12 @@ public final class Integrator {
         configuration.put(CONF_SUPPORTED_IMAGE_EXTENSIONS, StringUtils.assembleString(imgExts, CONF_LIST_SEPARATOR));
         
         // non-print transtypes
-        final Set<String> nonPrintTranstypes = new HashSet<String>();
-        final String nonPrintTranstypeValue = properties.getProperty(CONF_NON_PRINT_TRANSTYPES);
-        if (nonPrintTranstypeValue != null) {
-            nonPrintTranstypes.addAll(Arrays.asList(nonPrintTranstypeValue.split(PARAM_VALUE_SEPARATOR)));
+        final Set<String> printTranstypes = new HashSet<String>();
+        final String printTranstypeValue = properties.getProperty(CONF_PRINT_TRANSTYPES);
+        if (printTranstypeValue != null) {
+            printTranstypes.addAll(Arrays.asList(printTranstypeValue.split(PARAM_VALUE_SEPARATOR)));
         }
-        configuration.put(CONF_NON_PRINT_TRANSTYPES, StringUtils.assembleString(nonPrintTranstypes, CONF_LIST_SEPARATOR));
+        configuration.put(CONF_PRINT_TRANSTYPES, StringUtils.assembleString(printTranstypes, CONF_LIST_SEPARATOR));
         
         OutputStream out = null;
         try {

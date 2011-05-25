@@ -37,26 +37,22 @@ import org.xml.sax.SAXException;
  */
 public final class DITAAttrUtils {
 	
-	/** List of non-Print transtypes. */
-	private static final List<String> nonPrintTranstype;
+	/** List of print transtypes. */
+	private static final List<String> printTranstype;
 	static {
 	    final List<String> types = new ArrayList<String>();
-	    final String nonPrintTranstypes = Configuration.configuration.get(CONF_NON_PRINT_TRANSTYPES);
-        if (nonPrintTranstypes != null) {
-            if (nonPrintTranstypes.trim().length() > 0) {
-                for (final String transtype: nonPrintTranstypes.split(CONF_LIST_SEPARATOR)) {
+	    final String printTranstypes = Configuration.configuration.get(CONF_PRINT_TRANSTYPES);
+        if (printTranstypes != null) {
+            if (printTranstypes.trim().length() > 0) {
+                for (final String transtype: printTranstypes.split(CONF_LIST_SEPARATOR)) {
                     types.add(transtype.trim());
                 }
             }
         } else {
-            new DITAOTJavaLogger().logError("Failed to read non-print transtypes from configuration, using defaults.");
-            types.add(TRANS_TYPE_ECLIPSECONTENT);
-            types.add(TRANS_TYPE_ECLIPSEHELP);
-            types.add(TRANS_TYPE_HTMLHELP);
-            types.add(TRANS_TYPE_JAVAHELP);
-            types.add(TRANS_TYPE_XHTML);
+            new DITAOTJavaLogger().logError("Failed to read print transtypes from configuration, using defaults.");
+            types.add(TRANS_TYPE_PDF);
         }
-        nonPrintTranstype = Collections.unmodifiableList(types);
+        printTranstype = Collections.unmodifiableList(types);
 	}
 	
 	private static final List<String> excludeList;
@@ -140,7 +136,7 @@ public final class DITAAttrUtils {
 	 */
 	public boolean needExcludeForPrintAttri(final String transtype){
 		
-		if(printLevel > 0 && nonPrintTranstype.contains(transtype)){
+		if(printLevel > 0 && !printTranstype.contains(transtype)){
 			return true;
 		}else{
 			return false;
