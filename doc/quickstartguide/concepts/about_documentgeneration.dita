@@ -56,10 +56,10 @@
 	To learn more about what caused the <codeph>INFO</codeph>, <codeph>SEVERE</codeph>, and <codeph>WARNING</codeph> errors in the image above,
 	you should read the <codeph>transform.fo2pdf.fop</codeph> Ant target to learn what the Toolkit was doing when the error occurred and which
 	xsl file generated the error.</p>
-	<p><image href="../images/hand.gif"/> The DITA-OT build scripts sometimes continue to run even if they are unable to generate a temporary file for 
+	<note>The DITA-OT build scripts sometimes continue to run even if they are unable to generate a temporary file for 
 	one of your content files.  The build later displays an error message stating that a DITA-OT build script cannot find a generated file.  This
 	error is often misleading; the problem may be that your content file contains an error other than XML validation, which would stop the DITA-OT
-	build from proceeding.</p>
+	build from proceeding.</note>
 	<p>DITA-OT uses a separate set of Ant targets to process your PDF if you specify a value for the <codeph>
   args.fo.userconfig</codeph> property in your document's build script.  See <xref href="../reference/dita-ot_ant_properties.dita"/>
   for more information about this property.</p>

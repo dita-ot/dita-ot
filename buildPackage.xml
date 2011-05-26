@@ -447,14 +447,14 @@
     </ant>
     <!-- Quickstart guide -->
     <ant antfile="${basedir}/build.xml">
-      <property name="args.input" location="${doc.dir}/ant-quick-start-guide-for-ditaot.ditamap"/>
+      <property name="args.input" location="${doc.dir}/quickstartguide/quickstartguide.ditamap"/>
       <property name="output.dir" location="${doc.out.dir}"/>
       <property name="transtype" value="pdf"/>
       <property name="args.fo.img.ext" value=".gif"/>
       <property name="base.temp.dir" location="${work.dir}"/>
     </ant>
     <ant antfile="${basedir}/build.xml">
-      <property name="args.input" location="${doc.dir}/ant-quick-start-guide-for-ditaot.ditamap"/>
+      <property name="args.input" location="${doc.dir}/quickstartguide/quickstartguide.ditamap"/>
       <property name="output.dir" location="${doc.out.dir}"/>
       <property name="transtype" value="htmlhelp"/>
       <property name="base.temp.dir" location="${work.dir}"/>
@@ -462,20 +462,20 @@
     <!-- Readme -->
     <!--
     <ant antfile="${basedir}/build.xml">
-      <property name="args.input" location="${doc.dir}/DITA-readme.ditamap"/>
+      <property name="args.input" location="${doc.dir}/readme/DITA-readme.ditamap"/>
       <property name="output.dir" location="${doc.out.dir}"/>
       <property name="transtype" value="html"/>
       <property name="base.temp.dir" location="${work.dir}"/>
     </ant>
     -->
     <ant antfile="${basedir}/build.xml">
-      <property name="args.input" location="${doc.dir}/DITA-readme.ditamap"/>
+      <property name="args.input" location="${doc.dir}/readme/DITA-readme.ditamap"/>
       <property name="output.dir" location="${doc.out.dir}"/>
       <property name="transtype" value="htmlhelp"/>
       <property name="base.temp.dir" location="${work.dir}"/>
     </ant>
     <ant antfile="${basedir}/build.xml">
-      <property name="args.input" location="${doc.dir}/DITA-readme.ditamap"/>
+      <property name="args.input" location="${doc.dir}/readme/DITA-readme.ditamap"/>
       <property name="output.dir" location="${doc.out.dir}"/>
       <property name="transtype" value="pdf"/>
       <property name="args.fo.img.ext" value=".jpg"/>

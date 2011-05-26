@@ -327,13 +327,12 @@ in or below the directory containing your <codeph>.ditamap</codeph
 > file. 		The default value is "no."  The <codeph>gen-list-without-flagging</codeph
 > Ant task generates a harmless warning for content outside 		the
 map directory; you can suppress these warnings by setting the <codeph
->outer.control</codeph> property to "true". 		<p><image
-href="../images/warning.gif"></image> Microsoft HTML Help Compiler
+>outer.control</codeph> property to "true". 		<note type="warning">Microsoft HTML Help Compiler
 cannot produce HTMLHelp for documentation projects that use outer
 content.  Your content files must reside in or below the directory
 containing the <codeph>.ditamap</codeph> file, and the map file cannot
 specify  ".." at the start		of <codeph>href</codeph> attributes for <codeph
->topicref</codeph> elements.</p> 		</entry>
+>topicref</codeph> elements.</note> 		</entry>
 </row>
 </tbody>
 </tgroup>

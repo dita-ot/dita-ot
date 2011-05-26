@@ -2,25 +2,25 @@
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "../../dtd/technicalContent/dtd/map.dtd">
 <map>
 <title>Ant Quick Start Guide for DITA Open Toolkit</title>
-<topicref href="quickstartquide/chapters/chapter1.dita" toc="yes">
-	<topicref format="dita" href="quickstartquide/concepts/about_introduction.dita" navtitle="Introduction to Ant and DITA-OT" toc="yes" type="concept"/>
-	<topicref format="dita" href="quickstartguide/concepts/about_tookitroles.dita" navtitle="User Roles for the Toolkit" toc="yes" type="concept"/>
-	<topicref format="dita" href="quickstartquide/concepts/about_ant.dita" navtitle="What is Ant?" toc="yes" type="concept"/>
-	<topicref format="dita" href="quickstartquide/concepts/about_dita-ot.dita" navtitle="What is DITA-OT?" toc="yes" type="concept"/>
-	<topicref format="dita" href="quickstartquide/concepts/about_whentouseDITAOT.dita" navtitle="When Should I Use DITA-OT" toc="yes" type="concept"/>
+<topicref href="chapters/chapter1.dita">
+	<topicref format="dita" href="concepts/about_introduction.dita" navtitle="Introduction to Ant and DITA-OT"/>
+	<topicref format="dita" href="quickstartguide/concepts/about_tookitroles.dita" navtitle="User Roles for the Toolkit"/>
+	<topicref format="dita" href="concepts/about_ant.dita" navtitle="What is Ant?"/>
+	<topicref format="dita" href="concepts/about_dita-ot.dita" navtitle="What is DITA-OT?"/>
+	<topicref format="dita" href="concepts/about_whentouseDITAOT.dita" navtitle="When Should I Use DITA-OT"/>
 </topicref>
-<topicref href="quickstartquide/chapters/chapter2.dita" toc="yes">
-	<topicref format="dita" href="quickstartquide/concepts/about_antbuildfiles.dita" navtitle="Writing Your Own DITA-OT Build File" toc="yes" type="concept"/>
-	<topicref format="dita" href="quickstartquide/reference/dita-ot_ant_properties.dita" navtitle="DITA-OT XSL Processing Properties" toc="yes" type="reference"/>
-	<topicref format="dita" href="quickstartquide/tasks/generating_documents.dita" navtitle="Generating Documents with Ant" toc="yes" type="task"/>
-	<topicref format="dita" href="quickstartquide/concepts/about_javacmdinterface.dita" navtitle="Generating Documents with Java" toc="yes" type="concept"/>
-	<topicref format="dita" href="quickstartquide/tasks/generating_documentswithjava.dita" navtitle="About the Java Command Line Interface" toc="yes" type="task"/>
-	<topicref format="dita" href="quickstartquide/tasks/using_DITAOTBuildLogger.dita" type="task" toc="yes"/>
+<topicref href="chapters/chapter2.dita">
+	<topicref format="dita" href="concepts/about_antbuildfiles.dita" navtitle="Writing Your Own DITA-OT Build File"/>
+	<topicref format="dita" href="reference/dita-ot_ant_properties.dita" navtitle="DITA-OT XSL Processing Properties"/>
+	<topicref format="dita" href="tasks/generating_documents.dita" navtitle="Generating Documents with Ant"/>
+	<topicref format="dita" href="concepts/about_javacmdinterface.dita" navtitle="Generating Documents with Java"/>
+	<topicref format="dita" href="tasks/generating_documentswithjava.dita" navtitle="About the Java Command Line Interface"/>
+	<topicref format="dita" href="tasks/using_DITAOTBuildLogger.dita"/>
 </topicref>
-<topicref href="quickstartquide/chapters/chapter3.dita" toc="yes">
-	<topicref format="dita" href="quickstartquide/concepts/about_documentgeneration.dita" navtitle="" toc="yes" type="concept"/>
+<topicref href="chapters/chapter3.dita">
+  <topicref format="dita" href="concepts/about_documentgeneration.dita" navtitle="Introducing Document Generation"/>
 </topicref>
 <topicref>
-	<topicref navtitle="Best Practices" href="quickstartquide/topics/best-practices.dita" toc="yes"/>
+	<topicref navtitle="Best Practices" href="topics/best-practices.dita"/>
 </topicref>
 </map>
