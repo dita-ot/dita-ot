@@ -91,7 +91,7 @@ See the accompanying license.txt file for applicable licenses.
 					<p>Set the <varname>CLASSPATH </varname>environment variable 
               for DITA-OT: Set up your environment variable CLASSPATH to include the 
                   dost.jar. For example: 
-                  <codeblock>export CLASSPATH=${ditaot_dir}/lib:${ditaot_dir}/lib/dost.jar:${ditaot_dir}/lib/resolver.jar</codeblock>
+                  <codeblock>export CLASSPATH=$DITA_HOME/lib:$DITA_HOME/lib/dost.jar:$DITA_HOME/lib/resolver.jar</codeblock>
 					</p>
 				</info>
 				<info>

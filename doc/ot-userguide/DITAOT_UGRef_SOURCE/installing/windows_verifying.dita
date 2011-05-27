@@ -73,9 +73,9 @@ See the accompanying license.txt file for applicable licenses.
 				</choicetable>
 			</step>
 			<step>
-				<cmd>At the prompt, type <userinput>cd ditaot</userinput>
+			  <cmd>At the prompt, type <userinput>cd DITA-OT<keyword keyref="release.version"/></userinput>
 				</cmd>
-				<stepresult>The command prompt changes to <codeph>C:\ditaot</codeph>
+				<stepresult>The command prompt changes to <codeph>C:\DITA-OT<keyword keyref="release.version"/></codeph>
 				</stepresult>
 			</step>
 			<step>
@@ -87,8 +87,8 @@ See the accompanying license.txt file for applicable licenses.
 				</stepresult>
 			</step>
 		</steps>
-		<result>Be sure the directories and files in your <filepath>ditaot</filepath> are as described in
-		<xref href="ditaot_directory.dita">Directories and files in the ditaot root directory</xref>.
+		<result>Be sure the directories and files in your <filepath>DITA-OT<keyword keyref="release.version"/></filepath> are as described in
+		<xref href="ditaot_directory.dita">Directories and files in the DITA-OT<keyword keyref="release.version"/> root directory</xref>.
 		</result>
 	</taskbody>
 </task>

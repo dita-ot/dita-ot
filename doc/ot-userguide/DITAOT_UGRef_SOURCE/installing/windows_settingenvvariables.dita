@@ -151,7 +151,7 @@ See the accompanying license.txt file for applicable licenses.
                   click <uicontrol>New</uicontrol> under the System 
                   variables section.</li>
 							<li>Type 
-                  <codeph>C:\ditaot\lib;C:\ditaot\lib\dost.jar;C:\ditaot\lib\resolver.jar</codeph>
+                  <codeph>C:\DITA-OT<keyword keyref="release.version"/>\lib;C:\DITA-OT<keyword keyref="release.version"/>\lib\dost.jar;C:\DITA-OT<keyword keyref="release.version"/>\lib\resolver.jar</codeph>
 								<note type="important">If there are other variables listed, create a
                   new variable separated from the others by a semicolon. Ensure there are no 
                   spaces before or after the semicolon.</note>

@@ -40,8 +40,8 @@ See the accompanying license.txt file for applicable licenses.
 		</p>
 		<p>
 			<note>As an example, if you are using Fedora Core 5 Linux, software installation is done using the Package Manager. From this application, if you install the Java Development package within the Development group, you will install:<ul>
-					<li>Ant 1.7.1</li>
-					<li>Java SDK 1.5</li>
+					<li platform="linux">Ant <keyword keyref="tool.ant.version"/> or later</li>
+			    <li platform="linux">Java SDK <keyword keyref="tool.java.version"/> or later</li>
 					<li>Saxon 9B</li>
 				</ul>
 			</note>

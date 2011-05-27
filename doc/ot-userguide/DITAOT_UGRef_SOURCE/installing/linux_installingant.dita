@@ -58,7 +58,7 @@ See the accompanying license.txt file for applicable licenses.
 				</cmd>
 			</step>
 			<step>
-				<cmd>Select <uicontrol>apache-ant-1.7.1-bin.tar.gz [PGP] [SHA1] 
+				<cmd>Select <uicontrol>apache-ant-<keyword keyref="tool.ant.version"/>-bin.tar.gz [PGP] [SHA1] 
           [MD5]</uicontrol>.
 				</cmd>
 			</step>

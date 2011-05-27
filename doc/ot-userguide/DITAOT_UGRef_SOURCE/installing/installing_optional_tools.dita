@@ -38,11 +38,11 @@ See the accompanying license.txt file for applicable licenses.
 				</indexterm>
 				<indexterm>installing<indexterm>on Linux</indexterm>
 				</indexterm>
-				<indexterm>installing<indexterm>on Mac OS</indexterm>
+				<indexterm>installing<indexterm>on Mac OS X</indexterm>
 				</indexterm>
 				<indexterm>Windows, installing on</indexterm>
 				<indexterm>Linux, installing on</indexterm>
-				<indexterm>Mac OS, installing on</indexterm>
+				<indexterm>Mac OS X, installing on</indexterm>
 				<indexterm>installing<indexterm>optional tools</indexterm>
 				</indexterm>
 				<indexterm>Microsoft HTML Help compiler<indexterm>downloading</indexterm>
@@ -75,7 +75,7 @@ See the accompanying license.txt file for applicable licenses.
 		</metadata>
 	</prolog>
 	<conbody>
-		<section>
+		<!--section>
 			<p otherprops="pdf">Sections in this topic:
 		<sl>
 					<sli>
@@ -95,10 +95,10 @@ See the accompanying license.txt file for applicable licenses.
 					</sli>
 				</sl>
 			</p>
-		</section>
+		</section-->
 		<section>
 			<p>Depending on the kind of output you expect to produce, you may want to install the following tools.</p>
-			<p>
+			<p platform="windows">
 				<b>(If you plan to publish HTML Help) The Microsoft HTML Help processor</b>
 			</p>
 			<p>

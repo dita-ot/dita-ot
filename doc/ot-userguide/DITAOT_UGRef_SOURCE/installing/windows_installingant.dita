@@ -59,13 +59,13 @@ See the accompanying license.txt file for applicable licenses.
 				</cmd>
 			</step>
 			<step>
-				<cmd>Select <uicontrol>apache-ant-1.7.1-bin.zip [PGP] [SHA1] 
+				<cmd>Select <uicontrol>apache-ant-<keyword keyref="tool.ant.version"/>-bin.zip [PGP] [SHA1] 
           [MD5]</uicontrol>
 				</cmd>
 			</step>
 			<step>
 				<cmd>Click <uicontrol>Save</uicontrol> to unzip the 
-          apache-ant-1.7.1-bin.zip [PGP] [SHA1] [MD5] file and save it to your 
+          apache-ant-<keyword keyref="tool.ant.version"/>-bin.zip [PGP] [SHA1] [MD5] file and save it to your 
           C:\ directory as <filepath>ant</filepath>.</cmd>
 			</step>
 			<step>

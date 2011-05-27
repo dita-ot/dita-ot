@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "../dtd/task.dtd">
 <!-- 
 This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
 -->
-<concept id="installing_small_package">
+<task id="installing_small_package">
 	<title>Installing the DITA Tookit small package distribution</title>
 	<prolog>
 		<author type="creator">Richard Johnson</author>
@@ -35,23 +35,19 @@ See the accompanying license.txt file for applicable licenses.
 			</prodinfo>
 		</metadata>
 	</prolog>
-	<conbody>
-	<section>
-	<title>Installing the small package distribution</title>
-		<p>To install the small package:
-	<ol>
-				<li>Download the small package from <xref href="http://sourceforge.net/projects/dita-ot" format="html" scope="external"/>.</li>
-				<li>Unzip the package into the <filepath>C:\ditaot</filepath> directory on Windows, or into a home directory on Linux.</li>
-				<li>On Windows, add <codeph>C:\ditaot\lib;C:\ditaot\lib\dost.jar;C:\ditaot\lib\resolver.jar</codeph> to your <varname>CLASSPATH </varname> environment variable.</li>
-				<li>On Linux, set up your environment variable CLASSPATH. For example: 
-                  <codeblock>export CLASSPATH=$CLASSPATH:${ditaot_dir}/lib:${ditaot_dir}/lib/dost.jar:${ditaot_dir}/lib/resolver.jar</codeblock>
-				</li>
-			</ol>
-		</p>
-		</section>
-		<section>
-		<title>Installation considerations</title>
-		<p>Before installing the DITA Open Toolkit small package and its prerequisite software on Windows, check to see if any of the required tools are already installed on your system and, if so, whether the version you have is supported (see <xref href="sysreqs.dita">System requirements and supported applications</xref>). For any tools you need to install, complete the tasks below in the order shown.</p>
-		</section>
-	</conbody>
-</concept>
+	<taskbody>
+	<prereq>
+	  <p>Before installing the DITA Open Toolkit small package and its prerequisite software on Windows, check to see if any of the required tools are already installed on your system and, if so, whether the version you have is supported (see <xref href="sysreqs.dita">System requirements and supported applications</xref>). For any tools you need to install, complete the tasks below in the order shown.</p>
+	</prereq>		
+	<steps>
+	  <stepsection><p>To install the small package:</p></stepsection>
+				<step><cmd>Download the small package from <xref href="http://sourceforge.net/projects/dita-ot" format="html" scope="external"/>.</cmd></step>
+				<step platform="windows"><cmd>On Windows, unzip the package into the <filepath>C:\DITA-OT<keyword keyref="release.version"/></filepath> directory.</cmd></step>
+				<step platform="linux osx"><cmd>On Linux, unzip the package into <filepath>$HOME</filepath> directory.</cmd></step>
+				<step platform="windows"><cmd>On Windows, add <codeph>C:\DITA-OT<keyword keyref="release.version"/>\lib;C:\DITA-OT<keyword keyref="release.version"/>\lib\dost.jar;C:\DITA-OT<keyword keyref="release.version"/>\lib\resolver.jar</codeph> to your <varname>CLASSPATH </varname> environment variable.</cmd></step>
+				<step platform="linux osx"><cmd>On Linux, set up your environment variable CLASSPATH.</cmd> 
+                  <stepxmp><codeblock>export CLASSPATH=$CLASSPATH:$DITA_HOME/lib:$DITA_HOME/lib/dost.jar:$DITA_HOME/lib/resolver.jar</codeblock></stepxmp>
+				</step>
+			</steps>
+	</taskbody>
+</task>

@@ -58,7 +58,7 @@ See the accompanying license.txt file for applicable licenses.
 			</step>
 			<step>
 				<cmd>From the FOP page, in the Name column, select <uicontrol>
-						<image href="../images/compressed.png"/>"fop-0.95-bin.tar.gz" 
+						<image href="../images/compressed.png"/>"fop-<keyword keyref="tool.fop.version"/>-bin.tar.gz" 
           </uicontrol>.
 				</cmd>
 			</step>

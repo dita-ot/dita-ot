@@ -60,14 +60,14 @@ See the accompanying license.txt file for applicable licenses.
 			</step>
 			<step>
 				<cmd>From the FOP page, in the Name column, select <uicontrol>
-						<image href="../images/compressed.png"/>"fop-0.95-bin.zip" 
+						<image href="../images/compressed.png"/>"fop-<keyword keyref="tool.fop.version"/>-bin.zip" 
           </uicontrol>.
 				</cmd>
 			</step>
 			<step>
-				<cmd>Click <uicontrol>Save</uicontrol> to unzip the <filepath>fop-0.95-bin.zip </filepath>
+				<cmd>Click <uicontrol>Save</uicontrol> to unzip the <filepath>fop-<keyword keyref="tool.fop.version"/>-bin.zip </filepath>
           file and save it to the <filepath>C:\</filepath> directory as 
-          <filepath>fop-0.95</filepath>.
+          <filepath>fop-<keyword keyref="tool.fop.version"/></filepath>.
 				</cmd>
 			</step>
 			<step>

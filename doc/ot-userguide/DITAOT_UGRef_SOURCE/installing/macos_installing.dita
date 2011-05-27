@@ -5,7 +5,7 @@ This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
 -->
 <concept id="macos_installing">
-	<title>Installing on Mac OS</title>
+	<title>Installing on Mac OS X</title>
 	<prolog>
 		<author type="creator">Richard Johnson</author>
 		<author type="contributor">Anna van Raaphorst</author>
@@ -21,26 +21,26 @@ See the accompanying license.txt file for applicable licenses.
 		<metadata>
 			<keywords>
 				<keyword>installing DITA Open Toolkit</keyword>
-				<indexterm>installing<indexterm>on Mac OS</indexterm>
+				<indexterm>installing<indexterm>on Mac OS X</indexterm>
 				</indexterm>
-				<indexterm>Mac OS, installing on</indexterm>
-				<indexterm>Ant<indexterm>installing on Mac OS</indexterm>
+				<indexterm>Mac OS X, installing on</indexterm>
+				<indexterm>Ant<indexterm>installing on Mac OS X</indexterm>
 				</indexterm>
-				<indexterm>JDK (Java Development Kit)<indexterm>installing on Mac OS</indexterm>
+				<indexterm>JDK (Java Development Kit)<indexterm>installing on Mac OS X</indexterm>
 				</indexterm>
-				<indexterm>Java Development Kit (JDK)<indexterm>installing on Mac OS</indexterm>
+				<indexterm>Java Development Kit (JDK)<indexterm>installing on Mac OS X</indexterm>
 				</indexterm>
-				<indexterm>SAXON XSLT processor<indexterm>installing on Mac OS</indexterm>
+				<indexterm>SAXON XSLT processor<indexterm>installing on Mac OS X</indexterm>
 				</indexterm>
-				<indexterm>Xalan XSLT processor<indexterm>installing on Mac OS</indexterm>
+				<indexterm>Xalan XSLT processor<indexterm>installing on Mac OS X</indexterm>
 				</indexterm>
-				<indexterm>environment variables<indexterm>setting on Mac OS</indexterm>
+				<indexterm>environment variables<indexterm>setting on Mac OS X</indexterm>
 				</indexterm>
-				<indexterm>FOP processor<indexterm>installing on Mac OS</indexterm>
+				<indexterm>FOP processor<indexterm>installing on Mac OS X</indexterm>
 				</indexterm>
-				<indexterm>verifying the installation<indexterm>on Mac OS</indexterm>
+				<indexterm>verifying the installation<indexterm>on Mac OS X</indexterm>
 				</indexterm>
-				<indexterm>installing on Mac OS</indexterm>
+				<indexterm>installing on Mac OS X</indexterm>
 			</keywords>
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
@@ -52,11 +52,19 @@ See the accompanying license.txt file for applicable licenses.
 	</prolog>
 	<conbody>
 		<section>
-			<title>MacOS installation considerations</title>
-			<p>Before installing DITA Open Toolkit and its prerequisite software on Mac OS X, check to see if any of the tools are already installed on your system and, if so, whether the version you have is supported (see <xref href="sysreqs.dita">System requirements and supported applications).</xref>).  Java is a core component of Mac OS X. Newer versions of Mac OS X include the full version of the Java JDK 1.4.2 by default. This version of the JDK includes Ant and the Xalan-J XSLT processor, as well. Other tools you want to install may be included on the Mac OS X Developer's Tools on the product DVD.</p>
+			<title>Mac OS X installation considerations</title>
+			<p>Before installing DITA Open Toolkit and its prerequisite software on Mac OS X, check to see if
+        any of the tools are already installed on your system and, if so, whether the version you
+        have is supported (see <xref href="sysreqs.dita">System requirements and supported
+          applications).</xref>). Java is a core component of Mac OS X. Newer versions of Mac OS X
+        include the full version of the Java JDK 1.6 by default. Mac OS X also comes with Ant 1.7.1.
+        Other tools you want to install may be included on the Mac OS X Developer's Tools on the
+        product DVD.</p>
+      <note>Older version JDK included Xalan-J XSLT processor, but as of JDK 5.0 the default XSLT
+        transformer is Xalan XSLTC.</note>
 		</section>
 		<section>
-			<title>Installing on MacOS</title>
+			<title>Installing on Mac OS X</title>
 			<p>To install the Toolkit, extract the zip file to your HOME directory, then edit your login rc file to include the Toolkit in your CLASSPATH.</p>
 		</section>
 	</conbody>
