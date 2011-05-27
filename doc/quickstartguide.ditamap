@@ -4,7 +4,7 @@
 <title>Ant Quick Start Guide for DITA Open Toolkit</title>
 <topicref href="quickstartguide/chapters/chapter1.dita">
 	<topicref format="dita" href="quickstartguide/concepts/about_introduction.dita" navtitle="Introduction to Ant and DITA-OT"/>
-	<topicref format="dita" href="quickstartguide/concepts/about_tookitroles.dita" navtitle="User Roles for the Toolkit"/>
+	<topicref format="dita" href="quickstartguide/concepts/about_toolkitroles.dita" navtitle="User Roles for the Toolkit"/>
 	<topicref format="dita" href="quickstartguide/concepts/about_ant.dita" navtitle="What is Ant?"/>
 	<topicref format="dita" href="quickstartguide/concepts/about_dita-ot.dita" navtitle="What is DITA-OT?"/>
 	<topicref format="dita" href="quickstartguide/concepts/about_whentouseDITAOT.dita" navtitle="When Should I Use DITA-OT"/>

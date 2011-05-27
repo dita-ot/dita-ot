@@ -29,7 +29,7 @@
     build and a bad day or a gently purring build in a background <codeph>chron</codeph> chron job that never demands attention. If the build has already broken by the time you read this, your may be the "build hero" who magically "fixes" the build
     which no one cares about, except that it is usually only then that the fire-breathing IT dragon returns to it's cave and everyone can relax again until the next "emergency".
   </p>
-  <p>If you use the Eclipse plugin architecture to distribute online help to Eclipse developers, you should start with <xref href="../dev/ref/createplugin.xml">Create Eclipse Plugins</xref>.
+  <p>If you use the Eclipse plugin architecture to distribute online help to Eclipse developers, you should start with <xref href="../../dev_ref/createplugin.xml">Create Eclipse Plugins</xref>.
   </p>
 	</conbody>
 </concept>
