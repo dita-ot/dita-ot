@@ -30,7 +30,7 @@ See the accompanying license.txt file for applicable licenses.
 				</indexterm>
 				<indexterm>Java Development Kit (JDK)<indexterm>installing on Mac OS X</indexterm>
 				</indexterm>
-				<indexterm>SAXON XSLT processor<indexterm>installing on Mac OS X</indexterm>
+				<indexterm>Saxon XSLT processor<indexterm>installing on Mac OS X</indexterm>
 				</indexterm>
 				<indexterm>Xalan XSLT processor<indexterm>installing on Mac OS X</indexterm>
 				</indexterm>
@@ -61,11 +61,12 @@ See the accompanying license.txt file for applicable licenses.
         Other tools you want to install may be included on the Mac OS X Developer's Tools on the
         product DVD.</p>
       <note>Older version JDK included Xalan-J XSLT processor, but as of JDK 5.0 the default XSLT
-        transformer is Xalan XSLTC.</note>
+        transformer is Xalan XSLTC which does not work with DITA-OT.</note>
 		</section>
 		<section>
 			<title>Installing on Mac OS X</title>
-			<p>To install the Toolkit, extract the zip file to your HOME directory, then edit your login rc file to include the Toolkit in your CLASSPATH.</p>
+			<p>To install the Toolkit, extract the zip file to your HOME directory, then edit your login
+        shell profile file file to include the Toolkit in your CLASSPATH variable.</p>
 		</section>
 	</conbody>
 </concept>

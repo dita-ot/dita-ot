@@ -67,24 +67,24 @@ See the accompanying license.txt file for applicable licenses.
           directory.</cmd>
 			</step>
 			<step>
-				<cmd>Set the <varname>ANT_OPTS</varname> environment variable: 
-          
-								<codeph>export ANT_OPTS="-Xmx256M"</codeph>
-				</cmd>
+				<cmd>Set the <varname>ANT_OPTS</varname> environment variable.</cmd>
+			  <stepxmp>
+			    <codeblock>export ANT_OPTS="-Xmx256M"</codeblock>
+			  </stepxmp>
 			</step>
 			<step>
 				<cmd>Set the <varname>ANT_HOME</varname> environment variable 
-              to the directory where you installed Ant:
-          
-								<codeph>export ANT_HOME=${ant_dir}</codeph>
-				</cmd>
+              to the directory where you installed Ant.</cmd>
+			  <stepxmp>
+			    <codeblock>export ANT_HOME=${ant_dir}</codeblock>
+			  </stepxmp>
 			</step>
 			<step>
 				<cmd>
-					Set the <varname>PATH</varname> environment variable to include the directory where you installed the Ant bin directory:
-					
-            								<codeph>export PATH=${ANT_HOME}/bin:${JAVA_HOME}/bin:${PATH}</codeph>
-				</cmd>
+					Set the <varname>PATH</varname> environment variable to include the directory where you installed the Ant bin directory.</cmd>
+			  <stepxmp>
+			    <codeblock>export PATH=${ANT_HOME}/bin:${JAVA_HOME}/bin:${PATH}</codeblock>
+			  </stepxmp>
 			</step>
 		</steps>
 	</taskbody>

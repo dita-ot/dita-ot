@@ -5,7 +5,7 @@ This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
 -->
 <concept id="windows_installing">
-	<title>Installing the small package on Windows</title>	
+	<title>Installing the minimal package on Windows</title>	
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -34,6 +34,6 @@ See the accompanying license.txt file for applicable licenses.
 		</metadata>
 	</prolog>
 	<conbody>
-		<p>Before installing the DITA Open Toolkit small package and its prerequisite software on Windows, check to see if any of the required tools are already installed on your system and, if so, whether the version you have is supported (see <xref href="sysreqs.dita">System requirements and supported applications</xref>). For any tools you need to install, complete the tasks below in the order shown.</p>
+		<p>Before installing the DITA Open Toolkit minimal package and its prerequisite software on Windows, check to see if any of the required tools are already installed on your system and, if so, whether the version you have is supported (see <xref href="sysreqs.dita">System requirements and supported applications</xref>). For any tools you need to install, complete the tasks below in the order shown.</p>
 	</conbody>
 </concept>

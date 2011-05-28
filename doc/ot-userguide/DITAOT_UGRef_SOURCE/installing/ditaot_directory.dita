@@ -118,18 +118,38 @@ See the accompanying license.txt file for applicable licenses.
 					<stentry>demo</stentry>
 					<stentry>Specializations, plug-ins, and validators that demonstrate extensions to the base DITA language.
 				Includes:
-				<ul>
-							<li>book: bookmap specialization</li>
-							<li>dita11: DTD and XSD files for DITA 1.1</li>
-							<li>dita132: DTD and XSD files for IBM DITA 1.3.2</li>
-							<li>elementref: simple element reference description markup</li>
-							<li>enote: data object specialization</li>
-							<li>faq: faq (frequently asked questions) specialization</li>
-							<li>fo: plug-in files to produce PDF output</li>
-							<li>h2d: plug-in to convert XHTML to DITA topics</li>
-							<li>java: validators for DITA schemas</li>
-							<li>legacypdf: Legacy PDF transformation plug-in.</li>
-						</ul>
+				<dl>
+							<dlentry>
+<dt>book</dt><dd>bookmap specialization</dd>
+</dlentry>
+							<dlentry>
+<dt>dita11</dt><dd>DTD and XSD files for DITA 1.1</dd>
+</dlentry>
+							<dlentry>
+<dt>dita132</dt><dd>DTD and XSD files for IBM DITA 1.3.2</dd>
+</dlentry>
+							<dlentry>
+<dt>elementref</dt><dd>simple element reference description markup</dd>
+</dlentry>
+							<dlentry>
+<dt>enote</dt><dd>data object specialization</dd>
+</dlentry>
+							<dlentry>
+<dt>faq</dt><dd>faq (frequently asked questions) specialization</dd>
+</dlentry>
+							<dlentry>
+<dt>fo</dt><dd>plug-in files to produce PDF output</dd>
+</dlentry>
+							<dlentry>
+<dt>h2d</dt><dd>plug-in to convert XHTML to DITA topics</dd>
+</dlentry>
+							<dlentry>
+<dt>java</dt><dd>validators for DITA schemas</dd>
+</dlentry>
+							<dlentry>
+<dt>legacypdf</dt><dd>Legacy PDF transformation plug-in.</dd>
+</dlentry>
+						</dl>
 					Many of these directories have README files that provide information about how to use the specializations.
 				</stentry>
 				</strow>
@@ -169,15 +189,29 @@ See the accompanying license.txt file for applicable licenses.
 					<stentry>xsl</stentry>
 					<stentry>Core and process-specific stylesheets.
 				Includes:
-				<ul>
-							<li>common: stylesheets that can be used by any process (for example, internationalization)</li>
-							<li>docbook: stylesheets used in converting DITA source content into DocBook source</li>
-							<li>preprocess: code for conditional, conref, and link resolution</li>
-							<li>troff: stylesheets used in converting DITA source content into troff source</li>
-							<li>xslfo: code to support the processing of Formatting Objects (FO) output</li>
-							<li>xslhtml: code to support XHTML processing</li>
-							<li>xslrtf: code to support RTF processing</li>
-						</ul>
+				<dl>
+							<dlentry>
+<dt>common</dt><dd>stylesheets that can be used by any process (for example, internationalization)</dd>
+</dlentry>
+							<dlentry>
+<dt>docbook</dt><dd>stylesheets used in converting DITA source content into DocBook source</dd>
+</dlentry>
+							<dlentry>
+<dt>preprocess</dt><dd>code for conditional, conref, and link resolution</dd>
+</dlentry>
+							<dlentry>
+<dt>troff</dt><dd>stylesheets used in converting DITA source content into troff source</dd>
+</dlentry>
+							<dlentry>
+<dt>xslfo</dt><dd>code to support the processing of Formatting Objects (FO) output</dd>
+</dlentry>
+							<dlentry>
+<dt>xslhtml</dt><dd>code to support XHTML processing</dd>
+</dlentry>
+							<dlentry>
+<dt>xslrtf</dt><dd>code to support RTF processing</dd>
+</dlentry>
+						</dl>
 					</stentry>
 				</strow>
 			</simpletable>

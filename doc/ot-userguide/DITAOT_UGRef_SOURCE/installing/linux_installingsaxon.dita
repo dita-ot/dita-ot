@@ -5,7 +5,7 @@ This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
 -->
 <task id="linux_installingsaxon" xml:lang="en-us">
-	<title>Installing SAXON on Linux</title>
+	<title>Installing Saxon on Linux</title>
 	
 	<prolog>
 		<author type="creator">Jen Linton</author>
@@ -27,10 +27,10 @@ See the accompanying license.txt file for applicable licenses.
 		<metadata>
 			<keywords>
 				<keyword>installing DITA Open Toolkit</keyword>
-				<keyword>SAXON XSLT processor</keyword>
-				<indexterm>installing on Linux<indexterm>SAXON XSLT processor</indexterm>
+				<keyword>Saxon XSLT processor</keyword>
+				<indexterm>installing on Linux<indexterm>Saxon XSLT processor</indexterm>
 				</indexterm>
-				<indexterm>SAXON XSLT processor<indexterm>installing on Linux</indexterm>
+				<indexterm>Saxon XSLT processor<indexterm>installing on Linux</indexterm>
 				</indexterm>
 				<indexterm>environment variables<indexterm>CLASSPATH</indexterm>
 				</indexterm>
@@ -51,8 +51,8 @@ See the accompanying license.txt file for applicable licenses.
 				</cmd>
 			</step>
 			<step>
-				<cmd>From SAXON: The XSLT and XQuery Processor page, scroll to find the 
-          heading <uicontrol>Saxon-B 9.1</uicontrol>
+				<cmd>From Saxon: The XSLT and XQuery Processor page, scroll to find the 
+          heading <uicontrol>Saxon-B <keyword keyref="tool.saxon.version"/></uicontrol>
 				</cmd>
 			</step>
 			<step>
@@ -63,19 +63,19 @@ See the accompanying license.txt file for applicable licenses.
 			<step>
 				<cmd>Select any of the <image href="../images/compressed.png"/> 
           images to start the download.</cmd>
-				<info> If SAXON does not appear to be downloading, wait a few minutes 
-          before selecting another <image href="../images/compressed.png"/> 
-          image. You may have to select more than one <image href="../images/compressed.png"/> image until you find one that works. 
-          	</info>
+				<info>If Saxon does not appear to be downloading, wait a few minutes before selecting another
+            <image href="../images/compressed.png"/> image. You may have to select more than one
+            <image href="../images/compressed.png"/> image until you find one that works. </info>
 			</step>
 			<step>
 				<cmd>Download and unzip the <filepath>Saxonb9-1-0-5.zip</filepath> file and save it to a Linux 
           home directory.</cmd>
 			</step>
 			<step>
-				<cmd>Add Saxon to your <varname>CLASSPATH</varname> environment variable:
-				<userinput>export CLASSPATH=${CLASSPATH}:${saxon_dir}/saxon9.jar:${saxon_dir}/saxon9-dom.jar:${saxon_dir}/saxon9-dom4j.jar:${saxon_dir}/saxon9-jdom.jar:${saxon_dir}/saxon9-s9api.jar:${saxon_dir}/saxon9-sql.jar:${saxon_dir}/saxon9-xom.jar:${saxon_dir}/saxon9-xpath.jar:${saxon_dir}/saxon9-xqj.jar </userinput>
-				</cmd>
+				<cmd>Add Saxon to your <varname>CLASSPATH</varname> environment variable</cmd>
+			  <stepxmp>
+			    <codeblock>export CLASSPATH=$CLASSPATH:${saxon_dir}/saxon9.jar:${saxon_dir}/saxon9-dom.jar </codeblock>
+			  </stepxmp>
 			</step>
 		</steps>
 	</taskbody>

@@ -48,7 +48,7 @@ See the accompanying license.txt file for applicable licenses.
 		<p>
 			<b>The tools you use need to work together as a set.</b>
 		</p>
-		<p>This means, for example, that the DITA-aware authoring tool you are already using may not be "aware" of the version of the DTDs that come with the Toolkit. It could also mean that the version of SAXON you already have installed on your laptop doesn't work with the Toolkit. Read <xref href="sysreqs.dita">System requirements and supported applications</xref> and check your current system environment before installing or upgrading.</p>
+		<p>This means, for example, that the DITA-aware authoring tool you are already using may not be "aware" of the version of the DTDs that come with the Toolkit. It could also mean that the version of Saxon you already have installed on your laptop doesn't work with the Toolkit. Read <xref href="sysreqs.dita">System requirements and supported applications</xref> and check your current system environment before installing or upgrading.</p>
 		<p>
 			<b>You may not need to install the prerequisite tools separately.</b>
 		</p>

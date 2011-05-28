@@ -131,10 +131,10 @@ trademark="WebSphere">WebSphere</tm> Studio Advanced Developer 5.1</li>
 </body>
 </topic><topic id="xsjava">
 <title>Validate XML Schema using <tm tmclass="special"
-tmowner="Sun Microsystems, Inc." tmtype="tm" trademark="Java">Java</tm></title>
+tmowner="Oracle and/or its affiliates" tmtype="tm" trademark="Java">Java</tm></title>
 <body>
 <section>         <title>Using Sun <tm tmclass="special"
-tmowner="Sun Microsystems, Inc." tmtype="tm" trademark="Java">Java</tm> Development Kit (JDK)1.4.X            and Xerces 2.6.X</title>         <p>The Sun JDK 1.4.X has a built-in XML parser as part of the            distribution. It is called Crimson. Unfortunately, Sun&apos;s Crimson            parser only supports DTD validation. </p>         <p>Sun provides a mechanism to override the classes in the JDK.            It&apos;s called the <xref
+tmowner="Oracle and/or its affiliates" tmtype="tm" trademark="Java">Java</tm> Development Kit (JDK)1.4.X            and Xerces 2.6.X</title>         <p>The Sun JDK 1.4.X has a built-in XML parser as part of the            distribution. It is called Crimson. Unfortunately, Sun&apos;s Crimson            parser only supports DTD validation. </p>         <p>Sun provides a mechanism to override the classes in the JDK.            It&apos;s called the <xref
 href="http://java.sun.com/j2se/1.4.1/docs/guide/standards/"
 type="external">Endorsed Standards Override Mechanism</xref></p>         <p>For example, copy a version of the xercesImpl.jar and xml-apis.jar            to &lt;java_home&gt;/jre/lib/endorsed. Here &lt;java-home&gt; refers            to the directory where the Sun JDK is installed. Check the Xerces            version via the included Version application using the following            command-line syntax.</p>         <pre>java -Dorg.xml.sax.driver=org.apache.xerces.parsers.SAXParser org.apache.xerces.impl.Version
   </pre>         <note>Java 2 Platform, Standard Edition (J2SE) 5.0 and IBM Developer            Kit includes Xerces 2.6.2 as the built-in XML parser.</note>       </section>
@@ -171,7 +171,7 @@ href="http://java.sun.com/xml/jaxp/faq.html" type="external">JAXP          1.2.<
 <note type="note">The implied value for the class attribute, defined in          the schema, is necessary for DITA XSLT scripts to work properly. If you          see no output, or text-only output, this is usually an indication that          the class attribute&apos;s default value has not been provided during          parsing. Use the normalize.xsl transform to check the output of the          parser: if the class attribute is missing, or the value is not bounded          at the end by a space, the transforms cannot do class-based matching          properly. </note>
 <lines> Eric Sirois <xref href="mailto:esirois@ca.ibm.com"
 type="external">esirois@ca.ibm.com</xref> IBM Corporation</lines>
-<p>Java is a registered trademark of Sun Microsystems, Inc..</p>
+<p>Java is a registered trademark of Oracle and/or its affiliates.</p>
 </body>
 </topic></required-cleanup>
 </body>

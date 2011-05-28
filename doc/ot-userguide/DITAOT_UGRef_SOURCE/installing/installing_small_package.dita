@@ -5,7 +5,7 @@ This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
 -->
 <task id="installing_small_package">
-	<title>Installing the DITA Tookit small package distribution</title>
+	<title>Installing the DITA Tookit minimal package distribution</title>
 	<prolog>
 		<author type="creator">Richard Johnson</author>
 		<author type="contributor">Anna van Raaphorst</author>
@@ -24,7 +24,7 @@ See the accompanying license.txt file for applicable licenses.
 				<keyword>DITA Open Toolkit distributions</keyword>
 				<indexterm>DITA Open Toolkit
 				  <indexterm>distributions</indexterm>
-					<indexterm>small package distribution</indexterm>
+					<indexterm>minimal package distribution</indexterm>
 				</indexterm>
 			</keywords>
 			<prodinfo>
@@ -37,11 +37,11 @@ See the accompanying license.txt file for applicable licenses.
 	</prolog>
 	<taskbody>
 	<prereq>
-	  <p>Before installing the DITA Open Toolkit small package and its prerequisite software on Windows, check to see if any of the required tools are already installed on your system and, if so, whether the version you have is supported (see <xref href="sysreqs.dita">System requirements and supported applications</xref>). For any tools you need to install, complete the tasks below in the order shown.</p>
+	  <p>Before installing the DITA Open Toolkit minimal package and its prerequisite software on Windows, check to see if any of the required tools are already installed on your system and, if so, whether the version you have is supported (see <xref href="sysreqs.dita">System requirements and supported applications</xref>). For any tools you need to install, complete the tasks below in the order shown.</p>
 	</prereq>		
 	<steps>
-	  <stepsection><p>To install the small package:</p></stepsection>
-				<step><cmd>Download the small package from <xref href="http://sourceforge.net/projects/dita-ot" format="html" scope="external"/>.</cmd></step>
+	  <stepsection><p>To install the minimal package:</p></stepsection>
+				<step><cmd>Download the minimal package from <xref href="http://sourceforge.net/projects/dita-ot" format="html" scope="external"/>.</cmd></step>
 				<step platform="windows"><cmd>On Windows, unzip the package into the <filepath>C:\DITA-OT<keyword keyref="release.version"/></filepath> directory.</cmd></step>
 				<step platform="linux osx"><cmd>On Linux, unzip the package into <filepath>$HOME</filepath> directory.</cmd></step>
 				<step platform="windows"><cmd>On Windows, add <codeph>C:\DITA-OT<keyword keyref="release.version"/>\lib;C:\DITA-OT<keyword keyref="release.version"/>\lib\dost.jar;C:\DITA-OT<keyword keyref="release.version"/>\lib\resolver.jar</codeph> to your <varname>CLASSPATH </varname> environment variable.</cmd></step>

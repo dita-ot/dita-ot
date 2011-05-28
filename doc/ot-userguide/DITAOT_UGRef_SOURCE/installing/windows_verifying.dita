@@ -81,10 +81,9 @@ See the accompanying license.txt file for applicable licenses.
 			<step>
 				<cmd>Type <userinput>ant -f build_demo.xml all</userinput> and press Enter to process the DITA files in the <filepath>demo</filepath>, <filepath>doc</filepath>, <filepath>docbook</filepath>, and <filepath>samples</filepath> directories. This procedure also verifies the Toolkit installation.
           </cmd>
-				<stepresult>The testing process completes in 3-10 minutes depending on 
-          the speed of your machine. When testing completes, the confirmation 
-          message BUILD SUCCESSFUL displays.
-				</stepresult>
+				<stepresult>The testing process completes in 3-10 minutes depending on the speed of your
+          machine. When testing completes, the confirmation message <systemoutput>BUILD
+            SUCCESSFUL</systemoutput> displays. </stepresult>
 			</step>
 		</steps>
 		<result>Be sure the directories and files in your <filepath>DITA-OT<keyword keyref="release.version"/></filepath> are as described in

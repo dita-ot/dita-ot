@@ -23,7 +23,7 @@ See the accompanying license.txt file for applicable licenses.
 				<keyword>installing DITA Open Toolkit</keyword>
 				<keyword>Microsoft HTML Help compiler</keyword>
 				<keyword>HTML Help compiler</keyword>
-				<keyword>Sun JavaHelp processor</keyword>
+				<keyword>JavaHelp processor</keyword>
 				<keyword>JavaHelp processor</keyword>
 				<keyword>Apache FOP processor</keyword>
 				<keyword>RenderX XEP processor</keyword>
@@ -49,7 +49,7 @@ See the accompanying license.txt file for applicable licenses.
 				</indexterm>
 				<indexterm>HTML Help compiler<indexterm>downloading</indexterm>
 				</indexterm>
-				<indexterm>Sun Microsystems JavaHelp processor<indexterm>downloading</indexterm>
+				<indexterm>JavaHelp processor<indexterm>downloading</indexterm>
 				</indexterm>
 				<indexterm>JavaHelp processor<indexterm>downloading</indexterm>
 				</indexterm>
@@ -102,7 +102,7 @@ See the accompanying license.txt file for applicable licenses.
 				<b>(If you plan to publish HTML Help) The Microsoft HTML Help processor</b>
 			</p>
 			<p>
-				<b>(If you plan to publish JavaHelp files) The Sun JavaHelp processor</b>
+				<b>(If you plan to publish JavaHelp files) The JavaHelp processor</b>
 			</p>
 			<p>
 				<b>(If you plan to publish PDF files) The Apache FOP processor or the RenderX XEP processor</b>

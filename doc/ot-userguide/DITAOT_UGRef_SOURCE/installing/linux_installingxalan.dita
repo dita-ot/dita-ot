@@ -49,18 +49,20 @@ See the accompanying license.txt file for applicable licenses.
 				</cmd>
 			</step>
 			<step>
-				<cmd>From SAXON: The Xalan Processor page, scroll to find the heading 
-          <uicontrol>xalan-j_2_7_0-bin.tar.gz</uicontrol>. Click to 
+				<cmd>From Saxon: The Xalan Processor page, scroll to find the heading 
+          <uicontrol>xalan-j_2_7_1-bin.tar.gz</uicontrol>. Click to 
           download.</cmd>
 			</step>
 			<step>
-				<cmd> Save and unzip the <filepath>xalan-j_2_7_0-bin.tar.gz</filepath> file to a linux home 
+				<cmd> Save and unzip the <filepath>xalan-j_2_7_1-bin.tar.gz</filepath> file to a linux home 
           directory.</cmd>
 			</step>
 			<step>
 				<cmd>Add Xalan to the <varname>CLASSPATH</varname>
-					environment variable: <userinput>export CLASSPATH=${CLASSPATH}:${xalan_dir}/bin </userinput>
-					</cmd>
+				environment variable.</cmd>
+			  <stepxmp>
+			    <codeblock>export CLASSPATH=${CLASSPATH}:${xalan_dir}/bin </codeblock>
+			  </stepxmp>
 			</step>
 		</steps>
 	</taskbody>

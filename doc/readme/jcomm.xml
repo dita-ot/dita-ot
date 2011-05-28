@@ -6,7 +6,7 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN"
  "..\dtd\task.dtd">
 <task id="jcomm" xml:lang="en-us">
-<title>Transforming DITA to Word with <tm tmclass="special" tmowner="Sun Microsystems, Inc."
+<title>Transforming DITA to Word with <tm tmclass="special" tmowner="Oracle and/or its affiliates"
 tmtype="tm" trademark="Java">Java</tm> command</title>
 <taskbody>
 <context><b>Running Example</b></context>

@@ -48,4 +48,11 @@ See the accompanying license.txt file for applicable licenses.
       </keywords>
     </topicmeta>
   </keydef>
+  <keydef keys="tool.saxon.version">
+    <topicmeta>
+      <keywords>
+        <keyword>9.1</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
 </map>

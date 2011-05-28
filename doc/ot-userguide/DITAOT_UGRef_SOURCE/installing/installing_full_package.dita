@@ -39,7 +39,7 @@ See the accompanying license.txt file for applicable licenses.
 			<title>Installing the full package distribution</title>
 			<taskbody>
 			  <prereq platform="linux windows">
-			    <p>You cannot run a DITA Toolkit build until you have installed the Java SDK.</p>
+			    <p>You cannot run a DITA Toolkit build until you have installed the Java JDK.</p>
 			  </prereq>
 	     <steps>
 	       <stepsection>
@@ -54,16 +54,23 @@ See the accompanying license.txt file for applicable licenses.
 	         <cmd>On Windows, add system variable <codeph>DITA_HOME</codeph> with value <filepath>C:\DITA-OT<keyword keyref="release.version"/></filepath>.</cmd>
 	       </step>
 	       <step platform="linux osx">
-	         <cmd>On Linux, define variable <codeph>DITA_HOME</codeph> with value <filepath>$HOME/<keyword keyref="release.version"/></filepath>.</cmd>
-	       </step>
+          <cmd>On Linux, define variable <codeph>DITA_HOME</codeph> with value
+                <filepath>$HOME/<keyword keyref="release.version"/></filepath>.</cmd>
+        </step>
 	       <step platform="windows"><cmd>On Windows, create a new shortcut for <filepath>C:\DITA-OT<keyword keyref="release.version"/>\startcmd.bat</filepath> to be
             used to run DITA builds.</cmd></step>
-          <step platform="linux osx"><cmd>On Linux execute the shell script <filepath>startcmd.sh</filepath> before running a
-            DITA build.</cmd></step>
+          <step platform="linux osx"><cmd>On Linux execute the shell script <filepath>startcmd.sh</filepath> to set environment variables
+            before running a DITA build.</cmd></step>
 				</steps>
 			  <postreq><note>You may want to install other optional tools to complete your build environment.</note></postreq></taskbody>
-		</task>
-   <task id="installing_full_package_verifying">
+   </task>
+  <task id="id_moy_qmz_lc" conref="windows_verifying.dita#windows_verifying" platform="windows">
+    <title>Verifying the installation on Windows</title>
+  </task>
+  <task id="id_nri_omz_lc" conref="linux_verifying.dita#linux_verifying" platform="linux osx">
+    <title>Verifying the installation on Linux</title>
+  </task>
+   <!--task id="installing_full_package_verifying">
 			<title>Verifying the installation</title>
 			<taskbody>
 			  <steps-informal>
@@ -122,9 +129,10 @@ See the accompanying license.txt file for applicable licenses.
 			<p>If you do not specify a target for <filepath>build_demo.xml</filepath>, the default target is <filepath>prompt</filepath>. </p>
 			<p>You can also try your hand at modifying some of the sample scripts in the <filepath>ant</filepath> directory. These represent the kind of driver files that you would create for your own projects. You can easily adapt these to process your own test DITA files. Run the other ant samples using this example: </p>
 			<pre platform="windows">C:\DITA-OT<keyword keyref="release.version"/>&gt;ant -f ant/sample_xhtml.xml</pre>
-			<p>This is basically the same as running <userinput>ant samples.web -f build_demo.xml</userinput>, but intended for you to modify. </p>
+			<p>This is basically the same as running <userinput>ant -f build_demo.xml
+          samples.web</userinput>, but intended for you to modify. </p>
 			<p>You will find the output for this exercise in the <filepath>ant</filepath> directory itself. You can add parameters to the <filepath>sample_xhtml.xml</filepath> file to change where your outputs end up, and also to modify the build process in other ways. See <xref href="../processing/antparms.dita" scope="local"/> to learn more about processing options. </p>
 			  </steps-informal>
 			</taskbody>
-</task>	
+</task-->	
 </task>
