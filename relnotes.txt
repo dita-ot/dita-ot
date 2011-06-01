@@ -44,6 +44,12 @@
      * 3197328 Refactor writers for cleaner XML serialization (In process)   
      * 3199755 Improve log integration (In process)       
      * 3296040 Refactor PDF2 build files (In process)
+     * 3306146 PDF2 stylesheet refactoring (In process)
+     * 3304447 Add support for selecting output format in PDF2 (In process)  
+     * 3302779 Dependency extension points for PDF2 formatting (Milestone 7)    
+     * 3304945 Allow setting local overrides with properties file (Milestone 7) 
+     
+     
      
      [SourceForge Patches Added]
      * 3123507 String concat in map2plugin (Milestone 1)
@@ -96,7 +102,7 @@
      * 3288639 Conref code improperly generalizes map domain elements  (Milestone 6)
      * 3294295 PDF2 indexing and I18N fails with missing languages (Milestone 6)
      * 3294864 tocjs-demo: tocjs.ditamap is referencing a missing file (Milestone 6)
-
+	 * 3297930 PDF2: axf specific templates can't be overridden. (Milestone 7)
      
 ====================================================================================
 
