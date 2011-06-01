@@ -45,6 +45,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:import href="../common/vars.xsl"/>
 
     <xsl:import href="../../cfg/fo/attrs/basic-settings.xsl"/>
+    <xsl:import href="../../cfg/fo/attrs/layout-masters-attr.xsl"/>
     <xsl:import href="../../cfg/fo/layout-masters.xsl"/>
     <xsl:import href="../../cfg/fo/attrs/links-attr.xsl"/>
     <xsl:import href="links.xsl"/>
