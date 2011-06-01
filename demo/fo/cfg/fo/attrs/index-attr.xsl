@@ -35,7 +35,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="__index__label">
         <xsl:attribute name="margin-top">20pt</xsl:attribute>
-        <xsl:attribute name="space-after.optimum">20pt</xsl:attribute>
+        <xsl:attribute name="space-after">20pt</xsl:attribute>
         <xsl:attribute name="font-size">20pt</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
     </xsl:attribute-set>
@@ -43,18 +43,18 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="__index__page__link">
         <xsl:attribute name="color">blue</xsl:attribute>
         <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
-        <xsl:attribute name="link-back">true</xsl:attribute>
+        <!--xsl:attribute name="link-back">true</xsl:attribute-->
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__index__letter-group">
         <xsl:attribute name="font-size">12pt</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
-        <xsl:attribute name="space-after.optimum">0.1in</xsl:attribute>
+        <xsl:attribute name="space-after">0.1in</xsl:attribute>
         <xsl:attribute name="keep-with-next.within-page">always</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="index.entry">
-        <xsl:attribute name="space-after.optimum">0.2in</xsl:attribute>
+        <xsl:attribute name="space-after">0.2in</xsl:attribute>
         <xsl:attribute name="font-size">9pt</xsl:attribute>
     </xsl:attribute-set>
 

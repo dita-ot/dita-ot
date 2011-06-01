@@ -30,8 +30,8 @@
 <!--DL is a table-->
 <xsl:attribute-set name="dl">
     <!--xsl:attribute name="width">100%</xsl:attribute-->
-    <xsl:attribute name="space-before.optimum">5pt</xsl:attribute>
-    <xsl:attribute name="space-after.optimum">5pt</xsl:attribute>
+    <xsl:attribute name="space-before">5pt</xsl:attribute>
+    <xsl:attribute name="space-after">5pt</xsl:attribute>
 </xsl:attribute-set>
 
 <!-- DL body -->
@@ -60,8 +60,8 @@
 <xsl:attribute-set name="simpletable">
     <!--xsl:attribute name="width">100%</xsl:attribute-->
     <xsl:attribute name="font-size">10pt</xsl:attribute>
-    <xsl:attribute name="space-before.optimum">8pt</xsl:attribute>
-    <xsl:attribute name="space-after.optimum">10pt</xsl:attribute>
+    <xsl:attribute name="space-before">8pt</xsl:attribute>
+    <xsl:attribute name="space-after">10pt</xsl:attribute>
 </xsl:attribute-set>
 
 <xsl:attribute-set name="simpletable__body">

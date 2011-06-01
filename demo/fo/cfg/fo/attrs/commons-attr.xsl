@@ -78,7 +78,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="topic.topic.title">
         <xsl:attribute name="font-family">Sans</xsl:attribute>
 		<xsl:attribute name="border-bottom">1pt solid black</xsl:attribute>
-        <xsl:attribute name="space-before.optimum">15pt</xsl:attribute>
+        <xsl:attribute name="space-before">15pt</xsl:attribute>
         <xsl:attribute name="margin-top">1pc</xsl:attribute>
         <xsl:attribute name="margin-bottom">5pt</xsl:attribute>
         <xsl:attribute name="font-size">14pt</xsl:attribute>
@@ -141,7 +141,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="section.title">
         <xsl:attribute name="font-family">Sans</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
-        <xsl:attribute name="space-before.optimum">15pt</xsl:attribute>
+        <xsl:attribute name="space-before">15pt</xsl:attribute>
         <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
     </xsl:attribute-set>
 
@@ -149,7 +149,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="font-family">Sans</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
         <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
-        <xsl:attribute name="space-after.optimum">5pt</xsl:attribute>
+        <xsl:attribute name="space-after">5pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="fig">
@@ -159,8 +159,8 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="font-family">Sans</xsl:attribute>
         <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
-        <xsl:attribute name="space-before.optimum">5pt</xsl:attribute>
-        <xsl:attribute name="space-after.optimum">10pt</xsl:attribute>
+        <xsl:attribute name="space-before">5pt</xsl:attribute>
+        <xsl:attribute name="space-after">10pt</xsl:attribute>
         <xsl:attribute name="keep-with-previous.within-page">always</xsl:attribute>
     </xsl:attribute-set>
 
@@ -242,7 +242,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="text-indent">0em</xsl:attribute>
         <xsl:attribute name="space-before">0.6em</xsl:attribute>
         <xsl:attribute name="space-after">0.6em</xsl:attribute>
-        <xsl:attribute name="space-after.optimum">3pt</xsl:attribute>
+        <xsl:attribute name="space-after">3pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="lq">

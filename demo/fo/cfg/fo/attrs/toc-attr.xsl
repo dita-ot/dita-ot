@@ -142,8 +142,8 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="__toc__mini__list">
         <xsl:attribute name="provisional-distance-between-starts">1.5pc</xsl:attribute>
         <xsl:attribute name="provisional-label-separation">1pc</xsl:attribute>
-        <xsl:attribute name="space-after.optimum">9pt</xsl:attribute>
-        <xsl:attribute name="space-before.optimum">9pt</xsl:attribute>
+        <xsl:attribute name="space-after">9pt</xsl:attribute>
+        <xsl:attribute name="space-before">9pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__toc__mini__label">
