@@ -1098,13 +1098,22 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
                     // TODO Added by William on 2009-05-14 for keyref bug start
                     // When generating key.list
                     if (KEY_LIST.equals(key)) {
-
-                        final String repStr = FileUtils.removeRedundantNames(
-                                new StringBuffer(prefix).append(to).toString()).replace(WINDOWS_SEPARATOR,
-                                UNIX_SEPARATOR)
-                                + EQUAL
-                                + FileUtils.removeRedundantNames(new StringBuffer(prefix).append(source).toString())
-                                        .replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
+                        final StringBuilder repStr = new StringBuilder();
+                        repStr.append(FileUtils.removeRedundantNames(prefix + to)
+                                .replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR));
+                        repStr.append(EQUAL);
+                        // cases where keymap is in map ancestor folder
+                        if (source.substring(0, 1).equals(LEFT_BRACKET)) {
+                            repStr.append(FileUtils.removeRedundantNames(prefix)
+                                    .replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR));
+                            repStr.append(LEFT_BRACKET);
+                            repStr.append(FileUtils.removeRedundantNames(source.substring(1, source.length() - 1))
+                                    .replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR));
+                            repStr.append(RIGHT_BRACKET);
+                        } else {
+                            repStr.append(FileUtils.removeRedundantNames(prefix + source)
+                                    .replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR));
+                        }
 
                         StringBuffer result = new StringBuffer(repStr);
 
@@ -1112,7 +1121,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
                         // maps/target_topic_1=topics/target-topic-a.xml(root-map-01.ditamap)-->
                         // target_topic_1=topics/target-topic-a.xml(maps/root-map-01.ditamap)
                         if (!"".equals(prefix)) {
-                            final String prefix1 = prefix.replace("\\", "/");
+                            final String prefix1 = prefix.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
                             if (repStr.indexOf(prefix1) != -1) {
                                 result = new StringBuffer();
                                 result.append(repStr.substring(prefix1.length()));
