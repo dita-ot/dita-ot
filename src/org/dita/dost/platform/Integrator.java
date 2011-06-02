@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
@@ -49,6 +50,9 @@ public final class Integrator {
     public static final String PARAM_VALUE_SEPARATOR = ";";
     public static final String PARAM_NAME_SEPARATOR = "=";
 
+    private static final Pattern ID_PATTERN = Pattern.compile("[0-9a-zA-Z_\\-]+(?:\\.[0-9a-zA-Z_\\-]+)*");
+    private static final Pattern VERSION_PATTERN = Pattern.compile("\\d+(?:\\.\\d+(?:\\.\\d+(?:\\.[0-9a-zA-Z_\\-])?)?)?");
+    
     /** Plugin table which contains detected plugins. */
     private final Map<String, Features> pluginTable;
     private final Set<String> templateSet = new HashSet<String>(INT_16);
@@ -289,7 +293,7 @@ public final class Integrator {
     private void parsePlugin() {
         if (!descSet.isEmpty()) {
             for (final File descFile : descSet) {
-                logger.logDebug("Read plugin configuration " + descFile.getPath());
+                logger.logDebug("Read plug-in configuration " + descFile.getPath());
                 parseDesc(descFile);
             }
         }
@@ -306,10 +310,60 @@ public final class Integrator {
             reader.setContentHandler(parser);
             reader.parse(descFile.getAbsolutePath());
             final Features f = parser.getFeatures();
+            final String id = f.getPluginId();
+            validatePlugin(f);
+            setDefaultValues(f);
             extensionPoints.addAll(f.getExtensionPoints().keySet());
-            pluginTable.put(f.getPluginId(), f);
+            pluginTable.put(id, f);
         } catch (final Exception e) {
             logger.logException(e);
+        }
+    }
+    
+    /**
+     * Validate plug-in configuration.
+     * 
+     * Follow OSGi symbolic name syntax rules:
+     * 
+     * <pre>
+     * digit         ::= [0..9]
+     * alpha         ::= [a..zA..Z]
+     * alphanum      ::= alpha | digit
+     * token         ::= ( alphanum | ’_’ | ’-’ )+
+     * symbolic-name ::= token('.'token)*
+     * </pre>
+     * 
+     * Follow OSGi bundle version syntax rules:
+     * 
+     * <pre>
+     * version   ::= major( '.' minor ( '.' micro ( '.' qualifier )? )? )?
+     * major     ::= number
+     * minor     ::=number
+     * micro     ::=number
+     * qualifier ::= ( alphanum | ’_’ | '-' )+
+     * </pre>
+     * 
+     * @param f Features to validate
+     */
+    private void validatePlugin(final Features f) {
+        final String id = f.getPluginId(); 
+        if (!ID_PATTERN.matcher(id).matches()) {
+            logger.logWarn("Plug-in ID '" + id + "' doesn't follow recommended syntax rules, support for nonconforming IDs may be removed in future releases.");
+        }
+        final String version = f.getFeature("package.version");
+        if (version != null && !VERSION_PATTERN.matcher(version).matches()) {
+            logger.logWarn("Plug-in version '" + version + "' doesn't follow recommended syntax rules, support for nonconforming version may be removed in future releases.");
+        }
+    }
+    
+    /**
+     * Set default values.
+     * 
+     * @param f Features to set defaults to
+     */
+    private void setDefaultValues(final Features f) {
+        if (f.getFeature("package.version") == null) {
+            f.addFeature("package.version", "0.0.0", null);
         }
     }
 

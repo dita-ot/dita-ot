@@ -120,14 +120,16 @@ final class Features {
 	 * Add feature to the feature table.
 	 * @param id feature id
 	 * @param value feature value
-	 * @param type feature type
+	 * @param type feature type, may be {@code null} 
 	 * @deprecated use {@link #addFeature(String, Attributes)} instead
 	 */
 	@Deprecated
 	public void addFeature(final String id, final String value, final String type) {
 		final AttributesImpl atts = new AttributesImpl();
 		atts.addAttribute("", "value", "value", "CDATA", value);
-		atts.addAttribute("", "type", "type", "CDATA", type);
+		if (type != null) {
+		    atts.addAttribute("", "type", "type", "CDATA", type);
+		}
 		addFeature(id, atts);
 	}
 	

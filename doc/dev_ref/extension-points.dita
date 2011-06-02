@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="conceptId">
+  <title>Extension points for plug-ins to the DITA Open Toolkit</title>
+  <shortdesc>Extensions to the DITA Open Toolkit are supported through a plug-in extension mechanism.</shortdesc>
+  <conbody>
+    <p>Plug-ins may do a number of things, such as adding support for specialized DTDs or Schemas,
+      integrating processing overrides, or providing entirely new output transforms. Extensions are
+      integrated using a file named <filepath>plugin.xml</filepath>, located in the plug-in's root
+      directory; the plug-in directory itself is generally located within the
+        <filepath>demo/</filepath> or <filepath>plugins/</filepath> directory inside of the DITA-OT.
+      This document describes all recognized extension points that are available for use within the
+        <filepath>plugin.xml</filepath> file.</p>
+  </conbody>
+  <concept id="topic_yxv_wov_kc">
+    <title>Plugin configuration file</title>
+    <conbody>
+      <p>The root element of the plugin.xml file is <codeph>&lt;plugin&gt;</codeph>, and must
+        specify an <codeph>id</codeph> attribute. The <codeph>id</codeph> attribute is used to
+        identify the plugin, as well as to identify whether pre-requisite plugins are available. The
+          <codeph>id</codeph> attribute should follow the syntax rules:</p>
+      <codeblock>id    ::= token('.'token)*
+token ::= ( [0..9] | [a..zA..Z] | ’_’ | ’-’ )+</codeblock>
+      <p>The <codeph>&lt;plugin&gt;</codeph> element supports the following child elements: </p>
+      <ul>
+        <li>
+          <p><codeph>&lt;feature&gt;</codeph> defines an <i>extension</i> to contribute to a defined
+              <i>extension point</i>. The following attributes are supported:</p>
+          <simpletable keycol="1">
+            <sthead>
+              <stentry>Attribute</stentry>
+              <stentry>Description</stentry>
+              <stentry>Required</stentry>
+            </sthead>
+            <strow>
+              <stentry><codeph>extension</codeph></stentry>
+              <stentry>extension point identifier</stentry>
+              <stentry>yes</stentry>
+            </strow>
+            <strow>
+              <stentry><codeph>value</codeph></stentry>
+              <stentry>comma separated string value of the extension</stentry>
+              <stentry>either <codeph>value</codeph> or <codeph>file</codeph></stentry>
+            </strow>
+            <strow>
+              <stentry><codeph>file</codeph></stentry>
+              <stentry>file path value of the extension, relative to
+                <filepath>plugin.xml</filepath></stentry>
+              <stentry>either <codeph>value</codeph> or <codeph>file</codeph></stentry>
+            </strow>
+            <strow>
+              <stentry><codeph>type</codeph></stentry>
+              <stentry>type of the <codeph>value</codeph> attribute</stentry>
+              <stentry>no</stentry>
+            </strow>
+          </simpletable>
+        </li>
+        <li>
+          <p><codeph>&lt;require&gt;</codeph> defines plug-in dependencies. The following attributes
+            are supported:</p>
+          <simpletable keycol="1">
+            <sthead>
+              <stentry>Attribute</stentry>
+              <stentry>Description</stentry>
+              <stentry>Required</stentry>
+            </sthead>
+            <strow>
+              <stentry><codeph>plugin</codeph></stentry>
+              <stentry>vertical bar separated list of plug-ins that are required </stentry>
+              <stentry>yes</stentry>
+            </strow>
+            <strow>
+              <stentry><codeph>important</codeph></stentry>
+              <stentry>flag whether plug-in is required or optional</stentry>
+              <stentry>no</stentry>
+            </strow>
+          </simpletable>
+        </li>
+        <li>
+          <p><codeph>&lt;template&gt;</codeph> defines files that should be treated as
+              <i>templates</i>. The following attributes are supported:</p>
+          <simpletable keycol="1">
+            <sthead>
+              <stentry>Attribute</stentry>
+              <stentry>Description</stentry>
+              <stentry>Required</stentry>
+            </sthead>
+            <strow>
+              <stentry><codeph>file</codeph></stentry>
+              <stentry>file path to the template, relative to <filepath>plugin.xml</filepath></stentry>
+              <stentry>yes</stentry>
+            </strow>
+          </simpletable>
+        </li>
+        <li>
+          <p><codeph>&lt;meta&gt;</codeph> defines metadata. The following attributes are
+            supported:</p>
+          <simpletable  keycol="1">
+            <sthead>
+              <stentry>Attribute</stentry>
+              <stentry>Description</stentry>
+              <stentry>Required</stentry>
+            </sthead>
+            <strow>
+              <stentry><codeph>type</codeph></stentry>
+              <stentry>metadata name </stentry>
+              <stentry>yes</stentry>
+            </strow>
+            <strow>
+              <stentry><codeph>value</codeph></stentry>
+              <stentry>metadata value</stentry>
+              <stentry>yes</stentry>
+            </strow>
+          </simpletable>
+        </li>
+      </ul>
+      <p>Any extension that is not recognized by the DITA-OT is ignored; all elements other than
+          <codeph>&lt;plugin&gt;</codeph> are optional. Since version 1.5.3 multiple extension
+        definitions within a plugin configuration file are combined; in older versions only the last
+        extension definition is used. </p>
+    </conbody>
+    <related-links>
+      <link href="#topic_vcw_wov_kc"></link>
+    </related-links>
+  </concept>
+  <concept id="topic_myv_wov_kc">
+    <title>XML catalogs</title>
+    <conbody>
+      <p>The XML Catalogs extension point is used to update the XML Catalogs used to resolve DTD or
+        Schema document types. To do this, first create a catalog with only your new values, using
+        the OASIS Catalog format, and place that in your plugin. Next create a
+          <codeph>&lt;feature&gt;</codeph> element, with the extension attribute set to
+          "<codeph>dita.specialization.catalog.relative</codeph>", the <codeph>file</codeph>
+        attribute set to the name of your local catalog file. For example: </p>
+      <codeblock> &lt;feature extension="dita.specialization.catalog.relative" file="catalog-dita.xml"/&gt; </codeblock>
+      <note type="remember">The <codeph>dita.specialization.catalog</codeph> extension is
+        deprecated.  Use <codeph>dita.specialization.catalog.relative</codeph> instead.</note>
+    </conbody>
+  </concept>
+  <concept id="topic_uyv_wov_kc">
+    <title>New Ant targets</title>
+    <conbody>
+      <p>The Ant conductor extension point is used to make new targets available to Ant processing.
+        To do this, first place your extensions in an Ant project file within your plugin, such as
+        myAntStuff.xml. Create a small wrapper file <filepath>myAntStuffWrapper.xml</filepath> in
+        the same directory: </p>
+      <codeblock> &lt;dummy&gt; &lt;import file="myAntStuff.xml"/&gt; &lt;/dummy&gt; </codeblock>
+      <p>Then create the following feature: </p>
+      <codeblock>&lt;feature extension="dita.conductor.target.relative" file="myAntStuffWrapper.xml"/&gt; </codeblock>
+      <note type="remember">The <codeph>dita.conductor.target</codeph> extension is deprecated.  Use
+          <codeph>dita.conductor.target.relative</codeph> instead.</note>
+    </conbody>
+  </concept>
+  <concept id="topic_dzv_wov_kc">
+    <title>Add Ant targets to the preprocess pipeline</title>
+    <conbody>
+      <p>To add an Ant target myTarget to the preprocess pipeline, choose which pipeline stage it
+        must occur before.  Then create a feature for the extension
+            <codeph>depend.preprocess.<i>stagename</i>.pre</codeph>: </p>
+      <codeblock>&lt;feature extension="depend.preprocess.chunk.pre" value="myAntTargetBeforeChunk"/&gt; </codeblock>
+      <p>There are also extension points <codeph>depend.preprocess.pre</codeph> and
+          <codeph>depend.preprocess.post</codeph> to execute a target before or after all
+        preprocessing. </p>
+    </conbody>
+  </concept>
+  <concept id="topic_lzv_wov_kc">
+    <title>New transtype</title>
+    <conbody>
+      <p>The transtype extension point is used to define a new "transtype", or transform type, which
+        makes use of targets in your Ant extensions.</p>
+      <example>
+        <p>The following feature defines a transform type of "newtext"; using this transform type
+          will cause the build to look for a target dita2newtext, defined previously in your Ant
+          extension: </p>
+        <codeblock>&lt;feature extension="dita.conductor.transtype.check" value="newtext"/&gt;  </codeblock>
+      </example>
+    </conbody>
+  </concept>
+  <concept id="topic_tzv_wov_kc">
+    <title>XSLT overrides</title>
+    <conbody>
+      <p>The XSLT import extension points are used to override various steps of XSLT processing. For
+        this, the extension attribute indicates the step that the override applies to; the value
+        attribute is a relative path to the override within the current plugin; the type attribute
+        should be set to "file". The plugin installer will add an XSL import statement to the
+        default code, so that your override becomes a part of the normal build. The following XSLT
+        steps are available to override in the core toolkit: </p>
+      <dl>
+        <dlentry>
+          <dt><codeph>dita.xsl.xhtml</codeph></dt>
+          <dd>Override default (X)HTML output (including HTML Help and Eclipse Help) with the
+            following</dd>
+          <dd><codeblock>&lt;feature extension="dita.xsl.xhtml" file="xsl/modifyXhtml.xsl"/&gt; </codeblock></dd>
+        </dlentry>
+        <dlentry>
+          <dt><codeph>dita.xsl.xslfo</codeph></dt>
+          <dd>Override default PDF output (formerly known as PDF2) with the following</dd>
+          <dd><codeblock>&lt;feature extension="dita.xsl.xslfo" file="xsl/modifyPdf.xsl"/&gt; </codeblock></dd>
+        </dlentry>
+        <dlentry>
+          <dt><codeph>dita.xsl.docbook</codeph></dt>
+          <dd>Override default DocBook output with the following</dd>
+          <dd><codeblock>&lt;feature extension="dita.xsl.docbook" file="xsl/sample.xsl"/&gt; </codeblock></dd>
+        </dlentry>
+        <dlentry>
+          <dt><codeph>dita.xsl.rtf</codeph></dt>
+          <dd>Override default RTF output with the following</dd>
+          <dd><codeblock>&lt;feature extension="dita.xsl.rtf" file="xsl/sample.xsl"/&gt; </codeblock></dd>
+        </dlentry>
+        <dlentry>
+          <dt><codeph>dita.xsl.eclipse.plugin</codeph></dt>
+          <dd>Override the step that generates plugin.xml for Eclipse with the following</dd>
+          <dd><codeblock>&lt;feature extension="dita.xsl.eclipse.plugin" file="xsl/sample.xsl"/&gt;          </codeblock></dd>
+        </dlentry>
+        <dlentry>
+          <dt><codeph>dita.xsl.conref</codeph></dt>
+          <dd>Override conref processing</dd>
+          <dd><codeblock>&lt;feature extension="dita.xsl.conref" file="xsl/sample.xsl"/&gt; </codeblock></dd>
+        </dlentry>
+        <dlentry>
+          <dt><codeph>dita.xsl.topicpull</codeph></dt>
+          <dd>Override topicpull processing (the step that pulls text into &lt;xref&gt; elements,
+            among other things)</dd>
+          <dd><codeblock>&lt;feature extension="dita.xsl.topicpull" file="xsl/sample.xsl"/&gt; </codeblock></dd>
+        </dlentry>
+        <dlentry>
+          <dt><codeph>dita.xsl.mapref</codeph></dt>
+          <dd>Override mapref processing (the step that resolves references to other maps)</dd>
+          <dd><codeblock>&lt;feature extension="dita.xsl.mapref" file="xsl/sample.xsl"/&gt; </codeblock></dd>
+        </dlentry>
+        <dlentry>
+          <dt><codeph>dita.xsl.mappull</codeph></dt>
+          <dd>Override mappull processing (the step that updates navtitles in maps and causes
+            attributes to cascade)</dd>
+          <dd><codeblock>&lt;feature extension="dita.xsl.mappull" file="xsl/sample.xsl"/&gt;  </codeblock></dd>
+        </dlentry>
+        <dlentry>
+          <dt><codeph>dita.xsl.maplink</codeph></dt>
+          <dd>Override maplink processing (the step that generates map-based links)</dd>
+          <dd><codeblock>&lt;feature extension="dita.xsl.maplink" file="xsl/sample.xsl"/&gt;  </codeblock></dd>
+        </dlentry>
+        <dlentry importance="deprecated">
+          <dt><codeph>dita.xsl.fo</codeph></dt>
+          <dd>Override the (now deprecated) original PDF output with the following</dd>
+          <dd><codeblock>&lt;feature extension="dita.xsl.fo" file="xsl/modifyXhtml.xsl"/&gt; </codeblock></dd>
+        </dlentry>
+      </dl>
+    </conbody>
+  </concept>
+  <concept id="topic_gaw_wov_kc">
+    <title>Generated text </title>
+    <conbody>
+      <p>The generated text extension point is used to add new strings to the default set of
+        Generated Text. Copy the file xsl/common/strings.xml to your plugin, and edit it to contain
+        the languages that you are providing translations for ("en-us" must be present).  Copy the
+        file <filepath>xsl/common/strings-en-us</filepath>.xml to your plugin, and replace the
+        content with your own strings, being sure to give them unique name attributes.  Do the same
+        for each language that you are providing a translation for. </p>
+      <example>
+        <p>Use the following extension code to include your strings in the set of generated text: </p>
+        <codeblock>&lt;feature extension="dita.xsl.strings" file="xsl/common/strings.xml"/&gt;</codeblock>
+        <p>The string is now available to the XSLT "getString" template. </p>
+      </example>
+    </conbody>
+  </concept>
+  <concept id="topic_oaw_wov_kc">
+    <title>Pass parameters to XSLT</title>
+    <conbody>
+      <p>You can pass parameters from the Ant build to XSLT pipeline stages, usually to have those
+        parameters avalable as global &lt;xsl:param&gt; values in your XSLT overrides.  Create a
+        file insertParameters.xml which contains one or more Ant &lt;param&gt; elements: </p>
+      <codeblock>&lt;dummy&gt;
+  &lt;!-- Any Ant code allowed in xslt task is possible. Common example: --&gt;
+  &lt;param name="paramNameinXSLT" expression="${antProperty}" if="antProperty"/&gt;
+&lt;/dummy&gt;</codeblock>
+      <p>Pass the value using the following extensions: </p>
+      <dl>
+        <dlentry>
+          <dt><codeph>dita.conductor.html.param</codeph></dt>
+          <dd>Pass parameters to HTML and HTML Help XSLT</dd>
+          <dd><codeblock>&lt;feature extension="dita.conductor.html.param" file="insertParameters.xml"/&gt;</codeblock></dd>
+        </dlentry>
+        <dlentry>
+          <dt><codeph>dita.conductor.xhtml.param</codeph></dt>
+          <dd>Pass parameters to XHTML and Eclipse Help XSLT</dd>
+          <dd><codeblock>&lt;feature extension="dita.conductor.xhtml.param" file="insertParameters.xml"/&gt;</codeblock></dd>
+        </dlentry>
+        <dlentry>
+          <dt><codeph>dita.preprocess.conref.param</codeph></dt>
+          <dd>Pass parameters to conref XSLT</dd>
+          <dd><codeblock>&lt;feature extension="dita.preprocess.conref.param" file="insertParameters.xml"/&gt;</codeblock></dd>
+        </dlentry>
+        <dlentry>
+          <dt><codeph>dita.preprocess.mapref.param</codeph></dt>
+          <dd>Pass parameters to mapref XSLT</dd>
+          <dd><codeblock>&lt;feature extension="dita.preprocess.mapref.param" file="insertParameters.xml"/&gt;</codeblock></dd>
+        </dlentry>
+        <dlentry>
+          <dt><codeph>dita.preprocess.mappull.param</codeph></dt>
+          <dd>Pass parameters to mappull XSLT</dd>
+          <dd><codeblock>&lt;feature extension="dita.preprocess.mappull.param" file="insertParameters.xml"/&gt;</codeblock></dd>
+        </dlentry>
+        <dlentry>
+          <dt><codeph>dita.preprocess.maplink.param</codeph></dt>
+          <dd>Pass parameters to maplink XSLT</dd>
+          <dd><codeblock>&lt;feature extension="dita.preprocess.maplink.param" file="insertParameters.xml"/&gt;</codeblock></dd>
+        </dlentry>
+        <dlentry>
+          <dt><codeph>dita.preprocess.topicpull.param</codeph></dt>
+          <dd>Pass parameters to topicpull XSLT</dd>
+          <dd><codeblock>&lt;feature extension="dita.preprocess.topicpull.param" file="insertParameters.xml"/&gt;</codeblock></dd>
+        </dlentry>
+      </dl>
+    </conbody>
+  </concept>
+  <concept id="topic_bbw_wov_kc">
+    <title>Add Java libraries to the classpath</title>
+    <conbody>
+      <p>If your Ant or XSLT extensions require additional Java libraries in the classpath, you can
+        add them to the global Ant classpath. </p>
+      <example>
+        <codeblock>&lt;feature extension="dita.conductor.lib.import" file="myJavaLibrary.jar"/&gt;</codeblock>
+      </example>
+    </conbody>
+  </concept>
+  <concept id="topic_jbw_wov_kc">
+    <title>Add diagnostic messages</title>
+    <conbody>
+      <p>To add your own warning and error messages to the set supplied by DITA-OT, create the
+        message in an XML file <filepath>myMessages.xml</filepath>: </p>
+      <codeblock>&lt;dummy&gt;
+  &lt;!-- See resource/messages.xml for the details. --&gt;
+  &lt;message id="myMessageId" type="WARN"&gt;
+    &lt;reason&gt;...&lt;/reason&gt;
+    &lt;response&gt;...&lt;/response&gt;
+  &lt;/message&gt;
+&lt;/dummy&gt; </codeblock>
+      <p>And incorporate them with the extension: </p>
+      <codeblock>&lt;feature extension="dita.xsl.messages" file="myMessages.xml"/&gt; </codeblock>
+    </conbody>
+  </concept>
+  <concept id="topic_tbw_wov_kc">
+    <title>Manage plugin dependencies </title>
+    <conbody>
+      <p>The <codeph>&lt;require&gt;</codeph> element requires the <codeph>plugin</codeph>
+        attribute. It is used to identify pre-requisite plug-ins. If the current plugin requires a
+        plugin with <codeph>id="plugin-id"</codeph> before it can be installed, it would include the
+        following: </p>
+      <codeblock>&lt;require plugin="<i>plugin-id</i>"&gt;</codeblock>
+      <p>Prerequisite plugins are integrated before the current plugin is integrated. This does the
+        right thing with respect to XSLT overrides.  If your plugin is a specialization of a
+        specialization, it should <codeph>&lt;require&gt;</codeph> its base plugins, in order from
+        general to specific. </p>
+      <p>If a prerequisite plugin is missing, a warning will be printed during integration.  To
+        suppress this, but keep the integration order if both plugins are present, add
+          <codeph>importance="optional"</codeph> to the <codeph>&lt;require&gt; </codeph>element. </p>
+      <p>If your plugin can depend on any one of several optional plugins, separate the plugin ids
+        with a vertical bar.  This is most useful when combined with importance="optional": </p>
+      <example>
+        <codeblock>&lt;require plugin="pluginA|pluginB" importance="optional"/&gt; </codeblock>
+      </example>
+    </conbody>
+  </concept>
+  <concept id="topic_dcw_wov_kc">
+    <title>Version and support information</title>
+    <conbody>
+      <p>The following extension points are used by convention to define version and support info
+        within a plugin:</p>
+      <ul id="ul_jxr_hlv_mc">
+        <li><codeph>package.support.name</codeph></li>
+        <li><codeph>package.support.email</codeph></li>
+        <li><codeph>package.version</codeph></li>
+      </ul>
+      <note>
+        <p>The toolkit does not currently do anything with these values, but may do so in the
+          future.</p>
+      </note>
+      <p>The <codeph>package.version</codeph> value should follow the syntax rules:</p>
+      <codeblock>version   ::= major ( '.' minor ( '.' micro ( '.' qualifier )? )? )?
+
+major	 ::= number
+minor     ::= number
+micro     ::= number
+qualifier ::= ( [0..9] | [a..zA..Z] | ’_’ | '-' )+</codeblock>
+      <p>The default value is <codeph>0.0.0</codeph>.</p>
+      <example>
+        <codeblock>&lt;feature extension="package.support.name" value="Joe the Author"/&gt;
+&lt;feature extension="package.support.email" value="joe@example.com"/&gt;
+&lt;feature extension="package.version" value="1.2.3"/&gt;</codeblock>
+      </example>
+    </conbody>
+  </concept>
+  <concept id="topic_mcw_wov_kc">
+    <title>Create your own extension points</title>
+    <conbody>
+      <p>If your plugin needs to define its own extension point in an XML file, add the string
+          "<codeph>_template</codeph>" to the filename before the file suffix. During integration,
+        this file will be processed like the built-in DITA-OT templates. To mark the file as a
+        template file, use the <codeph>&lt;template&gt;</codeph> element.</p>
+      <example><codeblock>&lt;template file="myTemplateFile_template.xsl"/&gt; </codeblock></example>
+    </conbody>
+  </concept>
+  <concept id="topic_vcw_wov_kc">
+    <title>Example plugin.xml file</title>
+    <conbody>
+      <p>The following is a sample of a plugin.xml file. This file adds support for a new set of
+        specialized DTDs, and includes an override for the XHTML output processor. It would go into
+        a directory such as <filepath>DITA-OT\plugins\music\</filepath> and referenced supporting
+        files would also exist in that directory. Unfortunately, due to limitations in this wiki,
+        the full code sample does not show up as well formatted as one might wish. A more extensive
+        sample using these values is available in the actual music plug-in, available at the <xref
+          href="http://sourceforge.net/projects/dita-ot/files/" scope="external">DITA-OT download page</xref> at
+        SourceForge </p>
+      <example><codeblock>&lt;plugin id="org.metadita.specialization.music"&gt;
+  &lt;feature extension="dita.specialization.catalog.relative" file="catalog-dita.xml"&gt;
+  &lt;feature extension="dita.xsl.xhtml" file="xsl/music2xhtml.xsl"/&gt;
+&lt;/plugin&gt;</codeblock></example>
+    </conbody>
+  </concept>
+</concept>
