@@ -197,8 +197,8 @@ public final class ConvertLang extends Task {
     "</language>" +
     "<language lang=\"ja-jp\">" +
     "    <cp format=\"ibmiddoc\" encoding=\"943\"/>" +
-    "    <cp format=\"html\" encoding=\"943\" charset=\"Shift_JIS\"/>" +
-    "    <cp format=\"windows\" encoding=\"943\" charset=\"Shift_JIS\"/>" +
+    "    <cp format=\"html\" encoding=\"943\" charset=\"Windows-31J\"/>" +
+    "    <cp format=\"windows\" encoding=\"943\" charset=\"Windows-31J\"/>" +
     "</language>" +
     "<language lang=\"kk-kz\">" +
     "    <cp format=\"ibmiddoc\" encoding=\"utf-8\"/>" +
