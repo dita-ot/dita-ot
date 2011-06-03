@@ -5,7 +5,8 @@
     navtitle="DITA-OT Introduction">
     <topicref href="readme/EvaluateOT.xml" locktitle="yes"
       navtitle="Evaluating the DITA Open Toolkit"/>
-    <topicref href="readme/DITA-relnotes.xml" navtitle="DITA release notes"/>
+    <topicref href="readme/DITA-changes.xml#rel1.5.2" chunk="select-topic to-content" copy-to="readme/whats_new.dita"/>
+    <!--topicref href="readme/DITA-relnotes.xml" navtitle="DITA release notes"/-->
     <topicref href="readme/DITA-changes.xml" navtitle="DITA release history"/>
     <topicref href="specification/DITA1-2.xml" navtitle="DITA 1.2 Specification Support"/>
     <topicref href="readme/DITA-tested.xml" navtitle="Tested platforms and tools" toc="no"/>

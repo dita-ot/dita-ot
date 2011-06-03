@@ -13,23 +13,55 @@ the DITA      processing system.</shortdesc>
 <p>The DITA processing system has been tested against the following
        platforms and tools:</p>
 <simpletable>
+      <sthead>
+        <stentry>Platform or tool</stentry>
+        <stentry>Tested version</stentry>
+      </sthead>
 <strow>
-<stentry>Tested OS:</stentry>
-<stentry>Windows XP, SLES 10</stentry>
+<stentry>OS</stentry>
+<stentry>
+          <ul>
+            <li>Windows XP</li>
+            <li>OS X 10.6</li>
+            <li>SLES 10</li>
+          </ul>
+        </stentry>
 </strow>
 <strow>
-<stentry>Tested XSLT processor:</stentry>
-<stentry>Xalan-J 2.6, Xalan-J 2.7, Saxon 6.5, Saxon 9<note>XSLT 2.0
-standard is not officially supported yet, due to the reliance by some
-users on Xalan.</note></stentry><?Pub Caret 24?>
+<stentry>XSLT processor</stentry>
+<stentry>
+          <ul>
+            <li>Xalan-J 2.6</li>
+            <li>Xalan-J 2.7</li>
+            <li>Xalan-J 2.7.1</li>
+            <li>Saxon 6.5</li>
+            <li>Saxon 9</li>
+            <li>Saxon-B 9.1</li>
+            <li>Saxon-HE/EE 9.3</li>
+          </ul>
+          <note>XSLT 2.0 standard is not officially supported yet, due to the reliance by some users
+            on Xalan.</note>
+        </stentry><?Pub Caret 24?>
 </strow>
 <strow>
-<stentry>Tested JDK:</stentry>
-<stentry>IBM 1.5, 1.6; SUN 1.5, 1.6</stentry>
+<stentry>JDK</stentry>
+<stentry>
+          <ul>
+            <li>IBM 1.5</li>
+            <li>IBM 1.6</li>
+            <li>Oracle 1.5</li>
+            <li>Oracle 1.6</li>
+          </ul>
+        </stentry>
 </strow>
 <strow>
-<stentry>Tested Ant:</stentry>
-<stentry>Ant 1.7.1</stentry>
+<stentry>Ant</stentry>
+<stentry>
+          <ul>
+            <li>Ant 1.7.1</li>
+            <li>Ant 1.8.2</li>
+          </ul>
+        </stentry>
 </strow>
 </simpletable>
 </body>

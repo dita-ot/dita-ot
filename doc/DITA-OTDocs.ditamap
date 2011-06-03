@@ -5,7 +5,7 @@
     <topicref href="admin/DITA-OTProjectGoals.xml" locktitle="yes" navtitle="Goals and objectives"/>
     <topicref format="html" href="http://sourceforge.net/news/?group_id=132728" locktitle="yes" navtitle="News" scope="external"/>
   </topicref>
-  <topichead navtitle="Ant Quick Start Guide">
+  <topichead navtitle="Getting Started">
     <mapref href="quickstartguide.ditamap"/>
   </topichead>
   <topichead navtitle="Additional introductory material">
@@ -30,4 +30,5 @@
     <topicref format="html" href="http://www.oasis-open.org/committees/dita/" navtitle="OASIS DITA Technical Committee " scope="external"/>
     <topicref href="articles/DITA-dWarticles.xml" navtitle="DITA developerWorks articles"/>
   </topichead>
+  <mapref href="keyrefs.ditamap" processing-role="resource-only"/>
 </map>

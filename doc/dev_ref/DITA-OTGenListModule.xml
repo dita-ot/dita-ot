@@ -32,6 +32,5 @@
     over, GenListModule gets the result content from MapReader. Then 
     GenListModule processes the content and set the content to ListWriter. Then 
     it calls ListWriter to output the information to intermediate file.</p>
-  <p></p>
 </body>
 </topic>

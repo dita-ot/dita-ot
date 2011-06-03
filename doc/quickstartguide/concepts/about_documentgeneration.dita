@@ -9,8 +9,9 @@
   Sound confusing?  This topic explains this interaction and explains how to identify targets in these scripts related to 
   errors in your document generation.</p>
   <p>Each target in the build script for this Quick Start Guide contains the following code snippet.
-  <codeblock>&lt;ant antfile="${toolkit_dir}/conductor.xml" target="init"></codeblock>
-  The <codeph>toolkit_dir</codeph> directory is the root directory where you installed DITA-OT.</p>
+      <codeblock>&lt;ant antfile="${toolkit_dir}/build.xml" target="init"></codeblock> The
+        <codeph>toolkit_dir</codeph> directory is the root directory where you installed
+      DITA-OT.</p>
   <p>The build file you should understand is <codeph>build.xml</codeph>, located in <codeph>toolkit.dir</codeph>.  The Ant targets
   defined and imported into this script are the same targets that you see on the console as your build script runs.</p>
   <table>

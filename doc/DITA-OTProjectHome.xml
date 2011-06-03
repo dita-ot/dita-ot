@@ -24,7 +24,7 @@ independent, open source implementation of the standard</note><p>Key
 output formats for the toolkit include:<ul>
 <li>XHTML</li>
 <li>PDF (formerly known as PDF2)</li>
-<li>ODT (Open Document Format, coming in DITA-OT 1.5.2)</li>
+<li>ODT (Open Document Format)</li>
 <li>Eclipse Help</li>
 <li>HTML Help</li>
 <li>Java Help</li>
@@ -63,13 +63,13 @@ Quick Start Guide in the navigation on the left.</li>
 <link format="html" href="http://dita.xml.org/wiki/the-dita-open-toolkit"
 scope="external"><linktext>Main DITA-OT page at dita.xml.org</linktext>
 </link>
-<link format="html" href="http://dita.xml.org/wiki/dita-ot-release-152"
-scope="external"><linktext>Information on the 1.5.2 release</linktext>
-</link><?Pub Caret 20?>
-<link format="html"
+<link format="html" href="http://dita.xml.org/node/3101"
+scope="external"><linktext>Information on the <keyword keyref="release.version"/> release</linktext>
+</link>
+<!--link format="html"
 href="http://dita.xml.org/freelinking/DITA-OT%2520Release%25201.5.1"
 scope="external"><linktext>Release notes for the previous build (1.5.1)</linktext>
-</link>
+</link-->
 <link format="html"
 href="http://dita.xml.org/freelinking/Plugins%2520for%2520the%2520DITA%2520Open%2520Toolkit"
 scope="external"><linktext>Extending the toolkit with plug-ins</linktext>
