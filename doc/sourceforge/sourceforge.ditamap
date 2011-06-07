@@ -3,14 +3,18 @@
 <map>
   <title>DITA Topic Map</title>
   <topichead navtitle="About">
-    <topicref href="about.dita" navtitle="Overview" locktitle="yes"/>
-    <topicref navtitle="Features"/>
-    <topicref navtitle="License"/>
+    <topicref href="about.dita" navtitle="Overview" locktitle="yes" copy-to="index.dita"/>
+    <topicref href="features.dita" navtitle="Features"/>
+    <topicref href="license.dita" navtitle="License"/>
     <topicref navtitle="Who We Are" href="who_we_are.dita"/>
   </topichead>
-  <topicref navtitle="Download" scope="external" href="https://sourceforge.net/projects/dita-ot/files/"/>
+  <topichead navtitle="Download">
+    <topicref navtitle="Production Release" scope="external" href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Stable%20Release/DITA%20Open%20Toolkit%201.5.3/"/>
+    <topicref navtitle="Development Release" scope="external" href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Latest%20Test%20Build/"/>
+  </topichead>
   <topichead navtitle="Documentation">
-    <topicref href="1.5.3/index.html" navtitle="Release 1.5.3" scope="external"/>
+    <topicref href="1.5.3/" navtitle="Release 1.5.3" scope="peer"/>
+    <topicref href="1.5.2/" navtitle="Release 1.5.2" scope="peer"/>
   </topichead>
   <topichead navtitle="Resources">
     <!--topicref navtitle="Developers"/-->

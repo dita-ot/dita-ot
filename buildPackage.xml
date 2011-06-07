@@ -98,6 +98,12 @@
       </manifest>
     </jar>
   </target>
+	
+  <patternset id="pattern.global.excludes">
+    <exclude name="plugins/net.sourceforge.dita-ot.html/**"/>
+  	<exclude name="buildSourceForge.xml"/>
+  	<exclude name="doc/sourceforge/**"/>
+  </patternset>
   
   <patternset id="pattern.package.ant">
     <include name="tools/ant/*.*"/>
@@ -106,6 +112,7 @@
   </patternset>
 
   <patternset id="pattern.package.minimum">
+    <patternset refid="pattern.global.excludes"/>
     <exclude name="demo/fo/fop/build/"/>
     <exclude name="demo/fo/fop/conf/"/>
     <exclude name="demo/fo/fop/lib/"/>
@@ -138,6 +145,7 @@
   </patternset>
 
   <patternset id="pattern.package.full">
+  	<patternset refid="pattern.global.excludes"/>
     <include name="*.*"/>
     <include name="ant/**"/>
     <include name="css/**"/>
@@ -180,6 +188,7 @@
   </patternset>
 
   <patternset id="pattern.package.standard.base">
+  	<patternset refid="pattern.global.excludes"/>
     <exclude name="demo/fo/fop/build/"/>
     <exclude name="demo/fo/fop/conf/"/>
     <exclude name="demo/fo/fop/lib/"/>
