@@ -9,7 +9,7 @@
     <topicref navtitle="Who We Are" href="who_we_are.dita"/>
   </topichead>
   <topichead navtitle="Download">
-    <topicref navtitle="Production Release" scope="external" href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Stable%20Release/DITA%20Open%20Toolkit%201.5.3/"/>
+    <topicref navtitle="Release 1.5.3" scope="external" href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Stable%20Release/DITA%20Open%20Toolkit%201.5.3/"/>
     <topicref navtitle="Development Release" scope="external" href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Latest%20Test%20Build/"/>
   </topichead>
   <topichead navtitle="Documentation">

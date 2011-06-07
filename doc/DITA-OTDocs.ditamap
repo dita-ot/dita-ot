@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
 <map xml:lang="en-us">
+  <title>DITA Open Toolkit <keyword keyref="release.version"/></title>
   <topicref collection-type="family" href="DITA-OTProjectHome.xml">
     <topicref href="admin/DITA-OTProjectGoals.xml" locktitle="yes" navtitle="Goals and objectives"/>
     <topicref format="html" href="http://sourceforge.net/news/?group_id=132728" locktitle="yes" navtitle="News" scope="external"/>

@@ -77,7 +77,24 @@
 
   <xsl:template match="*" mode="gen-user-header">
     <div id="header">
-      <h1><a href="/">DITA Open Toolkit</a></h1>
+      <h1>
+        <a href="/">
+          <xsl:for-each select="$input.map/*[contains(@class, ' map/map ')]">
+            <xsl:choose>
+              <xsl:when test="*[contains(@class, ' topic/title ')]">
+                <xsl:apply-templates select="*[contains(@class, ' topic/title ')]/node()"/>
+              </xsl:when>
+              <xsl:when test="@title">
+                <xsl:value-of select="@title"/>
+              </xsl:when>
+              <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]">
+                <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]/node()"/>
+              </xsl:when>
+              <xsl:otherwise>DITA Open Toolkit</xsl:otherwise>
+            </xsl:choose>
+          </xsl:for-each>
+        </a>
+      </h1>
       <hr/>
     </div>
   </xsl:template>  
@@ -92,24 +109,13 @@
 
   <xsl:template match="*" mode="add-link-target-attribute"/>
   
+  <!-- Navigation -->
   
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
+  <xsl:template match="*[contains(@class, ' map/topicref ')][@toc='no' or @processing-role='resource-only']"
+                priority="1000"/>
   
   <xsl:template match="*[contains(@class, ' map/map ')]">
-    <xsl:param name="pathFromMaplist"/>
+    <xsl:param name="pathFromMaplist" select="$PATH2PROJ"/>
     <ul>
       <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]">
         <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
@@ -117,7 +123,7 @@
     </ul>
   </xsl:template>
   
-  <xsl:template match="*[contains(@class, ' map/topicref ')][not(@toc='no')][not(@processing-role='resource-only')]">
+  <xsl:template match="*[contains(@class, ' map/topicref ')]">
     <xsl:param name="pathFromMaplist"/>
     <xsl:variable name="title">
       <xsl:apply-templates select="." mode="get-navtitle"/>
@@ -127,7 +133,7 @@
         <li>
           <xsl:choose>
             <xsl:when test="@href and not(@href='')">
-              <xsl:element name="a">
+              <a>
                 <xsl:attribute name="href">
                   <xsl:choose>
                     <xsl:when test="contains(@copy-to, $DITAEXT) and not(contains(@chunk, 'to-content')) and (not(@format) or @format = 'dita' or @format='ditamap' ) ">
@@ -158,14 +164,18 @@
                     </xsl:otherwise>
                   </xsl:choose>
                 </xsl:attribute>
+                <!--
                 <xsl:if test="@scope='external' or @type='external' or ((@format='PDF' or @format='pdf') and not(@scope='local'))">
                   <xsl:attribute name="target">_blank</xsl:attribute>
                 </xsl:if>
+                -->
                 <xsl:value-of select="$title"/>
-              </xsl:element>
+              </a>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="$title"/>
+              <span>
+                <xsl:value-of select="$title"/>
+              </span>
             </xsl:otherwise>
           </xsl:choose>
           <xsl:if test="descendant::*[contains(@class, ' map/topicref ')][not(contains(@toc,'no'))][not(@processing-role='resource-only')]">
@@ -184,13 +194,13 @@
       </xsl:otherwise>
     </xsl:choose>    
   </xsl:template>
-  
-  <xsl:template match="*[contains(@class, ' map/topicref ')][@toc='no'][not(@processing-role='resource-only')]">
+    
+  <!--xsl:template match="*[contains(@class, ' map/topicref ')][@toc='no']">
     <xsl:param name="pathFromMaplist"/>
     <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]">
       <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
     </xsl:apply-templates>
-  </xsl:template>
+  </xsl:template-->
   
   <xsl:template match="processing-instruction('workdir')" mode="get-work-dir">
     <xsl:value-of select="concat(., '/')"/>
@@ -313,7 +323,6 @@
   <xsl:template match="*[contains(@class, ' map/anchor ')]"/>
   <xsl:template match="*[contains(@class, ' map/reltable ')]"/>
   <xsl:template match="*[contains(@class, ' map/topicmeta ')]"/>
-  <xsl:template match="*[contains(@class, ' mapgropup-d/keydef ')]"/>
-  <xsl:template match="*[contains(@class, ' mapgroup-d/mapref ')]"/>
+  <xsl:template match="*[contains(@class, ' mapgroup-d/keydef ')]"/>
 
 </xsl:stylesheet>

@@ -8,8 +8,8 @@ body {
 #body {
   width: 900px;
   margin: 0 auto;
-  border-left: solid 3px #EEF;
-  border-right: solid 3px #EEF;
+  border-left: solid 3px #EBEFF9;
+  border-right: solid 3px #EBEFF9;
 }
 #nav, #main {
   text-align: left;
@@ -30,12 +30,12 @@ body {
 }
 
 #main {
-  border-left: solid 3px #EEF;
+  border-left: solid 3px #EBEFF9;
   padding: 0 15px;
 }
 
 #header {
-  background-color: #EEF;
+  background-color: #EBEFF9;
 }
 #header h1 {
   padding: 5px;
@@ -50,18 +50,22 @@ body {
 
 #nav {
   padding-right: 5px;
+  font-size: 12px;
 }
 #nav ul {
   padding-left: 15px;
   margin: 0;
   list-style: none;
 }
-#nav li {
+#nav > ul > li > a,
+#nav > ul > li > span {
   font-weight: bold;
 }
-#nav ul ul li {
-  font-weight: normal;
+/*
+#nav li:hover {
+  background-color: #DDE5F9;
 }
+*/
 
 #header {
   clear: both;
@@ -78,6 +82,9 @@ hr {
 
 a {
   text-decoration: none;
+}
+a:visited {
+  color: blue;
 }
 a:hover {
   text-decoration: underline;
