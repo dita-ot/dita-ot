@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
 <map id="mainDITAreadme" title="DITA Readme map" xml:lang="en-us">
-  <topicref collection-type="family" href="readme/DITA-readme.xml" id="DITA-doc" locktitle="yes"
-    navtitle="DITA-OT Introduction">
-    <topicref href="readme/EvaluateOT.xml" locktitle="yes"
-      navtitle="Evaluating the DITA Open Toolkit"/>
+  <topicref collection-type="family" href="readme/DITA-readme.xml" id="DITA-doc" locktitle="yes" navtitle="DITA-OT Introduction">
+    <topicref href="readme/EvaluateOT.xml" locktitle="yes" navtitle="Evaluating the DITA Open Toolkit"/>
     <topicref href="readme/DITA-changes.xml#rel1.5.2" chunk="select-topic to-content" copy-to="readme/whats_new.dita"/>
     <!--topicref href="readme/DITA-relnotes.xml" navtitle="DITA release notes"/-->
     <topicref href="readme/DITA-changes.xml" navtitle="DITA release history"/>
@@ -20,7 +18,7 @@
     <topicref href="readme/DITA-log.xml" navtitle="Problem determination and log analysis"/>
     <topicref href="readme/DITA-troubleshooting.xml" navtitle="Troubleshooting"/>
     <topicref href="readme/DITA-limitations.xml" navtitle="Known limitations"/>
-    <topicref href="readme/dita2word.xml#dita2word" navtitle="Transfomring DITA to Word RTF"/>
+    <topicref href="readme/dita2word.xml" navtitle="Transforming DITA to Word RTF"/>
     <topicref href="readme/DITA-h2d.xml" navtitle="Migrating HTML to DITA">
       <topicref href="readme/DITA-h2d-ant.xml"/>
       <topicref href="readme/DITA-h2d-java.xml"/>

@@ -8,11 +8,8 @@
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"
  "map.dtd">
 <map title="DITA Open Toolkit Developement Reference">
-<topicref href="supporting_file_extension.dita" navtitle="Supporting both .dita and .xml in one ditamap">
-</topicref>
-<topicref href="standardxmlcatalogresolver.dita" navtitle="Standard XML catalog resolver">
-</topicref>
-<topicref href="topicmerge.dita" navtitle="Topic merge"></topicref>
-<topicref href="workingwithdocplugin.dita" navtitle="Working with documentation plug-in">
-</topicref>
+  <topicref href="supporting_file_extension.dita" navtitle="Supporting both .dita and .xml in one ditamap"/>
+  <topicref href="standardxmlcatalogresolver.dita" navtitle="Standard XML catalog resolver"/>
+  <topicref href="topicmerge.dita" navtitle="Topic merge"/>
+  <topicref href="workingwithdocplugin.dita" navtitle="Working with documentation plug-in"/>
 </map>
