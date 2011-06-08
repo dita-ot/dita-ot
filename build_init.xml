@@ -238,7 +238,7 @@
 	
   <target name="output-version">
   	<dita-ot-version/>
-  	<echo level="info">Version: ${otversion} ${milestone}</echo>
+  	<echo level="info">Version: ${otversion}</echo>
   </target>
 
   <!-- property value validation begin -->

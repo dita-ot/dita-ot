@@ -29,11 +29,9 @@ public final class AntVersion extends Task{
 		final VersionUtil versionUtil = new VersionUtil();
 		
 		final String otversion = versionUtil.getOtversion();
-		final String milestone = versionUtil.getMilestone();
 		
 		//set current OT version into antscript REQ ID:3079610
 		this.setActiveProjectProperty("otversion", otversion);
-		this.setActiveProjectProperty("milestone", milestone);
 		//logger.logInfo(message);
 	}
 	

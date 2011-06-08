@@ -19,16 +19,16 @@ import org.dita.dost.log.DITAOTJavaLogger;
  */
 public final class VersionUtil {
 
-	private final String milestone = "@@MILESTONE@@";
-
 	private final String otversion = "@@OTVERSION@@";
 	
 
 	/**
 	 * @return the milestone
+	 * @deprecated use {@link #getOtversion()} instead. To be remove in future releases
 	 */
+	@Deprecated
 	public String getMilestone() {
-		return "Milestone " + milestone;
+		return "";
 	}
 
 	/**

@@ -67,11 +67,9 @@
     </copy>
     <!-- Update the token so that we can find out what the version of DITA-OT users are using -->
     <replace file="${build.dir}/org/dita/dost/util/Version.java" token="@@VERSION@@"
-      value="${package.name.root} ${version} M${milestone}"/>
+      value="${package.name.root} ${version}"/>
     <replace file="${build.dir}/org/dita/dost/util/VersionUtil.java" token="@@OTVERSION@@"
       value="${version}"/>
-    <replace file="${build.dir}/org/dita/dost/util/VersionUtil.java" token="@@MILESTONE@@"
-      value="${milestone}"/>
     <javac srcdir="${build.dir}" destdir="${bin.dir}"
       excludes="com/**,org/dita/dost/junit/**, org/dita/dost/invoker/JavaInvoker.java" debug="on"
       source="1.5" target="1.5">
@@ -93,7 +91,7 @@
     </copy>
     <jar destfile="${dost.jar}" basedir="${bin.dir}" includes="**">
       <manifest>
-        <attribute name="Implementation-Version" value="${version} M${milestone}"/>
+        <attribute name="Implementation-Version" value="${version}"/>
         <attribute name="Main-Class" value="org.dita.dost.invoker.CommandLineInvoker"/>
       </manifest>
     </jar>
