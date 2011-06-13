@@ -16,8 +16,6 @@
 <xsl:param name="JAVAAPICSS" select="'ibmjavaref.css'"/>
 <xsl:param name="JAVAAPICSSRTL" select="'ibmjavarefrtl.css'"/>
 
-<xsl:param name="WORKDIR" select="'./'"/>
-
 
 <xsl:template name="javaGetString">
   <xsl:param name="stringName"/>
