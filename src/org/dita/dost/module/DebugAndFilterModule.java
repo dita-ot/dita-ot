@@ -239,6 +239,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 				inputDir = new File(baseDir, inputDir).getAbsolutePath();
 			}
 			final DitaValReader filterReader = new DitaValReader();
+			filterReader.setLogger(logger);
 			
 			Content content;
 			if (ditavalFile!=null){
