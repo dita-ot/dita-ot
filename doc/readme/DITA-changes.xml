@@ -85,18 +85,19 @@ going back to the beginning of the toolkit. </shortdesc>
           </dd>
         </dlentry>
         <dlentry id="topic_cys_vps_qc">
-          <dt>PDF2 variable format attribute removed</dt>
+          <dt>PDF2 changes</dt>
           <dd>
               <p>Support for the format attribute in PDF2 variable files has been remove as
                 redundant. The same functionality as </p>
               <codeblock>&lt;variable id="foo" format="bar"&gt;baz&lt;/variable&gt; </codeblock>
               <p>can be implemented with e.g. </p>
               <codeblock>&lt;variable id="foo.bar"&gt;baz&lt;/variable&gt; </codeblock>
+              <p>PDF2 no longer logs a warning about PDF2 plug-in replacing the legacy PDF
+                transformation type.</p>
+              <p>Support for flagging has been added.</p>
+              <p>Version of FOP that comes with Full Easy Install has been updated from 0.95 to
+                1.0.</p>
           </dd>
-        </dlentry>
-        <dlentry id="topic_iys_vps_qc">
-          <dt>PDF2 warning removed </dt>
-          <dd><p>PDF2 no longer logs a warning about PDF2 plug-in replacing the legacy PDF transformation type. </p></dd>
         </dlentry>
         <dlentry id="topic_oys_vps_qc">
           <dt>Filtering configuration</dt>
@@ -104,8 +105,17 @@ going back to the beginning of the toolkit. </shortdesc>
                   <filepath>integrator.properties</filepath> with the property name
                   <codeph>print_transtypes</codeph>. In previous releases this list was hardcoded
                 into Java code. Configuring print transtypes is currently not possible in plug-in
-                configuration files. </p></dd>
+                configuration files.</p></dd>
         </dlentry>
+          <dlentry>
+            <dt>Java API changes</dt>
+            <dd>
+              <p>Multiple Java classes have been changed from public non-final into package-private
+                final. This enables clearer distinction between public and internal API, and forbits
+                subclassing classes which have not been designed and documented for
+                extensibility.</p>
+            </dd>
+          </dlentry>
         </dl>
       </section>
       <section>
