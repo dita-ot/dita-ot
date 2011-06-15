@@ -582,10 +582,10 @@ of this template).</li>
 with the following command:<codeblock>ant -f samples/ant_sample/template_xhtml.xml</codeblock></p><p>The
 build will convert your input file to XHTML. Note that the build directly
 calls the Ant script "build.xml", which is a common entry point for
-DITA-OT builds; it in turn imports all of the scripts mentioned above.</p><note>To
+DITA-OT builds; it in turn imports all of the scripts mentioned above.</p><!--note>To
 get a more accurate error reporting about the transformation, you
 may add the command-line option <codeph>-logger org.dita.dost.log.DITAOTBuildLogger</codeph> after
-your Ant command.</note>     </section>
+your Ant command.</note-->     </section>
 </refbody>
 </reference>
 <?Pub *0000024648?>

@@ -67,10 +67,12 @@ find in the 				copious output.  If you have not configured your console
 window most of the 				early output may have already scrolled off
 the screen.  If you add an Ant property, 				<codeph>-logger</codeph> to
 the command line invocation, DITA-OT will save the output 				to a
-log file that you can study after the build finishes. 			</p> 			 <p>See <xref
+log file that you can study after the build finishes. 			</p> 			 
+<!-- Using DITAOTBuildLogger is not recommended with plain Ant process -->
+<!--p>See <xref
 href="using_DITAOTBuildLogger.dita">Using the DITA-OT Build Logger></xref> 				for
 information about logging DITA-OT build messages to a log file rather
-than the 				console window.  			 </p>  		  </stepresult></step>
+than the 				console window.  			 </p-->  		  </stepresult></step>
 </steps>
 </taskbody>
 </task>

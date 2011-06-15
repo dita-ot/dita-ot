@@ -15,7 +15,8 @@
   	<topicref href="quickstartguide/tasks/generating_documents.dita" navtitle="Generating Documents with Ant"/>
   	<topicref href="quickstartguide/concepts/about_javacmdinterface.dita" navtitle="Generating Documents with Java"/>
   	<topicref href="quickstartguide/tasks/generating_documentswithjava.dita" navtitle="About the Java Command Line Interface"/>
-  	<topicref href="quickstartguide/tasks/using_DITAOTBuildLogger.dita"/>
+    <!-- Using DITAOTBuildLogger with plain Ant is not recommended, it should only be used by Ant process which is launched by the Java interface. -->
+  	<!--topicref href="quickstartguide/tasks/using_DITAOTBuildLogger.dita"/-->
   </topicref>
   <topicref href="quickstartguide/chapters/chapter3.dita">
     <topicref href="quickstartguide/concepts/about_documentgeneration.dita" navtitle="Introducing Document Generation"/>
