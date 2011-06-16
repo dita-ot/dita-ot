@@ -211,10 +211,10 @@ going back to the beginning of the toolkit. </shortdesc>
           <li>3294864 tocjs-demo: tocjs.ditamap is referencing a missing file (Milestone 6)</li>
           <li>3297930 PDF2: axf specific templates can't be overridden. (Milestone 7) </li>
 		  <li>2001271 DITA-OT documentation wants Ant 1.6.5 (Milestone 8) </li> 
-	 	  <li> 3136773 Incorrect version reported in log file (Milestone 8) </li> 
-	 	  <li> 3260746 Topichead not processed the same as title-only topic (Milestone 8) </li> 
-	 	  <li> 3315029 Garbled character problem in Japanese HTMLHelp (Milestone 8) </li> 
-	 	  <li> 3308775 Keyref map in grandparent folder fails (Milestone 8) </li> 
+	 	  <li>3136773 Incorrect version reported in log file (Milestone 8) </li> 
+	 	  <li>3260746 Topichead not processed the same as title-only topic (Milestone 8) </li> 
+	 	  <li>3315029 Garbled character problem in Japanese HTMLHelp (Milestone 8) </li> 
+	 	  <li>3308775 Keyref map in grandparent folder fails (Milestone 8) </li> 
         </ol>
       </section>
     </refbody>
