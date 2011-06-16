@@ -139,6 +139,8 @@ going back to the beginning of the toolkit. </shortdesc>
           <li>3271552 ${args.xsl.pdf} as an absolut path not supported (Milestone 6)</li>
           <li>3033000 update to Apache FOP 1.0 release (Milestone 6) </li>
           <li>3213324 Separate FOP/XEP/AXF stylesheets in PDF2 (Milestone 6) </li>
+		  <li>3302779 Dependency extension points for PDF2 formatting (Milestone 7) </li>
+          <li>3304945 Allow setting local overrides with properties file (Milestone 7) </li>
           <li>3190356 Pluginize DITA-OT base configuration files (Milestone 8)</li>
           <li>3167087 Reduce static variable usage in Java code (Milestone 8)</li>
           <li>3158929 Java clean-up (Milestone 8)</li>
@@ -148,8 +150,6 @@ going back to the beginning of the toolkit. </shortdesc>
           <li>3296040 Refactor PDF2 build files (Milestone 8)</li>
           <li>3306146 PDF2 stylesheet refactoring (Milestone 8)</li>
           <li>3304447 Add support for selecting output format in PDF2 (Milestone 8) </li>
-          <li>3302779 Dependency extension points for PDF2 formatting (Milestone 7) </li>
-          <li>3304945 Allow setting local overrides with properties file (Milestone 7) </li>
         </ol>
       </section>
       <section>
@@ -210,6 +210,11 @@ going back to the beginning of the toolkit. </shortdesc>
           <li>3294295 PDF2 indexing and I18N fails with missing languages (Milestone 6)</li>
           <li>3294864 tocjs-demo: tocjs.ditamap is referencing a missing file (Milestone 6)</li>
           <li>3297930 PDF2: axf specific templates can't be overridden. (Milestone 7) </li>
+		  <li>2001271 DITA-OT documentation wants Ant 1.6.5 (Milestone 8) </li> 
+	 	  <li> 3136773 Incorrect version reported in log file (Milestone 8) </li> 
+	 	  <li> 3260746 Topichead not processed the same as title-only topic (Milestone 8) </li> 
+	 	  <li> 3315029 Garbled character problem in Japanese HTMLHelp (Milestone 8) </li> 
+	 	  <li> 3308775 Keyref map in grandparent folder fails (Milestone 8) </li> 
         </ol>
       </section>
     </refbody>

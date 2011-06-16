@@ -18,7 +18,7 @@
 
 	 [General Enhancements]
 	 
-     [SourceForge Enhancements Added]
+     [29 SourceForge Enhancements Added]
      * 3177971 Improve plugin configuration file (Milestone 2)    
      * 3178275 Add xsl:import extension point to PDF2 topic merge XSL (Milestone 3)
      * 3182113 Add common attribute processing to PDF2 plugin (Milestone 3)
@@ -36,7 +36,9 @@
      * 3293738 Use extensible pipeline task implementation (Milestone 6)
      * 3271552 ${args.xsl.pdf} as an absolut path not supported (Milestone 6)
      * 3033000 update to Apache FOP 1.0 release (Milestone 6) 
-     * 3213324 Separate FOP/XEP/AXF stylesheets in PDF2 (Milestone 6)  
+     * 3213324 Separate FOP/XEP/AXF stylesheets in PDF2 (Milestone 6)
+     * 3302779 Dependency extension points for PDF2 formatting (Milestone 7)
+     * 3304945 Allow setting local overrides with properties file (Milestone 7)   
      * 3190356 Pluginize DITA-OT base configuration files (Milestone 8)
      * 3167087 Reduce static variable usage in Java code (Milestone 8)
      * 3158929 Java clean-up (Milestone 8)
@@ -45,13 +47,9 @@
      * 3199755 Improve log integration (Milestone 8)
      * 3296040 Refactor PDF2 build files (Milestone 8)
      * 3306146 PDF2 stylesheet refactoring (Milestone 8)
-     * 3304447 Add support for selecting output format in PDF2 (Milestone 8)
-     * 3302779 Dependency extension points for PDF2 formatting (Milestone 7)
-     * 3304945 Allow setting local overrides with properties file (Milestone 7) 
+     * 3304447 Add support for selecting output format in PDF2 (Milestone 8)    
      
-     
-     
-     [SourceForge Patches Added]
+     [15 SourceForge Patches Added]
      * 3123507 String concat in map2plugin (Milestone 1)
      * 3110513 HTML XSLT uses complex casts (Milestone 1)
      * 3097677 Add property to reload XHTML stylesheets (Milestone 1) 
@@ -68,7 +66,7 @@
      * 3160801 Improve unit test coverage (Milestone 8)
      * 3189026 Avoid strings where other types are more appropriate  (Milestone 8)
          
-     [SourceForge Bugs Fixed] 
+     [39 SourceForge Bugs Fixed] 
      * 3114411 keyref links don't work for HTML Help (Milestone 1)
      * 3126578 Chunking Issues in DITA 1.5.1 (Milestone 1)
      * 3109616 More Antenna House Path Problems (Milestone 1)
@@ -103,6 +101,11 @@
      * 3294295 PDF2 indexing and I18N fails with missing languages (Milestone 6)
      * 3294864 tocjs-demo: tocjs.ditamap is referencing a missing file (Milestone 6)
 	 * 3297930 PDF2: axf specific templates can't be overridden. (Milestone 7)
+	 * 2001271 DITA-OT documentation wants Ant 1.6.5 (Milestone 8)
+	 * 3136773 Incorrect version reported in log file (Milestone 8)
+	 * 3260746 Topichead not processed the same as title-only topic (Milestone 8)
+	 * 3315029 Garbled character problem in Japanese HTMLHelp (Milestone 8) 
+	 * 3308775 Keyref map in grandparent folder fails (Milestone 8)
      
 ====================================================================================
 
