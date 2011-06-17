@@ -1,8 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
-<concept id="features">
- <title>Features</title>
- <conbody>
-  <draft-comment>TODO: Add a description what features OT has and which specs it implements.</draft-comment>
- </conbody>
+<concept id="features" xml:lang="en">
+  <title>Features of the DITA Open Toolkit</title>
+  <titlealts>
+    <navtitle>Features</navtitle>
+  </titlealts>
+  <shortdesc>The DITA Open Toolkit is primarily a publishing tool – it is intended to convert DITA
+    content into various output formats. This topic describes which versions of DITA are supported
+    as input; it also describes the output formats available in a default installation.</shortdesc>
+  <conbody>
+    <section>
+      <title>Supported versions of DITA</title>
+      <p>The toolkit supports all standard versions of DITA, including 1.0, 1.1, and 1.2. In
+        addition, it will still process documents that were written according to the pre-OASIS
+        version of DITA, often called "dita132".</p>
+    </section>
+    <section>
+      <title>Supported transformation types</title>
+      <p>The following transformation types are
+      supported out of the box with any toolkit installation.</p>
+      <dl>
+        <dlentry>
+          <dt>PDF / PDF2</dt>
+          <dd>PDF output is based on a plug-in that produces XSL-FO output. The XSL-FO output may be
+            converted to PDF using an open source tools (Apache FOP) or using commercial tools such
+            as RenderX or Antenna House. This transformation type replaced an older demo PDF
+            transform, and is often called "PDF2".</dd>
+        </dlentry>
+        <dlentry>
+          <dt>XHTML</dt>
+          <dd>XHTML output is supported together with a variety of XHTML-based navigation types.
+            Navigation is not required. The XHTML output contains class values based on the DITA
+            elements so CSS files may be used to customize the output style.</dd>
+        </dlentry>
+        <dlentry>
+          <dt>Eclipse Help</dt>
+          <dd>Eclipse output is an XHTML based format that also produces navigation and index files
+            for use with Eclipse information centers.</dd>
+        </dlentry>
+        <dlentry>
+          <dt>TocJS</dt>
+          <dd>The TocJS transformation type includes XHTML output along with JavaScript based frames
+            for navigation, including TOC sections that expand and collapse.</dd>
+        </dlentry>
+        <dlentry>
+          <dt>HTML Help</dt>
+          <dd>HTML Help output produces a compiled help (CHM) file with the XHTML topics, table of
+            contents, and index.</dd>
+        </dlentry>
+        <dlentry>
+          <dt>Java Help</dt>
+          <dd>Java Help includes a table of contents and index for use with the Java Help
+            platform.</dd>
+        </dlentry>
+        <dlentry>
+          <dt>ODT (Open Document)</dt>
+          <dd>ODT is a document format based on the ODF standard, for use with tools like Open
+            Office. Support for ODT was added in DITA-OT 1.5.2.</dd>
+        </dlentry>
+        <dlentry>
+          <dt>WordRTF</dt>
+          <dd>RTF output is supported for basic content, but complex markup and some advanced
+            features of DITA may not be supported.</dd>
+        </dlentry>
+        <dlentry>
+          <dt>TROFF</dt>
+          <dd>TROFF based man pages are supported; one man page is generated for each input topic.
+            Note that tables are not supported by this transformation type.</dd>
+        </dlentry>
+        <dlentry>
+          <dt>New transformation types</dt>
+          <dd>The toolkit’s plug-in mechanism allows new transformation types to be added. Note that
+            both TocJS and PDF2 were originally separately installable plug-ins, which became
+            widespread enough that they are now bundled together with the default toolkit
+            installation.</dd>
+        </dlentry>
+      </dl>
+    </section>
+  </conbody>
 </concept>
