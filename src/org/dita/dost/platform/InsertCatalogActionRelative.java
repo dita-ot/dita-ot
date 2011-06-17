@@ -45,11 +45,7 @@ final class InsertCatalogActionRelative extends InsertAction {
 		final int attLen = attributes.getLength();
 		for (int i = 0; i < attLen; i++){
 			String value;
-			
-			final File targetFile = new File(
-		    		new File(currentFile).getParentFile(),
-		    		attributes.getValue(i));
-			
+			final File targetFile = new File(new File(currentFile).getParentFile(), attributes.getValue(i));
 			int index = attributes.getIndex("xml:base");
 			if ((("public".equals(localName) ||
 					"system".equals(localName) ||
@@ -62,34 +58,22 @@ final class InsertCatalogActionRelative extends InsertAction {
 					"rewriteURI".equals(localName)) && "rewritePrefix".equals(attributes.getQName(i)))
 					&& attributes.getValue(i).indexOf(COLON) == -1) {
 				// Rewrite URI to be local to its final resting place.
-			    
-			    
-			    
-			   
-			    
-		        if (index == -1){
+			    if (index == -1){
 		        	//If there are no xml:base attributes, then we need to split
-		
-		        	String path = FileUtils.derivePath(FileUtils.getRelativePathFromMap(
+		        	final String path = FileUtils.derivePath(FileUtils.getRelativePathFromMap(
 				    		paramTable.get(FileGenerator.PARAM_TEMPLATE),
 				    		targetFile.toString())) + "/";
-		        	
-		        	String filename = FileUtils.deriveFilename(FileUtils.getRelativePathFromMap(
+		        	final String filename = FileUtils.deriveFilename(FileUtils.getRelativePathFromMap(
 				    		paramTable.get(FileGenerator.PARAM_TEMPLATE),
 				    		targetFile.toString()));
-		        	
-		        	
 		        	attrBuf.addAttribute("http://www.w3.org/XML/1998/namespace", "base",
 				             "xml:base", attributes.getType(i), path);
 		        	attrBuf.addAttribute(attributes.getURI(i), attributes.getLocalName(i),
 				             attributes.getQName(i), attributes.getType(i), filename);
-		        	
 		        }
 		        else {
 		        	//If there is an xml:base attribute, then we do nothing.
-		        	
 		        	value = attributes.getValue(i); 
-		        				        	
 		        	attrBuf.addAttribute(attributes.getURI(i), attributes.getLocalName(i),
 				             attributes.getQName(i), attributes.getType(i), value);
 		        }
@@ -99,21 +83,14 @@ final class InsertCatalogActionRelative extends InsertAction {
 				value = FileUtils.derivePath(FileUtils.getRelativePathFromMap(
 			    		paramTable.get(FileGenerator.PARAM_TEMPLATE),
 			    		targetFile.toString())) + "/" + attributes.getValue(i);
-
-				
 				attrBuf.addAttribute(attributes.getURI(i), attributes.getLocalName(i),
 			             attributes.getQName(i), attributes.getType(i), value);
 			}
-			
 		    else {
 			    value = attributes.getValue(i);
-			    
-			
 			    attrBuf.addAttribute(attributes.getURI(i), attributes.getLocalName(i),
 			             attributes.getQName(i), attributes.getType(i), value);
 			}
-			
-			
 		}
 
 		super.startElement(uri, localName, qName, attrBuf);

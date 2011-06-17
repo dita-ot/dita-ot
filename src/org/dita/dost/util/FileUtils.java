@@ -589,78 +589,54 @@ public final class FileUtils {
     	return false;
     }
     
-    public static String deriveFilename(String aURLString) {
-
+    public static String deriveFilename(final String aURLString) {
 		int pathnameEndIndex;
-		String schemaLocation = null;
-
 		if (isWindows()) {
-			if (aURLString.contains("#")) {
-				pathnameEndIndex = aURLString.lastIndexOf("#");
-			}
-			else {
-				pathnameEndIndex = aURLString.lastIndexOf("\\");
-			
-				if (pathnameEndIndex == -1){
-					pathnameEndIndex = aURLString.lastIndexOf("/");
+			if (aURLString.contains(SHARP)) {
+				pathnameEndIndex = aURLString.lastIndexOf(SHARP);
+			} else {
+				pathnameEndIndex = aURLString.lastIndexOf(WINDOWS_SEPARATOR);
+				if (pathnameEndIndex == -1) {
+					pathnameEndIndex = aURLString.lastIndexOf(UNIX_SEPARATOR);
 				}
 			}
 		} else {
-			if (aURLString.contains("#")) {
-				pathnameEndIndex = aURLString.lastIndexOf("#");
+			if (aURLString.contains(SHARP)) {
+				pathnameEndIndex = aURLString.lastIndexOf(SHARP);
 			}			
-			pathnameEndIndex = aURLString.lastIndexOf("/");
+			pathnameEndIndex = aURLString.lastIndexOf(UNIX_SEPARATOR);
 		}
 		
-		if (aURLString.contains("#")) {
+	    String schemaLocation = null;
+		if (aURLString.contains(SHARP)) {
 			schemaLocation = aURLString.substring(0, pathnameEndIndex);
-		}	
-		else {
+		} else {
 			schemaLocation = aURLString.substring(pathnameEndIndex + 1);
 		}
 
 		return schemaLocation;
-
 	}
     
+    /**
+     * Test if current platform is Windows
+     * 
+     * @return {@code true} if platform is Windows, otherwise {@code fasel}
+     */
     public static boolean isWindows() {
-		boolean isWindows = false;
-
-		String osName = System.getProperty("os.name");
+		final String osName = System.getProperty("os.name");
 		if (osName.startsWith("Win")) {
-			isWindows = true;
+			return true;
 		}
-
-		return isWindows;
+		return false;
 
 	}
     
     public static String derivePath(String aURLString) {
-
-		int pathnameStartIndex;
-		int pathnameEndIndex;
-		String aPath = null;
-
-//		if (isWindows()) {
-//			pathnameStartIndex = aURLString.indexOf("\\");
-//			pathnameEndIndex = aURLString.lastIndexOf("\\");
-//			
-//			System.out.println
-//			
-//
-//			aPath = aURLString.substring(pathnameStartIndex + 1, pathnameEndIndex);
-//
-//		} else {
-			pathnameStartIndex = aURLString.indexOf("/");
-			pathnameEndIndex = aURLString.lastIndexOf("/");
-
-			aPath = aURLString.substring(pathnameStartIndex, pathnameEndIndex);
-//		}
-
+		final int pathnameStartIndex = aURLString.indexOf(UNIX_SEPARATOR);
+		final int pathnameEndIndex = aURLString.lastIndexOf(UNIX_SEPARATOR);
+		String aPath = aURLString.substring(pathnameStartIndex, pathnameEndIndex);
 		aPath = aURLString.substring(0, pathnameEndIndex);
-
 		return aPath;
 	}
-
     
 }
