@@ -28,6 +28,7 @@
       if="plus.map.class.basic"
       dita:depends="plus-transtype-eclipsehelp.map.basic.class.fallback,
                     plus-transtype-eclipsehelp.map.basic.init,
+                    copy-plugin-files,
                     {depend.plus-transtype-eclipsehelp.map.basic.pre},
                     {depend.plus-transtype-eclipsehelp.map.basic.toc.pre},
                     plus-transtype-eclipsehelp.map.basic.toc,
@@ -35,6 +36,12 @@
                     {depend.plus-transtype-eclipsehelp.map.basic.index.pre},
                     plus-transtype-eclipsehelp.map.basic.index,
                     {depend.plus-transtype-eclipsehelp.map.basic.index.post},
+    				{depend.plus-transtype-eclipsehelp.map.basic.manifest.pre},
+    	            plus-transtype-eclipsehelp.map.basic.manifest,
+    	            {depend.plus-transtype-eclipsehelp.map.basic.manifest.post},
+    	            {depend.plus-transtype-eclipsehelp.map.basic.properties.pre},
+    	    	    plus-transtype-eclipsehelp.map.basic.properties,
+    	    	    {depend.plus-transtype-eclipsehelp.map.basic.properties.post},
                     {depend.plus-transtype-eclipsehelp.map.basic.plugin.pre},
                     plus-transtype-eclipsehelp.map.basic.plugin,
                     {depend.plus-transtype-eclipsehelp.map.basic.plugin.post},
@@ -69,6 +76,14 @@
                 <isset property="out.ext" />
             </not>
         </condition>
+    	<condition property="args.eclipsehelp.indexsee" value="false">
+    	    <not>
+    	      <isset property="args.eclipsehelp.indexsee"></isset>
+    	    </not>
+    	</condition>
+    	<condition property="dita.eclipsehelp.index.class" value="org.dita.dost.writer.EclipseIndexWriter"> 
+            <not><isset property="dita.eclipsehelp.index.class"></isset></not> 
+        </condition> 
 <!--
         <condition property="noPlugin">
             <equals arg1="${dita.eclipse.plugin}" arg2="no" />
@@ -94,12 +109,48 @@
     <target name="plus-transtype-eclipsehelp.map.basic.index"
        depends="plus-transtype-eclipsehelp.map.basic.init"
        if="plus.map.class.basic">
-        <pipeline message="Extract index term."
+    	<pipeline message="Extract index term."
             module="IndexTermExtract"
             basedir="${basedir}"
             tempdir="${dita.temp.dir}"
-            inputmap="${user.input.file}"
-            extparam="output=${output.dir}${file.separator}${user.input.file};targetext=${out.ext};indextype=eclipsehelp;${index.ext.param.encoding}" />
+            inputmap="${user.input.file}">
+          <param name="output" location="${output.dir}${file.separator}index.xml"/>
+          <param name="targetext" value="${out.ext}"/>
+          <param name="indextype" value="eclipsehelp"/>
+          <param name="indexclass" value="${dita.eclipsehelp.index.class}"/>
+          <param name="eclipse.indexsee" value="${args.eclipsehelp.indexsee}"/>
+          <param name="encoding" value="${args.dita.locale}" if="args.dita.locale"/>
+        </pipeline>
+    </target>
+	
+	<target name="plus-transtype-eclipsehelp.map.basic.manifest"
+	       depends="plus-transtype-eclipsehelp.map.basic.init"
+	       if="plus.map.class.basic">
+	        <xslt processor="trax"
+	        	  in="${dita.temp.dir}${file.separator}${user.input.file}"
+	        	  out="${dita.map.output.dir}${file.separator}META-INF${file.separator}MANIFEST.MF"
+	              style="${plus-transtype-eclipsehelp.dir}/xsl/map2plugin-shell.xsl">
+	            <param name="version" expression="${args.eclipse.version}" if="args.eclipse.version"/>
+	            <param name="provider" expression="${args.eclipse.provider}" if="args.eclipse.provider"/>
+	            <param name="osgi.symbolic.name" expression="${args.eclipse.symbolic.name}" if="args.eclipse.symbolic.name"/>
+	            <param name="plugin" expression="${eclipse.plugin}"/>
+	            <param name="fragment.country" expression="${args.eclipsehelp.country}" if="eclipse.fragment.country"/>
+	            <param name="fragment.lang" expression="${args.eclipsehelp.language}" if="args.eclipsehelp.language"/>
+	            <outputproperty value="text" name="method"/>
+	            <param name="dita.plugin.output" expression="dita.eclipse.manifest"/>
+	        </xslt>
+	    </target>
+	
+	<target name="plus-transtype-eclipsehelp.map.basic.properties"
+       depends="plus-transtype-eclipsehelp.map.basic.init"
+       if="plus.map.class.basic">
+        <xslt processor="trax"
+        	  in="${dita.temp.dir}${file.separator}${user.input.file}"
+        	  out="${output.dir}${file.separator}plugin.properties"
+              style="${plus-transtype-eclipsehelp.dir}/xsl/map2plugin-shell.xsl">
+            <outputproperty value="text" name="method"/>
+            <param name="dita.plugin.output" expression="dita.eclipse.properties"/>
+        </xslt>
     </target>
 
     <target name="plus-transtype-eclipsehelp.map.basic.plugin"
@@ -116,6 +167,9 @@
             <param name="provider"
                    expression="${args.eclipse.provider}"
                    if="args.eclipse.provider" />
+        	<param name="osgi.symbolic.name" expression="${args.eclipse.symbolic.name}" if="args.eclipse.symbolic.name"/>
+        	<param name="dita.plugin.output" expression="dita.eclipse.eclipse"></param>
+        	<outputproperty value="yes" name="indent"/>
         </xslt>
     </target>
 
@@ -173,5 +227,21 @@
         <param name="args.xsl" value="${plus-transtype-eclipsehelp.dir}/xsl/dita2html-shell.xsl"/>
       </antcall>
     </target>
+  
+    <target name="copy-plugin-files">
+	  	<!-- Look for files that override behavior in Eclipse plugins -->
+	  	<!-- <echo>* dita.input.dirname = ${user.input.dir}</echo> -->
+	  	<copy todir="${output.dir}">
+	  	      <fileset dir="${user.input.dir}">
+	  	      	<include name="disabled_book.css"/>
+	  	        <include name="narrow_book.css"/>
+	  	        <include name="${os}_narrow_book.css"/>
+	  	        <include name="book.css"/>
+	  	        <include name="plugincustomization.ini"/>
+	  	        <include name="helpData.xml"/>
+	  	      </fileset>
+	  		  
+	  	</copy>
+	</target>
 
 </project>

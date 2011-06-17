@@ -588,6 +588,79 @@ public final class FileUtils {
     	
     	return false;
     }
+    
+    public static String deriveFilename(String aURLString) {
+
+		int pathnameEndIndex;
+		String schemaLocation = null;
+
+		if (isWindows()) {
+			if (aURLString.contains("#")) {
+				pathnameEndIndex = aURLString.lastIndexOf("#");
+			}
+			else {
+				pathnameEndIndex = aURLString.lastIndexOf("\\");
+			
+				if (pathnameEndIndex == -1){
+					pathnameEndIndex = aURLString.lastIndexOf("/");
+				}
+			}
+		} else {
+			if (aURLString.contains("#")) {
+				pathnameEndIndex = aURLString.lastIndexOf("#");
+			}			
+			pathnameEndIndex = aURLString.lastIndexOf("/");
+		}
+		
+		if (aURLString.contains("#")) {
+			schemaLocation = aURLString.substring(0, pathnameEndIndex);
+		}	
+		else {
+			schemaLocation = aURLString.substring(pathnameEndIndex + 1);
+		}
+
+		return schemaLocation;
+
+	}
+    
+    public static boolean isWindows() {
+		boolean isWindows = false;
+
+		String osName = System.getProperty("os.name");
+		if (osName.startsWith("Win")) {
+			isWindows = true;
+		}
+
+		return isWindows;
+
+	}
+    
+    public static String derivePath(String aURLString) {
+
+		int pathnameStartIndex;
+		int pathnameEndIndex;
+		String aPath = null;
+
+//		if (isWindows()) {
+//			pathnameStartIndex = aURLString.indexOf("\\");
+//			pathnameEndIndex = aURLString.lastIndexOf("\\");
+//			
+//			System.out.println
+//			
+//
+//			aPath = aURLString.substring(pathnameStartIndex + 1, pathnameEndIndex);
+//
+//		} else {
+			pathnameStartIndex = aURLString.indexOf("/");
+			pathnameEndIndex = aURLString.lastIndexOf("/");
+
+			aPath = aURLString.substring(pathnameStartIndex, pathnameEndIndex);
+//		}
+
+		aPath = aURLString.substring(0, pathnameEndIndex);
+
+		return aPath;
+	}
 
     
 }

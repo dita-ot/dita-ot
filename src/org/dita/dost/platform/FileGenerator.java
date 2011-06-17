@@ -32,6 +32,7 @@ import org.xml.sax.ext.DefaultHandler2;
  */
 final class FileGenerator extends DefaultHandler2 {
 	
+	
 	public static final String PARAM_LOCALNAME = "localname";
 	public static final String PARAM_TEMPLATE = "template";
 
@@ -248,6 +249,16 @@ final class FileGenerator extends DefaultHandler2 {
 		}catch(final Exception e){
 			logger.logException(e);
 		}
+	}
+	
+	@Override
+	public void startDocument() throws SAXException {
+		try{
+    		output.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+		}catch(final Exception e){
+			logger.logException(e);
+		}
+		
 	}
 	
 }

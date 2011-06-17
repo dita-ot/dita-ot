@@ -389,7 +389,7 @@
       <xs:documentation>
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType>
+    <xs:complexType mixed="true">
       <xs:complexContent>
         <xs:extension base="bodydiv.class">
           <xs:attribute ref="class" default="- topic/bodydiv "/>
@@ -397,7 +397,8 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-  <xs:complexType name="bodydiv.class">
+  
+  <xs:complexType name="bodydiv.class" mixed="true">
     <xs:sequence>
       <xs:group ref="bodydiv.content"/>
     </xs:sequence>
