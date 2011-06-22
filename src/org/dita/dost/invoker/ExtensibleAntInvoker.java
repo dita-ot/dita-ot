@@ -102,7 +102,7 @@ public final class ExtensibleAntInvoker extends Task {
 	
     /**
      * Set input data.
-     * @param input data        
+     * @param inputdita input data file
      */
     public void setInputdita(String inputdita) {
         pipelineInput.setAttribute("inputdita", inputdita);
@@ -110,7 +110,7 @@ public final class ExtensibleAntInvoker extends Task {
 
     /**
      * Set input map.
-     * @param input map           
+     * @param inputmap input map file
      */
     public void setInputmap(String inputmap) {
         pipelineInput.setAttribute("inputmap", inputmap);

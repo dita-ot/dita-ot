@@ -62,7 +62,7 @@ public final class MessageUtils {
 	
 	/**
 	 * Internal Singleton getInstance() method, for Classloader to locate the CLASSPATH
-	 * @return
+	 * @return MessageUtils instance
 	 */
 	private static synchronized MessageUtils getInstance(){
 		if(utils == null){

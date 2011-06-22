@@ -49,8 +49,9 @@ public final class GrammarPoolManager {
 	
 
 	/**
-	 * @return 
+	 * Get grammar pool
 	 * 
+	 * @return grammar pool instance
 	 */
 	public static XMLGrammarPool getGrammarPool() {
 		XMLGrammarPool pool = grammarPool.get();

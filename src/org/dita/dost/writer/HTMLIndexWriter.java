@@ -178,13 +178,9 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter implements A
     }
 
     /**
-     * find the targets in its subterms when the current term doesn't have any target
+     * Find the targets in its subterms when the current term doesn't have any target
      * 
-     * @param term
-     * The current IndexTerm instance
-     * 
-     * @param targets
-     * The list of targets to store the result found
+     * @param term current IndexTerm instance
      */
 	private void findTargets(IndexTerm term) {
 		List<IndexTerm> subTerms = term.getSubTerms();

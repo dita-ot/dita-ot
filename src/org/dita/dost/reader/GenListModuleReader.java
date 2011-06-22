@@ -54,6 +54,9 @@ import org.xml.sax.XMLReader;
  * This class extends AbstractReader, used to parse relevant dita topics 
  * and ditamap files for GenMapAndTopicListModule.
  * 
+ * <p><strong>Not thread-safe</strong>. Instances can be reused by calling 
+ * {@link #reset()} between calls to {@link #parse(File)}.</p>
+ * 
  * @version 1.0 2004-11-25
  * 
  * @author Wu, Zhi Qiang
@@ -111,7 +114,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	private Map<String, String> keysDefMap = null;
 	
 	//Added on 20100826 for bug:3052913 start
-	//Map to store multi-level keyrefs
+	/** Map to store multi-level keyrefs */
 	private Map<String, String>keysRefMap = null;
 	//Added on 20100826 for bug:3052913 end
 	
@@ -144,7 +147,8 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	/** Flag used to mark if current file is still valid after filtering */
 	private boolean isValidInput = false;
 	
-	private String props; // contains the attribution specialization from props
+	/** Contains the attribution specialization from props */
+	private String props;
 	
 	/** Set of outer dita files */
 	private Set<String> outDitaFilesSet=null;
@@ -159,9 +163,12 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	private boolean setSystemid = true;
 	//Added on 2010-08-24 for bug:3086552 end
 	
-    private final Stack<String> processRoleStack; // stack for @processing-role value
-    private int processRoleLevel; // Depth inside a @processing-role parent
-    private final Set<String> resourceOnlySet; // Topics with role of "resource-only"
+	/** Stack for @processing-role value */
+    private final Stack<String> processRoleStack;
+    /** Depth inside a @processing-role parent */
+    private int processRoleLevel;
+    /** Topics with role of "resource-only" */
+    private final Set<String> resourceOnlySet;
     private final Set<String> crossSet;
     private Set<String> schemeRefSet = null;
     
@@ -175,41 +182,41 @@ public final class GenListModuleReader extends AbstractXMLReader {
     private Map<String, Set<String>> relationGraph = null;
     
     //Added by William on 2009-06-25 for req #12014 start
-    //StringBuffer to store <exportanchors> elements
+    /** StringBuffer to store <exportanchors> elements */
     private StringBuffer result = new StringBuffer();
-    //flag to show whether a file has <exportanchors> tag
+    /** Flag to show whether a file has <exportanchors> tag */
 	private boolean hasExport = false;
-	//for topic/dita files whether a </file> tag should be added
+	/** For topic/dita files whether a </file> tag should be added */
 	private boolean shouldAppendEndTag = false;
-	//store the href of topicref tag
+	/** Store the href of topicref tag */
 	private String topicHref = "";
-	//topicmeta set for merge multiple exportanchors into one
-	//each topicmeta/prolog can define many exportanchors
+	/** Topicmeta set for merge multiple exportanchors into one.
+	 * Each topicmeta/prolog can define many exportanchors */
 	private HashSet<String> topicMetaSet = null;
-	//refered topic id
+	/** Refered topic id */
 	private String topicId = "";
-	//Map to store plugin id
+	/** Map to store plugin id */
 	private final Map<String, Set<String>> pluginMap = new HashMap<String, Set<String>>();
-    //transtype
+    /** Transtype */
     private String transtype;
     //Added by William on 2010-03-01 for update onlytopicinmap option start
-    //Map to store referenced branches.
+    /** Map to store referenced branches. */
     private final Map<String, List<String>> vaildBranches;
-    //int to mark referenced nested elements.
+    /** Int to mark referenced nested elements. */
     private int level;
-    //topicref stack
+    /** Topicref stack */
     private final Stack<String> topicrefStack;
-    //store the primary ditamap file name.
+    /** Store the primary ditamap file name. */
     private String primaryDitamap = "";
     //Added by William on 2010-03-01 for update onlytopicinmap option end.
     
     //Added by William on 2010-06-01 for bug:3005748 start
-    //Get DITAAttrUtil
+    /** Get DITAAttrUtil */
     private final DITAAttrUtils ditaAttrUtils = DITAAttrUtils.getInstance();
     //Added by William on 2010-06-01 for bug:3005748 end
     
     //Added by William on 2010-06-09 for bug:3013079 start
-    //store the external/peer keydefs
+    /** Store the external/peer keydefs */
     private Map<String, String> exKeysDefMap = null;
     //Added by William on 2010-06-09 for bug:3013079 end
     
@@ -1221,7 +1228,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 		return null;
 	}
 
-	/*
+	/**
 	 * Parse the input attributes for needed information.
 	 */
 	private void parseAttribute(Attributes atts, String attrName) throws SAXException {
@@ -1536,7 +1543,9 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	}
 	
 	//Added on 20100826 for bug:3052913 start
-	//get multi-level keys list
+	/**
+	 * Get multi-level keys list
+	 */
 	private List<String> getKeysList(String key, Map<String, String> keysRefMap) {
 		
 		final List<String> list = new ArrayList<String>();
@@ -1561,7 +1570,10 @@ public final class GenListModuleReader extends AbstractXMLReader {
 		
 		return list;
 	}
-	//update keysDefMap for multi-level keys
+	
+	/**
+	 * Update keysDefMap for multi-level keys
+	 */
 	private void checkMultiLevelKeys(Map<String, String> keysDefMap,
 			Map<String, String> keysRefMap) {
 		

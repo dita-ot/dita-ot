@@ -357,9 +357,9 @@ public final class StringUtils {
      * Preferred XML readers are in order:
      * 
      * <ol>
-     *   <li>{@link SAX_DRIVER_DEFAULT_CLASS}</li>
-     *   <li>{@link SAX_DRIVER_SUN_HACK_CLASS}</li>
-     *   <li>{@link SAX_DRIVER_CRIMSON_CLASS}</li>
+     *   <li>{@link org.dita.dost.util.Constants#SAX_DRIVER_DEFAULT_CLASS Xerces}</li>
+     *   <li>{@link org.dita.dost.util.Constants#SAX_DRIVER_SUN_HACK_CLASS Sun's Xerces}</li>
+     *   <li>{@link org.dita.dost.util.Constants#SAX_DRIVER_CRIMSON_CLASS Crimson}</li>
      * </ol>
      * 
      * @return XML parser instance.

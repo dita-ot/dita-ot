@@ -102,7 +102,6 @@ public final class MergeTopicParser extends AbstractXMLReader {
 	/**
 	 * @param classValue
 	 * @param attValue
-	 * @return
 	 */
 	private String handleID(String classValue, String attValue) {
 		String retAttValue = attValue;
@@ -134,7 +133,6 @@ public final class MergeTopicParser extends AbstractXMLReader {
 	/**
 	 * @param sharpIndex
 	 * @param attValue
-	 * @return
 	 */
 	private String handleLocalDita(int sharpIndex, String attValue) {
 		String fileId;

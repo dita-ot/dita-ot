@@ -29,7 +29,9 @@ public final class TimingUtils {
 	}
 
 	/**
-	 * @return
+	 * Get current time.
+	 * 
+	 * @return current time
 	 */
 	public static Date getNowTime() {
 		return Calendar.getInstance().getTime();

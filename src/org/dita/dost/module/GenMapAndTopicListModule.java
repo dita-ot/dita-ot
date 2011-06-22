@@ -1237,7 +1237,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
      * add FlagImangesSet to Properties, which needn't to change the dir level,
      * just ouput to the ouput dir.
      * 
-     * @param Properties
+     * @param prop
      * @param key
      * @param set
      */

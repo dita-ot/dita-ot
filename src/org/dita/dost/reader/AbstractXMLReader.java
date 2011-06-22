@@ -47,11 +47,12 @@ public abstract class AbstractXMLReader implements AbstractReader,
 	protected static HashMap<String, String> catalogMap = null;
 
 	/**
-	 * @param validate
-	 * @param transtype 
-	 * @param rootFile 
-	 * @param grammarPool
-	 * @throws SAXException 
+	 * Initialize XML reader.
+	 * 
+	 * @param ditaDir DITA-OT base directory
+	 * @param validate  
+	 * @param inGrammarPool
+	 * @throws SAXException if initializing reader failed
 	 */
 	public static XMLReader initXMLReaderBase(String ditaDir, boolean validate,			
 		XMLGrammarPool inGrammarPool) throws SAXException {		

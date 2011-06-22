@@ -51,6 +51,24 @@ import org.xml.sax.XMLReader;
  * DitaWriter reads dita topic file and insert debug information and filter out the
  * content that is not necessary in the output.
  * 
+ * <p>The following processing instructions are added before the root element:</p>
+ * <dl>
+ *   <dt>{@link #PI_WORKDIR_TARGET}<dt>
+ *   <dd>Absolute system path of the file parent directory. On Windows, a {@code /}
+ *     is added to beginning of the path.</dd>
+ *   <dt>{@link #PI_PATH2PROJ_TARGET}<dt>
+ *   <dd>Relative system path to the project root directory, with a trailing directory separator.
+ *     When the file is in the project root directory, processing instruction has no value.</dd>
+ * </dl>
+ * 
+ * <p>The following attributes are added to elements:</p>
+ * <dl>
+ *   <dt>{@link #ATTRIBUTE_XTRF}</dt>
+ *   <dd>Absolute system path of the source file.</dd>
+ *   <dt>{@link #ATTRIBUTE_XTRC}</dt>
+ *   <dd>Element name and count in the document, {@code :} separated.</dd>
+ * </dl>
+ * 
  * @author Zhang, Yuan Peng
  */
 public final class DitaWriter extends AbstractXMLWriter {
@@ -655,7 +673,7 @@ public final class DitaWriter extends AbstractXMLWriter {
 	/**
 	 * Upate href.
 	 * @param href String key's href
-	 * @return
+	 * @return updated href value
 	 */
 	private String updateHref(final String href) {
 		
