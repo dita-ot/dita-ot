@@ -10,12 +10,12 @@
 package org.dita.dost.writer;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Properties;
 
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.Content;
-
-import java.io.*;
 
 /**
  * This class extends AbstractWriter, used to output content to properites file.
@@ -24,15 +24,10 @@ import java.io.*;
  * 
  * @author Wu, Zhi Qiang
  */
-public class PropertiesWriter implements AbstractWriter {
+public final class PropertiesWriter implements AbstractWriter {
 	/** Properties used to output */
 	private Properties prop = null;
-
-	/**
-	 * Default Constructor.
-	 */
-	public PropertiesWriter() {
-	}
+	private DITAOTLogger logger;
 
 	/**
 	 * 
@@ -67,6 +62,11 @@ public class PropertiesWriter implements AbstractWriter {
 			}
 		}
 	}
+	
+	public void setLogger(final DITAOTLogger logger) {
+	    this.logger = logger;
+	}
+	
 	/**
 	 * Write into xml file.
 	 * @param filename xml file name
@@ -84,6 +84,14 @@ public class PropertiesWriter implements AbstractWriter {
         	//Added by William on 2010-07-23 for bug:3033141 end
         }catch(IOException ioe){
         	throw new DITAOTException(ioe);
-        }
+        } finally {
+			if (os != null) {
+				try {
+	                os.close();
+                } catch (IOException e) {
+                	logger.logException(e);
+                }
+			}
+		}
 	}
 }

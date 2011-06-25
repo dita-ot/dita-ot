@@ -5,7 +5,7 @@ This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
 -->
 <concept id="linux_installing">
-	<title>Installing the small package on Linux</title>
+	<title>Installing the minimal package on Linux</title>
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -16,9 +16,9 @@ See the accompanying license.txt file for applicable licenses.
 			<copyrholder>VR Communications, Inc.</copyrholder>
 		</copyright>
 		<critdates>
-			<created date="2006-May-01"/>
-			<revised modified="2007-April-17"/>
-			<revised modified="2009-March-16"/>
+			<created date="2006-05-01"/>
+			<revised modified="2007-04-17"/>
+			<revised modified="2009-03-16"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -36,16 +36,15 @@ See the accompanying license.txt file for applicable licenses.
 		</metadata>
 	</prolog>
 	<conbody>
-		<p>Before installing DITA Open Toolkit small package on Linux, check to see if any of the required tools are already installed on your system and, if so, whether the version you have is supported (see <xref href="sysreqs.dita">System requirements and supported applications).</xref>
-		</p>
-		<p>
-			<note>As an example, if you are using Fedora Core 5 Linux, software installation is done using the Package Manager. From this application, if you install the Java Development package within the Development group, you will install:<ul>
-					<li>Ant 1.7.1</li>
-					<li>Java SDK 1.5</li>
-					<li>Saxon 9B</li>
-				</ul>
-			</note>
-		</p>
+	  <p>Before installing DITA Open Toolkit minimal package on Linux, check to see if any of the required tools are already installed on your system and, if so, whether the version you have is supported (see <xref href="sysreqs.dita"/>).</p>
+		<note>
+		  <p>As an example, if you are using Fedora Core 5 Linux, software installation is done using the Package Manager. From this application, if you install the Java Development package within the Development group, you will install:</p>
+		  <ul>
+				<li platform="linux">Ant <keyword keyref="tool.ant.version"/> or later</li>
+		    <li platform="linux">Java JDK <keyword keyref="tool.java.version"/> or later</li>
+				<li>Saxon-B <keyword keyref="tool.saxon.version"/></li>
+			</ul>
+		</note>
 		<p>For any tools you do need to install, complete the tasks below in the order shown.</p>
 	</conbody>
 </concept>

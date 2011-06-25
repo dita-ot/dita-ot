@@ -9,6 +9,8 @@
  */
 package org.dita.dost.platform;
 
+import java.io.File;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -17,73 +19,71 @@ import org.xml.sax.helpers.DefaultHandler;
  * Parser to parse description file of plugin.
  * @author Zhang, Yuan Peng
  */
-public class DescParser extends DefaultHandler{
+final class DescParser extends DefaultHandler{
+    
 	private String currentPlugin = null;
-	private String currentElement = null;
-	private Features features = null;
+	private final Features features;
 	
 	/**
 	 * DescParser Constructor.
-	 *
+	 * @deprecated use {@link #DescParser(File, File)} instead
 	 */
+	@Deprecated
 	public DescParser(){
-		this(null);
+		this(null, null);
 	}
 	
 	/**
 	 * Constructor initialize Feature with location.
 	 * @param location location
 	 */
-	public DescParser(String location) {
-		features = new Features(location);
+	public DescParser(final File location, final File ditaDir) {
+		super();
+		features = new Features(location, ditaDir);
 	}
 	
 	/**
-	 * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
+	 * Process configuration start element.
 	 */
-	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-		currentElement = qName;
-		if( "plugin".equals(currentElement) ){
+	@Override
+	public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
+		if( "plugin".equals(qName) ){
 			currentPlugin = attributes.getValue("id");
-		} else if ("feature".equals(currentElement)){
-			features.addFeature(attributes.getValue("extension"), attributes.getValue("value"), attributes.getValue("type"));
-		} else if ("require".equals(currentElement)){
+			features.setPluginId(currentPlugin);
+		} else if ("extension-point".equals(qName)){
+            addExtensionPoint(attributes);
+		} else if ("feature".equals(qName)){
+			features.addFeature(attributes.getValue("extension"), attributes);
+		} else if ("require".equals(qName)){
 			features.addRequire(attributes.getValue("plugin"), attributes.getValue("importance"));
-		} else if ("meta".equals(currentElement)){
+		} else if ("meta".equals(qName)){
 			features.addMeta(attributes.getValue("type"), attributes.getValue("value"));
-		} else if ("template".equals(currentElement)){
+		} else if ("template".equals(qName)){
 			features.addTemplate(attributes.getValue("file"));
 		}
 	}
-
+		
 	/**
-	 * @see org.xml.sax.ContentHandler#endDocument()
+	 * Get plug-in features.
+	 * 
+	 * @return plug-in features
 	 */
-	public void endDocument() throws SAXException {
-		Integrator.pluginTable.put(currentPlugin, features);
+	public Features getFeatures() {
+		return features;
 	}
-
+		
 	/**
-	 * @see org.xml.sax.ContentHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
-	 */
-	public void endElement(String uri, String localName, String qName) throws SAXException {
-		currentElement = null;
-	}
-
-	/**
-	 * @see org.xml.sax.ContentHandler#startDocument()
-	 */
-	public void startDocument() throws SAXException {
-		// TODO Auto-generated method stub
-		super.startDocument();
-	}
-
-	/**
-	 * @see org.xml.sax.ContentHandler#characters(char[], int, int)
-	 */
-	public void characters(char[] ch, int start, int length) throws SAXException {
-		// TODO Auto-generated method stub
-		super.characters(ch, start, length);
-	}
-	
+     * Add extension point.
+     * 
+     * @param atts extension point element attributes
+     * @throws NullPointerException if extension ID is {@code null}
+     */
+    private void addExtensionPoint(final Attributes atts) {
+        final String id = atts.getValue("id");
+        if (id == null) {
+            throw new NullPointerException("id attribute not set on extension-point");
+        }
+        final String name = atts.getValue("name");
+        features.addExtensionPoint(new ExtensionPoint(id, name, currentPlugin));
+    }
 }

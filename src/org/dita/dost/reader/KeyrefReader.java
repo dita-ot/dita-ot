@@ -1,27 +1,35 @@
+/*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
+ * (c) Copyright IBM Corp. 2010 All Rights Reserved.
+ */
 package org.dita.dost.reader;
+
+import static org.dita.dost.util.Constants.*;
 
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
 import java.util.Stack;
 
-import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
 import org.dita.dost.resolver.DitaURIResolverFactory;
 import org.dita.dost.resolver.URIResolverAdapter;
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 /**
  * KeyrefReader class which reads ditamap file to collect key definitions.
  *
  */
-public class KeyrefReader extends AbstractXMLReader {
+public final class KeyrefReader extends AbstractXMLReader {
 
 	protected static class KeyDef
 	{
@@ -34,11 +42,10 @@ public class KeyrefReader extends AbstractXMLReader {
 			keyDefContent = new StringBuffer();
 		}
 	}
-	private DITAOTJavaLogger javaLogger;
 	
 	private XMLReader reader;
 	
-	private Hashtable<String, String> keyDefTable;
+	private final Hashtable<String, String> keyDefTable;
 	
 	private Stack<KeyDef> keyDefs;
 	
@@ -53,15 +60,14 @@ public class KeyrefReader extends AbstractXMLReader {
 	 * Constructor.
 	 */
 	public KeyrefReader(){
-		javaLogger = new DITAOTJavaLogger();
 		keyDefTable = new Hashtable<String, String>();
 		keys = new HashSet<String>();
 		try {
-			reader = XMLReaderFactory.createXMLReader();
-			reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
-			reader.setFeature(Constants.FEATURE_NAMESPACE, true);
-		} catch (SAXException ex) {
-			javaLogger.logException(ex);
+			reader = StringUtils.getXMLReader();
+			reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
+			reader.setFeature(FEATURE_NAMESPACE, true);
+		} catch (final SAXException ex) {
+			logger.logException(ex);
 		}
 		reader.setContentHandler(this);
 	}
@@ -69,8 +75,9 @@ public class KeyrefReader extends AbstractXMLReader {
 	@Override
 	public void characters(char[] ch, int start, int length)
 			throws SAXException {
-		if(isStart())
-			keyDefAppend(StringUtils.escapeXML(ch, start, length));
+		if(isStart()) {
+            keyDefAppend(StringUtils.escapeXML(ch, start, length));
+        }
 	}
 
 
@@ -79,18 +86,19 @@ public class KeyrefReader extends AbstractXMLReader {
 			throws SAXException {
 		if(isStart()){
 			decKeyDefLevel();
-			keyDefAppend(Constants.LESS_THAN);
-			keyDefAppend(Constants.SLASH);
+			keyDefAppend(LESS_THAN);
+			keyDefAppend(SLASH);
 			keyDefAppend(name);
-			keyDefAppend(Constants.GREATER_THAN);
+			keyDefAppend(GREATER_THAN);
 		}
 		if(isStart() && getKeyDefLevel() == 0){
 			// to the end of the key definition, set the flag false 
 			// and put the key definition to table.
-			KeyDef keyDef = popKeyDef();
-			for(String keyName: keyDef.key.split(" ")){
-				if(!keyName.equals(""))
-				keyDefTable.put(keyName, keyDef.keyDefContent.toString());
+			final KeyDef keyDef = popKeyDef();
+			for(final String keyName: keyDef.key.split(" ")){
+				if(!keyName.equals("")) {
+                    keyDefTable.put(keyName, keyDef.keyDefContent.toString());
+                }
 				
 			}
 		}
@@ -98,7 +106,7 @@ public class KeyrefReader extends AbstractXMLReader {
 
 	@Override
 	public Content getContent() {
-		Content content = new ContentImpl();
+		final Content content = new ContentImpl();
 		content.setValue(keyDefTable);
 		return content;
 	}
@@ -110,11 +118,11 @@ public class KeyrefReader extends AbstractXMLReader {
 		try {
 			//AlanChanged: by refactoring Adding URIResolver Date:2009-08-13 --begin
 			/* filename = tempDir + File.separator + filename; */
-			InputSource source = URIResolverAdapter.convertToInputSource(DitaURIResolverFactory.getURIResolver().resolve(filename, null));			
+			final InputSource source = URIResolverAdapter.convertToInputSource(DitaURIResolverFactory.getURIResolver().resolve(filename, null));			
 			reader.parse(source);
 			//edit by Alan: by refactoring Adding URIResolver Date:2009-08-13 --end
-		} catch (Exception ex) {
-			javaLogger.logException(ex);
+		} catch (final Exception ex) {
+			logger.logException(ex);
 		}
 	}
 	/**
@@ -128,13 +136,13 @@ public class KeyrefReader extends AbstractXMLReader {
 	@Override
 	public void startElement(String uri, String localName, String name,
 			Attributes atts) throws SAXException {
-		String classValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
-		String keyName = atts.getValue(Constants.ATTRIBUTE_NAME_KEYS);
+		final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
+		final String keyName = atts.getValue(ATTRIBUTE_NAME_KEYS);
 		if(keyName!=null && classValue.contains(" map/topicref ")){
 			
 			// if it has @keys and is valid.
 			boolean flag = false;
-			String[] keyNames = keyName.split(" ");
+			final String[] keyNames = keyName.split(" ");
 			int index = 0;
 			while(index < keyNames.length){
 				if(keys.contains(keyNames[index++])){
@@ -156,21 +164,21 @@ public class KeyrefReader extends AbstractXMLReader {
 	private void putElement(String elemName,
 			Attributes atts) {
 		int index = 0;
-		keyDefAppend(Constants.LESS_THAN);
+		keyDefAppend(LESS_THAN);
 		keyDefAppend(elemName);
 		for (index=0; index < atts.getLength(); index++){
-			keyDefAppend(Constants.STRING_BLANK);
+			keyDefAppend(STRING_BLANK);
 			keyDefAppend(atts.getQName(index));
-			keyDefAppend(Constants.EQUAL);
-			keyDefAppend(Constants.QUOTATION);
+			keyDefAppend(EQUAL);
+			keyDefAppend(QUOTATION);
 			String value = atts.getValue(index);
 			//Added by William on 2009-10-15 for ampersand bug:2878492 start
 			value = StringUtils.escapeXML(value);
 			//Added by William on 2009-10-15 for ampersand bug:2878492 end
 			keyDefAppend(value);
-			keyDefAppend(Constants.QUOTATION);
+			keyDefAppend(QUOTATION);
 		}
-		keyDefAppend(Constants.GREATER_THAN);
+		keyDefAppend(GREATER_THAN);
 	}
 	/**
 	 * Set temp dir.
@@ -189,7 +197,7 @@ public class KeyrefReader extends AbstractXMLReader {
 	}
 	private void keyDefAppend(String content)
 	{
-		for (KeyDef keyDef : keyDefs)
+		for (final KeyDef keyDef : keyDefs)
 		{
 			keyDef.keyDefContent.append(content);
 		}

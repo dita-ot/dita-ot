@@ -34,17 +34,17 @@ See the accompanying license.txt file for applicable licenses.
 <!-- UPDATES: 20100524: SF Bug 2385466, disallow font-family="inherit" due to 
                         lack of support in renderers. -->
 
-<xsl:stylesheet version="1.0"
+<xsl:stylesheet version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:opentopic-i18n="http://www.idiominc.com/opentopic/i18n"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
-				xmlns:rx="http://www.renderx.com/XSL/Extensions"
-                exclude-result-prefixes="opentopic-i18n rx">
+                exclude-result-prefixes="opentopic-i18n">
 
     <xsl:variable name="debug-enabled" select="true()"/>
     <xsl:variable name="warn-enabled" select="true()"/>
 
     <xsl:variable name="font-mappings" select="document('cfg:fo/font-mappings.xml')/font-mappings"/>
+  <xsl:variable name="default-font" select="$font-mappings/font-table/aliases/alias[. = 'Normal']/@name"/>
 
 	<xsl:template match="fo:bookmark | fo:bookmark-label" priority="+10">
 		<xsl:copy>
@@ -81,12 +81,14 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:when test="$font">
                     <xsl:value-of select="$font"/>
                 </xsl:when>
-                <xsl:otherwise>Helvetica</xsl:otherwise>
+                <xsl:otherwise>
+                  <xsl:value-of select="$default-font"/>
+                </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
         <xsl:comment>
             currFontFam = <xsl:value-of select="$currFontFam"/>
-            currFontFam = <xsl:copy-of select="$phys-font"/>
+            physFontFam = <xsl:value-of select="normalize-space($physical-font-family)"/>
         </xsl:comment>
         <xsl:copy>
             <xsl:copy-of select="@*[not(name() = 'font-family')]"/>
@@ -102,6 +104,10 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:attribute name="line-height-shift-adjustment">disregard-shifts</xsl:attribute>
             <xsl:apply-templates/>
         </xsl:copy>
+    </xsl:template>
+
+    <xsl:template match="fo:instream-foreign-object//opentopic-i18n:text-fragment" priority="100">
+      <xsl:apply-templates/>
     </xsl:template>
 
     <xsl:template match="opentopic-i18n:text-fragment">
@@ -136,10 +142,15 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:when test="$font">
                     <xsl:value-of select="$font"/>
                 </xsl:when>
-                <xsl:otherwise>Helvetica</xsl:otherwise>
+                <xsl:otherwise>
+                  <xsl:value-of select="$default-font"/>
+                </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-
+        <xsl:comment>
+          currFontFam = <xsl:value-of select="$fontFace"/>
+          physFontFam = <xsl:value-of select="normalize-space($physical-font-family)"/>
+        </xsl:comment>
         <fo:inline line-height="100%">
             <xsl:attribute name="font-family"><xsl:value-of select="normalize-space($physical-font-family)"/></xsl:attribute>
 

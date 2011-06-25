@@ -9,54 +9,55 @@
  */
 package org.dita.dost.platform;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.dita.dost.log.DITAOTJavaLogger;
-import org.dita.dost.util.Constants;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.ext.LexicalHandler;
-import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.helpers.XMLReaderFactory;
+import org.xml.sax.ext.DefaultHandler2;
 
 /**
  * InsertAction implements IAction and insert the resource 
  * provided by plug-ins into the xsl files, ant scripts and xml catalog.
  * @author Zhang, Yuan Peng
  */
-public class InsertAction extends DefaultHandler implements IAction, LexicalHandler {
+class InsertAction extends DefaultHandler2 implements IAction {
 
-	protected XMLReader reader;
-	protected DITAOTJavaLogger logger;
-	protected Set<String> fileNameSet = null;
-	protected StringBuffer retBuf;
-	protected Hashtable<String,String> paramTable = null;
+	protected final XMLReader reader;
+	protected DITAOTLogger logger;
+	protected final Set<String> fileNameSet;
+	protected final StringBuffer retBuf;
+	protected final Hashtable<String,String> paramTable;
 	protected int elemLevel = 0;
+	protected boolean inCdataSection = false;
+	/** Current processing file. */
+	protected String currentFile;
+	/** Plug-in features. */
+    private Map<String, Features> featureTable = null;
 	
 	/**
 	 * Default Constructor.
 	 */
 	public InsertAction() {
-		fileNameSet = new LinkedHashSet<String>(Constants.INT_16);
+		fileNameSet = new LinkedHashSet<String>(INT_16);
 		logger = new DITAOTJavaLogger();
-		retBuf = new StringBuffer(Constants.INT_4096);
+		retBuf = new StringBuffer(INT_4096);
 		paramTable = new Hashtable<String,String>();
 		try {
-            if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
-                //The default sax driver is set to xerces's sax driver
-            	StringUtils.initSaxDriver();
-            }
-            reader = XMLReaderFactory.createXMLReader();
+            reader = StringUtils.getXMLReader();
             reader.setContentHandler(this);
-            reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
+            reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
             //added by Alan for bug: #2893316 on Date: 2009-11-09 begin
-            reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY, this);
+            reader.setProperty(LEXICAL_HANDLER_PROPERTY, this);
             //added by Alan for bug: #2893316 on Date: 2009-11-09 end
             
             //Edited by william on 2009-11-8 for ampbug:2893664 start
@@ -64,62 +65,48 @@ public class InsertAction extends DefaultHandler implements IAction, LexicalHand
 			reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
 			//Edited by william on 2009-11-8 for ampbug:2893664 end
 			
-        } catch (Exception e) {
-        	logger.logException(e);
+        } catch (final Exception e) {
+        	throw new RuntimeException("Failed to initialize parser: " + e.getMessage(), e);
         }
 	}
 
-	/**
-	 * @see org.dita.dost.platform.IAction#setInput(java.lang.String)
-	 */
-	public void setInput(String input) {
-		StringTokenizer inputTokenizer = new StringTokenizer(input,",");
+	public void setInput(final String input) {
+		final StringTokenizer inputTokenizer = new StringTokenizer(input, Integrator.FEAT_VALUE_SEPARATOR);
 		while(inputTokenizer.hasMoreElements()){
-			fileNameSet.add((String) inputTokenizer.nextElement());
+			fileNameSet.add(inputTokenizer.nextToken());
 		}
 	}
 
-	/**
-	 * @see org.dita.dost.platform.IAction#setParam(java.lang.String)
-	 */
-	public void setParam(String param) {
-		StringTokenizer paramTokenizer = new StringTokenizer(param,";");
-		String paramExpression = null;
-		int index;
-		while(paramTokenizer.hasMoreElements()){
-			paramExpression = (String) paramTokenizer.nextElement();
-			index = paramExpression.indexOf("=");
-			if(index > 0){
-				paramTable.put(paramExpression.substring(0,index),
-						paramExpression.substring(index+1));
-			}
-		}		
+	public void addParam(final String name, final String value) {
+		paramTable.put(name, value);
 	}
 
-	/**
-	 * @see org.dita.dost.platform.IAction#getResult()
-	 */
 	public String getResult() {
-		Iterator<String> iter;
-		iter = fileNameSet.iterator();
 		try{
-			while(iter.hasNext()){
-				reader.parse(iter.next());
+			for (final String fileName: fileNameSet) {
+				currentFile = fileName;
+				reader.parse(currentFile);
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 	       	logger.logException(e);
 		}
 		return retBuf.toString();
 	}
 
-	/**
-	 * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
-	 */
-	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+	public void setFeatures(final Map<String, Features> h) {
+	    featureTable = h;
+	}
+	
+    public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
+
+	@Override
+	public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
 		if(elemLevel != 0){
-			int attLen = attributes.getLength();
-			retBuf.append(Constants.LINE_SEPARATOR);
-			retBuf.append("<"+qName);
+			final int attLen = attributes.getLength();
+			retBuf.append(LINE_SEPARATOR);
+			retBuf.append("<").append(qName);
 			for (int i = 0; i < attLen; i++){
 				retBuf.append(" ").append(attributes.getQName(i)).append("=\"");
 				retBuf.append(StringUtils.escapeXML(attributes.getValue(i))).append("\"");
@@ -138,18 +125,18 @@ public class InsertAction extends DefaultHandler implements IAction, LexicalHand
 		elemLevel ++;
 	}
 
-	/**
-	 * @see org.xml.sax.ContentHandler#characters(char[], int, int)
-	 */
-	public void characters(char[] ch, int start, int length) throws SAXException {
-		final char[] esc = StringUtils.escapeXML(ch, start, length).toCharArray();
-		retBuf.append(esc, 0, esc.length);
+	@Override
+	public void characters(final char[] ch, final int start, final int length) throws SAXException {
+		if (inCdataSection) {
+			retBuf.append(ch, start, length);
+		} else {
+    		final char[] esc = StringUtils.escapeXML(ch, start, length).toCharArray();
+    		retBuf.append(esc, 0, esc.length);
+		}
 	}
 
-	/**
-	 * @see org.xml.sax.ContentHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
-	 */
-	public void endElement(String uri, String localName, String qName) throws SAXException {
+	@Override
+	public void endElement(final String uri, final String localName, final String qName) throws SAXException {
 		elemLevel --;
 		//edited by william on 2010-03-23 for bug:2974667 start
 		if(elemLevel != 0 && 
@@ -159,74 +146,39 @@ public class InsertAction extends DefaultHandler implements IAction, LexicalHand
 		){
 		//edited by william on 2010-03-23 for bug:2974667 end
 			//remove line break bug:3062912
-			//retBuf.append(Constants.LINE_SEPARATOR);
-			retBuf.append("</"+qName+">");
+			//retBuf.append(LINE_SEPARATOR);
+			retBuf.append("</").append(qName).append(">");
 		}
 	}
 
-	/**
-	 * @see org.xml.sax.ContentHandler#ignorableWhitespace(char[], int, int)
-	 */
-	public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
+	@Override
+	public void ignorableWhitespace(final char[] ch, final int start, final int length) throws SAXException {
 		retBuf.append(ch, start, length);
 	}
 
-	/**
-	 * @see org.xml.sax.ContentHandler#startDocument()
-	 */
+	@Override
 	public void startDocument() throws SAXException {
 		elemLevel = 0;
 	}
-	/**
-	 * @see  org.dita.dost.platform.IAction#setFeatures(Hashtable)
-	 */
-	public void setFeatures(Hashtable<String,String> h) {
-		
+
+	@Override
+	public void comment(final char[] ch, final int start, final int length) throws SAXException {
+		retBuf.append("<!--").append(ch, start, length).append("-->");
 	}
+	
 	//added by Alan for bug: #2893316 on Date: 2009-11-09 begin
-	/**
-	 * @see org.xml.sax.ext.LexicalHandler#startCDATA()
-	 */
+	@Override
 	public void startCDATA() throws SAXException {
-		retBuf.append(Constants.CDATA_HEAD);
+		inCdataSection = true;
+		retBuf.append(CDATA_HEAD);
 
 	}
-	/**
-	 * @see org.xml.sax.ext.LexicalHandler#endCDATA()
-	 */
+
+	@Override
 	public void endCDATA() throws SAXException {
-		retBuf.append(Constants.CDATA_END);
-	}
-	/**
-	 * @see org.xml.sax.ext.LexicalHandler#startDTD(String, String, String)
-	 */
-	public void startDTD(String name, String publicId, String systemId)
-			throws SAXException {
-		// nop;
-	}
-	/**
-	 * @see org.xml.sax.ext.LexicalHandler#endDTD()
-	 */
-	public void endDTD() throws SAXException {
-		// nop;
-	}
-	/**
-	 * @see org.xml.sax.ext.LexicalHandler#startEntity(String)
-	 */
-	public void startEntity(String name) throws SAXException {
-		// nop;
-	}
-	/**
-	 * @see org.xml.sax.ext.LexicalHandler#endEntity(String)
-	 */
-	public void endEntity(String name) throws SAXException {
-		// nop;
-	}
-	/**
-	 * @see org.xml.sax.ext.LexicalHandler#comment(char[], int, int)
-	 */
-	public void comment(char[] ch, int start, int length) throws SAXException {
-		// nop;
+		retBuf.append(CDATA_END);
+		inCdataSection = false;
 	}
 	//added by Alan for bug: #2893316 on Date: 2009-11-09 end
+	
 }

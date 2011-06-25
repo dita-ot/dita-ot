@@ -14,23 +14,23 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.StringReader;
 import java.util.HashSet;
+
 import org.apache.tools.ant.BuildEvent;
+import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.BuildLogger;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.util.DateUtils;
 import org.apache.tools.ant.util.StringUtils;
-import org.dita.dost.util.Constants;
-import org.dita.dost.util.LogUtils;
 import org.dita.dost.exception.DITAOTException;
-import org.apache.tools.ant.BuildException;
-import org.dita.dost.log.MessageBean;
+import org.dita.dost.util.LogUtils;
+
 /**
  * Class description goes here.
  * 
  * @author Wu, Zhi Qiang
  */
-public class DITAOTBuildLogger implements BuildLogger {
+public final class DITAOTBuildLogger implements BuildLogger {
 
 	/**
 	 * Size of left-hand column for right-justified task name.
@@ -94,19 +94,19 @@ public class DITAOTBuildLogger implements BuildLogger {
 		}
 	}
 
-	private PrintStream err = null;
+	private PrintStream err;
 
-	private DITAOTFileLogger logger = null;
+	final private DITAOTFileLogger logger;
 
 	/** Lowest level of message to write out */
 	private int msgOutputLevel = Project.MSG_ERR;
 
-	private PrintStream out = null;
+	private PrintStream out;
 
 	/** Time of the start of the build */
 	private long startTime = System.currentTimeMillis();
 	/** Set which contains already captured exceptions */
-	private HashSet exceptionsCaptured=new HashSet();
+	private final HashSet<Throwable> exceptionsCaptured=new HashSet<Throwable>();
 	/**
 	 * Constructor to init logger.
 	 * 
@@ -120,10 +120,9 @@ public class DITAOTBuildLogger implements BuildLogger {
 	 * @param event event
 	 * @see org.apache.tools.ant.BuildListener#buildFinished(org.apache.tools.ant.BuildEvent)
 	 */
-	public void buildFinished(BuildEvent event) {
-		Throwable error = event.getException();
-		StringBuffer message = new StringBuffer();
-		String msg = null;
+	public void buildFinished(final BuildEvent event) {
+		final Throwable error = event.getException();
+		final StringBuffer message = new StringBuffer();
 
 		message.append("Processing ended.");
 		message.append(LINE_SEP);
@@ -152,7 +151,7 @@ public class DITAOTBuildLogger implements BuildLogger {
 		message.append("Total time: ");
 		message.append(formatTime(System.currentTimeMillis() - startTime));
 
-		msg = message.toString();
+		final String msg = message.toString();
 
 		if (error == null) {
 			printMessage(msg, out, Project.MSG_INFO);
@@ -172,7 +171,7 @@ public class DITAOTBuildLogger implements BuildLogger {
 	 * @param event event
 	 * @see org.apache.tools.ant.BuildListener#buildStarted(org.apache.tools.ant.BuildEvent)
 	 */
-	public void buildStarted(BuildEvent event) {
+	public void buildStarted(final BuildEvent event) {
 		startTime = System.currentTimeMillis();
 	}
 
@@ -180,19 +179,18 @@ public class DITAOTBuildLogger implements BuildLogger {
 	 * @param event event
 	 * @see org.apache.tools.ant.BuildListener#messageLogged(org.apache.tools.ant.BuildEvent)
 	 */
-	public void messageLogged(BuildEvent event) {
-		StringBuffer message = new StringBuffer();
-		String msg = null;
-		Task eventTask = event.getTask();
-		int priority = event.getPriority();
+	public void messageLogged(final BuildEvent event) {
+		final int priority = event.getPriority();
 		// Filter out messages based on priority
 		if (priority > msgOutputLevel) {
 			return;
 		}
 
+		final StringBuffer message = new StringBuffer();
+	    final Task eventTask = event.getTask();
 		if (eventTask != null) {
 			// Print out the name of the task if we're in one
-			String label = new StringBuffer().append("  [").append(
+			final String label = new StringBuffer().append("  [").append(
 					eventTask.getTaskName()).append("] ").toString();
 			
 			BufferedReader r = null;
@@ -210,13 +208,13 @@ public class DITAOTBuildLogger implements BuildLogger {
 					
 					line = r.readLine();
 				}
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				// shouldn't be possible
 				message.append(label).append(event.getMessage());
 			} finally {
 				try {
 					r.close();
-				} catch (IOException ioe) {
+				} catch (final IOException ioe) {
 
 				}
 			}
@@ -224,7 +222,7 @@ public class DITAOTBuildLogger implements BuildLogger {
 			message.append(event.getMessage());
 		}
 		
-		msg = message.toString();
+		final String msg = message.toString();
 		//analyse the message to catch the error from HHC
 		catchHHCError(msg);
 		if (priority != Project.MSG_ERR) {
@@ -258,7 +256,7 @@ public class DITAOTBuildLogger implements BuildLogger {
 	 * @param mode mode
 	 * @see org.apache.tools.ant.BuildLogger#setEmacsMode(boolean)
 	 */
-	public void setEmacsMode(boolean mode) {
+	public void setEmacsMode(final boolean mode) {
 	}
 
 	/**
@@ -266,7 +264,7 @@ public class DITAOTBuildLogger implements BuildLogger {
 	 * @param errorPrintStream errorPrintStream
 	 * @see org.apache.tools.ant.BuildLogger#setErrorPrintStream(java.io.PrintStream)
 	 */
-	public void setErrorPrintStream(PrintStream errorPrintStream) {
+	public void setErrorPrintStream(final PrintStream errorPrintStream) {
 		this.err = new PrintStream(errorPrintStream, true);
 	}
 
@@ -275,7 +273,7 @@ public class DITAOTBuildLogger implements BuildLogger {
 	 * @param level outputlevel
 	 * @see org.apache.tools.ant.BuildLogger#setMessageOutputLevel(int)
 	 */
-	public void setMessageOutputLevel(int level) {
+	public void setMessageOutputLevel(final int level) {
 		this.msgOutputLevel = level;
 	}
 
@@ -284,7 +282,7 @@ public class DITAOTBuildLogger implements BuildLogger {
 	 * @param output output file
 	 * @see org.apache.tools.ant.BuildLogger#setOutputPrintStream(java.io.PrintStream)
 	 */
-	public void setOutputPrintStream(PrintStream output) {
+	public void setOutputPrintStream(final PrintStream output) {
 		this.out = new PrintStream(output, true);
 	}
 
@@ -293,19 +291,19 @@ public class DITAOTBuildLogger implements BuildLogger {
 	 * @param event event
 	 * @see org.apache.tools.ant.BuildListener#targetFinished(org.apache.tools.ant.BuildEvent)
 	 */
-	public void targetFinished(BuildEvent event) {
+	public void targetFinished(final BuildEvent event) {
 	}
 
 	/**
 	 * @param event event
 	 * @see org.apache.tools.ant.BuildListener#targetStarted(org.apache.tools.ant.BuildEvent)
 	 */
-	public void targetStarted(BuildEvent event) {
+	public void targetStarted(final BuildEvent event) {
 		if (Project.MSG_INFO <= msgOutputLevel
 				&& !"".equals(event.getTarget().getName())) {
-			String desc = event.getTarget().getDescription();
-			String msg = desc + "...";
-			if (desc == null || Constants.STRING_EMPTY.equals(desc.trim())) {
+			final String desc = event.getTarget().getDescription();
+			final String msg = desc + "...";
+			if (desc == null || desc.trim().length() == 0) {
 				return;
 			}
 			printMessage(msg, out, Project.MSG_INFO);
@@ -318,32 +316,35 @@ public class DITAOTBuildLogger implements BuildLogger {
 	 * @param event event
 	 * @see org.apache.tools.ant.BuildListener#taskFinished(org.apache.tools.ant.BuildEvent)
 	 */
-	public void taskFinished(BuildEvent event) {
+	public void taskFinished(final BuildEvent event) {
 		//captured the error from ant script or others
 		//Error or BuildException may be thrown out from ant 
 		//BuildException wrapped DITAOTException
-		if(event.getException()==null)
-			return;
-		Object exception=event.getException();
+		if(event.getException()==null) {
+            return;
+        }
+		final Object exception=event.getException();
 		//BuildException from ant
 		
 		if(exception instanceof BuildException){
-			BuildException buildEx=(BuildException) exception;
-			Object innerEx=buildEx.getException();
+			final BuildException buildEx=(BuildException) exception;
+			final Object innerEx=buildEx.getException();
 			
 			if(innerEx!=null && innerEx instanceof DITAOTException){
 				
-				DITAOTException ex=(DITAOTException)innerEx;
+				final DITAOTException ex=(DITAOTException)innerEx;
 				
-				if(ex.alreadyCaptured())
-					return;
+				if(ex.alreadyCaptured()) {
+                    return;
+                }
 				
 				ex.setCaptured(true);
-				MessageBean msgBean=ex.getMessageBean();
-				if(msgBean!=null)
-					LogUtils.increaseNumOfExceptionByType(msgBean.getType());
-				else 
-					LogUtils.increaseNumOfExceptionByType(null);
+				final MessageBean msgBean=ex.getMessageBean();
+				if(msgBean!=null) {
+                    LogUtils.increaseNumOfExceptionByType(msgBean.getType());
+                } else {
+                    LogUtils.increaseNumOfExceptionByType(null);
+                }
 				return;
 				
 			}
@@ -355,8 +356,9 @@ public class DITAOTBuildLogger implements BuildLogger {
 			
 		}else{
 			//error from ant
-			if(!chkThrowableAlreadyCaptured((Throwable)exception))
-				LogUtils.increaseNumOfErrors();
+			if(!chkThrowableAlreadyCaptured((Throwable)exception)) {
+                LogUtils.increaseNumOfErrors();
+            }
 		}
 	}
 
@@ -365,7 +367,7 @@ public class DITAOTBuildLogger implements BuildLogger {
 	 * 
 	 * @see org.apache.tools.ant.BuildListener#taskStarted(org.apache.tools.ant.BuildEvent)
 	 */
-	public void taskStarted(BuildEvent event) {
+	public void taskStarted(final BuildEvent event) {
 	}
 
 	/**
@@ -375,11 +377,12 @@ public class DITAOTBuildLogger implements BuildLogger {
 	 * @param ex the exception or error to analyse
 	 * @return true if the exception is wrapped with DITAException or it has been captured before
 	 */
-	private boolean chkThrowableAlreadyCaptured(Throwable ex) {
+	private boolean chkThrowableAlreadyCaptured(final Throwable ex) {
 		boolean captured = false;
 		
-		if(ex==null)
-			return true;
+		if(ex==null) {
+            return true;
+        }
 		
 		Throwable parent = ex;
 		Object unknownEx = parent.getCause();
@@ -394,17 +397,20 @@ public class DITAOTBuildLogger implements BuildLogger {
 			}
 		}
 		
-		if (captured == false)
-			exceptionsCaptured.add(parent);
+		if (captured == false) {
+            exceptionsCaptured.add(parent);
+        }
 		
 		return captured;
 		
 	}
 	
-	private void catchHHCError(String message){
+	private void catchHHCError(final String message){
 		//no good method to catch errors/exception from HHC.
-		if(message==null)return;
-		String upperMessage=message.toUpperCase();
+		if(message==null) {
+            return;
+        }
+		final String upperMessage=message.toUpperCase();
 		if(upperMessage.indexOf("HHC")!=-1 && upperMessage.indexOf("ERROR:")!=-1){
 			LogUtils.increaseNumOfErrors();
 		}

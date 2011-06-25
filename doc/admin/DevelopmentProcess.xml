@@ -64,7 +64,6 @@
   </topic>
   <topic id="processlifecycle">
     <title>Process life cycle</title>
-    <prolog/>
     <body>
       <p>To ensure transparency and predictability, this project sequences 
         through a series of Phases, with well-defined Phase Transition Reviews: 

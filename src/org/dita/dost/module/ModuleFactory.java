@@ -21,7 +21,7 @@ import org.dita.dost.log.MessageBean;
  * @author Lian, Li
  * 
  */
-public class ModuleFactory {
+public final class ModuleFactory {
 	private static ModuleFactory moduleFactory = null;
 
 	private final String packagePrefix = "org.dita.dost.module.";
@@ -39,7 +39,7 @@ public class ModuleFactory {
 	 * 
 	 * @return ModuleFactory
 	 */
-	public static ModuleFactory instance() {
+	public static synchronized ModuleFactory instance() {
 		if (moduleFactory == null) {
 			moduleFactory = new ModuleFactory();
 		}
@@ -53,19 +53,19 @@ public class ModuleFactory {
 	 * @return AbstractPipelineModule
 	 * @throws DITAOTException DITAOTException
 	 */
-	public AbstractPipelineModule createModule(String moduleName)
+	public AbstractPipelineModule createModule(final String moduleName)
 			throws DITAOTException {
-		String module = packagePrefix + moduleName + "Module";
+		final String module = packagePrefix + moduleName + "Module";
 		
 		try {
 			return (AbstractPipelineModule) Class.forName(
 					module).newInstance();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			String msg = null;
-			Properties params = new Properties();
+			final Properties params = new Properties();
 
 			params.put("%1", module);
-			MessageBean msgBean=MessageUtils.getMessage("DOTJ005F", params);
+			final MessageBean msgBean=MessageUtils.getMessage("DOTJ005F", params);
 			msg = msgBean.toString();
 
 			throw new DITAOTException(msgBean,e,msg);	

@@ -9,6 +9,8 @@
  */
 package org.dita.dost.module;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
@@ -17,12 +19,10 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.MapIndexReader;
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.ListUtils;
 import org.dita.dost.util.StringUtils;
@@ -35,10 +35,10 @@ import org.dita.dost.writer.DitaIndexWriter;
  * 
  * @author Zhang, Yuan Peng
  */
-public class MoveIndexModule implements AbstractPipelineModule {
+final class MoveIndexModule implements AbstractPipelineModule {
 
-    private ContentImpl content;
-    private DITAOTJavaLogger logger = null;
+    private final ContentImpl content;
+    private DITAOTLogger logger;
 
     /**
      * Default constructor of MoveIndexModule class.
@@ -46,8 +46,10 @@ public class MoveIndexModule implements AbstractPipelineModule {
     public MoveIndexModule() {
         super();
         content = new ContentImpl();
-        logger = new DITAOTJavaLogger();
-
+    }
+    
+    public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
     }
 
     /**
@@ -57,53 +59,57 @@ public class MoveIndexModule implements AbstractPipelineModule {
 	 * @return null
 	 * @throws DITAOTException exception
 	 */
-    public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException {
-    	String mapFile;
-    	Set mapSet;
-		Iterator i;
+    public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
+        if (logger == null) {
+            throw new IllegalStateException("Logger not set");
+        }
+    	Set<Map.Entry<String, String>> mapSet;
+		Iterator<Map.Entry<String, String>> i;
 		String targetFileName;
-		MapIndexReader indexReader = new MapIndexReader();
-		DitaIndexWriter indexInserter = new DitaIndexWriter();
-		String baseDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
-    	String tempDir = ((PipelineHashIO)input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
+		final MapIndexReader indexReader = new MapIndexReader();
+		indexReader.setLogger(logger);
+		final DitaIndexWriter indexInserter = new DitaIndexWriter();
+		indexInserter.setLogger(logger);
+		final String baseDir = input.getAttribute(ANT_INVOKER_PARAM_BASEDIR);
+    	String tempDir = input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR);
     	
 		if (!new File(tempDir).isAbsolute()) {
         	tempDir = new File(baseDir, tempDir).getAbsolutePath();
         }
     	   		
-		indexReader.setMatch(new StringBuffer(Constants.ELEMENT_NAME_TOPICREF)
-        .append(Constants.SLASH).append(Constants.ELEMENT_NAME_TOPICMETA)
-        .append(Constants.SLASH).append(Constants.ELEMENT_NAME_KEYWORDS).toString());
+		indexReader.setMatch(new StringBuffer(ELEMENT_NAME_TOPICREF)
+        .append(SLASH).append(ELEMENT_NAME_TOPICMETA)
+        .append(SLASH).append(ELEMENT_NAME_KEYWORDS).toString());
 		
 		Properties properties = null;
 		try{
 			properties = ListUtils.getDitaList();
-		}catch(IOException e){
+		}catch(final IOException e){
 			throw new DITAOTException(e);
 		}
 		
-		Set<String> fullditamaplist = StringUtils.restoreSet(properties.getProperty(Constants.FULL_DITAMAP_LIST));
-		for(String fileName : fullditamaplist){
+		final Set<String> fullditamaplist = StringUtils.restoreSet(properties.getProperty(FULL_DITAMAP_LIST));
+		for(final String fileName : fullditamaplist){
 			//FIXME: this reader needs parent directory for further process
 			indexReader.read(new File(tempDir, fileName).getAbsolutePath());  
 		}
 		
-		mapSet = (Set) indexReader.getContent().getCollection();
+		mapSet = (Set<Map.Entry<String, String>>) indexReader.getContent().getCollection();
 		i = mapSet.iterator();
         while (i.hasNext()) {
-            Map.Entry entry = (Map.Entry) i.next();
-            targetFileName = (String) entry.getKey();
-            targetFileName = targetFileName.indexOf(Constants.SHARP) != -1 
-            				? targetFileName.substring(0, targetFileName.indexOf(Constants.SHARP))
+        	final Map.Entry<String, String> entry = i.next();
+            targetFileName = entry.getKey();
+            targetFileName = targetFileName.indexOf(SHARP) != -1 
+            				? targetFileName.substring(0, targetFileName.indexOf(SHARP))
             				: targetFileName;
-            if (targetFileName.endsWith(Constants.FILE_EXTENSION_DITA) ||
-                    targetFileName.endsWith(Constants.FILE_EXTENSION_XML)){
+            if (targetFileName.endsWith(FILE_EXTENSION_DITA) ||
+                    targetFileName.endsWith(FILE_EXTENSION_XML)){
                 content.setValue(entry.getValue());
                 indexInserter.setContent(content);
-                if (FileUtils.fileExists((String) entry.getKey())){
-                    indexInserter.write((String) entry.getKey());
+                if (FileUtils.fileExists(entry.getKey())){
+                    indexInserter.write(entry.getKey());
                 }else{
-                    logger.logError(" ERROR FILE DOES NOT EXIST " + (String) entry.getKey());
+                    logger.logError(" ERROR FILE DOES NOT EXIST " + entry.getKey());
                 }
 
             }

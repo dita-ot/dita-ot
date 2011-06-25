@@ -9,73 +9,69 @@
  */
 package org.dita.dost.platform;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.util.Hashtable;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import org.dita.dost.util.Constants;
+import org.dita.dost.log.DITAOTLogger;
 
 /**
  * ImportAction implements IAction and import the resource 
  * provided by plug-ins into the xsl files and ant scripts.
  * @author Zhang, Yuan Peng
  */
-public abstract class ImportAction implements IAction {
-	protected Set<String> valueSet = null;
-	protected Hashtable<String,String> paramTable = null;
+abstract class ImportAction implements IAction {
+	
+	/** Action values. */
+	protected final Set<String> valueSet;
+	/** Action parameters. */
+	protected final Hashtable<String,String> paramTable;
+	protected DITAOTLogger logger;
+	/** Plug-in features. */
+    protected Map<String, Features> featureTable = null;
 	
 	/**
 	 * Default Constructor.
 	 */
 	public ImportAction() {
-		valueSet = new LinkedHashSet<String>(Constants.INT_16);
+		valueSet = new LinkedHashSet<String>(INT_16);
 		paramTable = new Hashtable<String,String>();
 	}
 	
 	/**
 	 * get result.
 	 * @return result
-	 * @see org.dita.dost.platform.IAction#getResult()
 	 */
 	public abstract String getResult();
 
 	/**
 	 * set input.
 	 * @param input input
-	 * @see org.dita.dost.platform.IAction#setInput(java.lang.String)
 	 */
-	public void setInput(String input) {
-		StringTokenizer inputTokenizer = new StringTokenizer(input,",");
+	public void setInput(final String input) {
+		final StringTokenizer inputTokenizer = new StringTokenizer(input, Integrator.FEAT_VALUE_SEPARATOR);
 		while(inputTokenizer.hasMoreElements()){
-			valueSet.add((String) inputTokenizer.nextElement());
+			valueSet.add(inputTokenizer.nextToken());
 		}
 	}
 
-	/**
-	 * Set the input parameters.
-	 * @param param param
-	 * @see org.dita.dost.platform.IAction#setParam(java.lang.String)
-	 */
-	public void setParam(String param) {
-		StringTokenizer paramTokenizer = new StringTokenizer(param,";");
-		String paramExpression = null;
-		int index;
-		while(paramTokenizer.hasMoreElements()){
-			paramExpression = (String) paramTokenizer.nextElement();
-			index = paramExpression.indexOf("=");
-			if(index > 0){
-				paramTable.put(paramExpression.substring(0,index),
-						paramExpression.substring(index+1));
-			}
-		}	
+	public void addParam(final String name, final String value) {
+		paramTable.put(name, value);
 	}
 	/**
 	 * Set the feature table.
 	 * @param h hastable
 	 */
-	public void setFeatures(Hashtable<String,String> h) {
-		
+	public void setFeatures(final Map<String, Features> h) {
+	    this.featureTable = h;
 	}
+	
+	public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
 
 }

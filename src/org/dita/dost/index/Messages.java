@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
  * Class to store messages.
  *
  */
-public class Messages {
+public final class Messages {
 	/**message bundle name.*/
 	private static final String BUNDLE_NAME = "org.dita.dost.index.messages"; //$NON-NLS-1$
 	/**read message resource file.*/

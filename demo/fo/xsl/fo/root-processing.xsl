@@ -37,16 +37,11 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
     xmlns:opentopic="http://www.idiominc.com/opentopic"
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
-    xmlns:rx="http://www.renderx.com/XSL/Extensions"
     exclude-result-prefixes="opentopic-index opentopic opentopic-i18n opentopic-func"
-    version="1.1">
+    version="2.0">
     
     <xsl:variable name="layout-masters">
         <xsl:value-of select="'cfg:fo/layout-masters.xml'"/>
-    </xsl:variable>
-
-    <xsl:variable name="index-configuration">
-        <xsl:value-of select="concat('cfg:common/index/', $locale, '.xml')"/>
     </xsl:variable>
 
     <xsl:variable name="mapType">
@@ -82,7 +77,9 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:variable name="topicNumbers">
         <xsl:for-each select="//*[contains(@class, ' topic/topic ') and not(contains(@class, ' bkinfo/bkinfo '))]">
-            <topic id="{@id}" guid="{generate-id()}"/>
+            <topic guid="{generate-id()}">
+                <xsl:call-template name="commonattributes"/>
+            </topic>
         </xsl:for-each>
     </xsl:variable>
 

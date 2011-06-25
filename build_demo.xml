@@ -171,13 +171,13 @@ http://docs.oasis-open.org/dita/v1.2/spec/DITA1.2-spec.html</echo>
 		</antcall>
 		<antcall target="dita.elementref.html">
 			<param name="inputFile"
-				value="${basedir}${file.separator}${dita.temp.dir}${file.separator}map.xml"/>
+				value="${dita.temp.dir}${file.separator}map.xml"/>
 			<param name="outputFile"
 				value="${dita.output.demo.elementref.dir}${file.separator}map.html"/>
 		</antcall>
 		<antcall target="dita.elementref.html">
 			<param name="inputFile"
-				value="${basedir}${file.separator}${dita.temp.dir}${file.separator}topicref.xml"/>
+				value="${dita.temp.dir}${file.separator}topicref.xml"/>
 			<param name="outputFile"
 				value="${dita.output.demo.elementref.dir}${file.separator}topicref.html"/>
 		</antcall>
@@ -204,7 +204,7 @@ http://docs.oasis-open.org/dita/v1.2/spec/DITA1.2-spec.html</echo>
 			<param name="args.input"
 				value="${dita.demo.enote.dir}${file.separator}testnote2.xml"/>
 			<param name="inputFile"
-				value="${basedir}${file.separator}${dita.temp.dir}${file.separator}testnote2.xml"/>
+				value="${dita.temp.dir}${file.separator}testnote2.xml"/>
 			<param name="output.dir"
 				value="${dita.output.demo.enote.dir}"/>
 			<param name="outputFile"
@@ -231,7 +231,7 @@ http://docs.oasis-open.org/dita/v1.2/spec/DITA1.2-spec.html</echo>
 			<!--param name="inputFile"
 				value="${basedir}${file.separator}temp${file.separator}DITA-faq.xml"/-->
 			<param name="inputFile"
-				value="${basedir}${file.separator}${dita.temp.dir}${file.separator}DITA-faq.xml"/>
+				value="${dita.temp.dir}${file.separator}DITA-faq.xml"/>
 			<param name="args.input"
 				value="${dita.demo.faq.dir}${file.separator}DITA-faq.xml"/>
 			<param name="output.dir"
@@ -243,7 +243,7 @@ http://docs.oasis-open.org/dita/v1.2/spec/DITA1.2-spec.html</echo>
 			<!--param name="inputFile"
 				value="${basedir}${file.separator}temp${file.separator}ditafaq.xml"/-->
 			<param name="inputFile"
-				value="${basedir}${file.separator}${dita.temp.dir}${file.separator}ditafaq.xml"/>
+				value="${dita.temp.dir}${file.separator}ditafaq.xml"/>
 			<param name="args.input"
 				value="${dita.demo.faq.dir}${file.separator}ditafaq.xml"/>
 			<param name="output.dir"
@@ -482,7 +482,7 @@ http://docs.oasis-open.org/dita/v1.2/spec/DITA1.2-spec.html
 	<target name="doc.readme.web" depends="init">
 		<antcall target="dita2xhtml">
 			<param name="args.input"
-				value="${dita.doc.dir}${file.separator}DITA-readme.ditamap"/>
+				value="${dita.doc.dir}${file.separator}readme.ditamap"/>
 			<param name="output.dir"     value="${dita.output.doc.dir}"/>
       <param name="transtype" value="xhtml"/>
 		</antcall>
@@ -491,7 +491,7 @@ http://docs.oasis-open.org/dita/v1.2/spec/DITA1.2-spec.html
     <target name="doc.readme.chm" depends="init">
 		<antcall target="dita2htmlhelp">
 			<param name="args.input"
-				value="${dita.doc.dir}${file.separator}DITA-readme.ditamap"/>
+				value="${dita.doc.dir}${file.separator}readme.ditamap"/>
 			<param name="output.dir"     value="${dita.output.doc.dir}"/>
       <param name="transtype" value="htmlhelp"/>
 		</antcall>
@@ -501,7 +501,7 @@ http://docs.oasis-open.org/dita/v1.2/spec/DITA1.2-spec.html
     	<!-- DOST is the project name of imported build.xml-->
 		<antcall target="DOST.init">
 			<param name="args.input"      
-				value="${dita.doc.dir}${file.separator}DITA-readme.ditamap"/>
+				value="${dita.doc.dir}${file.separator}readme.ditamap"/>
 			<param name="output.dir"      value="${dita.output.doc.dir}"/>
       		<param name="transtype" value="pdf"/>
 		</antcall>
@@ -538,7 +538,7 @@ http://docs.oasis-open.org/dita/v1.2/spec/DITA1.2-spec.html
 	<target name="doc.quickstartguide.chm" depends="init">
 		<antcall target="dita2htmlhelp">
 			<param name="args.input"
-				value="${dita.doc.dir}${file.separator}ant-quick-start-guide-for-ditaot.ditamap"/>
+			  value="${dita.doc.dir}${file.separator}quickstartguide.ditamap"/>
 			<param name="output.dir" value="${dita.output.doc.dir}"/>
       <param name="transtype" value="htmlhelp"/>
 		</antcall>
@@ -548,7 +548,7 @@ http://docs.oasis-open.org/dita/v1.2/spec/DITA1.2-spec.html
 		<!-- DOST is the project name of imported build.xml-->
 		<antcall target="DOST.init">
 			<param name="args.input"
-				value="${dita.doc.dir}${file.separator}ant-quick-start-guide-for-ditaot.ditamap"/>
+			  value="${dita.doc.dir}${file.separator}quickstartguide.ditamap"/>
 			<param name="output.dir" value="${dita.output.doc.dir}"/>
       		<param name="transtype" value="pdf"/>
 		</antcall>
@@ -878,8 +878,9 @@ Before rebuilding, please delete the output or the directory.</echo>
     <dirname property="temp.outdir" file="${temp.output}"/>
     <pipeline message="topicmerge" module="TopicMerge" 
       inputmap="${temp.dir}${file.separator}${temp.base}.ditamap" 
-      tempdir="${dita.temp.dir}"
-      extparam="output=${temp.outdir}${file.separator}${temp.base}_merged.xml" /> 
+      tempdir="${dita.temp.dir}">
+      <param name="output" location="${temp.outdir}${file.separator}${temp.base}_merged.xml"/>
+    </pipeline>
   </target>
 	
 </project>

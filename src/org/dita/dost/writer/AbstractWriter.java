@@ -10,6 +10,7 @@
 package org.dita.dost.writer;
 
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.Content;
 
 /**
@@ -36,4 +37,11 @@ public interface AbstractWriter {
      */
     void write(String filename) throws DITAOTException;
 
+    /**
+     * Set logger for module.
+     * 
+     * @param logger logger to use for log message
+     */
+    public void setLogger(DITAOTLogger logger);
+    
 }

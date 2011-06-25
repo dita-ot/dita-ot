@@ -18,8 +18,8 @@ See the accompanying license.txt file for applicable licenses.
 			<copyrholder>Comtech Services, Inc.</copyrholder>
 		</copyright>
 		<critdates>
-			<created date="2005-November-01"/>
-			<revised modified="2007-April-09"/>
+			<created date="2005-11-01"/>
+			<revised modified="2007-04-09"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -56,69 +56,77 @@ See the accompanying license.txt file for applicable licenses.
 			<step>
 				<cmd>Type in the Linux Console.</cmd>
 			</step>
-			<step>
-				<cmd>Modify each <varname>environmental or system 
-          variable</varname>.</cmd>
-				<info>
-					<p>Set the <varname>PATH</varname> environment variable to 
-              include the directory where you installed the Ant bin 
-              directory: <codeph>export PATH=${ANT_HOME}/bin:${JAVA_HOME}/bin:${PATH}</codeph>
-					</p>
-				</info>
-				<info>
-					<p>Set the <varname>ANT_HOME</varname> environment variable 
-              to the directory where you installed Ant: <codeph>export ANT_HOME=${ant_dir}</codeph>
-					</p>
-				</info>
-				<info>
-					<p>Set the <varname>ANT_OPTS</varname> environment variable 
-              to the directory where you installed Ant: <codeph>export ANT_OPTS="-Xmx256M"</codeph>
-					</p>
-				</info>
-				<info>
-					<p>Set the <varname>JAVA_HOME</varname> environment variable 
-              to the directory where you installed the J2SE SDK 
-              application: <codeph>export JAVA_HOME=${java_dir}</codeph>
-					</p>
-				</info>
-				<info>
-					<p>Set the <varname>JHHOME</varname> environment variable to 
-              the directory where you installed the JavaHelp 
-              application: <codeph>export JHHOME=${javahelp_dir}</codeph>
-					</p>
-				</info>
-				<info>
-					<p>Set the <varname>CLASSPATH </varname>environment variable 
-              for DITA-OT: Set up your environment variable CLASSPATH to include the 
-                  dost.jar. For example: 
-                  <codeblock>export CLASSPATH=${ditaot_dir}/lib:${ditaot_dir}/lib/dost.jar:${ditaot_dir}/lib/resolver.jar</codeblock>
-					</p>
-				</info>
-				<info>
-					<p>Set the <varname>CLASSPATH </varname>environment variable 
-              for the Apache FOP application: Set up your environment variable CLASSPATH to include the 
-                  fop.jar, batik.jar and avalon.jar files in the FOP directory. 
-                  For example: 
-                  <codeblock>export CLASSPATH=${fop_dir}/build/fop.jar:${fop_dir}/lib/batik.jar:${fop_dir}/lib/avalon-framework-cvs-20020806.jar:${CLASSPATH}</codeblock>
-					</p>
-				</info>
-				<info>
-					<p>(If you use SAXON) Set environment variables for SAXON:
-    <ol>
-							<li>Set up CLASSPATH to include the saxon.jar file. For example:
-					<codeblock expanse="page">export CLASSPATH=${CLASSPATH}:${saxon_dir}/saxon9.jar:${saxon_dir}/saxon9-dom.jar:${saxon_dir}/saxon9-dom4j.jar:${saxon_dir}/saxon9-jdom.jar:${saxon_dir}/saxon9-s9api.jar:${saxon_dir}/saxon9-sql.jar:${saxon_dir}/saxon9-xom.jar:${saxon_dir}/saxon9-xpath.jar:${saxon_dir}/saxon9-xqj.jar </codeblock>
-							</li>
-							<li>Set up ANT_OPTS. For example: <codeblock>export ANT_OPTS=${ANT_OPTS} -Djavax.xml.transform.TransformerFactory=com.icl.saxon.TransformerFactoryImpl</codeblock>
-							</li>
-						</ol>
-					</p>
-				</info>
-				<info>
-					<p>(If you use Xalan) Set environment variables for Xalan: Set up CLASSPATH to include the <filepath>xalan.jar</filepath> file and the 
-              <filepath>xercesImpl.jar</filepath> file. For example:<codeblock expanse="page">export CLASSPATH=${CLASSPATH}:${xalan_dir}/bin </codeblock>
-					</p>
-				</info>
-			</step>
+      <step>
+        <cmd>Set the <varname>PATH</varname> environment variable to include the directory where you
+          installed the Ant bin directory.
+        </cmd>
+        <stepxmp>
+          <codeblock>export PATH=${ANT_HOME}/bin:${JAVA_HOME}/bin:${PATH}</codeblock>
+        </stepxmp>
+      </step>
+      <step>
+        <cmd>Set the <varname>ANT_HOME</varname> environment variable to the directory where you
+          installed Ant.
+        </cmd>
+        <stepxmp>
+          <codeblock>export ANT_HOME=${ant_dir}</codeblock>
+        </stepxmp>
+      </step>
+      <step>
+        <cmd>Set the <varname>ANT_OPTS</varname> environment variable to the directory where you
+          installed Ant
+        </cmd>
+        <stepxmp>
+          <codeblock>export ANT_OPTS="-Xmx256M"</codeblock>
+        </stepxmp>
+      </step>
+      <step>
+        <cmd>Set the <varname>JAVA_HOME</varname> environment variable to the directory where you
+          installed the J2SE JDK application
+        </cmd>
+        <stepxmp>
+          <codeblock>export JAVA_HOME=${java_dir}</codeblock>
+        </stepxmp>
+      </step>
+      <step>
+        <cmd>Set the <varname>JHHOME</varname> environment variable to the directory where you
+          installed the JavaHelp application
+        </cmd>
+        <stepxmp><codeblock>export JHHOME=${javahelp_dir}</codeblock></stepxmp>
+      </step>
+      <step>
+        <cmd>Set the <varname>CLASSPATH </varname>environment variable for DITA-OT.</cmd>
+        <info>Set up your environment variable <varname>CLASSPATH</varname> to include the
+            <filepath>lib</filepath> directory, <filepath>dost.jar</filepath>, and
+            <filepath>resolver.jar</filepath>.</info>
+        <stepxmp>
+          <codeblock>export CLASSPATH=$DITA_HOME/lib:$DITA_HOME/lib/dost.jar:$DITA_HOME/lib/resolver.jar </codeblock>
+        </stepxmp>
+      </step>
+      <step>
+        <cmd>Set the <varname>CLASSPATH </varname>environment variable for the Apache FOP
+        application.</cmd>
+        <info>Set up your environment variable CLASSPATH to include the
+          <filepath>fop.jar</filepath>, <filepath>batik.jar</filepath> and
+            <filepath>avalon.jar</filepath> files in the FOP directory.</info>
+        <stepxmp><codeblock>export CLASSPATH=${fop_dir}/build/fop.jar:${fop_dir}/lib/batik.jar:${fop_dir}/lib/avalon-framework-cvs-20020806.jar:$CLASSPATH</codeblock></stepxmp>
+      </step>
+      <step>
+        <cmd>Set XSLT processor environment variables.</cmd>
+        <choices>
+          <choice> <p>Set environment variables for Saxon:</p><ol>
+                <li>Set up CLASSPATH to include the saxon.jar file. For example:
+                  <codeblock expanse="page">export CLASSPATH=${CLASSPATH}:${saxon_dir}/saxon9.jar:${saxon_dir}/saxon9-dom.jar </codeblock></li>
+                <li>Set up ANT_OPTS. For example:
+                  <codeblock>export "ANT_OPTS=$ANT_OPTS -Djavax.xml.transform.TransformerFactory=com.icl.saxon.TransformerFactoryImpl"</codeblock></li>
+          </ol></choice>
+          <choice><p>Set environment variables for Xalan: Set up CLASSPATH to include the
+                <filepath>xalan.jar</filepath> file and the <filepath>xercesImpl.jar</filepath>
+              file. For
+              example:
+          </p><codeblock expanse="page">export CLASSPATH=$CLASSPATH:${xalan_dir}/bin </codeblock></choice>
+        </choices>       
+      </step>
 		</steps>
 	</taskbody>
 </task>

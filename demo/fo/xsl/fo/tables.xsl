@@ -39,9 +39,8 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
     extension-element-prefixes="exsl"
     exclude-result-prefixes="opentopic-func exslf exsl dita2xslfo"
-    version="1.1">
+    version="2.0">
 
-    <xsl:include href="../../cfg/fo/attrs/tables-attr.xsl"/>
     <xsl:variable name="tableAttrs" select="'../../cfg/fo/attrs/tables-attr.xsl'"/>
 
     <xsl:param name="tableSpecNonProportional" select="'false'"/>
@@ -729,7 +728,13 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:call-template name="getTableScale"/>
         </xsl:variable>
 
-        <fo:block xsl:use-attribute-sets="table" id="{@id}">
+        <fo:block xsl:use-attribute-sets="table">
+            <xsl:call-template name="commonattributes"/>
+            <xsl:if test="not(@id)">
+              <xsl:attribute name="id">
+                <xsl:call-template name="get-id"/>
+              </xsl:attribute>
+            </xsl:if>
             <xsl:if test="not($scale = '')">
                 <xsl:attribute name="font-size"><xsl:value-of select="concat($scale, '%')"/></xsl:attribute>
             </xsl:if>
@@ -738,7 +743,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/table ')]/*[contains(@class,' topic/title ')]">
-        <fo:block xsl:use-attribute-sets="table.title" id="{@id}">
+        <fo:block xsl:use-attribute-sets="table.title">
+            <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="insertVariable">
                 <xsl:with-param name="theVariableID" select="'Table'"/>
                 <xsl:with-param name="theParameters">
@@ -771,7 +777,8 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:variable>
 
         <xsl:variable name="table">
-            <fo:table xsl:use-attribute-sets="table.tgroup" id="{@id}">
+            <fo:table xsl:use-attribute-sets="table.tgroup">
+                <xsl:call-template name="commonattributes"/>
 
                 <xsl:call-template name="displayAtts">
                     <xsl:with-param name="element" select=".."/>
@@ -822,7 +829,8 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class,' topic/spanspec ')]"/>
 
     <xsl:template match="*[contains(@class, ' topic/thead ')]">
-        <fo:table-header xsl:use-attribute-sets="tgroup.thead" id="{@id}">
+        <fo:table-header xsl:use-attribute-sets="tgroup.thead">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates select="*[contains(@class, ' topic/row ')][1]">
                 <xsl:with-param name="spans">
                     <xsl:call-template name="blank.spans">
@@ -835,7 +843,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/tfoot ')]">
-        <fo:table-footer xsl:use-attribute-sets="tgroup.tfoot" id="{@id}">
+        <fo:table-footer xsl:use-attribute-sets="tgroup.tfoot">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates select="*[contains(@class, ' topic/row ')][1]">
                 <xsl:with-param name="spans">
                     <xsl:call-template name="blank.spans">
@@ -848,7 +857,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/tbody ')]">
-        <fo:table-body xsl:use-attribute-sets="tgroup.tbody" id="{@id}">
+        <fo:table-body xsl:use-attribute-sets="tgroup.tbody">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates select="*[contains(@class, ' topic/row ')][1]">
                 <xsl:with-param name="spans">
                     <xsl:call-template name="blank.spans">
@@ -864,7 +874,8 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:param name="spans"/>
         <xsl:param name="parent"/>
 
-        <fo:table-row id="{@id}">
+        <fo:table-row>
+            <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="processAttrSetReflection">
                 <xsl:with-param name="attrSet" select="concat($parent, '.row')"/>
                 <xsl:with-param name="path" select="$tableAttrs"/>
@@ -987,7 +998,8 @@ See the accompanying license.txt file for applicable licenses.
                     </fo:block>
                 </xsl:variable>
 
-                <fo:table-cell id="{@id}">
+                <fo:table-cell>
+                    <xsl:call-template name="commonattributes"/>
                     <xsl:call-template name="processAttrSetReflection">
                         <xsl:with-param name="attrSet" select="concat($parent, '.row.entry')"/>
                         <xsl:with-param name="path" select="$tableAttrs"/>
@@ -1127,7 +1139,8 @@ See the accompanying license.txt file for applicable licenses.
 
     <!--Definition list-->
     <xsl:template match="*[contains(@class, ' topic/dl ')]">
-        <fo:table xsl:use-attribute-sets="dl" id="{@id}">
+        <fo:table xsl:use-attribute-sets="dl">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates select="*[contains(@class, ' topic/dlhead ')]"/>
             <fo:table-body xsl:use-attribute-sets="dl__body">
                 <xsl:choose>
@@ -1145,7 +1158,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/dl ')]/*[contains(@class, ' topic/dlhead ')]">
-        <fo:table-header xsl:use-attribute-sets="dl.dlhead" id="{@id}">
+        <fo:table-header xsl:use-attribute-sets="dl.dlhead">
+            <xsl:call-template name="commonattributes"/>
             <fo:table-row xsl:use-attribute-sets="dl.dlhead__row">
                 <xsl:apply-templates/>
             </fo:table-row>
@@ -1153,7 +1167,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/dlhead ')]/*[contains(@class, ' topic/dthd ')]">
-        <fo:table-cell xsl:use-attribute-sets="dlhead.dthd__cell" id="{@id}">
+        <fo:table-cell xsl:use-attribute-sets="dlhead.dthd__cell">
+            <xsl:call-template name="commonattributes"/>
             <fo:block xsl:use-attribute-sets="dlhead.dthd__content">
                 <xsl:apply-templates/>
             </fo:block>
@@ -1161,7 +1176,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/dlhead ')]/*[contains(@class, ' topic/ddhd ')]">
-        <fo:table-cell xsl:use-attribute-sets="dlhead.ddhd__cell" id="{@id}">
+        <fo:table-cell xsl:use-attribute-sets="dlhead.ddhd__cell">
+            <xsl:call-template name="commonattributes"/>
             <fo:block xsl:use-attribute-sets="dlhead.ddhd__content">
                 <xsl:apply-templates/>
             </fo:block>
@@ -1169,11 +1185,12 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/dlentry ')]">
-        <fo:table-row xsl:use-attribute-sets="dlentry" id="{@id}">
-            <fo:table-cell xsl:use-attribute-sets="dlentry.dt" id="{@id}">
+        <fo:table-row xsl:use-attribute-sets="dlentry">
+            <xsl:call-template name="commonattributes"/>
+            <fo:table-cell xsl:use-attribute-sets="dlentry.dt">
                 <xsl:apply-templates select="*[contains(@class, ' topic/dt ')]"/>
             </fo:table-cell>
-            <fo:table-cell xsl:use-attribute-sets="dlentry.dd" id="{@id}">
+            <fo:table-cell xsl:use-attribute-sets="dlentry.dd">
                 <xsl:apply-templates select="*[contains(@class, ' topic/dd ')]"/>
             </fo:table-cell>
         </fo:table-row>
@@ -1270,7 +1287,7 @@ See the accompanying license.txt file for applicable licenses.
          Count the number of values in @relcolwidth (to add values if one is missing) -->
     <xsl:template match="*" mode="count-colwidths">
       <xsl:param name="relcolwidth" select="@relcolwidth"/>
-      <xsl:param name="count" select="'0'"/>
+      <xsl:param name="count" select="0"/>
       <xsl:choose>
         <xsl:when test="not(contains($relcolwidth,' '))">
           <xsl:value-of select="$count + 1"/>
@@ -1298,7 +1315,7 @@ See the accompanying license.txt file for applicable licenses.
       <xsl:choose>
         <xsl:when test="$number-relwidths &lt; $number-cells">
           <xsl:apply-templates select="." mode="fix-relcolwidth">
-            <xsl:with-param name="update-relcolwidth" select="concat($update-relcolwidth,' *1')"/>
+            <xsl:with-param name="update-relcolwidth" select="concat($update-relcolwidth,' 1*')"/>
             <xsl:with-param name="number-cells" select="$number-cells"/>
             <xsl:with-param name="number-relwidths" select="$number-relwidths+1"/>
           </xsl:apply-templates>
@@ -1315,7 +1332,8 @@ See the accompanying license.txt file for applicable licenses.
             <!-- Contains the number of cells in the widest row -->
             <xsl:apply-templates select="*[1]" mode="count-max-simpletable-cells"/>
         </xsl:variable>
-        <fo:table xsl:use-attribute-sets="simpletable" id="{@id}">
+        <fo:table xsl:use-attribute-sets="simpletable">
+            <xsl:call-template name="commonattributes"/>
             <!-- <xsl:call-template name="univAttrs"/> -->
             <xsl:call-template name="globalAtts"/>
             <xsl:call-template name="displayAtts">
@@ -1383,9 +1401,10 @@ See the accompanying license.txt file for applicable licenses.
          Fill in empty cells when one is missing from strow or sthead.
          Context for this call is strow or sthead. -->
     <xsl:template match="*" mode="fillInMissingSimpletableCells">
-      <xsl:param name="fill-in-count" select="'0'"/>
+      <xsl:param name="fill-in-count" select="0"/>
       <xsl:if test="$fill-in-count > 0">
-        <fo:table-cell xsl:use-attribute-sets="strow.stentry" id="{@id}">
+        <fo:table-cell xsl:use-attribute-sets="strow.stentry">
+            <xsl:call-template name="commonattributes"/>
             <xsl:variable name="frame" select="../@frame"/>
             <xsl:if test="following-sibling::*[contains(@class, ' topic/strow ')]">
                 <xsl:call-template name="generateSimpleTableHorizontalBorders">
@@ -1432,7 +1451,8 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:param name="number-cells">
             <xsl:apply-templates select="../*[1]" mode="count-max-simpletable-cells"/>
         </xsl:param>
-        <fo:table-header xsl:use-attribute-sets="sthead" id="{@id}">
+        <fo:table-header xsl:use-attribute-sets="sthead">
+            <xsl:call-template name="commonattributes"/>
             <fo:table-row xsl:use-attribute-sets="sthead__row">
                 <xsl:apply-templates/>
                 <xsl:if test="count(*) &lt; $number-cells">
@@ -1448,7 +1468,8 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:param name="number-cells">
             <xsl:apply-templates select="../*[1]" mode="count-max-simpletable-cells"/>
         </xsl:param>
-        <fo:table-row xsl:use-attribute-sets="strow" id="{@id}">
+        <fo:table-row xsl:use-attribute-sets="strow">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
             <xsl:if test="count(*) &lt; $number-cells">
                 <xsl:apply-templates select="." mode="fillInMissingSimpletableCells">
@@ -1459,7 +1480,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/sthead ')]/*[contains(@class, ' topic/stentry ')]">
-        <fo:table-cell xsl:use-attribute-sets="sthead.stentry" id="{@id}">
+        <fo:table-cell xsl:use-attribute-sets="sthead.stentry">
+            <xsl:call-template name="commonattributes"/>
             <xsl:variable name="entryCol" select="count(preceding-sibling::*[contains(@class, ' topic/stentry ')]) + 1"/>
             <xsl:variable name="frame" select="ancestor::*[contains(@class, ' topic/simpletable ')][1]/@frame"/>
 
@@ -1494,7 +1516,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/strow ')]/*[contains(@class, ' topic/stentry ')]">
-        <fo:table-cell xsl:use-attribute-sets="strow.stentry" id="{@id}">
+        <fo:table-cell xsl:use-attribute-sets="strow.stentry">
+            <xsl:call-template name="commonattributes"/>
             <xsl:variable name="entryCol" select="count(preceding-sibling::*[contains(@class, ' topic/stentry ')]) + 1"/>
             <xsl:variable name="frame" select="ancestor::*[contains(@class, ' topic/simpletable ')][1]/@frame"/>
 
@@ -1527,7 +1550,8 @@ See the accompanying license.txt file for applicable licenses.
     <!--  Properties processing  -->
 
     <xsl:template match="*[contains(@class, ' reference/properties ')]">
-        <fo:table xsl:use-attribute-sets="properties" id="{@id}">
+        <fo:table xsl:use-attribute-sets="properties">
+            <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="univAttrs"/>
             <xsl:call-template name="globalAtts"/>
             <xsl:call-template name="displayAtts">
@@ -1582,7 +1606,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' reference/property ')]">
-        <fo:table-row xsl:use-attribute-sets="property" id="{@id}">
+        <fo:table-row xsl:use-attribute-sets="property">
+            <xsl:call-template name="commonattributes"/>
             <xsl:variable name="valuePos">
               <xsl:apply-templates select="." mode="get-propvalue-position"/>
             </xsl:variable>
@@ -1687,7 +1712,8 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="*[contains(@class, ' reference/proptype ') or contains(@class, ' reference/propvalue ') or contains(@class, ' reference/propdesc ')]">
         <xsl:param name="entryCol"/>
-        <fo:table-cell xsl:use-attribute-sets="property.entry" id="{@id}">
+        <fo:table-cell xsl:use-attribute-sets="property.entry">
+            <xsl:call-template name="commonattributes"/>
             <xsl:variable name="frame" select="ancestor::*[contains(@class, ' reference/properties ')][1]/@frame"/>
 
             <xsl:if test="../following-sibling::*[contains(@class, ' reference/property ')]">
@@ -1717,7 +1743,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' reference/prophead ')]">
-        <fo:table-header xsl:use-attribute-sets="prophead" id="{@id}">
+        <fo:table-header xsl:use-attribute-sets="prophead">
+            <xsl:call-template name="commonattributes"/>
             <xsl:variable name="frame" select="ancestor::*[contains(@class, ' reference/properties ')][1]/@frame"/>
             <xsl:variable name="keyCol" select="number(ancestor::*[contains(@class, ' reference/properties ')][1]/@keycol)"/>
 
@@ -1808,7 +1835,8 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="*[contains(@class, ' reference/proptypehd ') or contains(@class, ' reference/propvaluehd ') or contains(@class, ' reference/propdeschd ')]">
         <xsl:param name="entryCol"/>
-        <fo:table-cell xsl:use-attribute-sets="prophead.entry" id="{@id}">
+        <fo:table-cell xsl:use-attribute-sets="prophead.entry">
+            <xsl:call-template name="commonattributes"/>
             <xsl:variable name="frame" select="ancestor::*[contains(@class, ' reference/properties ')][1]/@frame"/>
 
             <xsl:call-template name="generateSimpleTableHorizontalBorders">
@@ -1843,7 +1871,8 @@ See the accompanying license.txt file for applicable licenses.
 
     <!--  Choicetable processing  -->
     <xsl:template match="*[contains(@class, ' task/choicetable ')]">
-        <fo:table xsl:use-attribute-sets="choicetable" id="{@id}">
+        <fo:table xsl:use-attribute-sets="choicetable">
+            <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="univAttrs"/>
             <xsl:call-template name="globalAtts"/>
 
@@ -1886,7 +1915,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' task/chhead ')]">
-        <fo:table-header xsl:use-attribute-sets="chhead" id="{@id}">
+        <fo:table-header xsl:use-attribute-sets="chhead">
+            <xsl:call-template name="commonattributes"/>
             <fo:table-row xsl:use-attribute-sets="chhead__row">
                 <xsl:apply-templates/>
             </fo:table-row>
@@ -1894,13 +1924,15 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' task/chrow ')]">
-        <fo:table-row xsl:use-attribute-sets="chrow" id="{@id}">
+        <fo:table-row xsl:use-attribute-sets="chrow">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:table-row>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' task/chhead ')]/*[contains(@class, ' task/choptionhd ')]">
-        <fo:table-cell xsl:use-attribute-sets="chhead.choptionhd" id="{@id}">
+        <fo:table-cell xsl:use-attribute-sets="chhead.choptionhd">
+            <xsl:call-template name="commonattributes"/>
             <fo:block xsl:use-attribute-sets="chhead.choptionhd__content">
                 <xsl:apply-templates/>
             </fo:block>
@@ -1908,7 +1940,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' task/chhead ')]/*[contains(@class, ' task/chdeschd ')]">
-        <fo:table-cell xsl:use-attribute-sets="chhead.chdeschd" id="{@id}">
+        <fo:table-cell xsl:use-attribute-sets="chhead.chdeschd">
+            <xsl:call-template name="commonattributes"/>
             <fo:block xsl:use-attribute-sets="chhead.chdeschd__content">
                 <xsl:apply-templates/>
             </fo:block>
@@ -1917,7 +1950,8 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="*[contains(@class, ' task/chrow ')]/*[contains(@class, ' task/choption ')]">
         <xsl:variable name="keyCol" select="ancestor::*[contains(@class, ' task/choicetable ')][1]/@keycol"/>
-        <fo:table-cell xsl:use-attribute-sets="chrow.choption" id="{@id}">
+        <fo:table-cell xsl:use-attribute-sets="chrow.choption">
+            <xsl:call-template name="commonattributes"/>
             <xsl:choose>
                 <xsl:when test="$keyCol = 1">
                     <fo:block xsl:use-attribute-sets="chrow.choption__keycol-content">
@@ -1935,7 +1969,8 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="*[contains(@class, ' task/chrow ')]/*[contains(@class, ' task/chdesc ')]">
         <xsl:variable name="keyCol" select="number(ancestor::*[contains(@class, ' task/choicetable ')][1]/@keycol)"/>
-        <fo:table-cell xsl:use-attribute-sets="chrow.chdesc" id="{@id}">
+        <fo:table-cell xsl:use-attribute-sets="chrow.chdesc">
+            <xsl:call-template name="commonattributes"/>
             <xsl:choose>
                 <xsl:when test="$keyCol = 2">
                     <fo:block xsl:use-attribute-sets="chrow.chdesc__keycol-content">

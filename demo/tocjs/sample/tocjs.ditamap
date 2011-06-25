@@ -18,7 +18,6 @@
   <topicref locktitle="yes" navtitle="Customizing" href="concepts/customization.xml">
     <topicref href="concepts/basefiles.xml"/>
     <topicref href="concepts/anttasks.xml"/>
-    <topicref href="concepts/content.frame.xml"/>
     <topicref href="concepts/paths.xml">
       <topicref href="tasks/ant-paths.xml"/>
     </topicref>

@@ -5,6 +5,12 @@
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <project name="build_generaltargets">
 
+  <!-- Set to "true" if you get out-of-memory errors during preprocess
+    while processing very large (thousands of files) document sets. -->
+  <condition property="dita.xhtml.reloadstylesheet" value="false">
+    <not><isset property="dita.xhtml.reloadstylesheet"/></not>
+  </condition>  
+
     <!--requirement 3, old solution-->
   <target name="dita.topics.xhtml" unless="noTopic" if="old.transform"
     description="Build XHTML output from dita inner and outer topics,which will adjust the directory.">
@@ -29,7 +35,8 @@
   	<!--Change path of ${dita.input.valfile} into url-->
   	<makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
   	<xslt processor="trax" basedir="${dita.temp.dir}"
-      destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}" 
+      destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
+      reloadstylesheet="${dita.xhtml.reloadstylesheet}"
       classpathref="dost.class.path"
       extension="${out.ext}" style="${args.xsl}"
   	  filenameparameter="FILENAME"
@@ -82,6 +89,7 @@
   	<makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
     <xslt processor="trax" basedir="${dita.temp.dir}"
       destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
+      reloadstylesheet="${dita.xhtml.reloadstylesheet}"
       classpathref="dost.class.path"
       extension="${out.ext}" style="${args.xsl}"
       filenameparameter="FILENAME"
@@ -142,6 +150,7 @@
   	<makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>    
     <xslt processor="trax" basedir="${dita.temp.dir}"
       destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
+      reloadstylesheet="${dita.xhtml.reloadstylesheet}"
       classpathref="dost.class.path"
       extension="${out.ext}" style="${args.xsl}"
       filenameparameter="FILENAME"
@@ -198,6 +207,7 @@
   	<makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
     <xslt processor="trax" basedir="${dita.temp.dir}"
       destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
+      reloadstylesheet="${dita.xhtml.reloadstylesheet}"
       classpathref="dost.class.path"
       extension="${out.ext}" style="${args.xsl}"
       filenameparameter="FILENAME"
@@ -276,6 +286,7 @@
   	<makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
     <xslt processor="trax" basedir="${dita.temp.dir}"
       destdir="${output.dir}${file.separator}${uplevels}" includesfile="${dita.temp.dir}${file.separator}${outditafilesfile}"
+      reloadstylesheet="${dita.xhtml.reloadstylesheet}"
       classpathref="dost.class.path"
       extension="${out.ext}" style="${args.xsl}"
       filenameparameter="FILENAME"
@@ -327,6 +338,7 @@
   	<makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
     <xslt processor="trax" basedir="${dita.temp.dir}"
       destdir="${output.dir}${file.separator}${uplevels}" includesfile="${dita.temp.dir}${file.separator}${outditafilesfile}"
+      reloadstylesheet="${dita.xhtml.reloadstylesheet}"
       classpathref="dost.class.path"
       extension="${out.ext}" style="${args.xsl}"
       filenameparameter="FILENAME"

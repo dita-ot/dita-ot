@@ -18,8 +18,8 @@ See the accompanying license.txt file for applicable licenses.
 			<copyrholder>Comtech Services, Inc.</copyrholder>
 		</copyright>
 		<critdates>
-			<created date="2005-November-01"/>
-			<revised modified="2007-April-09"/>
+			<created date="2005-11-01"/>
+			<revised modified="2007-04-09"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -73,22 +73,21 @@ See the accompanying license.txt file for applicable licenses.
 				</choicetable>
 			</step>
 			<step>
-				<cmd>At the prompt, type <userinput>cd ditaot</userinput>
+			  <cmd>At the prompt, type <userinput>cd DITA-OT<keyword keyref="release.version"/></userinput>
 				</cmd>
-				<stepresult>The command prompt changes to <codeph>C:\ditaot</codeph>
+				<stepresult>The command prompt changes to <codeph>C:\DITA-OT<keyword keyref="release.version"/></codeph>
 				</stepresult>
 			</step>
 			<step>
 				<cmd>Type <userinput>ant -f build_demo.xml all</userinput> and press Enter to process the DITA files in the <filepath>demo</filepath>, <filepath>doc</filepath>, <filepath>docbook</filepath>, and <filepath>samples</filepath> directories. This procedure also verifies the Toolkit installation.
           </cmd>
-				<stepresult>The testing process completes in 3-10 minutes depending on 
-          the speed of your machine. When testing completes, the confirmation 
-          message BUILD SUCCESSFUL displays.
-				</stepresult>
+				<stepresult>The testing process completes in 3-10 minutes depending on the speed of your
+          machine. When testing completes, the confirmation message <systemoutput>BUILD
+            SUCCESSFUL</systemoutput> displays. </stepresult>
 			</step>
 		</steps>
-		<result>Be sure the directories and files in your <filepath>ditaot</filepath> are as described in
-		<xref href="ditaot_directory.dita">Directories and files in the ditaot root directory</xref>.
+		<result>Be sure the directories and files in your <filepath>DITA-OT<keyword keyref="release.version"/></filepath> are as described in
+		<xref href="ditaot_directory.dita">Directories and files in the DITA-OT<keyword keyref="release.version"/> root directory</xref>.
 		</result>
 	</taskbody>
 </task>

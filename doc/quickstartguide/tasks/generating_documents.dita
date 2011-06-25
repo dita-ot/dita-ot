@@ -1,12 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--Arbortext, Inc., 1988-2010, v.4002-->
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN"
  "task.dtd">
 <?Pub Sty _display FontColor="red"?>
 <task id="about_generatingdocuments" xml:lang="en-us">
-<title>Generating Documents with DITA-OT</title>
-<shortdesc>How to generate documents from the command line with DITA
-OT.    </shortdesc>
+<title>Generating Documents with Ant</title>
+<shortdesc>How to generate documents from the command line with Ant.    </shortdesc>
 <taskbody>
 <steps>
 <step><cmd>Open a command prompt.  		  </cmd></step>
@@ -68,10 +67,12 @@ find in the 				copious output.  If you have not configured your console
 window most of the 				early output may have already scrolled off
 the screen.  If you add an Ant property, 				<codeph>-logger</codeph> to
 the command line invocation, DITA-OT will save the output 				to a
-log file that you can study after the build finishes. 			</p> 			 <p>See <xref
+log file that you can study after the build finishes. 			</p> 			 
+<!-- Using DITAOTBuildLogger is not recommended with plain Ant process -->
+<!--p>See <xref
 href="using_DITAOTBuildLogger.dita">Using the DITA-OT Build Logger></xref> 				for
 information about logging DITA-OT build messages to a log file rather
-than the 				console window.  			 </p>  		  </stepresult></step>
+than the 				console window.  			 </p-->  		  </stepresult></step>
 </steps>
 </taskbody>
 </task>

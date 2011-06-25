@@ -1,20 +1,17 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- This file is part of the DITA Open Toolkit project hosted on 
      Sourceforge.net. See the accompanying license.txt file for 
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved. -->
 <!-- build whole bin and source package for DITA Open Toolkit -->
-<project name="build_DITA-OT_package" default="build-all-packages" 
-            basedir=".">
+<project name="build_DITA-OT_package" default="build-all-packages" basedir=".">
   <description>Build source and binary packages for DITA Open Toolkit</description>
-  
-  <property name="HTMLHelpCompiler" value="C:\Program Files\HTML Help Workshop\hhc.exe"/>  
-  <property name="package.output.dir" location="${basedir}/build\"/>
+
+  <property file="buildPackage.properties"/>
+
+  <property name="HTMLHelpCompiler" value="C:\Program Files\HTML Help Workshop\hhc.exe"/>
   <property name="package.name.root" value="DITA-OT"/>
-  <property name="version" value="1.5.2"/>
-  <!--This property should be edited manually in each milestone release?-->
-  <property name="milestone" value="08"/>
-	
+
   <property name="src.dir" location="${basedir}"/>
   <property name="java.dir" location="${src.dir}/src/"/>
   <property name="lib.dir" location="${src.dir}/lib/"/>
@@ -29,415 +26,507 @@
   <property name="resource.dir" location="${src.dir}/resource/"/>
 
   <property name="top.work.dir" location="${basedir}"/>
+  <property name="package.output.dir" location="${top.work.dir}/build/"/>
   <property name="bin.dir" location="${top.work.dir}/output2/"/>
+  <property name="work.dir" location="${top.work.dir}/temp/"/>
   <property name="build.dir" location="${bin.dir}/build"/>
   <property name="out.dir" location="${top.work.dir}/out/"/>
   <property name="doc.out.dir" location="${top.work.dir}/out/doc"/>
-  
-  <property name="dost.jar" location="${lib.dir}/dost.jar" />
+
+  <property name="dost.jar" location="${lib.dir}/dost.jar"/>
   <property name="binary-min" value="DITA-OT${version}_minimal_bin"/>
-  <property name="binary-big" value="DITA-OT${version}_full_easy_install_bin" />
-  <property name="binary" value="DITA-OT${version}_standard_bin" />
-  <property name="source" value="DITA-OT${version}_src" />
-  <property name="win32.zip.suffix" value=".zip" />
-  <property name="linux.zip.suffix" value=".tar.gz" />
-    
+  <property name="binary-big" value="DITA-OT${version}_full_easy_install_bin"/>
+  <property name="binary" value="DITA-OT${version}_standard_bin"/>
+  <property name="source" value="DITA-OT${version}_src"/>
+  <property name="win32.zip.suffix" value=".zip"/>
+  <property name="linux.zip.suffix" value=".tar.gz"/>
+
   <target name="init-package" depends="clean-package">
-    <mkdir dir="${package.output.dir}"/>    
+    <mkdir dir="${package.output.dir}"/>
   </target>
-  
+
   <target name="clean-package">
-    <delete dir="${package.output.dir}"/>    
+    <delete dir="${package.output.dir}"/>
   </target>
-  
+
   <target name="init-java" depends="clean-java">
-    <mkdir dir="${lib.dir}" />
+    <mkdir dir="${lib.dir}"/>
     <mkdir dir="${bin.dir}"/>
   </target>
-  
+
   <target name="clean-java">
     <delete dir="${lib.dir}/dost.jar"/>
     <delete dir="${bin.dir}"/>
   </target>
-  
-  <target name="build-java" depends="init-java">
-  	
-  	<!-- Copying the files to a build directory before we modify the files -->
-  	<copy todir="${build.dir}">
-  		<fileset dir="${java.dir}" excludes="com/**,org/dita/dost/junit/**"/>
-  	</copy>
-  	
-  	<!-- Update the token so that we can find out what the version of DITA-OT users
-  	are using -->
-  	<replace file="${build.dir}/org/dita/dost/util/Version.java" 
-  		  	     token="@@VERSION@@" value="${package.name.root} ${version} M${milestone}"/>
-  	<replace file="${build.dir}/org/dita/dost/util/VersionUtil.java" 
-  		  	     token="@@OTVERSION@@" value="${version}"/>
-  	<replace file="${build.dir}/org/dita/dost/util/VersionUtil.java" 
-  		  	     token="@@MILESTONE@@" value="${milestone}"/>
-  	
-    <javac srcdir="${build.dir}" destdir="${bin.dir}" 
-      excludes="com/**,org/dita/dost/junit/**, org/dita/dost/invoker/JavaInvoker.java"
-      debug="on" source="1.5" target="1.5">
-      <classpath location="${lib.dir}/resolver.jar"></classpath>
-    </javac>
-  	<delete dir="${build.dir}" includeemptydirs="yes"/>
-  </target>
-  
-  <target name="package-java" depends="build-java">
-	<copy todir="${bin.dir}/resource/">
-		<fileset dir="${resource.dir}" includes="messages.*"/>
-	</copy>
-    <copy todir="${bin.dir}">
-    	<fileset dir="${java.dir}" includes="**/*.properties"/>
+
+  <target name="build-java" depends="compile"/>
+  <target name="compile" depends="init-java" description="Compile Java">
+    <!-- Copying the files to a build directory before we modify the files -->
+    <copy todir="${build.dir}">
+      <fileset dir="${java.dir}" excludes="com/**,org/dita/dost/junit/**"/>
     </copy>
-    <jar destfile="${dost.jar}" basedir="${bin.dir}" manifest="manifest.mf"
-           includes="**" />
+    <!-- Update the token so that we can find out what the version of DITA-OT users are using -->
+    <replace file="${build.dir}/org/dita/dost/util/Version.java" token="@@VERSION@@"
+      value="${package.name.root} ${version}"/>
+    <replace file="${build.dir}/org/dita/dost/util/VersionUtil.java" token="@@OTVERSION@@"
+      value="${version}"/>
+    <javac srcdir="${build.dir}" destdir="${bin.dir}"
+      excludes="com/**,org/dita/dost/junit/**, org/dita/dost/invoker/JavaInvoker.java" debug="on"
+      source="1.5" target="1.5">
+      <classpath>
+        <pathelement location="${lib.dir}/resolver.jar"/>
+        <pathelement location="${lib.dir}/commons-codec-1.4.jar"/>
+      </classpath>
+    </javac>
+    <delete dir="${build.dir}" includeemptydirs="yes"/>
   </target>
+
+  <target name="package-java" depends="jar"/>
+  <target name="jar" depends="compile" description="Build Java libraries">
+    <copy todir="${bin.dir}/resource/">
+      <fileset dir="${resource.dir}" includes="messages.*"/>
+    </copy>
+    <copy todir="${bin.dir}">
+      <fileset dir="${java.dir}" includes="**/*.properties"/>
+    </copy>
+    <jar destfile="${dost.jar}" basedir="${bin.dir}" includes="**">
+      <manifest>
+        <attribute name="Implementation-Version" value="${version}"/>
+        <attribute name="Main-Class" value="org.dita.dost.invoker.CommandLineInvoker"/>
+      </manifest>
+    </jar>
+  </target>
+	
+  <patternset id="pattern.global.excludes">
+    <exclude name="plugins/net.sourceforge.dita-ot.html/**"/>
+  	<exclude name="buildSourceForge.xml"/>
+  	<exclude name="doc/sourceforge/**"/>
+  </patternset>
   
+  <patternset id="pattern.package.ant">
+    <include name="tools/ant/*.*"/>
+    <include name="tools/ant/bin/**"/>
+    <include name="tools/ant/lib/**"/>
+  </patternset>
+
   <patternset id="pattern.package.minimum">
-  	
-  	<exclude name="demo/fo/fop/build/" />
-	<exclude name="demo/fo/fop/conf/" />
-	<exclude name="demo/fo/fop/lib/" />
-	<exclude name="demo/fo/lib/icu4j.jar" />
-	<exclude name="lib/saxon/*" />
-	<exclude name="lib/icu4j.jar" />
-	<exclude name="lib/log4j.properties" />
-	<exclude name="build.log"/>
-  	<include name="demo/tocjs/**"/>
-  	<include name="demo/h2d/**"/>
-  	<include name="demo/fo/**" />
+    <patternset refid="pattern.global.excludes"/>
+    <exclude name="demo/fo/fop/build/"/>
+    <exclude name="demo/fo/fop/conf/"/>
+    <exclude name="demo/fo/fop/lib/"/>
+    <exclude name="demo/fo/lib/icu4j.jar"/>
+    <exclude name="lib/saxon/*"/>
+    <exclude name="lib/icu4j.jar"/>
+    <exclude name="lib/log4j.properties"/>
+    <exclude name="build.log"/>
+    <include name="demo/tocjs/**"/>
+    <include name="demo/h2d/**"/>
+    <include name="demo/fo/**"/>
+    <include name="plugins/org.dita.*/**"/>
     <include name="*.*"/>
     <include name="css/**"/>
     <include name="dtd/**"/>
     <include name="resource/**"/>
-    <include name="schema/**"/>      
+    <include name="schema/**"/>
     <include name="xsl/**"/>
     <include name="lib/APACHE-LICENSE-2_0.html"/>
-  	<include name="lib/**" />
+    <include name="lib/**"/>
     <include name="lib/resolver.jar"/>
     <include name="lib/CatalogManager.properties"/>
-  	<exclude name="plugins/cxxapiref/" />
+    <exclude name="plugins/cxxapiref/"/>
     <exclude name="build.number"/>
     <exclude name=".*"/>
+    <include name="lib/dost.jar"/>
+    <include name="lib/commons-logging-1.1.1.jar"/>
+    <exclude name="startcmd.*"/>
+    <exclude name="buildPackage.*"/>
   </patternset>
-    
+
   <patternset id="pattern.package.full">
+  	<patternset refid="pattern.global.excludes"/>
     <include name="*.*"/>
     <include name="ant/**"/>
-    <include name="css/**"/>    
+    <include name="css/**"/>
     <include name="demo/book/**"/>
-  	<include name="demo/elementref/**"/>
-  	<include name="demo/eclipsemap/**"/>
-   	<include name="demo/enote/**"/>
-  	<include name="demo/faq/**"/>
-  	<include name="demo/h2d/**"/>
-  	<include name="demo/java/**"/>
-  	<include name="demo/dita11/**"/>
-  	<include name="demo/dita132/**"/>
-	<include name="demo/fo/**" />
-	<include name="demo/legacypdf/**" />
-  	<include name="demo/tocjs/**"/>
+    <include name="demo/elementref/**"/>
+    <include name="demo/eclipsemap/**"/>
+    <include name="demo/enote/**"/>
+    <include name="demo/faq/**"/>
+    <include name="demo/h2d/**"/>
+    <include name="demo/java/**"/>
+    <include name="demo/dita11/**"/>
+    <include name="demo/dita132/**"/>
+    <include name="demo/fo/**"/>
+    <include name="demo/legacypdf/**"/>
+    <include name="demo/tocjs/**"/>
     <include name="doc/**"/>
     <include name="dtd/**"/>
     <include name="plugins/**"/>
     <include name="resource/**"/>
     <include name="samples/**"/>
-    <include name="schema/**"/>      
+    <include name="schema/**"/>
     <include name="xsl/**"/>
     <include name="lib/APACHE-LICENSE-2_0.html"/>
     <include name="lib/resolver.jar"/>
     <include name="lib/CatalogManager.properties"/>
-  	<include name="lib/configuration.properties"/>
-  	<include name="lib/saxon/**" />
-  	<exclude name="plugins/cxxapiref/" />
+    <include name="lib/configuration.properties"/>
+    <include name="lib/saxon/**"/>
+    <exclude name="plugins/cxxapiref/"/>
     <exclude name="doc/userguide-orig/**"/>
-	<exclude name="doc/ot-userguide/**"/>
-	<exclude name="doc/archive/**"/>
-	<exclude name="doc/langref-dita1.1/**"/>
-	<exclude name="doc/ditaref-book.chm" />
-	<exclude name="doc/ditaref-book.pdf" />
-  	<exclude name="doc/quickstartguide/logs/**"/>
-  	 
+    <exclude name="doc/ot-userguide/**"/>
+    <exclude name="doc/archive/**"/>
+    <exclude name="doc/langref-dita1.1/**"/>
+    <exclude name="build.number"/>
+    <exclude name=".*"/>
+    <include name="lib/*.jar"/>
+    <patternset refid="pattern.package.ant"/>
+    <include name="lib/APACHE-LICENSE-2_0.html"/>
+    <include name="lib/ICU_License.html"/>
+    <exclude name="buildPackage.*"/>
+  </patternset>
+
+  <patternset id="pattern.package.standard.base">
+  	<patternset refid="pattern.global.excludes"/>
+    <exclude name="demo/fo/fop/build/"/>
+    <exclude name="demo/fo/fop/conf/"/>
+    <exclude name="demo/fo/fop/lib/"/>
+    <exclude name="demo/fo/lib/icu4j.jar"/>
+    <exclude name="plugins/cxxapiref/"/>
+    <exclude name="lib/saxon/*"/>
+    <exclude name="lib/icu4j.jar"/>
+    <exclude name="lib/log4j.properties"/>
+    <exclude name="build.log"/>
+    <include name="*.*"/>
+    <include name="ant/**"/>
+    <include name="css/**"/>
+    <include name="demo/book/**"/>
+    <include name="demo/elementref/**"/>
+    <include name="demo/eclipsemap/**"/>
+    <include name="demo/enote/**"/>
+    <include name="demo/faq/**"/>
+    <include name="demo/h2d/**"/>
+    <include name="demo/java/**"/>
+    <include name="demo/dita11/**"/>
+    <include name="demo/dita132/**"/>
+    <include name="demo/fo/**"/>
+    <include name="demo/legacypdf/**"/>
+    <include name="demo/tocjs/**"/>
+    <include name="doc/**"/>
+    <include name="dtd/**"/>
+    <include name="plugins/**"/>
+    <include name="resource/**"/>
+    <include name="samples/**"/>
+    <include name="schema/**"/>
+    <include name="xsl/**"/>
+    <include name="lib/**"/>
+    <include name="lib/APACHE-LICENSE-2_0.html"/>
+    <include name="lib/resolver.jar"/>
+    <include name="lib/CatalogManager.properties"/>
+    <!--exclude name="lib/saxon/**" /-->
+    <exclude name="doc/userguide-orig/**"/>
+    <exclude name="doc/ot-userguide/**"/>
+    <exclude name="doc/archive/**"/>
+    <exclude name="doc/langref-dita1.1/**"/>
     <exclude name="build.number"/>
     <exclude name=".*"/>
   </patternset>
-	
-	<patternset id="pattern.package.standard">
-			
-			<exclude name="demo/fo/fop/build/" />
-			<exclude name="demo/fo/fop/conf/" />
-			<exclude name="demo/fo/fop/lib/" />
-			<exclude name="demo/fo/lib/icu4j.jar" />
-			<exclude name="plugins/cxxapiref/" />
-			<exclude name="lib/saxon/*" />
-			<exclude name="lib/icu4j.jar" />
-			<exclude name="lib/log4j.properties" />
-			<exclude name="build.log"/>
-		
-			<include name="*.*"/>
-		    <include name="ant/**"/>
-		    <include name="css/**"/>    
-		    <include name="demo/book/**"/>
-		  	<include name="demo/elementref/**"/>
-		    <include name="demo/eclipsemap/**"/>
-		   	<include name="demo/enote/**"/>
-		  	<include name="demo/faq/**"/>
-		  	<include name="demo/h2d/**"/>
-		  	<include name="demo/java/**"/>
-		  	<include name="demo/dita11/**"/>
-		  	<include name="demo/dita132/**"/>
-			<include name="demo/fo/**" />
-			<include name="demo/legacypdf/**" />
-			<include name="demo/tocjs/**"/>
-		    <include name="doc/**"/>
-		    <include name="dtd/**"/>
-		    <include name="plugins/**"/>
-		    <include name="resource/**"/>
-		    <include name="samples/**"/>
-		    <include name="schema/**"/>      
-		    <include name="xsl/**"/>
-		    <include name="lib/**"/>
-		    <include name="lib/APACHE-LICENSE-2_0.html"/>
-		    <include name="lib/resolver.jar"/>
-		    <include name="lib/CatalogManager.properties"/>
-		  	<!--exclude name="lib/saxon/**" /-->
-		    <exclude name="doc/userguide-orig/**"/>
-			<exclude name="doc/ot-userguide/**"/>
-			<exclude name="doc/archive/**"/>
-			<exclude name="doc/langref-dita1.1/**"/>
-			<exclude name="doc/ditaref-book.chm" />
-			<exclude name="doc/ditaref-book.pdf" />
-			<exclude name="doc/quickstartguide/logs/**"/>
-		    <exclude name="build.number"/>
-		    <exclude name=".*"/>
-	</patternset>
-	
-  <patternset id="pattern.package.ant">
-  	<include name="tools/ant/*.*" />
-  	<include name="tools/ant/bin/**" />
-  	<include name="tools/ant/lib/**" />
+  
+  <patternset id="pattern.package.standard">
+    <patternset refid="pattern.package.standard.base"/>
+    <include name="lib/dost.jar"/>
+    <include name="lib/commons-logging-1.1.1.jar"/>
+    <include name="lib/APACHE-LICENSE-2_0.html"/>
+    <exclude name="startcmd.*"/>
+    <exclude name="buildPackage.*"/>
   </patternset>
-    
+  
+  <patternset id="pattern.package.source">
+    <patternset refid="pattern.package.standard.base"/>
+    <include name="src/**"/>
+    <include name="lib/APACHE-LICENSE-2_0.html"/>
+    <include name="lib/commons-logging-1.1.1.jar"/>
+    <exclude name="src/org/dita/dost/invoker/JavaInvoker.java"/>
+    <exclude name="lib/dost.jar"/>
+    <exclude name="lib/saxon/**"/>
+    <exclude name="files.txt"/>
+    <exclude name="startcmd.*"/>
+  </patternset>
+
+  <patternset id="pattern.package.doc">
+    <exclude name="**/*.hhp"/>
+    <exclude name="**/*.hhc"/>
+    <exclude name="**/*.hhk"/>
+    <exclude name="**/*.fo"/>
+    <exclude name="**/*.log"/>
+    <exclude name="**/*.list"/>
+    <exclude name="**/*.temp"/>
+    <exclude name="**/*.db"/>
+  </patternset>
+
   <target name="package-source">
-  	<fail unless="param.out.file">param.out.file not defined</fail>
+    <fail unless="param.out.file">param.out.file not defined</fail>
+    <property name="temp.dist.dir" location="${work.dir}/${param.out.file}/${package.name.root}${version}"/>
+    <delete dir="${temp.dist.dir}"/>
+    <mkdir dir="${temp.dist.dir}"/>
+    <copy todir="${temp.dist.dir}">
+      <fileset dir="${basedir}">
+        <patternset refid="pattern.package.source"/>
+      </fileset>
+    </copy>
+    <copy todir="${temp.dist.dir}/doc">
+      <fileset dir="${doc.out.dir}">
+        <patternset refid="pattern.package.doc"/>
+      </fileset>
+    </copy>
+    <ant antfile="${temp.dist.dir}/integrator.xml"/>
     <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
-      <zipfileset dir="${basedir}" prefix="${package.name.root}${version}-src">
-        <patternset refid="pattern.package.standard"/>
-        <include name="src/**"/>
-      	<include name="lib/APACHE-LICENSE-2_0.html"/>
-      	<include name="lib/commons-logging-1.1.1.jar"/>
-      	<exclude name="src/org/dita/dost/invoker/JavaInvoker.java"/>
-      	<exclude name="lib/dost.jar"/>
-      	<exclude name="lib/saxon/**"/>
-        <exclude name="files.txt"/>
-        <exclude name="startcmd.*"/>
-      </zipfileset>
+      <fileset dir="${work.dir}/${param.out.file}"/>
     </zip>
-    <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" 
-      compression="gzip" longfile="gnu">
-      <tarfileset dir="${basedir}" prefix="${package.name.root}${version}-src">
-        <patternset refid="pattern.package.standard"/>
-        <include name="src/**"/>
-      	<include name="lib/APACHE-LICENSE-2_0.html"/>
-      	<include name="lib/commons-logging-1.1.1.jar"/>
-      	<exclude name="src/org/dita/dost/invoker/JavaInvoker.java"/>
-      	<exclude name="lib/dost.jar"/>
-      	<exclude name="lib/saxon/**"/>
-        <exclude name="files.txt"/>
-        <exclude name="startcmd.*"/>
-      </tarfileset>
+    <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" compression="gzip" longfile="gnu">
+      <tarfileset dir="${work.dir}/${param.out.file}"/>
     </tar>
   </target>
-  
+
   <target name="package-binary-minimum">
-  	<fail unless="param.out.file">param.out.file not defined</fail>
-  	<sequential>
-  		<delete failonerror="no" includeemptydirs="true">
-  			<fileset dir="${demo.dir}">
-				<exclude name="fo/"/>
-				<exclude name="tocjs/"/>
-				<exclude name="h2d/"/>
-			</fileset>
-  		</delete>
-  		<ant antfile="${basedir}/integrator.xml" target="integrate" />
-	    <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
-	      <zipfileset dir="${basedir}" prefix="${package.name.root}${version}">
-	        <patternset refid="pattern.package.minimum"/>
-	        <include name="lib/dost.jar"/>
-	      	<include name="lib/commons-logging-1.1.1.jar"/>
-	        <exclude name="startcmd.*"/>
-	        <exclude name="buildPackage.xml" />
-	      </zipfileset>      
-	    </zip>
-	    
-	    <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}"
-	      compression="gzip" longfile="gnu">
-	      <tarfileset dir="${basedir}" prefix="${package.name.root}${version}">
-	        <patternset refid="pattern.package.minimum"/>
-	        <include name="lib/dost.jar"/>
-	      	<include name="lib/commons-logging-1.1.1.jar"/>
-	        <exclude name="startcmd.*"/>
-	        <exclude name="buildPackage.xml" />
-	      </tarfileset>      
-	    </tar>
-	 </sequential>
+    <fail unless="param.out.file">param.out.file not defined</fail>
+    <property name="temp.dist.dir" location="${work.dir}/${param.out.file}/${package.name.root}${version}"/>
+    <delete dir="${temp.dist.dir}"/>
+    <mkdir dir="${temp.dist.dir}"/>
+    <copy todir="${temp.dist.dir}">
+      <fileset dir="${basedir}">
+        <patternset refid="pattern.package.minimum"/>
+      </fileset>
+    </copy>
+    <!-- no documentation -->
+    <ant antfile="${temp.dist.dir}/integrator.xml"/>
+    <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
+      <fileset dir="${work.dir}/${param.out.file}"/>
+    </zip>
+    <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" compression="gzip" longfile="gnu">
+      <tarfileset dir="${work.dir}/${param.out.file}"/>
+    </tar>
   </target>
-  
+
   <target name="package-binary-standard">
-  	<fail unless="param.out.file">param.out.file not defined</fail>
+    <fail unless="param.out.file">param.out.file not defined</fail>
+    <property name="temp.dist.dir" location="${work.dir}/${param.out.file}/${package.name.root}${version}"/>
+    <delete dir="${temp.dist.dir}"/>
+    <mkdir dir="${temp.dist.dir}"/>
+    <copy todir="${temp.dist.dir}">
+      <fileset dir="${basedir}">
+        <patternset refid="pattern.package.standard"/>
+      </fileset>
+    </copy>
+    <copy todir="${temp.dist.dir}/doc">
+      <fileset dir="${doc.out.dir}">
+        <patternset refid="pattern.package.doc"/>
+      </fileset>
+    </copy>
+    <ant antfile="${temp.dist.dir}/integrator.xml"/>
     <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
-      <zipfileset dir="${basedir}" prefix="${package.name.root}${version}">
-        <patternset refid="pattern.package.standard"/>
-        <include name="lib/dost.jar"/>
-      	<include name="lib/commons-logging-1.1.1.jar"/>
-      	<include name="lib/APACHE-LICENSE-2_0.html"/>
-        <exclude name="startcmd.*"/>
-		<exclude name="buildPackage.xml" />
-      </zipfileset>
+      <fileset dir="${work.dir}/${param.out.file}"/>
     </zip>
-    
-    <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" 
-      compression="gzip" longfile="gnu">
-      <tarfileset dir="${basedir}" prefix="${package.name.root}${version}">
-        <patternset refid="pattern.package.standard"/>
-        <include name="lib/dost.jar"/>
-		<include name="lib/commons-logging-1.1.1.jar"/>
-      	<include name="lib/APACHE-LICENSE-2_0.html"/>
-        <exclude name="startcmd.*"/>
-		<exclude name="buildPackage.xml" />
-      </tarfileset>
+    <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" compression="gzip" longfile="gnu">
+      <tarfileset dir="${work.dir}/${param.out.file}"/>
     </tar>
   </target>
-  
+
   <target name="package-binary-full">
-  	<fail unless="param.out.file">param.out.file not defined</fail>
-    <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
-      <zipfileset dir="${basedir}" prefix="${package.name.root}${version}">
+    <fail unless="param.out.file">param.out.file not defined</fail>
+    <property name="temp.dist.dir" location="${work.dir}/${param.out.file}/${package.name.root}${version}"/>
+    <delete dir="${temp.dist.dir}"/>
+    <mkdir dir="${temp.dist.dir}"/>
+    <copy todir="${temp.dist.dir}">
+      <fileset dir="${basedir}">
         <patternset refid="pattern.package.full"/>
-        <include name="lib/*.jar"/>
-      	<patternset refid="pattern.package.ant"/>
-      	<include name="lib/APACHE-LICENSE-2_0.html"/>
-		<include name="lib/ICU_License.html"/>
-		<exclude name="buildPackage.xml" />
+      </fileset>
+    </copy>
+    <copy todir="${temp.dist.dir}/doc">
+      <fileset dir="${doc.out.dir}">
+        <patternset refid="pattern.package.doc"/>
+      </fileset>
+    </copy>
+    <ant antfile="${temp.dist.dir}/integrator.xml"/>
+    <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
+      <zipfileset dir="${work.dir}/${param.out.file}">
+        <exclude name="*/startcmd.sh"/>
+      </zipfileset>
+      <zipfileset dir="${work.dir}/${param.out.file}" filemode="755">
+        <include name="*/startcmd.sh"/>
       </zipfileset>
     </zip>
-    
-    <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" 
-      compression="gzip" longfile="gnu">
-      <tarfileset dir="${basedir}" prefix="${package.name.root}${version}">
-        <patternset refid="pattern.package.full"/>
-        <include name="lib/*.jar"/>
-        <patternset refid="pattern.package.ant"/>
-      	<include name="lib/APACHE-LICENSE-2_0.html"/>
-		<include name="lib/ICU_License.html"/>
-		<exclude name="buildPackage.xml" />
-		<exclude name="startcmd.sh"/>
+    <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" compression="gzip" longfile="gnu">
+      <tarfileset dir="${work.dir}/${param.out.file}">
+        <exclude name="*/startcmd.sh"/>
       </tarfileset>
-      <tarfileset mode="755" dir="${basedir}" prefix="${package.name.root}${version}">
-        <include name="startcmd.sh"/>
+      <tarfileset dir="${work.dir}/${param.out.file}" mode="755">
+        <include name="*/startcmd.sh"/>
       </tarfileset>
     </tar>
   </target>
-  
-  <target name="build-package-source" depends="package-java, update-doc, copy-updated-doc">
+
+  <target name="build-package-source" depends="jar, update-doc" description="Build source distribution package">
     <antcall target="package-source">
       <param name="param.out.file" value="${source}"/>
     </antcall>
   </target>
-  
-  <target name="build-package-binary" depends="package-java, update-doc, copy-updated-doc">
-  	<sequential>
-	  	<antcall target="package-binary-full">
-	  	   <param name="param.out.file" value="${binary-big}"/>
-	  	</antcall>
-	    <antcall target="package-binary-standard">
-	      <param name="param.out.file" value="${binary}"/>
-	    </antcall>
-	  	<antcall target="package-binary-minimum">
-	  	  <param name="param.out.file" value="${binary-min}"/>
-	  	</antcall>
-  	</sequential>
+
+  <target name="build-package-binary" depends="jar, update-doc" description="Build binary distribution packages">
+    <sequential>
+      <antcall target="package-binary-full">
+        <param name="param.out.file" value="${binary-big}"/>
+      </antcall>
+      <antcall target="package-binary-standard">
+        <param name="param.out.file" value="${binary}"/>
+      </antcall>
+      <antcall target="package-binary-minimum">
+        <param name="param.out.file" value="${binary-min}"/>
+      </antcall>
+    </sequential>
   </target>
-    
-  <target name="build-package-binary-with-buildnum" 
-    depends="package-java, update-doc">
+
+  <target name="build-package-binary-with-buildnum" depends="jar, update-doc">
     <buildnumber/>
     <tstamp>
       <format property="build.time" pattern="yyyyMMddhhmm"/>
     </tstamp>
-  	<sequential>
-  		<antcall target="package-binary-full">
-	      <param name="param.out.file" 
-	        value="${package.name.root}${version}b${build.number}_full_easy_install_bin.${build.time}"/>
-	    </antcall>
-	    <antcall target="package-binary-standard">
-	      <param name="param.out.file" 
-	        value="${package.name.root}${version}b${build.number}_standard_bin.${build.time}"/>
-	    </antcall>
-		<antcall target="package-binary-minimum">
-	      <param name="param.out.file"
-	        value="${package.name.root}${version}b${build.number}_minimal_bin.${build.time}"/>
-	    </antcall>
-  	</sequential>
+    <sequential>
+      <antcall target="package-binary-full">
+        <param name="param.out.file" value="${package.name.root}${version}b${build.number}_full_easy_install_bin.${build.time}"/>
+      </antcall>
+      <antcall target="package-binary-standard">
+        <param name="param.out.file" value="${package.name.root}${version}b${build.number}_standard_bin.${build.time}"/>
+      </antcall>
+      <antcall target="package-binary-minimum">
+        <param name="param.out.file" value="${package.name.root}${version}b${build.number}_minimal_bin.${build.time}"/>
+      </antcall>
+    </sequential>
   </target>
-  
-  <target name="build-all-packages" depends="init-package, build-package-source, build-package-binary"/>
-  
+
+  <target name="build-all-packages"
+    depends="init-package, build-package-source, build-package-binary, cleanup" description="Build distribution packages"/>
+
+  <target name="cleanup" unless="skip.cleanup">
+    <delete dir="${work.dir}"/>
+  </target>
+
   <target name="update-doc">
-    <ant antfile="${basedir}/integrator.xml" target="integrate"/> 
-    <ant antfile="${basedir}/build_demo.xml" target="doc.articles.web"/>
-    <ant antfile="${basedir}/build_demo.xml" target="doc.articles.chm"/>
-    <ant antfile="${basedir}/build_demo.xml" target="doc.articles.pdf">
-      <property name="args.fo.img.ext" value=".gif"/>
+    <ant antfile="${basedir}/integrator.xml" target="integrate"/>
+    <!-- Articles -->
+    <ant antfile="${basedir}/build.xml">
+      <property name="args.input" location="${doc.dir}/articles/DITA-articles.ditamap"/>
+      <property name="output.dir" location="${doc.out.dir}/articles"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="base.temp.dir" location="${work.dir}"/>
     </ant>
-    <ant antfile="${basedir}/build_demo.xml" target="doc.installguide.web"/>
-    <ant antfile="${basedir}/build_demo.xml" target="doc.installguide.pdf">
-      <property name="args.fo.img.ext" value=".gif"/>
+    <ant antfile="${basedir}/build.xml">
+      <property name="args.input" location="${doc.dir}/articles/DITA-articles.ditamap"/>
+      <property name="output.dir" location="${doc.out.dir}/articles"/>
+      <property name="transtype" value="htmlhelp"/>
+      <property name="base.temp.dir" location="${work.dir}"/>
     </ant>
-    <ant antfile="${basedir}/build_demo.xml" target="doc.installguide.chm"/>
-  	<ant antfile="build_demo.xml" target="doc.quickstartguide.pdf">
-  	  <property name="args.fo.img.ext" value=".gif" />
-  	</ant>
-  	<ant antfile="build_demo.xml" target="doc.quickstartguide.chm"/>
-    <!--ant antfile="${basedir}/build_demo.xml" target="doc.readme.web"/-->
-    <ant antfile="${basedir}/build_demo.xml" target="doc.readme.chm"/>
-    <ant antfile="${basedir}/build_demo.xml" target="doc.readme.pdf">
+    <ant antfile="${basedir}/build.xml">
+      <property name="args.input" location="${doc.dir}/articles/DITA-articles.ditamap"/>
+      <property name="output.dir" location="${doc.out.dir}/articles"/>
+      <property name="transtype" value="pdf"/>
+      <property name="args.fo.img.ext" value=".gif"/>
+      <property name="base.temp.dir" location="${work.dir}"/>
+    </ant>
+    <!-- Install guide -->
+  	<!-- Source has a reference to key definition map in ancestor folder, XHTML XSLT doens't handle this. As a workaround, we use generate.copy.outer=3 and copy results. -->
+    <ant antfile="${basedir}/build.xml">
+      <property name="args.input" location="${doc.dir}/ot-userguide/DITAOT_UGRef_SOURCE/installing/installing_map.ditamap"/>
+      <property name="output.dir" location="${doc.out.dir}/installguide"/>
+      <property name="generate.copy.outer" value="3"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="base.temp.dir" location="${work.dir}"/>
+    </ant>
+    <ant antfile="${basedir}/build.xml">
+      <property name="args.input" location="${doc.dir}/ot-userguide/DITAOT_UGRef_SOURCE/installing/installing_map.ditamap"/>
+      <property name="output.dir" location="${doc.out.dir}/installguide"/>
+      <property name="generate.copy.outer" value="3"/>
+      <property name="transtype" value="pdf"/>
+      <property name="args.fo.img.ext" value=".gif"/>
+      <property name="base.temp.dir" location="${work.dir}"/>
+    </ant>
+    <ant antfile="${basedir}/build.xml">
+      <property name="args.input" location="${doc.dir}/ot-userguide/DITAOT_UGRef_SOURCE/installing/installing_map.ditamap"/>
+      <property name="output.dir" location="${doc.out.dir}/installguide"/>
+      <property name="generate.copy.outer" value="3"/>
+      <property name="transtype" value="htmlhelp"/>
+      <property name="base.temp.dir" location="${work.dir}"/>
+    </ant>
+  	
+  	<move todir="${doc.out.dir}/installguide">
+  	<fileset dir="${doc.out.dir}/installguide/ot-userguide/DITAOT_UGRef_SOURCE">
+  	</fileset>
+  	</move>
+  	
+  	<delete includeEmptyDirs="true">
+  	<fileset dir="${doc.out.dir}/installguide/ot-userguide/"/>
+  	</delete>
+
+
+    <!-- Quickstart guide -->
+    <ant antfile="${basedir}/build.xml">
+      <property name="args.input" location="${doc.dir}/quickstartguide.ditamap"/>
+      <property name="output.dir" location="${doc.out.dir}"/>
+      <property name="transtype" value="pdf"/>
+      <property name="args.fo.img.ext" value=".gif"/>
+      <property name="base.temp.dir" location="${work.dir}"/>
+    </ant>
+    <ant antfile="${basedir}/build.xml">
+      <property name="args.input" location="${doc.dir}/quickstartguide.ditamap"/>
+      <property name="output.dir" location="${doc.out.dir}"/>
+      <property name="transtype" value="htmlhelp"/>
+      <property name="base.temp.dir" location="${work.dir}"/>
+    </ant>
+    <!-- Readme -->
+    <!--
+    <ant antfile="${basedir}/build.xml">
+      <property name="args.input" location="${doc.dir}/readme.ditamap"/>
+      <property name="output.dir" location="${doc.out.dir}"/>
+      <property name="transtype" value="html"/>
+      <property name="base.temp.dir" location="${work.dir}"/>
+    </ant>
+    -->
+    <ant antfile="${basedir}/build.xml">
+      <property name="args.input" location="${doc.dir}/readme.ditamap"/>
+      <property name="output.dir" location="${doc.out.dir}"/>
+      <property name="transtype" value="htmlhelp"/>
+      <property name="base.temp.dir" location="${work.dir}"/>
+    </ant>
+    <ant antfile="${basedir}/build.xml">
+      <property name="args.input" location="${doc.dir}/readme.ditamap"/>
+      <property name="output.dir" location="${doc.out.dir}"/>
+      <property name="transtype" value="pdf"/>
       <property name="args.fo.img.ext" value=".jpg"/>
+      <property name="base.temp.dir" location="${work.dir}"/>
     </ant>
-  	
-	<delete failonerror="yes" includeemptydirs="true" dir="${doc.out.dir}${file.separator}articles" excludes="**/*.chm,**/*.pdf,**/*.html,**/*.css,image/*.*">
-	</delete>
-
-	<delete failonerror="yes" includeemptydirs="true" dir="${doc.out.dir}" excludes="**/*.chm,**/*.pdf,**/*.html,**/image/*.*,**/images/*.*,**/pic/*.*,*.gif,**/*.jpg">
-	</delete>
-
-	<delete failonerror="yes" includeemptydirs="true" dir="${doc.out.dir}${file.separator}readme"
-							excludes="**/*.chm,**/*.pdf,**/*.css,images/*.*">
-	</delete>
-  	
-	<delete failonerror="yes" includeemptydirs="true" dir="${doc.out.dir}${file.separator}specification"
-							excludes="**/*.chm,**/*.pdf,**/*.css,images/*.*">
-	</delete>
-
-	<delete failonerror="yes" includeemptydirs="true" dir="${doc.out.dir}${file.separator}quickstartguide" excludes="**/*.chm,**/*.pdf,**/*.css,images/*.*">
-	</delete>
-  	
+    <!-- delete unneeded files -->
+    <delete failonerror="yes" includeemptydirs="true"
+      dir="${doc.out.dir}${file.separator}articles"
+      excludes="**/*.chm,**/*.pdf,**/*.html,**/*.css,image/*.*"/>
+    <delete failonerror="yes" includeemptydirs="true"
+      dir="${doc.out.dir}"
+      excludes="**/*.chm,**/*.pdf,**/*.html,**/image/*.*,**/images/*.*,**/pic/*.*,*.gif,**/*.jpg"/>
+    <delete failonerror="yes" includeemptydirs="true"
+      dir="${doc.out.dir}${file.separator}readme"
+      excludes="**/*.chm,**/*.pdf,**/*.css,images/*.*"/>
+    <delete failonerror="yes" includeemptydirs="true"
+      dir="${doc.out.dir}${file.separator}specification"
+      excludes="**/*.chm,**/*.pdf,**/*.css,images/*.*"/>
+    <delete failonerror="yes" includeemptydirs="true"
+      dir="${doc.out.dir}${file.separator}quickstartguide"
+      excludes="**/*.chm,**/*.pdf,**/*.css,images/*.*"/>
   </target>
-  
-  <target name="copy-updated-doc">
+
+  <target name="doc" depends="update-doc" description="Build documentation">
     <copy todir="${doc.dir}">
-      <fileset dir="${doc.out.dir}">        
-        <exclude name="**/*.hhp"/>
-        <exclude name="**/*.hhc"/>
-        <exclude name="**/*.hhk"/>
-        <exclude name="**/*.fo"/>
-        <exclude name="**/*.log"/>
-        <exclude name="**/*.list"/>
-        <exclude name="**/*.temp"/>
-        <exclude name="**/*.db"/>
+      <fileset dir="${doc.out.dir}">
+        <patternset refid="pattern.package.doc"/>
       </fileset>
     </copy>
   </target>
+
 </project>

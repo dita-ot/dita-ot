@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:dita="http://dita-ot.sourceforge.net">
+    
+  <!-- initialization -->
+  <target name="init">
+    <fail>
+      <condition>
+        <and>
+          <dita:extension id="CheckTranstypeAction"
+                          behavior="org.dita.dost.platform.CheckTranstypeAction"/>
+        </and>
+      </condition>
+    </fail>
+  </target>
+  
+  <path id="classpath">
+    <dita:extension id="ImportAntLibAction"
+                    behavior="org.dita.dost.platform.ImportAntLibAction"/>
+  </path>
+  
+  <dita:extension id="InsertAction"
+                  behavior="org.dita.dost.platform.InsertAction"/>
+  
+  <dita:extension id="InsertAntActionRelative"
+                  behavior="org.dita.dost.platform.InsertAntActionRelative"/>
+  
+  <target name="run"
+          dita:depends="{InsertDependsAction}, process"
+          dita:extension="depends org.dita.dost.platform.InsertDependsAction"/>
+  
+  <target name="process"/>
+
+</project>

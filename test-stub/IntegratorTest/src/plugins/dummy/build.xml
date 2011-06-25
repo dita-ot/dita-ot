@@ -1,0 +1,8 @@
+<project>
+  <!-- initialization -->
+  <target name="dummy.init">
+    <echo>foo <![CDATA[<bar>]]> baz</echo>
+  </target>
+  <!-- process -->
+  <target name="dummy"/>
+</project>

@@ -20,6 +20,7 @@ import java.util.Collection;
  */
 public class ContentImpl implements Content {
 
+	@SuppressWarnings("rawtypes")
     private Collection collection;
     private Object object;
 
@@ -37,6 +38,7 @@ public class ContentImpl implements Content {
      * @return collection
      * 
      */
+    @SuppressWarnings("rawtypes")
     public Collection getCollection() {
         return collection;
     }
@@ -56,7 +58,8 @@ public class ContentImpl implements Content {
      * Set the collection-like content.
      * @param col collection
      */
-    public void setCollection(Collection col) {
+    @SuppressWarnings("rawtypes")
+    public void setCollection(final Collection col) {
         this.collection = col;
     }
 
@@ -65,7 +68,7 @@ public class ContentImpl implements Content {
      * Set the object-like content.
      * @param obj object
      */
-    public void setValue(Object obj) {
+    public void setValue(final Object obj) {
         this.object = obj;
     }
 }

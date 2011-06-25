@@ -33,7 +33,7 @@ See the accompanying license.txt file for applicable licenses.
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
-    version="1.0">
+    version="2.0">
 
     <xsl:attribute-set name="linklist.title">
         <xsl:attribute name="font-weight">bold</xsl:attribute>
@@ -42,22 +42,22 @@ See the accompanying license.txt file for applicable licenses.
 
     <!--Common-->
     <xsl:attribute-set name="li.itemgroup">
-        <xsl:attribute name="space-after.optimum">3pt</xsl:attribute>
-        <xsl:attribute name="space-before.optimum">3pt</xsl:attribute>
+        <xsl:attribute name="space-after">3pt</xsl:attribute>
+        <xsl:attribute name="space-before">3pt</xsl:attribute>
     </xsl:attribute-set>
 
     <!--Unordered list-->
     <xsl:attribute-set name="ul">
         <xsl:attribute name="provisional-distance-between-starts">5mm</xsl:attribute>
         <xsl:attribute name="provisional-label-separation">1mm</xsl:attribute>
-        <xsl:attribute name="space-after.optimum">7pt</xsl:attribute>
-        <xsl:attribute name="space-before.optimum">7pt</xsl:attribute>
+        <xsl:attribute name="space-after">7pt</xsl:attribute>
+        <xsl:attribute name="space-before">7pt</xsl:attribute>
 <!--        <xsl:attribute name="margin-left">-8pt</xsl:attribute>-->
     </xsl:attribute-set>
 
     <xsl:attribute-set name="ul.li">
-        <xsl:attribute name="space-after.optimum">1.5pt</xsl:attribute>
-        <xsl:attribute name="space-before.optimum">1.5pt</xsl:attribute>
+        <xsl:attribute name="space-after">1.5pt</xsl:attribute>
+        <xsl:attribute name="space-before">1.5pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="ul.li__label">
@@ -81,14 +81,14 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="ol">
         <xsl:attribute name="provisional-distance-between-starts">5mm</xsl:attribute>
         <xsl:attribute name="provisional-label-separation">1mm</xsl:attribute>
-        <xsl:attribute name="space-after.optimum">7pt</xsl:attribute>
-        <xsl:attribute name="space-before.optimum">7pt</xsl:attribute>
+        <xsl:attribute name="space-after">7pt</xsl:attribute>
+        <xsl:attribute name="space-before">7pt</xsl:attribute>
 <!--		<xsl:attribute name="margin-left">-8pt</xsl:attribute>-->
     </xsl:attribute-set>
 
     <xsl:attribute-set name="ol.li">
-        <xsl:attribute name="space-after.optimum">1.5pt</xsl:attribute>
-        <xsl:attribute name="space-before.optimum">1.5pt</xsl:attribute>
+        <xsl:attribute name="space-after">1.5pt</xsl:attribute>
+        <xsl:attribute name="space-before">1.5pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="ol.li__label">
@@ -113,13 +113,13 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="sl">
         <xsl:attribute name="provisional-distance-between-starts">5mm</xsl:attribute>
         <xsl:attribute name="provisional-label-separation">1mm</xsl:attribute>
-        <xsl:attribute name="space-after.optimum">9pt</xsl:attribute>
-        <xsl:attribute name="space-before.optimum">9pt</xsl:attribute>
+        <xsl:attribute name="space-after">9pt</xsl:attribute>
+        <xsl:attribute name="space-before">9pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="sl.sli">
-        <xsl:attribute name="space-after.optimum">1.5pt</xsl:attribute>
-        <xsl:attribute name="space-before.optimum">1.5pt</xsl:attribute>
+        <xsl:attribute name="space-after">1.5pt</xsl:attribute>
+        <xsl:attribute name="space-before">1.5pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="sl.sli__label">

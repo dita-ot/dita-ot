@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<dita><!-- remove dita elements -->
+<?foo?><?foo bar?><?foo <&?>
+<concept xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+  class="- topic/topic concept/concept "
+  domains="(topic concept) (topic hi-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic abbrev-d) (topic pr-d) (topic sw-d) (topic ui-d)"
+  id="topic" ditaarch:DITAArchVersion="1.2" xml:lang="en-us">
+  <title class="- topic/title ">Test</title>
+  <conbody class="- topic/body  concept/conbody ">
+    <p class="- topic/p ">&lt;&amp;</p>
+    <p class="- topic/p "><![CDATA[<&]]></p>
+    <p class="- topic/p " id="a">A</p>
+    <p class="- topic/p " id="b">B</p>
+    <p class="- topic/p " id="a">A2</p><!-- duplicate non-topic ID -->
+    <xref class="- topic/xref " href="#topic2/a"/>
+    <xref class="- topic/xref " href="http://example.com/test.xml"/><!-- skip because of URL -->
+    <xref class="- topic/xref " href="#topic2/a" scope="peer"/><!-- skip because of scope -->
+    <xref class="- topic/xref " href="#topic2/a" format="html"/><!-- skip because of format -->
+    <xref class="- topic/xref " href="test2.xml"/>
+    <xref class="- topic/xref " href="test2.xml#concept"/>
+    <foreign class="- topic/foreign ">
+      <foo xmlns="http://example.com/foo" xmlns:bar="http://example.com/bar" bar:foo="baz"/>
+    </foreign>
+  </conbody>
+  <concept class="- topic/topic concept/concept "
+    domains="(topic concept) (topic hi-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic abbrev-d) (topic pr-d) (topic sw-d) (topic ui-d)"
+    id="topic2" ditaarch:DITAArchVersion="1.2" xml:lang="en-us">
+    <title class="- topic/title ">Test 2</title>
+    <conbody class="- topic/body  concept/conbody ">
+      <p class="- topic/p " id="a">A</p>
+    </conbody>
+  </concept>
+  <concept class="- topic/topic concept/concept "
+    domains="(topic concept) (topic hi-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic abbrev-d) (topic pr-d) (topic sw-d) (topic ui-d)"
+    id="topic2" ditaarch:DITAArchVersion="1.2" xml:lang="en-us"><!-- duplicate topic ID gets the same value -->
+    <title class="- topic/title ">Test 2</title>
+  </concept>
+  <related-links class="- topic/related-link ">
+    <link class="- topic/link " href="#topic2/a"/>
+    <link class="- topic/link " href="#topic2/a" scope="peer"/>
+    <link class="- topic/link " href="#topic2/a" format="html"/>
+  </related-links>
+</concept>
+</dita>

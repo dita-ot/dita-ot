@@ -7,14 +7,14 @@
   *-->
   <plugin id="org.dita.specialization.eclipsemap">
     <feature extension="dita.specialization.catalog.relative"
-      value="catalog.xml" type="file"/>
+      file="catalog.xml"/>
     <feature extension="dita.xsl.maplink"
-      value="xsl/maplink-plugin.xsl" type="file"/>
-    <feature extension="dita.xsl.mapref" value="xsl/mapref-plugin.xsl" type="file"/>
+      file="xsl/maplink-plugin.xsl"/>
+    <feature extension="dita.xsl.mapref" file="xsl/mapref-plugin.xsl"/>
     <feature extension="dita.xsl.mappull"
-      value="xsl/mappull-plugin.xsl" type="file"/>
+      file="xsl/mappull-plugin.xsl"/>
     <feature extension="dita.xsl.eclipse.plugin"
-      value="xsl/map2plugin.xsl" type="file"/>
-    <feature extension="dita.conductor.target" value="script.xml" type="file"/>
+      file="xsl/map2plugin.xsl"/>
+    <feature extension="dita.conductor.target" file="script.xml"/>
     <feature extension="dita.map.eclipse.index.pre" value="dita.index.eclipsehelp.init" type="text"/> 
   </plugin>

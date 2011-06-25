@@ -35,15 +35,13 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:opentopic="http://www.idiominc.com/opentopic"
     exclude-result-prefixes="opentopic"
-    version="1.1">
-
-    <xsl:include href="../../cfg/fo/attrs/front-matter-attr.xsl"/>
+    version="2.0">
 
     <xsl:variable name="map" select="//opentopic:map"/>
 
     <xsl:template name="createFrontMatter">
         <xsl:choose>
-            <xsl:when test="$ditaVersion &gt;= '1.1'">
+            <xsl:when test="$ditaVersion &gt;= 1.1">
                 <xsl:call-template name="createFrontMatter_1.0"/>
             </xsl:when>
             <xsl:otherwise>

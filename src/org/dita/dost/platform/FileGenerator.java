@@ -9,218 +9,255 @@
  */
 package org.dita.dost.platform;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.dita.dost.log.DITAOTJavaLogger;
-import org.dita.dost.util.Constants;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.helpers.XMLReaderFactory;
+import org.xml.sax.ext.DefaultHandler2;
 
 /**
  * Generate outputfile with templates.
  * @author Zhang, Yuan Peng
  */
-public class FileGenerator extends DefaultHandler {
+final class FileGenerator extends DefaultHandler2 {
 	
-	private XMLReader reader = null;
-	private DITAOTJavaLogger logger = null;
+	public static final String PARAM_LOCALNAME = "localname";
+	public static final String PARAM_TEMPLATE = "template";
+
+	private static final String DITA_OT_NS = "http://dita-ot.sourceforge.net";
+	private static final String TEMPLATE_PREFIX = "_template.";
+	
+	private final XMLReader reader;
+	private DITAOTLogger logger;
 	private OutputStreamWriter output = null;
-	private Hashtable<String,String> featureTable = null;
-	private String templateFileName = null;
+	/** Plug-in features. */
+	private final Map<String,String> featureTable;
+	private final Map<String, Features> pluginTable;
+	/** Template file. */
+	private File templateFile;
 
 	/**
 	 * Default Constructor.
 	 */
 	public FileGenerator() {
-		this(null);
+		this(null, null);
 	}
 
 	/**
 	 * Constructor init featureTable.
 	 * @param featureTbl featureTbl
 	 */
-	public FileGenerator(Hashtable<String,String> featureTbl) {
+	public FileGenerator(final Hashtable<String,String> featureTbl, final Map<String,Features> pluginTable) {
 		this.featureTable = featureTbl;
+		this.pluginTable = pluginTable;
 		output = null;
-		templateFileName = null;	
-		logger = new DITAOTJavaLogger();
+		templateFile = null;
 		
 		try {
-            if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
-                //The default sax driver is set to xerces's sax driver
-            	StringUtils.initSaxDriver();
-            }
-            reader = XMLReaderFactory.createXMLReader();
+            reader = StringUtils.getXMLReader();
             reader.setContentHandler(this);
-            //reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
-            reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
-            //reader.setFeature(Constants.FEATURE_VALIDATION, true); 
-            //reader.setFeature(Constants.FEATURE_VALIDATION_SCHEMA, true);
+            reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
+            reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
+            //reader.setFeature(FEATURE_VALIDATION, true); 
+            //reader.setFeature(FEATURE_VALIDATION_SCHEMA, true);
 
-        } catch (Exception e) {
-        	logger.logException(e);
+        } catch (final Exception e) {
+        	throw new RuntimeException("Failed to initialize parser: " + e.getMessage(), e);
         }
 	}
+	
+	/**
+     * Set logger.
+     * @param logger logger instance
+     */
+    public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
 	
 	/**
 	 * Generator the output file.
 	 * @param fileName filename
 	 */
-	public void generate(String fileName){
+	public void generate(final File fileName){
+	    if (logger == null) {
+	        logger = new DITAOTJavaLogger();
+	    }
 		FileOutputStream fileOutput = null;
-		File outputFile = new File(fileName.substring(0,
-				fileName.lastIndexOf("_template")) + 
-				fileName.substring(fileName.lastIndexOf('.')));
-		templateFileName = fileName;
+		final File outputFile = removeTemplatePrefix(fileName);
+		templateFile = fileName;
 				
 		try{
 			fileOutput = new FileOutputStream(outputFile);
-	        output = new OutputStreamWriter(fileOutput, Constants.UTF8);
-			reader.parse(fileName);
-		} catch (Exception e){
+	        output = new OutputStreamWriter(fileOutput, UTF8);
+			reader.parse(fileName.toURI().toString());
+		} catch (final Exception e){
 			logger.logException(e);
 		}finally {
-            try {
-                fileOutput.close();
-            }catch (Exception e) {
-            	logger.logException(e);
-            }
+			if (fileOutput != null) {
+	            try {
+	                fileOutput.close();
+	            }catch (final Exception e) {
+	            	logger.logException(e);
+	            }
+			}
         }
 	}
 
-	/**
-	 * @see org.xml.sax.ContentHandler#characters(char[], int, int)
-	 */
-	public void characters(char[] ch, int start, int length) throws SAXException {
+    private File removeTemplatePrefix(final File templateFile) {
+        final String f = templateFile.getAbsolutePath();
+        int i = f.lastIndexOf(TEMPLATE_PREFIX);
+        if (i != -1) {
+            return new File(f.substring(0, i)
+                    + f.substring(i + TEMPLATE_PREFIX.length() - 1));
+        } else {
+            throw new IllegalArgumentException("File " + templateFile + " does not contain template prefix");
+        }
+    }
+
+	@Override
+	public void characters(final char[] ch, final int start, final int length) throws SAXException {
 		try{
 			output.write(StringUtils.escapeXML(ch,start,length));
-		}catch (Exception e) {
+		}catch (final Exception e) {
         	logger.logException(e);
         }
 	}
 
-	/**
-	 * @see org.xml.sax.ContentHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
-	 */
-	public void endElement(String uri, String localName, String qName) throws SAXException {
+	@Override
+	public void endElement(final String uri, final String localName, final String qName) throws SAXException {
 		try{
-			if(!("http://dita-ot.sourceforge.net".equals(uri) && "extension".equals(localName))){
-				output.write("</"+qName+">");
+			if(!(DITA_OT_NS.equals(uri) && "extension".equals(localName))){
+				output.write("</");
+				output.write(qName);
+				output.write(">");
 			}
-		}catch (Exception e) {
+		}catch (final Exception e) {
         	logger.logException(e);
         }
 	}
 
-	/**
-	 * @see org.xml.sax.ContentHandler#ignorableWhitespace(char[], int, int)
-	 */
-	public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
+	@Override
+	public void ignorableWhitespace(final char[] ch, final int start, final int length) throws SAXException {
 		try{
 			output.write(ch,start,length);
-		}catch (Exception e) {
+		}catch (final Exception e) {
         	logger.logException(e);
         }
 	}
 
-	/**
-	 * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
-	 */
-	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+	@Override
+	public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
 		IAction action = null;
-		String input = null;
 		try{
-			if("http://dita-ot.sourceforge.net".equals(uri) && "extension".equals(localName)){
+			if(DITA_OT_NS.equals(uri) && "extension".equals(localName)){
 				// Element extension: <dita:extension id="extension-point" behavior="classname"/>
 				action = (IAction)Class.forName(attributes.getValue("behavior")).newInstance();
-				action.setParam("template="+templateFileName+";extension="+attributes.getValue("id"));
-				input = (String)featureTable.get(attributes.getValue("id"));
-				if(input!=null){
-					action.setFeatures(featureTable);
-					action.setInput(input);
-					output.write(action.getResult());
+				action.setLogger(logger);
+				action.addParam(PARAM_TEMPLATE, templateFile.getAbsolutePath());
+				final String extension = attributes.getValue("id");
+				action.addParam("extension", extension);
+				if(featureTable.containsKey(extension)){
+					action.setInput(featureTable.get(extension));
 				}
+				action.setFeatures(pluginTable);
+				output.write(action.getResult());
 			}else{
-				int attLen = attributes.getLength();
-				output.write("<"+qName);
+				final int attLen = attributes.getLength();
+				output.write("<");
+				output.write(qName);
 				for(int i = 0; i < attLen; i++){
-					if ("http://dita-ot.sourceforge.net".equals(attributes.getURI(i)))
+					if (DITA_OT_NS.equals(attributes.getURI(i)))
 					{
 						// Attribute extension: <element dita:extension="localname classname ..." dita:localname="...">
 						if (!("extension".equals(attributes.getLocalName(i))))
 						{
-							String extensions = attributes.getValue("http://dita-ot.sourceforge.net", "extension");
-							StringTokenizer extensionTokenizer = new StringTokenizer(extensions);
+							final String extensions = attributes.getValue(DITA_OT_NS, "extension");
+							final StringTokenizer extensionTokenizer = new StringTokenizer(extensions);
 							// Get the classname that implements this localname.
 							while (extensionTokenizer.hasMoreTokens())
 							{
-								String thisExtension = extensionTokenizer.nextToken();
-								String thisExtensionClass = extensionTokenizer.nextToken();
+								final String thisExtension = extensionTokenizer.nextToken();
+								final String thisExtensionClass = extensionTokenizer.nextToken();
 								if (thisExtension.equals(attributes.getLocalName(i)))
 								{
 									action = (IAction)Class.forName(thisExtensionClass).newInstance();
 									break;
 								}
 							}
-							action.setFeatures(featureTable);
-							action.setParam("template="+templateFileName+";localname="+attributes.getLocalName(i));
+							action.setLogger(logger);
+							action.setFeatures(pluginTable);
+							action.addParam(PARAM_TEMPLATE, templateFile.getAbsolutePath());
+							action.addParam(PARAM_LOCALNAME, attributes.getLocalName(i));
 							action.setInput(attributes.getValue(i));
 							output.write(action.getResult());
 						}
 					}
 					else if (attributes.getQName(i).startsWith("xmlns:") &&
-							"http://dita-ot.sourceforge.net".equals(attributes.getValue(i)))
+							DITA_OT_NS.equals(attributes.getValue(i)))
 					{
 						// Ignore xmlns:dita.
 					}
-					//Added by William on 2010-02-22 for bug:2950588 start
-					else if(attributes.getValue(i).contains("\"")){
-						output.write(" ");
-						output.write(new StringBuffer(attributes.getQName(i)).append("='").
-								append(attributes.getValue(i)).append("'").toString());
-					}
-					//Added by William on 2010-02-22 for bug:2950588 end
 					else
 					{
 						// Normal attribute.
 						output.write(" ");
 						output.write(new StringBuffer(attributes.getQName(i)).append("=\"").
-								append(attributes.getValue(i)).append("\"").toString());
+								append(StringUtils.escapeXML(attributes.getValue(i))).append("\"").toString());
 					}
 				}
 				output.write(">");
 			}
-		}catch(Exception e){
+		}catch(final Exception e){
+		    e.printStackTrace();
 			logger.logException(e);
 		}
 	}
 
-	/**
-	 * @see org.xml.sax.ContentHandler#endDocument()
-	 */
+	@Override
 	public void endDocument() throws SAXException {
 		try{
 			output.flush();
 			output.close();
-		}catch(Exception e){
+		}catch(final Exception e){
 			logger.logException(e);
 		}
 		
 	}
 	@Override
-	public void skippedEntity(String name) throws SAXException {
-		// TODO Auto-generated method stub
-		System.out.println(name);
+	public void skippedEntity(final String name) throws SAXException {
+		logger.logError("Skipped entity " + name);
 	}
 	
-
+	@Override
+	public void comment(final char[] ch, final int start, final int length) throws SAXException {
+		try{
+    		output.write("<!--");
+    		output.write(ch, start, length);
+    		output.write("-->");
+		}catch(final Exception e){
+			logger.logException(e);
+		}
+	}
+	
+	@Override
+	public void startDocument() throws SAXException {
+		try{
+    		output.write(XML_HEAD);
+		}catch(final Exception e){
+			logger.logException(e);
+		}
+		
+	}
 	
 }

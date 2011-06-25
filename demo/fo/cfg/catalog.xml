@@ -44,19 +44,31 @@ See the accompanying license.txt file for applicable licenses.
     <uri name="cfg:fo/font-mappings.xml" uri="fo/font-mappings.xml"/>
 
     <uri name="cfg:fo/i18n/de_DE.xml" uri="fo/i18n/de_DE.xml"/>
+    <uri name="cfg:fo/i18n/de.xml" uri="fo/i18n/de_DE.xml"/>
     <uri name="cfg:fo/i18n/en_US.xml" uri="fo/i18n/en_US.xml"/>
+    <uri name="cfg:fo/i18n/en.xml" uri="fo/i18n/en_US.xml"/>
     <uri name="cfg:fo/i18n/es_ES.xml" uri="fo/i18n/es_ES.xml"/>
+    <uri name="cfg:fo/i18n/es.xml" uri="fo/i18n/es_ES.xml"/>
     <uri name="cfg:fo/i18n/fr_FR.xml" uri="fo/i18n/fr_FR.xml"/>
+    <uri name="cfg:fo/i18n/fr.xml" uri="fo/i18n/fr_FR.xml"/>
     <uri name="cfg:fo/i18n/it_IT.xml" uri="fo/i18n/it_IT.xml"/>
+    <uri name="cfg:fo/i18n/it.xml" uri="fo/i18n/it_IT.xml"/>
     <uri name="cfg:fo/i18n/ja_JP.xml" uri="fo/i18n/ja_JP.xml"/>
+    <uri name="cfg:fo/i18n/ja.xml" uri="fo/i18n/ja_JP.xml"/>
     <uri name="cfg:fo/i18n/zh_CN.xml" uri="fo/i18n/zh_CN.xml"/>
 
     <uri name="cfg:common/index/de_DE.xml" uri="common/index/de_DE.xml"/>
+    <uri name="cfg:common/index/de.xml" uri="common/index/de_DE.xml"/>
     <uri name="cfg:common/index/en_US.xml" uri="common/index/en_US.xml"/>
+    <uri name="cfg:common/index/en.xml" uri="common/index/en_US.xml"/>
     <uri name="cfg:common/index/es_ES.xml" uri="common/index/es_ES.xml"/>
+    <uri name="cfg:common/index/es.xml" uri="common/index/es_ES.xml"/>
     <uri name="cfg:common/index/fr_FR.xml" uri="common/index/fr_FR.xml"/>
+    <uri name="cfg:common/index/fr.xml" uri="common/index/fr_FR.xml"/>
     <uri name="cfg:common/index/it_IT.xml" uri="common/index/it_IT.xml"/>
+    <uri name="cfg:common/index/it.xml" uri="common/index/it_IT.xml"/>
     <uri name="cfg:common/index/ja_JP.xml" uri="common/index/ja_JP.xml"/>
+    <uri name="cfg:common/index/ja.xml" uri="common/index/ja_JP.xml"/>
     <uri name="cfg:common/index/zh_CN.xml" uri="common/index/zh_CN.xml"/>
 
 </catalog>

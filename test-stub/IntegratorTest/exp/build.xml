@@ -1,0 +1,42 @@
+<project>
+
+  <!-- initialization -->
+  <target name="init">
+    <fail>
+      <condition>
+        <and>
+          <not>
+            <equals arg1="${transtype}" arg2="foo" casesensitive="false"/>
+          </not>
+          <not>
+            <equals arg1="${transtype}" arg2="bar" casesensitive="false"/>
+          </not>
+          <not>
+            <equals arg1="${transtype}" arg2="baz" casesensitive="false"/>
+          </not>
+        </and>
+      </condition>
+    </fail>
+  </target>
+
+  <path id="classpath">
+    <pathelement location="${dita.dir}${file.separator}plugins/dummy/foo.jar"/>
+    <pathelement location="${dita.dir}${file.separator}plugins/dummy/bar.jar"/>
+    <pathelement location="${dita.dir}${file.separator}plugins/dummy/baz.jar"/>
+  </path>
+
+  <!-- property -->
+  <property name="dummy">foo &lt;bar&gt; baz</property>
+
+  <!-- initialization -->
+  <target name="dummy.init">
+    <echo>foo &lt;bar&gt; baz</echo>
+  </target>
+  <!-- process -->
+  <target name="dummy"/>
+
+  <target name="run" depends="dummy.init,dummy,process"/>
+
+  <target name="process"/>
+
+</project>

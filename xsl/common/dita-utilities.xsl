@@ -197,7 +197,7 @@
       <xsl:when test="string(number($units))!='NaN' and string(number($numeric-value))!='NaN'">
         <!-- Since $units is a number, the input was unitless, so we default
           the unit to pixels and just return the input value -->
-        <xsl:value-of select="number(round(concat($numeric-value,$units)))"/>
+        <xsl:value-of select="round(number(concat($numeric-value,$units)))"/>
       </xsl:when>
       <xsl:when test="string(number($numeric-value))='NaN'">
         <!-- If the input isn't valid, just return 100% -->
@@ -280,5 +280,11 @@
   </xsl:choose>
 </xsl:template>
   
+  <!-- Template returns "true" if $text parameter string ends with the $with parameter string, and otherwise returns "false". -->
+  <xsl:template name="ends-with">
+    <xsl:param name="text"/>
+    <xsl:param name="with"/>
+    <xsl:value-of select="substring($text, string-length($text) - string-length($with) + 1) = $with"/>
+  </xsl:template>
   
 </xsl:stylesheet>

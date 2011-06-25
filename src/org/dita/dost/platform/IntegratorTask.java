@@ -10,34 +10,33 @@
 package org.dita.dost.platform;
 
 import java.io.File;
+
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
-import org.dita.dost.util.Constants;
-import org.dita.dost.util.StringUtils;
+
+import org.dita.dost.log.DITAOTAntLogger;
 
 /**
  * Task run by ant scripts, invoking Task.
  * @author Zhang, Yuan Peng
  */
-public class IntegratorTask extends Task {
+public final class IntegratorTask extends Task {
 
-	private Integrator adaptee;
+	private final Integrator adaptee;
 	
 	/**
 	 * Default Constructor.
 	 */
 	public IntegratorTask() {
-		if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
-            //The default sax driver is set to xerces's sax driver
-			StringUtils.initSaxDriver();
-        }
 		adaptee = new Integrator();
 	}
 
-	/**
-	 * @see org.apache.tools.ant.Task#execute()
-	 */
+	@Override
 	public void execute() throws BuildException {
+	    final DITAOTAntLogger logger = new DITAOTAntLogger(getProject());
+	    logger.setTarget(getOwningTarget());
+	    logger.setTask(this);
+	    adaptee.setLogger(logger);
 		adaptee.execute();
 	}
 
@@ -45,7 +44,7 @@ public class IntegratorTask extends Task {
 	 * Return the basedir.
 	 * @return basedir
 	 */
-	public String getBasedir() {
+	public File getBasedir() {
 		return adaptee.getBasedir();
 	}
 	
@@ -53,7 +52,7 @@ public class IntegratorTask extends Task {
 	 * Set the basedir.
 	 * @param basedir basedir
 	 */
-	public void setBasedir(String basedir) {
+	public void setBasedir(final File basedir) {
 		adaptee.setBasedir(basedir);
 	}
 	
@@ -61,7 +60,7 @@ public class IntegratorTask extends Task {
 	 * Return the ditaDir.
 	 * @return ditaDir
 	 */
-	public String getDitadir() {
+	public File getDitadir() {
 		return adaptee.getDitaDir();
 	}
 
@@ -69,7 +68,7 @@ public class IntegratorTask extends Task {
 	 * Set the ditaDir.
 	 * @param ditaDir ditaDir
 	 */
-	public void setDitadir(String ditaDir) {
+	public void setDitadir(final File ditaDir) {
 		adaptee.setDitaDir(ditaDir);
 	}
 
@@ -85,7 +84,7 @@ public class IntegratorTask extends Task {
 	 * Set the properties file.
 	 * @param propertiesFile propertiesFile
 	 */
-	public void setProperties(File propertiesFile) {
+	public void setProperties(final File propertiesFile) {
 		adaptee.setProperties(propertiesFile);
 	}
 

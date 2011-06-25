@@ -53,7 +53,7 @@
         from="^(${tempdirToinputmapdir.relative.value})(.*?)(\.(xml|dita))$$" 
         to="\2${dita.ext}"/>
     </xslt>
-	<echo>the ditmapoutputdir is ${dita.map.output.dir}</echo>
+	<echo level="info">the ditmapoutputdir is ${dita.map.output.dir}</echo>
     <!-- step 2 -->
     <xslt processor="trax" basedir="${output.dir}" destdir="${output.dir}"
       includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}" extension=".cli"

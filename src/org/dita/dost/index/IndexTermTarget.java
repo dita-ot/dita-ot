@@ -9,7 +9,7 @@
  */
 package org.dita.dost.index;
 
-import org.dita.dost.util.Constants;
+import static org.dita.dost.util.Constants.*;
 
 /**
  * This class represent the target of an index term.
@@ -18,7 +18,7 @@ import org.dita.dost.util.Constants;
  * 
  * @author Wu, Zhi Qiang
  */
-public class IndexTermTarget {
+public final class IndexTermTarget {
     /** Name (title) of the target topic. */
     private String targetName = null;
 
@@ -89,10 +89,10 @@ public class IndexTermTarget {
      * @return has code.
      */
     public int hashCode() {
-        int result = Constants.INT_17;
+        int result = INT_17;
 
-        result = Constants.INT_37 * result + targetName.hashCode();
-        result = Constants.INT_37 * result + targetURI.hashCode();
+        result = INT_37 * result + targetName.hashCode();
+        result = INT_37 * result + targetURI.hashCode();
 
         return result;
     }

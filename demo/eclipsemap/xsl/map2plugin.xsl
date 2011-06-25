@@ -20,14 +20,14 @@
   <xsl:param name="FULL-DITAMAPEXT">
     <xsl:choose>
       <xsl:when test="starts-with($DITAMAPEXT,'.')"><xsl:value-of select="$DITAMAPEXT"/></xsl:when>
-      <xsl:otherwise>.<xsl:value-of select="$DITAMAPEXT"/></xsl:otherwise>
+      <xsl:otherwise><xsl:value-of select="concat('.',$DITAMAPEXT)"/></xsl:otherwise>
     </xsl:choose>
   </xsl:param>
   <xsl:param name="DITAEXT" select="'dita'"/>
   <xsl:param name="FULL-DITAEXT">
     <xsl:choose>
       <xsl:when test="starts-with($DITAEXT,'.')"><xsl:value-of select="$DITAEXT"/></xsl:when>
-      <xsl:otherwise>.<xsl:value-of select="$DITAEXT"/></xsl:otherwise>
+      <xsl:otherwise><xsl:value-of select="concat('.',$DITAEXT)"/></xsl:otherwise>
     </xsl:choose>
   </xsl:param>
 

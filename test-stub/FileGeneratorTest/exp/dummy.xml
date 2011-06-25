@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?><dummy>
+    
+  <foo bar='baz'>quz</foo>
+
+  <target foo='bar'></target>
+  
+  <target name="help">
+    <echo>&quot;</echo>
+    <echo>&apos;</echo>
+    <echo>&lt;</echo>
+    <echo>&gt;</echo>
+    <echo>&amp;</echo>
+    <echo>&quot;</echo>
+    <echo>&apos;</echo>
+    <echo message="&quot;"></echo>
+    <echo message="&apos;"></echo>
+    <echo message="&lt;"></echo>
+    <echo message="&gt;"></echo>
+    <echo message="&amp;"></echo>
+    <echo message="&apos;"></echo>
+    <echo message="&quot;"></echo>
+  </target>
+
+</dummy>

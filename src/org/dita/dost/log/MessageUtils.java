@@ -9,7 +9,11 @@
  */
 package org.dita.dost.log;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Properties;
@@ -17,7 +21,6 @@ import java.util.Properties;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -30,12 +33,25 @@ import org.w3c.dom.NodeList;
  * 
  * @author Wu, Zhi Qiang
  */
-public class MessageUtils {
-	private static Hashtable hashTable = null;
-	private static String messageFile = null;
-	private static DITAOTJavaLogger fileLogger = new DITAOTJavaLogger();
-	private static String defaultResource = "resource/messages.xml";
-	private static MessageUtils utils = null;
+public final class MessageUtils {
+    
+    // Constants
+    
+    private static final String ELEMENT_MESSAGE = "message";
+    private static final String ELEMENT_REASON = "reason";
+    private static final String ELEMENT_RESPONSE = "response";
+    private static final String ATTRIBUTE_ID = "id";
+    private static final String ATTRIBUTE_TYPE = "type";
+    private static String defaultResource = "resource/messages.xml";
+    
+    // Variables
+    
+    private static Hashtable<String, MessageBean> hashTable;
+	private static String messageFile;
+	private static DITAOTLogger logger = new DITAOTJavaLogger();
+	private static MessageUtils utils;
+	
+	// Constructors
 	
 	/**
 	 * Default Construtor
@@ -48,13 +64,15 @@ public class MessageUtils {
 	 * Internal Singleton getInstance() method, for Classloader to locate the CLASSPATH
 	 * @return
 	 */
-	private static MessageUtils getInstance(){
+	private static synchronized MessageUtils getInstance(){
 		if(utils == null){
 			utils = new MessageUtils();
 		}
 		return utils;
 	}
 
+	// Methods
+	
 	/**
 	 * Just bypass to invoke member function loadDefMsg().
 	 *
@@ -68,18 +86,25 @@ public class MessageUtils {
 	 * If not exist in the relative path, search the CLASSPATH
 	 */
 	private void loadDefMsg(){
-		if(!new File(defaultResource).exists()){
-			loadMessages(getClass().getClassLoader().getResource(defaultResource).toString());
-		}else{
+		if (!new File(defaultResource).exists()) {
+            final URL msg = getClass().getClassLoader().getResource(defaultResource);
+            if (msg != null) {
+                try {
+                    loadMessages(new File(msg.toURI()).toString());
+                } catch (URISyntaxException e) {
+                    // NOOP
+                }
+            }
+		} else {
 			loadMessages(defaultResource);
 		}
 	}
 	
 	/**
 	 * Load message from message file.
-	 * @param newMessageFile newMessageFile
+	 * @param newMessageFile message file
 	 */
-	public static void loadMessages(String newMessageFile) {
+	public static void loadMessages(final String newMessageFile) {
 		if (!updateMessageFile(newMessageFile)) {
 			// this message file has been loaded
 			return;
@@ -88,38 +113,36 @@ public class MessageUtils {
 		// always assign a new instance to hashTable to avoid 
 		// to reload this method again and again when messages 
 		// loading failed.
-		hashTable = new Hashtable();
+		hashTable = new Hashtable<String, MessageBean>();
 		
 		try {
-			DocumentBuilderFactory factory = DocumentBuilderFactory
+			final DocumentBuilderFactory factory = DocumentBuilderFactory
 					.newInstance();
-			DocumentBuilder builder = factory.newDocumentBuilder();
-			Document doc = builder.parse(messageFile);
+			final DocumentBuilder builder = factory.newDocumentBuilder();
+			final Document doc = builder.parse(messageFile);
 
-			Element messages = doc.getDocumentElement();
-			NodeList messageList = messages.getElementsByTagName("message");
+			final Element messages = doc.getDocumentElement();
+			final NodeList messageList = messages.getElementsByTagName(ELEMENT_MESSAGE);
 
-			int messageListLength = messageList.getLength();
+			final int messageListLength = messageList.getLength();
 			for (int i = 0; i < messageListLength; i++) {
-				Element message = (Element) messageList.item(i);
-				Node reason = message.getElementsByTagName("reason").item(0);
-				Node response = message.getElementsByTagName("response")
+				final Element message = (Element) messageList.item(i);
+				final Node reason = message.getElementsByTagName(ELEMENT_REASON).item(0);
+				final Node response = message.getElementsByTagName(ELEMENT_RESPONSE)
 						.item(0);
 
-				MessageBean messageBean = new MessageBean();
-				NamedNodeMap attrs = message.getAttributes();
-				String id = attrs.getNamedItem("id").getNodeValue();
+				final NamedNodeMap attrs = message.getAttributes();
 
-				messageBean.setId(id);
-				messageBean.setType(attrs.getNamedItem("type").getNodeValue());
-				messageBean.setReason(reason.getFirstChild().getNodeValue());
-				messageBean
-						.setResponse(response.getFirstChild().getNodeValue());
-
-				hashTable.put(id, messageBean);
+                final MessageBean messageBean = new MessageBean(
+                        attrs.getNamedItem(ATTRIBUTE_ID).getNodeValue(),
+                        attrs.getNamedItem(ATTRIBUTE_TYPE).getNodeValue(),
+                        reason.getFirstChild().getNodeValue(),
+                        response.getFirstChild() != null ? response.getFirstChild().getNodeValue() : null);
+                
+				hashTable.put(messageBean.getId(), messageBean);
 			}
-		} catch (Exception e) {
-			StringBuffer buff = new StringBuffer(Constants.INT_128);
+		} catch (final Exception e) {
+			final StringBuffer buff = new StringBuffer(INT_128);
 			
 			buff.append("  Failed to load messages from '");
 			buff.append(messageFile);
@@ -130,28 +153,30 @@ public class MessageUtils {
 			buff.append(" that you run the toolkit. If not, please copy them");
 			buff.append(" from the toolkit's root directory.");
 			
-			fileLogger.logError(buff.toString());
+			logger.logError(buff.toString());
 		}
 	}
 
-	private static boolean updateMessageFile(String newMessageFile) {
-		String oldMessagePath = null;
-		String newMessagePath = null;
-
+	/**
+	 * Update or set message file if new message file is different or old one is {@code null}.
+	 * 
+	 * @param newMessageFile massage file
+	 * @return {@code true} if message file was updated, otherwise {@code false}
+	 */
+	private static boolean updateMessageFile(final String newMessageFile) {
 		if (messageFile == null) {
 			messageFile = newMessageFile;
 			return true;
 		}
 		
-		oldMessagePath = new File(MessageUtils.messageFile).getAbsolutePath();
-		newMessagePath = new File(newMessageFile).getAbsolutePath();
+		final String oldMessagePath = new File(MessageUtils.messageFile).getAbsolutePath();
+		final String newMessagePath = new File(newMessageFile).getAbsolutePath();
 		
 		if (oldMessagePath.equalsIgnoreCase(newMessagePath)) {
 			return false;
 		}
 		
 		messageFile = newMessageFile;
-		
 		return true;
 	}
 	
@@ -162,27 +187,20 @@ public class MessageUtils {
 	 * @param id message di
 	 * @return messageBean
 	 */
-	public static MessageBean getMessage(String id) {
-		MessageBean message = null;
-		MessageBean hashMessage = null;
-		
+	public static MessageBean getMessage(final String id) {
 		if (hashTable == null) {
 			loadDefaultMessages();
 		}
 
-		hashMessage = (MessageBean) hashTable.get(id);
+	    final MessageBean hashMessage = (MessageBean) hashTable.get(id);
 		if (hashMessage != null) {
-			message = new MessageBean(hashMessage);
+			return new MessageBean(hashMessage);
 		}
 		
-		if (message == null) {
-			// return a empty message when no message found, 
-			// and notify the user with a warning message.
-			message = new MessageBean(id, "", "", "");
-			fileLogger.logWarn("  Can't find message for id: " + id);			
-		}
-		
-		return message;
+		// return a empty message when no message found,
+		// and notify the user with a warning message.
+	    logger.logWarn("  Can't find message for id: " + id);
+		return new MessageBean(id, "", "", "");
 	}
 
 	/**
@@ -194,31 +212,25 @@ public class MessageUtils {
 	 * @param prop prop
 	 * @return MessageBean
 	 */
-	public static MessageBean getMessage(String id, Properties prop) {		
-		String reason = null;
-		String response = null;
-		Iterator iter = null;
-		MessageBean messageBean = getMessage(id);
+	public static MessageBean getMessage(final String id, final Properties prop) {		
+		final MessageBean messageBean = getMessage(id);
 		
 		if (prop == null || prop.size() == 0) {
 			return messageBean;
 		}
 		
-		reason = messageBean.getReason();
-		response = messageBean.getResponse();
-		iter = prop.keySet().iterator();
+		String reason = messageBean.getReason();
+		String response = messageBean.getResponse();
+		final Iterator<Object> iter = prop.keySet().iterator();
 
 		while (iter.hasNext()) {
-			String key = (String) iter.next();
-			String replacement = prop.getProperty(key);
+			final String key = (String) iter.next();
+			final String replacement = prop.getProperty(key);
 			reason = StringUtils.replaceAll(reason, key, replacement);
 			response = StringUtils.replaceAll(response, key, replacement);
 		}
 
-		messageBean.setReason(reason);
-		messageBean.setResponse(response);
-
-		return messageBean;
+		return new MessageBean(messageBean.getId(), messageBean.getType(), reason, response);
 	}
 	
 }

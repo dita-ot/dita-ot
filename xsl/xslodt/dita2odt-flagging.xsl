@@ -995,8 +995,8 @@
     <xsl:variable name="stable_depth" select="count(ancestor::*[contains(@class, ' topic/simpletable ')][1]/ancestor::*)"/>
     <!-- get closest tag -->
     <xsl:variable name="max_depth">
-      <xsl:value-of select="stringUtils:getMax($ul_depth, $ol_depth, $sl_depth, 
-        $dl_depth, $table_depth, $stable_depth)"/>
+      <xsl:value-of select="stringUtils:getMax(string($ul_depth), string($ol_depth), string($sl_depth), 
+        string($dl_depth), string($table_depth), string($stable_depth))"/>
     </xsl:variable>
     <xsl:if test="$max_depth != 0 ">
       <xsl:choose>
@@ -1062,8 +1062,8 @@
     <xsl:variable name="stable_depth" select="count(ancestor::*[contains(@class, ' topic/simpletable ')][1]/ancestor::*)"/>
     <!-- get closest tag -->
     <xsl:variable name="max_depth">
-      <xsl:value-of select="stringUtils:getMax($ul_depth, $ol_depth, $sl_depth, 
-        $dl_depth, $table_depth, $stable_depth)"/>
+      <xsl:value-of select="stringUtils:getMax(string($ul_depth), string($ol_depth), string($sl_depth), 
+        string($dl_depth), string($table_depth), string($stable_depth))"/>
     </xsl:variable>
     <xsl:if test="$max_depth != 0 ">
       <xsl:choose>

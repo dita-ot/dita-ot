@@ -10,6 +10,8 @@
 
 package org.dita.dost.reader;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -18,9 +20,7 @@ import org.dita.dost.index.IndexTerm;
 import org.dita.dost.index.IndexTermCollection;
 import org.dita.dost.index.IndexTermTarget;
 import org.dita.dost.index.TopicrefElement;
-import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
@@ -35,42 +35,46 @@ import org.xml.sax.SAXException;
  * @author Wu, Zhi Qiang
  */
 
-public class DitamapIndexTermReader extends AbstractXMLReader {
+public final class DitamapIndexTermReader extends AbstractXMLReader {
 	/** The stack used to store elements */
-	private Stack elementStack = null;
+	private Stack<Object> elementStack = null;
 	
 	/** List used to store all the specialized index terms */
-	private List indexTermSpecList = null;
+	private List<String> indexTermSpecList = null;
 	
 	/** List used to store all the specialized topicref tags */
-	private List topicrefSpecList = null;
+	private List<String> topicrefSpecList = null;
 	
 	/** List used to store all the specialized index-see tags */
-	private List indexSeeSpecList = null;
+	private List<String> indexSeeSpecList = null;
 	
 	/** List used to store all the specialized index-see-also tags */
-	private List indexSeeAlsoSpecList = null;
+	private List<String> indexSeeAlsoSpecList = null;
 	
 	private String mapPath = null;
 
-	private DITAOTJavaLogger javaLogger = null;
 	//Added by William on 2010-04-26 for ref:2990783 start
-	private IndexTermCollection result = IndexTermCollection.getInstantce();
+	private IndexTermCollection result;
 	// assumes index terms have been moved by preprocess
 	private boolean indexMoved = true; 
 	//Added by William on 2010-04-26 for ref:2990783 end
 	
 	/**
 	 * Create a new instance of sax handler for ditamap.
+	 * 
+	 * @deprecated use {@link #DitamapIndexTermReader(IndexTermCollection, boolean)} instead
 	 */
+	@Deprecated
 	public DitamapIndexTermReader() {
 		super();
-		elementStack = new Stack();
-		indexTermSpecList = new ArrayList(Constants.INT_16);
-		topicrefSpecList = new ArrayList(Constants.INT_16);
-		indexSeeSpecList = new ArrayList(Constants.INT_16);
-		indexSeeAlsoSpecList = new ArrayList(Constants.INT_16);
-		javaLogger = new DITAOTJavaLogger();
+		elementStack = new Stack<Object>();
+		indexTermSpecList = new ArrayList<String>(INT_16);
+		topicrefSpecList = new ArrayList<String>(INT_16);
+		indexSeeSpecList = new ArrayList<String>(INT_16);
+		indexSeeAlsoSpecList = new ArrayList<String>(INT_16);
+		if (result == null) {
+		    result = IndexTermCollection.getInstantce();
+		}
 	}
 	//Added by William on 2010-04-26 for ref:2990783 start
 	public DitamapIndexTermReader(IndexTermCollection result, boolean indexMoved) {
@@ -80,17 +84,15 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 	}
 	//Added by William on 2010-04-26 for ref:2990783 end
 
-	/**
-	 * @see org.xml.sax.helpers.DefaultHandler#characters(char[], int, int)
-	 */
+	@Override
 	public void characters(char[] ch, int start, int length)
 			throws SAXException {
 		//SF Bug 2010062: Do not trim white space from text nodes. Convert newline
 		//                to space, but leave all spaces. Also do not drop space-only nodes.
 		String temp = new String(ch, start, length);
 		IndexTerm indexTerm = null;
-		//boolean withSpace = (ch[start] == '\n' || temp.startsWith(Constants.LINE_SEPARATOR));
-		if (ch[start] == '\n' || temp.startsWith(Constants.LINE_SEPARATOR)) {
+		//boolean withSpace = (ch[start] == '\n' || temp.startsWith(LINE_SEPARATOR));
+		if (ch[start] == '\n' || temp.startsWith(LINE_SEPARATOR)) {
 			temp = " " + temp.substring(1);
 		}
 
@@ -100,11 +102,11 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 		
 		//TODO Added by William on 2009-05-22 for space bug:2793836 start
 		//used for store the space
-		char[] chars = temp.toCharArray();
+		final char[] chars = temp.toCharArray();
 		char flag = '\n';
 		//used for store the new String
-		StringBuffer sb = new StringBuffer();
-		for(char c : chars){
+		final StringBuffer sb = new StringBuffer();
+		for(final char c : chars){
 			//when a whitespace is met
 			if(c==' '){
 				//this is the first whitespace
@@ -138,10 +140,7 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 
 	}
 
-	/**
-	 * @see org.xml.sax.helpers.DefaultHandler#endElement(java.lang.String,
-	 *      java.lang.String, java.lang.String)
-	 */
+	@Override
 	public void endElement(String uri, String localName, String qName)
 			throws SAXException {
 		if (topicrefSpecList.contains(localName)) {
@@ -152,7 +151,7 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 		// check to see it the indexterm element or a specialized version is 
 		// in the list.
 		if (indexTermSpecList.contains(localName) && needPushTerm()) {
-			IndexTerm indexTerm = (IndexTerm) elementStack.pop();
+			final IndexTerm indexTerm = (IndexTerm) elementStack.pop();
 			Object obj = null;
 
 			if (indexTerm.getTermName() == null || indexTerm.getTermName().trim().equals("")) {
@@ -160,7 +159,7 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 					return;
 				}else{
 					indexTerm.setTermName("***");
-					javaLogger.logWarn(MessageUtils.getMessage("DOTJ014W").toString());
+					logger.logWarn(MessageUtils.getMessage("DOTJ014W").toString());
 				}
 			}
 			
@@ -181,7 +180,7 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 					
 				}				
 			} else {
-				IndexTerm parentTerm = (IndexTerm) obj;
+				final IndexTerm parentTerm = (IndexTerm) obj;
 				parentTerm.addSubTerm(indexTerm);
 			}
 		}
@@ -190,12 +189,12 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 		// version is in the list.
 		if (indexSeeSpecList.contains(localName)
 				|| indexSeeAlsoSpecList.contains(localName)) {
-			IndexTerm term = (IndexTerm) elementStack.pop();
+			final IndexTerm term = (IndexTerm) elementStack.pop();
 			if (term.getTermKey() == null) {
 				term.setTermKey(term.getTermFullName());
 			}
 			if (elementStack.peek() instanceof IndexTerm){
-				IndexTerm parentTerm = (IndexTerm) elementStack.peek();
+				final IndexTerm parentTerm = (IndexTerm) elementStack.peek();
 				parentTerm.addSubTerm(term);
 			}
 		}
@@ -203,17 +202,17 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 
 	private void genTargets(IndexTerm indexTerm, TopicrefElement obj) {
 		
-		TopicrefElement topicref = obj;
-		IndexTermTarget target = new IndexTermTarget();
+		final TopicrefElement topicref = obj;
+		final IndexTermTarget target = new IndexTermTarget();
 		String targetURI = null;
 
-		String href = topicref.getHref();
+		final String href = topicref.getHref();
 		
-		StringBuffer buffer = new StringBuffer();
-		if (!href.contains(Constants.COLON_DOUBLE_SLASH) && !FileUtils.isAbsolutePath(href)){
-			if (mapPath != null && !Constants.STRING_EMPTY.equals(mapPath)) {
+		final StringBuffer buffer = new StringBuffer();
+		if (!href.contains(COLON_DOUBLE_SLASH) && !FileUtils.isAbsolutePath(href)){
+			if (mapPath != null && mapPath.length() != 0) {
 				buffer.append(mapPath);
-				buffer.append(Constants.SLASH);
+				buffer.append(SLASH);
 			}
 			buffer.append(href);
 			targetURI = FileUtils.removeRedundantNames(buffer
@@ -240,22 +239,19 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 		}
 		
 		if (indexTerm.hasSubTerms()){
-			for (Object subTerm : indexTerm.getSubTerms()){
+			for (final Object subTerm : indexTerm.getSubTerms()){
 				assignTarget((IndexTerm)subTerm, target);
 			}
 		}
 	}
 
-	/**
-	 * @see org.xml.sax.helpers.DefaultHandler#startElement(java.lang.String,
-	 *      java.lang.String, java.lang.String, org.xml.sax.Attributes)
-	 */
+	@Override
 	public void startElement(String uri, String localName, String qName,
 			Attributes attributes) throws SAXException {
-		String classAttr = attributes.getValue(Constants.ATTRIBUTE_NAME_CLASS);
+		final String classAttr = attributes.getValue(ATTRIBUTE_NAME_CLASS);
 		
 		if (classAttr != null
-				&& classAttr.contains(Constants.ATTR_CLASS_VALUE_INDEXTERM)) {
+				&& classAttr.contains(ATTR_CLASS_VALUE_INDEXTERM)) {
 			// add the element name to the indexterm specialization element 
 			// list if it does not already exist in that list.  
 			if (!indexTermSpecList.contains(localName)){
@@ -264,32 +260,32 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 		}
 		
 		if (classAttr != null
-				&& classAttr.contains(Constants.ATTR_CLASS_VALUE_TOPICREF)){
+				&& classAttr.contains(ATTR_CLASS_VALUE_TOPICREF)){
 			if (!topicrefSpecList.contains(localName)){
 				topicrefSpecList.add(localName);
 			}
 		}
 		
 		if (classAttr != null
-				&& classAttr.contains(Constants.ATTR_CLASS_VALUE_INDEXSEE)){
+				&& classAttr.contains(ATTR_CLASS_VALUE_INDEXSEE)){
 			if (!indexSeeSpecList.contains(localName)){
 				indexSeeSpecList.add(localName);
 			}
 		}
 		
 		if (classAttr != null
-				&& classAttr.contains(Constants.ATTR_CLASS_VALUE_INDEXSEEALSO)){
+				&& classAttr.contains(ATTR_CLASS_VALUE_INDEXSEEALSO)){
 			if (!indexSeeAlsoSpecList.contains(localName)){
 				indexSeeAlsoSpecList.add(localName);
 			}
 		}
 		
 		if (topicrefSpecList.contains(localName)) {
-			String href = attributes.getValue(Constants.ATTRIBUTE_NAME_HREF);
-			String format = attributes
-					.getValue(Constants.ATTRIBUTE_NAME_FORMAT);
-			String navtitle =  attributes.getValue(Constants.ATTRIBUTE_NAME_NAVTITLE);
-			TopicrefElement topicref = new TopicrefElement();
+			final String href = attributes.getValue(ATTRIBUTE_NAME_HREF);
+			final String format = attributes
+					.getValue(ATTRIBUTE_NAME_FORMAT);
+			final String navtitle =  attributes.getValue(ATTRIBUTE_NAME_NAVTITLE);
+			final TopicrefElement topicref = new TopicrefElement();
 
 			topicref.setHref(href);
 			topicref.setFormat(format);
@@ -310,7 +306,7 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 		// is in the list.
 		if (indexSeeAlsoSpecList.contains(localName)
 				&& needPushTerm()) {
-			IndexTerm indexTerm = new IndexTerm();
+			final IndexTerm indexTerm = new IndexTerm();
 			IndexTerm parentTerm = null;
 			if(!elementStack.isEmpty()					
 					&& elementStack.peek() instanceof IndexTerm){
@@ -319,7 +315,7 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 					parentTerm.updateSubTerm();
 				}
 			}
-			indexTerm.setTermPrefix(Constants.IndexTerm_Prefix_See_Also);
+			indexTerm.setTermPrefix(IndexTerm_Prefix_See_Also);
 			elementStack.push(indexTerm);
 		}
 	}
@@ -329,17 +325,17 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 		// in the list.
 		if (indexSeeSpecList.contains(localName)
 				&& needPushTerm()) {
-			IndexTerm indexTerm = new IndexTerm();
+			final IndexTerm indexTerm = new IndexTerm();
 			IndexTerm parentTerm = null;
 			
-			indexTerm.setTermPrefix(Constants.IndexTerm_Prefix_See);
+			indexTerm.setTermPrefix(IndexTerm_Prefix_See);
 			
 			if(!elementStack.isEmpty()
 					&& elementStack.peek() instanceof IndexTerm){
 				parentTerm = (IndexTerm)elementStack.peek();
 				if(parentTerm.hasSubTerms()){
 					parentTerm.updateSubTerm();
-					indexTerm.setTermPrefix(Constants.IndexTerm_Prefix_See_Also);
+					indexTerm.setTermPrefix(IndexTerm_Prefix_See_Also);
 				}
 			}
 			elementStack.push(indexTerm);
@@ -350,9 +346,9 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 		// check to see it the indexterm element or a specialized version is 
 		// in the list.
 		if (indexTermSpecList.contains(localName) && needPushTerm()) {
-			IndexTerm indexTerm = new IndexTerm();
-			indexTerm.setStartAttribute(attributes.getValue(Constants.ATTRIBUTE_NAME_END));
-			indexTerm.setEndAttribute(attributes.getValue(Constants.ATTRIBUTE_NAME_END));
+			final IndexTerm indexTerm = new IndexTerm();
+			indexTerm.setStartAttribute(attributes.getValue(ATTRIBUTE_NAME_END));
+			indexTerm.setEndAttribute(attributes.getValue(ATTRIBUTE_NAME_END));
 			IndexTerm parentTerm = null;
 			if(!elementStack.isEmpty()
 					&& elementStack.peek() instanceof IndexTerm){

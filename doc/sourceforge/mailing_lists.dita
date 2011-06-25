@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="conceptId">
+ <title>Mailing Lists</title>
+ <shortdesc></shortdesc>
+  <related-links>
+    <linklist>
+      <link href="http://tech.groups.yahoo.com/group/dita-users/" scope="external">
+        <linktext>DITA users group</linktext>
+      </link>
+      <link href="http://sourceforge.net/mailarchive/forum.php?forum_name=dita-ot-developer"
+        scope="external">
+        <linktext>DITA-OT developer</linktext>
+      </link>
+      <linkinfo>
+        <p>Developers and vendors using the toolkit are encouraged to join the DITA-OT developer
+          mailing list. This list is used to discuss upcoming changes that may impact developers or
+          vendors.</p>
+      </linkinfo>
+    </linklist>
+  </related-links>
+</concept>

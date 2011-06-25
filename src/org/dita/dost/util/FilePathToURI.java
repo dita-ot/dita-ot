@@ -4,20 +4,22 @@
  * applicable licenses.
  */
 
-
+/*
+ * (c) Copyright IBM Corp. 2010 All Rights Reserved.
+ */
 package org.dita.dost.util;
 
 /**
  * Used to escape a file path to a URI.
  */
-public class FilePathToURI {
+public final class FilePathToURI {
 	// Which ASCII characters need to be escaped
-	private static boolean gNeedEscaping[] = new boolean[128];
+	private static final boolean gNeedEscaping[] = new boolean[128];
 	// The first hex character if a character needs to be escaped
-	private static char gAfterEscaping1[] = new char[128];
+	private static final char gAfterEscaping1[] = new char[128];
 	// The second hex character if a character needs to be escaped
-	private static char gAfterEscaping2[] = new char[128];
-	private static char[] gHexChs = {'0', '1', '2', '3', '4', '5', '6', '7',
+	private static final char gAfterEscaping2[] = new char[128];
+	private static final char[] gHexChs = {'0', '1', '2', '3', '4', '5', '6', '7',
 		'8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 	// Initialize the above 3 arrays
 	static {
@@ -29,9 +31,9 @@ public class FilePathToURI {
 		gNeedEscaping[0x7f] = true;
 		gAfterEscaping1[0x7f] = '7';
 		gAfterEscaping2[0x7f] = 'F';
-		char[] escChs = {' ', '<', '>', '#', '%', '"', '{', '}', '?',
+		final char[] escChs = {' ', '<', '>', '#', '%', '"', '{', '}', '?',
 				'|', '\\', '^', '~', '[', ']', '`', '\'', '&'};
-		int len = escChs.length;
+		final int len = escChs.length;
 		char ch;
 		for (int i = 0; i < len; i++) {
 			ch = escChs[i];
@@ -68,9 +70,9 @@ public class FilePathToURI {
 	 * @param path The path to be escaped.
 	 * @return The escaped path.
 	 */
-	public static String escapeSpecialAsciiAndNonAscii(String path) {
+	public static String escapeSpecialAsciiAndNonAscii(final String path) {
 		int len = path.length(), ch;
-		StringBuffer buffer = new StringBuffer(len*3);
+		final StringBuffer buffer = new StringBuffer(len*3);
 		// Change C:/something to /C:/something
 		if (len >= 2 && path.charAt(1) == ':') {
 			ch = Character.toUpperCase(path.charAt(0));
@@ -101,11 +103,11 @@ public class FilePathToURI {
 		// We saw some non-ASCII character
 		if (i < len) {
 			// Get UTF-8 bytes for the remaining sub-string
-			byte[] bytes = null;
+			byte[] bytes;
 			byte b;
 			try {
 				bytes = path.substring(i).getBytes("UTF-8");
-			} catch (java.io.UnsupportedEncodingException e) {
+			} catch (final java.io.UnsupportedEncodingException e) {
 				// Should never happen
 				return path;
 			}

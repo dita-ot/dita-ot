@@ -141,13 +141,19 @@
     	      xmlns:dita="http://dita-ot.sourceforge.net" 
     	      dita:extension="depends org.dita.dost.platform.InsertDependsAction" 
             description="Build Eclipse Help index file">
-    	  <echo> args.eclipsehelp.indexsee = ${args.eclipsehelp.indexsee} </echo>
+    	  <echo level="info"> args.eclipsehelp.indexsee = ${args.eclipsehelp.indexsee} </echo>
     	  <pipeline message="Extract index term."
             module="IndexTermExtract"
             basedir="${basedir}"
             tempdir="${dita.temp.dir}"
-            inputmap="${user.input.file}"
-            extparam="output=${output.dir}${file.separator}${user.input.file};targetext=${out.ext};indextype=eclipsehelp;indexclass=${dita.eclipsehelp.index.class};eclipse.indexsee=${args.eclipsehelp.indexsee}${index.ext.param.encoding}" />
+            inputmap="${user.input.file}">
+          <param name="output" location="${output.dir}${file.separator}${user.input.file}"/>
+          <param name="targetext" value="${out.ext}"/>
+          <param name="indextype" value="eclipsehelp"/>
+          <param name="indexclass" value="${dita.eclipsehelp.index.class}"/>
+          <param name="eclipse.indexsee" value="${args.eclipsehelp.indexsee}"/>
+          <param name="encoding" value="${args.dita.locale}" if="args.dita.locale"/>
+    	  </pipeline>
     </target>
     
     <target name="dita.out.map.eclipse.index" unless="noMap"
@@ -156,13 +162,19 @@
     	  xmlns:dita="http://dita-ot.sourceforge.net" 
     	  dita:extension="depends org.dita.dost.platform.InsertDependsAction" 
         description="Build Eclipse Help index file">
-    	  <echo> args.eclipsehelp.indexsee = ${args.eclipsehelp.indexsee} </echo>
+    	  <echo level="info"> args.eclipsehelp.indexsee = ${args.eclipsehelp.indexsee} </echo>
         <pipeline message="Extract index term."
             module="IndexTermExtract"
             basedir="${basedir}"
             tempdir="${dita.temp.dir}"
-            inputmap="${user.input.file}"
-            extparam="output=${output.dir}${file.separator}index.xml;targetext=${out.ext};indextype=eclipsehelp;indexclass=${dita.eclipsehelp.index.class};eclipse.indexsee=${args.eclipsehelp.indexsee};${index.ext.param.encoding}" />
+            inputmap="${user.input.file}">
+          <param name="output" location="${output.dir}${file.separator}index.xml"/>
+          <param name="targetext" value="${out.ext}"/>
+          <param name="indextype" value="eclipsehelp"/>
+          <param name="indexclass" value="${dita.eclipsehelp.index.class}"/>
+          <param name="eclipse.indexsee" value="${args.eclipsehelp.indexsee}"/>
+          <param name="encoding" value="${args.dita.locale}" if="args.dita.locale"/>
+        </pipeline>
     </target>
 
     <target name="dita.map.eclipse.plugin"

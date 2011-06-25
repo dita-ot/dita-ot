@@ -9,7 +9,9 @@
  */
 package org.dita.dost.platform;
 
-import java.util.Hashtable;
+import java.util.Map;
+
+import org.dita.dost.log.DITAOTLogger;
 
 /**
  * Interface. 
@@ -22,10 +24,11 @@ public interface IAction {
 	 */
 	void setInput(String input);
 	/**
-	 * Set the input parameters.
-	 * @param param param
+	 * Add input parameter.
+	 * @param name parameter name
+	 * @param value parameter value
 	 */
-	void setParam(String param);
+	void addParam(String name, String value);
 	/**
 	 * Return the result.
 	 * @return result
@@ -35,5 +38,10 @@ public interface IAction {
 	 * Set the feature table.
 	 * @param h hastable
 	 */
-	void setFeatures(Hashtable<String,String> h);
+	void setFeatures(Map<String, Features> h);
+	/**
+     * Set logger.
+     * @param logger logger instance
+     */
+    public void setLogger(DITAOTLogger logger);
 }

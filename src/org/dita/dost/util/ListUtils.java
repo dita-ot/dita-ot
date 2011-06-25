@@ -1,8 +1,20 @@
+/*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
+ * (c) Copyright IBM Corp. 2010 All Rights Reserved.
+ */
 package org.dita.dost.util;
+
+import static org.dita.dost.util.Constants.*;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Properties;
 
 import javax.xml.transform.TransformerException;
@@ -16,7 +28,7 @@ import org.dita.dost.resolver.URIResolverAdapter;
  * List Utils.
  *
  */
-public class ListUtils {
+public final class ListUtils {
 	/**
 	 * Private Constructor.
 	 */
@@ -32,18 +44,18 @@ public class ListUtils {
 	 * @throws IOException IOException.
 	 */
 	public static Properties getDitaList() throws IOException{
-		Properties properties = new Properties();
+		final Properties properties = new Properties();
 		try{
-			InputStream source = URIResolverAdapter.convertTOInputStream(DitaURIResolverFactory.getURIResolver().resolve(Constants.FILE_NAME_DITA_LIST_XML, null));
+			InputStream source = URIResolverAdapter.convertTOInputStream(DitaURIResolverFactory.getURIResolver().resolve(FILE_NAME_DITA_LIST_XML, null));
 			if (source != null) {
 				properties.loadFromXML(source);
 			}
 			else{
-				source = URIResolverAdapter.convertTOInputStream(DitaURIResolverFactory.getURIResolver().resolve(Constants.FILE_NAME_DITA_LIST, null));
+				source = URIResolverAdapter.convertTOInputStream(DitaURIResolverFactory.getURIResolver().resolve(FILE_NAME_DITA_LIST, null));
 				properties.load(source);
 			}			
-		}catch(TransformerException e){
-			DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+		}catch(final TransformerException e){
+			final DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 			javaLogger.logException(e);
 		}
 		return properties;
@@ -57,18 +69,18 @@ public class ListUtils {
 	 * @return Properties
 	 * @throws IOException exception
 	 */
-	public static Properties loadList(String name, String base, boolean isXML) throws IOException{
-		Properties properties = new Properties();
+	public static Properties loadList(final String name, final String base, final boolean isXML) throws IOException{
+		final Properties properties = new Properties();
 		try {
-			InputStream source = URIResolverAdapter.convertTOInputStream(DitaURIResolverFactory.getURIResolver().resolve(name, base));
+			final InputStream source = URIResolverAdapter.convertTOInputStream(DitaURIResolverFactory.getURIResolver().resolve(name, base));
 			if(isXML){
 				properties.loadFromXML(source);
 			}
 			else{
 				properties.load(source);
 			}
-		} catch (TransformerException e) {
-			DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+		} catch (final TransformerException e) {
+			final DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 			javaLogger.logException(e);
 		}
 		return properties;
@@ -83,18 +95,30 @@ public class ListUtils {
 	 * @throws IOException IOException
 	 * @deprecated -never used right now
 	 */
-	public static void storeList(String name, String base, boolean isXML, Properties properties) throws IOException{
+	@Deprecated
+	public static void storeList(final String name, final String base, final boolean isXML, final Properties properties) throws IOException{
+		OutputStream in = null;
 		try {
-			InputStream source = URIResolverAdapter.convertTOInputStream(DitaURIResolverFactory.getURIResolver().resolve(name, base));
+			final InputStream source = URIResolverAdapter.convertTOInputStream(DitaURIResolverFactory.getURIResolver().resolve(name, base));
+			in = new FileOutputStream(name);
 			if(isXML){
-				properties.storeToXML(new FileOutputStream(name), null);
+				properties.storeToXML(in, null);
 			}
 			else{
-				properties.store(new FileOutputStream(name), null);
+				properties.store(in, null);
 			}
-		} catch (TransformerException e) {
-			DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+		} catch (final TransformerException e) {
+			final DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 			javaLogger.logException(e);
-		}
+		} finally {
+        	if (in != null) {
+        		try {
+        			in.close();
+        		} catch (final IOException e) {
+        			final DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+        			javaLogger.logException(e);
+        		}
+        	}
+        }
 	}
 }

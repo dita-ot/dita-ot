@@ -7,14 +7,12 @@
     E-mail : info@antennahouse.com
     ============================================================
 -->
-<xsl:stylesheet version="1.1" 
+<xsl:stylesheet version="2.0" 
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:exsl="http://exslt.org/common"
 xmlns:opentopic="http://www.idiominc.com/opentopic"
 xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
 extension-element-prefixes="exsl"
 exclude-result-prefixes="opentopic-index opentopic">
-
-<xsl:include href="../../cfg/fo/attrs/index-attr_axf.xsl" />
 
 <xsl:template name="createIndex" >
     <xsl:comment>Antenna House Index support</xsl:comment>
@@ -133,8 +131,7 @@ exclude-result-prefixes="opentopic-index opentopic">
 </xsl:template>
 
 <xsl:template match="/" mode="index-postprocess">
-    <fo:block xsl:use-attribute-sets="__index__label">
-        <xsl:attribute name="id">ID_INDEX_00-0F-EA-40-0D-4D</xsl:attribute>
+    <fo:block xsl:use-attribute-sets="__index__label" id="{$id.index}">
         <xsl:call-template name="insertVariable">
             <xsl:with-param name="theVariableID" select="'Index'"/>
         </xsl:call-template>

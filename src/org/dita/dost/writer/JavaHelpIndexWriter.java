@@ -10,6 +10,7 @@
 package org.dita.dost.writer;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -29,12 +30,12 @@ import org.dita.dost.module.Content;
  * 
  * @author Wu, Zhi Qiang
  */
-public class JavaHelpIndexWriter extends AbstractExtendDitaWriter implements AbstractWriter, IDitaTranstypeIndexWriter {
+public final class JavaHelpIndexWriter extends AbstractExtendDitaWriter implements AbstractWriter, IDitaTranstypeIndexWriter {
 	
 	//RFE 2987769 Eclipse index-see - Added extends AbstractExtendedDitaWriter
 	
 	/** List of indexterms */
-	private List termList = null;
+	private List<IndexTerm> termList = null;
 	
 	/**
 	 * Default constructor.
@@ -48,7 +49,7 @@ public class JavaHelpIndexWriter extends AbstractExtendDitaWriter implements Abs
 	 * @param content The content to output
 	 */
 	public void setContent(Content content) {
-		termList = (List) content.getCollection();
+		termList = (List<IndexTerm>) content.getCollection();
 	}
 
 	/**
@@ -88,11 +89,21 @@ public class JavaHelpIndexWriter extends AbstractExtendDitaWriter implements Abs
 	/**
 	 * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
 	 */
-	public void write(String filename) throws DITAOTException {		
+	public void write(String filename) throws DITAOTException {
+		OutputStream out = null;
 		try {
-			write(new FileOutputStream(filename));
+			out = new FileOutputStream(filename);
+			write(out);
 		} catch (Exception e) {
 			throw new DITAOTException(e);
+		} finally {
+			if (out != null) {
+				try {
+	                out.close();
+                } catch (IOException e) {
+                	logger.logException(e);
+                }
+			}
 		}
 	}
 	
@@ -103,8 +114,8 @@ public class JavaHelpIndexWriter extends AbstractExtendDitaWriter implements Abs
 	 * @param printWriter
 	 */
 	private void outputIndexTerm(IndexTerm term, PrintWriter printWriter) {
-		List targets = term.getTargetList();
-		List subTerms = term.getSubTerms();		
+		List<IndexTermTarget> targets = term.getTargetList();
+		List<IndexTerm> subTerms = term.getSubTerms();
 		int targetNum = (targets == null) ? 0: targets.size();
 		int subTermNum = (subTerms == null) ? 0 : subTerms.size();
 		

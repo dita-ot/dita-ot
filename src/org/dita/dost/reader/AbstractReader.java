@@ -9,6 +9,7 @@
  */
 package org.dita.dost.reader;
 
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.Content;
 
 /**
@@ -32,5 +33,12 @@ public interface AbstractReader {
      * @return Content
      */
     Content getContent();
+    
+    /**
+     * Set logger for module.
+     * 
+     * @param logger logger to use for log message
+     */
+    public void setLogger(DITAOTLogger logger);
 
 }

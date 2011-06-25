@@ -6,7 +6,7 @@
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
     exclude-result-prefixes="xsl opentopic-func exsl exslf"
     xmlns:suitesol="http://suite-sol.com/namespaces/mapcounts"
-    version="1.1">
+    version="2.0">
 
    <xsl:import href="flag-rules.xsl"/>
    <xsl:import href="../../../../xsl/common/dita-utilities.xsl"/>

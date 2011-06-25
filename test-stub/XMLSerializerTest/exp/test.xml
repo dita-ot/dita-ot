@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<topic class="- topic/topic ">
+foo
+&amp;&lt;
+bar
+entity
+<!--foo & <-->
+<?foo bar & <?><?baz?>
+bar &amp; &lt;
+<empty/><empty with="attribute"/><parent>foo<child>bar</child>baz</parent>
+<foo xmlns="http://example.com/bar"/><ns:foo xmlns:ns="http://example.com/baz"><ns:bar/></ns:foo>
+</topic>

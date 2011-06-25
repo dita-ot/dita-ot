@@ -9,16 +9,17 @@
  */
 package org.dita.dost.module;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.MapLinksReader;
-import org.dita.dost.util.Constants;
 import org.dita.dost.writer.DitaLinksWriter;
 
 /**
@@ -28,9 +29,10 @@ import org.dita.dost.writer.DitaLinksWriter;
  * 
  * @author Zhang, Yuan Peng
  */
-public class MoveLinksModule implements AbstractPipelineModule {
-    private ContentImpl content;
+final class MoveLinksModule implements AbstractPipelineModule {
+    private final ContentImpl content;
 
+    private DITAOTLogger logger;
 
     /**
      * Default constructor of MoveLinksModule class.
@@ -41,6 +43,9 @@ public class MoveLinksModule implements AbstractPipelineModule {
 
     }
 
+    public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
 
     /**
      * execution point of MoveLinksModule.
@@ -49,28 +54,32 @@ public class MoveLinksModule implements AbstractPipelineModule {
 	 * @return null
 	 * @throws DITAOTException exception
 	 */
-    public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException {
-
-        String maplinksFile = ((PipelineHashIO)input).getAttribute(Constants.ANT_INVOKER_PARAM_MAPLINKS);
-        MapLinksReader indexReader = new MapLinksReader();
-		DitaLinksWriter indexInserter = new DitaLinksWriter();
-		Set mapSet;
-		Iterator i;
+    public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
+        if (logger == null) {
+            throw new IllegalStateException("Logger not set");
+        }
+        final String maplinksFile = input.getAttribute(ANT_INVOKER_PARAM_MAPLINKS);
+        final MapLinksReader indexReader = new MapLinksReader();
+        indexReader.setLogger(logger);
+		final DitaLinksWriter indexInserter = new DitaLinksWriter();
+		indexInserter.setLogger(logger);
+		Set<Map.Entry<String, String>> mapSet;
+		Iterator<Map.Entry<String, String>> i;
         
-        indexReader.setMatch(new StringBuffer(Constants.ELEMENT_NAME_MAPLINKS)
-                .append(Constants.SLASH).append(Constants.ELEMENT_NAME_LINKPOOL)
-                .append(Constants.SLASH).append(Constants.ELEMENT_NAME_LINKLIST)
+        indexReader.setMatch(new StringBuffer(ELEMENT_NAME_MAPLINKS)
+                .append(SLASH).append(ELEMENT_NAME_LINKPOOL)
+                .append(SLASH).append(ELEMENT_NAME_LINKLIST)
                 .toString());
         
         indexReader.read(maplinksFile);
-        mapSet = (Set) indexReader.getContent().getCollection();
+        mapSet = (Set<Map.Entry<String, String>>) indexReader.getContent().getCollection();
 
         i = mapSet.iterator();
         while (i.hasNext()) {
-            Map.Entry entry = (Map.Entry) i.next();
+            final Map.Entry<String, String> entry = i.next();
             content.setValue(entry.getValue());
             indexInserter.setContent(content);
-            indexInserter.write((String) entry.getKey());
+            indexInserter.write(entry.getKey());
         }
         return null;
     }

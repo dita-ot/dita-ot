@@ -9,366 +9,476 @@
  */
 package org.dita.dost.platform;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
- * Integrator is the main class to control and excute the 
- * integration of the toolkit and different plug-ins.
+ * Integrator is the main class to control and excute the integration of the
+ * toolkit and different plug-ins.
+ * 
  * @author Zhang, Yuan Peng
  */
-public class Integrator {
-		
-	/** Feature name for supported image extensions. */
-	public static final String FEAT_IMAGE_EXTENSIONS = "dita.image.extensions";
-	public static final String FEAT_VALUE_SEPARATOR = ",";
-	
-	/**
-	 * Plugin table which contains detected plugins.
-	 */
-	public static Hashtable<String,Features> pluginTable = null;
-	private Set<String> templateSet = null;
-	private String ditaDir;
-	private String basedir;
-	private Set<File> descSet;
-	private XMLReader reader;
-	private DITAOTJavaLogger logger;
-	private Set<String> loadedPlugin = null;
-	private Hashtable<String,String> featureTable = null;
-    private File propertiesFile = null;
-        
-    private Properties properties = null;
-	
-	private void initTemplateSet(){
-		templateSet = new HashSet<String>(Constants.INT_16);
-		templateSet.add("catalog-dita_template.xml");
-		templateSet.add("build_template.xml");
-		templateSet.add("build_general_template.xml");
-		templateSet.add("build_dita2eclipsehelp_template.xml");
-		templateSet.add("build_preprocess_template.xml");
-		templateSet.add("resource/messages_template.xml");
-		templateSet.add("xsl/common/allstrings_template.xml");
-		templateSet.add("xsl/dita2xhtml_template.xsl");
-		templateSet.add("xsl/dita2rtf_template.xsl");
-		templateSet.add("xsl/dita2odt_template.xsl");
-		templateSet.add("xsl/dita2dynamicdita_template.xsl");
-		templateSet.add("xsl/dita2fo-shell_template.xsl");
-		templateSet.add("xsl/dita2docbook_template.xsl");
-		templateSet.add("xsl/preprocess/maplink_template.xsl");
-		templateSet.add("xsl/preprocess/mapref_template.xsl");
-		templateSet.add("xsl/preprocess/mappull_template.xsl");
-		templateSet.add("xsl/map2eclipse_template.xsl");
-		templateSet.add("xsl/map2hhc_template.xsl");
-		templateSet.add("xsl/map2hhp_template.xsl");
-		templateSet.add("xsl/map2htmtoc_template.xsl");
-		templateSet.add("xsl/map2plugin_template.xsl");
-		templateSet.add("xsl/preprocess/conref_template.xsl");
-		templateSet.add("xsl/preprocess/topicpull_template.xsl");
-	}
+public final class Integrator {
 
-	/**
-	 * Execute point of Integrator.
-	 */
-	public void execute() {
-		if (!new File(ditaDir).isAbsolute()) {
-			ditaDir = new File(basedir, ditaDir).getAbsolutePath();
-		}
+    /** Feature name for supported image extensions. */
+    public static final String FEAT_IMAGE_EXTENSIONS = "dita.image.extensions";
+    public static final String FEAT_VALUE_SEPARATOR = ",";
+    public static final String PARAM_VALUE_SEPARATOR = ";";
+    public static final String PARAM_NAME_SEPARATOR = "=";
 
-                // Read the properties file, if it exists.
-		        properties = new Properties();
-                if (propertiesFile != null) {
-                  try {
-                    FileInputStream propertiesStream = new FileInputStream(propertiesFile);
-                    properties.load(propertiesStream);
-                  }
-                  catch (Exception e)
-                  {
-        	     logger.logException(e);
-                  }
-                }
-                else
-                {
-                  // Set reasonable defaults.
-                  properties.setProperty("plugindirs", "plugins;demo");
-                  properties.setProperty("plugin.ignores", "");
-                }
-        
-                // Get the list of plugin directories from the properties.
-                String[] pluginDirs = properties.getProperty("plugindirs").split(";");
-                
-                Set<String> pluginIgnores = new HashSet<String>();
-                if (properties.getProperty("plugin.ignores") != null) {
-                	pluginIgnores.addAll(Arrays.asList(properties.getProperty("plugin.ignores").split(";")));
-                }
-                
-                for (int j = 0; j < pluginDirs.length; j++)
-                {
-		  File pluginDir = null;
-		  File[] pluginFiles = null;
-		  pluginDir = new File(ditaDir + File.separatorChar + pluginDirs[j]);
-		  pluginFiles = pluginDir.listFiles();
- 
-		  for (int i=0; (pluginFiles != null) && (i < pluginFiles.length); i++){
-			File f = pluginFiles[i]; 
-			File descFile = new File(pluginFiles[i],"plugin.xml");
-			if (pluginFiles[i].isDirectory() && !pluginIgnores.contains(f.getName()) && descFile.exists()){
-				descSet.add(descFile);
-			}
-		  }
-                }
-		
-		parsePlugin();
-		integrate();
-	}
+    private static final Pattern ID_PATTERN = Pattern.compile("[0-9a-zA-Z_\\-]+(?:\\.[0-9a-zA-Z_\\-]+)*");
+    private static final Pattern VERSION_PATTERN = Pattern.compile("\\d+(?:\\.\\d+(?:\\.\\d+(?:\\.[0-9a-zA-Z_\\-])?)?)?");
+    
+    /** Plugin table which contains detected plugins. */
+    private final Map<String, Features> pluginTable;
+    private final Set<String> templateSet = new HashSet<String>(INT_16);
+    private File ditaDir;
+    private File basedir;
+    /** Plugin configuration file. */
+    private final Set<File> descSet;
+    private final XMLReader reader;
+    private DITAOTLogger logger;
+    private final Set<String> loadedPlugin;
+    private final Hashtable<String, String> featureTable;
+    private File propertiesFile;
+    private final Set<String> extensionPoints;
 
-	private void integrate() {
-		//Collect information for each feature id and generate a feature table.
-		Iterator<String> iter = pluginTable.keySet().iterator();
-		Iterator<String> setIter = null;
-		File templateFile = null;
-		String currentPlugin = null;
-		FileGenerator fileGen = new FileGenerator(featureTable);
-		while (iter.hasNext()){
-			currentPlugin = iter.next();
-			loadPlugin (currentPlugin);
-		}
-		
-		//generate the files from template
-		setIter = templateSet.iterator();
-		while(setIter.hasNext()){
-			templateFile = new File(ditaDir,(String) setIter.next());
-			fileGen.generate(templateFile.getAbsolutePath());
-		}
-		
-		// Added on 2010-11-09 for bug 3102827: Allow a way to specify recognized image extensions -- start
-		// generate configuration properties
-		final Properties configuration = new Properties();
-		//image extensions
-		final Set<String> imgExts = new HashSet<String>();
-		
-		for (final String ext: properties.getProperty(Constants.CONF_SUPPORTED_IMAGE_EXTENSIONS, "").split(Constants.CONF_LIST_SEPARATOR)) {
-			final String e = ext.trim();
-			if (e.length() != 0) {
-				imgExts.add(e);
-			} 
-		}
-		if (featureTable.containsKey(FEAT_IMAGE_EXTENSIONS)) {
-			for (final String ext: featureTable.get(FEAT_IMAGE_EXTENSIONS).split(FEAT_VALUE_SEPARATOR)) {
-				final String e = ext.trim();
-				if (e.length() != 0) {
-					imgExts.add(e);
-				}
-			}
-		}
-		configuration.put(Constants.CONF_SUPPORTED_IMAGE_EXTENSIONS, StringUtils.assembleString(imgExts, Constants.CONF_LIST_SEPARATOR));
-		OutputStream out = null;
-		try {
-			out = new BufferedOutputStream(new FileOutputStream(
-					new File(ditaDir, "lib" + File.separator + Constants.CONF_PROPERTIES)));
-			configuration.store(out, "DITA-OT runtime configuration");
-		} catch (Exception e) {
-			logger.logException(e);
-			//throw new RuntimeException("Failed to write configuration properties: " + e.getMessage(), e);
-		} finally {
-			if (out != null) {
-				try {
-					out.close();
-				} catch (IOException e) {
-					logger.logException(e);
-				}
-			}
-		}
-	}
-	// Added on 2010-11-09 for bug 3102827: Allow a way to specify recognized image extensions -- end
-	
-	//load the plug-ins and aggregate them by feature and fill into feature table
-	private boolean loadPlugin (String plugin)
-	{
-		Set<Map.Entry<String,String>> featureSet = null;
-		Iterator<Map.Entry<String,String>> setIter = null;
-		Iterator<String> templateIter = null;
-		Map.Entry<String,String> currentFeature = null;
-		Features pluginFeatures = pluginTable.get(plugin);
-		if (checkPlugin(plugin)){
-			featureSet = pluginFeatures.getAllFeatures();
-			setIter = featureSet.iterator();
-			while (setIter.hasNext()){
-				currentFeature = setIter.next();
-				if(featureTable.containsKey(currentFeature.getKey())){
-					String value = (String)featureTable.remove(currentFeature.getKey());
-					featureTable.put(currentFeature.getKey(), 
-							new StringBuffer(value).append(",").append(currentFeature.getValue()).toString());
-				}else{
-					featureTable.put(currentFeature.getKey(),currentFeature.getValue());
-				}
-			}
-			
-			templateIter = pluginFeatures.getAllTemplates().iterator();
-			while (templateIter.hasNext()){
-				String templateName = (String) templateIter.next();
-				templateSet.add(FileUtils.getRelativePathFromMap(getDitaDir() + File.separator + "dummy", pluginFeatures.getLocation() + File.separator + templateName));
-			}
-			loadedPlugin.add(plugin);
-			return true;
-		}else{
-			return false;
-		}
-	}
+    private Properties properties;
 
-	//check whether the plugin can be loaded
-	private boolean checkPlugin(String currentPlugin) {
-		PluginRequirement requirement = null;
-		Properties prop = new Properties();		
-		Features pluginFeatures = (Features) pluginTable.get(currentPlugin);
-		Iterator<PluginRequirement> iter = pluginFeatures.getRequireListIter();
-		//check whether dependcy is satisfied
-		while (iter.hasNext()){
-			boolean anyPluginFound = false;
-			requirement = iter.next();
-			Iterator<String> requiredPluginIter = requirement.getPlugins();
-			while (requiredPluginIter.hasNext()) {
-				// Iterate over all alternatives in plugin requirement.
-				String requiredPlugin = requiredPluginIter.next();
-				if(pluginTable.containsKey(requiredPlugin)){
-					if (!loadedPlugin.contains(requiredPlugin)){
-						//required plug-in is not loaded
-						loadPlugin(requiredPlugin);
-					}
-					// As soon as any plugin is found, it's OK.
-					anyPluginFound = true;
-				}
-			}
-			if (!anyPluginFound && requirement.getRequired()) {
-				//not contain any plugin required by current plugin
-				prop.put("%1",requirement.toString());
-				prop.put("%2",currentPlugin);
-				logger.logWarn(MessageUtils.getMessage("DOTJ020W",prop).toString());
-				return false;
-			}
-		}		
-		return true;
-	}
-
-	private void parsePlugin() {
-		if(!descSet.isEmpty()){
-			Iterator<File> iter = descSet.iterator();
-			File descFile = null;
-			while(iter.hasNext()){
-				descFile = iter.next();
-				parseDesc(descFile);
-			}
-		}
-	}
-
-	private void parseDesc(File descFile) {
-		try{
-			reader.setContentHandler(new DescParser(descFile.getParent()));
-			reader.parse(descFile.getAbsolutePath());
-		}catch(Exception e){
-			logger.logException(e);
-		}		
-	}
-
-	/**
-	 * Default Constructor.
-	 */
-	public Integrator() {
-		initTemplateSet();
-		pluginTable = new Hashtable<String,Features>(Constants.INT_16);
-		descSet = new HashSet<File>(Constants.INT_16);
-		loadedPlugin = new HashSet<String>(Constants.INT_16);
-		featureTable = new Hashtable<String,String>(Constants.INT_16);
-		logger = new DITAOTJavaLogger();
-		basedir = null;
-		ditaDir = null;
-		try {
-            if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
-                StringUtils.initSaxDriver();
-            }
-            reader = XMLReaderFactory.createXMLReader();            
-        } catch (Exception e) {
-        	logger.logException(e);
+    /**
+     * Execute point of Integrator.
+     */
+    public void execute() {
+        if (logger == null) {
+            logger = new DITAOTJavaLogger();
         }
-	}	
+        if (!ditaDir.isAbsolute()) {
+            ditaDir = new File(basedir, ditaDir.getPath());
+        }
 
-	/**
-	 * Return the basedir.
-	 * @return String
-	 */
-	public String getBasedir() {
-		return basedir;
-	}
+        // Read the properties file, if it exists.
+        properties = new Properties();
+        if (propertiesFile != null) {
+            FileInputStream propertiesStream = null;
+            try {
+                propertiesStream = new FileInputStream(propertiesFile);
+                properties.load(propertiesStream);
+            } catch (final Exception e) {
+                logger.logException(e);
+            } finally {
+                if (propertiesStream != null) {
+                    try {
+                        propertiesStream.close();
+                    } catch (IOException e) {
+                        logger.logException(e);
+                    }
+                }
+            }
+        } else {
+            // Set reasonable defaults.
+            properties.setProperty("plugindirs", "plugins;demo");
+            properties.setProperty("plugin.ignores", "");
+        }
 
-	/**
-	 * Set the basedir.
-	 * @param baseDir baseDir
-	 */
-	public void setBasedir(String baseDir) {
-		this.basedir = baseDir;
-	}
-	
-	/**
-	 * Return the ditaDir.
-	 * @return ditaDir
-	 */
-	public String getDitaDir() {
-		return ditaDir;
-	}
+        // Get the list of plugin directories from the properties.
+        final String[] pluginDirs = properties.getProperty("plugindirs").split(PARAM_VALUE_SEPARATOR);
 
-	/**
-	 * Set the ditaDir.
-	 * @param ditadir ditaDir
-	 */
-	public void setDitaDir(String ditadir) {
-		this.ditaDir = ditadir;
-	}
-	
-	/**
-	 * Return the properties file.
-	 * @return file
-	 */
-	public File getProperties() {
-		return propertiesFile;
-	}
+        final Set<String> pluginIgnores = new HashSet<String>();
+        if (properties.getProperty("plugin.ignores") != null) {
+            pluginIgnores.addAll(Arrays.asList(properties.getProperty("plugin.ignores").split(PARAM_VALUE_SEPARATOR)));
+        }
 
-	/**
-	 * Set the properties file.
-	 * @param propertiesfile propertiesfile
-	 */
-	public void setProperties(File propertiesfile) {
-		this.propertiesFile = propertiesfile;
-	}
-	
-	/**
-	 * Test function.
-	 * @param args args
-	 */
-	public static void main(String[] args) {
-		Integrator abc = new Integrator();
-		File currentDir = new File(".");
-		String currentPath = currentDir.getAbsolutePath();
-		abc.setDitaDir(currentPath.substring(0,currentPath.lastIndexOf(Constants.FILE_SEPARATOR)));
-		abc.setProperties(new File("integrator.properties"));
-		abc.execute();
-	}
+        for (final String tmpl : properties.getProperty(CONF_TEMPLATES, "").split(PARAM_VALUE_SEPARATOR)) {
+            final String t = tmpl.trim();
+            if (t.length() != 0) {
+                templateSet.add(t);
+            }
+        }
+
+        for (final String pluginDir2 : pluginDirs) {
+            File pluginDir = new File(pluginDir2);
+            if (!pluginDir.isAbsolute()) {
+                pluginDir = new File(ditaDir, pluginDir.getPath());
+            }
+            final File[] pluginFiles = pluginDir.listFiles();
+
+            for (int i = 0; (pluginFiles != null) && (i < pluginFiles.length); i++) {
+                final File f = pluginFiles[i];
+                final File descFile = new File(pluginFiles[i], "plugin.xml");
+                if (pluginFiles[i].isDirectory() && !pluginIgnores.contains(f.getName()) && descFile.exists()) {
+                    descSet.add(descFile);
+                }
+            }
+        }
+
+        parsePlugin();
+        integrate();
+    }
+
+    /**
+     * Generate and process plugin files.
+     */
+    private void integrate() {
+        // Collect information for each feature id and generate a feature table.
+        final FileGenerator fileGen = new FileGenerator(featureTable, pluginTable);
+        fileGen.setLogger(logger);
+        for (final String currentPlugin : pluginTable.keySet()) {
+            loadPlugin(currentPlugin);
+        }
+
+        // generate the files from template
+        for (final String template : templateSet) {
+            final File templateFile = new File(ditaDir, template);
+            logger.logDebug("Process template " + templateFile.getPath());
+            fileGen.generate(templateFile);
+        }
+
+        // Added on 2010-11-09 for bug 3102827: Allow a way to specify
+        // recognized image extensions -- start
+        // generate configuration properties
+        final Properties configuration = new Properties();
+        // image extensions
+        final Set<String> imgExts = new HashSet<String>();
+
+        for (final String ext : properties.getProperty(CONF_SUPPORTED_IMAGE_EXTENSIONS, "").split(CONF_LIST_SEPARATOR)) {
+            final String e = ext.trim();
+            if (e.length() != 0) {
+                imgExts.add(e);
+            }
+        }
+        if (featureTable.containsKey(FEAT_IMAGE_EXTENSIONS)) {
+            for (final String ext : featureTable.get(FEAT_IMAGE_EXTENSIONS).split(FEAT_VALUE_SEPARATOR)) {
+                final String e = ext.trim();
+                if (e.length() != 0) {
+                    imgExts.add(e);
+                }
+            }
+        }
+        configuration.put(CONF_SUPPORTED_IMAGE_EXTENSIONS, StringUtils.assembleString(imgExts, CONF_LIST_SEPARATOR));
+        
+        // non-print transtypes
+        final Set<String> printTranstypes = new HashSet<String>();
+        final String printTranstypeValue = properties.getProperty(CONF_PRINT_TRANSTYPES);
+        if (printTranstypeValue != null) {
+            printTranstypes.addAll(Arrays.asList(printTranstypeValue.split(PARAM_VALUE_SEPARATOR)));
+        }
+        configuration.put(CONF_PRINT_TRANSTYPES, StringUtils.assembleString(printTranstypes, CONF_LIST_SEPARATOR));
+        
+        OutputStream out = null;
+        try {
+            final File outFile = new File(ditaDir, "lib" + File.separator + CONF_PROPERTIES);
+            logger.logDebug("Generate configuration properties " + outFile.getPath());
+            out = new BufferedOutputStream(new FileOutputStream(outFile));
+            configuration.store(out, "DITA-OT runtime configuration");
+        } catch (final Exception e) {
+            logger.logException(e);
+            // throw new
+            // RuntimeException("Failed to write configuration properties: " +
+            // e.getMessage(), e);
+        } finally {
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (final IOException e) {
+                    logger.logException(e);
+                }
+            }
+        }
+    }
+
+    // Added on 2010-11-09 for bug 3102827: Allow a way to specify recognized
+    // image extensions -- end
+
+    /**
+     * Load the plug-ins and aggregate them by feature and fill into feature
+     * table.
+     * 
+     * @param plugin plugin ID
+     * @return {@code true}> if plugin was loaded, otherwise {@code false}
+     */
+    private boolean loadPlugin(final String plugin) {
+        if (checkPlugin(plugin)) {
+            final Features pluginFeatures = pluginTable.get(plugin);
+            final Set<Map.Entry<String, String>> featureSet = pluginFeatures.getAllFeatures();
+            for (final Map.Entry<String, String> currentFeature : featureSet) {
+                if (!extensionPoints.contains(currentFeature.getKey())) {
+                    logger.logDebug("Plug-in " + plugin + " uses an undefined extension point "
+                            + currentFeature.getKey());
+                }
+                if (featureTable.containsKey(currentFeature.getKey())) {
+                    final String value = featureTable.remove(currentFeature.getKey());
+                    featureTable.put(currentFeature.getKey(), new StringBuffer(value).append(FEAT_VALUE_SEPARATOR)
+                            .append(currentFeature.getValue()).toString());
+                } else {
+                    featureTable.put(currentFeature.getKey(), currentFeature.getValue());
+                }
+            }
+
+            for (final String templateName : pluginFeatures.getAllTemplates()) {
+                templateSet.add(FileUtils.getRelativePathFromMap(getDitaDir() + File.separator + "dummy",
+                        pluginFeatures.getLocation() + File.separator + templateName));
+            }
+            loadedPlugin.add(plugin);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Check whether the plugin can be loaded.
+     * 
+     * @param currentPlugin plugin ID
+     * @return {@code true} if plugin can be loaded, otherwise {@code false}
+     */
+    private boolean checkPlugin(final String currentPlugin) {
+        final Features pluginFeatures = pluginTable.get(currentPlugin);
+        final Iterator<PluginRequirement> iter = pluginFeatures.getRequireListIter();
+        // check whether dependcy is satisfied
+        while (iter.hasNext()) {
+            boolean anyPluginFound = false;
+            final PluginRequirement requirement = iter.next();
+            final Iterator<String> requiredPluginIter = requirement.getPlugins();
+            while (requiredPluginIter.hasNext()) {
+                // Iterate over all alternatives in plugin requirement.
+                final String requiredPlugin = requiredPluginIter.next();
+                if (pluginTable.containsKey(requiredPlugin)) {
+                    if (!loadedPlugin.contains(requiredPlugin)) {
+                        // required plug-in is not loaded
+                        loadPlugin(requiredPlugin);
+                    }
+                    // As soon as any plugin is found, it's OK.
+                    anyPluginFound = true;
+                }
+            }
+            if (!anyPluginFound && requirement.getRequired()) {
+                // not contain any plugin required by current plugin
+                final Properties prop = new Properties();
+                prop.put("%1", requirement.toString());
+                prop.put("%2", currentPlugin);
+                logger.logWarn(MessageUtils.getMessage("DOTJ020W", prop).toString());
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Parse plugin configuration files.
+     */
+    private void parsePlugin() {
+        if (!descSet.isEmpty()) {
+            for (final File descFile : descSet) {
+                logger.logDebug("Read plug-in configuration " + descFile.getPath());
+                parseDesc(descFile);
+            }
+        }
+    }
+
+    /**
+     * Parse plugin configuration file
+     * 
+     * @param descFile plugin configuration
+     */
+    private void parseDesc(final File descFile) {
+        try {
+            final DescParser parser = new DescParser(descFile.getParentFile(), ditaDir);
+            reader.setContentHandler(parser);
+            reader.parse(descFile.getAbsolutePath());
+            final Features f = parser.getFeatures();
+            final String id = f.getPluginId();
+            validatePlugin(f);
+            setDefaultValues(f);
+            extensionPoints.addAll(f.getExtensionPoints().keySet());
+            pluginTable.put(id, f);
+        } catch (final Exception e) {
+            logger.logException(e);
+        }
+    }
+    
+    /**
+     * Validate plug-in configuration.
+     * 
+     * Follow OSGi symbolic name syntax rules:
+     * 
+     * <pre>
+     * digit         ::= [0..9]
+     * alpha         ::= [a..zA..Z]
+     * alphanum      ::= alpha | digit
+     * token         ::= ( alphanum | ’_’ | ’-’ )+
+     * symbolic-name ::= token('.'token)*
+     * </pre>
+     * 
+     * Follow OSGi bundle version syntax rules:
+     * 
+     * <pre>
+     * version   ::= major( '.' minor ( '.' micro ( '.' qualifier )? )? )?
+     * major     ::= number
+     * minor     ::=number
+     * micro     ::=number
+     * qualifier ::= ( alphanum | ’_’ | '-' )+
+     * </pre>
+     * 
+     * @param f Features to validate
+     */
+    private void validatePlugin(final Features f) {
+        final String id = f.getPluginId(); 
+        if (!ID_PATTERN.matcher(id).matches()) {
+            logger.logWarn("Plug-in ID '" + id + "' doesn't follow recommended syntax rules, support for nonconforming IDs may be removed in future releases.");
+        }
+        final String version = f.getFeature("package.version");
+        if (version != null && !VERSION_PATTERN.matcher(version).matches()) {
+            logger.logWarn("Plug-in version '" + version + "' doesn't follow recommended syntax rules, support for nonconforming version may be removed in future releases.");
+        }
+    }
+    
+    /**
+     * Set default values.
+     * 
+     * @param f Features to set defaults to
+     */
+    private void setDefaultValues(final Features f) {
+        if (f.getFeature("package.version") == null) {
+            f.addFeature("package.version", "0.0.0", null);
+        }
+    }
+
+    /**
+     * Default Constructor.
+     */
+    public Integrator() {
+        pluginTable = new HashMap<String, Features>(INT_16);
+        descSet = new HashSet<File>(INT_16);
+        loadedPlugin = new HashSet<String>(INT_16);
+        featureTable = new Hashtable<String, String>(INT_16);
+        extensionPoints = new HashSet<String>();
+        try {
+            reader = StringUtils.getXMLReader();
+        } catch (final Exception e) {
+            throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Return the basedir.
+     * 
+     * @return base directory
+     */
+    public File getBasedir() {
+        return basedir;
+    }
+
+    /**
+     * Set the basedir.
+     * 
+     * @param baseDir base directory
+     */
+    public void setBasedir(final File baseDir) {
+        this.basedir = baseDir;
+    }
+
+    /**
+     * Return the ditaDir.
+     * 
+     * @return dita directory
+     */
+    public File getDitaDir() {
+        return ditaDir;
+    }
+
+    /**
+     * Set the ditaDir.
+     * 
+     * @param ditadir dita directory
+     */
+    public void setDitaDir(final File ditadir) {
+        this.ditaDir = ditadir;
+    }
+
+    /**
+     * Return the properties file.
+     * 
+     * @return properties file
+     */
+    public File getProperties() {
+        return propertiesFile;
+    }
+
+    /**
+     * Set the properties file.
+     * 
+     * @param propertiesfile properties file
+     */
+    public void setProperties(final File propertiesfile) {
+        this.propertiesFile = propertiesfile;
+    }
+
+    /**
+     * Set logger.
+     * 
+     * @param logger logger instance
+     */
+    public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
+
+    /**
+     * Get all and combine extension values
+     * 
+     * @param featureTable plugin features
+     * @param extension extension ID
+     * @return combined extension value, {@code null} if no value available
+     */
+    static final String getValue(final Map<String, Features> featureTable, final String extension) {
+        final List<String> buf = new ArrayList<String>();
+        for (final Features f : featureTable.values()) {
+            final String v = f.getFeature(extension);
+            if (v != null) {
+                buf.add(v);
+            }
+        }
+        if (buf.isEmpty()) {
+            return null;
+        } else {
+            return StringUtils.assembleString(buf, ",");
+        }
+    }
+
+    /**
+     * Command line interface for testing.
+     * 
+     * @param args arguments
+     */
+    public static void main(final String[] args) {
+        final Integrator abc = new Integrator();
+        final File currentDir = new File(".");
+        abc.setDitaDir(currentDir);
+        abc.setProperties(new File("integrator.properties"));
+        abc.execute();
+    }
 
 }

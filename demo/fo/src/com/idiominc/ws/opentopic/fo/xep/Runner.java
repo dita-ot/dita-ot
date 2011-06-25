@@ -52,7 +52,7 @@ public class Runner {
             System.exit(1);
         }
 
-        if (args.length == 3 && args[2].equals("failOnError=false"))
+        if (args.length >= 3 && args[2].equals("failOnError=false"))
         {
             failOnError = false;
         }
@@ -83,6 +83,13 @@ public class Runner {
             return true;
         }
 
+        String outputFormat = "PDF";
+        for (int i = 2; i < args.length; i++) {
+            if (args[i].startsWith("-")) {
+                outputFormat = args[i].substring(1);
+            }
+        }
+
         try {
             SAXSource source = createSAXSource(args);
             OutputStream out = createOutputStream(args);
@@ -90,7 +97,7 @@ public class Runner {
 
             try {
                 try {
-                    xep.render(source, new FOTarget(out, "PDF"), logger);
+                    xep.render(source, new FOTarget(out, outputFormat), logger);
                 } finally {
                     out.close();
                 }

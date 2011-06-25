@@ -9,6 +9,8 @@
  */
 package org.dita.dost.util;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.StringTokenizer;
@@ -23,11 +25,11 @@ import org.dita.dost.log.DITAOTJavaLogger;
  *
  * @author Wu, Zhi Qiang
  */
-public class DITAOTCopy extends Task {
+public final class DITAOTCopy extends Task {
 	private String includes = null;
 	private String relativePaths = null;
 	private String destDir = null;  // the destination directory
-	private DITAOTJavaLogger logger = new DITAOTJavaLogger();
+	private final DITAOTJavaLogger logger = new DITAOTJavaLogger();
 	
 	/**
 	 * Default Constructor.
@@ -40,7 +42,7 @@ public class DITAOTCopy extends Task {
 	 * Set the copy files.
 	 * @param incld The includes to set.
 	 */
-	public void setIncludes(String incld) {
+	public void setIncludes(final String incld) {
 		this.includes = incld;
 	}
 	
@@ -48,7 +50,7 @@ public class DITAOTCopy extends Task {
      * Set the destination directory.
      * @param destdir the destination directory.
      */
-    public void setTodir(String destdir) {
+    public void setTodir(final String destdir) {
         this.destDir = destdir;
     }
     
@@ -56,7 +58,7 @@ public class DITAOTCopy extends Task {
 	 * Set the relative path from output directory.
 	 * @param relPaths the relative path .
 	 */
-	public void setRelativePaths(String relPaths) {
+	public void setRelativePaths(final String relPaths) {
 		this.relativePaths = relPaths;
 	}
 
@@ -64,27 +66,27 @@ public class DITAOTCopy extends Task {
 	 * @see org.apache.tools.ant.Task#execute()
 	 */
 	public void execute() throws BuildException {
-		FileUtils fileUitls = FileUtils.newFileUtils();
+		final FileUtils fileUitls = FileUtils.newFileUtils();
 		StringTokenizer tokenizer;
 		StringTokenizer pathTokenizer;
 		if (includes == null) {
 			return;
 		}
-		tokenizer = new StringTokenizer(includes, Constants.COMMA);
+		tokenizer = new StringTokenizer(includes, COMMA);
 		if (relativePaths == null) {
 			try {
 				while (tokenizer.hasMoreTokens()) {
-					File srcFile = new File(tokenizer.nextToken());
+					final File srcFile = new File(tokenizer.nextToken());
 					if (srcFile.exists()) {
-						File destFile = new File(destDir, srcFile.getName());
+						final File destFile = new File(destDir, srcFile.getName());
 						fileUitls.copyFile(srcFile, destFile);
 					}
 				}
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				logger.logException(e);
 			}
 		}else{
-			pathTokenizer = new StringTokenizer(relativePaths, Constants.COMMA);
+			pathTokenizer = new StringTokenizer(relativePaths, COMMA);
 			StringBuffer realDest=null;
 			try {
 				while (tokenizer.hasMoreTokens()) {
@@ -94,13 +96,13 @@ public class DITAOTCopy extends Task {
 					if(destDir!=null && destDir.trim().length()>0){
 						realDest.append(destDir).append(File.separator).append(pathTokenizer.nextToken());
 					}
-					File srcFile = new File(tokenizer.nextToken());
+					final File srcFile = new File(tokenizer.nextToken());
 					if (srcFile.exists()) {
-						File destFile = new File(realDest.toString());
+						final File destFile = new File(realDest.toString());
 						fileUitls.copyFile(srcFile, destFile);
 					}
 				}
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				logger.logException(e);
 			}
 		}

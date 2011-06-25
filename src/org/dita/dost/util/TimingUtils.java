@@ -1,3 +1,9 @@
+/*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
 /**
  * Copyright (c) 2009 Really Strategies, Inc.
  */
@@ -9,10 +15,10 @@ import java.util.Date;
 /**
  *
  */
-public class TimingUtils {
+public final class TimingUtils {
 
-	public static String reportElapsedTime(Date startTime) {
-		long elapsedTime = Calendar.getInstance().getTime().getTime() - startTime.getTime();
+	public static String reportElapsedTime(final Date startTime) {
+		final long elapsedTime = Calendar.getInstance().getTime().getTime() - startTime.getTime();
 		if (elapsedTime < 500) {
 			return elapsedTime + " milliseconds";
 		} else if (elapsedTime < 60000) {

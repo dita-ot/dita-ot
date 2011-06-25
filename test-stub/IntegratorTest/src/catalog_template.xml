@@ -1,0 +1,7 @@
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"
+         xmlns:dita="http://dita-ot.sourceforge.net">
+
+  <dita:extension id="InsertCatalogActionRelative"
+                  behavior="org.dita.dost.platform.InsertCatalogActionRelative"/>  
+  
+</catalog>

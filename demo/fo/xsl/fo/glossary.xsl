@@ -5,10 +5,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 xmlns:fo="http://www.w3.org/1999/XSL/Format" 
 xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
 exclude-result-prefixes="ot-placeholder"
-version="1.1">
-
-
-    <xsl:include href="../../cfg/fo/attrs/glossary-attr.xsl"/>
+version="2.0">
 
     <xsl:template match="ot-placeholder:glossarylist">
     
@@ -17,8 +14,7 @@ version="1.1">
                 <fo:flow flow-name="xsl-region-body">
 
 
-                    <fo:block xsl:use-attribute-sets="__glossary__label">
-                        <xsl:attribute name="id">ID_GLOSSARY_00-0F-EA-40-0D-4D</xsl:attribute>
+                    <fo:block xsl:use-attribute-sets="__glossary__label" id="{$id.glossary}">
                         <xsl:call-template name="insertVariable">
                             <xsl:with-param name="theVariableID" select="'Glossary'"/>
                         </xsl:call-template>
@@ -34,10 +30,11 @@ version="1.1">
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' glossentry/glossentry ')]">
-        <fo:block id="{@id}">
+        <fo:block>
+            <xsl:call-template name="commonattributes"/>
             <fo:block>
                 <xsl:attribute name="id">
-                    <xsl:value-of select="concat('_OPENTOPIC_TOC_PROCESSING_', generate-id())"/>
+                    <xsl:call-template name="generate-toc-id"/>
                 </xsl:attribute>
                 <fo:block xsl:use-attribute-sets="__glossary__term">
                     <xsl:apply-templates select="*[contains(@class, ' glossentry/glossterm ')]/node()"/>

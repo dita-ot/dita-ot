@@ -12,6 +12,7 @@ package org.dita.dost.writer;
 import java.io.IOException;
 
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.Content;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
@@ -28,9 +29,11 @@ import org.xml.sax.ext.LexicalHandler;
  * @author Zhang, Yuan Peng
  */
 
-public abstract class AbstractXMLWriter implements AbstractWriter,
+abstract class AbstractXMLWriter implements AbstractWriter,
 ContentHandler, LexicalHandler, EntityResolver {
 
+    protected DITAOTLogger logger;
+    
     /**
      * @see org.xml.sax.ContentHandler#characters(char[], int, int)
      */
@@ -146,4 +149,8 @@ ContentHandler, LexicalHandler, EntityResolver {
 	public void write(String filename) throws DITAOTException {
 	}
     
+	public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
+	
 }

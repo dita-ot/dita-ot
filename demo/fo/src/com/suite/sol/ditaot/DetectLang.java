@@ -6,6 +6,9 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+
+import org.apache.tools.ant.BuildException;
+
 import java.io.File;
 
 import org.apache.tools.ant.Task;
@@ -59,46 +62,46 @@ public class DetectLang extends Task {
     /**
      * Executes the Ant task.
      */
-    public void execute() {
-
-        Project activeProject = getProject();
-        if (activeProject != null) {
-            if (activeProject.getProperty("document.locale") != null) {
-                /* document.locale already set, nothing to do. */
-                return;
+    public void execute() throws BuildException {
+        if (getProject() == null) {
+            throw new BuildException(new IllegalStateException("Project not available"));
+        }
+        if (getProject().getProperty("document.locale") == null) {
+            try {
+    
+                documentPath = documentPath.replace(File.separatorChar, '/');
+                File file = documentPath.startsWith("file:") ? 
+                        new File(new java.net.URI(documentPath)) : 
+                        new File(documentPath);   
+                if (!file.exists()) {
+                    throw new Exception("File does not exist");
+                }
+                if (!file.canRead()) {
+                    throw new Exception("Can't read input file");
+                }
+    
+                SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+                SAXParser saxParser = saxParserFactory.newSAXParser();
+    
+                saxParser.parse(file, new DefaultHandlerImpl());
+    
+            } catch (Exception e) {
+                /* Since an exception is used to stop parsing when the search
+                 * is successful, catch the exception.
+                 */
+                if (e.getMessage() != null &&
+                    e.getMessage().equals("Search finished")) {
+                    System.out.println("Lang search finished");
+                } else {
+                    e.printStackTrace();
+                }
             }
         }
-
-        try {
-
-            documentPath = documentPath.replace(File.separatorChar, '/');
-            File file = documentPath.startsWith("file:") ? 
-                    new File(new java.net.URI(documentPath)) : 
-                    new File(documentPath);   
-            if (!file.exists()) {
-                throw new Exception("File does not exist");
-            }
-            if (!file.canRead()) {
-                throw new Exception("Can't read input file");
-            }
-
-            SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
-            SAXParser saxParser = saxParserFactory.newSAXParser();
-
-            saxParser.parse(file, new DefaultHandlerImpl());
-
-        } catch (Exception e) {
-            /* Since an exception is used to stop parsing when the search
-             * is successful, catch the exception.
-             */
-            if (e.getMessage() != null &&
-                e.getMessage().equals("Search finished")) {
-                System.out.println("Lang search finished");
-            } else {
-                e.printStackTrace();
-            }
+        final String locale = getProject().getProperty("document.locale");
+        if (locale != null && getProject().getProperty("document.language") == null) {
+            setActiveProjectProperty("document.language",
+                                     locale.substring(0, locale.length() < 2 ? locale.length(): 2));
         }
-
     }
 
     private class DefaultHandlerImpl

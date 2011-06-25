@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic [
+<!ENTITY ent 'entity'> 
+]>
+<topic class="- topic/topic ">
+foo
+&amp;&lt;
+&#x62;&#x61;&#x72;
+&ent;
+<!--foo & <-->
+<?foo bar & <?><?baz?>
+<![CDATA[bar & <]]>
+<empty/><empty with="attribute"/><parent>foo<child>bar</child>baz</parent>
+<foo xmlns="http://example.com/bar"/><ns:foo xmlns:ns="http://example.com/baz"><ns:bar/></ns:foo>
+</topic>

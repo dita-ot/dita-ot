@@ -17,7 +17,6 @@
 <xsl:param name="APIREFCSSRTL" select="'ibmapirefrtl.css'"/>
 
 <xsl:param name="FILEREF">file:/</xsl:param>
-<xsl:param name="WORKDIR" select="'./'"/>
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
    - Suppressed processing

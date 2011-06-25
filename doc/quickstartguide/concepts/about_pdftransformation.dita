@@ -13,13 +13,14 @@
     </metadata>
   </prolog>  
   <conbody>
-  <p>DITA-OT performs PDF transformations differently than other output types.  A separate software program, known as a renderer or engine, is used
+  <p>DITA-OT performs PDF transformations differently than other output types.  A separate software program, known as XSL formatter, is used
 	to generate the PDF documents.  By default, that engine is the FO Plugin, which also uses an Ant build script to generates several files and 
 	place them in the directory you specify with the <codeph>dita.temp.dir</codeph> property in your script.  Several of these files are useful for 
 	debugging PDF-related transformation errors.  However, the FO Plugin build script also deletes them by default. You can override this behavior 
 	by setting the value of the <codeph>clean.temp</codeph> ant property in your build script to "no," as shown in the following code snippet.
 	<codeblock>&lt; property name="clean.temp" value="no"/></codeblock></p>
-  <p><image href="../images/hand.gif"/> The FO Plugin ant build script is located in the following directory: <codeph>DITA-OT1.5\demo\fo\build.xml</codeph>.</p>
+  <note>The FO Plugin ant build script is located in the
+      following directory: <codeph>DITA-OT<keyword keyref="release.version"/>\demo\fo\build.xml</codeph>.</note>
   <p>The following table describes the auto-generated files relevant to debugging PDF transformation errors.</p>
   <table>
   <tgroup cols="2">
@@ -61,9 +62,9 @@
   </tgroup>
   </table>
   <p>Examine the content of these files to determine the cause of PDF transformation errors.</p>
-  <p><image href="../images/warning.gif"/> The Apache FOP formatter does not support the <codeph>indexlist</codeph> element for PDF.
+  <note>The Apache FOP formatter does not support the <codeph>indexlist</codeph> element for PDF.
   You can try using a different PDF renderer or engine by specifying a different value for the <codeph>
   pdf.formatter</codeph> ant property in the FO plugin build file, or add a <codeph>topicref</codeph> element
-  in your build file with that links to a manually-created index file.</p>
+  in your build file with that links to a manually-created index file.</note>
   </conbody>
   </concept>

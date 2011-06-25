@@ -282,7 +282,7 @@ Allowed values are "yes" and "no".  Default is "no".</entry>
 "no". Default is "no".</entry>
 </row>
 <row>
-<entry><codeph>args.xhtml.class</codeph></entry>
+<entry><codeph>args.xhtml.toc.class</codeph></entry>
 <entry>NA</entry>
 <entry>String for a CSS class name attribute applied to the TOC (x)HTML
 output's &lt;body> element.  Found in map2htmltoc.xsl.</entry>
@@ -327,13 +327,12 @@ in or below the directory containing your <codeph>.ditamap</codeph
 > file. 		The default value is "no."  The <codeph>gen-list-without-flagging</codeph
 > Ant task generates a harmless warning for content outside 		the
 map directory; you can suppress these warnings by setting the <codeph
->outer.control</codeph> property to "true". 		<p><image
-href="../images/warning.gif"></image> Microsoft HTML Help Compiler
+>outer.control</codeph> property to "true". 		<note type="warning">Microsoft HTML Help Compiler
 cannot produce HTMLHelp for documentation projects that use outer
 content.  Your content files must reside in or below the directory
 containing the <codeph>.ditamap</codeph> file, and the map file cannot
 specify  ".." at the start		of <codeph>href</codeph> attributes for <codeph
->topicref</codeph> elements.</p> 		</entry>
+>topicref</codeph> elements.</note> 		</entry>
 </row>
 </tbody>
 </tgroup>
@@ -470,6 +469,11 @@ colname="col2" colwidth="125*"/><colspec colname="col3" colwidth="200*"/>
 </row>
 </thead>
 <tbody>
+  <row>
+    <entry><codeph>args.xhtml.contenttarget</codeph></entry>
+    <entry>NA</entry>
+    <entry>Specifies the content frame name where links from TOC are opened.</entry>
+  </row>
 <row>
 <entry colname="col1"><codeph>args.xhtml.toc</codeph></entry>
 <entry colname="col2"><codeph>/xhtmltoc</codeph></entry>
@@ -520,14 +524,14 @@ for an Eclipse fragment.</entry>
 <entry><codeph>args.eclipse.provider</codeph></entry>
 <entry><codeph>/provider</codeph></entry>
 <entry>Specifies the name of the person or organization providing
-an Eclipse Help project. Default value is <codeph>DITA</codeph>. - <b
->DITA Map only</b></entry>
+an Eclipse Help project. The default value is <codeph>DITA</codeph>.
+<note type="tip">The toolkit ignores the value of this property when processing an Eclipse Collection Map, <codeph>eclipse.dtd</codeph>.</note>
+</entry>
 </row>
 <row>
 <entry><codeph>args.eclipse.version</codeph></entry>
 <entry><codeph>/version</codeph></entry>
-<entry>Specifies the version number to include in the output. Default
-value is <codeph>0.0.0</codeph>. - <b>DITA Map only</b></entry>
+<entry>Specifies the version number to include in the output. Default value is <codeph>0.0.0</codeph>.<note type="tip">The toolkit ignores the value of this property when processing an Eclipse Collection Map, <codeph>eclipse.dtd</codeph>.</note></entry>
 </row>
 <row>
 <entry><codeph>args.eclipse.symbolic.name</codeph></entry>
@@ -535,8 +539,7 @@ value is <codeph>0.0.0</codeph>. - <b>DITA Map only</b></entry>
 <entry>Specifies the symbolic name (aka plugin ID) in the output for
 an Eclipse Help project. The @id value from the DITA map or the Eclipse
 map collection (Eclipse help specialization) is the symbolic name
-for the plugin in Eclipse. By default, the value org.sample.help.doc.- <b
->DITA Map only</b></entry>
+for the plugin in Eclipse. By default, the value org.sample.help.doc.<note type="tip">The toolkit ignores the value of this property when processing an Eclipse Collection Map, <codeph>eclipse.dtd</codeph>.</note></entry>
 </row>
 </tbody>
 </tgroup>
@@ -599,7 +602,7 @@ table describes additional Ant properties specific to the DITA Open
 Toolkit that you may override.  You should not override a DITA-OT
 Ant property if it does not appear in this table or one of the tables
 above.</p><table>
-<tgroup cols="3"><colspec colname="COLNAME0" colwidth="100*"/><colspec
+<tgroup cols="3"><colspec colname="COLNAME0" colwidth="200*"/><colspec
 colname="COLNAME2" colwidth="100*"/><colspec colname="COLNAME3"
 colwidth="200*"/>
 <thead>
@@ -611,25 +614,10 @@ colwidth="200*"/>
 </thead>
 <tbody>
 <row>
-<entry><codeph>dita.temp.dir</codeph></entry>
-<entry><codeph>/tempdir</codeph></entry>
-<entry>Defines the directory where DITA-OT will create a temporary
-directory to place temporary files generated during 			the transformation
-process.</entry>
-</row>
-<row>
-<entry><codeph>dita.extname</codeph></entry>
-<entry><codeph>/ditaext</codeph></entry>
-<entry>Deprecated. Defines the file extension for content files in
-the directory specified with the <codeph>dita.temp.dir</codeph> property.
-Allowed values are ".xml" and ".dita"; Default is ".xml".</entry>
-</row>
-<row>
-<entry><codeph>dita.dir</codeph></entry>
-<entry><codeph>/ditadir</codeph></entry>
-<entry>The location of your DITA-OT installation. Also referred to
-as <codeph>toolkit_dir</codeph> in the sample ant scripts. Verify
-that your project's build script points to the correct location.</entry>
+<entry><codeph>args.dita.locale</codeph></entry>
+<entry><codeph>/ditalocale</codeph></entry>
+<entry>Specifies the language locale file to use for sorting index
+entries. The JavaHelp transformation type also uses this parameter.</entry>
 </row>
 <row id="cleantemp">
 <entry><codeph>clean.temp</codeph></entry>
@@ -639,10 +627,33 @@ directory, <codeph>dita.temp.dir</codeph>, when it finishes a build.
 Allowed values are "yes" and "no". Default value is "yes".</entry>
 </row>
 <row>
-<entry><codeph>args.dita.locale</codeph></entry>
-<entry><codeph>/ditalocale</codeph></entry>
-<entry>Specifies the language locale file to use for sorting index
-entries. The JavaHelp transformation type also uses this parameter.</entry>
+<entry><codeph>dita.dir</codeph></entry>
+<entry><codeph>/ditadir</codeph></entry>
+<entry>The location of your DITA-OT installation. Also referred to
+as <codeph>toolkit_dir</codeph> in the sample ant scripts. Verify
+that your project's build script points to the correct location.</entry>
+</row>
+<row>
+<entry><codeph>dita.extname</codeph></entry>
+<entry><codeph>/ditaext</codeph></entry>
+<entry>Deprecated. Defines the file extension for content files in
+the directory specified with the <codeph>dita.temp.dir</codeph> property.
+Allowed values are ".xml" and ".dita"; Default is ".xml".</entry>
+</row>
+<row>
+<entry><codeph>dita.preprocess.reloadstylesheet</codeph></entry>
+<entry>NA</entry>
+<entry>Instructs the toolkit to reload the XSL stylesheets used for transformation.  Default value is false.<note type="tip">Set the value to true if you want to use more than one set
+of stylesheets to process a group of topics.  The parameter is also useful for writers of toolkit build scripts
+who experience Java memory problems during transformation due to large Ant projects.  Alternatively, you can adjust the size of
+your Java memory heap if setting <codeph>dita.preprocess.reloadstylesheet</codeph> for this reason.</note></entry>
+</row>
+<row>
+<entry><codeph>dita.temp.dir</codeph></entry>
+<entry><codeph>/tempdir</codeph></entry>
+<entry>Defines the directory where DITA-OT will create a temporary
+directory to place temporary files generated during 			the transformation
+process.</entry>
 </row>
 </tbody>
 </tgroup>

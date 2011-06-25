@@ -17,9 +17,9 @@ See the accompanying license.txt file for applicable licenses.
 			<copyrholder>VR Communications, Inc.</copyrholder>
 		</copyright>
 		<critdates>
-			<created date="2007-February-27"/>
-			<revised modified="2007-March-18"/>
-			<revised modified="2009-March-16"/>
+			<created date="2007-02-27"/>
+			<revised modified="2007-03-18"/>
+			<revised modified="2009-03-16"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -43,9 +43,9 @@ See the accompanying license.txt file for applicable licenses.
 			<title>System requirements</title>
 			<p>
 				DITA Open Toolkit is written in Java and requires at least a minimal set of Java applications be installed. 
-				Java SDK 1.5 or 1.6 must be used to execute the applications and the Toolkit Java code.
+				Java JDK <keyword keyref="tool.java.version"/> or later must be used to execute the applications and the Toolkit Java code.
 				</p>
-			<p>It is highly likely that any operating system environment where the supported Java SDK can be installed will support basic Toolkit functionality. The Toolkit has been successfully installed and used on Windows XP, Mac OS X, various UNIX and Linux distributions including FreeBSD, Ubuntu Linux, NexentaGNU/OpenSolaris, Solaris, and other operating environments.
+			<p>It is highly likely that any operating system environment where the supported Java JDK can be installed will support basic Toolkit functionality. The Toolkit has been successfully installed and used on Windows XP, Mac OS X, various UNIX and Linux distributions including FreeBSD, Ubuntu Linux, NexentaGNU/OpenSolaris, Solaris, and other operating environments.
 				</p>
 			<p>Some optional applications can be installed and run only on Windows, for example the HTML Help compiler.
 			</p>
@@ -53,24 +53,32 @@ See the accompanying license.txt file for applicable licenses.
 		<section id="required_tools">
 			<title>Required tools</title>
 			<note>All of the required tools except the JDK are bundled in the full package installation. For more information about the installation packages, see <xref href="../installing/installing_considerations.dita" scope="local"/></note>
-			<note>Now the full package ships together with SAXON 9B by default. If you intend to use other XSLT
-			translator, you may need to clean up SAXON 9B libraries first or use other package distributions.</note>
-			<p>The following tools are required to use DITA Open Toolkit at the 1.4.2 release level.
+			<note>Now the full package ships together with Saxon-B <keyword keyref="tool.saxon.version"/> by default. If you intend to use other
+        XSLT processor, you may need to clean up Saxon-B <keyword keyref="tool.saxon.version"/> libraries first or use other package
+        distributions.</note>
+			<p>The following tools are required to use DITA Open Toolkit at the <keyword keyref="release.version"/> release level.
 			</p>
 			<dl>
 				<dlentry>
-					<dt>Java Development Kits (SDKs)</dt>
-					<dd>Sun. You can download the Sun JDK from <xref href="http://java.sun.com/javase/downloads/index_jdk5.jsp" format="html"/>.</dd>
-					<dd>IBM.  You can download the IBM JDK from <xref href="http://www.ibm.com/developerworks/java/jdk" format="html"/>.</dd>
+					<dt>Java Development Kits (JDKs)</dt>
+					<dd>Oracle. You can download the Oracle JDK from <xref
+					  href="http://www.oracle.com/technetwork/java/javase/downloads/index.html" scope="external" format="html"/>.</dd>
+					<dd>IBM. You can download the IBM JDK from <xref href="http://www.ibm.com/developerworks/java/jdk" scope="external" format="html"/>.</dd>
 				</dlentry>
 				<dlentry>
 					<dt>Ant</dt>
-					<dd>Ant 1.7.1. You can download Ant from <xref href="http://ant.apache.org/bindownload.cgi" format="html"/>.</dd>
+					<dd>Ant <keyword keyref="tool.ant.version"/>. You can download Ant from <xref href="http://ant.apache.org/bindownload.cgi" scope="external" format="html"/>.</dd>
 				</dlentry>
 				<dlentry>
-					<dt>Either the SAXON or Xalan XSLT processor</dt>
-					<dd>SAXON 9B. You can download SAXON from <xref href="http://saxon.sourceforge.net/" format="html"/>.</dd>
-					<dd>Xalan-J 2.7. You can download Xalan from <xref href="http://archive.apache.org/dist/xml/xalan-j/" format="html"/>.</dd>
+					<dt>Either the Saxon or Xalan XSLT processor</dt>
+				  <dd>Saxon-B or Saxon-SA <keyword keyref="tool.saxon.version"/>. You can download Saxon from <xref href="http://saxon.sourceforge.net/" scope="external"
+              format="html"/>.</dd>
+          <dd>Saxon-PE or Saxon-EE 9.2 or newer. You can download Saxon from <xref
+            href="http://www.saxonica.com/" scope="external" format="html"/>.<note>As of version 9.2, the free
+              home edition of Saxon no longer supports EXSLT or custom Java extension. DITA-OT
+              continues to work with the commercial professional and enterprise
+            editions.</note></dd>
+				  <dd>Xalan-J <keyword keyref="tool.xalan.version"></keyword>. You can download Xalan from <xref href="http://archive.apache.org/dist/xml/xalan-j/" scope="external" format="html"/>.</dd>
 				</dlentry>
 			</dl>
 		</section>

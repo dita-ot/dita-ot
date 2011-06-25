@@ -9,8 +9,12 @@
  */
 package org.dita.dost.platform;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -18,50 +22,77 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import org.dita.dost.util.Constants;
+import org.xml.sax.Attributes;
+import org.xml.sax.helpers.AttributesImpl;
+
 import org.dita.dost.util.FileUtils;
 
 /**
  * Collection of features.
  * @author Zhang, Yuan Peng
  */
-public class Features {
-	private String location = null;
-	private Hashtable<String,String> featureTable;
-	private List<PluginRequirement> requireList;
-	private Hashtable<String,String> metaTable;
-	private List<String> templateList;
+final class Features {
+    
+    private String id;
+	private final File location;
+	private final File ditaDir;
+	private final Map<String, ExtensionPoint> extensionPoints;
+	private final Hashtable<String,String> featureTable;
+	private final List<PluginRequirement> requireList;
+	private final Hashtable<String,String> metaTable;
+	private final List<String> templateList;
 
 	/**
 	 * Default constructor.
+	 * 
+	 * @deprecated use {@link #Features(File, File)} instead
 	 */
+	@Deprecated
 	public Features() {
-		super();
-		featureTable = new Hashtable<String,String>(Constants.INT_16);
-		requireList = new ArrayList<PluginRequirement>(Constants.INT_8);
-		metaTable = new Hashtable<String,String>(Constants.INT_16);
-		templateList = new ArrayList<String>(Constants.INT_8);
-		// TODO Auto-generated constructor stub
+	    this(null, null);
 	}
 
 	/**
 	 * Constructor init location. 
 	 * @param location location
+	 * @param ditaDir base directory
 	 */
-	public Features(String location) {
+	public Features(final File location, final File ditaDir) {
 		this.location = location;
-		featureTable = new Hashtable<String,String>(Constants.INT_16);
-		requireList = new ArrayList<PluginRequirement>(Constants.INT_8);
-		metaTable = new Hashtable<String,String>(Constants.INT_16);
-		templateList = new ArrayList<String>(Constants.INT_8);
+		this.ditaDir = ditaDir;
+		extensionPoints= new HashMap<String, ExtensionPoint>();
+		featureTable = new Hashtable<String,String>(INT_16);
+		requireList = new ArrayList<PluginRequirement>(INT_8);
+		metaTable = new Hashtable<String,String>(INT_16);
+		templateList = new ArrayList<String>(INT_8);
 	}
 	
 	/**
 	 * Return the feature location.
 	 * @return location
 	 */
-	public String getLocation(){
+	public File getLocation(){
 		return location;
+	}
+	
+	/**
+	 * Get DITA-OT base directory
+	 * @return base directory
+	 */
+	public File getDitaDir() {
+	    return ditaDir;
+	}
+	
+	void setPluginId(final String id) {
+	    this.id = id;
+	}
+	
+	String getPluginId() {
+	    return id;
+	}
+	
+	Map<String, ExtensionPoint> getExtensionPoints() {
+	    return Collections.unmodifiableMap(extensionPoints);
 	}
 	
 	/**
@@ -69,7 +100,7 @@ public class Features {
 	 * @param id feature id
 	 * @return feature name
 	 */
-	public String getFeature(String id){
+	public String getFeature(final String id){
 		return featureTable.get(id);
 	}
 	
@@ -81,24 +112,56 @@ public class Features {
 		return featureTable.entrySet();
 	}
 	
+	void addExtensionPoint(final ExtensionPoint extensionPoint) {
+	    extensionPoints.put(extensionPoint.id, extensionPoint);
+	}
+	
 	/**
 	 * Add feature to the feature table.
 	 * @param id feature id
 	 * @param value feature value
-	 * @param type feature type
+	 * @param type feature type, may be {@code null} 
+	 * @deprecated use {@link #addFeature(String, Attributes)} instead
 	 */
-	public void addFeature(String id, String value, String type){
-		StringTokenizer valueTokenizer = new StringTokenizer(value,",");
-		StringBuffer valueBuffer = new StringBuffer();
+	@Deprecated
+	public void addFeature(final String id, final String value, final String type) {
+		final AttributesImpl atts = new AttributesImpl();
+		atts.addAttribute("", "value", "value", "CDATA", value);
+		if (type != null) {
+		    atts.addAttribute("", "type", "type", "CDATA", type);
+		}
+		addFeature(id, atts);
+	}
+	
+	/**
+	 * Add feature to the feature table.
+	 * @param id feature id
+	 * @param attributes configuration element attributes
+	 */
+	public final void addFeature(final String id, final Attributes attributes){
+		boolean isFile;
+		String value = attributes.getValue("file");
+		if (value != null) {
+			isFile = true;
+		} else {
+			value = attributes.getValue("value");
+			isFile = "file".equals(attributes.getValue("type"));
+		}
+		final StringTokenizer valueTokenizer = new StringTokenizer(value, Integrator.FEAT_VALUE_SEPARATOR);
+		final StringBuffer valueBuffer = new StringBuffer();
+		if (featureTable.containsKey(id)) {
+			valueBuffer.append(featureTable.get(id));
+			valueBuffer.append(Integrator.FEAT_VALUE_SEPARATOR);
+		}
 		while(valueTokenizer.hasMoreElements()){
-			String valueElement = (String) valueTokenizer.nextElement();
+			final String valueElement = valueTokenizer.nextToken();
 			if(valueElement!=null && valueElement.trim().length() != 0){
-				if("file".equals(type) && !FileUtils.isAbsolutePath(valueElement)){
+				if(isFile && !FileUtils.isAbsolutePath(valueElement)){
 					valueBuffer.append(location).append(File.separatorChar);
 				}
 				valueBuffer.append(valueElement.trim());
 				if(valueTokenizer.hasMoreElements()){
-					valueBuffer.append(",");
+					valueBuffer.append(Integrator.FEAT_VALUE_SEPARATOR);
 				}
 			}
 		}
@@ -109,8 +172,8 @@ public class Features {
 	 * Add the required feature id.
 	 * @param id feature id
 	 */
-	public void addRequire(String id){
-		PluginRequirement requirement = new PluginRequirement();
+	public void addRequire(final String id){
+		final PluginRequirement requirement = new PluginRequirement();
 		requirement.addPlugins(id);
 		requireList.add(requirement);
 	}
@@ -120,8 +183,8 @@ public class Features {
 	 * @param id feature id
 	 * @param importance importance
 	 */
-	public void addRequire(String id, String importance){
-		PluginRequirement requirement = new PluginRequirement();
+	public void addRequire(final String id, final String importance){
+		final PluginRequirement requirement = new PluginRequirement();
 		requirement.addPlugins(id);
 		if (importance != null) {
 			requirement.setRequired(importance.equals("required"));
@@ -142,7 +205,7 @@ public class Features {
 	 * @param type type
 	 * @param value value
 	 */
-	public void addMeta(String type, String value){
+	public void addMeta(final String type, final String value){
 		metaTable.put(type, value);
 	}
 	
@@ -151,7 +214,7 @@ public class Features {
 	 * @param type type
 	 * @return meat info
 	 */
-	public String getMeta(String type){
+	public String getMeta(final String type){
 		return metaTable.get(type);
 	}
 	
@@ -159,7 +222,7 @@ public class Features {
 	 * Add a template.
 	 * @param file file name
 	 */
-	public void addTemplate(String file){
+	public void addTemplate(final String file){
 		templateList.add(file);
 	}
 	/**

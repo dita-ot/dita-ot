@@ -9,25 +9,28 @@
  */
 package org.dita.dost.log;
 
-import org.dita.dost.util.Constants;
+import static org.dita.dost.util.Constants.*;
 
 /**
  * Class description goes here.
  * 
  * @author Wu, Zhi Qiang
  */
-public class MessageBean {
-	private String id = null;
+public final class MessageBean {
+	private String id;
 
-	private String type = null;
+	private String type;
 
-	private String reason = null;
+	private String reason;
 
-	private String response = null;
+	private String response;
 
 	/**
 	 * Default constructor.
+	 * 
+	 * @deprecated use {@link #MessageBean(String, String, String, String)} with {@code null} arguments instead
 	 */
+	@Deprecated
 	public MessageBean() {
 		this(null, null, null, null);
 	}
@@ -39,7 +42,7 @@ public class MessageBean {
 	 * @param mbReason reason
 	 * @param mbResponse response
 	 */
-	public MessageBean(String mbId, String mbType, String mbReason, String mbResponse) {
+	public MessageBean(final String mbId, final String mbType, final String mbReason, final String mbResponse) {
 		this.id = mbId;
 		this.type = mbType;
 		this.reason = mbReason;
@@ -51,7 +54,7 @@ public class MessageBean {
 	 * 
 	 * @param message message
 	 */
-	public MessageBean(MessageBean message) {
+	public MessageBean(final MessageBean message) {
 		this(message.getId(), message.getType(), message.getReason(), message.getResponse());
 	}
 	
@@ -65,15 +68,17 @@ public class MessageBean {
 
 	/**
 	 * Setter funciton of id.
-	 * @param mbId The id to set.          
+	 * @param mbId The id to set.
+	 * @deprecated this setter will be removed in the future when the object is changed to be immutable
 	 */
-	public void setId(String mbId) {
+	@Deprecated
+	public void setId(final String mbId) {
 		this.id = mbId;
 	}
 
 	/**
 	 * Getter function of reason.
-	 * @return Returns the reason.
+	 * @return Returns the reason
 	 */
 	public String getReason() {
 		return reason;
@@ -81,15 +86,17 @@ public class MessageBean {
 
 	/**
 	 * Setter function of reason.
-	 * @param mbReason The reason to set.           
+	 * @param mbReason The reason to set.
+	 * @deprecated this setter will be removed in the future when the object is changed to be immutable
 	 */
-	public void setReason(String mbReason) {
+	@Deprecated
+	public void setReason(final String mbReason) {
 		this.reason = mbReason;
 	}
 
 	/**
 	 * Getter function of response.
-	 * @return Returns the response.
+	 * @return Returns the response, {@code null} if not defined
 	 */
 	public String getResponse() {
 		return response;
@@ -98,8 +105,10 @@ public class MessageBean {
 	/**
 	 * Setter function of response.
 	 * @param mbResponse The response to set.
+	 * @deprecated this setter will be removed in the future when the object is changed to be immutable
 	 */
-	public void setResponse(String mbResponse) {
+	@Deprecated
+	public void setResponse(final String mbResponse) {
 		this.response = mbResponse;
 	}
 
@@ -114,8 +123,10 @@ public class MessageBean {
 	/**
 	 * Setter function of type.
 	 * @param mbType The type to set.
+	 * @deprecated this setter will be removed in the future when the object is changed to be immutable
 	 */
-	public void setType(String mbType) {
+	@Deprecated
+	public void setType(final String mbType) {
 		this.type = mbType;
 	}
 
@@ -125,12 +136,14 @@ public class MessageBean {
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		StringBuffer buff = new StringBuffer(Constants.INT_256);
+		final StringBuffer buff = new StringBuffer(INT_256);
 		
 		buff.append("[").append(id).append("]");
 		buff.append("[").append(type).append("] ");
 		buff.append(reason);
-		buff.append(" ").append(response);
+		if (response != null) {
+		    buff.append(" ").append(response);
+		}
 		
 		return buff.toString();
 	}

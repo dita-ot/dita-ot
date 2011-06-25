@@ -12,7 +12,7 @@
   <p>Here is the class diagram of a sample Java module 'GenListModule' in the 
     preprocessing stage</p>
   <p>
-    <image href="javamodules.gif"></image>
+    <image href="images/javamodules.gif"></image>
   </p>
   <p>We use GenListModule which extends AbstractModule to control the whole 
     program logic of this module. MapReader is used to parse the input xml 
@@ -22,7 +22,7 @@
     GenListModule and outputs those lists into the intermediate files. </p>
   <p>Here is the sequence diagram of the example. </p>
   <p>
-    <image href="genlistmodule.gif"></image>
+    <image href="images/genlistmodule.gif"></image>
   </p>
   <p>GenListModule first creates MapReader and ListWriter. Then GenListModule 
     calls MapReader to read and parse the input file. In order to process the 
@@ -32,6 +32,5 @@
     over, GenListModule gets the result content from MapReader. Then 
     GenListModule processes the content and set the content to ListWriter. Then 
     it calls ListWriter to output the information to intermediate file.</p>
-  <p></p>
 </body>
 </topic>

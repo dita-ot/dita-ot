@@ -31,46 +31,15 @@ This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
 -->
 
-<xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:opentopic-vars="http://www.idiominc.com/opentopic/vars"
 	xmlns:exsl="http://exslt.org/common"
  	extension-element-prefixes="exsl"
 	exclude-result-prefixes="opentopic-vars">
 
-    <xsl:template name="processVariableWithFormat">
-        <xsl:param name="variableNodes"/>
-        <xsl:param name="theParameters"/>
-        <xsl:param name="theVariableID"/>
-        <xsl:param name="theFormat"/>
-
-        <xsl:if test="count($variableNodes) = 0">
-            <xsl:message>
-                [WARN] Variable '<xsl:value-of select="$theVariableID"/>' with format '<xsl:value-of select="$theFormat"/>' not defined!
-            </xsl:message>
-        </xsl:if>             
-
-        <xsl:for-each select="$variableNodes[1]">
-            <xsl:call-template name="__processVariableBody">
-                <xsl:with-param name="theParameters" select="$theParameters"/>
-            </xsl:call-template>
-        </xsl:for-each>
-    </xsl:template>
-
-    <xsl:template name="processVariableWithoutFormat">
-        <xsl:param name="variableNodes"/>
-        <xsl:param name="theParameters"/>
-
-        <xsl:for-each select="$variableNodes[1]">
-            <xsl:call-template name="__processVariableBody">
-                <xsl:with-param name="theParameters" select="$theParameters"/>
-            </xsl:call-template>
-        </xsl:for-each>
-    </xsl:template>
-
 	<xsl:template name="insertVariable">
 		<xsl:param name="theVariableID"/>
 		<xsl:param name="theParameters"/>
-		<xsl:param name="theFormat"/>
 		<!-- We use the default $locale, unless there's an xml:lang attribute that applies to the current element. -->
         <xsl:variable name="currentLocale">
             <xsl:choose>
@@ -86,57 +55,51 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <xsl:variable name="customizationFilePath" select="concat($fileProtocolPrefix, $customizationDir, '/common/vars/', $currentLocale, '.xml')"/> 
+	  <xsl:variable name="currentLanguage">
+	    <xsl:choose>
+	      <xsl:when test="contains($currentLocale, '_')">
+	        <xsl:value-of select="substring-before($currentLocale, '_')"/>
+	      </xsl:when>
+	      <xsl:otherwise>
+	        <xsl:value-of select="$currentLocale"/>
+	      </xsl:otherwise>
+	    </xsl:choose>
+	  </xsl:variable>
+	  <xsl:variable name="customization.locale" select="document(concat($fileProtocolPrefix, $customizationDir, '/common/vars/', $currentLocale, '.xml'))"/>
+	  <xsl:variable name="customization.language" select="document(concat($fileProtocolPrefix, $customizationDir, '/common/vars/', $currentLanguage, '.xml'))"/>
+	  <xsl:variable name="cfg.locale" select="document(concat('../../cfg/common/vars/', $currentLocale, '.xml'))"/>
+	  <xsl:variable name="cfg.language" select="document(concat('../../cfg/common/vars/', $currentLanguage, '.xml'))"/>
 
-        <xsl:variable name="customVariableIsDefined">
-            <xsl:choose>
-                <xsl:when test="document($customizationFilePath)/opentopic-vars:vars/opentopic-vars:variable[@id = $theVariableID]">
-                    <xsl:value-of select="'true'"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="'false'"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-
-		<xsl:choose>
-			<xsl:when test="$theFormat and string-length($theFormat) &gt; 0">
-                <xsl:choose>
-                    <xsl:when test="$customVariableIsDefined = 'true'">
-                        <xsl:call-template name="processVariableWithFormat">
-                            <xsl:with-param name="variableNodes" select="document($customizationFilePath)/opentopic-vars:vars/opentopic-vars:variable[(@id = $theVariableID) and (@format = $theFormat)]"/>
-                            <xsl:with-param name="theParameters" select="$theParameters"/>
-							<xsl:with-param name="theVariableID" select="$theVariableID"/>
-							<xsl:with-param name="theFormat" select="$theFormat"/>
-						</xsl:call-template>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:call-template name="processVariableWithFormat">
-                            <xsl:with-param name="variableNodes" select="document(concat('../../cfg/common/vars/', $currentLocale, '.xml'))/opentopic-vars:vars/opentopic-vars:variable[(@id = $theVariableID) and (@format = $theFormat)]"/>
-                            <xsl:with-param name="theParameters" select="$theParameters"/>
-							<xsl:with-param name="theVariableID" select="$theVariableID"/>
-							<xsl:with-param name="theFormat" select="$theFormat"/>
-						</xsl:call-template>
-                    </xsl:otherwise>
-                </xsl:choose>
-			</xsl:when>
-			<xsl:otherwise>
-                <xsl:choose>
-                    <xsl:when test="$customVariableIsDefined = 'true'">
-                        <xsl:call-template name="processVariableWithoutFormat">
-                            <xsl:with-param name="variableNodes" select="document($customizationFilePath)/opentopic-vars:vars/opentopic-vars:variable[@id = $theVariableID]"/>
-                            <xsl:with-param name="theParameters" select="$theParameters"/>
-                        </xsl:call-template>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:call-template name="processVariableWithoutFormat">
-                            <xsl:with-param name="variableNodes" select="document(concat('../../cfg/common/vars/', $currentLocale, '.xml'))/opentopic-vars:vars/opentopic-vars:variable[@id = $theVariableID]"/>
-                            <xsl:with-param name="theParameters" select="$theParameters"/>
-                        </xsl:call-template>
-                    </xsl:otherwise>
-                </xsl:choose>
-			</xsl:otherwise>
-		</xsl:choose>
+	  <xsl:choose>
+	    <xsl:when test="$customization.locale/opentopic-vars:vars/opentopic-vars:variable[@id = $theVariableID]">
+	      <xsl:for-each select="$customization.locale/opentopic-vars:vars/opentopic-vars:variable[@id = $theVariableID][1]">
+	        <xsl:call-template name="__processVariableBody">
+	          <xsl:with-param name="theParameters" select="$theParameters"/>
+	        </xsl:call-template>
+	      </xsl:for-each>
+	    </xsl:when>
+	    <xsl:when test="$cfg.locale/opentopic-vars:vars/opentopic-vars:variable[@id = $theVariableID]">
+	      <xsl:for-each select="$cfg.locale/opentopic-vars:vars/opentopic-vars:variable[@id = $theVariableID][1]">
+	        <xsl:call-template name="__processVariableBody">
+	          <xsl:with-param name="theParameters" select="$theParameters"/>
+	        </xsl:call-template>
+	      </xsl:for-each>
+	    </xsl:when>
+	    <xsl:when test="$customization.language/opentopic-vars:vars/opentopic-vars:variable[@id = $theVariableID]">
+	      <xsl:for-each select="$customization.language/opentopic-vars:vars/opentopic-vars:variable[@id = $theVariableID][1]">
+	        <xsl:call-template name="__processVariableBody">
+	          <xsl:with-param name="theParameters" select="$theParameters"/>
+	        </xsl:call-template>
+	      </xsl:for-each>
+	    </xsl:when>
+	    <xsl:when test="$cfg.language/opentopic-vars:vars/opentopic-vars:variable[@id = $theVariableID]">
+	      <xsl:for-each select="$cfg.language/opentopic-vars:vars/opentopic-vars:variable[@id = $theVariableID][1]">
+	        <xsl:call-template name="__processVariableBody">
+	          <xsl:with-param name="theParameters" select="$theParameters"/>
+	        </xsl:call-template>
+	      </xsl:for-each>
+	    </xsl:when>
+	  </xsl:choose>
 	</xsl:template>
 
 	<xsl:template name="__processVariableBody">

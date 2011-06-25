@@ -16,7 +16,7 @@ package org.dita.dost.util;
  * @author wxzhang
  *
  */
-public class LogUtils {
+public final class LogUtils {
 	private static int numOfFatals=0;
 	private static int numOfErrors=0;
 	private static int numOfWarnings=0;
@@ -97,10 +97,11 @@ public class LogUtils {
 	 * @return boolean
 	 */
 	public  static boolean haveFatalOrError(){
-		if(numOfFatals>0 || numOfErrors>0) 
-			return true;
-		else 
-			return false;
+		if(numOfFatals>0 || numOfErrors>0) {
+            return true;
+        } else {
+            return false;
+        }
 	} 
 	
 	/**
@@ -129,14 +130,14 @@ public class LogUtils {
 	 * Increase the number of Exceptions by severity level.
 	 * @param msgType message type:error warn info
 	 */
-	public static void increaseNumOfExceptionByType(String msgType){
+	public static void increaseNumOfExceptionByType(final String msgType){
 		
 		if (msgType==null){
 			increaseNumOfErrors();
 			return;
 		}
 		
-		String type=msgType.toUpperCase();
+		final String type=msgType.toUpperCase();
 		
 		if(FATAL.equals(type)){
 			LogUtils.increaseNumOfFatals();

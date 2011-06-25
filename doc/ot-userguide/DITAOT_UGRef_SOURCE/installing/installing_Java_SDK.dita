@@ -5,7 +5,7 @@ This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
 -->
 <concept id="installing_java_sdk">
-	<title>Installing the Java SDK (JDK)</title>
+	<title>Installing the Java JDK</title>
 	<prolog>
 		<author type="creator">Richard Johnson</author>
 		<author type="contributor">Anna van Raaphorst</author>
@@ -15,13 +15,13 @@ See the accompanying license.txt file for applicable licenses.
 			<copyrholder>VR Communications, Inc.</copyrholder>
 		</copyright>
 		<critdates>
-			<created date="2006-September-26"/>
-			<revised modified="2007-April-15"/>
+			<created date="2006-09-26"/>
+			<revised modified="2007-04-15"/>
 		</critdates>
 		<metadata>
 			<keywords>
-				<keyword>installing Java SDK</keyword>
-				<indexterm>Java SDK, installing</indexterm>
+				<keyword>installing Java JDK</keyword>
+				<indexterm>Java JDK, installing</indexterm>
 			</keywords>
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
@@ -32,6 +32,7 @@ See the accompanying license.txt file for applicable licenses.
 		</metadata>
 	</prolog>
 	<conbody>
-		<p>Both the small and full package distributions require that the Java SDK be installed separately.</p>
+		<p>Both the minimal and full package distributions require that the Java JDK be installed
+      separately.</p>
 	</conbody>
 </concept>

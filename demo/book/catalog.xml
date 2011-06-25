@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  This file is part of the DITA Open Toolkit project hosted on
+  Sourceforge.net. See the accompanying license.txt file for applicable
+  licenses.
+-->
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+  <public publicId="-//IBM//DTD DITA BookMap//EN" uri="bookmap.dtd"/>
+  <public publicId="-//IBM//ELEMENTS DITA BookMap//EN" uri="bookmap.mod"/>
+  <public publicId="-//IBM//DTD DITA Book Information//EN" uri="bkinfo.dtd"/>
+  <public publicId="-//IBM//ELEMENTS DITA Book Information//EN" uri="bkinfo.mod"/>
+</catalog>

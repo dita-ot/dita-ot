@@ -9,6 +9,8 @@
  */
 package org.dita.dost.index;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,7 +22,6 @@ import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
 import org.dita.dost.pipeline.PipelineHashIO;
-import org.dita.dost.util.Constants;
 import org.dita.dost.writer.AbstractExtendDitaWriter;
 import org.dita.dost.writer.AbstractWriter;
 import org.dita.dost.writer.CHMIndexWriter;
@@ -35,11 +36,11 @@ import org.dita.dost.writer.JavaHelpIndexWriter;
  * 
  * @author Wu, Zhi Qiang
  */
-public class IndexTermCollection {
+public final class IndexTermCollection {
 	/** The collection of index terms. */
 	private static IndexTermCollection collection = null;
 	/** The list of all index term. */
-	private List termList = new ArrayList(Constants.INT_16);
+	private List<IndexTerm> termList = new ArrayList<IndexTerm>(INT_16);
 
 	/** The type of index term. */
 	private String indexType = null;
@@ -68,7 +69,7 @@ public class IndexTermCollection {
 	 * @return Singleton IndexTermCollection instance
 	 * @author Marshall
 	 */
-	public static IndexTermCollection getInstantce(){
+	public static synchronized IndexTermCollection getInstantce(){
 		if(collection == null){
 			collection = new IndexTermCollection();
 		}
@@ -150,7 +151,7 @@ public class IndexTermCollection {
 	 * 
 	 * @return term list
 	 */
-	public List getTermList() {
+	public List<IndexTerm> getTermList() {
 		return termList;
 	}
 
@@ -161,15 +162,15 @@ public class IndexTermCollection {
 		int termListSize = termList.size();
 		if (IndexTerm.getTermLocale() == null ||
 				IndexTerm.getTermLocale().getLanguage().trim().length()==0) {
-			IndexTerm.setTermLocale(new Locale(Constants.LANGUAGE_EN,
-					Constants.COUNTRY_US));
+			IndexTerm.setTermLocale(new Locale(LANGUAGE_EN,
+					COUNTRY_US));
 		}
 
 		/*
 		 * Sort all the terms recursively
 		 */
 		for (int i = 0; i < termListSize; i++) {
-			IndexTerm term = (IndexTerm) termList.get(i);
+			IndexTerm term = termList.get(i);
 			term.sortSubTerms();
 		}
 
@@ -189,10 +190,10 @@ public class IndexTermCollection {
 		
 		if (indexClass != null && indexClass.length() > 0) {
 			//Instantiate the class value 
-			Class anIndexClass = null;
+			Class<?> anIndexClass = null;
 			try {
 				anIndexClass = Class.forName( indexClass );
-				abstractWriter = (AbstractWriter)anIndexClass.newInstance();
+				abstractWriter = (AbstractWriter) anIndexClass.newInstance();
 				indexWriter = (IDitaTranstypeIndexWriter)anIndexClass.newInstance();
 				
 				//RFE 2987769 Eclipse index-see
@@ -228,14 +229,14 @@ public class IndexTermCollection {
 		//Fallback to the old way of doing things.
 		else {
 
-			if (Constants.INDEX_TYPE_HTMLHELP.equalsIgnoreCase(indexType)) {
+			if (INDEX_TYPE_HTMLHELP.equalsIgnoreCase(indexType)) {
 				abstractWriter = new CHMIndexWriter();
 				buff.append(".hhk");
-			} else if (Constants.INDEX_TYPE_JAVAHELP
+			} else if (INDEX_TYPE_JAVAHELP
 					.equalsIgnoreCase(indexType)) {
 				abstractWriter = new JavaHelpIndexWriter();
 				buff.append("_index.xml");
-			} else if (Constants.INDEX_TYPE_ECLIPSEHELP
+			} else if (INDEX_TYPE_ECLIPSEHELP
 					.equalsIgnoreCase(indexType)) {
 				abstractWriter = new EclipseIndexWriter();
 				// We need to get rid of the ditamap or topic name in the URL

@@ -33,55 +33,61 @@ See the accompanying license.txt file for applicable licenses.
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
-    version="1.0">
-
-    <xsl:include href="../../cfg/fo/attrs/sw-domain-attr.xsl"/>
+    version="2.0">
 
     <xsl:template match="*[contains(@class,' sw-d/msgph ')]">
-      <fo:inline xsl:use-attribute-sets="msgph" id="{@id}">
+      <fo:inline xsl:use-attribute-sets="msgph">
+        <xsl:call-template name="commonattributes"/>
         <xsl:apply-templates/>
       </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' sw-d/msgblock ')]">
       <xsl:call-template name="generateAttrLabel"/>
-      <fo:block xsl:use-attribute-sets="msgblock" id="{@id}">
+      <fo:block xsl:use-attribute-sets="msgblock">
+        <xsl:call-template name="commonattributes"/>
         <xsl:apply-templates/>
       </fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' sw-d/msgnum ')]">
-      <fo:inline xsl:use-attribute-sets="msgnum" id="{@id}">
+      <fo:inline xsl:use-attribute-sets="msgnum">
+        <xsl:call-template name="commonattributes"/>
         <xsl:apply-templates/>
       </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' sw-d/cmdname ')]">
-      <fo:inline xsl:use-attribute-sets="cmdname" id="{@id}">
+      <fo:inline xsl:use-attribute-sets="cmdname">
+        <xsl:call-template name="commonattributes"/>
         <xsl:apply-templates/>
       </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' sw-d/varname ')]">
-      <fo:inline xsl:use-attribute-sets="varname" id="{@id}">
+      <fo:inline xsl:use-attribute-sets="varname">
+        <xsl:call-template name="commonattributes"/>
         <xsl:apply-templates/>
       </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' sw-d/filepath ')]">
-      <fo:inline xsl:use-attribute-sets="filepath" id="{@id}">
+      <fo:inline xsl:use-attribute-sets="filepath">
+        <xsl:call-template name="commonattributes"/>
         <xsl:apply-templates/>
       </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' sw-d/userinput ')]">
-      <fo:inline xsl:use-attribute-sets="userinput" id="{@id}">
+      <fo:inline xsl:use-attribute-sets="userinput">
+        <xsl:call-template name="commonattributes"/>
         <xsl:apply-templates/>
       </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' sw-d/systemoutput ')]">
-      <fo:inline xsl:use-attribute-sets="systemoutput" id="{@id}">
+      <fo:inline xsl:use-attribute-sets="systemoutput">
+        <xsl:call-template name="commonattributes"/>
         <xsl:apply-templates/>
       </fo:inline>
     </xsl:template>

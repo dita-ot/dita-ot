@@ -7,5 +7,5 @@
   *-->
   <plugin id="org.dita.specialization.h2d">
     <feature extension="dita.specialization.catalog.relative"
-      value="catalog.xml" type="file"/> 
+      file="catalog.xml"/> 
   </plugin>

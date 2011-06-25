@@ -21,7 +21,7 @@ import org.dita.dost.util.LogUtils;
  * 
  * @author Wu, Zhi Qiang
  */
-public class DITAOTEchoTask extends Echo {
+public final class DITAOTEchoTask extends Echo {
 	private String id = null;
 
 	private Properties prop = null;
@@ -36,7 +36,7 @@ public class DITAOTEchoTask extends Echo {
 	 * Setter function for id.
 	 * @param identifier The id to set.         
 	 */
-	public void setId(String identifier) {
+	public void setId(final String identifier) {
 		this.id = identifier;
 	}
 
@@ -44,12 +44,12 @@ public class DITAOTEchoTask extends Echo {
 	 * Set the parameters.
 	 * @param params  The prop to set.     
 	 */
-	public void setParams(String params) {
-		StringTokenizer tokenizer = new StringTokenizer(params, ";");
+	public void setParams(final String params) {
+		final StringTokenizer tokenizer = new StringTokenizer(params, ";");
 		prop = new Properties();
 		while (tokenizer.hasMoreTokens()) {
-			String token = tokenizer.nextToken();
-			int pos = token.indexOf("=");
+			final String token = tokenizer.nextToken();
+			final int pos = token.indexOf("=");
 			this.prop.put(token.substring(0, pos), token.substring(pos + 1));
 		}
 	}
@@ -62,7 +62,7 @@ public class DITAOTEchoTask extends Echo {
 	public void execute() throws BuildException {
 		setMessage(MessageUtils.getMessage(id, prop).toString());
 		super.execute();
-		MessageBean msgBean=MessageUtils.getMessage(id, prop);
+		final MessageBean msgBean=MessageUtils.getMessage(id, prop);
 		if(msgBean!=null){
 			LogUtils.increaseNumOfExceptionByType(msgBean.getType());
 		}

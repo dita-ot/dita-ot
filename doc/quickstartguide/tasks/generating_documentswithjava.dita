@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="using_javacommandline" xml:lang="en-us">
+	<title>Generating Documents with Java</title>
+	<shortdesc>How to generate documents from the command line with Java</shortdesc>
+	<taskbody>
+	<prereq><p>See <xref href="../reference/dita-ot_ant_properties.dita">Ant Build Properties for DITA-OT</xref> for descriptions of all supported parameters.</p></prereq>
+	<steps>
+	<step><cmd>Open a command prompt.</cmd></step>
+	<step><cmd>Change directories to where you installed the DITA Open Toolkit.</cmd></step>
+	<step><cmd>Enter the following command to set environment variables for DITA-OT:</cmd><stepresult><codeblock>startcmd.bat</codeblock></stepresult></step>
+	<step><cmd>Enter the following command:</cmd><stepresult><codeblock>java -jar lib/dost.jar [optional parameters]</codeblock></stepresult>
+	</step>
+	</steps>
+	</taskbody>
+</task>

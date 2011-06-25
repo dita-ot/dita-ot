@@ -9,15 +9,17 @@
  */
 package org.dita.dost.reader;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.IOException;
 import java.util.HashMap;
 
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.util.CatalogUtils;
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
@@ -27,7 +29,6 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.ext.LexicalHandler;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
  * This class extends AbstractReader, implement SAX's ContentHandler, 
@@ -65,18 +66,14 @@ public abstract class AbstractXMLReader implements AbstractReader,
 			grammarPool = inGrammarPool;
 		}
 	
-		DITAOTJavaLogger javaLogger=new DITAOTJavaLogger();
-		if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
-			// The default sax driver is set to xerces's sax driver
-			StringUtils.initSaxDriver();
-		}
-		XMLReader reader = XMLReaderFactory.createXMLReader();
-		reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
+		final DITAOTLogger javaLogger=new DITAOTJavaLogger();
+		final XMLReader reader = StringUtils.getXMLReader();
+		reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
 		if(validate==true){
-			reader.setFeature(Constants.FEATURE_VALIDATION, true);
-			reader.setFeature(Constants.FEATURE_VALIDATION_SCHEMA, true);
+			reader.setFeature(FEATURE_VALIDATION, true);
+			reader.setFeature(FEATURE_VALIDATION_SCHEMA, true);
 		}else{
-			String msg=MessageUtils.getMessage("DOTJ037W").toString();
+			final String msg=MessageUtils.getMessage("DOTJ037W").toString();
 			javaLogger.logWarn(msg);
 		}
 		setGrammarPool(reader, grammarPool);
@@ -94,7 +91,7 @@ public abstract class AbstractXMLReader implements AbstractReader,
 	 */
 	public static void setGrammarPool(XMLReader reader, XMLGrammarPool grammarPool) {
 		
-		DITAOTJavaLogger logger = new DITAOTJavaLogger();
+		final DITAOTLogger logger = new DITAOTJavaLogger();
 		if (grammarPool == null) {
 			grammarPool = GrammarPoolManager.getGrammarPool();
 		}
@@ -104,201 +101,113 @@ public abstract class AbstractXMLReader implements AbstractReader,
 								"http://apache.org/xml/properties/internal/grammar-pool",
 								grammarPool);
 				
-				String msg = "Using Xerces grammar pool for DTD and schema caching.";
+				final String msg = "Using Xerces grammar pool for DTD and schema caching.";
 				logger.logInfo(msg);
 				
-			} catch (Exception e) {
-				String msg = "Failed to setXerces grammar pool for parser: "
+			} catch (final Exception e) {
+				final String msg = "Failed to setXerces grammar pool for parser: "
 					+ e.getMessage();
 				logger.logInfo(msg);
 			}
 		} else {
-			String msg = "grammar pool is null";
+			final String msg = "grammar pool is null";
 			logger.logInfo(msg);
 		}
 	}
 	
-	protected DITAOTJavaLogger javaLogger = null;
+	protected DITAOTLogger logger;
 
-	/**
-     * (non-Javadoc).
-     * 
-     * @see org.dita.dost.reader.AbstractReader#read(java.lang.String)
-     */
     public void read(String filename) {
+        // NOOP
     }
 
-    /**
-     * (non-Javadoc).
-     * 
-     * @see org.dita.dost.reader.AbstractReader#getContent()
-     */
     public Content getContent() {
         return null;
     }
+    
+    public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
 
-    /**
-     * (non-Javadoc).
-     * 
-     * @see org.xml.sax.ContentHandler#setDocumentLocator(org.xml.sax.Locator)
-     */
     public void setDocumentLocator(Locator locator) {
+        // NOOP
     }
 
-    /**
-     * (non-Javadoc).
-     * 
-     * @see org.xml.sax.ContentHandler#startDocument()
-     */
     public void startDocument() throws SAXException {
+        // NOOP
     }
 
-    /**
-     * (non-Javadoc).
-     * 
-     * @see org.xml.sax.ContentHandler#endDocument()
-     */
     public void endDocument() throws SAXException {
+        // NOOP
     }
 
-    /**
-     * (non-Javadoc).
-     * 
-     * @see org.xml.sax.ContentHandler#startPrefixMapping(java.lang.String,
-     *      java.lang.String)
-     */
     public void startPrefixMapping(String prefix, String uri)
             throws SAXException {
+        // NOOP
     }
 
-    /**
-     * (non-Javadoc).
-     * 
-     * @see org.xml.sax.ContentHandler#endPrefixMapping(java.lang.String)
-     */
     public void endPrefixMapping(String prefix) throws SAXException {
+        // NOOP
     }
 
-    /**
-     * (non-Javadoc).
-     * 
-     * @see org.xml.sax.ContentHandler#startElement(java.lang.String,
-     *      java.lang.String, java.lang.String, org.xml.sax.Attributes)
-     */
     public void startElement(String uri, String localName, String qName,
             Attributes atts) throws SAXException {
+        // NOOP
     }
 
-    /**
-     * (non-Javadoc).
-     * 
-     * @see org.xml.sax.ContentHandler#endElement(java.lang.String,
-     *      java.lang.String, java.lang.String)
-     */
     public void endElement(String uri, String localName, String qName)
             throws SAXException {
+        // NOOP
     }
 
-    /**
-     * (non-Javadoc).
-     * 
-     * @see org.xml.sax.ContentHandler#characters(char[], int, int)
-     */
     public void characters(char[] ch, int start, int length)
             throws SAXException {
+        // NOOP
     }
 
-    /**
-     * (non-Javadoc).
-     * 
-     * @see org.xml.sax.ContentHandler#ignorableWhitespace(char[], int, int)
-     */
     public void ignorableWhitespace(char[] ch, int start, int length)
             throws SAXException {
+        // NOOP
     }
 
-    /**
-     * (non-Javadoc).
-     * 
-     * @see org.xml.sax.ContentHandler#processingInstruction(java.lang.String,
-     *      java.lang.String)
-     */
     public void processingInstruction(String target, String data)
             throws SAXException {
+        // NOOP
     }
 
-    /**
-     * (non-Javadoc).
-     * 
-     * @see org.xml.sax.ContentHandler#skippedEntity(java.lang.String)
-     */
     public void skippedEntity(String name) throws SAXException {
+        // NOOP
     }
 
-    /**
-     * (non-Javadoc).
-     * 
-     * @see org.xml.sax.ext.LexicalHandler#startDTD(java.lang.String,
-     *      java.lang.String, java.lang.String)
-     */
     public void startDTD(String name, String publicId, String systemId)
             throws SAXException {
+        // NOOP
     }
 
-    /**
-     * (non-Javadoc).
-     * 
-     * @see org.xml.sax.ext.LexicalHandler#endDTD()
-     */
     public void endDTD() throws SAXException {
+        // NOOP
     }
 
-    /**
-     * (non-Javadoc).
-     * 
-     * @see org.xml.sax.ext.LexicalHandler#startEntity(java.lang.String)
-     */
     public void startEntity(String name) throws SAXException {
+        // NOOP
     }
 
-    /**
-     * (non-Javadoc).
-     * 
-     * @see org.xml.sax.ext.LexicalHandler#endEntity(java.lang.String)
-     */
     public void endEntity(String name) throws SAXException {
+        // NOOP
     }
 
-    /**
-     * (non-Javadoc).
-     * 
-     * @see org.xml.sax.ext.LexicalHandler#startCDATA()
-     */
     public void startCDATA() throws SAXException {
+        // NOOP
     }
 
-    /**
-     * (non-Javadoc).
-     * 
-     * @see org.xml.sax.ext.LexicalHandler#endCDATA()
-     */
     public void endCDATA() throws SAXException {
+        // NOOP
     }
 
-    /**
-     * (non-Javadoc).
-     * 
-     * @see org.xml.sax.ext.LexicalHandler#comment(char[], int, int)
-     */
     public void comment(char[] ch, int start, int length) throws SAXException {
+        // NOOP
     }
 
-    /**
-     * (non-Javadoc).
-     * 
-     * @see org.xml.sax.EntityResolver#resolveEntity(java.lang.String,
-     *      java.lang.String)
-     */
     public InputSource resolveEntity(String publicId, String systemId)
             throws SAXException, IOException {
         return null;

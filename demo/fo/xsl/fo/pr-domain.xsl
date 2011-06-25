@@ -33,19 +33,19 @@ See the accompanying license.txt file for applicable licenses.
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
-    version="1.0">
-
-    <xsl:include href="../../cfg/fo/attrs/pr-domain-attr.xsl"/>
+    version="2.0">
 
     <xsl:template match="*[contains(@class,' pr-d/codeph ')]">
-        <fo:inline xsl:use-attribute-sets="codeph" id="{@id}">
+        <fo:inline xsl:use-attribute-sets="codeph">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/codeblock ')]">
         <xsl:call-template name="generateAttrLabel"/>
-        <fo:block xsl:use-attribute-sets="codeblock" id="{@id}">
+        <fo:block xsl:use-attribute-sets="codeblock">
+            <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="setScale"/>
             <!-- rules have to be applied within the scope of the PRE box; else they start from page margin! -->
             <xsl:if test="contains(@frame,'top')">
@@ -63,68 +63,79 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/option ')]">
-        <fo:inline xsl:use-attribute-sets="option" id="{@id}">
+        <fo:inline xsl:use-attribute-sets="option">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/var ')]">
-        <fo:inline xsl:use-attribute-sets="var" id="{@id}">
+        <fo:inline xsl:use-attribute-sets="var">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/parmname ')]">
-        <fo:inline xsl:use-attribute-sets="parmname" id="{@id}">
+        <fo:inline xsl:use-attribute-sets="parmname">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/synph ')]">
-        <fo:inline xsl:use-attribute-sets="synph" id="{@id}">
+        <fo:inline xsl:use-attribute-sets="synph">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/oper ')]">
-        <fo:inline xsl:use-attribute-sets="oper" id="{@id}">
+        <fo:inline xsl:use-attribute-sets="oper">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/delim ')]">
-        <fo:inline xsl:use-attribute-sets="delim" id="{@id}">
+        <fo:inline xsl:use-attribute-sets="delim">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/sep ')]">
-        <fo:inline xsl:use-attribute-sets="sep" id="{@id}">
+        <fo:inline xsl:use-attribute-sets="sep">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/apiname ')]">
-        <fo:inline xsl:use-attribute-sets="apiname" id="{@id}">
+        <fo:inline xsl:use-attribute-sets="apiname">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/parml ')]">
         <xsl:call-template name="generateAttrLabel"/>
-        <fo:block xsl:use-attribute-sets="parml" id="{@id}">
+        <fo:block xsl:use-attribute-sets="parml">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/plentry ')]">
-        <fo:block xsl:use-attribute-sets="plentry" id="{@id}">
+        <fo:block xsl:use-attribute-sets="plentry">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/pt ')]">
-        <fo:block xsl:use-attribute-sets="pt" id="{@id}">
+        <fo:block xsl:use-attribute-sets="pt">
+            <xsl:call-template name="commonattributes"/>
             <xsl:choose>
                 <xsl:when test="*"> <!-- tagged content - do not default to bold -->
                     <xsl:apply-templates/>
@@ -139,25 +150,29 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/pd ')]">
-        <fo:block xsl:use-attribute-sets="pd" id="{@id}">
+        <fo:block xsl:use-attribute-sets="pd">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/synblk ')]">
-        <fo:inline xsl:use-attribute-sets="synblk" id="{@id}">
+        <fo:inline xsl:use-attribute-sets="synblk">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/synnoteref ')]">
-        <fo:inline xsl:use-attribute-sets="synnoteref" id="{@id}">
+        <fo:inline xsl:use-attribute-sets="synnoteref">
+        <xsl:call-template name="commonattributes"/>
         [<xsl:value-of select="@refid"/>] <!--TODO: synnoteref-->
         </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/synnote ')]">
-        <fo:inline xsl:use-attribute-sets="synnote" id="{@id}"> <!--TODO: synnote-->
+        <fo:inline xsl:use-attribute-sets="synnote"> <!--TODO: synnote-->
+            <xsl:call-template name="commonattributes"/>
             <xsl:choose>
                 <xsl:when test="not(@id='')"> <!-- case of an explicit id -->
                     <xsl:value-of select="@id"/>
@@ -173,13 +188,15 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/syntaxdiagram ')]">
-        <fo:block xsl:use-attribute-sets="syntaxdiagram" id="{@id}"> <!--TODO: syntaxdiagram-->
+        <fo:block xsl:use-attribute-sets="syntaxdiagram"> <!--TODO: syntaxdiagram-->
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/fragment ')]">
-        <fo:block xsl:use-attribute-sets="fragment" id="{@id}">
+        <fo:block xsl:use-attribute-sets="fragment">
+            <xsl:call-template name="commonattributes"/>
             <xsl:value-of select="*[contains(@class,' topic/title ')]"/>
             <xsl:text> </xsl:text>
             <xsl:apply-templates/>
@@ -187,13 +204,15 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/syntaxdiagram ')]/*[contains(@class,' topic/title ')]">
-        <fo:block xsl:use-attribute-sets="syntaxdiagram.title" id="{@id}">
+        <fo:block xsl:use-attribute-sets="syntaxdiagram.title">
+            <xsl:call-template name="commonattributes"/>
             <xsl:value-of select="."/>
         </fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/kwd ')]">
-        <fo:inline xsl:use-attribute-sets="kwd" id="{@id}">
+        <fo:inline xsl:use-attribute-sets="kwd">
+            <xsl:call-template name="commonattributes"/>
             <xsl:if test="parent::*[contains(@class,' pr-d/groupchoice ')]">
                 <xsl:if test="count(preceding-sibling::*)!=0"> | </xsl:if>
             </xsl:if>
@@ -213,71 +232,93 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/fragref ')]">
-        <fo:inline xsl:use-attribute-sets="fragref" id="{@id}">     <!--TODO: fragref-->
+        <fo:inline xsl:use-attribute-sets="fragref">     <!--TODO: fragref-->
+            <xsl:call-template name="commonattributes"/>
             &lt;<xsl:value-of select="."/>&gt;
         </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/fragment ')]/*[contains(@class,' topic/title ')]">
-        <fo:block xsl:use-attribute-sets="fragment.title" id="{@id}">
+        <fo:block xsl:use-attribute-sets="fragment.title">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/fragment ')]/*[contains(@class,' pr-d/groupcomp ')]|*[contains(@class,' pr-d/fragment ')]/*[contains(@class,' pr-d/groupchoice ')]|*[contains(@class,' pr-d/fragment ')]/*[contains(@class,' pr-d/groupseq ')]">
-        <fo:block xsl:use-attribute-sets="fragment.group" id="{@id}">
+        <fo:block xsl:use-attribute-sets="fragment.group">
+            <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="makeGroup"/>
         </fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/syntaxdiagram ')]/*[contains(@class,' pr-d/groupcomp ')]|*[contains(@class,' pr-d/syntaxdiagram ')]/*[contains(@class,' pr-d/groupseq ')]|*[contains(@class,' pr-d/syntaxdiagram ')]/*[contains(@class,' pr-d/groupchoice ')]">
-        <fo:block xsl:use-attribute-sets="syntaxdiagram.group" id="{@id}">
+        <fo:block xsl:use-attribute-sets="syntaxdiagram.group">
+            <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="makeGroup"/>
         </fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/groupcomp ')]/*[contains(@class,' pr-d/groupcomp ')]">
-        <fo:inline id="{@id}"/>
+        <fo:inline>
+          <xsl:call-template name="commonattributes"/>
+        </fo:inline>
         <xsl:call-template name="makeGroup"/>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/groupchoice ')]/*[contains(@class,' pr-d/groupchoice ')]">
-        <fo:inline id="{@id}"/>
+        <fo:inline>
+            <xsl:call-template name="commonattributes"/>
+        </fo:inline>
         <xsl:call-template name="makeGroup"/>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/groupseq ')]/*[contains(@class,' pr-d/groupseq ')]">
-        <fo:inline id="{@id}"/>
+        <fo:inline>
+            <xsl:call-template name="commonattributes"/>
+        </fo:inline>
         <xsl:call-template name="makeGroup"/>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/groupchoice ')]/*[contains(@class,' pr-d/groupcomp ')]">
-        <fo:inline id="{@id}"/>
+        <fo:inline>
+            <xsl:call-template name="commonattributes"/>
+        </fo:inline>
         <xsl:call-template name="makeGroup"/>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/groupchoice ')]/*[contains(@class,' pr-d/groupseq ')]">
-        <fo:inline id="{@id}"/>
+        <fo:inline>
+            <xsl:call-template name="commonattributes"/>
+        </fo:inline>
         <xsl:call-template name="makeGroup"/>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/groupcomp ')]/*[contains(@class,' pr-d/groupchoice ')]">
-        <fo:inline id="{@id}"/>
+        <fo:inline>
+            <xsl:call-template name="commonattributes"/>
+        </fo:inline>
         <xsl:call-template name="makeGroup"/>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/groupcomp ')]/*[contains(@class,' pr-d/groupseq ')]">
-        <fo:inline id="{@id}"/>
+        <fo:inline>
+            <xsl:call-template name="commonattributes"/>
+        </fo:inline>
         <xsl:call-template name="makeGroup"/>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/groupseq ')]/*[contains(@class,' pr-d/groupchoice ')]">
-        <fo:inline id="{@id}"/>
+        <fo:inline>
+            <xsl:call-template name="commonattributes"/>
+        </fo:inline>
         <xsl:call-template name="makeGroup"/>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/groupseq ')]/*[contains(@class,' pr-d/groupcomp ')]">
-        <fo:inline id="{@id}"/>
+        <fo:inline>
+            <xsl:call-template name="commonattributes"/>
+        </fo:inline>
         <xsl:call-template name="makeGroup"/>
     </xsl:template>
 

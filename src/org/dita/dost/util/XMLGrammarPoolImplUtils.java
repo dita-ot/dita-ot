@@ -19,9 +19,9 @@ import org.apache.xerces.xni.grammars.XMLGrammarDescription;
  * @author william
  * 
  */
-public class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
+public final class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
 	
-	private String gramCache = "yes";
+	private boolean gramCache = true;
 	
 
 	/** Constructs a grammar pool with a default number of buckets. */
@@ -30,22 +30,22 @@ public class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
 	}
 	
 	/** Constructs a grammar pool with a default number of buckets. */
-	public XMLGrammarPoolImplUtils(String gramCache) {
+	public XMLGrammarPoolImplUtils(final boolean gramCache) {
 		super();
 		this.gramCache = gramCache;
 	}
 
 	/** Constructs a grammar pool with a specified number of buckets. */
-	public XMLGrammarPoolImplUtils(int initialCapacity) {
+	public XMLGrammarPoolImplUtils(final int initialCapacity) {
 		super(initialCapacity);
 	}
 	/**
 	 * @see org.apache.xerces.xni.grammars.XMLGrammarPool#retrieveInitialGrammarSet(String)
 	 */
-	public Grammar[] retrieveInitialGrammarSet(String grammarType) {
+	public Grammar[] retrieveInitialGrammarSet(final String grammarType) {
 		synchronized (fGrammars) {
 			
-			Grammar[] toReturn = new Grammar[0];
+			final Grammar[] toReturn = new Grammar[0];
 			return toReturn;
 		}
 	}
@@ -57,9 +57,9 @@ public class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
 	 *            The grammar description
 	 * @return The hash code value
 	 */
-	public int hashCode(XMLGrammarDescription desc) {
+	public int hashCode(final XMLGrammarDescription desc) {
 		if (desc instanceof XSDDescription) {
-			String systemId = ((XSDDescription) desc).getLiteralSystemId();
+			final String systemId = ((XSDDescription) desc).getLiteralSystemId();
 			return systemId == null ? 0 : systemId.hashCode();
 		} else {
 			return desc.hashCode();
@@ -78,10 +78,10 @@ public class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
 	 *            The grammar description of the grammar to be compared to
 	 * @return True if the grammars are equal, otherwise false
 	 */
-	public boolean equals(XMLGrammarDescription desc1,
-			XMLGrammarDescription desc2) {
+	public boolean equals(final XMLGrammarDescription desc1,
+			final XMLGrammarDescription desc2) {
 		//grammar pool caching enabled.
-		if ("yes".equals(gramCache)) {
+		if (gramCache) {
 			if (desc1 instanceof XSDDescription
 					&& desc2 instanceof XSDDescription) {
 				return desc1.getLiteralSystemId().equals(

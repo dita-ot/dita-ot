@@ -1,4 +1,113 @@
+====================================================================================
+
 (c) Copyright IBM Corp. 2004, 2010 All Rights Reserved.
+
+     DITA OT release 1.5.3
+     
+     Release 1.5.3 is a maintenance release based on the final
+     version of the DITA 1.2 standard.  In addition to tweaks to 
+     match late changes in the standard, version 1.5.3 contains 
+     many enhancements, user patches, bug fixes, and significant 
+     updates to the documentation.
+     
+     Release 1.5.3 was developed using a series of test builds 
+     released to the community every three weeks. Each item in the list
+     below indicates which test build first contained the update.  The
+     eighth public build was the final build, released as the 
+     DITA-OT 1.5.3 final stable build.
+
+	 [General Enhancements]
+	 
+     [29 SourceForge Enhancements Added]
+     * 3177971 Improve plugin configuration file (Milestone 2)    
+     * 3178275 Add xsl:import extension point to PDF2 topic merge XSL (Milestone 3)
+     * 3182113 Add common attribute processing to PDF2 plugin (Milestone 3)
+     * 3185914 Improve integration loggin  (Milestone 3)
+     * 3189073 Plugin location should be available as Ant property  (Milestone 3)
+     * 3126848 Repository cleanup (Milestone 3)
+     * 3204188 Support for defining extension point (Milestone 4)
+     * 3213163 Clean PDF2 build and integration scripts (Milestone 4)
+     * 3227387 Need extension to pass user param to dita.map.xhtml.toc targ (Milestone 4)    
+     * 3231695 Use an XML serializer object for writing XML (Milestone 4)  
+     * 3256796 Remove lecagy PDF code from xsl (Milestone 4)
+     * 3283638 Remove format attribute support from PDF2 vars (Milestone 5)
+     * 3285716 Clean up PDF2 build files (Milestone 5)
+     * 3286085 Add output and temp dir params to PDF2 (Milestone 5)
+     * 3293738 Use extensible pipeline task implementation (Milestone 6)
+     * 3271552 ${args.xsl.pdf} as an absolut path not supported (Milestone 6)
+     * 3033000 update to Apache FOP 1.0 release (Milestone 6) 
+     * 3213324 Separate FOP/XEP/AXF stylesheets in PDF2 (Milestone 6)
+     * 3302779 Dependency extension points for PDF2 formatting (Milestone 7)
+     * 3304945 Allow setting local overrides with properties file (Milestone 7)   
+     * 3190356 Pluginize DITA-OT base configuration files (Milestone 8)
+     * 3167087 Reduce static variable usage in Java code (Milestone 8)
+     * 3158929 Java clean-up (Milestone 8)
+     * 3194917 Change Java API to be more final and non-public (Milestone 8)
+     * 3197328 Refactor writers for cleaner XML serialization (Milestone 8)
+     * 3199755 Improve log integration (Milestone 8)
+     * 3296040 Refactor PDF2 build files (Milestone 8)
+     * 3306146 PDF2 stylesheet refactoring (Milestone 8)
+     * 3304447 Add support for selecting output format in PDF2 (Milestone 8)    
+     
+     [15 SourceForge Patches Added]
+     * 3123507 String concat in map2plugin (Milestone 1)
+     * 3110513 HTML XSLT uses complex casts (Milestone 1)
+     * 3097677 Add property to reload XHTML stylesheets (Milestone 1) 
+     * 3106659 Added topicgroup elements to tocjs (Milestone 1)
+     * 3109051 RestoreEntity duplicates functionality (Milestone 1)
+     * 3107755 Configure templates with integrator properties (Milestone 1)
+     * 3142967 IndexTermReader leaves tab characters in terms (Milestone 1)
+     * 3140543 Add missing Commons Codec JAR into compile classpath for buildPackage.xml (Milestone 1)
+     * 3087664 Clean plugin configuration parser (Milestone 1)
+     * 3145258 Plug-in integrator code clean-up (Milestone 2)
+     * 3147226 Use common directory layout for Junit (Milestone 2)    
+     * 3062765 Fix unit test file paths to be platform dependent (Milestone 2)
+     * 3164523 Refactor platform Java code (Milestone 2)
+     * 3160801 Improve unit test coverage (Milestone 8)
+     * 3189026 Avoid strings where other types are more appropriate  (Milestone 8)
+         
+     [39 SourceForge Bugs Fixed] 
+     * 3114411 keyref links don't work for HTML Help (Milestone 1)
+     * 3126578 Chunking Issues in DITA 1.5.1 (Milestone 1)
+     * 3109616 More Antenna House Path Problems (Milestone 1)
+     * 3155375 Incorrect way to specify recognized image extensions(Milestone 2)
+     * 3157890 Navtitle Construction Does not Preserve Markup (Milestone 2)
+     * 3155848 xml decl in ditaval file not closed properly (Milestone 2)
+     * 3162808 Chunking remaps in-file <xref> to invalid value (Milestone 2)
+     * 3164866 Upper letter estensions (Milestone 2)
+     * 3165307 Add boilerplate to Java files (Milestone 2)
+     * 2793836 CHM Index terms come out with extra spaces (Milestone 2)
+     * 3165762 Initializer XMLReader without modifying system variables (Milestone 2)
+     * 3175328 Imagemap alt text gets extra text (Milestone 2)
+     * 3085106 FO: topicmerge drops id on map/topicref without href. (Milestone 2)
+     * 3147328 Error in commons.xsl: getTopicrefShortdesc (Milestone 2)
+     * 3130724 Error in tables.xsl: fix-relcolwidth (Milestone 2)
+     * 3174906 Normalize Map and Bookmap titles for JavaHelp output (Milestone 3)
+     * 3178361 Conkeyref push fails when equivalent conref push succeeds (Milestone 3)
+     * 3180681 PDF2: Inconsistent template import / include. (Milestone 3)
+     * 3191701 Conref Push to Same File Fails (Milestone 3)
+     * 3191704 Push Replace Results in Pushed element Being removed (Milestone 3)
+     * 3189883 MapLinksReader should not be namespace aware  (Milestone 3)
+     * 3164587 Warnings issued by Saxon 9.3.0.4 when publishing to PDF (Milestone 3)
+     * 3159001 Clean unit tests (Milestone 4)  
+     * 3199985 @chunk : xrefs and links break (Milestone 4)
+     * 3206158 Inconsistent message DOTJ038W (Milestone 4)
+     * 3206373 Better handling of referenced SVG images (Milestone 4)
+     * 3279539 Out of memory error from move-meta module (Milestone 5)
+     * 3281108 Fallback to $locale when xml:lang value is wrong format (Milestone 5)
+     * 3286679 ODT output transform deletes too many files (Milestone 6)
+     * 3287609 Chunking rewrites image based on map directory (Milestone 6)
+     * 3288639 Conref code improperly generalizes map domain elements  (Milestone 6)
+     * 3294295 PDF2 indexing and I18N fails with missing languages (Milestone 6)
+     * 3294864 tocjs-demo: tocjs.ditamap is referencing a missing file (Milestone 6)
+	 * 3297930 PDF2: axf specific templates can't be overridden. (Milestone 7)
+	 * 2001271 DITA-OT documentation wants Ant 1.6.5 (Milestone 8)
+	 * 3136773 Incorrect version reported in log file (Milestone 8)
+	 * 3260746 Topichead not processed the same as title-only topic (Milestone 8)
+	 * 3315029 Garbled character problem in Japanese HTMLHelp (Milestone 8) 
+	 * 3308775 Keyref map in grandparent folder fails (Milestone 8)
+     
+====================================================================================
 
      DITA OT release 1.5.2
      

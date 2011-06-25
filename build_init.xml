@@ -107,7 +107,7 @@
   </path>
 
   <taskdef name="pipeline"
-    classname="org.dita.dost.invoker.AntInvoker">
+    classname="org.dita.dost.invoker.ExtensibleAntInvoker">
     <classpath refid="dost.jar.path" />
   </taskdef>
 
@@ -159,18 +159,18 @@
   <tstamp>
     <format property="current.date" pattern="yyyyMMddHHmmssSSS"/>
   </tstamp>
-  <property name="base.temp.dir" value="temp"/>
-  <property name="dita.temp.dir" value="${base.temp.dir}${file.separator}temp${current.date}" />
-  <property name="output.dir" value="out" />
+  <property name="base.temp.dir" location="${basedir}/temp"/>
+  <property name="dita.temp.dir" location="${base.temp.dir}${file.separator}temp${current.date}" />
+  <property name="output.dir" location="${basedir}/out" />
   <property name="dita.extname" value="xml" />
   <property name="dita.script.dir"
-    value="${dita.dir}${file.separator}xsl" />
+    location="${dita.dir}${file.separator}xsl" />
   <property name="dita.resource.dir"
-    value="${dita.dir}${file.separator}resource" />
+    location="${dita.dir}${file.separator}resource" />
   <property environment="env" />
   <property name="dita.empty" value="" />
   <property name="args.message.file"
-    value="${dita.dir}${file.separator}resource${file.separator}messages.xml" />
+    location="${dita.dir}${file.separator}resource${file.separator}messages.xml" />
   <!-- property values end -->
 
   <!-- Changed by Alan to refacter:URIResolver Date2009-08-07 -->
@@ -203,6 +203,30 @@
   </target>
   
   <target name="use-init" depends="use-init.envhhcdir,use-init.hhcdir">
+    <condition property="xml.parser" value="XMLReader ${org.xml.sax.driver}">
+      <and>
+        <isset property="org.xml.sax.driver"/>
+        <not><isset property="xml.parser"/></not>
+      </and>
+    </condition>
+    <condition property="xml.parser" value="Xerces">
+      <and>
+        <available classname="org.apache.xerces.parsers.SAXParser"/>
+        <not><isset property="xml.parser"/></not>
+      </and>
+    </condition>
+    <condition property="xml.parser" value="Xerces in Sun JDK 1.5">
+      <and>
+        <available classname="com.sun.org.apache.xerces.internal.parsers.SAXParser"/>
+        <not><isset property="xml.parser"/></not>
+      </and>
+    </condition>
+    <condition property="xml.parser" value="Crimson">
+      <and>
+        <available classname="org.apache.crimson.parser.XMLReaderImpl"/>
+        <not><isset property="xml.parser"/></not>
+      </and>
+    </condition>
     <available classname="net.sf.saxon.StyleSheet" property="hasSaxon" />
     <available classname="net.sf.saxon.Transform" property="hasSaxon" />
     <available classname="org.apache.fop.tools.anttasks.Fop" property="hasFOP">
@@ -214,7 +238,7 @@
 	
   <target name="output-version">
   	<dita-ot-version/>
-  	<echo level="info">Version: ${otversion} ${milestone}</echo>
+  	<echo level="info">Version: ${otversion}</echo>
   </target>
 
   <!-- property value validation begin -->
@@ -486,19 +510,6 @@
       </not>
     </condition>
 
-    <condition property="index.ext.param.encoding" value="">
-      <not>
-        <isset property="args.dita.locale" />
-      </not>
-    </condition>
-
-    <condition property="index.ext.param.encoding"
-      value="encoding=${args.dita.locale}">
-      <not>
-        <isset property="index.ext.param.encoding" />
-      </not>
-    </condition>
-
     <condition property="xslt.parser" value="SAXON">
       <isset property="hasSaxon" />
     </condition>
@@ -571,6 +582,8 @@
     <echo level="info">*****************************************************************</echo>
   	<echoproperties regex="^(arg|preprocess|dita)" taskname="echo" failonerror="false"/>
   	<echo level="info">*****************************************************************</echo>
+    <echo level="info">* Using ${xml.parser}</echo>
+    <echo level="info">*****************************************************************</echo>
   </target>
 
   <target name="output-msg" depends="output-deprecated-msg, output-css-warn-message"/>

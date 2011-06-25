@@ -1,29 +1,36 @@
+/*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
+ * (c) Copyright IBM Corp. 2010 All Rights Reserved.
+ */
 package org.dita.dost.reader;
+
+import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
 import java.util.Hashtable;
 import java.util.Properties;
 
-import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
+
 /**
  * Class for reading conref push content.
  *
  */
-public class ConrefPushReader extends AbstractXMLReader {
+public final class ConrefPushReader extends AbstractXMLReader {
 	/** push table.*/
-	private Hashtable<String, Hashtable<String, String>> pushtable;
-	/** push table.*/
-	private DITAOTJavaLogger javaLogger = null;
+	private final Hashtable<String, Hashtable<String, String>> pushtable;
 	/** push table.*/
 	private XMLReader reader = null;
 	//Added by william on 2009-11-8 for ampbug:2893664 start
@@ -35,6 +42,8 @@ public class ConrefPushReader extends AbstractXMLReader {
 	filePath is useful to get the absolute path of the target file.*/
 	private String filePath = null; 
 	
+	/**keep the file name of  current file under parse */
+	private String parsefilename = null;
 	/**pushcontent is used to store the content copied to target
 	 in pushcontent href will be resolved if it is relative path
 	 if @conref is in pushconref the target name should be recorded so that it 
@@ -61,7 +70,7 @@ public class ConrefPushReader extends AbstractXMLReader {
 	 * @return Content
 	 */
 	public Content getContent() {
-		Content content = new ContentImpl();
+		final Content content = new ContentImpl();
 		content.setCollection(pushtable.entrySet());
 		return content;
 	}
@@ -70,13 +79,14 @@ public class ConrefPushReader extends AbstractXMLReader {
 	 */
 	public void read(String filename) {
 		filePath = new File(filename).getParentFile().getAbsolutePath();
+		parsefilename = new File(filename).getName();
 		start = false;
-		pushcontent = new StringBuffer(Constants.INT_256);
+		pushcontent = new StringBuffer(INT_256);
 		pushType = null;
 		try{
 			reader.parse(filename);
-		}catch (Exception e) {
-			javaLogger.logException(e);
+		}catch (final Exception e) {
+			logger.logException(e);
 		}
 	}
 	/**
@@ -84,20 +94,19 @@ public class ConrefPushReader extends AbstractXMLReader {
 	 */
 	public ConrefPushReader(){
 		pushtable = new Hashtable<String, Hashtable<String,String>>();
-		javaLogger = new DITAOTJavaLogger();
 		try{
-			reader = XMLReaderFactory.createXMLReader();
-			reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
-			reader.setFeature(Constants.FEATURE_NAMESPACE, true);
+			reader = StringUtils.getXMLReader();
+			reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
+			reader.setFeature(FEATURE_NAMESPACE, true);
 			
 			//Added by william on 2009-11-8 for ampbug:2893664 start
-			reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
+			reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
 			reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
 			reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
 			needResolveEntity = true;
 			//Added by william on 2009-11-8 for ampbug:2893664 end
-		}catch (Exception e) {
-			javaLogger.logException(e);
+		}catch (final Exception e) {
+			logger.logException(e);
 		}
 		reader.setContentHandler(this);
 	}
@@ -113,16 +122,16 @@ public class ConrefPushReader extends AbstractXMLReader {
 			putElement(pushcontent, name, atts, false);
 		}
 		
-		String conactValue = atts.getValue("conaction");
+		final String conactValue = atts.getValue("conaction");
 		if (!start && conactValue != null){
 			if ("pushbefore".equalsIgnoreCase(conactValue)){
 				if(pushcontent.length() != 0){
 					// there are redundant "pushbefore", create a new pushcontent and emit a warning message.
 					pushcontent = new StringBuffer();
-					Properties prop = new Properties();
+					final Properties prop = new Properties();
 					prop.put("%1", atts.getValue("xtrf"));
 					prop.put("%2", atts.getValue("xtrc"));
-					javaLogger.logWarn(MessageUtils.getMessage("DOTJ044W",prop).toString());
+					logger.logWarn(MessageUtils.getMessage("DOTJ044W",prop).toString());
 				}
 				start = true;
 				level =0;
@@ -134,10 +143,10 @@ public class ConrefPushReader extends AbstractXMLReader {
 				level = 0;
 				level ++;
 				if (target == null){
-					Properties prop = new Properties();
+					final Properties prop = new Properties();
 					prop.put("%1", atts.getValue("xtrf"));
 					prop.put("%2", atts.getValue("xtrc"));
-					javaLogger.logError(MessageUtils.getMessage("DOTJ039E", prop).toString());
+					logger.logError(MessageUtils.getMessage("DOTJ039E", prop).toString());
 				}else{
 					putElement(pushcontent, name, atts, true);
 					pushType = "pushafter";
@@ -148,10 +157,10 @@ public class ConrefPushReader extends AbstractXMLReader {
 				level ++;
 				target = atts.getValue("conref");
 				if (target == null){
-					Properties prop = new Properties();
+					final Properties prop = new Properties();
 					prop.put("%1", atts.getValue("xtrf"));
 					prop.put("%2", atts.getValue("xtrc"));
-					javaLogger.logError(MessageUtils.getMessage("DOTJ040E", prop).toString());
+					logger.logError(MessageUtils.getMessage("DOTJ040E", prop).toString());
 				}else{
 					pushType = "pushreplace";
 					putElement(pushcontent, name, atts, true);
@@ -165,16 +174,16 @@ public class ConrefPushReader extends AbstractXMLReader {
 					//we need to add target and content to pushtable		
 					replaceContent();
 					addtoPushTable(target, pushcontent.toString(), pushType);
-					pushcontent = new StringBuffer(Constants.INT_256);
+					pushcontent = new StringBuffer(INT_256);
 					target = null;
 					pushType = null;
 				}
 			}
-		}else if (pushcontent != null && pushcontent.length() > 0 && level == 0){
+		}//else if (pushcontent != null && pushcontent.length() > 0 && level == 0){
 			//if there is no element with conaction="mark" after 
 			//one with conaction="pushbefore", report syntax error
 			
-		}
+		//}
 	}	
 	/**
 	 * replace content.
@@ -187,7 +196,7 @@ public class ConrefPushReader extends AbstractXMLReader {
 		int nextindex = 0;
 		int hrefindex = pushcontent.indexOf("href=\"", index);
 		int conrefindex = pushcontent.indexOf("conref=\"", index);
-		StringBuffer resultBuffer = new StringBuffer(Constants.INT_256);
+		final StringBuffer resultBuffer = new StringBuffer(INT_256);
 		if(hrefindex < 0 && conrefindex < 0){
 			return;
 		}
@@ -203,10 +212,10 @@ public class ConrefPushReader extends AbstractXMLReader {
 				nextindex = conrefindex;
 			}
 			
-			int valueindex = pushcontent.indexOf(Constants.QUOTATION,nextindex)+1;
+			final int valueindex = pushcontent.indexOf(QUOTATION,nextindex)+1;
 			resultBuffer.append(pushcontent.substring(index, valueindex));
-			resultBuffer.append(replaceURL(pushcontent.substring(valueindex, pushcontent.indexOf(Constants.QUOTATION, valueindex))));
-			index = pushcontent.indexOf(Constants.QUOTATION, valueindex);
+			resultBuffer.append(replaceURL(pushcontent.substring(valueindex, pushcontent.indexOf(QUOTATION, valueindex))));
+			index = pushcontent.indexOf(QUOTATION, valueindex);
 			
 			if(hrefindex > 0){
 				hrefindex = pushcontent.indexOf("href=\"", index);
@@ -233,13 +242,13 @@ public class ConrefPushReader extends AbstractXMLReader {
 		//when copying it to pushcontent. True means remove and false means
 		//not remove.
 		int index = 0;
-		buf.append(Constants.LESS_THAN).append(elemName);
+		buf.append(LESS_THAN).append(elemName);
 		for (index=0; index < atts.getLength(); index++){
 			if (!removeConref || 
 					!"conref".equals(atts.getQName(index))&&
 							!"conaction".equals(atts.getQName(index))){
-				buf.append(Constants.STRING_BLANK);
-				buf.append(atts.getQName(index)).append(Constants.EQUAL).append(Constants.QUOTATION);
+				buf.append(STRING_BLANK);
+				buf.append(atts.getQName(index)).append(EQUAL).append(QUOTATION);
 				String value = atts.getValue(index);
 				//Added by william on 2009-11-8 for ampbug:2893664 start
 				value = StringUtils.escapeXML(value);
@@ -249,7 +258,7 @@ public class ConrefPushReader extends AbstractXMLReader {
 					// adjust href for pushbefore and replace					
 					value = replaceURL(value);
 				}
-				buf.append(value).append(Constants.QUOTATION);
+				buf.append(value).append(QUOTATION);
 			}
 			
 		}
@@ -257,31 +266,31 @@ public class ConrefPushReader extends AbstractXMLReader {
 		//id attribute should only be added to the starting element
 		//which dosen't have id attribute set
 		if("pushreplace".equals(pushType) && 
-				atts.getValue(Constants.ATTRIBUTE_NAME_ID) == null &&
+				atts.getValue(ATTRIBUTE_NAME_ID) == null &&
 				level == 1){
-			int sharpIndex = target.indexOf(Constants.SHARP);
+			final int sharpIndex = target.indexOf(SHARP);
 			if (sharpIndex == -1){
 				//if there is no '#' in target string, report error
-				Properties prop = new Properties();
+				final Properties prop = new Properties();
 				prop.put("%1", target);
-				javaLogger.logError(MessageUtils.getMessage("DOTJ041E", prop).toString());
+				logger.logError(MessageUtils.getMessage("DOTJ041E", prop).toString());
 			}else{
-				String targetLoc = target.substring(sharpIndex + 1);
+				final String targetLoc = target.substring(sharpIndex + 1);
 				String id = "";
 				//has element id
-				if(targetLoc.contains(Constants.SLASH)){
-					id = targetLoc.substring(targetLoc.lastIndexOf(Constants.SLASH) + 1);
+				if(targetLoc.contains(SLASH)){
+					id = targetLoc.substring(targetLoc.lastIndexOf(SLASH) + 1);
 				}else{
 					id = targetLoc;
 				}
 				//add id attribute
-				buf.append(Constants.STRING_BLANK);
-				buf.append(Constants.ATTRIBUTE_NAME_ID).append(Constants.EQUAL).append(Constants.QUOTATION);
-				buf.append(id).append(Constants.QUOTATION);
+				buf.append(STRING_BLANK);
+				buf.append(ATTRIBUTE_NAME_ID).append(EQUAL).append(QUOTATION);
+				buf.append(id).append(QUOTATION);
 			}
 		}
 		//Added by William on 2009-10-10 for conrefPush bug:2872954 end
-		buf.append(Constants.GREATER_THAN);
+		buf.append(GREATER_THAN);
 	}
 	/**
 	 * 
@@ -294,11 +303,11 @@ public class ConrefPushReader extends AbstractXMLReader {
 		}else if(target == null || 
 				FileUtils.isAbsolutePath(value) ||
 				value.contains("://") ||
-				value.startsWith(Constants.SHARP)){
+				value.startsWith(SHARP)){
 			return value;
 		}else{
-			String source = FileUtils.resolveFile(filePath, target);
-			String urltarget = FileUtils.resolveTopic(filePath, value);
+			final String source = FileUtils.resolveFile(filePath, target);
+			final String urltarget = FileUtils.resolveTopic(filePath, value);
 			return FileUtils.getRelativePathFromMap(source, urltarget);
 
 			
@@ -311,15 +320,21 @@ public class ConrefPushReader extends AbstractXMLReader {
 	 * @param pushcontent content
 	 * @param type push type
 	 */
-	private void addtoPushTable(String target, String pushcontent, String type) {
-		int sharpIndex = target.indexOf(Constants.SHARP);
+	private void addtoPushTable(String target, String pushcontent, String type) {		
+		int sharpIndex = target.indexOf(SHARP);
 		if (sharpIndex == -1){
 			//if there is no '#' in target string, report error
-			Properties prop = new Properties();
+			final Properties prop = new Properties();
 			prop.put("%1", target);
-			javaLogger.logError(MessageUtils.getMessage("DOTJ041E", prop).toString());
+			logger.logError(MessageUtils.getMessage("DOTJ041E", prop).toString());
 		}
-		String key = FileUtils.resolveFile(filePath, target);
+		
+		if (sharpIndex == 0){
+			//means conref the file itself
+			target= this.parsefilename+target;
+			sharpIndex = target.indexOf(SHARP);
+		}
+		final String key = FileUtils.resolveFile(filePath, target);
 		Hashtable<String, String> table = null;
 		if (pushtable.containsKey(key)){
 			//if there is something else push to the same file
@@ -330,17 +345,17 @@ public class ConrefPushReader extends AbstractXMLReader {
 			pushtable.put(key, table);
 		}
 		
-		String targetLoc = target.substring(sharpIndex);
-		String addon = Constants.STICK+type;
+		final String targetLoc = target.substring(sharpIndex);
+		final String addon = STICK+type;
 
 		if (table.containsKey(targetLoc+addon)){
 			//if there is something else push to the same target
 			//append content if type is 'pushbefore' or 'pushafter'
 			//report error if type is 'replace'
 			if ("pushreplace".equalsIgnoreCase(type)){
-				Properties prop = new Properties();
+				final Properties prop = new Properties();
 				prop.put("%1", target);
-				javaLogger.logError(MessageUtils.getMessage("DOTJ042E", prop).toString());
+				logger.logError(MessageUtils.getMessage("DOTJ042E", prop).toString());
 			}else{
 				table.put(targetLoc+addon, table.get(targetLoc+addon)+pushcontent);
 			}
@@ -364,7 +379,7 @@ public class ConrefPushReader extends AbstractXMLReader {
 			throws SAXException {
 		if (start){
 			level --;
-			pushcontent.append(Constants.LESS_THAN).append(Constants.SLASH).append(name).append(Constants.GREATER_THAN);
+			pushcontent.append(LESS_THAN).append(SLASH).append(name).append(GREATER_THAN);
 		}
 		if (level == 0){
 			//turn off start if we reach the end tag of staring element
@@ -375,7 +390,7 @@ public class ConrefPushReader extends AbstractXMLReader {
 				//if target == null we have already reported error in startElement;
 				if(target != null){
 					addtoPushTable(target, pushcontent.toString(), pushType);
-					pushcontent = new StringBuffer(Constants.INT_256);
+					pushcontent = new StringBuffer(INT_256);
 					target = null;
 					pushType = null;
 				}
@@ -391,7 +406,7 @@ public class ConrefPushReader extends AbstractXMLReader {
          	if(!needResolveEntity){
          		pushcontent.append(StringUtils.getEntity(name));
          	}
-         } catch (Exception e) {
+         } catch (final Exception e) {
          	//logger.logException(e);
          }
 	}

@@ -9,6 +9,8 @@
  */
 package org.dita.dost.util;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -18,6 +20,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
+
 import org.dita.dost.log.DITAOTJavaLogger;
 
 /**
@@ -25,7 +31,7 @@ import org.dita.dost.log.DITAOTJavaLogger;
  * 
  * @author Wu, Zhi Qiang
  */
-public class StringUtils {
+public final class StringUtils {
 
 	//Edited by william on 2009-11-8 for ampbug:2893664 start
 	private static final String NOT_RESOLVE_ENTITY_LIST = "|lt|gt|quot|amp|";
@@ -44,9 +50,9 @@ public class StringUtils {
 	 *            Description of the Parameter
 	 * @return java.lang.String
 	 */
-	@SuppressWarnings("unchecked")
-	public static String assembleString(Collection coll, String delim) {
-		StringBuffer buff = new StringBuffer(Constants.INT_256);
+	@SuppressWarnings("rawtypes")
+    public static String assembleString(final Collection coll, final String delim) {
+		final StringBuffer buff = new StringBuffer(INT_256);
 		Iterator iter = null;
 
 		if ((coll == null) || coll.isEmpty()) {
@@ -55,7 +61,7 @@ public class StringUtils {
 
 		iter = coll.iterator();
 		while (iter.hasNext()) {
-			buff.append(iter.next());
+			buff.append(iter.next().toString());
 
 			if (iter.hasNext()) {
 				buff.append(delim);
@@ -71,8 +77,8 @@ public class StringUtils {
 	 * @param s value needed to be escaped
 	 * @return escaped value
 	 */
-	public static String escapeXML(String s){
-		char[] chars = s.toCharArray();
+	public static String escapeXML(final String s){
+		final char[] chars = s.toCharArray();
         return escapeXML(chars, 0, chars.length);
 	}
 	
@@ -84,13 +90,12 @@ public class StringUtils {
 	 * @param length arrays lenth
 	 * @return escaped value
 	 */
-	public static String escapeXML(char[] chars, int offset, int length){
-		StringBuffer escaped = new StringBuffer();
+	public static String escapeXML(final char[] chars, final int offset, final int length){
+		final StringBuffer escaped = new StringBuffer();
 		
-		String test = new String(chars,offset, length);
-        int end = offset + length;
+        final int end = offset + length;
         for (int i = offset; i < end; ++i) {
-            char c = chars[i];
+            final char c = chars[i];
 
             switch (c) {
             case '\'':
@@ -122,7 +127,7 @@ public class StringUtils {
 	 * @param name entity name
 	 * @return entity
 	 */
-	public static String getEntity(String name) {
+	public static String getEntity(final String name) {
 	
 		return (name.startsWith("%")) ? (name + ";") : ("&" + name + ";");
 	}
@@ -133,13 +138,13 @@ public class StringUtils {
 	 * @param name entity name
 	 * @return ture if this entity needs to be resolved
 	 */
-	public static boolean checkEntity(String name) {
+	public static boolean checkEntity(final String name) {
 		// check whether this entity need resolve
-		if (NOT_RESOLVE_ENTITY_LIST.indexOf(Constants.STICK + name.trim()
-				+ Constants.STICK) != -1 ||
+		if (NOT_RESOLVE_ENTITY_LIST.indexOf(STICK + name.trim()
+				+ STICK) != -1 ||
 			//Edited by william on 2009-11-8 for ampbug:2893664 start
-			NOT_RESOLVE_ENTITY_CHAR.indexOf(Constants.STICK + name.trim()
-						+ Constants.STICK) != -1 ) {
+			NOT_RESOLVE_ENTITY_CHAR.indexOf(STICK + name.trim()
+						+ STICK) != -1 ) {
 			//Edited by william on 2009-11-8 for ampbug:2893664 end
 			return false;
 		}
@@ -161,7 +166,7 @@ public class StringUtils {
 	 */
 	public static String replaceAll(final String input,
 			final String pattern, final String replacement) {
-		StringBuffer result = new StringBuffer();
+		final StringBuffer result = new StringBuffer();
 		int startIndex = 0;
 		int newIndex = 0;
 
@@ -181,14 +186,14 @@ public class StringUtils {
 	 * @param inStr input string
 	 * @return asscii code
 	 */
-	public static String getAscii(String inStr){
-		byte [] input = inStr.getBytes();
+	public static String getAscii(final String inStr){
+		final byte [] input = inStr.getBytes();
 		/*byte [] output;
 		ByteArrayInputStream byteIS = new ByteArrayInputStream(input);
 		InputStreamReader reader = new InputStreamReader(byteIS,"UTF-8");
-		char [] cbuf = new char[Constants.INT_128];
+		char [] cbuf = new char[INT_128];
 		int count = reader.read(cbuf);*/
-		StringBuffer ret = new StringBuffer(Constants.INT_1024);
+		final StringBuffer ret = new StringBuffer(INT_1024);
 		String strByte = null;
 		for(int i = 0; i < input.length; i++){
 			ret.append("\\\'");
@@ -216,49 +221,33 @@ public class StringUtils {
 	 * @param domains input domain
 	 * @return prop
 	 */
-	public static String getExtProps (String domains){
-		StringBuffer propsBuffer = new StringBuffer();
+	public static String getExtProps (final String domains){
+		final StringBuffer propsBuffer = new StringBuffer();
     	int propsStart = domains.indexOf("a(props");
     	int propsEnd = domains.indexOf(")",propsStart);
     	while (propsStart != -1 && propsEnd != -1){
-    		propsBuffer.append(Constants.COMMA);
+    		propsBuffer.append(COMMA);
     		propsBuffer.append(domains.substring(propsStart+2,propsEnd).trim());
     		propsStart = domains.indexOf("a(props", propsEnd);
     		propsEnd = domains.indexOf(")",propsStart);
     	}
-    	return (propsBuffer.length() > 0) ? propsBuffer.substring(Constants.INT_1) : null;
+    	return (propsBuffer.length() > 0) ? propsBuffer.substring(INT_1) : null;
 	}
 	
-	/**
-	 * Restores standard XML entities such as &amp; to the string.
-	 * These entities were resolved by the parser but must be
-	 * written back out as entities.
-	 * @param s entity
-	 * @return String with &, <, >, ', and " converted to XML entities
-	 */
-	public static String restoreEntity(String s) {
-		String localEntity = s;
-		localEntity = StringUtils.replaceAll(localEntity, "&", "&amp;");
-		localEntity = StringUtils.replaceAll(localEntity, "<", "&lt;");
-		localEntity = StringUtils.replaceAll(localEntity, ">", "&gt;");		
-		localEntity = StringUtils.replaceAll(localEntity, "'", "&apos;");
-		localEntity = StringUtils.replaceAll(localEntity, "\"", "&quot;");
-		
-		return localEntity;
-	}
+	
 	
 	/**
 	 * Restore map.
 	 * @param s input string
 	 * @return map created from string
 	 */
-	public static Map<String, String> restoreMap(String s) {
-		Map<String,String> copytoMap = new HashMap<String,String>();
-		StringTokenizer st = new StringTokenizer(s, Constants.COMMA);
+	public static Map<String, String> restoreMap(final String s) {
+		final Map<String,String> copytoMap = new HashMap<String,String>();
+		final StringTokenizer st = new StringTokenizer(s, COMMA);
 		
         while (st.hasMoreTokens()) {
-        	String entry = st.nextToken();
-        	int index = entry.indexOf('=');
+        	final String entry = st.nextToken();
+        	final int index = entry.indexOf('=');
         	copytoMap.put(entry.substring(0, index), entry.substring(index+1));
         }
         
@@ -270,8 +259,8 @@ public class StringUtils {
 	 * @param s input string
 	 * @return string set
 	 */
-	public static Set<String> restoreSet(String s) {
-		return restoreSet(s, Constants.COMMA);
+	public static Set<String> restoreSet(final String s) {
+		return restoreSet(s, COMMA);
 	}
 	
 	/**
@@ -280,17 +269,17 @@ public class StringUtils {
 	 * @param delim Delimiter to be used.
 	 * @return string set
 	 */
-	public static Set<String> restoreSet(String s, String delim) {
-		Set<String> copytoSet = new HashSet<String>();
+	public static Set<String> restoreSet(final String s, final String delim) {
+		final Set<String> copytoSet = new HashSet<String>();
 		
 		if (StringUtils.isEmptyString(s)) {
 			return copytoSet;
 		}
 		
-		StringTokenizer st = new StringTokenizer(s, delim);
+		final StringTokenizer st = new StringTokenizer(s, delim);
 		
 		while (st.hasMoreTokens()) {
-			String entry = st.nextToken();
+			final String entry = st.nextToken();
 			if (!StringUtils.isEmptyString(entry)) {
 				copytoSet.add(entry);
 			}
@@ -303,8 +292,8 @@ public class StringUtils {
 	 * @param s input string
 	 * @return true if the string is null or ""
 	 */
-	public static boolean isEmptyString(String s){
-		return (s == null || Constants.STRING_EMPTY.equals(s.trim()));
+	public static boolean isEmptyString(final String s){
+		return (s == null || s.trim().length() == 0);
 	}
 	
 	/**
@@ -315,14 +304,14 @@ public class StringUtils {
 	 * @param withSpace whether insert a blank
 	 * @return processed string
 	 */
-	public static String setOrAppend(String target, String value, boolean withSpace){
+	public static String setOrAppend(final String target, final String value, final boolean withSpace){
 		if(target == null){
 			return value;
 		}if(value == null){
 			return target;
 		}else{
-			if(withSpace && !target.endsWith(Constants.STRING_BLANK)){
-				return target + Constants.STRING_BLANK + value;
+			if(withSpace && !target.endsWith(STRING_BLANK)){
+				return target + STRING_BLANK + value;
 			}else{
 				return target + value;
 			}
@@ -331,25 +320,28 @@ public class StringUtils {
 	
 	/**
 	 * Init sax driver info.
+	 * 
+	 * @deprecated use {@link #getXMLReader} instead to get the preferred SAX parser
 	 */
+	@Deprecated
 	public static void initSaxDriver(){
 		//The default sax driver is set to xerces's sax driver
-		DITAOTJavaLogger logger = new DITAOTJavaLogger();
+		final DITAOTJavaLogger logger = new DITAOTJavaLogger();
 		try {
-			Class.forName(Constants.SAX_DRIVER_DEFAULT_CLASS);
-			System.setProperty(Constants.SAX_DRIVER_PROPERTY,Constants.SAX_DRIVER_DEFAULT_CLASS);
+			Class.forName(SAX_DRIVER_DEFAULT_CLASS);
+			System.setProperty(SAX_DRIVER_PROPERTY,SAX_DRIVER_DEFAULT_CLASS);
 			logger.logInfo("Using XERCES.");
-		} catch (ClassNotFoundException e){
+		} catch (final ClassNotFoundException e){
 			try{
-				Class.forName(Constants.SAX_DRIVER_SUN_HACK_CLASS);
-				System.setProperty(Constants.SAX_DRIVER_PROPERTY,Constants.SAX_DRIVER_SUN_HACK_CLASS);
+				Class.forName(SAX_DRIVER_SUN_HACK_CLASS);
+				System.setProperty(SAX_DRIVER_PROPERTY,SAX_DRIVER_SUN_HACK_CLASS);
 				logger.logInfo("Using XERCES in SUN JDK 1.5");
-			}catch (ClassNotFoundException ex){
+			}catch (final ClassNotFoundException ex){
 				try {
-					Class.forName(Constants.SAX_DRIVER_CRIMSON_CLASS);
-					System.setProperty(Constants.SAX_DRIVER_PROPERTY,Constants.SAX_DRIVER_CRIMSON_CLASS);
+					Class.forName(SAX_DRIVER_CRIMSON_CLASS);
+					System.setProperty(SAX_DRIVER_PROPERTY,SAX_DRIVER_CRIMSON_CLASS);
 					logger.logInfo("Using CRIMSON");
-				}catch (ClassNotFoundException exc){
+				}catch (final ClassNotFoundException exc){
 					logger.logException(e);
 					logger.logException(ex);
 					logger.logException(exc);
@@ -359,6 +351,41 @@ public class StringUtils {
 		
 	}
 	
+	/**
+     * Get preferred SAX parser.
+     * 
+     * Preferred XML readers are in order:
+     * 
+     * <ol>
+     *   <li>{@link SAX_DRIVER_DEFAULT_CLASS}</li>
+     *   <li>{@link SAX_DRIVER_SUN_HACK_CLASS}</li>
+     *   <li>{@link SAX_DRIVER_CRIMSON_CLASS}</li>
+     * </ol>
+     * 
+     * @return XML parser instance.
+	 * @throws SAXException if instantiating XMLReader failed
+     */
+    public static XMLReader getXMLReader() throws SAXException {
+        if (System.getProperty(SAX_DRIVER_PROPERTY) != null) {
+            return XMLReaderFactory.createXMLReader();
+        }
+        try {
+            Class.forName(SAX_DRIVER_DEFAULT_CLASS);
+            return XMLReaderFactory.createXMLReader(SAX_DRIVER_DEFAULT_CLASS);
+        } catch (final ClassNotFoundException e) {
+            try {
+                Class.forName(SAX_DRIVER_SUN_HACK_CLASS);
+                return XMLReaderFactory.createXMLReader(SAX_DRIVER_SUN_HACK_CLASS);
+            } catch (final ClassNotFoundException ex) {
+                try {
+                    Class.forName(SAX_DRIVER_CRIMSON_CLASS);
+                    return XMLReaderFactory.createXMLReader(SAX_DRIVER_CRIMSON_CLASS);
+                } catch (final ClassNotFoundException exc){
+                    return XMLReaderFactory.createXMLReader();
+                }
+            }
+        }
+    }
 
 		/**
 		 * Return a Java Locale object.
@@ -366,7 +393,7 @@ public class StringUtils {
 		 * @return locale
 		 */
 	
-		public static Locale getLocale(String anEncoding){
+		public static Locale getLocale(final String anEncoding){
 			Locale aLocale = null;
 			String country = null;
 			String language = null;
@@ -374,13 +401,13 @@ public class StringUtils {
 			
 			//Tokenize the string using "-" as the token string as per IETF RFC4646 (superceeds RFC3066).
 			
-			StringTokenizer tokenizer = new StringTokenizer(anEncoding, "-");
+			final StringTokenizer tokenizer = new StringTokenizer(anEncoding, "-");
 			
 			//We need to know how many tokens we have so we can create a Locale object with the proper constructor.
-			int numberOfTokens = tokenizer.countTokens();
+			final int numberOfTokens = tokenizer.countTokens();
 			
 			if (numberOfTokens == 1) { 
-				String tempString = tokenizer.nextToken().toLowerCase();
+				final String tempString = tokenizer.nextToken().toLowerCase();
 				
 				//Note: Newer XML parsers should throw an error if the xml:lang value contains 
 				//underscore. But this is not guaranteed.
@@ -388,11 +415,11 @@ public class StringUtils {
 				//Check to see if some one used "en_US" instead of "en-US".  
 				//If so, the first token will contain "en_US" or "xxx_YYYYYYYY". In this case,
 				//we will only grab the value for xxx. 
-				int underscoreIndex = tempString.indexOf("_");
+				final int underscoreIndex = tempString.indexOf("_");
 				
 				if (underscoreIndex == -1){
 					language = tempString;
-				}else if (underscoreIndex == 2 | underscoreIndex == 3){
+				}else if (underscoreIndex == 2 || underscoreIndex == 3){
 					//check is first subtag is two or three characters in length.
 					language = tempString.substring(0, underscoreIndex);
 				}
@@ -402,7 +429,7 @@ public class StringUtils {
 				
 				language = tokenizer.nextToken().toLowerCase();
 				
-				String subtag2 = tokenizer.nextToken();
+				final String subtag2 = tokenizer.nextToken();
 				//All country tags should be three characters or less.  
 				//If the subtag is longer than three characters, it assumes that 
 				//is a dialect or variant. 
@@ -421,7 +448,7 @@ public class StringUtils {
 			} else if (numberOfTokens >= 3) {
 				
 				language = tokenizer.nextToken().toLowerCase();
-				String subtag2 = tokenizer.nextToken();
+				final String subtag2 = tokenizer.nextToken();
 				if (subtag2.length() <= 3){
 					country = subtag2.toUpperCase();
 				}else if (subtag2.length() > 3 && subtag2.length() <= 8){
@@ -436,8 +463,8 @@ public class StringUtils {
 			}else {
 			  //return an warning or do nothing.  
 			  //The xml:lang attribute is empty.
-				aLocale = new Locale(Constants.LANGUAGE_EN,
-						Constants.COUNTRY_US);
+				aLocale = new Locale(LANGUAGE_EN,
+						COUNTRY_US);
 				
 			}
 	
@@ -451,8 +478,8 @@ public class StringUtils {
 		 * @param marker delimiter
 		 * @return file's main name 
 		 */
-		public static String getFileName(String input, String marker){
-			int index = input.lastIndexOf(marker);
+		public static String getFileName(final String input, final String marker){
+			final int index = input.lastIndexOf(marker);
 			if(index != -1){
 				return input.substring(0, index);
 			}else{
@@ -464,15 +491,15 @@ public class StringUtils {
 		/**
 		 * Get max value.
 		 */
-		public static Integer getMax(Integer ul_depth, Integer ol_depth, Integer sl_depth, 
-				Integer dl_depth, Integer table_depth, Integer stable_depth){
+		public static Integer getMax(final String ul_depth, final String ol_depth, final String sl_depth, 
+				final String dl_depth, final String table_depth, final String stable_depth){
 			
-			int unDepth = ul_depth;
-			int olDepth = ol_depth;
-			int slDepth = sl_depth;
-			int dlDepth = dl_depth;
-			int tableDepth = table_depth;
-			int stableDepth = stable_depth;
+			final int unDepth = Integer.parseInt(ul_depth);
+			final int olDepth = Integer.parseInt(ol_depth);
+			final int slDepth = Integer.parseInt(sl_depth);
+			final int dlDepth = Integer.parseInt(dl_depth);
+			final int tableDepth = Integer.parseInt(table_depth);
+			final int stableDepth = Integer.parseInt(stable_depth);
 			
 			int max = unDepth;
 			if(olDepth > max){
@@ -498,13 +525,13 @@ public class StringUtils {
 		/**
 		 * Get max value.
 		 */
-		public static Integer getMax(Integer fn_depth, Integer list_depth, Integer dlist_depth, Integer table_depth, Integer stable_depth){
+		public static Integer getMax(final String fn_depth, final String list_depth, final String dlist_depth, final String table_depth, final String stable_depth){
 			
-			int fnDepth = fn_depth;
-			int listDepth = list_depth;
-			int dlistDepth = dlist_depth;
-			int tableDepth = table_depth;
-			int stableDepth = stable_depth;
+			final int fnDepth = Integer.parseInt(fn_depth);
+			final int listDepth = Integer.parseInt(list_depth);
+			final int dlistDepth = Integer.parseInt(dlist_depth);
+			final int tableDepth = Integer.parseInt(table_depth);
+			final int stableDepth = Integer.parseInt(stable_depth);
 			
 			int max = fnDepth;
 			if(listDepth > max){

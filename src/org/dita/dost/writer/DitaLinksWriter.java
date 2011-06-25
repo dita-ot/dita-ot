@@ -9,6 +9,8 @@
  */
 package org.dita.dost.writer;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
@@ -19,15 +21,12 @@ import java.util.Set;
 import java.util.Stack;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
-import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 
 /**
@@ -36,13 +35,12 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Zhang, Yuan Peng
  * 
  */
-public class DitaLinksWriter extends AbstractXMLWriter {
+public final class DitaLinksWriter extends AbstractXMLWriter {
     private String curMatchTopic;
     private boolean firstTopic; //Eric
 
     private HashMap<String, String> indexEntries;
     private Set<String> topicSet;
-    private DITAOTJavaLogger logger;
     private boolean needResolveEntity;
     private OutputStreamWriter output;
     private XMLReader reader;
@@ -65,17 +63,12 @@ public class DitaLinksWriter extends AbstractXMLWriter {
         output = null;
         insideCDATA = false;
         topicSpecList = new ArrayList<String>(); //Eric
-        logger = new DITAOTJavaLogger();
         
         try {
-            if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
-                //The default sax driver is set to xerces's sax driver
-            	StringUtils.initSaxDriver();
-            }
-            reader = XMLReaderFactory.createXMLReader();
+            reader = StringUtils.getXMLReader();
             reader.setContentHandler(this);
-            reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
-            reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
+            reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
+            reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
             //Edited by william on 2009-11-8 for ampbug:2893664 start
 			reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
 			reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
@@ -105,7 +98,7 @@ public class DitaLinksWriter extends AbstractXMLWriter {
     public void endCDATA() throws SAXException {
     	insideCDATA = false;
 	    try{
-	        output.write(Constants.CDATA_END);
+	        output.write(CDATA_END);
 	    }catch(Exception e){
 	    	logger.logException(e);
 	    }
@@ -132,14 +125,14 @@ public class DitaLinksWriter extends AbstractXMLWriter {
              //Using the same type of logic that's used in DITAIndexWriter.
         	if (curMatchTopic != null && topicSpecList.contains(localName)) {
                  // if <prolog> don't exist
-                output.write(Constants.RELATED_LINKS_HEAD);
+                output.write(RELATED_LINKS_HEAD);
                 output.write(indexEntries.get(curMatchTopic));
-                output.write(Constants.RELATED_LINKS_END);
+                output.write(RELATED_LINKS_END);
                 output.write(System.getProperty("line.separator"));
                 curMatchTopic = null;
             }
-            output.write(Constants.LESS_THAN + Constants.SLASH + qName 
-                    + Constants.GREATER_THAN);
+            output.write(LESS_THAN + SLASH + qName 
+                    + GREATER_THAN);
         } catch (Exception e) {
         	logger.logException(e);
         }
@@ -169,9 +162,9 @@ public class DitaLinksWriter extends AbstractXMLWriter {
             throws SAXException {
         String pi;
         try {
-            pi = (data != null) ? target + Constants.STRING_BLANK + data : target;
-            output.write(Constants.LESS_THAN + Constants.QUESTION 
-                    + pi + Constants.QUESTION + Constants.GREATER_THAN);
+            pi = (data != null) ? target + STRING_BLANK + data : target;
+            output.write(LESS_THAN + QUESTION 
+                    + pi + QUESTION + GREATER_THAN);
         } catch (Exception e) {
         	logger.logException(e);
         }
@@ -196,7 +189,7 @@ public class DitaLinksWriter extends AbstractXMLWriter {
     public void startCDATA() throws SAXException {
     	insideCDATA = true;
 	    try{
-	        output.write(Constants.CDATA_HEAD);
+	        output.write(CDATA_HEAD);
 	    }catch(Exception e){
 	    	logger.logException(e);
 	    }
@@ -214,35 +207,35 @@ public class DitaLinksWriter extends AbstractXMLWriter {
 		int attsLen = atts.getLength();
 
 		//only care about adding related links to topics. 
-		if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS) != null) {// Eric
+		if (atts.getValue(ATTRIBUTE_NAME_CLASS) != null) {// Eric
 
-			if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS).contains(" topic/topic ")) {
+			if (atts.getValue(ATTRIBUTE_NAME_CLASS).contains(" topic/topic ")) {
 
 				if (!topicSpecList.contains(localName)) {
 					topicSpecList.add(localName);
 				}
 				
-				if (!Constants.ELEMENT_NAME_DITA.equalsIgnoreCase(qName)) {
-					if (atts.getValue(Constants.ATTRIBUTE_NAME_ID) != null) {
-						topicIdStack.push(atts.getValue(Constants.ATTRIBUTE_NAME_ID));
+				if (!ELEMENT_NAME_DITA.equalsIgnoreCase(qName)) {
+					if (atts.getValue(ATTRIBUTE_NAME_ID) != null) {
+						topicIdStack.push(atts.getValue(ATTRIBUTE_NAME_ID));
 					}
 				}
 				
 				if (curMatchTopic != null && !firstTopic) {
 
 					try {
-						output.write(Constants.RELATED_LINKS_HEAD);
+						output.write(RELATED_LINKS_HEAD);
 						output.write(indexEntries.get(curMatchTopic));
-						output.write(Constants.RELATED_LINKS_END);
+						output.write(RELATED_LINKS_END);
 						output.write(System.getProperty("line.separator"));
 						curMatchTopic = null;
 					} catch (Exception e) {
-						if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS) != null) {
+						if (atts.getValue(ATTRIBUTE_NAME_CLASS) != null) {
 							logger.logException(e);
 						}
 					}
 				}
-				String t = StringUtils.assembleString(topicIdStack, Constants.SLASH);
+				String t = StringUtils.assembleString(topicIdStack, SLASH);
 				if (topicSet.contains(t)) {
 					curMatchTopic = t;
 				} else if (topicSet.contains(topicIdStack.peek())) {
@@ -253,7 +246,7 @@ public class DitaLinksWriter extends AbstractXMLWriter {
 		}
 		try {  //Eric
 
-			output.write(Constants.LESS_THAN + qName);
+			output.write(LESS_THAN + qName);
 			for (int i = 0; i < attsLen; i++) {
 				String attQName = atts.getQName(i);
 				String attValue;
@@ -265,21 +258,21 @@ public class DitaLinksWriter extends AbstractXMLWriter {
 				// }
 				attValue = StringUtils.escapeXML(attValue);
 
-				output.write(new StringBuffer().append(Constants.STRING_BLANK)
-						.append(attQName).append(Constants.EQUAL).append(
-								Constants.QUOTATION).append(attValue).append(
-								Constants.QUOTATION).toString());  //Eric
+				output.write(new StringBuffer().append(STRING_BLANK)
+						.append(attQName).append(EQUAL).append(
+								QUOTATION).append(attValue).append(
+								QUOTATION).toString());  //Eric
 			}
-			output.write(Constants.GREATER_THAN);
-			if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS)!=null 
-					&& atts.getValue(Constants.ATTRIBUTE_NAME_CLASS).indexOf(" topic/related-links ") != -1
+			output.write(GREATER_THAN);
+			if (atts.getValue(ATTRIBUTE_NAME_CLASS)!=null 
+					&& atts.getValue(ATTRIBUTE_NAME_CLASS).indexOf(" topic/related-links ") != -1
 					&& curMatchTopic != null) {
 				output.write(indexEntries.get(curMatchTopic));
 				curMatchTopic = null;
 			}
 
 		} catch (Exception e) {
-			if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS) != null) {
+			if (atts.getValue(ATTRIBUTE_NAME_CLASS) != null) {
 				logger.logException(e);
 			}// prevent printing stack trace when meeting <dita> which has no
 				// class attribute
@@ -309,7 +302,7 @@ public class DitaLinksWriter extends AbstractXMLWriter {
         try {
         	
         	file = filename;
-        	curMatchTopic = topicSet.contains(Constants.SHARP) ? Constants.SHARP : null;
+        	curMatchTopic = topicSet.contains(SHARP) ? SHARP : null;
             
             // ignore in-exists file
             if (file == null || !new File(file).exists()) {
@@ -319,9 +312,9 @@ public class DitaLinksWriter extends AbstractXMLWriter {
         	needResolveEntity = true;
             topicIdStack = new Stack<String>();
             inputFile = new File(file);
-            outputFile = new File(file + Constants.FILE_EXTENSION_TEMP);
+            outputFile = new File(file + FILE_EXTENSION_TEMP);
             fileOutput = new FileOutputStream(outputFile);
-            output = new OutputStreamWriter(fileOutput, Constants.UTF8);
+            output = new OutputStreamWriter(fileOutput, UTF8);
             reader.setErrorHandler(new DITAOTXMLErrorHandler(file));
             reader.parse(file);
             output.close();

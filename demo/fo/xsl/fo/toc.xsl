@@ -39,13 +39,10 @@ See the accompanying license.txt file for applicable licenses.
     exclude-result-prefixes="opentopic"
     version='1.1'>
 
-    <xsl:include href="../../cfg/fo/attrs/toc-attr.xsl"/>
-
     <xsl:variable name="map" select="//opentopic:map"/>
 
     <xsl:template name="createTocHeader">
-        <fo:block xsl:use-attribute-sets="__toc__header">
-            <xsl:attribute name="id">ID_TOC_00-0F-EA-40-0D-4D</xsl:attribute>
+        <fo:block xsl:use-attribute-sets="__toc__header" id="{$id.toc}">
             <xsl:call-template name="insertVariable">
                 <xsl:with-param name="theVariableID" select="'Table of Contents'"/>
             </xsl:call-template>
@@ -108,18 +105,23 @@ See the accompanying license.txt file for applicable licenses.
             	<xsl:when test="($mapTopic/*[position() = $topicNumber][@toc = 'yes' or not(@toc)]) or (not($mapTopic/*) and $include = 'true')">
                     <fo:block xsl:use-attribute-sets="__toc__indent">
                         <xsl:variable name="tocItemContent">
-                          <fo:basic-link internal-destination="{concat('_OPENTOPIC_TOC_PROCESSING_', generate-id())}" xsl:use-attribute-sets="__toc__link">
+                          <fo:basic-link xsl:use-attribute-sets="__toc__link">
+                            <xsl:attribute name="internal-destination">
+                              <xsl:call-template name="generate-toc-id"/>
+                            </xsl:attribute>
                             <xsl:apply-templates select="$topicType" mode="toc-prefix-text">
                                 <xsl:with-param name="id" select="@id"/>
                             </xsl:apply-templates>
-                            <fo:inline xsl:use-attribute-sets="__toc__title" margin-right=".2in"
-                                       keep-together.within-line="always">
+                            <fo:inline xsl:use-attribute-sets="__toc__title">
                                 <xsl:value-of select="$topicTitle"/>
                             </fo:inline>
-                            <fo:inline margin-left="-.2in" keep-together.within-line="always">
+                            <fo:inline xsl:use-attribute-sets="__toc__page-number">
                                 <fo:leader xsl:use-attribute-sets="__toc__leader"/>
-                                <fo:page-number-citation
-                                        ref-id="{concat('_OPENTOPIC_TOC_PROCESSING_', generate-id())}"/>
+                                <fo:page-number-citation>
+                                  <xsl:attribute name="ref-id">
+                                    <xsl:call-template name="generate-toc-id"/>
+                                  </xsl:attribute>
+                                </fo:page-number-citation>
                             </fo:inline>
                         </fo:basic-link>
                         </xsl:variable>

@@ -3,15 +3,14 @@
  * Sourceforge.net. See the accompanying license.txt file for 
  * applicable licenses.
  */
-package org.dita.dost.util;
-/**
- * This class is for converting charset and escaping 
- * entities in html help component files.
- * 
- * @version 1.0 2010-09-30
- * 
- * @author Zhang Di Hua
+
+/*
+ * (c) Copyright IBM Corp. 2010 All Rights Reserved.
  */
+package org.dita.dost.util;
+
+import static org.dita.dost.util.Constants.*;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -23,6 +22,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -41,7 +41,15 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-public class ConvertLang extends Task {
+/**
+ * This class is for converting charset and escaping 
+ * entities in html help component files.
+ * 
+ * @version 1.0 2010-09-30
+ * 
+ * @author Zhang Di Hua
+ */
+public final class ConvertLang extends Task {
 	// Added on 2010-11-05 for bug Unnecessary XML declaration in HHP and HHC - ID: 3101964 start
 	private static final String tag1 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 	private static final String tag2 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>[OPTIONS]";
@@ -55,7 +63,7 @@ public class ConvertLang extends Task {
     private String message;
     
     //code page content
-    private String codepg = 
+    private final String codepg = 
     "<codepages>" +
     "<language lang=\"en-us\">" +
     "    <cp format=\"ibmiddoc\" encoding=\"850\"/>" +
@@ -189,8 +197,8 @@ public class ConvertLang extends Task {
     "</language>" +
     "<language lang=\"ja-jp\">" +
     "    <cp format=\"ibmiddoc\" encoding=\"943\"/>" +
-    "    <cp format=\"html\" encoding=\"943\" charset=\"Shift_JIS\"/>" +
-    "    <cp format=\"windows\" encoding=\"943\" charset=\"Shift_JIS\"/>" +
+    "    <cp format=\"html\" encoding=\"943\" charset=\"Windows-31J\"/>" +
+    "    <cp format=\"windows\" encoding=\"943\" charset=\"Windows-31J\"/>" +
     "</language>" +
     "<language lang=\"kk-kz\">" +
     "    <cp format=\"ibmiddoc\" encoding=\"utf-8\"/>" +
@@ -326,14 +334,14 @@ public class ConvertLang extends Task {
     
     private String langcode;
     //charset map(e.g html = iso-8859-1)
-    private Map<String, String>charsetMap = new HashMap<String, String>();
+    private final Map<String, String>charsetMap = new HashMap<String, String>();
     //lang map(e.g ar- = 0x0c01 Arabic (EGYPT))
-    private Map<String, String>langMap = new HashMap<String, String>();
+    private final Map<String, String>langMap = new HashMap<String, String>();
     //entity map(e.g 38 = &amp;)
-    private Map<String, String>entityMap = new HashMap<String, String>();
+    private final Map<String, String>entityMap = new HashMap<String, String>();
     
     
-    private DITAOTJavaLogger logger = new DITAOTJavaLogger();
+    private final DITAOTJavaLogger logger = new DITAOTJavaLogger();
 
 	/**
      * Executes the Ant task.
@@ -341,9 +349,7 @@ public class ConvertLang extends Task {
     public void execute(){
     	
     	logger.logInfo(message);
-    	
-    	Properties params = new Properties();
-    	
+    	    	
     	//ensure outdir is absolute
 		if (!new File(outputdir).isAbsolute()) {
 			outputdir = new File(basedir, outputdir).getAbsolutePath();
@@ -552,33 +558,33 @@ public class ConvertLang extends Task {
 	
 	private void createCharsetMap() {
 		try {
-        	DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = factory.newDocumentBuilder();
-            StringReader reader = new StringReader(codepg);
-            InputSource source = new InputSource(reader);
-            Document doc = builder.parse(source);
-			Element root = doc.getDocumentElement();
-			NodeList childNodes = root.getChildNodes();
+        	final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			final DocumentBuilder builder = factory.newDocumentBuilder();
+            final StringReader reader = new StringReader(codepg);
+            final InputSource source = new InputSource(reader);
+            final Document doc = builder.parse(source);
+			final Element root = doc.getDocumentElement();
+			final NodeList childNodes = root.getChildNodes();
 			//search the node with langcode
 			for(int i = 0; i< childNodes.getLength(); i++){
-				Node node = childNodes.item(i);
+				final Node node = childNodes.item(i);
 				//only for element node
 				if(node.getNodeType() == Node.ELEMENT_NODE){
-					Element e = (Element)node;
-					String lang = e.getAttribute(Constants.ATTRIBUTE_NAME_LANG);
+					final Element e = (Element)node;
+					final String lang = e.getAttribute(ATTRIBUTE_NAME_LANG);
 					//node found
 					if(langcode.equalsIgnoreCase(lang)||
 					   lang.startsWith(langcode)){
 						//store the value into a map
 						//charsetMap = new HashMap<String, String>();
 						//iterate child nodes skip the 1st one
-						NodeList subChild = e.getChildNodes();
+						final NodeList subChild = e.getChildNodes();
 						for(int j = 0; j< subChild.getLength(); j++){
-							Node subNode = subChild.item(j);
+							final Node subNode = subChild.item(j);
 							if(subNode.getNodeType() == Node.ELEMENT_NODE){
-								Element elem = (Element)subNode;
-								String format = elem.getAttribute(Constants.ATTRIBUTE_NAME_FORMAT);
-								String charset = elem.getAttribute(Constants.ATTRIBUTE_NAME_CHARSET);
+								final Element elem = (Element)subNode;
+								final String format = elem.getAttribute(ATTRIBUTE_NAME_FORMAT);
+								final String charset = elem.getAttribute(ATTRIBUTE_NAME_CHARSET);
 								//store charset into map
 								charsetMap.put(format, charset);
 							}
@@ -590,10 +596,10 @@ public class ConvertLang extends Task {
 			}
 			//no matched charset is found set default value en-us
 			if(charsetMap.size() == 0){
-				charsetMap.put(Constants.ATTRIBUTE_FORMAT_VALUE_HTML, "iso-8859-1");
-				charsetMap.put(Constants.ATTRIBUTE_FORMAT_VALUE_WINDOWS, "windows-1252");
+				charsetMap.put(ATTRIBUTE_FORMAT_VALUE_HTML, "iso-8859-1");
+				charsetMap.put(ATTRIBUTE_FORMAT_VALUE_WINDOWS, "windows-1252");
 			}
-        } catch (Exception e) {
+        } catch (final Exception e) {
             /* Since an exception is used to stop parsing when the search
              * is successful, catch the exception.
              */
@@ -602,18 +608,18 @@ public class ConvertLang extends Task {
 	}
 	
 	// Added on 2010-11-05 for bug Unnecessary XML declaration in HHP and HHC - ID: 3101964 start
-	private String replaceXmlTag(String source,String tag){
-		int startPos = source.indexOf(tag);
-		int endPos = startPos + tag.length();
-		StringBuilder sb = new StringBuilder();
+	private String replaceXmlTag(final String source,final String tag){
+		final int startPos = source.indexOf(tag);
+		final int endPos = startPos + tag.length();
+		final StringBuilder sb = new StringBuilder();
 		sb.append(source.substring(0,startPos)).append(source.substring(endPos));
 		return sb.toString();
 	}
 	// Added on 2010-11-05 for bug Unnecessary XML declaration in HHP and HHC - ID: 3101964 end
 
 	private void convertHtmlCharset() {
-		File outputDir = new File(outputdir);
-		File[] files = outputDir.listFiles();
+		final File outputDir = new File(outputdir);
+		final File[] files = outputDir.listFiles();
 			for (int i = 0; i < files.length; i++) {
 				//Recursive method
 				convertCharset(files[i]);
@@ -621,9 +627,9 @@ public class ConvertLang extends Task {
 		
 	}
 	//Recursive method
-	private void convertCharset(File inputFile){
+	private void convertCharset(final File inputFile){
 		if(inputFile.isDirectory()){
-			File[] files = inputFile.listFiles();
+			final File[] files = inputFile.listFiles();
 			for (int i = 0; i < files.length; i++) {
 				convertCharset(files[i]);
 			}
@@ -631,32 +637,34 @@ public class ConvertLang extends Task {
 				FileUtils.isHHCFile(inputFile.getName())||
 				FileUtils.isHHKFile(inputFile.getName())){
 			
-			String fileName = inputFile.getAbsolutePath();
+			final String fileName = inputFile.getAbsolutePath();
+			BufferedReader reader = null;
+			Writer writer = null;
 			try {
 				//prepare for the input and output
-				FileInputStream inputStream = new FileInputStream(inputFile);
-				InputStreamReader streamReader = new InputStreamReader(inputStream, Constants.UTF8);
-				BufferedReader reader = new BufferedReader(streamReader);
-				
-				File outputFile = new File(fileName + Constants.FILE_EXTENSION_TEMP);
-				FileOutputStream outputStream = new FileOutputStream(outputFile);
-				OutputStreamWriter streamWriter = new OutputStreamWriter(outputStream, Constants.UTF8);
-				BufferedWriter writer = new BufferedWriter(streamWriter);
+				final FileInputStream inputStream = new FileInputStream(inputFile);
+				final InputStreamReader streamReader = new InputStreamReader(inputStream, UTF8);
+				reader = new BufferedReader(streamReader);
+									
+				final File outputFile = new File(fileName + FILE_EXTENSION_TEMP);
+				final FileOutputStream outputStream = new FileOutputStream(outputFile);
+				final OutputStreamWriter streamWriter = new OutputStreamWriter(outputStream, UTF8);
+				writer = new BufferedWriter(streamWriter);
 				
 				String value = reader.readLine();
 				while(value != null){
 					//meta tag contains charset found
 					if(value.contains("<meta http-equiv") && value.contains("charset")){
-						int insertPoint = value.indexOf("charset=") + "charset=".length();
-						String subString = value.substring(0, insertPoint);
-						int remainIndex = value.indexOf(Constants.UTF8) + Constants.UTF8.length();
-						String remainString = value.substring(remainIndex);
+						final int insertPoint = value.indexOf("charset=") + "charset=".length();
+						final String subString = value.substring(0, insertPoint);
+						final int remainIndex = value.indexOf(UTF8) + UTF8.length();
+						final String remainString = value.substring(remainIndex);
 						//change the charset
-						String newValue = subString + charsetMap.get(Constants.ATTRIBUTE_FORMAT_VALUE_HTML) + remainString;
+						final String newValue = subString + charsetMap.get(ATTRIBUTE_FORMAT_VALUE_HTML) + remainString;
 						//write into the output file
 						writer.write(newValue);
 						//add line break
-						writer.write(Constants.LINE_SEPARATOR);
+						writer.write(LINE_SEPARATOR);
 					}else{
 						// Added on 2010-11-05 for bug Unnecessary XML declaration in HHP and HHC - ID: 3101964 start
 						if(value.contains(tag1)){
@@ -670,15 +678,17 @@ public class ConvertLang extends Task {
 						
 						//other values
 						writer.write(value);
-						writer.write(Constants.LINE_SEPARATOR);
+						writer.write(LINE_SEPARATOR);
 					}
 					value = reader.readLine();
-				}
+				} 
+				
 				writer.close();
 				reader.close();
+				
 				//delete old file
 				if (!inputFile.delete()) {
-					Properties prop = new Properties();
+					final Properties prop = new Properties();
 					prop.put("%1", inputFile.getPath());
 					prop.put("%2", outputFile.getPath());
 					logger.logError(MessageUtils.getMessage("DOTJ009E", prop)
@@ -686,7 +696,7 @@ public class ConvertLang extends Task {
 				}
 				//rename newly created file to the old file
 				if (!outputFile.renameTo(inputFile)) {
-					Properties prop = new Properties();
+					final Properties prop = new Properties();
 					prop.put("%1", inputFile.getPath());
 					prop.put("%2", outputFile.getPath());
 					logger.logError(MessageUtils.getMessage("DOTJ009E", prop)
@@ -694,19 +704,19 @@ public class ConvertLang extends Task {
 				}
 				
 				
-			} catch (FileNotFoundException e) {
+			} catch (final FileNotFoundException e) {
 				logger.logException(e);
-			} catch (UnsupportedEncodingException e) {
+			} catch (final UnsupportedEncodingException e) {
 				logger.logException(e);
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				logger.logException(e);
-			}
+			} 
 		}
 	}
 	
 	private void updateAllEntitiesAndLangs() {
-		File outputDir = new File(outputdir);
-		File[] files = outputDir.listFiles();
+		final File outputDir = new File(outputdir);
+		final File[] files = outputDir.listFiles();
 		for (int i = 0; i < files.length; i++) {
 			//Recursive method
 			updateEntityAndLang(files[i]);
@@ -714,10 +724,10 @@ public class ConvertLang extends Task {
 		
 	}
 	//Recursive method
-    private void updateEntityAndLang(File inputFile) {
+    private void updateEntityAndLang(final File inputFile) {
 		//directory case
     	if(inputFile.isDirectory()){
-			File[] files = inputFile.listFiles();
+			final File[] files = inputFile.listFiles();
 			for (int i = 0; i < files.length; i++) {
 				updateEntityAndLang(files[i]);
 			}
@@ -727,31 +737,33 @@ public class ConvertLang extends Task {
 				FileUtils.isHHCFile(inputFile.getName())||
 				FileUtils.isHHKFile(inputFile.getName())){
 			//do converting work
-			convertEntityAndCharset(inputFile, Constants.ATTRIBUTE_FORMAT_VALUE_HTML);
+			convertEntityAndCharset(inputFile, ATTRIBUTE_FORMAT_VALUE_HTML);
 		
 		}
 		//hhp file case
 		else if(FileUtils.isHHPFile(inputFile.getName())){
 			//do converting work
-			convertEntityAndCharset(inputFile, Constants.ATTRIBUTE_FORMAT_VALUE_WINDOWS);
+			convertEntityAndCharset(inputFile, ATTRIBUTE_FORMAT_VALUE_WINDOWS);
 			//update language setting of hhp file
-			String fileName = inputFile.getAbsolutePath();
+			final String fileName = inputFile.getAbsolutePath();
 			//get new charset
-			String charset = charsetMap.get(Constants.ATTRIBUTE_FORMAT_VALUE_WINDOWS);
+			final String charset = charsetMap.get(ATTRIBUTE_FORMAT_VALUE_WINDOWS);
+			BufferedReader reader = null;
+			BufferedWriter writer = null;
 			try {
 				//prepare for the input and output
-				FileInputStream inputStream = new FileInputStream(inputFile);
-				InputStreamReader streamReader = new InputStreamReader(inputStream, charset);
+				final FileInputStream inputStream = new FileInputStream(inputFile);
+				final InputStreamReader streamReader = new InputStreamReader(inputStream, charset);
 				//wrapped into reader
-				BufferedReader reader = new BufferedReader(streamReader);
+				reader = new BufferedReader(streamReader);
 				
-				File outputFile = new File(fileName + Constants.FILE_EXTENSION_TEMP);
-				FileOutputStream outputStream = new FileOutputStream(outputFile);
+				final File outputFile = new File(fileName + FILE_EXTENSION_TEMP);
+				final FileOutputStream outputStream = new FileOutputStream(outputFile);
 				
 				//convert charset
-				OutputStreamWriter streamWriter = new OutputStreamWriter(outputStream, charset);
+				final OutputStreamWriter streamWriter = new OutputStreamWriter(outputStream, charset);
 				//wrapped into writer
-				BufferedWriter writer = new BufferedWriter(streamWriter);
+				writer = new BufferedWriter(streamWriter);
 				
 				String value = reader.readLine();
 				while(value != null){
@@ -767,19 +779,19 @@ public class ConvertLang extends Task {
 					
 					//meta tag contains charset found
 					if(value.contains("Language=")){
-						int insertPoint = value.indexOf("Language=") + "Language=".length();
-						String subString = value.substring(0, insertPoint);
+						final int insertPoint = value.indexOf("Language=") + "Language=".length();
+						final String subString = value.substring(0, insertPoint);
 						//get new lang
-						Set<Entry<String, String>> entrySet = langMap.entrySet();
-						for(Entry<String, String> entry : entrySet){
+						final Set<Entry<String, String>> entrySet = langMap.entrySet();
+						for(final Entry<String, String> entry : entrySet){
 							if(langcode.startsWith(entry.getKey())){
-								String lang = entry.getValue();
+								final String lang = entry.getValue();
 								//change the language setting
-								String newValue = subString + lang;
+								final String newValue = subString + lang;
 								//write into the output file
 								writer.write(newValue);
 								//add line break
-								writer.write(Constants.LINE_SEPARATOR);
+								writer.write(LINE_SEPARATOR);
 								break;
 							}
 						}
@@ -787,7 +799,7 @@ public class ConvertLang extends Task {
 					}else{
 						//other values
 						writer.write(value);
-						writer.write(Constants.LINE_SEPARATOR);
+						writer.write(LINE_SEPARATOR);
 					}
 					value = reader.readLine();
 				}
@@ -796,7 +808,7 @@ public class ConvertLang extends Task {
 				reader.close();
 				//delete old file
 				if (!inputFile.delete()) {
-					Properties prop = new Properties();
+					final Properties prop = new Properties();
 					prop.put("%1", inputFile.getPath());
 					prop.put("%2", outputFile.getPath());
 					logger.logError(MessageUtils.getMessage("DOTJ009E", prop)
@@ -804,7 +816,7 @@ public class ConvertLang extends Task {
 				}
 				//rename newly created file to the old file
 				if (!outputFile.renameTo(inputFile)) {
-					Properties prop = new Properties();
+					final Properties prop = new Properties();
 					prop.put("%1", inputFile.getPath());
 					prop.put("%2", outputFile.getPath());
 					logger.logError(MessageUtils.getMessage("DOTJ009E", prop)
@@ -812,45 +824,45 @@ public class ConvertLang extends Task {
 				}
 				
 				
-			} catch (FileNotFoundException e) {
+			} catch (final FileNotFoundException e) {
 				logger.logException(e);
-			} catch (UnsupportedEncodingException e) {
+			} catch (final UnsupportedEncodingException e) {
 				logger.logException(e);
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				logger.logException(e);
-			}
-			
-			
+			} 
 		}
 		
 	}
 
-	private void convertEntityAndCharset(File inputFile, String format) {
-		String fileName = inputFile.getAbsolutePath();
+	private void convertEntityAndCharset(final File inputFile, final String format) {
+		final String fileName = inputFile.getAbsolutePath();
+		BufferedReader reader = null;
+		BufferedWriter writer = null;
 		try {
 			//prepare for the input and output
-			FileInputStream inputStream = new FileInputStream(inputFile);
-			InputStreamReader streamReader = new InputStreamReader(inputStream, Constants.UTF8);
+			final FileInputStream inputStream = new FileInputStream(inputFile);
+			final InputStreamReader streamReader = new InputStreamReader(inputStream, UTF8);
 			//wrapped into reader
-			BufferedReader reader = new BufferedReader(streamReader);
+			reader = new BufferedReader(streamReader);
 			
-			File outputFile = new File(fileName + Constants.FILE_EXTENSION_TEMP);
-			FileOutputStream outputStream = new FileOutputStream(outputFile);
+			final File outputFile = new File(fileName + FILE_EXTENSION_TEMP);
+			final FileOutputStream outputStream = new FileOutputStream(outputFile);
 			//get new charset
-			String charset = charsetMap.get(format);
+			final String charset = charsetMap.get(format);
 			//convert charset
-			OutputStreamWriter streamWriter = new OutputStreamWriter(outputStream, charset);
+			final OutputStreamWriter streamWriter = new OutputStreamWriter(outputStream, charset);
 			//wrapped into writer
-			BufferedWriter writer = new BufferedWriter(streamWriter);
+			writer = new BufferedWriter(streamWriter);
 			
 			//read a character
 			int charCode = reader.read();
 			while(charCode != -1){
-				String key = String.valueOf(charCode);
+				final String key = String.valueOf(charCode);
 				//Is an entity char
 				if(entityMap.containsKey(key)){
 					//get related entity
-					String value = entityMap.get(key);
+					final String value = entityMap.get(key);
 					//write entity into output file
 					writer.write(value);
 				}else{
@@ -863,7 +875,7 @@ public class ConvertLang extends Task {
 			reader.close();
 			//delete old file
 			if (!inputFile.delete()) {
-				Properties prop = new Properties();
+				final Properties prop = new Properties();
 				prop.put("%1", inputFile.getPath());
 				prop.put("%2", outputFile.getPath());
 				logger.logError(MessageUtils.getMessage("DOTJ009E", prop)
@@ -871,7 +883,7 @@ public class ConvertLang extends Task {
 			}
 			//rename newly created file to the old file
 			if (!outputFile.renameTo(inputFile)) {
-				Properties prop = new Properties();
+				final Properties prop = new Properties();
 				prop.put("%1", inputFile.getPath());
 				prop.put("%2", outputFile.getPath());
 				logger.logError(MessageUtils.getMessage("DOTJ009E", prop)
@@ -879,55 +891,28 @@ public class ConvertLang extends Task {
 			}
 			
 			
-		} catch (FileNotFoundException e) {
+		} catch (final FileNotFoundException e) {
 			logger.logException(e);
-		} catch (UnsupportedEncodingException e) {
+		} catch (final UnsupportedEncodingException e) {
 			logger.logException(e);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			logger.logException(e);
-		}
+		} 
 	}
 
-	public void setBasedir(String basedir) {
+	public void setBasedir(final String basedir) {
 		this.basedir = basedir;
 	}
 
-	public void setLangcode(String langcode) {
+	public void setLangcode(final String langcode) {
 		this.langcode = langcode;
 	}
-	
-	/*public static void main(String[] args) {
-		//prepare for the input and output
-		FileInputStream inputStream;
-		try {
-			inputStream = new FileInputStream("C:/20101102/build3/DITA-OT1.5.2/odt_LineBreak/chmOut/DITA-articles.hhp");
-			InputStreamReader streamReader = new InputStreamReader(inputStream, Constants.UTF8);
-			BufferedReader reader = new BufferedReader(streamReader);
-			
-			String value = reader.readLine();
-			while(value != null){
-				System.out.println(value);
-				value = reader.readLine();
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		ConvertLang conv = new ConvertLang();
-		conv.setOutputdir("C:/20101102/build3/DITA-OT1.5.2/odt_LineBreak/chmOut/chmOutTest");
-		conv.setMessage("test");
-		conv.setLangcode("fr-fr");
-		conv.execute();
-		
-		
-	}*/
 
-	public void setMessage(String message) {
+	public void setMessage(final String message) {
 		this.message = message;
 	}
 
-	public void setOutputdir(String outputdir) {
+	public void setOutputdir(final String outputdir) {
 		this.outputdir = outputdir;
 	}
 

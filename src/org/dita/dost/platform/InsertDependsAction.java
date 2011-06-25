@@ -3,11 +3,17 @@
  * Sourceforge.net. See the accompanying license.txt file for 
  * applicable licenses.
  */
+
+/*
+ * (c) Copyright IBM Corp. 2008 All Rights Reserved.
+ */
 package org.dita.dost.platform;
 
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.StringTokenizer;
 
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.StringUtils;
 
 /**
@@ -16,11 +22,16 @@ import org.dita.dost.util.StringUtils;
  * Identifiers inside braces are replaced with the plugin features for the corresponding extension point.
  * @author Deborah Pickett
  */
-public class InsertDependsAction implements IAction {
+final class InsertDependsAction implements IAction {
 
-	private Hashtable<String,String> paramTable = null;
+	/** Action parameters. */
+	private final Hashtable<String,String> paramTable;
+	/** Action value. */
 	private String value;
-	private Hashtable<String,String> featureTable = null;
+	/** Plug-in features. */
+	protected Map<String, Features> featureTable = null;
+	private DITAOTLogger logger;
+	
 	/**
 	 * Constructor.
 	 */
@@ -32,30 +43,30 @@ public class InsertDependsAction implements IAction {
 	 * @return result
 	 */
 	public String getResult() {
-		String localname = paramTable.get("localname");
-		StringBuffer result = new StringBuffer();
+		final String localname = paramTable.get(FileGenerator.PARAM_LOCALNAME);
+		final StringBuffer result = new StringBuffer();
 		
 		// Parse the attribute value into comma-separated pieces.
-		StringTokenizer valueTokenizer = new StringTokenizer(value, ",");
+		final StringTokenizer valueTokenizer = new StringTokenizer(value, Integrator.FEAT_VALUE_SEPARATOR);
 		while (valueTokenizer.hasMoreElements())
 		{
-			String token = ((String) valueTokenizer.nextElement()).trim();
+			final String token = valueTokenizer.nextToken().trim();
 			
 			// Pieces which are surrounded with braces are extension points.
 			if (token.startsWith("{") && token.endsWith("}"))
 			{
-				String extension = token.substring(1, token.length() - 1);
-				String extensionInputs = (String)featureTable.get(extension);
+				final String extension = token.substring(1, token.length() - 1);
+				final String extensionInputs = Integrator.getValue(featureTable, extension);
 				if (extensionInputs != null)
 				{
-					if (result.length() != 0) { result.append(","); }
+					if (result.length() != 0) { result.append(Integrator.FEAT_VALUE_SEPARATOR); }
 					result.append(extensionInputs);
 				}
 			}
 			else
 			{
 				// Other pieces are literal.
-				if (result.length() != 0) { result.append(","); }
+				if (result.length() != 0) { result.append(Integrator.FEAT_VALUE_SEPARATOR); }
 				result.append(token);
 			}
 		}
@@ -75,35 +86,23 @@ public class InsertDependsAction implements IAction {
 	/**
 	 * Set input.
 	 * @param input input
-	 * @see org.dita.dost.platform.IAction#setInput(java.lang.String)
 	 */
-	public void setInput(String input) {
+	public void setInput(final String input) {
 		value = input;
 	}
-	/**
-	 * Set the input parameters.
-	 * @param param param
-	 * @see org.dita.dost.platform.IAction#setParam(java.lang.String)
-	 */
-	public void setParam(String param) {
-		StringTokenizer paramTokenizer = new StringTokenizer(param,";");
-		String paramExpression = null;
-		int index;
-		while(paramTokenizer.hasMoreElements()){
-			paramExpression = (String) paramTokenizer.nextElement();
-			index = paramExpression.indexOf("=");
-			if(index > 0){
-				paramTable .put(paramExpression.substring(0,index),
-						paramExpression.substring(index+1));
-			}
-		}	
+	public void addParam(final String name, final String value) {
+		paramTable.put(name, value);
 	}
 	/**
 	 * Set the feature table.
 	 * @param h hastable
 	 */
-	public void setFeatures(Hashtable<String,String> h) {
+	public void setFeatures(final Map<String, Features> h) {
 		featureTable = h;
 	}
 
+    public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
+    
 }

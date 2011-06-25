@@ -3,17 +3,18 @@
  * Sourceforge.net. See the accompanying license.txt file for 
  * applicable licenses.
  */
-package org.dita.dost.util;
-/**
- * This class is for get the first xml:lang value set in ditamap/topic files
- * 
- * @version 1.0 2010-09-30
- * 
- * @author Zhang Di Hua
+
+/*
+ * (c) Copyright IBM Corp. 2010 All Rights Reserved.
  */
+package org.dita.dost.util;
+
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 import java.util.Set;
 
@@ -25,7 +26,14 @@ import org.apache.tools.ant.Task;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
 
-public class CheckLang extends Task {
+/**
+ * This class is for get the first xml:lang value set in ditamap/topic files
+ * 
+ * @version 1.0 2010-09-30
+ * 
+ * @author Zhang Di Hua
+ */
+public final class CheckLang extends Task {
 
     private String basedir;
     
@@ -37,7 +45,7 @@ public class CheckLang extends Task {
     
     private String message;
     
-    private DITAOTJavaLogger logger = new DITAOTJavaLogger();
+    private final DITAOTJavaLogger logger = new DITAOTJavaLogger();
 
 	/**
      * Executes the Ant task.
@@ -46,7 +54,7 @@ public class CheckLang extends Task {
     	
     	logger.logInfo(message);
     	
-    	Properties params = new Properties();
+    	final Properties params = new Properties();
     	//ensure tempdir is absolute 
     	if (!new File(tempdir).isAbsolute()) {
         	tempdir = new File(basedir, tempdir).getAbsolutePath();
@@ -62,40 +70,52 @@ public class CheckLang extends Task {
 		
 		
 		//File object of dita.list
-		File ditalist = new File(tempdir, Constants.FILE_NAME_DITA_LIST);
+		final File ditalist = new File(tempdir, FILE_NAME_DITA_LIST);
 		//File object of dita.xml.properties
-	    File xmlDitalist=new File(tempdir,Constants.FILE_NAME_DITA_LIST_XML);
-	    Properties prop = new Properties();
+	    final File xmlDitalist=new File(tempdir,FILE_NAME_DITA_LIST_XML);
+	    final Properties prop = new Properties();
+	    InputStream in = null;
 	    try{
-	    	if(xmlDitalist.exists())
-	    		prop.loadFromXML(new FileInputStream(xmlDitalist));
-	    	else 
-	    		prop.load(new FileInputStream(ditalist));
-		}catch(IOException e){
+	    	if(xmlDitalist.exists()) {
+	    		in = new FileInputStream(xmlDitalist);
+	    		prop.loadFromXML(in);
+	    	} else {
+	    		in = new FileInputStream(ditalist);
+	    		prop.load(in);
+	    	}
+		}catch(final IOException e){
 			String msg = null;
 			params.put("%1", ditalist);
 			msg = MessageUtils.getMessage("DOTJ011E", params).toString();
-			/*msg = new StringBuffer(msg).append(Constants.LINE_SEPARATOR)
+			/*msg = new StringBuffer(msg).append(LINE_SEPARATOR)
 					.append(e.toString()).toString();*/
 			logger.logError(msg);
-		}
+		} finally {
+        	if (in != null) {
+        		try {
+        			in.close();
+        		} catch (final IOException e) {
+        			logger.logException(e);
+        		}
+        	}
+        }
 		
-		LangParser parser = new LangParser();
+		final LangParser parser = new LangParser();
 
         try {
 
-            SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
-            SAXParser saxParser = saxParserFactory.newSAXParser();
+            final SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+            final SAXParser saxParser = saxParserFactory.newSAXParser();
             //parse the user input file(usually a map)
             saxParser.parse(inputmap, parser);
             String langCode = parser.getLangCode();
             if(!StringUtils.isEmptyString(langCode)){
             	setActiveProjectProperty("htmlhelp.locale", langCode);
             }else{
-            	Set<String> topicList = StringUtils.restoreSet((String)prop.getProperty(Constants.FULL_DITA_TOPIC_LIST));
+            	final Set<String> topicList = StringUtils.restoreSet((String)prop.getProperty(FULL_DITA_TOPIC_LIST));
             	//parse topic files
-            	for(String topicFileName : topicList){
-            		File topicFile = new File(tempdir, topicFileName);
+            	for(final String topicFileName : topicList){
+            		final File topicFile = new File(tempdir, topicFileName);
             		if(topicFile.exists()){
 	            		saxParser.parse(topicFile, parser);
 	            		langCode = parser.getLangCode();
@@ -114,7 +134,7 @@ public class CheckLang extends Task {
             
             
 
-        } catch (Exception e) {
+        } catch (final Exception e) {
             /* Since an exception is used to stop parsing when the search
              * is successful, catch the exception.
              */
@@ -131,30 +151,30 @@ public class CheckLang extends Task {
      * Sets property in active ant project with name specified inpropertyName,
      * and value specified in propertyValue parameter
      */
-    private void setActiveProjectProperty(String propertyName, String propertyValue) {
-        Project activeProject = getProject();
+    private void setActiveProjectProperty(final String propertyName, final String propertyValue) {
+        final Project activeProject = getProject();
         if (activeProject != null) {
             activeProject.setProperty(propertyName, propertyValue);
         }
     }
     
-    public void setBasedir(String basedir) {
+    public void setBasedir(final String basedir) {
 		this.basedir = basedir;
 	}
 
-	public void setTempdir(String tempdir) {
+	public void setTempdir(final String tempdir) {
 		this.tempdir = tempdir;
 	}
 
-	public void setInputmap(String inputmap) {
+	public void setInputmap(final String inputmap) {
 		this.inputmap = inputmap;
 	}
 
-	public void setMessage(String message) {
+	public void setMessage(final String message) {
 		this.message = message;
 	}
 
-	public void setOutputdir(String outputdir) {
+	public void setOutputdir(final String outputdir) {
 		this.outputdir = outputdir;
 	}
 

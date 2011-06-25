@@ -15,5 +15,5 @@ $Header: /cvsroot/dita-ot/DITA-OT/demo/FrameMaker_adapter/plugin.xml,v 1.2 2006/
 -->
 <plugin id="org.dita.dost.FrameMaker_adapter">
   <feature extension="dita.conductor.transtype.check" value="fmxml" type="txt"/>
-  <feature extension="dita.conductor.target" value="integrator.xml" type="file"/>
+  <feature extension="dita.conductor.target" file="integrator.xml"/>
 </plugin>

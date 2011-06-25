@@ -38,14 +38,12 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:exslf="http://exslt.org/functions"
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
     exclude-result-prefixes="opentopic-mapmerge opentopic-func exslf exsl"
-    version="1.1">
+    version="2.0">
 	
 	<!-- added by William on 2009-10-26 for bug:1880097 start -->
 	<xsl:import href="../../../../xsl/common/output-message.xsl"/>
 	<xsl:variable name="msgprefix">DOTX</xsl:variable>
 	<!-- added by William on 2009-10-26 for bug:1880097 end -->
-    
-	<xsl:include href="../../cfg/fo/attrs/links-attr.xsl"/>
 	
     <xsl:key name="key_anchor" match="*[@id][not(contains(@class,' map/topicref '))]" use="@id"/>
 <!--[not(contains(@class,' map/topicref '))]-->
@@ -225,7 +223,9 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/xref ')]">
-        <fo:inline id="{@id}"/>
+        <fo:inline>
+            <xsl:call-template name="commonattributes"/>
+        </fo:inline>
 
 		<xsl:variable name="destination" select="opentopic-func:getDestinationId(@href)"/>
 		<xsl:variable name="element" select="key('key_anchor',$destination)[1]"/>

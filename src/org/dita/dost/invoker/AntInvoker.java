@@ -27,14 +27,12 @@ import org.dita.dost.util.StringUtils;
  * @author Lian, Li
  * 
  */
-public class AntInvoker extends Task {
+public final class AntInvoker extends Task {
 
 	/**key value pair separator.*/
 	private final static String KEY_VALUE_PAIR_SEPARATOR = ";";
 	/**equal sign.*/
 	private final static String KEY_VALUE_EQUAL_SIGN = "=";
-	/**logger.*/
-	private DITAOTJavaLogger javaLogger = null;
 	/**pipeline.*/
 	private PipelineFacade pipeline;
 	/**hashIO.*/
@@ -47,7 +45,6 @@ public class AntInvoker extends Task {
 		super();
 		pipeline = new PipelineFacade();
 		pipelineInput = new PipelineHashIO();
-		javaLogger = new DITAOTJavaLogger();
 	}
 
 	/**
@@ -147,6 +144,7 @@ public class AntInvoker extends Task {
 	 * @throws BuildException Exception
 	 */
 	public void execute() throws BuildException {
+	    pipeline.setLogger(new DITAOTJavaLogger());
 		try {
 			pipeline.execute(pipelineInput.getAttribute("module"),
 					pipelineInput);

@@ -330,7 +330,7 @@
       
       <style:style style:name="Contents_20_Heading_TOC" style:display-name="Contents Heading"
         style:family="paragraph" style:parent-style-name="Heading" style:class="index">
-        <style:paragraph-properties fo:margin-left="0in" fo:margin-right="0in" fo:text-indent="0in"
+        <style:paragraph-properties fo:margin-left="0in" fo:margin-right="0in" fo:margin-top="0.1665in" fo:margin-bottom="0.0835in" fo:text-indent="0in"
           style:auto-text-indent="false"
           text:number-lines="false"
           text:line-number="0"/>
@@ -635,6 +635,7 @@
         <xsl:when test="$depth='1'">
           <xsl:attribute name="style:display-name">Heading 1</xsl:attribute>
           <xsl:attribute name="style:name">Heading_20_1</xsl:attribute>
+          <style:paragraph-properties fo:margin-top="0.1665in" fo:margin-bottom="0.0835in" />
           <style:text-properties fo:font-size="16pt" fo:font-weight="bold"
             style:font-size-asian="16pt" style:font-weight-asian="bold"
             style:font-size-complex="16pt" style:font-weight-complex="bold"
@@ -645,6 +646,7 @@
         <xsl:when test="$depth='2'">
           <xsl:attribute name="style:display-name">Heading 2</xsl:attribute>
           <xsl:attribute name="style:name">Heading_20_2</xsl:attribute>
+          <style:paragraph-properties fo:margin-top="0.1665in" fo:margin-bottom="0.0835in" />
           <style:text-properties fo:font-size="15pt" fo:font-weight="bold"
             style:font-size-asian="15pt" style:font-weight-asian="bold"
             style:font-size-complex="15pt" style:font-weight-complex="bold"/>
@@ -652,6 +654,7 @@
         <xsl:when test="$depth='3'">
           <xsl:attribute name="style:display-name">Heading 3</xsl:attribute>
           <xsl:attribute name="style:name">Heading_20_3</xsl:attribute>
+          <style:paragraph-properties fo:margin-top="0.1665in" fo:margin-bottom="0.0835in" />
           <style:text-properties fo:font-size="14pt" fo:font-weight="bold"
             style:font-size-asian="14pt" style:font-weight-asian="bold"
             style:font-size-complex="14pt" style:font-weight-complex="bold"/>
@@ -659,6 +662,7 @@
         <xsl:when test="$depth='4'">
           <xsl:attribute name="style:display-name">Heading 4</xsl:attribute>
           <xsl:attribute name="style:name">Heading_20_4</xsl:attribute>
+          <style:paragraph-properties fo:margin-top="0.1665in" fo:margin-bottom="0.0835in" />
           <style:text-properties fo:font-size="13pt" fo:font-weight="bold"
             style:font-size-asian="13pt" style:font-weight-asian="bold"
             style:font-size-complex="13pt" style:font-weight-complex="bold"/>
@@ -666,6 +670,7 @@
         <xsl:when test="$depth='5'">
           <xsl:attribute name="style:display-name">Heading 5</xsl:attribute>
           <xsl:attribute name="style:name">Heading_20_5</xsl:attribute>
+          <style:paragraph-properties fo:margin-top="0.1665in" fo:margin-bottom="0.0835in" />
           <style:text-properties fo:font-size="12pt" fo:font-weight="bold"
             style:font-size-asian="12pt" style:font-weight-asian="bold"
             style:font-size-complex="12pt" style:font-weight-complex="bold"/>
@@ -673,6 +678,7 @@
         <xsl:otherwise>
           <xsl:attribute name="style:display-name">Heading 6</xsl:attribute>
           <xsl:attribute name="style:name">Heading_20_6</xsl:attribute>
+          <style:paragraph-properties fo:margin-top="0.1665in" fo:margin-bottom="0.0835in" />
           <style:text-properties fo:font-size="11pt" fo:font-weight="bold"
             style:font-size-asian="11pt" style:font-weight-asian="bold"
             style:font-size-complex="11pt" style:font-weight-complex="bold"/>

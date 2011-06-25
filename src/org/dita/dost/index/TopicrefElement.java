@@ -9,7 +9,7 @@
  */
 package org.dita.dost.index;
 
-import org.dita.dost.util.Constants;
+import static org.dita.dost.util.Constants.*;
 
 /**
  * This class represent the topicref element in ditamap.
@@ -18,7 +18,7 @@ import org.dita.dost.util.Constants;
  * 
  * @author Wu, Zhi Qiang
  */
-public class TopicrefElement {
+public final class TopicrefElement {
     /** The href attribute of the topicref element. */
     private String href = null;
 
@@ -76,7 +76,7 @@ public class TopicrefElement {
      */
     @Deprecated
     public boolean needExtractTerm() {
-        return (href != null && format != null && !Constants.ATTRIBUTE_FORMAT_VALUE_DITA
+        return (href != null && format != null && !ATTRIBUTE_FORMAT_VALUE_DITA
                 .equals(format));
     }
     

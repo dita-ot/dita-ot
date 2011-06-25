@@ -33,8 +33,7 @@ See the accompanying license.txt file for applicable licenses.
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
-    xmlns:rx="http://www.renderx.com/XSL/Extensions"
-    version="1.0">
+    version="2.0">
 
     <xsl:attribute-set name="task">
     </xsl:attribute-set>
@@ -52,8 +51,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="info">
-        <xsl:attribute name="space-before.optimum">3pt</xsl:attribute>
-        <xsl:attribute name="space-after.optimum">3pt</xsl:attribute>
+        <xsl:attribute name="space-before">3pt</xsl:attribute>
+        <xsl:attribute name="space-after">3pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="tutorialinfo">
@@ -75,13 +74,13 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="steps-unordered">
         <xsl:attribute name="provisional-distance-between-starts">5mm</xsl:attribute>
         <xsl:attribute name="provisional-label-separation">1mm</xsl:attribute>
-        <xsl:attribute name="space-after.optimum">9pt</xsl:attribute>
-        <xsl:attribute name="space-before.optimum">9pt</xsl:attribute>
+        <xsl:attribute name="space-after">9pt</xsl:attribute>
+        <xsl:attribute name="space-before">9pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="steps-unordered.step">
-        <xsl:attribute name="space-after.optimum">1.5pt</xsl:attribute>
-        <xsl:attribute name="space-before.optimum">1.5pt</xsl:attribute>
+        <xsl:attribute name="space-after">1.5pt</xsl:attribute>
+        <xsl:attribute name="space-before">1.5pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="steps-unordered.step__label">
@@ -105,13 +104,13 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="steps">
         <xsl:attribute name="provisional-distance-between-starts">5mm</xsl:attribute>
         <xsl:attribute name="provisional-label-separation">1mm</xsl:attribute>
-        <xsl:attribute name="space-after.optimum">9pt</xsl:attribute>
-        <xsl:attribute name="space-before.optimum">9pt</xsl:attribute>
+        <xsl:attribute name="space-after">9pt</xsl:attribute>
+        <xsl:attribute name="space-before">9pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="steps.step">
-        <xsl:attribute name="space-after.optimum">3pt</xsl:attribute>
-        <xsl:attribute name="space-before.optimum">3pt</xsl:attribute>
+        <xsl:attribute name="space-after">3pt</xsl:attribute>
+        <xsl:attribute name="space-before">3pt</xsl:attribute>
     </xsl:attribute-set>
 
 
@@ -135,8 +134,8 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- Stepsection (new in DITA 1.2) -->
     <xsl:attribute-set name="stepsection">
-        <xsl:attribute name="space-after.optimum">2pt</xsl:attribute>
-        <xsl:attribute name="space-before.optimum">2pt</xsl:attribute>
+        <xsl:attribute name="space-after">2pt</xsl:attribute>
+        <xsl:attribute name="space-before">2pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="stepsection__label">
@@ -160,13 +159,13 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="substeps">
         <xsl:attribute name="provisional-distance-between-starts">5mm</xsl:attribute>
         <xsl:attribute name="provisional-label-separation">1mm</xsl:attribute>
-        <xsl:attribute name="space-after.optimum">3pt</xsl:attribute>
-        <xsl:attribute name="space-before.optimum">3pt</xsl:attribute>
+        <xsl:attribute name="space-after">3pt</xsl:attribute>
+        <xsl:attribute name="space-before">3pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="substeps.substep">
-        <xsl:attribute name="space-after.optimum">1.5pt</xsl:attribute>
-        <xsl:attribute name="space-before.optimum">1.5pt</xsl:attribute>
+        <xsl:attribute name="space-after">1.5pt</xsl:attribute>
+        <xsl:attribute name="space-before">1.5pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="substeps.substep__label">
@@ -190,14 +189,14 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="choices">
         <xsl:attribute name="provisional-distance-between-starts">5mm</xsl:attribute>
         <xsl:attribute name="provisional-label-separation">1mm</xsl:attribute>
-        <xsl:attribute name="space-after.optimum">7pt</xsl:attribute>
-        <xsl:attribute name="space-before.optimum">7pt</xsl:attribute>
+        <xsl:attribute name="space-after">7pt</xsl:attribute>
+        <xsl:attribute name="space-before">7pt</xsl:attribute>
         <!--        <xsl:attribute name="margin-left">-8pt</xsl:attribute>-->
     </xsl:attribute-set>
 
     <xsl:attribute-set name="choices.choice">
-        <xsl:attribute name="space-after.optimum">1.5pt</xsl:attribute>
-        <xsl:attribute name="space-before.optimum">1.5pt</xsl:attribute>
+        <xsl:attribute name="space-after">1.5pt</xsl:attribute>
+        <xsl:attribute name="space-before">1.5pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="choices.choice__label">

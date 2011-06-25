@@ -1,4 +1,15 @@
+/*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
+ * (c) Copyright IBM Corp. 2010 All Rights Reserved.
+ */
 package org.dita.dost.module;
+
+import static org.dita.dost.util.Constants.*;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -8,15 +19,20 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.pipeline.PipelineHashIO;
-import org.dita.dost.util.Constants;
 
 /**
  * This class replace all non-ASCII characters to their RTF Unicode-escaped forms. 
  */
-public class EscapeUnicodeModule implements AbstractPipelineModule {
+final class EscapeUnicodeModule implements AbstractPipelineModule {
+	
+	private DITAOTLogger logger;
+	
+	public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
 	
 	/**
 	 * Entry point of EscapeUnicodeModule.
@@ -25,19 +41,22 @@ public class EscapeUnicodeModule implements AbstractPipelineModule {
 	 * @return null
 	 * @throws DITAOTException exception
 	 */
-	public AbstractPipelineOutput execute(AbstractPipelineInput input)
+	public AbstractPipelineOutput execute(final AbstractPipelineInput input)
 			throws DITAOTException {
-		String inputFile = ((PipelineHashIO)input).getAttribute(Constants.ANT_INVOKER_EXT_PARAM_INPUT);
-		String outputFile = ((PipelineHashIO)input).getAttribute(Constants.ANT_INVOKER_EXT_PARAM_OUTPUT);
+	    if (logger == null) {
+            throw new IllegalStateException("Logger not set");
+        }
+		final String inputFile = input.getAttribute(ANT_INVOKER_EXT_PARAM_INPUT);
+		final String outputFile = input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUT);
 
 		//Transliterator transliterator = Transliterator.getInstance("Any-Hex/C");
 		//initTransliterator(transliterator);
 
-		File file = new File(outputFile);
+		final File file = new File(outputFile);
 		if (!file.exists()) {
 			try {
 				file.createNewFile();
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				throw new RuntimeException(e);
 			}
 		}
@@ -65,18 +84,37 @@ public class EscapeUnicodeModule implements AbstractPipelineModule {
 				}
 				//fw.append(transliterator.transliterate(data));
 			}
-			
-		} catch (IOException e) {
+			fw.flush();			
+		} catch (final IOException e) {
 			throw new RuntimeException(e);
 		} finally {
-			try {
-				fw.flush();
-				fw.close();
-				br.close();
-				is.close();
-				fi.close();
-			} catch (Exception e) {
-				// nop
+			if (fw != null) {
+    			try {
+    				fw.close();
+    			} catch (final Exception e) {
+    				logger.logException(e);
+    			}
+			}
+			if (br != null) {
+    			try {
+    				br.close();
+    			} catch (final Exception e) {
+    				logger.logException(e);
+    			}
+			}
+			if (is != null) {
+    			try {
+    				is.close();
+    			} catch (final Exception e) {
+    				logger.logException(e);
+    			}
+			}
+			if (fi != null) {
+    			try {
+    				fi.close();
+    			} catch (final Exception e) {
+    				logger.logException(e);
+    			}
 			}
 		}
 		

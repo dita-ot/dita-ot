@@ -9,6 +9,8 @@
  */
 package org.dita.dost.util;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -48,18 +50,18 @@ import org.xml.sax.SAXException;
  * @author william
  *
  */
-public class DelayConrefUtils {
+public final class DelayConrefUtils {
 	
 	private Document root = null;
 
-	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+	private final DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 	
 	private static DelayConrefUtils instance = null;
 	/**
 	 * Return the DelayConrefUtils instance. Singleton.
 	 * @return DelayConrefUtils
 	 */
-	public static DelayConrefUtils getInstance(){
+	public static synchronized DelayConrefUtils getInstance(){
 		if(instance == null){
 			instance = new DelayConrefUtils();
 		}
@@ -84,54 +86,55 @@ public class DelayConrefUtils {
 	 * @param id topic id
 	 * @return true if id find and false otherwise
 	 */
-	public boolean findTopicId(String absolutePathToFile, String id) {
+	public boolean findTopicId(final String absolutePathToFile, final String id) {
 		
 		if(!FileUtils.fileExists(absolutePathToFile)){
 			return false;
 		}
 		try {
 			//load the file
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			//factory.setFeature("http://xml.org/sax/features/validation", false);
-			DocumentBuilder builder = factory.newDocumentBuilder();
+			final DocumentBuilder builder = factory.newDocumentBuilder();
 			try {
-    			Class.forName(Constants.RESOLVER_CLASS);
+    			Class.forName(RESOLVER_CLASS);
     			builder.setEntityResolver(CatalogUtils.getCatalogResolver());
-    		}catch (ClassNotFoundException e){
+    		}catch (final ClassNotFoundException e){
     			builder.setEntityResolver(null);
     		}
-			Document root = builder.parse(new InputSource(new FileInputStream(absolutePathToFile)));
+			final Document root = builder.parse(new InputSource(new FileInputStream(absolutePathToFile)));
 			
 			//get root element
-			Element doc = root.getDocumentElement();
+			final Element doc = root.getDocumentElement();
 			//do BFS
-			Queue<Element> queue = new LinkedList<Element>();
+			final Queue<Element> queue = new LinkedList<Element>();
 			queue.offer(doc);
 			while (!queue.isEmpty()) {
-				Element pe = queue.poll();
-				NodeList pchildrenList = pe.getChildNodes();
+				final Element pe = queue.poll();
+				final NodeList pchildrenList = pe.getChildNodes();
 				for (int i = 0; i < pchildrenList.getLength(); i++) {
-					Node node = pchildrenList.item(i);
-					if (node.getNodeType() == Node.ELEMENT_NODE)
-						queue.offer((Element)node);
+					final Node node = pchildrenList.item(i);
+					if (node.getNodeType() == Node.ELEMENT_NODE) {
+                        queue.offer((Element)node);
+                    }
 				}
-				String classValue = pe.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
-				if(classValue!=null && classValue.contains(Constants.ATTR_CLASS_VALUE_TOPIC)){
+				final String classValue = pe.getAttribute(ATTRIBUTE_NAME_CLASS);
+				if(classValue!=null && classValue.contains(ATTR_CLASS_VALUE_TOPIC)){
 					//topic id found
-					if(pe.getAttribute(Constants.ATTRIBUTE_NAME_ID).equals(id)){
+					if(pe.getAttribute(ATTRIBUTE_NAME_ID).equals(id)){
 						return true;
 					}
 				}
 			}
 			return false;
 			
-		} catch (FileNotFoundException e) {
+		} catch (final FileNotFoundException e) {
 			e.printStackTrace();
-		} catch (SAXException e) {
+		} catch (final SAXException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
-		} catch (ParserConfigurationException e) {
+		} catch (final ParserConfigurationException e) {
 			e.printStackTrace();
 		}
 		return false;
@@ -144,9 +147,9 @@ public class DelayConrefUtils {
 	 * @param tempDir temp dir
 	 * @return result list
 	 */
-	public List<Boolean> checkExport(String href, String id, String key, String tempDir) {
+	public List<Boolean> checkExport(String href, final String id, final String key, final String tempDir) {
 		//parsed export .xml to get exported elements
-		String exportFile = (new File(tempDir, Constants.FILE_NAME_EXPORT_XML)).
+		final String exportFile = (new File(tempDir, FILE_NAME_EXPORT_XML)).
 		getAbsolutePath();
 		
 		boolean idExported = false;
@@ -154,44 +157,44 @@ public class DelayConrefUtils {
 		try {
 			//load export.xml only once
 			if(root==null){
-				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+				final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 				//factory.setFeature("http://xml.org/sax/features/validation", false);
-				DocumentBuilder builder = factory.newDocumentBuilder();
+				final DocumentBuilder builder = factory.newDocumentBuilder();
 				try {
-	    			Class.forName(Constants.RESOLVER_CLASS);
+	    			Class.forName(RESOLVER_CLASS);
 	    			builder.setEntityResolver(CatalogUtils.getCatalogResolver());
-	    		}catch (ClassNotFoundException e){
+	    		}catch (final ClassNotFoundException e){
 	    			builder.setEntityResolver(null);
 	    		}
 				root = builder.parse(new InputSource(new FileInputStream(exportFile)));
 			}
 			//if dita file's extension name is ".xml"
-			if(href.endsWith(Constants.FILE_EXTENSION_XML)){
+			if(href.endsWith(FILE_EXTENSION_XML)){
 				//change the extension to ".dita"
-				href = href.replace(Constants.FILE_EXTENSION_XML, Constants.FILE_EXTENSION_DITA);
+				href = href.replace(FILE_EXTENSION_XML, FILE_EXTENSION_DITA);
 			}
 			//get file node which contains the export node
-			Element fileNode = searchForKey(root.getDocumentElement(), href, "file");
+			final Element fileNode = searchForKey(root.getDocumentElement(), href, "file");
 			if(fileNode!=null){
 				//iterate the child nodes
-				NodeList pList = fileNode.getChildNodes();
+				final NodeList pList = fileNode.getChildNodes();
 				for (int j = 0; j < pList.getLength(); j++) {
-					Node node = pList.item(j);
+					final Node node = pList.item(j);
 					if(Node.ELEMENT_NODE == node.getNodeType()){
-						Element child = (Element)node;
+						final Element child = (Element)node;
 						//compare keys
 						if(child.getNodeName().equals("keyref")&&
-						   child.getAttribute(Constants.ATTRIBUTE_NAME_NAME)
+						   child.getAttribute(ATTRIBUTE_NAME_NAME)
 						   .equals(key)){
 							keyrefExported = true;
 						//compare topic id
 						}else if(child.getNodeName().equals("topicid")&&
-							child.getAttribute(Constants.ATTRIBUTE_NAME_NAME)
+							child.getAttribute(ATTRIBUTE_NAME_NAME)
 							.equals(id)){
 							idExported = true;
 						//compare element id
 						}else if(child.getNodeName().equals("id")&&
-							child.getAttribute(Constants.ATTRIBUTE_NAME_NAME)
+							child.getAttribute(ATTRIBUTE_NAME_NAME)
 							.equals(id)){
 							idExported = true;
 						}
@@ -201,10 +204,10 @@ public class DelayConrefUtils {
 					}
 				}
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
-		List<Boolean> list = new ArrayList<Boolean>();
+		final List<Boolean> list = new ArrayList<Boolean>();
 		list.add(Boolean.valueOf(idExported));
 		list.add(Boolean.valueOf(keyrefExported));
 		return list;
@@ -216,18 +219,21 @@ public class DelayConrefUtils {
 	 * @param tagName search tag name
 	 * @return search result, null of either input is invalid or the looking result is not found.
 	 */
-	public Element searchForKey(Element root, String key, String tagName) {
-		if (root == null || StringUtils.isEmptyString(key)) return null;
-		Queue<Element> queue = new LinkedList<Element>();
+	public Element searchForKey(final Element root, final String key, final String tagName) {
+		if (root == null || StringUtils.isEmptyString(key)) {
+            return null;
+        }
+		final Queue<Element> queue = new LinkedList<Element>();
 		queue.offer(root);
 		
 		while (!queue.isEmpty()) {
-			Element pe = queue.poll();
-			NodeList pchildrenList = pe.getChildNodes();
+			final Element pe = queue.poll();
+			final NodeList pchildrenList = pe.getChildNodes();
 			for (int i = 0; i < pchildrenList.getLength(); i++) {
-				Node node = pchildrenList.item(i);
-				if (node.getNodeType() == Node.ELEMENT_NODE)
-					queue.offer((Element)node);
+				final Node node = pchildrenList.item(i);
+				if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    queue.offer((Element)node);
+                }
 			}
 			String value = pe.getNodeName();
 			if(StringUtils.isEmptyString(value)||
@@ -235,10 +241,14 @@ public class DelayConrefUtils {
 				continue;
 			}
 			
-			value = pe.getAttribute(Constants.ATTRIBUTE_NAME_NAME);
-			if (StringUtils.isEmptyString(value)) continue;
+			value = pe.getAttribute(ATTRIBUTE_NAME_NAME);
+			if (StringUtils.isEmptyString(value)) {
+                continue;
+            }
 			
-			if (value.equals(key)) return pe;
+			if (value.equals(key)) {
+                return pe;
+            }
 		}
 		return null;
 	}
@@ -247,58 +257,59 @@ public class DelayConrefUtils {
 	 * @param m map
 	 * @param outputFile output xml file
 	 */
-	public void writeMapToXML(Map<String, Set<String>> m, File outputFile) {
+	public void writeMapToXML(final Map<String, Set<String>> m, final File outputFile) {
 
-		if (m == null)
-			return;
-		Properties prop = new Properties();
-		Iterator<Map.Entry<String, Set<String>>> iter = m.entrySet().iterator();
+		if (m == null) {
+            return;
+        }
+		final Properties prop = new Properties();
+		final Iterator<Map.Entry<String, Set<String>>> iter = m.entrySet().iterator();
 		while (iter.hasNext()) {
-			Map.Entry<String, Set<String>> entry = iter.next();
-			String key = entry.getKey();
-			String value = StringUtils.assembleString(entry.getValue(),
-					Constants.COMMA);
+			final Map.Entry<String, Set<String>> entry = iter.next();
+			final String key = entry.getKey();
+			final String value = StringUtils.assembleString(entry.getValue(),
+					COMMA);
 			prop.setProperty(key, value);
 		}
 		//File outputFile = new File(tempDir, filename);
 		
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		DocumentBuilder db = null;
 		try {
 			db = dbf.newDocumentBuilder();
-		} catch (ParserConfigurationException pce) {
+		} catch (final ParserConfigurationException pce) {
 			assert (false);
 		}
-		Document doc = db.newDocument();
-		Element properties = (Element) doc.appendChild(doc
+		final Document doc = db.newDocument();
+		final Element properties = (Element) doc.appendChild(doc
 				.createElement("properties"));
 
-		Set keys = prop.keySet();
-		Iterator i = keys.iterator();
+		final Set<Object> keys = prop.keySet();
+		final Iterator<Object> i = keys.iterator();
 		while (i.hasNext()) {
-			String key = (String) i.next();
-			Element entry = (Element) properties.appendChild(doc
+			final String key = (String) i.next();
+			final Element entry = (Element) properties.appendChild(doc
 					.createElement("entry"));
 			entry.setAttribute("key", key);
 			entry.appendChild(doc.createTextNode(prop.getProperty(key)));
 		}
-		TransformerFactory tf = TransformerFactory.newInstance();
+		final TransformerFactory tf = TransformerFactory.newInstance();
 		Transformer t = null;
 		try {
 			t = tf.newTransformer();
 			t.setOutputProperty(OutputKeys.INDENT, "yes");
 			t.setOutputProperty(OutputKeys.METHOD, "xml");
 			t.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-		} catch (TransformerConfigurationException tce) {
+		} catch (final TransformerConfigurationException tce) {
 			assert (false);
 		}
-		DOMSource doms = new DOMSource(doc);
+		final DOMSource doms = new DOMSource(doc);
         try {
-        	StreamResult sr = new StreamResult(new FileOutputStream(outputFile));
+        	final StreamResult sr = new StreamResult(new FileOutputStream(outputFile));
             t.transform(doms, sr);
-        } catch (TransformerException te) {
+        } catch (final TransformerException te) {
             this.javaLogger.logException(te);
-        } catch (IOException te) {
+        } catch (final IOException te) {
 			this.javaLogger.logException(te);
 		}
 	}

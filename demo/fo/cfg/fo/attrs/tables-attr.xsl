@@ -31,14 +31,14 @@ This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
 -->
 
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="2.0">
 
     <xsl:attribute-set name="table.title">
         <xsl:attribute name="font-family">Sans</xsl:attribute>
         <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
-        <xsl:attribute name="space-before.optimum">10pt</xsl:attribute>
-        <xsl:attribute name="space-after.optimum">10pt</xsl:attribute>
+        <xsl:attribute name="space-before">10pt</xsl:attribute>
+        <xsl:attribute name="space-after">10pt</xsl:attribute>
         <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
     </xsl:attribute-set>
 
@@ -78,7 +78,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="table">
         <!--It is a table container -->
         <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
-        <xsl:attribute name="space-after.optimum">10pt</xsl:attribute>
+        <xsl:attribute name="space-after">10pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="table.tgroup">
@@ -87,8 +87,8 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="width">100%</xsl:attribute>
         <!--xsl:attribute name=&quot;inline-progression-dimension&quot;&gt;auto&lt;/xsl:attribute-->
 <!--        &lt;xsl:attribute name=&quot;background-color&quot;&gt;white&lt;/xsl:attribute&gt;-->
-        <xsl:attribute name="space-before.optimum">5pt</xsl:attribute>
-        <xsl:attribute name="space-after.optimum">5pt</xsl:attribute>
+        <xsl:attribute name="space-before">5pt</xsl:attribute>
+        <xsl:attribute name="space-after">5pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="table__tableframe__all">
@@ -193,8 +193,8 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="dl">
         <!--DL is a table-->
         <xsl:attribute name="width">100%</xsl:attribute>
-        <xsl:attribute name="space-before.optimum">5pt</xsl:attribute>
-        <xsl:attribute name="space-after.optimum">5pt</xsl:attribute>
+        <xsl:attribute name="space-before">5pt</xsl:attribute>
+        <xsl:attribute name="space-after">5pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="dl__body">
@@ -245,8 +245,8 @@ See the accompanying license.txt file for applicable licenses.
 		<!--It is a table container -->
         <xsl:attribute name="width">100%</xsl:attribute>
 		<xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
-		<xsl:attribute name="space-before.optimum">8pt</xsl:attribute>
-		<xsl:attribute name="space-after.optimum">10pt</xsl:attribute>
+		<xsl:attribute name="space-before">8pt</xsl:attribute>
+		<xsl:attribute name="space-after">10pt</xsl:attribute>
 	</xsl:attribute-set>
 
 	<xsl:attribute-set name="simpletable__body">
@@ -292,8 +292,8 @@ See the accompanying license.txt file for applicable licenses.
         <!--It is a table container -->
         <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
         <xsl:attribute name="width">100%</xsl:attribute>
-        <xsl:attribute name="space-before.optimum">8pt</xsl:attribute>
-        <xsl:attribute name="space-after.optimum">10pt</xsl:attribute>
+        <xsl:attribute name="space-before">8pt</xsl:attribute>
+        <xsl:attribute name="space-after">10pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="properties__body">
@@ -339,7 +339,7 @@ See the accompanying license.txt file for applicable licenses.
 		<!--It is a table container -->
         <xsl:attribute name="width">100%</xsl:attribute>
 		<xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
-		<xsl:attribute name="space-after.optimum">10pt</xsl:attribute>
+		<xsl:attribute name="space-after">10pt</xsl:attribute>
 	</xsl:attribute-set>
 
 	<xsl:attribute-set name="choicetable__body">

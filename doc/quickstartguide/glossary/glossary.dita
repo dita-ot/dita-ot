@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE glossgroup PUBLIC "-//OASIS//DTD DITA Glossary Group//EN" "glossentry.dtd">
+    <glossentry id="buildtool" xml:lang="en">
+      <glossterm>build tool</glossterm>
+      <glossdef>A program used to compile other programs.</glossdef>
+    </glossentry>

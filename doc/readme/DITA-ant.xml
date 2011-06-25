@@ -18,8 +18,8 @@ such as help output in Eclipse, Java Help and HTML Help, XHTML pages,
 and PDF. The DITA-OT uses Ant to manage these scripts, as well as
 to manage additional intermediate steps written in Java. </p><note>The
 following instructions and the associated <i>build.xml</i> and   
-    <i>ditatargets.xml </i> files are for the Java 1.5 (and above),
-Ant 1.7.1, FOP 0.95, and Saxon-B 9.1 releases. These instructions
+    <i>ditatargets.xml </i> files are for the Java <keyword keyref="tool.java.version"/> (and above),
+  Ant <keyword keyref="tool.ant.version"/>, FOP <keyword keyref="tool.fop.version"/>, and Saxon-B <keyword keyref="tool.saxon.version"/> releases. These instructions
 are likely to need        some adjustment for other versions of these
 components and for specific        environments.</note></section>
 </conbody>

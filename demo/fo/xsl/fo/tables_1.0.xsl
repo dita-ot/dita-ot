@@ -35,9 +35,8 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:exsl="http://exslt.org/common"
     extension-element-prefixes="exsl"
-    version="1.1">
+    version="2.0">
 
-    <xsl:include href="../../cfg/fo/attrs/tables-attr.xsl"/>
     <xsl:variable name="tableAttrs" select="'../../cfg/fo/attrs/tables-attr.xsl'"/>
 
     <xsl:param name="tableSpecNonProportional" select="'false'"/>
@@ -47,7 +46,13 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:call-template name="getTableScale"/>
         </xsl:variable>
 
-        <fo:block xsl:use-attribute-sets="table" id="{@id}">
+        <fo:block xsl:use-attribute-sets="table">
+            <xsl:call-template name="commonattributes"/>
+            <xsl:if test="not(@id)">
+              <xsl:attribute name="id">
+                <xsl:call-template name="get-id"/>
+              </xsl:attribute>
+            </xsl:if>
             <xsl:if test="not($scale = '')">
                 <xsl:attribute name="font-size"><xsl:value-of select="concat($scale, '%')"/></xsl:attribute>
             </xsl:if>
@@ -56,7 +61,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/table ')]/*[contains(@class,' topic/title ')]">
-        <fo:block xsl:use-attribute-sets="table.title" id="{@id}">
+        <fo:block xsl:use-attribute-sets="table.title">
+            <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="insertVariable">
                 <xsl:with-param name="theVariableID" select="'Table'"/>
                 <xsl:with-param name="theParameters">
@@ -83,7 +89,8 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:variable>
 
         <xsl:variable name="table">
-            <fo:table xsl:use-attribute-sets="table.tgroup" id="{@id}">
+            <fo:table xsl:use-attribute-sets="table.tgroup">
+                <xsl:call-template name="commonattributes"/>
 
                 <xsl:call-template name="displayAtts">
                     <xsl:with-param name="element" select=".."/>
@@ -136,31 +143,36 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/thead ')]">
-        <fo:table-header xsl:use-attribute-sets="tgroup.thead" id="{@id}">
+        <fo:table-header xsl:use-attribute-sets="tgroup.thead">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:table-header>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/tbody ')]">
-        <fo:table-body xsl:use-attribute-sets="tgroup.tbody" id="{@id}">
+        <fo:table-body xsl:use-attribute-sets="tgroup.tbody">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:table-body>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/thead ')]/*[contains(@class, ' topic/row ')]">
-        <fo:table-row xsl:use-attribute-sets="thead.row" id="{@id}">
+        <fo:table-row xsl:use-attribute-sets="thead.row">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:table-row>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/tbody ')]/*[contains(@class, ' topic/row ')]">
-        <fo:table-row xsl:use-attribute-sets="tbody.row" id="{@id}">
+        <fo:table-row xsl:use-attribute-sets="tbody.row">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:table-row>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/thead ')]/*[contains(@class, ' topic/row ')]/*[contains(@class, ' topic/entry ')]">
-        <fo:table-cell xsl:use-attribute-sets="thead.row.entry" id="{@id}">
+        <fo:table-cell xsl:use-attribute-sets="thead.row.entry">
+            <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="applySpansAttrs"/>
             <xsl:call-template name="applyAlignAttrs"/>
             <xsl:call-template name="generateTableEntryBorder"/>
@@ -171,7 +183,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/tbody ')]/*[contains(@class, ' topic/row ')]/*[contains(@class, ' topic/entry ')]">
-        <fo:table-cell xsl:use-attribute-sets="tbody.row.entry" id="{@id}">
+        <fo:table-cell xsl:use-attribute-sets="tbody.row.entry">
+            <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="applySpansAttrs"/>
             <xsl:call-template name="applyAlignAttrs"/>
             <xsl:call-template name="generateTableEntryBorder"/>
@@ -190,7 +203,7 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:when test="@char">
                     <xsl:value-of select="@char"/>
                 </xsl:when>
-                <xsl:when test="ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class,' topic/colspec ')][position() = $entryNumber]/@char">
+                <xsl:when test="ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class,' topic/colspec ')][position() = number($entryNumber)]/@char">
                     <xsl:value-of select="ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class,' topic/colspec ')][position() = $entryNumber]/@char"/>
                 </xsl:when>
             </xsl:choose>
@@ -200,7 +213,7 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:when test="@charoff">
                     <xsl:value-of select="@charoff"/>
                 </xsl:when>
-                <xsl:when test="ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class,' topic/colspec ')][position() = $entryNumber]/@charoff">
+                <xsl:when test="ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class,' topic/colspec ')][position() = number($entryNumber)]/@charoff">
                     <xsl:value-of select="ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class,' topic/colspec ')][position() = $entryNumber]/@charoff"/>
                 </xsl:when>
                 <xsl:otherwise>50</xsl:otherwise>

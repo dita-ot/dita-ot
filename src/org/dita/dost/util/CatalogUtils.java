@@ -9,6 +9,7 @@
  */
 package org.dita.dost.util;
 
+import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
 import java.util.HashMap;
@@ -18,9 +19,6 @@ import org.apache.xml.resolver.CatalogManager;
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
-
-
 
 /**
  * General catalog file resolving utilities.
@@ -28,13 +26,13 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Zhang, Yuan Peng
  */
 
-public class CatalogUtils {
+public final class CatalogUtils {
 	/**map to keep the resolved catalog mappings.*/
     private static HashMap<String, String> map=null;
     /**logger to log informations.*/
     private static DITAOTJavaLogger logger = new DITAOTJavaLogger();
     /**apache catalogResolver.*/
-    public static CatalogResolver catalogResolver = null;
+    private static CatalogResolver catalogResolver = null;
     /**directory to find catalog-dita.xml.*/
 	private static String ditaDir;
     /**
@@ -50,24 +48,20 @@ public class CatalogUtils {
      * @return catalog map
      * 
      */
-    public static HashMap<String, String> getCatalog(String ditaDir) {
+    public static synchronized HashMap<String, String> getCatalog(final String ditaDir) {
 		if (map != null) {
 			return map;
 		}
 		
-		String catalogFilePath = (ditaDir == null) ? Constants.FILE_NAME_CATALOG : ditaDir + File.separator + Constants.FILE_NAME_CATALOG;
+		final String catalogFilePath = (ditaDir == null) ? FILE_NAME_CATALOG : ditaDir + File.separator + FILE_NAME_CATALOG;
 		
 		map = new HashMap<String, String>();
-		CatalogParser parser = new CatalogParser(map, ditaDir);
-		if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
-			// The default sax driver is set to xerces's sax driver
-			StringUtils.initSaxDriver();
-		}	
+		final CatalogParser parser = new CatalogParser(map, ditaDir);
 		try {
-			XMLReader reader = XMLReaderFactory.createXMLReader();
+			final XMLReader reader = StringUtils.getXMLReader();
 			reader.setContentHandler(parser);
 			reader.parse(catalogFilePath);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			logger.logException(e);
 		}
 
@@ -78,7 +72,7 @@ public class CatalogUtils {
      * Set directory to find catalog-dita.xml.
      * @param ditaDir ditaDir
      */
-    public static void setDitaDir(String ditaDir){
+    public static synchronized void setDitaDir(final String ditaDir){
     	catalogResolver=null;
     	CatalogUtils.ditaDir=ditaDir;
     }
@@ -96,9 +90,9 @@ public class CatalogUtils {
      * Get CatalogResolver.
      * @return CatalogResolver
      */
-    public static CatalogResolver getCatalogResolver() {
+    public static synchronized CatalogResolver getCatalogResolver() {
         if (catalogResolver == null) {
-            CatalogManager manager = new CatalogManager();
+            final CatalogManager manager = new CatalogManager();
             manager.setIgnoreMissingProperties(true);
             manager.setUseStaticCatalog(false); // We'll use a private catalog.
             manager.setPreferPublic(true);
@@ -106,12 +100,12 @@ public class CatalogUtils {
             //manager.setVerbosity(10);
             catalogResolver = new CatalogResolver(manager);
             
-            String catalogFilePath = getDitaDir() + Constants.FILE_NAME_CATALOG;
+            final String catalogFilePath = getDitaDir() + FILE_NAME_CATALOG;
 
-            Catalog catalog = catalogResolver.getCatalog();
+            final Catalog catalog = catalogResolver.getCatalog();
             try {
                 catalog.parseCatalog(catalogFilePath);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 logger.logException(e);
             }
         }

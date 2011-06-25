@@ -36,9 +36,7 @@ See the accompanying license.txt file for applicable licenses.
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
-    version="1.1">
-
-    <xsl:include href="../../cfg/fo/attrs/lists-attr.xsl"/>
+    version="2.0">
 
     <xsl:template match="*[contains(@class,' topic/linklist ')]/*[contains(@class,' topic/title ')]">
       <fo:block xsl:use-attribute-sets="linklist.title">
@@ -48,13 +46,15 @@ See the accompanying license.txt file for applicable licenses.
 
     <!--Lists-->
     <xsl:template match="*[contains(@class, ' topic/ul ')]">
-        <fo:list-block xsl:use-attribute-sets="ul" id="{@id}">
+        <fo:list-block xsl:use-attribute-sets="ul">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:list-block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/ol ')]">
-        <fo:list-block xsl:use-attribute-sets="ol" id="{@id}">
+        <fo:list-block xsl:use-attribute-sets="ol">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:list-block>
     </xsl:template>
@@ -63,7 +63,9 @@ See the accompanying license.txt file for applicable licenses.
         <fo:list-item xsl:use-attribute-sets="ul.li">
             <fo:list-item-label xsl:use-attribute-sets="ul.li__label">
                 <fo:block xsl:use-attribute-sets="ul.li__label__content">
-                    <fo:inline id="{@id}"/>
+                    <fo:inline>
+                        <xsl:call-template name="commonattributes"/>
+                    </fo:inline>
                     <xsl:call-template name="insertVariable">
                         <xsl:with-param name="theVariableID" select="'Unordered List bullet'"/>
                     </xsl:call-template>
@@ -83,7 +85,9 @@ See the accompanying license.txt file for applicable licenses.
         <fo:list-item xsl:use-attribute-sets="ol.li">
             <fo:list-item-label xsl:use-attribute-sets="ol.li__label">
                 <fo:block xsl:use-attribute-sets="ol.li__label__content">
-                    <fo:inline id="{@id}"/>
+                    <fo:inline>
+                        <xsl:call-template name="commonattributes"/>
+                    </fo:inline>
                     <xsl:call-template name="insertVariable">
                         <xsl:with-param name="theVariableID" select="'Ordered List Number'"/>
                         <xsl:with-param name="theParameters">
@@ -112,13 +116,15 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/li ')]/*[contains(@class, ' topic/itemgroup ')]">
-        <fo:block xsl:use-attribute-sets="li.itemgroup" id="{@id}">
+        <fo:block xsl:use-attribute-sets="li.itemgroup">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/sl ')]">
-        <fo:list-block xsl:use-attribute-sets="sl" id="{@id}">
+        <fo:list-block xsl:use-attribute-sets="sl">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:list-block>
     </xsl:template>
@@ -127,7 +133,9 @@ See the accompanying license.txt file for applicable licenses.
         <fo:list-item xsl:use-attribute-sets="sl.sli">
             <fo:list-item-label xsl:use-attribute-sets="sl.sli__label">
                 <fo:block xsl:use-attribute-sets="sl.sli__label__content">
-                    <fo:inline id="{@id}"/>
+                    <fo:inline>
+                        <xsl:call-template name="commonattributes"/>
+                    </fo:inline>
                 </fo:block>
             </fo:list-item-label>
 

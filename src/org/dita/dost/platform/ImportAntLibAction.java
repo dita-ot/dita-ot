@@ -3,40 +3,34 @@
  * Sourceforge.net. See the accompanying license.txt file for 
  * applicable licenses.
  */
+
+/*
+ * (c) Copyright IBM Corp. 2008 All Rights Reserved.
+ */
 package org.dita.dost.platform;
 
-import java.util.Iterator;
+import static org.dita.dost.util.Constants.*;
 
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
+
 /**
  * ImportAntLibAction class.
  *
  */
-public class ImportAntLibAction extends ImportAction {
+final class ImportAntLibAction extends ImportAction {
 
-	private StringBuffer retBuf = null;
-	/**
-	 * Constructor.
-	 */
-	public ImportAntLibAction() {
-		super();
-		retBuf = new StringBuffer(Constants.INT_1024);
-	}
 	/**
 	 * get result.
 	 * @return result
 	 */
+	@Override
 	public String getResult() {
-		Iterator<String> iter;
-		String templateFilePath = paramTable.get("template");
-		String value = null;
-		iter = valueSet.iterator();
-		while(iter.hasNext()){
-			value = iter.next();
-			retBuf.append(Constants.LINE_SEPARATOR);
-            String resolvedValue = FileUtils.getRelativePathFromMap(
+		final StringBuilder retBuf = new StringBuilder();
+		final String templateFilePath = paramTable.get(FileGenerator.PARAM_TEMPLATE);
+		for (final String value: valueSet) {
+			retBuf.append(LINE_SEPARATOR);
+            final String resolvedValue = FileUtils.getRelativePathFromMap(
                 templateFilePath, value);
 			if(FileUtils.isAbsolutePath(resolvedValue)){
 				// if resolvedValue is absolute path

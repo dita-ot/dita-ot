@@ -23,7 +23,7 @@ import org.dita.dost.log.MessageBean;
  * 
  * @author Wu, Zhi Qiang
  */
-public class LogConfigTask extends Task {
+public final class LogConfigTask extends Task {
 
 	private String logDir = null;
 	private String logFile = null;
@@ -40,8 +40,8 @@ public class LogConfigTask extends Task {
 	 * @see org.apache.tools.ant.Task#execute()
 	 */
 	public void execute() throws BuildException {
-		DITAOTFileLogger logger = DITAOTFileLogger.getInstance();
-		String oldLogDir = logger.getLogDir();
+		final DITAOTFileLogger logger = DITAOTFileLogger.getInstance();
+		final String oldLogDir = logger.getLogDir();
 		
 		initMessageFile();
 		initLogDirectory();		
@@ -91,7 +91,7 @@ public class LogConfigTask extends Task {
 	}
 	
 	private void initLogDirectory() throws BuildException {
-		Project project = getProject();
+		final Project project = getProject();
 		File dir = null;
 		
 		logDir = project.getProperty("args.logdir");
@@ -101,8 +101,8 @@ public class LogConfigTask extends Task {
 		}
 		
 		if (logDir == null || "".equals(logDir)) {
-			MessageBean msgBean=MessageUtils.getMessage("DOTJ015F");
-			String msg = msgBean.toString();
+			final MessageBean msgBean=MessageUtils.getMessage("DOTJ015F");
+			final String msg = msgBean.toString();
 			throw new BuildException(msg,new DITAOTException(msgBean,null,msg));
 		}
 		
@@ -114,10 +114,10 @@ public class LogConfigTask extends Task {
 		dir = new File(logDir);
 		if (!dir.exists()) {
 			if (!dir.mkdirs()) {
-				Properties params = new Properties();
+				final Properties params = new Properties();
 				String msg = null;
 				params.put("%1", logDir);
-				MessageBean msgBean=MessageUtils.getMessage("DOTJ016F", params);
+				final MessageBean msgBean=MessageUtils.getMessage("DOTJ016F", params);
 				msg = msgBean.toString();
 				throw new BuildException(msg,new DITAOTException(msgBean,null,msg));
 			}
@@ -125,7 +125,7 @@ public class LogConfigTask extends Task {
 	}
 
 	private void initLogFile() throws BuildException {
-		Project project = getProject();
+		final Project project = getProject();
 		String inputFile = null;
 		String rootName = null;
 		String transType = null;
@@ -137,8 +137,8 @@ public class LogConfigTask extends Task {
 		}
 
 		if (input == null) {
-			MessageBean msgBean=MessageUtils.getMessage("DOTJ017F");
-			String msg = msgBean.toString();
+			final MessageBean msgBean=MessageUtils.getMessage("DOTJ017F");
+			final String msg = msgBean.toString();
 			throw new BuildException(msg,new DITAOTException(msgBean,null,msg));
 		}
 		

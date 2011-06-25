@@ -135,7 +135,28 @@
   <xsl:value-of select="."/><xsl:text>/</xsl:text>
 </xsl:template>
 
-<xsl:template match="*[@conaction]" priority="10"/>
+<xsl:template match="@*"  mode="conaction-target">
+   <xsl:choose>
+       <xsl:when test="name()='conaction' or name()='conref'"></xsl:when>
+       <xsl:otherwise>
+         <xsl:copy/>
+       </xsl:otherwise>
+     </xsl:choose>
+</xsl:template>
+
+<!-- When content is pushed from one topic to another, it is still rendered in the original context.
+ Processors may delete empty the element that with the conaction="mark" attribute. -->
+<xsl:template match="*[@conaction]" priority="10"> 
+  <xsl:variable name="conaction_value" select="@conaction"/>
+  <xsl:choose>
+    <xsl:when test="$conaction_value!='mark'">
+      <xsl:copy>  
+        <xsl:apply-templates select="@*" mode="conaction-target"/>
+        <xsl:apply-templates select="*|comment()|processing-instruction()|text()"/>     
+      </xsl:copy>
+    </xsl:when>
+  </xsl:choose>
+</xsl:template>
 
 <!--if something has a conref attribute, jump to the target if valid and continue applying templates-->
   
@@ -1220,7 +1241,8 @@
         <xsl:when test="contains($ORIGINAL-DOMAINS,concat(' ',$testModule,')'))">
           <xsl:value-of select="$testElement"/>
         </xsl:when>
-        <xsl:when test="$testModule='topic' or $testElement='map'"><xsl:value-of select="$testElement"/></xsl:when>
+        <xsl:when test="$testModule='topic' or $testModule='map'"><xsl:value-of select="$testElement"/></xsl:when>
+        
       </xsl:choose>
     </xsl:otherwise>
   </xsl:choose>

@@ -39,7 +39,7 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
     extension-element-prefixes="exsl"
     exclude-result-prefixes="opentopic exsl opentopic-index dita2xslfo"
-    version="1.1">
+    version="2.0">
 
     <!-- Determines whether to generate titles for task sections. Values are YES and NO. -->
     <xsl:param name="GENERATE-TASK-LABELS">
@@ -48,8 +48,6 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:otherwise>NO</xsl:otherwise>
         </xsl:choose>
     </xsl:param>
-
-    <xsl:include href="../../cfg/fo/attrs/task-elements-attr.xsl"/>
 
     <xsl:template name="processTask">
         <xsl:apply-templates select="." mode="processTask"/>
@@ -62,13 +60,15 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' task/taskbody ')]">
-        <fo:block xsl:use-attribute-sets="taskbody" id="{@id}">
+        <fo:block xsl:use-attribute-sets="taskbody">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' task/prereq ')]">
-        <fo:block xsl:use-attribute-sets="prereq" id="{@id}">
+        <fo:block xsl:use-attribute-sets="prereq">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates select="." mode="dita2xslfo:task-heading">
                 <xsl:with-param name="use-label">
                     <xsl:call-template name="insertVariable">
@@ -81,7 +81,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' task/context ')]">
-        <fo:block xsl:use-attribute-sets="context" id="{@id}">
+        <fo:block xsl:use-attribute-sets="context">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates select="." mode="dita2xslfo:task-heading">
                 <xsl:with-param name="use-label">
                     <xsl:call-template name="insertVariable">
@@ -94,7 +95,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' task/cmd ')]" priority="1">
-        <fo:block xsl:use-attribute-sets="cmd" id="{@id}">
+        <fo:block xsl:use-attribute-sets="cmd">
+            <xsl:call-template name="commonattributes"/>
             <xsl:if test="../@importance='optional'">
                 <xsl:call-template name="insertVariable">
                     <xsl:with-param name="theVariableID" select="'Optional Step'"/>
@@ -106,25 +108,29 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' task/info ')]">
-        <fo:block xsl:use-attribute-sets="info" id="{@id}">
+        <fo:block xsl:use-attribute-sets="info">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' task/tutorialinfo ')]">
-        <fo:block xsl:use-attribute-sets="tutorialinfo" id="{@id}">
+        <fo:block xsl:use-attribute-sets="tutorialinfo">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' task/stepresult ')]">
-        <fo:block xsl:use-attribute-sets="stepresult" id="{@id}">
+        <fo:block xsl:use-attribute-sets="stepresult">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' task/result ')]">
-        <fo:block xsl:use-attribute-sets="result" id="{@id}">
+        <fo:block xsl:use-attribute-sets="result">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates select="." mode="dita2xslfo:task-heading">
                 <xsl:with-param name="use-label">
                     <xsl:call-template name="insertVariable">
@@ -137,7 +143,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' task/taskbody ')]/*[contains(@class, ' topic/example ')]">
-        <fo:block xsl:use-attribute-sets="example" id="{@id}">
+        <fo:block xsl:use-attribute-sets="example">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates select="." mode="dita2xslfo:task-heading">
                 <xsl:with-param name="use-label">
                     <xsl:call-template name="insertVariable">
@@ -150,7 +157,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' task/postreq ')]">
-        <fo:block xsl:use-attribute-sets="postreq" id="{@id}">
+        <fo:block xsl:use-attribute-sets="postreq">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates select="." mode="dita2xslfo:task-heading">
                 <xsl:with-param name="use-label">
                     <xsl:call-template name="insertVariable">
@@ -163,7 +171,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' task/stepxmp ')]">
-        <fo:block xsl:use-attribute-sets="stepxmp" id="{@id}">
+        <fo:block xsl:use-attribute-sets="stepxmp">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
@@ -180,13 +189,15 @@ See the accompanying license.txt file for applicable licenses.
                           </xsl:call-template>
                       </xsl:with-param>
                   </xsl:apply-templates>
-                  <fo:list-block xsl:use-attribute-sets="steps" id="{@id}">
+                  <fo:list-block xsl:use-attribute-sets="steps">
+                      <xsl:call-template name="commonattributes"/>
                       <xsl:apply-templates/>
                   </fo:list-block>
               </fo:block>
             </xsl:when>
             <xsl:otherwise>
-                <fo:list-block xsl:use-attribute-sets="steps" id="{@id}">
+                <fo:list-block xsl:use-attribute-sets="steps">
+                    <xsl:call-template name="commonattributes"/>
                     <xsl:apply-templates/>
                 </fo:list-block>
             </xsl:otherwise>
@@ -194,7 +205,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' task/steps-unordered ')]">
-        <fo:list-block xsl:use-attribute-sets="steps-unordered" id="{@id}">
+        <fo:list-block xsl:use-attribute-sets="steps-unordered">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:list-block>
     </xsl:template>
@@ -204,9 +216,11 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:variable name="actual-step-count" select="number(count(preceding-sibling::*[contains(@class, ' task/step ')])+1)"/>
         <fo:list-item xsl:use-attribute-sets="steps.step">
             <fo:list-item-label xsl:use-attribute-sets="steps.step__label">
-                <xsl:if test="preceding-sibling::*[contains(@class, ' task/step ')] | following-sibling::*[contains(@class, ' task/step ')]">
-                    <fo:block xsl:use-attribute-sets="steps.step__label__content">
-                        <fo:inline id="{@id}"/>
+                <fo:block xsl:use-attribute-sets="steps.step__label__content">
+                    <fo:inline>
+                        <xsl:call-template name="commonattributes"/>
+                    </fo:inline>
+                    <xsl:if test="preceding-sibling::*[contains(@class, ' task/step ')] | following-sibling::*[contains(@class, ' task/step ')]">
                         <xsl:call-template name="insertVariable">
                             <xsl:with-param name="theVariableID" select="'Ordered List Number'"/>
                             <xsl:with-param name="theParameters">
@@ -215,8 +229,8 @@ See the accompanying license.txt file for applicable licenses.
                                 </number>
                             </xsl:with-param>
                         </xsl:call-template>
-                    </fo:block>
-                </xsl:if>
+                    </xsl:if>
+                </fo:block>
             </fo:list-item-label>
 
             <fo:list-item-body xsl:use-attribute-sets="steps.step__body">
@@ -232,7 +246,9 @@ See the accompanying license.txt file for applicable licenses.
         <fo:list-item xsl:use-attribute-sets="steps-unordered.step">
             <fo:list-item-label xsl:use-attribute-sets="steps-unordered.step__label">
                 <fo:block xsl:use-attribute-sets="steps-unordered.step__label__content">
-                    <fo:inline id="{@id}"/>
+                    <fo:inline>
+                        <xsl:call-template name="commonattributes"/>
+                    </fo:inline>
                     <xsl:call-template name="insertVariable">
                         <xsl:with-param name="theVariableID" select="'Unordered List bullet'"/>
                     </xsl:call-template>
@@ -252,7 +268,9 @@ See the accompanying license.txt file for applicable licenses.
         <fo:list-item xsl:use-attribute-sets="stepsection">
             <fo:list-item-label xsl:use-attribute-sets="stepsection__label">
               <fo:block xsl:use-attribute-sets="stepsection__label__content">
-                  <fo:inline id="{@id}"/>
+                  <fo:inline>
+                      <xsl:call-template name="commonattributes"/>
+                  </fo:inline>
               </fo:block>
             </fo:list-item-label>
 
@@ -267,7 +285,8 @@ See the accompanying license.txt file for applicable licenses.
 
     <!--Substeps-->
     <xsl:template match="*[contains(@class, ' task/substeps ')]">
-        <fo:list-block xsl:use-attribute-sets="substeps" id="{@id}">
+        <fo:list-block xsl:use-attribute-sets="substeps">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:list-block>
     </xsl:template>
@@ -276,7 +295,9 @@ See the accompanying license.txt file for applicable licenses.
         <fo:list-item xsl:use-attribute-sets="substeps.substep">
             <fo:list-item-label xsl:use-attribute-sets="substeps.substep__label">
                 <fo:block xsl:use-attribute-sets="substeps.substep__label__content">
-                    <fo:inline id="{@id}"/>
+                    <fo:inline>
+                        <xsl:call-template name="commonattributes"/>
+                    </fo:inline>
                     <xsl:number format="a) "/>
                 </fo:block>
             </fo:list-item-label>
@@ -290,7 +311,8 @@ See the accompanying license.txt file for applicable licenses.
 
     <!--Choices-->
     <xsl:template match="*[contains(@class, ' task/choices ')]">
-        <fo:list-block xsl:use-attribute-sets="choices" id="{@id}">
+        <fo:list-block xsl:use-attribute-sets="choices">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:list-block>
     </xsl:template>
@@ -299,7 +321,9 @@ See the accompanying license.txt file for applicable licenses.
         <fo:list-item xsl:use-attribute-sets="choices.choice">
             <fo:list-item-label xsl:use-attribute-sets="choices.choice__label">
                 <fo:block xsl:use-attribute-sets="choices.choice__label__content">
-                    <fo:inline id="{@id}"/>
+                    <fo:inline>
+                        <xsl:call-template name="commonattributes"/>
+                    </fo:inline>
                     <xsl:call-template name="insertVariable">
                         <xsl:with-param name="theVariableID" select="'Unordered List bullet'"/>
                     </xsl:call-template>

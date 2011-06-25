@@ -9,6 +9,9 @@
  */
 package org.dita.dost.reader;
 
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.writer.DitaWriter.*;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -23,11 +26,10 @@ import java.util.Random;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.ChunkTopicParser;
@@ -43,9 +45,14 @@ import org.w3c.dom.Text;
  * ChunkMapReader class, read ditamap file for chunking.
  *
  */
-public class ChunkMapReader implements AbstractReader {
+public final class ChunkMapReader implements AbstractReader {
 	
-	private DITAOTJavaLogger javaLogger = null;
+	public static final String CHUNK_BY_DOCUMENT = "by-document";
+    public static final String CHUNK_BY_TOPIC = "by-topic";
+    public static final String CHUNK_TO_CONTENT = "to-content";
+    public static final String CHUNK_TO_NAVIGATION = "to-navigation";
+
+    private DITAOTLogger logger;
 	
 	private boolean chunkByTopic = false;
 	
@@ -67,40 +74,39 @@ public class ChunkMapReader implements AbstractReader {
 
 	private ProcessingInstruction path2proj = null; // Tagsmiths modification
 	
-	private String processingRole = "normal";
+	private String processingRole = ATTR_PROCESSING_ROLE_VALUE_NORMAL;
 	/**
 	 * Constructor.
 	 */
 	public ChunkMapReader() {
 		super();
-		javaLogger = new DITAOTJavaLogger();
 		chunkByTopic=false;// By default, processor should chunk by document.
-		changeTable = new LinkedHashMap<String, String>(Constants.INT_128);
-		refFileSet = new HashSet<String>(Constants.INT_128);
-		conflictTable = new Hashtable<String, String>(Constants.INT_128);
+		changeTable = new LinkedHashMap<String, String>(INT_128);
+		refFileSet = new HashSet<String>(INT_128);
+		conflictTable = new Hashtable<String, String>(INT_128);
 	}
 	/**
 	 * read input file.
 	 * @param filename filename
 	 */
 	public void read(String filename) {
-		File inputFile = new File(filename);
+		final File inputFile = new File(filename);
         filePath = inputFile.getParent();
 		try {
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = factory.newDocumentBuilder();
-			Document doc = builder.parse(filename);
+			final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			final DocumentBuilder builder = factory.newDocumentBuilder();
+			final Document doc = builder.parse(filename);
 			
 			// Start Tagsmiths modification: Added logic to collect the 
 			// workdir and path2proj processing instructions.
-			NodeList docNodes = doc.getChildNodes();
+			final NodeList docNodes = doc.getChildNodes();
 			for (int i = 0; i < docNodes.getLength(); i++) {
-				Node node = docNodes.item(i);
+				final Node node = docNodes.item(i);
 				if (node.getNodeType() == Node.PROCESSING_INSTRUCTION_NODE) {
-					ProcessingInstruction pi = (ProcessingInstruction) node;
-					if (pi.getNodeName() == "workdir") {
+					final ProcessingInstruction pi = (ProcessingInstruction) node;
+					if (pi.getNodeName() == PI_WORKDIR_TARGET) {
 						workdir = pi;
-					} else if (pi.getNodeName() == "path2project") {
+					} else if (pi.getNodeName().equals(PI_PATH2PROJ_TARGET)) {
 						path2proj = pi;
 					}
 				}
@@ -108,12 +114,12 @@ public class ChunkMapReader implements AbstractReader {
 			// End Tagsmiths modification
 
 			//get the document node
-			Element root = doc.getDocumentElement();
+			final Element root = doc.getDocumentElement();
 			//get the immediate child nodes
-			NodeList list = root.getChildNodes();
-			String rootChunkValue = root.getAttribute(Constants.ATTRIBUTE_NAME_CHUNK);
+			final NodeList list = root.getChildNodes();
+			final String rootChunkValue = root.getAttribute(ATTRIBUTE_NAME_CHUNK);
 			if(rootChunkValue != null &&
-					rootChunkValue.contains("by-topic")){
+					rootChunkValue.contains(CHUNK_BY_TOPIC)){
 				chunkByTopic = true;
 			}else{
 				chunkByTopic = false;
@@ -122,46 +128,46 @@ public class ChunkMapReader implements AbstractReader {
 			//When @chunk="to-content" is specified on "map" element, 
 			//chunk module will change its @class attribute to "topicref" 
 			//and process it as if it were a normal topicref wich @chunk="to-content"
-			if(root.getAttribute(Constants.ATTRIBUTE_NAME_CHUNK) != null &&
-					root.getAttribute(Constants.ATTRIBUTE_NAME_CHUNK).indexOf("to-content")!=-1){
+			if(root.getAttribute(ATTRIBUTE_NAME_CHUNK) != null &&
+					root.getAttribute(ATTRIBUTE_NAME_CHUNK).indexOf(CHUNK_TO_CONTENT)!=-1){
 				// if to-content is specified on map element
 				
 				// create the reference to the new file on root element.
-				Random random = new Random();
+				final Random random = new Random();
 				String newFilename = inputFile.getName().substring(
-						0, inputFile.getName().indexOf(Constants.FILE_EXTENSION_DITAMAP)) + ditaext;
+						0, inputFile.getName().indexOf(FILE_EXTENSION_DITAMAP)) + ditaext;
 				File newFile = new File(inputFile.getParentFile().getAbsolutePath(),newFilename);
 				if (newFile.exists()) {
 					newFilename = "Chunk"
-							+new Integer(Math.abs(random.nextInt())).toString()+ditaext;
-					String oldpath = newFile.getAbsolutePath();
+							+ random.nextInt(Integer.MAX_VALUE) + ditaext;
+					final String oldpath = newFile.getAbsolutePath();
 					newFile = new File(FileUtils.resolveFile(inputFile.getParentFile().getAbsolutePath(), newFilename));
 					// Mark up the possible name changing, in case that references might be updated.
 					conflictTable.put(newFile.getAbsolutePath(), FileUtils.removeRedundantNames(oldpath));
 				} 
 				//change the class attribute to "topicref" 
-				String originClassValue = root.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
-				root.setAttribute(Constants.ATTRIBUTE_NAME_CLASS, originClassValue + Constants.ATTR_CLASS_VALUE_TOPICREF);
-				root.setAttribute(Constants.ATTRIBUTE_NAME_HREF, newFilename);
+				final String originClassValue = root.getAttribute(ATTRIBUTE_NAME_CLASS);
+				root.setAttribute(ATTRIBUTE_NAME_CLASS, originClassValue + ATTR_CLASS_VALUE_TOPICREF);
+				root.setAttribute(ATTRIBUTE_NAME_HREF, newFilename);
 				
 				//create the new file
 				OutputStreamWriter newFileWriter = null;
 				try{
-					newFileWriter = new OutputStreamWriter(new FileOutputStream(newFile), Constants.UTF8);
-					newFileWriter.write(Constants.XML_HEAD);
+					newFileWriter = new OutputStreamWriter(new FileOutputStream(newFile), UTF8);
+					newFileWriter.write(XML_HEAD);
 					newFileWriter.write("<?workdir /"+newFile.getParentFile().getAbsolutePath()+"?>");
 					newFileWriter.write("<dita></dita>");
 					newFileWriter.flush();
 					newFileWriter.close();
-				}catch (Exception e) {
-					javaLogger.logException(e);
+				}catch (final Exception e) {
+					logger.logException(e);
 				}finally{
 					try{
 						if(newFileWriter!=null){
 							newFileWriter.close();
 						}
-					}catch (Exception e) {
-						javaLogger.logException(e);
+					}catch (final Exception e) {
+						logger.logException(e);
 					}					
 				}
 				
@@ -173,30 +179,30 @@ public class ChunkMapReader implements AbstractReader {
 				
 				// restore original root element
 				if(originClassValue != null){
-					root.setAttribute(Constants.ATTRIBUTE_NAME_CLASS, originClassValue);
+					root.setAttribute(ATTRIBUTE_NAME_CLASS, originClassValue);
 				}
 				//remove the href
-				root.removeAttribute(Constants.ATTRIBUTE_NAME_HREF);
+				root.removeAttribute(ATTRIBUTE_NAME_HREF);
 				
 			}else{
 				// if to-content is not specified on map element
 				//process the map element's immediate child node(s)
 				for (int i = 0; i < list.getLength(); i++){
-					Node node = list.item(i);
+					final Node node = list.item(i);
 					Node classAttr = null;
 					String classValue = null;
 					if (node.getNodeType() == Node.ELEMENT_NODE){
-						classAttr = node.getAttributes().getNamedItem("class");
+						classAttr = node.getAttributes().getNamedItem(ATTRIBUTE_NAME_CLASS);
 						
 						if(classAttr != null){
 							classValue = classAttr.getNodeValue();
 						}
 						
-						if(classValue != null && classValue.indexOf(Constants.ATTR_CLASS_VALUE_RELTABLE)!=-1){
+						if(classValue != null && classValue.indexOf(ATTR_CLASS_VALUE_RELTABLE)!=-1){
 							updateReltable((Element)node);
 						}
-						if(classValue != null && classValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPICREF)!=-1
-								&& !classValue.contains(Constants.ATTR_CLASS_VALUE_TOPIC_GROUP)){
+						if(classValue != null && classValue.indexOf(ATTR_CLASS_VALUE_TOPICREF)!=-1
+								&& !classValue.contains(ATTR_CLASS_VALUE_TOPIC_GROUP)){
 							processTopicref(node);
 						}
 						
@@ -207,53 +213,60 @@ public class ChunkMapReader implements AbstractReader {
 			//write the edited ditamap file to a temp file
 			outputMapFile(inputFile.getAbsolutePath()+".chunk",root);
 			if(!inputFile.delete()){
-            	Properties prop = new Properties();
+            	final Properties prop = new Properties();
             	prop.put("%1", inputFile.getPath());
             	prop.put("%2", inputFile.getAbsolutePath()+".chunk");
-            	javaLogger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
+            	logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
             }
             if(!new File(inputFile.getAbsolutePath()+".chunk").renameTo(inputFile)){
-            	Properties prop = new Properties();
+            	final Properties prop = new Properties();
             	prop.put("%1", inputFile.getPath());
             	prop.put("%2", inputFile.getAbsolutePath()+".chunk");
-            	javaLogger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
+            	logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
             }
 			
-		}catch (Exception e){
-			javaLogger.logException(e);
+		}catch (final Exception e){
+			logger.logException(e);
 		}
 
 	}
 
+	public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
+	
 	private void outputMapFile(String file, Element root) {
 		
 		OutputStreamWriter output = null;
 		try{
 		output = new OutputStreamWriter(
 				new FileOutputStream(file),
-				Constants.UTF8);
+				UTF8);
 		// Start Tagsmiths modification: XML_HEAD and the workdir and
 		// path2proj processing instructions were not being sent to output.
 		// The follow few lines corrects that problem.
-		output.write(Constants.XML_HEAD);
-		if (workdir != null)
-			output(workdir, output);
+		output.write(XML_HEAD);
+		if (workdir != null) {
+            output(workdir, output);
+        }
 		if (path2proj != null)
-			output(path2proj, output);
+         {
+            output(path2proj, output);
 		// End Tagsmiths modification
+        }
 
 		output(root,output);
 		output.flush();
 		output.close();
-		}catch (Exception e) {
-			javaLogger.logException(e);
+		}catch (final Exception e) {
+			logger.logException(e);
 		}finally{
 			try{
 				if(output!=null){
 					output.close();
 				}
-			}catch (Exception e) {
-				javaLogger.logException(e);
+			}catch (final Exception e) {
+				logger.logException(e);
 			}
 		}
 	}
@@ -270,14 +283,14 @@ public class ChunkMapReader implements AbstractReader {
 
 	private void output(Element elem, Writer outputWriter) throws IOException{
 		outputWriter.write("<"+elem.getNodeName());
-		NamedNodeMap attrMap = elem.getAttributes();
+		final NamedNodeMap attrMap = elem.getAttributes();
 		for (int i = 0; i<attrMap.getLength(); i++){
 			outputWriter.write(" "+attrMap.item(i).getNodeName()
 					+"=\""+StringUtils.escapeXML(attrMap.item(i).getNodeValue())
 					+"\"");
 		}
 		outputWriter.write(">");
-		NodeList children = elem.getChildNodes();
+		final NodeList children = elem.getChildNodes();
 		Node child;
 		for (int j = 0; j<children.getLength(); j++){
 			child = children.item(j);
@@ -310,18 +323,18 @@ public class ChunkMapReader implements AbstractReader {
 		String classValue = null;
 		String xtrfValue = null;
 		String processValue = null;
-		String tempRole = processingRole;
+		final String tempRole = processingRole;
 		boolean prevChunkByTopic = false;
 		
 		attr = node.getAttributes();
 		
-		hrefAttr = attr.getNamedItem(Constants.ATTRIBUTE_NAME_HREF);
-		chunkAttr = attr.getNamedItem(Constants.ATTRIBUTE_NAME_CHUNK);
-		copytoAttr = attr.getNamedItem(Constants.ATTRIBUTE_NAME_COPY_TO);
-		scopeAttr = attr.getNamedItem(Constants.ATTRIBUTE_NAME_SCOPE);
-		classAttr = attr.getNamedItem(Constants.ATTRIBUTE_NAME_CLASS);
-		xtrfAttr = attr.getNamedItem(Constants.ATTRIBUTE_NAME_XTRF);
-		processAttr = attr.getNamedItem(Constants.ATTRIBUTE_NAME_PROCESSING_ROLE);
+		hrefAttr = attr.getNamedItem(ATTRIBUTE_NAME_HREF);
+		chunkAttr = attr.getNamedItem(ATTRIBUTE_NAME_CHUNK);
+		copytoAttr = attr.getNamedItem(ATTRIBUTE_NAME_COPY_TO);
+		scopeAttr = attr.getNamedItem(ATTRIBUTE_NAME_SCOPE);
+		classAttr = attr.getNamedItem(ATTRIBUTE_NAME_CLASS);
+		xtrfAttr = attr.getNamedItem(ATTRIBUTE_NAME_XTRF);
+		processAttr = attr.getNamedItem(ATTRIBUTE_NAME_PROCESSING_ROLE);
 		
 		if(hrefAttr != null){
 			hrefValue = hrefAttr.getNodeValue();
@@ -346,67 +359,69 @@ public class ChunkMapReader implements AbstractReader {
 			processingRole = processValue;
 		}
 		//This file is chunked(by-topic)
-		if (xtrfValue != null && xtrfValue.contains("generated_by_chunk")) return;
+		if (xtrfValue != null && xtrfValue.contains("generated_by_chunk")) {
+            return;
+        }
 		
 		//set chunkByTopic if there is "by-topic" or "by-document" in chunkValue
 		if(chunkValue != null && 
-				(chunkValue.contains("by-topic") || 
-						chunkValue.contains("by-document"))){
+				(chunkValue.contains(CHUNK_BY_TOPIC) || 
+						chunkValue.contains(CHUNK_BY_DOCUMENT))){
 			//a temp value to store the flag 
 			prevChunkByTopic = chunkByTopic;
 			//if there is "by-topic" then chunkByTopic should be set to true;
-			chunkByTopic = chunkValue.contains("by-topic");
+			chunkByTopic = chunkValue.contains(CHUNK_BY_TOPIC);
 		}
 		
 		if("external".equalsIgnoreCase(scopeValue) 
 				|| (hrefValue != null && !FileUtils.fileExists(FileUtils.resolveFile(filePath, hrefValue)))
-				|| (classValue.contains(Constants.ATTR_CLASS_VALUE_TOPIC_HEAD))||
+				|| (classValue.contains(ATTR_CLASS_VALUE_TOPIC_HEAD))||
 				//added by William on 2009-09-17 for chunk bug #2860199 start
 				////support topicref without href attribute
-				(classValue.contains(Constants.ATTR_CLASS_VALUE_TOPICREF) && chunkValue == null && hrefValue == null)
+				(classValue.contains(ATTR_CLASS_VALUE_TOPICREF) && chunkValue == null && hrefValue == null)
 				//added by William on 2009-09-17 for chunk bug #2860199 end
 				) {
-				//|| (Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processValue))) {
+				//|| (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processValue))) {
 			//Skip external links or non-existing href files.
 			//Skip topic head entries.
 			//Skip @processing-role=resource-only entries.
 			if(chunkValue != null && 
-					(chunkValue.contains("by-topic") || 
-							chunkValue.contains("by-document"))){
+					(chunkValue.contains(CHUNK_BY_TOPIC) || 
+							chunkValue.contains(CHUNK_BY_DOCUMENT))){
 				chunkByTopic = prevChunkByTopic;
 			}
 			processChildTopicref(node);
 		//chunk "to-content"
 		} else if(chunkValue != null &&
 				//edited on 20100818 for bug:3042978
-				chunkValue.indexOf("to-content") != -1 && (hrefAttr != null || copytoAttr != null || node.hasChildNodes())){
+				chunkValue.indexOf(CHUNK_TO_CONTENT) != -1 && (hrefAttr != null || copytoAttr != null || node.hasChildNodes())){
 			//if this is the start point of the content chunk
 			//TODO very important start point(to-content).
 			processChunk((Element)node,false, chunkByTopic);
 		}else if(chunkValue != null &&
-				chunkValue.indexOf("to-navigation")!=-1 &&
-				Constants.INDEX_TYPE_ECLIPSEHELP.equals(transtype)){
+				chunkValue.indexOf(CHUNK_TO_NAVIGATION)!=-1 &&
+				INDEX_TYPE_ECLIPSEHELP.equals(transtype)){
 			//if this is the start point of the navigation chunk
 			if(chunkValue != null && 
-					(chunkValue.contains("by-topic") || 
-							chunkValue.contains("by-document"))){
+					(chunkValue.contains(CHUNK_BY_TOPIC) || 
+							chunkValue.contains(CHUNK_BY_DOCUMENT))){
 				//restore the chunkByTopic value
 				chunkByTopic = prevChunkByTopic;
 			}
 			processChildTopicref(node);
 			//create new map file
 			//create new map's root element			
-			Node root = node.getOwnerDocument().getDocumentElement().cloneNode(false);
+			final Node root = node.getOwnerDocument().getDocumentElement().cloneNode(false);
 			//create navref element
-			Element navref = node.getOwnerDocument().createElement("navref");
-			Random random = new Random();
-			String newMapFile = "MAPCHUNK"+Math.abs(random.nextInt())+".ditamap";
+			final Element navref = node.getOwnerDocument().createElement("navref");
+			final Random random = new Random();
+			final String newMapFile = "MAPCHUNK" + random.nextInt(Integer.MAX_VALUE) + ".ditamap";
 			navref.setAttribute("mapref",newMapFile);
 			//replace node with navref
 			node.getParentNode().replaceChild(navref,node);
 			root.appendChild(node);			
 			// generate new file
-			String navmap = FileUtils.resolveFile(filePath,newMapFile);
+			final String navmap = FileUtils.resolveFile(filePath,newMapFile);
 			changeTable.put(navmap, navmap);
 			outputMapFile(navmap,(Element)root);
 		//chunk "by-topic"
@@ -414,8 +429,8 @@ public class ChunkMapReader implements AbstractReader {
 			//TODO very important start point(by-topic).
 			processChunk((Element)node,true, chunkByTopic);
 			if(chunkValue != null && 
-					(chunkValue.contains("by-topic") || 
-							chunkValue.contains("by-document"))){
+					(chunkValue.contains(CHUNK_BY_TOPIC) || 
+							chunkValue.contains(CHUNK_BY_DOCUMENT))){
 				chunkByTopic = prevChunkByTopic;
 			}
 			processChildTopicref(node);
@@ -438,12 +453,13 @@ public class ChunkMapReader implements AbstractReader {
 			// Here, we have a "by-document" chunk, simply
 			// send it to the output.
 			if ((chunkValue != null || !chunkByTopic) && currentPath != null
-					&& !Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processingRole))
-				changeTable.put(currentPath, currentPath);
+					&& !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processingRole)) {
+                changeTable.put(currentPath, currentPath);
+            }
 			
 			if (chunkValue != null && 
-					(chunkValue.contains("by-topic") || 
-							chunkValue.contains("by-document"))){
+					(chunkValue.contains(CHUNK_BY_TOPIC) || 
+							chunkValue.contains(CHUNK_BY_DOCUMENT))){
 				chunkByTopic = prevChunkByTopic;
 			}
 			
@@ -452,8 +468,8 @@ public class ChunkMapReader implements AbstractReader {
 		
 		//restore chunkByTopic if there is "by-topic" or "by-document" in chunkValue
 		if(chunkValue != null && 
-				(chunkValue.contains("by-topic") || 
-						chunkValue.contains("by-document"))){
+				(chunkValue.contains(CHUNK_BY_TOPIC) || 
+						chunkValue.contains(CHUNK_BY_DOCUMENT))){
 			chunkByTopic = prevChunkByTopic;
 		}
 		
@@ -463,19 +479,19 @@ public class ChunkMapReader implements AbstractReader {
 	
 
 	private void processChildTopicref(Node node) {
-		NodeList children = node.getChildNodes();
+		final NodeList children = node.getChildNodes();
 		for (int i = 0; i < children.getLength(); i++){
-			Node current = children.item(i);
+			final Node current = children.item(i);
 			if(current.getNodeType()==Node.ELEMENT_NODE){
-				String classValue  = ((Element)current).getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
-				String hrefValue = ((Element)current).getAttribute(Constants.ATTRIBUTE_NAME_HREF);
-				String xtrfValue = ((Element)current).getAttribute(Constants.ATTRIBUTE_NAME_XTRF);
-				if(classValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPICREF)!=-1){
-					if((!hrefValue.equals(Constants.STRING_EMPTY) &&
+				final String classValue  = ((Element)current).getAttribute(ATTRIBUTE_NAME_CLASS);
+				final String hrefValue = ((Element)current).getAttribute(ATTRIBUTE_NAME_HREF);
+				final String xtrfValue = ((Element)current).getAttribute(ATTRIBUTE_NAME_XTRF);
+				if(classValue.indexOf(ATTR_CLASS_VALUE_TOPICREF)!=-1){
+					if((hrefValue.length() != 0 &&
 							!"generated_by_chunk".equals(xtrfValue) &&
 							! FileUtils.resolveFile(filePath,hrefValue)
 							.equals(changeTable.get(FileUtils.resolveFile(filePath,hrefValue)))) || 
-							classValue.contains(Constants.ATTR_CLASS_VALUE_TOPICHEAD)
+							classValue.contains(ATTR_CLASS_VALUE_TOPICHEAD)
 						){
 						
 						//make sure hrefValue make sense and target file 
@@ -483,7 +499,7 @@ public class ChunkMapReader implements AbstractReader {
 						processTopicref(current);
 					//added by William on 2009-09-18 for chunk bug #2860199 start
 					//support topicref without href attribute
-					}else if(hrefValue.equals(Constants.STRING_EMPTY)){
+					}else if(hrefValue.length() == 0){
 						processTopicref(current);
 					}
 					//added by William on 2009-09-18 for chunk bug #2860199 end
@@ -496,36 +512,37 @@ public class ChunkMapReader implements AbstractReader {
 	private void processChunk(Element elem, boolean separate, boolean chunkByTopic) {
 		//set up ChunkTopicParser
 		try{
-			ChunkTopicParser chunkParser = new ChunkTopicParser();
+			final ChunkTopicParser chunkParser = new ChunkTopicParser();
+			chunkParser.setLogger(logger);
 			chunkParser.setup(changeTable, conflictTable, refFileSet, elem, separate, chunkByTopic, ditaext);
 			chunkParser.write(filePath);
-		}catch (Exception e) {
-			javaLogger.logException(e);
+		}catch (final Exception e) {
+			logger.logException(e);
 		}
 	}
 
 	private void updateReltable(Element elem) {
-		String hrefValue = elem.getAttribute(Constants.ATTRIBUTE_NAME_HREF);
+		final String hrefValue = elem.getAttribute(ATTRIBUTE_NAME_HREF);
 		String resulthrefValue = null;
-		if (!hrefValue.equals(Constants.STRING_EMPTY)){
+		if (hrefValue.length() != 0){
 			if(changeTable.containsKey(FileUtils.resolveFile(filePath,hrefValue))){
-				if (hrefValue.indexOf(Constants.SHARP)!=-1){
-					resulthrefValue=FileUtils.getRelativePathFromMap(filePath+Constants.SLASH+"stub.ditamap"
+				if (hrefValue.indexOf(SHARP)!=-1){
+					resulthrefValue=FileUtils.getRelativePathFromMap(filePath+UNIX_SEPARATOR+"stub.ditamap"
 							,FileUtils.resolveFile(filePath,hrefValue))
-					+ hrefValue.substring(hrefValue.indexOf(Constants.SHARP)+1);
+					+ hrefValue.substring(hrefValue.indexOf(SHARP)+1);
 				}else{
-					resulthrefValue=FileUtils.getRelativePathFromMap(filePath+Constants.SLASH+"stub.ditamap"
+					resulthrefValue=FileUtils.getRelativePathFromMap(filePath+UNIX_SEPARATOR+"stub.ditamap"
 							,FileUtils.resolveFile(filePath,hrefValue));
 				}
-				elem.setAttribute(Constants.ATTRIBUTE_NAME_HREF, resulthrefValue);
+				elem.setAttribute(ATTRIBUTE_NAME_HREF, resulthrefValue);
 			}
 		}
-		NodeList children = elem.getChildNodes();
+		final NodeList children = elem.getChildNodes();
 		for(int i = 0; i < children.getLength(); i++){
-			Node current = children.item(i);
+			final Node current = children.item(i);
 			if(current.getNodeType() == Node.ELEMENT_NODE){
-				String classValue = ((Element)current).getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
-				if (classValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPICREF)!=-1){
+				final String classValue = ((Element)current).getAttribute(ATTRIBUTE_NAME_CLASS);
+				if (classValue.indexOf(ATTR_CLASS_VALUE_TOPICREF)!=-1){
 					
 				}
 			}
@@ -536,7 +553,7 @@ public class ChunkMapReader implements AbstractReader {
 	 * @return Content
 	 */
 	public Content getContent() {
-		Content content = new ContentImpl();
+		final Content content = new ContentImpl();
 		content.setValue(changeTable);
 		return content;
 	}

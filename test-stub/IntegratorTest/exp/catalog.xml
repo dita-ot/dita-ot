@@ -1,0 +1,15 @@
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+
+  <public publicId="foo" xml:base="plugins/dummy/" uri="bar.dtd"/>
+  <system systemId="foo.dtd" xml:base="plugins/dummy/" uri="bar.dtd"/>
+  <uri name="foo" xml:base="plugins/dummy/" uri="bar.dtd"/>
+  <nextCatalog xml:base="plugins/dummy/" catalog="foo.xml"/>
+  <delegateURI uriStartString="foo" xml:base="plugins/dummy/" catalog="bar.xml"/>
+  <delegateSystem systemIdStartString="foo" xml:base="plugins/dummy/" catalog="bar.xml"/>
+  <delegatePublic publicIdStartString="foo" xml:base="plugins/dummy/" catalog="bar.xml"/>
+  <rewriteSystem systemIdStartString="foo" xml:base="plugins/dummy/" rewritePrefix="bar"/>
+  <rewriteURI uriStartString="foo" xml:base="plugins/dummy/" rewritePrefix="bar"/>
+  <rewriteSystem systemIdStartString="foo" rewritePrefix="file:///bar"/>
+  <rewriteURI uriStartString="foo" rewritePrefix="file:///bar"/>
+
+</catalog>

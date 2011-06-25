@@ -18,22 +18,18 @@ See the accompanying license.txt file for applicable licenses.
 			<copyrholder>Comtech Services, Inc.</copyrholder>
 		</copyright>
 		<critdates>
-			<created date="2005-November-01"/>
-			<revised modified="2007-April-09"/>
+			<created date="2005-11-01"/>
+			<revised modified="2007-04-09"/>
 		</critdates>
 		<metadata>
 			<keywords>
 				<keyword>installing DITA Open Toolkit</keyword>
 				<keyword>JDK</keyword>
 				<keyword>Java Development Kit</keyword>
-				<indexterm>installing on Linux<indexterm>JDK</indexterm>
-				</indexterm>
-				<indexterm>JDK (Java Development Kit)<indexterm>installing on Linux</indexterm>
-				</indexterm>
-				<indexterm>Java Development Kit (JDK)<indexterm>installing on Linux</indexterm>
-				</indexterm>
-				<indexterm>environment variables<indexterm>JAVA_HOME</indexterm>
-				</indexterm>
+				<indexterm>installing on Linux<indexterm>JDK</indexterm></indexterm>
+				<indexterm>JDK (Java Development Kit)<indexterm>installing on Linux</indexterm></indexterm>
+				<indexterm>Java Development Kit (JDK)<indexterm>installing on Linux</indexterm></indexterm>
+				<indexterm>environment variables<indexterm>JAVA_HOME</indexterm></indexterm>
 				<indexterm>JAVA_HOME environment variable</indexterm>
 			</keywords>
 			<prodinfo>
@@ -51,27 +47,26 @@ See the accompanying license.txt file for applicable licenses.
 			</step>
 			<step>
 				<cmd>From the Sun Developer Network page, scroll to find the heading 
-				<uicontrol>JDK 5.0 Update 14</uicontrol>.
-				</cmd>
+				<uicontrol>JDK 5.0 Update 14</uicontrol>.</cmd>
 			</step>
 			<step>
-				<cmd>Select <uicontrol>Download</uicontrol>.
-				</cmd>
+				<cmd>Select <uicontrol>Download</uicontrol>.</cmd>
 			</step>
 			<step>
 				<cmd>From the Sun Developer Network page, accept the license agreement 
 					and scroll to the heading "Linux Platform - Java Development Kit 5.0 Update 14".</cmd>
 			</step>
 			<step>
-				<cmd>Select and download <uicontrol>self-extracting file 
-          </uicontrol>.</cmd>
+				<cmd>Select and download <uicontrol>self-extracting file </uicontrol>.</cmd>
 			</step>
 			<step>
 				<cmd>Run and install into a Linux home directory. </cmd>
 			</step>
 			<step>
-				<cmd>Set the <varname>JAVA_HOME</varname> environment variable using <codeph>export JAVA_HOME=${java_dir}</codeph>.
-				</cmd>
+				<cmd>Set the <varname>JAVA_HOME</varname> environment variable to Java installation path.</cmd>
+			  <stepxmp>
+			    <codeblock>export JAVA_HOME=${java_dir}</codeblock>
+			  </stepxmp>
 			</step>
 		</steps>
 	</taskbody>

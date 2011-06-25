@@ -3,15 +3,22 @@
  * Sourceforge.net. See the accompanying license.txt file for 
  * applicable licenses.
  */
+
+/*
+ * (c) Copyright IBM Corp. 2008 All Rights Reserved.
+ */
 package org.dita.dost.platform;
 
-import org.dita.dost.util.Constants;
-import org.dita.dost.util.StringUtils;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.dita.dost.util.FileUtils;
+import static org.dita.dost.util.Constants.COLON;
 
 import java.io.File;
+
+import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.util.FileUtils;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
+
 
 /**
  * InsertCatalogActionRelative inserts the children of the root element of an XML document
@@ -26,62 +33,66 @@ import java.io.File;
  * @author Deborah Pickett
  *
  */
-public class InsertCatalogActionRelative extends InsertActionRelative implements
-		IAction {
+final class InsertCatalogActionRelative extends InsertAction {
+	
+	private static DITAOTJavaLogger logger = new DITAOTJavaLogger();
 
-	/**
-	 * Constructor.
-	 */
-	public InsertCatalogActionRelative() {
-		super();
-	}
-	/**
-	 * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
-	 */
-	public void startElement(String uri, String localName, String qName,
-			Attributes attributes) throws SAXException {
-		if(elemLevel != 0){
-			int attLen = attributes.getLength();
-			retBuf.append(Constants.LINE_SEPARATOR);
-			retBuf.append("<"+qName);
-			for (int i = 0; i < attLen; i++){
-				if ((("public".equals(localName) ||
-						"system".equals(localName) ||
-						"uri".equals(localName)) && "uri".equals(attributes.getQName(i)) ||
-				    ("nextCatalog".equals(localName) ||
-						"delegateURI".equals(localName) ||
-						"delegateSystem".equals(localName) ||
-						"delegatePublic".equals(localName)) && "catalog".equals(attributes.getQName(i)) ||
-				    ("rewriteSystem".equals(localName) ||
-						"rewriteURI".equals(localName)) && "rewritePrefix".equals(attributes.getQName(i)))
-						&& attributes.getValue(i).indexOf(Constants.COLON) == -1) {
-					// Rewrite URI to be local to its final resting place.
-				    File targetFile = new File(
-				    		new File(currentFile).getParentFile(),
-				    		attributes.getValue(i));
-				    String pastedURI = FileUtils.getRelativePathFromMap(
-				    		(String) paramTable.get("template"),
-				    		targetFile.toString());
-					retBuf.append(" ").append(attributes.getQName(i)).append("=\"");
-					retBuf.append(StringUtils.escapeXML(pastedURI)).append("\"");
-				}
-				else {
-					retBuf.append(" ").append(attributes.getQName(i)).append("=\"");
-					retBuf.append(StringUtils.escapeXML(attributes.getValue(i))).append("\"");
-				}
-			}
-			//Added by William on 2010-03-23 for bug:2974667 start
-			if(("public".equals(localName) ||
+	@Override
+	public void startElement(final String uri, final String localName, final String qName,
+			final Attributes attributes) throws SAXException {
+		final AttributesImpl attrBuf = new AttributesImpl();
+		
+		final int attLen = attributes.getLength();
+		for (int i = 0; i < attLen; i++){
+			String value;
+			final File targetFile = new File(new File(currentFile).getParentFile(), attributes.getValue(i));
+			int index = attributes.getIndex("xml:base");
+			if ((("public".equals(localName) ||
 					"system".equals(localName) ||
-					"uri".equals(localName))){
-				retBuf.append("/>");
+					"uri".equals(localName)) && "uri".equals(attributes.getQName(i)) ||
+			    ("nextCatalog".equals(localName) ||
+					"delegateURI".equals(localName) ||
+					"delegateSystem".equals(localName) ||
+					"delegatePublic".equals(localName)) && "catalog".equals(attributes.getQName(i)) ||
+			    ("rewriteSystem".equals(localName) ||
+					"rewriteURI".equals(localName)) && "rewritePrefix".equals(attributes.getQName(i)))
+					&& attributes.getValue(i).indexOf(COLON) == -1) {
+				// Rewrite URI to be local to its final resting place.
+			    if (index == -1){
+		        	//If there are no xml:base attributes, then we need to split
+		        	final String path = FileUtils.derivePath(FileUtils.getRelativePathFromMap(
+				    		paramTable.get(FileGenerator.PARAM_TEMPLATE),
+				    		targetFile.toString())) + "/";
+		        	final String filename = FileUtils.deriveFilename(FileUtils.getRelativePathFromMap(
+				    		paramTable.get(FileGenerator.PARAM_TEMPLATE),
+				    		targetFile.toString()));
+		        	attrBuf.addAttribute("http://www.w3.org/XML/1998/namespace", "base",
+				             "xml:base", attributes.getType(i), path);
+		        	attrBuf.addAttribute(attributes.getURI(i), attributes.getLocalName(i),
+				             attributes.getQName(i), attributes.getType(i), filename);
+		        }
+		        else {
+		        	//If there is an xml:base attribute, then we do nothing.
+		        	value = attributes.getValue(i); 
+		        	attrBuf.addAttribute(attributes.getURI(i), attributes.getLocalName(i),
+				             attributes.getQName(i), attributes.getType(i), value);
+		        }
 			}
-			//Added by William on 2010-03-23 for bug:2974667 end
-			else{
-				retBuf.append(">");
+			else if(i==index){
+				//We've found xml:base.  Need to add parent plugin directory to the original value.
+				value = FileUtils.derivePath(FileUtils.getRelativePathFromMap(
+			    		paramTable.get(FileGenerator.PARAM_TEMPLATE),
+			    		targetFile.toString())) + "/" + attributes.getValue(i);
+				attrBuf.addAttribute(attributes.getURI(i), attributes.getLocalName(i),
+			             attributes.getQName(i), attributes.getType(i), value);
 			}
-			
+		    else {
+			    value = attributes.getValue(i);
+			    attrBuf.addAttribute(attributes.getURI(i), attributes.getLocalName(i),
+			             attributes.getQName(i), attributes.getType(i), value);
+			}
 		}
-		elemLevel ++;
+
+		super.startElement(uri, localName, qName, attrBuf);
 	}
 }

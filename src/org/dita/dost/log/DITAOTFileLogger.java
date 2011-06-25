@@ -9,34 +9,34 @@
  */
 package org.dita.dost.log;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-
-import org.dita.dost.util.Constants;
 
 /**
  * Logger to a log file.
  * 
  * @author Wu, Zhi Qiang
  */
-public class DITAOTFileLogger implements DITAOTLogger {
-	private static DITAOTFileLogger logger = null;
+public final class DITAOTFileLogger implements DITAOTLogger {
+	private static DITAOTFileLogger logger;
 	
-	private File tmpLogFile = null;
+	private final File tmpLogFile;
 
-	private String logFile = null;
+	private String logFile;
 
-	private String logDir = null;
+	private String logDir;
 
-	private PrintWriter printWriter = null;
+	private final PrintWriter printWriter;
 
 	private DITAOTFileLogger() {
 		try {
 			tmpLogFile = File.createTempFile("ditaot-", ".log");
 			printWriter = new PrintWriter(new FileOutputStream(tmpLogFile));
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -45,7 +45,7 @@ public class DITAOTFileLogger implements DITAOTLogger {
 	 * Get the DITAOTFileLogger instance. Singleton.
 	 * @return DITAOTFileLogger logger
 	 */
-	public static DITAOTFileLogger getInstance() {
+	public static synchronized DITAOTFileLogger getInstance() {
 		if (logger == null) {
 			logger = new DITAOTFileLogger();
 		}
@@ -58,7 +58,7 @@ public class DITAOTFileLogger implements DITAOTLogger {
 	 * 
 	 */
 	public void closeLogger() {
-		DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+		final DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 		
 		if (logger == null) {
 			return;
@@ -68,14 +68,14 @@ public class DITAOTFileLogger implements DITAOTLogger {
 				
 		// move log file to logDir
 		if (logDir != null && logFile != null) {			
-			File log = new File(logDir, logFile);
+			final File log = new File(logDir, logFile);
 			
 			if (log.exists()) {
 				log.delete();
 			}
 			
 			if (tmpLogFile.renameTo(log)) {
-				StringBuffer buff = new StringBuffer(Constants.INT_256);
+				final StringBuffer buff = new StringBuffer(INT_256);
 				buff.append("Log file '").append(logFile);
 				buff.append("' was generated successfully in directory '");
 				buff.append(logDir).append("'.");				
@@ -106,7 +106,7 @@ public class DITAOTFileLogger implements DITAOTLogger {
 	 * 
 	 * @param filename filename
 	 */
-	public void setLogFile(String filename) {
+	public void setLogFile(final String filename) {
 		this.logFile = filename;
 	}
 
@@ -114,7 +114,7 @@ public class DITAOTFileLogger implements DITAOTLogger {
 	 * The logDir to set.
 	 * @param logdir logdir          
 	 */
-	public void setLogDir(String logdir) {
+	public void setLogDir(final String logdir) {
 		this.logDir = logdir;
 	}
 
@@ -122,7 +122,7 @@ public class DITAOTFileLogger implements DITAOTLogger {
 	 * Log the message at info level.
 	 * @param msg msg
 	 */
-	public void logInfo(String msg) {
+	public void logInfo(final String msg) {
 		logMessage(msg);
 	}
 	
@@ -130,7 +130,7 @@ public class DITAOTFileLogger implements DITAOTLogger {
 	 * Log the message at warning level.
 	 * @param msg msg
 	 */
-	public void logWarn(String msg) {
+	public void logWarn(final String msg) {
 		logMessage(msg);
 	}
 
@@ -138,7 +138,7 @@ public class DITAOTFileLogger implements DITAOTLogger {
 	 * Log the message at error level.
 	 * @param msg msg
 	 */
-	public void logError(String msg) {
+	public void logError(final String msg) {
 		logMessage(msg);
 	}
 	
@@ -146,7 +146,7 @@ public class DITAOTFileLogger implements DITAOTLogger {
 	 * Log the message at fatal level.
 	 * @param msg msg
 	 */
-	public void logFatal(String msg) {
+	public void logFatal(final String msg) {
 		logMessage(msg);
 	}
 
@@ -154,7 +154,7 @@ public class DITAOTFileLogger implements DITAOTLogger {
 	 * Log the message at debug level.
 	 * @param msg msg
 	 */
-	public void logDebug(String msg) {
+	public void logDebug(final String msg) {
 		logMessage(msg);
 	}
 
@@ -162,7 +162,7 @@ public class DITAOTFileLogger implements DITAOTLogger {
 	 * Log the exception.
 	 * @param t exception
 	 */
-	public void logException(Throwable t) {
+	public void logException(final Throwable t) {
 		logError(t.getMessage());
 		t.printStackTrace(printWriter);
 	}
@@ -171,7 +171,7 @@ public class DITAOTFileLogger implements DITAOTLogger {
 	 * Log ordinary message
 	 * @param msg
 	 */
-	private void logMessage(String msg) {
+	private void logMessage(final String msg) {
 		printWriter.println(msg);
 	}
 

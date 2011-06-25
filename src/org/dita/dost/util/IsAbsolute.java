@@ -20,7 +20,7 @@ import org.apache.tools.ant.taskdefs.condition.Condition;
  *
  * @author Wu, Zhi Qiang
  */
-public class IsAbsolute implements Condition {
+public final class IsAbsolute implements Condition {
 	private String path = null;
 	
 	/**
@@ -34,7 +34,7 @@ public class IsAbsolute implements Condition {
 	 * Set the path.
 	 * @param pth The path to set.
 	 */
-	public void setPath(String pth) {
+	public void setPath(final String pth) {
 		this.path = pth;
 	}
 	

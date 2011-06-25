@@ -13,7 +13,7 @@ package org.dita.dost.util;
  * @author William
  *
  */
-public class Version {
+public final class Version {
 	
 	private static final String fversion = "@@VERSION@@";
 	
@@ -23,7 +23,7 @@ public class Version {
 	 * main function.
 	 * @param args input arguments from command line
 	 */
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		System.out.println (fversion);
 
 	}

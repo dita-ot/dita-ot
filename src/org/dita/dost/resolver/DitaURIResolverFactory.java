@@ -1,3 +1,12 @@
+/*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
+ * (c) Copyright IBM Corp. 2010 All Rights Reserved.
+ */
 package org.dita.dost.resolver;
 
 import java.io.File;
@@ -19,7 +28,7 @@ import org.xml.sax.InputSource;
  * Usage: DitaURIResolverFactory.getURIResolver().resolve(href, base);
  * 
  */
-public class DitaURIResolverFactory {
+public final class DitaURIResolverFactory {
 	private static URIResolver resolver = null;
 	private static String path = null;
 	static {

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map title="test">
+  <topicmeta>
+    <navtitle>map navtitle</navtitle>
+    <linktext>map linktext</linktext>
+    <searchtitle>map searchtitle</searchtitle>
+    <shortdesc>map shortdesc</shortdesc>
+    <author>map author</author>
+    <source>map source</source>
+    <publisher>map publisher</publisher>
+    <copyright>
+      <copyryear year="2010"/>
+      <copyrholder>map copyrholder</copyrholder>
+    </copyright>
+    <critdates>
+      <created date="2010"/>
+      <revised modified="2010"/>
+    </critdates>
+    <permissions view="map permissins"/>
+    <metadata>
+      <audience/>
+      <category>map category</category>
+      <keywords>
+        <keyword>map keyword</keyword>
+      </keywords>
+      <prodinfo>
+        <prodname>map prodnamefoo</prodname>
+        <vrmlist>
+          <vrm version="1.0"/>
+        </vrmlist>
+      </prodinfo>
+      <othermeta name="othermeta" content="map othermeta"/>
+      <data>map data</data>
+      <data-about>
+        <data>map data</data>
+      </data-about>
+      <foreign>map foreign</foreign>
+      <unknown>map unknown</unknown>
+    </metadata>
+    <audience/>
+    <category>map category</category>
+    <keywords>
+      <keyword>map keyword</keyword>
+    </keywords>
+    <exportanchors>
+      <anchorkey keyref="map anchorkey"/>
+    </exportanchors>
+    <prodinfo>
+      <prodname>map prodnamefoo</prodname>
+      <vrmlist>
+        <vrm version="1.0"/>
+      </vrmlist>
+    </prodinfo>
+    <othermeta name="othermeta" content="map othermeta"/>
+    <resourceid id="foo"/>
+    <data>map datafoo</data>
+    <data-about>
+      <data>map datafoo</data>
+    </data-about>
+    <foreign>map foreign</foreign>
+    <unknown>map unknown</unknown>
+  </topicmeta>
+  <topicref href="a.xml"/>
+  <topicref href="b.xml">
+    <topicmeta>
+      <navtitle>topicref navtitle</navtitle>
+      <linktext>topicref linktext</linktext>
+      <searchtitle>topicref searchtitle</searchtitle>
+      <shortdesc>topicref shortdesc</shortdesc>
+      <author>topicref author</author>
+      <source>topicref source</source>
+      <publisher>topicref publisher</publisher>
+      <copyright>
+        <copyryear year="2011"/>
+        <copyrholder>topicref copyrholder</copyrholder>
+      </copyright>
+      <critdates>
+        <created date="2011"/>
+        <revised modified="2011"/>
+      </critdates>
+      <permissions view="topicref permissins"/>
+      <metadata>
+        <audience/>
+        <category>topicref category</category>
+        <keywords>
+          <keyword>topicref keyword</keyword>
+        </keywords>
+        <prodinfo>
+          <prodname>topicref prodnamefoo</prodname>
+          <vrmlist>
+            <vrm version="2.0"/>
+          </vrmlist>
+        </prodinfo>
+        <othermeta name="othermeta" content="topicref othermeta"/>
+        <data>topicref data</data>
+        <data-about>
+          <data>topicref data</data>
+        </data-about>
+        <foreign>topicref foreign</foreign>
+        <unknown>topicref unknown</unknown>
+      </metadata>
+      <audience/>
+      <category>topicref category</category>
+      <keywords>
+        <keyword>topicref keyword</keyword>
+      </keywords>
+      <exportanchors>
+        <anchorkey keyref="topicref anchorkey"/>
+      </exportanchors>
+      <prodinfo>
+        <prodname>topicref prodnamefoo</prodname>
+        <vrmlist>
+          <vrm version="2.0"/>
+        </vrmlist>
+      </prodinfo>
+      <othermeta name="othermeta" content="topicref othermeta"/>
+      <resourceid id="foo"/>
+      <data>topicref datafoo</data>
+      <data-about>
+        <data>topicref datafoo</data>
+      </data-about>
+      <foreign>topicref foreign</foreign>
+      <unknown>topicref unknown</unknown>
+    </topicmeta>
+  </topicref>
+  <topicref href="c.xml"/>
+  <topicref href="d.xml">
+    <topicmeta>
+      <navtitle>topicref navtitle</navtitle>
+      <linktext>topicref linktext</linktext>
+      <searchtitle>topicref searchtitle</searchtitle>
+      <shortdesc>topicref shortdesc</shortdesc>
+      <author>topicref author</author>
+      <source>topicref source</source>
+      <publisher>topicref publisher</publisher>
+      <copyright>
+        <copyryear year="2011"/>
+        <copyrholder>topicref copyrholder</copyrholder>
+      </copyright>
+      <critdates>
+        <created date="2011"/>
+        <revised modified="2011"/>
+      </critdates>
+      <permissions view="topicref permissins"/>
+      <metadata>
+        <audience/>
+        <category>topicref category</category>
+        <keywords>
+          <keyword>topicref keyword</keyword>
+        </keywords>
+        <prodinfo>
+          <prodname>topicref prodnamefoo</prodname>
+          <vrmlist>
+            <vrm version="2.0"/>
+          </vrmlist>
+        </prodinfo>
+        <othermeta name="othermeta" content="topicref othermeta"/>
+        <data>topicref data</data>
+        <data-about>
+          <data>topicref data</data>
+        </data-about>
+        <foreign>topicref foreign</foreign>
+        <unknown>topicref unknown</unknown>
+      </metadata>
+      <audience/>
+      <category>topicref category</category>
+      <keywords>
+        <keyword>topicref keyword</keyword>
+      </keywords>
+      <exportanchors>
+        <anchorkey keyref="topicref anchorkey"/>
+      </exportanchors>
+      <prodinfo>
+        <prodname>topicref prodnamefoo</prodname>
+        <vrmlist>
+          <vrm version="2.0"/>
+        </vrmlist>
+      </prodinfo>
+      <othermeta name="othermeta" content="topicref othermeta"/>
+      <resourceid id="foo"/>
+      <data>topicref datafoo</data>
+      <data-about>
+        <data>topicref datafoo</data>
+      </data-about>
+      <foreign>topicref foreign</foreign>
+      <unknown>topicref unknown</unknown>
+    </topicmeta>
+  </topicref>
+</map>

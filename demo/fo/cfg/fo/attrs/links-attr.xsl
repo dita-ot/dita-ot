@@ -31,7 +31,7 @@ This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
 -->
 
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="2.0">
 
     <xsl:attribute-set name="linklist">
     </xsl:attribute-set>
@@ -43,7 +43,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="related-links">
-        <xsl:attribute name="space-after.optimum">10pt</xsl:attribute>
+        <xsl:attribute name="space-after">10pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="related-links__content">
@@ -53,14 +53,14 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="related-links.ul">
 		<xsl:attribute name="provisional-distance-between-starts">5mm</xsl:attribute>
 		<xsl:attribute name="provisional-label-separation">1mm</xsl:attribute>
-		<xsl:attribute name="space-after.optimum">7pt</xsl:attribute>
-		<xsl:attribute name="space-before.optimum">7pt</xsl:attribute>
+		<xsl:attribute name="space-after">7pt</xsl:attribute>
+		<xsl:attribute name="space-before">7pt</xsl:attribute>
 		<xsl:attribute name="start-indent"><xsl:value-of select="$side-col-width"/></xsl:attribute>
 	</xsl:attribute-set>
 
     <xsl:attribute-set name="related-links.ul.li">
-		<xsl:attribute name="space-after.optimum">1.5pt</xsl:attribute>
-		<xsl:attribute name="space-before.optimum">1.5pt</xsl:attribute>
+		<xsl:attribute name="space-after">1.5pt</xsl:attribute>
+		<xsl:attribute name="space-before">1.5pt</xsl:attribute>
 	</xsl:attribute-set>
 
     <xsl:attribute-set name="related-links.ul.li__label">
@@ -83,14 +83,14 @@ See the accompanying license.txt file for applicable licenses.
 	<xsl:attribute-set name="related-links.ol">
 		<xsl:attribute name="provisional-distance-between-starts">5mm</xsl:attribute>
 		<xsl:attribute name="provisional-label-separation">1mm</xsl:attribute>
-		<xsl:attribute name="space-after.optimum">7pt</xsl:attribute>
-		<xsl:attribute name="space-before.optimum">7pt</xsl:attribute>
+		<xsl:attribute name="space-after">7pt</xsl:attribute>
+		<xsl:attribute name="space-before">7pt</xsl:attribute>
 		<xsl:attribute name="start-indent"><xsl:value-of select="$side-col-width"/></xsl:attribute>
 	</xsl:attribute-set>
 
     <xsl:attribute-set name="related-links.ol.li">
-		<xsl:attribute name="space-after.optimum">1.5pt</xsl:attribute>
-		<xsl:attribute name="space-before.optimum">1.5pt</xsl:attribute>
+		<xsl:attribute name="space-after">1.5pt</xsl:attribute>
+		<xsl:attribute name="space-before">1.5pt</xsl:attribute>
 	</xsl:attribute-set>
 
     <xsl:attribute-set name="related-links.ol.li__label">
@@ -134,8 +134,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="link">
-        <xsl:attribute name="space-after.optimum">2pt</xsl:attribute>
-        <xsl:attribute name="space-before.optimum">2pt</xsl:attribute>
+        <xsl:attribute name="space-after">2pt</xsl:attribute>
+        <xsl:attribute name="space-before">2pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="link__content">
@@ -147,7 +147,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="link__shortdesc">
         <xsl:attribute name="margin-left">15pt</xsl:attribute>
         <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
-        <xsl:attribute name="space-after.optimum">5pt</xsl:attribute>
+        <xsl:attribute name="space-after">5pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="linkpool">

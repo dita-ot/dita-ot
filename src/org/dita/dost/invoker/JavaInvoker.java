@@ -24,7 +24,7 @@ import org.dita.dost.pipeline.PipelineHashIO;
  * @author Lian, Li
  * 
  */
-public class JavaInvoker {
+public final class JavaInvoker {
 	private static DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 	
 	/**
@@ -49,44 +49,5 @@ public class JavaInvoker {
      */
     private JavaInvoker() {
     }
-    
-    
-	/**
-	 * The main flow of the process
-	 * 
-	 * @param args
-	 * 
-	 */
-	public static void main(String[] args) {
-		AbstractFacade facade = new PipelineFacade();
-		PipelineHashIO pipelineInput = new PipelineHashIO();
-		//pipelineInput.setAttribute("inputmap", "testcase" + File.separator
-		//        + "dwDT\\langref\\ditaref-book.ditamap");
-        
-		pipelineInput.setAttribute("inputmap","E:/DITA-OT-TMP/temp/hierarchy.ditamap");
-		pipelineInput.setAttribute("basedir", "E:/DITA-OT-TMP");
-		pipelineInput.setAttribute("inputdir", "E:/DITA-OT-TMP/test/testindextarget");
-		pipelineInput.setAttribute("output", "E:/DITA-OT-TMP/temp/out");
-		pipelineInput.setAttribute("tempDir", "E:/DITA-OT-TMP/temp");
-		pipelineInput.setAttribute("ditadir", "E:/DITA-OT-TMP");
-		pipelineInput.setAttribute("ditaext", ".xml");
-		pipelineInput.setAttribute("indextype", "eclipsehelp");
-		pipelineInput.setAttribute("encoding", "en-US");
-		pipelineInput.setAttribute("targetext", ".html");
-		try {
-		
-			//pipelineInput.setAttribute("ditaval", "d:\\temp\\DITA-OT\\test\\02.ditaval");
-			//removeFiles("C:/testcase/tc5/temp");
-			pipelineInput.setAttribute("ditalist", "temp" + File.separator
-					+ "dita.list");
-			pipelineInput.setAttribute("maplinks", "temp\\maplinks.unordered");
-			//facade.execute("GenMapAndTopicList", pipelineInput);
-			//facade.execute("DebugAndFilter", pipelineInput);
-			facade.execute("IndexTermExtract", pipelineInput);
-			//facade.execute("MoveMeta", pipelineInput);
-		} catch (DITAOTException e) {
-			// TODO Auto-generated catch block
-			javaLogger.logException(e);
-		}
-	}
+
 }

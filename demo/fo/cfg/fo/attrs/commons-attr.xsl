@@ -34,7 +34,7 @@ See the accompanying license.txt file for applicable licenses.
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:rx="http://www.renderx.com/XSL/Extensions"
-    version="1.0">
+    version="2.0">
 
     <xsl:attribute-set name="tm">
         <xsl:attribute name="border-left-width">0pt</xsl:attribute>
@@ -78,7 +78,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="topic.topic.title">
         <xsl:attribute name="font-family">Sans</xsl:attribute>
 		<xsl:attribute name="border-bottom">1pt solid black</xsl:attribute>
-        <xsl:attribute name="space-before.optimum">15pt</xsl:attribute>
+        <xsl:attribute name="space-before">15pt</xsl:attribute>
         <xsl:attribute name="margin-top">1pc</xsl:attribute>
         <xsl:attribute name="margin-bottom">5pt</xsl:attribute>
         <xsl:attribute name="font-size">14pt</xsl:attribute>
@@ -141,7 +141,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="section.title">
         <xsl:attribute name="font-family">Sans</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
-        <xsl:attribute name="space-before.optimum">15pt</xsl:attribute>
+        <xsl:attribute name="space-before">15pt</xsl:attribute>
         <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
     </xsl:attribute-set>
 
@@ -149,7 +149,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="font-family">Sans</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
         <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
-        <xsl:attribute name="space-after.optimum">5pt</xsl:attribute>
+        <xsl:attribute name="space-after">5pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="fig">
@@ -159,8 +159,8 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="font-family">Sans</xsl:attribute>
         <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
-        <xsl:attribute name="space-before.optimum">5pt</xsl:attribute>
-        <xsl:attribute name="space-after.optimum">10pt</xsl:attribute>
+        <xsl:attribute name="space-before">5pt</xsl:attribute>
+        <xsl:attribute name="space-after">10pt</xsl:attribute>
         <xsl:attribute name="keep-with-previous.within-page">always</xsl:attribute>
     </xsl:attribute-set>
 
@@ -242,7 +242,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="text-indent">0em</xsl:attribute>
         <xsl:attribute name="space-before">0.6em</xsl:attribute>
         <xsl:attribute name="space-after">0.6em</xsl:attribute>
-        <xsl:attribute name="space-after.optimum">3pt</xsl:attribute>
+        <xsl:attribute name="space-after">3pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="lq">
@@ -308,6 +308,15 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="space-before">0.6em</xsl:attribute>
         <xsl:attribute name="space-after">0.6em</xsl:attribute>
     </xsl:attribute-set>
+  
+    <xsl:attribute-set name="note__image__column">
+        <xsl:attribute name="column-number">1</xsl:attribute>
+        <xsl:attribute name="column-width">32pt</xsl:attribute>
+    </xsl:attribute-set>
+  
+    <xsl:attribute-set name="note__text__column">
+      <xsl:attribute name="column-number">2</xsl:attribute>
+    </xsl:attribute-set>  
 
     <xsl:attribute-set name="note__image__entry">
         <xsl:attribute name="padding-right">5pt</xsl:attribute>
@@ -635,7 +644,6 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="__fo__root">
         <xsl:attribute name="font-family">Serif</xsl:attribute>
         <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
-        <xsl:attribute name="rx:link-back">true</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__force__page__count">

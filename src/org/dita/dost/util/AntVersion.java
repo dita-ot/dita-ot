@@ -18,33 +18,20 @@ import org.apache.tools.ant.Task;
  * @author William
  *
  */
-public class AntVersion extends Task{
-	
-	//private VersionUtil versionUtil = new VersionUtil();
+public final class AntVersion extends Task{
 
-	/**
-	 * main function.
-	 * @param args input arguments from command line
-	 */
-	public static void main(String[] args) {
-		//System.out.println (fversion);
-
-	}
-	
 	/**
 	 * Task execute point.
 	 * @throws BuildException exception
 	 * @see org.apache.tools.ant.taskdefs.Echo#execute()
 	 */
 	public void execute() throws BuildException {
-		VersionUtil versionUtil = new VersionUtil();
+		final VersionUtil versionUtil = new VersionUtil();
 		
-		String otversion = versionUtil.getOtversion();
-		String milestone = versionUtil.getMilestone();
+		final String otversion = versionUtil.getOtversion();
 		
 		//set current OT version into antscript REQ ID:3079610
 		this.setActiveProjectProperty("otversion", otversion);
-		this.setActiveProjectProperty("milestone", milestone);
 		//logger.logInfo(message);
 	}
 	
@@ -52,8 +39,8 @@ public class AntVersion extends Task{
      * Sets property in active ant project with name specified inpropertyName,
      * and value specified in propertyValue parameter
      */
-    private void setActiveProjectProperty(String propertyName, String propertyValue) {
-        Project activeProject = getProject();
+    private void setActiveProjectProperty(final String propertyName, final String propertyValue) {
+        final Project activeProject = getProject();
         if (activeProject != null) {
             activeProject.setProperty(propertyName, propertyValue);
         }

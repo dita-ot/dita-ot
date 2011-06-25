@@ -18,7 +18,7 @@ import java.util.Random;
  * @author Zhang, Yuan Peng
  *
  */
-public class RandomUtils {
+public final class RandomUtils {
 	/**
 	 * Default Constructor
 	 *
@@ -32,7 +32,7 @@ public class RandomUtils {
 	 * 				Long random integer generated.
 	 */
 	public static long getRandomNum(){
-		Random generator = new Random();
+		final Random generator = new Random();
 		return generator.nextLong();
 	}
 }

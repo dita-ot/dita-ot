@@ -1,3 +1,12 @@
+/*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
+ * (c) Copyright IBM Corp. 2010 All Rights Reserved.
+ */
 package org.dita.dost.resolver;
 
 import java.io.File;
@@ -9,7 +18,7 @@ import org.apache.tools.ant.Task;
  * URIResolverConfigTask to setup DitaURIResolverFactory.
  * @author Alan
  */
-public class URIResolverConfigTask extends Task {
+public final class URIResolverConfigTask extends Task {
 	private String basedir = null;
 	private String tempdir = null;
 	/**

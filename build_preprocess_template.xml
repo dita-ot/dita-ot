@@ -47,7 +47,17 @@
     unless="preprocess.gen-list-without-flagging.skip">
     <pipeline message="Generate list." module="GenMapAndTopicList"
       basedir="${basedir}" inputmap="${args.input}"
-      tempdir="${dita.temp.dir}" extparam="ditadir=${dita.dir};validate=${validate};generatecopyouter=${generate.copy.outer};outercontrol=${outer.control};onlytopicinmap=${onlytopic.in.map};outputdir=${output.dir};transtype=${transtype};gramcache=${args.grammar.cache};setsystemid=${args.xml.systemid.set}" />
+      tempdir="${dita.temp.dir}">
+      <param name="ditadir" location="${dita.dir}"/>
+      <param name="validate" value="${validate}"/>
+      <param name="generatecopyouter" value="${generate.copy.outer}"/>
+      <param name="outercontrol" value="${outer.control}"/>
+      <param name="onlytopicinmap" value="${onlytopic.in.map}"/>
+      <param name="outputdir" location="${output.dir}"/>
+      <param name="transtype" value="${transtype}"/>
+      <param name="gramcache" value="${args.grammar.cache}"/>
+      <param name="setsystemid" value="${args.xml.systemid.set}"/>
+    </pipeline>
   </target>
 
   <target name="gen-list-with-flagging"
@@ -55,8 +65,18 @@
     unless="preprocess.gen-list-with-flagging.skip">
     <pipeline message="Generate list." module="GenMapAndTopicList"
       basedir="${basedir}" inputmap="${args.input}"
-      tempdir="${dita.temp.dir}"
-      extparam="ditadir=${dita.dir};ditaval=${dita.input.valfile};validate=${validate};generatecopyouter=${generate.copy.outer};outercontrol=${outer.control};onlytopicinmap=${onlytopic.in.map};outputdir=${output.dir};transtype=${transtype};gramcache=${args.grammar.cache};setsystemid=${args.xml.systemid.set}" />
+      tempdir="${dita.temp.dir}">
+      <param name="ditadir" location="${dita.dir}"/>
+      <param name="ditaval" value="${dita.input.valfile}"/>
+      <param name="validate" value="${validate}"/>
+      <param name="generatecopyouter" value="${generate.copy.outer}"/>
+      <param name="outercontrol" value="${outer.control}"/>
+      <param name="onlytopicinmap" value="${onlytopic.in.map}"/>
+      <param name="outputdir" location="${output.dir}"/>
+      <param name="transtype" value="${transtype}"/>
+      <param name="gramcache" value="${args.grammar.cache}"/>
+      <param name="setsystemid" value="${args.xml.systemid.set}"/>
+    </pipeline>
   </target>
 
   <target name="gen-list-flag-check">
@@ -124,8 +144,13 @@
     unless="preprocess.debug.skip"
     description="Debug input files">
     <pipeline message="Debug and filtering." module="DebugAndFilter"
-      basedir="${basedir}" tempdir="${dita.temp.dir}"
-      extparam="ditaext=${dita.extname};ditadir=${dita.dir};validate=${validate};transtype=${transtype};setsystemid=${args.xml.systemid.set}"/>
+      basedir="${basedir}" tempdir="${dita.temp.dir}">
+      <param name="ditaext" value="${dita.extname}"/>
+      <param name="ditadir" location="${dita.dir}"/>
+      <param name="validate" value="${validate}"/>
+      <param name="transtype" value="${transtype}"/>
+      <param name="setsystemid" value="${args.xml.systemid.set}"/>
+    </pipeline>
   </target>
 
   <target name="debug-and-filter"
@@ -133,8 +158,14 @@
     unless="preprocess.debug-and-filter.skip"
     description="Debug and filter input files">
     <pipeline message="Debug and filtering." module="DebugAndFilter"
-      basedir="${basedir}" tempdir="${dita.temp.dir}"
-      extparam="ditaval=${dita.input.valfile};ditaext=${dita.extname};ditadir=${dita.dir};validate=${validate};transtype=${transtype};setsystemid=${args.xml.systemid.set}" />
+      basedir="${basedir}" tempdir="${dita.temp.dir}">
+      <param name="ditaval" value="${dita.input.valfile}"/>
+      <param name="ditaext" value="${dita.extname}"/>
+      <param name="ditadir" location="${dita.dir}"/>
+      <param name="validate" value="${validate}"/>
+      <param name="transtype" value="${transtype}"/>
+      <param name="setsystemid" value="${args.xml.systemid.set}"/>
+    </pipeline>
   </target>
 
   <target name="debug-filter-flag-check">
@@ -299,7 +330,9 @@
     unless="preprocess.keyref.skip"
     description="Resolve keyref">
     <pipeline message="Resolve keyref." module="Keyref"
-      basedir="${basedir}" tempdir="${dita.temp.dir}" extparam="ditaext=${dita.extname}"/>     
+      basedir="${basedir}" tempdir="${dita.temp.dir}">
+      <param name="ditaext" value="${dita.extname}"/>
+    </pipeline>
   </target>
   
   <target name="keyref-check">
@@ -355,8 +388,10 @@
     description="Process chunks">
     <pipeline message="Process chunks." module="Chunk"
       basedir="${basedir}" inputmap="${user.input.file}"
-      tempdir="${dita.temp.dir}" 
-      extparam="ditaext=${dita.ext};transtype=${transtype}"/>
+      tempdir="${dita.temp.dir}">
+      <param name="ditaext" value="${dita.ext}"/>
+      <param name="transtype" value="${transtype}"/>
+    </pipeline>
   	
   	<xmlpropertyreader file="${dita.temp.dir}${file.separator}dita.xml.properties"/>
   	<condition property="noTopic">
@@ -412,8 +447,9 @@
     unless="preprocess.move-links.skip"
     description="Move the related link information to topics">
     <pipeline message="Move links." module="MoveLinks"
-      extparam="maplinks=${maplink.workdir}${file.separator}maplinks.unordered"
-      inputmap="${user.input.file}" tempdir="${dita.temp.dir}" />
+      inputmap="${user.input.file}" tempdir="${dita.temp.dir}">
+      <param name="maplinks" location="${maplink.workdir}${file.separator}maplinks.unordered"/>
+    </pipeline>
   </target>
 
   <target name="move-links-check">

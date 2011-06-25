@@ -9,8 +9,11 @@
  */
 package org.dita.dost.writer;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -22,10 +25,8 @@ import java.util.Properties;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.index.IndexTerm;
 import org.dita.dost.index.IndexTermTarget;
-import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
-import org.dita.dost.util.Constants;
 
 /**
  * This class extends AbstractWriter, used to output index term 
@@ -35,16 +36,14 @@ import org.dita.dost.util.Constants;
  *  
  *  @version 1.0 2006-10-17
  */
-public class EclipseIndexWriter extends AbstractExtendDitaWriter implements AbstractWriter, IDitaTranstypeIndexWriter {
+public final class EclipseIndexWriter extends AbstractExtendDitaWriter implements AbstractWriter, IDitaTranstypeIndexWriter {
 	
 	/** List of indexterms */
-	private List termList = null;
+	private List<IndexTerm> termList = null;
 	
 	private String filepath = null;
-	
-	private DITAOTJavaLogger javaLogger = null;
-	
-	private String targetExt = Constants.FILE_EXTENSION_HTML;
+		
+	private String targetExt = FILE_EXTENSION_HTML;
 	
 	/** 
      * Boolean to indicate when we are processing indexsee and child elements
@@ -52,23 +51,15 @@ public class EclipseIndexWriter extends AbstractExtendDitaWriter implements Abst
 	private boolean inIndexsee = false;
 	
 	/** List of index terms used to search for see references. */ 
-	private List termCloneList = null;
-	
-	
-	/**
-	 * Default constructor.
-	 */
-	public EclipseIndexWriter() {
-		javaLogger = new DITAOTJavaLogger();
-	}
-	
+	private List<IndexTerm> termCloneList = null;
+		
 	/**
 	 * Set the content for output.
      * 
 	 * @param content The content to output
 	 */
 	public void setContent(Content content) {
-		termList = (List) content.getCollection();
+		termList = (List<IndexTerm>) content.getCollection();
 	}
 	
 	/**
@@ -103,10 +94,10 @@ public class EclipseIndexWriter extends AbstractExtendDitaWriter implements Abst
 		boolean indexsee = false;
 		
 		//RFE 2987769 Eclipse index-see
-		if (((AbstractExtendDitaWriter)this).getPipelineHashIO() != null){
+		if (this.getPipelineHashIO() != null){
 			
-        	indexsee = new Boolean(((AbstractExtendDitaWriter)this).getPipelineHashIO().getAttribute("eclipse.indexsee")).booleanValue();
-        	targetExt = ((AbstractExtendDitaWriter)this).getPipelineHashIO().getAttribute(Constants.ANT_INVOKER_EXT_PARAM_TARGETEXT);
+        	indexsee = Boolean.valueOf(this.getPipelineHashIO().getAttribute("eclipse.indexsee"));
+        	targetExt = this.getPipelineHashIO().getAttribute(ANT_INVOKER_EXT_PARAM_TARGETEXT);
         	
         }
 		
@@ -139,13 +130,23 @@ public class EclipseIndexWriter extends AbstractExtendDitaWriter implements Abst
 	/**
 	 * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
 	 */
-	public void write(String filename) throws DITAOTException {			
+	public void write(String filename) throws DITAOTException {
+		OutputStream out = null;
 		try {
-			write(new FileOutputStream(filename));
+			out = new FileOutputStream(filename);
+			write(out);
 		} catch (Exception e) {			
-			javaLogger.logError(e.getMessage());
+			logger.logError(e.getMessage());
 			e.printStackTrace(); 
 			throw new DITAOTException(e);
+		} finally {
+			if (out != null) {
+				try {
+	                out.close();
+                } catch (IOException e) {
+                	logger.logException(e);
+                }
+			}
 		}
 	}
 	
@@ -160,7 +161,7 @@ public class EclipseIndexWriter extends AbstractExtendDitaWriter implements Abst
 	 */
     private void outputIndexTerm(IndexTerm term, PrintWriter printWriter, boolean indexsee) {
         
-    	List subTerms = term.getSubTerms();
+    	List<IndexTerm> subTerms = term.getSubTerms();
         int subTermNum = subTerms.size();
         
         outputIndexTermStartElement (term, printWriter, indexsee);
@@ -190,18 +191,18 @@ public class EclipseIndexWriter extends AbstractExtendDitaWriter implements Abst
         int fileExtIndex;
         int index;
     	
-    	index = aFileName.indexOf(Constants.SHARP);
+    	index = aFileName.indexOf(SHARP);
 		
-    	if (aFileName.startsWith(Constants.SHARP)){
+    	if (aFileName.startsWith(SHARP)){
     		return aFileName;
     	} else if (index != -1){
     		fileName = aFileName.substring(0,index); 
-    		fileExtIndex = fileName.lastIndexOf(Constants.DOT);
+    		fileExtIndex = fileName.lastIndexOf(DOT);
     		return (fileExtIndex != -1)
     			? fileName.substring(0, fileExtIndex) + targetExt + aFileName.substring(index)
     			: aFileName;
     	} else {
-    		fileExtIndex = aFileName.lastIndexOf(Constants.DOT);
+    		fileExtIndex = aFileName.lastIndexOf(DOT);
     		return (fileExtIndex != -1)
     			? (aFileName.substring(0, fileExtIndex) + targetExt) 
     			: aFileName;
@@ -237,7 +238,7 @@ public class EclipseIndexWriter extends AbstractExtendDitaWriter implements Abst
 	 */
 	private void outputIndexEntry(IndexTerm term, PrintWriter printWriter) {
 
-		List targets = term.getTargetList();
+		List<IndexTermTarget> targets = term.getTargetList();
 		int targetNum = targets.size();
 		
 		boolean foundIndexTerm = false;
@@ -343,7 +344,7 @@ public class EclipseIndexWriter extends AbstractExtendDitaWriter implements Abst
 			if (!foundIndexTerm && foundIndexsee && indexSeeRefTerm != null && !indexSeeRefTerm.equals("***")){
 				Properties prop=new Properties();
 				prop.put("%1", indexSeeRefTerm.trim());
-				javaLogger.logWarn(MessageUtils.getMessage("DOTJ050W", prop).toString());
+				logger.logWarn(MessageUtils.getMessage("DOTJ050W", prop).toString());
 				
 			}
 		}
@@ -360,7 +361,7 @@ public class EclipseIndexWriter extends AbstractExtendDitaWriter implements Abst
 
 	private void outputIndexEntryEclipseIndexsee(IndexTerm term,
 			PrintWriter printWriter) {
-		List targets = term.getTargetList();
+		List<IndexTermTarget> targets = term.getTargetList();
 		int targetNum = targets.size();
 
 		// Index-see and index-see-also terms should also generate links to its
@@ -368,7 +369,7 @@ public class EclipseIndexWriter extends AbstractExtendDitaWriter implements Abst
 		// Otherwise, the term won't be displayed in the index tab.
 		if (targets != null && !targets.isEmpty()) {
 			for (int i = 0; i < targetNum; i++) {
-				IndexTermTarget target = (IndexTermTarget) targets.get(i);
+				IndexTermTarget target = targets.get(i);
 				String targetUri = target.getTargetURI();
 				String targetName = target.getTargetName();
 				if (targetUri == null) {
@@ -404,13 +405,13 @@ public class EclipseIndexWriter extends AbstractExtendDitaWriter implements Abst
 	 * @return List The deep cloned list 
 	 */
 	
-	private List cloneIndextermList (List termList){
-		 List termListClone = new ArrayList (termList.size());
+	private List<IndexTerm> cloneIndextermList (List<IndexTerm> termList){
+		 List<IndexTerm> termListClone = new ArrayList<IndexTerm>(termList.size());
 	        
 	        
 	     if (termList != null && !termList.isEmpty()){
 		    for (int i = 0; i < termList.size(); i++) {
-		     	termListClone.add((IndexTerm) termList.get(i));
+		     	termListClone.add(termList.get(i));
 	         }
 	     }
 	    return termListClone;

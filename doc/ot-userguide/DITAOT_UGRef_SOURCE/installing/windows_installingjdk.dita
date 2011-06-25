@@ -19,8 +19,8 @@ See the accompanying license.txt file for applicable licenses.
 			<copyrholder>Comtech Services, Inc.</copyrholder>
 		</copyright>
 		<critdates>
-			<created date="2005-November-01"/>
-			<revised modified="2007-December-02"/>
+			<created date="2005-11-01"/>
+			<revised modified="2007-12-02"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -32,7 +32,7 @@ See the accompanying license.txt file for applicable licenses.
 				<indexterm>JDK (Java Development Kit)<indexterm>installing on Windows</indexterm>
 				</indexterm>
 				<indexterm>Java Development Kit (JDK)<indexterm>installing on Windows</indexterm>
-				</indexterm>
+        </indexterm>
 				<indexterm>environment variables<indexterm>JAVA_HOME</indexterm>
 				</indexterm>
 				<indexterm>JAVA_HOME environment variable</indexterm>
@@ -48,34 +48,21 @@ See the accompanying license.txt file for applicable licenses.
 	<taskbody>
 		<steps>
 			<step>
-				<cmd>For the Sun version of the JDK, enter  the URL <xref format="html" href="http://java.sun.com/javase/downloads/index.jsp" scope="external"/>.</cmd>
+			  <cmd>For the Sun version of the JDK, enter  the URL <xref format="html" href="http://www.java.com/en/download/manual.jsp#win" scope="external"
+			    >http://www.java.com/en/download/manual.jsp</xref>.</cmd>
 			</step>
 			<step>
-				<cmd>From the Sun Developer Network page, scroll to find the heading 
-          <uicontrol>JDK 6 Update 3</uicontrol>.</cmd>
+			  <cmd>Select and download <uicontrol>Windows 7, XP Online </uicontrol>.</cmd>
 			</step>
 			<step>
-				<cmd>Select <uicontrol>Download JDK 6</uicontrol>.</cmd>
+				<cmd>Save and install the <filepath>.exe</filepath> file.</cmd>
 			</step>
 			<step>
-				<cmd>From the Sun Developer Network page, accept the license agreement 
-          and scroll to the heading "Windows Platform - Java(TM) 2 SDK".</cmd>
-			</step>
-			<step>
-				<cmd>Select and download <uicontrol>Windows Installation, 
-          Multi-language</uicontrol>.</cmd>
-			</step>
-			<step>
-				<cmd>Save and install the <filepath>.exe</filepath> file.
-				</cmd>
-			</step>
-			
-			<step>
-				<cmd>Set the <varname>JAVA_HOME</varname> environment variable to <codeph>C:\Program Files\Java\jdk1.6.0_03</codeph>.</cmd>
+				<cmd>Set the <varname>JAVA_HOME</varname> system variable to Java installation path.</cmd>
 			</step>
 		</steps>
 		<postreq>
-		<note>For the IBM version of the JDK, enter <xref href="http://www.ibm.com/developerworks/java/jdk" format="html" scope="external"/>.
+		  <note>For the IBM version of the JDK, enter <xref href="http://www.ibm.com/developerworks/java/jdk" format="html" scope="external"/>.
 		</note>
 		</postreq>
 	</taskbody>
