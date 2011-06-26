@@ -37,7 +37,11 @@ public final class IntegratorTask extends Task {
 	    logger.setTarget(getOwningTarget());
 	    logger.setTask(this);
 	    adaptee.setLogger(logger);
-		adaptee.execute();
+	    try {
+	        adaptee.execute();
+	    } catch (final Exception e) {
+	        throw new BuildException("Integration failed: " + e.getMessage());
+	    }
 	}
 
 	/**
@@ -88,4 +92,12 @@ public final class IntegratorTask extends Task {
 		adaptee.setProperties(propertiesFile);
 	}
 
+	/**
+	 * Setter for strict/lax mode.
+	 * @param strict {@code true} for strict mode, {@code false} for lax mode
+	 */
+	public void setStrict(final boolean strict) {
+	    adaptee.setStrict(strict);
+	}
+	
 }
