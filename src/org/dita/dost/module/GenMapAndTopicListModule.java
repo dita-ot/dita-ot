@@ -34,7 +34,6 @@ import java.util.Map.Entry;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTFileLogger;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
@@ -194,8 +193,6 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
     private final Map<String, String> exKeyDefMap;
     // Added by William on 2010-06-09 for bug:3013079 end
 
-    private final DITAOTFileLogger fileLogger = DITAOTFileLogger.getInstance();
-
     private final String moduleStartMsg = "GenMapAndTopicListModule.execute(): Starting...";
 
     private final String moduleEndMsg = "GenMapAndTopicListModule.execute(): Execution time: ";
@@ -262,7 +259,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
         final Date startTime = TimingUtils.getNowTime();
 
         try {
-            fileLogger.logInfo(moduleStartMsg);
+            logger.logInfo(moduleStartMsg);
             parseInputParameters(input);
 
             // set grammar pool flag
@@ -309,7 +306,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
             throw new DITAOTException(e.getMessage(), e);
         } finally {
 
-            fileLogger.logInfo(moduleEndMsg + TimingUtils.reportElapsedTime(startTime));
+            logger.logInfo(moduleEndMsg + TimingUtils.reportElapsedTime(startTime));
 
         }
 
@@ -418,9 +415,6 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
     }
 
     private void processFile(String currentFile) throws DITAOTException {
-        final String logMsg = "GenMapAndTopicListModule.processFile(): Processing file " + currentFile + "...";
-        fileLogger.logInfo(logMsg);
-
         File fileToParse;
         final File file = new File(currentFile);
         if (file.isAbsolute()) {
@@ -429,6 +423,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
         } else {
             fileToParse = new File(baseInputDir, currentFile);
         }
+        logger.logInfo("Processing " + fileToParse.getAbsolutePath());
         String msg = null;
         final Properties params = new Properties();
         params.put("%1", currentFile);
@@ -463,7 +458,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
             final Exception inner = sax.getException();
             if (inner != null && inner instanceof DITAOTException) {// second
                                                                     // level
-                System.out.println(inner.getMessage());
+                logger.logInfo(inner.getMessage());
                 throw (DITAOTException) inner;
             }
             if (currentFile.equals(inputFile)) {
@@ -1038,8 +1033,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
             try {
                 export.write(result.toString());
             } catch (final IOException e) {
-
-                e.printStackTrace();
+                logger.logException(e);
             }
         }
         // added by Willam on 2009-07-17 for req #12014 end
@@ -1276,9 +1270,9 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
             bufferedWriter.flush();
             bufferedWriter.close();
         } catch (final FileNotFoundException e) {
-            e.printStackTrace();
+            logger.logException(e);
         } catch (final IOException e) {
-            e.printStackTrace();
+            logger.logException(e);
         } finally {
             if (bufferedWriter != null) {
                 try {

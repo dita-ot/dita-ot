@@ -38,7 +38,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTFileLogger;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
@@ -167,7 +166,6 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 	private boolean setSystemid = true;
 	//Added on 2010-08-24 for bug:3086552 end
 	
-	private final DITAOTFileLogger fileLogger = DITAOTFileLogger.getInstance();
 	/**
 	 * Default Construtor.
 	 *
@@ -189,7 +187,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
         }
     	final Date executeStartTime = TimingUtils.getNowTime();
     	final String msg = "DebugAndFilterModule.execute(): Starting...";
-    	fileLogger.logInfo(msg);
+    	logger.logInfo(msg);
     	
         try {
 			final String baseDir = input.getAttribute(ANT_INVOKER_PARAM_BASEDIR);
@@ -278,8 +276,8 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 			
 			while (!parseList.isEmpty()) {
 				final String filename = parseList.removeLast();
-				final String message = "DebugAndFilterModule.execute(): Handling file " + filename + "...";
-				fileLogger.logInfo(message);
+                final File currentFile = new File(inputDir, filename);
+				logger.logInfo("Processing " + currentFile.getAbsolutePath());
 				
 				final Set<String> schemaSet = dic.get(filename);
 				filterReader.reset();
@@ -309,7 +307,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 				
 				if (!new File(inputDir, filename).exists()) {
 					// This is an copy-to target file, ignore it
-					System.out.println("   Ignoring a copy-to file.");
+				    logger.logInfo("Ignoring a copy-to file " + filename);
 					continue;
 				}
 				
@@ -341,10 +339,10 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             }
 			performCopytoTask(tempDir, listReader.getCopytoMap());
 		} catch (final Exception e) {
-			System.err.println("Exception doing debug and filter module processing: ");
-			e.printStackTrace();
+		    // XXX This should throw an exception, not log it
+			logger.logException(new Exception("Exception doing debug and filter module processing: " + e.getMessage(), e));
 		} finally {
-			fileLogger.logInfo("Execution time: " + TimingUtils.reportElapsedTime(executeStartTime));
+			logger.logInfo("Execution time: " + TimingUtils.reportElapsedTime(executeStartTime));
 		}
 
         return null;
