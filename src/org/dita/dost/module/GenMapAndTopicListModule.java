@@ -722,18 +722,9 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
             imageSet.add(file);
         }
 
-        if (FileUtils.isHTMLFile(lcasefn)) {
+        if (FileUtils.isHTMLFile(lcasefn) || FileUtils.isResourceFile(lcasefn)) {
             htmlSet.add(file);
         }
-
-        if (FileUtils.isPDFFile(lcasefn)) {
-            htmlSet.add(file);
-        }
-        // Added by William on 2009-10-10 for resources bug:2873560 start
-        if (FileUtils.isSWFile(lcasefn)) {
-            htmlSet.add(file);
-        }
-        // Added by William on 2009-10-10 for resources bug:2873560 end
     }
 
     /**

@@ -30,6 +30,7 @@ import org.dita.dost.log.DITAOTJavaLogger;
  * @author Wu, Zhi Qiang
  */
 public final class FileUtils {
+
     /**
      * Private default constructor to make class uninstantiable.
      */
@@ -39,13 +40,47 @@ public final class FileUtils {
     private static DITAOTJavaLogger logger = new DITAOTJavaLogger();
     
     /**
-     * Supported image extensions.
+     * Supported DITA topic extensions. File extensions contain a leading dot.
+     */
+    private final static List<String> supportedTopicExtensions = new ArrayList<String>();
+    static {
+        final String extensions = Configuration.configuration.get(CONF_SUPPORTED_TOPIC_EXTENSIONS);
+        if (extensions != null && extensions.length()>0) {
+            for (final String ext: extensions.split(CONF_LIST_SEPARATOR)) {
+                supportedTopicExtensions.add(ext);
+            }
+        } else {
+            logger.logError("Failed to read supported DITA topic extensions from configuration, using defaults.");
+            supportedTopicExtensions.add(FILE_EXTENSION_DITA);
+            supportedTopicExtensions.add(FILE_EXTENSION_XML);
+        }
+    }
+    
+    /**
+     * Supported DITA map extensions. File extensions contain a leading dot.
+     */
+    private final static List<String> supportedMapExtensions = new ArrayList<String>();
+    static {
+        final String extensions = Configuration.configuration.get(CONF_SUPPORTED_MAP_EXTENSIONS);
+        if (extensions != null && extensions.length()>0) {
+            for (final String ext: extensions.split(CONF_LIST_SEPARATOR)) {
+                supportedMapExtensions.add(ext);
+            }
+        } else {
+            logger.logError("Failed to read supported DITA map extensions from configuration, using defaults.");
+            supportedMapExtensions.add(FILE_EXTENSION_DITA);
+            supportedMapExtensions.add(FILE_EXTENSION_XML);
+        }
+    }
+    
+    /**
+     * Supported image extensions. File extensions contain a leading dot.
      */
     private final static List<String> supportedImageExtensions = new ArrayList<String>();
     static {
         final String imageExtensions = Configuration.configuration.get(CONF_SUPPORTED_IMAGE_EXTENSIONS);
         if (imageExtensions != null && imageExtensions.length()>0) {
-            for (final String ext: imageExtensions.split(";")) {
+            for (final String ext: imageExtensions.split(CONF_LIST_SEPARATOR)) {
                 supportedImageExtensions.add(ext);
             }
         } else {
@@ -62,19 +97,50 @@ public final class FileUtils {
     }
     
     /**
-     * Supported extensions.
+     * Supported HTML extensions. File extensions contain a leading dot.
+     */
+    private final static List<String> supportedHTMLExtensions = new ArrayList<String>();
+    static {
+        final String extensions = Configuration.configuration.get(CONF_SUPPORTED_HTML_EXTENSIONS);
+        if (extensions != null && extensions.length()>0) {
+            for (final String ext: extensions.split(CONF_LIST_SEPARATOR)) {
+                supportedHTMLExtensions.add(ext);
+            }
+        } else {
+            logger.logError("Failed to read supported HTML extensions from configuration, using defaults.");
+            supportedHTMLExtensions.add(FILE_EXTENSION_HTML);
+            supportedHTMLExtensions.add(FILE_EXTENSION_HTM);
+        }
+    }
+
+    /**
+     * Supported resource file extensions. File extensions contain a leading dot.
+     */
+    private final static List<String> supportedResourceExtensions = new ArrayList<String>();
+    static {
+        final String extensions = Configuration.configuration.get(CONF_SUPPORTED_RESOURCE_EXTENSIONS);
+        if (extensions != null && extensions.length()>0) {
+            for (final String ext: extensions.split(CONF_LIST_SEPARATOR)) {
+                supportedResourceExtensions.add(ext);
+            }
+        } else {
+            logger.logError("Failed to read supported resource file extensions from configuration, using defaults.");
+            supportedResourceExtensions.add(FILE_EXTENSION_SWF);
+            supportedResourceExtensions.add(FILE_EXTENSION_PDF);
+        }
+    }
+    
+    /**
+     * Supported extensions. File extensions contain a leading dot.
      */
     private final static List<String> supportedExtensions = new ArrayList<String>();
     static {
+        supportedExtensions.addAll(supportedTopicExtensions);
+        supportedExtensions.addAll(supportedMapExtensions);
         supportedExtensions.addAll(supportedImageExtensions);
-        supportedExtensions.add(FILE_EXTENSION_DITA);
-        supportedExtensions.add(FILE_EXTENSION_DITAMAP);
-        supportedExtensions.add(FILE_EXTENSION_XML);
-        supportedExtensions.add(FILE_EXTENSION_HTML);
-        supportedExtensions.add(FILE_EXTENSION_PDF);
-        supportedExtensions.add(FILE_EXTENSION_SWF);
+        supportedExtensions.addAll(supportedHTMLExtensions);
+        supportedExtensions.addAll(supportedResourceExtensions);
     }
-    // Added on 2010-11-09 for bug 3102827: Allow a way to specify recognized image extensions -- end
 
     /**
      * Return if the file is a html file by extension.
@@ -82,8 +148,12 @@ public final class FileUtils {
      * @return true if is html file and false otherwise
      */
     public static boolean isHTMLFile(final String lcasefn) {
-        return (lcasefn.endsWith(FILE_EXTENSION_HTML) || lcasefn
-                .endsWith(FILE_EXTENSION_HTM));
+        for (final String ext: supportedHTMLExtensions) {
+            if (lcasefn.endsWith(ext)) {
+                return true;
+            }
+        }
+        return false;
     }
     /**
      * Return if the file is a hhp file by extension.
@@ -110,29 +180,20 @@ public final class FileUtils {
         return (lcasefn.endsWith(FILE_EXTENSION_HHK));
     }
     
-    
-    
     /**
-     * Return if the file is a pdf file by its extension.
-     * @param lcasefn File name in lower case.
-     * @return <code>TRUE</code> if lcasefn contains an extension of "pdf",
-     *         <code>FALSE</code> otherwise.
+     * Return if the file is a resource file by its extension.
+     * 
+     * @param lcasefn file name in lower case.
+     * @return {@code true} if file is a resource file, otherwise {@code false}
      */
-    public static boolean isPDFFile(final String lcasefn) {
-        return (lcasefn.endsWith(FILE_EXTENSION_PDF));
+    public static boolean isResourceFile(final String lcasefn) {
+        for (final String ext: supportedResourceExtensions) {
+            if (lcasefn.endsWith(ext)) {
+                return true;
+            }
+        }
+        return false;
     }
-    
-    //Added by William on 2009-10-10 for resources bug:2873560 start
-    /**
-     * Return if the file is a swf file by its extension.
-     * @param lcasefn File name in lower case.
-     * @return <code>TRUE</code> if lcasefn contains an extension of "swf",
-     *         <code>FALSE</code> otherwise.
-     */
-    public static boolean isSWFile(final String lcasefn) {
-        return (lcasefn.endsWith(FILE_EXTENSION_SWF));
-    }
-    //Added by William on 2009-10-10 for resources bug:2873560 end
     
     /**
      * Return if the file is a dita file by extension.
@@ -156,8 +217,12 @@ public final class FileUtils {
      * @return true if is dita file and false otherwise
      */
     public static boolean isDITATopicFile(final String lcasefn) {
-        return lcasefn.endsWith(FILE_EXTENSION_DITA)
-                || lcasefn.endsWith(FILE_EXTENSION_XML);
+        for (final String ext: supportedTopicExtensions) {
+            if (lcasefn.endsWith(ext)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -166,7 +231,12 @@ public final class FileUtils {
      * @return true if is ditamap file and false otherwise
      */
     public static boolean isDITAMapFile(final String lcasefn) {
-        return lcasefn.endsWith(FILE_EXTENSION_DITAMAP);
+        for (final String ext: supportedMapExtensions) {
+            if (lcasefn.endsWith(ext)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

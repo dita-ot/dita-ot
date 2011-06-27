@@ -10,6 +10,10 @@
   <extension-point id="package.support.name" name="Plug-in support name"/>
   <extension-point id="dita.conductor.plugin" name="Ant conductor plug-in information"/>
   <extension-point id="dita.image.extensions" name="Image file extension"/>
+  <extension-point id="dita.topic.extensions" name="DITA topic file extension"/>
+  <extension-point id="dita.map.extensions" name="DITA map file extension"/>
+  <extension-point id="dita.html.extensions" name="HTML file extension"/>
+  <extension-point id="dita.resource.extensions" name="Resource file extension"/>
   <extension-point id="dita.conductor.transtype.check" name="Transtype check"/>
   <extension-point id="dita.conductor.target" name="Ant conductor"/>
   <extension-point id="dita.conductor.target.relative" name="Ant conductor"/>
@@ -61,6 +65,13 @@
   <feature extension="dita.image.extensions" value=".tif"/>
   <feature extension="dita.image.extensions" value=".tiff"/>
   <feature extension="dita.image.extensions" value=".bmp"/>
+  <feature extension="dita.topic.extensions" value=".dita"/>
+  <feature extension="dita.topic.extensions" value=".xml"/>
+  <feature extension="dita.map.extensions" value=".ditamap"/>
+  <feature extension="dita.html.extensions" value=".html"/>
+  <feature extension="dita.html.extensions" value=".htm"/>
+  <feature extension="dita.resource.extensions" value=".pdf"/>
+  <feature extension="dita.resource.extensions" value=".swf"/>
   <template file="../../catalog-dita_template.xml"/>
   <template file="../../build_template.xml"/>
   <template file="../../build_preprocess_template.xml"/>

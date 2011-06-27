@@ -1215,14 +1215,20 @@ public final class Constants {
 	public static final String FILE_NAME_PLUGIN_XML = "pluginId.xml";
 	//Added by William on 2009-06-24 for req #12014 start
 	
-	// Added on 2010-11-09 for bug 3102827: Allow a way to specify recognized image extensions -- start
 	/** Configuration filename. */
 	public static final String CONF_PROPERTIES = "configuration.properties";
 	/** Configuration value separator. */
 	public static final String CONF_LIST_SEPARATOR = ";";
+	/** Property name for supported DITA topic extensions. */
+	public static final String CONF_SUPPORTED_TOPIC_EXTENSIONS = "supported_topic_extensions";
+	/** Property name for supported DITA map extensions. */
+	public static final String CONF_SUPPORTED_MAP_EXTENSIONS = "supported_map_extensions";
 	/** Property name for supported image extensions. */
 	public static final String CONF_SUPPORTED_IMAGE_EXTENSIONS = "supported_image_extensions";
-	// Added on 2010-11-09 for bug 3102827: Allow a way to specify recognized image extensions -- end
+	/** Property name for supported HTML extensions. */
+	public static final String CONF_SUPPORTED_HTML_EXTENSIONS = "supported_html_extensions";
+	/** Property name for supported resource file extensions. */
+    public static final String CONF_SUPPORTED_RESOURCE_EXTENSIONS = "supported_resource_extensions";
     /** Property name for print transtypes. */
     public static final String CONF_PRINT_TRANSTYPES = "print_transtypes";
 	/** Property name for template files. */

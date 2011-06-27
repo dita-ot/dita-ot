@@ -51,7 +51,16 @@ import org.xml.sax.XMLReader;
 public final class Integrator {
 
     /** Feature name for supported image extensions. */
+    public static final String FEAT_TOPIC_EXTENSIONS = "dita.topic.extensions";
+    /** Feature name for supported image extensions. */
+    public static final String FEAT_MAP_EXTENSIONS = "dita.map.extensions";
+    /** Feature name for supported image extensions. */
     public static final String FEAT_IMAGE_EXTENSIONS = "dita.image.extensions";
+    /** Feature name for supported image extensions. */
+    public static final String FEAT_HTML_EXTENSIONS = "dita.html.extensions";
+    /** Feature name for supported resource file extensions. */
+    public static final String FEAT_RESOURCE_EXTENSIONS = "dita.resource.extensions";
+    
     public static final String FEAT_VALUE_SEPARATOR = ",";
     public static final String PARAM_VALUE_SEPARATOR = ";";
     public static final String PARAM_NAME_SEPARATOR = "=";
@@ -168,13 +177,10 @@ public final class Integrator {
             fileGen.generate(templateFile);
         }
 
-        // Added on 2010-11-09 for bug 3102827: Allow a way to specify
-        // recognized image extensions -- start
         // generate configuration properties
         final Properties configuration = new Properties();
-        // image extensions
+        // image extensions, support legacy property file extension
         final Set<String> imgExts = new HashSet<String>();
-
         for (final String ext : properties.getProperty(CONF_SUPPORTED_IMAGE_EXTENSIONS, "").split(CONF_LIST_SEPARATOR)) {
             final String e = ext.trim();
             if (e.length() != 0) {
@@ -190,6 +196,11 @@ public final class Integrator {
             }
         }
         configuration.put(CONF_SUPPORTED_IMAGE_EXTENSIONS, StringUtils.assembleString(imgExts, CONF_LIST_SEPARATOR));
+        // extensions
+        configuration.put(CONF_SUPPORTED_TOPIC_EXTENSIONS, readExtensions(FEAT_TOPIC_EXTENSIONS));
+        configuration.put(CONF_SUPPORTED_MAP_EXTENSIONS, readExtensions(FEAT_MAP_EXTENSIONS));
+        configuration.put(CONF_SUPPORTED_HTML_EXTENSIONS, readExtensions(FEAT_HTML_EXTENSIONS));
+        configuration.put(CONF_SUPPORTED_RESOURCE_EXTENSIONS, readExtensions(FEAT_RESOURCE_EXTENSIONS));
         
         // non-print transtypes
         final Set<String> printTranstypes = new HashSet<String>();
@@ -222,8 +233,24 @@ public final class Integrator {
         }
     }
 
-    // Added on 2010-11-09 for bug 3102827: Allow a way to specify recognized
-    // image extensions -- end
+    /**
+     * Read plug-in feature.
+     * 
+     * @param featureName plug-in feature name
+     * @return combined list of values
+     */
+    private String readExtensions(final String featureName) {
+        final Set<String> exts = new HashSet<String>();
+        if (featureTable.containsKey(featureName)) {
+            for (final String ext : featureTable.get(featureName).split(FEAT_VALUE_SEPARATOR)) {
+                final String e = ext.trim();
+                if (e.length() != 0) {
+                    exts.add(e);
+                }
+            }
+        }
+        return StringUtils.assembleString(exts, CONF_LIST_SEPARATOR);
+    }
 
     /**
      * Load the plug-ins and aggregate them by feature and fill into feature
