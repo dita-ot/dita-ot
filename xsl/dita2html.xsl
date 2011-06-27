@@ -9,15 +9,12 @@
 
 -->
 
-<xsl:stylesheet version="1.0"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:saxon="http://icl.com/saxon"
-                xmlns:xt="http://www.jclark.com/xt"
-                extension-element-prefixes="saxon xt">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                version="1.0">
 
 <!-- stylesheet imports -->
 <!-- the main dita to xhtml converter -->
-<xsl:import href="dita2xhtml.xsl"/>
+<xsl:import href="dita2html-base.xsl"/>
 
 <xsl:output method="html"
             encoding="UTF-8"

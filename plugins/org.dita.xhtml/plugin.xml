@@ -15,6 +15,6 @@
   <feature extension="dita.conductor.target" file="conductor.xml"/>
   <template file="../../build_general_template.xml"/>
   <template file="../../build_dita2xhtml_template.xml"/>
-  <template file="../../xsl/dita2xhtml_template.xsl"/>
+  <template file="../../xsl/dita2html-base_template.xsl"/>
   <template file="../../xsl/map2htmtoc_template.xsl"/>
 </plugin>

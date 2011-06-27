@@ -49,16 +49,6 @@
 <!-- the dita to xhtml converter for element reference documents - not used now -->
 <!--<xsl:import href="elementrefdisp.xsl"/>-->
 
-<!-- Output XHTML with XML syntax, use UFT-8 encoding="UTF-8", transitional XHTML.
-     Prevent indenting to conserve space on output. -->
-<!--xsl:output method="saxon:xhtml" -->
-<xsl:output method="xml" 
-            encoding="UTF-8"
-            indent="no"
-            doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
-            doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
-/>
-
 <!-- DITAEXT file extension name of dita topic file -->
 <xsl:param name="DITAEXT" select="'.xml'"/>    
      
