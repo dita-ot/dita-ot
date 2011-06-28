@@ -48,7 +48,7 @@ public final class JavaHelpIndexWriter extends AbstractExtendDitaWriter implemen
      * 
 	 * @param content The content to output
 	 */
-	public void setContent(Content content) {
+	public void setContent(final Content content) {
 		termList = (List<IndexTerm>) content.getCollection();
 	}
 
@@ -58,9 +58,9 @@ public final class JavaHelpIndexWriter extends AbstractExtendDitaWriter implemen
 	 * @param outputStream outputStream
 	 * @throws UnsupportedEncodingException encoding not supported exception
 	 */
-	public void write(OutputStream outputStream) throws UnsupportedEncodingException {
+	public void write(final OutputStream outputStream) throws UnsupportedEncodingException {
 		PrintWriter printWriter = null;
-		int termNum = termList.size();
+		final int termNum = termList.size();
 		
 		try {
 			printWriter = new PrintWriter(new OutputStreamWriter(
@@ -74,7 +74,7 @@ public final class JavaHelpIndexWriter extends AbstractExtendDitaWriter implemen
 			printWriter.println("<index version=\"1.0\">");
 
 			for (int i = 0; i < termNum; i++) {
-				IndexTerm term = (IndexTerm) termList.get(i);
+				final IndexTerm term = (IndexTerm) termList.get(i);
 				
 				outputIndexTerm(term, printWriter);
 			}
@@ -89,18 +89,18 @@ public final class JavaHelpIndexWriter extends AbstractExtendDitaWriter implemen
 	/**
 	 * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
 	 */
-	public void write(String filename) throws DITAOTException {
+	public void write(final String filename) throws DITAOTException {
 		OutputStream out = null;
 		try {
 			out = new FileOutputStream(filename);
 			write(out);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new DITAOTException(e);
 		} finally {
 			if (out != null) {
 				try {
 	                out.close();
-                } catch (IOException e) {
+                } catch (final IOException e) {
                 	logger.logException(e);
                 }
 			}
@@ -113,11 +113,11 @@ public final class JavaHelpIndexWriter extends AbstractExtendDitaWriter implemen
 	 * @param term
 	 * @param printWriter
 	 */
-	private void outputIndexTerm(IndexTerm term, PrintWriter printWriter) {
-		List<IndexTermTarget> targets = term.getTargetList();
-		List<IndexTerm> subTerms = term.getSubTerms();
-		int targetNum = (targets == null) ? 0: targets.size();
-		int subTermNum = (subTerms == null) ? 0 : subTerms.size();
+	private void outputIndexTerm(final IndexTerm term, final PrintWriter printWriter) {
+		final List<IndexTermTarget> targets = term.getTargetList();
+		final List<IndexTerm> subTerms = term.getSubTerms();
+		final int targetNum = (targets == null) ? 0: targets.size();
+		final int subTermNum = (subTerms == null) ? 0 : subTerms.size();
 		
 		/*
 		 * Don't set 'target' attribute for group purpose index item.
@@ -128,14 +128,14 @@ public final class JavaHelpIndexWriter extends AbstractExtendDitaWriter implemen
 			printWriter.print("\">");	
 			
 			for (int i = 0; i < subTermNum; i++) {
-				IndexTerm subTerm = (IndexTerm) subTerms.get(i);
+				final IndexTerm subTerm = (IndexTerm) subTerms.get(i);
 				outputIndexTerm(subTerm, printWriter);
 			}
 			
 			printWriter.println("</indexitem>");
 		} else {
 			for (int i = 0; i < targetNum; i++) {
-				IndexTermTarget target = (IndexTermTarget) targets.get(i);
+				final IndexTermTarget target = (IndexTermTarget) targets.get(i);
 				String targetURL = target.getTargetURI();
 
 				/*
@@ -163,7 +163,7 @@ public final class JavaHelpIndexWriter extends AbstractExtendDitaWriter implemen
 	 * @param outputFileRoot root
 	 * @return index file name
 	 */
-	public String getIndexFileName(String outputFileRoot) {
+	public String getIndexFileName(final String outputFileRoot) {
 		StringBuffer indexFilename;
 		
 		indexFilename = new StringBuffer(outputFileRoot);

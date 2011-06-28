@@ -74,7 +74,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 			reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
 			reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
 			//Edited by william on 2009-11-8 for ampbug:2893664 end
-        } catch (Exception e) {
+        } catch (final Exception e) {
         	logger.logException(e);
         }
 	}
@@ -82,31 +82,31 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 	 * Set up class.
 	 * @param conflictTable conflictTable
 	 */
-	public void setup(Hashtable<String,String> conflictTable) {
+	public void setup(final Hashtable<String,String> conflictTable) {
 		this.conflictTable = conflictTable;
 	}
 
 
 	@Override
-	public void startEntity(String name) throws SAXException {
+	public void startEntity(final String name) throws SAXException {
 		try {
 			needResolveEntity = StringUtils.checkEntity(name);
 			if (!needResolveEntity) {
 				output.write(StringUtils.getEntity(name));
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			logger.logException(e);
 		}
 
 	}
 
 	@Override
-	public void processingInstruction(String target, String data)
+	public void processingInstruction(final String target, String data)
 			throws SAXException {
 		String pi;
 		try {
 			if (fixpath!=null&&target.equalsIgnoreCase("workdir")){	
-				String tmp = fixpath.substring(0,fixpath.lastIndexOf(SLASH));
+				final String tmp = fixpath.substring(0,fixpath.lastIndexOf(SLASH));
 				if (!data.endsWith(tmp)){
 					data = data+File.separator+tmp;
 				}
@@ -115,38 +115,39 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 					: target;
 			output.write(LESS_THAN + QUESTION + pi
 					+ QUESTION + GREATER_THAN);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			logger.logException(e);
 		}
 	}
 
 	@Override
-	public void ignorableWhitespace(char[] ch, int start, int length)
+	public void ignorableWhitespace(final char[] ch, final int start, final int length)
 			throws SAXException {
 		try {
 			output.write(ch, start, length);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			logger.logException(e);
 		}
 	}
 
 	@Override
-	public void characters(char[] ch, int start, int length)
+	public void characters(final char[] ch, final int start, final int length)
 			throws SAXException {
 		if (needResolveEntity) {
 			try {
-				if (insideCDATA)
-					output.write(ch, start, length);
-				else
-					output.write(StringUtils.escapeXML(ch, start, length));
-			} catch (Exception e) {
+				if (insideCDATA) {
+                    output.write(ch, start, length);
+                } else {
+                    output.write(StringUtils.escapeXML(ch, start, length));
+                }
+			} catch (final Exception e) {
 				logger.logException(e);
 			}
 		}
 	}
 
 	@Override
-	public void endEntity(String name) throws SAXException {
+	public void endEntity(final String name) throws SAXException {
 		if (!needResolveEntity) {
 			needResolveEntity = true;
 		}
@@ -162,7 +163,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 		insideCDATA = false;
 		try {
 			output.write(CDATA_END);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			logger.logException(e);
 		}
 	}
@@ -176,7 +177,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 	public void endDocument() throws SAXException {
 		try {
 			output.flush();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			logger.logException(e);
 		}
 	}
@@ -188,12 +189,12 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 	 *      java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void endElement(String uri, String localName, String qName)
+	public void endElement(final String uri, final String localName, final String qName)
 			throws SAXException {
 		try {
 			output.write(LESS_THAN + SLASH + qName
 					+ GREATER_THAN);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			logger.logException(e);
 		}
 	}
@@ -204,7 +205,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 	 * @see org.dita.dost.writer.AbstractXMLWriter#setContent(org.dita.dost.module.Content)
 	 */
 	@Override
-	public void setContent(Content content) {
+	public void setContent(final Content content) {
 		changeTable = (LinkedHashMap<String,String>) content.getValue();
 	}
 
@@ -218,7 +219,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 		try {
 			insideCDATA = true;
 			output.write(CDATA_HEAD);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			logger.logException(e);
 		}
 	}
@@ -235,7 +236,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 		try{
 			output.write(XML_HEAD);
 			output.write(LINE_SEPARATOR);
-			}catch(IOException io){
+			}catch(final IOException io){
 			logger.logException(io);	
         }
 	}
@@ -247,14 +248,14 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 	 *      java.lang.String, java.lang.String, org.xml.sax.Attributes)
 	 */
 	@Override
-	public void startElement(String uri, String localName, String qName,
-			Attributes atts) throws SAXException {
+	public void startElement(final String uri, final String localName, final String qName,
+			final Attributes atts) throws SAXException {
 		
 		try {
 			copyElementName(qName, atts);
 			copyElementAttribute(atts);
 			output.write(GREATER_THAN);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			logger.logException(e);
 		}// try
 		
@@ -265,7 +266,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 	 * @param attValue
 	 * @throws IOException
 	 */
-	private void copyAttribute(String attQName, String attValue)
+	private void copyAttribute(final String attQName, final String attValue)
 			throws IOException {
 		output.write(new StringBuffer().append(STRING_BLANK).append(
 				attQName).append(EQUAL).append(QUOTATION)
@@ -276,11 +277,11 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 	 * @param atts
 	 * @throws IOException
 	 */
-	private void copyElementAttribute(Attributes atts) throws IOException {
+	private void copyElementAttribute(final Attributes atts) throws IOException {
 		// copy the element's attributes
-		int attsLen = atts.getLength();
+		final int attsLen = atts.getLength();
 		for (int i = 0; i < attsLen; i++) {
-			String attQName = atts.getQName(i);
+			final String attQName = atts.getQName(i);
 			String attValue;
 
 			if (ATTRIBUTE_NAME_HREF.equals(attQName)) {
@@ -300,9 +301,9 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 	 * @param atts
 	 * @return true/false
 	 */
-	private boolean checkDITAHREF(Attributes atts) {
+	private boolean checkDITAHREF(final Attributes atts) {
 
-		String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
+		final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
 		String scopeValue = atts.getValue(ATTRIBUTE_NAME_SCOPE);
 		String formatValue = atts.getValue(ATTRIBUTE_NAME_FORMAT);
 
@@ -328,7 +329,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 		return false;
 	}
 
-	private String updateHref(String attQName, Attributes atts) {
+	private String updateHref(final String attQName, final Attributes atts) {
 		String attValue = null;
 
 		if (attQName == null) {
@@ -352,12 +353,13 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 			attValue = attValue.substring(fixpath.length());
 		}
 		
-		if(changeTable==null)
-			return attValue;
+		if(changeTable==null) {
+            return attValue;
+        }
 		
 		if (checkDITAHREF(atts)) {
 				// replace the href value if it's referenced topic is extracted.
-			String rootPathName=currentFilePathName;
+			final String rootPathName=currentFilePathName;
 			// Added on 20110125 for bug:Chunking remaps in-file <xref> to
 			// invalid value - ID: 3162808 start
 			String changeTargetkey = FileUtils.resolveFile(currentFilePath,
@@ -375,7 +377,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 					changeTargetkey = changeTargetkey
 							+ attValue.substring(sharpIndex);
 				}
-				String changeTarget_with_elemt = (String) changeTable
+				final String changeTarget_with_elemt = (String) changeTable
 						.get(changeTargetkey);
 				if (changeTarget_with_elemt != null) {
 					changeTarget = changeTarget_with_elemt;
@@ -383,8 +385,8 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 			}				
 			
 			// Added on 20110125 for bug:Chunking remaps in-file <xref> to invalid value - ID: 3162808   end 
-			String elementID=getElementID(attValue);
-			String pathtoElem = 
+			final String elementID=getElementID(attValue);
+			final String pathtoElem = 
 				attValue.contains(SHARP) ? attValue.substring(attValue.indexOf(SHARP)+1) : "";
 			
 			if (StringUtils.isEmptyString(changeTarget)) {
@@ -402,10 +404,10 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 				if(changeTarget == null) {
 					return attValue;//no change
 				}else{
-					String conTarget = (String)conflictTable.get(removeAnchor(changeTarget));
+					final String conTarget = (String)conflictTable.get(removeAnchor(changeTarget));
 					if (!StringUtils.isEmptyString(conTarget)) {
 						if (elementID == null) {
-							String idpath = getElementID(changeTarget);
+							final String idpath = getElementID(changeTarget);
 							return FileUtils.getRelativePathFromMap(
 									rootPathName, conTarget) + (idpath != null ? SHARP + idpath : "");
 						}else {
@@ -452,7 +454,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 		return attValue;
 	}
 	
-	private String removeAnchor(String s) {
+	private String removeAnchor(final String s) {
 		if (s.lastIndexOf(SHARP) != -1) {
 			return s.substring(0, s.lastIndexOf(SHARP));
 		} else {
@@ -465,14 +467,16 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 	 * @param relativePath
 	 * @return String
 	 */
-	private String getElementID(String relativePath){
+	private String getElementID(final String relativePath){
 		String elementID=null;
 		String topicWithelement=null;
 		if(relativePath.indexOf(SHARP)!=-1){
 			topicWithelement=relativePath.substring(relativePath.lastIndexOf(SHARP)+1);
-			if(topicWithelement.lastIndexOf(SLASH)!=-1)
-				elementID=topicWithelement.substring(topicWithelement.lastIndexOf(SLASH)+1);
-			else elementID = topicWithelement;
+			if(topicWithelement.lastIndexOf(SLASH)!=-1) {
+                elementID=topicWithelement.substring(topicWithelement.lastIndexOf(SLASH)+1);
+            } else {
+                elementID = topicWithelement;
+            }
 		}
 		return elementID;
 	}
@@ -481,11 +485,12 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 	 * @param valueOfURL
 	 * @return boolean
 	 */
-	private boolean notLocalURL(String valueOfURL) {
-		if (valueOfURL.indexOf(NOT_LOCAL_URL) == -1)
-			return false;
-		else
-			return true;
+	private boolean notLocalURL(final String valueOfURL) {
+		if (valueOfURL.indexOf(NOT_LOCAL_URL) == -1) {
+            return false;
+        } else {
+            return true;
+        }
 	}
 	
 	/**
@@ -493,7 +498,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 	 * @param attValue attribute value
 	 * @return String the extension
 	 */
-	public String getExtName(String attValue) {
+	public String getExtName(final String attValue) {
 		String fileName;
 		int fileExtIndex;
 		int index;
@@ -520,10 +525,10 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 	 * @param valueOfHref href attribute value
 	 * @return boolean
 	 */
-	private boolean notTopicFormat(Attributes attrs, String valueOfHref) {
-		String hrefValue = valueOfHref;
-		String formatValue = attrs.getValue(ATTRIBUTE_NAME_FORMAT);
-		String extOfHref = getExtName(valueOfHref);
+	private boolean notTopicFormat(final Attributes attrs, final String valueOfHref) {
+		final String hrefValue = valueOfHref;
+		final String formatValue = attrs.getValue(ATTRIBUTE_NAME_FORMAT);
+		final String extOfHref = getExtName(valueOfHref);
 		if (notLocalURL(hrefValue)) {
 			return true;
 		} else {
@@ -543,7 +548,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 	 * @param atts
 	 * @throws IOException
 	 */
-	private void copyElementName(String qName, Attributes atts)
+	private void copyElementName(final String qName, final Attributes atts)
 			throws IOException {
 		// copy the element name
 		output.write(LESS_THAN + qName);
@@ -551,7 +556,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 
 	
 	
-	public void write (String tempDir, String topicfile,Map relativePath2fix) throws DITAOTException{
+	public void write (final String tempDir, final String topicfile,final Map relativePath2fix) throws DITAOTException{
 		if (relativePath2fix.containsKey(topicfile)){
 			fixpath= (String)relativePath2fix.get(topicfile);
 		}
@@ -564,7 +569,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 	 * @see org.dita.dost.writer.AbstractXMLWriter#write(java.lang.String)
 	 */
 	@Override
-	public void write(String outputFilename) throws DITAOTException {
+	public void write(final String outputFilename) throws DITAOTException {
 		String filename = outputFilename;
 		String file = null;
 		currentFilePathName=new File(outputFilename).getAbsolutePath();
@@ -596,25 +601,25 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 
 			output.close();
 			if (!inputFile.delete()) {
-				Properties prop = new Properties();
+				final Properties prop = new Properties();
 				prop.put("%1", inputFile.getPath());
 				prop.put("%2", outputFile.getPath());
 				logger.logError(MessageUtils.getMessage("DOTJ009E", prop)
 						.toString());
 			}
 			if (!outputFile.renameTo(inputFile)) {
-				Properties prop = new Properties();
+				final Properties prop = new Properties();
 				prop.put("%1", inputFile.getPath());
 				prop.put("%2", outputFile.getPath());
 				logger.logError(MessageUtils.getMessage("DOTJ009E", prop)
 						.toString());
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			logger.logException(e);
 		} finally {
 			try {
 				fileOutput.close();
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				logger.logException(e);
 			}
 		}

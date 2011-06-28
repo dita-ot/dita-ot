@@ -25,7 +25,7 @@ public abstract class AbstractExtendDitaWriter implements IExtendDitaWriter {
 	}
 
 
-	public void setPipelineHashIO(PipelineHashIO hashIO) {
+	public void setPipelineHashIO(final PipelineHashIO hashIO) {
 		pipelineHashMap = hashIO;
 		
 	}

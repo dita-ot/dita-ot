@@ -232,7 +232,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	 * Set transtype.
 	 * @param transtype the transtype to set
 	 */
-	public void setTranstype(String transtype) {
+	public void setTranstype(final String transtype) {
 		this.transtype = transtype;
 	}
 	
@@ -289,7 +289,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 		props = null;
 		try {
             reader = StringUtils.getXMLReader();
-        } catch (SAXException e) {
+        } catch (final SAXException e) {
             throw new RuntimeException("Unable to create XML parser: " + e.getMessage(), e);
         }
 		reader.setContentHandler(this);
@@ -312,7 +312,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
      * @param rootFile input file
 	 * @throws SAXException parsing exception
      */
-	public void initXMLReader(String ditaDir,boolean validate,String rootFile, boolean arg_setSystemid) throws SAXException {
+	public void initXMLReader(final String ditaDir,final boolean validate,final String rootFile, final boolean arg_setSystemid) throws SAXException {
 		//final DITAOTJavaLogger javaLogger=new DITAOTJavaLogger();
 		
 		//to check whether the current parsing file's href value is out of inputmap.dir
@@ -456,7 +456,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	 * Add coderef outside coderef files. 
 	 * @param nonCopytoSet
 	 */
-	private void addCoderefFiles(Set<String> nonCopytoSet) {
+	private void addCoderefFiles(final Set<String> nonCopytoSet) {
 		
 		for(final String filename : subsidiarySet){
 			//only activated on /generateout:3 & is out file.
@@ -552,7 +552,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	 * 
 	 * @param dir dir
 	 */
-	public void setCurrentDir(String dir) {
+	public void setCurrentDir(final String dir) {
 		this.currentDir = dir;
 	}
 
@@ -580,7 +580,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	 * @throws IOException IOException
 	 * @throws FileNotFoundException FileNotFoundException
 	 */
-	public void parse(File file) throws FileNotFoundException, IOException, SAXException {
+	public void parse(final File file) throws FileNotFoundException, IOException, SAXException {
 		
 		currentFile=file.getAbsolutePath();
 		
@@ -597,8 +597,8 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	}
 
 	@Override
-	public void startElement(String uri, String localName, String qName,
-			Attributes atts) throws SAXException {
+	public void startElement(final String uri, final String localName, final String qName,
+			final Attributes atts) throws SAXException {
 		String domains = null;
 		final Properties params = new Properties();
 		
@@ -987,7 +987,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	 * @param fileName normalized file name(remove '#')
 	 * @return boolean
 	 */
-	private boolean parseBranch(Attributes atts, String hrefValue, String fileName) {
+	private boolean parseBranch(final Attributes atts, final String hrefValue, final String fileName) {
 		//current file is primary ditamap file.
 		//parse every branch.
 		final String currentFileRelative = FileUtils.getRelativePathFromMap(
@@ -1046,7 +1046,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	 * @param id String branch id.
 	 * @return boolean true if found and false otherwise.
 	 */
-	private boolean searchBrachesMap(String id) {
+	private boolean searchBrachesMap(final String id) {
 		//caculate relative path for current file.
 		final String currentFileRelative = FileUtils.getRelativePathFromMap(
 				rootFilePath, currentFile);
@@ -1076,7 +1076,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	 * @param hrefValue
 	 * @param fileName
 	 */
-	private void addReferredBranches(String hrefValue, String fileName) {
+	private void addReferredBranches(final String hrefValue, final String fileName) {
 		String branchId = null;
 		
 		//href value has branch id.
@@ -1132,7 +1132,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	}
 
 	@Override
-	public void endElement(String uri, String localName, String qName) throws SAXException {		
+	public void endElement(final String uri, final String localName, final String qName) throws SAXException {		
 		
 		//subject scheme
 		//if (currentElement != null && currentElement != schemeRoot.getDocumentElement()) {
@@ -1215,7 +1215,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	 * @throws java.io.IOException if dita-catalog.xml is not available 
 	 * @exception org.xml.sax.SAXException if dita-catalog.xml is not in valid format.
 	 */
-	public InputSource resolveEntity(String publicId, String systemId)
+	public InputSource resolveEntity(final String publicId, final String systemId)
 			throws SAXException, IOException {
 		if (catalogMap.get(publicId) != null) {
 			final File dtdFile = new File((String) catalogMap.get(publicId));
@@ -1231,7 +1231,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	/**
 	 * Parse the input attributes for needed information.
 	 */
-	private void parseAttribute(Attributes atts, String attrName) throws SAXException {
+	private void parseAttribute(final Attributes atts, final String attrName) throws SAXException {
 		String attrValue = atts.getValue(attrName);
 		String filename = null;
 		final String attrClass = atts.getValue(ATTRIBUTE_NAME_CLASS);
@@ -1546,7 +1546,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	/**
 	 * Get multi-level keys list
 	 */
-	private List<String> getKeysList(String key, Map<String, String> keysRefMap) {
+	private List<String> getKeysList(final String key, final Map<String, String> keysRefMap) {
 		
 		final List<String> list = new ArrayList<String>();
 		
@@ -1574,8 +1574,8 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	/**
 	 * Update keysDefMap for multi-level keys
 	 */
-	private void checkMultiLevelKeys(Map<String, String> keysDefMap,
-			Map<String, String> keysRefMap) {
+	private void checkMultiLevelKeys(final Map<String, String> keysDefMap,
+			final Map<String, String> keysRefMap) {
 		
 		String key = null;
 		String value = null;
@@ -1602,7 +1602,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	}
 	//Added on 20100826 for bug:3052913 end
 
-	private boolean isOutFile(String toCheckPath) {
+	private boolean isOutFile(final String toCheckPath) {
 		if (!toCheckPath.startsWith("..")) {
             return false;
         } else {
@@ -1625,7 +1625,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
             return false;
         }
 	}
-	private void addToOutFilesSet(String hrefedFile) {
+	private void addToOutFilesSet(final String hrefedFile) {
 		if (canResolved()) {
 			outDitaFilesSet.add(hrefedFile);
 		}
@@ -1644,7 +1644,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 		return null;
 	}
 	*/
-	private void toOutFile(String filename) throws SAXException {
+	private void toOutFile(final String filename) throws SAXException {
 		//the filename is a relative path from the dita input file
 		final Properties prop=new Properties();
 		prop.put("%1", FileUtils.normalizeDirectory(rootDir, filename));
@@ -1737,7 +1737,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 		return primaryDitamap;
 	}
 
-	public void setPrimaryDitamap(String primaryDitamap) {
+	public void setPrimaryDitamap(final String primaryDitamap) {
 		this.primaryDitamap = primaryDitamap;
 	}
 	

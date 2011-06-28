@@ -48,7 +48,7 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter implements A
     /**
      * @see org.dita.dost.writer.AbstractWriter#setContent(org.dita.dost.module.Content)
      */
-    public void setContent(Content content) {
+    public void setContent(final Content content) {
         termList = (List<IndexTerm>) content.getCollection();
     }
 
@@ -58,9 +58,9 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter implements A
      * @param outputStream outputStream
      * @throws UnsupportedEncodingException encoding not supported exception
      */
-    public void write(OutputStream outputStream) throws UnsupportedEncodingException{
+    public void write(final OutputStream outputStream) throws UnsupportedEncodingException{
         PrintWriter printWriter = null;
-        int termNum = termList.size();
+        final int termNum = termList.size();
 
         try {
             printWriter = new PrintWriter(new OutputStreamWriter(outputStream, UTF8));
@@ -74,7 +74,7 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter implements A
             printWriter.println("<ul>");
 			String printLetter = "A"; //Initializing the variable for the alphabetical headings.
             for (int i = 0; i < termNum; i++) {
-                IndexTerm term = termList.get(i);
+                final IndexTerm term = termList.get(i);
 				
 				//Add alphabetical headings:
 				if (i == 0)
@@ -82,7 +82,7 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter implements A
 					printLetter = term.getTermFullName().substring(0, 1);
 					printWriter.println(printLetter);
 				}
-				String firstLetter = term.getTermFullName().substring(0, 1);
+				final String firstLetter = term.getTermFullName().substring(0, 1);
 				if (!firstLetter.equals(printLetter))
 				{
 					printLetter = firstLetter;
@@ -106,18 +106,18 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter implements A
     /**
 	 * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
 	 */
-	public void write(String filename) throws DITAOTException {
+	public void write(final String filename) throws DITAOTException {
 		OutputStream out = null;
 		try {
 			out = new FileOutputStream(filename);
 			write(out);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new DITAOTException(e);
 		} finally {
 			if (out != null) {
 				try {
 	                out.close();
-                } catch (IOException e) {
+                } catch (final IOException e) {
                 	logger.logException(e);
                 }
 			}
@@ -130,11 +130,11 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter implements A
      * @param term
      * @param printWriter
      */
-    private void outputIndexTerm(IndexTerm term, PrintWriter printWriter) {
+    private void outputIndexTerm(final IndexTerm term, final PrintWriter printWriter) {
         List<IndexTermTarget> targets = term.getTargetList();
-        List<IndexTerm> subTerms = term.getSubTerms();
+        final List<IndexTerm> subTerms = term.getSubTerms();
         int targetNum = targets.size();
-        int subTermNum = subTerms.size();
+        final int subTermNum = subTerms.size();
 
         printWriter.println("<li>");
         printWriter.println();
@@ -153,7 +153,7 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter implements A
 		}
 		else
 		{
-            IndexTermTarget target = targets.get(0);
+            final IndexTermTarget target = targets.get(0);
             printWriter.print("<a href=\"");
 			printWriter.print(target.getTargetURI());
             printWriter.print("\">");
@@ -167,7 +167,7 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter implements A
             printWriter.println("<ul>");
 
             for (int i = 0; i < subTermNum; i++) {
-                IndexTerm subTerm = subTerms.get(i);
+                final IndexTerm subTerm = subTerms.get(i);
                 outputIndexTerm(subTerm, printWriter);
             }
 
@@ -182,12 +182,12 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter implements A
      * 
      * @param term current IndexTerm instance
      */
-	private void findTargets(IndexTerm term) {
-		List<IndexTerm> subTerms = term.getSubTerms();
+	private void findTargets(final IndexTerm term) {
+		final List<IndexTerm> subTerms = term.getSubTerms();
 		List<IndexTermTarget> subTargets = null;
 		if (subTerms != null && ! subTerms.isEmpty()){
 			for (int i = 0; i < subTerms.size(); i++){
-				IndexTerm subTerm = subTerms.get(i);
+				final IndexTerm subTerm = subTerms.get(i);
 				subTargets = subTerm.getTargetList();
 				if (subTargets != null && !subTargets.isEmpty()){
 					findTargets(subTerm);
@@ -202,7 +202,7 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter implements A
 	 * @param outputFileRoot root
 	 * @return index file name
 	 */
-	public String getIndexFileName(String outputFileRoot) {
+	public String getIndexFileName(final String outputFileRoot) {
 		StringBuffer indexFilename;
 		
 		indexFilename = new StringBuffer(outputFileRoot);

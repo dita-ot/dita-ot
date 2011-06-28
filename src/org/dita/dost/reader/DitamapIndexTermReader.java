@@ -77,7 +77,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
 		}
 	}
 	//Added by William on 2010-04-26 for ref:2990783 start
-	public DitamapIndexTermReader(IndexTermCollection result, boolean indexMoved) {
+	public DitamapIndexTermReader(final IndexTermCollection result, final boolean indexMoved) {
 		this();
 		this.result = result;
  		this.indexMoved = indexMoved;
@@ -85,7 +85,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
 	//Added by William on 2010-04-26 for ref:2990783 end
 
 	@Override
-	public void characters(char[] ch, int start, int length)
+	public void characters(final char[] ch, final int start, final int length)
 			throws SAXException {
 		//SF Bug 2010062: Do not trim white space from text nodes. Convert newline
 		//                to space, but leave all spaces. Also do not drop space-only nodes.
@@ -141,7 +141,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
 	}
 
 	@Override
-	public void endElement(String uri, String localName, String qName)
+	public void endElement(final String uri, final String localName, final String qName)
 			throws SAXException {
 		if (topicrefSpecList.contains(localName)) {
 			elementStack.pop();
@@ -200,7 +200,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
 		}
 	}
 
-	private void genTargets(IndexTerm indexTerm, TopicrefElement obj) {
+	private void genTargets(final IndexTerm indexTerm, final TopicrefElement obj) {
 		
 		final TopicrefElement topicref = obj;
 		final IndexTermTarget target = new IndexTermTarget();
@@ -233,7 +233,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
 			
 	}
 
-	private void assignTarget(IndexTerm indexTerm, IndexTermTarget target) {
+	private void assignTarget(final IndexTerm indexTerm, final IndexTermTarget target) {
 		if (indexTerm.isLeaf()){
 			indexTerm.addTarget(target);
 		}
@@ -246,8 +246,8 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
 	}
 
 	@Override
-	public void startElement(String uri, String localName, String qName,
-			Attributes attributes) throws SAXException {
+	public void startElement(final String uri, final String localName, final String qName,
+			final Attributes attributes) throws SAXException {
 		final String classAttr = attributes.getValue(ATTRIBUTE_NAME_CLASS);
 		
 		if (classAttr != null
@@ -301,7 +301,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
 				
 	}
 	
-	private void parseIndexSeeAlso(String localName) {
+	private void parseIndexSeeAlso(final String localName) {
 		// check to see it the index-see-also element or a specialized version
 		// is in the list.
 		if (indexSeeAlsoSpecList.contains(localName)
@@ -320,7 +320,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
 		}
 	}
 
-	private void parseIndexSee(String localName) {
+	private void parseIndexSee(final String localName) {
 		// check to see it the index-see element or a specialized version is
 		// in the list.
 		if (indexSeeSpecList.contains(localName)
@@ -342,7 +342,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
 		}
 	}
 	
-	private void parseIndexTerm(String localName, Attributes attributes) {
+	private void parseIndexTerm(final String localName, final Attributes attributes) {
 		// check to see it the indexterm element or a specialized version is 
 		// in the list.
 		if (indexTermSpecList.contains(localName) && needPushTerm()) {
@@ -391,7 +391,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
 	 * 
 	 * @param mappath path of map file
 	 */
-	public void setMapPath(String mappath) {
+	public void setMapPath(final String mappath) {
 		this.mapPath = mappath;
 	}
 

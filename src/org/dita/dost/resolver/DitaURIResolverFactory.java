@@ -42,7 +42,7 @@ public final class DitaURIResolverFactory {
 		 * wrong while trying to open the file, null is returned.
 		 */
 		resolver = new URIResolver() {
-			public Source resolve(String href, String base) throws TransformerException {			
+			public Source resolve(final String href, final String base) throws TransformerException {			
 				File file = new File(href);
 				if (!file.isAbsolute()) {
 					String parentDir=null;
@@ -56,7 +56,7 @@ public final class DitaURIResolverFactory {
 				}
 				try {
 					return new SAXSource(new InputSource(new FileInputStream(file)));
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					return null;
 				}
 			}
@@ -73,14 +73,14 @@ public final class DitaURIResolverFactory {
 	 * Set URIResolver.
 	 * @param resolver URIResolver
 	 */
-	public static void setURIResolver(URIResolver resolver) {
+	public static void setURIResolver(final URIResolver resolver) {
 		DitaURIResolverFactory.resolver = resolver;
 	}
 	/**
 	 * Set DitaURIResolverFactory's path to create resolver.
 	 * @param path path
 	 */
-	public static void setPath(String path) {
+	public static void setPath(final String path) {
 		DitaURIResolverFactory.path = path;
 	}
 }

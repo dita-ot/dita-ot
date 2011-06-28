@@ -20,7 +20,7 @@ import java.util.HashMap;
  */
 public final class PipelineHashIO implements AbstractPipelineInput,
         AbstractPipelineOutput {
-    private HashMap<String, String> hash;
+    private final HashMap<String, String> hash;
 
 
     /**
@@ -37,7 +37,7 @@ public final class PipelineHashIO implements AbstractPipelineInput,
      * @param name name
      * @param value value
      */
-    public void setAttribute(String name, String value) {
+    public void setAttribute(final String name, final String value) {
         hash.put(name, value);
     }
 
@@ -47,7 +47,7 @@ public final class PipelineHashIO implements AbstractPipelineInput,
      * @param name name
      * @return String value
      */
-    public String getAttribute(String name) {
+    public String getAttribute(final String name) {
         String value = null;
         value = hash.get(name);
         return value;

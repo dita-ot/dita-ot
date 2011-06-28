@@ -58,7 +58,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter implement
      * 
 	 * @param content The content to output
 	 */
-	public void setContent(Content content) {
+	public void setContent(final Content content) {
 		termList = (List<IndexTerm>) content.getCollection();
 	}
 	
@@ -67,7 +67,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter implement
      * 
 	 * @param filePath The file path to where the plugin are created.
 	 */
-	public void setFilePath(String filePath) {
+	public void setFilePath(final String filePath) {
 		this.filepath = filePath;
 	}
 	
@@ -86,9 +86,9 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter implement
 	 * @param outputStream outputStream
 	 * @throws UnsupportedEncodingException UnsupportedEncodingException
 	 */
-	public void write(OutputStream outputStream) throws UnsupportedEncodingException {
+	public void write(final OutputStream outputStream) throws UnsupportedEncodingException {
 		PrintWriter printWriter = null;
-		int termNum = termList.size();
+		final int termNum = termList.size();
 		
 		//boolean for processing indexsee the new markup (Eclipse 3.6 feature).
 		boolean indexsee = false;
@@ -114,7 +114,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter implement
 			termCloneList = cloneIndextermList(termList);
 
 			for (int i = 0; i < termNum; i++) {
-				IndexTerm term = (IndexTerm) termList.get(i);
+				final IndexTerm term = (IndexTerm) termList.get(i);
 				outputIndexTerm(term, printWriter, indexsee);
 			}
 
@@ -130,12 +130,12 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter implement
 	/**
 	 * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
 	 */
-	public void write(String filename) throws DITAOTException {
+	public void write(final String filename) throws DITAOTException {
 		OutputStream out = null;
 		try {
 			out = new FileOutputStream(filename);
 			write(out);
-		} catch (Exception e) {			
+		} catch (final Exception e) {			
 			logger.logError(e.getMessage());
 			e.printStackTrace(); 
 			throw new DITAOTException(e);
@@ -143,7 +143,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter implement
 			if (out != null) {
 				try {
 	                out.close();
-                } catch (IOException e) {
+                } catch (final IOException e) {
                 	logger.logException(e);
                 }
 			}
@@ -159,17 +159,17 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter implement
 	 * 
 	 * RFE 2987769 - Added indexsee parameter to keep track of the processing pipeline.
 	 */
-    private void outputIndexTerm(IndexTerm term, PrintWriter printWriter, boolean indexsee) {
+    private void outputIndexTerm(final IndexTerm term, final PrintWriter printWriter, final boolean indexsee) {
         
-    	List<IndexTerm> subTerms = term.getSubTerms();
-        int subTermNum = subTerms.size();
+    	final List<IndexTerm> subTerms = term.getSubTerms();
+        final int subTermNum = subTerms.size();
         
         outputIndexTermStartElement (term, printWriter, indexsee);
         
         if (subTerms != null && subTermNum > 0) {
 
             for (int i = 0; i < subTermNum; i++) {
-                IndexTerm subTerm = (IndexTerm) subTerms.get(i);
+                final IndexTerm subTerm = (IndexTerm) subTerms.get(i);
                 
                 outputIndexTerm(subTerm, printWriter, indexsee);
                 
@@ -186,7 +186,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter implement
      * @param aFileName file name to be replaced
      * @return replaced file name
      */
-    public String replaceExtName(String aFileName){
+    public String replaceExtName(final String aFileName){
     	String fileName;
         int fileExtIndex;
         int index;
@@ -214,11 +214,11 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter implement
      * @param outputFileRoot root path
      * @return index file name
      */
-	public String getIndexFileName(String outputFileRoot) {
+	public String getIndexFileName(final String outputFileRoot) {
 		
 		StringBuffer indexFilename;
 		
-		File indexDir = new File(outputFileRoot).getParentFile();
+		final File indexDir = new File(outputFileRoot).getParentFile();
 		// buff.delete(filepath, buff.length());
 		setFilePath(indexDir.getAbsolutePath());
 		// buff.insert(filepath, "\\index.xml");
@@ -236,10 +236,10 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter implement
 	 * @param term  The indexterm to be processed.
 	 * @param printWriter The Writer used for writing content to disk.
 	 */
-	private void outputIndexEntry(IndexTerm term, PrintWriter printWriter) {
+	private void outputIndexEntry(final IndexTerm term, final PrintWriter printWriter) {
 
-		List<IndexTermTarget> targets = term.getTargetList();
-		int targetNum = targets.size();
+		final List<IndexTermTarget> targets = term.getTargetList();
+		final int targetNum = targets.size();
 		
 		boolean foundIndexTerm = false;
 		boolean foundIndexsee = false;
@@ -252,16 +252,16 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter implement
 		 * warning to the build. RFE 2987769 Eclipse index-see
 		 */
 
-		int termCloneNum = termCloneList.size();
+		final int termCloneNum = termCloneList.size();
 
 		// Index-see and index-see-also terms should also generate links to its
 		// target
 		// Otherwise, the term won't be displayed in the index tab.
 		if (targets != null && !targets.isEmpty()) {
 			for (int i = 0; i < targetNum; i++) {
-				IndexTermTarget target = (IndexTermTarget) targets.get(i);
-				String targetUri = target.getTargetURI();
-				String targetName = target.getTargetName();
+				final IndexTermTarget target = (IndexTermTarget) targets.get(i);
+				final String targetUri = target.getTargetURI();
+				final String targetName = target.getTargetName();
 				if (targetUri == null) {
 					printWriter.print("<topic");
 					printWriter.print(" title=\"");
@@ -283,7 +283,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter implement
 						// Find the term with an href.
 
 						for (int j = 0; j < termCloneNum; j++) {
-							IndexTerm termClone = (IndexTerm) termCloneList
+							final IndexTerm termClone = (IndexTerm) termCloneList
 									.get(j);
 
 							if (term.getTermName().equals(
@@ -322,8 +322,9 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter implement
 
 						}// end for
 						// If there are no subterms, then we are done.
-						if (term.getSubTerms().size() == 0)
-							inIndexsee = false;
+						if (term.getSubTerms().size() == 0) {
+                            inIndexsee = false;
+                        }
 
 					} else {
 						printWriter.print("<topic href=\"");
@@ -342,7 +343,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter implement
 			}//end for
 			
 			if (!foundIndexTerm && foundIndexsee && indexSeeRefTerm != null && !indexSeeRefTerm.equals("***")){
-				Properties prop=new Properties();
+				final Properties prop=new Properties();
 				prop.put("%1", indexSeeRefTerm.trim());
 				logger.logWarn(MessageUtils.getMessage("DOTJ050W", prop).toString());
 				
@@ -359,19 +360,19 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter implement
 	 * @param printWriter The Writer used for writing content to disk.
 	 */
 
-	private void outputIndexEntryEclipseIndexsee(IndexTerm term,
-			PrintWriter printWriter) {
-		List<IndexTermTarget> targets = term.getTargetList();
-		int targetNum = targets.size();
+	private void outputIndexEntryEclipseIndexsee(final IndexTerm term,
+			final PrintWriter printWriter) {
+		final List<IndexTermTarget> targets = term.getTargetList();
+		final int targetNum = targets.size();
 
 		// Index-see and index-see-also terms should also generate links to its
 		// target
 		// Otherwise, the term won't be displayed in the index tab.
 		if (targets != null && !targets.isEmpty()) {
 			for (int i = 0; i < targetNum; i++) {
-				IndexTermTarget target = targets.get(i);
-				String targetUri = target.getTargetURI();
-				String targetName = target.getTargetName();
+				final IndexTermTarget target = targets.get(i);
+				final String targetUri = target.getTargetURI();
+				final String targetName = target.getTargetName();
 				if (targetUri == null) {
 
 					printWriter.print("<topic");
@@ -405,8 +406,8 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter implement
 	 * @return List The deep cloned list 
 	 */
 	
-	private List<IndexTerm> cloneIndextermList (List<IndexTerm> termList){
-		 List<IndexTerm> termListClone = new ArrayList<IndexTerm>(termList.size());
+	private List<IndexTerm> cloneIndextermList (final List<IndexTerm> termList){
+		 final List<IndexTerm> termListClone = new ArrayList<IndexTerm>(termList.size());
 	        
 	        
 	     if (termList != null && !termList.isEmpty()){
@@ -424,7 +425,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter implement
 	 * @param printWriter The Writer used for writing content to disk.
 	 * @param indexsee Boolean value for using the new markup for see references.
 	 */
-	private void outputIndexTermStartElement (IndexTerm term, PrintWriter printWriter, boolean indexsee){
+	private void outputIndexTermStartElement (final IndexTerm term, final PrintWriter printWriter, final boolean indexsee){
 		
 				
 		//RFE 2987769 Eclipse index-see
@@ -485,7 +486,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter implement
 	 * @param printWriter The Writer used for writing content to disk.
 	 * @param indexsee Boolean value for using the new markup for see references.
 	 */
-	private void outputIndexTermEndElement (IndexTerm term, PrintWriter printWriter, boolean indexsee){
+	private void outputIndexTermEndElement (final IndexTerm term, final PrintWriter printWriter, final boolean indexsee){
 		
 		
         if (indexsee){

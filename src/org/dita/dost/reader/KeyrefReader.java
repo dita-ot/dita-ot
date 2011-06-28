@@ -36,7 +36,7 @@ public final class KeyrefReader extends AbstractXMLReader {
 		protected String key;
 		protected StringBuffer keyDefContent;
 		protected int keyDefLevel = 0;
-		public KeyDef(String key)
+		public KeyDef(final String key)
 		{
 			this.key=key;
 			keyDefContent = new StringBuffer();
@@ -73,7 +73,7 @@ public final class KeyrefReader extends AbstractXMLReader {
 	}
 	
 	@Override
-	public void characters(char[] ch, int start, int length)
+	public void characters(final char[] ch, final int start, final int length)
 			throws SAXException {
 		if(isStart()) {
             keyDefAppend(StringUtils.escapeXML(ch, start, length));
@@ -82,7 +82,7 @@ public final class KeyrefReader extends AbstractXMLReader {
 
 
 	@Override
-	public void endElement(String uri, String localName, String name)
+	public void endElement(final String uri, final String localName, final String name)
 			throws SAXException {
 		if(isStart()){
 			decKeyDefLevel();
@@ -113,7 +113,7 @@ public final class KeyrefReader extends AbstractXMLReader {
 
 
 	@Override
-	public void read(String filename) {
+	public void read(final String filename) {
 		keyDefs = new Stack<KeyDef>();
 		try {
 			//AlanChanged: by refactoring Adding URIResolver Date:2009-08-13 --begin
@@ -129,13 +129,13 @@ public final class KeyrefReader extends AbstractXMLReader {
 	 * set keys set for later comparison.
 	 * @param set keys set
 	 */
-	public void setKeys(Set<String> set){
+	public void setKeys(final Set<String> set){
 		this.keys = set;
 	}
 	
 	@Override
-	public void startElement(String uri, String localName, String name,
-			Attributes atts) throws SAXException {
+	public void startElement(final String uri, final String localName, final String name,
+			final Attributes atts) throws SAXException {
 		final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
 		final String keyName = atts.getValue(ATTRIBUTE_NAME_KEYS);
 		if(keyName!=null && classValue.contains(" map/topicref ")){
@@ -161,8 +161,8 @@ public final class KeyrefReader extends AbstractXMLReader {
 		}
 	}
 
-	private void putElement(String elemName,
-			Attributes atts) {
+	private void putElement(final String elemName,
+			final Attributes atts) {
 		int index = 0;
 		keyDefAppend(LESS_THAN);
 		keyDefAppend(elemName);
@@ -184,10 +184,10 @@ public final class KeyrefReader extends AbstractXMLReader {
 	 * Set temp dir.
 	 * @param tempDir temp dir
 	 */
-	public void setTempDir(String tempDir){
+	public void setTempDir(final String tempDir){
 		this.tempDir = tempDir;
 	}
-	private void pushKeyDef(String keyName)
+	private void pushKeyDef(final String keyName)
 	{
 		keyDefs.push(new KeyDef(keyName));
 	}
@@ -195,7 +195,7 @@ public final class KeyrefReader extends AbstractXMLReader {
 	{
 		return keyDefs.pop();
 	}
-	private void keyDefAppend(String content)
+	private void keyDefAppend(final String content)
 	{
 		for (final KeyDef keyDef : keyDefs)
 		{
@@ -214,7 +214,7 @@ public final class KeyrefReader extends AbstractXMLReader {
 	{
 		addKeyDefLevel(-1);
 	}
-	private void addKeyDefLevel(int dif)
+	private void addKeyDefLevel(final int dif)
 	{
 		keyDefs.peek().keyDefLevel+=dif;
 	}

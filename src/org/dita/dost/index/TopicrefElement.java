@@ -47,7 +47,7 @@ public final class TopicrefElement {
      * 
      * @param formatValue The format to set.
      */
-    public void setFormat(String formatValue) {
+    public void setFormat(final String formatValue) {
         this.format = formatValue;
     }
 
@@ -65,7 +65,7 @@ public final class TopicrefElement {
      * 
      * @param hrefValue The href to set.
      */
-    public void setHref(String hrefValue) {
+    public void setHref(final String hrefValue) {
         this.href = hrefValue;
     }
 
@@ -84,7 +84,7 @@ public final class TopicrefElement {
      * Set navtitle attribute with the given value.
      * @param aNavtitle The navtitle to set.
      */
-    public void setNavTitle (String aNavtitle){
+    public void setNavTitle (final String aNavtitle){
     	navtitle = aNavtitle;
     }
     

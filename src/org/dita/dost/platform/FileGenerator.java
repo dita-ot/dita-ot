@@ -116,7 +116,7 @@ final class FileGenerator extends DefaultHandler2 {
 
     private File removeTemplatePrefix(final File templateFile) {
         final String f = templateFile.getAbsolutePath();
-        int i = f.lastIndexOf(TEMPLATE_PREFIX);
+        final int i = f.lastIndexOf(TEMPLATE_PREFIX);
         if (i != -1) {
             return new File(f.substring(0, i)
                     + f.substring(i + TEMPLATE_PREFIX.length() - 1));

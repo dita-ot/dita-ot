@@ -77,7 +77,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
 	/**
 	 * @param filename filename
 	 */
-	public void read(String filename) {
+	public void read(final String filename) {
 		filePath = new File(filename).getParentFile().getAbsolutePath();
 		parsefilename = new File(filename).getName();
 		start = false;
@@ -112,8 +112,8 @@ public final class ConrefPushReader extends AbstractXMLReader {
 	}
 
 	@Override
-	public void startElement(String uri, String localName, String name,
-			Attributes atts) throws SAXException {
+	public void startElement(final String uri, final String localName, final String name,
+			final Attributes atts) throws SAXException {
 		if(start){
 			//if start is true, we need to record content in pushcontent
 			//also we need to add level to make sure start is turn off
@@ -235,8 +235,8 @@ public final class ConrefPushReader extends AbstractXMLReader {
 	 * @param atts attribute
 	 * @param removeConref whether remeove conref info
 	 */
-	private void putElement(StringBuffer buf, String elemName,
-			Attributes atts, boolean removeConref) {
+	private void putElement(final StringBuffer buf, final String elemName,
+			final Attributes atts, final boolean removeConref) {
 		//parameter boolean removeConref specifies whether to remove
 		//conref information like @conref @conaction in current element
 		//when copying it to pushcontent. True means remove and false means
@@ -297,7 +297,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
 	 * @param value string
 	 * @return URL
 	 */
-	private String replaceURL(String value) {
+	private String replaceURL(final String value) {
 		if(value == null){
 			return null;
 		}else if(target == null || 
@@ -320,7 +320,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
 	 * @param pushcontent content
 	 * @param type push type
 	 */
-	private void addtoPushTable(String target, String pushcontent, String type) {		
+	private void addtoPushTable(String target, final String pushcontent, final String type) {		
 		int sharpIndex = target.indexOf(SHARP);
 		if (sharpIndex == -1){
 			//if there is no '#' in target string, report error
@@ -367,7 +367,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
 	}
 
 	@Override
-	public void characters(char[] ch, int start, int length)
+	public void characters(final char[] ch, final int start, final int length)
 			throws SAXException {
 		if (this.start && needResolveEntity){
 			pushcontent.append(StringUtils.escapeXML(ch, start, length));
@@ -375,7 +375,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
 	}
 
 	@Override
-	public void endElement(String uri, String localName, String name)
+	public void endElement(final String uri, final String localName, final String name)
 			throws SAXException {
 		if (start){
 			level --;
@@ -400,7 +400,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
 	
 	//Added by william on 2009-11-8 for ampbug:2893664 start
 	@Override
-	public void startEntity(String name) throws SAXException {
+	public void startEntity(final String name) throws SAXException {
 		 try {
          	needResolveEntity = StringUtils.checkEntity(name);
          	if(!needResolveEntity){
@@ -412,7 +412,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
 	}
 	
 	@Override
-	public void endEntity(String name) throws SAXException {
+	public void endEntity(final String name) throws SAXException {
 		if(!needResolveEntity){
 			needResolveEntity = true;
 		}

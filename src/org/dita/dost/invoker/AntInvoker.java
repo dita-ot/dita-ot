@@ -34,9 +34,9 @@ public final class AntInvoker extends Task {
 	/**equal sign.*/
 	private final static String KEY_VALUE_EQUAL_SIGN = "=";
 	/**pipeline.*/
-	private PipelineFacade pipeline;
+	private final PipelineFacade pipeline;
 	/**hashIO.*/
-	private PipelineHashIO pipelineInput;
+	private final PipelineHashIO pipelineInput;
 	
 	/**
 	 * Defalut Constructor. Construct pipeline & input instance.
@@ -51,7 +51,7 @@ public final class AntInvoker extends Task {
 	 * Set the "module" attribute for input.
 	 * @param module - The module to set.
 	 */
-	public void setModule(String module) {
+	public void setModule(final String module) {
 		pipelineInput.setAttribute("module", module);
 	}
 
@@ -59,7 +59,7 @@ public final class AntInvoker extends Task {
 	 * Set the "inputdata" attribute for input.
 	 * @param inputdita - The inputdita to set.        
 	 */
-	public void setInputdita(String inputdita) {
+	public void setInputdita(final String inputdita) {
 		pipelineInput.setAttribute("inputdita", inputdita);
 	}
 
@@ -67,7 +67,7 @@ public final class AntInvoker extends Task {
 	 * Set the "inputmap" attribute for input.
 	 * @param inputmap - The inputmap to set.           
 	 */
-	public void setInputmap(String inputmap) {
+	public void setInputmap(final String inputmap) {
 		pipelineInput.setAttribute("inputmap", inputmap);
 	}
 
@@ -75,7 +75,7 @@ public final class AntInvoker extends Task {
 	 * Set the "message" attribute for input.
 	 * @param msg -  The msg to set.        
 	 */
-	public void setMessage(String msg) {
+	public void setMessage(final String msg) {
 		pipelineInput.setAttribute("message", msg);
 	}
 
@@ -83,7 +83,7 @@ public final class AntInvoker extends Task {
 	 * Set the "basedir" attribute for input.
 	 * @param baseDir - base dir to set.
 	 */
-	public void setBasedir(String baseDir) {
+	public void setBasedir(final String baseDir) {
 		pipelineInput.setAttribute("basedir", baseDir);
 	}
 
@@ -91,7 +91,7 @@ public final class AntInvoker extends Task {
 	 * Set the 'tempDir' attribute for input.
 	 * @param tempdir temp
 	 */
-	public void setTempdir(String tempdir) {
+	public void setTempdir(final String tempdir) {
 		pipelineInput.setAttribute("tempDir", tempdir);
 	}
 
@@ -100,11 +100,11 @@ public final class AntInvoker extends Task {
 	 * @param extParam extended parameters string, key value pair string separated by
 	 *            ";" eg. extparam="maplinks=XXXX;other=YYYY"          
 	 */
-	public void setExtparam(String extParam) {
+	public void setExtparam(final String extParam) {
 		String keyValueStr = null;
 		String attrName = null;
 		String attrValue = null;
-		StringTokenizer extParamStrTokenizer = new StringTokenizer(extParam,
+		final StringTokenizer extParamStrTokenizer = new StringTokenizer(extParam,
 				KEY_VALUE_PAIR_SEPARATOR);
 
 		while (extParamStrTokenizer.hasMoreTokens()) {
@@ -114,7 +114,7 @@ public final class AntInvoker extends Task {
 
 			if (p <= 0) {
 				String msg = null;
-				Properties params = new Properties();
+				final Properties params = new Properties();
 
 				params.put("%1", keyValueStr);
 				msg = MessageUtils.getMessage("DOTJ006F", params).toString();
@@ -127,7 +127,7 @@ public final class AntInvoker extends Task {
 			if (StringUtils.isEmptyString(attrName) ||
 					StringUtils.isEmptyString(attrValue)) {
 				String msg = null;
-				Properties params = new Properties();
+				final Properties params = new Properties();
 
 				params.put("%1", keyValueStr);
 				msg = MessageUtils.getMessage("DOTJ006F", params).toString();
@@ -148,7 +148,7 @@ public final class AntInvoker extends Task {
 		try {
 			pipeline.execute(pipelineInput.getAttribute("module"),
 					pipelineInput);
-		} catch (DITAOTException e) {
+		} catch (final DITAOTException e) {
 			throw new BuildException(e.getMessage(), e);
 		}
 

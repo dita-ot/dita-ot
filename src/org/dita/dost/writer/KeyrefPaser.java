@@ -58,7 +58,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 
 	// It is stack used to store the place of current element
 	// relative to the key reference element. Because keyref can be nested.
-	private Stack<Integer> keyrefLevalStack;
+	private final Stack<Integer> keyrefLevalStack;
 
 	// It is used to store the place of current element
 	// relative to the key reference element. If it is out of range of key
@@ -94,7 +94,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 	// It is used to indicate whether the keyref is valid.
 	// The descendant element should know whether keyref is valid.
 	// Because keryef can be nested
-	private Stack<Boolean> validKeyref;
+	private final Stack<Boolean> validKeyref;
 
 	// Flag indicating whether the key reference element is empty,
 	// If it is empty, it should pull matching content from the key definition.
@@ -105,7 +105,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 	//private Stack<String> keyref;
 	
 	// It is used to store the name of the element containing keyref attribute.
-	private Stack<String> elemName;
+	private final Stack<String> elemName;
 	
 	// It is used to store the class value of the element, because in the function of 
 	// endElement() the class value can not be acquired.
@@ -114,7 +114,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 	private boolean hasChecked;
 	
 	// It is used to indicate whether key reference element has sub element. 
-	private Stack<Boolean> hasSubElem;
+	private final Stack<Boolean> hasSubElem;
 	
 	private Document doc;
 	
@@ -190,24 +190,25 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 			parser.setFeature(FEATURE_NAMESPACE_PREFIX, true);
 			parser.setFeature(FEATURE_NAMESPACE, true);
 			parser.setContentHandler(this);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			logger.logException(e);
 		}
 	}
 
 	@Override
-	public void characters(char[] ch, int start, int length)
+	public void characters(final char[] ch, final int start, final int length)
 			throws SAXException {
 		try {
 			if (keyrefLeval != 0 && new String(ch,start,length).trim().length() == 0) {
-				if(!hasChecked)
-					empty = true;
+				if(!hasChecked) {
+                    empty = true;
+                }
 			}else{
 				hasChecked = true;
 				empty = false;
 			}
 			output.write(StringUtils.escapeXML(ch, start, length));
-		} catch (IOException e) {
+		} catch (final IOException e) {
 
 			logger.logException(e);
 		}
@@ -218,19 +219,19 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 		try {
 			output.flush();
 			output.close();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			logger.logException(e);
 		} finally {
 			try {
 				output.close();
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				logger.logException(e);
 			}
 		}
 	}
 
 	@Override
-	public void endElement(String uri, String localName, String name)
+	public void endElement(final String uri, final String localName, final String name)
 			throws SAXException {
 		// write the end element
 		try {
@@ -241,18 +242,18 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 				if (!validKeyref.isEmpty() && validKeyref.peek()) {
 					// Key reference is valid, 
 					// need to pull matching content from the key definition
-					Element  elem = doc.getDocumentElement();
+					final Element  elem = doc.getDocumentElement();
 					NodeList nodeList = null;
 					// If current element name doesn't equal the key reference element
 					// just grab the content from the matching element of key definition
 					if(!name.equals(elemName.peek())){
 						nodeList = elem.getElementsByTagName(name);
 						if(nodeList.getLength() > 0){
-							Node node = nodeList.item(0);
-							NodeList nList = node.getChildNodes();
+							final Node node = nodeList.item(0);
+							final NodeList nList = node.getChildNodes();
 							int index = 0;
 							while(index < nList.getLength()){
-								Node n = nList.item(index++);
+								final Node n = nList.item(index++);
 								if(n.getNodeType() == Node.TEXT_NODE){
 									output.write(n.getNodeValue());
 									break;
@@ -280,7 +281,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 										output.write("<linktext class=\"- topic/linktext \">");
 									}
 									for(int index =0; index<nodeList.getLength(); index++){
-										Node node = nodeList.item(index);
+										final Node node = nodeList.item(index);
 										if(node.getNodeType() == Node.ELEMENT_NODE){
 											output.write(nodeToString((Element)node, true));
 										}
@@ -294,7 +295,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 								if(classValue.equals("topic/link")){
 									// If the key reference element is link or its specification, 
 									// should pull in the linktext
-									NodeList linktext = elem.getElementsByTagName("linktext");
+									final NodeList linktext = elem.getElementsByTagName("linktext");
 									if(linktext.getLength()>0){
 										output.write(nodeToString((Element)linktext.item(0), true));
 									}else if (!StringUtils.isEmptyString(elem.getAttribute(ATTRIBUTE_NAME_NAVTITLE))){
@@ -303,7 +304,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 										output.write("</linktext>");
 									}
 								}else if(withHref.contains(classValue)){
-									NodeList linktext = elem.getElementsByTagName(ELEMENT_NAME_LINKTEXT);
+									final NodeList linktext = elem.getElementsByTagName(ELEMENT_NAME_LINKTEXT);
 									if(linktext.getLength()>0){
 										output.write(nodeToString((Element)linktext.item(0), false));
 									}else{
@@ -334,36 +335,36 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 			output.write(name);
 			output.write(GREATER_THAN);
 
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			logger.logException(e);
 		}
 	}
 
 	@Override
-	public void ignorableWhitespace(char[] ch, int start, int length)
+	public void ignorableWhitespace(final char[] ch, final int start, final int length)
 			throws SAXException {
 		try {
 			output.write(ch, start, length);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			logger.logException(e);
 		}
 	}
 
 	@Override
-	public void processingInstruction(String target, String data)
+	public void processingInstruction(final String target, final String data)
 			throws SAXException {
 		try {
-			String pi = (data != null) ? target + STRING_BLANK + data
+			final String pi = (data != null) ? target + STRING_BLANK + data
 					: target;
 			output.write(LESS_THAN + QUESTION + pi
 					+ QUESTION + GREATER_THAN);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			logger.logException(e);
 		}
 	}
 
 	@Override
-	public void setContent(Content content) {
+	public void setContent(final Content content) {
 		this.content = content;
 	}
 
@@ -373,8 +374,8 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 	}
 
 	@Override
-	public void startElement(String uri, String localName, String name,
-			Attributes atts) throws SAXException {
+	public void startElement(final String uri, final String localName, final String name,
+			final Attributes atts) throws SAXException {
 		try {
 			hasChecked = false;
 			empty = true;
@@ -406,7 +407,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 				// definition to key reference.
 				
 				elemName.push(name);
-				Set<String> aset = new HashSet<String>();
+				final Set<String> aset = new HashSet<String>();
 				//hasKeyref = true;
 				if (keyrefLeval != 0) {
 					keyrefLevalStack.push(keyrefLeval);
@@ -423,22 +424,22 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 				/*String definition = ((Hashtable<String, String>) content
 						.getValue()).get(atts
 						.getValue(ATTRIBUTE_NAME_KEYREF));*/
-				String keyrefValue=atts.getValue(ATTRIBUTE_NAME_KEYREF);
-				int slashIndex=keyrefValue.indexOf(SLASH);
+				final String keyrefValue=atts.getValue(ATTRIBUTE_NAME_KEYREF);
+				final int slashIndex=keyrefValue.indexOf(SLASH);
 				String keyName= keyrefValue;
 				String tail= "";
 				if (slashIndex != -1) {
 					keyName = keyrefValue.substring(0, slashIndex);
 					tail = keyrefValue.substring(slashIndex);
 				}
-				String definition = ((Hashtable<String, String>)content.getValue()).get(keyName);
+				final String definition = ((Hashtable<String, String>)content.getValue()).get(keyName);
 				//Edit by Alan for bug ID: 2849078   date:2009-09-03  --End
 				
 				// If definition is not null 
 				if(definition!=null){
 					doc = keyDefToDoc(definition);
-					Element elem = doc.getDocumentElement();
-					NamedNodeMap namedNodeMap = elem.getAttributes();
+					final Element elem = doc.getDocumentElement();
+					final NamedNodeMap namedNodeMap = elem.getAttributes();
 					// first resolve the keyref attribute
 					if (withHref.contains(classValue)) {
 						String target = keyMap.get(keyName);
@@ -446,14 +447,14 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 							String target_output = target;
 							// if the scope equals local, the target should be verified that
 							// it exists, and add the href and scope to aSet.
-							String scopeValue=elem.getAttribute(ATTRIBUTE_NAME_SCOPE);						 
+							final String scopeValue=elem.getAttribute(ATTRIBUTE_NAME_SCOPE);						 
 							if (("".equals(scopeValue) || "local".equals(scopeValue)) && !"topic/image".equals(classValue)){
 								target = FileUtils.replaceExtName(target, extName);
 								if (new File(FileUtils.resolveFile(tempDir, target))
 										.exists()) {
 									//Added by William on 2010-05-26 for bug:3004060 start
-									File topicFile = new File(FileUtils.resolveFile(tempDir, target));
-									String topicId = this.getFirstTopicId(topicFile);
+									final File topicFile = new File(FileUtils.resolveFile(tempDir, target));
+									final String topicId = this.getFirstTopicId(topicFile);
 									//Added by William on 2010-05-26 for bug:3004060 end
 									target_output = FileUtils
 											.getRelativePathFromMap(filepath,
@@ -509,7 +510,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 							aset.add(ATTRIBUTE_NAME_FORMAT);
 						}else{
 							// key does not exist.
-							Properties prop = new Properties();
+							final Properties prop = new Properties();
 							prop.put("%1", atts.getValue("keyref"));
 							logger
 									.logInfo(MessageUtils.getMessage("DOTJ047I", prop)
@@ -517,7 +518,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 						}
 	
 					} else if (withOutHref.contains(classValue)) {
-						String target = keyMap.get(keyName);
+						final String target = keyMap.get(keyName);
 	
 						if (target != null) {
 							valid = true;
@@ -527,7 +528,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 							aset.add(ATTRIBUTE_NAME_FORMAT);
 						} else {
 							// key does not exist
-							Properties prop = new Properties();
+							final Properties prop = new Properties();
 							prop.put("%1", atts.getValue("keyref"));
 							logger
 									.logInfo(MessageUtils.getMessage("DOTJ047I", prop)
@@ -543,7 +544,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 						if (classValue.contains("map/topicref")) {
 							// @keyref in topicref
 							for (int index = 0; index < namedNodeMap.getLength(); index++) {
-								Node node = namedNodeMap.item(index);
+								final Node node = namedNodeMap.item(index);
 								if (node.getNodeType() == Node.ATTRIBUTE_NODE
 										&& !no_copy.contains(node.getNodeName())) {
 									aset.add(node.getNodeName());
@@ -560,7 +561,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 							if (withHref.contains(classValue)) {
 								// current element with href attribute
 								for (int index = 0; index < namedNodeMap.getLength(); index++) {
-									Node node = namedNodeMap.item(index);
+									final Node node = namedNodeMap.item(index);
 									if (node.getNodeType() == Node.ATTRIBUTE_NODE
 											&& !no_copy_topic.contains(node
 													.getNodeName())) {
@@ -576,7 +577,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 								// current element without href attribute
 								// so attributes about href should not be copied.
 								for (int index = 0; index < namedNodeMap.getLength(); index++) {
-									Node node = namedNodeMap.item(index);
+									final Node node = namedNodeMap.item(index);
 									if (node.getNodeType() == Node.ATTRIBUTE_NODE
 											&& !no_copy_topic.contains(node
 													.getNodeName())
@@ -600,7 +601,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 					}
 				}else{
 					// key does not exist
-					Properties prop = new Properties();
+					final Properties prop = new Properties();
 					prop.put("%1", atts.getValue("keyref"));
 					logger
 							.logInfo(MessageUtils.getMessage("DOTJ047I", prop)
@@ -627,44 +628,44 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 			output.write(GREATER_THAN);
 
 			output.flush();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			logger.logException(e);
 		}
 
 	}
 
 	@Override
-	public void write(String filename) throws DITAOTException {
+	public void write(final String filename) throws DITAOTException {
 		// added By Alan for ID: 2860433 on 2009-09-17
 		this.fileName=filename;
 		try {
-			File inputFile = new File(tempDir, filename);
+			final File inputFile = new File(tempDir, filename);
 			filepath = inputFile.getAbsolutePath();
-			File outputFile = new File(tempDir, filename + "keyref");
+			final File outputFile = new File(tempDir, filename + "keyref");
 			output = new OutputStreamWriter(new FileOutputStream(outputFile),UTF8);
 			parser.parse(inputFile.getAbsolutePath());
 			output.close();
 			if (!inputFile.delete()) {
-				Properties prop = new Properties();
+				final Properties prop = new Properties();
 				prop.put("%1", inputFile.getPath());
 				prop.put("%2", outputFile.getPath());
 				logger.logError(MessageUtils.getMessage("DOTJ009E", prop)
 						.toString());
 			}
 			if (!outputFile.renameTo(inputFile)) {
-				Properties prop = new Properties();
+				final Properties prop = new Properties();
 				prop.put("%1", inputFile.getPath());
 				prop.put("%2", outputFile.getPath());
 				logger.logError(MessageUtils.getMessage("DOTJ009E", prop)
 						.toString());
 			}
 
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			logger.logException(e);
 		} finally {
 			try {
 				output.close();
-			} catch (Exception ex) {
+			} catch (final Exception ex) {
 				logger.logException(ex);
 			}
 		}
@@ -674,53 +675,54 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 	 * Set temp dir.
 	 * @param tempDir temp dir
 	 */
-	public void setTempDir(String tempDir) {
+	public void setTempDir(final String tempDir) {
 		this.tempDir = tempDir;
 	}
 	/**
 	 * Set key map.
 	 * @param map key map
 	 */
-	public void setKeyMap(Map<String, String> map) {
+	public void setKeyMap(final Map<String, String> map) {
 		this.keyMap = map;
 	}
 
-	private Document keyDefToDoc(String key) {
+	private Document keyDefToDoc(final String key) {
 		InputSource inputSource = null;
 		Document document = null;
 		inputSource = new InputSource(new StringReader(key));
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		try {
-			DocumentBuilder documentBuilder = factory.newDocumentBuilder();
+			final DocumentBuilder documentBuilder = factory.newDocumentBuilder();
 			document = documentBuilder.parse(inputSource);
 			return document;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			logger.logException(e);
 			return document;
 		}
 	}
 	
-	private String nodeToString(Element elem, boolean flag){
+	private String nodeToString(final Element elem, final boolean flag){
 		// use flag to indicate that whether there is need to copy the element name
-		StringBuffer stringBuffer = new StringBuffer();
+		final StringBuffer stringBuffer = new StringBuffer();
 		if(flag){
 			stringBuffer.append(LESS_THAN).append(elem.getNodeName());
-			NamedNodeMap namedNodeMap = elem.getAttributes();
+			final NamedNodeMap namedNodeMap = elem.getAttributes();
 			for(int i=0; i<namedNodeMap.getLength(); i++){
 				String classValue = namedNodeMap.item(i).getNodeValue();
-				if(namedNodeMap.item(i).getNodeName().equals(ATTRIBUTE_NAME_CLASS))
-					classValue = changeclassValue(classValue);
+				if(namedNodeMap.item(i).getNodeName().equals(ATTRIBUTE_NAME_CLASS)) {
+                    classValue = changeclassValue(classValue);
+                }
 				stringBuffer.append(STRING_BLANK).append(namedNodeMap.item(i).getNodeName()).append(EQUAL).append(QUOTATION+classValue+QUOTATION);
 			}
 			stringBuffer.append(GREATER_THAN);
 		}
-		NodeList nodeList = elem.getChildNodes();
+		final NodeList nodeList = elem.getChildNodes();
 		for(int i=0; i<nodeList.getLength(); i++){
-			Node node = nodeList.item(i);
+			final Node node = nodeList.item(i);
 			if(node.getNodeType() == Node.ELEMENT_NODE){
 				//Added by William on 2010-05-20 for bug:3004220 start
 				//special process for tm tag.
-				String classValue = node.getAttributes().getNamedItem(ATTRIBUTE_NAME_CLASS).getNodeValue();
+				final String classValue = node.getAttributes().getNamedItem(ATTRIBUTE_NAME_CLASS).getNodeValue();
 				if(classValue.contains(" topic/tm ")){
 					stringBuffer.append(nodeToString((Element)node, true));
 				}else{
@@ -735,12 +737,13 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 				stringBuffer.append(node.getNodeValue());
 			}
 		}
-		if(flag)
-			stringBuffer.append("</").append(elem.getNodeName()).append(GREATER_THAN);
+		if(flag) {
+            stringBuffer.append("</").append(elem.getNodeName()).append(GREATER_THAN);
+        }
 		return stringBuffer.toString();
 	}
 	
-	private String changeclassValue(String classValue){
+	private String changeclassValue(final String classValue){
 		return classValue.replaceAll("map/", "topic/");
 	}
 	
@@ -757,15 +760,15 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 	 * Set extension name.
 	 * @param extName extension name
 	 */
-	public void setExtName(String extName) {
+	public void setExtName(final String extName) {
 		this.extName = extName;
 	}
 	//Added by Alan Date:2009-08-04 --end
 	
 	//Added by Alan Date:2009-09-03 Bug ID: 2849078
 	//change elementId into topicId if there is no topicId in key definition.
-	private static String normalizeHrefValue(String keyName, String tail) {
-		int sharpIndex=keyName.indexOf(SHARP);
+	private static String normalizeHrefValue(final String keyName, final String tail) {
+		final int sharpIndex=keyName.indexOf(SHARP);
 		if(sharpIndex == -1){
 			return keyName + tail.replaceAll(SLASH, SHARP);
 		}
@@ -774,15 +777,15 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 	
 	//Added by William on 2010-05-26 for bug:3004060 start
 	//Get first topic id
-	private String getFirstTopicId(File topicFile) {
-		String path = topicFile.getParent();
-		String name = topicFile.getName();
-		String topicId = MergeUtils.getFirstTopicId(name, path, false);
+	private String getFirstTopicId(final File topicFile) {
+		final String path = topicFile.getParent();
+		final String name = topicFile.getName();
+		final String topicId = MergeUtils.getFirstTopicId(name, path, false);
 		return topicId;
 	}
 	//Insert topic id into href 
-	private static String normalizeHrefValue(String fileName, String tail, String topicId) {
-		int sharpIndex=fileName.indexOf(SHARP);
+	private static String normalizeHrefValue(final String fileName, final String tail, final String topicId) {
+		final int sharpIndex=fileName.indexOf(SHARP);
 		//Insert first topic id only when topicid is not set in keydef 
 		//and keyref has elementid
 		if(sharpIndex == -1 && !"".equals(tail)){

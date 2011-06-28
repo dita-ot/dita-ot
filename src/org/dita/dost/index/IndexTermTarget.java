@@ -44,7 +44,7 @@ public final class IndexTermTarget {
      * Set the target topic's name (title).
      * @param name The targetName to set.         
      */
-    public void setTargetName(String name) {
+    public void setTargetName(final String name) {
         this.targetName = name;
     }
 
@@ -61,7 +61,7 @@ public final class IndexTermTarget {
      * Set the target topic's URI.
      * @param uri The targetURI to set.
      */
-    public void setTargetURI(String uri) {
+    public void setTargetURI(final String uri) {
         this.targetURI = uri;
     }
 
@@ -71,9 +71,9 @@ public final class IndexTermTarget {
      * @param obj object to compare
      * @return boolean true if equals
      */
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (obj instanceof IndexTermTarget) {
-            IndexTermTarget target = (IndexTermTarget) obj;
+            final IndexTermTarget target = (IndexTermTarget) obj;
             
             if (targetName.equals(target.getTargetName())
                     && targetURI.equals(target.getTargetURI())) {

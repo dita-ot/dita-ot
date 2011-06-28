@@ -49,10 +49,10 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
     private OutputStreamWriter output;
     private XMLReader reader;
     private boolean startTopic; //whether to insert links at this topic
-    private List<String> topicIdList; // array list that is used to keep the hierarchy of topic id
+    private final List<String> topicIdList; // array list that is used to keep the hierarchy of topic id
     private boolean insideCDATA;
     private boolean hasWritten;
-    private ArrayList<String> topicSpecList = new ArrayList<String>();
+    private final ArrayList<String> topicSpecList = new ArrayList<String>();
     private int topicLevel = -1;
 
 
@@ -83,7 +83,7 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
 			reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
 			reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
 			//Edited by william on 2009-11-8 for ampbug:2893664 end
-        } catch (Exception e) {
+        } catch (final Exception e) {
         	logger.logException(e);
         }
 
@@ -91,15 +91,16 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
 
 
     @Override
-    public void characters(char[] ch, int start, int length)
+    public void characters(final char[] ch, final int start, final int length)
             throws SAXException {
     	if(needResolveEntity){
     		try {
-    			if(insideCDATA)
-    				output.write(ch, start, length);
-    			else
-    				output.write(StringUtils.escapeXML(ch, start, length));
-        	} catch (Exception e) {
+    			if(insideCDATA) {
+                    output.write(ch, start, length);
+                } else {
+                    output.write(StringUtils.escapeXML(ch, start, length));
+                }
+        	} catch (final Exception e) {
         		logger.logException(e);
         	}
     	}
@@ -110,10 +111,10 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
 		if (matchList == null){
 			return true;
 		}
-        int matchSize = matchList.size();
-        int ancestorSize = topicIdList.size();
-        ListIterator<String> matchIterator = matchList.listIterator();
-        ListIterator<String> ancestorIterator = topicIdList.listIterator(ancestorSize
+        final int matchSize = matchList.size();
+        final int ancestorSize = topicIdList.size();
+        final ListIterator<String> matchIterator = matchList.listIterator();
+        final ListIterator<String> ancestorIterator = topicIdList.listIterator(ancestorSize
                 - matchSize);
         String match;
         String ancestor;
@@ -133,7 +134,7 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
     	insideCDATA = false;
 	    try{
 	        output.write(CDATA_END);
-	    }catch(Exception e){
+	    }catch(final Exception e){
 	    	logger.logException(e);
 	    }
 	}
@@ -143,13 +144,13 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
 
         try {
             output.flush();
-        } catch (Exception e) {
+        } catch (final Exception e) {
         	logger.logException(e);
         }
     }
 
     @Override
-    public void endElement(String uri, String localName, String qName)
+    public void endElement(final String uri, final String localName, final String qName)
             throws SAXException {
         if (!startTopic){
             topicIdList.remove(topicIdList.size() - 1);
@@ -178,19 +179,19 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
                 hasWritten = true;
             }
             
-        } catch (Exception e) {
+        } catch (final Exception e) {
         	logger.logException(e);
         }
     }
 
 	@Override
-    public void endEntity(String name) throws SAXException {
+    public void endEntity(final String name) throws SAXException {
 		if(!needResolveEntity){
 			needResolveEntity = true;
 		}
 	}
 	
-	private boolean hasMetadata(String qName){
+	private boolean hasMetadata(final String qName){
 		//check whether there is <metadata> in <prolog> element
 		//if there is <prolog> element and there is no <metadata> element before
 		//and current element is <resourceid>, then there is no <metadata> in current
@@ -201,7 +202,7 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
 		return true;
 	}
 	
-	private boolean hasProlog(Attributes atts){
+	private boolean hasProlog(final Attributes atts){
 		//check whether there is <prolog> in the current topic
 		//if current element is <body> and there is no <prolog> before
 		//then this topic has no <prolog> and return false
@@ -232,40 +233,40 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
 	}
 
     @Override
-    public void ignorableWhitespace(char[] ch, int start, int length)
+    public void ignorableWhitespace(final char[] ch, final int start, final int length)
             throws SAXException {
         try {
             output.write(ch, start, length);
-        } catch (Exception e) {
+        } catch (final Exception e) {
         	logger.logException(e);
         }
     }
 
     @Override
-    public void processingInstruction(String target, String data)
+    public void processingInstruction(final String target, final String data)
             throws SAXException {
         String pi;
         try {
             pi = (data != null) ? target + STRING_BLANK + data : target;
             output.write(LESS_THAN + QUESTION 
                     + pi + QUESTION + GREATER_THAN);
-        } catch (Exception e) {
+        } catch (final Exception e) {
         	logger.logException(e);
         }
     }
 
     @Override
-    public void setContent(Content content) {
+    public void setContent(final Content content) {
         indexEntries = (String) content.getValue();
     }
-    private void setMatch(String match) {
+    private void setMatch(final String match) {
 		int index = 0;
         matchList = new ArrayList<String>(INT_16);
         
         firstMatchTopic = (match.indexOf(SLASH) != -1) ? match.substring(0, match.indexOf('/')) : match;
 
         while (index != -1) {
-            int end = match.indexOf(SLASH, index);
+            final int end = match.indexOf(SLASH, index);
             if (end == -1) {
                 matchList.add(match.substring(index));
                 lastMatchTopic = match.substring(index);
@@ -278,10 +279,10 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
     }
 
     @Override
-    public void skippedEntity(String name) throws SAXException {
+    public void skippedEntity(final String name) throws SAXException {
         try {
             output.write(StringUtils.getEntity(name));
-        } catch (Exception e) {
+        } catch (final Exception e) {
         	logger.logException(e);
         }
     }
@@ -291,15 +292,15 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
     	insideCDATA = true;
 	    try{
 	        output.write(CDATA_HEAD);
-	    }catch(Exception e){
+	    }catch(final Exception e){
 	    	logger.logException(e);
 	    }
 	}
 
     @Override
-    public void startElement(String uri, String localName, String qName,
-            Attributes atts) throws SAXException {
-    	int attsLen = atts.getLength();
+    public void startElement(final String uri, final String localName, final String qName,
+            final Attributes atts) throws SAXException {
+    	final int attsLen = atts.getLength();
     	
         try {
         	if (topicLevel != -1){
@@ -335,7 +336,7 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
 
             output.write(LESS_THAN + qName);
             for (int i = 0; i < attsLen; i++) {
-                String attQName = atts.getQName(i);
+                final String attQName = atts.getQName(i);
                 String attValue;
                 attValue = atts.getValue(i);
                 
@@ -362,25 +363,25 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
 	                hasPrologTillNow = true;
 	            }
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
         	logger.logException(e);
         }
     }
 
 	@Override
-    public void startEntity(String name) throws SAXException {
+    public void startEntity(final String name) throws SAXException {
 		try {
            	needResolveEntity = StringUtils.checkEntity(name);
            	if(!needResolveEntity){
            		output.write(StringUtils.getEntity(name));
            	}
-        } catch (Exception e) {
+        } catch (final Exception e) {
         	logger.logException(e);
         }
 	}
 
     @Override
-    public void write(String outputFilename) {
+    public void write(final String outputFilename) {
     	String filename = outputFilename;
 		String file = null;
 		String topic = null;
@@ -418,23 +419,23 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
 
             output.close();
             if(!inputFile.delete()){
-            	Properties prop = new Properties();
+            	final Properties prop = new Properties();
             	prop.put("%1", inputFile.getPath());
             	prop.put("%2", outputFile.getPath());
             	logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
             }
             if(!outputFile.renameTo(inputFile)){
-            	Properties prop = new Properties();
+            	final Properties prop = new Properties();
             	prop.put("%1", inputFile.getPath());
             	prop.put("%2", outputFile.getPath());
             	logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
         	logger.logException(e);
         }finally {
             try{
                 fileOutput.close();
-            } catch (Exception e) {
+            } catch (final Exception e) {
             	logger.logException(e);
             }
         }

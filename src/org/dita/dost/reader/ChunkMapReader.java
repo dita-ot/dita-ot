@@ -89,7 +89,7 @@ public final class ChunkMapReader implements AbstractReader {
 	 * read input file.
 	 * @param filename filename
 	 */
-	public void read(String filename) {
+	public void read(final String filename) {
 		final File inputFile = new File(filename);
         filePath = inputFile.getParent();
 		try {
@@ -235,7 +235,7 @@ public final class ChunkMapReader implements AbstractReader {
         this.logger = logger;
     }
 	
-	private void outputMapFile(String file, Element root) {
+	private void outputMapFile(final String file, final Element root) {
 		
 		OutputStreamWriter output = null;
 		try{
@@ -271,17 +271,17 @@ public final class ChunkMapReader implements AbstractReader {
 		}
 	}
 		
-	private void output(ProcessingInstruction instruction,Writer outputWriter) throws IOException{
+	private void output(final ProcessingInstruction instruction,final Writer outputWriter) throws IOException{
 		outputWriter.write("<?"+instruction.getTarget()+" "+instruction.getData()+"?>");		
 	}
 
 
-	private void output(Text text, Writer outputWriter) throws IOException{
+	private void output(final Text text, final Writer outputWriter) throws IOException{
 		outputWriter.write(StringUtils.escapeXML(text.getData()));
 	}
 
 
-	private void output(Element elem, Writer outputWriter) throws IOException{
+	private void output(final Element elem, final Writer outputWriter) throws IOException{
 		outputWriter.write("<"+elem.getNodeName());
 		final NamedNodeMap attrMap = elem.getAttributes();
 		for (int i = 0; i<attrMap.getLength(); i++){
@@ -307,7 +307,7 @@ public final class ChunkMapReader implements AbstractReader {
 		outputWriter.write("</"+elem.getNodeName()+">");
 	}
 	//process chunk
-	private void processTopicref(Node node) {
+	private void processTopicref(final Node node) {
 		NamedNodeMap attr = null;
 		Node hrefAttr = null;
 		Node chunkAttr = null;
@@ -478,7 +478,7 @@ public final class ChunkMapReader implements AbstractReader {
 	}	
 	
 
-	private void processChildTopicref(Node node) {
+	private void processChildTopicref(final Node node) {
 		final NodeList children = node.getChildNodes();
 		for (int i = 0; i < children.getLength(); i++){
 			final Node current = children.item(i);
@@ -509,7 +509,7 @@ public final class ChunkMapReader implements AbstractReader {
 		
 	}
 
-	private void processChunk(Element elem, boolean separate, boolean chunkByTopic) {
+	private void processChunk(final Element elem, final boolean separate, final boolean chunkByTopic) {
 		//set up ChunkTopicParser
 		try{
 			final ChunkTopicParser chunkParser = new ChunkTopicParser();
@@ -521,7 +521,7 @@ public final class ChunkMapReader implements AbstractReader {
 		}
 	}
 
-	private void updateReltable(Element elem) {
+	private void updateReltable(final Element elem) {
 		final String hrefValue = elem.getAttribute(ATTRIBUTE_NAME_HREF);
 		String resulthrefValue = null;
 		if (hrefValue.length() != 0){
@@ -569,7 +569,7 @@ public final class ChunkMapReader implements AbstractReader {
 	 * @param ditaext ditaext
 	 * @param transtype transtype
 	 */
-	public void setup(String ditaext, String transtype) {
+	public void setup(final String ditaext, final String transtype) {
 		this.ditaext = ditaext;
 		this.transtype = transtype;
 		

@@ -670,7 +670,7 @@ public final class FileUtils {
      * @param aURLString UNIX or URI path
      * @return base path
      */
-    public static String derivePath(String aURLString) {
+    public static String derivePath(final String aURLString) {
         final int pathnameStartIndex = aURLString.indexOf(UNIX_SEPARATOR);
         final int pathnameEndIndex = aURLString.lastIndexOf(UNIX_SEPARATOR);
         String aPath = aURLString.substring(pathnameStartIndex, pathnameEndIndex);

@@ -34,11 +34,11 @@ public final class Messages {
 	 * @param msgLocale locale
 	 * @return string
 	 */
-	public static String getString (String key, Locale msgLocale){
+	public static String getString (final String key, final Locale msgLocale){
 		RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME, msgLocale);
 		try {
 			return RESOURCE_BUNDLE.getString(key);
-		} catch (MissingResourceException e) {
+		} catch (final MissingResourceException e) {
 			return key;
 		}
 	}

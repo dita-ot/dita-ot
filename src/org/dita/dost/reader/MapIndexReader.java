@@ -41,7 +41,7 @@ public final class MapIndexReader extends AbstractXMLReader {
     private static final String INTERNET_LINK_MARK = "://";
 
     // check whether the index entries we got is meaningfull and valid
-    private static boolean verifyIndexEntries(StringBuffer str) {
+    private static boolean verifyIndexEntries(final StringBuffer str) {
     	int start;
     	int end;
     	String temp;
@@ -118,7 +118,7 @@ public final class MapIndexReader extends AbstractXMLReader {
     }
 
     @Override
-    public void characters(char[] ch, int start, int length)
+    public void characters(final char[] ch, final int start, final int length)
             throws SAXException {
 
         if (match && needResolveEntity && validHref) {
@@ -156,7 +156,7 @@ public final class MapIndexReader extends AbstractXMLReader {
 	}
 
     @Override
-    public void endElement(String uri, String localName, String qName)
+    public void endElement(final String uri, final String localName, final String qName)
             throws SAXException {
 
         if (match) {
@@ -194,7 +194,7 @@ public final class MapIndexReader extends AbstractXMLReader {
     }
 
     @Override
-    public void endEntity(String name) throws SAXException {
+    public void endEntity(final String name) throws SAXException {
 		if(!needResolveEntity){
 			needResolveEntity = true;
 		}
@@ -209,7 +209,7 @@ public final class MapIndexReader extends AbstractXMLReader {
     }
 
     @Override
-    public void ignorableWhitespace(char[] ch, int start, int length)
+    public void ignorableWhitespace(final char[] ch, final int start, final int length)
             throws SAXException {
 
         if (match && validHref) {
@@ -220,7 +220,7 @@ public final class MapIndexReader extends AbstractXMLReader {
     }
 
     @Override
-    public void read(String filename) {
+    public void read(final String filename) {
 
         if (matchList.isEmpty()) {
         	logger.logError(MessageUtils.getMessage("DOTJ008E").toString());
@@ -250,7 +250,7 @@ public final class MapIndexReader extends AbstractXMLReader {
      * 
      * @param matchPattern the match pattern
      */
-    public void setMatch(String matchPattern) {
+    public void setMatch(final String matchPattern) {
         int index = 0;
         firstMatchElement = (matchPattern.indexOf(SLASH) != -1) ? matchPattern.substring(0, matchPattern.indexOf(SLASH)) : matchPattern;
 
@@ -277,14 +277,14 @@ public final class MapIndexReader extends AbstractXMLReader {
 	}
 
     @Override
-    public void startDTD(String name, String publicId, String systemId)
+    public void startDTD(final String name, final String publicId, final String systemId)
 			throws SAXException {
         // NOOP
 	}
 
     @Override
-    public void startElement(String uri, String localName, String qName,
-            Attributes atts) throws SAXException {
+    public void startElement(final String uri, final String localName, final String qName,
+            final Attributes atts) throws SAXException {
     	final int attsLen = atts.getLength();
     	final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
     	final String attrFormat = atts.getValue(ATTRIBUTE_NAME_FORMAT);
@@ -339,7 +339,7 @@ public final class MapIndexReader extends AbstractXMLReader {
     }
 
     @Override
-    public void startEntity(String name) throws SAXException {
+    public void startEntity(final String name) throws SAXException {
 		needResolveEntity = StringUtils.checkEntity(name);
 		if (match && !needResolveEntity && validHref) {
             indexEntries.append(StringUtils.getEntity(name));

@@ -129,7 +129,7 @@ public final class XmlPropertyTask extends Task {
 			if (in != null) {
 				try {
 					in.close();
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					log(e, Project.MSG_ERR);
 				}
 			}

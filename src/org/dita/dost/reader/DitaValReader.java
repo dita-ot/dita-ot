@@ -96,13 +96,13 @@ public final class DitaValReader extends AbstractXMLReader {
 		
 	}
 	//Added on 2010-08-24 for bug:3086552 start
-	public static void initXMLReader(boolean arg_setSystemid) {
+	public static void initXMLReader(final boolean arg_setSystemid) {
 		setSystemid= arg_setSystemid;
 	}
 	//Added on 2010-08-24 for bug:3086552 end
 	
 	@Override
-	public void read(String input) {
+	public void read(final String input) {
 		ditaVal = input;
 
 		try {
@@ -132,8 +132,8 @@ public final class DitaValReader extends AbstractXMLReader {
 	}
 	
 	@Override
-	public void startElement(String uri, String localName, String qName,
-			Attributes atts) throws SAXException {
+	public void startElement(final String uri, final String localName, final String qName,
+			final Attributes atts) throws SAXException {
 		String flagImage = null;
 		if(atts.getValue(ATTRIBUTE_NAME_IMG)!=null){
 			flagImage = atts.getValue(ATTRIBUTE_NAME_IMG);
@@ -203,7 +203,7 @@ public final class DitaValReader extends AbstractXMLReader {
 	 * @param action
 	 * @param key
 	 */
-	private void insertAction(String action, String key) {
+	private void insertAction(final String action, final String key) {
 		if (filterMap.get(key) == null) {
 			filterMap.put(key, action);
 		} else {
@@ -214,7 +214,7 @@ public final class DitaValReader extends AbstractXMLReader {
 		}
 	}
 	
-	private void insertAction(Element subTree, String attName, String action) {
+	private void insertAction(final Element subTree, final String attName, final String action) {
 		if (subTree == null || action == null) {
             return;
         }
@@ -297,7 +297,7 @@ public final class DitaValReader extends AbstractXMLReader {
 	 * load schema file.
 	 * @param scheme scheme file
 	 */
-	public void loadSubjectScheme(String scheme) {
+	public void loadSubjectScheme(final String scheme) {
 		
 		if (!FileUtils.fileExists(scheme)) {
 			return;
@@ -391,7 +391,7 @@ public final class DitaValReader extends AbstractXMLReader {
 		}
 	}
 	
-	private void putValuePairsIntoMap(Element subtree, String elementName, String attName) {
+	private void putValuePairsIntoMap(final Element subtree, final String elementName, final String attName) {
 		if (subtree == null || attName == null) {
             return;
         }
@@ -429,7 +429,7 @@ public final class DitaValReader extends AbstractXMLReader {
 		this.validValuesMap.put(attName, valueMap);
 	}
     
-	private Element searchForKey(Element root, String keyValue) {
+	private Element searchForKey(final Element root, final String keyValue) {
 		if (root == null || keyValue == null) {
             return null;
         }

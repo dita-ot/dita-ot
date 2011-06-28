@@ -39,7 +39,7 @@ import org.dita.dost.writer.DitaMetaWriter;
  */
 final class MoveMetaModule implements AbstractPipelineModule {
 
-    private ContentImpl content;
+    private final ContentImpl content;
     private DITAOTLogger logger;
 
     /**

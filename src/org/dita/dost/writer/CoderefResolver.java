@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
@@ -41,133 +42,122 @@ public final class CoderefResolver extends AbstractXMLWriter {
 		
 	private File currentFile = null;
 	
-	private HashSet<String> coderefSpec = null;
+	private final Set<String> coderefSpec;
 	/**
 	 * Constructor.
 	 */
 	public CoderefResolver() {
 		coderefSpec = new HashSet<String>();
-		
 		try {
             reader = StringUtils.getXMLReader();
             reader.setContentHandler(this);
             reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
             reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-        } catch (Exception e) {
+        } catch (final Exception e) {
         	logger.logException(e);
         }
 
 	}
 	@Override
-	public void setContent(Content content) {
-		// TODO Auto-generated method stub
-
+	public void setContent(final Content content) {
+	    // NOOP
 	}
+	
 	@Override
-	public void write(String filename) throws DITAOTException {
-		// TODO Auto-generated method stub
-		String file = null;
-		File inputFile = null;
-		File outputFile = null;
-		FileOutputStream fileOutput = null;
+	public void write(final String filename) throws DITAOTException {
+        // ignore in-exists file
+        if (filename == null || !new File(filename).exists()) {
+            return;
+        }
 
-        try {
-            
-            file = filename;                
-            
-            // ignore in-exists file
-            if (file == null || !new File(file).exists()) {
-            	return;
-            }
-                     
-            inputFile = new File(file);
+	    FileOutputStream fileOutput = null;
+        try {                     
+            final File inputFile = new File(filename);
             currentFile = inputFile;
-            outputFile = new File(file + FILE_EXTENSION_TEMP);
+            final File outputFile = new File(filename + FILE_EXTENSION_TEMP);
             fileOutput = new FileOutputStream(outputFile);
             output = new OutputStreamWriter(fileOutput, UTF8);
-            reader.setErrorHandler(new DITAOTXMLErrorHandler(file));
-            reader.parse(file);
+            reader.setErrorHandler(new DITAOTXMLErrorHandler(filename));
+            reader.parse(filename);
             output.flush();
             output.close();
             
             if(!inputFile.delete()){
-            	Properties prop = new Properties();
+            	final Properties prop = new Properties();
             	prop.put("%1", inputFile.getPath());
             	prop.put("%2", outputFile.getPath());
             	logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
-
             }
             if(!outputFile.renameTo(inputFile)){
-            	Properties prop = new Properties();
+            	final Properties prop = new Properties();
             	prop.put("%1", inputFile.getPath());
             	prop.put("%2", outputFile.getPath());
             	logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
         	logger.logException(e);
         }finally {
             try {
             	if (fileOutput != null) {
             		fileOutput.close();
             	}
-            }catch (Exception e) {
+            }catch (final Exception e) {
 				logger.logException(e);
             }
         }
-
 	}
 
 	@Override
-	public void characters(char[] ch, int start, int length)
+	public void characters(final char[] ch, final int start, final int length)
 			throws SAXException {
 		try {
             output.write(StringUtils.escapeXML(ch, start, length));
-        } catch (Exception e) {
+        } catch (final Exception e) {
         	logger.logException(e);
         }
 	}
 
 	@Override
-	public void ignorableWhitespace(char[] ch, int start, int length)
+	public void ignorableWhitespace(final char[] ch, final int start, final int length)
 			throws SAXException {
 		try {
             output.write(ch, start, length);
-        } catch (Exception e) {
+        } catch (final Exception e) {
         	logger.logException(e);
         }
 	}
 
 	@Override
-	public void processingInstruction(String target, String data)
+	public void processingInstruction(final String target, final String data)
 			throws SAXException {
 		try {
         	super.processingInstruction(target, data);
-        	String pi = (data != null) ? target + STRING_BLANK + data : target;
+        	final String pi = (data != null) ? target + STRING_BLANK + data : target;
             output.write(LESS_THAN + QUESTION 
                     + pi + QUESTION + GREATER_THAN);
-        } catch (Exception e) {
+        } catch (final Exception e) {
         	logger.logException(e);
         }
 	}
 
 	@Override
-	public void startElement(String uri, String localName, String name,
-			Attributes atts) throws SAXException {
-		String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
-		String hrefValue = atts.getValue(ATTRIBUTE_NAME_HREF);
+	public void startElement(final String uri, final String localName, final String name,
+			final Attributes atts) throws SAXException {
+		final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
+		final String hrefValue = atts.getValue(ATTRIBUTE_NAME_HREF);
 		try{
 			if (classValue != null
 					&& classValue.contains(ATTR_CLASS_VALUE_CODEREF)){
 				//TODO resolve coderef and pull in program content
 				coderefSpec.add(name);
 				if (hrefValue != null){
-					String codeFile = FileUtils.normalizeDirectory(
+					final String codeFile = FileUtils.normalizeDirectory(
 							currentFile.getParentFile().getAbsolutePath(), hrefValue);
 					if (new File(codeFile).exists()){
 						FileReader codeReader = null;
 						try {
 							codeReader = new FileReader(new File(codeFile));
-    						char[] buffer = new char[INT_1024 * INT_4];
+    						final char[] buffer = new char[INT_1024 * INT_4];
     						int len;
     						while((len = codeReader.read(buffer)) != -1){
     							output.write(StringUtils.escapeXML(buffer, 0, len));
@@ -176,7 +166,7 @@ public final class CoderefResolver extends AbstractXMLWriter {
 							if (codeReader != null) {
 								try {
 									codeReader.close();
-								} catch (IOException e) {
+								} catch (final IOException e) {
 									logger.logException(e);
 								}
 							}
@@ -196,20 +186,20 @@ public final class CoderefResolver extends AbstractXMLWriter {
 				}
 				output.write(GREATER_THAN);
 			}
-		}catch (Exception e){
+		}catch (final Exception e){
 			logger.logException(e);
 		}
 	}
 
 	@Override
-	public void endElement(String uri, String localName, String name)
+	public void endElement(final String uri, final String localName, final String name)
 			throws SAXException {
 		try{
 			if(!coderefSpec.contains(name)){
 				output.write(LESS_THAN + SLASH 
 						+ name + GREATER_THAN);
 			}
-		}catch (Exception e){
+		}catch (final Exception e){
 			logger.logException(e);
 		}		
 	}

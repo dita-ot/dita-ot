@@ -322,7 +322,7 @@ final class ChunkModule implements AbstractPipelineModule {
 						// newly chunked file
 						final File from = new File(entry.getValue());
 						String relativePath = FileUtils.getRelativePathFromMap(xmlDitalist.getAbsolutePath(), from.getAbsolutePath());						
-						String relativeTargetPath = FileUtils.getRelativePathFromMap(xmlDitalist.getAbsolutePath(), target.getAbsolutePath());					
+						final String relativeTargetPath = FileUtils.getRelativePathFromMap(xmlDitalist.getAbsolutePath(), target.getAbsolutePath());					
 						if (relativeTargetPath.lastIndexOf(SLASH)!=-1){
 						   relativePath2fix.put(relativeTargetPath, relativeTargetPath.substring(0, relativeTargetPath.lastIndexOf(SLASH)+1));	
 						}						

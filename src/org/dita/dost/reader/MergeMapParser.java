@@ -82,7 +82,7 @@ public final class MergeMapParser extends AbstractXMLReader {
 	}
 
 	@Override
-	public void read(String ditaInput) {
+	public void read(final String ditaInput) {
 		try{
 			String filename;
 			if(ditaInput.contains(STICK)){
@@ -103,7 +103,7 @@ public final class MergeMapParser extends AbstractXMLReader {
 	}
 
 	@Override
-	public void endElement(String uri, String localName, String qName) throws SAXException {
+	public void endElement(final String uri, final String localName, final String qName) throws SAXException {
 		if (processLevel > 0) {
 			String value = processStack.peek();
 			if (processLevel == processStack.size()) {
@@ -122,14 +122,14 @@ public final class MergeMapParser extends AbstractXMLReader {
 	}
 	
 	@Override
-	public void characters(char[] ch, int start, int length) throws SAXException {
+	public void characters(final char[] ch, final int start, final int length) throws SAXException {
 		if (processStack.empty() || !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processStack.peek())){
 			mapInfo.append(StringUtils.escapeXML(ch, start, length));
 		}
 	}
 
 	@Override
-	public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
+	public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
 		final String attrValue = atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE);
 	    if (attrValue != null) {
 	        processStack.push(attrValue);
@@ -199,7 +199,7 @@ public final class MergeMapParser extends AbstractXMLReader {
 	}
 	
 	@Override
-	public void processingInstruction(String target, String data)
+	public void processingInstruction(final String target, final String data)
 			throws SAXException {
 		final String pi = (data != null) ? target + STRING_BLANK + data : target;
         mapInfo.append(LESS_THAN + QUESTION 

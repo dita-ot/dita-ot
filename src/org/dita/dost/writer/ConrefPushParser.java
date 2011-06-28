@@ -148,28 +148,28 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 			parser.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
 			parser.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
 			//Added by william on 2009-11-8 for ampbug:2893664 end
-		}catch (Exception e) {
+		}catch (final Exception e) {
 			logger.logException(e);
 		}
 	}
 	/**
 	 * @param content Content
 	 */
-	public void setContent(Content content) {
+	public void setContent(final Content content) {
 		movetable = (Hashtable<String, String>)content.getValue();
 	}
 	/**
 	 * 
 	 * @param tempDir tempDir
 	 */
-	public void setTempDir(String tempDir){
+	public void setTempDir(final String tempDir){
 		this.tempDir = tempDir;
 	}
 	/**
 	 * @param filename filename
 	 * @throws DITAOTException exception
 	 */
-	public void write(String filename) throws DITAOTException {
+	public void write(final String filename) throws DITAOTException {
 		hasConref = false;
 		isReplaced = false;
 		hasPushafter = false;
@@ -180,14 +180,14 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 		levelForPushAfterStack = new Stack<Integer>();
 		contentForPushAfterStack = new Stack<String>();
 		try {
-			File inputFile = new File(filename);
-			File outputFile = new File(filename+".cnrfpush");
+			final File inputFile = new File(filename);
+			final File outputFile = new File(filename+".cnrfpush");
 			output = new OutputStreamWriter(new FileOutputStream(outputFile),UTF8);
 			parser.parse(filename);
 			if(!movetable.isEmpty()){
-				Properties prop = new Properties();
+				final Properties prop = new Properties();
 				String key = null;
-				Iterator<String> iterator = movetable.keySet().iterator();
+				final Iterator<String> iterator = movetable.keySet().iterator();
 				while(iterator.hasNext()){
 					key = iterator.next();
 					prop.setProperty("%1", key.substring(0, key.indexOf(STICK)));
@@ -200,23 +200,23 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 			}
 			output.close();
             if(!inputFile.delete()){
-            	Properties prop = new Properties();
+            	final Properties prop = new Properties();
             	prop.put("%1", inputFile.getPath());
             	prop.put("%2", outputFile.getPath());
             	logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
             }
             if(!outputFile.renameTo(inputFile)){
-            	Properties prop = new Properties();
+            	final Properties prop = new Properties();
             	prop.put("%1", inputFile.getPath());
             	prop.put("%2", outputFile.getPath());
             	logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
             }
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			logger.logException(e);
 		}finally{
 			try{
 				output.close();
-			}catch (Exception ex) {
+			}catch (final Exception ex) {
 				logger.logException(ex);
 			}
 		}
@@ -227,13 +227,13 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 	 * 
 	 * @param filename filename
 	 */
-	private void updateList(String filename){
-		Properties properties = new Properties();
+	private void updateList(final String filename){
+		final Properties properties = new Properties();
 		// dita.list file in temp directory, it is used to store the list properties.
-		File ditaFile = new File(tempDir, FILE_NAME_DITA_LIST);
+		final File ditaFile = new File(tempDir, FILE_NAME_DITA_LIST);
 		// dita.xml.properties file in temp dicrectory, 
 		// store the list properties as the dita.list in the form of xml.
-		File ditaxmlFile = new File(tempDir, FILE_NAME_DITA_LIST_XML);
+		final File ditaxmlFile = new File(tempDir, FILE_NAME_DITA_LIST_XML);
 		// use ditaFile as the OutputStream, rewrite the dita.list file
 		FileOutputStream output = null;
 		// use ditaxmlFile as the outputStream, rewrite the dita.xml.properties file
@@ -250,15 +250,15 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 				properties.load(in);
 			}
 			
-			String conreflist[] = properties.getProperty("conreflist").split(COMMA);
+			final String conreflist[] = properties.getProperty("conreflist").split(COMMA);
 			// get the reletivePath from tempDir
-			String reletivePath = filename.substring(FileUtils.removeRedundantNames(tempDir).length() + 1);
-			for(String str: conreflist){
+			final String reletivePath = filename.substring(FileUtils.removeRedundantNames(tempDir).length() + 1);
+			for(final String str: conreflist){
 				if(str.equals(reletivePath)){
 					return;
 				}
 			}
-			StringBuffer stringBuffer = new StringBuffer();
+			final StringBuffer stringBuffer = new StringBuffer();
 			stringBuffer.append(properties.getProperty("conreflist")).append(COMMA).append(reletivePath);
 			properties.setProperty("conreflist", stringBuffer.toString());
 			try {
@@ -279,7 +279,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 			}
 			try {
     			bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(tempDir,"conref.list"))));
-    			for(String str: conreflist){
+    			for(final String str: conreflist){
     				bufferedWriter.append(str).append("\n");
     			}
     			bufferedWriter.append(reletivePath);
@@ -288,13 +288,13 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 					bufferedWriter.close();
 				}
 			}
-		}catch (Exception e){
+		}catch (final Exception e){
 			logger.logException(e);
 		} finally {
 			if (in != null) {
 				try {
 	                in.close();
-                } catch (IOException e) {
+                } catch (final IOException e) {
                 	logger.logException(e);
                 }
 			}
@@ -303,19 +303,19 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 	}
 
 	@Override
-	public void characters(char[] ch, int start, int length)
+	public void characters(final char[] ch, final int start, final int length)
 			throws SAXException {
 		if (!isReplaced && needResolveEntity){
 			try{
 				output.write(StringUtils.escapeXML(ch, start, length));
-			}catch (Exception e) {
+			}catch (final Exception e) {
 				logger.logException(e);
 			}
 		}
 	}
 
 	@Override
-	public void endElement(String uri, String localName, String name)
+	public void endElement(final String uri, final String localName, final String name)
 			throws SAXException {
 		
 		if(isReplaced){
@@ -330,7 +330,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 				output.write(SLASH);
 				output.write(name);
 				output.write(GREATER_THAN);
-			}catch (Exception e) {
+			}catch (final Exception e) {
 				logger.logException(e);
 			}
 		}
@@ -343,7 +343,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 					if(contentForPushAfter != null){
 						output.write(contentForPushAfter);
 					}
-				}catch (Exception e) {
+				}catch (final Exception e) {
 					logger.logException(e);
 				}
 				if(!levelForPushAfterStack.isEmpty() &&
@@ -363,14 +363,14 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 	}
 
 	@Override
-	public void processingInstruction(String target, String data)
+	public void processingInstruction(final String target, final String data)
 			throws SAXException {
 		if (!isReplaced) { 
             try {
-            	String pi = (data != null) ? target + STRING_BLANK + data : target;
+            	final String pi = (data != null) ? target + STRING_BLANK + data : target;
                 output.write(LESS_THAN + QUESTION 
                         + pi + QUESTION + GREATER_THAN);
-            } catch (Exception e) {
+            } catch (final Exception e) {
             	logger.logException(e);
             }
         }
@@ -381,30 +381,30 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 	 * @param string string
 	 * @return string
 	 */
-	private String replaceElementName(String targetClassAttribute, String string){
+	private String replaceElementName(final String targetClassAttribute, String string){
 		InputSource inputSource = null;
 		Document document = null;
 		//add stub to serve as the root element
 		string = "<stub>" + string + "</stub>";
 		inputSource = new InputSource(new StringReader(string));
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		Element element = null;
 		NodeList nodeList = null;
 		String targetElementName ;
 		String type;
-		StringBuffer stringBuffer = new StringBuffer();
+		final StringBuffer stringBuffer = new StringBuffer();
 		try {
-			DocumentBuilder documentBuilder = factory.newDocumentBuilder();
+			final DocumentBuilder documentBuilder = factory.newDocumentBuilder();
 			document = documentBuilder.parse(inputSource);
 			element = document.getDocumentElement();
 			if(element.hasChildNodes()){
 				nodeList = element.getChildNodes();
 				for(int i =0;i<nodeList.getLength();i++){
-					Node node = nodeList.item(i);
+					final Node node = nodeList.item(i);
 					if (node.getNodeType() == Node.ELEMENT_NODE){
-						Element elem = (Element) node;
+						final Element elem = (Element) node;
 						NodeList nList = null;
-						String clazz = elem.getAttribute(ATTRIBUTE_NAME_CLASS);
+						final String clazz = elem.getAttribute(ATTRIBUTE_NAME_CLASS);
 						// get type of the target element  
 						type = targetClassAttribute.substring(INT_1, targetClassAttribute.indexOf("/")).trim();
 						if(!clazz.equalsIgnoreCase(targetClassAttribute) && clazz.contains(targetClassAttribute)){
@@ -412,7 +412,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 							// but we can catch such a situation to emit a warning by comparing the class values.
 							targetElementName = targetClassAttribute.substring(targetClassAttribute.indexOf("/") +1 ).trim();
 							stringBuffer.append(LESS_THAN).append(targetElementName);
-							NamedNodeMap namedNodeMap = elem.getAttributes();
+							final NamedNodeMap namedNodeMap = elem.getAttributes();
 							for(int t=0; t<namedNodeMap.getLength(); t++){
 								//write the attributes to new generated element
 								if(namedNodeMap.item(t).getNodeName().equals("conref") && namedNodeMap.item(t).getNodeValue().length()!=0){
@@ -427,7 +427,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 							// process the child nodes of the current node
 							nList = elem.getChildNodes();
 							for(int j=0; j<nList.getLength(); j++){
-								Node subNode = nList.item(j);
+								final Node subNode = nList.item(j);
 								if(subNode.getNodeType() == Node.ELEMENT_NODE){
 									//replace the subElement Name 
 									stringBuffer.append(replaceSubElementName(type, (Element)subNode));
@@ -453,7 +453,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 			else {
 				return string;
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 			return string;
 		}
@@ -464,9 +464,9 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 	 * @param elem element
 	 * @return string
 	 */
-	private String replaceSubElementName(String type, Element elem){
-		StringBuffer stringBuffer = new StringBuffer();
-		String classValue = elem.getAttribute(ATTRIBUTE_NAME_CLASS);
+	private String replaceSubElementName(final String type, final Element elem){
+		final StringBuffer stringBuffer = new StringBuffer();
+		final String classValue = elem.getAttribute(ATTRIBUTE_NAME_CLASS);
 		String generalizedElemName = elem.getNodeName();
 		if(classValue != null){
 			if(classValue.contains(type) && !type.equals(STRING_BLANK)){
@@ -474,7 +474,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 			}
 		}
 		stringBuffer.append(LESS_THAN).append(generalizedElemName);
-		NamedNodeMap namedNodeMap = elem.getAttributes();
+		final NamedNodeMap namedNodeMap = elem.getAttributes();
 		for(int i=0; i<namedNodeMap.getLength(); i++){
 			if(namedNodeMap.item(i).getNodeName().equals("conref") && namedNodeMap.item(i).getNodeValue().length()!=0){
 				hasConref = true;
@@ -485,9 +485,9 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 			  +QUOTATION);
 		}
 		stringBuffer.append(GREATER_THAN);
-		NodeList nodeList = elem.getChildNodes();
+		final NodeList nodeList = elem.getChildNodes();
 		for(int i=0; i<nodeList.getLength(); i++){
-			Node node = nodeList.item(i);
+			final Node node = nodeList.item(i);
 			if(node.getNodeType() == Node.ELEMENT_NODE){
 				// If the type of current node is ELEMENT_NODE, process current node.
 				stringBuffer.append(replaceSubElementName(type, (Element)node));
@@ -508,8 +508,8 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 
 	
 	@Override
-	public void startElement(String uri, String localName, String name,
-			Attributes atts) throws SAXException {
+	public void startElement(final String uri, final String localName, final String name,
+			final Attributes atts) throws SAXException {
 		if(hasPushafter){
 			levelForPushAfter ++;
 		}
@@ -517,7 +517,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 			level ++;
 		}else{
 			try{
-				String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
+				final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
 				if (classValue != null && classValue.contains(ATTR_CLASS_VALUE_TOPIC)){
 					if (!topicSpecSet.contains(name)){
 						//add the element name to topicSpecSet if the element
@@ -525,7 +525,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 						//topic ids in a stack
 						topicSpecSet.add(name);
 					}
-					String idValue = atts.getValue(ATTRIBUTE_NAME_ID);
+					final String idValue = atts.getValue(ATTRIBUTE_NAME_ID);
 					if (idValue != null){
 						if (topicId != null){
 							idStack.push(topicId);
@@ -534,18 +534,18 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 					}
 				}else if (atts.getValue(ATTRIBUTE_NAME_ID) != null){
 					String idPath = SHARP+topicId+SLASH+atts.getValue(ATTRIBUTE_NAME_ID);
-					String defaultidPath = SHARP+atts.getValue(ATTRIBUTE_NAME_ID);
+					final String defaultidPath = SHARP+atts.getValue(ATTRIBUTE_NAME_ID);
 					String containkey =null;
 					//Added by William on 2009-10-10 for conrefPush bug:2872954 start
 					//enable conref push at map level
 					if(classValue != null && (classValue.contains(ATTR_CLASS_VALUE_TOPICREF)
 						|| classValue.contains(ATTR_CLASS_VALUE_MAP))){
-						String mapId = atts.getValue(ATTRIBUTE_NAME_ID);
+						final String mapId = atts.getValue(ATTRIBUTE_NAME_ID);
 						idPath = SHARP + mapId;
 						idStack.push(mapId);
 					}
 					//Added by William on 2009-10-10 for conrefPush bug:2872954 end
-					String classAttribute = atts.getValue(ATTRIBUTE_NAME_CLASS);
+					final String classAttribute = atts.getValue(ATTRIBUTE_NAME_CLASS);
 					boolean containpushbefore= false;
 					if (movetable.containsKey(idPath+STICK+"pushbefore")){
 						containkey=idPath+STICK+"pushbefore";
@@ -620,7 +620,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 					}
 					output.write(GREATER_THAN);
 				}
-			}catch (Exception e) {
+			}catch (final Exception e) {
 				logger.logException(e);
 			}
 		}
@@ -632,24 +632,24 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 		try{
 			output.flush();
 			output.close();
-		}catch (Exception e) {
+		}catch (final Exception e) {
 			logger.logException(e);
 		}finally{
 			try{
 				output.close();
-			}catch (Exception e) {
+			}catch (final Exception e) {
 				logger.logException(e);
 			}
 		}
 	}
 
 	@Override
-	public void ignorableWhitespace(char[] ch, int start, int length)
+	public void ignorableWhitespace(final char[] ch, final int start, final int length)
 			throws SAXException {
 		if(!isReplaced){
 			try{
 				output.write(ch, start, length);
-			}catch (Exception e) {
+			}catch (final Exception e) {
 				logger.logException(e);
 			}
 		}
@@ -662,19 +662,19 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 	
 	//Added by william on 2009-11-8 for ampbug:2893664 start
 	@Override
-	public void startEntity(String name) throws SAXException {
+	public void startEntity(final String name) throws SAXException {
             try {
             	needResolveEntity = StringUtils.checkEntity(name);
             	if(!needResolveEntity){
             		output.write(StringUtils.getEntity(name));
             	}
-            } catch (Exception e) {
+            } catch (final Exception e) {
             	//logger.logException(e);
             }
     }
 	
 	@Override
-	public void endEntity(String name) throws SAXException {
+	public void endEntity(final String name) throws SAXException {
 		if(!needResolveEntity){
 			needResolveEntity = true;
 		}

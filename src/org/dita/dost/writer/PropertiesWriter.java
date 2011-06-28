@@ -33,14 +33,14 @@ public final class PropertiesWriter implements AbstractWriter {
 	 * 
 	 * @see org.dita.dost.writer.AbstractWriter#setContent(org.dita.dost.module.Content)
 	 */
-	public void setContent(Content content) {
+	public void setContent(final Content content) {
 		prop = (Properties) content.getValue();
 	}
 
 	/**
 	 * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
 	 */
-	public void write(String filename) throws DITAOTException {
+	public void write(final String filename) throws DITAOTException {
 		FileOutputStream fileOutputStream = null;
 
 		try {
@@ -50,13 +50,13 @@ public final class PropertiesWriter implements AbstractWriter {
 			//Added by William on 2010-07-23 for bug:3033141 start
 			fileOutputStream.close();
 			//Added by William on 2010-07-23 for bug:3033141 end
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new DITAOTException(e);
 		} finally {
 			if (fileOutputStream != null) {
 				try {
 					fileOutputStream.close();
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					throw new DITAOTException(e);
 				}
 			}
@@ -72,7 +72,7 @@ public final class PropertiesWriter implements AbstractWriter {
 	 * @param filename xml file name
 	 * @throws DITAOTException DITAOTException
 	 */
-	public void writeToXML(String filename) throws DITAOTException{
+	public void writeToXML(final String filename) throws DITAOTException{
 		FileOutputStream os=null;
 		//new dita.xml file
         try{
@@ -82,13 +82,13 @@ public final class PropertiesWriter implements AbstractWriter {
         	os.flush();
         	os.close();
         	//Added by William on 2010-07-23 for bug:3033141 end
-        }catch(IOException ioe){
+        }catch(final IOException ioe){
         	throw new DITAOTException(ioe);
         } finally {
 			if (os != null) {
 				try {
 	                os.close();
-                } catch (IOException e) {
+                } catch (final IOException e) {
                 	logger.logException(e);
                 }
 			}

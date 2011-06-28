@@ -39,15 +39,15 @@ public final class PipelineFacade implements AbstractFacade {
      * @return AbstractPipelineOutput
      * @throws DITAOTException DITAOTException
      */
-    public AbstractPipelineOutput execute(String pipelineModuleName,
-            AbstractPipelineInput input) throws DITAOTException {
+    public AbstractPipelineOutput execute(final String pipelineModuleName,
+            final AbstractPipelineInput input) throws DITAOTException {
         /* 
          * PipelineFacade just call the relevant single module now,
          * in the future can do more complex things here, like call several
          * modules. 
          */
         AbstractPipelineModule module = null;                
-        ModuleFactory factory = ModuleFactory.instance();
+        final ModuleFactory factory = ModuleFactory.instance();
         		
 		module = factory.createModule(pipelineModuleName);
 		module.setLogger(logger);

@@ -56,7 +56,7 @@ public final class ExtensibleAntInvoker extends Task {
 	 * Set base directory.
 	 * @param s base directory
 	 */
-	public void setBasedir(String s) {
+	public void setBasedir(final String s) {
 		pipelineInput.setAttribute("basedir", s);
 	}
 	
@@ -72,7 +72,7 @@ public final class ExtensibleAntInvoker extends Task {
 	 * Set module.
 	 * @param module module name
 	 */
-	public void setModule(String module) {
+	public void setModule(final String module) {
 		pipelineInput.setAttribute("module", module);
 	}
 	
@@ -88,7 +88,7 @@ public final class ExtensibleAntInvoker extends Task {
 	 * Set message.
 	 * @param m message
 	 */
-	public void setMessage(String m) {
+	public void setMessage(final String m) {
 		pipelineInput.setAttribute("message", m);
 	}
 	
@@ -104,7 +104,7 @@ public final class ExtensibleAntInvoker extends Task {
      * Set input data.
      * @param inputdita input data file
      */
-    public void setInputdita(String inputdita) {
+    public void setInputdita(final String inputdita) {
         pipelineInput.setAttribute("inputdita", inputdita);
     }
 
@@ -112,7 +112,7 @@ public final class ExtensibleAntInvoker extends Task {
      * Set input map.
      * @param inputmap input map file
      */
-    public void setInputmap(String inputmap) {
+    public void setInputmap(final String inputmap) {
         pipelineInput.setAttribute("inputmap", inputmap);
     }
     
@@ -120,7 +120,7 @@ public final class ExtensibleAntInvoker extends Task {
      * Set temporary directory.
      * @param tempdir temporary directory
      */
-    public void setTempdir(String tempdir) {
+    public void setTempdir(final String tempdir) {
         pipelineInput.setAttribute("tempDir", tempdir);
     }
 	
@@ -132,7 +132,7 @@ public final class ExtensibleAntInvoker extends Task {
 	 * 
 	 * @param extParam extended parameters string          
 	 */
-	public void setExtparam(String extParam) {
+	public void setExtparam(final String extParam) {
 		String keyValueStr = null;
 		String attrName = null;
 		String attrValue = null;
@@ -244,7 +244,7 @@ public final class ExtensibleAntInvoker extends Task {
 		 * Set parameter name.
 		 * @param s name
 		 */
-		public void setName(String s) {
+		public void setName(final String s) {
 			name = s;
 		}
 		
@@ -260,7 +260,7 @@ public final class ExtensibleAntInvoker extends Task {
 		 * Set parameter value.
 		 * @param v parameter value
 		 */
-		public void setExpression(String v) {
+		public void setExpression(final String v) {
 			value = v;
 		}
 		
@@ -268,7 +268,7 @@ public final class ExtensibleAntInvoker extends Task {
          * Set parameter value.
          * @param v parameter value
          */
-        public void setValue(String v) {
+        public void setValue(final String v) {
             value = v;
         }
         
@@ -276,7 +276,7 @@ public final class ExtensibleAntInvoker extends Task {
          * Set parameter file value.
          * @param v parameter file value
          */
-        public void setLocation(File v) {
+        public void setLocation(final File v) {
             value = v.getPath();
         }
 		
@@ -292,7 +292,7 @@ public final class ExtensibleAntInvoker extends Task {
 		 * Set if condition parameter name
 		 * @param p parameter name
 		 */
-		public void setIf(String p) {
+		public void setIf(final String p) {
 			ifProperty = p;
 		}
 	
@@ -308,7 +308,7 @@ public final class ExtensibleAntInvoker extends Task {
          * Set unless condition parameter name
          * @param p parameter name
          */
-        public void setUnless(String p) {
+        public void setUnless(final String p) {
             unlessProperty = p;
         }
 		

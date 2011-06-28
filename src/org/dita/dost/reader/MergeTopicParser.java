@@ -72,7 +72,7 @@ public final class MergeTopicParser extends AbstractXMLReader {
 	}
 
 	@Override
-	public void characters(char[] ch, int start, int length) throws SAXException {
+	public void characters(final char[] ch, final int start, final int length) throws SAXException {
 		topicInfo.append(StringUtils.escapeXML(ch, start, length));
 	}
 
@@ -82,7 +82,7 @@ public final class MergeTopicParser extends AbstractXMLReader {
 	}
 
 	@Override
-	public void endElement(String uri, String localName, String qName) throws SAXException {
+	public void endElement(final String uri, final String localName, final String qName) throws SAXException {
 		// Skip redundant <dita> tags.
 		if (ELEMENT_NAME_DITA.equalsIgnoreCase(qName)) {
 			return;
@@ -103,7 +103,7 @@ public final class MergeTopicParser extends AbstractXMLReader {
 	 * @param classValue
 	 * @param attValue
 	 */
-	private String handleID(String classValue, String attValue) {
+	private String handleID(final String classValue, final String attValue) {
 		String retAttValue = attValue;
 		if(classValue != null 
 				&& classValue.indexOf(ATTR_CLASS_VALUE_TOPIC)!=-1){
@@ -134,7 +134,7 @@ public final class MergeTopicParser extends AbstractXMLReader {
 	 * @param sharpIndex
 	 * @param attValue
 	 */
-	private String handleLocalDita(int sharpIndex, String attValue) {
+	private String handleLocalDita(final int sharpIndex, final String attValue) {
 		String fileId;
 		String topicId;
 		String pathFromMap;
@@ -201,7 +201,7 @@ public final class MergeTopicParser extends AbstractXMLReader {
 	 * @param dir file dir
 	 * @return updated id
 	 */
-	public String parse(String filename,String dir){
+	public String parse(final String filename,final String dir){
 		final int index = filename.indexOf(SHARP);
 		dirPath = dir;
 		try{
@@ -221,7 +221,7 @@ public final class MergeTopicParser extends AbstractXMLReader {
 	}
 
 	@Override
-	public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
+	public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
 		//write the start element of topic parsing logic;
 		String classValue = null;
 		String scopeValue = null;
@@ -289,14 +289,14 @@ public final class MergeTopicParser extends AbstractXMLReader {
 		topicInfo.append(GREATER_THAN);
 	}
 
-	private String handleLocalHref(String attValue) {
+	private String handleLocalHref(final String attValue) {
 		String pathFromMap;
         pathFromMap = FileUtils.resolveTopic(new File(filePath).getParent(),attValue);
         return pathFromMap;
 	}
 
 	@Override
-	public void processingInstruction(String target, String data)
+	public void processingInstruction(final String target, final String data)
 			throws SAXException {
 		final String pi = (data != null) ? target + STRING_BLANK + data : target;
         topicInfo.append(LESS_THAN + QUESTION 

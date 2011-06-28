@@ -51,7 +51,7 @@ public final class URIResolverConfigTask extends Task {
 	 * Set basedir.
 	 * @param basedir basedir
 	 */
-	public void setBasedir(String basedir) {
+	public void setBasedir(final String basedir) {
 		this.basedir = basedir;
 	}
 	/**
@@ -65,7 +65,7 @@ public final class URIResolverConfigTask extends Task {
 	 * Set tempdir.
 	 * @param tempdir tempdir
 	 */
-	public void setTempdir(String tempdir) {
+	public void setTempdir(final String tempdir) {
 		this.tempdir = tempdir;
 	}
 	

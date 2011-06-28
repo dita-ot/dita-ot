@@ -60,7 +60,7 @@ public final class DITAOTXMLErrorHandler implements ErrorHandler {
 	 */
 	public void warning(final SAXParseException saxException) throws SAXException {
 		final DITAOTJavaLogger javalogger = new DITAOTJavaLogger();
-		String msg = new SAXExceptionWrapper(filePath, saxException).getMessage();
+		final String msg = new SAXExceptionWrapper(filePath, saxException).getMessage();
 		javalogger.logWarn(msg);
 	}
 

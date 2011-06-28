@@ -113,7 +113,7 @@ public final class Integrator {
                 if (propertiesStream != null) {
                     try {
                         propertiesStream.close();
-                    } catch (IOException e) {
+                    } catch (final IOException e) {
                         logger.logException(e);
                     }
                 }
@@ -358,13 +358,13 @@ public final class Integrator {
             final DescParser parser = new DescParser(descFile.getParentFile(), ditaDir);
             reader.setContentHandler(parser);
             reader.setErrorHandler(new ErrorHandler() {
-                public void error(SAXParseException e) throws SAXException {
+                public void error(final SAXParseException e) throws SAXException {
                     throw e;
                 }
-                public void fatalError(SAXParseException e) throws SAXException {
+                public void fatalError(final SAXParseException e) throws SAXException {
                     throw e;
                 }
-                public void warning(SAXParseException e) throws SAXException {
+                public void warning(final SAXParseException e) throws SAXException {
                     throw e;
                 }
             });

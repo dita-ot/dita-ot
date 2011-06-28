@@ -46,7 +46,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
     private XMLReader reader;
     private Stack<String> topicIdStack; // array list that is used to keep the hierarchy of topic id
     private boolean insideCDATA;
-    private ArrayList<String> topicSpecList;  //Eric
+    private final ArrayList<String> topicSpecList;  //Eric
 
 
     /**
@@ -73,22 +73,23 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
 			reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
 			reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
 			//Edited by william on 2009-11-8 for ampbug:2893664 end
-        } catch (Exception e) {
+        } catch (final Exception e) {
         	logger.logException(e);
         }
 
     }
 
     @Override
-    public void characters(char[] ch, int start, int length)
+    public void characters(final char[] ch, final int start, final int length)
             throws SAXException {
     	if(needResolveEntity){
     		try {
-    			if(insideCDATA)
-    				output.write(ch, start, length);
-    			else
-    				output.write(StringUtils.escapeXML(ch, start, length));
-    		} catch (Exception e) {
+    			if(insideCDATA) {
+                    output.write(ch, start, length);
+                } else {
+                    output.write(StringUtils.escapeXML(ch, start, length));
+                }
+    		} catch (final Exception e) {
     			logger.logException(e);
     		}
     	}
@@ -99,7 +100,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
     	insideCDATA = false;
 	    try{
 	        output.write(CDATA_END);
-	    }catch(Exception e){
+	    }catch(final Exception e){
 	    	logger.logException(e);
 	    }
 	}
@@ -108,18 +109,22 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
     public void endDocument() throws SAXException {
         try {
             output.flush();
-        } catch (Exception e) {
+        } catch (final Exception e) {
         	logger.logException(e);
         }
     }
 
     @Override
-    public void endElement(String uri, String localName, String qName)
+    public void endElement(final String uri, final String localName, final String qName)
             throws SAXException {
     	if (topicSpecList.contains(localName)){//Eric
     		// Remove the last topic id.
-    		if (!topicIdStack.empty()) topicIdStack.pop();
-    		if (firstTopic) firstTopic = false;
+    		if (!topicIdStack.empty()) {
+                topicIdStack.pop();
+            }
+    		if (firstTopic) {
+                firstTopic = false;
+            }
     	}
         try {
              //Using the same type of logic that's used in DITAIndexWriter.
@@ -133,13 +138,13 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
             }
             output.write(LESS_THAN + SLASH + qName 
                     + GREATER_THAN);
-        } catch (Exception e) {
+        } catch (final Exception e) {
         	logger.logException(e);
         }
     }
 
     @Override
-    public void endEntity(String name) throws SAXException {
+    public void endEntity(final String name) throws SAXException {
 		if(!needResolveEntity){
 			needResolveEntity = true;
 		}
@@ -147,40 +152,40 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
 
 
     @Override
-    public void ignorableWhitespace(char[] ch, int start, int length)
+    public void ignorableWhitespace(final char[] ch, final int start, final int length)
             throws SAXException {
         try {
             output.write(ch, start, length);
-        } catch (Exception e) {
+        } catch (final Exception e) {
         	logger.logException(e);
         }
     }
 
 
     @Override
-    public void processingInstruction(String target, String data)
+    public void processingInstruction(final String target, final String data)
             throws SAXException {
         String pi;
         try {
             pi = (data != null) ? target + STRING_BLANK + data : target;
             output.write(LESS_THAN + QUESTION 
                     + pi + QUESTION + GREATER_THAN);
-        } catch (Exception e) {
+        } catch (final Exception e) {
         	logger.logException(e);
         }
     }
     
     @Override
-    public void setContent(Content content) {
+    public void setContent(final Content content) {
         indexEntries = (HashMap<String, String>)content.getValue();
         topicSet = indexEntries.keySet();
     }
     
     @Override
-    public void skippedEntity(String name) throws SAXException {
+    public void skippedEntity(final String name) throws SAXException {
         try {
             output.write(StringUtils.getEntity(name));
-        } catch (Exception e) {
+        } catch (final Exception e) {
         	logger.logException(e);
         }
     }
@@ -190,7 +195,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
     	insideCDATA = true;
 	    try{
 	        output.write(CDATA_HEAD);
-	    }catch(Exception e){
+	    }catch(final Exception e){
 	    	logger.logException(e);
 	    }
 	}
@@ -202,9 +207,9 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
     }
     
     @Override
-    public void startElement(String uri, String localName, String qName,
-            Attributes atts) throws SAXException {
-		int attsLen = atts.getLength();
+    public void startElement(final String uri, final String localName, final String qName,
+            final Attributes atts) throws SAXException {
+		final int attsLen = atts.getLength();
 
 		//only care about adding related links to topics. 
 		if (atts.getValue(ATTRIBUTE_NAME_CLASS) != null) {// Eric
@@ -229,26 +234,28 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
 						output.write(RELATED_LINKS_END);
 						output.write(System.getProperty("line.separator"));
 						curMatchTopic = null;
-					} catch (Exception e) {
+					} catch (final Exception e) {
 						if (atts.getValue(ATTRIBUTE_NAME_CLASS) != null) {
 							logger.logException(e);
 						}
 					}
 				}
-				String t = StringUtils.assembleString(topicIdStack, SLASH);
+				final String t = StringUtils.assembleString(topicIdStack, SLASH);
 				if (topicSet.contains(t)) {
 					curMatchTopic = t;
 				} else if (topicSet.contains(topicIdStack.peek())) {
 					curMatchTopic = topicIdStack.peek();
 				}
-				if (firstTopic) firstTopic = false;
+				if (firstTopic) {
+                    firstTopic = false;
+                }
 			}
 		}
 		try {  //Eric
 
 			output.write(LESS_THAN + qName);
 			for (int i = 0; i < attsLen; i++) {
-				String attQName = atts.getQName(i);
+				final String attQName = atts.getQName(i);
 				String attValue;
 				attValue = atts.getValue(i);
 
@@ -271,7 +278,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
 				curMatchTopic = null;
 			}
 
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			if (atts.getValue(ATTRIBUTE_NAME_CLASS) != null) {
 				logger.logException(e);
 			}// prevent printing stack trace when meeting <dita> which has no
@@ -280,20 +287,20 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
 	}
 
     @Override
-    public void startEntity(String name) throws SAXException {
+    public void startEntity(final String name) throws SAXException {
 		try {
            	needResolveEntity = StringUtils.checkEntity(name);
            	if(!needResolveEntity){
            		output.write(StringUtils.getEntity(name));
            	}
-        } catch (Exception e) {
+        } catch (final Exception e) {
         	logger.logException(e);
         }
         
 	}
 
     @Override
-    public void write(String filename) {
+    public void write(final String filename) {
 		String file = null;
 		File inputFile = null;
 		File outputFile = null;
@@ -320,26 +327,26 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
             output.close();
             
             if(!inputFile.delete()){
-            	Properties prop = new Properties();
+            	final Properties prop = new Properties();
             	prop.put("%1", inputFile.getPath());
             	prop.put("%2", outputFile.getPath());
             	logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
 
             }
             if(!outputFile.renameTo(inputFile)){
-            	Properties prop = new Properties();
+            	final Properties prop = new Properties();
             	prop.put("%1", inputFile.getPath());
             	prop.put("%2", outputFile.getPath());
             	logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
         	logger.logException(e);
         }finally {
             try {
             	if (fileOutput != null) {
             		fileOutput.close();
             	}
-            }catch (Exception e) {
+            }catch (final Exception e) {
 				logger.logException(e);
             }
         }

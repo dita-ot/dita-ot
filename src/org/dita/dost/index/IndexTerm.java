@@ -89,7 +89,7 @@ public final class IndexTerm implements Comparable {
      * 
      * @param locale locale
      */
-    public static void setTermLocale(Locale locale) {
+    public static void setTermLocale(final Locale locale) {
         termLocale = locale;
     }
 
@@ -107,7 +107,7 @@ public final class IndexTerm implements Comparable {
      * 
      * @param name name to set
      */
-    public void setTermName(String name) {
+    public void setTermName(final String name) {
         this.termName = name;
     }
 
@@ -123,7 +123,7 @@ public final class IndexTerm implements Comparable {
 	 * Set the key used for sorting this term.
 	 * @param key The termKey to set.
 	 */
-	public void setTermKey(String key) {
+	public void setTermKey(final String key) {
 		this.termKey = key;
 	}
 
@@ -156,7 +156,7 @@ public final class IndexTerm implements Comparable {
      * Set the start attribute.
      * @param start attribute
      */
-    public void setStartAttribute(String start){
+    public void setStartAttribute(final String start){
     	this.start=start;
     }
     
@@ -165,7 +165,7 @@ public final class IndexTerm implements Comparable {
      * @param end attribute
      */
     
-    public void setEndAttribute(String end){
+    public void setEndAttribute(final String end){
     	this.end=end;
     }
     /**
@@ -173,9 +173,9 @@ public final class IndexTerm implements Comparable {
      * 
      * @param term index term to be added
      */
-    public void addSubTerm(IndexTerm term) {
+    public void addSubTerm(final IndexTerm term) {
         int i = 0;
-        int subTermNum = subTerms.size();
+        final int subTermNum = subTerms.size();
         
         if (!IndexTerm_Prefix_See.equals(term.getTermPrefix()) && 
         		!IndexTerm_Prefix_See_Also.equals(term.getTermPrefix())){
@@ -184,7 +184,7 @@ public final class IndexTerm implements Comparable {
         }
 
         for (; i < subTermNum; i++) {
-            IndexTerm subTerm = subTerms.get(i);
+            final IndexTerm subTerm = subTerms.get(i);
 
             if (subTerm.equals(term)) {
                 return;
@@ -209,7 +209,7 @@ public final class IndexTerm implements Comparable {
      *  
      * @param terms terms list
      */
-    public void addSubTerms(List<IndexTerm> terms) {
+    public void addSubTerms(final List<IndexTerm> terms) {
     	int subTermsNum = 0;
     	if (terms == null) {
     		return;
@@ -227,13 +227,13 @@ public final class IndexTerm implements Comparable {
      * @param o object to compare with.
      * @return boolean
      */
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (!(o instanceof IndexTerm)) {
             return false;
         } else if (o == this) {
             return true;
         }
-    	IndexTerm it = (IndexTerm) o;
+    	final IndexTerm it = (IndexTerm) o;
         boolean eqTermName;
         boolean eqTermKey;
         boolean eqTargetList;
@@ -268,12 +268,12 @@ public final class IndexTerm implements Comparable {
      * Sort all the subterms iteratively.
      */
     public void sortSubTerms() {
-        int subTermNum = subTerms.size();
+        final int subTermNum = subTerms.size();
 
         if (subTerms != null && subTermNum > 0) {
             Collections.sort(subTerms);
             for (int i = 0; i < subTermNum; i++) {
-                IndexTerm subTerm = subTerms.get(i);
+                final IndexTerm subTerm = subTerms.get(i);
                 subTerm.sortSubTerms();
             }
         }
@@ -285,7 +285,7 @@ public final class IndexTerm implements Comparable {
      * @param obj object to compare with
      * @return int
      */
-    public int compareTo(Object obj) {
+    public int compareTo(final Object obj) {
         return DITAOTCollator.getInstance(termLocale).compare(termKey,
                 ((IndexTerm) obj).getTermKey());
     }
@@ -304,7 +304,7 @@ public final class IndexTerm implements Comparable {
      * 
      * @param target indexterm target
      */
-    public void addTarget(IndexTermTarget target) {
+    public void addTarget(final IndexTermTarget target) {
         if (!targetList.contains(target)) {
             targetList.add(target);
         }
@@ -315,7 +315,7 @@ public final class IndexTerm implements Comparable {
      * 
      * @param targets list of targets
      */
-    public void addTargets(List<IndexTermTarget> targets) {
+    public void addTargets(final List<IndexTermTarget> targets) {
     	int targetNum = 0;
     	
     	if (targets == null) {
@@ -342,7 +342,7 @@ public final class IndexTerm implements Comparable {
 	 * @return string
 	 */
 	public String toString() {
-		StringBuffer buffer = new StringBuffer(INT_128);
+		final StringBuffer buffer = new StringBuffer(INT_128);
 		
 		buffer.append("{Term name: ").append(termName); //$NON-NLS-1$
 		buffer.append(", Term key: ").append(termKey); //$NON-NLS-1$
@@ -367,7 +367,7 @@ public final class IndexTerm implements Comparable {
      * Set the term prefix (such as IndexTerm_Prefix_See_Also).
      * @param termPrefix term prefix to set
      */
-	public void setTermPrefix(String termPrefix) {
+	public void setTermPrefix(final String termPrefix) {
 		this.termPrefix = termPrefix;
 	}
 	
@@ -399,7 +399,7 @@ public final class IndexTerm implements Comparable {
 	public void updateSubTerm(){
 		if (subTerms.size()==1){
 			// if there is only one subterm, it is necessary to update
-			IndexTerm term = subTerms.get(0); // get the only subterm
+			final IndexTerm term = subTerms.get(0); // get the only subterm
 			if (term.getTermPrefix()!= null &&
 					IndexTerm_Prefix_See.equalsIgnoreCase(term.getTermPrefix().trim())){ //$NON-NLS-1$
 				//if the only subterm is index-see update it to index-see-also

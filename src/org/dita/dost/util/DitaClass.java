@@ -67,19 +67,24 @@ public class DitaClass {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
-        DitaClass other = (DitaClass) obj;
+        }
+        final DitaClass other = (DitaClass) obj;
         if (stringValue == null) {
-            if (other.stringValue != null)
+            if (other.stringValue != null) {
                 return false;
-        } else if (!stringValue.equals(other.stringValue))
+            }
+        } else if (!stringValue.equals(other.stringValue)) {
             return false;
+        }
         return true;
     }
 

@@ -41,11 +41,6 @@ import org.xml.sax.ext.LexicalHandler;
 public abstract class AbstractXMLReader implements AbstractReader,
         ContentHandler, LexicalHandler, EntityResolver {
 	
-    /** XMLReader instance for parsing dita file */
-	protected static XMLReader reader = null;
-	/** Map of XML catalog info */
-	protected static HashMap<String, String> catalogMap = null;
-
 	/**
 	 * Initialize XML reader.
 	 * 
@@ -54,8 +49,8 @@ public abstract class AbstractXMLReader implements AbstractReader,
 	 * @param inGrammarPool
 	 * @throws SAXException if initializing reader failed
 	 */
-	public static XMLReader initXMLReaderBase(String ditaDir, boolean validate,			
-		XMLGrammarPool inGrammarPool) throws SAXException {		
+	public static XMLReader initXMLReaderBase(final String ditaDir, final boolean validate,			
+		final XMLGrammarPool inGrammarPool) throws SAXException {		
 		// FIXME: WEK: This is my attempt to factor out common reader initialization
 		//             code for the GenListModuleReader and the Debug and filter reader.
 		
@@ -80,7 +75,6 @@ public abstract class AbstractXMLReader implements AbstractReader,
 		setGrammarPool(reader, grammarPool);
 	
 		CatalogUtils.setDitaDir(ditaDir);
-		catalogMap = CatalogUtils.getCatalog(ditaDir);
 		return reader;
 	}
 
@@ -90,7 +84,7 @@ public abstract class AbstractXMLReader implements AbstractReader,
 	 * @param reader
 	 * @param grammarPool
 	 */
-	public static void setGrammarPool(XMLReader reader, XMLGrammarPool grammarPool) {
+	public static void setGrammarPool(final XMLReader reader, XMLGrammarPool grammarPool) {
 		
 		final DITAOTLogger logger = new DITAOTJavaLogger();
 		if (grammarPool == null) {
@@ -118,7 +112,7 @@ public abstract class AbstractXMLReader implements AbstractReader,
 	
 	protected DITAOTLogger logger;
 
-    public void read(String filename) {
+    public void read(final String filename) {
         // NOOP
     }
 
@@ -126,11 +120,11 @@ public abstract class AbstractXMLReader implements AbstractReader,
         return null;
     }
     
-    public void setLogger(final DITAOTLogger logger) {
+    public final void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
 
-    public void setDocumentLocator(Locator locator) {
+    public void setDocumentLocator(final Locator locator) {
         // NOOP
     }
 
@@ -142,45 +136,45 @@ public abstract class AbstractXMLReader implements AbstractReader,
         // NOOP
     }
 
-    public void startPrefixMapping(String prefix, String uri)
+    public void startPrefixMapping(final String prefix, final String uri)
             throws SAXException {
         // NOOP
     }
 
-    public void endPrefixMapping(String prefix) throws SAXException {
+    public void endPrefixMapping(final String prefix) throws SAXException {
         // NOOP
     }
 
-    public void startElement(String uri, String localName, String qName,
-            Attributes atts) throws SAXException {
+    public void startElement(final String uri, final String localName, final String qName,
+            final Attributes atts) throws SAXException {
         // NOOP
     }
 
-    public void endElement(String uri, String localName, String qName)
+    public void endElement(final String uri, final String localName, final String qName)
             throws SAXException {
         // NOOP
     }
 
-    public void characters(char[] ch, int start, int length)
+    public void characters(final char[] ch, final int start, final int length)
             throws SAXException {
         // NOOP
     }
 
-    public void ignorableWhitespace(char[] ch, int start, int length)
+    public void ignorableWhitespace(final char[] ch, final int start, final int length)
             throws SAXException {
         // NOOP
     }
 
-    public void processingInstruction(String target, String data)
+    public void processingInstruction(final String target, final String data)
             throws SAXException {
         // NOOP
     }
 
-    public void skippedEntity(String name) throws SAXException {
+    public void skippedEntity(final String name) throws SAXException {
         // NOOP
     }
 
-    public void startDTD(String name, String publicId, String systemId)
+    public void startDTD(final String name, final String publicId, final String systemId)
             throws SAXException {
         // NOOP
     }
@@ -189,11 +183,11 @@ public abstract class AbstractXMLReader implements AbstractReader,
         // NOOP
     }
 
-    public void startEntity(String name) throws SAXException {
+    public void startEntity(final String name) throws SAXException {
         // NOOP
     }
 
-    public void endEntity(String name) throws SAXException {
+    public void endEntity(final String name) throws SAXException {
         // NOOP
     }
 
@@ -205,11 +199,11 @@ public abstract class AbstractXMLReader implements AbstractReader,
         // NOOP
     }
 
-    public void comment(char[] ch, int start, int length) throws SAXException {
+    public void comment(final char[] ch, final int start, final int length) throws SAXException {
         // NOOP
     }
 
-    public InputSource resolveEntity(String publicId, String systemId)
+    public InputSource resolveEntity(final String publicId, final String systemId)
             throws SAXException, IOException {
         return null;
     }

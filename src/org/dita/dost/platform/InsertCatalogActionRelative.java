@@ -46,7 +46,7 @@ final class InsertCatalogActionRelative extends InsertAction {
 		for (int i = 0; i < attLen; i++){
 			String value;
 			final File targetFile = new File(new File(currentFile).getParentFile(), attributes.getValue(i));
-			int index = attributes.getIndex("xml:base");
+			final int index = attributes.getIndex("xml:base");
 			if ((("public".equals(localName) ||
 					"system".equals(localName) ||
 					"uri".equals(localName)) && "uri".equals(attributes.getQName(i)) ||

@@ -90,7 +90,7 @@ public final class IndexTermReader extends AbstractXMLReader {
 	//Added by William on 2010-04-26 for ref:2990783 end
 	
 	//Added by William on 2010-04-26 for ref:2990783 start
-	public IndexTermReader(IndexTermCollection result) {
+	public IndexTermReader(final IndexTermCollection result) {
  		this();
  		this.result = result;
 	}
@@ -142,7 +142,7 @@ public final class IndexTermReader extends AbstractXMLReader {
 	}
 
 	@Override
-	public void characters(char[] ch, int start, int length)
+	public void characters(final char[] ch, final int start, final int length)
 			throws SAXException {
 		final StringBuilder tempBuf = new StringBuilder(length);
 		tempBuf.append(ch, start, length);
@@ -188,7 +188,7 @@ public final class IndexTermReader extends AbstractXMLReader {
 	}
 
 	@Override
-	public void endElement(String uri, String localName, String qName)
+	public void endElement(final String uri, final String localName, final String qName)
 			throws SAXException {
 		
 		//Skip the topic if @processing-role="resource-only"
@@ -309,8 +309,8 @@ public final class IndexTermReader extends AbstractXMLReader {
 	}
 
 	@Override
-	public void startElement(String uri, String localName, String qName,
-			Attributes attributes) throws SAXException {
+	public void startElement(final String uri, final String localName, final String qName,
+			final Attributes attributes) throws SAXException {
 		
 		//Skip the topic if @processing-role="resource-only"
 		final String attrValue = attributes
@@ -363,13 +363,13 @@ public final class IndexTermReader extends AbstractXMLReader {
 		}
 	}
 	
-	private void parseTopic(String localName, String id){
+	private void parseTopic(final String localName, final String id){
 		if (topicSpecList.contains(localName)){
 			topicIdStack.push(id);
 		}
 	}
 
-	private void parseIndexSeeAlso(String localName) {
+	private void parseIndexSeeAlso(final String localName) {
 		// check to see it the index-see-also element or a specialized version
 		// is in the list.
 		if (indexSeeAlsoSpecList.contains(localName)) {
@@ -386,7 +386,7 @@ public final class IndexTermReader extends AbstractXMLReader {
 		}
 	}
 
-	private void parseIndexSee(String localName) {
+	private void parseIndexSee(final String localName) {
 		// check to see it the index-see element or a specialized version is
 		// in the list.
 		if (indexSeeSpecList.contains(localName)) {
@@ -406,7 +406,7 @@ public final class IndexTermReader extends AbstractXMLReader {
 		}
 	}
 
-	private void parseIndexTerm(String localName, Attributes attributes) {
+	private void parseIndexTerm(final String localName, final Attributes attributes) {
 		// check to see it the indexterm element or a specialized version is 
 		// in the list.
 		if (indexTermSpecList.contains(localName)) {
@@ -432,7 +432,7 @@ public final class IndexTermReader extends AbstractXMLReader {
 	 * @param localName
 	 * @param classAttr
 	 */
-	private void handleSpecialization(String localName, String classAttr) {
+	private void handleSpecialization(final String localName, final String classAttr) {
 		if (classAttr == null) {
 			return;
 		} else if (classAttr.indexOf(ATTR_CLASS_VALUE_INDEXTERM) != -1) {
@@ -478,7 +478,7 @@ public final class IndexTermReader extends AbstractXMLReader {
 	 * Set the current parsing file.
 	 * @param target The parsingFile to set.
 	 */
-	public void setTargetFile(String target) {
+	public void setTargetFile(final String target) {
 		this.targetFile = target;
 	}
 	
@@ -501,7 +501,7 @@ public final class IndexTermReader extends AbstractXMLReader {
 	 * Update the target name of each IndexTerm, recursively.
 	 * @param indexterm
 	 */
-	private void updateIndexTermTargetName(IndexTerm indexterm){
+	private void updateIndexTermTargetName(final IndexTerm indexterm){
 		final int targetSize = indexterm.getTargetList().size();
 		final int subtermSize = indexterm.getSubTerms().size();
 		
@@ -533,7 +533,7 @@ public final class IndexTermReader extends AbstractXMLReader {
 	 * 
 	 * @param strBuffer The string buffer.
 	 */
-	private void normalizeAndCollapseWhitespace(StringBuilder strBuffer){
+	private void normalizeAndCollapseWhitespace(final StringBuilder strBuffer){
 		WhiteSpaceState currentState = WhiteSpaceState.WORD;
 		for (int i = strBuffer.length() - 1; i >= 0; i--) {
 			final char currentChar = strBuffer.charAt(i);

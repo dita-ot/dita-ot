@@ -44,7 +44,7 @@ import org.w3c.dom.NodeList;
 public final class MapMetaReader implements AbstractReader {
 	private static final String INTERNET_LINK_MARK = "://";
 	
-	private Hashtable<String, Hashtable<String, Element>> resultTable = new Hashtable<String, Hashtable<String, Element>>(INT_16);
+	private final Hashtable<String, Hashtable<String, Element>> resultTable = new Hashtable<String, Hashtable<String, Element>>(INT_16);
 	
 	private static final HashSet<String> uniqueSet;
 	
@@ -147,7 +147,7 @@ public final class MapMetaReader implements AbstractReader {
 	 * read map files.
 	 * @param filename filename
 	 */
-	public void read(String filename) {
+	public void read(final String filename) {
 		final File inputFile = new File(filename);
         filePath = inputFile.getParent();
         inputFile.getPath();
@@ -224,7 +224,7 @@ public final class MapMetaReader implements AbstractReader {
 	 * end attribute.
 	 * @param parent root element
 	 */
-	private void removeIndexTermRecursive(Element parent) {
+	private void removeIndexTermRecursive(final Element parent) {
 		if (parent == null) {
 			return;
 		}
@@ -247,7 +247,7 @@ public final class MapMetaReader implements AbstractReader {
 	}
 	//added by Alan for bug ID:#2891736 on Date: 2009-11-16 end
 	
-	private void handleTopicref(Node topicref, Hashtable<String, Element> inheritance) {
+	private void handleTopicref(final Node topicref, final Hashtable<String, Element> inheritance) {
 		final Node hrefAttr = topicref.getAttributes().getNamedItem(ATTRIBUTE_NAME_HREF);
 		final Node copytoAttr = topicref.getAttributes().getNamedItem(ATTRIBUTE_NAME_COPY_TO);
 		final Node scopeAttr = topicref.getAttributes().getNamedItem(ATTRIBUTE_NAME_SCOPE);
@@ -330,7 +330,7 @@ public final class MapMetaReader implements AbstractReader {
 			//edited by william on 2009-08-06 for bug:2832696 end
 		}
 	}
-	private Hashtable<String, Element> cloneElementMap(Hashtable<String, Element> current) {
+	private Hashtable<String, Element> cloneElementMap(final Hashtable<String, Element> current) {
 		final Hashtable<String, Element> topicMetaTable = new Hashtable<String, Element>(INT_16);
 		for (final Entry<String, Element> topicMetaItem: current.entrySet()) {
 		    final Element inheritStub = doc.createElement("stub");
@@ -347,7 +347,7 @@ public final class MapMetaReader implements AbstractReader {
 	}
 
 
-	private Hashtable<String, Element> handleMeta(Node meta, Hashtable<String, Element> inheritance) {
+	private Hashtable<String, Element> handleMeta(final Node meta, final Hashtable<String, Element> inheritance) {
 		
 		final Hashtable<String, Element> topicMetaTable = new Hashtable<String, Element>(INT_16);
 		
@@ -357,7 +357,7 @@ public final class MapMetaReader implements AbstractReader {
 		
 	}
 	
-	private void getMeta(Node meta, Hashtable<String, Element> topicMetaTable){
+	private void getMeta(final Node meta, final Hashtable<String, Element> topicMetaTable){
 		final NodeList children = meta.getChildNodes();
 		for(int i = 0; i < children.getLength(); i++){
 			final Node node = children.item(i);
@@ -387,7 +387,7 @@ public final class MapMetaReader implements AbstractReader {
 	}
 
 	private Hashtable<String, Element> mergeMeta(Hashtable<String, Element> topicMetaTable, 
-					Hashtable<String, Element> inheritance, HashSet<String> enableSet) {
+					final Hashtable<String, Element> inheritance, final HashSet<String> enableSet) {
 		
 		// When inherited metadata need to be merged into current metadata
 		// enableSet should be cascadeSet so that only metadata that can
@@ -436,7 +436,7 @@ public final class MapMetaReader implements AbstractReader {
 		return topicMetaTable;
 	}
 
-	private void handleGlobalMeta(Node metadata) {
+	private void handleGlobalMeta(final Node metadata) {
 		
 		final NodeList children = metadata.getChildNodes();
 		for(int i = 0; i < children.getLength(); i++){

@@ -50,7 +50,7 @@ public final class ListReader implements AbstractReader {
         content.setCollection(refList);
     }
 
-    public void read(String filename) {
+    public void read(final String filename) {
     	Properties propterties = null; 	
 		try {
 			propterties=ListUtils.getDitaList();
@@ -63,7 +63,7 @@ public final class ListReader implements AbstractReader {
 		inputMap = propterties.getProperty(INPUT_DITAMAP);
 	}
     
-    private void setList(Properties property){
+    private void setList(final Properties property){
         String liststr;
         StringTokenizer tokenizer;
         String copytoMapEntries;

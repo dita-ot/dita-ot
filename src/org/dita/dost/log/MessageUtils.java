@@ -91,7 +91,7 @@ public final class MessageUtils {
             if (msg != null) {
                 try {
                     loadMessages(new File(msg.toURI()).toString());
-                } catch (URISyntaxException e) {
+                } catch (final URISyntaxException e) {
                     // NOOP
                 }
             }

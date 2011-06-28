@@ -40,7 +40,7 @@ public final class IndexTermCollection {
 	/** The collection of index terms. */
 	private static IndexTermCollection collection = null;
 	/** The list of all index term. */
-	private List<IndexTerm> termList = new ArrayList<IndexTerm>(INT_16);
+	private final List<IndexTerm> termList = new ArrayList<IndexTerm>(INT_16);
 
 	/** The type of index term. */
 	private String indexType = null;
@@ -98,7 +98,7 @@ public final class IndexTermCollection {
 	 * 
 	 * @param type The indexType to set.
 	 */
-	public void setIndexType(String type) {
+	public void setIndexType(final String type) {
 		this.indexType = type;
 	}
 	/**
@@ -112,7 +112,7 @@ public final class IndexTermCollection {
 	 * set index class.
 	 * @param indexClass index class
 	 */
-	public void setIndexClass(String indexClass) {
+	public void setIndexClass(final String indexClass) {
 		this.indexClass = indexClass;
 	}
 	
@@ -122,12 +122,12 @@ public final class IndexTermCollection {
 	 * 
 	 * @param term index term
 	 */
-	public void addTerm(IndexTerm term) {
+	public void addTerm(final IndexTerm term) {
 		int i = 0;
-		int termNum = termList.size();
+		final int termNum = termList.size();
 
 		for (; i < termNum; i++) {
-			IndexTerm indexTerm = (IndexTerm) termList.get(i);
+			final IndexTerm indexTerm = (IndexTerm) termList.get(i);
 			if (indexTerm.equals(term)) {
 				return;
 			}
@@ -159,7 +159,7 @@ public final class IndexTermCollection {
 	 * Sort term list extracted from dita files base on Locale.
 	 */
 	public void sort() {
-		int termListSize = termList.size();
+		final int termListSize = termList.size();
 		if (IndexTerm.getTermLocale() == null ||
 				IndexTerm.getTermLocale().getLanguage().trim().length()==0) {
 			IndexTerm.setTermLocale(new Locale(LANGUAGE_EN,
@@ -170,7 +170,7 @@ public final class IndexTermCollection {
 		 * Sort all the terms recursively
 		 */
 		for (int i = 0; i < termListSize; i++) {
-			IndexTerm term = termList.get(i);
+			final IndexTerm term = termList.get(i);
 			term.sortSubTerms();
 		}
 
@@ -186,7 +186,7 @@ public final class IndexTermCollection {
 		StringBuffer buff = new StringBuffer(this.outputFileRoot);
 		AbstractWriter abstractWriter = null;
 		IDitaTranstypeIndexWriter indexWriter = null;
-		Content content = new ContentImpl();
+		final Content content = new ContentImpl();
 		
 		if (indexClass != null && indexClass.length() > 0) {
 			//Instantiate the class value 
@@ -201,7 +201,7 @@ public final class IndexTermCollection {
 					
 					((AbstractExtendDitaWriter) abstractWriter).setPipelineHashIO(this.getPipelineHashIO());
 		
-				}catch (ClassCastException e){
+				}catch (final ClassCastException e){
 					javaLogger.logInfo(e.getMessage());
 					javaLogger.logInfo(e.toString());
 					e.printStackTrace();
@@ -212,13 +212,13 @@ public final class IndexTermCollection {
 				buff = new StringBuffer(indexWriter.getIndexFileName(this.outputFileRoot));
 				
 				
-			} catch (ClassNotFoundException e) {
+			} catch (final ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (IllegalAccessException e) {
+			} catch (final IllegalAccessException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (InstantiationException e) {
+			} catch (final InstantiationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -242,7 +242,7 @@ public final class IndexTermCollection {
 				// We need to get rid of the ditamap or topic name in the URL
 				// so we can create index.xml file for Eclipse plug-ins.
 				// int filepath = buff.lastIndexOf("\\");
-				File indexDir = new File(buff.toString()).getParentFile();
+				final File indexDir = new File(buff.toString()).getParentFile();
 				// buff.delete(filepath, buff.length());
 				((EclipseIndexWriter) abstractWriter).setFilePath(indexDir
 						.getAbsolutePath());
@@ -265,7 +265,7 @@ public final class IndexTermCollection {
 	 * Set the output file.
 	 * @param fileRoot The outputFile to set.
 	 */
-	public void setOutputFileRoot(String fileRoot) {
+	public void setOutputFileRoot(final String fileRoot) {
 		this.outputFileRoot = fileRoot;
 	}
 
@@ -282,7 +282,7 @@ public final class IndexTermCollection {
 	 * Set the hashmap cotaining parameters from ANT pipeline module.
 	 * @param hashIO The hashmap to set.
 	 */
-	public void setPipelineHashIO(PipelineHashIO hashIO) {
+	public void setPipelineHashIO(final PipelineHashIO hashIO) {
 		this.pipelineHashIO = hashIO;
 	}
 	

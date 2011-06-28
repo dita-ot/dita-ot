@@ -35,7 +35,7 @@ public final class URIResolverAdapter {
 	 * @return InputSource instance if target object is instance of either SAXSource, DOMSource, StreamSource
 	 *         or their derived class. null, if not.
 	 */
-	public static InputSource convertToInputSource(Source source) {
+	public static InputSource convertToInputSource(final Source source) {
 		if(source==null){
 			return null;
 		}
@@ -43,17 +43,17 @@ public final class URIResolverAdapter {
 		if (source instanceof SAXSource) {
 			return ((SAXSource) source).getInputSource();
 		} else if (source instanceof StreamSource) {
-			StreamSource ss = (StreamSource) source;
-			InputSource isource = new InputSource(ss.getInputStream());
+			final StreamSource ss = (StreamSource) source;
+			final InputSource isource = new InputSource(ss.getInputStream());
 			isource.setByteStream(ss.getInputStream());
 			isource.setCharacterStream(ss.getReader());
 			return isource;
 		} else if (source instanceof DOMSource) {
-			StringWriter writer = new StringWriter();
+			final StringWriter writer = new StringWriter();
 			try {
 				TransformerFactory.newInstance().newTransformer().transform(source, new StreamResult(writer));
 				return new InputSource(new StringReader(writer.toString()));
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				return null;
 			}
 		} else {
@@ -67,8 +67,8 @@ public final class URIResolverAdapter {
 	 * @return InputStream instance if target object is instance of either SAXSource, DOMSource, StreamSource
 	 *         or their derived class. null, if not.
 	 */
-	public static InputStream convertTOInputStream(Source source){
-		InputSource result=convertToInputSource(source);
+	public static InputStream convertTOInputStream(final Source source){
+		final InputSource result=convertToInputSource(source);
 		if(result==null){
 			return null;
 		}

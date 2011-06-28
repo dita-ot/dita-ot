@@ -48,7 +48,7 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter implements Ab
     /**
      * @see org.dita.dost.writer.AbstractWriter#setContent(org.dita.dost.module.Content)
      */
-    public void setContent(Content content) {
+    public void setContent(final Content content) {
         termList = (List<IndexTerm>) content.getCollection();
     }
 
@@ -58,9 +58,9 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter implements Ab
      * @param outputStream outputStream
      * @throws UnsupportedEncodingException The Character Encoding is not supported.
      */
-    public void write(OutputStream outputStream) throws UnsupportedEncodingException{
+    public void write(final OutputStream outputStream) throws UnsupportedEncodingException{
         PrintWriter printWriter = null;
-        int termNum = termList.size();
+        final int termNum = termList.size();
 
         try {
             printWriter = new PrintWriter(new OutputStreamWriter(outputStream, UTF8));
@@ -76,7 +76,7 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter implements Ab
             printWriter.println("<ul>");
 
             for (int i = 0; i < termNum; i++) {
-                IndexTerm term = (IndexTerm) termList.get(i);
+                final IndexTerm term = (IndexTerm) termList.get(i);
                 outputIndexTerm(term, printWriter);
             }
 
@@ -94,18 +94,18 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter implements Ab
     /**
 	 * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
 	 */
-	public void write(String filename) throws DITAOTException {
+	public void write(final String filename) throws DITAOTException {
 		OutputStream out = null;
 		try {
 			out = new FileOutputStream(filename);
 			write(out);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new DITAOTException(e);
 		} finally {
         	if (out != null) {
         		try {
         			out.close();
-        		} catch (IOException e) {
+        		} catch (final IOException e) {
         			logger.logException(e);
         		}
         	}
@@ -118,11 +118,11 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter implements Ab
      * @param term
      * @param printWriter
      */
-    private void outputIndexTerm(IndexTerm term, PrintWriter printWriter) {
+    private void outputIndexTerm(final IndexTerm term, final PrintWriter printWriter) {
         List<IndexTermTarget> targets = term.getTargetList();
-        List<IndexTerm> subTerms = term.getSubTerms();
+        final List<IndexTerm> subTerms = term.getSubTerms();
         int targetNum = targets.size();
-        int subTermNum = subTerms.size();
+        final int subTermNum = subTerms.size();
 
         printWriter.println("<li> <object type=\"text/sitemap\">");
         printWriter.print("<param name=\"Name\" value=\"");
@@ -139,7 +139,7 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter implements Ab
         }
 
         for (int i = 0; i < targetNum; i++) {
-            IndexTermTarget target = (IndexTermTarget) targets.get(i);
+            final IndexTermTarget target = (IndexTermTarget) targets.get(i);
             printWriter.print("<param name=\"Name\" value=\"");
             printWriter.print(target.getTargetName());
             printWriter.print("\">");
@@ -156,7 +156,7 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter implements Ab
             printWriter.println("<ul>");
 
             for (int i = 0; i < subTermNum; i++) {
-                IndexTerm subTerm = (IndexTerm) subTerms.get(i);
+                final IndexTerm subTerm = (IndexTerm) subTerms.get(i);
                 outputIndexTerm(subTerm, printWriter);
             }
 
@@ -175,12 +175,12 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter implements Ab
      * @param targets
      * The list of targets to store the result found
      */
-	private void findTargets(IndexTerm term) {
-		List<IndexTerm> subTerms = term.getSubTerms();
+	private void findTargets(final IndexTerm term) {
+		final List<IndexTerm> subTerms = term.getSubTerms();
 		List<IndexTermTarget> subTargets = null;
 		if (subTerms != null && ! subTerms.isEmpty()){
 			for (int i = 0; i < subTerms.size(); i++){
-				IndexTerm subTerm = subTerms.get(i);
+				final IndexTerm subTerm = subTerms.get(i);
 				subTargets = subTerm.getTargetList();
 				if (subTargets != null && !subTargets.isEmpty()){
 				// edited by William on 2009-07-13 for indexterm bug:2819853 start
@@ -205,7 +205,7 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter implements Ab
 	 * @param outputFileRoot root
 	 * @return index file name
 	 */
-	public String getIndexFileName(String outputFileRoot) {
+	public String getIndexFileName(final String outputFileRoot) {
 		StringBuffer indexFilename;
 		
 		indexFilename = new StringBuffer(outputFileRoot);

@@ -32,14 +32,14 @@ public final class JavaInvoker {
 	 * @param dir
 	 * @author Marshall
 	 */
-	public static void removeFiles(String dir){
-		File file = new File(dir);
-		int size = file.listFiles().length;
+	public static void removeFiles(final String dir){
+		final File file = new File(dir);
+		final int size = file.listFiles().length;
 		if(!(file.exists() && file.isDirectory())){
 			return;
 		}
 		for(int i=0; i< size; i++){
-			File f = file.listFiles()[i];
+			final File f = file.listFiles()[i];
 			f.deleteOnExit();
 		}
 	}
