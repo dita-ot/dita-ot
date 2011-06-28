@@ -18,6 +18,57 @@ going back to the beginning of the toolkit. </shortdesc>
       <copyrholder>OASIS</copyrholder>
     </copyright>
   </prolog>
+  <reference id="rel1.5.4">
+    <title>DITA Open Toolkit Release 1.5.4</title>
+    <reference id="general-enhancements-and-changes">
+      <title>General Enhancements and Changes</title>
+      <refbody>
+      <section>
+        <title>Plug-in extension point for file extension configuration</title>
+          <p>New plug-in extension points have been added allow configuring DITA-OT behaviour based
+            on file extensions.</p>
+          <simpletable id="simpletable_xym_ryi_uc">
+            <sthead>
+              <stentry>Extension point</stentry>
+              <stentry>Description</stentry>
+              <stentry>Default values</stentry>
+            </sthead>
+            <strow>
+              <stentry><codeph>dita.topic.extension</codeph></stentry>
+              <stentry>DITA topic</stentry>
+              <stentry><filepath>.dita</filepath>, <filepath>.xml</filepath></stentry>
+            </strow>
+            <strow>
+              <stentry><codeph>dita.map.extensions</codeph></stentry>
+              <stentry>DITA map</stentry>
+              <stentry><filepath>.ditamap</filepath></stentry>
+            </strow>
+            <strow>
+              <stentry><codeph>dita.html.extensions</codeph></stentry>
+              <stentry>HTML file</stentry>
+              <stentry><filepath>.html</filepath>, <filepath>.htm</filepath></stentry>
+            </strow>
+            <strow>
+              <stentry><codeph>dita.resource.extensions</codeph></stentry>
+              <stentry>Resource file</stentry>
+              <stentry><filepath>.pdf</filepath>, <filepath>.swf</filepath></stentry>
+            </strow>
+          </simpletable><p>Both HTML and resource file extensions are used to determine if a
+          file in source is copied to output.</p>
+      </section>
+        <section>
+          <title>Strict integration mode</title>
+          <p>Two modes have been added to integration process: lax and strict. In strict mode the
+            processing will fail if any errors are encountered. In lax mode an error message may be
+            thrown for an error and the integration process will try to run to the end, even if
+            there are errors that were unrecoverable. The default mode is lax.</p>
+          <note>In lax mode, even if the process runs to the end and reports a successful result,
+            DITA-OT may not be able to function correctly because of e.g. corrupted plug-in files or
+            unprocessed template files.</note>
+        </section>
+      </refbody>
+    </reference>
+  </reference>
   <reference id="rel1.5.3">
     <title>DITA Open Toolkit Release 1.5.3</title>
     <shortdesc>Release 1.5.3 is a maintenance release based on the final version of the DITA 1.2
@@ -149,7 +200,10 @@ going back to the beginning of the toolkit. </shortdesc>
           <li>3199755 Improve log integration (Milestone 8) </li>
           <li>3296040 Refactor PDF2 build files (Milestone 8)</li>
           <li>3306146 PDF2 stylesheet refactoring (Milestone 8)</li>
-          <li>3304447 Add support for selecting output format in PDF2 (Milestone 8) </li>
+          <li>3304447 Add support for selecting output format in PDF2 (Milestone 8)</li>
+          <li>3310476 Add plug-in ID and version syntax check (Milestone 8)</li>
+          <li>3309275 Warning reported by Apache FOP on any topic (Milestone 8)</li>
+          <li>3305843 Support list of tables/figures in PDF2 (Milestone 8)</li>
         </ol>
       </section>
       <section>
