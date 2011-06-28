@@ -178,7 +178,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
     private OutputStreamWriter schemekeydef;
 
     // Added by William on 2009-06-25 for req #12014 start
-    // export file
+    /** Export file */
     private OutputStreamWriter export;
     // Added by William on 2009-06-25 for req #12014 end
 

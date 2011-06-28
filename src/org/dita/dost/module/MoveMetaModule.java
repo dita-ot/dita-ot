@@ -56,7 +56,7 @@ final class MoveMetaModule implements AbstractPipelineModule {
 
     /**
 	 * Entry point of MoveMetaModule.
-	 * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
+	 * 
 	 * @param input Input parameters and resources.
 	 * @return null
 	 * @throws DITAOTException exception

@@ -29,17 +29,10 @@ public final class PropertiesWriter implements AbstractWriter {
 	private Properties prop = null;
 	private DITAOTLogger logger;
 
-	/**
-	 * 
-	 * @see org.dita.dost.writer.AbstractWriter#setContent(org.dita.dost.module.Content)
-	 */
 	public void setContent(final Content content) {
 		prop = (Properties) content.getValue();
 	}
 
-	/**
-	 * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
-	 */
 	public void write(final String filename) throws DITAOTException {
 		FileOutputStream fileOutputStream = null;
 

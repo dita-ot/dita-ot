@@ -153,11 +153,6 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.dita.dost.writer.AbstractXMLWriter#endCDATA()
-	 */
 	@Override
 	public void endCDATA() throws SAXException {
 		insideCDATA = false;
@@ -168,11 +163,6 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.dita.dost.writer.AbstractXMLWriter#endDocument()
-	 */
 	@Override
 	public void endDocument() throws SAXException {
 		try {
@@ -182,12 +172,6 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.dita.dost.writer.AbstractXMLWriter#endElement(java.lang.String,
-	 *      java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void endElement(final String uri, final String localName, final String qName)
 			throws SAXException {
@@ -199,21 +183,11 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.dita.dost.writer.AbstractXMLWriter#setContent(org.dita.dost.module.Content)
-	 */
 	@Override
 	public void setContent(final Content content) {
 		changeTable = (LinkedHashMap<String,String>) content.getValue();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.dita.dost.writer.AbstractXMLWriter#startCDATA()
-	 */
 	@Override
 	public void startCDATA() throws SAXException {
 		try {
@@ -224,14 +198,8 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.dita.dost.writer.AbstractXMLWriter#startDocument()
-	 */
 	@Override
 	public void startDocument() throws SAXException {
-		// TODO Auto-generated method stub
 		super.startDocument();
 		try{
 			output.write(XML_HEAD);
@@ -241,12 +209,6 @@ public final class TopicRefWriter extends AbstractXMLWriter {
         }
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.dita.dost.writer.AbstractXMLWriter#startElement(java.lang.String,
-	 *      java.lang.String, java.lang.String, org.xml.sax.Attributes)
-	 */
 	@Override
 	public void startElement(final String uri, final String localName, final String qName,
 			final Attributes atts) throws SAXException {
@@ -563,11 +525,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 		write(new File(tempDir,topicfile).getAbsolutePath());
 		fixpath= null;
 	}
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.dita.dost.writer.AbstractXMLWriter#write(java.lang.String)
-	 */
+
 	@Override
 	public void write(final String outputFilename) throws DITAOTException {
 		String filename = outputFilename;

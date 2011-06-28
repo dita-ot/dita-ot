@@ -63,9 +63,9 @@ import org.xml.sax.XMLReader;
  * 
  * <p>The following attributes are added to elements:</p>
  * <dl>
- *   <dt>{@link #ATTRIBUTE_XTRF}</dt>
+ *   <dt>{@link org.dita.dost.util.Constants#ATTRIBUTE_NAME_XTRF}</dt>
  *   <dd>Absolute system path of the source file.</dd>
- *   <dt>{@link #ATTRIBUTE_XTRC}</dt>
+ *   <dt>{@link org.dita.dost.util.Constants#ATTRIBUTE_NAME_XTRF}</dt>
  *   <dd>Element name and count in the document, {@code :} separated.</dd>
  * </dl>
  * 
@@ -79,10 +79,6 @@ public final class DitaWriter extends AbstractXMLWriter {
     public static final String PI_WORKDIR_TARGET = "workdir";
     //To check the URL of href in topicref attribute
     private static final String NOT_LOCAL_URL="://";
-    //To check whether the attribute of XTRC and XTRF have existed
-    private static final String ATTRIBUTE_XTRC = "xtrc";
-    private static final String ATTRIBUTE_XTRF = "xtrf";
-    
   //Added on 2010-08-24 for bug:3086552 start
     private boolean setSystemid = true;
   //Added on 2010-08-24 for bug:3086552 end
@@ -467,7 +463,7 @@ public final class DitaWriter extends AbstractXMLWriter {
 		    final String nsUri = atts.getURI(i);
 		    
 		    //ignore the xtrf and xtrc attribute ,and not copy
-		    if(attQName.equals(ATTRIBUTE_XTRF)|| attQName.equals(ATTRIBUTE_XTRC)) {
+		    if(attQName.equals(ATTRIBUTE_NAME_XTRF)|| attQName.equals(ATTRIBUTE_NAME_XTRC)) {
                 continue;
             }
 		    
@@ -1131,8 +1127,8 @@ public final class DitaWriter extends AbstractXMLWriter {
                     // write the xtrf and xtrc attributes which contain debug
                     // information if it is dita elements (elements not in foreign/unknown)
                     if (foreignLevel <= 1){
-                        copyAttribute(ATTRIBUTE_XTRF, traceFilename);
-                        copyAttribute(ATTRIBUTE_XTRC, qName + COLON + nextValue.toString());
+                        copyAttribute(ATTRIBUTE_NAME_XTRF, traceFilename);
+                        copyAttribute(ATTRIBUTE_NAME_XTRC, qName + COLON + nextValue.toString());
                     }
                     output.write(GREATER_THAN);
                     

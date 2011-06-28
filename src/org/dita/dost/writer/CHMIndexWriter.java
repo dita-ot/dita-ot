@@ -45,9 +45,6 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter implements Ab
     public CHMIndexWriter() {
     }
 
-    /**
-     * @see org.dita.dost.writer.AbstractWriter#setContent(org.dita.dost.module.Content)
-     */
     public void setContent(final Content content) {
         termList = (List<IndexTerm>) content.getCollection();
     }
@@ -90,10 +87,6 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter implements Ab
         }
     }
     
-
-    /**
-	 * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
-	 */
 	public void write(final String filename) throws DITAOTException {
 		OutputStream out = null;
 		try {
@@ -210,7 +203,6 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter implements Ab
 		
 		indexFilename = new StringBuffer(outputFileRoot);
 		indexFilename.append(".hhk");
-		// TODO Auto-generated method stub
 		return indexFilename.toString();
 	}
 

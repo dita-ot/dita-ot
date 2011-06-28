@@ -18,12 +18,8 @@ import org.xml.sax.SAXException;
 
 
 /**
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments.
- *
  * @author Zhang, Yuan Peng
  */
-
 public final class CatalogParser implements ContentHandler{
     private final String catalogDir;
 
@@ -52,22 +48,13 @@ public final class CatalogParser implements ContentHandler{
         dtdBase = null;
     }
     
-    /** 
-     * @see org.xml.sax.ContentHandler#characters(char[], int, int)
-     */
     public void characters(final char[] ch, final int start, final int length)
             throws SAXException {
     }
     
-    /** 
-     * @see org.xml.sax.ContentHandler#endDocument()
-     */
     public void endDocument() throws SAXException {
     }
     
-    /** 
-     * @see org.xml.sax.ContentHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
-     */
     public void endElement(final String uri, final String localName, final String qName)
             throws SAXException {
         if ("group".equals(qName)){
@@ -75,44 +62,26 @@ public final class CatalogParser implements ContentHandler{
         }
     }
     
-    /**
-     * @see org.xml.sax.ContentHandler#endPrefixMapping(java.lang.String)
-     */
     public void endPrefixMapping(final String prefix) throws SAXException {
     }
     
-    /**
-     * @see org.xml.sax.ContentHandler#ignorableWhitespace(char[], int, int)
-     */
     public void ignorableWhitespace(final char[] ch, final int start, final int length)
             throws SAXException {
     }
     
-    /**
-     * @see org.xml.sax.ContentHandler#processingInstruction(java.lang.String, java.lang.String)
-     */
     public void processingInstruction(final String target, final String data)
             throws SAXException {
     }
     
-    /**
-     * @see org.xml.sax.ContentHandler#setDocumentLocator(org.xml.sax.Locator)
-     */
     public void setDocumentLocator(final Locator locator) {
     }
-    /**
-     * @see org.xml.sax.ContentHandler#skippedEntity(java.lang.String)
-     */
+
     public void skippedEntity(final String name) throws SAXException {
     }
-    /**
-     * @see org.xml.sax.ContentHandler#startDocument()
-     */
+
     public void startDocument() throws SAXException {
     }
-    /**
-     * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
-     */
+
     public void startElement(final String uri, final String localName, final String qName,
             final Attributes atts) throws SAXException {
         /*if ("group".equals(qName)){
@@ -155,10 +124,9 @@ public final class CatalogParser implements ContentHandler{
             map.put(atts.getValue("systemId"), absoluteLocalURI);
         }
     }
-    /**
-     * @see org.xml.sax.ContentHandler#startPrefixMapping(java.lang.String, java.lang.String)
-     */
+
     public void startPrefixMapping(final String prefix, final String uri)
             throws SAXException {
     }
+
 }

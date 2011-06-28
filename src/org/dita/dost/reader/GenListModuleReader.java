@@ -84,38 +84,38 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	private boolean hasCodeRef = false;
 
 	/** Set of all the non-conref and non-copyto targets refered in current parsing file */
-	private Set<String> nonConrefCopytoTargets = null;
+	private final Set<String> nonConrefCopytoTargets;
 	
 	/** Set of conref targets refered in current parsing file */
-	private Set<String> conrefTargets = null;
+	private final Set<String> conrefTargets;
 	
 	/** Set of href nonConrefCopytoTargets refered in current parsing file */
-	private Set<String> hrefTargets = null;
+	private final Set<String> hrefTargets;
 	
 	/** Set of href targets with anchor appended */
-	private Set<String> hrefTopicSet = null;
+	private final Set<String> hrefTopicSet;
 	
 	/** Set of chunk targets */
-	private Set<String> chunkTopicSet = null;
+	private final Set<String> chunkTopicSet;
 	
 	/** Set of subject schema files */
-	private Set<String> schemeSet = null;
+	private final Set<String> schemeSet;
 	
 	/** Set of subsidiary files */
-	private Set<String> subsidiarySet = null;
+	private final Set<String> subsidiarySet;
 
 	/** Set of sources of those copy-to that were ignored */
-	private Set<String> ignoredCopytoSourceSet = null;
+	private final Set<String> ignoredCopytoSourceSet;
 	
 	/** Map of copy-to target to souce	*/
-	private Map<String, String> copytoMap = null;
+	private final Map<String, String> copytoMap;
 	
 	/** Map of key definitions */
-	private Map<String, String> keysDefMap = null;
+	private final Map<String, String> keysDefMap;
 	
 	//Added on 20100826 for bug:3052913 start
 	/** Map to store multi-level keyrefs */
-	private Map<String, String>keysRefMap = null;
+	private final Map<String, String>keysRefMap;
 	//Added on 20100826 for bug:3052913 end
 	
 	/** Flag for conrefpush   */
@@ -151,7 +151,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	private String props;
 	
 	/** Set of outer dita files */
-	private Set<String> outDitaFilesSet=null;
+	private final Set<String> outDitaFilesSet;
 	
 	private String rootDir = null;
 	
@@ -170,7 +170,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
     /** Topics with role of "resource-only" */
     private final Set<String> resourceOnlySet;
     private final Set<String> crossSet;
-    private Set<String> schemeRefSet = null;
+    private final Set<String> schemeRefSet;
     
     /** Subject scheme document root */
     //private Document schemeRoot = null;
@@ -192,7 +192,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	private String topicHref = "";
 	/** Topicmeta set for merge multiple exportanchors into one.
 	 * Each topicmeta/prolog can define many exportanchors */
-	private HashSet<String> topicMetaSet = null;
+	private final HashSet<String> topicMetaSet;
 	/** Refered topic id */
 	private String topicId = "";
 	/** Map to store plugin id */
@@ -217,7 +217,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
     
     //Added by William on 2010-06-09 for bug:3013079 start
     /** Store the external/peer keydefs */
-    private Map<String, String> exKeysDefMap = null;
+    private final Map<String, String> exKeysDefMap;
     //Added by William on 2010-06-09 for bug:3013079 end
     
     /**

@@ -260,7 +260,6 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
     }
 
 	private void processDOM() {
-		// TODO Auto-generated method stub
 		try{
 			final DocumentBuilderFactory factory = DocumentBuilderFactory
 			.newInstance();
@@ -354,7 +353,6 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
 	}
 
 	private void moveMeta(final Entry<String, Node> entry, final Node root) {
-		// TODO Auto-generated method stub
 		final String metaPath = (String)moveTable.get(entry.getKey());
 		if (metaPath == null){
 			// for the elements which doesn't need to be moved to topic

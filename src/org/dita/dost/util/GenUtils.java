@@ -31,7 +31,6 @@ public final class GenUtils {
 	 */
 	public GenUtils() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	/**
 	 * Clear up.

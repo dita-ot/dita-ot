@@ -41,7 +41,6 @@ final class ConrefPushModule implements AbstractPipelineModule {
     }
     
 	/**
-	 * @see org.dita.dost.module.AbstractPipelineModule#execute(AbstractPipelineInput)
 	 * @param input input
 	 * @return output
 	 * @throws DITAOTException exception

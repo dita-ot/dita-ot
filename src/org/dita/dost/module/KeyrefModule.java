@@ -41,7 +41,7 @@ final class KeyrefModule implements AbstractPipelineModule {
     
 	/**
 	 * Entry point of KeyrefModule.
-	 * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
+	 * 
 	 * @param input Input parameters and resources.
 	 * @return null
 	 * @throws DITAOTException exception

@@ -127,9 +127,6 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter implement
 	
 	}
 	
-	/**
-	 * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
-	 */
 	public void write(final String filename) throws DITAOTException {
 		OutputStream out = null;
 		try {
@@ -156,8 +153,6 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter implement
 	 * @param term
 	 * @param printWriter
 	 * @param indexsee
-	 * 
-	 * RFE 2987769 - Added indexsee parameter to keep track of the processing pipeline.
 	 */
     private void outputIndexTerm(final IndexTerm term, final PrintWriter printWriter, final boolean indexsee) {
         
@@ -225,7 +220,6 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter implement
 		indexFilename = new StringBuffer(new File(indexDir, "index.xml")
 				.getAbsolutePath());
 		
-		// TODO Auto-generated method stub
 		return indexFilename.toString();
 	}
 	

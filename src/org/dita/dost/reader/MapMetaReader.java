@@ -128,7 +128,7 @@ public final class MapMetaReader implements AbstractReader {
 
 	private DITAOTLogger logger;
 	
-	private Hashtable<String, Element> globalMeta = null;
+	private final Hashtable<String, Element> globalMeta;
 	
 	private Document doc = null;
 	

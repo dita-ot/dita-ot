@@ -41,7 +41,6 @@ final class TopicMergeModule implements AbstractPipelineModule {
 	 */
 	public TopicMergeModule() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	public void setLogger(final DITAOTLogger logger) {
@@ -50,7 +49,7 @@ final class TopicMergeModule implements AbstractPipelineModule {
 	
 	/**
 	 * Entry point of TopicMergeModule.
-	 * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
+	 * 
 	 * @param input Input parameters and resources.
 	 * @return null
 	 * @throws DITAOTException exception

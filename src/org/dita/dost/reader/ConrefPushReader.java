@@ -129,8 +129,8 @@ public final class ConrefPushReader extends AbstractXMLReader {
 					// there are redundant "pushbefore", create a new pushcontent and emit a warning message.
 					pushcontent = new StringBuffer();
 					final Properties prop = new Properties();
-					prop.put("%1", atts.getValue("xtrf"));
-					prop.put("%2", atts.getValue("xtrc"));
+					prop.put("%1", atts.getValue(ATTRIBUTE_NAME_XTRF));
+					prop.put("%2", atts.getValue(ATTRIBUTE_NAME_XTRC));
 					logger.logWarn(MessageUtils.getMessage("DOTJ044W",prop).toString());
 				}
 				start = true;
@@ -144,8 +144,8 @@ public final class ConrefPushReader extends AbstractXMLReader {
 				level ++;
 				if (target == null){
 					final Properties prop = new Properties();
-					prop.put("%1", atts.getValue("xtrf"));
-					prop.put("%2", atts.getValue("xtrc"));
+					prop.put("%1", atts.getValue(ATTRIBUTE_NAME_XTRF));
+					prop.put("%2", atts.getValue(ATTRIBUTE_NAME_XTRC));
 					logger.logError(MessageUtils.getMessage("DOTJ039E", prop).toString());
 				}else{
 					putElement(pushcontent, name, atts, true);
@@ -158,8 +158,8 @@ public final class ConrefPushReader extends AbstractXMLReader {
 				target = atts.getValue("conref");
 				if (target == null){
 					final Properties prop = new Properties();
-					prop.put("%1", atts.getValue("xtrf"));
-					prop.put("%2", atts.getValue("xtrc"));
+					prop.put("%1", atts.getValue(ATTRIBUTE_NAME_XTRF));
+					prop.put("%2", atts.getValue(ATTRIBUTE_NAME_XTRC));
 					logger.logError(MessageUtils.getMessage("DOTJ040E", prop).toString());
 				}else{
 					pushType = "pushreplace";

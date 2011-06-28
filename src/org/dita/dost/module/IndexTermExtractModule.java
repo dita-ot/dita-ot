@@ -73,10 +73,6 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
         this.logger = logger;
     }
 
-	/**
-	 * 
-	 * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
-	 */
 	public AbstractPipelineOutput execute(final AbstractPipelineInput input)
 			throws DITAOTException {
 	    if (logger == null) {

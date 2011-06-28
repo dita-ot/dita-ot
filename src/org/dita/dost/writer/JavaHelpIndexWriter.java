@@ -86,9 +86,6 @@ public final class JavaHelpIndexWriter extends AbstractExtendDitaWriter implemen
 		}
 	}
 	
-	/**
-	 * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
-	 */
 	public void write(final String filename) throws DITAOTException {
 		OutputStream out = null;
 		try {
@@ -168,7 +165,6 @@ public final class JavaHelpIndexWriter extends AbstractExtendDitaWriter implemen
 		
 		indexFilename = new StringBuffer(outputFileRoot);
 		indexFilename.append("_index.xml");
-		// TODO Auto-generated method stub
 		return indexFilename.toString();
 	}
 

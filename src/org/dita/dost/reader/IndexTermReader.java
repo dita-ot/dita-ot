@@ -50,22 +50,22 @@ public final class IndexTermReader extends AbstractXMLReader {
 	private boolean insideSortingAs = false;
 	
 	/** Stack used to store index term */
-	private Stack<IndexTerm> termStack = null;
+	private final Stack<IndexTerm> termStack;
 	
 	/** Stack used to store topic id */
-	private Stack<String> topicIdStack = null;
+	private final Stack<String> topicIdStack;
 
 	/** List used to store all the specialized index terms */
-	private List<String> indexTermSpecList = null;
+	private final List<String> indexTermSpecList;
 	
 	/** List used to store all the specialized index-see */
-	private List<String> indexSeeSpecList = null;
+	private final List<String> indexSeeSpecList;
 	
 	/** List used to store all the specialized index-see-also */
-	private List<String> indexSeeAlsoSpecList = null;
+	private final List<String> indexSeeAlsoSpecList;
 	
 	/** List used to store all the specialized index-sort-as */
-	private List<String> indexSortAsSpecList = null;
+	private final List<String> indexSortAsSpecList;
 	
 	/** List used to store all the specialized topics */
 	private final List<String> topicSpecList;

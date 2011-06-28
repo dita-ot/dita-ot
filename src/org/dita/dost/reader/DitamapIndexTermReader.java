@@ -37,19 +37,19 @@ import org.xml.sax.SAXException;
 
 public final class DitamapIndexTermReader extends AbstractXMLReader {
 	/** The stack used to store elements */
-	private Stack<Object> elementStack = null;
+	private final Stack<Object> elementStack;
 	
 	/** List used to store all the specialized index terms */
-	private List<String> indexTermSpecList = null;
+	private final List<String> indexTermSpecList;
 	
 	/** List used to store all the specialized topicref tags */
-	private List<String> topicrefSpecList = null;
+	private final List<String> topicrefSpecList;
 	
 	/** List used to store all the specialized index-see tags */
-	private List<String> indexSeeSpecList = null;
+	private final List<String> indexSeeSpecList;
 	
 	/** List used to store all the specialized index-see-also tags */
-	private List<String> indexSeeAlsoSpecList = null;
+	private final List<String> indexSeeAlsoSpecList;
 	
 	private String mapPath = null;
 

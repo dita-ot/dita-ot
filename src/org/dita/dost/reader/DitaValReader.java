@@ -55,17 +55,17 @@ public final class DitaValReader extends AbstractXMLReader {
 
 	private XMLReader reader;
 
-	private List<String> imageList = null;
+	private final List<String> imageList;
 
 	private String ditaVal = null;
 	
-	private List<String> relFlagImageList= null;
+	private final List<String> relFlagImageList;
 	
-	private HashMap<String, HashMap<String, HashSet<Element>>> bindingMap = null;
+	private final HashMap<String, HashMap<String, HashSet<Element>>> bindingMap;
 	
-	private HashMap<String, HashMap<String, HashSet<String>>> validValuesMap = null;
+	private final HashMap<String, HashMap<String, HashSet<String>>> validValuesMap;
 	
-	private HashMap<String, HashMap<String, String>> defaultValueMap = null;
+	private final HashMap<String, HashMap<String, String>> defaultValueMap;
 	
 	private Element schemeRoot = null;
 	

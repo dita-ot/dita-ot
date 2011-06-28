@@ -32,7 +32,7 @@ public interface AbstractWriter {
     /**
      * Call the writer to write or rewrite the file.
      * 
-     * @param filename filename
+     * @param filename system path to process, may contain a pseudo-fragment part
      * @throws DITAOTException DITAOTException
      */
     void write(String filename) throws DITAOTException;

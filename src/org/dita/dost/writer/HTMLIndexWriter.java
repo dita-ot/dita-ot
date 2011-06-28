@@ -45,9 +45,6 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter implements A
     public HTMLIndexWriter() {
     }
 
-    /**
-     * @see org.dita.dost.writer.AbstractWriter#setContent(org.dita.dost.module.Content)
-     */
     public void setContent(final Content content) {
         termList = (List<IndexTerm>) content.getCollection();
     }
@@ -102,10 +99,6 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter implements A
         }
     }
 
-
-    /**
-	 * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
-	 */
 	public void write(final String filename) throws DITAOTException {
 		OutputStream out = null;
 		try {
@@ -207,7 +200,6 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter implements A
 		
 		indexFilename = new StringBuffer(outputFileRoot);
 		indexFilename.append(".hhk");
-		// TODO Auto-generated method stub
 		return indexFilename.toString();
 	}
 
