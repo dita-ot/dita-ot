@@ -3877,19 +3877,8 @@
  </xsl:attribute>
 </xsl:template>
 
-<!-- Set the A-NAME attr for NS -->
-<xsl:template name="setanametag">
- <xsl:param name="idvalue"/>
- <a>
-  <xsl:attribute name="name">
-   <xsl:if test="ancestor::*[contains(@class,' topic/body ')]">
-    <xsl:value-of select="ancestor::*[contains(@class,' topic/body ')]/parent::*/@id"/><xsl:text>__</xsl:text>
-   </xsl:if>
-   <xsl:value-of select="$idvalue"/>
-  </xsl:attribute>
-  <xsl:value-of select="$afill"/><xsl:comment><xsl:text> </xsl:text></xsl:comment> <!-- fix for home page reader -->
- </a>
-</xsl:template>
+<!-- Legacy named template for generating HTML4 anchors -->
+<xsl:template name="setanametag"/>
 
 <xsl:template name="parent-id"><!-- if the parent's element has an ID, copy it through as an anchor -->
  <a>
@@ -4004,8 +3993,11 @@
 </xsl:template>
 
 <!-- If an element has @xml:lang, copy it to the output -->
-<xsl:template match="@xml:lang">
-  <xsl:attribute name="xml:lang"><xsl:value-of select="."/></xsl:attribute>
+<xsl:template match="@xml:lang" name="generate-lang">
+  <xsl:param name="lang" select="."/>
+  <xsl:attribute name="lang">
+    <xsl:value-of select="$lang"/>
+  </xsl:attribute>
 </xsl:template>
 
 <!-- If an element has @dir, copy it to the output -->
@@ -4649,8 +4641,9 @@
         <xsl:with-param name="parentlang" select="$childlang"/>
       </xsl:call-template>
     </xsl:variable>
-    <xsl:attribute name="lang"><xsl:value-of select="$childlang"/></xsl:attribute>
-    <xsl:attribute name="xml:lang"><xsl:value-of select="$childlang"/></xsl:attribute>
+    <xsl:call-template name="generate-lang">
+      <xsl:with-param name="lang" select="$childlang"/>
+    </xsl:call-template>
     <xsl:if test="$direction='bidi'">
       <xsl:attribute name="dir">rtl</xsl:attribute>
     </xsl:if>
