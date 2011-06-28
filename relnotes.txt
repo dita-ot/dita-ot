@@ -18,7 +18,7 @@
 
 	 [General Enhancements]
 	 
-     [29 SourceForge Enhancements Added]
+     [32 SourceForge Enhancements Added]
      * 3177971 Improve plugin configuration file (Milestone 2)    
      * 3178275 Add xsl:import extension point to PDF2 topic merge XSL (Milestone 3)
      * 3182113 Add common attribute processing to PDF2 plugin (Milestone 3)
@@ -47,7 +47,10 @@
      * 3199755 Improve log integration (Milestone 8)
      * 3296040 Refactor PDF2 build files (Milestone 8)
      * 3306146 PDF2 stylesheet refactoring (Milestone 8)
-     * 3304447 Add support for selecting output format in PDF2 (Milestone 8)    
+     * 3304447 Add support for selecting output format in PDF2 (Milestone 8)  
+     * 3310476 Add plug-in ID and version syntax check (Milestone 8)
+     * 3309275 Warning reported by Apache FOP on any topic (Milestone 8)
+     * 3305843 Support list of tables/figures in PDF2 (Milestone 8)
      
      [15 SourceForge Patches Added]
      * 3123507 String concat in map2plugin (Milestone 1)
