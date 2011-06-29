@@ -214,7 +214,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
 		//only care about adding related links to topics. 
 		if (atts.getValue(ATTRIBUTE_NAME_CLASS) != null) {// Eric
 
-			if (atts.getValue(ATTRIBUTE_NAME_CLASS).contains(" topic/topic ")) {
+			if (atts.getValue(ATTRIBUTE_NAME_CLASS).contains(TOPIC_TOPIC.matcher)) {
 
 				if (!topicSpecList.contains(localName)) {
 					topicSpecList.add(localName);
@@ -272,7 +272,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
 			}
 			output.write(GREATER_THAN);
 			if (atts.getValue(ATTRIBUTE_NAME_CLASS)!=null 
-					&& atts.getValue(ATTRIBUTE_NAME_CLASS).indexOf(" topic/related-links ") != -1
+					&& atts.getValue(ATTRIBUTE_NAME_CLASS).indexOf(TOPIC_RELATED_LINKS.matcher) != -1
 					&& curMatchTopic != null) {
 				output.write(indexEntries.get(curMatchTopic));
 				curMatchTopic = null;

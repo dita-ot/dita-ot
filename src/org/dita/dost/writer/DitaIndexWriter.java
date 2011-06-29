@@ -209,13 +209,13 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
 		
 		if (atts.getValue(ATTRIBUTE_NAME_CLASS) != null){
 			if (!hasPrologTillNow){
-				if (atts.getValue(ATTRIBUTE_NAME_CLASS).indexOf(" topic/body ") != -1){
+				if (atts.getValue(ATTRIBUTE_NAME_CLASS).indexOf(TOPIC_BODY.matcher) != -1){
 					return false;
 				}
-				else if (atts.getValue(ATTRIBUTE_NAME_CLASS).indexOf(" topic/related-links ") != -1){
+				else if (atts.getValue(ATTRIBUTE_NAME_CLASS).indexOf(TOPIC_RELATED_LINKS.matcher) != -1){
 					return false;
 				}
-				else if (atts.getValue(ATTRIBUTE_NAME_CLASS).indexOf(" topic/topic ") != -1){
+				else if (atts.getValue(ATTRIBUTE_NAME_CLASS).indexOf(TOPIC_TOPIC.matcher) != -1){
 
 					if (topicLevel > 0){
 						topicLevel++;
@@ -353,13 +353,13 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
             if (atts.getValue(ATTRIBUTE_NAME_CLASS) != null){
             	
 	            if (atts.getValue(ATTRIBUTE_NAME_CLASS)
-	                    .indexOf(" topic/metadata ") != -1 && startTopic && !hasWritten) {
+	                    .indexOf(TOPIC_METADATA.matcher) != -1 && startTopic && !hasWritten) {
 	                hasMetadataTillNow = true;
 	                output.write(indexEntries);
 	                hasWritten = true;
 	            }
 	            if (atts.getValue(ATTRIBUTE_NAME_CLASS)
-	                    .indexOf(" topic/prolog ") != -1) {
+	                    .indexOf(TOPIC_PROLOG.matcher) != -1) {
 	                hasPrologTillNow = true;
 	            }
             }
