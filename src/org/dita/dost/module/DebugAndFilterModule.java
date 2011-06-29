@@ -334,8 +334,8 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             }
 			performCopytoTask(tempDir, listReader.getCopytoMap());
 		} catch (final Exception e) {
-		    // XXX This should throw an exception, not log it
-			logger.logException(new Exception("Exception doing debug and filter module processing: " + e.getMessage(), e));
+		    e.printStackTrace();
+			throw new DITAOTException("Exception doing debug and filter module processing: " + e.getMessage(), e);
 		} finally {
 			logger.logInfo("Execution time: " + TimingUtils.reportElapsedTime(executeStartTime));
 		}

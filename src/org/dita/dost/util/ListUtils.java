@@ -52,7 +52,11 @@ public final class ListUtils {
 			}
 			else{
 				source = URIResolverAdapter.convertTOInputStream(DitaURIResolverFactory.getURIResolver().resolve(FILE_NAME_DITA_LIST, null));
-				properties.load(source);
+				if (source != null) {
+				    properties.load(source);
+				} else {
+				    throw new IllegalStateException("List file " + FILE_NAME_DITA_LIST_XML + " or " + FILE_NAME_DITA_LIST + " not found");
+				}
 			}			
 		}catch(final TransformerException e){
 			final DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();

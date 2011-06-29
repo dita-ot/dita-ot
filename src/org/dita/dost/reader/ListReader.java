@@ -11,6 +11,7 @@ package org.dita.dost.reader;
 
 import static org.dita.dost.util.Constants.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -54,8 +55,8 @@ public final class ListReader implements AbstractReader {
     	Properties propterties = null; 	
 		try {
 			propterties=ListUtils.getDitaList();
-		} catch (final Exception e) {
-			logger.logException(e);
+		} catch (final IOException e) {
+		    throw new RuntimeException("Reading list file failed: " + e.getMessage(), e);
 		}
 		
 		setList(propterties);			
