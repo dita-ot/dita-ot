@@ -46,6 +46,8 @@ public class TestCHMIndexWriter {
         final DocumentBuilderFactory factory = new HTMLDocumentBuilderFactory();
         XMLUnit.setControlDocumentBuilderFactory(factory);
         XMLUnit.setTestDocumentBuilderFactory(factory);
+        XMLUnit.setControlEntityResolver(null);
+        XMLUnit.setTestEntityResolver(null);
         XMLUnit.setIgnoreWhitespace(true);
         XMLUnit.setIgnoreComments(true);
     }

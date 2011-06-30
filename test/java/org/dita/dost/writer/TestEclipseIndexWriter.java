@@ -66,7 +66,7 @@ public class TestEclipseIndexWriter {
 
     @AfterClass
     public static void tearDown() throws IOException {
-        //TestUtils.forceDelete(tempDir);
+        TestUtils.forceDelete(tempDir);
     }
 
 }

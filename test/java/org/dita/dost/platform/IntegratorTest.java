@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.custommonkey.xmlunit.XMLUnit;
 
 import org.xml.sax.InputSource;
@@ -117,6 +119,8 @@ public class IntegratorTest {
         XMLUnit.setNormalizeWhitespace(true);
         XMLUnit.setIgnoreWhitespace(true);
         XMLUnit.setIgnoreDiffBetweenTextAndCDATA(true);
+        XMLUnit.setControlDocumentBuilderFactory(DocumentBuilderFactory.newInstance());
+        XMLUnit.setTestDocumentBuilderFactory(DocumentBuilderFactory.newInstance());
 		assertXMLEqual(new InputSource(new File(expDir, "build.xml").toURI().toString()),
 		               new InputSource(new File(tempDir, "build.xml").toURI().toString()));
 		assertXMLEqual(new InputSource(new File(expDir, "catalog.xml").toURI().toString()),
