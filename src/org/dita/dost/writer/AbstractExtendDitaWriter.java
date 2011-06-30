@@ -9,29 +9,45 @@
  */
 package org.dita.dost.writer;
 
+import java.util.List;
+
+import org.dita.dost.index.IndexTerm;
 import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.module.Content;
 import org.dita.dost.pipeline.PipelineHashIO;
 
 //RFE 2987769 Eclipse index-see
 
-public abstract class AbstractExtendDitaWriter implements IExtendDitaWriter {
+public abstract class AbstractExtendDitaWriter implements AbstractWriter, IExtendDitaWriter, IDitaTranstypeIndexWriter {
 	
-	private PipelineHashIO pipelineHashMap = null;
+	protected PipelineHashIO pipelineHashMap = null;
 	protected DITAOTLogger logger;
+    /** List of indexterms */
+    protected List<IndexTerm> termList = null;
 
-	public PipelineHashIO getPipelineHashIO() {
-		
-		return pipelineHashMap;
-	}
-
-
-	public void setPipelineHashIO(final PipelineHashIO hashIO) {
-		pipelineHashMap = hashIO;
-		
-	}
+    // AbstractWriter methods
+    
+    /**
+     * Set the content for output.
+     * 
+     * @param content The content to output
+     */
+    public final void setContent(final Content content) {
+        termList = (List<IndexTerm>) content.getCollection();
+    }	
 	
-	public void setLogger(final DITAOTLogger logger) {
+	public final void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
+    }
+	
+	// IExtendDitaWriter methods
+    
+    public final PipelineHashIO getPipelineHashIO() {
+        return pipelineHashMap;
+    }
+
+    public final void setPipelineHashIO(final PipelineHashIO hashIO) {
+        pipelineHashMap = hashIO;
     }
 
 }

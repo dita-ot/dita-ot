@@ -12,15 +12,16 @@ package org.dita.dost.writer;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
+
+import javax.xml.transform.Transformer;
+
+import org.xml.sax.SAXException;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.index.IndexTerm;
 import org.dita.dost.index.IndexTermTarget;
-import org.dita.dost.module.Content;
+import org.dita.dost.util.XMLSerializer;
 
 /**
  * This class extends AbstractWriter, used to output index term 
@@ -30,142 +31,89 @@ import org.dita.dost.module.Content;
  * 
  * @author Wu, Zhi Qiang
  */
-public final class JavaHelpIndexWriter extends AbstractExtendDitaWriter implements AbstractWriter, IDitaTranstypeIndexWriter {
-	
-	//RFE 2987769 Eclipse index-see - Added extends AbstractExtendedDitaWriter
-	
-	/** List of indexterms */
-	private List<IndexTerm> termList = null;
-	
-	/**
-	 * Default constructor.
-	 */
-	public JavaHelpIndexWriter() {
-	}
-	
-	/**
-	 * Set the content for output.
-     * 
-	 * @param content The content to output
-	 */
-	public void setContent(final Content content) {
-		termList = (List<IndexTerm>) content.getCollection();
-	}
+public final class JavaHelpIndexWriter extends AbstractExtendDitaWriter {
 
-	/**
-	 * Output the java help index to the output stream.
-     * 
-	 * @param outputStream outputStream
-	 * @throws UnsupportedEncodingException encoding not supported exception
-	 */
-	public void write(final OutputStream outputStream) throws UnsupportedEncodingException {
-		PrintWriter printWriter = null;
-		final int termNum = termList.size();
-		
-		try {
-			printWriter = new PrintWriter(new OutputStreamWriter(
-					outputStream, "UTF-8"));
-			
-			printWriter.println("<?xml version='1.0' encoding='UTF-8' ?>");
-			printWriter.println("<!DOCTYPE index PUBLIC ");
-			printWriter.println("\"-//Sun Microsystems Inc.//DTD JavaHelp Index Version 1.0//EN\" ");
-			printWriter.println("\"http://java.sun.com/products/javahelp/index_1_0.dtd\">");
-			
-			printWriter.println("<index version=\"1.0\">");
-
-			for (int i = 0; i < termNum; i++) {
-				final IndexTerm term = (IndexTerm) termList.get(i);
-				
-				outputIndexTerm(term, printWriter);
-			}
-
-			printWriter.println("</index>");
-			
-		} finally {
-			printWriter.close();
-		}
-	}
-	
-	public void write(final String filename) throws DITAOTException {
-		OutputStream out = null;
-		try {
-			out = new FileOutputStream(filename);
-			write(out);
-		} catch (final Exception e) {
-			throw new DITAOTException(e);
-		} finally {
-			if (out != null) {
-				try {
-	                out.close();
+    public void write(final String filename) throws DITAOTException {
+        OutputStream out = null;
+        try {
+            out = new FileOutputStream(filename);
+            final XMLSerializer serializer = XMLSerializer.newInstance(out);
+            final Transformer transformer = serializer.getTransformerHandler().getTransformer();
+            transformer.setOutputProperty("doctype-public", "-//Sun Microsystems Inc.//DTD JavaHelp Index Version 1.0//EN");
+            transformer.setOutputProperty("doctype-system", "http://java.sun.com/products/javahelp/index_1_0.dtd");
+            serializer.writeStartDocument();
+            serializer.writeStartElement("index");
+            serializer.writeAttribute("version", "1.0");
+            final int termNum = termList.size();
+            for (int i = 0; i < termNum; i++) {
+                final IndexTerm term = termList.get(i);
+                outputIndexTerm(term, serializer);
+            }
+            serializer.writeEndElement(); // index
+            serializer.writeEndDocument();
+        } catch (final Exception e) {
+            throw new DITAOTException(e);
+        } finally {
+            if (out != null) {
+                try {
+                    out.close();
                 } catch (final IOException e) {
-                	logger.logException(e);
+                    logger.logException(e);
                 }
-			}
-		}
-	}
-	
-	/**
+            }
+        }
+    }
+
+    /**
      * Output the given indexterm into the PrintWriter.  
      * 
-	 * @param term
-	 * @param printWriter
-	 */
-	private void outputIndexTerm(final IndexTerm term, final PrintWriter printWriter) {
-		final List<IndexTermTarget> targets = term.getTargetList();
-		final List<IndexTerm> subTerms = term.getSubTerms();
-		final int targetNum = (targets == null) ? 0: targets.size();
-		final int subTermNum = (subTerms == null) ? 0 : subTerms.size();
-		
-		/*
-		 * Don't set 'target' attribute for group purpose index item.
-		 */
-		if (subTermNum > 0) { 
-			printWriter.print("<indexitem text=\"");		
-			printWriter.print(term.getTermFullName());
-			printWriter.print("\">");	
-			
-			for (int i = 0; i < subTermNum; i++) {
-				final IndexTerm subTerm = (IndexTerm) subTerms.get(i);
-				outputIndexTerm(subTerm, printWriter);
-			}
-			
-			printWriter.println("</indexitem>");
-		} else {
-			for (int i = 0; i < targetNum; i++) {
-				final IndexTermTarget target = (IndexTermTarget) targets.get(i);
-				String targetURL = target.getTargetURI();
+     * @param term
+     * @param printWriter
+     * @throws SAXException 
+     */
+    private void outputIndexTerm(final IndexTerm term, final XMLSerializer serializer) throws SAXException {
+        final List<IndexTermTarget> targets = term.getTargetList();
+        final List<IndexTerm> subTerms = term.getSubTerms();
+        final int targetNum = (targets == null) ? 0: targets.size();
+        final int subTermNum = (subTerms == null) ? 0 : subTerms.size();
 
-				/*
-				 * Remove file extension from targetName, and replace all the
-				 * file seperator with '_'.
-				 */
-				targetURL = targetURL.substring(0, targetURL
-						.lastIndexOf("."));
-				targetURL = targetURL.replace('\\', '_');
-				targetURL = targetURL.replace('/', '_');
-				targetURL = targetURL.replace('.', '_');
+        // Don't set 'target' attribute for group purpose index item.
+        if (subTermNum > 0) {
+            serializer.writeStartElement("indexitem");
+            serializer.writeAttribute("text", term.getTermFullName());
+            for (int i = 0; i < subTermNum; i++) {
+                final IndexTerm subTerm = subTerms.get(i);
+                outputIndexTerm(subTerm, serializer);
+            }
+            serializer.writeEndElement(); // indexitem
+        } else {
+            for (int i = 0; i < targetNum; i++) {
+                final IndexTermTarget target = targets.get(i);
+                String targetURL = target.getTargetURI();
+                // Remove file extension from targetName, and replace all the
+                // file seperator with '_'.
+                targetURL = targetURL.substring(0, targetURL.lastIndexOf("."));
+                targetURL = targetURL.replace('\\', '_');
+                targetURL = targetURL.replace('/', '_');
+                targetURL = targetURL.replace('.', '_');
 
-				printWriter.print("<indexitem text=\"");
-				printWriter.print(term.getTermFullName());
-				printWriter.print("\"");
-				printWriter.print(" target=\"");
-				printWriter.print(targetURL);
-				printWriter.println("\"/>");
-			}
-		}		
-		
-	}
-	/**
-	 * Get index file name.
-	 * @param outputFileRoot root
-	 * @return index file name
-	 */
-	public String getIndexFileName(final String outputFileRoot) {
-		StringBuffer indexFilename;
-		
-		indexFilename = new StringBuffer(outputFileRoot);
-		indexFilename.append("_index.xml");
-		return indexFilename.toString();
-	}
+                serializer.writeStartElement("indexitem");
+                serializer.writeAttribute("text", term.getTermFullName());
+                serializer.writeAttribute("target", targetURL);
+                serializer.writeEndElement();
+            }
+        }
+    }
+
+    /**
+     * Get index file name.
+     * @param outputFileRoot root
+     * @return index file name
+     */
+    public String getIndexFileName(final String outputFileRoot) {
+        final StringBuffer indexFilename = new StringBuffer(outputFileRoot);
+        indexFilename.append("_index.xml");
+        return indexFilename.toString();
+    }
 
 }
