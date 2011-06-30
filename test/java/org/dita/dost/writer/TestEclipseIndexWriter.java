@@ -38,6 +38,7 @@ public class TestEclipseIndexWriter {
     @BeforeClass
     public static void setUp() throws IOException {
         tempDir = TestUtils.createTempDir(TestEclipseIndexWriter.class);
+        TestUtils.resetXMLUnit();
     }
 
     @Test

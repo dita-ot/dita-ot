@@ -85,6 +85,8 @@ public class DitaWriterTest {
             writer.setContent(content);
             writer.write(srcDir.getAbsolutePath() + Constants.STICK + f);
         }
+        
+        TestUtils.resetXMLUnit();
     }
     
     @Test

@@ -19,11 +19,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Writer;
 
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
+
+import org.custommonkey.xmlunit.XMLUnit;
 
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.FileUtils;
@@ -32,7 +35,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.XMLFilterImpl;
 import org.xml.sax.helpers.XMLReaderFactory;
@@ -217,6 +219,17 @@ public class TestUtils {
 		}
 	}
 
+	/**
+	 * Reset XMLUnit configuration.
+	 */
+	public static void resetXMLUnit() {
+	    final DocumentBuilderFactory b = DocumentBuilderFactory.newInstance();
+	    XMLUnit.setControlDocumentBuilderFactory(b);
+        XMLUnit.setTestDocumentBuilderFactory(b);
+        XMLUnit.setControlEntityResolver(null);
+        XMLUnit.setTestEntityResolver(null);
+	}
+	
 	/**
 	 * DITA-OT logger that will throw an assertion error for error messages.
 	 */

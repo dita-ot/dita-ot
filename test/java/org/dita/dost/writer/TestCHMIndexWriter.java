@@ -43,6 +43,7 @@ public class TestCHMIndexWriter {
     @BeforeClass
     public static void setUp() throws IOException, DITAOTException {
         tempDir = TestUtils.createTempDir(TestCHMIndexWriter.class);
+        TestUtils.resetXMLUnit();
         final DocumentBuilderFactory factory = new HTMLDocumentBuilderFactory();
         XMLUnit.setControlDocumentBuilderFactory(factory);
         XMLUnit.setTestDocumentBuilderFactory(factory);

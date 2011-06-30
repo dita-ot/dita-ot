@@ -42,6 +42,7 @@ public class TestJavaHelpIndexWriter {
     @BeforeClass
     public static void setUp() throws IOException {
         tempDir = TestUtils.createTempDir(TestJavaHelpIndexWriter.class);
+        TestUtils.resetXMLUnit();
     }
 
     @Test

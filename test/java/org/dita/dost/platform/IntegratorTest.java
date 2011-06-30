@@ -116,11 +116,10 @@ public class IntegratorTest {
 		
 		assertEquals(getProperties(new File(expDir, "lib" + File.separator + Constants.CONF_PROPERTIES)),
 					 getProperties(new File(tempDir, "lib" + File.separator + Constants.CONF_PROPERTIES)));
+		TestUtils.resetXMLUnit();
         XMLUnit.setNormalizeWhitespace(true);
         XMLUnit.setIgnoreWhitespace(true);
         XMLUnit.setIgnoreDiffBetweenTextAndCDATA(true);
-        XMLUnit.setControlDocumentBuilderFactory(DocumentBuilderFactory.newInstance());
-        XMLUnit.setTestDocumentBuilderFactory(DocumentBuilderFactory.newInstance());
 		assertXMLEqual(new InputSource(new File(expDir, "build.xml").toURI().toString()),
 		               new InputSource(new File(tempDir, "build.xml").toURI().toString()));
 		assertXMLEqual(new InputSource(new File(expDir, "catalog.xml").toURI().toString()),
