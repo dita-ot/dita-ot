@@ -68,7 +68,7 @@ public final class FileUtils {
             }
         } else {
             logger.logError("Failed to read supported DITA map extensions from configuration, using defaults.");
-            supportedMapExtensions.add(FILE_EXTENSION_DITA);
+            supportedMapExtensions.add(FILE_EXTENSION_DITAMAP);
             supportedMapExtensions.add(FILE_EXTENSION_XML);
         }
     }
