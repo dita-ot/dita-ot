@@ -14,7 +14,9 @@ import static javax.xml.XMLConstants.*;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
-import java.util.Stack;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
@@ -48,7 +50,7 @@ public class XMLSerializer {
     private OutputStream outStream;
     private Writer outWriter;
 
-    private final Stack<QName> elementStack = new Stack<QName>();
+    private final LinkedList<QName> elementStack = new LinkedList<QName>();
     private AttributesImpl openAttributes;
     private boolean openStartElement;
 
@@ -141,11 +143,14 @@ public class XMLSerializer {
      * @throws SAXException if processing the event failed
      */
     public void writeEndDocument() throws SAXException {
+        while (!elementStack.isEmpty()) {
+            writeEndElement();
+        }
         transformer.endDocument();
     }
 
     /**
-     * Writer start element without attributes.
+     * Write start element without attributes.
      * 
      * @param qName element QName
      * @throws SAXException if processing the event failed
@@ -155,7 +160,7 @@ public class XMLSerializer {
     }
 
     /**
-     * Writer start element without attributes.
+     * Write start element without attributes.
      * 
      * @param qName element QName
      * @throws SAXException if processing the event failed
@@ -163,32 +168,62 @@ public class XMLSerializer {
     public void writeStartElement(final String uri, final String qName) throws SAXException {
         processStartElement();
         final QName res = new QName(uri, qName);
-        if (uri != null) {
-            boolean found = false;
-            for (final QName e: elementStack) {
-                if (e.uri.equals(res.uri) && e.prefix.equals(res.prefix)) {
-                    found = true;
-                    break;
-                }
-            }
-            res.newMapping = !found;
-        }
-        elementStack.push(res);
+        addNamespace(res.uri, res.prefix, res);
+        elementStack.addFirst(res); // push
         openStartElement = true;
     }
 
+    /**
+     * Write namepace prefix.
+     * 
+     * @param prefix namespace prefix
+     * @param uri namespace URI
+     * @throws SAXException if processing the event failed
+     * @throws IllegalStateException if start element is not open
+     * @throws IllegalArgumentException if prefix is already bound
+     */
+    public void writeNamespace(String prefix, String uri) throws SAXException {
+        if (!openStartElement) throw new IllegalStateException("Current state does not allow Namespace writing");
+        final QName qName = elementStack.getFirst(); // peek
+        for (final NamespaceMapping p: qName.mappings) {
+            if (p.prefix.equals(prefix) && p.uri.equals(uri)) {
+                return;
+            } else if (p.prefix.equals(prefix)) {
+                throw new IllegalArgumentException("Prefix " + prefix + " already bound to " + uri);
+            }
+        } 
+        qName.mappings.add(new NamespaceMapping(prefix, uri, true));
+    }
+    
     /**
      * Write attribute
      * 
      * @param qName attribute name
      * @param atts attribute value
      * @throws SAXException if processing the event failed
+     * @throws IllegalStateException if start element is not open
      */
     public void writeAttribute(final String qName, final String value) throws SAXException {
+        writeAttribute(NULL_NS_URI, qName, value);
+    }
+    
+    /**
+     * Write attribute
+     * 
+     * @param uri namespace URI
+     * @param qName attribute name
+     * @param atts attribute value
+     * @throws SAXException if processing the event failed
+     * @throws IllegalStateException if start element is not open
+     */
+    public void writeAttribute(final String uri, final String qName, final String value) throws SAXException {
+        if (!openStartElement) throw new IllegalStateException("Current state does not allow Attribute writing");
         if (openAttributes == null) {
             openAttributes = new AttributesImpl();
         }
-        openAttributes.addAttribute("", qName, qName, "CDATA", value);
+        final QName att = new QName(uri, qName);
+        addNamespace(uri, att.prefix, elementStack.getFirst()); // peek
+        openAttributes.addAttribute(uri, att.localName, qName, "CDATA", value);
     }
 
     /**
@@ -198,10 +233,12 @@ public class XMLSerializer {
      */
     public void writeEndElement() throws SAXException {
         processStartElement();
-        final QName qName = elementStack.pop();
+        final QName qName = elementStack.remove(); // pop
         transformer.endElement(qName.uri, qName.localName, qName.prefix);
-        if (qName.newMapping) {
-            transformer.endPrefixMapping(qName.prefix);
+        for (NamespaceMapping p: qName.mappings) {
+            if (p.newMapping) {
+                transformer.endPrefixMapping(p.prefix);
+            }
         }
     }
 
@@ -210,13 +247,27 @@ public class XMLSerializer {
      * 
      * @param text character data
      * @throws SAXException if processing the event failed
+     * @throws IllegalStateException if start element is not open
      */
     public void writeCharacters(final String text) throws SAXException {
-        processStartElement();
+        if (elementStack.isEmpty()) throw new IllegalStateException("Current state does not allow Character writing");
         final char[] ch = text.toCharArray();
-        transformer.characters(ch, 0, ch.length);
+        writeCharacters(ch, 0, ch.length);
     }
 
+    /**
+     * Write characters.
+     * 
+     * @param text character data
+     * @throws SAXException if processing the event failed
+     * @throws IllegalStateException if start element is not open
+     */
+    public void writeCharacters(final char[] ch, final int start, final int length) throws SAXException {
+        if (elementStack.isEmpty()) throw new IllegalStateException("Current state does not allow Character writing");
+        processStartElement();
+        transformer.characters(ch, 0, ch.length);
+    }
+    
     /**
      * Write processing instruction.
      * 
@@ -246,9 +297,11 @@ public class XMLSerializer {
     
     private void processStartElement() throws SAXException {
         if (openStartElement) {
-            final QName qName = elementStack.peek();
-            if (qName.newMapping) {
-                transformer.startPrefixMapping(qName.prefix, qName.uri);
+            final QName qName = elementStack.getFirst(); // peek
+            for (NamespaceMapping p: qName.mappings) {
+                if (p.newMapping) {
+                    transformer.startPrefixMapping(p.prefix, p.uri);
+                }
             }
             final Attributes atts = openAttributes != null ? openAttributes : EMPTY_ATTS;
             transformer.startElement(qName.uri, qName.localName, qName.qName, atts);
@@ -257,6 +310,28 @@ public class XMLSerializer {
         }
     }
     
+    private void addNamespace(final String uri, final String prefix, final QName current) {
+        if (uri.equals(NULL_NS_URI) && !prefix.equals(DEFAULT_NS_PREFIX)) throw new IllegalArgumentException("Undeclaring prefix " + prefix + " not allowed");
+        if (uri != null) {
+            // attempt to find apping in stack
+            boolean found = false;
+            stack: for (final QName e: elementStack) {
+                for (final NamespaceMapping m: e.mappings) {
+                    if (m.uri.equals(uri) && m.prefix.equals(prefix)) {
+                        found = true;
+                        break stack;
+                    } else if (m.prefix.equals(prefix)) {
+                        break stack;
+                    }
+                }
+            }
+            // skip xmlns=""
+            if (!found && uri.equals(NULL_NS_URI) && prefix.equals(DEFAULT_NS_PREFIX)) {
+                return;
+            }
+            current.mappings.add(new NamespaceMapping(prefix, uri, !found));
+        }
+    }
     
     // Private inner classes ---------------------------------------------------
     
@@ -266,7 +341,7 @@ public class XMLSerializer {
         final String localName;
         final String prefix;
         final String qName;
-        boolean newMapping;
+        final List<NamespaceMapping> mappings;
         
         QName(final String uri, final String qName) {
             final int i = qName.indexOf(':');
@@ -274,6 +349,21 @@ public class XMLSerializer {
             this.localName = i != -1 ? qName.substring(i + 1) : qName;
             this.prefix = i != -1 ? qName.substring(0, i) : DEFAULT_NS_PREFIX;
             this.qName = qName;
+            this.mappings = new ArrayList<NamespaceMapping>(5);
+        }
+        
+    }
+    
+    private static final class NamespaceMapping {
+        
+        final String prefix;
+        final String uri;
+        final boolean newMapping;
+        
+        NamespaceMapping(final String prefix, final String uri, final boolean newMapping) {
+            this.prefix = prefix;
+            this.uri = uri;
+            this.newMapping = newMapping;
         }
         
     }
