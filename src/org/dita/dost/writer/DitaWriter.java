@@ -701,7 +701,7 @@ public final class DitaWriter extends AbstractXMLWriter {
 	 * @throws IOException
 	 */
 	private void copyElementName(final String qName, final Attributes atts) throws IOException {
-		if (ELEMENT_NAME_TGROUP.equals(qName)){
+		if (TOPIC_TGROUP.localName.equals(qName)){
 			
 		    //Edited by William on 2009-11-27 for bug:1846993 start
 		    //push into the stack.
@@ -721,14 +721,14 @@ public final class DitaWriter extends AbstractXMLWriter {
 		    //new table initialize the col list
 		    rowNumber = 0;
 		    //Edited by William on 2009-11-27 for bug:1846993 end
-		}else if(ELEMENT_NAME_ROW.equals(qName)) {
+		}else if(TOPIC_ROW.localName.equals(qName)) {
 		    columnNumber = 1; // initialize the column number
 		    columnNumberEnd = 0;
 		    //Added by William on 2009-06-30 for colname bug:2811358 start
 		    //store the row number
 		    rowNumber++;
 		    //Added by William on 2009-06-30 for colname bug:2811358 end
-		}else if(ELEMENT_NAME_COLSPEC.equals(qName)){
+		}else if(TOPIC_COLSPEC.localName.equals(qName)){
 			columnNumber = columnNumberEnd +1;
 			if(atts.getValue(ATTRIBUTE_NAME_COLNAME) != null){
 				colSpec.add(atts.getValue(ATTRIBUTE_NAME_COLNAME));
@@ -742,7 +742,7 @@ public final class DitaWriter extends AbstractXMLWriter {
 			//total columns count
 			totalColumns = columnNumberEnd;
 			//Added by William on 2009-06-30 for colname bug:2811358 end
-		}else if(ELEMENT_NAME_ENTRY.equals(qName)){
+		}else if(TOPIC_ENTRY.localName.equals(qName)){
 			
 			/*columnNumber = getStartNumber(atts, columnNumberEnd);
 			if(columnNumber > columnNumberEnd){
@@ -890,7 +890,7 @@ public final class DitaWriter extends AbstractXMLWriter {
         }
         //Added by William on 2009-11-27 for bug:1846993 embedded table bug start
         //note the tag shouldn't be excluded by filter file(bug:2925636 )
-        if(ELEMENT_NAME_TGROUP.equals(qName) && !exclude){
+        if(TOPIC_TGROUP.localName.equals(qName) && !exclude){
         	//colSpecStack.pop();
         	//rowNumStack.pop();
         	//has tgroup tag

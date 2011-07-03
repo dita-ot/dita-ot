@@ -76,10 +76,10 @@ public final class FilterUtils {
 			return false;
 		}
 
-		ret = checkExclude(ELEMENT_NAME_AUDIENCE, 
-				atts.getValue(ELEMENT_NAME_AUDIENCE))
-			|| checkExclude(ELEMENT_NAME_PLATFORM, 
-				atts.getValue(ELEMENT_NAME_PLATFORM))
+		ret = checkExclude(TOPIC_AUDIENCE.localName, 
+				atts.getValue(TOPIC_AUDIENCE.localName))
+			|| checkExclude(TOPIC_PLATFORM.localName, 
+				atts.getValue(TOPIC_PLATFORM.localName))
 			|| checkExclude(ELEMENT_NAME_PRODUCT, 
 				atts.getValue(ELEMENT_NAME_PRODUCT))
 			|| checkExclude(ELEMENT_NAME_OTHERPROPS, 

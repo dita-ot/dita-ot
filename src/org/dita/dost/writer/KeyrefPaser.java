@@ -236,7 +236,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 		// write the end element
 		try {
 			
-			if (keyrefLeval != 0 && empty && !elemName.peek().equals(ELEMENT_NAME_TOPICREF)) {
+			if (keyrefLeval != 0 && empty && !elemName.peek().equals(MAP_TOPICREF.localName)) {
 				// If current element is in the scope of key reference element 
 				// and the element is empty
 				if (!validKeyref.isEmpty() && validKeyref.peek()) {
@@ -304,7 +304,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 										output.write("</linktext>");
 									}
 								}else if(withHref.contains(classValue)){
-									final NodeList linktext = elem.getElementsByTagName(ELEMENT_NAME_LINKTEXT);
+									final NodeList linktext = elem.getElementsByTagName(TOPIC_LINKTEXT.localName);
 									if(linktext.getLength()>0){
 										output.write(nodeToString((Element)linktext.item(0), false));
 									}else{

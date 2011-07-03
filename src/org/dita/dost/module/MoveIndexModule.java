@@ -77,9 +77,9 @@ final class MoveIndexModule implements AbstractPipelineModule {
         	tempDir = new File(baseDir, tempDir).getAbsolutePath();
         }
     	   		
-		indexReader.setMatch(new StringBuffer(ELEMENT_NAME_TOPICREF)
-        .append(SLASH).append(ELEMENT_NAME_TOPICMETA)
-        .append(SLASH).append(ELEMENT_NAME_KEYWORDS).toString());
+		indexReader.setMatch(new StringBuffer(MAP_TOPICREF.localName)
+        .append(SLASH).append(MAP_TOPICMETA.localName)
+        .append(SLASH).append(TOPIC_KEYWORDS.localName).toString());
 		
 		Properties properties = null;
 		try{

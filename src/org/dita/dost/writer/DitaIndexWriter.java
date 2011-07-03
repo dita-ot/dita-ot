@@ -160,7 +160,7 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
         		topicLevel--;
         	}
         	
-            if (!hasMetadataTillNow && ELEMENT_NAME_PROLOG.equals(qName) && startTopic && !hasWritten) {
+            if (!hasMetadataTillNow && TOPIC_PROLOG.localName.equals(qName) && startTopic && !hasWritten) {
                 output.write(META_HEAD);
                 output.write(indexEntries);
                 output.write(META_END);
@@ -196,7 +196,7 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
 		//if there is <prolog> element and there is no <metadata> element before
 		//and current element is <resourceid>, then there is no <metadata> in current
 		//<prolog> element. return false.
-		if(hasPrologTillNow && !hasMetadataTillNow && ELEMENT_NAME_RESOURCEID.equals(qName)){
+		if(hasPrologTillNow && !hasMetadataTillNow && TOPIC_RESOURCEID.localName.equals(qName)){
 			return false;
 		}
 		return true;

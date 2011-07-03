@@ -311,7 +311,7 @@ public final class MapMetaReader implements AbstractReader {
 					if (metaNode != null) {
                         topicref.removeChild(metaNode);
                     }
-					final Element newMeta = doc.createElement(ELEMENT_NAME_TOPICMETA);
+					final Element newMeta = doc.createElement(MAP_TOPICMETA.localName);
 					newMeta.setAttribute(ATTRIBUTE_NAME_CLASS, "-" + MAP_TOPICMETA.matcher);
 					for (int i = 0; i < metaPos.size(); i++) {
 						final Node stub = (Node)metas.get(metaPos.get(i));

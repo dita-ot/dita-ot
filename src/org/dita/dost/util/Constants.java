@@ -625,46 +625,63 @@ public final class Constants {
     public static final DitaClass XNAL_D_URLS = new DitaClass("+ topic/data xnal-d/urls ");
     
     /**map element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_MAP = MAP_MAP.localName;
     /**indexterm element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_INDEXTERM = TOPIC_INDEXTERM.localName;
     /**index-see element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_INDEXSEE = INDEXING_D_INDEX_SEE.localName;
     /**index-see-also element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_INDEXSEEALSO = INDEXING_D_INDEX_SEE_ALSO.localName;
     /**index-sort-as element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_INDEXSORTAS = INDEXING_D_INDEX_SORT_AS.localName;
     /**topicref element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_TOPICREF = MAP_TOPICREF.localName;
     /**topicmeta element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_TOPICMETA = MAP_TOPICMETA.localName;
     /**linktext element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_LINKTEXT = TOPIC_LINKTEXT.localName;
     /**navtitle element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_NAVTITLE = TOPIC_NAVTITLE.localName;
     /**shortdesc element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_SHORTDESC = TOPIC_SHORTDESC.localName;
     /**keywords element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_KEYWORDS = TOPIC_KEYWORDS.localName;
     /**maplinks element.*/
     public static final String ELEMENT_NAME_MAPLINKS = "maplinks";
     /**linkpool element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_LINKPOOL = TOPIC_LINKPOOL.localName;
     /**linklist element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_LINKLIST = TOPIC_LINKLIST.localName;
     /**prop element.*/
     public static final String ELEMENT_NAME_PROP = "prop";
     /**prolog element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_PROLOG = TOPIC_PROLOG.localName;
     /**map element.*/
     public static final String ELEMENT_NAME_ACTION = "action";
     /**action element.*/
     public static final String ELEMENT_NAME_DITA = "dita";
     /**resourceid element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_RESOURCEID = TOPIC_RESOURCEID.localName;
     /**audience element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_AUDIENCE = TOPIC_AUDIENCE.localName;
     /**platform element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_PLATFORM = TOPIC_PLATFORM.localName;
     /**product element.*/
     public static final String ELEMENT_NAME_PRODUCT = "product";
@@ -677,43 +694,62 @@ public final class Constants {
     public static final String ELEMENT_NAME_REV = "rev";
     //Added by William on 2010-07-16 for bug:3030317 start	
     /**tgroup element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_TGROUP = TOPIC_TGROUP.localName;
     /**row element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_ROW = TOPIC_ROW.localName;
     /**title element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_TITLE = TOPIC_TITLE.localName;
     /**entry element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_ENTRY = TOPIC_ENTRY.localName;
     /**colspec element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_COLSPEC = TOPIC_COLSPEC.localName;
     /**topic element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_TOPIC = TOPIC_TOPIC.localName;
     /**glossentry element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_GLOSSENTRY = GLOSSENTRY_GLOSSENTRY.localName;
     /**glossterm element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_GLOSSTERM = GLOSSENTRY_GLOSSTERM.localName;
     /**glossSurfaceForm element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_GLOSSSURFACEFORM = GLOSSENTRY_GLOSSSURFACEFORM.localName;
     /**glossAcronym element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_GLOSSACRONYM = GLOSSENTRY_GLOSSACRONYM.localName;
     /**glossStatus element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_GLOSSSTATUS = GLOSSENTRY_GLOSSSTATUS.localName;
     /**glossSynonym element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_GLOSSSYNONYM = GLOSSENTRY_GLOSSSYNONYM.localName;
     /**glossAbbreviation element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_GLOSSABBREVIATION = GLOSSENTRY_GLOSSABBREVIATION.localName;
     /**glossShortForm element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_GLOSSSHORTFORM = GLOSSENTRY_GLOSSSHORTFORM.localName;
     /**subjectScheme element.*/
-    public static final String ELEMENT_NAME_SUBJECT_SCHEME = "subjectScheme";
+    @Deprecated
+    public static final String ELEMENT_NAME_SUBJECT_SCHEME = SUBJECTSCHEME_SUBJECTSCHEME.localName;
     /**subjectdef element.*/
-    public static final String ELEMENT_NAME_SUBJECT_DEF = "subjectdef";
+    @Deprecated
+    public static final String ELEMENT_NAME_SUBJECT_DEF = SUBJECTSCHEME_SUBJECTDEF.localName;
     /**attributedef element.*/
-    public static final String ELEMENT_NAME_ATTRIBUTE_DEF = "attributedef";
+    @Deprecated
+    public static final String ELEMENT_NAME_ATTRIBUTE_DEF = SUBJECTSCHEME_ATTRIBUTEDEF.localName;
     /**elementdef element.*/
-    public static final String ELEMENT_NAME_ELEMENT_DEF = "elementdef";
+    @Deprecated
+    public static final String ELEMENT_NAME_ELEMENT_DEF = SUBJECTSCHEME_ELEMENTDEF.localName;
     /**defaultSubject element.*/
-    public static final String ELEMENT_NAME_DEFAULT_SUBJECT = "defaultSubject";
+    @Deprecated
+    public static final String ELEMENT_NAME_DEFAULT_SUBJECT = SUBJECTSCHEME_DEFAULTSUBJECT.localName;
     
     /**conref attribute.*/
     public static final String ATTRIBUTE_NAME_CONREF = "conref";
