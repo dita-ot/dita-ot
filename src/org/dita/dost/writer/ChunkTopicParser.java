@@ -292,13 +292,13 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 		}
 		
 		try{
-			if(classValue!=null && classValue.indexOf(ATTR_CLASS_VALUE_TOPIC)!=-1){
+			if(classValue!=null && classValue.indexOf(TOPIC_TOPIC.matcher)!=-1){
 				topicSpecSet.add(qName);
 				//Added by William on 20100628 for bug:3020314 start
 				final String id = atts.getValue(ATTRIBUTE_NAME_ID);
 				//search node by id.
 				final Element element = DITAAttrUtils.getInstance().
-				searchForNode(topicDoc, id, ATTRIBUTE_NAME_ID, ATTR_CLASS_VALUE_TOPIC);
+				searchForNode(topicDoc, id, ATTRIBUTE_NAME_ID, TOPIC_TOPIC.matcher);
 				//Added by William on 20100628 for bug:3020314 end
 				
 				//only by topic
@@ -345,7 +345,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 									,newFileName));
 
 					newChild.setAttribute(ATTRIBUTE_NAME_CLASS,
-							"-" + ATTR_CLASS_VALUE_TOPICREF);
+							"-" + MAP_TOPICREF.matcher);
 					newChild.setAttribute(ATTRIBUTE_NAME_XTRF, "generated_by_chunk");
 					
 					//Added by William on 20100628 for bug:3020314 start
@@ -426,7 +426,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 					attrValue = StringUtils.escapeXML(attrValue);
 			    	//Added by William on 2009-08-18 for chunkbug id:2839035 end
 					
-					if(ATTRIBUTE_NAME_ID.equals(attrName) && classValue.indexOf(ATTR_CLASS_VALUE_TOPIC)!=-1){
+					if(ATTRIBUTE_NAME_ID.equals(attrName) && classValue.indexOf(TOPIC_TOPIC.matcher)!=-1){
 						//change topic @id if there are conflicts. 
 						if(topicID.contains(attrValue)){
 							// Added on 2010-11-12 for bug 3090803 start
@@ -494,7 +494,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 				}
 				
 				if (classValue != null && 
-						classValue.contains(ATTR_CLASS_VALUE_TOPIC) &&
+						classValue.contains(TOPIC_TOPIC.matcher) &&
 						atts.getValue("xmlns:ditaarch") == null){
 					//if there is none declaration for ditaarch namespace, 
 					//processor need to add it
@@ -944,7 +944,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 			}
 		
 			if ( !StringUtils.isEmptyString(classValue) ) {
-				if ((!classValue.contains(ATTR_CLASS_VALUE_TOPIC_GROUP))
+				if ((!classValue.contains(MAPGROUP_D_TOPICGROUP.matcher))
 						&& (!StringUtils.isEmptyString(parseFilePath))
 						&& (!"external".equalsIgnoreCase(scopeValue))) {
 					// now the path to target file make sense
@@ -957,7 +957,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 						output = new StringWriter();
 						topicID = new HashSet<String>();
 						//if (ELEMENT_NAME_MAP.equalsIgnoreCase(element.getNodeName())) {
-						if (classValue.contains(ATTR_CLASS_VALUE_MAP)) {
+						if (classValue.contains(MAP_MAP.matcher)) {
 							// Very special case, we have a map element with href value.
 							// This is a map that needs to be chunked to content.
 							// No need to parse any file, just generate a stub output.
@@ -995,7 +995,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 						
 						// Check if there is any conflict
 						if(FileUtils.fileExists(outputFileName)
-								&& !classValue.contains(ATTR_CLASS_VALUE_MAP)) {
+								&& !classValue.contains(MAP_MAP.matcher)) {
 							final String t = outputFileName;
 							final Random random = new Random();
 							outputFileName = FileUtils.resolveFile(filePath,"Chunk"
@@ -1108,7 +1108,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 								+ random.nextInt(Integer.MAX_VALUE)) + ditaext;
 						// Check if there is any conflict
 						if(FileUtils.fileExists(outputFileName)
-						   && !classValue.contains(ATTR_CLASS_VALUE_MAP)) {
+						   && !classValue.contains(MAP_MAP.matcher)) {
 							final String t = outputFileName;
 							outputFileName = FileUtils.resolveFile(filePath,"Chunk"
 									+ random.nextInt(Integer.MAX_VALUE)) + ditaext;
@@ -1124,9 +1124,9 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 						String navtitleValue = null;
 						String shortDescValue = null;
 						//get navtitle value.
-						navtitleValue = utils.getChildElementValueOfTopicmeta(element, ATTR_CLASS_VALUE_NAVTITLE);
+						navtitleValue = utils.getChildElementValueOfTopicmeta(element, TOPIC_NAVTITLE.matcher);
 						//get shortdesc value
-						shortDescValue = utils.getChildElementValueOfTopicmeta(element, ATTR_CLASS_VALUE_MAP_SHORTDESC);
+						shortDescValue = utils.getChildElementValueOfTopicmeta(element, MAP_SHORTDESC.matcher);
 						//no navtitle tag exists.
 						if(navtitleValue == null){
 							//use @navtitle
@@ -1184,7 +1184,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 						final Node current = children.item(i);
 						if (current.getNodeType() == Node.ELEMENT_NODE
 								&& ((Element)current).getAttribute(ATTRIBUTE_NAME_CLASS)
-								.indexOf(ATTR_CLASS_VALUE_TOPICREF)!=-1){
+								.indexOf(MAP_TOPICREF.matcher)!=-1){
 							processChunk((Element)current,outputFileName);
 						}				
 					}
@@ -1372,7 +1372,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 		final Element topicmeta = elem.getOwnerDocument()
 		.createElement(ELEMENT_NAME_TOPICMETA);
 		topicmeta.setAttribute(ATTRIBUTE_NAME_CLASS,
-				"-" + ATTR_CLASS_VALUE_TOPICMETA);
+				"-" + MAP_TOPICMETA.matcher);
 		newChild.appendChild(topicmeta);
 		
 		final DITAAttrUtils utils = DITAAttrUtils.getInstance();
@@ -1389,20 +1389,20 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 					final Element childNode = (Element)node;
 					
 					if(childNode.getAttribute(ATTRIBUTE_NAME_CLASS).
-							contains(ATTR_CLASS_VALUE_TITLE)){
+							contains(TOPIC_TITLE.matcher)){
 						//set title node
 						title = childNode;
 					}
 					//navtitle node
 					if(childNode.getAttribute(ATTRIBUTE_NAME_CLASS).
-							contains(ATTR_CLASS_VALUE_TITLEALTS)){
+							contains(TOPIC_TITLEALTS.matcher)){
 						final NodeList subList = childNode.getChildNodes();
 						for(int j = 0; j < subList.getLength(); j ++ ){
 							final Node subNode = subList.item(j);
 							if(subNode.getNodeType() == Node.ELEMENT_NODE){
 								final Element subChildNode = (Element)subNode;
 								if(subChildNode.getAttribute(ATTRIBUTE_NAME_CLASS).
-										contains(ATTR_CLASS_VALUE_NAVTITLE)){
+										contains(TOPIC_NAVTITLE.matcher)){
 									//set navtitle node
 									navtitle = subChildNode;	
 								}
@@ -1421,7 +1421,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 					final String clazzValue = elem
 							.getAttribute(ATTRIBUTE_NAME_CLASS);
 					//if needed node is found
-					if (clazzValue != null && clazzValue.contains(ATTR_CLASS_VALUE_SHORTDESC)) {
+					if (clazzValue != null && clazzValue.contains(TOPIC_SHORTDESC.matcher)) {
 							shortDesc = elem;
 					}
 				}
@@ -1430,7 +1430,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 			final Element navtitleNode = elem.getOwnerDocument()
 			.createElement(ELEMENT_NAME_NAVTITLE);
 			navtitleNode.setAttribute(ATTRIBUTE_NAME_CLASS,
-					"-" + ATTR_CLASS_VALUE_NAVTITLE);
+					"-" + TOPIC_NAVTITLE.matcher);
 			//append navtitle node
 			if(navtitle != null){
 				//Get text value
@@ -1456,7 +1456,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 			final Element linkTextNode = elem.getOwnerDocument()
 			.createElement(ELEMENT_NAME_LINKTEXT);
 			linkTextNode.setAttribute(ATTRIBUTE_NAME_CLASS,
-					"-" + ATTR_CLASS_VALUE_MAP_LINKTEXT);
+					"-" + MAP_LINKTEXT.matcher);
 			//Get text value
 			final String text = utils.getText(title);
 			final Text textNode = elem.getOwnerDocument().createTextNode(text);
@@ -1472,7 +1472,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 			final Element shortDescNode = elem.getOwnerDocument()
 			.createElement(ELEMENT_NAME_SHORTDESC);
 			shortDescNode.setAttribute(ATTRIBUTE_NAME_CLASS,
-					"-" + ATTR_CLASS_VALUE_MAP_SHORTDESC);
+					"-" + MAP_SHORTDESC.matcher);
 			//Get text value
 			final String shortDescText = utils.getText(shortDesc);
 			final Text shortDescTextNode = elem.getOwnerDocument().createTextNode(shortDescText);

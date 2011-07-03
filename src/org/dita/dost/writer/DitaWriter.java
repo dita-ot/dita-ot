@@ -91,9 +91,9 @@ public final class DitaWriter extends AbstractXMLWriter {
     	
     	
     	if (classValue == null
-    			|| (classValue.indexOf(ATTR_CLASS_VALUE_XREF) == -1
-    			&& classValue.indexOf(ATTR_CLASS_VALUE_LINK) == -1
-    			&& classValue.indexOf(ATTR_CLASS_VALUE_TOPICREF) == -1))
+    			|| (classValue.indexOf(TOPIC_XREF.matcher) == -1
+    			&& classValue.indexOf(TOPIC_LINK.matcher) == -1
+    			&& classValue.indexOf(MAP_TOPICREF.matcher) == -1))
     	{
     		return false;
     	} 
@@ -169,7 +169,7 @@ public final class DitaWriter extends AbstractXMLWriter {
 			return true;
 		}
 		else{
-			if(classValue!=null && classValue.contains(ATTR_CLASS_VALUE_CODEREF)){
+			if(classValue!=null && classValue.contains(PR_D_CODEREF.matcher)){
 				return true;
 			}
 			if(formatValue==null && extOfHref!=null && !extOfHref.equalsIgnoreCase("DITA") && !extOfHref.equalsIgnoreCase("XML") ){
@@ -1083,7 +1083,7 @@ public final class DitaWriter extends AbstractXMLWriter {
 				params.put("%1", localName);
 				logger.logInfo(MessageUtils.getMessage("DOTJ030I", params).toString());			
 			}       
-	        if (attrValue != null && attrValue.indexOf(ATTR_CLASS_VALUE_TOPIC) != -1){
+	        if (attrValue != null && attrValue.indexOf(TOPIC_TOPIC.matcher) != -1){
 	        	domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
 	        	if(domains==null){
 	        		params.clear();
@@ -1094,8 +1094,8 @@ public final class DitaWriter extends AbstractXMLWriter {
                 }
 	        }
 	        if (attrValue != null && 
-	        		(attrValue.indexOf(ATTR_CLASS_VALUE_FOREIGN) != -1 ||
-	        				attrValue.indexOf(ATTR_CLASS_VALUE_UNKNOWN) != -1)){
+	        		(attrValue.indexOf(TOPIC_FOREIGN.matcher) != -1 ||
+	        				attrValue.indexOf(TOPIC_UNKNOWN.matcher) != -1)){
 	        	foreignLevel = 1;
 	        }
         }

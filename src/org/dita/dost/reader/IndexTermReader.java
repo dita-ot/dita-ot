@@ -435,37 +435,37 @@ public final class IndexTermReader extends AbstractXMLReader {
 	private void handleSpecialization(final String localName, final String classAttr) {
 		if (classAttr == null) {
 			return;
-		} else if (classAttr.indexOf(ATTR_CLASS_VALUE_INDEXTERM) != -1) {
+		} else if (classAttr.indexOf(TOPIC_INDEXTERM.matcher) != -1) {
 			// add the element name to the indexterm specialization element
 			// list if it does not already exist in that list.
 			if (!indexTermSpecList.contains(localName)) {
 				indexTermSpecList.add(localName);
 			}
-		} else if (classAttr.indexOf(ATTR_CLASS_VALUE_INDEXSEEALSO) != -1) {
+		} else if (classAttr.indexOf(INDEXING_D_INDEX_SEE_ALSO.matcher) != -1) {
 			// add the element name to the index-see-also specialization element
 			// list if it does not already exist in that list.
 			if (!indexSeeAlsoSpecList.contains(localName)) {
 				indexSeeAlsoSpecList.add(localName);
 			}
-		} else if (classAttr.indexOf(ATTR_CLASS_VALUE_INDEXSEE) != -1) {
+		} else if (classAttr.indexOf(INDEXING_D_INDEX_SEE.matcher) != -1) {
 			// add the element name to the index-see specialization element
 			// list if it does not already exist in that list.
 			if (!indexSeeSpecList.contains(localName)) {
 				indexSeeSpecList.add(localName);
 			}
-		} else if (classAttr.indexOf(ATTR_CLASS_VALUE_INDEXSORTAS) != -1) {
+		} else if (classAttr.indexOf(INDEXING_D_INDEX_SORT_AS.matcher) != -1) {
 			// add the element name to the index-sort-as specialization element
 			// list if it does not already exist in that list.
 			if (!indexSortAsSpecList.contains(localName)) {
 				indexSortAsSpecList.add(localName);
 			}
-		} else if (classAttr.indexOf(ATTR_CLASS_VALUE_TOPIC) != -1) {
+		} else if (classAttr.indexOf(TOPIC_TOPIC.matcher) != -1) {
 			//add the element name to the topic specialization element
 			// list if it does not already exist in that list.
 			if (!topicSpecList.contains(localName)) {
 				topicSpecList.add(localName);
 			}
-		} else if (classAttr.indexOf(ATTR_CLASS_VALUE_TITLE) != -1) {
+		} else if (classAttr.indexOf(TOPIC_TITLE.matcher) != -1) {
 			//add the element name to the title specailization element list
 			// if it does not exist in that list.
 			if (!titleSpecList.contains(localName)){

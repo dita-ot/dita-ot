@@ -58,13 +58,13 @@ public final class DITAAttrUtils {
 	private static final List<String> excludeList;
 	static {
 	    final List<String> el = new ArrayList<String>();
-        el.add("-" + ATTR_CLASS_VALUE_INDEXTERM);
-        el.add("-" + ATTR_CLASS_VALUE_DRAFTCOMMENT);
-        el.add("-" + ATTR_CLASS_VALUE_REQUIREDCLEANUP);
-        el.add("-" + ATTR_CLASS_VALUE_DATA);
-        el.add("-" + ATTR_CLASS_VALUE_DATAABOUT);
-        el.add("-" + ATTR_CLASS_VALUE_UNKNOWN);
-        el.add("-" + ATTR_CLASS_VALUE_FOREIGN);
+        el.add("-" + TOPIC_INDEXTERM.matcher);
+        el.add("-" + TOPIC_DRAFT_COMMENT.matcher);
+        el.add("-" + TOPIC_REQUIRED_CLEANUP.matcher);
+        el.add("-" + TOPIC_DATA.matcher);
+        el.add("-" + TOPIC_DATA_ABOUT.matcher);
+        el.add("-" + TOPIC_UNKNOWN.matcher);
+        el.add("-" + TOPIC_FOREIGN.matcher);
         excludeList = Collections.unmodifiableList(el);
 	}
 	
@@ -277,7 +277,7 @@ public final class DITAAttrUtils {
 		//has child nodes
 		if(element.hasChildNodes()){
 			//Get topicmeta element node
-			final Element topicMeta = getElementNode(element, ATTR_CLASS_VALUE_TOPICMETA);
+			final Element topicMeta = getElementNode(element, MAP_TOPICMETA.matcher);
 			//no topicmeta node
 			if(topicMeta == null){
 				return returnValue;

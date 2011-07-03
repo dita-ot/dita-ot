@@ -270,9 +270,9 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 		String formatValue = atts.getValue(ATTRIBUTE_NAME_FORMAT);
 
 		if (classValue == null
-				|| (classValue.indexOf(ATTR_CLASS_VALUE_XREF) == -1
-						&& classValue.indexOf(ATTR_CLASS_VALUE_LINK) == -1 && classValue
-						.indexOf(ATTR_CLASS_VALUE_TOPICREF) == -1)) {
+				|| (classValue.indexOf(TOPIC_XREF.matcher) == -1
+						&& classValue.indexOf(TOPIC_LINK.matcher) == -1 && classValue
+						.indexOf(MAP_TOPICREF.matcher) == -1)) {
 			return false;
 		}
 

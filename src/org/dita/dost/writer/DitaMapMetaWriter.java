@@ -77,34 +77,34 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
     private static final Hashtable<String, String> moveTable;
     static{
     	moveTable = new Hashtable<String, String>(INT_32);
-    	moveTable.put(ATTR_CLASS_VALUE_MAP_SEARCHTITLE,"topicmeta/searchtitle");
-    	moveTable.put(ATTR_CLASS_VALUE_AUDIENCE,"topicmeta/audience");
-    	moveTable.put(ATTR_CLASS_VALUE_AUTHOR,"topicmeta/author");
-    	moveTable.put(ATTR_CLASS_VALUE_CATEGORY,"topicmeta/category");
-    	moveTable.put(ATTR_CLASS_VALUE_COPYRIGHT,"topicmeta/copyright");
-    	moveTable.put(ATTR_CLASS_VALUE_CRITDATES,"topicmeta/critdates");
-    	moveTable.put(ATTR_CLASS_VALUE_DATA,"topicmeta/data");
-    	moveTable.put(ATTR_CLASS_VALUE_DATAABOUT,"topicmeta/data-about");
-    	moveTable.put(ATTR_CLASS_VALUE_FOREIGN,"topicmeta/foreign");
-    	moveTable.put(ATTR_CLASS_VALUE_KEYWORDS,"topicmeta/keywords");
-    	moveTable.put(ATTR_CLASS_VALUE_OTHERMETA,"topicmeta/othermeta");
-    	moveTable.put(ATTR_CLASS_VALUE_PERMISSIONS,"topicmeta/permissions");
-    	moveTable.put(ATTR_CLASS_VALUE_PRODINFO,"topicmeta/prodinfo");
-    	moveTable.put(ATTR_CLASS_VALUE_PUBLISHER,"topicmeta/publisher");
-    	moveTable.put(ATTR_CLASS_VALUE_RESOURCEID,"topicmeta/resourceid");
-    	moveTable.put(ATTR_CLASS_VALUE_SOURCE,"topicmeta/source");
-    	moveTable.put(ATTR_CLASS_VALUE_UNKNOWN,"topicmeta/unknown");  	
+    	moveTable.put(MAP_SEARCHTITLE.matcher,"topicmeta/searchtitle");
+    	moveTable.put(TOPIC_AUDIENCE.matcher,"topicmeta/audience");
+    	moveTable.put(TOPIC_AUTHOR.matcher,"topicmeta/author");
+    	moveTable.put(TOPIC_CATEGORY.matcher,"topicmeta/category");
+    	moveTable.put(TOPIC_COPYRIGHT.matcher,"topicmeta/copyright");
+    	moveTable.put(TOPIC_CRITDATES.matcher,"topicmeta/critdates");
+    	moveTable.put(TOPIC_DATA.matcher,"topicmeta/data");
+    	moveTable.put(TOPIC_DATA_ABOUT.matcher,"topicmeta/data-about");
+    	moveTable.put(TOPIC_FOREIGN.matcher,"topicmeta/foreign");
+    	moveTable.put(TOPIC_KEYWORDS.matcher,"topicmeta/keywords");
+    	moveTable.put(TOPIC_OTHERMETA.matcher,"topicmeta/othermeta");
+    	moveTable.put(TOPIC_PERMISSIONS.matcher,"topicmeta/permissions");
+    	moveTable.put(TOPIC_PRODINFO.matcher,"topicmeta/prodinfo");
+    	moveTable.put(TOPIC_PUBLISHER.matcher,"topicmeta/publisher");
+    	moveTable.put(TOPIC_RESOURCEID.matcher,"topicmeta/resourceid");
+    	moveTable.put(TOPIC_SOURCE.matcher,"topicmeta/source");
+    	moveTable.put(TOPIC_UNKNOWN.matcher,"topicmeta/unknown");  	
     }
     
     private static final HashSet<String> uniqueSet;
 	
 	static{
 		uniqueSet = new HashSet<String>(INT_16);
-		uniqueSet.add(ATTR_CLASS_VALUE_CRITDATES);
-		uniqueSet.add(ATTR_CLASS_VALUE_PERMISSIONS);
-		uniqueSet.add(ATTR_CLASS_VALUE_PUBLISHER);
-		uniqueSet.add(ATTR_CLASS_VALUE_SOURCE);
-		uniqueSet.add(ATTR_CLASS_VALUE_MAP_SEARCHTITLE);
+		uniqueSet.add(TOPIC_CRITDATES.matcher);
+		uniqueSet.add(TOPIC_PERMISSIONS.matcher);
+		uniqueSet.add(TOPIC_PUBLISHER.matcher);
+		uniqueSet.add(TOPIC_SOURCE.matcher);
+		uniqueSet.add(MAP_SEARCHTITLE.matcher);
 	}
 
 	private static final Hashtable<String, Integer> compareTable;
@@ -524,7 +524,7 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
     	
         try {
         	if (classAttrValue != null && 
-        			classAttrValue.contains(ATTR_CLASS_VALUE_TOPIC) &&
+        			classAttrValue.contains(TOPIC_TOPIC.matcher) &&
         			!topicSpecList.contains(qName)){
         		//add topic qName to topicSpecList
         		topicSpecList.add(qName);
@@ -532,7 +532,7 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
         	
         	if ( startMap && !startDOM && classAttrValue != null && !hasWritten 
             		&&(
-            		classAttrValue.indexOf(ATTR_CLASS_VALUE_TOPICMETA)!= -1 
+            		classAttrValue.indexOf(MAP_TOPICMETA.matcher)!= -1 
             		)){
             	startDOM = true;
             	output = strOutput;
@@ -540,10 +540,10 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
             }
             
             if ( startMap && classAttrValue != null && !hasWritten &&(
-            		classAttrValue.indexOf(ATTR_CLASS_VALUE_NAVREF)!= -1 || 
-            		classAttrValue.indexOf(ATTR_CLASS_VALUE_ANCHOR)!= -1 ||
-            		classAttrValue.indexOf(ATTR_CLASS_VALUE_TOPICREF)!= -1 || 
-            		classAttrValue.indexOf(ATTR_CLASS_VALUE_RELTABLE)!= -1
+            		classAttrValue.indexOf(MAP_NAVREF.matcher)!= -1 || 
+            		classAttrValue.indexOf(MAP_ANCHOR.matcher)!= -1 ||
+            		classAttrValue.indexOf(MAP_TOPICREF.matcher)!= -1 || 
+            		classAttrValue.indexOf(MAP_RELTABLE.matcher)!= -1
             		)){
             	if (startDOM){
             		startDOM = false;

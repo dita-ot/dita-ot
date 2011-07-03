@@ -1033,24 +1033,34 @@ public final class Constants {
     /**FILTER_ACTION_EXCLUDE.*/
     public static final String FILTER_ACTION_EXCLUDE = "exclude";
     /**ATTR_CLASS_VALUE_TITLE.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_TITLE = TOPIC_TITLE.matcher;
 	/**ATTR_CLASS_VALUE_MAP.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_MAP = MAP_MAP.matcher;
 	/**ATTR_CLASS_VALUE_INDEXTERM.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_INDEXTERM = TOPIC_INDEXTERM.matcher;
 	/**ATTR_CLASS_VALUE_INDEXSEE.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_INDEXSEE = INDEXING_D_INDEX_SEE.matcher;
 	/**ATTR_CLASS_VALUE_INDEXSEEALSO.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_INDEXSEEALSO = INDEXING_D_INDEX_SEE_ALSO.matcher;
 	/**ATTR_CLASS_VALUE_INDEXSORTAS.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_INDEXSORTAS = INDEXING_D_INDEX_SORT_AS.matcher;
 	/**ATTR_CLASS_VALUE_TOPIC.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_TOPIC = TOPIC_TOPIC.matcher;
 	/**ATTR_CLASS_VALUE_XREF.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_XREF = TOPIC_XREF.matcher;
 	/**ATTR_CLASS_VALUE_LINK.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_LINK = TOPIC_LINK.matcher;
 	/**ATTR_CLASS_VALUE_TOPICREF.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_TOPICREF = MAP_TOPICREF.matcher;
 	/**ATTR_SCOPE_VALUE_LOCAL.*/
 	public static final String ATTR_SCOPE_VALUE_LOCAL = "local";
@@ -1071,110 +1081,161 @@ public final class Constants {
 	/**ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION.*/
 	public static final String ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION = "xmlns:ditaarch";
 	/**ATTR_CLASS_VALUE_OBJECT.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_OBJECT = TOPIC_OBJECT.matcher;
 	/**ATTR_CLASS_VALUE_TOPICMETA.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_TOPICMETA = MAP_TOPICMETA.matcher;
 	//Added by William on 2009-06-24 for req #12014 start
 	/**ATTR_CLASS_VALUE_EXPORTANCHORS.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_EXPORTANCHORS = DELAY_D_EXPORTANCHORS.matcher;
 	/**ATTR_CLASS_VALUE_ANCHORKEY.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_ANCHORKEY = DELAY_D_ANCHORKEY.matcher;
 	/**ATTR_CLASS_VALUE_ANCHORID.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_ANCHORID = DELAY_D_ANCHORID.matcher;
 	//Added by William on 2009-06-24 for req #12014 end
 	
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_ANCHOR = MAP_ANCHOR.matcher;
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_NAVREF = MAP_NAVREF.matcher;
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_DATE = TOPIC_DATA.matcher;
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_DATEABOUT = TOPIC_DATA_ABOUT.matcher;
 	
 	//Added by William on 2009-12-21 for bug:2916469 start
 	/**ATTR_CLASS_VALUE_NAVTITLE.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_NAVTITLE = TOPIC_NAVTITLE.matcher;
 	//Added by William on 2009-12-21 for bug:2916469 end
 	/**ATTR_CLASS_VALUE_AUTHOR.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_AUTHOR = TOPIC_AUTHOR.matcher;
 	/**ATTR_CLASS_VALUE_SOURCE.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_SOURCE = TOPIC_SOURCE.matcher;
 	/**ATTR_CLASS_VALUE_PUBLISHER.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_PUBLISHER = TOPIC_PUBLISHER.matcher;
 	/**ATTR_CLASS_VALUE_COPYRIGHT.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_COPYRIGHT = TOPIC_COPYRIGHT.matcher;
 	/**ATTR_CLASS_VALUE_CRITDATES.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_CRITDATES = TOPIC_CRITDATES.matcher;
 	/**ATTR_CLASS_VALUE_PERMISSIONS.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_PERMISSIONS = TOPIC_PERMISSIONS.matcher;
 	/**ATTR_CLASS_VALUE_CATEGORY.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_CATEGORY = TOPIC_CATEGORY.matcher;
 	/**ATTR_CLASS_VALUE_AUDIENCE.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_AUDIENCE = TOPIC_AUDIENCE.matcher;
 	/**ATTR_CLASS_VALUE_KEYWORDS.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_KEYWORDS = TOPIC_KEYWORDS.matcher;
 	/**ATTR_CLASS_VALUE_PRODINFO.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_PRODINFO = TOPIC_PRODINFO.matcher;
 	/**ATTR_CLASS_VALUE_OTHERMETA.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_OTHERMETA = TOPIC_OTHERMETA.matcher;
 	/**ATTR_CLASS_VALUE_RESOURCEID.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_RESOURCEID = TOPIC_RESOURCEID.matcher;
 	/**ATTR_CLASS_VALUE_DATA.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_DATA = TOPIC_DATA.matcher;
 	/**ATTR_CLASS_VALUE_DATAABOUT.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_DATAABOUT = TOPIC_DATA_ABOUT.matcher;
 	/**ATTR_CLASS_VALUE_DRAFTCOMMENT.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_DRAFTCOMMENT = TOPIC_DRAFT_COMMENT.matcher;
 	/**ATTR_CLASS_VALUE_REQUIREDCLEANUP.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_REQUIREDCLEANUP = TOPIC_REQUIRED_CLEANUP.matcher;
 	/**ATTR_CLASS_VALUE_FOREIGN.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_FOREIGN = TOPIC_FOREIGN.matcher;
 	/**ATTR_CLASS_VALUE_UNKNOWN.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_UNKNOWN = TOPIC_UNKNOWN.matcher;
 	/**ATTR_CLASS_VALUE_MAP_SEARCHTITLE.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_MAP_SEARCHTITLE = MAP_SEARCHTITLE.matcher;
 	//Added by William on 2009-07-25 for bug:2826143 start
 	/**ATTR_CLASS_VALUE_MAP_LINKTEXT.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_MAP_LINKTEXT = MAP_LINKTEXT.matcher;
 	/**ATTR_CLASS_VALUE_MAP_SHORTDESC.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_MAP_SHORTDESC = MAP_SHORTDESC.matcher;
 	//Added by William on 2009-07-25 for bug:2826143 start
 	/**ATTR_CLASS_VALUE_TOPIC_SEARCHTITLE.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_TOPIC_SEARCHTITLE = TOPIC_SEARCHTITLE.matcher;
 	/**ATTR_CLASS_VALUE_PROLOG.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_PROLOG = TOPIC_PROLOG.matcher;
 	/**ATTR_CLASS_VALUE_ABSTRACT.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_ABSTRACT = TOPIC_ABSTRACT.matcher;
 	/**ATTR_CLASS_VALUE_SHORTDESC.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_SHORTDESC = TOPIC_SHORTDESC.matcher;
 	/**ATTR_CLASS_VALUE_TITLEALTS.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_TITLEALTS = TOPIC_TITLEALTS.matcher;
 	/**ATTR_CLASS_VALUE_RELATED_LINKS.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_RELATED_LINKS = TOPIC_RELATED_LINKS.matcher;
 	/**ATTR_CLASS_VALUE_BODY.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_BODY = TOPIC_BODY.matcher;
 	/**ATTR_CLASS_VALUE_RELTABLE.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_RELTABLE = MAP_RELTABLE.matcher;
 	/**ATTR_CLASS_VALUE_METADATA.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_METADATA = TOPIC_METADATA.matcher;
 	/**ATTR_CLASS_VALUE_TOPICHEAD.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_TOPICHEAD = MAPGROUP_D_TOPICHEAD.matcher;
 	/**ATTR_CLASS_VALUE_CODEREF.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_CODEREF = PR_D_CODEREF.matcher;
 	/**ATTR_CLASS_VALUE_TOPIC_GROUP.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_TOPIC_GROUP = MAPGROUP_D_TOPICGROUP.matcher;
 	/**ATTR_CLASS_VALUE_TOPIC_HEAD.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_TOPIC_HEAD = MAPGROUP_D_TOPICHEAD.matcher;
 	/**ATTR_CLASS_VALUE_SUBJECT_SCHEME.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_SUBJECT_SCHEME = SUBJECTSCHEME_SUBJECTSCHEME.matcher;
 	/**ATTR_CLASS_VALUE_SUBJECT_DEF.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_SUBJECT_DEF = SUBJECTSCHEME_SUBJECTDEF.matcher;
 	/**ATTR_CLASS_VALUE_SCHEME_REF.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_SCHEME_REF = SUBJECTSCHEME_SCHEMEREF.matcher;
 	/**ATTR_CLASS_VALUE_ENUMERATION_DEF.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_ENUMERATION_DEF = SUBJECTSCHEME_ENUMERATIONDEF.matcher;
 	/**ATTR_CLASS_VALUE_ATTRIBUTE_DEF.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_ATTRIBUTE_DEF = SUBJECTSCHEME_ATTRIBUTEDEF.matcher;
 	/**ATTR_CLASS_VALUE_ELEMENT_DEF.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_ELEMENT_DEF = SUBJECTSCHEME_ELEMENTDEF.matcher;
 	/**ATTR_CLASS_VALUE_DEFAULT_SUBJECT.*/
+	@Deprecated
 	public static final String ATTR_CLASS_VALUE_DEFAULT_SUBJECT = SUBJECTSCHEME_DEFAULTSUBJECT.matcher;
 	/**ATTR_CLASS_VALUE_SUBJECT_SCHEME_BASE.*/
 	public static final String ATTR_CLASS_VALUE_SUBJECT_SCHEME_BASE = " subjectScheme/";

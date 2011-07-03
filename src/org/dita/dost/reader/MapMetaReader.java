@@ -50,79 +50,79 @@ public final class MapMetaReader implements AbstractReader {
 	
 	static{
 		uniqueSet = new HashSet<String>(INT_16);
-		uniqueSet.add(ATTR_CLASS_VALUE_CRITDATES);
-		uniqueSet.add(ATTR_CLASS_VALUE_PERMISSIONS);
-		uniqueSet.add(ATTR_CLASS_VALUE_PUBLISHER);
-		uniqueSet.add(ATTR_CLASS_VALUE_SOURCE);
-		uniqueSet.add(ATTR_CLASS_VALUE_MAP_SEARCHTITLE);
+		uniqueSet.add(TOPIC_CRITDATES.matcher);
+		uniqueSet.add(TOPIC_PERMISSIONS.matcher);
+		uniqueSet.add(TOPIC_PUBLISHER.matcher);
+		uniqueSet.add(TOPIC_SOURCE.matcher);
+		uniqueSet.add(MAP_SEARCHTITLE.matcher);
 	}
 	
 	private static final HashSet<String> cascadeSet;
 	
 	static{
 		cascadeSet = new HashSet<String>(INT_16);
-		cascadeSet.add(ATTR_CLASS_VALUE_AUDIENCE);
-		cascadeSet.add(ATTR_CLASS_VALUE_AUTHOR);
-		cascadeSet.add(ATTR_CLASS_VALUE_CATEGORY);
-		cascadeSet.add(ATTR_CLASS_VALUE_COPYRIGHT);
-		cascadeSet.add(ATTR_CLASS_VALUE_CRITDATES);
-		cascadeSet.add(ATTR_CLASS_VALUE_PERMISSIONS);
-		cascadeSet.add(ATTR_CLASS_VALUE_PRODINFO);
-		cascadeSet.add(ATTR_CLASS_VALUE_PUBLISHER);
+		cascadeSet.add(TOPIC_AUDIENCE.matcher);
+		cascadeSet.add(TOPIC_AUTHOR.matcher);
+		cascadeSet.add(TOPIC_CATEGORY.matcher);
+		cascadeSet.add(TOPIC_COPYRIGHT.matcher);
+		cascadeSet.add(TOPIC_CRITDATES.matcher);
+		cascadeSet.add(TOPIC_PERMISSIONS.matcher);
+		cascadeSet.add(TOPIC_PRODINFO.matcher);
+		cascadeSet.add(TOPIC_PUBLISHER.matcher);
 	}
 	
 	private static final HashSet<String> metaSet;
 	
 	static{
 		metaSet = new HashSet<String>(INT_16);
-		metaSet.add(ATTR_CLASS_VALUE_MAP_SEARCHTITLE);
-		metaSet.add(ATTR_CLASS_VALUE_AUTHOR);
-		metaSet.add(ATTR_CLASS_VALUE_SOURCE);
-		metaSet.add(ATTR_CLASS_VALUE_PUBLISHER);
-		metaSet.add(ATTR_CLASS_VALUE_COPYRIGHT);
-		metaSet.add(ATTR_CLASS_VALUE_CRITDATES);
-		metaSet.add(ATTR_CLASS_VALUE_PERMISSIONS);
-		metaSet.add(ATTR_CLASS_VALUE_AUDIENCE);
-		metaSet.add(ATTR_CLASS_VALUE_CATEGORY);
-		metaSet.add(ATTR_CLASS_VALUE_KEYWORDS);
-		metaSet.add(ATTR_CLASS_VALUE_PRODINFO);
-		metaSet.add(ATTR_CLASS_VALUE_OTHERMETA);
-		metaSet.add(ATTR_CLASS_VALUE_RESOURCEID);
-		metaSet.add(ATTR_CLASS_VALUE_DATA);
-		metaSet.add(ATTR_CLASS_VALUE_DATAABOUT);
-		metaSet.add(ATTR_CLASS_VALUE_FOREIGN);
-		metaSet.add(ATTR_CLASS_VALUE_UNKNOWN);
+		metaSet.add(MAP_SEARCHTITLE.matcher);
+		metaSet.add(TOPIC_AUTHOR.matcher);
+		metaSet.add(TOPIC_SOURCE.matcher);
+		metaSet.add(TOPIC_PUBLISHER.matcher);
+		metaSet.add(TOPIC_COPYRIGHT.matcher);
+		metaSet.add(TOPIC_CRITDATES.matcher);
+		metaSet.add(TOPIC_PERMISSIONS.matcher);
+		metaSet.add(TOPIC_AUDIENCE.matcher);
+		metaSet.add(TOPIC_CATEGORY.matcher);
+		metaSet.add(TOPIC_KEYWORDS.matcher);
+		metaSet.add(TOPIC_PRODINFO.matcher);
+		metaSet.add(TOPIC_OTHERMETA.matcher);
+		metaSet.add(TOPIC_RESOURCEID.matcher);
+		metaSet.add(TOPIC_DATA.matcher);
+		metaSet.add(TOPIC_DATA_ABOUT.matcher);
+		metaSet.add(TOPIC_FOREIGN.matcher);
+		metaSet.add(TOPIC_UNKNOWN.matcher);
 	}
 	
 	private static final Vector<String> metaPos;
 	
 	static {
 		metaPos = new Vector<String>(INT_16);
-		metaPos.add(ATTR_CLASS_VALUE_MAP_SEARCHTITLE);
-		metaPos.add(ATTR_CLASS_VALUE_AUTHOR);
-		metaPos.add(ATTR_CLASS_VALUE_SOURCE);
-		metaPos.add(ATTR_CLASS_VALUE_PUBLISHER);
-		metaPos.add(ATTR_CLASS_VALUE_COPYRIGHT);
-		metaPos.add(ATTR_CLASS_VALUE_CRITDATES);
-		metaPos.add(ATTR_CLASS_VALUE_PERMISSIONS);
-		metaPos.add(ATTR_CLASS_VALUE_AUDIENCE);
-		metaPos.add(ATTR_CLASS_VALUE_CATEGORY);
-		metaPos.add(ATTR_CLASS_VALUE_KEYWORDS);
-		metaPos.add(ATTR_CLASS_VALUE_PRODINFO);
-		metaPos.add(ATTR_CLASS_VALUE_OTHERMETA);
-		metaPos.add(ATTR_CLASS_VALUE_RESOURCEID);
-		metaPos.add(ATTR_CLASS_VALUE_DATA);
-		metaPos.add(ATTR_CLASS_VALUE_DATAABOUT);
-		metaPos.add(ATTR_CLASS_VALUE_FOREIGN);
-		metaPos.add(ATTR_CLASS_VALUE_UNKNOWN);
+		metaPos.add(MAP_SEARCHTITLE.matcher);
+		metaPos.add(TOPIC_AUTHOR.matcher);
+		metaPos.add(TOPIC_SOURCE.matcher);
+		metaPos.add(TOPIC_PUBLISHER.matcher);
+		metaPos.add(TOPIC_COPYRIGHT.matcher);
+		metaPos.add(TOPIC_CRITDATES.matcher);
+		metaPos.add(TOPIC_PERMISSIONS.matcher);
+		metaPos.add(TOPIC_AUDIENCE.matcher);
+		metaPos.add(TOPIC_CATEGORY.matcher);
+		metaPos.add(TOPIC_KEYWORDS.matcher);
+		metaPos.add(TOPIC_PRODINFO.matcher);
+		metaPos.add(TOPIC_OTHERMETA.matcher);
+		metaPos.add(TOPIC_RESOURCEID.matcher);
+		metaPos.add(TOPIC_DATA.matcher);
+		metaPos.add(TOPIC_DATA_ABOUT.matcher);
+		metaPos.add(TOPIC_FOREIGN.matcher);
+		metaPos.add(TOPIC_UNKNOWN.matcher);
 		//Added by William on 2009-07-25 for bug:2826143 start
-		metaPos.add(ATTR_CLASS_VALUE_MAP_LINKTEXT);
-		metaPos.add(ATTR_CLASS_VALUE_MAP_SHORTDESC);
+		metaPos.add(MAP_LINKTEXT.matcher);
+		metaPos.add(MAP_SHORTDESC.matcher);
 		//Added by William on 2009-07-25 for bug:2826143 end
 		//Added by William on 2009-12-21 for bug:2916469 start
-		metaPos.add(ATTR_CLASS_VALUE_NAVTITLE);
-		metaPos.add(ATTR_CLASS_VALUE_METADATA);
-		metaPos.add(ATTR_CLASS_VALUE_EXPORTANCHORS);
+		metaPos.add(TOPIC_NAVTITLE.matcher);
+		metaPos.add(TOPIC_METADATA.matcher);
+		metaPos.add(DELAY_D_EXPORTANCHORS.matcher);
 		//Added by William on 2009-12-21 for bug:2916469 end
 	}
 
@@ -172,11 +172,11 @@ public final class MapMetaReader implements AbstractReader {
         			classAttr = node.getAttributes().getNamedItem(ATTRIBUTE_NAME_CLASS);
         		}
         		if(classAttr != null && 
-        				classAttr.getNodeValue().indexOf(ATTR_CLASS_VALUE_TOPICMETA) != -1){
+        				classAttr.getNodeValue().indexOf(MAP_TOPICMETA.matcher) != -1){
         			//if this node is topicmeta node under root
         			handleGlobalMeta(node);
         		}else if(classAttr != null &&
-        				classAttr.getNodeValue().indexOf(ATTR_CLASS_VALUE_TOPICREF) != -1){
+        				classAttr.getNodeValue().indexOf(MAP_TOPICREF.matcher) != -1){
         			//if this node is topicref node under root
         			handleTopicref(node, globalMeta);
         		}	
@@ -189,7 +189,7 @@ public final class MapMetaReader implements AbstractReader {
 			for (final Hashtable<String, Element> resultTableEntry : resultTable.values()) {
 				for (final Map.Entry<String, Element> mapEntry : resultTableEntry.entrySet()) {
 					final String key = mapEntry.getKey();
-					if (ATTR_CLASS_VALUE_KEYWORDS.equals(key)) {
+					if (TOPIC_KEYWORDS.matcher.equals(key)) {
 						removeIndexTermRecursive(mapEntry.getValue());
 					}
 				}
@@ -233,7 +233,7 @@ public final class MapMetaReader implements AbstractReader {
 		for (int i = 0; i < children.getLength(); i++) {
 			if(children.item(i).getNodeType() == Node.ELEMENT_NODE){
 				child = (Element) children.item(i);
-				final boolean isIndexTerm = child.getAttribute(ATTRIBUTE_NAME_CLASS).contains(ATTR_CLASS_VALUE_INDEXTERM);
+				final boolean isIndexTerm = child.getAttribute(ATTRIBUTE_NAME_CLASS).contains(TOPIC_INDEXTERM.matcher);
 				final boolean hasStart = !StringUtils.isEmptyString(child.getAttribute(ATTRIBUTE_NAME_START));
 				final boolean hasEnd = !StringUtils.isEmptyString(child.getAttribute(ATTRIBUTE_NAME_END));
 				
@@ -265,7 +265,7 @@ public final class MapMetaReader implements AbstractReader {
     		}
     		 
     		if(classAttr != null && hrefAttr != null &&
-    				classAttr.getNodeValue().indexOf(ATTR_CLASS_VALUE_TOPICMETA) != -1 &&
+    				classAttr.getNodeValue().indexOf(MAP_TOPICMETA.matcher) != -1 &&
     				hrefAttr != null && hrefAttr.getNodeValue().indexOf(INTERNET_LINK_MARK) == -1
             		&& (scopeAttr == null || ATTR_SCOPE_VALUE_LOCAL.equalsIgnoreCase(scopeAttr.getNodeValue()))
             		&& ((formatAttr == null || ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatAttr.getNodeValue()))
@@ -276,7 +276,7 @@ public final class MapMetaReader implements AbstractReader {
     			current = handleMeta(node, inheritance);
     			
     		}else if(classAttr != null &&
-    				classAttr.getNodeValue().indexOf(ATTR_CLASS_VALUE_TOPICREF) != -1){
+    				classAttr.getNodeValue().indexOf(MAP_TOPICREF.matcher) != -1){
     			//if this node is topicref node under topicref
     			handleTopicref(node, current);
     		}
@@ -312,7 +312,7 @@ public final class MapMetaReader implements AbstractReader {
                         topicref.removeChild(metaNode);
                     }
 					final Element newMeta = doc.createElement(ELEMENT_NAME_TOPICMETA);
-					newMeta.setAttribute(ATTRIBUTE_NAME_CLASS, "-" + ATTR_CLASS_VALUE_TOPICMETA);
+					newMeta.setAttribute(ATTRIBUTE_NAME_CLASS, "-" + MAP_TOPICMETA.matcher);
 					for (int i = 0; i < metaPos.size(); i++) {
 						final Node stub = (Node)metas.get(metaPos.get(i));
 						if (stub != null) {
@@ -370,7 +370,7 @@ public final class MapMetaReader implements AbstractReader {
 				// int number 1 is used to remove the first "-" or "+" character in class attribute
 				final String metaKey = attrValue.substring(1,
 						attrValue.indexOf(STRING_BLANK,attrValue.indexOf(SLASH))+1 );
-				if (attrValue.contains(ATTR_CLASS_VALUE_METADATA)){
+				if (attrValue.contains(TOPIC_METADATA.matcher)){
 					getMeta(node, topicMetaTable);
 				}else if(topicMetaTable.containsKey(metaKey)){
 					//append node to the list if it exist in topic meta table
@@ -449,7 +449,7 @@ public final class MapMetaReader implements AbstractReader {
 				final String attrValue = attr.getNodeValue();
 				final String metaKey = attrValue.substring(1,
 						attrValue.indexOf(STRING_BLANK,attrValue.indexOf(SLASH))+1 );
-				if (attrValue.contains(ATTR_CLASS_VALUE_METADATA)){
+				if (attrValue.contains(TOPIC_METADATA.matcher)){
 					//proceed the metadata in <metadata>
 					handleGlobalMeta(node);
 				}else if(cascadeSet.contains(metaKey) && globalMeta.containsKey(metaKey)){

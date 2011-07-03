@@ -238,7 +238,7 @@ public final class DitaValReader extends AbstractXMLReader {
                 }
 			}
 			final String attrValue = node.getAttribute(ATTRIBUTE_NAME_CLASS);
-			if (attrValue != null && attrValue.contains(ATTR_CLASS_VALUE_SUBJECT_DEF)) {
+			if (attrValue != null && attrValue.contains(SUBJECTSCHEME_SUBJECTDEF.matcher)) {
 				String key = node.getAttribute(ATTRIBUTE_NAME_KEYS);
 				if (!StringUtils.isEmptyString(key)) {
 					key = attName + EQUAL + key;
@@ -320,7 +320,7 @@ public final class DitaValReader extends AbstractXMLReader {
 					Element node = (Element)rootChildren.item(i);
 					String attrValue = node.getAttribute(ATTRIBUTE_NAME_CLASS);
 					if (attrValue != null
-							&& attrValue.contains(ATTR_CLASS_VALUE_ENUMERATION_DEF)) {
+							&& attrValue.contains(SUBJECTSCHEME_ENUMERATIONDEF.matcher)) {
 						final NodeList enumChildren = node.getChildNodes();
 						String elementName = "*";
 						String attributeName = null;
@@ -329,10 +329,10 @@ public final class DitaValReader extends AbstractXMLReader {
 								node = (Element)enumChildren.item(j);
 								attrValue = node.getAttribute(ATTRIBUTE_NAME_CLASS);
 								if (attrValue != null 
-										&& attrValue.contains(ATTR_CLASS_VALUE_ELEMENT_DEF)) {
+										&& attrValue.contains(SUBJECTSCHEME_ELEMENTDEF.matcher)) {
 									elementName = node.getAttribute(ATTRIBUTE_NAME_NAME);
 								} else if (attrValue != null
-										&& attrValue.contains(ATTR_CLASS_VALUE_ATTRIBUTE_DEF)) {
+										&& attrValue.contains(SUBJECTSCHEME_ATTRIBUTEDEF.matcher)) {
 									attributeName = node.getAttribute(ATTRIBUTE_NAME_NAME);
 									HashMap<String, HashSet<Element>> S = bindingMap.get(attributeName);
 									if (S == null) {
@@ -340,7 +340,7 @@ public final class DitaValReader extends AbstractXMLReader {
 										bindingMap.put(attributeName, S);
 									}
 								} else if (attrValue != null
-										&& attrValue.contains(ATTR_CLASS_VALUE_DEFAULT_SUBJECT)) {
+										&& attrValue.contains(SUBJECTSCHEME_DEFAULTSUBJECT.matcher)) {
 									// Put default values.
 									final String keyValue = node.getAttribute(ATTRIBUTE_NAME_KEYREF);
 									if (keyValue != null) {
@@ -352,7 +352,7 @@ public final class DitaValReader extends AbstractXMLReader {
 										defaultValueMap.put(attributeName, S);
 									}
 								} else if (attrValue != null
-										&& attrValue.contains(ATTR_CLASS_VALUE_SUBJECT_DEF)) {
+										&& attrValue.contains(SUBJECTSCHEME_SUBJECTDEF.matcher)) {
 									// Search for attributeName in schemeRoot
 									String keyValue = node
 											.getAttribute(ATTRIBUTE_NAME_KEYREF);
@@ -418,7 +418,7 @@ public final class DitaValReader extends AbstractXMLReader {
                 }
 			}
 			final String attrValue = node.getAttribute(ATTRIBUTE_NAME_CLASS);
-			if (attrValue != null && attrValue.contains(ATTR_CLASS_VALUE_SUBJECT_DEF)) {
+			if (attrValue != null && attrValue.contains(SUBJECTSCHEME_SUBJECTDEF.matcher)) {
 				final String key = node.getAttribute(ATTRIBUTE_NAME_KEYS);
 				if (!StringUtils.isEmptyString(key)) {
 					valueSet.add(key);
@@ -444,7 +444,7 @@ public final class DitaValReader extends AbstractXMLReader {
                 }
 			}
 			final String attrValue = node.getAttribute(ATTRIBUTE_NAME_CLASS);
-			if (attrValue != null && attrValue.contains(ATTR_CLASS_VALUE_SUBJECT_DEF)) {
+			if (attrValue != null && attrValue.contains(SUBJECTSCHEME_SUBJECTDEF.matcher)) {
 				final String key = node.getAttribute(ATTRIBUTE_NAME_KEYS);
 				if (keyValue.equals(key)) {
 					return node;

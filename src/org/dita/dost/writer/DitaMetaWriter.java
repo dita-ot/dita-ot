@@ -78,35 +78,35 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
     private static final Hashtable<String, String> moveTable;
     static{
     	moveTable = new Hashtable<String, String>(INT_32);
-    	moveTable.put(ATTR_CLASS_VALUE_MAP_SEARCHTITLE,"titlealts/searchtitle");
-    	moveTable.put(ATTR_CLASS_VALUE_AUDIENCE,"prolog/metadata/audience");
-    	moveTable.put(ATTR_CLASS_VALUE_AUTHOR,"prolog/author");
-    	moveTable.put(ATTR_CLASS_VALUE_CATEGORY,"prolog/metadata/category");
-    	moveTable.put(ATTR_CLASS_VALUE_COPYRIGHT,"prolog/copyright");
-    	moveTable.put(ATTR_CLASS_VALUE_CRITDATES,"prolog/critdates");
-    	moveTable.put(ATTR_CLASS_VALUE_DATA,"prolog/data");
-    	moveTable.put(ATTR_CLASS_VALUE_DATAABOUT,"prolog/data-about");
-    	moveTable.put(ATTR_CLASS_VALUE_FOREIGN,"prolog/foreign");
-    	moveTable.put(ATTR_CLASS_VALUE_KEYWORDS,"prolog/metadata/keywords");
-    	moveTable.put(ATTR_CLASS_VALUE_OTHERMETA,"prolog/metadata/othermeta");
-    	moveTable.put(ATTR_CLASS_VALUE_PERMISSIONS,"prolog/permissions");
-    	moveTable.put(ATTR_CLASS_VALUE_PRODINFO,"prolog/metadata/prodinfo");
-    	moveTable.put(ATTR_CLASS_VALUE_PUBLISHER,"prolog/publisher");
-    	moveTable.put(ATTR_CLASS_VALUE_RESOURCEID,"prolog/resourceid");
-    	moveTable.put(ATTR_CLASS_VALUE_MAP,"titlealts/searchtitle");
-    	moveTable.put(ATTR_CLASS_VALUE_SOURCE,"prolog/source");
-    	moveTable.put(ATTR_CLASS_VALUE_UNKNOWN,"prolog/unknown");  	
+    	moveTable.put(MAP_SEARCHTITLE.matcher,"titlealts/searchtitle");
+    	moveTable.put(TOPIC_AUDIENCE.matcher,"prolog/metadata/audience");
+    	moveTable.put(TOPIC_AUTHOR.matcher,"prolog/author");
+    	moveTable.put(TOPIC_CATEGORY.matcher,"prolog/metadata/category");
+    	moveTable.put(TOPIC_COPYRIGHT.matcher,"prolog/copyright");
+    	moveTable.put(TOPIC_CRITDATES.matcher,"prolog/critdates");
+    	moveTable.put(TOPIC_DATA.matcher,"prolog/data");
+    	moveTable.put(TOPIC_DATA_ABOUT.matcher,"prolog/data-about");
+    	moveTable.put(TOPIC_FOREIGN.matcher,"prolog/foreign");
+    	moveTable.put(TOPIC_KEYWORDS.matcher,"prolog/metadata/keywords");
+    	moveTable.put(TOPIC_OTHERMETA.matcher,"prolog/metadata/othermeta");
+    	moveTable.put(TOPIC_PERMISSIONS.matcher,"prolog/permissions");
+    	moveTable.put(TOPIC_PRODINFO.matcher,"prolog/metadata/prodinfo");
+    	moveTable.put(TOPIC_PUBLISHER.matcher,"prolog/publisher");
+    	moveTable.put(TOPIC_RESOURCEID.matcher,"prolog/resourceid");
+    	moveTable.put(MAP_MAP.matcher,"titlealts/searchtitle");
+    	moveTable.put(TOPIC_SOURCE.matcher,"prolog/source");
+    	moveTable.put(TOPIC_UNKNOWN.matcher,"prolog/unknown");  	
     }
     
     private static final HashSet<String> uniqueSet;
 	
 	static{
 		uniqueSet = new HashSet<String>(INT_16);
-		uniqueSet.add(ATTR_CLASS_VALUE_CRITDATES);
-		uniqueSet.add(ATTR_CLASS_VALUE_PERMISSIONS);
-		uniqueSet.add(ATTR_CLASS_VALUE_PUBLISHER);
-		uniqueSet.add(ATTR_CLASS_VALUE_SOURCE);
-		uniqueSet.add(ATTR_CLASS_VALUE_MAP_SEARCHTITLE);
+		uniqueSet.add(TOPIC_CRITDATES.matcher);
+		uniqueSet.add(TOPIC_PERMISSIONS.matcher);
+		uniqueSet.add(TOPIC_PUBLISHER.matcher);
+		uniqueSet.add(TOPIC_SOURCE.matcher);
+		uniqueSet.add(MAP_SEARCHTITLE.matcher);
 	}
 
 	private static final Hashtable<String, Integer> compareTable;
@@ -528,7 +528,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
     	
         try {
         	if (classAttrValue != null && 
-        			classAttrValue.contains(ATTR_CLASS_VALUE_TOPIC) &&
+        			classAttrValue.contains(TOPIC_TOPIC.matcher) &&
         			!topicSpecList.contains(qName)){
         		//add topic qName to topicSpecList
         		topicSpecList.add(qName);
@@ -536,10 +536,10 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
         	
         	if ( startTopic && !startDOM && classAttrValue != null && !hasWritten 
             		&&(
-            		classAttrValue.indexOf(ATTR_CLASS_VALUE_PROLOG)!= -1 || 
-            		classAttrValue.indexOf(ATTR_CLASS_VALUE_ABSTRACT)!= -1 || 
-            		classAttrValue.indexOf(ATTR_CLASS_VALUE_SHORTDESC)!= -1 ||
-            		classAttrValue.indexOf(ATTR_CLASS_VALUE_TITLEALTS)!= -1
+            		classAttrValue.indexOf(TOPIC_PROLOG.matcher)!= -1 || 
+            		classAttrValue.indexOf(TOPIC_ABSTRACT.matcher)!= -1 || 
+            		classAttrValue.indexOf(TOPIC_SHORTDESC.matcher)!= -1 ||
+            		classAttrValue.indexOf(TOPIC_TITLEALTS.matcher)!= -1
             		)){
             	startDOM = true;
             	output = strOutput;
@@ -547,9 +547,9 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
             }
             
             if ( startTopic && classAttrValue != null && !hasWritten &&(
-            		classAttrValue.indexOf(ATTR_CLASS_VALUE_TOPIC)!= -1 || 
-            		classAttrValue.indexOf(ATTR_CLASS_VALUE_RELATED_LINKS)!= -1 || 
-            		classAttrValue.indexOf(ATTR_CLASS_VALUE_BODY)!= -1
+            		classAttrValue.indexOf(TOPIC_TOPIC.matcher)!= -1 || 
+            		classAttrValue.indexOf(TOPIC_RELATED_LINKS.matcher)!= -1 || 
+            		classAttrValue.indexOf(TOPIC_BODY.matcher)!= -1
             		)){
             	if (startDOM){
             		startDOM = false;

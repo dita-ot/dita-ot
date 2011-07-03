@@ -652,7 +652,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 		if(attrValue!=null){
 			
 			//when meets topic tag
-			if(attrValue.contains(ATTR_CLASS_VALUE_TOPIC)){
+			if(attrValue.contains(TOPIC_TOPIC.matcher)){
 				topicId = atts.getValue(ATTRIBUTE_NAME_ID);
 				//relpace place holder with first topic id
 				//Get relative file name
@@ -668,7 +668,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 			//get plugin id only transtype = eclipsehelp
 			if(FileUtils.isDITAMapFile(currentFile)&&
 				rootFilePath.equals(currentFile)&&
-				attrValue.contains(ATTR_CLASS_VALUE_MAP)&&
+				attrValue.contains(MAP_MAP.matcher)&&
 				INDEX_TYPE_ECLIPSEHELP.equals(transtype)){
 				String pluginId = atts.getValue(ATTRIBUTE_NAME_ID);
 				if(pluginId == null){
@@ -683,13 +683,13 @@ public final class GenListModuleReader extends AbstractXMLReader {
 			//Each <topic> can only have one <prolog>
 			//and <metadata> can have more than one exportanchors
 			if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
-				if (attrValue.contains(ATTR_CLASS_VALUE_TOPICMETA)
-						|| attrValue.contains(ATTR_CLASS_VALUE_PROLOG)) {
+				if (attrValue.contains(MAP_TOPICMETA.matcher)
+						|| attrValue.contains(TOPIC_PROLOG.matcher)) {
 					topicMetaSet.add(qName);
 				}
 				// If the file has <exportanchors> tags only transtype =
 				// eclipsehelp
-				if (attrValue.contains(ATTR_CLASS_VALUE_EXPORTANCHORS)) {
+				if (attrValue.contains(DELAY_D_EXPORTANCHORS.matcher)) {
 					hasExport = true;
 					// If current file is a ditamap file
 					if (FileUtils.isDITAMapFile(currentFile)) {
@@ -737,14 +737,14 @@ public final class GenListModuleReader extends AbstractXMLReader {
 					}
 					// meet <anchorkey> tag
 				} else if (attrValue
-						.contains(ATTR_CLASS_VALUE_ANCHORKEY)) {
+						.contains(DELAY_D_ANCHORKEY.matcher)) {
 					// create keyref element in the StringBuffer
 					// TODO in topic file is no keys
 					final String keyref = atts
 							.getValue(ATTRIBUTE_NAME_KEYREF);
 					result.append("<keyref name=\"" + keyref + "\"/>");
 					// meet <anchorid> tag
-				} else if (attrValue.contains(ATTR_CLASS_VALUE_ANCHORID)) {
+				} else if (attrValue.contains(DELAY_D_ANCHORID.matcher)) {
 					// create keyref element in the StringBuffer
 					final String id = atts.getValue(ATTRIBUTE_NAME_ID);
 					// If current file is a ditamap file
@@ -779,7 +779,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 		
 		// Generate Scheme relationship graph
 		if (attrValue != null) {
-			if (attrValue.contains(ATTR_CLASS_VALUE_SUBJECT_SCHEME)) {
+			if (attrValue.contains(SUBJECTSCHEME_SUBJECTSCHEME.matcher)) {
 				if (this.relationGraph == null) {
                     this.relationGraph = new LinkedHashMap<String, Set<String>>();
                 }
@@ -791,7 +791,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 				children.add(this.currentFile);
 				this.relationGraph.put("ROOT", children);
 				schemeRefSet.add(FileUtils.getRelativePathFromMap(rootFilePath, currentFile));
-			} else if (attrValue.contains(ATTR_CLASS_VALUE_SCHEME_REF)) {
+			} else if (attrValue.contains(SUBJECTSCHEME_SCHEMEREF.matcher)) {
 				Set<String> children = this.relationGraph.get(this.currentFile);
 				if (children == null) {
 					children = new LinkedHashSet<String>();
@@ -809,8 +809,8 @@ public final class GenListModuleReader extends AbstractXMLReader {
 			foreignLevel ++;
 			return;
 		} else if(attrValue != null && 
-        		(attrValue.indexOf(ATTR_CLASS_VALUE_FOREIGN) != -1 || 
-        				attrValue.indexOf(ATTR_CLASS_VALUE_UNKNOWN) != -1)){
+        		(attrValue.indexOf(TOPIC_FOREIGN.matcher) != -1 || 
+        				attrValue.indexOf(TOPIC_UNKNOWN.matcher) != -1)){
         	foreignLevel ++;
         }
 		
@@ -823,7 +823,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 		if(relTableLevel > 0) {
 			relTableLevel ++;
 		} else if(attrValue != null && 
-				attrValue.indexOf(ATTR_CLASS_VALUE_RELTABLE) != -1){
+				attrValue.indexOf(MAP_RELTABLE.matcher) != -1){
 			relTableLevel++;
 		}
 		//Added by William on 2010-6-17 for bug:3016739 end
@@ -839,7 +839,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 		if(topicGroupLevel > 0) {
 			topicGroupLevel++;
 		} else if (atts.getValue(ATTRIBUTE_NAME_CLASS) != null
-				&& atts.getValue(ATTRIBUTE_NAME_CLASS).contains(ATTR_CLASS_VALUE_TOPIC_GROUP)) {
+				&& atts.getValue(ATTRIBUTE_NAME_CLASS).contains(MAPGROUP_D_TOPICGROUP.matcher)) {
 			topicGroupLevel++;
 		}
 		
@@ -849,7 +849,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
     		logger.logInfo(MessageUtils.getMessage("DOTJ030I", params).toString());			
 		}		
 		
-        if (attrValue != null && attrValue.indexOf(ATTR_CLASS_VALUE_TOPIC) != -1){
+        if (attrValue != null && attrValue.indexOf(TOPIC_TOPIC.matcher) != -1){
         	domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
         	if(domains==null){
         		params.clear();
@@ -882,10 +882,10 @@ public final class GenListModuleReader extends AbstractXMLReader {
 		 */
 		
 		if (attrValue != null) {
-			if ((attrValue.indexOf(ATTR_CLASS_VALUE_MAP) != -1)
-					|| (attrValue.indexOf(ATTR_CLASS_VALUE_TITLE) != -1)) {
+			if ((attrValue.indexOf(MAP_MAP.matcher) != -1)
+					|| (attrValue.indexOf(TOPIC_TITLE.matcher) != -1)) {
 				isValidInput = true;
-			}else if (attrValue.indexOf(ATTR_CLASS_VALUE_OBJECT) != -1){
+			}else if (attrValue.indexOf(TOPIC_OBJECT.matcher) != -1){
 				parseAttribute(atts, ATTRIBUTE_NAME_DATA);
 			}
 		}
@@ -898,7 +898,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 			final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
 			
 				//topicref(only defined in ditamap file.)
-				if(classValue.contains(ATTR_CLASS_VALUE_TOPICREF)){
+				if(classValue.contains(MAP_TOPICREF.matcher)){
 					
 					//get href attribute value.
 					final String hrefValue = atts.getValue(ATTRIBUTE_NAME_HREF);
@@ -1252,7 +1252,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 			hasConRef = true;
 		} else if (ATTRIBUTE_NAME_HREF.equals(attrName)) {
 			if(attrClass != null && 
-					attrClass.contains(ATTR_CLASS_VALUE_CODEREF) ){
+					attrClass.contains(PR_D_CODEREF.matcher) ){
 				//if current element is <coderef> or its specialization
 				//set hasCodeRef to true
 				hasCodeRef = true;
@@ -1386,7 +1386,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 			
 		}
 		
-		if (attrClass.contains(ATTR_CLASS_VALUE_TOPICREF)) {
+		if (attrClass.contains(MAP_TOPICREF.matcher)) {
 			if (ATTR_TYPE_VALUE_SUBJECT_SCHEME.equalsIgnoreCase(attrType)) {
 				schemeSet.add(filename);
 			}
@@ -1425,7 +1425,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 		//files referred by coderef won't effect the uplevels, code has already returned.
 		if (("DITA-foreign".equals(attrType) &&
 				ATTRIBUTE_NAME_DATA.equals(attrName))
-				|| attrClass!=null && attrClass.contains(ATTR_CLASS_VALUE_CODEREF)){
+				|| attrClass!=null && attrClass.contains(PR_D_CODEREF.matcher)){
 			
 			subsidiarySet.add(filename);
 			return;
