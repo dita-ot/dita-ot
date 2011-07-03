@@ -49,8 +49,8 @@ public class CoderefResolverTest {
         
         TestUtils.resetXMLUnit();
         XMLUnit.setIgnoreWhitespace(true);
-        assertXMLEqual(new InputSource(f.toURI().toString()),
-                       new InputSource(new File(tempDir, "test.dita").toURI().toString()));
+        assertXMLEqual(new InputSource(new File(expDir, "test.dita").toURI().toString()),
+                       new InputSource(f.toURI().toString()));
     }
     
     @AfterClass

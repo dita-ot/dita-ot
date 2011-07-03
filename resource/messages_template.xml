@@ -313,6 +313,11 @@
     <response>Please make sure that the appropriate index entry is created or manually update the index.xml file.</response>
   </message>
   
+  <message id="DOTJ051E" type="ERROR">
+    <reason>Unable to find target for coderef "%1". Check to make sure that the target element is available. Found in file="%2", element="%3".</reason>
+    <response>Check to make sure the value in the href attribute is correct.</response>
+  </message>
+    
   <!-- End of Java Messages -->
     
   <!-- Begin of XSL Messages -->  
