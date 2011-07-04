@@ -119,7 +119,7 @@ public final class DelayConrefUtils {
                     }
 				}
 				final String classValue = pe.getAttribute(ATTRIBUTE_NAME_CLASS);
-				if(classValue!=null && classValue.contains(TOPIC_TOPIC.matcher)){
+				if(classValue!=null && TOPIC_TOPIC.matches(classValue)){
 					//topic id found
 					if(pe.getAttribute(ATTRIBUTE_NAME_ID).equals(id)){
 						return true;

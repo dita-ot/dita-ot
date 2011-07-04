@@ -39,8 +39,7 @@ public final class LangParser extends DefaultHandler {
         final String langAttr = attributes.getValue(ATTRIBUTE_NAME_XML_LANG);
 
         if(classAttr != null && langAttr != null) {
-            if ((classAttr.indexOf(MAP_MAP.matcher) > -1) ||
-                (classAttr.indexOf(TOPIC_TOPIC.matcher) > -1)) {
+            if (MAP_MAP.matches(classAttr) || TOPIC_TOPIC.matches(classAttr)) {
                     langCode = langAttr.toLowerCase();
             }
         }

@@ -156,7 +156,7 @@ public final class MergeMapParser extends AbstractXMLReader {
             if(ATTRIBUTE_NAME_HREF.equals(attQName) 
             		&& !StringUtils.isEmptyString(attValue)
             		&& classValue != null
-            		&& classValue.indexOf(MAP_TOPICREF.matcher)!=-1){
+            		&& MAP_TOPICREF.matches(classValue)){
                 final String scopeValue = atts.getValue(ATTRIBUTE_NAME_SCOPE);
         		final String formatValue = atts.getValue(ATTRIBUTE_NAME_FORMAT);
         		

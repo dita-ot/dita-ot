@@ -528,7 +528,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
     	
         try {
         	if (classAttrValue != null && 
-        			classAttrValue.contains(TOPIC_TOPIC.matcher) &&
+        			TOPIC_TOPIC.matches(classAttrValue) &&
         			!topicSpecList.contains(qName)){
         		//add topic qName to topicSpecList
         		topicSpecList.add(qName);
@@ -536,10 +536,10 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
         	
         	if ( startTopic && !startDOM && classAttrValue != null && !hasWritten 
             		&&(
-            		classAttrValue.indexOf(TOPIC_PROLOG.matcher)!= -1 || 
-            		classAttrValue.indexOf(TOPIC_ABSTRACT.matcher)!= -1 || 
-            		classAttrValue.indexOf(TOPIC_SHORTDESC.matcher)!= -1 ||
-            		classAttrValue.indexOf(TOPIC_TITLEALTS.matcher)!= -1
+            		TOPIC_PROLOG.matches(classAttrValue) || 
+            		TOPIC_ABSTRACT.matches(classAttrValue) || 
+            		TOPIC_SHORTDESC.matches(classAttrValue) ||
+            		TOPIC_TITLEALTS.matches(classAttrValue)
             		)){
             	startDOM = true;
             	output = strOutput;
@@ -547,9 +547,9 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
             }
             
             if ( startTopic && classAttrValue != null && !hasWritten &&(
-            		classAttrValue.indexOf(TOPIC_TOPIC.matcher)!= -1 || 
-            		classAttrValue.indexOf(TOPIC_RELATED_LINKS.matcher)!= -1 || 
-            		classAttrValue.indexOf(TOPIC_BODY.matcher)!= -1
+            		TOPIC_TOPIC.matches(classAttrValue) || 
+            		TOPIC_RELATED_LINKS.matches(classAttrValue) || 
+            		TOPIC_BODY.matches(classAttrValue)
             		)){
             	if (startDOM){
             		startDOM = false;

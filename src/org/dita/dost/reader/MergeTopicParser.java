@@ -106,7 +106,7 @@ public final class MergeTopicParser extends AbstractXMLReader {
 	private String handleID(final String classValue, final String attValue) {
 		String retAttValue = attValue;
 		if(classValue != null 
-				&& classValue.indexOf(TOPIC_TOPIC.matcher)!=-1){
+				&& TOPIC_TOPIC.matches(classValue)){
 			// Process the topic element id
 			final String value = filePath+SHARP+attValue;
 			if(util.findId(value)){
@@ -265,8 +265,8 @@ public final class MergeTopicParser extends AbstractXMLReader {
     					&& attValue.indexOf(COLON_DOUBLE_SLASH) == -1) {
         			//The scope for @href is local
         			
-        			if((classValue.indexOf(TOPIC_XREF.matcher) != -1
-        					|| classValue.indexOf(TOPIC_LINK.matcher) != -1)
+        			if((TOPIC_XREF.matches(classValue)
+        					|| TOPIC_LINK.matches(classValue))
         					&& (formatValue == null 
     							|| ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatValue))){
         				//local xref or link that refers to dita file

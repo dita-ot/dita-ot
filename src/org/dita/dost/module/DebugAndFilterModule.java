@@ -477,7 +477,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 			
 			String value = pe.getAttribute(ATTRIBUTE_NAME_CLASS);
 			if (StringUtils.isEmptyString(value) 
-					|| !value.contains(SUBJECTSCHEME_SUBJECTDEF.matcher)) {
+					|| !SUBJECTSCHEME_SUBJECTDEF.matches(value)) {
                 continue;
             }
 			
@@ -547,7 +547,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 			
 			String value = pe.getAttribute(ATTRIBUTE_NAME_CLASS);
 			if (StringUtils.isEmptyString(value) 
-					|| !value.contains(SUBJECTSCHEME_SUBJECTDEF.matcher)) {
+					|| !SUBJECTSCHEME_SUBJECTDEF.matches(value)) {
                 continue;
             }
 			

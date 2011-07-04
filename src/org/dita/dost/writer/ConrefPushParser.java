@@ -518,7 +518,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 		}else{
 			try{
 				final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
-				if (classValue != null && classValue.contains(TOPIC_TOPIC.matcher)){
+				if (classValue != null && TOPIC_TOPIC.matches(classValue)){
 					if (!topicSpecSet.contains(name)){
 						//add the element name to topicSpecSet if the element
 						//is a topic specialization. This is used when push and pop
@@ -538,8 +538,8 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 					String containkey =null;
 					//Added by William on 2009-10-10 for conrefPush bug:2872954 start
 					//enable conref push at map level
-					if(classValue != null && (classValue.contains(MAP_TOPICREF.matcher)
-						|| classValue.contains(MAP_MAP.matcher))){
+					if(classValue != null && (MAP_TOPICREF.matches(classValue)
+						|| MAP_MAP.matches(classValue))){
 						final String mapId = atts.getValue(ATTRIBUTE_NAME_ID);
 						idPath = SHARP + mapId;
 						idStack.push(mapId);

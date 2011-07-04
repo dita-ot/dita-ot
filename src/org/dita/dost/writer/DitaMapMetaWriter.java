@@ -524,7 +524,7 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
     	
         try {
         	if (classAttrValue != null && 
-        			classAttrValue.contains(TOPIC_TOPIC.matcher) &&
+        			TOPIC_TOPIC.matches(classAttrValue) &&
         			!topicSpecList.contains(qName)){
         		//add topic qName to topicSpecList
         		topicSpecList.add(qName);
@@ -532,7 +532,7 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
         	
         	if ( startMap && !startDOM && classAttrValue != null && !hasWritten 
             		&&(
-            		classAttrValue.indexOf(MAP_TOPICMETA.matcher)!= -1 
+            		MAP_TOPICMETA.matches(classAttrValue) 
             		)){
             	startDOM = true;
             	output = strOutput;
@@ -540,10 +540,10 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
             }
             
             if ( startMap && classAttrValue != null && !hasWritten &&(
-            		classAttrValue.indexOf(MAP_NAVREF.matcher)!= -1 || 
-            		classAttrValue.indexOf(MAP_ANCHOR.matcher)!= -1 ||
-            		classAttrValue.indexOf(MAP_TOPICREF.matcher)!= -1 || 
-            		classAttrValue.indexOf(MAP_RELTABLE.matcher)!= -1
+            		MAP_NAVREF.matches(classAttrValue) || 
+            		MAP_ANCHOR.matches(classAttrValue) ||
+            		MAP_TOPICREF.matches(classAttrValue) || 
+            		MAP_RELTABLE.matches(classAttrValue)
             		)){
             	if (startDOM){
             		startDOM = false;

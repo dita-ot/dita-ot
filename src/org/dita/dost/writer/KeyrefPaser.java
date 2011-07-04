@@ -723,7 +723,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 				//Added by William on 2010-05-20 for bug:3004220 start
 				//special process for tm tag.
 				final String classValue = node.getAttributes().getNamedItem(ATTRIBUTE_NAME_CLASS).getNodeValue();
-				if(classValue.contains(TOPIC_TM.matcher)){
+				if(TOPIC_TM.matches(classValue)){
 					stringBuffer.append(nodeToString((Element)node, true));
 				}else{
 					// If the type of current node is ELEMENT_NODE, process current node.

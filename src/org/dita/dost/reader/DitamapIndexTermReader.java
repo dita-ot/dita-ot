@@ -251,7 +251,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
 		final String classAttr = attributes.getValue(ATTRIBUTE_NAME_CLASS);
 		
 		if (classAttr != null
-				&& classAttr.contains(TOPIC_INDEXTERM.matcher)) {
+				&& TOPIC_INDEXTERM.matches(classAttr)) {
 			// add the element name to the indexterm specialization element 
 			// list if it does not already exist in that list.  
 			if (!indexTermSpecList.contains(localName)){
@@ -260,21 +260,21 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
 		}
 		
 		if (classAttr != null
-				&& classAttr.contains(MAP_TOPICREF.matcher)){
+				&& MAP_TOPICREF.matches(classAttr)){
 			if (!topicrefSpecList.contains(localName)){
 				topicrefSpecList.add(localName);
 			}
 		}
 		
 		if (classAttr != null
-				&& classAttr.contains(INDEXING_D_INDEX_SEE.matcher)){
+				&& INDEXING_D_INDEX_SEE.matches(classAttr)){
 			if (!indexSeeSpecList.contains(localName)){
 				indexSeeSpecList.add(localName);
 			}
 		}
 		
 		if (classAttr != null
-				&& classAttr.contains(INDEXING_D_INDEX_SEE_ALSO.matcher)){
+				&& INDEXING_D_INDEX_SEE_ALSO.matches(classAttr)){
 			if (!indexSeeAlsoSpecList.contains(localName)){
 				indexSeeAlsoSpecList.add(localName);
 			}

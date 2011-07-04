@@ -198,11 +198,11 @@ public final class ChunkMapReader implements AbstractReader {
 							classValue = classAttr.getNodeValue();
 						}
 						
-						if(classValue != null && classValue.indexOf(MAP_RELTABLE.matcher)!=-1){
+						if(classValue != null && MAP_RELTABLE.matches(classValue)){
 							updateReltable((Element)node);
 						}
-						if(classValue != null && classValue.indexOf(MAP_TOPICREF.matcher)!=-1
-								&& !classValue.contains(MAPGROUP_D_TOPICGROUP.matcher)){
+						if(classValue != null && MAP_TOPICREF.matches(classValue)
+								&& !MAPGROUP_D_TOPICGROUP.matches(classValue)){
 							processTopicref(node);
 						}
 						
@@ -375,10 +375,10 @@ public final class ChunkMapReader implements AbstractReader {
 		
 		if("external".equalsIgnoreCase(scopeValue) 
 				|| (hrefValue != null && !FileUtils.fileExists(FileUtils.resolveFile(filePath, hrefValue)))
-				|| (classValue.contains(MAPGROUP_D_TOPICHEAD.matcher))||
+				|| (MAPGROUP_D_TOPICHEAD.matches(classValue))||
 				//added by William on 2009-09-17 for chunk bug #2860199 start
 				////support topicref without href attribute
-				(classValue.contains(MAP_TOPICREF.matcher) && chunkValue == null && hrefValue == null)
+				(MAP_TOPICREF.matches(classValue) && chunkValue == null && hrefValue == null)
 				//added by William on 2009-09-17 for chunk bug #2860199 end
 				) {
 				//|| (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processValue))) {
@@ -486,12 +486,12 @@ public final class ChunkMapReader implements AbstractReader {
 				final String classValue  = ((Element)current).getAttribute(ATTRIBUTE_NAME_CLASS);
 				final String hrefValue = ((Element)current).getAttribute(ATTRIBUTE_NAME_HREF);
 				final String xtrfValue = ((Element)current).getAttribute(ATTRIBUTE_NAME_XTRF);
-				if(classValue.indexOf(MAP_TOPICREF.matcher)!=-1){
+				if(MAP_TOPICREF.matches(classValue)){
 					if((hrefValue.length() != 0 &&
 							!"generated_by_chunk".equals(xtrfValue) &&
 							! FileUtils.resolveFile(filePath,hrefValue)
 							.equals(changeTable.get(FileUtils.resolveFile(filePath,hrefValue)))) || 
-							classValue.contains(MAPGROUP_D_TOPICHEAD.matcher)
+							MAPGROUP_D_TOPICHEAD.matches(classValue)
 						){
 						
 						//make sure hrefValue make sense and target file 
@@ -542,7 +542,7 @@ public final class ChunkMapReader implements AbstractReader {
 			final Node current = children.item(i);
 			if(current.getNodeType() == Node.ELEMENT_NODE){
 				final String classValue = ((Element)current).getAttribute(ATTRIBUTE_NAME_CLASS);
-				if (classValue.indexOf(MAP_TOPICREF.matcher)!=-1){
+				if (MAP_TOPICREF.matches(classValue)){
 					
 				}
 			}

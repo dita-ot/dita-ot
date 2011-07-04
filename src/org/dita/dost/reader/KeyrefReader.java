@@ -138,7 +138,7 @@ public final class KeyrefReader extends AbstractXMLReader {
 			final Attributes atts) throws SAXException {
 		final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
 		final String keyName = atts.getValue(ATTRIBUTE_NAME_KEYS);
-		if(keyName!=null && classValue.contains(MAP_TOPICREF.matcher)){
+		if(keyName!=null && MAP_TOPICREF.matches(classValue)){
 			
 			// if it has @keys and is valid.
 			boolean flag = false;

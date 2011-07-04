@@ -58,13 +58,13 @@ public final class DITAAttrUtils {
 	private static final List<String> excludeList;
 	static {
 	    final List<String> el = new ArrayList<String>();
-        el.add("-" + TOPIC_INDEXTERM.matcher);
-        el.add("-" + TOPIC_DRAFT_COMMENT.matcher);
-        el.add("-" + TOPIC_REQUIRED_CLEANUP.matcher);
-        el.add("-" + TOPIC_DATA.matcher);
-        el.add("-" + TOPIC_DATA_ABOUT.matcher);
-        el.add("-" + TOPIC_UNKNOWN.matcher);
-        el.add("-" + TOPIC_FOREIGN.matcher);
+        el.add(TOPIC_INDEXTERM.toString());
+        el.add(TOPIC_DRAFT_COMMENT.toString());
+        el.add(TOPIC_REQUIRED_CLEANUP.toString());
+        el.add(TOPIC_DATA.toString());
+        el.add(TOPIC_DATA_ABOUT.toString());
+        el.add(TOPIC_UNKNOWN.toString());
+        el.add(TOPIC_FOREIGN.toString());
         excludeList = Collections.unmodifiableList(el);
 	}
 	

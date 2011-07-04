@@ -171,12 +171,10 @@ public final class MapMetaReader implements AbstractReader {
         		if (node.getNodeType() == Node.ELEMENT_NODE){
         			classAttr = node.getAttributes().getNamedItem(ATTRIBUTE_NAME_CLASS);
         		}
-        		if(classAttr != null && 
-        				classAttr.getNodeValue().indexOf(MAP_TOPICMETA.matcher) != -1){
+        		if(classAttr != null && MAP_TOPICMETA.matches(classAttr.getNodeValue())){
         			//if this node is topicmeta node under root
         			handleGlobalMeta(node);
-        		}else if(classAttr != null &&
-        				classAttr.getNodeValue().indexOf(MAP_TOPICREF.matcher) != -1){
+        		}else if(classAttr != null && MAP_TOPICREF.matches(classAttr.getNodeValue())){
         			//if this node is topicref node under root
         			handleTopicref(node, globalMeta);
         		}	
@@ -233,7 +231,7 @@ public final class MapMetaReader implements AbstractReader {
 		for (int i = 0; i < children.getLength(); i++) {
 			if(children.item(i).getNodeType() == Node.ELEMENT_NODE){
 				child = (Element) children.item(i);
-				final boolean isIndexTerm = child.getAttribute(ATTRIBUTE_NAME_CLASS).contains(TOPIC_INDEXTERM.matcher);
+				final boolean isIndexTerm = TOPIC_INDEXTERM.matches(child.getAttribute(ATTRIBUTE_NAME_CLASS));
 				final boolean hasStart = !StringUtils.isEmptyString(child.getAttribute(ATTRIBUTE_NAME_START));
 				final boolean hasEnd = !StringUtils.isEmptyString(child.getAttribute(ATTRIBUTE_NAME_END));
 				
@@ -265,7 +263,7 @@ public final class MapMetaReader implements AbstractReader {
     		}
     		 
     		if(classAttr != null && hrefAttr != null &&
-    				classAttr.getNodeValue().indexOf(MAP_TOPICMETA.matcher) != -1 &&
+    		        MAP_TOPICMETA.matches(classAttr.getNodeValue()) &&
     				hrefAttr != null && hrefAttr.getNodeValue().indexOf(INTERNET_LINK_MARK) == -1
             		&& (scopeAttr == null || ATTR_SCOPE_VALUE_LOCAL.equalsIgnoreCase(scopeAttr.getNodeValue()))
             		&& ((formatAttr == null || ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatAttr.getNodeValue()))
@@ -276,7 +274,7 @@ public final class MapMetaReader implements AbstractReader {
     			current = handleMeta(node, inheritance);
     			
     		}else if(classAttr != null &&
-    				classAttr.getNodeValue().indexOf(MAP_TOPICREF.matcher) != -1){
+    		        MAP_TOPICREF.matches(classAttr.getNodeValue())){
     			//if this node is topicref node under topicref
     			handleTopicref(node, current);
     		}
@@ -370,7 +368,7 @@ public final class MapMetaReader implements AbstractReader {
 				// int number 1 is used to remove the first "-" or "+" character in class attribute
 				final String metaKey = attrValue.substring(1,
 						attrValue.indexOf(STRING_BLANK,attrValue.indexOf(SLASH))+1 );
-				if (attrValue.contains(TOPIC_METADATA.matcher)){
+				if (TOPIC_METADATA.matches(attrValue)){
 					getMeta(node, topicMetaTable);
 				}else if(topicMetaTable.containsKey(metaKey)){
 					//append node to the list if it exist in topic meta table
@@ -449,7 +447,7 @@ public final class MapMetaReader implements AbstractReader {
 				final String attrValue = attr.getNodeValue();
 				final String metaKey = attrValue.substring(1,
 						attrValue.indexOf(STRING_BLANK,attrValue.indexOf(SLASH))+1 );
-				if (attrValue.contains(TOPIC_METADATA.matcher)){
+				if (TOPIC_METADATA.matches(attrValue)){
 					//proceed the metadata in <metadata>
 					handleGlobalMeta(node);
 				}else if(cascadeSet.contains(metaKey) && globalMeta.containsKey(metaKey)){
