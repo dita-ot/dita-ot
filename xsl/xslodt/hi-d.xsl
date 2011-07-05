@@ -44,14 +44,14 @@
           </xsl:when>
           <!-- nested by entry -->
           <xsl:when test="parent::*[contains(@class, ' topic/entry ')]">
-               <!-- create p tag -->
-               <xsl:element name="text:p">
+              
+               
                     <!-- alignment styles -->
                     <xsl:if test="parent::*[contains(@class, ' topic/entry ')]/@align">
                          <xsl:call-template name="set_align_value"/>
                     </xsl:if>
                     <xsl:apply-templates/>
-               </xsl:element>
+              
           </xsl:when>
           <!-- nested by stentry -->
           <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]">

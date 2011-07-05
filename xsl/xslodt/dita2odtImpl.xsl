@@ -2333,8 +2333,7 @@
                     parent::*[contains(@class, ' topic/stentry ')] or
                     parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')] or 
                     parent::*[contains(@class, ' topic/sli ')]">
-      <xsl:element name="text:p">
-        <xsl:attribute name="text:style-name">indent_paragraph_style</xsl:attribute>
+  
         <xsl:choose>
           <xsl:when test="ancestor::*[contains(@class, ' topic/thead ')] or 
             ancestor::*[contains(@class, ' topic/sthead')]">
@@ -2370,7 +2369,7 @@
             </xsl:element>
           </xsl:otherwise>
         </xsl:choose>
-      </xsl:element>
+     
     </xsl:when>
     <!-- text is not allowed under these tags -->
     <xsl:when test="parent::*[contains(@class,' topic/ul ')] | parent::*[contains(@class,' topic/ol ')]
