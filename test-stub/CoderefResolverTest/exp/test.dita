@@ -5,6 +5,9 @@
 &lt;foo&gt;
   amp: &amp;amp; less-than: &amp;lt;
 &lt;/foo&gt;</codeblock>
-    
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;foo&gt;
+  copyright sign: ©; em-dash: —
+&lt;/foo&gt;</codeblock>
   </body>
 </topic>

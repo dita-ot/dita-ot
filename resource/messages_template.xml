@@ -317,7 +317,12 @@
     <reason>Unable to find target for coderef "%1". Check to make sure that the target element is available. Found in file="%2", element="%3".</reason>
     <response>Check to make sure the value in the href attribute is correct.</response>
   </message>
-    
+
+  <message id="DOTJ052E" type="ERROR">
+    <reason>Code reference charset "%1" not supported.</reason>
+    <response>Check to make sure the charset value in the format attribute is correct and supported.</response>
+  </message>
+
   <!-- End of Java Messages -->
     
   <!-- Begin of XSL Messages -->  

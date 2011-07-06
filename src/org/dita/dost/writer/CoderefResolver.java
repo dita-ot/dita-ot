@@ -12,8 +12,12 @@ package org.dita.dost.writer;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.Charset;
 import java.util.Properties;
 
 import org.xml.sax.Attributes;
@@ -26,6 +30,14 @@ import org.dita.dost.util.FileUtils;
 
 /**
  * Coderef element resolver filter.
+ * 
+ * <p>The format attribute is assumed to follow the syntax:</p>
+ * 
+ * <pre>format (";" space* "charset=" charset)?</pre>
+ * 
+ * <p>If no charset if defined or the charset name is not recognized,
+ * {@link ava.nio.charset.Charset#defaultCharset() default charset} is used in
+ * reading the code file.</p>
  */
 public final class CoderefResolver extends AbstractXMLFilter {
 	
@@ -76,9 +88,10 @@ public final class CoderefResolver extends AbstractXMLFilter {
     			if (hrefValue != null){
     				final String codeFile = FileUtils.normalizeDirectory(currentFile.getParentFile().getAbsolutePath(), hrefValue);
     				if (new File(codeFile).exists()){
-    					FileReader codeReader = null;
+    				    final Charset charset = getCharset(atts.getValue(ATTRIBUTE_NAME_FORMAT));
+    					Reader codeReader = null;
     					try {
-    						codeReader = new FileReader(new File(codeFile));
+    						codeReader = new InputStreamReader(new FileInputStream(new File(codeFile)), charset);
     						final char[] buffer = new char[INT_1024 * INT_4];
     						int len;
     						while ((len = codeReader.read(buffer)) != -1) {
@@ -113,7 +126,7 @@ public final class CoderefResolver extends AbstractXMLFilter {
 		}
 	}
 
-	@Override
+    @Override
 	public void endElement(final String uri, final String localName, final String name)
 			throws SAXException {
 	    if (ignoreDepth > 0) {
@@ -124,4 +137,32 @@ public final class CoderefResolver extends AbstractXMLFilter {
 	    super.endElement(uri, localName, name);
 	}
 	
+	// Private methods ---------------------------------------------------------
+    
+    /**
+     * Get code file charset.
+     *  
+     * @param value format attribute value, may be {@code null}
+     * @return charset if set, otherwise default charset
+     */
+    private Charset getCharset(final String value) {
+        Charset c = null;
+        if (value != null) {
+            final String[] tokens = value.trim().split("[;=]");
+            if (tokens.length >= 3 && tokens[1].trim().equals("charset")) {
+                try {
+                    c = Charset.forName(tokens[2].trim());
+                } catch (final RuntimeException e) {
+                    final Properties prop = new Properties();
+                    prop.put("%1", tokens[2].trim());
+                    logger.logError(MessageUtils.getMessage("DOTJ052E",prop).toString());
+                }
+            }
+        }
+        if (c == null) {
+            c = Charset.defaultCharset();
+        }
+        return c;
+    }
+    
 }
