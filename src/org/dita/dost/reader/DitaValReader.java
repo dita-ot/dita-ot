@@ -19,7 +19,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -47,9 +49,9 @@ import org.xml.sax.XMLReader;
  * @author Zhang, Yuan Peng
  */
 public final class DitaValReader extends AbstractXMLReader {
-	private final HashMap<String, String> filterMap;
+	private final Map<String, String> filterMap;
 	
-	private final HashMap<String, String> schemeFilterMap;
+	private final Map<String, String> schemeFilterMap;
 
 	private ContentImpl content;
 
@@ -61,11 +63,11 @@ public final class DitaValReader extends AbstractXMLReader {
 	
 	private final List<String> relFlagImageList;
 	
-	private final HashMap<String, HashMap<String, HashSet<Element>>> bindingMap;
+	private final Map<String, Map<String, Set<Element>>> bindingMap;
 	
-	private final HashMap<String, HashMap<String, HashSet<String>>> validValuesMap;
+	private final Map<String, Map<String, Set<String>>> validValuesMap;
 	
-	private final HashMap<String, HashMap<String, String>> defaultValueMap;
+	private final Map<String, Map<String, String>> defaultValueMap;
 	
 	private Element schemeRoot = null;
 	
@@ -83,9 +85,9 @@ public final class DitaValReader extends AbstractXMLReader {
 		content = null;
 		imageList = new ArrayList<String>(INT_256);
 		relFlagImageList= new ArrayList<String>(INT_256);
-		validValuesMap = new HashMap<String, HashMap<String, HashSet<String>>>();
-		defaultValueMap = new HashMap<String, HashMap<String, String>>();
-		bindingMap = new HashMap<String, HashMap<String, HashSet<Element>>>();
+		validValuesMap = new HashMap<String, Map<String, Set<String>>>();
+		defaultValueMap = new HashMap<String, Map<String, String>>();
+		bindingMap = new HashMap<String, Map<String, Set<Element>>>();
 		
 		try {
 			reader = StringUtils.getXMLReader();
@@ -163,9 +165,9 @@ public final class DitaValReader extends AbstractXMLReader {
 			}
 			
 			if (attName != null && attValue != null && bindingMap != null && !bindingMap.isEmpty()) {
-				final HashMap<String, HashSet<Element>> schemeMap = bindingMap.get(attName);
+				final Map<String, Set<Element>> schemeMap = bindingMap.get(attName);
 				if (schemeMap != null && !schemeMap.isEmpty()) {
-					final Iterator<HashSet<Element>> subTreeIter = schemeMap.values().iterator();
+					final Iterator<Set<Element>> subTreeIter = schemeMap.values().iterator();
 					while (subTreeIter.hasNext()) {
 						final Iterator<Element> subTreeSet = subTreeIter.next().iterator();
 						while (subTreeSet.hasNext()) {
@@ -268,7 +270,7 @@ public final class DitaValReader extends AbstractXMLReader {
 	 * Return the filter map.
 	 * @return filter map
 	 */
-	public HashMap<String, String> getFilterMap() {
+	public Map<String, String> getFilterMap() {
 		schemeFilterMap.putAll(filterMap);
 		return schemeFilterMap;
 	}
@@ -334,9 +336,9 @@ public final class DitaValReader extends AbstractXMLReader {
 								} else if (attrValue != null
 										&& SUBJECTSCHEME_ATTRIBUTEDEF.matches(attrValue)) {
 									attributeName = node.getAttribute(ATTRIBUTE_NAME_NAME);
-									HashMap<String, HashSet<Element>> S = bindingMap.get(attributeName);
+									Map<String, Set<Element>> S = bindingMap.get(attributeName);
 									if (S == null) {
-										S = new HashMap<String, HashSet<Element>>();
+										S = new HashMap<String, Set<Element>>();
 										bindingMap.put(attributeName, S);
 									}
 								} else if (attrValue != null
@@ -344,7 +346,7 @@ public final class DitaValReader extends AbstractXMLReader {
 									// Put default values.
 									final String keyValue = node.getAttribute(ATTRIBUTE_NAME_KEYREF);
 									if (keyValue != null) {
-										HashMap<String, String> S = defaultValueMap.get(attributeName);
+										Map<String, String> S = defaultValueMap.get(attributeName);
 										if (S == null) {
 											S = new HashMap<String, String>();
 										}
@@ -363,12 +365,12 @@ public final class DitaValReader extends AbstractXMLReader {
 									final Element subTree = searchForKey(schemeRoot,
 											keyValue);
 									if (subTree != null) {
-										HashMap<String, HashSet<Element>> S = bindingMap
+										Map<String, Set<Element>> S = bindingMap
 												.get(attributeName);
 										if (S == null) {
-											S = new HashMap<String, HashSet<Element>>();
+											S = new HashMap<String, Set<Element>>();
 										}
-										HashSet<Element> A = S.get(elementName);
+										Set<Element> A = S.get(elementName);
 										if (A == null) {
                                             A = new HashSet<Element>();
                                         }
@@ -396,12 +398,12 @@ public final class DitaValReader extends AbstractXMLReader {
             return;
         }
 		
-		HashMap<String, HashSet<String>> valueMap = this.validValuesMap.get(attName);
+		Map<String, Set<String>> valueMap = this.validValuesMap.get(attName);
 		if (valueMap == null) {
-            valueMap = new HashMap<String, HashSet<String>>();
+            valueMap = new HashMap<String, Set<String>>();
         }
 		
-		HashSet<String> valueSet = valueMap.get(elementName);
+		Set<String> valueSet = valueMap.get(elementName);
 		if (valueSet == null) {
             valueSet = new HashSet<String>();
         }
@@ -457,14 +459,14 @@ public final class DitaValReader extends AbstractXMLReader {
 	/**
 	 * @return the validValuesMap
 	 */
-	public HashMap<String, HashMap<String,HashSet<String>>> getValidValuesMap() {
+	public Map<String, Map<String, Set<String>>> getValidValuesMap() {
 		return validValuesMap;
 	}
 	/**
 	 * get map of default value.
 	 * @return default value map
 	 */
-	public HashMap<String, HashMap<String, String>> getDefaultValueMap() {
+	public Map<String, Map<String, String>> getDefaultValueMap() {
 		return this.defaultValueMap;
 	}
 

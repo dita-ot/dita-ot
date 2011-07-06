@@ -15,7 +15,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.dita.dost.log.DITAOTJavaLogger;
@@ -28,8 +30,8 @@ import org.xml.sax.Attributes;
  * @author Wu, Zhi Qiang
  */
 public final class FilterUtils {
-	private static HashMap<String, String> filterMap = null;
-	private static HashSet<String> notMappingRules=new HashSet<String>();
+	private static Map<String, String> filterMap = null;
+	private static Set<String> notMappingRules=new HashSet<String>();
 	/**
 	 * Default Constructor
 	 *
@@ -40,7 +42,7 @@ public final class FilterUtils {
 	 * Set the filter map.
 	 * @param filtermap The filterMap to set.
 	 */
-	public static void setFilterMap(final HashMap<String, String> filtermap) {
+	public static void setFilterMap(final Map<String, String> filtermap) {
 		FilterUtils.filterMap = filtermap;
 	}
 	
@@ -48,7 +50,7 @@ public final class FilterUtils {
 	 * Getter for filter map.
 	 * @return filter map
 	 */
-	public static HashMap<String, String> getFilterMap() {
+	public static Map<String, String> getFilterMap() {
 		return filterMap;
 	}
 

@@ -10,6 +10,7 @@
 package org.dita.dost.pipeline;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * PipelineHashIO implements AbstractPipelineInput. It put all of the input information
@@ -20,7 +21,7 @@ import java.util.HashMap;
  */
 public final class PipelineHashIO implements AbstractPipelineInput,
         AbstractPipelineOutput {
-    private final HashMap<String, String> hash;
+    private final Map<String, String> hash;
 
 
     /**

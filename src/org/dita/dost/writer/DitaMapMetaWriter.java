@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Map.Entry;
 
@@ -96,7 +97,7 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
     	moveTable.put(TOPIC_UNKNOWN.matcher,"topicmeta/unknown");  	
     }
     
-    private static final HashSet<String> uniqueSet;
+    private static final Set<String> uniqueSet;
 	
 	static{
 		uniqueSet = new HashSet<String>(INT_16);

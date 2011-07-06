@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.Stack;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
@@ -275,7 +276,7 @@ public final class DitaWriter extends AbstractXMLWriter {
     	return attValue;
     }
     private String absolutePath;
-    private HashMap<String, String> catalogMap; //map that contains the information from XML Catalog
+    private Map<String, String> catalogMap; //map that contains the information from XML Catalog
     private List<String> colSpec;
     private int columnNumber; // columnNumber is used to adjust column name
     private int columnNumberEnd; //columnNumberEnd is the end value for current entry
@@ -309,7 +310,7 @@ public final class DitaWriter extends AbstractXMLWriter {
     private String transtype;
     //Added by William on 2009-07-18 for req #12014 start
     
-    private HashMap<String, Integer> counterMap;
+    private Map<String, Integer> counterMap;
     private boolean exclude; // when exclude is true the tag will be excluded.
     private int foreignLevel; // foreign/unknown nesting level
     private int level;// level is used to count the element level in the filtering
@@ -333,8 +334,8 @@ public final class DitaWriter extends AbstractXMLWriter {
     private final DITAAttrUtils ditaAttrUtils = DITAAttrUtils.getInstance();
     //Added by William on 2010-06-01 for bug:3005748 end
     
-    private HashMap<String, HashMap<String, HashSet<String>>> validateMap = null;
-	private HashMap<String, HashMap<String, String>> defaultValueMap = null;
+    private Map<String, Map<String, Set<String>>> validateMap = null;
+	private Map<String, Map<String, String>> defaultValueMap = null;
     
     /** XMLReader instance for parsing dita file */
     private XMLReader reader = null;
@@ -469,7 +470,7 @@ public final class DitaWriter extends AbstractXMLWriter {
 		    
 		  //Probe for default values
 			if (StringUtils.isEmptyString(attValue) && defaultValueMap != null) {
-				final HashMap<String, String> defaultMap = defaultValueMap.get(attQName);
+				final Map<String, String> defaultMap = defaultValueMap.get(attQName);
 				if (defaultMap != null) {
 					final String defaultValue = defaultMap.get(qName);
 					if (defaultValue != null) {
@@ -1336,7 +1337,6 @@ public final class DitaWriter extends AbstractXMLWriter {
     }
     
     private void validateAttributeValues(final String qName, final Attributes atts) {
-    	
     	if (validateMap == null) {
             return;
         }
@@ -1347,9 +1347,9 @@ public final class DitaWriter extends AbstractXMLWriter {
 			final String attrName = atts.getQName(i);
 			final String attrValue = atts.getValue(i);
 			
-			final HashMap<String, HashSet<String>> valueMap = validateMap.get(attrName);
+			final Map<String, Set<String>> valueMap = validateMap.get(attrName);
 			if (valueMap != null) {
-				HashSet<String> valueSet = valueMap.get(qName);
+				Set<String> valueSet = valueMap.get(qName);
 				if (valueSet == null) {
                     valueSet = valueMap.get("*");
                 }
@@ -1376,21 +1376,21 @@ public final class DitaWriter extends AbstractXMLWriter {
 	/**
 	 * @return the validateMap
 	 */
-	public HashMap<String, HashMap<String, HashSet<String>>> getValidateMap() {
+	public Map<String, Map<String, Set<String>>> getValidateMap() {
 		return validateMap;
 	}
 
 	/**
 	 * @param validateMap the validateMap to set
 	 */
-	public void setValidateMap(final HashMap<String, HashMap<String, HashSet<String>>> validateMap) {
+	public void setValidateMap(final Map<String, Map<String, Set<String>>> validateMap) {
 		this.validateMap = validateMap;
 	}
 	/**
 	 * Set default value map.
 	 * @param defaultMap default value map
 	 */
-	public void setDefaultValueMap(final HashMap<String, HashMap<String, String>> defaultMap) {
+	public void setDefaultValueMap(final Map<String, Map<String, String>> defaultMap) {
 		defaultValueMap  = defaultMap;
 	}
 	

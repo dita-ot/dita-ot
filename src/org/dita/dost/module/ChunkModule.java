@@ -268,8 +268,8 @@ final class ChunkModule implements AbstractPipelineModule {
 			}
 		}
 		
-	    final HashSet<String> chunkedTopicSet=new LinkedHashSet<String>(INT_128);
-	    final HashSet<String> chunkedDitamapSet=new LinkedHashSet<String>(INT_128);
+	    final Set<String> chunkedTopicSet=new LinkedHashSet<String>(INT_128);
+	    final Set<String> chunkedDitamapSet=new LinkedHashSet<String>(INT_128);
 		final Set<String> ditamapList = StringUtils.restoreSet(prop.getProperty(FULL_DITAMAP_LIST));
 		for (final Map.Entry<String, String> entry: changeTable.entrySet()) {
 			final String oldFile=entry.getKey();

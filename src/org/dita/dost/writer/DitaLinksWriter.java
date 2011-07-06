@@ -16,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.Stack;
@@ -39,7 +40,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
     private String curMatchTopic;
     private boolean firstTopic; //Eric
 
-    private HashMap<String, String> indexEntries;
+    private Map<String, String> indexEntries;
     private Set<String> topicSet;
     private boolean needResolveEntity;
     private OutputStreamWriter output;

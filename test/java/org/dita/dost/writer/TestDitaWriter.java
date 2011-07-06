@@ -16,6 +16,7 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -103,7 +104,7 @@ public class TestDitaWriter {
         final DitaValReader filterReader = new DitaValReader();
         filterReader.read(ditavalFile);
         
-        final HashMap<String, String> map = filterReader.getFilterMap();
+        final Map<String, String> map = filterReader.getFilterMap();
 		assertEquals("include", map.get("audience=Cindy"));
 		assertEquals("flag", map.get("produt=p1"));
 		assertEquals("exclude", map.get("product=ABase_ph"));

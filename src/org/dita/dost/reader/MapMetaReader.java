@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 import java.util.Map.Entry;
 
@@ -46,7 +47,7 @@ public final class MapMetaReader implements AbstractReader {
 	
 	private final Hashtable<String, Hashtable<String, Element>> resultTable = new Hashtable<String, Hashtable<String, Element>>(INT_16);
 	
-	private static final HashSet<String> uniqueSet;
+	private static final Set<String> uniqueSet;
 	
 	static{
 		uniqueSet = new HashSet<String>(INT_16);
@@ -57,7 +58,7 @@ public final class MapMetaReader implements AbstractReader {
 		uniqueSet.add(MAP_SEARCHTITLE.matcher);
 	}
 	
-	private static final HashSet<String> cascadeSet;
+	private static final Set<String> cascadeSet;
 	
 	static{
 		cascadeSet = new HashSet<String>(INT_16);
@@ -71,7 +72,7 @@ public final class MapMetaReader implements AbstractReader {
 		cascadeSet.add(TOPIC_PUBLISHER.matcher);
 	}
 	
-	private static final HashSet<String> metaSet;
+	private static final Set<String> metaSet;
 	
 	static{
 		metaSet = new HashSet<String>(INT_16);
@@ -385,7 +386,7 @@ public final class MapMetaReader implements AbstractReader {
 	}
 
 	private Hashtable<String, Element> mergeMeta(Hashtable<String, Element> topicMetaTable, 
-					final Hashtable<String, Element> inheritance, final HashSet<String> enableSet) {
+					final Hashtable<String, Element> inheritance, final Set<String> enableSet) {
 		
 		// When inherited metadata need to be merged into current metadata
 		// enableSet should be cascadeSet so that only metadata that can

@@ -1285,7 +1285,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 	 * @param ditaext ditaext
 	 */
 	public void setup(final LinkedHashMap<String, String> changeTable, final Hashtable<String, String> conflictTable, 
-			final HashSet<String> refFileSet, final Element elem, final boolean separate, final boolean chunkByTopic, final String ditaext) {
+			final Set<String> refFileSet, final Element elem, final boolean separate, final boolean chunkByTopic, final String ditaext) {
 		// Initialize ChunkTopicParser
 		this.changeTable = changeTable;
 		this.elem = elem;

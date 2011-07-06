@@ -14,6 +14,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
@@ -74,7 +75,7 @@ public class TestDitaValReader {
 	public void testRead() throws DITAOTException{
 		final File ditavalFile = new File(baseDir, "DITAVAL" + File.separator + "DITAVAL_1.ditaval");
 		reader.read(ditavalFile.getAbsolutePath());
-		HashMap<String, String> map = reader.getFilterMap();
+		Map<String, String> map = reader.getFilterMap();
 		assertEquals("include", map.get("audience=Cindy"));
 		assertEquals("flag", map.get("produt=p1"));
 		assertEquals("exclude", map.get("product=ABase_ph"));

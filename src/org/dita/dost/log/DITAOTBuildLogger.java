@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.StringReader;
 import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.tools.ant.BuildEvent;
 import org.apache.tools.ant.BuildException;
@@ -106,7 +107,7 @@ public final class DITAOTBuildLogger implements BuildLogger {
 	/** Time of the start of the build */
 	private long startTime = System.currentTimeMillis();
 	/** Set which contains already captured exceptions */
-	private final HashSet<Throwable> exceptionsCaptured=new HashSet<Throwable>();
+	private final Set<Throwable> exceptionsCaptured=new HashSet<Throwable>();
 	/**
 	 * Constructor to init logger.
 	 * 

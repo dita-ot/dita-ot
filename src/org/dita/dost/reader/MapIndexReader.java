@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
@@ -70,7 +71,7 @@ public final class MapIndexReader extends AbstractXMLReader {
     private File inputFile;
     private String lastMatchElement;
     private int level;
-    private final HashMap<String, String> map;
+    private final Map<String, String> map;
     private boolean match;
 
     /*

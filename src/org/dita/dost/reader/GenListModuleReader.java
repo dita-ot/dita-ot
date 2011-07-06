@@ -66,7 +66,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	private XMLReader reader = null;
 
 	/** Map of XML catalog info */
-	private HashMap<String, String> catalogMap = null;
+	private Map<String, String> catalogMap = null;
 
 	/** Basedir of the current parsing file */
 	private String currentDir = null;
@@ -192,7 +192,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	private String topicHref = "";
 	/** Topicmeta set for merge multiple exportanchors into one.
 	 * Each topicmeta/prolog can define many exportanchors */
-	private final HashSet<String> topicMetaSet;
+	private final Set<String> topicMetaSet;
 	/** Refered topic id */
 	private String topicId = "";
 	/** Map to store plugin id */
@@ -1728,7 +1728,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 	/**
 	 * @return the catalogMap
 	 */
-	public HashMap<String, String> getCatalogMap() {
+	public Map<String, String> getCatalogMap() {
 		return catalogMap;
 	}
 

@@ -22,6 +22,7 @@ import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.Properties;
 import java.util.Random;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -64,7 +65,7 @@ public final class ChunkMapReader implements AbstractReader {
 	private Hashtable<String, String> conflictTable = null;
 	
 	
-	private HashSet<String> refFileSet = null;
+	private Set<String> refFileSet = null;
 	
 	private String ditaext = null;
 	

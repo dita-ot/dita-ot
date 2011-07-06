@@ -18,6 +18,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
+import java.util.Set;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
@@ -37,7 +39,7 @@ import org.xml.sax.XMLReader;
  * MapLinksReader reads and parse the index information. It is also used to parse
  * map link information in "maplinks.unordered" file.
  * 
- * NOTE: Result of this reader is a map organized as HashMap<String, HashMap<String, String> >.
+ * NOTE: Result of this reader is a map organized as Map<String, Map<String, String> >.
  * Logically it is organized as:
  * 
  * 		topic-file-path --+-- topic-id-1 --+-- index-entry-1-1
@@ -85,9 +87,9 @@ public final class MapLinksReader extends AbstractXMLReader {
     private String firstMatchElement;
     private StringBuffer indexEntries;
     private File inputFile;
-    private final HashSet<String> lastMatchElement;
+    private final Set<String> lastMatchElement;
     private int level;
-    private final HashMap<String, HashMap<String,String> > map;
+    private final Map<String, Map<String,String> > map;
     private boolean match;
 
     /*
@@ -106,7 +108,7 @@ public final class MapLinksReader extends AbstractXMLReader {
      */
     public MapLinksReader() {
         super();
-        map = new HashMap<String, HashMap<String,String> >();
+        map = new HashMap<String, Map<String,String> >();
         ancestorList = new ArrayList<String>(INT_16);
         matchList = new ArrayList<String>(INT_16);
         indexEntries = new StringBuffer(INT_1024);
@@ -217,7 +219,7 @@ public final class MapLinksReader extends AbstractXMLReader {
         		//remove the "#" in topic file path
         		t = t.substring(0, t.indexOf(SHARP));
         	}
-        	HashMap<String, String> m = (HashMap<String, String>)map.get(t);
+        	Map<String, String> m = map.get(t);
         	if (m != null) {
         		final String orig = m.get(frag);
         		m.put(frag, StringUtils.setOrAppend(orig, indexEntries.toString(), false));
@@ -350,7 +352,7 @@ public final class MapLinksReader extends AbstractXMLReader {
             				SHARP : t.substring(t.indexOf(SHARP) + 1);
             		t = t.substring(0, t.indexOf(SHARP));
             	}
-            	HashMap<String, String> m = (HashMap<String, String>)map.get(t);
+            	Map<String, String> m = map.get(t);
             	if (m != null) {
             		final String orig = m.get(frag);
             		m.put(frag, StringUtils.setOrAppend(orig, indexEntries.toString(), false));

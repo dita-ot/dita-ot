@@ -345,9 +345,9 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
     
     private static class InternalEntityResolver implements EntityResolver {
 
-		private final HashMap<String, String> catalogMap;
+		private final Map<String, String> catalogMap;
 		
-		public InternalEntityResolver(final HashMap<String, String> map) {
+		public InternalEntityResolver(final Map<String, String> map) {
 			this.catalogMap = map;
 		}
 		

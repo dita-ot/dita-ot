@@ -77,7 +77,7 @@ final class KeyrefModule implements AbstractPipelineModule {
 		// maps of keyname and target 
 		final Map<String, String> keymap =new HashMap<String, String>();
 		// store the key name defined in a map(keyed by ditamap file)
-		final Hashtable<String, HashSet<String>> maps = new Hashtable<String, HashSet<String>>();
+		final Hashtable<String, Set<String>> maps = new Hashtable<String, Set<String>>();
 		
 		// get the key definitions from the dita.list, and the ditamap where it is defined
 		// are not handle yet.
@@ -94,7 +94,7 @@ final class KeyrefModule implements AbstractPipelineModule {
 				if(maps.containsKey(map)){
 					maps.get(map).add(key.substring(0,key.indexOf(EQUAL)));
 				}else{
-					final HashSet<String> set = new HashSet<String>();
+					final Set<String> set = new HashSet<String>();
 					set.add(key.substring(0, key.indexOf(EQUAL)));
 					maps.put(map, set);
 				}

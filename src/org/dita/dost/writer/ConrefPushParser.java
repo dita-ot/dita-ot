@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.Set;
 import java.util.Stack;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -71,7 +72,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 	know the value of class attribute of the element when processing its end
 	tag. That's why we need to store the element's name to the set when we first
 	met it in startElement(...).*/
-	private HashSet<String> topicSpecSet = null;
+	private Set<String> topicSpecSet = null;
 	
 	/**boolean isReplaced show whether current content is replace
 	because of "pushreplace" action in conref push. If the current

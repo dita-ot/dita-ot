@@ -11,6 +11,8 @@ package org.dita.dost.util;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
@@ -26,7 +28,7 @@ public final class CatalogParser implements ContentHandler{
 
     private String dtdBase;
     private String schemaBase; 
-    private final HashMap<String, String> map;
+    private final Map<String, String> map;
     
     /**
      * Automatically generated constructor: CatalogParser.
@@ -42,7 +44,7 @@ public final class CatalogParser implements ContentHandler{
      * @param catalogMap catalogMap
      * @param ditaDir ditaDir
      */
-    public CatalogParser(final HashMap<String, String> catalogMap, final String ditaDir) {
+    public CatalogParser(final Map<String, String> catalogMap, final String ditaDir) {
         map = catalogMap;
         catalogDir = ditaDir;
         dtdBase = null;
