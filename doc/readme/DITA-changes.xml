@@ -66,6 +66,12 @@ going back to the beginning of the toolkit. </shortdesc>
             DITA-OT may not be able to function correctly because of e.g. corrupted plug-in files or
             unprocessed template files.</note>
         </section>
+        <section id="section_dcd_yhr_wc">
+          <title>Code reference charset support</title>
+          <p>Encoding of the code reference target file can be set using the <codeph>format</codeph>
+            attribute, for example </p>
+          <codeblock>&lt;coderef href="unicode.txt" format="txt; charset=UTF-8"/> </codeblock>
+        </section>
       </refbody>
     </reference>
   </reference>
