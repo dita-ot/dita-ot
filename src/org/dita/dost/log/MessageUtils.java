@@ -227,7 +227,9 @@ public final class MessageUtils {
 			final String key = (String) iter.next();
 			final String replacement = prop.getProperty(key);
 			reason = StringUtils.replaceAll(reason, key, replacement);
-			response = StringUtils.replaceAll(response, key, replacement);
+			if (response != null) {
+			    response = StringUtils.replaceAll(response, key, replacement);
+			}
 		}
 
 		return new MessageBean(messageBean.getId(), messageBean.getType(), reason, response);

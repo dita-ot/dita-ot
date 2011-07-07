@@ -288,6 +288,11 @@
     <response>Please make sure the key name is unique in a single map.</response>
   </message>
   
+  <message id="DOTJ045I" type="INFO">
+    <reason>The key "%1" is defined more than once in the same map file. The reference href="%2" is ignored.</reason>
+    <response/>
+  </message>
+  
   <message id="DOTJ046E" type="ERROR">
     <reason>Conkeyref="%1" can not be resolved because it does not contain a key or the key is not defined. Using the conref value as fall-back if it exists.</reason>
     <response>Please make sure the key name does exist.</response>

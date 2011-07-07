@@ -1323,7 +1323,8 @@ public final class GenListModuleReader extends AbstractXMLReader {
 					final Properties prop = new Properties();
 					prop.setProperty("%1", key);
 					prop.setProperty("%2", target);
-					logger.logWarn(MessageUtils.getMessage("DOTJ045W", prop).toString());
+					// DOTJ045W also exists
+					logger.logInfo(MessageUtils.getMessage("DOTJ045I", prop).toString());
 				}
 				//restore target
 				target = temp;
