@@ -1,5 +1,7 @@
 package com.idiominc.ws.opentopic.fo.index2.util;
 
+import static org.dita.dost.util.Constants.*;
+
 import com.idiominc.ws.opentopic.fo.index2.IndexEntry;
 
 import java.util.List;
@@ -40,12 +42,8 @@ This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
 */
 public abstract class IndexDitaProcessor {
-    private static String elIndexName = "indexterm";
-	private static String elIndexSortName = "index-sort-as";
-	private static String elIndexSeeName = "index-see";
-	private static String elIndexSeeAlsoName = "index-see-also";
     private static String elIndexRangeStartName = "start";
-	private static String elIndexRangeEndName = "end";
+    private static String elIndexRangeEndName = "end";
     private static final String SO = "<so>";
     private static final String LT = "<";
     private static final String GT = ">";
@@ -70,7 +68,7 @@ public abstract class IndexDitaProcessor {
                 if (null != val) {
                     textValueBuffer.append(val);
                 }
-            } else if (elIndexName.equals(child.getNodeName())) {
+            } else if (TOPIC_INDEXTERM.matches(child)) {
 
                 String currentTextValue = normalizeTextValue(textValueBuffer.toString());
                 String currentRefId;
@@ -80,7 +78,7 @@ public abstract class IndexDitaProcessor {
                 for (int j = 0;j < childs.length;j++)
                     childEntrys.add(childs[j]);
 
-            } else if (elIndexSortName.equals(child.getNodeName())) {
+            } else if (INDEXING_D_INDEX_SORT_AS.matches(child)) {
 
                 for (int j = 0; j < child.getChildNodes().getLength(); j++) {
                     final Node sortChildNode = child.getChildNodes().item(j);
@@ -89,11 +87,11 @@ public abstract class IndexDitaProcessor {
                         if (text != null) sortStringBuffer.append(text);
                     }
                 }
-            } else if (elIndexSeeName.equals(child.getNodeName())) {
+            } else if (INDEXING_D_INDEX_SEE.matches(child)) {
                 IndexEntry[] childs = processIndexDitaNode(child,"");
                 for (int j = 0;j < childs.length;j++)
                     seeEntry.add(childs[j]);
-            } else if (elIndexSeeAlsoName.equals(child.getNodeName())) {
+            } else if (INDEXING_D_INDEX_SEE_ALSO.matches(child)) {
                 IndexEntry[] childs = processIndexDitaNode(child,"");
                 for (int j = 0;j < childs.length;j++)
                     seeAlsoEntry.add(childs[j]);

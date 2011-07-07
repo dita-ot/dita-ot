@@ -1,5 +1,7 @@
 package com.idiominc.ws.opentopic.fo.index2;
 
+import static org.dita.dost.util.Constants.*;
+
 import com.idiominc.ws.opentopic.fo.index2.configuration.IndexConfiguration;
 import com.idiominc.ws.opentopic.fo.index2.util.IndexStringProcessor;
 import com.idiominc.ws.opentopic.fo.index2.util.IndexDitaProcessor;
@@ -44,26 +46,14 @@ See the accompanying license.txt file for applicable licenses.
 public class IndexPreprocessor {
 	private final String prefix;
 	private final String namespace_url;
-	private String elIndexName = "indexterm";
-	private String elIndexSortName = "index-sort-as";
-	private String elIndexSeeName = "index-see";
-	private String elIndexSeeAlsoName = "index-see-also";
-    private String elIndexRangeStartName = "start";
-	private String elIndexRangeEndName = "end";
+	private static final String elIndexRangeStartName = "start";
+	private static final String elIndexRangeEndName = "end";
 
 
 	public IndexPreprocessor(String prefix, String theNamespace_url) {
 		this.prefix = prefix;
 		this.namespace_url = theNamespace_url;
 	}
-
-
-	public IndexPreprocessor(String prefix, String theNamespace_url, String theElementIndexName) {
-		this.prefix = prefix;
-		this.namespace_url = theNamespace_url;
-		this.elIndexName = theElementIndexName;
-	}
-
 
 	public IndexPreprocessResult process(Document theInput)
 			throws ProcessException {
@@ -144,7 +134,7 @@ public class IndexPreprocessor {
 	private Node[] processCurrNode(Node theNode, Document theTargetDocument, IndexEntryFoundListener theIndexEntryFoundListener) {
 		NodeList childNodes = theNode.getChildNodes();
 
-		if (checkElementName(theNode.getNodeName())) {
+		if (checkElementName(theNode)) {
             return processIndexNode(theNode, theTargetDocument, theIndexEntryFoundListener);
 /*
             for (int i = 0; i < childNodes.getLength(); i++) {
@@ -179,8 +169,7 @@ public class IndexPreprocessor {
         NodeList childNodes = theNode.getChildNodes();
         for (int i = 0; i < childNodes.getLength(); i++) {
             final Node child = childNodes.item(i);
-            final String nodeName = child.getNodeName();
-            if (checkElementName(nodeName)) {
+            if (checkElementName(child)) {
                 ditastyle = true;
                 break;
             }
@@ -239,8 +228,7 @@ public class IndexPreprocessor {
 		NodeList childNodes = theNode.getParentNode().getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			final Node child = childNodes.item(i);
-            final String nodeName = child.getNodeName();
-            if (checkElementName(nodeName)) {
+            if (checkElementName(child)) {
 				ditastyle = true;
 				break;
 			}
@@ -276,16 +264,18 @@ public class IndexPreprocessor {
 		return (Node[]) res.toArray(new Node[res.size()]);
 	}
 
-    private boolean checkElementName(String nodeName) {
-        return elIndexName.equals(nodeName) || elIndexSortName.equals(nodeName)
-                || elIndexSeeName.equals(nodeName) || elIndexSeeAlsoName.equals(nodeName);
+    private boolean checkElementName(final Node node) {
+        return TOPIC_INDEXTERM.matches(node)
+                || INDEXING_D_INDEX_SORT_AS.matches(node)
+                || INDEXING_D_INDEX_SEE.matches(node)
+                || INDEXING_D_INDEX_SEE_ALSO.matches(node);
     }
 
     private String[] createIndexStringFromDitastyleIndex(Node theNode) {
         //Go through the childs and append text nodes to the index string
         //Index elements on the same level will create separate index strings
         ArrayList resultList = new ArrayList();
-        if (elIndexName.equals(theNode.getNodeName())) //Is index element?
+        if (TOPIC_INDEXTERM.matches(theNode)) //Is index element?
         {
             StringBuffer resIndexString = new StringBuffer();
             boolean skipCurrentLevel = false;
@@ -297,7 +287,7 @@ public class IndexPreprocessor {
                     if (null != val) {
                         resIndexString.append(val); //append to result index string
                     }
-                } else if (elIndexName.equals(child.getNodeName())) {
+                } else if (TOPIC_INDEXTERM.matches(child)) {
                     skipCurrentLevel = true;		//skip adding current level index string because it has continuation on the descendant level
                     String[] indexValues = createIndexStringFromDitastyleIndex(child); //call recursevelly but for the found child
                     for (int j = 0; j < indexValues.length; j++) {

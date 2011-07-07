@@ -1,5 +1,7 @@
 package com.idiominc.ws.opentopic.fo.index2;
 
+import static org.dita.dost.util.Constants.*;
+
 import com.idiominc.ws.opentopic.fo.index2.configuration.IndexConfiguration;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
@@ -58,9 +60,8 @@ public class IndexPreprocessorTask
 	private String indexConfig = "";
 	public static boolean failOnError = false;
 	public static boolean processingFaild = false;
-	private String prefix = "opentopic-index";
-	private String namespace_url = "http://www.idiominc.com/opentopic/index";
-	private String indexElementName = "indexterm";
+	private static final String prefix = "opentopic-index";
+	private static final String namespace_url = "http://www.idiominc.com/opentopic/index";
 
     public static void main(String[] args) {
         new IndexPreprocessorTask().execute();
@@ -89,7 +90,7 @@ public class IndexPreprocessorTask
 			});
 
 			Document doc = documentBuilder.parse(input);
-			IndexPreprocessor preprocessor = new IndexPreprocessor(this.prefix, this.namespace_url, this.indexElementName);
+			IndexPreprocessor preprocessor = new IndexPreprocessor(this.prefix, this.namespace_url);
 
 			// Walks through source document and builds an array of IndexEntry and builds
 			// new Document with pre-processed index entries included.
@@ -174,11 +175,6 @@ public class IndexPreprocessorTask
 
     public void setFailOnError(String theFailOnErro) {
 		this.failOnError = theFailOnErro.equals("true");
-	}
-
-
-	public void setIndexElementName(String theIndexElementName) {
-		this.indexElementName = theIndexElementName;
 	}
 
     private void setActiveProjectProperty(String propertyName, String propertyValue) {
