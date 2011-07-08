@@ -41,7 +41,7 @@ See the accompanying license.txt file for applicable licenses.
                 xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
                 extension-element-prefixes="exsl"
                 exclude-result-prefixes="opentopic-index opentopic exslf opentopic-func ot-placeholder"
-                version='1.1'>
+                version="2.0">
 
     <xsl:variable name="map" select="//opentopic:map"/>
 
