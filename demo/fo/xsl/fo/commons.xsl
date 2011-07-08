@@ -1204,14 +1204,30 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:param name="topicNumber" select="number('NaN')"/>
         <xsl:variable name="id" select="@id"/>
         <xsl:variable name="topicref" select="$map//*[@id = $id]"/>
+        <xsl:variable name="numTopicref" select="$topicref[position()=$topicNumber]"/>
         <xsl:choose>
             <xsl:when test="not(string(number($topicNumber)) = 'NaN') and 
-                            $topicref and 
-                            $topicref[position()=$topicNumber]/@locktitle='yes' and 
-                            $topicref[position()=$topicNumber]/@navtitle">
-                <xsl:value-of select="$topicref[position()=$topicNumber]/@navtitle"/>
+                            $topicref and
+                            $numTopicref/@locktitle='yes' and
+                            $numTopicref/*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
+               <xsl:value-of select="$numTopicref/*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]"/>
             </xsl:when>
-            <xsl:when test="string(number($topicNumber)) = 'NaN' and $topicref and $topicref/@locktitle='yes' and $topicref/@navtitle">
+            <xsl:when test="not(string(number($topicNumber)) = 'NaN') and
+                            $topicref and
+                            $numTopicref/@locktitle='yes' and
+                            $numTopicref/@navtitle">
+                <xsl:value-of select="$numTopicref/@navtitle"/>
+            </xsl:when>
+            <xsl:when test="string(number($topicNumber)) = 'NaN' and
+                            $topicref and
+                            $topicref/@locktitle='yes' and
+                            $topicref/*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
+                <xsl:value-of select="$topicref/*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]"/>
+            </xsl:when>
+            <xsl:when test="string(number($topicNumber)) = 'NaN' and
+                            $topicref and
+                            $topicref/@locktitle='yes' and
+                            $topicref/@navtitle">
                 <xsl:value-of select="$topicref/@navtitle"/>
             </xsl:when>
             <xsl:otherwise>

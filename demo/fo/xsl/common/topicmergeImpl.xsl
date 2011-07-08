@@ -84,8 +84,7 @@ See the accompanying license.txt file for applicable licenses.
                   <title class=" topic/title ">
                       <xsl:choose>
                           <xsl:when test="*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')]">
-                              <xsl:copy-of select="*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')]/text()|
-                                           *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')]/*"/>
+                              <xsl:copy-of select="*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')]/node()"/>
                           </xsl:when>
                           <xsl:otherwise>
                               <xsl:value-of select="@navtitle"/>
@@ -111,7 +110,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:apply-templates mode="build-tree"/>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' bookmap/toc ')]" priority="2" mode="build-tree">
+    <xsl:template match="*[contains(@class,' bookmap/toc ')][not(@href)]" priority="2" mode="build-tree">
         <ot-placeholder:toc>
             <xsl:apply-templates mode="build-tree"/>
         </ot-placeholder:toc>
