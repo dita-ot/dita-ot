@@ -48,6 +48,7 @@ import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.OutputUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.TimingUtils;
+import org.dita.dost.util.XMLSerializer;
 import org.dita.dost.writer.PropertiesWriter;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -172,10 +173,10 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 
     private String rootFile;
 
-    private OutputStreamWriter keydef;
+    private XMLSerializer keydef;
 
     // keydef file from keys used in schema files
-    private OutputStreamWriter schemekeydef;
+    private XMLSerializer schemekeydef;
 
     // Added by William on 2009-06-25 for req #12014 start
     /** Export file */
@@ -283,15 +284,10 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
             updateBaseDirectory();
             refactoringResult();
             outputResult();
-            keydef.write("</stub>");
+            keydef.writeEndDocument();
             keydef.close();
-            // Added by William on 2009-06-09 for scheme key bug start
-            // write the end tag
-            schemekeydef.write("</stub>");
-            // close the steam
+            schemekeydef.writeEndDocument();
             schemekeydef.close();
-            // Added by William on 2009-06-09 for scheme key bug end
-
             // Added by William on 2009-06-25 for req #12014 start
             // write the end tag
             export.write("</stub>");
@@ -373,26 +369,27 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 
         inputFile = inFile.getName();
         try {
-            keydef = new OutputStreamWriter(new FileOutputStream(new File(tempDir, "keydef.xml")));
-            keydef.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-            keydef.write("<stub>");
+            keydef = XMLSerializer.newInstance(new FileOutputStream(new File(tempDir, "keydef.xml")));
+            keydef.writeStartDocument();
+            keydef.writeStartElement("stub");
             // Added by William on 2009-06-09 for scheme key bug
             // create the keydef file for scheme files
-            schemekeydef = new OutputStreamWriter(new FileOutputStream(new File(tempDir, "schemekeydef.xml")));
-            // write the head
-            schemekeydef.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-            schemekeydef.write("<stub>");
+            schemekeydef = XMLSerializer.newInstance(new FileOutputStream(new File(tempDir, "schemekeydef.xml")));
+            schemekeydef.writeStartDocument();
+            schemekeydef.writeStartElement("stub");
 
             // Added by William on 2009-06-25 for req #12014 start
             // create the export file for exportanchors
             // write the head
             export = new OutputStreamWriter(new FileOutputStream(new File(tempDir, FILE_NAME_EXPORT_XML)));
-            export.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+            export.write(XML_HEAD);
             export.write("<stub>");
             // Added by William on 2009-06-25 for req #12014 end
         } catch (final FileNotFoundException e) {
             logger.logException(e);
         } catch (final IOException e) {
+            logger.logException(e);
+        } catch (final SAXException e) {
             logger.logException(e);
         }
 
@@ -592,14 +589,12 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
             if (schemeSet.contains(currentFile)) {
                 // write the keydef into the scheme keydef file
                 try {
-                    schemekeydef.write("<keydef ");
-                    schemekeydef.write("keys=\"" + key + "\" ");
-                    schemekeydef.write("href=\"" + value + "\" ");
-                    schemekeydef.write("source=\"" + currentFile + "\"/>");
-                    schemekeydef.write("\n");
-                    schemekeydef.flush();
-                } catch (final IOException e) {
-
+                    schemekeydef.writeStartElement("keydef");
+                    schemekeydef.writeAttribute("keys", key);
+                    schemekeydef.writeAttribute("href", value);
+                    schemekeydef.writeAttribute("source", currentFile);
+                    schemekeydef.writeEndElement();
+                } catch (final SAXException e) {
                     logger.logException(e);
                 }
             }
@@ -785,6 +780,12 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
         return buff.toString();
     }
 
+    /**
+     * Escape regular expression special characters.
+     * 
+     * @param value input
+     * @return input with regular expression special characters escaped
+     */
     private String formatRelativeValue(final String value) {
         final StringBuffer buff = new StringBuffer();
         if (value == null || value.length() == 0) {
@@ -798,6 +799,8 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
             case '.':
                 buff.append("\\.");
                 break;
+            // case '/':
+            // case '|':
             case '\\':
                 buff.append("[\\\\|/]");
                 break;
@@ -1204,14 +1207,12 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
             final String href = result.substring(equalIndex + 1, leftBracketIndex);
             // get source file
             final String sourcefile = result.substring(leftBracketIndex + 1, rightBracketIndex);
-            keydef.write("<keydef ");
-            keydef.write("keys=\"" + keyName + "\" ");
-            keydef.write("href=\"" + href + "\" ");
-            keydef.write("source=\"" + sourcefile + "\"/>");
-            keydef.write("\n");
-            keydef.flush();
-        } catch (final IOException e) {
-
+            keydef.writeStartElement("keydef");
+            keydef.writeAttribute("keys", keyName);
+            keydef.writeAttribute("href", href);
+            keydef.writeAttribute("source", sourcefile);
+            keydef.writeEndElement();
+        } catch (final SAXException e) {
             logger.logException(e);
         }
     }
