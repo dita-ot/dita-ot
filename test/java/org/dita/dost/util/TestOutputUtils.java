@@ -9,7 +9,7 @@
  */
 package org.dita.dost.util;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import org.junit.Test;
 import org.dita.dost.util.OutputUtils;
 public class TestOutputUtils {
@@ -17,14 +17,17 @@ public class TestOutputUtils {
 	@Test
 	public  void testsetoutercontrol()
 	{
-		OutputUtils.setOutterControl(null);
-		assertEquals("WARN",OutputUtils.getOutterControl());
+		assertEquals(OutputUtils.OutterControl.WARN, OutputUtils.getOutterControl());
 		OutputUtils.setOutterControl("FAIL");
-		assertEquals("FAIL",OutputUtils.getOutterControl());
+		assertEquals(OutputUtils.OutterControl.FAIL, OutputUtils.getOutterControl());
 		OutputUtils.setOutterControl("WARN");
-		assertEquals("WARN",OutputUtils.getOutterControl());
+		assertEquals(OutputUtils.OutterControl.WARN ,OutputUtils.getOutterControl());
 		OutputUtils.setOutterControl("QUIET");
-		assertEquals("QUIET",OutputUtils.getOutterControl());
+		assertEquals(OutputUtils.OutterControl.QUIET, OutputUtils.getOutterControl());
+		try {
+            OutputUtils.setOutterControl(null);
+            fail();
+        } catch (final NullPointerException e) {}
 	}
 	
 	
@@ -46,14 +49,17 @@ public class TestOutputUtils {
 	@Test
 	public void testsetgeneratecopyouter()
 	{
-		OutputUtils.setGeneratecopyouter(null);
-		assertEquals(1,OutputUtils.getGeneratecopyouter());
+		assertEquals(OutputUtils.Generate.NOT_GENERATEOUTTER, OutputUtils.getGeneratecopyouter());
 		OutputUtils.setGeneratecopyouter("1");
-		assertEquals(1,OutputUtils.getGeneratecopyouter());
+		assertEquals(OutputUtils.Generate.NOT_GENERATEOUTTER, OutputUtils.getGeneratecopyouter());
 		OutputUtils.setGeneratecopyouter("2");
-		assertEquals(2,OutputUtils.getGeneratecopyouter());
+		assertEquals(OutputUtils.Generate.GENERATEOUTTER, OutputUtils.getGeneratecopyouter());
 		OutputUtils.setGeneratecopyouter("3");
-		assertEquals(3,OutputUtils.getGeneratecopyouter());
+		assertEquals(OutputUtils.Generate.OLDSOLUTION, OutputUtils.getGeneratecopyouter());
+		try {
+		    OutputUtils.setGeneratecopyouter(null);
+            fail();
+        } catch (final NumberFormatException e) {}
 	}
 
 }

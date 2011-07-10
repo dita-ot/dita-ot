@@ -15,22 +15,43 @@ package org.dita.dost.util;
  *
  */
 public final class OutputUtils {
-	private static int generatecopyouter=1;//default:only generate&copy the non-overflowing files 
-	private static boolean onlytopicinmap=false;//default:only the topic files will be resolved in the map
-	/**fail behavior.*/
-	public static final String OUTTERCONTROL_FAIL="FAIL";
-	/**warn behavior.*/
-	public static final String OUTTERCONTROL_WARN="WARN";
-	/**quiet behavior.*/
-	public static final String OUTTERCONTROL_QUIET="QUIET";
-	
-	private static String outercontrol=OUTTERCONTROL_WARN;
-	/**not generate outer files.*/
-	public static final int NOT_GENERATEOUTTER=1;
-	/**generate outer files.*/
-	public static final int GENERATEOUTTER=2;
-	/**old solution.*/
-	public static final int OLDSOLUTION=3;
+
+    public enum OutterControl {
+        /** Fail behavior. */
+        FAIL,
+        /** Warn behavior. */
+        WARN,
+        /** Quiet behavior. */
+        QUIET
+    }
+
+    public enum Generate {
+        /** Not generate outer files. */
+        NOT_GENERATEOUTTER(1),
+        /** Generate outer files. */
+        GENERATEOUTTER(2),
+        /** Old solution. */
+        OLDSOLUTION(3);
+
+        public final int type;
+
+        Generate(final int type) {
+            this.type = type;
+        }
+
+        public static Generate get(final int type) {
+            for (final Generate g: Generate.values()) {
+                if (g.type == type) {
+                    return g;
+                }
+            }
+            throw new IllegalArgumentException();
+        }
+    }
+
+    private static Generate generatecopyouter = Generate.NOT_GENERATEOUTTER;//default:only generate&copy the non-overflowing files 
+	private static boolean onlytopicinmap=false;//default:only the topic files will be resolved in the map	
+	private static OutterControl outercontrol = OutterControl.WARN;
 	/**Output Dir.*/
 	private static String OutputDir=null;
 	/**Input Map Dir.*/
@@ -45,7 +66,7 @@ public final class OutputUtils {
 	 * @return String outercontrol behavior
 	 *
 	 */
-	public static String getOutterControl(){
+	public static OutterControl getOutterControl(){
 		return outercontrol;
 	}
 	
@@ -54,16 +75,7 @@ public final class OutputUtils {
 	 * @param control control
 	 */	
 	public static void setOutterControl(final String control){
-		if(OUTTERCONTROL_FAIL.equalsIgnoreCase(control)){
-			outercontrol=OUTTERCONTROL_FAIL;
-			return;
-		}
-		if(OUTTERCONTROL_QUIET.equalsIgnoreCase(control)){
-			outercontrol=OUTTERCONTROL_QUIET;
-			return;
-		}
-		//default: if control equals "1" or other values
-		outercontrol=OUTTERCONTROL_WARN;
+	    outercontrol = OutterControl.valueOf(control.toUpperCase());
 	}
 	
 	/**
@@ -90,7 +102,7 @@ public final class OutputUtils {
 	 * Retrieve the flag of generatecopyouter.
 	 * @return int generatecopyouter flag
 	 */
-	public static int getGeneratecopyouter(){
+	public static Generate getGeneratecopyouter(){
 		return generatecopyouter;
 	}
 	
@@ -99,15 +111,7 @@ public final class OutputUtils {
 	 * @param flag generatecopyouter flag
 	 */
 	public static void setGeneratecopyouter(final String flag){
-		if("2".equals(flag)){
-			generatecopyouter=GENERATEOUTTER;
-			return;
-		}
-		if("3".equals(flag)){
-			generatecopyouter=OLDSOLUTION;
-			return;
-		}
-		generatecopyouter=NOT_GENERATEOUTTER;
+	    generatecopyouter = Generate.get(Integer.parseInt(flag));
 	}
 	
 	/**

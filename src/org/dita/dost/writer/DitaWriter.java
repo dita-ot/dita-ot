@@ -1233,7 +1233,7 @@ public final class DitaWriter extends AbstractXMLWriter {
                 						:filename.substring(index+1, fileExtIndex)+extName);
                 
                 //when it is not the old solution 3
-                if(OutputUtils.getGeneratecopyouter()!=OutputUtils.OLDSOLUTION){
+                if(OutputUtils.getGeneratecopyouter()!=OutputUtils.Generate.OLDSOLUTION){
                 		if(isOutFile(traceFilename)){
                 			
                 			path2Project=getRelativePathFromOut(traceFilename);
@@ -1252,7 +1252,7 @@ public final class DitaWriter extends AbstractXMLWriter {
                 outputFilename.append((fileExtIndex == -1)
                 					   ? filename
                 					   : filename.substring(0, fileExtIndex)+extName);
-                if(OutputUtils.getGeneratecopyouter()!=OutputUtils.OLDSOLUTION){
+                if(OutputUtils.getGeneratecopyouter()!=OutputUtils.Generate.OLDSOLUTION){
             		if(isOutFile(traceFilename)){
             			
             			path2Project=getRelativePathFromOut(traceFilename);

@@ -461,7 +461,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 		for(final String filename : subsidiarySet){
 			//only activated on /generateout:3 & is out file.
 			if(isOutFile(filename) && OutputUtils.getGeneratecopyouter() 
-			  == OutputUtils.OLDSOLUTION){
+			  == OutputUtils.Generate.OLDSOLUTION){
 				nonCopytoSet.add(filename);
 			}
 		}
@@ -1649,14 +1649,14 @@ public final class GenListModuleReader extends AbstractXMLReader {
 		final Properties prop=new Properties();
 		prop.put("%1", FileUtils.normalizeDirectory(rootDir, filename));
 		prop.put("%2", FileUtils.removeRedundantNames(currentFile));
-		if ((OutputUtils.getGeneratecopyouter() == OutputUtils.NOT_GENERATEOUTTER) 
-				|| (OutputUtils.getGeneratecopyouter() == OutputUtils.GENERATEOUTTER)) {
+		if ((OutputUtils.getGeneratecopyouter() == OutputUtils.Generate.NOT_GENERATEOUTTER) 
+				|| (OutputUtils.getGeneratecopyouter() == OutputUtils.Generate.GENERATEOUTTER)) {
 			if (isOutFile(filename)) {
-				if (OutputUtils.getOutterControl().equals(OutputUtils.OUTTERCONTROL_FAIL)){
+				if (OutputUtils.getOutterControl().equals(OutputUtils.OutterControl.FAIL)){
 					final MessageBean msgBean=MessageUtils.getMessage("DOTJ035F", prop);	
 					throw new SAXParseException(null,null,new DITAOTException(msgBean,null,msgBean.toString()));	
 				}
-				if (OutputUtils.getOutterControl().equals(OutputUtils.OUTTERCONTROL_WARN)){
+				if (OutputUtils.getOutterControl().equals(OutputUtils.OutterControl.WARN)){
 					final String message=MessageUtils.getMessage("DOTJ036W",prop).toString();
 					logger.logWarn(message);
 				}
