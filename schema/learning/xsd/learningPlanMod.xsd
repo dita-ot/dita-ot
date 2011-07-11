@@ -132,7 +132,7 @@
       <xs:group ref="lcGapAnalysis" minOccurs="0"/>
       <xs:group ref="lcIntervention" minOccurs="0"/>
       <xs:group ref="lcTechnical" minOccurs="0"/>
-      <xs:group ref="section" minOccurs="0"/>
+      <xs:group ref="section" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     </xs:sequence>
   </xs:group>
