@@ -11,6 +11,13 @@ package org.dita.dost.writer;
 import static org.dita.dost.util.Constants.FILE_EXTENSION_TEMP;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.Properties;
 
 import javax.xml.transform.Result;
@@ -32,6 +39,8 @@ import org.dita.dost.util.StringUtils;
 
 /**
  * Base for XML filters.
+ *
+ * @since 1.5.4
  */
 abstract class AbstractXMLFilter extends XMLFilterImpl implements AbstractWriter {
 
@@ -42,17 +51,42 @@ abstract class AbstractXMLFilter extends XMLFilterImpl implements AbstractWriter
     public void write(final String filename) throws DITAOTException {
         final File inputFile = new File(filename);
         final File outputFile = new File(filename + FILE_EXTENSION_TEMP);
+        InputStream in = null;
+        OutputStream out = null;
         try {
             final Transformer transformer = TransformerFactory.newInstance().newTransformer();
             final XMLReader reader = StringUtils.getXMLReader();
             //reader.setErrorHandler(new DITAOTXMLErrorHandler(filename));
             setParent(reader);
-            final Source source = new SAXSource(this, new InputSource(inputFile.toURI().toString()));
-            final Result result = new StreamResult(outputFile.toURI().toString());
+            // ContentHandler must be reset so e.g. Saxon 9.1 will reassign ContentHandler
+            // when reusing filter with multiple Transformers.
+            setContentHandler(null);
+            in = new BufferedInputStream(new FileInputStream(inputFile));
+            out = new BufferedOutputStream(new FileOutputStream(outputFile));
+            final Source source = new SAXSource(this, new InputSource(in));
+            final Result result = new StreamResult(out);
             
             transformer.transform(source, result);
-
-            // replace original file
+        } catch (final Exception e) {
+            logger.logException(e);
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    logger.logException(e);
+                }
+            }
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    logger.logException(e);
+                }
+            }
+        }
+        // replace original file
+        try {
             if (!inputFile.delete()) {
                 final Properties prop = new Properties();
                 prop.put("%1", inputFile.getPath());
