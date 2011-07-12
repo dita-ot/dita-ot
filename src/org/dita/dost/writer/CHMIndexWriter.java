@@ -42,6 +42,8 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter {
             transformer.setOutputProperty("doctype-public", "-//IETF//DTD HTML//EN");
             transformer.setOutputProperty("method", "html");
             transformer.setOutputProperty("encoding", "UTF-8");
+            transformer.setOutputProperty(javax.xml.transform.OutputKeys.INDENT, "no");
+            
 
             serializer.writeStartDocument();
             serializer.writeStartElement("html");
