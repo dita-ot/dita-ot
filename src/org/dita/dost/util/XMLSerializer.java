@@ -234,7 +234,7 @@ public class XMLSerializer {
     public void writeEndElement() throws SAXException {
         processStartElement();
         final QName qName = elementStack.remove(); // pop
-        transformer.endElement(qName.uri, qName.localName, qName.prefix);
+        transformer.endElement(qName.uri, qName.localName, qName.qName);
         for (NamespaceMapping p: qName.mappings) {
             if (p.newMapping) {
                 transformer.endPrefixMapping(p.prefix);
