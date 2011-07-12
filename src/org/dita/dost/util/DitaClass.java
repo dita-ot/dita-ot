@@ -99,6 +99,16 @@ public class DitaClass {
     }
     
     /**
+     * Test if given DITA class matches this DITA class.
+     * 
+     * @param cls DITA element class
+     * @return {@code true} if given class matches this class, otherwise {@code false}
+     */
+    public boolean matches(final DitaClass cls) {
+        return cls != null && cls.toString().indexOf(matcher) != -1;
+    }
+    
+    /**
      * Test if given DITA class string matches this DITA class.
      * 
      * @param classString DITA element class string

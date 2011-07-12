@@ -64,6 +64,12 @@ public class DitaClassTest {
     }
     
     @Test
+    public void testMatchesDitaClass() {
+        assertTrue(new DitaClass("- foo/bar ").matches(new DitaClass("- foo/bar baz/qux ")));
+        assertTrue(new DitaClass("- foo/bar baz/qux ").matches(new DitaClass("- foo/bar baz/qux ")));
+    }
+    
+    @Test
     public void testMatchesString() {
         assertTrue(new DitaClass("- foo/bar ").matches("- foo/bar baz/qux "));
         assertTrue(new DitaClass("- foo/bar baz/qux ").matches("- foo/bar baz/qux "));

@@ -25,9 +25,7 @@
       </data-about>
     </prolog>
     <body>
-      <image keyref="image" placement="inline">
-        <keyword>image keyword</keyword>
-      </image>
+      <image keyref="image" placement="inline"/>
       <p>
         <xref keyref="xref">
           <keyword>xref keyword</keyword>
@@ -90,9 +88,7 @@
       </data-about>
     </prolog>
     <body>
-      <image href="b.gif" keyref="image_link" placement="inline">
-        <keyword>image keyword</keyword>
-      </image>
+      <image href="b.gif" keyref="image_link" placement="inline"/>
       <p>
         <xref href="a.xml" keyref="xref_link">
           <keyword>xref keyword</keyword>

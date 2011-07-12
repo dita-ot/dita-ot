@@ -7,6 +7,6 @@
   </topicgroup>
   <topicgroup>
     <topicref keyref="topicref_link" href="a.xml"/>
-    <navref keyref="navref_link"/>      
+    <navref keyref="navref_link" mapref="a.xml"/>
   </topicgroup>  
 </map>
