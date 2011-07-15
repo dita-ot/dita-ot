@@ -20,6 +20,10 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.junit.AfterClass;
+
+import org.junit.BeforeClass;
+
 import static org.junit.Assert.assertEquals;
 
 import org.dita.dost.TestUtils;
@@ -30,8 +34,6 @@ import org.dita.dost.reader.ConrefPushReader;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.writer.ConrefPushParser;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -42,25 +44,21 @@ import org.xml.sax.SAXException;
 
 public class TestConrefPushParser {
 	
-	private final File resourceDir = new File("test-stub");
-	private File tempDir;
-	private File inputFile; 
+	private static final File resourceDir = new File("test-stub", TestConrefPushParser.class.getSimpleName());
+	private static final File srcDir = new File(resourceDir, "src");
+	private static File tempDir;
+	private static File inputFile; 
 	
-	public ConrefPushParser parser;
-	public ConrefPushReader reader;
 	
-	@Before
-	public void setUp() throws IOException{
-		tempDir = TestUtils.createTempDir(getClass());
+	@BeforeClass
+	public static void setUp() throws IOException{
+		tempDir = TestUtils.createTempDir(TestConrefPushParser.class);
 
 		inputFile = new File(tempDir, "conrefpush_stub.xml"); 
-		FileUtils.copyFile(new File(resourceDir, "conrefpush_stub.xml"),
+		FileUtils.copyFile(new File(srcDir, "conrefpush_stub.xml"),
 				           inputFile);
-		FileUtils.copyFile(new File(resourceDir, "conrefpush_stub2.xml"),
+		FileUtils.copyFile(new File(srcDir, "conrefpush_stub2.xml"),
 						   new File(tempDir, "conrefpush_stub2.xml"));
-		
-		parser = new ConrefPushParser();
-		reader = new ConrefPushReader();
 	}
 	
 	@Test
@@ -103,13 +101,16 @@ public class TestConrefPushParser {
 		 *	</li>
 		 * </ol>
 		 */
+	    final ConrefPushParser parser = new ConrefPushParser();
+	    final ConrefPushReader reader = new ConrefPushReader();
+
 		reader.read(inputFile.getAbsolutePath());
 		Set<Map.Entry<String, Hashtable<String, String>>> pushSet = (Set<Map.Entry<String, Hashtable<String,String>>>) reader.getContent().getCollection();
 		Iterator<Map.Entry<String, Hashtable<String,String>>> iter = pushSet.iterator();
 			if(iter.hasNext()){
 				Map.Entry<String, Hashtable<String,String>> entry = iter.next();
 				// initialize the parsed file
-				FileUtils.copyFile(new File(resourceDir, "conrefpush_stub2_backup.xml"),
+				FileUtils.copyFile(new File(srcDir, "conrefpush_stub2_backup.xml"),
 								   new File(entry.getKey()));
 				Content content = new ContentImpl();
 				content.setValue(entry.getValue());
@@ -185,8 +186,8 @@ public class TestConrefPushParser {
 		return stringBuffer.toString();
 	}
 
-	@After
-	public void tearDown() throws IOException {
+	@AfterClass
+	public static void tearDown() throws IOException {
 		TestUtils.forceDelete(tempDir);
 	}
 	

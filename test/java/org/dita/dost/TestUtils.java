@@ -21,10 +21,14 @@ import java.io.Writer;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
+
+import org.apache.xml.resolver.CatalogManager;
+import org.apache.xml.resolver.tools.CatalogResolver;
 
 import org.custommonkey.xmlunit.XMLUnit;
 
@@ -218,6 +222,21 @@ public class TestUtils {
 			}
 		}
 	}
+	
+	/**
+	 * Normalize XML file.
+	 * 
+	 * @param src source XML file
+	 * @param dst destination XML file
+	 * @throws Exception if parsing or serializing failed
+	 */
+	public static void normalize(final File src, final File dst) throws Exception {
+	    final Transformer serializer = TransformerFactory.newInstance().newTransformer();
+	    final XMLReader parser = XMLReaderFactory.createXMLReader();
+	    parser.setEntityResolver(new CatalogResolver());
+	    serializer.transform(new SAXSource(parser, new InputSource(src.toURI().toString())),
+	                         new StreamResult(dst));
+	}
 
 	/**
 	 * Reset XMLUnit configuration.
@@ -256,6 +275,7 @@ public class TestUtils {
         }
 
         public void logException(Throwable t) {
+            t.printStackTrace();
             throw new AssertionError("Throwable was thrown: " + t.getMessage());
         }
 	    

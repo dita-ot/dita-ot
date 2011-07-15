@@ -25,7 +25,9 @@ import org.junit.Test;
 
 public class TestMergeUtils {
 
-	private final File resourceDir = new File("test-stub");
+	private static final File resourceDir = new File("test-stub", TestMergeUtils.class.getSimpleName());
+	private static final File srcDir = new File(resourceDir, "src");
+	
 	public static MergeUtils mergeUtils;
 	
 	@BeforeClass
@@ -96,8 +98,8 @@ public class TestMergeUtils {
 	@Test
 	public void testGetFirstTopicId() {
 		//assertEquals("task",mergeUtils.getFirstTopicId("stub.xml", "TEST_STUB"));
-		assertEquals("task", MergeUtils.getFirstTopicId("stub.xml", resourceDir.getAbsolutePath(),false));
-		assertEquals("task", MergeUtils.getFirstTopicId("stub.xml", resourceDir.getAbsolutePath(), true));
+		assertEquals("task", MergeUtils.getFirstTopicId("stub.xml", srcDir.getAbsolutePath(), false));
+		assertEquals("task", MergeUtils.getFirstTopicId("stub.xml", srcDir.getAbsolutePath(), true));
 	}
 	
 }

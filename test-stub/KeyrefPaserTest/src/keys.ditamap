@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map>
+  <keydef keys="empty"/>
+  <topicgroup>
+    <keydef keys="author">
+      <topicmeta>
+        <linktext>author linktext</linktext>
+        <shortdesc>author shortdesc</shortdesc>
+        <author>author author</author>
+        <keywords>
+          <keyword>author keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef keys="data">
+      <topicmeta>
+        <linktext>data linktext</linktext>
+        <shortdesc>data shortdesc</shortdesc>
+        <keywords>
+          <keyword>data keyword</keyword>
+        </keywords>
+        <data>data data</data>
+      </topicmeta>
+    </keydef>
+    <keydef keys="data-about">
+      <topicmeta>
+        <linktext>data-about linktext</linktext>
+        <shortdesc>data-about shortdesc</shortdesc>
+        <keywords>
+          <keyword>data-about keyword</keyword>
+        </keywords>
+        <data-about>
+          <data>data-about data-about</data>
+        </data-about>
+      </topicmeta>
+    </keydef>
+    <keydef keys="image">
+      <topicmeta>
+        <linktext>image linktext</linktext>
+        <shortdesc>image shortdesc</shortdesc>
+        <keywords>
+          <keyword>image keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef keys="link">
+      <topicmeta>
+        <linktext>link linktext</linktext>
+        <shortdesc>link shortdesc</shortdesc>
+        <keywords>
+          <keyword>link keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef keys="lq">
+      <topicmeta>
+        <linktext>lq linktext</linktext>
+        <shortdesc>lq shortdesc</shortdesc>
+        <keywords>
+          <keyword>lq keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef keys="navref">
+      <topicmeta>
+        <linktext>navref linktext</linktext>
+        <shortdesc>navref shortdesc</shortdesc>
+        <keywords>
+          <keyword>navref keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef keys="publisher">
+      <topicmeta>
+        <linktext>publisher linktext</linktext>
+        <shortdesc>publisher shortdesc</shortdesc>
+        <publisher>publisher publisher</publisher>
+        <keywords>
+          <keyword>publisher keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef keys="source">
+      <topicmeta>
+        <linktext>source linktext</linktext>
+        <shortdesc>source shortdesc</shortdesc>
+        <source>source source</source>
+        <keywords>
+          <keyword>source keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef keys="topicref">
+      <topicmeta>
+        <linktext>topicref linktext</linktext>
+        <shortdesc>topicref shortdesc</shortdesc>
+        <keywords>
+          <keyword>topicref keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef keys="xref">
+      <topicmeta>
+        <linktext>xref linktext</linktext>
+        <shortdesc>xref shortdesc</shortdesc>
+        <keywords>
+          <keyword>xref keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef keys="cite">
+      <topicmeta>
+        <linktext>cite linktext</linktext>
+        <shortdesc>cite shortdesc</shortdesc>
+        <keywords>
+          <keyword>cite keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef keys="dt">
+      <topicmeta>
+        <linktext>dt linktext</linktext>
+        <shortdesc>dt shortdesc</shortdesc>
+        <keywords>
+          <keyword>dt keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef keys="keyword">
+      <topicmeta>
+        <linktext>keyword linktext</linktext>
+        <shortdesc>keyword shortdesc</shortdesc>
+        <keywords>
+          <keyword>keyword keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef keys="term">
+      <topicmeta>
+        <linktext>term linktext</linktext>
+        <shortdesc>term shortdesc</shortdesc>
+        <keywords>
+          <keyword>term keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef keys="ph">
+      <topicmeta>
+        <linktext>ph linktext</linktext>
+        <shortdesc>ph shortdesc</shortdesc>
+        <keywords>
+          <keyword>ph keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef keys="indexterm">
+      <topicmeta>
+        <linktext>indexterm linktext</linktext>
+        <shortdesc>indexterm shortdesc</shortdesc>
+        <keywords>
+          <keyword>indexterm keyword</keyword>
+          <indexterm>indexterm indexterm</indexterm>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef keys="index-base">
+      <topicmeta>
+        <linktext>index-base linktext</linktext>
+        <shortdesc>index-base shortdesc</shortdesc>
+        <keywords>
+          <keyword>index-base keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef keys="indextermref">
+      <topicmeta>
+        <linktext>indextermref linktext</linktext>
+        <shortdesc>indextermref shortdesc</shortdesc>
+        <keywords>
+          <keyword>indextermref keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+  </topicgroup>
+  <topicgroup>
+    <keydef href="a.xml" keys="author_link">
+      <topicmeta>
+        <linktext>author linktext</linktext>
+        <shortdesc>author shortdesc</shortdesc>
+        <author>author author</author>
+        <keywords>
+          <keyword>author keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef href="a.xml" keys="data_link">
+      <topicmeta>
+        <linktext>data linktext</linktext>
+        <shortdesc>data shortdesc</shortdesc>
+        <keywords>
+          <keyword>data keyword</keyword>
+        </keywords>
+        <data>data data</data>
+      </topicmeta>
+    </keydef>
+    <keydef href="a.xml" keys="data-about_link">
+      <topicmeta>
+        <linktext>data-about linktext</linktext>
+        <shortdesc>data-about shortdesc</shortdesc>
+        <keywords>
+          <keyword>data-about keyword</keyword>
+        </keywords>
+        <data-about>
+          <data>data-about data-about</data>
+        </data-about>
+      </topicmeta>
+    </keydef>
+    <keydef href="b.gif" keys="image_link">
+      <topicmeta>
+        <linktext>image linktext</linktext>
+        <shortdesc>image shortdesc</shortdesc>
+        <keywords>
+          <keyword>image keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef href="a.xml" keys="link_link">
+      <topicmeta>
+        <linktext>link linktext</linktext>
+        <shortdesc>link shortdesc</shortdesc>
+        <keywords>
+          <keyword>link keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef href="a.xml" keys="lq_link">
+      <topicmeta>
+        <linktext>lq linktext</linktext>
+        <shortdesc>lq shortdesc</shortdesc>
+        <keywords>
+          <keyword>lq keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef href="a.xml" keys="navref_link">
+      <topicmeta>
+        <linktext>navref linktext</linktext>
+        <shortdesc>navref shortdesc</shortdesc>
+        <keywords>
+          <keyword>navref keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef href="a.xml" keys="publisher_link">
+      <topicmeta>
+        <linktext>publisher linktext</linktext>
+        <shortdesc>publisher shortdesc</shortdesc>
+        <publisher>publisher publisher</publisher>
+        <keywords>
+          <keyword>publisher keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef href="a.xml" keys="source_link">
+      <topicmeta>
+        <linktext>source linktext</linktext>
+        <shortdesc>source shortdesc</shortdesc>
+        <source>source source</source>
+        <keywords>
+          <keyword>source keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef href="a.xml" keys="topicref_link">
+      <topicmeta>
+        <linktext>topicref linktext</linktext>
+        <shortdesc>topicref shortdesc</shortdesc>
+        <keywords>
+          <keyword>topicref keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef href="a.xml" keys="xref_link">
+      <topicmeta>
+        <linktext>xref linktext</linktext>
+        <shortdesc>xref shortdesc</shortdesc>
+        <keywords>
+          <keyword>xref keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef href="a.xml" keys="cite_link">
+      <topicmeta>
+        <linktext>cite linktext</linktext>
+        <shortdesc>cite shortdesc</shortdesc>
+        <keywords>
+          <keyword>cite keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef href="a.xml" keys="dt_link">
+      <topicmeta>
+        <linktext>dt linktext</linktext>
+        <shortdesc>dt shortdesc</shortdesc>
+        <keywords>
+          <keyword>dt keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef href="a.xml" keys="keyword_link">
+      <topicmeta>
+        <linktext>keyword linktext</linktext>
+        <shortdesc>keyword shortdesc</shortdesc>
+        <keywords>
+          <keyword>keyword keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef href="a.xml" keys="term_link">
+      <topicmeta>
+        <linktext>term linktext</linktext>
+        <shortdesc>term shortdesc</shortdesc>
+        <keywords>
+          <keyword>term keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef href="a.xml" keys="ph_link">
+      <topicmeta>
+        <linktext>ph linktext</linktext>
+        <shortdesc>ph shortdesc</shortdesc>
+        <keywords>
+          <keyword>ph keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef href="a.xml" keys="indexterm_link">
+      <topicmeta>
+        <linktext>indexterm linktext</linktext>
+        <shortdesc>indexterm shortdesc</shortdesc>
+        <keywords>
+          <keyword>indexterm keyword</keyword>
+          <indexterm>indexterm indexterm</indexterm>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef href="a.xml" keys="index-base_link">
+      <topicmeta>
+        <linktext>index-base linktext</linktext>
+        <shortdesc>index-base shortdesc</shortdesc>
+        <keywords>
+          <keyword>index-base keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef href="a.xml" keys="indextermref_link">
+      <topicmeta>
+        <linktext>indextermref linktext</linktext>
+        <shortdesc>indextermref shortdesc</shortdesc>
+        <keywords>
+          <keyword>indextermref keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+  </topicgroup>
+</map>

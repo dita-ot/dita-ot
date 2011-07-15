@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map>
+  <topicgroup>
+    <topicref keyref="topicref" scope="external" href="dead" type="dead" format="dead"/>
+    <navref keyref="navref"/>      
+  </topicgroup>
+  <topicgroup>
+    <topicref keyref="topicref_link" scope="external" href="dead" type="dead" format="dead"/>
+    <navref keyref="navref_link"/>      
+  </topicgroup>  
+</map>

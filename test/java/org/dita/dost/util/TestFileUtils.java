@@ -9,32 +9,29 @@
  */
 package org.dita.dost.util;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 
-import org.dita.dost.TestUtils;
-import org.dita.dost.util.FileUtils;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
+
+import org.dita.dost.TestUtils;
 
 public class TestFileUtils {
 
 	private static final String SEPARATOR_WINDOWS = "\\";
 	private static final String SEPARATOR_UNIX = "/";
 	
-	private final File resourceDir = new File("test-stub");
-	private File tempDir;
+	private static final File resourceDir = new File("test-stub", TestFileUtils.class.getSimpleName());
+	private static final File srcDir = new File(resourceDir, "src");
+	private static File tempDir;
 
-	@Before
-	public void setUp() throws IOException {
-		tempDir = TestUtils.createTempDir(getClass());
+	@BeforeClass
+	public static void setUp() throws IOException {
+		tempDir = TestUtils.createTempDir(TestFileUtils.class);
 	}
 	
 	@Test
@@ -220,7 +217,7 @@ public class TestFileUtils {
 
 	@Test
 	public void testCopyFile() throws IOException {
-		final File src = new File(resourceDir, "ibmrnr.txt");
+		final File src = new File(srcDir, "ibmrnr.txt");
 		final File dst = new File(tempDir, "ibmrnr.txt");
 		assertFalse(dst.exists());
 		FileUtils.copyFile(src, dst);
@@ -250,13 +247,13 @@ public class TestFileUtils {
 
 	@Test
 	public void testFileExists() {
-		assertTrue(FileUtils.fileExists(new File(resourceDir, "ibmrnr.txt").getPath()));
-		assertTrue(FileUtils.fileExists(new File(resourceDir, "ibmrnr.txt#topicid").getPath()));
-		assertFalse(FileUtils.fileExists(new File(resourceDir, "ibmrnr").getPath()));
+		assertTrue(FileUtils.fileExists(new File(srcDir, "ibmrnr.txt").getPath()));
+		assertTrue(FileUtils.fileExists(new File(srcDir, "ibmrnr.txt#topicid").getPath()));
+		assertFalse(FileUtils.fileExists(new File(srcDir, "ibmrnr").getPath()));
 	}
 
-	@After
-	public void tearDown() throws IOException {
+	@AfterClass
+	public static void tearDown() throws IOException {
 		TestUtils.forceDelete(tempDir);
 	}
 	

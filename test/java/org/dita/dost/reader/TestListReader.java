@@ -10,30 +10,30 @@
 package org.dita.dost.reader;
 
 import static org.junit.Assert.assertEquals;
+
 import java.io.File;
-import org.dita.dost.reader.ListReader;
-import org.dita.dost.resolver.DitaURIResolverFactory;
+
 import org.junit.Test;
 
+import org.dita.dost.resolver.DitaURIResolverFactory;
 
 public class TestListReader {
-	public static ListReader listreader;
-	public static DitaURIResolverFactory ditaurlresolverfactory =new DitaURIResolverFactory();
-	String path="test-stub" + File.separator + "TestListReader" + File.separator + "xhtml" + File.separator;
-	String filename="dita.xml.properties";
-	String userinputfile="C:" + File.separator + "DITA-OT1.5" + File.separator + "SAXONIBMJDK" + File.separator + "testcase" + File.separator + "12014" + File.separator + ".." + File.separator + ".." + File.separator + "testdata" + File.separator + "12014";
-	String userinputmap="map1.ditamap";
-	String subjectschemelist="[cvf.ditamap]";
+    
+	private static final File resourceDir = new File("test-stub", TestListReader.class.getSimpleName());
 	
     @Test
     public void testread(){
-    ditaurlresolverfactory.setPath(path);
-	listreader=new ListReader();
-	listreader.read(filename);
-	assertEquals(userinputfile,listreader.getContent().getValue().toString());
-	assertEquals(userinputmap,listreader.getInputMap());	
-    assertEquals(subjectschemelist,listreader.getSchemeSet().toString());
-   // System.out.println(listreader.getCopytoMap());
+        final File path = new File(resourceDir, "xhtml" + File.separator);
+        DitaURIResolverFactory.setPath(path.getAbsolutePath());
+        final ListReader listreader = new ListReader();
+    	//final String filename = "dita.xml.properties";
+    	listreader.read(null);
+    	final String userinputfile = "C:" + File.separator + "DITA-OT1.5" + File.separator + "SAXONIBMJDK" + File.separator + "testcase" + File.separator + "12014" + File.separator + ".." + File.separator + ".." + File.separator + "testdata" + File.separator + "12014";
+    	assertEquals(userinputfile, listreader.getContent().getValue().toString());
+    	final String userinputmap = "map1.ditamap";
+    	assertEquals(userinputmap, listreader.getInputMap());	
+    	final String subjectschemelist = "[cvf.ditamap]";
+    	assertEquals(subjectschemelist, listreader.getSchemeSet().toString());
     }
    
 
