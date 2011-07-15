@@ -2,6 +2,43 @@
 
 (c) Copyright IBM Corp. 2004, 2010 All Rights Reserved.
 
+     DITA OT release 1.5.4
+     
+     Release 1.5.4 is a maintenance release based on the final
+     version of the DITA 1.2 standard.  In addition to tweaks to 
+     match late changes in the standard, version 1.5.4 contains 
+     many enhancements, user patches, bug fixes, and significant 
+     updates to the documentation.
+     
+     Release 1.5.4 was developed using a series of test builds 
+     released to the community every three weeks. Each item in the list
+     below indicates which test build first contained the update.  The
+     eighth public build was the final build, released as the 
+     DITA-OT 1.5.4 final stable build.
+
+	 [General Enhancements]
+	 
+     [ SourceForge Enhancements Added]
+     * 3333697 Add strict mode processing (Milestone 1)    
+     * 3336630 Add resource file extension configuration (Milestone 1)    
+     * 3323776 Base HTML stylesheets  (Milestone 1)  
+     * 3355860 Enable defining code ref target encoding (Milestone 1)
+     * 3341648 Clean HTML and XHTML stylesheets  (In Processing)
+     * 3343562 Java clean-up  (In Processing)
+     * 3346094 Improve test coverage  (In Processing)
+     	
+     [ SourceForge Patches Added]
+    
+         
+     [ SourceForge Bugs Fixed] 
+     * 2714699 FO plug-in doesn't support specialized index elements (Milestone 1)
+     * 2848636 Duplicate key definitions should produce info messages (Milestone 1)
+     * 3353955 Frontmatter child order is not retained in PDF2 (Milestone 1)
+     * 3354301 XRef with conreffed phrases not properly generate HTML link (Milestone 1)
+	 * 3323806 Improve Java logging and exception handling (In Processing)     
+
+====================================================================================
+
      DITA OT release 1.5.3
      
      Release 1.5.3 is a maintenance release based on the final
