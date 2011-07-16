@@ -7,7 +7,6 @@
  "..\dtd\task.dtd">
 <task id="ascript" xml:lang="en-us">
 <title>Transforming DITA to Word with Ant script</title>
-<shortdesc>Running Example</shortdesc>
 <taskbody>
 <steps>
 <step><cmd>Specify a directory where you want to put the output files. For

@@ -5,6 +5,9 @@
 <?Pub Sty _display FontColor="red"?>
 <reference id="ditareleasehistory" xml:lang="en-us">
 <title>DITA complete release history</title>
+  <titlealts>
+    <navtitle>DITA release history</navtitle>
+  </titlealts>
 <shortdesc>This document lists major changes and new features by release,
 going back to the beginning of the toolkit. </shortdesc>
   <prolog>

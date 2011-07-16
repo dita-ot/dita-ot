@@ -8,12 +8,11 @@
 <title>Ant tasks and scripts</title>
 <shortdesc>This topic describes detailed Ant tasks and scripts.</shortdesc>
 <refbody>
-<section><p>The build process including pre-process can be called
-by using an Ant script. The most important Ant script files are called <filepath>build.xml</filepath>, <filepath>build_general.xml</filepath>,
-and <filepath>build_preprocess.xml</filepath>; together they define
-common pre-processing and output transformation routines, as well
-as extension points that allow DITA-OT Plug-ins to add to this common
-processing.</p></section>
+<section><p>The build process including pre-process can be called by using an Ant script. The most important
+        Ant script files are called <filepath>build.xml</filepath>,
+          <filepath>build_general.xml</filepath>, and <filepath>build_preprocess.xml</filepath>;
+        together they define common pre-processing and output transformation routines, as well as
+        extension points that allow DITA-OT Plug-ins to add to this common processing.</p></section>
 <section><p>The following table lists many general parameters to the
 DITA-OT transforms.</p><table id="dita.param.general"><title>General
 Parameter Table</title>

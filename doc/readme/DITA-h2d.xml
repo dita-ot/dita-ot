@@ -8,16 +8,14 @@
 <concept id="h2d" xml:lang="en-us">
     <title>Migrating HTML to DITA</title>
     <conbody>
-        <p>The DITA Open Toolkit release 1.2 or above provides a HTML to DITA 
-            migration tool, which migrates HTML files to DITA files. This 
-            migration tool originally comes from the developerWorks publication 
-            of Robert D. Anderson's how-to articles with the original h2d code. 
-            This migration tool is under "demo\h2d" directory. You can use it 
-            separately because it is not integrated into the main transformation 
-            of toolkit. The version in the toolkit is more recent, but the 
-            articles should be referenced for information on details of the 
-            program, as well as for information on how to extend it. There are 
-            links to the articles at the bottom of this page.</p>
+        <p>The DITA Open Toolkit release 1.2 or above provides a HTML to DITA migration tool, which
+      migrates HTML files to DITA files. This migration tool originally comes from the
+      developerWorks publication of Robert D. Anderson's how-to articles with the original h2d code.
+      This migration tool is under <filepath>demo\h2d</filepath> directory. You can use it
+      separately because it is not integrated into the main transformation of toolkit. The version
+      in the toolkit is more recent, but the articles should be referenced for information on
+      details of the program, as well as for information on how to extend it. There are links to the
+      articles at the bottom of this page.</p>
         <section>
             <title>Preconditions</title>
             <p>The preconditions to be considered before using the migration 
@@ -37,7 +35,7 @@
                     utility before processing.</li>
             </ul>
         </section>
-        <section>
+        <!--section>
             <title>Running examples</title>
             <p>You can use the Ant script to migrate only one HTML file or all 
                 the HTML files in same directory each time. See <xref 
@@ -46,7 +44,7 @@
             <p>You can also use the Java command for migration. See <xref 
                 href="DITA-h2d-java.xml#h2d-java"></xref> for more 
                 details.</p>
-        </section>
+        </section-->
         <section>
             <title>Post conditions</title>
             <p>There are also some post conditions to consider after 
@@ -59,9 +57,7 @@
         </section>
         <section>
             <title>Known limitations</title>
-            <p>There are some known limitations within the current release, 
-                please refer to <xref href="DITA-limitations.xml"/> 
-                for detailed information.</p>
+            <ol conref="DITA-limitations.xml#limitations/html2dita-limitations"><li/></ol>
         </section>
         <section>
             <title>Extension points</title>
@@ -79,14 +75,6 @@
                 <li>You can also migrate to another specialized DTD by 
                     overriding the original template base on the specific DTD 
                     and your required output.</li>
-            </ul>
-        </section>
-        <section>
-            <title>Additional information</title>
-            <p>You can find the here original developerWorks publication via links below:</p>
-            <ul>
-                <li><xref href="http://www-128.ibm.com/developerworks/xml/library/x-dita8a" format="html" scope="external">Migrating HTML to DITA, Part 1: Simple steps to move from HTML to DITA</xref></li>
-                <li><xref href="http://www-128.ibm.com/developerworks/xml/library/x-dita8b" format="html" scope="external">Migrating HTML to DITA, Part 2: Extend the migration for more robust results</xref></li>
             </ul>
         </section>
     </conbody>

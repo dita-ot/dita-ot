@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE subjectScheme PUBLIC "-//OASIS//DTD DITA Subject Scheme Map//EN" "subjectScheme.dtd">
+<subjectScheme>
+  <enumerationdef>
+    <attributedef name="audience"/>
+    <subjectdef keys="end-user"/>
+    <subjectdef keys="build-scripter"/>
+    <subjectdef keys="help-developer"/>
+    <subjectdef keys="xslt-customizer"/>
+  </enumerationdef>
+</subjectScheme>

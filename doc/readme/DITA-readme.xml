@@ -6,7 +6,7 @@
 <concept id="DITA-readme" xml:lang="en-us">
 <title>DITA Open Toolkit </title>
 <titlealts>
-<navtitle>DITA Toolkit Introduction</navtitle>
+<navtitle>DITA-OT Introduction</navtitle>
 </titlealts>
 <shortdesc>The DITA Open Toolkit is an implementation of the OASIS
 DITA Technical Committee&apos;s specification for DITA DTDs and Schemas.

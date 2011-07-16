@@ -13,15 +13,14 @@ screen present user with the status information, warning, error, and
      fatal error messages. The messages in the log file present user
 with more      detailed information about the transformation process.
 By analyzing these      messages, user can know what cause the problem
-and how to solve it.</p><?Pub Caret 347?>   <p>The logging method
+and how to solve it.</p>   <p>The logging method
 is based on Ant's Logger &amp; Listener interface.      By default,
 this logging method is disabled, and all the messages occur on   
   the screen just like previous releases.</p>   <p>To start this new
 logging method, you need to follow the usage below:   <ul>
-<li>In Ant command, specify the logger by appending          <codeph>-logger
-org.dita.dost.log.DITAOTBuildLogger</codeph> in the          command
-parameters, for example:          <codeblock>ant sample.web -logger org.dita.dost.log.DITAOTBuildLogger
-        </codeblock></li>
+<li importance="deprecated">In Ant command, specify the logger by appending <codeph>-logger
+              org.dita.dost.log.DITAOTBuildLogger</codeph> in the command parameters, for example:
+            <codeblock>ant sample.web -logger org.dita.dost.log.DITAOTBuildLogger</codeblock></li>
 <li>In Java command, the logger is specified internally, so you do
 not          need to specify it again.</li>
 </ul></p> </section>
@@ -65,8 +64,7 @@ can help          the user or developer to go deep into the problems
 and find the root          cause.</p>     <p>By default, the debug
 mode is disabled. To turn on the debug mode,          you need to
 follow the usage below:       <ul>
-<li>Append <codeph>-d</codeph> or <codeph>-debug</codeph> in Ant 
-            command.</li>
+<li>Append <codeph>-v</codeph> and <codeph>-Dargs.debug=yes</codeph> in Ant command.</li>
 <li>Append <codeph>/d</codeph> or <codeph>/debug</codeph> in Java
              command.</li>
 </ul></p> </section>

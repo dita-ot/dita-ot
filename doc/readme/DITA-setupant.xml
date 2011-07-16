@@ -27,14 +27,14 @@ format="html" href="http://ant.apache.org/bindownload.cgi"
 scope="external"></xref>) into a directory of your choice.</cmd></step>
 <step><cmd>Set up environment variable.</cmd>
 <choices>
-<choice>On a Windows platform, follow these steps: <ul>
+<choice platform="windows">On a Windows platform, follow these steps: <ul>
 <li>Set the JAVA_HOME environment variable, if it is not already defined: <codeph>set
                JAVA_HOME=&lt;jdk_dir></codeph></li>
 <li>Set the ANT_HOME environment variable: <codeph>set ANT_HOME=&lt;ant_dir></codeph></li>
 <li>Add the Ant binary directory to the PATH environment variable: <codeph>set
 PATH=%PATH%;&lt;ant_dir>\bin</codeph></li>
 </ul></choice>
-<choice>On Linux, follow these steps: <ul>
+<choice platform="linux osx">On Linux, follow these steps: <ul>
 <li>Set JAVA_HOME as follows: <codeph>export JAVA_HOME=&lt;jdk_dir></codeph></li>
 <li>Set the ANT_HOME as follows: <codeph>export ANT_HOME=&lt;ant_dir></codeph></li>
 <li>Add Ant to the PATH as follows: <codeph>export PATH=$PATH:&lt;ant_dir>\bin</codeph></li>

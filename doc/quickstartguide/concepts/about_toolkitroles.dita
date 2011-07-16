@@ -4,7 +4,7 @@
 	<title>About DITA-OT Toolkit Roles</title>
 	<shortdesc>Descriptions of the following user roles for the toolkit: CSS Customizers, Build Scripters, and potentially End Users of third-party authoring tools.</shortdesc>
 	<conbody>
-  <p  audience="helpdevelopers endusers xsltcustomizers buildscripters">If you don't know what a build script is, or whether your authoring tool should or does use DITA OpenToolkit, you may be reading the right document in the 
+  <p  audience="help-developer end-user xslt-customizer build-scripter">If you don't know what a build script is, or whether your authoring tool should or does use DITA OpenToolkit, you may be reading the right document in the 
   in the DITA-OT documentation suite.  User Roles are a useful way to present and approach the documentation, enabling the reader to bypass information that is not relevant to 
   the specific task she is performing when this document is read.  The followige roles are addressed in this guide:
     <ul>
