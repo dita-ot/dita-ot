@@ -285,7 +285,7 @@ with those set forth herein.
     <!-- resolver and catalogs with the Open Toolkit -->
     <echo level="info" message="Java maximum memory=${maxJavaMemory}"/>
     <java classname="${fo.saxon.classname}" classpathref="project.class.path" fork="true"
-          maxmemory="${maxJavaMemory}">
+          maxmemory="${maxJavaMemory}" failonerror="true">
       <jvmarg line="${baseJVMArgLine}"/>
       <arg line='-o:"${dita.temp.dir}/stage2.fo"'/>
       <arg line="${saxon.resolver.command.line}"/>

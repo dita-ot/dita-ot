@@ -7,7 +7,10 @@ import com.idiominc.ws.opentopic.fo.index2.configuration.IndexConfiguration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.Set;
+
+import org.dita.dost.log.MessageUtils;
 
 /*
 Copyright � 2004-2006 by Idiom Technologies, Inc. All rights reserved.
@@ -140,11 +143,13 @@ public class IndexGroupProcessor {
                 String key = (String) keys[j];
                 if (key.length() > 0) {
                     final IndexEntry entry = (IndexEntry) indexMap.get(key);
-                    System.out.println("[ERROR] Index entry '"+entry.toString()+"' is dropped, because corresponding group is not found");
+                    final Properties prop = new Properties();
+                    prop.put("%1", entry.toString());
+                    System.err.println(MessageUtils.getMessage("PDFJ001E", prop).toString());
                 }
             }
             if (IndexPreprocessorTask.failOnError) {
-                System.out.println("[ERROR] Build stopped. Problems occured during Index preprocess task. Please check the messages above.");
+                System.err.println(MessageUtils.getMessage("PDFJ002E", new Properties()).toString());
                 IndexPreprocessorTask.processingFaild=true;
             }
         }

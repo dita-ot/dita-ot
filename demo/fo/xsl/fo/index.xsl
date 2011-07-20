@@ -157,24 +157,20 @@ See the accompanying license.txt file for applicable licenses.
 						<xsl:variable name="followingStartMarker" select="$followingMarkers[@start-range='true'][1]"/>
 						<xsl:choose>
 							<xsl:when test="not($followingMarker)">
-								<xsl:if test="$warn-enabled">
-									<xsl:message>
-										<xsl:text>[WARNING] There is no index entry found which closing range for ID="</xsl:text>
-										<xsl:value-of select="$selfID"/>
-										<xsl:text>"</xsl:text>
-									</xsl:message>
-								</xsl:if>
+							  <xsl:call-template name="output-message">
+							    <xsl:with-param name="msgnum">001</xsl:with-param>
+							    <xsl:with-param name="msgsev">W</xsl:with-param>
+							    <xsl:with-param name="msgparams">%1=<xsl:value-of select="$selfID"/></xsl:with-param>
+							  </xsl:call-template>
 							</xsl:when>
 							<xsl:otherwise>
 								<xsl:choose>
 									<xsl:when test="$followingStartMarker and $followingStartMarker[following::*[generate-id() = generate-id($followingMarker)]]">
-										<xsl:if test="$warn-enabled">
-											<xsl:message>
-												<xsl:text>[WARNING] There are multiple index entry found which is opening range for ID="</xsl:text>
-												<xsl:value-of select="$selfID"/>
-												<xsl:text>"</xsl:text> but there is only one which close it or ranges are overlapping.
-											</xsl:message>
-										</xsl:if>
+									  <xsl:call-template name="output-message">
+									    <xsl:with-param name="msgnum">002</xsl:with-param>
+									    <xsl:with-param name="msgsev">W</xsl:with-param>
+									    <xsl:with-param name="msgparams">%1=<xsl:value-of select="$selfID"/></xsl:with-param>
+									  </xsl:call-template>
 									</xsl:when>
 									<xsl:otherwise>
 										<fo:index-range-begin id="{$selfID}_{generate-id()}" index-key="{$selfID}"/>
@@ -196,24 +192,20 @@ See the accompanying license.txt file for applicable licenses.
 						<xsl:variable name="precEndMarker" select="$precMarkers[@end-range='true'][last()]"/>
 						<xsl:choose>
 							<xsl:when test="not($precMarker)">
-								<xsl:if test="$warn-enabled">
-									<xsl:message>
-										<xsl:text>[WARNING] There is no index entry found which opening range for ID="</xsl:text>
-										<xsl:value-of select="$selfID"/>
-										<xsl:text>"</xsl:text>
-									</xsl:message>
-								</xsl:if>
+							  <xsl:call-template name="output-message">
+							    <xsl:with-param name="msgnum">007</xsl:with-param>
+							    <xsl:with-param name="msgsev">W</xsl:with-param>
+							    <xsl:with-param name="msgparams">%1=<xsl:value-of select="$selfID"/></xsl:with-param>
+							  </xsl:call-template>
 							</xsl:when>
 							<xsl:otherwise>
 								<xsl:choose>
 									<xsl:when test="$precEndMarker and $precEndMarker[preceding::*[generate-id() = generate-id($precMarker)]]">
-										<xsl:if test="$warn-enabled">
-											<xsl:message>
-												<xsl:text>[WARNING] There are multiple index entry found which closing range for ID="</xsl:text>
-												<xsl:value-of select="$selfID"/>
-												<xsl:text>"</xsl:text>
-											</xsl:message>
-										</xsl:if>
+									  <xsl:call-template name="output-message">
+									    <xsl:with-param name="msgnum">003</xsl:with-param>
+									    <xsl:with-param name="msgsev">W</xsl:with-param>
+									    <xsl:with-param name="msgparams">%1=<xsl:value-of select="$selfID"/></xsl:with-param>
+									  </xsl:call-template>
 									</xsl:when>
 									<xsl:otherwise>
 										<xsl:for-each select="$precMarker//opentopic-index:refID[@value = $selfID]/@value">

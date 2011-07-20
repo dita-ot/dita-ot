@@ -97,14 +97,19 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="topicref-validation">
         <xsl:if test="@href = ''">
-            <xsl:message>[ERROR] Empty href was specified for some topic reference !</xsl:message>
-            <xsl:message terminate="yes">[ERROR] Please correct your ditamap or bookmap file.</xsl:message>
+          <xsl:call-template name="output-message">
+            <xsl:with-param name="msgnum">004</xsl:with-param>
+            <xsl:with-param name="msgsev">F</xsl:with-param>
+          </xsl:call-template>
         </xsl:if>
         <xsl:if test="@href and @id">
             <xsl:variable name="searchId" select="@id"/>
             <xsl:if test="not(//*[contains(@class, ' topic/topic ')][@id = $searchId]) and not($searchId = '')">
-                <xsl:message>[ERROR] Topic reference (href : <xsl:value-of select="@href"/>) not found !</xsl:message>
-                <xsl:message terminate="yes">[ERROR] Reference may be incorrect. Please correct your ditamap or bookmap file.</xsl:message>
+              <xsl:call-template name="output-message">
+                <xsl:with-param name="msgnum">005</xsl:with-param>
+                <xsl:with-param name="msgsev">F</xsl:with-param>
+                <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
+              </xsl:call-template>
             </xsl:if>
         </xsl:if>
         <xsl:apply-templates mode="topicref-validation"/>

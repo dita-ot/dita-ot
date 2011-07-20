@@ -41,6 +41,8 @@ See the accompanying license.txt file for applicable licenses.
     exclude-result-prefixes="opentopic exsl opentopic-index dita2xslfo"
     version="2.0">
 
+    <xsl:variable name="msgprefix" select="'PDFX'"/>
+  
     <xsl:variable name="id.toc" select="'ID_TOC_00-0F-EA-40-0D-4D'"/>
     <xsl:variable name="id.index" select="'ID_INDEX_00-0F-EA-40-0D-4D'"/>
     <xsl:variable name="id.lot" select="'ID_LOT_00-0F-EA-40-0D-4D'"/>

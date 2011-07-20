@@ -40,8 +40,10 @@ See the accompanying license.txt file for applicable licenses.
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 exclude-result-prefixes="opentopic-i18n">
 
+  <xsl:import href="../../../../xsl/common/output-message.xsl"/>
+
     <xsl:variable name="debug-enabled" select="true()"/>
-    <xsl:variable name="warn-enabled" select="true()"/>
+  <xsl:variable name="msgprefix" select="'PDFX'"/>
 
     <xsl:variable name="font-mappings" select="document('cfg:fo/font-mappings.xml')/font-mappings"/>
   <xsl:variable name="default-font" select="$font-mappings/font-table/aliases/alias[. = 'Normal']/@name"/>
@@ -67,7 +69,13 @@ See the accompanying license.txt file for applicable licenses.
 				<xsl:otherwise>
 					<!--Try search this name within font aliases-->
 					<xsl:variable name="aliasValue" select="$font-mappings/font-table/aliases/alias[@name=$currFontFam]/."/>
-					<xsl:if test="$warn-enabled and not($aliasValue)">[WARN] Font definition not found for the logical name or alias '<xsl:value-of select="$currFontFam"/>'!</xsl:if>
+					<xsl:if test="not($aliasValue)">
+					  <xsl:call-template name="output-message">
+					    <xsl:with-param name="msgnum">008</xsl:with-param>
+					    <xsl:with-param name="msgsev">W</xsl:with-param>
+					    <xsl:with-param name="msgparams">%1=<xsl:value-of select="$currFontFam"/></xsl:with-param>
+					  </xsl:call-template>
+					</xsl:if>
 					<xsl:value-of select="$aliasValue"/>
 				</xsl:otherwise>
 			</xsl:choose>
@@ -122,7 +130,13 @@ See the accompanying license.txt file for applicable licenses.
 				<xsl:otherwise>
 					<!--Try search this name within font aliases-->
 					<xsl:variable name="aliasValue" select="$font-mappings/font-table/aliases/alias[@name=$fontFace]/."/>
-					<xsl:if test="$warn-enabled and not($aliasValue)">[WARN] Font definition not found for the logical name or alias '<xsl:value-of select="$fontFace"/>'!</xsl:if>
+					<xsl:if test="not($aliasValue)">
+					  <xsl:call-template name="output-message">
+					    <xsl:with-param name="msgnum">008</xsl:with-param>
+					    <xsl:with-param name="msgsev">W</xsl:with-param>
+					    <xsl:with-param name="msgparams">%1=<xsl:value-of select="$fontFace"/></xsl:with-param>
+					  </xsl:call-template>
+					</xsl:if>
 					<xsl:value-of select="$aliasValue"/>
 				</xsl:otherwise>
 			</xsl:choose>
