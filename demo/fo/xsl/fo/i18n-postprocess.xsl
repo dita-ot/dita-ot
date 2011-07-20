@@ -46,7 +46,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:variable name="font-mappings" select="document('cfg:fo/font-mappings.xml')/font-mappings"/>
   <xsl:variable name="default-font" select="$font-mappings/font-table/aliases/alias[. = 'Normal']/@name"/>
 
-	<xsl:template match="fo:bookmark | fo:bookmark-label" priority="+10">
+	<xsl:template match="fo:bookmark | fo:bookmark-label | fo:bookmark-title" priority="+10">
 		<xsl:copy>
 			<xsl:copy-of select="@*"/>
 			<xsl:apply-templates/>
