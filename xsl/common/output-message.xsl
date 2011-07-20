@@ -65,10 +65,24 @@
         </xsl:if>
       </xsl:variable>
       
-      <xsl:message>
-        <!-- Debug location,Error message-->
- 		<xsl:value-of select="concat($msgcontent,'The location of this problem was at ',$debugloc)"/>
-      </xsl:message>
+      <xsl:variable name="m">
+        <xsl:value-of select="$msgcontent"/>
+        <xsl:if test="normalize-space($debugloc)">
+          <xsl:value-of select="concat('The location of this problem was at ',$debugloc)"/>
+        </xsl:if>
+      </xsl:variable>
+      <xsl:choose>
+        <xsl:when test="$msgsev = 'F'">
+          <xsl:message terminate="yes">
+            <xsl:value-of select="$m"/>
+          </xsl:message>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:message>
+            <xsl:value-of select="$m"/>
+          </xsl:message>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:template>
     
     <xsl:template match="message" mode="get-message-content">
