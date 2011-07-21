@@ -54,7 +54,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="__toc__topic__content">
         <xsl:attribute name="last-line-end-indent">-22pt</xsl:attribute>
         <xsl:attribute name="end-indent">22pt</xsl:attribute>
-        <xsl:attribute name="text-indent">-.2in</xsl:attribute>
+        <xsl:attribute name="text-indent">-14pt</xsl:attribute>
         <xsl:attribute name="text-align">left</xsl:attribute>
         <xsl:attribute name="text-align-last">justify</xsl:attribute>
         <xsl:attribute name="font-size">
@@ -108,12 +108,12 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__toc__title">
-      <xsl:attribute name="margin-right">.2in</xsl:attribute>
+      <xsl:attribute name="margin-right">14pt</xsl:attribute>
       <xsl:attribute name="keep-together.within-line">always</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__toc__page-number">
-      <xsl:attribute name="margin-left">-.2in</xsl:attribute>
+      <xsl:attribute name="margin-left">-14pt</xsl:attribute>
       <xsl:attribute name="keep-together.within-line">always</xsl:attribute>
     </xsl:attribute-set>
 
@@ -212,7 +212,7 @@ See the accompanying license.txt file for applicable licenses.
     
     <xsl:attribute-set name="__toc__item__right">
         <xsl:attribute name="keep-together.within-line">always</xsl:attribute>
-        <xsl:attribute name="margin-left">0.01in</xsl:attribute>
+        <xsl:attribute name="margin-left">1pt</xsl:attribute>
     </xsl:attribute-set>
 
 </xsl:stylesheet>

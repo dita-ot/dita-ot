@@ -244,17 +244,17 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="section">
-        <xsl:attribute name="line-height">12pt</xsl:attribute>
+        <xsl:attribute name="line-height"><xsl:value-of select="$default-line-height"/></xsl:attribute>
         <xsl:attribute name="space-before">0.6em</xsl:attribute>
         <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="example" use-attribute-sets="common.border">
-        <xsl:attribute name="line-height">12pt</xsl:attribute>
+        <xsl:attribute name="line-height"><xsl:value-of select="$default-line-height"/></xsl:attribute>
         <xsl:attribute name="space-before">0.6em</xsl:attribute>
         <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
-        <xsl:attribute name="margin-left">0.5in</xsl:attribute>
-        <xsl:attribute name="margin-right">0.5in</xsl:attribute>
+        <xsl:attribute name="margin-left">36pt</xsl:attribute>
+        <xsl:attribute name="margin-right">36pt</xsl:attribute>
         <xsl:attribute name="padding">5pt</xsl:attribute>
     </xsl:attribute-set>
 

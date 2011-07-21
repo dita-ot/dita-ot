@@ -21,7 +21,7 @@
 <xsl:attribute-set name="__index__letter-group">
         <xsl:attribute name="font-size">12pt</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
-        <xsl:attribute name="space-after">0.1in</xsl:attribute>
+        <xsl:attribute name="space-after">7pt</xsl:attribute>
         <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
     </xsl:attribute-set>
 </xsl:stylesheet>

@@ -35,60 +35,70 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     version="2.0">
 
-    <xsl:attribute-set name="__body__odd__footer">
-        <xsl:attribute name="text-align">right</xsl:attribute>
-        <xsl:attribute name="margin-right">10pt</xsl:attribute>
-        <xsl:attribute name="margin-bottom">10pt</xsl:attribute>
+  <xsl:attribute-set name="odd__header">
+    <xsl:attribute name="text-align">right</xsl:attribute>
+    <xsl:attribute name="margin-right">10pt</xsl:attribute>
+    <xsl:attribute name="margin-top">10pt</xsl:attribute>
+  </xsl:attribute-set>
+
+  <xsl:attribute-set name="even__header">
+    <xsl:attribute name="margin-left">10pt</xsl:attribute>
+    <xsl:attribute name="margin-top">10pt</xsl:attribute>
+  </xsl:attribute-set>
+
+  <xsl:attribute-set name="odd__footer">
+    <xsl:attribute name="text-align">right</xsl:attribute>
+    <xsl:attribute name="margin-right">10pt</xsl:attribute>
+    <xsl:attribute name="margin-bottom">10pt</xsl:attribute>
+  </xsl:attribute-set>
+
+  <xsl:attribute-set name="even__footer">
+    <xsl:attribute name="margin-left">10pt</xsl:attribute>
+    <xsl:attribute name="margin-bottom">10pt</xsl:attribute>
+  </xsl:attribute-set>
+  
+  <xsl:attribute-set name="pagenum">
+    <xsl:attribute name="font-weight">bold</xsl:attribute>
+  </xsl:attribute-set>
+
+
+    <xsl:attribute-set name="__body__odd__footer" use-attribute-sets="odd__footer">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__body__odd__footer__heading">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__body__odd__footer__pagenum">
-        <xsl:attribute name="font-weight">bold</xsl:attribute>
+    <xsl:attribute-set name="__body__odd__footer__pagenum" use-attribute-sets="pagenum">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__body__even__footer">
-        <xsl:attribute name="margin-left">10pt</xsl:attribute>
-        <xsl:attribute name="margin-bottom">10pt</xsl:attribute>
+    <xsl:attribute-set name="__body__even__footer" use-attribute-sets="even__footer">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__body__even__footer__heading">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__body__even__footer__pagenum">
-        <xsl:attribute name="font-weight">bold</xsl:attribute>
+    <xsl:attribute-set name="__body__even__footer__pagenum" use-attribute-sets="pagenum">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__body__odd__header">
-        <xsl:attribute name="text-align">right</xsl:attribute>
-        <xsl:attribute name="margin-right">10pt</xsl:attribute>
-        <xsl:attribute name="margin-top">10pt</xsl:attribute>
+    <xsl:attribute-set name="__body__odd__header" use-attribute-sets="odd__header">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__body__odd__header__heading">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__body__odd__header__pagenum">
-        <xsl:attribute name="font-weight">bold</xsl:attribute>
+    <xsl:attribute-set name="__body__odd__header__pagenum" use-attribute-sets="pagenum">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__body__even__header">
-        <xsl:attribute name="margin-left">10pt</xsl:attribute>
-        <xsl:attribute name="margin-top">10pt</xsl:attribute>
+    <xsl:attribute-set name="__body__even__header" use-attribute-sets="even__header">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__body__even__header__heading">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__body__even__header__pagenum">
-        <xsl:attribute name="font-weight">bold</xsl:attribute>
+    <xsl:attribute-set name="__body__even__header__pagenum" use-attribute-sets="pagenum">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__body__first__header">
-        <xsl:attribute name="text-align">right</xsl:attribute>
-        <xsl:attribute name="margin-right">10pt</xsl:attribute>
-        <xsl:attribute name="margin-top">10pt</xsl:attribute>
+    <xsl:attribute-set name="__body__first__header" use-attribute-sets="odd__header">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__body__first__footer">
@@ -97,13 +107,13 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="__body__first__header__heading">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__body__first__header__pagenum">
+    <xsl:attribute-set name="__body__first__header__pagenum" use-attribute-sets="pagenum">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__body__first__footer__heading">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__body__first__footer__pagenum">
+    <xsl:attribute-set name="__body__first__footer__pagenum" use-attribute-sets="pagenum">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__body__last__header">
@@ -112,81 +122,52 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="__body__last__footer">
     </xsl:attribute-set>
 
-
-    <xsl:attribute-set name="__toc__odd__footer">
-        <xsl:attribute name="text-align">right</xsl:attribute>
-        <xsl:attribute name="margin-right">10pt</xsl:attribute>
-        <xsl:attribute name="margin-bottom">10pt</xsl:attribute>
+    <xsl:attribute-set name="__toc__odd__footer" use-attribute-sets="odd__footer">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__toc__odd__footer__pagenum">
-        <xsl:attribute name="font-weight">bold</xsl:attribute>
+    <xsl:attribute-set name="__toc__odd__footer__pagenum" use-attribute-sets="pagenum">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__toc__even__footer">
-        <xsl:attribute name="margin-left">10pt</xsl:attribute>
-        <xsl:attribute name="margin-bottom">10pt</xsl:attribute>
+    <xsl:attribute-set name="__toc__even__footer" use-attribute-sets="even__footer">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__toc__even__footer__pagenum">
-        <xsl:attribute name="font-weight">bold</xsl:attribute>
+    <xsl:attribute-set name="__toc__even__footer__pagenum" use-attribute-sets="pagenum">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__toc__odd__header">
-        <xsl:attribute name="text-align">right</xsl:attribute>
-        <xsl:attribute name="margin-right">10pt</xsl:attribute>
-        <xsl:attribute name="margin-top">10pt</xsl:attribute>
+    <xsl:attribute-set name="__toc__odd__header" use-attribute-sets="odd__header">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__toc__odd__header__pagenum">
-        <xsl:attribute name="font-weight">bold</xsl:attribute>
+    <xsl:attribute-set name="__toc__odd__header__pagenum" use-attribute-sets="pagenum">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__toc__even__header">
-        <xsl:attribute name="margin-left">10pt</xsl:attribute>
-        <xsl:attribute name="margin-top">10pt</xsl:attribute>
+    <xsl:attribute-set name="__toc__even__header" use-attribute-sets="even__header">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__toc__even__header__pagenum">
-        <xsl:attribute name="font-weight">bold</xsl:attribute>
+    <xsl:attribute-set name="__toc__even__header__pagenum" use-attribute-sets="pagenum">
     </xsl:attribute-set>
 
-        <xsl:attribute-set name="__index__odd__footer">
-        <xsl:attribute name="text-align">right</xsl:attribute>
-        <xsl:attribute name="margin-right">10pt</xsl:attribute>
-        <xsl:attribute name="margin-bottom">10pt</xsl:attribute>
+    <xsl:attribute-set name="__index__odd__footer" use-attribute-sets="odd__footer">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__index__odd__footer__pagenum">
-        <xsl:attribute name="font-weight">bold</xsl:attribute>
+    <xsl:attribute-set name="__index__odd__footer__pagenum" use-attribute-sets="pagenum">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__index__even__footer">
-        <xsl:attribute name="margin-left">10pt</xsl:attribute>
-        <xsl:attribute name="margin-bottom">10pt</xsl:attribute>
+    <xsl:attribute-set name="__index__even__footer" use-attribute-sets="even__footer">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__index__even__footer__pagenum">
-        <xsl:attribute name="font-weight">bold</xsl:attribute>
+    <xsl:attribute-set name="__index__even__footer__pagenum" use-attribute-sets="pagenum">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__index__odd__header">
-        <xsl:attribute name="text-align">right</xsl:attribute>
-        <xsl:attribute name="margin-right">10pt</xsl:attribute>
-        <xsl:attribute name="margin-top">10pt</xsl:attribute>
+    <xsl:attribute-set name="__index__odd__header" use-attribute-sets="odd__header">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__index__odd__header__pagenum">
-        <xsl:attribute name="font-weight">bold</xsl:attribute>
+    <xsl:attribute-set name="__index__odd__header__pagenum" use-attribute-sets="pagenum">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__index__even__header">
-        <xsl:attribute name="margin-left">10pt</xsl:attribute>
-        <xsl:attribute name="margin-top">10pt</xsl:attribute>
+    <xsl:attribute-set name="__index__even__header" use-attribute-sets="even__header">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__index__even__header__pagenum">
-        <xsl:attribute name="font-weight">bold</xsl:attribute>
+    <xsl:attribute-set name="__index__even__header__pagenum" use-attribute-sets="pagenum">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__body__footnote__separator">
@@ -212,42 +193,28 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="font-weight">bold</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__glossary__odd__footer">
-        <xsl:attribute name="text-align">right</xsl:attribute>
-        <xsl:attribute name="margin-right">10pt</xsl:attribute>
-        <xsl:attribute name="margin-bottom">10pt</xsl:attribute>
+    <xsl:attribute-set name="__glossary__odd__footer" use-attribute-sets="odd__footer">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__glossary__odd__footer__pagenum">
-        <xsl:attribute name="font-weight">bold</xsl:attribute>
+    <xsl:attribute-set name="__glossary__odd__footer__pagenum" use-attribute-sets="pagenum">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__glossary__even__footer">
-        <xsl:attribute name="margin-left">10pt</xsl:attribute>
-        <xsl:attribute name="margin-bottom">10pt</xsl:attribute>
+    <xsl:attribute-set name="__glossary__even__footer" use-attribute-sets="even__footer">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__glossary__even__footer__pagenum">
-        <xsl:attribute name="font-weight">bold</xsl:attribute>
+    <xsl:attribute-set name="__glossary__even__footer__pagenum" use-attribute-sets="pagenum">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__glossary__odd__header">
-        <xsl:attribute name="text-align">right</xsl:attribute>
-        <xsl:attribute name="margin-right">10pt</xsl:attribute>
-        <xsl:attribute name="margin-top">10pt</xsl:attribute>
+    <xsl:attribute-set name="__glossary__odd__header" use-attribute-sets="odd__header">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__glossary__odd__header__pagenum">
-        <xsl:attribute name="font-weight">bold</xsl:attribute>
+    <xsl:attribute-set name="__glossary__odd__header__pagenum" use-attribute-sets="pagenum">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__glossary__even__header">
-        <xsl:attribute name="margin-left">10pt</xsl:attribute>
-        <xsl:attribute name="margin-top">10pt</xsl:attribute>
+    <xsl:attribute-set name="__glossary__even__header" use-attribute-sets="even__header">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__glossary__even__header__pagenum">
-        <xsl:attribute name="font-weight">bold</xsl:attribute>
+    <xsl:attribute-set name="__glossary__even__header__pagenum" use-attribute-sets="pagenum">
     </xsl:attribute-set>
 
 </xsl:stylesheet>

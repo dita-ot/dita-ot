@@ -63,4 +63,5 @@
     <xsl:variable name="side-col-width">25pt</xsl:variable>
 
     <xsl:variable name="default-font-size">10pt</xsl:variable>
+    <xsl:variable name="default-line-height">12pt</xsl:variable>
 </xsl:stylesheet>

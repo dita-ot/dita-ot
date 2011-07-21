@@ -13,8 +13,7 @@
   </xsl:attribute-set>
   
   <xsl:attribute-set name ="__lotf__content" use-attribute-sets="__toc__topic__content__booklist">
-    <xsl:attribute name ="font-size">12pt</xsl:attribute>
-    <xsl:attribute name ="line-height">14pt</xsl:attribute>
+    <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     <xsl:attribute name="font-weight">normal</xsl:attribute>
     <xsl:attribute name="space-before">5pt</xsl:attribute>
     <xsl:attribute name="space-after">5pt</xsl:attribute>
@@ -25,18 +24,18 @@
   </xsl:attribute-set>
 
   <xsl:attribute-set name="__lotf__number" use-attribute-sets="__lotf__content">
-    <xsl:attribute name="start-indent">1in</xsl:attribute>
+    <xsl:attribute name="start-indent">72pt</xsl:attribute>
     <xsl:attribute name="float">left</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="__lotf__title" use-attribute-sets="__lotf__content">
-    <xsl:attribute name="margin-left">1.5in</xsl:attribute>
-    <xsl:attribute name="margin-right">.2in</xsl:attribute>
+    <xsl:attribute name="margin-left">108pt</xsl:attribute>
+    <xsl:attribute name="margin-right">14pt</xsl:attribute>
     <xsl:attribute name="keep-together.within-line">always</xsl:attribute>
   </xsl:attribute-set>
   
   <xsl:attribute-set name="__lotf__page-number">
-    <xsl:attribute name="margin-left">-.2in</xsl:attribute>
+    <xsl:attribute name="margin-left">-14pt</xsl:attribute>
     <xsl:attribute name="keep-together.within-line">always</xsl:attribute>
   </xsl:attribute-set>
 

@@ -33,6 +33,15 @@ See the accompanying license.txt file for applicable licenses.
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="2.0">
 
+  <!-- contents of table entries or similer structures -->
+  <xsl:attribute-set name="common.table.body.entry">
+    <xsl:attribute name="margin">3pt 3pt 3pt 3pt</xsl:attribute>
+  </xsl:attribute-set>
+  
+  <xsl:attribute-set name="common.table.head.entry">
+    <xsl:attribute name="font-weight">bold</xsl:attribute>
+  </xsl:attribute-set>
+
     <xsl:attribute-set name="table.title" use-attribute-sets="common.title">
         <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
@@ -124,30 +133,25 @@ See the accompanying license.txt file for applicable licenses.
         <!--head cell-->
         <xsl:attribute name="background-color">antiquewhite</xsl:attribute>
     </xsl:attribute-set>
-
-    <xsl:attribute-set name="thead.row.entry__content">
+    
+    <xsl:attribute-set name="thead.row.entry__content" use-attribute-sets="common.table.body.entry common.table.head.entry">
         <!--head cell contents-->
-        <xsl:attribute name="margin">3pt 3pt 3pt 3pt</xsl:attribute>
-        <xsl:attribute name="font-weight">bold</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="tfoot.row.entry">
         <!--footer cell-->
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="tfoot.row.entry__content">
+    <xsl:attribute-set name="tfoot.row.entry__content" use-attribute-sets="common.table.body.entry common.table.head.entry">
         <!--footer cell contents-->
-        <xsl:attribute name="margin">3pt 3pt 3pt 3pt</xsl:attribute>
-        <xsl:attribute name="font-weight">bold</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="tbody.row.entry">
         <!--body cell-->
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="tbody.row.entry__content">
+    <xsl:attribute-set name="tbody.row.entry__content" use-attribute-sets="common.table.body.entry">
         <!--body cell contents-->
-        <xsl:attribute name="margin">3pt 3pt 3pt 3pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="dl">
@@ -170,16 +174,13 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="relative-align">baseline</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="dlentry.dt__content">
-        <xsl:attribute name="margin">3pt 3pt 3pt 3pt</xsl:attribute>
-        <xsl:attribute name="font-weight">bold</xsl:attribute>
+    <xsl:attribute-set name="dlentry.dt__content" use-attribute-sets="common.table.body.entry common.table.head.entry">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="dlentry.dd">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="dlentry.dd__content">
-        <xsl:attribute name="margin">3pt 3pt 3pt 3pt</xsl:attribute>
+    <xsl:attribute-set name="dlentry.dd__content" use-attribute-sets="common.table.body.entry">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="dl.dlhead__row">
@@ -188,17 +189,13 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="dlhead.dthd__cell">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="dlhead.dthd__content">
-        <xsl:attribute name="margin">3pt 3pt 3pt 3pt</xsl:attribute>
-        <xsl:attribute name="font-weight">bold</xsl:attribute>
+    <xsl:attribute-set name="dlhead.dthd__content" use-attribute-sets="common.table.body.entry common.table.head.entry">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="dlhead.ddhd__cell">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="dlhead.ddhd__content">
-        <xsl:attribute name="margin">3pt 3pt 3pt 3pt</xsl:attribute>
-        <xsl:attribute name="font-weight">bold</xsl:attribute>
+    <xsl:attribute-set name="dlhead.ddhd__content" use-attribute-sets="common.table.body.entry common.table.head.entry">
     </xsl:attribute-set>
 
 	<xsl:attribute-set name="simpletable">
@@ -224,24 +221,17 @@ See the accompanying license.txt file for applicable licenses.
 	<xsl:attribute-set name="sthead.stentry">
 	</xsl:attribute-set>
 
-	<xsl:attribute-set name="sthead.stentry__content">
-		<xsl:attribute name="margin">3pt 3pt 3pt 3pt</xsl:attribute>
-        <xsl:attribute name="font-weight">bold</xsl:attribute>
+  <xsl:attribute-set name="sthead.stentry__content" use-attribute-sets="common.table.body.entry common.table.head.entry">
 	</xsl:attribute-set>
 
-	<xsl:attribute-set name="sthead.stentry__keycol-content">
-		<xsl:attribute name="margin">3pt 3pt 3pt 3pt</xsl:attribute>
-        <xsl:attribute name="font-weight">bold</xsl:attribute>
+  <xsl:attribute-set name="sthead.stentry__keycol-content" use-attribute-sets="common.table.body.entry common.table.head.entry">
 		<xsl:attribute name="background-color">antiquewhite</xsl:attribute>
 	</xsl:attribute-set>
 
-	<xsl:attribute-set name="strow.stentry__content">
-		<xsl:attribute name="margin">3pt 3pt 3pt 3pt</xsl:attribute>
+  <xsl:attribute-set name="strow.stentry__content" use-attribute-sets="common.table.body.entry">
 	</xsl:attribute-set>
 
-	<xsl:attribute-set name="strow.stentry__keycol-content">
-		<xsl:attribute name="margin">3pt 3pt 3pt 3pt</xsl:attribute>
-        <xsl:attribute name="font-weight">bold</xsl:attribute>
+  <xsl:attribute-set name="strow.stentry__keycol-content" use-attribute-sets="common.table.body.entry common.table.head.entry">
 		<xsl:attribute name="background-color">antiquewhite</xsl:attribute>
 	</xsl:attribute-set>
 
@@ -265,14 +255,11 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="property.entry">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="property.entry__keycol-content">
-        <xsl:attribute name="margin">3pt 3pt 3pt 3pt</xsl:attribute>
-        <xsl:attribute name="font-weight">bold</xsl:attribute>
+    <xsl:attribute-set name="property.entry__keycol-content" use-attribute-sets="common.table.body.entry common.table.head.entry">
         <xsl:attribute name="background-color">antiquewhite</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="property.entry__content">
-        <xsl:attribute name="margin">3pt 3pt 3pt 3pt</xsl:attribute>
+    <xsl:attribute-set name="property.entry__content" use-attribute-sets="common.table.body.entry">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="prophead">
@@ -284,15 +271,11 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="prophead.entry">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="prophead.entry__keycol-content">
-        <xsl:attribute name="margin">3pt 3pt 3pt 3pt</xsl:attribute>
-        <xsl:attribute name="font-weight">bold</xsl:attribute>
+    <xsl:attribute-set name="prophead.entry__keycol-content" use-attribute-sets="common.table.body.entry common.table.head.entry">
         <xsl:attribute name="background-color">antiquewhite</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="prophead.entry__content">
-        <xsl:attribute name="margin">3pt 3pt 3pt 3pt</xsl:attribute>
-        <xsl:attribute name="font-weight">bold</xsl:attribute>
+    <xsl:attribute-set name="prophead.entry__content" use-attribute-sets="common.table.body.entry common.table.head.entry">
     </xsl:attribute-set>
 
 	<xsl:attribute-set name="choicetable">
@@ -317,41 +300,31 @@ See the accompanying license.txt file for applicable licenses.
 	<xsl:attribute-set name="chhead.choptionhd">
 	</xsl:attribute-set>
 
-	<xsl:attribute-set name="chhead.choptionhd__content">
-		<xsl:attribute name="margin">3pt 3pt 3pt 3pt</xsl:attribute>
-        <xsl:attribute name="font-weight">bold</xsl:attribute>
+  <xsl:attribute-set name="chhead.choptionhd__content" use-attribute-sets="common.table.body.entry common.table.head.entry">
 	</xsl:attribute-set>
 
 	<xsl:attribute-set name="chhead.chdeschd">
 	</xsl:attribute-set>
 
-	<xsl:attribute-set name="chhead.chdeschd__content">
-		<xsl:attribute name="margin">3pt 3pt 3pt 3pt</xsl:attribute>
-        <xsl:attribute name="font-weight">bold</xsl:attribute>
+  <xsl:attribute-set name="chhead.chdeschd__content" use-attribute-sets="common.table.body.entry common.table.head.entry">
 	</xsl:attribute-set>
 
 	<xsl:attribute-set name="chrow.choption">
 	</xsl:attribute-set>
 
-    <xsl:attribute-set name="chrow.choption__keycol-content">
-        <xsl:attribute name="margin">3pt 3pt 3pt 3pt</xsl:attribute>
-		<xsl:attribute name="font-weight">bold</xsl:attribute>
+    <xsl:attribute-set name="chrow.choption__keycol-content" use-attribute-sets="common.table.body.entry common.table.head.entry">
     </xsl:attribute-set>
 
-	<xsl:attribute-set name="chrow.choption__content">
-		<xsl:attribute name="margin">3pt 3pt 3pt 3pt</xsl:attribute>
+  <xsl:attribute-set name="chrow.choption__content" use-attribute-sets="common.table.body.entry">
 	</xsl:attribute-set>
 
 	<xsl:attribute-set name="chrow.chdesc">
 	</xsl:attribute-set>
 
-	<xsl:attribute-set name="chrow.chdesc__keycol-content">
-		<xsl:attribute name="margin">3pt 3pt 3pt 3pt</xsl:attribute>
-		<xsl:attribute name="font-weight">bold</xsl:attribute>
+  <xsl:attribute-set name="chrow.chdesc__keycol-content" use-attribute-sets="common.table.body.entry common.table.head.entry">
 	</xsl:attribute-set>
 
-	<xsl:attribute-set name="chrow.chdesc__content">
-		<xsl:attribute name="margin">3pt 3pt 3pt 3pt</xsl:attribute>
+  <xsl:attribute-set name="chrow.chdesc__content" use-attribute-sets="common.table.body.entry">
 	</xsl:attribute-set>
 
 
