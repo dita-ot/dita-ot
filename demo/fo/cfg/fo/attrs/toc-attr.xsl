@@ -35,13 +35,12 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     version="2.0">
 
-    <xsl:attribute-set name="__toc__header">
+    <xsl:attribute-set name="__toc__header" use-attribute-sets="common.title">
         <xsl:attribute name="margin-top">0pc</xsl:attribute>
         <xsl:attribute name="margin-bottom">1.4pc</xsl:attribute>
         <xsl:attribute name="font-size">20pt</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
         <xsl:attribute name="padding-top">1.4pc</xsl:attribute>
-        <xsl:attribute name="font-family">Sans</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__toc__link">
@@ -62,7 +61,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:variable name="level" select="count(ancestor-or-self::*[contains(@class, ' topic/topic ')])"/>
             <xsl:choose>
                 <xsl:when test="$level = 1">12pt</xsl:when>
-                <xsl:otherwise>10pt</xsl:otherwise>
+                <xsl:otherwise><xsl:value-of select="$default-font-size"/></xsl:otherwise>
             </xsl:choose>
         </xsl:attribute>
         <xsl:attribute name="font-weight">
@@ -135,7 +134,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="end-indent">5pt</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__toc__mini__header" use-attribute-sets="__toc__mini">
+    <xsl:attribute-set name="__toc__mini__header" use-attribute-sets="__toc__mini common.title">
         <xsl:attribute name="font-weight">bold</xsl:attribute>
     </xsl:attribute-set>
 
@@ -178,9 +177,8 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="column-width">65%</xsl:attribute>
     </xsl:attribute-set>
 
-     <xsl:attribute-set name="__toc__mini__summary">
+     <xsl:attribute-set name="__toc__mini__summary" use-attribute-sets="common.border__left">
          <xsl:attribute name="padding-left">10pt</xsl:attribute>
-         <xsl:attribute name="border-left">solid 1px black</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__toc__topic__content__booklist" use-attribute-sets="__toc__topic__content">

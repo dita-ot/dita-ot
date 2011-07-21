@@ -59,7 +59,7 @@
 
 <xsl:attribute-set name="simpletable">
     <!--xsl:attribute name="width">100%</xsl:attribute-->
-    <xsl:attribute name="font-size">10pt</xsl:attribute>
+    <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     <xsl:attribute name="space-before">8pt</xsl:attribute>
     <xsl:attribute name="space-after">10pt</xsl:attribute>
 </xsl:attribute-set>

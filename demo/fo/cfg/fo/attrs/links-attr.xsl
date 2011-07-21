@@ -138,9 +138,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="space-before">2pt</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="link__content">
-        <xsl:attribute name="color">blue</xsl:attribute>
-        <xsl:attribute name="font-style">italic</xsl:attribute>
+    <xsl:attribute-set name="link__content" use-attribute-sets="common.link">
         <!--<xsl:attribute name="margin-left">8pt</xsl:attribute>-->
     </xsl:attribute-set>
 
@@ -153,9 +151,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="linkpool">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="xref">
-        <xsl:attribute name="color">blue</xsl:attribute>
-        <xsl:attribute name="font-style">italic</xsl:attribute>
+    <xsl:attribute-set name="xref" use-attribute-sets="common.link">
     </xsl:attribute-set>
 
 </xsl:stylesheet>

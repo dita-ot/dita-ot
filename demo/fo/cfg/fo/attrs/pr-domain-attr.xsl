@@ -38,19 +38,8 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="codeblock">
-        <xsl:attribute name="space-before">0.4em</xsl:attribute>
-        <xsl:attribute name="space-after">0.8em</xsl:attribute>
-        <xsl:attribute name="white-space-treatment">preserve</xsl:attribute>
-        <xsl:attribute name="white-space-collapse">false</xsl:attribute>
-        <xsl:attribute name="linefeed-treatment">preserve</xsl:attribute>
-        <xsl:attribute name="wrap-option">wrap</xsl:attribute>
-        <xsl:attribute name="background-color">#f0f0f0</xsl:attribute>
-        <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="line-height">106%</xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
+    <xsl:attribute-set name="codeblock" use-attribute-sets="pre">
         <xsl:attribute name="keep-with-previous.within-page">always</xsl:attribute>
-        <!--        &lt;xsl:attribute name=&quot;keep-together.within-page&quot;&gt;always&lt;/xsl:attribute&gt;-->
     </xsl:attribute-set>
 
     <xsl:attribute-set name="codeblock__top">
