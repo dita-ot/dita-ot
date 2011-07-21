@@ -106,7 +106,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
         <xsl:attribute name="space-before">0.3em</xsl:attribute>
         <xsl:attribute name="space-after">0.5em</xsl:attribute>
-        <xsl:attribute name="start-indent">6pc</xsl:attribute>
+        <xsl:attribute name="start-indent">72pt</xsl:attribute>
         <xsl:attribute name="end-indent">24pt</xsl:attribute>
     </xsl:attribute-set>
 

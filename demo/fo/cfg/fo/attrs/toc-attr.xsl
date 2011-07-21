@@ -36,11 +36,11 @@ See the accompanying license.txt file for applicable licenses.
     version="2.0">
 
     <xsl:attribute-set name="__toc__header" use-attribute-sets="common.title">
-        <xsl:attribute name="margin-top">0pc</xsl:attribute>
-        <xsl:attribute name="margin-bottom">1.4pc</xsl:attribute>
+        <xsl:attribute name="margin-top">0pt</xsl:attribute>
+        <xsl:attribute name="margin-bottom">16.8pt</xsl:attribute>
         <xsl:attribute name="font-size">20pt</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
-        <xsl:attribute name="padding-top">1.4pc</xsl:attribute>
+        <xsl:attribute name="padding-top">16.8pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__toc__link">
@@ -139,8 +139,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__toc__mini__list">
-        <xsl:attribute name="provisional-distance-between-starts">1.5pc</xsl:attribute>
-        <xsl:attribute name="provisional-label-separation">1pc</xsl:attribute>
+        <xsl:attribute name="provisional-distance-between-starts">18pt</xsl:attribute>
+        <xsl:attribute name="provisional-label-separation">12pt</xsl:attribute>
         <xsl:attribute name="space-after">9pt</xsl:attribute>
         <xsl:attribute name="space-before">9pt</xsl:attribute>
     </xsl:attribute-set>

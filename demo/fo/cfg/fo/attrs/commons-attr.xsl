@@ -105,11 +105,11 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="topic.title" use-attribute-sets="common.title">
 		<xsl:attribute name="border-bottom">3pt solid black</xsl:attribute>
-        <xsl:attribute name="margin-top">0pc</xsl:attribute>
-        <xsl:attribute name="margin-bottom">1.4pc</xsl:attribute>
+        <xsl:attribute name="margin-top">0pt</xsl:attribute>
+        <xsl:attribute name="margin-bottom">16.8pt</xsl:attribute>
         <xsl:attribute name="font-size">18pt</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
-        <xsl:attribute name="padding-top">1.4pc</xsl:attribute>
+        <xsl:attribute name="padding-top">16.8pt</xsl:attribute>
         <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
     </xsl:attribute-set>
 
@@ -122,11 +122,11 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="topic.topic.title" use-attribute-sets="common.title common.border__bottom">
         <xsl:attribute name="space-before">15pt</xsl:attribute>
-        <xsl:attribute name="margin-top">1pc</xsl:attribute>
+        <xsl:attribute name="margin-top">12pt</xsl:attribute>
         <xsl:attribute name="margin-bottom">5pt</xsl:attribute>
         <xsl:attribute name="font-size">14pt</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
-        <xsl:attribute name="padding-top">1pc</xsl:attribute>
+        <xsl:attribute name="padding-top">12pt</xsl:attribute>
         <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
     </xsl:attribute-set>
 
@@ -136,7 +136,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="topic.topic.topic.title" use-attribute-sets="common.title">
-        <xsl:attribute name="margin-top">1pc</xsl:attribute>
+        <xsl:attribute name="margin-top">12pt</xsl:attribute>
         <xsl:attribute name="margin-bottom">2pt</xsl:attribute>
         <xsl:attribute name="font-size">12pt</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>

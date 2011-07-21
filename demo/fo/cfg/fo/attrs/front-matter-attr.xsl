@@ -53,7 +53,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__frontmatter__owner" use-attribute-sets="common.title">
-        <xsl:attribute name="margin-top">3pc</xsl:attribute>
+        <xsl:attribute name="margin-top">36pt</xsl:attribute>
         <xsl:attribute name="font-size">11pt</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
         <xsl:attribute name="line-height">normal</xsl:attribute>
