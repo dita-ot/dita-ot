@@ -35,6 +35,8 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     version="2.0">
 
+    <xsl:variable name="toc.text-indent" select="'14pt'"/>
+
     <xsl:attribute-set name="__toc__header" use-attribute-sets="common.title">
         <xsl:attribute name="margin-top">0pt</xsl:attribute>
         <xsl:attribute name="margin-bottom">16.8pt</xsl:attribute>
@@ -54,7 +56,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="__toc__topic__content">
         <xsl:attribute name="last-line-end-indent">-22pt</xsl:attribute>
         <xsl:attribute name="end-indent">22pt</xsl:attribute>
-        <xsl:attribute name="text-indent">-14pt</xsl:attribute>
+        <xsl:attribute name="text-indent">-<xsl:value-of select="$toc.text-indent"/></xsl:attribute>
         <xsl:attribute name="text-align">left</xsl:attribute>
         <xsl:attribute name="text-align-last">justify</xsl:attribute>
         <xsl:attribute name="font-size">
@@ -108,12 +110,12 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__toc__title">
-      <xsl:attribute name="margin-right">14pt</xsl:attribute>
+      <xsl:attribute name="margin-right"><xsl:value-of select="$toc.text-indent"/></xsl:attribute>
       <xsl:attribute name="keep-together.within-line">always</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__toc__page-number">
-      <xsl:attribute name="margin-left">-14pt</xsl:attribute>
+      <xsl:attribute name="margin-left">-<xsl:value-of select="$toc.text-indent"/></xsl:attribute>
       <xsl:attribute name="keep-together.within-line">always</xsl:attribute>
     </xsl:attribute-set>
 
@@ -124,7 +126,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="__toc__indent">
         <xsl:attribute name="margin-left">
             <xsl:variable name="level" select="count(ancestor-or-self::*[contains(@class, ' topic/topic ')])"/>
-            <xsl:value-of select="concat(string(42 + number($level) * 30), 'pt')"/>
+            <xsl:value-of select="concat($side-col-width, ' + ', string((number($level) - 1) * 30), 'pt + ', $toc.text-indent)"/>
         </xsl:attribute>
     </xsl:attribute-set>
 
@@ -187,7 +189,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
     
     <xsl:attribute-set name="__toc__indent__booklist" use-attribute-sets="__toc__indent">
-        <xsl:attribute name="margin-left">72pt</xsl:attribute>
+        <xsl:attribute name="margin-left"><xsl:value-of select="$side-col-width"/> + <xsl:value-of select="$toc.text-indent"/></xsl:attribute>
         <xsl:attribute name="space-before">10pt</xsl:attribute>
         <xsl:attribute name="space-after">10pt</xsl:attribute>
     </xsl:attribute-set>

@@ -9,7 +9,6 @@
   </xsl:attribute-set>
 
   <xsl:attribute-set name="__lotf__indent" use-attribute-sets="__toc__indent__booklist">
-    <xsl:attribute name="margin-left">42pt</xsl:attribute>
   </xsl:attribute-set>
   
   <xsl:attribute-set name ="__lotf__content" use-attribute-sets="__toc__topic__content__booklist">
@@ -20,22 +19,14 @@
   </xsl:attribute-set>
 
   <xsl:attribute-set name ="__lotf__leader">
-    <xsl:attribute name ="leader-pattern">dots</xsl:attribute>
-  </xsl:attribute-set>
-
-  <xsl:attribute-set name="__lotf__number" use-attribute-sets="__lotf__content">
-    <xsl:attribute name="start-indent">72pt</xsl:attribute>
-    <xsl:attribute name="float">left</xsl:attribute>
+    <xsl:attribute name="leader-pattern">dots</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="__lotf__title" use-attribute-sets="__lotf__content">
-    <xsl:attribute name="margin-left">108pt</xsl:attribute>
-    <xsl:attribute name="margin-right">14pt</xsl:attribute>
     <xsl:attribute name="keep-together.within-line">always</xsl:attribute>
   </xsl:attribute-set>
   
   <xsl:attribute-set name="__lotf__page-number">
-    <xsl:attribute name="margin-left">-14pt</xsl:attribute>
     <xsl:attribute name="keep-together.within-line">always</xsl:attribute>
   </xsl:attribute-set>
 
