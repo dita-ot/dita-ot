@@ -52,111 +52,111 @@ See the accompanying license.txt file for applicable licenses.
         <fo:layout-master-set>
             <!-- Frontmatter simple masters -->
             <fo:simple-page-master master-name="front-matter-first" xsl:use-attribute-sets="simple-page-master">
-                <fo:region-body xsl:use-attribute-sets="region-body"/>
+                <fo:region-body xsl:use-attribute-sets="region-body.odd"/>
             </fo:simple-page-master>
 
             <fo:simple-page-master master-name="front-matter-last" xsl:use-attribute-sets="simple-page-master">
-                <fo:region-body xsl:use-attribute-sets="region-body"/>
+                <fo:region-body xsl:use-attribute-sets="region-body.even"/>
                 <fo:region-before  region-name="last-frontmatter-header" xsl:use-attribute-sets="region-before"/>
                 <fo:region-after region-name="last-frontmatter-footer" xsl:use-attribute-sets="region-after"/>
             </fo:simple-page-master>
 
             <fo:simple-page-master master-name="front-matter-even" xsl:use-attribute-sets="simple-page-master">
-                <fo:region-body xsl:use-attribute-sets="region-body"/>
+                <fo:region-body xsl:use-attribute-sets="region-body.even"/>
                 <fo:region-before region-name="even-frontmatter-header" xsl:use-attribute-sets="region-before"/>
                 <fo:region-after region-name="even-frontmatter-footer" xsl:use-attribute-sets="region-after"/>
             </fo:simple-page-master>
 
             <fo:simple-page-master master-name="front-matter-odd" xsl:use-attribute-sets="simple-page-master">
-                <fo:region-body xsl:use-attribute-sets="region-body"/>
+                <fo:region-body xsl:use-attribute-sets="region-body.odd"/>
                 <fo:region-before region-name="odd-frontmatter-header" xsl:use-attribute-sets="region-before"/>
                 <fo:region-after region-name="odd-frontmatter-footer" xsl:use-attribute-sets="region-after"/>
             </fo:simple-page-master>
 
             <!--TOC simple masters-->
             <fo:simple-page-master master-name="toc-even" xsl:use-attribute-sets="simple-page-master">
-                <fo:region-body xsl:use-attribute-sets="region-body"/>
+                <fo:region-body xsl:use-attribute-sets="region-body.even"/>
                 <fo:region-before region-name="even-toc-header" xsl:use-attribute-sets="region-before"/>
                 <fo:region-after region-name="even-toc-footer" xsl:use-attribute-sets="region-after"/>
             </fo:simple-page-master>
 
             <fo:simple-page-master master-name="toc-odd" xsl:use-attribute-sets="simple-page-master">
-                <fo:region-body xsl:use-attribute-sets="region-body"/>
+                <fo:region-body xsl:use-attribute-sets="region-body.odd"/>
                 <fo:region-before region-name="odd-toc-header" xsl:use-attribute-sets="region-before"/>
                 <fo:region-after region-name="odd-toc-footer" xsl:use-attribute-sets="region-after"/>
             </fo:simple-page-master>
 
             <fo:simple-page-master master-name="toc-last" xsl:use-attribute-sets="simple-page-master">
-                <fo:region-body xsl:use-attribute-sets="region-body"/>
+                <fo:region-body xsl:use-attribute-sets="region-body.even"/>
                 <fo:region-before region-name="even-toc-header" xsl:use-attribute-sets="region-before"/>
                 <fo:region-after region-name="even-toc-footer" xsl:use-attribute-sets="region-after"/>
             </fo:simple-page-master>
 
             <fo:simple-page-master master-name="toc-first" xsl:use-attribute-sets="simple-page-master">
-                <fo:region-body xsl:use-attribute-sets="region-body"/>
+                <fo:region-body xsl:use-attribute-sets="region-body.odd"/>
                 <fo:region-before region-name="odd-toc-header" xsl:use-attribute-sets="region-before"/>
                 <fo:region-after region-name="odd-toc-footer" xsl:use-attribute-sets="region-after"/>
             </fo:simple-page-master>
 
             <!--BODY simple masters-->
             <fo:simple-page-master master-name="body-first" xsl:use-attribute-sets="simple-page-master">
-                <fo:region-body xsl:use-attribute-sets="region-body"/>
+                <fo:region-body xsl:use-attribute-sets="region-body.odd"/>
                 <fo:region-before region-name="first-body-header" xsl:use-attribute-sets="region-before"/>
                 <fo:region-after region-name="first-body-footer" xsl:use-attribute-sets="region-after"/>
             </fo:simple-page-master>
 
             <fo:simple-page-master master-name="body-even" xsl:use-attribute-sets="simple-page-master">
-                <fo:region-body xsl:use-attribute-sets="region-body"/>
+                <fo:region-body xsl:use-attribute-sets="region-body.even"/>
                 <fo:region-before region-name="even-body-header" xsl:use-attribute-sets="region-before"/>
                 <fo:region-after region-name="even-body-footer" xsl:use-attribute-sets="region-after"/>
             </fo:simple-page-master>
 
             <fo:simple-page-master master-name="body-odd" xsl:use-attribute-sets="simple-page-master">
-                <fo:region-body xsl:use-attribute-sets="region-body"/>
+                <fo:region-body xsl:use-attribute-sets="region-body.odd"/>
                 <fo:region-before region-name="odd-body-header" xsl:use-attribute-sets="region-before"/>
                 <fo:region-after region-name="odd-body-footer" xsl:use-attribute-sets="region-after"/>
             </fo:simple-page-master>
 
             <fo:simple-page-master master-name="body-last" xsl:use-attribute-sets="simple-page-master">
-                <fo:region-body xsl:use-attribute-sets="region-body"/>
+                <fo:region-body xsl:use-attribute-sets="region-body.even"/>
                 <fo:region-before region-name="last-body-header" xsl:use-attribute-sets="region-before"/>
                 <fo:region-after region-name="last-body-footer" xsl:use-attribute-sets="region-after"/>
             </fo:simple-page-master>
 
             <!--INDEX simple masters-->
             <fo:simple-page-master master-name="index-first" xsl:use-attribute-sets="simple-page-master">
-                <fo:region-body xsl:use-attribute-sets="region-body__index"/>
+                <fo:region-body xsl:use-attribute-sets="region-body__index.odd"/>
                 <fo:region-before region-name="odd-index-header" xsl:use-attribute-sets="region-before"/>
                 <fo:region-after region-name="odd-index-footer" xsl:use-attribute-sets="region-after"/>
             </fo:simple-page-master>
 
             <fo:simple-page-master master-name="index-even" xsl:use-attribute-sets="simple-page-master">
-                <fo:region-body xsl:use-attribute-sets="region-body__index"/>
+                <fo:region-body xsl:use-attribute-sets="region-body__index.even"/>
                 <fo:region-before region-name="even-index-header" xsl:use-attribute-sets="region-before"/>
                 <fo:region-after region-name="even-index-footer" xsl:use-attribute-sets="region-after"/>
             </fo:simple-page-master>
 
             <fo:simple-page-master master-name="index-odd" xsl:use-attribute-sets="simple-page-master">
-                <fo:region-body xsl:use-attribute-sets="region-body__index"/>
+                <fo:region-body xsl:use-attribute-sets="region-body__index.odd"/>
                 <fo:region-before region-name="odd-index-header" xsl:use-attribute-sets="region-before"/>
                 <fo:region-after region-name="odd-index-footer" xsl:use-attribute-sets="region-after"/>
             </fo:simple-page-master>
 
             <!--GLOSSARY simple masters-->
             <fo:simple-page-master master-name="glossary-first" xsl:use-attribute-sets="simple-page-master">
-                <fo:region-body xsl:use-attribute-sets="region-body"/>
+                <fo:region-body xsl:use-attribute-sets="region-body.odd"/>
                 <fo:region-before region-name="odd-glossary-header" xsl:use-attribute-sets="region-before"/>
                 <fo:region-after region-name="odd-glossary-footer" xsl:use-attribute-sets="region-after"/>
             </fo:simple-page-master>
 
             <fo:simple-page-master master-name="glossary-even" xsl:use-attribute-sets="simple-page-master">
-                <fo:region-body xsl:use-attribute-sets="region-body"/>
+                <fo:region-body xsl:use-attribute-sets="region-body.even"/>
                 <fo:region-before region-name="even-glossary-header" xsl:use-attribute-sets="region-before"/>
                 <fo:region-after region-name="even-glossary-footer" xsl:use-attribute-sets="region-after"/>
             </fo:simple-page-master>
 
             <fo:simple-page-master master-name="glossary-odd" xsl:use-attribute-sets="simple-page-master">
-                <fo:region-body xsl:use-attribute-sets="region-body"/>
+                <fo:region-body xsl:use-attribute-sets="region-body.odd"/>
                 <fo:region-before region-name="odd-glossary-header" xsl:use-attribute-sets="region-before"/>
                 <fo:region-after region-name="odd-glossary-footer" xsl:use-attribute-sets="region-after"/>
             </fo:simple-page-master>
@@ -167,8 +167,15 @@ See the accompanying license.txt file for applicable licenses.
                 <fo:repeatable-page-master-alternatives>
                     <fo:conditional-page-master-reference master-reference="toc-first" odd-or-even="odd" page-position="first"/>
                     <fo:conditional-page-master-reference master-reference="toc-last" odd-or-even="even" page-position="last" blank-or-not-blank="blank"/>
-                    <fo:conditional-page-master-reference master-reference="toc-odd" odd-or-even="odd"/>
-                    <fo:conditional-page-master-reference master-reference="toc-even" odd-or-even="even"/>
+                    <xsl:choose>
+                      <xsl:when test="$mirror-page-margins">
+                        <fo:conditional-page-master-reference master-reference="toc-odd" odd-or-even="odd"/>
+                        <fo:conditional-page-master-reference master-reference="toc-even" odd-or-even="even"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <fo:conditional-page-master-reference master-reference="toc-odd"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
                 </fo:repeatable-page-master-alternatives>
             </fo:page-sequence-master>
 
@@ -176,23 +183,44 @@ See the accompanying license.txt file for applicable licenses.
                 <fo:repeatable-page-master-alternatives>
                     <fo:conditional-page-master-reference page-position="first" master-reference="body-first" odd-or-even="odd"/>
                     <fo:conditional-page-master-reference master-reference="body-last" odd-or-even="even" page-position="last" blank-or-not-blank="blank"/>
-                    <fo:conditional-page-master-reference master-reference="body-odd" odd-or-even="odd"/>
-                    <fo:conditional-page-master-reference master-reference="body-even" odd-or-even="even"/>
+                    <xsl:choose>
+                      <xsl:when test="$mirror-page-margins">
+                        <fo:conditional-page-master-reference master-reference="body-odd" odd-or-even="odd"/>
+                        <fo:conditional-page-master-reference master-reference="body-even" odd-or-even="even"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <fo:conditional-page-master-reference master-reference="body-odd"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
                 </fo:repeatable-page-master-alternatives>
             </fo:page-sequence-master>
 
             <fo:page-sequence-master master-name="ditamap-body-sequence">
                 <fo:repeatable-page-master-alternatives>
-                    <fo:conditional-page-master-reference master-reference="body-odd" odd-or-even="odd"/>
-                    <fo:conditional-page-master-reference master-reference="body-even" odd-or-even="even"/>
+                  <xsl:choose>
+                    <xsl:when test="$mirror-page-margins">
+                      <fo:conditional-page-master-reference master-reference="body-odd" odd-or-even="odd"/>
+                      <fo:conditional-page-master-reference master-reference="body-even" odd-or-even="even"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <fo:conditional-page-master-reference master-reference="body-odd"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
                 </fo:repeatable-page-master-alternatives>
             </fo:page-sequence-master>
 
             <fo:page-sequence-master master-name="index-sequence">
                 <fo:repeatable-page-master-alternatives>
                     <fo:conditional-page-master-reference page-position="first" master-reference="index-first" odd-or-even="odd"/>
-                    <fo:conditional-page-master-reference master-reference="index-odd" odd-or-even="odd" />
-                    <fo:conditional-page-master-reference master-reference="index-even" odd-or-even="even"/>
+                    <xsl:choose>
+                      <xsl:when test="$mirror-page-margins">
+                        <fo:conditional-page-master-reference master-reference="index-odd" odd-or-even="odd"/>
+                        <fo:conditional-page-master-reference master-reference="index-even" odd-or-even="even"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <fo:conditional-page-master-reference master-reference="index-odd"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
                 </fo:repeatable-page-master-alternatives>
             </fo:page-sequence-master>
 
@@ -200,16 +228,30 @@ See the accompanying license.txt file for applicable licenses.
                 <fo:repeatable-page-master-alternatives>
                     <fo:conditional-page-master-reference page-position="first" master-reference="front-matter-first" odd-or-even="odd"/>
                     <fo:conditional-page-master-reference master-reference="front-matter-last" page-position="last" odd-or-even="even" blank-or-not-blank="blank"/>
-                    <fo:conditional-page-master-reference master-reference="front-matter-even" odd-or-even="even"/>
-                    <fo:conditional-page-master-reference master-reference="front-matter-odd" odd-or-even="odd"/>
+                    <xsl:choose>
+                      <xsl:when test="$mirror-page-margins">
+                        <fo:conditional-page-master-reference master-reference="front-matter-odd" odd-or-even="odd"/>
+                        <fo:conditional-page-master-reference master-reference="front-matter-even" odd-or-even="even"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <fo:conditional-page-master-reference master-reference="front-matter-odd"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
                 </fo:repeatable-page-master-alternatives>
             </fo:page-sequence-master>
 
             <fo:page-sequence-master master-name="glossary-sequence">
                 <fo:repeatable-page-master-alternatives>
                     <fo:conditional-page-master-reference page-position="first" master-reference="glossary-first" odd-or-even="odd"/>
-                    <fo:conditional-page-master-reference master-reference="glossary-odd" odd-or-even="odd" />
-                    <fo:conditional-page-master-reference master-reference="glossary-even" odd-or-even="even"/>
+                    <xsl:choose>
+                      <xsl:when test="$mirror-page-margins">
+                        <fo:conditional-page-master-reference master-reference="glossary-odd" odd-or-even="odd"/>
+                        <fo:conditional-page-master-reference master-reference="glossary-even" odd-or-even="even"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <fo:conditional-page-master-reference master-reference="glossary-odd"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
                 </fo:repeatable-page-master-alternatives>
             </fo:page-sequence-master>
 

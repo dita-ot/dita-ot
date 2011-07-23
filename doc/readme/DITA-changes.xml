@@ -75,6 +75,27 @@ going back to the beginning of the toolkit. </shortdesc>
             attribute, for example </p>
           <codeblock>&lt;coderef href="unicode.txt" format="txt; charset=UTF-8"/> </codeblock>
         </section>
+        <section>
+          <title>PDF</title>
+          <p>Support for mirrored page layout has been added. The default is the unmirrored
+            layout.</p>
+        </section>
+      </refbody>
+    </reference>
+    <reference id="reference_yvj_ttj_bd">
+      <title>Migration from previous releases</title>
+      <refbody>
+        <section><title>PDF</title><p>Support for mirrored page layout was added and the following
+            XSLT configuration variables have been
+            deprecated:</p><ul id="ul_hkv_oyj_bd">
+              <li><codeph>page-margin-left</codeph></li>
+            <li><codeph>page-margin-right</codeph></li>
+          </ul>
+          <p>The following variables should be used instead to control page margins:</p>
+          <ul id="ul_yda_wyj_bd">
+            <li><codeph>page-margin-outside</codeph></li>
+            <li><codeph>page-margin-inside</codeph></li>
+          </ul></section>
       </refbody>
     </reference>
   </reference>
