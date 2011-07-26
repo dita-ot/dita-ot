@@ -163,98 +163,70 @@ See the accompanying license.txt file for applicable licenses.
 
 
             <!--Sequences-->
-            <fo:page-sequence-master master-name="toc-sequence">
-                <fo:repeatable-page-master-alternatives>
-                    <fo:conditional-page-master-reference master-reference="toc-first" odd-or-even="odd" page-position="first"/>
-                    <fo:conditional-page-master-reference master-reference="toc-last" odd-or-even="even" page-position="last" blank-or-not-blank="blank"/>
-                    <xsl:choose>
-                      <xsl:when test="$mirror-page-margins">
-                        <fo:conditional-page-master-reference master-reference="toc-odd" odd-or-even="odd"/>
-                        <fo:conditional-page-master-reference master-reference="toc-even" odd-or-even="even"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <fo:conditional-page-master-reference master-reference="toc-odd"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                </fo:repeatable-page-master-alternatives>
-            </fo:page-sequence-master>
-
-            <fo:page-sequence-master master-name="body-sequence">
-                <fo:repeatable-page-master-alternatives>
-                    <fo:conditional-page-master-reference page-position="first" master-reference="body-first" odd-or-even="odd"/>
-                    <fo:conditional-page-master-reference master-reference="body-last" odd-or-even="even" page-position="last" blank-or-not-blank="blank"/>
-                    <xsl:choose>
-                      <xsl:when test="$mirror-page-margins">
-                        <fo:conditional-page-master-reference master-reference="body-odd" odd-or-even="odd"/>
-                        <fo:conditional-page-master-reference master-reference="body-even" odd-or-even="even"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <fo:conditional-page-master-reference master-reference="body-odd"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                </fo:repeatable-page-master-alternatives>
-            </fo:page-sequence-master>
-
-            <fo:page-sequence-master master-name="ditamap-body-sequence">
-                <fo:repeatable-page-master-alternatives>
-                  <xsl:choose>
-                    <xsl:when test="$mirror-page-margins">
-                      <fo:conditional-page-master-reference master-reference="body-odd" odd-or-even="odd"/>
-                      <fo:conditional-page-master-reference master-reference="body-even" odd-or-even="even"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <fo:conditional-page-master-reference master-reference="body-odd"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </fo:repeatable-page-master-alternatives>
-            </fo:page-sequence-master>
-
-            <fo:page-sequence-master master-name="index-sequence">
-                <fo:repeatable-page-master-alternatives>
-                    <fo:conditional-page-master-reference page-position="first" master-reference="index-first" odd-or-even="odd"/>
-                    <xsl:choose>
-                      <xsl:when test="$mirror-page-margins">
-                        <fo:conditional-page-master-reference master-reference="index-odd" odd-or-even="odd"/>
-                        <fo:conditional-page-master-reference master-reference="index-even" odd-or-even="even"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <fo:conditional-page-master-reference master-reference="index-odd"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                </fo:repeatable-page-master-alternatives>
-            </fo:page-sequence-master>
-
-            <fo:page-sequence-master master-name="front-matter">
-                <fo:repeatable-page-master-alternatives>
-                    <fo:conditional-page-master-reference page-position="first" master-reference="front-matter-first" odd-or-even="odd"/>
-                    <fo:conditional-page-master-reference master-reference="front-matter-last" page-position="last" odd-or-even="even" blank-or-not-blank="blank"/>
-                    <xsl:choose>
-                      <xsl:when test="$mirror-page-margins">
-                        <fo:conditional-page-master-reference master-reference="front-matter-odd" odd-or-even="odd"/>
-                        <fo:conditional-page-master-reference master-reference="front-matter-even" odd-or-even="even"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <fo:conditional-page-master-reference master-reference="front-matter-odd"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                </fo:repeatable-page-master-alternatives>
-            </fo:page-sequence-master>
-
-            <fo:page-sequence-master master-name="glossary-sequence">
-                <fo:repeatable-page-master-alternatives>
-                    <fo:conditional-page-master-reference page-position="first" master-reference="glossary-first" odd-or-even="odd"/>
-                    <xsl:choose>
-                      <xsl:when test="$mirror-page-margins">
-                        <fo:conditional-page-master-reference master-reference="glossary-odd" odd-or-even="odd"/>
-                        <fo:conditional-page-master-reference master-reference="glossary-even" odd-or-even="even"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <fo:conditional-page-master-reference master-reference="glossary-odd"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                </fo:repeatable-page-master-alternatives>
-            </fo:page-sequence-master>
-
+          <xsl:call-template name="generate-page-sequence-master">
+            <xsl:with-param name="master-name" select="'toc-sequence'"/>
+            <xsl:with-param name="master-reference" select="'toc'"/>
+          </xsl:call-template>
+          <xsl:call-template name="generate-page-sequence-master">
+            <xsl:with-param name="master-name" select="'body-sequence'"/>
+            <xsl:with-param name="master-reference" select="'body'"/>
+          </xsl:call-template>
+          <xsl:call-template name="generate-page-sequence-master">
+            <xsl:with-param name="master-name" select="'ditamap-body-sequence'"/>
+            <xsl:with-param name="master-reference" select="'body'"/>
+            <xsl:with-param name="first" select="false()"/>
+            <xsl:with-param name="last" select="false()"/>
+          </xsl:call-template>
+          <xsl:call-template name="generate-page-sequence-master">
+            <xsl:with-param name="master-name" select="'index-sequence'"/>
+            <xsl:with-param name="master-reference" select="'index'"/>
+            <xsl:with-param name="last" select="false()"/>
+          </xsl:call-template>
+          <xsl:call-template name="generate-page-sequence-master">
+            <xsl:with-param name="master-name" select="'front-matter'"/>
+            <xsl:with-param name="master-reference" select="'front-matter'"/>
+          </xsl:call-template>
+          <xsl:call-template name="generate-page-sequence-master">
+            <xsl:with-param name="master-name" select="'glossary-sequence'"/>
+            <xsl:with-param name="master-reference" select="'glossary'"/>
+            <xsl:with-param name="last" select="false()"/>
+          </xsl:call-template>
         </fo:layout-master-set>
     </xsl:template>
+  
+  <!-- Generate a page sequence master -->
+  <xsl:template name="generate-page-sequence-master">
+    <xsl:param name="master-name"/>
+    <xsl:param name="master-reference"/>
+    <xsl:param name="first" select="true()"/>
+    <xsl:param name="last" select="true()"/>
+    <fo:page-sequence-master master-name="{$master-name}">
+      <fo:repeatable-page-master-alternatives>
+        <xsl:if test="$first">
+          <fo:conditional-page-master-reference master-reference="{$master-reference}-first"
+                                                odd-or-even="odd"
+                                                page-position="first"/>
+        </xsl:if>
+        <xsl:if test="$last">
+          <fo:conditional-page-master-reference master-reference="{$master-reference}-last"
+                                                odd-or-even="even"
+                                                page-position="last"
+                                                blank-or-not-blank="blank"/>
+        </xsl:if>
+        <xsl:choose>
+          <xsl:when test="$mirror-page-margins">
+            <fo:conditional-page-master-reference master-reference="{$master-reference}-odd"
+                                                  odd-or-even="odd"/>
+            <fo:conditional-page-master-reference master-reference="{$master-reference}-even"
+                                                  odd-or-even="even"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <fo:conditional-page-master-reference master-reference="{$master-reference}-odd"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </fo:repeatable-page-master-alternatives>
+    </fo:page-sequence-master>
+    
+  </xsl:template>
+  
 </xsl:stylesheet>
