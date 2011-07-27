@@ -376,6 +376,56 @@ public final class ConrefPushParser extends AbstractXMLWriter {
             }
         }
 	}
+	
+	/**
+	 * This function is added for bug report: Conref Push order of validation - ID: 3344142 
+	 * @param targetClassAttribute targetClassAttribute
+	 * @param string pushedContent
+	 * @return boolean
+	 */
+	private boolean isPushedTypeMatch(final String targetClassAttribute, String string) {
+		
+		String clazz = "";
+		InputSource inputSource = null;
+		Document document = null;
+		//add stub to serve as the root element
+		string = "<stub>" + string + "</stub>";
+		inputSource = new InputSource(new StringReader(string));
+		final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		Element element = null;
+		NodeList nodeList = null;
+
+		final StringBuffer stringBuffer = new StringBuffer();
+		try {
+			final DocumentBuilder documentBuilder = factory.newDocumentBuilder();
+			document = documentBuilder.parse(inputSource);
+			element = document.getDocumentElement();
+			if(element.hasChildNodes()){
+				nodeList = element.getChildNodes();
+				for(int i =0;i<nodeList.getLength();i++){
+					final Node node = nodeList.item(i);
+					if (node.getNodeType() == Node.ELEMENT_NODE){
+						final Element elem = (Element) node;
+						clazz = elem.getAttribute(ATTRIBUTE_NAME_CLASS);
+						break;
+						// get type of the target element  
+					}
+				}
+			} 
+		} catch (final Exception e) {
+				e.printStackTrace();
+				return false;
+		}
+		
+		if(clazz.equalsIgnoreCase(targetClassAttribute) || clazz.contains(targetClassAttribute)) {
+			return true;
+		}else{
+			return false;
+		}
+			
+		
+	}
+	
 	/**
 	 * 
 	 * @param targetClassAttribute targetClassAttribute
@@ -550,10 +600,15 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 					boolean containpushbefore= false;
 					if (movetable.containsKey(idPath+STICK+"pushbefore")){
 						containkey=idPath+STICK+"pushbefore";
-						containpushbefore = true;
+						if(isPushedTypeMatch(classValue, movetable.get(containkey))) {
+							containpushbefore = true;
+						}
+						
 					}else if (movetable.containsKey(defaultidPath+STICK+"pushbefore")){
 						containkey=defaultidPath+STICK+"pushbefore";
-						containpushbefore = true;
+						if(isPushedTypeMatch(classValue, movetable.get(containkey))) {
+							containpushbefore = true;
+						}
 					}
 					if (containpushbefore){
 						output.write(replaceElementName(classValue, movetable.remove(containkey)));
@@ -564,10 +619,14 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 					
 					if  (movetable.containsKey(idPath+STICK+"pushreplace")){
 						containkey=idPath+STICK+"pushreplace";
-						containpushplace = true;
+						if(isPushedTypeMatch(classValue, movetable.get(containkey))) {
+							containpushplace= true;
+						}
 					}else if (movetable.containsKey(defaultidPath+STICK+"pushreplace")){
 						containkey = defaultidPath+STICK+"pushreplace";
-						containpushplace= true;
+						if(isPushedTypeMatch(classValue, movetable.get(containkey))) {
+							containpushplace= true;
+						}
 					}
 					
 					if (containpushplace){
@@ -580,10 +639,14 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 					boolean containpushafter = false;
 					if  (movetable.containsKey(idPath+STICK+"pushafter")){
 						containkey= idPath + STICK+"pushafter";
-						containpushafter = true;
+						if(isPushedTypeMatch(classValue, movetable.get(containkey))) {
+							containpushafter = true;
+						}
 					}else if (movetable.containsKey(defaultidPath+STICK+"pushafter")){
-						containpushafter= true;
 						containkey = defaultidPath+STICK+"pushafter";
+						if(isPushedTypeMatch(classValue, movetable.get(containkey))) {
+							containpushafter = true;
+						}
 					}
 					if (containpushafter){
 						if (hasPushafter && levelForPushAfter > 0){

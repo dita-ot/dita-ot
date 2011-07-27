@@ -274,8 +274,8 @@
   </message>
   
   <message id="DOTJ043W" type="WARN">
-    <reason>There is no target "%1" in "%2" specified for the conref push action.</reason>
-    <response>Please make sure that the target exists and is not filtered out.</response>
+    <reason>There is no correct target "%1" in "%2" specified for the conref push action.</reason>
+    <response>Please make sure that the target exists and is not filtered out or the target type matches.</response>
   </message>
   
   <message id="DOTJ044W" type="WARN">
