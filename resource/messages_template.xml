@@ -671,6 +671,13 @@
   </message>
   <!-- Added by William on 2010-06-21 for bug:3012392 start -->
   
+  <!-- Added by ryan on 2011-07-27 for bug:3358377 start  -->
+  <message id="DOTX066W" type="WARN">
+    <reason>Input file '%1' is not valid DITA file name.</reason>
+    <response>Please check the file '%1' to see if the file is a valid target file by extension.</response>
+  </message>
+  <!-- Added by ryan on 2011-07-27 for bug:3358377 end  -->
+  
   <!-- Add any messages defined by plugins. -->
   <dita:extension xmlns:dita="http://dita-ot.sourceforge.net"
     behavior="org.dita.dost.platform.InsertAction" id="dita.xsl.messages"/>
