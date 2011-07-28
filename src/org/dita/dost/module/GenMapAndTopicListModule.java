@@ -437,7 +437,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
                 // logger.logWarn("Input file name is not valid DITA file name.");
                 final Properties prop = new Properties();
                 prop.put("%1", fileToParse);
-                logger.logWarn(MessageUtils.getMessage("DOTX066W", params).toString());
+                logger.logWarn(MessageUtils.getMessage("DOTJ053W", params).toString());
                 // edited by Alan on Date:2009-11-02 for Work Item:#1590 end
             }
 
