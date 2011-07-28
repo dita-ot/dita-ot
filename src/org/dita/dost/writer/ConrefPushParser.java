@@ -378,13 +378,13 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 	}
 	
 	/**
-	 * This function is added for bug report: Conref Push order of validation - ID: 3344142 
-	 * @param targetClassAttribute targetClassAttribute
+	 * The function is to judge if the pushed content type march the type of content being pushed/replaced
+	 * @param targetClassAttribute the class attribute of target element which is being pushed
 	 * @param string pushedContent
-	 * @return boolean
+	 * @return boolean: if type match, return true, else return false
 	 */
 	private boolean isPushedTypeMatch(final String targetClassAttribute, String string) {
-		
+		//This function is added for bug report: Conref Push order of validation - ID: 3344142
 		String clazz = "";
 		InputSource inputSource = null;
 		Document document = null;
