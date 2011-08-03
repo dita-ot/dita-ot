@@ -26,7 +26,10 @@
      * 3341648 Clean HTML and XHTML stylesheets  (In Processing)
      * 3343562 Java clean-up  (In Processing)
      * 3346094 Improve test coverage  (In Processing)
-     	
+     * 3372147 Improve logging (In Processing)
+     * 3373416 Refactor PDF attribute sets (In Processing)
+     * 3376114 Improve PDF page layout configuration (In Processing)
+     
      [ SourceForge Patches Added]
     
          
@@ -35,8 +38,12 @@
      * 2848636 Duplicate key definitions should produce info messages (Milestone 1)
      * 3353955 Frontmatter child order is not retained in PDF2 (Milestone 1)
      * 3354301 XRef with conreffed phrases not properly generate HTML link (Milestone 1)
-	 * 3323806 Improve Java logging and exception handling (In Processing)     
-
+	 * 3281074 Bad attribute being applied to fo:bookmark-title element (Milestone 2) 
+	 * 3344142 Conref Push order of validation (Milestone 2)
+	 * 3358377 Cryptic error message when DITA Map has "bookmap" extension (In Processing)
+	 * 3323806 Improve Java logging and exception handling (In Processing)  
+	 * 2837095 Positions of index and TOC in bookmaps are ignored  (In Processing)
+	 
 ====================================================================================
 
      DITA OT release 1.5.3
