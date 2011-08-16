@@ -6,8 +6,8 @@
     
     (C) Copyright Shawn McKenzie, 2007. All Rights Reserved.
     *-->
-<project name="docondoc" default="all">
-    <import file="..${file.separator}..${file.separator}conductor.xml"/>
+<project name="docondoc" default="sample2tocjs">
+    <import file="..${file.separator}..${file.separator}build.xml"/>
     <property name="dita.extname" value=".xml"/>
     <property name="content.frame" value="contentwin"/>
    
