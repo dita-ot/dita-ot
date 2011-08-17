@@ -9,7 +9,70 @@
  */
 package org.dita.dost.writer;
 
-import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_CLASS;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_COLNAME;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_CONKEYREF;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_CONREF;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_COPY_TO;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_DITAARCHVERSION;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_DOMAINS;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_FORMAT;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_HREF;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_MOREROWS;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_NAMEEND;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_NAMEST;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_PRINT;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_SCOPE;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_XTRC;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_XTRF;
+import static org.dita.dost.util.Constants.ATTRIBUTE_PREFIX_DITAARCHVERSION;
+import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITA;
+import static org.dita.dost.util.Constants.ATTR_SCOPE_VALUE_LOCAL;
+import static org.dita.dost.util.Constants.CDATA_END;
+import static org.dita.dost.util.Constants.CDATA_HEAD;
+import static org.dita.dost.util.Constants.COLON;
+import static org.dita.dost.util.Constants.COMMA;
+import static org.dita.dost.util.Constants.DOT;
+import static org.dita.dost.util.Constants.ELEMENT_NAME_DITA;
+import static org.dita.dost.util.Constants.EQUAL;
+import static org.dita.dost.util.Constants.FEATURE_NAMESPACE;
+import static org.dita.dost.util.Constants.FEATURE_NAMESPACE_PREFIX;
+import static org.dita.dost.util.Constants.FEATURE_VALIDATION;
+import static org.dita.dost.util.Constants.FEATURE_VALIDATION_SCHEMA;
+import static org.dita.dost.util.Constants.FILE_EXTENSION_DITAMAP;
+import static org.dita.dost.util.Constants.FILE_NAME_DITA_LIST;
+import static org.dita.dost.util.Constants.FILE_NAME_DITA_LIST_XML;
+import static org.dita.dost.util.Constants.GREATER_THAN;
+import static org.dita.dost.util.Constants.INDEX_TYPE_ECLIPSEHELP;
+import static org.dita.dost.util.Constants.INT_16;
+import static org.dita.dost.util.Constants.KEY_LIST;
+import static org.dita.dost.util.Constants.LEFT_BRACKET;
+import static org.dita.dost.util.Constants.LESS_THAN;
+import static org.dita.dost.util.Constants.LEXICAL_HANDLER_PROPERTY;
+import static org.dita.dost.util.Constants.LINE_SEPARATOR;
+import static org.dita.dost.util.Constants.MAP_TOPICREF;
+import static org.dita.dost.util.Constants.OS_NAME;
+import static org.dita.dost.util.Constants.PR_D_CODEREF;
+import static org.dita.dost.util.Constants.QUESTION;
+import static org.dita.dost.util.Constants.QUOTATION;
+import static org.dita.dost.util.Constants.SHARP;
+import static org.dita.dost.util.Constants.SLASH;
+import static org.dita.dost.util.Constants.STICK;
+import static org.dita.dost.util.Constants.STRING_BLANK;
+import static org.dita.dost.util.Constants.TOPIC_COLSPEC;
+import static org.dita.dost.util.Constants.TOPIC_ENTRY;
+import static org.dita.dost.util.Constants.TOPIC_FOREIGN;
+import static org.dita.dost.util.Constants.TOPIC_LINK;
+import static org.dita.dost.util.Constants.TOPIC_ROW;
+import static org.dita.dost.util.Constants.TOPIC_TGROUP;
+import static org.dita.dost.util.Constants.TOPIC_TOPIC;
+import static org.dita.dost.util.Constants.TOPIC_UNKNOWN;
+import static org.dita.dost.util.Constants.TOPIC_XREF;
+import static org.dita.dost.util.Constants.UNIX_SEPARATOR;
+import static org.dita.dost.util.Constants.UTF8;
+import static org.dita.dost.util.Constants.WINDOWS_SEPARATOR;
+import static org.dita.dost.util.Constants.XML_HEAD;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,7 +83,6 @@ import java.io.OutputStreamWriter;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -1219,7 +1281,7 @@ public final class DitaWriter extends AbstractXMLWriter {
     		}
         }
         index = filename.indexOf(STICK);
-        fileExtIndex = filename.endsWith(FILE_EXTENSION_DITAMAP)
+        fileExtIndex = filename.toLowerCase().endsWith(FILE_EXTENSION_DITAMAP)
         			 ? -1
         			 : filename.lastIndexOf(DOT);
         
