@@ -5,6 +5,9 @@
     applicable licenses.
     
     (C) Copyright Shawn McKenzie, 2007. All Rights Reserved.
+    
+    UPDATES:
+    August 2011: Updated by Robert D Anderson for SF Bug 3392718
     *-->
 <project name="docondoc" default="sample2tocjs">
     <import file="..${file.separator}..${file.separator}build.xml"/>
