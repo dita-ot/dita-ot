@@ -28,12 +28,24 @@
 	    </not>
   </condition>
 	
-  <target name="set_property">
+  <target name="set_odt_output_tempdir">
     <condition property="odt.output.tempdir" value="${dita.map.output.dir}/temp">
       <not>
         <isset property="odt.output.tempdir"/>
       </not>
     </condition>
+    
+    <copy todir="${odt.output.tempdir}">
+      <fileset dir="${dita.map.output.dir}">
+        <exclude name="**/*.list"/>
+        <exclude name="**/*.log"/>
+        <exclude name="**/*.temp"/>
+        <exclude name="**/*.properties"/>
+        <exclude name="**/*.odt"/>
+        <exclude name="temp/**"/>
+      </fileset>
+    </copy>
+    
   </target>
 	
   
@@ -43,7 +55,7 @@
 	
 	
   <target name="dita2odt"
-    depends="build-init, preprocess, set_property, dita.odt.package.topic, dita.odt.package.map, move-output-file, clean_output_tempdir">
+    depends="build-init, preprocess, set_odt_output_tempdir, dita.odt.package.topic, dita.odt.package.map, move-output-file, clean_output_tempdir">
   </target>
   
   <target name="map2odt" unless="noMap">
