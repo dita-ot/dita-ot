@@ -15,6 +15,11 @@
   *-->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
+  <xsl:variable name="quote">"</xsl:variable>
+  <xsl:variable name="quotestring">\"</xsl:variable>
+  <xsl:variable name="lessthan">&lt;</xsl:variable>
+  <xsl:variable name="lessthanstring">&amp;lt;</xsl:variable>
+
   <xsl:template match="*[contains(@class, ' map/topicref ')]">
     <xsl:param name="parent"/>
     <xsl:param name="contentwin"/>
@@ -27,8 +32,6 @@
     <xsl:variable name="jsapos">\'</xsl:variable>
     <xsl:variable name="comma">,</xsl:variable>
     <xsl:variable name="empty_string" select="''"/>
-    <xsl:variable name="quote">"</xsl:variable>
-    <xsl:variable name="quotestring">\"</xsl:variable>
     <xsl:variable name="self" select="generate-id()"/>
 
     <xsl:choose>
@@ -48,34 +51,28 @@
         <xsl:choose>
           <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
             <!--<xsl:message> - testing navtitle - <xsl:value-of select="topicmeta/navtitle"/></xsl:message>-->
-            <xsl:call-template name="replace-string">
+            <xsl:call-template name="fix-title">
               <xsl:with-param name="text">
                 <xsl:value-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]"/>
               </xsl:with-param>
-              <xsl:with-param name="from" select="$quote"/>
-              <xsl:with-param name="to" select="$quotestring"/>
             </xsl:call-template>
           </xsl:when>
           
           <xsl:when test="@navtitle">
             <!--<xsl:message> - testing2 navtitle - <xsl:value-of select="@navtitle"/></xsl:message>-->
-            <xsl:call-template name="replace-string">
+            <xsl:call-template name="fix-title">
               <xsl:with-param name="text">
                 <xsl:value-of select="@navtitle"/>
               </xsl:with-param>
-              <xsl:with-param name="from" select="$quote"/>
-              <xsl:with-param name="to" select="$quotestring"/>
             </xsl:call-template>
           </xsl:when>
           
           <xsl:otherwise>
             <!--<xsl:message> - testing3 navtitle - <xsl:value-of select="@navtitle"/></xsl:message>-->
-            <xsl:call-template name="replace-string">
+            <xsl:call-template name="fix-title">
               <xsl:with-param name="text">
                 <xsl:value-of select="@navtitle"/>
               </xsl:with-param>
-              <xsl:with-param name="from" select="$quote"/>
-              <xsl:with-param name="to" select="$quotestring"/>
             </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
@@ -141,6 +138,44 @@
       
     </xsl:choose>
     
+  </xsl:template>
+
+  <!-- Remove known problem characters " and < from TOC -->
+  <xsl:template name="fix-title">
+    <xsl:param name="text"/>
+    <xsl:choose>
+      <xsl:when test="contains($text,$quote) and contains($text,$lessthan)">
+        <xsl:variable name="chopquote">
+          <xsl:call-template name="replace-string">
+            <xsl:with-param name="text" select="$text"/>
+            <xsl:with-param name="from" select="$quote"/>
+            <xsl:with-param name="to" select="$quotestring"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:call-template name="replace-string">
+          <xsl:with-param name="text" select="$chopquote"/>
+          <xsl:with-param name="from" select="$lessthan"/>
+          <xsl:with-param name="to" select="$lessthanstring"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:when test="contains($text,$quote)">
+        <xsl:call-template name="replace-string">
+          <xsl:with-param name="text" select="$text"/>
+          <xsl:with-param name="from" select="$quote"/>
+          <xsl:with-param name="to" select="$quotestring"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:when test="contains($text,$lessthan)">
+        <xsl:call-template name="replace-string">
+          <xsl:with-param name="text" select="$text"/>
+          <xsl:with-param name="from" select="$lessthan"/>
+          <xsl:with-param name="to" select="$lessthanstring"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$text"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template name="replace-string">
