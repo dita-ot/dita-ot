@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Arbortext, Inc., 1988-2010, v.4002-->
+<!--Arbortext, Inc., 1988-2011, v.4002-->
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
  "concept.dtd">
 <concept id="preprocessarch" xml:lang="en-us">
-<title>DITA pre-processing architecture</title>
+<title>DITA-OT pre-processing architecture</title>
 <shortdesc>This document describes the different steps in preprocessing
-for DITA topics.</shortdesc>
+for DITA topics. These steps typically run at the start of any build
+using the DITA-OT.</shortdesc><?Pub Caret -1?>
 <conbody>
 <p>The DITA Toolkit implements a multi-stage, map-driven architecture
 to process DITA content. Each step in the process examines some or
@@ -23,12 +24,12 @@ following note on processing order.</p>
 the steps below is significant. Although the DITA specification does
 not mandate a specific order for processing, the toolkit has over
 time found that the current order best meets user expectations. Switching
-the order of processing may give different results. </p><?Pub Caret -2?><p>For
-example, if conref is evaluated before filtering, it is possible to
-reuse content that will later be filtered out of its original location.
-However, we have found that filtering first provides several benefits.
-For example, the following &lt;note> element uses conref, but also
-contains a product attribute:<codeblock>&lt;note conref="documentA.dita#doc/note" product="MyProd">&lt;/note></codeblock></p><p>If
+the order of processing may give different results. </p><p>For example,
+if conref is evaluated before filtering, it is possible to reuse content
+that will later be filtered out of its original location. However,
+we have found that filtering first provides several benefits. For
+example, the following &lt;note> element uses conref, but also contains
+a product attribute:<codeblock>&lt;note conref="documentA.dita#doc/note" product="MyProd">&lt;/note></codeblock></p><p>If
 the conref attribute is evaluated first, then documentA must be parsed
 in order to retrieve the note content. That content is then stored
 in the current document (or in a representation of that document in
@@ -171,4 +172,4 @@ pull in titles for &lt;xref> and &lt;link> elements that do not already
 specify link text. The step is implemented in XSLT.</p>   </section>
 </conbody>
 </concept>
-<?Pub *0000009645?>
+<?Pub *0000009716?>
