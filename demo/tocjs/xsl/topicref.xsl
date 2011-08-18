@@ -4,6 +4,14 @@
   applicable licenses.
   
   (C) Copyright Shawn McKenzie, 2007. All Rights Reserved.
+
+  UPDATES:
+  20110817 RDA Include several fixes:
+      * Make several element tests specialization aware
+      * Topichead with navtitle element and navtitle attribute
+        duplicates the branch underneath
+      * Topicref with no href or title drops the branch
+      * Toc=no drops any nested toc=yes branches (unlike XHTML / others)
   *-->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -23,20 +31,26 @@
     <xsl:variable name="quotestring">\"</xsl:variable>
     <xsl:variable name="self" select="generate-id()"/>
 
-    <xsl:if test="not(@toc='no')">
-      <xsl:if test="@href">
+    <xsl:choose>
+      <xsl:when test="@toc='no'">
+        <!-- Continue to children; if they turn @toc back on, connect to the last @toc=yes parent -->
+        <xsl:apply-templates>
+          <xsl:with-param name="parent" select="$parent"/>
+          <xsl:with-param name="contentwin" select="$contentwin"/>
+        </xsl:apply-templates>
+      </xsl:when>
+      <xsl:when test="@href">
 
         <xsl:text>var </xsl:text>
         <xsl:value-of select="concat('obj', $self)"/>
         <xsl:text> = { label: "</xsl:text>
 
-        
         <xsl:choose>
           <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
             <!--<xsl:message> - testing navtitle - <xsl:value-of select="topicmeta/navtitle"/></xsl:message>-->
             <xsl:call-template name="replace-string">
               <xsl:with-param name="text">
-                <xsl:value-of select="topicmeta/navtitle"/>
+                <xsl:value-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]"/>
               </xsl:with-param>
               <xsl:with-param name="from" select="$quote"/>
               <xsl:with-param name="to" select="$quotestring"/>
@@ -67,29 +81,6 @@
         </xsl:choose>
         
         
-<!--        <xsl:if test="@navtitle">
-          
-          <xsl:call-template name="replace-string">
-            <xsl:with-param name="text">
-              <xsl:value-of select="@navtitle"/>
-            </xsl:with-param>
-            <xsl:with-param name="from" select="$quote"/>
-            <xsl:with-param name="to" select="$quotestring"/>
-          </xsl:call-template>
-        </xsl:if>
-
-        <xsl:if test="topicmeta/navtitle">
-          
-          <xsl:call-template name="replace-string">
-            <xsl:with-param name="text">
-              <xsl:value-of select="topicmeta/navtitle"/>
-            </xsl:with-param>
-            <xsl:with-param name="from" select="$quote"/>
-            <xsl:with-param name="to" select="$quotestring"/>
-          </xsl:call-template>
-        </xsl:if>-->
-
-
         <xsl:text>", href:"</xsl:text>
         <xsl:call-template name="gethref">
           <xsl:with-param name="ditahref" select="@href"/>
@@ -109,63 +100,47 @@
           <xsl:with-param name="parent" select="$self"/>
           <xsl:with-param name="contentwin" select="$contentwin"/>
         </xsl:apply-templates>
-      </xsl:if>
+      </xsl:when>
+      <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
+        <!-- No href, has a navtitle element. Used in DITA-OT 1.5 and later. -->
+        <xsl:text>var </xsl:text>
+        <xsl:value-of select="$self"/>
+        <xsl:text> = new YAHOO.widget.TextNode("</xsl:text>
+        <xsl:value-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]"/>
+        <xsl:text>", </xsl:text>
+        <xsl:value-of select="$parent"/>
+        <xsl:text>, false);</xsl:text>
 
+        <xsl:apply-templates>
+          <xsl:with-param name="parent" select="$self"/>
+          <xsl:with-param name="contentwin" select="$contentwin"/>
+        </xsl:apply-templates>
+      </xsl:when>
+      <xsl:when test="@navtitle">
+        <!-- No href, has navtitle attribute. -->
+        <xsl:text>var </xsl:text>
+        <xsl:value-of select="$self"/>
+        <xsl:text> = new YAHOO.widget.TextNode("</xsl:text>
+        <xsl:value-of select="@navtitle"/>
+        <xsl:text>", </xsl:text>
+        <xsl:value-of select="$parent"/>
+        <xsl:text>, false);</xsl:text>
+
+        <xsl:apply-templates>
+          <xsl:with-param name="parent" select="$self"/>
+          <xsl:with-param name="contentwin" select="$contentwin"/>
+        </xsl:apply-templates>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- Topicgroup or similar (no href, no title): continue to children -->
+        <xsl:apply-templates>
+          <xsl:with-param name="parent" select="$parent"/>
+          <xsl:with-param name="contentwin" select="$contentwin"/>
+        </xsl:apply-templates>
+      </xsl:otherwise>
       
-      <xsl:if test="not(@href)">
-        
-        <!-- I think this next if never gets called 
-        <xsl:if test="not(@navtitle) and not(topicmeta/navtitle)">
-          <xsl:apply-templates>
-            <xsl:with-param name="parent" select="$parent"/>
-            <xsl:with-param name="contentwin" select="$contentwin"/>
-          </xsl:apply-templates>
-        </xsl:if>
-        -->
-        
-        <xsl:if test="@navtitle">
-          <xsl:text>var </xsl:text>
-          <xsl:value-of select="$self"/>
-          <xsl:text> = new YAHOO.widget.TextNode("</xsl:text>
-          <xsl:value-of select="@navtitle"/>
-          <xsl:text>", </xsl:text>
-          <xsl:value-of select="$parent"/>
-          <xsl:text>, false);</xsl:text>
-
-          <xsl:apply-templates>
-            <xsl:with-param name="parent" select="$self"/>
-            <xsl:with-param name="contentwin" select="$contentwin"/>
-          </xsl:apply-templates>
-        </xsl:if>
-
-        <!-- for 1.5 toolkit and later -->
-        <xsl:if test="topicmeta/navtitle">
-          <xsl:text>var </xsl:text>
-          <xsl:value-of select="$self"/>
-          <xsl:text> = new YAHOO.widget.TextNode("</xsl:text>
-          <xsl:value-of select="topicmeta/navtitle"/>
-          <xsl:text>", </xsl:text>
-          <xsl:value-of select="$parent"/>
-          <xsl:text>, false);</xsl:text>
-          
-          <xsl:apply-templates>
-            <xsl:with-param name="parent" select="$self"/>
-            <xsl:with-param name="contentwin" select="$contentwin"/>
-          </xsl:apply-templates>
-        </xsl:if>
-      </xsl:if>
-
-      <!-- Need to deal with topicgroup elements that are used for navigation purposes -->
-      <xsl:if test="topicgroup">
-        <xsl:for-each select="*[contains(@class,' map/topicref ')]">
-          <xsl:apply-templates>
-            <xsl:with-param name="parent" select="$self"/>
-            <xsl:with-param name="contentwin" select="$contentwin"/>
-          </xsl:apply-templates>
-        </xsl:for-each>
-      </xsl:if>
-      
-    </xsl:if>
+    </xsl:choose>
+    
   </xsl:template>
 
   <xsl:template name="replace-string">

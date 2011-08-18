@@ -99,10 +99,6 @@
     <xsl:message> WARNING! anchor not supported. </xsl:message>
   </xsl:template>
 
-  <xsl:template match="*[contains(@class, ' map/topicgroup ')]">
-    <!-- do nothing for now -->
-  </xsl:template>
-
   <xsl:template match="*[contains(@class, ' map/reltable ')]">
     <!-- do nothing now -->
   </xsl:template>
