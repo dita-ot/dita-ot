@@ -10,11 +10,9 @@
      many enhancements, user patches, bug fixes, and significant 
      updates to the documentation.
      
-     Release 1.5.4 was developed using a series of test builds 
+     Release 1.5.4 is developed using a series of test builds 
      released to the community every three weeks. Each item in the list
-     below indicates which test build first contained the update.  The
-     eighth public build was the final build, released as the 
-     DITA-OT 1.5.4 final stable build.
+     below indicates which test build first contained the update.
 
 	 [General Enhancements]
 	 
@@ -29,6 +27,7 @@
      * 3372147 Improve logging (In Processing)
      * 3373416 Refactor PDF attribute sets (In Processing)
      * 3376114 Improve PDF page layout configuration (In Processing)
+     * 3393969 Make default TocJS output more usable (Milestone 3)
      
      [ SourceForge Patches Added]
     
@@ -38,11 +37,16 @@
      * 2848636 Duplicate key definitions should produce info messages (Milestone 1)
      * 3353955 Frontmatter child order is not retained in PDF2 (Milestone 1)
      * 3354301 XRef with conreffed phrases not properly generate HTML link (Milestone 1)
-	 * 3281074 Bad attribute being applied to fo:bookmark-title element (Milestone 2) 
-	 * 3344142 Conref Push order of validation (Milestone 2)
-	 * 3358377 Cryptic error message when DITA Map has "bookmap" extension (In Processing)
-	 * 3323806 Improve Java logging and exception handling (In Processing)  
-	 * 2837095 Positions of index and TOC in bookmaps are ignored  (In Processing)
+     * 3281074 Bad attribute being applied to fo:bookmark-title element (Milestone 2) 
+     * 3344142 Conref Push order of validation (Milestone 2)
+     * 3358377 Cryptic error message when DITA Map has "bookmap" extension (In Processing)
+     * 3323806 Improve Java logging and exception handling (In Processing)  
+     * 2837095 Positions of index and TOC in bookmaps are ignored  (In Processing)
+     * 3394000 TocJS needs cleanup for several minor bugs (Milestone 3)
+     * 3392718 TOCJS sample should not require ant target (Milestone 3) 
+     * 3389277 DocBook transform redundantly nests Related Links (Milestone 3)
+     * 3105339 '<' and '>' characters in a title cause tocjs trouble (Milestone 3)
+     * 3104497 tocjs JavaScripts don't work in Japanese environment (Milestone 3)
 	 
 ====================================================================================
 
