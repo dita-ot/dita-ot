@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -23,7 +23,7 @@ public final class DITAOTAntLogger implements DITAOTLogger {
     private final Project project;
     private Task task;
     private Target target;
-    
+
     /**
      * Construct a new logger that forwards messages to Ant project logger.
      * @param project Ant project to log to
@@ -35,7 +35,7 @@ public final class DITAOTAntLogger implements DITAOTLogger {
         }
         this.project = project;
     }
-    
+
     /**
      * Set log message source task.
      * @param task logging task
@@ -43,7 +43,7 @@ public final class DITAOTAntLogger implements DITAOTLogger {
     public void setTask(final Task task) {
         this.task = task;
     }
-    
+
     /**
      * Set log message source target.
      * @param target logging target
@@ -51,7 +51,7 @@ public final class DITAOTAntLogger implements DITAOTLogger {
     public void setTarget(final Target target) {
         this.target = target;
     }
-    
+
     public void logInfo(final String msg) {
         log(msg, Project.MSG_INFO);
     }
@@ -81,7 +81,7 @@ public final class DITAOTAntLogger implements DITAOTLogger {
             project.log(t.getMessage(), t, Project.MSG_ERR);
         }
     }
-    
+
     private void log(final String msg, final int level) {
         if (task != null) {
             project.log(task, msg, level);

@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -24,7 +24,7 @@ public final class XMLUtils {
 
     /** Private constructor to make class uninstantiable. */
     private XMLUtils() {}
-    
+
     /**
      * Add or set attribute.
      * 
@@ -44,7 +44,7 @@ public final class XMLUtils {
             atts.addAttribute(uri, localName, qName, type, value);
         }
     }
-    
+
     /**
      * Add or set attribute. Convenience method for {@link #addOrSetAttribute(AttributesImpl, String, String, String, String, String)}.
      * 
@@ -55,7 +55,7 @@ public final class XMLUtils {
     public static void addOrSetAttribute(final AttributesImpl atts, final String localName, final String value) {
         addOrSetAttribute(atts, NULL_NS_URI, localName, localName, "CDATA", value);
     }
-    
+
     /**
      * Add or set attribute. Convenience method for {@link #addOrSetAttribute(AttributesImpl, String, String, String, String, String)}.
      * 
@@ -69,12 +69,12 @@ public final class XMLUtils {
         final Attr a = (Attr) att;
         addOrSetAttribute(atts,
                 a.getNamespaceURI() != null ? a.getNamespaceURI() : NULL_NS_URI,
-                a.getLocalName() != null ? a.getLocalName() : "",
-                a.getName() != null ? a.getName() : "",
-                a.isId() ? "ID" : "CDATA",
-                a.getValue());
+                        a.getLocalName() != null ? a.getLocalName() : "",
+                                a.getName() != null ? a.getName() : "",
+                                        a.isId() ? "ID" : "CDATA",
+                                                a.getValue());
     }
-    
+
     /**
      * Remove an attribute from the list. Do nothing if attribute does not exist.
      * 
@@ -87,5 +87,5 @@ public final class XMLUtils {
             atts.removeAttribute(i);
         }
     }
-    
+
 }

@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -49,97 +49,97 @@ public final class OutputUtils {
         }
     }
 
-    private static Generate generatecopyouter = Generate.NOT_GENERATEOUTTER;//default:only generate&copy the non-overflowing files 
-	private static boolean onlytopicinmap=false;//default:only the topic files will be resolved in the map	
-	private static OutterControl outercontrol = OutterControl.WARN;
-	/**Output Dir.*/
-	private static String OutputDir=null;
-	/**Input Map Dir.*/
-	private static String InputMapDir=null;
-	
-	private OutputUtils(){
-		// leave blank as designed 
-	}
-	
-	/**
-	 * Retrieve the outercontrol.
-	 * @return String outercontrol behavior
-	 *
-	 */
-	public static OutterControl getOutterControl(){
-		return outercontrol;
-	}
-	
-	/**
-	 * Set the outercontrol.
-	 * @param control control
-	 */	
-	public static void setOutterControl(final String control){
-	    outercontrol = OutterControl.valueOf(control.toUpperCase());
-	}
-	
-	/**
-	 * Retrieve the flag of onlytopicinmap.
-	 * @return boolean if only topic in map
-	 */
-	public static boolean getOnlyTopicInMap(){
-		return onlytopicinmap;
-	}
-	
-	/**
-	 * Set the onlytopicinmap.
-	 * @param flag onlytopicinmap flag
-	 */
-	public static void setOnlyTopicInMap(final String flag){
-		if("true".equalsIgnoreCase(flag)){
-			onlytopicinmap=true;
-		}else{
-			onlytopicinmap=false;
-		}
-	}
-	
-	/**
-	 * Retrieve the flag of generatecopyouter.
-	 * @return int generatecopyouter flag
-	 */
-	public static Generate getGeneratecopyouter(){
-		return generatecopyouter;
-	}
-	
-	/**
-	 * Set the generatecopyouter.
-	 * @param flag generatecopyouter flag
-	 */
-	public static void setGeneratecopyouter(final String flag){
-	    generatecopyouter = Generate.get(Integer.parseInt(flag));
-	}
-	
-	/**
-	 * Get output dir.
-	 * @return output dir
-	 */
-	public static String getOutputDir(){
-		return OutputDir;
-	}
-	/**
-	 * Set output dir.
-	 * @param outputDir output dir
-	 */
-	public static void setOutputDir(final String outputDir){
-		OutputDir=outputDir;
-	}
-	/**
-	 * Get input map path.
-	 * @return input map path
-	 */
-	public static String getInputMapPathName(){
-		return InputMapDir;
-	}
-	/**
-	 * Set input map path.
-	 * @param inputMapDir input map path
-	 */
-	public static void setInputMapPathName(final String inputMapDir){
-		InputMapDir=inputMapDir;
-	}
+    private static Generate generatecopyouter = Generate.NOT_GENERATEOUTTER;//default:only generate&copy the non-overflowing files
+    private static boolean onlytopicinmap=false;//default:only the topic files will be resolved in the map
+    private static OutterControl outercontrol = OutterControl.WARN;
+    /**Output Dir.*/
+    private static String OutputDir=null;
+    /**Input Map Dir.*/
+    private static String InputMapDir=null;
+
+    private OutputUtils(){
+        // leave blank as designed
+    }
+
+    /**
+     * Retrieve the outercontrol.
+     * @return String outercontrol behavior
+     *
+     */
+    public static OutterControl getOutterControl(){
+        return outercontrol;
+    }
+
+    /**
+     * Set the outercontrol.
+     * @param control control
+     */
+    public static void setOutterControl(final String control){
+        outercontrol = OutterControl.valueOf(control.toUpperCase());
+    }
+
+    /**
+     * Retrieve the flag of onlytopicinmap.
+     * @return boolean if only topic in map
+     */
+    public static boolean getOnlyTopicInMap(){
+        return onlytopicinmap;
+    }
+
+    /**
+     * Set the onlytopicinmap.
+     * @param flag onlytopicinmap flag
+     */
+    public static void setOnlyTopicInMap(final String flag){
+        if("true".equalsIgnoreCase(flag)){
+            onlytopicinmap=true;
+        }else{
+            onlytopicinmap=false;
+        }
+    }
+
+    /**
+     * Retrieve the flag of generatecopyouter.
+     * @return int generatecopyouter flag
+     */
+    public static Generate getGeneratecopyouter(){
+        return generatecopyouter;
+    }
+
+    /**
+     * Set the generatecopyouter.
+     * @param flag generatecopyouter flag
+     */
+    public static void setGeneratecopyouter(final String flag){
+        generatecopyouter = Generate.get(Integer.parseInt(flag));
+    }
+
+    /**
+     * Get output dir.
+     * @return output dir
+     */
+    public static String getOutputDir(){
+        return OutputDir;
+    }
+    /**
+     * Set output dir.
+     * @param outputDir output dir
+     */
+    public static void setOutputDir(final String outputDir){
+        OutputDir=outputDir;
+    }
+    /**
+     * Get input map path.
+     * @return input map path
+     */
+    public static String getInputMapPathName(){
+        return InputMapDir;
+    }
+    /**
+     * Set input map path.
+     * @param inputMapDir input map path
+     */
+    public static void setInputMapPathName(final String inputMapDir){
+        InputMapDir=inputMapDir;
+    }
 }

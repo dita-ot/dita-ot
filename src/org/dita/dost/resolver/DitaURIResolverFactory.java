@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -29,58 +29,58 @@ import org.xml.sax.InputSource;
  * 
  */
 public final class DitaURIResolverFactory {
-	private static URIResolver resolver = null;
-	private static String path = null;
-	static {
-		// DITA-OT default URIResolver
-		/**
-		 * The href parameter can be either absolute or relative path. If
-		 * relative path is encountered, this function will tend to change it
-		 * into an absolute path according to the basedir and tempdir defined in the
-		 * program. Then it will use this absolute path to find the
-		 * file. If no such file in the specific path is found or something goes
-		 * wrong while trying to open the file, null is returned.
-		 */
-		resolver = new URIResolver() {
-			public Source resolve(final String href, final String base) throws TransformerException {			
-				File file = new File(href);
-				if (!file.isAbsolute()) {
-					String parentDir=null;
-					if(base == null){
-						parentDir=path;
-					}
-					else{
-						parentDir=new File(base).getAbsolutePath();
-					}
-					file = new File(parentDir, href);
-				}
-				try {
-					return new SAXSource(new InputSource(new FileInputStream(file)));
-				} catch (final Exception e) {
-					return null;
-				}
-			}
-		};
-	}
-	/**
-	 * Get URIResolver.
-	 * @return resolver
-	 */
-	public static URIResolver getURIResolver() {
-		return resolver;
-	}
-	/**
-	 * Set URIResolver.
-	 * @param resolver URIResolver
-	 */
-	public static void setURIResolver(final URIResolver resolver) {
-		DitaURIResolverFactory.resolver = resolver;
-	}
-	/**
-	 * Set DitaURIResolverFactory's path to create resolver.
-	 * @param path path
-	 */
-	public static void setPath(final String path) {
-		DitaURIResolverFactory.path = path;
-	}
+    private static URIResolver resolver = null;
+    private static String path = null;
+    static {
+        // DITA-OT default URIResolver
+        /**
+         * The href parameter can be either absolute or relative path. If
+         * relative path is encountered, this function will tend to change it
+         * into an absolute path according to the basedir and tempdir defined in the
+         * program. Then it will use this absolute path to find the
+         * file. If no such file in the specific path is found or something goes
+         * wrong while trying to open the file, null is returned.
+         */
+        resolver = new URIResolver() {
+            public Source resolve(final String href, final String base) throws TransformerException {
+                File file = new File(href);
+                if (!file.isAbsolute()) {
+                    String parentDir=null;
+                    if(base == null){
+                        parentDir=path;
+                    }
+                    else{
+                        parentDir=new File(base).getAbsolutePath();
+                    }
+                    file = new File(parentDir, href);
+                }
+                try {
+                    return new SAXSource(new InputSource(new FileInputStream(file)));
+                } catch (final Exception e) {
+                    return null;
+                }
+            }
+        };
+    }
+    /**
+     * Get URIResolver.
+     * @return resolver
+     */
+    public static URIResolver getURIResolver() {
+        return resolver;
+    }
+    /**
+     * Set URIResolver.
+     * @param resolver URIResolver
+     */
+    public static void setURIResolver(final URIResolver resolver) {
+        DitaURIResolverFactory.resolver = resolver;
+    }
+    /**
+     * Set DitaURIResolverFactory's path to create resolver.
+     * @param path path
+     */
+    public static void setPath(final String path) {
+        DitaURIResolverFactory.path = path;
+    }
 }

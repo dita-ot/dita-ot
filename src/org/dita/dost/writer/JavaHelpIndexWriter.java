@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -24,7 +24,7 @@ import org.dita.dost.index.IndexTermTarget;
 import org.dita.dost.util.XMLSerializer;
 
 /**
- * This class extends AbstractWriter, used to output index term 
+ * This class extends AbstractWriter, used to output index term
  * into java help index file.
  * 
  * @version 1.0 2005-05-20
@@ -65,11 +65,11 @@ public final class JavaHelpIndexWriter extends AbstractExtendDitaWriter {
     }
 
     /**
-     * Output the given indexterm into the PrintWriter.  
+     * Output the given indexterm into the PrintWriter.
      * 
      * @param term
      * @param printWriter
-     * @throws SAXException 
+     * @throws SAXException
      */
     private void outputIndexTerm(final IndexTerm term, final XMLSerializer serializer) throws SAXException {
         final List<IndexTermTarget> targets = term.getTargetList();

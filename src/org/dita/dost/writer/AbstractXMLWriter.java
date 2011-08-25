@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -33,7 +33,7 @@ abstract class AbstractXMLWriter implements AbstractWriter,
 ContentHandler, LexicalHandler, EntityResolver {
 
     protected DITAOTLogger logger;
-    
+
 
     public void characters(final char[] ch, final int start, final int length)
             throws SAXException {
@@ -104,9 +104,9 @@ ContentHandler, LexicalHandler, EntityResolver {
     public abstract void setContent(Content content);
 
     public abstract void write(String filename) throws DITAOTException;
-    
-	public final void setLogger(final DITAOTLogger logger) {
+
+    public final void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
-	
+
 }

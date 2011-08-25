@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -21,36 +21,36 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class TestDITAOTCopy {
-	
-	private static final File resourceDir = new File("test-stub", TestDITAOTCopy.class.getSimpleName());
-	private static final File srcDir = new File(resourceDir, "src");
-	private static File tempDir;
-	
-	@BeforeClass
-	public static void setUp() throws IOException {
-		tempDir = TestUtils.createTempDir(TestDITAOTCopy.class);
-	}
-	
-	@Test
-	public void testexecute() throws BuildException, IOException
-	{
+
+    private static final File resourceDir = new File("test-stub", TestDITAOTCopy.class.getSimpleName());
+    private static final File srcDir = new File(resourceDir, "src");
+    private static File tempDir;
+
+    @BeforeClass
+    public static void setUp() throws IOException {
+        tempDir = TestUtils.createTempDir(TestDITAOTCopy.class);
+    }
+
+    @Test
+    public void testexecute() throws BuildException, IOException
+    {
         final File myFile = new File(tempDir, "testbuild.xml");
         FileUtils.copyFile(new File(srcDir, "testbuild.xml"), myFile);
-	    final File mydestFile = new File(tempDir, "testbuildaaa.xml");
-	    
-		DITAOTCopy ditaotcopy= new DITAOTCopy();
-		ditaotcopy.setIncludes(myFile.getPath());
-		ditaotcopy.setTodir(tempDir.getPath());
-	       ditaotcopy.setRelativePaths(mydestFile.getName()); 
-	       ditaotcopy.execute();
-	       
-        assertEquals(TestUtils.readFileToString(myFile),
-                     TestUtils.readFileToString(mydestFile));
-	}
+        final File mydestFile = new File(tempDir, "testbuildaaa.xml");
 
-	@AfterClass
-	public static void tearDown() throws IOException {
-		TestUtils.forceDelete(tempDir);
-	}
-	
+        final DITAOTCopy ditaotcopy= new DITAOTCopy();
+        ditaotcopy.setIncludes(myFile.getPath());
+        ditaotcopy.setTodir(tempDir.getPath());
+        ditaotcopy.setRelativePaths(mydestFile.getName());
+        ditaotcopy.execute();
+
+        assertEquals(TestUtils.readFileToString(myFile),
+                TestUtils.readFileToString(mydestFile));
+    }
+
+    @AfterClass
+    public static void tearDown() throws IOException {
+        TestUtils.forceDelete(tempDir);
+    }
+
 }

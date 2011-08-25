@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -18,92 +18,92 @@ import java.util.Locale;
 import org.dita.dost.log.DITAOTJavaLogger;
 
 /**
- * DITAOTCollator class. 
+ * DITAOTCollator class.
  *
  * @author Wu, Zhi Qiang
  */
 public final class DITAOTCollator implements Comparator {
-	static HashMap<Locale, DITAOTCollator> cache = new HashMap<Locale, DITAOTCollator>();
-	
-	/**
-	 * Return the DITAOTCollator instance, Locale.US is default.
-	 * @return DITAOTCollator
-	 */
-	public static DITAOTCollator getInstance() {
-			return getInstance(Locale.US);
-	}
-	
-	/**
-	 * Return the DITAOTCollator instance specifying Locale.
-	 * @param locale the locale
-	 * @return DITAOTCollator
-	 */
-	public static DITAOTCollator getInstance(final Locale locale) {
-		DITAOTCollator instance = null;
-		instance = (DITAOTCollator) cache.get(locale);		
-		if (instance == null) {
-			instance = new DITAOTCollator(locale);
-			cache.put(locale, instance);
-		}
-		return instance;
-	}
-	
-	private Object collatorInstance = null;
-	private Method compareMethod = null;
-	private final DITAOTJavaLogger logger = new DITAOTJavaLogger();
-	
-	/**
-	 * Default Constructor
-	 */
-	private DITAOTCollator(){
-		this(Locale.US);
-	}
-	
-	/**
-	 * Constructor specifying Locale.
-	 * @param locale
-	 */
-	private DITAOTCollator(final Locale locale) {
-		init(locale);
-	}
-	
-	/**
-	 * Comparing method required to compare.
-	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-	 */
-	public int compare(final Object source, final Object target) {
-		try {
-			return ((Integer) compareMethod.invoke(collatorInstance, new Object[] {
-					source, target})).intValue();
-		} catch (final Exception e) {
-			throw new RuntimeException(e.getMessage(), e);
-		}
-	}
-	
-	/**
-	 * Initialization.
-	 * @param locale
-	 */
-	private void init(final Locale locale) {
-		Class<?> c = null;
-		
-		try {
-			c = Class.forName("com.ibm.icu.text.Collator");
-			logger.logInfo("Using ICU collator for " + locale.toString());
-		} catch (final Exception e) {
-			c = Collator.class;
-			logger.logInfo("Using JDK collator for " + locale.toString());
-		}
-		
-		try {
-			final Method m = c.getDeclaredMethod("getInstance",
-					new Class[] { Locale.class });
-			collatorInstance = m.invoke(null, new Object[] { locale });
-			compareMethod = c.getDeclaredMethod("compare", new Class[] {
-					Object.class, Object.class });
-		} catch (final Exception e) {
-			logger.logException(e);
-		}
-	}
+    static HashMap<Locale, DITAOTCollator> cache = new HashMap<Locale, DITAOTCollator>();
+
+    /**
+     * Return the DITAOTCollator instance, Locale.US is default.
+     * @return DITAOTCollator
+     */
+    public static DITAOTCollator getInstance() {
+        return getInstance(Locale.US);
+    }
+
+    /**
+     * Return the DITAOTCollator instance specifying Locale.
+     * @param locale the locale
+     * @return DITAOTCollator
+     */
+    public static DITAOTCollator getInstance(final Locale locale) {
+        DITAOTCollator instance = null;
+        instance = cache.get(locale);
+        if (instance == null) {
+            instance = new DITAOTCollator(locale);
+            cache.put(locale, instance);
+        }
+        return instance;
+    }
+
+    private Object collatorInstance = null;
+    private Method compareMethod = null;
+    private final DITAOTJavaLogger logger = new DITAOTJavaLogger();
+
+    /**
+     * Default Constructor
+     */
+    private DITAOTCollator(){
+        this(Locale.US);
+    }
+
+    /**
+     * Constructor specifying Locale.
+     * @param locale
+     */
+    private DITAOTCollator(final Locale locale) {
+        init(locale);
+    }
+
+    /**
+     * Comparing method required to compare.
+     * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+     */
+    public int compare(final Object source, final Object target) {
+        try {
+            return ((Integer) compareMethod.invoke(collatorInstance, new Object[] {
+                    source, target})).intValue();
+        } catch (final Exception e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Initialization.
+     * @param locale
+     */
+    private void init(final Locale locale) {
+        Class<?> c = null;
+
+        try {
+            c = Class.forName("com.ibm.icu.text.Collator");
+            logger.logInfo("Using ICU collator for " + locale.toString());
+        } catch (final Exception e) {
+            c = Collator.class;
+            logger.logInfo("Using JDK collator for " + locale.toString());
+        }
+
+        try {
+            final Method m = c.getDeclaredMethod("getInstance",
+                    new Class[] { Locale.class });
+            collatorInstance = m.invoke(null, new Object[] { locale });
+            compareMethod = c.getDeclaredMethod("compare", new Class[] {
+                    Object.class, Object.class });
+        } catch (final Exception e) {
+            logger.logException(e);
+        }
+    }
 
 }

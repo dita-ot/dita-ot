@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -26,13 +26,10 @@ import org.junit.Test;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
-
 import org.dita.dost.TestUtils;
 import org.dita.dost.index.IndexTerm;
 import org.dita.dost.index.IndexTermCollection;
 import org.dita.dost.index.IndexTermTarget;
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.StringUtils;
 
 /**
@@ -81,9 +78,9 @@ public class IndexTermReaderTest {
         exp.add(generateIndexTerms(target, "Primary", "Secondary", "Tertiary"));
         exp.add(generateIndexTerms(target, "Primary normalized", "Secondary normalized", "Tertiary normalized"));
         exp.add(generateIndexTerms(target, " Primary unnormalized ", " Secondary unnormalized ", " Tertiary unnormalized "));
-        
+
         assertEquals(new HashSet<IndexTerm>(exp),
-                     new HashSet<IndexTerm>(act));
+                new HashSet<IndexTerm>(act));
     }
 
     @After

@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -39,31 +39,31 @@ import org.dita.dost.util.FileUtils;
  * reading the code file.</p>
  */
 public final class CoderefResolver extends AbstractXMLFilter {
-    
+
     // Constants ---------------------------------------------------------------
-    
+
     private static final char[] XML_NEWLINE = { '\n' };
-    
+
     // Variables ---------------------------------------------------------------
-    
+
     private File currentFile = null;
     private int ignoreDepth = 0;
-    
+
     // Constructors ------------------------------------------------------------
-    
+
     /**
      * Constructor.
      */
     public CoderefResolver() {
     }
-    
+
     // AbstractWriter methods --------------------------------------------------
-    
+
     @Override
     public void setContent(final Content content) {
         // NOOP
     }
-    
+
     @Override
     public void write(final String filename) throws DITAOTException {
         // ignore in-exists file
@@ -73,7 +73,7 @@ public final class CoderefResolver extends AbstractXMLFilter {
         currentFile = new File(filename);
         super.write(filename);
     }
-    
+
     // XMLFilter methods -------------------------------------------------------
 
     @Override
@@ -83,7 +83,7 @@ public final class CoderefResolver extends AbstractXMLFilter {
             ignoreDepth++;
             return;
         }
-        
+
         if (PR_D_CODEREF.matches(atts)) {
             ignoreDepth++;
             try{
@@ -143,12 +143,12 @@ public final class CoderefResolver extends AbstractXMLFilter {
 
         super.endElement(uri, localName, name);
     }
-    
+
     // Private methods ---------------------------------------------------------
-    
+
     /**
      * Get code file charset.
-     *  
+     * 
      * @param value format attribute value, may be {@code null}
      * @return charset if set, otherwise default charset
      */
@@ -171,5 +171,5 @@ public final class CoderefResolver extends AbstractXMLFilter {
         }
         return c;
     }
-    
+
 }

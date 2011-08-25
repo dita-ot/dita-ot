@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -60,14 +60,14 @@ public final class Integrator {
     public static final String FEAT_HTML_EXTENSIONS = "dita.html.extensions";
     /** Feature name for supported resource file extensions. */
     public static final String FEAT_RESOURCE_EXTENSIONS = "dita.resource.extensions";
-    
+
     public static final String FEAT_VALUE_SEPARATOR = ",";
     public static final String PARAM_VALUE_SEPARATOR = ";";
     public static final String PARAM_NAME_SEPARATOR = "=";
 
     private static final Pattern ID_PATTERN = Pattern.compile("[0-9a-zA-Z_\\-]+(?:\\.[0-9a-zA-Z_\\-]+)*");
     private static final Pattern VERSION_PATTERN = Pattern.compile("\\d+(?:\\.\\d+(?:\\.\\d+(?:\\.[0-9a-zA-Z_\\-])?)?)?");
-    
+
     /** Plugin table which contains detected plugins. */
     private final Map<String, Features> pluginTable;
     private final Set<String> templateSet = new HashSet<String>(INT_16);
@@ -201,7 +201,7 @@ public final class Integrator {
         configuration.put(CONF_SUPPORTED_MAP_EXTENSIONS, readExtensions(FEAT_MAP_EXTENSIONS));
         configuration.put(CONF_SUPPORTED_HTML_EXTENSIONS, readExtensions(FEAT_HTML_EXTENSIONS));
         configuration.put(CONF_SUPPORTED_RESOURCE_EXTENSIONS, readExtensions(FEAT_RESOURCE_EXTENSIONS));
-        
+
         // non-print transtypes
         final Set<String> printTranstypes = new HashSet<String>();
         final String printTranstypeValue = properties.getProperty(CONF_PRINT_TRANSTYPES);
@@ -209,7 +209,7 @@ public final class Integrator {
             printTranstypes.addAll(Arrays.asList(printTranstypeValue.split(PARAM_VALUE_SEPARATOR)));
         }
         configuration.put(CONF_PRINT_TRANSTYPES, StringUtils.assembleString(printTranstypes, CONF_LIST_SEPARATOR));
-        
+
         OutputStream out = null;
         try {
             final File outFile = new File(ditaDir, "lib" + File.separator + CONF_PROPERTIES);
@@ -390,7 +390,7 @@ public final class Integrator {
             }
         }
     }
-    
+
     /**
      * Validate plug-in configuration.
      * 
@@ -417,7 +417,7 @@ public final class Integrator {
      * @param f Features to validate
      */
     private void validatePlugin(final Features f) {
-        final String id = f.getPluginId(); 
+        final String id = f.getPluginId();
         if (!ID_PATTERN.matcher(id).matches()) {
             final String msg = "Plug-in ID '" + id + "' doesn't follow recommended syntax rules, support for nonconforming IDs may be removed in future releases.";
             if (strict) {
@@ -436,7 +436,7 @@ public final class Integrator {
             }
         }
     }
-    
+
     /**
      * Set default values.
      * 
@@ -526,7 +526,7 @@ public final class Integrator {
     public void setStrict(final boolean strict) {
         this.strict = strict;
     }
-    
+
     /**
      * Set logger.
      * 

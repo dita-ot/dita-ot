@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -79,22 +79,22 @@ public final class TopicrefElement {
         return (href != null && format != null && !ATTRIBUTE_FORMAT_VALUE_DITA
                 .equals(format));
     }
-    
+
     /**
      * Set navtitle attribute with the given value.
      * @param aNavtitle The navtitle to set.
      */
     public void setNavTitle (final String aNavtitle){
-    	navtitle = aNavtitle;
+        navtitle = aNavtitle;
     }
-    
+
     /**
      * Get navtitle attribute.
      * 
      * @return Returns the navtitle.
      */
     public String getNavTitle(){
-    	return navtitle;
+        return navtitle;
     }
 
 

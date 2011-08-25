@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -17,25 +17,25 @@ import java.util.Date;
  */
 public final class TimingUtils {
 
-	public static String reportElapsedTime(final Date startTime) {
-		final long elapsedTime = Calendar.getInstance().getTime().getTime() - startTime.getTime();
-		if (elapsedTime < 500) {
-			return elapsedTime + " milliseconds";
-		} else if (elapsedTime < 60000) {
-			return (elapsedTime/1000.0) + " seconds";
-		} else {
-			return (elapsedTime/60000) + " minutes";
-		}
-	}
+    public static String reportElapsedTime(final Date startTime) {
+        final long elapsedTime = Calendar.getInstance().getTime().getTime() - startTime.getTime();
+        if (elapsedTime < 500) {
+            return elapsedTime + " milliseconds";
+        } else if (elapsedTime < 60000) {
+            return (elapsedTime/1000.0) + " seconds";
+        } else {
+            return (elapsedTime/60000) + " minutes";
+        }
+    }
 
-	/**
-	 * Get current time.
-	 * 
-	 * @return current time
-	 */
-	public static Date getNowTime() {
-		return Calendar.getInstance().getTime();
-	}
-	
+    /**
+     * Get current time.
+     * 
+     * @return current time
+     */
+    public static Date getNowTime() {
+        return Calendar.getInstance().getTime();
+    }
+
 
 }

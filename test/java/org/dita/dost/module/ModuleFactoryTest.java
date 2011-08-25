@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -20,23 +20,23 @@ import org.dita.dost.exception.DITAOTException;
 
 public class ModuleFactoryTest {
 
-	@Test
-	public void testInstance() {
-		assertNotNull(ModuleFactory.instance());
-		assertSame(ModuleFactory.instance(), ModuleFactory.instance());
-	}
+    @Test
+    public void testInstance() {
+        assertNotNull(ModuleFactory.instance());
+        assertSame(ModuleFactory.instance(), ModuleFactory.instance());
+    }
 
-	@Test
-	public void testCreateModule() throws DITAOTException {
-		final ModuleFactory f = ModuleFactory.instance();
-		final AbstractPipelineModule d = f.createModule("DummyPipeline");
-		assertEquals(DummyPipelineModule.class, d.getClass());
-		try {
-    		f.createModule(null);
-    		fail();
-		} catch (final DITAOTException e) {
-			// NOOP
-		}
-	}
-	
+    @Test
+    public void testCreateModule() throws DITAOTException {
+        final ModuleFactory f = ModuleFactory.instance();
+        final AbstractPipelineModule d = f.createModule("DummyPipeline");
+        assertEquals(DummyPipelineModule.class, d.getClass());
+        try {
+            f.createModule(null);
+            fail();
+        } catch (final DITAOTException e) {
+            // NOOP
+        }
+    }
+
 }

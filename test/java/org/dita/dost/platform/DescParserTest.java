@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -25,11 +25,11 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class DescParserTest {
 
     private final File resourceDir = new File("test-stub", DescParserTest.class.getSimpleName());
-    
+
     final File base = new File("base", "plugins");
     final String basePrefix = base.getPath() + File.separator;
     final DescParser p = new DescParser(base, base.getParentFile());
-    
+
     @Before
     public void setUp() throws Exception {
         final XMLReader parser = XMLReaderFactory.createXMLReader();
@@ -41,7 +41,7 @@ public class DescParserTest {
     public void testGetAllTemplates() {
         final Features f = p.getFeatures();
         assertEquals(Arrays.asList("xsl/shell_template.xsl", "xsl/shell2_template.xsl"),
-                     f.getAllTemplates());
+                f.getAllTemplates());
     }
 
     @Test
@@ -54,13 +54,13 @@ public class DescParserTest {
         for (final Iterator<PluginRequirement> i = f.getRequireListIter(); i.hasNext();) {
             final PluginRequirement r = i.next();
             for (final Iterator<String> ps = r.getPlugins(); ps.hasNext();) {
-            	final String p = ps.next();
-            	assertTrue(exp.containsKey(p));
-            	assertEquals(exp.get(p), r.getRequired());
+                final String p = ps.next();
+                assertTrue(exp.containsKey(p));
+                assertEquals(exp.get(p), r.getRequired());
             }
         }
     }
-    
+
     @Test
     public void testGetMeta() {
         final Features f = p.getFeatures();
@@ -68,7 +68,7 @@ public class DescParserTest {
         assertEquals("quxx", f.getMeta("baz"));
         assertNull(f.getMeta("undefined"));
     }
-    
+
     @Test
     public void testValueFeature() {
         final Features f = p.getFeatures();
@@ -76,23 +76,23 @@ public class DescParserTest {
         assertEquals("foo,bar", f.getFeature("multiple_type_text"));
         assertNull(f.getFeature("undefined"));
     }
-    
+
     @Test
     public void testFileValueFeature() {
         final Features f = p.getFeatures();
         assertEquals(basePrefix + "foo," + basePrefix + "bar",
-        		f.getFeature("type_file"));
+                f.getFeature("type_file"));
         assertEquals(basePrefix + "foo," + basePrefix + "bar",
-        		f.getFeature("multiple_type_file"));
+                f.getFeature("multiple_type_file"));
     }
-    
+
     @Test
     public void testFileFeature() {
         final Features f = p.getFeatures();
         assertEquals(basePrefix + "foo," + basePrefix + "bar",
-        		f.getFeature("file"));
+                f.getFeature("file"));
         assertEquals(basePrefix + "foo," + basePrefix + "bar",
-        		f.getFeature("multiple_file"));
+                f.getFeature("multiple_file"));
     }
-    
+
 }

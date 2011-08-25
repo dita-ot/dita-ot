@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -52,7 +52,7 @@ public class DebugAndFilterModuleTest {
     private final File ditaDir = new File("");
     private File tmpDir;
     private File inputDir;
-    
+
     @Before
     public void setUp() throws IOException, DITAOTException {
         tempDir = TestUtils.createTempDir(getClass());
@@ -67,7 +67,7 @@ public class DebugAndFilterModuleTest {
         props.put("user.input.dir", inputDir.getAbsolutePath());
         writeProperties(props, ditaList, false);
         writeProperties(props, new File(tmpDir, "dita.xml.properties"), true);
-        
+
         DITAOTFileLogger.getInstance().setLogDir(tmpDir.getAbsolutePath());
         DITAOTFileLogger.getInstance().setLogFile(DebugAndFilterModuleTest.class.getSimpleName() + ".log");
         DitaURIResolverFactory.setPath(tmpDir.getAbsolutePath());
@@ -141,7 +141,7 @@ public class DebugAndFilterModuleTest {
         }
         return props;
     }
-    
+
     private void writeProperties(final Properties props, final File ditaList, final boolean isXML) throws IOException {
         OutputStream out = null;
         try {
@@ -157,18 +157,18 @@ public class DebugAndFilterModuleTest {
             }
         }
     }
-    
+
     private class TestHandler implements ContentHandler {
 
         private File source;
         private final Map<String, Integer> counter = new HashMap<String, Integer>();
         private final Set<String> requiredProcessingInstructions = new HashSet<String>();
-                
+
         void setSource(final File source) {
             this.source = source;
         }
-        
-        public void characters(char[] arg0, int arg1, int arg2) throws SAXException {
+
+        public void characters(final char[] arg0, final int arg1, final int arg2) throws SAXException {
             // NOOP
         }
 
@@ -182,30 +182,30 @@ public class DebugAndFilterModuleTest {
             requiredProcessingInstructions.clear();
         }
 
-        public void endElement(String arg0, String arg1, String arg2) throws SAXException {
+        public void endElement(final String arg0, final String arg1, final String arg2) throws SAXException {
             // NOOP
         }
 
-        public void endPrefixMapping(String arg0) throws SAXException {
+        public void endPrefixMapping(final String arg0) throws SAXException {
             // NOOP
         }
 
-        public void ignorableWhitespace(char[] arg0, int arg1, int arg2) throws SAXException {
+        public void ignorableWhitespace(final char[] arg0, final int arg1, final int arg2) throws SAXException {
             // NOOP
         }
 
-        public void processingInstruction(String arg0, String arg1)
+        public void processingInstruction(final String arg0, final String arg1)
                 throws SAXException {
             if (requiredProcessingInstructions.contains(arg0)) {
                 requiredProcessingInstructions.remove(arg0);
             }
         }
 
-        public void setDocumentLocator(Locator arg0) {
+        public void setDocumentLocator(final Locator arg0) {
             // NOOP
         }
 
-        public void skippedEntity(String arg0) throws SAXException {
+        public void skippedEntity(final String arg0) throws SAXException {
             // NOOP
         }
 
@@ -215,7 +215,7 @@ public class DebugAndFilterModuleTest {
 
         }
 
-        public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
+        public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
             final String xtrf = atts.getValue("xtrf");
             assertNotNull(xtrf);
             assertEquals(source.getAbsolutePath(), xtrf);
@@ -227,10 +227,10 @@ public class DebugAndFilterModuleTest {
             assertEquals(localName + ":" + c, xtrc);
         }
 
-        public void startPrefixMapping(String arg0, String arg1) throws SAXException {
+        public void startPrefixMapping(final String arg0, final String arg1) throws SAXException {
             // NOOP
         }
-        
+
     }
 
 }

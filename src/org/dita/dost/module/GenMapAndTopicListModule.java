@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -454,7 +454,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
             // :FATALERROR
             final Exception inner = sax.getException();
             if (inner != null && inner instanceof DITAOTException) {// second
-                                                                    // level
+                // level
                 logger.logInfo(inner.getMessage());
                 throw (DITAOTException) inner;
             }
@@ -521,7 +521,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
             updateUplevels(file);
         }
 
-        // Update uplevels for copy-to targets, and store copy-to map. 
+        // Update uplevels for copy-to targets, and store copy-to map.
         // Note: same key(target) copy-to will be ignored.
         iter = cpMap.keySet().iterator();
         while (iter.hasNext()) {
@@ -706,7 +706,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 
         if (FileUtils.isDITAFile(lcasefn)
                 && (format == null || ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(format) || ATTR_FORMAT_VALUE_DITAMAP
-                        .equalsIgnoreCase(format))) {
+                .equalsIgnoreCase(format))) {
 
             addToWaitList(file);
         } else if (!FileUtils.isSupportedImageFile(lcasefn)) {
@@ -799,8 +799,8 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
             case '.':
                 buff.append("\\.");
                 break;
-            // case '/':
-            // case '|':
+                // case '/':
+                // case '|':
             case '\\':
                 buff.append("[\\\\|/]");
                 break;
@@ -1141,7 +1141,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
                                 .replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR)
                                 + EQUAL
                                 + FileUtils.removeRedundantNames(new StringBuffer(prefix).append(source).toString())
-                                        .replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR));
+                                .replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR));
                     }
                 } else {
                     newSet.add(FileUtils.removeRedundantNames(new StringBuffer(prefix).append(file).toString())

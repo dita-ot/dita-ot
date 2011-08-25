@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -43,5 +43,5 @@ public interface AbstractWriter {
      * @param logger logger to use for log message
      */
     public void setLogger(DITAOTLogger logger);
-    
+
 }

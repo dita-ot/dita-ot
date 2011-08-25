@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -28,11 +28,11 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.XMLSerializer;
 
 /**
- * This class extends AbstractWriter, used to output index term 
+ * This class extends AbstractWriter, used to output index term
  * into eclipse help index file.
  * 
  *  @author Sirois, Eric
- *  
+ * 
  *  @version 1.0 2006-10-17
  */
 public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
@@ -41,12 +41,12 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
 
     private String targetExt = FILE_EXTENSION_HTML;
 
-    /** 
+    /**
      * Boolean to indicate when we are processing indexsee and child elements
      */
     private boolean inIndexsee = false;
 
-    /** List of index terms used to search for see references. */ 
+    /** List of index terms used to search for see references. */
     private List<IndexTerm> termCloneList = null;
 
     /**
@@ -59,9 +59,9 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
     }
 
     /**
-     *  
+     * 
      * @return filePath The file path to the plugin.xml file
-     */	
+     */
     public String getFilePath(){
         return filepath;
     }
@@ -80,7 +80,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
             }
 
             final XMLSerializer serializer = XMLSerializer.newInstance(out);
-            
+
             serializer.writeStartDocument();
             serializer.writeStartElement("index");
             //Clone the list of indexterms so we can look for see references
@@ -106,12 +106,12 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
     }
 
     /**
-     * Output the given indexterm into the PrintWriter.  
+     * Output the given indexterm into the PrintWriter.
      * 
      * @param term
      * @param printWriter
      * @param indexsee
-     * @throws SAXException 
+     * @throws SAXException
      */
     private void outputIndexTerm(final IndexTerm term, final XMLSerializer serializer, final boolean indexsee) throws SAXException {
         final List<IndexTerm> subTerms = term.getSubTerms();
@@ -136,16 +136,16 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
         if (aFileName.startsWith(SHARP)){
             return aFileName;
         } else if (index != -1){
-            final String fileName = aFileName.substring(0, index); 
+            final String fileName = aFileName.substring(0, index);
             final int fileExtIndex = fileName.lastIndexOf(DOT);
             return (fileExtIndex != -1)
                     ? fileName.substring(0, fileExtIndex) + targetExt + aFileName.substring(index)
-                    : aFileName;
+                            : aFileName;
         } else {
             final int fileExtIndex = aFileName.lastIndexOf(DOT);
             return (fileExtIndex != -1)
-                    ? (aFileName.substring(0, fileExtIndex) + targetExt) 
-                    : aFileName;
+                    ? (aFileName.substring(0, fileExtIndex) + targetExt)
+                            : aFileName;
         }
     }
 
@@ -154,7 +154,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
      * @param outputFileRoot root path
      * @return index file name
      */
-    public String getIndexFileName(final String outputFileRoot) {	
+    public String getIndexFileName(final String outputFileRoot) {
         final File indexDir = new File(outputFileRoot).getParentFile();
         setFilePath(indexDir.getAbsolutePath());
         final StringBuffer indexFilename = new StringBuffer(new File(indexDir, "index.xml").getAbsolutePath());
@@ -162,7 +162,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
     }
 
     /*
-     * Method for see references in Eclipse. This version does not have a 
+     * Method for see references in Eclipse. This version does not have a
      * dependency on a specific Eclipse version.
      * 
      * @param term  The indexterm to be processed.
@@ -206,7 +206,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
                     if (term.getTermPrefix() != null || inIndexsee) {
                         indexSeeRefTerm = term.getTermName();
                         inIndexsee = true;
-                        foundIndexsee = true;						
+                        foundIndexsee = true;
                         // Find the term with an href.
                         for (int j = 0; j < termCloneNum; j++) {
                             final IndexTerm termClone = termCloneList.get(j);
@@ -294,8 +294,8 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
     /*
      * Clone a list used for comparison against the original list.
      * 
-     * @param  List A list to be deep cloned 
-     * @return List The deep cloned list 
+     * @param  List A list to be deep cloned
+     * @return List The deep cloned list
      */
 
     private List<IndexTerm> cloneIndextermList (final List<IndexTerm> termList){

@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -20,57 +20,57 @@ import java.util.StringTokenizer;
 import org.dita.dost.log.DITAOTLogger;
 
 /**
- * ImportAction implements IAction and import the resource 
+ * ImportAction implements IAction and import the resource
  * provided by plug-ins into the xsl files and ant scripts.
  * @author Zhang, Yuan Peng
  */
 abstract class ImportAction implements IAction {
-	
-	/** Action values. */
-	protected final Set<String> valueSet;
-	/** Action parameters. */
-	protected final Hashtable<String,String> paramTable;
-	protected DITAOTLogger logger;
-	/** Plug-in features. */
+
+    /** Action values. */
+    protected final Set<String> valueSet;
+    /** Action parameters. */
+    protected final Hashtable<String,String> paramTable;
+    protected DITAOTLogger logger;
+    /** Plug-in features. */
     protected Map<String, Features> featureTable = null;
-	
-	/**
-	 * Default Constructor.
-	 */
-	public ImportAction() {
-		valueSet = new LinkedHashSet<String>(INT_16);
-		paramTable = new Hashtable<String,String>();
-	}
-	
-	/**
-	 * get result.
-	 * @return result
-	 */
-	public abstract String getResult();
 
-	/**
-	 * set input.
-	 * @param input input
-	 */
-	public void setInput(final String input) {
-		final StringTokenizer inputTokenizer = new StringTokenizer(input, Integrator.FEAT_VALUE_SEPARATOR);
-		while(inputTokenizer.hasMoreElements()){
-			valueSet.add(inputTokenizer.nextToken());
-		}
-	}
+    /**
+     * Default Constructor.
+     */
+    public ImportAction() {
+        valueSet = new LinkedHashSet<String>(INT_16);
+        paramTable = new Hashtable<String,String>();
+    }
 
-	public void addParam(final String name, final String value) {
-		paramTable.put(name, value);
-	}
-	/**
-	 * Set the feature table.
-	 * @param h hastable
-	 */
-	public void setFeatures(final Map<String, Features> h) {
-	    this.featureTable = h;
-	}
-	
-	public void setLogger(final DITAOTLogger logger) {
+    /**
+     * get result.
+     * @return result
+     */
+    public abstract String getResult();
+
+    /**
+     * set input.
+     * @param input input
+     */
+    public void setInput(final String input) {
+        final StringTokenizer inputTokenizer = new StringTokenizer(input, Integrator.FEAT_VALUE_SEPARATOR);
+        while(inputTokenizer.hasMoreElements()){
+            valueSet.add(inputTokenizer.nextToken());
+        }
+    }
+
+    public void addParam(final String name, final String value) {
+        paramTable.put(name, value);
+    }
+    /**
+     * Set the feature table.
+     * @param h hastable
+     */
+    public void setFeatures(final Map<String, Features> h) {
+        this.featureTable = h;
+    }
+
+    public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
 

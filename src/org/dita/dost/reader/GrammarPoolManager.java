@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -18,52 +18,47 @@ import org.dita.dost.util.XMLGrammarPoolImplUtils;
  * be used across Ant task invocations.
  */
 public final class GrammarPoolManager {
-	
-	//flag whether use grammar caching.
-	private static boolean gramCache;
 
-	public static XMLGrammarPool initializeGrammarPool() {
-		XMLGrammarPool pool = null;
-		try {
-		    pool = new XMLGrammarPoolImplUtils(gramCache);
-		    //set grammar caching flag
-		    
-		}
-		catch (final Exception e) {
-			System.out.println("Failed to create Xerces grammar pool for caching DTDs and schemas");
-		}
-		grammarPool.set(pool);
-		return pool;
-	}
+    //flag whether use grammar caching.
+    private static boolean gramCache;
 
-	private static ThreadLocal<XMLGrammarPool> grammarPool = new ThreadLocal<XMLGrammarPool>() {
-		protected synchronized XMLGrammarPool initialvalue() {
-			final XMLGrammarPool grammarPool = initializeGrammarPool();
-			set(grammarPool);
-			return grammarPool;
-		}
+    public static XMLGrammarPool initializeGrammarPool() {
+        XMLGrammarPool pool = null;
+        try {
+            pool = new XMLGrammarPoolImplUtils(gramCache);
+            //set grammar caching flag
 
-		
-	};
-	
-	
+        }
+        catch (final Exception e) {
+            System.out.println("Failed to create Xerces grammar pool for caching DTDs and schemas");
+        }
+        grammarPool.set(pool);
+        return pool;
+    }
 
-	/**
-	 * Get grammar pool
-	 * 
-	 * @return grammar pool instance
-	 */
-	public static XMLGrammarPool getGrammarPool() {
-		XMLGrammarPool pool = grammarPool.get();
-		if (pool == null) {
+    private static ThreadLocal<XMLGrammarPool> grammarPool = new ThreadLocal<XMLGrammarPool>() {
+
+
+    };
+
+
+
+    /**
+     * Get grammar pool
+     * 
+     * @return grammar pool instance
+     */
+    public static XMLGrammarPool getGrammarPool() {
+        XMLGrammarPool pool = grammarPool.get();
+        if (pool == null) {
             pool = initializeGrammarPool();
         }
-		return pool;
-	}
+        return pool;
+    }
 
-	public static void setGramCache(final boolean gramCache) {
-		GrammarPoolManager.gramCache = gramCache;
-	}
+    public static void setGramCache(final boolean gramCache) {
+        GrammarPoolManager.gramCache = gramCache;
+    }
 
 }
-	  	 
+

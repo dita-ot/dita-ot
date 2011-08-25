@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -23,24 +23,24 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
  */
 public interface AbstractPipelineModule {
 
-	/**
-	 * Start the process of this module with the input.
-	 * 
-	 * <p>{@link #setLogger(DITAOTLogger)} must be called before calling this method.</p>
-	 * 
-	 * @param input input
-	 * @return output
-	 * @author Lian, Li
-	 * @throws DITAOTException DITAOTException
-	 */
-	AbstractPipelineOutput execute(AbstractPipelineInput input)
-			throws DITAOTException;
+    /**
+     * Start the process of this module with the input.
+     * 
+     * <p>{@link #setLogger(DITAOTLogger)} must be called before calling this method.</p>
+     * 
+     * @param input input
+     * @return output
+     * @author Lian, Li
+     * @throws DITAOTException DITAOTException
+     */
+    AbstractPipelineOutput execute(AbstractPipelineInput input)
+            throws DITAOTException;
 
-	/**
-	 * Set logger for module.
-	 * 
-	 * @param logger logger to use for log message
-	 */
-	public void setLogger(DITAOTLogger logger);
-	
+    /**
+     * Set logger for module.
+     * 
+     * @param logger logger to use for log message
+     */
+    public void setLogger(DITAOTLogger logger);
+
 }

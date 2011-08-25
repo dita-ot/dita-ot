@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 /*
@@ -33,12 +33,12 @@ import org.dita.dost.module.ContentImpl;
 
 
 public class TestJavaHelpIndexWriter {
-    
+
     private static File tempDir;
     private static final File resourceDir = new File("test-stub", TestJavaHelpIndexWriter.class.getSimpleName());
     private static final File expDir = new File(resourceDir, "exp");
     private static final File etcDir = new File(resourceDir, "resource");
-    
+
     @BeforeClass
     public static void setUp() throws IOException {
         tempDir = TestUtils.createTempDir(TestJavaHelpIndexWriter.class);
@@ -58,12 +58,12 @@ public class TestJavaHelpIndexWriter {
         final Collection<IndexTerm> collection = new ArrayList<IndexTerm>();
         collection.add(indexterm1);
         content.setCollection(collection);
-        
+
         final JavaHelpIndexWriter javahelpindexwriter = new JavaHelpIndexWriter();
         javahelpindexwriter.setContent(content);
         final File outFile = new File(tempDir, "javahelpindexwriteroutput.xml");
         javahelpindexwriter.write(outFile.getAbsolutePath());
-        
+
         final CatalogManager manager = new CatalogManager();
         manager.setIgnoreMissingProperties(true);
         manager.setUseStaticCatalog(false);
@@ -74,7 +74,7 @@ public class TestJavaHelpIndexWriter {
         XMLUnit.setTestEntityResolver(resolver);
         XMLUnit.setIgnoreWhitespace(true);
         assertXMLEqual(new InputSource(new File(expDir, "comparejavahelpindexwriteroutput.xml").toURI().toString()),
-                       new InputSource(outFile.toURI().toString()));
+                new InputSource(outFile.toURI().toString()));
     }
 
     @AfterClass

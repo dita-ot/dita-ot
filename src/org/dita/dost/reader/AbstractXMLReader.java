@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -12,8 +12,6 @@ package org.dita.dost.reader;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.IOException;
-import java.util.HashMap;
-
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
@@ -31,7 +29,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.ext.LexicalHandler;
 
 /**
- * This class extends AbstractReader, implement SAX's ContentHandler, 
+ * This class extends AbstractReader, implement SAX's ContentHandler,
  * LexicalHandler, and EntityResolver.
  * 
  * @version 1.0 2005-06-24
@@ -39,78 +37,78 @@ import org.xml.sax.ext.LexicalHandler;
  * @author Wu, Zhi Qiang
  */
 public abstract class AbstractXMLReader implements AbstractReader,
-        ContentHandler, LexicalHandler, EntityResolver {
-	
-	/**
-	 * Initialize XML reader.
-	 * 
-	 * @param ditaDir DITA-OT base directory
-	 * @param validate  
-	 * @param inGrammarPool
-	 * @throws SAXException if initializing reader failed
-	 */
-	public static XMLReader initXMLReaderBase(final String ditaDir, final boolean validate,			
-		final XMLGrammarPool inGrammarPool) throws SAXException {		
-		// FIXME: WEK: This is my attempt to factor out common reader initialization
-		//             code for the GenListModuleReader and the Debug and filter reader.
-		
-		XMLGrammarPool grammarPool = null;
-		
-		if (inGrammarPool == null) {
-			grammarPool = GrammarPoolManager.getGrammarPool();
-		} else {
-			grammarPool = inGrammarPool;
-		}
-	
-		final DITAOTLogger javaLogger=new DITAOTJavaLogger();
-		final XMLReader reader = StringUtils.getXMLReader();
-		reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-		if(validate==true){
-			reader.setFeature(FEATURE_VALIDATION, true);
-			reader.setFeature(FEATURE_VALIDATION_SCHEMA, true);
-		}else{
-			final String msg=MessageUtils.getMessage("DOTJ037W").toString();
-			javaLogger.logWarn(msg);
-		}
-		setGrammarPool(reader, grammarPool);
-	
-		CatalogUtils.setDitaDir(ditaDir);
-		return reader;
-	}
+ContentHandler, LexicalHandler, EntityResolver {
 
-	/**
-	 * Sets the grammar pool on the parser. Note that this is a Xerces-specific
-	 * feature.
-	 * @param reader
-	 * @param grammarPool
-	 */
-	public static void setGrammarPool(final XMLReader reader, XMLGrammarPool grammarPool) {
-		
-		final DITAOTLogger logger = new DITAOTJavaLogger();
-		if (grammarPool == null) {
-			grammarPool = GrammarPoolManager.getGrammarPool();
-		}
-		if (grammarPool != null) {
-			try {
-				reader.setProperty(
-								"http://apache.org/xml/properties/internal/grammar-pool",
-								grammarPool);
-				
-				final String msg = "Using Xerces grammar pool for DTD and schema caching.";
-				logger.logInfo(msg);
-				
-			} catch (final Exception e) {
-				final String msg = "Failed to setXerces grammar pool for parser: "
-					+ e.getMessage();
-				logger.logInfo(msg);
-			}
-		} else {
-			final String msg = "grammar pool is null";
-			logger.logInfo(msg);
-		}
-	}
-	
-	protected DITAOTLogger logger;
+    /**
+     * Initialize XML reader.
+     * 
+     * @param ditaDir DITA-OT base directory
+     * @param validate
+     * @param inGrammarPool
+     * @throws SAXException if initializing reader failed
+     */
+    public static XMLReader initXMLReaderBase(final String ditaDir, final boolean validate,
+            final XMLGrammarPool inGrammarPool) throws SAXException {
+        // FIXME: WEK: This is my attempt to factor out common reader initialization
+        //             code for the GenListModuleReader and the Debug and filter reader.
+
+        XMLGrammarPool grammarPool = null;
+
+        if (inGrammarPool == null) {
+            grammarPool = GrammarPoolManager.getGrammarPool();
+        } else {
+            grammarPool = inGrammarPool;
+        }
+
+        final DITAOTLogger javaLogger=new DITAOTJavaLogger();
+        final XMLReader reader = StringUtils.getXMLReader();
+        reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
+        if(validate==true){
+            reader.setFeature(FEATURE_VALIDATION, true);
+            reader.setFeature(FEATURE_VALIDATION_SCHEMA, true);
+        }else{
+            final String msg=MessageUtils.getMessage("DOTJ037W").toString();
+            javaLogger.logWarn(msg);
+        }
+        setGrammarPool(reader, grammarPool);
+
+        CatalogUtils.setDitaDir(ditaDir);
+        return reader;
+    }
+
+    /**
+     * Sets the grammar pool on the parser. Note that this is a Xerces-specific
+     * feature.
+     * @param reader
+     * @param grammarPool
+     */
+    public static void setGrammarPool(final XMLReader reader, XMLGrammarPool grammarPool) {
+
+        final DITAOTLogger logger = new DITAOTJavaLogger();
+        if (grammarPool == null) {
+            grammarPool = GrammarPoolManager.getGrammarPool();
+        }
+        if (grammarPool != null) {
+            try {
+                reader.setProperty(
+                        "http://apache.org/xml/properties/internal/grammar-pool",
+                        grammarPool);
+
+                final String msg = "Using Xerces grammar pool for DTD and schema caching.";
+                logger.logInfo(msg);
+
+            } catch (final Exception e) {
+                final String msg = "Failed to setXerces grammar pool for parser: "
+                        + e.getMessage();
+                logger.logInfo(msg);
+            }
+        } else {
+            final String msg = "grammar pool is null";
+            logger.logInfo(msg);
+        }
+    }
+
+    protected DITAOTLogger logger;
 
     public void read(final String filename) {
         // NOOP
@@ -119,7 +117,7 @@ public abstract class AbstractXMLReader implements AbstractReader,
     public Content getContent() {
         return null;
     }
-    
+
     public final void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }

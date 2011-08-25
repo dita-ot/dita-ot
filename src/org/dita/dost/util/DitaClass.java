@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -27,18 +27,18 @@ import org.xml.sax.Attributes;
 public class DitaClass {
 
     // Variables
-    
+
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
-    
+
     /** Module/type pair for the most specialized type, with a single preceding and following space character. */
     public final String matcher;
     /** Type name, i.e. local element name. */
     public final String localName;
     /** Normalized specialization hierarchy string. */
     private final String stringValue;
-    
+
     // Constructors
-    
+
     /**
      * Constructor
      * 
@@ -55,9 +55,9 @@ public class DitaClass {
         }
         stringValue = sb.toString();
     }
-    
+
     // Public methods
-    
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -97,7 +97,7 @@ public class DitaClass {
     public String toString() {
         return stringValue;
     }
-    
+
     /**
      * Test if given DITA class matches this DITA class.
      * 
@@ -107,7 +107,7 @@ public class DitaClass {
     public boolean matches(final DitaClass cls) {
         return cls != null && cls.toString().indexOf(matcher) != -1;
     }
-    
+
     /**
      * Test if given DITA class string matches this DITA class.
      * 
@@ -117,7 +117,7 @@ public class DitaClass {
     public boolean matches(final String classString) {
         return classString != null && classString.indexOf(matcher) != -1;
     }
-    
+
     /**
      * Test if given DITA class string matches this DITA class.
      * 

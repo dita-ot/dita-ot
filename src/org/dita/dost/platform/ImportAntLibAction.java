@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -20,30 +20,30 @@ import org.dita.dost.util.StringUtils;
  */
 final class ImportAntLibAction extends ImportAction {
 
-	/**
-	 * get result.
-	 * @return result
-	 */
-	@Override
-	public String getResult() {
-		final StringBuilder retBuf = new StringBuilder();
-		final String templateFilePath = paramTable.get(FileGenerator.PARAM_TEMPLATE);
-		for (final String value: valueSet) {
-			retBuf.append(LINE_SEPARATOR);
+    /**
+     * get result.
+     * @return result
+     */
+    @Override
+    public String getResult() {
+        final StringBuilder retBuf = new StringBuilder();
+        final String templateFilePath = paramTable.get(FileGenerator.PARAM_TEMPLATE);
+        for (final String value: valueSet) {
+            retBuf.append(LINE_SEPARATOR);
             final String resolvedValue = FileUtils.getRelativePathFromMap(
-                templateFilePath, value);
-			if(FileUtils.isAbsolutePath(resolvedValue)){
-				// if resolvedValue is absolute path
-				retBuf.append("<pathelement location=\"");
-				retBuf.append(StringUtils.escapeXML(resolvedValue));
-				retBuf.append("\"/>");
-			}else{// if resolvedValue is relative path
-				retBuf.append("<pathelement location=\"${dita.dir}${file.separator}");
-				retBuf.append(StringUtils.escapeXML(resolvedValue));
-				retBuf.append("\"/>");
-			}
-		}
-		return retBuf.toString();
-	}
+                    templateFilePath, value);
+            if(FileUtils.isAbsolutePath(resolvedValue)){
+                // if resolvedValue is absolute path
+                retBuf.append("<pathelement location=\"");
+                retBuf.append(StringUtils.escapeXML(resolvedValue));
+                retBuf.append("\"/>");
+            }else{// if resolvedValue is relative path
+                retBuf.append("<pathelement location=\"${dita.dir}${file.separator}");
+                retBuf.append(StringUtils.escapeXML(resolvedValue));
+                retBuf.append("\"/>");
+            }
+        }
+        return retBuf.toString();
+    }
 
 }

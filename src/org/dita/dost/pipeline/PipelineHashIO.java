@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -20,7 +20,7 @@ import java.util.Map;
  * 
  */
 public final class PipelineHashIO implements AbstractPipelineInput,
-        AbstractPipelineOutput {
+AbstractPipelineOutput {
     private final Map<String, String> hash;
 
 

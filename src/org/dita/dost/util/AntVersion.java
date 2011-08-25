@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -20,22 +20,23 @@ import org.apache.tools.ant.Task;
  */
 public final class AntVersion extends Task{
 
-	/**
-	 * Task execute point.
-	 * @throws BuildException exception
-	 * @see org.apache.tools.ant.taskdefs.Echo#execute()
-	 */
-	public void execute() throws BuildException {
-		final VersionUtil versionUtil = new VersionUtil();
-		
-		final String otversion = versionUtil.getOtversion();
-		
-		//set current OT version into antscript REQ ID:3079610
-		this.setActiveProjectProperty("otversion", otversion);
-		//logger.logInfo(message);
-	}
-	
-	/**
+    /**
+     * Task execute point.
+     * @throws BuildException exception
+     * @see org.apache.tools.ant.taskdefs.Echo#execute()
+     */
+    @Override
+    public void execute() throws BuildException {
+        final VersionUtil versionUtil = new VersionUtil();
+
+        final String otversion = versionUtil.getOtversion();
+
+        //set current OT version into antscript REQ ID:3079610
+        this.setActiveProjectProperty("otversion", otversion);
+        //logger.logInfo(message);
+    }
+
+    /**
      * Sets property in active ant project with name specified inpropertyName,
      * and value specified in propertyValue parameter
      */

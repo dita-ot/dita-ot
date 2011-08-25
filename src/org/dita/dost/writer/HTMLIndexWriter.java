@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -30,7 +30,7 @@ import org.dita.dost.util.XMLSerializer;
  * @version 1.0 2005-05-11
  * 
  * @author Anders Svensson (based on modifications of the CHMIndexWriter class by Wu, Zhi Qiang)
- * The class outputs an index for html, including alphabetical headings. (Thanks to pre-existing functionality in DITA OT, 
+ * The class outputs an index for html, including alphabetical headings. (Thanks to pre-existing functionality in DITA OT,
  * these will be sorted based on locale as long as the xml:lang attribute is used.)
  *
  */
@@ -50,11 +50,11 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter {
             serializer.writeStartElement("html");
             serializer.writeStartElement("head");
             serializer.writeComment("Sitemap 1.0");
-            serializer.writeEndElement(); // head			
+            serializer.writeEndElement(); // head
             serializer.writeStartElement("body");
             serializer.writeStartElement("ul");
             // Initializing the variable for the alphabetical headings.
-            String printLetter = "A"; 
+            String printLetter = "A";
             final int termNum = termList.size();
             for (int i = 0; i < termNum; i++) {
                 final IndexTerm term = termList.get(i);
@@ -89,11 +89,11 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter {
     }
 
     /**
-     * Output the given indexterm into the PrintWriter.  
+     * Output the given indexterm into the PrintWriter.
      * 
      * @param term
      * @param printWriter
-     * @throws SAXException 
+     * @throws SAXException
      */
     private void outputIndexTerm(final IndexTerm term, final XMLSerializer serializer) throws SAXException {
         List<IndexTermTarget> targets = term.getTargetList();
@@ -147,8 +147,8 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter {
                     findTargets(subTerm);
                 }
                 term.addTargets(subTerm.getTargetList());
-            }			
-        }	
+            }
+        }
     }
 
     /**

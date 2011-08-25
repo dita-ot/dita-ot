@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -64,18 +64,18 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
         output = null;
         insideCDATA = false;
         topicSpecList = new ArrayList<String>(); //Eric
-        
+
         try {
             reader = StringUtils.getXMLReader();
             reader.setContentHandler(this);
             reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
             reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
             //Edited by william on 2009-11-8 for ampbug:2893664 start
-			reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
-			reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
-			//Edited by william on 2009-11-8 for ampbug:2893664 end
+            reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
+            reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
+            //Edited by william on 2009-11-8 for ampbug:2893664 end
         } catch (final Exception e) {
-        	logger.logException(e);
+            logger.logException(e);
         }
 
     }
@@ -83,73 +83,73 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
     @Override
     public void characters(final char[] ch, final int start, final int length)
             throws SAXException {
-    	if(needResolveEntity){
-    		try {
-    			if(insideCDATA) {
+        if(needResolveEntity){
+            try {
+                if(insideCDATA) {
                     output.write(ch, start, length);
                 } else {
                     output.write(StringUtils.escapeXML(ch, start, length));
                 }
-    		} catch (final Exception e) {
-    			logger.logException(e);
-    		}
-    	}
+            } catch (final Exception e) {
+                logger.logException(e);
+            }
+        }
     }
-	
+
     @Override
     public void endCDATA() throws SAXException {
-    	insideCDATA = false;
-	    try{
-	        output.write(CDATA_END);
-	    }catch(final Exception e){
-	    	logger.logException(e);
-	    }
-	}
+        insideCDATA = false;
+        try{
+            output.write(CDATA_END);
+        }catch(final Exception e){
+            logger.logException(e);
+        }
+    }
 
     @Override
     public void endDocument() throws SAXException {
         try {
             output.flush();
         } catch (final Exception e) {
-        	logger.logException(e);
+            logger.logException(e);
         }
     }
 
     @Override
     public void endElement(final String uri, final String localName, final String qName)
             throws SAXException {
-    	if (topicSpecList.contains(localName)){//Eric
-    		// Remove the last topic id.
-    		if (!topicIdStack.empty()) {
+        if (topicSpecList.contains(localName)){//Eric
+            // Remove the last topic id.
+            if (!topicIdStack.empty()) {
                 topicIdStack.pop();
             }
-    		if (firstTopic) {
+            if (firstTopic) {
                 firstTopic = false;
             }
-    	}
+        }
         try {
-             //Using the same type of logic that's used in DITAIndexWriter.
-        	if (curMatchTopic != null && topicSpecList.contains(localName)) {
-                 // if <prolog> don't exist
+            //Using the same type of logic that's used in DITAIndexWriter.
+            if (curMatchTopic != null && topicSpecList.contains(localName)) {
+                // if <prolog> don't exist
                 output.write(RELATED_LINKS_HEAD);
                 output.write(indexEntries.get(curMatchTopic));
                 output.write(RELATED_LINKS_END);
                 output.write(System.getProperty("line.separator"));
                 curMatchTopic = null;
             }
-            output.write(LESS_THAN + SLASH + qName 
+            output.write(LESS_THAN + SLASH + qName
                     + GREATER_THAN);
         } catch (final Exception e) {
-        	logger.logException(e);
+            logger.logException(e);
         }
     }
 
     @Override
     public void endEntity(final String name) throws SAXException {
-		if(!needResolveEntity){
-			needResolveEntity = true;
-		}
-	}
+        if(!needResolveEntity){
+            needResolveEntity = true;
+        }
+    }
 
 
     @Override
@@ -158,7 +158,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
         try {
             output.write(ch, start, length);
         } catch (final Exception e) {
-        	logger.logException(e);
+            logger.logException(e);
         }
     }
 
@@ -169,155 +169,155 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
         String pi;
         try {
             pi = (data != null) ? target + STRING_BLANK + data : target;
-            output.write(LESS_THAN + QUESTION 
+            output.write(LESS_THAN + QUESTION
                     + pi + QUESTION + GREATER_THAN);
         } catch (final Exception e) {
-        	logger.logException(e);
+            logger.logException(e);
         }
     }
-    
+
     @Override
     public void setContent(final Content content) {
         indexEntries = (HashMap<String, String>)content.getValue();
         topicSet = indexEntries.keySet();
     }
-    
+
     @Override
     public void skippedEntity(final String name) throws SAXException {
         try {
             output.write(StringUtils.getEntity(name));
         } catch (final Exception e) {
-        	logger.logException(e);
+            logger.logException(e);
         }
     }
-	
+
     @Override
     public void startCDATA() throws SAXException {
-    	insideCDATA = true;
-	    try{
-	        output.write(CDATA_HEAD);
-	    }catch(final Exception e){
-	    	logger.logException(e);
-	    }
-	}
+        insideCDATA = true;
+        try{
+            output.write(CDATA_HEAD);
+        }catch(final Exception e){
+            logger.logException(e);
+        }
+    }
 
     @Override
     public void startDocument() throws SAXException {
-    	topicIdStack.clear();
-    	firstTopic = true;
+        topicIdStack.clear();
+        firstTopic = true;
     }
-    
+
     @Override
     public void startElement(final String uri, final String localName, final String qName,
             final Attributes atts) throws SAXException {
-		final int attsLen = atts.getLength();
+        final int attsLen = atts.getLength();
 
-		//only care about adding related links to topics. 
-		if (atts.getValue(ATTRIBUTE_NAME_CLASS) != null) {// Eric
+        //only care about adding related links to topics.
+        if (atts.getValue(ATTRIBUTE_NAME_CLASS) != null) {// Eric
 
-			if (atts.getValue(ATTRIBUTE_NAME_CLASS).contains(TOPIC_TOPIC.matcher)) {
+            if (atts.getValue(ATTRIBUTE_NAME_CLASS).contains(TOPIC_TOPIC.matcher)) {
 
-				if (!topicSpecList.contains(localName)) {
-					topicSpecList.add(localName);
-				}
-				
-				if (!ELEMENT_NAME_DITA.equalsIgnoreCase(qName)) {
-					if (atts.getValue(ATTRIBUTE_NAME_ID) != null) {
-						topicIdStack.push(atts.getValue(ATTRIBUTE_NAME_ID));
-					}
-				}
-				
-				if (curMatchTopic != null && !firstTopic) {
+                if (!topicSpecList.contains(localName)) {
+                    topicSpecList.add(localName);
+                }
 
-					try {
-						output.write(RELATED_LINKS_HEAD);
-						output.write(indexEntries.get(curMatchTopic));
-						output.write(RELATED_LINKS_END);
-						output.write(System.getProperty("line.separator"));
-						curMatchTopic = null;
-					} catch (final Exception e) {
-						if (atts.getValue(ATTRIBUTE_NAME_CLASS) != null) {
-							logger.logException(e);
-						}
-					}
-				}
-				final String t = StringUtils.assembleString(topicIdStack, SLASH);
-				if (topicSet.contains(t)) {
-					curMatchTopic = t;
-				} else if (topicSet.contains(topicIdStack.peek())) {
-					curMatchTopic = topicIdStack.peek();
-				}
-				if (firstTopic) {
+                if (!ELEMENT_NAME_DITA.equalsIgnoreCase(qName)) {
+                    if (atts.getValue(ATTRIBUTE_NAME_ID) != null) {
+                        topicIdStack.push(atts.getValue(ATTRIBUTE_NAME_ID));
+                    }
+                }
+
+                if (curMatchTopic != null && !firstTopic) {
+
+                    try {
+                        output.write(RELATED_LINKS_HEAD);
+                        output.write(indexEntries.get(curMatchTopic));
+                        output.write(RELATED_LINKS_END);
+                        output.write(System.getProperty("line.separator"));
+                        curMatchTopic = null;
+                    } catch (final Exception e) {
+                        if (atts.getValue(ATTRIBUTE_NAME_CLASS) != null) {
+                            logger.logException(e);
+                        }
+                    }
+                }
+                final String t = StringUtils.assembleString(topicIdStack, SLASH);
+                if (topicSet.contains(t)) {
+                    curMatchTopic = t;
+                } else if (topicSet.contains(topicIdStack.peek())) {
+                    curMatchTopic = topicIdStack.peek();
+                }
+                if (firstTopic) {
                     firstTopic = false;
                 }
-			}
-		}
-		try {  //Eric
+            }
+        }
+        try {  //Eric
 
-			output.write(LESS_THAN + qName);
-			for (int i = 0; i < attsLen; i++) {
-				final String attQName = atts.getQName(i);
-				String attValue;
-				attValue = atts.getValue(i);
+            output.write(LESS_THAN + qName);
+            for (int i = 0; i < attsLen; i++) {
+                final String attQName = atts.getQName(i);
+                String attValue;
+                attValue = atts.getValue(i);
 
-				// replace '&' with '&amp;'
-				// if (attValue.indexOf('&') > 0) {
-				// attValue = StringUtils.replaceAll(attValue, "&", "&amp;");
-				// }
-				attValue = StringUtils.escapeXML(attValue);
+                // replace '&' with '&amp;'
+                // if (attValue.indexOf('&') > 0) {
+                // attValue = StringUtils.replaceAll(attValue, "&", "&amp;");
+                // }
+                attValue = StringUtils.escapeXML(attValue);
 
-				output.write(new StringBuffer().append(STRING_BLANK)
-						.append(attQName).append(EQUAL).append(
-								QUOTATION).append(attValue).append(
-								QUOTATION).toString());  //Eric
-			}
-			output.write(GREATER_THAN);
-			if (atts.getValue(ATTRIBUTE_NAME_CLASS)!=null 
-					&& atts.getValue(ATTRIBUTE_NAME_CLASS).indexOf(TOPIC_RELATED_LINKS.matcher) != -1
-					&& curMatchTopic != null) {
-				output.write(indexEntries.get(curMatchTopic));
-				curMatchTopic = null;
-			}
+                output.write(new StringBuffer().append(STRING_BLANK)
+                        .append(attQName).append(EQUAL).append(
+                                QUOTATION).append(attValue).append(
+                                        QUOTATION).toString());  //Eric
+            }
+            output.write(GREATER_THAN);
+            if (atts.getValue(ATTRIBUTE_NAME_CLASS)!=null
+                    && atts.getValue(ATTRIBUTE_NAME_CLASS).indexOf(TOPIC_RELATED_LINKS.matcher) != -1
+                    && curMatchTopic != null) {
+                output.write(indexEntries.get(curMatchTopic));
+                curMatchTopic = null;
+            }
 
-		} catch (final Exception e) {
-			if (atts.getValue(ATTRIBUTE_NAME_CLASS) != null) {
-				logger.logException(e);
-			}// prevent printing stack trace when meeting <dita> which has no
-				// class attribute
-		}
-	}
+        } catch (final Exception e) {
+            if (atts.getValue(ATTRIBUTE_NAME_CLASS) != null) {
+                logger.logException(e);
+            }// prevent printing stack trace when meeting <dita> which has no
+            // class attribute
+        }
+    }
 
     @Override
     public void startEntity(final String name) throws SAXException {
-		try {
-           	needResolveEntity = StringUtils.checkEntity(name);
-           	if(!needResolveEntity){
-           		output.write(StringUtils.getEntity(name));
-           	}
+        try {
+            needResolveEntity = StringUtils.checkEntity(name);
+            if(!needResolveEntity){
+                output.write(StringUtils.getEntity(name));
+            }
         } catch (final Exception e) {
-        	logger.logException(e);
+            logger.logException(e);
         }
-        
-	}
+
+    }
 
     @Override
     public void write(final String filename) {
-		String file = null;
-		File inputFile = null;
-		File outputFile = null;
-		FileOutputStream fileOutput = null;
+        String file = null;
+        File inputFile = null;
+        File outputFile = null;
+        FileOutputStream fileOutput = null;
 
         try {
-        	
-        	file = filename;
-        	curMatchTopic = topicSet.contains(SHARP) ? SHARP : null;
-            
+
+            file = filename;
+            curMatchTopic = topicSet.contains(SHARP) ? SHARP : null;
+
             // ignore in-exists file
             if (file == null || !new File(file).exists()) {
-            	return;
+                return;
             }
-            
-        	needResolveEntity = true;
+
+            needResolveEntity = true;
             topicIdStack = new Stack<String>();
             inputFile = new File(file);
             outputFile = new File(file + FILE_EXTENSION_TEMP);
@@ -326,29 +326,29 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
             reader.setErrorHandler(new DITAOTXMLErrorHandler(file));
             reader.parse(file);
             output.close();
-            
+
             if(!inputFile.delete()){
-            	final Properties prop = new Properties();
-            	prop.put("%1", inputFile.getPath());
-            	prop.put("%2", outputFile.getPath());
-            	logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
+                final Properties prop = new Properties();
+                prop.put("%1", inputFile.getPath());
+                prop.put("%2", outputFile.getPath());
+                logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
 
             }
             if(!outputFile.renameTo(inputFile)){
-            	final Properties prop = new Properties();
-            	prop.put("%1", inputFile.getPath());
-            	prop.put("%2", outputFile.getPath());
-            	logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
+                final Properties prop = new Properties();
+                prop.put("%1", inputFile.getPath());
+                prop.put("%2", outputFile.getPath());
+                logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
             }
         } catch (final Exception e) {
-        	logger.logException(e);
+            logger.logException(e);
         }finally {
             try {
-            	if (fileOutput != null) {
-            		fileOutput.close();
-            	}
+                if (fileOutput != null) {
+                    fileOutput.close();
+                }
             }catch (final Exception e) {
-				logger.logException(e);
+                logger.logException(e);
             }
         }
     }

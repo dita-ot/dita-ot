@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -16,23 +16,23 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 
 /**
- * Dummy pipeline module for testing. 
+ * Dummy pipeline module for testing.
  * 
  * @author Jarno Elovirta
  */
 public class DummyPipelineModule implements AbstractPipelineModule {
-	
-	public static final AbstractPipelineOutput exp = new AbstractPipelineOutput() {};
-	
-	/**
-	 * @return always returns {@link #exp}
-	 */
-	public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException {
-		return exp;
-	}
-	
-	public void setLogger(final DITAOTLogger logger) {
-	    // NOOP
-	}
-	
+
+    public static final AbstractPipelineOutput exp = new AbstractPipelineOutput() {};
+
+    /**
+     * @return always returns {@link #exp}
+     */
+    public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
+        return exp;
+    }
+
+    public void setLogger(final DITAOTLogger logger) {
+        // NOOP
+    }
+
 }

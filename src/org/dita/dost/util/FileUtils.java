@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -36,9 +36,9 @@ public final class FileUtils {
      */
     private FileUtils(){
     }
-    
+
     private static DITAOTJavaLogger logger = new DITAOTJavaLogger();
-    
+
     /**
      * Supported DITA topic extensions. File extensions contain a leading dot.
      */
@@ -55,7 +55,7 @@ public final class FileUtils {
             supportedTopicExtensions.add(FILE_EXTENSION_XML);
         }
     }
-    
+
     /**
      * Supported DITA map extensions. File extensions contain a leading dot.
      */
@@ -72,7 +72,7 @@ public final class FileUtils {
             supportedMapExtensions.add(FILE_EXTENSION_XML);
         }
     }
-    
+
     /**
      * Supported image extensions. File extensions contain a leading dot.
      */
@@ -95,7 +95,7 @@ public final class FileUtils {
             supportedImageExtensions.add(FILE_EXTENSION_TIF);
         }
     }
-    
+
     /**
      * Supported HTML extensions. File extensions contain a leading dot.
      */
@@ -129,7 +129,7 @@ public final class FileUtils {
             supportedResourceExtensions.add(FILE_EXTENSION_PDF);
         }
     }
-    
+
     /**
      * Supported extensions. File extensions contain a leading dot.
      */
@@ -179,7 +179,7 @@ public final class FileUtils {
     public static boolean isHHKFile(final String lcasefn) {
         return (lcasefn.endsWith(FILE_EXTENSION_HHK));
     }
-    
+
     /**
      * Return if the file is a resource file by its extension.
      * 
@@ -194,7 +194,7 @@ public final class FileUtils {
         }
         return false;
     }
-    
+
     /**
      * Return if the file is a dita file by extension.
      * @param lcasefn file name
@@ -207,7 +207,7 @@ public final class FileUtils {
         if (lcasefn.contains(SHARP)){
             lcasefn = lcasefn.substring(0, lcasefn.indexOf(SHARP));
         }
-        
+
         return isDITATopicFile(lcasefn) || isDITAMapFile(lcasefn);
     }
 
@@ -279,7 +279,7 @@ public final class FileUtils {
         }
         return false;
     }
-    
+
     /**
      * Get the path of topicFile relative to the input map.
      * In fact this method can be used to calculate any path of topicFile related to the first parameter.
@@ -294,11 +294,11 @@ public final class FileUtils {
         final StringTokenizer mapTokenizer = new StringTokenizer(
                 removeRedundantNames(mapFilePathName.replace(WINDOWS_SEPARATOR,UNIX_SEPARATOR),
                         UNIX_SEPARATOR),
-                UNIX_SEPARATOR);
+                        UNIX_SEPARATOR);
         final StringTokenizer topicTokenizer = new StringTokenizer(
                 removeRedundantNames(topicFilePathName.replace(WINDOWS_SEPARATOR,UNIX_SEPARATOR),
                         UNIX_SEPARATOR),
-                UNIX_SEPARATOR);
+                        UNIX_SEPARATOR);
 
         while (mapTokenizer.countTokens() > 1
                 && topicTokenizer.countTokens() > 1) {
@@ -342,7 +342,7 @@ public final class FileUtils {
 
         return upPathBuffer.append(downPathBuffer).toString();
     }
-    
+
     /**
      * Get path2Project from the relative path of a file.
      * @param relativePath relative path
@@ -364,9 +364,9 @@ public final class FileUtils {
     }
 
     /**
-     * Normalize topic path base on current directory and href value, by 
+     * Normalize topic path base on current directory and href value, by
      * replacing "\\" and "\" with {@link File#separator}, and removing ".", ".."
-     * from the file path, with no change to substring behind "#".  
+     * from the file path, with no change to substring behind "#".
      * 
      * @param rootPath root path
      * @param relativePath relative path
@@ -375,19 +375,19 @@ public final class FileUtils {
     public static String resolveTopic(final String rootPath, final String relativePath) {
         String begin = relativePath;
         String end = "";
-    
+
         if (relativePath.indexOf(SHARP) != -1) {
             begin = relativePath.substring(0, relativePath.indexOf('#'));
             end = relativePath.substring(relativePath.indexOf('#'));
         }
-        
+
         return normalizeDirectory(rootPath, begin) + end;
     }
-    
+
     /**
-     * Normalize topic path base on current directory and href value, by 
+     * Normalize topic path base on current directory and href value, by
      * replacing "\\" and "\" with {@link File#separator}, and removing ".", "..", and "#"
-     * from the file path.  
+     * from the file path.
      * 
      * @param rootPath root path
      * @param relativePath relative path
@@ -395,20 +395,20 @@ public final class FileUtils {
      */
     public static String resolveFile(final String rootPath, final String relativePath) {
         String begin = relativePath;
-    
+
         if (relativePath.indexOf(SHARP) != -1) {
             begin = relativePath.substring(0, relativePath.indexOf('#'));
         }
-        
+
         return normalizeDirectory(rootPath, begin);
     }
-    
+
     /**
      * Normalize the input file path, by replacing all the '\\', '/' with
      * File.seperator, and removing '..' from the directory.
      * 
      * <p>Note: the substring behind "#" will be removed.</p>
-     *  
+     * 
      * @param basedir base dir
      * @param filepath file path
      * @return normalized path
@@ -422,14 +422,14 @@ public final class FileUtils {
          * normilize file path using java.io.File
          */
         normilizedPath = new File(basedir, pathname).getPath();
-        
+
         if (basedir == null || basedir.length() == 0) {
             return normilizedPath;
         }
 
         return FileUtils.removeRedundantNames(normilizedPath);
     }
-    
+
     /**
      * Remove redundant names ".." and "." from the given path.
      * Use platform directory separator.
@@ -440,8 +440,8 @@ public final class FileUtils {
     public static String removeRedundantNames(final String path) {
         return removeRedundantNames(path, File.separator);
     }
-    
-    
+
+
     /**
      * Remove redundant names ".." and "." from the given path.
      * 
@@ -456,7 +456,7 @@ public final class FileUtils {
         Iterator<String> iter = null;
         int dirNum = 0;
         int i = 0;
-    
+
         /*
          * remove "." from the directory.
          */
@@ -467,27 +467,27 @@ public final class FileUtils {
                 dirs.add(token);
             }
         }
-    
+
         /*
          * remove ".." and the dir name before it.
          */
         dirNum = dirs.size();
         while (i < dirNum) {
             if (i > 0) {
-              final String lastDir = (String) dirs.get(i - 1);
-              final String dir = (String) dirs.get(i);
-              if ("..".equals(dir) && !("..".equals(lastDir))) {
-                  dirs.remove(i);
-                  dirs.remove(i - 1);
-                  dirNum = dirs.size();
-                  i = i - 1;
-                  continue;
-              }
+                final String lastDir = dirs.get(i - 1);
+                final String dir = dirs.get(i);
+                if ("..".equals(dir) && !("..".equals(lastDir))) {
+                    dirs.remove(i);
+                    dirs.remove(i - 1);
+                    dirNum = dirs.size();
+                    i = i - 1;
+                    continue;
+                }
             }
-            
+
             i++;
         }
-    
+
         /*
          * restore the directory.
          */
@@ -501,15 +501,15 @@ public final class FileUtils {
                 buff.append(separator);
             }
         }
-    
+
         return buff.toString();
     }
-    
-    
-    
-    
 
-    /** 
+
+
+
+
+    /**
      * Return if the path is absolute.
      * @param path test path
      * @return true if path is absolute and false otherwise.
@@ -518,11 +518,11 @@ public final class FileUtils {
         if (path == null || path.trim().length() == 0) {
             return false;
         }
-        
+
         if (FILE_SEPARATOR.equals(UNIX_SEPARATOR)) {
             return path.startsWith(UNIX_SEPARATOR);
         }
-        
+
         if (FILE_SEPARATOR.equals(WINDOWS_SEPARATOR) && path.length() > 2) {
             return path.matches("[a-zA-Z]:\\\\.*");
         }
@@ -540,7 +540,7 @@ public final class FileUtils {
         FileOutputStream fos = null;
         final byte[] buffer = new byte[INT_1024 * INT_4];
         int len;
-        
+
         try {
             fis = new FileInputStream(src);
             fos = new FileOutputStream(target);
@@ -567,7 +567,7 @@ public final class FileUtils {
             }
         }
     }
-    
+
     /**
      * Replace the file extension.
      * @param attValue value to be replaced
@@ -578,25 +578,25 @@ public final class FileUtils {
         String fileName;
         int fileExtIndex;
         int index;
-        
+
         index = attValue.indexOf(SHARP);
-        
+
         if (attValue.startsWith(SHARP)){
             return attValue;
         } else if (index != -1){
-            fileName = attValue.substring(0,index); 
+            fileName = attValue.substring(0,index);
             fileExtIndex = fileName.lastIndexOf(DOT);
             return (fileExtIndex != -1)
-                ? fileName.substring(0, fileExtIndex) + extName + attValue.substring(index)
-                : attValue;
+                    ? fileName.substring(0, fileExtIndex) + extName + attValue.substring(index)
+                            : attValue;
         } else {
             fileExtIndex = attValue.lastIndexOf(DOT);
             return (fileExtIndex != -1)
-                ? (attValue.substring(0, fileExtIndex) + extName) 
-                : attValue;
+                    ? (attValue.substring(0, fileExtIndex) + extName)
+                            : attValue;
         }
     }
-    
+
     /**
      * Check whether a file exists on the local file systmem.
      * @param filename platform path, may contain a hash fragment
@@ -604,18 +604,18 @@ public final class FileUtils {
      */
     public static boolean fileExists (String filename){  //Eric
         // FIXME don't modify argument, use a separate variable for results2
-        filename = filename.indexOf(SHARP) != -1 
-        ? filename.substring(0, filename.indexOf(SHARP))
-        : filename;
-           
-        
-        if (new File(filename).exists()){
-            return true;
-        }
-        
-        return false;
+        filename = filename.indexOf(SHARP) != -1
+                ? filename.substring(0, filename.indexOf(SHARP))
+                        : filename;
+
+
+                if (new File(filename).exists()){
+                    return true;
+                }
+
+                return false;
     }
-    
+
     /**
      * Get filename from a path.
      * 
@@ -636,10 +636,10 @@ public final class FileUtils {
         } else {
             if (aURLString.contains(SHARP)) {
                 pathnameEndIndex = aURLString.lastIndexOf(SHARP);
-            }            
+            }
             pathnameEndIndex = aURLString.lastIndexOf(UNIX_SEPARATOR);
         }
-        
+
         String schemaLocation = null;
         if (aURLString.contains(SHARP)) {
             schemaLocation = aURLString.substring(0, pathnameEndIndex);
@@ -649,7 +649,7 @@ public final class FileUtils {
 
         return schemaLocation;
     }
-    
+
     /**
      * Test if current platform is Windows
      * 
@@ -663,7 +663,7 @@ public final class FileUtils {
         return false;
 
     }
-    
+
     /**
      * Get base path from a path.
      * 
@@ -677,5 +677,5 @@ public final class FileUtils {
         aPath = aURLString.substring(0, pathnameEndIndex);
         return aPath;
     }
-    
+
 }

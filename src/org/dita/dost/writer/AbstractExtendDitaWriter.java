@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -19,14 +19,14 @@ import org.dita.dost.pipeline.PipelineHashIO;
 //RFE 2987769 Eclipse index-see
 
 public abstract class AbstractExtendDitaWriter implements AbstractWriter, IExtendDitaWriter, IDitaTranstypeIndexWriter {
-	
-	protected PipelineHashIO pipelineHashMap = null;
-	protected DITAOTLogger logger;
+
+    protected PipelineHashIO pipelineHashMap = null;
+    protected DITAOTLogger logger;
     /** List of indexterms */
     protected List<IndexTerm> termList = null;
 
     // AbstractWriter methods
-    
+
     /**
      * Set the content for output.
      * 
@@ -34,14 +34,14 @@ public abstract class AbstractExtendDitaWriter implements AbstractWriter, IExten
      */
     public final void setContent(final Content content) {
         termList = (List<IndexTerm>) content.getCollection();
-    }	
-	
-	public final void setLogger(final DITAOTLogger logger) {
+    }
+
+    public final void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
-	
-	// IExtendDitaWriter methods
-    
+
+    // IExtendDitaWriter methods
+
     public final PipelineHashIO getPipelineHashIO() {
         return pipelineHashMap;
     }

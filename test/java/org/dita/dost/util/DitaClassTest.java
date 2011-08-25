@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -38,7 +38,7 @@ public class DitaClassTest {
         try {
             new DitaClass(null);
             fail();
-        } catch (NullPointerException e) {}
+        } catch (final NullPointerException e) {}
     }
 
     @Test
@@ -52,29 +52,29 @@ public class DitaClassTest {
         assertEquals("- foo/bar baz/qux ", new DitaClass("- foo/bar baz/qux ").toString());
         assertEquals("- foo/bar baz/qux ", new DitaClass("-  foo/bar  baz/qux  ").toString());
     }
-    
+
     @Test
     public void testLocalName() {
         assertEquals("qux", new DitaClass("- foo/bar baz/qux ").localName);
     }
-    
+
     @Test
     public void testMatcher() {
         assertEquals(" baz/qux ", new DitaClass("- foo/bar baz/qux ").matcher);
     }
-    
+
     @Test
     public void testMatchesDitaClass() {
         assertTrue(new DitaClass("- foo/bar ").matches(new DitaClass("- foo/bar baz/qux ")));
         assertTrue(new DitaClass("- foo/bar baz/qux ").matches(new DitaClass("- foo/bar baz/qux ")));
     }
-    
+
     @Test
     public void testMatchesString() {
         assertTrue(new DitaClass("- foo/bar ").matches("- foo/bar baz/qux "));
         assertTrue(new DitaClass("- foo/bar baz/qux ").matches("- foo/bar baz/qux "));
     }
-    
+
     @Test
     public void testMatchesAttributes() {
         final AttributesImpl atts = new AttributesImpl();

@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -16,18 +16,18 @@ import org.dita.dost.util.StringUtils;
  */
 final class CheckTranstypeAction extends ImportAction {
 
-	/**
-	 * Get result.
-	 * @return result
-	 */
-	@Override
-	public String getResult() {
-		final StringBuilder retBuf = new StringBuilder();
-		for (final String value: valueSet) {
-			retBuf.append("<not><equals arg1=\"${transtype}\" arg2=\"")
-				.append(StringUtils.escapeXML(value)).append("\" casesensitive=\"false\"/></not>");
-		}
-		return retBuf.toString();
-	}
+    /**
+     * Get result.
+     * @return result
+     */
+    @Override
+    public String getResult() {
+        final StringBuilder retBuf = new StringBuilder();
+        for (final String value: valueSet) {
+            retBuf.append("<not><equals arg1=\"${transtype}\" arg2=\"")
+            .append(StringUtils.escapeXML(value)).append("\" casesensitive=\"false\"/></not>");
+        }
+        return retBuf.toString();
+    }
 
 }

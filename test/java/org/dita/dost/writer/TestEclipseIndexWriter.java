@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 /*
@@ -30,11 +30,11 @@ import org.dita.dost.module.ContentImpl;
 
 
 public class TestEclipseIndexWriter {
-    
+
     private static File tempDir;
     private static final File resourceDir = new File("test-stub", TestEclipseIndexWriter.class.getSimpleName());
     private static final File expDir = new File(resourceDir, "exp");
-    
+
     @BeforeClass
     public static void setUp() throws IOException {
         tempDir = TestUtils.createTempDir(TestEclipseIndexWriter.class);
@@ -54,15 +54,15 @@ public class TestEclipseIndexWriter {
         final Collection<IndexTerm> collection = new ArrayList<IndexTerm>();
         collection.add(indexterm1);
         content.setCollection(collection);
-        
+
         final EclipseIndexWriter indexWriter = new EclipseIndexWriter();
         indexWriter.setContent(content);
         final File outFile = new File(tempDir, "index.xml");
         indexWriter.write(outFile.getAbsolutePath());
-        
+
         XMLUnit.setIgnoreWhitespace(true);
         assertXMLEqual(new InputSource(new File(expDir, "index.xml").toURI().toString()),
-                       new InputSource(outFile.toURI().toString()));
+                new InputSource(outFile.toURI().toString()));
     }
 
     @AfterClass

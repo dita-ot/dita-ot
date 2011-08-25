@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -23,22 +23,22 @@ import org.dita.dost.util.StringUtils;
  */
 final class ListTranstypeAction extends ImportAction {
 
-	/**
-	 * Get result.
-	 * @return result
-	 */
-	@Override
-	public String getResult() {
-	    final List<String> v = new ArrayList<String>(valueSet);
-	    Collections.sort(v);
-		final StringBuilder retBuf = new StringBuilder();
-		for (final Iterator<String> i = v.iterator(); i.hasNext(); ) {
-			retBuf.append(StringUtils.escapeXML(i.next()));
-			if (i.hasNext()) {
-			    retBuf.append('|');
-			}
-		}
-		return retBuf.toString();
-	}
+    /**
+     * Get result.
+     * @return result
+     */
+    @Override
+    public String getResult() {
+        final List<String> v = new ArrayList<String>(valueSet);
+        Collections.sort(v);
+        final StringBuilder retBuf = new StringBuilder();
+        for (final Iterator<String> i = v.iterator(); i.hasNext(); ) {
+            retBuf.append(StringUtils.escapeXML(i.next()));
+            if (i.hasNext()) {
+                retBuf.append('|');
+            }
+        }
+        return retBuf.toString();
+    }
 
 }

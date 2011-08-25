@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -14,32 +14,32 @@ import java.util.Map;
 import org.dita.dost.log.DITAOTLogger;
 
 /**
- * Interface. 
+ * Interface.
  * @author Zhang, Yuan Peng
  */
 public interface IAction {
-	/**
-	 * Set the input string.
-	 * @param input input
-	 */
-	void setInput(String input);
-	/**
-	 * Add input parameter.
-	 * @param name parameter name
-	 * @param value parameter value
-	 */
-	void addParam(String name, String value);
-	/**
-	 * Return the result.
-	 * @return result
-	 */
-	String getResult();
-	/**
-	 * Set the feature table.
-	 * @param h hastable
-	 */
-	void setFeatures(Map<String, Features> h);
-	/**
+    /**
+     * Set the input string.
+     * @param input input
+     */
+    void setInput(String input);
+    /**
+     * Add input parameter.
+     * @param name parameter name
+     * @param value parameter value
+     */
+    void addParam(String name, String value);
+    /**
+     * Return the result.
+     * @return result
+     */
+    String getResult();
+    /**
+     * Set the feature table.
+     * @param h hastable
+     */
+    void setFeatures(Map<String, Features> h);
+    /**
      * Set logger.
      * @param logger logger instance
      */

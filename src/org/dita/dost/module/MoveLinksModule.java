@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -50,10 +50,10 @@ final class MoveLinksModule implements AbstractPipelineModule {
     /**
      * execution point of MoveLinksModule.
      * 
-	 * @param input Input parameters and resources.
-	 * @return null
-	 * @throws DITAOTException exception
-	 */
+     * @param input Input parameters and resources.
+     * @return null
+     * @throws DITAOTException exception
+     */
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
         if (logger == null) {
             throw new IllegalStateException("Logger not set");
@@ -61,16 +61,16 @@ final class MoveLinksModule implements AbstractPipelineModule {
         final String maplinksFile = input.getAttribute(ANT_INVOKER_PARAM_MAPLINKS);
         final MapLinksReader indexReader = new MapLinksReader();
         indexReader.setLogger(logger);
-		final DitaLinksWriter indexInserter = new DitaLinksWriter();
-		indexInserter.setLogger(logger);
-		Set<Map.Entry<String, String>> mapSet;
-		Iterator<Map.Entry<String, String>> i;
-        
+        final DitaLinksWriter indexInserter = new DitaLinksWriter();
+        indexInserter.setLogger(logger);
+        Set<Map.Entry<String, String>> mapSet;
+        Iterator<Map.Entry<String, String>> i;
+
         indexReader.setMatch(new StringBuffer(ELEMENT_NAME_MAPLINKS)
-                .append(SLASH).append(TOPIC_LINKPOOL.localName)
-                .append(SLASH).append(TOPIC_LINKLIST.localName)
-                .toString());
-        
+        .append(SLASH).append(TOPIC_LINKPOOL.localName)
+        .append(SLASH).append(TOPIC_LINKLIST.localName)
+        .toString());
+
         indexReader.read(maplinksFile);
         mapSet = (Set<Map.Entry<String, String>>) indexReader.getContent().getCollection();
 

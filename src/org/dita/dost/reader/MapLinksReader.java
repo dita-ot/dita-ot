@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -61,9 +61,9 @@ public final class MapLinksReader extends AbstractXMLReader {
 
     // check whether the index entries we got is meaningfull and valid
     private static boolean verifyIndexEntries(final StringBuffer str) {
-    	int start;
-    	int end;
-    	String temp;
+        int start;
+        int end;
+        String temp;
         if (str.length() == 0) {
             return false;
         }
@@ -75,7 +75,7 @@ public final class MapLinksReader extends AbstractXMLReader {
          * modified code check whether there is any content between first and
          * last tags
          */
-                
+
         temp = str.substring(start + 1, end);
         if (temp.trim().length() != 0) {
             return true;
@@ -101,7 +101,7 @@ public final class MapLinksReader extends AbstractXMLReader {
     private XMLReader reader;
     private String topicPath;
     private boolean validHref;// whether the current href target is internal dita topic file
-    
+
 
     /**
      * Default constructor of MapLinksReader class.
@@ -119,19 +119,19 @@ public final class MapLinksReader extends AbstractXMLReader {
         validHref = true;
         needResolveEntity = false;
         topicPath = null;
-        inputFile = null; 
-        
+        inputFile = null;
+
         try {
             reader = StringUtils.getXMLReader();
             reader.setContentHandler(this);
             reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
             //Added by william on 2009-11-8 for ampbug:2893664 start
-			reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
-			reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
-			//Added by william on 2009-11-8 for ampbug:2893664 end
-			reader.setFeature("http://xml.org/sax/features/namespaces", false);
+            reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
+            reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
+            //Added by william on 2009-11-8 for ampbug:2893664 end
+            reader.setFeature("http://xml.org/sax/features/namespaces", false);
         } catch (final Exception e) {
-        	logger.logException(e);
+            logger.logException(e);
         }
 
     }
@@ -143,7 +143,7 @@ public final class MapLinksReader extends AbstractXMLReader {
         if (match && needResolveEntity && validHref) {
             final String temp = new String(ch, start, length);
             indexEntries.append(StringUtils.escapeXML(temp));
-            
+
         }
     }
 
@@ -157,8 +157,8 @@ public final class MapLinksReader extends AbstractXMLReader {
         String currentMatchString;
         String ancestor;
         while (matchIterator.hasNext()) {
-            currentMatchString = (String) matchIterator.next();
-            ancestor = (String) ancestorIterator.next();
+            currentMatchString = matchIterator.next();
+            ancestor = ancestorIterator.next();
             if (!currentMatchString.contains(ancestor)) {
                 return false;
             }
@@ -168,24 +168,24 @@ public final class MapLinksReader extends AbstractXMLReader {
 
     @Override
     public void endCDATA() throws SAXException {
-    	if (match && validHref){
-    		indexEntries.append(CDATA_END);
-    	}
-	    
-	}
+        if (match && validHref){
+            indexEntries.append(CDATA_END);
+        }
+
+    }
 
     @Override
     public void endElement(final String uri, final String localName, final String qName)
             throws SAXException {
 
         if (match) {
-        	if (validHref){
-        		indexEntries.append(LESS_THAN);
-        		indexEntries.append(SLASH);
-        		indexEntries.append(qName);
-        		indexEntries.append(GREATER_THAN);
-        	}
-            
+            if (validHref){
+                indexEntries.append(LESS_THAN);
+                indexEntries.append(SLASH);
+                indexEntries.append(qName);
+                indexEntries.append(GREATER_THAN);
+            }
+
             level--;
         }
 
@@ -199,9 +199,9 @@ public final class MapLinksReader extends AbstractXMLReader {
         }
 
         if (qName.equals(firstMatchElement) && verifyIndexEntries(indexEntries) && topicPath != null) {
-        	// if the href is not valid, topicPath will be null. We don't need to set the condition 
-        	// to check validHref at here.
-        	/*
+            // if the href is not valid, topicPath will be null. We don't need to set the condition
+            // to check validHref at here.
+            /*
                 String origin = (String) map.get(topicPath);
                 if (origin != null) {
                     map.put(topicPath, origin + indexEntries.toString());
@@ -209,43 +209,43 @@ public final class MapLinksReader extends AbstractXMLReader {
                     map.put(topicPath, indexEntries.toString());
                 }
                 indexEntries = new StringBuffer(INT_1024);
-                */
-        	String t = topicPath;
-        	String frag = SHARP;
-        	//Get topic id
-        	if (t.contains(SHARP)) {
-        		frag = t.indexOf(SHARP) + 1 >= t.length() ?
-        				SHARP : t.substring(t.indexOf(SHARP) + 1);
-        		//remove the "#" in topic file path
-        		t = t.substring(0, t.indexOf(SHARP));
-        	}
-        	Map<String, String> m = map.get(t);
-        	if (m != null) {
-        		final String orig = m.get(frag);
-        		m.put(frag, StringUtils.setOrAppend(orig, indexEntries.toString(), false));
-        	} else {
-        		m = new HashMap<String, String>(INT_16);
-        		m.put(frag, indexEntries.toString());
-        		map.put(t, m);
-        	}
-        	//TODO Added by William on 2009-06-16 for bug:2791696 reltable bug start
-        	indexEntries = new StringBuffer(INT_1024);
-        	//TODO Added by William on 2009-06-16 for bug:2791696 reltable bug end
-            
+             */
+            String t = topicPath;
+            String frag = SHARP;
+            //Get topic id
+            if (t.contains(SHARP)) {
+                frag = t.indexOf(SHARP) + 1 >= t.length() ?
+                        SHARP : t.substring(t.indexOf(SHARP) + 1);
+                //remove the "#" in topic file path
+                t = t.substring(0, t.indexOf(SHARP));
+            }
+            Map<String, String> m = map.get(t);
+            if (m != null) {
+                final String orig = m.get(frag);
+                m.put(frag, StringUtils.setOrAppend(orig, indexEntries.toString(), false));
+            } else {
+                m = new HashMap<String, String>(INT_16);
+                m.put(frag, indexEntries.toString());
+                map.put(t, m);
+            }
+            //TODO Added by William on 2009-06-16 for bug:2791696 reltable bug start
+            indexEntries = new StringBuffer(INT_1024);
+            //TODO Added by William on 2009-06-16 for bug:2791696 reltable bug end
+
         }
     }
 
     @Override
     public void endEntity(final String name) throws SAXException {
-		if(!needResolveEntity){
-			needResolveEntity = true;
-		}
-	}
+        if(!needResolveEntity){
+            needResolveEntity = true;
+        }
+    }
 
     @Override
     public Content getContent() {
 
-    	final ContentImpl result = new ContentImpl();
+        final ContentImpl result = new ContentImpl();
         result.setCollection( map.entrySet());
         return result;
     }
@@ -257,7 +257,7 @@ public final class MapLinksReader extends AbstractXMLReader {
         if (match && validHref) {
             final String temp = new String(ch, start, length);
             indexEntries.append(temp);
-           
+
         }
     }
 
@@ -265,7 +265,7 @@ public final class MapLinksReader extends AbstractXMLReader {
     public void read(final String filename) {
 
         if (matchList.isEmpty()) {
-        	logger.logError(MessageUtils.getMessage("DOTJ008E").toString());
+            logger.logError(MessageUtils.getMessage("DOTJ008E").toString());
         } else {
             match = false;
             needResolveEntity = true;
@@ -273,16 +273,16 @@ public final class MapLinksReader extends AbstractXMLReader {
             filePath = inputFile.getParent();
             inputFile.getPath();
             if(indexEntries.length() != 0){
-				//delete all the content in indexEntries
-				indexEntries = new StringBuffer(INT_1024);
+                //delete all the content in indexEntries
+                indexEntries = new StringBuffer(INT_1024);
             }
-                         
+
             try {
-            	reader.setErrorHandler(new DITAOTXMLErrorHandler(filename));
-            	final InputSource source=URIResolverAdapter.convertToInputSource(DitaURIResolverFactory.getURIResolver().resolve(filename, null));
+                reader.setErrorHandler(new DITAOTXMLErrorHandler(filename));
+                final InputSource source=URIResolverAdapter.convertToInputSource(DitaURIResolverFactory.getURIResolver().resolve(filename, null));
                 reader.parse(source);
             } catch (final Exception e) {
-            	logger.logException(e);
+                logger.logException(e);
             }
         }
     }
@@ -296,135 +296,135 @@ public final class MapLinksReader extends AbstractXMLReader {
     public void setMatch(final String matchPattern) {
         int index = 0;
         firstMatchElement = (matchPattern.indexOf(SLASH) != -1) ? matchPattern.substring(0, matchPattern.indexOf(SLASH)) : matchPattern;
-        
+
         while (index != -1) {
             final int start = matchPattern.indexOf(SLASH, index);
             final int end = matchPattern.indexOf(SLASH,start + 1);
             if(start != -1 && end != -1){
-            	lastMatchElement.add(matchPattern.substring(start+1, end));
-            	index = end;
+                lastMatchElement.add(matchPattern.substring(start+1, end));
+                index = end;
             } else if(start != -1 && end == -1){
-            	lastMatchElement.add(matchPattern.substring(start + 1));
-            	index = -1;
+                lastMatchElement.add(matchPattern.substring(start + 1));
+                index = -1;
             }
         }
         matchList.add(firstMatchElement);
         final Iterator<String> it = lastMatchElement.iterator();
         final StringBuffer sb = new StringBuffer();
         while(it.hasNext()){
-        	sb.append(it.next() + STRING_BLANK);
+            sb.append(it.next() + STRING_BLANK);
         }
         matchList.add(sb.toString());
     }
 
     @Override
     public void startCDATA() throws SAXException {
-    	if (match && validHref){
-    		indexEntries.append(CDATA_HEAD);
-    	}
-	    
-	}
+        if (match && validHref){
+            indexEntries.append(CDATA_HEAD);
+        }
+
+    }
 
     @Override
     public void startDTD(final String name, final String publicId, final String systemId)
-			throws SAXException {
+            throws SAXException {
         // NOOP
-	}
+    }
 
     @Override
     public void startElement(final String uri, final String localName, final String qName,
             final Attributes atts) throws SAXException {
-    	final int attsLen = atts.getLength();
-    	final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
-    	final String attrFormat = atts.getValue(ATTRIBUTE_NAME_FORMAT);
-    	
+        final int attsLen = atts.getLength();
+        final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
+        final String attrFormat = atts.getValue(ATTRIBUTE_NAME_FORMAT);
+
         if (qName.equals(firstMatchElement)) {
             final String hrefValue = atts.getValue(ATTRIBUTE_NAME_HREF);
             if (verifyIndexEntries(indexEntries) && topicPath != null) {
-            	/*
+                /*
                 String origin = (String) map.get(topicPath);
                 map.put(topicPath, StringUtils.setOrAppend(origin, indexEntries.toString(), false));
-                */
-            	String t = topicPath;
-            	String frag = SHARP;
-            	if (t.contains(SHARP)) {
-            		frag = t.indexOf(SHARP) + 1 >= t.length() ?
-            				SHARP : t.substring(t.indexOf(SHARP) + 1);
-            		t = t.substring(0, t.indexOf(SHARP));
-            	}
-            	Map<String, String> m = map.get(t);
-            	if (m != null) {
-            		final String orig = m.get(frag);
-            		m.put(frag, StringUtils.setOrAppend(orig, indexEntries.toString(), false));
-            	} else {
-            		m = new HashMap<String, String>(INT_16);
-            		m.put(frag, indexEntries.toString());
-            		map.put(t, m);
-            	}
+                 */
+                String t = topicPath;
+                String frag = SHARP;
+                if (t.contains(SHARP)) {
+                    frag = t.indexOf(SHARP) + 1 >= t.length() ?
+                            SHARP : t.substring(t.indexOf(SHARP) + 1);
+                    t = t.substring(0, t.indexOf(SHARP));
+                }
+                Map<String, String> m = map.get(t);
+                if (m != null) {
+                    final String orig = m.get(frag);
+                    m.put(frag, StringUtils.setOrAppend(orig, indexEntries.toString(), false));
+                } else {
+                    m = new HashMap<String, String>(INT_16);
+                    m.put(frag, indexEntries.toString());
+                    map.put(t, m);
+                }
                 indexEntries = new StringBuffer(INT_1024);
             }
             topicPath = null;
             if (hrefValue != null && hrefValue.indexOf(INTERNET_LINK_MARK) == -1
-            		&& (attrScope == null || ATTR_SCOPE_VALUE_LOCAL.equalsIgnoreCase(attrScope))
-            		&& (attrFormat == null || ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(attrFormat))) {
-            	// If the href is internal dita topic file
-            	topicPath = FileUtils.resolveTopic(filePath, hrefValue);
-            	validHref = true;
+                    && (attrScope == null || ATTR_SCOPE_VALUE_LOCAL.equalsIgnoreCase(attrScope))
+                    && (attrFormat == null || ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(attrFormat))) {
+                // If the href is internal dita topic file
+                topicPath = FileUtils.resolveTopic(filePath, hrefValue);
+                validHref = true;
             }else{
-            	//set up the boolean to prevent the invalid href's metadata inserted into indexEntries.
-            	topicPath = null;
-            	validHref = false;
+                //set up the boolean to prevent the invalid href's metadata inserted into indexEntries.
+                topicPath = null;
+                validHref = false;
             }
         }
         if (!match) {
             ancestorList.add(qName);
             if (lastMatchElement.contains(qName) && checkMatch()) {
-                
-                    match = true;
-                    level = 0;
+
+                match = true;
+                level = 0;
             }
         }
 
         if (match) {
-        	if (validHref){
-	        	indexEntries.append(LESS_THAN + qName + STRING_BLANK);
-	            
-	            for (int i = 0; i < attsLen; i++) {
-	            	indexEntries.append(atts.getQName(i));
-	            	indexEntries.append(EQUAL);
-					indexEntries.append(QUOTATION);
-	            	indexEntries.append(StringUtils.escapeXML(atts.getValue(i)));
-	            	indexEntries.append(QUOTATION);
-	            	indexEntries.append(STRING_BLANK);
-	            	
-	            }
-	            
-	            indexEntries.append(GREATER_THAN);
-        	}
+            if (validHref){
+                indexEntries.append(LESS_THAN + qName + STRING_BLANK);
+
+                for (int i = 0; i < attsLen; i++) {
+                    indexEntries.append(atts.getQName(i));
+                    indexEntries.append(EQUAL);
+                    indexEntries.append(QUOTATION);
+                    indexEntries.append(StringUtils.escapeXML(atts.getValue(i)));
+                    indexEntries.append(QUOTATION);
+                    indexEntries.append(STRING_BLANK);
+
+                }
+
+                indexEntries.append(GREATER_THAN);
+            }
             level++;
         }
     }
 
     @Override
     public void startEntity(final String name) throws SAXException {
-		needResolveEntity = StringUtils.checkEntity(name);
-		if (match && !needResolveEntity && validHref) {
+        needResolveEntity = StringUtils.checkEntity(name);
+        if (match && !needResolveEntity && validHref) {
             indexEntries.append(StringUtils.getEntity(name));
-            
-        }
-	}
 
-	@Override
-	public void processingInstruction(final String target, final String data)
-			throws SAXException {		
-		
-		final String pi = (data != null) ? target + STRING_BLANK + data : target;
-		
-        if (match && needResolveEntity && validHref) {
-            final String temp = LESS_THAN + QUESTION 
-            + StringUtils.escapeXML(pi) + QUESTION + GREATER_THAN;
-            indexEntries.append(temp);            
         }
-        
-	}
+    }
+
+    @Override
+    public void processingInstruction(final String target, final String data)
+            throws SAXException {
+
+        final String pi = (data != null) ? target + STRING_BLANK + data : target;
+
+        if (match && needResolveEntity && validHref) {
+            final String temp = LESS_THAN + QUESTION
+                    + StringUtils.escapeXML(pi) + QUESTION + GREATER_THAN;
+            indexEntries.append(temp);
+        }
+
+    }
 }

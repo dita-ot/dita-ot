@@ -65,7 +65,7 @@ abstract class AbstractXMLFilter extends XMLFilterImpl implements AbstractWriter
             out = new BufferedOutputStream(new FileOutputStream(outputFile));
             final Source source = new SAXSource(this, new InputSource(in));
             final Result result = new StreamResult(out);
-            
+
             transformer.transform(source, result);
         } catch (final Exception e) {
             logger.logException(e);
@@ -73,14 +73,14 @@ abstract class AbstractXMLFilter extends XMLFilterImpl implements AbstractWriter
             if (in != null) {
                 try {
                     in.close();
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     logger.logException(e);
                 }
             }
             if (out != null) {
                 try {
                     out.close();
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     logger.logException(e);
                 }
             }
@@ -103,9 +103,9 @@ abstract class AbstractXMLFilter extends XMLFilterImpl implements AbstractWriter
             logger.logException(e);
         }
     }
-    
-	public final void setLogger(final DITAOTLogger logger) {
+
+    public final void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
-	
+
 }

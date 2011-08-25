@@ -39,26 +39,26 @@ public class KeyrefPaserTest {
     private static final File srcDir = new File(resourceDir, "src");
     private static final File expDir = new File(resourceDir, "exp");
     private static CatalogResolver resolver;
-    
+
     private final static Content content = new ContentImpl();
     private final static Map<String, String> keymap = new HashMap<String, String>();
-    
+
     @BeforeClass
     public static void setUp() throws Exception {
         tempDir = TestUtils.createTempDir(KeyrefPaserTest.class);
         TestUtils.normalize(new File(srcDir, "a.xml"), new File(tempDir, "a.xml"));
         TestUtils.normalize(new File(srcDir, "b.ditamap"), new File(tempDir, "b.ditamap"));
         resolver = new CatalogResolver();
-        
+
         TestUtils.resetXMLUnit();
         XMLUnit.setControlEntityResolver(resolver);
         XMLUnit.setTestEntityResolver(resolver);
         XMLUnit.setURIResolver(resolver);
         XMLUnit.setIgnoreWhitespace(true);
-        
+
         readKeyMap();
     }
-    
+
     @Test
     public void testTopicWrite() throws Exception {
         final KeyrefPaser parser = new KeyrefPaser();
@@ -68,9 +68,9 @@ public class KeyrefPaserTest {
         parser.setKeyMap(keymap);
         parser.setExtName(".xml");
         parser.write(new File("a.xml").getPath());
-        
+
         assertXMLEqual(new InputSource(new File(expDir, "a.xml").toURI().toString()),
-                       new InputSource(new File(tempDir, "a.xml").toURI().toString()));
+                new InputSource(new File(tempDir, "a.xml").toURI().toString()));
     }
 
     @Test
@@ -82,17 +82,17 @@ public class KeyrefPaserTest {
         parser.setKeyMap(keymap);
         parser.setExtName(".xml");
         parser.write(new File("b.ditamap").getPath());
-        
+
         assertXMLEqual(new InputSource(new File(expDir, "b.ditamap").toURI().toString()),
-                       new InputSource(new File(tempDir, "b.ditamap").toURI().toString()));
+                new InputSource(new File(tempDir, "b.ditamap").toURI().toString()));
     }
 
-    
+
     @AfterClass
     public static void tearDown() throws IOException {
         TestUtils.forceDelete(tempDir);
     }
-    
+
     private static void readKeyMap() throws Exception {
         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         final InputSource inputSource = new InputSource(new File(srcDir, "keys.ditamap").toURI().toString());
@@ -109,11 +109,11 @@ public class KeyrefPaserTest {
             final StringWriter out = new StringWriter();
             final Result result = new StreamResult(out);
             serializer.transform(source, result);
-            
+
             keymap.put(keydef.getAttribute("keys"), keydef.getAttribute("href"));
             keys.put(keydef.getAttribute("keys"), out.toString());
         }
         content.setValue(keys);
     }
-    
+
 }

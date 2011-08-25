@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -13,12 +13,12 @@ package org.dita.dost.writer;
  * 
  */
 public interface IDitaTranstypeIndexWriter {
-	
-	/**
-	 * Get index file name.
-	 * @param outputFileRoot root
-	 * @return index file name
-	 */
-	public String getIndexFileName(String outputFileRoot);
+
+    /**
+     * Get index file name.
+     * @param outputFileRoot root
+     * @return index file name
+     */
+    public String getIndexFileName(String outputFileRoot);
 
 }

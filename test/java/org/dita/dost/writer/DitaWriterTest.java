@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -53,12 +53,12 @@ import org.dita.dost.util.Constants;
 import org.dita.dost.util.OutputUtils;
 
 public class DitaWriterTest {
-    
+
     private static final File resourceDir = new File("test-stub", DitaWriterTest.class.getSimpleName());
     private static final File srcDir = new File(resourceDir, "src");
     private static final File expDir = new File(resourceDir, "exp");
     private static File tempDir;
-    
+
     @BeforeClass
     public static void setUp() throws IOException, SAXException {
         tempDir = TestUtils.createTempDir(DitaWriterTest.class);
@@ -73,22 +73,22 @@ public class DitaWriterTest {
                 out.close();
             }
         }
-        
+
         OutputUtils.setInputMapPathName(new File(srcDir, "main.ditamap").getAbsolutePath());
         final DitaWriter writer = new DitaWriter();
         writer.initXMLReader(srcDir.getAbsolutePath(), false, true);
         writer.setExtName(".xml");
-        
+
         for (final String f: new String[] {"main.ditamap", "keyword.dita"}) {
             final Content content = new ContentImpl();
             content.setValue(tempDir.getAbsolutePath());
             writer.setContent(content);
             writer.write(srcDir.getAbsolutePath() + Constants.STICK + f);
         }
-        
+
         TestUtils.resetXMLUnit();
     }
-    
+
     @Test
     public void testGeneratedTopic() throws SAXException, IOException {
         final TestHandler handler = new TestHandler();
@@ -105,7 +105,7 @@ public class DitaWriterTest {
             }
         }
     }
-    
+
     @Test
     public void testGeneratedMap() throws SAXException, IOException {
         final TestHandler handler = new TestHandler();
@@ -125,19 +125,19 @@ public class DitaWriterTest {
 
     @Test
     public void testWrite() throws Exception {
-        DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        Document keyword = clean(db.parse(new File(tempDir, "keyword.xml")));
-        
+        final DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        clean(db.parse(new File(tempDir, "keyword.xml")));
+
         XMLUnit.setNormalizeWhitespace(true);
         XMLUnit.setIgnoreWhitespace(true);
         XMLUnit.setIgnoreDiffBetweenTextAndCDATA(true);
-        
+
         assertXMLEqual(clean(db.parse(new File(expDir, "keyword.xml"))),
-                       clean(db.parse(new File(tempDir, "keyword.xml"))));
+                clean(db.parse(new File(tempDir, "keyword.xml"))));
         assertXMLEqual(clean(db.parse(new File(expDir, "main.ditamap"))),
-                       clean(db.parse(new File(tempDir, "main.ditamap"))));
+                clean(db.parse(new File(tempDir, "main.ditamap"))));
     }
-    
+
     private Document clean(final Document d) {
         final NodeList elems = d.getElementsByTagName("*");
         for (int i = 0; i < elems.getLength(); i++) {
@@ -148,24 +148,24 @@ public class DitaWriterTest {
         }
         return d;
     }
-    
+
     @AfterClass
     public static void tearDown() throws IOException {
         TestUtils.forceDelete(tempDir);
     }
 
-    
+
     private class TestHandler implements ContentHandler {
 
         private File source;
         private final Map<String, Integer> counter = new HashMap<String, Integer>();
         private final Set<String> requiredProcessingInstructions = new HashSet<String>();
-                
+
         void setSource(final File source) {
             this.source = source;
         }
-        
-        public void characters(char[] arg0, int arg1, int arg2) throws SAXException {
+
+        public void characters(final char[] arg0, final int arg1, final int arg2) throws SAXException {
             // NOOP
         }
 
@@ -179,30 +179,30 @@ public class DitaWriterTest {
             requiredProcessingInstructions.clear();
         }
 
-        public void endElement(String arg0, String arg1, String arg2) throws SAXException {
+        public void endElement(final String arg0, final String arg1, final String arg2) throws SAXException {
             // NOOP
         }
 
-        public void endPrefixMapping(String arg0) throws SAXException {
+        public void endPrefixMapping(final String arg0) throws SAXException {
             // NOOP
         }
 
-        public void ignorableWhitespace(char[] arg0, int arg1, int arg2) throws SAXException {
+        public void ignorableWhitespace(final char[] arg0, final int arg1, final int arg2) throws SAXException {
             // NOOP
         }
 
-        public void processingInstruction(String arg0, String arg1)
+        public void processingInstruction(final String arg0, final String arg1)
                 throws SAXException {
             if (requiredProcessingInstructions.contains(arg0)) {
                 requiredProcessingInstructions.remove(arg0);
             }
         }
 
-        public void setDocumentLocator(Locator arg0) {
+        public void setDocumentLocator(final Locator arg0) {
             // NOOP
         }
 
-        public void skippedEntity(String arg0) throws SAXException {
+        public void skippedEntity(final String arg0) throws SAXException {
             // NOOP
         }
 
@@ -211,9 +211,9 @@ public class DitaWriterTest {
             requiredProcessingInstructions.add("workdir");
         }
 
-        public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
+        public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
             final String xtrf = atts.getValue("xtrf");
-            if (xtrf != null) { 
+            if (xtrf != null) {
                 assertEquals(source.getAbsolutePath(), xtrf);
             }
             final String xtrc = atts.getValue("xtrc");
@@ -225,9 +225,9 @@ public class DitaWriterTest {
             }
         }
 
-        public void startPrefixMapping(String arg0, String arg1) throws SAXException {
+        public void startPrefixMapping(final String arg0, final String arg1) throws SAXException {
             // NOOP
         }
-        
+
     }
 }

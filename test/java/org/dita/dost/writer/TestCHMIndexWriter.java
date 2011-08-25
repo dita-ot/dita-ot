@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -66,30 +66,30 @@ public class TestCHMIndexWriter {
         final Collection<IndexTerm> collection = new ArrayList<IndexTerm>();
         collection.add(indexterm1);
         content.setCollection(collection);
-        
+
         final CHMIndexWriter indexWriter = new CHMIndexWriter();
         indexWriter.setContent(content);
         final File outFile = new File(tempDir, "index.hhk");
         indexWriter.write(outFile.getAbsolutePath());
-        
+
         assertXMLEqual(new InputSource(new File(expDir, "index.hhk").toURI().toString()),
-                       new InputSource(outFile.toURI().toString()));
+                new InputSource(outFile.toURI().toString()));
     }
 
     @AfterClass
     public static void tearDown() throws IOException {
         TestUtils.forceDelete(tempDir);
     }
-    
+
     private static class HTMLDocumentBuilderFactory extends DocumentBuilderFactory {
-        
+
         @Override
-        public Object getAttribute(String arg0) throws IllegalArgumentException {
+        public Object getAttribute(final String arg0) throws IllegalArgumentException {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public boolean getFeature(String arg0) throws ParserConfigurationException {
+        public boolean getFeature(final String arg0) throws ParserConfigurationException {
             throw new UnsupportedOperationException();
         }
 
@@ -99,15 +99,15 @@ public class TestCHMIndexWriter {
         }
 
         @Override
-        public void setAttribute(String arg0, Object arg1) throws IllegalArgumentException {
+        public void setAttribute(final String arg0, final Object arg1) throws IllegalArgumentException {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public void setFeature(String arg0, boolean arg1) throws ParserConfigurationException {
-            throw new UnsupportedOperationException();           
+        public void setFeature(final String arg0, final boolean arg1) throws ParserConfigurationException {
+            throw new UnsupportedOperationException();
         }
-        
+
     }
 
 }

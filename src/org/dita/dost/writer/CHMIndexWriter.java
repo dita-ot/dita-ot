@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -43,7 +43,7 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter {
             transformer.setOutputProperty("method", "html");
             transformer.setOutputProperty("encoding", "UTF-8");
             transformer.setOutputProperty(javax.xml.transform.OutputKeys.INDENT, "no");
-            
+
 
             serializer.writeStartDocument();
             serializer.writeStartElement("html");
@@ -79,11 +79,11 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter {
     }
 
     /**
-     * Output the given indexterm into the PrintWriter.  
+     * Output the given indexterm into the PrintWriter.
      * 
      * @param term
      * @param printWriter
-     * @throws SAXException 
+     * @throws SAXException
      */
     private void outputIndexTerm(final IndexTerm term, final XMLSerializer serializer) throws SAXException {
         List<IndexTermTarget> targets = term.getTargetList();
@@ -159,7 +159,7 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter {
                 // edited by William on 2009-07-13 for indexterm bug:2819853 end
             }
 
-        }	
+        }
     }
 
     /**
