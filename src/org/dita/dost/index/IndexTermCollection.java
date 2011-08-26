@@ -256,6 +256,7 @@ public final class IndexTermCollection {
         //Even if there is no term in the list create an empty index file
         //otherwise the compiler will report error.
         content.setCollection(this.getTermList());
+        abstractWriter.setLogger(javaLogger);
         abstractWriter.setContent(content);
         abstractWriter.write(buff.toString());
         //}
