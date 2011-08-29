@@ -8,11 +8,20 @@
  * (c) Copyright IBM Corp. 2010 All Rights Reserved.
  */
 package org.dita.dost.reader;
+import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import static org.junit.Assert.assertEquals;
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Map;
 import java.util.Set;
+
+import org.xml.sax.SAXException;
+
+import org.custommonkey.xmlunit.XMLUnit;
+import org.xml.sax.InputSource;
 
 import org.dita.dost.TestUtils;
 import org.dita.dost.module.Content;
@@ -24,16 +33,14 @@ public class TestKeyrefReader {
 
     private static final File resourceDir = new File("test-stub", TestKeyrefReader.class.getSimpleName());
     private static final File srcDir = new File(resourceDir, "src");
-    private static final File expDir = new File(resourceDir, "exp");
 
     @Test
-    public void testKeyrefReader() throws IOException
-    {
-        final String path=System.getProperty("user.dir");
+    public void testKeyrefReader() throws IOException, SAXException {
+        final String path = System.getProperty("user.dir");
         DitaURIResolverFactory.setPath(path);
         final File filename = new File(srcDir, "keyrefreader.xml");
 
-        final Set <String> set=new HashSet<String> ();
+        final Set <String> set = new HashSet<String> ();
         set.add("blatview");
         set.add("blatfeference");
         set.add("blatintro");
@@ -41,14 +48,22 @@ public class TestKeyrefReader {
         keyrefreader.setKeys(set);
         keyrefreader.read(filename.getAbsolutePath());
         final Content content = keyrefreader.getContent();
-        //keyrefreader.getContent();
-        final String string1 = content.getValue().toString();
+        @SuppressWarnings("unchecked")
+        final Hashtable<String, String> act = (Hashtable<String, String>) content.getValue();
 
-        assertEquals(TestUtils.readFileToString(new File(expDir, "keyrefreaderCompare.xml")),
-                string1);
-
+        final Hashtable<String, String> exp = new Hashtable<String, String>();
+        exp.put("blatfeference", "<topicref keys='blatview blatfeference blatintro' href='blatview.dita' navtitle='blatview' locktitle='yes' class='- map/topicref '/>");
+        exp.put("blatview", "<topicref keys='blatview blatfeference blatintro' href='blatview.dita' navtitle='blatview' locktitle='yes' class='- map/topicref '/>");
+        exp.put("blatintro", "<topicref keys='blatview blatfeference blatintro' href='blatview.dita' navtitle='blatview' locktitle='yes' class='- map/topicref '/>");
+        
+        TestUtils.resetXMLUnit();
+        assertEquals(exp.keySet(), act.keySet());
+        for (Map.Entry<String, String> e: exp.entrySet()) {
+            String ev = e.getValue();
+            String av = act.get(e.getKey());
+            assertXMLEqual(new InputSource(new StringReader(ev)),
+                           new InputSource(new StringReader(av)));
+        }
     }
-
-
 
 }
