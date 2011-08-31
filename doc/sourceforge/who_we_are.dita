@@ -13,10 +13,9 @@
         <li>Robert D Anderson (IBM) - Architect and current project lead, frequent developer and doc
           updator, primary maintainer of this set of Wiki pages</li>
         <li>Jason (Jian Le Shen, IBM) - Primary developer within IBM</li>
-        <li>Rob Justice - DITA-OT Documentation</li>
         <li>Eric Sirois (IBM) - contributor for several chunks of Eclipse and indexing related
           code</li>
-        <li>Jarno Elovirta (Citec Group) - Java and XSLT developer</li>
+        <li>Jarno Elovirta (Citec Information) - Java and XSLT developer</li>
         <li>Aryeh Sanders and Reuven Weiser (Suite Solutions) - responsible for PDF output using the
           PDF2 transform </li>
       </ul>
@@ -32,6 +31,7 @@
         <li>Eliot Kimber (Really Strategies, Inc) - DTD and XML Schema caching</li>
         <li>Dick Johnson and Anna van Raaphorst (VR Communcations, Inc) - Original contributors of
           the DITA User Guide</li>
+        <li>Rob Justice - DITA-OT Documentation</li>
       </ul>
     </section>
   </conbody>

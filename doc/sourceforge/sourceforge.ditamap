@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
 <map>
-  <title>DITA Topic Map</title>
+  <title>DITA Open Toolkit</title>
   <topichead navtitle="About">
     <topicref href="about.dita" navtitle="Overview" locktitle="yes" copy-to="index.dita"/>
     <topicref href="features.dita" navtitle="Features"/>
@@ -10,11 +10,17 @@
   </topichead>
   <topichead navtitle="Download">
     <topicref navtitle="Release 1.5.3" scope="external" href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Stable%20Release/DITA%20Open%20Toolkit%201.5.3/"/>
+    <topicref navtitle="Release 1.5.2" scope="external" href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Stable%20Release/DITA%20Open%20Toolkit%201.5.2/"/>
     <topicref navtitle="Development Release" scope="external" href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Latest%20Test%20Build/"/>
   </topichead>
   <topichead navtitle="Documentation">
-    <topicref href="1.5.3/" navtitle="Release 1.5.3" scope="peer"/>
-    <topicref href="1.5.2/" navtitle="Release 1.5.2" scope="peer"/>
+    <topicref href="1.5.3/" navtitle="Release 1.5.3" scope="peer" format="html"/>
+    <topicref href="1.5.2/" navtitle="Release 1.5.2" scope="peer" format="html"/>
+    <!--
+    <topicref href="doc/ot-userguide141/xhtml/" navtitle="Release 1.4.1" scope="peer" format="html"/>
+    <topicref href="doc/ot-userguide131/xhtml/" navtitle="Release 1.3.1" scope="peer" format="html"/>
+    <topicref href="doc/ot-userguide13/xhtml/frameset.html" navtitle="Release 1.3" scope="peer" format="html"/>
+    -->
   </topichead>
   <topichead navtitle="Resources">
     <!--topicref navtitle="Developers"/-->

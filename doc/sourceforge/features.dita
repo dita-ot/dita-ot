@@ -21,7 +21,7 @@
       supported out of the box with any toolkit installation.</p>
       <dl>
         <dlentry>
-          <dt>PDF / PDF2</dt>
+          <dt>PDF</dt>
           <dd>PDF output is based on a plug-in that produces XSL-FO output. The XSL-FO output may be
             converted to PDF using an open source tools (Apache FOP) or using commercial tools such
             as RenderX or Antenna House. This transformation type replaced an older demo PDF
@@ -45,8 +45,9 @@
         </dlentry>
         <dlentry>
           <dt>HTML Help</dt>
-          <dd>HTML Help output produces a compiled help (CHM) file with the XHTML topics, table of
-            contents, and index.</dd>
+          <dd>Microsoft Compiled HTML Help output produces a compiled help
+              (<filepath>.chm</filepath>) file with the XHTML topics, table of contents, and
+            index.</dd>
         </dlentry>
         <dlentry>
           <dt>Java Help</dt>
@@ -54,12 +55,12 @@
             platform.</dd>
         </dlentry>
         <dlentry>
-          <dt>ODT (Open Document)</dt>
+          <dt>OpenDocument (ODT)</dt>
           <dd>ODT is a document format based on the ODF standard, for use with tools like Open
             Office. Support for ODT was added in DITA-OT 1.5.2.</dd>
         </dlentry>
         <dlentry>
-          <dt>WordRTF</dt>
+          <dt>Rich Text Format (RTF)</dt>
           <dd>RTF output is supported for basic content, but complex markup and some advanced
             features of DITA may not be supported.</dd>
         </dlentry>
@@ -68,14 +69,10 @@
           <dd>TROFF based man pages are supported; one man page is generated for each input topic.
             Note that tables are not supported by this transformation type.</dd>
         </dlentry>
-        <dlentry>
-          <dt>New transformation types</dt>
-          <dd>The toolkit’s plug-in mechanism allows new transformation types to be added. Note that
-            both TocJS and PDF2 were originally separately installable plug-ins, which became
-            widespread enough that they are now bundled together with the default toolkit
-            installation.</dd>
-        </dlentry>
       </dl>
+      <p>The toolkit’s plug-in mechanism allows new transformation types to be added. Note that both
+        TocJS and PDF2 were originally separately installable plug-ins, which became widespread
+        enough that they are now bundled together with the default toolkit installation.</p>
     </section>
   </conbody>
 </concept>
