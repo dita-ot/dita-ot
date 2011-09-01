@@ -29,25 +29,25 @@ with those set forth herein.
 
 This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
-*/
+ */
 
-public class ParseException
-		extends Exception {
-	public ParseException() {
-	}
-
-
-	public ParseException(String message) {
-		super(message);
-	}
+public class ParseException extends Exception {
+    
+    public ParseException() {
+    }
 
 
-	public ParseException(Throwable cause) {
-		super(cause);
-	}
+    public ParseException(final String message) {
+        super(message);
+    }
 
 
-	public ParseException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public ParseException(final Throwable cause) {
+        super(cause);
+    }
+
+
+    public ParseException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
 }

@@ -29,14 +29,14 @@ with those set forth herein.
 
 This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
-*/
+ */
 public class ProcessException
-		extends Exception {
-	public ProcessException() {
-	}
+extends Exception {
+    public ProcessException() {
+    }
 
 
-	public ProcessException(String message) {
-		super(message);
-	}
+    public ProcessException(final String message) {
+        super(message);
+    }
 }

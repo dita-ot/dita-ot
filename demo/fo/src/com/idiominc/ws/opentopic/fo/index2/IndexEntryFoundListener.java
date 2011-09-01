@@ -30,12 +30,12 @@ with those set forth herein.
 
 This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
-*/
+ */
 public interface IndexEntryFoundListener {
-	/**
-	 * Notifies that the new index entry was found
-	 *
-	 * @param theEntry index entry
-	 */
-	void foundEntry(IndexEntry theEntry);
+    /**
+     * Notifies that the new index entry was found
+     *
+     * @param theEntry index entry
+     */
+    void foundEntry(IndexEntry theEntry);
 }

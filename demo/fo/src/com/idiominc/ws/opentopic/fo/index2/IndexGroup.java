@@ -29,7 +29,7 @@ with those set forth herein.
 
 This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
-*/
+ */
 /**
  * User: Ivan Luzyanin
  * Date: 21.06.2005
@@ -39,22 +39,22 @@ See the accompanying license.txt file for applicable licenses.
  */
 public interface IndexGroup {
 
-	/**
-	 * @return group label
-	 */
-	String getLabel();
+    /**
+     * @return group label
+     */
+    String getLabel();
 
 
-	/**
-	 * @return group entries
-	 */
-	IndexEntry[] getEntries();
+    /**
+     * @return group entries
+     */
+    IndexEntry[] getEntries();
 
 
-	/**
-	 * Adds entry to the index group
-	 *
-	 * @param theEntry index entry
-	 */
-	void addEntry(IndexEntry theEntry);
+    /**
+     * Adds entry to the index group
+     *
+     * @param theEntry index entry
+     */
+    void addEntry(IndexEntry theEntry);
 }

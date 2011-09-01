@@ -11,21 +11,21 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 
 /*
-Copyright (c) 2004-2006 by Idiom Technologies, Inc. All rights reserved. 
+Copyright (c) 2004-2006 by Idiom Technologies, Inc. All rights reserved.
 IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
-and WORLDSTART are trademarks of Idiom Technologies, Inc. All other 
-trademarks are the property of their respective owners. 
+and WORLDSTART are trademarks of Idiom Technologies, Inc. All other
+trademarks are the property of their respective owners.
 
-IDIOM TECHNOLOGIES, INC. IS DELIVERING THE SOFTWARE "AS IS," WITH 
+IDIOM TECHNOLOGIES, INC. IS DELIVERING THE SOFTWARE "AS IS," WITH
 ABSOLUTELY NO WARRANTIES WHATSOEVER, WHETHER EXPRESS OR IMPLIED,  AND IDIOM
 TECHNOLOGIES, INC. DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING
-BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
+BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
 PURPOSE AND WARRANTY OF NON-INFRINGEMENT. IDIOM TECHNOLOGIES, INC. SHALL NOT
 BE LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL, COVER, PUNITIVE, EXEMPLARY,
-RELIANCE, OR CONSEQUENTIAL DAMAGES (INCLUDING BUT NOT LIMITED TO LOSS OF 
-ANTICIPATED PROFIT), ARISING FROM ANY CAUSE UNDER OR RELATED TO  OR ARISING 
+RELIANCE, OR CONSEQUENTIAL DAMAGES (INCLUDING BUT NOT LIMITED TO LOSS OF
+ANTICIPATED PROFIT), ARISING FROM ANY CAUSE UNDER OR RELATED TO  OR ARISING
 OUT OF THE USE OF OR INABILITY TO USE THE SOFTWARE, EVEN IF IDIOM
-TECHNOLOGIES, INC. HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. 
+TECHNOLOGIES, INC. HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
 
 Idiom Technologies, Inc. and its licensors shall not be liable for any
 damages suffered by any person as a result of using and/or modifying the
@@ -37,15 +37,15 @@ These terms and conditions supersede the terms and conditions in any
 licensing agreement to the extent that such terms and conditions conflict
 with those set forth herein.
 
-This file is part of the DITA Open Toolkit project hosted on Sourceforge.net. 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
-*/
+ */
 public class Runner {
     private boolean failed;
 
     private static boolean failOnError = true;
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         if (args.length < 2) {
             System.out.println("Invalid number of parameters. " +
                     "This class should not be executed outside of publising output build script");
@@ -57,7 +57,7 @@ public class Runner {
             failOnError = false;
         }
 
-        boolean failed = new Runner().run(args);
+        final boolean failed = new Runner().run(args);
 
         if (failed && failOnError) {
             System.exit(1);
@@ -74,11 +74,11 @@ public class Runner {
     /**
      * @return true if transformation failed
      */
-    private boolean run(String[] args) {
+    private boolean run(final String[] args) {
         FormatterImpl xep = null;
         try {
             xep = new FormatterImpl();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             System.out.println("Could not create XEP formatter: " + e.toString());
             return true;
         }
@@ -91,9 +91,9 @@ public class Runner {
         }
 
         try {
-            SAXSource source = createSAXSource(args);
-            OutputStream out = createOutputStream(args);
-            Logger logger = createCustomLogger(this);
+            final SAXSource source = createSAXSource(args);
+            final OutputStream out = createOutputStream(args);
+            final Logger logger = createCustomLogger(this);
 
             try {
                 try {
@@ -101,7 +101,7 @@ public class Runner {
                 } finally {
                     out.close();
                 }
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 System.out.println("Rendering failed: " + e.getMessage());
                 return true;
             }
@@ -112,35 +112,35 @@ public class Runner {
         return this.failed;
     }
 
-    private static SAXSource createSAXSource(String[] args) {
+    private static SAXSource createSAXSource(final String[] args) {
         SAXSource source = null;
         try {
-            File in = new File(args[0]);
-            InputSource saxsrc = new InputSource(in.toURL().toString());
+            final File in = new File(args[0]);
+            final InputSource saxsrc = new InputSource(in.toURL().toString());
             source = new SAXSource(saxsrc);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             System.out.println("Source creation failed: " + e.getMessage());
             System.exit(1);
         }
         return source;
     }
 
-    private static OutputStream createOutputStream(String[] args) {
+    private static OutputStream createOutputStream(final String[] args) {
         OutputStream out = null;
         try {
             out = new BufferedOutputStream(new FileOutputStream(args[1]));
-        } catch (Exception e) {
+        } catch (final Exception e) {
             System.out.println("Could not open output file: " + e.getMessage());
             System.exit(1);
         }
         return out;
     }
 
-    private static Logger createCustomLogger(Runner runner) {
+    private static Logger createCustomLogger(final Runner runner) {
         Logger logger = null;
         try {
             logger = new Logger(runner);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             System.out.println("Log handler creation failed: " + e.getMessage());
             System.exit(1);
         }
