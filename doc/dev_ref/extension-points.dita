@@ -127,14 +127,29 @@ token ::= ( [0..9] | [a..zA..Z] | ’_’ | ’-’ )+</codeblock>
     <title>XML catalogs</title>
     <conbody>
       <p>The XML Catalogs extension point is used to update the XML Catalogs used to resolve DTD or
-        Schema document types. To do this, first create a catalog with only your new values, using
-        the OASIS Catalog format, and place that in your plugin. Next create a
-          <codeph>&lt;feature&gt;</codeph> element, with the extension attribute set to
-          "<codeph>dita.specialization.catalog.relative</codeph>", the <codeph>file</codeph>
-        attribute set to the name of your local catalog file. For example: </p>
-      <codeblock> &lt;feature extension="dita.specialization.catalog.relative" file="catalog-dita.xml"/&gt; </codeblock>
-      <note type="remember">The <codeph>dita.specialization.catalog</codeph> extension is
-        deprecated.  Use <codeph>dita.specialization.catalog.relative</codeph> instead.</note>
+        Schema document types, or to add URI mappings. To do this, first create a catalog with only
+        your new values, using the OASIS Catalog format, and place that in your plugin.</p>
+      <dl>
+        <dlentry>
+          <dt><codeph>dita.specialization.catalog.relative</codeph></dt>
+          <dt><codeph>dita.specialization.catalog</codeph></dt>
+          <dd>
+            <p>Adds the content of the catalog file defined in <codeph>file</codeph> attribute to
+              main DITA-OT catalog file.</p>
+            <codeblock>&lt;feature extension="dita.specialization.catalog.relative" file="catalog-dita.xml"/&gt; </codeblock>
+            <note type="remember">The <codeph>dita.specialization.catalog</codeph> extension is
+              deprecated.  Use <codeph>dita.specialization.catalog.relative</codeph> instead.</note>
+          </dd>
+        </dlentry>
+        <dlentry>
+          <dt><codeph>org.dita.pdf2.catalog.relative</codeph></dt>
+          <dd>
+            <p>Adds the content of the catalog file defined in <codeph>file</codeph> attribute to
+              main PDF plug-in catalog file.</p>
+            <codeblock>&lt;feature extension="org.dita.pdf2.catalog.relative" file="common/catalog.xml"/&gt; </codeblock>
+          </dd>
+        </dlentry>
+      </dl>
     </conbody>
   </concept>
   <concept id="topic_uyv_wov_kc">
@@ -144,7 +159,7 @@ token ::= ( [0..9] | [a..zA..Z] | ’_’ | ’-’ )+</codeblock>
         To do this, first place your extensions in an Ant project file within your plugin, such as
         myAntStuff.xml. Create a small wrapper file <filepath>myAntStuffWrapper.xml</filepath> in
         the same directory: </p>
-      <codeblock> &lt;dummy&gt; &lt;import file="myAntStuff.xml"/&gt; &lt;/dummy&gt; </codeblock>
+      <codeblock>&lt;dummy&gt; &lt;import file="myAntStuff.xml"/&gt; &lt;/dummy&gt; </codeblock>
       <p>Then create the following feature: </p>
       <codeblock>&lt;feature extension="dita.conductor.target.relative" file="myAntStuffWrapper.xml"/&gt; </codeblock>
       <note type="remember">The <codeph>dita.conductor.target</codeph> extension is deprecated.  Use
