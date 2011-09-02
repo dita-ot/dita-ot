@@ -101,7 +101,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="__body__first__header" use-attribute-sets="odd__header">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__body__first__footer">
+    <xsl:attribute-set name="__body__first__footer" use-attribute-sets="odd__footer">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__body__first__header__heading">
