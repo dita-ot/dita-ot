@@ -251,6 +251,20 @@ public class TestFileUtils {
         assertTrue(FileUtils.fileExists(new File(srcDir, "ibmrnr.txt#topicid").getPath()));
         assertFalse(FileUtils.fileExists(new File(srcDir, "ibmrnr").getPath()));
     }
+    
+    @Test
+    public void testDeriveFilename() {
+        assertEquals("baz.qux", FileUtils.deriveFilename("/foo/bar/baz.qux"));
+        assertEquals("baz.qux", FileUtils.deriveFilename("baz.qux"));
+        assertEquals("", FileUtils.deriveFilename("/foo/bar/"));
+    }
+
+    @Test
+    public void testDerivePath() {
+        assertEquals("/foo/bar", FileUtils.derivePath("/foo/bar/baz.qux"));
+        assertEquals("foo/bar", FileUtils.derivePath("foo/bar/baz.qux"));
+        //assertEquals("", FileUtils.derivePath("baz.qux"));
+    }
 
     @AfterClass
     public static void tearDown() throws IOException {

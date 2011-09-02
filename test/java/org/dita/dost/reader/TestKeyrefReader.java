@@ -44,6 +44,8 @@ public class TestKeyrefReader {
         set.add("blatview");
         set.add("blatfeference");
         set.add("blatintro");
+        set.add("keyword");
+        set.add("escape");
         final KeyrefReader keyrefreader = new KeyrefReader();
         keyrefreader.setKeys(set);
         keyrefreader.read(filename.getAbsolutePath());
@@ -55,6 +57,8 @@ public class TestKeyrefReader {
         exp.put("blatfeference", "<topicref keys='blatview blatfeference blatintro' href='blatview.dita' navtitle='blatview' locktitle='yes' class='- map/topicref '/>");
         exp.put("blatview", "<topicref keys='blatview blatfeference blatintro' href='blatview.dita' navtitle='blatview' locktitle='yes' class='- map/topicref '/>");
         exp.put("blatintro", "<topicref keys='blatview blatfeference blatintro' href='blatview.dita' navtitle='blatview' locktitle='yes' class='- map/topicref '/>");
+        exp.put("keyword", "<topicref keys='keyword' class='- map/topicref '><topicmeta class='- map/topicmeta '><keywords class='- topic/keywords '><keyword class='- topic/keyword '>keyword value</keyword></keywords></topicmeta></topicref>");
+        exp.put("escape", "<topicref keys='escape' class='- map/topicref ' navtitle='&amp;&lt;&gt;&quot;&apos;'><topicmeta class='- map/topicmeta '><keywords class='- topic/keywords '><keyword class='- topic/keyword '>&amp;&lt;&gt;&quot;&apos;</keyword></keywords></topicmeta></topicref>");
         
         TestUtils.resetXMLUnit();
         assertEquals(exp.keySet(), act.keySet());

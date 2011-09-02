@@ -6,10 +6,28 @@
     
     <topicref keys="blatview blatfeference blatintro" href="blatview.dita" navtitle="blatview" locktitle="yes"/>
     
+    <!-- skipped key -->
     <topicref keys="blatexample" href="blatexample.dita" navtitle="blatexample" locktitle="yes"/>
     
+    <!-- skipped topicref -->
     <topicref href="keyRef_blatexample.dita" navtitle="keyRef_blatexample" locktitle="yes"/>
     
+  <topicref keys="keyword">
+    <topicmeta>
+      <keywords>
+        <keyword>keyword value</keyword>
+      </keywords>
+    </topicmeta>
+  </topicref>
+  
+  <topicref keys="escape" navtitle="&amp;&lt;&gt;&quot;&apos;">
+    <topicmeta>
+      <keywords>
+        <keyword>&amp;&lt;&gt;&quot;&apos;</keyword>
+      </keywords>
+    </topicmeta>
+  </topicref>
+      
     <!-- Check keyRef_blatexample.dita  -->
     <!-- It will change its link to blatexample.dita , not blatview.dita -->
     
