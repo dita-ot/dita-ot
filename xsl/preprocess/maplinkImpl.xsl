@@ -360,7 +360,7 @@
     </xsl:variable>
     <xsl:variable name="group-title">
       <xsl:apply-templates mode="grab-group-title" 
-        select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]/*[contains(@class, ' map/topicref ')][1]"/>
+         select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]"/>
     </xsl:variable>
     
     <xsl:if test="$linklist='true' and not($group-title='#none#') and not($group-title='')">
@@ -513,6 +513,19 @@
   
   
   <!-- Grab the group title from the matching header of reltable. -->
+  <xsl:template match="*[contains(@class, ' map/relcolspec ')]"
+    mode="grab-group-title"> 
+    <xsl:choose>
+      <xsl:when test="*[contains(@class, ' topic/title ')][not(title='')]">
+        <xsl:value-of select="*[contains(@class, ' topic/title ')]"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates mode="grab-group-title" 
+          select="*[contains(@class, ' map/topicref ')][1]"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>  
+  
   <xsl:template match="*[contains(@class, ' map/topicref ')]"
    mode="grab-group-title">
     <xsl:variable name="file-origin">
@@ -563,7 +576,7 @@
     </xsl:variable>
     <xsl:variable name="group-title">
       <xsl:apply-templates mode="grab-group-title" 
-        select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]/*[contains(@class, ' map/topicref ')][1]"/>
+        select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]"/>
     </xsl:variable>
     <linklist class="- topic/linklist ">
       <xsl:copy-of select="@xtrf | @xtrc"/>
@@ -596,7 +609,7 @@
     </xsl:variable>
     <xsl:variable name="group-title">
       <xsl:apply-templates mode="grab-group-title" 
-        select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]/*[contains(@class, ' map/topicref ')][1]"/>
+        select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]"/>
     </xsl:variable>
     <linklist class="- topic/linklist ">
       <xsl:copy-of select="@xtrf | @xtrc"/>
