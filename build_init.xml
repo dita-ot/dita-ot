@@ -446,7 +446,7 @@
   	  		        <isset property="args.odt.img.embed"/>
   	  		      </not>
   	</condition>
-  	<condition property="clean_temp">
+  	<condition property="clean-temp.skip">
       <and>
         <isset property="clean.temp" />
         <equals arg1="${clean.temp}" arg2="no" casesensitive="false" />

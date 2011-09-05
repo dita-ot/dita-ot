@@ -22,7 +22,7 @@
 
   <!-- clean-temp
       Remove anything in the ${dita.temp.dir} directory before starting. -->
-  <target name="clean-temp" unless="clean_temp"
+  <target name="clean-temp" unless="clean-temp.skip"
     dita:depends="{depend.preprocess.clean-temp.pre}"
     xmlns:dita="http://dita-ot.sourceforge.net"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
