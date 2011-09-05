@@ -56,8 +56,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:variable>
 
     <xsl:variable name="productName">
-        <xsl:variable name="mapProdname" select="/*/opentopic:map//*[contains(@class, ' topic/prodname ')]"/>
-        <xsl:variable name="bkinfoProdname" select="/*/*[contains(@class, ' bkinfo/bkinfo ')]//*[contains(@class, ' topic/prodname ')]"/>
+        <xsl:variable name="mapProdname" select="(/*/opentopic:map//*[contains(@class, ' topic/prodname ')])[1]"/>
+        <xsl:variable name="bkinfoProdname" select="(/*/*[contains(@class, ' bkinfo/bkinfo ')]//*[contains(@class, ' topic/prodname ')])[1]"/>
         <xsl:choose>
             <xsl:when test="$mapProdname">
                 <xsl:value-of select="$mapProdname"/>
