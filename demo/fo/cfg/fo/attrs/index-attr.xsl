@@ -40,9 +40,8 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="font-weight">bold</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__index__page__link">
+    <xsl:attribute-set name="__index__page__link" use-attribute-sets="base-font">
         <xsl:attribute name="color">blue</xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
         <!--xsl:attribute name="link-back">true</xsl:attribute-->
     </xsl:attribute-set>
 

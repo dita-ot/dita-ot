@@ -142,9 +142,8 @@ See the accompanying license.txt file for applicable licenses.
         <!--<xsl:attribute name="margin-left">8pt</xsl:attribute>-->
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="link__shortdesc">
+    <xsl:attribute-set name="link__shortdesc" use-attribute-sets="base-font">
         <xsl:attribute name="margin-left">15pt</xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
         <xsl:attribute name="space-after">5pt</xsl:attribute>
     </xsl:attribute-set>
 
