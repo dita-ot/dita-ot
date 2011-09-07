@@ -301,7 +301,7 @@
     	extension=".ditamap.ref"
         classpathref="dost.class.path"
         reloadstylesheet="${dita.preprocess.reloadstylesheet.mapref}"
-      style="${dita.script.dir}${file.separator}preprocess${file.separator}mapref.xsl">
+      style="${dita.script.dir}${file.separator}preprocess${file.separator}mapref.xsl" filenameparameter="file-being-processed">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="TRANSTYPE" expression="${transtype}" />
       <!--Added by William on 2010-04-14 for bug:2982485 start -->

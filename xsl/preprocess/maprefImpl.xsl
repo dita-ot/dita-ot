@@ -19,6 +19,12 @@
     <xsl:param name="FILEREF">file://</xsl:param>
     <!-- The directory where the topic resides, starting with root -->
     <xsl:param name="WORKDIR" select="'./'"/>
+    
+    <!--Added by Jason on 2011-09-07 for bug:3401721 start-->
+    <xsl:param name="file-being-processed"/>  
+    <!--Added by Jason on 2011-09-07  for bug:3401721 end-->
+    
+    
     <!-- list of attributes that can be overided. -->
     <xsl:variable name="special-atts" select="' href class linking toc print audience product platform otherprops props '"/>
     
@@ -63,7 +69,13 @@
                 <xsl:when test="contains(@href,'://')">
                     <xsl:value-of select="@href"/>
                 </xsl:when>
+                
+                <xsl:when test="starts-with(@href,'#')">
+                    <xsl:value-of select="$file-being-processed"/>
+                </xsl:when>   
+                
                 <!-- if @href contains # get the part before # -->
+                
                 <xsl:when test="contains(@href,'#')">
                     <xsl:value-of select="substring-before(@href,'#')"/>
                 </xsl:when>
@@ -113,6 +125,9 @@
                         <xsl:otherwise>
                             <!-- edited by William on 2009-09-01 for updated mapref start-->
                             <xsl:choose>
+                                <xsl:when test="starts-with(@href,'#')">
+                                    <xsl:value-of select="$FILEREF"/><xsl:value-of select="$WORKDIR"/><xsl:value-of select="$file-being-processed"/>
+                                </xsl:when>   
                                 <xsl:when test="contains(@href, '#')">
                                     <xsl:value-of select="$FILEREF"/><xsl:value-of select="$WORKDIR"/><xsl:value-of select="substring-before(@href, '#')"/> 
                                 </xsl:when>
