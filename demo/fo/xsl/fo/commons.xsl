@@ -164,6 +164,13 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:apply-templates select="*[contains(@class, ' topic/prolog ')]"/>
         
         <xsl:choose>
+            <!-- When topic has an abstract, we cannot override shortdesc -->
+            <xsl:when test="*[contains(@class, ' topic/abstract ')]">
+              <xsl:apply-templates select="*[not(contains(@class, ' topic/title ')) and
+                    not(contains(@class, ' topic/prolog ')) and
+                    not(contains(@class, ' topic/shortdesc ')) and
+                    not(contains(@class, ' topic/topic '))]"/>
+            </xsl:when>
             <xsl:when test="$topicrefShortdesc/*">
                 <xsl:apply-templates select="$topicrefShortdesc/*"/>
                 <xsl:apply-templates select="*[not(contains(@class, ' topic/title ')) and
