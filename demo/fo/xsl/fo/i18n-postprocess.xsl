@@ -42,7 +42,7 @@ See the accompanying license.txt file for applicable licenses.
 
   <xsl:import href="../../../../xsl/common/output-message.xsl"/>
 
-    <xsl:variable name="debug-enabled" select="true()"/>
+    <xsl:param name="debug-enabled" select="'false'"/>
   <xsl:variable name="msgprefix" select="'PDFX'"/>
 
     <xsl:variable name="font-mappings" select="document('cfg:fo/font-mappings.xml')/font-mappings"/>
@@ -94,10 +94,12 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
+        <xsl:if test="$debug-enabled = 'true'">
         <xsl:comment>
             currFontFam = <xsl:value-of select="$currFontFam"/>
             physFontFam = <xsl:value-of select="normalize-space($physical-font-family)"/>
         </xsl:comment>
+        </xsl:if>
         <xsl:copy>
             <xsl:copy-of select="@*[not(name() = 'font-family')]"/>
             <xsl:attribute name="line-height-shift-adjustment">disregard-shifts</xsl:attribute>
@@ -161,10 +163,12 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
+        <xsl:if test="$debug-enabled = 'true'">
         <xsl:comment>
           currFontFam = <xsl:value-of select="$fontFace"/>
           physFontFam = <xsl:value-of select="normalize-space($physical-font-family)"/>
         </xsl:comment>
+        </xsl:if>
         <fo:inline line-height="100%">
             <xsl:attribute name="font-family"><xsl:value-of select="normalize-space($physical-font-family)"/></xsl:attribute>
 

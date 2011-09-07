@@ -122,11 +122,6 @@ See the accompanying license.txt file for applicable licenses.
 
         <fo:root xsl:use-attribute-sets="__fo__root">
 
-            <xsl:comment>
-                <xsl:text>Layout masters = </xsl:text>
-                <xsl:value-of select="$layout-masters"/>
-            </xsl:comment>
-
             <xsl:call-template name="createLayoutMasters"/>
 
             <xsl:call-template name="createBookmarks"/>
