@@ -33,9 +33,8 @@ See the accompanying license.txt file for applicable licenses.
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
 
-    <xsl:attribute-set name="codeph">
+    <xsl:attribute-set name="codeph" use-attribute-sets="base-font">
         <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="codeblock" use-attribute-sets="pre">
@@ -65,24 +64,20 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="synph">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="oper">
+    <xsl:attribute-set name="oper" use-attribute-sets="base-font">
         <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="delim">
+    <xsl:attribute-set name="delim" use-attribute-sets="base-font">
         <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="sep">
+    <xsl:attribute-set name="sep" use-attribute-sets="base-font">
         <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="apiname">
+    <xsl:attribute-set name="apiname" use-attribute-sets="base-font">
         <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="parml">
@@ -91,8 +86,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="plentry">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="pt">
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
+    <xsl:attribute-set name="pt" use-attribute-sets="base-font">
         <xsl:attribute name="font-weight">bold</xsl:attribute>
         <xsl:attribute name="text-indent">0em</xsl:attribute>
         <xsl:attribute name="end-indent">24pt</xsl:attribute>
@@ -102,8 +96,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="font-weight">bold</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="pd">
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
+    <xsl:attribute-set name="pd" use-attribute-sets="base-font">
         <xsl:attribute name="space-before">0.3em</xsl:attribute>
         <xsl:attribute name="space-after">0.5em</xsl:attribute>
         <xsl:attribute name="start-indent">72pt</xsl:attribute>
@@ -134,18 +127,16 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="kwd">
+    <xsl:attribute-set name="kwd" use-attribute-sets="base-font">
         <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="kwd__default">
         <xsl:attribute name="text-decoration">underline</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="fragref">
+    <xsl:attribute-set name="fragref" use-attribute-sets="base-font">
         <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="fragment.title">

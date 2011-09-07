@@ -42,8 +42,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute name="font-weight">bold</xsl:attribute>
   </xsl:attribute-set>
 
-    <xsl:attribute-set name="table.title" use-attribute-sets="common.title">
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
+    <xsl:attribute-set name="table.title" use-attribute-sets="base-font common.title">
         <xsl:attribute name="font-weight">bold</xsl:attribute>
         <xsl:attribute name="space-before">10pt</xsl:attribute>
         <xsl:attribute name="space-after">10pt</xsl:attribute>
@@ -68,9 +67,8 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="__tableframe__right" use-attribute-sets="common.border__right">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="table">
+    <xsl:attribute-set name="table" use-attribute-sets="base-font">
         <!--It is a table container -->
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
         <xsl:attribute name="space-after">10pt</xsl:attribute>
     </xsl:attribute-set>
 
@@ -198,10 +196,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="dlhead.ddhd__content" use-attribute-sets="common.table.body.entry common.table.head.entry">
     </xsl:attribute-set>
 
-	<xsl:attribute-set name="simpletable">
+	<xsl:attribute-set name="simpletable" use-attribute-sets="base-font">
 		<!--It is a table container -->
         <xsl:attribute name="width">100%</xsl:attribute>
-		<xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
 		<xsl:attribute name="space-before">8pt</xsl:attribute>
 		<xsl:attribute name="space-after">10pt</xsl:attribute>
 	</xsl:attribute-set>
@@ -238,9 +235,8 @@ See the accompanying license.txt file for applicable licenses.
 	<xsl:attribute-set name="strow.stentry">
 	</xsl:attribute-set>
 
-    <xsl:attribute-set name="properties">
+    <xsl:attribute-set name="properties" use-attribute-sets="base-font">
         <!--It is a table container -->
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
         <xsl:attribute name="width">100%</xsl:attribute>
         <xsl:attribute name="space-before">8pt</xsl:attribute>
         <xsl:attribute name="space-after">10pt</xsl:attribute>
@@ -278,10 +274,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="prophead.entry__content" use-attribute-sets="common.table.body.entry common.table.head.entry">
     </xsl:attribute-set>
 
-	<xsl:attribute-set name="choicetable">
+	<xsl:attribute-set name="choicetable" use-attribute-sets="base-font">
 		<!--It is a table container -->
         <xsl:attribute name="width">100%</xsl:attribute>
-		<xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
 		<xsl:attribute name="space-after">10pt</xsl:attribute>
 	</xsl:attribute-set>
 
