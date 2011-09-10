@@ -9,9 +9,9 @@
     <topicref navtitle="Who We Are" href="who_we_are.dita"/>
   </topichead>
   <topichead navtitle="Download">
-    <topicref navtitle="Release 1.5.3" scope="external" href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Stable%20Release/DITA%20Open%20Toolkit%201.5.3/"/>
-    <topicref navtitle="Release 1.5.2" scope="external" href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Stable%20Release/DITA%20Open%20Toolkit%201.5.2/"/>
-    <topicref navtitle="Development Release" scope="external" href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Latest%20Test%20Build/"/>
+    <topicref navtitle="Release 1.5.3" scope="external" format="html" href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Stable%20Release/DITA%20Open%20Toolkit%201.5.3/"/>
+    <topicref navtitle="Release 1.5.2" scope="external" format="html" href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Stable%20Release/DITA%20Open%20Toolkit%201.5.2/"/>
+    <topicref navtitle="Development Release" scope="external" format="html" href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Latest%20Test%20Build/"/>
   </topichead>
   <topichead navtitle="Documentation">
     <topicref href="1.5.3/" navtitle="Release 1.5.3" scope="peer" format="html"/>
@@ -24,10 +24,10 @@
   </topichead>
   <topichead navtitle="Resources">
     <!--topicref navtitle="Developers"/-->
-    <topicref navtitle="Issuer Tracking" scope="external" href="https://sourceforge.net/tracker/?group_id=132728"/>
+    <topicref navtitle="Issuer Tracking" scope="external" format="html" href="https://sourceforge.net/tracker/?group_id=132728"/>
     <topicref navtitle="Mailing lists" href="mailing_lists.dita"/>
-    <topicref navtitle="Version Control" scope="external" href="https://sourceforge.net/scm/?type=git&amp;group_id=132728"/>
-    <topicref navtitle="Wiki" href="http://dita.xml.org/wiki/the-dita-open-toolkit" scope="external"/>
+    <topicref navtitle="Version Control" scope="external" format="html" href="https://sourceforge.net/scm/?type=git&amp;group_id=132728"/>
+    <topicref navtitle="Wiki" href="http://dita.xml.org/wiki/the-dita-open-toolkit" format="html" scope="external"/>
   </topichead>
   <mapref href="../keyrefs.ditamap" processing-role="resource-only"/>
 </map>

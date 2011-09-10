@@ -79,6 +79,18 @@ going back to the beginning of the toolkit. </shortdesc>
           <title>PDF</title>
           <p>Support for mirrored page layout has been added. The default is the unmirrored
             layout.</p>
+          <p>A new extension point has been added to add mappings to the PDF configuration catalog
+            file.</p>
+          <simpletable>
+            <sthead>
+              <stentry>Extension point</stentry>
+              <stentry>Description</stentry>
+            </sthead>
+            <strow>
+              <stentry><codeph>org.dita.pdf2.catalog.relative</codeph></stentry>
+              <stentry>Configuration catalog includes.</stentry>
+            </strow>
+          </simpletable>
         </section>
       </refbody>
     </reference>
