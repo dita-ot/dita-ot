@@ -30,9 +30,4 @@
       <topicref href="readme/DITA-h2d-java.xml" toc="no"/>
     </topicref>
   </topicref>
-  <topichead navtitle="Development Reference">
-    <topicref href="dev_ref/DITA1.2-implementation-dependent-features.dita"/>
-    <topicref href="dev_ref/extended-functionality.dita"/>
-    <mapref href="dev_ref/dev_ref.ditamap"/>
-  </topichead>
 </map>
