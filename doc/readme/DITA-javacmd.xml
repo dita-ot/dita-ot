@@ -10,11 +10,12 @@ as an alternative for users with little knowledge of Ant. Most parameters
 available to the Ant builds are also available using the Java command
 line.</shortdesc>
 <conbody>
-<note>This information is currently being integrated with the parameter
+<!--
+  <note>This information is currently being integrated with the parameter
 information in the Ant Quick Start Guide. Newer information on Java
 and Ant parameters can be found in that document here: <xref
-href="../quickstartguide/reference/dita-ot_ant_properties.dita"></xref></note><?Pub
-Caret 153?>
+href="../quickstartguide/reference/dita-ot_ant_properties.dita"></xref></note><
+-->
 <note>The Java command line interface is simply a wrapper around the
 Ant interface; it takes the simplified parameters as input, converts
 them to Ant parameters, and then runs an Ant build. This means that
@@ -46,10 +47,17 @@ properties file:             <codeblock>ant -f conductor.xml -propertyfile ${arg
 <li>To see a list of all supported parameters from the Java command
 line, run the following command with no additional parameters:<codeblock>java -jar lib/dost.jar</codeblock></li>
 </ol></p>     </section>
-<section>       <title>Supported parameters</title><p>The following table lists many supported parameters that you can set with this tool. The
+<section>       <title>Supported parameters</title>
+  <p>See <xref
+    href="../quickstartguide/reference/dita-ot_ant_properties.dita"/> for supported command line interface arguments. To get a full list of
+    parameters, run</p>
+  <codeblock>java -jar lib/dost.jar -help</codeblock>
+<!--  
+  <p>The following table lists many supported parameters that you can set with this tool. The
         equivalent Ant parameter names are specified within braces. To get a full list of
         parameters, run the following command with no additional options: <codeph>java -jar
-          lib/dost.jar</codeph></p><table
+        lib/dost.jar</codeph></p>
+  <table
 id="javacmdinterface"><title>Table of supported parameters</title>
 <tgroup cols="2"><colspec colname="col1"/><colspec colname="col2"/>
 <thead>
@@ -309,7 +317,9 @@ conref="DITA-antscript.xml#antscript/onlytopicinmap"></ph>
 </row>
 </tbody>
 </tgroup>
-</table>     </section>
+</table>
+-->
+</section>
 <section>       <title>Enhanced command line help</title>       <p> You can find the version of toolkit and the usage of the command line from the command
         line help by using the following commands:
         <codeblock>java -jar lib/dost.jar <b>-version</b>
@@ -318,5 +328,8 @@ description of the supported parameters in the command line
   window when you type a specific command. For example, <codeph rev="r3">java
 -jar lib/dost.jar <b>-h</b></codeph></p>     </section>
 </conbody>
+  <related-links>
+    <link href="../quickstartguide/reference/dita-ot_ant_properties.dita"/>
+  </related-links>
 </concept>
 <?Pub *0000013750?>

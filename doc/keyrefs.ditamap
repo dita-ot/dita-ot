@@ -60,4 +60,12 @@ See the accompanying license.txt file for applicable licenses.
       </keywords>
     </topicmeta>
   </keydef>
+  <!-- bundled versions -->
+  <keydef keys="tool.resolver.version">
+    <topicmeta>
+      <keywords>
+        <keyword>1.1</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
 </map>

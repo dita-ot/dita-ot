@@ -80,6 +80,10 @@ See the accompanying license.txt file for applicable licenses.
             editions.</note></dd>
 				  <dd>Xalan-J <keyword keyref="tool.xalan.version"></keyword>. You can download Xalan from <xref href="http://archive.apache.org/dist/xml/xalan-j/" scope="external" format="html"/>.</dd>
 				</dlentry>
+        <dlentry>
+          <dt>Apache XML Commons Resolver</dt>
+          <dd>Apache XML Commons Resolver <keyword keyref="tool.resolver.version"></keyword>. You can download Resolver from <xref href="http://xml.apache.org/commons/components/resolver/" scope="external" format="html"/></dd>
+        </dlentry>
 			</dl>
 		</section>
 		<section id="supportedlanguages">

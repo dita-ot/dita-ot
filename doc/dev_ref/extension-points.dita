@@ -490,11 +490,10 @@ qualifier ::= ( [0..9] | [a..zA..Z] | ’_’ | '-' )+</codeblock>
       <p>The following is a sample of a plugin.xml file. This file adds support for a new set of
         specialized DTDs, and includes an override for the XHTML output processor. It would go into
         a directory such as <filepath>DITA-OT\plugins\music\</filepath> and referenced supporting
-        files would also exist in that directory. Unfortunately, due to limitations in this wiki,
-        the full code sample does not show up as well formatted as one might wish. A more extensive
-        sample using these values is available in the actual music plug-in, available at the <xref
-          href="http://sourceforge.net/projects/dita-ot/files/" scope="external">DITA-OT download page</xref> at
-        SourceForge </p>
+        files would also exist in that directory. A more extensive sample using these values is
+        available in the actual music plug-in, available at the <xref
+          href="http://sourceforge.net/projects/dita-ot/files/" scope="external">DITA-OT download
+          page</xref> at SourceForge </p>
       <example><codeblock>&lt;plugin id="org.metadita.specialization.music"&gt;
   &lt;feature extension="dita.specialization.catalog.relative" file="catalog-dita.xml"&gt;
   &lt;feature extension="dita.xsl.xhtml" file="xsl/music2xhtml.xsl"/&gt;

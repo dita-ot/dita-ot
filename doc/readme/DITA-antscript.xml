@@ -13,223 +13,224 @@
           <filepath>build_general.xml</filepath>, and <filepath>build_preprocess.xml</filepath>;
         together they define common pre-processing and output transformation routines, as well as
         extension points that allow DITA-OT Plug-ins to add to this common processing.</p></section>
-<section><p>The following table lists many general parameters to the
-DITA-OT transforms.</p><table id="dita.param.general"><title>General
-Parameter Table</title>
-<tgroup cols="3"><colspec align="left" colname="col1" colwidth="1*"/>
-<colspec align="left" colname="col2" colwidth="4*"/><colspec align="left"
-colname="col3" colwidth="1*"/>
-<thead>
-<row>
-<entry>Parameter </entry>
-<entry>Description</entry>
-<entry>Required</entry>
-</row>
-</thead>
-<tbody>
-<row>
-<entry>basedir</entry>
-<entry>                       <ph id="basedir">The path of the working
-directory for transformations,                          it will be
-the base of relative paths specified by other parameters.</ph>   
-                    <note id="basedir-note"><ul>
-<li>If input is relative, it will be set relative to the current directory.</li>
-<li>In Ant scripts, the default is that specified in the Ant buildfile.</li>
-<li>In Java command line, the default is current directory.</li>
-</ul>                       </note>                     </entry>
-<entry>No</entry>
-</row>
-<row>
-<entry>dita.dir</entry>
-<entry>                       <ph id="ditadir">The absolute path of
-the toolkit's home directory.</ph>                      </entry>
-<entry>No</entry>
-</row>
-<row>
-<entry>args.input</entry>
-<entry>                       <ph id="argsinput">The path and name
-of the input file.                          This argument should be
-in the same upper or lower case                          with the
-filename on file system.</ph>                       <note
-id="argsinput-note">This parameter must be provided              
-           if <tt>dita.input</tt> and <tt>dita.input.dirname</tt> 
-                        not be provided.</note>                  
-  </entry>
-<entry>No</entry>
-</row>
-<row>
-<entry>dita.input</entry>
-<entry>                       <ph id="ditainput">The name of the input
-file .</ph>                       <note id="ditainput-note">This parameter
-must be provided                          if <tt>args.input</tt> not
-be provided. And this                          parameter must be used
-together with the                          <tt>dita.input.dirname</tt> parameter.
-The result of                          this combination is equivalent
-to use only the                          <tt>args.input</tt> parameter.
-It is an alternative way                          to specify the path
-and name of the input file.                          <i><b>DEPRECATED</b> -
-use <codeph>args.input</codeph>                            instead.</i></note> 
-                   </entry>
-<entry>No</entry>
-</row>
-<row>
-<entry>dita.input.dirname</entry>
-<entry>                       <ph id="ditainputdirname">The input
-directory which                          contains the input file.</ph> 
-                     <note id="ditainputdirname-note">This parameter
-must be                          provided if <tt>args.input</tt> not
-be provided. And                          this parameter must be used
-together with the                          <tt>dita.input</tt> parameter.
-The result of this                          combination is equivalent
-to use only the                          <tt>args.input</tt> parameter.
-It is an alternative way                          to specify the path
-and name of the input file.                         <i><b>DEPRECATED</b> -
-use <codeph>args.input</codeph>                            instead.</i></note> 
-                   </entry>
-<entry>No</entry>
-</row>
-<row>
-<entry>dita.temp.dir</entry>
-<entry>                       <ph id="tempdir">The directory of the
-temporary files.                          The default is 'temp'.</ph> 
-                   </entry>
-<entry>No</entry>
-</row>
-<row>
-<entry>output.dir</entry>
-<entry>                       <ph id="outputdir">The path of the output
-directory.</ph>                     </entry>
-<entry>Yes</entry>
-</row>
-<row>
-<entry>dita.extname</entry>
-<entry>                       <ph id="ditaextname">The file extension
-name of the input                          topic files, for example,
-'.xml' or '.dita'. The                          default is '.xml'.</ph> 
-                   </entry>
-<entry>No</entry>
-</row>
-<row>
-<entry>args.xsl</entry>
-<entry>                       <ph id="argsxsl">The xsl file to replace
-the default xsl                          file. It will replace dita2docbook.xsl
-in docbook                          transformation, dita2fo-shell.xsl
-in pdf                          transformation, dita2xhtml.xsl in
-xhtml/eclipsehelp                          transformation, dita2rtfImpl.xsl
-                        in word transformation and dita2html.xsl in
-javahelp/htmlhelp                          transformation.</ph>  
-                  </entry>
-<entry>No</entry>
-</row>
-<row>
-<entry>dita.input.valfile</entry>
-<entry>                       <ph id="inputvalfile">The name of the
-file containing                          <i>filter/flagging/revision </i>information.</ph> 
-                   </entry>
-<entry>No</entry>
-</row>
-<row>
-<entry>args.draft</entry>
-<entry>                       <ph id="argsdraft">Default "hide draft &amp;
-required-cleanup                          content" processing parameter
-(<q>no</q>= hide                          them); <q>no</q> and <q>yes</q> are
-valid values;                          non-<q>yes</q> is ignored.</ph> 
-                   </entry>
-<entry>No</entry>
-</row>
-<row>
-<entry>args.artlbl</entry>
-<entry>                       <ph id="argsartlbl">Default "output
-artwork                          filenames" processing parameter; <q>no</q>and
-                         <q>yes</q>are valid values; non-<q>yes</q> is
-                         ignored.</ph>                     </entry>
-<entry>No</entry>
-</row>
-<row>
-<entry>clean.temp</entry>
-<entry>                       <ph id="cleantemp">The parameter to
-specify whether to clean                          the temp directory
-before each build. Only "no" and "yes"                          are
-valid values. The default is yes.</ph>                     </entry>
-<entry>No</entry>
-</row>
-<row>
-<entry>args.logdir</entry>
-<entry>                       <ph id="argslogdir">The directory used
-to keep generated                          log files. Default will
-be output directory.</ph>                       <note
-id="argslogdir-note">If several transforms running               
-          batchly, e.g., ant all:                         <ul>
-<li>If the user has specified a common logdir for all            
-                 transformations, it will be used as log directory.</li>
-<li>If the user hasn't specified a common dir for all            
-                 transformations:                             <ul>
-<li>If all transformations have same output directory,           
-                      the common output direcory will be used as log
-                                 directory.</li>
-<li>If there is no same output directory for all                 
-                transformations, the <codeph>basedir</codeph> will
-be used as                                  default log directory.</li>
-</ul></li>
-</ul>                                               </note>      
+<section><p>See <xref href="../quickstartguide/reference/dita-ot_ant_properties.dita"/> for supported
+      argument properties.</p>
+  <!--
+  <table id="dita.param.general">
+        <title>General Parameter Table</title>
+        <tgroup cols="3">
+          <colspec align="left" colname="col1" colwidth="1*"/>
+          <colspec align="left" colname="col2" colwidth="4*"/>
+          <colspec align="left" colname="col3" colwidth="1*"/>
+          <thead>
+            <row>
+              <entry>Parameter </entry>
+              <entry>Description</entry>
+              <entry>Required</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>basedir</entry>
+              <entry>
+                <ph id="basedir">The path of the working directory for transformations, it will be
+                  the base of relative paths specified by other parameters.</ph>
+                <note id="basedir-note">
+                  <ul>
+                    <li>If input is relative, it will be set relative to the current directory.</li>
+                    <li>In Ant scripts, the default is that specified in the Ant buildfile.</li>
+                    <li>In Java command line, the default is current directory.</li>
+                  </ul>
+                </note>
               </entry>
-<entry>No</entry>
-</row>
-<row>
-<entry>validate</entry>
-<entry>                       <ph id="validate">The parameter to specify
-whether the ditamap/dita/xml                        files to be validated.
-Only "true" and "false" are valid values. The default is true. </ph> 
-                     <note id="validate-note">It is not recommended
-to turn off the validation function ,                        which
-will cause unexpected error during transformation.               
-                     </note>                     </entry>
-<entry>No</entry>
-</row>
-<row>
-<entry>outer.control</entry>
-<entry>                       <ph id="outercontrol">The parameter
-to specify how to respond to the overflowing dita/topic files. Only
-"fail", "warn" and "quiet" are valid values. The default is warn. </ph> 
-                     <note id="outercontrol-note">The detailed introduction:
-                       	<ul>
-<li><i>fail</i>: Fail quickly if files are going to be generated/copied
-outside of that directory</li>
-<li><i>warn</i>: Complete if files will be generated/copied outside,
-but log a warning</li>
-<li><i>quiet</i>: Quietly finish with only those files (no warning
-or error)</li>
-</ul>                       </note>                     </entry>
-<entry>No</entry>
-</row>
-<row>
-<entry>generate.copy.outer</entry>
-<entry>                       <ph id="generatecopyouter">The parameter
-to specify how to deal with the overflowing dita/topic files. Only
-"1", "2" and "3" are valid values. The default is 1. </ph>       
-               <note id="generatecopyouter-note">The detailed introduction:
-                       	<ul>
-<li><i>1</i>: Only generate/copy files that fit within the designated
-output directory.</li>
-<li><i>2</i>: Generate/copy all files, even those that will end up
-outside of the output directory.</li>
-<li><i>3</i>: the old solution,adjust the input.dir according to the
-referenced files. (not default option any more but keep this as the
-option of backward compatibility).</li>
-</ul>                       </note>                     </entry>
-<entry>No</entry>
-</row>
-<row>
-<entry>onlytopic.in.map</entry>
-<entry>                       <ph id="onlytopicinmap">The parameter
-to specify whether the referenced dita/topic files which are not referenced
-by ditamap files should be resolved. Only "true" and "false" are valid
-values. The default is false. </ph>                     </entry>
-<entry>No</entry>
-</row>
-</tbody>
-</tgroup>
-</table></section>
+              <entry>No</entry>
+            </row>
+            <row>
+              <entry>dita.dir</entry>
+              <entry>
+                <ph id="ditadir">The absolute path of the toolkit's home directory.</ph>
+              </entry>
+              <entry>No</entry>
+            </row>
+            <row>
+              <entry>args.input</entry>
+              <entry>
+                <ph id="argsinput">The path and name of the input file. This argument should be in
+                  the same upper or lower case with the filename on file system.</ph>
+                <note id="argsinput-note">This parameter must be provided if <tt>dita.input</tt> and
+                    <tt>dita.input.dirname</tt> not be provided.</note>
+              </entry>
+              <entry>No</entry>
+            </row>
+            <row>
+              <entry>dita.input</entry>
+              <entry>
+                <ph id="ditainput">The name of the input file .</ph>
+                <note id="ditainput-note">This parameter must be provided if <tt>args.input</tt> not
+                  be provided. And this parameter must be used together with the
+                    <tt>dita.input.dirname</tt> parameter. The result of this combination is
+                  equivalent to use only the <tt>args.input</tt> parameter. It is an alternative way
+                  to specify the path and name of the input file. <i><b>DEPRECATED</b> - use
+                      <codeph>args.input</codeph> instead.</i></note>
+              </entry>
+              <entry>No</entry>
+            </row>
+            <row>
+              <entry>dita.input.dirname</entry>
+              <entry>
+                <ph id="ditainputdirname">The input directory which contains the input file.</ph>
+                <note id="ditainputdirname-note">This parameter must be provided if
+                    <tt>args.input</tt> not be provided. And this parameter must be used together
+                  with the <tt>dita.input</tt> parameter. The result of this combination is
+                  equivalent to use only the <tt>args.input</tt> parameter. It is an alternative way
+                  to specify the path and name of the input file. <i><b>DEPRECATED</b> - use
+                      <codeph>args.input</codeph> instead.</i></note>
+              </entry>
+              <entry>No</entry>
+            </row>
+            <row>
+              <entry>dita.temp.dir</entry>
+              <entry>
+                <ph id="tempdir">The directory of the temporary files. The default is 'temp'.</ph>
+              </entry>
+              <entry>No</entry>
+            </row>
+            <row>
+              <entry>output.dir</entry>
+              <entry>
+                <ph id="outputdir">The path of the output directory.</ph>
+              </entry>
+              <entry>Yes</entry>
+            </row>
+            <row>
+              <entry>dita.extname</entry>
+              <entry>
+                <ph id="ditaextname">The file extension name of the input topic files, for example,
+                  '.xml' or '.dita'. The default is '.xml'.</ph>
+              </entry>
+              <entry>No</entry>
+            </row>
+            <row>
+              <entry>args.xsl</entry>
+              <entry>
+                <ph id="argsxsl">The xsl file to replace the default xsl file. It will replace
+                  dita2docbook.xsl in docbook transformation, dita2fo-shell.xsl in pdf
+                  transformation, dita2xhtml.xsl in xhtml/eclipsehelp transformation,
+                  dita2rtfImpl.xsl in word transformation and dita2html.xsl in javahelp/htmlhelp
+                  transformation.</ph>
+              </entry>
+              <entry>No</entry>
+            </row>
+            <row>
+              <entry>dita.input.valfile</entry>
+              <entry>
+                <ph id="inputvalfile">The name of the file containing <i>filter/flagging/revision
+                  </i>information.</ph>
+              </entry>
+              <entry>No</entry>
+            </row>
+            <row>
+              <entry>args.draft</entry>
+              <entry>
+                <ph id="argsdraft">Default "hide draft &amp; required-cleanup content" processing
+                  parameter (<q>no</q>= hide them); <q>no</q> and <q>yes</q> are valid values;
+                    non-<q>yes</q> is ignored.</ph>
+              </entry>
+              <entry>No</entry>
+            </row>
+            <row>
+              <entry>args.artlbl</entry>
+              <entry>
+                <ph id="argsartlbl">Default "output artwork filenames" processing parameter;
+                    <q>no</q>and <q>yes</q>are valid values; non-<q>yes</q> is ignored.</ph>
+              </entry>
+              <entry>No</entry>
+            </row>
+            <row>
+              <entry>clean.temp</entry>
+              <entry>
+                <ph id="cleantemp">The parameter to specify whether to clean the temp directory
+                  before each build. Only "no" and "yes" are valid values. The default is yes.</ph>
+              </entry>
+              <entry>No</entry>
+            </row>
+            <row>
+              <entry>args.logdir</entry>
+              <entry>
+                <ph id="argslogdir">The directory used to keep generated log files. Default will be
+                  output directory.</ph>
+                <note id="argslogdir-note">If several transforms running batchly, e.g., ant all: <ul>
+                    <li>If the user has specified a common logdir for all transformations, it will
+                      be used as log directory.</li>
+                    <li>If the user hasn't specified a common dir for all transformations: <ul>
+                        <li>If all transformations have same output directory, the common output
+                          direcory will be used as log directory.</li>
+                        <li>If there is no same output directory for all transformations, the
+                            <codeph>basedir</codeph> will be used as default log directory.</li>
+                      </ul></li>
+                  </ul>
+                </note>
+              </entry>
+              <entry>No</entry>
+            </row>
+            <row>
+              <entry>validate</entry>
+              <entry>
+                <ph id="validate">The parameter to specify whether the ditamap/dita/xml files to be
+                  validated. Only "true" and "false" are valid values. The default is true. </ph>
+                <note id="validate-note">It is not recommended to turn off the validation function ,
+                  which will cause unexpected error during transformation. </note>
+              </entry>
+              <entry>No</entry>
+            </row>
+            <row>
+              <entry>outer.control</entry>
+              <entry>
+                <ph id="outercontrol">The parameter to specify how to respond to the overflowing
+                  dita/topic files. Only "fail", "warn" and "quiet" are valid values. The default is
+                  warn. </ph>
+                <note id="outercontrol-note">The detailed introduction: <ul>
+                    <li><i>fail</i>: Fail quickly if files are going to be generated/copied outside
+                      of that directory</li>
+                    <li><i>warn</i>: Complete if files will be generated/copied outside, but log a
+                      warning</li>
+                    <li><i>quiet</i>: Quietly finish with only those files (no warning or
+                      error)</li>
+                  </ul>
+                </note>
+              </entry>
+              <entry>No</entry>
+            </row>
+            <row>
+              <entry>generate.copy.outer</entry>
+              <entry>
+                <ph id="generatecopyouter">The parameter to specify how to deal with the overflowing
+                  dita/topic files. Only "1", "2" and "3" are valid values. The default is 1. </ph>
+                <note id="generatecopyouter-note">The detailed introduction: <ul>
+                    <li><i>1</i>: Only generate/copy files that fit within the designated output
+                      directory.</li>
+                    <li><i>2</i>: Generate/copy all files, even those that will end up outside of
+                      the output directory.</li>
+                    <li><i>3</i>: the old solution,adjust the input.dir according to the referenced
+                      files. (not default option any more but keep this as the option of backward
+                      compatibility).</li>
+                  </ul>
+                </note>
+              </entry>
+              <entry>No</entry>
+            </row>
+            <row>
+              <entry>onlytopic.in.map</entry>
+              <entry>
+                <ph id="onlytopicinmap">The parameter to specify whether the referenced dita/topic
+                  files which are not referenced by ditamap files should be resolved. Only "true"
+                  and "false" are valid values. The default is false. </ph>
+              </entry>
+              <entry>No</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table></section>
 <section><p>The following table lists general parameters that apply
 to the various HTML and XHTML based output formats.</p><table
 id="dita.param.htmlgeneral"><title>General Parameter Table for   
@@ -542,16 +543,17 @@ value that is not                          "yes" is regarded as "no".</note>
 </row>
 </tbody>
 </tgroup>
-</table></p></section>
-<section>       <title>Sample ant script</title>       <p>These ant
-scripts are in <codeph>samples/ant_sample</codeph> directory.    
-     They are simple and easy to learn. From these files, you can
-learn how          to write your own Ant script to build your own
-process.</p>       <p>Here is a sample template for writing an Ant
-script that executes transformation to xhtml in <codeph>samples/ant_samples</codeph> directory:<codeblock>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+</table>
+-->
+</section>
+<section>       <title>Sample ant script</title>       <p>These ant scripts are in <filepath>samples/ant_sample</filepath> directory. They are
+        simple and easy to learn. From these files, you can learn how to write your own Ant script
+        to build your own process.</p>       <p>Here is a sample template for writing an Ant script that executes transformation to xhtml
+        in <filepath>samples/ant_samples</filepath>
+        directory:<codeblock>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
 &lt;project name="@PROJECT.NAME@_xhtml" default="@DELIVERABLE.NAME@2xhtml" basedir=".">
 
-  &lt;property name="dita.dir" value="${basedir}${file.separator}..${file.separator}.."/>
+  &lt;property name="dita.dir" value="${basedir}/../.."/>
  
   &lt;import file="${dita.dir}${file.separator}integrator.xml"/>
 
@@ -578,10 +580,9 @@ of this template).</li>
 directory (using either a full path or a relative path from the location
 of this template).</li>
 </ul></p><p>Once you have updated these items, you can run your build
-with the following command:<codeblock>ant -f samples/ant_sample/template_xhtml.xml</codeblock></p><p>The
-build will convert your input file to XHTML. Note that the build directly
-calls the Ant script "build.xml", which is a common entry point for
-DITA-OT builds; it in turn imports all of the scripts mentioned above.</p><!--note>To
+with the following command:<codeblock>ant -f samples/ant_sample/template_xhtml.xml</codeblock></p><p>The build will convert your input file to XHTML. Note that the build directly calls the Ant
+        script <filepath>build.xml</filepath>, which is a common entry point for DITA-OT builds; it
+        in turn imports all of the scripts mentioned above.</p><!--note>To
 get a more accurate error reporting about the transformation, you
 may add the command-line option <codeph>-logger org.dita.dost.log.DITAOTBuildLogger</codeph> after
 your Ant command.</note-->     </section>
