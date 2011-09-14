@@ -481,6 +481,13 @@
       <xsl:apply-templates mode="grab-group-title" select="."/>
     </xsl:variable>
     <xsl:if test="$linklist='true' and not($group-title='#none#') and not($group-title='')">
+    <linklist class="- topic/linklist ">
+    <xsl:copy-of select="@xtrf | @xtrc"/>
+    <xsl:if test="/*[@id]">
+    <xsl:attribute name="mapkeyref">
+    <xsl:value-of select="/*/@id"/>
+    </xsl:attribute>
+    </xsl:if>
     <title class="- topic/title ">
       <xsl:value-of select="$group-title"/>
     </title>
@@ -491,6 +498,7 @@
        select="$pathBackToMapDirectory">
       </xsl:with-param>
     </xsl:apply-templates>
+    </linklist>
     </xsl:if>
     <xsl:if test="$linklist='false' and ($group-title='#none#' or $group-title='')">
       <xsl:apply-templates mode="link"
