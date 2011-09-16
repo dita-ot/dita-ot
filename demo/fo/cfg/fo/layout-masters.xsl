@@ -56,23 +56,23 @@ See the accompanying license.txt file for applicable licenses.
         <fo:layout-master-set>
             <!-- Frontmatter simple masters -->
             <fo:simple-page-master master-name="front-matter-first" xsl:use-attribute-sets="simple-page-master">
-                <fo:region-body xsl:use-attribute-sets="region-body.odd"/>
+                <fo:region-body xsl:use-attribute-sets="region-body__frontmatter.odd"/>
             </fo:simple-page-master>
 
             <fo:simple-page-master master-name="front-matter-last" xsl:use-attribute-sets="simple-page-master">
-                <fo:region-body xsl:use-attribute-sets="region-body.even"/>
+                <fo:region-body xsl:use-attribute-sets="region-body__frontmatter.even"/>
                 <fo:region-before  region-name="last-frontmatter-header" xsl:use-attribute-sets="region-before"/>
                 <fo:region-after region-name="last-frontmatter-footer" xsl:use-attribute-sets="region-after"/>
             </fo:simple-page-master>
 
             <fo:simple-page-master master-name="front-matter-even" xsl:use-attribute-sets="simple-page-master">
-                <fo:region-body xsl:use-attribute-sets="region-body.even"/>
+                <fo:region-body xsl:use-attribute-sets="region-body__frontmatter.even"/>
                 <fo:region-before region-name="even-frontmatter-header" xsl:use-attribute-sets="region-before"/>
                 <fo:region-after region-name="even-frontmatter-footer" xsl:use-attribute-sets="region-after"/>
             </fo:simple-page-master>
 
             <fo:simple-page-master master-name="front-matter-odd" xsl:use-attribute-sets="simple-page-master">
-                <fo:region-body xsl:use-attribute-sets="region-body.odd"/>
+                <fo:region-body xsl:use-attribute-sets="region-body__frontmatter.odd"/>
                 <fo:region-before region-name="odd-frontmatter-header" xsl:use-attribute-sets="region-before"/>
                 <fo:region-after region-name="odd-frontmatter-footer" xsl:use-attribute-sets="region-after"/>
             </fo:simple-page-master>
