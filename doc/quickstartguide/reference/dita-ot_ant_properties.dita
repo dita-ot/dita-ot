@@ -384,11 +384,21 @@ GENERATE-TASK-LABELS.<--></entry>
 <row>
 <entry><codeph>args.xsl.pdf</codeph></entry>
 <entry><codeph>/xslpdf</codeph></entry>
-<entry>Specifies an XSL file that is used in place of the default
-XSL transform at <codeph>toolkitdir\demo\fo\xsl\fo\topic2fo_shell.xsl</codeph
->. You must specify the full path and XSL file name.</entry>
+<entry>Specifies an XSL file that is used in place of the default XSL transform at
+                  <codeph>demo\fo\xsl\fo\topic2fo_shell.xsl</codeph>. You must specify the full path
+                and XSL file name.</entry>
 </row>
-<row>
+            <row>
+              <entry><codeph>args.fo.userconfig</codeph></entry>
+              <entry><codeph>/fouserconfig</codeph></entry>
+              <entry>The parameter to specify the user configuration file for FOP.</entry>
+            </row>
+            <row>
+              <entry><codeph>custom.xep.config</codeph></entry>
+              <entry>NA</entry>
+              <entry>The parameter to specify the user configuration file for RenderX.</entry>
+            </row>
+<row audience="xslt-customizer">
 <entry><codeph>retain.topic.fo</codeph></entry>
 <entry><codeph>/retaintopicfo</codeph></entry>
 <entry>Specifies whether to leave the generated FO file for a PDF
