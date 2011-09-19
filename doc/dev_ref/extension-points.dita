@@ -230,11 +230,16 @@ token ::= ( [0..9] | [a..zA..Z] | ’_’ | ’-’ )+</codeblock>
           <dt><codeph>dita.conductor.transtype.check</codeph></dt>
           <dd>Add new value to list of valid transformation type names.</dd>
         </dlentry>
+        <dlentry>
+          <dt><codeph>dita.transtype.print</codeph></dt>
+          <dd>Declare transtype as a print type.</dd>
+        </dlentry>
       </dl>
-      <example>The following feature defines a transform type of "newtext"; using this transform
-        type will cause the build to look for a target dita2newtext, defined previously in your Ant
-        extension:
-        <codeblock>&lt;feature extension="dita.conductor.transtype.check" value="newtext"/&gt;</codeblock></example>
+      <example>The following feature defines a transform type of "newtext" and declare it as a print
+        type; using this transform type will cause the build to look for a target
+          <codeph>dita2newtext</codeph>, defined previously in your Ant extension:
+        <codeblock>&lt;feature extension="dita.conductor.transtype.check" value="newtext"/&gt;
+&lt;feature extension="dita.transtype.print" value="newtext"/&gt;</codeblock></example>
     </conbody>
   </concept>
   <concept id="topic_tzv_wov_kc">

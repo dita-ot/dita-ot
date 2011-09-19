@@ -15,6 +15,7 @@
   <extension-point id="dita.html.extensions" name="HTML file extension"/>
   <extension-point id="dita.resource.extensions" name="Resource file extension"/>
   <extension-point id="dita.conductor.transtype.check" name="Transtype check"/>
+  <extension-point id="dita.transtype.print" name="Print transtype"/>
   <extension-point id="dita.conductor.target" name="Ant conductor"/>
   <extension-point id="dita.conductor.target.relative" name="Ant conductor"/>
   <extension-point id="dita.specialization.catalog" name="XML catalog"/>

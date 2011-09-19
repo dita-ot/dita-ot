@@ -60,6 +60,8 @@ public final class Integrator {
     public static final String FEAT_HTML_EXTENSIONS = "dita.html.extensions";
     /** Feature name for supported resource file extensions. */
     public static final String FEAT_RESOURCE_EXTENSIONS = "dita.resource.extensions";
+    /** Feature name for print transformation types. */
+    public static final String FEAT_PRINT_TRANSTYPES = "dita.transtype.print";
 
     public static final String FEAT_VALUE_SEPARATOR = ",";
     public static final String PARAM_VALUE_SEPARATOR = ";";
@@ -202,8 +204,17 @@ public final class Integrator {
         configuration.put(CONF_SUPPORTED_HTML_EXTENSIONS, readExtensions(FEAT_HTML_EXTENSIONS));
         configuration.put(CONF_SUPPORTED_RESOURCE_EXTENSIONS, readExtensions(FEAT_RESOURCE_EXTENSIONS));
 
-        // non-print transtypes
+        // print transtypes
         final Set<String> printTranstypes = new HashSet<String>();
+        if (featureTable.containsKey(FEAT_PRINT_TRANSTYPES)) {
+            for (final String ext : featureTable.get(FEAT_PRINT_TRANSTYPES).split(FEAT_VALUE_SEPARATOR)) {
+                final String e = ext.trim();
+                if (e.length() != 0) {
+                    printTranstypes.add(e);
+                }
+            }
+        }
+        // support legacy property
         final String printTranstypeValue = properties.getProperty(CONF_PRINT_TRANSTYPES);
         if (printTranstypeValue != null) {
             printTranstypes.addAll(Arrays.asList(printTranstypeValue.split(PARAM_VALUE_SEPARATOR)));
