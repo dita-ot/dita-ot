@@ -10,7 +10,7 @@
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
 
 <xsl:attribute-set name="__index__label">
-<xsl:attribute name="margin-top">20pt</xsl:attribute>
+<xsl:attribute name="space-before">20pt</xsl:attribute>
 <xsl:attribute name="space-after">20pt</xsl:attribute>
 <xsl:attribute name="font-size">20pt</xsl:attribute>
 <xsl:attribute name="font-weight">bold</xsl:attribute>
