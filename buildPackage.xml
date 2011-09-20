@@ -9,7 +9,12 @@
 
   <property file="buildPackage.properties"/>
 
-  <property name="HTMLHelpCompiler" value="C:\Program Files\HTML Help Workshop\hhc.exe"/>
+  <condition property="HTMLHelpCompiler" value="C:\Program Files\HTML Help Workshop\hhc.exe">
+    <available file="C:\Program Files\HTML Help Workshop\hhc.exe"/>
+  </condition>
+  <condition property="HTMLHelpCompiler" value="C:\Program Files (x86)\HTML Help Workshop\hhc.exe">
+    <available file="C:\Program Files (x86)\HTML Help Workshop\hhc.exe"/>
+  </condition>
   <property name="package.name.root" value="DITA-OT"/>
 
   <property name="src.dir" location="${basedir}"/>
@@ -98,9 +103,17 @@
   </target>
 	
   <patternset id="pattern.global.excludes">
+    <exclude name=".*"/>
+    <exclude name="build.log"/>
+    <exclude name="build.number"/>
+    <exclude name="plugins/cxxapiref/"/>
     <exclude name="plugins/net.sourceforge.dita-ot.html/**"/>
   	<exclude name="buildSourceForge.xml"/>
   	<exclude name="doc/sourceforge/**"/>
+    <exclude name="doc/userguide-orig/**"/>
+    <exclude name="doc/ot-userguide/**"/>
+    <exclude name="doc/archive/**"/>
+    <exclude name="doc/langref-dita1.1/**"/>
   </patternset>
   
   <patternset id="pattern.package.ant">
@@ -118,7 +131,8 @@
     <exclude name="lib/saxon/*"/>
     <exclude name="lib/icu4j.jar"/>
     <exclude name="lib/log4j.properties"/>
-    <exclude name="build.log"/>
+    <exclude name="startcmd.*"/>
+    <exclude name="buildPackage.*"/>
     <include name="demo/tocjs/**"/>
     <include name="demo/h2d/**"/>
     <include name="demo/fo/**"/>
@@ -129,21 +143,18 @@
     <include name="resource/**"/>
     <include name="schema/**"/>
     <include name="xsl/**"/>
-    <include name="lib/APACHE-LICENSE-2_0.html"/>
-    <include name="lib/**"/>
-    <include name="lib/resolver.jar"/>
-    <include name="lib/CatalogManager.properties"/>
-    <exclude name="plugins/cxxapiref/"/>
-    <exclude name="build.number"/>
-    <exclude name=".*"/>
     <include name="lib/dost.jar"/>
     <include name="lib/commons-logging-1.1.1.jar"/>
-    <exclude name="startcmd.*"/>
-    <exclude name="buildPackage.*"/>
+    <include name="lib/APACHE-LICENSE-2_0.html"/>
+    <include name="lib/resolver.jar"/>
+    <include name="lib/CatalogManager.properties"/>
+    <include name="lib/**"/>
   </patternset>
 
   <patternset id="pattern.package.full">
   	<patternset refid="pattern.global.excludes"/>
+    <exclude name="buildPackage.*"/>
+    <exclude name="lib/log4j.properties"/>
     <include name="*.*"/>
     <include name="ant/**"/>
     <include name="css/**"/>
@@ -166,23 +177,8 @@
     <include name="samples/**"/>
     <include name="schema/**"/>
     <include name="xsl/**"/>
-    <include name="lib/APACHE-LICENSE-2_0.html"/>
-    <include name="lib/resolver.jar"/>
-    <include name="lib/CatalogManager.properties"/>
-    <include name="lib/configuration.properties"/>
-    <include name="lib/saxon/**"/>
-    <exclude name="plugins/cxxapiref/"/>
-    <exclude name="doc/userguide-orig/**"/>
-    <exclude name="doc/ot-userguide/**"/>
-    <exclude name="doc/archive/**"/>
-    <exclude name="doc/langref-dita1.1/**"/>
-    <exclude name="build.number"/>
-    <exclude name=".*"/>
-    <include name="lib/*.jar"/>
+    <include name="lib/**"/>
     <patternset refid="pattern.package.ant"/>
-    <include name="lib/APACHE-LICENSE-2_0.html"/>
-    <include name="lib/ICU_License.html"/>
-    <exclude name="buildPackage.*"/>
   </patternset>
 
   <patternset id="pattern.package.standard.base">
@@ -191,11 +187,9 @@
     <exclude name="demo/fo/fop/conf/"/>
     <exclude name="demo/fo/fop/lib/"/>
     <exclude name="demo/fo/lib/icu4j.jar"/>
-    <exclude name="plugins/cxxapiref/"/>
-    <exclude name="lib/saxon/*"/>
+    <exclude name="lib/saxon/"/>
     <exclude name="lib/icu4j.jar"/>
     <exclude name="lib/log4j.properties"/>
-    <exclude name="build.log"/>
     <include name="*.*"/>
     <include name="ant/**"/>
     <include name="css/**"/>
@@ -219,37 +213,21 @@
     <include name="schema/**"/>
     <include name="xsl/**"/>
     <include name="lib/**"/>
-    <include name="lib/APACHE-LICENSE-2_0.html"/>
-    <include name="lib/resolver.jar"/>
-    <include name="lib/CatalogManager.properties"/>
-    <!--exclude name="lib/saxon/**" /-->
-    <exclude name="doc/userguide-orig/**"/>
-    <exclude name="doc/ot-userguide/**"/>
-    <exclude name="doc/archive/**"/>
-    <exclude name="doc/langref-dita1.1/**"/>
-    <exclude name="build.number"/>
-    <exclude name=".*"/>
   </patternset>
   
   <patternset id="pattern.package.standard">
     <patternset refid="pattern.package.standard.base"/>
-    <include name="lib/dost.jar"/>
-    <include name="lib/commons-logging-1.1.1.jar"/>
-    <include name="lib/APACHE-LICENSE-2_0.html"/>
     <exclude name="startcmd.*"/>
     <exclude name="buildPackage.*"/>
   </patternset>
   
   <patternset id="pattern.package.source">
     <patternset refid="pattern.package.standard.base"/>
-    <include name="src/**"/>
-    <include name="lib/APACHE-LICENSE-2_0.html"/>
-    <include name="lib/commons-logging-1.1.1.jar"/>
     <exclude name="src/org/dita/dost/invoker/JavaInvoker.java"/>
     <exclude name="lib/dost.jar"/>
-    <exclude name="lib/saxon/**"/>
     <exclude name="files.txt"/>
     <exclude name="startcmd.*"/>
+    <include name="src/**"/>
   </patternset>
 
   <patternset id="pattern.package.doc">
