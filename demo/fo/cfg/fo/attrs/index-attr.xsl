@@ -36,20 +36,22 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="__index__label">
         <xsl:attribute name="space-before">20pt</xsl:attribute>
         <xsl:attribute name="space-after">20pt</xsl:attribute>
+        <xsl:attribute name="space-after.conditionality">retain</xsl:attribute>
         <xsl:attribute name="font-size">20pt</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
+        <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
+        <xsl:attribute name="span">all</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__index__page__link" use-attribute-sets="base-font">
-        <xsl:attribute name="color">blue</xsl:attribute>
-        <!--xsl:attribute name="link-back">true</xsl:attribute-->
+    <xsl:attribute-set name="__index__page__link" use-attribute-sets="common.link">
+        <xsl:attribute name="page-number-treatment">link</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__index__letter-group">
         <xsl:attribute name="font-size">12pt</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
         <xsl:attribute name="space-after">7pt</xsl:attribute>
-        <xsl:attribute name="keep-with-next.within-page">always</xsl:attribute>
+        <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="index.entry">
