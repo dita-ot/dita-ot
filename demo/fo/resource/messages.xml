@@ -50,4 +50,8 @@
     <reason>Attribute set reflection can't handle XSLT element %1.</reason>
     <response/>
   </message>
+  <message id="PDFX010W" type="WARN">
+    <reason>Index generation is not supported in FOP.</reason>
+    <response/>
+  </message>
 </messages>  
