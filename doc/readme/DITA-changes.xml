@@ -121,7 +121,10 @@ going back to the beginning of the toolkit. </shortdesc>
           <ul id="ul_yda_wyj_bd">
             <li><codeph>page-margin-outside</codeph></li>
             <li><codeph>page-margin-inside</codeph></li>
-          </ul></section>
+          </ul>
+          <p>A new shell stylesheet has been added for FOP and other shell stylesheets have also
+            been revised. Plug-ins which have their own shell stylesheets for PDF processing should
+            make sure all required stylesheets are imported.</p></section>
       </refbody>
     </reference>
   </reference>

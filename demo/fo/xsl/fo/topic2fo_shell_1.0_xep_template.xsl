@@ -10,6 +10,7 @@
 
   <xsl:import href="../../cfg/fo/attrs/commons-attr_xep.xsl"/>
   <xsl:import href="../../cfg/fo/attrs/layout-masters-attr_xep.xsl"/>
+  <xsl:import href="index_xep.xsl"/>
 
   <dita:extension id="dita.xsl.xslfo" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
 
