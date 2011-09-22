@@ -768,9 +768,11 @@
    <xs:group name="step.content">
     <xs:sequence>
       <xs:sequence>
+        <xs:group ref="note" minOccurs="0" maxOccurs="unbounded"/>
         <xs:group ref="cmd"/>
         <xs:choice minOccurs="0" maxOccurs="unbounded">
           <xs:group ref="info"/>
+          <xs:group ref="itemgroup"/>
           <xs:group ref="substeps"/>
           <xs:group ref="tutorialinfo"/>
           <xs:group ref="stepxmp"/>
