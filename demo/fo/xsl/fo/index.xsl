@@ -288,31 +288,40 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="opentopic-index:see-childs" mode="index-postprocess">
         <xsl:choose>
             <xsl:when test="parent::*[@no-page = 'true']">
-                <fo:inline>
+                <fo:inline xsl:use-attribute-sets="index.see.label">
                     <xsl:call-template name="insertVariable">
                         <xsl:with-param name="theVariableID" select="'Index See String'"/>
                     </xsl:call-template>
+                </fo:inline>
+                <fo:basic-link>
+                    <xsl:attribute name="internal-destination">
+                        <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-destination"/>
+                    </xsl:attribute>
+                    <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-value"/>
+                </fo:basic-link>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="output-message">
+                  <xsl:with-param name="msgnum">011</xsl:with-param>
+                  <xsl:with-param name="msgsev">E</xsl:with-param>
+                  <xsl:with-param name="msgparams">
+                    <xsl:text>%1=</xsl:text><xsl:value-of select="if (following-sibling::opentopic-index:see-also-childs) then 'index-see-also' else 'indexterm'"/>
+                    <xsl:text>;</xsl:text>
+                    <xsl:text>%2=</xsl:text><xsl:value-of select="../@value"/>
+                  </xsl:with-param>
+                </xsl:call-template>
+                <fo:block xsl:use-attribute-sets="index.entry__content">
+                    <fo:inline xsl:use-attribute-sets="index.see-also.label">
+                        <xsl:call-template name="insertVariable">
+                            <xsl:with-param name="theVariableID" select="'Index See Also String'"/>
+                        </xsl:call-template>
+                    </fo:inline>
                     <fo:basic-link>
                         <xsl:attribute name="internal-destination">
                             <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-destination"/>
                         </xsl:attribute>
                         <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-value"/>
                     </fo:basic-link>
-                </fo:inline>
-            </xsl:when>
-            <xsl:otherwise>
-                <fo:block xsl:use-attribute-sets="index.entry__content">
-                    <fo:inline >
-                        <xsl:call-template name="insertVariable">
-                            <xsl:with-param name="theVariableID" select="'Index See Also String'"/>
-                        </xsl:call-template>
-                        <fo:basic-link>
-                            <xsl:attribute name="internal-destination">
-                                <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-destination"/>
-                            </xsl:attribute>
-                            <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-value"/>
-                        </fo:basic-link>
-                    </fo:inline>
                 </fo:block>
             </xsl:otherwise>
         </xsl:choose>
@@ -328,24 +337,24 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:call-template name="__formatText">
                 <xsl:with-param name="text" select="opentopic-index:formatted-value"/>
             </xsl:call-template>
-            <xsl:copy-of select="$index.separator"/>
+            <xsl:text> </xsl:text>
             <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-value"/>
         </fo:inline>
     </xsl:template>
 
     <xsl:template match="opentopic-index:see-also-childs" mode="index-postprocess">
         <fo:block xsl:use-attribute-sets="index.entry__content">
-            <fo:inline>
+            <fo:inline xsl:use-attribute-sets="index.see-also.label">
                 <xsl:call-template name="insertVariable">
                     <xsl:with-param name="theVariableID" select="'Index See Also String'"/>
                 </xsl:call-template>
-                <fo:basic-link>
-                    <xsl:attribute name="internal-destination">
-                        <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-destination"/>
-                    </xsl:attribute>
-                    <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-value"/>
-                </fo:basic-link>
             </fo:inline>
+            <fo:basic-link>
+                <xsl:attribute name="internal-destination">
+                    <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-destination"/>
+                </xsl:attribute>
+                <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-value"/>
+            </fo:basic-link>
         </fo:block>
     </xsl:template>
 

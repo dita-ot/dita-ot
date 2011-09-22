@@ -71,4 +71,12 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="margin-left">18pt</xsl:attribute>
     </xsl:attribute-set>
 
+  <xsl:attribute-set name="index.see.label">
+    <xsl:attribute name="font-style">italic</xsl:attribute>
+  </xsl:attribute-set>
+  
+  <xsl:attribute-set name="index.see-also.label">
+    <xsl:attribute name="font-style">italic</xsl:attribute>
+  </xsl:attribute-set>
+
 </xsl:stylesheet>
