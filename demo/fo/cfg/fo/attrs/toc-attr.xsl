@@ -38,8 +38,8 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:variable name="toc.text-indent" select="'14pt'"/>
 
     <xsl:attribute-set name="__toc__header" use-attribute-sets="common.title">
-        <xsl:attribute name="margin-top">0pt</xsl:attribute>
-        <xsl:attribute name="margin-bottom">16.8pt</xsl:attribute>
+        <xsl:attribute name="space-before">0pt</xsl:attribute>
+        <xsl:attribute name="space-after">16.8pt</xsl:attribute>
         <xsl:attribute name="font-size">20pt</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
         <xsl:attribute name="padding-top">16.8pt</xsl:attribute>

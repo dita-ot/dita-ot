@@ -376,7 +376,7 @@ public final class ChunkMapReader implements AbstractReader {
 
         if("external".equalsIgnoreCase(scopeValue)
                 || (hrefValue != null && !FileUtils.fileExists(FileUtils.resolveFile(filePath, hrefValue)))
-                || (MAPGROUP_D_TOPICHEAD.matches(classValue))||
+                || (MAPGROUP_D_TOPICHEAD.matches(classValue) && chunkValue == null)||
                 //added by William on 2009-09-17 for chunk bug #2860199 start
                 ////support topicref without href attribute
                 (MAP_TOPICREF.matches(classValue) && chunkValue == null && hrefValue == null)

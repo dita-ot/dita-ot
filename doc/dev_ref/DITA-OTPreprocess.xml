@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Arbortext, Inc., 1988-2011, v.4002-->
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
  "concept.dtd">
 <concept id="preprocessarch" xml:lang="en-us">
@@ -24,12 +23,11 @@ following note on processing order.</p>
 the steps below is significant. Although the DITA specification does
 not mandate a specific order for processing, the toolkit has over
 time found that the current order best meets user expectations. Switching
-the order of processing may give different results. </p><p>For example,
-if conref is evaluated before filtering, it is possible to reuse content
-that will later be filtered out of its original location. However,
-we have found that filtering first provides several benefits. For
-example, the following &lt;note> element uses conref, but also contains
-a product attribute:<codeblock>&lt;note conref="documentA.dita#doc/note" product="MyProd">&lt;/note></codeblock></p><p>If
+the order of processing may give different results. </p><p>For example, if conref is evaluated before filtering, it is possible to reuse content that will
+        later be filtered out of its original location. However, we have found that filtering first
+        provides several benefits. For example, the following &lt;note> element uses conref, but
+        also contains a product
+        attribute:</p><codeblock>&lt;note conref="documentA.dita#doc/note" product="MyProd"/></codeblock><p>If
 the conref attribute is evaluated first, then documentA must be parsed
 in order to retrieve the note content. That content is then stored
 in the current document (or in a representation of that document in
@@ -37,7 +35,7 @@ memory). However, if all content with product="MyProd" is filtered
 out, then that work is all discarded later in the build.</p><p>However,
 if the filtering is done first as in the toolkit, this element is
 discarded immediately, and documentA is never examined. This provides
-several important benefits:<ul>
+several important benefits:</p><ul>
 <li>Time is saved simply by discarding unused content as early as
 possible; all future steps can load the document without this extra
 content.</li>
@@ -49,127 +47,267 @@ content is sent to a translation team, that team can reproduce an
 error-free build without documentA; this means documentA can be kept
 back from translation, preventing accidental translation and increased
 costs.</li>
-</ul></p></section>
-<section><title><apiname>gen-list</apiname>: generate lists for use
-by later steps</title><p>The gen-list step examines the input files
-and creates lists of topics, images, or other content. These lists
-are used by later steps in the pipeline. For example, one list includes
-all topics that make use of the conref attribute; only those files
-are processed during the conref stage of the build. This step is implemented
-in Ant and Java.</p><p>The result of this list is a set of several
-list files in the temporary directory, including dita.list and dita.xml.properties.
-A non-exhaustive selection of each list is given in the table below.</p><table>
-<title>Sample lists included in the dita.list file</title>
-<tgroup cols="2"><colspec colname="col1"/><colspec colname="col2"/>
+</ul></section>
+<section><title>Generate lists</title><p>The <codeph>gen-list</codeph> step examines the input files and creates lists of topics, images,
+        or other content. These lists are used by later steps in the pipeline. For example, one list
+        includes all topics that make use of the conref attribute; only those files are processed
+        during the conref stage of the build. This step is implemented in Ant and Java.</p><p>The result of this list is a set of several list files in the temporary directory, including
+          <filepath>dita.list</filepath> and <filepath>dita.xml.properties</filepath>.</p><table>
+<title>Lists included in the <filepath>dita.list </filepath> and
+            <filepath>dita.xml.properties</filepath> files.</title>
+  <tgroup cols="2"><colspec colname="col1"/><colspec colname="col2"/><colspec colname="col3"/><colspec colname="col4"/>
 <thead>
 <row valign="bottom">
-<entry colname="col1">Property Name</entry>
-<entry colname="col2">Usage</entry>
+<entry colname="col1">List file property</entry>
+  <entry colname="col2">List file</entry>
+  <entry colname="col3">List property</entry>
+<entry colname="col4">Usage</entry>
 </row>
 </thead>
 <tbody>
-<row>
-<entry colname="col1">conreflist</entry>
-<entry colname="col2">Documents that contains conref attribute that
-need to be resolved in preprocess.</entry>
-</row>
-<row>
-<entry colname="col1">fullditamapandtopiclist</entry>
-<entry colname="col2">All of the ditamap and topic files that are
-                 referenced during the transformation. These may be
-referenced by href or conref attributes.</entry>
-</row>
-<row>
-<entry colname="col1">fullditamaplist</entry>
-<entry colname="col2">All of the ditamap files in dita.list</entry>
-</row>
-<row>
-<entry colname="col1">hrefditatopiclist</entry>
-<entry colname="col2">All of the topic files that are referenced with
-an href attribute</entry>
-</row>
-<row>
-<entry colname="col1">fullditatopiclist</entry>
-<entry colname="col2">All of the topic files in dita.list</entry>
-</row>
-<row>
-<entry colname="col1">imagelist</entry>
-<entry colname="col2">Images files that are referenced in the content</entry>
-</row>
+  <row>
+    <entry>canditopicsfile</entry>
+    <entry><codeph>canditopics.list</codeph></entry>
+    <entry>canditopicslist</entry>
+    <entry></entry>
+  </row>
+  <row>
+    <entry>chunkedditamapfile</entry>
+    <entry><codeph>chunkedditamap.list</codeph></entry>
+    <entry>chunkedditamaplist</entry>
+    <entry></entry>
+  </row>
+  <row>
+    <entry>chunkedtopicfile</entry>
+    <entry><codeph>chunkedtopic.list</codeph></entry>
+    <entry>chunkedtopiclist</entry>
+    <entry></entry>
+  </row>
+  <row>
+    <entry>codereffile</entry>
+    <entry><codeph>coderef.list</codeph></entry>
+    <entry>codereflist</entry>
+    <entry>topics with coderef</entry>
+  </row>
+  <row>
+    <entry>conreffile</entry>
+    <entry><codeph>conref.list</codeph></entry>
+    <entry>conreflist</entry>
+    <entry>Documents that contains conref attribute that need to be resolved in preprocess.</entry>
+  </row>
+  <row>
+    <entry>conrefpushfile</entry>
+    <entry><codeph>conrefpush.list</codeph></entry>
+    <entry>conrefpushlist</entry>
+    <entry></entry>
+  </row>
+  <row>
+    <entry>conreftargetsfile</entry>
+    <entry><codeph>conreftargets.list</codeph></entry>
+    <entry>conreftargetslist</entry>
+    <entry></entry>
+  </row>
+  <row>
+    <entry>copytosourcefile</entry>
+    <entry><codeph>copytosource.list</codeph></entry>
+    <entry>copytosourcelist</entry>
+    <entry></entry>
+  </row>
+  <row>
+    <entry>copytotarget2sourcemapfile</entry>
+    <entry><codeph>copytotarget2sourcemap.list</codeph></entry>
+    <entry>copytotarget2sourcemaplist</entry>
+    <entry></entry>
+  </row>
+  <row>
+    <entry>flagimagefile</entry>
+    <entry><codeph>flagimage.list</codeph></entry>
+    <entry>flagimagelist</entry>
+    <entry></entry>
+  </row>
+  <row>
+    <entry>fullditamapandtopicfile</entry>
+    <entry><codeph>fullditamapandtopic.list</codeph></entry>
+    <entry>fullditamapandtopiclist</entry>
+    <entry>All of the ditamap and topic files that are referenced during the transformation. These
+                may be referenced by href or conref attributes.</entry>
+  </row>
+  <row>
+    <entry>fullditamapfile</entry>
+    <entry><codeph>fullditamap.list</codeph></entry>
+    <entry>fullditamaplist</entry>
+    <entry>All of the ditamap files in dita.list</entry>
+  </row>
+  <row>
+    <entry>fullditatopicfile</entry>
+    <entry><codeph>fullditatopic.list</codeph></entry>
+    <entry>fullditatopiclist</entry>
+    <entry>All of the topic files in dita.list</entry>
+  </row>
+  <row>
+    <entry>hrefditatopicfile</entry>
+    <entry><codeph>hrefditatopic.list</codeph></entry>
+    <entry>hrefditatopiclist</entry>
+    <entry>All of the topic files that are referenced with an href attribute</entry>
+  </row>
+  <row>
+    <entry>hreftargetsfile</entry>
+    <entry><codeph>hreftargets.list</codeph></entry>
+    <entry>hreftargetslist</entry>
+    <entry>link targets</entry>
+  </row>
+  <row>
+    <entry>htmlfile</entry>
+    <entry><codeph>html.list</codeph></entry>
+    <entry>htmllist</entry>
+    <entry>resource files</entry>
+  </row>
+  <row>
+    <entry>imagefile</entry>
+    <entry><codeph>image.list</codeph></entry>
+    <entry>imagelist</entry>
+    <entry>Images files that are referenced in the content</entry>
+  </row>
+  <row>
+    <entry>keyfile</entry>
+    <entry><codeph>key.list</codeph></entry>
+    <entry>keylist</entry>
+    <entry></entry>
+  </row>
+  <row>
+    <entry>keyreffile</entry>
+    <entry><codeph>keyref.list</codeph></entry>
+    <entry>keyreflist</entry>
+    <entry></entry>
+  </row>
+  <row>
+    <entry>outditafilesfile</entry>
+    <entry><codeph>outditafiles.list</codeph></entry>
+    <entry>outditafileslist</entry>
+    <entry></entry>
+  </row>
+  <row>
+    <entry>relflagimagefile</entry>
+    <entry><codeph>relflagimage.list</codeph></entry>
+    <entry>relflagimagelist</entry>
+    <entry></entry>
+  </row>
+  <row>
+    <entry>resourceonlyfile</entry>
+    <entry><codeph>resourceonly.list</codeph></entry>
+    <entry>resourceonlylist</entry>
+    <entry></entry>
+  </row>
+  <row>
+    <entry>skipchunkfile</entry>
+    <entry><codeph>skipchunk.list</codeph></entry>
+    <entry>skipchunklist</entry>
+    <entry></entry>
+  </row>
+  <row>
+    <entry>subjectschemefile</entry>
+    <entry><codeph>subjectscheme.list</codeph></entry>
+    <entry>subjectschemelist</entry>
+    <entry></entry>
+  </row>
+  <row>
+    <entry>subtargetsfile</entry>
+    <entry><codeph>subtargets.list</codeph></entry>
+    <entry>subtargetslist</entry>
+    <entry></entry>
+  </row>
+  <row>
+    <entry>tempdirToinputmapdir.relative.value</entry>
+    <entry></entry>
+    <entry></entry>
+    <entry></entry>
+  </row>
+  <row>
+    <entry>uplevels</entry>
+    <entry></entry>
+    <entry></entry>
+    <entry></entry>
+  </row>
+  <row>
+    <entry>user.input.dir</entry>
+    <entry></entry>
+    <entry></entry>
+    <entry>source directory</entry>
+  </row>
+  <row>
+    <entry>user.input.file.listfile</entry>
+    <entry></entry>
+    <entry></entry>
+    <entry>Input file list file</entry>
+  </row>
+  <row>
+    <entry>user.input.file</entry>
+    <entry></entry>
+    <entry></entry>
+    <entry>Input file</entry>
+  </row>
 </tbody>
 </tgroup>
 </table>       </section>
-<section>     <title>Debug and filter</title><p>This stage processes
-all referenced DITA content, and creates copies in a temporary directory
-for use during the remainder of the build. This step is implemented
-in Java.</p><p>As the files are copied, the following modifications
-are made:<ul>
+<section>     <title>Debug and filter</title><p>The <codeph>debug-filter</codeph> stage processes all referenced DITA content, and creates copies
+        in a temporary directory for use during the remainder of the build. This step is implemented
+        in Java.</p><p>As the files are copied, the following modifications
+are made:</p><ul>
 <li>The files are filtered according to entries in any specified DITAVAL
 file.</li>
-<li>Debug information is inserted into each element (using the xtrf
-and xtrc element). These values allow messages later in the build
-to reliably indicate the original source of the error - for example,
-the fifth &lt;ph> element in a specific file.</li>
+<li>Debug information is inserted into each element (using the <codeph>xtrf</codeph> and
+              <codeph>xtrc</codeph> element). These values allow messages later in the build to
+            reliably indicate the original source of the error—for example, the fifth
+              <codeph>&lt;ph></codeph> element in a specific file.</li>
 <li>Adjust column names in tables to use a common naming scheme. This
 is done only to simplify later conref processing; for example, if
 a table row is pulled into another table, this ensures that a reference
 to "column 5" will continue to work in the fifth column of the new
 table.</li>
-</ul></p></section>
-<section><title>Copy related files</title><p>This step copies related
-non-DITA resources to the output directory, including referenced HTML
-files and images referenced by DITAVAL files.</p></section>
-<section><title>Conref push</title><p>This step resolves "conref push"
-references. Conref push is a new feature in the DITA 1.2 specification.
-This step only processes documents that use conref push (or that are
-updated due to the push action. The step is implemented in Java.</p></section>
-<section>     <title>Resolve conref</title><p>This step resolves traditional
-conref attributes. It is implemented in XSLT. The step only runs on
-documents that use the conref attribute. It is implemented in XSLT.</p></section>
-<section>     <title>move metadata entries</title><p>This step pushes
-metadata back and forth between maps and topics. For example, index
-entries and copyrights in the map are pushed into affected topics,
-so that topics may be processed later in isolation while retaining
-all relevant metadata. This step is implemented in Java.</p></section>
-<section><title>Keyref</title><p>Keyref is perhaps the most significant
-new feature in the DITA 1.2 standard. This step examines all keys
-defined in the source material, and updates content appropriately.
-Links that make use of keys are updated so that any href value is
-replaced by the appropriate target; key based text replacement is
-also evaluated. This step is implemented in Java.</p></section>
-<section><title>Coderef</title><p>The codref element was added in
-DITA 1.2, and allows references to non-DITA code for use in a codeblock
-element. This step reads the referenced document, and adds the content
-to the referencing DITA topic. This step is implemented in Java.</p></section>
-<section><title>Mapref</title><p>The mapref step resolves references
-to other maps, such as <codeblock>&lt;topicref href="other.ditamap" format="ditamap">&lt;/topicref></codeblock></p><p>This
+</ul></section>
+<section><title>Copy related files</title><p>The <codeph>copy-files</codeph> step copies related non-DITA resources to the output directory,
+        including e.g referenced HTML files and images referenced by DITAVAL files.</p></section>
+<section><title>Conref push</title><p>The <codeph>conrefpush</codeph> step resolves "conref push" references. Conref push is a new
+        feature in the DITA 1.2 specification. This step only processes documents that use conref
+        push (or that are updated due to the push action. The step is implemented in Java.</p></section>
+<section>     <title>Resolve conref</title><p>The <codeph>conref</codeph> step resolves traditional conref attributes, processing only the
+        documents that use the conref attribute. It is implemented in XSLT.</p></section>
+<section>     <title>Move metadata entries</title><p>The <codeph>move-meta-entries</codeph> step pushes metadata back and forth between maps and
+        topics. For example, index entries and copyrights in the map are pushed into affected
+        topics, so that topics may be processed later in isolation while retaining all relevant
+        metadata. This step is implemented in Java.</p></section>
+<section><title>Keyref</title><p>Keyref is perhaps the most significant new feature in the DITA 1.2 standard. The
+          <codeph>keyref</codeph> step examines all keys defined in the source material, and updates
+        content appropriately. Links that make use of keys are updated so that any href value is
+        replaced by the appropriate target; key based text replacement is also evaluated. This step
+        is implemented in Java.</p></section>
+<section><title>Coderef</title><p>The codref element was added in DITA 1.2, and allows references to non-DITA code for use in a
+        codeblock element. The <codeph>coderef</codeph> step reads the referenced code block
+        document, and adds the content to the referencing DITA topic. This step is implemented in
+        Java.</p></section>
+<section><title>Mapref</title><p>The <codeph>mapref</codeph> step resolves references to other maps, such as</p>
+        <codeblock>&lt;topicref href="other.ditamap" format="ditamap"/></codeblock><p>This
 step is implemented in XSLT.</p></section>
-<section>     <title>Mappull</title><p>The mappull step pulls content
-from referenced topics into maps. For example, by default, the navigation
-title on a topicref is replaced by a title from the referenced topic.
-Short descriptions and link text are also established during this
-stage. Finally, cascading attributes are made explicit; for example,
-if a topicref does not set the toc attribute while the parent attribute
-sets toc="no", that toc="no" value is explicitly set for the child.
-This step is implemented in XSLT.</p></section>
-<section><title>Chunk</title><p>The chunk step breaks apart and assembles
-referenced DITA content based on the chunk attribute in maps. For
-example, the chunk attribute may be used to assemble all referenced
-topics into a single document; alternatively, it may do the opposite
-and break one document with multiple topics into several individual
-documents. This step is implemented in Java.</p></section>
-<section><title>Maplink and move-links</title><p>These steps work
-together to add links to topics based on the location of those topics
-in a map. This is where family links (such as parent, child, next,
-and previous) are created, as well as links based on relationship
-tables. The maplink step (implemented in XSLT) generates all of the
-links, and places them in one large file in the temporary directory.
-Next, the move-links step (implemented in Java) pushes all of the
-generated links into the proper topics.</p></section>
-<section>     <title>topicpull:</title><p>The topicpull step is similar
-to the mappull step, except that it runs on topics. This is used to
-pull in titles for &lt;xref> and &lt;link> elements that do not already
-specify link text. The step is implemented in XSLT.</p>   </section>
+<section>     <title>Map pull</title><p>The <codeph>mappull</codeph> step pulls content from referenced topics into maps. For example, by
+        default, the navigation title on a topicref is replaced by a title from the referenced
+        topic. Short descriptions and link text are also established during this stage. Finally,
+        cascading attributes are made explicit; for example, if a topicref does not set the toc
+        attribute while the parent attribute sets toc="no", that toc="no" value is explicitly set
+        for the child. This step is implemented in XSLT.</p></section>
+<section><title>Chunk</title><p>The <codeph>chunk</codeph> step breaks apart and assembles referenced DITA content based on the
+        chunk attribute in maps. For example, the chunk attribute may be used to assemble all
+        referenced topics into a single document; alternatively, it may do the opposite and break
+        one document with multiple topics into several individual documents. This step is
+        implemented in Java.</p></section>
+<section><title>Maplink and move-links</title><p>These steps work together to add links to topics based on the location of those topics in a map.
+        This is where family links (such as parent, child, next, and previous) are created, as well
+        as links based on relationship tables. The <codeph>maplink</codeph> step (implemented in
+        XSLT) generates all of the links, and places them in one large file in the temporary
+        directory. Next, the <codeph>move-links</codeph> step (implemented in Java) pushes all of
+        the generated links into the proper topics.</p></section>
+<section>     <title>Topic pull</title><p>The <codeph>topicpull</codeph> step is similar to the mappull step, except that it runs on
+        topics. This is used to pull in titles for <codeph>&lt;xref></codeph> and
+          <codeph>&lt;link></codeph> elements that do not already specify link text. The step is
+        implemented in XSLT.</p>   </section>
 </conbody>
 </concept>
-<?Pub *0000009716?>

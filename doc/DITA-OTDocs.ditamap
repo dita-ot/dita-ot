@@ -10,15 +10,8 @@
     <mapref href="quickstartguide.ditamap"/>
   </topichead>
   <mapref href="readme.ditamap"/>
-  <topichead navtitle="Development Documents">
-    <!-- To be cleaned up:
-    DITA-OTArchitecture.xml referenced DITA-OTGenListModule.xml, which is out of date and
-    no longer referenced. The topic should be cleaned up or removed. It is also commented 
-    out of the TOC below. -->
-    <topicref href="dev_ref/DITA-OTArchitecture.xml" navtitle="Complete Process Architecture"/>
-    <topicref href="dev_ref/DITA-OTPreprocess.xml" navtitle="Preprocess Architecture"/>
-    <!-- <topicref href="dev_ref/DITA-OTGenListModule.xml" navtitle="Java Module Architecture"/> -->
-    <topicref href="dev_ref/extension-points.dita"/>
+  <topichead navtitle="Developer Reference">
+    <mapref href="dev_ref/dev_ref.ditamap"/>
   </topichead>
   <topichead navtitle="Project Management">
     <topicref href="admin/DevelopmentProcess.xml" locktitle="yes" navtitle="Development Process"/>

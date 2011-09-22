@@ -2,7 +2,10 @@
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
  "reference.dtd">
 <reference id="dita-ot-ant-properties" xml:lang="en-us">
-<title>Ant Properties for DITA-OT</title>
+<title>Argument properties for DITA-OT</title>
+  <titlealts>
+    <navtitle>Argument properties</navtitle>
+  </titlealts>
 <shortdesc>Reference list of DITA-specific Ant properties.   </shortdesc>
 <refbody>
 <section> 	<p>DITA-OT processes your documentation project as an Ant
@@ -52,8 +55,8 @@ project.  Allowed values are "yes" and "no". Default value is "no".</entry>
 <entry><codeph>args.draft</codeph></entry>
 <entry><codeph>/draft</codeph></entry>
 <entry>Indicates whether draft-comment and required-cleanup elements
-are included in the generated file. Corresponds to XSLT parameter
-DRAFT in most XSLT modules. Allowed values are "yes" and "no". Default
+are included in the generated file. <ph audience="xslt-customizer">Corresponds to XSLT parameter
+DRAFT in most XSLT modules.</ph> Allowed values are "yes" and "no". Default
 value is "no". If <codeph>${publish.required.cleanup}</codeph> is
 not set, <codeph>${args.draft}</codeph> will be used. <note type="tip"
 >The <codeph>${publish.required.cleanup}</codeph> property is a legacy
@@ -68,8 +71,8 @@ the title.</note>               </entry>
 <entry colname="COLSPEC2">NA</entry>
 <entry colname="COLSPEC3">Specifies how cross references to figures
 are styled. Allowed values are "NUMBER" and "TITLE". NUMBER results
-in "Figure 5", TITLE results in the title of the figure. Corresponds
-to the XSLT parameter FIGURELINK.<note>This parameter is available
+in "Figure 5", TITLE results in the title of the figure. <ph audience="xslt-customizer">Corresponds
+to the XSLT parameter FIGURELINK.</ph><note>This parameter is available
 for all except the PDF transform.</note></entry>
 </row>
 <row>
@@ -100,7 +103,7 @@ project.</entry>
 <row>
 <entry><codeph>args.outext</codeph></entry>
 <entry><codeph>/outext</codeph></entry>
-<entry>Specifies the file extension for HTML files in your project's output. Corresponds to XHTML parameter OUTEXT. Default values is ".html".</entry>
+<entry>Specifies the file extension for HTML files in your project's output. <ph audience="xslt-customizer">Corresponds to XHTML parameter OUTEXT.</ph> Default values is ".html".</entry>
 </row>
 <row>
 <entry colname="COLSPEC0"><codeph>args.tablelink.style</codeph></entry>
@@ -108,7 +111,7 @@ project.</entry>
 <entry colname="COLSPEC3">Specifies how cross references to tables
 are styled. Allowed values are "NUMBER" or "TITLE". The default is
 "NUMBER", which produces results such as "Table 5". TITLE results
-in the title of the table. Corresponds to the XSLT parameter TABLELINK.<note
+in the title of the table. <ph audience="xslt-customizer">Corresponds to the XSLT parameter TABLELINK.</ph><note
 >This parameter is available for all except the PDF transform.</note
 ></entry>
 </row>
@@ -124,8 +127,8 @@ but you can also define it as a project property.</entry><?Pub Caret 143?>
 <entry><codeph>dita.ext</codeph></entry>
 <entry>NA</entry>
 <entry>Specifies an extension to use for DITA topics; All DITA topics
-will use this single extension in the temp directory.  Corresponds
-to XSLT parameter DITAEXT. Default value is ".xml"</entry>
+will use this single extension in the temp directory. <ph audience="xslt-customizer">Corresponds
+to XSLT parameter DITAEXT.</ph> Default value is ".xml"</entry>
 </row>
 <row>
 <entry colname="COLSPEC0"><codeph>dita.input.valfile</codeph></entry>
@@ -200,7 +203,7 @@ image's filename. Allowed values are "yes" and "no". Default is "no".</entry>
 <entry colname="COLSPEC0"><codeph>args.breadcrumbs</codeph></entry>
 <entry colname="COLSPEC2">NA</entry>
 <entry colname="COLSPEC3">Specifies whether to generate breadcrumb
-links. Corresponds to the XSLT parameter  BREADCRUMBS. Allowed values
+links. <ph audience="xslt-customizer">Corresponds to the XSLT parameter  BREADCRUMBS.</ph> Allowed values
 are "yes" and "no". Default is "no".</entry>
 </row>
 <row>
@@ -218,7 +221,7 @@ own .css file to the output directory.</entry>
 <entry colname="COLSPEC0"><codeph>args.csspath</codeph></entry>
 <entry colname="COLSPEC2"><codeph>/csspath</codeph></entry>
 <entry colname="COLSPEC3">The location of your copied .css file relative
-to the output directory. Corresponds to XSLT parameter CSSPATH.</entry>
+to the output directory. <ph audience="xslt-customizer">Corresponds to XSLT parameter CSSPATH.</ph></entry>
 </row>
 <row>
 <entry colname="COLSPEC0"><codeph>args.cssroot</codeph></entry>
@@ -230,8 +233,7 @@ to the output directory. Corresponds to XSLT parameter CSSPATH.</entry>
 <entry colname="COLSPEC0"><codeph>args.ftr</codeph></entry>
 <entry colname="COLSPEC2"><codeph>/ftr</codeph></entry>
 <entry colname="COLSPEC3">Specifies the location of a well-formed
-XML file containing your custom running-footer for the document body.
-Corresponds to XSLT parameter FTR.<note>The fragment must be valid
+XML file containing your custom running-footer for the document body. <ph audience="xslt-customizer">Corresponds to XSLT parameter FTR.</ph><note>The fragment must be valid
 XML, with a single root element, common practice is to place all content
 into &lt;div>.</note></entry>
 </row>
@@ -241,16 +243,15 @@ into &lt;div>.</note></entry>
 <entry colname="COLSPEC3">Specifies whether to generate extra metadata
 that targets parental control scanners, meta elements with name="security"
 and name="Robots". Allowed values are "yes" and "no". Default value
-is "no". Corresponds to the XSLT parameter genDefMeta.</entry>
+is "no". <ph audience="xslt-customizer">Corresponds to the XSLT parameter genDefMeta.</ph></entry>
 </row>
-<row>
+  <row id="args.gen.task.lbl">
 <entry colname="COLSPEC0"><codeph>args.gen.task.lbl</codeph></entry>
 <entry colname="COLSPEC2"><codeph>/usetasklabels</codeph></entry>
 <entry colname="COLSPEC3">Specifies whether to generate locale-based
 default headings for sections within task topics. Allowed values are
-"YES" and "NO". Default is "NO". Corresponds to the XSLT parameter
-GENERATE-TASK-LABELS. <i>This parameter is also available for the
-PDF transform.</i></entry>
+"YES" and "NO". Default is "NO". <ph audience="xslt-customizer">Corresponds to the XSLT parameter
+GENERATE-TASK-LABELS.</ph></entry>
 </row>
 <row>
 <entry colname="COLSPEC0"><codeph>args.hdf</codeph></entry>
@@ -262,8 +263,7 @@ XML file to be placed in the document head.</entry>
 <entry colname="COLSPEC0"><codeph>args.hdr</codeph></entry>
 <entry colname="COLSPEC2"><codeph>/hdr</codeph></entry>
 <entry colname="COLSPEC3">Specifies the location of a well-formed
-XML file containing your custom running-header for the document body.
-Corresponds to XSLT parameter HDR.<note>The fragment must be valid
+XML file containing your custom running-header for the document body. <ph audience="xslt-customizer">Corresponds to XSLT parameter HDR.</ph><note>The fragment must be valid
 XML, with a single root element, common practice is to place all content
 into &lt;div>.</note></entry>
 </row>
@@ -271,7 +271,7 @@ into &lt;div>.</note></entry>
 <entry colname="COLSPEC0"><codeph>args.hide.parent.link</codeph></entry>
 <entry colname="COLSPEC2">NA</entry>
 <entry colname="COLSPEC3">Specifies whether to hide links to parent
-topics in the rendered XHTML. Corresponds to the XSLT parameter NOPARENTLINK.
+topics in the rendered XHTML. <ph audience="xslt-customizer">Corresponds to the XSLT parameter NOPARENTLINK.</ph>
 Allowed values are "yes" and "no".  Default is "no".</entry>
 </row>
 <row>
@@ -285,7 +285,7 @@ Allowed values are "yes" and "no".  Default is "no".</entry>
 <entry><codeph>args.xhtml.toc.class</codeph></entry>
 <entry>NA</entry>
 <entry>String for a CSS class name attribute applied to the TOC (x)HTML
-output's &lt;body> element.  Found in map2htmltoc.xsl.</entry>
+output's &lt;body> element. Found in map2htmltoc.xsl.</entry>
 </row>
 <row>
 <entry colname="COLSPEC0"><codeph>args.xhtml.classattr</codeph></entry>
@@ -295,7 +295,7 @@ ancestry inside generated XHTML elements. Allowed values are "no"
 and "yes"; the default is "yes" in release 1.5.2 (it was "no" in 1.5
 and 1.5.1). For example, the prereq element in a task (which is specialized
 from section) would generate "<codeph>class="section prereq</codeph
->". Corresponds to the XSLT parameter PRESERVE-DITA-CLASS.</entry>
+>". <ph audience="xslt-customizer">Corresponds to the XSLT parameter PRESERVE-DITA-CLASS.</ph></entry>
 </row>
 <row>
 <entry colname="COLSPEC0"><codeph>args.xsl</codeph></entry>
@@ -363,33 +363,42 @@ PDF file. Values are:<ul>
 Parent, child, next, and previous links are not included.</li>
 </ul></entry>
 </row>
-<row>
+<row importance="deprecated">
 <entry colname="COLSPEC0"><codeph>args.fo.output.rel.links</codeph
 ></entry>
 <entry colname="COLSPEC2"><codeph>/fooutputrellinks</codeph></entry>
-<entry colname="COLSPEC3"><note>This parameter is deprecated in favor
-of <codeph>${args.fo.include.rellinks}</codeph>.</note>Specifies whether
+<entry colname="COLSPEC3">Specifies whether
 to show links in your project's output. Values are "yes" (include
 all links) and "no" (the default, include no links). If <codeph>${args.fo.include.rellinks}</codeph
-> is specified, this parameter is ignored.</entry>
+  > is specified, this parameter is ignored.<note>This parameter is deprecated in favor
+    of <codeph>${args.fo.include.rellinks}</codeph>.</note></entry>
 </row>
-<row>
+  <row conref="#args.gen.task.lbl">
 <entry colname="COLSPEC0"><codeph>args.gen.task.lbl</codeph></entry>
-<entry colname="COLSPEC2"><codeph>/usetasklabels</codeph></entry>
-<entry colname="COLSPEC3">Specifies whether to generate locale-based
+<entry colname="COLSPEC2"><!--codeph>/usetasklabels</codeph--></entry>
+<entry colname="COLSPEC3"><!--Specifies whether to generate locale-based
 default headings for sections within task topics. Allowed values are
 "yes" and "no". Default is "no". Corresponds to the XSLT parameter
-GENERATE-TASK-LABELS. <i>This parameter is also available for the
-XHTML based transforms.</i></entry>
+GENERATE-TASK-LABELS.<--></entry>
 </row>
 <row>
 <entry><codeph>args.xsl.pdf</codeph></entry>
 <entry><codeph>/xslpdf</codeph></entry>
-<entry>Specifies an XSL file that is used in place of the default
-XSL transform at <codeph>toolkitdir\demo\fo\xsl\fo\topic2fo_shell.xsl</codeph
->. You must specify the full path and XSL file name.</entry>
+<entry>Specifies an XSL file that is used in place of the default XSL transform at
+                  <codeph>demo\fo\xsl\fo\topic2fo_shell.xsl</codeph>. You must specify the full path
+                and XSL file name.</entry>
 </row>
-<row>
+            <row>
+              <entry><codeph>args.fo.userconfig</codeph></entry>
+              <entry><codeph>/fouserconfig</codeph></entry>
+              <entry>The parameter to specify the user configuration file for FOP.</entry>
+            </row>
+            <row>
+              <entry><codeph>custom.xep.config</codeph></entry>
+              <entry>NA</entry>
+              <entry>The parameter to specify the user configuration file for RenderX.</entry>
+            </row>
+<row audience="xslt-customizer">
 <entry><codeph>retain.topic.fo</codeph></entry>
 <entry><codeph>/retaintopicfo</codeph></entry>
 <entry>Specifies whether to leave the generated FO file for a PDF
@@ -633,7 +642,7 @@ Allowed values are "yes" and "no". Default value is "yes".</entry>
 as <codeph>toolkit_dir</codeph> in the sample ant scripts. Verify
 that your project's build script points to the correct location.</entry>
 </row>
-<row>
+<row importance="deprecated">
 <entry><codeph>dita.extname</codeph></entry>
 <entry><codeph>/ditaext</codeph></entry>
 <entry>Deprecated. Defines the file extension for content files in
@@ -660,6 +669,6 @@ process.</entry>
 </table></section>
 </refbody>
 <related-links>
-<link href="../concepts/about_pdftransformation.dita"></link>
+<!--link href="../concepts/about_pdftransformation.dita"></link-->
 </related-links>
 </reference>

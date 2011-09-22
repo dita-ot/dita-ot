@@ -42,7 +42,7 @@ See the accompanying license.txt file for applicable licenses.
     exclude-result-prefixes="opentopic-index exsl comparer opentopic-func exslf">
 
     <xsl:template name="createIndex">
-        <xsl:if test="(//opentopic-index:index.groups//opentopic-index:index.entry) and (count($index-entries//opentopic-index:index.entry) &gt; 0) and ($pdfFormatter = 'xep')">
+        <xsl:if test="(//opentopic-index:index.groups//opentopic-index:index.entry) and (count($index-entries//opentopic-index:index.entry) &gt; 0)">
             <xsl:variable name="index">
                 <xsl:choose>
                     <xsl:when test="($ditaVersion &gt;= 1.1) and $map//*[contains(@class,' bookmap/indexlist ')][@href]"/>

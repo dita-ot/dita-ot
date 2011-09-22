@@ -58,6 +58,17 @@ going back to the beginning of the toolkit. </shortdesc>
             </strow>
           </simpletable><p>Both HTML and resource file extensions are used to determine if a
           file in source is copied to output.</p>
+        <p>New plug-in extension point has been added to allow declaring transtypes as print types.</p>
+        <simpletable>
+          <sthead>
+            <stentry>Extension point</stentry>
+            <stentry>Description</stentry>
+          </sthead>
+          <strow>
+            <stentry><codeph>dita.transtype.print</codeph></stentry>
+            <stentry>Declare transtype as a print type.</stentry>
+          </strow>
+        </simpletable>
       </section>
         <section>
           <title>Strict integration mode</title>
@@ -79,12 +90,27 @@ going back to the beginning of the toolkit. </shortdesc>
           <title>PDF</title>
           <p>Support for mirrored page layout has been added. The default is the unmirrored
             layout.</p>
+          <p>A new extension point has been added to add mappings to the PDF configuration catalog
+            file.</p>
+          <simpletable>
+            <sthead>
+              <stentry>Extension point</stentry>
+              <stentry>Description</stentry>
+            </sthead>
+            <strow>
+              <stentry><codeph>org.dita.pdf2.catalog.relative</codeph></stentry>
+              <stentry>Configuration catalog includes.</stentry>
+            </strow>
+          </simpletable>
         </section>
       </refbody>
     </reference>
     <reference id="reference_yvj_ttj_bd">
       <title>Migration from previous releases</title>
       <refbody>
+        <section>
+          <p>The <codeph>print_transtypes</codeph> property in <filepath>integrator.properties</filepath> has been deprecated in favor of <codeph>dita.transtype.print</codeph> plug-in extension point.</p>
+        </section>
         <section><title>PDF</title><p>Support for mirrored page layout was added and the following
             XSLT configuration variables have been
             deprecated:</p><ul id="ul_hkv_oyj_bd">
@@ -95,7 +121,10 @@ going back to the beginning of the toolkit. </shortdesc>
           <ul id="ul_yda_wyj_bd">
             <li><codeph>page-margin-outside</codeph></li>
             <li><codeph>page-margin-inside</codeph></li>
-          </ul></section>
+          </ul>
+          <p>A new shell stylesheet has been added for FOP and other shell stylesheets have also
+            been revised. Plug-ins which have their own shell stylesheets for PDF processing should
+            make sure all required stylesheets are imported.</p></section>
       </refbody>
     </reference>
   </reference>

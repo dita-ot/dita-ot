@@ -34,58 +34,58 @@ with those set forth herein.
 
 This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
-*/class ConfigEntryImpl
-		implements ConfigEntry {
-	private String label;
-	private String key;
-	private String[] members;
-	private CharRange[] ranges = new CharRange[0];
-	
+ */class ConfigEntryImpl
+ implements ConfigEntry {
+     private final String label;
+     private final String key;
+     private final String[] members;
+     private CharRange[] ranges = new CharRange[0];
 
 
-	public ConfigEntryImpl(String theLabel, String theKey, String[] theMembers) {
-		this.label = theLabel;
-		this.key = theKey;
-		this.members = theMembers;
-	}
 
-	public void addRange(CharRange range) {
-		ArrayList rangeList = new ArrayList();
-		for (int i = 0; i<ranges.length;i++) {
-			rangeList.add(ranges[i]);
-		}
-		rangeList.add(range);
-		ranges = (CharRange[]) rangeList.toArray(new CharRange[rangeList.size()]);
-	}
+     public ConfigEntryImpl(final String theLabel, final String theKey, final String[] theMembers) {
+         this.label = theLabel;
+         this.key = theKey;
+         this.members = theMembers;
+     }
 
-
-	public String getLabel() {
-		return this.label;
-	}
+     public void addRange(final CharRange range) {
+         final ArrayList<CharRange> rangeList = new ArrayList<CharRange>();
+         for (final CharRange range2 : ranges) {
+             rangeList.add(range2);
+         }
+         rangeList.add(range);
+         ranges = (CharRange[]) rangeList.toArray(new CharRange[rangeList.size()]);
+     }
 
 
-	public String getKey() {
-		return this.key;
-	}
+     public String getLabel() {
+         return this.label;
+     }
 
-	public String[] getGroupMembers() {
-		return this.members;
-	}
 
-	public boolean isInRange(String value, IndexCollator collator) {
-		if (value.length() > 0) {
-			for (int i = 0; i < members.length; i++) {
-				if (value.startsWith(members[i]) || members[i].startsWith(value)) {
-					return true;
-				}
-			}
-			for (int i = 0; i < ranges.length; i++) {
-				if (ranges[i].isInRange(value, collator)) {
-					return true;
-				}
-			}
-		}
-		return false;  //To change body of implemented methods use File | Settings | File Templates.
-	}
+     public String getKey() {
+         return this.key;
+     }
 
-}
+     public String[] getGroupMembers() {
+         return this.members;
+     }
+
+     public boolean isInRange(final String value, final IndexCollator collator) {
+         if (value.length() > 0) {
+             for (final String member : members) {
+                 if (value.startsWith(member) || member.startsWith(value)) {
+                     return true;
+                 }
+             }
+             for (final CharRange range : ranges) {
+                 if (range.isInRange(value, collator)) {
+                     return true;
+                 }
+             }
+         }
+         return false;  //To change body of implemented methods use File | Settings | File Templates.
+     }
+
+ }

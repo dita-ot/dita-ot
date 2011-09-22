@@ -22,7 +22,7 @@
 
   <!-- clean-temp
       Remove anything in the ${dita.temp.dir} directory before starting. -->
-  <target name="clean-temp" unless="clean_temp"
+  <target name="clean-temp" unless="clean-temp.skip"
     dita:depends="{depend.preprocess.clean-temp.pre}"
     xmlns:dita="http://dita-ot.sourceforge.net"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
@@ -301,7 +301,7 @@
     	extension=".ditamap.ref"
         classpathref="dost.class.path"
         reloadstylesheet="${dita.preprocess.reloadstylesheet.mapref}"
-      style="${dita.script.dir}${file.separator}preprocess${file.separator}mapref.xsl">
+      style="${dita.script.dir}${file.separator}preprocess${file.separator}mapref.xsl" filenameparameter="file-being-processed">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="TRANSTYPE" expression="${transtype}" />
       <!--Added by William on 2010-04-14 for bug:2982485 start -->
@@ -502,15 +502,36 @@
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.copy-files.skip" />
 
+	
+  <target name="copy-image-uplevels"
+		if="image.copy.uplevels"
+	    dita:depends="{depend.preprocess.copy-image.pre},copy-image-check"
+	    xmlns:dita="http://dita-ot.sourceforge.net"
+	    dita:extension="depends org.dita.dost.platform.InsertDependsAction"
+	    unless="preprocess.copy-image.skip"
+	    description="Copy image files">
+	    <copy todir="${output.dir}${file.separator}${uplevels}">
+	      <fileset dir="${user.input.dir}" includesfile="${dita.temp.dir}${file.separator}${imagefile}" />
+	    </copy>
+  </target>
+	
+  <target name="copy-image-noraml"
+	 	if="image.copy.normal"
+		dita:depends="{depend.preprocess.copy-image.pre},copy-image-check"
+		xmlns:dita="http://dita-ot.sourceforge.net"
+		dita:extension="depends org.dita.dost.platform.InsertDependsAction"
+		unless="preprocess.copy-image.skip"
+		description="Copy image files">
+		<copy todir="${output.dir}">
+		   <fileset dir="${user.input.dir}" includesfile="${dita.temp.dir}${file.separator}${imagefile}" />
+		</copy>
+  </target>
+		 
   <target name="copy-image"
-    dita:depends="{depend.preprocess.copy-image.pre},copy-image-check"
+    dita:depends="{depend.preprocess.copy-image.pre},copy-image-uplevels,copy-image-noraml"
     xmlns:dita="http://dita-ot.sourceforge.net"
-    dita:extension="depends org.dita.dost.platform.InsertDependsAction"
-    unless="preprocess.copy-image.skip"
-    description="Copy image files">
-    <copy todir="${output.dir}">
-      <fileset dir="${user.input.dir}" includesfile="${dita.temp.dir}${file.separator}${imagefile}" />
-    </copy>
+    dita:extension="depends org.dita.dost.platform.InsertDependsAction" 
+    description="Copy image files">   
   </target>
   
   <target name="copy-image-check">
@@ -520,6 +541,16 @@
         <isset property="noImagelist"/>
       </or>
     </condition>
+  	<condition property="image.copy.uplevels">
+  	  <not>
+  	  	 <equals arg1="${generate.copy.outer}" arg2="3"></equals>
+  	  </not>
+  	 </condition>
+  	 <condition property="image.copy.normal">
+  	 	<and>
+  	     <equals arg1="${generate.copy.outer}" arg2="3"></equals>
+  	   </and>
+  	</condition> 	
   </target>
 
   <target name="copy-html"

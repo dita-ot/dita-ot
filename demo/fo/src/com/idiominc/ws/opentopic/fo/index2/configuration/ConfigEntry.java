@@ -32,25 +32,26 @@ with those set forth herein.
 
 This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
-*/public interface ConfigEntry {
+ */
+public interface ConfigEntry {
 
-	/**
-	 * @return group label
-	 */
-	String getLabel();
+     /**
+      * @return group label
+      */
+     String getLabel();
 
-	/**
-	 * @return group key. this key is being used to check if some string belongs to this group by comparing it with
-	 *         two keys of near by config entries
-	 */
-	String getKey();
+     /**
+      * @return group key. this key is being used to check if some string belongs to this group by comparing it with
+      *         two keys of near by config entries
+      */
+     String getKey();
 
-	/**
-	 * @return specifies group member characters. The meaning of these characters is that if some string starts with the
-	 *         character from this array then it(string) belongs to this group
-	 */
-	String[] getGroupMembers();
+     /**
+      * @return specifies group member characters. The meaning of these characters is that if some string starts with the
+      *         character from this array then it(string) belongs to this group
+      */
+     String[] getGroupMembers();
 
-	boolean isInRange(String value, IndexCollator collator);
+     boolean isInRange(String value, IndexCollator collator);
 
-}
+ }

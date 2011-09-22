@@ -50,4 +50,12 @@
     <reason>Attribute set reflection can't handle XSLT element %1.</reason>
     <response/>
   </message>
+  <message id="PDFX010W" type="WARN">
+    <reason>Index generation is not supported in FOP.</reason>
+    <response/>
+  </message>
+  <message id="PDFX011E" type="ERROR">
+    <reason>Both index-see and %1 defined for index entry '%2'.</reason>
+    <response>Recovering by treating the index-see as an index-see-also.</response>
+  </message>
 </messages>  

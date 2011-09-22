@@ -11,7 +11,6 @@
   </topicref>
   <topicref href="quickstartguide/chapters/chapter2.dita">
   	<topicref href="quickstartguide/concepts/about_antbuildfiles.dita" navtitle="Writing Your Own DITA-OT Build File"/>
-  	<topicref href="quickstartguide/reference/dita-ot_ant_properties.dita" navtitle="DITA-OT XSL Processing Properties"/>
   	<topicref href="quickstartguide/tasks/generating_documents.dita" navtitle="Generating Documents with Ant"/>
   	<topicref href="quickstartguide/concepts/about_javacmdinterface.dita" navtitle="Generating Documents with Java"/>
   	<topicref href="quickstartguide/tasks/generating_documentswithjava.dita" navtitle="About the Java Command Line Interface"/>
@@ -21,7 +20,5 @@
   <topicref href="quickstartguide/chapters/chapter3.dita">
     <topicref href="quickstartguide/concepts/about_documentgeneration.dita" navtitle="Introducing Document Generation"/>
   </topicref>
-  <topicref>
-  	<topicref navtitle="Best Practices" href="quickstartguide/topics/best-practices.dita"/>
-  </topicref>
+	<topicref navtitle="Best Practices" href="quickstartguide/topics/best-practices.dita"/>
 </map>

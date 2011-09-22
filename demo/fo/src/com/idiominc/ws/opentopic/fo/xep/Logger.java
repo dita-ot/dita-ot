@@ -1,21 +1,21 @@
 package com.idiominc.ws.opentopic.fo.xep;
 
 /*
-Copyright (c) 2004-2006 by Idiom Technologies, Inc. All rights reserved. 
+Copyright (c) 2004-2006 by Idiom Technologies, Inc. All rights reserved.
 IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
-and WORLDSTART are trademarks of Idiom Technologies, Inc. All other 
-trademarks are the property of their respective owners. 
+and WORLDSTART are trademarks of Idiom Technologies, Inc. All other
+trademarks are the property of their respective owners.
 
-IDIOM TECHNOLOGIES, INC. IS DELIVERING THE SOFTWARE "AS IS," WITH 
+IDIOM TECHNOLOGIES, INC. IS DELIVERING THE SOFTWARE "AS IS," WITH
 ABSOLUTELY NO WARRANTIES WHATSOEVER, WHETHER EXPRESS OR IMPLIED,  AND IDIOM
 TECHNOLOGIES, INC. DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING
-BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
+BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
 PURPOSE AND WARRANTY OF NON-INFRINGEMENT. IDIOM TECHNOLOGIES, INC. SHALL NOT
 BE LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL, COVER, PUNITIVE, EXEMPLARY,
-RELIANCE, OR CONSEQUENTIAL DAMAGES (INCLUDING BUT NOT LIMITED TO LOSS OF 
-ANTICIPATED PROFIT), ARISING FROM ANY CAUSE UNDER OR RELATED TO  OR ARISING 
+RELIANCE, OR CONSEQUENTIAL DAMAGES (INCLUDING BUT NOT LIMITED TO LOSS OF
+ANTICIPATED PROFIT), ARISING FROM ANY CAUSE UNDER OR RELATED TO  OR ARISING
 OUT OF THE USE OF OR INABILITY TO USE THE SOFTWARE, EVEN IF IDIOM
-TECHNOLOGIES, INC. HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. 
+TECHNOLOGIES, INC. HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
 
 Idiom Technologies, Inc. and its licensors shall not be liable for any
 damages suffered by any person as a result of using and/or modifying the
@@ -27,14 +27,14 @@ These terms and conditions supersede the terms and conditions in any
 licensing agreement to the extent that such terms and conditions conflict
 with those set forth herein.
 
-This file is part of the DITA Open Toolkit project hosted on Sourceforge.net. 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
-*/
+ */
 public class Logger implements com.renderx.xep.lib.Logger {
 
-    private Runner runner;
+    private final Runner runner;
 
-    public Logger(Runner runner) {
+    public Logger(final Runner runner) {
         this.runner = runner;
     }
 
@@ -44,29 +44,29 @@ public class Logger implements com.renderx.xep.lib.Logger {
     public void closeDocument() {
     }
 
-    public void event(String name, String message) {
+    public void event(final String name, final String message) {
     }
 
-    public void openState(String name) {
+    public void openState(final String name) {
     }
 
-    public void closeState(String name) {
+    public void closeState(final String name) {
     }
 
-    public void info(String message) {
+    public void info(final String message) {
     }
 
-    public void warning(String message) {
+    public void warning(final String message) {
         this.runner.fail();
         System.out.println("WARNING: " + message);
     }
 
-    public void error(String message) {
+    public void error(final String message) {
         this.runner.fail();
         System.out.println("ERROR: " + message);
     }
 
-    public void exception(String message, java.lang.Exception except) {
+    public void exception(final String message, final java.lang.Exception except) {
         this.runner.fail();
         System.out.println("EXCEPTION: " + message);
     }

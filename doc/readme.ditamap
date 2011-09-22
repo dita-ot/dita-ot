@@ -17,6 +17,7 @@
       <topicref href="readme/DITA-antscript.xml" navtitle="Ant tasks and scripts" toc="no"/>
     </topicref>
     <topicref href="readme/DITA-javacmd.xml" navtitle="Building DITA output with Java command line"/>
+    <topicref href="quickstartguide/reference/dita-ot_ant_properties.dita"/>
     <topicref href="readme/DITA-log.xml" navtitle="Problem determination and log analysis"/>
     <topicref href="readme/DITA-troubleshooting.xml" navtitle="Troubleshooting"/>
     <topicref href="readme/DITA-limitations.xml" navtitle="Known limitations"
@@ -30,9 +31,4 @@
       <topicref href="readme/DITA-h2d-java.xml" toc="no"/>
     </topicref>
   </topicref>
-  <topichead navtitle="Development Reference">
-    <topicref href="dev_ref/DITA1.2-implementation-dependent-features.dita"/>
-    <topicref href="dev_ref/extended-functionality.dita"/>
-    <mapref href="dev_ref/dev_ref.ditamap"/>
-  </topichead>
 </map>

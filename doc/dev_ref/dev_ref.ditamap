@@ -7,9 +7,21 @@
   *-->   
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"
  "map.dtd">
-<map title="DITA Open Toolkit Developement Reference">
-  <topicref href="supporting_file_extension.dita" navtitle="Supporting both .dita and .xml in one ditamap"/>
+<map title="Developement Reference">
+  <topicref href="DITA1.2-implementation-dependent-features.dita"/>
+  <topicref href="extended-functionality.dita"/>
+  <topicref href="DITA-OTArchitecture.xml" navtitle="Complete Process Architecture"/>
+  <topicref href="DITA-OTPreprocess.xml" navtitle="Preprocess Architecture"/>
+  <topicref href="extension-points.dita"/>
+  <topicref href="supporting_file_extension.dita" navtitle="Supporting both .dita and .xml in one ditamap" importance="obsolete"/>
+  <!-- XXX: is this obsolete, don't we currently require Apache resolver? -->
   <topicref href="standardxmlcatalogresolver.dita" navtitle="Standard XML catalog resolver"/>
+  <!-- XXX: is this obsolete? -->
   <topicref href="topicmerge.dita" navtitle="Topic merge"/>
   <topicref href="workingwithdocplugin.dita" navtitle="Working with documentation plug-in"/>
+  <!-- To be cleaned up:
+    DITA-OTArchitecture.xml referenced DITA-OTGenListModule.xml, which is out of date and
+    no longer referenced. The topic should be cleaned up or removed. It is also commented 
+    out of the TOC below. -->
+  <!-- <topicref href="DITA-OTGenListModule.xml" navtitle="Java Module Architecture"/> -->
 </map>

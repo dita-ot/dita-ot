@@ -49,9 +49,9 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
+
 /**
- * KeyrefPaser class parsing keyref attribute.
- *
+ * Filter for processing key reference elements in DITA files.
  */
 public final class KeyrefPaser extends AbstractXMLWriter {
 
@@ -63,49 +63,62 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 
     private String tempDir;
 
-    // It is stack used to store the place of current element
-    // relative to the key reference element. Because keyref can be nested.
+    /**
+     * It is stack used to store the place of current element
+     * relative to the key reference element. Because keyref can be nested.
+     */
     private final Stack<Integer> keyrefLevalStack;
 
-    // It is used to store the place of current element
-    // relative to the key reference element. If it is out of range of key
-    // reference element it is zero, otherwise it is positive number.
-    // It is also used to indicate whether current element is descendant of the
-    // key reference element.
+    /**
+     * It is used to store the place of current element
+     * relative to the key reference element. If it is out of range of key
+     * reference element it is zero, otherwise it is positive number.
+     * It is also used to indicate whether current element is descendant of the
+     * key reference element.
+     */
     private int keyrefLeval;
 
     // flat for whether the ancestor element has keyref
     //private boolean hasKeyref;
 
-    // relative path of the filename to the temp directory
+    /** Relative path of the filename to the temporary directory. */
     private String filepath;
 
-    // It is the attributes set which should not be copied from
-    // key definition to key reference which is <topicref>
+    /**
+     * Set of attributes which should not be copied from
+     * key definition to key reference which is {@code <topicref>}.
+     */
     private static final Set<String> no_copy = new HashSet<String>();
 
-    // It is the attributes set which should not be copied from
-    // key definition to key reference which is not <topicref>
+    /**
+     * Set of attributes which should not be copied from
+     * key definition to key reference which is not {@code <topicref>}.
+     */
     private static final Set<String> no_copy_topic = new HashSet<String>();
 
-    // It is used to store the target of the keys
-    // In the from the map <keys, target>.
+    /**
+     * It is used to store the target of the keys
+     * In the from the map <keys, target>.
+     */
     private Map<String, String> keyMap;
 
-    // It is used to indicate whether the keyref is valid.
-    // The descendant element should know whether keyref is valid.
-    // Because keryef can be nested
+    /**
+     * It is used to indicate whether the keyref is valid.
+     * The descendant element should know whether keyref is valid because keyrefs can be nested.
+     */
     private final Stack<Boolean> validKeyref;
 
-    // Flag indicating whether the key reference element is empty,
-    // If it is empty, it should pull matching content from the key definition.
+    /**
+     * Flag indicating whether the key reference element is empty,
+     * if it is empty, it should pull matching content from the key definition.
+     */
     private boolean empty;
 
     // It is used to store the value of attribute keyref,
     // Because keyref can be nested.
     //private Stack<String> keyref;
 
-    // It is used to store the name of the element containing keyref attribute.
+    /** Stack of element names of the element containing keyref attribute. */
     private final Stack<String> elemName;
 
     /** Current element keyref info, {@code null} if not keyref type element. */
@@ -113,13 +126,13 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 
     private boolean hasChecked;
 
-    // It is used to indicate whether key reference element has sub element.
+    /** Flag stack to indicate whether key reference element has sub-elements. */
     private final Stack<Boolean> hasSubElem;
 
     private Document doc;
 
     // added By Alan for ID: 2860433 on 2009-09-17
-    // file name with relative path to the tempDir of input file.
+    /** File name with relative path to the temporary directory of input file. */
     private String fileName;
 
     private static final class KeyrefInfo {
@@ -131,6 +144,13 @@ public final class KeyrefPaser extends AbstractXMLWriter {
         final boolean isRefType;
         /** Element is empty. */
         final boolean isEmpty;
+        /**
+         * Construct a new key reference info object.
+         * 
+         * @param type element type
+         * @param refAttr hyperlink attribute name
+         * @param isEmpty flag if element is empty
+         */
         KeyrefInfo(final DitaClass type, final String refAttr, final boolean isEmpty) {
             this.type = type;
             this.refAttr = refAttr;
@@ -139,6 +159,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
         }
     }
 
+    /** List of key reference element definitions. */
     private final static List<KeyrefInfo> keyrefInfos = new ArrayList<KeyrefInfo>();
     static {
         keyrefInfos.add(new KeyrefInfo(TOPIC_AUTHOR, ATTRIBUTE_NAME_HREF, false));
@@ -689,6 +710,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
         }
 
     }
+    
     /**
      * Set temp dir.
      * @param tempDir temp dir
@@ -696,6 +718,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
     public void setTempDir(final String tempDir) {
         this.tempDir = tempDir;
     }
+    
     /**
      * Set key map.
      * @param map key map
@@ -768,12 +791,16 @@ public final class KeyrefPaser extends AbstractXMLWriter {
         return stringBuffer.toString();
     }
 
+    /**
+     * Change map type to topic type. 
+     */
     private String changeclassValue(final String classValue){
         return classValue.replaceAll("map/", "topic/");
     }
 
     //Added by Alan Date:2009-08-04 --begin
     private String extName;
+    
     /**
      * Get extension name.
      * @return extension name
@@ -781,6 +808,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
     public String getExtName() {
         return extName;
     }
+    
     /**
      * Set extension name.
      * @param extName extension name
@@ -791,7 +819,9 @@ public final class KeyrefPaser extends AbstractXMLWriter {
     //Added by Alan Date:2009-08-04 --end
 
     //Added by Alan Date:2009-09-03 Bug ID: 2849078
-    //change elementId into topicId if there is no topicId in key definition.
+    /**
+     * change elementId into topicId if there is no topicId in key definition.
+     */
     private static String normalizeHrefValue(final String keyName, final String tail) {
         final int sharpIndex=keyName.indexOf(SHARP);
         if(sharpIndex == -1){
@@ -801,14 +831,19 @@ public final class KeyrefPaser extends AbstractXMLWriter {
     }
 
     //Added by William on 2010-05-26 for bug:3004060 start
-    //Get first topic id
+    /**
+     * Get first topic id
+     */
     private String getFirstTopicId(final File topicFile) {
         final String path = topicFile.getParent();
         final String name = topicFile.getName();
         final String topicId = MergeUtils.getFirstTopicId(name, path, false);
         return topicId;
     }
-    //Insert topic id into href
+    
+    /**
+     * Insert topic id into href
+     */
     private static String normalizeHrefValue(final String fileName, final String tail, final String topicId) {
         final int sharpIndex=fileName.indexOf(SHARP);
         //Insert first topic id only when topicid is not set in keydef

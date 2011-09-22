@@ -11,8 +11,7 @@
   <xsl:attribute-set name="__lotf__indent" use-attribute-sets="__toc__indent__booklist">
   </xsl:attribute-set>
   
-  <xsl:attribute-set name ="__lotf__content" use-attribute-sets="__toc__topic__content__booklist">
-    <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
+  <xsl:attribute-set name ="__lotf__content" use-attribute-sets="base-font __toc__topic__content__booklist">
     <xsl:attribute name="font-weight">normal</xsl:attribute>
     <xsl:attribute name="space-before">5pt</xsl:attribute>
     <xsl:attribute name="space-after">5pt</xsl:attribute>

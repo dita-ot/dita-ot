@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
-<concept id="conceptId">
+<concept id="extension-points">
   <title>Extension points for plug-ins to the DITA Open Toolkit</title>
+  <titlealts>
+    <navtitle>Plug-in extension points</navtitle>
+  </titlealts>
   <shortdesc>Extensions to the DITA Open Toolkit are supported through a plug-in extension mechanism.</shortdesc>
   <conbody>
     <p>Plug-ins may do a number of things, such as adding support for specialized DTDs or Schemas,
@@ -127,40 +130,94 @@ token ::= ( [0..9] | [a..zA..Z] | ’_’ | ’-’ )+</codeblock>
     <title>XML catalogs</title>
     <conbody>
       <p>The XML Catalogs extension point is used to update the XML Catalogs used to resolve DTD or
-        Schema document types. To do this, first create a catalog with only your new values, using
-        the OASIS Catalog format, and place that in your plugin. Next create a
-          <codeph>&lt;feature&gt;</codeph> element, with the extension attribute set to
-          "<codeph>dita.specialization.catalog.relative</codeph>", the <codeph>file</codeph>
-        attribute set to the name of your local catalog file. For example: </p>
-      <codeblock> &lt;feature extension="dita.specialization.catalog.relative" file="catalog-dita.xml"/&gt; </codeblock>
-      <note type="remember">The <codeph>dita.specialization.catalog</codeph> extension is
-        deprecated.  Use <codeph>dita.specialization.catalog.relative</codeph> instead.</note>
+        Schema document types, or to add URI mappings. To do this, first create a catalog with only
+        your new values, using the OASIS Catalog format, and place that in your plugin.</p>
+      <dl>
+        <dlentry>
+          <dt><codeph>dita.specialization.catalog.relative</codeph></dt>
+          <dt importance="deprecated"><codeph>dita.specialization.catalog</codeph></dt>
+          <dd>
+            <p>Adds the content of the catalog file defined in <codeph>file</codeph> attribute to
+              main DITA-OT catalog file.</p>
+            <codeblock>&lt;feature extension="dita.specialization.catalog.relative" file="catalog-dita.xml"/&gt;</codeblock>
+            <note type="remember">The <codeph>dita.specialization.catalog</codeph> extension is
+              deprecated. Use <codeph>dita.specialization.catalog.relative</codeph> instead.</note>
+          </dd>
+        </dlentry>
+        <dlentry>
+          <dt><codeph>org.dita.pdf2.catalog.relative</codeph></dt>
+          <dd>
+            <p>Adds the content of the catalog file defined in <codeph>file</codeph> attribute to
+              main PDF plug-in catalog file.</p>
+            <codeblock>&lt;feature extension="org.dita.pdf2.catalog.relative" file="common/catalog.xml"/&gt;</codeblock>
+          </dd>
+        </dlentry>
+      </dl>
     </conbody>
   </concept>
   <concept id="topic_uyv_wov_kc">
     <title>New Ant targets</title>
     <conbody>
-      <p>The Ant conductor extension point is used to make new targets available to Ant processing.
-        To do this, first place your extensions in an Ant project file within your plugin, such as
-        myAntStuff.xml. Create a small wrapper file <filepath>myAntStuffWrapper.xml</filepath> in
-        the same directory: </p>
-      <codeblock> &lt;dummy&gt; &lt;import file="myAntStuff.xml"/&gt; &lt;/dummy&gt; </codeblock>
-      <p>Then create the following feature: </p>
-      <codeblock>&lt;feature extension="dita.conductor.target.relative" file="myAntStuffWrapper.xml"/&gt; </codeblock>
-      <note type="remember">The <codeph>dita.conductor.target</codeph> extension is deprecated.  Use
-          <codeph>dita.conductor.target.relative</codeph> instead.</note>
+      <p>The Ant conductor extension point is used to make new targets available to Ant
+        processing.</p>
+      <dl>
+        <dlentry>
+          <dt><codeph>dita.conductor.target.relative</codeph></dt>
+          <dt importance="deprecated"><codeph>dita.conductor.target</codeph></dt>
+          <dd>
+            <p>Add Ant import to main Ant build file.</p>
+            <note type="remember">The <codeph>dita.conductor.target</codeph> extension is
+              deprecated. Use <codeph>dita.conductor.target.relative</codeph> instead.</note>
+          </dd>
+        </dlentry>
+      </dl>
+      <example>
+        <p>To do this, first place your extensions in an Ant project file within your plugin, such
+          as myAntStuff.xml. Create a small wrapper file <filepath>myAntStuffWrapper.xml</filepath>
+          in the same directory: </p>
+        <codeblock>&lt;dummy&gt; &lt;import file="myAntStuff.xml"/&gt; &lt;/dummy&gt;</codeblock>
+        <p>Then create the following feature: </p>
+        <codeblock>&lt;feature extension="dita.conductor.target.relative" file="myAntStuffWrapper.xml"/&gt;</codeblock>
+      </example>
     </conbody>
   </concept>
   <concept id="topic_dzv_wov_kc">
     <title>Add Ant targets to the preprocess pipeline</title>
     <conbody>
-      <p>To add an Ant target myTarget to the preprocess pipeline, choose which pipeline stage it
-        must occur before.  Then create a feature for the extension
-            <codeph>depend.preprocess.<i>stagename</i>.pre</codeph>: </p>
-      <codeblock>&lt;feature extension="depend.preprocess.chunk.pre" value="myAntTargetBeforeChunk"/&gt; </codeblock>
-      <p>There are also extension points <codeph>depend.preprocess.pre</codeph> and
-          <codeph>depend.preprocess.post</codeph> to execute a target before or after all
-        preprocessing. </p>
+      <p>There are extension points to execute an Ant target before or after all preprocessing. </p>
+      <dl>
+        <dlentry><dt><codeph>depend.preprocess.pre</codeph></dt><dd>Preprocessing pre-target</dd></dlentry>
+        <dlentry><dt><codeph>depend.preprocess.post</codeph></dt><dd>Preprocessing post-target</dd></dlentry>
+      </dl>
+      <p>In addition, there are extension points to execute an Ant target before a given
+        preprocessing step.</p>
+      <dl>
+        <dlentry><dt><codeph>depend.preprocess.clean-temp.pre</codeph></dt><dd>Clean temp pre-target</dd></dlentry>
+        <dlentry><dt><codeph>depend.preprocess.gen-list.pre</codeph></dt><dd>Generate list pre-target</dd></dlentry>
+        <dlentry><dt><codeph>depend.preprocess.debug-filter.pre</codeph></dt><dd>Debug and filter pre-target</dd></dlentry>
+        <dlentry><dt><codeph>depend.preprocess.conrefpush.pre</codeph></dt><dd>Content reference push pre-target</dd></dlentry>
+        <dlentry><dt><codeph>depend.preprocess.move-meta-entries.pre</codeph></dt><dd>Move meta entries pre-target</dd></dlentry>
+        <dlentry><dt><codeph>depend.preprocess.conref.pre</codeph></dt><dd>Content reference pre-target</dd></dlentry>
+        <dlentry><dt><codeph>depend.preprocess.coderef.pre</codeph></dt><dd>Code reference pre-target</dd></dlentry>
+        <dlentry><dt><codeph>depend.preprocess.mapref.pre</codeph></dt><dd>Map reference pre-target</dd></dlentry>
+        <dlentry><dt><codeph>depend.preprocess.keyref.pre</codeph></dt><dd>Key reference pre-target</dd></dlentry>
+        <dlentry><dt><codeph>depend.preprocess.mappull.pre</codeph></dt><dd>Map pull pre-target</dd></dlentry>
+        <dlentry><dt><codeph>depend.preprocess.chunk.pre</codeph></dt><dd>Chunking pre-target</dd></dlentry>
+        <dlentry><dt><codeph>depend.preprocess.maplink.pre</codeph></dt><dd>Map link pre-target</dd></dlentry>
+        <dlentry><dt><codeph>depend.preprocess.move-links.pre</codeph></dt><dd>Move links pre-target</dd></dlentry>
+        <dlentry><dt><codeph>depend.preprocess.topicpull.pre</codeph></dt><dd>Topic pull pre-target</dd></dlentry>
+        <dlentry><dt><codeph>depend.preprocess.copy-files.pre</codeph></dt><dd>Copy files pre-target</dd></dlentry>
+        <dlentry><dt><codeph>depend.preprocess.copy-image.pre</codeph></dt><dd>Copy images pre-target</dd></dlentry>
+        <dlentry><dt><codeph>depend.preprocess.copy-html.pre</codeph></dt><dd>Copy HTML pre-target</dd></dlentry>
+        <dlentry><dt><codeph>depend.preprocess.copy-flag.pre</codeph></dt><dd>Copy flag pre-target</dd></dlentry>
+        <dlentry><dt><codeph>depend.preprocess.copy-subsidiary.pre</codeph></dt><dd>Copy subsidiary pre-target</dd></dlentry>
+        <dlentry><dt><codeph>depend.preprocess.copy-generated-files.pre</codeph></dt><dd>Copy generated files pre-target</dd></dlentry>
+      </dl>
+      <example>
+        <p>The following feature adds "myAntTargetBeforeChunk" Ant target to be executed before the
+          chunk step in preprocessing: </p>
+        <codeblock>&lt;feature extension="depend.preprocess.chunk.pre" value="myAntTargetBeforeChunk"/&gt;</codeblock>
+      </example>
     </conbody>
   </concept>
   <concept id="topic_lzv_wov_kc">
@@ -168,12 +225,21 @@ token ::= ( [0..9] | [a..zA..Z] | ’_’ | ’-’ )+</codeblock>
     <conbody>
       <p>The transtype extension point is used to define a new "transtype", or transform type, which
         makes use of targets in your Ant extensions.</p>
-      <example>
-        <p>The following feature defines a transform type of "newtext"; using this transform type
-          will cause the build to look for a target dita2newtext, defined previously in your Ant
-          extension: </p>
-        <codeblock>&lt;feature extension="dita.conductor.transtype.check" value="newtext"/&gt;  </codeblock>
-      </example>
+      <dl>
+        <dlentry>
+          <dt><codeph>dita.conductor.transtype.check</codeph></dt>
+          <dd>Add new value to list of valid transformation type names.</dd>
+        </dlentry>
+        <dlentry>
+          <dt><codeph>dita.transtype.print</codeph></dt>
+          <dd>Declare transtype as a print type.</dd>
+        </dlentry>
+      </dl>
+      <example>The following feature defines a transform type of "newtext" and declare it as a print
+        type; using this transform type will cause the build to look for a target
+          <codeph>dita2newtext</codeph>, defined previously in your Ant extension:
+        <codeblock>&lt;feature extension="dita.conductor.transtype.check" value="newtext"/&gt;
+&lt;feature extension="dita.transtype.print" value="newtext"/&gt;</codeblock></example>
     </conbody>
   </concept>
   <concept id="topic_tzv_wov_kc">
@@ -190,59 +256,59 @@ token ::= ( [0..9] | [a..zA..Z] | ’_’ | ’-’ )+</codeblock>
           <dt><codeph>dita.xsl.xhtml</codeph></dt>
           <dd>Override default (X)HTML output (including HTML Help and Eclipse Help) with the
             following</dd>
-          <dd><codeblock>&lt;feature extension="dita.xsl.xhtml" file="xsl/modifyXhtml.xsl"/&gt; </codeblock></dd>
+          <dd><codeblock>&lt;feature extension="dita.xsl.xhtml" file="xsl/modifyXhtml.xsl"/&gt;</codeblock></dd>
         </dlentry>
         <dlentry>
           <dt><codeph>dita.xsl.xslfo</codeph></dt>
           <dd>Override default PDF output (formerly known as PDF2) with the following</dd>
-          <dd><codeblock>&lt;feature extension="dita.xsl.xslfo" file="xsl/modifyPdf.xsl"/&gt; </codeblock></dd>
+          <dd><codeblock>&lt;feature extension="dita.xsl.xslfo" file="xsl/modifyPdf.xsl"/&gt;</codeblock></dd>
         </dlentry>
         <dlentry>
           <dt><codeph>dita.xsl.docbook</codeph></dt>
           <dd>Override default DocBook output with the following</dd>
-          <dd><codeblock>&lt;feature extension="dita.xsl.docbook" file="xsl/sample.xsl"/&gt; </codeblock></dd>
+          <dd><codeblock>&lt;feature extension="dita.xsl.docbook" file="xsl/sample.xsl"/&gt;</codeblock></dd>
         </dlentry>
         <dlentry>
           <dt><codeph>dita.xsl.rtf</codeph></dt>
           <dd>Override default RTF output with the following</dd>
-          <dd><codeblock>&lt;feature extension="dita.xsl.rtf" file="xsl/sample.xsl"/&gt; </codeblock></dd>
+          <dd><codeblock>&lt;feature extension="dita.xsl.rtf" file="xsl/sample.xsl"/&gt;</codeblock></dd>
         </dlentry>
         <dlentry>
           <dt><codeph>dita.xsl.eclipse.plugin</codeph></dt>
           <dd>Override the step that generates plugin.xml for Eclipse with the following</dd>
-          <dd><codeblock>&lt;feature extension="dita.xsl.eclipse.plugin" file="xsl/sample.xsl"/&gt;          </codeblock></dd>
+          <dd><codeblock>&lt;feature extension="dita.xsl.eclipse.plugin" file="xsl/sample.xsl"/&gt;</codeblock></dd>
         </dlentry>
         <dlentry>
           <dt><codeph>dita.xsl.conref</codeph></dt>
           <dd>Override conref processing</dd>
-          <dd><codeblock>&lt;feature extension="dita.xsl.conref" file="xsl/sample.xsl"/&gt; </codeblock></dd>
+          <dd><codeblock>&lt;feature extension="dita.xsl.conref" file="xsl/sample.xsl"/&gt;</codeblock></dd>
         </dlentry>
         <dlentry>
           <dt><codeph>dita.xsl.topicpull</codeph></dt>
           <dd>Override topicpull processing (the step that pulls text into &lt;xref&gt; elements,
             among other things)</dd>
-          <dd><codeblock>&lt;feature extension="dita.xsl.topicpull" file="xsl/sample.xsl"/&gt; </codeblock></dd>
+          <dd><codeblock>&lt;feature extension="dita.xsl.topicpull" file="xsl/sample.xsl"/&gt;</codeblock></dd>
         </dlentry>
         <dlentry>
           <dt><codeph>dita.xsl.mapref</codeph></dt>
           <dd>Override mapref processing (the step that resolves references to other maps)</dd>
-          <dd><codeblock>&lt;feature extension="dita.xsl.mapref" file="xsl/sample.xsl"/&gt; </codeblock></dd>
+          <dd><codeblock>&lt;feature extension="dita.xsl.mapref" file="xsl/sample.xsl"/&gt;</codeblock></dd>
         </dlentry>
         <dlentry>
           <dt><codeph>dita.xsl.mappull</codeph></dt>
           <dd>Override mappull processing (the step that updates navtitles in maps and causes
             attributes to cascade)</dd>
-          <dd><codeblock>&lt;feature extension="dita.xsl.mappull" file="xsl/sample.xsl"/&gt;  </codeblock></dd>
+          <dd><codeblock>&lt;feature extension="dita.xsl.mappull" file="xsl/sample.xsl"/&gt; </codeblock></dd>
         </dlentry>
         <dlentry>
           <dt><codeph>dita.xsl.maplink</codeph></dt>
           <dd>Override maplink processing (the step that generates map-based links)</dd>
-          <dd><codeblock>&lt;feature extension="dita.xsl.maplink" file="xsl/sample.xsl"/&gt;  </codeblock></dd>
+          <dd><codeblock>&lt;feature extension="dita.xsl.maplink" file="xsl/sample.xsl"/&gt; </codeblock></dd>
         </dlentry>
         <dlentry importance="deprecated">
           <dt><codeph>dita.xsl.fo</codeph></dt>
           <dd>Override the (now deprecated) original PDF output with the following</dd>
-          <dd><codeblock>&lt;feature extension="dita.xsl.fo" file="xsl/modifyXhtml.xsl"/&gt; </codeblock></dd>
+          <dd><codeblock>&lt;feature extension="dita.xsl.fo" file="xsl/modifyXhtml.xsl"/&gt;</codeblock></dd>
         </dlentry>
       </dl>
     </conbody>
@@ -251,12 +317,19 @@ token ::= ( [0..9] | [a..zA..Z] | ’_’ | ’-’ )+</codeblock>
     <title>Generated text </title>
     <conbody>
       <p>The generated text extension point is used to add new strings to the default set of
-        Generated Text. Copy the file xsl/common/strings.xml to your plugin, and edit it to contain
-        the languages that you are providing translations for ("en-us" must be present).  Copy the
-        file <filepath>xsl/common/strings-en-us</filepath>.xml to your plugin, and replace the
-        content with your own strings, being sure to give them unique name attributes.  Do the same
-        for each language that you are providing a translation for. </p>
+        Generated Text.</p>
+      <dl>
+        <dlentry>
+          <dt><codeph>dita.xsl.strings</codeph></dt>
+          <dd>Add new strings to generated text file. </dd>
+        </dlentry>
+      </dl>
       <example>
+        <p>Copy the file <filepath>xsl/common/strings.xml</filepath> to your plugin, and edit it to
+          contain the languages that you are providing translations for ("en-us" must be present). 
+          Copy the file <filepath>xsl/common/strings-en-us.xml</filepath> to your plugin, and
+          replace the content with your own strings, being sure to give them unique name attributes.
+          Do the same for each language that you are providing a translation for. </p>
         <p>Use the following extension code to include your strings in the set of generated text: </p>
         <codeblock>&lt;feature extension="dita.xsl.strings" file="xsl/common/strings.xml"/&gt;</codeblock>
         <p>The string is now available to the XSLT "getString" template. </p>
@@ -267,7 +340,7 @@ token ::= ( [0..9] | [a..zA..Z] | ’_’ | ’-’ )+</codeblock>
     <title>Pass parameters to XSLT</title>
     <conbody>
       <p>You can pass parameters from the Ant build to XSLT pipeline stages, usually to have those
-        parameters avalable as global &lt;xsl:param&gt; values in your XSLT overrides.  Create a
+        parameters avalable as global &lt;xsl:param&gt; values in your XSLT overrides. Create a
         file insertParameters.xml which contains one or more Ant &lt;param&gt; elements: </p>
       <codeblock>&lt;dummy&gt;
   &lt;!-- Any Ant code allowed in xslt task is possible. Common example: --&gt;
@@ -318,6 +391,12 @@ token ::= ( [0..9] | [a..zA..Z] | ’_’ | ’-’ )+</codeblock>
     <conbody>
       <p>If your Ant or XSLT extensions require additional Java libraries in the classpath, you can
         add them to the global Ant classpath. </p>
+      <dl>
+        <dlentry>
+          <dt><codeph>dita.conductor.lib.import</codeph></dt>
+          <dd>Add Java libraries to DITA-OT classpath.</dd>
+        </dlentry>
+      </dl>
       <example>
         <codeblock>&lt;feature extension="dita.conductor.lib.import" file="myJavaLibrary.jar"/&gt;</codeblock>
       </example>
@@ -326,17 +405,27 @@ token ::= ( [0..9] | [a..zA..Z] | ’_’ | ’-’ )+</codeblock>
   <concept id="topic_jbw_wov_kc">
     <title>Add diagnostic messages</title>
     <conbody>
-      <p>To add your own warning and error messages to the set supplied by DITA-OT, create the
-        message in an XML file <filepath>myMessages.xml</filepath>: </p>
+      <p>Plug-in specific warning and error messages can be added to the set of messages supplied by
+        DITA-OT.</p>
+      <dl>
+        <dlentry>
+          <dt><codeph>dita.xsl.messages</codeph></dt>
+          <dd>Add new messages to diagnostic message file.</dd>
+        </dlentry>
+      </dl>
+      <example>
+      <p>To add your own messages, create the message in an XML file
+          <filepath>myMessages.xml</filepath>: </p>
       <codeblock>&lt;dummy&gt;
   &lt;!-- See resource/messages.xml for the details. --&gt;
   &lt;message id="myMessageId" type="WARN"&gt;
     &lt;reason&gt;...&lt;/reason&gt;
     &lt;response&gt;...&lt;/response&gt;
   &lt;/message&gt;
-&lt;/dummy&gt; </codeblock>
+&lt;/dummy&gt;</codeblock>
       <p>And incorporate them with the extension: </p>
-      <codeblock>&lt;feature extension="dita.xsl.messages" file="myMessages.xml"/&gt; </codeblock>
+      <codeblock>&lt;feature extension="dita.xsl.messages" file="myMessages.xml"/&gt;</codeblock>
+      </example>
     </conbody>
   </concept>
   <concept id="topic_tbw_wov_kc">
@@ -348,16 +437,16 @@ token ::= ( [0..9] | [a..zA..Z] | ’_’ | ’-’ )+</codeblock>
         following: </p>
       <codeblock>&lt;require plugin="<i>plugin-id</i>"&gt;</codeblock>
       <p>Prerequisite plugins are integrated before the current plugin is integrated. This does the
-        right thing with respect to XSLT overrides.  If your plugin is a specialization of a
+        right thing with respect to XSLT overrides. If your plugin is a specialization of a
         specialization, it should <codeph>&lt;require&gt;</codeph> its base plugins, in order from
         general to specific. </p>
-      <p>If a prerequisite plugin is missing, a warning will be printed during integration.  To
+      <p>If a prerequisite plugin is missing, a warning will be printed during integration. To
         suppress this, but keep the integration order if both plugins are present, add
           <codeph>importance="optional"</codeph> to the <codeph>&lt;require&gt; </codeph>element. </p>
       <p>If your plugin can depend on any one of several optional plugins, separate the plugin ids
-        with a vertical bar.  This is most useful when combined with importance="optional": </p>
+        with a vertical bar. This is most useful when combined with importance="optional": </p>
       <example>
-        <codeblock>&lt;require plugin="pluginA|pluginB" importance="optional"/&gt; </codeblock>
+        <codeblock>&lt;require plugin="pluginA|pluginB" importance="optional"/&gt;</codeblock>
       </example>
     </conbody>
   </concept>
@@ -378,7 +467,7 @@ token ::= ( [0..9] | [a..zA..Z] | ’_’ | ’-’ )+</codeblock>
       <p>The <codeph>package.version</codeph> value should follow the syntax rules:</p>
       <codeblock>version   ::= major ( '.' minor ( '.' micro ( '.' qualifier )? )? )?
 
-major	 ::= number
+major     ::= number
 minor     ::= number
 micro     ::= number
 qualifier ::= ( [0..9] | [a..zA..Z] | ’_’ | '-' )+</codeblock>
@@ -397,7 +486,7 @@ qualifier ::= ( [0..9] | [a..zA..Z] | ’_’ | '-' )+</codeblock>
           "<codeph>_template</codeph>" to the filename before the file suffix. During integration,
         this file will be processed like the built-in DITA-OT templates. To mark the file as a
         template file, use the <codeph>&lt;template&gt;</codeph> element.</p>
-      <example><codeblock>&lt;template file="myTemplateFile_template.xsl"/&gt; </codeblock></example>
+      <example><codeblock>&lt;template file="myTemplateFile_template.xsl"/&gt;</codeblock></example>
     </conbody>
   </concept>
   <concept id="topic_vcw_wov_kc">
@@ -406,11 +495,10 @@ qualifier ::= ( [0..9] | [a..zA..Z] | ’_’ | '-' )+</codeblock>
       <p>The following is a sample of a plugin.xml file. This file adds support for a new set of
         specialized DTDs, and includes an override for the XHTML output processor. It would go into
         a directory such as <filepath>DITA-OT\plugins\music\</filepath> and referenced supporting
-        files would also exist in that directory. Unfortunately, due to limitations in this wiki,
-        the full code sample does not show up as well formatted as one might wish. A more extensive
-        sample using these values is available in the actual music plug-in, available at the <xref
-          href="http://sourceforge.net/projects/dita-ot/files/" scope="external">DITA-OT download page</xref> at
-        SourceForge </p>
+        files would also exist in that directory. A more extensive sample using these values is
+        available in the actual music plug-in, available at the <xref
+          href="http://sourceforge.net/projects/dita-ot/files/" scope="external">DITA-OT download
+          page</xref> at SourceForge </p>
       <example><codeblock>&lt;plugin id="org.metadita.specialization.music"&gt;
   &lt;feature extension="dita.specialization.catalog.relative" file="catalog-dita.xml"&gt;
   &lt;feature extension="dita.xsl.xhtml" file="xsl/music2xhtml.xsl"/&gt;

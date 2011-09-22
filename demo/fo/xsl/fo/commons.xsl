@@ -32,6 +32,7 @@ See the accompanying license.txt file for applicable licenses.
 -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:dita2xslfo="http://dita-ot.sourceforge.net/ns/200910/dita2xslfo"
     xmlns:opentopic="http://www.idiominc.com/opentopic"
@@ -163,6 +164,13 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:apply-templates select="*[contains(@class, ' topic/prolog ')]"/>
         
         <xsl:choose>
+            <!-- When topic has an abstract, we cannot override shortdesc -->
+            <xsl:when test="*[contains(@class, ' topic/abstract ')]">
+              <xsl:apply-templates select="*[not(contains(@class, ' topic/title ')) and
+                    not(contains(@class, ' topic/prolog ')) and
+                    not(contains(@class, ' topic/shortdesc ')) and
+                    not(contains(@class, ' topic/topic '))]"/>
+            </xsl:when>
             <xsl:when test="$topicrefShortdesc/*">
                 <xsl:apply-templates select="$topicrefShortdesc/*"/>
                 <xsl:apply-templates select="*[not(contains(@class, ' topic/title ')) and
@@ -1439,8 +1447,28 @@ See the accompanying license.txt file for applicable licenses.
         </fo:block>
     </xsl:template>
 
+  <xsl:template match="*[contains(@class,' topic/section ')][@spectitle != '' 
+                         and not(*[contains(@class, ' topic/title ')])]" 
+    mode="dita2xslfo:section-heading" 
+    priority="10">
+    <fo:block xsl:use-attribute-sets="section.title">
+      <xsl:call-template name="commonattributes"/>
+      <xsl:variable name="spectitleValue" as="xs:string" select="string(@spectitle)"/>
+      <xsl:variable name="resolvedVariable">
+        <xsl:call-template name="insertVariable">
+          <xsl:with-param name="theVariableID" select="$spectitleValue"/>
+        </xsl:call-template>
+      </xsl:variable>
+      <xsl:sequence
+        select="if (not(normalize-space($resolvedVariable))) 
+        then $spectitleValue
+        else $resolvedVariable"
+      />
+    </fo:block>
+    
+  </xsl:template>
     <xsl:template match="*[contains(@class,' topic/section ')]" mode="dita2xslfo:section-heading">
-      <!-- Specialized simpletable elements may override this rule to add
+      <!-- Specialized section elements may override this rule to add
            default headings for a section. By default, titles are processed
            where they exist within the section, so overrides may need to
            check for the existence of a title first. -->

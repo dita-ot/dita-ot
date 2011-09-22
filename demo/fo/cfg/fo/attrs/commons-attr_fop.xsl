@@ -4,16 +4,16 @@
   applicable licenses.-->
 <!-- (c) Copyright IBM Corporation 2011 All Rights Reserved. -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 version="2.0">
-  
-  <xsl:import href="topic2fo.xsl"/>
 
-  <xsl:import href="../../cfg/fo/attrs/commons-attr_xep.xsl"/>
-  <xsl:import href="index_xep.xsl"/>
+  <xsl:attribute-set name="note__table">
+    <xsl:attribute name="table-layout">fixed</xsl:attribute>
+    <xsl:attribute name="width">100%</xsl:attribute>
+  </xsl:attribute-set>
   
-  <dita:extension id="dita.xsl.xslfo" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
-  
-  <xsl:import href="cfg:fo/attrs/custom.xsl"/>
-  <xsl:import href="cfg:fo/xsl/custom.xsl"/>
+  <xsl:attribute-set name="note__text__column">
+    <xsl:attribute name="column-width">100% - 32pt</xsl:attribute>
+  </xsl:attribute-set>
   
 </xsl:stylesheet>

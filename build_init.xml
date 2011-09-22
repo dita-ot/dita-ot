@@ -63,12 +63,17 @@
 		<!-- NOTE: The following is not a complete list but should cover
 		           most of the systems Open Toolkit users are likely
 		           to use. Add more values as they become known.
-		  -->
-		<or>
-			<os arch="x86_64"/>
-			<os arch="amd64"/>
-			<os arch="ppc64"/>
-		</or>
+		-->
+	  <and>
+  		<or>
+  			<os arch="x86_64"/>
+  			<os arch="amd64"/>
+  			<os arch="ppc64"/>
+  		</or>
+	    <not>
+	      <os family="windows"/>
+	    </not>
+	  </and>
   </condition>
 	
 	<condition property="is32bit">
@@ -441,7 +446,7 @@
   	  		        <isset property="args.odt.img.embed"/>
   	  		      </not>
   	</condition>
-  	<condition property="clean_temp">
+  	<condition property="clean-temp.skip">
       <and>
         <isset property="clean.temp" />
         <equals arg1="${clean.temp}" arg2="no" casesensitive="false" />

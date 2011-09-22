@@ -93,6 +93,11 @@
     </xsl:attribute>
   </xsl:attribute-set>
   
+  <xsl:attribute-set name="region-body__frontmatter.odd" use-attribute-sets="region-body.odd">
+  </xsl:attribute-set>
+  <xsl:attribute-set name="region-body__frontmatter.even" use-attribute-sets="region-body.even">
+  </xsl:attribute-set>
+  
   <!-- legacy attribute set -->
   <xsl:attribute-set name="region-body__index" use-attribute-sets="region-body__index.odd"/>
 

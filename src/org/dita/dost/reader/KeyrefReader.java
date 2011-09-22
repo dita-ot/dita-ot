@@ -25,22 +25,29 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
+
 /**
- * KeyrefReader class which reads ditamap file to collect key definitions.
- *
+ * KeyrefReader class which reads DITA mao file to collect key definitions.
  */
 public final class KeyrefReader extends AbstractXMLReader {
 
-    protected static class KeyDef
-    {
-        protected String key;
-        protected StringBuffer keyDefContent;
+    /** Key definition. */
+    protected static final class KeyDef {
+        
+        protected final String key;
+        protected final StringBuffer keyDefContent;
         protected int keyDefLevel = 0;
-        public KeyDef(final String key)
-        {
-            this.key=key;
+        
+        /**
+         * Construct a new key definition.
+         * 
+         * @param key key name
+         */
+        public KeyDef(final String key) {
+            this.key = key;
             keyDefContent = new StringBuffer();
         }
+        
     }
 
     private XMLReader reader;
@@ -50,11 +57,6 @@ public final class KeyrefReader extends AbstractXMLReader {
     private Stack<KeyDef> keyDefs;
 
     private Set<String> keys;
-
-    
-
-
-    // flag for the start of key definition;
 
     /**
      * Constructor.
@@ -111,7 +113,6 @@ public final class KeyrefReader extends AbstractXMLReader {
         return content;
     }
 
-
     @Override
     public void read(final String filename) {
         keyDefs = new Stack<KeyDef>();
@@ -125,8 +126,10 @@ public final class KeyrefReader extends AbstractXMLReader {
             logger.logException(ex);
         }
     }
+    
     /**
-     * set keys set for later comparison.
+     * Set keys set for later comparison.
+     * 
      * @param set keys set
      */
     public void setKeys(final Set<String> set){
@@ -180,45 +183,85 @@ public final class KeyrefReader extends AbstractXMLReader {
         }
         keyDefAppend(GREATER_THAN);
     }
+    
     /**
-     * Set temp dir.
-     * @param tempDir temp dir
+     * Set temporary directory.
+     * 
+     * @param tempDir temporary directory path
      */
-    public void setTempDir(final String tempDir){
+    public void setTempDir(final String tempDir) {
     }
-    private void pushKeyDef(final String keyName)
-    {
+    
+    /**
+     * Push new key definition to stack
+     * 
+     * @param keyName key name
+     */
+    private void pushKeyDef(final String keyName) {
         keyDefs.push(new KeyDef(keyName));
     }
-    private KeyDef popKeyDef()
-    {
+    
+    /**
+     * Pop key definition from the stack.
+     * 
+     * @return top most key definition
+     * @throws EmptyStackException if stack is empty
+     */
+    private KeyDef popKeyDef() {
         return keyDefs.pop();
     }
-    private void keyDefAppend(final String content)
-    {
-        for (final KeyDef keyDef : keyDefs)
-        {
+    
+    /**
+     * Append content to every key definition in the stack.
+     * 
+     * @param content XML content to add to key definitions
+     */
+    private void keyDefAppend(final String content) {
+        for (final KeyDef keyDef : keyDefs) {
             keyDef.keyDefContent.append(content);
         }
     }
-    private boolean isStart()
-    {
-        return keyDefs.size()>0;
+    
+    /**
+     * Check if key definition stack is not empty.
+     * @return {@code true} if stack is not empty, otherwise {@code false}
+     */
+    private boolean isStart() {
+        return keyDefs.size() > 0;
     }
-    private void incKeyDefLevel()
-    {
+    
+    /**
+     * Increment key definition level by one.
+     */
+    private void incKeyDefLevel() {
         addKeyDefLevel(1);
     }
-    private void decKeyDefLevel()
-    {
+    
+    /**
+     * Decrement key definition level.
+     * 
+     * @param dif decrement amount
+     */
+    private void decKeyDefLevel() {
         addKeyDefLevel(-1);
     }
-    private void addKeyDefLevel(final int dif)
-    {
-        keyDefs.peek().keyDefLevel+=dif;
+    
+    /**
+     * Increment key definition level.
+     * 
+     * @param dif increment amount
+     */
+    private void addKeyDefLevel(final int dif) {
+        keyDefs.peek().keyDefLevel += dif;
     }
-    private int getKeyDefLevel()
-    {
+    
+    /**
+     * Get top key definition level from.
+     * 
+     * @return key definition level
+     */
+    private int getKeyDefLevel() {
         return keyDefs.peek().keyDefLevel;
     }
+    
 }
