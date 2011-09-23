@@ -1,0 +1,39 @@
+configuration =
+  ## Character set configuration
+  element configuration {
+    alphabet*
+  }
+alphabet =
+  ## Character set
+  element alphabet {
+    ## Character set name
+    attribute char-set { text },
+    character-set*
+  }
+character-set =
+  ## Character set
+  element character-set {
+    (character | character-range)*
+  }
+character =
+  ## Character
+  element character {
+    text
+  }
+character-range =
+  ## Character range
+  element character-range {
+    ## Range start character
+    element start {
+      ## Include character in range
+      attribute include { "yes" | "no" },
+      text
+    },
+    ## Range end character
+    element end {
+      ## Include character in range
+      attribute include { "yes" | "no" },
+      text
+    }
+  }
+start = configuration
