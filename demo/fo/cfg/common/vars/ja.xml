@@ -47,7 +47,7 @@ See the accompanying license.txt file for applicable licenses.
     -->
 
     <!-- Product name to be placed inside headers etc. -->
-    <variable id="Product Name">OpenTopic</variable>
+    <variable id="Product Name"/>
 
     <!-- The footer that appears on odd-numbered pages. -->
     <variable id="Body odd footer"/>
