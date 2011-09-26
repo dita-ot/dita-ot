@@ -48,13 +48,11 @@
 
 <!-- DL/DT content -->
 <xsl:attribute-set name="dlentry.dt__content">
-    <!--xsl:attribute name="margin">3pt 3pt 3pt 3pt</xsl:attribute-->
     <xsl:attribute name="font-weight">bold</xsl:attribute>
 </xsl:attribute-set>
 
 <!-- DL/DD content -->
 <xsl:attribute-set name="dlentry.dd__content">
-    <!--xsl:attribute name="margin">3pt 3pt 3pt 3pt</xsl:attribute-->
 </xsl:attribute-set>
 
 <xsl:attribute-set name="simpletable" use-attribute-sets="base-font">
@@ -95,10 +93,6 @@
 </xsl:attribute-set>
 
 <xsl:attribute-set name="chrow.chdesc__content">
-    <xsl:attribute name="margin">3pt 3pt 3pt 3pt</xsl:attribute>
-    <!-- Added start/end indent -->
-    <xsl:attribute name="start-indent">3pt</xsl:attribute>
-    <xsl:attribute name="end-indent">3pt</xsl:attribute>
 </xsl:attribute-set>
 
 </xsl:stylesheet>

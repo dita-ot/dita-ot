@@ -35,7 +35,12 @@ See the accompanying license.txt file for applicable licenses.
 
   <!-- contents of table entries or similer structures -->
   <xsl:attribute-set name="common.table.body.entry">
-    <xsl:attribute name="margin">3pt 3pt 3pt 3pt</xsl:attribute>
+    <xsl:attribute name="space-before">3pt</xsl:attribute>
+    <xsl:attribute name="space-before.conditionality">retain</xsl:attribute>
+    <xsl:attribute name="space-after">3pt</xsl:attribute>
+    <xsl:attribute name="space-after.conditionality">retain</xsl:attribute>
+    <xsl:attribute name="start-indent">3pt</xsl:attribute>
+    <xsl:attribute name="end-indent">3pt</xsl:attribute>
   </xsl:attribute-set>
   
   <xsl:attribute-set name="common.table.head.entry">
