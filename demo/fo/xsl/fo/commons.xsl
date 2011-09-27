@@ -252,7 +252,7 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:call-template name="processTopicPreface"/>
             </xsl:when>
             <xsl:when test="$topicType = 'topicNotices'">
-                <xsl:if test="$bookmap-order eq 'retain'">
+                <xsl:if test="$retain-bookmap-order">
                   <xsl:call-template name="processTopicNotices"/>
                 </xsl:if>
             </xsl:when>

@@ -41,6 +41,8 @@ See the accompanying license.txt file for applicable licenses.
     version="2.0">
     
     <xsl:param name="bookmap-order" select="'discard'"/>
+  
+    <xsl:variable name="retain-bookmap-order" select="*[contains(@class,' bookmap/bookmap ')] and $bookmap-order eq 'retain'"/>
     
     <xsl:variable name="layout-masters">
         <xsl:value-of select="'cfg:fo/layout-masters.xml'"/>
@@ -130,7 +132,7 @@ See the accompanying license.txt file for applicable licenses.
 
             <xsl:call-template name="createFrontMatter"/>
 
-            <xsl:if test="$bookmap-order ne 'retain'">
+            <xsl:if test="not($retain-bookmap-order)">
                 <xsl:call-template name="createToc"/>
             </xsl:if>
 
@@ -138,7 +140,7 @@ See the accompanying license.txt file for applicable licenses.
 
             <xsl:apply-templates/>
 
-            <xsl:if test="$bookmap-order ne 'retain'">
+            <xsl:if test="not($retain-bookmap-order)">
                 <xsl:call-template name="createIndex"/>
             </xsl:if>
 

@@ -73,7 +73,7 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:if>
     </xsl:template>
 
-  <xsl:template match="ot-placeholder:indexlist[$bookmap-order eq 'retain']">
+  <xsl:template match="ot-placeholder:indexlist[$retain-bookmap-order]">
     <xsl:call-template name="createIndex"/>
   </xsl:template>
 

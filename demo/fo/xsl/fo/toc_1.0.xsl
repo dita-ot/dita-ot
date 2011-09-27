@@ -100,7 +100,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class, ' topic/topic ')][opentopic-func:determineTopicType() = 'topicIndexList']"  mode="toc" priority="10"/>
     -->
     
-  <xsl:template match="ot-placeholder:toc[$bookmap-order eq 'retain']">
+  <xsl:template match="ot-placeholder:toc[$retain-bookmap-order]">
     <xsl:call-template name="createToc"/>
   </xsl:template>
     

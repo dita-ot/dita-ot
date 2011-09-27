@@ -124,7 +124,7 @@ See the accompanying license.txt file for applicable licenses.
 
             </fo:flow>
         </fo:page-sequence>
-        <xsl:if test="$bookmap-order ne 'retain'">
+        <xsl:if test="not($retain-bookmap-order)">
           <xsl:call-template name="createNotices"/>
         </xsl:if>
     </xsl:template>
