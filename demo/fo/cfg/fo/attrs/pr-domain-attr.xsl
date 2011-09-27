@@ -40,7 +40,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="codeblock" use-attribute-sets="pre">
         <xsl:attribute name="keep-with-previous.within-page">always</xsl:attribute>
         <xsl:attribute name="start-indent">6pt + from-parent(start-indent)</xsl:attribute>
-        <xsl:attribute name="end-indent">6pt</xsl:attribute>
+        <xsl:attribute name="end-indent">6pt + from-parent(end-indent)</xsl:attribute>
         <xsl:attribute name="padding">6pt</xsl:attribute>
     </xsl:attribute-set>
 
