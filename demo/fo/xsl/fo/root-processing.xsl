@@ -40,6 +40,8 @@ See the accompanying license.txt file for applicable licenses.
     exclude-result-prefixes="opentopic-index opentopic opentopic-i18n opentopic-func"
     version="2.0">
     
+    <xsl:param name="bookmap-order" select="'discard'"/>
+    
     <xsl:variable name="layout-masters">
         <xsl:value-of select="'cfg:fo/layout-masters.xml'"/>
     </xsl:variable>
@@ -128,13 +130,17 @@ See the accompanying license.txt file for applicable licenses.
 
             <xsl:call-template name="createFrontMatter"/>
 
-            <xsl:call-template name="createToc"/>
+            <xsl:if test="$bookmap-order ne 'retain'">
+                <xsl:call-template name="createToc"/>
+            </xsl:if>
 
 <!--            <xsl:call-template name="createPreface"/>-->
 
             <xsl:apply-templates/>
 
-            <xsl:call-template name="createIndex"/>
+            <xsl:if test="$bookmap-order ne 'retain'">
+                <xsl:call-template name="createIndex"/>
+            </xsl:if>
 
         </fo:root>
     </xsl:template>

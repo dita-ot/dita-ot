@@ -252,8 +252,9 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:call-template name="processTopicPreface"/>
             </xsl:when>
             <xsl:when test="$topicType = 'topicNotices'">
-                <!-- Suppressed in normal processing, since it goes at the beginning of the book. -->
-                <!-- <xsl:call-template name="processTopicNotices"/> -->
+                <xsl:if test="$bookmap-order eq 'retain'">
+                  <xsl:call-template name="processTopicNotices"/>
+                </xsl:if>
             </xsl:when>
             <xsl:when test="$topicType = 'topicSimple'">
                 <xsl:variable name="page-sequence-reference">

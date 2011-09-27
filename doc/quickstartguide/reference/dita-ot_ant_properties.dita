@@ -404,6 +404,12 @@ GENERATE-TASK-LABELS.<--></entry>
 <entry>Specifies whether to leave the generated FO file for a PDF
 project.</entry>
 </row>
+  <row>
+    <entry><codeph>args.bookmap-order</codeph></entry>
+    <entry>NA</entry>
+    <entry>Specify if frontmatter and backmatter content order is retained in bookmap. Values are
+                "retain" and "discard" (default).</entry>
+  </row>
 </tbody>
 </tgroup>
 </table></section>

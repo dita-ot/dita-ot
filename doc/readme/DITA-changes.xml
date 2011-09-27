@@ -86,10 +86,12 @@ going back to the beginning of the toolkit. </shortdesc>
             attribute, for example </p>
           <codeblock>&lt;coderef href="unicode.txt" format="txt; charset=UTF-8"/> </codeblock>
         </section>
-        <section>
+        <section id="section_mdj_zcw_td">
           <title>PDF</title>
           <p>Support for mirrored page layout has been added. The default is the unmirrored
             layout.</p>
+          <p>Support has been added to control how front and back matter are processed in bookmaps.
+            The default is to reorder the frontmatter content as in previous releases.</p>
           <p>A new extension point has been added to add mappings to the PDF configuration catalog
             file.</p>
           <simpletable>

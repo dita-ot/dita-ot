@@ -53,6 +53,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:if test="count(exsl:node-set($bookmarks)/*) > 0">
             <fo:bookmark-tree>
                 <xsl:choose>
+                    <xsl:when test="$bookmap-order eq 'retain'"/>
                     <xsl:when test="($ditaVersion &gt;= 1.1) and $map//*[contains(@class,' bookmap/toc ')][@href]"/>
                     <xsl:when test="($ditaVersion &gt;= 1.1) and ($map//*[contains(@class,' bookmap/toc ')]
                         				or /*[contains(@class,' map/map ')][not(contains(@class,' bookmap/bookmap '))])">
@@ -79,6 +80,7 @@ See the accompanying license.txt file for applicable licenses.
                 <!-- CC #6163  -->
                 <xsl:if test="//opentopic-index:index.groups//opentopic-index:index.entry">
                     <xsl:choose>
+                        <xsl:when test="$bookmap-order eq 'retain'"/>
                         <xsl:when test="($ditaVersion &gt;= 1.1) and $map//*[contains(@class,' bookmap/indexlist ')][@href]"/>
                         <xsl:when test="($ditaVersion &gt;= 1.1) and ($map//*[contains(@class,' bookmap/indexlist ')]
                         				or /*[contains(@class,' map/map ')][not(contains(@class,' bookmap/bookmap '))])">
@@ -104,6 +106,26 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:if>
             </fo:bookmark-tree>
         </xsl:if>
+    </xsl:template>
+    
+    <xsl:template match="ot-placeholder:toc[$bookmap-order eq 'retain']" mode="bookmark">
+        <fo:bookmark internal-destination="{$id.toc}">
+            <fo:bookmark-title>
+                <xsl:call-template name="insertVariable">
+                    <xsl:with-param name="theVariableID" select="'Table of Contents'"/>
+                </xsl:call-template>
+            </fo:bookmark-title>
+        </fo:bookmark>
+    </xsl:template>
+    
+    <xsl:template match="ot-placeholder:indexlist[$bookmap-order eq 'retain']" mode="bookmark">
+        <fo:bookmark internal-destination="{$id.index}">
+            <fo:bookmark-title>
+                <xsl:call-template name="insertVariable">
+                    <xsl:with-param name="theVariableID" select="'Index'"/>
+                </xsl:call-template>
+            </fo:bookmark-title>
+        </fo:bookmark>
     </xsl:template>
     
     <xsl:template match="ot-placeholder:glossarylist" mode="bookmark">

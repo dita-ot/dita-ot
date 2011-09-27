@@ -204,6 +204,10 @@ with those set forth herein.
         <isset property="args.xsl.pdf"/>
       </and>
     </condition>
+    
+    <condition property="args.bookmap-order" value="discard">
+      <not><isset property="args.bookmap-order"/></not>
+    </condition>
 
     <condition property="temp.transformation.file" value="${xsl.fo.dir}/topic2fo_shell_1.0${formatter.specific.ext}.xsl">
       <and>
@@ -316,6 +320,7 @@ with those set forth herein.
       <arg line='"antArgsIncludeRelatedLinks=${args.fo.include.rellinks}"'/>
       <arg line='"antArgsGenerateTaskLabels=${args.gen.task.lbl}"'/>
       <arg line='"pdfFormatter=${pdf.formatter}"'/>
+      <arg line='"bookmap-order=${args.bookmap-order}"'/>
       <sysproperty key="xml.catalog.files" value="${xml.catalog.files}"/>
     </java>
   </target>

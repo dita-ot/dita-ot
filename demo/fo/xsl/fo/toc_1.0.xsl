@@ -100,6 +100,10 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class, ' topic/topic ')][opentopic-func:determineTopicType() = 'topicIndexList']"  mode="toc" priority="10"/>
     -->
     
+  <xsl:template match="ot-placeholder:toc[$bookmap-order eq 'retain']">
+    <xsl:call-template name="createToc"/>
+  </xsl:template>
+    
     <xsl:template match="ot-placeholder:glossarylist" mode="toc">
         <fo:block xsl:use-attribute-sets="__toc__indent__glossary">
             <fo:block xsl:use-attribute-sets="__toc__topic__content__glossary">
