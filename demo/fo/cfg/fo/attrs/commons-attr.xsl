@@ -152,7 +152,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="topic.topic.topic.topic.title" use-attribute-sets="base-font common.title">
         <xsl:attribute name="space-before">10pt</xsl:attribute>
-        <xsl:attribute name="margin-left"><xsl:value-of select="$side-col-width"/></xsl:attribute>
+        <xsl:attribute name="start-indent"><xsl:value-of select="$side-col-width"/></xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
         <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
     </xsl:attribute-set>
@@ -161,7 +161,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="topic.topic.topic.topic.topic.title" use-attribute-sets="base-font common.title">
-        <xsl:attribute name="margin-left"><xsl:value-of select="$side-col-width"/></xsl:attribute>
+        <xsl:attribute name="start-indent"><xsl:value-of select="$side-col-width"/></xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
         <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
     </xsl:attribute-set>
@@ -170,7 +170,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="topic.topic.topic.topic.topic.topic.title" use-attribute-sets="base-font common.title">
-        <xsl:attribute name="margin-left"><xsl:value-of select="$side-col-width"/></xsl:attribute>
+        <xsl:attribute name="start-indent"><xsl:value-of select="$side-col-width"/></xsl:attribute>
         <xsl:attribute name="font-style">italic</xsl:attribute>
         <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
     </xsl:attribute-set>
@@ -222,15 +222,15 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="body__toplevel" use-attribute-sets="base-font">
-        <xsl:attribute name="margin-left"><xsl:value-of select="$side-col-width"/></xsl:attribute>
+        <xsl:attribute name="start-indent"><xsl:value-of select="$side-col-width"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="body__secondLevel" use-attribute-sets="base-font">
-        <xsl:attribute name="margin-left"><xsl:value-of select="$side-col-width"/></xsl:attribute>
+        <xsl:attribute name="start-indent"><xsl:value-of select="$side-col-width"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="body" use-attribute-sets="base-font">
-        <xsl:attribute name="margin-left"><xsl:value-of select="$side-col-width"/></xsl:attribute>
+        <xsl:attribute name="start-indent"><xsl:value-of select="$side-col-width"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="shortdesc">
@@ -247,8 +247,8 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="example" use-attribute-sets="base-font common.border">
         <xsl:attribute name="line-height"><xsl:value-of select="$default-line-height"/></xsl:attribute>
         <xsl:attribute name="space-before">0.6em</xsl:attribute>
-        <xsl:attribute name="margin-left">36pt</xsl:attribute>
-        <xsl:attribute name="margin-right">36pt</xsl:attribute>
+        <xsl:attribute name="start-indent">36pt + from-parent(start-indent)</xsl:attribute>
+        <xsl:attribute name="end-indent">36pt</xsl:attribute>
         <xsl:attribute name="padding">5pt</xsl:attribute>
     </xsl:attribute-set>
 
