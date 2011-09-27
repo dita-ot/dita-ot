@@ -5,7 +5,9 @@
 <!-- (c) Copyright IBM Corporation 2011 All Rights Reserved. -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
-                version="2.0">
+                xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
+                version="2.0"
+                exclude-result-prefixes="opentopic-index">
 
   <!-- Disable index creation -->
   <xsl:template name="createIndex">
@@ -19,5 +21,8 @@
       <xsl:with-param name="msgsev">W</xsl:with-param>
     </xsl:call-template>
   </xsl:template>
+  
+  <!-- Disable index entry processing in keywords -->
+  <xsl:template match="opentopic-index:index.entry"/>
 
 </xsl:stylesheet>
