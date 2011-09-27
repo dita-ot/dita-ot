@@ -1307,7 +1307,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class,' map/topicmeta ')]/*[contains(@class,' map/searchtitle ')]"/>
 
     <xsl:template match="*[contains(@class,' topic/abstract ')]">
-        <fo:block>
+        <fo:block xsl:use-attribute-sets="abstract">
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>

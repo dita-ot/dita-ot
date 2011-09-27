@@ -233,6 +233,9 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="start-indent"><xsl:value-of select="$side-col-width"/></xsl:attribute>
     </xsl:attribute-set>
 
+    <xsl:attribute-set name="abstract" use-attribute-sets="body">
+    </xsl:attribute-set>
+
     <xsl:attribute-set name="shortdesc">
     </xsl:attribute-set>
 
@@ -367,9 +370,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="note__label__other">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="pre" use-attribute-sets="base-font">
-        <xsl:attribute name="space-before">1.2em</xsl:attribute>
-        <xsl:attribute name="space-after">0.8em</xsl:attribute>
+    <xsl:attribute-set name="pre" use-attribute-sets="base-font common.block">
         <xsl:attribute name="white-space-treatment">preserve</xsl:attribute>
         <xsl:attribute name="white-space-collapse">false</xsl:attribute>
         <xsl:attribute name="linefeed-treatment">preserve</xsl:attribute>
