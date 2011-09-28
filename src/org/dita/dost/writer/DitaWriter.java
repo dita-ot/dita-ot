@@ -356,6 +356,8 @@ public final class DitaWriter extends AbstractXMLWriter {
     private final Stack<Integer> columnNumberEndStack;
     //stack to store rowsMap
     private final Stack<Map<String, Integer>> rowsMapStack;
+    //stack to store colSpanMap
+    private final Stack<Map<String, Integer>> colSpanMapStack;
     //Added by William on 2010-07-01 for bug:3023642 end
 
 
@@ -366,6 +368,7 @@ public final class DitaWriter extends AbstractXMLWriter {
     private int totalColumns;
     //store morerows attribute
     private Map<String, Integer> rowsMap;
+    private Map<String, Integer> colSpanMap;
     //Added by William on 2009-06-30 for colname bug:2811358 end
     //Added by William on 2009-07-18 for req #12014 start
     //transtype
@@ -419,6 +422,7 @@ public final class DitaWriter extends AbstractXMLWriter {
         totalColumns = 0;
         //initialize the map
         rowsMap = new HashMap<String, Integer>();
+        colSpanMap = new HashMap<String, Integer>();
         //Added by William on 2009-06-30 for colname bug:2811358 start
         catalogMap = CatalogUtils.getCatalog(null);
         absolutePath = null;
@@ -439,6 +443,7 @@ public final class DitaWriter extends AbstractXMLWriter {
         columnNumberStack = new Stack<Integer>();
         columnNumberEndStack = new Stack<Integer>();
         rowsMapStack = new Stack<Map<String,Integer>>();
+        colSpanMapStack = new Stack<Map<String,Integer>>();
         //added by William on 20100701 for bug:3023642 end
 
         props = null;
@@ -774,11 +779,13 @@ public final class DitaWriter extends AbstractXMLWriter {
                 columnNumberStack.push(columnNumber);
                 columnNumberEndStack.push(columnNumberEnd);
                 rowsMapStack.push(rowsMap);
+                colSpanMapStack.push(colSpanMap);
             }
 
             columnNumber = 1; // initialize the column number
             columnNumberEnd = 0;//totally columns
             rowsMap = new HashMap<String, Integer>();
+            colSpanMap = new HashMap<String, Integer>();
             //new table initialize the col list
             colSpec = new ArrayList<String>(INT_16);
             //new table initialize the col list
@@ -849,7 +856,8 @@ public final class DitaWriter extends AbstractXMLWriter {
                                 //get total span rows
                                 final int totalSpanRows = rowsMap.get(pos).intValue();
                                 if(rowNumber <= totalSpanRows){
-                                    offset ++;
+                                    //offset ++;
+                                	offset += colSpanMap.get(pos).intValue();
                                 }
                             }
                         }
@@ -870,6 +878,7 @@ public final class DitaWriter extends AbstractXMLWriter {
                         final int total = Integer.parseInt(atts.getValue(ATTRIBUTE_NAME_MOREROWS))+
                                 rowNumber;
                         rowsMap.put(pos, Integer.valueOf(total));
+                        colSpanMap.put(pos, getColumnSpan(atts));
 
                     }
 
@@ -888,6 +897,19 @@ public final class DitaWriter extends AbstractXMLWriter {
         }
     }
 
+   private int getColumnSpan(final Attributes atts) {
+        int ret;
+        if ((atts.getValue("namest") == null)||(atts.getValue("nameend") == null)){
+            return 1;
+        }else{
+            ret = colSpec.indexOf(atts.getValue("nameend")) - colSpec.indexOf(atts.getValue("namest"))+1;
+            if(ret <= 0){
+                return 1;
+            }
+            return ret;
+        }
+    }
+    
     @Override
     public void endCDATA() throws SAXException {
         insideCDATA = false;
@@ -961,12 +983,14 @@ public final class DitaWriter extends AbstractXMLWriter {
                 columnNumber = columnNumberStack.peek().intValue();
                 columnNumberEnd = columnNumberEndStack.peek().intValue();
                 rowsMap = rowsMapStack.peek();
+                colSpanMap = colSpanMapStack.peek();
 
                 colSpecStack.pop();
                 rowNumStack.pop();
                 columnNumberStack.pop();
                 columnNumberEndStack.pop();
                 rowsMapStack.pop();
+                colSpanMapStack.pop();
 
             }else{
                 //no more tgroup tag
@@ -975,6 +999,7 @@ public final class DitaWriter extends AbstractXMLWriter {
                 columnNumber = 1;
                 columnNumberEnd = 0;
                 rowsMap = null;
+                colSpanMap = null;
             }
         }
         //Added by William on 2009-11-27 for bug:1846993 embedded table bug end
