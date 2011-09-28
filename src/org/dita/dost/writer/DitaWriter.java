@@ -73,7 +73,7 @@ import static org.dita.dost.util.Constants.UNIX_SEPARATOR;
 import static org.dita.dost.util.Constants.UTF8;
 import static org.dita.dost.util.Constants.WINDOWS_SEPARATOR;
 import static org.dita.dost.util.Constants.XML_HEAD;
-
+import static org.dita.dost.util.Constants.MAP_MAP;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -1168,7 +1168,7 @@ public final class DitaWriter extends AbstractXMLWriter {
                 params.put("%1", localName);
                 logger.logInfo(MessageUtils.getMessage("DOTJ030I", params).toString());
             }
-            if (attrValue != null && TOPIC_TOPIC.matches(attrValue)){
+            if (attrValue != null && (TOPIC_TOPIC.matches(attrValue)||MAP_MAP.matches(attrValue))){
                 domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
                 if(domains==null){
                     params.clear();
