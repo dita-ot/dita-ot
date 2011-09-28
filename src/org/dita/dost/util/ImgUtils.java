@@ -58,7 +58,7 @@ public final class ImgUtils {
         }catch (final Exception e){
             final Properties prop = new Properties();
             prop.put("%1", dirName+File.separatorChar+fileName);
-            logger.logError(MessageUtils.getMessage("DOTJ021E", prop).toString());
+            logger.logError(MessageUtils.getMessage("DOTJ023E", prop).toString());
             logger.logException(e);
             return -1;
         }
@@ -108,7 +108,7 @@ public final class ImgUtils {
         }catch (final Exception e){
             final Properties prop = new Properties();
             prop.put("%1", dirName+File.separatorChar+fileName);
-            logger.logError(MessageUtils.getMessage("DOTJ021E", prop).toString());
+            logger.logError(MessageUtils.getMessage("DOTJ023E", prop).toString());
             logger.logException(e);
             return -1;
         }
@@ -133,14 +133,14 @@ public final class ImgUtils {
         }catch (final Exception e){
             final Properties prop = new Properties();
             prop.put("%1", dirName+File.separatorChar+fileName);
-            logger.logError(MessageUtils.getMessage("DOTJ021E", prop).toString());
+            logger.logError(MessageUtils.getMessage("DOTJ023E", prop).toString());
             logger.logException(e);
             return -1;
         }
     }
 
     /**
-     * Get the image binary data, with hexical output.
+     * Get the image binary data, with hexical output. For RTF transformation
      * @param dirName -
      * 				The directory name that will be added to the path
      * 				of the image file.
@@ -169,7 +169,7 @@ public final class ImgUtils {
             }
             return ret.toString();
         }catch (final Exception e){
-            logger.logError(MessageUtils.getMessage("DOTJ021E").toString());
+            logger.logError(MessageUtils.getMessage("DOTJ023E").toString());
             logger.logException(e);
             return null;
         }finally{
@@ -181,7 +181,7 @@ public final class ImgUtils {
         }
     }
     /**
-     * Get Base64 encoding content.
+     * Get Base64 encoding content. For ODT transformation
      * @param dirName -
      * 				The directory name that will be added to the path
      * 				of the image file.

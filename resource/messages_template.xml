@@ -163,10 +163,10 @@
     <response>Please check the file '%1' and the ditaval file to see if this is the intended result.</response>
   </message>
   
-  <message id="DOTJ021E" type="ERROR">
+  <!--message id="DOTJ021E" type="ERROR">
     <reason>Failed to get the image file specified '%1' in ODT generation</reason>
     <response>Check whether the image exists and copied to output directory before the final step of ODT generation.</response>
-  </message>
+  </message-->
   
   <message id="DOTJ022F" type="FATAL">
     <reason>Failed to parse the input file '%1' because all of its content has been filtered out.</reason>
@@ -174,8 +174,8 @@
   </message>
 
   <message id="DOTJ023E" type="ERROR">
-    <reason>Failed to get the specified image file '%1' for RTF generation.</reason>
-    <response>Check whether the image exists and was copied to output directory before the final step of RTF generation.</response>
+    <reason>Failed to get the specified image file '%1' for output generation.</reason>
+    <response>Check whether the image exists and was copied to output directory before the final step of output generation.</response>
   </message>
   
   <message id="DOTJ024W" type="WARN">
