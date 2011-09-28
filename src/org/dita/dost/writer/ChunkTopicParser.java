@@ -462,6 +462,10 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                         if(checkHREF(atts)){
                             // if current @href value needs to be updated
                             String relative = FileUtils.getRelativePathFromMap(outputFile,currentParsingFile);
+                            if (conflictTable.containsKey(outputFile)){
+                            	String realoutputfile = conflictTable.get(outputFile);
+                            	relative = FileUtils.getRelativePathFromMap(realoutputfile,currentParsingFile);
+                        	}
                             if(attrValue.startsWith(SHARP)){
                                 // if @href refers to a location inside current parsing file
                                 // update @href to point back to current file
