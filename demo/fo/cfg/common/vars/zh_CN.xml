@@ -138,7 +138,8 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Table of Contents Part">第部分&#160;<param ref-name="number" />:&#160;</variable>
 
     <!-- The string used to label an preface within the table of contents. -->
-    <variable id="Table of Contents Preface">Preface&#160;</variable>
+    <variable id="Table of Contents Preface">序言&#160;</variable>
+    <variable id="Preface title">序言</variable>
 
     <!-- The heading to put at the top of a chapter when creating a
          chapter-level "mini-TOC" -->
@@ -223,13 +224,13 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Search title">Search title</variable>
 
     <!-- Text to use for chapter titles.-->
-    <variable id="Chapter with number">Chapter <param ref-name="number" /></variable>
+    <variable id="Chapter with number">第 <param ref-name="number"/> 章</variable>
 
     <!-- Text to use for appendix titles.-->
-    <variable id="Appendix with number">Appendix <param ref-name="number" /></variable>
+    <variable id="Appendix with number">附录 <param ref-name="number"/></variable>
 
     <!-- Text to use for part titles.-->
-    <variable id="Part with number">Part <param ref-name="number" /></variable>
+    <variable id="Part with number">第 <param ref-name="number"/> 部分</variable>
 
     <!-- Text to use for a label generated from <required-cleanup> element. -->
     <variable id="Required-Cleanup">[需要修正]</variable>
