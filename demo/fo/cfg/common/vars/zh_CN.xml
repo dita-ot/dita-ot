@@ -123,7 +123,10 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Table of Contents">内容</variable>
 
     <!-- The heading string to put at the top of the Index -->
-    <variable id="Index">索引</variable> <variable id="Index Continued String">继续</variable>
+    <variable id="Index">索引</variable>
+    <variable id="Index Continued String">继续</variable>
+    <variable id="Index See String">，见</variable>
+    <variable id="Index See Also String">参见</variable>
 
     <!-- The string used to label a chapter within the table of contents. -->
     <variable id="Table of Contents Chapter">章节&#160;<param ref-name="number" />:&#160;</variable>
@@ -326,4 +329,7 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Task Result">结果</variable>
     <variable id="Task Example">示例</variable>
     <variable id="Task Postreq">下一步做什么</variable>
+    <variable id="Glossary">术语表</variable>
+    <variable id="List of Tables">表格清单</variable>
+    <variable id="List of Figures">插图清单</variable>
 </vars>

@@ -123,7 +123,10 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Table of Contents">Inhalt</variable>
 
     <!-- The heading string to put at the top of the Index -->
-    <variable id="Index">Index</variable> <variable id="Index Continued String">Fortsetzung</variable>
+    <variable id="Index">Index</variable>
+    <variable id="Index Continued String">Fortsetzung</variable>
+    <variable id="Index See String">, Siehe </variable>
+    <variable id="Index See Also String">Siehe auch </variable>
 
     <!-- The string used to label a chapter within the table of contents. -->
     <variable id="Table of Contents Chapter">Kapitel&#160;<param ref-name="number" />:&#160;</variable>
@@ -326,4 +329,7 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Task Result">Ergebnisse</variable>
     <variable id="Task Example">Beispiel</variable>
     <variable id="Task Postreq">Nächste Maßnahme</variable>
+    <variable id="Glossary">Glossar</variable>
+    <variable id="List of Tables">Tabellenverzeichnis</variable>
+    <variable id="List of Figures">Abbildungsverzeichnis</variable>
 </vars>
