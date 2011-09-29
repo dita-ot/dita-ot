@@ -62,10 +62,10 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Body first header"/>
 
     <!-- The header that appears on odd-numbered pages. -->
-    <variable id="Body odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
+    <variable id="Body odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
 
     <!-- The header that appears on even-numbered pages. -->
-    <variable id="Body even header"><param ref-name="pagenum"/> | <param ref-name="prodname"/> | <param ref-name="heading"/></variable>
+    <variable id="Body even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
 
     <!-- The footer that appears on Preface odd-numbered pages. -->
     <variable id="Preface odd footer"/>
@@ -77,10 +77,10 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Preface first footer"/>
 
     <!-- The header that appears on Preface odd-numbered pages. -->
-    <variable id="Preface odd header">はじめに | <param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
+    <variable id="Preface odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;はじめに&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
 
     <!-- The header that appears on Preface even-numbered pages. -->
-    <variable id="Preface even header"><param ref-name="pagenum"/> | <param ref-name="prodname"/> | はじめに</variable>
+    <variable id="Preface even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;はじめに&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
 
     <!-- The header that appears on Preface first page. -->
     <variable id="Preface first header"/>
@@ -95,11 +95,11 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- The header that appears on the odd-numbered table of contents
          pages. --> 
-    <variable id="Toc odd header"><param ref-name="prodname"/> | 目次 | <param ref-name="pagenum"/></variable>
+    <variable id="Toc odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;目次&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
 
     <!-- The header that appears on the odd-numbered table of contents
          pages. --> 
-    <variable id="Toc even header"><param ref-name="pagenum"/> | <param ref-name="prodname"/> | 目次</variable>
+    <variable id="Toc even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;目次&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
 
     <!-- The footer that appears on the odd-numbered index pages. -->
     <variable id="Index odd footer"/>
@@ -108,10 +108,10 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Index even footer"/>
 
     <!-- The header that appears on the odd-numbered index pages. -->
-    <variable id="Index odd header"><param ref-name="prodname"/> | 索引 | <param ref-name="pagenum"/></variable>
+    <variable id="Index odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;<variable id="Index"/>&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
 
     <!-- The header that appears on the even-numbered index pages. -->
-    <variable id="Index even header"><param ref-name="pagenum"/> | <param ref-name="prodname"/> | 索引</variable>
+    <variable id="Index even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<variable id="Index"/>&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
 
     <!-- The formatting used to display ordered lists (e.g., "1., 2." or 
          "1), 2)" -->
@@ -389,6 +389,10 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Task Result">タスクの結果</variable>
     <variable id="Task Example">例</variable>
     <variable id="Task Postreq">次のタスク</variable>
+    <variable id="Glossary odd footer"/>
+    <variable id="Glossary even footer"/>
+    <variable id="Glossary odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;<variable id="Glossary"/>&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
+    <variable id="Glossary even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<variable id="Glossary"/>&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
     <variable id="Glossary">用語集</variable>
     <variable id="List of Tables">表の一覧</variable>
     <variable id="List of Figures">図の一覧</variable>
