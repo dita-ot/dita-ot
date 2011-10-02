@@ -62,13 +62,13 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="index-indents">
         <xsl:attribute name="end-indent">5pt</xsl:attribute>
         <xsl:attribute name="last-line-end-indent">0pt</xsl:attribute>
-        <xsl:attribute name="margin-left">36pt</xsl:attribute>
+        <xsl:attribute name="start-indent">36pt</xsl:attribute>
         <xsl:attribute name="text-indent">-36pt</xsl:attribute>
         <xsl:attribute name="font-size">9pt</xsl:attribute>
     </xsl:attribute-set>
     
     <xsl:attribute-set name="index.entry__content">
-        <xsl:attribute name="margin-left">18pt</xsl:attribute>
+        <xsl:attribute name="start-indent">18pt</xsl:attribute>
     </xsl:attribute-set>
 
   <xsl:attribute-set name="index.see.label">

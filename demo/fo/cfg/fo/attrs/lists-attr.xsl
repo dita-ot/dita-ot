@@ -65,7 +65,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="ul.li__label__content">
-        <xsl:attribute name="text-align">left</xsl:attribute>
+        <xsl:attribute name="text-align">start</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="ul.li__body">
@@ -94,7 +94,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="ol.li__label__content">
-        <xsl:attribute name="text-align">left</xsl:attribute>
+        <xsl:attribute name="text-align">start</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
     </xsl:attribute-set>
 
@@ -123,7 +123,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="sl.sli__label__content">
-        <xsl:attribute name="text-align">left</xsl:attribute>
+        <xsl:attribute name="text-align">start</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="sl.sli__body">

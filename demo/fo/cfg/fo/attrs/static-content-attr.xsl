@@ -36,27 +36,27 @@ See the accompanying license.txt file for applicable licenses.
     version="2.0">
 
   <xsl:attribute-set name="odd__header">
-    <xsl:attribute name="text-align">right</xsl:attribute>
-    <xsl:attribute name="margin-right">10pt</xsl:attribute>
+    <xsl:attribute name="text-align">end</xsl:attribute>
+    <xsl:attribute name="end-indent">10pt</xsl:attribute>
     <xsl:attribute name="space-before">10pt</xsl:attribute>
     <xsl:attribute name="space-before.conditionality">retain</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="even__header">
-    <xsl:attribute name="margin-left">10pt</xsl:attribute>
+    <xsl:attribute name="start-indent">10pt</xsl:attribute>
     <xsl:attribute name="space-before">10pt</xsl:attribute>
     <xsl:attribute name="space-before.conditionality">retain</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="odd__footer">
-    <xsl:attribute name="text-align">right</xsl:attribute>
-    <xsl:attribute name="margin-right">10pt</xsl:attribute>
+    <xsl:attribute name="text-align">end</xsl:attribute>
+    <xsl:attribute name="end-indent">10pt</xsl:attribute>
     <xsl:attribute name="space-after">10pt</xsl:attribute>
     <xsl:attribute name="space-after.conditionality">retain</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="even__footer">
-    <xsl:attribute name="margin-left">10pt</xsl:attribute>
+    <xsl:attribute name="start-indent">10pt</xsl:attribute>
     <xsl:attribute name="space-after">10pt</xsl:attribute>
     <xsl:attribute name="space-after.conditionality">retain</xsl:attribute>
   </xsl:attribute-set>

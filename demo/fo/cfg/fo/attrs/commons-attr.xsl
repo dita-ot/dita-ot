@@ -273,7 +273,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="padding-left">6pt</xsl:attribute>
         <xsl:attribute name="start-indent">92pt</xsl:attribute>
         <xsl:attribute name="end-indent">92pt</xsl:attribute>
-        <xsl:attribute name="text-align">left</xsl:attribute>
+        <xsl:attribute name="text-align">start</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="lq_simple" use-attribute-sets="base-font common.border">
@@ -282,20 +282,20 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="padding-left">6pt</xsl:attribute>
         <xsl:attribute name="start-indent">92pt</xsl:attribute>
         <xsl:attribute name="end-indent">92pt</xsl:attribute>
-        <xsl:attribute name="text-align">left</xsl:attribute>
+        <xsl:attribute name="text-align">start</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="lq_link" use-attribute-sets="base-font common.link">
         <xsl:attribute name="space-after">10pt</xsl:attribute>
         <xsl:attribute name="end-indent">92pt</xsl:attribute>
-        <xsl:attribute name="text-align">right</xsl:attribute>
+        <xsl:attribute name="text-align">end</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="lq_title" use-attribute-sets="base-font">
         <xsl:attribute name="space-after">10pt</xsl:attribute>
         <xsl:attribute name="end-indent">92pt</xsl:attribute>
-        <xsl:attribute name="text-align">right</xsl:attribute>
+        <xsl:attribute name="text-align">end</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
         <xsl:attribute name="font-style">italic</xsl:attribute>
     </xsl:attribute-set>
@@ -491,12 +491,12 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__align__left">
-        <xsl:attribute name="text-align">left</xsl:attribute>
+        <xsl:attribute name="text-align">start</xsl:attribute>
         <xsl:attribute name="display-align">before</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__align__right">
-        <xsl:attribute name="text-align">right</xsl:attribute>
+        <xsl:attribute name="text-align">end</xsl:attribute>
         <xsl:attribute name="display-align">before</xsl:attribute>
     </xsl:attribute-set>
 
@@ -639,6 +639,14 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="__fo__root" use-attribute-sets="base-font">
         <xsl:attribute name="font-family">Serif</xsl:attribute>
+        <xsl:attribute name="xml:lang" select="translate($locale, '_', '-')"/>
+        <xsl:attribute name="writing-mode">
+          <xsl:variable name="lang" select="if (contains($locale, '_')) then substring-before($locale, '_') else $locale"/>
+          <xsl:choose>
+            <xsl:when test="some $l in ('ar', 'fa', 'he', 'ps', 'ur') satisfies $l eq $lang">rl</xsl:when>
+            <xsl:otherwise>lt</xsl:otherwise>
+          </xsl:choose>
+        </xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__force__page__count">
