@@ -1,32 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
 <map id="mainDITAreadme" title="DITA-Ot Readme map" xml:lang="en-us">
-  <topicref href="readme/DITA-readme.xml" id="DITA-doc" locktitle="yes"
-    navtitle="DITA-OT Introduction">
-    <topicref href="readme/EvaluateOT.xml" locktitle="yes"
-      navtitle="Evaluating the DITA Open Toolkit"/>
-    <topicref href="readme/DITA-changes.xml#rel1.5.4" chunk="select-branch to-content"
-      copy-to="readme/whats_new.dita"/>
-    <topicref href="readme/DITA-changes.xml" navtitle="DITA release history"/>
-    <topicref href="specification/DITA1-2.xml" navtitle="DITA 1.2 Specification Support"/>
-    <topicref href="readme/DITA-tested.xml" navtitle="Tested platforms and tools" toc="no"/>
-    <topicref href="readme/DITA-usingtransforms.xml" navtitle="Using DITA transforms"/>
-    <topicref href="readme/DITA-ant.xml" navtitle="Building DITA output with Ant">
-      <topicref href="readme/DITA-setupant.xml" navtitle="Setting up Ant" toc="no"/>
-      <topicref href="readme/DITA-antuse.xml" navtitle="Running Ant" toc="no"/>
-      <topicref href="readme/DITA-antscript.xml" navtitle="Ant tasks and scripts" toc="no"/>
+  <topicref href="readme/DITA-readme.xml" id="DITA-doc">
+    <topicref href="readme/EvaluateOT.xml"/>
+    <topicref href="readme/DITA-changes.xml#rel1.5.4" chunk="select-branch to-content" copy-to="readme/whats_new.dita"/>
+    <!--topicref href="readme/DITA-changes.xml" navtitle="DITA release history"/-->
+    <topicref href="specification/DITA1-2.xml"/>
+    <topicref href="readme/DITA-tested.xml" toc="no"/>
+    <topicref href="readme/DITA-usingtransforms.xml"/>
+    <topicref href="readme/DITA-ant.xml">
+      <topicref href="readme/DITA-setupant.xml" toc="no"/>
+      <topicref href="readme/DITA-antuse.xml" toc="no"/>
+      <topicref href="readme/DITA-antscript.xml" toc="no"/>
     </topicref>
-    <topicref href="readme/DITA-javacmd.xml" navtitle="Building DITA output with Java command line"/>
+    <topicref href="readme/DITA-javacmd.xml"/>
     <topicref href="quickstartguide/reference/dita-ot_ant_properties.dita"/>
-    <topicref href="readme/DITA-log.xml" navtitle="Problem determination and log analysis"/>
-    <topicref href="readme/DITA-troubleshooting.xml" navtitle="Troubleshooting"/>
-    <topicref href="readme/DITA-limitations.xml" navtitle="Known limitations"
-      processing-role="resource-only"/>
-    <topicref href="readme/dita2word.xml" navtitle="Transforming DITA to Word RTF">
+    <topicref href="readme/DITA-log.xml"/>
+    <topicref href="readme/DITA-troubleshooting.xml"/>
+    <topicref href="readme/DITA-limitations.xml" processing-role="resource-only"/>
+    <topicref href="readme/dita2word.xml">
       <topicref href="readme/ascript.xml#ascript" toc="no"/>
       <topicref href="readme/jcomm.xml#jcomm" toc="no"/>
     </topicref>
-    <topicref href="readme/DITA-h2d.xml" navtitle="Migrating HTML to DITA">
+    <topicref href="readme/DITA-h2d.xml">
       <topicref href="readme/DITA-h2d-ant.xml" toc="no"/>
       <topicref href="readme/DITA-h2d-java.xml" toc="no"/>
     </topicref>

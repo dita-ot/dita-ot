@@ -104,6 +104,13 @@ going back to the beginning of the toolkit. </shortdesc>
               <stentry>Configuration catalog includes.</stentry>
             </strow>
           </simpletable>
+          <p>Support for the following languages has been added:</p>
+          <ul>
+            <li>Finnish</li>
+            <li>Hebrew</li>
+            <li>Romanian</li>
+            <li>Swedish</li>
+          </ul>
         </section>
       </refbody>
     </reference>
