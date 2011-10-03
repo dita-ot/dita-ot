@@ -26,7 +26,7 @@
     <xsl:attribute name="margin-bottom">
       <xsl:value-of select="$page-margin-bottom"/>
     </xsl:attribute>
-    <xsl:attribute name="margin-left">
+    <xsl:attribute name="{if ($writing-mode = 'lr') then 'margin-left' else 'margin-right'}">
       <xsl:choose>
         <!-- support legacy parameter -->
         <xsl:when test="normalize-space($page-margin-left)">
@@ -40,7 +40,7 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>
-    <xsl:attribute name="margin-right">
+    <xsl:attribute name="{if ($writing-mode = 'lr') then 'margin-right' else 'margin-left'}">
       <xsl:choose>
         <!-- support legacy parameter -->
         <xsl:when test="normalize-space($page-margin-right)">
@@ -63,7 +63,7 @@
     <xsl:attribute name="margin-bottom">
       <xsl:value-of select="$page-margin-bottom"/>
     </xsl:attribute>
-    <xsl:attribute name="margin-left">
+    <xsl:attribute name="{if ($writing-mode = 'lr') then 'margin-left' else 'margin-right'}">
       <xsl:choose>
         <!-- support legacy parameter -->
         <xsl:when test="normalize-space($page-margin-left)">
@@ -77,7 +77,7 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>
-    <xsl:attribute name="margin-right">
+    <xsl:attribute name="{if ($writing-mode = 'lr') then 'margin-right' else 'margin-left'}">
       <xsl:choose>
         <!-- support legacy parameter -->
         <xsl:when test="normalize-space($page-margin-right)">

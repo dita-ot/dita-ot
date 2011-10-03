@@ -43,6 +43,13 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:param name="bookmap-order" select="'discard'"/>
   
     <xsl:variable name="retain-bookmap-order" select="*[contains(@class,' bookmap/bookmap ')] and $bookmap-order eq 'retain'"/>
+    <xsl:variable name="writing-mode">
+      <xsl:variable name="lang" select="if (contains($locale, '_')) then substring-before($locale, '_') else $locale"/>
+      <xsl:choose>
+        <xsl:when test="some $l in ('ar', 'fa', 'he', 'ps', 'ur') satisfies $l eq $lang">rl</xsl:when>
+        <xsl:otherwise>lr</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
     
     <xsl:variable name="layout-masters">
         <xsl:value-of select="'cfg:fo/layout-masters.xml'"/>

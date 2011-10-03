@@ -640,13 +640,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="__fo__root" use-attribute-sets="base-font">
         <xsl:attribute name="font-family">Serif</xsl:attribute>
         <xsl:attribute name="xml:lang" select="translate($locale, '_', '-')"/>
-        <xsl:attribute name="writing-mode">
-          <xsl:variable name="lang" select="if (contains($locale, '_')) then substring-before($locale, '_') else $locale"/>
-          <xsl:choose>
-            <xsl:when test="some $l in ('ar', 'fa', 'he', 'ps', 'ur') satisfies $l eq $lang">rl</xsl:when>
-            <xsl:otherwise>lt</xsl:otherwise>
-          </xsl:choose>
-        </xsl:attribute>
+        <xsl:attribute name="writing-mode" select="$writing-mode"/>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__force__page__count">
