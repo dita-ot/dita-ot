@@ -144,7 +144,11 @@ See the accompanying license.txt file for applicable licenses.
 			</xsl:choose>
 		</xsl:variable>
 
-		<xsl:variable name="phys-font" select="$font-mappings/font-table/logical-font[@name=normalize-space($realFontName)]/physical-font[@char-set=$charSet]"/>
+    <xsl:variable name="logical-font" select="$font-mappings/font-table/logical-font[@name = normalize-space($realFontName)]"/>
+    <xsl:variable name="phys-font"
+                  select="if ($logical-font/physical-font[@char-set = $charSet])
+                          then $logical-font/physical-font[@char-set = $charSet]
+                          else $logical-font/physical-font[@char-set = 'default']"/>
 
         <xsl:variable name="font-style" select="$phys-font/font-style"/>
         <xsl:variable name="baseline-shift" select="$phys-font/baseline-shift"/>
