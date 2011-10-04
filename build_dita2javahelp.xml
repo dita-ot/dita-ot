@@ -68,6 +68,7 @@
             <mapper type="glob"
                     from="*${dita.input.filename}"
                     to="*${args.javahelp.toc}.xml" />
+          <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>
     
@@ -86,6 +87,7 @@
             <mapper type="glob"
                 from="${user.input.file}"
                 to="${args.javahelp.toc}.xml" />
+          <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>
 
@@ -104,6 +106,7 @@
             <mapper type="glob"
                     from="*${dita.input.filename}"
                     to="*${args.javahelp.map}.jhm" />
+          <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>
     
@@ -122,6 +125,7 @@
             <mapper type="glob"
                 from="${user.input.file}"
                 to="${args.javahelp.map}.jhm" />
+          <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>
 
@@ -143,6 +147,7 @@
             <mapper type="glob"
                     from="*${dita.input.filename}"
                     to="*${dita.map.toc.root}_helpset.hs" />
+          <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>
     
@@ -164,6 +169,7 @@
             <mapper type="glob"
                 from="${user.input.file}"
                 to="${dita.map.toc.root}_helpset.hs" />
+          <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>
 

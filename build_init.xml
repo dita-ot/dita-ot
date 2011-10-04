@@ -49,6 +49,10 @@
     </not>
   </condition>
 	
+  <xmlcatalog id="dita.catalog">
+    <catalogpath path="${dita.dir}/catalog-dita.xml"/>
+  </xmlcatalog>
+
 	<!-- Determine the Java architecture and set the JVM arguments
 	     appropriately.
 	     

@@ -7,4 +7,5 @@
   <feature extension="dita.conductor.transtype.check" value="javahelp"/>
   <require plugin="org.dita.xhtml"/>
   <feature extension="dita.conductor.target" file="conductor.xml"/>
+  <feature extension="dita.basedir-resource-directory" value="true"/>
 </plugin>

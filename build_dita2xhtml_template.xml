@@ -53,6 +53,7 @@
             <mapper type="glob"
                     from="*${dita.input.filename}"
                     to="*${args.xhtml.toc}${out.ext}" />
+          <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>
     
@@ -77,6 +78,7 @@
             <mapper type="glob"
                     from="${user.input.file}"
                     to="${args.xhtml.toc}${out.ext}" />
+          <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>
 </project>

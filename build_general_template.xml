@@ -69,6 +69,7 @@
       <!-- added by William on 2009-09-03 for keyref bug #2849078 end -->
       <param name="DBG" expression="${args.debug}" if="args.debug"/>
       <dita:extension id="dita.conductor.xhtml.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+  	  <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
 
@@ -122,6 +123,7 @@
       <!-- added by William on 2009-09-03 for keyref bug #2849078 end -->
       <param name="DBG" expression="${args.debug}" if="args.debug"/>
 	  <dita:extension id="dita.conductor.html.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+      <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
   
@@ -187,6 +189,7 @@
       <mapper type="regexp" 
         from="^(${tempdirToinputmapdir.relative.value})(.*?)(\.(xml|dita))$$" 
         to="\2${out.ext}"/>
+      <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
 
@@ -243,6 +246,7 @@
       <mapper type="regexp" 
         from="^(${tempdirToinputmapdir.relative.value})(.*?)(\.(xml|dita))$$" 
         to="\2${out.ext}"/>
+      <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
   
@@ -318,6 +322,7 @@
       <!-- added by William on 2009-09-03 for keyref bug #2849078 end -->
       <param name="DBG" expression="${args.debug}" if="args.debug"/>
       <dita:extension id="dita.conductor.xhtml.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+      <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
 
@@ -370,6 +375,7 @@
       <!-- added by William on 2009-09-03 for keyref bug #2849078 end -->
       <param name="DBG" expression="${args.debug}" if="args.debug"/>
 	  <dita:extension id="dita.conductor.html.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+      <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
 </project>

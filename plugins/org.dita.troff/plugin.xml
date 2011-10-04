@@ -6,4 +6,5 @@
 <plugin id="org.dita.troff">
   <feature extension="dita.conductor.transtype.check" value="troff"/>
   <feature extension="dita.conductor.target" file="conductor.xml"/>
+  <feature extension="dita.basedir-resource-directory" value="true"/>
 </plugin>

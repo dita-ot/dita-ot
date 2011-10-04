@@ -247,6 +247,7 @@
       <param name="TRANSTYPE" expression="${transtype}"/>
       <!-- added by William on 2009-06-26 for req #12014 end -->
       <dita:extension id="dita.preprocess.conref.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+      <xmlcatalog refid="dita.catalog"/>
     </xslt>
     <move todir="${dita.temp.dir}">
       <fileset dir="${dita.temp.dir}" includes="**/*.cnrf" />
@@ -308,6 +309,7 @@
       <param name="FILEREF" expression="file:"/>
       <!--Added by William on 2010-04-14 for bug:2982485 end -->
       <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+      <xmlcatalog refid="dita.catalog"/>
     </xslt>
     <move overwrite="true" todir="${dita.temp.dir}">
       <fileset dir="${dita.temp.dir}" includes="**/*.ditamap.ref" />
@@ -365,6 +367,7 @@
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="TRANSTYPE" expression="${transtype}" />
       <dita:extension id="dita.preprocess.mappull.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+      <xmlcatalog refid="dita.catalog"/>
     </xslt>
     <move overwrite="true" todir="${dita.temp.dir}">
       <fileset dir="${dita.temp.dir}" includes="**/*.ditamap.pull" />
@@ -428,6 +431,7 @@
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="INPUTMAP" expression="${user.input.file}" />
       <dita:extension id="dita.preprocess.maplink.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+      <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
 
@@ -481,6 +485,7 @@
       <param name="ONLYTOPICINMAP" expression="${onlytopic.in.map}" if="onlytopic.in.map"/>
       <dita:extension id="dita.preprocess.topicpull.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
       <mapper type="glob" from="*" to="*.pull" />
+      <xmlcatalog refid="dita.catalog"/>
     </xslt>
     <move todir="${dita.temp.dir}">
       <fileset dir="${dita.temp.dir}" includes="**/*.pull" />

@@ -86,6 +86,13 @@ going back to the beginning of the toolkit. </shortdesc>
             attribute, for example </p>
           <codeblock>&lt;coderef href="unicode.txt" format="txt; charset=UTF-8"/> </codeblock>
         </section>
+        <section>
+          <title>Plugin URI scheme</title>
+          <p>Support for <keyword>plugin</keyword> URI scheme has been added to XSLT stylesheets.
+            Plug-ins can refer to files in other plug-ins without hard coding relative paths, for
+            example </p>
+          <codeblock>&lt;xsl:import href="plugin:org.dita.pdf2:xsl/fo/topic2fo_1.0.xsl"/></codeblock>
+        </section>
         <section id="section_mdj_zcw_td">
           <title>PDF</title>
           <p>Support for mirrored page layout has been added. The default is the unmirrored
@@ -119,6 +126,8 @@ going back to the beginning of the toolkit. </shortdesc>
       <refbody>
         <section>
           <p>The <codeph>print_transtypes</codeph> property in <filepath>integrator.properties</filepath> has been deprecated in favor of <codeph>dita.transtype.print</codeph> plug-in extension point.</p>
+          <p>The <codeph>dita.plugin.org.dita.*.dir</codeph> properties have been changed to point
+            to DITA-OT base directory.</p>
         </section>
         <section><title>PDF</title><p>Support for mirrored page layout was added and the following
             XSLT configuration variables have been

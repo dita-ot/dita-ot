@@ -26,7 +26,9 @@ final class ImportPluginInfoAction extends ImportAction {
             final Features f = e.getValue();
             final String name = "dita.plugin."+ e.getKey() + ".dir";
             final StringBuilder location = new StringBuilder();
-            if (f.getLocation().getAbsolutePath().startsWith(f.getDitaDir().getAbsolutePath())) {
+            if (Boolean.parseBoolean(f.getFeature("dita.basedir-resource-directory"))) {
+                location.append("${dita.dir}");
+            } else if (f.getLocation().getAbsolutePath().startsWith(f.getDitaDir().getAbsolutePath())) {
                 location.append("${dita.dir}").append(File.separator)
                 .append(FileUtils.getRelativePathFromMap(
                         new File(f.getDitaDir(), "plugin.xml").getAbsolutePath(),
