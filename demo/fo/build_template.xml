@@ -39,8 +39,9 @@ with those set forth herein.
     <property name="default.locale" value="en_US"/>
     <property name="default.language" value="en"/>
     
-    <property name="ot.dir" value="${dita.plugin.org.dita.pdf2.dir}/../.."/>
-    <property name="lib.dir" value="${ot.dir}/lib"/>
+    <!-- legacy property -->
+    <property name="ot.dir" location="${dita.dir}"/>
+    <property name="lib.dir" value="${dita.dir}/lib"/>
     <property name="fo.lib.dir" value="${dita.plugin.org.dita.pdf2.dir}/lib"/>
     <property name="merged.file" value="${dita.map.filename.root}_MERGED.xml"/>
     
@@ -59,15 +60,17 @@ with those set forth herein.
       <not><isset property="file.protocol.prefix"/></not>
     </condition>
     
-    <property name="xml.catalog.files" value="${customization.dir}/catalog.xml;${dita.plugin.org.dita.pdf2.dir}/cfg/catalog.xml;${ot.dir}/catalog-dita.xml"/>
+    <property name="xml.catalog.files" value="${customization.dir}/catalog.xml;${dita.plugin.org.dita.pdf2.dir}/cfg/catalog.xml;${dita.dir}/catalog-dita.xml"/>
     
     <property name="xsl.dir" value="${dita.plugin.org.dita.pdf2.dir}/xsl"/>
     <property name="xsl.fo.dir" value="${dita.plugin.org.dita.pdf2.dir}/xsl/fo"/>
+    <!-- legacy property -->
     <property name="xsl.fo.diff.dir" value="${dita.plugin.org.dita.pdf2.dir}/xsl/fo/diff"/>
     <property name="xsl.common.dir" value="${dita.plugin.org.dita.pdf2.dir}/xsl/common"/>
     <property name="cfg.dir" value="${dita.plugin.org.dita.pdf2.dir}/cfg"/>
     <property name="cfg.fo.dir" value="${dita.plugin.org.dita.pdf2.dir}/cfg/fo"/>
     <property name="cfg.common.dir" value="${dita.plugin.org.dita.pdf2.dir}/cfg/common"/>
+    <!-- legacy property -->
     <property name="dtd.dir" value="${dita.plugin.org.dita.pdf2.dir}/dtd"/>
     
     <property name="saxon.resolver.command.line"
