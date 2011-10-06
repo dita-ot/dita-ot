@@ -54,9 +54,13 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
     </xsl:attribute-set>
 
+    <!-- FIXME: Incorrectly named, should be index.group -->
     <xsl:attribute-set name="index.entry">
         <xsl:attribute name="space-after">14pt</xsl:attribute>
         <xsl:attribute name="font-size">9pt</xsl:attribute>
+    </xsl:attribute-set>
+  
+    <xsl:attribute-set name="index.term">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="index-indents">
