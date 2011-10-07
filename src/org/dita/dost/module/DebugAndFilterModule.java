@@ -195,16 +195,6 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             final String transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
             //Added by William on 2009-07-18 for req #12014 start
 
-            //Added on 2010-08-24 for bug:3086552 start
-            final String setSystemid_tmp = input.getAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID);
-            if(setSystemid_tmp.equals("yes")) {
-                setSystemid = true;
-            } else {
-                setSystemid = false;
-            }
-            DitaValReader.initXMLReader(setSystemid);
-            //Added on 2010-08-24 for bug:3086552 end
-
             inputDir = null;
 
 
@@ -233,6 +223,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             }
             final DitaValReader filterReader = new DitaValReader();
             filterReader.setLogger(logger);
+            filterReader.initXMLReader("yes".equals(input.getAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID)));
 
             Content content;
             if (ditavalFile!=null){

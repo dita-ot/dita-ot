@@ -71,9 +71,7 @@ public final class DitaValReader extends AbstractXMLReader {
 
     private Element schemeRoot = null;
 
-    //Added on 2010-08-24 for bug:3086552 start
-    private static boolean setSystemid = true;
-    //Added on 2010-08-24 for bug:3086552 end
+    private boolean setSystemid = true;
 
     /**
      * Default constructor of DitaValReader class.
@@ -97,11 +95,10 @@ public final class DitaValReader extends AbstractXMLReader {
         }
 
     }
-    //Added on 2010-08-24 for bug:3086552 start
-    public static void initXMLReader(final boolean arg_setSystemid) {
-        setSystemid= arg_setSystemid;
+
+    public void initXMLReader(final boolean arg_setSystemid) {
+        setSystemid = arg_setSystemid;
     }
-    //Added on 2010-08-24 for bug:3086552 end
 
     @Override
     public void read(final String input) {

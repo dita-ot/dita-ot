@@ -269,9 +269,6 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
             reader = new GenListModuleReader();
             reader.setLogger(logger);
             reader.initXMLReader(ditaDir, xmlValidate, rootFile, setSystemid);
-            // Added on 2010-08-24 for bug:3086552 start
-            DitaValReader.initXMLReader(setSystemid);
-            // Added on 2010-08-24 for bug:3086552 end
 
             // first parse filter file for later use
             parseFilterFile();
@@ -843,6 +840,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
         if (ditavalFile != null) {
             final DitaValReader ditaValReader = new DitaValReader();
             ditaValReader.setLogger(logger);
+            ditaValReader.initXMLReader(setSystemid);
 
             ditaValReader.read(ditavalFile);
             // Store filter map for later use
