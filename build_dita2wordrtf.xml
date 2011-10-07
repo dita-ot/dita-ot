@@ -22,7 +22,7 @@
     </antcall>
     <antcall target="escapeUnicode">
       <param name="input" value="${dita.map.output.dir}${file.separator}${dita.topic.filename.root}.rtf"/>
-      <param name="output" value="${dita.map.output.dir}${file.separator}${dita.topic.filename.root}"/>
+      <param name="output" value="${dita.map.output.dir}${file.separator}${dita.topic.filename.root}.rtf.tmp"/>
     </antcall>
   </target>
   
@@ -35,7 +35,7 @@
     </antcall>
     <antcall target="escapeUnicode">
       <param name="input" value="${dita.map.output.dir}${file.separator}${dita.map.filename.root}.rtf"/>
-      <param name="output" value="${dita.map.output.dir}${file.separator}${dita.map.filename.root}"/>
+      <param name="output" value="${dita.map.output.dir}${file.separator}${dita.map.filename.root}.rtf.tmp"/>
     </antcall>
   </target>
 
