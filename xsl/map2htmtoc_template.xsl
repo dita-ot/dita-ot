@@ -7,6 +7,7 @@
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
+<xsl:import href="common/dita-utilities.xsl"/>
 <!-- Import the main ditamap to HTML TOC conversion -->
 <xsl:import href="map2htmtoc/map2htmtocImpl.xsl"/>
 

@@ -19,9 +19,8 @@
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0"
-                xmlns:java="org.dita.dost.util.StringUtils"
                 xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
-                exclude-result-prefixes="java dita-ot"
+                exclude-result-prefixes="dita-ot"
   >
 
 <!-- Include error message template -->
@@ -286,21 +285,21 @@
               <xsl:when test="contains(@copy-to, $DITAEXT)">
                 <xsl:attribute name="value">
                   <xsl:value-of select="$pathFromMaplist"/>
-                  <!-- added by William on 2009-11-26 for bug:1628937 start-->
-                  <!--xsl:value-of select="substring-before(@copy-to,$DITAEXT)"/-->
-                  <xsl:value-of select="java:getFileName(@copy-to,$DITAEXT)"/>
-                  <!-- added by William on 2009-11-26 for bug:1628937 end-->
-                  
-                  <xsl:value-of select="$OUTEXT"/><xsl:value-of select="$topicID"/>
+                  <xsl:call-template name="getFileName">
+                    <xsl:with-param name="filename" select="@copy-to"/>
+                    <xsl:with-param name="extension" select="$DITAEXT"/>
+                  </xsl:call-template>
+                  <xsl:value-of select="$OUTEXT"/>
+                  <xsl:value-of select="$topicID"/>
                 </xsl:attribute>
               </xsl:when>
               <xsl:when test="contains(@href, $DITAEXT)">
                 <xsl:attribute name="value">
                   <xsl:value-of select="$pathFromMaplist"/>
-                  <!-- added by William on 2009-11-26 for bug:1628937 start-->
-                  <!--xsl:value-of select="substring-before(@href,$DITAEXT)"/-->
-                  <xsl:value-of select="java:getFileName(@href,$DITAEXT)"/>
-                  <!-- added by William on 2009-11-26 for bug:1628937 end-->
+                  <xsl:call-template name="getFileName">
+                    <xsl:with-param name="filename" select="@href"/>
+                    <xsl:with-param name="extension" select="$DITAEXT"/>
+                  </xsl:call-template>
                   <xsl:value-of select="$OUTEXT"/>
                   <xsl:value-of select="$topicID"/>
                 </xsl:attribute>
