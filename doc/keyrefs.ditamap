@@ -68,4 +68,28 @@ See the accompanying license.txt file for applicable licenses.
       </keywords>
     </topicmeta>
   </keydef>
+  <!-- bundled versions -->
+  <keydef keys="tool.codec.version">
+    <topicmeta>
+      <keywords>
+        <keyword>1.4</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <!-- bundled versions -->
+  <keydef keys="tool.logging.version">
+    <topicmeta>
+      <keywords>
+        <keyword>1.1.1</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <!-- bundled versions -->
+  <keydef keys="tool.icu4j.version">
+    <topicmeta>
+      <keywords>
+        <keyword>3.4.4</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
 </map>

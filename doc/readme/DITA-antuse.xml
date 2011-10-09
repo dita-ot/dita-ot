@@ -19,16 +19,16 @@ following commands.</note><ul>
             <codeblock>ant all -f build_demo.xml</codeblock><p>The building process will create an
               <filepath>/out/</filepath> directory and put the output files in subdirectories that
             parallel the source directory. </p></li>
-<li>You can        also rebuild specific DITA sample files after running
-the full demo.<p>First you need        to remove part of the output
-by specifying a        "<codeph>clean</codeph>" target, and then rebuild
-the output. For        example: To rebuild FAQ demo, run the following
-two commands: <codeblock>ant clean.demo.faq -f build_demo.xml
-ant demo.faq -f build_demo.xml</codeblock></p><note>To find out the
-complete list of targets you can clean and build, check the <i>name</i> attributes
-for the target elements within the        <i>build_demo.xml</i> file.
-Or, input <codeph>ant -projecthelp -f build_demo.xml</codeph> for
-a full list information.</note> </li>
+<li>You can also rebuild specific DITA sample files after running the full demo.<p>First you need to
+            remove part of the output by specifying a "<codeph>clean</codeph>" target, and then
+            rebuild the output. For example: To rebuild FAQ demo, run the following two commands:
+            <codeblock>ant clean.demo.faq -f build_demo.xml
+ant demo.faq -f build_demo.xml</codeblock></p><note>To
+            find out the complete list of targets you can clean and build, check the
+              <codeph>name</codeph> attributes for the target elements within the
+              <filepath>build_demo.xml</filepath> file. Or, input <codeph>ant -projecthelp -f
+              build_demo.xml</codeph> for a full list information.</note>
+        </li>
 <li>You can also build your own selections using a prompted build.
             <codeblock>ant -f build_demo.xml</codeblock><p>Ant will prompt you for the input file,
             output directory, and transform type. Values on these parameters are case

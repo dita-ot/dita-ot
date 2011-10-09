@@ -70,9 +70,9 @@ DITA Toolkit provides several core transforms:</p>
         features of DITA may not be supported.</dd>
     </dlentry>
     <dlentry>
-      <dt>TROFF</dt>
-      <dd>TROFF based man pages are supported; one man page is generated for each input topic.
-        Note that tables are not supported by this transformation type.</dd>
+      <dt>troff</dt>
+      <dd>troff based man pages are supported; one man page is generated for each input topic. Note
+            that tables are not supported by this transformation type.</dd>
     </dlentry>
   </dl>     </section>
 <section>       <title>Available special output formats</title><p>Additional
@@ -100,7 +100,6 @@ by an ant script. There are some examples of simple ant scripts in
 the directory <filepath>samples/ant_sample</filepath>. See <xref
 href="DITA-antuse.xml"></xref> for more details about Ant processing.</p> 
    </section>
-<section></section>
 </body>
 </topic>
 <?Pub *0000003228?>
