@@ -514,7 +514,7 @@ qualifier ::= ( [0..9] | [a..zA..Z] | ’_’ | '-' )+</codeblock>
         specialized DTDs, and includes an override for the XHTML output processor. It would go into
         a directory such as <filepath>DITA-OT\plugins\music\</filepath> and referenced supporting
         files would also exist in that directory. A more extensive sample using these values is
-        available in the actual music plug-in, available at the <xref
+        available in the actual music plug-in, available at the <xref format="html"
           href="http://sourceforge.net/projects/dita-ot/files/" scope="external">DITA-OT download
           page</xref> at SourceForge </p>
       </section>

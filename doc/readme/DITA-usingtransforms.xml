@@ -10,14 +10,12 @@
 of all processing defined by OASIS in the DITA specification.</shortdesc>
 <body>
 <section id="preprocess">             <title>Pre-process</title><?Pub
-Caret -2?><p>A pre-process is done before the main transformation.
-The input of the pre-process is dita files (maps and topics) and the
-output of the pre-process is often referred to as "normalized" dita
-files. The pre-process stage resolves several common DITA behaviors,
-such as resolving conref attributes, resolving keyref values, and
-adding links based on the hierarchy and relationship tables in a map.
-The normalized dita files are in a temporary directory. Most DITA
-transforms should use this common pre-process setup.</p></section>
+Caret -2?><p>A pre-process is done before the main transformation. The input of the pre-process is dita files
+        (maps and topics) and the output of the pre-process is often referred to as "normalized"
+        dita files. The pre-process stage resolves several common DITA behaviors, such as resolving
+        conref attributes, resolving keyref values, and adding links based on the hierarchy and
+        relationship tables in a map. The normalized dita files are in a temporary directory. Most
+        DITA transforms use this common pre-process setup.</p></section>
 <section>       <title>Available core transforms</title><p>A core
 DITA transform is the basic set of templates that support all    
      the elements of a topic. This set is the basis for the following
@@ -59,7 +57,7 @@ DITA Toolkit provides several core transforms:</p>
       <dd>Java Help includes a table of contents and index for use with the Java Help
         platform.</dd>
     </dlentry>
-    <dlentry>
+    <dlentry rev="1.5.2">
       <dt>OpenDocument (ODT)</dt>
       <dd>ODT is a document format based on the ODF standard, for use with tools like Open
         Office. Support for ODT was added in DITA-OT 1.5.2.</dd>
@@ -75,10 +73,11 @@ DITA Toolkit provides several core transforms:</p>
             that tables are not supported by this transformation type.</dd>
     </dlentry>
   </dl>     </section>
+  <!--
 <section>       <title>Available special output formats</title><p>Additional
 map-driven tools support transforming sets of topics into        
  special output formats, including:<dl><dlentry>
-<dt>map2eclipsehelp (map2elipse.xsl)</dt>
+<dt>map2eclipsehelp (map2eclipse.xsl)</dt>
 <dd>This          transform generates table of content for help contents
 in Eclipse.</dd>
 </dlentry><dlentry>
@@ -94,6 +93,7 @@ of          Html Help.</dd>
 <dd>This transform          generates table of content and jhm file
 for Java Help.</dd>
 </dlentry></dl></p>     </section>
+-->
 <section>       <title>Invoke the complete transformation</title> 
      <p>The complete transformation including pre-process can be executed
 by an ant script. There are some examples of simple ant scripts in

@@ -19,8 +19,7 @@
 <conbody>
 <note>This topic explains how to use the Full Easy Install on Windows; the three versions are also
       available on all other supported platforms. For a description of all packages available, see
-        <xref format="html" href="http://dita.xml.org/wiki/dita-ot-packages" scope="external">What
-        packages are available for the DITA Open Toolkit</xref>.</note>
+  <xref href="distribution_packages.dita"/></note>
 <p>Unzip or extract the &quot;full_easy_install&quot; zip file to a convenient directory, such as
       your C: drive&apos;s root directory. The package will create a directory such as
           <filepath>C:\DITA-OT<keyword keyref="release.version"/>\</filepath> that contains not only
@@ -96,7 +95,7 @@ try your hand at modifying some of the sample scripts in the ant directory.
 These represent the kind of driver files that you would create for
 your own projects. You can easily adapt these to process your own
 test DITA files, for example. Call the other ant samples after this
-example: </p><pre platform="windows">C:\DITA-OT-<keyword keyref="release.version"/>>ant -f samples/ant_sample/sample_xhtml.xml</pre>
+example: </p><pre platform="windows">C:\DITA-OT<keyword keyref="release.version"/>>ant -f samples\ant_sample\sample_xhtml.xml</pre>
   <note>This is basically the same as running <codeph>ant samples.web -f build_demo.xml</codeph>, but
         intended for you to modify. </note><p>You
 will find the output for this exercise in the <filepath>samples/ant_sample/</filepath> directory
@@ -105,5 +104,8 @@ to change where your outputs end up, and also to modify the build
 process in other ways. See the documentation for Ant parameters to
 learn more about processing options.</p></section>
 </conbody>
+  <related-links>
+    <link href="../quickstartguide/reference/dita-ot_ant_properties.dita"/>
+  </related-links>
 </concept>
 <?Pub *0000006946?>

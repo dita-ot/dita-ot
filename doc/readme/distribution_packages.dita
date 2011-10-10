@@ -52,7 +52,7 @@
       </ul>
     </section>
     <section>
-      <title>Source package</title>
+      <title>Source package (DITA-OT<keyword keyref="release.version"/>_src.zip)</title>
       <p>In addition to the binary versions of the toolkit, there is a source package available that
         contains all of the source code used in each of the three packages. The demo files, samples,
         and documentation are not part of the source package.The source package contains the Apache

@@ -72,7 +72,7 @@ the title.</note>               </entry>
 <entry colname="COLSPEC3">Specifies how cross references to figures
 are styled. Allowed values are "NUMBER" and "TITLE". NUMBER results
 in "Figure 5", TITLE results in the title of the figure. <ph audience="xslt-customizer">Corresponds
-to the XSLT parameter FIGURELINK.</ph><note>This parameter is available
+to the XSLT parameter <codeph>FIGURELINK</codeph>.</ph><note>This parameter is available
 for all except the PDF transform.</note></entry>
 </row>
 <row>
@@ -103,7 +103,7 @@ project.</entry>
 <row>
 <entry><codeph>args.outext</codeph></entry>
 <entry><codeph>/outext</codeph></entry>
-<entry>Specifies the file extension for HTML files in your project's output. <ph audience="xslt-customizer">Corresponds to XHTML parameter OUTEXT.</ph> Default values is ".html".</entry>
+<entry>Specifies the file extension for HTML files in your project's output. <ph audience="xslt-customizer">Corresponds to XHTML parameter <codeph>OUTEXT</codeph>.</ph> Default values is ".html".</entry>
 </row>
 <row>
 <entry colname="COLSPEC0"><codeph>args.tablelink.style</codeph></entry>
@@ -111,7 +111,7 @@ project.</entry>
 <entry colname="COLSPEC3">Specifies how cross references to tables
 are styled. Allowed values are "NUMBER" or "TITLE". The default is
 "NUMBER", which produces results such as "Table 5". TITLE results
-in the title of the table. <ph audience="xslt-customizer">Corresponds to the XSLT parameter TABLELINK.</ph><note
+in the title of the table. <ph audience="xslt-customizer">Corresponds to the XSLT parameter <codeph>TABLELINK</codeph>.</ph><note
 >This parameter is available for all except the PDF transform.</note
 ></entry>
 </row>
@@ -152,7 +152,7 @@ project.</entry>
 <entry>Defines the output type for a specific Ant target. Plug-ins
 may add new values for this option; by default, the following values
 are available:<ul>
-<li>PDF</li>
+<li>pdf</li>
 <li>xhtml</li>
 <li>htmlhelp</li>
 <li>eclipsehelp</li>
@@ -203,7 +203,7 @@ image's filename. Allowed values are "yes" and "no". Default is "no".</entry>
 <entry colname="COLSPEC0"><codeph>args.breadcrumbs</codeph></entry>
 <entry colname="COLSPEC2">NA</entry>
 <entry colname="COLSPEC3">Specifies whether to generate breadcrumb
-links. <ph audience="xslt-customizer">Corresponds to the XSLT parameter  BREADCRUMBS.</ph> Allowed values
+links. <ph audience="xslt-customizer">Corresponds to the XSLT parameter <codeph>BREADCRUMBS</codeph>.</ph> Allowed values
 are "yes" and "no". Default is "no".</entry>
 </row>
 <row>
@@ -221,7 +221,7 @@ own .css file to the output directory.</entry>
 <entry colname="COLSPEC0"><codeph>args.csspath</codeph></entry>
 <entry colname="COLSPEC2"><codeph>/csspath</codeph></entry>
 <entry colname="COLSPEC3">The location of your copied .css file relative
-to the output directory. <ph audience="xslt-customizer">Corresponds to XSLT parameter CSSPATH.</ph></entry>
+to the output directory. <ph audience="xslt-customizer">Corresponds to XSLT parameter <codeph>CSSPATH</codeph>.</ph></entry>
 </row>
 <row>
 <entry colname="COLSPEC0"><codeph>args.cssroot</codeph></entry>
@@ -233,7 +233,7 @@ to the output directory. <ph audience="xslt-customizer">Corresponds to XSLT para
 <entry colname="COLSPEC0"><codeph>args.ftr</codeph></entry>
 <entry colname="COLSPEC2"><codeph>/ftr</codeph></entry>
 <entry colname="COLSPEC3">Specifies the location of a well-formed
-XML file containing your custom running-footer for the document body. <ph audience="xslt-customizer">Corresponds to XSLT parameter FTR.</ph><note>The fragment must be valid
+XML file containing your custom running-footer for the document body. <ph audience="xslt-customizer">Corresponds to XSLT parameter <codeph>FTR</codeph>.</ph><note>The fragment must be valid
 XML, with a single root element, common practice is to place all content
 into &lt;div>.</note></entry>
 </row>
@@ -243,15 +243,15 @@ into &lt;div>.</note></entry>
 <entry colname="COLSPEC3">Specifies whether to generate extra metadata
 that targets parental control scanners, meta elements with name="security"
 and name="Robots". Allowed values are "yes" and "no". Default value
-is "no". <ph audience="xslt-customizer">Corresponds to the XSLT parameter genDefMeta.</ph></entry>
+is "no". <ph audience="xslt-customizer">Corresponds to the XSLT parameter <codeph>genDefMeta</codeph>.</ph></entry>
 </row>
   <row id="args.gen.task.lbl">
 <entry colname="COLSPEC0"><codeph>args.gen.task.lbl</codeph></entry>
 <entry colname="COLSPEC2"><codeph>/usetasklabels</codeph></entry>
-<entry colname="COLSPEC3">Specifies whether to generate locale-based
-default headings for sections within task topics. Allowed values are
-"YES" and "NO". Default is "NO". <ph audience="xslt-customizer">Corresponds to the XSLT parameter
-GENERATE-TASK-LABELS.</ph></entry>
+<entry colname="COLSPEC3">Specifies whether to generate locale-based default headings for sections
+                within task topics. Allowed values are "YES" and "NO". Default is "NO". <ph
+                  audience="xslt-customizer">Corresponds to the XSLT parameter
+                    <codeph>GENERATE-TASK-LABELS</codeph>.</ph></entry>
 </row>
 <row>
 <entry colname="COLSPEC0"><codeph>args.hdf</codeph></entry>
@@ -263,7 +263,7 @@ XML file to be placed in the document head.</entry>
 <entry colname="COLSPEC0"><codeph>args.hdr</codeph></entry>
 <entry colname="COLSPEC2"><codeph>/hdr</codeph></entry>
 <entry colname="COLSPEC3">Specifies the location of a well-formed
-XML file containing your custom running-header for the document body. <ph audience="xslt-customizer">Corresponds to XSLT parameter HDR.</ph><note>The fragment must be valid
+XML file containing your custom running-header for the document body. <ph audience="xslt-customizer">Corresponds to XSLT parameter <codeph>HDR</codeph>.</ph><note>The fragment must be valid
 XML, with a single root element, common practice is to place all content
 into &lt;div>.</note></entry>
 </row>
@@ -271,7 +271,7 @@ into &lt;div>.</note></entry>
 <entry colname="COLSPEC0"><codeph>args.hide.parent.link</codeph></entry>
 <entry colname="COLSPEC2">NA</entry>
 <entry colname="COLSPEC3">Specifies whether to hide links to parent
-topics in the rendered XHTML. <ph audience="xslt-customizer">Corresponds to the XSLT parameter NOPARENTLINK.</ph>
+topics in the rendered XHTML. <ph audience="xslt-customizer">Corresponds to the XSLT parameter <codeph>NOPARENTLINK</codeph>.</ph>
 Allowed values are "yes" and "no".  Default is "no".</entry>
 </row>
 <row>
@@ -285,17 +285,17 @@ Allowed values are "yes" and "no".  Default is "no".</entry>
 <entry><codeph>args.xhtml.toc.class</codeph></entry>
 <entry>NA</entry>
 <entry>String for a CSS class name attribute applied to the TOC (x)HTML
-output's &lt;body> element. Found in map2htmltoc.xsl.</entry>
+output's &lt;body> element. <ph audience="xslt-customizer">Found in <filepath>map2htmltoc.xsl</filepath>.</ph></entry>
 </row>
 <row>
 <entry colname="COLSPEC0"><codeph>args.xhtml.classattr</codeph></entry>
 <entry colname="COLSPEC2"><codeph>/xhtmlclass</codeph></entry>
-<entry colname="COLSPEC3">Specifies whether to include DITA class
-ancestry inside generated XHTML elements. Allowed values are "no"
-and "yes"; the default is "yes" in release 1.5.2 (it was "no" in 1.5
-and 1.5.1). For example, the prereq element in a task (which is specialized
-from section) would generate "<codeph>class="section prereq</codeph
->". <ph audience="xslt-customizer">Corresponds to the XSLT parameter PRESERVE-DITA-CLASS.</ph></entry>
+<entry colname="COLSPEC3">Specifies whether to include DITA class ancestry inside generated XHTML
+                elements. Allowed values are "no" and "yes"; the default is "yes" in release 1.5.2
+                (it was "no" in 1.5 and 1.5.1). For example, the prereq element in a task (which is
+                specialized from section) would generate "<codeph>class="section prereq</codeph>".
+                  <ph audience="xslt-customizer">Corresponds to the XSLT parameter
+                    <codeph>PRESERVE-DITA-CLASS</codeph>.</ph></entry>
 </row>
 <row>
 <entry colname="COLSPEC0"><codeph>args.xsl</codeph></entry>
@@ -373,7 +373,7 @@ all links) and "no" (the default, include no links). If <codeph>${args.fo.includ
   > is specified, this parameter is ignored.<note>This parameter is deprecated in favor
     of <codeph>${args.fo.include.rellinks}</codeph>.</note></entry>
 </row>
-  <row conref="#args.gen.task.lbl">
+  <row conref="#dita-ot-ant-properties/args.gen.task.lbl">
 <entry colname="COLSPEC0"><codeph>args.gen.task.lbl</codeph></entry>
 <entry colname="COLSPEC2"><!--codeph>/usetasklabels</codeph--></entry>
 <entry colname="COLSPEC3"><!--Specifies whether to generate locale-based
@@ -404,7 +404,7 @@ GENERATE-TASK-LABELS.<--></entry>
 <entry>Specifies whether to leave the generated FO file for a PDF
 project.</entry>
 </row>
-  <row>
+  <row rev="1.5.4">
     <entry><codeph>args.bookmap-order</codeph></entry>
     <entry>NA</entry>
     <entry>Specify if frontmatter and backmatter content order is retained in bookmap. Values are
@@ -413,7 +413,7 @@ project.</entry>
 </tbody>
 </tgroup>
 </table></section>
-<section><title>ODT-specific Ant Properties</title><p>The ODT transform,
+<section rev="1.5.2"><title>ODT-specific Ant Properties</title><p>The ODT transform,
 which produces a document using the Open Document Format, is available
 in the 1.5.2 version of the DITA-OT.</p><table><title>ODT related
 parameters</title>
@@ -554,7 +554,7 @@ an Eclipse Help project. The default value is <codeph>DITA</codeph>.
 <entry>Specifies the symbolic name (aka plugin ID) in the output for
 an Eclipse Help project. The @id value from the DITA map or the Eclipse
 map collection (Eclipse help specialization) is the symbolic name
-for the plugin in Eclipse. By default, the value org.sample.help.doc.<note type="tip">The toolkit ignores the value of this property when processing an Eclipse Collection Map, <codeph>eclipse.dtd</codeph>.</note></entry>
+for the plugin in Eclipse. By default, the value <codeph>org.sample.help.doc</codeph>.<note type="tip">The toolkit ignores the value of this property when processing an Eclipse Collection Map, <codeph>eclipse.dtd</codeph>.</note></entry>
 </row>
 </tbody>
 </tgroup>
