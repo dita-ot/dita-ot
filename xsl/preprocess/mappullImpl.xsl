@@ -496,7 +496,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
             <xsl:choose>
               <xsl:when test="document($file,/)//*[contains(@class, ' topic/topic ')][1]">
                 <xsl:attribute name="type">
-                  <xsl:value-of select="local-name(document($file,/)//*[contains(@class, $classval)][1])"/>
+                  <xsl:value-of select="local-name((document($file,/)//*[contains(@class, $classval)])[1])"/>
                 </xsl:attribute>
               </xsl:when>
               <xsl:otherwise><!-- do nothing - omit attribute--></xsl:otherwise>

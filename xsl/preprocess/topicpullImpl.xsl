@@ -698,7 +698,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       <xsl:when test="$topicpos='firstinfile'">
         <xsl:choose>
           <xsl:when test="document($file,/)//*[contains(@class, ' topic/topic ')][1]">
-            <xsl:value-of select="local-name(document($file,/)//*[contains(@class, ' topic/topic ')][1])"/>
+            <xsl:value-of select="local-name((document($file,/)//*[contains(@class, ' topic/topic ')])[1])"/>
           </xsl:when>
           <!--type could not be retrieved-->
           <xsl:otherwise>#none#</xsl:otherwise>
