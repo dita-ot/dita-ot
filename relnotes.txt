@@ -23,12 +23,22 @@
      * 3355860 Enable defining code ref target encoding (Milestone 1)
      * 3393969 Make default TocJS output more usable (Milestone 3)
      * 3394708 cfg/catalog.xml should be an extension point (Milestone 4)	  
+     * 3411030 Add args.fo.userconfig to PDF2  (Milestone 5)	     
+     * 3411961 Change margin-* to space-* property  (Milestone 5)
+     * 3412144 Add FOP specific shell to PDF2  (Milestone 5)
+     * 3413215 Add schemas for PDF2 configuration files  (Milestone 5)
+     * 3414416 Support bookmap order in PDF2 front and back matter  (Milestone 5)
+     * 3413933 Fix inconsistencies in PDF2 page headers  (Milestone 5)
+     * 3418877 Mechanism to refer to other plug-ins in XSLT  (Milestone 5)
      * 3341648 Clean HTML and XHTML stylesheets  (In Processing)
      * 3343562 Java clean-up  (In Processing)
      * 3346094 Improve test coverage  (In Processing)
      * 3372147 Improve logging (In Processing)
      * 3373416 Refactor PDF attribute sets (In Processing)
      * 3376114 Improve PDF page layout configuration (In Processing)
+     * 3415269 Support for more languages in the PDF transform 	(In Processing)
+     * 3412211 Refactor PDF index stylesheet for XSL 1.1 support (In Processing)
+     * 3411476 Add extension point for print type declaration  (In Processing)	
      
      [ SourceForge Patches Added]
     
@@ -60,7 +70,14 @@
      * 3386590 Product name repeated hundreds of times in PDF (Milestone 4)
      * 3405417 Shortdesc output twice when using abstract (Milestone 4)
      * 3402165 wrong image output dir if using generate.copy.outer=2 (Milestone 4)
-     * 2837095 Positions of index and TOC in bookmaps are ignored  (In Processing)
+     * 2837095 Positions of index and TOC in bookmaps are ignored  (Milestone 5)
+     * 3414826 DITA OT not handling image path with chunking turned on (Milestone 5)
+     * 3411767 Not so meaningful messages given by ImgUtils (Milestone 5)
+     * 3405851 Incorrect entry@colname in merged XML with row and colspan (Milestone 5)
+	 * 3406357 Custom profiling issue (Milestone 5)
+	 * 3413203 Remove references to OpenTopic in PDF2 (Milestone 5)
+	 * 3414270 @props specialization not used in map (Milestone 5)
+	 * 3414332 PDF2 variable string translations missing (Milestone 5)    
      * 3323806 Improve Java logging and exception handling (In Processing)
 	 
 ====================================================================================
