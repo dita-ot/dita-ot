@@ -549,9 +549,10 @@ public final class ChunkMapReader implements AbstractReader {
             }
         }
     }
+    
     /**
      * get content.
-     * @return Content
+     * @return content value {@code LinkedHashMap<String, String>}
      */
     public Content getContent() {
         final Content content = new ContentImpl();

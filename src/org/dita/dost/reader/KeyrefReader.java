@@ -106,6 +106,9 @@ public final class KeyrefReader extends AbstractXMLReader {
         }
     }
 
+    /**
+     * @return content collection {@code Hashtable<String, String>}
+     */
     @Override
     public Content getContent() {
         final Content content = new ContentImpl();

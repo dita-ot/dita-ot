@@ -1089,9 +1089,15 @@ public final class DitaWriter extends AbstractXMLWriter {
         return null;
     }
 
+    /**
+     * @param content value {@code String}
+     */
     @Override
     public void setContent(final Content content) {
         tempDir = (String) content.getValue();
+        if (tempDir == null) {
+            throw new IllegalArgumentException("Content value must be non-null String");
+        }
     }
 
     @Override

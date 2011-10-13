@@ -465,6 +465,9 @@ public final class MapMetaReader implements AbstractReader {
 
     }
 
+    /**
+     * @return content collection {@code Set<Entry<String, Hashtable<String, Element>>>}
+     */
     public Content getContent() {
         final ContentImpl result = new ContentImpl();
         result.setCollection( resultTable.entrySet());

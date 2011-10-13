@@ -69,8 +69,10 @@ final class ConrefPushModule implements AbstractPipelineModule {
         final ConrefPushReader reader = new ConrefPushReader();
         reader.setLogger(logger);
         for(final String fileName:conrefpushlist){
+            final File file = new File(tempDir,fileName);
+            logger.logInfo("Reading  " + file.getAbsolutePath());
             //FIXME: this reader calculate parent directory
-            reader.read(new File(tempDir,fileName).getAbsolutePath());
+            reader.read(file.getAbsolutePath());
         }
 
         final Set<Map.Entry<String, Hashtable<String, String>>> pushSet = (Set<Map.Entry<String, Hashtable<String,String>>>) reader.getContent().getCollection();
@@ -78,6 +80,7 @@ final class ConrefPushModule implements AbstractPipelineModule {
 
         while(iter.hasNext()){
             final Map.Entry<String, Hashtable<String,String>> entry = iter.next();
+            logger.logInfo("Processing " + new File(tempDir, entry.getKey()).getAbsolutePath());
             final ConrefPushParser parser = new ConrefPushParser();
             parser.setLogger(logger);
             final Content content = new ContentImpl();

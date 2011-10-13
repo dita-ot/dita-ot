@@ -99,6 +99,7 @@ final class MoveIndexModule implements AbstractPipelineModule {
         while (i.hasNext()) {
             final Map.Entry<String, String> entry = i.next();
             targetFileName = entry.getKey();
+            logger.logInfo("Processing " + targetFileName);
             targetFileName = targetFileName.indexOf(SHARP) != -1
                     ? targetFileName.substring(0, targetFileName.indexOf(SHARP))
                             : targetFileName;

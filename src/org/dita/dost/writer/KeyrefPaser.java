@@ -59,7 +59,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 
     private OutputStreamWriter output = null;
 
-    private Content content;
+    private Hashtable<String, String> definitionMap;
 
     private String tempDir;
 
@@ -299,9 +299,9 @@ public final class KeyrefPaser extends AbstractXMLWriter {
                     }else{
                         // Current element name equals the key reference element
                         // grab keyword or term from key definition
-                        nodeList = elem.getElementsByTagName("keyword");
+                        nodeList = elem.getElementsByTagName(TOPIC_KEYWORD.localName);
                         if(nodeList.getLength() == 0 ){
-                            nodeList = elem.getElementsByTagName("term");
+                            nodeList = elem.getElementsByTagName(TOPIC_TERM.localName);
                         }
                         if(!hasSubElem.peek()){
                             if(nodeList.getLength() > 0){
@@ -343,7 +343,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
                                 if(currentElement != null && TOPIC_LINK.matches(currentElement.type)){
                                     // If the key reference element is link or its specification,
                                     // should pull in the linktext
-                                    final NodeList linktext = elem.getElementsByTagName("linktext");
+                                    final NodeList linktext = elem.getElementsByTagName(TOPIC_LINKTEXT.localName);
                                     if(linktext.getLength()>0){
                                         output.write(nodeToString((Element)linktext.item(0), true));
                                     }else if (!StringUtils.isEmptyString(elem.getAttribute(ATTRIBUTE_NAME_NAVTITLE))){
@@ -422,9 +422,16 @@ public final class KeyrefPaser extends AbstractXMLWriter {
         }
     }
 
+    /**
+     * @param content value {@code Hashtable<String, String>}
+     */
+    @SuppressWarnings("unchecked")
     @Override
     public void setContent(final Content content) {
-        this.content = content;
+        definitionMap = (Hashtable<String, String>) content.getValue();
+        if (definitionMap == null) {
+            throw new IllegalArgumentException("Content value must be non-null Hashtable<String, String>");
+        }
     }
 
     @Override
@@ -485,7 +492,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
                     keyName = keyrefValue.substring(0, slashIndex);
                     tail = keyrefValue.substring(slashIndex);
                 }
-                final String definition = ((Hashtable<String, String>)content.getValue()).get(keyName);
+                final String definition = definitionMap.get(keyName);
                 //Edit by Alan for bug ID: 2849078   date:2009-09-03  --End
 
                 // If definition is not null

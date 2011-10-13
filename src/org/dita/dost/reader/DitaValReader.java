@@ -123,6 +123,9 @@ public final class DitaValReader extends AbstractXMLReader {
         }
     }
 
+    /**
+     * @return content collection {@code Set<Entry<String, String>>}
+     */
     @Override
     public Content getContent() {
         content = new ContentImpl();

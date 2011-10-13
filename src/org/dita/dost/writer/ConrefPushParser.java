@@ -153,13 +153,19 @@ public final class ConrefPushParser extends AbstractXMLWriter {
             logger.logException(e);
         }
     }
+    
     /**
-     * @param content Content
+     * @param content value {@code Hashtable<String, Node>}
      */
+    @SuppressWarnings("unchecked")
     @Override
     public void setContent(final Content content) {
         movetable = (Hashtable<String, String>)content.getValue();
+        if (movetable == null) {
+            throw new IllegalArgumentException("Content value must be non-null Hashtable<String, Node>");
+        }
     }
+    
     /**
      * 
      * @param tempDir tempDir

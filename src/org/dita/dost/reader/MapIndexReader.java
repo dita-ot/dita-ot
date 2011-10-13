@@ -201,6 +201,9 @@ public final class MapIndexReader extends AbstractXMLReader {
         }
     }
 
+    /**
+     * @return content collection {@code Set<Entry<String, String>}
+     */
     @Override
     public Content getContent() {
 

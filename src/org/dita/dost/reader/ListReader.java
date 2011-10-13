@@ -90,6 +90,9 @@ public final class ListReader implements AbstractReader {
 
     }
 
+    /**
+     * @return content value {@code String}; collection {@code LinkedList<String>}
+     */
     public Content getContent() {
         return content;
     }

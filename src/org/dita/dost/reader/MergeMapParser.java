@@ -75,6 +75,9 @@ public final class MergeMapParser extends AbstractXMLReader {
         }
     }
 
+    /**
+     * @return content value {@code StringBuffer}
+     */
     @Override
     public Content getContent() {
         content.setValue(mapInfo.append((StringBuffer)topicParser.getContent().getValue()));

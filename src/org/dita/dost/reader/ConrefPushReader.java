@@ -66,8 +66,9 @@ public final class ConrefPushReader extends AbstractXMLReader {
     /**pushType is used to record the current type of push
 	 it is used in endElement(....) to tell whether it is pushafter or replace.*/
     private String pushType = null;
+    
     /**
-     * @return Content
+     * @return content collection {@code Set<Entry<String, Hashtable<String, String>>>}
      */
     @Override
     public Content getContent() {

@@ -176,9 +176,16 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
         }
     }
 
+    /**
+     * @param content value {@code HashMap<String, String>}
+     */
+    @SuppressWarnings("unchecked")
     @Override
     public void setContent(final Content content) {
         indexEntries = (HashMap<String, String>)content.getValue();
+        if (indexEntries == null) {
+            throw new IllegalArgumentException("Content value must be non-null HashMap<String, String>");
+        }
         topicSet = indexEntries.keySet();
     }
 

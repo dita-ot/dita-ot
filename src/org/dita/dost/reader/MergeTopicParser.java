@@ -93,6 +93,9 @@ public final class MergeTopicParser extends AbstractXMLReader {
         .append(GREATER_THAN);
     }
 
+    /**
+     * @return content value {@code StringBuffer}
+     */
     @Override
     public Content getContent() {
         content.setValue(topicInfo);

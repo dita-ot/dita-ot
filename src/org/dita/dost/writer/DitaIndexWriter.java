@@ -255,10 +255,18 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
         }
     }
 
+    
+    /**
+     * @param content value {@code String}
+     */
     @Override
     public void setContent(final Content content) {
         indexEntries = (String) content.getValue();
+        if (indexEntries == null) {
+            throw new IllegalArgumentException("Content value must be non-null String");
+        }
     }
+    
     private void setMatch(final String match) {
         int index = 0;
         matchList = new ArrayList<String>(INT_16);

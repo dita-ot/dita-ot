@@ -242,6 +242,9 @@ public final class MapLinksReader extends AbstractXMLReader {
         }
     }
 
+    /**
+     * @return content collection {@code Set<Entry<String, Map<String, String>>>}
+     */
     @Override
     public Content getContent() {
 

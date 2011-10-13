@@ -476,10 +476,18 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
         }
     }
 
+    /**
+     * @param content value {@code Hashtable<String, Node>}
+     */
+    @SuppressWarnings("unchecked")
     @Override
     public void setContent(final Content content) {
         metaTable = (Hashtable<String, Node>) content.getValue();
+        if (metaTable == null) {
+            throw new IllegalArgumentException("Content value must be non-null Hashtable<String, Node>");
+        }
     }
+    
     private void setMatch(final String match) {
         int index = 0;
         matchList = new ArrayList<String>(INT_16);

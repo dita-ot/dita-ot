@@ -89,6 +89,7 @@ final class MoveMetaModule implements AbstractPipelineModule {
         final Set<String> fullditamaplist = StringUtils.restoreSet(properties.getProperty(FULL_DITAMAP_LIST));
         for(String mapFile:fullditamaplist){
             mapFile = new File(tempDir, mapFile).getAbsolutePath();
+            logger.logInfo("Reading " + mapFile);
             //FIXME: this reader gets the parent path of input file
             metaReader.read(mapFile);
             final File oldMap = new File(mapFile);
@@ -123,6 +124,7 @@ final class MoveMetaModule implements AbstractPipelineModule {
                         content.setValue(entry.getValue());
                         mapInserter.setContent(content);
                         if (FileUtils.fileExists((String) entry.getKey())){
+                            logger.logInfo("Processing " + (String) entry.getKey());
                             mapInserter.write((String) entry.getKey());
                         }else{
                             logger.logError(" ERROR FILE DOES NOT EXIST " + (String) entry.getKey());
@@ -145,6 +147,7 @@ final class MoveMetaModule implements AbstractPipelineModule {
                         content.setValue(entry.getValue());
                         topicInserter.setContent(content);
                         if (FileUtils.fileExists((String) entry.getKey())){
+                            logger.logInfo("Processing " + (String) entry.getKey());
                             topicInserter.write((String) entry.getKey());
                         }else{
                             logger.logError(" ERROR FILE DOES NOT EXIST " + (String) entry.getKey());

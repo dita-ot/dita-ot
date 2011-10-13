@@ -104,6 +104,7 @@ final class KeyrefModule implements AbstractPipelineModule {
         reader.setLogger(logger);
         reader.setTempDir(tempDir);
         for(final String mapFile: maps.keySet()){
+            logger.logInfo("Reading " + new File(tempDir, mapFile).getAbsolutePath());
             reader.setKeys(maps.get(mapFile));
             reader.read(mapFile);
         }
@@ -116,6 +117,7 @@ final class KeyrefModule implements AbstractPipelineModule {
         final Set<String> conrefList = StringUtils.restoreSet(properties.getProperty(CONREF_LIST));
         parseList.addAll(conrefList);
         for(final String file: parseList){
+            logger.logInfo("Processing " + new File(tempDir, file).getAbsolutePath());
             final KeyrefPaser parser = new KeyrefPaser();
             parser.setLogger(logger);
             parser.setContent(content);
