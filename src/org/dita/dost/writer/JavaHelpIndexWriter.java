@@ -9,6 +9,8 @@
  */
 package org.dita.dost.writer;
 
+import static javax.xml.transform.OutputKeys.*;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -39,8 +41,8 @@ public final class JavaHelpIndexWriter extends AbstractExtendDitaWriter {
             out = new FileOutputStream(filename);
             final XMLSerializer serializer = XMLSerializer.newInstance(out);
             final Transformer transformer = serializer.getTransformerHandler().getTransformer();
-            transformer.setOutputProperty("doctype-public", "-//Sun Microsystems Inc.//DTD JavaHelp Index Version 1.0//EN");
-            transformer.setOutputProperty("doctype-system", "http://java.sun.com/products/javahelp/index_1_0.dtd");
+            transformer.setOutputProperty(DOCTYPE_PUBLIC , "-//Sun Microsystems Inc.//DTD JavaHelp Index Version 1.0//EN");
+            transformer.setOutputProperty(DOCTYPE_SYSTEM, "http://java.sun.com/products/javahelp/index_1_0.dtd");
             serializer.writeStartDocument();
             serializer.writeStartElement("index");
             serializer.writeAttribute("version", "1.0");

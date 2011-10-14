@@ -37,16 +37,7 @@ import org.dita.dost.writer.DitaIndexWriter;
  */
 final class MoveIndexModule implements AbstractPipelineModule {
 
-    private final ContentImpl content;
     private DITAOTLogger logger;
-
-    /**
-     * Default constructor of MoveIndexModule class.
-     */
-    public MoveIndexModule() {
-        super();
-        content = new ContentImpl();
-    }
 
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
@@ -63,30 +54,25 @@ final class MoveIndexModule implements AbstractPipelineModule {
         if (logger == null) {
             throw new IllegalStateException("Logger not set");
         }
-        Set<Map.Entry<String, String>> mapSet;
-        Iterator<Map.Entry<String, String>> i;
-        String targetFileName;
-        final MapIndexReader indexReader = new MapIndexReader();
-        indexReader.setLogger(logger);
-        final DitaIndexWriter indexInserter = new DitaIndexWriter();
-        indexInserter.setLogger(logger);
-        final String baseDir = input.getAttribute(ANT_INVOKER_PARAM_BASEDIR);
+        
         String tempDir = input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR);
-
         if (!new File(tempDir).isAbsolute()) {
+            final String baseDir = input.getAttribute(ANT_INVOKER_PARAM_BASEDIR);
             tempDir = new File(baseDir, tempDir).getAbsolutePath();
         }
-
-        indexReader.setMatch(new StringBuffer(MAP_TOPICREF.localName)
-        .append(SLASH).append(MAP_TOPICMETA.localName)
-        .append(SLASH).append(TOPIC_KEYWORDS.localName).toString());
-
+        
         Properties properties = null;
         try{
             properties = ListUtils.getDitaList();
-        }catch(final IOException e){
+        } catch(final IOException e) {
             throw new DITAOTException(e);
         }
+
+        final MapIndexReader indexReader = new MapIndexReader();
+        indexReader.setLogger(logger);
+        indexReader.setMatch(new StringBuffer(MAP_TOPICREF.localName)
+                .append(SLASH).append(MAP_TOPICMETA.localName)
+                .append(SLASH).append(TOPIC_KEYWORDS.localName).toString());
 
         final Set<String> fullditamaplist = StringUtils.restoreSet(properties.getProperty(FULL_DITAMAP_LIST));
         for(final String fileName : fullditamaplist){
@@ -94,26 +80,27 @@ final class MoveIndexModule implements AbstractPipelineModule {
             indexReader.read(new File(tempDir, fileName).getAbsolutePath());
         }
 
-        mapSet = (Set<Map.Entry<String, String>>) indexReader.getContent().getCollection();
-        i = mapSet.iterator();
-        while (i.hasNext()) {
-            final Map.Entry<String, String> entry = i.next();
-            targetFileName = entry.getKey();
-            logger.logInfo("Processing " + targetFileName);
+        final Set<Map.Entry<String, String>> mapSet = (Set<Map.Entry<String, String>>) indexReader.getContent().getCollection();
+        
+        final DitaIndexWriter indexInserter = new DitaIndexWriter();
+        indexInserter.setLogger(logger);
+        for (final Map.Entry<String, String> entry: mapSet) {
+            String targetFileName = entry.getKey();
             targetFileName = targetFileName.indexOf(SHARP) != -1
-                    ? targetFileName.substring(0, targetFileName.indexOf(SHARP))
+                            ? targetFileName.substring(0, targetFileName.indexOf(SHARP))
                             : targetFileName;
-                    if (targetFileName.endsWith(FILE_EXTENSION_DITA) ||
-                            targetFileName.endsWith(FILE_EXTENSION_XML)){
-                        content.setValue(entry.getValue());
-                        indexInserter.setContent(content);
-                        if (FileUtils.fileExists(entry.getKey())){
-                            indexInserter.write(entry.getKey());
-                        }else{
-                            logger.logError(" ERROR FILE DOES NOT EXIST " + entry.getKey());
-                        }
+            if (targetFileName.endsWith(FILE_EXTENSION_DITA) || targetFileName.endsWith(FILE_EXTENSION_XML)){
+                final ContentImpl content = new ContentImpl();
+                content.setValue(entry.getValue());
+                indexInserter.setContent(content);
+                if (FileUtils.fileExists(entry.getKey())) {
+                    logger.logInfo("Processing " + targetFileName);
+                    indexInserter.write(entry.getKey());
+                } else {
+                    logger.logError("File " + entry.getKey() + " does not exist");
+                }
 
-                    }
+            }
         }
         return null;
     }

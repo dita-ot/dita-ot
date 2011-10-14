@@ -9,6 +9,8 @@
  */
 package org.dita.dost.writer;
 
+import static javax.xml.transform.OutputKeys.*;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -42,9 +44,9 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter {
             out = new FileOutputStream(filename);
             final XMLSerializer serializer = XMLSerializer.newInstance(out);
             final Transformer transformer = serializer.getTransformerHandler().getTransformer();
-            transformer.setOutputProperty("doctype-public", "-//IETF//DTD HTML//EN");
-            transformer.setOutputProperty("method", "html");
-            transformer.setOutputProperty("encoding", "UTF-8");
+            transformer.setOutputProperty(DOCTYPE_PUBLIC, "-//IETF//DTD HTML//EN");
+            transformer.setOutputProperty(METHOD, "html");
+            transformer.setOutputProperty(ENCODING, "UTF-8");
 
             serializer.writeStartDocument();
             serializer.writeStartElement("html");

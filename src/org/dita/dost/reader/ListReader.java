@@ -63,27 +63,19 @@ public final class ListReader implements AbstractReader {
     }
 
     private void setList(final Properties property){
-        String liststr;
-        StringTokenizer tokenizer;
-        String copytoMapEntries;
         content.setValue(property.getProperty("user.input.dir"));
-
-        /*
-         * Parse copy-to target to source map list,
-         * and restore the copy-to map
-         */
-        copytoMapEntries = property
-                .getProperty(COPYTO_TARGET_TO_SOURCE_MAP_LIST);
+        
+        // Parse copy-to target to source map list, and restore the copy-to map
+        final String copytoMapEntries = property.getProperty(COPYTO_TARGET_TO_SOURCE_MAP_LIST);
         copytoMap = StringUtils.restoreMap(copytoMapEntries);
 
-        liststr = property.getProperty(FULL_DITAMAP_TOPIC_LIST)
+        final String liststr = property.getProperty(FULL_DITAMAP_TOPIC_LIST)
                 + COMMA
                 + property.getProperty(CONREF_TARGET_LIST)
                 + COMMA
                 + property.getProperty(COPYTO_SOURCE_LIST);
 
-        tokenizer = new StringTokenizer(liststr,COMMA);
-
+        final StringTokenizer tokenizer = new StringTokenizer(liststr,COMMA);
         while (tokenizer.hasMoreTokens()) {
             refList.addFirst(tokenizer.nextToken());
         }
@@ -108,7 +100,6 @@ public final class ListReader implements AbstractReader {
         return copytoMap;
     }
 
-
     /**
      * @return the schemeSet
      */
@@ -116,11 +107,11 @@ public final class ListReader implements AbstractReader {
         return schemeSet;
     }
 
-
     /**
      * @return the inputMap
      */
     public String getInputMap() {
         return inputMap;
     }
+    
 }

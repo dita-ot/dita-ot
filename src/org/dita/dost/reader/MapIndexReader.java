@@ -39,26 +39,18 @@ import org.xml.sax.XMLReader;
  * @author Zhang, Yuan Peng
  */
 public final class MapIndexReader extends AbstractXMLReader {
-    private static final String INTERNET_LINK_MARK = "://";
+    private static final String INTERNET_LINK_MARK = COLON_DOUBLE_SLASH;
 
-    // check whether the index entries we got is meaningfull and valid
+    /**
+     * Check whether the index entries we got is meaningfull and valid.
+     */
     private static boolean verifyIndexEntries(final StringBuffer str) {
-        int start;
-        int end;
-        String temp;
         if (str.length() == 0) {
             return false;
         }
-        start = str.indexOf(GREATER_THAN); // start from first tag's end
-        end = str.lastIndexOf(LESS_THAN); // end at last tag's start
-
-        /*
-         * original code check whether there is text between different tags
-         * modified code check whether there is any content between first and
-         * last tags
-         */
-
-        temp = str.substring(start + 1, end);
+        final int start = str.indexOf(GREATER_THAN); // start from first tag's end
+        final int end = str.lastIndexOf(LESS_THAN); // end at last tag's start
+        final String temp = str.substring(start + 1, end);
         if (temp.trim().length() != 0) {
             return true;
         }
@@ -74,15 +66,13 @@ public final class MapIndexReader extends AbstractXMLReader {
     private final Map<String, String> map;
     private boolean match;
 
-    /*
-     * meta shows whether the event is in metadata when using sax to parse
-     * ditmap file.
-     */
+    /** Meta shows whether the event is in metadata when using sax to parse ditmap file. */
     private final List<String> matchList;
     private boolean needResolveEntity;
     private XMLReader reader;
     private String topicPath;
-    private boolean validHref;// whether the current href target is internal dita topic file
+    /** Whether the current href target is internal dita topic file. */
+    private boolean validHref;
 
 
     /**
@@ -129,23 +119,16 @@ public final class MapIndexReader extends AbstractXMLReader {
         }
     }
 
-    // check whether the hierarchy of current node match the matchList
+    /**
+     * Check whether the hierarchy of current node match the matchList.
+     * 
+     * @return {@code true} is match, otherwise {@code false}
+     */
     private boolean checkMatch() {
         final int matchSize = matchList.size();
         final int ancestorSize = ancestorList.size();
-        final ListIterator<String> matchIterator = matchList.listIterator();
-        final ListIterator<String> ancestorIterator = ancestorList.listIterator(ancestorSize
-                - matchSize);
-        String currentMatchString;
-        String ancestor;
-        while (matchIterator.hasNext()) {
-            currentMatchString = matchIterator.next();
-            ancestor = ancestorIterator.next();
-            if (!currentMatchString.equals(ancestor)) {
-                return false;
-            }
-        }
-        return true;
+        final List<String> tail = ancestorList.subList(ancestorSize - matchSize, ancestorSize);
+        return matchList.equals(tail);
     }
 
     @Override

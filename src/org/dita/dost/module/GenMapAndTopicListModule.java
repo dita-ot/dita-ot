@@ -502,7 +502,6 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
     }
 
     private void processParseResult(String currentFile) {
-        Iterator<String> iter = reader.getNonCopytoResult().iterator();
         final Map<String, String> cpMap = reader.getCopytoMap();
         final Map<String, String> kdMap = reader.getKeysDMap();
         // Added by William on 2010-06-09 for bug:3013079 start
@@ -512,17 +511,14 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
         // Added by William on 2010-06-09 for bug:3013079 end
 
         // Category non-copyto result and update uplevels accordingly
-        while (iter.hasNext()) {
-            final String file = iter.next();
+        for (final String file: reader.getNonCopytoResult()) {
             categorizeResultFile(file);
             updateUplevels(file);
         }
 
         // Update uplevels for copy-to targets, and store copy-to map.
         // Note: same key(target) copy-to will be ignored.
-        iter = cpMap.keySet().iterator();
-        while (iter.hasNext()) {
-            final String key = iter.next();
+        for (final String key: cpMap.keySet()) {
             final String value = cpMap.get(key);
 
             if (copytoMap.containsKey(key)) {
@@ -549,12 +545,8 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
         // TODO Added by William on 2009-06-09 for scheme key bug(497)
         schemeSet.addAll(reader.getSchemeRefSet());
 
-        /**
-         * collect key definitions
-         */
-        iter = kdMap.keySet().iterator();
-        while (iter.hasNext()) {
-            final String key = iter.next();
+        // collect key definitions
+        for (final String key: kdMap.keySet()) {
             final String value = kdMap.get(key);
             if (keysDefMap.containsKey(key)) {
                 // if there already exists duplicated key definition in
@@ -622,12 +614,9 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 
             this.schemeDictionary.put(currentFile, children);
             final Set<String> hrfSet = reader.getHrefTargets();
-            final Iterator<String> it = hrfSet.iterator();
-            while (it.hasNext()) {
-                String filename = it.next();
-
+            for (String f: hrfSet) {
                 // for Linux support
-                filename = filename.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
+                final String filename = f.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
 
                 children = this.schemeDictionary.get(filename);
                 if (children == null) {
@@ -864,9 +853,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
         final Set<String> totalCopytoSources = new HashSet<String>(INT_128);
 
         // Validate copy-to map, remove those without valid sources
-        Iterator<String> iter = copytoMap.keySet().iterator();
-        while (iter.hasNext()) {
-            final String key = iter.next();
+        for (final String key: copytoMap.keySet()) {
             final String value = copytoMap.get(key);
             if (new File(baseInputDir + File.separator + prefix, value).exists()) {
                 tempMap.put(key, value);
@@ -887,9 +874,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
         // Get pure copy-to sources
         totalCopytoSources.addAll(copytoMap.values());
         totalCopytoSources.addAll(ignoredCopytoSourceSet);
-        iter = totalCopytoSources.iterator();
-        while (iter.hasNext()) {
-            final String src = iter.next();
+        for (final String src: totalCopytoSources) {
             if (!nonConrefCopytoTargetSet.contains(src) && !copytoMap.keySet().contains(src)) {
                 pureCopytoSources.add(src);
             }
@@ -905,9 +890,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
     private void handleConref() {
         // Get pure conref targets
         final Set<String> pureConrefTargets = new HashSet<String>(INT_128);
-        final Iterator<String> iter = conrefTargetSet.iterator();
-        while (iter.hasNext()) {
-            final String target = iter.next();
+        for (final String target: conrefTargetSet) {
             if (!nonConrefCopytoTargetSet.contains(target)) {
                 pureConrefTargets.add(target);
             }
@@ -928,7 +911,6 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
         final File dir = new File(tempDir);
         final Set<String> copytoSet = new HashSet<String>(INT_128);
         final Set<String> keysDefSet = new HashSet<String>(INT_128);
-        Iterator<Entry<String, String>> iter = null;
 
         if (!dir.exists()) {
             dir.mkdirs();
@@ -992,14 +974,10 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
         addFlagImagesSetToProperties(prop, REL_FLAGIMAGE_LIST, relFlagImagesSet);
 
         // Convert copyto map into set and output
-        iter = copytoMap.entrySet().iterator();
-        while (iter.hasNext()) {
-            final Map.Entry<String, String> entry = iter.next();
+        for (final Map.Entry<String, String> entry: copytoMap.entrySet()) {
             copytoSet.add(entry.toString());
         }
-        iter = keysDefMap.entrySet().iterator();
-        while (iter.hasNext()) {
-            final Map.Entry<String, String> entry = iter.next();
+        for (final Map.Entry<String, String> entry: keysDefMap.entrySet()) {
             keysDefSet.add(entry.toString());
         }
         addSetToProperties(prop, COPYTO_TARGET_TO_SOURCE_MAP_LIST, copytoSet);
@@ -1037,9 +1015,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
             return;
         }
         final Properties prop = new Properties();
-        final Iterator<Map.Entry<String, Set<String>>> iter = m.entrySet().iterator();
-        while (iter.hasNext()) {
-            final Map.Entry<String, Set<String>> entry = iter.next();
+        for (final Map.Entry<String, Set<String>> entry: m.entrySet()) {
             final String key = entry.getKey();
             final String value = StringUtils.assembleString(entry.getValue(), COMMA);
             prop.setProperty(key, value);
@@ -1066,10 +1042,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
     private void addSetToProperties(final Properties prop, final String key, final Set<String> set) {
         String value = null;
         final Set<String> newSet = new LinkedHashSet<String>(INT_128);
-        final Iterator<String> iter = set.iterator();
-
-        while (iter.hasNext()) {
-            final String file = iter.next();
+        for (final String file: set) {
             if (new File(file).isAbsolute()) {
                 // no need to append relative path before absolute paths
                 newSet.add(FileUtils.removeRedundantNames(file));
@@ -1228,10 +1201,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
     private void addFlagImagesSetToProperties(final Properties prop, final String key, final Set<String> set) {
         String value = null;
         final Set<String> newSet = new LinkedHashSet<String>(INT_128);
-        final Iterator<String> iter = set.iterator();
-
-        while (iter.hasNext()) {
-            final String file = iter.next();
+        for (final String file: set) {
             if (new File(file).isAbsolute()) {
                 // no need to append relative path before absolute paths
                 newSet.add(FileUtils.removeRedundantNames(file));

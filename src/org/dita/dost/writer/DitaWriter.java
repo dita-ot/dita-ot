@@ -9,71 +9,8 @@
  */
 package org.dita.dost.writer;
 
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION;
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_CLASS;
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_COLNAME;
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_CONKEYREF;
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_CONREF;
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_COPY_TO;
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_DITAARCHVERSION;
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_DOMAINS;
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_FORMAT;
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_HREF;
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_MOREROWS;
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_NAMEEND;
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_NAMEST;
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_PRINT;
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_SCOPE;
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_XTRC;
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_XTRF;
-import static org.dita.dost.util.Constants.ATTRIBUTE_PREFIX_DITAARCHVERSION;
-import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITA;
-import static org.dita.dost.util.Constants.ATTR_SCOPE_VALUE_LOCAL;
-import static org.dita.dost.util.Constants.CDATA_END;
-import static org.dita.dost.util.Constants.CDATA_HEAD;
-import static org.dita.dost.util.Constants.COLON;
-import static org.dita.dost.util.Constants.COMMA;
-import static org.dita.dost.util.Constants.DOT;
-import static org.dita.dost.util.Constants.ELEMENT_NAME_DITA;
-import static org.dita.dost.util.Constants.EQUAL;
-import static org.dita.dost.util.Constants.FEATURE_NAMESPACE;
-import static org.dita.dost.util.Constants.FEATURE_NAMESPACE_PREFIX;
-import static org.dita.dost.util.Constants.FEATURE_VALIDATION;
-import static org.dita.dost.util.Constants.FEATURE_VALIDATION_SCHEMA;
-import static org.dita.dost.util.Constants.FILE_EXTENSION_DITAMAP;
-import static org.dita.dost.util.Constants.FILE_NAME_DITA_LIST;
-import static org.dita.dost.util.Constants.FILE_NAME_DITA_LIST_XML;
-import static org.dita.dost.util.Constants.GREATER_THAN;
-import static org.dita.dost.util.Constants.INDEX_TYPE_ECLIPSEHELP;
-import static org.dita.dost.util.Constants.INT_16;
-import static org.dita.dost.util.Constants.KEY_LIST;
-import static org.dita.dost.util.Constants.LEFT_BRACKET;
-import static org.dita.dost.util.Constants.LESS_THAN;
-import static org.dita.dost.util.Constants.LEXICAL_HANDLER_PROPERTY;
-import static org.dita.dost.util.Constants.LINE_SEPARATOR;
-import static org.dita.dost.util.Constants.MAP_TOPICREF;
-import static org.dita.dost.util.Constants.OS_NAME;
-import static org.dita.dost.util.Constants.PR_D_CODEREF;
-import static org.dita.dost.util.Constants.QUESTION;
-import static org.dita.dost.util.Constants.QUOTATION;
-import static org.dita.dost.util.Constants.SHARP;
-import static org.dita.dost.util.Constants.SLASH;
-import static org.dita.dost.util.Constants.STICK;
-import static org.dita.dost.util.Constants.STRING_BLANK;
-import static org.dita.dost.util.Constants.TOPIC_COLSPEC;
-import static org.dita.dost.util.Constants.TOPIC_ENTRY;
-import static org.dita.dost.util.Constants.TOPIC_FOREIGN;
-import static org.dita.dost.util.Constants.TOPIC_LINK;
-import static org.dita.dost.util.Constants.TOPIC_ROW;
-import static org.dita.dost.util.Constants.TOPIC_TGROUP;
-import static org.dita.dost.util.Constants.TOPIC_TOPIC;
-import static org.dita.dost.util.Constants.TOPIC_UNKNOWN;
-import static org.dita.dost.util.Constants.TOPIC_XREF;
-import static org.dita.dost.util.Constants.UNIX_SEPARATOR;
-import static org.dita.dost.util.Constants.UTF8;
-import static org.dita.dost.util.Constants.WINDOWS_SEPARATOR;
-import static org.dita.dost.util.Constants.XML_HEAD;
-import static org.dita.dost.util.Constants.MAP_MAP;
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -136,12 +73,14 @@ import org.xml.sax.XMLReader;
  */
 public final class DitaWriter extends AbstractXMLWriter {
 
+    private static final String ATTRIBUTE_NAME_COLNAME = "colname";
+    private static final String ATTRIBUTE_NAME_COLNUM = "colnum";
     private static final String COLUMN_NAME_COL = "col";
     private static final String OS_NAME_WINDOWS = "windows";
     public static final String PI_PATH2PROJ_TARGET = "path2project";
     public static final String PI_WORKDIR_TARGET = "workdir";
-    //To check the URL of href in topicref attribute
-    private static final String NOT_LOCAL_URL="://";
+    /** To check the URL of href in topicref attribute */
+    private static final String NOT_LOCAL_URL = COLON_DOUBLE_SLASH;
     //Added on 2010-08-24 for bug:3086552 start
     private boolean setSystemid = true;
     //Added on 2010-08-24 for bug:3086552 end
@@ -176,12 +115,11 @@ public final class DitaWriter extends AbstractXMLWriter {
         return false;
     }
 
+    /**
+     * replace all the backslash with slash in
+     * all href and conref attribute
+     */
     private static String replaceCONREF (final Attributes atts){
-
-        /*
-         * replace all the backslash with slash in
-         * all href and conref attribute
-         */
         String attValue = atts.getValue(ATTRIBUTE_NAME_CONREF);
         final int sharp_index = attValue.lastIndexOf(SHARP);
         final int dot_index = attValue.lastIndexOf(DOT);
@@ -222,20 +160,20 @@ public final class DitaWriter extends AbstractXMLWriter {
     }
     private  static boolean warnOfNoneTopicFormat(final Attributes attrs,final String valueOfHref){
         final String hrefValue=valueOfHref;
-        final String formatValue=attrs.getValue(ATTRIBUTE_NAME_FORMAT);
-        final String classValue=attrs.getValue(ATTRIBUTE_NAME_CLASS);
-        final String extOfHref=getExtName(valueOfHref);
-        final DITAOTLogger logger=new DITAOTJavaLogger();
-        final Properties params = new Properties();
-        params.put("%1", hrefValue);
         if(notLocalURL(hrefValue)){
             return true;
         }
         else{
+            final String classValue=attrs.getValue(ATTRIBUTE_NAME_CLASS);
             if(classValue!=null && PR_D_CODEREF.matches(classValue)){
                 return true;
             }
+            final String formatValue=attrs.getValue(ATTRIBUTE_NAME_FORMAT);
+            final String extOfHref=getExtName(valueOfHref);
             if(formatValue==null && extOfHref!=null && !extOfHref.equalsIgnoreCase("DITA") && !extOfHref.equalsIgnoreCase("XML") ){
+                final DITAOTLogger logger=new DITAOTJavaLogger();
+                final Properties params = new Properties();
+                params.put("%1", hrefValue);
                 logger.logError(MessageUtils.getMessage("DOTJ028E", params).toString());
                 return true;
             }
@@ -249,36 +187,28 @@ public final class DitaWriter extends AbstractXMLWriter {
      * @return extension name
      */
     public static String getExtName(final String attValue){
-        String fileName;
-        int fileExtIndex;
-        int index;
-
-        index = attValue.indexOf(SHARP);
-
+        final int index = attValue.indexOf(SHARP);
         if (attValue.startsWith(SHARP)){
             return null;
         } else if (index != -1){
-            fileName = attValue.substring(0,index);
-            fileExtIndex = fileName.lastIndexOf(DOT);
-            return (fileExtIndex != -1)
-                    ? fileName.substring(fileExtIndex+1, fileName.length())
-                            : null;
+            final String fileName = attValue.substring(0,index);
+            final int fileExtIndex = fileName.lastIndexOf(DOT);
+            return fileExtIndex != -1
+                   ? fileName.substring(fileExtIndex + 1, fileName.length())
+                   : null;
         } else {
-            fileExtIndex = attValue.lastIndexOf(DOT);
-            return (fileExtIndex != -1)
-                    ? attValue.substring(fileExtIndex+1, attValue.length())
-                            : null;
+            final int fileExtIndex = attValue.lastIndexOf(DOT);
+            return fileExtIndex != -1
+                   ? attValue.substring(fileExtIndex + 1, attValue.length())
+                   : null;
         }
     }
     private static String replaceHREF (final String attName, final Attributes atts){
-
-        String attValue = null;
-
         if (attName == null){
             return null;
         }
 
-        attValue = atts.getValue(attName);
+        String attValue = atts.getValue(attName);
         if(attValue!=null){
             final int dot_index = attValue.lastIndexOf(DOT);
             final int sharp_index = attValue.lastIndexOf(SHARP);
@@ -548,7 +478,9 @@ public final class DitaWriter extends AbstractXMLWriter {
 
             if(ATTRIBUTE_NAME_HREF.equals(attQName)
                     || ATTRIBUTE_NAME_COPY_TO.equals(attQName)){
-                if(atts.getValue(ATTRIBUTE_NAME_SCOPE)!=null && (atts.getValue(ATTRIBUTE_NAME_SCOPE).equalsIgnoreCase("external")||atts.getValue(ATTRIBUTE_NAME_SCOPE).equalsIgnoreCase("peer"))){
+                if(atts.getValue(ATTRIBUTE_NAME_SCOPE)!=null &&
+                        (atts.getValue(ATTRIBUTE_NAME_SCOPE).equalsIgnoreCase(ATTR_SCOPE_VALUE_EXTERNAL) ||
+                                atts.getValue(ATTRIBUTE_NAME_SCOPE).equalsIgnoreCase(ATTR_SCOPE_VALUE_PEER))){
                     attValue = atts.getValue(i);
                 }else{
                     attValue = replaceHREF(attQName, atts);
@@ -617,7 +549,7 @@ public final class DitaWriter extends AbstractXMLWriter {
                             if(idExported && keyrefExported
                                     && transtype.equals(INDEX_TYPE_ECLIPSEHELP)){
                                 //remain the conkeyref attribute.
-                                copyAttribute("conkeyref", attValue);
+                                copyAttribute(ATTRIBUTE_NAME_CONKEYREF, attValue);
                                 //Added by William on 2009-06-25 for #12014 end
                             }else {
                                 //normal process
@@ -643,7 +575,7 @@ public final class DitaWriter extends AbstractXMLWriter {
                                         target = target.substring(0,target.indexOf(SHARP));
                                     }
                                 }
-                                copyAttribute("conref", target + tail);
+                                copyAttribute(ATTRIBUTE_NAME_CONREF, target + tail);
                                 conkeyrefValid = true;
                             }
                         }else{
@@ -670,7 +602,7 @@ public final class DitaWriter extends AbstractXMLWriter {
                             //key is exported and transtype is eclipsehelp
                             if(keyrefExported && transtype.equals(INDEX_TYPE_ECLIPSEHELP)){
                                 //remain the conkeyref attribute.
-                                copyAttribute("conkeyref", attValue);
+                                copyAttribute(ATTRIBUTE_NAME_CONKEYREF, attValue);
                                 //Added by William on 2009-06-25 for #12014 end
                             }else{
                                 //e.g conref = c.xml
@@ -678,7 +610,7 @@ public final class DitaWriter extends AbstractXMLWriter {
                                 //Added by William on 2010-05-17 for conkeyrefbug:3001705 start
                                 target = replaceExtName(target);
                                 //Added by William on 2010-05-17 for conkeyrefbug:3001705 end
-                                copyAttribute("conref", target);
+                                copyAttribute(ATTRIBUTE_NAME_CONREF, target);
 
                                 conkeyrefValid = true;
                             }
@@ -722,7 +654,9 @@ public final class DitaWriter extends AbstractXMLWriter {
         }
     }
 
-    /** Repalce extestion name for non-ditamap file
+    /**
+     * Replace extension name for non-ditamap file.
+     * 
      * @param target String
      * @return String
      */
@@ -735,7 +669,8 @@ public final class DitaWriter extends AbstractXMLWriter {
     }
 
     /**
-     * Upate href.
+     * Update href.
+     * 
      * @param href String key's href
      * @return updated href value
      */
@@ -899,10 +834,10 @@ public final class DitaWriter extends AbstractXMLWriter {
 
    private int getColumnSpan(final Attributes atts) {
         int ret;
-        if ((atts.getValue("namest") == null)||(atts.getValue("nameend") == null)){
+        if ((atts.getValue(ATTRIBUTE_NAME_NAMEST) == null)||(atts.getValue(ATTRIBUTE_NAME_NAMEEND) == null)){
             return 1;
         }else{
-            ret = colSpec.indexOf(atts.getValue("nameend")) - colSpec.indexOf(atts.getValue("namest"))+1;
+            ret = colSpec.indexOf(atts.getValue(ATTRIBUTE_NAME_NAMEEND)) - colSpec.indexOf(atts.getValue(ATTRIBUTE_NAME_NAMEST))+1;
             if(ret <= 0){
                 return 1;
             }
@@ -1015,10 +950,10 @@ public final class DitaWriter extends AbstractXMLWriter {
 
     private int getEndNumber(final Attributes atts, final int columnStart) {
         int ret;
-        if (atts.getValue("nameend") == null){
+        if (atts.getValue(ATTRIBUTE_NAME_NAMEEND) == null){
             return columnStart;
         }else{
-            ret = colSpec.indexOf(atts.getValue("nameend")) + 1;
+            ret = colSpec.indexOf(atts.getValue(ATTRIBUTE_NAME_NAMEEND)) + 1;
             if(ret == 0){
                 return columnStart;
             }
@@ -1028,16 +963,16 @@ public final class DitaWriter extends AbstractXMLWriter {
 
     private int getStartNumber(final Attributes atts, final int previousEnd) {
         int ret;
-        if (atts.getValue("colnum") != null){
-            return new Integer(atts.getValue("colnum")).intValue();
-        }else if(atts.getValue("namest") != null){
-            ret = colSpec.indexOf(atts.getValue("namest")) + 1;
+        if (atts.getValue(ATTRIBUTE_NAME_COLNUM) != null){
+            return new Integer(atts.getValue(ATTRIBUTE_NAME_COLNUM)).intValue();
+        }else if(atts.getValue(ATTRIBUTE_NAME_NAMEST) != null){
+            ret = colSpec.indexOf(atts.getValue(ATTRIBUTE_NAME_NAMEST)) + 1;
             if(ret == 0){
                 return previousEnd + 1;
             }
             return ret;
-        }else if(atts.getValue("colname") != null){
-            ret = colSpec.indexOf(atts.getValue("colname")) + 1;
+        }else if(atts.getValue(ATTRIBUTE_NAME_COLNAME) != null){
+            ret = colSpec.indexOf(atts.getValue(ATTRIBUTE_NAME_COLNAME)) + 1;
             if(ret == 0){
                 return previousEnd + 1;
             }
@@ -1152,7 +1087,6 @@ public final class DitaWriter extends AbstractXMLWriter {
         Integer value;
         Integer nextValue;
         String domains = null;
-        final Properties params = new Properties();
         final String attrValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
 
         //Added by William on 2010-06-01 for bug:3005748 start
@@ -1170,14 +1104,14 @@ public final class DitaWriter extends AbstractXMLWriter {
         }else if( foreignLevel == 0){
 
             if(attrValue==null && !ELEMENT_NAME_DITA.equals(localName)){
-                params.clear();
+                final Properties params = new Properties();
                 params.put("%1", localName);
                 logger.logInfo(MessageUtils.getMessage("DOTJ030I", params).toString());
             }
             if (attrValue != null && (TOPIC_TOPIC.matches(attrValue)||MAP_MAP.matches(attrValue))){
                 domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
                 if(domains==null){
-                    params.clear();
+                    final Properties params = new Properties();
                     params.put("%1", localName);
                     logger.logInfo(MessageUtils.getMessage("DOTJ029I", params).toString());
                 } else {
@@ -1430,9 +1364,6 @@ public final class DitaWriter extends AbstractXMLWriter {
         if (validateMap == null) {
             return;
         }
-
-        final Properties prop = new Properties();
-
         for (int i = 0; i < atts.getLength(); i++) {
             final String attrName = atts.getQName(i);
             final String attrValue = atts.getValue(i);
@@ -1448,7 +1379,7 @@ public final class DitaWriter extends AbstractXMLWriter {
                     for (final String s : keylist) {
                         // Warning ? Value not valid.
                         if (!StringUtils.isEmptyString(s) && !valueSet.contains(s)) {
-                            prop.clear();
+                            final Properties prop = new Properties();
                             prop.put("%1", attrName);
                             prop.put("%2", qName);
                             prop.put("%3", attrValue);

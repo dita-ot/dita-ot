@@ -39,7 +39,7 @@ import org.xml.sax.XMLReader;
 public final class TopicRefWriter extends AbstractXMLWriter {
 
     // To check the URL of href in topicref attribute
-    private static final String NOT_LOCAL_URL = "://";
+    private static final String NOT_LOCAL_URL = COLON_DOUBLE_SLASH;
 
     private LinkedHashMap<String, String> changeTable = null;
     private Hashtable<String, String> conflictTable = null;

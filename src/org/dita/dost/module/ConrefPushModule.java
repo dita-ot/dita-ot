@@ -50,14 +50,13 @@ final class ConrefPushModule implements AbstractPipelineModule {
         if (logger == null) {
             throw new IllegalStateException("Logger not set");
         }
+        
         String tempDir = input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR);
-        final String basedir = input
-                .getAttribute(ANT_INVOKER_PARAM_BASEDIR);
-
-        if (! new File(tempDir).isAbsolute()){
+        if (! new File(tempDir).isAbsolute()) {
+            final String basedir = input .getAttribute(ANT_INVOKER_PARAM_BASEDIR);
             tempDir = new File(basedir, tempDir).getAbsolutePath();
         }
-
+        
         Properties properties = null;
         try{
             properties = ListUtils.getDitaList();
@@ -76,10 +75,8 @@ final class ConrefPushModule implements AbstractPipelineModule {
         }
 
         final Set<Map.Entry<String, Hashtable<String, String>>> pushSet = (Set<Map.Entry<String, Hashtable<String,String>>>) reader.getContent().getCollection();
-        final Iterator<Map.Entry<String, Hashtable<String,String>>> iter = pushSet.iterator();
-
-        while(iter.hasNext()){
-            final Map.Entry<String, Hashtable<String,String>> entry = iter.next();
+        
+        for (final Map.Entry<String, Hashtable<String,String>> entry: pushSet) {
             logger.logInfo("Processing " + new File(tempDir, entry.getKey()).getAbsolutePath());
             final ConrefPushParser parser = new ConrefPushParser();
             parser.setLogger(logger);

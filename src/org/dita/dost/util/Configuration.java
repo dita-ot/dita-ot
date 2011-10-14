@@ -39,7 +39,7 @@ public final class Configuration {
      * <p>If configuration file is not found e.g. during integration, the
      * configuration will be an empty.</p>
      */
-    final static Map<String, String> configuration;
+    public final static Map<String, String> configuration;
     static {
         final Properties properties = new Properties();
         InputStream configurationInputStream = null;

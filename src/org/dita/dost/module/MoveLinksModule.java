@@ -11,7 +11,6 @@ package org.dita.dost.module;
 
 import static org.dita.dost.util.Constants.*;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -30,18 +29,8 @@ import org.dita.dost.writer.DitaLinksWriter;
  * @author Zhang, Yuan Peng
  */
 final class MoveLinksModule implements AbstractPipelineModule {
-    private final ContentImpl content;
 
     private DITAOTLogger logger;
-
-    /**
-     * Default constructor of MoveLinksModule class.
-     */
-    public MoveLinksModule() {
-        super();
-        content = new ContentImpl();
-
-    }
 
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
@@ -50,34 +39,31 @@ final class MoveLinksModule implements AbstractPipelineModule {
     /**
      * execution point of MoveLinksModule.
      * 
-     * @param input Input parameters and resources.
-     * @return null
-     * @throws DITAOTException exception
+     * @param input input parameters and resources
+     * @return always {@code null}
+     * @throws DITAOTException if process fails
      */
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
         if (logger == null) {
             throw new IllegalStateException("Logger not set");
         }
+        
         final String maplinksFile = input.getAttribute(ANT_INVOKER_PARAM_MAPLINKS);
+        
         final MapLinksReader indexReader = new MapLinksReader();
         indexReader.setLogger(logger);
+        indexReader.setMatch(new StringBuffer(ELEMENT_NAME_MAPLINKS)
+                .append(SLASH).append(TOPIC_LINKPOOL.localName)
+                .append(SLASH).append(TOPIC_LINKLIST.localName)
+                .toString());
+        indexReader.read(maplinksFile);
+        final Set<Map.Entry<String, String>> mapSet = (Set<Map.Entry<String, String>>) indexReader.getContent().getCollection();
+        
         final DitaLinksWriter indexInserter = new DitaLinksWriter();
         indexInserter.setLogger(logger);
-        Set<Map.Entry<String, String>> mapSet;
-        Iterator<Map.Entry<String, String>> i;
-
-        indexReader.setMatch(new StringBuffer(ELEMENT_NAME_MAPLINKS)
-        .append(SLASH).append(TOPIC_LINKPOOL.localName)
-        .append(SLASH).append(TOPIC_LINKLIST.localName)
-        .toString());
-
-        indexReader.read(maplinksFile);
-        mapSet = (Set<Map.Entry<String, String>>) indexReader.getContent().getCollection();
-
-        i = mapSet.iterator();
-        while (i.hasNext()) {
-            final Map.Entry<String, String> entry = i.next();
+        for (final Map.Entry<String, String> entry: mapSet) {
             logger.logInfo("Processing " + entry.getKey());
+            final ContentImpl content = new ContentImpl();
             content.setValue(entry.getValue());
             indexInserter.setContent(content);
             indexInserter.write(entry.getKey());

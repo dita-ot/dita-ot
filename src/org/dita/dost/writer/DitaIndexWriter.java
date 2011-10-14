@@ -39,17 +39,22 @@ import org.xml.sax.XMLReader;
  */
 public final class DitaIndexWriter extends AbstractXMLWriter {
     private String firstMatchTopic;
-    private boolean hasMetadataTillNow;// whether we have met <metadata> in <prolog> element
-    private boolean hasPrologTillNow;// whether we have met <prolog> in this topic we want
+    /** whether we have met <metadata> in <prolog> element */
+    private boolean hasMetadataTillNow;
+    /** whether we have met <prolog> in this topic we want */
+    private boolean hasPrologTillNow;
 
     private String indexEntries;
     private String lastMatchTopic;
-    private List<String> matchList; // topic path that topicIdList need to match
+    /** topic path that topicIdList need to match */
+    private List<String> matchList;
     private boolean needResolveEntity;
     private OutputStreamWriter output;
     private XMLReader reader;
-    private boolean startTopic; //whether to insert links at this topic
-    private final List<String> topicIdList; // array list that is used to keep the hierarchy of topic id
+    /** whether to insert links at this topic */
+    private boolean startTopic;
+    /** array list that is used to keep the hierarchy of topic id */
+    private final List<String> topicIdList;
     private boolean insideCDATA;
     private boolean hasWritten;
     private final ArrayList<String> topicSpecList = new ArrayList<String>();
@@ -106,27 +111,17 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
         }
     }
 
-    //  check whether the hierarchy of current node match the matchList
+    /**
+     * check whether the hierarchy of current node match the matchList
+     */
     private boolean checkMatch() {
         if (matchList == null){
             return true;
         }
         final int matchSize = matchList.size();
         final int ancestorSize = topicIdList.size();
-        final ListIterator<String> matchIterator = matchList.listIterator();
-        final ListIterator<String> ancestorIterator = topicIdList.listIterator(ancestorSize
-                - matchSize);
-        String match;
-        String ancestor;
-
-        while (matchIterator.hasNext()) {
-            match = matchIterator.next();
-            ancestor = ancestorIterator.next();
-            if (!match.equals(ancestor)) {
-                return false;
-            }
-        }
-        return true;
+        final List<String> tail = topicIdList.subList(ancestorSize - matchSize, ancestorSize);
+        return matchList.equals(tail);
     }
 
     @Override

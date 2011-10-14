@@ -10,6 +10,7 @@
 package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;
+import static java.util.Arrays.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -62,39 +63,44 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
     private String firstMatchTopic;
     private String lastMatchTopic;
     private Hashtable<String, Node> metaTable;
-    private List<String> matchList; // topic path that topicIdList need to match
+    /** topic path that topicIdList need to match */
+    private List<String> matchList;
     private boolean needResolveEntity;
     private Writer output;
     private OutputStreamWriter ditaFileOutput;
     private StringWriter strOutput;
     private XMLReader reader;
-    private boolean startMap; //whether to insert links at this topic
-    private boolean startDOM; // whether to cache the current stream into a buffer for building DOM tree
-    private boolean hasWritten; // whether metadata has been written
-    private final List<String> topicIdList; // array list that is used to keep the hierarchy of topic id
+    /** whether to insert links at this topic */
+    private boolean startMap;
+    /** whether to cache the current stream into a buffer for building DOM tree */
+    private boolean startDOM;
+    /** whether metadata has been written */
+    private boolean hasWritten;
+    /** array list that is used to keep the hierarchy of topic id */
+    private final List<String> topicIdList;
     private boolean insideCDATA;
     private final ArrayList<String> topicSpecList;
 
-    private static final Hashtable<String, String> moveTable;
+    private static final Hashtable<String, List<String>> moveTable;
     static{
-        moveTable = new Hashtable<String, String>(INT_32);
-        moveTable.put(MAP_SEARCHTITLE.matcher,"topicmeta/searchtitle");
-        moveTable.put(TOPIC_AUDIENCE.matcher,"topicmeta/audience");
-        moveTable.put(TOPIC_AUTHOR.matcher,"topicmeta/author");
-        moveTable.put(TOPIC_CATEGORY.matcher,"topicmeta/category");
-        moveTable.put(TOPIC_COPYRIGHT.matcher,"topicmeta/copyright");
-        moveTable.put(TOPIC_CRITDATES.matcher,"topicmeta/critdates");
-        moveTable.put(TOPIC_DATA.matcher,"topicmeta/data");
-        moveTable.put(TOPIC_DATA_ABOUT.matcher,"topicmeta/data-about");
-        moveTable.put(TOPIC_FOREIGN.matcher,"topicmeta/foreign");
-        moveTable.put(TOPIC_KEYWORDS.matcher,"topicmeta/keywords");
-        moveTable.put(TOPIC_OTHERMETA.matcher,"topicmeta/othermeta");
-        moveTable.put(TOPIC_PERMISSIONS.matcher,"topicmeta/permissions");
-        moveTable.put(TOPIC_PRODINFO.matcher,"topicmeta/prodinfo");
-        moveTable.put(TOPIC_PUBLISHER.matcher,"topicmeta/publisher");
-        moveTable.put(TOPIC_RESOURCEID.matcher,"topicmeta/resourceid");
-        moveTable.put(TOPIC_SOURCE.matcher,"topicmeta/source");
-        moveTable.put(TOPIC_UNKNOWN.matcher,"topicmeta/unknown");
+        moveTable = new Hashtable<String, List<String>>(INT_32);
+        moveTable.put(MAP_SEARCHTITLE.matcher, asList(MAP_TOPICMETA.localName, MAP_SEARCHTITLE.localName));
+        moveTable.put(TOPIC_AUDIENCE.matcher, asList(MAP_TOPICMETA.localName, TOPIC_AUDIENCE.localName));
+        moveTable.put(TOPIC_AUTHOR.matcher, asList(MAP_TOPICMETA.localName, TOPIC_AUTHOR.localName));
+        moveTable.put(TOPIC_CATEGORY.matcher, asList(MAP_TOPICMETA.localName, TOPIC_CATEGORY.localName));
+        moveTable.put(TOPIC_COPYRIGHT.matcher, asList(MAP_TOPICMETA.localName, TOPIC_COPYRIGHT.localName));
+        moveTable.put(TOPIC_CRITDATES.matcher, asList(MAP_TOPICMETA.localName, TOPIC_CRITDATES.localName));
+        moveTable.put(TOPIC_DATA.matcher, asList(MAP_TOPICMETA.localName, TOPIC_DATA.localName));
+        moveTable.put(TOPIC_DATA_ABOUT.matcher, asList(MAP_TOPICMETA.localName, TOPIC_DATA_ABOUT.localName));
+        moveTable.put(TOPIC_FOREIGN.matcher, asList(MAP_TOPICMETA.localName, TOPIC_FOREIGN.localName));
+        moveTable.put(TOPIC_KEYWORDS.matcher, asList(MAP_TOPICMETA.localName, TOPIC_KEYWORDS.localName));
+        moveTable.put(TOPIC_OTHERMETA.matcher, asList(MAP_TOPICMETA.localName, TOPIC_OTHERMETA.localName));
+        moveTable.put(TOPIC_PERMISSIONS.matcher, asList(MAP_TOPICMETA.localName, TOPIC_PERMISSIONS.localName));
+        moveTable.put(TOPIC_PRODINFO.matcher, asList(MAP_TOPICMETA.localName, TOPIC_PRODINFO.localName));
+        moveTable.put(TOPIC_PUBLISHER.matcher, asList(MAP_TOPICMETA.localName, TOPIC_PUBLISHER.localName));
+        moveTable.put(TOPIC_RESOURCEID.matcher, asList(MAP_TOPICMETA.localName, TOPIC_RESOURCEID.localName));
+        moveTable.put(TOPIC_SOURCE.matcher, asList(MAP_TOPICMETA.localName, TOPIC_SOURCE.localName));
+        moveTable.put(TOPIC_UNKNOWN.matcher, asList(MAP_TOPICMETA.localName, TOPIC_UNKNOWN.localName));
     }
 
     private static final Set<String> uniqueSet;
@@ -112,25 +118,25 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
 
     static{
         compareTable = new Hashtable<String, Integer>(INT_32);
-        compareTable.put("topicmeta", 1);
-        compareTable.put("searchtitle", 2);
-        compareTable.put("shortdesc", 3);
-        compareTable.put("author", 4);
-        compareTable.put("source", 5);
-        compareTable.put("publisher", 6);
-        compareTable.put("copyright", 7);
-        compareTable.put("critdates", 8);
-        compareTable.put("permissions", 9);
-        compareTable.put("audience", 10);
-        compareTable.put("category", 11);
-        compareTable.put("keywords", 12);
-        compareTable.put("prodinfo", 13);
-        compareTable.put("othermeta", 14);
-        compareTable.put("resourceid", 15);
-        compareTable.put("data", 16);
-        compareTable.put("data-about", 17);
-        compareTable.put("foreign", 18);
-        compareTable.put("unknown", 19);
+        compareTable.put(MAP_TOPICMETA.localName, 1);
+        compareTable.put(TOPIC_SEARCHTITLE.localName, 2);
+        compareTable.put(TOPIC_SHORTDESC.localName, 3);
+        compareTable.put(TOPIC_AUTHOR.localName, 4);
+        compareTable.put(TOPIC_SOURCE.localName, 5);
+        compareTable.put(TOPIC_PUBLISHER.localName, 6);
+        compareTable.put(TOPIC_COPYRIGHT.localName, 7);
+        compareTable.put(TOPIC_CRITDATES.localName, 8);
+        compareTable.put(TOPIC_PERMISSIONS.localName, 9);
+        compareTable.put(TOPIC_AUDIENCE.localName, 10);
+        compareTable.put(TOPIC_CATEGORY.localName, 11);
+        compareTable.put(TOPIC_KEYWORDS.localName, 12);
+        compareTable.put(TOPIC_PRODINFO.localName, 13);
+        compareTable.put(TOPIC_OTHERMETA.localName, 14);
+        compareTable.put(TOPIC_RESOURCEID.localName, 15);
+        compareTable.put(TOPIC_DATA.localName, 16);
+        compareTable.put(TOPIC_DATA_ABOUT.localName, 17);
+        compareTable.put(TOPIC_FOREIGN.localName, 18);
+        compareTable.put(TOPIC_UNKNOWN.localName, 19);
     }
 
 
@@ -182,27 +188,17 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
         }
     }
 
-    //  check whether the hierarchy of current node match the matchList
+    /** 
+     * Check whether the hierarchy of current node match the matchList.
+     */
     private boolean checkMatch() {
         if (matchList == null){
             return true;
         }
         final int matchSize = matchList.size();
         final int ancestorSize = topicIdList.size();
-        final ListIterator<String> matchIterator = matchList.listIterator();
-        final ListIterator<String> ancestorIterator = topicIdList.listIterator(ancestorSize
-                - matchSize);
-        String match;
-        String ancestor;
-
-        while (matchIterator.hasNext()) {
-            match = matchIterator.next();
-            ancestor = ancestorIterator.next();
-            if (!match.equals(ancestor)) {
-                return false;
-            }
-        }
-        return true;
+        final List<String> tail = topicIdList.subList(ancestorSize - matchSize, ancestorSize);
+        return matchList.equals(tail);
     }
 
     @Override
@@ -348,13 +344,13 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
     }
 
     private void moveMeta(final Entry<String, Node> entry, final Node root) {
-        final String metaPath = moveTable.get(entry.getKey());
+        final List<String> metaPath = moveTable.get(entry.getKey());
         if (metaPath == null){
             // for the elements which doesn't need to be moved to topic
             // the processor need to neglect them.
             return;
         }
-        final StringTokenizer token = new StringTokenizer(metaPath,SLASH);
+        final Iterator<String> token = metaPath.iterator();
         Node parent = null;
         Node child = root;
         Node current = null;
@@ -362,9 +358,9 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
         NodeList childElements;
         boolean createChild = false;
 
-        while (token.hasMoreElements()){// find the element, if cannot find create one.
+        while (token.hasNext()){// find the element, if cannot find create one.
+            final String next = token.next();
             parent = child;
-            final String next = (String) token.nextElement();
             final Integer nextIndex = compareTable.get(next);
             Integer currentIndex = null;
             childElements = parent.getChildNodes();

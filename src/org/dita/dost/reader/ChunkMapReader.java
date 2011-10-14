@@ -129,8 +129,8 @@ public final class ChunkMapReader implements AbstractReader {
             //When @chunk="to-content" is specified on "map" element,
             //chunk module will change its @class attribute to "topicref"
             //and process it as if it were a normal topicref wich @chunk="to-content"
-            if(root.getAttribute(ATTRIBUTE_NAME_CHUNK) != null &&
-                    root.getAttribute(ATTRIBUTE_NAME_CHUNK).indexOf(CHUNK_TO_CONTENT)!=-1){
+            if(rootChunkValue != null &&
+                    rootChunkValue.indexOf(CHUNK_TO_CONTENT)!=-1){
                 // if to-content is specified on map element
 
                 // create the reference to the new file on root element.
@@ -190,21 +190,21 @@ public final class ChunkMapReader implements AbstractReader {
                 //process the map element's immediate child node(s)
                 for (int i = 0; i < list.getLength(); i++){
                     final Node node = list.item(i);
-                    Node classAttr = null;
-                    String classValue = null;
                     if (node.getNodeType() == Node.ELEMENT_NODE){
-                        classAttr = node.getAttributes().getNamedItem(ATTRIBUTE_NAME_CLASS);
+                        final Element currentElem = (Element) node;
+                        Node classAttr = node.getAttributes().getNamedItem(ATTRIBUTE_NAME_CLASS);
 
+                        String classValue = null;
                         if(classAttr != null){
                             classValue = classAttr.getNodeValue();
                         }
 
                         if(classValue != null && MAP_RELTABLE.matches(classValue)){
-                            updateReltable((Element)node);
+                            updateReltable(currentElem);
                         }
                         if(classValue != null && MAP_TOPICREF.matches(classValue)
                                 && !MAPGROUP_D_TOPICGROUP.matches(classValue)){
-                            processTopicref(node);
+                            processTopicref(currentElem);
                         }
 
                     }
@@ -292,9 +292,8 @@ public final class ChunkMapReader implements AbstractReader {
         }
         outputWriter.write(">");
         final NodeList children = elem.getChildNodes();
-        Node child;
         for (int j = 0; j<children.getLength(); j++){
-            child = children.item(j);
+            final Node child = children.item(j);
             switch (child.getNodeType()){
             case Node.TEXT_NODE:
                 output((Text) child, outputWriter); break;
@@ -308,15 +307,7 @@ public final class ChunkMapReader implements AbstractReader {
         outputWriter.write("</"+elem.getNodeName()+">");
     }
     //process chunk
-    private void processTopicref(final Node node) {
-        NamedNodeMap attr = null;
-        Node hrefAttr = null;
-        Node chunkAttr = null;
-        Node copytoAttr = null;
-        Node scopeAttr = null;
-        Node classAttr = null;
-        Node xtrfAttr = null;
-        Node processAttr = null;
+    private void processTopicref(final Element node) {
         String hrefValue = null;
         String chunkValue = null;
         String copytoValue = null;
@@ -327,15 +318,13 @@ public final class ChunkMapReader implements AbstractReader {
         final String tempRole = processingRole;
         boolean prevChunkByTopic = false;
 
-        attr = node.getAttributes();
-
-        hrefAttr = attr.getNamedItem(ATTRIBUTE_NAME_HREF);
-        chunkAttr = attr.getNamedItem(ATTRIBUTE_NAME_CHUNK);
-        copytoAttr = attr.getNamedItem(ATTRIBUTE_NAME_COPY_TO);
-        scopeAttr = attr.getNamedItem(ATTRIBUTE_NAME_SCOPE);
-        classAttr = attr.getNamedItem(ATTRIBUTE_NAME_CLASS);
-        xtrfAttr = attr.getNamedItem(ATTRIBUTE_NAME_XTRF);
-        processAttr = attr.getNamedItem(ATTRIBUTE_NAME_PROCESSING_ROLE);
+        final Node hrefAttr = node.getAttributeNode(ATTRIBUTE_NAME_HREF);
+        final Node chunkAttr = node.getAttributeNode(ATTRIBUTE_NAME_CHUNK);
+        final Node copytoAttr = node.getAttributeNode(ATTRIBUTE_NAME_COPY_TO);
+        final Node scopeAttr = node.getAttributeNode(ATTRIBUTE_NAME_SCOPE);
+        final Node classAttr = node.getAttributeNode(ATTRIBUTE_NAME_CLASS);
+        final Node xtrfAttr = node.getAttributeNode(ATTRIBUTE_NAME_XTRF);
+        final Node processAttr = node.getAttributeNode(ATTRIBUTE_NAME_PROCESSING_ROLE);
 
         if(hrefAttr != null){
             hrefValue = hrefAttr.getNodeValue();
@@ -484,9 +473,10 @@ public final class ChunkMapReader implements AbstractReader {
         for (int i = 0; i < children.getLength(); i++){
             final Node current = children.item(i);
             if(current.getNodeType()==Node.ELEMENT_NODE){
-                final String classValue  = ((Element)current).getAttribute(ATTRIBUTE_NAME_CLASS);
-                final String hrefValue = ((Element)current).getAttribute(ATTRIBUTE_NAME_HREF);
-                final String xtrfValue = ((Element)current).getAttribute(ATTRIBUTE_NAME_XTRF);
+                final Element currentElem = (Element) current;
+                final String classValue  = currentElem.getAttribute(ATTRIBUTE_NAME_CLASS);
+                final String hrefValue = currentElem.getAttribute(ATTRIBUTE_NAME_HREF);
+                final String xtrfValue = currentElem.getAttribute(ATTRIBUTE_NAME_XTRF);
                 if(MAP_TOPICREF.matches(classValue)){
                     if((hrefValue.length() != 0 &&
                             !"generated_by_chunk".equals(xtrfValue) &&
@@ -497,11 +487,11 @@ public final class ChunkMapReader implements AbstractReader {
 
                         //make sure hrefValue make sense and target file
                         //is not generated file or the element is topichead
-                        processTopicref(current);
+                        processTopicref(currentElem);
                         //added by William on 2009-09-18 for chunk bug #2860199 start
                         //support topicref without href attribute
                     }else if(hrefValue.length() == 0){
-                        processTopicref(current);
+                        processTopicref(currentElem);
                     }
                     //added by William on 2009-09-18 for chunk bug #2860199 end
                 }
@@ -524,9 +514,9 @@ public final class ChunkMapReader implements AbstractReader {
 
     private void updateReltable(final Element elem) {
         final String hrefValue = elem.getAttribute(ATTRIBUTE_NAME_HREF);
-        String resulthrefValue = null;
         if (hrefValue.length() != 0){
             if(changeTable.containsKey(FileUtils.resolveFile(filePath,hrefValue))){
+                String resulthrefValue = null;
                 if (hrefValue.indexOf(SHARP)!=-1){
                     resulthrefValue=FileUtils.getRelativePathFromMap(filePath+UNIX_SEPARATOR+"stub.ditamap"
                             ,FileUtils.resolveFile(filePath,hrefValue))
@@ -542,7 +532,8 @@ public final class ChunkMapReader implements AbstractReader {
         for(int i = 0; i < children.getLength(); i++){
             final Node current = children.item(i);
             if(current.getNodeType() == Node.ELEMENT_NODE){
-                final String classValue = ((Element)current).getAttribute(ATTRIBUTE_NAME_CLASS);
+                final Element currentElem = (Element) current;
+                final String classValue = currentElem.getAttribute(ATTRIBUTE_NAME_CLASS);
                 if (MAP_TOPICREF.matches(classValue)){
 
                 }

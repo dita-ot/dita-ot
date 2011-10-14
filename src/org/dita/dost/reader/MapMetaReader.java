@@ -43,7 +43,7 @@ import org.w3c.dom.NodeList;
  *
  */
 public final class MapMetaReader implements AbstractReader {
-    private static final String INTERNET_LINK_MARK = "://";
+    private static final String INTERNET_LINK_MARK = COLON_DOUBLE_SLASH;
 
     private final Hashtable<String, Hashtable<String, Element>> resultTable = new Hashtable<String, Hashtable<String, Element>>(INT_16);
 

@@ -305,7 +305,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
             return null;
         }else if(target == null ||
                 FileUtils.isAbsolutePath(value) ||
-                value.contains("://") ||
+                value.contains(COLON_DOUBLE_SLASH) ||
                 value.startsWith(SHARP)){
             return value;
         }else{

@@ -1325,7 +1325,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
             scopeValue = ATTR_SCOPE_VALUE_LOCAL;
         }
 
-        if (hrefValue == null || hrefValue.indexOf("://")!=-1){
+        if (hrefValue == null || hrefValue.indexOf(COLON_DOUBLE_SLASH)!=-1){
             return false;
         }
 
