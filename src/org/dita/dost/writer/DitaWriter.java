@@ -76,7 +76,6 @@ public final class DitaWriter extends AbstractXMLWriter {
     private static final String ATTRIBUTE_NAME_COLNAME = "colname";
     private static final String ATTRIBUTE_NAME_COLNUM = "colnum";
     private static final String COLUMN_NAME_COL = "col";
-    private static final String OS_NAME_WINDOWS = "windows";
     public static final String PI_PATH2PROJ_TARGET = "path2project";
     public static final String PI_WORKDIR_TARGET = "workdir";
     /** To check the URL of href in topicref attribute */

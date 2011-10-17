@@ -18,6 +18,7 @@ import java.util.Stack;
 
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
+import org.dita.dost.reader.KeyrefReader.KeyDef;
 import org.dita.dost.resolver.DitaURIResolverFactory;
 import org.dita.dost.resolver.URIResolverAdapter;
 import org.dita.dost.util.StringUtils;
@@ -27,7 +28,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 /**
- * KeyrefReader class which reads DITA mao file to collect key definitions.
+ * KeyrefReader class which reads DITA map file to collect key definitions. Instances are reusable but not thread-safe.
  */
 public final class KeyrefReader extends AbstractXMLReader {
 
@@ -36,7 +37,7 @@ public final class KeyrefReader extends AbstractXMLReader {
         
         protected final String key;
         protected final StringBuffer keyDefContent;
-        protected int keyDefLevel = 0;
+        protected int keyDefLevel = 1;
         
         /**
          * Construct a new key definition.
@@ -50,7 +51,7 @@ public final class KeyrefReader extends AbstractXMLReader {
         
     }
 
-    private XMLReader reader;
+    private final XMLReader reader;
 
     private final Hashtable<String, String> keyDefTable;
 
@@ -63,21 +64,20 @@ public final class KeyrefReader extends AbstractXMLReader {
      */
     public KeyrefReader(){
         keyDefTable = new Hashtable<String, String>();
-        keys = new HashSet<String>();
         try {
             reader = StringUtils.getXMLReader();
             reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
             reader.setFeature(FEATURE_NAMESPACE, true);
+            reader.setContentHandler(this);
         } catch (final SAXException ex) {
-            logger.logException(ex);
+            throw new RuntimeException("Unable to initialize XML parser: " + ex.getMessage(), ex);
         }
-        reader.setContentHandler(this);
     }
 
     @Override
     public void characters(final char[] ch, final int start, final int length)
             throws SAXException {
-        if(isStart()) {
+        if(!keyDefs.isEmpty()) {
             keyDefAppend(StringUtils.escapeXML(ch, start, length));
         }
     }
@@ -86,22 +86,22 @@ public final class KeyrefReader extends AbstractXMLReader {
     @Override
     public void endElement(final String uri, final String localName, final String name)
             throws SAXException {
-        if(isStart()){
-            decKeyDefLevel();
+        if(!keyDefs.isEmpty()){
+            keyDefs.peek().keyDefLevel--;
             keyDefAppend(LESS_THAN);
             keyDefAppend(SLASH);
             keyDefAppend(name);
             keyDefAppend(GREATER_THAN);
-        }
-        if(isStart() && getKeyDefLevel() == 0){
-            // to the end of the key definition, set the flag false
-            // and put the key definition to table.
-            final KeyDef keyDef = popKeyDef();
-            for(final String keyName: keyDef.key.split(" ")){
-                if(!keyName.equals("")) {
-                    keyDefTable.put(keyName, keyDef.keyDefContent.toString());
-                }
+            if(keyDefs.peek().keyDefLevel == 0){
+                // to the end of the key definition, set the flag false
+                // and put the key definition to table.
+                final KeyDef keyDef = keyDefs.pop();
+                for(final String keyName: keyDef.key.split(" ")){
+                    if(!keyName.equals("")) {
+                        keyDefTable.put(keyName, keyDef.keyDefContent.toString());
+                    }
 
+                }
             }
         }
     }
@@ -127,6 +127,8 @@ public final class KeyrefReader extends AbstractXMLReader {
             //edit by Alan: by refactoring Adding URIResolver Date:2009-08-13 --end
         } catch (final Exception ex) {
             logger.logException(ex);
+        } finally {
+            keys = null;
         }
     }
     
@@ -147,32 +149,28 @@ public final class KeyrefReader extends AbstractXMLReader {
         if(keyName!=null && MAP_TOPICREF.matches(classValue)){
 
             // if it has @keys and is valid.
-            boolean flag = false;
-            final String[] keyNames = keyName.split(" ");
-            int index = 0;
-            while(index < keyNames.length){
-                if(keys.contains(keyNames[index++])){
-                    flag = true;
+            boolean hasKnownKey = false;
+            for (final String k: keyName.split(" ")) {
+                if(keys.contains(k)){
+                    hasKnownKey = true;
                     break;
                 }
             }
-            if(keyName != null && flag){
-                pushKeyDef(keyName);
-                incKeyDefLevel();
+            if(hasKnownKey){
+                keyDefs.push(new KeyDef(keyName));
                 putElement(name, atts);
             }
-        }else if(isStart()){
-            incKeyDefLevel();
+        }else if(!keyDefs.isEmpty()){
+            keyDefs.peek().keyDefLevel++;
             putElement(name, atts);
         }
     }
 
     private void putElement(final String elemName,
             final Attributes atts) {
-        int index = 0;
         keyDefAppend(LESS_THAN);
         keyDefAppend(elemName);
-        for (index=0; index < atts.getLength(); index++){
+        for (int index=0; index < atts.getLength(); index++){
             keyDefAppend(STRING_BLANK);
             keyDefAppend(atts.getQName(index));
             keyDefAppend(EQUAL);
@@ -196,25 +194,6 @@ public final class KeyrefReader extends AbstractXMLReader {
     }
     
     /**
-     * Push new key definition to stack
-     * 
-     * @param keyName key name
-     */
-    private void pushKeyDef(final String keyName) {
-        keyDefs.push(new KeyDef(keyName));
-    }
-    
-    /**
-     * Pop key definition from the stack.
-     * 
-     * @return top most key definition
-     * @throws EmptyStackException if stack is empty
-     */
-    private KeyDef popKeyDef() {
-        return keyDefs.pop();
-    }
-    
-    /**
      * Append content to every key definition in the stack.
      * 
      * @param content XML content to add to key definitions
@@ -224,47 +203,5 @@ public final class KeyrefReader extends AbstractXMLReader {
             keyDef.keyDefContent.append(content);
         }
     }
-    
-    /**
-     * Check if key definition stack is not empty.
-     * @return {@code true} if stack is not empty, otherwise {@code false}
-     */
-    private boolean isStart() {
-        return keyDefs.size() > 0;
-    }
-    
-    /**
-     * Increment key definition level by one.
-     */
-    private void incKeyDefLevel() {
-        addKeyDefLevel(1);
-    }
-    
-    /**
-     * Decrement key definition level.
-     * 
-     * @param dif decrement amount
-     */
-    private void decKeyDefLevel() {
-        addKeyDefLevel(-1);
-    }
-    
-    /**
-     * Increment key definition level.
-     * 
-     * @param dif increment amount
-     */
-    private void addKeyDefLevel(final int dif) {
-        keyDefs.peek().keyDefLevel += dif;
-    }
-    
-    /**
-     * Get top key definition level from.
-     * 
-     * @return key definition level
-     */
-    private int getKeyDefLevel() {
-        return keyDefs.peek().keyDefLevel;
-    }
-    
+        
 }

@@ -33,45 +33,40 @@ import org.xml.sax.XMLReader;
 /**
  * MergeMapParser reads the ditamap file after preprocessing and merges
  * different files into one intermediate result. It calls MergeTopicParser
- * to process the topic file.
+ * to process the topic file. Instances are reusable but not thread-safe.
  * 
  * @author Zhang, Yuan Peng
  */
 public final class MergeMapParser extends AbstractXMLReader {
-    private XMLReader reader = null;
-    private StringBuffer mapInfo = null;
-    private MergeTopicParser topicParser = null;
-    private MergeUtils util;
-    private ContentImpl content;
+    
+    private final XMLReader reader;
+    private final StringBuffer mapInfo;
+    private final MergeTopicParser topicParser;
+    private final MergeUtils util;
+    private final ContentImpl content;
     private String dirPath = null;
     private String tempdir = null;
 
-    private Stack<String> processStack;
-    private int processLevel = 0;
+    private final Stack<String> processStack;
+    private int processLevel;
 
     /**
      * Default Constructor.
      */
     public MergeMapParser() {
+        mapInfo = new StringBuffer(INT_1024);
+        processStack = new Stack<String>();
+        processLevel = 0;
+        util = new MergeUtils();
+        topicParser = new MergeTopicParser(util);
+        topicParser.setLogger(logger);
+        content = new ContentImpl();
         try{
-            if(reader == null){
-                reader = StringUtils.getXMLReader();
-                reader.setContentHandler(this);
-                reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-            }
-            if(mapInfo == null){
-                mapInfo = new StringBuffer(INT_1024);
-            }
-
-            processStack = new Stack<String>();
-            processLevel = 0;
-
-            util = new MergeUtils();
-            topicParser = new MergeTopicParser(util);
-            topicParser.setLogger(logger);
-            content = new ContentImpl();
+            reader = StringUtils.getXMLReader();
+            reader.setContentHandler(this);
+            reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
         }catch (final Exception e){
-            throw new RuntimeException("Failed to initialize merge map parser: " + e.getMessage(), e);
+            throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
     }
 
@@ -226,13 +221,13 @@ public final class MergeMapParser extends AbstractXMLReader {
                 in = new FileInputStream(ditalist);
                 property.loadFromXML(in);
             }
-            final String hrefTargetList = property.getProperty(HREF_TARGET_LIST);
             String resourceOnlySet = property.getProperty(RESOURCE_ONLY_LIST);
             resourceOnlySet = (resourceOnlySet == null ? "" : resourceOnlySet);
             String skipTopicSet = property.getProperty(CHUNK_TOPIC_LIST);
             skipTopicSet = (skipTopicSet == null ? "" : skipTopicSet);
             String chunkedTopicSet = property.getProperty(CHUNKED_TOPIC_LIST);
             chunkedTopicSet = (chunkedTopicSet == null ? "" : chunkedTopicSet);
+            final String hrefTargetList = property.getProperty(HREF_TARGET_LIST);
             final StringTokenizer tokenizer = new StringTokenizer(hrefTargetList,COMMA);
             while(tokenizer.hasMoreElements())
             {

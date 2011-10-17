@@ -10,6 +10,7 @@
 package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.writer.DitaWriter.*;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -34,7 +35,6 @@ import java.util.Stack;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
-import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.util.DITAAttrUtils;
@@ -52,15 +52,16 @@ import org.xml.sax.XMLReader;
 
 /**
  * ChunkTopicParser class, writing chunking content into relative topic files
- * and then update list.
- * 
- *
+ * and then update list. Not reusable and not thread-safe.
  */
 public final class ChunkTopicParser extends AbstractXMLWriter {
 
-    private static final String OS_NAME_WINDOWS = "windows";
-    private static final String PI_END = "?>";
-    private static final String PI_WORKDIR_HEAD = "<?workdir ";
+    private static final String ATTR_CHUNK_VALUE_SELECT_BRANCH = "select-branch";
+    private static final String ATTR_CHUNK_VALUE_TO_CONTENT = "to-content";
+    private static final String ATTR_CHUNK_VALUE_SELECT_TOPIC = "select-topic";
+    private static final String ATTR_CHUNK_VALUE_SELECT_DOCUMENT = "select-document";
+    private static final String PI_END = QUESTION + GREATER_THAN;
+    private static final String PI_WORKDIR_HEAD = LESS_THAN + QUESTION + PI_WORKDIR_TARGET + STRING_BLANK;
     //edited by william on 2009-09-10 for maintain iteration order start
     private LinkedHashMap<String,String> changeTable = null;
     //edited by william on 2009-09-10 for maintain iteration order start
@@ -82,7 +83,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 
     private String targetTopicId = null;
 
-    private String selectMethod = "select-document";
+    private String selectMethod = ATTR_CHUNK_VALUE_SELECT_DOCUMENT;
     //flag whether output the nested nodes
     private boolean include = false;
     private boolean skip = false;
@@ -96,7 +97,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
     private boolean needResolveEntity = true;
     private boolean startFromFirstTopic = false;
 
-    private static XMLReader reader = null;
+    private final XMLReader reader;
     private Writer output = null;
 
     private StringBuffer temp = null;
@@ -141,7 +142,16 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
         copyto = new HashSet<String>();
         copytoSource = new HashSet<String>();
         copytotarget2source = new HashMap<String,String>();
-        new HashSet<String>();
+        try {
+            reader = StringUtils.getXMLReader();
+            reader.setContentHandler(this);
+            reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
+            reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
+            reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
+            reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
+        } catch (final Exception e) {
+            throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
+        }
     }
     @Override
     public void characters(final char[] ch, final int start, final int length) throws SAXException {
@@ -182,10 +192,13 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                 includelevel--;
                 if(includelevel >= 0){
                     // prevent adding </dita> into output
-                    output.write("</"+qName+">");
+                    output.write(LESS_THAN);
+                    output.write(SLASH);
+                    output.write(qName);
+                    output.write(GREATER_THAN);
                 }
                 if (includelevel == 0 &&
-                        !"select-document".equals(selectMethod)){
+                        !ATTR_CHUNK_VALUE_SELECT_DOCUMENT.equals(selectMethod)){
                     include = false;
                 }
                 if (topicSpecSet.contains(qName) &&
@@ -230,8 +243,8 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
     @Override
     public void processingInstruction(final String target, final String data) throws SAXException {
         if(include ||
-                "workdir".equalsIgnoreCase(target) ||
-                "path2proj".equalsIgnoreCase(target)){
+                PI_WORKDIR_TARGET.equalsIgnoreCase(target) ||
+                PI_PATH2PROJ_TARGET.equalsIgnoreCase(target)){
             try {
                 final String pi = (data != null) ? target + STRING_BLANK + data : target;
                 output.write(LESS_THAN + QUESTION
@@ -259,7 +272,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
     public void startDocument() throws SAXException {
         //dontWriteDita = true;
         //difference between to-content & select-topic
-        if ("select-document".equals(selectMethod)){
+        if (ATTR_CHUNK_VALUE_SELECT_DOCUMENT.equals(selectMethod)){
             //currentParsingFile can never equal outputFile except when chunk="to-content"
             //is set at map level
             //TODO former is set and line 606(895) and the later is set at line 838
@@ -302,7 +315,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                 //Added by William on 20100628 for bug:3020314 end
 
                 //only by topic
-                if (separate && include && !"select-topic".equals(selectMethod)){
+                if (separate && include && !ATTR_CHUNK_VALUE_SELECT_TOPIC.equals(selectMethod)){
                     //chunk="by-topic" and next topic element found
                     fileWriterStack.push(output);
                     outputFileNameStack.push(outputFile);
@@ -375,7 +388,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                         newChild.appendChild(stub);
                     }
                 }
-                if(include && "select-topic".equals(selectMethod)){
+                if(include && ATTR_CHUNK_VALUE_SELECT_TOPIC.equals(selectMethod)){
                     //if select method is "select-topic" and
                     //current topic is the nested topic in
                     //target topic-->skip it.
@@ -417,7 +430,8 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 
             if(include){
                 includelevel++;
-                output.write("<"+qName);
+                output.write(LESS_THAN);
+                output.write(qName);
                 for(int i = 0; i<atts.getLength();i++){
                     final String attrName = atts.getQName(i);
                     String attrValue = atts.getValue(i);
@@ -458,7 +472,8 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                         //update @href value
                         output.write(STRING_BLANK);
                         output.write(ATTRIBUTE_NAME_HREF);
-                        output.write("=\"");
+                        output.write(EQUAL);
+                        output.write(QUOTATION);
                         if(checkHREF(atts)){
                             // if current @href value needs to be updated
                             String relative = FileUtils.getRelativePathFromMap(outputFile,currentParsingFile);
@@ -487,13 +502,14 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                             output.write(attrValue);
                         }
 
-                        output.write("\"");
+                        output.write(QUOTATION);
                     }else{
                         output.write(STRING_BLANK);
                         output.write(attrName);
-                        output.write("=\"");
+                        output.write(EQUAL);
+                        output.write(QUOTATION);
                         output.write(attrValue);
-                        output.write("\"");
+                        output.write(QUOTATION);
                     }
                 }
 
@@ -504,12 +520,13 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                     //processor need to add it
                     output.write(STRING_BLANK);
                     output.write(ditaarchNSQName);
-                    output.write("=\"");
+                    output.write(EQUAL);
+                    output.write(QUOTATION);
                     output.write(ditaarchNSValue);
-                    output.write("\"");
+                    output.write(QUOTATION);
                 }
 
-                output.write(">");
+                output.write(GREATER_THAN);
             }
 
         }catch(final Exception e){
@@ -697,7 +714,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
         boolean dotchunk = false;
 
 
-        if (copytoValue.length() != 0 && !chunkValue.contains("to-content")){
+        if (copytoValue.length() != 0 && !chunkValue.contains(ATTR_CHUNK_VALUE_TO_CONTENT)){
             if (hrefValue.indexOf(SHARP)!=-1){
                 parseFilePath = copytoValue + hrefValue.substring(hrefValue.indexOf(SHARP));
             }else{
@@ -709,7 +726,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 
         // if @copy-to is processed in chunk module, the list file needs to be updated.
         // Because @copy-to should be included in fulltopiclist, and the source of coyy-to should be excluded in fulltopiclist.
-        if(copytoValue.length() != 0 && chunkValue.contains("to-content")){
+        if(copytoValue.length() != 0 && chunkValue.contains(ATTR_CHUNK_VALUE_TO_CONTENT)){
             copyto.add(copytoValue);
             if(hrefValue.indexOf(SHARP) != -1){
                 copytoSource.add(hrefValue.substring(0, hrefValue.indexOf(SHARP)));
@@ -721,7 +738,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
         }
         try {
             if (!StringUtils.isEmptyString(parseFilePath)
-                    && !"external".equalsIgnoreCase(scopeValue)
+                    && !ATTR_SCOPE_VALUE_EXTERNAL.equalsIgnoreCase(scopeValue)
                     && !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processRoleValue)) {
                 // if the path to target file make sense
                 currentParsingFile = FileUtils.resolveFile(filePath,parseFilePath);
@@ -735,12 +752,12 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                 if (parseFilePath.contains(SHARP)
                         && parseFilePath.indexOf(SHARP) < parseFilePath.length() - 1) {
                     id = parseFilePath.substring(parseFilePath.indexOf(SHARP)+1);
-                    if (chunkValue.contains("select-branch")) {
+                    if (chunkValue.contains(ATTR_CHUNK_VALUE_SELECT_BRANCH)) {
                         outputFileName = FileUtils.resolveFile(filePath, id) + ditaext;
                         this.targetTopicId = id;
                         this.startFromFirstTopic = false;
-                        selectMethod = "select-branch";
-                    } else if (chunkValue.contains("select-document")) {
+                        selectMethod = ATTR_CHUNK_VALUE_SELECT_BRANCH;
+                    } else if (chunkValue.contains(ATTR_CHUNK_VALUE_SELECT_DOCUMENT)) {
                         firstTopicID = this.getFirstTopicId(FileUtils.resolveFile(filePath, parseFilePath));
 
                         //Added by William on 20100628 for bug:3020314 start
@@ -755,12 +772,12 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                             dotchunk = true;
                             this.targetTopicId = null;
                         }
-                        selectMethod = "select-document";
+                        selectMethod = ATTR_CHUNK_VALUE_SELECT_DOCUMENT;
                     } else {
                         outputFileName = FileUtils.resolveFile(filePath, id) + ditaext;
                         this.targetTopicId = id;
                         this.startFromFirstTopic = false;
-                        selectMethod = "select-topic";
+                        selectMethod = ATTR_CHUNK_VALUE_SELECT_TOPIC;
                     }
                 } else {
                     firstTopicID = this.getFirstTopicId(FileUtils.resolveFile(filePath, parseFilePath));
@@ -777,7 +794,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                         dotchunk = true;
                         this.targetTopicId = null;
                     }
-                    selectMethod = "select-document";
+                    selectMethod = ATTR_CHUNK_VALUE_SELECT_DOCUMENT;
                 }
                 if (copytoValue.length() != 0){
                     // use @copy-to value as the new file name
@@ -916,14 +933,14 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
         Set<String> tempTopicID = new HashSet<String>();
 
         targetTopicId = null;
-        selectMethod = "select-document";
+        selectMethod = ATTR_CHUNK_VALUE_SELECT_DOCUMENT;
         include = false;
 
         boolean needWriteDitaTag = true;
 
         try {
             //Get target chunk file name
-            if (copytoValue.length() != 0 && !chunkValue.contains("to-content")){
+            if (copytoValue.length() != 0 && !chunkValue.contains(ATTR_CHUNK_VALUE_TO_CONTENT)){
                 if (hrefValue.indexOf(SHARP)!=-1){
                     parseFilePath = copytoValue + hrefValue.substring(hrefValue.indexOf(SHARP));
                 }else{
@@ -935,7 +952,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 
             // if @copy-to is processed in chunk module, the list file needs to be updated.
             // Because @copy-to should be included in fulltopiclist, and the source of coyy-to should be excluded in fulltopiclist.
-            if(copytoValue.length() != 0 && chunkValue.contains("to-content")
+            if(copytoValue.length() != 0 && chunkValue.contains(ATTR_CHUNK_VALUE_TO_CONTENT)
                     && hrefValue.length() != 0){
                 copyto.add(copytoValue);
                 if(hrefValue.indexOf(SHARP) != -1){
@@ -952,7 +969,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                         && (!StringUtils.isEmptyString(parseFilePath))
                         && (!"external".equalsIgnoreCase(scopeValue))) {
                     // now the path to target file make sense
-                    if(chunkValue.indexOf("to-content")!=-1){
+                    if(chunkValue.indexOf(ATTR_CHUNK_VALUE_TO_CONTENT)!=-1){
                         //if current element contains "to-content" in chunk attribute
                         //we need to create new buffer and flush the buffer to file
                         //after processing is finished
@@ -972,7 +989,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                             outputFileName = FileUtils.resolveFile(filePath,copytoValue);
                         } else if (hrefValue.length() != 0) {
                             // try to use href value as the new file name
-                            if (chunkValue.contains("select-topic") || chunkValue.contains("select-branch")) {
+                            if (chunkValue.contains(ATTR_CHUNK_VALUE_SELECT_TOPIC) || chunkValue.contains(ATTR_CHUNK_VALUE_SELECT_BRANCH)) {
                                 if (hrefValue.contains(SHARP)
                                         && hrefValue.indexOf(SHARP) < hrefValue.length() - 1) {
                                     // if we have an ID here, use it.
@@ -1051,11 +1068,11 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                                     endIndex);
                         }
 
-                        if ("select-topic".equals(selectMethod) ||
-                                "select-branch".equals(selectMethod)){
+                        if (ATTR_CHUNK_VALUE_SELECT_TOPIC.equals(selectMethod) ||
+                                ATTR_CHUNK_VALUE_SELECT_BRANCH.equals(selectMethod)){
                             //if the current topic href referred to a entire topic file,it will be handled in "document" level.
                             if(targetTopicId == null){
-                                selectMethod = "select-document";
+                                selectMethod = ATTR_CHUNK_VALUE_SELECT_DOCUMENT;
                             }
                         }
                     }
@@ -1220,7 +1237,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 
                 }
 
-                if(chunkValue.indexOf("to-content")!=-1){
+                if(chunkValue.indexOf(ATTR_CHUNK_VALUE_TO_CONTENT)!=-1){
                     //flush the buffer to file after processing is finished
                     //and restore back original output
 
@@ -1251,8 +1268,14 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                                 if (null==path2project){
                                     path2project="";
                                 }
-                                ditaFileOutput.write("<?path2project "
-                                        + path2project + "?>");
+                                
+                                ditaFileOutput.write(LESS_THAN);
+                                ditaFileOutput.write(QUESTION);
+                                ditaFileOutput.write(PI_PATH2PROJ_TARGET);
+                                ditaFileOutput.write(STRING_BLANK);
+                                ditaFileOutput.write(path2project);
+                                ditaFileOutput.write(QUESTION);
+                                ditaFileOutput.write(GREATER_THAN);
                             }
                             //Added on 20101210 for bug:3126578 end
                         }
@@ -1296,22 +1319,6 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
         this.separate = separate;
         this.ditaext  = ditaext;
         this.conflictTable = conflictTable;
-        logger=new DITAOTJavaLogger();
-
-        try {
-            reader = StringUtils.getXMLReader();
-            reader.setContentHandler(this);
-            reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
-            reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-
-            //Edited by william on 2009-11-8 for ampbug:2893664 start
-            reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
-            reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
-            //Edited by william on 2009-11-8 for ampbug:2893664 end
-
-        } catch (final Exception e) {
-            logger.logException(e);
-        }
     }
 
     private boolean checkHREF(final Attributes atts){

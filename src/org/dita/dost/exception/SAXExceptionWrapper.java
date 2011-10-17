@@ -9,6 +9,8 @@
  */
 package org.dita.dost.exception;
 
+import static org.dita.dost.util.Constants.*;
+
 import org.xml.sax.Locator;
 import org.xml.sax.SAXParseException;
 
@@ -103,7 +105,7 @@ public final class SAXExceptionWrapper extends SAXParseException {
         buff.append(saxParseException.getLineNumber());
         buff.append(":");
         buff.append(saxParseException.getMessage());
-        buff.append(System.getProperty("line.separator"));
+        buff.append(LINE_SEPARATOR);
 
         return buff.toString();
     }

@@ -1287,7 +1287,6 @@ public final class Constants {
     /**ATTR_PRINT_VALUE_PRINT_ONLY.*/
     public static final String ATTR_PRINT_VALUE_PRINT_ONLY = "printonly";
 
-
     /**
      * constants for filtering or flagging.
      */

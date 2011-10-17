@@ -9,6 +9,8 @@
  */
 package org.dita.dost.util;
 
+import static org.dita.dost.util.Constants.*;
+
 /**
  * LogUtils : To anylyse the information from dita & xslt ,supply
  * fatal , error , warn , info to the DITAOTBuildLogger,
@@ -25,8 +27,7 @@ public final class LogUtils {
     private static final String WARN="WARN";
     private static final String ERROR="ERROR";
     private static final String INFO="INFO";
-    /** Line separator */
-    private static final String LINE_SEP = System.getProperty("line.separator");
+
     private LogUtils(){
     }
     /**
@@ -120,9 +121,9 @@ public final class LogUtils {
      */
     public static String getLogStatisticInfo(){
         String logStaticticInfo;
-        logStaticticInfo="Number of Fatals : " + getNumOfFatals() +LINE_SEP;
-        logStaticticInfo=logStaticticInfo+"Number of Errors : " + getNumOfErrors() +LINE_SEP;
-        logStaticticInfo=logStaticticInfo+"Number of Warnings : " + getNumOfWarnings() +LINE_SEP;
+        logStaticticInfo="Number of Fatals : " + getNumOfFatals() +LINE_SEPARATOR;
+        logStaticticInfo=logStaticticInfo+"Number of Errors : " + getNumOfErrors() +LINE_SEPARATOR;
+        logStaticticInfo=logStaticticInfo+"Number of Warnings : " + getNumOfWarnings() +LINE_SEPARATOR;
         return logStaticticInfo;
     }
 

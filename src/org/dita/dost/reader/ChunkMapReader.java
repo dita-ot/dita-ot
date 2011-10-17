@@ -156,7 +156,14 @@ public final class ChunkMapReader implements AbstractReader {
                 try{
                     newFileWriter = new OutputStreamWriter(new FileOutputStream(newFile), UTF8);
                     newFileWriter.write(XML_HEAD);
-                    newFileWriter.write("<?workdir /"+newFile.getParentFile().getAbsolutePath()+"?>");
+                    newFileWriter.write(LESS_THAN);
+                    newFileWriter.write(QUESTION);
+                    newFileWriter.write(PI_WORKDIR_TARGET);
+                    newFileWriter.write(STRING_BLANK);
+                    newFileWriter.write(UNIX_SEPARATOR);
+                    newFileWriter.write(newFile.getParentFile().getAbsolutePath());
+                    newFileWriter.write(QUESTION);
+                    newFileWriter.write(GREATER_THAN);
                     newFileWriter.write("<dita></dita>");
                     newFileWriter.flush();
                     newFileWriter.close();
@@ -273,7 +280,13 @@ public final class ChunkMapReader implements AbstractReader {
     }
 
     private void output(final ProcessingInstruction instruction,final Writer outputWriter) throws IOException{
-        outputWriter.write("<?"+instruction.getTarget()+" "+instruction.getData()+"?>");
+        outputWriter.write(LESS_THAN);
+        outputWriter.write(QUESTION);
+        outputWriter.write(instruction.getTarget());
+        outputWriter.write(STRING_BLANK);
+        outputWriter.write(instruction.getData());
+        outputWriter.write(QUESTION);
+        outputWriter.write(GREATER_THAN);
     }
 
 
@@ -283,14 +296,18 @@ public final class ChunkMapReader implements AbstractReader {
 
 
     private void output(final Element elem, final Writer outputWriter) throws IOException{
-        outputWriter.write("<"+elem.getNodeName());
+        outputWriter.write(LESS_THAN);
+        outputWriter.write(elem.getNodeName());
         final NamedNodeMap attrMap = elem.getAttributes();
         for (int i = 0; i<attrMap.getLength(); i++){
-            outputWriter.write(" "+attrMap.item(i).getNodeName()
-                    +"=\""+StringUtils.escapeXML(attrMap.item(i).getNodeValue())
-                    +"\"");
+            outputWriter.write(STRING_BLANK);
+            outputWriter.write(attrMap.item(i).getNodeName());
+            outputWriter.write(EQUAL);
+            outputWriter.write(QUOTATION);
+            outputWriter.write(StringUtils.escapeXML(attrMap.item(i).getNodeValue()));
+            outputWriter.write(QUOTATION);
         }
-        outputWriter.write(">");
+        outputWriter.write(GREATER_THAN);
         final NodeList children = elem.getChildNodes();
         for (int j = 0; j<children.getLength(); j++){
             final Node child = children.item(j);
@@ -303,8 +320,10 @@ public final class ChunkMapReader implements AbstractReader {
                 output((Element) child, outputWriter);
             }
         }
-
-        outputWriter.write("</"+elem.getNodeName()+">");
+        outputWriter.write(LESS_THAN);
+        outputWriter.write(SLASH);
+        outputWriter.write(elem.getNodeName());
+        outputWriter.write(GREATER_THAN);
     }
     //process chunk
     private void processTopicref(final Element node) {

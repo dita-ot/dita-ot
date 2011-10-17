@@ -44,7 +44,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
     private Set<String> topicSet;
     private boolean needResolveEntity;
     private OutputStreamWriter output;
-    private XMLReader reader;
+    private final XMLReader reader;
     private Stack<String> topicIdStack; // array list that is used to keep the hierarchy of topic id
     private boolean insideCDATA;
     private final ArrayList<String> topicSpecList;  //Eric
@@ -75,7 +75,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
             reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
             //Edited by william on 2009-11-8 for ampbug:2893664 end
         } catch (final Exception e) {
-            logger.logException(e);
+            throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
 
     }
@@ -134,7 +134,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
                 output.write(RELATED_LINKS_HEAD);
                 output.write(indexEntries.get(curMatchTopic));
                 output.write(RELATED_LINKS_END);
-                output.write(System.getProperty("line.separator"));
+                output.write(LINE_SEPARATOR);
                 curMatchTopic = null;
             }
             output.write(LESS_THAN + SLASH + qName
@@ -240,7 +240,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
                         output.write(RELATED_LINKS_HEAD);
                         output.write(indexEntries.get(curMatchTopic));
                         output.write(RELATED_LINKS_END);
-                        output.write(System.getProperty("line.separator"));
+                        output.write(LINE_SEPARATOR);
                         curMatchTopic = null;
                     } catch (final Exception e) {
                         if (atts.getValue(ATTRIBUTE_NAME_CLASS) != null) {

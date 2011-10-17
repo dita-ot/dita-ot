@@ -10,6 +10,7 @@
 package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.writer.DitaWriter.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -50,7 +51,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
     private String currentFilePath = null;
     private String currentFilePathName=null;
     /** XMLReader instance for parsing dita file */
-    private  XMLReader reader = null;
+    private final XMLReader reader;
 
     /**
      * using for rectify relative path of xml
@@ -75,7 +76,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
             reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
             //Edited by william on 2009-11-8 for ampbug:2893664 end
         } catch (final Exception e) {
-            logger.logException(e);
+            throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
     }
     /**
@@ -105,7 +106,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
             throws SAXException {
         String pi;
         try {
-            if (fixpath!=null&&target.equalsIgnoreCase("workdir")){
+            if (fixpath!=null&&target.equalsIgnoreCase(PI_WORKDIR_TARGET)){
                 final String tmp = fixpath.substring(0,fixpath.lastIndexOf(SLASH));
                 if (!data.endsWith(tmp)){
                     data = data+File.separator+tmp;

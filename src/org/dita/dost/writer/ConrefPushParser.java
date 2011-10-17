@@ -59,7 +59,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
     /**idStack keeps the history of topicId because topics can be nested.*/
     private Stack<String> idStack = null;
     /**parser.*/
-    private XMLReader parser = null;
+    private final XMLReader parser;
     /**output.*/
     private OutputStreamWriter output = null;
     //Added by william on 2009-11-8 for ampbug:2893664 start
@@ -150,7 +150,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
             parser.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
             //Added by william on 2009-11-8 for ampbug:2893664 end
         }catch (final Exception e) {
-            logger.logException(e);
+            throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
     }
     

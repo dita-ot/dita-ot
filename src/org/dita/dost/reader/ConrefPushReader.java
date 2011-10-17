@@ -29,10 +29,20 @@ import org.xml.sax.XMLReader;
  *
  */
 public final class ConrefPushReader extends AbstractXMLReader {
+    
+    /** Conaction mark value */
+    private static final String ATTR_CONACTION_VALUE_MARK = "mark";
+    /** Conaction push after value */
+    private static final String ATTR_CONACTION_VALUE_PUSHAFTER = "pushafter";
+    /** Conaction push before value */
+    private static final String ATTR_CONACTION_VALUE_PUSHBEFORE = "pushbefore";
+    /** Conaction push replace value */
+    private static final String ATTR_CONACTION_VALUE_PUSHREPLACE = "pushreplace";
+    
     /** push table.*/
     private final Hashtable<String, Hashtable<String, String>> pushtable;
     /** push table.*/
-    private XMLReader reader = null;
+    private final XMLReader reader;
     //Added by william on 2009-11-8 for ampbug:2893664 start
     /**whether an entity needs to be resolved or not flag. */
     private boolean needResolveEntity = true;
@@ -108,10 +118,10 @@ public final class ConrefPushReader extends AbstractXMLReader {
             reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
             needResolveEntity = true;
             //Added by william on 2009-11-8 for ampbug:2893664 end
+            reader.setContentHandler(this);
         }catch (final Exception e) {
-            logger.logException(e);
+            throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
-        reader.setContentHandler(this);
     }
 
     @Override
@@ -125,9 +135,9 @@ public final class ConrefPushReader extends AbstractXMLReader {
             putElement(pushcontent, name, atts, false);
         }
 
-        final String conactValue = atts.getValue("conaction");
+        final String conactValue = atts.getValue(ATTRIBUTE_NAME_CONACTION);
         if (!start && conactValue != null){
-            if ("pushbefore".equalsIgnoreCase(conactValue)){
+            if (ATTR_CONACTION_VALUE_PUSHBEFORE.equalsIgnoreCase(conactValue)){
                 if(pushcontent.length() != 0){
                     // there are redundant "pushbefore", create a new pushcontent and emit a warning message.
                     pushcontent = new StringBuffer();
@@ -140,8 +150,8 @@ public final class ConrefPushReader extends AbstractXMLReader {
                 level =0;
                 level ++;
                 putElement(pushcontent, name, atts, true);
-                pushType = "pushbefore";
-            }else if ("pushafter".equalsIgnoreCase(conactValue)){
+                pushType = ATTR_CONACTION_VALUE_PUSHBEFORE;
+            }else if (ATTR_CONACTION_VALUE_PUSHAFTER.equalsIgnoreCase(conactValue)){
                 start = true;
                 level = 0;
                 level ++;
@@ -152,27 +162,27 @@ public final class ConrefPushReader extends AbstractXMLReader {
                     logger.logError(MessageUtils.getMessage("DOTJ039E", prop).toString());
                 }else{
                     putElement(pushcontent, name, atts, true);
-                    pushType = "pushafter";
+                    pushType = ATTR_CONACTION_VALUE_PUSHAFTER;
                 }
-            }else if ("pushreplace".equalsIgnoreCase(conactValue)){
+            }else if (ATTR_CONACTION_VALUE_PUSHREPLACE.equalsIgnoreCase(conactValue)){
                 start = true;
                 level = 0;
                 level ++;
-                target = atts.getValue("conref");
+                target = atts.getValue(ATTRIBUTE_NAME_CONREF);
                 if (target == null){
                     final Properties prop = new Properties();
                     prop.put("%1", atts.getValue(ATTRIBUTE_NAME_XTRF));
                     prop.put("%2", atts.getValue(ATTRIBUTE_NAME_XTRC));
                     logger.logError(MessageUtils.getMessage("DOTJ040E", prop).toString());
                 }else{
-                    pushType = "pushreplace";
+                    pushType = ATTR_CONACTION_VALUE_PUSHREPLACE;
                     putElement(pushcontent, name, atts, true);
                 }
 
-            }else if ("mark".equalsIgnoreCase(conactValue)){
-                target = atts.getValue("conref");
+            }else if (ATTR_CONACTION_VALUE_MARK.equalsIgnoreCase(conactValue)){
+                target = atts.getValue(ATTRIBUTE_NAME_CONREF);
                 if (pushcontent != null && pushcontent.length() > 0 &&
-                        "pushbefore".equals(pushType)){
+                        ATTR_CONACTION_VALUE_PUSHBEFORE.equals(pushType)){
                     //pushcontent != null means it is pushbefore action
                     //we need to add target and content to pushtable
                     replaceContent();
@@ -248,16 +258,16 @@ public final class ConrefPushReader extends AbstractXMLReader {
         buf.append(LESS_THAN).append(elemName);
         for (index=0; index < atts.getLength(); index++){
             if (!removeConref ||
-                    !"conref".equals(atts.getQName(index))&&
-                    !"conaction".equals(atts.getQName(index))){
+                    !ATTRIBUTE_NAME_CONREF.equals(atts.getQName(index))&&
+                    !ATTRIBUTE_NAME_CONACTION.equals(atts.getQName(index))){
                 buf.append(STRING_BLANK);
                 buf.append(atts.getQName(index)).append(EQUAL).append(QUOTATION);
                 String value = atts.getValue(index);
                 //Added by william on 2009-11-8 for ampbug:2893664 start
                 value = StringUtils.escapeXML(value);
                 //Added by william on 2009-11-8 for ampbug:2893664 end
-                if ("href".equals(atts.getQName(index)) ||
-                        "conref".equals(atts.getQName(index))){
+                if (ATTRIBUTE_NAME_HREF.equals(atts.getQName(index)) ||
+                        ATTRIBUTE_NAME_CONREF.equals(atts.getQName(index))){
                     // adjust href for pushbefore and replace
                     value = replaceURL(value);
                 }
@@ -268,7 +278,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
         //Added by William on 2009-10-10 for conrefPush bug:2872954 start
         //id attribute should only be added to the starting element
         //which dosen't have id attribute set
-        if("pushreplace".equals(pushType) &&
+        if(ATTR_CONACTION_VALUE_PUSHREPLACE.equals(pushType) &&
                 atts.getValue(ATTRIBUTE_NAME_ID) == null &&
                 level == 1){
             final int sharpIndex = target.indexOf(SHARP);
@@ -355,7 +365,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
             //if there is something else push to the same target
             //append content if type is 'pushbefore' or 'pushafter'
             //report error if type is 'replace'
-            if ("pushreplace".equalsIgnoreCase(type)){
+            if (ATTR_CONACTION_VALUE_PUSHREPLACE.equalsIgnoreCase(type)){
                 final Properties prop = new Properties();
                 prop.put("%1", target);
                 logger.logError(MessageUtils.getMessage("DOTJ042E", prop).toString());
@@ -387,8 +397,8 @@ public final class ConrefPushReader extends AbstractXMLReader {
         if (level == 0){
             //turn off start if we reach the end tag of staring element
             start = false;
-            if ("pushafter".equals(pushType) ||
-                    "pushreplace".equals(pushType)){
+            if (ATTR_CONACTION_VALUE_PUSHAFTER.equals(pushType) ||
+                    ATTR_CONACTION_VALUE_PUSHREPLACE.equals(pushType)){
                 //if it is pushafter or replace, we need to record content in pushtable
                 //if target == null we have already reported error in startElement;
                 if(target != null){

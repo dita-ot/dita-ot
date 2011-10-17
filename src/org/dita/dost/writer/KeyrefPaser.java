@@ -55,7 +55,7 @@ import org.xml.sax.XMLReader;
  */
 public final class KeyrefPaser extends AbstractXMLWriter {
 
-    private XMLReader parser = null;
+    private final XMLReader parser;
 
     private OutputStreamWriter output = null;
 
@@ -226,7 +226,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
             parser.setFeature(FEATURE_NAMESPACE, true);
             parser.setContentHandler(this);
         } catch (final Exception e) {
-            logger.logException(e);
+            throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
     }
 

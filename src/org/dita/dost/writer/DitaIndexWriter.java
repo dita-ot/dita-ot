@@ -50,7 +50,7 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
     private List<String> matchList;
     private boolean needResolveEntity;
     private OutputStreamWriter output;
-    private XMLReader reader;
+    private final XMLReader reader;
     /** whether to insert links at this topic */
     private boolean startTopic;
     /** array list that is used to keep the hierarchy of topic id */
@@ -89,7 +89,7 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
             reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
             //Edited by william on 2009-11-8 for ampbug:2893664 end
         } catch (final Exception e) {
-            logger.logException(e);
+            throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
 
     }
@@ -166,7 +166,7 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
                     + GREATER_THAN);
             if (!hasPrologTillNow && startTopic && !hasWritten && !topicSpecList.contains(localName)) {
                 // if <prolog> don't exist
-                output.write(System.getProperty("line.separator"));
+                output.write(LINE_SEPARATOR);
                 output.write(PROLOG_HEAD + META_HEAD);
                 output.write(indexEntries);
                 output.write(META_END + PROLOG_END);
@@ -309,7 +309,7 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
             if (topicLevel != -1){
                 if (!hasProlog(atts) && startTopic && !hasWritten) {
                     // if <prolog> don't exist
-                    output.write(System.getProperty("line.separator"));
+                    output.write(LINE_SEPARATOR);
                     output.write(PROLOG_HEAD + META_HEAD);
                     output.write(indexEntries);
                     output.write(META_END + PROLOG_END);

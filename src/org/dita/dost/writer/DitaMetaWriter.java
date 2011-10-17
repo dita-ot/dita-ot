@@ -65,7 +65,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
     private Writer output;
     private OutputStreamWriter ditaFileOutput;
     private StringWriter strOutput;
-    private XMLReader reader;
+    private final XMLReader reader;
     /** whether to insert links at this topic */
     private boolean startTopic;
     /** Whether to cache the current stream into a buffer for building DOM tree */
@@ -167,7 +167,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
             reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
             //Edited by william on 2009-11-8 for ampbug:2893664 end
         } catch (final Exception e) {
-            logger.logException(e);
+            throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
 
     }

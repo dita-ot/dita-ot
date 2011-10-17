@@ -26,19 +26,24 @@ import org.xml.sax.XMLReader;
  * MergeTopicParser reads topic file and transform the references to other dita
  * files into internal references. The parse result of MergeTopicParser will be
  * returned to MergeMapParser and serves as part of intermediate merged result.
+ * Instances are reusable but not thread-safe.
  * 
  * @author Zhang, Yuan Peng
  */
 public final class MergeTopicParser extends AbstractXMLReader {
-    private StringBuffer topicInfo = null;
-    private ContentImpl content;
+    
+    private static final String ATTRIBUTE_NAME_OHREF = "ohref";
+    private static final String ATTRIBUTE_NAME_OID = "oid";
+    
+    private final StringBuffer topicInfo;
+    private final ContentImpl content;
     private String dirPath = null;
     private String filePath = null;
     private boolean isFirstTopicId = false;
 
-    private XMLReader reader = null;
+    private final XMLReader reader;
     private String retId = null;
-    private MergeUtils util;
+    private final MergeUtils util;
 
     /**
      * Default Constructor.
@@ -46,22 +51,15 @@ public final class MergeTopicParser extends AbstractXMLReader {
      * @param util merge utility
      */
     public MergeTopicParser(final MergeUtils util) {
+        this.util = util;
+        content = new ContentImpl();
+        topicInfo = new StringBuffer(INT_1024);
         try{
-            if(reader == null){
-                reader = StringUtils.getXMLReader();
-                reader.setContentHandler(this);
-                reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-            }
-            synchronized(this) {
-                if(topicInfo == null){
-                    topicInfo = new StringBuffer(INT_1024);
-                }
-            }
-
-            content = new ContentImpl();
-            this.util = util;
+            reader = StringUtils.getXMLReader();
+            reader.setContentHandler(this);
+            reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
         }catch (final Exception e){
-            throw new RuntimeException("Failed to initialize merge topic parse: " + e.getMessage(), e);
+            throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
     }
     /**
@@ -114,12 +112,12 @@ public final class MergeTopicParser extends AbstractXMLReader {
             final String value = filePath+SHARP+attValue;
             if(util.findId(value)){
                 topicInfo.append(STRING_BLANK)
-                .append("oid").append(EQUAL).append(QUOTATION)
+                .append(ATTRIBUTE_NAME_OID).append(EQUAL).append(QUOTATION)
                 .append(StringUtils.escapeXML(attValue)).append(QUOTATION);
                 retAttValue = util.getIdValue(value);
             }else{
                 topicInfo.append(STRING_BLANK)
-                .append("oid").append(EQUAL).append(QUOTATION)
+                .append(ATTRIBUTE_NAME_OID).append(EQUAL).append(QUOTATION)
                 .append(StringUtils.escapeXML(attValue)).append(QUOTATION);
                 retAttValue = util.addId(value);
             }
@@ -138,11 +136,7 @@ public final class MergeTopicParser extends AbstractXMLReader {
      * @param attValue
      */
     private String handleLocalDita(final int sharpIndex, final String attValue) {
-        String fileId;
-        String topicId;
         String pathFromMap;
-        int slashIndex;
-        int index;
         String retAttValue = attValue;
         if (sharpIndex != -1){ // href value refer to an id in a topic
             if(sharpIndex == 0){
@@ -152,14 +146,14 @@ public final class MergeTopicParser extends AbstractXMLReader {
             }
 
             topicInfo.append(STRING_BLANK)
-            .append("ohref").append(EQUAL).append(QUOTATION)
+            .append(ATTRIBUTE_NAME_OHREF).append(EQUAL).append(QUOTATION)
             .append(pathFromMap)
             .append(attValue.substring(sharpIndex))
             .append(QUOTATION);
 
-            topicId = attValue.substring(sharpIndex);
-            slashIndex = topicId.indexOf(SLASH);
-            index = attValue.indexOf(SLASH, sharpIndex);
+            String topicId = attValue.substring(sharpIndex);
+            final int slashIndex = topicId.indexOf(SLASH);
+            final int index = attValue.indexOf(SLASH, sharpIndex);
             topicId = (slashIndex != -1)
                     ? pathFromMap + topicId.substring(0, slashIndex)
                             : pathFromMap + topicId;
@@ -177,14 +171,14 @@ public final class MergeTopicParser extends AbstractXMLReader {
             pathFromMap = FileUtils.resolveTopic(new File(filePath).getParent(),attValue);
 
             topicInfo.append(STRING_BLANK)
-            .append("ohref").append(EQUAL).append(QUOTATION)
+            .append(ATTRIBUTE_NAME_OHREF).append(EQUAL).append(QUOTATION)
             .append(pathFromMap)
             .append(QUOTATION);
 
             if(util.findId(pathFromMap)){
                 retAttValue = SHARP + util.getIdValue(pathFromMap);
             }else{
-                fileId = util.getFirstTopicId(pathFromMap, dirPath , false);
+                final String fileId = MergeUtils.getFirstTopicId(pathFromMap, dirPath , false);
                 if (util.findId(pathFromMap + SHARP + fileId)){
                     util.addId(pathFromMap,util.getIdValue(pathFromMap + SHARP + fileId));
                     retAttValue = SHARP + util.getIdValue(pathFromMap + SHARP + fileId);
@@ -206,9 +200,9 @@ public final class MergeTopicParser extends AbstractXMLReader {
      */
     public String parse(final String filename,final String dir){
         final int index = filename.indexOf(SHARP);
+        filePath = (index != -1) ? filename.substring(0,index):filename;
         dirPath = dir;
         try{
-            filePath = (index != -1) ? filename.substring(0,index):filename;
             reader.setErrorHandler(new DITAOTXMLErrorHandler(dir + File.separator + filePath));
             reader.parse(dir + File.separator + filePath);
             return retId;
@@ -225,21 +219,15 @@ public final class MergeTopicParser extends AbstractXMLReader {
 
     @Override
     public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
-        //write the start element of topic parsing logic;
-        String classValue = null;
-        String scopeValue = null;
-        String formatValue = null;
-        final int attsLen = atts.getLength();
-        int sharpIndex;
-
         // Skip redundant <dita> tags.
         if (ELEMENT_NAME_DITA.equalsIgnoreCase(qName)) {
             return;
         }
 
         topicInfo.append(LESS_THAN).append(qName);
-        classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
+        final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
 
+        final int attsLen = atts.getLength();
         for (int i = 0; i < attsLen; i++) {
             final String attQName = atts.getQName(i);
             String attValue = atts.getValue(i);
@@ -254,15 +242,13 @@ public final class MergeTopicParser extends AbstractXMLReader {
                     && attValue.length() != 0){
                 //If the element has valid @class attribute and current attribute
                 //is valid @href
-
-                scopeValue = atts.getValue(ATTRIBUTE_NAME_SCOPE);
-                formatValue = atts.getValue(ATTRIBUTE_NAME_FORMAT);
-                sharpIndex = attValue.indexOf(SHARP);
+                final String scopeValue = atts.getValue(ATTRIBUTE_NAME_SCOPE);
+                final String formatValue = atts.getValue(ATTRIBUTE_NAME_FORMAT);
+                final int sharpIndex = attValue.indexOf(SHARP);
 
                 //        		if (attValue.indexOf(SHARP) != -1){
                 //        			attValue = attValue.substring(0, attValue.indexOf(SHARP));
                 //        		}
-
                 if((scopeValue == null
                         || ATTR_SCOPE_VALUE_LOCAL.equalsIgnoreCase(scopeValue))
                         && attValue.indexOf(COLON_DOUBLE_SLASH) == -1) {
@@ -273,11 +259,9 @@ public final class MergeTopicParser extends AbstractXMLReader {
                             && (formatValue == null
                             || ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatValue))){
                         //local xref or link that refers to dita file
-
                         attValue = handleLocalDita(sharpIndex, attValue);
                     } else {
                         //local @href other than local xref and link that refers to dita file
-
                         attValue = handleLocalHref(attValue);
                     }
                 }
