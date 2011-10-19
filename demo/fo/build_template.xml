@@ -314,6 +314,7 @@ with those set forth herein.
                value="net.sf.saxon.Transform" classpathref="project.class.path"/>
     <property name="fo.saxon.classname" value="com.icl.saxon.StyleSheet"/>
     
+    <makeurl property="customization.dir.url" file="${customization.dir}"/>
     <!-- must fork or catalog resolution will fail due to sharing of -->
     <!-- resolver and catalogs with the Open Toolkit -->
     <echo level="info" message="Java maximum memory=${maxJavaMemory}"/>
@@ -327,12 +328,11 @@ with those set forth herein.
       <arg line='"${dita.temp.dir}/stage1a.xml"'/>
       <arg line='"${temp.transformation.file}"'/>
       <arg line='"locale=${document.locale}"'/>
-      <arg line='"customizationDir=${customization.dir}"'/>
+      <arg line='"customizationDir.url=${customization.dir.url}"'/>
       <arg line='"DRAFT=${args.draft}"'/>
       <arg line='"output.dir.url=${dita.map.output.dir.url}"'/>
       <arg line='"work.dir.url=${work.dir.url}"'/>
       <arg line='"artworkPrefix=${artworkPrefixUrl}"'/>
-      <arg line='"fileProtocolPrefix=${file.protocol.prefix}"'/>
       <arg line='"publishRequiredCleanup=${publish.required.cleanup}"'/>
       <arg line='"disableRelatedLinks=${disableRelatedLinks}"'/>
       <arg line='"antArgsBookmarkStyle=${args.bookmark.style}"'/>

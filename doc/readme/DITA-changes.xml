@@ -141,6 +141,9 @@ going back to the beginning of the toolkit. </shortdesc>
             <li><codeph>page-margin-outside</codeph></li>
             <li><codeph>page-margin-inside</codeph></li>
           </ul>
+          <p>XSLT Parameters <codeph>customizationDir</codeph> and
+              <codeph>fileProfilePrefix</codeph> have been removed in favor of
+              <codeph>customizationDir.url</codeph> parameter.</p>
           <p>A new shell stylesheet has been added for FOP and other shell stylesheets have also
             been revised. Plug-ins which have their own shell stylesheets for PDF processing should
             make sure all required stylesheets are imported.</p></section>

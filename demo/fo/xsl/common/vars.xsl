@@ -65,8 +65,8 @@ See the accompanying license.txt file for applicable licenses.
 	      </xsl:otherwise>
 	    </xsl:choose>
 	  </xsl:variable>
-	  <xsl:variable name="customization.locale" select="document(concat($fileProtocolPrefix, $customizationDir, '/common/vars/', $currentLocale, '.xml'))"/>
-	  <xsl:variable name="customization.language" select="document(concat($fileProtocolPrefix, $customizationDir, '/common/vars/', $currentLanguage, '.xml'))"/>
+	  <xsl:variable name="customization.locale" select="document(concat($customizationDir.url, 'common/vars/', $currentLocale, '.xml'))"/>
+	  <xsl:variable name="customization.language" select="document(concat($customizationDir.url, 'common/vars/', $currentLanguage, '.xml'))"/>
 	  <xsl:variable name="cfg.locale" select="document(concat('../../cfg/common/vars/', $currentLocale, '.xml'))"/>
 	  <xsl:variable name="cfg.language" select="document(concat('../../cfg/common/vars/', $currentLanguage, '.xml'))"/>
 
