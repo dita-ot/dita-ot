@@ -12,6 +12,7 @@
     <topicref href="specification/DITA1-2.xml"/>
     <topicref href="readme/DITA-tested.xml" toc="no"/>
     <topicref href="readme/distribution_packages.dita"/>
+    <topicref href="readme/DITA-installation.xml"/>
     <topicref href="readme/DITA-usingtransforms.xml"/>
     <topicref href="readme/DITA-ant.xml">
       <topicref href="readme/DITA-setupant.xml" toc="no"/>
