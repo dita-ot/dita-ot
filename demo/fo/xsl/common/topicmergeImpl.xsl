@@ -111,31 +111,31 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' bookmap/toc ')][not(@href)]" priority="2" mode="build-tree">
-        <ot-placeholder:toc>
+        <ot-placeholder:toc id="{generate-id()}">
             <xsl:apply-templates mode="build-tree"/>
         </ot-placeholder:toc>
     </xsl:template>
   
     <xsl:template match="*[contains(@class,' bookmap/indexlist ')]" priority="2" mode="build-tree">
-        <ot-placeholder:indexlist>
+        <ot-placeholder:indexlist id="{generate-id()}">
             <xsl:apply-templates mode="build-tree"/>
         </ot-placeholder:indexlist>
     </xsl:template>
   
     <xsl:template match="*[contains(@class,' bookmap/glossarylist ')]" priority="2" mode="build-tree">
-        <ot-placeholder:glossarylist>
+        <ot-placeholder:glossarylist id="{generate-id()}">
             <xsl:apply-templates mode="build-tree"/>
         </ot-placeholder:glossarylist>
     </xsl:template>
   
     <xsl:template match="*[contains(@class,' bookmap/tablelist ')]" priority="2" mode="build-tree">
-        <ot-placeholder:tablelist>
+        <ot-placeholder:tablelist id="{generate-id()}">
             <xsl:apply-templates mode="build-tree"/>
         </ot-placeholder:tablelist>
     </xsl:template>
   
     <xsl:template match="*[contains(@class,' bookmap/figurelist ')]" priority="2" mode="build-tree">
-        <ot-placeholder:figurelist>
+        <ot-placeholder:figurelist id="{generate-id()}">
             <xsl:apply-templates mode="build-tree"/>
         </ot-placeholder:figurelist>
     </xsl:template>
