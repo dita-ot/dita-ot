@@ -55,6 +55,7 @@
 <str name="Prerequisite">شرط اول</str>
 <str name="Prerequisites">اولین شرطیں</str>
 <str name="or">یا</str>
+<str name="figure-number-separator"> </str>
 
 <!--Task section labels -->
 <str name="task_context">اس کام کے متعلق</str>

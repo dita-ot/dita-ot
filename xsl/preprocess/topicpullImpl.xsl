@@ -1366,7 +1366,11 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
         <xsl:apply-templates select="exsl:node-set($figtitle)" mode="text-only"/>
       </xsl:when>
       <xsl:otherwise> <!-- Default: FIGURELINK='NUMBER' -->
-        <xsl:value-of select="$figtext"/><xsl:text> </xsl:text><xsl:value-of select="$figcount"/>
+        <xsl:value-of select="$figtext"/>
+        <xsl:call-template name="getString">
+          <xsl:with-param name="stringName" select="'figure-number-separator'"/>
+        </xsl:call-template>
+        <xsl:value-of select="$figcount"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -1380,7 +1384,11 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
         <xsl:apply-templates select="exsl:node-set($figtitle)" mode="text-only"/>
       </xsl:when>
       <xsl:otherwise> <!-- Default: FIGURELINK='NUMBER' -->
-        <xsl:value-of select="$figcount"/>. <xsl:value-of select="$figtext"/>
+        <xsl:value-of select="$figcount"/>
+        <xsl:call-template name="getString">
+          <xsl:with-param name="stringName" select="'figure-number-separator'"/>
+        </xsl:call-template>
+        <xsl:value-of select="$figtext"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -1486,7 +1494,11 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
         <xsl:apply-templates select="exsl:node-set($tbltitle)" mode="text-only"/>
       </xsl:when>
       <xsl:otherwise> <!-- Default: TABLELINK='NUMBER' -->
-        <xsl:value-of select="$tbltext"/><xsl:text> </xsl:text><xsl:value-of select="$tblcount"/>
+        <xsl:value-of select="$tbltext"/>
+        <xsl:call-template name="getString">
+          <xsl:with-param name="stringName" select="'figure-number-separator'"/>
+        </xsl:call-template>
+        <xsl:value-of select="$tblcount"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -1500,7 +1512,11 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
         <xsl:apply-templates select="exsl:node-set($tbltitle)" mode="text-only"/>
       </xsl:when>
       <xsl:otherwise> <!-- Default: TABLELINK='NUMBER' -->
-        <xsl:value-of select="$tblcount"/>. <xsl:value-of select="$tbltext"/>
+        <xsl:value-of select="$tblcount"/>
+        <xsl:call-template name="getString">
+          <xsl:with-param name="stringName" select="'figure-number-separator'"/>
+        </xsl:call-template>
+        <xsl:value-of select="$tbltext"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
