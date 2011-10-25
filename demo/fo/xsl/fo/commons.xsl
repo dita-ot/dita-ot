@@ -1920,7 +1920,7 @@ See the accompanying license.txt file for applicable licenses.
                         <xsl:call-template name="commonattributes"/>
                         <xsl:call-template name="placeImage">
                             <xsl:with-param name="imageAlign" select="@align"/>
-                            <xsl:with-param name="href" select="@href"/>
+                            <xsl:with-param name="href" select="concat($input.dir.url, @href)"/>
                             <xsl:with-param name="height" select="@height"/>
                             <xsl:with-param name="width" select="@width"/>
                         </xsl:call-template>
@@ -1932,7 +1932,7 @@ See the accompanying license.txt file for applicable licenses.
                     <xsl:call-template name="commonattributes"/>
                     <xsl:call-template name="placeImage">
                         <xsl:with-param name="imageAlign" select="@align"/>
-                        <xsl:with-param name="href" select="@href"/>
+                        <xsl:with-param name="href" select="concat($input.dir.url, @href)"/>
                         <xsl:with-param name="height" select="@height"/>
                         <xsl:with-param name="width" select="@width"/>
                     </xsl:call-template>

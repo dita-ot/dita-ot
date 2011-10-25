@@ -102,6 +102,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:param name="DRAFT"/>
     <xsl:param name="output.dir.url"/>
     <xsl:param name="work.dir.url"/>
+    <xsl:param name="input.dir.url"/>
     <xsl:param name="disableRelatedLinks" select="'yes'"/>
     <xsl:param name="pdfFormatter" select="'fop'"/>
 

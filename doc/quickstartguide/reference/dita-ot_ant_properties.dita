@@ -410,6 +410,12 @@ project.</entry>
     <entry>Specify if frontmatter and backmatter content order is retained in bookmap. Values are
                 "retain" and "discard" (default).</entry>
   </row>
+  <row rev="1.5.4" audience="xslt-customizer">
+    <entry><codeph>org.dita.pdf2.legacy.use-out-temp</codeph></entry>
+    <entry>NA</entry>
+    <entry>Use legacy processing for temporary files and images. Values are "true" and "false"
+                (default).</entry>
+  </row>
 </tbody>
 </tgroup>
 </table></section>

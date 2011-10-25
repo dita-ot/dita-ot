@@ -32,9 +32,23 @@ with those set forth herein.
   <import file="${dita.plugin.org.dita.pdf2.dir}/build_axf.xml"/>
   <import file="${dita.plugin.org.dita.pdf2.dir}/build_xep.xml"/>
 
-  <target name="dita2pdf2" depends="dita-preprocess, map2pdf2, topic2pdf2"/>
+  <target name="dita2pdf2.init">
+    <condition property="preprocess.copy-image.skip" value="true">
+      <isfalse value="${org.dita.pdf2.legacy.use-out-temp}"/>
+    </condition>
+    <!-- Legacy: pass empty input directory -->
+    <condition property="user.input.dir.url" value="">
+      <istrue value="${org.dita.pdf2.legacy.use-out-temp}"/>
+    </condition>
+  </target>
+
+  <target name="dita2pdf2" depends="dita2pdf2.init, dita-preprocess, map2pdf2, topic2pdf2"/>
 
   <target name="transform.topic2pdf.init">
+    <condition property="pdf2.temp.dir" value="${dita.temp.dir}" else="${dita.map.output.dir}">
+      <isfalse value="${org.dita.pdf2.legacy.use-out-temp}"/>
+    </condition>
+    
     <property name="customization.dir" value="${dita.plugin.org.dita.pdf2.dir}/Customization"/>
     <property file="${customization.dir}/build.properties"/>
     
@@ -51,7 +65,7 @@ with those set forth herein.
     <!-- default is FOP.  Can be changed here, or with pdf.formatter property. -->
     <property name="pdf.formatter" value="fop"/>
     
-    <property name="artwork.dir" value="${dita.map.output.dir}"/>
+    <property name="artwork.dir" value="${pdf2.temp.dir}"/>
     <property name="disableRelatedLinks" value="yes"/>
     
     <condition property="file.protocol.prefix" value="file://">
@@ -306,7 +320,7 @@ with those set forth herein.
   <target name="transform.topic2fo.main">
     <!--makeurl seems to output file:/C: style instead of file:///C:, but xep, fop, and ah all accept it.-->
     <makeurl property="artworkPrefixUrl" file="${artworkPrefix}"/>
-    <makeurl property="dita.map.output.dir.url" file="${dita.map.output.dir}" validate="no"/>
+    <makeurl property="dita.map.output.dir.url" file="${pdf2.temp.dir}" validate="no"/>
     <makeurl property="work.dir.url" file="${dita.temp.dir}" validate="no"/>
     
     <!--Decide which version of saxon to use.-->
@@ -315,6 +329,7 @@ with those set forth herein.
     <property name="fo.saxon.classname" value="com.icl.saxon.StyleSheet"/>
     
     <makeurl property="customization.dir.url" file="${customization.dir}"/>
+    <makeurl property="user.input.dir.url" file="${user.input.dir}"/>
     <!-- must fork or catalog resolution will fail due to sharing of -->
     <!-- resolver and catalogs with the Open Toolkit -->
     <echo level="info" message="Java maximum memory=${maxJavaMemory}"/>
@@ -329,6 +344,7 @@ with those set forth herein.
       <arg line='"${temp.transformation.file}"'/>
       <arg line='"locale=${document.locale}"'/>
       <arg line='"customizationDir.url=${customization.dir.url}"'/>
+      <arg line='"input.dir.url=${user.input.dir.url}"'/>
       <arg line='"DRAFT=${args.draft}"'/>
       <arg line='"output.dir.url=${dita.map.output.dir.url}"'/>
       <arg line='"work.dir.url=${work.dir.url}"'/>
@@ -380,7 +396,7 @@ with those set forth herein.
     <i18n-preprocess input="${dita.temp.dir}/stage2.fo" output="${dita.temp.dir}/stage3.fo"
                      config="${i18n.config.file}" catalogs="${xml.catalog.files}"/> 
 
-    <xslt in="${dita.temp.dir}/stage3.fo" out="${dita.map.output.dir}/topic.fo" style="${xsl.fo.dir}/i18n-postprocess.xsl">
+    <xslt in="${dita.temp.dir}/stage3.fo" out="${pdf2.temp.dir}/topic.fo" style="${xsl.fo.dir}/i18n-postprocess.xsl">
       <xmlcatalog>
         <catalogpath path="${xml.catalog.files}"/>
       </xmlcatalog>
@@ -401,7 +417,7 @@ with those set forth herein.
     <delete>
       <!--Deleting the stage files isn't necessary, since it will be cleaned by clean-temp, and is useful for debugging.-->
       <!--<fileset dir="${dita.temp.dir}" includes="stage?.*"/>-->
-      <fileset dir="${dita.map.output.dir}" includes="topic.fo"/>
+      <fileset dir="${pdf2.temp.dir}" includes="topic.fo"/>
     </delete>
   </target>
 

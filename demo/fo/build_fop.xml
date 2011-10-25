@@ -173,7 +173,7 @@
       <not><isset property="outputFile"/></not>
     </condition>
     
-    <fop format="${fop.formatter.output-format}" fofile="${dita.map.output.dir}/topic.fo" basedir="${dita.map.output.dir}"
+    <fop format="${fop.formatter.output-format}" fofile="${pdf2.temp.dir}/topic.fo" basedir="${pdf2.temp.dir}"
          outfile="${outputFile}" messagelevel="info" relativebase="true" force="true"
          userconfig="${args.fo.userconfig}"/>
   </target>

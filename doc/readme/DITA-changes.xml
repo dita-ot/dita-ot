@@ -119,6 +119,12 @@ going back to the beginning of the toolkit. </shortdesc>
             <li>Romanian</li>
             <li>Swedish</li>
           </ul>
+          <p>PDF processing no longer copies images or generates XSL FO to output directory.
+            Instead, the temporary directory is used for all temporary files and source images are
+            read directly from source directory. The legacy processing model can be enabled by
+            setting <codeph>org.dita.pdf2.legacy.use-out-temp</codeph> property to value
+              <codeph>true</codeph>; support for the legacy processing model may be removed in
+            future releases.</p>
         </section>
       </refbody>
     </reference>
