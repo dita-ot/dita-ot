@@ -91,7 +91,7 @@ See the accompanying license.txt file for applicable licenses.
                           </xsl:otherwise>
                       </xsl:choose>
                   </title>
-                  <body class=" topic/body "/>
+                  <!--body class=" topic/body "/-->
                   <xsl:apply-templates mode="build-tree"/>
               </topic>
           </xsl:if>

@@ -338,11 +338,9 @@ See the accompanying license.txt file for applicable licenses.
 
                     <xsl:choose>
                       <xsl:when test="$chapterLayout='BASIC'">
-                          <fo:block>
-                            <xsl:apply-templates select="*[not(contains(@class, ' topic/topic ') or contains(@class, ' topic/title ') or
-                                                               contains(@class, ' topic/prolog '))]"/>
-                            <xsl:call-template name="buildRelationships"/>
-                          </fo:block>
+                          <xsl:apply-templates select="*[not(contains(@class, ' topic/topic ') or contains(@class, ' topic/title ') or
+                                                             contains(@class, ' topic/prolog '))]"/>
+                          <xsl:call-template name="buildRelationships"/>
                       </xsl:when>
                       <xsl:otherwise>
                           <xsl:call-template name="createMiniToc"/>
@@ -390,11 +388,9 @@ See the accompanying license.txt file for applicable licenses.
 
                     <xsl:choose>
                       <xsl:when test="$appendixLayout='BASIC'">
-                          <fo:block>
-                            <xsl:apply-templates select="*[not(contains(@class, ' topic/topic ') or contains(@class, ' topic/title ') or
-                                                               contains(@class, ' topic/prolog '))]"/>
-                            <xsl:call-template name="buildRelationships"/>
-                          </fo:block>
+                          <xsl:apply-templates select="*[not(contains(@class, ' topic/topic ') or contains(@class, ' topic/title ') or
+                                                             contains(@class, ' topic/prolog '))]"/>
+                          <xsl:call-template name="buildRelationships"/>
                       </xsl:when>
                       <xsl:otherwise>
                           <xsl:call-template name="createMiniToc"/>
@@ -443,11 +439,9 @@ See the accompanying license.txt file for applicable licenses.
 
                     <xsl:choose>
                       <xsl:when test="$partLayout='BASIC'">
-                          <fo:block>
-                            <xsl:apply-templates select="*[not(contains(@class, ' topic/topic ') or contains(@class, ' topic/title ') or
-                                                               contains(@class, ' topic/prolog '))]"/>
-                            <xsl:call-template name="buildRelationships"/>
-                          </fo:block>
+                          <xsl:apply-templates select="*[not(contains(@class, ' topic/topic ') or contains(@class, ' topic/title ') or
+                                                             contains(@class, ' topic/prolog '))]"/>
+                          <xsl:call-template name="buildRelationships"/>
                       </xsl:when>
                       <xsl:otherwise>
                           <xsl:call-template name="createMiniToc"/>
@@ -511,11 +505,9 @@ See the accompanying license.txt file for applicable licenses.
 
                     <xsl:choose>
                       <xsl:when test="$noticesLayout='BASIC'">
-                          <fo:block>
-                            <xsl:apply-templates select="*[not(contains(@class, ' topic/topic ') or contains(@class, ' topic/title ') or
-                                                               contains(@class, ' topic/prolog '))]"/>
-                            <xsl:call-template name="buildRelationships"/>
-                          </fo:block>
+                          <xsl:apply-templates select="*[not(contains(@class, ' topic/topic ') or contains(@class, ' topic/title ') or
+                                                             contains(@class, ' topic/prolog '))]"/>
+                          <xsl:call-template name="buildRelationships"/>
                       </xsl:when>
                       <xsl:otherwise>
                           <xsl:call-template name="createMiniToc"/>
@@ -1423,6 +1415,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class,' topic/body ')]">
         <xsl:variable name="level" select="count(ancestor::*[contains(@class,' topic/topic ')])"/>
         <xsl:choose>
+                <xsl:when test="not(node())"/>
                 <xsl:when test="$level = 1">
                     <fo:block xsl:use-attribute-sets="body__toplevel">
                         <xsl:apply-templates/>
