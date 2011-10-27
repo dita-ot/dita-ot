@@ -7,11 +7,6 @@
 <xsl:stylesheet version="1.0"
      xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-<xsl:output method="xml"
-            encoding="utf-8"
-            indent="no"
-/>
-
 <!-- software-domain.ent domain: filepath | msgph | userinput | systemoutput | cmdname | msgnum | varname -->
 
 <xsl:template match="*[contains(@class,' sw-d/filepath ')]" name="topic.sw-d.filepath">

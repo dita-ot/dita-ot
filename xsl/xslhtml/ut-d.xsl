@@ -9,13 +9,6 @@
      xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
      exclude-result-prefixes="ditamsg">
 
-<!-- XHTML output with XML syntax -->
-<xsl:output method="xml"
-            encoding="utf-8"
-            indent="no"
-/>
-
-
 <!-- == User Technologies UNIQUE SUBSTRUCTURES == -->
 
 <!-- imagemap -->
@@ -38,20 +31,19 @@
     </xsl:call-template>
 
     <!-- the image -->
-    <xsl:element name="img">
-      <xsl:attribute name="usemap">#<xsl:value-of select="generate-id(.)"/></xsl:attribute>
+    <img usemap="#{generate-id()}">
       <!-- Border attribute defaults to 0 -->
       <xsl:apply-templates select="." mode="imagemap-border-attribute"/>
       <!-- Process the 'normal' image attributes, using this special mode -->
       <xsl:apply-templates select="*[contains(@class,' topic/image ')]" mode="imagemap-image"/>
-    </xsl:element>
+    </img>
     <xsl:value-of select="$newline"/>
 
     <map name="{generate-id(.)}" id="{generate-id(.)}">
 
       <xsl:for-each select="*[contains(@class,' ut-d/area ')]">
         <xsl:value-of select="$newline"/>
-        <xsl:element name="area">
+        <area>
 
           <!-- if no xref/@href - error -->
           <xsl:choose>
@@ -105,7 +97,7 @@
             </xsl:otherwise>
           </xsl:choose>
 
-        </xsl:element>
+        </area>
       </xsl:for-each>
 
       <xsl:value-of select="$newline"/>
