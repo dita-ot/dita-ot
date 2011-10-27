@@ -106,6 +106,7 @@
     <exclude name=".*"/>
     <exclude name="build.log"/>
     <exclude name="build.number"/>
+    <exclude name="lib/commons-logging-1.1.1.jar"/>
     <exclude name="plugins/cxxapiref/"/>
     <exclude name="plugins/net.sourceforge.dita-ot.html/**"/>
   	<exclude name="buildSourceForge.xml"/>
@@ -144,7 +145,6 @@
     <include name="schema/**"/>
     <include name="xsl/**"/>
     <include name="lib/dost.jar"/>
-    <include name="lib/commons-logging-1.1.1.jar"/>
     <include name="lib/APACHE-LICENSE-2_0.html"/>
     <include name="lib/resolver.jar"/>
     <include name="lib/CatalogManager.properties"/>

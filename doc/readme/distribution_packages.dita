@@ -15,7 +15,6 @@
         the following open source libraries:</p>
       <ul>
         <li>Apache Commons Codec <keyword keyref="tool.codec.version"/></li>
-        <li>Apache Commons Logging <keyword keyref="tool.logging.version"/></li>
         <li>Apache Catalog Resolver <keyword keyref="tool.resolver.version"/></li>
       </ul>
     </section>
@@ -28,7 +27,6 @@
         standard package includes only the following open source libraries:</p>
       <ul>
         <li>Apache Commons Codec <keyword keyref="tool.codec.version"/></li>
-        <li>Apache Commons Logging <keyword keyref="tool.logging.version"/></li>
         <li>Apache Catalog Resolver <keyword keyref="tool.resolver.version"/></li>
       </ul>
     </section>
@@ -45,7 +43,6 @@
         <li>Apache Ant <keyword keyref="tool.ant.version"/></li>
         <li>Saxon <keyword keyref="tool.saxon.version"/></li>
         <li>Apache Commons Codec <keyword keyref="tool.codec.version"/></li>
-        <li>Apache Commons Logging <keyword keyref="tool.logging.version"/></li>
         <li>Apache Catalog Resolver <keyword keyref="tool.resolver.version"/></li>
         <li>IBM ICU for Java <keyword keyref="tool.icu4j.version"/></li>
         <li>Apache FOP <keyword keyref="tool.fop.version"/></li>
