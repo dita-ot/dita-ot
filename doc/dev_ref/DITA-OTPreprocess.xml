@@ -7,7 +7,7 @@
 for DITA topics. These steps typically run at the start of any build
 using the DITA-OT.</shortdesc><?Pub Caret -1?>
 <conbody>
-<p>The DITA Toolkit implements a multi-stage, map-driven architecture
+<p>The DITA Open Toolkit implements a multi-stage, map-driven architecture
 to process DITA content. Each step in the process examines some or
 all of the content; some steps result in temporary files used by later
 steps, while others result in updated copies of the DITA content.

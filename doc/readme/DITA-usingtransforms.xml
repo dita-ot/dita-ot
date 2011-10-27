@@ -6,8 +6,8 @@
 <?Pub Inc?>
 <topic id="ditausingxform" xml:lang="en-us">
 <title>Using DITA transforms</title>
-<shortdesc>The core transforms of the DITA Toolkit represent an implementation
-of all processing defined by OASIS in the DITA specification.</shortdesc>
+<shortdesc>The core transforms of the DITA Open Toolkit represent an implementation of all
+    processing defined by OASIS in the DITA specification.</shortdesc>
 <body>
 <section id="preprocess">             <title>Pre-process</title><?Pub
 Caret -2?><p>A pre-process is done before the main transformation. The input of the pre-process is dita files
@@ -16,12 +16,10 @@ Caret -2?><p>A pre-process is done before the main transformation. The input of 
         conref attributes, resolving keyref values, and adding links based on the hierarchy and
         relationship tables in a map. The normalized dita files are in a temporary directory. Most
         DITA transforms use this common pre-process setup.</p></section>
-<section>       <title>Available core transforms</title><p>A core
-DITA transform is the basic set of templates that support all    
-     the elements of a topic. This set is the basis for the following
-         processing of any specialized element. Core transforms handle
-one topic          instance, or nested set of topics, at a time. The
-DITA Toolkit provides several core transforms:</p>
+<section>       <title>Available core transforms</title><p>A core DITA transform is the basic set of templates that support all the elements of a topic.
+        This set is the basis for the following processing of any specialized element. Core
+        transforms handle one topic instance, or nested set of topics, at a time. The DITA Open
+        Toolkit provides several core transforms:</p>
   <dl id="core-tranforms">
     <dlentry>
       <dt>PDF</dt>

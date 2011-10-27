@@ -69,7 +69,6 @@ Austin TX 78758</address>
       </keywords>
     </metadata>
     <!--points: usability, reusability, extensibility, and consistency-->  </prolog>
-  <body/>
   <topic id="ditarmintro">
     <title>Executive summary</title>
     <body>
@@ -300,7 +299,6 @@ user interface</lines>
   <topic id="domainsintro">
     <title>DITA vocabulary specialization (domains)</title>
     <body>
-      <p/>
       <p>Commonly, when a set of infotyped topics are used within a domain of knowledge, such as computer software or hardware, a common vocabulary is shared across the infotyped topics. However, the same infotyped topic can be used across domains that have different vocabularies and semantics. For example, a hardware reference topic might refer to diagnostic codes while a software reference topic might refer to error message numbers, with neither domain necessarily needing to expose the other domain&apos;s unique vocabulary to its own writers. </p>
       <p>Using the same technique as specialization for topics, DITA allows the definition of domains of special vocabulary that can be shared among infotyped topics. Domains can even be elided entirely, to produce typed topics that have only the core elements<fn>In the original design of DITA, all of the shared vocabulary had been made global to all information types by being defined in the topic DTD, which had two undesirable effects: <ul>
             <li>new vocabulary could not be added without increasing the size of the core DTD</li>
@@ -365,7 +363,6 @@ user interface</lines>
       </simpletable>
       <p>By following the rules for specializing a new domain of content, you can extend, replace, or remove these domains. Moreover, content specialization enables you to name and extend <i>any</i> content element in the scope of DITA infotyped topics for a more semantically significant role in a new domain.</p>
       <p>To enable specialized vocabulary, you declare a parameter entity equivalent for every element used in a DTD (such as topic or one of its specializations), and then use the parameter entities instead of literal element tokens within the content models of that DTD. Later, after entity substitution, because an element&apos;s parameter entity is redefined to include both the original element and the domain elements derived from that element, anywhere the original element is allowed, the other derived domain elements are also allowed. In effect, a domain-agnostic topic can be easily extended for different domains by simply changing the scope of entity set inclusions in a front-end DTD &quot;shell&quot; that formalizes the vocabulary extensions within that typed topic or family of typed topics</p>
-      <p/>
     </body>
   </topic>
   <topic id="ditacommon">
@@ -397,12 +394,10 @@ user interface</lines>
   <topic id="ditashared">
     <title>Elements designed for specialization</title>
     <body>
-      <p/>
       <p>DITA provides a rich base for specialization because of the general design of elements used in its archetype-like topic DTD.</p>
       <p>For example, a section in the base topic DTD can contain both text and element data. However, a section can be specialized to eliminate PCDATA, yielding an element-only content model similar to the body level of most DTDs. Specialized another way, a section can eliminate most block-like elements and thus be characterized as a description for definitions, field labels, parts, and so forth.</p>
       <p>In DITA, an effort has been made to select element names that are popular or that are common with HTML. Some semantic names have been borrowed from industry DTDs that support large SGML libraries, such as IBMIDDoc and DocBook.</p>
       <p>The attribute lists within the topic DTD reflect this design philosophy. For example, one of the &quot;universal attributes&quot; (they appear on most elements) is <codeph>importance</codeph>, which defines values for weightings or appraisals that are often used as properties in specialized elements. This attribute shows up in several elements of the task topic specialization with only two allowed values out of the original set, &quot;optional&apos; and &quot;required.&quot; In other domains, the elements are more appropriately ranked as &quot;high&quot; or &quot;low,&quot; again values that are provided at the topic level.</p>
-      <p/>
     </body>
   </topic>
   <topic id="roadmapspeclz">
@@ -431,4 +426,3 @@ user interface</lines>
     </body>
   </topic>
 </topic>
-

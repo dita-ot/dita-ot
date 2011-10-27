@@ -167,24 +167,27 @@ up your environment variable CLASSPATH to include the
 <substep>
               <cmd>Using the Xalan-J: </cmd>
              <stepxmp>
-                <p>For example:</p>
                 <codeblock>C:\pkg\DITA-OT<keyword keyref="release.version"/>>java org.apache.xalan.xslt.Process -in doc\DITA-readme.xml -xsl xsl\pretty.xsl -out out\DITA-readme.xml</codeblock>
               </stepxmp></substep>
 <substep>
               <cmd>Using the Saxon: </cmd>
              <stepxmp>
-                <p>For example:</p>
                 <codeblock>C:\pkg\DITA-OT<keyword keyref="release.version"/>\doc>java net.sf.saxon.Transform -s:doc\DITA-readme.xml -xsl:xsl\pretty.xsl -o:out\DITA-readme.xml </codeblock>
               </stepxmp></substep>
 <substep>
                 <cmd>Using the Ant :</cmd>
-                <stepxmp><p>Run all demo in the DITA Open Toolkit directory. </p><p>For
-                example:</p><codeblock>C:\pkg\DITA-OT<keyword keyref="release.version"/>>ant -f build_demo.xml all </codeblock>Or
-                you can run specific file individually. <p>For example:</p><codeblock>C:\pkg\DITA-OT<keyword keyref="release.version"/>\ant -f build_demo.xml samples.web</codeblock><p>
-                  <note rev="r1v1" type="tip">Input <codeph>ant -projecthelp</codeph> to see the
+                <stepxmp>
+                <p>Run all demo in the DITA Open Toolkit directory. </p>
+                <codeblock>C:\pkg\DITA-OT<keyword keyref="release.version"/>>ant -f build_demo.xml all </codeblock>
+                <p>Or you can run specific file individually. </p>
+                <codeblock>C:\pkg\DITA-OT<keyword keyref="release.version"/>\ant -f build_demo.xml samples.web</codeblock>
+                <p>
+                  <note type="tip">Input <codeph>ant -projecthelp</codeph> to see the
                     list of tasks </note>
-                </p><note> If you can pass this test, it means that all of the tools are installed
-                  correctly. </note></stepxmp></substep>
+                </p>
+                <note> If you can pass this test, it means that all of the tools are installed
+                  correctly. </note>
+              </stepxmp></substep>
 </substeps>         </step>
 </steps>
 </taskbody>
@@ -219,7 +222,7 @@ up your environment variable CLASSPATH to include the
 <chrow><choption>If you use the Saxon,</choption><chdesc>        
         <ul>
 <li>Set up <codeph>CLASSPATH</codeph> to include the <filepath>saxon.jar</filepath>
-                    file.<codeblock rev="r1v1">export CLASSPATH=$CLASSPATH:&lt;saxon_dir>/saxon9.jar:&lt;saxon_dir>/saxon9-dom.jar</codeblock></li>
+                    file.<codeblock>export CLASSPATH=$CLASSPATH:&lt;saxon_dir>/saxon9.jar:&lt;saxon_dir>/saxon9-dom.jar</codeblock></li>
 <li>Set up <codeph>ANT_OPTS</codeph>.
                     <codeblock>export ANT_OPTS=$ANT_OPTS -Djavax.xml.transform.TransformerFactory=com.icl.saxon.TransformerFactoryImpl</codeblock></li>
 </ul>               </chdesc></chrow>
@@ -257,26 +260,29 @@ the following options              to set up.</cmd>
             <substep>
               <cmd>Using the Xalan-J: </cmd>
               <stepxmp>
-                <p>For example:</p>
                 <codeblock>/usr/local/share/DITA-OT<keyword keyref="release.version"/>$ java org.apache.xalan.xslt.Process -in doc/DITA-readme.xml -xsl xsl/pretty.xsl -out out/DITA-readme.xml</codeblock>
               </stepxmp>
             </substep>
             <substep>
               <cmd>Using the Saxon: </cmd>
               <stepxmp>
-                <p>For example:</p>
                 <codeblock>/usr/local/share/DITA-OT<keyword keyref="release.version"/>$ java net.sf.saxon.Transform -s:doc/DITA-readme.xml -xsl:xsl\pretty.xsl -o:out/DITA-readme.xml </codeblock>
               </stepxmp>
             </substep>
             <substep>
               <cmd>Using the Ant :</cmd>
-              <stepxmp><p>Run all demo in the DITA Open Toolkit directory. </p><p>For
-                example:</p><codeblock>/usr/local/share/DITA-OT<keyword keyref="release.version"/>$ ant -f build_demo.xml all </codeblock>Or
-                you can run specific file individually. <p>For example:</p><codeblock>/usr/local/share/DITA-OT<keyword keyref="release.version"/>$ ant -f build_demo.xml samples.web</codeblock><p>
-                  <note rev="r1v1" type="tip">Input <codeph>ant -projecthelp</codeph> to see the
+              <stepxmp>
+                <p>Run all demo in the DITA Open Toolkit directory. </p>
+                <codeblock>/usr/local/share/DITA-OT<keyword keyref="release.version"/>$ ant -f build_demo.xml all </codeblock>
+                <p>Or you can run specific file individually. </p>
+                <codeblock>/usr/local/share/DITA-OT<keyword keyref="release.version"/>$ ant -f build_demo.xml samples.web</codeblock>
+                <p>
+                  <note type="tip">Input <codeph>ant -projecthelp</codeph> to see the
                     list of tasks </note>
-                </p><note> If you can pass this test, it means that all of the tools are installed
-                  correctly. </note></stepxmp>
+                </p>
+                <note> If you can pass this test, it means that all of the tools are installed
+                  correctly. </note>
+              </stepxmp>
             </substep>
           </substeps>
         </step>
