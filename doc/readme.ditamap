@@ -15,7 +15,7 @@
     <topicref href="readme/DITA-installation.xml"/>
     <topicref href="readme/DITA-usingtransforms.xml"/>
     <topicref href="readme/DITA-ant.xml">
-      <topicref href="readme/DITA-setupant.xml" toc="no"/>
+      <!--topicref href="readme/DITA-setupant.xml" toc="no"/-->
       <topicref href="readme/DITA-antuse.xml" toc="no"/>
       <topicref href="readme/DITA-antscript.xml" toc="no"/>
     </topicref>
