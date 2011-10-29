@@ -48,6 +48,7 @@
   <variable id="Attention">אל</variable>
   <variable id="Caution">אזהרה</variable>
   <variable id="Danger">סכנה</variable>
+  <variable id="Warning">אזהרה</variable>
   <variable id="Restriction">מגבלה</variable>
   <variable id="Figure">איור <param ref-name="number"/>. <param ref-name="title"/></variable>
   <variable id="Table">טבלה <param ref-name="number"/>. <param ref-name="title"/></variable>
@@ -69,6 +70,7 @@
   <variable id="attention Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
   <variable id="caution Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
   <variable id="danger Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
+  <variable id="warning Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
   <variable id="fastpath Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand_rtl.gif</variable>
   <variable id="important Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand_rtl.gif</variable>
   <variable id="remember Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand_rtl.gif</variable>

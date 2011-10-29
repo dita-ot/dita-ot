@@ -189,7 +189,8 @@ See the accompanying license.txt file for applicable licenses.
     <!-- Text to use for 'Note' label generated from <note> element 
          with 'type' attribute set to 'danger'. -->
     <variable id="Danger">Danger</variable>
-
+    <!-- Text to use for 'Note' label generated from <note> element with 'type' attribute set to 'warning'. -->
+    <variable id="Warning">Warning</variable>
     <!-- Text to use for 'Note' label generated from <note> element
          with 'type' attribute set to 'restriction'. -->
     <variable id="Restriction">Restriction</variable>
@@ -272,7 +273,8 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- Image path to use for a note of "danger" type. -->
     <variable id="danger Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
-
+    <!-- Image path to use for a note of "warning" type. -->
+    <variable id="warning Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
     <!-- Image path to use for a note of "fastpath" type. -->
     <variable id="fastpath Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
 
