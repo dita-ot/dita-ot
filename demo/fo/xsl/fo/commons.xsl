@@ -534,15 +534,10 @@ See the accompanying license.txt file for applicable licenses.
                             <xsl:with-param name="theVariableID" select="'Chapter with number'"/>
                             <xsl:with-param name="theParameters">
                                 <number>
-                                    <xsl:variable name="id" select="@id"/>
-                                    <xsl:variable name="topicChapters">
-                                        <xsl:copy-of select="$map//*[contains(@class, ' bookmap/chapter ')]"/>
-                                    </xsl:variable>
-                                    <xsl:variable name="chapterNumber">
-                                        <xsl:number format="1" value="count($topicChapters/*[@id = $id]/preceding-sibling::*) + 1"/>
-                                    </xsl:variable>
                                     <fo:block xsl:use-attribute-sets="__chapter__frontmatter__number__container">
-                                        <xsl:value-of select="$chapterNumber"/>
+                                        <xsl:for-each select="key('map-id', @id)[1]">
+                                          <xsl:number format="1" count="*[contains(@class, ' bookmap/chapter ')]"/>
+                                        </xsl:for-each>
                                     </fo:block>
                                 </number>
                             </xsl:with-param>
@@ -555,15 +550,10 @@ See the accompanying license.txt file for applicable licenses.
                                 <xsl:with-param name="theVariableID" select="'Appendix with number'"/>
                                 <xsl:with-param name="theParameters">
                                     <number>
-                                        <xsl:variable name="id" select="@id"/>
-                                        <xsl:variable name="topicAppendixes">
-                                            <xsl:copy-of select="$map//*[contains(@class, ' bookmap/appendix ')]"/>
-                                        </xsl:variable>
-                                        <xsl:variable name="appendixNumber">
-                                            <xsl:number format="A" value="count($topicAppendixes/*[@id = $id]/preceding-sibling::*) + 1"/>
-                                        </xsl:variable>
                                         <fo:block xsl:use-attribute-sets="__chapter__frontmatter__number__container">
-                                            <xsl:value-of select="$appendixNumber"/>
+                                            <xsl:for-each select="key('map-id', @id)[1]">
+                                              <xsl:number format="A" count="*[contains(@class, ' bookmap/appendix ')]"/>
+                                            </xsl:for-each>
                                         </fo:block>
                                     </number>
                                 </xsl:with-param>
@@ -577,15 +567,10 @@ See the accompanying license.txt file for applicable licenses.
                                 <xsl:with-param name="theVariableID" select="'Part with number'"/>
                                 <xsl:with-param name="theParameters">
                                     <number>
-                                        <xsl:variable name="id" select="@id"/>
-                                        <xsl:variable name="topicParts">
-                                            <xsl:copy-of select="$map//*[contains(@class, ' bookmap/part ')]"/>
-                                        </xsl:variable>
-                                        <xsl:variable name="partNumber">
-                                            <xsl:number format="I" value="count($topicParts/*[@id = $id]/preceding-sibling::*) + 1"/>
-                                        </xsl:variable>
                                         <fo:block xsl:use-attribute-sets="__chapter__frontmatter__number__container">
-                                            <xsl:value-of select="$partNumber"/>
+                                            <xsl:for-each select="key('map-id', @id)[1]">
+                                              <xsl:number format="I" count="*[contains(@class, ' bookmap/part ')]"/>
+                                            </xsl:for-each>
                                         </fo:block>
                                     </number>
                                 </xsl:with-param>
@@ -1205,8 +1190,7 @@ See the accompanying license.txt file for applicable licenses.
         <!-- topicNumber = the # of times this topic has appeared. When topicNumber=3,
              this copy of the topic is based on its third appearance in the map. -->
         <xsl:param name="topicNumber" select="number('NaN')"/>
-        <xsl:variable name="id" select="@id"/>
-        <xsl:variable name="topicref" select="$map//*[@id = $id]"/>
+        <xsl:variable name="topicref" select="key('map-id', @id)"/>
         <xsl:variable name="numTopicref" select="$topicref[position()=$topicNumber]"/>
         <xsl:choose>
             <xsl:when test="not(string(number($topicNumber)) = 'NaN') and 
