@@ -732,8 +732,8 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       </xsl:when>
       <xsl:when test="$topicpos='otherfile'">
         <xsl:choose>
-          <xsl:when test="//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid]">
-            <xsl:value-of select="local-name(//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid])"/>
+          <xsl:when test="$doc//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid]">
+            <xsl:value-of select="local-name($doc//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid])"/>
           </xsl:when>
           <!--type could not be retrieved-->
           <xsl:otherwise>#none#</xsl:otherwise>

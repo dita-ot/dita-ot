@@ -5022,7 +5022,7 @@
       <xsl:when test="$keydef">
         <xsl:variable name="updatedTarget">
           <xsl:apply-templates select="." mode="find-keyref-target">
-            <xsl:with-param name="target" select="$keydef"/>
+            <!--xsl:with-param name="target" select="$keydef"/-->
           </xsl:apply-templates>
         </xsl:variable>
         <xsl:choose>
