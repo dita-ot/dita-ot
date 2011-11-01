@@ -377,7 +377,12 @@
     <reason>File '%1' does not exist.</reason>
     <response>Be sure the file '%1' exists or change the href to reference an existing file. Note:'%1' might be changed to use standard dita topic file extension name '.dita' or '.xml'.</response>
   </message>
-  
+
+  <message id="DOTX008E" type="ERROR">
+    <reason>File '%1' does not exist.</reason>
+    <response>Be sure the file '%1' exists or change the href to reference an existing file. Note:'%1' might be changed to use standard dita topic file extension name '.dita' or '.xml'.</response>
+  </message>
+
   <message id="DOTX009W" type="WARN">
     <reason>Could not retrieve a title from '%1'. Using '%2' instead.</reason>
     <response>Add a title in the target topic file.</response>

@@ -427,6 +427,10 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
         final Properties params = new Properties();
         params.put("%1", currentFile);
 
+        if (!fileToParse.exists()) {
+            logger.logError(MessageUtils.getMessage("DOTX008E", params).toString());
+            return;
+        }
         try {
             fileToParse = fileToParse.getCanonicalFile();
             if (FileUtils.isValidTarget(currentFile.toLowerCase())) {

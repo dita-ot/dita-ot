@@ -550,6 +550,12 @@ public final class TopicRefWriter extends AbstractXMLWriter {
                 file = filename;
             }
             inputFile = new File(file);
+            if (!inputFile.exists()) {
+                final Properties prop = new Properties();
+                prop.put("%1", file);
+                logger.logError(MessageUtils.getMessage("DOTX008E", prop).toString());
+                return;
+            }
             outputFile = new File(file + FILE_EXTENSION_TEMP);
             fileOutput = new FileOutputStream(outputFile);
             ditaFileOutput = new OutputStreamWriter(fileOutput, UTF8);
@@ -575,10 +581,12 @@ public final class TopicRefWriter extends AbstractXMLWriter {
         } catch (final Exception e) {
             logger.logException(e);
         } finally {
-            try {
-                fileOutput.close();
-            } catch (final Exception e) {
-                logger.logException(e);
+            if (fileOutput != null) {
+                try {
+                    fileOutput.close();
+                } catch (final Exception e) {
+                    logger.logException(e);
+                }
             }
         }
     }
