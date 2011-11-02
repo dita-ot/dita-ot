@@ -1294,7 +1294,7 @@
     <xsl:when test="@keyref and $keydef">
       <xsl:variable name="updatedTarget">
         <xsl:apply-templates select="." mode="find-keyref-target">
-          <xsl:with-param name="target" select="$keydef/@href"/>
+          <!--xsl:with-param name="target" select="$keydef/@href"/-->
         </xsl:apply-templates>
       </xsl:variable>
       <xsl:choose>
@@ -3796,7 +3796,7 @@
      <xsl:when test="@keyref and $keydef">
        <xsl:variable name="updatedTarget">
          <xsl:apply-templates select="." mode="find-keyref-target">
-           <xsl:with-param name="target" select="$keydef/@href"/>
+           <!--xsl:with-param name="target" select="$keydef/@href"/-->
          </xsl:apply-templates>
        </xsl:variable>
        <a href="{$updatedTarget}">
