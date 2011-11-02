@@ -27,7 +27,9 @@ import org.dita.dost.resolver.URIResolverAdapter;
  * 
  * List Utils.
  *
+ * @deprecated use {@link org.dita.dost.util.Job} instead
  */
+@Deprecated
 public final class ListUtils {
     /**
      * Private Constructor.

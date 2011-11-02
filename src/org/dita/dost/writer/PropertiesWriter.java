@@ -23,7 +23,9 @@ import org.dita.dost.module.Content;
  * @version 1.0 2005-05-11
  * 
  * @author Wu, Zhi Qiang
+ * @deprecated use {@link org.dita.dost.util.Job#write()} instead
  */
+@Deprecated
 public final class PropertiesWriter implements AbstractWriter {
     /** Properties used to output */
     private Properties prop = null;

@@ -31,7 +31,9 @@ import org.dita.dost.util.StringUtils;
  * "dita.list" file contains information of the files that should be processed.
  * 
  * @author Zhang, Yuan Peng
+ * @deprecated use {@link org.dita.dost.util.Job} instead
  */
+@Deprecated
 public final class ListReader implements AbstractReader {
 
     private final LinkedList<String> refList;
