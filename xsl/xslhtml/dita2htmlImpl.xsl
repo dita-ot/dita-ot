@@ -4113,7 +4113,7 @@
   <xsl:choose>
     <xsl:when test="contains($sptext,'  ')">
        <xsl:value-of select="substring-before($sptext,'  ')"/>
-       <xsl:text>&#xA0;;&#xA0;</xsl:text>
+       <xsl:text>&#xA0;&#xA0;</xsl:text>
        <xsl:call-template name="sp-replace"> <!-- call again to get remaining spaces -->
          <xsl:with-param name="sptext" select="substring-after($sptext,'  ')"/>
        </xsl:call-template>
