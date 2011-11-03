@@ -24,9 +24,9 @@ Caret -2?><p>A pre-process is done before the main transformation. The input of 
     <dlentry>
       <dt>PDF</dt>
       <dd>PDF output is based on a plug-in that produces XSL-FO output. The XSL-FO output may be
-        converted to PDF using an open source tools (Apache FOP) or using commercial tools such
-        as RenderX or Antenna House. This transformation type replaced an older demo PDF
-        transform, and is often called "PDF2".</dd>
+            converted to PDF using an open source tools (Apache FOP) or using commercial tools such
+            as RenderX or Antenna House Formatter. This transformation type replaced an older demo
+            PDF transform, and is often called "PDF2".</dd>
     </dlentry>
     <dlentry>
       <dt>XHTML</dt>
@@ -93,10 +93,9 @@ for Java Help.</dd>
 </dlentry></dl></p>     </section>
 -->
 <section>       <title>Invoke the complete transformation</title> 
-     <p>The complete transformation including pre-process can be executed
-by an ant script. There are some examples of simple ant scripts in
-the directory <filepath>samples/ant_sample</filepath>. See <xref
-href="DITA-antuse.xml"></xref> for more details about Ant processing.</p> 
+     <p>The complete transformation including pre-process can be executed by an Ant script. There
+        are some examples of simple Ant scripts in the directory
+          <filepath>samples/ant_sample</filepath>.</p> 
    </section>
 </body>
 </topic>
