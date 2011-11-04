@@ -180,7 +180,7 @@ public final class MergeMapParser extends AbstractXMLReader {
 
                         //parse the topic
                         util.visit(attValue);
-                        if (new File(dirPath, attValue).exists()) {
+                        if (new File(dirPath, attValue.indexOf(SHARP) != -1 ? attValue.substring(0, attValue.indexOf(SHARP)) : attValue).exists()) {
                             final String fileId = topicParser.parse(attValue,dirPath);
                             attValue = new StringBuffer(SHARP).append(fileId).toString();
                         } else {
