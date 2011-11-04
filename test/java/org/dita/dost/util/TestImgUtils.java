@@ -8,12 +8,24 @@
  * (c) Copyright IBM Corp. 2010 All Rights Reserved.
  */
 package org.dita.dost.util;
+
 import static org.junit.Assert.assertEquals;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+import java.util.Properties;
 
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+
+import org.dita.dost.TestUtils;
+import org.dita.dost.resolver.DitaURIResolverFactory;
 import org.dita.dost.util.ImgUtils;
-
 
 import org.junit.Test;
 
@@ -23,13 +35,35 @@ public class TestImgUtils {
 
     private static final File resourceDir = new File("test-stub", TestImgUtils.class.getSimpleName());
     private static final File srcDir = new File(resourceDir, "src");
+    private static File tempDir;
 
+    @BeforeClass
+    public static void setUp() throws IOException {
+        tempDir = TestUtils.createTempDir(TestImgUtils.class);
+        final Properties prop = new Properties();
+        OutputStream ditaList = null;
+        try {
+            ditaList = new BufferedOutputStream(new FileOutputStream(new File(tempDir, FILE_NAME_DITA_LIST_XML)));
+            prop.storeToXML(ditaList, null);
+        } finally {
+            if (ditaList != null) {
+                ditaList.close();
+            }
+        }
+        DitaURIResolverFactory.setPath(tempDir.getAbsolutePath());
+    }
+    
     @Test
     public void testgetwidth()
     {
 
         assertEquals(135, ImgUtils.getWidth(srcDir.getAbsolutePath(), "img.jpg"));
 
+    }
+    
+    @Test
+    public void testGetWidthODT() {
+        assertEquals(135, ImgUtils.getWidthODT(srcDir.getAbsolutePath(), "img.jpg"));
     }
 
     @Test
@@ -38,7 +72,11 @@ public class TestImgUtils {
         assertEquals(95, ImgUtils.getHeight(srcDir.getAbsolutePath(), "img.jpg"));
     }
 
-
+    @Test
+    public void testGetHeightODT() {
+        assertEquals(95, ImgUtils.getHeightODT(srcDir.getAbsolutePath(), "img.jpg"));
+    }
+    
     @Test
     public void testgetbindata()
     {
@@ -55,4 +93,10 @@ public class TestImgUtils {
         assertEquals("pngblip",ImgUtils.getType("img.png"));
         assertEquals("other",ImgUtils.getType("img.JJJ"));
     }
+
+    @AfterClass
+    public static void tearDown() throws IOException {
+        TestUtils.forceDelete(tempDir);
+    }
+
 }
