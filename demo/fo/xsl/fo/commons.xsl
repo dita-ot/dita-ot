@@ -1531,6 +1531,13 @@ See the accompanying license.txt file for applicable licenses.
                             </xsl:call-template>
                         </fo:inline>
                     </xsl:when>
+                    <xsl:when test="@type='notice'">
+                        <fo:inline xsl:use-attribute-sets="note__label__notice">
+                            <xsl:call-template name="insertVariable">
+                                <xsl:with-param name="theVariableID" select="'Notice'"/>
+                            </xsl:call-template>
+                        </fo:inline>
+                    </xsl:when>
                     <xsl:when test="@type='tip'">
                         <fo:inline xsl:use-attribute-sets="note__label__tip">
                             <xsl:call-template name="insertVariable">

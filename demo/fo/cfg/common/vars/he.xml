@@ -41,6 +41,7 @@
   <variable id="Notices title"><!--TODO:Notice--></variable>
   <variable id="Mini Toc">נושאים: </variable>
   <variable id="Note">שים לב</variable>
+  <variable id="Notice"><!--TODO:Notice--></variable>
   <variable id="Tip">עצה</variable>
   <variable id="Important">חשוב</variable>
   <variable id="Fastpath">נתיב מהיר</variable>
@@ -67,6 +68,7 @@
   <variable id="Page">עמוד <param ref-name="pagenum"/></variable>
   <variable id="This link"><!--TODO:this link--></variable>
   <variable id="note Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand_rtl.gif</variable>
+  <variable id="notice Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand_rtl.gif</variable>
   <variable id="attention Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
   <variable id="caution Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
   <variable id="danger Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>

@@ -343,6 +343,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="note__label__note">
     </xsl:attribute-set>
 
+    <xsl:attribute-set name="note__label__notice">
+    </xsl:attribute-set>
+
     <xsl:attribute-set name="note__label__tip">
     </xsl:attribute-set>
 

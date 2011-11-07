@@ -147,7 +147,8 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- Text to use for 'Note' label generated from <note> element. -->
     <variable id="Note">Nota</variable>
-
+    <!-- Text to use for 'Notice' label generated from <note> element. -->
+    <variable id="Notice"><!--TODO:Notice--></variable>
     <!-- Text to use for 'Note' label generated from <note> element 
          with 'type' attribute set to 'tip'. -->
     <variable id="Tip">Suggerimento</variable>
@@ -250,7 +251,8 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- Image path to use for a note of "note" type. -->
     <variable id="note Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
-
+    <!-- Image path to use for a note of "notice" type. -->
+    <variable id="notice Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
     <!-- Image path to use for a note of "attention" type. -->
     <variable id="attention Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
 
