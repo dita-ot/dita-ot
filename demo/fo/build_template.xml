@@ -53,7 +53,6 @@ with those set forth herein.
     <property file="${customization.dir}/build.properties"/>
     
     <property name="default.locale" value="en_US"/>
-    <property name="default.language" value="en"/>
     
     <!-- legacy property -->
     <property name="ot.dir" location="${dita.dir}"/>
