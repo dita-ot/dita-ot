@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<?Pub Inc?>
+<reference id="preprocess-copyfiles" xml:lang="en-us">
+<title>Copy related files (copy-files)</title>
+<shortdesc>The <codeph>copy-files</codeph> step copies related non-DITA
+resources to the output directory, such as HTML files referenced in
+a map or images referenced by DITAVAL files.</shortdesc>
+<refbody></refbody><?Pub Caret -1?>
+</reference>
+<?Pub *0000000541?>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- This file is part of the DITA Open Toolkit project hosted on 
  Sourceforge.net. See the accompanying license.txt file for 
  applicable licenses.-->
@@ -7,21 +7,57 @@
   *-->   
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"
  "map.dtd">
-<map title="Developement Reference">
-  <topicref href="DITA1.2-implementation-dependent-features.dita"/>
-  <topicref href="extended-functionality.dita"/>
-  <topicref href="DITA-OTArchitecture.xml" navtitle="Complete Process Architecture"/>
-  <topicref href="DITA-OTPreprocess.xml" navtitle="Preprocess Architecture"/>
-  <topicref href="extension-points.dita"/>
-  <topicref href="supporting_file_extension.dita" navtitle="Supporting both .dita and .xml in one ditamap" importance="obsolete"/>
-  <!-- XXX: is this obsolete, don't we currently require Apache resolver? -->
-  <topicref href="standardxmlcatalogresolver.dita" navtitle="Standard XML catalog resolver"/>
-  <!-- XXX: is this obsolete? -->
-  <topicref href="topicmerge.dita" navtitle="Topic merge"/>
-  <topicref href="workingwithdocplugin.dita" navtitle="Working with documentation plug-in"/>
-  <!-- To be cleaned up:
-    DITA-OTArchitecture.xml referenced DITA-OTGenListModule.xml, which is out of date and
+<map title="Developement Reference" xml:lang="en-us">
+<topicref href="DITA-OTArchitecture.dita"
+navtitle="Complete Process Architecture">
+<topicref href="processing-pipeline-modules.dita"></topicref>
+<topicref href="processing-order.dita"></topicref>
+<topicset chunk="to-content" collection-type="sequence"
+href="DITA-OTPreprocess.dita" id="preprocess"
+navtitle="Preprocess Architecture">
+<topicref href="preprocess-genlist.dita"></topicref>
+<topicref href="preprocess-debugfilter.dita"></topicref>
+<topicref href="preprocess-copyfiles.dita"></topicref>
+<topicref href="preprocess-conrefpush.dita"></topicref>
+<topicref href="preprocess-conref.dita"></topicref>
+<topicref href="preprocess-metadata.dita"></topicref>
+<topicref href="preprocess-keyref.dita"></topicref>
+<topicref href="preprocess-coderef.dita"></topicref>
+<topicref href="preprocess-mapref.dita"></topicref>
+<topicref href="preprocess-mappull.dita"></topicref>
+<topicref href="preprocess-chunk.dita"></topicref>
+<topicref href="preprocess-maplink.dita"></topicref>
+<topicref href="preprocess-topicpull.dita"></topicref>
+</topicset>
+</topicref>
+<topicref href="DITA1.2-implementation-dependent-features.dita">
+</topicref>
+<topicref href="extended-functionality.dita"></topicref><?Pub Caret -2?>
+<topicref href="extension-points.dita"></topicref>
+<!-- XXX: is this obsolete? -->
+<topicref href="topicmerge.dita" navtitle="Topic merge"></topicref>
+<!--The following topic needs o be updated. robert to work with Eric-->
+<topicref href="workingwithdocplugin.dita"
+navtitle="Working with documentation plug-in"></topicref>
+<!-- To be cleaned up:
+    DITA-OTArchitecture.xml referenced DITA-OTGenListModule.dita, which is out of date and
     no longer referenced. The topic should be cleaned up or removed. It is also commented 
     out of the TOC below. -->
-  <!-- <topicref href="DITA-OTGenListModule.xml" navtitle="Java Module Architecture"/> -->
+<!-- <topicref href="DITA-OTGenListModule.xml" navtitle="Java Module Architecture"/> -->
+<reltable>
+<relrow>
+<relcell>
+<topicref href="preprocess-chunk.dita"></topicref>
+</relcell>
+<relcell>
+<topicref format="html"
+href="http://docs.oasis-open.org/dita/v1.2/os/spec/archSpec/chunking.html"
+scope="external">
+<topicmeta>
+<navtitle>Chunking definition in the DITA 1.2 specification</navtitle>
+</topicmeta>
+</topicref>
+</relcell>
+</relrow>
+</reltable>
 </map>

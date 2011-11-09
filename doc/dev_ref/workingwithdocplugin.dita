@@ -8,7 +8,13 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN"
  "..\..\dtd\task.dtd">
 <task id="integratingwithwtp" xml:lang="en-us">
-<title>Working with documentation plug-in</title>
+<title>Creating Eclipse help from within Eclipse</title>
+<shortdesc>This topic explains how to create an Eclipse help documentation
+plug-in from within the Eclipse platform. This process allows you
+to set up repeatable builds directly within Eclipse, which may already
+be familiar to many developers working within Eclipse. The topic was
+originally written based on Eclipse 3.3, but much of the information
+still applies.</shortdesc>
 <taskbody>
 <context>You can use a template to develop documentation plug-in with DITA in Eclipse PDE and use
       DITA-OT <keyword keyref="release.version"/> to build and pack the final plug-in. When you want to develop a documentation
