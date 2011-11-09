@@ -223,10 +223,13 @@ public final class Integrator {
 
         OutputStream out = null;
         try {
-            final File outFile = new File(ditaDir, "lib" + File.separator + CONF_PROPERTIES);
+            final File outFile = new File(ditaDir, "lib" + File.separator + getClass().getPackage().getName() + File.separator + GEN_CONF_PROPERTIES);
+            if (!(outFile.getParentFile().exists()) && !outFile.getParentFile().mkdirs()) {
+                throw new RuntimeException("Failed to make directory " + outFile.getParentFile().getAbsolutePath());
+            }
             logger.logDebug("Generate configuration properties " + outFile.getPath());
             out = new BufferedOutputStream(new FileOutputStream(outFile));
-            configuration.store(out, "DITA-OT runtime configuration");
+            configuration.store(out, "DITA-OT runtime configuration, do not edit manually");
         } catch (final Exception e) {
             if (strict) {
                 throw new RuntimeException("Failed to write configuration properties: " + e.getMessage(), e);

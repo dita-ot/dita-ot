@@ -10,6 +10,7 @@
 package org.dita.dost.platform;
 
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.dita.dost.util.Constants.GEN_CONF_PROPERTIES;
 import static org.junit.Assert.*;
 
 import java.io.File;
@@ -110,8 +111,8 @@ public class IntegratorTest {
         i.setProperties(new File(tempDir, "integrator.properties"));
         i.execute();
 
-        assertEquals(getProperties(new File(expDir, "lib" + File.separator + Constants.CONF_PROPERTIES)),
-                getProperties(new File(tempDir, "lib" + File.separator + Constants.CONF_PROPERTIES)));
+        assertEquals(getProperties(new File(expDir, "lib" + File.separator + Integrator.class.getPackage().getName() + File.separator + Constants.GEN_CONF_PROPERTIES)),
+                getProperties(new File(tempDir, "lib" + File.separator + Integrator.class.getPackage().getName() + File.separator + Constants.GEN_CONF_PROPERTIES)));
         TestUtils.resetXMLUnit();
         XMLUnit.setNormalizeWhitespace(true);
         XMLUnit.setIgnoreWhitespace(true);

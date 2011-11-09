@@ -1313,6 +1313,8 @@ public final class Constants {
 
     /** Configuration filename. */
     public static final String CONF_PROPERTIES = "configuration.properties";
+    /** Generated configuration filename. */
+    public static final String GEN_CONF_PROPERTIES = "plugin.properties";
     /** Configuration value separator. */
     public static final String CONF_LIST_SEPARATOR = ";";
     /** Property name for supported DITA topic extensions. */

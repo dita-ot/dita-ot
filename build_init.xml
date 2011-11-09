@@ -4,6 +4,11 @@
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <project name="ditaot-init" basedir=".">
+  
+  <!-- Read configuration properties -->
+  <property file="${basedir}/lib/org.dita.dost.platform/plugin.properties"/>
+  <property file="${basedir}/lib/configuration.properties"/>
+  
   <!--<import file="catalog-ant.xml"/>-->
 
 	<!-- Default maximum memory to give to forked Java processes.
