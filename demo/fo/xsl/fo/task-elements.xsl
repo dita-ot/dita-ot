@@ -145,13 +145,15 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class, ' task/taskbody ')]/*[contains(@class, ' topic/example ')]">
         <fo:block xsl:use-attribute-sets="example">
             <xsl:call-template name="commonattributes"/>
-            <xsl:apply-templates select="." mode="dita2xslfo:task-heading">
+            <xsl:if test="not(*[contains(@class, ' topic/title ')])">
+              <xsl:apply-templates select="." mode="dita2xslfo:task-heading">
                 <xsl:with-param name="use-label">
                     <xsl:call-template name="insertVariable">
                         <xsl:with-param name="theVariableID" select="'Task Example'"/>
                     </xsl:call-template>
                 </xsl:with-param>
-            </xsl:apply-templates>
+              </xsl:apply-templates>
+            </xsl:if>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
@@ -337,11 +339,22 @@ See the accompanying license.txt file for applicable licenses.
         </fo:list-item>
     </xsl:template>
 
+  <xsl:template match="*[contains(@class, ' topic/example ')]" mode="dita2xslfo:task-heading">
+    <xsl:param name="use-label"/>
+    <xsl:if test="$GENERATE-TASK-LABELS='YES'">
+      <fo:block xsl:use-attribute-sets="example.title">
+        <fo:inline>
+          <xsl:copy-of select="$use-label"/>
+        </fo:inline>
+      </fo:block>
+    </xsl:if>
+  </xsl:template>
+
     <xsl:template match="*" mode="dita2xslfo:task-heading">
         <xsl:param name="use-label"/>
         <xsl:if test="$GENERATE-TASK-LABELS='YES'">
             <fo:block xsl:use-attribute-sets="section.title">
-                <fo:inline><xsl:value-of select="$use-label"/></fo:inline>
+                <fo:inline><xsl:copy-of select="$use-label"/></fo:inline>
             </fo:block>
         </xsl:if>
     </xsl:template>
