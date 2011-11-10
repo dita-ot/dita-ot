@@ -26,6 +26,14 @@ going back to the beginning of the toolkit. </shortdesc>
     <reference id="general-enhancements-and-changes">
       <title>General Enhancements and Changes</title>
       <refbody>
+        <section id="section_vc5_gld_g2">
+          <title>Configuration file for defaults</title>
+          <p>In previous versions, <filepath>lib/configuration.properties</filepath> was generated
+            by integration process. Integration has been changed to generate
+              <filepath>lib/org.dita.dost.platform/plugin.properties</filepath> and the role of the
+            old <filepath>lib/configuration.properties</filepath> has been changed to contain
+            defaults and configuration options, such as default language.</p>
+        </section>
       <section>
         <title>Plug-in extension point for file extension configuration</title>
           <p>New plug-in extension points have been added allow configuring DITA-OT behaviour based
@@ -117,6 +125,7 @@ going back to the beginning of the toolkit. </shortdesc>
             <li>Finnish</li>
             <li>Hebrew</li>
             <li>Romanian</li>
+            <li>Russian</li>
             <li>Swedish</li>
           </ul>
           <p>PDF processing no longer copies images or generates XSL FO to output directory.
@@ -125,6 +134,15 @@ going back to the beginning of the toolkit. </shortdesc>
             setting <codeph>org.dita.pdf2.legacy.use-out-temp</codeph> property to value
               <codeph>true</codeph>; support for the legacy processing model may be removed in
             future releases.</p>
+        </section>
+        <section id="section_cnx_gmd_g2">
+          <title>XHTML</title>
+          <p>Support for the following languages has been added:</p>
+          <ul>
+            <li>Indonesian</li>
+            <li>Kazakh</li>
+            <li>Malay</li>
+          </ul>
         </section>
       </refbody>
     </reference>
