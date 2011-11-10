@@ -441,12 +441,16 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:choose>
  </xsl:template>
 
-
+  <xsl:param name="useFrameIndexMarkup" select="'false'"/>
 
 	<xsl:template name="__formatText">
 		<xsl:param name="text"/>
 		<xsl:param name="formatting" select="'Default Para Font'"/>
 		<xsl:choose>
+		  <!-- Ignore Frame-style markup in index entry text. -->
+		  <xsl:when test="$useFrameIndexMarkup ne 'true'">
+        <xsl:value-of select="$text"/>
+      </xsl:when>
 			<xsl:when test="starts-with($text, '&lt;')">
 				<xsl:variable name="formatting-name" select="substring-before(substring-after($text, '&lt;'), '&gt;')"/>
 				<xsl:call-template name="__formatText">

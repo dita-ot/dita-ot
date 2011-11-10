@@ -355,6 +355,7 @@ with those set forth herein.
       <arg line='"antArgsIncludeRelatedLinks=${args.fo.include.rellinks}"'/>
       <arg line='"antArgsGenerateTaskLabels=${args.gen.task.lbl}"'/>
       <arg line='"pdfFormatter=${pdf.formatter}"'/>
+      <arg line='"useFrameIndexMarkup=${pdf.index.frame-markup}"'/>
       <arg line='"bookmap-order=${args.bookmap-order}"'/>
       <sysproperty key="xml.catalog.files" value="${xml.catalog.files}"/>
     </java>

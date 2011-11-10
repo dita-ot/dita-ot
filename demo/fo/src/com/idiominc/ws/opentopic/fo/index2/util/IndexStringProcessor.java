@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import org.dita.dost.util.Configuration;
+
 /*
 Copyright � 2004-2006 by Idiom Technologies, Inc. All rights reserved.
 IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
@@ -49,6 +51,29 @@ public abstract class IndexStringProcessor {
     private static final String LT = "<";
     private static final String GT = ">";
 
+    private static final boolean usesFrameMarkup = Boolean.parseBoolean(Configuration.configuration.get("pdf.index.frame-markup"));
+
+    /**
+     * Parse the index marker string and create IndexEntry object from one. If pdf.index.frame-markup property
+     * is true, the text is parsed for Frame style markup and the result may be multiple IndexEntry instances. 
+     * Otherwise, the text of the index term is taken as-is.
+     *
+     * @param theIndexMarkerString index marker string
+     * @param the IndexPreprocessorTask instance
+     * @return IndexEntry objects created from the index string
+     */
+    public static IndexEntry[] processIndexString(final String theIndexMarkerString) {
+        if (usesFrameMarkup) {
+            return processIndexStringWithFrameMarkup(theIndexMarkerString);
+        }
+        final IndexEntryImpl indexEntry = createIndexEntry(theIndexMarkerString, null, false);
+        final StringBuffer referenceIDBuf = new StringBuffer();
+        referenceIDBuf.append(indexEntry.getValue());
+        referenceIDBuf.append(':');
+        indexEntry.addRefID(referenceIDBuf.toString());
+
+        return new IndexEntry[] { indexEntry };
+    }
 
     /**
      * Parse the index marker string and create IndexEntry object from one
@@ -57,7 +82,7 @@ public abstract class IndexStringProcessor {
      * @return IndexEntry objects created from the index string
      * @see "Adobe Framemaker 7.1" help, topic "Adding index markers" (page is "1_15_8_0.html") for syntax details
      */
-    public static IndexEntry[] processIndexString(final String theIndexMarkerString) {
+    public static IndexEntry[] processIndexStringWithFrameMarkup(final String theIndexMarkerString) {
         final List<IndexEntry> resList = new ArrayList<IndexEntry>();
         final StringTokenizer stringTokenizer = new StringTokenizer(normalizeTextValue(theIndexMarkerString), SEMICOLON);
         while (stringTokenizer.hasMoreTokens()) {
@@ -163,6 +188,9 @@ public abstract class IndexStringProcessor {
     public static String normalizeTextValue(final String theString) {
         if (null != theString && theString.length() > 0) {
             String res = theString.replaceAll("[\\s\\n]+", " ");
+            if (!usesFrameMarkup) {
+                return res;
+            }
             res = res.replaceAll("[\\s]+:", ":"); //replace spaces before ':'
             return res.replaceAll(":[\\s]+", ":"); //replace spaces after ':'
         }
@@ -173,7 +201,7 @@ public abstract class IndexStringProcessor {
     private static IndexEntryImpl createIndexEntry(String theValue, final String theSortString, final boolean theIsParentNoPage) {
         String soString;
         final int soIdxOf = theValue.indexOf(SO);
-        if (soIdxOf > 0) {
+        if (soIdxOf > 0 && usesFrameMarkup) {
             soString = theValue.substring(soIdxOf + SO.length());
             theValue = theValue.substring(0, soIdxOf);
         } else {
@@ -182,14 +210,14 @@ public abstract class IndexStringProcessor {
 
         boolean suppressesThePageNumber = theIsParentNoPage;
         final int nopageIdx = theValue.indexOf(NOPAGE);
-        if (nopageIdx == 0) {
+        if (nopageIdx == 0 && usesFrameMarkup) {
             suppressesThePageNumber = true;
             theValue = theValue.substring(NOPAGE.length());
         }
 
         boolean restoresPageNumber = false;
         final int singlepageIdx = theValue.indexOf(SINGLEPAGE);
-        if (singlepageIdx == 0) {
+        if (singlepageIdx == 0 && usesFrameMarkup) {
             restoresPageNumber = true;
             suppressesThePageNumber = false;
             theValue = theValue.substring(SINGLEPAGE.length());
@@ -197,19 +225,19 @@ public abstract class IndexStringProcessor {
 
         boolean startsRange = false;
         final int startsRangeIdx = theValue.indexOf(STARTRANGE);
-        if (startsRangeIdx == 0) {
+        if (startsRangeIdx == 0 && usesFrameMarkup) {
             startsRange = true;
             theValue = theValue.substring(STARTRANGE.length());
         }
 
         boolean endsRange = false;
         final int endsRangeIdx = theValue.indexOf(ENDRANGE);
-        if (endsRangeIdx == 0) {
+        if (endsRangeIdx == 0 && usesFrameMarkup) {
             endsRange = true;
             theValue = theValue.substring(ENDRANGE.length());
         }
 
-        final String strippedFormatting = stripFormatting(theValue);
+        final String strippedFormatting = usesFrameMarkup ? stripFormatting(theValue) : theValue;
 
         final IndexEntryImpl indexEntry = new IndexEntryImpl(strippedFormatting, soString, theSortString, theValue);
         indexEntry.setSuppressesThePageNumber(suppressesThePageNumber);

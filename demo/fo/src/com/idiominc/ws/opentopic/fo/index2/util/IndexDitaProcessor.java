@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+import org.dita.dost.util.Configuration;
+
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 
@@ -49,6 +51,7 @@ public abstract class IndexDitaProcessor {
     private static final String GT = ">";
     private static final String sortStart = "[";
     private static final String sortEnd = "]";
+    private static final boolean usesFrameMarkup = Boolean.parseBoolean(Configuration.configuration.get("pdf.index.frame-markup"));
 
     public static IndexEntry[] processIndexDitaNode(final Node theNode, final String theParentValue) {
 
@@ -162,14 +165,14 @@ public abstract class IndexDitaProcessor {
     private static IndexEntry createIndexEntry(String theValue, final String theSortString) {
         String soString;
         final int soIdxOf = theValue.indexOf(SO);
-        if (soIdxOf > 0) {
+        if (soIdxOf > 0 && usesFrameMarkup) {
             soString = theValue.substring(soIdxOf + SO.length());
             theValue = theValue.substring(0, soIdxOf);
         } else {
             soString = null;
         }
 
-        final String strippedFormatting = stripFormatting(theValue);
+        final String strippedFormatting = usesFrameMarkup ? stripFormatting(theValue) : theValue;
 
         final IndexEntryImpl indexEntry = new IndexEntryImpl(strippedFormatting, soString, theSortString, theValue);
         if (!theSortString.equals("")) {
@@ -197,6 +200,9 @@ public abstract class IndexDitaProcessor {
         if (null != theString && theString.length() > 0) {
             String res = theString.replaceAll("[\\s\\n]+", " ");
             res = res.replaceAll("[\\s]+$", ""); //replace in the end of string
+            if (!usesFrameMarkup) {
+                return res;
+            }
             res = res.replaceAll("[\\s]+:", ":"); //replace spaces before ':'
             return res.replaceAll(":[\\s]+", ":"); //replace spaces after ':'
         }
