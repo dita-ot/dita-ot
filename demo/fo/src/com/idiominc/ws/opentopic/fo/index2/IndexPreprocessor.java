@@ -12,6 +12,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.util.*;
 
+import org.dita.dost.util.XMLUtils;
 
 /*
 Copyright � 2004-2006 by Idiom Technologies, Inc. All rights reserved.
@@ -49,12 +50,24 @@ public class IndexPreprocessor {
     private static final String elIndexRangeStartName = "start";
     private static final String elIndexRangeEndName = "end";
 
-
+    /**
+     * Create new index preprocessor.
+     * 
+     * @param prefix index prefix
+     * @param theNamespace_url index element namespace URI
+     */
     public IndexPreprocessor(final String prefix, final String theNamespace_url) {
         this.prefix = prefix;
         this.namespace_url = theNamespace_url;
     }
 
+    /**
+     * Process index terms.
+     * 
+     * @param theInput input document
+     * @return read index terms
+     * @throws ProcessException if processing index terms failed
+     */
     public IndexPreprocessResult process(final Document theInput)
             throws ProcessException {
         final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -163,21 +176,24 @@ public class IndexPreprocessor {
         theNode.normalize();
 
         boolean ditastyle = false;
-        boolean textNode = false;
+        String textNode = null;
 
         final NodeList childNodes = theNode.getChildNodes();
+        final StringBuilder textBuf = new StringBuilder();
         for (int i = 0; i < childNodes.getLength(); i++) {
             final Node child = childNodes.item(i);
             if (checkElementName(child)) {
                 ditastyle = true;
                 break;
+            } else if (child.getNodeType() == Node.ELEMENT_NODE) {
+                textBuf.append(XMLUtils.getStringValue((Element) child));
+            } else if (child.getNodeType() == Node.TEXT_NODE) {
+                textBuf.append(child.getNodeValue());
             }
-            if (child.getNodeType() == Node.TEXT_NODE) {
-                final String normIndex = IndexStringProcessor.normalizeTextValue(child.getNodeValue());
-                if (normIndex.length() > 0) {
-                    textNode = true;
-                }
-            }
+        }
+        textNode = IndexStringProcessor.normalizeTextValue(textBuf.toString());
+        if (textNode.length() == 0) {
+            textNode = null;
         }
 
         if (theNode.getAttributes().getNamedItem(elIndexRangeStartName) != null ||
@@ -199,16 +215,10 @@ public class IndexPreprocessor {
                 res.add(node);
             }
 
-        } else if (textNode) {
-            for (int k = 0; k < childNodes.getLength(); k++) {
-                final Node child = childNodes.item(k);
-                indexStrings = new String[]{child.getNodeValue()};
-                for (final String indexString : indexStrings) {
-                    final Node[] nodes = processIndexString(indexString, theTargetDocument, theIndexEntryFoundListener);
-                    for (final Node node : nodes) {
-                        res.add(node);
-                    }
-                }
+        } else if (textNode != null) {
+            final Node[] nodes = processIndexString(textNode, theTargetDocument, theIndexEntryFoundListener);
+            for (final Node node : nodes) {
+                res.add(node);
             }
         } else {
             return new Node[0];
@@ -259,6 +269,12 @@ public class IndexPreprocessor {
         return (Node[]) res.toArray(new Node[res.size()]);
     }
 
+    /**
+     * Check if node is an index term element or specialization of one.
+     * 
+     * @param node element to test
+     * @return {@code true} if node is an index term element, otherwise {@code false}
+     */
     private boolean checkElementName(final Node node) {
         return TOPIC_INDEXTERM.matches(node)
                 || INDEXING_D_INDEX_SORT_AS.matches(node)
