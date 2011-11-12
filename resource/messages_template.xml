@@ -683,6 +683,16 @@
   </message>
   <!-- Added by William on 2010-06-21 for bug:3012392 start -->
     
+  <message id="DOTA067W" type="WARN">
+    <reason>Ignoring index-see '%1' for '%2' because parent indexterm contains indexterm children.</reason>
+    <response/>
+  </message>
+  
+  <message id="DOTA068W" type="WARN">
+    <reason>Ignoring index-see-also '%1' for '%2' because parent indexterm contains indexterm children.</reason>
+    <response/>
+  </message>
+    
   <!-- Add any messages defined by plugins. -->
   <dita:extension xmlns:dita="http://dita-ot.sourceforge.net"
     behavior="org.dita.dost.platform.InsertAction" id="dita.xsl.messages"/>

@@ -7,8 +7,11 @@ import com.idiominc.ws.opentopic.fo.index2.IndexEntry;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Properties;
 import java.util.StringTokenizer;
 
+import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.XMLUtils;
 
@@ -46,7 +49,7 @@ with those set forth herein.
 This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
  */
-public abstract class IndexDitaProcessor {
+public final class IndexDitaProcessor {
     
     private static String elIndexRangeStartName = "start";
     private static String elIndexRangeEndName = "end";
@@ -56,6 +59,12 @@ public abstract class IndexDitaProcessor {
     private static final String sortStart = "[";
     private static final String sortEnd = "]"; 
     
+    private DITAOTLogger logger;
+    
+    public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
+    
     /**
      * Read index terms from source XML.
      * 
@@ -63,7 +72,7 @@ public abstract class IndexDitaProcessor {
      * @param theParentValue parent value
      * @return index entries
      */
-    public static IndexEntry[] processIndexDitaNode(final Node theNode, final String theParentValue) {
+    public IndexEntry[] processIndexDitaNode(final Node theNode, final String theParentValue) {
 
         final NodeList childNodes = theNode.getChildNodes();
         final StringBuffer textValueBuffer = new StringBuffer();
@@ -141,6 +150,26 @@ public abstract class IndexDitaProcessor {
                 textValue = textValue.substring(0,textValue.indexOf(sortStart));
             }
         }
+
+        if (!childEntrys.isEmpty() && !seeEntry.isEmpty()) {
+            for (final IndexEntry e: seeEntry) {
+                final Properties prop = new Properties();
+                prop.put("%1", e.getFormattedString());
+                prop.put("%2", textValue);
+                logger.logWarn(MessageUtils.getMessage("DOTA067W", prop).toString());
+            }
+            seeEntry.clear();
+        }
+        if (!childEntrys.isEmpty() && !seeAlsoEntry.isEmpty()) {
+            for (final IndexEntry e: seeAlsoEntry) {
+                final Properties prop = new Properties();
+                prop.put("%1", e.getFormattedString());
+                prop.put("%2", textValue);
+                logger.logWarn(MessageUtils.getMessage("DOTA068W", prop).toString());
+            }
+            seeAlsoEntry.clear();
+        }
+        
         final IndexEntry result = createIndexEntry(contents, textValue,sortString);
         if (result.getValue().length() > 0 || endRange || startRange) {
             result.setStartRange(startRange);

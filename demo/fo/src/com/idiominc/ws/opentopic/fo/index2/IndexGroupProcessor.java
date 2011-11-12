@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 
 /*
@@ -43,7 +44,14 @@ with those set forth herein.
 This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
  */
-public class IndexGroupProcessor {
+public final class IndexGroupProcessor {
+    
+    private DITAOTLogger logger;
+    
+    public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
+    
     /**
      * Puts index entries to the group they are belongs
      *
@@ -52,7 +60,7 @@ public class IndexGroupProcessor {
      * @param theLocale             locale used to sort and compare index entries
      * @return groups with sorted index entries inside
      */
-    public static IndexGroup[] process(final IndexEntry[] theIndexEntries, final IndexConfiguration theIndexConfiguration,
+    public IndexGroup[] process(final IndexEntry[] theIndexEntries, final IndexConfiguration theIndexConfiguration,
             final Locale theLocale) {
         final IndexCollator collator = new IndexCollator(theLocale);
 
@@ -139,11 +147,11 @@ public class IndexGroupProcessor {
                     final IndexEntry entry = (IndexEntry) indexMap.get(key);
                     final Properties prop = new Properties();
                     prop.put("%1", entry.toString());
-                    System.err.println(MessageUtils.getMessage("PDFJ001E", prop).toString());
+                    logger.logError(MessageUtils.getMessage("PDFJ001E", prop).toString());
                 }
             }
             if (IndexPreprocessorTask.failOnError) {
-                System.err.println(MessageUtils.getMessage("PDFJ002E", new Properties()).toString());
+                logger.logError(MessageUtils.getMessage("PDFJ002E", new Properties()).toString());
                 IndexPreprocessorTask.processingFaild=true;
             }
         }

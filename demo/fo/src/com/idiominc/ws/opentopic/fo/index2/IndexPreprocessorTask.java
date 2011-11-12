@@ -7,6 +7,7 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.Project;
 import org.apache.xml.resolver.tools.CatalogResolver;
+import org.dita.dost.log.DITAOTAntLogger;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
@@ -93,6 +94,7 @@ extends Task {
 
             final Document doc = documentBuilder.parse(input);
             final IndexPreprocessor preprocessor = new IndexPreprocessor(this.prefix, this.namespace_url);
+            preprocessor.setLogger(new DITAOTAntLogger(getProject()));
 
             // Walks through source document and builds an array of IndexEntry and builds
             // new Document with pre-processed index entries included.

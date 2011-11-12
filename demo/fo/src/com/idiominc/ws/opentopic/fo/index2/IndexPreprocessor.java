@@ -13,6 +13,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.util.*;
 
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.XMLUtils;
 
@@ -46,13 +47,16 @@ with those set forth herein.
 This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
  */
-public class IndexPreprocessor {
+public final class IndexPreprocessor {
     
     /** Index term level separator. */
     public static final String VALUE_SEPARATOR = ":";
     
     private final String prefix;
     private final String namespace_url;
+    private final IndexDitaProcessor indexDitaProcessor;
+    private final IndexGroupProcessor indexGroupProcessor;
+    private DITAOTLogger logger;
     private static final String elIndexRangeStartName = "start";
     private static final String elIndexRangeEndName = "end";
     
@@ -67,8 +71,16 @@ public class IndexPreprocessor {
     public IndexPreprocessor(final String prefix, final String theNamespace_url) {
         this.prefix = prefix;
         this.namespace_url = theNamespace_url;
+        indexDitaProcessor = new IndexDitaProcessor();
+        indexGroupProcessor = new IndexGroupProcessor();
     }
 
+    public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+        indexDitaProcessor.setLogger(logger);
+        indexGroupProcessor.setLogger(logger);
+    }
+    
     /**
      * Process index terms.
      * 
@@ -110,7 +122,7 @@ public class IndexPreprocessor {
     public void createAndAddIndexGroups(final IndexEntry[] theIndexEntries, final IndexConfiguration theConfiguration, final Document theDocument, final Locale theLocale) {
         final IndexComparator indexEntryComparator = new IndexComparator(theLocale);
 
-        final IndexGroup[] indexGroups = IndexGroupProcessor.process(theIndexEntries, theConfiguration, theLocale);
+        final IndexGroup[] indexGroups = indexGroupProcessor.process(theIndexEntries, theConfiguration, theLocale);
 
         final Element rootElement = theDocument.getDocumentElement();
 
@@ -210,7 +222,7 @@ public class IndexPreprocessor {
 
         final ArrayList<Node> res = new ArrayList<Node>();
         if ((ditastyle)) {
-            final IndexEntry[] indexEntries = IndexDitaProcessor.processIndexDitaNode(theNode,"");
+            final IndexEntry[] indexEntries = indexDitaProcessor.processIndexDitaNode(theNode,"");
 
             for (final IndexEntry indexEntrie : indexEntries) {
                 theIndexEntryFoundListener.foundEntry(indexEntrie);
@@ -252,7 +264,7 @@ public class IndexPreprocessor {
         String[] indexStrings;
         final ArrayList<Node> res = new ArrayList<Node>();
         if ((ditastyle)) {
-            final IndexEntry[] indexEntries = IndexDitaProcessor.processIndexDitaNode(theNode.getParentNode(),"");
+            final IndexEntry[] indexEntries = indexDitaProcessor.processIndexDitaNode(theNode.getParentNode(),"");
 
             for (final IndexEntry indexEntrie : indexEntries) {
                 theIndexEntryFoundListener.foundEntry(indexEntrie);
