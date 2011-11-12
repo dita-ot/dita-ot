@@ -1,5 +1,7 @@
 package com.idiominc.ws.opentopic.fo.index2.util;
 
+import static com.idiominc.ws.opentopic.fo.index2.IndexPreprocessor.*;
+
 import com.idiominc.ws.opentopic.fo.index2.IndexEntry;
 
 import java.util.ArrayList;
@@ -69,7 +71,7 @@ public abstract class IndexStringProcessor {
         final IndexEntryImpl indexEntry = createIndexEntry(theIndexMarkerString, null, false);
         final StringBuffer referenceIDBuf = new StringBuffer();
         referenceIDBuf.append(indexEntry.getValue());
-        referenceIDBuf.append(':');
+        referenceIDBuf.append(VALUE_SEPARATOR);
         indexEntry.addRefID(referenceIDBuf.toString());
 
         return new IndexEntry[] { indexEntry };
@@ -142,7 +144,7 @@ public abstract class IndexStringProcessor {
             indexEntry = createIndexEntry(s, currSortString, parentSuppressesThePageNumber);
 
             referenceIDBuf.append(indexEntry.getValue());
-            referenceIDBuf.append(':');
+            referenceIDBuf.append(VALUE_SEPARATOR);
 
             if (!indexEntry.isSuppressesThePageNumber()) {
                 indexEntry.addRefID(referenceIDBuf.toString());

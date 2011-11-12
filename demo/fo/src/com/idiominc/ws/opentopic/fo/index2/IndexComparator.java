@@ -35,7 +35,7 @@ with those set forth herein.
 This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
  */
-class IndexComparator implements Comparator {
+class IndexComparator implements Comparator<IndexEntry> {
 
     private final IndexCollator Collator;
 
@@ -45,9 +45,9 @@ class IndexComparator implements Comparator {
     }
 
 
-    public int compare(final Object o1, final Object o2) {
-        final String value1 = getSortString((IndexEntry) o1);
-        final String value2 = getSortString((IndexEntry) o2);
+    public int compare(final IndexEntry o1, final IndexEntry o2) {
+        final String value1 = getSortString(o1);
+        final String value2 = getSortString(o2);
 
         return this.Collator.compare(value1,value2);
     }

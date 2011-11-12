@@ -1,6 +1,7 @@
 package com.idiominc.ws.opentopic.fo.index2;
 
 import static org.dita.dost.util.Constants.*;
+import static javax.xml.XMLConstants.*;
 
 import com.idiominc.ws.opentopic.fo.index2.configuration.IndexConfiguration;
 import com.idiominc.ws.opentopic.fo.index2.util.IndexStringProcessor;
@@ -45,6 +46,10 @@ This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
  */
 public class IndexPreprocessor {
+    
+    /** Index term level separator. */
+    public static final String VALUE_SEPARATOR = ":";
+    
     private final String prefix;
     private final String namespace_url;
     private static final String elIndexRangeStartName = "start";
@@ -75,14 +80,14 @@ public class IndexPreprocessor {
         try {
             documentBuilder = documentBuilderFactory.newDocumentBuilder();
         } catch (final ParserConfigurationException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Unable to create a document builder: " + e.getMessage(), e);
         }
         final Document doc = documentBuilder.newDocument();
 
         final Node rootElement = theInput.getDocumentElement();
 
 
-        final ArrayList indexes = new ArrayList();
+        final ArrayList<IndexEntry> indexes = new ArrayList<IndexEntry>();
 
         final IndexEntryFoundListener listener = new IndexEntryFoundListener() {
             public void foundEntry(final IndexEntry theEntry) {
@@ -94,17 +99,13 @@ public class IndexPreprocessor {
 
         doc.appendChild(node);
 
-        doc.getDocumentElement().setAttribute("xmlns:" + this.prefix, this.namespace_url);
+        doc.getDocumentElement().setAttribute(XMLNS_ATTRIBUTE + ":" + this.prefix, this.namespace_url);
 
         return new IndexPreprocessResult(doc, (IndexEntry[]) indexes.toArray(new IndexEntry[0]));
     }
 
     public void createAndAddIndexGroups(final IndexEntry[] theIndexEntries, final IndexConfiguration theConfiguration, final Document theDocument, final Locale theLocale) {
         final IndexComparator indexEntryComparator = new IndexComparator(theLocale);
-
-        if (null == indexEntryComparator) {
-            System.out.println("Collator is not found, sort order of index group can be wrong");
-        }
 
         final IndexGroup[] indexGroups = IndexGroupProcessor.process(theIndexEntries, theConfiguration, theLocale);
 
@@ -201,8 +202,7 @@ public class IndexPreprocessor {
             ditastyle = true;
         }
 
-        String[] indexStrings;
-        final ArrayList res = new ArrayList();
+        final ArrayList<Node> res = new ArrayList<Node>();
         if ((ditastyle)) {
             final IndexEntry[] indexEntries = IndexDitaProcessor.processIndexDitaNode(theNode,"");
 
@@ -228,6 +228,7 @@ public class IndexPreprocessor {
 
     }
 
+    @Deprecated
     private Node[] processIndexTextNode(final Node theNode, final Document theTargetDocument, final IndexEntryFoundListener theIndexEntryFoundListener) {
         theNode.normalize();
 
@@ -243,7 +244,7 @@ public class IndexPreprocessor {
         }
 
         String[] indexStrings;
-        final ArrayList res = new ArrayList();
+        final ArrayList<Node> res = new ArrayList<Node>();
         if ((ditastyle)) {
             final IndexEntry[] indexEntries = IndexDitaProcessor.processIndexDitaNode(theNode.getParentNode(),"");
 
@@ -282,10 +283,11 @@ public class IndexPreprocessor {
                 || INDEXING_D_INDEX_SEE_ALSO.matches(node);
     }
 
+    @Deprecated
     private String[] createIndexStringFromDitastyleIndex(final Node theNode) {
         //Go through the childs and append text nodes to the index string
         //Index elements on the same level will create separate index strings
-        final ArrayList resultList = new ArrayList();
+        final ArrayList<String> resultList = new ArrayList<String>();
         if (TOPIC_INDEXTERM.matches(theNode)) //Is index element?
         {
             final StringBuffer resIndexString = new StringBuffer();
@@ -302,7 +304,7 @@ public class IndexPreprocessor {
                     skipCurrentLevel = true;		//skip adding current level index string because it has continuation on the descendant level
                     final String[] indexValues = createIndexStringFromDitastyleIndex(child); //call recursevelly but for the found child
                     for (final String indexValue : indexValues) {
-                        resultList.add(resIndexString.toString() + ':' + indexValue); //append to result list prefixed by current level
+                        resultList.add(resIndexString.toString() + VALUE_SEPARATOR + indexValue); //append to result list prefixed by current level
                     }
                 }
             }
@@ -343,12 +345,12 @@ public class IndexPreprocessor {
      * @param theIndexEntryComparator comparator to sort the index entries. if it is null the index entries will be unsorted
      * @return nodes for the target document
      */
-    private Node[] transformToNodes(final IndexEntry[] theIndexEntries, final Document theTargetDocument, final Comparator theIndexEntryComparator) {
+    private Node[] transformToNodes(final IndexEntry[] theIndexEntries, final Document theTargetDocument, final Comparator<IndexEntry> theIndexEntryComparator) {
         if (null != theIndexEntryComparator) {
             Arrays.sort(theIndexEntries, theIndexEntryComparator);
         }
 
-        final List result = new ArrayList();
+        final List<Element> result = new ArrayList<Element>();
         for (final IndexEntry indexEntry : theIndexEntries) {
             final Element indexEntryNode = createElement(theTargetDocument, "index.entry");
 

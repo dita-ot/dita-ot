@@ -7,6 +7,7 @@ import com.idiominc.ws.opentopic.fo.index2.configuration.IndexConfiguration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -98,10 +99,8 @@ public class IndexGroupProcessor {
 
             if (groupMembers.length > 0) {
                 //Find entries by comaping first letter with a chars in current config entry
-                final Set set = indexMap.keySet();
-                final Object[] keys = set.toArray(new Object[set.size()]);
-                for (final Object key2 : keys) {
-                    final String key = (String) key2;
+                for (final String key2 : new ArrayList<String>(indexMap.keySet())) {
+                    final String key = key2;
                     if (key.length() > 0) {
                         final String value = getValue((IndexEntry) indexMap.get(key));
                         //						final char c = value.charAt(0);
@@ -134,10 +133,8 @@ public class IndexGroupProcessor {
         }
 
         if (!indexMap.isEmpty()) {
-            final Set set = indexMap.keySet();
-            final Object[] keys = set.toArray(new Object[set.size()]);
-            for (final Object key2 : keys) {
-                final String key = (String) key2;
+            for (final String key2 : new ArrayList<String>(indexMap.keySet())) {
+                final String key = key2;
                 if (key.length() > 0) {
                     final IndexEntry entry = (IndexEntry) indexMap.get(key);
                     final Properties prop = new Properties();
@@ -177,23 +174,18 @@ public class IndexGroupProcessor {
 
 
     private static String[] getIndexKeysOfIndexesInRange(final String theKey1, final String theKey2, final IndexCollator theCollator, final HashMap<String, IndexEntry> theIndexEntryMap) {
-        final Set<String> set = theIndexEntryMap.keySet();
-        final String[] allKeys = (String[]) set.toArray(new String[0]);
-
-
         final ArrayList<String> res = new ArrayList<String>();
-        for (final String key : allKeys) {
-            final String value = getValue((IndexEntry) theIndexEntryMap.get(key));
-            final int res1 = theCollator.compare(theKey1, value);
+        for (final Map.Entry<String, IndexEntry> e : theIndexEntryMap.entrySet()) {
+            final int res1 = theCollator.compare(theKey1, e.getValue());
             if (res1 <= 0) {
                 if (theKey2 == null) {
                     //the right range is not specified
-                    res.add(key);
+                    res.add(e.getKey());
                     continue;
                 }
-                final int res2 = theCollator.compare(theKey2, key);
+                final int res2 = theCollator.compare(theKey2, e.getKey());
                 if (res2 > 0) {
-                    res.add(key);
+                    res.add(e.getKey());
                 }
             }
         }

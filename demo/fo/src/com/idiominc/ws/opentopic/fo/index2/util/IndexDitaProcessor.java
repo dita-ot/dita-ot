@@ -1,6 +1,7 @@
 package com.idiominc.ws.opentopic.fo.index2.util;
 
 import static org.dita.dost.util.Constants.*;
+import static com.idiominc.ws.opentopic.fo.index2.IndexPreprocessor.*;
 
 import com.idiominc.ws.opentopic.fo.index2.IndexEntry;
 
@@ -44,6 +45,7 @@ This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
  */
 public abstract class IndexDitaProcessor {
+    
     private static String elIndexRangeStartName = "start";
     private static String elIndexRangeEndName = "end";
     private static final String SO = "<so>";
@@ -78,7 +80,7 @@ public abstract class IndexDitaProcessor {
                 if (currentTextValue.equals("")) {
                     currentRefId="";
                 } else {
-                    currentRefId = currentTextValue+":";
+                    currentRefId = currentTextValue + VALUE_SEPARATOR;
                 }
                 final IndexEntry[] childs = processIndexDitaNode(child,theParentValue+currentRefId);
                 for (final IndexEntry child2 : childs) {
@@ -135,23 +137,23 @@ public abstract class IndexDitaProcessor {
             } else if (endRange) {
                 result.addRefID(theNode.getAttributes().getNamedItem(elIndexRangeEndName).getNodeValue());
             } else {
-                result.addRefID(normalizeTextValue(theParentValue + textValue + ":"));
+                result.addRefID(normalizeTextValue(theParentValue + textValue + VALUE_SEPARATOR));
             }
             if (!seeEntry.isEmpty()) {
                 for (int j = 0; j < seeEntry.size(); j++) {
-                    final IndexEntry seeIndexEntry = (IndexEntry) seeEntry.get(j);
+                    final IndexEntry seeIndexEntry = seeEntry.get(j);
                     result.addSeeChild(seeIndexEntry);
                 }
                 result.setSuppressesThePageNumber(true);
             }
             if (!seeAlsoEntry.isEmpty()) {
                 for (int j = 0; j < seeAlsoEntry.size(); j++) {
-                    final IndexEntry seeAlsoIndexEntry = (IndexEntry) seeAlsoEntry.get(j);
+                    final IndexEntry seeAlsoIndexEntry = seeAlsoEntry.get(j);
                     result.addSeeAlsoChild(seeAlsoIndexEntry);
                 }
             }
             for (int i = 0; i < childEntrys.size(); i++) {
-                final IndexEntry child = (IndexEntry) childEntrys.get(i);
+                final IndexEntry child = childEntrys.get(i);
                 result.addChild(child);
             }
             final IndexEntry[] resultArray = new IndexEntry[1];
