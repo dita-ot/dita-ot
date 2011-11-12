@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 import org.dita.dost.util.Configuration;
+import org.dita.dost.util.XMLUtils;
 
+import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 
@@ -52,13 +54,20 @@ public abstract class IndexDitaProcessor {
     private static final String LT = "<";
     private static final String GT = ">";
     private static final String sortStart = "[";
-    private static final String sortEnd = "]";
-    private static final boolean usesFrameMarkup = Boolean.parseBoolean(Configuration.configuration.get("pdf.index.frame-markup"));
-
+    private static final String sortEnd = "]"; 
+    
+    /**
+     * Read index terms from source XML.
+     * 
+     * @param theNode source indexterm element
+     * @param theParentValue parent value
+     * @return index entries
+     */
     public static IndexEntry[] processIndexDitaNode(final Node theNode, final String theParentValue) {
 
         final NodeList childNodes = theNode.getChildNodes();
-        final StringBuffer textValueBuffer = new StringBuffer();;
+        final StringBuffer textValueBuffer = new StringBuffer();
+        final List<Node> contents = new ArrayList<Node>();
         final StringBuffer sortStringBuffer = new StringBuffer();
         final boolean startRange = theNode.getAttributes().getNamedItem(elIndexRangeStartName) != null;
         final boolean endRange = theNode.getAttributes().getNamedItem(elIndexRangeEndName) != null;
@@ -69,6 +78,7 @@ public abstract class IndexDitaProcessor {
         for (int i = 0; i < childNodes.getLength(); i++) { //Go through child nodes to find text nodes
             final Node child = childNodes.item(i);
             if (child.getNodeType() == Node.TEXT_NODE) {
+                contents.add(child);
                 final String val = child.getNodeValue();
                 if (null != val) {
                     textValueBuffer.append(val);
@@ -108,6 +118,9 @@ public abstract class IndexDitaProcessor {
                 for (final IndexEntry child2 : childs) {
                     seeAlsoEntry.add(child2);
                 }
+            } else if (child.getNodeType() == Node.ELEMENT_NODE) {
+                contents.add(child);
+                textValueBuffer.append(XMLUtils.getStringValue((Element) child));
             }
 
         }
@@ -128,7 +141,7 @@ public abstract class IndexDitaProcessor {
                 textValue = textValue.substring(0,textValue.indexOf(sortStart));
             }
         }
-        final IndexEntry result = createIndexEntry(textValue,sortString);
+        final IndexEntry result = createIndexEntry(contents, textValue,sortString);
         if (result.getValue().length() > 0 || endRange || startRange) {
             result.setStartRange(startRange);
             result.setEndsRange(endRange);
@@ -164,19 +177,19 @@ public abstract class IndexDitaProcessor {
         }
     }
 
-    private static IndexEntry createIndexEntry(String theValue, final String theSortString) {
+    private static IndexEntry createIndexEntry(final List<Node> contents, String theValue, final String theSortString) {
         String soString;
         final int soIdxOf = theValue.indexOf(SO);
-        if (soIdxOf > 0 && usesFrameMarkup) {
+        if (soIdxOf > 0 && USES_FRAME_MARKUP) {
             soString = theValue.substring(soIdxOf + SO.length());
             theValue = theValue.substring(0, soIdxOf);
         } else {
             soString = null;
         }
 
-        final String strippedFormatting = usesFrameMarkup ? stripFormatting(theValue) : theValue;
+        final String strippedFormatting = USES_FRAME_MARKUP ? stripFormatting(theValue) : theValue;
 
-        final IndexEntryImpl indexEntry = new IndexEntryImpl(strippedFormatting, soString, theSortString, theValue);
+        final IndexEntryImpl indexEntry = new IndexEntryImpl(strippedFormatting, soString, theSortString, theValue, contents);
         if (!theSortString.equals("")) {
             indexEntry.setSortString(theSortString);
         } else {
@@ -200,9 +213,9 @@ public abstract class IndexDitaProcessor {
 
     public static String normalizeTextValue(final String theString) {
         if (null != theString && theString.length() > 0) {
-            String res = theString.replaceAll("[\\s\\n]+", " ");
+            String res = theString.replaceAll("[\\s\\n]+", " ").trim();
             res = res.replaceAll("[\\s]+$", ""); //replace in the end of string
-            if (!usesFrameMarkup) {
+            if (!USES_FRAME_MARKUP) {
                 return res;
             }
             res = res.replaceAll("[\\s]+:", ":"); //replace spaces before ':'

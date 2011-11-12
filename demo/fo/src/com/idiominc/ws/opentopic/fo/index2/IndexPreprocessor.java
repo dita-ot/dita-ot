@@ -13,6 +13,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.util.*;
 
+import org.dita.dost.util.Configuration;
 import org.dita.dost.util.XMLUtils;
 
 /*
@@ -54,6 +55,8 @@ public class IndexPreprocessor {
     private final String namespace_url;
     private static final String elIndexRangeStartName = "start";
     private static final String elIndexRangeEndName = "end";
+    
+    public static final boolean USES_FRAME_MARKUP = Boolean.parseBoolean(Configuration.configuration.get("pdf.index.frame-markup"));
 
     /**
      * Create new index preprocessor.
@@ -181,6 +184,7 @@ public class IndexPreprocessor {
 
         final NodeList childNodes = theNode.getChildNodes();
         final StringBuilder textBuf = new StringBuilder();
+        final List<Node> contents = new ArrayList<Node>();
         for (int i = 0; i < childNodes.getLength(); i++) {
             final Node child = childNodes.item(i);
             if (checkElementName(child)) {
@@ -188,8 +192,10 @@ public class IndexPreprocessor {
                 break;
             } else if (child.getNodeType() == Node.ELEMENT_NODE) {
                 textBuf.append(XMLUtils.getStringValue((Element) child));
+                contents.add(child);
             } else if (child.getNodeType() == Node.TEXT_NODE) {
                 textBuf.append(child.getNodeValue());
+                contents.add(child);
             }
         }
         textNode = IndexStringProcessor.normalizeTextValue(textBuf.toString());
@@ -216,7 +222,7 @@ public class IndexPreprocessor {
             }
 
         } else if (textNode != null) {
-            final Node[] nodes = processIndexString(textNode, theTargetDocument, theIndexEntryFoundListener);
+            final Node[] nodes = processIndexString(textNode, contents, theTargetDocument, theIndexEntryFoundListener);
             for (final Node node : nodes) {
                 res.add(node);
             }
@@ -260,7 +266,7 @@ public class IndexPreprocessor {
         } else {
             indexStrings = new String[]{theNode.getNodeValue()};
             for (final String indexString : indexStrings) {
-                final Node[] nodes = processIndexString(indexString, theTargetDocument, theIndexEntryFoundListener);
+                final Node[] nodes = processIndexString(indexString, null, theTargetDocument, theIndexEntryFoundListener);
                 for (final Node node : nodes) {
                     res.add(node);
                 }
@@ -321,12 +327,13 @@ public class IndexPreprocessor {
      * Processes index string and creates nodes with "prefix" in given "namespace_url" from the parsed index entry text.
      *
      * @param theIndexString             index string
+     * param contents index contents 
      * @param theTargetDocument          target document to create new nodes
      * @param theIndexEntryFoundListener listener to notify that new index entry was found
      * @return the array of nodes after processing index string
      */
-    private Node[] processIndexString(final String theIndexString, final Document theTargetDocument, final IndexEntryFoundListener theIndexEntryFoundListener) {
-        final IndexEntry[] indexEntries = IndexStringProcessor.processIndexString(theIndexString);
+    private Node[] processIndexString(final String theIndexString, final List<Node> contents, final Document theTargetDocument, final IndexEntryFoundListener theIndexEntryFoundListener) {
+        final IndexEntry[] indexEntries = IndexStringProcessor.processIndexString(theIndexString, contents);
 
 
         for (final IndexEntry indexEntrie : indexEntries) {
@@ -355,9 +362,21 @@ public class IndexPreprocessor {
             final Element indexEntryNode = createElement(theTargetDocument, "index.entry");
 
             final Element formattedStringElement = createElement(theTargetDocument, "formatted-value");
-            final Text textNode = theTargetDocument.createTextNode(indexEntry.getFormattedString());
-            textNode.normalize();
-            formattedStringElement.appendChild(textNode);
+            if (indexEntry.getContents() != null) {
+                for (final Iterator<Node> i = indexEntry.getContents().iterator(); i.hasNext();) {
+                    final Node child = i.next();
+                    final Node clone = theTargetDocument.importNode(child, true);
+                    if (!i.hasNext() && clone.getNodeType() == Node.TEXT_NODE) {
+                        final Text t = (Text) clone;
+                        t.setData(t.getData().replaceAll("[\\s\\n]+$", ""));
+                    }
+                    formattedStringElement.appendChild(clone);
+                }
+            } else {
+                final Text textNode = theTargetDocument.createTextNode(indexEntry.getFormattedString());
+                textNode.normalize();
+                formattedStringElement.appendChild(textNode);
+            }
             indexEntryNode.appendChild(formattedStringElement);
 
             final String[] refIDs = indexEntry.getRefIDs();

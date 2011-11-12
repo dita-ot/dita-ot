@@ -1,5 +1,9 @@
 package com.idiominc.ws.opentopic.fo.index2;
 
+import java.util.List;
+
+import org.w3c.dom.Node;
+
 
 /*
 Copyright � 2004-2006 by Idiom Technologies, Inc. All rights reserved.
@@ -68,6 +72,13 @@ public interface IndexEntry {
      *         <code>See "Adobe Framemaker 7.1" help, topic "Adding index markers" (page is "1_15_8_0.html") for details</code>
      */
     public String getFormattedString();
+    
+    /**
+     * Get index term markup content.
+     * 
+     * @return DITA markup content, {@code null} if not available
+     */
+    public List<Node> getContents();
 
 
     /**

@@ -449,7 +449,7 @@ See the accompanying license.txt file for applicable licenses.
 		<xsl:choose>
 		  <!-- Ignore Frame-style markup in index entry text. -->
 		  <xsl:when test="$useFrameIndexMarkup ne 'true'">
-        <xsl:value-of select="$text"/>
+        <xsl:apply-templates select="$text/node()"/>
       </xsl:when>
 			<xsl:when test="starts-with($text, '&lt;')">
 				<xsl:variable name="formatting-name" select="substring-before(substring-after($text, '&lt;'), '&gt;')"/>

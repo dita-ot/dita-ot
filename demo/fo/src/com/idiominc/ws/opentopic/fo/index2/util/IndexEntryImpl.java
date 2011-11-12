@@ -5,6 +5,9 @@ import com.idiominc.ws.opentopic.fo.index2.IndexEntry;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
+
+import org.w3c.dom.Node;
 
 /*
 Copyright � 2004-2006 by Idiom Technologies, Inc. All rights reserved.
@@ -40,6 +43,7 @@ class IndexEntryImpl implements IndexEntry {
     
     private final String value;
     private final String formattedString;
+    private final List<Node> contents;
     private String soString;
     private String sortString;
 
@@ -54,12 +58,22 @@ class IndexEntryImpl implements IndexEntry {
 
     private final ArrayList<String> refIDs = new ArrayList<String>();
 
-
-    public IndexEntryImpl(final String theValue, final String theSoString, final String theSortString, final String theFormattedString) {
+    /**
+     * Index entry constructor.
+     * 
+     * @param theValue string value
+     * @param theSoString FrameMaker SO value 
+     * @param theSortString sort-as value
+     * @param theFormattedString formatter string value
+     * @param contents markup value, may be {@code null}
+     */
+    public IndexEntryImpl(final String theValue, final String theSoString, final String theSortString, final String theFormattedString,
+                          final List<Node> contents) {
         this.value = theValue;
         this.soString = theSoString;
         this.sortString = theSortString;
         this.formattedString = theFormattedString;
+        this.contents = contents;
     }
 
 
@@ -80,6 +94,10 @@ class IndexEntryImpl implements IndexEntry {
 
     public String getFormattedString() {
         return this.formattedString;
+    }
+    
+    public List<Node> getContents() {
+        return contents;
     }
 
 
