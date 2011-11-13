@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
  "reference.dtd">
-<?Pub Inc?>
 <reference id="processing-pipeline-modules" xml:lang="en-us">
 <title>Processing modules in the DITA-OT</title>
 <shortdesc>The DITA-OT processing pipeline is implemented using Ant.
@@ -35,7 +36,6 @@ with the file system to copy files, or which make use of standard
 Java libraries (like those used for index sorting). Java modules are
 also used in many cases where a step involves copying files, such
 as the initial process where source files are parsed and copied to
-a temporary processing directory.</p><?Pub Caret -1?></section>
+a temporary processing directory.</p></section>
 </refbody>
 </reference>
-<?Pub *0000002425?>

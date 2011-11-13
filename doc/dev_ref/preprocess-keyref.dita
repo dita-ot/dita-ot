@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
  "reference.dtd">
-<?Pub Inc?>
 <reference id="preprocess-keyref" xml:lang="en-us">
 <title>Resolve keyref (keyref)</title>
 <shortdesc>The <codeph>keyref</codeph> step examines all keys defined
@@ -12,7 +13,6 @@ replaced by the appropriate target; key based text replacement is
 also evaluated. The keyref mechanism was defined as part of the DITA
 1.2 standard, and is available in DITA-OT 1.5 and later.</shortdesc>
 <refbody>
-<section><p>This step is implemented in Java.</p><?Pub Caret -1?></section>
+<section><p>This step is implemented in Java.</p></section>
 </refbody>
 </reference>
-<?Pub *0000000800?>

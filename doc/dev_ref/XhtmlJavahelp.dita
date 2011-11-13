@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="xhtmljavahelp" xml:lang="en-us">
+<title>Javahelp output</title>
+<shortdesc>The "javahelp" transform type runs several additional Ant
+targets after the XHTML process is completed in order to create control
+files for JavaHelp output.</shortdesc>
+<refbody>
+<section><p>There are two primary targets in the Ant JavaHelp code.<ul>
+<li><codeph>dita.map.javahelp</codeph> creates all of the files needed
+to compile Javahelp, including a table of contents, sorted index,
+and help map file.</li>
+<li><codeph>compile.Java.Help</codeph> searches for a Javahelp compiler
+on the system; if found, it will compile the help project.</li>
+</ul></p></section>
+</refbody>
+</reference>

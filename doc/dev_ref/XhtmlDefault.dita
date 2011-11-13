@@ -4,10 +4,10 @@
  applicable licenses.-->
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
  "reference.dtd">
-<reference id="preprocess-copyfiles" xml:lang="en-us">
-<title>Copy related files (copy-files)</title>
-<shortdesc>The <codeph>copy-files</codeph> step copies related non-DITA
-resources to the output directory, such as HTML files referenced in
-a map or images referenced by DITAVAL files.</shortdesc>
+<reference id="xhtmldefault" xml:lang="en-us">
+<title>Default XHTML output</title>
+<shortdesc>The <codeph>dita.map.xhtml</codeph> target is called by
+default xhtml builds. This target generates a TOC file called index.html,
+which may be loaded into an independent frameset.</shortdesc>
 <refbody></refbody>
 </reference>

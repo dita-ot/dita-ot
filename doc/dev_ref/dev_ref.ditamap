@@ -29,10 +29,19 @@ navtitle="Preprocess Architecture">
 <topicref href="preprocess-maplink.dita"></topicref>
 <topicref href="preprocess-topicpull.dita"></topicref>
 </topicset>
+<topicref collection-type="family" href="XhtmlWithNavigation.dita">
+<topicref href="XhtmlDefault.dita"></topicref>
+<topicref href="XhtmlEclipse.dita"></topicref>
+<topicref href="XhtmlTocjs.dita"></topicref>
+<topicref href="XhtmlCHM.dita"></topicref>
+<topicref href="XhtmlJavahelp.dita"></topicref>
+</topicref>
+<topicref href="PdfDefault.dita"></topicref>
+<topicref href="OdtDefault.dita"></topicref>
 </topicref>
 <topicref href="DITA1.2-implementation-dependent-features.dita">
 </topicref>
-<topicref href="extended-functionality.dita"></topicref><?Pub Caret -2?>
+<topicref href="extended-functionality.dita"></topicref>
 <topicref href="extension-points.dita"></topicref>
 <!-- XXX: is this obsolete? -->
 <topicref href="topicmerge.dita" navtitle="Topic merge"></topicref>

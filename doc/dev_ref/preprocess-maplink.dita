@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
  "reference.dtd">
-<?Pub Inc?>
 <reference id="preprocess-maplink" xml:lang="en-us">
 <title>Map based linking (maplink and move-links)</title>
 <shortdesc>These two steps work together to create links based on
@@ -16,5 +17,4 @@ a single file in the temporary processing directory. Once that file
 is created, the <codeph>move-links</codeph> module runs a Java program
 that pushes the generated links into the proper topics.</p></section>
 </refbody>
-</reference><?Pub Caret -1?>
-<?Pub *0000000969?>
+</reference>

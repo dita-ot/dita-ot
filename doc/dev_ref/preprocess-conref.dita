@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
  "reference.dtd">
-<?Pub Inc?>
 <reference id="preprocess-conref" xml:lang="en-us">
 <title>Conref (conref)</title>
 <shortdesc>The <codeph>conref</codeph> step resolves traditional conref
@@ -43,7 +44,6 @@ document.<codeblock>&lt;section>&lt;title>Sample section&lt;/title>
 &lt;/section></codeblock></p><p>In this case, the ID of the figure
 has been changed to a generated value of "d1e25". At the same time,
 the &lt;xref> element has been updated to use that new generated ID,
-so that the reference stays local in the updated topic.</p><?Pub Caret -1?></section>
+so that the reference stays local in the updated topic.</p></section>
 </refbody>
 </reference>
-<?Pub *0000002544?>

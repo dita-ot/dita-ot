@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
  "reference.dtd">
-<?Pub Inc?>
 <reference id="preprocess-debugfilter" xml:lang="en-us">
 <title>Debug and filter (debug-filter)</title>
 <shortdesc>The <codeph>debug-filter</codeph> stage processes all referenced
@@ -25,7 +26,6 @@ is done only to simplify later conref processing; for example, if
 a table row is pulled into another table, this ensures that a reference
 to "column 5 properties" will continue to work in the fifth column
 of the new table.</li>
-</ul><p>This step is implemented in Java. </p><?Pub Caret -1?></section>
+</ul><p>This step is implemented in Java. </p></section>
 </refbody>
 </reference>
-<?Pub *0000001565?>

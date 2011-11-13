@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
  "reference.dtd">
-<?Pub Sty _display FontColor="red"?>
-<?Pub Inc?>
 <reference id="preprocess-topicpull" xml:lang="en-us">
 <title>Pull content into topics (topicpull)</title>
 <shortdesc>The <codeph>topicpull</codeph> module pulls content into <codeph>&lt;xref></codeph> and <codeph>&lt;link></codeph> elements
@@ -23,6 +23,5 @@ does not have a child <codeph>&lt;desc></codeph> element, and the
 short description of the target can be determined, a <codeph>&lt;desc></codeph> is
 created with the short description of the target.</p><p>This step
 is implemented in XSLT.</p></section>
-</refbody><?Pub Caret -2?>
+</refbody>
 </reference>
-<?Pub *0000001653?>

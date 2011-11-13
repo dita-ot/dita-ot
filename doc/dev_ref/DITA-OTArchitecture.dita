@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
 <!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
  "topic.dtd">
-<?Pub Sty _display FontColor="red"?>
 <topic id="ditaotarch" xml:lang="en-us">
 <title>DITA Open Toolkit Architecture</title>
 <shortdesc>The DITA Open Toolkit is an open source implementation
@@ -26,11 +27,10 @@ Once the pre-processing is completed, the pipeline diverges based
 on the desired output format. Some processing is still common to multiple
 output formats; for example, Eclipse Help and HTML Help both use the
 same routines to generate XHTML topics, after which the two pipelines
-branch to create a different set of navigation files.</p><?Pub Caret 542?><p>The
+branch to create a different set of navigation files.</p><p>The
 following image illustrates how the pipeline works for some common
 output types.</p><image href="images/mainarch.gif" placement="break">
 <alt>Diagram of some possible paths through the transform pipeline.</alt>
 </image></section>
 </body>
 </topic>
-<?Pub *0000002029?>

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
  "reference.dtd">
-<?Pub Inc?>
 <reference id="preprocess-coderef" xml:lang="en-us">
 <title>Resolve code references (codref)</title>
 <shortdesc>The <codeph>coderef</codeph> module resolves references
@@ -12,8 +13,6 @@ in DITA 1.2. This module is available in DITA-OT 1.5 and later.</shortdesc>
 <section><p>The <codeph>&lt;coderef></codeph> element is used inside
 of <codeph>&lt;codeblock></codeph> to reference code stored externally
 in non-XML documents. During the pre-process step, this Java module
-pulls the referenced content into the <codeph>&lt;codeblock></codeph> element.</p><?Pub
-Caret -1?></section>
+pulls the referenced content into the <codeph>&lt;codeblock></codeph> element.</p></section>
 </refbody>
 </reference>
-<?Pub *0000000857?>
