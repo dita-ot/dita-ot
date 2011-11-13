@@ -76,7 +76,9 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:call-template>
                 </xsl:with-param>
             </xsl:apply-templates>
-            <xsl:apply-templates/>
+            <fo:block xsl:use-attribute-sets="prereq__contents">
+              <xsl:apply-templates/>
+            </fo:block>
         </fo:block>
     </xsl:template>
 
@@ -90,7 +92,9 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:call-template>
                 </xsl:with-param>
             </xsl:apply-templates>
-            <xsl:apply-templates/>
+            <fo:block xsl:use-attribute-sets="context__contents">
+              <xsl:apply-templates/>
+            </fo:block>
         </fo:block>
     </xsl:template>
 
@@ -138,23 +142,33 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:call-template>
                 </xsl:with-param>
             </xsl:apply-templates>
-            <xsl:apply-templates/>
+            <fo:block xsl:use-attribute-sets="result__contents">
+              <xsl:apply-templates/>
+            </fo:block>
         </fo:block>
     </xsl:template>
 
+    <!-- If example has a title, process it first; otherwise, create default title (if needed) -->
     <xsl:template match="*[contains(@class, ' task/taskbody ')]/*[contains(@class, ' topic/example ')]">
-        <fo:block xsl:use-attribute-sets="example">
+        <fo:block xsl:use-attribute-sets="task.example">
             <xsl:call-template name="commonattributes"/>
-            <xsl:if test="not(*[contains(@class, ' topic/title ')])">
-              <xsl:apply-templates select="." mode="dita2xslfo:task-heading">
-                <xsl:with-param name="use-label">
-                    <xsl:call-template name="insertVariable">
-                        <xsl:with-param name="theVariableID" select="'Task Example'"/>
-                    </xsl:call-template>
-                </xsl:with-param>
-              </xsl:apply-templates>
-            </xsl:if>
-            <xsl:apply-templates/>
+            <xsl:choose>
+              <xsl:when test="*[contains(@class, ' topic/title ')]">
+                <xsl:apply-templates select="*[contains(@class, ' topic/title ')]"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:apply-templates select="." mode="dita2xslfo:task-heading">
+                  <xsl:with-param name="use-label">
+                      <xsl:call-template name="insertVariable">
+                          <xsl:with-param name="theVariableID" select="'Task Example'"/>
+                      </xsl:call-template>
+                  </xsl:with-param>
+                </xsl:apply-templates>
+              </xsl:otherwise>
+            </xsl:choose>
+            <fo:block xsl:use-attribute-sets="task.example__contents">
+              <xsl:apply-templates select="*[not(contains(@class, ' topic/title '))]|text()|processing-instruction()"/>
+            </fo:block>
         </fo:block>
     </xsl:template>
 
@@ -168,7 +182,9 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:call-template>
                 </xsl:with-param>
             </xsl:apply-templates>
-            <xsl:apply-templates/>
+            <fo:block xsl:use-attribute-sets="postreq__contents">
+              <xsl:apply-templates/>
+            </fo:block>
         </fo:block>
     </xsl:template>
 

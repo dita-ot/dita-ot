@@ -246,6 +246,8 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="line-height"><xsl:value-of select="$default-line-height"/></xsl:attribute>
         <xsl:attribute name="space-before">0.6em</xsl:attribute>
     </xsl:attribute-set>
+    <xsl:attribute-set name="section__contents">
+    </xsl:attribute-set>
 
     <xsl:attribute-set name="example" use-attribute-sets="base-font common.border">
         <xsl:attribute name="line-height"><xsl:value-of select="$default-line-height"/></xsl:attribute>
@@ -253,6 +255,8 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="start-indent">36pt + from-parent(start-indent)</xsl:attribute>
         <xsl:attribute name="end-indent">36pt</xsl:attribute>
         <xsl:attribute name="padding">5pt</xsl:attribute>
+    </xsl:attribute-set>
+    <xsl:attribute-set name="example__contents">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="desc">
