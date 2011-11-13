@@ -43,12 +43,12 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="prereq" use-attribute-sets="section">
     </xsl:attribute-set>
-    <xsl:attribute-set name="prereq__contents" use-attribute-sets="section__contents">
+    <xsl:attribute-set name="prereq__content" use-attribute-sets="section__content">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="context" use-attribute-sets="section">
     </xsl:attribute-set>
-    <xsl:attribute-set name="context__contents" use-attribute-sets="section__contents">
+    <xsl:attribute-set name="context__content" use-attribute-sets="section__content">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="cmd">
@@ -67,17 +67,17 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="result" use-attribute-sets="section">
     </xsl:attribute-set>
-    <xsl:attribute-set name="result__contents" use-attribute-sets="section__contents">
+    <xsl:attribute-set name="result__content" use-attribute-sets="section__content">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="task.example" use-attribute-sets="example">
     </xsl:attribute-set>
-    <xsl:attribute-set name="task.example__contents" use-attribute-sets="example__contents">
+    <xsl:attribute-set name="task.example__content" use-attribute-sets="example__content">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="postreq" use-attribute-sets="section">
     </xsl:attribute-set>
-    <xsl:attribute-set name="postreq__contents" use-attribute-sets="section__contents">
+    <xsl:attribute-set name="postreq__content" use-attribute-sets="section__content">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="stepxmp">

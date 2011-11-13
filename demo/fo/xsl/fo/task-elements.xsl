@@ -76,7 +76,7 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:call-template>
                 </xsl:with-param>
             </xsl:apply-templates>
-            <fo:block xsl:use-attribute-sets="prereq__contents">
+            <fo:block xsl:use-attribute-sets="prereq__content">
               <xsl:apply-templates/>
             </fo:block>
         </fo:block>
@@ -92,7 +92,7 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:call-template>
                 </xsl:with-param>
             </xsl:apply-templates>
-            <fo:block xsl:use-attribute-sets="context__contents">
+            <fo:block xsl:use-attribute-sets="context__content">
               <xsl:apply-templates/>
             </fo:block>
         </fo:block>
@@ -142,7 +142,7 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:call-template>
                 </xsl:with-param>
             </xsl:apply-templates>
-            <fo:block xsl:use-attribute-sets="result__contents">
+            <fo:block xsl:use-attribute-sets="result__content">
               <xsl:apply-templates/>
             </fo:block>
         </fo:block>
@@ -166,7 +166,7 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:apply-templates>
               </xsl:otherwise>
             </xsl:choose>
-            <fo:block xsl:use-attribute-sets="task.example__contents">
+            <fo:block xsl:use-attribute-sets="task.example__content">
               <xsl:apply-templates select="*[not(contains(@class, ' topic/title '))]|text()|processing-instruction()"/>
             </fo:block>
         </fo:block>
@@ -182,7 +182,7 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:call-template>
                 </xsl:with-param>
             </xsl:apply-templates>
-            <fo:block xsl:use-attribute-sets="postreq__contents">
+            <fo:block xsl:use-attribute-sets="postreq__content">
               <xsl:apply-templates/>
             </fo:block>
         </fo:block>
