@@ -68,13 +68,13 @@ public final class Job {
                 throw new IllegalStateException("Job configuration files not found");
             }
         } catch(final IOException e) {
-            throw new IOException("Failed to read file: " + e.getMessage(), e);
+            throw new IOException("Failed to read file: " + e.getMessage());
         } finally {
             if (in != null) {
                 try {
                     in.close();
                 } catch (final IOException e) {
-                    throw new IOException("Failed to close file: " + e.getMessage(), e);
+                    throw new IOException("Failed to close file: " + e.getMessage());
                 }
             }
         }
@@ -92,13 +92,13 @@ public final class Job {
             prop.store(propertiesOutputStream, null);
             propertiesOutputStream.flush();
         } catch (final IOException e) {
-            throw new IOException("Failed to write file: " + e.getMessage(), e);
+            throw new IOException("Failed to write file: " + e.getMessage());
         } finally {
             if (propertiesOutputStream != null) {
                 try {
                     propertiesOutputStream.close();
                 } catch (final IOException e) {
-                    throw new IOException("Failed to close file: " + e.getMessage(), e);
+                    throw new IOException("Failed to close file: " + e.getMessage());
                 }
             }
         }
