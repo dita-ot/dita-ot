@@ -11,13 +11,16 @@ package org.dita.dost.module;
 
 import static org.dita.dost.util.Constants.*;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.PrintStream;
 import java.io.Writer;
 import java.util.Date;
 import java.util.HashMap;
@@ -323,7 +326,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             } else {
                 listReader.read(new File(tempDir, FILE_NAME_DITA_LIST).getAbsolutePath());
             }
-            performCopytoTask(tempDir, listReader.getCopytoMap());
+            performCopytoTask(tempDir,  listReader );
         } catch (final Exception e) {
             e.printStackTrace();
             throw new DITAOTException("Exception doing debug and filter module processing: " + e.getMessage(), e);
@@ -578,7 +581,8 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
     /*
      * Execute copy-to task, generate copy-to targets base on sources
      */
-    private void performCopytoTask(final String tempDir, final Map<String, String> copytoMap) {
+    private void performCopytoTask(final String tempDir, final ListReader listReader) {
+    	Map<String, String> copytoMap  = listReader.getCopytoMap();
         final Iterator<Map.Entry<String, String>> iter = copytoMap.entrySet().iterator();
         while (iter.hasNext()) {
             final Map.Entry<String, String> entry = iter.next();
@@ -598,7 +602,70 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                 logger.logWarn(MessageUtils.getMessage("DOTX064W", prop).toString());
                 //edited by Alan on Date:2009-11-02 for Work Item:#1590 end
             }else{
-                FileUtils.copyFile(srcFile, targetFile);
+                String inputMapInTemp = new File(tempDir + File.separator + listReader.getInputMap()).getAbsolutePath();
+                copyFileWithPIReplaced(srcFile, targetFile, copytoTarget, inputMapInTemp);
+            }
+        }
+    }
+    
+    
+    public void copyFileWithPIReplaced(final File src, final File target, String copytoTargetFilename, String inputMapInTemp ) {
+        BufferedReader bfis = null;
+        OutputStreamWriter bfos = null;
+        
+        
+
+        try {
+        	//calculate workdir and path2project
+            String workdir = null;
+            String path2project = null;  
+        	DitaWriter dw = new DitaWriter();
+        	path2project = dw.getPathtoProject(copytoTargetFilename, target.getAbsolutePath(), inputMapInTemp);
+        	workdir = target.getParentFile().getCanonicalPath();
+            
+            bfis = new BufferedReader(new InputStreamReader(new FileInputStream(src),UTF8));
+            bfos = new OutputStreamWriter(new FileOutputStream(target), UTF8);
+            
+            for (String line = bfis.readLine(); line != null; line = bfis.readLine()) {
+            	if(line.indexOf(DitaWriter.PI_WORKDIR_TARGET)!=-1) {
+            		bfos.write(LESS_THAN + QUESTION);
+            		bfos.write(DitaWriter.PI_WORKDIR_TARGET);
+                    if (workdir != null) {
+                    	bfos.write(STRING_BLANK + workdir);
+                    }
+                    bfos.write(QUESTION + GREATER_THAN);
+        
+            		bfos.write(LINE_SEPARATOR);
+            	} else if (line.indexOf(DitaWriter.PI_PATH2PROJ_TARGET)!=-1) {
+               		bfos.write(LESS_THAN + QUESTION);
+            		bfos.write(DitaWriter.PI_PATH2PROJ_TARGET);
+                    if (path2project != null) {
+                    	bfos.write(STRING_BLANK + path2project);
+                    }
+                    bfos.write(QUESTION + GREATER_THAN);       
+                    bfos.write(LINE_SEPARATOR);
+            	} else {           	
+            		bfos.write(line);
+            		bfos.write(LINE_SEPARATOR);
+            	}
+            }
+            bfos.flush();
+        } catch (final IOException ex) {
+            logger.logException(ex);
+        } finally {
+            if (bfis != null) {
+                try {
+                    bfis.close();
+                } catch (final Exception e) {
+                    logger.logException(e);
+                }
+            }
+            if (bfos != null) {
+                try {
+                    bfos.close();
+                } catch (final Exception e) {
+                    logger.logException(e);
+                }
             }
         }
     }

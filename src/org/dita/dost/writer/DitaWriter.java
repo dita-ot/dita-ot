@@ -1256,6 +1256,7 @@ public final class DitaWriter extends AbstractXMLWriter {
                                 :filename.substring(index+1, fileExtIndex)+extName);
 
                 //when it is not the old solution 3
+                
                 if(OutputUtils.getGeneratecopyouter()!=OutputUtils.Generate.OLDSOLUTION){
                     if(isOutFile(traceFilename)){
 
@@ -1270,11 +1271,13 @@ public final class DitaWriter extends AbstractXMLWriter {
                 } else {
                     path2Project = FileUtils.getPathtoProject(filename.substring(index+1));
                 }
+                
             }else{
                 traceFilename = filename;
                 outputFilename.append((fileExtIndex == -1)
                         ? filename
                                 : filename.substring(0, fileExtIndex)+extName);
+                
                 if(OutputUtils.getGeneratecopyouter()!=OutputUtils.Generate.OLDSOLUTION){
                     if(isOutFile(traceFilename)){
 
@@ -1289,6 +1292,7 @@ public final class DitaWriter extends AbstractXMLWriter {
                 } else {
                     path2Project = FileUtils.getPathtoProject(filename);
                 }
+                
             }
             outputFile = new File(outputFilename.toString());
             counterMap = new HashMap<String, Integer>();
@@ -1328,6 +1332,24 @@ public final class DitaWriter extends AbstractXMLWriter {
         }
     }
 
+    public String getPathtoProject (String filename, String traceFilename, String inputMap) {
+    	String path2Project = null;
+    	 if(OutputUtils.getGeneratecopyouter()!=OutputUtils.Generate.OLDSOLUTION){
+             if(isOutFile(traceFilename)){
+
+                 path2Project=getRelativePathFromOut(traceFilename);
+             }else{
+                 path2Project=FileUtils.getRelativePathFromMap(traceFilename,inputMap);
+                 path2Project=new File(path2Project).getParent();
+                 if(path2Project!=null && path2Project.length()>0){
+                     path2Project=path2Project+File.separator;
+                 }
+             }
+         } else {
+             path2Project = FileUtils.getPathtoProject(filename);
+         }
+    	 return path2Project;
+    }
     /**
      * Just for the overflowing files.
      * @param overflowingFile overflowingFile
