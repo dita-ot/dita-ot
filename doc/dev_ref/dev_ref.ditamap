@@ -39,10 +39,27 @@ navtitle="Preprocess Architecture">
 <topicref href="PdfDefault.dita"></topicref>
 <topicref href="OdtDefault.dita"></topicref>
 </topicref>
+<topicref href="extending-the-ot.dita"></topicref>
+<topicset href="plugins-overview.dita" id="plugins">
+<topicref href="plugin-configfile.dita"></topicref>
+<topicref href="plugin-xmlcatalog.dita"></topicref>
+<topicref href="plugin-anttarget.dita"></topicref>
+<topicref href="plugin-antpreprocess.dita"></topicref>
+<topicref href="plugin-newtranstype.dita"></topicref>
+<topicref href="plugin-overridestyle.dita"></topicref>
+<topicref href="plugin-addgeneratedtext.dita"></topicref>
+<topicref href="plugin-xsltparams.dita"></topicref>
+<topicref href="plugin-javalib.dita"></topicref>
+<topicref href="plugin-messages.dita"></topicref>
+<topicref href="plugin-dependencies.dita"></topicref>
+<topicref href="plugin-support.dita"></topicref>
+<topicref href="plugin-newextensions.dita"></topicref>
+<topicref href="plugin-sample.dita"></topicref>
+</topicset>
+<topicref href="plugins-installing.dita"></topicref>
 <topicref href="DITA1.2-implementation-dependent-features.dita">
 </topicref>
 <topicref href="extended-functionality.dita"></topicref>
-<topicref href="extension-points.dita"></topicref>
 <!-- XXX: is this obsolete? -->
 <topicref href="topicmerge.dita" navtitle="Topic merge"></topicref>
 <!--The following topic needs o be updated. robert to work with Eric-->

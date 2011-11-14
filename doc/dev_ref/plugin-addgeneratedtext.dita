@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<?Pub Inc?>
+<reference id="plugin-addgeneratedtext" xml:lang="en-us">
+<title>Adding new generated text</title>
+<shortdesc>Generated text is the term for strings that are automatically
+added by the build, such as "Note" before the contents of a &lt;note>
+element.</shortdesc>
+<refbody>
+<section>       <p>The generated text extension point is used to add
+new strings to the default set of         Generated Text.</p>    
+  <dl><dlentry>
+<dt><codeph>dita.xsl.strings</codeph></dt>
+<dd>Add new strings to generated text file. </dd>
+</dlentry></dl>       </section>
+<example>         <p>Copy the file <filepath>xsl/common/strings.xml</filepath> to
+your plugin, and edit it to           contain the languages that you
+are providing translations for ("en-us" must be present).        
+   Copy the file <filepath>xsl/common/strings-en-us.xml</filepath> to
+your plugin, and           replace the content with your own strings,
+being sure to give them unique name attributes.           Do the same
+for each language that you are providing a translation for. </p> 
+       <p>Use the following extension code to include your strings
+in the set of generated text: </p>         <codeblock>&lt;feature extension="dita.xsl.strings" file="xsl/common/strings.xml"/></codeblock> 
+       <p>The string is now available to the XSLT "getString" template. </p> 
+     </example>
+</refbody><?Pub Caret -1?>
+</reference>
+<?Pub *0000001577?>

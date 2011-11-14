@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<?Pub Inc?>
+<reference id="plugin-messages" xml:lang="en-us">
+<title>Adding diagnostic messages</title>
+<shortdesc>Plug-in specific warning and error messages can be added
+to the set of messages supplied by         DITA-OT.</shortdesc>
+<refbody>
+<section>       <dl><dlentry>
+<dt><codeph>dita.xsl.messages</codeph></dt>
+<dd>Add new messages to diagnostic message file.</dd>
+</dlentry></dl>       </section>
+<example>       <p>To add your own messages, create the message in
+an XML file           <filepath>myMessages.xml</filepath>: </p><codeblock>&lt;dummy>
+  &lt;!-- See resource/messages.xml for the details. -->
+  &lt;message id="myMessageId" type="WARN">
+    &lt;reason>...&lt;/reason>
+    &lt;response>...&lt;/response>
+  &lt;/message>
+&lt;/dummy></codeblock><?Pub Caret -2?><p>And incorporate them with
+the extension: </p><codeblock>&lt;feature extension="dita.xsl.messages" file="myMessages.xml"/></codeblock></example>
+</refbody>
+</reference>
+<?Pub *0000001133?>

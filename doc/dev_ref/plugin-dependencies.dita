@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<?Pub Inc?>
+<reference id="plugin-dependencies" xml:lang="en-us">
+<title>Managing plug-in dependencies</title>
+<shortdesc>The <codeph>&lt;require></codeph> element in a <filepath>plugin.xml</filepath> file
+is used to create a dependency on another plug-in. The <codeph>&lt;require></codeph> element
+requires the <codeph>plugin</codeph> attribute in order to reference
+the dependency.</shortdesc>
+<refbody>
+<section>       <p>If the current plugin requires a         plugin
+with <codeph>id="plugin-id"</codeph> before it can be installed, it
+would include the         following: </p>       <codeblock>&lt;require plugin="<i>plugin-id</i>"></codeblock> 
+     <p>Prerequisite plugins are integrated before the current plugin
+is integrated. This does the         right thing with respect to XSLT
+overrides. If your plugin is a specialization of a         specialization,
+it should <codeph>&lt;require></codeph> its base plugins, in order
+from         general to specific. </p>       <p>If a prerequisite
+plugin is missing, a warning will be printed during integration. To
+        suppress this, but keep the integration order if both plugins
+are present, add           <codeph>importance="optional"</codeph> to
+the <codeph>&lt;require></codeph> element. </p>       <p>If your plugin
+can depend on any one of several optional plugins, separate the plugin
+ids         with a vertical bar. This is most useful when combined
+with importance="optional": </p>       </section>
+<example>         <codeblock>&lt;require plugin="pluginA|pluginB" importance="optional"/></codeblock><?Pub
+Caret -2?>       </example>
+</refbody>
+</reference>
+<?Pub *0000001807?>

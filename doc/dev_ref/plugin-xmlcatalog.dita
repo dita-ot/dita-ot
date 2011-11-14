@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<?Pub Inc?>
+<reference id="plugin-xmlcatalog" xml:lang="en-us">
+<title>Extending the XML Catalog</title>
+<shortdesc>The XML Catalogs extension point is used to update the
+XML Catalogs used to resolve DTD or Schema document types, or to add
+URI mappings.</shortdesc>
+<refbody>
+<section>       <p>To do this, first create a catalog with only  
+      your new values, using the OASIS Catalog format, and place that
+in your plug-in. Local file references in the catalog should be relative
+to the location of the catalog. The following extension points are
+available to work with catalogs.</p><dl><dlentry>
+<dt><codeph>dita.specialization.catalog.relative</codeph></dt>
+<dt importance="deprecated"><codeph>dita.specialization.catalog</codeph></dt>
+<dd>             <p>Adds the content of the catalog file defined in <codeph>file</codeph> attribute
+to               main DITA-OT catalog file.</p>             <note
+type="remember">The <codeph>dita.specialization.catalog</codeph> extension
+is deprecated. Use <codeph>dita.specialization.catalog.relative</codeph> instead.</note> 
+         </dd>
+</dlentry><dlentry>
+<dt><codeph>org.dita.pdf2.catalog.relative</codeph></dt>
+<dd>             <p>Adds the content of the catalog file defined in <codeph>file</codeph> attribute
+to               main PDF plug-in catalog file.</p>           </dd>
+</dlentry></dl>       </section>
+<example>         <codeblock>&lt;feature extension="dita.specialization.catalog.relative" file="catalog-dita.xml"/></codeblock> 
+     </example><?Pub Caret -2?>
+</refbody>
+</reference>
+<?Pub *0000001733?>
