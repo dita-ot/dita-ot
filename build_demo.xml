@@ -105,6 +105,8 @@ http://docs.oasis-open.org/dita/v1.2/spec/DITA1.2-spec.html</echo>
 		value="${dita.output.samples.dir}${file.separator}javahelp"/>
 	<property name="dita.output.samples.htmlhelp.dir"
 		value="${dita.output.samples.dir}${file.separator}htmlhelp"/>
+	<property name="dita.output.samples.tocjs.dir"
+		value="${dita.output.samples.dir}${file.separator}tocjs"/>
 	<property name="dita.output.samples.pdf.dir"
 		value="${dita.output.samples.dir}${file.separator}pdf"/>
   
@@ -561,7 +563,7 @@ http://docs.oasis-open.org/dita/v1.2/spec/DITA1.2-spec.html
 
 	<target name="samples"
 		description="build the sample output"
-		depends="samples.web, samples.eclipse, samples.javahelp, samples.htmlhelp, samples.pdf">
+		depends="samples.web, samples.eclipse, samples.javahelp, samples.htmlhelp, samples.tocjs, samples.pdf">
 	</target>
 
 	<target name="samples.init" depends="init">
@@ -592,6 +594,17 @@ http://docs.oasis-open.org/dita/v1.2/spec/DITA1.2-spec.html
 				value="${dita.samples.dir}${file.separator}hierarchy.ditamap"/>
 			<param name="output.dir"     value="${dita.output.samples.eclipse.dir}"/>
       <param name="transtype" value="eclipsehelp"/>
+		</antcall>
+	</target>
+
+	<target name="samples.tocjs"
+		description="build the samples for TocJS"
+		depends="samples.init">
+		<antcall target="dita2tocjs">
+			<param name="args.input"
+				value="${dita.samples.dir}${file.separator}hierarchy.ditamap"/>
+			<param name="output.dir"     value="${dita.output.samples.tocjs.dir}"/>
+      <param name="transtype" value="tocjs"/>
 		</antcall>
 	</target>
 
@@ -671,6 +684,11 @@ http://docs.oasis-open.org/dita/v1.2/spec/DITA1.2-spec.html
 		<delete dir="${dita.output.samples.eclipse.dir}"/>
 	</target>
 
+	<target name="clean.samples.tocjs"
+		description="remove the sample TocJS output">
+		<delete dir="${dita.output.samples.tocjs.dir}"/>
+	</target>
+
 	<target name="clean.samples.javahelp"
 		description="remove the sample JavaHelp output">
 		<delete dir="${dita.output.samples.javahelp.dir}"/>
@@ -725,15 +743,18 @@ to accept the default.</echo>
 			defaultvalue="out"/>
 		<echo>
 Please enter the type of output to generate.
-Options include: eclipse, htmlhelp, javahelp, pdf, or web
+Options include: eclipse, tocjs, htmlhelp, javahelp, pdf, or web
 Use lowercase letters.
 		</echo>
 		<input message="The output type: "
 			addproperty="prompt.output.type"
-			validargs="eclipse,htmlhelp,javahelp,pdf,web,docbook"
+			validargs="eclipse,tocjs,htmlhelp,javahelp,pdf,web,docbook"
 			defaultvalue="web"/>
 		<condition property="isEclipseOutput">
 			<equals arg1="${prompt.output.type}" arg2="eclipse"/>
+		</condition>
+		<condition property="isTocjsOutput">
+			<equals arg1="${prompt.output.type}" arg2="tocjs"/>
 		</condition>
 		<condition property="isHtmlHelpOutput">
 			<equals arg1="${prompt.output.type}" arg2="htmlhelp"/>
@@ -783,7 +804,7 @@ Before rebuilding, please delete the output or the directory.</echo>
 	</target>
 
 	<target name="prompt.output"
-		depends="prompt.output.eclipse, prompt.output.javahelp, prompt.output.htmlhelp, prompt.output.pdf, prompt.output.web, prompt.output.docbook"/>
+		depends="prompt.output.eclipse, prompt.output.tocjs, prompt.output.javahelp, prompt.output.htmlhelp, prompt.output.pdf, prompt.output.web, prompt.output.docbook"/>
 
 	<target name="prompt.output.web" depends="prompt.output.init"
 		if="isWebOutput">			
@@ -808,6 +829,16 @@ Before rebuilding, please delete the output or the directory.</echo>
 			<param name="args.eclipse.toc" value="toc"/>
 			<param name="dita.temp.dir" value="temp"/>
       <param name="transtype" value="eclipsehelp"/>
+		</antcall>
+	</target>
+
+	<target name="prompt.output.tocjs" depends="prompt.output.init"
+		if="isTocjsOutput">
+		<antcall target="dita2tocjs">
+			<param name="args.input"      value="${prompt.ditamap.filename}"/>
+			<param name="output.dir"     value="${prompt.output.directory}"/>
+			<param name="dita.temp.dir" value="temp"/>
+      <param name="transtype" value="tocjs"/>
 		</antcall>
 	</target>
 
