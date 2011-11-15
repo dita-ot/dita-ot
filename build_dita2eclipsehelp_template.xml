@@ -3,12 +3,7 @@
      Sourceforge.net. See the accompanying license.txt file for 
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
-<project name="dita2eclipsehelp" default="dita2eclipsehelp">
-    <property name="transtype" value="eclipsehelp"/>
-    
-    <import file="build_init.xml" />
-    <import file="build_preprocess.xml" />
-    <import file="build_general.xml"/>
+<project name="dita2eclipsehelp">
 	
 	   <target name="dita.index.eclipsehelp.init">
 	      <condition property="dita.eclipsehelp.index.class" value="org.dita.dost.writer.EclipseIndexWriter"> 

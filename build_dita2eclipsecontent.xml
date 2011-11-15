@@ -3,12 +3,7 @@
      Sourceforge.net. See the accompanying license.txt file for 
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
-<project name="dita2eclipsecontent" default="dita2eclipsecontent">
-  <property name="transtype" value="eclipsecontent"/>
-    
-  <import file="build_init.xml" />
-  <import file="build_preprocess.xml" />
-  <import file="build_general.xml" />
+<project name="dita2eclipsecontent">
 
   <target name="dita2eclipsecontent" unless="noMap"
     depends="build-init, preprocess, dita.topics.eclipse.content, 
