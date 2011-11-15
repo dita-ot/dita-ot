@@ -70,7 +70,7 @@ See the accompanying license.txt file for applicable licenses.
   
   <!-- titles -->
   <xsl:attribute-set name="common.title">
-    <xsl:attribute name="font-family">Sans</xsl:attribute>
+    <xsl:attribute name="font-family">sans-serif</xsl:attribute>
   </xsl:attribute-set>
   
   <!-- paragraph-like blocks -->
@@ -383,7 +383,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="linefeed-treatment">preserve</xsl:attribute>
         <xsl:attribute name="wrap-option">wrap</xsl:attribute>
         <xsl:attribute name="background-color">#f0f0f0</xsl:attribute>
-        <xsl:attribute name="font-family">Monospaced</xsl:attribute>
+        <xsl:attribute name="font-family">monospace</xsl:attribute>
         <xsl:attribute name="line-height">106%</xsl:attribute>
     </xsl:attribute-set>
 
@@ -645,7 +645,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__fo__root" use-attribute-sets="base-font">
-        <xsl:attribute name="font-family">Serif</xsl:attribute>
+        <xsl:attribute name="font-family">serif</xsl:attribute>
         <xsl:attribute name="xml:lang" select="translate($locale, '_', '-')"/>
         <xsl:attribute name="writing-mode" select="$writing-mode"/>
     </xsl:attribute-set>

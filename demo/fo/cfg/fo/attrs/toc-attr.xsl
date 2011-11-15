@@ -132,7 +132,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="__toc__mini">
         <xsl:attribute name="font-size">10.5pt</xsl:attribute>
-        <xsl:attribute name="font-family">Sans</xsl:attribute>
+        <xsl:attribute name="font-family">sans-serif</xsl:attribute>
         <xsl:attribute name="end-indent">5pt</xsl:attribute>
     </xsl:attribute-set>
 

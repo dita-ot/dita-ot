@@ -34,7 +34,7 @@ See the accompanying license.txt file for applicable licenses.
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
 
     <xsl:attribute-set name="msgph" use-attribute-sets="base-font">
-        <xsl:attribute name="font-family">Monospaced</xsl:attribute>
+        <xsl:attribute name="font-family">monospace</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="msgblock">
@@ -44,7 +44,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="cmdname" use-attribute-sets="base-font">
-        <xsl:attribute name="font-family">Monospaced</xsl:attribute>
+        <xsl:attribute name="font-family">monospace</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="varname">
@@ -52,15 +52,15 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="filepath" use-attribute-sets="base-font">
-        <xsl:attribute name="font-family">Monospaced</xsl:attribute>
+        <xsl:attribute name="font-family">monospace</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="userinput" use-attribute-sets="base-font">
-        <xsl:attribute name="font-family">Monospaced</xsl:attribute>
+        <xsl:attribute name="font-family">monospace</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="systemoutput" use-attribute-sets="base-font">
-        <xsl:attribute name="font-family">Monospaced</xsl:attribute>
+        <xsl:attribute name="font-family">monospace</xsl:attribute>
     </xsl:attribute-set>
 
 </xsl:stylesheet>
