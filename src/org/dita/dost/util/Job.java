@@ -108,13 +108,13 @@ public final class Job {
             prop.storeToXML(xmlOutputStream, null);
             xmlOutputStream.flush();
         } catch (final IOException e) {
-            throw new IOException("Failed to write file: " + e.getMessage(), e);
+            throw new IOException("Failed to write file: " + e.getMessage());
         } finally {
             if (xmlOutputStream != null) {
                 try {
                     xmlOutputStream.close();
                 } catch (final IOException e) {
-                    throw new IOException("Failed to close file: " + e.getMessage(), e);
+                    throw new IOException("Failed to close file: " + e.getMessage());
                 }
             }
         }
