@@ -46,7 +46,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="tt" use-attribute-sets="base-font">
-        <xsl:attribute name="font-family">Monospaced</xsl:attribute>
+        <xsl:attribute name="font-family">monospace</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="sup">

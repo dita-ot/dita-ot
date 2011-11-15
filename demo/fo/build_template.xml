@@ -52,6 +52,13 @@ with those set forth herein.
     <property name="customization.dir" value="${dita.plugin.org.dita.pdf2.dir}/Customization"/>
     <property file="${customization.dir}/build.properties"/>
     
+    <condition property="pdf2.i18n.skip" value="true">
+      <and>
+        <isset property="pdf2.i18n.enabled"/>
+        <isfalse value="${pdf2.i18n.enabled}"/>
+      </and>
+    </condition>
+    
     <property name="default.locale" value="en_US"/>
     
     <!-- legacy property -->
@@ -361,7 +368,10 @@ with those set forth herein.
     </java>
   </target>
 
-  <target name="transform.topic2fo.i18n">
+  <target name="transform.topic2fo.i18n"
+          depends="transform.topic2fo.i18n.filter,
+                   transform.topic2fo.i18n.no-filter"/>
+  <target name="transform.topic2fo.i18n.filter" unless="pdf2.i18n.skip">
     <taskdef classname="com.idiominc.ws.opentopic.fo.i18n.PreprocessorTask" name="i18n-preprocess"
              classpathref="project.class.path"/>
     
@@ -401,6 +411,10 @@ with those set forth herein.
         <catalogpath path="${xml.catalog.files}"/>
       </xmlcatalog>
     </xslt>
+  </target>
+  <target name="transform.topic2fo.i18n.no-filter" if="pdf2.i18n.skip">
+    <echo level="info">Skip I18N font processing.</echo>
+    <move file="${dita.temp.dir}/stage2.fo" tofile="${pdf2.temp.dir}/topic.fo"/>
   </target>
 
   <target name="transform.topic2pdf"

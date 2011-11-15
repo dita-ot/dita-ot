@@ -34,7 +34,16 @@ See the accompanying license.txt file for applicable licenses.
 <font-mappings>
 
         <font-table>
-
+    <!-- Backwards compatibility aliases -->
+    <aliases>
+      <alias name="serif">Serif</alias>
+    </aliases>
+    <aliases>
+      <alias name="sans-serif">Sans</alias>
+    </aliases>
+    <aliases>
+      <alias name="monospace">Monospaced</alias>
+    </aliases>
                 <aliases>
                         <alias name="Helvetica">Normal</alias>
                 </aliases>
