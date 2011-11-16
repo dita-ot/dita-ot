@@ -54,8 +54,8 @@ with those set forth herein.
     
     <condition property="pdf2.i18n.skip" value="true">
       <and>
-        <isset property="pdf2.i18n.enabled"/>
-        <isfalse value="${pdf2.i18n.enabled}"/>
+        <isset property="org.dita.pdf2.i18n.enabled"/>
+        <isfalse value="${org.dita.pdf2.i18n.enabled}"/>
       </and>
     </condition>
     
@@ -362,7 +362,7 @@ with those set forth herein.
       <arg line='"antArgsIncludeRelatedLinks=${args.fo.include.rellinks}"'/>
       <arg line='"antArgsGenerateTaskLabels=${args.gen.task.lbl}"'/>
       <arg line='"pdfFormatter=${pdf.formatter}"'/>
-      <arg line='"useFrameIndexMarkup=${pdf.index.frame-markup}"'/>
+      <arg line='"useFrameIndexMarkup=${org.dita.pdf2.index.frame-markup}"'/>
       <arg line='"bookmap-order=${args.bookmap-order}"'/>
       <sysproperty key="xml.catalog.files" value="${xml.catalog.files}"/>
     </java>

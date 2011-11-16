@@ -60,7 +60,7 @@ public final class IndexPreprocessor {
     private static final String elIndexRangeStartName = "start";
     private static final String elIndexRangeEndName = "end";
     
-    public static final boolean USES_FRAME_MARKUP = Boolean.parseBoolean(Configuration.configuration.get("pdf.index.frame-markup"));
+    public static final boolean USES_FRAME_MARKUP = Boolean.parseBoolean(Configuration.configuration.get("org.dita.pdf2.index.frame-markup"));
 
     /**
      * Create new index preprocessor.

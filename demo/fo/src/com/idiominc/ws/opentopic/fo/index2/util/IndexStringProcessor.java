@@ -55,7 +55,7 @@ public abstract class IndexStringProcessor {
     private static final String GT = ">";
 
     /**
-     * Parse the index marker string and create IndexEntry object from one. If pdf.index.frame-markup property
+     * Parse the index marker string and create IndexEntry object from one. If {@code org.dita.pdf2.index.frame-markup} property
      * is true, the text is parsed for Frame style markup and the result may be multiple IndexEntry instances. 
      * Otherwise, the text of the index term is taken as-is.
      *

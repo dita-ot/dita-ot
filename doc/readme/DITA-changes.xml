@@ -135,11 +135,11 @@ going back to the beginning of the toolkit. </shortdesc>
               <codeph>true</codeph>; support for the legacy processing model may be removed in
             future releases.</p>
           <p>Support for FrameMaker index syntax has been disabled by default. To enable FrameMaker
-            index syntax, set <codeph>index.uses.frame.markup</codeph> to <codeph>true</codeph> in
+            index syntax, set <codeph>org.dita.pdf2.index.frame-markup</codeph> to <codeph>true</codeph> in
             configuration properties.</p>
           <p>A configuration option has been added to disable I18N font processing and use
             stylesheet defined fonts. To disable I18N font processing, set
-              <codeph>pdf2.i18n.enabled</codeph> to <codeph>false</codeph> in configuration
+              <codeph>org.dita.pdf2.i18n.enabled</codeph> to <codeph>false</codeph> in configuration
             properties</p>
         </section>
         <section id="section_cnx_gmd_g2">
