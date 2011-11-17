@@ -36,6 +36,7 @@ See the accompanying license.txt file for applicable licenses.
     version="2.0">
 
     <xsl:variable name="toc.text-indent" select="'14pt'"/>
+    <xsl:variable name="toc.toc-indent" select="'30pt'"/>
 
     <xsl:attribute-set name="__toc__header" use-attribute-sets="common.title">
         <xsl:attribute name="space-before">0pt</xsl:attribute>
@@ -126,7 +127,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="__toc__indent">
         <xsl:attribute name="start-indent">
             <xsl:variable name="level" select="count(ancestor-or-self::*[contains(@class, ' topic/topic ')])"/>
-            <xsl:value-of select="concat($side-col-width, ' + ', string((number($level) - 1) * 30), 'pt + ', $toc.text-indent)"/>
+            <xsl:value-of select="concat($side-col-width, ' + (', string($level - 1), ' * ', $toc.toc-indent, ') + ', $toc.text-indent)"/>
         </xsl:attribute>
     </xsl:attribute-set>
 
