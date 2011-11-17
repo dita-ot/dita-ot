@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference
+  PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="rel1.5.4" ditaarch:DITAArchVersion="1.2"><title>DITA Open Toolkit Release 1.5.4</title><reference id="general-enhancements-and-changes" ditaarch:DITAArchVersion="1.2"><title>General Enhancements and Changes</title><refbody><section id="section_vc5_gld_g2">
+          <title>Configuration file for defaults</title>
+          <p>In previous versions, <filepath>lib/configuration.properties</filepath> was generated
+            by integration process. Integration has been changed to generate
+              <filepath>lib/org.dita.dost.platform/plugin.properties</filepath> and the role of the
+            old <filepath>lib/configuration.properties</filepath> has been changed to contain
+            defaults and configuration options, such as default language.</p>
+        </section><section>
+        <title>Plug-in extension point for file extension configuration</title>
+          <p>New plug-in extension points have been added allow configuring DITA-OT behaviour based
+            on file extensions.</p>
+          <simpletable id="simpletable_xym_ryi_uc"><sthead><stentry>Extension point</stentry><stentry>Description</stentry><stentry>Default values</stentry></sthead><strow><stentry><codeph>dita.topic.extension</codeph></stentry><stentry>DITA topic</stentry><stentry><filepath>.dita</filepath>, <filepath>.xml</filepath></stentry></strow><strow><stentry><codeph>dita.map.extensions</codeph></stentry><stentry>DITA map</stentry><stentry><filepath>.ditamap</filepath></stentry></strow><strow><stentry><codeph>dita.html.extensions</codeph></stentry><stentry>HTML file</stentry><stentry><filepath>.html</filepath>, <filepath>.htm</filepath></stentry></strow><strow><stentry><codeph>dita.resource.extensions</codeph></stentry><stentry>Resource file</stentry><stentry><filepath>.pdf</filepath>, <filepath>.swf</filepath></stentry></strow></simpletable><p>Both HTML and resource file extensions are used to determine if a
+          file in source is copied to output.</p>
+        <p>New plug-in extension point has been added to allow declaring transtypes as print types.</p>
+        <simpletable><sthead><stentry>Extension point</stentry><stentry>Description</stentry></sthead><strow><stentry><codeph>dita.transtype.print</codeph></stentry><stentry>Declare transtype as a print type.</stentry></strow></simpletable>
+      </section><section>
+          <title>Strict integration mode</title>
+          <p>Two modes have been added to integration process: lax and strict. In strict mode the
+            processing will fail if any errors are encountered. In lax mode an error message may be
+            thrown for an error and the integration process will try to run to the end, even if
+            there are errors that were unrecoverable. The default mode is lax.</p>
+          <note>In lax mode, even if the process runs to the end and reports a successful result,
+            DITA-OT may not be able to function correctly because of e.g. corrupted plug-in files or
+            unprocessed template files.</note>
+        </section><section id="section_dcd_yhr_wc">
+          <title>Code reference charset support</title>
+          <p>Encoding of the code reference target file can be set using the <codeph>format</codeph>
+            attribute, for example </p>
+          <codeblock xml:space="preserve">&lt;coderef href="unicode.txt" format="txt; charset=UTF-8"/&gt; </codeblock>
+        </section><section>
+          <title>Plugin URI scheme</title>
+          <p>Support for <keyword>plugin</keyword> URI scheme has been added to XSLT stylesheets.
+            Plug-ins can refer to files in other plug-ins without hard coding relative paths, for
+            example </p>
+          <codeblock xml:space="preserve">&lt;xsl:import href="plugin:org.dita.pdf2:xsl/fo/topic2fo_1.0.xsl"/&gt;</codeblock>
+        </section><section id="section_mdj_zcw_td">
+          <title>PDF</title>
+          <p>Support for mirrored page layout has been added. The default is the unmirrored
+            layout.</p>
+          <p>The <codeph>args.bookmap-order</codeph> property has been added to control how front
+            and back matter are processed in bookmaps. The default is to reorder the frontmatter
+            content as in previous releases.</p>
+          <p>A new extension point has been added to add mappings to the PDF configuration catalog
+            file.</p>
+          <simpletable><sthead><stentry>Extension point</stentry><stentry>Description</stentry></sthead><strow><stentry><codeph>org.dita.pdf2.catalog.relative</codeph></stentry><stentry>Configuration catalog includes.</stentry></strow></simpletable>
+          <p>Support for the following languages has been added:</p>
+          <ul><li>Finnish</li><li>Hebrew</li><li>Romanian</li><li>Russian</li><li>Swedish</li></ul>
+          <p>PDF processing no longer copies images or generates XSL FO to output directory.
+            Instead, the temporary directory is used for all temporary files and source images are
+            read directly from source directory. The legacy processing model can be enabled by
+            setting <codeph>org.dita.pdf2.legacy.use-out-temp</codeph> property to value
+              <codeph>true</codeph>; support for the legacy processing model may be removed in
+            future releases.</p>
+          <p>Support for FrameMaker index syntax has been disabled by default. To enable FrameMaker
+            index syntax, set <codeph>org.dita.pdf2.index.frame-markup</codeph> to <codeph>true</codeph> in
+            configuration properties.</p>
+          <p>A configuration option has been added to disable I18N font processing and use
+            stylesheet defined fonts. To disable I18N font processing, set
+              <codeph>org.dita.pdf2.i18n.enabled</codeph> to <codeph>false</codeph> in configuration
+            properties</p>
+        </section><section id="section_cnx_gmd_g2">
+          <title>XHTML</title>
+          <p>Support for the following languages has been added:</p>
+          <ul><li>Indonesian</li><li>Kazakh</li><li>Malay</li></ul>
+        </section></refbody></reference><reference id="reference_yvj_ttj_bd" ditaarch:DITAArchVersion="1.2"><title>Migration from previous releases</title><refbody><section>
+          <p>The <codeph>print_transtypes</codeph> property in <filepath>integrator.properties</filepath> has been deprecated in favor of <codeph>dita.transtype.print</codeph> plug-in extension point.</p>
+          <p>The <codeph>dita.plugin.org.dita.*.dir</codeph> properties have been changed to point
+            to DITA-OT base directory.</p>
+        </section><section><title>PDF</title><p>Support for mirrored page layout was added and the following
+            XSLT configuration variables have been
+            deprecated:</p><ul id="ul_hkv_oyj_bd"><li><codeph>page-margin-left</codeph></li><li><codeph>page-margin-right</codeph></li></ul>
+          <p>The following variables should be used instead to control page margins:</p>
+          <ul id="ul_yda_wyj_bd"><li><codeph>page-margin-outside</codeph></li><li><codeph>page-margin-inside</codeph></li></ul>
+          <p>XSLT Parameters <codeph>customizationDir</codeph> and
+              <codeph>fileProfilePrefix</codeph> have been removed in favor of
+              <codeph>customizationDir.url</codeph> parameter.</p>
+          <p>A new shell stylesheet has been added for FOP and other shell stylesheets have also
+            been revised. Plug-ins which have their own shell stylesheets for PDF processing should
+            make sure all required stylesheets are imported.</p>
+          <p>Font family definitions have been changed from Sans, Serif, and Monospaced to
+            sans-serif, serif, and monospace, respectively. The I18N font processing still uses the
+            old logical names and aliases are used to map the new names to old ones. </p></section></refbody></reference></reference>
