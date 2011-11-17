@@ -330,9 +330,16 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="opentopic-index:index.entry" mode="get-see-value">
         <fo:inline>
-            <xsl:call-template name="__formatText">
+          <xsl:choose>
+            <xsl:when test="$useFrameIndexMarkup ne 'true'">
+              <xsl:apply-templates select="opentopic-index:formatted-value/node()"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:call-template name="__formatText">
                 <xsl:with-param name="text" select="opentopic-index:formatted-value"/>
-            </xsl:call-template>
+              </xsl:call-template>
+            </xsl:otherwise>
+          </xsl:choose>
             <xsl:text> </xsl:text>
             <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-value"/>
         </fo:inline>
@@ -369,9 +376,21 @@ See the accompanying license.txt file for applicable licenses.
                                     </xsl:if>
                                     <xsl:variable name="following-idx" select="following-sibling::opentopic-index:index.entry[@value = $value and opentopic-index:refID]"/>
                                     <xsl:if test="count(preceding-sibling::opentopic-index:index.entry[@value = $value]) = 0">
-                                        <xsl:call-template name="__formatText">
+                                      <xsl:choose>
+                                        <xsl:when test="$useFrameIndexMarkup ne 'true'">
+                                          <xsl:apply-templates select="opentopic-index:formatted-value/node()"/>
+                                          <fo:inline font-style="italic">
+                                            <xsl:text> (</xsl:text>
+                                            <xsl:value-of select="$continuedValue"/>
+                                            <xsl:text>)</xsl:text>
+                                          </fo:inline>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                          <xsl:call-template name="__formatText">
                                             <xsl:with-param name="text" select="concat(opentopic-index:formatted-value/text(), '&lt;italic&gt; (', $continuedValue, ')')"/>
-                                        </xsl:call-template>
+                                          </xsl:call-template>
+                                        </xsl:otherwise>
+                                      </xsl:choose>
                                         <xsl:if test="$following-idx">
                                             <xsl:text> </xsl:text>
                                             <fo:index-page-citation-list>
@@ -473,10 +492,6 @@ See the accompanying license.txt file for applicable licenses.
 		<xsl:param name="text"/>
 		<xsl:param name="formatting" select="'Default Para Font'"/>
 		<xsl:choose>
-		  <!-- Ignore Frame-style markup in index entry text. -->
-      <xsl:when test="$useFrameIndexMarkup ne 'true'">
-        <xsl:apply-templates select="$text/node()"/>
-      </xsl:when>
 			<xsl:when test="starts-with($text, '&lt;')">
 				<xsl:variable name="formatting-name" select="substring-before(substring-after($text, '&lt;'), '&gt;')"/>
 				<xsl:call-template name="__formatText">
@@ -522,9 +537,16 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:attribute name="keep-with-previous">always</xsl:attribute>
             </xsl:if>
             <fo:inline>
-                <xsl:call-template name="__formatText">
+              <xsl:choose>
+                <xsl:when test="$useFrameIndexMarkup ne 'true'">
+                  <xsl:apply-templates select="$inner-text/node()"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:call-template name="__formatText">
                     <xsl:with-param name="text" select="$inner-text"/>
-                </xsl:call-template>
+                  </xsl:call-template>
+                </xsl:otherwise>
+              </xsl:choose>
             </fo:inline>
             <xsl:if test="$idxs">
                 <xsl:for-each select="$idxs">
