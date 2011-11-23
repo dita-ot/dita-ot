@@ -36,6 +36,9 @@ with those set forth herein.
     <condition property="preprocess.copy-image.skip" value="true">
       <isfalse value="${org.dita.pdf2.legacy.use-out-temp}"/>
     </condition>
+    <condition property="retain.topic.fo" value="true">
+      <isfalse value="${org.dita.pdf2.legacy.use-out-temp}"/>
+    </condition>
     <!-- Legacy: pass empty input directory -->
     <condition property="user.input.dir.url" value="">
       <istrue value="${org.dita.pdf2.legacy.use-out-temp}"/>
