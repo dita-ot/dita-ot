@@ -15,10 +15,13 @@
     <topicref href="readme/DITA-usingtransforms.xml"/>
     <topicref href="readme/DITA-ant.xml">
       <!--topicref href="readme/DITA-setupant.xml" toc="no"/-->
-      <topicref href="readme/DITA-antuse.xml" toc="no"/>
-      <topicref href="readme/DITA-antscript.xml" toc="no"/>
+      <topicref href="readme/DITA-antuse.xml"/>
+      <topicref href="readme/DITA-antscript.xml"/>
+      <topicref href="readme/dita-ot_ant_properties.dita"/>
     </topicref>
-    <topicref href="readme/DITA-javacmd.xml"/>
+    <topicref href="readme/DITA-javacmd.xml">
+      <topicref href="readme/dita-ot_java_properties.dita"/>
+    </topicref>
     <topicref href="quickstartguide/reference/dita-ot_ant_properties.dita"/>
     <topicref href="readme/DITA-log.xml"/>
     <topicref href="readme/DITA-troubleshooting.xml"/>
