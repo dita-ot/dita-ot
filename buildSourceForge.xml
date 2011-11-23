@@ -13,36 +13,10 @@
     <ant antfile="${basedir}/build.xml">
       <property name="args.input" location="${doc.dir}/DITA-OTDocs.ditamap"/>
       <property name="output.dir" location="${doc.out.dir}/${version}"/>
-      <property name="transtype" value="xhtml"/>
-      <property name="args.xhtml.toc" value="DITA-OTDocs"/>
-      <!--property name="dita.input.valfile" location="${work.dir}/filter.ditaval"/-->
+      <property name="transtype" value="tocjs"/>
+      <property name="args.csspath" value="css"/>
       <property name="base.temp.dir" location="${work.dir}"/>
     </ant>
-    <echo file="${doc.out.dir}/${version}/index.html"><![CDATA[
-<!-- This file is part of the DITA Open Toolkit project hosted on 
-     Sourceforge.net. See the accompanying license.txt file for 
-     applicable licenses.-->
-<!-- (C) Copyright IBM Corporation 2005. All Rights Reserved.
- *-->
-<html>
-  <head>
-    <title>DITA Open Toolkit</title>
-  </head>
-  <frameset cols="30%,*">
-    <frame name="navwin" src="DITA-OTDocs.html" />
-    <frame name="contentwin" src="DITA-OTProjectHome.html" scrolling="auto" />
-  </frameset>
-</html>
-]]>
-    </echo>
-    <!--
-    <ant antfile="${basedir}/build.xml">
-      <property name="args.input" location="${doc.dir}/articles/DITA-articles.ditamap"/>
-      <property name="output.dir" location="${doc.out.dir}/${version}/articles"/>
-      <property name="transtype" value="xhtml"/>
-      <property name="base.temp.dir" location="${work.dir}"/>
-    </ant>
-    -->
   </target>
 
 </project>
