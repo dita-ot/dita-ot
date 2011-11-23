@@ -49,11 +49,10 @@
           <p>Support for the following languages has been added:</p>
           <ul><li>Finnish</li><li>Hebrew</li><li>Romanian</li><li>Russian</li><li>Swedish</li></ul>
           <p>PDF processing no longer copies images or generates XSL FO to output directory.
-            Instead, the temporary directory is used for all temporary files and source images are
-            read directly from source directory. The legacy processing model can be enabled by
-            setting <codeph>org.dita.pdf2.legacy.use-out-temp</codeph> property to value
-              <codeph>true</codeph>; support for the legacy processing model may be removed in
-            future releases.</p>
+          Instead, the temporary directory is used for all temporary files and source images are
+          read directly from source directory. The legacy processing model can be enabled by setting
+            <codeph>org.dita.pdf2.use-out-temp</codeph> to <codeph>true</codeph> in configuration
+          properties; support for the legacy processing model may be removed in future releases.</p>
           <p>Support for FrameMaker index syntax has been disabled by default. To enable FrameMaker
             index syntax, set <codeph>org.dita.pdf2.index.frame-markup</codeph> to <codeph>true</codeph> in
             configuration properties.</p>
@@ -80,9 +79,9 @@
           <p>A new shell stylesheet has been added for FOP and other shell stylesheets have also
             been revised. Plug-ins which have their own shell stylesheets for PDF processing should
             make sure all required stylesheets are imported.</p>
-          <p>Font family definitions have been changed from Sans, Serif, and Monospaced to
-            sans-serif, serif, and monospace, respectively. The I18N font processing still uses the
-            old logical names and aliases are used to map the new names to old ones. </p></section></refbody></reference>
+          <p>Font family definitions in stylesheets have been changed from Sans, Serif, and
+          Monospaced to sans-serif, serif, and monospace, respectively. The I18N font processing
+          still uses the old logical names and aliases are used to map the new names to old ones. </p></section></refbody></reference>
 <reference id="reference_r2v_pdv_j2">
     <title>SourceForge trackers</title>
   <refbody>

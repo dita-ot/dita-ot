@@ -34,14 +34,14 @@ with those set forth herein.
 
   <target name="dita2pdf2.init">
     <condition property="preprocess.copy-image.skip" value="true">
-      <isfalse value="${org.dita.pdf2.legacy.use-out-temp}"/>
+      <isfalse value="${org.dita.pdf2.use-out-temp}"/>
     </condition>
     <condition property="retain.topic.fo" value="true">
-      <isfalse value="${org.dita.pdf2.legacy.use-out-temp}"/>
+      <isfalse value="${org.dita.pdf2.use-out-temp}"/>
     </condition>
     <!-- Legacy: pass empty input directory -->
     <condition property="user.input.dir.url" value="">
-      <istrue value="${org.dita.pdf2.legacy.use-out-temp}"/>
+      <istrue value="${org.dita.pdf2.use-out-temp}"/>
     </condition>
   </target>
 
@@ -49,7 +49,7 @@ with those set forth herein.
 
   <target name="transform.topic2pdf.init">
     <condition property="pdf2.temp.dir" value="${dita.temp.dir}" else="${dita.map.output.dir}">
-      <isfalse value="${org.dita.pdf2.legacy.use-out-temp}"/>
+      <isfalse value="${org.dita.pdf2.use-out-temp}"/>
     </condition>
     
     <property name="customization.dir" value="${dita.plugin.org.dita.pdf2.dir}/Customization"/>
