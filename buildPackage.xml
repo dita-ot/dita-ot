@@ -33,10 +33,13 @@
   <property name="top.work.dir" location="${basedir}"/>
   <property name="package.output.dir" location="${top.work.dir}/build/"/>
   <property name="bin.dir" location="${top.work.dir}/output2/"/>
-  <property name="work.dir" location="${top.work.dir}/temp/"/>
+  <tstamp>
+    <format property="current.date" pattern="yyyyMMddHHmmssSSS"/>
+  </tstamp>
+  <property name="work.dir" location="${top.work.dir}/temp/${current.date}/"/>
   <property name="build.dir" location="${bin.dir}/build"/>
-  <property name="out.dir" location="${top.work.dir}/out/"/>
-  <property name="doc.out.dir" location="${top.work.dir}/out/doc"/>
+  <property name="out.dir" location="${work.dir}/out/"/>
+  <property name="doc.out.dir" location="${out.dir}/doc"/>
 
   <property name="dost.jar" location="${lib.dir}/dost.jar"/>
   <property name="binary-min" value="DITA-OT${version}_minimal_bin"/>
@@ -106,6 +109,7 @@
     <exclude name=".*"/>
     <exclude name="build.log"/>
     <exclude name="build.number"/>
+    <exclude name="relnotes.txt"/>
     <exclude name="lib/commons-logging-1.1.1.jar"/>
     <exclude name="plugins/cxxapiref/"/>
     <exclude name="plugins/net.sourceforge.dita-ot.html/**"/>
@@ -226,6 +230,8 @@
   </patternset>
 
   <patternset id="pattern.package.doc">
+    <include name="relnotes.html"/>
+    <include name="doc/**"/>
     <exclude name="**/*.hhp"/>
     <exclude name="**/*.hhc"/>
     <exclude name="**/*.hhk"/>
@@ -246,8 +252,8 @@
         <patternset refid="pattern.package.source"/>
       </fileset>
     </copy>
-    <copy todir="${temp.dist.dir}/doc">
-      <fileset dir="${doc.out.dir}">
+    <copy todir="${temp.dist.dir}">
+      <fileset dir="${out.dir}">
         <patternset refid="pattern.package.doc"/>
       </fileset>
     </copy>
@@ -290,8 +296,8 @@
         <patternset refid="pattern.package.standard"/>
       </fileset>
     </copy>
-    <copy todir="${temp.dist.dir}/doc">
-      <fileset dir="${doc.out.dir}">
+    <copy todir="${temp.dist.dir}">
+      <fileset dir="${out.dir}">
         <patternset refid="pattern.package.doc"/>
       </fileset>
     </copy>
@@ -314,8 +320,8 @@
         <patternset refid="pattern.package.full"/>
       </fileset>
     </copy>
-    <copy todir="${temp.dist.dir}/doc">
-      <fileset dir="${doc.out.dir}">
+    <copy todir="${temp.dist.dir}">
+      <fileset dir="${out.dir}">
         <patternset refid="pattern.package.doc"/>
       </fileset>
     </copy>
@@ -385,83 +391,58 @@
 
   <target name="update-doc">
     <ant antfile="${basedir}/integrator.xml" target="integrate"/>
-    <!-- Articles -->
+    <!--mkdir dir="${work.dir}/doc"/-->
+    
     <ant antfile="${basedir}/build.xml">
-      <property name="args.input" location="${doc.dir}/articles/DITA-articles.ditamap"/>
-      <property name="output.dir" location="${doc.out.dir}/articles"/>
+      <property name="args.input" location="${doc.dir}/userguide-book.ditamap"/>
+      <property name="output.dir" location="${doc.out.dir}"/>
+      <property name="outputFile.base" value="userguide"/>
+      <property name="transtype" value="pdf"/>
+      <property name="base.temp.dir" location="${work.dir}"/>
+    </ant>
+
+    <ant antfile="${basedir}/build.xml">
+      <property name="args.input" location="${doc.dir}/userguide.ditamap"/>
+      <property name="output.dir" location="${work.dir}/htmlhelp"/>
+      <property name="transtype" value="htmlhelp"/>
+      <property name="base.temp.dir" location="${work.dir}"/>
+    </ant>
+    <copy todir="${doc.out.dir}" failonerror="no">
+      <fileset dir="${work.dir}/htmlhelp">
+        <include name="*.chm"/>
+      </fileset>
+    </copy>
+
+    <ant antfile="${basedir}/build.xml">
+      <property name="args.input" location="${doc.dir}/userguide.ditamap"/>
+      <property name="output.dir" location="${doc.out.dir}/html"/>
+      <property name="outputFile.base" value="index"/>
+      <property name="args.csspath" value="css"/>
+      <property name="transtype" value="tocjs"/>
+      <property name="base.temp.dir" location="${work.dir}"/>
+    </ant>
+    <move file="${doc.out.dir}/html/userguide.html" tofile="${doc.out.dir}/html/index.html" force="yes"/>
+    
+    <ant antfile="${basedir}/build.xml">
+      <property name="args.input" location="${doc.dir}/readme/changes/rel1.5.4.xml"/>
+      <property name="output.dir" location="${work.dir}/relnotes"/>
+      <property name="args.csspath" value="resource"/>
       <property name="transtype" value="xhtml"/>
       <property name="base.temp.dir" location="${work.dir}"/>
     </ant>
-    <ant antfile="${basedir}/build.xml">
-      <property name="args.input" location="${doc.dir}/articles/DITA-articles.ditamap"/>
-      <property name="output.dir" location="${doc.out.dir}/articles"/>
-      <property name="transtype" value="htmlhelp"/>
-      <property name="base.temp.dir" location="${work.dir}"/>
-    </ant>
-    <ant antfile="${basedir}/build.xml">
-      <property name="args.input" location="${doc.dir}/articles/DITA-articles.ditamap"/>
-      <property name="output.dir" location="${doc.out.dir}/articles"/>
-      <property name="transtype" value="pdf"/>
-      <property name="args.fo.img.ext" value=".gif"/>
-      <property name="base.temp.dir" location="${work.dir}"/>
-    </ant>
-    <!-- Quickstart guide -->
-    <ant antfile="${basedir}/build.xml">
-      <property name="args.input" location="${doc.dir}/quickstartguide.ditamap"/>
-      <property name="output.dir" location="${doc.out.dir}"/>
-      <property name="transtype" value="pdf"/>
-      <property name="args.fo.img.ext" value=".gif"/>
-      <property name="base.temp.dir" location="${work.dir}"/>
-    </ant>
-    <ant antfile="${basedir}/build.xml">
-      <property name="args.input" location="${doc.dir}/quickstartguide.ditamap"/>
-      <property name="output.dir" location="${doc.out.dir}"/>
-      <property name="transtype" value="htmlhelp"/>
-      <property name="base.temp.dir" location="${work.dir}"/>
-    </ant>
-    <!-- Readme -->
-    <!--
-    <ant antfile="${basedir}/build.xml">
-      <property name="args.input" location="${doc.dir}/readme.ditamap"/>
-      <property name="output.dir" location="${doc.out.dir}"/>
-      <property name="transtype" value="html"/>
-      <property name="base.temp.dir" location="${work.dir}"/>
-    </ant>
-    -->
-    <ant antfile="${basedir}/build.xml">
-      <property name="args.input" location="${doc.dir}/readme.ditamap"/>
-      <property name="output.dir" location="${doc.out.dir}"/>
-      <property name="transtype" value="htmlhelp"/>
-      <property name="base.temp.dir" location="${work.dir}"/>
-    </ant>
-    <ant antfile="${basedir}/build.xml">
-      <property name="args.input" location="${doc.dir}/readme.ditamap"/>
-      <property name="output.dir" location="${doc.out.dir}"/>
-      <property name="transtype" value="pdf"/>
-      <property name="args.fo.img.ext" value=".jpg"/>
-      <property name="base.temp.dir" location="${work.dir}"/>
-    </ant>
-    <!-- delete unneeded files -->
-    <delete failonerror="yes" includeemptydirs="true"
-      dir="${doc.out.dir}${file.separator}articles"
-      excludes="**/*.chm,**/*.pdf,**/*.html,**/*.css,image/*.*"/>
-    <delete failonerror="yes" includeemptydirs="true"
-      dir="${doc.out.dir}"
-      excludes="**/*.chm,**/*.pdf,**/*.html,**/image/*.*,**/images/*.*,**/pic/*.*,*.gif,**/*.jpg"/>
-    <delete failonerror="yes" includeemptydirs="true"
-      dir="${doc.out.dir}${file.separator}readme"
-      excludes="**/*.chm,**/*.pdf,**/*.css,images/*.*"/>
-    <delete failonerror="yes" includeemptydirs="true"
-      dir="${doc.out.dir}${file.separator}specification"
-      excludes="**/*.chm,**/*.pdf,**/*.css,images/*.*"/>
-    <delete failonerror="yes" includeemptydirs="true"
-      dir="${doc.out.dir}${file.separator}quickstartguide"
-      excludes="**/*.chm,**/*.pdf,**/*.css,images/*.*"/>
+    <copy file="${work.dir}/relnotes/rel1.5.4.html" tofile="${out.dir}/relnotes.html" verbose="yes"/>
+    
+    <delete failonerror="yes" includeemptydirs="true">
+      <fileset dir="${doc.out.dir}">
+        <include name="**/dita.list"/>
+        <include name="**/dita.xml.properties"/>
+      </fileset>
+    </delete>
   </target>
 
   <target name="doc" depends="update-doc" description="Build documentation">
-    <copy todir="${doc.dir}">
-      <fileset dir="${doc.out.dir}">
+    <copy todir="${src.dir}">
+      <fileset dir="${out.dir}">
         <patternset refid="pattern.package.doc"/>
       </fileset>
     </copy>

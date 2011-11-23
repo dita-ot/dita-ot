@@ -29,7 +29,7 @@
     
     <target name="build-doc" description="build DITA Open Toolkit web docs">
         <ant antfile="${basedir}${file.separator}conductor.xml" target="init">
-            <property name="args.input" value="${my.input.dir}${file.separator}DITA-OTDocs.ditamap"/>
+            <property name="args.input" value="${my.input.dir}${file.separator}userguide.ditamap"/>
             <property name="output.dir" value="${my.output.dir}"/>
             <property name="args.ftr" value="${my.resource.dir}${file.separator}htmlfoot.html"/>
             <property name="args.css" value="${my.resource.dir}${file.separator}dita-ot.css"/>

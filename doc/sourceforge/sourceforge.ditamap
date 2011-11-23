@@ -15,7 +15,7 @@
     <topicref navtitle="Development Release" scope="external" format="html" href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Latest%20Test%20Build/"/>
   </topichead>
   <topichead navtitle="Documentation">
-    <topicref href="1.5.4/DITA-OTDocs.html" navtitle="Release 1.5.4" scope="peer"/>
+    <topicref href="1.5.4/userguide.html" navtitle="Release 1.5.4" scope="peer"/>
     <topicref href="1.5.3/" navtitle="Release 1.5.3" scope="peer" format="html"/>
     <topicref href="1.5.2/" navtitle="Release 1.5.2" scope="peer" format="html"/>
     <!--
