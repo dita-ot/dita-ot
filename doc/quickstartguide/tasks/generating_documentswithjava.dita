@@ -4,8 +4,6 @@
 	<title>Generating Documents with Java</title>
 	<shortdesc>How to generate documents from the command line with Java.</shortdesc>
 	<taskbody>
-	<prereq><p>See <xref href="../reference/dita-ot_ant_properties.dita"/> for descriptions of all supported
-        arguments.</p></prereq>
 	<steps>
 	<step><cmd>Open a command prompt.</cmd></step>
 	<step><cmd>Change directories to where you installed the DITA Open Toolkit.</cmd></step>
@@ -18,4 +16,7 @@
 	</step>
 	</steps>
 	</taskbody>
+  <related-links>
+    <link href="../../readme/dita-ot_java_properties.dita"/>
+  </related-links>
 </task>

@@ -13,9 +13,6 @@
           <filepath>build_general.xml</filepath>, and <filepath>build_preprocess.xml</filepath>;
         together they define common pre-processing and output transformation routines, as well as
         extension points that allow DITA-OT Plug-ins to add to this common processing.</p></section>
-<section><p>See <xref href="../quickstartguide/reference/dita-ot_ant_properties.dita"/> for supported
-      argument properties.</p>
-</section>
 <section>       <title>Sample ant script</title>       <p>These ant scripts are in <filepath>samples/ant_sample</filepath> directory. They are
         simple and easy to learn. From these files, you can learn how to write your own Ant script
         to build your own process.</p>       <p>Here is a sample template for writing an Ant script that executes transformation to xhtml
@@ -25,10 +22,8 @@
 
   &lt;property name="dita.dir" value="${basedir}/../.."/>
  
-  &lt;import file="${dita.dir}${file.separator}integrator.xml"/>
-
-  &lt;target name="@DELIVERABLE.NAME@2xhtml" depends="integrate">
-    &lt;ant antfile="${dita.dir}${file.separator}build.xml" target="init">
+  &lt;target name="@DELIVERABLE.NAME@2xhtml">
+    &lt;ant antfile="${dita.dir}${file.separator}build.xml">
       &lt;!-- please refer to the toolkit's document for supported parameters, and 
            specify them base on your needs -->
       &lt;property name="args.input" value="@DITA.INPUT@"/>
@@ -54,5 +49,8 @@ with the following command:<codeblock>ant -f samples/ant_sample/template_xhtml.x
         script <filepath>build.xml</filepath>, which is a common entry point for DITA-OT builds; it
         in turn imports all of the scripts mentioned above.</p></section>
 </refbody>
+  <related-links>
+    <link href="dita-ot_ant_properties.dita"/>
+  </related-links>
 </reference>
 <?Pub *0000024648?>

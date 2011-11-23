@@ -22,7 +22,6 @@
     <topicref href="readme/DITA-javacmd.xml">
       <topicref href="readme/dita-ot_java_properties.dita"/>
     </topicref>
-    <topicref href="quickstartguide/reference/dita-ot_ant_properties.dita"/>
     <topicref href="readme/DITA-log.xml"/>
     <topicref href="readme/DITA-troubleshooting.xml"/>
     <topicref href="readme/DITA-limitations.xml" processing-role="resource-only" toc="no"/>
