@@ -49,17 +49,14 @@ public final class ImgUtils {
 		String imgoutDir= null;
 		String filename = fileName.replace(
 				WINDOWS_SEPARATOR, UNIX_SEPARATOR);
-		int length = "../".length();
-		while (filename.startsWith("../")){
-			filename = filename.substring(length);
-		}
+
 		imgoutDir = outDir;
 		if (OutputUtils.getGeneratecopyouter() != OutputUtils.Generate.OLDSOLUTION) {
 			Properties propterties = null;
 			try {
 				propterties = ListUtils.getDitaList();
 				uplevelPath = propterties.getProperty("uplevels");
-				if (uplevelPath != null){
+				if (uplevelPath != null&&uplevelPath.length()>0){
 					imgoutDir = outDir +File.separator+uplevelPath;
 				}
 
