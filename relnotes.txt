@@ -46,8 +46,10 @@
      * 3412211 Refactor PDF index stylesheet for XSL 1.1 support (In Processing)     	
      * 3425838 General PDF2 improvements  (In Processing)	     
      * 3428152 General I18N improvements  (In Processing)	     		
-     * 3429390 General XHTML improvements (In Processing)		
-
+     * 3429390 General XHTML improvements (In Processing)
+     * 3438361 Add "tocjs" transform to demo script (In Processing)			
+	 * 3438790 Clean up build_demo script (In Processing)
+	 	
      [ SourceForge Patches Added]
      * 2963037 PDF changes to fix index rendering of colon (bug 2879196) (Milestone 7)
          
@@ -98,7 +100,10 @@
      * 3429845 No variables for Warning (Milestone 7)
      * 3428871 topicmerge gives incomplete topicref when reference or topic (Milestone 7)
      * 3132976 Duplicate index text in index page (Milestone 7)
-     * 2795649 Java topicmerge ignores xml:lang (Milestone 7)
+     * 3431798 Relative CSS paths incorrectly computed for @copy-of (Milestone 7)
+     * 2795649 Java topicmerge ignores xml:lang (Milestone 7)   
+     * 3438421 Remove transtype default (Milestone 7)
+     * 3429824 topicmerge gives wrong topicref with nested topics (In processing)
 	 * 3414332 PDF2 variable string translations missing (In processing)    
      * 3323806 Improve Java logging and exception handling (In Processing)
 	 
