@@ -128,7 +128,7 @@ public final class MergeTopicParser extends AbstractXMLReader {
             }
             if(isFirstTopicId){
                 isFirstTopicId = false;
-                //retId = retAttValue;
+                retId = retAttValue;
                 util.addId(filePath,retAttValue);
             }
         }
