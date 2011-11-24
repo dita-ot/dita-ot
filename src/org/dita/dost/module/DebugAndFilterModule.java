@@ -9,7 +9,53 @@
  */
 package org.dita.dost.module;
 
-import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_DITADIR;
+import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE;
+import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAN_SETSYSTEMID;
+import static org.dita.dost.util.Constants.ANT_INVOKER_PARAM_BASEDIR;
+import static org.dita.dost.util.Constants.ANT_INVOKER_PARAM_DITAEXT;
+import static org.dita.dost.util.Constants.ANT_INVOKER_PARAM_DITAVAL;
+import static org.dita.dost.util.Constants.ANT_INVOKER_PARAM_TEMPDIR;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_CLASS;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_KEYREF;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_KEYS;
+import static org.dita.dost.util.Constants.CHUNK_TOPIC_LIST;
+import static org.dita.dost.util.Constants.CODEREF_LIST;
+import static org.dita.dost.util.Constants.COMMA;
+import static org.dita.dost.util.Constants.CONREF_LIST;
+import static org.dita.dost.util.Constants.CONREF_PUSH_LIST;
+import static org.dita.dost.util.Constants.CONREF_TARGET_LIST;
+import static org.dita.dost.util.Constants.COPYTO_SOURCE_LIST;
+import static org.dita.dost.util.Constants.COPYTO_TARGET_TO_SOURCE_MAP_LIST;
+import static org.dita.dost.util.Constants.DOT;
+import static org.dita.dost.util.Constants.EQUAL;
+import static org.dita.dost.util.Constants.FILE_EXTENSION_DITAMAP;
+import static org.dita.dost.util.Constants.FILE_NAME_DITA_LIST;
+import static org.dita.dost.util.Constants.FILE_NAME_DITA_LIST_XML;
+import static org.dita.dost.util.Constants.FILE_NAME_SUBJECT_DICTIONARY;
+import static org.dita.dost.util.Constants.FILE_NAME_SUBJECT_RELATION;
+import static org.dita.dost.util.Constants.FULL_DITAMAP_TOPIC_LIST;
+import static org.dita.dost.util.Constants.FULL_DITA_TOPIC_LIST;
+import static org.dita.dost.util.Constants.GREATER_THAN;
+import static org.dita.dost.util.Constants.HREF_DITA_TOPIC_LIST;
+import static org.dita.dost.util.Constants.HREF_TARGET_LIST;
+import static org.dita.dost.util.Constants.HREF_TOPIC_LIST;
+import static org.dita.dost.util.Constants.INT_0;
+import static org.dita.dost.util.Constants.INT_1;
+import static org.dita.dost.util.Constants.INT_1024;
+import static org.dita.dost.util.Constants.KEYREF_LIST;
+import static org.dita.dost.util.Constants.LESS_THAN;
+import static org.dita.dost.util.Constants.LINE_SEPARATOR;
+import static org.dita.dost.util.Constants.OS_NAME;
+import static org.dita.dost.util.Constants.OS_NAME_WINDOWS;
+import static org.dita.dost.util.Constants.OUT_DITA_FILES_LIST;
+import static org.dita.dost.util.Constants.QUESTION;
+import static org.dita.dost.util.Constants.RESOURCE_ONLY_LIST;
+import static org.dita.dost.util.Constants.STICK;
+import static org.dita.dost.util.Constants.STRING_BLANK;
+import static org.dita.dost.util.Constants.SUBJECTSCHEME_SUBJECTDEF;
+import static org.dita.dost.util.Constants.UNIX_SEPARATOR;
+import static org.dita.dost.util.Constants.UTF8;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -20,7 +66,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.PrintStream;
 import java.io.Writer;
 import java.util.Date;
 import java.util.HashMap;
@@ -630,8 +675,13 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             	if(line.indexOf(DitaWriter.PI_WORKDIR_TARGET)!=-1) {
             		bfos.write(LESS_THAN + QUESTION);
             		bfos.write(DitaWriter.PI_WORKDIR_TARGET);
+            		 
                     if (workdir != null) {
-                    	bfos.write(STRING_BLANK + workdir);
+                    	if (OS_NAME.toLowerCase().indexOf(OS_NAME_WINDOWS) == -1) {
+							bfos.write(STRING_BLANK + workdir);
+						} else {
+							bfos.write(STRING_BLANK + UNIX_SEPARATOR + workdir);
+						}                    	
                     }
                     bfos.write(QUESTION + GREATER_THAN);
         
