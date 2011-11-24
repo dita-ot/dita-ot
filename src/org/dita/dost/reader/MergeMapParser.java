@@ -79,22 +79,39 @@ public final class MergeMapParser extends AbstractXMLReader {
         return content;
     }
 
+    /**
+     * Read map.
+     * 
+     * @param ditaInput input file path + pipe character + temporary directory path, or only input file path
+     * @deprecated use {@link #read(String, String)} instead
+     */
+    @Deprecated
     @Override
     public void read(final String ditaInput) {
-        try{
-            String filename;
-            if(ditaInput.contains(STICK)){
-                filename = ditaInput.substring(0, ditaInput.indexOf(STICK));
-                tempdir = ditaInput.substring(ditaInput.indexOf(STICK)+1);
-            }else{
-                filename = ditaInput;
-                tempdir = new File(filename).getParent();
-            }
+        String filename;
+        if(ditaInput.contains(STICK)){
+            filename = ditaInput.substring(0, ditaInput.indexOf(STICK));
+            tempdir = ditaInput.substring(ditaInput.indexOf(STICK)+1);
+        }else{
+            filename = ditaInput;
+            tempdir = new File(filename).getParent();
+        }
+        read(filename, tempdir);
+    }
 
+    /**
+     * Read map.
+     * 
+     * @param input map file path
+     * @param tmpdir temporary directory path, may be {@code null}
+     */
+    public void read(final String filename, final String tmpDir) {
+        tempdir = tmpDir != null ? tmpDir : new File(filename).getParent();
+        try{
             final File input = new File(filename);
             dirPath = input.getParent();
-            reader.setErrorHandler(new DITAOTXMLErrorHandler(filename));
-            reader.parse(filename);
+            reader.setErrorHandler(new DITAOTXMLErrorHandler(input.getAbsolutePath()));
+            reader.parse(input.toURI().toString());
         }catch(final Exception e){
             logger.logException(e);
         }
