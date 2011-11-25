@@ -76,6 +76,42 @@
                 <isset property="out.ext" />
             </not>
         </condition>
+    	<condition property="eclipse.fragment.language">
+    	        <and>
+    	          <isset property="args.eclipsehelp.language" />
+    	          <not>
+    	            <isset property="args.eclipsehelp.country" />
+    	          </not>
+    	        </and>
+    	      </condition>
+    	      <condition property="eclipse.fragment.country">
+    	        <and>
+    	          <isset property="args.eclipsehelp.language" />
+    	          <isset property="args.eclipsehelp.country" />
+    	        </and>
+    	      </condition>
+    	      
+    	      <condition property="eclipse.plugin">
+    	        <not>
+    	          <or>
+    	            <isset property="args.eclipsehelp.language" />
+    	            <isset property="args.eclipsehelp.country" />
+    	            <and>
+    	              <isset property="args.eclipsehelp.country" />
+    	              <isset property="args.eclipsehelp.language" />
+    	            </and>
+    	          </or>
+    	        </not>
+    	      </condition>
+    	      <condition property="eclipse.fragment.error">
+    	        <and>
+    	          <isset property="args.eclipsehelp.country" />
+    	          <not>
+    	            <isset property="args.eclipsehelp.language" />
+    	          </not>
+    	        </and>
+    	      </condition>
+    	    	
     	<condition property="args.eclipsehelp.indexsee" value="false">
     	    <not>
     	      <isset property="args.eclipsehelp.indexsee"></isset>
@@ -150,6 +186,9 @@
               style="${plus-transtype-eclipsehelp.dir}/xsl/map2plugin-shell.xsl">
             <outputproperty value="text" name="method"/>
             <param name="dita.plugin.output" expression="dita.eclipse.properties"/>
+        	<param name="provider"
+        	                   expression="${args.eclipse.provider}"
+        	                   if="args.eclipse.provider" />
         </xslt>
     </target>
 
@@ -168,7 +207,7 @@
                    expression="${args.eclipse.provider}"
                    if="args.eclipse.provider" />
         	<param name="osgi.symbolic.name" expression="${args.eclipse.symbolic.name}" if="args.eclipse.symbolic.name"/>
-        	<param name="dita.plugin.output" expression="dita.eclipse.eclipse"></param>
+        	<param name="dita.plugin.output" expression="dita.eclipse.plugin"></param>
         	<outputproperty value="yes" name="indent"/>
         </xslt>
     </target>
