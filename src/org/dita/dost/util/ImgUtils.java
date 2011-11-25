@@ -49,17 +49,14 @@ public final class ImgUtils {
 		String imgoutDir= null;
 		String filename = fileName.replace(
 				WINDOWS_SEPARATOR, UNIX_SEPARATOR);
-		int length = "../".length();
-		while (filename.startsWith("../")){
-			filename = filename.substring(length);
-		}
+
 		imgoutDir = outDir;
 		if (OutputUtils.getGeneratecopyouter() != OutputUtils.Generate.OLDSOLUTION) {
 			Properties propterties = null;
 			try {
 				propterties = ListUtils.getDitaList();
 				uplevelPath = propterties.getProperty("uplevels");
-				if (uplevelPath != null){
+				if (uplevelPath != null&&uplevelPath.length()>0){
 					imgoutDir = outDir +File.separator+uplevelPath;
 				}
 
@@ -70,6 +67,20 @@ public final class ImgUtils {
 		}
 				
 		return imgoutDir+File.separator+filename;
+	}
+    
+    private static boolean checkDirName(String dirName) {
+		String outDir = OutputUtils.getOutputDir();
+		if (outDir != null) {
+			outDir = new File(outDir).getPath().replace(
+					WINDOWS_SEPARATOR, UNIX_SEPARATOR);
+
+			if (new File(dirName).getPath().replace(WINDOWS_SEPARATOR,
+					UNIX_SEPARATOR).equalsIgnoreCase(outDir)) {
+				return true;
+			}
+		}
+		return false;
 	}
     /**
      * Get the image width.
@@ -83,7 +94,9 @@ public final class ImgUtils {
      */
     public static int getWidth (final String dirName, final String fileName){
         final DITAOTJavaLogger logger = new DITAOTJavaLogger();
-        final File imgInput = new File(getImageOutPutPath(fileName));      
+		File imgInput = new File(dirName + File.separatorChar + fileName);
+		if (checkDirName(dirName))
+			imgInput = new File(getImageOutPutPath(fileName));      
         try {
             final BufferedImage img = ImageIO.read(imgInput);
             return img.getWidth();
@@ -108,7 +121,9 @@ public final class ImgUtils {
      */
     public static int getHeight (final String dirName, final String fileName){
         final DITAOTJavaLogger logger = new DITAOTJavaLogger();
-        final File imgInput = new File(getImageOutPutPath(fileName));
+        File imgInput = new File(dirName+File.separatorChar+fileName);
+        if (checkDirName(dirName))
+        	imgInput = new File(getImageOutPutPath(fileName));      
         try {
             final BufferedImage img = ImageIO.read(imgInput);
             return img.getHeight();
@@ -133,7 +148,9 @@ public final class ImgUtils {
      */
     public static int getWidthODT (final String dirName, final String fileName){
         final DITAOTJavaLogger logger = new DITAOTJavaLogger();
-        final File imgInput = new File(getImageOutPutPath(fileName));
+        File imgInput = new File(dirName+File.separatorChar+fileName);
+        if (checkDirName(dirName))
+        	imgInput = new File(getImageOutPutPath(fileName));      
         try {
             final BufferedImage img = ImageIO.read(imgInput);
             return img.getWidth();
@@ -158,7 +175,9 @@ public final class ImgUtils {
      */
     public static int getHeightODT (final String dirName, final String fileName){
         final DITAOTJavaLogger logger = new DITAOTJavaLogger();
-        final File imgInput = new File(getImageOutPutPath(fileName));
+        File imgInput = new File(dirName+File.separatorChar+fileName);
+        if (checkDirName(dirName))
+        	imgInput = new File(getImageOutPutPath(fileName));      
         try {
             final BufferedImage img = ImageIO.read(imgInput);
             return img.getHeight();
@@ -183,7 +202,9 @@ public final class ImgUtils {
      */
     public static String getBinData (final String dirName, final String fileName){
         final DITAOTJavaLogger logger = new DITAOTJavaLogger();
-        final File imgInput = new File(getImageOutPutPath(fileName));
+        File imgInput = new File(dirName+File.separatorChar+fileName);
+        if (checkDirName(dirName))
+        	imgInput = new File(getImageOutPutPath(fileName));      
         FileInputStream binInput = null;
         int bin;
         try{
@@ -223,7 +244,9 @@ public final class ImgUtils {
      */
     public static String getBASE64(final String dirName, final String fileName) {
         final DITAOTJavaLogger logger = new DITAOTJavaLogger();
-        final File imgInput = new File(getImageOutPutPath(fileName));
+        File imgInput = new File(dirName+File.separatorChar+fileName);
+        if (checkDirName(dirName))
+        	imgInput = new File(getImageOutPutPath(fileName));      
         //BASE64Encoder encoder = new BASE64Encoder();
         final Base64 encoder = new Base64();
         final byte   buff[]=new   byte[(int)imgInput.length()];

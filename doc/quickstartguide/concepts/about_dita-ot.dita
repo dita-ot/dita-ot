@@ -25,6 +25,6 @@
   </conbody>
   <related-links>
 	<link href="about_ant.dita" scope="local"/>
-	<link href="../reference/dita-ot_ant_properties.dita" scope="local"/>
+	<link href="../../readme/dita-ot_ant_properties.dita" scope="local"/>
   </related-links>
 </concept>

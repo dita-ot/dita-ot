@@ -1,5 +1,7 @@
 package com.idiominc.ws.opentopic.fo.i18n;
 
+import static javax.xml.XMLConstants.*;
+
 import org.w3c.dom.*;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -74,7 +76,7 @@ public class MultilanguagePreprocessor {
 
          doc.appendChild(node);
 
-         doc.getDocumentElement().setAttribute("xmlns:" + PREFIX, NAMESPACE_URL);
+         doc.getDocumentElement().setAttribute(XMLNS_ATTRIBUTE + ":" + PREFIX, NAMESPACE_URL);
 
          return doc;
      }

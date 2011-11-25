@@ -334,9 +334,16 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="opentopic-index:index.entry" mode="get-see-value">
         <fo:inline>
-            <xsl:call-template name="__formatText">
+          <xsl:choose>
+            <xsl:when test="$useFrameIndexMarkup ne 'true'">
+              <xsl:apply-templates select="opentopic-index:formatted-value/node()"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:call-template name="__formatText">
                 <xsl:with-param name="text" select="opentopic-index:formatted-value"/>
             </xsl:call-template>
+            </xsl:otherwise>
+          </xsl:choose>
             <xsl:text> </xsl:text>
             <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-value"/>
         </fo:inline>
@@ -441,7 +448,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:choose>
  </xsl:template>
 
-
+  <xsl:param name="useFrameIndexMarkup" select="'false'"/>
 
 	<xsl:template name="__formatText">
 		<xsl:param name="text"/>
@@ -485,16 +492,23 @@ See the accompanying license.txt file for applicable licenses.
 
   <xsl:template name="make-index-ref">
     <xsl:param name="idxs" select="()"/>
-    <xsl:param name="inner-text"/>
+    <xsl:param name="inner-text" select="()"/>
     <xsl:param name="no-page"/>
     <fo:block xsl:use-attribute-sets="index.term">
       <xsl:if test="position() = 1">
         <xsl:attribute name="keep-with-previous">always</xsl:attribute>
       </xsl:if>
       <fo:inline>
-        <xsl:call-template name="__formatText">
-          <xsl:with-param name="text" select="$inner-text"/>
-        </xsl:call-template>
+        <xsl:choose>
+          <xsl:when test="$useFrameIndexMarkup ne 'true'">
+            <xsl:apply-templates select="$inner-text/node()"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:call-template name="__formatText">
+              <xsl:with-param name="text" select="$inner-text"/>
+            </xsl:call-template>
+          </xsl:otherwise>
+        </xsl:choose>
       </fo:inline>
       <!-- XXX: XEP has this, should base too? -->
       <!--xsl:for-each select="$idxs">

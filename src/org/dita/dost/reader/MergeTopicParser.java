@@ -10,16 +10,19 @@
 package org.dita.dost.reader;
 
 import static org.dita.dost.util.Constants.*;
+import static javax.xml.XMLConstants.*;
 
 import java.io.File;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
+import org.dita.dost.util.Configuration;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.MergeUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
+import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 /**
@@ -40,6 +43,8 @@ public final class MergeTopicParser extends AbstractXMLReader {
     private String dirPath = null;
     private String filePath = null;
     private boolean isFirstTopicId = false;
+    private boolean isFirstTopic = false;
+    private String rootLang = null;
 
     private final XMLReader reader;
     private String retId = null;
@@ -214,18 +219,32 @@ public final class MergeTopicParser extends AbstractXMLReader {
     @Override
     public void startDocument() throws SAXException {
         isFirstTopicId = true;
+        isFirstTopic = true;
+        rootLang = null;
     }
 
     @Override
-    public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
+    public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
         // Skip redundant <dita> tags.
         if (ELEMENT_NAME_DITA.equalsIgnoreCase(qName)) {
+            rootLang = attributes.getValue(XML_NS_URI, "lang");
             return;
         }
 
         topicInfo.append(LESS_THAN).append(qName);
+        final AttributesImpl atts = new AttributesImpl(attributes);
         final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
 
+        // Add default language
+        if (TOPIC_TOPIC.matches(classValue) && isFirstTopic) {
+            if (atts.getIndex(XML_NS_URI, "lang") == -1) {
+                atts.addAttribute(XML_NS_URI, "lang", XML_NS_PREFIX + ":lang", "CDATA",
+                                  rootLang != null ? rootLang : Configuration.configuration.get("default.language"));
+                rootLang = null;
+            }
+            isFirstTopic = false;
+        }
+        
         final int attsLen = atts.getLength();
         for (int i = 0; i < attsLen; i++) {
             final String attQName = atts.getQName(i);

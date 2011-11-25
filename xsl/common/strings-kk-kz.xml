@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings xml:lang="ru-ru">        <!-- US English -->
+
+<!-- various labels (not author controlled) -->
+<str name="Figure">Сурет</str>
+<str name="Table">Кесте</str>
+<str name="Next topic">Келесі бөлім</str>
+<str name="Previous topic">Бұдан бұрынғы бөлім</str>
+<str name="Parent topic">Негізгі бөлім</str>
+<str name="Required cleanup">Қажет тазалау</str>
+<str name="Draft comment">Жоба түсініктеме</str>
+<str name="Option">Параметр</str>
+<str name="Description">Сипаттама</str>
+<str name="Optional">Қосымша</str>
+<str name="Required">Қажет</str>
+<str name="Skip visual syntax diagram">Визуалдық синтаксистік диаграмманы өткізіп жіберу</str>
+<str name="Read syntax diagram">Синтаксистік диаграмманы оқу</str>
+<str name="Start of change">Өзгертуді бастау</str>
+<str name="End of change">Өзгертуді аяқтау</str>
+<str name="Index">Индекс</str>
+<str name="Special characters">Арнайы таңбалар</str>
+<str name="Numerics">Сандар</str>
+<str name="End notes">Қорытынды ескертулер</str>
+<str name="Artwork">Графика</str>
+<str name="Syntax">Синтаксис</str>
+<str name="Type">Түр</str>
+<str name="Value">Мән</str>
+<!-- Text that goes before a link to a topic -->
+<str name="intro-to-topic-link"></str>
+
+<!-- peril notice labels -->
+<str name="Note">Ескерту</str>
+<str name="Notes">Ескертулер</str>
+<str name="Tip">Кеңес</str>
+<str name="Fastpath">Жылдам жол</str>
+<str name="Important">Маңызды</str>
+<str name="Attention">Назар аударыңыз</str>
+<str name="Caution">АБАЙЛАҢЫЗ</str>
+<str name="Danger">ҚАУІП</str>
+<str name="Remember">Есте сақтаңыз</str>
+<str name="Warning">Ескерту</str>
+<str name="Restriction">Шектеу</str>
+
+<!-- default title text for section level generated sections -->
+<str name="Contents">Мазмұны</str>
+<str name="Related concepts">Өзара байланысты түсініктер</str>
+<str name="Related tasks">Өзара байланысты тапсырмалар</str>
+<str name="Related reference">Өзара байланысты сілтеме</str>
+<str name="Related information">Өзара байланысты ақпарат</str>
+
+<str name="Prerequisite">Бастапқы шарт</str>
+<str name="Prerequisites">Бастапқы шарттар</str>
+<str name="or">немесе</str>
+<str name="figure-number-separator"> </str>
+
+<!--Task section labels -->
+<str name="task_context">Осы тапсырма туралы</str>
+<str name="task_example">Мысал</str>
+<str name="task_postreq">Келесі әрекет</str>
+<str name="task_prereq">Бастаудан бұрын</str>
+<str name="task_procedure">Процедура</str>
+<str name="task_results">Нәтижелер</str>
+
+<str name="Copyright">авторлық құқықтары</str>
+
+<!-- Symbols -->
+<str name="OpenQuote">"</str>
+<str name="CloseQuote">"</str>
+<str name="ColonSymbol">:</str>
+
+<!-- For odt transform -->
+<str name="On the page"> on page </str>
+<str name="Related Links">Related Links</str>
+<str name="List item">List item.</str>
+<str name="Foot note">Footnote.</str>
+<str name="Page"> page </str>
+<str name="Unordered List bullet">&#x2022;</str>
+
+</strings>

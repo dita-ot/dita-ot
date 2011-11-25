@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<?Pub Inc?>
+<reference id="plugin-newextensions" xml:lang="en-us">
+<title>Creating a new plug-in extension point</title>
+<shortdesc>If your plugin needs to define its own extension point
+in an XML file, add the string           "<codeph>_template</codeph>"
+to the filename before the file suffix. During integration,      
+  this file will be processed like the built-in DITA-OT templates.</shortdesc>
+<refbody>
+<section><p>To mark the file as a         template file, use the <codeph>&lt;template></codeph> element.</p></section>
+<example><codeblock>&lt;template file="myTemplateFile_template.xsl"/></codeblock></example>
+</refbody><?Pub Caret -1?>
+</reference>
+<?Pub *0000000844?>

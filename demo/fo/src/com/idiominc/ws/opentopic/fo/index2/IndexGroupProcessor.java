@@ -7,9 +7,11 @@ import com.idiominc.ws.opentopic.fo.index2.configuration.IndexConfiguration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 
 /*
@@ -42,7 +44,14 @@ with those set forth herein.
 This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
  */
-public class IndexGroupProcessor {
+public final class IndexGroupProcessor {
+    
+    private DITAOTLogger logger;
+    
+    public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
+    
     /**
      * Puts index entries to the group they are belongs
      *
@@ -51,7 +60,7 @@ public class IndexGroupProcessor {
      * @param theLocale             locale used to sort and compare index entries
      * @return groups with sorted index entries inside
      */
-    public static IndexGroup[] process(final IndexEntry[] theIndexEntries, final IndexConfiguration theIndexConfiguration,
+    public IndexGroup[] process(final IndexEntry[] theIndexEntries, final IndexConfiguration theIndexConfiguration,
             final Locale theLocale) {
         final IndexCollator collator = new IndexCollator(theLocale);
 
@@ -98,10 +107,8 @@ public class IndexGroupProcessor {
 
             if (groupMembers.length > 0) {
                 //Find entries by comaping first letter with a chars in current config entry
-                final Set set = indexMap.keySet();
-                final Object[] keys = set.toArray(new Object[set.size()]);
-                for (final Object key2 : keys) {
-                    final String key = (String) key2;
+                for (final String key2 : new ArrayList<String>(indexMap.keySet())) {
+                    final String key = key2;
                     if (key.length() > 0) {
                         final String value = getValue((IndexEntry) indexMap.get(key));
                         //						final char c = value.charAt(0);
@@ -134,19 +141,17 @@ public class IndexGroupProcessor {
         }
 
         if (!indexMap.isEmpty()) {
-            final Set set = indexMap.keySet();
-            final Object[] keys = set.toArray(new Object[set.size()]);
-            for (final Object key2 : keys) {
-                final String key = (String) key2;
+            for (final String key2 : new ArrayList<String>(indexMap.keySet())) {
+                final String key = key2;
                 if (key.length() > 0) {
                     final IndexEntry entry = (IndexEntry) indexMap.get(key);
                     final Properties prop = new Properties();
                     prop.put("%1", entry.toString());
-                    System.err.println(MessageUtils.getMessage("PDFJ001E", prop).toString());
+                    logger.logError(MessageUtils.getMessage("PDFJ001E", prop).toString());
                 }
             }
             if (IndexPreprocessorTask.failOnError) {
-                System.err.println(MessageUtils.getMessage("PDFJ002E", new Properties()).toString());
+                logger.logError(MessageUtils.getMessage("PDFJ002E", new Properties()).toString());
                 IndexPreprocessorTask.processingFaild=true;
             }
         }
@@ -177,23 +182,18 @@ public class IndexGroupProcessor {
 
 
     private static String[] getIndexKeysOfIndexesInRange(final String theKey1, final String theKey2, final IndexCollator theCollator, final HashMap<String, IndexEntry> theIndexEntryMap) {
-        final Set<String> set = theIndexEntryMap.keySet();
-        final String[] allKeys = (String[]) set.toArray(new String[0]);
-
-
         final ArrayList<String> res = new ArrayList<String>();
-        for (final String key : allKeys) {
-            final String value = getValue((IndexEntry) theIndexEntryMap.get(key));
-            final int res1 = theCollator.compare(theKey1, value);
+        for (final Map.Entry<String, IndexEntry> e : theIndexEntryMap.entrySet()) {
+            final int res1 = theCollator.compare(theKey1, e.getValue());
             if (res1 <= 0) {
                 if (theKey2 == null) {
                     //the right range is not specified
-                    res.add(key);
+                    res.add(e.getKey());
                     continue;
                 }
-                final int res2 = theCollator.compare(theKey2, key);
+                final int res2 = theCollator.compare(theKey2, e.getKey());
                 if (res2 > 0) {
-                    res.add(key);
+                    res.add(e.getKey());
                 }
             }
         }

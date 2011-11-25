@@ -3,12 +3,11 @@
 <map id="mainDITAreadme" title="DITA-Ot Readme map" xml:lang="en-us">
   <topicref href="readme/DITA-readme.xml" id="DITA-doc">
     <topicref href="readme/EvaluateOT.xml"/>
-    <topicref href="readme/DITA-changes.xml#rel1.5.4" chunk="select-branch to-content" copy-to="readme/whats_new.dita" locktitle="yes">
+    <topicref href="readme/changes/rel1.5.4.xml" locktitle="yes">
       <topicmeta>
         <navtitle>Release notes</navtitle>
       </topicmeta>
     </topicref>
-    <!--topicref href="readme/DITA-changes.xml" navtitle="DITA release history"/-->
     <topicref href="specification/DITA1-2.xml"/>
     <topicref href="readme/DITA-tested.xml" toc="no"/>
     <topicref href="readme/distribution_packages.dita"/>
@@ -16,11 +15,13 @@
     <topicref href="readme/DITA-usingtransforms.xml"/>
     <topicref href="readme/DITA-ant.xml">
       <!--topicref href="readme/DITA-setupant.xml" toc="no"/-->
-      <topicref href="readme/DITA-antuse.xml" toc="no"/>
-      <topicref href="readme/DITA-antscript.xml" toc="no"/>
+      <topicref href="readme/DITA-antuse.xml"/>
+      <topicref href="readme/DITA-antscript.xml"/>
+      <topicref href="readme/dita-ot_ant_properties.dita"/>
     </topicref>
-    <topicref href="readme/DITA-javacmd.xml"/>
-    <topicref href="quickstartguide/reference/dita-ot_ant_properties.dita"/>
+    <topicref href="readme/DITA-javacmd.xml">
+      <topicref href="readme/dita-ot_java_properties.dita"/>
+    </topicref>
     <topicref href="readme/DITA-log.xml"/>
     <topicref href="readme/DITA-troubleshooting.xml"/>
     <topicref href="readme/DITA-limitations.xml" processing-role="resource-only" toc="no"/>

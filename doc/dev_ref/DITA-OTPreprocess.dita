@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
  "concept.dtd">
 <concept id="preprocessarch" xml:lang="en-us">
@@ -12,6 +14,6 @@ output format.</shortdesc>
 <p>Each step described corresponds to one Ant target in the build
 pipeline. The general Ant target "preprocess" will call all of the
 targets described here.</p>
-</conbody><?Pub Caret -1?>
+</conbody>
 </concept>
-<?Pub *0000000713?>
+

@@ -1,13 +1,21 @@
 package com.idiominc.ws.opentopic.fo.index2.util;
 
 import static org.dita.dost.util.Constants.*;
+import static com.idiominc.ws.opentopic.fo.index2.IndexPreprocessor.*;
 
 import com.idiominc.ws.opentopic.fo.index2.IndexEntry;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Properties;
 import java.util.StringTokenizer;
 
+import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.log.MessageUtils;
+import org.dita.dost.util.Configuration;
+import org.dita.dost.util.XMLUtils;
+
+import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 
@@ -41,19 +49,34 @@ with those set forth herein.
 This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
  */
-public abstract class IndexDitaProcessor {
+public final class IndexDitaProcessor {
+    
     private static String elIndexRangeStartName = "start";
     private static String elIndexRangeEndName = "end";
     private static final String SO = "<so>";
     private static final String LT = "<";
     private static final String GT = ">";
     private static final String sortStart = "[";
-    private static final String sortEnd = "]";
-
-    public static IndexEntry[] processIndexDitaNode(final Node theNode, final String theParentValue) {
+    private static final String sortEnd = "]"; 
+    
+    private DITAOTLogger logger;
+    
+    public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
+    
+    /**
+     * Read index terms from source XML.
+     * 
+     * @param theNode source indexterm element
+     * @param theParentValue parent value
+     * @return index entries
+     */
+    public IndexEntry[] processIndexDitaNode(final Node theNode, final String theParentValue) {
 
         final NodeList childNodes = theNode.getChildNodes();
-        final StringBuffer textValueBuffer = new StringBuffer();;
+        final StringBuffer textValueBuffer = new StringBuffer();
+        final List<Node> contents = new ArrayList<Node>();
         final StringBuffer sortStringBuffer = new StringBuffer();
         final boolean startRange = theNode.getAttributes().getNamedItem(elIndexRangeStartName) != null;
         final boolean endRange = theNode.getAttributes().getNamedItem(elIndexRangeEndName) != null;
@@ -64,6 +87,7 @@ public abstract class IndexDitaProcessor {
         for (int i = 0; i < childNodes.getLength(); i++) { //Go through child nodes to find text nodes
             final Node child = childNodes.item(i);
             if (child.getNodeType() == Node.TEXT_NODE) {
+                contents.add(child);
                 final String val = child.getNodeValue();
                 if (null != val) {
                     textValueBuffer.append(val);
@@ -75,7 +99,7 @@ public abstract class IndexDitaProcessor {
                 if (currentTextValue.equals("")) {
                     currentRefId="";
                 } else {
-                    currentRefId = currentTextValue+":";
+                    currentRefId = currentTextValue + VALUE_SEPARATOR;
                 }
                 final IndexEntry[] childs = processIndexDitaNode(child,theParentValue+currentRefId);
                 for (final IndexEntry child2 : childs) {
@@ -103,6 +127,9 @@ public abstract class IndexDitaProcessor {
                 for (final IndexEntry child2 : childs) {
                     seeAlsoEntry.add(child2);
                 }
+            } else if (child.getNodeType() == Node.ELEMENT_NODE) {
+                contents.add(child);
+                textValueBuffer.append(XMLUtils.getStringValue((Element) child));
             }
 
         }
@@ -123,7 +150,27 @@ public abstract class IndexDitaProcessor {
                 textValue = textValue.substring(0,textValue.indexOf(sortStart));
             }
         }
-        final IndexEntry result = createIndexEntry(textValue,sortString);
+
+        if (!childEntrys.isEmpty() && !seeEntry.isEmpty()) {
+            for (final IndexEntry e: seeEntry) {
+                final Properties prop = new Properties();
+                prop.put("%1", e.getFormattedString());
+                prop.put("%2", textValue);
+                logger.logWarn(MessageUtils.getMessage("DOTA067W", prop).toString());
+            }
+            seeEntry.clear();
+        }
+        if (!childEntrys.isEmpty() && !seeAlsoEntry.isEmpty()) {
+            for (final IndexEntry e: seeAlsoEntry) {
+                final Properties prop = new Properties();
+                prop.put("%1", e.getFormattedString());
+                prop.put("%2", textValue);
+                logger.logWarn(MessageUtils.getMessage("DOTA068W", prop).toString());
+            }
+            seeAlsoEntry.clear();
+        }
+        
+        final IndexEntry result = createIndexEntry(contents, textValue,sortString);
         if (result.getValue().length() > 0 || endRange || startRange) {
             result.setStartRange(startRange);
             result.setEndsRange(endRange);
@@ -132,23 +179,23 @@ public abstract class IndexDitaProcessor {
             } else if (endRange) {
                 result.addRefID(theNode.getAttributes().getNamedItem(elIndexRangeEndName).getNodeValue());
             } else {
-                result.addRefID(normalizeTextValue(theParentValue + textValue + ":"));
+                result.addRefID(normalizeTextValue(theParentValue + textValue + VALUE_SEPARATOR));
             }
             if (!seeEntry.isEmpty()) {
                 for (int j = 0; j < seeEntry.size(); j++) {
-                    final IndexEntry seeIndexEntry = (IndexEntry) seeEntry.get(j);
+                    final IndexEntry seeIndexEntry = seeEntry.get(j);
                     result.addSeeChild(seeIndexEntry);
                 }
                 result.setSuppressesThePageNumber(true);
             }
             if (!seeAlsoEntry.isEmpty()) {
                 for (int j = 0; j < seeAlsoEntry.size(); j++) {
-                    final IndexEntry seeAlsoIndexEntry = (IndexEntry) seeAlsoEntry.get(j);
+                    final IndexEntry seeAlsoIndexEntry = seeAlsoEntry.get(j);
                     result.addSeeAlsoChild(seeAlsoIndexEntry);
                 }
             }
             for (int i = 0; i < childEntrys.size(); i++) {
-                final IndexEntry child = (IndexEntry) childEntrys.get(i);
+                final IndexEntry child = childEntrys.get(i);
                 result.addChild(child);
             }
             final IndexEntry[] resultArray = new IndexEntry[1];
@@ -159,19 +206,19 @@ public abstract class IndexDitaProcessor {
         }
     }
 
-    private static IndexEntry createIndexEntry(String theValue, final String theSortString) {
+    private static IndexEntry createIndexEntry(final List<Node> contents, String theValue, final String theSortString) {
         String soString;
         final int soIdxOf = theValue.indexOf(SO);
-        if (soIdxOf > 0) {
+        if (soIdxOf > 0 && USES_FRAME_MARKUP) {
             soString = theValue.substring(soIdxOf + SO.length());
             theValue = theValue.substring(0, soIdxOf);
         } else {
             soString = null;
         }
 
-        final String strippedFormatting = stripFormatting(theValue);
+        final String strippedFormatting = USES_FRAME_MARKUP ? stripFormatting(theValue) : theValue;
 
-        final IndexEntryImpl indexEntry = new IndexEntryImpl(strippedFormatting, soString, theSortString, theValue);
+        final IndexEntryImpl indexEntry = new IndexEntryImpl(strippedFormatting, soString, theSortString, theValue, contents);
         if (!theSortString.equals("")) {
             indexEntry.setSortString(theSortString);
         } else {
@@ -195,8 +242,11 @@ public abstract class IndexDitaProcessor {
 
     public static String normalizeTextValue(final String theString) {
         if (null != theString && theString.length() > 0) {
-            String res = theString.replaceAll("[\\s\\n]+", " ");
+            String res = theString.replaceAll("[\\s\\n]+", " ").trim();
             res = res.replaceAll("[\\s]+$", ""); //replace in the end of string
+            if (!USES_FRAME_MARKUP) {
+                return res;
+            }
             res = res.replaceAll("[\\s]+:", ":"); //replace spaces before ':'
             return res.replaceAll(":[\\s]+", ":"); //replace spaces after ':'
         }

@@ -3,12 +3,7 @@
      Sourceforge.net. See the accompanying license.txt file for 
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
-<project name="dita2javahelp" default="dita2javahelp">
-    <property name="transtype" value="javahelp"/>
-    
-    <import file="build_init.xml" />
-    <import file="build_preprocess.xml" />
-    <import file="build_general.xml" />
+<project name="dita2javahelp">
 
     <target name="dita2javahelp"
             unless="noMap"

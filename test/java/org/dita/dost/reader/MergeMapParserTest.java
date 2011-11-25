@@ -29,7 +29,7 @@ public class MergeMapParserTest {
     private final File expDir = new File(resourceDir, "exp");
 
     @Test
-    public void testRead() throws SAXException, IOException {
+    public void testReadString() throws SAXException, IOException {
         final MergeMapParser parser = new MergeMapParser();
         parser.setLogger(new TestUtils.TestLogger());
         parser.read(new File(srcDir, "test.ditamap").getAbsolutePath() + "|" + srcDir.getAbsolutePath());
@@ -38,4 +38,24 @@ public class MergeMapParserTest {
                 new InputSource(new StringReader(act)));
     }
 
+    @Test
+    public void testReadStringString() throws SAXException, IOException {
+        final MergeMapParser parser = new MergeMapParser();
+        parser.setLogger(new TestUtils.TestLogger());
+        parser.read(new File(srcDir, "test.ditamap").getAbsolutePath(), srcDir.getAbsolutePath());
+        final String act = "<wrapper>" + parser.getContent().getValue().toString() + "</wrapper>";
+        assertXMLEqual(new InputSource(new File(expDir, "merged.xml").toURI().toString()),
+                new InputSource(new StringReader(act)));
+    }
+    
+    @Test
+    public void testReadSpace() throws SAXException, IOException {
+        final MergeMapParser parser = new MergeMapParser();
+        parser.setLogger(new TestUtils.TestLogger());
+        parser.read(new File(srcDir, "space in map name.ditamap").getAbsolutePath(), srcDir.getAbsolutePath());
+        final String act = "<wrapper>" + parser.getContent().getValue().toString() + "</wrapper>";
+        assertXMLEqual(new InputSource(new File(expDir, "merged.xml").toURI().toString()),
+                new InputSource(new StringReader(act)));
+    }
+    
 }

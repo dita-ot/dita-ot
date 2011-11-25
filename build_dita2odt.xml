@@ -3,12 +3,8 @@
      Sourceforge.net. See the accompanying license.txt file for 
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
-<project name="dita2odt" default="dita2odt">
+<project name="dita2odt">
 	
-  <import file="build_init.xml" />
-  <import file="build_preprocess.xml" />	
-  
-  <property name="transtype" value="odt"/>
   <property name="odt.suffix" value=".odt" />
   <condition property="args.odt.include.rellinks" value="none">
      <not><isset property="args.odt.include.rellinks"></isset></not>

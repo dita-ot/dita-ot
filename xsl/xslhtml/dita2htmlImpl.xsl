@@ -2236,7 +2236,7 @@
     <xsl:variable name="width">
       <xsl:choose>
         <xsl:when test="not(contains(../@href,'://'))">
-          <xsl:value-of select="java:getWidth($OUTPUTDIR, string(../@href))"/>
+          <xsl:value-of select="java:getWidth($OUTPUTDIR, concat($FILEDIR,'/',string(../@href)))"/>
         </xsl:when>
         <xsl:otherwise/>
       </xsl:choose>
@@ -2244,7 +2244,7 @@
     <xsl:variable name="height">
       <xsl:choose>
         <xsl:when test="not(contains(../@href,'://'))">
-          <xsl:value-of select="java:getHeight($OUTPUTDIR, string(../@href))"/>
+          <xsl:value-of select="java:getHeight($OUTPUTDIR, concat($FILEDIR,'/',string(../@href)))"/>
         </xsl:when>
         <xsl:otherwise/>
       </xsl:choose>

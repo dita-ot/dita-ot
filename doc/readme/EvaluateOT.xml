@@ -54,26 +54,6 @@
         1.2 specification.</note>
   <dl>
     <dlentry><dt>all</dt><dd>Build all output</dd></dlentry>
-    <dlentry><dt>clean</dt><dd>Delete all output</dd></dlentry>
-    <dlentry><dt>clean.demo</dt><dd>Remove the demo output</dd></dlentry>
-    <dlentry><dt>clean.demo.book</dt><dd>Remove the book demo output</dd></dlentry>
-    <dlentry><dt>clean.demo.elementref</dt><dd>Remove the Element Reference demo output</dd></dlentry>
-    <dlentry><dt>clean.demo.enote</dt><dd>Remove the eNote demo output</dd></dlentry>
-    <dlentry><dt>clean.demo.faq</dt><dd>Remove the FAQ demo output</dd></dlentry>
-    <dlentry><dt>clean.doc</dt><dd>Remove the documentation output</dd></dlentry>
-    <dlentry><dt>clean.doc.articles</dt><dd>Delete the articles directory in doc.</dd></dlentry>
-    <dlentry><dt>clean.docbook</dt><dd>Remove the docbook output</dd></dlentry>
-    <dlentry><dt>clean.samples</dt><dd>Remove the sample output</dd></dlentry>
-    <dlentry><dt>clean.samples.eclipse</dt><dd>Remove the sample Eclipse output</dd></dlentry>
-    <dlentry><dt>clean.samples.htmlhelp</dt><dd>Remove the sample Microsoft Compiled HTML Help output</dd></dlentry>
-    <dlentry><dt>clean.samples.javahelp</dt><dd>Remove the sample JavaHelp output</dd></dlentry>
-    <dlentry><dt>clean.samples.pdf</dt><dd>Remove the sample PDF output</dd></dlentry>
-    <dlentry><dt>clean.samples.web</dt><dd>Remove the sample XHTML output</dd></dlentry>
-    <dlentry><dt>demo</dt><dd>Build the demos</dd></dlentry>
-    <dlentry><dt>demo.book</dt><dd>Build the book demo</dd></dlentry>
-    <dlentry><dt>demo.elementref</dt><dd>Build the element reference demo</dd></dlentry>
-    <dlentry><dt>demo.enote</dt><dd>Build the eNote demo</dd></dlentry>
-    <dlentry><dt>demo.faq</dt><dd>Build the FAQ demo</dd></dlentry>
     <dlentry><dt>doc</dt><dd>Build the documentation</dd></dlentry>
     <dlentry><dt>doc.articles.chm</dt><dd>Build the articles of dita to Microsoft Compiled HTML Help</dd></dlentry>
     <dlentry><dt>doc.articles.pdf</dt><dd>Build the articles of dita to PDF</dd></dlentry>
@@ -87,15 +67,53 @@
     <dlentry><dt>samples.pdf</dt><dd>Build the samples as PDF</dd></dlentry>
     <dlentry><dt>samples.troff</dt><dd>Build the samples as troff</dd></dlentry>
     <dlentry><dt>samples.web</dt><dd>Build the samples to XHTML</dd></dlentry>
+        <dlentry>
+          <dt>clean</dt>
+          <dd>Delete all output</dd>
+        </dlentry>
+        <dlentry>
+          <dt>clean.doc</dt>
+          <dd>Remove the documentation output</dd>
+        </dlentry>
+        <dlentry>
+          <dt>clean.doc.articles</dt>
+          <dd>Delete the articles directory in doc.</dd>
+        </dlentry>
+        <dlentry>
+          <dt>clean.docbook</dt>
+          <dd>Remove the docbook output</dd>
+        </dlentry>
+        <dlentry>
+          <dt>clean.samples</dt>
+          <dd>Remove the sample output</dd>
+        </dlentry>
+        <dlentry>
+          <dt>clean.samples.eclipse</dt>
+          <dd>Remove the sample Eclipse output</dd>
+        </dlentry>
+        <dlentry>
+          <dt>clean.samples.htmlhelp</dt>
+          <dd>Remove the sample Microsoft Compiled HTML Help output</dd>
+        </dlentry>
+        <dlentry>
+          <dt>clean.samples.javahelp</dt>
+          <dd>Remove the sample JavaHelp output</dd>
+        </dlentry>
+        <dlentry>
+          <dt>clean.samples.pdf</dt>
+          <dd>Remove the sample PDF output</dd>
+        </dlentry>
+        <dlentry>
+          <dt>clean.samples.web</dt>
+          <dd>Remove the sample XHTML output</dd>
+        </dlentry>
   </dl>
   <p>If
 you do not specify a target for <filepath>build_demo.xml</filepath>,
-the default target is <codeph>prompt</codeph>. </p><p>You can also
-try your hand at modifying some of the sample scripts in the ant directory.
-These represent the kind of driver files that you would create for
-your own projects. You can easily adapt these to process your own
-test DITA files, for example. Call the other ant samples after this
-example: </p><pre platform="windows">C:\DITA-OT<keyword keyref="release.version"/>>ant -f samples\ant_sample\sample_xhtml.xml</pre>
+the default target is <codeph>prompt</codeph>. </p><p>You can also try your hand at modifying some of the sample scripts in the ant directory. These
+        represent the kind of driver files that you would create for your own projects. You can
+        easily adapt these to process your own test DITA files, for example. Call the other Ant
+        samples after this example: </p><pre platform="windows">C:\DITA-OT<keyword keyref="release.version"/>>ant -f samples\ant_sample\sample_xhtml.xml</pre>
   <note>This is basically the same as running <codeph>ant samples.web -f build_demo.xml</codeph>, but
         intended for you to modify. </note><p>You
 will find the output for this exercise in the <filepath>samples/ant_sample/</filepath> directory
@@ -105,7 +123,7 @@ process in other ways. See the documentation for Ant parameters to
 learn more about processing options.</p></section>
 </conbody>
   <related-links>
-    <link href="../quickstartguide/reference/dita-ot_ant_properties.dita"/>
+    <link href="dita-ot_ant_properties.dita"/>
   </related-links>
 </concept>
 <?Pub *0000006946?>

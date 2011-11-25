@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved. -->
+<project name="sample_tocjs" default="samples.tocjs" basedir=".">
+  
+  <property name="dita.dir" location="${basedir}/../.."/>
+  
+  <import file="${dita.dir}/integrator.xml"/>
+  
+  <target name="samples.tocjs" depends="integrate" description="build the samples for the TocJS">
+    <ant antfile="${dita.dir}/build.xml" target="init">
+      <property name="args.input" location="${dita.dir}/samples/hierarchy.ditamap"/>
+      <property name="output.dir" location="${dita.dir}/out/samples/tocjs"/>
+      <property name="transtype" value="tocjs"/>
+    </ant>
+  </target>
+ 
+  <target name="clean.samples.tocjs" description="remove the sample TocJS output">
+    <delete dir="${dita.dir}/out/samples/tocjs"/>
+  </target>
+
+</project>

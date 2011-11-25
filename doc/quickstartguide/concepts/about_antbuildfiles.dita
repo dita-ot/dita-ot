@@ -33,18 +33,12 @@ or two Ant properties in these scripts for your own documentation.
     &lt;/ant>
   &lt;/target>
 
-&lt;/project></codeblock>     
-  <!--
-    <image placement="break"
-align="left" height="400" href="../images/samplepdfbuildfile.gif"
-width="400"></image>
--->
+&lt;/project></codeblock>
 <p>You simply change the values of
 the following properties to match the values used in your project:
     <ul>
 <li>Project name: The root element in an Ant build file.</li>
-<li>Target name: Must be one of the DITA-OT targets listed in <xref
-href="../reference/dita-ot_ant_properties.dita"></xref></li>
+<li>Target name: Must be one of the supported DITA-OT transtypes.</li>
 </ul>     However, the toolkit's scripts assume that your input files
 are located in same directory structure used by the DITA-OT samples.
     </p>    </section>
@@ -90,10 +84,7 @@ are located in same directory structure used by the DITA-OT samples.
   &lt;/target>
 
 &lt;/project></codeblock>
-      <!--
-      <image align="left" height="400" href="../images/mybuildfile.gif" width="400" placement="break"/>
-      -->
-      <p><xref href="../reference/dita-ot_ant_properties.dita"/> contains a list of the most basic
+      <p><xref href="../../readme/dita-ot_ant_properties.dita"/> contains a list of the most basic
         Ant properties used by DITA-OT. Use these properties to customize your document's build
         script for your needs.</p>
       <?Pub Caret 1?>
@@ -101,7 +92,7 @@ are located in same directory structure used by the DITA-OT samples.
 </conbody>
 <related-links>
 <link href="about_ant.dita" scope="local"></link>
-<link href="../reference/dita-ot_ant_properties.dita" scope="local">
+  <link href="../../readme/dita-ot_ant_properties.dita" scope="local">
 </link>
 </related-links>
 </concept>

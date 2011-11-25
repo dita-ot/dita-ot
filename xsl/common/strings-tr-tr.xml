@@ -28,7 +28,7 @@
 <str name="End notes">Notların sonu</str>
 <str name="Artwork">Şekil</str>
 <str name="Syntax">Sözdizim</str>
-<str name="Type">Tip</str>
+<str name="Type">İpucu</str>
 <str name="Value">Değer</str>
 <!-- Text that goes before a link to a topic -->
 <str name="intro-to-topic-link"></str>

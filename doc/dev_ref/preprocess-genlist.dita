@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
  "reference.dtd">
-<?Pub Inc?>
 <reference id="preprocess-genlist" xml:lang="en-us">
 <title>Generate lists (gen-list)</title>
 <shortdesc>The <codeph>gen-list</codeph> step examines the input files
@@ -13,8 +14,7 @@ attribute; only those files are processed         during the conref
 stage of the build. This step is implemented in Ant and Java.</shortdesc>
 <refbody>
 <section><p>The result of this list is a set of several list files
-in the temporary directory, including <filepath>dita.list</filepath> and <filepath>dita.xml.properties</filepath>.</p><?Pub
-Caret -2?><table>
+in the temporary directory, including <filepath>dita.list</filepath> and <filepath>dita.xml.properties</filepath>.</p><table>
 <tgroup cols="4"><colspec colname="col1"/><colspec colname="col2"/>
 <colspec colname="col3"/><colspec colname="col4"/>
 <thead>
@@ -215,4 +215,3 @@ an href attribute</entry>
 </table></section>
 </refbody>
 </reference>
-<?Pub *0000007575?>

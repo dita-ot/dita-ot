@@ -3,11 +3,7 @@
      Sourceforge.net. See the accompanying license.txt file for 
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
-<project name="dita2troff" default="dita2troff">
-  <property name="transtype" value="troff"/>
-    
-  <import file="build_init.xml" />
-  <import file="build_preprocess.xml" />
+<project name="dita2troff">
 
   <target name="dita2troff"
     depends="build-init, preprocess, dita.topic.troff, dita.inner.topic.troff, dita.outer.topic.troff">

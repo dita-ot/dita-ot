@@ -20,7 +20,7 @@
       -->
     </linklist>
     <linklist outputclass="download">
-      <link href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Stable%20Release/DITA%20Open%20Toolkit%201.5.3/" scope="external">
+      <link href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Stable%20Release/DITA%20Open%20Toolkit%201.5.4/" scope="external">
         <linktext>Download</linktext>
       </link>
       <linkinfo>
@@ -28,7 +28,7 @@
       </linkinfo>
     </linklist>
     <linklist outputclass="startguide">
-      <link href="1.5.3/quickstartguide/tasks/generating_documents.dita" scope="peer">
+      <link href="1.5.4/quickstartguide/tasks/generating_documents.dita" scope="peer">
         <linktext>Get Started</linktext>
       </link>
       <linkinfo>
@@ -36,7 +36,7 @@
       </linkinfo>
     </linklist>
     <linklist outputclass="documentation">
-      <link href="1.5.3/" scope="peer">
+      <link href="1.5.4/" scope="peer">
         <linktext>Read the Docs</linktext>
       </link>
       <linkinfo>

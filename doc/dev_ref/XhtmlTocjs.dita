@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="xhtmltocjs" xml:lang="en-us">
+<title>TocJS output path</title>
+<shortdesc>The TocJS transform type was originally created as a plug-in
+distributed outside of the toolkit, but now ships bundled in the default
+packages. This XHTML based output type creates a JavaScript based
+frameset with TOC entries that expand and collapse.</shortdesc>
+<refbody>
+<section><p>A few Ant targets control most of the TocJS processing:<ul>
+<li><codeph>tocjsInit</codeph> is used to set up default properties.
+This template detects whether builds have already set a name for the
+JavaScript control file; if not, the default name <filepath>toctree.js</filepath> is
+used.</li>
+<li><codeph>map2tocjs</codeph> calls <codeph>dita.map.tocjs</codeph>,
+which generates the contents frame for TocJS output.</li>
+<li><codeph>tocjsDefaultOutput</codeph> was added to the process in
+version 1.5.4 of the DITA-OT. If scripts are missing some required
+information, such as a name for the default frameset, this template
+will copy default style and control files. It also ensures that the
+XHTML process runs (earlier versions of TocJS created only the JavaScript
+control file by default).</li>
+</ul></p></section>
+</refbody>
+</reference>

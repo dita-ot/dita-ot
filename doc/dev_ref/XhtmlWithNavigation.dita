@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="xhtmlwithnavigation" xml:lang="en-us">
+<title>Generating XHTML with navigation</title>
+<shortdesc>The toolkit ships with several varieties of XHTML output,
+each of which follows roughly the same path through the processing
+pipeline. All XHTML builds begin with the same call to the preprocess
+routine, after which they generate XHTML files and then branch to
+create navigation files.</shortdesc>
+<refbody>
+<section><p>Once the preprocess runs, XHTML based builds each run
+a common series of Ant targets. Navigation may be created before or
+after this set of common routines.</p><ul>
+<li>When the CSS parameter is passed to the build to add a CSS file,
+the <codeph>copy-css</codeph> target copies that CSS file from its
+source location to the proper relative location in the output directory.</li>
+<li>When a DITAVAL file is used, the <codeph>copy-revflag</codeph> target
+copies the default start and end revision flags into the output directory.</li>
+<li>Two targets names <codeph>dita.inner.topics.xhtml</codeph> and <codeph>dita.outer.topics.xhtml</codeph> are
+used to convert DITA topics into XHTML documents. At this point after
+the preprocess has completed, each DITA topic document in the temporary
+directory corresponds to one XHTML output document. The "inner" template
+is used to process documents that are in the map directory (or subdirectories
+of that directory). The "outer" template is used to process documents
+that are outside of the scope of the map, and may end up outside of
+the designated output directory. Parameters to the build control how
+documents processed by the "outer" target are handled.</li>
+</ul></section>
+</refbody>
+</reference>

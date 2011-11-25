@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved. -->
+<project name="sample_troff" default="samples.troff" basedir=".">
+  
+  <property name="dita.dir" location="${basedir}/../.."/>
+  
+  <import file="${dita.dir}/integrator.xml"/>
+  
+  <target name="samples.troff" depends="integrate" description="test dita to troff">
+    <ant antfile="${dita.dir}/build.xml" target="init">
+      <property name="args.input" location="${dita.dir}/samples/hierarchy.ditamap"/>
+      <property name="output.dir" location="${dita.dir}/out/samples/troff"/>
+      <property name="transtype" value="troff"/>
+    </ant>
+  </target>
+  
+</project>

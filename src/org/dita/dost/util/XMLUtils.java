@@ -11,6 +11,10 @@ package org.dita.dost.util;
 
 import static javax.xml.XMLConstants.NULL_NS_URI;
 
+import org.w3c.dom.NodeList;
+
+import org.w3c.dom.Element;
+
 import org.w3c.dom.Attr;
 import org.w3c.dom.Node;
 import org.xml.sax.helpers.AttributesImpl;
@@ -86,6 +90,29 @@ public final class XMLUtils {
         if (i != -1) {
             atts.removeAttribute(i);
         }
+    }
+    
+    /**
+     * Get element node string value.
+     * 
+     * @param element element to get string value for
+     * @return concatenated text node descendant values
+     */
+    public static String getStringValue(final Element element) {
+        final StringBuilder buf = new StringBuilder();
+        final NodeList children = element.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            final Node n = children.item(i);
+            switch (n.getNodeType()) {
+            case Node.TEXT_NODE:
+                buf.append(n.getNodeValue());
+                break;
+            case Node.ELEMENT_NODE:
+                buf.append(getStringValue((Element) n));
+                break;
+            }
+        }
+        return buf.toString();
     }
 
 }

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="odtdefault" xml:lang="en-us">
+<title>ODT Transform type (Open Document Format)</title>
+<shortdesc>The "odt" transform type creates a binary file using the
+OASIS standard Open Document Format. </shortdesc>
+<refbody>
+<section><p>The "odt" transform path begins with the preprocess, as
+with other builds. It then runs the Ant target <codeph>dita.odt.package.topic</codeph> (if
+the input file is a topic) or <codeph>dita.odt.package.map</codeph> (if
+the input file is a map). This description focuses on the map process,
+which is made up of the following targets.</p><ul>
+<li><codeph>dita.map.odt</codeph> creates the <filepath>content.xml</filepath> portion
+of the ODT output file. This is done by converting the map into a
+merged XML file using the Java topicmerge program. An XSLT process
+is then used to convert the merged file into <filepath>content.xml</filepath>.</li>
+<li><codeph>dita.map.odt.stylesfile</codeph> is a target that reads
+the input map, and uses XSLT to create a <filepath>styles.xml</filepath> file
+in the temporary directory.</li>
+<li><codeph>dita.out.odt.manifest.file</codeph> creates the <filepath>manifest.xml</filepath> portion
+of the ODT output file.</li>
+<li>Once the three previous targets run, the generated files are zipped
+up together with other required files to create the output ODT file.</li>
+</ul></section>
+</refbody>
+</reference>

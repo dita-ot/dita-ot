@@ -34,11 +34,14 @@ with those set forth herein.
 
   <target name="dita2pdf2.init">
     <condition property="preprocess.copy-image.skip" value="true">
-      <isfalse value="${org.dita.pdf2.legacy.use-out-temp}"/>
+      <isfalse value="${org.dita.pdf2.use-out-temp}"/>
+    </condition>
+    <condition property="retain.topic.fo" value="true">
+      <isfalse value="${org.dita.pdf2.use-out-temp}"/>
     </condition>
     <!-- Legacy: pass empty input directory -->
     <condition property="user.input.dir.url" value="">
-      <istrue value="${org.dita.pdf2.legacy.use-out-temp}"/>
+      <istrue value="${org.dita.pdf2.use-out-temp}"/>
     </condition>
   </target>
 
@@ -46,14 +49,20 @@ with those set forth herein.
 
   <target name="transform.topic2pdf.init">
     <condition property="pdf2.temp.dir" value="${dita.temp.dir}" else="${dita.map.output.dir}">
-      <isfalse value="${org.dita.pdf2.legacy.use-out-temp}"/>
+      <isfalse value="${org.dita.pdf2.use-out-temp}"/>
     </condition>
     
     <property name="customization.dir" value="${dita.plugin.org.dita.pdf2.dir}/Customization"/>
     <property file="${customization.dir}/build.properties"/>
     
+    <condition property="pdf2.i18n.skip" value="true">
+      <and>
+        <isset property="org.dita.pdf2.i18n.enabled"/>
+        <isfalse value="${org.dita.pdf2.i18n.enabled}"/>
+      </and>
+    </condition>
+    
     <property name="default.locale" value="en_US"/>
-    <property name="default.language" value="en"/>
     
     <!-- legacy property -->
     <property name="ot.dir" location="${dita.dir}"/>
@@ -356,12 +365,16 @@ with those set forth herein.
       <arg line='"antArgsIncludeRelatedLinks=${args.fo.include.rellinks}"'/>
       <arg line='"antArgsGenerateTaskLabels=${args.gen.task.lbl}"'/>
       <arg line='"pdfFormatter=${pdf.formatter}"'/>
+      <arg line='"useFrameIndexMarkup=${org.dita.pdf2.index.frame-markup}"'/>
       <arg line='"bookmap-order=${args.bookmap-order}"'/>
       <sysproperty key="xml.catalog.files" value="${xml.catalog.files}"/>
     </java>
   </target>
 
-  <target name="transform.topic2fo.i18n">
+  <target name="transform.topic2fo.i18n"
+          depends="transform.topic2fo.i18n.filter,
+                   transform.topic2fo.i18n.no-filter"/>
+  <target name="transform.topic2fo.i18n.filter" unless="pdf2.i18n.skip">
     <taskdef classname="com.idiominc.ws.opentopic.fo.i18n.PreprocessorTask" name="i18n-preprocess"
              classpathref="project.class.path"/>
     
@@ -401,6 +414,10 @@ with those set forth herein.
         <catalogpath path="${xml.catalog.files}"/>
       </xmlcatalog>
     </xslt>
+  </target>
+  <target name="transform.topic2fo.i18n.no-filter" if="pdf2.i18n.skip">
+    <echo level="info">Skip I18N font processing.</echo>
+    <move file="${dita.temp.dir}/stage2.fo" tofile="${pdf2.temp.dir}/topic.fo"/>
   </target>
 
   <target name="transform.topic2pdf"

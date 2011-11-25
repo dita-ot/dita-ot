@@ -34,7 +34,7 @@ See the accompanying license.txt file for applicable licenses.
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
 
     <xsl:attribute-set name="codeph" use-attribute-sets="base-font">
-        <xsl:attribute name="font-family">Monospaced</xsl:attribute>
+        <xsl:attribute name="font-family">monospace</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="codeblock" use-attribute-sets="pre">
@@ -68,19 +68,19 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="oper" use-attribute-sets="base-font">
-        <xsl:attribute name="font-family">Monospaced</xsl:attribute>
+        <xsl:attribute name="font-family">monospace</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="delim" use-attribute-sets="base-font">
-        <xsl:attribute name="font-family">Monospaced</xsl:attribute>
+        <xsl:attribute name="font-family">monospace</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="sep" use-attribute-sets="base-font">
-        <xsl:attribute name="font-family">Monospaced</xsl:attribute>
+        <xsl:attribute name="font-family">monospace</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="apiname" use-attribute-sets="base-font">
-        <xsl:attribute name="font-family">Monospaced</xsl:attribute>
+        <xsl:attribute name="font-family">monospace</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="parml">
@@ -131,7 +131,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="kwd" use-attribute-sets="base-font">
-        <xsl:attribute name="font-family">Monospaced</xsl:attribute>
+        <xsl:attribute name="font-family">monospace</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="kwd__default">
@@ -139,7 +139,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="fragref" use-attribute-sets="base-font">
-        <xsl:attribute name="font-family">Monospaced</xsl:attribute>
+        <xsl:attribute name="font-family">monospace</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="fragment.title">

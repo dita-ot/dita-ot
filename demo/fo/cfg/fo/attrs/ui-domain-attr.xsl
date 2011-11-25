@@ -58,7 +58,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="linefeed-treatment">preserve</xsl:attribute>
         <xsl:attribute name="wrap-option">wrap</xsl:attribute>
         <xsl:attribute name="background-color">#f0f0f0</xsl:attribute>
-        <xsl:attribute name="font-family">Monospaced</xsl:attribute>
+        <xsl:attribute name="font-family">monospace</xsl:attribute>
         <xsl:attribute name="line-height">106%</xsl:attribute>
     </xsl:attribute-set>
 

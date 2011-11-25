@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
 <topic id="dita-otprojecthome" xml:lang="en-us">
-  <title>DITA Open Toolkit Project Home</title>
+  <title>DITA Open Toolkit <keyword keyref="release.version"/></title>
   <shortdesc>This document describes the DITA Open Toolkit project—what the project is, and how to
     use the site.</shortdesc>
   <body>
@@ -67,12 +67,11 @@
     <link format="html" href="http://dita.xml.org/node/3101" scope="external">
       <linktext>Information on the <keyword keyref="release.version"/> release</linktext>
     </link>
+    <!-- TODO: Move this to plug-in usage/installation topic -->
     <link format="html" importance="deprecated"
       href="http://dita.xml.org/freelinking/Plugins%2520for%2520the%2520DITA%2520Open%2520Toolkit"
       scope="external">
       <linktext>Extending the toolkit with plug-ins</linktext>
     </link>
-    <link href="dev_ref/extension-points.dita"/>
-    <link href="quickstartguide/reference/dita-ot_ant_properties.dita"/>
   </related-links>
 </topic>

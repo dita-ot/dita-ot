@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
  "reference.dtd">
-<?Pub Inc?>
 <reference id="processing-order" xml:lang="en-us">
 <title>Processing order within the DITA-OT</title>
 <shortdesc>The order of processing is often significant when evaluating
@@ -47,7 +48,6 @@ target of the original conref before that conref is ever evaluated
 resolve the reference, and only later filter out the target of the
 conref. While some use cases can be found where this is desirable,
 benefits such as those described above resulted in the current processing
-order.</p><?Pub Caret -1?></section>
+order.</p></section>
 </refbody>
 </reference>
-<?Pub *0000003064?>

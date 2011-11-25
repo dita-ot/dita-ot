@@ -33,6 +33,9 @@
      * 3411476 Add extension point for print type declaration  (Milestone 6)
      * 3392891 Copy the graphic files to the temporary folder (Milestone 6)	
      * 3429290 Remove unused Apache Commons Logging JAR (Milestone 6)
+     * 3435528 Add base configuration file (Milestone 7)
+     * 3432219 Refector dita.list read and write (Milestone 7)
+     * 3401849 PDF2: runtime switch for localization post-processing (Milestone 7)
      * 3341648 Clean HTML and XHTML stylesheets  (In Processing)
      * 3343562 Java clean-up  (In Processing)
      * 3346094 Improve test coverage  (In Processing)
@@ -43,9 +46,12 @@
      * 3412211 Refactor PDF index stylesheet for XSL 1.1 support (In Processing)     	
      * 3425838 General PDF2 improvements  (In Processing)	     
      * 3428152 General I18N improvements  (In Processing)	     		
-     * 3429390 General XHTML improvements (In Processing)		
+     * 3429390 General XHTML improvements (In Processing)
+     * 3438361 Add "tocjs" transform to demo script (In Processing)			
+	 * 3438790 Clean up build_demo script (In Processing)
+	 	
      [ SourceForge Patches Added]
-    
+     * 2963037 PDF changes to fix index rendering of colon (bug 2879196) (Milestone 7)
          
      [ SourceForge Bugs Fixed] 
      * 2714699 FO plug-in doesn't support specialized index elements (Milestone 1)
@@ -81,10 +87,23 @@
 	 * 3406357 Custom profiling issue (Milestone 5)
 	 * 3413203 Remove references to OpenTopic in PDF2 (Milestone 5)
 	 * 3414270 @props specialization not used in map (Milestone 5)
+	 * 3383618 Attribute 'link-back' cannot occur at element 'fo:index-key (Milestone 5)
 	 * 3418953 Scale computation for XHTML uncorrectly looks up images (Milestone 6)
 	 * 3413229 onlytopic.in.map & symlink (Milestone 6)
 	 * 3423537 Additional line breaks in <menucascade> should be ignored  (Milestone 6)
 	 * 3423672 Problems with refs to images outside the DITA Map directory (Milestone 6)
+	 * 2879663 indexterm/keyword causees NullPointerException (Milestone 7)
+	 * 2879196 Colon character in <indexterm> causes nesting in output (Milestone 7)
+	 * 3179018 Indexterm with only nested subelement results in NPE (Milestone 7)
+	 * 3432267 Task example title processing incorrect for PDF (Milestone 7)
+     * 3430302 Unitless images sizes in throw errors (Milestone 7)
+     * 3429845 No variables for Warning (Milestone 7)
+     * 3428871 topicmerge gives incomplete topicref when reference or topic (Milestone 7)
+     * 3132976 Duplicate index text in index page (Milestone 7)
+     * 3431798 Relative CSS paths incorrectly computed for @copy-of (Milestone 7)
+     * 2795649 Java topicmerge ignores xml:lang (Milestone 7)   
+     * 3438421 Remove transtype default (Milestone 7)
+     * 3429824 topicmerge gives wrong topicref with nested topics (In processing)
 	 * 3414332 PDF2 variable string translations missing (In processing)    
      * 3323806 Improve Java logging and exception handling (In Processing)
 	 

@@ -26,7 +26,9 @@
   <chapter navtitle="Developer Reference">
     <mapref href="dev_ref/dev_ref.ditamap"/>
   </chapter>
-  <appendix navtitle="DITA-OT release history" href="readme/DITA-changes.xml"/>
+  <appendix navtitle="DITA-OT release history">
+    <mapref href="readme/changes/changes.ditamap"/>
+  </appendix>
   <appendix navtitle="Project Management">
     <topicref href="admin/DITA-OTProjectGoals.xml"/>
     <topicref href="admin/DevelopmentProcess.xml"/>
