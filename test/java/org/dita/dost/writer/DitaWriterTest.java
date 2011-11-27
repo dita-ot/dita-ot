@@ -83,7 +83,7 @@ public class DitaWriterTest {
             final Content content = new ContentImpl();
             content.setValue(tempDir.getAbsolutePath());
             writer.setContent(content);
-            writer.write(srcDir.getAbsolutePath() + Constants.STICK + f);
+            writer.write(srcDir.getAbsolutePath(), f);
         }
 
         TestUtils.resetXMLUnit();

@@ -301,10 +301,6 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             //set transtype
             fileWriter.setTranstype(transtype);
             //added by William on 2009-07-18 for req #12014 end
-            String filePathPrefix = null;
-            if(inputDir != null){
-                filePathPrefix = inputDir + STICK;
-            }
 
             final Map<String, Set<String>> dic = readMapFromXML(FILE_NAME_SUBJECT_DICTIONARY);
 
@@ -345,17 +341,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                     continue;
                 }
 
-                /*
-                 * Usually the writer's argument for write() is used to pass in the
-                 * ouput file name. But in this case, the input file name is same as
-                 * output file name so we can use this argument to pass in the input
-                 * file name. "|" is used to separate the path information that is
-                 * not necessary to be kept (baseDir) and the path information that
-                 * need to be kept in the temp directory.
-                 */
-                fileWriter.write(
-                        new StringBuffer().append(filePathPrefix)
-                        .append(filename).toString());
+                fileWriter.write(inputDir, filename);
             }
 
             updateList(tempDir);
@@ -665,7 +651,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             String workdir = null;
             String path2project = null;  
         	DitaWriter dw = new DitaWriter();
-        	path2project = dw.getPathtoProject(copytoTargetFilename, target.getAbsolutePath(), inputMapInTemp);
+        	path2project = dw.getPathtoProject(copytoTargetFilename, target, inputMapInTemp);
         	workdir = target.getParentFile().getCanonicalPath();
             
             bfis = new BufferedReader(new InputStreamReader(new FileInputStream(src),UTF8));

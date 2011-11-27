@@ -119,10 +119,8 @@ public class TestDitaWriter {
         final Content content = new ContentImpl();
         content.setValue(tempDir.getAbsolutePath());
         writer.setContent(content);
-        //C:\jia\DITA-OT1.5\DITAVAL|img.dita
-        final String filePathPrefix = new File(baseDir, inputDir.getPath()).getAbsolutePath() + Constants.STICK;
         writer.setExtName(".xml");
-        writer.write(filePathPrefix + "keyword.dita");
+        writer.write(new File(baseDir, inputDir.getPath()).getAbsolutePath(), "keyword.dita");
 
         compareKeyword(new File(baseDir, new File(inputDir, "keyword.dita").getPath()),
                 new String[] {"prodname1", "prodname2", "prodname3"},

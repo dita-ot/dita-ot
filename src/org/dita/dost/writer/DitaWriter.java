@@ -80,6 +80,7 @@ public final class DitaWriter extends AbstractXMLWriter {
     public static final String PI_WORKDIR_TARGET = "workdir";
     /** To check the URL of href in topicref attribute */
     private static final String NOT_LOCAL_URL = COLON_DOUBLE_SLASH;
+    
     //Added on 2010-08-24 for bug:3086552 start
     private boolean setSystemid = true;
     //Added on 2010-08-24 for bug:3086552 end
@@ -182,6 +183,9 @@ public final class DitaWriter extends AbstractXMLWriter {
     }
     /**
      * Get file extension name.
+     * 
+     * TODO: move to FileUtils.
+     * 
      * @param attValue file name
      * @return extension name
      */
@@ -272,35 +276,35 @@ public final class DitaWriter extends AbstractXMLWriter {
     private int columnNumber; // columnNumber is used to adjust column name
     private int columnNumberEnd; //columnNumberEnd is the end value for current entry
     //Added by William on 2009-11-27 for bug:1846993 embedded table bug start
-    //stack to store colspec list
+    /** Stack to store colspec list */
     private final Stack<List<String>> colSpecStack;
     //Added by William on 2009-11-27 for bug:1846993 embedded table bug end
 
     //Added by William on 2010-07-01 for bug:3023642 start
-    //stack to store rowNum
+    /** Stack to store rowNum */
     private final Stack<Integer> rowNumStack;
-    //stack to store columnNumber
+    /** Stack to store columnNumber */
     private final Stack<Integer> columnNumberStack;
-    //stack to store columnNumberEnd
+    /** Stack to store columnNumberEnd */
     private final Stack<Integer> columnNumberEndStack;
-    //stack to store rowsMap
+    /** Stack to store rowsMap */
     private final Stack<Map<String, Integer>> rowsMapStack;
-    //stack to store colSpanMap
+    /** Stack to store colSpanMap */
     private final Stack<Map<String, Integer>> colSpanMapStack;
     //Added by William on 2010-07-01 for bug:3023642 end
 
 
     //Added by William on 2009-06-30 for colname bug:2811358 start
-    //store row number
+    /** Store row number */
     private int rowNumber;
-    //store total column count
+    /** Store total column count */
     private int totalColumns;
-    //store morerows attribute
+    /** store morerows attribute */
     private Map<String, Integer> rowsMap;
     private Map<String, Integer> colSpanMap;
     //Added by William on 2009-06-30 for colname bug:2811358 end
     //Added by William on 2009-07-18 for req #12014 start
-    //transtype
+    /** Transtype */
     private String transtype;
     //Added by William on 2009-07-18 for req #12014 start
 
@@ -314,7 +318,7 @@ public final class DitaWriter extends AbstractXMLWriter {
     private String props; // contains the attribution specialization from props
 
     private String tempDir;
-    private String traceFilename;
+    private File traceFilename;
     private boolean insideCDATA;
 
     private Map<String, String> keys = null;
@@ -645,11 +649,11 @@ public final class DitaWriter extends AbstractXMLWriter {
             }
 
         }
-        String conref = atts.getValue("conref");
+        String conref = atts.getValue(ATTRIBUTE_NAME_CONREF);
         if(conref != null && !conkeyrefValid){
             conref = replaceCONREF(atts);
             conref = StringUtils.escapeXML(conref);
-            copyAttribute("conref", conref);
+            copyAttribute(ATTRIBUTE_NAME_CONREF, conref);
         }
     }
 
@@ -1151,7 +1155,7 @@ public final class DitaWriter extends AbstractXMLWriter {
                     // write the xtrf and xtrc attributes which contain debug
                     // information if it is dita elements (elements not in foreign/unknown)
                     if (foreignLevel <= 1){
-                        copyAttribute(ATTRIBUTE_NAME_XTRF, traceFilename);
+                        copyAttribute(ATTRIBUTE_NAME_XTRF, traceFilename.getAbsolutePath());
                         copyAttribute(ATTRIBUTE_NAME_XTRC, qName + COLON + nextValue.toString());
                     }
                     output.write(GREATER_THAN);
@@ -1179,17 +1183,29 @@ public final class DitaWriter extends AbstractXMLWriter {
     }
 
 
+    /**
+     * @deprecated use {@link #write(String, String))} instead
+     */
     @Override
+    @Deprecated
     public void write(final String filename) {
-        int index;
-        int fileExtIndex;
-        File outputFile;
-        File dirFile;
-        FileOutputStream fileOutput = null;
+        final int index = filename.indexOf(STICK);
+        final String baseDir = filename.substring(0, index);
+        inputFile = filename.substring(index + 1);
+        write(baseDir, inputFile);
+    }
+    
+    /**
+     * Write output
+     * 
+     * @param baseDir base directory path
+     * @param inFile relative file path
+     */
+    public void write(final String baseDir, final String inFile) {
         exclude = false;
         needResolveEntity = true;
 
-        inputFile = filename.substring(filename.lastIndexOf(STICK) + 1);
+        inputFile = inFile;
 
         if(null == keys){
             keys = new HashMap<String, String>();
@@ -1224,79 +1240,48 @@ public final class DitaWriter extends AbstractXMLWriter {
 
             if(prop.getProperty(KEY_LIST).length()!=0){
                 final String[] keylist = prop.getProperty(KEY_LIST).split(COMMA);
-                String key;
-                String value;
                 for(final String keyinfo: keylist){
                     //get the key name
-                    key = keyinfo.substring(0, keyinfo.indexOf(EQUAL));
+                    final String key = keyinfo.substring(0, keyinfo.indexOf(EQUAL));
 
                     //Edited by William on 2010-02-25 for bug:2957456 start
                     //value = keyinfo.substring(keyinfo.indexOf(EQUAL)+1, keyinfo.indexOf("("));
                     //get the href value and source file name
                     //e.g topics/target-topic-a.xml(maps/root-map-01.ditamap)
-                    value = keyinfo.substring(keyinfo.indexOf(EQUAL)+1);
+                    final String value = keyinfo.substring(keyinfo.indexOf(EQUAL)+1);
                     //Edited by William on 2010-02-25 for bug:2957456 end
                     keys.put(key, value);
                 }
 
             }
         }
-        index = filename.indexOf(STICK);
-        fileExtIndex = filename.toLowerCase().endsWith(FILE_EXTENSION_DITAMAP)
-                ? -1
-                        : filename.lastIndexOf(DOT);
 
+        FileOutputStream fileOutput = null;
         try {
-            final StringBuffer outputFilename = new StringBuffer(tempDir + File.separator);
-            if(index!=-1){
-                traceFilename = filename.replace('|',File.separatorChar)
-                        .replace('/',File.separatorChar).replace('\\',File.separatorChar);
-                outputFilename.append((fileExtIndex == -1 || fileExtIndex <= index)
-                        ?filename.substring(index+1)
-                                :filename.substring(index+1, fileExtIndex)+extName);
-
-                //when it is not the old solution 3
-                
-                if(OutputUtils.getGeneratecopyouter()!=OutputUtils.Generate.OLDSOLUTION){
-                    if(isOutFile(traceFilename)){
-
-                        path2Project=getRelativePathFromOut(traceFilename);
-                    }else{
-                        path2Project=FileUtils.getRelativePathFromMap(traceFilename,OutputUtils.getInputMapPathName());
-                        path2Project=new File(path2Project).getParent();
-                        if(path2Project!=null && path2Project.length()>0){
-                            path2Project=path2Project+File.separator;
-                        }
-                    }
-                } else {
-                    path2Project = FileUtils.getPathtoProject(filename.substring(index+1));
-                }
-                
-            }else{
-                traceFilename = filename;
-                outputFilename.append((fileExtIndex == -1)
-                        ? filename
-                                : filename.substring(0, fileExtIndex)+extName);
-                
-                if(OutputUtils.getGeneratecopyouter()!=OutputUtils.Generate.OLDSOLUTION){
-                    if(isOutFile(traceFilename)){
-
-                        path2Project=getRelativePathFromOut(traceFilename);
-                    }else{
-                        path2Project=FileUtils.getRelativePathFromMap(traceFilename,OutputUtils.getInputMapPathName());
-                        path2Project=new File(path2Project).getParent();
-                        if(path2Project!=null && path2Project.length()>0){
-                            path2Project=path2Project+File.separator;
-                        }
-                    }
-                } else {
-                    path2Project = FileUtils.getPathtoProject(filename);
-                }
-                
+            traceFilename = new File(baseDir, inputFile);
+            File outputFile;
+            if (FileUtils.isDITAMapFile(inputFile.toLowerCase())) {
+                outputFile = new File(tempDir, inputFile);
+            } else {
+                outputFile = new File(tempDir, FileUtils.replaceExtName(inputFile, extName));
             }
-            outputFile = new File(outputFilename.toString());
+
+            //when it is not the old solution 3
+            if(OutputUtils.getGeneratecopyouter()!=OutputUtils.Generate.OLDSOLUTION){
+                if(isOutFile(traceFilename)){
+                    path2Project=getRelativePathFromOut(traceFilename.getAbsolutePath());
+                }else{
+                    path2Project=FileUtils.getRelativePathFromMap(traceFilename.getAbsolutePath(), OutputUtils.getInputMapPathName());
+                    path2Project=new File(path2Project).getParent();
+                    if(path2Project!=null && path2Project.length()>0){
+                        path2Project=path2Project+File.separator;
+                    }
+                }
+            } else {
+                path2Project = FileUtils.getPathtoProject(inputFile);
+            }
             counterMap = new HashMap<String, Integer>();
-            dirFile = outputFile.getParentFile();
+            final File dirFile = outputFile.getParentFile();
             if (!dirFile.exists()) {
                 dirFile.mkdirs();
             }
@@ -1307,14 +1292,13 @@ public final class DitaWriter extends AbstractXMLWriter {
 
             // start to parse the file and direct to output in the temp
             // directory
-            reader.setErrorHandler(new DITAOTXMLErrorHandler(traceFilename));
+            reader.setErrorHandler(new DITAOTXMLErrorHandler(traceFilename.getAbsolutePath()));
             //Added on 2010-08-24 for bug:3086552 start
-            final File file = new File(traceFilename);
-            final InputSource is = new InputSource(new FileInputStream(file));
+            final InputSource is = new InputSource(traceFilename.toURI().toString());
             //set system id bug:3086552
             if(setSystemid) {
                 //is.setSystemId(URLUtil.correct(file).toString());
-                is.setSystemId(file.toURI().toURL().toString());
+                is.setSystemId(traceFilename.toURI().toURL().toString());
             }
 
             //Added on 2010-08-24 for bug:3086552 end
@@ -1332,14 +1316,14 @@ public final class DitaWriter extends AbstractXMLWriter {
         }
     }
 
-    public String getPathtoProject (String filename, String traceFilename, String inputMap) {
+    public String getPathtoProject (String filename, File traceFilename, String inputMap) {
     	String path2Project = null;
     	 if(OutputUtils.getGeneratecopyouter()!=OutputUtils.Generate.OLDSOLUTION){
              if(isOutFile(traceFilename)){
 
-                 path2Project=getRelativePathFromOut(traceFilename);
+                 path2Project=getRelativePathFromOut(traceFilename.getAbsolutePath());
              }else{
-                 path2Project=FileUtils.getRelativePathFromMap(traceFilename,inputMap);
+                 path2Project=FileUtils.getRelativePathFromMap(traceFilename.getAbsolutePath(),inputMap);
                  path2Project=new File(path2Project).getParent();
                  if(path2Project!=null && path2Project.length()>0){
                      path2Project=path2Project+File.separator;
@@ -1373,8 +1357,8 @@ public final class DitaWriter extends AbstractXMLWriter {
         return finalRelativePath.toString();
     }
 
-    private boolean isOutFile(final String filePathName){
-        final String relativePath=FileUtils.getRelativePathFromMap(OutputUtils.getInputMapPathName(),new File(filePathName).getPath());
+    private boolean isOutFile(final File filePathName){
+        final String relativePath=FileUtils.getRelativePathFromMap(OutputUtils.getInputMapPathName(), filePathName.getPath());
         if(relativePath==null || relativePath.length()==0 || !relativePath.startsWith("..")){
             return false;
         }
