@@ -90,6 +90,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:import href="../../cfg/fo/attrs/lot-lof-attr.xsl"/>
     <xsl:import href="lot-lof.xsl"/>
     
+    <xsl:import href="../../cfg/fo/attrs/learning-elements-attr.xsl"/>
+    <xsl:import href="learning-elements.xsl"/>
+    
     <xsl:import href="flagging.xsl"/>
     
 <!--    <xsl:strip-space elements="*"/>-->
