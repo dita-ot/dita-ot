@@ -168,6 +168,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:apply-templates/>
       </xsl:template-->
     <xsl:template match="*[contains(@class, ' topic/data ')]"/>
+    <xsl:template match="*[contains(@class, ' topic/data ')]" mode="insert-text"/>
     <xsl:template match="*[contains(@class, ' topic/data-about ')]"/>
     <!-- edited by William on 2009-09-18 for output bug #2860168 end-->
 
