@@ -242,14 +242,15 @@ See the accompanying license.txt file for applicable licenses.
 		<fo:basic-link xsl:use-attribute-sets="xref">
 			<xsl:call-template name="buildBasicLinkDestination">
 				<xsl:with-param name="scope" select="@scope"/>
+				<xsl:with-param name="format" select="@format"/>
 				<xsl:with-param name="href" select="@href"/>
 			</xsl:call-template>
 
 			<xsl:choose>
-				<xsl:when test="not(@scope = 'external') and not($referenceTitle = '')">
+				<xsl:when test="not(@scope = 'external' or @format = 'html') and not($referenceTitle = '')">
 					<xsl:copy-of select="$referenceTitle"/>
 				</xsl:when>
-				<xsl:when test="not(@scope = 'external')">
+				<xsl:when test="not(@scope = 'external' or @format = 'html')">
 					<xsl:call-template name="insertPageNumberCitation">
 						<xsl:with-param name="isTitleEmpty" select="'yes'"/>
 						<xsl:with-param name="destination" select="$destination"/>
@@ -276,7 +277,7 @@ See the accompanying license.txt file for applicable licenses.
 				</xsl:if>
 		-->
 
-		<xsl:if test="not(@scope = 'external') and not($referenceTitle = '') and not($element[contains(@class, ' topic/fn ')])">
+    	<xsl:if test="not(@scope = 'external' or @format = 'html') and not($referenceTitle = '') and not($element[contains(@class, ' topic/fn ')])">
             <!-- SourceForge bug 1880097: should not include page number when xref includes author specified text -->
             <xsl:if test="not(processing-instruction()[name()='ditaot'][.='usertext'])">
                 <xsl:call-template name="insertPageNumberCitation">
@@ -455,10 +456,11 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template name="buildBasicLinkDestination">
         <xsl:param name="scope"/>
+    	<xsl:param name="format"/>
         <xsl:param name="href"/>
         <xsl:choose>
             <xsl:when test="(contains(@href, '://') and not(starts-with(@href, 'file://')))
-            or starts-with(@href, '/') or $scope = 'external'">
+            or starts-with(@href, '/') or $scope = 'external' or $format = 'html'">
                 <xsl:attribute name="external-destination">
                     <xsl:value-of select="concat('url(', $href, ')')"/>
                 </xsl:attribute>

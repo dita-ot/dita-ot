@@ -1701,7 +1701,7 @@ See the accompanying license.txt file for applicable licenses.
                             <xsl:when test="@reftitle">
                                 <xsl:value-of select="@reftitle"/>
                             </xsl:when>
-                            <xsl:when test="not(@type = 'external')">
+                            <xsl:when test="not(@type = 'external' or @format = 'html')">
                                 <xsl:call-template name="insertReferenceTitle">
                                     <xsl:with-param name="href" select="@href"/>
                                     <xsl:with-param name="titlePrefix" select="''"/>
