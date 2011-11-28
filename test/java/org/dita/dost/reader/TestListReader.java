@@ -10,6 +10,7 @@
 package org.dita.dost.reader;
 
 import static org.junit.Assert.assertEquals;
+import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
 
@@ -28,7 +29,7 @@ public class TestListReader {
         final ListReader listreader = new ListReader();
         //final String filename = "dita.xml.properties";
         listreader.read(null);
-        final String userinputfile = "C:" + File.separator + "DITA-OT1.5" + File.separator + "SAXONIBMJDK" + File.separator + "testcase" + File.separator + "12014" + File.separator + ".." + File.separator + ".." + File.separator + "testdata" + File.separator + "12014";
+        final String userinputfile = "C:" + UNIX_SEPARATOR + "DITA-OT1.5" + UNIX_SEPARATOR + "SAXONIBMJDK" + UNIX_SEPARATOR + "testcase" + UNIX_SEPARATOR + "12014" + UNIX_SEPARATOR + ".." + UNIX_SEPARATOR + ".." + UNIX_SEPARATOR + "testdata" + UNIX_SEPARATOR + "12014";
         assertEquals(userinputfile, listreader.getContent().getValue().toString());
         final String userinputmap = "map1.ditamap";
         assertEquals(userinputmap, listreader.getInputMap());

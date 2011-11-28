@@ -195,17 +195,18 @@ public final class MapMetaReader implements AbstractReader {
             }
             // end -->
 
-            final FileOutputStream file = new FileOutputStream(inputFile.getCanonicalPath()+ ".temp");
-            final StreamResult res = new StreamResult(file);
-            final DOMSource ds = new DOMSource(doc);
-            final TransformerFactory tff = TransformerFactory.newInstance();
-            final Transformer tf = tff.newTransformer();
-            tf.transform(ds, res);
-            if (res.getOutputStream() != null) {
-                res.getOutputStream().close();
-            }
-            if (file != null) {
-                file.close();
+            FileOutputStream file = null;
+            try {
+                file = new FileOutputStream(inputFile.getCanonicalPath()+ ".temp");
+                final StreamResult res = new StreamResult(file);
+                final DOMSource ds = new DOMSource(doc);
+                final TransformerFactory tff = TransformerFactory.newInstance();
+                final Transformer tf = tff.newTransformer();
+                tf.transform(ds, res);
+            } finally {
+                if (file != null) {
+                    file.close();
+                }
             }
 
         }catch (final Exception e){

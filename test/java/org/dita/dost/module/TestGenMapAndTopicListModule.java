@@ -12,11 +12,18 @@ package org.dita.dost.module;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertTrue;
+import static org.dita.dost.util.Constants.*;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -67,7 +74,7 @@ public class TestGenMapAndTopicListModule {
         pipelineInput.setAttribute("onlytopicinmap", "false");
         pipelineInput.setAttribute("ditalist", new File(tempDir, "dita.list").getPath());
         pipelineInput.setAttribute("maplinks", new File(tempDir, "maplinks.unordered").getPath());
-        pipelineInput.setAttribute(Constants.ANT_INVOKER_EXT_PARAN_SETSYSTEMID, "no");
+        pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID, "no");
 
         final AbstractFacade facade = new PipelineFacade();
         facade.setLogger(new TestUtils.TestLogger());
@@ -106,44 +113,41 @@ public class TestGenMapAndTopicListModule {
 
     @Test
     public void testFileContent() throws Exception{
-        final Properties properties = new Properties();
-        properties.load(new FileInputStream(tempDir + File.separator + "canditopics.list"));
-        assertTrue(properties.containsKey("topics" + File.separator + "xreffin-topic-1.xml"));
-        assertTrue(properties.containsKey("topics" + File.separator + "target-topic-c.xml"));
-        assertTrue(properties.containsKey("topics" + File.separator + "target-topic-a.xml"));
+        final List<String> canditopicsList = readLines(new File(tempDir, "canditopics.list"));
+        assertTrue(canditopicsList.contains("topics" + UNIX_SEPARATOR + "xreffin-topic-1.xml"));
+        assertTrue(canditopicsList.contains("topics" + UNIX_SEPARATOR + "target-topic-c.xml"));
+        assertTrue(canditopicsList.contains("topics" + UNIX_SEPARATOR + "target-topic-a.xml"));
 
-        properties.load(new FileInputStream(tempDir+ File.separator + "dita.list"));
+        final Properties ditaProps = readProperties(new File(tempDir, "dita.list"));
         final String[] expFullditamapandtopiclist = {
-                "topics" + File.separator + "xreffin-topic-1.xml",
-                "maps" + File.separator + "root-map-01.ditamap",
-                "topics" + File.separator + "target-topic-c.xml",
-                "topics" + File.separator + "target-topic-a.xml" };
-        final String[] actFullditamapandtopiclist = properties.getProperty("fullditamapandtopiclist").split(",");
+                "topics" + UNIX_SEPARATOR + "xreffin-topic-1.xml",
+                "maps" + UNIX_SEPARATOR + "root-map-01.ditamap",
+                "topics" + UNIX_SEPARATOR + "target-topic-c.xml",
+                "topics" + UNIX_SEPARATOR + "target-topic-a.xml" };
+        final String[] actFullditamapandtopiclist = ditaProps.getProperty("fullditamapandtopiclist").split(",");
         Arrays.sort(expFullditamapandtopiclist);
         Arrays.sort(actFullditamapandtopiclist);
         assertArrayEquals(expFullditamapandtopiclist, actFullditamapandtopiclist);
 
-        properties.load(new FileInputStream(tempDir+ File.separator + "fullditamapandtopic.list"));
-        assertTrue(properties.containsKey("topics" + File.separator + "xreffin-topic-1.xml"));
-        assertTrue(properties.containsKey("topics" + File.separator + "target-topic-c.xml"));
-        assertTrue(properties.containsKey("topics" + File.separator + "target-topic-a.xml"));
-        assertTrue(properties.containsKey("maps" + File.separator + "root-map-01.ditamap"));
+        final List<String> fullditamapandtopicList = readLines(new File(tempDir, "fullditamapandtopic.list"));
+        assertTrue(fullditamapandtopicList.contains("topics" + UNIX_SEPARATOR + "xreffin-topic-1.xml"));
+        assertTrue(fullditamapandtopicList.contains("topics" + UNIX_SEPARATOR + "target-topic-c.xml"));
+        assertTrue(fullditamapandtopicList.contains("topics" + UNIX_SEPARATOR + "target-topic-a.xml"));
+        assertTrue(fullditamapandtopicList.contains("maps" + UNIX_SEPARATOR + "root-map-01.ditamap"));
 
-        properties.load(new FileInputStream(tempDir+ File.separator + "hrefditatopic.list"));
-        assertTrue(properties.containsKey("topics" + File.separator + "xreffin-topic-1.xml"));
+        final List<String> hrefditatopicList = readLines(new File(tempDir, "hrefditatopic.list"));
+        assertTrue(hrefditatopicList.contains("topics" + UNIX_SEPARATOR + "xreffin-topic-1.xml"));
 
-        properties.load(new FileInputStream(tempDir+ File.separator + "hreftargets.list"));
-        assertTrue(properties.containsKey("topics" + File.separator + "xreffin-topic-1.xml"));
-        assertTrue(properties.containsKey("topics" + File.separator + "target-topic-c.xml"));
-        assertTrue(properties.containsKey("topics" + File.separator + "target-topic-a.xml"));
+        final List<String> hreftargetsList = readLines(new File(tempDir, "hreftargets.list"));
+        assertTrue(hreftargetsList.contains("topics" + UNIX_SEPARATOR + "xreffin-topic-1.xml"));
+        assertTrue(hreftargetsList.contains("topics" + UNIX_SEPARATOR + "target-topic-c.xml"));
+        assertTrue(hreftargetsList.contains("topics" + UNIX_SEPARATOR + "target-topic-a.xml"));
 
-        properties.load(new FileInputStream(tempDir+ File.separator + "key.list"));
-
-        assertEquals("topics" + File.separator + "target-topic-a.xml(maps" + File.separator + "root-map-01.ditamap)",
-                properties.getProperty("target_topic_1"));
-        assertEquals("topics" + File.separator + "target-topic-c.xml(maps" + File.separator + "root-map-01.ditamap)",
-                properties.getProperty("target_topic_2"));
-
+        final Properties keyProps = readProperties(new File(tempDir, "key.list"));
+        assertEquals("topics" + UNIX_SEPARATOR + "target-topic-a.xml(maps" + UNIX_SEPARATOR + "root-map-01.ditamap)",
+                keyProps.getProperty("target_topic_1"));
+        assertEquals("topics" + UNIX_SEPARATOR + "target-topic-c.xml(maps" + UNIX_SEPARATOR + "root-map-01.ditamap)",
+                keyProps.getProperty("target_topic_2"));
 
         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         final DocumentBuilder builder = factory.newDocumentBuilder();
@@ -153,8 +157,8 @@ public class TestGenMapAndTopicListModule {
         final Element elem = document.getDocumentElement();
         final NodeList nodeList = elem.getElementsByTagName("keydef");
         final String[]keys ={"target_topic_2","target_topic_1"};
-        final String[]href ={"topics" + File.separator + "target-topic-c.xml","topics" + File.separator + "target-topic-a.xml"};
-        final String[]source ={"maps" + File.separator + "root-map-01.ditamap","maps" + File.separator + "root-map-01.ditamap"};
+        final String[]href ={"topics" + UNIX_SEPARATOR + "target-topic-c.xml","topics" + UNIX_SEPARATOR + "target-topic-a.xml"};
+        final String[]source ={"maps" + UNIX_SEPARATOR + "root-map-01.ditamap","maps" + UNIX_SEPARATOR + "root-map-01.ditamap"};
 
         for(int i = 0; i< nodeList.getLength();i++){
             assertEquals(keys[i],
@@ -165,17 +169,49 @@ public class TestGenMapAndTopicListModule {
                     ((Element)nodeList.item(i)).getAttribute("source"));
         }
 
-        properties.load(new FileInputStream(tempDir+ File.separator + "keyref.list"));
-        assertTrue(properties.containsKey("topics" + File.separator + "xreffin-topic-1.xml"));
+        final List<String> keyrefList = readLines(new File(tempDir, "keyref.list"));
+        assertTrue(keyrefList.contains("topics" + UNIX_SEPARATOR + "xreffin-topic-1.xml"));
 
-        properties.load(new FileInputStream(tempDir+ File.separator + "outditafiles.list"));
-        assertTrue(properties.containsKey("topics" + File.separator + "xreffin-topic-1.xml"));
-        assertTrue(properties.containsKey("topics" + File.separator + "target-topic-c.xml"));
-        assertTrue(properties.containsKey("topics" + File.separator + "target-topic-a.xml"));
+        final List<String> outditafilesList = readLines(new File(tempDir, "outditafiles.list"));
+        assertTrue(outditafilesList.contains("topics" + UNIX_SEPARATOR + "xreffin-topic-1.xml"));
+        assertTrue(outditafilesList.contains("topics" + UNIX_SEPARATOR + "target-topic-c.xml"));
+        assertTrue(outditafilesList.contains("topics" + UNIX_SEPARATOR + "target-topic-a.xml"));
 
-        properties.load(new FileInputStream(tempDir+ File.separator + "usr.input.file.list"));
-        assertTrue(properties.containsKey("maps" + File.separator + "root-map-01.ditamap"));
+        final List<String> usrInputFileList = readLines(new File(tempDir, "usr.input.file.list"));
+        assertTrue(usrInputFileList.contains("maps" + File.separator + "root-map-01.ditamap"));
 
+    }
+    
+    private Properties readProperties(final File f)
+            throws IOException, FileNotFoundException {
+        final Properties p = new Properties();
+        InputStream in = null;
+        try {
+            in = new FileInputStream(f);
+            p.load(in);
+        } finally {
+            if (in != null) {
+                in.close();
+            }
+        }
+        return p;
+    }
+    
+    private List<String> readLines(final File f) throws IOException {
+        final List<String> lines = new ArrayList<String>();
+        BufferedReader in = null;
+        try {
+            in = new BufferedReader(new FileReader(f));
+            String line = null;
+            while ((line = in.readLine()) != null) {
+                lines.add(line);
+            }
+        } finally {
+            if (in != null) {
+                in.close();
+            }
+        }
+        return lines;
     }
 
     @After
