@@ -14,15 +14,16 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.util.Properties;
 
-import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.AfterClass;
 import org.junit.Test;
 
 public class MessageUtilsTest {
 
-    private final File resourceDir = new File("test-stub", MessageUtilsTest.class.getSimpleName());
+    private static final File resourceDir = new File("test-stub", MessageUtilsTest.class.getSimpleName());
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeClass
+    public static void setUp() throws Exception {
         final File f = new File(resourceDir, "messages.xml");
         MessageUtils.loadMessages(f.getAbsolutePath());
     }
@@ -87,4 +88,10 @@ public class MessageUtilsTest {
         assertEquals(exp.toString(), MessageUtils.getMessage("XXX234E", props).toString());
     }
 
+    @AfterClass
+    public static void tearDown() throws Exception {
+        final File f = new File("resource/messages.xml");
+        MessageUtils.loadMessages(f.getAbsolutePath());
+    }
+    
 }
