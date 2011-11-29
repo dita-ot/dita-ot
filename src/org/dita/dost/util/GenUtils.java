@@ -20,7 +20,10 @@ import org.dita.dost.log.DITAOTJavaLogger;
 /**
  * GenUtils class writing xml contents into xml files.
  *
+ * @since 1.4
+ * @deprecated use {@link XMLSerializer} instead
  */
+@Deprecated
 public final class GenUtils {
 
     private static StringBuffer buffer;

@@ -199,8 +199,8 @@ public final class MergeTopicParser extends AbstractXMLReader {
 
     /**
      * Parse the file to update id.
-     * @param filename filename
-     * @param dir file dir
+     * @param filename relative topic system path, may contain a fragment part
+     * @param dir topic directory system path
      * @return updated id
      */
     public String parse(final String filename,final String dir){

@@ -44,7 +44,7 @@ Caret -2?><p>A pre-process is done before the main transformation. The input of 
       <dd>The TocJS transformation type includes XHTML output along with JavaScript based frames
         for navigation, including TOC sections that expand and collapse.</dd>
     </dlentry>
-    <dlentry>
+    <dlentry platform="windows">
       <dt>HTML Help</dt>
       <dd>Microsoft Compiled HTML Help output produces a compiled help
         (<filepath>.chm</filepath>) file with the XHTML topics, table of contents, and

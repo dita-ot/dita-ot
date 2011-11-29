@@ -157,7 +157,9 @@ public final class Job {
     }
 
     /**
-     * @return the inputMap
+     * Get input file
+     * 
+     * @return input file path relative to input directory
      */
     public String getInputMap() {
         return prop.getProperty(INPUT_DITAMAP);
@@ -166,7 +168,7 @@ public final class Job {
     /**
      * Get reference list.
      * 
-     * <p>TODO: rename to getReferenceList</p>
+     * <p>TODO: rename to {@code getReferenceList}</p>
      * 
      * @return reference list
      */
@@ -187,9 +189,9 @@ public final class Job {
     /**
      * Get input directory.
      * 
-     * <p>TODO: rename to getInputDir</p>
+     * <p>TODO: rename to {@code File getInputDir()̋}</p>
      * 
-     * @return input directory
+     * @return absolute input directory path 
      */
     public String getValue() {
         return prop.getProperty("user.input.dir");

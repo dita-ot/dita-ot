@@ -37,8 +37,8 @@ the DITA      processing system.</shortdesc>
             <li>Saxon-B 9.1</li>
             <li>Saxon-HE/EE 9.3</li>
           </ul>
-          <note>XSLT 2.0 standard is not officially supported in DITA-OT code, due to the reliance
-            by some users on Xalan.</note>
+          <note>XSLT 2.0 standard is not officially required in DITA-OT code, due to the reliance by
+            some users on Xalan.</note>
         </stentry><?Pub Caret 24?>
 </strow>
 <strow>

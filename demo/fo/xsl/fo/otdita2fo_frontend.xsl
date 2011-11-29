@@ -30,7 +30,8 @@ with those set forth herein.
 This is the Open Toolkit adaptor. It contains overrides to improve
 interoperability between the OpenTopic FO transforms and the Open Toolkit.
 -->
-
+<!-- Deprecated: left for backward compatibility, and it will be removed in a 
+     later release -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
 	xmlns:fo="http://www.w3.org/1999/XSL/Format" version="2.0">
   <xsl:import href="topic2fo_shell.xsl"/>
