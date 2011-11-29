@@ -95,7 +95,7 @@
       <fileset dir="${resource.dir}" includes="messages.*"/>
     </copy>
     <copy todir="${bin.dir}">
-      <fileset dir="${java.dir}" includes="**/*.properties"/>
+      <fileset dir="${java.dir}" includes="**/*.properties, **/*.xml"/>
     </copy>
     <jar destfile="${dost.jar}" basedir="${bin.dir}" includes="**">
       <manifest>
