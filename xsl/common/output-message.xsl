@@ -23,9 +23,7 @@
   
   
   <xsl:stylesheet version="1.0"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-    xmlns:log="org.dita.dost.util.LogUtils" 
-    exclude-result-prefixes="log">
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:template name="output-message">
       <xsl:param name="msg" select="'***'"/>
       <xsl:param name="msgnum" select="'000'"/>
@@ -93,10 +91,6 @@
       <xsl:text>[</xsl:text><xsl:value-of select="@id"/><xsl:text>]</xsl:text>
       <xsl:text>[</xsl:text><xsl:value-of select="@type"/><xsl:text>]</xsl:text>
       <xsl:text>: </xsl:text>
-      <!--record this messageType as Information in the log file  when parsing the xml  add by wxzhang 20070515 -->
-      <xsl:call-template name="LogUtils">
-        <xsl:with-param name="messageType" select="$messageType"></xsl:with-param>
-      </xsl:call-template> 
       <xsl:call-template name="replaceParams">
         <xsl:with-param name="string" select="$reason"/>
         <xsl:with-param name="params" select="$params"/>    
@@ -159,46 +153,6 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:template>
-    
-    <!-- This is LogUtils module  -->
-    <xsl:template name="LogUtils">
-      <xsl:param name="messageType"/>
-      <xsl:variable name="messageTypeLower">
-        <!-- ensure lowercase for comparisons -->
-        <!--  <xsl:call-template name="convert-to-lower">
-          <xsl:with-param name="inputval" select="@messageType"/>
-          </xsl:call-template> -->
-        <xsl:value-of select="$messageType"/>
-      </xsl:variable>
-      <xsl:choose>
-        <xsl:when test="$messageTypeLower='FATAL'">
-          <xsl:call-template name="fatalIncrease"/>
-        </xsl:when>
-        <xsl:when test="$messageTypeLower='ERROR'">
-          <xsl:call-template name="errorIncrease"></xsl:call-template>
-        </xsl:when>
-        <xsl:when test="$messageTypeLower='WARN'">
-          <xsl:call-template name="warnIncrease"></xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-        </xsl:otherwise> 
-      </xsl:choose>
-    </xsl:template>
-    <xsl:template name="fatalIncrease">
-    	<xsl:if test="function-available('log:increaseNumOfFatals')">
-      		<xsl:value-of select="log:increaseNumOfFatals()"/>
-      	</xsl:if>
-    </xsl:template>         
-    <xsl:template name="errorIncrease">
-    	<xsl:if test="function-available('log:increaseNumOfErrors')">
-      		<xsl:value-of select="log:increaseNumOfErrors()"/>
-      	</xsl:if>
-    </xsl:template>     
-    <xsl:template name="warnIncrease">  	      		
-    	<xsl:if test="function-available('log:increaseNumOfWarnings')">
-      		<xsl:value-of select="log:increaseNumOfWarnings()"/>
-      	</xsl:if>
-    </xsl:template>     
-    
+        
   </xsl:stylesheet>
   

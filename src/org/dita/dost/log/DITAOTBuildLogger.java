@@ -9,12 +9,17 @@
  */
 package org.dita.dost.log;
 
+import static org.dita.dost.log.MessageBean.*;
+import static org.dita.dost.util.Constants.*;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.StringReader;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Pattern;
 
 import org.apache.tools.ant.BuildEvent;
 import org.apache.tools.ant.BuildException;
@@ -24,7 +29,6 @@ import org.apache.tools.ant.Task;
 import org.apache.tools.ant.util.DateUtils;
 import org.apache.tools.ant.util.StringUtils;
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.util.LogUtils;
 
 /**
  * Ant build logger for {@link org.dita.dost.invoker.CommandLineInvoker}, not intended to be used as a stand-alone logger.
@@ -45,6 +49,17 @@ public final class DITAOTBuildLogger implements BuildLogger {
     /** Line separator.*/
     protected static final String LINE_SEP = StringUtils.LINE_SEP;
 
+    private AtomicInteger numOfFatals = new AtomicInteger(0);
+    private AtomicInteger numOfErrors = new AtomicInteger(0);
+    private AtomicInteger numOfWarnings = new AtomicInteger(0);
+    private AtomicInteger numOfInfo = new AtomicInteger(0);
+    
+    private final Pattern fatalPattern = Pattern.compile("\\[\\w+F\\]\\[FATAL\\]");
+    private final Pattern errorPattern = Pattern.compile("\\[\\w+E\\]\\[ERROR\\]");
+    private final Pattern warnPattern = Pattern.compile("\\[\\w+W\\]\\[WARN\\]");
+    private final Pattern infoPattern = Pattern.compile("\\[\\w+I\\]\\[INFO\\]");
+    private final Pattern debugPattern = Pattern.compile("\\[\\w+D\\]\\[DEBUG\\]");
+    
     /**
      * Convenience method to format a specified length of time.
      * 
@@ -90,9 +105,35 @@ public final class DITAOTBuildLogger implements BuildLogger {
      * @param priority
      *            The priority of the message. (Ignored in this implementation.)
      */
-    protected static void printMessage(final String message,
+    protected void printMessage(final String message,
             final PrintStream stream, final int priority) {
-        if (priority <= Project.MSG_INFO) {
+        // fix priority
+        int fixedPriority = priority;
+        if (fatalPattern.matcher(message).find()) {
+            fixedPriority = Project.MSG_ERR;
+            numOfFatals.incrementAndGet();
+        } else if (errorPattern.matcher(message).find()) {
+            fixedPriority = Project.MSG_ERR;
+        } else if (warnPattern.matcher(message).find()) {
+            fixedPriority = Project.MSG_WARN;
+        } else if (infoPattern.matcher(message).find()) {
+            fixedPriority = Project.MSG_INFO;
+        } else if (debugPattern.matcher(message).find()) {
+            fixedPriority = Project.MSG_DEBUG;
+        }
+        // collect levels
+        switch (fixedPriority) {
+        case Project.MSG_ERR:
+            numOfErrors.incrementAndGet();
+            break;
+        case Project.MSG_WARN:
+            numOfWarnings.incrementAndGet();
+            break;
+        case Project.MSG_INFO:
+            numOfInfo.incrementAndGet();
+            break;
+        }
+        if (fixedPriority <= Project.MSG_INFO) {
             stream.println(message);
         }
     }
@@ -130,7 +171,7 @@ public final class DITAOTBuildLogger implements BuildLogger {
         message.append("Processing ended.");
         message.append(LINE_SEP);
 
-        if (error == null && LogUtils.haveFatalOrError() == false) {
+        if (error == null && numOfFatals.get() == 0 && numOfErrors.get() == 0) {
             message.append(LINE_SEP);
             message.append(getBuildSuccessfulMessage());
         } else {
@@ -148,7 +189,9 @@ public final class DITAOTBuildLogger implements BuildLogger {
         }
         // add by start wxzhang 20070514
         message.append(LINE_SEP);
-        message.append(LogUtils.getLogStatisticInfo());
+        message.append("Number of Fatals : ").append(numOfFatals.get()).append(LINE_SEPARATOR);
+        message.append("Number of Errors : ").append(numOfErrors.get()).append(LINE_SEPARATOR);
+        message.append("Number of Warnings : ").append(numOfWarnings.get()).append(LINE_SEPARATOR);
         // add by end wxzhang 20070514
         message.append(LINE_SEP);
         message.append("Total time: ");
@@ -344,23 +387,23 @@ public final class DITAOTBuildLogger implements BuildLogger {
                 ex.setCaptured(true);
                 final MessageBean msgBean=ex.getMessageBean();
                 if(msgBean!=null) {
-                    LogUtils.increaseNumOfExceptionByType(msgBean.getType());
+                    increaseNumOfExceptionByType(msgBean.getType());
                 } else {
-                    LogUtils.increaseNumOfExceptionByType(null);
+                    increaseNumOfExceptionByType(null);
                 }
                 return;
 
             }
 
             if(!chkThrowableAlreadyCaptured(buildEx)){
-                LogUtils.increaseNumOfErrors();
+                numOfErrors.incrementAndGet();
                 return;
             }
 
         }else{
             //error from ant
             if(!chkThrowableAlreadyCaptured((Throwable)exception)) {
-                LogUtils.increaseNumOfErrors();
+                numOfErrors.incrementAndGet();
             }
         }
     }
@@ -415,7 +458,25 @@ public final class DITAOTBuildLogger implements BuildLogger {
         }
         final String upperMessage=message.toUpperCase();
         if(upperMessage.indexOf("HHC")!=-1 && upperMessage.indexOf("ERROR:")!=-1){
-            LogUtils.increaseNumOfErrors();
+            numOfErrors.incrementAndGet();
         }
     }
+        
+    private void increaseNumOfExceptionByType(final String msgType) {
+        if (msgType == null) {
+            numOfInfo.incrementAndGet();
+        } else {
+            final String type = msgType.toUpperCase();
+            if (FATAL.equals(type)) {
+                numOfFatals.incrementAndGet();
+            } else if (ERROR.equals(type)) {
+                numOfErrors.incrementAndGet();
+            } else if (WARN.equals(type)) {
+                numOfWarnings.incrementAndGet();
+            } else if (INFO.equals(type)) {
+                numOfInfo.incrementAndGet();
+            }
+        }
+    }
+    
 }

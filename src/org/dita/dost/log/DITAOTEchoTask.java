@@ -84,7 +84,6 @@ public final class DITAOTEchoTask extends Echo {
             } else if(DEBUG.equals(type)){
                 logger.logDebug(msgBean.toString());
             }
-            LogUtils.increaseNumOfExceptionByType(msgBean.getType());
         }
     }
 
