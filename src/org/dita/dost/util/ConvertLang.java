@@ -36,7 +36,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.tools.ant.Project;
 
 import org.apache.tools.ant.Task;
-import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.log.DITAOTAntLogger;
 import org.dita.dost.log.MessageUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -74,14 +75,14 @@ public final class ConvertLang extends Task {
     private final Map<String, String>entityMap = new HashMap<String, String>();
 
 
-    private final DITAOTJavaLogger logger = new DITAOTJavaLogger();
+    private DITAOTLogger logger;
 
     /**
      * Executes the Ant task.
      */
     @Override
     public void execute(){
-
+        logger = new DITAOTAntLogger(getProject());
         logger.logInfo(message);
 
         //ensure outdir is absolute

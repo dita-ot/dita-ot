@@ -23,7 +23,8 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
-import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.log.DITAOTAntLogger;
 import org.dita.dost.log.MessageUtils;
 
 /**
@@ -45,14 +46,14 @@ public final class CheckLang extends Task {
 
     private String message;
 
-    private final DITAOTJavaLogger logger = new DITAOTJavaLogger();
+    private DITAOTLogger logger;
 
     /**
      * Executes the Ant task.
      */
     @Override
     public void execute(){
-
+        logger = new DITAOTAntLogger(getProject());
         logger.logInfo(message);
 
         final Properties params = new Properties();

@@ -18,7 +18,8 @@ import java.util.StringTokenizer;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.util.FileUtils;
-import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.log.DITAOTAntLogger;
 
 /**
  * Class description goes here.
@@ -29,7 +30,7 @@ public final class DITAOTCopy extends Task {
     private String includes = null;
     private String relativePaths = null;
     private String destDir = null;  // the destination directory
-    private final DITAOTJavaLogger logger = new DITAOTJavaLogger();
+    private DITAOTLogger logger;
 
     /**
      * Default Constructor.
@@ -67,6 +68,7 @@ public final class DITAOTCopy extends Task {
      */
     @Override
     public void execute() throws BuildException {
+        logger = new DITAOTAntLogger(getProject());
         final FileUtils fileUitls = FileUtils.newFileUtils();
         StringTokenizer tokenizer;
         StringTokenizer pathTokenizer;
