@@ -17,9 +17,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
- * Logger to a log file.
+ * Logger to a log file. Intended to be used only with {@link org.dita.dost.log.DITAOTBuildLogger}, not as a stand-alone logger.
  * 
  * @author Wu, Zhi Qiang
+ * @see org.dita.dost.log.DITAOTBuildLogger
  */
 public final class DITAOTFileLogger implements DITAOTLogger {
     private static DITAOTFileLogger logger;

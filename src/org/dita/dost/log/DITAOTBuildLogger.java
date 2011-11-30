@@ -27,9 +27,11 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.util.LogUtils;
 
 /**
- * Ant build logger for {@link org.dita.dost.invoker.CommandLineInvoker}, not intended to be used as a standalone logger.
+ * Ant build logger for {@link org.dita.dost.invoker.CommandLineInvoker}, not intended to be used as a stand-alone logger.
  * 
  * @author Wu, Zhi Qiang
+ * 
+ * @see org.dita.dost.invoker.CommandLineInvoker
  */
 public final class DITAOTBuildLogger implements BuildLogger {
 

@@ -189,10 +189,11 @@
 
   <!-- Changed by Alan to refacter:URIResolver Date2009-08-07 -->
   <target name="build-init"
-    depends="start-process, init-logger, init-URIResolver, use-init, output-version, check-arg, output-msg" />
+    depends="start-process, init-URIResolver, use-init, output-version, check-arg, output-msg" />
     
   <target name="start-process" description="Processing started" />
 
+  <!-- Only used when invoked with CommandLineInvoker -->
   <target name="init-logger"
     description="Initialize log directory and file name">
     <config-logger />
