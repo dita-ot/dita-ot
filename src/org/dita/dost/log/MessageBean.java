@@ -17,6 +17,13 @@ import static org.dita.dost.util.Constants.*;
  * @author Wu, Zhi Qiang
  */
 public final class MessageBean {
+    
+    public static final String FATAL = "FATAL";
+    public static final String ERROR = "ERROR";
+    public static final String WARN = "WARN";
+    public static final String INFO = "INFO";
+    public static final String DEBUG = "DEBUG";
+    
     private String id;
 
     private String type;

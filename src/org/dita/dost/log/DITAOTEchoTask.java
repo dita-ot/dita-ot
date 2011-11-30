@@ -9,12 +9,16 @@
  */
 package org.dita.dost.log;
 
+import static org.dita.dost.log.MessageBean.*;
+
 import java.util.Properties;
 import java.util.StringTokenizer;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.taskdefs.Echo;
 import org.dita.dost.util.LogUtils;
+import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.log.DITAOTAntLogger;
 
 /**
  * Class description goes here.
@@ -26,6 +30,8 @@ public final class DITAOTEchoTask extends Echo {
 
     private Properties prop = null;
 
+    private DITAOTLogger logger;
+    
     /**
      * Default Construtor.
      *
@@ -61,10 +67,23 @@ public final class DITAOTEchoTask extends Echo {
      */
     @Override
     public void execute() throws BuildException {
-        setMessage(MessageUtils.getMessage(id, prop).toString());
-        super.execute();
-        final MessageBean msgBean=MessageUtils.getMessage(id, prop);
-        if(msgBean!=null){
+        logger = new DITAOTAntLogger(getProject());
+        final MessageBean msgBean = MessageUtils.getMessage(id, prop);
+        //setMessage(msgBean.toString());
+        //super.execute();
+        if (msgBean != null) {
+            final String type = msgBean.getType();
+            if(FATAL.equals(type)){
+                logger.logFatal(msgBean.toString());
+            } else if(ERROR.equals(type)){
+                logger.logError(msgBean.toString());
+            } else if(WARN.equals(type)){
+                logger.logWarn(msgBean.toString());
+            } else if(INFO.equals(type)){
+                logger.logInfo(msgBean.toString());
+            } else if(DEBUG.equals(type)){
+                logger.logDebug(msgBean.toString());
+            }
             LogUtils.increaseNumOfExceptionByType(msgBean.getType());
         }
     }

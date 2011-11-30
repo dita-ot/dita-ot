@@ -10,23 +10,23 @@
 package org.dita.dost.util;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.log.MessageBean.*;
 
 /**
  * LogUtils : To anylyse the information from dita & xslt ,supply
  * fatal , error , warn , info to the DITAOTBuildLogger,
  * which to complement the ant's shortage.
+ * 
+ * Only intended to be used with {@link org.dita.dost.log.DITAOTBuildLogger}.
+ * 
  * @author wxzhang
- *
+ * @see org.dita.dost.log.DITAOTBuildLogger
  */
 public final class LogUtils {
     private static int numOfFatals=0;
     private static int numOfErrors=0;
     private static int numOfWarnings=0;
     private static int numOfInfo=0;
-    private static final String FATAL="FATAL";
-    private static final String WARN="WARN";
-    private static final String ERROR="ERROR";
-    private static final String INFO="INFO";
 
     private LogUtils(){
     }
