@@ -85,6 +85,7 @@ public class TestDitaWriter {
         facade.execute("GenMapAndTopicList", pipelineInput);
 
         writer = new DitaWriter();
+        writer.setLogger(new TestUtils.TestLogger());
         writer.initXMLReader(baseDir.getAbsolutePath(), false, true);
 
         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

@@ -87,7 +87,7 @@ public final class DitaWriter extends AbstractXMLWriter {
     private boolean setSystemid = true;
     //Added on 2010-08-24 for bug:3086552 end
 
-    private static boolean checkDITAHREF(final Attributes atts){
+    private boolean checkDITAHREF(final Attributes atts){
         final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
         String scopeValue = atts.getValue(ATTRIBUTE_NAME_SCOPE);
         String formatValue = atts.getValue(ATTRIBUTE_NAME_FORMAT);
@@ -121,7 +121,7 @@ public final class DitaWriter extends AbstractXMLWriter {
      * replace all the backslash with slash in
      * all href and conref attribute
      */
-    private static String replaceCONREF (final Attributes atts){
+    private String replaceCONREF (final Attributes atts){
         String attValue = atts.getValue(ATTRIBUTE_NAME_CONREF);
         final int sharp_index = attValue.lastIndexOf(SHARP);
         final int dot_index = attValue.lastIndexOf(DOT);
@@ -208,7 +208,7 @@ public final class DitaWriter extends AbstractXMLWriter {
                    : null;
         }
     }
-    private static String replaceHREF (final String attName, final Attributes atts){
+    private String replaceHREF (final String attName, final Attributes atts){
         if (attName == null){
             return null;
         }
@@ -1455,7 +1455,7 @@ public final class DitaWriter extends AbstractXMLWriter {
     //Added by William on 2009-07-18 for req #12014 end
 
     //Added by Alan Date:2009-08-04 --begin
-    private static String extName;
+    private String extName;
     /**
      * Get extension name.
      * @return extension name
@@ -1467,8 +1467,8 @@ public final class DitaWriter extends AbstractXMLWriter {
      * Set extension name.
      * @param extName extension name
      */
-    public synchronized void setExtName(final String extName) {
-        DitaWriter.extName = extName;
+    public void setExtName(final String extName) {
+        this.extName = extName;
     }
     //Added by Alan Date:2009-08-04 --end
 

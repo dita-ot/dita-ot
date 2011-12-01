@@ -125,10 +125,10 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
     /**
      * File extension of source file.
      */
-    private static String extName = null;
-    private static String tempDir = "";
+    private String extName = null;
+    private String tempDir = "";
 
-    private static void updateProperty (final String listName, final Properties property){
+    private void updateProperty (final String listName, final Properties property){
         final StringBuffer result = new StringBuffer(INT_1024);
         final String propValue = property.getProperty(listName);
 
@@ -315,7 +315,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                     final Iterator<String> iter = schemaSet.iterator();
                     while (iter.hasNext()) {
                         filterReader.loadSubjectScheme(FileUtils.resolveFile(
-                                DebugAndFilterModule.tempDir, iter.next())+".subm");
+                                tempDir, iter.next())+".subm");
                     }
                     if (ditavalFile!=null){
                         filterReader.filterReset();
@@ -455,7 +455,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                 }
                 visitedSet.add(parent);
                 String tmprel = FileUtils.getRelativePathFromMap(inputMap, parent);
-                tmprel = FileUtils.resolveFile(DebugAndFilterModule.tempDir, tmprel)+".subm";
+                tmprel = FileUtils.resolveFile(tempDir, tmprel)+".subm";
                 Document parentRoot = null;
                 if (!FileUtils.fileExists(tmprel)) {
                     parentRoot = builder.parse(new InputSource(new FileInputStream(parent)));
@@ -469,14 +469,14 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                         final Document childRoot = builder.parse(new InputSource(new FileInputStream(childpath)));
                         mergeScheme(parentRoot, childRoot);
                         String rel = FileUtils.getRelativePathFromMap(inputMap, childpath);
-                        rel = FileUtils.resolveFile(DebugAndFilterModule.tempDir, rel)+".subm";
+                        rel = FileUtils.resolveFile(tempDir, rel)+".subm";
                         generateScheme(rel, childRoot);
                     }
                 }
 
                 //Output parent scheme
                 String rel = FileUtils.getRelativePathFromMap(inputMap, parent);
-                rel = FileUtils.resolveFile(DebugAndFilterModule.tempDir, rel)+".subm";
+                rel = FileUtils.resolveFile(tempDir, rel)+".subm";
                 generateScheme(rel, parentRoot);
             }
         } catch (final Exception e) {

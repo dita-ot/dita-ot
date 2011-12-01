@@ -76,6 +76,7 @@ public class DitaWriterTest {
 
         OutputUtils.setInputMapPathName(new File(srcDir, "main.ditamap").getAbsolutePath());
         final DitaWriter writer = new DitaWriter();
+        writer.setLogger(new TestUtils.TestLogger());
         writer.initXMLReader(srcDir.getAbsolutePath(), false, true);
         writer.setExtName(".xml");
 
