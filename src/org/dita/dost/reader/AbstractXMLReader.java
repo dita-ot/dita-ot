@@ -47,7 +47,8 @@ ContentHandler, LexicalHandler, EntityResolver {
      * @param inGrammarPool
      * @throws SAXException if initializing reader failed
      */
-    public static XMLReader initXMLReaderBase(final String ditaDir, final boolean validate,
+    @Deprecated
+    public XMLReader initXMLReaderBase(final String ditaDir, final boolean validate,
             final XMLGrammarPool inGrammarPool) throws SAXException {
         // FIXME: WEK: This is my attempt to factor out common reader initialization
         //             code for the GenListModuleReader and the Debug and filter reader.
@@ -82,29 +83,12 @@ ContentHandler, LexicalHandler, EntityResolver {
      * @param reader
      * @param grammarPool
      */
-    public static void setGrammarPool(final XMLReader reader, XMLGrammarPool grammarPool) {
-
-        final DITAOTLogger logger = new DITAOTJavaLogger();
-        if (grammarPool == null) {
-            grammarPool = GrammarPoolManager.getGrammarPool();
-        }
-        if (grammarPool != null) {
-            try {
-                reader.setProperty(
-                        "http://apache.org/xml/properties/internal/grammar-pool",
-                        grammarPool);
-
-                final String msg = "Using Xerces grammar pool for DTD and schema caching.";
-                logger.logInfo(msg);
-
-            } catch (final Exception e) {
-                final String msg = "Failed to setXerces grammar pool for parser: "
-                        + e.getMessage();
-                logger.logInfo(msg);
-            }
-        } else {
-            final String msg = "grammar pool is null";
-            logger.logInfo(msg);
+    public void setGrammarPool(final XMLReader reader, XMLGrammarPool grammarPool) {
+        try {
+            reader.setProperty("http://apache.org/xml/properties/internal/grammar-pool", grammarPool);
+            logger.logInfo("Using Xerces grammar pool for DTD and schema caching.");
+        } catch (final Exception e) {
+            logger.logWarn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
         }
     }
 

@@ -26,6 +26,8 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.Stack;
 
+import org.apache.xerces.xni.grammars.XMLGrammarPool;
+
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
@@ -392,7 +394,6 @@ public final class DitaWriter extends AbstractXMLWriter {
     public void initXMLReader(final String ditaDir, final boolean validate, final boolean arg_setSystemid) throws SAXException {
         try {
             reader = StringUtils.getXMLReader();
-            AbstractXMLReader.setGrammarPool(reader, null);
 
             reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
             reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
@@ -408,10 +409,25 @@ public final class DitaWriter extends AbstractXMLWriter {
         } catch (final Exception e) {
             throw new SAXException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
-        AbstractXMLReader.setGrammarPool(reader, GrammarPoolManager.getGrammarPool());
+        setGrammarPool(reader, GrammarPoolManager.getGrammarPool());
         CatalogUtils.setDitaDir(ditaDir);
         catalogMap = CatalogUtils.getCatalog(ditaDir);
         setSystemid= arg_setSystemid;
+    }
+    
+    /**
+     * Sets the grammar pool on the parser. Note that this is a Xerces-specific
+     * feature.
+     * @param reader
+     * @param grammarPool
+     */
+    public void setGrammarPool(final XMLReader reader, final XMLGrammarPool grammarPool) {
+        try {
+            reader.setProperty("http://apache.org/xml/properties/internal/grammar-pool", grammarPool);
+            logger.logInfo("Using Xerces grammar pool for DTD and schema caching.");
+        } catch (final Exception e) {
+            logger.logWarn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
+        }
     }
 
     @Override
