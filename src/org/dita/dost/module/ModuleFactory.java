@@ -24,7 +24,7 @@ import org.dita.dost.log.MessageBean;
 public final class ModuleFactory {
     private static ModuleFactory moduleFactory = null;
 
-    private final String packagePrefix = "org.dita.dost.module.";
+    private static final String packagePrefix = "org.dita.dost.module.";
 
     /**
      * Automatically generated constructor: ModuleFactory.

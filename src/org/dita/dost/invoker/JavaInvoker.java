@@ -20,6 +20,7 @@ import org.dita.dost.log.DITAOTJavaLogger;
  * @author Lian, Li
  * 
  */
+@Deprecated
 public final class JavaInvoker {
     private static DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 

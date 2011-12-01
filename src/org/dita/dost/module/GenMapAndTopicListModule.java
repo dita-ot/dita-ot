@@ -193,9 +193,9 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
     private final Map<String, String> exKeyDefMap;
     // Added by William on 2010-06-09 for bug:3013079 end
 
-    private final String moduleStartMsg = "GenMapAndTopicListModule.execute(): Starting...";
+    private static final String moduleStartMsg = "GenMapAndTopicListModule.execute(): Starting...";
 
-    private final String moduleEndMsg = "GenMapAndTopicListModule.execute(): Execution time: ";
+    private static final String moduleEndMsg = "GenMapAndTopicListModule.execute(): Execution time: ";
 
     // Added on 2010-08-24 for bug:2994593 start
     /** use grammar pool cache */

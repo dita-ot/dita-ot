@@ -125,8 +125,8 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
     private Map<String, String> currentParsingFileTopicIDChangeTable;
     // Added on 2010-11-12 for bug 3090803 end
 
-    private final String ditaarchNSQName = "xmlns:ditaarch";
-    private final String ditaarchNSValue = "http://dita.oasis-open.org/architecture/2005/";
+    private static final String ditaarchNSQName = "xmlns:ditaarch";
+    private static final String ditaarchNSValue = "http://dita.oasis-open.org/architecture/2005/";
     /**
      * Constructor.
      */

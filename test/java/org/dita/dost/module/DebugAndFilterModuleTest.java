@@ -158,7 +158,7 @@ public class DebugAndFilterModuleTest {
         }
     }
 
-    private class TestHandler implements ContentHandler {
+    private static class TestHandler implements ContentHandler {
 
         private File source;
         private final Map<String, Integer> counter = new HashMap<String, Integer>();

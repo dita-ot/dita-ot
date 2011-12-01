@@ -294,7 +294,7 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
             case Node.PROCESSING_INSTRUCTION_NODE:
                 output((ProcessingInstruction) child); break;
             case Node.ELEMENT_NODE:
-                output((Element) child);
+                output((Element) child); break;
             }
         }
 
@@ -336,7 +336,7 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
             case Node.PROCESSING_INSTRUCTION_NODE:
                 output((ProcessingInstruction) child); break;
             case Node.ELEMENT_NODE:
-                output((Element) child);
+                output((Element) child); break;
             }
         }
 

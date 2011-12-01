@@ -35,8 +35,6 @@ import org.xml.sax.helpers.AttributesImpl;
  */
 final class InsertCatalogActionRelative extends InsertAction {
 
-    private static DITAOTJavaLogger logger = new DITAOTJavaLogger();
-
     @Override
     public void startElement(final String uri, final String localName, final String qName,
             final Attributes attributes) throws SAXException {

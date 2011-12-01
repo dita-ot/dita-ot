@@ -17,7 +17,7 @@ package org.dita.dost.util;
  */
 public final class VersionUtil {
 
-    private final String otversion = "@@OTVERSION@@";
+    private static final String otversion = "@@OTVERSION@@";
 
 
     /**

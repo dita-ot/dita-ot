@@ -89,12 +89,34 @@ public final class KeyrefPaser extends AbstractXMLWriter {
      * key definition to key reference which is {@code <topicref>}.
      */
     private static final Set<String> no_copy = new HashSet<String>();
+    static {
+        no_copy.add(ATTRIBUTE_NAME_ID);
+        no_copy.add(ATTRIBUTE_NAME_CLASS);
+        no_copy.add(ATTRIBUTE_NAME_XTRC);
+        no_copy.add(ATTRIBUTE_NAME_XTRF);
+        no_copy.add(ATTRIBUTE_NAME_HREF);
+        no_copy.add(ATTRIBUTE_NAME_KEYS);
+        //added by William on 2009-09-25 for keyref bug:2866204 start
+        no_copy.add(ATTRIBUTE_NAME_TOC);
+        no_copy.add(ATTRIBUTE_NAME_PROCESSING_ROLE);
+        //added by William on 2009-09-25 for keyref bug:2866204 end
+    }
 
     /**
      * Set of attributes which should not be copied from
      * key definition to key reference which is not {@code <topicref>}.
      */
     private static final Set<String> no_copy_topic = new HashSet<String>();
+    static {
+        no_copy_topic.addAll(no_copy);
+        no_copy_topic.add("query");
+        no_copy_topic.add("search");
+        no_copy_topic.add(ATTRIBUTE_NAME_TOC);
+        no_copy_topic.add(ATTRIBUTE_NAME_PRINT);
+        no_copy_topic.add(ATTRIBUTE_NAME_COPY_TO);
+        no_copy_topic.add(ATTRIBUTE_NAME_CHUNK);
+        no_copy_topic.add(ATTRIBUTE_NAME_NAVTITLE);
+    }
 
     /**
      * It is used to store the target of the keys
@@ -181,30 +203,6 @@ public final class KeyrefPaser extends AbstractXMLWriter {
         keyrefInfos.add(new KeyrefInfo(TOPIC_INDEXTERM, null, false));
         keyrefInfos.add(new KeyrefInfo(TOPIC_INDEX_BASE, null, false));
         keyrefInfos.add(new KeyrefInfo(TOPIC_INDEXTERMREF, null, false));
-    }
-
-    static {
-        no_copy.add(ATTRIBUTE_NAME_ID);
-        no_copy.add(ATTRIBUTE_NAME_CLASS);
-        no_copy.add(ATTRIBUTE_NAME_XTRC);
-        no_copy.add(ATTRIBUTE_NAME_XTRF);
-        no_copy.add(ATTRIBUTE_NAME_HREF);
-        no_copy.add(ATTRIBUTE_NAME_KEYS);
-        //added by William on 2009-09-25 for keyref bug:2866204 start
-        no_copy.add(ATTRIBUTE_NAME_TOC);
-        no_copy.add(ATTRIBUTE_NAME_PROCESSING_ROLE);
-        //added by William on 2009-09-25 for keyref bug:2866204 end
-    }
-
-    static {
-        no_copy_topic.addAll(no_copy);
-        no_copy_topic.add("query");
-        no_copy_topic.add("search");
-        no_copy_topic.add(ATTRIBUTE_NAME_TOC);
-        no_copy_topic.add(ATTRIBUTE_NAME_PRINT);
-        no_copy_topic.add(ATTRIBUTE_NAME_COPY_TO);
-        no_copy_topic.add(ATTRIBUTE_NAME_CHUNK);
-        no_copy_topic.add(ATTRIBUTE_NAME_NAVTITLE);
     }
 
     /**

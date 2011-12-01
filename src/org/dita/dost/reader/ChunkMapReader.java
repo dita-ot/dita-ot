@@ -317,7 +317,7 @@ public final class ChunkMapReader implements AbstractReader {
             case Node.PROCESSING_INSTRUCTION_NODE:
                 output((ProcessingInstruction) child, outputWriter); break;
             case Node.ELEMENT_NODE:
-                output((Element) child, outputWriter);
+                output((Element) child, outputWriter); break;
             }
         }
         outputWriter.write(LESS_THAN);
