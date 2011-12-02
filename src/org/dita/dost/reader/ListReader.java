@@ -12,6 +12,7 @@ package org.dita.dost.reader;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -48,7 +49,6 @@ public final class ListReader implements AbstractReader {
         super();
         refList = new LinkedList<String>();
         content = new ContentImpl();
-        content.setCollection(refList);
     }
 
     public void read(final String filename) {
@@ -81,11 +81,11 @@ public final class ListReader implements AbstractReader {
         while (tokenizer.hasMoreTokens()) {
             refList.addFirst(tokenizer.nextToken());
         }
-
+        content.setCollection(Collections.unmodifiableList(refList));
     }
 
     /**
-     * @return content value {@code String}; collection {@code LinkedList<String>}
+     * @return content value {@code String}; collection unmodifiable {@code List<String>}
      */
     public Content getContent() {
         return content;

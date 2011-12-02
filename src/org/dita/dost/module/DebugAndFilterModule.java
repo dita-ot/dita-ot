@@ -67,11 +67,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Queue;
@@ -229,27 +231,19 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             throw new IllegalStateException("Logger not set");
         }
         final Date executeStartTime = TimingUtils.getNowTime();
-        final String msg = "DebugAndFilterModule.execute(): Starting...";
-        logger.logInfo(msg);
+        logger.logInfo("DebugAndFilterModule.execute(): Starting...");
 
         try {
             final String baseDir = input.getAttribute(ANT_INVOKER_PARAM_BASEDIR);
-            String ditavalFile = input.getAttribute(ANT_INVOKER_PARAM_DITAVAL);
             tempDir = input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR);
-            final String ext = input.getAttribute(ANT_INVOKER_PARAM_DITAEXT);
-            ditaDir=input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR);
-            //Added by William on 2009-07-18 for req #12014 start
-            //get transtype
-            final String transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
-            //Added by William on 2009-07-18 for req #12014 start
-
-            inputDir = null;
-
-
-            extName = ext.startsWith(DOT) ? ext : (DOT + ext);
             if (!new File(tempDir).isAbsolute()) {
                 tempDir = new File(baseDir, tempDir).getAbsolutePath();
             }
+            ditaDir=input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR);
+            final String transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
+            final String ext = input.getAttribute(ANT_INVOKER_PARAM_DITAEXT);
+            extName = ext.startsWith(DOT) ? ext : (DOT + ext);
+            String ditavalFile = input.getAttribute(ANT_INVOKER_PARAM_DITAVAL);
             if (ditavalFile != null && !new File(ditavalFile).isAbsolute()) {
                 ditavalFile = new File(baseDir, ditavalFile).getAbsolutePath();
             }
@@ -259,12 +253,12 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             //null means default path: tempdir/dita.xml.properties
             listReader.read(null);
 
-            final LinkedList<String> parseList = (LinkedList<String>) listReader.getContent().getCollection();
+            final List<String> parseList = (List<String>) listReader.getContent().getCollection();
             inputDir = (String) listReader.getContent().getValue();
             inputMap = new File(inputDir + File.separator + listReader.getInputMap()).getAbsolutePath();
 
             // Output subject schemas
-            this.outputSubjectScheme();
+            outputSubjectScheme();
 
             if (!new File(inputDir).isAbsolute()) {
                 inputDir = new File(baseDir, inputDir).getAbsolutePath();
@@ -282,6 +276,8 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                 content = new ContentImpl();
                 //FilterUtils.setFilterMap(null);
             }
+            content.setValue(tempDir);
+            
             final DitaWriter fileWriter = new DitaWriter();
             fileWriter.setLogger(logger);
             try{
@@ -290,32 +286,22 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             } catch (final SAXException e) {
                 throw new DITAOTException(e.getMessage(), e);
             }
-
-            content.setValue(tempDir);
             fileWriter.setContent(content);
-
-            //Added by Alan Date:2009-08-04 --begin
             fileWriter.setExtName(extName);
-
-            //added by William on 2009-07-18 for req #12014 start
-            //set transtype
             fileWriter.setTranstype(transtype);
-            //added by William on 2009-07-18 for req #12014 end
 
             final Map<String, Set<String>> dic = readMapFromXML(FILE_NAME_SUBJECT_DICTIONARY);
 
-            while (!parseList.isEmpty()) {
-                final String filename = parseList.removeLast();
+            for (final String filename: parseList) {
                 final File currentFile = new File(inputDir, filename);
                 logger.logInfo("Processing " + currentFile.getAbsolutePath());
 
                 final Set<String> schemaSet = dic.get(filename);
                 filterReader.reset();
                 if (schemaSet != null) {
-                    final Iterator<String> iter = schemaSet.iterator();
-                    while (iter.hasNext()) {
+                    for (final String schema: schemaSet) {
                         filterReader.loadSubjectScheme(FileUtils.resolveFile(
-                                tempDir, iter.next())+".subm");
+                                tempDir, schema)+".subm");
                     }
                     if (ditavalFile!=null){
                         filterReader.filterReset();
@@ -357,7 +343,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             } else {
                 listReader.read(new File(tempDir, FILE_NAME_DITA_LIST).getAbsolutePath());
             }
-            performCopytoTask(tempDir,  listReader );
+            performCopytoTask(tempDir, listReader);
         } catch (final Exception e) {
             e.printStackTrace();
             throw new DITAOTException("Exception doing debug and filter module processing: " + e.getMessage(), e);
@@ -415,14 +401,13 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             }
         }
 
-        final Iterator<Object> it = prop.keySet().iterator();
-        while (it.hasNext()) {
-            final String key = (String)it.next();
-            final String value = prop.getProperty(key);
+        for (final Map.Entry<Object, Object> entry: prop.entrySet()) {
+            final String key = (String) entry.getKey();
+            final String value = (String) entry.getValue();
             graph.put(key, StringUtils.restoreSet(value, COMMA));
         }
 
-        return graph;
+        return Collections.unmodifiableMap(graph);
     }
 
     private void outputSubjectScheme() throws DITAOTException {
@@ -431,9 +416,8 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 
         final Queue<String> queue = new LinkedList<String>();
         final Set<String> visitedSet = new HashSet<String>();
-        final Iterator<Map.Entry<String, Set<String>>> graphIter = graph.entrySet().iterator();
-        if (graphIter.hasNext()) {
-            final Map.Entry<String, Set<String>> entry = graphIter.next();
+        
+        for (final Map.Entry<String, Set<String>> entry: graph.entrySet()) {
             queue.offer(entry.getKey());
         }
 
@@ -463,9 +447,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                     parentRoot = builder.parse(new InputSource(new FileInputStream(tmprel)));
                 }
                 if (children != null) {
-                    final Iterator<String> child = children.iterator();
-                    while (child.hasNext()) {
-                        final String childpath = child.next();
+                    for (final String childpath: children) {
                         final Document childRoot = builder.parse(new InputSource(new FileInputStream(childpath)));
                         mergeScheme(parentRoot, childRoot);
                         String rel = FileUtils.getRelativePathFromMap(inputMap, childpath);
@@ -614,9 +596,8 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
      */
     private void performCopytoTask(final String tempDir, final ListReader listReader) {
     	Map<String, String> copytoMap  = listReader.getCopytoMap();
-        final Iterator<Map.Entry<String, String>> iter = copytoMap.entrySet().iterator();
-        while (iter.hasNext()) {
-            final Map.Entry<String, String> entry = iter.next();
+    	
+    	for (final Map.Entry<String, String> entry: copytoMap.entrySet()) {
             final String copytoTarget = entry.getKey();
             final String copytoSource = entry.getValue();
             final File srcFile = new File(tempDir, copytoSource);
@@ -760,9 +741,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
         //result map
         final Map<String, Set<String>> resultMap = new HashMap<String, Set<String>>();
         //Iterate the orignal map
-        final Iterator<Map.Entry<String, Set<String>>> itr = dic.entrySet().iterator();
-        while (itr.hasNext()) {
-            final Map.Entry<String, java.util.Set<String>> entry =  itr.next();
+        for (final Map.Entry<String, java.util.Set<String>> entry: dic.entrySet()) {
             //filename will be checked.
             String filename = entry.getKey();
             if(FileUtils.isTopicFile(filename)){
@@ -784,9 +763,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             return;
         }
         final Properties prop = new Properties();
-        final Iterator<Map.Entry<String, Set<String>>> iter = m.entrySet().iterator();
-        while (iter.hasNext()) {
-            final Map.Entry<String, Set<String>> entry = iter.next();
+        for (final Map.Entry<String, Set<String>> entry: m.entrySet()) {
             final String key = entry.getKey();
             final String value = StringUtils.assembleString(entry.getValue(), COMMA);
             prop.setProperty(key, value);
