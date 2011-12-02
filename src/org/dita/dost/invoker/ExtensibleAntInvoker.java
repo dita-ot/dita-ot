@@ -18,6 +18,7 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTAntLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
@@ -209,7 +210,9 @@ public final class ExtensibleAntInvoker extends Task {
             }
         }
 
-        pipeline.setLogger(new DITAOTAntLogger(getProject()));
+        final DITAOTAntLogger logger = new DITAOTAntLogger(getProject());
+        logger.setTask(this);
+        pipeline.setLogger(logger);
         try {
             pipeline.execute(getModule(), pipelineInput);
         } catch (final DITAOTException e) {

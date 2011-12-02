@@ -45,7 +45,7 @@
   <target name="gen-list-without-flagging"
     depends="gen-list-flag-check"
     unless="preprocess.gen-list-without-flagging.skip">
-    <pipeline message="Generate list." module="GenMapAndTopicList"
+    <pipeline message="Generate list." module="GenMapAndTopicList" taskname="gen-list"
       basedir="${basedir}" inputmap="${args.input}"
       tempdir="${dita.temp.dir}">
       <param name="ditadir" location="${dita.dir}"/>
@@ -63,7 +63,7 @@
   <target name="gen-list-with-flagging"
     depends="gen-list-flag-check"
     unless="preprocess.gen-list-with-flagging.skip">
-    <pipeline message="Generate list." module="GenMapAndTopicList"
+    <pipeline message="Generate list." module="GenMapAndTopicList" taskname="gen-list"
       basedir="${basedir}" inputmap="${args.input}"
       tempdir="${dita.temp.dir}">
       <param name="ditadir" location="${dita.dir}"/>
@@ -143,7 +143,7 @@
     depends="debug-filter-flag-check"
     unless="preprocess.debug.skip"
     description="Debug input files">
-    <pipeline message="Debug and filtering." module="DebugAndFilter"
+    <pipeline message="Debug and filtering." module="DebugAndFilter" taskname="debug"
       basedir="${basedir}" tempdir="${dita.temp.dir}">
       <param name="ditaext" value="${dita.extname}"/>
       <param name="ditadir" location="${dita.dir}"/>
@@ -157,7 +157,7 @@
     depends="debug-filter-flag-check"
     unless="preprocess.debug-and-filter.skip"
     description="Debug and filter input files">
-    <pipeline message="Debug and filtering." module="DebugAndFilter"
+    <pipeline message="Debug and filtering." module="DebugAndFilter" taskname="filter"
       basedir="${basedir}" tempdir="${dita.temp.dir}">
       <param name="ditaval" value="${dita.input.valfile}"/>
       <param name="ditaext" value="${dita.extname}"/>
@@ -194,7 +194,7 @@
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.conrefpush.skip"
     description="Resolve conref push">
-    <pipeline message="Resolve conref push." module="ConrefPush"
+    <pipeline message="Resolve conref push." module="ConrefPush" taskname="conref-push"
       basedir="${basedir}" tempdir="${dita.temp.dir}"/>     
   </target>
   
@@ -212,7 +212,7 @@
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.move-meta-entries.skip"
     description="Move metadata entries">
-    <pipeline message="Move metadata entries." module="MoveMeta"
+    <pipeline message="Move metadata entries." module="MoveMeta" taskname="move-meta"
       basedir="${basedir}" inputmap="${user.input.file}"
       tempdir="${dita.temp.dir}" />
   </target>
@@ -234,7 +234,7 @@
     <condition property="dita.preprocess.reloadstylesheet.conref" value="${dita.preprocess.reloadstylesheet}">
       <not><isset property="dita.preprocess.reloadstylesheet.conref"/></not>
     </condition>
-    <xslt processor="trax" basedir="${dita.temp.dir}"
+    <xslt processor="trax" basedir="${dita.temp.dir}" taskname="conref"
       destdir="${dita.temp.dir}" includesfile="${dita.temp.dir}${file.separator}${conreffile}"
       classpathref="dost.class.path"
       reloadstylesheet="${dita.preprocess.reloadstylesheet.conref}"
@@ -269,7 +269,7 @@
     unless="preprocess.coderef.skip"
     description="Resolve coderef in input files">
     
-    <pipeline message="Resolve coderef." module="Coderef"
+    <pipeline message="Resolve coderef." module="Coderef" taskname="coderef"
       basedir="${basedir}"
       tempdir="${dita.temp.dir}" />
       
@@ -295,7 +295,7 @@
     </condition>
     <dirname property="mapref.workdir"
       file="${dita.temp.dir}${file.separator}${user.input.file}" />
-    <xslt processor="trax"
+    <xslt taskname="mapref"
     	basedir="${dita.temp.dir}"
     	destdir="${dita.temp.dir}"
         includesfile="${dita.temp.dir}${file.separator}${fullditamapfile}"
@@ -331,7 +331,7 @@
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.keyref.skip"
     description="Resolve keyref">
-    <pipeline message="Resolve keyref." module="Keyref"
+    <pipeline message="Resolve keyref." module="Keyref" taskname="keyref"
       basedir="${basedir}" tempdir="${dita.temp.dir}">
       <param name="ditaext" value="${dita.extname}"/>
     </pipeline>
@@ -356,7 +356,7 @@
     <condition property="dita.preprocess.reloadstylesheet.mappull" value="${dita.preprocess.reloadstylesheet}">
       <not><isset property="dita.preprocess.reloadstylesheet.mappull"/></not>
     </condition>
-    <xslt processor="trax"
+    <xslt taskname="mappull"
   	    basedir="${dita.temp.dir}"
     	destdir="${dita.temp.dir}"
         includesfile="${dita.temp.dir}${file.separator}${fullditamapfile}"
@@ -389,7 +389,7 @@
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.chunk.skip"
     description="Process chunks">
-    <pipeline message="Process chunks." module="Chunk"
+    <pipeline message="Process chunks." module="Chunk" taskname="chunk"
       basedir="${basedir}" inputmap="${user.input.file}"
       tempdir="${dita.temp.dir}">
       <param name="ditaext" value="${dita.ext}"/>
@@ -422,7 +422,7 @@
     <condition property="dita.preprocess.reloadstylesheet.maplink" value="${dita.preprocess.reloadstylesheet}">
       <not><isset property="dita.preprocess.reloadstylesheet.maplink"/></not>
     </condition>
-    <xslt processor="trax"
+    <xslt taskname="maplink"
       in="${dita.temp.dir}${file.separator}${user.input.file}"
       out="${maplink.workdir}${file.separator}maplinks.unordered"
       classpathref="dost.class.path"
@@ -450,7 +450,7 @@
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.move-links.skip"
     description="Move the related link information to topics">
-    <pipeline message="Move links." module="MoveLinks"
+    <pipeline message="Move links." module="MoveLinks" taskname="move-links"
       inputmap="${user.input.file}" tempdir="${dita.temp.dir}">
       <param name="maplinks" location="${maplink.workdir}${file.separator}maplinks.unordered"/>
     </pipeline>
@@ -473,7 +473,7 @@
     <condition property="dita.preprocess.reloadstylesheet.topicpull" value="${dita.preprocess.reloadstylesheet}">
       <not><isset property="dita.preprocess.reloadstylesheet.topicpull"/></not>
     </condition>
-    <xslt processor="trax" basedir="${dita.temp.dir}"
+    <xslt taskname="topicpull" basedir="${dita.temp.dir}"
       destdir="${dita.temp.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
       classpathref="dost.class.path"
       reloadstylesheet="${dita.preprocess.reloadstylesheet.topicpull}"
