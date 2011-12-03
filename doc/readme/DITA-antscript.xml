@@ -9,25 +9,24 @@
 <shortdesc>This topic describes detailed Ant tasks and scripts.</shortdesc>
 <refbody>
 <section><p>The build process including pre-process can be called by using an Ant script. The most important
-        Ant script files are called <filepath>build.xml</filepath>,
-          <filepath>build_general.xml</filepath>, and <filepath>build_preprocess.xml</filepath>;
-        together they define common pre-processing and output transformation routines, as well as
-        extension points that allow DITA-OT Plug-ins to add to this common processing.</p></section>
+        Ant scrip file is called <filepath>build.xml</filepath>, it defines and combines common
+        pre-processing and output transformation routines, as well as extension points that allow
+        DITA-OT Plug-ins to add to this common processing.</p></section>
 <section>       <title>Sample ant script</title>       <p>These ant scripts are in <filepath>samples/ant_sample</filepath> directory. They are
         simple and easy to learn. From these files, you can learn how to write your own Ant script
-        to build your own process.</p>       <p>Here is a sample template for writing an Ant script that executes transformation to xhtml
+        to build your own process.</p>       <p>Here is a sample template for writing an Ant script that executes transformation to XHTML
         in <filepath>samples/ant_samples</filepath>
         directory:<codeblock>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
 &lt;project name="@PROJECT.NAME@_xhtml" default="@DELIVERABLE.NAME@2xhtml" basedir=".">
 
-  &lt;property name="dita.dir" value="${basedir}/../.."/>
+  &lt;property name="dita.dir" location="${basedir}/../.."/>
  
   &lt;target name="@DELIVERABLE.NAME@2xhtml">
     &lt;ant antfile="${dita.dir}${file.separator}build.xml">
       &lt;!-- please refer to the toolkit's document for supported parameters, and 
            specify them base on your needs -->
-      &lt;property name="args.input" value="@DITA.INPUT@"/>
-      &lt;property name="output.dir" value="@OUTPUT.DIR@"/>
+      &lt;property name="args.input" location="@DITA.INPUT@"/>
+      &lt;property name="output.dir" location="@OUTPUT.DIR@"/>
       &lt;property name="transtype" value="xhtml"/>
     &lt;/ant>
   &lt;/target>

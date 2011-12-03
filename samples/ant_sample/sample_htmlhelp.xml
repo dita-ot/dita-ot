@@ -8,12 +8,10 @@
 
   <property name="dita.dir" location="${basedir}/../.."/>
     
-  <import file="${dita.dir}/integrator.xml"/>
-
-  <target name="samples.htmlhelp" depends="integrate" description="build the samples for HTMLHelp">
-    <ant antfile="${dita.dir}/build.xml" target="init">
+  <target name="samples.htmlhelp" description="build the samples for HTMLHelp" depends="clean.samples.htmlhelp">
+    <ant antfile="${dita.dir}/build.xml">
       <property name="args.input" location="${dita.dir}/samples/hierarchy.ditamap"/>
-      <property name="output.dir" value="${dita.dir}/out/samples/htmlhelp"/>
+      <property name="output.dir" location="${dita.dir}/out/samples/htmlhelp"/>
       <property name="transtype" value="htmlhelp"/>
     </ant>
   </target>

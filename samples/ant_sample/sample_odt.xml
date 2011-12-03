@@ -7,14 +7,16 @@
   
   <property name="dita.dir" location="${basedir}/../.."/>
   
-  <import file="${dita.dir}/integrator.xml"/>
-  
-  <target name="samples.odt" depends="integrate" description="transform the samples to ODT">
-    <ant antfile="${dita.dir}/build.xml" target="init">
+  <target name="samples.odt" description="transform the samples to ODT" depends="clean.samples.odt">
+    <ant antfile="${dita.dir}/build.xml">
       <property name="args.input" location="${dita.dir}/samples/hierarchy.ditamap"/>
       <property name="output.dir" location="${dita.dir}/out/samples/odt"/>
       <property name="transtype" value="odt"/>
     </ant>
+  </target>
+  
+  <target name="clean.samples.odt" description="remove the sample ODT output">
+    <delete dir="${dita.dir}/out/samples/odt"/>
   </target>
   
 </project>

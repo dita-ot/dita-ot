@@ -21,14 +21,12 @@ or two Ant properties in these scripts for your own documentation.
     </p>     <p>Here is the Ant project definition from <codeph>template_pdf.xml</codeph>. </p>
       <codeblock>&lt;project name="@PROJECT.NAME@_pdf" default="@DELIVERABLE.NAME@2pdf" basedir=".">
   
-  &lt;property name="dita.dir" value="${basedir}${file.separator}..${file.separator}.."/>
-  
-  &lt;import file="${dita.dir}${file.separator}integrator.xml"/>
-  
-  &lt;target name="@DELIVERABLE.NAME@2pdf" depends="integrate">
-    &lt;ant antfile="${dita.dir}${file.separator}build.xml" target="init">
-      &lt;property name="args.input" value="@DITA.INPUT@"/>
-      &lt;property name="output.dir" value="@OUTPUT.DIR@"/>
+  &lt;property name="dita.dir" location="${basedir}${file.separator}..${file.separator}.."/>
+    
+  &lt;target name="@DELIVERABLE.NAME@2pdf">
+    &lt;ant antfile="${dita.dir}${file.separator}build.xml">
+      &lt;property name="args.input" location="@DITA.INPUT@"/>
+      &lt;property name="output.dir" location="@OUTPUT.DIR@"/>
       &lt;property name="transtype" value="pdf"/>
     &lt;/ant>
   &lt;/target>
@@ -59,7 +57,6 @@ are located in same directory structure used by the DITA-OT samples.
 
   &lt;property environment = "env"/>
   &lt;property name="DITA_DIR" value="${env.DITA_DIR}"/>
-  &lt;import file="${DITA_DIR}/integrator.xml"/>
   &lt;property name="args.logdir" value="../logs"/>
   &lt;property name="dita.input.valfile" value="../QSG.ditaval"/>
 
@@ -73,8 +70,8 @@ are located in same directory structure used by the DITA-OT samples.
   &lt;property name="args.indexshow" value="no"/>
     
   &lt;target name="dita2pdf">
-    &lt;ant antfile="${DITA_DIR}/build.xml" target="init">
-      &lt;property name="transtype" value="pdf2"/>
+    &lt;ant antfile="${DITA_DIR}/build.xml">
+      &lt;property name="transtype" value="pdf"/>
       &lt;property name="args.input" value="../quickstartguide.ditamap"/>
       &lt;property name="dita.temp.dir" value="${outdir}/temp_pdf"/>
       &lt;property name="output.dir" value="${outdir}/pdf"/>

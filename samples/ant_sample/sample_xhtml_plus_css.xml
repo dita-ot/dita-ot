@@ -10,10 +10,8 @@
   <property name="sample.output.dir" value="${dita.dir}/out/xhtml_plus_css"/>
   <property name="css.source.dir" location="${dita.dir}/samples/css"/>
 
-  <import file="${dita.dir}/integrator.xml"/>
-  
-  <target name="samples.xhtml_plus_css" depends="integrate">
-    <ant antfile="${dita.dir}/build.xml" target="init">
+  <target name="samples.xhtml_plus_css" depends="clean.samples.xhtml_plus_css">
+    <ant antfile="${dita.dir}/build.xml">
       <property name="args.input" location="${dita.dir}/samples/hierarchy.ditamap"/>
       <property name="output.dir" location="${sample.output.dir}"/>
       <property name="transtype" value="xhtml"/>
@@ -26,5 +24,10 @@
         <fileset dir="${css.source.dir}" includes="*.jpg"/>
     </copy>
   </target>
+  
+  <target name="clean.samples.xhtml_plus_css" description="remove the sample web output">
+    <delete dir="${sample.output.dir}"/>
+  </target>
+  
   
 </project>

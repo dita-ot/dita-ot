@@ -7,14 +7,16 @@
   
   <property name="dita.dir" location="${basedir}/../.."/>
   
-  <import file="${dita.dir}/integrator.xml"/>
-  
-  <target name="samples.wordrtf" depends="integrate" description="transform the samples to RTF">
-    <ant antfile="${dita.dir}/build.xml" target="init">
+  <target name="samples.wordrtf" description="transform the samples to RTF" depends="clean.samples.wordrtf">
+    <ant antfile="${dita.dir}/build.xml">
       <property name="args.input" location="${dita.dir}/samples/hierarchy.ditamap"/>
       <property name="output.dir" location="${dita.dir}/out/samples/wordrtf"/>
       <property name="transtype" value="wordrtf"/>
     </ant>
   </target>
-    
+  
+  <target name="clean.samples.wordrtf" description="remove the sample RTF output">
+    <delete dir="${dita.dir}/out/samples/wordrtf"/>
+  </target>
+      
 </project>

@@ -98,5 +98,8 @@ for Java Help.</dd>
           <filepath>samples/ant_sample</filepath>.</p> 
    </section>
 </body>
+  <related-links>
+    <link href="DITA-ant.xml"/>
+  </related-links>
 </topic>
 <?Pub *0000003228?>

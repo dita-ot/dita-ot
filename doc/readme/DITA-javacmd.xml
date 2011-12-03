@@ -10,13 +10,11 @@ as an alternative for users with little knowledge of Ant. Most parameters
 available to the Ant builds are also available using the Java command
 line.</shortdesc>
 <conbody>
-<note>The Java command line interface is simply a wrapper around the
-Ant interface; it takes the simplified parameters as input, converts
-them to Ant parameters, and then runs an Ant build. This means that
-in general, applications embedding the toolkit are better off simply
-calling Ant directly. For individual builds, the additional Java overhead
-is minimal, but for repeated or server based builds, it the extra
-memory usage may become more of an issue.</note>
+<note>The Java command line interface is simply a wrapper around the Ant interface; it takes the
+      simplified parameters as input, converts them to Ant parameters, and then runs an Ant build.
+      This means that applications embedding the toolkit should always invoke Ant directly. For
+      individual builds, the additional Java overhead is minimal, but for repeated or server based
+      builds, it the extra memory usage will become more of an issue.</note>
 <section>       <title>Running a Java based build.</title><p>If you
 are using the "Full Easy Install" package, running the startcmd batch
 file will set up a build environment for you and put you in the correct
@@ -31,10 +29,10 @@ separator for each parameter.</li>
 <li>Currently, the parameters <codeph>/filter</codeph>, <codeph>/ftr</codeph>,
              <codeph>/hdr</codeph>, and <codeph>/hdf</codeph> require
 an absolute path.</li>
-<li>The properties file is saved in the <codeph>${args.logdir}</codeph> directory.
-             The following command provides an example using this
-properties file:             <codeblock>ant -f conductor.xml -propertyfile ${args.logdir}/property.temp</codeblock> 
-         </li>
+<li>The properties file is saved in the <codeph>${args.logdir}</codeph> directory. The following
+            command provides an example using this properties file:
+            <codeblock>ant -propertyfile ${args.logdir}/property.temp</codeblock>
+          </li>
 <li>To see a list of all supported parameters from the Java command
 line, run the following command with no additional parameters:<codeblock>java -jar lib/dost.jar</codeblock></li>
 </ol></p>     </section>

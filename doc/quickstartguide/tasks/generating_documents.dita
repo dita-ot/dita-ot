@@ -7,21 +7,27 @@
 <title>Generating Documents with Ant</title>
 <shortdesc>How to generate documents from the command line with Ant.    </shortdesc>
 <taskbody>
-<steps>
-<step><cmd>Open a command prompt.  		  </cmd></step>
-<step><cmd>Change directories to where the DITA-OT is installed on
-your 			 machine.  		  </cmd></step>
-<step><cmd>Enter the following command:  		  </cmd><info>
+    <steps>
+      <step>
+        <cmd>Open a command prompt. </cmd>
+      </step>
+      <step>
+        <cmd>Change directories to where the DITA-OT is installed on your machine. </cmd>
+      </step>
+      <step>
+        <cmd>Enter the following command: </cmd>
+        <info>
           <codeblock>startcmd.bat</codeblock>
         </info>
-        <stepresult> Another command prompt appears with DITA-OT in the title bar, as shown in the
-          following figure: <p><image align="center" height="250"
-              href="../images/DITA-OTCommandPrompt.gif" width="350"/>
-          </p>
-        </stepresult></step>
-<step><cmd>Enter the following command and press the Enter key:  		
- </cmd><info>
-          <codeblock>ant -f <userinput>buildfile</userinput> <userinput>target</userinput></codeblock>
+        <stepresult><p>Another command prompt appears with DITA-OT in the title bar, as shown in the
+        following figure:</p>
+          <image align="center" href="../images/DITA-OTCommandPrompt.gif"/>
+        </stepresult>
+      </step>
+      <step>
+        <cmd>Enter the following command and press the Enter key: </cmd>
+        <info>
+          <codeblock>ant -f <userinput>buildfile</userinput></codeblock>
           <p>The following table describes this command.</p>
           <table>
             <tgroup cols="2">
@@ -47,55 +53,25 @@ your 			 machine.  		  </cmd></step>
                     compile your document project. If the build file is not in the current
                     directory, you must specify the path to the file. </entry>
                 </row>
-                <row>
-                  <entry colname="col1"><codeph><userinput>target</userinput></codeph>
-                  </entry>
-                  <entry colname="col2">Specifies the desired output type of the document project.
-                    DITA Open Toolkit supports the following targets: <p>
-                      <ul>
-                        <li><codeph>dita2PDF </codeph>
-                        </li>
-                        <li><codeph>dita2xhtml</codeph>
-                        </li>
-                        <li><codeph>dita2htmlhelp</codeph>
-                        </li>
-                        <li><codeph>dita2eclipsehelp</codeph>
-                        </li>
-                        <li><codeph>dita2eclipsecontent</codeph>
-                        </li>
-                        <li><codeph>dita2rtf</codeph>
-                        </li>
-                        <li><codeph>dita2javahelp</codeph>
-                        </li>
-                        <li><codeph>dita2troff</codeph>
-                        </li>
-                      </ul>
-                    </p>
-                  </entry>
-                </row>
               </tbody>
             </tgroup>
-          </table></info>
+          </table>
+        </info>
         <stepresult>
           <p>DITA-OT displays a lot of output in the console window, including whether the build
             failed or succeeded at the end of the output. </p>
-          <p><image align="center" height="200" href="../images/CommandPromptOutputSuccess2.gif"
-              width="350">
+          <image href="../images/CommandPromptOutputSuccess2.gif">
               <alt>DITA-OT Build Success Message </alt>
-            </image></p>
+            </image>
           <?Pub Caret 1?>
           <p>When your build is unsuccessful, the error message may be difficult to find in the
             copious output. If you have not configured your console window most of the early output
-            may have already scrolled off the screen. If you add an Ant property,
-              <codeph>-logger</codeph> to the command line invocation, DITA-OT will save the output
-            to a log file that you can study after the build finishes. </p>
-          <!-- Using DITAOTBuildLogger is not recommended with plain Ant process -->
-          <!--p>See <xref
-href="using_DITAOTBuildLogger.dita">Using the DITA-OT Build Logger></xref> 				for
-information about logging DITA-OT build messages to a log file rather
-than the 				console window.  			 </p-->
-        </stepresult></step>
-</steps>
-</taskbody>
+            may have already scrolled off the screen. If you add an Ant property, <codeph>-l
+                <userinput>log-file</userinput></codeph> to the command line invocation, DITA-OT
+            will save the output to a log file that you can study after the build finishes.</p>
+        </stepresult>
+      </step>
+    </steps>
+  </taskbody>
 </task>
 <?Pub *0000003534?>

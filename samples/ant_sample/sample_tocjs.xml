@@ -7,10 +7,8 @@
   
   <property name="dita.dir" location="${basedir}/../.."/>
   
-  <import file="${dita.dir}/integrator.xml"/>
-  
-  <target name="samples.tocjs" depends="integrate" description="build the samples for the TocJS">
-    <ant antfile="${dita.dir}/build.xml" target="init">
+  <target name="samples.tocjs" description="build the samples for the TocJS" depends="clean.samples.tocjs">
+    <ant antfile="${dita.dir}/build.xml">
       <property name="args.input" location="${dita.dir}/samples/hierarchy.ditamap"/>
       <property name="output.dir" location="${dita.dir}/out/samples/tocjs"/>
       <property name="transtype" value="tocjs"/>

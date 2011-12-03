@@ -7,10 +7,8 @@
   
   <property name="dita.dir" location="${basedir}/../.."/>
   
-  <import file="${dita.dir}/integrator.xml"/>
-  
-  <target name="samples.web" depends="integrate" description="build the samples for the web">
-    <ant antfile="${dita.dir}/build.xml" target="init">
+  <target name="samples.web" description="build the samples for the web" depends="clean.samples.web">
+    <ant antfile="${dita.dir}/build.xml">
       <property name="args.input" location="${dita.dir}/samples/hierarchy.ditamap"/>
       <property name="output.dir" location="${dita.dir}/out/samples/web"/>
       <property name="args.xhtml.toc" value="toc"/>

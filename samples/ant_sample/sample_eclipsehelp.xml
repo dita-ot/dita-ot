@@ -7,10 +7,8 @@
   
   <property name="dita.dir" location="${basedir}/../.."/>
   
-  <import file="${dita.dir}/integrator.xml"/>
-  
-  <target name="samples.eclipse" depends="integrate" description="build the samples for Eclipse">
-    <ant antfile="${dita.dir}/build.xml" target="init">
+  <target name="samples.eclipse" description="build the samples for Eclipse" depends="clean.samples.eclipse">
+    <ant antfile="${dita.dir}/build.xml">
       <property name="args.input" location="${dita.dir}/samples/hierarchy.ditamap"/>
       <property name="output.dir" location="${dita.dir}/out/samples/org.dita.sample.doc"/>
       <property name="transtype" value="eclipsehelp"/>

@@ -14,15 +14,16 @@
 the possibility of meeting the out of memory exception in the build process.
 As illustrated in the following figure, when you run the build in previous
 releases of DITA Open Toolkit, the build speed is slow and you are likely
-to get out of memory exception.<fig>
+to get out of memory exception.</p>
+  <fig>
 <image href="images/outofmemory.jpg" placement="break"><alt>Out of memory exception</alt>
 </image>
-</fig></p>
+</fig>
 <p>With this enhanced topic merge feature, you will be less likely to meet
 the out of memory exception error when you build output through DITA files.
 The intermediate merged file will keep the structure information in the DITA
 map, and the structured toc will be reflected in the output.</p>
-<p rev="r4">To know more about this topic feature, you can write a script
+<p>To know more about this topic feature, you can write a script
 file first. DITA OT 1.3 offers a module, <codeph>TopicMerge</codeph>, that
 helps you implement this feature. You can use this module to generate the
 merged files. A sample usage of this module is as follows.</p>
@@ -45,9 +46,8 @@ merged files. A sample usage of this module is as follows.</p>
 			extparam="output=${dita.dir}${file.separator}output${file.separator}${temp.base}_merged.xml;
       style=${dita.dir}${file.separator}xsl${file.separator}pretty.xsl" /&gt; 
 	&lt;/target&gt;
-&lt;/project&gt;
-</codeblock></p>
-<p rev="r3">Then, you need to type <codeph>ant -f sample.xml merge -Dinput="C:\DITA-OT1.3\test.ditamap</codeph>"
+&lt;/project&gt;</codeblock></p>
+  <p>Then, you need to type <codeph>ant -f sample.xml merge -Dinput="C:\DITA-OT<keyword keyref="release.version"/>\test.ditamap</codeph>"
 in the command window.<note>The path for -Dinput must be an absolute path</note></p>
 </conbody>
 </concept>

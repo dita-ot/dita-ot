@@ -7,10 +7,8 @@
   
   <property name="dita.dir" location="${basedir}/../.."/>
   
-  <import file="${dita.dir}/integrator.xml"/>
-  
-  <target name="samples.pdf" depends="integrate" description="build the samples as PDF">
-    <ant antfile="${dita.dir}/build.xml" target="init">
+  <target name="samples.pdf" description="build the samples as PDF" depends="clean.samples.pdf">
+    <ant antfile="${dita.dir}/build.xml">
       <property name="args.input" location="${dita.dir}/samples/sequence.ditamap"/>
       <property name="output.dir" location="${dita.dir}/out/samples/pdf"/>
       <property name="transtype" value="pdf"/>

@@ -7,10 +7,8 @@
   
   <property name="dita.dir" location="${basedir}/../.."/>
   
-  <import file="${dita.dir}/integrator.xml"/>
-  
-  <target name="samples.javahelp" depends="integrate" description="build the samples for JavaHelp">
-    <ant antfile="${dita.dir}/build.xml" target="init">
+  <target name="samples.javahelp" description="build the samples for JavaHelp" depends="clean.samples.javahelp">
+    <ant antfile="${dita.dir}/build.xml">
       <property name="args.input" location="${dita.dir}/samples/hierarchy.ditamap"/>
       <property name="output.dir" location="${dita.dir}/out/samples/javahelp"/>
       <property name="transtype" value="javahelp"/>
@@ -20,6 +18,5 @@
   <target name="clean.samples.javahelp" description="remove the sample JavaHelp output">
     <delete dir="${dita.dir}/out/samples/javahelp"/>
   </target>
-  
   
 </project>

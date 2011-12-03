@@ -24,8 +24,6 @@
         <dd>defines the type of document you want to generate for the project.</dd>
       </dlentry>
     </dl>
-    <p>See <xref href="../../readme/dita-ot_ant_properties.dita" scope="local"/> for descriptions of
-      all supported arguments.</p>
     <example>
       <p>For example, the following command instructs DITA-OT to build the samples project as a PDF
         in the <codeph>out</codeph> directory:</p>
@@ -33,5 +31,8 @@
         <codeblock>java -jar lib/dost.jar /i:samples/sequence.ditamap /outdir:out /transtype:pdf</codeblock>
       </p>
     </example>
-  </conbody>
+	</conbody>
+  <related-links>
+    <link href="../../readme/dita-ot_java_properties.dita" />
+  </related-links>
 </concept>
