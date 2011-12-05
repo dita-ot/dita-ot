@@ -97,7 +97,8 @@ public final class DitaWriter extends AbstractXMLWriter {
         if (classValue == null
                 || (!TOPIC_XREF.matches(classValue)
                         && !TOPIC_LINK.matches(classValue)
-                        && !MAP_TOPICREF.matches(classValue)))
+                        && !MAP_TOPICREF.matches(classValue))
+                        && !TOPIC_LONGDESCREF.matches(classValue))
         {
             return false;
         }
