@@ -1323,6 +1323,9 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
+  <xsl:variable name="flagrules-parent">
+    <xsl:for-each select="parent::*"><xsl:call-template name="getrules"/></xsl:for-each>
+  </xsl:variable>
   <dd>
     <xsl:if test="$ddcount!=1">  <!-- para space before 2 thru N -->
       <xsl:attribute name="class">ddexpand</xsl:attribute>
@@ -1337,13 +1340,13 @@
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
     </xsl:call-template>
     <xsl:call-template name="start-revflag-parent">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
+      <xsl:with-param name="flagrules" select="$flagrules-parent"/>
     </xsl:call-template>
     <xsl:call-template name="revblock">
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
     <xsl:call-template name="end-revflag-parent">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
+      <xsl:with-param name="flagrules" select="$flagrules-parent"/>
     </xsl:call-template>
     <xsl:call-template name="end-flagit">
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
@@ -1361,6 +1364,7 @@
 <xsl:template match="*[contains(@class,' topic/dthd ')]" name="topic.dthd">
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
+    <xsl:call-template name="getrules-parent"/>
   </xsl:variable>
 <dt>
  <xsl:apply-templates select="../@xml:lang"/> <!-- Get from DLHEAD, then override with local -->
@@ -1393,6 +1397,7 @@
 <xsl:template match="*[contains(@class,' topic/ddhd ')]" name="topic.ddhd">
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
+    <xsl:call-template name="getrules-parent"/>
   </xsl:variable>
 <dd>
  <xsl:apply-templates select="../@xml:lang"/> <!-- Get from DLHEAD, then override with local -->
