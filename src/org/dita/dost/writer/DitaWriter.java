@@ -805,7 +805,7 @@ public final class DitaWriter extends AbstractXMLWriter {
                         int previous_offset=offset;
                         //search from first row
                         for(int row=1;row<rowNumber;row++){
-                            final String pos = String.valueOf(row) + String.valueOf(currentCol);
+                            final String pos = String.valueOf(row) +"-"+ String.valueOf(currentCol);
                             if(rowsMap.containsKey(pos)){
                                 //get total span rows
                                 final int totalSpanRows = rowsMap.get(pos).intValue();
@@ -827,7 +827,7 @@ public final class DitaWriter extends AbstractXMLWriter {
                     columnNumber = columnNumber+offset;
                     //if has morerows attribute
                     if(atts.getValue(ATTRIBUTE_NAME_MOREROWS)!=null){
-                        final String pos = String.valueOf(rowNumber) + String.valueOf(columnNumber);
+                        final String pos = String.valueOf(rowNumber) + "-" + String.valueOf(columnNumber);
                         //total span rows
                         final int total = Integer.parseInt(atts.getValue(ATTRIBUTE_NAME_MOREROWS))+
                                 rowNumber;
