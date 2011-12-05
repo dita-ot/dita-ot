@@ -67,6 +67,11 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="*[contains(@class,' map/topicref ')]" mode="build-tree">
 		<xsl:choose>
+		    <xsl:when test="not(normalize-space(@first_topic_id) = '')">
+		        <xsl:apply-templates select="key('topic',@first_topic_id)">				    
+		            <xsl:with-param name="parentId" select="generate-id()"/>
+		        </xsl:apply-templates>
+		    </xsl:when>
 			<xsl:when test="not(normalize-space(@href) = '')">
 				<xsl:apply-templates select="key('topic',@href)">				    
 					<xsl:with-param name="parentId" select="generate-id()"/>
