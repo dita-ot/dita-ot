@@ -1178,10 +1178,10 @@
 
     <uri name="commonElementMod.xsd" uri="commonElementMod.xsd"
         xml:base="schema/base/xsd/"/>
-    <uri name="urn:oasis:names:tc:dita:xsd:commonElementMod.xsd:1.2"
+    <uri name="urn:oasis:names:tc:dita:xsd:commonElementMod.xsd"
         uri="commonElementMod.xsd"
         xml:base="schema/base/xsd/"/>
-    <uri name="urn:oasis:names:tc:dita:xsd:commonElementMod.xsd:1.2"
+    <uri name="urn:oasis:names:tc:dita:xsd:commonElementMod.xsd:1.x"
         uri="commonElementMod.xsd"
         xml:base="schema/base/xsd/"/>
     <uri name="urn:oasis:names:tc:dita:xsd:commonElementMod.xsd:1.2"
