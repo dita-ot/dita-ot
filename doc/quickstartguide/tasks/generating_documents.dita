@@ -15,48 +15,48 @@
         <cmd>Change directories to where the DITA-OT is installed on your machine. </cmd>
       </step>
       <step>
-        <cmd>Enter the following command: </cmd>
-        <info>
-          <codeblock>startcmd.bat</codeblock>
-        </info>
+        <cmd>Set up the processing environment.</cmd>
+        <info>Enter the following command:<codeblock>startcmd.bat</codeblock></info>
         <stepresult><p>Another command prompt appears with DITA-OT in the title bar, as shown in the
         following figure:</p>
           <image align="center" href="../images/DITA-OTCommandPrompt.gif"/>
         </stepresult>
       </step>
       <step>
-        <cmd>Enter the following command and press the Enter key: </cmd>
-        <info>
-          <codeblock>ant -f <userinput>buildfile</userinput></codeblock>
-          <p>The following table describes this command.</p>
-          <table>
-            <tgroup cols="2">
-              <colspec colname="col1" colnum="1" colwidth="1.00*"/>
-              <colspec colname="col2" colnum="2" colwidth="2.15*"/>
-              <thead>
-                <row>
-                  <entry colname="col1">Syntax </entry>
-                  <entry colname="col2">Description </entry>
-                </row>
-              </thead>
-              <tbody>
-                <row>
-                  <entry colname="col1"><codeph>ant</codeph>
-                  </entry>
-                  <entry colname="col2">Starts the Ant build tool installed as part of DITA-OT.
-                  </entry>
-                </row>
-                <row>
-                  <entry colname="col1"><codeph>-f <userinput>buildfile</userinput></codeph>
-                  </entry>
-                  <entry colname="col2">Specifies the build file containing instructions on how to
-                    compile your document project. If the build file is not in the current
-                    directory, you must specify the path to the file. </entry>
-                </row>
-              </tbody>
-            </tgroup>
-          </table>
-        </info>
+        <cmd>Run a convertion to a transformation output type.</cmd>
+        <info>Enter the following command and press the Enter
+            key:<codeblock>ant -Dargs.input=<userinput>source</userinput> -Dtranstype=<userinput>transtype</userinput></codeblock><p>The
+            following table describes this command.</p>
+          <simpletable>
+              <sthead>
+                  <stentry>Syntax </stentry>
+                  <stentry>Description </stentry>
+              </sthead>
+                <strow>
+                  <stentry><codeph>ant</codeph>
+                  </stentry>
+                  <stentry>Starts the Ant build tool installed as part of DITA-OT.
+                  </stentry>
+                </strow>
+                <strow>
+                  <stentry><codeph>-Dargs.input=<userinput>source</userinput></codeph>
+                  </stentry>
+                  <stentry>The <userinput>source</userinput> specifies the DITA topic
+                    or map to process. If the build file is not in the current directory, you must
+                    specify the path to the file.</stentry>
+                </strow>
+                <strow>
+                  <stentry
+                    ><codeph>-Dtranstype=<userinput>format</userinput></codeph></stentry>
+                  <stentry>The <userinput>format</userinput> specifies the
+                    transformation output type to generate.</stentry>
+                </strow>
+          </simpletable></info>
+        <stepxmp>
+          <p>To build XHTML output for the sample DITA map
+              <filepath>samples\hierarchy.ditamap</filepath>, run the command:</p>
+          <codeblock>ant -Dargs.input=samples\hierarchy.ditamap -Dtranstype=xhtml</codeblock>
+        </stepxmp>
         <stepresult>
           <p>DITA-OT displays a lot of output in the console window, including whether the build
             failed or succeeded at the end of the output. </p>
