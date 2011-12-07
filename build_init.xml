@@ -189,7 +189,7 @@
 
   <!-- Changed by Alan to refacter:URIResolver Date2009-08-07 -->
   <target name="build-init"
-    depends="start-process, init-URIResolver, use-init, output-version, check-arg, output-msg" />
+    depends="start-process, init-logger, init-URIResolver, use-init, output-version, check-arg, output-msg" />
     
   <target name="start-process" description="Processing started" />
 

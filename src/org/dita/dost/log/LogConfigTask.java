@@ -11,6 +11,9 @@ package org.dita.dost.log;
 
 import java.io.File;
 import java.util.Properties;
+import java.util.Vector;
+
+import org.apache.tools.ant.BuildListener;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
@@ -19,7 +22,9 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageBean;
 
 /**
- * Class description goes here.
+ * Initialise log output directory and open {@link org.dita.dost.log.DITAOTFileLogger DITAOTFileLogger}.
+ * 
+ * Run only when {@link org.dita.dost.log.DITAOTBuildLogger DITAOTBuildLogger} is used as a build logger.
  * 
  * @author Wu, Zhi Qiang
  */
@@ -41,6 +46,9 @@ public final class LogConfigTask extends Task {
      */
     @Override
     public void execute() throws BuildException {
+        if (!isEnabled()) {
+            return;
+        }
         final DITAOTFileLogger logger = DITAOTFileLogger.getInstance();
         final String oldLogDir = logger.getLogDir();
 
@@ -72,6 +80,25 @@ public final class LogConfigTask extends Task {
 
         logger.setLogDir(logDir);
         logger.setLogFile(logFile);
+    }
+    
+    /**
+     * Check if log configuration is enabled.
+     * 
+     * This exists for backwards compatibility, {@link org.dita.dost.log.DITAOTFileLogger  DITAOTFileLogger} should be initialised only if
+     * {@link org.dita.dost.log.DITAOTBuildLogger DITAOTBuildLogger} is used as a build logger.
+     * 
+     * @return {@code true} if enabled, otherwise {@code false}
+     */
+    private boolean isEnabled() {
+        @SuppressWarnings("unchecked")
+        final Vector<BuildListener> listeners = getProject().getBuildListeners();
+        for (final BuildListener listener: listeners) {
+            if (listener instanceof DITAOTBuildLogger) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void initMessageFile() {

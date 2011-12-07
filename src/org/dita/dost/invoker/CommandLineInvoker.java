@@ -285,7 +285,6 @@ public final class CommandLineInvoker {
             cmd.add("-d");
         }
         // targets
-        cmd.add("init-logger");
         cmd.add("init");
 
         final String[] cmds = new String[cmd.size()];
