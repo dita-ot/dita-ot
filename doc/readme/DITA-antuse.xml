@@ -39,7 +39,7 @@
     </section>
   </conbody>
   <related-links>
-    <link href="readme/DITA-antscript.xml">
+    <link href="DITA-antscript.xml">
       <linktext>Writing reusable Ant builds</linktext>
     </link>
   </related-links>
