@@ -8,7 +8,7 @@
 <shortdesc>The <filepath>plugin.xml</filepath> controls all aspects
 of a plug-in, making each extension visible to the rest of the toolkit.
 The file uses pre-defined extension points to locate changes, and
-integrates those changes into the core code.</shortdesc><?Pub Caret -1?>
+integrates those changes into the core code.</shortdesc>
 <refbody>
 <section>       <p>The root element of the plugin.xml file is <codeph>&lt;plugin></codeph>,
 and must         specify an <codeph>id</codeph> attribute. The <codeph>id</codeph> attribute
@@ -61,7 +61,7 @@ keycol="1">
 <stentry>yes</stentry>
 </strow>
 <strow>
-<stentry><codeph>important</codeph></stentry>
+<stentry><codeph>importance</codeph></stentry><?Pub Caret 11?>
 <stentry>flag whether plug-in is required or optional</stentry>
 <stentry>no</stentry>
 </strow>
@@ -106,4 +106,4 @@ within a plugin configuration file are combined; in older versions
 only the last         extension definition is used. </p>       </section>
 </refbody>
 </reference>
-<?Pub *0000004255?>
+<?Pub *0000004256?>

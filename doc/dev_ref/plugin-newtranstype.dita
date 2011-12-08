@@ -11,19 +11,27 @@ creates an additional control file; it can also be very complex, adding
 any number of new processing steps.</shortdesc>
 <refbody>
 <section>       <p>The transtype extension point is used to define
-a new "transtype", or transform type, which         makes use of targets
-in your Ant extensions.</p><dl><dlentry>
+a new "transtype", or transform type, which makes use of targets in
+your Ant extensions. When a transform type is defined, the build expects
+Ant code to be integrated to define the transform process. The Ant
+code must define a target based on the name of the transform type;
+if the transform type is "mystuff", the Ant code must define a target
+named dita2mystuff.</p><dl><dlentry>
 <dt><codeph>dita.conductor.transtype.check</codeph></dt>
 <dd>Add new value to list of valid transformation type names.</dd>
 </dlentry><dlentry>
-<dt><codeph>dita.transtype.print</codeph></dt><?Pub Caret -2?>
+<dt><codeph>dita.transtype.print</codeph></dt>
 <dd>Declare transtype as a print type.</dd>
 </dlentry></dl></section>
-<example>The following feature defines a transform type of "newtext"
-and declare it as a print         type; using this transform type
-will cause the build to look for a target           <codeph>dita2newtext</codeph>,
-defined previously in your Ant extension:         <codeblock>&lt;feature extension="dita.conductor.transtype.check" value="newtext"/>
-&lt;feature extension="dita.transtype.print" value="newtext"/></codeblock></example>
+<example><title>Example</title><p>The following feature defines a
+transform type of "newtext" and declares it as a print type; using
+this transform type will cause the build to look for a target <codeph>dita2newtext</codeph>,
+defined in a related Ant extension from the third feature:</p><?Pub
+Caret 234?><codeblock>&lt;plugin id="com.example.newtext">
+  <b>&lt;feature extension="dita.conductor.transtype.check" value="newtext"/></b>
+  &lt;feature extension="dita.transtype.print" value="newtext"/>
+  &lt;feature extension="dita.conductor.target.relative" file="antWrapper.xml"/>
+&lt;/plugin></codeblock></example>
 </refbody>
 </reference>
-<?Pub *0000001479?>
+<?Pub *0000001910?>

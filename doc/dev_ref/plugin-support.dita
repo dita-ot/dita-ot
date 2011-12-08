@@ -14,18 +14,19 @@ define version and support info         within a plugin.</shortdesc>
 <li><codeph>package.version</codeph></li>
 </ul>       <note>         <p>The toolkit does not currently do anything
 with these values, but may do so in the           future.</p>    
-  </note><?Pub Caret -2?>       <p>The <codeph>package.version</codeph> value
-should follow the syntax rules:</p>       <codeblock>version   ::= major ( '.' minor ( '.' micro ( '.' qualifier )? )? )?
+  </note>       <p>The <codeph>package.version</codeph> value should
+follow the syntax rules:</p>       <codeblock>version   ::= major ( '.' minor ( '.' micro ( '.' qualifier )? )? )?
 
 major     ::= number
 minor     ::= number
 micro     ::= number
 qualifier ::= ( [0..9] | [a..zA..Z] | ’_’ | '-' )+</codeblock>   
    <p>The default value is <codeph>0.0.0</codeph>.</p>       </section>
-<example>         <codeblock>&lt;feature extension="package.support.name" value="Joe the Author"/>
-&lt;feature extension="package.support.email" value="joe@example.com"/>
-&lt;feature extension="package.version" value="1.2.3"/></codeblock> 
-     </example>
+<example><title>Example</title><codeblock>&lt;plugin id="com.example.WithSupportInfo">
+  &lt;feature extension="package.support.name" value="Joe the Author"/>
+  &lt;feature extension="package.support.email" value="joe@example.com"/>
+  &lt;feature extension="package.version" value="1.2.3"/>
+&lt;/plugin></codeblock><?Pub Caret -1?>       </example>
 </refbody>
 </reference>
-<?Pub *0000001434?>
+<?Pub *0000001511?>

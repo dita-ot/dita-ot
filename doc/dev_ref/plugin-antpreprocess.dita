@@ -7,15 +7,19 @@
 <title>Adding Ant targets to the pre-process pipeline</title>
 <shortdesc>Every step in the pre-process pipeline defines an extension
 point before and after the step, to allow plug-ins to integrate additional
-processing.</shortdesc>
+processing. This allows a plug-in to insert a new step before any
+pre-processing step, as well as before or after the entire preprocess
+pipeline.</shortdesc>
 <refbody>
 <section><p>The group of preprocessing steps defines extension points
 before and after the full preprocessing chain.</p><dl><dlentry>
 <dt><codeph>depend.preprocess.pre</codeph></dt>
-<dd>Preprocessing pre-target</dd>
+<dd>Preprocessing pre-target; extending this target runs your Ant
+target before the full preprocess routine begins.</dd>
 </dlentry><dlentry>
 <dt><codeph>depend.preprocess.post</codeph></dt>
-<dd>Preprocessing post-target</dd>
+<dd>Preprocessing post-target; extending this target runs your Ant
+target after the full preprocess routine completes.</dd>
 </dlentry></dl><p>In addition, there are extension points to execute
 an Ant target before individual preprocessing steps.</p><dl><dlentry>
 <dt><codeph>depend.preprocess.clean-temp.pre</codeph></dt>
@@ -43,7 +47,7 @@ an Ant target before individual preprocessing steps.</p><dl><dlentry>
 <dd>Map reference pre-target</dd>
 </dlentry><dlentry>
 <dt><codeph>depend.preprocess.keyref.pre</codeph></dt>
-<dd>Key reference pre-target</dd>
+<dd>Resolve key reference pre-target</dd>
 </dlentry><dlentry>
 <dt><codeph>depend.preprocess.mappull.pre</codeph></dt>
 <dd>Map pull pre-target</dd>
@@ -78,10 +82,14 @@ an Ant target before individual preprocessing steps.</p><dl><dlentry>
 <dt><codeph>depend.preprocess.copy-generated-files.pre</codeph></dt>
 <dd>Copy generated files pre-target</dd>
 </dlentry></dl></section>
-<example>         <p>The following feature adds "myAntTargetBeforeChunk"
-Ant target to be executed before the           chunk step in preprocessing.
+<example><title>Example</title><p>The following feature adds "myAntTargetBeforeChunk"
+Ant target to be executed before the chunk step in preprocessing.
 It assumes that an Ant file defining that target has already been
-integrated.</p><?Pub Caret -1?><codeblock>&lt;feature extension="depend.preprocess.chunk.pre" value="myAntTargetBeforeChunk"/></codeblock></example>
+integrated.</p><codeblock>&lt;plugin id="com.example.extendchunk">
+  &lt;feature extension="depend.preprocess.chunk.pre" value="myAntTargetBeforeChunk"/>
+&lt;/plugin></codeblock><p>When integrated, the Ant target "myAntTargetBeforeChunk"
+will be added to the Ant dependency list so that it always runs immediately
+before the Chunk step.</p><?Pub Caret -1?></example>
 </refbody>
 </reference>
-<?Pub *0000003589?>
+<?Pub *0000004128?>

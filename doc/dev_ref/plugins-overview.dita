@@ -15,13 +15,12 @@ through toolkit upgrades.</shortdesc>
 <refbody>
 <section><p>A plug-in consists of a directory, typically stored directly
 within the <filepath>demo/</filepath> or <filepath>plugins/</filepath> directory
-inside of the DITA-OT. Every plug-in is defined with a file named <filepath>plugin.xml</filepath>,
-located in the plug-in's root directory.</p><p>Benefits of extending
-the toolkit through plug-ins include:<ul>
+inside of the DITA-OT. Every plug-in is controlled by a file named <filepath>plugin.xml</filepath>,
+located in the plug-in's root directory.</p><?Pub Caret 158?><p>Benefits
+of extending the toolkit through plug-ins include:<ul>
 <li>Plug-ins are easily sharable with other users, teams, or companies;
 typically, all that is needed is to unzip and run a single integration
-step. With many builds, even that integration step is automatic.</li><?Pub
-Caret 61?>
+step. With many builds, even that integration step is automatic.</li>
 <li>Allows overrides or customizations to grow from simple to complex
 over time, with no increased complexity to the extension mechanism.</li>
 <li>Plug-ins can be moved from version to version with an upgraded
@@ -36,4 +35,4 @@ with the original provider.</li>
 </ul></p></section>
 </refbody>
 </reference>
-<?Pub *0000002081?>
+<?Pub *0000002083?>
