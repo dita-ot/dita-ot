@@ -11,17 +11,15 @@
       <title>Core Committers</title>
       <ul>
         <li>Robert D Anderson, <xref href="http://www.ibm.com/" format="html" scope="external"
-            >IBM</xref> — Architect and current project lead, frequent developer and doc updator,
-          primary maintainer of this set of Wiki pages</li>
+            >IBM</xref> — Architect and current project lead, frequent developer and documentation updater</li>
         <li>沈剑乐 (Jian Le Shen, "Jason"), <xref href="http://www.ibm.com/" format="html"
             scope="external">IBM</xref> — Primary developer within IBM</li>
         <li>Jarno Elovirta, <xref href="http://www.citec.com/" format="html" scope="external">Citec
           Information</xref> and individual contributor — Primary developer</li>
         <li>Eric Sirois, <xref href="http://www.ibm.com/" format="html" scope="external">IBM</xref>
           — contributor for several chunks of Eclipse and indexing related code</li>
-        <li>Aryeh Sanders and Reuven Weiser, <xref href="http://www.suite-sol.com/" format="html"
-            scope="external">Suite Solutions</xref> — responsible for PDF output using the PDF2
-          transform </li>
+        <li>Reuven Weiser, <xref href="http://www.suite-sol.com/" format="html"
+            scope="external">Suite Solutions</xref> — PDF2 plug-in developer</li>
       </ul>
     </section>
     <section id="section_pvn_wre_nc">
@@ -39,6 +37,8 @@
             format="html" scope="external">VR Communcations, Inc</xref> — Original contributors of
           the DITA User Guide</li>
         <li>Rob Justice,  individual contributor — DITA-OT Documentation</li>
+        <li>Aryeh Sanders, <xref href="http://www.suite-sol.com/" format="html"
+            scope="external">Suite Solutions</xref> — PDF2 plug-in developer</li>
       </ul>
     </section>
   </conbody>

@@ -21,12 +21,12 @@ look something like this:</p><codeblock>&lt;?xml version="1.0" encoding="utf-8"?
 &lt;!-- Provide strings for my plug-in; this plug-in supports
      English, Icelandic, and Russian. -->
 &lt;langlist>
-  &lt;lang xml:lang="en"     filename="mystring-en-us.xml"/&amp;gt;
-  &lt;lang xml:lang="en-us"  filename="mystring-en-us.xml"/&amp;gt;
-  &lt;lang xml:lang="is"     filename="mystring-is-is.xml"/&amp;gt;
-  &lt;lang xml:lang="is-is"  filename="mystring-is-is.xml"/&amp;gt;
-  &lt;lang xml:lang="ru"     filename="mystring-ru-ru.xml"/&amp;gt;
-  &lt;lang xml:lang="ru-ru"  filename="mystring-ru-ru.xml"/&amp;gt;
+  &lt;lang xml:lang="en"     filename="mystring-en-us.xml"/>
+  &lt;lang xml:lang="en-us"  filename="mystring-en-us.xml"/>
+  &lt;lang xml:lang="is"     filename="mystring-is-is.xml"/>
+  &lt;lang xml:lang="is-is"  filename="mystring-is-is.xml"/>
+  &lt;lang xml:lang="ru"     filename="mystring-ru-ru.xml"/>
+  &lt;lang xml:lang="ru-ru"  filename="mystring-ru-ru.xml"/>
 &lt;/langlist></codeblock><p>Next, copy the file <filepath>xsl/common/strings-en-us.xml</filepath> to
 your plug-in, and replace the content with your own strings (be sure
 to give them unique name attributes). Do the same for each language

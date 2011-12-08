@@ -6,13 +6,13 @@
   <target name="generate-sf">
     <ant antfile="${basedir}/build.xml">
       <property name="args.input" location="${doc.dir}/sourceforge/sourceforge.ditamap"/>
-      <property name="output.dir" location="${doc.out.dir}"/>
+      <property name="output.dir" location="${basedir}/out"/>
       <property name="transtype" value="net.sourceforge.dita-ot.html"/>
       <property name="base.temp.dir" location="${work.dir}"/>
     </ant>
     <ant antfile="${basedir}/build.xml">
-      <property name="args.input" location="${doc.dir}/DITA-OTDocs.ditamap"/>
-      <property name="output.dir" location="${doc.out.dir}/${version}"/>
+      <property name="args.input" location="${doc.dir}/userguide.ditamap"/>
+      <property name="output.dir" location="${basedir}/out/${version}"/>
       <property name="transtype" value="tocjs"/>
       <property name="args.csspath" value="css"/>
       <property name="base.temp.dir" location="${work.dir}"/>

@@ -2,7 +2,6 @@
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
 <map id="mainDITAreadme" title="DITA-Ot Readme map" xml:lang="en-us">
   <topicref href="readme/DITA-readme.xml" id="DITA-doc">
-    <topicref href="readme/EvaluateOT.xml"/>
     <topicref href="readme/changes/rel1.5.4.xml" locktitle="yes">
       <topicmeta>
         <navtitle>Release notes</navtitle>

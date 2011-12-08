@@ -8,7 +8,7 @@
   <shortdesc>This topic explains how to install the DITA Open Toolkit processing
     environment.</shortdesc>
   <task id="Fullsetup-windows" platform="windows">
-    <title>Installing DITA OT Full Easy Install package in Windows</title>
+    <title>Installing DITA-OT Full Easy Install package in Windows</title>
     <shortdesc>The software that DITA-OT depend on are redistributed. The Full Easy Install package
       of DITA-OT after 1.3 includes the software, so the configuration process is
       streamlined.</shortdesc>
@@ -43,14 +43,13 @@
             shell.</stepresult>
         </step>
         <step>
-          <cmd>Run the transformation in the Command Prompt window by using Java command line or
-            Ant.</cmd>
+          <cmd>Run the transformation in the Command Prompt window by using Ant or command-line tool.</cmd>
         </step>
       </steps>
     </taskbody>
   </task>
   <task id="Fullsetup-unix" platform="linux osx">
-    <title>Installing DITA OT Full Easy Install package in Linux or OS X</title>
+    <title>Installing DITA-OT Full Easy Install package in Linux or OS X</title>
     <shortdesc>The software that DITA-OT depend on are redistributed. The Full Easy Install package
       of DITA OT after 1.3 includes the software, so the configuration process is
       streamlined.</shortdesc>
@@ -82,8 +81,7 @@
             variables already set to enable DITA-OT to run within that shell.</stepresult>
         </step>
         <step>
-          <cmd>Run the transformation in the Terminal window by using Java command line or
-            Ant.</cmd>
+          <cmd>Run the transformation in the Terminal window by using Ant or command-line tool.</cmd>
         </step>
       </steps>
     </taskbody>
@@ -241,7 +239,7 @@ set CLASSPATH=%DITA_HOME%\lib\commons-codec-<keyword keyref="tool.codec.version"
           <cmd>Test the DITA-OT installation with the demo conversions.</cmd>
           <stepxmp>
             <p>Run all demos in the DITA Open Toolkit directory. </p>
-            <codeblock>C:\pkg\DITA-OT<keyword keyref="release.version"/>>ant -f build_demo.xml all</codeblock>
+            <codeblock>C:\pkg\DITA-OT<keyword keyref="release.version"/>>ant -f samples\ant_sample\sample_all.xml</codeblock>
           </stepxmp>
         </step>
       </steps>
@@ -360,7 +358,7 @@ export CLASSPATH=$DITA_HOME/lib/commons-codec-<keyword keyref="tool.codec.versio
           <cmd>Test the DITA-OT installation with the demo conversions.</cmd>
           <stepxmp>
             <p>Run all demos in the DITA Open Toolkit directory. </p>
-            <codeblock>/usr/local/share/DITA-OT<keyword keyref="release.version"/>$ ant -f build_demo.xml all</codeblock>
+            <codeblock>/usr/local/share/DITA-OT<keyword keyref="release.version"/>$ ant -f samples/ant_sample/sample_all.xml</codeblock>
           </stepxmp>
         </step>
       </steps>

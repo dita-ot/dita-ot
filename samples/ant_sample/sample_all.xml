@@ -18,6 +18,8 @@
   <import file="sample_odt.xml"/>
   <import file="sample_troff.xml"/>
 
+  <target name="all" depends="samples"/>
+
   <target name="samples" description="build the sample output"
           depends="samples.web, samples.tocjs, samples.eclipse, samples.javahelp, samples.htmlhelp, samples.pdf, samples.docbook, samples.odt, samples.troff"/>
   
