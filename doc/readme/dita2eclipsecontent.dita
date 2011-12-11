@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2011 All Rights Reserved. -->
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "concept.dtd">
+<concept id="dita2eclipsecontent" xml:lang="en-us">
+<title>DITA to Eclipse Content</title>
+<shortdesc>The "eclipsecontent" transform type was originally designed
+to work with an Eclipse plug-in for dynamically rendering DITA content.
+It returns Eclipse control files along with normalized DITA files
+(with preprocessing complete and default attributes included).</shortdesc>
+<conbody>
+<p>The normalized DITA files, which use an extension of ".xml", may
+also be used by other scripts that work with DITA; they have all pre-processing
+resolved, including modifications such as: <ul>
+<li>Map-based links are added to the topics</li>
+<li>Link text is resolved (based on empty elements like <codeph>&lt;xref
+href="othertopic.dita"/></codeph>)</li>
+<li>DTD or Schema reference is removed</li>
+<li>Class attributes, which are defaulted in the DTD / Schema, are
+made explicit in the topics</li>
+<li>Map attributes that cascade are made explicit on child elements</li><?Pub
+Caret -1?>
+</ul></p>
+</conbody>
+</concept>
+<?Pub *0000001183?>

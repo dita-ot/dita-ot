@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2011 All Rights Reserved. -->
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "concept.dtd">
+<concept id="dita2legacypdf" xml:lang="en-us">
+<title>DITA to legacypdf (Deprecated)</title>
+<shortdesc>The first few versions of the toolkit came with a demo
+PDF build, which was eventually replaced by the much more robust PDF
+Plug-in (also known as PDF2). This code is no longer maintained by
+the DITA-OT developers.</shortdesc>
+<conbody>
+<p>The demo PDF transform was deprecated in DITA-OT release 1.4.3,
+when it was replaced by the PDF Plug-in. The older script is still
+included in order to support older customizations or build scripts
+that extended the code; however, the transform type must be set to
+"legacypdf".</p><?Pub Caret -1?>
+</conbody>
+</concept>
+<?Pub *0000000839?>

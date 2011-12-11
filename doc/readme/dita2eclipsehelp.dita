@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2011 All Rights Reserved. -->
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "concept.dtd">
+<?Pub Sty _display FontColor="red"?>
+<concept id="dita2eclipsehelp" xml:lang="en-us">
+<title>DITA to Eclipse help</title>
+<shortdesc>Eclipse output is an XHTML based output format used by
+the Eclipse Help system.</shortdesc>
+<conbody>
+<p>To create a documentation plug-in for the Eclipse platform, set
+the transform type to "eclipsehelp". In addition to the standard XHTML
+and CSS files, this transform will generate the following output files:<ul>
+<li><filepath>plugin.xml</filepath>, the required control file for
+any Eclipse plug-in.</li>
+<li>An Eclipse table of contents, based on the name of the input map
+(<filepath>mapname.ditamap</filepath> will generate <filepath>mapname.xml</filepath>).</li>
+<li>An Eclipse index file with any index entries from the content,
+in a file named <filepath>index.xml</filepath>.</li>
+<li>Additional control files for Eclipse named <filepath>plugin.properties</filepath> and <filepath>META-INF/MANIFEST.MF</filepath>.</li>
+</ul></p>
+<draft-comment>RDA> The following paragraph correctly describes the
+Eclipse Help specialization, but I'm keeping it out until we have
+more complete documentation. I'd like to get more complete docs on
+this into an upcoming milestone.<p>For more complex plug-ins, the <filepath>demo/</filepath> directory
+in the DITA-OT contains an "Eclipse Map" specialization that gives
+more control over the generated <filepath>plugin.xml</filepath> file.
+The specialization provides additional control over metadata, as well
+as the ability to reference multiple TOC files, index files, and other
+Eclipse extensions.</p></draft-comment><?Pub Caret -1?>
+</conbody>
+<related-links>
+<link format="html" href="http://eclipse.org/" scope="external">
+<linktext>More about Eclipse from eclipse.org</linktext></link>
+</related-links>
+</concept>
+<?Pub *0000001968?>

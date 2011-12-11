@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2011 All Rights Reserved. -->
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "concept.dtd">
+<concept id="dita2tocjs" xml:lang="en-us">
+<title>DITA to TocJS</title>
+<shortdesc>The "tocjs" transform type is an XHTML based output type
+that also generates a frameset and a JavaScript based table of contents
+with expandable and collapsible entries. The tocjs transform type
+was originally created by Shawn McKenzie as a plug-in to the toolkit,
+and later bundled with the default distribution.</shortdesc>
+<conbody>
+<p>The original tocjs output required an Ant build with several parameters
+in order to function properly; it also required a separate transform
+to XHTML in order to produce content. Beginning with DITA-OT release
+1.5.4, the tocjs transform type was updated to always produce XHTML
+output and to use a default frameset when one is not already specified.</p>
+<p>In release 1.5.4 the tocjs transform was also added to the <filepath>build_demo.xml</filepath> script
+as an option for the output type.</p>
+</conbody>
+</concept><?Pub Caret -3?>
+<?Pub *0000001132?>

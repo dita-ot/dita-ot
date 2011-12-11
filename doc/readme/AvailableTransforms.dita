@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "concept.dtd">
+<concept id="availabletransforms" xml:lang="en-us">
+<title>Available DITA-OT Transforms</title>
+<shortdesc>The primary purpose of the DITA Open Toolkit is to transform
+DITA maps and topics into other formats. The toolkit ships with several
+native transforms, and can be extended to support any other output
+format with by adding a new plug-in.</shortdesc><?Pub Caret -1?>
+<conbody></conbody>
+</concept>
+<?Pub *0000000578?>
