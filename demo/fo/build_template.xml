@@ -62,7 +62,14 @@ with those set forth herein.
       </and>
     </condition>
     
-    <property name="default.locale" value="en_US"/>
+    <loadfile property="default.locale">
+      <string>${default.language}</string>
+      <filterchain>
+        <tokenfilter>
+          <replaceregex pattern="-" replace="_" flags="gi"/>
+        </tokenfilter>
+      </filterchain>
+    </loadfile>
     
     <!-- legacy property -->
     <property name="ot.dir" location="${dita.dir}"/>

@@ -86,16 +86,10 @@ public class DetectLang extends Task {
 
                         saxParser.parse(file, new DefaultHandlerImpl());
 
+            } catch (final StopParsingException e) {
+                log("Lang search finished", Project.MSG_INFO);
             } catch (final Exception e) {
-                /* Since an exception is used to stop parsing when the search
-                 * is successful, catch the exception.
-                 */
-                if (e.getMessage() != null &&
-                        e.getMessage().equals("Search finished")) {
-                    System.out.println("Lang search finished");
-                } else {
-                    e.printStackTrace();
-                }
+                throw new BuildException("Failed to read document language: " + e.getMessage(), e);
             }
         }
         final String locale = getProject().getProperty("document.locale");
@@ -133,7 +127,7 @@ public class DetectLang extends Task {
                     setActiveProjectProperty("document.locale",
                             processedString);
                     /* Successfully found xml:lang, so stop parsing. */
-                    throw new SAXException("Search finished");
+                    throw new StopParsingException();
                 }
 
             }
@@ -141,6 +135,11 @@ public class DetectLang extends Task {
         }
 
     }
+    
+    /**
+     * Exception to signal deliberate parsing stop.
+     */
+    private final static class StopParsingException extends SAXException {}
 
     /**
      * Sets property in active ant project with name specified inpropertyName,
