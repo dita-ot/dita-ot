@@ -199,7 +199,18 @@ public final class MergeMapParser extends AbstractXMLReader {
                         util.visit(attValue);
                         if (new File(dirPath, attValue.indexOf(SHARP) != -1 ? attValue.substring(0, attValue.indexOf(SHARP)) : attValue).exists()) {
                             final String fileId = topicParser.parse(attValue,dirPath);
-                            attValue = new StringBuffer(SHARP).append(fileId).toString();
+                            String firstTopicId = new StringBuffer(SHARP).append(fileId).toString();
+                            if(util.getIdValue(attValue)!=null) {
+                            	attValue = new StringBuffer(SHARP).append(util.getIdValue(attValue)).toString();
+                            } else {
+                            	attValue = firstTopicId;
+                            }                         
+                            
+                            mapInfo.append(STRING_BLANK)
+                            .append("first_topic_id").append(EQUAL).append(QUOTATION)
+                            .append(StringUtils.escapeXML(firstTopicId)).append(QUOTATION);
+                            
+                            
                         } else {
                             final String fileName = new File(dirPath, attValue).getAbsolutePath();
                             final Properties prop = new Properties();
