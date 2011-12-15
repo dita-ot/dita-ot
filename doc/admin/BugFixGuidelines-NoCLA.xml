@@ -8,6 +8,9 @@
 <topic id="bugfixguidelines" xml:lang="en-us">
   <title>Due Diligence for Submission of Bug Fixes and Patches from 
     Non-Committers</title>
+  <titlealts>
+    <navtitle>Bug Fix Guidelines</navtitle>
+  </titlealts>
   <body>
     <p>Before committing code from a bug fix or patch provided by a third party 
       who has not signed a current Common Public License to become a 

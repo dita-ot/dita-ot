@@ -14,7 +14,8 @@
     <taskbody>
         <context>
             <p>Once you have obtained the latest tocjs plugin, you need to install and integrate it
-                into the DITA Open Toolkit</p>
+                into the DITA Open Toolkit. Note that if you are using DITA-OT 1.5 or later, you can
+                skip directly to step #3, because the tocjs plugin is already part of your install.</p>
         </context>
         <steps>
             <step>

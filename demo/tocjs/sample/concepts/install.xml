@@ -14,11 +14,10 @@
  <conbody>
   <p>The tocjs plugin is designed to be integrated into the DITA Open Toolkit so that you have
     <codeph>tocjs</codeph> as a registered transtype. This transtype can then be used in conjunction
-   with the XHTML output. This plugin has been tested (somewhat) on the 1.2.2 toolkit version, but
-   it works with the 1.3 versions as well. There are some known issues, and likely many unknown
+   with the XHTML output. There are some known issues, and likely many unknown
    issues. Please report any issues to smckenzie23@gmail.com. You may also be able to find people
-   who can help on the dita-users Yahoo! Group. You can also find the latest version of the tocjs
-   plugin in the files area of the dita-users Yahoo! group.</p>
+   who can help on the dita-users Yahoo! Group. The plugin has been integrated with the default
+   DITA-OT distribution since DITA-OT version 1.5 in December, 2009.</p>
  </conbody>
  <related-links>
   <link href="http://tech.groups.yahoo.com/group/dita-users/files/Demos/" scope="external"

@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -44,14 +44,14 @@ public final class Constants {
     /**INT 1024.*/
     public static final int INT_1024 = 1024;
     /**INT 2048.*/
-	public static final int INT_2048 = 2048;
-	/**INT 4096.*/
-	public static final int INT_4096 = 4096;
-	/**INT 17.*/
+    public static final int INT_2048 = 2048;
+    /**INT 4096.*/
+    public static final int INT_4096 = 4096;
+    /**INT 17.*/
     public static final int INT_17 = 17;
     /**INT 37.*/
-    public static final int INT_37 = 37;    
-    
+    public static final int INT_37 = 37;
+
     /**.gif extension.*/
     public static final String FILE_EXTENSION_GIF = ".gif";
     /**.dita extension.*/
@@ -79,7 +79,7 @@ public final class Constants {
     /**.ditamap extension.*/
     public static final String FILE_EXTENSION_DITAMAP = ".ditamap";
     /**.temp extension.*/
-    public static final String FILE_EXTENSION_TEMP = ".temp";    
+    public static final String FILE_EXTENSION_TEMP = ".temp";
     /**.jpeg extension.*/
     public static final String FILE_EXTENSION_JPEG = ".jpeg";
     /**.png extension.*/
@@ -92,7 +92,7 @@ public final class Constants {
     public static final String FILE_EXTENSION_TIF = ".tif";
     /**.pdf extension.*/
     public static final String FILE_EXTENSION_PDF = ".pdf";
-    
+
     public static final DitaClass ABBREV_D_ABBREVIATED_FORM = new DitaClass("+ topic/term abbrev-d/abbreviated-form ");
     public static final DitaClass BOOKMAP_ABBREVLIST = new DitaClass("- map/topicref bookmap/abbrevlist ");
     public static final DitaClass BOOKMAP_AMENDMENTS = new DitaClass("- map/topicref bookmap/amendments ");
@@ -623,102 +623,138 @@ public final class Constants {
     public static final DitaClass XNAL_D_THOROUGHFARE = new DitaClass("+ topic/ph xnal-d/thoroughfare ");
     public static final DitaClass XNAL_D_URL = new DitaClass("+ topic/data xnal-d/url ");
     public static final DitaClass XNAL_D_URLS = new DitaClass("+ topic/data xnal-d/urls ");
-    
+
     /**map element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_MAP = MAP_MAP.localName;
     /**indexterm element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_INDEXTERM = TOPIC_INDEXTERM.localName;
     /**index-see element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_INDEXSEE = INDEXING_D_INDEX_SEE.localName;
     /**index-see-also element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_INDEXSEEALSO = INDEXING_D_INDEX_SEE_ALSO.localName;
     /**index-sort-as element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_INDEXSORTAS = INDEXING_D_INDEX_SORT_AS.localName;
     /**topicref element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_TOPICREF = MAP_TOPICREF.localName;
     /**topicmeta element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_TOPICMETA = MAP_TOPICMETA.localName;
     /**linktext element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_LINKTEXT = TOPIC_LINKTEXT.localName;
     /**navtitle element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_NAVTITLE = TOPIC_NAVTITLE.localName;
     /**shortdesc element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_SHORTDESC = TOPIC_SHORTDESC.localName;
     /**keywords element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_KEYWORDS = TOPIC_KEYWORDS.localName;
     /**maplinks element.*/
     public static final String ELEMENT_NAME_MAPLINKS = "maplinks";
     /**linkpool element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_LINKPOOL = TOPIC_LINKPOOL.localName;
     /**linklist element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_LINKLIST = TOPIC_LINKLIST.localName;
     /**prop element.*/
     public static final String ELEMENT_NAME_PROP = "prop";
     /**prolog element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_PROLOG = TOPIC_PROLOG.localName;
     /**map element.*/
     public static final String ELEMENT_NAME_ACTION = "action";
     /**action element.*/
     public static final String ELEMENT_NAME_DITA = "dita";
     /**resourceid element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_RESOURCEID = TOPIC_RESOURCEID.localName;
     /**audience element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_AUDIENCE = TOPIC_AUDIENCE.localName;
     /**platform element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_PLATFORM = TOPIC_PLATFORM.localName;
     /**product element.*/
     public static final String ELEMENT_NAME_PRODUCT = "product";
     /**otherprops element.*/
     public static final String ELEMENT_NAME_OTHERPROPS = "otherprops";
-    //Added by William on 2010-07-16 for bug:3030317 start	
+    //Added by William on 2010-07-16 for bug:3030317 start
     /**props element.*/
     public static final String ELEMENT_NAME_PROPS = "props";
     /**rev element.*/
     public static final String ELEMENT_NAME_REV = "rev";
-    //Added by William on 2010-07-16 for bug:3030317 start	
+    //Added by William on 2010-07-16 for bug:3030317 start
     /**tgroup element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_TGROUP = TOPIC_TGROUP.localName;
     /**row element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_ROW = TOPIC_ROW.localName;
     /**title element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_TITLE = TOPIC_TITLE.localName;
     /**entry element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_ENTRY = TOPIC_ENTRY.localName;
     /**colspec element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_COLSPEC = TOPIC_COLSPEC.localName;
     /**topic element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_TOPIC = TOPIC_TOPIC.localName;
     /**glossentry element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_GLOSSENTRY = GLOSSENTRY_GLOSSENTRY.localName;
     /**glossterm element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_GLOSSTERM = GLOSSENTRY_GLOSSTERM.localName;
     /**glossSurfaceForm element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_GLOSSSURFACEFORM = GLOSSENTRY_GLOSSSURFACEFORM.localName;
     /**glossAcronym element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_GLOSSACRONYM = GLOSSENTRY_GLOSSACRONYM.localName;
     /**glossStatus element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_GLOSSSTATUS = GLOSSENTRY_GLOSSSTATUS.localName;
     /**glossSynonym element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_GLOSSSYNONYM = GLOSSENTRY_GLOSSSYNONYM.localName;
     /**glossAbbreviation element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_GLOSSABBREVIATION = GLOSSENTRY_GLOSSABBREVIATION.localName;
     /**glossShortForm element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_GLOSSSHORTFORM = GLOSSENTRY_GLOSSSHORTFORM.localName;
     /**subjectScheme element.*/
-    public static final String ELEMENT_NAME_SUBJECT_SCHEME = "subjectScheme";
+    @Deprecated
+    public static final String ELEMENT_NAME_SUBJECT_SCHEME = SUBJECTSCHEME_SUBJECTSCHEME.localName;
     /**subjectdef element.*/
-    public static final String ELEMENT_NAME_SUBJECT_DEF = "subjectdef";
+    @Deprecated
+    public static final String ELEMENT_NAME_SUBJECT_DEF = SUBJECTSCHEME_SUBJECTDEF.localName;
     /**attributedef element.*/
-    public static final String ELEMENT_NAME_ATTRIBUTE_DEF = "attributedef";
+    @Deprecated
+    public static final String ELEMENT_NAME_ATTRIBUTE_DEF = SUBJECTSCHEME_ATTRIBUTEDEF.localName;
     /**elementdef element.*/
-    public static final String ELEMENT_NAME_ELEMENT_DEF = "elementdef";
+    @Deprecated
+    public static final String ELEMENT_NAME_ELEMENT_DEF = SUBJECTSCHEME_ELEMENTDEF.localName;
     /**defaultSubject element.*/
-    public static final String ELEMENT_NAME_DEFAULT_SUBJECT = "defaultSubject";
-    
+    @Deprecated
+    public static final String ELEMENT_NAME_DEFAULT_SUBJECT = SUBJECTSCHEME_DEFAULTSUBJECT.localName;
+
     /**conref attribute.*/
     public static final String ATTRIBUTE_NAME_CONREF = "conref";
     /**href attribute.*/
-    public static final String ATTRIBUTE_NAME_HREF = "href";    
+    public static final String ATTRIBUTE_NAME_HREF = "href";
     /**navtitle attribute.*/
     public static final String ATTRIBUTE_NAME_NAVTITLE = "navtitle";
     /**format attribute.*/
@@ -746,7 +782,7 @@ public final class Constants {
     /**nameend attribute.*/
     public static final String ATTRIBUTE_NAME_NAMEEND = "nameend";
     /**xml:lang attribute.*/
-    public static final String ATTRIBUTE_NAME_XML_LANG = "xml:lang";    
+    public static final String ATTRIBUTE_NAME_XML_LANG = "xml:lang";
     /**domains attribute.*/
     public static final String ATTRIBUTE_NAME_DOMAINS = "domains";
     /**props attribute.*/
@@ -787,12 +823,12 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_TOC = "toc";
     /**print attribute.*/
     public static final String ATTRIBUTE_NAME_PRINT = "print";
-    
+
     /** UNIX path separator. */
     public static final String UNIX_SEPARATOR = "/";
     /** Windows path separator. */
     public static final String WINDOWS_SEPARATOR = "\\";
-    
+
     /**
      * Constant for value of attribute format in dita files.
      */
@@ -802,14 +838,14 @@ public final class Constants {
     public static final String ATTRIBUTE_FORMAT_VALUE_HTML = "html";
     /** Constants for format attribute value windows*/
     public static final String ATTRIBUTE_FORMAT_VALUE_WINDOWS = "windows";
-    
+
     /** Constants for index type(javahelp).*/
     public static final String INDEX_TYPE_JAVAHELP = "javahelp";
     /** Constants for index type(htmlhelp).*/
     public static final String INDEX_TYPE_HTMLHELP = "htmlhelp";
     /** Constants for index type(eclipsehelp).*/
     public static final String INDEX_TYPE_ECLIPSEHELP = "eclipsehelp";
-    
+
     /** Constants for transform type(pdf).*/
     public static final String TRANS_TYPE_PDF = "pdf";
     /** Constants for transform type(xhtml).*/
@@ -822,7 +858,7 @@ public final class Constants {
     public static final String TRANS_TYPE_HTMLHELP = "htmlhelp";
     /** Constants for transform type(eclipsecontent).*/
     public static final String TRANS_TYPE_ECLIPSECONTENT = "eclipsecontent";
-    
+
     /** Constant for generated property file name(dita.list).*/
     public static final String FILE_NAME_DITA_LIST = "dita.list";
     /** Constant for generated property file name(dita.xml.properties).*/
@@ -832,7 +868,7 @@ public final class Constants {
     //store the scheme files refered by a scheme file in the form of Map<String Set<String>>
     /** Constant for generated property file name(subrelation.xml).*/
     public static final String FILE_NAME_SUBJECT_RELATION = "subrelation.xml";
-    
+
     /**Constants for the properties's name(hreftargetslist).*/
     public static final String HREF_TARGET_LIST = "hreftargetslist";
     /**Constants for the properties's name(canditopicslist).*/
@@ -937,12 +973,12 @@ public final class Constants {
     public static final String FILE_SEPARATOR = File.separator;
     /**Constants for line separator.*/
     public static final String LINE_SEPARATOR = System.getProperty("line.separator");
-    
+
     /**OS relevant constants(OS NAME).*/
     public static final String OS_NAME = System.getProperty("os.name");
     /**OS relevant constants(windows).*/
     public static final String OS_NAME_WINDOWS = "windows";
-    
+
     /**
      * Misc string constants used in this toolkit.
      */
@@ -953,51 +989,51 @@ public final class Constants {
     /**RIGHT_BRACKET.*/
     public static final String RIGHT_BRACKET = ")";
     /**SLASH.*/
-    public static final String SLASH = "/";    
+    public static final String SLASH = "/";
     /**BACK_SLASH.*/
     public static final String BACK_SLASH = "\\";
     /**SHARP.*/
-    public static final String SHARP = "#";    
+    public static final String SHARP = "#";
     /**STICK.*/
-    public static final String STICK = "|";    
+    public static final String STICK = "|";
     /**EQUAL.*/
-    public static final String EQUAL = "=";    
+    public static final String EQUAL = "=";
     /**COMMA.*/
-    public static final String COMMA = ",";    
+    public static final String COMMA = ",";
     /**LESS_THAN.*/
-    public static final String LESS_THAN = "<";    
+    public static final String LESS_THAN = "<";
     /**GREATER_THAN.*/
-    public static final String GREATER_THAN = ">";    
+    public static final String GREATER_THAN = ">";
     /**QUESTION.*/
-    public static final String QUESTION = "?";    
+    public static final String QUESTION = "?";
     /**QUOTATION.*/
-    public static final String QUOTATION = "\"";    
+    public static final String QUOTATION = "\"";
     /**COLON.*/
     public static final String COLON = ":";
     /**DOT.*/
     public static final String DOT= ".";
     /**DOUBLE_BACK_SLASH.*/
-    public static final String DOUBLE_BACK_SLASH = "\\\\";    
+    public static final String DOUBLE_BACK_SLASH = "\\\\";
     /**COLON_DOUBLE_SLASH.*/
-    public static final String COLON_DOUBLE_SLASH = "://";    
+    public static final String COLON_DOUBLE_SLASH = "://";
     /**CDATA_HEAD.*/
-    public static final String CDATA_HEAD = "<![CDATA[";    
+    public static final String CDATA_HEAD = "<![CDATA[";
     /**CDATA_END.*/
     public static final String CDATA_END = "]]>";
     /**DOCTYPE_HEAD.*/
     public static final String DOCTYPE_HEAD = "<!DOCTYPE ";
     /**META_HEAD.*/
-    public static final String META_HEAD = "<metadata class=\"- topic/metadata \">";    
+    public static final String META_HEAD = "<metadata class=\"- topic/metadata \">";
     /**META_END.*/
-    public static final String META_END = "</metadata>";    
+    public static final String META_END = "</metadata>";
     /**PROLOG_HEAD.*/
     public static final String PROLOG_HEAD = "<prolog class=\"- topic/prolog \">";
     /**PROLOG_END.*/
-    public static final String PROLOG_END = "</prolog>";    
+    public static final String PROLOG_END = "</prolog>";
     /**RELATED_LINKS_HEAD.*/
-    public static final String RELATED_LINKS_HEAD = "<related-links class=\"- topic/related-links \">";    
+    public static final String RELATED_LINKS_HEAD = "<related-links class=\"- topic/related-links \">";
     /**RELATED_LINKS_END.*/
-    public static final String RELATED_LINKS_END = "</related-links>";    
+    public static final String RELATED_LINKS_END = "</related-links>";
     /**XML_HEAD.*/
     public static final String XML_HEAD = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
     /**STRING_BLANK.*/
@@ -1005,13 +1041,13 @@ public final class Constants {
     /**COUNTRY_US.*/
     public static final String COUNTRY_US = "us";
     /**LANGUAGE_EN.*/
-    public static final String LANGUAGE_EN = "en";    
+    public static final String LANGUAGE_EN = "en";
     /**UTF8.*/
     public static final String UTF8 = "UTF-8";
     /**SAX_DRIVER_PROPERTY.*/
-    public static final String SAX_DRIVER_PROPERTY = "org.xml.sax.driver";    
+    public static final String SAX_DRIVER_PROPERTY = "org.xml.sax.driver";
     /**SAX_DRIVER_DEFAULT_CLASS.*/
-    public static final String SAX_DRIVER_DEFAULT_CLASS = "org.apache.xerces.parsers.SAXParser"; 
+    public static final String SAX_DRIVER_DEFAULT_CLASS = "org.apache.xerces.parsers.SAXParser";
     /**SAX_DRIVER_SUN_HACK_CLASS.*/
     public static final String SAX_DRIVER_SUN_HACK_CLASS = "com.sun.org.apache.xerces.internal.parsers.SAXParser";
     /**SAX_DRIVER_CRIMSON_CLASS.*/
@@ -1019,7 +1055,7 @@ public final class Constants {
     /**RESOLVER_CLASS.*/
     public static final String RESOLVER_CLASS = "org.apache.xml.resolver.tools.CatalogResolver";
     /**LEXICAL_HANDLER_PROPERTY.*/
-    public static final String LEXICAL_HANDLER_PROPERTY = "http://xml.org/sax/properties/lexical-handler";    
+    public static final String LEXICAL_HANDLER_PROPERTY = "http://xml.org/sax/properties/lexical-handler";
     /**FEATURE_NAMESPACE_PREFIX.*/
     public static final String FEATURE_NAMESPACE_PREFIX = "http://xml.org/sax/features/namespace-prefixes";
     /**FEATURE_NAMESPACE.*/
@@ -1027,206 +1063,274 @@ public final class Constants {
     /**FEATURE_VALIDATION.*/
     public static final String FEATURE_VALIDATION = "http://xml.org/sax/features/validation";
     /**FEATURE_VALIDATION_SCHEMA.*/
-    public static final String FEATURE_VALIDATION_SCHEMA = "http://apache.org/xml/features/validation/schema";    
+    public static final String FEATURE_VALIDATION_SCHEMA = "http://apache.org/xml/features/validation/schema";
     /**TEMP_DIR_DEFAULT.*/
     public static final String TEMP_DIR_DEFAULT = "temp";
     /**FILTER_ACTION_EXCLUDE.*/
     public static final String FILTER_ACTION_EXCLUDE = "exclude";
     /**ATTR_CLASS_VALUE_TITLE.*/
-	public static final String ATTR_CLASS_VALUE_TITLE = TOPIC_TITLE.matcher;
-	/**ATTR_CLASS_VALUE_MAP.*/
-	public static final String ATTR_CLASS_VALUE_MAP = MAP_MAP.matcher;
-	/**ATTR_CLASS_VALUE_INDEXTERM.*/
-	public static final String ATTR_CLASS_VALUE_INDEXTERM = TOPIC_INDEXTERM.matcher;
-	/**ATTR_CLASS_VALUE_INDEXSEE.*/
-	public static final String ATTR_CLASS_VALUE_INDEXSEE = INDEXING_D_INDEX_SEE.matcher;
-	/**ATTR_CLASS_VALUE_INDEXSEEALSO.*/
-	public static final String ATTR_CLASS_VALUE_INDEXSEEALSO = INDEXING_D_INDEX_SEE_ALSO.matcher;
-	/**ATTR_CLASS_VALUE_INDEXSORTAS.*/
-	public static final String ATTR_CLASS_VALUE_INDEXSORTAS = INDEXING_D_INDEX_SORT_AS.matcher;
-	/**ATTR_CLASS_VALUE_TOPIC.*/
-	public static final String ATTR_CLASS_VALUE_TOPIC = TOPIC_TOPIC.matcher;
-	/**ATTR_CLASS_VALUE_XREF.*/
-	public static final String ATTR_CLASS_VALUE_XREF = TOPIC_XREF.matcher;
-	/**ATTR_CLASS_VALUE_LINK.*/
-	public static final String ATTR_CLASS_VALUE_LINK = TOPIC_LINK.matcher;
-	/**ATTR_CLASS_VALUE_TOPICREF.*/
-	public static final String ATTR_CLASS_VALUE_TOPICREF = MAP_TOPICREF.matcher;
-	/**ATTR_SCOPE_VALUE_LOCAL.*/
-	public static final String ATTR_SCOPE_VALUE_LOCAL = "local";
-	/**ATTR_SCOPE_VALUE_EXTERNAL.*/
-	public static final String ATTR_SCOPE_VALUE_EXTERNAL = "external";
-	/**ATTR_SCOPE_VALUE_PEER.*/
-	public static final String ATTR_SCOPE_VALUE_PEER = "peer";
-	/**ATTR_FORMAT_VALUE_DITA.*/
-	public static final String ATTR_FORMAT_VALUE_DITA = "dita";
-	//added by william on 2009-08-06 for bug:2832696 start
-	/**ATTR_FORMAT_VALUE_DITAMAP.*/
-	public static final String ATTR_FORMAT_VALUE_DITAMAP = "ditamap";
-	//added by william on 2009-08-06 for bug:2832696 end
-	/**ATTRIBUTE_NAME_DITAARCHVERSION.*/
-	public static final String ATTRIBUTE_NAME_DITAARCHVERSION = "DITAArchVersion";
-	/**ATTRIBUTE_PREFIX_DITAARCHVERSION.*/
-	public static final String ATTRIBUTE_PREFIX_DITAARCHVERSION = "ditaarch";
-	/**ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION.*/
-	public static final String ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION = "xmlns:ditaarch";
-	/**ATTR_CLASS_VALUE_OBJECT.*/
-	public static final String ATTR_CLASS_VALUE_OBJECT = TOPIC_OBJECT.matcher;
-	/**ATTR_CLASS_VALUE_TOPICMETA.*/
-	public static final String ATTR_CLASS_VALUE_TOPICMETA = MAP_TOPICMETA.matcher;
-	//Added by William on 2009-06-24 for req #12014 start
-	/**ATTR_CLASS_VALUE_EXPORTANCHORS.*/
-	public static final String ATTR_CLASS_VALUE_EXPORTANCHORS = DELAY_D_EXPORTANCHORS.matcher;
-	/**ATTR_CLASS_VALUE_ANCHORKEY.*/
-	public static final String ATTR_CLASS_VALUE_ANCHORKEY = DELAY_D_ANCHORKEY.matcher;
-	/**ATTR_CLASS_VALUE_ANCHORID.*/
-	public static final String ATTR_CLASS_VALUE_ANCHORID = DELAY_D_ANCHORID.matcher;
-	//Added by William on 2009-06-24 for req #12014 end
-	
-	public static final String ATTR_CLASS_VALUE_ANCHOR = " map/anchor ";
-	public static final String ATTR_CLASS_VALUE_NAVREF = " map/navref ";
-	public static final String ATTR_CLASS_VALUE_DATE = " topic/data ";
-	public static final String ATTR_CLASS_VALUE_DATEABOUT = " topic/data-about ";
-	
-	//Added by William on 2009-12-21 for bug:2916469 start
-	/**ATTR_CLASS_VALUE_NAVTITLE.*/
-	public static final String ATTR_CLASS_VALUE_NAVTITLE = TOPIC_NAVTITLE.matcher;
-	//Added by William on 2009-12-21 for bug:2916469 end
-	/**ATTR_CLASS_VALUE_AUTHOR.*/
-	public static final String ATTR_CLASS_VALUE_AUTHOR = TOPIC_AUTHOR.matcher;
-	/**ATTR_CLASS_VALUE_SOURCE.*/
-	public static final String ATTR_CLASS_VALUE_SOURCE = TOPIC_SOURCE.matcher;
-	/**ATTR_CLASS_VALUE_PUBLISHER.*/
-	public static final String ATTR_CLASS_VALUE_PUBLISHER = TOPIC_PUBLISHER.matcher;
-	/**ATTR_CLASS_VALUE_COPYRIGHT.*/
-	public static final String ATTR_CLASS_VALUE_COPYRIGHT = TOPIC_COPYRIGHT.matcher;
-	/**ATTR_CLASS_VALUE_CRITDATES.*/
-	public static final String ATTR_CLASS_VALUE_CRITDATES = TOPIC_CRITDATES.matcher;
-	/**ATTR_CLASS_VALUE_PERMISSIONS.*/
-	public static final String ATTR_CLASS_VALUE_PERMISSIONS = TOPIC_PERMISSIONS.matcher;
-	/**ATTR_CLASS_VALUE_CATEGORY.*/
-	public static final String ATTR_CLASS_VALUE_CATEGORY = TOPIC_CATEGORY.matcher;
-	/**ATTR_CLASS_VALUE_AUDIENCE.*/
-	public static final String ATTR_CLASS_VALUE_AUDIENCE = TOPIC_AUDIENCE.matcher;
-	/**ATTR_CLASS_VALUE_KEYWORDS.*/
-	public static final String ATTR_CLASS_VALUE_KEYWORDS = TOPIC_KEYWORDS.matcher;
-	/**ATTR_CLASS_VALUE_PRODINFO.*/
-	public static final String ATTR_CLASS_VALUE_PRODINFO = TOPIC_PRODINFO.matcher;
-	/**ATTR_CLASS_VALUE_OTHERMETA.*/
-	public static final String ATTR_CLASS_VALUE_OTHERMETA = TOPIC_OTHERMETA.matcher;
-	/**ATTR_CLASS_VALUE_RESOURCEID.*/
-	public static final String ATTR_CLASS_VALUE_RESOURCEID = TOPIC_RESOURCEID.matcher;
-	/**ATTR_CLASS_VALUE_DATA.*/
-	public static final String ATTR_CLASS_VALUE_DATA = TOPIC_DATA.matcher;
-	/**ATTR_CLASS_VALUE_DATAABOUT.*/
-	public static final String ATTR_CLASS_VALUE_DATAABOUT = TOPIC_DATA_ABOUT.matcher;
-	/**ATTR_CLASS_VALUE_DRAFTCOMMENT.*/
-	public static final String ATTR_CLASS_VALUE_DRAFTCOMMENT = TOPIC_DRAFT_COMMENT.matcher;
-	/**ATTR_CLASS_VALUE_REQUIREDCLEANUP.*/
-	public static final String ATTR_CLASS_VALUE_REQUIREDCLEANUP = TOPIC_REQUIRED_CLEANUP.matcher;
-	/**ATTR_CLASS_VALUE_FOREIGN.*/
-	public static final String ATTR_CLASS_VALUE_FOREIGN = TOPIC_FOREIGN.matcher;
-	/**ATTR_CLASS_VALUE_UNKNOWN.*/
-	public static final String ATTR_CLASS_VALUE_UNKNOWN = TOPIC_UNKNOWN.matcher;
-	/**ATTR_CLASS_VALUE_MAP_SEARCHTITLE.*/
-	public static final String ATTR_CLASS_VALUE_MAP_SEARCHTITLE = MAP_SEARCHTITLE.matcher;
-	//Added by William on 2009-07-25 for bug:2826143 start
-	/**ATTR_CLASS_VALUE_MAP_LINKTEXT.*/
-	public static final String ATTR_CLASS_VALUE_MAP_LINKTEXT = MAP_LINKTEXT.matcher;
-	/**ATTR_CLASS_VALUE_MAP_SHORTDESC.*/
-	public static final String ATTR_CLASS_VALUE_MAP_SHORTDESC = MAP_SHORTDESC.matcher;
-	//Added by William on 2009-07-25 for bug:2826143 start
-	/**ATTR_CLASS_VALUE_TOPIC_SEARCHTITLE.*/
-	public static final String ATTR_CLASS_VALUE_TOPIC_SEARCHTITLE = TOPIC_SEARCHTITLE.matcher;
-	/**ATTR_CLASS_VALUE_PROLOG.*/
-	public static final String ATTR_CLASS_VALUE_PROLOG = TOPIC_PROLOG.matcher;
-	/**ATTR_CLASS_VALUE_ABSTRACT.*/
-	public static final String ATTR_CLASS_VALUE_ABSTRACT = TOPIC_ABSTRACT.matcher;
-	/**ATTR_CLASS_VALUE_SHORTDESC.*/
-	public static final String ATTR_CLASS_VALUE_SHORTDESC = TOPIC_SHORTDESC.matcher;
-	/**ATTR_CLASS_VALUE_TITLEALTS.*/
-	public static final String ATTR_CLASS_VALUE_TITLEALTS = TOPIC_TITLEALTS.matcher;
-	/**ATTR_CLASS_VALUE_RELATED_LINKS.*/
-	public static final String ATTR_CLASS_VALUE_RELATED_LINKS = TOPIC_RELATED_LINKS.matcher;
-	/**ATTR_CLASS_VALUE_BODY.*/
-	public static final String ATTR_CLASS_VALUE_BODY = TOPIC_BODY.matcher;
-	/**ATTR_CLASS_VALUE_RELTABLE.*/
-	public static final String ATTR_CLASS_VALUE_RELTABLE = MAP_RELTABLE.matcher;
-	/**ATTR_CLASS_VALUE_METADATA.*/
-	public static final String ATTR_CLASS_VALUE_METADATA = TOPIC_METADATA.matcher;
-	/**ATTR_CLASS_VALUE_TOPICHEAD.*/
-	public static final String ATTR_CLASS_VALUE_TOPICHEAD = MAPGROUP_D_TOPICHEAD.matcher;
-	/**ATTR_CLASS_VALUE_CODEREF.*/
-	public static final String ATTR_CLASS_VALUE_CODEREF = PR_D_CODEREF.matcher;
-	/**ATTR_CLASS_VALUE_TOPIC_GROUP.*/
-	public static final String ATTR_CLASS_VALUE_TOPIC_GROUP = MAPGROUP_D_TOPICGROUP.matcher;
-	/**ATTR_CLASS_VALUE_TOPIC_HEAD.*/
-	public static final String ATTR_CLASS_VALUE_TOPIC_HEAD = MAPGROUP_D_TOPICHEAD.matcher;
-	/**ATTR_CLASS_VALUE_SUBJECT_SCHEME.*/
-	public static final String ATTR_CLASS_VALUE_SUBJECT_SCHEME = SUBJECTSCHEME_SUBJECTSCHEME.matcher;
-	/**ATTR_CLASS_VALUE_SUBJECT_DEF.*/
-	public static final String ATTR_CLASS_VALUE_SUBJECT_DEF = SUBJECTSCHEME_SUBJECTDEF.matcher;
-	/**ATTR_CLASS_VALUE_SCHEME_REF.*/
-	public static final String ATTR_CLASS_VALUE_SCHEME_REF = SUBJECTSCHEME_SCHEMEREF.matcher;
-	/**ATTR_CLASS_VALUE_ENUMERATION_DEF.*/
-	public static final String ATTR_CLASS_VALUE_ENUMERATION_DEF = SUBJECTSCHEME_ENUMERATIONDEF.matcher;
-	/**ATTR_CLASS_VALUE_ATTRIBUTE_DEF.*/
-	public static final String ATTR_CLASS_VALUE_ATTRIBUTE_DEF = SUBJECTSCHEME_ATTRIBUTEDEF.matcher;
-	/**ATTR_CLASS_VALUE_ELEMENT_DEF.*/
-	public static final String ATTR_CLASS_VALUE_ELEMENT_DEF = SUBJECTSCHEME_ELEMENTDEF.matcher;
-	/**ATTR_CLASS_VALUE_DEFAULT_SUBJECT.*/
-	public static final String ATTR_CLASS_VALUE_DEFAULT_SUBJECT = SUBJECTSCHEME_DEFAULTSUBJECT.matcher;
-	/**ATTR_CLASS_VALUE_SUBJECT_SCHEME_BASE.*/
-	public static final String ATTR_CLASS_VALUE_SUBJECT_SCHEME_BASE = " subjectScheme/";
-	/**ATTR_PROCESSING_ROLE_VALUE_NORMAL.*/
-	public static final String ATTR_PROCESSING_ROLE_VALUE_NORMAL = "normal";
-	/**ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.*/
-	public static final String ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY = "resource-only";
-	
-	/**ATTR_PRINT_VALUE_YES.*/
-	public static final String ATTR_PRINT_VALUE_YES = "yes";
-	/**ATTR_PRINT_VALUE_NO.*/
-	public static final String ATTR_PRINT_VALUE_NO = "no";
-	/**ATTR_PRINT_VALUE_PRINT_ONLY.*/
-	public static final String ATTR_PRINT_VALUE_PRINT_ONLY = "printonly";
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_TITLE = TOPIC_TITLE.matcher;
+    /**ATTR_CLASS_VALUE_MAP.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_MAP = MAP_MAP.matcher;
+    /**ATTR_CLASS_VALUE_INDEXTERM.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_INDEXTERM = TOPIC_INDEXTERM.matcher;
+    /**ATTR_CLASS_VALUE_INDEXSEE.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_INDEXSEE = INDEXING_D_INDEX_SEE.matcher;
+    /**ATTR_CLASS_VALUE_INDEXSEEALSO.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_INDEXSEEALSO = INDEXING_D_INDEX_SEE_ALSO.matcher;
+    /**ATTR_CLASS_VALUE_INDEXSORTAS.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_INDEXSORTAS = INDEXING_D_INDEX_SORT_AS.matcher;
+    /**ATTR_CLASS_VALUE_TOPIC.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_TOPIC = TOPIC_TOPIC.matcher;
+    /**ATTR_CLASS_VALUE_XREF.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_XREF = TOPIC_XREF.matcher;
+    /**ATTR_CLASS_VALUE_LINK.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_LINK = TOPIC_LINK.matcher;
+    /**ATTR_CLASS_VALUE_TOPICREF.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_TOPICREF = MAP_TOPICREF.matcher;
+    /**ATTR_SCOPE_VALUE_LOCAL.*/
+    public static final String ATTR_SCOPE_VALUE_LOCAL = "local";
+    /**ATTR_SCOPE_VALUE_EXTERNAL.*/
+    public static final String ATTR_SCOPE_VALUE_EXTERNAL = "external";
+    /**ATTR_SCOPE_VALUE_PEER.*/
+    public static final String ATTR_SCOPE_VALUE_PEER = "peer";
+    /**ATTR_FORMAT_VALUE_DITA.*/
+    public static final String ATTR_FORMAT_VALUE_DITA = "dita";
+    //added by william on 2009-08-06 for bug:2832696 start
+    /**ATTR_FORMAT_VALUE_DITAMAP.*/
+    public static final String ATTR_FORMAT_VALUE_DITAMAP = "ditamap";
+    //added by william on 2009-08-06 for bug:2832696 end
+    /**ATTRIBUTE_NAME_DITAARCHVERSION.*/
+    public static final String ATTRIBUTE_NAME_DITAARCHVERSION = "DITAArchVersion";
+    /**ATTRIBUTE_PREFIX_DITAARCHVERSION.*/
+    public static final String ATTRIBUTE_PREFIX_DITAARCHVERSION = "ditaarch";
+    /**ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION.*/
+    public static final String ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION = "xmlns:ditaarch";
+    /**ATTR_CLASS_VALUE_OBJECT.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_OBJECT = TOPIC_OBJECT.matcher;
+    /**ATTR_CLASS_VALUE_TOPICMETA.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_TOPICMETA = MAP_TOPICMETA.matcher;
+    //Added by William on 2009-06-24 for req #12014 start
+    /**ATTR_CLASS_VALUE_EXPORTANCHORS.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_EXPORTANCHORS = DELAY_D_EXPORTANCHORS.matcher;
+    /**ATTR_CLASS_VALUE_ANCHORKEY.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_ANCHORKEY = DELAY_D_ANCHORKEY.matcher;
+    /**ATTR_CLASS_VALUE_ANCHORID.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_ANCHORID = DELAY_D_ANCHORID.matcher;
+    //Added by William on 2009-06-24 for req #12014 end
 
-	
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_ANCHOR = MAP_ANCHOR.matcher;
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_NAVREF = MAP_NAVREF.matcher;
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_DATE = TOPIC_DATA.matcher;
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_DATEABOUT = TOPIC_DATA_ABOUT.matcher;
+
+    //Added by William on 2009-12-21 for bug:2916469 start
+    /**ATTR_CLASS_VALUE_NAVTITLE.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_NAVTITLE = TOPIC_NAVTITLE.matcher;
+    //Added by William on 2009-12-21 for bug:2916469 end
+    /**ATTR_CLASS_VALUE_AUTHOR.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_AUTHOR = TOPIC_AUTHOR.matcher;
+    /**ATTR_CLASS_VALUE_SOURCE.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_SOURCE = TOPIC_SOURCE.matcher;
+    /**ATTR_CLASS_VALUE_PUBLISHER.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_PUBLISHER = TOPIC_PUBLISHER.matcher;
+    /**ATTR_CLASS_VALUE_COPYRIGHT.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_COPYRIGHT = TOPIC_COPYRIGHT.matcher;
+    /**ATTR_CLASS_VALUE_CRITDATES.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_CRITDATES = TOPIC_CRITDATES.matcher;
+    /**ATTR_CLASS_VALUE_PERMISSIONS.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_PERMISSIONS = TOPIC_PERMISSIONS.matcher;
+    /**ATTR_CLASS_VALUE_CATEGORY.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_CATEGORY = TOPIC_CATEGORY.matcher;
+    /**ATTR_CLASS_VALUE_AUDIENCE.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_AUDIENCE = TOPIC_AUDIENCE.matcher;
+    /**ATTR_CLASS_VALUE_KEYWORDS.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_KEYWORDS = TOPIC_KEYWORDS.matcher;
+    /**ATTR_CLASS_VALUE_PRODINFO.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_PRODINFO = TOPIC_PRODINFO.matcher;
+    /**ATTR_CLASS_VALUE_OTHERMETA.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_OTHERMETA = TOPIC_OTHERMETA.matcher;
+    /**ATTR_CLASS_VALUE_RESOURCEID.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_RESOURCEID = TOPIC_RESOURCEID.matcher;
+    /**ATTR_CLASS_VALUE_DATA.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_DATA = TOPIC_DATA.matcher;
+    /**ATTR_CLASS_VALUE_DATAABOUT.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_DATAABOUT = TOPIC_DATA_ABOUT.matcher;
+    /**ATTR_CLASS_VALUE_DRAFTCOMMENT.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_DRAFTCOMMENT = TOPIC_DRAFT_COMMENT.matcher;
+    /**ATTR_CLASS_VALUE_REQUIREDCLEANUP.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_REQUIREDCLEANUP = TOPIC_REQUIRED_CLEANUP.matcher;
+    /**ATTR_CLASS_VALUE_FOREIGN.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_FOREIGN = TOPIC_FOREIGN.matcher;
+    /**ATTR_CLASS_VALUE_UNKNOWN.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_UNKNOWN = TOPIC_UNKNOWN.matcher;
+    /**ATTR_CLASS_VALUE_MAP_SEARCHTITLE.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_MAP_SEARCHTITLE = MAP_SEARCHTITLE.matcher;
+    //Added by William on 2009-07-25 for bug:2826143 start
+    /**ATTR_CLASS_VALUE_MAP_LINKTEXT.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_MAP_LINKTEXT = MAP_LINKTEXT.matcher;
+    /**ATTR_CLASS_VALUE_MAP_SHORTDESC.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_MAP_SHORTDESC = MAP_SHORTDESC.matcher;
+    //Added by William on 2009-07-25 for bug:2826143 start
+    /**ATTR_CLASS_VALUE_TOPIC_SEARCHTITLE.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_TOPIC_SEARCHTITLE = TOPIC_SEARCHTITLE.matcher;
+    /**ATTR_CLASS_VALUE_PROLOG.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_PROLOG = TOPIC_PROLOG.matcher;
+    /**ATTR_CLASS_VALUE_ABSTRACT.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_ABSTRACT = TOPIC_ABSTRACT.matcher;
+    /**ATTR_CLASS_VALUE_SHORTDESC.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_SHORTDESC = TOPIC_SHORTDESC.matcher;
+    /**ATTR_CLASS_VALUE_TITLEALTS.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_TITLEALTS = TOPIC_TITLEALTS.matcher;
+    /**ATTR_CLASS_VALUE_RELATED_LINKS.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_RELATED_LINKS = TOPIC_RELATED_LINKS.matcher;
+    /**ATTR_CLASS_VALUE_BODY.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_BODY = TOPIC_BODY.matcher;
+    /**ATTR_CLASS_VALUE_RELTABLE.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_RELTABLE = MAP_RELTABLE.matcher;
+    /**ATTR_CLASS_VALUE_METADATA.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_METADATA = TOPIC_METADATA.matcher;
+    /**ATTR_CLASS_VALUE_TOPICHEAD.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_TOPICHEAD = MAPGROUP_D_TOPICHEAD.matcher;
+    /**ATTR_CLASS_VALUE_CODEREF.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_CODEREF = PR_D_CODEREF.matcher;
+    /**ATTR_CLASS_VALUE_TOPIC_GROUP.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_TOPIC_GROUP = MAPGROUP_D_TOPICGROUP.matcher;
+    /**ATTR_CLASS_VALUE_TOPIC_HEAD.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_TOPIC_HEAD = MAPGROUP_D_TOPICHEAD.matcher;
+    /**ATTR_CLASS_VALUE_SUBJECT_SCHEME.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_SUBJECT_SCHEME = SUBJECTSCHEME_SUBJECTSCHEME.matcher;
+    /**ATTR_CLASS_VALUE_SUBJECT_DEF.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_SUBJECT_DEF = SUBJECTSCHEME_SUBJECTDEF.matcher;
+    /**ATTR_CLASS_VALUE_SCHEME_REF.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_SCHEME_REF = SUBJECTSCHEME_SCHEMEREF.matcher;
+    /**ATTR_CLASS_VALUE_ENUMERATION_DEF.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_ENUMERATION_DEF = SUBJECTSCHEME_ENUMERATIONDEF.matcher;
+    /**ATTR_CLASS_VALUE_ATTRIBUTE_DEF.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_ATTRIBUTE_DEF = SUBJECTSCHEME_ATTRIBUTEDEF.matcher;
+    /**ATTR_CLASS_VALUE_ELEMENT_DEF.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_ELEMENT_DEF = SUBJECTSCHEME_ELEMENTDEF.matcher;
+    /**ATTR_CLASS_VALUE_DEFAULT_SUBJECT.*/
+    @Deprecated
+    public static final String ATTR_CLASS_VALUE_DEFAULT_SUBJECT = SUBJECTSCHEME_DEFAULTSUBJECT.matcher;
+    /**ATTR_CLASS_VALUE_SUBJECT_SCHEME_BASE.*/
+    public static final String ATTR_CLASS_VALUE_SUBJECT_SCHEME_BASE = " subjectScheme/";
+    /**ATTR_PROCESSING_ROLE_VALUE_NORMAL.*/
+    public static final String ATTR_PROCESSING_ROLE_VALUE_NORMAL = "normal";
+    /**ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.*/
+    public static final String ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY = "resource-only";
+
+    /**ATTR_PRINT_VALUE_YES.*/
+    public static final String ATTR_PRINT_VALUE_YES = "yes";
+    /**ATTR_PRINT_VALUE_NO.*/
+    public static final String ATTR_PRINT_VALUE_NO = "no";
+    /**ATTR_PRINT_VALUE_PRINT_ONLY.*/
+    public static final String ATTR_PRINT_VALUE_PRINT_ONLY = "printonly";
+
     /**
      * constants for filtering or flagging.
-     */	
-	public static final String DEFAULT_ACTION = "default";
-	/**chunk attribute.*/
-	public static final String ATTRIBUTE_NAME_CHUNK = "chunk";
-		
-	/**constants for indexterm prefix(See).*/
-	public static final String IndexTerm_Prefix_See = "See";
-	/**constants for indexterm prefix(See also).*/
-	public static final String IndexTerm_Prefix_See_Also = "See also";
-	/**name attribute.*/
-	public static final String ATTRIBUTE_NAME_NAME = "name";
-	/**type attribute value subjectScheme.*/
-	public static final String ATTR_TYPE_VALUE_SUBJECT_SCHEME = "subjectScheme";
-	/**store how many scheme files a ditamap file used in form of Map<String, Set<String>>.*/
-	public static final String FILE_NAME_SUBJECT_DICTIONARY = "subject_scheme.dictionary";
-	//Added by William on 2009-06-24 for req #12014 start
-	/**export.xml to store exported elements.*/
-	public static final String FILE_NAME_EXPORT_XML = "export.xml";
-	/**pluginId.xml to store the plugin id.*/
-	public static final String FILE_NAME_PLUGIN_XML = "pluginId.xml";
-	//Added by William on 2009-06-24 for req #12014 start
-	
-	// Added on 2010-11-09 for bug 3102827: Allow a way to specify recognized image extensions -- start
-	/** Configuration filename. */
-	public static final String CONF_PROPERTIES = "configuration.properties";
-	/** Configuration value separator. */
-	public static final String CONF_LIST_SEPARATOR = ";";
-	/** Property name for supported image extensions. */
-	public static final String CONF_SUPPORTED_IMAGE_EXTENSIONS = "supported_image_extensions";
-	// Added on 2010-11-09 for bug 3102827: Allow a way to specify recognized image extensions -- end
+     */
+    public static final String DEFAULT_ACTION = "default";
+    /**chunk attribute.*/
+    public static final String ATTRIBUTE_NAME_CHUNK = "chunk";
+
+    /**constants for indexterm prefix(See).*/
+    public static final String IndexTerm_Prefix_See = "See";
+    /**constants for indexterm prefix(See also).*/
+    public static final String IndexTerm_Prefix_See_Also = "See also";
+    /**name attribute.*/
+    public static final String ATTRIBUTE_NAME_NAME = "name";
+    /**type attribute value subjectScheme.*/
+    public static final String ATTR_TYPE_VALUE_SUBJECT_SCHEME = "subjectScheme";
+    /**store how many scheme files a ditamap file used in form of Map<String, Set<String>>.*/
+    public static final String FILE_NAME_SUBJECT_DICTIONARY = "subject_scheme.dictionary";
+    //Added by William on 2009-06-24 for req #12014 start
+    /**export.xml to store exported elements.*/
+    public static final String FILE_NAME_EXPORT_XML = "export.xml";
+    /**pluginId.xml to store the plugin id.*/
+    public static final String FILE_NAME_PLUGIN_XML = "pluginId.xml";
+    //Added by William on 2009-06-24 for req #12014 start
+
+    /** Configuration filename. */
+    public static final String CONF_PROPERTIES = "configuration.properties";
+    /** Generated configuration filename. */
+    public static final String GEN_CONF_PROPERTIES = "plugin.properties";
+    /** Configuration value separator. */
+    public static final String CONF_LIST_SEPARATOR = ";";
+    /** Property name for supported DITA topic extensions. */
+    public static final String CONF_SUPPORTED_TOPIC_EXTENSIONS = "supported_topic_extensions";
+    /** Property name for supported DITA map extensions. */
+    public static final String CONF_SUPPORTED_MAP_EXTENSIONS = "supported_map_extensions";
+    /** Property name for supported image extensions. */
+    public static final String CONF_SUPPORTED_IMAGE_EXTENSIONS = "supported_image_extensions";
+    /** Property name for supported HTML extensions. */
+    public static final String CONF_SUPPORTED_HTML_EXTENSIONS = "supported_html_extensions";
+    /** Property name for supported resource file extensions. */
+    public static final String CONF_SUPPORTED_RESOURCE_EXTENSIONS = "supported_resource_extensions";
     /** Property name for print transtypes. */
     public static final String CONF_PRINT_TRANSTYPES = "print_transtypes";
-	/** Property name for template files. */
-	public static final String CONF_TEMPLATES = "templates";
+    /** Property name for template files. */
+    public static final String CONF_TEMPLATES = "templates";
 
     /**
      * Instances should NOT be constructed in standard programming.

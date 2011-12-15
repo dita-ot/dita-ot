@@ -50,7 +50,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="text-decoration">underline</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="screen">
+    <xsl:attribute-set name="screen" use-attribute-sets="base-font">
         <xsl:attribute name="space-before">1.2em</xsl:attribute>
         <xsl:attribute name="space-after">0.8em</xsl:attribute>
         <xsl:attribute name="white-space-treatment">preserve</xsl:attribute>
@@ -58,9 +58,8 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="linefeed-treatment">preserve</xsl:attribute>
         <xsl:attribute name="wrap-option">wrap</xsl:attribute>
         <xsl:attribute name="background-color">#f0f0f0</xsl:attribute>
-        <xsl:attribute name="font-family">Monospaced</xsl:attribute>
+        <xsl:attribute name="font-family">monospace</xsl:attribute>
         <xsl:attribute name="line-height">106%</xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="screen__top">

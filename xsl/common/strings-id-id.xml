@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings xml:lang="id-id">        <!-- Indonesian -->
+
+<!-- various labels (not author controlled) -->
+<str name="Figure">Gambar</str>
+<str name="Table">Tabel</str>
+<str name="Next topic">Topik berikutnya</str>
+<str name="Previous topic">Topik sebelumnya</str>
+<str name="Parent topic">Topik Induk</str>
+<str name="Required cleanup">Pembersihan diperlukan</str>
+<str name="Draft comment">Komentar draf</str>
+<str name="Option">Pilihan</str>
+<str name="Description">Deskripsi</str>
+<str name="Optional">Opsional</str>
+<str name="Required">Diperlukan</str>
+<str name="Skip visual syntax diagram">Lewatkan diagram sintaks visual</str>
+<str name="Read syntax diagram">Baca diagram sintaks</str>
+<str name="Start of change">Mulai perubahan</str>
+<str name="End of change">Akhiri perubahan</str>
+<str name="Index">Indeks</str>
+<str name="Special characters">Karakter khusus</str>
+<str name="Numerics">Numerik</str>
+<str name="End notes">Catatan akhir</str>
+<str name="Artwork">Grafis</str>
+<str name="Syntax">Sintaks</str>
+<str name="Type">Jenis</str>
+<str name="Value">Nilai</str>
+<!-- Text that goes before a link to a topic -->
+<str name="intro-to-topic-link"></str>
+
+<!-- peril notice labels -->
+<str name="Note">Catatan</str>
+<str name="Notes">Catatan</str>
+<str name="Tip">Kiat</str>
+<str name="Fastpath">Jalur cepat</str>
+<str name="Important">Penting</str>
+<str name="Attention">Perhatian</str>
+<str name="Caution">PERINGATAN</str>
+<str name="Danger">BAHAYA</str>
+<str name="Remember">Ingat</str>
+<str name="Warning">Peringatan</str>
+<str name="Restriction">Pembatasan</str>
+
+<!-- default title text for section level generated sections -->
+<str name="Contents">Isi</str>
+<str name="Related concepts">Konsep terkait</str>
+<str name="Related tasks">Tugas terkait</str>
+<str name="Related reference">Referensi terkait</str>
+<str name="Related information">Informasi terkait</str>
+
+<str name="Prerequisite">Prasyarat</str>
+<str name="Prerequisites">Prasyarat</str>
+<str name="or">atau</str>
+<str name="figure-number-separator"> </str>
+
+<!--Task section labels -->
+<str name="task_context">Mengenai tugas ini</str>
+<str name="task_example">Contoh</str>
+<str name="task_postreq">Yang harus dilakukan berikutnya</str>
+<str name="task_prereq">Sebelum Anda mulai</str>
+<str name="task_procedure">Prosedur</str>
+<str name="task_results">Hasil</str>
+
+<str name="Copyright">Hak cipta</str>
+
+<!-- Symbols -->
+<str name="OpenQuote">"</str>
+<str name="CloseQuote">"</str>
+<str name="ColonSymbol">:</str>
+
+<!-- For odt transform -->
+<str name="On the page"> on page </str>
+<str name="Related Links">Related Links</str>
+<str name="List item">List item.</str>
+<str name="Foot note">Footnote.</str>
+<str name="Page"> page </str>
+<str name="Unordered List bullet">&#x2022;</str>
+</strings>

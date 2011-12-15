@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="extended-functionality">
+  <title>Extended functionality</title>
+  <reference id="code-reference">
+    <title>Code reference processing</title>
+    <refbody>
+      <section>
+        <p>DITA-OT supports defining the code reference target file encoding using the
+            <codeph>format</codeph> attribute. The supported format is:</p>
+        <codeblock>format (";" space* "charset=" charset)?</codeblock>
+        <p>If charset is not defined system default charset will be used. If charset is not
+          recognized or supported, <keyword>DOTJ052E</keyword> error is thrown and system default
+          charset is used as a fall-back.</p>
+      </section>
+      <example>
+        <codeblock>&lt;coderef href="unicode.txt" format="txt; charset=UTF-8"/></codeblock>
+      </example>
+    </refbody>
+  </reference>
+</reference>

@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -14,7 +14,7 @@ package org.dita.dost.pipeline;
  */
 public interface AbstractPipelineInput {
 
-	/**
+    /**
      * Set the attribute value. Existing attribute value will
      * be overwritten.
      * 
@@ -22,13 +22,13 @@ public interface AbstractPipelineInput {
      * @param value attribute value
      */
     public void setAttribute(String name, String value);
-    
+
     /**
      * Get the attribute value.
      * 
-     * @param name attribute name 
+     * @param name attribute name
      * @return String attribute value, <code>null</code> if not defined.
      */
     public String getAttribute(String name);
-	
+
 }

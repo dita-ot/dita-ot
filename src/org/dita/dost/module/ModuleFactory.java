@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -22,53 +22,53 @@ import org.dita.dost.log.MessageBean;
  * 
  */
 public final class ModuleFactory {
-	private static ModuleFactory moduleFactory = null;
+    private static ModuleFactory moduleFactory = null;
 
-	private final String packagePrefix = "org.dita.dost.module.";
+    private static final String packagePrefix = "org.dita.dost.module.";
 
-	/**
-	 * Automatically generated constructor: ModuleFactory.
-	 */
-	public ModuleFactory() {
+    /**
+     * Automatically generated constructor: ModuleFactory.
+     */
+    public ModuleFactory() {
 
-	}
+    }
 
-	/**
-	 * Method to get the only instance of ModuleFactory. ModuleFactory is a
-	 * singleton class.
-	 * 
-	 * @return ModuleFactory
-	 */
-	public static synchronized ModuleFactory instance() {
-		if (moduleFactory == null) {
-			moduleFactory = new ModuleFactory();
-		}
-		return moduleFactory;
-	}
+    /**
+     * Method to get the only instance of ModuleFactory. ModuleFactory is a
+     * singleton class.
+     * 
+     * @return ModuleFactory
+     */
+    public static synchronized ModuleFactory instance() {
+        if (moduleFactory == null) {
+            moduleFactory = new ModuleFactory();
+        }
+        return moduleFactory;
+    }
 
-	/**
-	 * Create the Module class instance according to moduleName.
-	 * 
-	 * @param moduleName moduleName
-	 * @return AbstractPipelineModule
-	 * @throws DITAOTException DITAOTException
-	 */
-	public AbstractPipelineModule createModule(final String moduleName)
-			throws DITAOTException {
-		final String module = packagePrefix + moduleName + "Module";
-		
-		try {
-			return (AbstractPipelineModule) Class.forName(
-					module).newInstance();
-		} catch (final Exception e) {
-			String msg = null;
-			final Properties params = new Properties();
+    /**
+     * Create the Module class instance according to moduleName.
+     * 
+     * @param moduleName moduleName
+     * @return AbstractPipelineModule
+     * @throws DITAOTException DITAOTException
+     */
+    public AbstractPipelineModule createModule(final String moduleName)
+            throws DITAOTException {
+        final String module = packagePrefix + moduleName + "Module";
 
-			params.put("%1", module);
-			final MessageBean msgBean=MessageUtils.getMessage("DOTJ005F", params);
-			msg = msgBean.toString();
+        try {
+            return (AbstractPipelineModule) Class.forName(
+                    module).newInstance();
+        } catch (final Exception e) {
+            String msg = null;
+            final Properties params = new Properties();
 
-			throw new DITAOTException(msgBean,e,msg);	
-		}
-	}
+            params.put("%1", module);
+            final MessageBean msgBean=MessageUtils.getMessage("DOTJ005F", params);
+            msg = msgBean.toString();
+
+            throw new DITAOTException(msgBean,e,msg);
+        }
+    }
 }

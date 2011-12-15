@@ -53,6 +53,7 @@
    <str name="Prerequisite">Préambule</str>
    <str name="Prerequisites">Préambules</str>
    <str name="or">ou</str>
+   <str name="figure-number-separator"> </str>
 
    <!--Task section labels -->
    <str name="task_context">Pourquoi et quand exécuter cette tâche</str>

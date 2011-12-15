@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -22,7 +22,7 @@ final class ExtensionPoint {
     final String name;
     /** Plug-in defining the extension point. */
     final String plugin;
-    
+
     /**
      * Extension point constructor.
      * 
@@ -42,5 +42,5 @@ final class ExtensionPoint {
         this.name = name;
         this.plugin = plugin;
     }
-    
+
 }

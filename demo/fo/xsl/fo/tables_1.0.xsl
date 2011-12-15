@@ -79,9 +79,10 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="*[contains(@class, ' topic/tgroup ')]" name="tgroup">
         <xsl:if test="not(@cols)">
-            <xsl:message terminate="yes">
-                <xsl:text>ERROR: Number of columns must be specified.</xsl:text>
-            </xsl:message>
+          <xsl:call-template name="output-message">
+            <xsl:with-param name="msgnum">006</xsl:with-param>
+            <xsl:with-param name="msgsev">E</xsl:with-param>
+          </xsl:call-template>
         </xsl:if>
 
         <xsl:variable name="scale">

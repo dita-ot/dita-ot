@@ -18,6 +18,7 @@
   <property name="xep.jar" location="${lib.dir}/xep/lib/xep.jar" />
 
   <path id="build.class.path">
+    <pathelement location="${basedir}/../../lib/dost.jar" />
     <pathelement location="${ant.jar}" />
     <pathelement location="${resolver.jar}" />
     <pathelement location="${icu4j.jar}" />

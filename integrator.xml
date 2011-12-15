@@ -3,7 +3,7 @@
      Sourceforge.net. See the accompanying license.txt file for 
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
-<project name="dita.integrator" default="integrate" basedir=".">
+<project name="dita.integrator" default="lax" basedir=".">
   
   <dirname property="ant.file.dita.integrator.dir" file="${ant.file.dita.integrator}"/>
   
@@ -40,7 +40,24 @@
   </taskdef>
   
   <target name="integrate">
-    <integrate basedir="${basedir}" ditadir="${dita.dir}" properties="${properties}"/>
+    <condition property="strict" value="false">
+      <not>
+        <isset property="strict"/>
+      </not>
+    </condition>
+    <integrate basedir="${basedir}" ditadir="${dita.dir}" properties="${properties}" strict="${strict}"/>
+  </target>
+  
+  <target name="lax" description="Run integration in lax mode">
+    <antcall target="integrate">
+      <param name="strict" value="false"/>
+    </antcall>
+  </target>
+
+  <target name="strict" description="Run integration in strict mode">
+    <antcall target="integrate">
+      <param name="strict" value="true"/>
+    </antcall>
   </target>
 
 </project>

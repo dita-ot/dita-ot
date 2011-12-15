@@ -48,19 +48,31 @@ See the accompanying license.txt file for applicable licenses.
     <!-- RDA: Modified with RFE 2882109. Can now modify results or add new types by matching an element
               with mode="determineTopicType", without overriding the entire determineTopicType template. -->
     <xsl:template name="determineTopicType">
-        <xsl:variable name="id" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>
-        <xsl:variable name="gid" select="generate-id(ancestor-or-self::*[contains(@class, ' topic/topic ')][1])"/>
-        <xsl:variable name="topicNumber" select="count(exsl:node-set($topicNumbers)/topic[@id = $id][following-sibling::topic[@guid = $gid]]) + 1"/>
-        <xsl:variable name="mapTopic">
-            <xsl:copy-of select="$map//*[@id = $id]"/>
-        </xsl:variable>
-        <xsl:variable name="foundTopicType">
-            <xsl:apply-templates select="$mapTopic/*[position() = $topicNumber]" mode="determineTopicType"/>
-        </xsl:variable>
+      <xsl:variable name="foundTopicType">
+        <xsl:variable name="topic" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]"/>
+        <xsl:variable name="id" select="$topic/@id"/>
+        <xsl:variable name="mapTopics" select="key('map-id', $id)"/>
         <xsl:choose>
-            <xsl:when test="$foundTopicType!=''"><xsl:value-of select="$foundTopicType"/></xsl:when>
-            <xsl:otherwise>topicSimple</xsl:otherwise>
+          <xsl:when test="count($mapTopics) = 1">
+            <xsl:apply-templates select="$mapTopics[1]" mode="determineTopicType"/>
+          </xsl:when>
+          <!-- topicmerge.xsl should already rewrite all duplicate IDs, keep for backwards compatibility -->
+          <xsl:when test="count($mapTopics) > 1">
+            <xsl:variable name="gid" select="generate-id($topic)"/>
+            <xsl:variable name="topicNumber" select="count(exsl:node-set($topicNumbers)/topic[@id = $id][following-sibling::topic[@guid = $gid]]) + 1"/>
+            <xsl:variable name="mapTopic">
+              <xsl:copy-of select="$mapTopics"/>
+            </xsl:variable>
+            <xsl:apply-templates select="$mapTopic/*[position() = $topicNumber]" mode="determineTopicType"/>
+          </xsl:when>
         </xsl:choose>
+      </xsl:variable>
+      <xsl:choose>
+        <xsl:when test="$foundTopicType!=''">
+          <xsl:value-of select="$foundTopicType"/>
+        </xsl:when>
+        <xsl:otherwise>topicSimple</xsl:otherwise>
+      </xsl:choose>
     </xsl:template>
 
     <xsl:template match="*" mode="determineTopicType">
@@ -156,88 +168,15 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:apply-templates/>
       </xsl:template-->
     <xsl:template match="*[contains(@class, ' topic/data ')]"/>
+    <xsl:template match="*[contains(@class, ' topic/data ')]" mode="insert-text"/>
     <xsl:template match="*[contains(@class, ' topic/data-about ')]"/>
     <!-- edited by William on 2009-09-18 for output bug #2860168 end-->
 
     <exslf:function name="opentopic-func:determineTopicType">
-        <xsl:variable name="id" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>
-        <xsl:variable name="gid" select="generate-id(ancestor-or-self::*[contains(@class, ' topic/topic ')][1])"/>
-        <xsl:variable name="topicNumber" select="count(exsl:node-set($topicNumbers)/topic[@id = $id][following-sibling::topic[@guid = $gid]]) + 1"/>
-        <xsl:variable name="mapTopic">
-            <xsl:copy-of select="$map//*[@id = $id]"/>
-        </xsl:variable>
-        <xsl:variable name="foundTopicType">
-            <xsl:apply-templates select="$mapTopic/*[position() = $topicNumber]" mode="determineTopicType"/>
-        </xsl:variable>
-        <xsl:variable name="topicType">
-            <xsl:choose>
-                <xsl:when test="$foundTopicType!=''"><xsl:value-of select="$foundTopicType"/></xsl:when>
-                <xsl:otherwise>topicSimple</xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-
-        <exslf:result select="$topicType"/>
+      <xsl:variable name="topicType">
+        <xsl:call-template name="determineTopicType"/>
+      </xsl:variable>
+      <exslf:result select="string($topicType)"/>
     </exslf:function>
     
-    <!-- TODO: Need to support XSLT 2.0? Not for now. -->
-    <!-- 
-    <xsl:function version="2.0" name="opentopic-func:determineTopicType">
-        <xsl:variable name="id" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>
-        <xsl:variable name="gid" select="generate-id(ancestor-or-self::*[contains(@class, ' topic/topic ')][1])"/>
-        <xsl:variable name="topicNumber" select="count(exsl:node-set($topicNumbers)/topic[@id = $id][following-sibling::topic[@guid = $gid]]) + 1"/>
-        <xsl:variable name="mapTopic">
-            <xsl:copy-of select="$map//*[@id = $id]"/>
-        </xsl:variable>
-
-        <xsl:variable name="topicType">
-            <xsl:choose>
-                <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/chapter ')]">
-                    <xsl:text>topicChapter</xsl:text>
-                </xsl:when>
-                <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/appendix ')]">
-                    <xsl:text>topicAppendix</xsl:text>
-                </xsl:when>
-                <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/preface ')]">
-                    <xsl:text>topicPreface</xsl:text>
-                </xsl:when>
-                <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/part ')]">
-                    <xsl:text>topicPart</xsl:text>
-                </xsl:when>
-                <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/abbrevlist ')]">
-                    <xsl:text>topicAbbrevList</xsl:text>
-                </xsl:when>
-                <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/bibliolist ')]">
-                    <xsl:text>topicBiblioList</xsl:text>
-                </xsl:when>
-                <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/booklist ')]">
-                    <xsl:text>topicBookList</xsl:text>
-                </xsl:when>
-                <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/figurelist ')]">
-                    <xsl:text>topicFigureList</xsl:text>
-                </xsl:when>
-                <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/indexlist ')]">
-                    <xsl:text>topicIndexList</xsl:text>
-                </xsl:when>
-                <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/toc ')]">
-                    <xsl:text>topicTocList</xsl:text>
-                </xsl:when>
-                <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/glossarylist ')]">
-                    <xsl:text>topicGlossaryList</xsl:text>
-                </xsl:when>
-                <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/trademarklist ')]">
-                    <xsl:text>topicTradeMarkList</xsl:text>
-                </xsl:when>
-                <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/notices ')]">
-                    <xsl:text>topicNotices</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>topicSimple</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-
-        <xsl:value-of select="$topicType"/>
-    </xsl:function>
-     -->
-
 </xsl:stylesheet>

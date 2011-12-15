@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="xhtmlchm" xml:lang="en-us">
+<title>Compiled Help (CHM) output</title>
+<shortdesc>The transform type "htmlhelp" is used to create HTML Help
+control files. If the build runs on a system that has the HTML Help
+compiler installed, the control files will be compiled into a CHM
+file.</shortdesc>
+<refbody>
+<section><p>Once the preprocess and XHTML process is complete, most
+of the HTML Help processing is handled by the <codeph>dita.map.htmlhelp</codeph> target.
+This target creates several files:<ul>
+<li>The HHP file is the control file for the HTML Help project.</li>
+<li>The HHC file contains the HTML Help table of contents.</li>
+<li>The HHK file contains the HTML Help index. This file is sorted
+based on the language of the map.</li>
+</ul></p><p>The <codeph>dita.htmlhelp.convertlang</codeph> is a post-processor
+for the content to ensure that it can be processed correctly by the
+compiler, and that the appropriate codepages and languages are used.</p><p>Finally, <codeph>compile.HTML.Help</codeph> attempts
+to detect the HTML Help compiler; if found, it compiles the full project
+into a single CHM file.</p></section>
+</refbody>
+</reference>

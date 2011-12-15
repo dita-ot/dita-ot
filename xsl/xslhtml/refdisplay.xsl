@@ -9,12 +9,6 @@
      xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links"
      exclude-result-prefixes="related-links">
 
-<!-- XHTML output with XML syntax -->
-<xsl:output method="xml"
-            encoding="utf-8"
-            indent="no"
-/>
-
 <!-- == REFERENCE UNIQUE SUBSTRUCTURES == -->
 
 <!-- Process the header row in a properties table -->

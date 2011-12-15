@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "concept.dtd">
+<concept id="preprocessarch" xml:lang="en-us">
+<title>DITA-OT pre-processing architecture</title>
+<shortdesc>This topic describes the set of steps commonly known as
+the pre-processing stage of a DITA build. These steps typically run
+at the start of any build using the DITA-OT, regardless of the final
+output format.</shortdesc>
+<conbody>
+<p>Each step described corresponds to one Ant target in the build
+pipeline. The general Ant target "preprocess" will call all of the
+targets described here.</p>
+</conbody>
+</concept>
+

@@ -83,19 +83,22 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:import href="../../cfg/fo/attrs/lot-lof-attr.xsl"/>
     <xsl:import href="lot-lof.xsl"/>
     
+    <xsl:import href="../../cfg/fo/attrs/learning-elements-attr.xsl"/>
+    <xsl:import href="learning-elements.xsl"/>
+    
     <xsl:import href="flagging.xsl"/>
     
     <xsl:strip-space elements="menucascade uicontrol"/>
 
     <!-- Parameters in the following group are always passed in from Ant. -->
     <xsl:param name="locale"/>
-    <xsl:param name="customizationDir"/>
+    <xsl:param name="customizationDir.url"/>
     <xsl:param name="artworkPrefix"/>
-    <xsl:param name="fileProtocolPrefix"/>
     <xsl:param name="publishRequiredCleanup"/>
     <xsl:param name="DRAFT"/>
     <xsl:param name="output.dir.url"/>
     <xsl:param name="work.dir.url"/>
+    <xsl:param name="input.dir.url"/>
     <xsl:param name="disableRelatedLinks" select="'yes'"/>
     <xsl:param name="pdfFormatter" select="'fop'"/>
 

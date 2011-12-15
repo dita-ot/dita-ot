@@ -55,6 +55,7 @@
 <str name="Prerequisite">शर्त</str>
 <str name="Prerequisites">शर्त</str>
 <str name="or">या</str>
+<str name="figure-number-separator"> </str>
 
 <!--Task section labels -->
 <str name="task_context">इस कार्य के बारे में</str>

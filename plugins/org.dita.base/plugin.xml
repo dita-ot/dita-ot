@@ -9,8 +9,14 @@
   <extension-point id="package.support.email" name="Plug-in support email"/>
   <extension-point id="package.support.name" name="Plug-in support name"/>
   <extension-point id="dita.conductor.plugin" name="Ant conductor plug-in information"/>
+  <extension-point id="dita.catalog.plugin-info" name="Plug-in XML catalog information"/>
   <extension-point id="dita.image.extensions" name="Image file extension"/>
+  <extension-point id="dita.topic.extensions" name="DITA topic file extension"/>
+  <extension-point id="dita.map.extensions" name="DITA map file extension"/>
+  <extension-point id="dita.html.extensions" name="HTML file extension"/>
+  <extension-point id="dita.resource.extensions" name="Resource file extension"/>
   <extension-point id="dita.conductor.transtype.check" name="Transtype check"/>
+  <extension-point id="dita.transtype.print" name="Print transtype"/>
   <extension-point id="dita.conductor.target" name="Ant conductor"/>
   <extension-point id="dita.conductor.target.relative" name="Ant conductor"/>
   <extension-point id="dita.specialization.catalog" name="XML catalog"/>
@@ -18,6 +24,8 @@
   <extension-point id="dita.xsl.strings" name="Generated text"/>
   <extension-point id="dita.conductor.lib.import" name="Java library import"/>
   <extension-point id="dita.xsl.messages" name="Diagnostic messages"/>
+  <!-- legacy support -->
+  <extension-point id="dita.basedir-resource-directory" name="Flag to use basedir as resource directory"/>
   <!-- preprocessing extension points -->
   <extension-point id="depend.preprocess.pre" name="Preprocessing pre-target"/>
   <extension-point id="depend.preprocess.clean-temp.pre" name="Clean temp pre-target"/>
@@ -61,6 +69,14 @@
   <feature extension="dita.image.extensions" value=".tif"/>
   <feature extension="dita.image.extensions" value=".tiff"/>
   <feature extension="dita.image.extensions" value=".bmp"/>
+  <feature extension="dita.topic.extensions" value=".dita"/>
+  <feature extension="dita.topic.extensions" value=".xml"/>
+  <feature extension="dita.map.extensions" value=".ditamap"/>
+  <feature extension="dita.html.extensions" value=".html"/>
+  <feature extension="dita.html.extensions" value=".htm"/>
+  <feature extension="dita.resource.extensions" value=".pdf"/>
+  <feature extension="dita.resource.extensions" value=".swf"/>
+  <feature extension="dita.basedir-resource-directory" value="true"/>
   <template file="../../catalog-dita_template.xml"/>
   <template file="../../build_template.xml"/>
   <template file="../../build_preprocess_template.xml"/>

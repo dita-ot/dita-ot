@@ -9,10 +9,6 @@
   xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
   xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links"
   exclude-result-prefixes="related-links ditamsg">
-<xsl:output method="xml"
-            encoding="utf-8"
-            indent="yes"
-/>
 
 <xsl:key name="link" match="*[contains(@class, ' topic/link ')][not(ancestor::*[contains(@class, ' topic/linklist ')])]" use="concat(ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id, ' ', @href,@type,@role,@platform,@audience,@importance,@outputclass,@keyref,@scope,@format,@otherrole,@product,@otherprops,@rev,@class,child::*)"/>
 <xsl:key name="linkdup" match="*[contains(@class, ' topic/link ')][not(ancestor::*[contains(@class, ' topic/linklist ')])][not(@role='child' or @role='parent' or @role='previous' or @role='next' or @role='ancestor' or @role='descendant')]" use="concat(ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id, ' ', @href)"/>

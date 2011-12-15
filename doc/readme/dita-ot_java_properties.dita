@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference
+  PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="dita-ot-java-properties" xml:lang="en-us">
+  <title>Command-line tool arguments for DITA-OT</title>
+  <titlealts>
+    <navtitle>Command line tool arguments</navtitle>
+  </titlealts>
+  <shortdesc>Reference list of DITA-specific command line tool arguments.</shortdesc>
+  <refbody>
+    <section>
+      <title>Parameters available to all transforms</title>
+      <p>The following common parameters are available for all transformation output types.</p>
+      <table>
+        <title>Common DITA-OT parameters</title>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Argument</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry><codeph>/debug</codeph></entry>
+              <entry conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/args.debug.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/draft</codeph></entry>
+              <entry conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/args.draft.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/grammarcache</codeph></entry>
+              <entry
+                conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/args.grammar.cache.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/i</codeph></entry>
+              <entry conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/args.input.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/logdir</codeph></entry>
+              <entry conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/args.logdir.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/outext</codeph></entry>
+              <entry conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/args.outext.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/basedir</codeph></entry>
+              <entry conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/basedir.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/filter</codeph></entry>
+              <entry
+                conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/dita.input.valfile.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/outdir</codeph></entry>
+              <entry conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/output.dir.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/transtype</codeph></entry>
+              <entry conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/transtype.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/validate</codeph></entry>
+              <entry conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/validate.desc"/>
+            </row>
+          </tbody>
+        </tgroup>
+        </table>
+    </section>
+    <section>
+      <title>Parameters available for all XHTML based transforms</title>
+      <p>The following
+        parameters are available for all output types that are based on the XHTML transform type,
+        including:</p>
+      <ul>
+        <li>XHTML</li>
+        <li>HTMLHelp</li>
+        <li>JavaHelp</li>
+        <li>eclipsehelp</li>
+      </ul>
+      <table>
+        <title>XHTML and related parameters</title>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Argument</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry><codeph>/artlbl</codeph></entry>
+              <entry conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/args.artlbl.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/copycss</codeph></entry>
+              <entry conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/args.copycss.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/args.css</codeph></entry>
+              <entry conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/args.css.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/csspath</codeph></entry>
+              <entry conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/args.csspath.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/cssroot</codeph></entry>
+              <entry conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/args.cssroot.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/ftr</codeph></entry>
+              <entry conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/args.ftr.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/usetasklabels</codeph></entry>
+              <entry
+                conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/args.gen.task.lbl.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/hdf</codeph></entry>
+              <entry conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/args.hdf.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/hdr</codeph></entry>
+              <entry conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/args.hdr.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/indexshow</codeph></entry>
+              <entry conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/args.indexshow.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/xhtmlclass</codeph></entry>
+              <entry
+                conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/args.xhtml.classattr.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/xsl</codeph></entry>
+              <entry conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/args.xsl.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/generateouter</codeph></entry>
+              <entry
+                conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/generate.copy.outer.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/onlytopicinmap</codeph></entry>
+              <entry
+                conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/onlytopic.in.map.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/outercontrol</codeph></entry>
+              <entry conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/outer.control.desc"/>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+    <section>
+      <title>PDF-specific command line tool options</title>
+      <p>The following table describes command line tool options that are specific to the PDF
+        transformation type.</p>
+      <table>
+        <title>PDF parameters</title>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Argument</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry><codeph>/foincluderellinks</codeph></entry>
+              <entry
+                conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/args.fo.include.rellinks.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/fooutputrellinks</codeph></entry>
+              <entry
+                conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/args.fo.output.rel.links.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/xslpdf</codeph></entry>
+              <entry conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/args.xsl.pdf.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/fouserconfig</codeph></entry>
+              <entry
+                conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/args.fo.userconfig.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/retaintopicfo</codeph></entry>
+              <entry
+                conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/retain.topic.fo.desc"/>
+            </row>
+          </tbody>
+        </tgroup>
+        </table>
+    </section>
+    <section rev="1.5.2">
+      <title>ODT-specific command line tool options</title>
+      <p>The ODT transform, which
+        produces a document using the Open Document Format, is available in the 1.5.2 version of the
+        DITA-OT.</p>
+      <table>
+        <title>ODT related parameters</title>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Argument</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry><codeph>/odtimgembed</codeph></entry>
+              <entry
+                conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/args.odt.img.embed.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/odtincluderellinks</codeph></entry>
+              <entry
+                conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/args.odt.include.rellinks.desc"/>
+            </row>
+          </tbody>
+        </tgroup>
+        </table>
+    </section>
+    <section>
+      <title>EclipseContent-specific command line tool options</title>
+      <p>The "eclipsecontent" transform
+      type produces normalized DITA files, along with Eclipse TOC and project files.</p>
+      <table>
+        <title>EclipseContent options</title>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Argument</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry><codeph>/eclipsecontenttoc</codeph></entry>
+              <entry
+                conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/args.eclipsecontent.toc.desc"/>
+            </row>
+          </tbody>
+        </tgroup>
+        </table>
+    </section>
+    <section>
+      <title>XHTML-specific command line tool options</title>
+      <p>Parameters in this section are used by
+      the "xhtml" transtype, but not by other XHTML based transforms.</p>
+      <table>
+        <title>Options for the "xhtml" transform type</title>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry valign="bottom">Argument</entry>
+              <entry valign="bottom">Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry><codeph>/xhtmltoc</codeph></entry>
+              <entry conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/args.xhtml.toc.desc"/>
+            </row>
+          </tbody>
+        </tgroup>
+        </table>
+    </section>
+    <section>
+      <title>EclipseHelp-specific command line tool options</title>
+      <p>The following table describes command line tool options that are specific to the
+        EclipseHelp transformation type, which is an XHTML based output for use with the Eclipse
+        Help System.</p>
+      <table>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Argument</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry><codeph>/eclipsehelptoc</codeph></entry>
+              <entry
+                conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/args.eclipsehelp.toc.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/provider</codeph></entry>
+              <entry
+                conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/args.eclipse.provider.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/version</codeph></entry>
+              <entry
+                conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/args.eclipse.version.desc"/>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+    <section platform="windows">
+      <title>HTMLHelp-specific command line tool options</title><p>The following table describes command line tool options that are specific to the HTML Help
+        compiled help transformation target.</p><table>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Argument</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry><codeph>/htmlhelpincludefile</codeph></entry>
+              <entry
+                conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/args.htmlhelp.includefile.desc"/>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+    <section>
+      <title>JavaHelp-specific command line tool options</title><p>The following table describes command line tool options that are specific to the JavaHelp
+        transformation target.</p><table>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Argument</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry><codeph>/javahelpmap</codeph></entry>
+              <entry
+                conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/args.javahelp.map.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/javahelptoc</codeph></entry>
+              <entry
+                conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/args.javahelp.toc.desc"/>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+    <section>
+      <title>Other Toolkit command line tool options</title><p>The following table describes additional command line tool options specific to the DITA Open
+        Toolkit that you may override.</p><table>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Argument</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry><codeph>/ditalocale</codeph></entry>
+              <entry
+                conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/args.dita.locale.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/cleantemp</codeph></entry>
+              <entry conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/clean.temp.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/ditadir</codeph></entry>
+              <entry conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/dita.dir.desc"/>
+            </row>
+            <row importance="deprecated">
+              <entry><codeph>/ditaext</codeph></entry>
+              <entry conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/dita.extname.desc"/>
+            </row>
+            <row>
+              <entry><codeph>/tempdir</codeph></entry>
+              <entry conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/dita.temp.dir.desc"/>
+            </row>
+          </tbody>
+        </tgroup>
+        </table>
+    </section>
+  </refbody>
+</reference>

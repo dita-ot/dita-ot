@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="pdfdefault" xml:lang="en-us">
+<title>PDF output pipeline</title>
+<shortdesc>The PDF process (formerly known as PDF2) runs the preprocess
+routine, followed by a series of additional targets. These steps work
+together to create a merged set of content, convert that to XSL-FO,
+and then format the FO file to PDF.</shortdesc>
+<refbody>
+<section><p>The PDF process adds many new Ant targets. During a typical
+conversion from map to PDF, the following targets are most significant.</p><ul>
+<li><codeph>map2pdf2</codeph> creates a merged file by calling a common
+Java merge module. It then calls <codeph>publish.map.pdf</codeph> to
+do the remainder of the work.</li>
+<li>The <codeph>publish.map.pdf</codeph> target does some initialization,
+and then calls <codeph>transform.topic2pdf</codeph> to do the remainder
+of processing. That target runs all of the following steps.<ul>
+<li><codeph>transform.topic2fo</codeph> is used to convert the merged
+file to an XSL-FO file. This process is composed of several Ant targets.<ul>
+<li><codeph>transform.topic2fo.index</codeph> runs a Java process
+to set up index processing, based on the document language. This step
+generates the file <filepath>stage1.xml</filepath> in the temporary
+processing directory.</li>
+<li><codeph>transform.topic2fo.flagging</codeph> sets up preprocessing
+for flagging based on a DITAVAL file. This step generates the file <filepath>stage1a.xml</filepath> in
+the temporary processing directory.</li>
+<li><codeph>transform.topic2fo.main</codeph> does the bulk of the
+conversion from DITA to XSL-FO. It runs the XSLT based process that
+creates <filepath>stage2.fo</filepath> in the temporary processing
+directory.</li>
+<li><codeph>transform.topic2fo.i18n</codeph> does additional localization
+processing on the FO file; it runs a Java process that converts <filepath>stage2.fo</filepath> into <filepath>stage3.fo</filepath>,
+followed by an XSLT process that converts <filepath>stage3.fo</filepath> into <filepath>topic.fo</filepath>.</li>
+</ul></li>
+<li><codeph>transform.fo2pdf</codeph> converts the <filepath>topic.fo</filepath> file
+into PDF using the available FO processor (Antenna House, XEP, or
+Apache FOP).</li>
+<li><codeph>delete.fo2pdf.topic.fo</codeph> deletes the <filepath>topic.fo</filepath> file,
+unless otherwise specified by setting an Ant property or command line
+option.</li>
+</ul></li>
+</ul></section>
+</refbody>
+</reference>

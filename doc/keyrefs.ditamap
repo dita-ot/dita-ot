@@ -8,11 +8,11 @@ See the accompanying license.txt file for applicable licenses.
   <keydef keys="release.version">
     <topicmeta>
       <keywords>
-        <keyword>1.5.3</keyword>
+        <keyword>1.5.4</keyword>
       </keywords>
     </topicmeta>
   </keydef>
-  <!-- bundled or minimum tool versions -->
+  <!-- minimum versions -->
   <keydef keys="tool.java.version">
     <topicmeta>
       <keywords>
@@ -20,6 +20,7 @@ See the accompanying license.txt file for applicable licenses.
       </keywords>
     </topicmeta>
   </keydef>
+  <!-- bundled -->
   <keydef keys="tool.ant.version">
     <topicmeta>
       <keywords>
@@ -27,13 +28,15 @@ See the accompanying license.txt file for applicable licenses.
       </keywords>
     </topicmeta>
   </keydef>
+  <!-- bundled with Ant 1.7.1 -->
   <keydef keys="tool.xerces.version">
     <topicmeta>
       <keywords>
-        <keyword>2.7.0</keyword>
+        <keyword>2.9.0</keyword>
       </keywords>
     </topicmeta>
   </keydef>
+  <!-- minimum versions -->
   <keydef keys="tool.xalan.version">
     <topicmeta>
       <keywords>
@@ -41,6 +44,7 @@ See the accompanying license.txt file for applicable licenses.
       </keywords>
     </topicmeta>
   </keydef>
+  <!-- bundled versions -->
   <keydef keys="tool.fop.version">
     <topicmeta>
       <keywords>
@@ -48,10 +52,35 @@ See the accompanying license.txt file for applicable licenses.
       </keywords>
     </topicmeta>
   </keydef>
+  <!-- bundled versions -->
   <keydef keys="tool.saxon.version">
     <topicmeta>
       <keywords>
         <keyword>9.1</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <!-- bundled versions -->
+  <keydef keys="tool.resolver.version">
+    <topicmeta>
+      <keywords>
+        <keyword>1.1</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <!-- bundled versions -->
+  <keydef keys="tool.codec.version">
+    <topicmeta>
+      <keywords>
+        <keyword>1.4</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <!-- bundled versions -->
+  <keydef keys="tool.icu4j.version">
+    <topicmeta>
+      <keywords>
+        <keyword>3.4.4</keyword>
       </keywords>
     </topicmeta>
   </keydef>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA 1.2 Topic//EN" "topic.dtd">
+<topic id="a">
+  <title>Keyref</title>
+  <related-links>
+    <link keyref="empty" href="a.xml"/>
+  </related-links>
+  <topic id="nolink">
+    <title>Without href</title>
+    <prolog>
+      <author keyref="author" scope="external" href="dead" type="dead" format="dead"/>
+      <source keyref="source" scope="external" href="dead" type="dead" format="dead"/>
+      <publisher keyref="publisher" scope="external" href="dead" type="dead" format="dead"/>
+      <data keyref="data" scope="external" href="dead" type="dead" format="dead"/>
+      <data-about keyref="data-about" scope="external" href="dead" type="dead" format="dead">
+        <data/>
+      </data-about>
+    </prolog>
+    <body>
+      <image keyref="image" placement="inline" scope="external" href="dead"/>
+      <p>
+        <xref keyref="xref" scope="external" href="dead" type="dead" format="dead"/>
+        <cite keyref="cite"/>
+        <keyword keyref="keyword"/>
+        <ph keyref="ph"/>
+        <term keyref="term"/>
+        <indexterm keyref="indexterm"/>
+        <indexterm>
+          <index-base keyref="index-base"/>
+        </indexterm>
+        <indextermref keyref="indextermref"/>
+      </p>
+      <dl>
+        <dlentry>
+          <dt keyref="dt"/>
+          <dd/>
+        </dlentry>
+      </dl>
+      <lq keyref="lq" scope="external" href="dead" type="dead" format="dead"/>
+      <p>
+        <keyword keyref="keyword">original</keyword>
+        <keyword keyref="keyword"><text>original</text></keyword>
+        <keyword keyref="keyword"><!--original--></keyword>
+        <keyword keyref="keyword"><?original?></keyword>
+      </p>
+      <p>
+        <xref keyref="missing" scope="external" href="dead" type="dead" format="dead">missing</xref>
+        <keyword keyref="missing">missing</keyword>
+      </p>
+    </body>
+    <related-links>
+      <link keyref="link" scope="external" href="dead" type="dead" format="dead"/>
+    </related-links>
+  </topic>
+  <topic id="link">
+    <title>With href</title>
+    <prolog>
+      <author keyref="author_link" scope="external" href="dead" type="dead" format="dead"/>
+      <source keyref="source_link" scope="external" href="dead" type="dead" format="dead"/>
+      <publisher keyref="publisher_link" scope="external" href="dead" type="dead" format="dead"/>
+      <data keyref="data_link" scope="external" href="dead" type="dead" format="dead"/>
+      <data-about keyref="data-about_link" scope="external" href="dead" type="dead" format="dead">
+        <data/>
+      </data-about>
+    </prolog>
+    <body>
+      <image keyref="image_link" placement="inline" scope="external" href="dead"/>
+      <p>
+        <xref keyref="xref_link" scope="external" href="dead" type="dead" format="dead"/>
+        <cite keyref="cite_link"/>
+        <keyword keyref="keyword_link"/>
+        <ph keyref="ph_link"/>
+        <term keyref="term_link"/>
+        <indexterm keyref="indexterm_link"/>
+        <indexterm>
+          <index-base keyref="index-base_link"/>
+        </indexterm>
+        <indextermref keyref="indextermref_link"/>
+      </p>
+      <dl>
+        <dlentry>
+          <dt keyref="dt_link"/>
+          <dd/>
+        </dlentry>
+      </dl>
+      <lq keyref="lq_link" scope="external" href="dead" type="dead" format="dead"/>
+      <p>
+        <keyword keyref="keyword_link">original</keyword>
+        <keyword keyref="keyword_link"><text>original</text></keyword>
+        <keyword keyref="keyword_link"><!--original--></keyword>
+        <keyword keyref="keyword_link"><?original?></keyword>
+      </p>
+      <p>
+        <xref href="a.xml" keyref="missing" scope="external" type="dead" format="dead">missing</xref>
+        <keyword keyref="missing">missing</keyword>
+      </p>
+    </body>
+    <related-links>
+      <link keyref="link_link" scope="external" href="dead" type="dead" format="dead"/>
+    </related-links>
+  </topic>
+</topic>

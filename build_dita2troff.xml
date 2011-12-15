@@ -3,11 +3,7 @@
      Sourceforge.net. See the accompanying license.txt file for 
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
-<project name="dita2troff" default="dita2troff">
-  <property name="transtype" value="troff"/>
-    
-  <import file="build_init.xml" />
-  <import file="build_preprocess.xml" />
+<project name="dita2troff">
 
   <target name="dita2troff"
     depends="build-init, preprocess, dita.topic.troff, dita.inner.topic.troff, dita.outer.topic.troff">
@@ -24,6 +20,7 @@
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" if="chunkedtopicfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
+      <xmlcatalog refid="dita.catalog"/>
     </xslt>
 
     <!-- step 2 -->
@@ -33,6 +30,7 @@
       style="${dita.script.dir}${file.separator}dita2troff-step2-shell.xsl">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
+      <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
   
@@ -52,6 +50,7 @@
       <mapper type="regexp" 
         from="^(${tempdirToinputmapdir.relative.value})(.*?)(\.(xml|dita))$$" 
         to="\2${dita.ext}"/>
+      <xmlcatalog refid="dita.catalog"/>
     </xslt>
 	<echo level="info">the ditmapoutputdir is ${dita.map.output.dir}</echo>
     <!-- step 2 -->
@@ -65,6 +64,7 @@
       <mapper type="regexp" 
         from="^(${tempdirToinputmapdir.relative.value})(.*?)(\.(xml|dita))$$" 
         to="\2\.cli"/>
+      <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
   
@@ -94,6 +94,7 @@
       style="${dita.script.dir}${file.separator}dita2troff-step1-shell.xsl">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
+      <xmlcatalog refid="dita.catalog"/>
     </xslt>
 
     <!-- step 2 -->
@@ -103,6 +104,7 @@
       style="${dita.script.dir}${file.separator}dita2troff-step2-shell.xsl">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
+      <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
 </project>

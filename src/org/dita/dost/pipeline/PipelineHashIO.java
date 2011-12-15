@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -10,6 +10,7 @@
 package org.dita.dost.pipeline;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * PipelineHashIO implements AbstractPipelineInput. It put all of the input information
@@ -19,8 +20,8 @@ import java.util.HashMap;
  * 
  */
 public final class PipelineHashIO implements AbstractPipelineInput,
-        AbstractPipelineOutput {
-    private HashMap<String, String> hash;
+AbstractPipelineOutput {
+    private final Map<String, String> hash;
 
 
     /**
@@ -37,7 +38,7 @@ public final class PipelineHashIO implements AbstractPipelineInput,
      * @param name name
      * @param value value
      */
-    public void setAttribute(String name, String value) {
+    public void setAttribute(final String name, final String value) {
         hash.put(name, value);
     }
 
@@ -47,7 +48,7 @@ public final class PipelineHashIO implements AbstractPipelineInput,
      * @param name name
      * @return String value
      */
-    public String getAttribute(String name) {
+    public String getAttribute(final String name) {
         String value = null;
         value = hash.get(name);
         return value;

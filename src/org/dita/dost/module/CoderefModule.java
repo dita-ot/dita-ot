@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -28,53 +28,53 @@ import org.dita.dost.writer.CoderefResolver;
  *
  */
 final class CoderefModule implements AbstractPipelineModule {
-    
+
     private DITAOTLogger logger;
-    
-	/**
-	 * Constructor.
-	 */
-	public CoderefModule() {
-		super();
-	}
-	
-	public void setLogger(final DITAOTLogger logger) {
+
+    /**
+     * Constructor.
+     */
+    public CoderefModule() {
+        super();
+    }
+
+    public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
-	
-	/**
-	 * Entry point of Coderef Module.
-	 * @param input Input parameters and resources.
-	 * @return null
-	 * @throws DITAOTException exception
-	 */
-	public AbstractPipelineOutput execute(final AbstractPipelineInput input)
-			throws DITAOTException {
-	    if (logger == null) {
+
+    /**
+     * Entry point of Coderef Module.
+     * @param input Input parameters and resources.
+     * @return null
+     * @throws DITAOTException exception
+     */
+    public AbstractPipelineOutput execute(final AbstractPipelineInput input)
+            throws DITAOTException {
+        if (logger == null) {
             throw new IllegalStateException("Logger not set");
         }
-		final String baseDir = input.getAttribute(ANT_INVOKER_PARAM_BASEDIR);
-		String tempDir = input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR);
+        final String baseDir = input.getAttribute(ANT_INVOKER_PARAM_BASEDIR);
+        String tempDir = input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR);
         if (!new File(tempDir).isAbsolute()) {
-        	tempDir = new File(baseDir, tempDir).getAbsolutePath();
+            tempDir = new File(baseDir, tempDir).getAbsolutePath();
         }
-        
-    	Properties properties = null;
-    	try{
-    		properties = ListUtils.getDitaList();
-    	}catch(final IOException e){
-    		throw new DITAOTException(e);
-    	}
-    	
-    	final Set<String> codereflist=StringUtils.restoreSet(properties.getProperty(CODEREF_LIST));		
-		final CoderefResolver writer = new CoderefResolver();
-		writer.setLogger(logger);
-		for (final String fileName : codereflist) {
-			//FIXME:This writer deletes and renames files, have to 
-			writer.write(new File(tempDir,fileName).getAbsolutePath()); 
-		}
-		
-		return null;
-	}
+
+        Properties properties = null;
+        try{
+            properties = ListUtils.getDitaList();
+        }catch(final IOException e){
+            throw new DITAOTException(e);
+        }
+
+        final Set<String> codereflist=StringUtils.restoreSet(properties.getProperty(CODEREF_LIST));
+        final CoderefResolver writer = new CoderefResolver();
+        writer.setLogger(logger);
+        for (final String fileName : codereflist) {
+            //FIXME:This writer deletes and renames files, have to
+            writer.write(new File(tempDir,fileName).getAbsolutePath());
+        }
+
+        return null;
+    }
 
 }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="preprocess-metadata" xml:lang="en-us">
+<title>Move metadata (move-meta-entries)</title>
+<shortdesc>The <codeph>move-meta-entries</codeph> step pushes metadata
+back and forth between maps and topics. For example, index entries
+and copyrights in the map are pushed into affected topics, so that
+topics may be processed later in isolation while retaining all relevant
+metadata.</shortdesc>
+<refbody>
+<section>This step is implemented in Java.</section>
+</refbody>
+</reference>

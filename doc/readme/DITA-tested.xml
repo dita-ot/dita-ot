@@ -4,9 +4,6 @@
  "../dtd/topic.dtd">
 <topic id="testedplatformsandtools" xml:lang="en-us">
 <title>Tested platforms and tools</title>
-<titlealts>
-<navtitle>Tested Platforms and tools</navtitle>
-</titlealts>
 <shortdesc>See which tools and platforms have been used in testing
 the DITA      processing system.</shortdesc>
 <body>
@@ -22,6 +19,7 @@ the DITA      processing system.</shortdesc>
 <stentry>
           <ul>
             <li>Windows XP</li>
+            <li>Windows 7</li>
             <li>OS X 10.6</li>
             <li>SLES 10</li>
           </ul>
@@ -39,8 +37,8 @@ the DITA      processing system.</shortdesc>
             <li>Saxon-B 9.1</li>
             <li>Saxon-HE/EE 9.3</li>
           </ul>
-          <note>XSLT 2.0 standard is not officially supported yet, due to the reliance by some users
-            on Xalan.</note>
+          <note>XSLT 2.0 standard is not officially required in DITA-OT code, due to the reliance by
+            some users on Xalan.</note>
         </stentry><?Pub Caret 24?>
 </strow>
 <strow>

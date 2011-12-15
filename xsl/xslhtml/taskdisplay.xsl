@@ -13,12 +13,6 @@
      xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
      exclude-result-prefixes="related-links dita2html ditamsg">
 
-<!-- XHTML output with XML syntax -->
-<xsl:output method="xml"
-            encoding="utf-8"
-            indent="no"
-/>
-
 <!-- Determines whether to generate titles for task sections. Values are YES and NO. -->
 <xsl:param name="GENERATE-TASK-LABELS" select="'NO'"/>
 

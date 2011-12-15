@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="preprocess-mappull" xml:lang="en-us">
+<title>Pull content into maps (mappull)</title>
+<shortdesc>The <codeph>mappull</codeph> step pulls content from referenced
+topics into maps, and cascades data within maps.</shortdesc>
+<refbody>
+<section><p>This step uses XSLT to make the following changes to the
+map:<ul>
+<li>Pull titles from referenced DITA topics. This step replaces the
+navigation title specified on the topicref. If the locktitle attribute
+is set to "yes", the value in the map is not changed.</li>
+<li>The &lt;linktext> element is set based on the title of the referenced
+topic, unless it is already specified locally.</li>
+<li>The &lt;shortdesc> element is set based on the short description
+of the referenced topic, unless it is already specified locally.</li>
+<li>When a local DITA topic is referenced, the type attribute is set
+on the topicref based on the type of topic referenced. For example,
+a reference to a task topic will end up with type="task".</li>
+<li>Inheritable attributes, such as toc or print, are made explicit
+on child topicref elements. This allows any future step to work with
+the attributes directly, without reevaluating the cascade behavior.</li>
+</ul></p></section>
+</refbody>
+</reference>

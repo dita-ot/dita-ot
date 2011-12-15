@@ -38,10 +38,8 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class,' ui-d/uicontrol ')]">
         <!-- insert an arrow before all but the first uicontrol in a menucascade -->
         <xsl:if test="ancestor::*[contains(@class,' ui-d/menucascade ')]">
-            <xsl:variable name="uicontrolcount">
-                <xsl:number count="*[contains(@class,' ui-d/uicontrol ')]"/>
-            </xsl:variable>
-            <xsl:if test="$uicontrolcount &gt; 1">
+            <xsl:variable name="uicontrolcount" select="count(preceding-sibling::*[contains(@class,' ui-d/uicontrol ')])"/>
+            <xsl:if test="$uicontrolcount &gt; 0">
                 <xsl:text> &gt; </xsl:text>
             </xsl:if>
         </xsl:if>
@@ -61,7 +59,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class,' ui-d/menucascade ')]">
         <fo:inline xsl:use-attribute-sets="menucascade">
             <xsl:call-template name="commonattributes"/>
-            <xsl:apply-templates/>
+            <xsl:apply-templates select="* | processing-instruction() | comment()"/>
         </fo:inline>
     </xsl:template>
 

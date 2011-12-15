@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2011 All Rights Reserved. -->
+<vars xmlns="http://www.idiominc.com/opentopic/vars">
+  <variable id="Product Name"/>
+  <variable id="Body odd footer"/>
+  <variable id="Body even footer"/>
+  <variable id="Body first footer"/>
+  <variable id="Body first header"/>
+  <variable id="Body odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
+  <variable id="Body even header"><param ref-name="pagenum"/> | <param ref-name="heading"/> | <param ref-name="prodname"/></variable>
+  <variable id="Preface odd footer"/>
+  <variable id="Preface even footer"/>
+  <variable id="Preface first footer"/>
+  <variable id="Preface odd header"><param ref-name="prodname"/> | <variable id="Preface title"/> | <param ref-name="pagenum"/></variable>
+  <variable id="Preface even header"><param ref-name="pagenum"/> | <variable id="Preface title"/> | <param ref-name="prodname"/></variable>
+  <variable id="Preface first header"/>
+  <variable id="Toc odd footer"/>
+  <variable id="Toc even footer"/>
+  <variable id="Toc odd header"><param ref-name="prodname"/> | <variable id="Table of Contents"/> | <param ref-name="pagenum"/></variable>
+  <variable id="Toc even header"><param ref-name="pagenum"/> | <variable id="Table of Contents"/> | <param ref-name="prodname"/></variable>
+  <variable id="Index odd footer"/>
+  <variable id="Index even footer"/>
+  <variable id="Index odd header"><param ref-name="prodname"/> | <variable id="Index"/> | <param ref-name="pagenum"/></variable>
+  <variable id="Index even header"><param ref-name="pagenum"/> | <variable id="Index"/> | <param ref-name="prodname"/></variable>
+  <variable id="Ordered List Number"><param ref-name="number"/>. </variable>
+  <variable id="Unordered List bullet">•</variable>
+  <variable id="Table of Contents">תוכן העניינים</variable>
+  <variable id="Index">אינדקס</variable>
+  <variable id="Index Continued String">המשך</variable>
+  <variable id="Index See String">, ראה </variable>
+  <variable id="See Also String">ראה גם </variable>
+  <variable id="Table of Contents Chapter">פרק <param ref-name="number"/>. </variable>
+  <variable id="Table of Contents Appendix">נספח <param ref-name="number"/>. </variable>
+  <variable id="Table of Contents Part">חלק <param ref-name="number"/>. </variable>
+  <variable id="Table of Contents Preface">מבוא: </variable>
+  <variable id="Table of Contents Notices"/>
+  <variable id="Preface title">מבוא</variable>
+  <variable id="Notices title"><!--TODO:Notice--></variable>
+  <variable id="Mini Toc">נושאים: </variable>
+  <variable id="Note">שים לב</variable>
+  <variable id="Notice"><!--TODO:Notice--></variable>
+  <variable id="Tip">עצה</variable>
+  <variable id="Important">חשוב</variable>
+  <variable id="Fastpath">נתיב מהיר</variable>
+  <variable id="Remember">נא לזכור</variable>
+  <variable id="Attention">אל</variable>
+  <variable id="Caution">אזהרה</variable>
+  <variable id="Danger">סכנה</variable>
+  <variable id="Warning">אזהרה</variable>
+  <variable id="Restriction">מגבלה</variable>
+  <variable id="Figure">איור <param ref-name="number"/>. <param ref-name="title"/></variable>
+  <variable id="Table">טבלה <param ref-name="number"/>. <param ref-name="title"/></variable>
+  <variable id="Related Links"><!--TODO:Related Links--></variable>
+  <variable id="Cross-Reference"><!--TODO:Cross-Reference to:--></variable>
+  <variable id="Content-Reference"><!--TODO:Content-Reference to:--></variable>
+  <variable id="Untitled section"><!--TODO:Untitled section.--></variable>
+  <variable id="List item"><!--TODO:List item.--></variable>
+  <variable id="Foot note"><!--TODO:Footnote.--></variable>
+  <variable id="Navigation title"><!--TODO:Navigation title--></variable>
+  <variable id="Chapter with number">פרק <param ref-name="number"/></variable>
+  <variable id="Appendix with number">נספח <param ref-name="number"/></variable>
+  <variable id="Part with number">חלק <param ref-name="number"/></variable>
+  <variable id="Required-Cleanup"><!--TODO:[Required-Cleanup]--></variable>
+  <variable id="On the page">בעמוד <param ref-name="pagenum"/></variable>
+  <variable id="Page">עמוד <param ref-name="pagenum"/></variable>
+  <variable id="This link"><!--TODO:this link--></variable>
+  <variable id="note Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand_rtl.gif</variable>
+  <variable id="notice Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand_rtl.gif</variable>
+  <variable id="attention Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
+  <variable id="caution Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
+  <variable id="danger Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
+  <variable id="warning Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
+  <variable id="fastpath Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand_rtl.gif</variable>
+  <variable id="important Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand_rtl.gif</variable>
+  <variable id="remember Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand_rtl.gif</variable>
+  <variable id="restriction Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand_rtl.gif</variable>
+  <variable id="tip Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand_rtl.gif</variable>
+  <variable id="other Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand_rtl.gif</variable>
+  <variable id="Parent topic">נושא אב</variable>
+  <variable id="Next topic">הנושא הבא</variable>
+  <variable id="Previous topic">הנושא הקודם</variable>
+  <variable id="Child topics"><!--TODO:Child Topics--></variable>
+  <variable id="Related concepts">מושגים קשורים</variable>
+  <variable id="Related tasks">משימות קשורות</variable>
+  <variable id="Related references">תיעוד קשור</variable>
+  <variable id="Related information">מידע קשור</variable>
+  <variable id="Index multiple entries separator">, </variable>
+  <variable id="Optional Step"><!--TODO:Optional:--></variable>
+  <variable id="Task Prereq">לפני שתתחילו</variable>
+  <variable id="Task Context">אודות משימה זו</variable>
+  <variable id="Task Steps">נוהל</variable>
+  <variable id="Task Result">תוצאות</variable>
+  <variable id="Task Example">דוגמה</variable>
+  <variable id="Task Postreq">איך להמשיך</variable>
+  <variable id="Glossary odd footer"/>
+  <variable id="Glossary even footer"/>
+  <variable id="Glossary odd header"><param ref-name="prodname"/> | <variable id="Glossary"/> | <param ref-name="pagenum"/></variable>
+  <variable id="Glossary even header"><param ref-name="pagenum"/> | <variable id="Glossary"/> | <param ref-name="prodname"/></variable>
+  <variable id="Glossary">מילון מונחים</variable>
+  <variable id="List of Tables">רשימת טבלאות</variable>
+  <variable id="List of Figures">רשימת איורים</variable>
+</vars>

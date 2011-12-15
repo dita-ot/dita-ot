@@ -4,9 +4,9 @@
  "../dtd/concept.dtd">
 <?Pub Sty _display FontColor="red"?>
 <concept id="DITA-readme" xml:lang="en-us">
-<title>DITA Open Toolkit </title>
+<title>DITA Open Toolkit User Guide</title>
 <titlealts>
-<navtitle>DITA Toolkit Introduction</navtitle>
+<navtitle>User Guide</navtitle>
 </titlealts>
 <shortdesc>The DITA Open Toolkit is an implementation of the OASIS
 DITA Technical Committee&apos;s specification for DITA DTDs and Schemas.

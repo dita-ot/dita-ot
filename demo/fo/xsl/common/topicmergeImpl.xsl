@@ -67,7 +67,16 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="*[contains(@class,' map/topicref ')]" mode="build-tree">
 		<xsl:choose>
-			<xsl:when test="@print='no'" />
+		    <xsl:when test="not(normalize-space(@first_topic_id) = '')">
+		        <xsl:apply-templates select="key('topic',@first_topic_id)">				    
+		            <xsl:with-param name="parentId" select="generate-id()"/>
+		        </xsl:apply-templates>
+		        <xsl:if test="@first_topic_id != @href">
+    		        <xsl:apply-templates select="key('topic',@href)">				    
+    		            <xsl:with-param name="parentId" select="generate-id()"/>
+    		        </xsl:apply-templates>
+		        </xsl:if>
+		    </xsl:when>
 			<xsl:when test="not(normalize-space(@href) = '')">
 				<xsl:apply-templates select="key('topic',@href)">				    
 					<xsl:with-param name="parentId" select="generate-id()"/>
@@ -75,104 +84,73 @@ See the accompanying license.txt file for applicable licenses.
 			</xsl:when>
 			<xsl:when test="(normalize-space(@href) = '') and 
                             (normalize-space(@navtitle) != '' or *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')])">
-                <xsl:choose>
-                    <xsl:when test="contains(@class,' bookmap/backmatter ')
-                                    or contains(@class,' bookmap/booklists ')
-                                    or contains(@class,' bookmap/frontmatter ')">
-                        <xsl:apply-templates mode="build-tree"/>
-                    </xsl:when>
-                    <xsl:when test="contains(@class,' bookmap/toc ')">
-                        <ot-placeholder:toc>
-                            <xsl:apply-templates mode="build-tree"/>
-                        </ot-placeholder:toc>
-                    </xsl:when>
-                    <xsl:when test="contains(@class,' bookmap/indexlist ')">
-                        <ot-placeholder:indexlist>
-                            <xsl:apply-templates mode="build-tree"/>
-                        </ot-placeholder:indexlist>
-                    </xsl:when>
-                    <xsl:when test="contains(@class,' bookmap/glossarylist ')">
-                        <ot-placeholder:glossarylist>
-                            <xsl:apply-templates mode="build-tree"/>
-                        </ot-placeholder:glossarylist>
-                    </xsl:when>
-                    <xsl:when test="contains(@class,' bookmap/tablelist ')">
-                        <ot-placeholder:tablelist>
-                            <xsl:apply-templates mode="build-tree"/>
-                        </ot-placeholder:tablelist>
-                    </xsl:when>
-                    <xsl:when test="contains(@class,' bookmap/figurelist ')">
-                        <ot-placeholder:figurelist>
-                            <xsl:apply-templates mode="build-tree"/>
-                        </ot-placeholder:figurelist>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:variable name="isNotTopicRef">
-                            <xsl:call-template name="isNotTopicRef">
-                                <xsl:with-param name="class" select="@class"/>
-                            </xsl:call-template>
-                        </xsl:variable>
-                        <xsl:if test="contains($isNotTopicRef,'false')">
-                            <topic id="{generate-id()}" class="- topic/topic ">
-                                <title class=" topic/title ">
-                                    <xsl:choose>
-                                        <xsl:when test="*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')]">
-                                            <xsl:copy-of select="*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')]/text()|
-                                                         *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')]/*"/>
-                                        </xsl:when>
-                                        <xsl:otherwise>
-                                            <xsl:value-of select="@navtitle"/>
-                                        </xsl:otherwise>
-                                    </xsl:choose>
-                                </title>
-                                <body class=" topic/body "/>
-                                <xsl:apply-templates mode="build-tree"/>
-                            </topic>
-                        </xsl:if>
-                    </xsl:otherwise>
-                </xsl:choose>
+          <xsl:variable name="isNotTopicRef">
+              <xsl:call-template name="isNotTopicRef">
+                  <xsl:with-param name="class" select="@class"/>
+              </xsl:call-template>
+          </xsl:variable>
+          <xsl:if test="contains($isNotTopicRef,'false')">
+              <topic id="{generate-id()}" class="- topic/topic ">
+                  <title class=" topic/title ">
+                      <xsl:choose>
+                          <xsl:when test="*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')]">
+                              <xsl:copy-of select="*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')]/node()"/>
+                          </xsl:when>
+                          <xsl:otherwise>
+                              <xsl:value-of select="@navtitle"/>
+                          </xsl:otherwise>
+                      </xsl:choose>
+                  </title>
+                  <!--body class=" topic/body "/-->
+                  <xsl:apply-templates mode="build-tree"/>
+              </topic>
+          </xsl:if>
 			</xsl:when>
 			<xsl:otherwise>
-                <xsl:choose>
-                    <xsl:when test="contains(@class,' bookmap/backmatter ')
-                                    or contains(@class,' bookmap/booklists ')
-                                    or contains(@class,' bookmap/frontmatter ')">
-                        <xsl:apply-templates mode="build-tree"/>
-                    </xsl:when>
-                    <xsl:when test="contains(@class,' bookmap/toc ')">
-                        <ot-placeholder:toc>
-                            <xsl:apply-templates mode="build-tree"/>
-                        </ot-placeholder:toc>
-                    </xsl:when>
-                    <xsl:when test="contains(@class,' bookmap/indexlist ')">
-                        <ot-placeholder:indexlist>
-                            <xsl:apply-templates mode="build-tree"/>
-                        </ot-placeholder:indexlist>
-                    </xsl:when>
-                    <xsl:when test="contains(@class,' bookmap/glossarylist ')">
-                        <ot-placeholder:glossarylist>
-                            <xsl:apply-templates mode="build-tree"/>
-                        </ot-placeholder:glossarylist>
-                    </xsl:when>
-                    <xsl:when test="contains(@class,' bookmap/tablelist ')">
-                        <ot-placeholder:tablelist>
-                            <xsl:apply-templates mode="build-tree"/>
-                        </ot-placeholder:tablelist>
-                    </xsl:when>
-                    <xsl:when test="contains(@class,' bookmap/figurelist ')">
-                        <ot-placeholder:figurelist>
-                            <xsl:apply-templates mode="build-tree"/>
-                        </ot-placeholder:figurelist>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:apply-templates mode="build-tree"/>
-                    </xsl:otherwise>
-                </xsl:choose>
+          <xsl:apply-templates mode="build-tree"/>
 			</xsl:otherwise>
 		</xsl:choose>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class, ' map/topicref ') and @print='no']" priority="5"/>
+    <xsl:template match="*[@print = 'no']" priority="5" mode="build-tree"/>
+
+    <xsl:template match="*[contains(@class,' bookmap/backmatter ')] |
+                         *[contains(@class,' bookmap/booklists ')] |
+                         *[contains(@class,' bookmap/frontmatter ')]" priority="2" mode="build-tree">
+        <xsl:apply-templates mode="build-tree"/>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class,' bookmap/toc ')][not(@href)]" priority="2" mode="build-tree">
+        <ot-placeholder:toc id="{generate-id()}">
+            <xsl:apply-templates mode="build-tree"/>
+        </ot-placeholder:toc>
+    </xsl:template>
+  
+    <xsl:template match="*[contains(@class,' bookmap/indexlist ')]" priority="2" mode="build-tree">
+        <ot-placeholder:indexlist id="{generate-id()}">
+            <xsl:apply-templates mode="build-tree"/>
+        </ot-placeholder:indexlist>
+    </xsl:template>
+  
+    <xsl:template match="*[contains(@class,' bookmap/glossarylist ')]" priority="2" mode="build-tree">
+        <ot-placeholder:glossarylist id="{generate-id()}">
+            <xsl:apply-templates mode="build-tree"/>
+        </ot-placeholder:glossarylist>
+    </xsl:template>
+  
+    <xsl:template match="*[contains(@class,' bookmap/tablelist ')]" priority="2" mode="build-tree">
+        <ot-placeholder:tablelist id="{generate-id()}">
+            <xsl:apply-templates mode="build-tree"/>
+        </ot-placeholder:tablelist>
+    </xsl:template>
+  
+    <xsl:template match="*[contains(@class,' bookmap/figurelist ')]" priority="2" mode="build-tree">
+        <ot-placeholder:figurelist id="{generate-id()}">
+            <xsl:apply-templates mode="build-tree"/>
+        </ot-placeholder:figurelist>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class, ' map/topicref ') and @print='no']" priority="6"/>
     <xsl:template match="*[contains(@class,' topic/topic ')] | dita-merge/dita">
 
         <xsl:param name="parentId"/>

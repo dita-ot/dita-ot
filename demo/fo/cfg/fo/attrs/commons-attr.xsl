@@ -36,6 +36,56 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:rx="http://www.renderx.com/XSL/Extensions"
     version="2.0">
 
+  <!-- common attribute sets -->
+
+  <xsl:attribute-set name="common.border__top">
+    <xsl:attribute name="border-top-style">solid</xsl:attribute>
+    <xsl:attribute name="border-top-width">1pt</xsl:attribute>
+    <xsl:attribute name="border-top-color">black</xsl:attribute>
+  </xsl:attribute-set>
+  
+  <xsl:attribute-set name="common.border__bottom">
+    <xsl:attribute name="border-bottom-style">solid</xsl:attribute>
+    <xsl:attribute name="border-bottom-width">1pt</xsl:attribute>
+    <xsl:attribute name="border-bottom-color">black</xsl:attribute>
+  </xsl:attribute-set>
+  
+  <xsl:attribute-set name="common.border__right">
+    <xsl:attribute name="border-right-style">solid</xsl:attribute>
+    <xsl:attribute name="border-right-width">1pt</xsl:attribute>
+    <xsl:attribute name="border-right-color">black</xsl:attribute>
+  </xsl:attribute-set>
+  
+  <xsl:attribute-set name="common.border__left">
+    <xsl:attribute name="border-left-style">solid</xsl:attribute>
+    <xsl:attribute name="border-left-width">1pt</xsl:attribute>
+    <xsl:attribute name="border-left-color">black</xsl:attribute>
+  </xsl:attribute-set>
+  
+  <xsl:attribute-set name="common.border" use-attribute-sets="common.border__top common.border__right common.border__bottom common.border__left"/>
+  
+  <xsl:attribute-set name="base-font">
+    <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
+  </xsl:attribute-set>
+  
+  <!-- titles -->
+  <xsl:attribute-set name="common.title">
+    <xsl:attribute name="font-family">sans-serif</xsl:attribute>
+  </xsl:attribute-set>
+  
+  <!-- paragraph-like blocks -->
+  <xsl:attribute-set name="common.block">
+    <xsl:attribute name="space-before">0.6em</xsl:attribute>
+    <xsl:attribute name="space-after">0.6em</xsl:attribute>
+  </xsl:attribute-set>
+  
+  <xsl:attribute-set name="common.link">
+    <xsl:attribute name="color">blue</xsl:attribute>
+    <xsl:attribute name="font-style">italic</xsl:attribute>
+  </xsl:attribute-set>
+  
+  <!-- common element specific attribute sets -->
+
     <xsl:attribute-set name="tm">
         <xsl:attribute name="border-left-width">0pt</xsl:attribute>
         <xsl:attribute name="border-right-width">0pt</xsl:attribute>
@@ -57,14 +107,13 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="source">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="topic.title">
-        <xsl:attribute name="font-family">Sans</xsl:attribute>
+    <xsl:attribute-set name="topic.title" use-attribute-sets="common.title">
 		<xsl:attribute name="border-bottom">3pt solid black</xsl:attribute>
-        <xsl:attribute name="margin-top">0pc</xsl:attribute>
-        <xsl:attribute name="margin-bottom">1.4pc</xsl:attribute>
+        <xsl:attribute name="space-before">0pt</xsl:attribute>
+        <xsl:attribute name="space-after">16.8pt</xsl:attribute>
         <xsl:attribute name="font-size">18pt</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
-        <xsl:attribute name="padding-top">1.4pc</xsl:attribute>
+        <xsl:attribute name="padding-top">16.8pt</xsl:attribute>
         <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
     </xsl:attribute-set>
 
@@ -75,15 +124,13 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="topic.topic.title">
-        <xsl:attribute name="font-family">Sans</xsl:attribute>
-		<xsl:attribute name="border-bottom">1pt solid black</xsl:attribute>
+    <xsl:attribute-set name="topic.topic.title" use-attribute-sets="common.title common.border__bottom">
         <xsl:attribute name="space-before">15pt</xsl:attribute>
-        <xsl:attribute name="margin-top">1pc</xsl:attribute>
-        <xsl:attribute name="margin-bottom">5pt</xsl:attribute>
+        <xsl:attribute name="space-before">12pt</xsl:attribute>
+        <xsl:attribute name="space-after">5pt</xsl:attribute>
         <xsl:attribute name="font-size">14pt</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
-        <xsl:attribute name="padding-top">1pc</xsl:attribute>
+        <xsl:attribute name="padding-top">12pt</xsl:attribute>
         <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
     </xsl:attribute-set>
 
@@ -92,10 +139,9 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="border-right-width">0pt</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="topic.topic.topic.title">
-        <xsl:attribute name="font-family">Sans</xsl:attribute>
-        <xsl:attribute name="margin-top">1pc</xsl:attribute>
-        <xsl:attribute name="margin-bottom">2pt</xsl:attribute>
+    <xsl:attribute-set name="topic.topic.topic.title" use-attribute-sets="common.title">
+        <xsl:attribute name="space-before">12pt</xsl:attribute>
+        <xsl:attribute name="space-after">2pt</xsl:attribute>
         <xsl:attribute name="font-size">12pt</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
         <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
@@ -104,11 +150,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="topic.topic.topic.title__content">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="topic.topic.topic.topic.title">
-        <xsl:attribute name="font-family">Sans</xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
-        <xsl:attribute name="margin-top">10pt</xsl:attribute>
-        <xsl:attribute name="margin-left"><xsl:value-of select="$side-col-width"/></xsl:attribute>
+    <xsl:attribute-set name="topic.topic.topic.topic.title" use-attribute-sets="base-font common.title">
+        <xsl:attribute name="space-before">10pt</xsl:attribute>
+        <xsl:attribute name="start-indent"><xsl:value-of select="$side-col-width"/></xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
         <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
     </xsl:attribute-set>
@@ -116,10 +160,8 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="topic.topic.topic.topic.title__content">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="topic.topic.topic.topic.topic.title">
-        <xsl:attribute name="font-family">Sans</xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
-        <xsl:attribute name="margin-left"><xsl:value-of select="$side-col-width"/></xsl:attribute>
+    <xsl:attribute-set name="topic.topic.topic.topic.topic.title" use-attribute-sets="base-font common.title">
+        <xsl:attribute name="start-indent"><xsl:value-of select="$side-col-width"/></xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
         <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
     </xsl:attribute-set>
@@ -127,10 +169,8 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="topic.topic.topic.topic.topic.title__content">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="topic.topic.topic.topic.topic.topic.title">
-        <xsl:attribute name="font-family">Sans</xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
-        <xsl:attribute name="margin-left"><xsl:value-of select="$side-col-width"/></xsl:attribute>
+    <xsl:attribute-set name="topic.topic.topic.topic.topic.topic.title" use-attribute-sets="base-font common.title">
+        <xsl:attribute name="start-indent"><xsl:value-of select="$side-col-width"/></xsl:attribute>
         <xsl:attribute name="font-style">italic</xsl:attribute>
         <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
     </xsl:attribute-set>
@@ -138,15 +178,13 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="topic.topic.topic.topic.topic.topic.title__content">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="section.title">
-        <xsl:attribute name="font-family">Sans</xsl:attribute>
+    <xsl:attribute-set name="section.title" use-attribute-sets="common.title">
         <xsl:attribute name="font-weight">bold</xsl:attribute>
         <xsl:attribute name="space-before">15pt</xsl:attribute>
         <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="example.title">
-        <xsl:attribute name="font-family">Sans</xsl:attribute>
+    <xsl:attribute-set name="example.title" use-attribute-sets="common.title">
         <xsl:attribute name="font-weight">bold</xsl:attribute>
         <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
         <xsl:attribute name="space-after">5pt</xsl:attribute>
@@ -155,28 +193,21 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="fig">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="fig.title">
-        <xsl:attribute name="font-family">Sans</xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
+    <xsl:attribute-set name="fig.title" use-attribute-sets="base-font common.title">
         <xsl:attribute name="font-weight">bold</xsl:attribute>
         <xsl:attribute name="space-before">5pt</xsl:attribute>
         <xsl:attribute name="space-after">10pt</xsl:attribute>
         <xsl:attribute name="keep-with-previous.within-page">always</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="topic">
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
+    <xsl:attribute-set name="topic" use-attribute-sets="base-font">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="titlealts">
+    <xsl:attribute-set name="titlealts" use-attribute-sets="common.border">
         <xsl:attribute name="background-color">#f0f0d0</xsl:attribute>
-        <xsl:attribute name="border-style">solid</xsl:attribute>
-        <xsl:attribute name="border-color">black</xsl:attribute>
-        <xsl:attribute name="border-width">thin</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="navtitle">
-        <xsl:attribute name="font-family">Sans</xsl:attribute>
+    <xsl:attribute-set name="navtitle" use-attribute-sets="common.title">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="navtitle__label">
@@ -190,19 +221,19 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="font-weight">bold</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="body__toplevel">
-        <xsl:attribute name="margin-left"><xsl:value-of select="$side-col-width"/></xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
+    <xsl:attribute-set name="body__toplevel" use-attribute-sets="base-font">
+        <xsl:attribute name="start-indent"><xsl:value-of select="$side-col-width"/></xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="body__secondLevel">
-        <xsl:attribute name="margin-left"><xsl:value-of select="$side-col-width"/></xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
+    <xsl:attribute-set name="body__secondLevel" use-attribute-sets="base-font">
+        <xsl:attribute name="start-indent"><xsl:value-of select="$side-col-width"/></xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="body">
-        <xsl:attribute name="margin-left"><xsl:value-of select="$side-col-width"/></xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
+    <xsl:attribute-set name="body" use-attribute-sets="base-font">
+        <xsl:attribute name="start-indent"><xsl:value-of select="$side-col-width"/></xsl:attribute>
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="abstract" use-attribute-sets="body">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="shortdesc">
@@ -211,20 +242,21 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="topic__shortdesc" use-attribute-sets="body">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="section">
-        <xsl:attribute name="line-height">12pt</xsl:attribute>
+    <xsl:attribute-set name="section" use-attribute-sets="base-font">
+        <xsl:attribute name="line-height"><xsl:value-of select="$default-line-height"/></xsl:attribute>
         <xsl:attribute name="space-before">0.6em</xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
+    </xsl:attribute-set>
+    <xsl:attribute-set name="section__content">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="example">
-        <xsl:attribute name="line-height">12pt</xsl:attribute>
+    <xsl:attribute-set name="example" use-attribute-sets="base-font common.border">
+        <xsl:attribute name="line-height"><xsl:value-of select="$default-line-height"/></xsl:attribute>
         <xsl:attribute name="space-before">0.6em</xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
-        <xsl:attribute name="margin-left">0.5in</xsl:attribute>
-        <xsl:attribute name="margin-right">0.5in</xsl:attribute>
-        <xsl:attribute name="border">thin solid black</xsl:attribute>
+        <xsl:attribute name="start-indent">36pt + from-parent(start-indent)</xsl:attribute>
+        <xsl:attribute name="end-indent">36pt</xsl:attribute>
         <xsl:attribute name="padding">5pt</xsl:attribute>
+    </xsl:attribute-set>
+    <xsl:attribute-set name="example__content">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="desc">
@@ -232,59 +264,42 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="border-right-width">0pt</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="prolog">
+    <xsl:attribute-set name="prolog" use-attribute-sets="base-font">
         <xsl:attribute name="start-indent">72pt</xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="p">
-<!--        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>-->
+    <xsl:attribute-set name="p" use-attribute-sets="common.block">
         <xsl:attribute name="text-indent">0em</xsl:attribute>
-        <xsl:attribute name="space-before">0.6em</xsl:attribute>
-        <xsl:attribute name="space-after">0.6em</xsl:attribute>
-        <xsl:attribute name="space-after">3pt</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="lq">
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
+    <xsl:attribute-set name="lq" use-attribute-sets="base-font common.border">
         <xsl:attribute name="space-before">10pt</xsl:attribute>
         <xsl:attribute name="padding-left">6pt</xsl:attribute>
         <xsl:attribute name="start-indent">92pt</xsl:attribute>
         <xsl:attribute name="end-indent">92pt</xsl:attribute>
-        <xsl:attribute name="text-align">left</xsl:attribute>
-        <xsl:attribute name="border-style">solid</xsl:attribute>
-        <xsl:attribute name="border-color">black</xsl:attribute>
-        <xsl:attribute name="border-width">thin</xsl:attribute>
+        <xsl:attribute name="text-align">start</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="lq_simple">
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
+    <xsl:attribute-set name="lq_simple" use-attribute-sets="base-font common.border">
         <xsl:attribute name="space-before">10pt</xsl:attribute>
         <xsl:attribute name="space-after">10pt</xsl:attribute>
         <xsl:attribute name="padding-left">6pt</xsl:attribute>
         <xsl:attribute name="start-indent">92pt</xsl:attribute>
         <xsl:attribute name="end-indent">92pt</xsl:attribute>
-        <xsl:attribute name="text-align">left</xsl:attribute>
-        <xsl:attribute name="border-style">solid</xsl:attribute>
-        <xsl:attribute name="border-color">black</xsl:attribute>
-        <xsl:attribute name="border-width">thin</xsl:attribute>
+        <xsl:attribute name="text-align">start</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="lq_link">
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
+    <xsl:attribute-set name="lq_link" use-attribute-sets="base-font common.link">
         <xsl:attribute name="space-after">10pt</xsl:attribute>
         <xsl:attribute name="end-indent">92pt</xsl:attribute>
-        <xsl:attribute name="text-align">right</xsl:attribute>
+        <xsl:attribute name="text-align">end</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
-        <xsl:attribute name="color">blue</xsl:attribute>
-        <xsl:attribute name="font-style">italic</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="lq_title">
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
+    <xsl:attribute-set name="lq_title" use-attribute-sets="base-font">
         <xsl:attribute name="space-after">10pt</xsl:attribute>
         <xsl:attribute name="end-indent">92pt</xsl:attribute>
-        <xsl:attribute name="text-align">right</xsl:attribute>
+        <xsl:attribute name="text-align">end</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
         <xsl:attribute name="font-style">italic</xsl:attribute>
     </xsl:attribute-set>
@@ -299,14 +314,10 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="border-right-width">0pt</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="note">
-        <xsl:attribute name="space-before">0.6em</xsl:attribute>
-        <xsl:attribute name="space-after">0.6em</xsl:attribute>
+    <xsl:attribute-set name="note" use-attribute-sets="common.block">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="note__table">
-        <xsl:attribute name="space-before">0.6em</xsl:attribute>
-        <xsl:attribute name="space-after">0.6em</xsl:attribute>
+    <xsl:attribute-set name="note__table" use-attribute-sets="common.block">
     </xsl:attribute-set>
   
     <xsl:attribute-set name="note__image__column">
@@ -336,6 +347,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="note__label__note">
     </xsl:attribute-set>
 
+    <xsl:attribute-set name="note__label__notice">
+    </xsl:attribute-set>
+
     <xsl:attribute-set name="note__label__tip">
     </xsl:attribute-set>
 
@@ -363,17 +377,14 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="note__label__other">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="pre">
-        <xsl:attribute name="space-before">1.2em</xsl:attribute>
-        <xsl:attribute name="space-after">0.8em</xsl:attribute>
+    <xsl:attribute-set name="pre" use-attribute-sets="base-font common.block">
         <xsl:attribute name="white-space-treatment">preserve</xsl:attribute>
         <xsl:attribute name="white-space-collapse">false</xsl:attribute>
         <xsl:attribute name="linefeed-treatment">preserve</xsl:attribute>
         <xsl:attribute name="wrap-option">wrap</xsl:attribute>
         <xsl:attribute name="background-color">#f0f0f0</xsl:attribute>
-        <xsl:attribute name="font-family">Monospaced</xsl:attribute>
+        <xsl:attribute name="font-family">monospace</xsl:attribute>
         <xsl:attribute name="line-height">106%</xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__spectitle">
@@ -397,14 +408,10 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="border-right-width">thin</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__border__all">
-        <xsl:attribute name="border-style">solid</xsl:attribute>
-        <xsl:attribute name="border-color">black</xsl:attribute>
-        <xsl:attribute name="border-width">thin</xsl:attribute>
+    <xsl:attribute-set name="__border__all" use-attribute-sets="common.border">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="lines">
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
+    <xsl:attribute-set name="lines" use-attribute-sets="base-font">
         <xsl:attribute name="space-before">0.8em</xsl:attribute>
         <xsl:attribute name="space-after">0.8em</xsl:attribute>
 <!--        <xsl:attribute name="white-space-treatment">ignore-if-after-linefeed</xsl:attribute>-->
@@ -450,12 +457,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="param">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="draft-comment">
+    <xsl:attribute-set name="draft-comment" use-attribute-sets="common.border">
         <xsl:attribute name="background-color">#FF99FF</xsl:attribute>
         <xsl:attribute name="color">#CC3333</xsl:attribute>
-        <xsl:attribute name="border-style">solid</xsl:attribute>
-        <xsl:attribute name="border-color">black</xsl:attribute>
-        <xsl:attribute name="border-width">thin</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="draft-comment__label">
@@ -486,21 +490,20 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="font-size">75%</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="fn__body">
+    <xsl:attribute-set name="fn__body" use-attribute-sets="base-font">
         <xsl:attribute name="provisional-distance-between-starts">8mm</xsl:attribute>
         <xsl:attribute name="provisional-label-separation">2mm</xsl:attribute>
         <xsl:attribute name="line-height">1.2</xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
         <xsl:attribute name="start-indent">0pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__align__left">
-        <xsl:attribute name="text-align">left</xsl:attribute>
+        <xsl:attribute name="text-align">start</xsl:attribute>
         <xsl:attribute name="display-align">before</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__align__right">
-        <xsl:attribute name="text-align">right</xsl:attribute>
+        <xsl:attribute name="text-align">end</xsl:attribute>
         <xsl:attribute name="display-align">before</xsl:attribute>
     </xsl:attribute-set>
 
@@ -641,9 +644,10 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="color">#CC3333</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__fo__root">
-        <xsl:attribute name="font-family">Serif</xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
+    <xsl:attribute-set name="__fo__root" use-attribute-sets="base-font">
+        <xsl:attribute name="font-family">serif</xsl:attribute>
+        <xsl:attribute name="xml:lang" select="translate($locale, '_', '-')"/>
+        <xsl:attribute name="writing-mode" select="$writing-mode"/>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__force__page__count">

@@ -360,12 +360,15 @@
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
    - RELATIONSHIPS
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<xsl:template match="*[contains(@class,' topic/related-links ') or
-      contains(@class,' topic/linkpool ')]">
+<xsl:template match="*[contains(@class,' topic/related-links ')]">
   <itemizedlist>
     <title>Related links</title>
     <xsl:apply-templates/>
   </itemizedlist>
+</xsl:template>
+
+<xsl:template match="*[contains(@class,' topic/linkpool ')]">
+  <xsl:apply-templates/>
 </xsl:template>
 
 <!-- ??? should handle title and linkinfo and desc -->

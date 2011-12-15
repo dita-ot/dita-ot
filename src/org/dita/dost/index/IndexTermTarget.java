@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -42,9 +42,9 @@ public final class IndexTermTarget {
 
     /**
      * Set the target topic's name (title).
-     * @param name The targetName to set.         
+     * @param name The targetName to set.
      */
-    public void setTargetName(String name) {
+    public void setTargetName(final String name) {
         this.targetName = name;
     }
 
@@ -61,7 +61,7 @@ public final class IndexTermTarget {
      * Set the target topic's URI.
      * @param uri The targetURI to set.
      */
-    public void setTargetURI(String uri) {
+    public void setTargetURI(final String uri) {
         this.targetURI = uri;
     }
 
@@ -71,10 +71,11 @@ public final class IndexTermTarget {
      * @param obj object to compare
      * @return boolean true if equals
      */
-    public boolean equals(Object obj) {
+    @Override
+    public boolean equals(final Object obj) {
         if (obj instanceof IndexTermTarget) {
-            IndexTermTarget target = (IndexTermTarget) obj;
-            
+            final IndexTermTarget target = (IndexTermTarget) obj;
+
             if (targetName.equals(target.getTargetName())
                     && targetURI.equals(target.getTargetURI())) {
                 return true;
@@ -83,11 +84,12 @@ public final class IndexTermTarget {
 
         return false;
     }
-    
+
     /**
      * Generate hash code for IndexTermTarget.
      * @return has code.
      */
+    @Override
     public int hashCode() {
         int result = INT_17;
 
@@ -97,13 +99,14 @@ public final class IndexTermTarget {
         return result;
     }
 
-	/** 
-	 * Generate String for IndexTermTarget, with the format "{Target name: name, Target URL: uri}".
-	 * @see java.lang.Object#toString()
-	 * @return string
-	 */
-	public String toString() {
-		return new StringBuffer("{Target name: ").append(targetName).append(
-				", Target URL: ").append(targetURI).append("}").toString();
-	}
+    /**
+     * Generate String for IndexTermTarget, with the format "{Target name: name, Target URL: uri}".
+     * @see java.lang.Object#toString()
+     * @return string
+     */
+    @Override
+    public String toString() {
+        return new StringBuffer("{Target name: ").append(targetName).append(
+                ", Target URL: ").append(targetURI).append("}").toString();
+    }
 }

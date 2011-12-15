@@ -586,10 +586,12 @@
         <xsl:element name="text:p">
           <xsl:element name="text:span">
             <!-- start add rev flagging styles -->
+            <xsl:apply-templates select="." mode="start-add-odt-flags"/>
             <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
             <xsl:apply-templates/>
             <!-- end add rev flagging styles -->
             <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
+            <xsl:apply-templates select="." mode="end-add-odt-flags"/>
           </xsl:element>            
         </xsl:element>
       </xsl:when>
@@ -603,6 +605,7 @@
           </xsl:if>
           <xsl:element name="text:span">
             <!-- start add rev flagging styles -->
+            <xsl:apply-templates select="." mode="start-add-odt-flags"/>
             <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
             <!-- cell belongs to thead -->
             <xsl:choose>
@@ -619,6 +622,7 @@
             </xsl:choose>
             <!-- end add rev flagging styles -->
             <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
+            <xsl:apply-templates select="." mode="end-add-odt-flags"/>
           </xsl:element>
         </xsl:element>
       </xsl:when>
@@ -632,19 +636,23 @@
               <xsl:attribute name="text:style-name">bold_paragraph</xsl:attribute>
               <xsl:element name="text:span">
                 <!-- start add rev flagging styles -->
+                <xsl:apply-templates select="." mode="start-add-odt-flags"/>
                 <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
                 <xsl:apply-templates/>
                 <!-- end add rev flagging styles -->
                 <xsl:apply-templates select="." mode="end-add-odt-revflags"/>	
+                <xsl:apply-templates select="." mode="end-add-odt-flags"/>
               </xsl:element>	
             </xsl:when>
             <xsl:otherwise>
               <xsl:element name="text:span">
                 <!-- start add rev flagging styles -->
+                <xsl:apply-templates select="." mode="start-add-odt-flags"/>
                 <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
                 <xsl:apply-templates/>
                 <!-- end add rev flagging styles -->
                 <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
+                <xsl:apply-templates select="." mode="end-add-odt-flags"/>
               </xsl:element>
             </xsl:otherwise>
           </xsl:choose>
@@ -655,10 +663,12 @@
         <xsl:element name="text:span">
           <xsl:element name="text:span">
             <!-- start add rev flagging styles -->
+            <xsl:apply-templates select="." mode="start-add-odt-flags"/>
             <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
             <xsl:apply-templates/>
             <!-- end add rev flagging styles -->
             <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
+            <xsl:apply-templates select="." mode="end-add-odt-flags"/>
           </xsl:element>
         </xsl:element>
       </xsl:otherwise>
@@ -2333,8 +2343,7 @@
                     parent::*[contains(@class, ' topic/stentry ')] or
                     parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')] or 
                     parent::*[contains(@class, ' topic/sli ')]">
-      <xsl:element name="text:p">
-        <xsl:attribute name="text:style-name">indent_paragraph_style</xsl:attribute>
+  
         <xsl:choose>
           <xsl:when test="ancestor::*[contains(@class, ' topic/thead ')] or 
             ancestor::*[contains(@class, ' topic/sthead')]">
@@ -2370,7 +2379,7 @@
             </xsl:element>
           </xsl:otherwise>
         </xsl:choose>
-      </xsl:element>
+     
     </xsl:when>
     <!-- text is not allowed under these tags -->
     <xsl:when test="parent::*[contains(@class,' topic/ul ')] | parent::*[contains(@class,' topic/ol ')]

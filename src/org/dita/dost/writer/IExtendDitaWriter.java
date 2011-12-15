@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -13,9 +13,9 @@ import org.dita.dost.pipeline.PipelineHashIO;
 
 //RFE 2987769 Eclipse index-see
 public interface IExtendDitaWriter {
-	
-	public PipelineHashIO getPipelineHashIO ();
-	
-	public void setPipelineHashIO (PipelineHashIO pipelineHashIO);
+
+    public PipelineHashIO getPipelineHashIO ();
+
+    public void setPipelineHashIO (PipelineHashIO pipelineHashIO);
 
 }

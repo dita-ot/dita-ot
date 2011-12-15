@@ -1,3 +1,5 @@
+<!-- NOTE: THIS MODULE IS NO LONGER USED BY TOCJS PROCESSING!!! -->
+<!-- NOTE: THIS MODULE IS NO LONGER USED BY TOCJS PROCESSING!!! -->
 <!-- 
   This file is part of the DITA Open Toolkit project hosted on
   Sourceforge.net. See the accompanying license.txt file for

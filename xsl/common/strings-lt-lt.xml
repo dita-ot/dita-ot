@@ -56,6 +56,7 @@
 <str name="Prerequisite">Nuoroda</str>
 <str name="Prerequisites">Nuorodos</str>
 <str name="or">arba</str>
+<str name="figure-number-separator"> </str>
 
 <!--Task section labels -->
 <str name="task_context">Apie šią užduotį</str>

@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map xml:lang="en-us">
+  <title>DITA Open Toolkit <keyword keyref="release.version"/></title>
+  <topicref href="DITA-OTProjectHome.xml"/>
+  <topichead navtitle="Getting Started">
+    <mapref href="quickstartguide.ditamap"/>
+  </topichead>
+  <mapref href="readme.ditamap"/>
+  <topichead navtitle="Developer Reference">
+    <mapref href="dev_ref/dev_ref.ditamap"/>
+  </topichead>
+  <topichead navtitle="Project Management">
+    <topicref href="admin/DITA-OTProjectGoals.xml"/>
+    <topicref href="admin/DevelopmentProcess.xml"/>
+    <topicref href="admin/ContributionPolicy.xml"/>
+    <topicref href="admin/ContributionForm.xml"/>
+    <topicref href="admin/BugFixGuidelines-NoCLA.xml" toc="no"/>
+  </topichead>
+  <topichead navtitle="Resources">
+    <topicref format="html" href="http://dita.xml.org/wiki/the-dita-open-toolkit" navtitle="Project page at dita.xml.org" scope="external"/>
+    <topicref format="html" href="http://groups.yahoo.com/group/dita-users/" navtitle="Yahoo! Group: dita-users" scope="external"/>
+    <topicref format="html" href="http://www.oasis-open.org/committees/dita/" navtitle="OASIS DITA Technical Committee " scope="external"/>
+    <topicref href="articles/DITA-dWarticles.xml"/>
+  </topichead>
+  <mapref href="keyrefs.ditamap" processing-role="resource-only"/>
+  <mapref href="subjectscheme.ditamap" type="subjectScheme" processing-role="resource-only"/>
+  <reltable>
+    <relrow>
+      <relcell>
+        <topicref href="DITA-OTProjectHome.xml"/>
+      </relcell>
+      <relcell>
+        <topicref format="html" href="http://sourceforge.net/news/?group_id=132728" scope="external">
+          <topicmeta>
+            <navtitle>Project News for DITA Open Toolkit</navtitle>
+          </topicmeta>
+        </topicref>
+      </relcell>
+    </relrow>
+  </reltable>
+</map>

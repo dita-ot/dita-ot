@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE bookmap PUBLIC "-//OASIS//DTD DITA BookMap//EN" "bookmap.dtd">
+<bookmap xml:lang="en">
+  <title>DITA Open Toolkit <keyword keyref="release.version"/></title>
+  <bookmeta>
+    <prodinfo>
+      <prodname>DITA-OT</prodname>
+      <vrmlist>
+        <vrm version="1.5.3"/>
+      </vrmlist>
+    </prodinfo>
+  </bookmeta>
+  <frontmatter>
+    <mapref href="keyrefs.ditamap" processing-role="resource-only"/>
+    <mapref href="subjectscheme.ditamap" type="subjectScheme" processing-role="resource-only"/>
+    <booklists>
+      <toc/>
+      <figurelist/>
+      <tablelist/>
+    </booklists>
+  </frontmatter>
+  <chapter navtitle="Getting Started">
+    <mapref href="quickstartguide.ditamap"/>
+  </chapter>
+  <chapter href="readme.ditamap" format="ditamap"/>
+  <chapter navtitle="Developer Reference">
+    <mapref href="dev_ref/dev_ref.ditamap"/>
+  </chapter>
+  <appendix navtitle="DITA-OT release history">
+    <mapref href="readme/changes/changes.ditamap"/>
+  </appendix>
+  <appendix navtitle="Project Management">
+    <topicref href="admin/DITA-OTProjectGoals.xml"/>
+    <topicref href="admin/DevelopmentProcess.xml"/>
+    <topicref href="admin/ContributionPolicy.xml"/>
+    <topicref href="admin/ContributionForm.xml"/>
+    <topicref href="admin/BugFixGuidelines-NoCLA.xml" toc="no"/>
+  </appendix>
+  <appendix href="articles/ditaot_topic_developerworks_articles.dita">
+    <topicref href="articles/DITA-rm.xml"/>
+    <topicref href="articles/DITA-dsf.xml"/>
+    <topicref href="articles/DITA-domains.xml"/>
+    <topicref href="articles/DITA-mapdomains.xml"/>
+  </appendix>
+  <backmatter>
+    <booklists>
+      <indexlist/>
+      <!--glossarylist/-->
+    </booklists>
+  </backmatter>
+</bookmap>

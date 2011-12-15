@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<?Pub Inc?>
+<reference id="plugin-javalib" xml:lang="en-us">
+<title>Adding Java libraries to the classpath</title>
+<shortdesc>If your Ant or XSLT extensions require additional Java
+libraries in the classpath, you can add them to the global Ant classpath
+with the following feature.</shortdesc>
+<refbody>
+<section>       <dl><dlentry>
+<dt><codeph>dita.conductor.lib.import</codeph></dt>
+<dd>Add Java libraries to DITA-OT classpath.</dd>
+</dlentry></dl>       </section>
+<example><title>Example</title><p>The following plug-in adds the compiled
+Java code from <filepath>myJavaLibrary.jar</filepath> into the global
+Ant classpath. XSLT or Ant code can then make use of the added code.</p><?Pub
+Caret -1?><codeblock>&lt;plugin id="com.example.addjar">
+  &lt;feature extension="dita.conductor.lib.import" file="myJavaLibrary.jar"/>
+&lt;/plugin></codeblock></example>
+</refbody>
+</reference>
+<?Pub *0000001067?>

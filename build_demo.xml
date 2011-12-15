@@ -9,6 +9,8 @@
 	<property environment="env"/>
 
   <import file="${basedir}${file.separator}build.xml"/>
+  
+  <import file="${basedir}/samples/ant_sample/sample_all.xml"/>
 
 	<target name="use.init">
         <available classname="net.sf.saxon.StyleSheet"
@@ -23,7 +25,7 @@
 	</target>
 
 	<target name="all" description="build all output" 
-		depends="demo, samples">
+		depends="samples">
 		<echo>Output from the demo build is in the directory
 ${dita.output.dir}
 
@@ -54,62 +56,12 @@ http://docs.oasis-open.org/dita/v1.2/spec/DITA1.2-spec.html</echo>
 		value="${dita.doc.dir}${file.separator}langref-dita1.1"/>
 	<property name="dita.doc.articles.dir"
 		value="${dita.doc.dir}${file.separator}articles"/>
-
-	<property name="dita.demo.dir"
-		value="${dita.dir}${file.separator}demo"/>
-	<property name="dita.demo.book.dir"
-		value="${dita.dir}${file.separator}samples"/>
-	<property name="dita.demo.elementref.dir"
-		value="${dita.demo.dir}${file.separator}elementref"/>
-	<property name="dita.demo.enote.dir"
-		value="${dita.demo.dir}${file.separator}enote"/>
-	<property name="dita.demo.faq.dir"
-		value="${dita.demo.dir}${file.separator}faq"/>
 	
 	<property name="dita.samples.dir"
 		value="${dita.dir}${file.separator}samples"/>
 
 	<property name="dita.output.dir"
 		value="${dita.dir}${file.separator}out"/>
-
-	<property name="dita.output.demo.dir"
-		value="${dita.output.dir}${file.separator}demo"/>
-	<property name="dita.output.demo.book.dir"
-		value="${dita.output.demo.dir}${file.separator}book"/>
-	<property name="dita.output.demo.elementref.dir"
-		value="${dita.output.demo.dir}${file.separator}elementref"/>
-	<property name="dita.output.demo.enote.dir"
-		value="${dita.output.demo.dir}${file.separator}enote"/>
-	<property name="dita.output.demo.faq.dir"
-		value="${dita.output.demo.dir}${file.separator}faq"/>
-	<property name="dita.output.demo.langref.dir"
-		value="${dita.output.demo.dir}${file.separator}langref-dita1.1"/>
-
-	<property name="dita.output.demo.langrefhelp.dir"
-		value="${dita.output.demo.dir}${file.separator}langrefhelp-dita1.1"/>
-
-	<property name="dita.output.doc.dir"
-		value="${dita.output.dir}${file.separator}doc"/>
-	<property name="dita.output.doc.langref.dir"
-		value="${dita.output.doc.dir}${file.separator}langref-dita1.1"/>
-	<property name="dita.output.doc.articles.dir"
-		value="${dita.output.doc.dir}${file.separator}articles"/>
-
-	<property name="dita.output.samples.dir"
-		value="${dita.output.dir}${file.separator}samples"/>
-	<property name="dita.output.samples.web.dir"
-		value="${dita.output.samples.dir}${file.separator}web"/>
-	<property name="dita.output.samples.eclipse.dir"
-		value="${dita.output.samples.dir}${file.separator}org.dita.sample.doc"/>
-	<property name="dita.output.samples.javahelp.dir"
-		value="${dita.output.samples.dir}${file.separator}javahelp"/>
-	<property name="dita.output.samples.htmlhelp.dir"
-		value="${dita.output.samples.dir}${file.separator}htmlhelp"/>
-	<property name="dita.output.samples.pdf.dir"
-		value="${dita.output.samples.dir}${file.separator}pdf"/>
-  
-  	<property name="dita.output.samples.troff.dir"
-  		value="${dita.output.samples.dir}${file.separator}troff"/>
 
 	<property name="dita.output.docbook.dir"
 		value="${dita.output.dir}${file.separator}docbook"/>
@@ -130,313 +82,9 @@ http://docs.oasis-open.org/dita/v1.2/spec/DITA1.2-spec.html</echo>
 		<mkdir dir="${dita.output.dir}"/>
 	</target>
 
-	<target name="demo"
-		description="build the demos"
-		depends="demo.book, demo.elementref, demo.enote, demo.faq">
-	</target>
-
-	<target name="init.demo"
-		depends="init">
-		<mkdir dir="${dita.output.demo.dir}"/>
-	</target>
-
-	<target name="demo.book"
-		description="build the book demo"
-		depends="init.demo">
-		<mkdir dir="${dita.output.demo.book.dir}"/>
-		<antcall target="dita2xhtml">
-			<param name="args.input"
-				value="${dita.demo.book.dir}${file.separator}taskbook.ditamap"/>
-			<param name="output.dir"
-				value="${dita.output.demo.book.dir}"/>
-      		<param name="transtype" value="xhtml"/>
-		</antcall>
-		<!-- DOST is the project name of imported build.xml-->
-		<antcall target="DOST.init">
-			<param name="args.input"      
-				value="${dita.demo.book.dir}${file.separator}taskbook.ditamap"/>
-			<param name="output.dir"      value="${dita.output.demo.book.dir}"/>
-      		<param name="transtype" value="pdf"/>
-		</antcall>
-	</target>
-
-	<target name="demo.elementref"
-		description="build the element reference demo"
-		depends="init.demo">
-		<mkdir dir="${dita.output.demo.elementref.dir}"/>
-		<antcall target="dita.elementref.toc">
-			<param name="args.input"
-				value="${dita.demo.elementref.dir}${file.separator}map-elements.ditamap"/>
-			<param name="output.dir"     value="${dita.output.demo.elementref.dir}"/>
-		</antcall>
-		<antcall target="dita.elementref.html">
-			<param name="inputFile"
-				value="${dita.temp.dir}${file.separator}map.xml"/>
-			<param name="outputFile"
-				value="${dita.output.demo.elementref.dir}${file.separator}map.html"/>
-		</antcall>
-		<antcall target="dita.elementref.html">
-			<param name="inputFile"
-				value="${dita.temp.dir}${file.separator}topicref.xml"/>
-			<param name="outputFile"
-				value="${dita.output.demo.elementref.dir}${file.separator}topicref.html"/>
-		</antcall>
-	</target>
-				
-	<target name="dita.elementref.toc" depends="dita-preprocess, dita.map.xhtml">
-	</target>
-
-	<target name="dita.elementref.html">
-		<xslt processor="trax"
-				in="${inputFile}"
-				out="${outputFile}"
-				style="${dita.demo.elementref.dir}${file.separator}elementref2xhtml_shell.xsl">
-			<param name="OUTEXT" expression=".html"/>
-			<!--<xmlcatalog refid="dita.catalog"/>-->
-		</xslt>
-	</target>
-	
-	<target name="demo.enote"
-		description="build the eNote demo"
-		depends="init.demo">
-		<mkdir dir="${dita.output.demo.enote.dir}"/>
-		<antcall target="dita.enote.html">
-			<param name="args.input"
-				value="${dita.demo.enote.dir}${file.separator}testnote2.xml"/>
-			<param name="inputFile"
-				value="${dita.temp.dir}${file.separator}testnote2.xml"/>
-			<param name="output.dir"
-				value="${dita.output.demo.enote.dir}"/>
-			<param name="outputFile"
-				value="${dita.output.demo.enote.dir}${file.separator}testnote2.html"/>
-		</antcall>
-	</target>
-				
-	<!-- build HTML output for an Email Note topic -->
-	<target name="dita.enote.html" depends="dita-preprocess">
-		<xslt processor="trax"
-				in="${inputFile}"
-				out="${outputFile}"
-				style="${dita.demo.enote.dir}${file.separator}enote2xhtml_shell.xsl">
-			<param name="OUTEXT" expression=".html"/>
-			<!--<xmlcatalog refid="dita.catalog"/>-->
-		</xslt>
-	</target>
-
-	<target name="demo.faq"
-		description="build the FAQ demo"
-		depends="init.demo">
-		<mkdir dir="${dita.output.demo.faq.dir}"/>
-		<antcall target="dita.faq.html">
-			<!--param name="inputFile"
-				value="${basedir}${file.separator}temp${file.separator}DITA-faq.xml"/-->
-			<param name="inputFile"
-				value="${dita.temp.dir}${file.separator}DITA-faq.xml"/>
-			<param name="args.input"
-				value="${dita.demo.faq.dir}${file.separator}DITA-faq.xml"/>
-			<param name="output.dir"
-				value="${dita.output.demo.faq.dir}"/>
-			<param name="outputFile"
-				value="${dita.output.demo.faq.dir}${file.separator}DITA-faq.html"/>
-		</antcall>
-		<antcall target="dita.faq.html">
-			<!--param name="inputFile"
-				value="${basedir}${file.separator}temp${file.separator}ditafaq.xml"/-->
-			<param name="inputFile"
-				value="${dita.temp.dir}${file.separator}ditafaq.xml"/>
-			<param name="args.input"
-				value="${dita.demo.faq.dir}${file.separator}ditafaq.xml"/>
-			<param name="output.dir"
-				value="${dita.output.demo.faq.dir}"/>
-			<param name="outputFile"
-				value="${dita.output.demo.faq.dir}${file.separator}ditafaq.html"/>
-		</antcall>
-		<antcall target="demo.faq.generalize"/>
-	</target>
-	
-	<!-- build HTML output for a FAQ topic -->
-	<target name="dita.faq.html" depends="dita-preprocess">
-		<xslt processor="trax"
-				in="${inputFile}"
-				out="${outputFile}"
-				style="${dita.demo.faq.dir}${file.separator}faq2xhtml_shell.xsl">
-			<!--<xmlcatalog refid="dita.catalog"/>-->
-		</xslt>
-	</target>
-
-	<target name="demo.faq.generalize" depends="init.demo">
-		<antcall target="dita.topic.generalize">
-			<param name="inputFile"
-				value="${dita.demo.faq.dir}${file.separator}ditafaq.xml"/>
-			<param name="outputFile"
-				value="${dita.output.demo.faq.dir}${file.separator}ditafaq_GENERALIZED.xml"/>
-		</antcall>
-	</target>
-    
-	<!-- generalize a specialized topic to the base elements -->
-	<target name="dita.topic.generalize">
-		<xslt processor="trax"
-			in="${inputFile}"
-			out="${outputFile}"
-			style="${dita.script.dir}${file.separator}generalize.xsl">
-			<!--<xmlcatalog refid="dita.catalog"/>-->
-		</xslt>
-	</target>
-
-	<target name="demo.langref-dita1.1"
-		description="build the DITA 1.1 Language Reference book as a demo"
-        depends="demo.langref.draftstatus.message">
-	</target>
-
-	<target name="demo.langref" depends="demo.langref.draftstatus.message">
-	</target>
-
-	<target name="init.demo.langref-dita1.1" depends="demo.langref.draftstatus.message">
-		<!--<mkdir dir="${dita.output.demo.langref.dir}"/>-->
-	</target>
-
-
-	<target name="demo.langref-dita1.1.pdf" depends="demo.langref.draftstatus.message">
-		<!-- DOST is the project name of imported build.xml-->
-		<!--<antcall target="DOST.init">
-			<param name="args.input"      
-				value="${dita.doc.langref.dir}${file.separator}ditaref-book.ditamap"/>
-			<param name="output.dir"      value="${dita.output.demo.langref.dir}"/>
-      		<param name="transtype" value="pdf"/>
-			<param name="dita.extname" value="dita"/>
-			<param name="args.fo.img.ext" value=".gif"/>
-		</antcall>-->
-	</target>
-
-    <target name="demo.langref.draftstatus.message">
-      <echo>The language reference demo has been removed for DITA-OT 1.5.2
-because it used the DITA 1.1 language reference. The toolkit
-now fully supports DITA 1.2; however, the combined DITA 1.2 
-specification is very large, and is not bundled with the 1.5.2 
-toolkit. For the final version of the standard (including
-source, XHTML, PDF, and CHM), see:
-http://docs.oasis-open.org/dita/v1.2/spec/DITA1.2-spec.html
-</echo>
-    </target>
-
-	<target name="demo.langref.pdf" depends="demo.langref.draftstatus.message">
-    </target>
-	<target name="demo.langref.compilehelp" depends="demo.langref.draftstatus.message">
-    </target>
-	<target name="doc.langref.web" depends="demo.langref.draftstatus.message">
-    </target>
-    <target name="doc.langref.chm" depends="demo.langref.draftstatus.message">
-    </target>
-    <target name="doc.langref.pdf" depends="demo.langref.draftstatus.message">
-    </target>
-
-	<target name="demo.langref-dita1.1.compilehelp"
-		description="to build the DITA 1.1 Language Reference as HTML Help (not in all)"
-		depends="demo.langref.draftstatus.message">
-		<!--<antcall target="dita2htmlhelp">
-			<param name="args.input"
-				value="${dita.doc.langref.dir}${file.separator}ditaref-book.ditamap"/>
-			<param name="output.dir"
-				value="${dita.output.demo.langrefhelp.dir}"/>
-            <param name="transtype" value="htmlhelp"/>
-            <param name="dita.extname" value="dita"/>
-            <param name="args.ftr" value="${dita.doc.langref.dir}${file.separator}langref-footer.xml"/>
-            <param name="args.css" value="${dita.doc.langref.dir}${file.separator}resource${file.separator}dita-oasis.css"/>
-            <param name="args.copycss" value="yes"/>
-		</antcall>-->
-	</target>
-
-	<target name="clean.demo"
-		description="remove the demo output">
-		<delete dir="${dita.output.demo.dir}"/>
-	</target>
-
-	<target name="clean.demo.book"
-		description="remove the book demo output">
-		<delete dir="${dita.output.demo.book.dir}"/>
-	</target>
-
-	<target name="clean.demo.elementref"
-		description="remove the Element Reference demo output">
-		<delete dir="${dita.output.demo.elementref.dir}"/>
-	</target>
-
-	<target name="clean.demo.enote"
-		description="remove the eNote demo output">
-		<delete dir="${dita.output.demo.enote.dir}"/>
-	</target>
-
-	<target name="clean.demo.faq"
-		description="remove the FAQ demo output">
-		<delete dir="${dita.output.demo.faq.dir}"/>
-	</target>
-
-	<target name="clean.demo.langref-dita1.1"
-		description="remove the Language Reference demo output">
-		<!--<delete dir="${dita.output.demo.langref.dir}"/>-->
-	</target>
-
-	<target name="clean.demo.langref-dita1.1.compilehelp"
-		description="remove the Language Reference as HTML Help output">
-		<!--<delete dir="${dita.output.demo.langrefhelp.dir}"/>-->
-	</target>
-
 	<target name="doc"
 		description="build the documentation"
 		depends="init, doc.articles.web, doc.readme.web, doc.installguide.chm">      
-	</target>
-	
-	<target name="init.doc.langref-dita1.1" depends="demo.langref.draftstatus.message">
-		<!--<mkdir dir="${dita.output.doc.langref.dir}"/>-->
-	</target>
-	
-	<target name="doc.langref-dita1.1.web" depends="demo.langref.draftstatus.message"
-		description="Build the DITA 1.1 Language Reference.">
-		<!--<antcall target="dita2xhtml">
-			<param name="args.input"
-				value="${dita.doc.langref.dir}${file.separator}ditaref-alpha.ditamap"/>
-			<param name="output.dir"     value="${dita.output.doc.langref.dir}"/>
-            <param name="args.xhtml.toc" value="toc"/>
-            <param name="dita.extname" value="dita"/>
-            <param name="transtype" value="xhtml"/>
-            <param name="args.ftr" value="${dita.doc.langref.dir}${file.separator}langref-footer.html"/>
-            <param name="args.css" value="${dita.doc.langref.dir}${file.separator}resource${file.separator}dita-oasis.css"/>
-            <param name="args.copycss" value="yes"/>    
-		</antcall>
-		<copy todir="${dita.output.doc.langref.dir}"
-        file="${dita.doc.langref.dir}${file.separator}resource${file.separator}index.html"/>		    -->
-	</target>
-    
-    <target name="doc.langref-dita1.1.chm" depends="demo.langref.draftstatus.message"
-		description="Build the DITA 1.1 langref document to HTML Help.">
-		<!--<antcall target="dita2htmlhelp">
-			<param name="args.input"
-				     value="${dita.doc.langref.dir}${file.separator}ditaref-alpha.ditamap"/>
-			<param name="output.dir" value="${dita.output.doc.langref.dir}"/>
-            <param name="transtype" value="htmlhelp"/>
-            <param name="dita.extname" value="dita"/>
-            <param name="args.ftr" value="${dita.doc.langref.dir}${file.separator}langref-footer.html"/>
-            <param name="args.css" value="${dita.doc.langref.dir}${file.separator}resource${file.separator}dita-oasis.css"/>
-            <param name="args.copycss" value="yes"/>
-		</antcall>    -->
-	</target>
-    
-    <target name="doc.langref-dita1.1.pdf" depends="demo.langref.draftstatus.message"
-		description="Build the DITA 1.1 langref document to PDF.">
-    	<!-- DOST is the project name of imported build.xml-->
-		<!--<antcall target="DOST.init">
-			<param name="args.input"      
-				value="${dita.doc.langref.dir}${file.separator}ditaref-alpha.ditamap"/>
-			<param name="output.dir"      value="${dita.output.doc.langref.dir}"/>
-      		<param name="transtype" value="pdf"/>
-			<param name="dita.extname" value="dita"/>
-			<param name="args.fo.img.ext" value=".gif"/>
-		</antcall>-->
-	</target>
-	
-	<target name="clean.doc.langref-dita1.1"
-		description="Delete the langref directory in doc.">
-		<!--<delete dir="${dita.output.doc.langref.dir}"></delete>-->
 	</target>
 	
 	<target name="init.doc.articles" depends="init">
@@ -558,89 +206,13 @@ http://docs.oasis-open.org/dita/v1.2/spec/DITA1.2-spec.html
 		description="remove the documentation output">
 		<delete dir="${dita.output.doc.dir}"/>
 	</target>
-
-	<target name="samples"
-		description="build the sample output"
-		depends="samples.web, samples.eclipse, samples.javahelp, samples.htmlhelp, samples.pdf">
-	</target>
-
-	<target name="samples.init" depends="init">
-		<mkdir dir="${dita.output.samples.dir}"/>
-	</target>
-
-	<target name="samples.web"
-		description="build the samples for the web"
-		depends="samples.init">
-		<antcall target="dita2xhtml">
-			<param name="args.input"
-				value="${dita.samples.dir}${file.separator}hierarchy.ditamap"/>
-			<param name="output.dir" value="${dita.output.samples.web.dir}"/>
-  		<param name="args.xhtml.toc" value="toc"/>
-      <param name="transtype" value="xhtml"/>
-		</antcall>
-		<copy todir="${dita.output.samples.web.dir}">
-			<fileset dir="${dita.resource.dir}"
-				includes="index.html"/>
-		</copy>
-	</target>
-
-	<target name="samples.eclipse"
-		description="build the samples for Eclipse"
-		depends="samples.init">
-		<antcall target="dita2eclipsehelp">
-			<param name="args.input"
-				value="${dita.samples.dir}${file.separator}hierarchy.ditamap"/>
-			<param name="output.dir"     value="${dita.output.samples.eclipse.dir}"/>
-      <param name="transtype" value="eclipsehelp"/>
-		</antcall>
-	</target>
-
-	<target name="samples.javahelp"
-		description="build the samples for JavaHelp"
-		depends="samples.init">
-		<antcall target="dita2javahelp">
-			<param name="args.input"
-				value="${dita.samples.dir}${file.separator}hierarchy.ditamap"/>
-			<param name="output.dir"     value="${dita.output.samples.javahelp.dir}"/>
-      <param name="transtype" value="javahelp"/>
-		</antcall>
-	</target>
-
-	<target name="samples.htmlhelp"
-		description="build the samples for HTMLHelp"
-		depends="samples.init">
-		<antcall target="dita2htmlhelp">
-			<param name="args.input"
-				value="${dita.samples.dir}${file.separator}hierarchy.ditamap"/>
-			<param name="output.dir"
-				value="${dita.output.samples.htmlhelp.dir}"/>
-      <param name="transtype" value="htmlhelp"/>
-		</antcall>
-	</target>
-
-	<target name="samples.pdf"
-		description="build the samples as PDF"
-		depends="samples.init">
-		<!-- DOST is the project name of imported build.xml-->
-		<antcall target="DOST.init">
-			<param name="args.input"      
-				value="${dita.samples.dir}${file.separator}sequence.ditamap"/>
-			<param name="output.dir"      value="${dita.output.samples.pdf.dir}"/>
-      		<param name="transtype" value="pdf"/>
-		</antcall>
-	</target>
 	
 	<target name="docbook"
 		description="transform the samples to DocBook"
 		depends="init">
 		<mkdir dir="${dita.output.docbook.dir}"/>
 
-		<antcall target="dita2docbook">
-			<param name="args.input"  
-				value="${dita.samples.dir}${file.separator}hierarchy.ditamap"/>
-			<param name="output.dir" value="${dita.output.docbook.dir}"/>
-      <param name="transtype" value="docbook"/>
-		</antcall>
+		<antcall target="samples.docbook"/>
 
 		<antcall target="dita2docbook">
 			<param name="args.input"
@@ -655,36 +227,6 @@ http://docs.oasis-open.org/dita/v1.2/spec/DITA1.2-spec.html
 		description="remove the docbook output">
 		<delete dir="${dita.output.docbook.dir}"/>
 	</target>	
-
-	<target name="clean.samples"
-		description="remove the sample output">
-		<delete dir="${dita.output.samples.dir}"/>
-	</target>
-
-	<target name="clean.samples.web"
-		description="remove the sample web output">
-		<delete dir="${dita.output.samples.web.dir}"/>
-	</target>
-
-	<target name="clean.samples.eclipse"
-		description="remove the sample Eclipse output">
-		<delete dir="${dita.output.samples.eclipse.dir}"/>
-	</target>
-
-	<target name="clean.samples.javahelp"
-		description="remove the sample JavaHelp output">
-		<delete dir="${dita.output.samples.javahelp.dir}"/>
-	</target>
-
-	<target name="clean.samples.htmlhelp"
-		description="remove the sample HTMLHelp output">
-		<delete dir="${dita.output.samples.htmlhelp.dir}"/>
-	</target>
-
-	<target name="clean.samples.pdf"
-		description="remove the sample PDF output">
-		<delete dir="${dita.output.samples.pdf.dir}"/>
-	</target>
     
 	<!-- prompting target -->
 	<target name="prompt"
@@ -725,15 +267,18 @@ to accept the default.</echo>
 			defaultvalue="out"/>
 		<echo>
 Please enter the type of output to generate.
-Options include: eclipse, htmlhelp, javahelp, pdf, or web
+Options include: eclipse, tocjs, htmlhelp, javahelp, pdf, or web
 Use lowercase letters.
 		</echo>
 		<input message="The output type: "
 			addproperty="prompt.output.type"
-			validargs="eclipse,htmlhelp,javahelp,pdf,web,docbook"
+			validargs="eclipse,tocjs,htmlhelp,javahelp,pdf,web,docbook"
 			defaultvalue="web"/>
 		<condition property="isEclipseOutput">
 			<equals arg1="${prompt.output.type}" arg2="eclipse"/>
+		</condition>
+		<condition property="isTocjsOutput">
+			<equals arg1="${prompt.output.type}" arg2="tocjs"/>
 		</condition>
 		<condition property="isHtmlHelpOutput">
 			<equals arg1="${prompt.output.type}" arg2="htmlhelp"/>
@@ -783,7 +328,7 @@ Before rebuilding, please delete the output or the directory.</echo>
 	</target>
 
 	<target name="prompt.output"
-		depends="prompt.output.eclipse, prompt.output.javahelp, prompt.output.htmlhelp, prompt.output.pdf, prompt.output.web, prompt.output.docbook"/>
+		depends="prompt.output.eclipse, prompt.output.tocjs, prompt.output.javahelp, prompt.output.htmlhelp, prompt.output.pdf, prompt.output.web, prompt.output.docbook"/>
 
 	<target name="prompt.output.web" depends="prompt.output.init"
 		if="isWebOutput">			
@@ -808,6 +353,16 @@ Before rebuilding, please delete the output or the directory.</echo>
 			<param name="args.eclipse.toc" value="toc"/>
 			<param name="dita.temp.dir" value="temp"/>
       <param name="transtype" value="eclipsehelp"/>
+		</antcall>
+	</target>
+
+	<target name="prompt.output.tocjs" depends="prompt.output.init"
+		if="isTocjsOutput">
+		<antcall target="dita2tocjs">
+			<param name="args.input"      value="${prompt.ditamap.filename}"/>
+			<param name="output.dir"     value="${prompt.output.directory}"/>
+			<param name="dita.temp.dir" value="temp"/>
+      <param name="transtype" value="tocjs"/>
 		</antcall>
 	</target>
 
@@ -856,19 +411,7 @@ Before rebuilding, please delete the output or the directory.</echo>
       <param name="transtype" value="docbook"/>
 		</antcall>
 	</target>
-  
- 	<target name="samples.troff"
-  			description="test dita to troff"
-  			depends="samples.init">
-  		<antcall target="dita2troff">
-  			<param name="args.input"       
-  				value="${dita.samples.dir}${file.separator}concepts${file.separator}oil.xml"/>
-  			<param name="output.dir" value="${dita.output.samples.troff.dir}"/>
-  			<param name="dita.temp.dir" value="temp"/>
-        <param name="transtype" value="troff"/>
-  		</antcall>
-  	</target>
-	
+  	
   <!-- The whole process on which javamerge depends equals to the target "dita-process" in build.xml. -->
   <target name="javamerge"  description="Merge topics" depends="start-process, init-logger, check-arg, output-deprecated-msg, output-css-warn-message, preprocess">
 	<basename property="temp.base" file="${user.input.file}" suffix=".ditamap"/>

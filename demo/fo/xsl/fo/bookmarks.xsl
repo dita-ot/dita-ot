@@ -38,7 +38,7 @@ See the accompanying license.txt file for applicable licenses.
                 xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
                 extension-element-prefixes="exsl"
                 exclude-result-prefixes="opentopic-index opentopic"
-                version='1.1'>
+                version="2.0">
 
     <xsl:variable name="map" select="//opentopic:map"/>
 

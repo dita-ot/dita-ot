@@ -8,6 +8,8 @@
   <extension-point id="dita.xsl.odt" name="ODT XSLT import"/>
   <!-- extensions -->
   <feature extension="dita.conductor.transtype.check" value="odt"/>
+  <feature extension="dita.transtype.print" value="odt"/>
   <feature extension="dita.conductor.target" file="conductor.xml"/>
+  <feature extension="dita.basedir-resource-directory" value="true"/>
   <template file="../../xsl/dita2odt_template.xsl"/>
 </plugin>

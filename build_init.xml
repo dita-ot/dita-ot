@@ -4,6 +4,7 @@
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <project name="ditaot-init" basedir=".">
+    
   <!--<import file="catalog-ant.xml"/>-->
 
 	<!-- Default maximum memory to give to forked Java processes.
@@ -48,7 +49,15 @@
       <isset property="dita.dir" />
     </not>
   </condition>
+  
+  <!-- Read configuration properties -->
+  <property file="${dita.dir}/lib/org.dita.dost.platform/plugin.properties"/>
+  <property file="${dita.dir}/lib/configuration.properties"/>
 	
+  <xmlcatalog id="dita.catalog">
+    <catalogpath path="${dita.dir}/catalog-dita.xml"/>
+  </xmlcatalog>
+
 	<!-- Determine the Java architecture and set the JVM arguments
 	     appropriately.
 	     
@@ -63,12 +72,17 @@
 		<!-- NOTE: The following is not a complete list but should cover
 		           most of the systems Open Toolkit users are likely
 		           to use. Add more values as they become known.
-		  -->
-		<or>
-			<os arch="x86_64"/>
-			<os arch="amd64"/>
-			<os arch="ppc64"/>
-		</or>
+		-->
+	  <and>
+  		<or>
+  			<os arch="x86_64"/>
+  			<os arch="amd64"/>
+  			<os arch="ppc64"/>
+  		</or>
+	    <not>
+	      <os family="windows"/>
+	    </not>
+	  </and>
   </condition>
 	
 	<condition property="is32bit">
@@ -179,6 +193,7 @@
     
   <target name="start-process" description="Processing started" />
 
+  <!-- Only used when invoked with CommandLineInvoker -->
   <target name="init-logger"
     description="Initialize log directory and file name">
     <config-logger />
@@ -441,7 +456,7 @@
   	  		        <isset property="args.odt.img.embed"/>
   	  		      </not>
   	</condition>
-  	<condition property="clean_temp">
+  	<condition property="clean-temp.skip">
       <and>
         <isset property="clean.temp" />
         <equals arg1="${clean.temp}" arg2="no" casesensitive="false" />

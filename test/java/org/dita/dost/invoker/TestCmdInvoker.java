@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -24,59 +24,59 @@ import org.junit.Test;
 
 public class TestCmdInvoker {
 
-	private final PrintStream originalOut = System.out;
-	
-	private File tempDir;
-	private String tempArg;
-	
-	@Before
-	public void setUp() throws IOException {
-		tempDir = TestUtils.createTempDir(getClass());
-		tempArg = "/tempdir:" + tempDir.getAbsolutePath();
-	}
-	
-	@Test
-	public void testProcessArguments() throws Exception {
-		final String input[] = { "/i:abc.ditamap", "/transtype:xhtml", tempArg };
-		final CommandLineInvoker test = new CommandLineInvoker();
-		test.processArguments(input);
-	}
+    private final PrintStream originalOut = System.out;
 
-	@Test(expected = DITAOTException.class)
-	public void testProcessArgsWrongParam() throws Exception {
-		final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-		final String input[] = { "/i:abc.ditamap", "/abc:def" };
-		final CommandLineInvoker test = new CommandLineInvoker();
-		try {
-			System.setOut(new PrintStream(outContent));
-			test.processArguments(input);
-		} catch (final DITAOTException e) {
-			throw e;
-		} finally {
-			System.setOut(originalOut);
-			assertTrue(outContent.size() > 0);
-		}
-	}
+    private File tempDir;
+    private String tempArg;
 
-	@Test(expected = DITAOTException.class)
-	public void testProcessArgsEmptyValue() throws Exception {
-		final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-		final String input[] = { "/i:" };
-		final CommandLineInvoker test = new CommandLineInvoker();
-		try {
-			System.setOut(new PrintStream(outContent));
-			test.processArguments(input);
-		} catch (final DITAOTException e) {
-			throw e;
-		} finally {
-			System.setOut(originalOut);
-			assertTrue(outContent.size() > 0);
-		}
-	}
+    @Before
+    public void setUp() throws IOException {
+        tempDir = TestUtils.createTempDir(getClass());
+        tempArg = "/tempdir:" + tempDir.getAbsolutePath();
+    }
 
-	@After
-	public void tearDown() throws IOException {
-		TestUtils.forceDelete(tempDir);
-	}
-	
+    @Test
+    public void testProcessArguments() throws Exception {
+        final String input[] = { "/i:abc.ditamap", "/transtype:xhtml", tempArg };
+        final CommandLineInvoker test = new CommandLineInvoker();
+        test.processArguments(input);
+    }
+
+    @Test(expected = DITAOTException.class)
+    public void testProcessArgsWrongParam() throws Exception {
+        final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        final String input[] = { "/i:abc.ditamap", "/abc:def" };
+        final CommandLineInvoker test = new CommandLineInvoker();
+        try {
+            System.setOut(new PrintStream(outContent));
+            test.processArguments(input);
+        } catch (final DITAOTException e) {
+            throw e;
+        } finally {
+            System.setOut(originalOut);
+            assertTrue(outContent.size() > 0);
+        }
+    }
+
+    @Test(expected = DITAOTException.class)
+    public void testProcessArgsEmptyValue() throws Exception {
+        final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        final String input[] = { "/i:" };
+        final CommandLineInvoker test = new CommandLineInvoker();
+        try {
+            System.setOut(new PrintStream(outContent));
+            test.processArguments(input);
+        } catch (final DITAOTException e) {
+            throw e;
+        } finally {
+            System.setOut(originalOut);
+            assertTrue(outContent.size() > 0);
+        }
+    }
+
+    @After
+    public void tearDown() throws IOException {
+        TestUtils.forceDelete(tempDir);
+    }
+
 }

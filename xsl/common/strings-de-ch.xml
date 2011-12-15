@@ -56,6 +56,7 @@
 <str name="Prerequisite">Voraussetzung</str>
 <str name="Prerequisites">Voraussetzungen</str>
 <str name="or">oder</str>
+<str name="figure-number-separator"> </str>
 
 <!--Task section labels -->
 <str name="task_context">Warum und wann dieser Vorgang ausgeführt wird</str>

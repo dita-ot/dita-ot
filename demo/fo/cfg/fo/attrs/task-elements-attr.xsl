@@ -43,8 +43,12 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="prereq" use-attribute-sets="section">
     </xsl:attribute-set>
+    <xsl:attribute-set name="prereq__content" use-attribute-sets="section__content">
+    </xsl:attribute-set>
 
     <xsl:attribute-set name="context" use-attribute-sets="section">
+    </xsl:attribute-set>
+    <xsl:attribute-set name="context__content" use-attribute-sets="section__content">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="cmd">
@@ -63,157 +67,121 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="result" use-attribute-sets="section">
     </xsl:attribute-set>
+    <xsl:attribute-set name="result__content" use-attribute-sets="section__content">
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="task.example" use-attribute-sets="example">
+    </xsl:attribute-set>
+    <xsl:attribute-set name="task.example__content" use-attribute-sets="example__content">
+    </xsl:attribute-set>
 
     <xsl:attribute-set name="postreq" use-attribute-sets="section">
+    </xsl:attribute-set>
+    <xsl:attribute-set name="postreq__content" use-attribute-sets="section__content">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="stepxmp">
     </xsl:attribute-set>
 
     <!--Unordered steps-->
-    <xsl:attribute-set name="steps-unordered">
-        <xsl:attribute name="provisional-distance-between-starts">5mm</xsl:attribute>
-        <xsl:attribute name="provisional-label-separation">1mm</xsl:attribute>
-        <xsl:attribute name="space-after">9pt</xsl:attribute>
-        <xsl:attribute name="space-before">9pt</xsl:attribute>
+    <xsl:attribute-set name="steps-unordered" use-attribute-sets="ul">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="steps-unordered.step">
-        <xsl:attribute name="space-after">1.5pt</xsl:attribute>
-        <xsl:attribute name="space-before">1.5pt</xsl:attribute>
+    <xsl:attribute-set name="steps-unordered.step" use-attribute-sets="ul.li">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="steps-unordered.step__label">
-        <xsl:attribute name="keep-together.within-line">always</xsl:attribute>
-        <xsl:attribute name="keep-with-next.within-line">always</xsl:attribute>
-        <xsl:attribute name="end-indent">label-end()</xsl:attribute>
+    <xsl:attribute-set name="steps-unordered.step__label" use-attribute-sets="ul.li__label">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="steps-unordered.step__label__content">
-        <xsl:attribute name="text-align">left</xsl:attribute>
+    <xsl:attribute-set name="steps-unordered.step__label__content" use-attribute-sets="ul.li__label__content">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="steps-unordered.step__body">
-        <xsl:attribute name="start-indent">body-start()</xsl:attribute>
+    <xsl:attribute-set name="steps-unordered.step__body" use-attribute-sets="ul.li__body">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="steps-unordered.step__content">
+    <xsl:attribute-set name="steps-unordered.step__content" use-attribute-sets="ul.li__content">
     </xsl:attribute-set>
 
     <!--Ordered steps-->
-    <xsl:attribute-set name="steps">
-        <xsl:attribute name="provisional-distance-between-starts">5mm</xsl:attribute>
-        <xsl:attribute name="provisional-label-separation">1mm</xsl:attribute>
-        <xsl:attribute name="space-after">9pt</xsl:attribute>
-        <xsl:attribute name="space-before">9pt</xsl:attribute>
+    <xsl:attribute-set name="steps" use-attribute-sets="ol">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="steps.step">
+    <xsl:attribute-set name="steps.step" use-attribute-sets="ol.li">
         <xsl:attribute name="space-after">3pt</xsl:attribute>
         <xsl:attribute name="space-before">3pt</xsl:attribute>
     </xsl:attribute-set>
 
 
-    <xsl:attribute-set name="steps.step__label">
-        <xsl:attribute name="keep-together.within-line">always</xsl:attribute>
-        <xsl:attribute name="keep-with-next.within-line">always</xsl:attribute>
-        <xsl:attribute name="end-indent">label-end()</xsl:attribute>
+    <xsl:attribute-set name="steps.step__label" use-attribute-sets="ol.li__label">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="steps.step__label__content">
-        <xsl:attribute name="text-align">left</xsl:attribute>
-        <xsl:attribute name="font-weight">bold</xsl:attribute>
+    <xsl:attribute-set name="steps.step__label__content" use-attribute-sets="ol.li__label__content">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="steps.step__body">
-        <xsl:attribute name="start-indent">body-start()</xsl:attribute>
+    <xsl:attribute-set name="steps.step__body" use-attribute-sets="ol.li__body">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="steps.step__content">
+    <xsl:attribute-set name="steps.step__content" use-attribute-sets="ol.li__content">
     </xsl:attribute-set>
 
     <!-- Stepsection (new in DITA 1.2) -->
-    <xsl:attribute-set name="stepsection">
+    <xsl:attribute-set name="stepsection" use-attribute-sets="ul.li">
         <xsl:attribute name="space-after">2pt</xsl:attribute>
         <xsl:attribute name="space-before">2pt</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="stepsection__label">
-        <xsl:attribute name="keep-together.within-line">always</xsl:attribute>
-        <xsl:attribute name="keep-with-next.within-line">always</xsl:attribute>
-        <xsl:attribute name="end-indent">label-end()</xsl:attribute>
+    <xsl:attribute-set name="stepsection__label" use-attribute-sets="ul.li__label">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="stepsection__label__content">
-        <xsl:attribute name="text-align">left</xsl:attribute>
+    <xsl:attribute-set name="stepsection__label__content" use-attribute-sets="ul.li__label__content">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="stepsection__body">
+    <xsl:attribute-set name="stepsection__body" use-attribute-sets="ul.li__body">
         <xsl:attribute name="start-indent">9mm</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="stepsection__content">
+    <xsl:attribute-set name="stepsection__content" use-attribute-sets="ul.li__content">
     </xsl:attribute-set>
 
     <!--Substeps-->
-    <xsl:attribute-set name="substeps">
-        <xsl:attribute name="provisional-distance-between-starts">5mm</xsl:attribute>
-        <xsl:attribute name="provisional-label-separation">1mm</xsl:attribute>
+    <xsl:attribute-set name="substeps" use-attribute-sets="ol">
         <xsl:attribute name="space-after">3pt</xsl:attribute>
         <xsl:attribute name="space-before">3pt</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="substeps.substep">
-        <xsl:attribute name="space-after">1.5pt</xsl:attribute>
-        <xsl:attribute name="space-before">1.5pt</xsl:attribute>
+    <xsl:attribute-set name="substeps.substep" use-attribute-sets="ol.li">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="substeps.substep__label">
-        <xsl:attribute name="keep-together.within-line">always</xsl:attribute>
-        <xsl:attribute name="keep-with-next.within-line">always</xsl:attribute>
-        <xsl:attribute name="end-indent">label-end()</xsl:attribute>
+    <xsl:attribute-set name="substeps.substep__label" use-attribute-sets="ol.li__label">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="substeps.substep__label__content">
-        <xsl:attribute name="text-align">left</xsl:attribute>
+    <xsl:attribute-set name="substeps.substep__label__content" use-attribute-sets="ol.li__label__content">
+      <xsl:attribute name="font-weight">normal</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="substeps.substep__body">
-        <xsl:attribute name="start-indent">body-start()</xsl:attribute>
+    <xsl:attribute-set name="substeps.substep__body" use-attribute-sets="ol.li__body">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="substeps.substep__content">
+    <xsl:attribute-set name="substeps.substep__content" use-attribute-sets="ol.li__content">
     </xsl:attribute-set>
 
     <!--Choices-->
-    <xsl:attribute-set name="choices">
-        <xsl:attribute name="provisional-distance-between-starts">5mm</xsl:attribute>
-        <xsl:attribute name="provisional-label-separation">1mm</xsl:attribute>
-        <xsl:attribute name="space-after">7pt</xsl:attribute>
-        <xsl:attribute name="space-before">7pt</xsl:attribute>
-        <!--        <xsl:attribute name="margin-left">-8pt</xsl:attribute>-->
+    <xsl:attribute-set name="choices" use-attribute-sets="ul">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="choices.choice">
-        <xsl:attribute name="space-after">1.5pt</xsl:attribute>
-        <xsl:attribute name="space-before">1.5pt</xsl:attribute>
+    <xsl:attribute-set name="choices.choice" use-attribute-sets="ul.li">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="choices.choice__label">
-        <xsl:attribute name="keep-together.within-line">always</xsl:attribute>
-        <xsl:attribute name="keep-with-next.within-line">always</xsl:attribute>
-        <xsl:attribute name="end-indent">label-end()</xsl:attribute>
+    <xsl:attribute-set name="choices.choice__label" use-attribute-sets="ul.li__label">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="choices.choice__label__content">
-        <xsl:attribute name="text-align">left</xsl:attribute>
+    <xsl:attribute-set name="choices.choice__label__content" use-attribute-sets="ul.li__label__content">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="choices.choice__body">
-        <xsl:attribute name="start-indent">body-start()</xsl:attribute>
+    <xsl:attribute-set name="choices.choice__body" use-attribute-sets="ul.li__body">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="choices.choice__content">
+    <xsl:attribute-set name="choices.choice__content" use-attribute-sets="ul.li__content">
     </xsl:attribute-set>
 
 </xsl:stylesheet>

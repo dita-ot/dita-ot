@@ -161,7 +161,7 @@ See the accompanying license.txt file for applicable licenses.
             </fo:inline>
             <fo:block>
                 <xsl:attribute name="border-bottom">3pt solid black</xsl:attribute>
-                <xsl:attribute name="margin-bottom">1.4pc</xsl:attribute>
+                <xsl:attribute name="space-after">16.8pt</xsl:attribute>
             </fo:block>
             <fo:block xsl:use-attribute-sets="body__toplevel">
                 <xsl:apply-templates select="*[not(contains(@class, ' topic/title '))]"/>

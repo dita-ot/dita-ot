@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -9,20 +9,19 @@
  */
 package org.dita.dost.writer;
 
-import static org.dita.dost.util.Constants.*;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
+
+import javax.xml.transform.Transformer;
+
+import org.xml.sax.SAXException;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.index.IndexTerm;
 import org.dita.dost.index.IndexTermTarget;
-import org.dita.dost.module.Content;
+import org.dita.dost.util.XMLSerializer;
 
 /**
  * This class extends AbstractWriter, used to output IndexTerm list to CHM index
@@ -32,138 +31,101 @@ import org.dita.dost.module.Content;
  * 
  * @author Wu, Zhi Qiang
  */
-public final class CHMIndexWriter extends AbstractExtendDitaWriter implements AbstractWriter, IDitaTranstypeIndexWriter {
-    
-	//RFE 2987769 Eclipse index-see - Added extends AbstractExtendedDitaWriter
-	
-	/** List of indexterms */
-    private List<IndexTerm> termList = null;
+public final class CHMIndexWriter extends AbstractExtendDitaWriter {
 
-    /**
-     * Default Constructor.
-     */
-    public CHMIndexWriter() {
-    }
-
-    /**
-     * @see org.dita.dost.writer.AbstractWriter#setContent(org.dita.dost.module.Content)
-     */
-    public void setContent(Content content) {
-        termList = (List<IndexTerm>) content.getCollection();
-    }
-
-    /**
-     * Write the index term into given OutputStream.
-     * 
-     * @param outputStream outputStream
-     * @throws UnsupportedEncodingException The Character Encoding is not supported.
-     */
-    public void write(OutputStream outputStream) throws UnsupportedEncodingException{
-        PrintWriter printWriter = null;
-        int termNum = termList.size();
-
+    public void write(final String filename) throws DITAOTException {
+        OutputStream out = null;
         try {
-            printWriter = new PrintWriter(new OutputStreamWriter(outputStream, UTF8));
+            out = new FileOutputStream(filename);
+            final XMLSerializer serializer = XMLSerializer.newInstance(out);
+            final Transformer transformer = serializer.getTransformerHandler().getTransformer();
+            transformer.setOutputProperty("doctype-public", "-//IETF//DTD HTML//EN");
+            transformer.setOutputProperty("method", "html");
+            transformer.setOutputProperty("encoding", "UTF-8");
+            transformer.setOutputProperty(javax.xml.transform.OutputKeys.INDENT, "no");
 
-            printWriter.println("<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML//EN\">");
-            printWriter.println("<html>");
-            printWriter.println("<head>");
-            printWriter
-                    .println("<meta name=\"GENERATOR\" content=\"Microsoft&reg; HTML Help Workshop 4.1\">");
-            printWriter.println("<!-- Sitemap 1.0 -->");
-            printWriter.println("</head>");
-            printWriter.println("<body>");
-            printWriter.println("<ul>");
 
+            serializer.writeStartDocument();
+            serializer.writeStartElement("html");
+            serializer.writeStartElement("head");
+            serializer.writeStartElement("meta");
+            serializer.writeAttribute("name", "GENERATOR");
+            serializer.writeAttribute("content", "Microsoft\u00AE HTML Help Workshop 4.1");
+            serializer.writeEndElement(); // meta
+            serializer.writeComment("Sitemap 1.0");
+            serializer.writeEndElement(); // head
+            serializer.writeStartElement("body");
+            serializer.writeStartElement("ul");
+            final int termNum = termList.size();
             for (int i = 0; i < termNum; i++) {
-                IndexTerm term = (IndexTerm) termList.get(i);
-                outputIndexTerm(term, printWriter);
+                final IndexTerm term = termList.get(i);
+                outputIndexTerm(term, serializer);
             }
-
-            printWriter.println("</ul>");
-            printWriter.println("</body>");
-            printWriter.println("</html>");
+            serializer.writeEndElement(); // ul
+            serializer.writeEndElement(); // body
+            serializer.writeEndElement(); // html
+            serializer.writeEndDocument();
+        } catch (final Exception e) {
+            throw new DITAOTException(e);
         } finally {
-            if (printWriter != null) {
-                printWriter.close();
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (final IOException e) {
+                    logger.logException(e);
+                }
             }
         }
     }
-    
 
     /**
-	 * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
-	 */
-	public void write(String filename) throws DITAOTException {
-		OutputStream out = null;
-		try {
-			out = new FileOutputStream(filename);
-			write(out);
-		} catch (Exception e) {
-			throw new DITAOTException(e);
-		} finally {
-        	if (out != null) {
-        		try {
-        			out.close();
-        		} catch (IOException e) {
-        			logger.logException(e);
-        		}
-        	}
-        }
-	}
-
-	/**
-     * Output the given indexterm into the PrintWriter.  
+     * Output the given indexterm into the PrintWriter.
      * 
      * @param term
      * @param printWriter
+     * @throws SAXException
      */
-    private void outputIndexTerm(IndexTerm term, PrintWriter printWriter) {
+    private void outputIndexTerm(final IndexTerm term, final XMLSerializer serializer) throws SAXException {
         List<IndexTermTarget> targets = term.getTargetList();
-        List<IndexTerm> subTerms = term.getSubTerms();
+        final List<IndexTerm> subTerms = term.getSubTerms();
         int targetNum = targets.size();
-        int subTermNum = subTerms.size();
+        final int subTermNum = subTerms.size();
 
-        printWriter.println("<li> <object type=\"text/sitemap\">");
-        printWriter.print("<param name=\"Name\" value=\"");
-        printWriter.print(term.getTermFullName());
-        printWriter.print("\">");
-        printWriter.println();
-        
+        serializer.writeStartElement("li");
+        serializer.writeStartElement("object");
+        serializer.writeAttribute("type", "text/sitemap");
+        serializer.writeStartElement("param");
+        serializer.writeAttribute("name", "Name");
+        serializer.writeAttribute("value", term.getTermFullName());
+        serializer.writeEndElement(); // param
         //if term doesn't has target to link to, it won't appear in the index tab
         //we need to create links for such terms
         if (targets == null || targets.isEmpty()){
-        	findTargets(term);
-        	targets = term.getTargetList();
-        	targetNum = targets.size();
+            findTargets(term);
+            targets = term.getTargetList();
+            targetNum = targets.size();
         }
-
         for (int i = 0; i < targetNum; i++) {
-            IndexTermTarget target = (IndexTermTarget) targets.get(i);
-            printWriter.print("<param name=\"Name\" value=\"");
-            printWriter.print(target.getTargetName());
-            printWriter.print("\">");
-            printWriter.println();
-            printWriter.print("<param name=\"Local\" value=\"");
-            printWriter.print(target.getTargetURI());
-            printWriter.print("\">");
-            printWriter.println();
+            final IndexTermTarget target = targets.get(i);
+            serializer.writeStartElement("param");
+            serializer.writeAttribute("name", "Name");
+            serializer.writeAttribute("value", target.getTargetName());
+            serializer.writeEndElement(); // param
+            serializer.writeStartElement("param");
+            serializer.writeAttribute("name", "Local");
+            serializer.writeAttribute("value", target.getTargetURI());
+            serializer.writeEndElement(); // param
         }
-
-        printWriter.println("</object>");
-
+        serializer.writeEndElement(); // object
         if (subTerms != null && subTermNum > 0) {
-            printWriter.println("<ul>");
-
+            serializer.writeStartElement("ul");
             for (int i = 0; i < subTermNum; i++) {
-                IndexTerm subTerm = (IndexTerm) subTerms.get(i);
-                outputIndexTerm(subTerm, printWriter);
+                final IndexTerm subTerm = subTerms.get(i);
+                outputIndexTerm(subTerm, serializer);
             }
-
-            printWriter.println("</ul>");
+            serializer.writeEndElement(); // ul
         }
-
-        printWriter.println("</li>");
+        serializer.writeEndElement(); // li
     }
 
     /**
@@ -175,43 +137,40 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter implements Ab
      * @param targets
      * The list of targets to store the result found
      */
-	private void findTargets(IndexTerm term) {
-		List<IndexTerm> subTerms = term.getSubTerms();
-		List<IndexTermTarget> subTargets = null;
-		if (subTerms != null && ! subTerms.isEmpty()){
-			for (int i = 0; i < subTerms.size(); i++){
-				IndexTerm subTerm = subTerms.get(i);
-				subTargets = subTerm.getTargetList();
-				if (subTargets != null && !subTargets.isEmpty()){
-				// edited by William on 2009-07-13 for indexterm bug:2819853 start
-					//findTargets(subTerm);
-					//add targets(child term)
-					term.addTargets(subTerm.getTargetList());
-				}else{
-					//term.addTargets(subTerm.getTargetList());
-					//recursive search child's child term
-					findTargets(subTerm);
-				}
-				//add target to parent indexterm
-				term.addTargets(subTerm.getTargetList());
-				// edited by William on 2009-07-13 for indexterm bug:2819853 end
-			}
-			
-		}	
-	}
+    private void findTargets(final IndexTerm term) {
+        final List<IndexTerm> subTerms = term.getSubTerms();
+        List<IndexTermTarget> subTargets = null;
+        if (subTerms != null && ! subTerms.isEmpty()){
+            for (int i = 0; i < subTerms.size(); i++){
+                final IndexTerm subTerm = subTerms.get(i);
+                subTargets = subTerm.getTargetList();
+                if (subTargets != null && !subTargets.isEmpty()){
+                    // edited by William on 2009-07-13 for indexterm bug:2819853 start
+                    //findTargets(subTerm);
+                    //add targets(child term)
+                    term.addTargets(subTerm.getTargetList());
+                }else{
+                    //term.addTargets(subTerm.getTargetList());
+                    //recursive search child's child term
+                    findTargets(subTerm);
+                }
+                //add target to parent indexterm
+                term.addTargets(subTerm.getTargetList());
+                // edited by William on 2009-07-13 for indexterm bug:2819853 end
+            }
 
-	/**
-	 * Get index file name.
-	 * @param outputFileRoot root
-	 * @return index file name
-	 */
-	public String getIndexFileName(String outputFileRoot) {
-		StringBuffer indexFilename;
-		
-		indexFilename = new StringBuffer(outputFileRoot);
-		indexFilename.append(".hhk");
-		// TODO Auto-generated method stub
-		return indexFilename.toString();
-	}
+        }
+    }
+
+    /**
+     * Get index file name.
+     * @param outputFileRoot root
+     * @return index file name
+     */
+    public String getIndexFileName(final String outputFileRoot) {
+        final StringBuffer indexFilename = new StringBuffer(outputFileRoot);
+        indexFilename.append(".hhk");
+        return indexFilename.toString();
+    }
 
 }

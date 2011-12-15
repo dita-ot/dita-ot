@@ -7,11 +7,6 @@
 <xsl:stylesheet version="1.0"
      xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-<xsl:output method="xml"
-            encoding="utf-8"
-            indent="no"
-/>
-
 <!-- Screen -->
 <xsl:template match="*[contains(@class,' ui-d/screen ')]" name="topic.ui-d.screen">
  <xsl:variable name="revtest">
@@ -110,6 +105,8 @@
    </xsl:call-template>
   </span>
 </xsl:template>
+<!-- Ignore text inside menucascade -->
+<xsl:template match="*[contains(@class,' ui-d/menucascade ')]/text()"/>
 
 <xsl:template match="*[contains(@class,' ui-d/shortcut ')]" name="topic.ui-d.shortcut">
   <xsl:variable name="flagrules">

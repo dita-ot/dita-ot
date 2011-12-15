@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="preprocess-mapref" xml:lang="en-us">
+<title>Resolve map references (mapref)</title>
+<shortdesc>The <codeph>mapref</codeph> module resolves references
+from one map to another.</shortdesc>
+<refbody>
+<section><p>Maps may reference other maps using markup similar to
+the following:<codeblock>&lt;topicref href="other.ditamap" format="ditamap"/></codeblock></p><p>The
+DITA 1.2 standard added a new element that allows this sort of reference
+without setting the format attribute:<codeblock>&lt;mapref href="other.ditamap"/></codeblock></p><p>In
+either case, the element that references the other map is replaced
+by the topic references from the other map. Relationship tables are
+pulled into the referencing map as a child of the root element (&lt;map>
+or a specialization of &lt;map>).</p><p>This step is implemented in
+XSLT.</p></section>
+</refbody>
+</reference>

@@ -31,24 +31,24 @@ with those set forth herein.
 
 This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
-*/
+ */
 public class IndexPreprocessResult {
-	private Document document;
-	private IndexEntry[] indexEntries;
+    private final Document document;
+    private final IndexEntry[] indexEntries;
 
 
-	public IndexPreprocessResult(Document theDocument, IndexEntry[] theIndexEntries) {
-		document = theDocument;
-		indexEntries = theIndexEntries;
-	}
+    public IndexPreprocessResult(final Document theDocument, final IndexEntry[] theIndexEntries) {
+        document = theDocument;
+        indexEntries = theIndexEntries;
+    }
 
 
-	public Document getDocument() {
-		return document;
-	}
+    public Document getDocument() {
+        return document;
+    }
 
 
-	public IndexEntry[] getIndexEntries() {
-		return indexEntries;
-	}
+    public IndexEntry[] getIndexEntries() {
+        return indexEntries;
+    }
 }

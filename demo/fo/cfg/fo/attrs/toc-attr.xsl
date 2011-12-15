@@ -35,13 +35,15 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     version="2.0">
 
-    <xsl:attribute-set name="__toc__header">
-        <xsl:attribute name="margin-top">0pc</xsl:attribute>
-        <xsl:attribute name="margin-bottom">1.4pc</xsl:attribute>
+    <xsl:variable name="toc.text-indent" select="'14pt'"/>
+    <xsl:variable name="toc.toc-indent" select="'30pt'"/>
+
+    <xsl:attribute-set name="__toc__header" use-attribute-sets="common.title">
+        <xsl:attribute name="space-before">0pt</xsl:attribute>
+        <xsl:attribute name="space-after">16.8pt</xsl:attribute>
         <xsl:attribute name="font-size">20pt</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
-        <xsl:attribute name="padding-top">1.4pc</xsl:attribute>
-        <xsl:attribute name="font-family">Sans</xsl:attribute>
+        <xsl:attribute name="padding-top">16.8pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__toc__link">
@@ -55,14 +57,14 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="__toc__topic__content">
         <xsl:attribute name="last-line-end-indent">-22pt</xsl:attribute>
         <xsl:attribute name="end-indent">22pt</xsl:attribute>
-        <xsl:attribute name="text-indent">-.2in</xsl:attribute>
-        <xsl:attribute name="text-align">left</xsl:attribute>
+        <xsl:attribute name="text-indent">-<xsl:value-of select="$toc.text-indent"/></xsl:attribute>
+        <xsl:attribute name="text-align">start</xsl:attribute>
         <xsl:attribute name="text-align-last">justify</xsl:attribute>
         <xsl:attribute name="font-size">
             <xsl:variable name="level" select="count(ancestor-or-self::*[contains(@class, ' topic/topic ')])"/>
             <xsl:choose>
                 <xsl:when test="$level = 1">12pt</xsl:when>
-                <xsl:otherwise>10pt</xsl:otherwise>
+                <xsl:otherwise><xsl:value-of select="$default-font-size"/></xsl:otherwise>
             </xsl:choose>
         </xsl:attribute>
         <xsl:attribute name="font-weight">
@@ -109,12 +111,12 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__toc__title">
-      <xsl:attribute name="margin-right">.2in</xsl:attribute>
+      <xsl:attribute name="end-indent"><xsl:value-of select="$toc.text-indent"/></xsl:attribute>
       <xsl:attribute name="keep-together.within-line">always</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__toc__page-number">
-      <xsl:attribute name="margin-left">-.2in</xsl:attribute>
+      <xsl:attribute name="start-indent">-<xsl:value-of select="$toc.text-indent"/></xsl:attribute>
       <xsl:attribute name="keep-together.within-line">always</xsl:attribute>
     </xsl:attribute-set>
 
@@ -123,25 +125,25 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__toc__indent">
-        <xsl:attribute name="margin-left">
+        <xsl:attribute name="start-indent">
             <xsl:variable name="level" select="count(ancestor-or-self::*[contains(@class, ' topic/topic ')])"/>
-            <xsl:value-of select="concat(string(42 + number($level) * 30), 'pt')"/>
+            <xsl:value-of select="concat($side-col-width, ' + (', string($level - 1), ' * ', $toc.toc-indent, ') + ', $toc.text-indent)"/>
         </xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__toc__mini">
         <xsl:attribute name="font-size">10.5pt</xsl:attribute>
-        <xsl:attribute name="font-family">Sans</xsl:attribute>
+        <xsl:attribute name="font-family">sans-serif</xsl:attribute>
         <xsl:attribute name="end-indent">5pt</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__toc__mini__header" use-attribute-sets="__toc__mini">
+    <xsl:attribute-set name="__toc__mini__header" use-attribute-sets="__toc__mini common.title">
         <xsl:attribute name="font-weight">bold</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__toc__mini__list">
-        <xsl:attribute name="provisional-distance-between-starts">1.5pc</xsl:attribute>
-        <xsl:attribute name="provisional-label-separation">1pc</xsl:attribute>
+        <xsl:attribute name="provisional-distance-between-starts">18pt</xsl:attribute>
+        <xsl:attribute name="provisional-label-separation">12pt</xsl:attribute>
         <xsl:attribute name="space-after">9pt</xsl:attribute>
         <xsl:attribute name="space-before">9pt</xsl:attribute>
     </xsl:attribute-set>
@@ -178,9 +180,8 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="column-width">65%</xsl:attribute>
     </xsl:attribute-set>
 
-     <xsl:attribute-set name="__toc__mini__summary">
+     <xsl:attribute-set name="__toc__mini__summary" use-attribute-sets="common.border__left">
          <xsl:attribute name="padding-left">10pt</xsl:attribute>
-         <xsl:attribute name="border-left">solid 1px black</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__toc__topic__content__booklist" use-attribute-sets="__toc__topic__content">
@@ -189,7 +190,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
     
     <xsl:attribute-set name="__toc__indent__booklist" use-attribute-sets="__toc__indent">
-        <xsl:attribute name="margin-left">72pt</xsl:attribute>
+        <xsl:attribute name="start-indent"><xsl:value-of select="$side-col-width"/> + <xsl:value-of select="$toc.text-indent"/></xsl:attribute>
         <xsl:attribute name="space-before">10pt</xsl:attribute>
         <xsl:attribute name="space-after">10pt</xsl:attribute>
     </xsl:attribute-set>
@@ -214,7 +215,7 @@ See the accompanying license.txt file for applicable licenses.
     
     <xsl:attribute-set name="__toc__item__right">
         <xsl:attribute name="keep-together.within-line">always</xsl:attribute>
-        <xsl:attribute name="margin-left">0.01in</xsl:attribute>
+        <xsl:attribute name="start-indent">1pt</xsl:attribute>
     </xsl:attribute-set>
 
 </xsl:stylesheet>

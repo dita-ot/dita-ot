@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<?Pub Sty _display FontColor="red"?>
+<?Pub Inc?>
+<reference id="plugin-sample" xml:lang="en-us">
+<title>Example plugin.xml file</title>
+<shortdesc>The following is a sample of a <filepath>plugin.xml</filepath> file.
+This file adds support for a new set of         specialized DTDs,
+and includes an override for the XHTML output processor.</shortdesc>
+<refbody>
+<section><p>This <filepath>plugin.xml</filepath> file would go into
+        a directory such as <filepath>DITA-OT\plugins\music\</filepath> and
+referenced supporting         files would also exist in that directory.
+A more extensive sample using these values is         available in
+the actual music plug-in, available at the <xref format="html"
+href="http://sourceforge.net/projects/dita-ot/files/" scope="external">DITA-OT
+download           page</xref> at SourceForge </p><?Pub Caret -2?> 
+     </section>
+<example><codeblock>&lt;plugin id="org.metadita.specialization.music">
+  &lt;feature extension="dita.specialization.catalog.relative" file="catalog-dita.xml">
+  &lt;feature extension="dita.xsl.xhtml" file="xsl/music2xhtml.xsl"/>
+&lt;/plugin></codeblock></example>
+</refbody>
+</reference>
+<?Pub *0000001339?>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<?Pub Inc?>
+<reference id="plugin-newextensions" xml:lang="en-us">
+<title>Creating a new plug-in extension point</title>
+<shortdesc>If your plug-in needs to define its own extension point
+in an XML file, add the string           "<codeph>_template</codeph>"
+to the filename before the file suffix. During integration,      
+  this file will be processed like the built-in DITA-OT templates.</shortdesc>
+<refbody>
+<section><p>Template files are used to integrate most DITA-OT extensions.
+For example, the file <filepath>dita2xhtml_template.xsl</filepath> contains
+all of the default rules for converting DITA topics to XHTML, along
+with an integration point for plug-in extensions. When the integrator
+runs, the file dita2xhtml.xsl is recreated, and the integration point
+is replaced with references to all appropriate plug-ins.</p><p>To
+mark a new file as a template file, use the <codeph>&lt;template></codeph> element.</p></section>
+<example><title>Example</title><p>The following plug-in defines <filepath>myTemplateFile_template.xsl</filepath> as
+a new template for extensions. When the integrator runs, this will
+be used to recreate <filepath>myTemplateFile.xsl</filepath>, replacing
+any anchor points with the appropriate XSLT imports.</p><?Pub Caret -1?><codeblock>&lt;plugin id="com.example.new-extensions">
+  &lt;template file="myTemplateFile_template.xsl"/>
+&lt;/plugin></codeblock></example>
+</refbody>
+</reference>
+<?Pub *0000001608?>

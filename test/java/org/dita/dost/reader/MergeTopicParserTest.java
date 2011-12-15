@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -25,7 +25,7 @@ public class MergeTopicParserTest {
     private final File resourceDir = new File("test-stub", MergeTopicParserTest.class.getSimpleName());
     private final File srcDir = new File(resourceDir, "src");
     private final File expDir = new File(resourceDir, "exp");
-        
+
     @Test
     public void testGetContent() {
         final MergeTopicParser parser = new MergeTopicParser(new MergeUtils());
@@ -52,11 +52,11 @@ public class MergeTopicParserTest {
         parser.setLogger(new TestUtils.TestLogger());
         parser.parse("test.xml", srcDir.getAbsolutePath());
         assertXMLEqual(new InputSource(new File(expDir, "test.xml").toURI().toString()),
-                       new InputSource(new StringReader(parser.getContent().getValue().toString())));
+                new InputSource(new StringReader(parser.getContent().getValue().toString())));
         parser.reset();
         parser.parse("test2.xml", srcDir.getAbsolutePath());
         assertXMLEqual(new InputSource(new File(expDir, "test2.xml").toURI().toString()),
-                       new InputSource(new StringReader(parser.getContent().getValue().toString())));
+                new InputSource(new StringReader(parser.getContent().getValue().toString())));
     }
 
 }

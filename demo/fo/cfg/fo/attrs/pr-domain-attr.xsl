@@ -33,24 +33,15 @@ See the accompanying license.txt file for applicable licenses.
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
 
-    <xsl:attribute-set name="codeph">
-        <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
+    <xsl:attribute-set name="codeph" use-attribute-sets="base-font">
+        <xsl:attribute name="font-family">monospace</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="codeblock">
-        <xsl:attribute name="space-before">0.4em</xsl:attribute>
-        <xsl:attribute name="space-after">0.8em</xsl:attribute>
-        <xsl:attribute name="white-space-treatment">preserve</xsl:attribute>
-        <xsl:attribute name="white-space-collapse">false</xsl:attribute>
-        <xsl:attribute name="linefeed-treatment">preserve</xsl:attribute>
-        <xsl:attribute name="wrap-option">wrap</xsl:attribute>
-        <xsl:attribute name="background-color">#f0f0f0</xsl:attribute>
-        <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="line-height">106%</xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
+    <xsl:attribute-set name="codeblock" use-attribute-sets="pre">
         <xsl:attribute name="keep-with-previous.within-page">always</xsl:attribute>
-        <!--        &lt;xsl:attribute name=&quot;keep-together.within-page&quot;&gt;always&lt;/xsl:attribute&gt;-->
+        <xsl:attribute name="start-indent">6pt + from-parent(start-indent)</xsl:attribute>
+        <xsl:attribute name="end-indent">6pt + from-parent(end-indent)</xsl:attribute>
+        <xsl:attribute name="padding">6pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="codeblock__top">
@@ -76,24 +67,20 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="synph">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="oper">
-        <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
+    <xsl:attribute-set name="oper" use-attribute-sets="base-font">
+        <xsl:attribute name="font-family">monospace</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="delim">
-        <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
+    <xsl:attribute-set name="delim" use-attribute-sets="base-font">
+        <xsl:attribute name="font-family">monospace</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="sep">
-        <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
+    <xsl:attribute-set name="sep" use-attribute-sets="base-font">
+        <xsl:attribute name="font-family">monospace</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="apiname">
-        <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
+    <xsl:attribute-set name="apiname" use-attribute-sets="base-font">
+        <xsl:attribute name="font-family">monospace</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="parml">
@@ -102,8 +89,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="plentry">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="pt">
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
+    <xsl:attribute-set name="pt" use-attribute-sets="base-font">
         <xsl:attribute name="font-weight">bold</xsl:attribute>
         <xsl:attribute name="text-indent">0em</xsl:attribute>
         <xsl:attribute name="end-indent">24pt</xsl:attribute>
@@ -113,11 +99,10 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="font-weight">bold</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="pd">
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
+    <xsl:attribute-set name="pd" use-attribute-sets="base-font">
         <xsl:attribute name="space-before">0.3em</xsl:attribute>
         <xsl:attribute name="space-after">0.5em</xsl:attribute>
-        <xsl:attribute name="start-indent">6pc</xsl:attribute>
+        <xsl:attribute name="start-indent">72pt</xsl:attribute>
         <xsl:attribute name="end-indent">24pt</xsl:attribute>
     </xsl:attribute-set>
 
@@ -145,18 +130,16 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="kwd">
-        <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
+    <xsl:attribute-set name="kwd" use-attribute-sets="base-font">
+        <xsl:attribute name="font-family">monospace</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="kwd__default">
         <xsl:attribute name="text-decoration">underline</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="fragref">
-        <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
+    <xsl:attribute-set name="fragref" use-attribute-sets="base-font">
+        <xsl:attribute name="font-family">monospace</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="fragment.title">

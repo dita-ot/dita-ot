@@ -45,9 +45,8 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="text-decoration">underline</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="tt">
-        <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
+    <xsl:attribute-set name="tt" use-attribute-sets="base-font">
+        <xsl:attribute name="font-family">monospace</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="sup">

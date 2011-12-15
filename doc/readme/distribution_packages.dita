@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="distribution_packages">
+  <title>Distribution packages</title>
+  <shortdesc>DITA-OT is available in three three binary packages, as well as in a source
+    package.</shortdesc>
+  <conbody>
+    <section>
+      <title>Minimal package (DITA-OT<keyword keyref="release.version"/>_minimal_bin.zip).</title>
+      <p>This package is primarily for use by vendors that embed the toolkit within their products.
+        It contains all of the core processing code: CSS and XSLT, Ant build scripts, Java code
+        (dost.jar), resource files, DTDs and Schemas. Users will need to have their own version of
+        Ant and other libraries, and will need to set up environment variables for each library. The
+        only external files inside the minimal package are the OASIS DTDs and Schemas, along with
+        the following open source libraries:</p>
+      <ul>
+        <li>Apache Commons Codec <keyword keyref="tool.codec.version"/></li>
+        <li>Apache Catalog Resolver <keyword keyref="tool.resolver.version"/></li>
+      </ul>
+    </section>
+    <section>
+      <title>Standard package (DITA-OT<keyword keyref="release.version"/>_bin.zip)</title>
+      <p>This package contains everything in the minimal package, plus documentation, existing demo
+        code (such as legacy support for the old bookmap), sample Ant scripts, and sample DITA
+        files. This package is appropriate for those who want the core toolkit function, demos, and
+        samples, but already have local installed copies of Ant and other required tools. The
+        standard package includes only the following open source libraries:</p>
+      <ul>
+        <li>Apache Commons Codec <keyword keyref="tool.codec.version"/></li>
+        <li>Apache Catalog Resolver <keyword keyref="tool.resolver.version"/></li>
+      </ul>
+    </section>
+    <section>
+      <title>Full Easy Install package (DITA-OT<keyword keyref="release.version"
+        />_full_easy_install_bin.zip)</title>
+      <p>This package contains everything in the Standard package, plus common Apache tools used for
+        builds so that you do not need to set them up separately; the only core tool that is missing
+        is Java. This package also contains a batch file to set up a build environment using those
+        tools. This package is appropriate for novice users, those testing the toolkit, or those who
+        do not want to maintain local copies of other Apache tools. The following external libraries
+        are included in version <keyword keyref="release.version"/> of this package:</p>
+      <ul>
+        <li>Apache Ant <keyword keyref="tool.ant.version"/></li>
+        <li>Saxon <keyword keyref="tool.saxon.version"/></li>
+        <li>Apache Commons Codec <keyword keyref="tool.codec.version"/></li>
+        <li>Apache Catalog Resolver <keyword keyref="tool.resolver.version"/></li>
+        <li>IBM ICU for Java <keyword keyref="tool.icu4j.version"/></li>
+        <li>Apache FOP <keyword keyref="tool.fop.version"/></li>
+      </ul>
+    </section>
+    <section>
+      <title>Source package (DITA-OT<keyword keyref="release.version"/>_src.zip)</title>
+      <p>In addition to the binary versions of the toolkit, there is a source package available that
+        contains all of the source code used in each of the three packages. The demo files, samples,
+        and documentation are not part of the source package.The source package contains the Apache
+        Commons Logging and Apache Catalog Resolver libraries.</p>
+    </section>
+  </conbody>
+  <related-links>
+    <link href="https://sourceforge.net/projects/dita-ot/files" scope="external" format="html">
+      <linktext>DITA Open Toolkit distibution package downloads</linktext>
+    </link>
+  </related-links>
+</concept>

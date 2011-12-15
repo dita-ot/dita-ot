@@ -8,7 +8,7 @@
   <!-- Begin of Ant Messages -->
   <message id="DOTA001F" type="FATAL">
     <reason>Invalid transformation type.</reason>
-    <response>Please provide the correct transormation types using Ant parameter 'transtype':  xhtml, eclipsehelp, eclipsecontent, javahelp, htmlhelp, pdf, pdf2, troff, docbook, wordrtf, odt.</response>
+    <response>Please provide the correct transformation types using Ant parameter 'transtype': xhtml, eclipsehelp, eclipsecontent, javahelp, htmlhelp, pdf, pdf2, troff, docbook, wordrtf, odt.</response>
   </message>
   
   <message id="DOTA002F" type="FATAL">
@@ -18,11 +18,11 @@
   
   <message id="DOTA003F" type="FATAL">
     <reason>Can't find the user specified stylesheet '%1'.</reason>
-    <response>Please provide the correct sytlesheet using Ant parameter 'args.xsl'.</response>
+    <response>Please provide the correct stylesheet using Ant parameter 'args.xsl'.</response>
   </message>
   
   <message id="DOTA004F" type="FATAL">
-    <reason>Invalid dita extensition '%1'.</reason>
+    <reason>Invalid dita extension '%1'.</reason>
     <response>Please input the correct dita extension using Ant parameter 'dita.extname'. Valid values are dita, .dita, xml, or .xml.</response>
   </message>
   
@@ -37,24 +37,24 @@
   </message>
   
   <message id="DOTA007E" type="ERROR">
-    <reason>Cann't find the user specified file  "%1".</reason>
-    <response>Please provide the existing file using Ant parameter 'args.ftr', and make sure there is no prefix of  "file:" in the 'args.ftr'.</response>
+    <reason>Can't find the user specified file "%1".</reason>
+    <response>Please provide the existing file using Ant parameter 'args.ftr', and make sure there is no prefix of "file:" in the 'args.ftr'.</response>
   </message>
   
   <message id="DOTA008E" type="ERROR">
-    <reason>Cann't find the user specified file  "%1".</reason>
-    <response>Please provide the existing file using Ant parameter 'args.hdr', and make sure there is no prefix of  "file:" in the 'args.hdr'.</response>
+    <reason>Can't find the user specified file "%1".</reason>
+    <response>Please provide the existing file using Ant parameter 'args.hdr', and make sure there is no prefix of "file:" in the 'args.hdr'.</response>
   </message>
   
   <message id="DOTA009E" type="ERROR">
-    <reason>Cann't find the user specified file  "%1".</reason>
-    <response>Please provide the existing file using Ant parameter 'args.hdf', and make sure there is no prefix of  "file:" in the 'args.hdf'.</response>
+    <reason>Can't find the user specified file "%1".</reason>
+    <response>Please provide the existing file using Ant parameter 'args.hdf', and make sure there is no prefix of "file:" in the 'args.hdf'.</response>
   </message>
   
   <!--Added by William on 2009-11-23 for bug:2893745 -->
   <message id="DOTA010E" type="ERROR">
-    <reason>The FOP Plugin cannot be found in the default location.</reason>
-    <response>Please install the required plugins into the dir demo/fo/fop or configure the build file to support your local configuration.</response>
+    <reason>The FOP plug-in cannot be found in the default location.</reason>
+    <response>Please install the required plug-ins into the dir demo/fo/fop or configure the build file to support your local configuration.</response>
   </message>
   
   <!-- Begin of Java Messages -->
@@ -154,8 +154,8 @@
   </message>
   
   <message id="DOTJ020W" type="WARN">
-    <reason>At least one plugin in '%1' is required by plugin '%2'. Plugin '%2' cannot be loaded.</reason>
-    <response>Check and see whether all prerequisite plugins are installed in toolkit.</response>
+    <reason>At least one plug-in in '%1' is required by plug-in '%2'. Plug-in '%2' cannot be loaded.</reason>
+    <response>Check and see whether all prerequisite plug-ins are installed in toolkit.</response>
   </message>
   
   <message id="DOTJ021W" type="WARN">
@@ -163,10 +163,10 @@
     <response>Please check the file '%1' and the ditaval file to see if this is the intended result.</response>
   </message>
   
-  <message id="DOTJ021E" type="ERROR">
+  <!--message id="DOTJ021E" type="ERROR">
     <reason>Failed to get the image file specified '%1' in ODT generation</reason>
     <response>Check whether the image exists and copied to output directory before the final step of ODT generation.</response>
-  </message>
+  </message-->
   
   <message id="DOTJ022F" type="FATAL">
     <reason>Failed to parse the input file '%1' because all of its content has been filtered out.</reason>
@@ -174,8 +174,8 @@
   </message>
 
   <message id="DOTJ023E" type="ERROR">
-    <reason>Failed to get the specified image file '%1' for RTF generation.</reason>
-    <response>Check whether the image exists and was copied to output directory before the final step of RTF generation.</response>
+    <reason>Failed to get the specified image file '%1' for output generation.</reason>
+    <response>Check whether the image exists and was copied to output directory before the final step of output generation.</response>
   </message>
   
   <message id="DOTJ024W" type="WARN">
@@ -214,7 +214,7 @@
   </message> 
   
   <message id="DOTJ031I" type="INFO">
-    <reason>No specified rule for '%1'  was found in the ditaval file. This value will use the default action, or a parent prop action if specified. </reason>
+    <reason>No specified rule for '%1' was found in the ditaval file. This value will use the default action, or a parent prop action if specified. </reason>
     <response>To remove this message, you can specify a rule for '%1' in the ditaval file. </response>
   </message> 
   
@@ -235,22 +235,22 @@
   
   <message id="DOTJ035F" type="FATAL">
     <reason>The file "%1" referenced by "%2" is outside the scope of the input dita/map directory.</reason>
-    <response>If you want to lower the severity level, please use the Ant parameter 'outer.control', and set the value to "warn" or "quiet". Otherwise, move the referenced file "%1" into the the input dita/map directory.</response>
+    <response>If you want to lower the severity level, please use the Ant parameter 'outer.control', and set the value to "warn" or "quiet". Otherwise, move the referenced file "%1" into the input dita/map directory.</response>
   </message>
   
    <message id="DOTJ036W" type="WARN">
     <reason>The file "%1" referenced by "%2" is outside the scope of the input dita/map directory.</reason>
-    <response>If you do not want to see the warning message, please use the Ant parameter 'outer.control', and set the value to "quiet". Otherwise, move the referenced file "%1" into the the input dita/map directory.</response>
+    <response>If you do not want to see the warning message, please use the Ant parameter 'outer.control', and set the value to "quiet". Otherwise, move the referenced file "%1" into the input dita/map directory.</response>
   </message>
   
   <message id="DOTJ037W" type="WARN">
-    <reason>The XML schema and DTD validition function of the parser is turned off.</reason>
+    <reason>The XML schema and DTD validation function of the parser is turned off.</reason>
     <response>Please make sure the input is normalized DITA with class attributes included, otherwise it will not be processed correctly.</response>
   </message>
   
   <message id="DOTJ038E" type="ERROR">
     <reason>The tag "%1" is specialized from non-predefined metadata.</reason>
-    <response>Please make sure that tag "%1" is specialized from some predefinded metadata tag.</response>
+    <response>Please make sure that tag "%1" is specialized from some predefined metadata tag.</response>
   </message>
   
   <message id="DOTJ039E" type="ERROR">
@@ -274,8 +274,8 @@
   </message>
   
   <message id="DOTJ043W" type="WARN">
-    <reason>There is no target "%1" in "%2" specified for the conref push action.</reason>
-    <response>Please make sure that the target exists and is not filtered out.</response>
+    <reason>There is no correct target "%1" in "%2" specified for the conref push action.</reason>
+    <response>Please make sure that the target exists and is not filtered out or the target type matches.</response>
   </message>
   
   <message id="DOTJ044W" type="WARN">
@@ -288,13 +288,18 @@
     <response>Please make sure the key name is unique in a single map.</response>
   </message>
   
+  <message id="DOTJ045I" type="INFO">
+    <reason>The key "%1" is defined more than once in the same map file. The reference href="%2" is ignored.</reason>
+    <response/>
+  </message>
+  
   <message id="DOTJ046E" type="ERROR">
-    <reason>Conkeyref="%1" can not be resolved because it does not contain a key or the key is not defined. Using the conref value as fallback if it exists.</reason>
+    <reason>Conkeyref="%1" can not be resolved because it does not contain a key or the key is not defined. Using the conref value as fall-back if it exists.</reason>
     <response>Please make sure the key name does exist.</response>
   </message>
   
   <message id="DOTJ047I" type="INFO">
-    <reason>Unable to find key definition for keyref="%1", href may be used as fallback if it exists.</reason>
+    <reason>Unable to find key definition for keyref="%1", href may be used as fall-back if it exists.</reason>
     <response>Please make sure the key name is correct.</response>
   </message>
   
@@ -309,9 +314,26 @@
   </message>
   
   <message id="DOTJ050W" type="WARN">
-    <reason>The index-see reference '%1' was not found in the plugin. </reason>
+    <reason>The index-see reference '%1' was not found in the plug-in. </reason>
     <response>Please make sure that the appropriate index entry is created or manually update the index.xml file.</response>
   </message>
+  
+  <message id="DOTJ051E" type="ERROR">
+    <reason>Unable to find target for coderef "%1". Check to make sure that the target element is available. Found in file="%2", element="%3".</reason>
+    <response>Check to make sure the value in the href attribute is correct.</response>
+  </message>
+
+  <message id="DOTJ052E" type="ERROR">
+    <reason>Code reference charset "%1" not supported.</reason>
+    <response>Check to make sure the charset value in the format attribute is correct and supported.</response>
+  </message>
+
+  <!-- Added by ryan on 2011-07-27 for bug:3358377 start  -->
+  <message id="DOTJ053W" type="WARN">
+    <reason>Input file '%1' is not valid DITA file name.</reason>
+    <response>Please check the file '%1' to see if the file is a valid target file by extension.</response>
+  </message>
+  <!-- Added by ryan on 2011-07-27 for bug:3358377 end  -->
   
   <!-- End of Java Messages -->
     
@@ -355,7 +377,12 @@
     <reason>File '%1' does not exist.</reason>
     <response>Be sure the file '%1' exists or change the href to reference an existing file. Note:'%1' might be changed to use standard dita topic file extension name '.dita' or '.xml'.</response>
   </message>
-  
+
+  <message id="DOTX008E" type="ERROR">
+    <reason>File '%1' does not exist.</reason>
+    <response>Be sure the file '%1' exists or change the href to reference an existing file. Note:'%1' might be changed to use standard dita topic file extension name '.dita' or '.xml'.</response>
+  </message>
+
   <message id="DOTX009W" type="WARN">
     <reason>Could not retrieve a title from '%1'. Using '%2' instead.</reason>
     <response>Add a title in the target topic file.</response>
@@ -528,7 +555,7 @@
   
   <message id="DOTX043I" type="INFO">
     <reason>The link to '%1' may appear more than once in '%2'.</reason>
-    <response>If you do not want two occurrences of a link to the same href, remove one of the links or define the same attributes on both link elements.  Note that links generated from a &lt;reltable&gt; in a DITA Map will have the role attribute set to "friend".</response>
+    <response>If you do not want two occurrences of a link to the same href, remove one of the links or define the same attributes on both link elements. Note that links generated from a &lt;reltable&gt; in a DITA Map will have the role attribute set to "friend".</response>
   </message>
   
   <message id="DOTX044E" type="ERROR">
@@ -563,7 +590,7 @@
   
   <message id="DOTX050W" type="WARN">
     <reason>Cannot find id attribute in map element. </reason>
-    <response>Default id "org.sample.help.doc" is used for Eclipse plugin. If you want to use your own id, please specify it in the id attribute of the map.</response>
+    <response>Default id "org.sample.help.doc" is used for Eclipse plug-in. If you want to use your own id, please specify it in the id attribute of the map.</response>
   </message>
   
   <message id="DOTX051W" type="WARN">
@@ -578,7 +605,7 @@
   
   <message id="DOTX053E" type="ERROR">
     <reason>A element that references another map indirectly includes itself, which is not possible. Please fix the target of the mapref. The map reference points to '%1'.</reason>
-    <response>Resolve the circlular map reference.</response>
+    <response>Resolve the circular map reference.</response>
   </message>
   
   <message id="DOTX054W" type="WARN">
@@ -652,10 +679,20 @@
   <!-- Added by William on 2010-06-21 for bug:3012392 start  -->
   <message id="DOTA066F" type="FATAL">
     <reason>Can't find the user specified stylesheet '%1'.</reason>
-    <response>Please provide the correct sytlesheet using Ant parameter 'args.xsl.pdf'.</response>
+    <response>Please provide the correct stylesheet using Ant parameter 'args.xsl.pdf'.</response>
   </message>
   <!-- Added by William on 2010-06-21 for bug:3012392 start -->
+    
+  <message id="DOTA067W" type="WARN">
+    <reason>Ignoring index-see '%1' for '%2' because parent indexterm contains indexterm children.</reason>
+    <response/>
+  </message>
   
+  <message id="DOTA068W" type="WARN">
+    <reason>Ignoring index-see-also '%1' for '%2' because parent indexterm contains indexterm children.</reason>
+    <response/>
+  </message>
+    
   <!-- Add any messages defined by plugins. -->
   <dita:extension xmlns:dita="http://dita-ot.sourceforge.net"
     behavior="org.dita.dost.platform.InsertAction" id="dita.xsl.messages"/>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<?Pub Inc?>
+<reference id="plugin-dependencies" xml:lang="en-us">
+<title>Managing plug-in dependencies</title>
+<shortdesc>The <codeph>&lt;require></codeph> element in a <filepath>plugin.xml</filepath> file
+is used to create a dependency on another plug-in. The <codeph>&lt;require></codeph> element
+requires the <codeph>plugin</codeph> attribute in order to reference
+the dependency.</shortdesc>
+<refbody>
+<section>       <p>If the current plug-in requires a plug-in with <codeph>id="plugin-id"</codeph> before
+it can be installed, it would include the         following: </p> 
+     <codeblock>&lt;require plugin="<i>plugin-id</i>"></codeblock> 
+     <p>Prerequisite plug-ins are integrated before the current plug-in
+is integrated. This does the         right thing with respect to XSLT
+overrides. If your plug-in is a specialization of a         specialization,
+it should <codeph>&lt;require></codeph> its base plug-ins, in order
+from         general to specific. </p>       <p>If a prerequisite
+plug-in is missing, a warning will be printed during integration.
+To         suppress this, but keep the integration order if both plug-ins
+are present, add           <codeph>importance="optional"</codeph> to
+the <codeph>&lt;require></codeph> element. </p>       <p>If your plug-in
+can depend on any one of several optional plug-ins, separate the plug-in
+ids         with a vertical bar. This is most useful when combined
+with importance="optional": </p>       </section>
+<example><title>Example</title><p>The following plug-in will only
+be installed if the plug-in with id="com.example.primary" is available.
+If that one is not available, a warning will be generated during the
+integration process.</p><codeblock>&lt;plugin id="com.example.builds-on-primary">
+  &lt;!-- ...extensions here -->
+  &lt;require plugin="com.example.primary"/>
+&lt;/plugin></codeblock><p>The following plug-in will only be installed
+if either the plug-in with id="pluginA" or the plug-in with id="pluginB"
+are available. If neither of those are installed, the current plug-in
+will be ignored.</p><codeblock>&lt;plugin id="pluginC">
+  &lt;!-- ...extensions here -->
+  &lt;require plugin="pluginA|pluginB" importance="optional"/>
+&lt;/plugin></codeblock>       </example>
+</refbody>
+</reference><?Pub Caret -3?>
+<?Pub *0000002467?>

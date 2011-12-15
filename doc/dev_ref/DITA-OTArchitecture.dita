@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+ "topic.dtd">
+<topic id="ditaotarch" xml:lang="en-us">
+<title>DITA Open Toolkit Architecture</title>
+<shortdesc>The DITA Open Toolkit is an open source implementation
+of the OASIS DITA Technical Committee's specification for Darwin Information
+Typing Architecture (DITA) DTDs and schemas. The toolkit uses open
+source solution of ANT, XSLT (currently 1.0 for most processing, with
+XSLT 2.0 for PDF) and Java to implement transformation functions from
+DITA content (maps and topics) into different deliverable formats.</shortdesc>
+<body>
+<section><title>Processing structure</title><p>The DITA Open Toolkit
+implements a multi-stage, map-driven architecture to process DITA
+content. Each step in the process examines some or all of the content;
+some steps result in temporary files used by later steps, while others
+result in updated copies of the DITA content. Most of the processing
+takes place in a temporary working directory (the source files themselves
+are never modified).</p><p>Transformations in the toolkit are designed
+like a pipeline. Most of the pipeline is common between all output
+formats, and is known as the "pre-process" stage. In general, any
+DITA process begins with this common set of pre-processing routines.
+Once the pre-processing is completed, the pipeline diverges based
+on the desired output format. Some processing is still common to multiple
+output formats; for example, Eclipse Help and HTML Help both use the
+same routines to generate XHTML topics, after which the two pipelines
+branch to create a different set of navigation files.</p><p>The
+following image illustrates how the pipeline works for some common
+output types.</p><image href="images/mainarch.gif" placement="break">
+<alt>Diagram of some possible paths through the transform pipeline.</alt>
+</image></section>
+</body>
+</topic>

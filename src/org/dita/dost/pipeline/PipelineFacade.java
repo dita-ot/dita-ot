@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -24,7 +24,7 @@ import org.dita.dost.module.ModuleFactory;
 public final class PipelineFacade implements AbstractFacade {
 
     private DITAOTLogger logger;
-    
+
     /**
      * Automatically generated constructor: PipelineFacade.
      */
@@ -39,26 +39,26 @@ public final class PipelineFacade implements AbstractFacade {
      * @return AbstractPipelineOutput
      * @throws DITAOTException DITAOTException
      */
-    public AbstractPipelineOutput execute(String pipelineModuleName,
-            AbstractPipelineInput input) throws DITAOTException {
-        /* 
+    public AbstractPipelineOutput execute(final String pipelineModuleName,
+            final AbstractPipelineInput input) throws DITAOTException {
+        /*
          * PipelineFacade just call the relevant single module now,
          * in the future can do more complex things here, like call several
-         * modules. 
+         * modules.
          */
-        AbstractPipelineModule module = null;                
-        ModuleFactory factory = ModuleFactory.instance();
-        		
-		module = factory.createModule(pipelineModuleName);
-		module.setLogger(logger);
-		
+        AbstractPipelineModule module = null;
+        final ModuleFactory factory = ModuleFactory.instance();
+
+        module = factory.createModule(pipelineModuleName);
+        module.setLogger(logger);
+
         if (module != null) {
             return module.execute(input);
         }
 
         return null;
     }
-    
+
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }

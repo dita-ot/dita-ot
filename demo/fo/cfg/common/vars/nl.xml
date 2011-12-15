@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<vars xmlns="http://www.idiominc.com/opentopic/vars">
+  <variable id="Product Name"/>
+  <variable id="Body odd footer"/>
+  <variable id="Body even footer"/>
+  <variable id="Body first footer"/>
+  <variable id="Body first header"/>
+  <variable id="Body odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
+  <variable id="Body even header"><param ref-name="pagenum"/>>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
+  <variable id="Preface odd footer"/>
+  <variable id="Preface even footer"/>
+  <variable id="Preface first footer"/>
+  <variable id="Preface odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;Inleiding&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
+  <variable id="Preface even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;Inleiding&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
+  <variable id="Preface first header"/>
+  <variable id="Toc odd footer"/>
+  <variable id="Toc even footer"/>
+  <variable id="Toc odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;Inhoud&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
+  <variable id="Toc even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;Inhoud&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
+  <variable id="Index odd footer"/>
+  <variable id="Index even footer"/>
+  <variable id="Index odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;Index&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
+  <variable id="Index even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;Index&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
+  <variable id="Ordered List Number"><param ref-name="number"/>. </variable>
+  <variable id="Unordered List bullet">&#x2022;</variable>
+  <variable id="Table of Contents">Inhoudsopgave</variable>
+  <variable id="Index">Index</variable>
+  <variable id="Index Continued String">Vervolg</variable>
+  <variable id="Index See String">, zie </variable>
+  <variable id="Index See Also String">Zie ook </variable>
+  <variable id="Table of Contents Chapter">Hoofdstuk&#xA0;<param ref-name="number"/>:&#xA0;</variable>
+  <variable id="Table of Contents Appendix">Bijlage&#xA0;<param ref-name="number"/>:&#xA0;</variable>
+  <variable id="Table of Contents Part">Deel&#xA0;<param ref-name="number"/>:&#xA0;</variable>
+  <variable id="Table of Contents Preface">Voorwoord:&#xA0;</variable>
+  <variable id="Table of Contents Notices"></variable>
+  <variable id="Preface title">Voorwoord</variable>
+  <variable id="Notices title">Let op</variable>
+  <variable id="Mini Toc">Onderwerpen: </variable>
+  <variable id="Note">Opmerking</variable>
+  <variable id="Tip">Tip</variable>
+  <variable id="Important">Belangrijk</variable>
+  <variable id="Fastpath">Versnelde keuze</variable>
+  <variable id="Remember">Niet vergeten</variable>
+  <variable id="Attention">Waarschuwing</variable>
+  <variable id="Caution">Let op!</variable>
+  <variable id="Danger">Gevaar!</variable>
+  <variable id="Restriction">Beperking</variable>
+  <variable id="Figure">Figuur <param ref-name="number"/>: <param ref-name="title"/></variable>
+  <variable id="Table">Tabel <param ref-name="number"/>: <param ref-name="title"/></variable>
+  <variable id="Related Links">Verwante onderwerpen</variable>
+  <variable id="Cross-Reference">Verwijzing naar:</variable>
+  <variable id="Content-Reference">Verwijzing naar:</variable>
+  <variable id="Untitled section">Naamloze sectie.</variable>
+  <variable id="List item">Lijst onderdeel.</variable>
+  <variable id="Foot note">Voetnoot.</variable>
+  <variable id="Navigation title">Navigatietitel</variable>
+  <variable id="Search title">Zoektitel</variable>
+  <variable id="Chapter with number">Hoofdstuk <param ref-name="number"/></variable>
+  <variable id="Appendix with number">Appendix <param ref-name="number"/></variable>
+  <variable id="Part with number">Deel <param ref-name="number"/></variable>
+  <variable id="Required-Cleanup">[Controle nodig]</variable>
+  <variable id="On the page"> op pagina <param ref-name="pagenum"/></variable>
+  <variable id="Page"> pagina <param ref-name="pagenum"/></variable>
+  <variable id="This link">deze verwijzing</variable>
+  <variable id="note Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+  <variable id="notice Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+  <variable id="attention Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
+  <variable id="caution Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
+  <variable id="danger Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
+  <variable id="warning Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
+  <variable id="fastpath Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+  <variable id="important Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+  <variable id="remember Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+  <variable id="restriction Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+  <variable id="tip Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+  <variable id="other Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+  <variable id="Parent topic">Hoofdonderwerp</variable>
+  <variable id="Next topic">Volgend onderwerp</variable>
+  <variable id="Previous topic">Vorig onderwerp</variable>
+  <variable id="Child topics">Onderliggende onderwerpen</variable>
+  <variable id="Related concepts">Verwante onderwerpen</variable>
+  <variable id="Related tasks">Verwante taken</variable>
+  <variable id="Related references">Verwante verwijzingen</variable>
+  <variable id="Related information">Verwante informatie</variable>
+  <variable id="Contents button title">Inhoud</variable>
+  <variable id="Index button title">Index</variable>
+  <variable id="Index multiple entries separator">, </variable>
+  <variable id="Search button title">Zoek</variable>
+  <variable id="Back button title">Terug</variable>
+  <variable id="Forward button title">Vooruit</variable>
+  <variable id="Main page button title">Hoofdpagina</variable>
+  <variable id="Previous page button title">Vorig onderwerp</variable>
+  <variable id="Next page button title">Volgend onderwerp</variable>
+  <variable id="Online help prefix">Online Help</variable>
+  <variable id="Search index field title">Zoek op het trefwoord:</variable>
+  <variable id="Search index button title">Zie</variable>
+  <variable id="Search text field title">Zoek help voor:</variable>
+  <variable id="Search text button title">Zoek</variable>
+  <variable id="Online Help Search Method Field">Zoek methode</variable>
+  <variable id="Online Help Search Method Or">of</variable>
+  <variable id="Online Help Search Method And">en</variable>
+  <variable id="Search Highlight Switch">Markeer tekst in zoekresultaten</variable>
+  <variable id="Search index next button title">Toon volgende</variable>
+  <variable id="Search Whole Words Switch">Zoek alleen hele woorden</variable>
+  <variable id="Search Case Sensitive Switch">Hoofdlettergevoelig</variable>
+  <variable id="Search Stopped Message">De zoekactie is gestopt na 50 treffers.</variable>
+  <variable id="Search Excluded Stop Words Message">"De volgende woorden worden uitgesloten van de zoekactie: "+<param ref-name="stop-words-list"/></variable>
+  <variable id="Search Search in Progress Message">De zoekactie loopt...</variable>
+  <variable id="Search Search Give No Results Message">Geen treffers gevonden.</variable>
+  <variable id="Optional Step">Optioneel:</variable>
+  <variable id="Task Prereq">Voordat u begint</variable>
+  <variable id="Task Context">Over deze taak</variable>
+  <variable id="Task Steps">Procedure</variable>
+  <variable id="Task Result">Resultaten</variable>
+  <variable id="Task Example">Voorbeeld</variable>
+  <variable id="Task Postreq">Volgende stappen</variable>
+</vars>

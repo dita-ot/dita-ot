@@ -28,7 +28,6 @@
                 xmlns:saxon="http://icl.com/saxon"
                 xmlns:xalanredirect="org.apache.xalan.xslt.extensions.Redirect"
                 xmlns:exsl="http://exslt.org/common"
-                xmlns:java="org.dita.dost.util.StringUtils"
                 extension-element-prefixes="saxon xalanredirect exsl">
 
 <!-- Include error message template -->
@@ -267,18 +266,18 @@ Default topic=</xsl:text>
         <!-- For dita files, change the extension; for HTML files, output the name as-is. Use the copy-to value first. -->
         <xsl:when test="contains(@copy-to,$DITAEXT)">
           <xsl:value-of select="$pathFromMaplist"/>
-          <!-- added by William on 2009-11-26 for bug:1628937 start-->
-          <!--xsl:value-of select="substring-before(@copy-to,$DITAEXT)"/-->
-          <xsl:value-of select="java:getFileName(@copy-to,$DITAEXT)"/>
-          <!-- added by William on 2009-11-26 for bug:1628937 end-->
+          <xsl:call-template name="getFileName">
+            <xsl:with-param name="filename" select="@copy-to"/>
+            <xsl:with-param name="extension" select="$DITAEXT"/>
+          </xsl:call-template>
           <xsl:value-of select="$OUTEXT"/>
         </xsl:when>
         <xsl:when test="contains(@href,$DITAEXT)">
           <xsl:value-of select="$pathFromMaplist"/>
-          <!-- added by William on 2009-11-26 for bug:1628937 start-->
-          <!--xsl:value-of select="substring-before(@href,$DITAEXT)"/-->
-          <xsl:value-of select="java:getFileName(@href,$DITAEXT)"/>
-          <!-- added by William on 2009-11-26 for bug:1628937 end-->
+          <xsl:call-template name="getFileName">
+            <xsl:with-param name="filename" select="@href"/>
+            <xsl:with-param name="extension" select="$DITAEXT"/>
+          </xsl:call-template>
           <xsl:value-of select="$OUTEXT"/>
         </xsl:when>
         <!-- For local HTML files, add any path from the maplist -->
@@ -311,21 +310,19 @@ Default topic=</xsl:text>
     <!-- If copy-to is specified, that copy should be used in place of the original -->
     <xsl:when test="contains(@copy-to,$DITAEXT)">
       <xsl:if test="not(@scope='external')"><xsl:value-of select="$pathFromMaplist"/></xsl:if>
-      <!-- added by William on 2009-11-26 for bug:1628937 start-->
-      <!--xsl:value-of select="substring-before(@copy-to,$DITAEXT)"/-->
-      <xsl:value-of select="java:getFileName(@copy-to,$DITAEXT)"/>
-      <!-- added by William on 2009-11-26 for bug:1628937 end-->
-      
+      <xsl:call-template name="getFileName">
+        <xsl:with-param name="filename" select="@copy-to"/>
+        <xsl:with-param name="extension" select="$DITAEXT"/>
+      </xsl:call-template>
       <xsl:value-of select="$OUTEXT"/><xsl:text>
 </xsl:text></xsl:when>
     <!-- For dita files, change the extension to OUTEXT -->
     <xsl:when test="contains(@href,$DITAEXT)">
       <xsl:if test="not(@scope='external')"><xsl:value-of select="$pathFromMaplist"/></xsl:if>
-      <!-- added by William on 2009-11-26 for bug:1628937 start-->
-      <!--xsl:value-of select="substring-before(@href,$DITAEXT)"/-->
-      <xsl:value-of select="java:getFileName(@href,$DITAEXT)"/>
-      <!-- added by William on 2009-11-26 for bug:1628937 end-->
-      
+      <xsl:call-template name="getFileName">
+        <xsl:with-param name="filename" select="@href"/>
+        <xsl:with-param name="extension" select="$DITAEXT"/>
+      </xsl:call-template>
       <xsl:value-of select="$OUTEXT"/><xsl:text>
 </xsl:text></xsl:when>
     <!-- For local HTML files, add any path from the maplist -->

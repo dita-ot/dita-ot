@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="preprocess-maplink" xml:lang="en-us">
+<title>Map based linking (maplink and move-links)</title>
+<shortdesc>These two steps work together to create links based on
+a map and move those links into referenced topics. The links are created
+based on hierarchy (parent/child), the collection-type attribute (sequential
+or family links), and relationship tables.</shortdesc>
+<refbody>
+<section><p>The <codeph>maplink</codeph> module first runs an XSLT
+program that evaluates the map, and places all generated links into
+a single file in the temporary processing directory. Once that file
+is created, the <codeph>move-links</codeph> module runs a Java program
+that pushes the generated links into the proper topics.</p></section>
+</refbody>
+</reference>

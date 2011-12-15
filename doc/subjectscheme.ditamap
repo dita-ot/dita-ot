@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE subjectScheme PUBLIC "-//OASIS//DTD DITA Subject Scheme Map//EN" "map.dtd">
+<subjectScheme>
+  <enumerationdef>
+    <attributedef name="audience"/>
+    <subjectdef keys="end-user"/>
+    <subjectdef keys="build-scripter"/>
+    <subjectdef keys="help-developer"/>
+    <subjectdef keys="xslt-customizer"/>
+  </enumerationdef>
+  <enumerationdef>
+    <attributedef name="platform"/>
+    <subjectdef keys="windows"/>
+    <subjectdef keys="unix">
+      <subjectdef keys="osx"/>
+      <subjectdef keys="linux"/>
+    </subjectdef>
+  </enumerationdef>
+</subjectScheme>

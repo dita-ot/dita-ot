@@ -7,6 +7,9 @@
 <!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
 <topic id="contribution_policy" xml:lang="en-us">
   <title>DITA Open Toolkit Contribution Policy</title>
+  <titlealts>
+    <navtitle>Contribution Policy</navtitle>
+  </titlealts>
   <shortdesc>The purpose of the DITA Open Toolkit Contribution Policy is to set 
     forth the general principles under which the DITA Open Toolkit project 
     shall accept contributions, license contributions, license materials owned 

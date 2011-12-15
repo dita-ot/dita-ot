@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -32,7 +32,7 @@ public interface AbstractWriter {
     /**
      * Call the writer to write or rewrite the file.
      * 
-     * @param filename filename
+     * @param filename system path to process, may contain a pseudo-fragment part
      * @throws DITAOTException DITAOTException
      */
     void write(String filename) throws DITAOTException;
@@ -43,5 +43,5 @@ public interface AbstractWriter {
      * @param logger logger to use for log message
      */
     public void setLogger(DITAOTLogger logger);
-    
+
 }

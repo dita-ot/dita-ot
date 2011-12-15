@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -17,57 +17,57 @@ import org.junit.Test;
 
 public class DITAOTExceptionTest {
 
-	@Test
-	public void testDITAOTException() {
-		new DITAOTException();
-	}
+    @Test
+    public void testDITAOTException() {
+        new DITAOTException();
+    }
 
-	@Test
-	public void testDITAOTExceptionString() {
-		new DITAOTException((String) null);
-		new DITAOTException("test");
-	}
+    @Test
+    public void testDITAOTExceptionString() {
+        new DITAOTException((String) null);
+        new DITAOTException("test");
+    }
 
-	@Test
-	public void testDITAOTExceptionThrowable() {
-		new DITAOTException((Throwable) null);
-		new DITAOTException(new RuntimeException());
-	}
+    @Test
+    public void testDITAOTExceptionThrowable() {
+        new DITAOTException((Throwable) null);
+        new DITAOTException(new RuntimeException());
+    }
 
-	@Test
-	public void testDITAOTExceptionStringThrowable() {
-		new DITAOTException(null, null);
-		new DITAOTException("test", new RuntimeException());
-	}
+    @Test
+    public void testDITAOTExceptionStringThrowable() {
+        new DITAOTException(null, null);
+        new DITAOTException("test", new RuntimeException());
+    }
 
-	@Test
-	public void testDITAOTExceptionMessageBeanThrowableString() {
-		new DITAOTException(null, null, null);
-		new DITAOTException(new MessageBean(), new RuntimeException(), "test");
-	}
+    @Test
+    public void testDITAOTExceptionMessageBeanThrowableString() {
+        new DITAOTException(null, null, null);
+        new DITAOTException(new MessageBean(), new RuntimeException(), "test");
+    }
 
-	@Test
-	public void testGetMessageBean() {
-		final MessageBean m = new MessageBean();
-		final DITAOTException e = new DITAOTException(m, null, "test");
-		assertSame(m, e.getMessageBean());
-	}
+    @Test
+    public void testGetMessageBean() {
+        final MessageBean m = new MessageBean();
+        final DITAOTException e = new DITAOTException(m, null, "test");
+        assertSame(m, e.getMessageBean());
+    }
 
-	@Test
-	public void testAlreadyCaptured() {
-		final DITAOTException e = new DITAOTException();
-		assertEquals(e.alreadyCaptured(), false);
-		e.setCaptured(true);
-		assertEquals(e.alreadyCaptured(), true);
-	}
+    @Test
+    public void testAlreadyCaptured() {
+        final DITAOTException e = new DITAOTException();
+        assertEquals(e.alreadyCaptured(), false);
+        e.setCaptured(true);
+        assertEquals(e.alreadyCaptured(), true);
+    }
 
-	@Test
-	public void testSetCaptured() {
-		final DITAOTException e = new DITAOTException();
-		e.setCaptured(false);
-		assertEquals(e.alreadyCaptured(), false);
-		e.setCaptured(true);
-		assertEquals(e.alreadyCaptured(), true);
-	}
+    @Test
+    public void testSetCaptured() {
+        final DITAOTException e = new DITAOTException();
+        e.setCaptured(false);
+        assertEquals(e.alreadyCaptured(), false);
+        e.setCaptured(true);
+        assertEquals(e.alreadyCaptured(), true);
+    }
 
 }

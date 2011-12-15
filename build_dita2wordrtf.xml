@@ -3,11 +3,7 @@
      Sourceforge.net. See the accompanying license.txt file for 
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
-<project name="dita2wordrtf" default="dita2wordrtf">
-  <property name="transtype" value="wordrtf"/>
-        
-  <import file="build_init.xml" />
-  <import file="build_preprocess.xml" />
+<project name="dita2wordrtf">
 
   <target name="dita2wordrtf"
     depends="build-init, preprocess, map2wordrtf, topic2wordrtf">
@@ -22,7 +18,7 @@
     </antcall>
     <antcall target="escapeUnicode">
       <param name="input" value="${dita.map.output.dir}${file.separator}${dita.topic.filename.root}.rtf"/>
-      <param name="output" value="${dita.map.output.dir}${file.separator}${dita.topic.filename.root}"/>
+      <param name="output" value="${dita.map.output.dir}${file.separator}${dita.topic.filename.root}.rtf.tmp"/>
     </antcall>
   </target>
   
@@ -35,7 +31,7 @@
     </antcall>
     <antcall target="escapeUnicode">
       <param name="input" value="${dita.map.output.dir}${file.separator}${dita.map.filename.root}.rtf"/>
-      <param name="output" value="${dita.map.output.dir}${file.separator}${dita.map.filename.root}"/>
+      <param name="output" value="${dita.map.output.dir}${file.separator}${dita.map.filename.root}.rtf.tmp"/>
     </antcall>
   </target>
 
@@ -53,7 +49,7 @@
       style="${args.xsl}">
       <param name="DRAFT" expression="${args.draft}" if="args.draft" />
       <param name="OUTPUTDIR" expression="${dita.rtf.outputdir}" />
-      <!--<xmlcatalog refid="dita.catalog" />-->
+      <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
 
@@ -69,7 +65,7 @@
       out="${dita.temp.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
       classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}topicmerge.xsl">
-      <!--<xmlcatalog refid="dita.catalog" />-->
+      <xmlcatalog refid="dita.catalog"/>
     </xslt>
     <xslt processor="trax"
       in="${dita.temp.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
@@ -77,7 +73,7 @@
       out="${output}" style="${args.xsl}">
       <param name="DRAFT" expression="${args.draft}" if="args.draft" />
       <param name="OUTPUTDIR" expression="${dita.rtf.outputdir}" />
-      <!--<xmlcatalog refid="dita.catalog" />-->
+      <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
 

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<?Pub Inc?>
+<reference id="plugins-installing" xml:lang="en-us">
+<title>Installing DITA-OT plug-ins</title>
+<shortdesc>Plug-ins are generally distributed as zip files. There are two steps to installing a
+    plug-in: unzipping and integrating.</shortdesc>
+<refbody>
+<section><p>It is possible to define a plug-in so that it may be installed
+anywhere, although most expect to be placed in either the <filepath>demo/</filepath> or <filepath>plugins/</filepath> directory
+inside of the DITA-OT. Most plug-ins do not require a specific install
+directory and can go in either of the default locations, but some
+may come with instructions for a particular install directory. The
+first step to installing a plug-in is to unzip to the desired location.</p><p>The remaining step is to integrate the new plug-in. This can be accomplished in a few ways:<ol>
+          <li>From the toolkit directory, you can run the following command to integrate all
+            installed plug-ins:<codeblock>ant -f integrator.xml</codeblock><p>The integration
+              process has two modes, lax and strict. In the strict mode the integration process will
+              immediately fail if it encounters errors in plug-in configurations or installation
+              process. In the lax mode, the integration process will continue to finish regardless
+              of errors; the lax mode does not imply error recovery and may leave the DITA-OT
+              installation into a broken state. The default mode is lax due to backwards
+              compatibility, to run the integration in strict
+              mode:</p><codeblock>ant -f integrator.xml strict</codeblock><?Pub Caret -1?><p>To get
+              more information about the integration process, run Ant in verbose
+            mode:</p><codeblock>ant -f integrator.xml -verbose strict</codeblock></li>
+          <li>Any build that uses the Java command line interface automatically runs the integrator
+            before processing begins.</li>
+          <li>Ant based builds may import the <codeph>integrator.xml</codeph> file, and add
+              <codeph>integrate</codeph> to the start of the dependency chain for the build.<note
+              type="note">The integration process in considered part of the installation process and
+              running it before each conversion will incur a preformance penalty.</note></li>
+        </ol></p></section>
+</refbody>
+</reference>
+<?Pub *0000001524?>

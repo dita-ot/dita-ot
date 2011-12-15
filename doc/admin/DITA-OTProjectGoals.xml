@@ -4,6 +4,9 @@
  "topic.dtd">
 <topic id="ditaotgoals" xml:lang="en-us">
 <title>Goals and objectives of the DITA Open Toolkit</title>
+  <titlealts>
+    <navtitle>Goals and objectives</navtitle>
+  </titlealts>
 <shortdesc>The long term goal of the DITA Open Toolkit is to provide
 a high quality        implementation for production level output of
 DITA XML content, built in        a professionally-managed project

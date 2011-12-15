@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -14,20 +14,20 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.util.Properties;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.AfterClass;
 import org.junit.Test;
 
 public class MessageUtilsTest {
 
-    private final File resourceDir = new File("test-stub", MessageUtilsTest.class.getSimpleName());
-    
-    @Before
-    public void setUp() throws Exception {
+    private static final File resourceDir = new File("test-stub", MessageUtilsTest.class.getSimpleName());
+
+    @BeforeClass
+    public static void setUp() throws Exception {
         final File f = new File(resourceDir, "messages.xml");
         MessageUtils.loadMessages(f.getAbsolutePath());
     }
-    
+
     @Test
     public void testLoadDefaultMessages() {
         MessageUtils.loadDefaultMessages();
@@ -86,6 +86,12 @@ public class MessageUtilsTest {
         exp.setReason("Error foo reason bar baz.");
         exp.setResponse("Error foo response bar baz.");
         assertEquals(exp.toString(), MessageUtils.getMessage("XXX234E", props).toString());
+    }
+
+    @AfterClass
+    public static void tearDown() throws Exception {
+        final File f = new File("resource/messages.xml");
+        MessageUtils.loadMessages(f.getAbsolutePath());
     }
     
 }

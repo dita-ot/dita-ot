@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -11,206 +11,165 @@ package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.util.HashSet;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.Properties;
 
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.StringUtils;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
+
 /**
- * CoderefResolver class, resolving 
- * coderef attribute in topic file.
- *
+ * Coderef element resolver filter.
+ * 
+ * <p>The format attribute is assumed to follow the syntax:</p>
+ * 
+ * <pre>format (";" space* "charset=" charset)?</pre>
+ * 
+ * <p>If no charset if defined or the charset name is not recognized,
+ * {@link ava.nio.charset.Charset#defaultCharset() default charset} is used in
+ * reading the code file.</p>
  */
-public final class CoderefResolver extends AbstractXMLWriter {
-	
-	private OutputStreamWriter output = null;
-	
-	private XMLReader reader = null;
-		
-	private File currentFile = null;
-	
-	private HashSet<String> coderefSpec = null;
-	/**
-	 * Constructor.
-	 */
-	public CoderefResolver() {
-		coderefSpec = new HashSet<String>();
-		
-		try {
-            reader = StringUtils.getXMLReader();
-            reader.setContentHandler(this);
-            reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
-            reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-        } catch (Exception e) {
-        	logger.logException(e);
+public final class CoderefResolver extends AbstractXMLFilter {
+
+    // Constants ---------------------------------------------------------------
+
+    private static final char[] XML_NEWLINE = { '\n' };
+
+    // Variables ---------------------------------------------------------------
+
+    private File currentFile = null;
+    private int ignoreDepth = 0;
+
+    // Constructors ------------------------------------------------------------
+
+    /**
+     * Constructor.
+     */
+    public CoderefResolver() {
+    }
+
+    // AbstractWriter methods --------------------------------------------------
+
+    @Override
+    public void setContent(final Content content) {
+        // NOOP
+    }
+
+    @Override
+    public void write(final String filename) throws DITAOTException {
+        // ignore in-exists file
+        if (filename == null || !new File(filename).exists()) {
+            return;
+        }
+        currentFile = new File(filename);
+        super.write(filename);
+    }
+
+    // XMLFilter methods -------------------------------------------------------
+
+    @Override
+    public void startElement(final String uri, final String localName, final String name,
+            final Attributes atts) throws SAXException {
+        if (ignoreDepth > 0) {
+            ignoreDepth++;
+            return;
         }
 
-	}
-	@Override
-	public void setContent(Content content) {
-		// TODO Auto-generated method stub
-
-	}
-	@Override
-	public void write(String filename) throws DITAOTException {
-		// TODO Auto-generated method stub
-		String file = null;
-		File inputFile = null;
-		File outputFile = null;
-		FileOutputStream fileOutput = null;
-
-        try {
-            
-            file = filename;                
-            
-            // ignore in-exists file
-            if (file == null || !new File(file).exists()) {
-            	return;
+        if (PR_D_CODEREF.matches(atts)) {
+            ignoreDepth++;
+            try{
+                final String hrefValue = atts.getValue(ATTRIBUTE_NAME_HREF);
+                if (hrefValue != null){
+                    final String codeFile = FileUtils.normalizeDirectory(currentFile.getParentFile().getAbsolutePath(), hrefValue);
+                    if (new File(codeFile).exists()){
+                        final Charset charset = getCharset(atts.getValue(ATTRIBUTE_NAME_FORMAT));
+                        BufferedReader codeReader = null;
+                        try {
+                            codeReader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(codeFile)), charset));
+                            String line = codeReader.readLine();
+                            while (line != null) {
+                                final char[] ch = line.toCharArray();
+                                super.characters(ch, 0, ch.length);
+                                line = codeReader.readLine();
+                                if (line != null) {
+                                    super.characters(XML_NEWLINE, 0, XML_NEWLINE.length);
+                                }
+                            }
+                        } catch (final Exception e) {
+                            logger.logException(new Exception("Failed to process code reference " + codeFile));
+                        } finally {
+                            if (codeReader != null) {
+                                try {
+                                    codeReader.close();
+                                } catch (final IOException e) {
+                                    logger.logException(e);
+                                }
+                            }
+                        }
+                    } else {
+                        final Properties prop = new Properties();
+                        prop.put("%1", hrefValue);
+                        prop.put("%2", atts.getValue(ATTRIBUTE_NAME_XTRF));
+                        prop.put("%3", atts.getValue(ATTRIBUTE_NAME_XTRC));
+                        logger.logWarn(MessageUtils.getMessage("DOTJ051E",prop).toString());
+                    }
+                } else {
+                    //logger.logDebug("Code reference target not defined");
+                }
+            } catch (final Exception e) {
+                logger.logException(e);
             }
-                     
-            inputFile = new File(file);
-            currentFile = inputFile;
-            outputFile = new File(file + FILE_EXTENSION_TEMP);
-            fileOutput = new FileOutputStream(outputFile);
-            output = new OutputStreamWriter(fileOutput, UTF8);
-            reader.setErrorHandler(new DITAOTXMLErrorHandler(file));
-            reader.parse(file);
-            output.flush();
-            output.close();
-            
-            if(!inputFile.delete()){
-            	Properties prop = new Properties();
-            	prop.put("%1", inputFile.getPath());
-            	prop.put("%2", outputFile.getPath());
-            	logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
+        } else {
+            super.startElement(uri, localName, name, atts);
+        }
+    }
 
+    @Override
+    public void endElement(final String uri, final String localName, final String name)
+            throws SAXException {
+        if (ignoreDepth > 0) {
+            ignoreDepth--;
+            return;
+        }
+
+        super.endElement(uri, localName, name);
+    }
+
+    // Private methods ---------------------------------------------------------
+
+    /**
+     * Get code file charset.
+     * 
+     * @param value format attribute value, may be {@code null}
+     * @return charset if set, otherwise default charset
+     */
+    private Charset getCharset(final String value) {
+        Charset c = null;
+        if (value != null) {
+            final String[] tokens = value.trim().split("[;=]");
+            if (tokens.length >= 3 && tokens[1].trim().equals("charset")) {
+                try {
+                    c = Charset.forName(tokens[2].trim());
+                } catch (final RuntimeException e) {
+                    final Properties prop = new Properties();
+                    prop.put("%1", tokens[2].trim());
+                    logger.logError(MessageUtils.getMessage("DOTJ052E",prop).toString());
+                }
             }
-            if(!outputFile.renameTo(inputFile)){
-            	Properties prop = new Properties();
-            	prop.put("%1", inputFile.getPath());
-            	prop.put("%2", outputFile.getPath());
-            	logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
-            }
-        } catch (Exception e) {
-        	logger.logException(e);
-        }finally {
-            try {
-            	if (fileOutput != null) {
-            		fileOutput.close();
-            	}
-            }catch (Exception e) {
-				logger.logException(e);
-            }
         }
-
-	}
-
-	@Override
-	public void characters(char[] ch, int start, int length)
-			throws SAXException {
-		try {
-            output.write(StringUtils.escapeXML(ch, start, length));
-        } catch (Exception e) {
-        	logger.logException(e);
+        if (c == null) {
+            c = Charset.defaultCharset();
         }
-	}
+        return c;
+    }
 
-	@Override
-	public void ignorableWhitespace(char[] ch, int start, int length)
-			throws SAXException {
-		try {
-            output.write(ch, start, length);
-        } catch (Exception e) {
-        	logger.logException(e);
-        }
-	}
-
-	@Override
-	public void processingInstruction(String target, String data)
-			throws SAXException {
-		try {
-        	super.processingInstruction(target, data);
-        	String pi = (data != null) ? target + STRING_BLANK + data : target;
-            output.write(LESS_THAN + QUESTION 
-                    + pi + QUESTION + GREATER_THAN);
-        } catch (Exception e) {
-        	logger.logException(e);
-        }
-	}
-
-	@Override
-	public void startElement(String uri, String localName, String name,
-			Attributes atts) throws SAXException {
-		String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
-		String hrefValue = atts.getValue(ATTRIBUTE_NAME_HREF);
-		try{
-			if (classValue != null
-					&& classValue.contains(ATTR_CLASS_VALUE_CODEREF)){
-				//TODO resolve coderef and pull in program content
-				coderefSpec.add(name);
-				if (hrefValue != null){
-					String codeFile = FileUtils.normalizeDirectory(
-							currentFile.getParentFile().getAbsolutePath(), hrefValue);
-					if (new File(codeFile).exists()){
-						FileReader codeReader = null;
-						try {
-							codeReader = new FileReader(new File(codeFile));
-    						char[] buffer = new char[INT_1024 * INT_4];
-    						int len;
-    						while((len = codeReader.read(buffer)) != -1){
-    							output.write(StringUtils.escapeXML(buffer, 0, len));
-    						}
-						} finally {
-							if (codeReader != null) {
-								try {
-									codeReader.close();
-								} catch (IOException e) {
-									logger.logException(e);
-								}
-							}
-						}
-					}else{
-						//report error of href target is not valid
-					}
-				}else{
-					//report error of href attribute is null
-				}
-			}else{
-				output.write(LESS_THAN + name);
-				for (int i=0; i<atts.getLength(); i++){
-					output.write(STRING_BLANK + atts.getQName(i)
-							+ EQUAL + QUOTATION
-							+ atts.getValue(i) + QUOTATION);
-				}
-				output.write(GREATER_THAN);
-			}
-		}catch (Exception e){
-			logger.logException(e);
-		}
-	}
-
-	@Override
-	public void endElement(String uri, String localName, String name)
-			throws SAXException {
-		try{
-			if(!coderefSpec.contains(name)){
-				output.write(LESS_THAN + SLASH 
-						+ name + GREATER_THAN);
-			}
-		}catch (Exception e){
-			logger.logException(e);
-		}		
-	}
 }

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="preprocess-conref" xml:lang="en-us">
+<title>Conref (conref)</title>
+<shortdesc>The <codeph>conref</codeph> step resolves traditional conref
+attributes, processing only the documents that use the conref attribute.
+Each map or topic is processed with XSLT to resolve the attributes.</shortdesc>
+<refbody>
+<section><p>As part of the process, IDs within referenced content
+are changed as they are pulled into the new location. This is done
+in order to ensure that IDs within the original (referencing) topic
+remain unique.</p><p>If an element with an ID is pulled into a new
+context along with a cross reference that references the target, both
+the ID and the reference are updated so that they remain valid in
+the new location. For example, a referenced topic may include a section
+as in the following example.<codeblock>&lt;topic id="referenced_topic">
+  &lt;title>...&lt;/title>
+  &lt;body>
+    &lt;section id="sect">&lt;title>Sample section&lt;/title>
+      &lt;p>Look at the next figure &lt;xref href="#referenced_topic/fig">here&lt;/xref>.&lt;/p>
+      &lt;fig id="fig">&lt;title>Sample&lt;/title>
+        &lt;p>This is a rather useless figure, but it
+           illustrates a point.&lt;/p>
+      &lt;/fig>
+    &lt;/section>
+  &lt;/body>
+&lt;/topic></codeblock></p><p>If the section is referenced with a
+conref attribute, the ID on the &lt;fig> element will be modified
+to ensure it remains unique inside the new topic. At the same time,
+the &lt;xref> element will also be modified so that after the conref
+is resolved, it remains valid as a local reference. If the topic pulling
+in a new copy of the section has the id "new_topic", then the pulled
+copy of the section may look something like this in the intermediate
+document.<codeblock>&lt;section>&lt;title>Sample section&lt;/title>
+  &lt;p>Look at the next figure &lt;xref href="#new_topic/d1e25">here&lt;/xref>.&lt;/p>
+  &lt;fig id="d1e25">&lt;title>Sample&lt;/title>
+    &lt;p>This is a rather useless figure, but it
+       illustrates a point.&lt;/p>
+  &lt;/fig>
+&lt;/section></codeblock></p><p>In this case, the ID of the figure
+has been changed to a generated value of "d1e25". At the same time,
+the &lt;xref> element has been updated to use that new generated ID,
+so that the reference stays local in the updated topic.</p></section>
+</refbody>
+</reference>

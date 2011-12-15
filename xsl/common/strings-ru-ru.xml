@@ -56,6 +56,7 @@
 <str name="Prerequisite">Предварительное условие</str>
 <str name="Prerequisites">Предварительные условия</str>
 <str name="or">or</str>
+<str name="figure-number-separator"> </str>
 
 <!--Task section labels -->
 <str name="task_context">Об этой задаче</str>

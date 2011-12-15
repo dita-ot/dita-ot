@@ -3,12 +3,7 @@
      Sourceforge.net. See the accompanying license.txt file for 
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
-<project name="dita2javahelp" default="dita2javahelp">
-    <property name="transtype" value="javahelp"/>
-    
-    <import file="build_init.xml" />
-    <import file="build_preprocess.xml" />
-    <import file="build_general.xml" />
+<project name="dita2javahelp">
 
     <target name="dita2javahelp"
             unless="noMap"
@@ -68,6 +63,7 @@
             <mapper type="glob"
                     from="*${dita.input.filename}"
                     to="*${args.javahelp.toc}.xml" />
+          <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>
     
@@ -86,6 +82,7 @@
             <mapper type="glob"
                 from="${user.input.file}"
                 to="${args.javahelp.toc}.xml" />
+          <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>
 
@@ -104,6 +101,7 @@
             <mapper type="glob"
                     from="*${dita.input.filename}"
                     to="*${args.javahelp.map}.jhm" />
+          <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>
     
@@ -122,6 +120,7 @@
             <mapper type="glob"
                 from="${user.input.file}"
                 to="${args.javahelp.map}.jhm" />
+          <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>
 
@@ -143,6 +142,7 @@
             <mapper type="glob"
                     from="*${dita.input.filename}"
                     to="*${dita.map.toc.root}_helpset.hs" />
+          <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>
     
@@ -164,6 +164,7 @@
             <mapper type="glob"
                 from="${user.input.file}"
                 to="${dita.map.toc.root}_helpset.hs" />
+          <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>
 

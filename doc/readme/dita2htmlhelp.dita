@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2011 All Rights Reserved. -->
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "concept.dtd">
+<concept id="dita2htmlhelp" xml:lang="en-us">
+<title>DITA to HTML Help (CHM)</title>
+<shortdesc>The "htmlhelp" transform type will generate HTML output,
+along with the control files needed to produce a <tm tmclass="special"
+tmowner="Microsoft Corporation" tmtype="reg" trademark="Microsoft">Microsoft</tm> HTML
+Help file.</shortdesc>
+<conbody>
+<p>The HTML Help output produces HTML files rather than XHTML files.
+In addition to the HTML output and CSS files, this transform type
+will return the following files, all based on the name of the input
+map:<ul>
+<li>Table of Contents (<filepath>mapname.hhc</filepath>)</li>
+<li>Sorted index (<filepath>mapname.hhk</filepath>)</li>
+<li>HTML Help project file (<filepath>mapname.hhp</filepath>)</li>
+<li>If the HTML Help compiler is located on the system, the project
+will be compiled to create <filepath>mapname.chm</filepath></li>
+</ul></p><?Pub Caret 110?>
+</conbody>
+</concept>
+<?Pub *0000001099?>

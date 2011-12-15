@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="preprocess-topicpull" xml:lang="en-us">
+<title>Pull content into topics (topicpull)</title>
+<shortdesc>The <codeph>topicpull</codeph> module pulls content into <codeph>&lt;xref></codeph> and <codeph>&lt;link></codeph> elements
+(if needed).</shortdesc>
+<refbody>
+<section><p>For <codeph>&lt;xref></codeph> elements, if the <codeph>&lt;xref></codeph> does
+not contain link text, the target is examined and link text is pulled.
+For example, a reference to a topic will pull the title of the topic;
+a reference to a list item will pull the number of the item. If the <codeph>&lt;xref></codeph> element
+references a topic that has a short description, and the <codeph>&lt;xref></codeph> element
+does not already contain a child <codeph>&lt;desc></codeph> element,
+a <codeph>&lt;desc></codeph> element is created with the short description
+of the target.</p><p>The process is similar for <codeph>&lt;link></codeph> elements.
+If the <codeph>&lt;link></codeph> does not have a child <codeph>&lt;linktext></codeph> element,
+one is created with the appropriate link text. Similarly, if the <codeph>&lt;link></codeph> element
+does not have a child <codeph>&lt;desc></codeph> element, and the
+short description of the target can be determined, a <codeph>&lt;desc></codeph> is
+created with the short description of the target.</p><p>This step
+is implemented in XSLT.</p></section>
+</refbody>
+</reference>

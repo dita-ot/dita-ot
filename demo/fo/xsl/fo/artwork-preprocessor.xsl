@@ -30,7 +30,8 @@ with those set forth herein.
 This file is part of the DITA Open Toolkit project hosted on Sourceforge.net. 
 See the accompanying license.txt file for applicable licenses.
 -->
-
+<!-- Deprecated: left for backward compatibility, and it will be removed in a 
+     later release -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     version="2.0">

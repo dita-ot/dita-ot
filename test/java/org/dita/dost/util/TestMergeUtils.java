@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -25,79 +25,81 @@ import org.junit.Test;
 
 public class TestMergeUtils {
 
-	private final File resourceDir = new File("test-stub");
-	public static MergeUtils mergeUtils;
-	
-	@BeforeClass
-	public static void setUp() {
-		mergeUtils = new MergeUtils();
-	}
+    private static final File resourceDir = new File("test-stub", TestMergeUtils.class.getSimpleName());
+    private static final File srcDir = new File(resourceDir, "src");
 
-	@After
-	public void reset() {
-	    mergeUtils.reset();
-	}
-	
-	@Test
-	public void testFindId() {
-		mergeUtils.addId("dir\\\\#topicid");
-		mergeUtils.addId("dir\\\\dir1\\\\a.xml#topicid");
-		assertTrue(mergeUtils.findId("dir/#topicid"));
-		assertTrue(mergeUtils.findId("dir/dir1/a.xml#topicid"));
-		assertFalse(mergeUtils.findId("topicid"));
-		assertFalse(mergeUtils.findId("dir/a.xml#topicid"));
-	}
-	
+    public static MergeUtils mergeUtils;
 
-	@Test
-	public void testAddIdString() {
-		assertEquals(null, mergeUtils.addId(null));
-		assertEquals("unique_1", mergeUtils.addId("a.xml#topicid"));
-		assertEquals("unique_2", mergeUtils.addId("a.xml#topicid2"));
-		assertNull(mergeUtils.addId(null));
-	}
+    @BeforeClass
+    public static void setUp() {
+        mergeUtils = new MergeUtils();
+    }
 
-	@Test@Ignore
-	public void testAddIdStringString() {
-		fail("Not yet implemented");
-	}
+    @After
+    public void reset() {
+        mergeUtils.reset();
+    }
 
-	@Test
-	public void testGetIdValue() {
-	    mergeUtils.addId("a.xml#topicid");
-	    mergeUtils.addId("a.xml#topicid2");
-		assertEquals(null, mergeUtils.getIdValue(null));
-		assertEquals("unique_1", mergeUtils.getIdValue("a.xml#topicid"));
-		assertEquals("unique_2", mergeUtils.getIdValue("a.xml#topicid2"));
-		assertEquals(null, mergeUtils.getIdValue(" "));
-	}
+    @Test
+    public void testFindId() {
+        mergeUtils.addId("dir\\\\#topicid");
+        mergeUtils.addId("dir\\\\dir1\\\\a.xml#topicid");
+        assertTrue(mergeUtils.findId("dir/#topicid"));
+        assertTrue(mergeUtils.findId("dir/dir1/a.xml#topicid"));
+        assertFalse(mergeUtils.findId("topicid"));
+        assertFalse(mergeUtils.findId("dir/a.xml#topicid"));
+    }
 
-	@Test
-	public void testIsVisited() {
-		//set visitSet
-		mergeUtils.visit("dir/dir1/a.xml#topicid");
-		mergeUtils.visit("dir/a.xml");
-		assertTrue(mergeUtils.isVisited("dir/a.xml"));
-		assertTrue(mergeUtils.isVisited("dir/a.xml#topicid"));
-		assertFalse(mergeUtils.isVisited("a.xml"));
-		assertTrue(mergeUtils.isVisited("dir/dir1/a.xml"));
-		assertTrue(mergeUtils.isVisited("dir/dir1/a.xml#topicid"));
-		//if topic id in the path are not the same
-		assertTrue(mergeUtils.isVisited("dir/dir1/a.xml#another"));
-		assertFalse(mergeUtils.isVisited("a.xml"));
-	}
 
-	@Test@Ignore
-	// This method has been tested in the previous method.
-	public void testVisit() {
-		fail("Not yet implemented");
-	}
+    @Test
+    public void testAddIdString() {
+        assertEquals(null, mergeUtils.addId(null));
+        assertEquals("unique_1", mergeUtils.addId("a.xml#topicid"));
+        assertEquals("unique_2", mergeUtils.addId("a.xml#topicid2"));
+        assertNull(mergeUtils.addId(null));
+    }
 
-	@Test
-	public void testGetFirstTopicId() {
-		//assertEquals("task",mergeUtils.getFirstTopicId("stub.xml", "TEST_STUB"));
-		assertEquals("task", MergeUtils.getFirstTopicId("stub.xml", resourceDir.getAbsolutePath(),false));
-		assertEquals("task", MergeUtils.getFirstTopicId("stub.xml", resourceDir.getAbsolutePath(), true));
-	}
-	
+    @Test@Ignore
+    public void testAddIdStringString() {
+        fail("Not yet implemented");
+    }
+
+    @Test
+    public void testGetIdValue() {
+        mergeUtils.addId("a.xml#topicid");
+        mergeUtils.addId("a.xml#topicid2");
+        assertEquals(null, mergeUtils.getIdValue(null));
+        assertEquals("unique_1", mergeUtils.getIdValue("a.xml#topicid"));
+        assertEquals("unique_2", mergeUtils.getIdValue("a.xml#topicid2"));
+        assertEquals(null, mergeUtils.getIdValue(" "));
+    }
+
+    @Test
+    public void testIsVisited() {
+        //set visitSet
+        mergeUtils.visit("dir/dir1/a.xml#topicid");
+        mergeUtils.visit("dir/a.xml");
+        assertTrue(mergeUtils.isVisited("dir/a.xml"));
+        assertTrue(mergeUtils.isVisited("dir/a.xml#topicid"));
+        assertFalse(mergeUtils.isVisited("a.xml"));
+        assertTrue(mergeUtils.isVisited("dir/dir1/a.xml"));
+        assertTrue(mergeUtils.isVisited("dir/dir1/a.xml#topicid"));
+        //if topic id in the path are not the same
+        assertTrue(mergeUtils.isVisited("dir/dir1/a.xml#another"));
+        assertFalse(mergeUtils.isVisited("a.xml"));
+    }
+
+    @Test@Ignore
+    // This method has been tested in the previous method.
+    public void testVisit() {
+        fail("Not yet implemented");
+    }
+
+    @Test
+    public void testGetFirstTopicId() {
+        //assertEquals("task",mergeUtils.getFirstTopicId("stub.xml", "TEST_STUB"));
+        assertEquals("task", MergeUtils.getFirstTopicId("stub.xml", srcDir.getAbsolutePath(), false));
+        assertEquals("task", MergeUtils.getFirstTopicId("stub.xml", srcDir.getAbsolutePath(), true));
+    }
+
 }

@@ -44,6 +44,12 @@
       <equals arg1="${pdf.formatter}" arg2="fop"/>
     </condition>
     
+    <condition property="args.fo.userconfig" value="${fop.home}/conf/fop.xconf">
+      <not>
+        <isset property="args.fo.userconfig"/>
+      </not>
+    </condition>
+    
     <!-- default output format -->
     <condition property="fop.formatter.output-format" value="application/pdf">
       <not><isset property="fop.formatter.output-format"/></not>
@@ -167,9 +173,9 @@
       <not><isset property="outputFile"/></not>
     </condition>
     
-    <fop format="${fop.formatter.output-format}" fofile="${dita.map.output.dir}/topic.fo" basedir="${dita.map.output.dir}"
+    <fop format="${fop.formatter.output-format}" fofile="${pdf2.temp.dir}/topic.fo" basedir="${pdf2.temp.dir}"
          outfile="${outputFile}" messagelevel="info" relativebase="true" force="true"
-         userconfig="${fop.home}/conf/fop.xconf"/>
+         userconfig="${args.fo.userconfig}"/>
   </target>
 
 </project>

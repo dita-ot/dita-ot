@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -29,6 +29,12 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import org.xml.sax.SAXException;
+
+import org.xml.sax.ErrorHandler;
+
+import org.xml.sax.SAXParseException;
+
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
@@ -45,14 +51,25 @@ import org.xml.sax.XMLReader;
 public final class Integrator {
 
     /** Feature name for supported image extensions. */
+    public static final String FEAT_TOPIC_EXTENSIONS = "dita.topic.extensions";
+    /** Feature name for supported image extensions. */
+    public static final String FEAT_MAP_EXTENSIONS = "dita.map.extensions";
+    /** Feature name for supported image extensions. */
     public static final String FEAT_IMAGE_EXTENSIONS = "dita.image.extensions";
+    /** Feature name for supported image extensions. */
+    public static final String FEAT_HTML_EXTENSIONS = "dita.html.extensions";
+    /** Feature name for supported resource file extensions. */
+    public static final String FEAT_RESOURCE_EXTENSIONS = "dita.resource.extensions";
+    /** Feature name for print transformation types. */
+    public static final String FEAT_PRINT_TRANSTYPES = "dita.transtype.print";
+
     public static final String FEAT_VALUE_SEPARATOR = ",";
     public static final String PARAM_VALUE_SEPARATOR = ";";
     public static final String PARAM_NAME_SEPARATOR = "=";
 
     private static final Pattern ID_PATTERN = Pattern.compile("[0-9a-zA-Z_\\-]+(?:\\.[0-9a-zA-Z_\\-]+)*");
     private static final Pattern VERSION_PATTERN = Pattern.compile("\\d+(?:\\.\\d+(?:\\.\\d+(?:\\.[0-9a-zA-Z_\\-])?)?)?");
-    
+
     /** Plugin table which contains detected plugins. */
     private final Map<String, Features> pluginTable;
     private final Set<String> templateSet = new HashSet<String>(INT_16);
@@ -66,6 +83,7 @@ public final class Integrator {
     private final Hashtable<String, String> featureTable;
     private File propertiesFile;
     private final Set<String> extensionPoints;
+    private boolean strict = false;
 
     private Properties properties;
 
@@ -88,12 +106,16 @@ public final class Integrator {
                 propertiesStream = new FileInputStream(propertiesFile);
                 properties.load(propertiesStream);
             } catch (final Exception e) {
-                logger.logException(e);
+                if (strict) {
+                    throw new RuntimeException(e);
+                } else {
+                    logger.logException(e);
+                }
             } finally {
                 if (propertiesStream != null) {
                     try {
                         propertiesStream.close();
-                    } catch (IOException e) {
+                    } catch (final IOException e) {
                         logger.logException(e);
                     }
                 }
@@ -157,13 +179,10 @@ public final class Integrator {
             fileGen.generate(templateFile);
         }
 
-        // Added on 2010-11-09 for bug 3102827: Allow a way to specify
-        // recognized image extensions -- start
         // generate configuration properties
         final Properties configuration = new Properties();
-        // image extensions
+        // image extensions, support legacy property file extension
         final Set<String> imgExts = new HashSet<String>();
-
         for (final String ext : properties.getProperty(CONF_SUPPORTED_IMAGE_EXTENSIONS, "").split(CONF_LIST_SEPARATOR)) {
             final String e = ext.trim();
             if (e.length() != 0) {
@@ -179,26 +198,44 @@ public final class Integrator {
             }
         }
         configuration.put(CONF_SUPPORTED_IMAGE_EXTENSIONS, StringUtils.assembleString(imgExts, CONF_LIST_SEPARATOR));
-        
-        // non-print transtypes
+        // extensions
+        configuration.put(CONF_SUPPORTED_TOPIC_EXTENSIONS, readExtensions(FEAT_TOPIC_EXTENSIONS));
+        configuration.put(CONF_SUPPORTED_MAP_EXTENSIONS, readExtensions(FEAT_MAP_EXTENSIONS));
+        configuration.put(CONF_SUPPORTED_HTML_EXTENSIONS, readExtensions(FEAT_HTML_EXTENSIONS));
+        configuration.put(CONF_SUPPORTED_RESOURCE_EXTENSIONS, readExtensions(FEAT_RESOURCE_EXTENSIONS));
+
+        // print transtypes
         final Set<String> printTranstypes = new HashSet<String>();
+        if (featureTable.containsKey(FEAT_PRINT_TRANSTYPES)) {
+            for (final String ext : featureTable.get(FEAT_PRINT_TRANSTYPES).split(FEAT_VALUE_SEPARATOR)) {
+                final String e = ext.trim();
+                if (e.length() != 0) {
+                    printTranstypes.add(e);
+                }
+            }
+        }
+        // support legacy property
         final String printTranstypeValue = properties.getProperty(CONF_PRINT_TRANSTYPES);
         if (printTranstypeValue != null) {
             printTranstypes.addAll(Arrays.asList(printTranstypeValue.split(PARAM_VALUE_SEPARATOR)));
         }
         configuration.put(CONF_PRINT_TRANSTYPES, StringUtils.assembleString(printTranstypes, CONF_LIST_SEPARATOR));
-        
+
         OutputStream out = null;
         try {
-            final File outFile = new File(ditaDir, "lib" + File.separator + CONF_PROPERTIES);
+            final File outFile = new File(ditaDir, "lib" + File.separator + getClass().getPackage().getName() + File.separator + GEN_CONF_PROPERTIES);
+            if (!(outFile.getParentFile().exists()) && !outFile.getParentFile().mkdirs()) {
+                throw new RuntimeException("Failed to make directory " + outFile.getParentFile().getAbsolutePath());
+            }
             logger.logDebug("Generate configuration properties " + outFile.getPath());
             out = new BufferedOutputStream(new FileOutputStream(outFile));
-            configuration.store(out, "DITA-OT runtime configuration");
+            configuration.store(out, "DITA-OT runtime configuration, do not edit manually");
         } catch (final Exception e) {
-            logger.logException(e);
-            // throw new
-            // RuntimeException("Failed to write configuration properties: " +
-            // e.getMessage(), e);
+            if (strict) {
+                throw new RuntimeException("Failed to write configuration properties: " + e.getMessage(), e);
+            } else {
+                logger.logException(e);
+            }
         } finally {
             if (out != null) {
                 try {
@@ -210,8 +247,24 @@ public final class Integrator {
         }
     }
 
-    // Added on 2010-11-09 for bug 3102827: Allow a way to specify recognized
-    // image extensions -- end
+    /**
+     * Read plug-in feature.
+     * 
+     * @param featureName plug-in feature name
+     * @return combined list of values
+     */
+    private String readExtensions(final String featureName) {
+        final Set<String> exts = new HashSet<String>();
+        if (featureTable.containsKey(featureName)) {
+            for (final String ext : featureTable.get(featureName).split(FEAT_VALUE_SEPARATOR)) {
+                final String e = ext.trim();
+                if (e.length() != 0) {
+                    exts.add(e);
+                }
+            }
+        }
+        return StringUtils.assembleString(exts, CONF_LIST_SEPARATOR);
+    }
 
     /**
      * Load the plug-ins and aggregate them by feature and fill into feature
@@ -226,8 +279,13 @@ public final class Integrator {
             final Set<Map.Entry<String, String>> featureSet = pluginFeatures.getAllFeatures();
             for (final Map.Entry<String, String> currentFeature : featureSet) {
                 if (!extensionPoints.contains(currentFeature.getKey())) {
-                    logger.logDebug("Plug-in " + plugin + " uses an undefined extension point "
-                            + currentFeature.getKey());
+                    final String msg = "Plug-in " + plugin + " uses an undefined extension point "
+                            + currentFeature.getKey();
+                    if (strict) {
+                        throw new RuntimeException(msg);
+                    } else {
+                        logger.logDebug(msg);
+                    }
                 }
                 if (featureTable.containsKey(currentFeature.getKey())) {
                     final String value = featureTable.remove(currentFeature.getKey());
@@ -280,7 +338,12 @@ public final class Integrator {
                 final Properties prop = new Properties();
                 prop.put("%1", requirement.toString());
                 prop.put("%2", currentPlugin);
-                logger.logWarn(MessageUtils.getMessage("DOTJ020W", prop).toString());
+                final String msg = MessageUtils.getMessage("DOTJ020W", prop).toString();
+                if (strict) {
+                    throw new RuntimeException(msg);
+                } else {
+                    logger.logWarn(msg);
+                }
                 return false;
             }
         }
@@ -308,6 +371,17 @@ public final class Integrator {
         try {
             final DescParser parser = new DescParser(descFile.getParentFile(), ditaDir);
             reader.setContentHandler(parser);
+            reader.setErrorHandler(new ErrorHandler() {
+                public void error(final SAXParseException e) throws SAXException {
+                    throw e;
+                }
+                public void fatalError(final SAXParseException e) throws SAXException {
+                    throw e;
+                }
+                public void warning(final SAXParseException e) throws SAXException {
+                    throw e;
+                }
+            });
             reader.parse(descFile.getAbsolutePath());
             final Features f = parser.getFeatures();
             final String id = f.getPluginId();
@@ -315,11 +389,22 @@ public final class Integrator {
             setDefaultValues(f);
             extensionPoints.addAll(f.getExtensionPoints().keySet());
             pluginTable.put(id, f);
+        } catch (final SAXParseException e) {
+            final RuntimeException ex = new RuntimeException("Failed to parse " + descFile.getAbsolutePath() + ": " + e.getMessage(), e);
+            if (strict) {
+                throw ex;
+            } else {
+                logger.logException(ex);
+            }
         } catch (final Exception e) {
-            logger.logException(e);
+            if (strict) {
+                throw new RuntimeException(e);
+            } else {
+                logger.logException(e);
+            }
         }
     }
-    
+
     /**
      * Validate plug-in configuration.
      * 
@@ -346,16 +431,26 @@ public final class Integrator {
      * @param f Features to validate
      */
     private void validatePlugin(final Features f) {
-        final String id = f.getPluginId(); 
+        final String id = f.getPluginId();
         if (!ID_PATTERN.matcher(id).matches()) {
-            logger.logWarn("Plug-in ID '" + id + "' doesn't follow recommended syntax rules, support for nonconforming IDs may be removed in future releases.");
+            final String msg = "Plug-in ID '" + id + "' doesn't follow recommended syntax rules, support for nonconforming IDs may be removed in future releases.";
+            if (strict) {
+                throw new IllegalArgumentException(msg);
+            } else {
+                logger.logWarn(msg);
+            }
         }
         final String version = f.getFeature("package.version");
         if (version != null && !VERSION_PATTERN.matcher(version).matches()) {
-            logger.logWarn("Plug-in version '" + version + "' doesn't follow recommended syntax rules, support for nonconforming version may be removed in future releases.");
+            final String msg = "Plug-in version '" + version + "' doesn't follow recommended syntax rules, support for nonconforming version may be removed in future releases.";
+            if (strict) {
+                throw new IllegalArgumentException(msg);
+            } else {
+                logger.logWarn(msg);
+            }
         }
     }
-    
+
     /**
      * Set default values.
      * 
@@ -435,6 +530,15 @@ public final class Integrator {
      */
     public void setProperties(final File propertiesfile) {
         this.propertiesFile = propertiesfile;
+    }
+
+    /**
+     * Setter for strict/lax mode.
+     * 
+     * @param strict {@code true} for strict mode, {@code false} for lax mode
+     */
+    public void setStrict(final boolean strict) {
+        this.strict = strict;
     }
 
     /**

@@ -54,13 +54,20 @@
     <xsl:variable name="page-margins">20mm</xsl:variable>
     
     <!-- Change these if your page has different margins on different sides. -->
-    <xsl:variable name="page-margin-left" select="$page-margins"/>
-    <xsl:variable name="page-margin-right" select="$page-margins"/>
+    <!-- legacy parameter -->
+    <xsl:variable name="page-margin-left"/>
+    <!-- legacy parameter -->
+    <xsl:variable name="page-margin-right"/>
+    <xsl:variable name="page-margin-inside" select="$page-margins"/>
+    <xsl:variable name="page-margin-outside" select="$page-margins"/>
     <xsl:variable name="page-margin-top" select="$page-margins"/>
     <xsl:variable name="page-margin-bottom" select="$page-margins"/>
 
     <!--The side column width is the amount the body text is indented relative to the margin. -->
     <xsl:variable name="side-col-width">25pt</xsl:variable>
 
+    <xsl:variable name="mirror-page-margins" select="false()"/>
+
     <xsl:variable name="default-font-size">10pt</xsl:variable>
+    <xsl:variable name="default-line-height">12pt</xsl:variable>
 </xsl:stylesheet>

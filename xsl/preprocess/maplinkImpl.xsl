@@ -167,18 +167,18 @@
   <!-- Generated ordered links to friends (with linklist) -->
   <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="generate-ordered-links">
     <xsl:param name="pathBackToMapDirectory"/>
-    <linklist class="- topic/linklist ">
+    <!--linklist class="- topic/linklist ">
       <xsl:copy-of select="@xtrf | @xtrc"/>
       <xsl:if test="/*[@id]">
         <xsl:attribute name="mapkeyref">
           <xsl:value-of select="/*/@id"/>
         </xsl:attribute>
-      </xsl:if>
+      </xsl:if-->
       <xsl:apply-templates select="." mode="link-to-friends">
         <xsl:with-param name="pathBackToMapDirectory" select="$pathBackToMapDirectory"/>
         <xsl:with-param name="linklist">true</xsl:with-param>
       </xsl:apply-templates>
-    </linklist>
+    <!--/linklist-->
   </xsl:template>
 
   <!-- Generate unordered links (with linkpool) -->
@@ -351,6 +351,65 @@
     mode="link-to-friends" name="link-to-friends">
     <xsl:param name="pathBackToMapDirectory"/>
     <xsl:param name="linklist">false</xsl:param>
+    
+    <xsl:variable name="temp-position">
+      <xsl:apply-templates mode="get-position" select="ancestor::*[contains(@class, ' map/relcell ')]"/>
+    </xsl:variable>
+    <xsl:variable name="position">
+      <xsl:value-of select="string-length($temp-position)"/>
+    </xsl:variable>
+    <xsl:variable name="group-title">
+      <xsl:apply-templates mode="grab-group-title" 
+         select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]"/>
+    </xsl:variable>
+    
+    <xsl:if test="$linklist='true' and not($group-title='#none#') and not($group-title='')">
+      <xsl:if test="ancestor::*[contains(@class, ' map/relcell ')]/preceding-sibling::*[contains(@class, ' map/relcell ')]/descendant::*[contains(@class, ' map/topicref ')][@href][not(@href='')][not(@linking='none')][not(@linking='sourceonly')]">
+          <xsl:apply-templates mode="generate-ordered-links-2" 
+            select="ancestor::*[contains(@class, ' map/relcell ')]/preceding-sibling::*[contains(@class, ' map/relcell ')]">
+            <xsl:with-param name="role">friend</xsl:with-param>
+            <xsl:with-param name="pathBackToMapDirectory" 
+              select="$pathBackToMapDirectory"/>
+          </xsl:apply-templates>
+      </xsl:if>
+      <xsl:if test="ancestor::*[contains(@class, ' map/relcell ')]/following-sibling::*[contains(@class, ' map/relcell ')]/descendant::*[contains(@class, ' map/topicref ')][@href][not(@href='')][not(@linking='none')][not(@linking='sourceonly')]">
+          <xsl:apply-templates mode="generate-ordered-links-2" 
+            select="ancestor::*[contains(@class, ' map/relcell ')]/following-sibling::*[contains(@class, ' map/relcell ')]">
+            <xsl:with-param name="role">friend</xsl:with-param>
+            <xsl:with-param name="pathBackToMapDirectory" 
+              select="$pathBackToMapDirectory"/>
+          </xsl:apply-templates>
+      </xsl:if>
+      <xsl:if test="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]/*[contains(@class, ' map/topicref ')][@href][not(@href='')][not(@linking='none')][not(@linking='sourceonly')]">  
+          <xsl:apply-templates mode="generate-ordered-links-2"
+            select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]">
+            <xsl:with-param name="role">friend</xsl:with-param>
+            <xsl:with-param name="pathBackToMapDirectory" 
+              select="$pathBackToMapDirectory"/>
+          </xsl:apply-templates>
+      </xsl:if>  
+    </xsl:if>
+    <xsl:if test="$linklist='false' and ($group-title='#none#' or $group-title='')">
+      <xsl:apply-templates mode="link" 
+        select="ancestor::*[contains(@class, ' map/relcell ')]/preceding-sibling::*[contains(@class, ' map/relcell ')]/descendant::*[contains(@class, ' map/topicref ')][@href][not(@href='')][not(@linking='none')][not(@linking='sourceonly')]">
+        <xsl:with-param name="role">friend</xsl:with-param>
+        <xsl:with-param name="pathBackToMapDirectory" 
+          select="$pathBackToMapDirectory"/>
+      </xsl:apply-templates>
+      <xsl:apply-templates mode="link" 
+        select="ancestor::*[contains(@class, ' map/relcell ')]/following-sibling::*[contains(@class, ' map/relcell ')]/descendant::*[contains(@class, ' map/topicref ')][@href][not(@href='')][not(@linking='none')][not(@linking='sourceonly')]">
+        <xsl:with-param name="role">friend</xsl:with-param>
+        <xsl:with-param name="pathBackToMapDirectory" 
+          select="$pathBackToMapDirectory"/>
+      </xsl:apply-templates>
+      <xsl:apply-templates mode="link"
+        select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]/*[contains(@class, ' map/topicref ')][@href][not(@href='')][not(@linking='none')][not(@linking='sourceonly')]">
+        <xsl:with-param name="role">friend</xsl:with-param>
+        <xsl:with-param name="pathBackToMapDirectory" 
+          select="$pathBackToMapDirectory"/>
+      </xsl:apply-templates>
+    </xsl:if>
+    <!--
     <xsl:variable name="temp-position">
       <xsl:apply-templates mode="get-position" select="ancestor::*[contains(@class, ' map/relcell ')]"/>
     </xsl:variable>
@@ -361,7 +420,8 @@
       <xsl:apply-templates mode="grab-group-title" 
         select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]/*[contains(@class, ' map/topicref ')][1]"/>
     </xsl:variable>
-    <xsl:if test="$linklist='true' and not($group-title='#none#') and not($group-title='')">
+    -->
+    <!--xsl:if test="$linklist='true' and not($group-title='#none#') and not($group-title='')">
       <title class="- topic/title ">
         <xsl:value-of select="$group-title"/>
       </title>
@@ -403,7 +463,7 @@
         <xsl:with-param name="pathBackToMapDirectory" 
           select="$pathBackToMapDirectory"/>
       </xsl:apply-templates>
-    </xsl:if>
+    </xsl:if-->
   </xsl:template>
   
   <xsl:template match="*[contains(@class, ' map/relcolspec ')]/*[contains(@class, ' map/topicref ')]"
@@ -421,6 +481,13 @@
       <xsl:apply-templates mode="grab-group-title" select="."/>
     </xsl:variable>
     <xsl:if test="$linklist='true' and not($group-title='#none#') and not($group-title='')">
+    <linklist class="- topic/linklist ">
+    <xsl:copy-of select="@xtrf | @xtrc"/>
+    <xsl:if test="/*[@id]">
+    <xsl:attribute name="mapkeyref">
+    <xsl:value-of select="/*/@id"/>
+    </xsl:attribute>
+    </xsl:if>
     <title class="- topic/title ">
       <xsl:value-of select="$group-title"/>
     </title>
@@ -431,6 +498,7 @@
        select="$pathBackToMapDirectory">
       </xsl:with-param>
     </xsl:apply-templates>
+    </linklist>
     </xsl:if>
     <xsl:if test="$linklist='false' and ($group-title='#none#' or $group-title='')">
       <xsl:apply-templates mode="link"
@@ -453,6 +521,19 @@
   
   
   <!-- Grab the group title from the matching header of reltable. -->
+  <xsl:template match="*[contains(@class, ' map/relcolspec ')]"
+    mode="grab-group-title"> 
+    <xsl:choose>
+      <xsl:when test="*[contains(@class, ' topic/title ')][not(title='')]">
+        <xsl:value-of select="*[contains(@class, ' topic/title ')]"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates mode="grab-group-title" 
+          select="*[contains(@class, ' map/topicref ')][1]"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>  
+  
   <xsl:template match="*[contains(@class, ' map/topicref ')]"
    mode="grab-group-title">
     <xsl:variable name="file-origin">
@@ -492,7 +573,73 @@
   
       <!--edited by William on 2009-06-10 for bug:2799543 link bug  start  -->
       <!--xsl:template mode="link" 
-          match="*[@href][not(@href='')][not(@linking='none')][not(@linking='sourceonly')][not(@processing-role='resource-only')]"-->
+      match="*[@href][not(@href='')][not(@linking='none')][not(@linking='sourceonly')][not(@processing-role='resource-only')]"-->
+  <xsl:template mode="generate-ordered-links-2" match="*[contains(@class, ' map/relcell ')]">
+    <xsl:param name="pathBackToMapDirectory"/>
+    <xsl:variable name="temp-position">
+      <xsl:apply-templates mode="get-position" select="."/>
+    </xsl:variable>
+    <xsl:variable name="position">
+      <xsl:value-of select="string-length($temp-position)"/>
+    </xsl:variable>
+    <xsl:variable name="group-title">
+      <xsl:apply-templates mode="grab-group-title" 
+        select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]"/>
+    </xsl:variable>
+    <linklist class="- topic/linklist ">
+      <xsl:copy-of select="@xtrf | @xtrc"/>
+      <xsl:if test="/*[@id]">
+        <xsl:attribute name="mapkeyref">
+          <xsl:value-of select="/*/@id"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="not($group-title='#none#') and not($group-title='')">
+        <title class="- topic/title ">
+          <xsl:value-of select="$group-title"/>
+        </title>
+        <xsl:apply-templates mode="link" 
+          select="descendant::*[contains(@class, ' map/topicref ')][@href][not(@href='')][not(@linking='none')][not(@linking='sourceonly')]">
+          <xsl:with-param name="role">friend</xsl:with-param>
+          <xsl:with-param name="pathBackToMapDirectory" 
+            select="$pathBackToMapDirectory"/>
+        </xsl:apply-templates> 
+      </xsl:if>
+    </linklist>
+  </xsl:template>
+  
+  <xsl:template mode="generate-ordered-links-2" match="*[contains(@class, ' map/relcolspec ')]">
+    <xsl:param name="pathBackToMapDirectory"/>
+    <xsl:variable name="temp-position">
+      <xsl:apply-templates mode="get-position" select="."/>
+    </xsl:variable>
+    <xsl:variable name="position">
+      <xsl:value-of select="string-length($temp-position)"/>
+    </xsl:variable>
+    <xsl:variable name="group-title">
+      <xsl:apply-templates mode="grab-group-title" 
+        select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]"/>
+    </xsl:variable>
+    <linklist class="- topic/linklist ">
+      <xsl:copy-of select="@xtrf | @xtrc"/>
+      <xsl:if test="/*[@id]">
+        <xsl:attribute name="mapkeyref">
+          <xsl:value-of select="/*/@id"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="not($group-title='#none#') and not($group-title='')">
+        <title class="- topic/title ">
+          <xsl:value-of select="$group-title"/>
+        </title>
+        <xsl:apply-templates mode="link" 
+          select="descendant::*[contains(@class, ' map/topicref ')][@href][not(@href='')][not(@linking='none')][not(@linking='sourceonly')]">
+          <xsl:with-param name="role">friend</xsl:with-param>
+          <xsl:with-param name="pathBackToMapDirectory" 
+            select="$pathBackToMapDirectory"/>
+        </xsl:apply-templates> 
+      </xsl:if>
+    </linklist>
+  </xsl:template>
+  
   <xsl:template mode="link" 
               match="*[@href][not(@href='')][not(@linking='none')][not(@linking='sourceonly')][not(@processing-role='resource-only')]">
       <!--edited by William on 2009-06-10 for bug:2799543 link bug  end  -->
@@ -506,7 +653,8 @@
     <!-- If going to print, and @print=no, do not create links for this topicref -->
           <!--edited by William on 2009-06-10 for bug:2799543 link bug  start  -->
           <!--xsl:if 
-              test="not(($FINALOUTPUTTYPE='PDF' or $FINALOUTPUTTYPE='IDD') and @print='no')"-->
+          test="not(($FINALOUTPUTTYPE='PDF' or $FINALOUTPUTTYPE='IDD') and @print='no')"--> 
+
     <xsl:if 
               test="not(($FINALOUTPUTTYPE='PDF' or $FINALOUTPUTTYPE='IDD') and @print='no') and 
               not(@processing-role='resource-only') and ($found='found')">
@@ -584,6 +732,7 @@
         </xsl:if>
       </link>
     </xsl:if>
+
   </xsl:template>
   
   <!-- added by William on 2009-05-07 for shortdesc bug start -->

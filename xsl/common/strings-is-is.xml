@@ -56,6 +56,7 @@
 <str name="Prerequisite">Forsenda</str>
 <str name="Prerequisites">Forsendur</str>
 <str name="or">eða</str>
+<str name="figure-number-separator"> </str>
 
 <!--Task section labels -->
 <str name="task_context">Um þetta verk</str>
@@ -65,7 +66,7 @@
 <str name="task_procedure">Aðferð</str>
 <str name="task_results">Niðurstöður</str>
 
-<str name="Copyright IBM">Copyright IBM Corp.</str>
+<str name="Copyright">Copyright</str>
 
 <!-- Symbols -->
 <str name="OpenQuote">"</str>

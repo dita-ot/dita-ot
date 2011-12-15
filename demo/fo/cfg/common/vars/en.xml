@@ -47,7 +47,7 @@ See the accompanying license.txt file for applicable licenses.
     -->
 
     <!-- Product name to be placed inside headers etc. -->
-    <variable id="Product Name">OpenTopic</variable>
+    <variable id="Product Name"/>
 
     <!-- The footer that appears on odd-numbered pages. -->
     <variable id="Body odd footer"/>
@@ -65,7 +65,7 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Body odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
 
     <!-- The header that appears on even-numbered pages. -->
-    <variable id="Body even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<param ref-name="prodname"/>&#xA0;|&#xA0;<param ref-name="heading"/></variable>
+    <variable id="Body even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
 
     <!-- The footer that appears on Preface odd-numbered pages. -->
     <variable id="Preface odd footer"/>
@@ -77,10 +77,10 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Preface first footer"/>
 
     <!-- The header that appears on Preface odd-numbered pages. -->
-    <variable id="Preface odd header">Introduction&#xA0;|&#xA0;<param ref-name="prodname"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
+    <variable id="Preface odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;Introduction&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
 
     <!-- The header that appears on Preface even-numbered pages. -->
-    <variable id="Preface even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<param ref-name="prodname"/>&#xA0;|&#xA0;Introduction</variable>
+    <variable id="Preface even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;Introduction&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
 
     <!-- The header that appears on Preface first page. -->
     <variable id="Preface first header"/>
@@ -99,7 +99,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- The header that appears on the odd-numbered table of contents
          pages. --> 
-    <variable id="Toc even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<param ref-name="prodname"/>&#xA0;|&#xA0;TOC</variable>
+    <variable id="Toc even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;TOC&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
 
     <!-- The footer that appears on the odd-numbered index pages. -->
     <variable id="Index odd footer"/>
@@ -108,10 +108,10 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Index even footer"/>
 
     <!-- The header that appears on the odd-numbered index pages. -->
-    <variable id="Index odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;Index&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
+    <variable id="Index odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;<variable id="Index"/>&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
 
     <!-- The header that appears on the even-numbered index pages. -->
-    <variable id="Index even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<param ref-name="prodname"/>&#xA0;|&#xA0;Index</variable>
+    <variable id="Index even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<variable id="Index"/>&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
 
     <!-- The formatting used to display ordered lists (e.g., "1., 2." or 
          "1), 2)" -->
@@ -161,7 +161,8 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- Text to use for 'Note' label generated from <note> element. -->
     <variable id="Note">Note</variable>
-
+    <!-- Text to use for 'Notice' label generated from <note> element. -->
+    <variable id="Notice">Notice</variable>
     <!-- Text to use for 'Note' label generated from <note> element 
          with 'type' attribute set to 'tip'. -->
     <variable id="Tip">Tip</variable>
@@ -189,7 +190,8 @@ See the accompanying license.txt file for applicable licenses.
     <!-- Text to use for 'Note' label generated from <note> element 
          with 'type' attribute set to 'danger'. -->
     <variable id="Danger">Danger</variable>
-
+    <!-- Text to use for 'Note' label generated from <note> element with 'type' attribute set to 'warning'. -->
+    <variable id="Warning">Warning</variable>
     <!-- Text to use for 'Note' label generated from <note> element
          with 'type' attribute set to 'restriction'. -->
     <variable id="Restriction">Restriction</variable>
@@ -263,7 +265,8 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- Image path to use for a note of "note" type. -->
     <variable id="note Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
-
+    <!-- Image path to use for a note of "notice" type. -->
+    <variable id="notice Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
     <!-- Image path to use for a note of "attention" type. -->
     <variable id="attention Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
 
@@ -272,7 +275,8 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- Image path to use for a note of "danger" type. -->
     <variable id="danger Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
-
+    <!-- Image path to use for a note of "warning" type. -->
+    <variable id="warning Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
     <!-- Image path to use for a note of "fastpath" type. -->
     <variable id="fastpath Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
 
@@ -398,14 +402,10 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Glossary even footer"/>
 
     <!-- The header that appears on the odd-numbered glossary pages. -->
-    <variable id="Glossary odd header">
-        <param ref-name="prodname"/>&#xA0;|&#xA0;Glossary&#xA0;|&#xA0;<param ref-name="pagenum"/>
-    </variable>
+    <variable id="Glossary odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;<variable id="Glossary"/>&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
 
     <!-- The header that appears on the even-numbered glossary pages. -->
-    <variable id="Glossary even header">
-        <param ref-name="pagenum"/>&#xA0;|&#xA0;<param ref-name="prodname"/>&#xA0;|&#xA0;Glossary
-    </variable>
+    <variable id="Glossary even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<variable id="Glossary"/>&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
      
      <!-- The heading string to put at the top of the Glossary -->
      <variable id="Glossary">Glossary</variable>

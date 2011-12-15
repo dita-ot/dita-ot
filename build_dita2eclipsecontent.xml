@@ -3,12 +3,7 @@
      Sourceforge.net. See the accompanying license.txt file for 
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
-<project name="dita2eclipsecontent" default="dita2eclipsecontent">
-  <property name="transtype" value="eclipsecontent"/>
-    
-  <import file="build_init.xml" />
-  <import file="build_preprocess.xml" />
-  <import file="build_general.xml" />
+<project name="dita2eclipsecontent">
 
   <target name="dita2eclipsecontent" unless="noMap"
     depends="build-init, preprocess, dita.topics.eclipse.content, 
@@ -50,6 +45,7 @@
       <param name="OUTEXT" expression="${content.link.ext}" />
       <mapper type="glob" from="*${dita.input.filename}"
         to="*${args.eclipsecontent.toc}.xml" />
+      <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
   
@@ -81,6 +77,7 @@
         if="args.eclipse.version" />
       <param name="provider" expression="${args.eclipse.provider}"
         if="args.eclipse.provider" />
+      <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
 
@@ -104,6 +101,7 @@
       <param name="OUTEXT" expression="${dita.ext}" if="dita.ext"></param>
       <param name="DRAFT" expression="${args.draft}" if="args.draft"></param>
       <param name="DBG" expression="${args.debug}" if="args.debug"></param>
+  	  <xmlcatalog refid="dita.catalog"/>
     </xslt>
 
   </target>

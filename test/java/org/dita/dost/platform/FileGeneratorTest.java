@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -34,15 +34,15 @@ public class FileGeneratorTest {
 
     private final File resourceDir = new File("test-stub", FileGeneratorTest.class.getSimpleName());
     private File tempDir;
-    
+
     private static File tempFile;
     private final static Hashtable<String, String> features = new Hashtable<String, String>();
-    static {        
+    static {
         features.put("element", "foo,bar,baz");
         features.put("attribute", "foo,bar,baz");
     }
     private final static Map<String, Features> plugins = new HashMap<String, Features>();
-    static {   
+    static {
         final Features a = new Features(null, null);
         final AttributesImpl aAtts = new AttributesImpl();
         aAtts.addAttribute("", "value", "value", "CDATA", "foo,bar,baz");
@@ -56,22 +56,22 @@ public class FileGeneratorTest {
         b.addFeature("attribute", bAtts);
         plugins.put("b", b);
     }
-    
+
     @Before
     public void setUp() throws Exception {
         tempDir = TestUtils.createTempDir(getClass());
         tempFile = new File(tempDir, "dummy_template.xml");
         FileUtils.copyFile(new File(resourceDir, "src" + File.separator + "dummy_template.xml"),
-                           tempFile);
+                tempFile);
     }
 
     @Test
     public void testGenerate() throws IOException {
         final FileGenerator f = new FileGenerator(features, plugins);
         f.generate(tempFile);
-        
+
         assertEquals(TestUtils.readFileToString(new File(resourceDir, "exp" + File.separator + "dummy.xml")),
-                     TestUtils.readFileToString(new File(tempDir, "dummy.xml")));
+                TestUtils.readFileToString(new File(tempDir, "dummy.xml")));
     }
 
     @After
@@ -90,17 +90,17 @@ public class FileGeneratorTest {
             }
         }
         public void addParam(final String name, final String value) {
-    		params.put(name, value);
-    	}
-        public void setFeatures(Map<String, Features> features) {
+            params.put(name, value);
+        }
+        public void setFeatures(final Map<String, Features> features) {
             this.features = features;
         }
         public abstract String getResult();
         public void setLogger(final DITAOTLogger logger) {
             // NOOP
         }
-    } 
-    
+    }
+
     public static class ElementAction extends AbstractAction {
         @Override
         public String getResult() {
@@ -114,7 +114,7 @@ public class FileGeneratorTest {
             return "<foo bar='baz'>quz</foo>";
         }
     }
-    
+
     public static class AttributeAction extends AbstractAction {
         @Override
         public String getResult() {
@@ -128,5 +128,5 @@ public class FileGeneratorTest {
             return " foo='bar'";
         }
     }
-    
+
 }

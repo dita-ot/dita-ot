@@ -40,13 +40,15 @@ See the accompanying license.txt file for applicable licenses.
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 exclude-result-prefixes="opentopic-i18n">
 
-    <xsl:variable name="debug-enabled" select="true()"/>
-    <xsl:variable name="warn-enabled" select="true()"/>
+  <xsl:import href="../../../../xsl/common/output-message.xsl"/>
+
+    <xsl:param name="debug-enabled" select="'false'"/>
+  <xsl:variable name="msgprefix" select="'PDFX'"/>
 
     <xsl:variable name="font-mappings" select="document('cfg:fo/font-mappings.xml')/font-mappings"/>
   <xsl:variable name="default-font" select="$font-mappings/font-table/aliases/alias[. = 'Normal']/@name"/>
 
-	<xsl:template match="fo:bookmark | fo:bookmark-label" priority="+10">
+	<xsl:template match="fo:bookmark | fo:bookmark-label | fo:bookmark-title" priority="+10">
 		<xsl:copy>
 			<xsl:copy-of select="@*"/>
 			<xsl:apply-templates/>
@@ -67,7 +69,13 @@ See the accompanying license.txt file for applicable licenses.
 				<xsl:otherwise>
 					<!--Try search this name within font aliases-->
 					<xsl:variable name="aliasValue" select="$font-mappings/font-table/aliases/alias[@name=$currFontFam]/."/>
-					<xsl:if test="$warn-enabled and not($aliasValue)">[WARN] Font definition not found for the logical name or alias '<xsl:value-of select="$currFontFam"/>'!</xsl:if>
+					<xsl:if test="not($aliasValue)">
+					  <xsl:call-template name="output-message">
+					    <xsl:with-param name="msgnum">008</xsl:with-param>
+					    <xsl:with-param name="msgsev">W</xsl:with-param>
+					    <xsl:with-param name="msgparams">%1=<xsl:value-of select="$currFontFam"/></xsl:with-param>
+					  </xsl:call-template>
+					</xsl:if>
 					<xsl:value-of select="$aliasValue"/>
 				</xsl:otherwise>
 			</xsl:choose>
@@ -86,10 +94,12 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
+        <xsl:if test="$debug-enabled = 'true'">
         <xsl:comment>
             currFontFam = <xsl:value-of select="$currFontFam"/>
             physFontFam = <xsl:value-of select="normalize-space($physical-font-family)"/>
         </xsl:comment>
+        </xsl:if>
         <xsl:copy>
             <xsl:copy-of select="@*[not(name() = 'font-family')]"/>
             <xsl:attribute name="line-height-shift-adjustment">disregard-shifts</xsl:attribute>
@@ -122,13 +132,28 @@ See the accompanying license.txt file for applicable licenses.
 				<xsl:otherwise>
 					<!--Try search this name within font aliases-->
 					<xsl:variable name="aliasValue" select="$font-mappings/font-table/aliases/alias[@name=$fontFace]/."/>
-					<xsl:if test="$warn-enabled and not($aliasValue)">[WARN] Font definition not found for the logical name or alias '<xsl:value-of select="$fontFace"/>'!</xsl:if>
+					<xsl:if test="not($aliasValue)">
+					  <xsl:call-template name="output-message">
+					    <xsl:with-param name="msgnum">008</xsl:with-param>
+					    <xsl:with-param name="msgsev">W</xsl:with-param>
+					    <xsl:with-param name="msgparams">%1=<xsl:value-of select="$fontFace"/></xsl:with-param>
+					  </xsl:call-template>
+					</xsl:if>
 					<xsl:value-of select="$aliasValue"/>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
 
-		<xsl:variable name="phys-font" select="$font-mappings/font-table/logical-font[@name=normalize-space($realFontName)]/physical-font[@char-set=$charSet]"/>
+   	  <xsl:variable name="logical-font" select="$font-mappings/font-table/logical-font[@name = normalize-space($realFontName)]"/>
+      <xsl:variable name="phys-font.charset">
+        <xsl:choose>
+          <xsl:when test="$logical-font/physical-font[@char-set = $charSet]">
+             <xsl:value-of select="$charSet"/>
+          </xsl:when>
+          <xsl:otherwise>default</xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:variable name="phys-font" select="$logical-font/physical-font[@char-set = $phys-font.charset]"/>
 
         <xsl:variable name="font-style" select="$phys-font/font-style"/>
         <xsl:variable name="baseline-shift" select="$phys-font/baseline-shift"/>
@@ -147,10 +172,12 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
+        <xsl:if test="$debug-enabled = 'true'">
         <xsl:comment>
           currFontFam = <xsl:value-of select="$fontFace"/>
           physFontFam = <xsl:value-of select="normalize-space($physical-font-family)"/>
         </xsl:comment>
+        </xsl:if>
         <fo:inline line-height="100%">
             <xsl:attribute name="font-family"><xsl:value-of select="normalize-space($physical-font-family)"/></xsl:attribute>
 

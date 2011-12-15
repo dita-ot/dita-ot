@@ -9,10 +9,6 @@
      xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
      exclude-result-prefixes="ditamsg">
 
-<xsl:output method="xml"
-            encoding="utf-8"
-            indent="no"/>
-
 <!-- KEYREF-FILE is defined in dita2htmlImpl.xsl: -->
 <!--<xsl:param name="KEYREF-FILE" select="concat($WORKDIR,$PATH2PROJ,'keydef.xml')"/>-->
 

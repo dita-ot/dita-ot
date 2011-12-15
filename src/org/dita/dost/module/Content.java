@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -25,7 +25,7 @@ public interface Content {
      * @return collection
      * 
      */
-	@SuppressWarnings("rawtypes")
+    @SuppressWarnings("rawtypes")
     Collection getCollection();
 
     /**

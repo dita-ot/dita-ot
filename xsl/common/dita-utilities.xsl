@@ -286,5 +286,39 @@
     <xsl:param name="with"/>
     <xsl:value-of select="substring($text, string-length($text) - string-length($with) + 1) = $with"/>
   </xsl:template>
+
+  <!-- Get filename base -->
+  <xsl:template name="getFileName">
+    <xsl:param name="filename"/>
+    <xsl:param name="extension"/>
+    <xsl:choose>
+      <xsl:when test="contains($filename, $extension)">
+        <xsl:call-template name="substring-before-last">
+          <xsl:with-param name="text" select="$filename"/>
+          <xsl:with-param name="delim" select="$extension"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$filename"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
   
+  <xsl:template name="substring-before-last">
+    <xsl:param name="text"/>
+    <xsl:param name="delim"/>
+    
+    <xsl:if test="string($text) and string($delim)">
+      <xsl:value-of select="substring-before($text, $delim)" />
+      <xsl:variable name="tail" select="substring-after($text, $delim)" />
+      <xsl:if test="contains($tail, $delim)">
+        <xsl:value-of select="$delim" />
+        <xsl:call-template name="substring-before-last">
+          <xsl:with-param name="text" select="$tail" />
+          <xsl:with-param name="delim" select="$delim" />
+        </xsl:call-template>
+      </xsl:if>
+    </xsl:if>
+  </xsl:template>
+
 </xsl:stylesheet>

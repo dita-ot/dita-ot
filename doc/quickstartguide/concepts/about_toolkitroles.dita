@@ -4,7 +4,7 @@
 	<title>About DITA-OT Toolkit Roles</title>
 	<shortdesc>Descriptions of the following user roles for the toolkit: CSS Customizers, Build Scripters, and potentially End Users of third-party authoring tools.</shortdesc>
 	<conbody>
-  <p  audience="helpdevelopers endusers xsltcustomizers buildscripters">If you don't know what a build script is, or whether your authoring tool should or does use DITA OpenToolkit, you may be reading the right document in the 
+  <p  audience="help-developer end-user xslt-customizer build-scripter">If you don't know what a build script is, or whether your authoring tool should or does use DITA OpenToolkit, you may be reading the right document in the 
   in the DITA-OT documentation suite.  User Roles are a useful way to present and approach the documentation, enabling the reader to bypass information that is not relevant to 
   the specific task she is performing when this document is read.  The followige roles are addressed in this guide:
     <ul>
@@ -28,8 +28,6 @@
     unafraid of a command line and willing to "get your hands dirty" under the hood, an up-to-date, and maintained table of Ant build properties can be the difference between a broken
     build and a bad day or a gently purring build in a background <codeph>chron</codeph> chron job that never demands attention. If the build has already broken by the time you read this, your may be the "build hero" who magically "fixes" the build
     which no one cares about, except that it is usually only then that the fire-breathing IT dragon returns to it's cave and everyone can relax again until the next "emergency".
-  </p>
-  <p>If you use the Eclipse plugin architecture to distribute online help to Eclipse developers, you should start with <xref href="../../dev_ref/createplugin.xml">Create Eclipse Plugins</xref>.
   </p>
 	</conbody>
 </concept>

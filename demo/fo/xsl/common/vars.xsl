@@ -65,8 +65,8 @@ See the accompanying license.txt file for applicable licenses.
 	      </xsl:otherwise>
 	    </xsl:choose>
 	  </xsl:variable>
-	  <xsl:variable name="customization.locale" select="document(concat($fileProtocolPrefix, $customizationDir, '/common/vars/', $currentLocale, '.xml'))"/>
-	  <xsl:variable name="customization.language" select="document(concat($fileProtocolPrefix, $customizationDir, '/common/vars/', $currentLanguage, '.xml'))"/>
+	  <xsl:variable name="customization.locale" select="document(concat($customizationDir.url, 'common/vars/', $currentLocale, '.xml'))"/>
+	  <xsl:variable name="customization.language" select="document(concat($customizationDir.url, 'common/vars/', $currentLanguage, '.xml'))"/>
 	  <xsl:variable name="cfg.locale" select="document(concat('../../cfg/common/vars/', $currentLocale, '.xml'))"/>
 	  <xsl:variable name="cfg.language" select="document(concat('../../cfg/common/vars/', $currentLanguage, '.xml'))"/>
 
@@ -107,25 +107,32 @@ See the accompanying license.txt file for applicable licenses.
 		<!--
 			Inserting variable with given id
 		-->
-		<xsl:for-each select="child::node()">
+		<xsl:for-each select="node()">
 			<xsl:choose>
-				<xsl:when test="name()='param'">
+			  <xsl:when test="self::opentopic-vars:param">
 					<!--Processing parametrized variable-->
 					<xsl:variable name="param-name" select="@ref-name"/>
 					<!--Copying parameter child as is-->
-					<xsl:copy-of select="exsl:node-set($theParameters/*[name() = $param-name]/child::node())"/>
+					<xsl:copy-of select="exsl:node-set($theParameters/*[name() = $param-name]/node())"/>
 				</xsl:when>
-                <xsl:when test="name()='variable'">
-                    <xsl:call-template name="insertVariable">
-                        <xsl:with-param name="theVariableID" select="@id"/>
-                    </xsl:call-template>
-                </xsl:when>
+			  <xsl:when test="self::opentopic-vars:variable">
+          <xsl:call-template name="insertVariable">
+            <xsl:with-param name="theVariableID" select="@id"/>
+            <xsl:with-param name="theParameters" select="$theParameters"/>
+          </xsl:call-template>
+        </xsl:when>
 				<xsl:otherwise>
 					<!--Using default template-->
-					<xsl:apply-templates select="self::node()" mode="default"/>
+					<xsl:apply-templates select="." mode="default"/>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:for-each>
 	</xsl:template>
+  
+  <xsl:template match="@* | node()" mode="default">
+    <xsl:copy>
+      <xsl:apply-templates select="@* | node()" mode="default"/>
+    </xsl:copy>
+  </xsl:template>
 
 </xsl:stylesheet>

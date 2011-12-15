@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2011 All Rights Reserved. -->
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "concept.dtd">
+<concept id="dita2xhtml" xml:lang="en-us">
+<title>DITA to XHTML</title>
+<shortdesc>The XHTML transform was the first transform created for
+the DITA Open Toolkit; it converts DITA topics
+into XHTML documents. In addition to the XHTML output, this transform
+also returns a simple table of contents file named <filepath>index.html</filepath>,
+which is based on the structure of the input map file.</shortdesc>
+<conbody>
+<p>XHTML output is always associated with the default DITA-OT CSS
+stylesheet "<filepath>commonltr.css</filepath>" (or "<filepath>commonrtl.css</filepath>"
+for right-to-left languages). Parameters are available to override
+the default CSS styling.</p>
+<p>To run the default XHTML transform, set the transform type parameter
+to "xhtml". Many of the other transform types run the same conversion
+to XHTML, followed by additional routines to create new navigation
+files.</p>
+<note>When running the demo script <filepath>build_demo.xml</filepath>,
+setting the output type to "web" will run the default XHTML transform.</note><?Pub
+Caret -1?>
+</conbody>
+</concept>
+<?Pub *0000001108?>

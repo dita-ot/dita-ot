@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -25,53 +25,53 @@ import org.xml.sax.InputSource;
  * URIResolverAdapter class, convert source into inputsteam.
  */
 public final class URIResolverAdapter {
-	private URIResolverAdapter() {
-		// nop
-	}
-	
-	/**
-	 * Translate Source object to InputSource object.
-	 * @param source target object
-	 * @return InputSource instance if target object is instance of either SAXSource, DOMSource, StreamSource
-	 *         or their derived class. null, if not.
-	 */
-	public static InputSource convertToInputSource(Source source) {
-		if(source==null){
-			return null;
-		}
-		
-		if (source instanceof SAXSource) {
-			return ((SAXSource) source).getInputSource();
-		} else if (source instanceof StreamSource) {
-			StreamSource ss = (StreamSource) source;
-			InputSource isource = new InputSource(ss.getInputStream());
-			isource.setByteStream(ss.getInputStream());
-			isource.setCharacterStream(ss.getReader());
-			return isource;
-		} else if (source instanceof DOMSource) {
-			StringWriter writer = new StringWriter();
-			try {
-				TransformerFactory.newInstance().newTransformer().transform(source, new StreamResult(writer));
-				return new InputSource(new StringReader(writer.toString()));
-			} catch (Exception e) {
-				return null;
-			}
-		} else {
-			return null;
-		}
-	}
-	
-	/**
-	 * Translate Source object to InputStream object.
-	 * @param source target object
-	 * @return InputStream instance if target object is instance of either SAXSource, DOMSource, StreamSource
-	 *         or their derived class. null, if not.
-	 */
-	public static InputStream convertTOInputStream(Source source){
-		InputSource result=convertToInputSource(source);
-		if(result==null){
-			return null;
-		}
-		return result.getByteStream();
-	}
+    private URIResolverAdapter() {
+        // nop
+    }
+
+    /**
+     * Translate Source object to InputSource object.
+     * @param source target object
+     * @return InputSource instance if target object is instance of either SAXSource, DOMSource, StreamSource
+     *         or their derived class. null, if not.
+     */
+    public static InputSource convertToInputSource(final Source source) {
+        if(source==null){
+            return null;
+        }
+
+        if (source instanceof SAXSource) {
+            return ((SAXSource) source).getInputSource();
+        } else if (source instanceof StreamSource) {
+            final StreamSource ss = (StreamSource) source;
+            final InputSource isource = new InputSource(ss.getInputStream());
+            isource.setByteStream(ss.getInputStream());
+            isource.setCharacterStream(ss.getReader());
+            return isource;
+        } else if (source instanceof DOMSource) {
+            final StringWriter writer = new StringWriter();
+            try {
+                TransformerFactory.newInstance().newTransformer().transform(source, new StreamResult(writer));
+                return new InputSource(new StringReader(writer.toString()));
+            } catch (final Exception e) {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Translate Source object to InputStream object.
+     * @param source target object
+     * @return InputStream instance if target object is instance of either SAXSource, DOMSource, StreamSource
+     *         or their derived class. null, if not.
+     */
+    public static InputStream convertTOInputStream(final Source source){
+        final InputSource result=convertToInputSource(source);
+        if(result==null){
+            return null;
+        }
+        return result.getByteStream();
+    }
 }

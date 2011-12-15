@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -13,14 +13,14 @@ import java.util.Collection;
 
 /**
  * ContentImpl is the implementation of content container. It contains Collection and
- * Object and can be used to exchange different types of data between module, reader 
+ * Object and can be used to exchange different types of data between module, reader
  * and writer instances.
  * 
  * @author Zhang, Yuan Peng
  */
 public class ContentImpl implements Content {
 
-	@SuppressWarnings("rawtypes")
+    @SuppressWarnings("rawtypes")
     private Collection collection;
     private Object object;
 
@@ -28,8 +28,8 @@ public class ContentImpl implements Content {
      * Automatically generated constructor: ContentImpl.
      */
     public ContentImpl() {
-    	collection = null;
-    	object = null;
+        collection = null;
+        object = null;
     }
 
 
@@ -49,7 +49,7 @@ public class ContentImpl implements Content {
      * @return object
      * 
      */
-    public Object getValue() { 
+    public Object getValue() {
         return object;
     }
 

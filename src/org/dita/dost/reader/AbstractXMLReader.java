@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -12,8 +12,6 @@ package org.dita.dost.reader;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.IOException;
-import java.util.HashMap;
-
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
@@ -31,7 +29,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.ext.LexicalHandler;
 
 /**
- * This class extends AbstractReader, implement SAX's ContentHandler, 
+ * This class extends AbstractReader, implement SAX's ContentHandler,
  * LexicalHandler, and EntityResolver.
  * 
  * @version 1.0 2005-06-24
@@ -39,97 +37,76 @@ import org.xml.sax.ext.LexicalHandler;
  * @author Wu, Zhi Qiang
  */
 public abstract class AbstractXMLReader implements AbstractReader,
-        ContentHandler, LexicalHandler, EntityResolver {
-	
-    /** XMLReader instance for parsing dita file */
-	protected static XMLReader reader = null;
-	/** Map of XML catalog info */
-	protected static HashMap<String, String> catalogMap = null;
+ContentHandler, LexicalHandler, EntityResolver {
 
-	/**
-	 * @param validate
-	 * @param transtype 
-	 * @param rootFile 
-	 * @param grammarPool
-	 * @throws SAXException 
-	 */
-	public static XMLReader initXMLReaderBase(String ditaDir, boolean validate,			
-		XMLGrammarPool inGrammarPool) throws SAXException {		
-		// FIXME: WEK: This is my attempt to factor out common reader initialization
-		//             code for the GenListModuleReader and the Debug and filter reader.
-		
-		XMLGrammarPool grammarPool = null;
-		
-		if (inGrammarPool == null) {
-			grammarPool = GrammarPoolManager.getGrammarPool();
-		} else {
-			grammarPool = inGrammarPool;
-		}
-	
-		final DITAOTLogger javaLogger=new DITAOTJavaLogger();
-		final XMLReader reader = StringUtils.getXMLReader();
-		reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-		if(validate==true){
-			reader.setFeature(FEATURE_VALIDATION, true);
-			reader.setFeature(FEATURE_VALIDATION_SCHEMA, true);
-		}else{
-			final String msg=MessageUtils.getMessage("DOTJ037W").toString();
-			javaLogger.logWarn(msg);
-		}
-		setGrammarPool(reader, grammarPool);
-	
-		CatalogUtils.setDitaDir(ditaDir);
-		catalogMap = CatalogUtils.getCatalog(ditaDir);
-		return reader;
-	}
+    /**
+     * Initialize XML reader.
+     * 
+     * @param ditaDir DITA-OT base directory
+     * @param validate
+     * @param inGrammarPool
+     * @throws SAXException if initializing reader failed
+     */
+    @Deprecated
+    public XMLReader initXMLReaderBase(final String ditaDir, final boolean validate,
+            final XMLGrammarPool inGrammarPool) throws SAXException {
+        // FIXME: WEK: This is my attempt to factor out common reader initialization
+        //             code for the GenListModuleReader and the Debug and filter reader.
 
-	/**
-	 * Sets the grammar pool on the parser. Note that this is a Xerces-specific
-	 * feature.
-	 * @param reader
-	 * @param grammarPool
-	 */
-	public static void setGrammarPool(XMLReader reader, XMLGrammarPool grammarPool) {
-		
-		final DITAOTLogger logger = new DITAOTJavaLogger();
-		if (grammarPool == null) {
-			grammarPool = GrammarPoolManager.getGrammarPool();
-		}
-		if (grammarPool != null) {
-			try {
-				reader.setProperty(
-								"http://apache.org/xml/properties/internal/grammar-pool",
-								grammarPool);
-				
-				final String msg = "Using Xerces grammar pool for DTD and schema caching.";
-				logger.logInfo(msg);
-				
-			} catch (final Exception e) {
-				final String msg = "Failed to setXerces grammar pool for parser: "
-					+ e.getMessage();
-				logger.logInfo(msg);
-			}
-		} else {
-			final String msg = "grammar pool is null";
-			logger.logInfo(msg);
-		}
-	}
-	
-	protected DITAOTLogger logger;
+        XMLGrammarPool grammarPool = null;
 
-    public void read(String filename) {
+        if (inGrammarPool == null) {
+            grammarPool = GrammarPoolManager.getGrammarPool();
+        } else {
+            grammarPool = inGrammarPool;
+        }
+
+        final DITAOTLogger javaLogger=new DITAOTJavaLogger();
+        final XMLReader reader = StringUtils.getXMLReader();
+        reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
+        if(validate==true){
+            reader.setFeature(FEATURE_VALIDATION, true);
+            reader.setFeature(FEATURE_VALIDATION_SCHEMA, true);
+        }else{
+            final String msg=MessageUtils.getMessage("DOTJ037W").toString();
+            javaLogger.logWarn(msg);
+        }
+        setGrammarPool(reader, grammarPool);
+
+        CatalogUtils.setDitaDir(ditaDir);
+        return reader;
+    }
+
+    /**
+     * Sets the grammar pool on the parser. Note that this is a Xerces-specific
+     * feature.
+     * @param reader
+     * @param grammarPool
+     */
+    public void setGrammarPool(final XMLReader reader, XMLGrammarPool grammarPool) {
+        try {
+            reader.setProperty("http://apache.org/xml/properties/internal/grammar-pool", grammarPool);
+            logger.logInfo("Using Xerces grammar pool for DTD and schema caching.");
+        } catch (final Exception e) {
+            logger.logWarn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
+        }
+    }
+
+    protected DITAOTLogger logger;
+
+    public void read(final String filename) {
         // NOOP
     }
 
     public Content getContent() {
         return null;
     }
-    
-    public void setLogger(final DITAOTLogger logger) {
+
+    public final void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
 
-    public void setDocumentLocator(Locator locator) {
+    public void setDocumentLocator(final Locator locator) {
         // NOOP
     }
 
@@ -141,45 +118,45 @@ public abstract class AbstractXMLReader implements AbstractReader,
         // NOOP
     }
 
-    public void startPrefixMapping(String prefix, String uri)
+    public void startPrefixMapping(final String prefix, final String uri)
             throws SAXException {
         // NOOP
     }
 
-    public void endPrefixMapping(String prefix) throws SAXException {
+    public void endPrefixMapping(final String prefix) throws SAXException {
         // NOOP
     }
 
-    public void startElement(String uri, String localName, String qName,
-            Attributes atts) throws SAXException {
+    public void startElement(final String uri, final String localName, final String qName,
+            final Attributes atts) throws SAXException {
         // NOOP
     }
 
-    public void endElement(String uri, String localName, String qName)
+    public void endElement(final String uri, final String localName, final String qName)
             throws SAXException {
         // NOOP
     }
 
-    public void characters(char[] ch, int start, int length)
+    public void characters(final char[] ch, final int start, final int length)
             throws SAXException {
         // NOOP
     }
 
-    public void ignorableWhitespace(char[] ch, int start, int length)
+    public void ignorableWhitespace(final char[] ch, final int start, final int length)
             throws SAXException {
         // NOOP
     }
 
-    public void processingInstruction(String target, String data)
+    public void processingInstruction(final String target, final String data)
             throws SAXException {
         // NOOP
     }
 
-    public void skippedEntity(String name) throws SAXException {
+    public void skippedEntity(final String name) throws SAXException {
         // NOOP
     }
 
-    public void startDTD(String name, String publicId, String systemId)
+    public void startDTD(final String name, final String publicId, final String systemId)
             throws SAXException {
         // NOOP
     }
@@ -188,11 +165,11 @@ public abstract class AbstractXMLReader implements AbstractReader,
         // NOOP
     }
 
-    public void startEntity(String name) throws SAXException {
+    public void startEntity(final String name) throws SAXException {
         // NOOP
     }
 
-    public void endEntity(String name) throws SAXException {
+    public void endEntity(final String name) throws SAXException {
         // NOOP
     }
 
@@ -204,11 +181,11 @@ public abstract class AbstractXMLReader implements AbstractReader,
         // NOOP
     }
 
-    public void comment(char[] ch, int start, int length) throws SAXException {
+    public void comment(final char[] ch, final int start, final int length) throws SAXException {
         // NOOP
     }
 
-    public InputSource resolveEntity(String publicId, String systemId)
+    public InputSource resolveEntity(final String publicId, final String systemId)
             throws SAXException, IOException {
         return null;
     }

@@ -39,10 +39,11 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:comparer="com.idiominc.ws.opentopic.xsl.extension.CompareStrings"
     extension-element-prefixes="exsl"
     xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
-    exclude-result-prefixes="opentopic-index exsl comparer opentopic-func exslf">
+    xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
+    exclude-result-prefixes="opentopic-index exsl comparer opentopic-func exslf ot-placeholder">
 
     <xsl:template name="createIndex">
-        <xsl:if test="(//opentopic-index:index.groups//opentopic-index:index.entry) and (count($index-entries//opentopic-index:index.entry) &gt; 0) and ($pdfFormatter = 'xep')">
+        <xsl:if test="(//opentopic-index:index.groups//opentopic-index:index.entry) and (count($index-entries//opentopic-index:index.entry) &gt; 0)">
             <xsl:variable name="index">
                 <xsl:choose>
                     <xsl:when test="($ditaVersion &gt;= 1.1) and $map//*[contains(@class,' bookmap/indexlist ')][@href]"/>
@@ -71,6 +72,10 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:if>
         </xsl:if>
     </xsl:template>
+
+  <xsl:template match="ot-placeholder:indexlist[$retain-bookmap-order]">
+    <xsl:call-template name="createIndex"/>
+  </xsl:template>
 
     <xsl:template name="processIndexList">
         <fo:page-sequence master-reference="index-sequence" xsl:use-attribute-sets="__force__page__count">

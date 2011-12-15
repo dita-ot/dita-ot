@@ -3,11 +3,7 @@
      Sourceforge.net. See the accompanying license.txt file for 
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
-<project name="dita2docbook" default="dita2docbook">
-  <property name="transtype" value="docbook"/>
-    
-  <import file="build_init.xml" />
-  <import file="build_preprocess.xml" />
+<project name="dita2docbook">
 
   <target name="dita2docbook"
     depends="build-init, preprocess, topic2docbook, map2docbook">
@@ -46,7 +42,7 @@
       classpathref="dost.class.path"
       style="${args.xsl}">
       <param name="outputdir" expression="${outputDir}" />
-      <!--<xmlcatalog refid="dita.catalog" />-->
+      <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
 
@@ -62,7 +58,7 @@
     <xslt processor="trax" in="${inputFile}" out="${outputFile}"
       classpathref="dost.class.path"
       style="${args.xsl}">
-      <!--<xmlcatalog refid="dita.catalog" />-->
+      <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
 </project>

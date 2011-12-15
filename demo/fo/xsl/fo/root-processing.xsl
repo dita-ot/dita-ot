@@ -40,6 +40,17 @@ See the accompanying license.txt file for applicable licenses.
     exclude-result-prefixes="opentopic-index opentopic opentopic-i18n opentopic-func"
     version="2.0">
     
+    <xsl:param name="bookmap-order" select="'discard'"/>
+  
+    <xsl:variable name="retain-bookmap-order" select="*[contains(@class,' bookmap/bookmap ')] and $bookmap-order eq 'retain'"/>
+    <xsl:variable name="writing-mode">
+      <xsl:variable name="lang" select="if (contains($locale, '_')) then substring-before($locale, '_') else $locale"/>
+      <xsl:choose>
+        <xsl:when test="some $l in ('ar', 'fa', 'he', 'ps', 'ur') satisfies $l eq $lang">rl</xsl:when>
+        <xsl:otherwise>lr</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    
     <xsl:variable name="layout-masters">
         <xsl:value-of select="'cfg:fo/layout-masters.xml'"/>
     </xsl:variable>
@@ -56,8 +67,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:variable>
 
     <xsl:variable name="productName">
-        <xsl:variable name="mapProdname" select="/*/opentopic:map//*[contains(@class, ' topic/prodname ')]"/>
-        <xsl:variable name="bkinfoProdname" select="/*/*[contains(@class, ' bkinfo/bkinfo ')]//*[contains(@class, ' topic/prodname ')]"/>
+        <xsl:variable name="mapProdname" select="(/*/opentopic:map//*[contains(@class, ' topic/prodname ')])[1]"/>
+        <xsl:variable name="bkinfoProdname" select="(/*/*[contains(@class, ' bkinfo/bkinfo ')]//*[contains(@class, ' topic/prodname ')])[1]"/>
         <xsl:choose>
             <xsl:when test="$mapProdname">
                 <xsl:value-of select="$mapProdname"/>
@@ -97,14 +108,19 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="topicref-validation">
         <xsl:if test="@href = ''">
-            <xsl:message>[ERROR] Empty href was specified for some topic reference !</xsl:message>
-            <xsl:message terminate="yes">[ERROR] Please correct your ditamap or bookmap file.</xsl:message>
+          <xsl:call-template name="output-message">
+            <xsl:with-param name="msgnum">004</xsl:with-param>
+            <xsl:with-param name="msgsev">F</xsl:with-param>
+          </xsl:call-template>
         </xsl:if>
         <xsl:if test="@href and @id">
             <xsl:variable name="searchId" select="@id"/>
             <xsl:if test="not(//*[contains(@class, ' topic/topic ')][@id = $searchId]) and not($searchId = '')">
-                <xsl:message>[ERROR] Topic reference (href : <xsl:value-of select="@href"/>) not found !</xsl:message>
-                <xsl:message terminate="yes">[ERROR] Reference may be incorrect. Please correct your ditamap or bookmap file.</xsl:message>
+              <xsl:call-template name="output-message">
+                <xsl:with-param name="msgnum">005</xsl:with-param>
+                <xsl:with-param name="msgsev">F</xsl:with-param>
+                <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
+              </xsl:call-template>
             </xsl:if>
         </xsl:if>
         <xsl:apply-templates mode="topicref-validation"/>
@@ -117,24 +133,23 @@ See the accompanying license.txt file for applicable licenses.
 
         <fo:root xsl:use-attribute-sets="__fo__root">
 
-            <xsl:comment>
-                <xsl:text>Layout masters = </xsl:text>
-                <xsl:value-of select="$layout-masters"/>
-            </xsl:comment>
-
             <xsl:call-template name="createLayoutMasters"/>
 
             <xsl:call-template name="createBookmarks"/>
 
             <xsl:call-template name="createFrontMatter"/>
 
-            <xsl:call-template name="createToc"/>
+            <xsl:if test="not($retain-bookmap-order)">
+                <xsl:call-template name="createToc"/>
+            </xsl:if>
 
 <!--            <xsl:call-template name="createPreface"/>-->
 
             <xsl:apply-templates/>
 
-            <xsl:call-template name="createIndex"/>
+            <xsl:if test="not($retain-bookmap-order)">
+                <xsl:call-template name="createIndex"/>
+            </xsl:if>
 
         </fo:root>
     </xsl:template>

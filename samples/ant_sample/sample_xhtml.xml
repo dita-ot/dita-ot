@@ -3,32 +3,24 @@
      Sourceforge.net. See the accompanying license.txt file for 
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved. -->
-
-<!-- 
-  | basedir can be specified to other places base on your need.
-  |
-  | Note: input, output, and temp directories will base on the basedir if 
-  | they are relative paths.
-  * -->
-
-<project name="sample_xhtml" default="sample2xhtml" basedir=".">
+<project name="sample_xhtml" default="samples.web" basedir=".">
   
-  <!-- dita.dir should point to the toolkit's root directory -->
-  <property name="dita.dir" value="${basedir}${file.separator}..${file.separator}.."/>
+  <property name="dita.dir" location="${basedir}/../.."/>
   
-  <!-- if file is a relative file name, the file name will be resolved 
-       relative to the importing file -->
-  <import file="${dita.dir}${file.separator}integrator.xml"/>
-  
-  <target name="sample2xhtml" depends="integrate">
-    <ant antfile="${dita.dir}${file.separator}build.xml" target="init">
-      <!-- please refer to the toolkit's document for supported parameters, and 
-           specify them base on your needs -->
-      <property name="args.input"
-        value="${dita.dir}${file.separator}samples${file.separator}hierarchy.ditamap"/>
-      <property name="output.dir"
-        value="out${file.separator}samples${file.separator}xhtml"/>
+  <target name="samples.web" description="build the samples for the web" depends="clean.samples.web">
+    <ant antfile="${dita.dir}/build.xml">
+      <property name="args.input" location="${dita.dir}/samples/hierarchy.ditamap"/>
+      <property name="output.dir" location="${dita.dir}/out/samples/web"/>
+      <property name="args.xhtml.toc" value="toc"/>
       <property name="transtype" value="xhtml"/>
     </ant>
+    <copy todir="${dita.dir}/out/samples/web">
+      <fileset dir="${dita.dir}/resource" includes="index.html"/>
+    </copy>
   </target>
+  
+  <target name="clean.samples.web" description="remove the sample web output">
+    <delete dir="${dita.dir}/out/samples/web"/>
+  </target>
+  
 </project>

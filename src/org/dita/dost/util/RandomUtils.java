@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -12,27 +12,27 @@ package org.dita.dost.util;
 import java.util.Random;
 
 /**
- * Radom utility to generate random long integer as list id in WORD RTF 
+ * Radom utility to generate random long integer as list id in WORD RTF
  * transformation.
  * 
  * @author Zhang, Yuan Peng
  *
  */
 public final class RandomUtils {
-	/**
-	 * Default Constructor
-	 *
-	 */
-	private RandomUtils(){
-	}
+    /**
+     * Default Constructor
+     *
+     */
+    private RandomUtils(){
+    }
 
-	/**
-	 * Return a random long number.
-	 * @return long -
-	 * 				Long random integer generated.
-	 */
-	public static long getRandomNum(){
-		final Random generator = new Random();
-		return generator.nextLong();
-	}
+    /**
+     * Return a random long number.
+     * @return long -
+     * 				Long random integer generated.
+     */
+    public static long getRandomNum(){
+        final Random generator = new Random();
+        return generator.nextLong();
+    }
 }

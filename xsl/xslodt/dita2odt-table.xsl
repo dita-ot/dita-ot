@@ -266,7 +266,10 @@
       </xsl:if>
       <xsl:call-template name="create_style_table"/>
       
-      <xsl:apply-templates/>
+      <xsl:element name="text:p">
+      	<xsl:attribute name="text:style-name">indent_paragraph_style</xsl:attribute>  
+      	<xsl:apply-templates/>
+      </xsl:element>
       
     </xsl:element>
     <!-- render col spanned cell.-->

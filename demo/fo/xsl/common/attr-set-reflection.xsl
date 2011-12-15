@@ -339,12 +339,13 @@ list just like regular named attribute sets.
             <xsl:attribute name="{@name}">
                 <xsl:value-of select="."/>
             </xsl:attribute>
-            <xsl:if test="xsl:*">
-                <xsl:message>
-                    Warning: processAttrSetReflection can't handle xsl elements:
-                    <xsl:copy-of select="*"/>
-                </xsl:message>
-            </xsl:if>
+            <xsl:for-each select="xsl:*">
+              <xsl:call-template name="output-message">
+                <xsl:with-param name="msgnum">009</xsl:with-param>
+                <xsl:with-param name="msgsev">E</xsl:with-param>
+                <xsl:with-param name="msgparams">%1=<xsl:value-of select="name()"/></xsl:with-param>
+              </xsl:call-template>
+            </xsl:for-each>
         </xsl:for-each>
     </xsl:template>
 

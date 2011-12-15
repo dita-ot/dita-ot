@@ -11,7 +11,7 @@ for      DITA topics.</shortdesc>
 toolkit, and no longer includes all steps in the pre-process pipeline;
 we expect to correct the documentation in the DITA-OT 1.5.2 release.</note><?Pub
 Caret 177?>
-<p>The DITA Toolkit implements a two-pass, map-driven architecture
+<p>The DITA Open Toolkit implements a two-pass, map-driven architecture
 that        resolves any conditional properties and content references
 on the first        pass, then applies transformations to the normalized
 files on the second        pass. The stages of this pre-processing

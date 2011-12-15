@@ -4,7 +4,7 @@
  "../dtd/ditabase.dtd">
 <?Pub Sty _display FontColor="red"?>
 <concept id="DITA-ant" xml:lang="en-us">
-<title>Building DITA output with Ant</title>
+<title>Running DITA-OT from Ant</title>
 <shortdesc>Ant is an open tool that the DITA Open Toolkit uses to
 manage builds.</shortdesc>
 <conbody>
@@ -16,12 +16,7 @@ ships with a copy of Ant.</p><?Pub Caret -1?><p>DITA provides a set
 of XSLT scripts for producing different types of        documentation,
 such as help output in Eclipse, Java Help and HTML Help, XHTML pages,
 and PDF. The DITA-OT uses Ant to manage these scripts, as well as
-to manage additional intermediate steps written in Java. </p><note>The
-following instructions and the associated <i>build.xml</i> and   
-    <i>ditatargets.xml </i> files are for the Java <keyword keyref="tool.java.version"/> (and above),
-  Ant <keyword keyref="tool.ant.version"/>, FOP <keyword keyref="tool.fop.version"/>, and Saxon-B <keyword keyref="tool.saxon.version"/> releases. These instructions
-are likely to need        some adjustment for other versions of these
-components and for specific        environments.</note></section>
+to manage additional intermediate steps written in Java. </p></section>
 </conbody>
 </concept>
 <?Pub *0000001389?>

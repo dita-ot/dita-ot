@@ -50,65 +50,42 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="start-indent"><xsl:value-of select="$side-col-width"/></xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="related-links.ul">
-		<xsl:attribute name="provisional-distance-between-starts">5mm</xsl:attribute>
-		<xsl:attribute name="provisional-label-separation">1mm</xsl:attribute>
-		<xsl:attribute name="space-after">7pt</xsl:attribute>
-		<xsl:attribute name="space-before">7pt</xsl:attribute>
+    <xsl:attribute-set name="related-links.ul" use-attribute-sets="ul">
 		<xsl:attribute name="start-indent"><xsl:value-of select="$side-col-width"/></xsl:attribute>
 	</xsl:attribute-set>
 
-    <xsl:attribute-set name="related-links.ul.li">
-		<xsl:attribute name="space-after">1.5pt</xsl:attribute>
-		<xsl:attribute name="space-before">1.5pt</xsl:attribute>
+    <xsl:attribute-set name="related-links.ul.li" use-attribute-sets="ul.li">
 	</xsl:attribute-set>
 
-    <xsl:attribute-set name="related-links.ul.li__label">
-		<xsl:attribute name="keep-together.within-line">always</xsl:attribute>
-		<xsl:attribute name="keep-with-next.within-line">always</xsl:attribute>
-		<xsl:attribute name="end-indent">label-end()</xsl:attribute>
+    <xsl:attribute-set name="related-links.ul.li__label" use-attribute-sets="ul.li__label">
 	</xsl:attribute-set>
 
-	<xsl:attribute-set name="related-links.ul.li__label__content">
-		<xsl:attribute name="text-align">left</xsl:attribute>
+	<xsl:attribute-set name="related-links.ul.li__label__content" use-attribute-sets="ul.li__label__content">
 	</xsl:attribute-set>
 
-	<xsl:attribute-set name="related-links.ul.li__body">
-		<xsl:attribute name="start-indent">body-start()</xsl:attribute>
+	<xsl:attribute-set name="related-links.ul.li__body" use-attribute-sets="ul.li__body">
 	</xsl:attribute-set>
 
-	<xsl:attribute-set name="related-links.ul.li__content">
+	<xsl:attribute-set name="related-links.ul.li__content" use-attribute-sets="ul.li__content">
 	</xsl:attribute-set>
 
-	<xsl:attribute-set name="related-links.ol">
-		<xsl:attribute name="provisional-distance-between-starts">5mm</xsl:attribute>
-		<xsl:attribute name="provisional-label-separation">1mm</xsl:attribute>
-		<xsl:attribute name="space-after">7pt</xsl:attribute>
-		<xsl:attribute name="space-before">7pt</xsl:attribute>
+	<xsl:attribute-set name="related-links.ol" use-attribute-sets="ol">
 		<xsl:attribute name="start-indent"><xsl:value-of select="$side-col-width"/></xsl:attribute>
 	</xsl:attribute-set>
 
-    <xsl:attribute-set name="related-links.ol.li">
-		<xsl:attribute name="space-after">1.5pt</xsl:attribute>
-		<xsl:attribute name="space-before">1.5pt</xsl:attribute>
+    <xsl:attribute-set name="related-links.ol.li" use-attribute-sets="ol.li">
 	</xsl:attribute-set>
 
-    <xsl:attribute-set name="related-links.ol.li__label">
-		<xsl:attribute name="keep-together.within-line">always</xsl:attribute>
-		<xsl:attribute name="keep-with-next.within-line">always</xsl:attribute>
-		<xsl:attribute name="end-indent">label-end()</xsl:attribute>
+    <xsl:attribute-set name="related-links.ol.li__label" use-attribute-sets="ol.li__label">
 	</xsl:attribute-set>
 
-	<xsl:attribute-set name="related-links.ol.li__label__content">
-		<xsl:attribute name="text-align">left</xsl:attribute>
-		<xsl:attribute name="font-weight">bold</xsl:attribute>
+	<xsl:attribute-set name="related-links.ol.li__label__content" use-attribute-sets="ol.li__label__content">
 	</xsl:attribute-set>
 
-	<xsl:attribute-set name="related-links.ol.li__body">
-		<xsl:attribute name="start-indent">body-start()</xsl:attribute>
+	<xsl:attribute-set name="related-links.ol.li__body" use-attribute-sets="ol.li__body">
 	</xsl:attribute-set>
 
-	<xsl:attribute-set name="related-links.ol.li__content">
+	<xsl:attribute-set name="related-links.ol.li__content" use-attribute-sets="ol.li__content">
 	</xsl:attribute-set>
 
     <xsl:attribute-set name="related-links.title">
@@ -138,24 +115,19 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="space-before">2pt</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="link__content">
-        <xsl:attribute name="color">blue</xsl:attribute>
-        <xsl:attribute name="font-style">italic</xsl:attribute>
+    <xsl:attribute-set name="link__content" use-attribute-sets="common.link">
         <!--<xsl:attribute name="margin-left">8pt</xsl:attribute>-->
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="link__shortdesc">
+    <xsl:attribute-set name="link__shortdesc" use-attribute-sets="base-font">
         <xsl:attribute name="margin-left">15pt</xsl:attribute>
-        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
         <xsl:attribute name="space-after">5pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="linkpool">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="xref">
-        <xsl:attribute name="color">blue</xsl:attribute>
-        <xsl:attribute name="font-style">italic</xsl:attribute>
+    <xsl:attribute-set name="xref" use-attribute-sets="common.link">
     </xsl:attribute-set>
 
 </xsl:stylesheet>

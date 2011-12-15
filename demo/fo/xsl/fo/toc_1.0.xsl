@@ -40,7 +40,7 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
     extension-element-prefixes="exsl"
     exclude-result-prefixes="opentopic exslf opentopic-func ot-placeholder"
-    version='1.1'>
+    version="2.0">
 
     <xsl:variable name="map" select="//opentopic:map"/>
 
@@ -99,6 +99,10 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class, ' topic/topic ')][opentopic-func:determineTopicType() = 'topicTocList']"  mode="toc" priority="10"/>
     <xsl:template match="*[contains(@class, ' topic/topic ')][opentopic-func:determineTopicType() = 'topicIndexList']"  mode="toc" priority="10"/>
     -->
+    
+  <xsl:template match="ot-placeholder:toc[$retain-bookmap-order]">
+    <xsl:call-template name="createToc"/>
+  </xsl:template>
     
     <xsl:template match="ot-placeholder:glossarylist" mode="toc">
         <fo:block xsl:use-attribute-sets="__toc__indent__glossary">

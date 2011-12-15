@@ -6,11 +6,6 @@
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-<xsl:output method="xml"
-            encoding="utf-8"
-            indent="no"
-/>
-
 <!-- syntax diagram -->
 
 
@@ -228,11 +223,11 @@ and if so, produce an associative link. -->
 
 <xsl:template match="*[contains(@class,' pr-d/synnoteref ')]" mode="process-syntaxdiagram">
 <sup>
-  <xsl:element name="a">
-  <xsl:attribute name="href">#FNsrc_<xsl:value-of select="@refid"/>
-  </xsl:attribute>
-    [<xsl:value-of select="@refid"/>]
-  </xsl:element>
+  <a href="#FNsrc_{@refid}">
+    <xsl:text>[</xsl:text>
+    <xsl:value-of select="@refid"/>
+    <xsl:text>]</xsl:text>
+  </a>
 </sup>
 </xsl:template>
 
@@ -241,28 +236,25 @@ and if so, produce an associative link. -->
   <xsl:choose>
     <xsl:when test="not(@id='')"> <!-- case of an explicit id -->
       <sup>(explicit id <xsl:value-of select="@id"/>)
-        <xsl:element name="a">
-          <xsl:attribute name="name">FNsrc_<xsl:value-of select="@id"/></xsl:attribute>
-          <xsl:attribute name="href">#FNtarg_<xsl:value-of select="@id"/></xsl:attribute>
-            <xsl:value-of select="@id"/>
-        </xsl:element>
+        <a name="FNsrc_{@id}" href="#FNtarg_{@id}">
+          <xsl:value-of select="@id"/>
+        </a>
       </sup>
     </xsl:when>
     <xsl:when test="not(@callout='')"> <!-- case of an explicit callout (presume id for now) -->
       <sup>(callout <xsl:value-of select="@callout"/>)
-        <xsl:element name="a">
-          <xsl:attribute name="name">FNsrc_<xsl:value-of select="@id"/></xsl:attribute>
-          <xsl:attribute name="href">#FNtarg_<xsl:value-of select="@id"/></xsl:attribute>
-            <xsl:value-of select="@callout"/>
-        </xsl:element>
+        <a name="FNsrc_{@id}" href="#FNtarg_{@id}">
+          <xsl:value-of select="@callout"/>
+        </a>
       </sup>
     </xsl:when>
     <xsl:otherwise>
-        <xsl:element name="a">
-          <xsl:attribute name="href">#</xsl:attribute>
+        <a href="#">
           <xsl:attribute name="onMouseOver">
             <xsl:text>alert('</xsl:text><xsl:apply-templates mode="process-syntaxdiagram"/><xsl:text>')</xsl:text>
-          </xsl:attribute>*</xsl:element>
+          </xsl:attribute>
+          <xsl:text>*</xsl:text>
+        </a>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>

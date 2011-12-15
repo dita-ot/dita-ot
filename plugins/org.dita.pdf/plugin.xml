@@ -6,4 +6,5 @@
 <plugin id="org.dita.pdf">
   <!-- extensions -->
   <feature extension="dita.conductor.transtype.check" value="pdf"/>
+  <feature extension="dita.transtype.print" value="pdf"/>
 </plugin>

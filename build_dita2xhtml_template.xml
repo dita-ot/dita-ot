@@ -3,12 +3,7 @@
      Sourceforge.net. See the accompanying license.txt file for 
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
-<project name="dita2xhtml" default="dita2xhtml">
-    <property name="transtype" value="xhtml"/>
-    
-    <import file="build_init.xml" />
-    <import file="build_preprocess.xml" />
-    <import file="build_general.xml" />
+<project name="dita2xhtml">
 	
     <target name="dita2xhtml"
       depends="build-init, preprocess, dita.map.xhtml, copy-revflag, 
@@ -53,6 +48,7 @@
             <mapper type="glob"
                     from="*${dita.input.filename}"
                     to="*${args.xhtml.toc}${out.ext}" />
+          <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>
     
@@ -77,6 +73,7 @@
             <mapper type="glob"
                     from="${user.input.file}"
                     to="${args.xhtml.toc}${out.ext}" />
+          <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>
 </project>

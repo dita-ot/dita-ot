@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2011 All Rights Reserved. -->
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "concept.dtd">
+<concept id="dita2docbook" xml:lang="en-us">
+<title>DITA to Docbook</title>
+<shortdesc>The Docbook output routine (transform type "docbook) was
+converts DITA maps and topics into a Docbook output file. Complex
+DITA markup may not be supported by this process, but the transform
+does support most common DITA structures.</shortdesc>
+<conbody></conbody><?Pub Caret -1?>
+</concept>
+<?Pub *0000000554?>

@@ -27,7 +27,7 @@
       <equals arg1="${transtype}" arg2="pdf" casesensitive="false"/>
     </condition>
     <antcall target="dita2${transtarget}"/>
-  	<condition property="clean_temp">
+  	<condition property="clean-temp.skip">
   	  <and>
   	    <isset property="clean.temp" />
   	    <equals arg1="${clean.temp}" arg2="no" casesensitive="false" />
@@ -50,53 +50,126 @@
   <dita:extension id="dita.conductor.target.relative" behavior="org.dita.dost.platform.InsertAntActionRelative" xmlns:dita="http://dita-ot.sourceforge.net"/>
   
   <target name="help">
-    <echo level="info">Usage: ant [PROPERTIES] [TARGETS]</echo>
     <echo level="info">Mandatory properties:</echo>
-    <echo level="info">  args.input         path and name of the input file</echo>
-    <echo level="info">  transtype          transformation type</echo>
+    <echo level="info"/>
+    <echo level="info">  args.input=&lt;file&gt;</echo>
+    <echo level="info">    Path and name of the input file.</echo>
+    <echo level="info"/>
+    <echo level="info">  transtype={<dita:extension id="dita.conductor.transtype.check" behavior="org.dita.dost.platform.ListTranstypeAction" xmlns:dita="http://dita-ot.sourceforge.net"/>}</echo>
+    <echo level="info">    Transformation type.</echo>
+    <echo level="info"/>
     <echo level="info">Optional properties:</echo>
-    <echo level="info">  basedir            working directory</echo>
-    <echo level="info">  dita.dir           toolkit's home directory. Default is "temp"</echo>
-    <echo level="info">  out.dir            output directory</echo>
-    <echo level="info">  dita.temp.dir      temporary directory</echo>
-    <echo level="info">  args.logdir        log directory</echo>
-    <echo level="info">  dita.extname       file extension name to be used in the temp directory. Default is ".xml"</echo>
-    <echo level="info">  dita.input.valfile name of the file that contains the filter/flaggin/revision information</echo>
-    <echo level="info">  args.draft         specify whether to output draft info. Valid values are "no" and "yes". Default is "no" (hide them)</echo>
-    <echo level="info">  artlbl:            specify whether to output artwork filenames. Valid values are "no" and "yes"</echo>
-    <echo level="info">  args.ftr           file to be placed in the BODY running-footing area</echo>
-    <echo level="info">  args.hdr           file to be placed in the BODY running-heading area</echo>
-    <echo level="info">  args.hdf           file to be placed in the HEAD area</echo>
-    <echo level="info">  args.csspath       path for css reference</echo>
-    <echo level="info">  args.css           user css file</echo>
-    <echo level="info">  args.cssroot       root directory for user specified css file</echo>
-    <echo level="info">  args.copycss       copy user specified css files. Valid values are "no" and "yes"</echo>
-    <echo level="info">  args.indexshow     index entries should display within the body of the text itself. Valid values are "no" and "yes"</echo>
-    <echo level="info">  args.outext        output file extension for generated xhtml files. Default is ".html"</echo>
-    <echo level="info">  args.xsl           xsl file used to replace the default xsl file</echo>
-    <echo level="info">  args.xsl.pdf       xsl file used to replace the default xsl file when transforming pdf</echo>
-    <echo level="info">  clean.temp         clean the temp directory before each build. Valid values are "no" and "yes". Default is "yes"</echo>
-    <!--
-    <echo level="info">  args.fo.img.ext    extension of image file in legacy pdf transformation. Default is ".jpg"</echo>
-    <echo level="info">  args.fo.output.rel.links     For legacy PDF transform: determine if links are included in the PDF. Values are "no" and "yes". Default is "no"</echo>
-    <echo level="info">  args.fo.include.rellinks     For default PDF transform: determine which links are included in the PDF. Values are "none", "all", and "nofamily". Default is "none"</echo>
-    -->
-    <echo level="info">  args.odt.include.rellinks  determine which links are included in the ODT. Values are "none", "all", and "nofamily". Default is "none"</echo>
-    <echo level="info">  retain.topic.fo    topic.fo file should be preserved in the output directory. Specify any value, such as "yes", to preserve the file</echo>
-    <echo level="info">  args.javahelp.toc  root file name of the output javahelp toc file in javahelp transformation. Default is the name of the input ditamap file</echo>
-    <echo level="info">  args.javahelp.map   root file name of the output javahelp map file in javahelp transformation. Default is the name of the input ditamap file</echo>
-    <echo level="info">  args.eclipsehelp.toc  root file name of the output eclipsehelp toc file in eclipsehelp transformation. Default is the name of the input ditamap file</echo>
-    <echo level="info">  args.eclipsecontent.toc  root file name of the output Eclipse content provider toc file in eclipsecontent transformation. Default is the name of the input ditamap file</echo>
-    <echo level="info">  args.xhtml.toc      root file name of the output xhtml toc file in xhtml transformation</echo>
-    <echo level="info">  args.xhtml.classattr  DITA element names and ancestry are included in XHTML class attributes. Only "yes" and "no" are valid values. The default is yes</echo>
-    <echo level="info">  args.gen.task.lbl   DITA Task sections should get headings. Only "YES" and "NO" are valid values. The default is NO</echo>
-    <echo level="info">  validate:           ditamap/dita/xml files to be validated</echo>
-    <echo level="info">  outer.control       respond to the overflowing dita/topic files. Only "fail", "warn" and "quiet" are valid values. The default is warn</echo>
-    <echo level="info">  generate.copy.outer specify how to deal with the overflowing dita/topic files. Only "1", "2" and "3" are valid values. The default is 1</echo>
-    <echo level="info">  onlytopic.in.map    make dita processor only resolve dita/topic files which are referenced by primary ditamap files. Only "true" and "false" are valid values. The default is false</echo> 
-    <echo level="info">  args.debug          extra debug information should be included in the log. Only "yes" and "no" are valid values. The default is no</echo>
-    <echo level="info">  args.grammar.cache  use grammar pool caching when parsing dita files. Only "yes" and "no" are valid values. The default is yes</echo>
-    <echo level="info">  args.odt.img.embed  embedding images as binary data in odt transform. Only "yes" and "no" are valid values. The default is yes</echo>
+    <echo level="info"/>
+    <echo level="info">  args.logdir=&lt;dir&gt;</echo>
+    <echo level="info">    Log directory.</echo>
+    <echo level="info"/>
+    <echo level="info">  args.draft={yes|no}</echo>
+    <echo level="info">    Specify whether to output draft info. Default is "no".</echo>
+    <echo level="info"/>
+    <echo level="info">  args.ftr=&lt;file&gt;</echo>
+    <echo level="info">    File to be placed in the BODY running-footing area.</echo>
+    <echo level="info"/>
+    <echo level="info">  args.hdr=&lt;file&gt;</echo>
+    <echo level="info">    File to be placed in the BODY running-heading area.</echo>
+    <echo level="info"/>
+    <echo level="info">  args.hdf=&lt;file&gt;</echo>
+    <echo level="info">    File to be placed in the HEAD area.</echo>
+    <echo level="info"/>
+    <echo level="info">  args.csspath=&lt;file|url&gt;</echo>
+    <echo level="info">    Path for CSS reference.</echo>
+    <echo level="info"/>
+    <echo level="info">  args.css=&lt;file&gt;</echo>
+    <echo level="info">    User CSS file.</echo>
+    <echo level="info"/>
+    <echo level="info">  args.cssroot=&lt;dir&gt;</echo>
+    <echo level="info">    Root directory for user specified CSS file.</echo>
+    <echo level="info"/>
+    <echo level="info">  args.copycss={yes|no}</echo>
+    <echo level="info">    Copy user specified CSS files. Default is "no".</echo>
+    <echo level="info"/>
+    <echo level="info">  args.indexshow={yes|no}</echo>
+    <echo level="info">    Index entries should display within the body of the text itself. Default is "no".</echo>
+    <echo level="info"/>
+    <echo level="info">  args.outext=&lt;ext&gt;</echo>
+    <echo level="info">    Output file extension for generated XHTML files. Default is ".html".</echo>
+    <echo level="info"/>
+    <echo level="info">  args.xsl=&lt;file&gt;</echo>
+    <echo level="info">    XSLT file used to replace the default XSLT file.</echo>
+    <echo level="info"/>
+    <echo level="info">  args.xsl.pdf=&lt;file&gt;</echo>
+    <echo level="info">    XSLT file used to replace the default XSLT file when transforming PDF.</echo>
+    <echo level="info"/>
+    <echo level="info">  args.odt.include.rellinks={none|all|nofamily}</echo>
+    <echo level="info">    Determine which links are included in the ODT. Default is "none".</echo>
+    <echo level="info"/>
+    <echo level="info">  args.javahelp.toc=&lt;file&gt;</echo>
+    <echo level="info">    Root file name of the output javahelp toc file in javahelp transformation. Default is the name of the input ditamap file.</echo>
+    <echo level="info"/>
+    <echo level="info">  args.javahelp.map=&lt;file&gt;</echo>
+    <echo level="info">    Root file name of the output javahelp map file in javahelp transformation. Default is the name of the input ditamap file.</echo>
+    <echo level="info"/>
+    <echo level="info">  args.eclipsehelp.toc=&lt;file&gt;</echo>
+    <echo level="info">    Root file name of the output eclipsehelp toc file in eclipsehelp transformation. Default is the name of the input ditamap file.</echo>
+    <echo level="info"/>
+    <echo level="info">  args.eclipsecontent.toc=&lt;file&gt;</echo>
+    <echo level="info">    Root file name of the output Eclipse content provider toc file in eclipsecontent transformation. Default is the name of the input ditamap file.</echo>
+    <echo level="info"/>
+    <echo level="info">  args.debug={yes|no}</echo>
+    <echo level="info">    Extra debug information should be included in the log. Default is "no".</echo>
+    <echo level="info"/>
+    <echo level="info">  args.grammar.cache={yes|no}</echo>
+    <echo level="info">    Use grammar pool caching when parsing dita files. Default is "yes".</echo>
+    <echo level="info"/>
+    <echo level="info">  args.odt.img.embed={yes|no}</echo>
+    <echo level="info">    Embedding images as binary data in ODT transform. Default is "yes".</echo>
+    <echo level="info"/>
+    <echo level="info">  args.xhtml.toc=&lt;file&gt;</echo>
+    <echo level="info">    Root file name of the output XHTML toc file in XHTML transformation.</echo>
+    <echo level="info"/>
+    <echo level="info">  args.xhtml.classattr={yes|no}</echo>
+    <echo level="info">    DITA element names and ancestry are included in XHTML class attributes. Default is "yes".</echo>
+    <echo level="info"/>
+    <echo level="info">  args.gen.task.lbl={YES|NO}</echo>
+    <echo level="info">    DITA Task sections should get headings. Default is "NO".</echo>
+    <echo level="info"/>
+    <echo level="info">  artlbl={yes|no}</echo>
+    <echo level="info">    Specify whether to output artwork filenames.</echo>
+    <echo level="info"/>
+    <echo level="info">  basedir=&lt;dir&gt;</echo>
+    <echo level="info">    Working directory.</echo>
+    <echo level="info"/>
+    <echo level="info">  clean.temp={yes|no}</echo>
+    <echo level="info">    Clean the temp directory before each build. Default is "yes".</echo>
+    <echo level="info"/>
+    <echo level="info">  dita.dir=&lt;dir&gt;</echo>
+    <echo level="info">    Toolkit's home directory.</echo>
+    <echo level="info"/>
+    <echo level="info">  dita.temp.dir=&lt;dir&gt;</echo>
+    <echo level="info">    Temporary directory.</echo>
+    <echo level="info"/>
+    <echo level="info">  dita.extname=&lt;ext&gt;</echo>
+    <echo level="info">    File extension name to be used in the temp directory. Default is ".xml".</echo>
+    <echo level="info"/>
+    <echo level="info">  dita.input.valfile=&lt;file&gt;</echo>
+    <echo level="info">    Name of the file that contains the filter/flaggin/revision information.</echo>
+    <echo level="info"/>
+    <echo level="info">  generate.copy.outer={1|2|3}</echo>
+    <echo level="info">    Specify how to deal with the overflowing dita/topic files. Default is "1".</echo>
+    <echo level="info"/>
+    <echo level="info">  onlytopic.in.map={true|false}</echo>
+    <echo level="info">    Make dita processor only resolve dita/topic files which are referenced by primary ditamap files. Default is "false".</echo>
+    <echo level="info"/>
+    <echo level="info">  out.dir=&lt;dir&gt;</echo>
+    <echo level="info">    Output directory.</echo>
+    <echo level="info"/>
+    <echo level="info">  outer.control={fail|warn|quiet}</echo>
+    <echo level="info">    Respond to the overflowing dita/topic files. Default is "warn".</echo>
+    <echo level="info"/>
+    <echo level="info">  retain.topic.fo</echo>
+    <echo level="info">    Temporary FO file should be preserved in the output directory. Specify any value, such as "yes", to preserve the file.</echo>
+    <echo level="info"/>
+    <echo level="info">  validate={true|false}</echo>
+    <echo level="info">    Input files are validated. Default is "true".</echo>
   </target>
-  
+
 </project>

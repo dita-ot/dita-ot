@@ -9,7 +9,12 @@
 
   <property file="buildPackage.properties"/>
 
-  <property name="HTMLHelpCompiler" value="C:\Program Files\HTML Help Workshop\hhc.exe"/>
+  <condition property="HTMLHelpCompiler" value="C:\Program Files\HTML Help Workshop\hhc.exe">
+    <available file="C:\Program Files\HTML Help Workshop\hhc.exe"/>
+  </condition>
+  <condition property="HTMLHelpCompiler" value="C:\Program Files (x86)\HTML Help Workshop\hhc.exe">
+    <available file="C:\Program Files (x86)\HTML Help Workshop\hhc.exe"/>
+  </condition>
   <property name="package.name.root" value="DITA-OT"/>
 
   <property name="src.dir" location="${basedir}"/>
@@ -28,10 +33,13 @@
   <property name="top.work.dir" location="${basedir}"/>
   <property name="package.output.dir" location="${top.work.dir}/build/"/>
   <property name="bin.dir" location="${top.work.dir}/output2/"/>
-  <property name="work.dir" location="${top.work.dir}/temp/"/>
+  <tstamp>
+    <format property="current.date" pattern="yyyyMMddHHmmssSSS"/>
+  </tstamp>
+  <property name="work.dir" location="${top.work.dir}/temp/${current.date}/"/>
   <property name="build.dir" location="${bin.dir}/build"/>
-  <property name="out.dir" location="${top.work.dir}/out/"/>
-  <property name="doc.out.dir" location="${top.work.dir}/out/doc"/>
+  <property name="out.dir" location="${work.dir}/out/"/>
+  <property name="doc.out.dir" location="${out.dir}/doc"/>
 
   <property name="dost.jar" location="${lib.dir}/dost.jar"/>
   <property name="binary-min" value="DITA-OT${version}_minimal_bin"/>
@@ -87,7 +95,7 @@
       <fileset dir="${resource.dir}" includes="messages.*"/>
     </copy>
     <copy todir="${bin.dir}">
-      <fileset dir="${java.dir}" includes="**/*.properties"/>
+      <fileset dir="${java.dir}" includes="**/*.properties, **/*.xml"/>
     </copy>
     <jar destfile="${dost.jar}" basedir="${bin.dir}" includes="**">
       <manifest>
@@ -98,9 +106,24 @@
   </target>
 	
   <patternset id="pattern.global.excludes">
+    <exclude name=".*"/>
+    <exclude name="build.log"/>
+    <exclude name="build.number"/>
+    <exclude name="relnotes.txt"/>
+    <exclude name="lib/commons-logging-1.1.1.jar"/>
+    <exclude name="plugins/cxxapiref/"/>
     <exclude name="plugins/net.sourceforge.dita-ot.html/**"/>
+    <exclude name="demo/book/**"/>
+    <exclude name="demo/elementref/**"/>
+    <exclude name="demo/enote/**"/>
+    <exclude name="demo/faq/**"/>
+    <exclude name="demo/java/**"/>
   	<exclude name="buildSourceForge.xml"/>
   	<exclude name="doc/sourceforge/**"/>
+    <exclude name="doc/userguide-orig/**"/>
+    <exclude name="doc/ot-userguide/**"/>
+    <exclude name="doc/archive/**"/>
+    <exclude name="doc/langref-dita1.1/**"/>
   </patternset>
   
   <patternset id="pattern.package.ant">
@@ -118,7 +141,8 @@
     <exclude name="lib/saxon/*"/>
     <exclude name="lib/icu4j.jar"/>
     <exclude name="lib/log4j.properties"/>
-    <exclude name="build.log"/>
+    <exclude name="startcmd.*"/>
+    <exclude name="buildPackage.*"/>
     <include name="demo/tocjs/**"/>
     <include name="demo/h2d/**"/>
     <include name="demo/fo/**"/>
@@ -129,31 +153,22 @@
     <include name="resource/**"/>
     <include name="schema/**"/>
     <include name="xsl/**"/>
+    <include name="lib/dost.jar"/>
     <include name="lib/APACHE-LICENSE-2_0.html"/>
-    <include name="lib/**"/>
     <include name="lib/resolver.jar"/>
     <include name="lib/CatalogManager.properties"/>
-    <exclude name="plugins/cxxapiref/"/>
-    <exclude name="build.number"/>
-    <exclude name=".*"/>
-    <include name="lib/dost.jar"/>
-    <include name="lib/commons-logging-1.1.1.jar"/>
-    <exclude name="startcmd.*"/>
-    <exclude name="buildPackage.*"/>
+    <include name="lib/**"/>
   </patternset>
 
   <patternset id="pattern.package.full">
   	<patternset refid="pattern.global.excludes"/>
+    <exclude name="buildPackage.*"/>
+    <exclude name="lib/log4j.properties"/>
     <include name="*.*"/>
     <include name="ant/**"/>
     <include name="css/**"/>
-    <include name="demo/book/**"/>
-    <include name="demo/elementref/**"/>
     <include name="demo/eclipsemap/**"/>
-    <include name="demo/enote/**"/>
-    <include name="demo/faq/**"/>
     <include name="demo/h2d/**"/>
-    <include name="demo/java/**"/>
     <include name="demo/dita11/**"/>
     <include name="demo/dita132/**"/>
     <include name="demo/fo/**"/>
@@ -166,23 +181,8 @@
     <include name="samples/**"/>
     <include name="schema/**"/>
     <include name="xsl/**"/>
-    <include name="lib/APACHE-LICENSE-2_0.html"/>
-    <include name="lib/resolver.jar"/>
-    <include name="lib/CatalogManager.properties"/>
-    <include name="lib/configuration.properties"/>
-    <include name="lib/saxon/**"/>
-    <exclude name="plugins/cxxapiref/"/>
-    <exclude name="doc/userguide-orig/**"/>
-    <exclude name="doc/ot-userguide/**"/>
-    <exclude name="doc/archive/**"/>
-    <exclude name="doc/langref-dita1.1/**"/>
-    <exclude name="build.number"/>
-    <exclude name=".*"/>
-    <include name="lib/*.jar"/>
+    <include name="lib/**"/>
     <patternset refid="pattern.package.ant"/>
-    <include name="lib/APACHE-LICENSE-2_0.html"/>
-    <include name="lib/ICU_License.html"/>
-    <exclude name="buildPackage.*"/>
   </patternset>
 
   <patternset id="pattern.package.standard.base">
@@ -191,21 +191,14 @@
     <exclude name="demo/fo/fop/conf/"/>
     <exclude name="demo/fo/fop/lib/"/>
     <exclude name="demo/fo/lib/icu4j.jar"/>
-    <exclude name="plugins/cxxapiref/"/>
-    <exclude name="lib/saxon/*"/>
+    <exclude name="lib/saxon/"/>
     <exclude name="lib/icu4j.jar"/>
     <exclude name="lib/log4j.properties"/>
-    <exclude name="build.log"/>
     <include name="*.*"/>
     <include name="ant/**"/>
     <include name="css/**"/>
-    <include name="demo/book/**"/>
-    <include name="demo/elementref/**"/>
     <include name="demo/eclipsemap/**"/>
-    <include name="demo/enote/**"/>
-    <include name="demo/faq/**"/>
     <include name="demo/h2d/**"/>
-    <include name="demo/java/**"/>
     <include name="demo/dita11/**"/>
     <include name="demo/dita132/**"/>
     <include name="demo/fo/**"/>
@@ -219,40 +212,26 @@
     <include name="schema/**"/>
     <include name="xsl/**"/>
     <include name="lib/**"/>
-    <include name="lib/APACHE-LICENSE-2_0.html"/>
-    <include name="lib/resolver.jar"/>
-    <include name="lib/CatalogManager.properties"/>
-    <!--exclude name="lib/saxon/**" /-->
-    <exclude name="doc/userguide-orig/**"/>
-    <exclude name="doc/ot-userguide/**"/>
-    <exclude name="doc/archive/**"/>
-    <exclude name="doc/langref-dita1.1/**"/>
-    <exclude name="build.number"/>
-    <exclude name=".*"/>
   </patternset>
   
   <patternset id="pattern.package.standard">
     <patternset refid="pattern.package.standard.base"/>
-    <include name="lib/dost.jar"/>
-    <include name="lib/commons-logging-1.1.1.jar"/>
-    <include name="lib/APACHE-LICENSE-2_0.html"/>
     <exclude name="startcmd.*"/>
     <exclude name="buildPackage.*"/>
   </patternset>
   
   <patternset id="pattern.package.source">
     <patternset refid="pattern.package.standard.base"/>
-    <include name="src/**"/>
-    <include name="lib/APACHE-LICENSE-2_0.html"/>
-    <include name="lib/commons-logging-1.1.1.jar"/>
     <exclude name="src/org/dita/dost/invoker/JavaInvoker.java"/>
     <exclude name="lib/dost.jar"/>
-    <exclude name="lib/saxon/**"/>
     <exclude name="files.txt"/>
     <exclude name="startcmd.*"/>
+    <include name="src/**"/>
   </patternset>
 
   <patternset id="pattern.package.doc">
+    <include name="relnotes.html"/>
+    <include name="doc/**"/>
     <exclude name="**/*.hhp"/>
     <exclude name="**/*.hhc"/>
     <exclude name="**/*.hhk"/>
@@ -273,8 +252,8 @@
         <patternset refid="pattern.package.source"/>
       </fileset>
     </copy>
-    <copy todir="${temp.dist.dir}/doc">
-      <fileset dir="${doc.out.dir}">
+    <copy todir="${temp.dist.dir}">
+      <fileset dir="${out.dir}">
         <patternset refid="pattern.package.doc"/>
       </fileset>
     </copy>
@@ -317,8 +296,8 @@
         <patternset refid="pattern.package.standard"/>
       </fileset>
     </copy>
-    <copy todir="${temp.dist.dir}/doc">
-      <fileset dir="${doc.out.dir}">
+    <copy todir="${temp.dist.dir}">
+      <fileset dir="${out.dir}">
         <patternset refid="pattern.package.doc"/>
       </fileset>
     </copy>
@@ -341,8 +320,8 @@
         <patternset refid="pattern.package.full"/>
       </fileset>
     </copy>
-    <copy todir="${temp.dist.dir}/doc">
-      <fileset dir="${doc.out.dir}">
+    <copy todir="${temp.dist.dir}">
+      <fileset dir="${out.dir}">
         <patternset refid="pattern.package.doc"/>
       </fileset>
     </copy>
@@ -412,118 +391,58 @@
 
   <target name="update-doc">
     <ant antfile="${basedir}/integrator.xml" target="integrate"/>
-    <!-- Articles -->
+    <!--mkdir dir="${work.dir}/doc"/-->
+    
     <ant antfile="${basedir}/build.xml">
-      <property name="args.input" location="${doc.dir}/articles/DITA-articles.ditamap"/>
-      <property name="output.dir" location="${doc.out.dir}/articles"/>
+      <property name="args.input" location="${doc.dir}/userguide-book.ditamap"/>
+      <property name="output.dir" location="${doc.out.dir}"/>
+      <property name="outputFile.base" value="userguide"/>
+      <property name="transtype" value="pdf"/>
+      <property name="base.temp.dir" location="${work.dir}"/>
+    </ant>
+
+    <ant antfile="${basedir}/build.xml">
+      <property name="args.input" location="${doc.dir}/userguide.ditamap"/>
+      <property name="output.dir" location="${work.dir}/htmlhelp"/>
+      <property name="transtype" value="htmlhelp"/>
+      <property name="base.temp.dir" location="${work.dir}"/>
+    </ant>
+    <copy todir="${doc.out.dir}" failonerror="no">
+      <fileset dir="${work.dir}/htmlhelp">
+        <include name="*.chm"/>
+      </fileset>
+    </copy>
+
+    <ant antfile="${basedir}/build.xml">
+      <property name="args.input" location="${doc.dir}/userguide.ditamap"/>
+      <property name="output.dir" location="${doc.out.dir}/html"/>
+      <property name="outputFile.base" value="index"/>
+      <property name="args.csspath" value="css"/>
+      <property name="transtype" value="tocjs"/>
+      <property name="base.temp.dir" location="${work.dir}"/>
+    </ant>
+    <move file="${doc.out.dir}/html/userguide.html" tofile="${doc.out.dir}/html/index.html"/>
+    
+    <ant antfile="${basedir}/build.xml">
+      <property name="args.input" location="${doc.dir}/readme/changes/rel1.5.4.xml"/>
+      <property name="output.dir" location="${work.dir}/relnotes"/>
+      <property name="args.csspath" value="resource"/>
       <property name="transtype" value="xhtml"/>
       <property name="base.temp.dir" location="${work.dir}"/>
     </ant>
-    <ant antfile="${basedir}/build.xml">
-      <property name="args.input" location="${doc.dir}/articles/DITA-articles.ditamap"/>
-      <property name="output.dir" location="${doc.out.dir}/articles"/>
-      <property name="transtype" value="htmlhelp"/>
-      <property name="base.temp.dir" location="${work.dir}"/>
-    </ant>
-    <ant antfile="${basedir}/build.xml">
-      <property name="args.input" location="${doc.dir}/articles/DITA-articles.ditamap"/>
-      <property name="output.dir" location="${doc.out.dir}/articles"/>
-      <property name="transtype" value="pdf"/>
-      <property name="args.fo.img.ext" value=".gif"/>
-      <property name="base.temp.dir" location="${work.dir}"/>
-    </ant>
-    <!-- Install guide -->
-  	<!-- Source has a reference to key definition map in ancestor folder, XHTML XSLT doens't handle this. As a workaround, we use generate.copy.outer=3 and copy results. -->
-    <ant antfile="${basedir}/build.xml">
-      <property name="args.input" location="${doc.dir}/ot-userguide/DITAOT_UGRef_SOURCE/installing/installing_map.ditamap"/>
-      <property name="output.dir" location="${doc.out.dir}/installguide"/>
-      <property name="generate.copy.outer" value="3"/>
-      <property name="transtype" value="xhtml"/>
-      <property name="base.temp.dir" location="${work.dir}"/>
-    </ant>
-    <ant antfile="${basedir}/build.xml">
-      <property name="args.input" location="${doc.dir}/ot-userguide/DITAOT_UGRef_SOURCE/installing/installing_map.ditamap"/>
-      <property name="output.dir" location="${doc.out.dir}/installguide"/>
-      <property name="generate.copy.outer" value="3"/>
-      <property name="transtype" value="pdf"/>
-      <property name="args.fo.img.ext" value=".gif"/>
-      <property name="base.temp.dir" location="${work.dir}"/>
-    </ant>
-    <ant antfile="${basedir}/build.xml">
-      <property name="args.input" location="${doc.dir}/ot-userguide/DITAOT_UGRef_SOURCE/installing/installing_map.ditamap"/>
-      <property name="output.dir" location="${doc.out.dir}/installguide"/>
-      <property name="generate.copy.outer" value="3"/>
-      <property name="transtype" value="htmlhelp"/>
-      <property name="base.temp.dir" location="${work.dir}"/>
-    </ant>
-  	
-  	<move todir="${doc.out.dir}/installguide">
-  	<fileset dir="${doc.out.dir}/installguide/ot-userguide/DITAOT_UGRef_SOURCE">
-  	</fileset>
-  	</move>
-  	
-  	<delete includeEmptyDirs="true">
-  	<fileset dir="${doc.out.dir}/installguide/ot-userguide/"/>
-  	</delete>
-
-
-    <!-- Quickstart guide -->
-    <ant antfile="${basedir}/build.xml">
-      <property name="args.input" location="${doc.dir}/quickstartguide.ditamap"/>
-      <property name="output.dir" location="${doc.out.dir}"/>
-      <property name="transtype" value="pdf"/>
-      <property name="args.fo.img.ext" value=".gif"/>
-      <property name="base.temp.dir" location="${work.dir}"/>
-    </ant>
-    <ant antfile="${basedir}/build.xml">
-      <property name="args.input" location="${doc.dir}/quickstartguide.ditamap"/>
-      <property name="output.dir" location="${doc.out.dir}"/>
-      <property name="transtype" value="htmlhelp"/>
-      <property name="base.temp.dir" location="${work.dir}"/>
-    </ant>
-    <!-- Readme -->
-    <!--
-    <ant antfile="${basedir}/build.xml">
-      <property name="args.input" location="${doc.dir}/readme.ditamap"/>
-      <property name="output.dir" location="${doc.out.dir}"/>
-      <property name="transtype" value="html"/>
-      <property name="base.temp.dir" location="${work.dir}"/>
-    </ant>
-    -->
-    <ant antfile="${basedir}/build.xml">
-      <property name="args.input" location="${doc.dir}/readme.ditamap"/>
-      <property name="output.dir" location="${doc.out.dir}"/>
-      <property name="transtype" value="htmlhelp"/>
-      <property name="base.temp.dir" location="${work.dir}"/>
-    </ant>
-    <ant antfile="${basedir}/build.xml">
-      <property name="args.input" location="${doc.dir}/readme.ditamap"/>
-      <property name="output.dir" location="${doc.out.dir}"/>
-      <property name="transtype" value="pdf"/>
-      <property name="args.fo.img.ext" value=".jpg"/>
-      <property name="base.temp.dir" location="${work.dir}"/>
-    </ant>
-    <!-- delete unneeded files -->
-    <delete failonerror="yes" includeemptydirs="true"
-      dir="${doc.out.dir}${file.separator}articles"
-      excludes="**/*.chm,**/*.pdf,**/*.html,**/*.css,image/*.*"/>
-    <delete failonerror="yes" includeemptydirs="true"
-      dir="${doc.out.dir}"
-      excludes="**/*.chm,**/*.pdf,**/*.html,**/image/*.*,**/images/*.*,**/pic/*.*,*.gif,**/*.jpg"/>
-    <delete failonerror="yes" includeemptydirs="true"
-      dir="${doc.out.dir}${file.separator}readme"
-      excludes="**/*.chm,**/*.pdf,**/*.css,images/*.*"/>
-    <delete failonerror="yes" includeemptydirs="true"
-      dir="${doc.out.dir}${file.separator}specification"
-      excludes="**/*.chm,**/*.pdf,**/*.css,images/*.*"/>
-    <delete failonerror="yes" includeemptydirs="true"
-      dir="${doc.out.dir}${file.separator}quickstartguide"
-      excludes="**/*.chm,**/*.pdf,**/*.css,images/*.*"/>
+    <copy file="${work.dir}/relnotes/rel1.5.4.html" tofile="${out.dir}/relnotes.html"/>
+    
+    <delete failonerror="yes" includeemptydirs="true">
+      <fileset dir="${doc.out.dir}">
+        <include name="**/dita.list"/>
+        <include name="**/dita.xml.properties"/>
+      </fileset>
+    </delete>
   </target>
 
   <target name="doc" depends="update-doc" description="Build documentation">
-    <copy todir="${doc.dir}">
-      <fileset dir="${doc.out.dir}">
+    <copy todir="${src.dir}">
+      <fileset dir="${out.dir}">
         <patternset refid="pattern.package.doc"/>
       </fileset>
     </copy>

@@ -32,90 +32,99 @@ See the accompanying license.txt file for applicable licenses.
 -->
 
 <font-mappings>
+  <font-table>
+    
+    <!-- Backwards compatibility aliases -->
+    <aliases>
+      <alias name="serif">Serif</alias>
+    </aliases>
+    <aliases>
+      <alias name="sans-serif">Sans</alias>
+    </aliases>
+    <aliases>
+      <alias name="monospace">Monospaced</alias>
+    </aliases>
+    <aliases>
+      <alias name="Helvetica">Normal</alias>
+    </aliases>
+    <aliases>
+      <alias name="Courier">Monospaced</alias>
+    </aliases>
 
-        <font-table>
+    <logical-font name="Sans">
+      <physical-font char-set="default">
+        <font-face>Helvetica, Arial Unicode MS</font-face>
+      </physical-font>
+      <physical-font char-set="Simplified Chinese">
+        <font-face>AdobeSongStd-Light</font-face>
+      </physical-font>
+      <physical-font char-set="Japanese">
+        <font-face>KozMinProVI-Regular</font-face>
+      </physical-font>
+      <physical-font char-set="Korean">
+        <font-face>AdobeMyungjoStd-Medium</font-face>
+      </physical-font>
+      <physical-font char-set="Symbols">
+        <font-face>ZapfDingbats</font-face>
+      </physical-font>
+      <physical-font char-set="SubmenuSymbol">
+        <font-face>ZapfDingbats</font-face>
+      </physical-font>
+      <physical-font char-set="SymbolsSuperscript">
+        <font-face>Helvetica, Arial Unicode MS</font-face>
+        <baseline-shift>20%</baseline-shift>
+        <override-size>smaller</override-size>
+      </physical-font>
+    </logical-font>
 
-                <aliases>
-                        <alias name="Helvetica">Normal</alias>
-                </aliases>
-        <aliases>
-                        <alias name="Courier">Monospaced</alias>
-                </aliases>
+    <logical-font name="Serif">
+      <physical-font char-set="default">
+        <font-face>Times New Roman, Times</font-face>
+      </physical-font>
+      <physical-font char-set="Simplified Chinese">
+        <font-face>AdobeSongStd-Light</font-face>
+      </physical-font>
+      <physical-font char-set="Japanese">
+        <font-face>KozMinProVI-Regular</font-face>
+      </physical-font>
+      <physical-font char-set="Korean">
+        <font-face>AdobeMyungjoStd-Medium</font-face>
+      </physical-font>
+      <physical-font char-set="Symbols">
+        <font-face>ZapfDingbats</font-face>
+      </physical-font>
+      <physical-font char-set="SubmenuSymbol">
+        <font-face>ZapfDingbats</font-face>
+      </physical-font>
+      <physical-font char-set="SymbolsSuperscript">
+        <font-face>Times New Roman, Times</font-face>
+        <baseline-shift>20%</baseline-shift>
+        <override-size>smaller</override-size>
+      </physical-font>
+    </logical-font>
 
-                <logical-font name="Sans">
-                        <physical-font char-set="default">
-                                <font-face>Helvetica</font-face>
-                        </physical-font>
-                        <physical-font char-set="Simplified Chinese">
-                                <font-face>AdobeSongStd-Light</font-face>
-                        </physical-font>
-                        <physical-font char-set="Japanese">
-                                <font-face>KozMinProVI-Regular</font-face>
-                        </physical-font>
-                        <physical-font char-set="Korean">
-                                <font-face>AdobeMyungjoStd-Medium</font-face>
-                        </physical-font>
-                        <physical-font char-set="Symbols">
-                                <font-face>ZapfDingbats</font-face>
-                        </physical-font>
-                        <physical-font char-set="SubmenuSymbol">
-                                <font-face>ZapfDingbats</font-face>
-                        </physical-font>
-                        <physical-font char-set="SymbolsSuperscript">
-                                <font-face>Helvetica</font-face>
-                                <baseline-shift>20%</baseline-shift>
-                                <override-size>smaller</override-size>
-                        </physical-font>
-                </logical-font>
-
-        <logical-font name="Serif">
-                        <physical-font char-set="default">
-                                <font-face>Times</font-face>
-                        </physical-font>
-                        <physical-font char-set="Simplified Chinese">
-                                <font-face>AdobeSongStd-Light</font-face>
-                        </physical-font>
-                        <physical-font char-set="Japanese">
-                                <font-face>KozMinProVI-Regular</font-face>
-                        </physical-font>
-                        <physical-font char-set="Korean">
-                                <font-face>AdobeMyungjoStd-Medium</font-face>
-                        </physical-font>
-                        <physical-font char-set="Symbols">
-                                <font-face>ZapfDingbats</font-face>
-                        </physical-font>
-                        <physical-font char-set="SubmenuSymbol">
-                                <font-face>ZapfDingbats</font-face>
-                        </physical-font>
-                        <physical-font char-set="SymbolsSuperscript">
-                                <font-face>Times</font-face>
-                                <baseline-shift>20%</baseline-shift>
-                                <override-size>smaller</override-size>
-                        </physical-font>
-                </logical-font>
-
-                <logical-font name="Monospaced">
-                        <physical-font char-set="default">
-                                <font-face>Courier</font-face>
-                        </physical-font>
-                        <physical-font char-set="Simplified Chinese">
-                                <font-face>AdobeSongStd-Light</font-face>
-                        </physical-font>
-                        <physical-font char-set="Japanese">
-                                <font-face>KozMinProVI-Regular</font-face>
-                        </physical-font>
-                        <physical-font char-set="Korean">
-                                <font-face>AdobeMyungjoStd-Medium</font-face>
-                        </physical-font>
-                        <physical-font char-set="Symbols">
-                                <font-face>ZapfDingbats</font-face>
-                        </physical-font>
-                        <physical-font char-set="SymbolsSuperscript">
-                                <font-face>Courier</font-face>
-                                <baseline-shift>20%</baseline-shift>
-                                <override-size>smaller</override-size>
-                        </physical-font>
-                </logical-font>
-        </font-table>
+    <logical-font name="Monospaced">
+      <physical-font char-set="default">
+        <font-face>Courier New, Courier</font-face>
+      </physical-font>
+      <physical-font char-set="Simplified Chinese">
+        <font-face>AdobeSongStd-Light</font-face>
+      </physical-font>
+      <physical-font char-set="Japanese">
+        <font-face>KozMinProVI-Regular</font-face>
+      </physical-font>
+      <physical-font char-set="Korean">
+        <font-face>AdobeMyungjoStd-Medium</font-face>
+      </physical-font>
+      <physical-font char-set="Symbols">
+        <font-face>ZapfDingbats</font-face>
+      </physical-font>
+      <physical-font char-set="SymbolsSuperscript">
+        <font-face>Courier New, Courier</font-face>
+        <baseline-shift>20%</baseline-shift>
+        <override-size>smaller</override-size>
+      </physical-font>
+    </logical-font>
+  </font-table>
 
 </font-mappings>

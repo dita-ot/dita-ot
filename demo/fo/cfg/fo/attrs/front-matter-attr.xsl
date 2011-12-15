@@ -39,24 +39,22 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="text-align">center</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__frontmatter__title">
-        <xsl:attribute name="margin-top">80mm</xsl:attribute>
-        <xsl:attribute name="font-family">Sans</xsl:attribute>
+    <xsl:attribute-set name="__frontmatter__title" use-attribute-sets="common.title">
+        <xsl:attribute name="space-before">80mm</xsl:attribute>
+        <xsl:attribute name="space-before.conditionality">retain</xsl:attribute>
         <xsl:attribute name="font-size">22pt</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
         <xsl:attribute name="line-height">140%</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__frontmatter__subtitle">
-        <xsl:attribute name="font-family">Sans</xsl:attribute>
+    <xsl:attribute-set name="__frontmatter__subtitle" use-attribute-sets="common.title">
         <xsl:attribute name="font-size">18pt</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
         <xsl:attribute name="line-height">140%</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__frontmatter__owner">
-        <xsl:attribute name="margin-top">3pc</xsl:attribute>
-       <xsl:attribute name="font-family">Sans</xsl:attribute>
+    <xsl:attribute-set name="__frontmatter__owner" use-attribute-sets="common.title">
+        <xsl:attribute name="space-before">36pt</xsl:attribute>
         <xsl:attribute name="font-size">11pt</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
         <xsl:attribute name="line-height">normal</xsl:attribute>

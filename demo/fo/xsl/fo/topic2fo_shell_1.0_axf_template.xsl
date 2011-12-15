@@ -14,6 +14,7 @@
 
   <xsl:import href="../../cfg/fo/attrs/tables-attr_axf.xsl"/>
   <xsl:import href="../../cfg/fo/attrs/toc-attr_axf.xsl"/>
+  <xsl:import href="../../cfg/fo/attrs/index-attr_axf.xsl" />
   <xsl:import href="index_axf.xsl"/>
   
   <dita:extension id="dita.xsl.xslfo" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>

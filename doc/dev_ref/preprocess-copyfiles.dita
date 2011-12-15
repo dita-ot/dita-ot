@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="preprocess-copyfiles" xml:lang="en-us">
+<title>Copy related files (copy-files)</title>
+<shortdesc>The <codeph>copy-files</codeph> step copies related non-DITA
+resources to the output directory, such as HTML files referenced in
+a map or images referenced by DITAVAL files.</shortdesc>
+<refbody></refbody>
+</reference>

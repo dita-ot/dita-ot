@@ -9,6 +9,8 @@
     <metadata>
       <keywords>
         <indexterm>DITA-OT</indexterm>
+        <indexterm>Ant</indexterm>
+        <indexterm>DITA-OT</indexterm>
       </keywords>
     </metadata>
   </prolog>
@@ -18,13 +20,13 @@
 	 Many errors are more quickly fixed if you understand what the toolkit is doing "beneath the hood"
 	 of your authoring tool.
 	 </p>
-	 <p>DITA-OT uses Ant <indexterm>Ant</indexterm><indexterm>DITA-OT</indexterm>to generate your documents. The primary ant script
+	 <p>DITA-OT uses Ant to generate your documents. The primary ant script
 	 is <codeph>build.xml</codeph>, which imports several other build scripts to initialize, validate, and transform your .dita documents.</p>
 	 <p>See <xref href="about_documentgeneration.dita"/> for more information about how DITA-OT processes
 	 documents.</p>
   </conbody>
   <related-links>
 	<link href="about_ant.dita" scope="local"/>
-	<link href="../reference/dita-ot_ant_properties.dita" scope="local"/>
+	<link href="../../readme/dita-ot_ant_properties.dita" scope="local"/>
   </related-links>
 </concept>

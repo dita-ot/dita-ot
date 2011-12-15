@@ -3,12 +3,7 @@
      Sourceforge.net. See the accompanying license.txt file for 
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
-<project name="dita2htmlhelp" default="dita2htmlhelp">
-    <property name="transtype" value="htmlhelp"/>
-    
-    <import file="build_init.xml" />
-    <import file="build_preprocess.xml" />
-    <import file="build_general.xml" />
+<project name="dita2htmlhelp">
 
     <target name="dita2htmlhelp"
             unless="noMap"
@@ -51,6 +46,7 @@
             <param name="INCLUDEFILE"
                    expression="${args.htmlhelp.includefile}"
                    if="args.htmlhelp.includefile" />
+          <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>
     
@@ -71,6 +67,7 @@
                 expression="${args.htmlhelp.includefile}"
                 if="args.htmlhelp.includefile" />
             <mapper type="glob" from="${user.input.file}" to="${dita.map.filename.root}.hhp"/>
+          <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>
 
@@ -87,6 +84,7 @@
         	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+          <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>
     
@@ -103,6 +101,7 @@
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
             <mapper type="glob" from="${user.input.file}" to="${dita.map.filename.root}.hhc"/>
+          <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>
 

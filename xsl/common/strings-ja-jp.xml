@@ -56,6 +56,7 @@
 <str name="Prerequisite">前提条件</str>
 <str name="Prerequisites">前提条件</str>
 <str name="or">または</str>
+<str name="figure-number-separator"> </str>
 
 <!--Task section labels -->
 <str name="task_context">このタスクについて</str>

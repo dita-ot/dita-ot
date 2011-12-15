@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -14,26 +14,26 @@ package org.dita.dost.util;
  *
  */
 public final class Version {
-	
-	private static final String fversion = "@@VERSION@@";
-	
-	
 
-	/**
-	 * main function.
-	 * @param args input arguments from command line
-	 */
-	public static void main(final String[] args) {
-		System.out.println (fversion);
-
-	}
+    private static final String fversion = "@@VERSION@@";
 
 
-	/**
-	 * @return the fversion
-	 */
-	public static String getVersion() {
-		return fversion;
-	}
+
+    /**
+     * main function.
+     * @param args input arguments from command line
+     */
+    public static void main(final String[] args) {
+        System.out.println (fversion);
+
+    }
+
+
+    /**
+     * @return the fversion
+     */
+    public static String getVersion() {
+        return fversion;
+    }
 
 }

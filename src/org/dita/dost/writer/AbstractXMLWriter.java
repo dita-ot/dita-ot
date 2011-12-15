@@ -1,6 +1,6 @@
 /*
  * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for 
+ * Sourceforge.net. See the accompanying license.txt file for
  * applicable licenses.
  */
 
@@ -33,124 +33,80 @@ abstract class AbstractXMLWriter implements AbstractWriter,
 ContentHandler, LexicalHandler, EntityResolver {
 
     protected DITAOTLogger logger;
-    
-    /**
-     * @see org.xml.sax.ContentHandler#characters(char[], int, int)
-     */
-    public void characters(char[] ch, int start, int length)
+
+
+    public void characters(final char[] ch, final int start, final int length)
             throws SAXException {
     }
-    /**
-     * @see org.xml.sax.ContentHandler#endDocument()
-     */
+
     public void endDocument() throws SAXException {
     }
-    /**
-     * @see org.xml.sax.ContentHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
-     */
-    public void endElement(String uri, String localName, String qName)
+
+    public void endElement(final String uri, final String localName, final String qName)
             throws SAXException {
     }
-    /**
-     * @see org.xml.sax.ContentHandler#endPrefixMapping(java.lang.String)
-     */
-    public void endPrefixMapping(String prefix) throws SAXException {
+
+    public void endPrefixMapping(final String prefix) throws SAXException {
     }
-    /**
-     * @see org.xml.sax.ContentHandler#ignorableWhitespace(char[], int, int)
-     */
-    public void ignorableWhitespace(char[] ch, int start, int length)
+
+    public void ignorableWhitespace(final char[] ch, final int start, final int length)
             throws SAXException {
     }
-    /**
-     * @see org.xml.sax.ContentHandler#processingInstruction(java.lang.String, java.lang.String)
-     */
-    public void processingInstruction(String target, String data)
+
+    public void processingInstruction(final String target, final String data)
             throws SAXException {
     }
-    /**
-     * @see org.xml.sax.ContentHandler#setDocumentLocator(org.xml.sax.Locator)
-     */
-    public void setDocumentLocator(Locator locator) {
+
+    public void setDocumentLocator(final Locator locator) {
     }
-    /**
-     * @see org.xml.sax.ContentHandler#skippedEntity(java.lang.String)
-     */
-    public void skippedEntity(String name) throws SAXException {
+
+    public void skippedEntity(final String name) throws SAXException {
     }
-    /**
-     * @see org.xml.sax.ContentHandler#startDocument()
-     */
+
     public void startDocument() throws SAXException {
     }
-    /**
-     * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
-     */
-    public void startElement(String uri, String localName, String qName,
-            Attributes atts) throws SAXException {
+
+    public void startElement(final String uri, final String localName, final String qName,
+            final Attributes atts) throws SAXException {
     }
-    /**
-     * @see org.xml.sax.ContentHandler#startPrefixMapping(java.lang.String, java.lang.String)
-     */
-    public void startPrefixMapping(String prefix, String uri)
+
+    public void startPrefixMapping(final String prefix, final String uri)
             throws SAXException {
     }
-    /**
-     * @see org.xml.sax.ext.LexicalHandler#comment(char[], int, int)
-     */
-    public void comment(char[] ch, int start, int length) throws SAXException {
+
+    public void comment(final char[] ch, final int start, final int length) throws SAXException {
     }
-    /**
-     * @see org.xml.sax.ext.LexicalHandler#endCDATA()
-     */
+
     public void endCDATA() throws SAXException {
     }
-    /**
-     * @see org.xml.sax.ext.LexicalHandler#endDTD()
-     */
+
     public void endDTD() throws SAXException {
     }
-    /**
-     * @see org.xml.sax.ext.LexicalHandler#endEntity(java.lang.String)
-     */
-    public void endEntity(String name) throws SAXException {
+
+    public void endEntity(final String name) throws SAXException {
     }
-    /**
-     * @see org.xml.sax.ext.LexicalHandler#startCDATA()
-     */
+
     public void startCDATA() throws SAXException {
     }
-    /**
-     * @see org.xml.sax.ext.LexicalHandler#startDTD(java.lang.String, java.lang.String, java.lang.String)
-     */
-    public void startDTD(String name, String publicId, String systemId)
+
+    public void startDTD(final String name, final String publicId, final String systemId)
             throws SAXException {
     }
-    /**
-     * @see org.xml.sax.ext.LexicalHandler#startEntity(java.lang.String)
-     */
-    public void startEntity(String name) throws SAXException {
+
+    public void startEntity(final String name) throws SAXException {
     }
-    /**
-     * @see org.xml.sax.EntityResolver#resolveEntity(java.lang.String, java.lang.String)
-     */
-    public InputSource resolveEntity(String publicId, String systemId)
+
+    public InputSource resolveEntity(final String publicId, final String systemId)
             throws SAXException, IOException {
         return null;
     }
-    /**
-     * @see org.dita.dost.writer.AbstractWriter#setContent(org.dita.dost.module.Content)
-     */
-    public void setContent(Content content) {
-    }
-	/**
-	 * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
-	 */
-	public void write(String filename) throws DITAOTException {
-	}
-    
-	public void setLogger(final DITAOTLogger logger) {
+
+    public abstract void setContent(Content content);
+
+    public abstract void write(String filename) throws DITAOTException;
+
+    public final void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
-	
+
 }
