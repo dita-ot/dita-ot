@@ -53,36 +53,34 @@ public final class DITAOTAntLogger implements DITAOTLogger {
     }
 
     public void logInfo(final String msg) {
-        log(msg, Project.MSG_INFO);
+        log(msg, null, Project.MSG_INFO);
     }
 
     public void logWarn(final String msg) {
-        log(msg, Project.MSG_WARN);
+        log(msg, null, Project.MSG_WARN);
     }
 
     public void logError(final String msg) {
-        log(msg, Project.MSG_ERR);
+        log(msg, null, Project.MSG_ERR);
     }
 
+    public void logError(final String msg, final Throwable t) {
+        log(msg, t, Project.MSG_ERR);
+    }
+    
     public void logFatal(final String msg) {
-        log(msg, Project.MSG_ERR);
+        log(msg, null, Project.MSG_ERR);
     }
 
     public void logDebug(final String msg) {
-        log(msg, Project.MSG_VERBOSE);
+        log(msg, null, Project.MSG_VERBOSE);
     }
 
     public void logException(final Throwable t) {
-        if (task != null) {
-            project.log(task, t.getMessage(), t, Project.MSG_ERR);
-        } else if (target != null) {
-            project.log(target, t.getMessage(), t, Project.MSG_ERR);
-        } else {
-            project.log(t.getMessage(), t, Project.MSG_ERR);
-        }
+        log(t.getMessage(), t, Project.MSG_ERR);
     }
 
-    private void log(final String msg, final int level) {
+    private void log(final String msg, final Throwable t, final int level) {
         if (task != null) {
             project.log(task, msg, level);
         } else if (target != null) {

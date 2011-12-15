@@ -36,10 +36,20 @@ public interface DITAOTLogger {
     public void logError(final String msg);
 
     /**
+     * Log an error message with cause exception.
+     * 
+     * @param msg message
+     * @param t exception
+     */
+    public void logError(final String msg, final Throwable t);
+
+    /**
      * Log a fatal error message.
      * 
      * @param msg message
+     * @deprecated throw exception instead
      */
+    @Deprecated
     public void logFatal(final String msg);
 
     /**
@@ -53,7 +63,9 @@ public interface DITAOTLogger {
      * Log an exception.
      * 
      * @param t exception
+     * @deprecated use {@link #logError(String, Throwable)} instead
      */
+    @Deprecated
     public void logException(final Throwable t);
 
 }

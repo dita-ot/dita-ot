@@ -65,6 +65,19 @@ public final class DITAOTJavaLogger implements DITAOTLogger {
     }
 
     /**
+     * Log error message.
+     * 
+     * @param msg message
+     * @param t exception
+     */
+    public void logError(final String msg, final Throwable t) {
+        logError(t.toString());
+        if (debugMode) {
+            t.printStackTrace(System.err);
+        }
+    }
+    
+    /**
      * Log fatal error message.
      * 
      * @param msg message

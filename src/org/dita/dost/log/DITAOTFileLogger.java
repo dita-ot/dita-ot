@@ -144,6 +144,16 @@ public final class DITAOTFileLogger implements DITAOTLogger {
     }
 
     /**
+     * Log the message at error level.
+     * @param msg msg
+     * @param t exception
+     */
+    public void logError(final String msg, final Throwable t) {
+        logError(t.getMessage());
+        t.printStackTrace(printWriter);
+    }
+    
+    /**
      * Log the message at fatal level.
      * @param msg msg
      */
