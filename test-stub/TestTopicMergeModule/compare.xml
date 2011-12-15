@@ -9,7 +9,7 @@
     <title class="- topic/title " xtrc="title:1"
       xtrf="C:\DITA-OT1.5\SAXONIBMJDK\testcase\12008\..\..\testdata\12008\case1_allow\test.ditamap"
       >this is a title</title>
-    <topicref class="- map/topicref " ohref="componentA/configA.xml#configA" href="#unique_1"
+    <topicref class="- map/topicref " ohref="componentA/configA.xml#configA" first_topic_id="#unique_1" href="#unique_1"
       keys="componentAconfig commonconfig" type="task" xtrc="topicref:1"
       xtrf="C:\DITA-OT1.5\SAXONIBMJDK\testcase\12008\..\..\testdata\12008\case1_allow\test.ditamap">
       <topicmeta class="- map/topicmeta ">
@@ -28,7 +28,7 @@
         </exportanchors>
       </topicmeta>
     </topicref>
-    <topicref class="- map/topicref " ohref="test1.xml" href="#unique_2" type="task"
+    <topicref class="- map/topicref " ohref="test1.xml" first_topic_id="#unique_2" href="#unique_2" type="task"
       xtrc="topicref:2"
       xtrf="C:\DITA-OT1.5\SAXONIBMJDK\testcase\12008\..\..\testdata\12008\case1_allow\test.ditamap">
       <topicmeta class="- map/topicmeta ">

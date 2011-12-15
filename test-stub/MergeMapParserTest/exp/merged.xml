@@ -2,8 +2,8 @@
 <wrapper><map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- map/map "
   domains="(topic delay-d) (map mapgroup-d) (topic indexing-d) (map glossref-d)"
   ditaarch:DITAArchVersion="1.2">
-  <topicref class="- map/topicref " ohref="test.xml" href="#unique_1"/>
-  <topicref class="- map/topicref " ohref="test2.xml" href="#unique_3"/>
+  <topicref class="- map/topicref " ohref="test.xml" href="#unique_1" first_topic_id="#unique_1"/>
+  <topicref class="- map/topicref " ohref="test2.xml" href="#unique_3" first_topic_id="#unique_3"/>
   <topicref class="- map/topicref " ohref="test.xml" href="#unique_1"/>
 </map><concept xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
   class="- topic/topic concept/concept "
