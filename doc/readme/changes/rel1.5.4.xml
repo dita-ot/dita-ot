@@ -104,7 +104,7 @@
 <li>3411476 Add extension point for print type declaration (Milestone 6)</li>
 <li>3392891 Copy the graphic files to the temporary folder (Milestone 6)</li>
 <li>3429290 Remove unused Apache Commons Logging JAR (Milestone 6)</li>
-<li>3434640 Add XHTML NLS support for Indonesian, Malay, Kazakh </li>
+<li>3434640 Add XHTML NLS support for Indonesian, Malay, Kazakh (Milestone 6) </li>
 <li>3435528 Add base configuration file (Milestone 7)</li>
 <li>3432219 Refector dita.list read and write (Milestone 7)</li>
 <li>3401849 PDF2: runtime switch for localization post-processing (Milestone 7)</li>
