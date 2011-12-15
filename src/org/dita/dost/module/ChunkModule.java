@@ -40,6 +40,7 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.ChunkMapReader;
 import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.PropertiesWriter;
 import org.dita.dost.writer.TopicRefWriter;
@@ -92,41 +93,24 @@ final class ChunkModule implements AbstractPipelineModule {
             tempDir = new File(baseDir, tempDir).getAbsolutePath();
         }
         //change to xml property
-        final File ditalist = new File(tempDir, FILE_NAME_DITA_LIST);
-        final File xmlDitalist=new File(tempDir,FILE_NAME_DITA_LIST_XML);
         final ChunkMapReader mapReader = new ChunkMapReader();
         mapReader.setLogger(logger);
         mapReader.setup(ditaext, transtype);
 
-        final Properties prop = new Properties();
-        InputStream in = null;
+        Job job = null;
         try{
-            if(xmlDitalist.exists()) {
-                in = new FileInputStream(xmlDitalist);
-                prop.loadFromXML(in);
-            } else {
-                in = new FileInputStream(ditalist);
-                prop.load(in);
-            }
+            job = new Job(new File(tempDir));
         }catch(final IOException ioe){
             throw new DITAOTException(ioe);
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (final IOException e) {
-                    logger.logException(e);
-                }
-            }
         }
         try{
             final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             final DocumentBuilder builder = factory.newDocumentBuilder();
-            String mapFile = new File(tempDir, prop.getProperty(INPUT_DITAMAP)).getAbsolutePath();
+            String mapFile = new File(tempDir, job.getProperty(INPUT_DITAMAP)).getAbsolutePath();
             final Document doc = builder.parse(mapFile);
             final Element root = doc.getDocumentElement();
             if(root.getAttribute(ATTRIBUTE_NAME_CLASS).contains(" eclipsemap/plugin ") && transtype.equals(INDEX_TYPE_ECLIPSEHELP)){
-                final StringTokenizer st = new StringTokenizer(prop.getProperty(FULL_DITAMAP_LIST), COMMA);
+                final StringTokenizer st = new StringTokenizer(job.getProperty(FULL_DITAMAP_LIST), COMMA);
                 while(st.hasMoreTokens()){
                     mapFile = new File(tempDir, st.nextToken()).getAbsolutePath();
                     mapReader.read(mapFile);
@@ -159,34 +143,17 @@ final class ChunkModule implements AbstractPipelineModule {
             final String baseDir = input.getAttribute(ANT_INVOKER_PARAM_BASEDIR);
             tempDir = new File(baseDir, tempDir).getAbsolutePath();
         }
-        final File ditalist=new File(tempDir, FILE_NAME_DITA_LIST);
-        final File xmlDitalist=new File(tempDir, FILE_NAME_DITA_LIST_XML);
-        final Properties prop = new Properties();
-        InputStream in = null;
+        Job job = null;
         try{
-            if(xmlDitalist.exists()) {
-                in = new FileInputStream(xmlDitalist);
-                prop.loadFromXML(in);
-            } else {
-                in = new FileInputStream(ditalist);
-                prop.load(in);
-            }
+            job = new Job(new File(tempDir));
         }catch(final IOException io){
             logger.logError(io.getMessage());
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (final IOException e) {
-                    logger.logException(e);
-                }
-            }
         }
         final TopicRefWriter topicRefWriter=new TopicRefWriter();
         topicRefWriter.setLogger(logger);
         topicRefWriter.setContent(changeTable);
         topicRefWriter.setup(conflictTable);
-        final StringTokenizer fullTopicList=new StringTokenizer(prop.getProperty(FULL_DITAMAP_TOPIC_LIST), COMMA);
+        final StringTokenizer fullTopicList=new StringTokenizer(job.getProperty(FULL_DITAMAP_TOPIC_LIST), COMMA);
         try{
             while(fullTopicList.hasMoreTokens()){
                 topicRefWriter.write(tempDir,fullTopicList.nextToken(),this.relativePath2fix);
@@ -205,32 +172,16 @@ final class ChunkModule implements AbstractPipelineModule {
             tempDir = new File(baseDir, tempDir).getAbsolutePath();
 
         }
-        final File ditalist=new File(tempDir,FILE_NAME_DITA_LIST);
-        final File xmlDitalist=new File(tempDir,FILE_NAME_DITA_LIST_XML);
-        final Properties prop = new Properties();
-        InputStream in = null;
+        final File xmlDitalist=new File(tempDir, "dummy.xml");
+        Job job = null;
         try{
-            if(xmlDitalist.exists()) {
-                in = new FileInputStream(xmlDitalist);
-                prop.loadFromXML(in);
-            } else {
-                in = new FileInputStream(ditalist);
-                prop.load(in);
-            }
+            job = new Job(new File(tempDir));
         }catch(final IOException ex){
             logger.logException(ex);
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (final IOException e) {
-                    logger.logException(e);
-                }
-            }
         }
 
-        final Set<String> hrefTopics = StringUtils.restoreSet(prop.getProperty(HREF_TOPIC_LIST));
-        final Set<String> chunkTopics = StringUtils.restoreSet(prop.getProperty(CHUNK_TOPIC_LIST));
+        final Set<String> hrefTopics = StringUtils.restoreSet(job.getProperty(HREF_TOPIC_LIST));
+        final Set<String> chunkTopics = StringUtils.restoreSet(job.getProperty(CHUNK_TOPIC_LIST));
         for (final String s : chunkTopics) {
             if (!StringUtils.isEmptyString(s) && !s.contains(SHARP)) {
                 // This entry does not have an anchor, we assume that this topic will
@@ -251,7 +202,7 @@ final class ChunkModule implements AbstractPipelineModule {
         }
 
         final Set<String> topicList = new LinkedHashSet<String>(INT_128);
-        final Set<String> oldTopicList = StringUtils.restoreSet(prop.getProperty(FULL_DITA_TOPIC_LIST));
+        final Set<String> oldTopicList = StringUtils.restoreSet(job.getProperty(FULL_DITA_TOPIC_LIST));
         for (String t : hrefTopics) {
             if (t.lastIndexOf(SHARP) != -1) {
                 t = t.substring(0, t.lastIndexOf(SHARP));
@@ -269,7 +220,7 @@ final class ChunkModule implements AbstractPipelineModule {
 
         final Set<String> chunkedTopicSet=new LinkedHashSet<String>(INT_128);
         final Set<String> chunkedDitamapSet=new LinkedHashSet<String>(INT_128);
-        final Set<String> ditamapList = StringUtils.restoreSet(prop.getProperty(FULL_DITAMAP_LIST));
+        final Set<String> ditamapList = StringUtils.restoreSet(job.getProperty(FULL_DITAMAP_LIST));
         for (final Map.Entry<String, String> entry: changeTable.entrySet()) {
             final String oldFile=entry.getKey();
             if(entry.getValue().equals(oldFile)){
@@ -347,20 +298,20 @@ final class ChunkModule implements AbstractPipelineModule {
 
         //TODO Remove newly generated files from resource-only list, these new files should not
         //     excluded from the final outputs.
-        final Set<String> resourceOnlySet = StringUtils.restoreSet(prop.getProperty(RESOURCE_ONLY_LIST));
+        final Set<String> resourceOnlySet = StringUtils.restoreSet(job.getProperty(RESOURCE_ONLY_LIST));
         resourceOnlySet.removeAll(chunkedTopicSet);
         resourceOnlySet.removeAll(chunkedDitamapSet);
 
-        prop.setProperty(RESOURCE_ONLY_LIST, StringUtils.assembleString(resourceOnlySet, COMMA));
-        prop.setProperty(FULL_DITA_TOPIC_LIST,StringUtils.assembleString(topicList, COMMA));
-        prop.setProperty(FULL_DITAMAP_LIST, StringUtils.assembleString(ditamapList, COMMA));
+        job.setProperty(RESOURCE_ONLY_LIST, StringUtils.assembleString(resourceOnlySet, COMMA));
+        job.setProperty(FULL_DITA_TOPIC_LIST,StringUtils.assembleString(topicList, COMMA));
+        job.setProperty(FULL_DITAMAP_LIST, StringUtils.assembleString(ditamapList, COMMA));
         topicList.addAll(ditamapList);
-        prop.setProperty(FULL_DITAMAP_TOPIC_LIST, StringUtils.assembleString(topicList, COMMA));
+        job.setProperty(FULL_DITAMAP_TOPIC_LIST, StringUtils.assembleString(topicList, COMMA));
 
         try {
-            writeList(prop, tempDir, FULL_DITA_TOPIC_LIST);
-            writeList(prop, tempDir, FULL_DITAMAP_LIST);
-            writeList(prop, tempDir, FULL_DITAMAP_TOPIC_LIST);
+            writeList(job, tempDir, FULL_DITA_TOPIC_LIST);
+            writeList(job, tempDir, FULL_DITAMAP_LIST);
+            writeList(job, tempDir, FULL_DITAMAP_TOPIC_LIST);
         } catch (final FileNotFoundException e) {
             logger.logException(e);
         } catch (final IOException e) {
@@ -378,8 +329,8 @@ final class ChunkModule implements AbstractPipelineModule {
         for(int i=0;i<keys.length;i++){
             final String key = keys[i];
             final String fileKey=key.substring(0,key.lastIndexOf("list"))+"file";
-            prop.put(fileKey, key.substring(0, key.lastIndexOf("list"))+".list");
-            final File list = new File(tempDir, prop.getProperty(fileKey));
+            job.setProperty(fileKey, key.substring(0, key.lastIndexOf("list"))+".list");
+            final File list = new File(tempDir, job.getProperty(fileKey));
             BufferedWriter bufferedWriter=null;
             try {
                 bufferedWriter=new BufferedWriter(new OutputStreamWriter(new FileOutputStream(list)));
@@ -408,16 +359,11 @@ final class ChunkModule implements AbstractPipelineModule {
         }
 
 
-        addSetToProperties(prop,CHUNKED_DITAMAP_LIST,chunkedDitamapSet);
-        addSetToProperties(prop,CHUNKED_TOPIC_LIST,chunkedTopicSet);
-        final Content content = new ContentImpl();
-        content.setValue(prop);
-        final PropertiesWriter writer = new PropertiesWriter();
-        writer.setContent(content);
+        addSetToProperties(job,CHUNKED_DITAMAP_LIST,chunkedDitamapSet);
+        addSetToProperties(job,CHUNKED_TOPIC_LIST,chunkedTopicSet);
         try{
-            writer.write(ditalist.getAbsolutePath());
-            writer.writeToXML(xmlDitalist.getAbsolutePath());
-        }catch(final DITAOTException ex){
+            job.write();
+        }catch(final IOException ex){
             logger.logException(ex);
         }
 
@@ -430,7 +376,7 @@ final class ChunkModule implements AbstractPipelineModule {
      * @param tempDir temporary directory
      * @param list name of the list
      */
-    private void writeList(final Properties prop, final String tempDir, final String list) throws FileNotFoundException,
+    private void writeList(final Job prop, final String tempDir, final String list) throws FileNotFoundException,
     IOException {
         final File topic_list=new File(tempDir, list.substring(0, list.lastIndexOf("list"))+".list");
         BufferedWriter topicWriter = null;
@@ -509,9 +455,9 @@ final class ChunkModule implements AbstractPipelineModule {
      * @param key key to add
      * @param set set of values
      */
-    private void addSetToProperties(final Properties prop, final String key, final Set<String> set) {
+    private void addSetToProperties(final Job prop, final String key, final Set<String> set) {
         final String value = StringUtils.assembleString(set, COMMA);
-        prop.put(key, value);
+        prop.setProperty(key, value);
         // clear set
         set.clear();
     }

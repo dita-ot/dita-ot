@@ -70,36 +70,11 @@ public final class CheckLang extends Task {
             inputmap = new File(tempdir, inputmap).getAbsolutePath();
         }
 
-
-        //File object of dita.list
-        final File ditalist = new File(tempdir, FILE_NAME_DITA_LIST);
-        //File object of dita.xml.properties
-        final File xmlDitalist=new File(tempdir,FILE_NAME_DITA_LIST_XML);
-        final Properties prop = new Properties();
-        InputStream in = null;
+        Job job = null;
         try{
-            if(xmlDitalist.exists()) {
-                in = new FileInputStream(xmlDitalist);
-                prop.loadFromXML(in);
-            } else {
-                in = new FileInputStream(ditalist);
-                prop.load(in);
-            }
+            job = new Job(new File(tempdir));
         }catch(final IOException e){
-            String msg = null;
-            params.put("%1", ditalist);
-            msg = MessageUtils.getMessage("DOTJ011E", params).toString();
-            /*msg = new StringBuffer(msg).append(LINE_SEPARATOR)
-					.append(e.toString()).toString();*/
-            logger.logError(msg);
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (final IOException e) {
-                    logger.logException(e);
-                }
-            }
+            logger.logException(e);
         }
 
         final LangParser parser = new LangParser();
@@ -114,7 +89,7 @@ public final class CheckLang extends Task {
             if(!StringUtils.isEmptyString(langCode)){
                 setActiveProjectProperty("htmlhelp.locale", langCode);
             }else{
-                final Set<String> topicList = StringUtils.restoreSet(prop.getProperty(FULL_DITA_TOPIC_LIST));
+                final Set<String> topicList = StringUtils.restoreSet(job.getProperty(FULL_DITA_TOPIC_LIST));
                 //parse topic files
                 for(final String topicFileName : topicList){
                     final File topicFile = new File(tempdir, topicFileName);

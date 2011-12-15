@@ -44,11 +44,11 @@ import org.dita.dost.reader.GrammarPoolManager;
 import org.dita.dost.util.DelayConrefUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.OutputUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.TimingUtils;
 import org.dita.dost.util.XMLSerializer;
-import org.dita.dost.writer.PropertiesWriter;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
@@ -916,10 +916,6 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 
     private void outputResult() throws DITAOTException {
         final Properties prop = new Properties();
-        final PropertiesWriter writer = new PropertiesWriter();
-        final Content content = new ContentImpl();
-        final File outputFile = new File(tempDir, FILE_NAME_DITA_LIST);
-        final File xmlDitalist = new File(tempDir, FILE_NAME_DITA_LIST_XML);
         final File dir = new File(tempDir);
         final Set<String> copytoSet = new HashSet<String>(INT_128);
         final Set<String> keysDefSet = new HashSet<String>(INT_128);
@@ -994,12 +990,15 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
         }
         addSetToProperties(prop, COPYTO_TARGET_TO_SOURCE_MAP_LIST, copytoSet);
         addSetToProperties(prop, KEY_LIST, keysDefSet);
-        content.setValue(prop);
-        writer.setContent(content);
 
-        writer.write(outputFile.getAbsolutePath());
-        writer.writeToXML(xmlDitalist.getAbsolutePath());
-
+        final Job job = new Job(prop, new File(tempDir));
+        try {
+            logger.logInfo("Serializing job specification");
+            job.write();
+        } catch (final IOException e) {
+            throw new DITAOTException("Failed to serialize job configuration files: " + e.getMessage(), e);
+        }
+        
         // Output relation-graph
         writeMapToXML(reader.getRelationshipGrap(), FILE_NAME_SUBJECT_RELATION);
         // Output topic-scheme dictionary

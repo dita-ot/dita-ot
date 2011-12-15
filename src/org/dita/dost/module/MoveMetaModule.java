@@ -29,6 +29,7 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.MapMetaReader;
 import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.ListUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.DitaMapMetaWriter;
@@ -76,16 +77,16 @@ final class MoveMetaModule implements AbstractPipelineModule {
             tempDir = new File(baseDir, tempDir).getAbsolutePath();
         }
         
-        Properties properties = null;
+        Job job = null;
         try{
-            properties = ListUtils.getDitaList();
+            job = new Job(new File(tempDir));
         } catch (final IOException e) {
             throw new DITAOTException(e);
         }
 
         final MapMetaReader metaReader = new MapMetaReader();
         metaReader.setLogger(logger);
-        final Set<String> fullditamaplist = StringUtils.restoreSet(properties.getProperty(FULL_DITAMAP_LIST));
+        final Set<String> fullditamaplist = StringUtils.restoreSet(job.getProperty(FULL_DITAMAP_LIST));
         for (String mapFile: fullditamaplist) {
             mapFile = new File(tempDir, mapFile).getAbsolutePath();
             logger.logInfo("Reading " + mapFile);

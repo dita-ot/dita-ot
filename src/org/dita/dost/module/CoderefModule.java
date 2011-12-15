@@ -20,6 +20,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.ListUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.CoderefResolver;
@@ -59,14 +60,14 @@ final class CoderefModule implements AbstractPipelineModule {
             tempDir = new File(baseDir, tempDir).getAbsolutePath();
         }
 
-        Properties properties = null;
+        Job job = null;
         try{
-            properties = ListUtils.getDitaList();
+            job = new Job(new File(tempDir));
         }catch(final IOException e){
             throw new DITAOTException(e);
         }
 
-        final Set<String> codereflist=StringUtils.restoreSet(properties.getProperty(CODEREF_LIST));
+        final Set<String> codereflist=StringUtils.restoreSet(job.getProperty(CODEREF_LIST));
         final CoderefResolver writer = new CoderefResolver();
         writer.setLogger(logger);
         for (final String fileName : codereflist) {

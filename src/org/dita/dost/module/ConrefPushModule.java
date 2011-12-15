@@ -24,6 +24,7 @@ import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.ConrefPushReader;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.ListUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.ConrefPushParser;
@@ -57,14 +58,14 @@ final class ConrefPushModule implements AbstractPipelineModule {
             tempDir = new File(basedir, tempDir).getAbsolutePath();
         }
         
-        Properties properties = null;
+        Job job = null;
         try{
-            properties = ListUtils.getDitaList();
+            job = new Job(new File(tempDir));
         }catch(final IOException e){
             logger.logException(e);
         }
 
-        final Set<String> conrefpushlist = StringUtils.restoreSet(properties.getProperty(CONREF_PUSH_LIST));
+        final Set<String> conrefpushlist = StringUtils.restoreSet(job.getProperty(CONREF_PUSH_LIST));
         final ConrefPushReader reader = new ConrefPushReader();
         reader.setLogger(logger);
         for(final String fileName:conrefpushlist){

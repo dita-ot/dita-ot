@@ -44,7 +44,9 @@ public final class ListUtils {
      * 3. or, log exceptions.
      * @return Properties
      * @throws IOException IOException.
+     * @deprecated use {@link org.dita.dost.util.Job} instead
      */
+    @Deprecated
     public static Properties getDitaList() throws IOException{
         final Properties properties = new Properties();
         try{

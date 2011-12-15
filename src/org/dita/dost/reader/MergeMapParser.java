@@ -24,6 +24,7 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
 import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.MergeUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
@@ -244,25 +245,15 @@ public final class MergeMapParser extends AbstractXMLReader {
         // read href dita topic list
         // compare visitedSet with the list
         // if list item not in visitedSet then call MergeTopicParser to parse it
-        final Properties property = new Properties();
-        final File ditalist = new File(tempdir, FILE_NAME_DITA_LIST);
-        final File xmlDitalist = new File(tempdir, FILE_NAME_DITA_LIST_XML);
-        InputStream in = null;
         try{
-            if(xmlDitalist.exists()) {
-                in = new FileInputStream(xmlDitalist);
-                property.loadFromXML(in);
-            } else {
-                in = new FileInputStream(ditalist);
-                property.loadFromXML(in);
-            }
-            String resourceOnlySet = property.getProperty(RESOURCE_ONLY_LIST);
+            final Job job = new Job(new File(tempdir));
+            String resourceOnlySet = job.getProperty(RESOURCE_ONLY_LIST);
             resourceOnlySet = (resourceOnlySet == null ? "" : resourceOnlySet);
-            String skipTopicSet = property.getProperty(CHUNK_TOPIC_LIST);
+            String skipTopicSet = job.getProperty(CHUNK_TOPIC_LIST);
             skipTopicSet = (skipTopicSet == null ? "" : skipTopicSet);
-            String chunkedTopicSet = property.getProperty(CHUNKED_TOPIC_LIST);
+            String chunkedTopicSet = job.getProperty(CHUNKED_TOPIC_LIST);
             chunkedTopicSet = (chunkedTopicSet == null ? "" : chunkedTopicSet);
-            final String hrefTargetList = property.getProperty(HREF_TARGET_LIST);
+            final String hrefTargetList = job.getProperty(HREF_TARGET_LIST);
             final StringTokenizer tokenizer = new StringTokenizer(hrefTargetList,COMMA);
             while(tokenizer.hasMoreElements())
             {
@@ -289,14 +280,6 @@ public final class MergeMapParser extends AbstractXMLReader {
             }
         }catch (final Exception e){
             logger.logException(e);
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (final IOException e) {
-                    logger.logException(e);
-                }
-            }
         }
     }
 

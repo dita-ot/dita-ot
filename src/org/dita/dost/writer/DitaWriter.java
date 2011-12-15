@@ -12,10 +12,8 @@ package org.dita.dost.writer;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -33,13 +31,13 @@ import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
-import org.dita.dost.reader.AbstractXMLReader;
 import org.dita.dost.reader.GrammarPoolManager;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.DITAAttrUtils;
 import org.dita.dost.util.DelayConrefUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.OutputUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
@@ -1226,37 +1224,19 @@ public final class DitaWriter extends AbstractXMLWriter {
 
         if(null == keys){
             keys = new HashMap<String, String>();
-            final Properties prop = new Properties();
             if (! new File(tempDir).isAbsolute()){
                 tempDir = new File(tempDir).getAbsolutePath();
             }
 
-            final File ditafile = new File(tempDir, FILE_NAME_DITA_LIST);
-            final File ditaxmlfile = new File(tempDir, FILE_NAME_DITA_LIST_XML);
-
-            InputStream in = null;
+            Job job = null;
             try{
-                if(ditaxmlfile.exists()){
-                    in = new FileInputStream(ditaxmlfile);
-                    prop.loadFromXML(in);
-                }else{
-                    in = new FileInputStream(ditafile);
-                    prop.load(in);
-                }
-            }catch (final Exception e) {
-                logger.logException(e);
-            } finally {
-                if (in != null) {
-                    try {
-                        in.close();
-                    } catch (final IOException e) {
-                        logger.logException(e);
-                    }
-                }
+                job = new Job(new File(tempDir));
+            }catch (final IOException e) {
+                logger.logException(new Exception("Failed to read job configuration file: " + e.getMessage(), e));
             }
 
-            if(prop.getProperty(KEY_LIST).length()!=0){
-                final String[] keylist = prop.getProperty(KEY_LIST).split(COMMA);
+            if(job.getProperty(KEY_LIST).length()!=0){
+                final String[] keylist = job.getProperty(KEY_LIST).split(COMMA);
                 for(final String keyinfo: keylist){
                     //get the key name
                     final String key = keyinfo.substring(0, keyinfo.indexOf(EQUAL));

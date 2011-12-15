@@ -24,6 +24,7 @@ import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.KeyrefReader;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.ListUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.KeyrefPaser;
@@ -67,9 +68,9 @@ final class KeyrefModule implements AbstractPipelineModule {
         final String extName = ext.startsWith(DOT) ? ext : (DOT + ext);
         //Added by Alan Date:2009-08-04 --end
 
-        Properties properties = null;
+        Job job = null;
         try{
-            properties = ListUtils.getDitaList();
+            job = new Job(new File(tempDir));
         }catch(final Exception e){
             logger.logException(e);
         }
@@ -81,7 +82,7 @@ final class KeyrefModule implements AbstractPipelineModule {
 
         // get the key definitions from the dita.list, and the ditamap where it is defined
         // are not handle yet.
-        final String keylist = properties.getProperty(KEY_LIST);
+        final String keylist = job.getProperty(KEY_LIST);
         if(!StringUtils.isEmptyString(keylist)){
             final Set<String> keys = StringUtils.restoreSet(keylist);
             for(final String key: keys){
@@ -110,11 +111,11 @@ final class KeyrefModule implements AbstractPipelineModule {
         }
         final Content content = reader.getContent();
         //get files which have keyref attr
-        final Set<String> parseList = StringUtils.restoreSet(properties.getProperty(KEYREF_LIST));
+        final Set<String> parseList = StringUtils.restoreSet(job.getProperty(KEYREF_LIST));
         //Conref Module will change file's content, it is possible that tags with @keyref are copied in
         //while keyreflist is hard update with xslt.
         //bug:3056939
-        final Set<String> conrefList = StringUtils.restoreSet(properties.getProperty(CONREF_LIST));
+        final Set<String> conrefList = StringUtils.restoreSet(job.getProperty(CONREF_LIST));
         parseList.addAll(conrefList);
         for(final String file: parseList){
             logger.logInfo("Processing " + new File(tempDir, file).getAbsolutePath());

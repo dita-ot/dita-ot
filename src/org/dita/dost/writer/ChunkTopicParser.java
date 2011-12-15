@@ -39,6 +39,7 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.util.DITAAttrUtils;
 import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.TopicIdParser;
 import org.w3c.dom.Element;
@@ -588,20 +589,14 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
         //in the special case of the concurrence of copy-to and chunk='to-content', @copy-to is handled in chunk module
         //instead of genlist module and debugandfilter module, so the list should be updated.
         //and this method is used to update the list file.
-        final Properties property = new Properties();
-        InputStream in = null;
-        FileOutputStream output = null;
-        FileOutputStream xmlDitaList = null;
         String key = null;
         String filename = null;
         BufferedWriter bufferedWriter = null;
         try{
-            in = new FileInputStream(new File(FileUtils.resolveFile(filePath,FILE_NAME_DITA_LIST_XML)));
-            property.loadFromXML(in);
-            output = new FileOutputStream(new File(FileUtils.resolveFile(filePath, FILE_NAME_DITA_LIST)));
-            xmlDitaList = new FileOutputStream(new File(FileUtils.resolveFile(filePath, FILE_NAME_DITA_LIST_XML)));
-            final String copytosourcelist[] = property.getProperty(COPYTO_SOURCE_LIST).split(COMMA);
-            final String copytotarget2sourcemaplist[] = property.getProperty(COPYTO_TARGET_TO_SOURCE_MAP_LIST).split(COMMA);
+            // XXX: This may have to use new File(FileUtils.resolveFile(filePath,FILE_NAME_DITA_LIST_XML)).getParent()
+            final Job job = new Job(new File(filePath));
+            final String copytosourcelist[] = job.getProperty(COPYTO_SOURCE_LIST).split(COMMA);
+            final String copytotarget2sourcemaplist[] = job.getProperty(COPYTO_TARGET_TO_SOURCE_MAP_LIST).split(COMMA);
             //in the following, all the 4 arrays are updated according to the set copyto and
             //map copytotarget2source.
 
@@ -637,7 +632,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                     }
                     bufferedWriter.append("\n");
                 }
-                property.setProperty(COPYTO_SOURCE_LIST, temp.toString());
+                job.setProperty(COPYTO_SOURCE_LIST, temp.toString());
                 bufferedWriter.flush();
             } finally {
                 if (bufferedWriter != null) {
@@ -664,38 +659,22 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                     }
                     bufferedWriter.append("\n");
                 }
-                property.setProperty(COPYTO_TARGET_TO_SOURCE_MAP_LIST, temp.toString());
+                job.setProperty(COPYTO_TARGET_TO_SOURCE_MAP_LIST, temp.toString());
                 bufferedWriter.flush();
             } finally {
                 bufferedWriter.close();
             }
 
-            property.store(output, null);
-            property.storeToXML(xmlDitaList, null);
-
+            job.write();
         }catch (final Exception e){
             //edited by Alan on Date:2009-11-02 for Work Item:#1590 start
             /*logger.logWarn(e.toString());*/
             logger.logException(e);
             //edited by Alan on Date:2009-11-02 for Work Item:#1590 end
         } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (final IOException e) {
-                    logger.logException(e);
-                }
-            }
             if (output != null) {
                 try {
                     output.close();
-                } catch (final IOException e) {
-                    logger.logException(e);
-                }
-            }
-            if (xmlDitaList != null) {
-                try {
-                    xmlDitaList.close();
                 } catch (final IOException e) {
                     logger.logException(e);
                 }

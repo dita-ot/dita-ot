@@ -24,6 +24,7 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.MapIndexReader;
 import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.ListUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.DitaIndexWriter;
@@ -61,9 +62,9 @@ final class MoveIndexModule implements AbstractPipelineModule {
             tempDir = new File(baseDir, tempDir).getAbsolutePath();
         }
         
-        Properties properties = null;
+        Job job = null;
         try{
-            properties = ListUtils.getDitaList();
+            job = new Job(new File(tempDir));
         } catch(final IOException e) {
             throw new DITAOTException(e);
         }
@@ -74,7 +75,7 @@ final class MoveIndexModule implements AbstractPipelineModule {
                 .append(SLASH).append(MAP_TOPICMETA.localName)
                 .append(SLASH).append(TOPIC_KEYWORDS.localName).toString());
 
-        final Set<String> fullditamaplist = StringUtils.restoreSet(properties.getProperty(FULL_DITAMAP_LIST));
+        final Set<String> fullditamaplist = StringUtils.restoreSet(job.getProperty(FULL_DITAMAP_LIST));
         for(final String fileName : fullditamaplist){
             //FIXME: this reader needs parent directory for further process
             indexReader.read(new File(tempDir, fileName).getAbsolutePath());

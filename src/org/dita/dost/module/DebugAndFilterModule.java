@@ -94,10 +94,10 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.DitaValReader;
-import org.dita.dost.reader.ListReader;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.TimingUtils;
 import org.dita.dost.writer.DitaWriter;
@@ -130,7 +130,13 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
     private String extName = null;
     private String tempDir = "";
 
-    private void updateProperty (final String listName, final Properties property){
+    /**
+     * Update property value
+     * 
+     * @param listName name of list to update
+     * @param property property to update
+     */
+    private void updateProperty (final String listName, final Job property){
         final StringBuffer result = new StringBuffer(INT_1024);
         final String propValue = property.getProperty(listName);
 
@@ -248,14 +254,11 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                 ditavalFile = new File(baseDir, ditavalFile).getAbsolutePath();
             }
 
-            final ListReader listReader = new ListReader();
-            listReader.setLogger(logger);
-            //null means default path: tempdir/dita.xml.properties
-            listReader.read(null);
+            final Job job = new Job(new File(tempDir));
 
-            final List<String> parseList = (List<String>) listReader.getContent().getCollection();
-            inputDir = (String) listReader.getContent().getValue();
-            inputMap = new File(inputDir + File.separator + listReader.getInputMap()).getAbsolutePath();
+            final List<String> parseList = (List<String>) job.getCollection();
+            inputDir = (String) job.getValue();
+            inputMap = new File(inputDir + File.separator + job.getInputMap()).getAbsolutePath();
 
             // Output subject schemas
             outputSubjectScheme();
@@ -337,13 +340,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             //Added by William on 2010-04-16 for cvf flag support end
 
             // reload the property for processing of copy-to
-            final File xmlListFile=new File(tempDir, FILE_NAME_DITA_LIST_XML);
-            if(xmlListFile.exists()) {
-                listReader.read(xmlListFile.getAbsolutePath());
-            } else {
-                listReader.read(new File(tempDir, FILE_NAME_DITA_LIST).getAbsolutePath());
-            }
-            performCopytoTask(tempDir, listReader);
+            performCopytoTask(tempDir, new Job(new File(tempDir)));
         } catch (final Exception e) {
             e.printStackTrace();
             throw new DITAOTException("Exception doing debug and filter module processing: " + e.getMessage(), e);
@@ -377,6 +374,11 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 
     }
 
+    /**
+     * Read XML properties file.
+     * 
+     * @param filename XML properties file path, relative to temporary directory
+     */
     private Map<String, Set<String>> readMapFromXML(final String filename) {
         final File inputFile = new File(tempDir, filename);
         final Map<String, Set<String>> graph = new HashMap<String, Set<String>>();
@@ -410,6 +412,11 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
         return Collections.unmodifiableMap(graph);
     }
 
+    /**
+     * Output subject schema file.
+     * 
+     * @throws DITAOTException if generation files
+     */
     private void outputSubjectScheme() throws DITAOTException {
 
         final Map<String, Set<String>> graph = readMapFromXML(FILE_NAME_SUBJECT_RELATION);
@@ -570,6 +577,14 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
         return null;
     }
 
+    /**
+     * Serialize subject scheme file.
+     * 
+     * @param filename output filepath
+     * @param root subject scheme document
+     * 
+     * @throws DITAOTException if generation fails
+     */
     private void generateScheme(final String filename, final Document root) throws DITAOTException {
         try {
             final FileOutputStream file = new FileOutputStream(new File(filename));
@@ -591,11 +606,11 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
     }
 
 
-    /*
+    /**
      * Execute copy-to task, generate copy-to targets base on sources
      */
-    private void performCopytoTask(final String tempDir, final ListReader listReader) {
-    	Map<String, String> copytoMap  = listReader.getCopytoMap();
+    private void performCopytoTask(final String tempDir, final Job job) {
+    	Map<String, String> copytoMap  = job.getCopytoMap();
     	
     	for (final Map.Entry<String, String> entry: copytoMap.entrySet()) {
             final String copytoTarget = entry.getKey();
@@ -614,13 +629,21 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                 logger.logWarn(MessageUtils.getMessage("DOTX064W", prop).toString());
                 //edited by Alan on Date:2009-11-02 for Work Item:#1590 end
             }else{
-                String inputMapInTemp = new File(tempDir + File.separator + listReader.getInputMap()).getAbsolutePath();
+                String inputMapInTemp = new File(tempDir + File.separator + job.getInputMap()).getAbsolutePath();
                 copyFileWithPIReplaced(srcFile, targetFile, copytoTarget, inputMapInTemp);
             }
         }
     }
     
     
+    /**
+     * Copy files and replace workdir PI contents.
+     * 
+     * @param src
+     * @param target
+     * @param copytoTargetFilename
+     * @param inputMapInTemp
+     */
     public void copyFileWithPIReplaced(final File src, final File target, String copytoTargetFilename, String inputMapInTemp ) {
         BufferedReader bfis = null;
         OutputStreamWriter bfos = null;
@@ -687,54 +710,26 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
         }
     }
 
-    private void updateList(final String tempDir){
-        final Properties property = new Properties();
-        FileInputStream in = null;
-        FileOutputStream output = null;
-        FileOutputStream xmlDitalist=null;
-        try{
-            in = new FileInputStream( new File(tempDir, FILE_NAME_DITA_LIST_XML));
-            //property.load(new FileInputStream( new File(tempDir, FILE_NAME_DITA_LIST)));
-            property.loadFromXML(in);
-            for (final String element : PROPERTY_UPDATE_LIST) {
-                updateProperty(element, property);
-            }
-
-            output = new FileOutputStream(new File(tempDir, FILE_NAME_DITA_LIST));
-            xmlDitalist=new FileOutputStream(new File(tempDir,FILE_NAME_DITA_LIST_XML));
-            property.store(output, null);
-            property.storeToXML(xmlDitalist, null);
-            output.flush();
-            xmlDitalist.flush();
-        } catch (final Exception e){
-            logger.logException(e);
-        } finally{
-            if (in != null) {
-                try{
-                    in.close();
-                }catch(final IOException e){
-                    logger.logException(e);
-                }
-            }
-            if (output != null) {
-                try{
-                    output.close();
-                }catch(final IOException e){
-                    logger.logException(e);
-                }
-            }
-            if (xmlDitalist != null) {
-                try{
-                    xmlDitalist.close();
-                }catch(final IOException e){
-                    logger.logException(e);
-                }
-            }
+    /**
+     * Read job configuration, update properties, and serialise.
+     * 
+     * @param tempDir temporary directory path
+     * @throws IOException 
+     */
+    private void updateList(final String tempDir) throws IOException{
+        final Job job = new Job(new File(tempDir));
+        for (final String element : PROPERTY_UPDATE_LIST) {
+            updateProperty(element, job);
         }
-
+        job.write();
     }
 
     //Added by William on 2010-04-16 for cvf flag support start
+    /**
+     * Update dictionary
+     * 
+     * @param tempDir temporary directory
+     */
     private void updateDictionary(final String tempDir){
         //orignal map
         final Map<String, Set<String>> dic = readMapFromXML(FILE_NAME_SUBJECT_DICTIONARY);
@@ -757,7 +752,9 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
         //File inputFile = new File(tempDir, FILE_NAME_SUBJECT_DICTIONARY);
 
     }
-    //Method for writing a map into xml file.
+    /**
+     * Method for writing a map into xml file.
+     */
     private void writeMapToXML(final Map<String, Set<String>> m, final String filename) {
         if (m == null) {
             return;

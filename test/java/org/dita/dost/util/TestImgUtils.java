@@ -40,16 +40,8 @@ public class TestImgUtils {
     @BeforeClass
     public static void setUp() throws IOException {
         tempDir = TestUtils.createTempDir(TestImgUtils.class);
-        final Properties prop = new Properties();
-        OutputStream ditaList = null;
-        try {
-            ditaList = new BufferedOutputStream(new FileOutputStream(new File(tempDir, FILE_NAME_DITA_LIST_XML)));
-            prop.storeToXML(ditaList, null);
-        } finally {
-            if (ditaList != null) {
-                ditaList.close();
-            }
-        }
+        final Job job = new Job(new Properties(), tempDir);
+        job.write();
         DitaURIResolverFactory.setPath(tempDir.getAbsolutePath());
     }
     

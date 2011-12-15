@@ -48,6 +48,21 @@ public final class Job {
     }
 
     /**
+     * Create new job configuration instance. Initialise from properties file.
+     *  
+     * @param props properties file
+     * @param tempDir temporary directory
+     */
+    public Job(final Properties props, final File tempDir) {
+        this.tempDir = tempDir;
+        prop = new Properties();
+        for (final Map.Entry<Object, Object> e: props.entrySet()) {
+            prop.put(e.getKey(), e.getValue());
+        }
+        
+    }
+    
+    /**
      * Read temporary configuration files.
      * 
      * @throws IOException if reading configuration files failed
