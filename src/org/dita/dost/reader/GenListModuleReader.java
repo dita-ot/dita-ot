@@ -67,7 +67,8 @@ public final class GenListModuleReader extends AbstractXMLReader {
 
     /** Map of XML catalog info */
     private Map<String, String> catalogMap = null;
-
+    /** Filter utils */
+    private FilterUtils filterUtils;
     /** Basedir of the current parsing file */
     private String currentDir = null;
 
@@ -300,8 +301,15 @@ public final class GenListModuleReader extends AbstractXMLReader {
         } catch (final SAXNotSupportedException e1) {
             logger.logException(e1);
         }
-
-
+    }
+    
+    /**
+     * Set content filter.
+     * 
+     * @param filterUtils filter utils
+     */
+    public void setFilterUtils(final FilterUtils filterUtils) {
+        this.filterUtils = filterUtils;
     }
 
     /**
@@ -865,7 +873,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
         }
 
         // Ignore element that has been filtered out.
-        if (FilterUtils.needExclude(atts, props)) {
+        if (filterUtils.needExclude(atts, props)) {
             insideExcludedElement = true;
             ++excludedLevel;
             return;

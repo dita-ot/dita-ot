@@ -14,6 +14,7 @@ import static org.dita.dost.util.Constants.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -271,9 +272,21 @@ public final class DitaValReader extends AbstractXMLReader {
      * @return filter map
      */
     public Map<String, String> getFilterMap() {
-        schemeFilterMap.putAll(filterMap);
-        return schemeFilterMap;
+        final Map<String, String> res = new HashMap<String, String>();
+        res.putAll(schemeFilterMap);
+        res.putAll(filterMap);
+        return Collections.unmodifiableMap(res);
     }
+    
+    /**
+     * Get subject scheme filter map
+     *  
+     * @return subject scheme filter map
+     */
+    public Map<String, String> getSchemeFilterMap() {
+        return Collections.unmodifiableMap(schemeFilterMap);
+    }
+    
     /**
      * reset.
      */

@@ -29,6 +29,7 @@ import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.util.Constants;
+import org.dita.dost.util.FilterUtils;
 import org.dita.dost.writer.DitaWriter;
 import org.junit.After;
 import org.junit.Before;
@@ -117,6 +118,9 @@ public class TestDitaWriter {
         assertEquals("flag", map.get("product=key2"));
         assertEquals("include", map.get("product=key3"));
 
+        final FilterUtils filterUtils = new FilterUtils();
+        filterUtils.setFilterMap(map);
+        writer.setFilterUtils(filterUtils);
         final Content content = new ContentImpl();
         content.setValue(tempDir.getAbsolutePath());
         writer.setContent(content);

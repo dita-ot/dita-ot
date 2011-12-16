@@ -268,9 +268,8 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
             reader = new GenListModuleReader();
             reader.setLogger(logger);
             reader.initXMLReader(ditaDir, xmlValidate, rootFile, setSystemid);
-
-            // first parse filter file for later use
-            parseFilterFile();
+            final FilterUtils filterUtils = parseFilterFile();
+            reader.setFilterUtils(filterUtils);
 
             addToWaitList(inputFile);
             processWaitList();
@@ -837,7 +836,8 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
         return buff.toString();
     }
 
-    private void parseFilterFile() {
+    private FilterUtils parseFilterFile() {
+        final FilterUtils filterUtils = new FilterUtils();
         if (ditavalFile != null) {
             final DitaValReader ditaValReader = new DitaValReader();
             ditaValReader.setLogger(logger);
@@ -845,13 +845,14 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 
             ditaValReader.read(ditavalFile);
             // Store filter map for later use
-            FilterUtils.setFilterMap(ditaValReader.getFilterMap());
+            filterUtils.setFilterMap(ditaValReader.getFilterMap());
             // Store flagging image used for image copying
             flagImageSet.addAll(ditaValReader.getImageList());
             relFlagImagesSet.addAll(ditaValReader.getRelFlagImageList());
         } else {
-            FilterUtils.setFilterMap(null);
+            filterUtils.setFilterMap(null);
         }
+        return filterUtils;
     }
 
     private void refactoringResult() {

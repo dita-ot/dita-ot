@@ -270,11 +270,12 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             filterReader.setLogger(logger);
             filterReader.initXMLReader("yes".equals(input.getAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID)));
 
+            final FilterUtils filterUtils = new FilterUtils();
             Content content;
             if (ditavalFile!=null){
                 filterReader.read(ditavalFile);
                 content = filterReader.getContent();
-                FilterUtils.setFilterMap(filterReader.getFilterMap());
+                filterUtils.setFilterMap(filterReader.getFilterMap());
             }else{
                 content = new ContentImpl();
                 //FilterUtils.setFilterMap(null);
@@ -292,6 +293,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             fileWriter.setContent(content);
             fileWriter.setExtName(extName);
             fileWriter.setTranstype(transtype);
+            fileWriter.setFilterUtils(filterUtils);
 
             final Map<String, Set<String>> dic = readMapFromXML(FILE_NAME_SUBJECT_DICTIONARY);
 
@@ -302,6 +304,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                 final Set<String> schemaSet = dic.get(filename);
                 filterReader.reset();
                 if (schemaSet != null) {
+                    final FilterUtils fu = new FilterUtils();
                     for (final String schema: schemaSet) {
                         filterReader.loadSubjectScheme(FileUtils.resolveFile(
                                 tempDir, schema)+".subm");
@@ -309,19 +312,19 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                     if (ditavalFile!=null){
                         filterReader.filterReset();
                         filterReader.read(ditavalFile);
-                        FilterUtils.setFilterMap(filterReader.getFilterMap());
+                        final Map<String, String> fm = new HashMap<String, String>();
+                        fm.putAll(filterReader.getSchemeFilterMap());
+                        fm.putAll(filterUtils.getFilterMap());
+                        fu.setFilterMap(fm);
                     } else {
-                        FilterUtils.setFilterMap(null);
+                        fu.setFilterMap(null);
                     }
+                    fileWriter.setFilterUtils(fu);
 
                     fileWriter.setValidateMap(filterReader.getValidValuesMap());
                     fileWriter.setDefaultValueMap(filterReader.getDefaultValueMap());
                 } else {
-                    if (ditavalFile!=null){
-                        FilterUtils.setFilterMap(filterReader.getFilterMap());
-                    } else {
-                        FilterUtils.setFilterMap(null);
-                    }
+                    fileWriter.setFilterUtils(filterUtils);
                 }
 
                 if (!new File(inputDir, filename).exists()) {

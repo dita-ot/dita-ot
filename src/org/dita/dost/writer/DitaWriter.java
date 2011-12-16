@@ -335,9 +335,11 @@ public final class DitaWriter extends AbstractXMLWriter {
 
     private Map<String, Map<String, Set<String>>> validateMap = null;
     private Map<String, Map<String, String>> defaultValueMap = null;
-
+    /** Filter utils */
+    private FilterUtils filterUtils;
     /** XMLReader instance for parsing dita file */
     private XMLReader reader = null;
+    
     /**
      * Default constructor of DitaWriter class.
      * 
@@ -384,6 +386,15 @@ public final class DitaWriter extends AbstractXMLWriter {
         validateMap = null;
     }
 
+    /**
+     * Set content filter.
+     * 
+     * @param filterUtils filter utils
+     */
+    public void setFilterUtils(final FilterUtils filterUtils) {
+        this.filterUtils = filterUtils;
+    }
+    
     /**
      * Initialize XML reader used for pipeline parsing.
      * @param ditaDir ditaDir
@@ -1157,7 +1168,7 @@ public final class DitaWriter extends AbstractXMLWriter {
             // If it is the start of a child of an excluded tag, level increase
             level++;
         } else { // exclude shows whether it's excluded by filtering
-            if (foreignLevel <= 1 && FilterUtils.needExclude(atts, props)){
+            if (foreignLevel <= 1 && filterUtils.needExclude(atts, props)){
                 exclude = true;
                 level = 0;
             }else{

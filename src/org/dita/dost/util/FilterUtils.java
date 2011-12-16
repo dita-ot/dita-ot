@@ -29,27 +29,22 @@ import org.xml.sax.Attributes;
  * @author Wu, Zhi Qiang
  */
 public final class FilterUtils {
-    private static Map<String, String> filterMap = null;
-    private static Set<String> notMappingRules=new HashSet<String>();
-    /**
-     * Default Constructor
-     *
-     */
-    private FilterUtils(){
-    }
+    private Map<String, String> filterMap = null;
+    private Set<String> notMappingRules=new HashSet<String>();
+
     /**
      * Set the filter map.
      * @param filtermap The filterMap to set.
      */
-    public static void setFilterMap(final Map<String, String> filtermap) {
-        FilterUtils.filterMap = filtermap;
+    public void setFilterMap(final Map<String, String> filtermap) {
+        filterMap = filtermap;
     }
 
     /**
      * Getter for filter map.
      * @return filter map
      */
-    public static Map<String, String> getFilterMap() {
+    public Map<String, String> getFilterMap() {
         return filterMap;
     }
 
@@ -60,7 +55,7 @@ public final class FilterUtils {
      * @return true if any one of attributes 'audience', 'platform',
      * 'product', 'otherprops' was excluded.
      */
-    public static boolean needExclude(final Attributes atts, final String extProps) {
+    public boolean needExclude(final Attributes atts, final String extProps) {
         boolean ret = false;
         boolean extRet = false;
         StringTokenizer prop = null;
@@ -139,7 +134,7 @@ public final class FilterUtils {
      * @param attValue
      * @return
      */
-    private static boolean extCheckExclude(final List<String> propList, final String attValue){
+    private boolean extCheckExclude(final List<String> propList, final String attValue){
         int propListIndex = 0;
         boolean hasNullAction = false;
         boolean hasExcludeAction = false;
@@ -238,7 +233,7 @@ public final class FilterUtils {
      * @param attValue
      * @return
      */
-    private static boolean checkExclude(final String attName, final String attValue) {
+    private boolean checkExclude(final String attName, final String attValue) {
         StringTokenizer tokenizer;
 
         //for the special value :"" or " ",just ignore it
@@ -285,7 +280,7 @@ public final class FilterUtils {
 
         return true;
     }
-    private static boolean checkExcludeOfGlobalDefaultAction(){
+    private boolean checkExcludeOfGlobalDefaultAction(){
         final String defaultAction=filterMap.get(DEFAULT_ACTION);
         if(defaultAction==null) {
             return false;
@@ -297,7 +292,7 @@ public final class FilterUtils {
             }
         }
     }
-    private static void checkRuleMapping(final String attName, final String attValue){
+    private void checkRuleMapping(final String attName, final String attValue){
         StringTokenizer tokenizer;
         if (attValue == null || attValue.trim().length()==0 ) {
             return ;
@@ -314,18 +309,18 @@ public final class FilterUtils {
             }
         }
     }
-    private static void noRuleMapping(final String notMappingKey){
+    private void noRuleMapping(final String notMappingKey){
         if(!alreadyShowed(notMappingKey)){
             showInfoOfNoRuleMapping(notMappingKey);
         }
     }
-    private static void showInfoOfNoRuleMapping(final String notMappingKey){
+    private void showInfoOfNoRuleMapping(final String notMappingKey){
         final Properties prop=new Properties();
         prop.put("%1", notMappingKey);
         final DITAOTJavaLogger javaLogger=new DITAOTJavaLogger();
         javaLogger.logInfo(MessageUtils.getMessage("DOTJ031I", prop).toString());
     }
-    private static boolean alreadyShowed(final String notMappingKey){
+    private boolean alreadyShowed(final String notMappingKey){
         if(!notMappingRules.contains(notMappingKey)){
             notMappingRules.add(notMappingKey);
             return false;
