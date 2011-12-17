@@ -138,6 +138,7 @@
     <exclude name="demo/fo/fop/conf/"/>
     <exclude name="demo/fo/fop/lib/"/>
     <exclude name="demo/fo/lib/icu4j.jar"/>
+    <exclude name="demo/fo/src/**"/>
     <exclude name="lib/saxon/*"/>
     <exclude name="lib/icu4j.jar"/>
     <exclude name="lib/log4j.properties"/>
@@ -171,6 +172,7 @@
     <include name="demo/h2d/**"/>
     <include name="demo/dita11/**"/>
     <include name="demo/dita132/**"/>
+    <exclude name="demo/fo/src/**"/>
     <include name="demo/fo/**"/>
     <include name="demo/legacypdf/**"/>
     <include name="demo/tocjs/**"/>
@@ -218,6 +220,8 @@
     <patternset refid="pattern.package.standard.base"/>
     <exclude name="startcmd.*"/>
     <exclude name="buildPackage.*"/>
+    <exclude name="src/**"/>
+    <exclude name="demo/fo/src/**"/>
   </patternset>
   
   <patternset id="pattern.package.source">
@@ -227,6 +231,7 @@
     <exclude name="files.txt"/>
     <exclude name="startcmd.*"/>
     <include name="src/**"/>
+    <include name="demo/fo/src/**"/>
   </patternset>
 
   <patternset id="pattern.package.doc">
