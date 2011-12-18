@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="rel1.5.4" xml:lang="en">
+  <title>DITA Open Toolkit Release 1.6</title>
+  <reference id="general-enhancements-and-changes">
+    <title>General Enhancements and Changes</title>
+    <refbody>
+      <section id="section_h5q_3nt_q2"/>
+    </refbody>
+  </reference>
+  <reference id="reference_yvj_ttj_bd">
+    <title>Migration from previous releases</title>
+    <refbody>
+      <section id="section_tqw_bnt_q2"/>
+    </refbody>
+  </reference>
+  <reference id="rel1.6">
+    <title>SourceForge trackers</title>
+    <refbody>
+      <section>
+        <title>Feature requests</title>
+        <ul>
+          <li> 3458065 PDF2 should fully support core default language</li>
+        </ul>
+      </section>
+      <section>
+        <title>Patches</title>
+      </section>
+      <section>
+        <title>Bugs</title>
+      </section>
+    </refbody>
+  </reference>
+</reference>
