@@ -16,20 +16,8 @@ and your project.  These properties can be divided into three categories:
 <li>Properties specific to the DITA Open Toolkit that you may override</li>
 <li>Properties specific to the DITA Open Toolkit that you should never
 override</li>
-</ul> 	<p>The following tables describes the first group of properties, those specific to your
-        documentation project. Each table describes the properties for one of the following
-        transformation types:</p>
-<ul>
-<li>PDF</li>
-<li>XHTML</li>
-<li platform="windows">HTMLHelp</li>
-<li>WordRTF</li>
-<li>troff</li>
-<li>docbook</li>
-<li>JavaHelp</li>
-<li>eclipsehelp</li>
-<li>ODT (Open Document format)</li>
-</ul></section>
+</ul> 	<p>The following tables describes the first group of properties, grouped by transformation
+        type.</p></section>
 <section><title>Parameters available to all transforms</title><p>The
 following common parameters are available for use by all DITA-OT builds.</p><table>
 <title>Common DITA-OT parameters</title>
@@ -397,10 +385,18 @@ GENERATE-TASK-LABELS.<--></entry>
               <entry id="args.bookmap-order.desc">Specify if frontmatter and backmatter content
                 order is retained in bookmap. Values are "retain" and "discard" (default).</entry>
             </row>
-            <row id="org.dita.pdf2.legacy.use-out-temp" rev="1.5.4" audience="xslt-customizer">
-              <entry><codeph>org.dita.pdf2.use-out-temp</codeph></entry>
-              <entry id="org.dita.pdf2.legacy.use-out-temp.desc">Use legacy processing for temporary
-                files and images. Values are "true" and "false" (default).</entry>
+            <row id="customization.dir" audience="xslt-customizer">
+              <entry><codeph>customization.dir</codeph></entry>
+              <entry>Specifies the customization directory path.</entry>
+            </row>
+            <row id="pdf.formatter">
+              <entry><codeph>pdf.formatter</codeph></entry>
+              <entry>Specified the XSL processor to use. Supported values are:<ul>
+                  <li>"fop" (default)  – Apache FOP</li>
+                  <li>"ah" – Antenna House Formatter</li>
+                  <li>"xep" – RenderX XEP Engine</li>
+                </ul>The Full Easy Install distribution package comes with Apache FOP installed,
+                other XSL processors need to be separately installed. </entry>
             </row>
           </tbody>
         </tgroup>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="configuration" xml:lang="en">
+  <title>Configuration</title>
+  <abstract>
+    <shortdesc>Reference list of DITA-OT configuration properties.</shortdesc>
+    <p>The <filepath>lib/configuration.properties</filepath> file is used to store configuration
+      properties for DITA-OT and plug-ins. The configuration properties are available to both Ant
+      and Java processes, but unlike argument properties, they cannot be set at run-time. </p>
+    <p>The <filepath>lib/org.dita.dost.platform/plugin.properties</filepath> file is used to store
+      configuration properties set by the integration process. The file is regenerated from plug-in
+      configuration each time the integration process is run and should not be edited manually.</p>
+  </abstract>
+  <refbody>
+    <section>
+      <title>Common properties</title>
+      <simpletable>
+        <strow>
+          <stentry><codeph>default.language</codeph></stentry>
+          <stentry>Default language. Allowed values are those defined in IETF BCP 47, <xref
+              href="https://tools.ietf.org/html/bcp47" scope="external">Tags for the Identification
+              of Languages</xref>.</stentry>
+        </strow>
+      </simpletable>
+    </section>
+    <section>
+      <title>PDF properties</title>
+      <simpletable>
+        <strow>
+          <stentry><codeph>org.dita.pdf2.index.frame-markup</codeph></stentry>
+          <stentry>FrameMaker index syntax processing. Allowed values are<ul>
+              <li>"true" — FrameMaker index syntax processing</li>
+              <li>"false" (default) — normal DITA 1.2 index syntax processing</li>
+            </ul></stentry>
+        </strow>
+        <strow>
+          <stentry><codeph>org.dita.pdf2.i18n.enabled</codeph></stentry>
+          <stentry>I18N font processing. Allowed values are<ul>
+              <li>"true" (default) — I18N processing is enabled</li>
+              <li>"false" — I18N processing is disabled</li>
+            </ul></stentry>
+        </strow>
+        <strow>
+          <stentry><codeph>org.dita.pdf2.use-out-temp</codeph></stentry>
+          <stentry>Legacy temporary file mode for generating <filepath>topic.fo</filepath> and
+            graphics into output directory. Allowed values are<ul>
+              <li>"true" — use output directory for XSL FO file processing</li>
+              <li>"false" (default) — use tempory folder for XSL FO processing</li>
+            </ul></stentry>
+        </strow>
+      </simpletable>
+    </section>
+  </refbody>
+</reference>

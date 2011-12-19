@@ -292,8 +292,13 @@ public final class DITAOTBuildLogger implements BuildLogger {
             // always log to log file
             logger.logInfo(msg);
         } else {
-            printMessage(msg, err, priority);
-            logger.logError(msg);
+        	//for error msg return from CHM compiler, such as "[exec] Result: 1", just log it, not count it
+            if(eventTask!=null && "exec".equals(eventTask.getTaskName()) && msg.indexOf("ERROR") == -1) {
+            	logger.logError(msg);
+            } else {
+            	printMessage(msg, err, priority);
+            	logger.logError(msg);
+            }
         }
     }
 

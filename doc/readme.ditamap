@@ -21,9 +21,7 @@
     <topicref href="readme/DITA-javacmd.xml">
       <topicref href="readme/dita-ot_java_properties.dita"/>
     </topicref>
-    <topicref href="readme/DITA-log.xml"/>
-    <topicref href="readme/DITA-troubleshooting.xml"/>
-    <topicref href="readme/DITA-limitations.xml" processing-role="resource-only" toc="no"/>
+    <topicref href="readme/configuration.dita"/>
 <topicref href="readme/AvailableTransforms.dita">
 <topicref href="readme/dita2xhtml.dita"></topicref><?Pub Caret -2?>
 <topicref href="readme/dita2eclipsehelp.dita"></topicref>
@@ -38,11 +36,14 @@
 <topicref href="readme/jcomm.xml#jcomm" toc="no"></topicref>
 </topicref>
 <topicref href="readme/dita2eclipsecontent.dita"></topicref>
-<topicref href="readme/dita2legacypdf.dita"></topicref>
+<topicref href="readme/dita2legacypdf.dita" importance="deprecated"></topicref>
 <topicref href="readme/DITA-h2d.xml">
 <topicref href="readme/DITA-h2d-ant.xml" toc="no"></topicref>
 <topicref href="readme/DITA-h2d-java.xml" toc="no"></topicref>
 </topicref>
 </topicref>
+    <topicref href="readme/DITA-log.xml"/>
+    <topicref href="readme/DITA-troubleshooting.xml"/>
+    <topicref href="readme/DITA-limitations.xml" processing-role="resource-only" toc="no"/>
 </topicref>
 </map>
