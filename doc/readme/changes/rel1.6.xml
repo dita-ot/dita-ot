@@ -20,7 +20,10 @@
       <section>
         <title>Feature requests</title>
         <ul>
-          <li> 3458065 PDF2 should fully support core default language</li>
+          <li>3453816 Deprecate logException and add logError(String, Throwable) (milestone 1)</li>
+          <li>3458065 PDF2 should fully support core default language (milestone 1)</li>
+          <li>3460151 Use Job to read/write job configuration files (milestone 1)</li>
+          <li>1785391 Make Java code thread-safe (in progress)</li>
         </ul>
       </section>
       <section>
@@ -28,6 +31,9 @@
       </section>
       <section>
         <title>Bugs</title>
+        <ul>
+          <li>3462389 v 1.5.4 fails to create PDF with external topic ref (milestone 1)</li>
+        </ul>
       </section>
     </refbody>
   </reference>
