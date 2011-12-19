@@ -172,6 +172,7 @@
     <condition property="outputFile" value="${dita.map.output.dir}/${outputFile.base}${xsl.formatter.ext}">
       <not><isset property="outputFile"/></not>
     </condition>
+    <mkdir dir="${dita.map.output.dir}"/>
     
     <fop format="${fop.formatter.output-format}" fofile="${pdf2.temp.dir}/topic.fo" basedir="${pdf2.temp.dir}"
          outfile="${outputFile}" messagelevel="info" relativebase="true" force="true"
