@@ -687,7 +687,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
             filepath = inputFile.getAbsolutePath();
             final File outputFile = new File(tempDir, filename + ATTRIBUTE_NAME_KEYREF);
             output = new OutputStreamWriter(new FileOutputStream(outputFile),UTF8);
-            parser.parse(inputFile.getAbsolutePath());
+            parser.parse(inputFile.toURI().toString());
             output.close();
             if (!inputFile.delete()) {
                 final Properties prop = new Properties();

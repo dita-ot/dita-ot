@@ -561,7 +561,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
             ditaFileOutput = new OutputStreamWriter(fileOutput, UTF8);
             output = ditaFileOutput;
             reader.setErrorHandler(new DITAOTXMLErrorHandler(file));
-            reader.parse(file);
+            reader.parse(inputFile.toURI().toString());
 
             output.close();
             if (!inputFile.delete()) {

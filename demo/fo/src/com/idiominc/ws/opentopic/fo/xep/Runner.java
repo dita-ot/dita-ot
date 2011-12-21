@@ -116,7 +116,7 @@ public class Runner {
         SAXSource source = null;
         try {
             final File in = new File(args[0]);
-            final InputSource saxsrc = new InputSource(in.toURL().toString());
+            final InputSource saxsrc = new InputSource(in.toURI().toString());
             source = new SAXSource(saxsrc);
         } catch (final Exception e) {
             System.out.println("Source creation failed: " + e.getMessage());

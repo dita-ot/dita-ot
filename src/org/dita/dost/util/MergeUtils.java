@@ -166,7 +166,7 @@ public final class MergeUtils {
                     logger.logException(e);
                 }
             }
-            reader.parse(localDir+File.separator+localPath);
+            reader.parse(new File(localDir+File.separator+localPath).toURI().toString());
         }catch (final Exception e){
             logger.logException(e);
         }
