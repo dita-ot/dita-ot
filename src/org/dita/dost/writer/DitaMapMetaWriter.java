@@ -654,7 +654,7 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
             output = ditaFileOutput;
 
             topicIdList.clear();
-            reader.parse(file);
+            reader.parse(inputFile.toURI().toString());
 
             output.close();
             if(!inputFile.delete()){

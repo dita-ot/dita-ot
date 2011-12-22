@@ -96,7 +96,7 @@ public final class ChunkMapReader implements AbstractReader {
         try {
             final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             final DocumentBuilder builder = factory.newDocumentBuilder();
-            final Document doc = builder.parse(filename);
+            final Document doc = builder.parse(inputFile);
 
             // Start Tagsmiths modification: Added logic to collect the
             // workdir and path2proj processing instructions.

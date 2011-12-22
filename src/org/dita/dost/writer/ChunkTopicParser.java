@@ -852,7 +852,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                 }
 
                 reader.setErrorHandler(new DITAOTXMLErrorHandler(currentParsingFile));
-                reader.parse(currentParsingFile);
+                reader.parse(new File(currentParsingFile).toURI().toString());
                 output.flush();
 
                 //remove stub and siblingStub
@@ -1064,7 +1064,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                         currentParsingFileTopicIDChangeTable = new HashMap<String, String>();
                         // Added on 2010-11-12 for bug 3090803 end
                         //TODO recursive point
-                        reader.parse(currentParsingFile);
+                        reader.parse(new File(currentParsingFile).toURI().toString());
                         // Added on 2010-11-12 for bug 3090803 start
                         if(currentParsingFileTopicIDChangeTable.size()>0) {
                             String href = element.getAttribute(ATTRIBUTE_NAME_HREF);
@@ -1343,7 +1343,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
         try{
             reader = StringUtils.getXMLReader();
             reader.setContentHandler(parser);
-            reader.parse(absolutePathToFile);
+            reader.parse(new File(absolutePathToFile).toURI().toString());
         }catch (final Exception e){
             logger.logException(e);
         }
