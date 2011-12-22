@@ -9,24 +9,38 @@
  */
 package org.dita.dost.reader;
 
+import static javax.xml.transform.OutputKeys.*;
 import static org.dita.dost.util.Constants.*;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.sax.SAXTransformerFactory;
+import javax.xml.transform.sax.TransformerHandler;
+import javax.xml.transform.stream.StreamResult;
+
+import org.xml.sax.helpers.XMLFilterImpl;
+
+import org.xml.sax.helpers.AttributesImpl;
+
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.Content;
-import org.dita.dost.module.ContentImpl;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.MergeUtils;
 import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.XMLUtils;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -35,69 +49,66 @@ import org.xml.sax.XMLReader;
  * MergeMapParser reads the ditamap file after preprocessing and merges
  * different files into one intermediate result. It calls MergeTopicParser
  * to process the topic file. Instances are reusable but not thread-safe.
- * 
- * @author Zhang, Yuan Peng
  */
-public final class MergeMapParser extends AbstractXMLReader {
+public final class MergeMapParser extends XMLFilterImpl {
+    
+    public static final String ATTRIBUTE_NAME_FIRST_TOPIC_ID = "first_topic_id";
+    public static final String ATTRIBUTE_NAME_OHREF = "ohref";
+    public static final String ATTRIBUTE_NAME_OID = "oid";
     
     private final XMLReader reader;
-    private final StringBuffer mapInfo;
     private final MergeTopicParser topicParser;
     private final MergeUtils util;
-    private final ContentImpl content;
     private String dirPath = null;
     private String tempdir = null;
 
     private final Stack<String> processStack;
     private int processLevel;
+    private final ByteArrayOutputStream topicBuffer;
+    private final SAXTransformerFactory stf;
+    private OutputStream output;
+    private DITAOTLogger logger;
 
     /**
      * Default Constructor.
      */
     public MergeMapParser() {
-        mapInfo = new StringBuffer(INT_1024);
         processStack = new Stack<String>();
         processLevel = 0;
         util = new MergeUtils();
         topicParser = new MergeTopicParser(util);
         topicParser.setLogger(logger);
-        content = new ContentImpl();
+        topicBuffer = new ByteArrayOutputStream();
         try{
             reader = StringUtils.getXMLReader();
             reader.setContentHandler(this);
             reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
+            
+            final TransformerFactory tf = TransformerFactory.newInstance();
+            if (!tf.getFeature(SAXTransformerFactory.FEATURE)) {
+                throw new RuntimeException("SAX transformation factory not supported");
+            }
+            stf = (SAXTransformerFactory) tf;
+            final TransformerHandler s = stf.newTransformerHandler();
+            s.getTransformer().setOutputProperty(OMIT_XML_DECLARATION , "yes");
+            s.setResult(new StreamResult(topicBuffer));
+            topicParser.setContentHandler(s);
         }catch (final Exception e){
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
     }
-
-    /**
-     * @return content value {@code StringBuffer}
-     */
-    @Override
-    public Content getContent() {
-        content.setValue(mapInfo.append((StringBuffer)topicParser.getContent().getValue()));
-        return content;
+    
+    public final void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
     }
 
     /**
-     * Read map.
+     * Set output.
      * 
-     * @param ditaInput input file path + pipe character + temporary directory path, or only input file path
-     * @deprecated use {@link #read(String, String)} instead
+     * @param output output stream
      */
-    @Deprecated
-    @Override
-    public void read(final String ditaInput) {
-        String filename;
-        if(ditaInput.contains(STICK)){
-            filename = ditaInput.substring(0, ditaInput.indexOf(STICK));
-            tempdir = ditaInput.substring(ditaInput.indexOf(STICK)+1);
-        }else{
-            filename = ditaInput;
-            tempdir = new File(filename).getParent();
-        }
-        read(filename, tempdir);
+    public void setOutputStream(final OutputStream output) {
+        this.output = output;
     }
 
     /**
@@ -109,10 +120,17 @@ public final class MergeMapParser extends AbstractXMLReader {
     public void read(final String filename, final String tmpDir) {
         tempdir = tmpDir != null ? tmpDir : new File(filename).getParent();
         try{
+            final TransformerHandler s = stf.newTransformerHandler();
+            s.getTransformer().setOutputProperty(OMIT_XML_DECLARATION, "yes");
+            s.setResult(new StreamResult(output));
+            setContentHandler(s);
             final File input = new File(filename);
             dirPath = input.getParent();
             reader.setErrorHandler(new DITAOTXMLErrorHandler(input.getAbsolutePath()));
+            topicParser.getContentHandler().startDocument();
             reader.parse(input.toURI().toString());
+            topicParser.getContentHandler().endDocument();
+            output.write(topicBuffer.toByteArray());
         }catch(final Exception e){
             logger.logException(e);
         }
@@ -126,92 +144,72 @@ public final class MergeMapParser extends AbstractXMLReader {
                 value = processStack.pop();
             }
             processLevel--;
-
             if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(value)) {
                 return;
             }
         }
-        mapInfo.append(LESS_THAN)
-        .append(SLASH)
-        .append(qName)
-        .append(GREATER_THAN);
+        getContentHandler().endElement(uri, localName, qName);
     }
 
     @Override
     public void characters(final char[] ch, final int start, final int length) throws SAXException {
         if (processStack.empty() || !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processStack.peek())){
-            mapInfo.append(StringUtils.escapeXML(ch, start, length));
+            getContentHandler().characters(ch, start, length);
         }
     }
 
     @Override
-    public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
-        final String attrValue = atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE);
+    public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
+        final String attrValue = attributes.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE);
         if (attrValue != null) {
             processStack.push(attrValue);
             processLevel++;
+            // @processing-role='resource-only'
             if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(attrValue)) {
-                // @processing-role='resource-only'
                 return;
             }
         } else if (processLevel > 0) {
             processLevel++;
+            // Child of @processing-role='resource-only'
             if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processStack.peek())) {
-                // Child of @processing-role='resource-only'
                 return;
             }
         }
-
-        mapInfo.append(LESS_THAN).append(qName);
-        final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
-
-        final int attsLen = atts.getLength();
-        for (int i = 0; i < attsLen; i++) {
-            final String attQName = atts.getQName(i);
-            String attValue = atts.getValue(i);
-            if(ATTRIBUTE_NAME_HREF.equals(attQName)
-                    && !StringUtils.isEmptyString(attValue)
-                    && classValue != null
-                    && MAP_TOPICREF.matches(classValue)){
+        AttributesImpl atts = null;
+        if (MAP_TOPICREF.matches(attributes)) {
+            String attValue = attributes.getValue(ATTRIBUTE_NAME_HREF);
+            if (attValue != null) {
+                atts = new AttributesImpl(attributes);
                 final String scopeValue = atts.getValue(ATTRIBUTE_NAME_SCOPE);
                 final String formatValue = atts.getValue(ATTRIBUTE_NAME_FORMAT);
-
-                if((scopeValue == null
-                        || ATTR_SCOPE_VALUE_LOCAL.equalsIgnoreCase(scopeValue))
-                        && (formatValue == null
-                        || ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatValue))){
+                if ((scopeValue == null || ATTR_SCOPE_VALUE_LOCAL.equalsIgnoreCase(scopeValue))
+                        && (formatValue == null || ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatValue))) {
                     final String ohref = attValue;
                     final String copyToValue = atts.getValue(ATTRIBUTE_NAME_COPY_TO);
                     if (!StringUtils.isEmptyString(copyToValue)) {
                         attValue = copyToValue;
                     }
+                    XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OHREF, ohref);
                     if (util.isVisited(attValue)){
-                        mapInfo.append(STRING_BLANK)
-                        .append("ohref").append(EQUAL).append(QUOTATION)
-                        .append(StringUtils.escapeXML(ohref)).append(QUOTATION);
-
-                        attValue = new StringBuffer(SHARP).append(util.getIdValue(attValue)).toString();
-                    }else{
-                        mapInfo.append(STRING_BLANK)
-                        .append("ohref").append(EQUAL).append(QUOTATION)
-                        .append(StringUtils.escapeXML(ohref)).append(QUOTATION);
-
+                        attValue = SHARP + util.getIdValue(attValue);
+                    } else {
                         //parse the topic
                         util.visit(attValue);
-                        if (new File(dirPath, attValue.indexOf(SHARP) != -1 ? attValue.substring(0, attValue.indexOf(SHARP)) : attValue).exists()) {
-                            final String fileId = topicParser.parse(attValue,dirPath);
-                            String firstTopicId = new StringBuffer(SHARP).append(fileId).toString();
-                            if(util.getIdValue(attValue)!=null) {
-                            	attValue = new StringBuffer(SHARP).append(util.getIdValue(attValue)).toString();
+                        final File f = new File(dirPath,
+                                                attValue.indexOf(SHARP) != -1
+                                                ? attValue.substring(0, attValue.indexOf(SHARP))
+                                                : attValue) ;
+                        if (f.exists()) {
+                            topicParser.parse(attValue,dirPath);
+                            final String fileId = topicParser.getFirstTopicId();
+                            util.addId(attValue, fileId);
+                            String firstTopicId = SHARP + fileId;
+                            if (util.getIdValue(attValue) != null) {
+                            	attValue = SHARP + util.getIdValue(attValue);
                             } else {
                             	attValue = firstTopicId;
-                            }                         
-                            
-                            mapInfo.append(STRING_BLANK)
-                            .append("first_topic_id").append(EQUAL).append(QUOTATION)
-                            .append(StringUtils.escapeXML(firstTopicId)).append(QUOTATION);
-                            
-                            
+                            }                                                     
+                            XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_FIRST_TOPIC_ID, firstTopicId);
                         } else {
                             final String fileName = new File(dirPath, attValue).getAbsolutePath();
                             final Properties prop = new Properties();
@@ -220,26 +218,12 @@ public final class MergeMapParser extends AbstractXMLReader {
                         }
                     }
                 }
-
+                XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_HREF, attValue);
             }
-
-            //output all attributes
-            mapInfo.append(STRING_BLANK)
-            .append(attQName).append(EQUAL).append(QUOTATION)
-            .append(StringUtils.escapeXML(attValue)).append(QUOTATION);
         }
-        mapInfo.append(GREATER_THAN);
-
+        getContentHandler().startElement(uri, localName, qName, atts != null ? atts : attributes);
     }
-
-    @Override
-    public void processingInstruction(final String target, final String data)
-            throws SAXException {
-        final String pi = (data != null) ? target + STRING_BLANK + data : target;
-        mapInfo.append(LESS_THAN + QUESTION
-                + pi + QUESTION + GREATER_THAN);
-    }
-
+    
     @Override
     public void endDocument() throws SAXException {
         // read href dita topic list
@@ -255,21 +239,22 @@ public final class MergeMapParser extends AbstractXMLReader {
             chunkedTopicSet = (chunkedTopicSet == null ? "" : chunkedTopicSet);
             final String hrefTargetList = job.getProperty(HREF_TARGET_LIST);
             final StringTokenizer tokenizer = new StringTokenizer(hrefTargetList,COMMA);
-            while(tokenizer.hasMoreElements())
-            {
-                String element = (String)tokenizer.nextElement();
+            while (tokenizer.hasMoreElements()) {
+                String element = (String) tokenizer.nextElement();
                 if (!new File(dirPath).equals(new File(tempdir))) {
-                    element = FileUtils.getRelativePathFromMap(new File(dirPath,"a.ditamap").getAbsolutePath(), new File(tempdir,element).getAbsolutePath());
+                    element = FileUtils.getRelativePathFromMap(new File(dirPath,"a.ditamap").getAbsolutePath(),
+                                                               new File(tempdir, element).getAbsolutePath());
                 }
-                if(!util.isVisited(element)){
+                if (!util.isVisited(element)) {
                     util.visit(element);
                     if (!resourceOnlySet.contains(element) && (chunkedTopicSet.contains(element)
                             || !skipTopicSet.contains(element))){
                         //ensure the file exists
-                        if(new File(dirPath, element).exists()){
+                        final File f = new File(dirPath, element);
+                        if (f.exists()) {
                             topicParser.parse(element, dirPath);
-                        }else{
-                            final String fileName = new File(dirPath, element).getAbsolutePath();
+                        } else {
+                            final String fileName = f.getAbsolutePath();
                             final Properties prop = new Properties();
                             prop.put("%1", fileName);
                             logger.logError(MessageUtils.getMessage("DOTX008E", prop).toString());
@@ -281,6 +266,8 @@ public final class MergeMapParser extends AbstractXMLReader {
         }catch (final Exception e){
             logger.logException(e);
         }
+        
+        getContentHandler().endDocument();
     }
-
+    
 }

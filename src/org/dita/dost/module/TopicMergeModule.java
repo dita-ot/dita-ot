@@ -9,15 +9,23 @@
  */
 package org.dita.dost.module;
 
+import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
 import static org.dita.dost.util.Constants.*;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
@@ -80,40 +88,54 @@ final class TopicMergeModule implements AbstractPipelineModule {
             return null;
         }
 
-        mapParser.read(ditaInput, tempdir);
-        final String midResult = new StringBuffer(XML_HEAD).append(
-                "<dita-merge xmlns:ditaarch=\"http://dita.oasis-open.org/architecture/2005/\">")
-                .append(((StringBuffer)mapParser.getContent().getValue())).append("</dita-merge>").toString();
-        final StringReader midStream = new StringReader(midResult);
+        ByteArrayOutputStream midBuffer = null;
+        try {
+            midBuffer = new ByteArrayOutputStream();
+            midBuffer.write(XML_HEAD.getBytes(UTF8));
+            midBuffer.write("<dita-merge xmlns:ditaarch=\"http://dita.oasis-open.org/architecture/2005/\">".getBytes(UTF8));
+            mapParser.setOutputStream(midBuffer);
+            mapParser.read(ditaInput, tempdir);
+            midBuffer.write("</dita-merge>".getBytes(UTF8));
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new DITAOTException("Failed to merge topics: " + e.getMessage(), e);
+        } finally {
+            if (midBuffer != null) {
+                try {
+                    midBuffer.close();
+                } catch (final IOException e) {
+                    logger.logError("Failed to close output buffer: " + e.getMessage(), e);
+                }
+            }
+        }
 
-        OutputStreamWriter output = null;
+        OutputStream output = null;
         try{
             final File outputDir = new File(out).getParentFile();
             if (!outputDir.exists()){
                 outputDir.mkdirs();
             }
+            output = new BufferedOutputStream(new FileOutputStream(out));
             if (style != null){
                 final TransformerFactory factory = TransformerFactory.newInstance();
                 final File styleFile = new File(style);
                 final Transformer transformer = factory.newTransformer(new StreamSource(styleFile.toURI().toString()));
-                transformer.transform(new StreamSource(midStream), new StreamResult(new FileOutputStream(new File(out))));
+                transformer.transform(new StreamSource(new ByteArrayInputStream(midBuffer.toByteArray())),
+                                      new StreamResult(output));
             }else{
-                output = new OutputStreamWriter(new FileOutputStream(out),UTF8);
-                output.write(midResult);
+                output.write(midBuffer.toByteArray());
                 output.flush();
             }
         }catch (final Exception e){
-            //use java logger to log the exception
-            logger.logException(e);
+            throw new DITAOTException("Failed to process merged topics: " + e.getMessage(), e);
         }finally{
             try{
                 if (output !=null){
                     output.close();
                 }
-                midStream.close();
             }catch (final Exception e){
-                //use java logger to log the exception
-                logger.logException(e);
+                logger.logError("Failed to close output buffer: " + e.getMessage(), e);
             }
         }
 

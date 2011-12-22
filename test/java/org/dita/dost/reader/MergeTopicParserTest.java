@@ -9,11 +9,21 @@
  */
 package org.dita.dost.reader;
 
+import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
 import static org.junit.Assert.*;
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.StringReader;
+
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.sax.SAXTransformerFactory;
+import javax.xml.transform.sax.TransformerHandler;
+import javax.xml.transform.stream.StreamResult;
+
+import org.junit.BeforeClass;
 
 import org.xml.sax.InputSource;
 import org.dita.dost.TestUtils;
@@ -26,37 +36,31 @@ public class MergeTopicParserTest {
     private final File srcDir = new File(resourceDir, "src");
     private final File expDir = new File(resourceDir, "exp");
 
-    @Test
-    public void testGetContent() {
-        final MergeTopicParser parser = new MergeTopicParser(new MergeUtils());
-        parser.setLogger(new TestUtils.TestLogger());
-        assertEquals(0, parser.getContent().getValue().toString().length());
-    }
-
-    @Test
-    public void testReset() {
-        final MergeTopicParser parser = new MergeTopicParser(new MergeUtils());
-        parser.setLogger(new TestUtils.TestLogger());
-        parser.parse("test.xml", srcDir.getAbsolutePath());
-        final String exp = parser.getContent().getValue().toString();
-        parser.reset();
-        assertEquals(0, parser.getContent().getValue().toString().length());
-        parser.parse("test.xml", srcDir.getAbsolutePath());
-        final String act = parser.getContent().getValue().toString();
-        assertEquals(exp, act);
+    private static SAXTransformerFactory stf;
+    
+    @BeforeClass
+    public static void setup() {
+        final TransformerFactory tf = TransformerFactory.newInstance();
+        if (!tf.getFeature(SAXTransformerFactory.FEATURE)) {
+            throw new RuntimeException("SAX transformation factory not supported");
+        }
+        stf = (SAXTransformerFactory) tf;
     }
 
     @Test
     public void testParse() throws Exception {
         final MergeTopicParser parser = new MergeTopicParser(new MergeUtils());
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        final TransformerHandler s = stf.newTransformerHandler();
+        s.getTransformer().setOutputProperty(OMIT_XML_DECLARATION , "yes");
+        s.setResult(new StreamResult(output));
+        parser.setContentHandler(s);
         parser.setLogger(new TestUtils.TestLogger());
+        s.startDocument();
         parser.parse("test.xml", srcDir.getAbsolutePath());
+        s.endDocument();
         assertXMLEqual(new InputSource(new File(expDir, "test.xml").toURI().toString()),
-                new InputSource(new StringReader(parser.getContent().getValue().toString())));
-        parser.reset();
-        parser.parse("test2.xml", srcDir.getAbsolutePath());
-        assertXMLEqual(new InputSource(new File(expDir, "test2.xml").toURI().toString()),
-                new InputSource(new StringReader(parser.getContent().getValue().toString())));
+                new InputSource(new ByteArrayInputStream(output.toByteArray())));
     }
 
 }

@@ -12,6 +12,7 @@ package org.dita.dost.util;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
@@ -29,6 +30,7 @@ public final class MergeUtils {
 
     private final Hashtable<String, String> idMap;
     private int index;
+    /** Set of visited topic files. */
     private final Set<String> visitSet;
 
     /**
@@ -37,14 +39,14 @@ public final class MergeUtils {
     public MergeUtils() {
         super();
         idMap = new Hashtable<String, String>();
-        visitSet = new HashSet<String>(INT_256);
+        visitSet = Collections.synchronizedSet(new HashSet<String>(INT_256));
         index = 0;
     }
 
     /**
      * Resets all internal data structures.
      */
-    public void reset(){
+    public void reset() {
         idMap.clear();
         visitSet.clear();
         index = 0;
@@ -55,9 +57,9 @@ public final class MergeUtils {
      * @param id topic id
      * @return true if find and false otherwise
      */
-    public boolean findId(final String id){
-        return id != null && idMap.containsKey(FileUtils.removeRedundantNames(id.trim().replace(WINDOWS_SEPARATOR,
-                UNIX_SEPARATOR), UNIX_SEPARATOR));
+    public boolean findId(final String id) {
+        return id != null && idMap.containsKey(FileUtils.removeRedundantNames(id.trim().replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR),
+                                                                              UNIX_SEPARATOR));
     }
 
     /**
@@ -65,15 +67,15 @@ public final class MergeUtils {
      * @param id topic id
      * @return updated topic id
      */
-    public String addId (final String id){
-        if(id == null){
+    public String addId(final String id) {
+        if (id == null) {
             return null;
         }
-        final String localId = id.trim().replace(WINDOWS_SEPARATOR,
-                UNIX_SEPARATOR);
+        final String localId = id.trim().replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
         index ++;
-        idMap.put(FileUtils.removeRedundantNames(localId, UNIX_SEPARATOR),"unique_"+Integer.toString(index));
-        return "unique_"+Integer.toString(index);
+        final String newId = "unique_" + Integer.toString(index);
+        idMap.put(FileUtils.removeRedundantNames(localId, UNIX_SEPARATOR), newId);
+        return newId;
     }
 
     /**
@@ -81,10 +83,9 @@ public final class MergeUtils {
      * @param id id
      * @param value value
      */
-    public void addId (final String id, final String value){
-        if(id != null && value != null){
-            final String localId=id.trim().replace(WINDOWS_SEPARATOR,
-                    UNIX_SEPARATOR);
+    public void addId(final String id, final String value){
+        if (id != null && value != null) {
+            final String localId = id.trim().replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
             final String localValue = value.trim();
             idMap.put(FileUtils.removeRedundantNames(localId, UNIX_SEPARATOR), localValue);
         }
@@ -95,42 +96,42 @@ public final class MergeUtils {
      * @param id id
      * @return value
      */
-    public String getIdValue (final String id){
-        if (id==null){
+    public String getIdValue(final String id){
+        if (id == null) {
             return null;
         }
-        final String localId = id.trim().replace(WINDOWS_SEPARATOR,
-                UNIX_SEPARATOR);
+        final String localId = id.trim().replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
         return idMap.get(FileUtils.removeRedundantNames(localId, UNIX_SEPARATOR));
     }
 
     /**
      * Return if this path has been visited before.
-     * @param path path
+     * @param path topic path, may contain a fragment
      * @return true if has been visited
      */
     public boolean isVisited(final String path){
         String localPath = path;
         final int idx = path.indexOf(SHARP);
-        if(idx != -1){
-            localPath=localPath.substring(0,idx);
+        if (idx != -1) {
+            localPath=localPath.substring(0, idx);
         }
-        return visitSet.contains(FileUtils.removeRedundantNames(localPath.trim().replace(WINDOWS_SEPARATOR,
-                UNIX_SEPARATOR), UNIX_SEPARATOR));
+        return visitSet.contains(FileUtils.removeRedundantNames(localPath.trim().replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR),
+                                                                UNIX_SEPARATOR));
     }
 
     /**
-     * Visit the path.
-     * @param path path
+     * Add topic to set of visited topics.
+     * 
+     * @param path topic path, may contain a fragment
      */
     public void visit(final String path){
         String localPath = path;
         final int idx = path.indexOf(SHARP);
-        if(idx != -1){
-            localPath=localPath.substring(0,idx);
+        if (idx != -1) {
+            localPath=localPath.substring(0, idx);
         }
-        visitSet.add(FileUtils.removeRedundantNames(localPath.trim().replace(WINDOWS_SEPARATOR,
-                UNIX_SEPARATOR), UNIX_SEPARATOR));
+        visitSet.add(FileUtils.removeRedundantNames(localPath.trim().replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR),
+                                                    UNIX_SEPARATOR));
     }
 
     /**
@@ -147,27 +148,27 @@ public final class MergeUtils {
         String localDir = dir;
         final StringBuffer firstTopicId = new StringBuffer();
 
-        if(path != null && dir != null){
+        if (path != null && dir != null) {
             localPath = localPath.trim();
             localDir = localDir.trim();
-        }else{
+        } else {
             return null;
         }
         final TopicIdParser parser = new TopicIdParser(firstTopicId);
-        try{
+        try {
             final XMLReader reader = StringUtils.getXMLReader();
             reader.setContentHandler(parser);
 
-            if(useCatalog){
+            if (useCatalog) {
                 try {
                     Class.forName(RESOLVER_CLASS);
                     reader.setEntityResolver(CatalogUtils.getCatalogResolver());
-                }catch (final ClassNotFoundException e){
+                } catch (final ClassNotFoundException e) {
                     logger.logException(e);
                 }
             }
-            reader.parse(new File(localDir+File.separator+localPath).toURI().toString());
-        }catch (final Exception e){
+            reader.parse(new File(localDir, localPath).toURI().toString());
+        } catch (final Exception e) {
             logger.logException(e);
         }
         return firstTopicId.toString();
