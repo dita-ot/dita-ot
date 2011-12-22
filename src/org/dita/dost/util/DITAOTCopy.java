@@ -93,15 +93,24 @@ public final class DITAOTCopy extends Task {
             StringBuffer realDest=null;
             try {
                 while (tokenizer.hasMoreTokens()) {
-                    realDest=new StringBuffer();
+                	final File srcFile = new File(tokenizer.nextToken());
+                    File destFile = null;
                     //destDir is the ouput dir
                     //pathTokenizer is the relative path with the filename
-                    if(destDir!=null && destDir.trim().length()>0){
-                        realDest.append(destDir).append(File.separator).append(pathTokenizer.nextToken());
-                    }
-                    final File srcFile = new File(tokenizer.nextToken());
-                    if (srcFile.exists()) {
-                        final File destFile = new File(realDest.toString());
+                    pathTokenizer = new StringTokenizer(relativePaths, COMMA);
+					while (pathTokenizer.hasMoreTokens()) {
+						if (destDir != null && destDir.trim().length() > 0) {
+							realDest=new StringBuffer();
+							realDest.append(destDir).append(File.separator)
+									.append(pathTokenizer.nextToken());
+							File temp = new File(realDest.toString());
+							if (temp.getName().equalsIgnoreCase(srcFile.getName())){
+								destFile = temp;
+								break;
+							}
+						}
+					}
+                    if (srcFile.exists()&&destFile!=null) {                      
                         fileUitls.copyFile(srcFile, destFile);
                     }
                 }
