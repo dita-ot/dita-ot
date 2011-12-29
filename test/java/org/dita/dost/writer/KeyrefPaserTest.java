@@ -55,6 +55,7 @@ public class KeyrefPaserTest {
         XMLUnit.setTestEntityResolver(resolver);
         XMLUnit.setURIResolver(resolver);
         XMLUnit.setIgnoreWhitespace(true);
+        XMLUnit.setIgnoreComments(true);
 
         readKeyMap();
     }
