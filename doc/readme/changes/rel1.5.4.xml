@@ -65,6 +65,8 @@
           <p>Support for the following languages has been added:</p>
           <ul><li>Indonesian</li><li>Kazakh</li><li>Malay</li></ul>
         </section></refbody></reference><reference id="reference_yvj_ttj_bd" ditaarch:DITAArchVersion="1.2"><title>Migration from previous releases</title><refbody><section>
+        <p>To allow access to configuration files, the <filepath>lib</filepath> directory needs to
+          be added to Java classpath.</p>
           <p>The <codeph>print_transtypes</codeph> property in <filepath>integrator.properties</filepath> has been deprecated in favor of <codeph>dita.transtype.print</codeph> plug-in extension point.</p>
           <p>The <codeph>dita.plugin.org.dita.*.dir</codeph> properties have been changed to point
             to DITA-OT base directory.</p>
