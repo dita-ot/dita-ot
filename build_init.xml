@@ -294,7 +294,7 @@
       </condition>
     </dita-ot-fail>
 
-    <dita-ot-fail id="DOTA003F" params="%1=${args.xsl}">
+    <dita-ot-fail id="DOTA003F">
       <condition>
         <and>
           <isset property="args.xsl" />
@@ -303,10 +303,11 @@
           </not>
         </and>
       </condition>
+      <param name="1" location="${args.xsl}"/>
     </dita-ot-fail>
   	
   	<!--Added by William on 2010-06-21 for bug:3012392 start -->
-    <dita-ot-fail id="DOTA066F" params="%1=${args.xsl.pdf}">
+    <dita-ot-fail id="DOTA066F">
       <condition>
         <and>
           <isset property="args.xsl.pdf" />
@@ -315,10 +316,11 @@
           </not>
         </and>
       </condition>
+      <param name="1" location="${args.xsl.pdf}"/>
     </dita-ot-fail>
   	<!--Added by William on 2010-06-21 for bug:3012392 start -->
   	
-    <dita-ot-fail id="DOTA004F" params="%1=${dita.extname}">
+    <dita-ot-fail id="DOTA004F">
       <condition>
         <not>
           <or>
@@ -327,8 +329,9 @@
           </or>
         </not>
       </condition>
+      <param name="1" value="${dita.extname}"/>
     </dita-ot-fail>
-   <dita-ot-fail id="DOTA007E" params="%1=${args.ftr}">
+   <dita-ot-fail id="DOTA007E">
         <condition>
         	<and>
         	 <isset property="args.ftr" />
@@ -337,8 +340,9 @@
         	</not>
         	</and>
         </condition>
+     <param name="1" value="${args.ftr}"/>
      </dita-ot-fail>
-    <dita-ot-fail id="DOTA008E" params="%1=${args.hdr}">
+    <dita-ot-fail id="DOTA008E">
       <condition>
         <and>
           <isset property="args.hdr" />
@@ -347,8 +351,9 @@
           </not>
         </and>
       </condition>
+      <param name="1" value="${args.hdr}"/>
     </dita-ot-fail>
-    <dita-ot-fail id="DOTA009E" params="%1=${args.hdf}">
+    <dita-ot-fail id="DOTA009E">
       <condition>
         <and>
           <isset property="args.hdf" />
@@ -357,6 +362,7 @@
           </not>
         </and>
       </condition>
+      <param name="1" value="${args.hdf}"/>
     </dita-ot-fail>
     <!-- end to check input parameters -->
 
