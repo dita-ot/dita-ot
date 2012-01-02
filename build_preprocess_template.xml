@@ -35,20 +35,16 @@
   <!-- gen-list
       Create the manifest files listing which files are referenced by the input file (even indirectly). -->
   <target name="gen-list"
-    dita:depends="{depend.preprocess.gen-list.pre},gen-list-without-flagging, gen-list-with-flagging"
+    dita:depends="{depend.preprocess.gen-list.pre}"
     xmlns:dita="http://dita-ot.sourceforge.net"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.gen-list.skip"
     description="Generate file list">
-  </target>
-
-  <target name="gen-list-without-flagging"
-    depends="gen-list-flag-check"
-    unless="preprocess.gen-list-without-flagging.skip">
     <pipeline message="Generate list." module="GenMapAndTopicList" taskname="gen-list"
       basedir="${basedir}" inputmap="${args.input}"
       tempdir="${dita.temp.dir}">
       <param name="ditadir" location="${dita.dir}"/>
+      <param name="ditaval" value="${dita.input.valfile}" if="dita.input.valfile"/>
       <param name="validate" value="${validate}"/>
       <param name="generatecopyouter" value="${generate.copy.outer}"/>
       <param name="outercontrol" value="${outer.control}"/>
@@ -58,43 +54,6 @@
       <param name="gramcache" value="${args.grammar.cache}"/>
       <param name="setsystemid" value="${args.xml.systemid.set}"/>
     </pipeline>
-  </target>
-
-  <target name="gen-list-with-flagging"
-    depends="gen-list-flag-check"
-    unless="preprocess.gen-list-with-flagging.skip">
-    <pipeline message="Generate list." module="GenMapAndTopicList" taskname="gen-list"
-      basedir="${basedir}" inputmap="${args.input}"
-      tempdir="${dita.temp.dir}">
-      <param name="ditadir" location="${dita.dir}"/>
-      <param name="ditaval" value="${dita.input.valfile}"/>
-      <param name="validate" value="${validate}"/>
-      <param name="generatecopyouter" value="${generate.copy.outer}"/>
-      <param name="outercontrol" value="${outer.control}"/>
-      <param name="onlytopicinmap" value="${onlytopic.in.map}"/>
-      <param name="outputdir" location="${output.dir}"/>
-      <param name="transtype" value="${transtype}"/>
-      <param name="gramcache" value="${args.grammar.cache}"/>
-      <param name="setsystemid" value="${args.xml.systemid.set}"/>
-    </pipeline>
-  </target>
-
-  <target name="gen-list-flag-check">
-    <!-- The apparent double-negative logic of "unless skipped"
-        is so that plugins extending depend.preprocess.gen-list.pre
-        can skip all gen-list processing if they choose to re-implement it themselves. -->
-    <condition property="preprocess.gen-list-without-flagging.skip">
-      <or>
-        <isset property="preprocess.gen-list.skip"/>
-        <isset property="dita.input.valfile"/>
-      </or>
-    </condition>
-    <condition property="preprocess.gen-list-with-flagging.skip">
-      <or>
-        <isset property="preprocess.gen-list.skip"/>
-        <not><isset property="dita.input.valfile"/></not>
-      </or>
-    </condition>
   </target>
 
   <!-- debug-filter
