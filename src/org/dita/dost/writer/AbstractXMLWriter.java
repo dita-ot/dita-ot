@@ -101,7 +101,8 @@ ContentHandler, LexicalHandler, EntityResolver {
         return null;
     }
 
-    public abstract void setContent(Content content);
+    public void setContent(Content content) {
+    }
 
     public abstract void write(String filename) throws DITAOTException;
 

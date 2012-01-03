@@ -121,9 +121,7 @@ public class TestDitaWriter {
         final FilterUtils filterUtils = new FilterUtils();
         filterUtils.setFilterMap(map);
         writer.setFilterUtils(filterUtils);
-        final Content content = new ContentImpl();
-        content.setValue(tempDir.getAbsolutePath());
-        writer.setContent(content);
+        writer.setTempDir(tempDir.getAbsolutePath());
         writer.setExtName(".xml");
         writer.write(new File(baseDir, inputDir.getPath()).getAbsolutePath(), "keyword.dita");
 

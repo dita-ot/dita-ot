@@ -17,7 +17,9 @@ import java.util.Collection;
  * instance.
  * 
  * @author Zhang, Yuan Peng
+ * @deprecated use dedicated getters and setters instead
  */
+@Deprecated
 public interface Content {
     /**
      * Get the collection contained in the content container.

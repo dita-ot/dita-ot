@@ -1054,14 +1054,12 @@ public final class DitaWriter extends AbstractXMLWriter {
     }
 
     /**
-     * @param content value {@code String}
+     * Set temporary directory
+     * 
+     * @param tempDir temporary directory
      */
-    @Override
-    public void setContent(final Content content) {
-        tempDir = (String) content.getValue();
-        if (tempDir == null) {
-            throw new IllegalArgumentException("Content value must be non-null String");
-        }
+    public void setTempDir(final String tempDir) {
+        this.tempDir = tempDir;
     }
 
     @Override

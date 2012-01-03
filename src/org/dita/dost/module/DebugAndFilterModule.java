@@ -271,16 +271,10 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             filterReader.initXMLReader("yes".equals(input.getAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID)));
 
             final FilterUtils filterUtils = new FilterUtils();
-            Content content;
             if (ditavalFile!=null){
                 filterReader.read(ditavalFile);
-                content = filterReader.getContent();
                 filterUtils.setFilterMap(filterReader.getFilterMap());
-            }else{
-                content = new ContentImpl();
-                //FilterUtils.setFilterMap(null);
             }
-            content.setValue(tempDir);
             
             final DitaWriter fileWriter = new DitaWriter();
             fileWriter.setLogger(logger);
@@ -290,7 +284,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             } catch (final SAXException e) {
                 throw new DITAOTException(e.getMessage(), e);
             }
-            fileWriter.setContent(content);
+            fileWriter.setTempDir(tempDir);
             fileWriter.setExtName(extName);
             fileWriter.setTranstype(transtype);
             fileWriter.setFilterUtils(filterUtils);

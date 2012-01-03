@@ -83,9 +83,7 @@ public class DitaWriterTest {
         writer.setFilterUtils(new FilterUtils());
 
         for (final String f: new String[] {"main.ditamap", "keyword.dita"}) {
-            final Content content = new ContentImpl();
-            content.setValue(tempDir.getAbsolutePath());
-            writer.setContent(content);
+            writer.setTempDir(tempDir.getAbsolutePath());
             writer.write(srcDir.getAbsolutePath(), f);
         }
 
