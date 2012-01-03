@@ -56,6 +56,10 @@ public final class FilterUtils {
      * 'product', 'otherprops' was excluded.
      */
     public boolean needExclude(final Attributes atts, final String extProps) {
+        if (filterMap == null) {
+            return false;
+        }
+
         boolean ret = false;
         boolean extRet = false;
         StringTokenizer prop = null;
