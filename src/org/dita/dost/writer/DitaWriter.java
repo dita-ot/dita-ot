@@ -316,7 +316,8 @@ public final class DitaWriter extends AbstractXMLWriter {
     private boolean needResolveEntity; //check whether the entity need resolve.
     private OutputStreamWriter output;
     private String path2Project;
-    private String props; // contains the attribution specialization from props
+    /** Contains the attribution specialization paths for {@code props} attribute */
+    private String[][] props;
 
     private String tempDir;
     private File traceFilename;

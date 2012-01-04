@@ -11,10 +11,12 @@ package org.dita.dost.util;
 
 import static org.dita.dost.util.Constants.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -217,21 +219,27 @@ public final class StringUtils {
     }
 
     /**
-     * Get the props.
+     * Parse {@code props} attribute specializations
+     * 
      * @param domains input domain
-     * @return prop
+     * @return list of {@code props} attribute specializations
      */
-    public static String getExtProps (final String domains){
-        final StringBuffer propsBuffer = new StringBuffer();
+    public static String[][] getExtProps (final String domains){
+        final List<String[]> propsBuffer = new ArrayList<String[]>();
         int propsStart = domains.indexOf("a(props");
         int propsEnd = domains.indexOf(")",propsStart);
         while (propsStart != -1 && propsEnd != -1){
-            propsBuffer.append(COMMA);
-            propsBuffer.append(domains.substring(propsStart+2,propsEnd).trim());
+            final String propPath = domains.substring(propsStart+2,propsEnd).trim();
+            final StringTokenizer propPathTokenizer = new StringTokenizer(propPath, STRING_BLANK);
+            final List<String> propList = new ArrayList<String>(INT_128);
+            while(propPathTokenizer.hasMoreTokens()){
+                propList.add(propPathTokenizer.nextToken());
+            }
+            propsBuffer.add(propList.toArray(new String[propList.size()]));
             propsStart = domains.indexOf("a(props", propsEnd);
             propsEnd = domains.indexOf(")",propsStart);
         }
-        return (propsBuffer.length() > 0) ? propsBuffer.substring(INT_1) : null;
+        return propsBuffer.toArray(new String[propsBuffer.size()][]);
     }
 
 

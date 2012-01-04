@@ -20,7 +20,9 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
+
 import org.xml.sax.Attributes;
 
 /**
@@ -29,14 +31,29 @@ import org.xml.sax.Attributes;
  * @author Wu, Zhi Qiang
  */
 public final class FilterUtils {
-    private Map<String, String> filterMap = null;
-    private Set<String> notMappingRules=new HashSet<String>();
+    
+    public enum Action {
+        INCLUDE,
+        EXCLUDE,
+        PASSTHROUGH,
+        FLAG
+    }
+    
+    public static final FilterKey DEFAULT = new FilterKey(DEFAULT_ACTION, null);
+    
+    private DITAOTLogger logger;
+    private Map<FilterKey, Action> filterMap = null;
+    private Set<FilterKey> notMappingRules=new HashSet<FilterKey>();
 
+    public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
+    
     /**
      * Set the filter map.
      * @param filtermap The filterMap to set.
      */
-    public void setFilterMap(final Map<String, String> filtermap) {
+    public void setFilterMap(final Map<FilterKey, Action> filtermap) {
         filterMap = filtermap;
     }
 
@@ -44,34 +61,25 @@ public final class FilterUtils {
      * Getter for filter map.
      * @return filter map
      */
-    public Map<String, String> getFilterMap() {
+    public Map<FilterKey, Action> getFilterMap() {
         return filterMap;
     }
 
     /**
      * Check if the given Attributes need to be excluded.
      * @param atts attributes
-     * @param extProps props a(props...)
+     * @param extProps {@code props} attribute specializations
      * @return true if any one of attributes 'audience', 'platform',
      * 'product', 'otherprops' was excluded.
      */
-    public boolean needExclude(final Attributes atts, final String extProps) {
+    public boolean needExclude(final Attributes atts, final String[][] extProps) {
         if (filterMap == null) {
             return false;
         }
 
         boolean ret = false;
         boolean extRet = false;
-        StringTokenizer prop = null;
-        StringTokenizer propPathTokenizer = null;
-        String propName = null;
-        String propValue = null;
-        String propPath = null;
-        List<String> propList = null;
-        int propListIndex = 0;
-        String attrPropsValue = null;
-        int propStart;
-        int propEnd;
+        
         if (filterMap == null) {
             return false;
         }
@@ -93,24 +101,16 @@ public final class FilterUtils {
             return ret;
         }
 
-        prop = new StringTokenizer(extProps, COMMA);
-
-        while(prop.hasMoreElements()){
-            propPath = (String)prop.nextElement();
-            propPathTokenizer = new StringTokenizer(propPath, STRING_BLANK);
-            propList = new ArrayList<String>(INT_128);
-            while(propPathTokenizer.hasMoreElements()){
-                propList.add((String)propPathTokenizer.nextElement());
-            }
-            propListIndex = propList.size()-1;
-            propName = propList.get(propListIndex);
-            propValue = atts.getValue(propName);
+        for (final String[] propList: extProps) {
+            int propListIndex = propList.length - 1;
+            final String propName = propList[propListIndex];
+            String propValue = atts.getValue(propName);
 
             while (propValue == null && propListIndex > 0){
                 propListIndex--;
-                attrPropsValue = atts.getValue(propList.get(propListIndex));
+                final String attrPropsValue = atts.getValue(propList[propListIndex]);
                 if (attrPropsValue != null){
-                    propStart=-1;
+                    int propStart=-1;
                     if(attrPropsValue.startsWith(new StringBuffer(propName).append("(").toString(), 0)==true
                             || attrPropsValue.indexOf(new StringBuffer(STRING_BLANK+propName).append("(").toString(), 0)!=-1){
                         propStart = attrPropsValue.indexOf(new StringBuffer(propName).append("(").toString());
@@ -118,7 +118,7 @@ public final class FilterUtils {
                     if(propStart!=-1) {
                         propStart=propStart+ propName.length() + 1;
                     }
-                    propEnd = attrPropsValue.indexOf(")", propStart);
+                    int propEnd = attrPropsValue.indexOf(")", propStart);
                     if (propStart != -1 && propEnd != -1){
                         propValue = attrPropsValue.substring(propStart, propEnd).trim();
                     }
@@ -138,38 +138,36 @@ public final class FilterUtils {
      * @param attValue
      * @return
      */
-    private boolean extCheckExclude(final List<String> propList, final String attValue){
-        int propListIndex = 0;
-        boolean hasNullAction = false;
-        boolean hasExcludeAction = false;
-        StringTokenizer tokenizer = null;
-        String attName = null;
+    private boolean extCheckExclude(final String[] propList, final String attValue){
         //to check if the value is just only "" or " ",ignore it
-        if (attValue == null || attValue.trim().length()==0 || propList.size() == 0 || attValue.indexOf("(")!=-1) {
+        if (attValue == null || attValue.trim().length()==0 || propList.length == 0 || attValue.indexOf("(")!=-1) {
             return false;
         }
 
-        propListIndex = propList.size() - 1;
-        checkRuleMapping(propList.get(propListIndex),attValue);
+        int propListIndex = 0;
+        boolean hasNullAction = false;
+        boolean hasExcludeAction = false;
+
+        propListIndex = propList.length - 1;
+        checkRuleMapping(propList[propListIndex], attValue);
         while (propListIndex >= 0){
             hasNullAction = false;
             hasExcludeAction = false;
-            tokenizer = new StringTokenizer(attValue,
+            final StringTokenizer tokenizer = new StringTokenizer(attValue,
                     STRING_BLANK);
 
-            attName = propList.get(propListIndex);
+            final String attName = propList[propListIndex];
             while (tokenizer.hasMoreTokens()) {
                 final String attSubValue = tokenizer.nextToken();
-                final String filterKey = new StringBuffer().append(attName).append(
-                        EQUAL).append(attSubValue).toString();
-                final String filterAction = filterMap.get(filterKey);
+                final FilterKey filterKey = new FilterKey(attName, attSubValue);
+                final Action filterAction = filterMap.get(filterKey);
                 // no action will be considered as 'not exclude'
                 if (filterAction == null) {
                     //check Specified DefaultAction mapping this attribute's name
-                    final String attDefaultAction=filterMap.get(attName);
+                    final Action attDefaultAction=filterMap.get(new FilterKey(attName, null));
                     if(attDefaultAction!=null){
                         //filterAction=attDefaultAction;
-                        if(!FILTER_ACTION_EXCLUDE.equalsIgnoreCase(attDefaultAction)){
+                        if(Action.EXCLUDE != attDefaultAction){
                             return false;
                         }else{
                             hasExcludeAction=true;
@@ -190,7 +188,7 @@ public final class FilterUtils {
                             hasNullAction=true;
                         }
                     }
-                }else if (FILTER_ACTION_EXCLUDE.equalsIgnoreCase(filterAction)) {
+                }else if (Action.EXCLUDE == filterAction) {
                     hasExcludeAction = true;
                     if(hasNullAction==true){
                         if (checkExcludeOfGlobalDefaultAction()==true) {
@@ -255,18 +253,17 @@ public final class FilterUtils {
                 STRING_BLANK);
         while (tokenizer.hasMoreTokens()) {
             final String attSubValue = tokenizer.nextToken();
-            final String filterKey = new StringBuffer().append(attName).append(
-                    EQUAL).append(attSubValue).toString();
-            String filterAction = filterMap.get(filterKey);
+            final FilterKey filterKey = new FilterKey(attName, attSubValue);
+            Action filterAction = filterMap.get(filterKey);
 
             //not mapping ,no action will be considered as default action,
             //if default action does not exists ,considered as "not exclude"
             if (filterAction == null) {
                 //check Specified DefaultAction mapping this attribute's name
-                final String attDefaultAction=filterMap.get(attName);
+                final Action attDefaultAction=filterMap.get(new FilterKey(attName, null));
                 if(attDefaultAction!=null){
                     filterAction=attDefaultAction;
-                    if(!FILTER_ACTION_EXCLUDE.equalsIgnoreCase(attDefaultAction)){
+                    if(Action.EXCLUDE != attDefaultAction){
                         return false;
                     }
                 }else{
@@ -276,8 +273,7 @@ public final class FilterUtils {
                 }
             }
             // action is case insensitive
-            else if (!(FILTER_ACTION_EXCLUDE
-                    .equalsIgnoreCase(filterAction))) {
+            else if (Action.EXCLUDE != filterAction) {
                 return false;
             }
         }
@@ -285,11 +281,11 @@ public final class FilterUtils {
         return true;
     }
     private boolean checkExcludeOfGlobalDefaultAction(){
-        final String defaultAction=filterMap.get(DEFAULT_ACTION);
+        final Action defaultAction=filterMap.get(DEFAULT);
         if(defaultAction==null) {
             return false;
         } else {
-            if(!FILTER_ACTION_EXCLUDE.equalsIgnoreCase(defaultAction)) {
+            if(Action.EXCLUDE != defaultAction) {
                 return false;
             } else {
                 return true;
@@ -297,38 +293,97 @@ public final class FilterUtils {
         }
     }
     private void checkRuleMapping(final String attName, final String attValue){
-        StringTokenizer tokenizer;
         if (attValue == null || attValue.trim().length()==0 ) {
             return ;
         }
-        tokenizer = new StringTokenizer(attValue,
+        final StringTokenizer tokenizer = new StringTokenizer(attValue,
                 STRING_BLANK);
         while (tokenizer.hasMoreTokens()) {
             final String attSubValue = tokenizer.nextToken();
-            final String filterKey = new StringBuffer().append(attName).append(
-                    EQUAL).append(attSubValue).toString();
-            final String filterAction = filterMap.get(filterKey);
+            final FilterKey filterKey = new FilterKey(attName, attSubValue);
+            final Action filterAction = filterMap.get(filterKey);
             if(filterAction==null){
                 noRuleMapping(filterKey);
             }
         }
     }
-    private void noRuleMapping(final String notMappingKey){
+    private void noRuleMapping(final FilterKey notMappingKey){
         if(!alreadyShowed(notMappingKey)){
             showInfoOfNoRuleMapping(notMappingKey);
         }
     }
-    private void showInfoOfNoRuleMapping(final String notMappingKey){
+    private void showInfoOfNoRuleMapping(final FilterKey notMappingKey){
         final Properties prop=new Properties();
-        prop.put("%1", notMappingKey);
-        final DITAOTJavaLogger javaLogger=new DITAOTJavaLogger();
-        javaLogger.logInfo(MessageUtils.getMessage("DOTJ031I", prop).toString());
+        prop.put("%1", notMappingKey.toString());
+        logger.logInfo(MessageUtils.getMessage("DOTJ031I", prop).toString());
     }
-    private boolean alreadyShowed(final String notMappingKey){
+    private boolean alreadyShowed(final FilterKey notMappingKey){
         if(!notMappingRules.contains(notMappingKey)){
             notMappingRules.add(notMappingKey);
             return false;
         }
         return true;
     }
+    
+    /**
+     * Filter key object.
+     * 
+     * @since 1.6
+     */
+    public static class FilterKey {
+        /** Attribute name */
+        public final String attribute;
+        /** Attribute value, may be {@code null} */
+        public final String value;
+        public FilterKey(final String attribute, final String value) {
+            if (attribute == null) {
+                throw new IllegalArgumentException("Attribute may not be null");
+            }
+            this.attribute = attribute;
+            this.value = value;
+        }
+        @Override
+        public String toString() {
+            return value != null ? attribute + EQUAL + value : attribute;
+        }
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + ((attribute == null) ? 0 : attribute.hashCode());
+            result = prime * result + ((value == null) ? 0 : value.hashCode());
+            return result;
+        }
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (!(obj instanceof FilterKey)) {
+                final Throwable t = new RuntimeException("Not comparing FilterKey");
+                t.printStackTrace();
+                return false;
+            }
+            FilterKey other = (FilterKey) obj;
+            if (attribute == null) {
+                if (other.attribute != null) {
+                    return false;
+                }
+            } else if (!attribute.equals(other.attribute)) {
+                return false;
+            }
+            if (value == null) {
+                if (other.value != null) {
+                    return false;
+                }
+            } else if (!value.equals(other.value)) {
+                return false;
+            }
+            return true;
+        }
+    }
+    
 }

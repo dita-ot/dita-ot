@@ -838,6 +838,7 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
 
     private FilterUtils parseFilterFile() {
         final FilterUtils filterUtils = new FilterUtils();
+        filterUtils.setLogger(logger);
         if (ditavalFile != null) {
             final DitaValReader ditaValReader = new DitaValReader();
             ditaValReader.setLogger(logger);

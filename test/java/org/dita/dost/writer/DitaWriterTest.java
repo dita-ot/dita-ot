@@ -80,7 +80,9 @@ public class DitaWriterTest {
         writer.setLogger(new TestUtils.TestLogger());
         writer.initXMLReader(srcDir.getAbsolutePath(), false, true);
         writer.setExtName(".xml");
-        writer.setFilterUtils(new FilterUtils());
+        final FilterUtils fu = new FilterUtils();
+        fu.setLogger(new TestUtils.TestLogger());
+        writer.setFilterUtils(fu);
 
         for (final String f: new String[] {"main.ditamap", "keyword.dita"}) {
             writer.setTempDir(tempDir.getAbsolutePath());

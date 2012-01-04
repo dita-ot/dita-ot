@@ -149,7 +149,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
     private boolean isValidInput = false;
 
     /** Contains the attribution specialization from props */
-    private String props;
+    private String[][] props;
 
     /** Set of outer dita files */
     private final Set<String> outDitaFilesSet;

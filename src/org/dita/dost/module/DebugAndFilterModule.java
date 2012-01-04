@@ -94,6 +94,8 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.DitaValReader;
+import org.dita.dost.util.FilterUtils.Action;
+import org.dita.dost.util.FilterUtils.FilterKey;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
@@ -271,6 +273,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             filterReader.initXMLReader("yes".equals(input.getAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID)));
 
             final FilterUtils filterUtils = new FilterUtils();
+            filterUtils.setLogger(logger);
             if (ditavalFile!=null){
                 filterReader.read(ditavalFile);
                 filterUtils.setFilterMap(filterReader.getFilterMap());
@@ -299,13 +302,14 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                 filterReader.reset();
                 if (ditavalFile != null && schemaSet != null) {
                     final FilterUtils fu = new FilterUtils();
+                    fu.setLogger(logger);
                     for (final String schema: schemaSet) {
                         filterReader.loadSubjectScheme(FileUtils.resolveFile(
                                 tempDir, schema)+".subm");
                     }
                     filterReader.filterReset();
                     filterReader.read(ditavalFile);
-                    final Map<String, String> fm = new HashMap<String, String>();
+                    final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>();
                     fm.putAll(filterReader.getSchemeFilterMap());
                     fm.putAll(filterUtils.getFilterMap());
                     fu.setFilterMap(Collections.unmodifiableMap(fm));

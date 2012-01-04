@@ -20,6 +20,8 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.DitaValReader;
+import org.dita.dost.util.FilterUtils.Action;
+import org.dita.dost.util.FilterUtils.FilterKey;
 import org.dita.dost.util.Constants;
 
 import org.junit.After;
@@ -74,17 +76,17 @@ public class TestDitaValReader {
     public void testRead() throws DITAOTException{
         final File ditavalFile = new File(baseDir, "DITAVAL" + File.separator + "DITAVAL_1.ditaval");
         reader.read(ditavalFile.getAbsolutePath());
-        final Map<String, String> map = reader.getFilterMap();
-        assertEquals("include", map.get("audience=Cindy"));
-        assertEquals("flag", map.get("produt=p1"));
-        assertEquals("exclude", map.get("product=ABase_ph"));
-        assertEquals("include", map.get("product=AExtra_ph"));
-        assertEquals("exclude", map.get("product=Another_ph"));
-        assertEquals("flag", map.get("platform=Windows"));
-        assertEquals("flag", map.get("platform=Linux"));
-        assertEquals("exclude", map.get("keyword=key1"));
-        assertEquals("flag", map.get("keyword=key2"));
-        assertEquals("include", map.get("keyword=key3"));
+        final Map<FilterKey, Action> map = reader.getFilterMap();
+        assertEquals(Action.INCLUDE, map.get(new FilterKey("audience", "Cindy")));
+        assertEquals(Action.FLAG, map.get(new FilterKey("produt", "p1")));
+        assertEquals(Action.EXCLUDE, map.get(new FilterKey("product", "ABase_ph")));
+        assertEquals(Action.INCLUDE, map.get(new FilterKey("product", "AExtra_ph")));
+        assertEquals(Action.EXCLUDE, map.get(new FilterKey("product", "Another_ph")));
+        assertEquals(Action.FLAG, map.get(new FilterKey("platform", "Windows")));
+        assertEquals(Action.FLAG, map.get(new FilterKey("platform", "Linux")));
+        assertEquals(Action.EXCLUDE, map.get(new FilterKey("keyword", "key1")));
+        assertEquals(Action.FLAG, map.get(new FilterKey("keyword", "key2")));
+        assertEquals(Action.INCLUDE, map.get(new FilterKey("keyword", "key3")));
     }
 
     @After

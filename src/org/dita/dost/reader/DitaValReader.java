@@ -10,6 +10,7 @@
 package org.dita.dost.reader;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.FilterUtils.DEFAULT;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,6 +33,8 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
 import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.FilterUtils.Action;
+import org.dita.dost.util.FilterUtils.FilterKey;
 import org.dita.dost.util.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -50,9 +53,9 @@ import org.xml.sax.XMLReader;
  * @author Zhang, Yuan Peng
  */
 public final class DitaValReader extends AbstractXMLReader {
-    private final Map<String, String> filterMap;
+    private final Map<FilterKey, Action> filterMap;
 
-    private final Map<String, String> schemeFilterMap;
+    private final Map<FilterKey, Action> schemeFilterMap;
 
     private ContentImpl content;
 
@@ -79,8 +82,8 @@ public final class DitaValReader extends AbstractXMLReader {
      */
     public DitaValReader() {
         super();
-        filterMap = new HashMap<String, String>();
-        schemeFilterMap = new HashMap<String, String>();
+        filterMap = new HashMap<FilterKey, Action>();
+        schemeFilterMap = new HashMap<FilterKey, Action>();
         content = null;
         imageList = new ArrayList<String>(INT_256);
         relFlagImageList= new ArrayList<String>(INT_256);
@@ -145,22 +148,13 @@ public final class DitaValReader extends AbstractXMLReader {
         }
 
         if (ELEMENT_NAME_PROP.equals(qName)) {
-            final String action = atts.getValue(ELEMENT_NAME_ACTION);
+            final String attAction = atts.getValue(ELEMENT_NAME_ACTION);
             final String attName = atts.getValue(ATTRIBUTE_NAME_ATT);
             final String attValue = atts.getValue(ATTRIBUTE_NAME_VAL);
             //first to check if the att attribute and val attribute are null
             //which is a default action for elements without mapping with the other filter val
-            String key=null;
-            if(attName==null){
-                key=DEFAULT_ACTION;
-            }else
-                if(attValue==null){
-                    key=attName;//default action for the specified attribute
-                }
-                else{
-                    key = attName + EQUAL + attValue;
-                }
-
+            final FilterKey key = attName != null ? new FilterKey(attName, attValue) : DEFAULT;
+            final Action action = attAction != null ? Action.valueOf(attAction.toUpperCase()) : null;
             if (action != null) {
                 insertAction(action, key);
             }
@@ -185,8 +179,7 @@ public final class DitaValReader extends AbstractXMLReader {
         /*
          * Parse image files for flagging
          */
-        if (flagImage != null && !"".equals(flagImage.trim())) {
-            String filterDir;
+        if (flagImage != null && flagImage.trim().length() > 0) {
             if (new File(flagImage).isAbsolute()) {
                 imageList.add(flagImage);
                 relFlagImageList.add(FileUtils.getRelativePathFromMap(ditaVal, flagImage));
@@ -194,8 +187,7 @@ public final class DitaValReader extends AbstractXMLReader {
             }
 
             // img is a relative path to the .ditaval file
-            filterDir = new File(new File(ditaVal).getAbsolutePath())
-            .getParent();
+            final String filterDir = new File(ditaVal).getParent();
             imageList.add(new File(filterDir, flagImage).getAbsolutePath());
             relFlagImageList.add(flagImage);
         }
@@ -206,7 +198,7 @@ public final class DitaValReader extends AbstractXMLReader {
      * @param action
      * @param key
      */
-    private void insertAction(final String action, final String key) {
+    private void insertAction(final Action action, final FilterKey key) {
         if (filterMap.get(key) == null) {
             filterMap.put(key, action);
         } else {
@@ -217,7 +209,7 @@ public final class DitaValReader extends AbstractXMLReader {
         }
     }
 
-    private void insertAction(final Element subTree, final String attName, final String action) {
+    private void insertAction(final Element subTree, final String attName, final Action action) {
         if (subTree == null || action == null) {
             return;
         }
@@ -244,9 +236,9 @@ public final class DitaValReader extends AbstractXMLReader {
             if (attrValue != null && SUBJECTSCHEME_SUBJECTDEF.matches(attrValue)) {
                 String key = node.getAttribute(ATTRIBUTE_NAME_KEYS);
                 if (!StringUtils.isEmptyString(key)) {
-                    key = attName + EQUAL + key;
-                    if (schemeFilterMap.get(key) == null) {
-                        schemeFilterMap.put(key, action);
+                    final FilterKey k = new FilterKey(attName, key);
+                    if (!schemeFilterMap.containsKey(k)) {
+                        schemeFilterMap.put(k, action);
                     }
                     //					else {
                     //						Properties prop = new Properties();
@@ -271,8 +263,8 @@ public final class DitaValReader extends AbstractXMLReader {
      * Return the filter map.
      * @return filter map
      */
-    public Map<String, String> getFilterMap() {
-        final Map<String, String> res = new HashMap<String, String>();
+    public Map<FilterKey, Action> getFilterMap() {
+        final Map<FilterKey, Action> res = new HashMap<FilterKey, Action>();
         res.putAll(schemeFilterMap);
         res.putAll(filterMap);
         return Collections.unmodifiableMap(res);
@@ -283,7 +275,7 @@ public final class DitaValReader extends AbstractXMLReader {
      *  
      * @return subject scheme filter map
      */
-    public Map<String, String> getSchemeFilterMap() {
+    public Map<FilterKey, Action> getSchemeFilterMap() {
         return Collections.unmodifiableMap(schemeFilterMap);
     }
     
