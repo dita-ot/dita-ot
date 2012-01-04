@@ -58,22 +58,22 @@ public class TestGenMapAndTopicListModule {
         final File outDir = new File(tempDir, "out");
 
         final PipelineHashIO pipelineInput = new PipelineHashIO();
-        pipelineInput.setAttribute("inputmap", inputMap.getPath());
-        pipelineInput.setAttribute("basedir", baseDir.getAbsolutePath());
-        pipelineInput.setAttribute("inputdir", inputDir.getPath());
-        pipelineInput.setAttribute("outputdir", outDir.getPath());
-        pipelineInput.setAttribute("tempDir", tempDir.getPath());
-        pipelineInput.setAttribute("ditadir", "");
-        pipelineInput.setAttribute("ditaext", ".xml");
-        pipelineInput.setAttribute("indextype", "xhtml");
-        pipelineInput.setAttribute("encoding", "en-US");
-        pipelineInput.setAttribute("targetext", ".html");
-        pipelineInput.setAttribute("validate", "false");
-        pipelineInput.setAttribute("generatecopyouter", "1");
-        pipelineInput.setAttribute("outercontrol", "warn");
-        pipelineInput.setAttribute("onlytopicinmap", "false");
-        pipelineInput.setAttribute("ditalist", new File(tempDir, "dita.list").getPath());
-        pipelineInput.setAttribute("maplinks", new File(tempDir, "maplinks.unordered").getPath());
+        pipelineInput.setAttribute(ANT_INVOKER_PARAM_INPUTMAP, inputMap.getPath());
+        pipelineInput.setAttribute(ANT_INVOKER_PARAM_BASEDIR, srcDir.getAbsolutePath());
+        pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_DITADIR, inputDir.getPath());
+        pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR, outDir.getPath());
+        pipelineInput.setAttribute(ANT_INVOKER_PARAM_TEMPDIR, tempDir.getPath());
+        pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_DITADIR, "");
+        pipelineInput.setAttribute(ANT_INVOKER_PARAM_DITAEXT, ".xml");
+        pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_INDEXTYPE, "xhtml");
+        pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_ENCODING, "en-US");
+        pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_TARGETEXT, ".html");
+        pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_VALIDATE, "false");
+        pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER, "1");
+        pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_OUTTERCONTROL, "warn");
+        pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP, "false");
+        //pipelineInput.setAttribute("ditalist", new File(tempDir, "dita.list").getPath());
+        pipelineInput.setAttribute(ANT_INVOKER_PARAM_MAPLINKS, new File(tempDir, "maplinks.unordered").getPath());
         pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID, "no");
 
         final AbstractFacade facade = new PipelineFacade();
@@ -83,32 +83,32 @@ public class TestGenMapAndTopicListModule {
 
     @Test
     public void testTempContents() throws DITAOTException{
-        assertTrue(new File(tempDir, "canditopics.list").exists());
-        assertTrue(new File(tempDir, "coderef.list").exists());
-        assertTrue(new File(tempDir, "conref.list").exists());
-        assertTrue(new File(tempDir, "conrefpush.list").exists());
-        assertTrue(new File(tempDir, "conreftargets.list").exists());
-        assertTrue(new File(tempDir, "copytosource.list").exists());
-        assertTrue(new File(tempDir, "copytotarget2sourcemap.list").exists());
-        assertTrue(new File(tempDir, "dita.list").exists());
-        assertTrue(new File(tempDir, "dita.xml.properties").exists());
-        assertTrue(new File(tempDir, "flagimage.list").exists());
-        assertTrue(new File(tempDir, "fullditamap.list").exists());
-        assertTrue(new File(tempDir, "fullditamapandtopic.list").exists());
-        assertTrue(new File(tempDir, "fullditatopic.list").exists());
-        assertTrue(new File(tempDir, "hrefditatopic.list").exists());
-        assertTrue(new File(tempDir, "hreftargets.list").exists());
-        assertTrue(new File(tempDir, "html.list").exists());
-        assertTrue(new File(tempDir, "image.list").exists());
-        assertTrue(new File(tempDir, "key.list").exists());
-        assertTrue(new File(tempDir, "keydef.xml").exists());
-        assertTrue(new File(tempDir, "keyref.list").exists());
-        assertTrue(new File(tempDir, "outditafiles.list").exists());
-        assertTrue(new File(tempDir, "relflagimage.list").exists());
-        assertTrue(new File(tempDir, "resourceonly.list").exists());
-        assertTrue(new File(tempDir, "skipchunk.list").exists());
-        assertTrue(new File(tempDir, "subtargets.list").exists());
-        assertTrue(new File(tempDir, "usr.input.file.list").exists());
+        assertTrue(new File(tempDir, HREF_TOPIC_LIST_FILE).exists());
+        assertTrue(new File(tempDir, CODEREF_LIST_FILE).exists());
+        assertTrue(new File(tempDir, CONREF_LIST_FILE).exists());
+        assertTrue(new File(tempDir, CONREF_PUSH_LIST_FILE).exists());
+        assertTrue(new File(tempDir, CONREF_TARGET_LIST_FILE).exists());
+        assertTrue(new File(tempDir, COPYTO_SOURCE_LIST_FILE).exists());
+        assertTrue(new File(tempDir, COPYTO_TARGET_TO_SOURCE_MAP_LIST_FILE).exists());
+        assertTrue(new File(tempDir, FILE_NAME_DITA_LIST).exists());
+        assertTrue(new File(tempDir, FILE_NAME_DITA_LIST_XML).exists());
+        assertTrue(new File(tempDir, FLAG_IMAGE_LIST_FILE).exists());
+        assertTrue(new File(tempDir, FULL_DITAMAP_LIST_FILE).exists());
+        assertTrue(new File(tempDir, FULL_DITAMAP_TOPIC_LIST_FILE).exists());
+        assertTrue(new File(tempDir, FULL_DITA_TOPIC_LIST_FILE).exists());
+        assertTrue(new File(tempDir, HREF_DITA_TOPIC_LIST_FILE).exists());
+        assertTrue(new File(tempDir, HREF_TARGET_LIST_FILE).exists());
+        assertTrue(new File(tempDir, HTML_LIST_FILE).exists());
+        assertTrue(new File(tempDir, IMAGE_LIST_FILE).exists());
+        assertTrue(new File(tempDir, KEY_LIST_FILE).exists());
+        assertTrue(new File(tempDir, KEYDEF_LIST_FILE).exists());
+        assertTrue(new File(tempDir, KEYREF_LIST_FILE).exists());
+        assertTrue(new File(tempDir, OUT_DITA_FILES_LIST_FILE ).exists());
+        assertTrue(new File(tempDir, REL_FLAGIMAGE_LIST_FILE).exists());
+        assertTrue(new File(tempDir, RESOURCE_ONLY_LIST_FILE).exists());
+        assertTrue(new File(tempDir, CHUNK_TOPIC_LIST_FILE).exists());
+        assertTrue(new File(tempDir, SUBSIDIARY_TARGET_LIST_FILE).exists());
+        assertTrue(new File(tempDir, USER_INPUT_FILE_LIST_FILE).exists());
     }
 
     @Test

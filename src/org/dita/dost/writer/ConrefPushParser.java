@@ -10,6 +10,7 @@
 package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Job.*;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -243,7 +244,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
         try{
             final Job job = new Job(new File(tempDir));
 
-            final String conreflist[] = job.getProperty("conreflist").split(COMMA);
+            final String conreflist[] = job.getProperty(CONREF_LIST).split(COMMA);
             // get the reletivePath from tempDir
             final String reletivePath = filename.substring(FileUtils.removeRedundantNames(tempDir).length() + 1);
             for(final String str: conreflist){
@@ -252,13 +253,13 @@ public final class ConrefPushParser extends AbstractXMLWriter {
                 }
             }
             final StringBuffer stringBuffer = new StringBuffer();
-            stringBuffer.append(job.getProperty("conreflist")).append(COMMA).append(reletivePath);
-            job.setProperty("conreflist", stringBuffer.toString());
+            stringBuffer.append(job.getProperty(CONREF_LIST)).append(COMMA).append(reletivePath);
+            job.setProperty(CONREF_LIST, stringBuffer.toString());
             
             job.write();
 
             try {
-                bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(tempDir,"conref.list"))));
+                bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(tempDir, CONREF_LIST_FILE))));
                 for(final String str: conreflist){
                     bufferedWriter.append(str).append("\n");
                 }

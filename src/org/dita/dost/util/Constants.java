@@ -869,58 +869,62 @@ public final class Constants {
     /** Constant for generated property file name(subrelation.xml).*/
     public static final String FILE_NAME_SUBJECT_RELATION = "subrelation.xml";
 
-    /**Constants for the properties's name(hreftargetslist).*/
+    /** Property name for href targets list file */
     public static final String HREF_TARGET_LIST = "hreftargetslist";
-    /**Constants for the properties's name(canditopicslist).*/
+    /** Property name for candidate topics list file */
     public static final String HREF_TOPIC_LIST = "canditopicslist";
-    /**Constants for the properties's name(skipchunklist).*/
+    /** Property name for skip chunk list file */
     public static final String CHUNK_TOPIC_LIST = "skipchunklist";
-    /**Constants for the properties's name(htmllist).*/
+    /** Property name for html list file */
     public static final String HTML_LIST = "htmllist";
-    /**Constants for the properties's name(imagelist).*/
+    /** Property name for image list file */
     public static final String IMAGE_LIST = "imagelist";
-    /**Constants for the properties's name(flagimagelist).*/
+    /** Property name for flag image list file */
     public static final String FLAG_IMAGE_LIST = "flagimagelist";
-    /**Constants for the properties's name(conreflist).*/
+    /** Property name for conref list file */
     public static final String CONREF_LIST = "conreflist";
-    /**Constants for the properties's name(hrefditatopiclist).*/
+    /** Property name for href dita topic list file */
     public static final String HREF_DITA_TOPIC_LIST = "hrefditatopiclist";
-    /**Constants for the properties's name(fullditatopiclist).*/
+    /** Property name for full dita topic list file */
     public static final String FULL_DITA_TOPIC_LIST = "fullditatopiclist";
-    /**Constants for the properties's name(fullditamaplist).*/
+    /** Property name for full dita map list file */
     public static final String FULL_DITAMAP_LIST = "fullditamaplist";
-    /**Constants for the properties's name(user.input.file).*/
+    /** Property name for input file */
     public static final String INPUT_DITAMAP = "user.input.file";
-    /**Constants for the properties's name(fullditamapandtopiclist).*/
+    /** Property name for input file list file list file, i.e. file which points to a file which points to the input file */
+    public static final String INPUT_DITAMAP_LIST_FILE_LIST = "user.input.file.listfile";
+    /** Property name for input directory */
+    public static final String INPUT_DIR = "user.input.dir";
+    /** Property name for full dita map and topic list file */
     public static final String FULL_DITAMAP_TOPIC_LIST = "fullditamapandtopiclist";
-    /**Constants for the properties's name(conreftargetslist).*/
+    /** Property name for conref targets list file */
     public static final String CONREF_TARGET_LIST = "conreftargetslist";
-    /**Constants for the properties's name(copytosourcelist).*/
+    /** Property name for copy-to source list file */
     public static final String COPYTO_SOURCE_LIST = "copytosourcelist";
-    /**Constants for the properties's name(copytotarget2sourcemaplist).*/
+    /** Property name for copy-to target2sourcemap list file */
     public static final String COPYTO_TARGET_TO_SOURCE_MAP_LIST = "copytotarget2sourcemaplist";
-    /**Constants for the properties's name(subtargetslist).*/
+    /** Property name for subtargets list file */
     public static final String SUBSIDIARY_TARGET_LIST = "subtargetslist";
-    /**Constants for the properties's name(chunkedtopiclist).*/
+    /** Property name for chunked topic list file */
     public static final String CHUNKED_TOPIC_LIST="chunkedtopiclist";
-    /**Constants for the properties's name(chunkedditamaplist).*/
+    /** Property name for chunked dita map list file */
     public static final String CHUNKED_DITAMAP_LIST="chunkedditamaplist";
-    /**Constants for the properties's name(outditafileslist).*/
+    /** Property name for out dita files list file */
     public static final String OUT_DITA_FILES_LIST="outditafileslist";
-    /**Constants for the properties's name(relflagimagelist).*/
+    /** Property name for relflag image list file */
     public static final String REL_FLAGIMAGE_LIST="relflagimagelist";
-    /**Constants for the properties's name(conrefpushlist).*/
+    /** Property name for conref push list file */
     public static final String CONREF_PUSH_LIST = "conrefpushlist";
-    /**Constants for the properties's name(keylist).*/
+    /** Property name for key list file */
     public static final String KEY_LIST = "keylist";
-    /**Constants for the properties's name(keyreflist).*/
+    /** Property name for keyref list file */
     public static final String KEYREF_LIST = "keyreflist";
-    /**Constants for the properties's name(codereflist).*/
+    /** Property name for coderef list file */
     public static final String CODEREF_LIST = "codereflist";
-    /**Constants for the properties's name(resourceonlylist).*/
+    /** Property name for resource-only list file */
     public static final String RESOURCE_ONLY_LIST = "resourceonlylist";
     //list all of the scheme files
-    /**Constants for the properties's name(subjectschemelist).*/
+    /** Property name for subject scheme list file */
     public static final String SUBJEC_SCHEME_LIST = "subjectschemelist";
 
     /**Constants for common params used in ant invoker(tempDir).*/

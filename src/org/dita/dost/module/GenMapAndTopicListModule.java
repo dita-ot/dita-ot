@@ -10,6 +10,7 @@
 package org.dita.dost.module;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Job.*;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -926,11 +927,11 @@ final class GenMapAndTopicListModule implements AbstractPipelineModule {
             dir.mkdirs();
         }
 
-        prop.put("user.input.dir", baseInputDir);
-        prop.put("user.input.file", prefix + inputFile);
+        prop.put(INPUT_DIR, baseInputDir);
+        prop.put(INPUT_DITAMAP, prefix + inputFile);
 
-        prop.put("user.input.file.listfile", "usr.input.file.list");
-        final File inputfile = new File(tempDir, "usr.input.file.list");
+        prop.put(INPUT_DITAMAP_LIST_FILE_LIST, USER_INPUT_FILE_LIST_FILE);
+        final File inputfile = new File(tempDir, USER_INPUT_FILE_LIST_FILE);
         Writer bufferedWriter = null;
         try {
             bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(inputfile)));
