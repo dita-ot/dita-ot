@@ -13,6 +13,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertTrue;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Job.*;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -34,9 +35,8 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractFacade;
 import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
-import org.dita.dost.util.Constants;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -44,16 +44,16 @@ import org.w3c.dom.NodeList;
 
 public class TestGenMapAndTopicListModule {
 
-    private final File resourceDir = new File("test-stub");
-    private File tempDir;
+    private static final File resourceDir = new File("test-stub", TestGenMapAndTopicListModule.class.getSimpleName());
+    private static final File srcDir = new File(resourceDir, "src");
+    
+    private static File tempDir;
 
-    private final File baseDir = new File(resourceDir, "DITA-OT1.5");
+    @BeforeClass
+    public static void setUp() throws IOException, DITAOTException {
+        tempDir = TestUtils.createTempDir(TestGenMapAndTopicListModule.class);
 
-    @Before
-    public void setUp() throws IOException, DITAOTException {
-        tempDir = TestUtils.createTempDir(getClass());
-
-        final File inputDir = new File("keyrefs", "maps_parallel_to_topics" + File.separator + "maps");
+        final File inputDir = new File("maps");
         final File inputMap = new File(inputDir, "root-map-01.ditamap");
         final File outDir = new File(tempDir, "out");
 
@@ -214,8 +214,8 @@ public class TestGenMapAndTopicListModule {
         return lines;
     }
 
-    @After
-    public void tearDown() throws IOException {
+    @AfterClass
+    public static void tearDown() throws IOException {
         TestUtils.forceDelete(tempDir);
     }
 

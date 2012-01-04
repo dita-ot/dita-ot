@@ -31,22 +31,23 @@ import org.dita.dost.util.FilterUtils;
 public class TestGenListModuleReader {
 
     public static GenListModuleReader reader;
-    private static File baseDir = new File("test-stub", "DITA-OT1.5");
-
-    private static File inputDir = new File("keyrefs" + File.separator + "maps_parallel_to_topics" + File.separator + "maps");
-    private static File rootFile = new File(inputDir, "root-map-01.ditamap");
+    
+    private static final File baseDir = new File("test-stub", TestGenListModuleReader.class.getSimpleName());
+    private static final File srcDir = new File(baseDir, "src");
+    private static final File inputDir = new File(srcDir, "maps");
+    private static final File rootFile = new File(inputDir, "root-map-01.ditamap");
 
     @BeforeClass
     public static void setUp() throws Exception{
         //parser = new ConrefPushParser();
         String ditaDir = "";
         //get absolute path
-        ditaDir = new File(baseDir, "").getAbsolutePath();
+        ditaDir = new File("").getAbsolutePath();
 
         final boolean validate = false;
         reader = new GenListModuleReader();
         reader.setLogger(new TestUtils.TestLogger());
-        reader.initXMLReader(ditaDir, validate, new File(baseDir, rootFile.getPath()).getCanonicalPath(), true);
+        reader.initXMLReader(ditaDir, validate, new File(rootFile.getPath()).getCanonicalPath(), true);
         reader.setFilterUtils(new FilterUtils());
     }
 
@@ -56,7 +57,7 @@ public class TestGenListModuleReader {
         //inputDir = baseDir;
         //String inputMap = inputDir + "/root-map-01.ditamap";
 
-        reader.parse(new File(baseDir, rootFile.getPath()));
+        reader.parse(new File(rootFile.getPath()));
         reader.getContent();
         final Set<String> conref = reader.getConrefTargets();
         final Set<String> chunk = reader.getChunkTopicSet();

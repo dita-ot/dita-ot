@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/topic.dtd">
+<topic
+  id="topic-1">
+  <title>XReffing Topic 1</title>
+  <body>
+    <p>This topic has an xref to the key "target_topic_1": <xref
+        keyref="target_topic_1"/>. It should resolve to topic A in the context of Root Map 01 and
+      topic B in the context of Root Map 02.</p>
+    <p>This is an xref to the key "target_topic_2": <xref
+        keyref="target_topic_2"/>. It should resolve to topic C in both maps.</p>
+    <p>This is an xref to the undefined key "target_topic_3": <xref
+        keyref="target_topic_3"/>. It should result in an "undefined key" message from the processor
+      and result in an empty xref.</p>
+    <p>This is an xref to the undefined key "target_topic_3" where the xref also specifies an href=
+      value, which should be used as the fallback. The link should be to topic C: <xref
+        keyref="target_topic_3"
+        href="target-topic-c.xml"/>.</p>
+  </body>
+</topic>
