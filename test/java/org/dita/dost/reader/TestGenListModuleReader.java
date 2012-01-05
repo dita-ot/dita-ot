@@ -22,6 +22,7 @@ import org.junit.Test;
 
 import org.dita.dost.TestUtils;
 import org.dita.dost.module.Content;
+import org.dita.dost.module.GenMapAndTopicListModule.KeyDef;
 import org.dita.dost.util.FilterUtils;
 
 /**
@@ -65,7 +66,7 @@ public class TestGenListModuleReader {
         final Set<String> hrefTargets = reader.getHrefTargets();
         final Set<String> hrefTopic =reader.getHrefTopicSet();
         final Set<String> copytoSet = reader.getIgnoredCopytoSourceSet();
-        final Map<String, String> keyDMap = reader.getKeysDMap();
+        final Map<String, KeyDef> keyDMap = reader.getKeysDMap();
         final Set<String> nonConref = reader.getNonConrefCopytoTargets();
         final Set<String> nonCopyTo = reader.getNonCopytoResult();
         final Set<String> outDita = reader.getOutDitaFilesSet();
@@ -89,8 +90,8 @@ public class TestGenListModuleReader {
 
         assertEquals(0, copytoSet.size());
 
-        assertEquals(".." + File.separator + "topics" + File.separator + "target-topic-c.xml",keyDMap.get("target_topic_2"));
-        assertEquals(".." + File.separator + "topics" + File.separator + "target-topic-a.xml",keyDMap.get("target_topic_1"));
+        assertEquals(".." + File.separator + "topics" + File.separator + "target-topic-c.xml",keyDMap.get("target_topic_2").href);
+        assertEquals(".." + File.separator + "topics" + File.separator + "target-topic-a.xml",keyDMap.get("target_topic_1").href);
 
         assertTrue(nonConref.contains(".." + File.separator + "topics" + File.separator + "xreffin-topic-1.xml"));
         assertTrue(nonConref.contains(".." + File.separator + "topics" + File.separator + "target-topic-c.xml"));

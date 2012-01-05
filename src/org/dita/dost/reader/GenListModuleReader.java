@@ -35,6 +35,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.module.GenMapAndTopicListModule.KeyDef;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.DITAAttrUtils;
 import org.dita.dost.util.FileUtils;
@@ -112,7 +113,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
     private final Map<String, String> copytoMap;
 
     /** Map of key definitions */
-    private final Map<String, String> keysDefMap;
+    private final Map<String, KeyDef> keysDefMap;
 
     //Added on 20100826 for bug:3052913 start
     /** Map to store multi-level keyrefs */
@@ -168,8 +169,9 @@ public final class GenListModuleReader extends AbstractXMLReader {
     private final Stack<String> processRoleStack;
     /** Depth inside a @processing-role parent */
     private int processRoleLevel;
-    /** Topics with role of "resource-only" */
+    /** Topics with processing role of "resource-only" */
     private final Set<String> resourceOnlySet;
+    /** Topics with processing role of "normal" */
     private final Set<String> crossSet;
     private final Set<String> schemeRefSet;
 
@@ -267,7 +269,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
         subsidiarySet = new HashSet<String>(INT_16);
         ignoredCopytoSourceSet = new HashSet<String>(INT_16);
         outDitaFilesSet=new HashSet<String>(INT_64);
-        keysDefMap = new HashMap<String, String>();
+        keysDefMap = new HashMap<String, KeyDef>();
         keysRefMap = new HashMap<String, String>();
 
         exKeysDefMap = new HashMap<String, String>();
@@ -545,7 +547,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
      * 
      * @return Key definitions map
      */
-    public Map<String,String> getKeysDMap(){
+    public Map<String, KeyDef> getKeysDMap(){
         return keysDefMap;
     }
 
@@ -620,23 +622,26 @@ public final class GenListModuleReader extends AbstractXMLReader {
         }
         //Added by William on 2010-06-01 for bug:3005748 end
 
-        String attrValue = atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE);
+        final String processingRole = atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE);
         final String href = atts.getValue(ATTRIBUTE_NAME_HREF);
-        if (attrValue != null) {
-            processRoleStack.push(attrValue);
+        final String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
+        if (processingRole != null) {
+            processRoleStack.push(processingRole);
             processRoleLevel++;
-            if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(attrValue)) {
+            if (ATTR_SCOPE_VALUE_EXTERNAL.equals(scope)) {
+            } else if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processingRole)) {
                 if (href != null) {
                     resourceOnlySet.add(FileUtils.resolveFile(currentDir, href));
                 }
-            } else if (ATTR_PROCESSING_ROLE_VALUE_NORMAL.equalsIgnoreCase(attrValue)) {
+            } else if (ATTR_PROCESSING_ROLE_VALUE_NORMAL.equalsIgnoreCase(processingRole)) {
                 if (href != null) {
                     crossSet.add(FileUtils.resolveFile(currentDir, href));
                 }
             }
         } else if (processRoleLevel > 0) {
             processRoleLevel++;
-            if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(
+            if (ATTR_SCOPE_VALUE_EXTERNAL.equals(scope)) {
+            } else if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(
                     processRoleStack.peek())) {
                 if (href != null) {
                     resourceOnlySet.add(FileUtils.resolveFile(currentDir, href));
@@ -647,20 +652,20 @@ public final class GenListModuleReader extends AbstractXMLReader {
                     crossSet.add(FileUtils.resolveFile(currentDir, href));
                 }
             }
-        } else {
+        } else if (ATTR_SCOPE_VALUE_EXTERNAL.equals(scope)) {
             if (href != null) {
                 crossSet.add(FileUtils.resolveFile(currentDir, href));
             }
         }
 
-        attrValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
+        final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
 
         //Added by William on 2009-06-24 for req #12014 start
         //has class attribute
-        if(attrValue!=null){
+        if(classValue!=null){
 
             //when meets topic tag
-            if(TOPIC_TOPIC.matches(attrValue)){
+            if(TOPIC_TOPIC.matches(classValue)){
                 topicId = atts.getValue(ATTRIBUTE_NAME_ID);
                 //relpace place holder with first topic id
                 //Get relative file name
@@ -676,7 +681,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
             //get plugin id only transtype = eclipsehelp
             if(FileUtils.isDITAMapFile(currentFile)&&
                     rootFilePath.equals(currentFile)&&
-                    MAP_MAP.matches(attrValue)&&
+                    MAP_MAP.matches(classValue)&&
                     INDEX_TYPE_ECLIPSEHELP.equals(transtype)){
                 String pluginId = atts.getValue(ATTRIBUTE_NAME_ID);
                 if(pluginId == null){
@@ -691,13 +696,13 @@ public final class GenListModuleReader extends AbstractXMLReader {
             //Each <topic> can only have one <prolog>
             //and <metadata> can have more than one exportanchors
             if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
-                if (MAP_TOPICMETA.matches(attrValue)
-                        || TOPIC_PROLOG.matches(attrValue)) {
+                if (MAP_TOPICMETA.matches(classValue)
+                        || TOPIC_PROLOG.matches(classValue)) {
                     topicMetaSet.add(qName);
                 }
                 // If the file has <exportanchors> tags only transtype =
                 // eclipsehelp
-                if (DELAY_D_EXPORTANCHORS.matches(attrValue)) {
+                if (DELAY_D_EXPORTANCHORS.matches(classValue)) {
                     hasExport = true;
                     // If current file is a ditamap file
                     if (FileUtils.isDITAMapFile(currentFile)) {
@@ -744,14 +749,14 @@ public final class GenListModuleReader extends AbstractXMLReader {
                         shouldAppendEndTag = true;
                     }
                     // meet <anchorkey> tag
-                } else if (DELAY_D_ANCHORKEY.matches(attrValue)) {
+                } else if (DELAY_D_ANCHORKEY.matches(classValue)) {
                     // create keyref element in the StringBuffer
                     // TODO in topic file is no keys
                     final String keyref = atts
                             .getValue(ATTRIBUTE_NAME_KEYREF);
                     result.append("<keyref name=\"" + keyref + "\"/>");
                     // meet <anchorid> tag
-                } else if (DELAY_D_ANCHORID.matches(attrValue)) {
+                } else if (DELAY_D_ANCHORID.matches(classValue)) {
                     // create keyref element in the StringBuffer
                     final String id = atts.getValue(ATTRIBUTE_NAME_ID);
                     // If current file is a ditamap file
@@ -785,8 +790,8 @@ public final class GenListModuleReader extends AbstractXMLReader {
         //Added by William on 2009-06-24 for req #12014 end
 
         // Generate Scheme relationship graph
-        if (attrValue != null) {
-            if (SUBJECTSCHEME_SUBJECTSCHEME.matches(attrValue)) {
+        if (classValue != null) {
+            if (SUBJECTSCHEME_SUBJECTSCHEME.matches(classValue)) {
                 if (this.relationGraph == null) {
                     this.relationGraph = new LinkedHashMap<String, Set<String>>();
                 }
@@ -798,7 +803,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
                 children.add(this.currentFile);
                 this.relationGraph.put("ROOT", children);
                 schemeRefSet.add(FileUtils.getRelativePathFromMap(rootFilePath, currentFile));
-            } else if (SUBJECTSCHEME_SCHEMEREF.matches(attrValue)) {
+            } else if (SUBJECTSCHEME_SCHEMEREF.matches(classValue)) {
                 Set<String> children = this.relationGraph.get(this.currentFile);
                 if (children == null) {
                     children = new LinkedHashSet<String>();
@@ -815,9 +820,9 @@ public final class GenListModuleReader extends AbstractXMLReader {
             //do not parse it
             foreignLevel ++;
             return;
-        } else if(attrValue != null &&
-                (TOPIC_FOREIGN.matches(attrValue) ||
-                        TOPIC_UNKNOWN.matches(attrValue))){
+        } else if(classValue != null &&
+                (TOPIC_FOREIGN.matches(classValue) ||
+                        TOPIC_UNKNOWN.matches(classValue))){
             foreignLevel ++;
         }
 
@@ -829,8 +834,8 @@ public final class GenListModuleReader extends AbstractXMLReader {
         //Added by William on 2010-6-17 for bug:3016739 start
         if(relTableLevel > 0) {
             relTableLevel ++;
-        } else if(attrValue != null &&
-                MAP_RELTABLE.matches(attrValue)){
+        } else if(classValue != null &&
+                MAP_RELTABLE.matches(classValue)){
             relTableLevel++;
         }
         //Added by William on 2010-6-17 for bug:3016739 end
@@ -850,13 +855,13 @@ public final class GenListModuleReader extends AbstractXMLReader {
             topicGroupLevel++;
         }
 
-        if(attrValue==null && !ELEMENT_NAME_DITA.equals(localName)){
+        if(classValue==null && !ELEMENT_NAME_DITA.equals(localName)){
             params.clear();
             params.put("%1", localName);
             logger.logInfo(MessageUtils.getMessage("DOTJ030I", params).toString());
         }
 
-        if (attrValue != null && TOPIC_TOPIC.matches(attrValue)){
+        if (classValue != null && TOPIC_TOPIC.matches(classValue)){
             domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
             if(domains==null){
                 params.clear();
@@ -888,11 +893,11 @@ public final class GenListModuleReader extends AbstractXMLReader {
          * must contains 'topic/title'.
          */
 
-        if (attrValue != null) {
-            if ((MAP_MAP.matches(attrValue))
-                    || (TOPIC_TITLE.matches(attrValue))) {
+        if (classValue != null) {
+            if ((MAP_MAP.matches(classValue))
+                    || (TOPIC_TITLE.matches(classValue))) {
                 isValidInput = true;
-            }else if (TOPIC_OBJECT.matches(attrValue)){
+            }else if (TOPIC_OBJECT.matches(classValue)){
                 parseAttribute(atts, ATTRIBUTE_NAME_DATA);
             }
         }
@@ -901,9 +906,6 @@ public final class GenListModuleReader extends AbstractXMLReader {
         //Added by William on 2010-03-02 for /onlytopicinmap update start.
         //onlyTopicInMap is on.
         if(OutputUtils.getOnlyTopicInMap() && this.canResolved()){
-            //Get class attribute value
-            final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
-
             //topicref(only defined in ditamap file.)
             if(MAP_TOPICREF.matches(classValue)){
 
@@ -1278,11 +1280,6 @@ public final class GenListModuleReader extends AbstractXMLReader {
 
             final String keyRef = atts.getValue(ATTRIBUTE_NAME_KEYREF);
 
-            //Added by William on 2009-10-15 for ampersand bug:2878492 start
-            if(target != null){
-                target = StringUtils.escapeXML(target);
-            }
-            //Added by William on 2009-10-15 for ampersand bug:2878492 end
 
             //Added by Alan for bug ID: 2870935 on Date: 2009-10-10 begin
             final String copy_to = atts.getValue(ATTRIBUTE_NAME_COPY_TO);
@@ -1308,7 +1305,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
                             //store external or peer resources.
                             exKeysDefMap.put(key, target);
                             //Added by William on 2010-06-09 for bug:3013079 end
-                            keysDefMap.put(key, target);
+                            keysDefMap.put(key, new KeyDef(key, target, null));
                         }else{
                             String tail = "";
                             if(target.indexOf(SHARP) != -1){
@@ -1319,14 +1316,14 @@ public final class GenListModuleReader extends AbstractXMLReader {
                                 target = FileUtils.getRelativePathFromMap(rootFilePath, target);
                             }
                             target = FileUtils.normalizeDirectory(currentDir, target);
-                            keysDefMap.put(key, target + tail);
+                            keysDefMap.put(key, new KeyDef(key, target + tail, null));
                         }
                     }else if(!StringUtils.isEmptyString(keyRef)){
                         //store multi-level keys.
                         keysRefMap.put(key, keyRef);
                     }else{
                         // target is null or empty, it is useful in the future when consider the content of key definition
-                        keysDefMap.put(key, "");
+                        keysDefMap.put(key, new KeyDef(null, null, null));
                     }
                 }else{
                     final Properties prop = new Properties();
@@ -1583,17 +1580,17 @@ public final class GenListModuleReader extends AbstractXMLReader {
     /**
      * Update keysDefMap for multi-level keys
      */
-    private void checkMultiLevelKeys(final Map<String, String> keysDefMap,
+    private void checkMultiLevelKeys(final Map<String, KeyDef> keysDefMap,
             final Map<String, String> keysRefMap) {
 
         String key = null;
-        String value = null;
+        KeyDef value = null;
         //tempMap storing values to avoid ConcurrentModificationException
-        final Map<String, String> tempMap = new HashMap<String, String>();
-        final Iterator<Entry<String, String>> iter = keysDefMap.entrySet().iterator();
+        final Map<String, KeyDef> tempMap = new HashMap<String, KeyDef>();
+        final Iterator<Entry<String, KeyDef>> iter = keysDefMap.entrySet().iterator();
 
         while (iter.hasNext()) {
-            final Map.Entry<String, String> entry = iter.next();
+            final Map.Entry<String, KeyDef> entry = iter.next();
             key = entry.getKey();
             value = entry.getValue();
             //there is multi-level keys exist.
