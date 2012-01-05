@@ -9,5 +9,8 @@
     keys="target_topic_1"/>
   <topicref
     href="topics/target-topic-c.xml"
-    keys="target_topic_2"/>
+    keys="target_topic_2 target_topic_3"/>
+  <keydef
+    href="http://www.example.com/" scope="external"
+    keys="target_topic_4"/>
 </map>
