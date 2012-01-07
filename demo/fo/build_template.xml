@@ -338,7 +338,7 @@ with those set forth herein.
     <property name="fo.saxon.classname" value="com.icl.saxon.StyleSheet"/>
     
     <makeurl property="customization.dir.url" file="${customization.dir}"/>
-    <makeurl property="user.input.dir.url" file="${user.input.dir}"/>
+    <makeurl property="user.input.dir.url" file="${dita.input.dirname}"/>
     <!-- must fork or catalog resolution will fail due to sharing of -->
     <!-- resolver and catalogs with the Open Toolkit -->
     <echo level="info" message="Java maximum memory=${maxJavaMemory}"/>

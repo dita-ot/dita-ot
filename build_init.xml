@@ -464,6 +464,7 @@
     </condition>
 
     <basename property="dita.input.filename" file="${args.input}" />
+    <dirname property="dita.input.dirname" file="${args.input}" />
     <basename property="dita.map.filename.root"
       file="${dita.input.filename}" suffix=".ditamap" />
     <basename property="dita.topic.filename.root"
