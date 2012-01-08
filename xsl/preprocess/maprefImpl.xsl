@@ -161,7 +161,8 @@
                         
                         <xsl:choose>
                             <!-- see whether it is reference to a file or a reference to specific element -->
-                            <xsl:when test="not(contains(@href,'://') or $element-id='#none#')">
+                            <xsl:when test="not(contains(@href,'://') or $element-id='#none#' or
+                                                $file/*[contains(@class,' map/map ')][@id = $element-id])">
                                 <!-- reference to an element -->
                                 <xsl:apply-templates select="$file//*[contains(@class,' map/topicref ')][@id=$element-id]">
                                     <xsl:with-param name="refclass" select="$refclass"/>
