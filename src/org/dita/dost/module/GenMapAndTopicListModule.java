@@ -593,7 +593,9 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
                 try {
                     schemekeydef.writeStartElement("keydef");
                     schemekeydef.writeAttribute("keys", key);
-                    schemekeydef.writeAttribute("href", value.href);
+                    if (value.href != null) {
+                        schemekeydef.writeAttribute("href", value.href);
+                    }
                     schemekeydef.writeAttribute("source", currentFile);
                     schemekeydef.writeEndElement();
                 } catch (final SAXException e) {
@@ -1189,7 +1191,9 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         try {
             keydef.writeStartElement("keydef");
             keydef.writeAttribute("keys", keyDef.keys);
-            keydef.writeAttribute("href", keyDef.href);
+            if (keyDef.href != null) {
+                keydef.writeAttribute("href", keyDef.href);
+            }
             if (keyDef.source != null) {
                 keydef.writeAttribute("source", keyDef.source);
             }

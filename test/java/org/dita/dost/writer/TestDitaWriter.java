@@ -104,6 +104,10 @@ public class TestDitaWriter {
         ditavalFile = new File(baseDir, ditavalFile).getAbsolutePath();
         final DitaValReader filterReader = new DitaValReader();
         filterReader.read(ditavalFile);
+        
+        filterReader.loadSubjectScheme(new File(inputDir, "subject_scheme.ditamap").getPath());
+        writer.setValidateMap(filterReader.getValidValuesMap());
+        writer.setDefaultValueMap(filterReader.getDefaultValueMap());
 
         final Map<FilterKey, Action> map = filterReader.getFilterMap();
         assertEquals(Action.INCLUDE, map.get(new FilterKey("audience", "Cindy")));
