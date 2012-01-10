@@ -255,7 +255,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 
                 final Set<String> schemaSet = dic.get(filename);
                 filterReader.reset();
-                if (ditavalFile != null && schemaSet != null) {
+                if (schemaSet != null) {
                     final FilterUtils fu = new FilterUtils();
                     fu.setLogger(logger);
                     for (final String schema: schemaSet) {
