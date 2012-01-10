@@ -188,15 +188,27 @@ public class TestFileUtils {
     }
 
     @Test
-    public void testRemoveRedundantNamesStringString() {
+    public void testRemoveRedundantNamesStringStringWindows() {
         assertEquals("a\\c\\file.xml",FileUtils.removeRedundantNames("a\\b\\..\\c\\file.xml", SEPARATOR_WINDOWS));
         assertEquals("a\\b\\file.xml",FileUtils.removeRedundantNames("a\\.\\b\\.\\file.xml", SEPARATOR_WINDOWS));
         assertEquals("..\\a\\file.xml",FileUtils.removeRedundantNames("..\\a\\file.xml", SEPARATOR_WINDOWS));
         assertEquals("..\\file.xml", FileUtils.removeRedundantNames("a\\..\\..\\file.xml", SEPARATOR_WINDOWS));
         assertEquals("file.xml", FileUtils.removeRedundantNames("a\\b\\..\\..\\file.xml", SEPARATOR_WINDOWS));
         assertEquals("\\a\\b\\file.xml", FileUtils.removeRedundantNames("\\a\\.\\b\\c\\..\\file.xml", SEPARATOR_WINDOWS));
+        assertEquals("\\\\server\\dir\\file.xml", FileUtils.removeRedundantNames("\\\\server\\a\\..\\dir\\file.xml", SEPARATOR_WINDOWS));
     }
 
+    @Test
+    public void testRemoveRedundantNamesStringStringUnix() {
+        assertEquals("a/c/file.xml",FileUtils.removeRedundantNames("a/b/../c/file.xml", SEPARATOR_UNIX));
+        assertEquals("a/b/file.xml",FileUtils.removeRedundantNames("a/./b/./file.xml", SEPARATOR_UNIX));
+        assertEquals("../a/file.xml",FileUtils.removeRedundantNames("../a/file.xml", SEPARATOR_UNIX));
+        assertEquals("../file.xml", FileUtils.removeRedundantNames("a/../../file.xml", SEPARATOR_UNIX));
+        assertEquals("file.xml", FileUtils.removeRedundantNames("a/b/../../file.xml", SEPARATOR_UNIX));
+        assertEquals("/a/b/file.xml", FileUtils.removeRedundantNames("/a/./b/c/../file.xml", SEPARATOR_UNIX));
+        assertEquals("//server/dir/file.xml", FileUtils.removeRedundantNames("//server/a/../dir/file.xml", SEPARATOR_UNIX));
+    }
+    
     @Test
     public void testIsAbsolutePath() {
         assertFalse(FileUtils.isAbsolutePath(null));
@@ -208,7 +220,7 @@ public class TestFileUtils {
             assertFalse(FileUtils.isAbsolutePath("\\dic\\file.xml"));
             assertFalse(FileUtils.isAbsolutePath("file.xml"));
             // Microsoft Windows UNC
-            assertFalse(FileUtils.isAbsolutePath("\\\\ComputerName\\SharedFolder\\Resource"));
+            assertTrue(FileUtils.isAbsolutePath("\\\\ComputerName\\SharedFolder\\Resource"));
         }else if(File.separator.equals(SEPARATOR_UNIX)){
             assertTrue(FileUtils.isAbsolutePath("/file.xml"));
             assertFalse(FileUtils.isAbsolutePath("file.xml"));
