@@ -613,46 +613,10 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
             //while they are not supposed to be contained, so should be be removed
 
             job.setSet(COPYTO_SOURCE_LIST, copytoSource);
-            filename = COPYTO_SOURCE_LIST.substring(INT_0, COPYTO_SOURCE_LIST
-                    .lastIndexOf("list"))
-                    + ".list";
-
-            try {
-                bufferedWriter = new BufferedWriter(
-                        new OutputStreamWriter(new FileOutputStream(new File(FileUtils.resolveFile(filePath, filename)
-                                ))));
-                final Iterator<String> it = copytoSource.iterator();
-                while(it.hasNext()){
-                    key = it.next();
-                    // XXX: Should this really only output empty lines?
-                    bufferedWriter.append("\n");
-                }
-                bufferedWriter.flush();
-            } finally {
-                if (bufferedWriter != null) {
-                    bufferedWriter.close();
-                }
-            }
+            job.writeList(COPYTO_SOURCE_LIST);
 
             job.setMap(COPYTO_TARGET_TO_SOURCE_MAP_LIST, copytotarget2source);
-            filename = COPYTO_TARGET_TO_SOURCE_MAP_LIST.substring(INT_0, COPYTO_TARGET_TO_SOURCE_MAP_LIST
-                    .lastIndexOf("list"))
-                    + ".list";
-            bufferedWriter = null;
-            try {
-                bufferedWriter = new BufferedWriter(
-                        new OutputStreamWriter(new FileOutputStream(new File(FileUtils.resolveFile(filePath, filename)
-                                ))));
-                final Iterator<String> it = copytotarget2source.keySet().iterator();
-                while(it.hasNext()){
-                    key = it.next();
-                    bufferedWriter.append(key).append(EQUAL).append(copytotarget2source.get(key));
-                    bufferedWriter.append("\n");
-                }
-                bufferedWriter.flush();
-            } finally {
-                bufferedWriter.close();
-            }
+            job.writeList(COPYTO_TARGET_TO_SOURCE_MAP_LIST);
 
             job.write();
         }catch (final Exception e){

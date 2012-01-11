@@ -10,6 +10,7 @@
 package org.dita.dost.module;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Job.*;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -307,91 +308,33 @@ final class ChunkModule implements AbstractPipelineModule {
         job.setSet(FULL_DITAMAP_TOPIC_LIST, topicList);
 
         try {
-            writeList(job, tempDir, FULL_DITA_TOPIC_LIST);
-            writeList(job, tempDir, FULL_DITAMAP_LIST);
-            writeList(job, tempDir, FULL_DITAMAP_TOPIC_LIST);
+            job.writeList(FULL_DITA_TOPIC_LIST);
+            job.writeList(FULL_DITAMAP_LIST);
+            job.writeList(FULL_DITAMAP_TOPIC_LIST);
         } catch (final FileNotFoundException e) {
             logger.logException(e);
         } catch (final IOException e) {
             logger.logException(e);
         }
 
-        /*
-         * write filename in the list to a file, in order to use the includesfile attribute in ant script
-         */
-        final String[] keys={CHUNKED_DITAMAP_LIST, CHUNKED_TOPIC_LIST, RESOURCE_ONLY_LIST};
-        final List<Set<String>> sets = new ArrayList<Set<String>>();
-        sets.add(chunkedDitamapSet);
-        sets.add(chunkedTopicSet);
-        sets.add(resourceOnlySet);
-        for(int i=0;i<keys.length;i++){
-            final String key = keys[i];
-            final String fileKey=key.substring(0,key.lastIndexOf("list"))+"file";
-            job.setProperty(fileKey, key.substring(0, key.lastIndexOf("list"))+".list");
-            final File list = new File(tempDir, job.getProperty(fileKey));
-            BufferedWriter bufferedWriter=null;
-            try {
-                bufferedWriter=new BufferedWriter(new OutputStreamWriter(new FileOutputStream(list)));
-                final Iterator<String> it= sets.get(i).iterator();
-                while(it.hasNext()){
-                    bufferedWriter.write(it.next());
-                    if(it.hasNext()) {
-                        bufferedWriter.write("\n");
-                    }
-                }
-                bufferedWriter.flush();
-                bufferedWriter.close();
-            } catch (final FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (final IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (bufferedWriter != null) {
-                    try {
-                        bufferedWriter.close();
-                    } catch (final IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
+        job.setProperty("chunkedditamapfile", CHUNKED_DITAMAP_LIST_FILE);
+        job.setProperty("chunkedtopicfile", CHUNKED_TOPIC_LIST_FILE);
+        job.setProperty("resourceonlyfile", RESOURCE_ONLY_LIST_FILE);
+        try {
+            job.writeList(CHUNKED_DITAMAP_LIST);
+            job.writeList(CHUNKED_TOPIC_LIST);
+            job.writeList(RESOURCE_ONLY_LIST);
+        } catch (final IOException e) {
+            logger.logError("Failed to write list file: " + e.getMessage(), e);
         }
 
+        job.setSet(CHUNKED_DITAMAP_LIST, chunkedDitamapSet);
+        job.setSet(CHUNKED_TOPIC_LIST, chunkedTopicSet);
 
-        addSetToProperties(job,CHUNKED_DITAMAP_LIST,chunkedDitamapSet);
-        addSetToProperties(job,CHUNKED_TOPIC_LIST,chunkedTopicSet);
         try{
             job.write();
         }catch(final IOException ex){
             logger.logException(ex);
-        }
-
-    }
-
-    /**
-     * Write a property value to a list file.
-     * 
-     * @param prop source properties
-     * @param tempDir temporary directory
-     * @param list name of the list
-     */
-    private void writeList(final Job prop, final String tempDir, final String list) throws FileNotFoundException,
-    IOException {
-        final File topic_list=new File(tempDir, list.substring(0, list.lastIndexOf("list"))+".list");
-        BufferedWriter topicWriter = null;
-        try {
-            topicWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(topic_list)));
-            final Set<String> topics = prop.getSet(list);
-            for (final Iterator<String> i = topics.iterator(); i.hasNext();) {
-                topicWriter.write(i.next());
-                if (i.hasNext()) {
-                    topicWriter.write("\n");
-                }
-                topicWriter.flush();
-            }
-        } finally {
-            if (topicWriter != null) {
-                topicWriter.close();
-            }
         }
     }
 
@@ -444,19 +387,5 @@ final class ChunkModule implements AbstractPipelineModule {
         } else {
             return filename + to;
         }
-    }
-
-    /**
-     * Add strings to set as a comma delimited list and clear input value set.
-     * 
-     * @param prop properties to add value to
-     * @param key key to add
-     * @param set set of values
-     */
-    private void addSetToProperties(final Job prop, final String key, final Set<String> set) {
-        final String value = StringUtils.assembleString(set, COMMA);
-        prop.setProperty(key, value);
-        // clear set
-        set.clear();
     }
 }

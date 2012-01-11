@@ -10,20 +10,21 @@
 package org.dita.dost.util;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Job.*;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
-
-import net.sf.saxon.functions.StandardFunction.Entry;
 
 /**
  * Definition of current job.
@@ -119,11 +120,11 @@ public final class Job {
         for (final Map.Entry<Object, Object> e: props.entrySet()) {
             prop.put(e.getKey(), e.getValue());
         }
-        
     }
     
     /**
-     * Read temporary configuration files.
+     * Read temporary configuration files. If configuration files are not found,
+     * assume an empty job object is being created.
      * 
      * @throws IOException if reading configuration files failed
      * @throws IllegalStateException if configuration files are missing
@@ -139,8 +140,6 @@ public final class Job {
             } else if(ditalist.exists()) {
                 in = new FileInputStream(ditalist);
                 prop.load(in);
-            } else {
-                throw new IllegalStateException("Job configuration files not found");
             }
         } catch(final IOException e) {
             throw new IOException("Failed to read file: " + e.getMessage());
@@ -312,6 +311,48 @@ public final class Job {
      */
     public String getValue() {
         return prop.getProperty(INPUT_DIR);
+    }
+
+    // Utility methods
+    
+    /**
+     * Write list file.
+     * 
+     * @param prop property name
+     * @throws IOException if writing fails
+     */
+    public void writeList(final String prop) throws IOException {
+        final String filename = prop.equals(INPUT_DITAMAP)
+                                ? INPUT_DITAMAP_LIST_FILE
+                                : prop.substring(0, prop.lastIndexOf("list"))+ ".list";
+        writeList(prop, filename);
+    }
+    
+    /**
+     * Write list file.
+     * 
+     * @param tempDir temporary directory
+     * @param prop property name
+     * @throws IOException if writing fails
+     */
+    public void writeList(final String prop, final String filename) throws IOException {
+        final File listFile = new File(tempDir, filename);
+        BufferedWriter topicWriter = null;
+        try {
+            topicWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(listFile)));
+            final Set<String> topics = getSet(prop);
+            for (final Iterator<String> i = topics.iterator(); i.hasNext();) {
+                topicWriter.write(i.next());
+                if (i.hasNext()) {
+                    topicWriter.write("\n");
+                }
+            }
+            topicWriter.flush();
+        } finally {
+            if (topicWriter != null) {
+                topicWriter.close();
+            }
+        }
     }
     
 }

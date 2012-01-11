@@ -88,85 +88,52 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
     private String tempDir = "";
 
     /**
-     * Update property value
+     * Update property value.
+     *
+     * - get property value
+     * - update value
+     * - set property value
+     * - write list file
      * 
      * @param listName name of list to update
      * @param property property to update
      */
     private void updateProperty (final String listName, final Job property){
-        final StringBuffer result = new StringBuffer(INT_1024);
         final String propValue = property.getProperty(listName);
-
 
         if (propValue == null || propValue.trim().length() == 0){
             //if the propValue is null or empty
             return;
         }
 
-        final StringTokenizer tokenizer = new StringTokenizer(propValue,COMMA);
-
+        final StringTokenizer tokenizer = new StringTokenizer(propValue, COMMA);
+        final Set<String> result = new HashSet<String>();
         while (tokenizer.hasMoreElements()){
             final String file = (String)tokenizer.nextElement();
             final int equalIndex = file.indexOf(EQUAL);
             final int fileExtIndex = file.lastIndexOf(DOT);
-
-            if(fileExtIndex != -1 &&
-                    FILE_EXTENSION_DITAMAP.equalsIgnoreCase(file.substring(fileExtIndex))){
-                result.append(COMMA).append(file);
-            } else if (equalIndex == -1 ){
-                //append one more comma at the beginning of property value
-                result.append(COMMA).append(FileUtils.replaceExtName(file,extName));
+            // don't replace DITA map file extensions
+            if (fileExtIndex != -1 && FILE_EXTENSION_DITAMAP.equalsIgnoreCase(file.substring(fileExtIndex))){
+                result.add(file);
+            // replace file extension
+            } else if (equalIndex == -1){
+                result.add(FileUtils.replaceExtName(file,extName));
+            // replace file extension in both map key and value
             } else {
-                //append one more comma at the beginning of property value
-                result.append(COMMA);
-                result.append(FileUtils.replaceExtName(file.substring(0,equalIndex),extName));
-                result.append(EQUAL);
-                result.append(FileUtils.replaceExtName(file.substring(equalIndex+1),extName));
+                result.add(FileUtils.replaceExtName(file.substring(0, equalIndex), extName) +
+                           EQUAL +
+                           FileUtils.replaceExtName(file.substring(equalIndex+1), extName));
             }
-
         }
-        final String list = result.substring(INT_1);
-        property.setProperty(listName, list);
-
-        final String files[] = list.split(
-                COMMA);
-        String filename = "";
-        if (listName.equals(INPUT_DITAMAP)) {
-            filename = INPUT_DITAMAP_LIST_FILE;
-        } else {
-            filename = listName.substring(INT_0, listName
-                    .lastIndexOf("list"))
-                    + ".list";
-        }
-        Writer bufferedWriter = null;
+        
+        property.setProperty(listName, StringUtils.assembleString(result, COMMA));
         try {
-            bufferedWriter = new BufferedWriter(
-                    new OutputStreamWriter(new FileOutputStream(new File(
-                            tempDir, filename))));
-            if(files.length>0){
-                for (int i = 0; i < files.length; i++) {
-                    bufferedWriter.write(files[i]);
-                    if (i < files.length - 1) {
-                        bufferedWriter.write("\n");
-                    }
-                    bufferedWriter.flush();
-                }
-            }
-        } catch (final FileNotFoundException e) {
-            e.printStackTrace();
+            property.writeList(listName);
         } catch (final IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (bufferedWriter != null) {
-                try {
-                    bufferedWriter.close();
-                } catch (final IOException e) {
-                    final DITAOTLogger logger = new DITAOTJavaLogger();
-                    logger.logException(e);
-                }
-            }
+            logger.logError("Failed to write list file: " + e.getMessage(), e);
         }
     }
+    
     private DITAOTLogger logger;
 
     private String inputMap = null;

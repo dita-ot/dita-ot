@@ -921,18 +921,22 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
     }
 
     private void outputResult() throws DITAOTException {
-        final Properties prop = new Properties();
         final File dir = new File(tempDir);
-        final Set<String> copytoSet = new HashSet<String>(INT_128);
-
         if (!dir.exists()) {
             dir.mkdirs();
         }
+        
+        Job prop = null;
+        try {
+            prop = new Job(dir);
+        } catch (final IOException e) {
+            throw new DITAOTException("Failed to create empty job: " + e.getMessage(), e);
+        }
+        
+        prop.setProperty(INPUT_DIR, baseInputDir);
+        prop.setProperty(INPUT_DITAMAP, prefix + inputFile);
 
-        prop.put(INPUT_DIR, baseInputDir);
-        prop.put(INPUT_DITAMAP, prefix + inputFile);
-
-        prop.put(INPUT_DITAMAP_LIST_FILE_LIST, USER_INPUT_FILE_LIST_FILE);
+        prop.setProperty(INPUT_DITAMAP_LIST_FILE_LIST, USER_INPUT_FILE_LIST_FILE);
         final File inputfile = new File(tempDir, USER_INPUT_FILE_LIST_FILE);
         Writer bufferedWriter = null;
         try {
@@ -957,9 +961,9 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         // output problem
         relativeValue = prefix;
         formatRelativeValue = formatRelativeValue(relativeValue);
-        prop.put("tempdirToinputmapdir.relative.value", formatRelativeValue);
+        prop.setProperty("tempdirToinputmapdir.relative.value", formatRelativeValue);
 
-        prop.put("uplevels", getUpdateLevels());
+        prop.setProperty("uplevels", getUpdateLevels());
         addSetToProperties(prop, OUT_DITA_FILES_LIST, outDitaFilesSet);
 
         addSetToProperties(prop, FULL_DITAMAP_TOPIC_LIST, ditaSet);
@@ -987,16 +991,16 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         addFlagImagesSetToProperties(prop, REL_FLAGIMAGE_LIST, relFlagImagesSet);
 
         // Convert copyto map into set and output
+        final Set<String> copytoSet = new HashSet<String>(INT_128);
         for (final Map.Entry<String, String> entry: copytoMap.entrySet()) {
             copytoSet.add(entry.toString());
         }
         addSetToProperties(prop, COPYTO_TARGET_TO_SOURCE_MAP_LIST, copytoSet);
         addKeyDefSetToProperties(prop, KEY_LIST, keysDefMap.values());
 
-        final Job job = new Job(prop, new File(tempDir));
         try {
             logger.logInfo("Serializing job specification");
-            job.write();
+            prop.write();
         } catch (final IOException e) {
             throw new DITAOTException("Failed to serialize job configuration files: " + e.getMessage(), e);
         }
@@ -1052,8 +1056,8 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         }
     }
 
-    private void addSetToProperties(final Properties prop, final String key, final Set<String> set) {
-        String value = null;
+    private void addSetToProperties(final Job prop, final String key, final Set<String> set) {
+        // update value
         final Set<String> newSet = new LinkedHashSet<String>(INT_128);
         for (final String file: set) {
             if (new File(file).isAbsolute()) {
@@ -1069,57 +1073,30 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
                     final String source = file.substring(index + 1);
                     
                     newSet.add(FileUtils.removeRedundantNames(new StringBuffer(prefix).append(to).toString())
-                            .replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR)
+                                  .replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR)
                             + EQUAL
                             + FileUtils.removeRedundantNames(new StringBuffer(prefix).append(source).toString())
-                            .replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR));
+                                  .replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR));
                 } else {
                     newSet.add(FileUtils.removeRedundantNames(new StringBuffer(prefix).append(file).toString())
-                            .replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR));
+                                  .replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR));
                 }
             }
         }
-
-        /*
-         * write filename in the list to a file, in order to use the
-         * includesfile attribute in ant script
-         */
+        prop.setSet(key, newSet);
+        // write list file
         final String fileKey = key.substring(0, key.lastIndexOf("list")) + "file";
-        prop.put(fileKey, key.substring(0, key.lastIndexOf("list")) + ".list");
-        final File list = new File(tempDir, prop.getProperty(fileKey));
-        Writer bufferedWriter = null;
+        prop.setProperty(fileKey, key.substring(0, key.lastIndexOf("list")) + ".list");
         try {
-            bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(list)));
-            final Iterator<String> it = newSet.iterator();
-            while (it.hasNext()) {
-                bufferedWriter.write(it.next());
-                if (it.hasNext()) {
-                    bufferedWriter.write("\n");
-                }
-            }
-            bufferedWriter.flush();
-            bufferedWriter.close();
-        } catch (final FileNotFoundException e) {
-            logger.logException(e);
+            prop.writeList(key);
         } catch (final IOException e) {
-            logger.logException(e);
-        } finally {
-            if (bufferedWriter != null) {
-                try {
-                    bufferedWriter.close();
-                } catch (final IOException e) {
-                    logger.logException(e);
-                }
-            }
+            logger.logError("Failed to write list file: " + e.getMessage(), e);
         }
-
-        value = StringUtils.assembleString(newSet, COMMA);
-        prop.put(key, value);
     }
     
-    private void addKeyDefSetToProperties(final Properties prop, final String key, final Collection<KeyDef> set) {
-        String value = null;
-        final Set<KeyDef> newSet = new LinkedHashSet<KeyDef>(set.size());
+    private void addKeyDefSetToProperties(final Job prop, final String key, final Collection<KeyDef> set) {
+        // update value
+        final Set<String> newSet = new LinkedHashSet<String>(set.size());
         for (final KeyDef file: set) {
             String keys = FileUtils.removeRedundantNames(prefix + file.keys).replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
             String href = file.href;
@@ -1138,46 +1115,19 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
                 }
             }
             final KeyDef keyDef = new KeyDef(keys, href, source);
-            newSet.add(keyDef);
+            newSet.add(keyDef.toString());
 
             writeKeyDef(keyDef);
         }
-
-        /*
-         * write filename in the list to a file, in order to use the
-         * includesfile attribute in ant script
-         */
+        prop.setSet(key, newSet);
+        // write list file
         final String fileKey = key.substring(0, key.lastIndexOf("list")) + "file";
-        prop.put(fileKey, key.substring(0, key.lastIndexOf("list")) + ".list");
-        final File list = new File(tempDir, prop.getProperty(fileKey));
-        Writer bufferedWriter = null;
+        prop.setProperty(fileKey, key.substring(0, key.lastIndexOf("list")) + ".list");
         try {
-            bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(list)));
-            final Iterator<KeyDef> it = newSet.iterator();
-            while (it.hasNext()) {
-                bufferedWriter.write(it.next().toString());
-                if (it.hasNext()) {
-                    bufferedWriter.write("\n");
-                }
-            }
-            bufferedWriter.flush();
-            bufferedWriter.close();
-        } catch (final FileNotFoundException e) {
-            logger.logException(e);
+            prop.writeList(key);
         } catch (final IOException e) {
-            logger.logException(e);
-        } finally {
-            if (bufferedWriter != null) {
-                try {
-                    bufferedWriter.close();
-                } catch (final IOException e) {
-                    logger.logException(e);
-                }
-            }
+            logger.logError("Failed to write key list file: " + e.getMessage(), e);
         }
-    
-        value = StringUtils.assembleString(newSet, COMMA);
-        prop.put(key, value);
     }
 
     // Added by William on 2010-06-10 for bug:3013545 start
@@ -1213,7 +1163,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
      * @param key
      * @param set
      */
-    private void addFlagImagesSetToProperties(final Properties prop, final String key, final Set<String> set) {
+    private void addFlagImagesSetToProperties(final Job prop, final String key, final Set<String> set) {
         String value = null;
         final Set<String> newSet = new LinkedHashSet<String>(INT_128);
         for (final String file: set) {
@@ -1230,7 +1180,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
 
         // write list attribute to file
         final String fileKey = key.substring(0, key.lastIndexOf("list")) + "file";
-        prop.put(fileKey, key.substring(0, key.lastIndexOf("list")) + ".list");
+        prop.setProperty(fileKey, key.substring(0, key.lastIndexOf("list")) + ".list");
         final File list = new File(tempDir, prop.getProperty(fileKey));
         Writer bufferedWriter = null;
         try {
@@ -1260,7 +1210,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
 
         value = StringUtils.assembleString(newSet, COMMA);
 
-        prop.put(key, value);
+        prop.setProperty(key, value);
 
         // clear set
         set.clear();
