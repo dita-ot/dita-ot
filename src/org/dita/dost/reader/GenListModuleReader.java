@@ -1323,7 +1323,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
                         keysRefMap.put(key, keyRef);
                     }else{
                         // target is null or empty, it is useful in the future when consider the content of key definition
-                        keysDefMap.put(key, new KeyDef(null, null, null));
+                        keysDefMap.put(key, new KeyDef(key, null, null));
                     }
                 }else{
                     final Properties prop = new Properties();
