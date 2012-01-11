@@ -65,7 +65,7 @@ final class ConrefPushModule implements AbstractPipelineModule {
             logger.logException(e);
         }
 
-        final Set<String> conrefpushlist = StringUtils.restoreSet(job.getProperty(CONREF_PUSH_LIST));
+        final Set<String> conrefpushlist = job.getSet(CONREF_PUSH_LIST);
         final ConrefPushReader reader = new ConrefPushReader();
         reader.setLogger(logger);
         for(final String fileName:conrefpushlist){

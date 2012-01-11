@@ -20,6 +20,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Set;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
@@ -231,16 +232,10 @@ public final class MergeMapParser extends XMLFilterImpl {
         // if list item not in visitedSet then call MergeTopicParser to parse it
         try{
             final Job job = new Job(new File(tempdir));
-            String resourceOnlySet = job.getProperty(RESOURCE_ONLY_LIST);
-            resourceOnlySet = (resourceOnlySet == null ? "" : resourceOnlySet);
-            String skipTopicSet = job.getProperty(CHUNK_TOPIC_LIST);
-            skipTopicSet = (skipTopicSet == null ? "" : skipTopicSet);
-            String chunkedTopicSet = job.getProperty(CHUNKED_TOPIC_LIST);
-            chunkedTopicSet = (chunkedTopicSet == null ? "" : chunkedTopicSet);
-            final String hrefTargetList = job.getProperty(HREF_TARGET_LIST);
-            final StringTokenizer tokenizer = new StringTokenizer(hrefTargetList,COMMA);
-            while (tokenizer.hasMoreElements()) {
-                String element = (String) tokenizer.nextElement();
+            final Set<String> resourceOnlySet = job.getSet(RESOURCE_ONLY_LIST);
+            final Set<String> skipTopicSet = job.getSet(CHUNK_TOPIC_LIST);
+            final Set<String> chunkedTopicSet = job.getSet(CHUNKED_TOPIC_LIST);
+            for (String element: job.getSet(HREF_TARGET_LIST)) {
                 if (!new File(dirPath).equals(new File(tempdir))) {
                     element = FileUtils.getRelativePathFromMap(new File(dirPath,"a.ditamap").getAbsolutePath(),
                                                                new File(tempdir, element).getAbsolutePath());

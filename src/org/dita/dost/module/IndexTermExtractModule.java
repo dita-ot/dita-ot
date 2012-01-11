@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.dita.dost.exception.DITAOTException;
@@ -31,6 +32,7 @@ import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.DitamapIndexTermReader;
 import org.dita.dost.reader.IndexTermReader;
 import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -109,49 +111,28 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
         inputMap = input.getAttribute(ANT_INVOKER_PARAM_INPUTMAP);
         targetExt = input.getAttribute(ANT_INVOKER_EXT_PARAM_TARGETEXT);
         baseInputDir = tempDir;
-        final String ditalist = new File(tempDir, "dita.list").getAbsolutePath();
-        final Properties prop = new Properties();
-        InputStream in = null;
+        final Job prop;
         try {
-            in = new FileInputStream(ditalist);
-            prop.load(in);
+            prop = new Job(new File(tempDir));
         } catch (final Exception e) {
-            String msg = null;
-            final Properties params = new Properties();
-            params.put("%1", ditalist);
-            msg = MessageUtils.getMessage("DOTJ011E", params).toString();
-            msg = new StringBuffer(msg).append(LINE_SEPARATOR)
-                    .append(e.toString()).toString();
-            throw new DITAOTException(msg, e);
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (final IOException e) {
-                    logger.logException(e);
-                }
-            }
+            throw new DITAOTException("Failed to load job: " + e.getMessage(), e);
         }
 
         /*
          * Parse topic list and ditamap list from the input dita.list file
          */
-        StringTokenizer tokenizer = new StringTokenizer(prop
-                .getProperty(FULL_DITA_TOPIC_LIST), COMMA);
-        final String resource_only_list = prop.getProperty(RESOURCE_ONLY_LIST, "");
-        topicList = new ArrayList<String>(tokenizer.countTokens());
-        while (tokenizer.hasMoreTokens()) {
-            final String t = tokenizer.nextToken();
+        final Set<String> topics = prop.getSet(FULL_DITA_TOPIC_LIST);
+        final Set<String> resource_only_list = prop.getSet(RESOURCE_ONLY_LIST);
+        topicList = new ArrayList<String>(topics.size());
+        for (final String t: topics) {
             if (!resource_only_list.contains(t)) {
                 topicList.add(t);
             }
         }
 
-        tokenizer = new StringTokenizer(prop
-                .getProperty(FULL_DITAMAP_LIST), COMMA);
-        ditamapList = new ArrayList<String>(tokenizer.countTokens());
-        while (tokenizer.hasMoreTokens()) {
-            final String t = tokenizer.nextToken();
+        final Set<String> maps = prop.getSet(FULL_DITAMAP_LIST);
+        ditamapList = new ArrayList<String>(maps.size());
+        for (final String t: maps) {
             if (!resource_only_list.contains(t)) {
                 ditamapList.add(t);
             }

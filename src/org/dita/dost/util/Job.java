@@ -16,11 +16,14 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
+
+import net.sf.saxon.functions.StandardFunction.Entry;
 
 /**
  * Definition of current job.
@@ -203,6 +206,26 @@ public final class Job {
     }
     
     /**
+     * Searches for the property with the specified key in this property list.
+     * 
+     * @param key property key
+     * @return the value in this property list with the specified key value, empty map if not found
+     */
+    public Map<String, String> getMap(final String key) {
+        return StringUtils.restoreMap(prop.getProperty(key, ""));
+    }
+    
+    /**
+     * Searches for the property with the specified key in this property list.
+     * 
+     * @param key property key
+     * @return the value in this property list with the specified key value, empty set if not found
+     */
+    public Set<String> getSet(final String key) {
+        return StringUtils.restoreSet(prop.getProperty(key, ""));
+    }
+    
+    /**
      * Set property value.
      * 
      * @param key property key
@@ -211,6 +234,28 @@ public final class Job {
      */
     public String setProperty(final String key, final String value) {
         return (String) prop.setProperty(key, value);
+    }
+    
+    /**
+     * Set property value.
+     * 
+     * @param key property key
+     * @param value property value
+     * @return the previous value of the specified key in this property list, or {@code null} if it did not have one
+     */
+    public  Set<String> setSet(final String key, final Set<String> value) {
+        return (Set<String>) StringUtils.restoreSet((String) prop.setProperty(key, StringUtils.assembleString(value, COMMA)));
+    }
+    
+    /**
+     * Set property value.
+     * 
+     * @param key property key
+     * @param value property value
+     * @return the previous value of the specified key in this property list, or {@code null} if it did not have one
+     */
+    public Map<String, String> setMap(final String key, final Map<String, String> value) {        
+        return (Map<String, String>) StringUtils.restoreMap((String) prop.setProperty(key, StringUtils.assembleString(value, COMMA)));
     }
     
     /**

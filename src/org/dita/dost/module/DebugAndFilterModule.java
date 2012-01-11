@@ -262,12 +262,16 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                         filterReader.loadSubjectScheme(FileUtils.resolveFile(
                                 tempDir, schema)+".subm");
                     }
-                    filterReader.filterReset();
-                    filterReader.read(ditavalFile);
-                    final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>();
-                    fm.putAll(filterReader.getSchemeFilterMap());
-                    fm.putAll(filterUtils.getFilterMap());
-                    fu.setFilterMap(Collections.unmodifiableMap(fm));
+                    if (ditavalFile!=null){
+                        filterReader.filterReset();
+                        filterReader.read(ditavalFile);
+                        final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>();
+                        fm.putAll(filterReader.getSchemeFilterMap());
+                        fm.putAll(filterUtils.getFilterMap());
+                        fu.setFilterMap(Collections.unmodifiableMap(fm));
+                    } else {
+                        fu.setFilterMap(null);
+                    }
                     fileWriter.setFilterUtils(fu);
 
                     fileWriter.setValidateMap(filterReader.getValidValuesMap());

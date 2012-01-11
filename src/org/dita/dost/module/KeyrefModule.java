@@ -82,23 +82,19 @@ final class KeyrefModule implements AbstractPipelineModule {
 
         // get the key definitions from the dita.list, and the ditamap where it is defined
         // are not handle yet.
-        final String keylist = job.getProperty(KEY_LIST);
-        if(!StringUtils.isEmptyString(keylist)){
-            final Set<String> keys = StringUtils.restoreSet(keylist);
-            for(final String key: keys){
-                keymap.put(key.substring(0, key.indexOf(EQUAL)),
-                        key.substring(key.indexOf(EQUAL)+1, key.lastIndexOf("(")));
-                // map file which define the keys
-                final String map = key.substring(key.lastIndexOf("(") + 1, key.lastIndexOf(")"));
-                // put the keyname into corresponding map which defines it.
-                //a map file can define many keys
-                if(maps.containsKey(map)){
-                    maps.get(map).add(key.substring(0,key.indexOf(EQUAL)));
-                }else{
-                    final Set<String> set = new HashSet<String>();
-                    set.add(key.substring(0, key.indexOf(EQUAL)));
-                    maps.put(map, set);
-                }
+        for(final String key: job.getSet(KEY_LIST)){
+            keymap.put(key.substring(0, key.indexOf(EQUAL)),
+                    key.substring(key.indexOf(EQUAL)+1, key.lastIndexOf("(")));
+            // map file which define the keys
+            final String map = key.substring(key.lastIndexOf("(") + 1, key.lastIndexOf(")"));
+            // put the keyname into corresponding map which defines it.
+            //a map file can define many keys
+            if(maps.containsKey(map)){
+                maps.get(map).add(key.substring(0,key.indexOf(EQUAL)));
+            }else{
+                final Set<String> set = new HashSet<String>();
+                set.add(key.substring(0, key.indexOf(EQUAL)));
+                maps.put(map, set);
             }
         }
         final KeyrefReader reader = new KeyrefReader();
@@ -111,11 +107,11 @@ final class KeyrefModule implements AbstractPipelineModule {
         }
         final Content content = reader.getContent();
         //get files which have keyref attr
-        final Set<String> parseList = StringUtils.restoreSet(job.getProperty(KEYREF_LIST));
+        final Set<String> parseList = job.getSet(KEYREF_LIST);
         //Conref Module will change file's content, it is possible that tags with @keyref are copied in
         //while keyreflist is hard update with xslt.
         //bug:3056939
-        final Set<String> conrefList = StringUtils.restoreSet(job.getProperty(CONREF_LIST));
+        final Set<String> conrefList = job.getSet(CONREF_LIST);
         parseList.addAll(conrefList);
         for(final String file: parseList){
             logger.logInfo("Processing " + new File(tempDir, file).getAbsolutePath());

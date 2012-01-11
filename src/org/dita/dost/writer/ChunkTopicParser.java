@@ -101,8 +101,6 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
     private final XMLReader reader;
     private Writer output = null;
 
-    private StringBuffer temp = null;
-
     private final Stack<Writer> fileWriterStack;
     private final Stack<Element> stubStack;
 
@@ -595,8 +593,8 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
         try{
             // XXX: This may have to use new File(FileUtils.resolveFile(filePath,FILE_NAME_DITA_LIST_XML)).getParent()
             final Job job = new Job(new File(filePath));
-            final String copytosourcelist[] = job.getProperty(COPYTO_SOURCE_LIST).split(COMMA);
-            final String copytotarget2sourcemaplist[] = job.getProperty(COPYTO_TARGET_TO_SOURCE_MAP_LIST).split(COMMA);
+            final Set<String> copytosourcelist = job.getSet(COPYTO_SOURCE_LIST);
+            final Set<String> copytotarget2sourcemaplist = job.getSet(COPYTO_TARGET_TO_SOURCE_MAP_LIST);
             //in the following, all the 4 arrays are updated according to the set copyto and
             //map copytotarget2source.
 
@@ -614,8 +612,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
             //the @href value are added in fullditatopic and fullditamapandtopic,
             //while they are not supposed to be contained, so should be be removed
 
-            temp = new StringBuffer();
-            Iterator<String> it = copytoSource.iterator();
+            job.setSet(COPYTO_SOURCE_LIST, copytoSource);
             filename = COPYTO_SOURCE_LIST.substring(INT_0, COPYTO_SOURCE_LIST
                     .lastIndexOf("list"))
                     + ".list";
@@ -624,15 +621,12 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                 bufferedWriter = new BufferedWriter(
                         new OutputStreamWriter(new FileOutputStream(new File(FileUtils.resolveFile(filePath, filename)
                                 ))));
+                final Iterator<String> it = copytoSource.iterator();
                 while(it.hasNext()){
                     key = it.next();
-                    temp.append(key);
-                    if(it.hasNext()) {
-                        temp.append(COMMA);
-                    }
+                    // XXX: Should this really only output empty lines?
                     bufferedWriter.append("\n");
                 }
-                job.setProperty(COPYTO_SOURCE_LIST, temp.toString());
                 bufferedWriter.flush();
             } finally {
                 if (bufferedWriter != null) {
@@ -640,8 +634,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                 }
             }
 
-            temp = new StringBuffer();
-            it = copytotarget2source.keySet().iterator();
+            job.setMap(COPYTO_TARGET_TO_SOURCE_MAP_LIST, copytotarget2source);
             filename = COPYTO_TARGET_TO_SOURCE_MAP_LIST.substring(INT_0, COPYTO_TARGET_TO_SOURCE_MAP_LIST
                     .lastIndexOf("list"))
                     + ".list";
@@ -650,16 +643,12 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                 bufferedWriter = new BufferedWriter(
                         new OutputStreamWriter(new FileOutputStream(new File(FileUtils.resolveFile(filePath, filename)
                                 ))));
+                final Iterator<String> it = copytotarget2source.keySet().iterator();
                 while(it.hasNext()){
                     key = it.next();
-                    temp.append(key).append(EQUAL).append(copytotarget2source.get(key));
                     bufferedWriter.append(key).append(EQUAL).append(copytotarget2source.get(key));
-                    if(it.hasNext()) {
-                        temp.append(COMMA);
-                    }
                     bufferedWriter.append("\n");
                 }
-                job.setProperty(COPYTO_TARGET_TO_SOURCE_MAP_LIST, temp.toString());
                 bufferedWriter.flush();
             } finally {
                 bufferedWriter.close();

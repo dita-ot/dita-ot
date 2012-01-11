@@ -86,7 +86,7 @@ final class MoveMetaModule implements AbstractPipelineModule {
 
         final MapMetaReader metaReader = new MapMetaReader();
         metaReader.setLogger(logger);
-        final Set<String> fullditamaplist = StringUtils.restoreSet(job.getProperty(FULL_DITAMAP_LIST));
+        final Set<String> fullditamaplist = job.getSet(FULL_DITAMAP_LIST);
         for (String mapFile: fullditamaplist) {
             mapFile = new File(tempDir, mapFile).getAbsolutePath();
             logger.logInfo("Reading " + mapFile);

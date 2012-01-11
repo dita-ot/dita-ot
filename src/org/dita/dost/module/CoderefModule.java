@@ -67,7 +67,7 @@ final class CoderefModule implements AbstractPipelineModule {
             throw new DITAOTException(e);
         }
 
-        final Set<String> codereflist=StringUtils.restoreSet(job.getProperty(CODEREF_LIST));
+        final Set<String> codereflist=job.getSet(CODEREF_LIST);
         final CoderefResolver writer = new CoderefResolver();
         writer.setLogger(logger);
         for (final String fileName : codereflist) {

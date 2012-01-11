@@ -89,7 +89,7 @@ public final class CheckLang extends Task {
             if(!StringUtils.isEmptyString(langCode)){
                 setActiveProjectProperty("htmlhelp.locale", langCode);
             }else{
-                final Set<String> topicList = StringUtils.restoreSet(job.getProperty(FULL_DITA_TOPIC_LIST));
+                final Set<String> topicList = job.getSet(FULL_DITA_TOPIC_LIST);
                 //parse topic files
                 for(final String topicFileName : topicList){
                     final File topicFile = new File(tempdir, topicFileName);

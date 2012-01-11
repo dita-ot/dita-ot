@@ -244,7 +244,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
         try{
             final Job job = new Job(new File(tempDir));
 
-            final String conreflist[] = job.getProperty(CONREF_LIST).split(COMMA);
+            final Set<String> conreflist = job.getSet(CONREF_LIST);
             // get the reletivePath from tempDir
             final String reletivePath = filename.substring(FileUtils.removeRedundantNames(tempDir).length() + 1);
             for(final String str: conreflist){
@@ -252,9 +252,9 @@ public final class ConrefPushParser extends AbstractXMLWriter {
                     return;
                 }
             }
-            final StringBuffer stringBuffer = new StringBuffer();
-            stringBuffer.append(job.getProperty(CONREF_LIST)).append(COMMA).append(reletivePath);
-            job.setProperty(CONREF_LIST, stringBuffer.toString());
+            final Set<String> stringBuffer = new HashSet<String>(job.getSet(CONREF_LIST));
+            stringBuffer.add(reletivePath);
+            job.setSet(CONREF_LIST, stringBuffer);
             
             job.write();
 

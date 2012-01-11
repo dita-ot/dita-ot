@@ -72,6 +72,29 @@ public final class StringUtils {
 
         return buff.toString();
     }
+    
+    /**
+     * Assemble all elements in map to a string.
+     * 
+     * @param value map to serializer
+     * @param delim entry delimiter
+     * @return concatenated map
+     */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public static String assembleString(final Map value, final String delim) {
+        if (value == null || value.isEmpty()) {
+            return "";
+        }
+        final StringBuilder buf = new StringBuilder();
+        for (Iterator<Map.Entry<String, String>> i = value.entrySet().iterator(); i.hasNext();) {
+            final Map.Entry<String, String> e = i.next();
+            buf.append(e.getKey().toString()).append(EQUAL).append(e.getValue().toString());
+            if (i.hasNext()) {
+                buf.append(delim);
+            }
+        }
+        return buf.toString();
+    }
 
     /**
      * Escape XML characters.

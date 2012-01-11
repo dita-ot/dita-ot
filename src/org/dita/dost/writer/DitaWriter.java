@@ -1245,21 +1245,17 @@ public final class DitaWriter extends AbstractXMLWriter {
                 logger.logException(new Exception("Failed to read job configuration file: " + e.getMessage(), e));
             }
 
-            if(job.getProperty(KEY_LIST).length()!=0){
-                final String[] keylist = job.getProperty(KEY_LIST).split(COMMA);
-                for(final String keyinfo: keylist){
-                    //get the key name
-                    final String key = keyinfo.substring(0, keyinfo.indexOf(EQUAL));
+            for(final String keyinfo: job.getSet(KEY_LIST)){
+                //get the key name
+                final String key = keyinfo.substring(0, keyinfo.indexOf(EQUAL));
 
-                    //Edited by William on 2010-02-25 for bug:2957456 start
-                    //value = keyinfo.substring(keyinfo.indexOf(EQUAL)+1, keyinfo.indexOf("("));
-                    //get the href value and source file name
-                    //e.g topics/target-topic-a.xml(maps/root-map-01.ditamap)
-                    final String value = keyinfo.substring(keyinfo.indexOf(EQUAL)+1);
-                    //Edited by William on 2010-02-25 for bug:2957456 end
-                    keys.put(key, value);
-                }
-
+                //Edited by William on 2010-02-25 for bug:2957456 start
+                //value = keyinfo.substring(keyinfo.indexOf(EQUAL)+1, keyinfo.indexOf("("));
+                //get the href value and source file name
+                //e.g topics/target-topic-a.xml(maps/root-map-01.ditamap)
+                final String value = keyinfo.substring(keyinfo.indexOf(EQUAL)+1);
+                //Edited by William on 2010-02-25 for bug:2957456 end
+                keys.put(key, value);
             }
         }
 

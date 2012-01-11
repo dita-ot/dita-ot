@@ -75,7 +75,7 @@ final class MoveIndexModule implements AbstractPipelineModule {
                 .append(SLASH).append(MAP_TOPICMETA.localName)
                 .append(SLASH).append(TOPIC_KEYWORDS.localName).toString());
 
-        final Set<String> fullditamaplist = StringUtils.restoreSet(job.getProperty(FULL_DITAMAP_LIST));
+        final Set<String> fullditamaplist = job.getSet(FULL_DITAMAP_LIST);
         for(final String fileName : fullditamaplist){
             //FIXME: this reader needs parent directory for further process
             indexReader.read(new File(tempDir, fileName).getAbsolutePath());
