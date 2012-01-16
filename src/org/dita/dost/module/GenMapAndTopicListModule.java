@@ -715,7 +715,18 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         }
         // edited by william on 2009-08-06 for bug:2832696 end
         if (FileUtils.isSupportedImageFile(lcasefn)) {
-            imageSet.add(file);
+        	imageSet.add(file);        	      	
+			try {
+				File image = new File (baseInputDir + File.separator + file).getCanonicalFile(); 
+				if (!image.exists()){
+	            	Properties prop = new Properties();
+					prop.put("%1", image.getAbsolutePath());
+					logger.logWarn(MessageUtils.getMessage(
+							"DOTX008W", prop).toString());
+	            }
+			} catch (IOException e) {
+				logger.logError(e.getMessage());
+			}
         }
 
         if (FileUtils.isHTMLFile(lcasefn) || FileUtils.isResourceFile(lcasefn)) {
