@@ -109,7 +109,7 @@
                   basedir="${basedir}"
                   tempdir="${dita.temp.dir}"
                   inputmap="${user.input.file}"
-                  extparam="output=${output.dir}${file.separator}${user.input.file};targetext=${out.ext};indextype=htmlhelp;${index.ext.param.encoding}" />
+                  extparam="output=${output.dir}${file.separator}${user.input.file};targetext=${out.ext};indextype=htmlhelp;${args.dita.locale}" />
     </target>
 
     <target name="plus-transtype-htmlhelp.topics.basic"
