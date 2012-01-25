@@ -83,7 +83,10 @@ See the accompanying license.txt file for applicable licenses.
                     </fo:bookmark>
                 </xsl:otherwise>
             </xsl:choose>
-            <xsl:for-each select="/*/*[contains(@class, ' topic/topic ')]">
+            <xsl:for-each select="/*/*[contains(@class, ' topic/topic ')] |
+                                  /*/ot-placeholder:glossarylist |
+                                  /*/ot-placeholder:tablelist |
+                                  /*/ot-placeholder:figurelist">
               <xsl:variable name="topicType">
                 <xsl:call-template name="determineTopicType"/>
               </xsl:variable>
@@ -128,6 +131,9 @@ See the accompanying license.txt file for applicable licenses.
     
     <xsl:template match="ot-placeholder:toc[$retain-bookmap-order]" mode="bookmark">
         <fo:bookmark internal-destination="{$id.toc}">
+            <xsl:if test="$bookmarkStyle!='EXPANDED'">
+                <xsl:attribute name="starting-state">hide</xsl:attribute>
+            </xsl:if>
             <fo:bookmark-title>
                 <xsl:call-template name="insertVariable">
                     <xsl:with-param name="theVariableID" select="'Table of Contents'"/>
@@ -138,6 +144,9 @@ See the accompanying license.txt file for applicable licenses.
     
     <xsl:template match="ot-placeholder:indexlist[$retain-bookmap-order]" mode="bookmark">
         <fo:bookmark internal-destination="{$id.index}">
+            <xsl:if test="$bookmarkStyle!='EXPANDED'">
+                <xsl:attribute name="starting-state">hide</xsl:attribute>
+            </xsl:if>
             <fo:bookmark-title>
                 <xsl:call-template name="insertVariable">
                     <xsl:with-param name="theVariableID" select="'Index'"/>
