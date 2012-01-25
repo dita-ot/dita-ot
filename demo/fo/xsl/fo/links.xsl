@@ -312,8 +312,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/related-links ')]">
-        <xsl:if test="$disableRelatedLinks = 'no' or
-                      $includeRelatedLinks!='none'">
+        <xsl:if test="not($includeRelatedLinkRoles = '')">
             <xsl:variable name="topicType">
                 <xsl:for-each select="parent::*">
                     <xsl:call-template name="determineTopicType"/>
@@ -364,9 +363,6 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:choose>
     </xsl:template>
 
-    <!-- 20100323: Update to be aware of new includeRelatedLinks parameter.
-         Move main processing of link into a mode template; this allows customized
-         code to easily match links without the need to copy processing logic. -->
     <xsl:template match="*[contains(@class,' topic/link ')]">
       <xsl:param name="topicType">
           <xsl:for-each select="ancestor::*[contains(@class,' topic/topic ')][1]">
@@ -374,11 +370,7 @@ See the accompanying license.txt file for applicable licenses.
           </xsl:for-each>
       </xsl:param>
       <xsl:choose>
-        <xsl:when test="$includeRelatedLinks='nofamily' and
-                        (@role='parent' or @role='child' or @role='ancestor' or @role='descendant' or
-                         @role='next' or @role='previous' or @role='sibling' or @role='cousin')">
-          <!-- Skip link; family links are ignored for 'nofamily' -->
-        </xsl:when>
+        <xsl:when test="@role and not(contains($includeRelatedLinkRoles, @role))"/>
         <xsl:when test="@role='child' and $chapterLayout='MINITOC' and
                         ($topicType='topicChapter' or $topicType='topicAppendix' or $topicType='topicPart')">
           <!-- When a minitoc already links to children, do not add them here -->

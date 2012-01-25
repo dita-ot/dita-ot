@@ -43,6 +43,23 @@ with those set forth herein.
     <condition property="user.input.dir.url" value="">
       <istrue value="${org.dita.pdf2.use-out-temp}"/>
     </condition>
+    
+    <condition property="args.rellinks" value="none">
+      <or>
+        <equals arg1="${args.fo.include.rellinks}" arg2="none"/>
+        <not><isset property="args.fo.include.rellinks"/></not>
+        <istrue value="${disableRelatedLinks}"/>
+      </or>
+    </condition>
+    <condition property="args.rellinks" value="all">
+      <equals arg1="${args.fo.include.rellinks}" arg2="all"/>
+    </condition>
+    <condition property="args.rellinks" value="nofamily">
+      <equals arg1="${args.fo.include.rellinks}" arg2="nofamily"/>
+    </condition>
+    <condition property="args.rellinks" value="none">
+      <not><isset property="args.rellinks"/></not>
+    </condition>
   </target>
 
   <target name="dita2pdf2" depends="dita2pdf2.init, dita-preprocess, map2pdf2, topic2pdf2"/>
@@ -370,6 +387,7 @@ with those set forth herein.
       <arg line='"antArgsBookmarkStyle=${args.bookmark.style}"'/>
       <arg line='"antArgsChapterLayout=${args.chapter.layout}"'/>
       <arg line='"antArgsIncludeRelatedLinks=${args.fo.include.rellinks}"'/>
+      <arg line='"include.rellinks=${include.rellinks}"'/>
       <arg line='"antArgsGenerateTaskLabels=${args.gen.task.lbl}"'/>
       <arg line='"pdfFormatter=${pdf.formatter}"'/>
       <arg line='"useFrameIndexMarkup=${org.dita.pdf2.index.frame-markup}"'/>

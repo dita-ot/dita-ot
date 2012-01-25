@@ -114,6 +114,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:param name="antArgsBookmarkStyle"/>
     <xsl:param name="antArgsChapterLayout"/>
     <xsl:param name="antArgsIncludeRelatedLinks"/>
+    <xsl:param name="include.rellinks"/>
     <xsl:param name="antArgsGenerateTaskLabels"/>
 
     <!-- Remaining parameters are not passed in with the default Ant code. -->

@@ -234,12 +234,16 @@ are based on the XHTML transform type, including:</p>
                   <codeph>HDR</codeph>.</ph><note>The fragment must be valid XML, with a single root
                   element, common practice is to place all content into &lt;div&gt;.</note></entry>
             </row>
-            <row id="args.hide.parent.link">
+            <row id="args.hide.parent.link" importance="deprecated">
               <entry colname="COLSPEC0"><codeph>args.hide.parent.link</codeph></entry>
               <entry id="args.hide.parent.link.desc" colname="COLSPEC3">Specifies whether to hide
                 links to parent topics in the rendered XHTML. <ph audience="xslt-customizer"
                   >Corresponds to the XSLT parameter <codeph>NOPARENTLINK</codeph>.</ph> Allowed
-                values are "yes" and "no". Default value is "no".</entry>
+                values are "yes" and "no". Default value is "no".<note type="notice">Deprecated in
+                  favor of <codeph>args.rellinks</codeph>.</note></entry>
+            </row>
+            <row conref="#dita-ot-ant-properties/args.rellinks">
+              <entry></entry>
             </row>
             <row id="args.indexshow">
               <entry colname="COLSPEC0"><codeph>args.indexshow</codeph></entry>
@@ -266,9 +270,8 @@ are based on the XHTML transform type, including:</p>
             <row id="args.xsl">
               <entry colname="COLSPEC0"><codeph>args.xsl</codeph></entry>
               <entry id="args.xsl.desc" colname="COLSPEC3">Specifies an XSL file that is used rather
-                than the default XSL transform, located in
-                  <codeph>toolkitdir\xsl\dita2xhtml.xsl</codeph>. Property must specify the full
-                path and XSL file name.</entry>
+                than the default XSL transform, located in <codeph>xsl\dita2xhtml.xsl</codeph>.
+                Property must specify the full path and XSL file name.</entry>
             </row>
             <row id="generate.copy.outer">
               <entry colname="COLSPEC0"><codeph>generate.copy.outer</codeph></entry>
@@ -310,97 +313,125 @@ are based on the XHTML transform type, including:</p>
           </tbody>
         </tgroup>
 </table></section>
-<section> 	<title>PDF-specific Ant Properties</title><p>The following
-table describes Ant properties that are specific to the PDF transformation
-type.</p><table><title>PDF parameters</title>
-<tgroup cols="2">
-          <colspec colname="COLSPEC0" colwidth="150*"/>
-          <colspec colname="COLSPEC3" colwidth="200*"/>
-          <thead>
-            <row>
-              <entry>Project Ant Property</entry>
-              <entry>Description</entry>
-            </row>
-          </thead>
-          <tbody>
-            <row id="args.fo.include.rellinks">
-              <entry colname="COLSPEC0"><codeph>args.fo.include.rellinks</codeph></entry>
-              <entry id="args.fo.include.rellinks.desc" colname="COLSPEC3">Specifies which links to
+  <section> 	<title>PDF2-specific Ant properties</title><p>The following
+    table describes Ant properties that are specific to the PDF2 transformation
+    type.</p><table><title>PDF2 parameters</title>
+      <tgroup cols="2">
+        <colspec colname="COLSPEC0" colwidth="150*"/>
+        <colspec colname="COLSPEC3" colwidth="200*"/>
+        <thead>
+          <row>
+            <entry>Project Ant Property</entry>
+            <entry>Description</entry>
+          </row>
+        </thead>
+        <tbody>
+          <row id="args.rellinks">
+            <entry><codeph>args.rellinks</codeph></entry>
+            <entry id="args.rellinks.desc">Specifies which links to
+              include in the output. Values are:<ul>
+                <li>"none" (default) – no links are included.</li>
+                <li>"all" – all links are included.</li>
+                <li>"nofamily" – parent, child, next, and previous links are not included.</li>
+              </ul></entry>
+          </row>
+          <row id="args.fo.include.rellinks" importance="deprecated">
+            <entry colname="COLSPEC0"><codeph>args.fo.include.rellinks</codeph></entry>
+            <entry id="args.fo.include.rellinks.desc" colname="COLSPEC3">Specifies which links to
                 include in the PDF file. Values are:<ul>
                   <li>"none" (default) – no links are included.</li>
                   <li>"all" – all links are included.</li>
                   <li>"nofamily" – hard coded links and reltable-based links are included. Parent,
                     child, next, and previous links are not included.</li>
-                </ul></entry>
-            </row>
-            <row id="args.fo.output.rel.links" importance="deprecated">
-              <entry colname="COLSPEC0"><codeph>args.fo.output.rel.links</codeph></entry>
-              <entry id="args.fo.output.rel.links.desc" colname="COLSPEC3">Specifies whether to show
-                links in your project's output. Values are "yes" (include all links) and "no" (the
-                default, include no links). If <codeph>${args.fo.include.rellinks}</codeph> is
-                specified, this parameter is ignored.<note>This parameter is deprecated in favor of
-                    <codeph>${args.fo.include.rellinks}</codeph>.</note></entry>
-            </row>
-            <row conref="#dita-ot-ant-properties/args.gen.task.lbl">
-              <entry colname="COLSPEC0"><codeph>args.gen.task.lbl</codeph></entry>
-              <entry colname="COLSPEC2"><!--codeph>/usetasklabels</codeph--></entry>
-              <entry colname="COLSPEC3"
-                ><!--Specifies whether to generate locale-based
+                </ul><note type="notice">Deprecated in favor of
+                  <codeph>args.rellinks</codeph>.</note></entry>
+          </row>
+          <row id="args.xsl.pdf">
+            <entry><codeph>args.xsl.pdf</codeph></entry>
+            <entry id="args.xsl.pdf.desc">Specifies an XSL file that is used in place of the
+              default XSL transform at <codeph>demo\fo\xsl\fo\topic2fo_shell.xsl</codeph>. You
+              must specify the full path and XSL file name.</entry>
+          </row>
+          <row conref="#dita-ot-ant-properties/args.gen.task.lbl">
+            <entry colname="COLSPEC0"><codeph>args.gen.task.lbl</codeph></entry>
+            <entry colname="COLSPEC2"><!--codeph>/usetasklabels</codeph--></entry>
+            <entry colname="COLSPEC3"
+              ><!--Specifies whether to generate locale-based
 default headings for sections within task topics. Allowed values are
 "yes" and "no". Default is "no". Corresponds to the XSLT parameter
 GENERATE-TASK-LABELS.<--></entry>
-            </row>
-            <row id="args.xsl.pdf">
-              <entry><codeph>args.xsl.pdf</codeph></entry>
-              <entry id="args.xsl.pdf.desc">Specifies an XSL file that is used in place of the
-                default XSL transform at <codeph>demo\fo\xsl\fo\topic2fo_shell.xsl</codeph>. You
-                must specify the full path and XSL file name.</entry>
-            </row>
-            <row id="publish.required.cleanup" importance="deprecated">
-              <entry><codeph>publish.required.cleanup</codeph></entry>
-              <entry id="publish.required.cleanup.desc">Indicates whether draft-comment and
-                required-cleanup elements are included in the generated file. Allowed values are "yes" and "no".
-                Default value is value of <codeph>args.draft</codeph> property. Deprecated,
-                <codeph>args.draft</codeph> parameter should be used instead. <ph
+          </row>
+          <row id="publish.required.cleanup" importance="deprecated">
+            <entry><codeph>publish.required.cleanup</codeph></entry>
+            <entry id="publish.required.cleanup.desc">Indicates whether draft-comment and
+                required-cleanup elements are included in the generated file. Allowed values are
+                "yes" and "no". Default value is value of <codeph>args.draft</codeph> property. <ph
                   audience="xslt-customizer">Corresponds to XSLT parameter
-                  <codeph>publishRequiredCleanup</codeph>.</ph></entry>
-            </row>
-            <row id="args.fo.userconfig">
-              <entry><codeph>args.fo.userconfig</codeph></entry>
-              <entry id="args.fo.userconfig.desc">The parameter to specify the user configuration
-                file for FOP.</entry>
-            </row>
-            <row id="custom.xep.config">
-              <entry><codeph>custom.xep.config</codeph></entry>
-              <entry id="custom.xep.config.desc">The parameter to specify the user configuration
-                file for RenderX.</entry>
-            </row>
-            <row id="retain.topic.fo" audience="xslt-customizer" importance="deprecated">
-              <entry><codeph>retain.topic.fo</codeph></entry>
-              <entry id="retain.topic.fo.desc">Specifies whether to leave the generated FO file for
-                a PDF project.</entry>
-            </row>
-            <row id="args.bookmap-order" rev="1.5.4">
-              <entry><codeph>args.bookmap-order</codeph></entry>
-              <entry id="args.bookmap-order.desc">Specify if frontmatter and backmatter content
-                order is retained in bookmap. Values are "retain" and "discard" (default).</entry>
-            </row>
-            <row id="customization.dir" audience="xslt-customizer">
-              <entry><codeph>customization.dir</codeph></entry>
-              <entry>Specifies the customization directory path.</entry>
-            </row>
-            <row id="pdf.formatter">
-              <entry><codeph>pdf.formatter</codeph></entry>
-              <entry>Specified the XSL processor to use. Supported values are:<ul>
-                  <li>"fop" (default)  – Apache FOP</li>
-                  <li>"ah" – Antenna House Formatter</li>
-                  <li>"xep" – RenderX XEP Engine</li>
-                </ul>The Full Easy Install distribution package comes with Apache FOP installed,
-                other XSL processors need to be separately installed. </entry>
-            </row>
-          </tbody>
-        </tgroup>
-</table></section>
+                    <codeph>publishRequiredCleanup</codeph>.</ph><note type="notice">Deprecated in
+                  favor of <codeph>args.draft</codeph>.</note></entry>
+          </row>
+          <row id="args.fo.userconfig">
+            <entry><codeph>args.fo.userconfig</codeph></entry>
+            <entry id="args.fo.userconfig.desc">The parameter to specify the user configuration
+              file for FOP.</entry>
+          </row>
+          <row id="custom.xep.config">
+            <entry><codeph>custom.xep.config</codeph></entry>
+            <entry id="custom.xep.config.desc">The parameter to specify the user configuration
+              file for RenderX.</entry>
+          </row>
+          <row id="retain.topic.fo" audience="xslt-customizer" importance="deprecated">
+            <entry><codeph>retain.topic.fo</codeph></entry>
+            <entry id="retain.topic.fo.desc">Specifies whether to leave the generated FO file for
+              a PDF project.</entry>
+          </row>
+          <row id="args.bookmap-order" rev="1.5.4">
+            <entry><codeph>args.bookmap-order</codeph></entry>
+            <entry id="args.bookmap-order.desc">Specify if frontmatter and backmatter content
+              order is retained in bookmap. Values are "retain" and "discard" (default).</entry>
+          </row>
+          <row id="customization.dir" audience="xslt-customizer">
+            <entry><codeph>customization.dir</codeph></entry>
+            <entry>Specifies the customization directory path.</entry>
+          </row>
+          <row id="pdf.formatter">
+            <entry><codeph>pdf.formatter</codeph></entry>
+            <entry>Specified the XSL processor to use. Supported values are:<ul>
+              <li>"fop" (default)  – Apache FOP</li>
+              <li>"ah" – Antenna House Formatter</li>
+              <li>"xep" – RenderX XEP Engine</li>
+            </ul>The Full Easy Install distribution package comes with Apache FOP installed,
+              other XSL processors need to be separately installed. </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table></section>
+  <section> 	<title>Legacy PDF-specific Ant properties</title><p>The following
+    table describes Ant properties that are specific to the Legacy PDF transformation
+    type.</p><table><title>Legacy PDF parameters</title>
+      <tgroup cols="2">
+        <colspec colname="COLSPEC0" colwidth="150*"/>
+        <colspec colname="COLSPEC3" colwidth="200*"/>
+        <thead>
+          <row>
+            <entry>Project Ant Property</entry>
+            <entry>Description</entry>
+          </row>
+        </thead>
+        <tbody>
+          <row id="args.fo.output.rel.links" importance="deprecated">
+            <entry colname="COLSPEC0"><codeph>args.fo.output.rel.links</codeph></entry>
+            <entry id="args.fo.output.rel.links.desc" colname="COLSPEC3">Specifies whether to show
+                links in your project's output. Values are "yes" (include all links) and "no" (the
+                default, include no links). If <codeph>${args.fo.include.rellinks}</codeph> is
+                specified, this parameter is ignored.</entry>
+          </row>
+          <row conref="#dita-ot-ant-properties/args.fo.userconfig">
+            <entry></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table></section>
 <section rev="1.5.2"><title>ODT-specific Ant Properties</title><p>The ODT transform,
 which produces a document using the Open Document Format, is available
 in the 1.5.2 version of the DITA-OT.</p><table><title>ODT related
@@ -420,7 +451,7 @@ parameters</title>
               <entry id="args.odt.img.embed.desc" colname="COLSPEC3">Determines whether images are
                 embedded as binary objects within the ODT file. </entry>
             </row>
-            <row id="args.odt.include.rellinks">
+            <row id="args.odt.include.rellinks" importance="deprecated">
               <entry><codeph>args.odt.include.rellinks</codeph></entry>
               <entry id="args.odt.include.rellinks.desc">Specifies which links to include in the ODT
                 file. Values are:<ul>
@@ -428,7 +459,8 @@ parameters</title>
                   <li>"all" – all links are included.</li>
                   <li>"nofamily" – hard coded links and reltable-based links are included. Parent,
                     child, next, and previous links are not included.</li>
-                </ul></entry>
+                </ul><note type="notice">Deprecated in favor of
+                  <codeph>args.rellinks</codeph>.</note></entry>
             </row>
           </tbody>
         </tgroup>
@@ -626,10 +658,10 @@ above.</p><table>
             </row>
             <row id="dita.extname" importance="deprecated">
               <entry><codeph>dita.extname</codeph></entry>
-              <entry id="dita.extname.desc">Deprecated, <codeph>dita.ext</codeph> parameter should
-                be used instead. Defines the file extension for content files in the directory
-                specified with the <codeph>dita.temp.dir</codeph> property. Allowed values are
-                ".xml" and ".dita"; Default value is ".xml".</entry>
+              <entry id="dita.extname.desc">Defines the file extension for content files in the
+                directory specified with the <codeph>dita.temp.dir</codeph> property. Allowed values
+                are ".xml" and ".dita". Default value is ".xml".<note>Deprecated in favor of
+                    <codeph>dita.ext</codeph>.</note></entry>
             </row>
             <row id="dita.preprocess.reloadstylesheet">
               <entry><codeph>dita.preprocess.reloadstylesheet</codeph>              </entry>

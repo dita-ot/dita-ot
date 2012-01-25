@@ -351,6 +351,7 @@
       style="${dita.script.dir}${file.separator}preprocess${file.separator}maplink.xsl">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="INPUTMAP" expression="${user.input.file}" />
+      <param name="include.rellinks" expression="${include.rellinks}" if="include.rellinks"/>
       <dita:extension id="dita.preprocess.maplink.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
       <xmlcatalog refid="dita.catalog"/>
     </xslt>

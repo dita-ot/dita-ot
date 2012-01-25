@@ -45,6 +45,8 @@
         <xsl:otherwise>none</xsl:otherwise>
       </xsl:choose>
     </xsl:param>
+    <!-- list of supported link roles -->
+    <xsl:param name="includeRelatedLinkRoles" select="normalize-space($include.rellinks)"/>
 
     <!-- The default of 215.9mm x 279.4mm is US Letter size (8.5x11in) -->
     <xsl:variable name="page-width">215.9mm</xsl:variable>

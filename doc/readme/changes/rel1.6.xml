@@ -5,7 +5,10 @@
   <reference id="general-enhancements-and-changes">
     <title>General Enhancements and Changes</title>
     <refbody>
-      <section id="section_h5q_3nt_q2"/>
+      <section id="section_h5q_3nt_q2">
+        <p>A new property <codeph>args.rellinks</codeph> can be used to control which related links
+          will be output.</p>
+      </section>
     </refbody>
   </reference>
   <reference id="reference_yvj_ttj_bd">

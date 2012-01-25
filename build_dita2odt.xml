@@ -5,12 +5,6 @@
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <project name="dita2odt">
 	
-  <property name="odt.suffix" value=".odt" />
-  <condition property="args.odt.include.rellinks" value="none">
-     <not><isset property="args.odt.include.rellinks"></isset></not>
-  </condition>
-	
-  
 <!--  
   <target name="dita2odt"
     depends="build-init, preprocess, map2odt, topic2odt,
@@ -18,11 +12,6 @@
   	dita.odt.package.topic, dita.odt.package.map, clean-up-out-dir">
   </target>
 -->
-  <condition property="odt.dir" value="xsl/xslodt">
-	    <not>
-	      <isset property="odt.dir"/>
-	    </not>
-  </condition>
 	
   <target name="set_odt_output_tempdir">
     <condition property="odt.output.tempdir" value="${dita.map.output.dir}/temp">
@@ -51,7 +40,20 @@
 	
 	
   <target name="dita2odt"
-    depends="build-init, preprocess, set_odt_output_tempdir, dita.odt.package.topic, dita.odt.package.map, move-output-file, clean_output_tempdir">
+    depends="dita2odt.init, build-init, preprocess, set_odt_output_tempdir, dita.odt.package.topic, dita.odt.package.map, move-output-file, clean_output_tempdir">
+  </target>
+  
+  <target name="dita2odt.init">
+    <property name="odt.suffix" value=".odt" />
+    <condition property="args.rellinks" value="none">
+      <not><isset property="args.rellinks"/></not>
+    </condition>
+    <condition property="args.odt.include.rellinks" value="none">
+       <not><isset property="args.odt.include.rellinks"></isset></not>
+    </condition>
+    <condition property="odt.dir" value="xsl/xslodt">
+      <not><isset property="odt.dir"/></not>
+    </condition>
   </target>
   
   <target name="map2odt" unless="noMap">

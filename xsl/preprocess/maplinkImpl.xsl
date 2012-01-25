@@ -20,6 +20,8 @@
   <xsl:param name="WORKDIR">
     <xsl:apply-templates select="/processing-instruction()" mode="get-work-dir"/>
   </xsl:param>
+  <xsl:param name="include.rellinks" select="'parent child sibling friend next previous cousin ancestor descendant sample external other'"/>
+  <xsl:variable name="include.roles" select="concat(' ', normalize-space($include.rellinks), ' ')"/>
   <xsl:variable name="file-prefix">
     <xsl:value-of select="$FILEREF"/><xsl:value-of select="$WORKDIR"/>
   </xsl:variable>
@@ -200,28 +202,40 @@
   <!-- To do: When XSLT 2.0 is a minimum requirement, do this again with hearty use of xsl:next-match. -->
   <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="link-from">
     <xsl:param name="pathBackToMapDirectory"/>
-    <xsl:apply-templates select="." mode="link-to-parent">
-      <xsl:with-param name="pathBackToMapDirectory" select="$pathBackToMapDirectory"/>
-    </xsl:apply-templates>
+    <xsl:if test="contains($include.roles, ' parent ')">
+      <xsl:apply-templates select="." mode="link-to-parent">
+        <xsl:with-param name="pathBackToMapDirectory" select="$pathBackToMapDirectory"/>
+      </xsl:apply-templates>
+    </xsl:if>
     <xsl:apply-templates select="." mode="link-to-prereqs">
       <xsl:with-param name="pathBackToMapDirectory" select="$pathBackToMapDirectory"/>
     </xsl:apply-templates>
-    <xsl:apply-templates select="." mode="link-to-siblings">
-      <xsl:with-param name="pathBackToMapDirectory" select="$pathBackToMapDirectory"/>
-    </xsl:apply-templates>
-    <xsl:apply-templates select="." mode="link-to-next-prev">
-      <xsl:with-param name="pathBackToMapDirectory" select="$pathBackToMapDirectory"/>
-    </xsl:apply-templates>
-    <xsl:apply-templates select="." mode="link-to-children">
-      <xsl:with-param name="pathBackToMapDirectory" select="$pathBackToMapDirectory"/>
-    </xsl:apply-templates>
-    <xsl:apply-templates select="." mode="link-to-friends">
-      <xsl:with-param name="pathBackToMapDirectory" select="$pathBackToMapDirectory"/>
-      <xsl:with-param name="linklist">false</xsl:with-param>
-    </xsl:apply-templates>    
-    <xsl:apply-templates select="." mode="link-to-other">
-      <xsl:with-param name="pathBackToMapDirectory" select="$pathBackToMapDirectory"/>
-    </xsl:apply-templates>    
+    <xsl:if test="contains($include.roles, ' sibling ')">
+      <xsl:apply-templates select="." mode="link-to-siblings">
+        <xsl:with-param name="pathBackToMapDirectory" select="$pathBackToMapDirectory"/>
+      </xsl:apply-templates>
+    </xsl:if>
+    <xsl:if test="contains($include.roles, ' next ') or contains($include.roles, ' previous')">
+      <xsl:apply-templates select="." mode="link-to-next-prev">
+        <xsl:with-param name="pathBackToMapDirectory" select="$pathBackToMapDirectory"/>
+      </xsl:apply-templates>
+    </xsl:if>
+    <xsl:if test="contains($include.roles, ' child ')">
+      <xsl:apply-templates select="." mode="link-to-children">
+        <xsl:with-param name="pathBackToMapDirectory" select="$pathBackToMapDirectory"/>
+      </xsl:apply-templates>
+    </xsl:if>
+    <xsl:if test="contains($include.roles, ' friend ')">
+      <xsl:apply-templates select="." mode="link-to-friends">
+        <xsl:with-param name="pathBackToMapDirectory" select="$pathBackToMapDirectory"/>
+        <xsl:with-param name="linklist">false</xsl:with-param>
+      </xsl:apply-templates>
+    </xsl:if>
+    <xsl:if test="contains($include.roles, ' other ')">
+      <xsl:apply-templates select="." mode="link-to-other">
+        <xsl:with-param name="pathBackToMapDirectory" select="$pathBackToMapDirectory"/>
+      </xsl:apply-templates>
+    </xsl:if>
   </xsl:template>
 
   <!--parent-->
@@ -273,18 +287,22 @@
   <xsl:template match="*[@collection-type='sequence']/*[contains(@class, ' map/topicref ')]
     [not(ancestor::*[contains(concat(' ', @chunk, ' '), ' to-content ')])]" mode="link-to-next-prev" name="link-to-next-prev">
     <xsl:param name="pathBackToMapDirectory"/>
+    <xsl:if test="contains($include.roles, ' previous ')">
         <xsl:apply-templates mode="link" 
           select="preceding-sibling::*[contains(@class, ' map/topicref ')][@href][not(@href='')][not(@linking='none')][not(@linking='sourceonly')][not(@processing-role='resource-only')][1]">
           <xsl:with-param name="role">previous</xsl:with-param>
           <xsl:with-param name="pathBackToMapDirectory" 
             select="$pathBackToMapDirectory"/>
         </xsl:apply-templates>
+    </xsl:if>
+    <xsl:if test="contains($include.roles, ' next ')">
         <xsl:apply-templates mode="link" 
           select="following-sibling::*[contains(@class, ' map/topicref ')][@href][not(@href='')][not(@linking='none')][not(@linking='sourceonly')][not(@processing-role='resource-only')][1]">
           <xsl:with-param name="role">next</xsl:with-param>
           <xsl:with-param name="pathBackToMapDirectory" 
             select="$pathBackToMapDirectory"/>
         </xsl:apply-templates>
+    </xsl:if>
   </xsl:template>
   
   <!--children-->

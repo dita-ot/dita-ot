@@ -15,6 +15,8 @@
 <xsl:key name="hideduplicates" match="*[contains(@class, ' topic/link ')][not(ancestor::*[contains(@class, ' topic/linklist ')])][not(@role) or @role='cousin' or @role='external' or @role='friend' or @role='other' or @role='sample' or @role='sibling']" use="concat(ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id, ' ',@href,@scope,@audience,@platform,@product,@otherprops,@rev,@type,normalize-space(child::*))"/>
 
 <xsl:param name="NOPARENTLINK" select="'no'"/><!-- "no" and "yes" are valid values; non-'no' is ignored -->
+<xsl:param name="include.rellinks" select="'parent child sibling friend next previous cousin ancestor descendant sample external other'"/>
+<xsl:variable name="include.roles" select="concat(' ', normalize-space($include.rellinks), ' ')"/>
 
 <!-- ========== Hooks for common user customizations ============== -->
 <!-- The following two templates are available for anybody who needs
@@ -97,6 +99,7 @@
 <xsl:template match="*[contains(@class,' topic/related-links ')]" mode="breadcrumb">
   <xsl:for-each select="descendant-or-self::*[contains(@class,' topic/related-links ') or contains(@class,' topic/linkpool ')][child::*[@role='ancestor']]">
      <xsl:value-of select="$newline"/><div class="breadcrumb">
+     <xsl:if test="contains($include.roles, ' previous ')">
      <xsl:choose>
           <!--output previous link first, if it exists-->
           <xsl:when test="*[@href][@role='previous']">
@@ -104,10 +107,14 @@
           </xsl:when>
           <xsl:otherwise/>
      </xsl:choose>
+     </xsl:if>
      <!--if both previous and next links exist, output a separator bar-->
+     <xsl:if test="contains($include.roles, ' next ') and contains($include.roles, ' next ')">
      <xsl:if test="*[@href][@role='next'] and *[@href][@role='previous']">
        <xsl:text> | </xsl:text>
      </xsl:if>
+     </xsl:if>
+     <xsl:if test="contains($include.roles, ' next ')">
      <xsl:choose>
           <!--output next link, if it exists-->
           <xsl:when test="*[@href][@role='next']">
@@ -115,15 +122,20 @@
           </xsl:when>
           <xsl:otherwise/>
      </xsl:choose>
+     </xsl:if>
+     <xsl:if test="contains($include.roles, ' next ') and contains($include.roles, ' next ') and contains($include.roles, ' ancestor ')">
      <!--if we have either next or previous, plus ancestors, separate the next/prev from the ancestors with a vertical bar-->
      <xsl:if test="(*[@href][@role='next'] or *[@href][@role='previous']) and *[@href][@role='ancestor']">
        <xsl:text> | </xsl:text>
      </xsl:if>
+     </xsl:if>
+     <xsl:if test="contains($include.roles, ' ancestor ')">
      <!--if ancestors exist, output them, and include a greater-than symbol after each one, including a trailing one-->
      <xsl:if test="*[@href][@role='ancestor']">
      <xsl:for-each select="*[@href][@role='ancestor']">
                <xsl:apply-templates select="."/> &gt;
      </xsl:for-each>
+     </xsl:if>
      </xsl:if>
      </div><xsl:value-of select="$newline"/>
   </xsl:for-each>
@@ -157,13 +169,14 @@
 <xsl:template match="*[contains(@class,' topic/related-links ')]" name="topic.related-links">
  <div>
     <xsl:call-template name="commonattributes"/>
-
+  <xsl:if test="contains($include.roles, ' child ') or contains($include.roles, ' descendant ')">
   <xsl:call-template name="ul-child-links"/><!--handle child/descendants outside of linklists in collection-type=unordered or choice-->
 
   <xsl:call-template name="ol-child-links"/><!--handle child/descendants outside of linklists in collection-type=ordered/sequence-->
-
+  </xsl:if>
+  <xsl:if test="contains($include.roles, ' next ') or contains($include.roles, ' previous ') or contains($include.roles, ' parent ')">
   <xsl:call-template name="next-prev-parent-links"/><!--handle next and previous links-->
-
+  </xsl:if>
   <!-- Calls to typed links deprecated.  Grouping instead performed by related-links:group-unordered-links template. -->
 
   <!--<xsl:call-template name="concept-links"/>--><!--sort remaining concept links by type-->
@@ -240,7 +253,7 @@ Children are displayed in a numbered list, with the target title as the cmd and 
      )]/parent::*">
      <xsl:value-of select="$newline"/><div class="familylinks"><xsl:value-of select="$newline"/>
 
-    <xsl:if test="$NOPARENTLINK='no'"> 
+    <xsl:if test="$NOPARENTLINK='no' and contains($include.roles, ' parent ')">
      <xsl:choose>
        <xsl:when test="*[@href][@role='parent']">
          <xsl:for-each select="*[@href][@role='parent']">
@@ -255,12 +268,16 @@ Children are displayed in a numbered list, with the target title as the cmd and 
      </xsl:choose>
     </xsl:if>
 
+  <xsl:if test="contains($include.roles, ' previous ')">
      <xsl:for-each select="*[@href][@role='previous']">
           <div class="previouslink"><xsl:apply-templates select="."/></div><xsl:value-of select="$newline"/>
      </xsl:for-each>
+  </xsl:if>
+  <xsl:if test="contains($include.roles, ' next ')">
      <xsl:for-each select="*[@href][@role='next']">
           <div class="nextlink"><xsl:apply-templates select="."/></div><xsl:value-of select="$newline"/>
      </xsl:for-each>
+  </xsl:if>
        </div><xsl:value-of select="$newline"/>
      </xsl:for-each>
 </xsl:template>
@@ -356,6 +373,7 @@ Children are displayed in a numbered list, with the target title as the cmd and 
           [not(ancestor::*[contains(@class,' topic/linklist ')])]
           [generate-id(.)=generate-id(key('link',concat(ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id, ' ', @href,@type,@role,@platform,@audience,@importance,@outputclass,@keyref,@scope,@format,@otherrole,@product,@otherprops,@rev,@class,child::*))[1])]
 [contains(@class, ' topic/link ')]
+          [@role and contains($include.roles, concat(' ', @role, ' '))]
           [not(@role='child' or @role='descendant' or @role='ancestor' or @role='parent' or @role='next' or @role='previous' or @type='concept' or @type='task' or @type='reference')]
           [not(@importance='required' and (not(@role) or @role='sibling' or @role='friend' or @role='cousin'))]">
           <xsl:apply-templates select="."/>
@@ -419,6 +437,7 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 <!-- Override no-name group wrapper template for HTML: output "Related Information" in a <div>. -->
   <xsl:template match="*[contains(@class, ' topic/link ')]" mode="related-links:result-group" name="related-links:group-result.">
     <xsl:param name="links"/>
+    <xsl:if test="$links/node()">
     <div class="relinfo">
       <strong>
         <xsl:call-template name="getString">
@@ -427,6 +446,7 @@ Children are displayed in a numbered list, with the target title as the cmd and 
       </strong><br/><xsl:value-of select="$newline"/>
       <xsl:copy-of select="$links"/>
     </div><xsl:value-of select="$newline"/>
+    </xsl:if>
   </xsl:template>
   
   <!-- Links with @type="topic" belong in no-name group. -->
@@ -679,6 +699,7 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 </xsl:template>
 
 <xsl:template match="*[contains(@class, ' topic/link ')]" name="topic.link">
+  <xsl:if test="@role and contains($include.roles, concat(' ', @role, ' '))">
   <xsl:choose>
     <!-- Linklist links put out <br/> in "processlinklist" -->
     <xsl:when test="ancestor::*[contains(@class,' topic/linklist ')]">
@@ -704,6 +725,7 @@ Children are displayed in a numbered list, with the target title as the cmd and 
     </xsl:when>
     <xsl:otherwise><div><xsl:call-template name="makelink"/></div><xsl:value-of select="$newline"/></xsl:otherwise>
   </xsl:choose>
+  </xsl:if>
 </xsl:template>
 
 <!--creating the actual link-->

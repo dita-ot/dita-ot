@@ -547,6 +547,20 @@
   		 <isset property="validate" />
   	   </not>
   	</condition>
+    
+    <!-- Related links to output: none, all, nofamily -->
+    <condition property="include.rellinks" value="">
+      <equals arg1="${args.rellinks}" arg2="none"/>
+    </condition>
+    <condition property="include.rellinks" value="friend sample external other">
+      <equals arg1="${args.rellinks}" arg2="nofamily"/>
+    </condition>
+    <condition property="include.rellinks" value="parent child sibling friend next previous cousin ancestor descendant sample external other">
+      <or>
+        <equals arg1="${args.rellinks}" arg2="all"/>
+        <not><isset property="args.rellinks"/></not>
+      </or>
+    </condition>
   	
   	<!--solution for the output control-->
   	<condition property="generate.copy.outer" value="1">
