@@ -25,17 +25,39 @@
         <ul>
           <li>3453816 Deprecate logException and add logError(String, Throwable) (milestone 1)</li>
           <li>3458065 PDF2 should fully support core default language (milestone 1)</li>
-          <li>3460151 Use Job to read/write job configuration files (milestone 1)</li>
+          <li>3455512 Add switch to ignore links in XHTML (milestone 1)</li>
+          <li>3468355 Refactor log messages and tasks (milestone 1)</li>
+          <li>3466533 Reduce topic merge memory consumption (milestone 1)</li>
+          <li>3466842 Refactor preprocessing to use SAX filters (in progress)</li>
+          <li>3468864 Remove Content object (in progress)</li>
+          <li>3460151 Use Job to read/write job configuration files (in progress)</li>
+          <li>3469384 Improve filtering (in progress)</li>
           <li>1785391 Make Java code thread-safe (in progress)</li>
+          <li>3468246 Clean Ant scripts (in progress)</li>
         </ul>
       </section>
       <section>
         <title>Patches</title>
+        <ul>
+          <li>3470331 Map references with root fragment are not processed (milestone 1)</li>
+        </ul>
       </section>
       <section>
         <title>Bugs</title>
         <ul>
+          <li>3463319 Temp dir with non-ASCII character crashes (milestone 1)</li>
           <li>3462389 v 1.5.4 fails to create PDF with external topic ref (milestone 1)</li>
+          <li>3477641 [1.5.4]Glosslist no longer visible in Bookmarks (PDF output) (milestone
+            1)</li>
+          <li>3465136 Incorrect image reference does not checked (milestone 1)</li>
+          <li>3455589 Deprecated property breaks Plus plugins (milestone 1)</li>
+          <li>3471937 Info message about inline flagging not displayed (milestone 1)</li>
+          <li>3469425 NullPointerException when absolute path to image (milestone 1)</li>
+          <li>3470580 PDF2 image references broken with uplevels (milestone 1)</li>
+          <li>3468070 1.5.4 looks for lib dir at current dir instead a ${dita.dir} (milestone
+            1)</li>
+          <li>3468073 Apache FOP: TOCs with uneven right margin (milestone 1)</li>
+          <li>3471364 UNC paths are not supported in input argument (in progress)</li>
         </ul>
       </section>
     </refbody>
