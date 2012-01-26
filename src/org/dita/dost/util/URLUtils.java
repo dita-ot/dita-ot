@@ -19,6 +19,13 @@ import java.util.StringTokenizer;
  * Corrects the URLs.
  */
 public final class URLUtils {
+    
+    /**
+     * Private default constructor to make class uninstantiable.
+     */
+    private URLUtils() {
+    }
+    
     /**
      * Corrects the file to URL.
      * 

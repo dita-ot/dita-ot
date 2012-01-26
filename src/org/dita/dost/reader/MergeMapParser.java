@@ -15,14 +15,9 @@ import static org.dita.dost.util.Constants.*;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 import java.util.Stack;
-import java.util.StringTokenizer;
 
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXTransformerFactory;
@@ -30,7 +25,6 @@ import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
 
 import org.xml.sax.helpers.XMLFilterImpl;
-
 import org.xml.sax.helpers.AttributesImpl;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;

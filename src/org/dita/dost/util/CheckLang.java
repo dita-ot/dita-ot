@@ -12,9 +12,7 @@ package org.dita.dost.util;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
 import java.util.Set;
 
@@ -25,7 +23,6 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.DITAOTAntLogger;
-import org.dita.dost.log.MessageUtils;
 
 /**
  * This class is for get the first xml:lang value set in ditamap/topic files

@@ -57,8 +57,10 @@ public final class OutputUtils {
     /**Input Map Dir.*/
     private static String InputMapDir=null;
 
+    /**
+     * Private default constructor to make class uninstantiable.
+     */
     private OutputUtils(){
-        // leave blank as designed
     }
 
     /**

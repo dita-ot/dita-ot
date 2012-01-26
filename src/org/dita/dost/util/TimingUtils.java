@@ -17,6 +17,13 @@ import java.util.Date;
  */
 public final class TimingUtils {
 
+    /**
+     * Private default constructor to make class uninstantiable.
+     */
+    private TimingUtils() {
+        
+    }
+    
     public static String reportElapsedTime(final Date startTime) {
         final long elapsedTime = Calendar.getInstance().getTime().getTime() - startTime.getTime();
         if (elapsedTime < 500) {

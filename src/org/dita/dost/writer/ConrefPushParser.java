@@ -14,10 +14,7 @@ import static org.dita.dost.util.Job.*;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.util.HashSet;

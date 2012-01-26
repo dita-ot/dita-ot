@@ -13,9 +13,7 @@ import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import org.dita.dost.exception.DITAOTException;
@@ -25,8 +23,6 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.MapIndexReader;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
-import org.dita.dost.util.ListUtils;
-import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.DitaIndexWriter;
 
 /**

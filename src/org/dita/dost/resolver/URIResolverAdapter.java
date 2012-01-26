@@ -25,6 +25,10 @@ import org.xml.sax.InputSource;
  * URIResolverAdapter class, convert source into inputsteam.
  */
 public final class URIResolverAdapter {
+    
+    /**
+     * Private default constructor to make class uninstantiable.
+     */
     private URIResolverAdapter() {
         // nop
     }

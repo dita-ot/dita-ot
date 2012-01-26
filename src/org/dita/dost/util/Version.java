@@ -17,7 +17,11 @@ public final class Version {
 
     private static final String fversion = "@@VERSION@@";
 
-
+    /**
+     * Private default constructor to make class uninstantiable.
+     */
+    private Version() {
+    }
 
     /**
      * main function.

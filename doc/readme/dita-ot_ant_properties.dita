@@ -382,8 +382,9 @@ GENERATE-TASK-LABELS.<--></entry>
           </row>
           <row id="retain.topic.fo" audience="xslt-customizer" importance="deprecated">
             <entry><codeph>retain.topic.fo</codeph></entry>
-            <entry id="retain.topic.fo.desc">Specifies whether to leave the generated FO file for
-              a PDF project.</entry>
+            <entry id="retain.topic.fo.desc">Specifies whether to leave the generated FO file for a
+                PDF project. If configuration property <codeph>org.dita.pdf2.use-out-temp</codeph>
+                is set to "false", this parameter is ignored.</entry>
           </row>
           <row id="args.bookmap-order" rev="1.5.4">
             <entry><codeph>args.bookmap-order</codeph></entry>
@@ -433,8 +434,7 @@ GENERATE-TASK-LABELS.<--></entry>
       </tgroup>
     </table></section>
 <section rev="1.5.2"><title>ODT-specific Ant Properties</title><p>The ODT transform,
-which produces a document using the Open Document Format, is available
-in the 1.5.2 version of the DITA-OT.</p><table><title>ODT related
+which produces a document using the Open Document Format.</p><table><title>ODT related
 parameters</title>
 <tgroup cols="2">
           <colspec colname="COLSPEC0" colwidth="150*"/>

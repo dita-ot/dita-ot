@@ -15,7 +15,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;

@@ -29,6 +29,7 @@ import org.xml.sax.InputSource;
  * 
  */
 public final class DitaURIResolverFactory {
+        
     private static URIResolver resolver = null;
     private static String path = null;
     static {
@@ -62,6 +63,13 @@ public final class DitaURIResolverFactory {
             }
         };
     }
+    
+    /**
+     * Private default constructor to make class uninstantiable.
+     */
+    private DitaURIResolverFactory() {
+    }
+    
     /**
      * Get URIResolver.
      * @return resolver

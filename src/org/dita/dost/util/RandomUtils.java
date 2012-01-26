@@ -13,15 +13,15 @@ import java.util.Random;
 
 /**
  * Radom utility to generate random long integer as list id in WORD RTF
- * transformation.
+ * transformation. Used from RTF and OTD transtype's XSTL stylesheets.
  * 
  * @author Zhang, Yuan Peng
  *
  */
 public final class RandomUtils {
+    
     /**
-     * Default Constructor
-     *
+     * Private default constructor to make class uninstantiable.
      */
     private RandomUtils(){
     }

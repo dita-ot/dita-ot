@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Style utility to get and set style names.
+ * Style utility to get and set style names. Used from ODT transtype's XSLT stylesheets.
  * 
  * @author Zhang Di Hua
  *

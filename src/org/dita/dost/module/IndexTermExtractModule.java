@@ -14,12 +14,10 @@ import static org.dita.dost.util.Constants.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.index.IndexTerm;

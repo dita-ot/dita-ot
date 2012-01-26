@@ -16,7 +16,6 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Properties;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;

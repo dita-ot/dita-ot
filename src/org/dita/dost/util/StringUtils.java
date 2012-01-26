@@ -40,6 +40,9 @@ public final class StringUtils {
     private static final String NOT_RESOLVE_ENTITY_CHAR = "|#38|";
     //Edited by william on 2009-11-8 for ampbug:2893664 end
 
+    /**
+     * Private default constructor to make class uninstantiable.
+     */
     private StringUtils() {
     }
 

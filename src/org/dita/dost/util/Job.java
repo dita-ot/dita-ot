@@ -10,7 +10,6 @@
 package org.dita.dost.util;
 
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.Job.*;
 
 import java.io.BufferedWriter;
 import java.io.File;

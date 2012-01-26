@@ -24,7 +24,7 @@ import org.xml.sax.Attributes;
  * 
  * @since 1.5.3
  */
-public class DitaClass {
+public final class DitaClass {
 
     // Variables
 

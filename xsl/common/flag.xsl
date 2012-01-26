@@ -15,9 +15,7 @@
   xmlns:exsl="http://exslt.org/common" 
   xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"
   xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
-  xmlns:styleUtils="org.dita.dost.util.StyleUtils"
-  xmlns:imgUtils="org.dita.dost.util.ImgUtils"
-  exclude-result-prefixes="exsl dita2html ditamsg styleUtils imgUtils">
+  exclude-result-prefixes="exsl dita2html ditamsg">
  
  <xsl:template name="getrules">
   <xsl:variable name="domains">

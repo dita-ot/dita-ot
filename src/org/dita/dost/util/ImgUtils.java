@@ -37,8 +37,7 @@ import org.dita.dost.log.MessageUtils;
 public final class ImgUtils {
 	
     /**
-     * Default Constructor
-     *
+     * Private default constructor to make class uninstantiable.
      */
     private ImgUtils(){
     }

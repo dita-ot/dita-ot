@@ -12,11 +12,10 @@ package org.dita.dost.util;
 import static javax.xml.XMLConstants.NULL_NS_URI;
 
 import org.w3c.dom.NodeList;
-
 import org.w3c.dom.Element;
-
 import org.w3c.dom.Attr;
 import org.w3c.dom.Node;
+
 import org.xml.sax.helpers.AttributesImpl;
 
 /**

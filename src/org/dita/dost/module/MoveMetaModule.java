@@ -14,7 +14,6 @@ import static org.dita.dost.util.Constants.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -30,8 +29,6 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.MapMetaReader;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
-import org.dita.dost.util.ListUtils;
-import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.DitaMapMetaWriter;
 import org.dita.dost.writer.DitaMetaWriter;
 

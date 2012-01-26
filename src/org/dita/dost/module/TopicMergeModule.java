@@ -9,7 +9,6 @@
  */
 package org.dita.dost.module;
 
-import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.BufferedOutputStream;
@@ -19,13 +18,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 

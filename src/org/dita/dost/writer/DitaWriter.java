@@ -207,6 +207,14 @@ public final class DitaWriter extends AbstractXMLWriter {
                    : null;
         }
     }
+    
+    /**
+     * Normalize href attribute.
+     * 
+     * @param attName attribute name
+     * @param atts attributes
+     * @return attribute value
+     */
     private String replaceHREF (final String attName, final Attributes atts){
         if (attName == null){
             return null;
@@ -460,9 +468,11 @@ public final class DitaWriter extends AbstractXMLWriter {
     }
 
     /**
-     * @param attQName
-     * @param attValue
-     * @throws IOException
+     * Write attribute to output. The method does not escape XML delimiter chacters in the value.
+     * 
+     * @param attQName attribute name
+     * @param attValue attribute value
+     * @throws IOException if writing to output failed
      */
     private void copyAttribute(final String attQName, final String attValue) throws IOException{
         output.write(STRING_BLANK);
@@ -474,12 +484,11 @@ public final class DitaWriter extends AbstractXMLWriter {
     }
 
     /**
+     * Process all attributes and write them to output
      * 
-     */
-
-    /**
-     * @param atts
-     * @throws IOException
+     * @param qName element name
+     * @param atts attributes
+     * @throws IOException if writing to output failed
      */
     private void copyElementAttribute(final String qName, final Attributes atts) throws IOException {
         // copy the element's attributes
@@ -1368,6 +1377,12 @@ public final class DitaWriter extends AbstractXMLWriter {
         return true;
     }
 
+    /**
+     * Validate attribute values
+     * 
+     * @param qName element name
+     * @param atts attributes
+     */
     private void validateAttributeValues(final String qName, final Attributes atts) {
         if (validateMap == null) {
             return;

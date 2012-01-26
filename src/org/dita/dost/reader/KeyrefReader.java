@@ -11,14 +11,12 @@ package org.dita.dost.reader;
 
 import static org.dita.dost.util.Constants.*;
 
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
 import java.util.Stack;
 
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
-import org.dita.dost.reader.KeyrefReader.KeyDef;
 import org.dita.dost.resolver.DitaURIResolverFactory;
 import org.dita.dost.resolver.URIResolverAdapter;
 import org.dita.dost.util.StringUtils;
