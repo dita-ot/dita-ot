@@ -54,6 +54,11 @@
     <condition property="odt.dir" value="xsl/xslodt">
       <not><isset property="odt.dir"/></not>
     </condition>
+    <condition property="args.odt.img.embed" value="yes">
+      <not>
+        <isset property="args.odt.img.embed"/>
+      </not>
+    </condition>
   </target>
   
   <target name="map2odt" unless="noMap">

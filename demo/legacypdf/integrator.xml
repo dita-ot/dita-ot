@@ -6,7 +6,30 @@
     <project name="dita2legacypdf" default="dita2legacypdf">
         
         <target name="dita2legacypdf"
-            depends="build-init, preprocess, map2legacypdf, topic2legacypdf">
+            depends="build-init, topic2legacypdf.init, preprocess, map2legacypdf, topic2legacypdf">
+        </target>
+        
+        <target name="topic2legacypdf.init">
+          <available classname="org.apache.fop.tools.anttasks.Fop" property="hasFOP">
+            <classpath>
+              <pathelement location="${dita.dir}/demo/legacypdf/lib/fop.jar"/>
+            </classpath>
+          </available>
+          <!-- append a '.' to ${fo.img.ext} if ${args.fo.img.ext} not contains '.' -->
+          <condition property="fo.img.ext" value=".${args.fo.img.ext}">
+            <and>
+              <isset property="args.fo.img.ext" />
+              <not>
+                <contains string="${args.fo.img.ext}" substring="." />
+              </not>
+            </and>
+          </condition>
+          <condition property="fo.img.ext" value="${args.fo.img.ext}">
+            <and>
+              <isset property="args.fo.img.ext" />
+              <contains string="${args.fo.img.ext}" substring="." />
+            </and>
+          </condition>
         </target>
         
         <target name="topic2legacypdf" if="noMap">

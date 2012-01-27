@@ -3,7 +3,7 @@
      Sourceforge.net. See the accompanying license.txt file for 
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
-<project name="DOST" default="init" basedir=".">
+<project name="DOST" default="init">
   
   <property file="${basedir}/local.properties"/>
   
@@ -26,15 +26,16 @@
     <condition property="transtarget" value="pdf2" else="${transtype}">
       <equals arg1="${transtype}" arg2="pdf" casesensitive="false"/>
     </condition>
-    <antcall target="dita2${transtarget}"/>
-  	<condition property="clean-temp.skip">
-  	  <and>
-  	    <isset property="clean.temp" />
-  	    <equals arg1="${clean.temp}" arg2="no" casesensitive="false" />
-  	  </and>
-  	</condition>
-  	<antcall target="clean-temp">
-  	</antcall>
+    <condition property="clean.temp" value="true">
+      <not><isset property="clean.temp"/></not>
+    </condition>
+    <condition property="clean-temp.skip">
+      <isfalse value="${clean.temp}"/>
+    </condition>
+    <antcall>
+      <target name="dita2${transtarget}"/>
+      <target name="clean-temp"/>
+    </antcall>
   </target>
   
   <target name="all">

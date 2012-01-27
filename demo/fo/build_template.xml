@@ -33,6 +33,18 @@ with those set forth herein.
   <import file="${dita.plugin.org.dita.pdf2.dir}/build_xep.xml"/>
 
   <target name="dita2pdf2.init">
+    <dita-ot-fail id="DOTA066F">
+      <condition>
+        <and>
+          <isset property="args.xsl.pdf" />
+          <not>
+            <available file="${args.xsl.pdf}" type="file" />
+          </not>
+        </and>
+      </condition>
+      <param name="1" location="${args.xsl.pdf}"/>
+    </dita-ot-fail>
+    
     <condition property="preprocess.copy-image.skip" value="true">
       <isfalse value="${org.dita.pdf2.use-out-temp}"/>
     </condition>
