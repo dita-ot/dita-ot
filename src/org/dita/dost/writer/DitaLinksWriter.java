@@ -331,7 +331,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
             fileOutput = new FileOutputStream(outputFile);
             output = new OutputStreamWriter(fileOutput, UTF8);
             reader.setErrorHandler(new DITAOTXMLErrorHandler(file));
-            reader.parse(file);
+            reader.parse(inputFile.toURI().toString());
             output.close();
 
             if(!inputFile.delete()){

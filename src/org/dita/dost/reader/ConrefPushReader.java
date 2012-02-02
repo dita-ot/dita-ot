@@ -97,7 +97,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
         pushcontent = new StringBuffer(INT_256);
         pushType = null;
         try{
-            reader.parse(filename);
+            reader.parse(new File(filename).toURI().toString());
         }catch (final Exception e) {
             logger.logException(e);
         }

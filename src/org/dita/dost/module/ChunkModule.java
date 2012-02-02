@@ -123,7 +123,7 @@ final class ChunkModule implements AbstractPipelineModule {
             final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             final DocumentBuilder builder = factory.newDocumentBuilder();
             String mapFile = new File(tempDir, prop.getProperty(INPUT_DITAMAP)).getAbsolutePath();
-            final Document doc = builder.parse(mapFile);
+            final Document doc = builder.parse(new File(mapFile));
             final Element root = doc.getDocumentElement();
             if(root.getAttribute(ATTRIBUTE_NAME_CLASS).contains(" eclipsemap/plugin ") && transtype.equals(INDEX_TYPE_ECLIPSEHELP)){
                 final StringTokenizer st = new StringTokenizer(prop.getProperty(FULL_DITAMAP_LIST), COMMA);

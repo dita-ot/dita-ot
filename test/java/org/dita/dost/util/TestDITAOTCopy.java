@@ -38,7 +38,7 @@ public class TestDITAOTCopy {
     {
         final File myFile = new File(tempDir, "testbuild.xml");
         FileUtils.copyFile(new File(srcDir, "testbuild.xml"), myFile);
-        final File mydestFile = new File(tempDir, "testbuildaaa.xml");
+        final File mydestFile = new File(tempDir, "testbuild.xml");
 
         final DITAOTCopy ditaotcopy= new DITAOTCopy();
         ditaotcopy.setProject(new Project());
