@@ -34,6 +34,7 @@
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:utilitiesDomain.xsd:1.2"/>
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:indexingDomain.xsd:1.2"/>
     <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:hazardstatementDomain.xsd:1.2"/>
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:abbreviateDomain.xsd:1.2" />
 
   <!--  ================ GROUP DEFINITIONS =====================  -->
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:referenceGrp.xsd:1.2" />
@@ -112,6 +113,13 @@
       </xs:choice>
     </xs:group >
     
+    <xs:group name="term">
+      <xs:choice>
+        <xs:group ref="term"/>
+        <xs:group ref="abbrev-d-term"/>
+      </xs:choice>
+    </xs:group>
+
   </xs:redefine>
 
   <!--  ================ INFO TYPES =====================  -->
@@ -192,6 +200,7 @@
   <xs:attributeGroup name="domains-att">
     <xs:attribute name="domains" type="xs:string" 
       default="(topic hazard-d) 
+		      (topic abbrev-d)
                       (topic hi-d) 
                       (topic indexing-d)
                       (topic sw-d) 

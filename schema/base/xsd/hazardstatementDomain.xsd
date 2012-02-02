@@ -246,7 +246,7 @@
   
   <xs:element name="consequence" >
     <xs:complexType>
-      <xs:complexContent>
+      <xs:complexContent mixed="true">
         <xs:extension base="consequence.class">
           <xs:attribute ref="class" default="+ topic/li hazard-d/consequence "/>
         </xs:extension>
@@ -254,7 +254,7 @@
     </xs:complexType>
   </xs:element>
   
-  <xs:complexType name="consequence.class">
+  <xs:complexType name="consequence.class" mixed="true">
     <xs:sequence>
       <xs:group ref="consequence.content"/>
     </xs:sequence>

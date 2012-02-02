@@ -771,13 +771,13 @@
         <xs:group ref="note" minOccurs="0" maxOccurs="unbounded"/>
         <xs:group ref="cmd"/>
         <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="choices"/>
+          <xs:group ref="choicetable"/>
           <xs:group ref="info"/>
           <xs:group ref="itemgroup"/>
+          <xs:group ref="stepxmp"/>
           <xs:group ref="substeps"/>
           <xs:group ref="tutorialinfo"/>
-          <xs:group ref="stepxmp"/>
-          <xs:group ref="choicetable"/>
-          <xs:group ref="choices"/>
         </xs:choice>
         <xs:group ref="stepresult" minOccurs="0"/>
       </xs:sequence>
@@ -870,9 +870,11 @@
    <xs:group name="substep.content">
     <xs:sequence>
       <xs:sequence>
+        <xs:group ref="note" minOccurs="0" maxOccurs="unbounded"/>
         <xs:group ref="cmd"/>
         <xs:choice minOccurs="0" maxOccurs="unbounded">
           <xs:group ref="info"/>
+          <xs:group ref="itemgroup"/>
           <xs:group ref="tutorialinfo"/>
           <xs:group ref="stepxmp"/>
         </xs:choice>

@@ -1693,6 +1693,7 @@
 					<xs:group ref="figgroup"/>
 					<xs:group ref="basic.ph"/>
 					<xs:group ref="basic.block.notbnofg"/>
+					<xs:group ref="fn"/>
 					<xs:group ref="data.elements.incl"/>
 					<xs:group ref="foreign.unknown.incl"/>
 				</xs:choice>

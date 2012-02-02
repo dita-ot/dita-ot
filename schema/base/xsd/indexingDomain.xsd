@@ -148,7 +148,6 @@
     <xs:sequence>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:group ref="words.cnt"/>
-        <xs:group ref="indexterm"/>
       </xs:choice>
     </xs:sequence>
   </xs:group>

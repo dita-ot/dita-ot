@@ -131,8 +131,9 @@
        <xs:sequence>
          <xs:group ref="body.cnt" minOccurs="0" maxOccurs="unbounded"/>
          <xs:choice minOccurs="0" maxOccurs="unbounded">
-           <xs:group ref="section" minOccurs="0"/>
-           <xs:group ref="example" minOccurs="0"/>
+           <xs:group ref="section" />
+           <xs:group ref="example" />
+           <xs:group ref="conbodydiv" />
          </xs:choice>
        </xs:sequence>
      </xs:sequence>
@@ -144,6 +145,41 @@
      <xs:attributeGroup ref="base-attribute-extensions"/>
      <xs:attributeGroup ref="id-atts"/>
      <xs:attributeGroup ref="localization-atts"/>
+     <xs:attributeGroup ref="global-atts"/>
+   </xs:attributeGroup>
+   
+   <xs:element name="conbodydiv">
+     <xs:annotation>
+       <xs:documentation>
+       </xs:documentation>
+     </xs:annotation>
+     <xs:complexType>
+       <xs:complexContent>
+         <xs:extension base="conbodydiv.class">
+           <xs:attribute ref="class" default="- topic/bodydiv concept/conbodydiv "/>
+         </xs:extension>
+       </xs:complexContent>
+     </xs:complexType>
+   </xs:element>
+   <xs:complexType name="conbodydiv.class">
+     <xs:sequence>
+       <xs:group ref="conbodydiv.content"/>
+     </xs:sequence>
+     <xs:attributeGroup ref="conbodydiv.attributes"/>
+   </xs:complexType>
+   
+   <xs:group name="conbodydiv.content">
+     <xs:sequence>
+       <xs:choice minOccurs="0" maxOccurs="unbounded">
+         <xs:group ref="example"/>
+         <xs:group ref="section"/>
+       </xs:choice>  
+     </xs:sequence>
+   </xs:group>
+   
+   <xs:attributeGroup name="conbodydiv.attributes">
+     <xs:attribute name="outputclass" type="xs:string"/>
+     <xs:attributeGroup ref="univ-atts"/>
      <xs:attributeGroup ref="global-atts"/>
    </xs:attributeGroup>
  </xs:schema>

@@ -38,5 +38,13 @@
          </xs:choice>
       </xs:sequence>
    </xs:group>
+   
+   <xs:group name="conbodydiv">
+      <xs:sequence>
+         <xs:choice>
+            <xs:element ref="conbodydiv"/>
+         </xs:choice>
+      </xs:sequence>
+   </xs:group>
 
 </xs:schema>
