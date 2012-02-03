@@ -34,12 +34,14 @@ See the accompanying license.txt file for applicable licenses.
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
-    xmlns:dita2xslfo="http://dita-ot.sourceforge.net/ns/200910/dita2xslfo"
     xmlns:opentopic="http://www.idiominc.com/opentopic"
     xmlns:exsl="http://exslt.org/common"
     xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
+    xmlns:exslf="http://exslt.org/functions"
+    xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
+    xmlns:dita2xslfo="http://dita-ot.sourceforge.net/ns/200910/dita2xslfo"
     extension-element-prefixes="exsl"
-    exclude-result-prefixes="opentopic exsl opentopic-index dita2xslfo"
+    exclude-result-prefixes="opentopic exsl opentopic-index exslf opentopic-func dita2xslfo xs"
     version="2.0">
 
     <xsl:key name="map-id" match="opentopic:map//*[@id]" use="@id"/>
@@ -69,50 +71,6 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:with-param name="titlePrefix" select="'Content-Reference'"/>
             </xsl:call-template>
         </fo:block>
-    </xsl:template>
-
-    <!-- note that bkinfo provides information for a cover in a bookmap application,
-     hence bkinfo does not need to be instanced.  In an application that processes
-     only maps, bkinfo should process as a topic based on default processing. -->
-    <xsl:template match="*[contains(@class,' bkinfo/bkinfo ')]" priority="2">
-        <!-- no operation for bkinfo -->
-    </xsl:template>
-
-    <!-- RDA: Modified with RFE 2882109. Can now modify results or add new types by matching an element
-              with mode="determineTopicType", without overriding the entire determineTopicType template. -->
-    <xsl:template name="determineTopicType">
-        <xsl:variable name="id" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>
-        <xsl:variable name="gid" select="generate-id(ancestor-or-self::*[contains(@class, ' topic/topic ')][1])"/>
-        <xsl:variable name="topicNumber" select="count(exsl:node-set($topicNumbers)/topic[@id = $id][following-sibling::topic[@guid = $gid]]) + 1"/>
-        <xsl:variable name="mapTopic">
-            <xsl:copy-of select="$map//*[@id = $id]"/>
-        </xsl:variable>
-        <xsl:variable name="foundTopicType">
-            <xsl:apply-templates select="$mapTopic/*[position() = $topicNumber]" mode="determineTopicType"/>
-        </xsl:variable>
-        <xsl:choose>
-            <xsl:when test="$foundTopicType!=''"><xsl:value-of select="$foundTopicType"/></xsl:when>
-            <xsl:otherwise>topicSimple</xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-
-    <xsl:template match="*" mode="determineTopicType">
-        <xsl:text>topicSimple</xsl:text>
-    </xsl:template>
-    <xsl:template match="*[contains(@class, ' bookmap/chapter ')]" mode="determineTopicType">
-        <xsl:text>topicChapter</xsl:text>
-    </xsl:template>
-    <xsl:template match="*[contains(@class, ' bookmap/appendix ')]" mode="determineTopicType">
-        <xsl:text>topicAppendix</xsl:text>
-    </xsl:template>
-    <xsl:template match="*[contains(@class, ' bookmap/preface ')]" mode="determineTopicType">
-        <xsl:text>topicPreface</xsl:text>
-    </xsl:template>
-    <xsl:template match="*[contains(@class, ' bookmap/part ')]" mode="determineTopicType">
-        <xsl:text>topicPart</xsl:text>
-    </xsl:template>
-    <xsl:template match="*[contains(@class, ' bookmap/abstract ')]" mode="determineTopicType">
-        <xsl:text>topicAbstract</xsl:text>
     </xsl:template>
 
     <xsl:template name="startPageNumbering">
@@ -155,7 +113,7 @@ See the accompanying license.txt file for applicable licenses.
                 </fo:marker>
             </xsl:if>
             <xsl:apply-templates select="." mode="commonTopicProcessing"/>
-		</fo:block>
+    </fo:block>
     </xsl:template>
 
     <xsl:template match="*" mode="commonTopicProcessing">
@@ -197,12 +155,6 @@ See the accompanying license.txt file for applicable licenses.
            See SourceForge RFE 2928584: Add general model for end-of-topic processing in PDF -->
     </xsl:template>
 
-    <xsl:template name="processUnknowTopic">
-        <xsl:param name="topicType"/>
-        <xsl:apply-templates select="." mode="processUnknowTopic">
-            <xsl:with-param name="topicType" select="$topicType"/>
-        </xsl:apply-templates>
-    </xsl:template>
     <xsl:template match="*" mode="processUnknowTopic">
         <xsl:param name="topicType"/>
         <xsl:choose>
@@ -293,9 +245,9 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:when>
-			<!--BS: skipp abstract (copyright) from usual content. It will be processed from the front-matter-->
-			<xsl:when test="$topicType = 'topicAbstract'"/>
-			<xsl:otherwise>
+      <!--BS: skipp abstract (copyright) from usual content. It will be processed from the front-matter-->
+      <xsl:when test="$topicType = 'topicAbstract'"/>
+      <xsl:otherwise>
                 <xsl:call-template name="processUnknowTopic">
                     <xsl:with-param name="topicType" select="$topicType"/>
                 </xsl:call-template>
@@ -641,7 +593,7 @@ See the accompanying license.txt file for applicable licenses.
                                 <xsl:apply-templates select="*[contains(@class,' topic/related-links ')]"/>
                             </xsl:if>
 
-						</fo:block>
+            </fo:block>
                     </fo:table-cell>
                 </fo:table-row>
             </fo:table-body>
@@ -1048,7 +1000,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:comment> concept/concept </xsl:comment>
             <xsl:apply-templates select="." mode="commonTopicProcessing"/>
         </fo:block>
-	</xsl:template>
+  </xsl:template>
 
     <!-- RFE 2882109: Combine this common code with topic/topic rule. -->
     <!--<xsl:template match="*[contains(@class, ' concept/concept ')]">
@@ -1094,8 +1046,8 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:when>
-			<xsl:when test="$topicType = 'topicAbstract'"/>
-			<xsl:otherwise>
+      <xsl:when test="$topicType = 'topicAbstract'"/>
+      <xsl:otherwise>
                 <xsl:call-template name="processUnknowTopic">
                     <xsl:with-param name="topicType" select="$topicType"/>
                 </xsl:call-template>
@@ -1104,11 +1056,29 @@ See the accompanying license.txt file for applicable licenses.
 
     </xsl:template>-->
 
-    <xsl:template match="*[contains(@class, ' concept/conbody ')]">
-        <fo:block xsl:use-attribute-sets="conbody">
-            <xsl:call-template name="commonattributes"/>
-            <xsl:apply-templates/>
-        </fo:block>
+    <xsl:template match="*[contains(@class, ' concept/conbody ')]" priority="1">
+      <xsl:variable name="level" select="count(ancestor::*[contains(@class,' topic/topic ')])"/>
+      <xsl:choose>
+        <xsl:when test="not(node())"/>
+        <xsl:when test="$level = 1">
+            <fo:block xsl:use-attribute-sets="body__toplevel conbody">
+                <xsl:call-template name="commonattributes"/>
+                <xsl:apply-templates/>
+            </fo:block>
+        </xsl:when>
+        <xsl:when test="$level = 2">
+            <fo:block xsl:use-attribute-sets="body__secondLevel conbody">
+                <xsl:call-template name="commonattributes"/>
+                <xsl:apply-templates/>
+            </fo:block>
+        </xsl:when>
+        <xsl:otherwise>
+            <fo:block xsl:use-attribute-sets="conbody">
+                <xsl:call-template name="commonattributes"/>
+                <xsl:apply-templates/>
+            </fo:block>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:template>
 
     <xsl:template name="processReference">
@@ -1118,7 +1088,7 @@ See the accompanying license.txt file for applicable licenses.
         <fo:block xsl:use-attribute-sets="reference">
             <xsl:apply-templates select="." mode="commonTopicProcessing"/>
         </fo:block>
-	</xsl:template>
+  </xsl:template>
 
     <!-- RFE 2882109: Combine this common code with topic/topic rule. -->
     <!--<xsl:template match="*[contains(@class, ' reference/reference ')]">
@@ -1164,8 +1134,8 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:when>
-			<xsl:when test="$topicType = 'topicAbstract'"/>
-			<xsl:otherwise>
+      <xsl:when test="$topicType = 'topicAbstract'"/>
+      <xsl:otherwise>
                 <xsl:call-template name="processUnknowTopic">
                     <xsl:with-param name="topicType" select="$topicType"/>
                 </xsl:call-template>
@@ -1173,11 +1143,29 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:choose>
     </xsl:template>-->
 
-    <xsl:template match="*[contains(@class, ' reference/refbody ')]">
-        <fo:block xsl:use-attribute-sets="refbody">
-            <xsl:call-template name="commonattributes"/>
-            <xsl:apply-templates/>
-        </fo:block>
+    <xsl:template match="*[contains(@class, ' reference/refbody ')]" priority="1">
+      <xsl:variable name="level" select="count(ancestor::*[contains(@class,' topic/topic ')])"/>
+      <xsl:choose>
+        <xsl:when test="not(node())"/>
+        <xsl:when test="$level = 1">
+            <fo:block xsl:use-attribute-sets="body__toplevel refbody">
+                <xsl:call-template name="commonattributes"/>
+                <xsl:apply-templates/>
+            </fo:block>
+        </xsl:when>
+        <xsl:when test="$level = 2">
+            <fo:block xsl:use-attribute-sets="body__secondLevel refbody">
+                <xsl:call-template name="commonattributes"/>
+                <xsl:apply-templates/>
+            </fo:block>
+        </xsl:when>
+        <xsl:otherwise>
+            <fo:block xsl:use-attribute-sets="refbody">
+                <xsl:call-template name="commonattributes"/>
+                <xsl:apply-templates/>
+            </fo:block>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' reference/refsyn ')]">
@@ -2214,4 +2202,141 @@ See the accompanying license.txt file for applicable licenses.
       <xsl:value-of select="concat('_OPENTOPIC_TOC_PROCESSING_', generate-id($element))"/>
     </xsl:template>
 
+    <!-- BS: Template owerwrited to define new topic types (List's),
+    to create special processing for any of list you should use <template name="processUnknowTopic"/>
+    example below.-->
+    <!-- RDA: Modified with RFE 2882109. Can now modify results or add new types by matching an element
+              with mode="determineTopicType", without overriding the entire determineTopicType template. -->
+    <xsl:template name="determineTopicType">
+      <xsl:variable name="foundTopicType">
+        <xsl:variable name="topic" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]"/>
+        <xsl:variable name="id" select="$topic/@id"/>
+        <xsl:variable name="mapTopics" select="key('map-id', $id)"/>
+        <xsl:choose>
+          <xsl:when test="count($mapTopics) = 1">
+            <xsl:apply-templates select="$mapTopics[1]" mode="determineTopicType"/>
+          </xsl:when>
+          <!-- topicmerge.xsl should already rewrite all duplicate IDs, keep for backwards compatibility -->
+          <xsl:when test="count($mapTopics) > 1">
+            <xsl:variable name="gid" select="generate-id($topic)"/>
+            <xsl:variable name="topicNumber" select="count(exsl:node-set($topicNumbers)/topic[@id = $id][following-sibling::topic[@guid = $gid]]) + 1"/>
+            <xsl:variable name="mapTopic">
+              <xsl:copy-of select="$mapTopics"/>
+            </xsl:variable>
+            <xsl:apply-templates select="$mapTopic/*[position() = $topicNumber]" mode="determineTopicType"/>
+          </xsl:when>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:choose>
+        <xsl:when test="$foundTopicType!=''">
+          <xsl:value-of select="$foundTopicType"/>
+        </xsl:when>
+        <xsl:otherwise>topicSimple</xsl:otherwise>
+      </xsl:choose>
+    </xsl:template>
+
+    <xsl:template match="*" mode="determineTopicType">
+        <!-- Default, when not matching a bookmap type, is topicSimple -->
+        <xsl:text>topicSimple</xsl:text>
+    </xsl:template>
+    <xsl:template match="*[contains(@class, ' bookmap/chapter ')]" mode="determineTopicType">
+        <xsl:text>topicChapter</xsl:text>
+    </xsl:template>
+    <xsl:template match="*[contains(@class, ' bookmap/appendix ')]" mode="determineTopicType">
+        <xsl:text>topicAppendix</xsl:text>
+    </xsl:template>
+    <xsl:template match="*[contains(@class, ' bookmap/preface ')]" mode="determineTopicType">
+        <xsl:text>topicPreface</xsl:text>
+    </xsl:template>
+    <xsl:template match="*[contains(@class, ' bookmap/part ')]" mode="determineTopicType">
+        <xsl:text>topicPart</xsl:text>
+    </xsl:template>
+    <xsl:template match="*[contains(@class, ' bookmap/abbrevlist ')]" mode="determineTopicType">
+        <xsl:text>topicAbbrevList</xsl:text>
+    </xsl:template>
+    <xsl:template match="*[contains(@class, ' bookmap/bibliolist ')]" mode="determineTopicType">
+        <xsl:text>topicBiblioList</xsl:text>
+    </xsl:template>
+    <xsl:template match="*[contains(@class, ' bookmap/booklist ')]" mode="determineTopicType">
+        <xsl:text>topicBookList</xsl:text>
+    </xsl:template>
+    <xsl:template match="*[contains(@class, ' bookmap/figurelist ')]" mode="determineTopicType">
+        <xsl:text>topicFigureList</xsl:text>
+    </xsl:template>
+    <xsl:template match="*[contains(@class, ' bookmap/indexlist ')]" mode="determineTopicType">
+        <xsl:text>topicIndexList</xsl:text>
+    </xsl:template>
+    <xsl:template match="*[contains(@class, ' bookmap/toc ')]" mode="determineTopicType">
+        <xsl:text>topicTocList</xsl:text>
+    </xsl:template>
+    <xsl:template match="*[contains(@class, ' bookmap/glossarylist ')]" mode="determineTopicType">
+        <xsl:text>topicGlossaryList</xsl:text>
+    </xsl:template>
+    <xsl:template match="*[contains(@class, ' bookmap/trademarklist ')]" mode="determineTopicType">
+        <xsl:text>topicTradeMarkList</xsl:text>
+    </xsl:template>
+    <xsl:template match="*[contains(@class, ' bookmap/notices ')]" mode="determineTopicType">
+        <xsl:text>topicNotices</xsl:text>
+    </xsl:template>
+
+
+    <xsl:template name="processUnknowTopic">
+        <xsl:param name="topicType"/>
+        <xsl:apply-templates select="." mode="processUnknowTopic">
+            <xsl:with-param name="topicType" select="$topicType"/>
+        </xsl:apply-templates>
+    </xsl:template>
+    <xsl:template match="*" mode="processUnknowTopic">
+        <xsl:param name="topicType"/>
+        <xsl:choose>
+            <xsl:when test="$topicType = 'topicTocList'">
+                <xsl:call-template name="processTocList"/>
+            </xsl:when>
+            <xsl:when test="$topicType = 'topicIndexList'">
+                <xsl:call-template name="processIndexList"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:choose>
+                    <xsl:when test="not(ancestor::*[contains(@class,' topic/topic ')])">
+                        <xsl:variable name="page-sequence-reference">
+                            <xsl:choose>
+                                <xsl:when test="$mapType = 'bookmap'">
+                                    <xsl:value-of select="'body-sequence'"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="'ditamap-body-sequence'"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:variable>
+
+                        <fo:page-sequence master-reference="{$page-sequence-reference}" xsl:use-attribute-sets="__force__page__count">
+                            <xsl:call-template name="insertBodyStaticContents"/>
+                            <fo:flow flow-name="xsl-region-body">
+                                <xsl:call-template name="processTopic"/>
+                            </fo:flow>
+                        </fo:page-sequence>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:call-template name="processTopic"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    <!-- edited by William on 2009-09-18 for output bug #2860168 start-->
+    <!--xsl:template match="*[contains(@class, ' topic/data ')]">
+        <xsl:apply-templates/>
+      </xsl:template-->
+    <xsl:template match="*[contains(@class, ' topic/data ')]"/>
+    <xsl:template match="*[contains(@class, ' topic/data ')]" mode="insert-text"/>
+    <xsl:template match="*[contains(@class, ' topic/data-about ')]"/>
+    <!-- edited by William on 2009-09-18 for output bug #2860168 end-->
+
+    <exslf:function name="opentopic-func:determineTopicType">
+      <xsl:variable name="topicType">
+        <xsl:call-template name="determineTopicType"/>
+      </xsl:variable>
+      <exslf:result select="string($topicType)"/>
+    </exslf:function>
+    
 </xsl:stylesheet>

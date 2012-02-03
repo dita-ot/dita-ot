@@ -19,9 +19,5 @@
   <template file="xsl/fo/topic2fo_shell_axf_template.xsl"/>
   <template file="xsl/fo/topic2fo_shell_fop_template.xsl"/>
   <template file="xsl/fo/topic2fo_shell_xep_template.xsl"/>
-  <template file="xsl/fo/topic2fo_shell_1.0_template.xsl"/>
-  <template file="xsl/fo/topic2fo_shell_1.0_axf_template.xsl"/>
-  <template file="xsl/fo/topic2fo_shell_1.0_fop_template.xsl"/>
-  <template file="xsl/fo/topic2fo_shell_1.0_xep_template.xsl"/>
   <template file="xsl/common/topicmerge_template.xsl"/>
 </plugin>

@@ -12,9 +12,9 @@
   <xsl:import href="../../cfg/fo/attrs/tables-attr_fop.xsl"/>
   <xsl:import href="../../cfg/fo/attrs/toc-attr_fop.xsl"/>
   <xsl:import href="index_fop.xsl"/>
-  
+
   <dita:extension id="dita.xsl.xslfo" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
-  
+
   <xsl:import href="cfg:fo/attrs/custom.xsl"/>
   <xsl:import href="cfg:fo/xsl/custom.xsl"/>
   

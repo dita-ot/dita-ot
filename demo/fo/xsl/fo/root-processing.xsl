@@ -68,13 +68,9 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:variable name="productName">
         <xsl:variable name="mapProdname" select="(/*/opentopic:map//*[contains(@class, ' topic/prodname ')])[1]"/>
-        <xsl:variable name="bkinfoProdname" select="(/*/*[contains(@class, ' bkinfo/bkinfo ')]//*[contains(@class, ' topic/prodname ')])[1]"/>
         <xsl:choose>
             <xsl:when test="$mapProdname">
                 <xsl:value-of select="$mapProdname"/>
-            </xsl:when>
-            <xsl:when test="$bkinfoProdname">
-                <xsl:value-of select="$bkinfoProdname"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:call-template name="insertVariable">
@@ -87,7 +83,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:variable name="map" select="//opentopic:map"/>
 
     <xsl:variable name="topicNumbers">
-        <xsl:for-each select="//*[contains(@class, ' topic/topic ') and not(contains(@class, ' bkinfo/bkinfo '))]">
+        <xsl:for-each select="//*[contains(@class, ' topic/topic ')]">
             <topic guid="{generate-id()}">
                 <xsl:call-template name="commonattributes"/>
             </topic>

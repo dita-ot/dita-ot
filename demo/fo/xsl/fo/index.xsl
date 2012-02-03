@@ -1,21 +1,21 @@
 <?xml version='1.0'?>
 
-<!-- 
-Copyright © 2004-2006 by Idiom Technologies, Inc. All rights reserved. 
+<!--
+Copyright © 2004-2006 by Idiom Technologies, Inc. All rights reserved.
 IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
-and WORLDSTART are trademarks of Idiom Technologies, Inc. All other 
-trademarks are the property of their respective owners. 
+and WORLDSTART are trademarks of Idiom Technologies, Inc. All other
+trademarks are the property of their respective owners.
 
-IDIOM TECHNOLOGIES, INC. IS DELIVERING THE SOFTWARE "AS IS," WITH 
+IDIOM TECHNOLOGIES, INC. IS DELIVERING THE SOFTWARE "AS IS," WITH
 ABSOLUTELY NO WARRANTIES WHATSOEVER, WHETHER EXPRESS OR IMPLIED,  AND IDIOM
 TECHNOLOGIES, INC. DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING
-BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
+BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
 PURPOSE AND WARRANTY OF NON-INFRINGEMENT. IDIOM TECHNOLOGIES, INC. SHALL NOT
 BE LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL, COVER, PUNITIVE, EXEMPLARY,
-RELIANCE, OR CONSEQUENTIAL DAMAGES (INCLUDING BUT NOT LIMITED TO LOSS OF 
-ANTICIPATED PROFIT), ARISING FROM ANY CAUSE UNDER OR RELATED TO  OR ARISING 
+RELIANCE, OR CONSEQUENTIAL DAMAGES (INCLUDING BUT NOT LIMITED TO LOSS OF
+ANTICIPATED PROFIT), ARISING FROM ANY CAUSE UNDER OR RELATED TO  OR ARISING
 OUT OF THE USE OF OR INABILITY TO USE THE SOFTWARE, EVEN IF IDIOM
-TECHNOLOGIES, INC. HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. 
+TECHNOLOGIES, INC. HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
 
 Idiom Technologies, Inc. and its licensors shall not be liable for any
 damages suffered by any person as a result of using and/or modifying the
@@ -33,14 +33,14 @@ See the accompanying license.txt file for applicable licenses.
 
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
-    xmlns:rx="http://www.renderx.com/XSL/Extensions"
     xmlns:exsl="http://exslt.org/common"
     xmlns:exslf="http://exslt.org/functions"
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
     xmlns:comparer="com.idiominc.ws.opentopic.xsl.extension.CompareStrings"
     extension-element-prefixes="exsl"
     xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
-    exclude-result-prefixes="opentopic-index exsl comparer rx opentopic-func exslf">
+    xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
+    exclude-result-prefixes="opentopic-index exsl comparer opentopic-func exslf ot-placeholder">
 
     <!-- *************************************************************** -->
     <!-- Create index templates                                          -->
@@ -61,11 +61,11 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:variable name="warn-enabled" select="true()"/>
 
-	<xsl:key name="index-key" match="opentopic-index:index.entry" use="@value"/>
+  <xsl:key name="index-key" match="opentopic-index:index.entry" use="@value"/>
 
-	<xsl:variable name="index-entries">
+  <xsl:variable name="index-entries">
             <xsl:apply-templates select="/" mode="index-entries"/>
-	</xsl:variable>
+  </xsl:variable>
   
   <xsl:variable name="index.separator">
     <xsl:text> </xsl:text>
@@ -118,28 +118,16 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:apply-templates mode="index-entries"/>
     </xsl:template>
 
-  <xsl:template name="createIndex">
-    <xsl:if test="//opentopic-index:index.groups//opentopic-index:index.entry and $index-entries//opentopic-index:index.entry">
-      <fo:page-sequence master-reference="index-sequence" xsl:use-attribute-sets="__force__page__count">
-        <xsl:call-template name="insertIndexStaticContents"/>
-        <fo:flow flow-name="xsl-region-body">
-          <xsl:apply-templates select="/" mode="index-postprocess"/>
-          <fo:block span="all"/>
-        </fo:flow>
-      </fo:page-sequence>
-    </xsl:if>
+    <xsl:template match="*[contains(@class, ' topic/indexterm ')]">
+    <xsl:apply-templates/>
   </xsl:template>
 
-    <xsl:template match="*[contains(@class, ' topic/indexterm ')]">
-		<xsl:apply-templates/>
-	</xsl:template>
-
-	<!--Following four templates handles index entry elements created by the index preprocessor task-->
+  <!--Following four templates handles index entry elements created by the index preprocessor task-->
 
     <xsl:template match="opentopic-index:index.groups"/>
 
-	<xsl:template match="opentopic-index:index.entry[ancestor-or-self::opentopic-index:index.entry[@no-page='true'] and not(@single-page='true')]">
-		<!--Skip index entries which shouldn't have a page numbering-->
+  <xsl:template match="opentopic-index:index.entry[ancestor-or-self::opentopic-index:index.entry[@no-page='true'] and not(@single-page='true')]">
+    <!--Skip index entries which shouldn't have a page numbering-->
     </xsl:template>
 
   <xsl:template match="opentopic-index:index.entry">
@@ -251,37 +239,37 @@ See the accompanying license.txt file for applicable licenses.
   </xsl:template>
 
     <xsl:template match="*" mode="index-postprocess" priority="-1">
-		<xsl:apply-templates mode="index-postprocess"/>
-	</xsl:template>
+    <xsl:apply-templates mode="index-postprocess"/>
+  </xsl:template>
 
-	<xsl:template match="opentopic-index:index.groups" mode="index-postprocess">
-		<xsl:apply-templates mode="index-postprocess"/>
-	</xsl:template>
+  <xsl:template match="opentopic-index:index.groups" mode="index-postprocess">
+    <xsl:apply-templates mode="index-postprocess"/>
+  </xsl:template>
 
-	<xsl:template match="opentopic-index:index.group[opentopic-index:index.entry]" mode="index-postprocess">
-		<fo:block xsl:use-attribute-sets="index.entry" >
-			<xsl:apply-templates mode="index-postprocess"/>
-		</fo:block>
-	</xsl:template>
+  <xsl:template match="opentopic-index:index.group[opentopic-index:index.entry]" mode="index-postprocess">
+    <fo:block xsl:use-attribute-sets="index.entry" >
+      <xsl:apply-templates mode="index-postprocess"/>
+    </fo:block>
+  </xsl:template>
 
-	<xsl:template match="opentopic-index:label" mode="index-postprocess">
-		<fo:block xsl:use-attribute-sets="__index__letter-group">
-			<xsl:value-of select="."/>
-		</fo:block>
-	</xsl:template>
+  <xsl:template match="opentopic-index:label" mode="index-postprocess">
+    <fo:block xsl:use-attribute-sets="__index__letter-group">
+      <xsl:value-of select="."/>
+    </fo:block>
+  </xsl:template>
 
     <xsl:template match="opentopic-index:index.entry[not(opentopic-index:index.entry)]" mode="index-postprocess" priority="1">
         <xsl:variable name="page-setting" select=" (ancestor-or-self::opentopic-index:index.entry/@no-page | ancestor-or-self::opentopic-index:index.entry/@start-page)[last()]"/>
-		<xsl:variable name="isNoPage" select=" $page-setting = 'true' and name($page-setting) = 'no-page' "/>
+    <xsl:variable name="isNoPage" select=" $page-setting = 'true' and name($page-setting) = 'no-page' "/>
         <xsl:variable name="value" select="@value"/>
         <xsl:variable name="refID" select="opentopic-index:refID/@value"/>
 
         <xsl:if test="opentopic-func:getIndexEntry($value,$refID)">
             <xsl:call-template name="make-index-ref">
-				<xsl:with-param name="idxs" select="opentopic-index:refID"/>
-				<xsl:with-param name="inner-text" select="opentopic-index:formatted-value"/>
-				<xsl:with-param name="no-page" select="$isNoPage"/>
-			</xsl:call-template>
+        <xsl:with-param name="idxs" select="opentopic-index:refID"/>
+        <xsl:with-param name="inner-text" select="opentopic-index:formatted-value"/>
+        <xsl:with-param name="no-page" select="$isNoPage"/>
+      </xsl:call-template>
         </xsl:if>
     </xsl:template>
 
@@ -450,45 +438,45 @@ See the accompanying license.txt file for applicable licenses.
 
   <xsl:param name="useFrameIndexMarkup" select="'false'"/>
 
-	<xsl:template name="__formatText">
-		<xsl:param name="text"/>
-		<xsl:param name="formatting" select="'Default Para Font'"/>
-		<xsl:choose>
-			<xsl:when test="starts-with($text, '&lt;')">
-				<xsl:variable name="formatting-name" select="substring-before(substring-after($text, '&lt;'), '&gt;')"/>
-				<xsl:call-template name="__formatText">
-					<xsl:with-param name="text" select="substring-after($text, '&gt;')"/>
-					<xsl:with-param name="formatting" select="$formatting-name"/>
-				</xsl:call-template>
-			</xsl:when>
-			<xsl:when test="contains($text, '&lt;')">
-				<xsl:call-template name="__formatText">
-					<xsl:with-param name="text" select="substring-before($text, '&lt;')"/>
-					<xsl:with-param name="formatting" select="$formatting"/>
-				</xsl:call-template>
-				<xsl:call-template name="__formatText">
-					<xsl:with-param name="text" select="concat('&lt;', substring-after($text, '&lt;'))"/>
-				</xsl:call-template>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:choose>
-					<xsl:when test="$formatting = 'italic'">
-						<fo:inline font-style="italic">
-							<xsl:value-of select="$text"/>
-						</fo:inline>
-					</xsl:when>
-					<xsl:when test="$formatting = 'bold'">
-						<fo:inline font-weight="bold">
-							<xsl:value-of select="$text"/>
-						</fo:inline>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="$text"/>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
+  <xsl:template name="__formatText">
+    <xsl:param name="text"/>
+    <xsl:param name="formatting" select="'Default Para Font'"/>
+    <xsl:choose>
+      <xsl:when test="starts-with($text, '&lt;')">
+        <xsl:variable name="formatting-name" select="substring-before(substring-after($text, '&lt;'), '&gt;')"/>
+        <xsl:call-template name="__formatText">
+          <xsl:with-param name="text" select="substring-after($text, '&gt;')"/>
+          <xsl:with-param name="formatting" select="$formatting-name"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:when test="contains($text, '&lt;')">
+        <xsl:call-template name="__formatText">
+          <xsl:with-param name="text" select="substring-before($text, '&lt;')"/>
+          <xsl:with-param name="formatting" select="$formatting"/>
+        </xsl:call-template>
+        <xsl:call-template name="__formatText">
+          <xsl:with-param name="text" select="concat('&lt;', substring-after($text, '&lt;'))"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:choose>
+          <xsl:when test="$formatting = 'italic'">
+            <fo:inline font-style="italic">
+              <xsl:value-of select="$text"/>
+            </fo:inline>
+          </xsl:when>
+          <xsl:when test="$formatting = 'bold'">
+            <fo:inline font-weight="bold">
+              <xsl:value-of select="$text"/>
+            </fo:inline>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$text"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
   <xsl:template name="make-index-ref">
     <xsl:param name="idxs" select="()"/>
@@ -530,24 +518,80 @@ See the accompanying license.txt file for applicable licenses.
     </fo:block>
   </xsl:template>
 
-	<exslf:function name="opentopic-func:getIndexEntry">
-		<xsl:param name="value"/>
-		<xsl:param name="refID"/>
+  <exslf:function name="opentopic-func:getIndexEntry">
+    <xsl:param name="value"/>
+    <xsl:param name="refID"/>
 
-		<xsl:for-each select="$index-entries">
-			<xsl:variable name="entries" select="key('index-key',$value)"/>
-			<exslf:result select="$entries[opentopic-index:refID/@value = $refID]"/>
-		</xsl:for-each>
-	</exslf:function>
-	
-	<xsl:function version="2.0" name="opentopic-func:getIndexEntry">
-		<xsl:param name="value"/>
-		<xsl:param name="refID"/>
+    <xsl:for-each select="$index-entries">
+      <xsl:variable name="entries" select="key('index-key',$value)"/>
+      <exslf:result select="$entries[opentopic-index:refID/@value = $refID]"/>
+    </xsl:for-each>
+  </exslf:function>
+  
+  <xsl:function version="2.0" name="opentopic-func:getIndexEntry">
+    <xsl:param name="value"/>
+    <xsl:param name="refID"/>
 
-		<xsl:for-each select="$index-entries">
-			<xsl:variable name="entries" select="key('index-key',$value)"/>
-			<xsl:value-of select="$entries[opentopic-index:refID/@value = $refID]"/>
-		</xsl:for-each>
-	</xsl:function>
-	
-</xsl:stylesheet>
+    <xsl:for-each select="$index-entries">
+      <xsl:variable name="entries" select="key('index-key',$value)"/>
+      <xsl:value-of select="$entries[opentopic-index:refID/@value = $refID]"/>
+    </xsl:for-each>
+  </xsl:function>
+
+    <xsl:template name="createIndex">
+        <xsl:if test="(//opentopic-index:index.groups//opentopic-index:index.entry) and (count($index-entries//opentopic-index:index.entry) &gt; 0)">
+            <xsl:variable name="index">
+                <xsl:choose>
+                    <xsl:when test="($ditaVersion &gt;= 1.1) and $map//*[contains(@class,' bookmap/indexlist ')][@href]"/>
+                    <xsl:when test="($ditaVersion &gt;= 1.1) and $map//*[contains(@class,' bookmap/indexlist ')]">
+                        <xsl:apply-templates select="/" mode="index-postprocess"/>
+                    </xsl:when>
+                    <xsl:when test="($ditaVersion &gt;= 1.1) and /*[contains(@class,' map/map ')][not(contains(@class,' bookmap/bookmap '))]">
+                        <xsl:apply-templates select="/" mode="index-postprocess"/>
+                    </xsl:when>
+                    <xsl:when test="$ditaVersion &gt;= 1.1"/>
+                    <xsl:otherwise>
+                        <xsl:apply-templates select="/" mode="index-postprocess"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <xsl:if test="count(exsl:node-set($index)/*) > 0">
+                <fo:page-sequence master-reference="index-sequence" xsl:use-attribute-sets="__force__page__count">
+
+                    <xsl:call-template name="insertIndexStaticContents"/>
+
+                    <fo:flow flow-name="xsl-region-body">
+                        <xsl:copy-of select="exsl:node-set($index)"/>
+                    </fo:flow>
+
+                </fo:page-sequence>
+            </xsl:if>
+        </xsl:if>
+    </xsl:template>
+
+  <xsl:template match="ot-placeholder:indexlist[$retain-bookmap-order]">
+    <xsl:call-template name="createIndex"/>
+  </xsl:template>
+
+    <xsl:template name="processIndexList">
+        <fo:page-sequence master-reference="index-sequence" xsl:use-attribute-sets="__force__page__count">
+
+            <xsl:call-template name="insertIndexStaticContents"/>
+
+            <fo:flow flow-name="xsl-region-body">
+                <fo:block xsl:use-attribute-sets="__index__label" id="{$id.index}">
+                    <xsl:call-template name="insertVariable">
+                        <xsl:with-param name="theVariableID" select="'Index'"/>
+                    </xsl:call-template>
+                </fo:block>
+
+                <fo:block>
+                    <xsl:apply-templates/>
+                </fo:block>
+            </fo:flow>
+
+        </fo:page-sequence>
+    </xsl:template>
+
+
+</xsl:stylesheet>    

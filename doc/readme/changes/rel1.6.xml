@@ -9,12 +9,21 @@
         <p>A new property <codeph>args.rellinks</codeph> can be used to control which related links
           will be output.</p>
       </section>
+      <section>
+        <title>PDF2</title>
+        <p>Support for IBM DITA and BookMap demo plug-in has been removed from PDF2.</p>
+      </section>
     </refbody>
   </reference>
   <reference id="reference_yvj_ttj_bd">
     <title>Migration from previous releases</title>
     <refbody>
-      <section id="section_tqw_bnt_q2"/>
+      <section id="section_tqw_bnt_q2">
+        <title>PDF2</title>
+        <p>Custom PDF2 shell stylesheets need to be revised to not include separate IBM and OASIS
+          DITA stylesheets. The <filepath><varname>*</varname>_1.0.xsl</filepath> stylesheets have
+          been removed and their imports must be removed from shell stylesheets.</p>
+      </section>
     </refbody>
   </reference>
   <reference id="rel1.6">
@@ -28,6 +37,7 @@
           <li>3455512 Add switch to ignore links in XHTML (milestone 1)</li>
           <li>3468355 Refactor log messages and tasks (milestone 1)</li>
           <li>3466533 Reduce topic merge memory consumption (milestone 1)</li>
+          <li>3483326 Remove IBM DITA and BookMap demo support from PDF2 (milestone 1)</li>
           <li>3466842 Refactor preprocessing to use SAX filters (in progress)</li>
           <li>3468864 Remove Content object (in progress)</li>
           <li>3460151 Use Job to read/write job configuration files (in progress)</li>

@@ -528,7 +528,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="concept">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="conbody">
+    <xsl:attribute-set name="conbody" use-attribute-sets="body">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="topichead">
@@ -619,7 +619,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="reference">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="refbody">
+    <xsl:attribute-set name="refbody" use-attribute-sets="body">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="refsyn">
