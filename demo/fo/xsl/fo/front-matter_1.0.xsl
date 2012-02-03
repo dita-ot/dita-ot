@@ -37,6 +37,107 @@ See the accompanying license.txt file for applicable licenses.
     exclude-result-prefixes="opentopic"
     version="2.0">
 
+    <xsl:template match="*[contains(@class, ' bkinfo/bkowner ')]">
+        <fo:block-container xsl:use-attribute-sets="__frontmatter__owner__container">
+            <fo:block >
+                <fo:inline>
+                    <xsl:apply-templates select="*[contains(@class, ' bkinfo/organization ')]/*[contains(@class, ' bkinfo/orgname ')]"/>
+                </fo:inline>
+                    &#xA0;
+                <fo:inline>
+                    <xsl:apply-templates select="*[contains(@class, ' bkinfo/organization ')]/*[contains(@class, ' bkinfo/address ')]"/>
+                </fo:inline>
+            </fo:block>
+        </fo:block-container>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class, ' map/topicmeta ')]">
+        <fo:block-container xsl:use-attribute-sets="__frontmatter__owner__container">
+            <xsl:apply-templates/>
+        </fo:block-container>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class, ' topic/author ')]">
+        <fo:block xsl:use-attribute-sets="author" >
+            <xsl:apply-templates/>
+        </fo:block>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class, ' topic/publisher ')]">
+        <fo:block xsl:use-attribute-sets="publisher" >
+            <xsl:apply-templates/>
+        </fo:block>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class, ' topic/copyright ')]">
+        <fo:block xsl:use-attribute-sets="copyright" >
+            <xsl:apply-templates/>
+        </fo:block>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class, ' topic/copyryear ')]">
+        <fo:inline xsl:use-attribute-sets="copyryear" >
+            <xsl:value-of select="@year"/><xsl:text> </xsl:text>
+        </fo:inline>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class, ' topic/copyrholder ')]">
+        <fo:inline xsl:use-attribute-sets="copyrholder" >
+            <xsl:apply-templates/>
+        </fo:inline>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class, ' bkinfo/bksubtitle ')]" priority="2">
+        <fo:block xsl:use-attribute-sets="__frontmatter__subtitle">
+            <xsl:apply-templates/>
+        </fo:block>
+    </xsl:template>
+
+    <xsl:template name="processCopyrigth">
+        <xsl:apply-templates select="/bookmap/*[contains(@class,' topic/topic ')]" mode="process-preface"/>
+    </xsl:template>
+
+    <xsl:template name="processTopicAbstract">
+        <fo:block xsl:use-attribute-sets="topic" page-break-before="always">
+            <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
+                <fo:marker marker-class-name="current-topic-number">
+                    <xsl:number format="1"/>
+                </fo:marker>
+                <fo:marker marker-class-name="current-header">
+                    <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
+                        <xsl:call-template name="getTitle"/>
+                    </xsl:for-each>
+                </fo:marker>
+            </xsl:if>
+            <fo:inline>
+                <xsl:call-template name="commonattributes"/>
+            </fo:inline>
+            <fo:inline>
+                <xsl:attribute name="id">
+                    <xsl:call-template name="generate-toc-id"/>
+                </xsl:attribute>
+            </fo:inline>
+            <fo:block>
+                <xsl:attribute name="border-bottom">3pt solid black</xsl:attribute>
+                <xsl:attribute name="space-after">16.8pt</xsl:attribute>
+            </fo:block>
+            <fo:block xsl:use-attribute-sets="body__toplevel">
+                <xsl:apply-templates select="*[not(contains(@class, ' topic/title '))]"/>
+            </fo:block>
+        </fo:block>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="process-preface">
+        <xsl:param name="include" select="'true'"/>
+        <xsl:variable name="topicType">
+            <xsl:call-template name="determineTopicType"/>
+        </xsl:variable>
+
+        <xsl:if test="$topicType = 'topicAbstract'">
+            <xsl:call-template name="processTopicAbstract"/>
+        </xsl:if>
+    </xsl:template>
+
     <xsl:variable name="map" select="//opentopic:map"/>
 
     <xsl:template name="createFrontMatter">
@@ -44,6 +145,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:when test="$ditaVersion &gt;= 1.1">
                 <xsl:call-template name="createFrontMatter_1.0"/>
             </xsl:when>
+            <!-- DITA 1.0 -->
             <xsl:otherwise>
                 <fo:page-sequence master-reference="front-matter" xsl:use-attribute-sets="__force__page__count">
                     <xsl:call-template name="insertFrontMatterStaticContents"/>
@@ -129,7 +231,7 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:if>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class, ' bookmap/bookmeta ')]">
+    <xsl:template match="*[contains(@class, ' bookmap/bookmeta ')]" priority="1">
         <fo:block-container xsl:use-attribute-sets="__frontmatter__owner__container">
             <fo:block >
 				<xsl:apply-templates/>
@@ -137,13 +239,13 @@ See the accompanying license.txt file for applicable licenses.
         </fo:block-container>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class, ' bookmap/booktitlealt ')]" priority="+2">
+    <xsl:template match="*[contains(@class, ' bookmap/booktitlealt ')]" priority="2">
         <fo:block xsl:use-attribute-sets="__frontmatter__subtitle">
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class, ' bookmap/booktitle ')]" priority="+2">
+    <xsl:template match="*[contains(@class, ' bookmap/booktitle ')]" priority="2">
         <fo:block xsl:use-attribute-sets="__frontmatter__booklibrary">
             <xsl:apply-templates select="*[contains(@class, ' bookmap/booklibrary ')]"/>
         </fo:block>

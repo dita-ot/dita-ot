@@ -45,6 +45,51 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:variable name="map" select="//opentopic:map"/>
 
+    <xsl:template match="*[contains(@class, ' topic/topic ') and not(contains(@class, ' bkinfo/bkinfo '))]" mode="bookmark">
+        <xsl:variable name="id" select="@id"/>
+        <xsl:variable name="gid" select="generate-id()"/>
+        <xsl:variable name="topicNumber" select="count(exsl:node-set($topicNumbers)/topic[@id = $id][following-sibling::topic[@guid = $gid]]) + 1"/>
+        <xsl:variable name="topicTitle">
+            <xsl:call-template name="getNavTitle">
+              <xsl:with-param name="topicNumber" select="$topicNumber"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <!-- normalize the title bug:3065853 -->
+        <xsl:variable name="normalizedTitle" select="normalize-space($topicTitle)"/>
+        <xsl:variable name="mapTopic">
+            <xsl:copy-of select="$map//*[@id = $id]"/>
+        </xsl:variable>
+        
+        <!-- added by William on 2009-05-11 for toc bug start -->
+        <xsl:choose>
+          <xsl:when test="($mapTopic/*[position() = $topicNumber][@toc = 'yes' or not(@toc)]) or (not($mapTopic/*))">
+            <fo:bookmark>
+                <xsl:attribute name="internal-destination">
+                    <xsl:call-template name="generate-toc-id"/>
+                </xsl:attribute>
+                    <xsl:if test="$bookmarkStyle!='EXPANDED'">
+                        <xsl:attribute name="starting-state">hide</xsl:attribute>
+                    </xsl:if>
+                <fo:bookmark-title>
+                    <xsl:value-of select="$normalizedTitle"/>
+                </fo:bookmark-title>
+                <xsl:apply-templates mode="bookmark"/>
+            </fo:bookmark>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates mode="bookmark"/>
+          </xsl:otherwise>
+        </xsl:choose>
+        <!-- added by William on 2009-05-11 for toc bug end -->
+        
+    </xsl:template>
+
+    <xsl:template match="*" mode="bookmark">
+        <xsl:apply-templates mode="bookmark"/>
+    </xsl:template>
+
+    <xsl:template match="text()" mode="bookmark"/>
+
     <xsl:template name="createBookmarks">
       <xsl:variable name="bookmarks" as="element()*">
         <xsl:choose>
@@ -203,9 +248,5 @@ See the accompanying license.txt file for applicable licenses.
             </fo:bookmark>
         </xsl:if>
     </xsl:template>
-
-    <!--<xsl:template match="*[contains(@class, ' topic/topic ')][opentopic-func:determineTopicType() = 'topicTocList']" mode="bookmark" priority="10"/>-->
-    <!--<xsl:template match="*[contains(@class, ' topic/topic ')][opentopic-func:determineTopicType() = 'topicIndexList']" mode="bookmark" priority="10"/>-->
-
 
 </xsl:stylesheet>
