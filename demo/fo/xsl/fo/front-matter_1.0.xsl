@@ -37,20 +37,6 @@ See the accompanying license.txt file for applicable licenses.
     exclude-result-prefixes="opentopic"
     version="2.0">
 
-    <xsl:template match="*[contains(@class, ' bkinfo/bkowner ')]">
-        <fo:block-container xsl:use-attribute-sets="__frontmatter__owner__container">
-            <fo:block >
-                <fo:inline>
-                    <xsl:apply-templates select="*[contains(@class, ' bkinfo/organization ')]/*[contains(@class, ' bkinfo/orgname ')]"/>
-                </fo:inline>
-                    &#xA0;
-                <fo:inline>
-                    <xsl:apply-templates select="*[contains(@class, ' bkinfo/organization ')]/*[contains(@class, ' bkinfo/address ')]"/>
-                </fo:inline>
-            </fo:block>
-        </fo:block-container>
-    </xsl:template>
-
     <xsl:template match="*[contains(@class, ' map/topicmeta ')]">
         <fo:block-container xsl:use-attribute-sets="__frontmatter__owner__container">
             <xsl:apply-templates/>
@@ -85,12 +71,6 @@ See the accompanying license.txt file for applicable licenses.
         <fo:inline xsl:use-attribute-sets="copyrholder" >
             <xsl:apply-templates/>
         </fo:inline>
-    </xsl:template>
-
-    <xsl:template match="*[contains(@class, ' bkinfo/bksubtitle ')]" priority="2">
-        <fo:block xsl:use-attribute-sets="__frontmatter__subtitle">
-            <xsl:apply-templates/>
-        </fo:block>
     </xsl:template>
 
     <xsl:template name="processCopyrigth">
@@ -154,9 +134,6 @@ See the accompanying license.txt file for applicable licenses.
                             <!-- set the title -->
                             <fo:block xsl:use-attribute-sets="__frontmatter__title">
                                 <xsl:choose>
-                                    <xsl:when test="//*[contains(@class,' bkinfo/bkinfo ')][1]">
-                                        <xsl:apply-templates select="//*[contains(@class,' bkinfo/bkinfo ')][1]/*[contains(@class,' topic/title ')]/node()"/>
-                                    </xsl:when>
                                     <xsl:when test="//*[contains(@class, ' map/map ')]/@title">
                                         <xsl:value-of select="//*[contains(@class, ' map/map ')]/@title"/>
                                     </xsl:when>
@@ -166,18 +143,8 @@ See the accompanying license.txt file for applicable licenses.
                                 </xsl:choose>
                             </fo:block>
 
-                            <!-- set the subtitle -->
-                            <xsl:apply-templates select="//*[contains(@class,' bkinfo/bkinfo ')][1]/*[contains(@class,' bkinfo/bktitlealts ')]/*[contains(@class,' bkinfo/bksubtitle ')]"/>
-
                             <fo:block xsl:use-attribute-sets="__frontmatter__owner">
-                                <xsl:choose>
-                                    <xsl:when test="//*[contains(@class,' bkinfo/bkowner ')]">
-                                        <xsl:apply-templates select="//*[contains(@class,' bkinfo/bkowner ')]"/>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:apply-templates select="$map/*[contains(@class, ' map/topicmeta ')]"/>
-                                    </xsl:otherwise>
-                                </xsl:choose>
+                                <xsl:apply-templates select="$map/*[contains(@class, ' map/topicmeta ')]"/>
                             </fo:block>
 
                         </fo:block>

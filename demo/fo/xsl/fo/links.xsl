@@ -715,7 +715,7 @@ See the accompanying license.txt file for applicable licenses.
 					<xsl:call-template name="linkToParent"/>
 
 					<!-- Creating relationships to the concepts -->
-					<xsl:variable name="siblingConcepts" select="preceding-sibling::*[contains(@class, ' concept/concept ') and not(contains(@class, ' bkinfo/bkinfo '))] | following-sibling::*[contains(@class, ' concept/concept ') and not(contains(@class, ' bkinfo/bkinfo '))]"/>
+					<xsl:variable name="siblingConcepts" select="preceding-sibling::*[contains(@class, ' concept/concept ')] | following-sibling::*[contains(@class, ' concept/concept ')]"/>
 					<xsl:call-template name="createMapLinks">
 						<xsl:with-param name="nodeSet" select="$siblingConcepts"/>
 						<xsl:with-param name="title" select="$relatedConceptsTitle"/>
@@ -735,7 +735,7 @@ See the accompanying license.txt file for applicable licenses.
 					</xsl:choose>
 
 					<!-- Creating relationships to the tasks -->
-					<xsl:variable name="siblingTasks" select="preceding-sibling::*[contains(@class, ' task/task ') and not(contains(@class, ' bkinfo/bkinfo '))] | following-sibling::*[contains(@class, ' task/task ') and not(contains(@class, ' bkinfo/bkinfo '))]"/>
+					<xsl:variable name="siblingTasks" select="preceding-sibling::*[contains(@class, ' task/task ')] | following-sibling::*[contains(@class, ' task/task ')]"/>
 					<xsl:call-template name="createMapLinks">
 						<xsl:with-param name="nodeSet" select="$siblingTasks"/>
 						<xsl:with-param name="title" select="$relatedTasksTitle"/>
@@ -755,7 +755,7 @@ See the accompanying license.txt file for applicable licenses.
 					</xsl:choose>
 
 					<!-- Creating relationships to the references -->
-					<xsl:variable name="siblingReferences" select="preceding-sibling::*[contains(@class, ' reference/reference ') and not(contains(@class, ' bkinfo/bkinfo '))] | following-sibling::*[contains(@class, ' reference/reference ') and not(contains(@class, ' bkinfo/bkinfo '))]"/>
+					<xsl:variable name="siblingReferences" select="preceding-sibling::*[contains(@class, ' reference/reference ')] | following-sibling::*[contains(@class, ' reference/reference ')]"/>
 					<xsl:call-template name="createMapLinks">
 						<xsl:with-param name="nodeSet" select="$siblingReferences"/>
 						<xsl:with-param name="title" select="$relatedReferencesTitle"/>
@@ -775,7 +775,7 @@ See the accompanying license.txt file for applicable licenses.
 					</xsl:choose>
 
 					<!-- Creating relationships to the topics -->
-					<xsl:variable name="siblingTopics" select="preceding-sibling::*[contains(@class, ' topic/topic ') and not(contains(@class, ' bkinfo/bkinfo ') or contains(@class, ' concept/concept ') or contains(@class, ' task/task ') or contains(@class, ' reference/reference '))] | following-sibling::*[contains(@class, ' topic/topic ') and not(contains(@class, ' bkinfo/bkinfo ') or contains(@class, ' concept/concept ') or contains(@class, ' task/task ') or contains(@class, ' reference/reference '))]"/>
+					<xsl:variable name="siblingTopics" select="preceding-sibling::*[contains(@class, ' topic/topic ') and not(contains(@class, ' concept/concept ') or contains(@class, ' task/task ') or contains(@class, ' reference/reference '))] | following-sibling::*[contains(@class, ' topic/topic ') and not(contains(@class, ' concept/concept ') or contains(@class, ' task/task ') or contains(@class, ' reference/reference '))]"/>
 					<xsl:call-template name="createMapLinks">
 						<xsl:with-param name="nodeSet" select="$siblingTopics"/>
 						<xsl:with-param name="title" select="$relatedInformationTitle"/>

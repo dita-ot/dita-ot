@@ -45,7 +45,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:variable name="map" select="//opentopic:map"/>
 
-    <xsl:template match="*[contains(@class, ' topic/topic ') and not(contains(@class, ' bkinfo/bkinfo '))]" mode="bookmark">
+    <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="bookmark">
         <xsl:variable name="id" select="@id"/>
         <xsl:variable name="gid" select="generate-id()"/>
         <xsl:variable name="topicNumber" select="count(exsl:node-set($topicNumbers)/topic[@id = $id][following-sibling::topic[@guid = $gid]]) + 1"/>

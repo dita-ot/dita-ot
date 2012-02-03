@@ -58,7 +58,7 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:apply-templates>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class, ' topic/topic ') and not(contains(@class, ' bkinfo/bkinfo '))]" mode="toc">
+    <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="toc">
         <xsl:param name="include"/>
         <xsl:variable name="topicLevel" select="count(ancestor-or-self::*[contains(@class, ' topic/topic ')])"/>
         <xsl:if test="$topicLevel &lt; $tocMaximumLevel">
