@@ -389,8 +389,8 @@
       <xs:documentation>
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
-      <xs:complexContent>
+    <xs:complexType>
+      <xs:complexContent mixed="true">
         <xs:extension base="bodydiv.class">
           <xs:attribute ref="class" default="- topic/bodydiv "/>
         </xs:extension>
