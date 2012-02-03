@@ -197,14 +197,10 @@ with those set forth herein.
                    transform.topic2fo.i18n"/>
     
   <target name="transform.topic2fo.init">
-    <taskdef name="dita-version" classname="com.idiominc.ws.opentopic.xsl.extension.DitaVersion"
-             classpathref="project.class.path"/>
     <taskdef name="detect-lang" classname="com.suite.sol.ditaot.DetectLang"
              classpathref="project.class.path"/>
 
     <makeurl file="${inputFile}" property="inputFile.url" validate="true"/>
-
-    <dita-version documentPath="${inputFile.url}"/>
 
     <!-- Set document.locale from xml:lang -->
     <!-- The map takes precedence, followed by the first topic -->
@@ -288,19 +284,7 @@ with those set forth herein.
       <not><isset property="args.bookmap-order"/></not>
     </condition>
 
-    <condition property="temp.transformation.file" value="${xsl.fo.dir}/topic2fo_shell_1.0${formatter.specific.ext}.xsl">
-      <and>
-        <not><isset property="temp.transformation.file"/></not>
-        <or>
-          <equals arg1="${ws.runtime.publishing.map.dita.version}" arg2="1.0"/>
-          <equals arg1="${ws.runtime.publishing.map.dita.version}" arg2="1.1"/>
-          <equals arg1="${ws.runtime.publishing.map.dita.version}" arg2="1.2"/>
-        </or>
-      </and>
-    </condition>
-    <condition property="temp.transformation.file" value="${xsl.fo.dir}/topic2fo_shell${formatter.specific.ext}.xsl">
-      <not><isset property="temp.transformation.file"/></not>
-    </condition>
+    <property name="temp.transformation.file" location="${xsl.fo.dir}/topic2fo_shell_1.0${formatter.specific.ext}.xsl"/>
   </target>
 
   <target name="transform.topic2fo.index">
