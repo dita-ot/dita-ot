@@ -284,7 +284,7 @@ with those set forth herein.
       <not><isset property="args.bookmap-order"/></not>
     </condition>
 
-    <property name="temp.transformation.file" location="${xsl.fo.dir}/topic2fo_shell_1.0${formatter.specific.ext}.xsl"/>
+    <property name="temp.transformation.file" location="${xsl.fo.dir}/topic2fo_shell${formatter.specific.ext}.xsl"/>
   </target>
 
   <target name="transform.topic2fo.index">

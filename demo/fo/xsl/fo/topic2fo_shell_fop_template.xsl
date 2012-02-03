@@ -6,11 +6,12 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="2.0">
   
-  <xsl:import href="topic2fo_1.0.xsl"/>
+  <xsl:import href="topic2fo.xsl"/>
 
-  <xsl:import href="../../cfg/fo/attrs/commons-attr_xep.xsl"/>
-  <xsl:import href="../../cfg/fo/attrs/layout-masters-attr_xep.xsl"/>
-  <xsl:import href="index_xep.xsl"/>
+  <xsl:import href="../../cfg/fo/attrs/commons-attr_fop.xsl"/>
+  <xsl:import href="../../cfg/fo/attrs/tables-attr_fop.xsl"/>
+  <xsl:import href="../../cfg/fo/attrs/toc-attr_fop.xsl"/>
+  <xsl:import href="index_fop.xsl"/>
 
   <dita:extension id="dita.xsl.xslfo" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
 
