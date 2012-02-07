@@ -437,7 +437,7 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 <!-- Override no-name group wrapper template for HTML: output "Related Information" in a <div>. -->
   <xsl:template match="*[contains(@class, ' topic/link ')]" mode="related-links:result-group" name="related-links:group-result.">
     <xsl:param name="links"/>
-    <xsl:if test="$links/node()">
+    <xsl:if test="normalize-space($links)">
     <div class="relinfo">
       <strong>
         <xsl:call-template name="getString">
