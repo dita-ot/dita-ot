@@ -291,6 +291,11 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 <!-- Deprecated! Use related-links:group-unordered-links template instead. -->
 
 <xsl:template name="concept-links">
+  <xsl:call-template name="output-message">
+    <xsl:with-param name="msgnum">066</xsl:with-param>
+    <xsl:with-param name="msgsev">W</xsl:with-param>
+    <xsl:with-param name="msgparams">%1=concept-links</xsl:with-param>
+  </xsl:call-template>
      <!-- Deprecated! Use related-links:group-unordered-links template instead. -->
      <!--related concepts - all the related concept links that haven't already been covered as a child/descendant/ancestor/next/previous/prerequisite, and aren't in a linklist-->
      <xsl:if test="descendant::*[contains(@class, ' topic/link ')]
@@ -311,6 +316,11 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 </xsl:template>
 
 <xsl:template name="task-links">
+  <xsl:call-template name="output-message">
+    <xsl:with-param name="msgnum">066</xsl:with-param>
+    <xsl:with-param name="msgsev">W</xsl:with-param>
+    <xsl:with-param name="msgparams">%1=task-links</xsl:with-param>
+  </xsl:call-template>
      <!-- Deprecated! Use related-links:group-unordered-links template instead. -->
      <!--related tasks - all the related task links that haven't already been covered as a child/descendant/ancestor/next/previous/prerequisite, and aren't in a linklist-->
      <xsl:if test="descendant::*[contains(@class, ' topic/link ')]
@@ -332,6 +342,11 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 
 
 <xsl:template name="reference-links">
+  <xsl:call-template name="output-message">
+    <xsl:with-param name="msgnum">066</xsl:with-param>
+    <xsl:with-param name="msgsev">W</xsl:with-param>
+    <xsl:with-param name="msgparams">%1=reference-links</xsl:with-param>
+  </xsl:call-template>
      <!-- Deprecated! Use related-links:group-unordered-links template instead. -->
      <!--related reference - all the related reference links that haven't already been covered as a child/descendant/ancestor/next/previous/prerequisite, and aren't in a linklist-->
      <xsl:if test="descendant::*
@@ -354,6 +369,11 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 
 
 <xsl:template name="relinfo-links">
+  <xsl:call-template name="output-message">
+    <xsl:with-param name="msgnum">066</xsl:with-param>
+    <xsl:with-param name="msgsev">W</xsl:with-param>
+    <xsl:with-param name="msgparams">%1=relinfo-links</xsl:with-param>
+  </xsl:call-template>
      <!-- Deprecated! Use related-links:group-unordered-links template instead. -->
      <!--other info- - not currently sorting by role, since already mixing any number of types in here-->
      <!--if there are links not covered by any of the other routines - ie, not in a linklist, not a child or descendant, not a concept/task/reference, not ancestor/next/previous, not prerequisite - create a section for them and create the links-->
@@ -388,6 +408,11 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 <xsl:template name="sort-links-by-role">
   <!-- Deprecated! Use related-links:group-unordered-links template instead. -->
    <xsl:param name="type">topic</xsl:param>
+   <xsl:call-template name="output-message">
+     <xsl:with-param name="msgnum">066</xsl:with-param>
+     <xsl:with-param name="msgsev">W</xsl:with-param>
+     <xsl:with-param name="msgparams">%1=sort-links-by-role</xsl:with-param>
+   </xsl:call-template>
      <!--create all sibling links of the specified type-->
      <xsl:call-template name="create-links"><xsl:with-param name="role">sibling</xsl:with-param><xsl:with-param name="type"><xsl:value-of select="$type"/></xsl:with-param></xsl:call-template>
      <!--create all cousin links of the specified type-->
@@ -405,7 +430,11 @@ Children are displayed in a numbered list, with the target title as the cmd and 
      <!--create links of the specified type and role-->
      <xsl:param name="type">topic</xsl:param>
      <xsl:param name="role">friend</xsl:param>
-
+     <xsl:call-template name="output-message">
+       <xsl:with-param name="msgnum">066</xsl:with-param>
+       <xsl:with-param name="msgsev">W</xsl:with-param>
+       <xsl:with-param name="msgparams">%1=create-links</xsl:with-param>
+     </xsl:call-template>
        <xsl:choose>
           <!--when processing links with no role, apply templates to links that are unique, not in a linklist, don't have a role attribute, match the specified type, and aren't prerequisites-->
           <xsl:when test="$role='#none#'">
@@ -881,6 +910,11 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 
 <!-- DEPRECATED: use mode template instead -->
 <xsl:template name="add-linking-attributes">
+  <xsl:call-template name="output-message">
+    <xsl:with-param name="msgnum">066</xsl:with-param>
+    <xsl:with-param name="msgsev">W</xsl:with-param>
+    <xsl:with-param name="msgparams">%1=add-linking-attributes</xsl:with-param>
+  </xsl:call-template>
   <xsl:if test="@href and normalize-space(@href)!=''">
     <xsl:attribute name="href">
       <xsl:call-template name="href" />
@@ -910,6 +944,11 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 </xsl:template>
 
 <xsl:template name="add-link-target-attribute">
+  <xsl:call-template name="output-message">
+    <xsl:with-param name="msgnum">066</xsl:with-param>
+    <xsl:with-param name="msgsev">W</xsl:with-param>
+    <xsl:with-param name="msgparams">%1=add-link-target-attribute</xsl:with-param>
+  </xsl:call-template>
   <!-- DEPRECATED: use mode template -->
   <xsl:apply-templates select="." mode="add-link-target-attribute"/>
 </xsl:template>
@@ -920,6 +959,11 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 </xsl:template>
 
 <xsl:template name="add-user-link-attributes">
+  <xsl:call-template name="output-message">
+    <xsl:with-param name="msgnum">066</xsl:with-param>
+    <xsl:with-param name="msgsev">W</xsl:with-param>
+    <xsl:with-param name="msgparams">%1=add-user-link-attributes</xsl:with-param>
+  </xsl:call-template>
   <!-- stub for user values. DEPRECATED - use mode template instead. -->
   <xsl:apply-templates select="." mode="add-custom-link-attributes"/>
 </xsl:template>

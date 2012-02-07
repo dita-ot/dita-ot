@@ -552,6 +552,11 @@
 <!-- Output starting & ending flag for "blocked" text.
      Use instead of 'apply-templates' for block areas (P, Note, DD, etc) -->
 <xsl:template name="revblock-deprecated">
+  <xsl:call-template name="output-message">
+    <xsl:with-param name="msgnum">066</xsl:with-param>
+    <xsl:with-param name="msgsev">W</xsl:with-param>
+    <xsl:with-param name="msgparams">%1=revblock-deprecated</xsl:with-param>
+  </xsl:call-template>
  <xsl:choose>
   <xsl:when test="@rev and not($FILTERFILE='') and ($DRAFT='yes')"> <!-- draft rev mode, add div w/ rev attr value -->
     <xsl:variable name="revtest"> 
@@ -663,6 +668,11 @@
 <!-- output the revision color & apply further templates-->
 <xsl:template name="revstyle-deprecated">
  <xsl:param name="revvalue"/>
+  <xsl:call-template name="output-message">
+    <xsl:with-param name="msgnum">066</xsl:with-param>
+    <xsl:with-param name="msgsev">W</xsl:with-param>
+    <xsl:with-param name="msgparams">%1=revstyle-deprecated</xsl:with-param>
+  </xsl:call-template>
  <xsl:variable name="revcolor">
   <xsl:call-template name="find-active-rev-style"> <!-- get 1st active rev color -->
    <xsl:with-param name="allrevs" select="$revvalue"/>
@@ -686,6 +696,11 @@
 <!-- output the beginning revision graphic & ALT text -->
 <!-- Reverse the artwork for BIDI languages -->
 <xsl:template name="start-revision-flag-deprecated">
+  <xsl:call-template name="output-message">
+    <xsl:with-param name="msgnum">066</xsl:with-param>
+    <xsl:with-param name="msgsev">W</xsl:with-param>
+    <xsl:with-param name="msgparams">%1=start-revision-flag-deprecated</xsl:with-param>
+  </xsl:call-template>
  <xsl:variable name="biditest"> 
   <xsl:call-template name="bidi-area"/>
  </xsl:variable>
@@ -706,6 +721,11 @@
 <!-- output the ending revision graphic & ALT text -->
 <!-- Reverse the artwork for BIDI languages -->
 <xsl:template name="end-revision-flag-deprecated">
+  <xsl:call-template name="output-message">
+    <xsl:with-param name="msgnum">066</xsl:with-param>
+    <xsl:with-param name="msgsev">W</xsl:with-param>
+    <xsl:with-param name="msgparams">%1=end-revision-flag-deprecated</xsl:with-param>
+  </xsl:call-template>
  <xsl:variable name="biditest">
   <xsl:call-template name="bidi-area"/>
  </xsl:variable>

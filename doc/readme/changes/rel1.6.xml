@@ -18,6 +18,39 @@
   <reference id="reference_yvj_ttj_bd">
     <title>Migration from previous releases</title>
     <refbody>
+      <section>
+        <title>XHTML</title>
+        <p>The following deprecated templates will be removed:</p>
+        <ul id="ul_ywp_gsc_ff">
+          <li>revblock-deprecated</li>
+          <li>revstyle-deprecated</li>
+          <li>start-revision-flag-deprecated</li>
+          <li>end-revision-flag-deprecated</li>
+          <li>concept-links</li>
+          <li>task-links</li>
+          <li>reference-links</li>
+          <li>relinfo-links</li>
+          <li>sort-links-by-role</li>
+          <li>create-links</li>
+          <li>add-linking-attributes</li>
+          <li>add-link-target-attribute</li>
+          <li>add-user-link-attributes</li>
+        </ul>
+        <p>The removed templates have been replaced by other templates in earlier releases and
+          plug-ins should be changed to use the new templates.</p>
+      </section>
+      <section>
+        <title>ODT</title>
+        <p>The following deprecated templates will be removed:</p>
+        <ul id="ul_ywp_gsc_ff2">
+          <li>revblock-deprecated</li>
+          <li>revstyle-deprecated</li>
+          <li>start-revision-flag-deprecated</li>
+          <li>end-revision-flag-deprecated</li>
+        </ul>
+        <p>The removed templates have been replaced by other templates in earlier releases and
+          plug-ins should be changed to use the new templates.</p>
+      </section>
       <section id="section_tqw_bnt_q2">
         <title>PDF2</title>
         <p>Custom PDF2 shell stylesheets need to be revised to not include separate IBM and OASIS
