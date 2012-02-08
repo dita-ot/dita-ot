@@ -70,10 +70,18 @@ public final class XMLUtils {
             throw new IllegalArgumentException();
         }
         final Attr a = (Attr) att;
+        String localName = a.getLocalName();
+        if (localName == null) {
+            localName = a.getName();
+            final int i = localName.indexOf(':');
+            if (i != -1) {
+                localName = localName.substring(i + 1);
+            }
+        }
         addOrSetAttribute(atts,
                 a.getNamespaceURI() != null ? a.getNamespaceURI() : NULL_NS_URI,
-                        a.getLocalName() != null ? a.getLocalName() : (a.getName() != null ? a.getName() : ""),
-                                a.getName() != null ? a.getName() : "",
+                        localName,
+                                a.getName() != null ? a.getName() : localName,
                                         a.isId() ? "ID" : "CDATA",
                                                 a.getValue());
     }
