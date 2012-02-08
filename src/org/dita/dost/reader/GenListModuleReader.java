@@ -652,7 +652,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
                     crossSet.add(FileUtils.resolveFile(currentDir, href));
                 }
             }
-        } else if (ATTR_SCOPE_VALUE_EXTERNAL.equals(scope)) {
+        } else  {
             if (href != null) {
                 crossSet.add(FileUtils.resolveFile(currentDir, href));
             }
