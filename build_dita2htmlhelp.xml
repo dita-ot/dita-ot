@@ -7,7 +7,7 @@
 
     <target name="dita2htmlhelp"
             unless="noMap"
-    	depends="build-init, use-init.envhhcdir, use-init.envhhcdir, preprocess, copy-css, 
+    	depends="build-init, use-init.envhhcdir, use-init.hhcdir, preprocess, copy-css, 
                      dita.topics.html, dita.inner.topics.html, dita.outer.topics.html">
         <antcall target="dita.map.htmlhelp"></antcall>
     	
