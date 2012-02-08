@@ -583,8 +583,8 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
                  * 
                  * logger.logException(e); }
                  */
-
-                keysDefMap.put(key, new KeyDef(value.keys, value.href, currentFile));
+                
+                keysDefMap.put(key, new KeyDef(key, value.href==null?"":value.href, currentFile));
             }
             // TODO Added by William on 2009-06-09 for scheme key bug(532-547)
             // if the current file is also a schema file
