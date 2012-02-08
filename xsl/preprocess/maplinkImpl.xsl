@@ -20,7 +20,7 @@
   <xsl:param name="WORKDIR">
     <xsl:apply-templates select="/processing-instruction()" mode="get-work-dir"/>
   </xsl:param>
-  <xsl:param name="include.rellinks" select="'parent child sibling friend next previous cousin ancestor descendant sample external other'"/>
+  <xsl:param name="include.rellinks" select="'#default parent child sibling friend next previous cousin ancestor descendant sample external other'"/>
   <xsl:variable name="include.roles" select="concat(' ', normalize-space($include.rellinks), ' ')"/>
   <xsl:variable name="file-prefix">
     <xsl:value-of select="$FILEREF"/><xsl:value-of select="$WORKDIR"/>

@@ -15,7 +15,7 @@
 <xsl:key name="hideduplicates" match="*[contains(@class, ' topic/link ')][not(ancestor::*[contains(@class, ' topic/linklist ')])][not(@role) or @role='cousin' or @role='external' or @role='friend' or @role='other' or @role='sample' or @role='sibling']" use="concat(ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id, ' ',@href,@scope,@audience,@platform,@product,@otherprops,@rev,@type,normalize-space(child::*))"/>
 
 <xsl:param name="NOPARENTLINK" select="'no'"/><!-- "no" and "yes" are valid values; non-'no' is ignored -->
-<xsl:param name="include.rellinks" select="'parent child sibling friend next previous cousin ancestor descendant sample external other'"/>
+<xsl:param name="include.rellinks" select="'#default parent child sibling friend next previous cousin ancestor descendant sample external other'"/>
 <xsl:variable name="include.roles" select="concat(' ', normalize-space($include.rellinks), ' ')"/>
 
 <!-- ========== Hooks for common user customizations ============== -->
@@ -373,7 +373,8 @@ Children are displayed in a numbered list, with the target title as the cmd and 
           [not(ancestor::*[contains(@class,' topic/linklist ')])]
           [generate-id(.)=generate-id(key('link',concat(ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id, ' ', @href,@type,@role,@platform,@audience,@importance,@outputclass,@keyref,@scope,@format,@otherrole,@product,@otherprops,@rev,@class,child::*))[1])]
 [contains(@class, ' topic/link ')]
-          [@role and contains($include.roles, concat(' ', @role, ' '))]
+          [(@role and contains($include.roles, concat(' ', @role, ' '))) or
+           (not(@role) and contains($include.roles, ' #default '))]
           [not(@role='child' or @role='descendant' or @role='ancestor' or @role='parent' or @role='next' or @role='previous' or @type='concept' or @type='task' or @type='reference')]
           [not(@importance='required' and (not(@role) or @role='sibling' or @role='friend' or @role='cousin'))]">
           <xsl:apply-templates select="."/>
@@ -699,7 +700,8 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 </xsl:template>
 
 <xsl:template match="*[contains(@class, ' topic/link ')]" name="topic.link">
-  <xsl:if test="@role and contains($include.roles, concat(' ', @role, ' '))">
+  <xsl:if test="(@role and contains($include.roles, concat(' ', @role, ' '))) or
+                (not(@role) and contains($include.roles, ' #default '))">
   <xsl:choose>
     <!-- Linklist links put out <br/> in "processlinklist" -->
     <xsl:when test="ancestor::*[contains(@class,' topic/linklist ')]">
