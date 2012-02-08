@@ -508,7 +508,11 @@ public final class KeyrefPaser extends XMLFilterImpl {
                             target_output = normalizeHrefValue(target_output, tail);
                             XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output);
                         } else if ("".equals(scopeValue) || ATTR_SCOPE_VALUE_LOCAL.equals(scopeValue)){
-                            target = FileUtils.replaceExtName(target, extName);
+                        	if (!(cls.equalsIgnoreCase(MAPGROUP_D_MAPREF.toString())
+									&& target.toLowerCase().endsWith(".ditamap")) ){
+                        		target = FileUtils.replaceExtName(target,extName);
+							}
+                        	
                             final File topicFile = new File(FileUtils.resolveFile(tempDir, target));
                             if (topicFile.exists()) {  
                                 final String topicId = this.getFirstTopicId(topicFile);
