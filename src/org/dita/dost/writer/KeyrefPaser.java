@@ -615,7 +615,17 @@ public final class KeyrefPaser extends XMLFilterImpl {
                                                 || node.getNodeName().equals(ATTRIBUTE_NAME_FORMAT)
                                                 || node.getNodeName().equals(ATTRIBUTE_NAME_TYPE))) {
                                     XMLUtils.removeAttribute(resAtts, node.getNodeName());
-                                    XMLUtils.addOrSetAttribute(resAtts, node);
+                                    //must set local name of attribute 'xml:lang' with vale 'lang' ,or it will cause saxon parse problem
+                                	if (node.getNodeName().equalsIgnoreCase("xml:lang")) {
+                                		Attr a = (Attr) node;
+                                		XMLUtils.addOrSetAttribute(resAtts,a.getNamespaceURI() != null ? a.getNamespaceURI() : NULL_NS_URI,
+                                									a.getLocalName() != null ? a.getLocalName() : "lang",
+                                									a.getName() != null ? a.getName() : "",
+                                									a.isId() ? "ID" : "CDATA",
+                                                                    a.getValue()) ;
+									} else {
+										XMLUtils.addOrSetAttribute(resAtts,node);
+									}                
                                 }
                             }
                         }
