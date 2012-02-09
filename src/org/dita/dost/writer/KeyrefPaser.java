@@ -508,8 +508,8 @@ public final class KeyrefPaser extends XMLFilterImpl {
                             target_output = normalizeHrefValue(target_output, tail);
                             XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output);
                         } else if ("".equals(scopeValue) || ATTR_SCOPE_VALUE_LOCAL.equals(scopeValue)){
-                        	if (!(cls.equalsIgnoreCase(MAPGROUP_D_MAPREF.toString())
-									&& target.toLowerCase().endsWith(".ditamap")) ){
+                        	if (!(MAPGROUP_D_MAPREF.matches(cls)
+									&& FileUtils.isDITAMapFile(target.toLowerCase()))){
                         		target = FileUtils.replaceExtName(target,extName);
 							}
                         	
