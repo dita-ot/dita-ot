@@ -12,13 +12,13 @@ package org.dita.dost.module;
 import static org.junit.Assert.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.*;
+import static org.dita.dost.module.GenMapAndTopicListModule.KeyDef;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -148,6 +148,37 @@ public class TestGenMapAndTopicListModule {
             assertEquals(exp.get(1), e.getAttribute("href"));
             assertEquals(exp.get(2), e.getAttribute("source"));
         }
+    }
+    
+    @Test
+    public void testKeyDefStringStringString() {
+        final KeyDef k = new KeyDef("foo", "bar", "baz");
+        assertEquals("foo", k.keys);
+        assertEquals("bar", k.href);
+        assertEquals("baz", k.source);
+        final KeyDef n = new KeyDef("foo", null, null);
+        assertEquals("foo", n.keys);
+        assertNull(n.href);
+        assertNull(n.source);
+    }
+    
+    @Test
+    public void testKeyDefString() {
+        final KeyDef k = new KeyDef("foo=bar(baz)");
+        assertEquals("foo", k.keys);
+        assertEquals("bar", k.href);
+        assertEquals("baz", k.source);
+        final KeyDef n = new KeyDef("foo=");
+        assertEquals("foo", n.keys);
+        assertNull(n.href);
+        assertNull(n.source);
+    }
+    @Test
+    public void testKeyDefToString() {
+        final KeyDef k = new KeyDef("foo", "bar", "baz");
+        assertEquals("foo=bar(baz)", k.toString());
+        final KeyDef n = new KeyDef("foo", null, null);
+        assertEquals("foo=", n.toString());
     }
     
     private void testFileContent(final File expDir, final File actDir) throws Exception{
