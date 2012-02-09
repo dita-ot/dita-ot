@@ -73,11 +73,6 @@
     <copy todir="${build.dir}">
       <fileset dir="${java.dir}" excludes="com/**,org/dita/dost/junit/**"/>
     </copy>
-    <!-- Update the token so that we can find out what the version of DITA-OT users are using -->
-    <replace file="${build.dir}/org/dita/dost/util/Version.java" token="@@VERSION@@"
-      value="${package.name.root} ${version}"/>
-    <replace file="${build.dir}/org/dita/dost/util/VersionUtil.java" token="@@OTVERSION@@"
-      value="${version}"/>
     <javac srcdir="${build.dir}" destdir="${bin.dir}"
       excludes="com/**,org/dita/dost/junit/**, org/dita/dost/invoker/JavaInvoker.java" debug="on"
       source="1.5" target="1.5">

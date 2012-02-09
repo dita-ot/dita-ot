@@ -28,7 +28,7 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
 import org.dita.dost.platform.Integrator;
-import org.dita.dost.util.Version;
+import org.dita.dost.util.Configuration;
 import org.dita.dost.writer.PropertiesWriter;
 
 /**
@@ -349,7 +349,7 @@ public final class CommandLineInvoker {
      * print dita version.
      */
     private void printVersion() {
-        System.out.println(Version.getVersion());
+        System.out.println(Configuration.configuration.get("otversion"));
     }
 
     /**
