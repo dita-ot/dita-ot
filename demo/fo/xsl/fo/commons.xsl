@@ -489,9 +489,7 @@ See the accompanying license.txt file for applicable licenses.
                             <xsl:with-param name="theParameters">
                                 <number>
                                     <fo:block xsl:use-attribute-sets="__chapter__frontmatter__number__container">
-                                        <xsl:for-each select="key('map-id', @id)[1]">
-                                          <xsl:number format="1" count="*[contains(@class, ' bookmap/chapter ')]"/>
-                                        </xsl:for-each>
+                                        <xsl:apply-templates select="key('map-id', @id)[1]" mode="topicTitleNumber"/>
                                     </fo:block>
                                 </number>
                             </xsl:with-param>
@@ -505,9 +503,7 @@ See the accompanying license.txt file for applicable licenses.
                                 <xsl:with-param name="theParameters">
                                     <number>
                                         <fo:block xsl:use-attribute-sets="__chapter__frontmatter__number__container">
-                                            <xsl:for-each select="key('map-id', @id)[1]">
-                                              <xsl:number format="A" count="*[contains(@class, ' bookmap/appendix ')]"/>
-                                            </xsl:for-each>
+                                            <xsl:apply-templates select="key('map-id', @id)[1]" mode="topicTitleNumber"/>
                                         </fo:block>
                                     </number>
                                 </xsl:with-param>
@@ -522,9 +518,7 @@ See the accompanying license.txt file for applicable licenses.
                                 <xsl:with-param name="theParameters">
                                     <number>
                                         <fo:block xsl:use-attribute-sets="__chapter__frontmatter__number__container">
-                                            <xsl:for-each select="key('map-id', @id)[1]">
-                                              <xsl:number format="I" count="*[contains(@class, ' bookmap/part ')]"/>
-                                            </xsl:for-each>
+                                            <xsl:apply-templates select="key('map-id', @id)[1]" mode="topicTitleNumber"/>
                                         </fo:block>
                                     </number>
                                 </xsl:with-param>
@@ -547,6 +541,23 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:when>
             </xsl:choose>
         </fo:block>
+    </xsl:template>
+    
+    <xsl:template match="*[contains(@class, ' bookmap/chapter ')] |
+                         opentopic:map/*[contains(@class, ' map/topicref ')]" mode="topicTitleNumber" priority="-1">
+      <xsl:number format="1" count="*[contains(@class, ' bookmap/chapter ')]"/>
+    </xsl:template>
+    
+    <xsl:template match="*[contains(@class, ' bookmap/appendix ')]" mode="topicTitleNumber">
+      <xsl:number format="A" count="*[contains(@class, ' bookmap/appendix ')]"/>
+    </xsl:template>
+    
+    <xsl:template match="*[contains(@class, ' bookmap/part ')]" mode="topicTitleNumber">
+      <xsl:number format="I" count="*[contains(@class, ' bookmap/part ')]"/>
+    </xsl:template>
+    
+    <xsl:template match="*" mode="topicTitleNumber" priority="-10">
+      <xsl:message>No topicTitleNumber mode template for <xsl:value-of select="name()"/></xsl:message>
     </xsl:template>
 
     <xsl:template name="createMiniToc">

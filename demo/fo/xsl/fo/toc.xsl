@@ -62,39 +62,19 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:param name="include"/>
         <xsl:variable name="topicLevel" select="count(ancestor-or-self::*[contains(@class, ' topic/topic ')])"/>
         <xsl:if test="$topicLevel &lt; $tocMaximumLevel">
-            <xsl:variable name="topicTitle">
-                <xsl:call-template name="getNavTitle" />
-            </xsl:variable>
-            <xsl:variable name="id" select="@id"/>
-            <xsl:variable name="gid" select="generate-id()"/>
-            <xsl:variable name="topicNumber" select="count(exsl:node-set($topicNumbers)/topic[@id = $id][following-sibling::topic[@guid = $gid]]) + 1"/>
-            <xsl:variable name="mapTopic">
-                <xsl:copy-of select="$map//*[@id = $id]"/>
-            </xsl:variable>
-            <xsl:variable name="topicType">
-                <xsl:call-template name="determineTopicType"/>
-            </xsl:variable>
-
-            <!-- Removing this variable - it is not used and matches on an invalid class attribute. -->
-            <!--<xsl:variable name="parentTopicHead">
-                <xsl:copy-of select="$map//*[@id = $id]/parent::*[contains(@class, ' mapgroup/topichead ')]"/>
-            </xsl:variable>-->
-
-            <!--        <xsl:if test="(($mapTopic/*[position() = $topicNumber][@toc = 'yes' or not(@toc)]) or (not($mapTopic/*) and $include = 'true')) and not($parentTopicHead/*[position() = $topicNumber]/@toc = 'no')">-->
-            <!-- added by William on 2009-05-11 for toc bug start -->
+            <xsl:variable name="mapTopicref" select="key('map-id', @id)[1]"/>
             <xsl:choose>
-              <xsl:when test="($mapTopic/*[position() = $topicNumber][@toc = 'yes' or not(@toc)]) or (not($mapTopic/*) and $include = 'true')">
+              <xsl:when test="$mapTopicref[@toc = 'yes' or not(@toc)] or
+                              (not($mapTopicref) and $include = 'true')">
                     <fo:block xsl:use-attribute-sets="__toc__indent">
                         <xsl:variable name="tocItemContent">
                           <fo:basic-link xsl:use-attribute-sets="__toc__link">
                             <xsl:attribute name="internal-destination">
                               <xsl:call-template name="generate-toc-id"/>
                             </xsl:attribute>
-                            <xsl:apply-templates select="$topicType" mode="toc-prefix-text">
-                                <xsl:with-param name="id" select="@id"/>
-                            </xsl:apply-templates>
+                            <xsl:apply-templates select="$mapTopicref" mode="tocPrefix"/>
                             <fo:inline xsl:use-attribute-sets="__toc__title">
-                                <xsl:value-of select="$topicTitle"/>
+                                <xsl:call-template name="getNavTitle" />
                             </fo:inline>
                             <fo:inline xsl:use-attribute-sets="__toc__page-number">
                                 <fo:leader xsl:use-attribute-sets="__toc__leader"/>
@@ -106,13 +86,13 @@ See the accompanying license.txt file for applicable licenses.
                             </fo:inline>
                         </fo:basic-link>
                         </xsl:variable>
-                        <xsl:apply-templates select="$topicType" mode="toc-topic-text">
+                        <xsl:apply-templates select="$mapTopicref" mode="tocText">
                             <xsl:with-param name="tocItemContent" select="$tocItemContent"/>
                             <xsl:with-param name="currentNode" select="."/>
                         </xsl:apply-templates>
                     </fo:block>
                     <!-- In a future version, suppressing Notices in the TOC should not be hard-coded. -->
-                    <xsl:if test="not($topicType = 'topicNotices')">
+                    <xsl:if test="not($mapTopicref/self::*[contains(@class, ' bookmap/notices ')])">
                         <xsl:apply-templates mode="toc">
                             <xsl:with-param name="include" select="'true'"/>
                         </xsl:apply-templates>
@@ -124,12 +104,18 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:apply-templates>
               </xsl:otherwise>
             </xsl:choose>
-            <!-- added by William on 2009-05-11 for toc bug end -->
         </xsl:if>
     </xsl:template>
     
+    <!-- Deprecated, use tocPrefix mode instead. -->
     <xsl:template match="text()[. = 'topicChapter']" mode="toc-prefix-text">
         <xsl:param name="id"/>
+        <xsl:call-template name="output-message">
+          <xsl:with-param name="msgcat">DOTX</xsl:with-param>
+          <xsl:with-param name="msgnum">066</xsl:with-param>
+          <xsl:with-param name="msgsev">W</xsl:with-param>
+          <xsl:with-param name="msgparams">%1=toc-prefix-text</xsl:with-param>
+        </xsl:call-template>
         <xsl:variable name="topicChapters">
             <xsl:copy-of select="$map//*[contains(@class, ' bookmap/chapter ')]"/>
         </xsl:variable>
@@ -145,9 +131,15 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:with-param>
         </xsl:call-template>
     </xsl:template>
-    
+    <!-- Deprecated, use tocPrefix mode instead. -->
     <xsl:template match="text()[. = 'topicAppendix']" mode="toc-prefix-text">
         <xsl:param name="id"/>
+        <xsl:call-template name="output-message">
+          <xsl:with-param name="msgcat">DOTX</xsl:with-param>
+          <xsl:with-param name="msgnum">066</xsl:with-param>
+          <xsl:with-param name="msgsev">W</xsl:with-param>
+          <xsl:with-param name="msgparams">%1=toc-prefix-text</xsl:with-param>
+        </xsl:call-template>
         <xsl:variable name="topicAppendixes">
             <xsl:copy-of select="$map//*[contains(@class, ' bookmap/appendix ')]"/>
         </xsl:variable>
@@ -163,9 +155,15 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:with-param>
         </xsl:call-template>
     </xsl:template>
-    
+    <!-- Deprecated, use tocPrefix mode instead. -->
     <xsl:template match="text()[. = 'topicPart']" mode="toc-prefix-text">
         <xsl:param name="id"/>
+        <xsl:call-template name="output-message">
+          <xsl:with-param name="msgcat">DOTX</xsl:with-param>
+          <xsl:with-param name="msgnum">066</xsl:with-param>
+          <xsl:with-param name="msgsev">W</xsl:with-param>
+          <xsl:with-param name="msgparams">%1=toc-prefix-text</xsl:with-param>
+        </xsl:call-template>
         <xsl:variable name="topicParts">
             <xsl:copy-of select="$map//*[contains(@class, ' bookmap/part ')]"/>
         </xsl:variable>
@@ -181,22 +179,83 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:with-param>
         </xsl:call-template>
     </xsl:template>
-    
+    <!-- Deprecated, use tocPrefix mode instead. -->
     <xsl:template match="text()[. = 'topicPreface']" mode="toc-prefix-text">
+        <xsl:call-template name="output-message">
+          <xsl:with-param name="msgcat">DOTX</xsl:with-param>
+          <xsl:with-param name="msgnum">066</xsl:with-param>
+          <xsl:with-param name="msgsev">W</xsl:with-param>
+          <xsl:with-param name="msgparams">%1=toc-prefix-text</xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="insertVariable">
+            <xsl:with-param name="theVariableID" select="'Table of Contents Preface'"/>
+        </xsl:call-template>
+    </xsl:template>
+    <!-- Deprecated, use tocPrefix mode instead. -->
+    <xsl:template match="text()[. = 'topicNotices']" mode="toc-prefix-text">
+        <xsl:call-template name="output-message">
+          <xsl:with-param name="msgcat">DOTX</xsl:with-param>
+          <xsl:with-param name="msgnum">066</xsl:with-param>
+          <xsl:with-param name="msgsev">W</xsl:with-param>
+          <xsl:with-param name="msgparams">%1=toc-prefix-text</xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="insertVariable">
+            <xsl:with-param name="theVariableID" select="'Table of Contents Notices'"/>
+        </xsl:call-template>
+    </xsl:template>
+    <!-- Deprecated, use tocPrefix mode instead. -->
+    <xsl:template match="node()" mode="toc-prefix-text" />
+
+
+    <xsl:template match="*[contains(@class, ' bookmap/chapter ')] |
+                         opentopic:map/*[contains(@class, ' map/topicref ')]" mode="tocPrefix" priority="-1">
+        <xsl:call-template name="insertVariable">
+            <xsl:with-param name="theVariableID" select="'Table of Contents Chapter'"/>
+            <xsl:with-param name="theParameters">
+                <number>
+                    <xsl:apply-templates select="." mode="topicTitleNumber"/>
+                </number>
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
+    
+    <xsl:template match="*[contains(@class, ' bookmap/appendix ')]" mode="tocPrefix">
+        <xsl:call-template name="insertVariable">
+            <xsl:with-param name="theVariableID" select="'Table of Contents Appendix'"/>
+            <xsl:with-param name="theParameters">
+                <number>
+                    <xsl:apply-templates select="." mode="topicTitleNumber"/>
+                </number>
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
+    
+    <xsl:template match="*[contains(@class, ' bookmap/part ')]" mode="tocPrefix">
+        <xsl:call-template name="insertVariable">
+            <xsl:with-param name="theVariableID" select="'Table of Contents Part'"/>
+            <xsl:with-param name="theParameters">
+                <number>
+                    <xsl:apply-templates select="." mode="topicTitleNumber"/>
+                </number>
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
+    
+    <xsl:template match="*[contains(@class, ' bookmap/preface ')]" mode="tocPrefix">
         <xsl:call-template name="insertVariable">
             <xsl:with-param name="theVariableID" select="'Table of Contents Preface'"/>
         </xsl:call-template>
     </xsl:template>
     
-    <xsl:template match="text()[. = 'topicNotices']" mode="toc-prefix-text">
+    <xsl:template match="*[contains(@class, ' bookmap/notices ')]" mode="tocPrefix">
         <xsl:call-template name="insertVariable">
             <xsl:with-param name="theVariableID" select="'Table of Contents Notices'"/>
         </xsl:call-template>
     </xsl:template>
+    
+    <xsl:template match="node()" mode="tocPrefix" priority="-10"/>
 
-    <xsl:template match="node()" mode="toc-prefix-text" />
-
-
+    <!-- Deprecated, use tocText mode instead. -->
     <xsl:template match="text()[. = 'topicChapter']" mode="toc-topic-text">
         <xsl:param name="tocItemContent"/>
         <xsl:param name="currentNode"/>
@@ -206,52 +265,143 @@ See the accompanying license.txt file for applicable licenses.
         </fo:block>
         </xsl:for-each>
     </xsl:template>
-    
+    <!-- Deprecated, use tocText mode instead. -->
     <xsl:template match="text()[. = 'topicAppendix']" mode="toc-topic-text">
         <xsl:param name="tocItemContent"/>
         <xsl:param name="currentNode"/>
+        <xsl:call-template name="output-message">
+          <xsl:with-param name="msgcat">DOTX</xsl:with-param>
+          <xsl:with-param name="msgnum">066</xsl:with-param>
+          <xsl:with-param name="msgsev">W</xsl:with-param>
+          <xsl:with-param name="msgparams">%1=toc-topic-text</xsl:with-param>
+        </xsl:call-template>
         <xsl:for-each select="$currentNode">
         <fo:block xsl:use-attribute-sets="__toc__appendix__content">
             <xsl:copy-of select="$tocItemContent"/>
         </fo:block>
         </xsl:for-each>
     </xsl:template>
-    
+    <!-- Deprecated, use tocText mode instead. -->
     <xsl:template match="text()[. = 'topicPart']" mode="toc-topic-text">
         <xsl:param name="tocItemContent"/>
         <xsl:param name="currentNode"/>
+        <xsl:call-template name="output-message">
+          <xsl:with-param name="msgcat">DOTX</xsl:with-param>
+          <xsl:with-param name="msgnum">066</xsl:with-param>
+          <xsl:with-param name="msgsev">W</xsl:with-param>
+          <xsl:with-param name="msgparams">%1=toc-topic-text</xsl:with-param>
+        </xsl:call-template>
         <xsl:for-each select="$currentNode">
         <fo:block xsl:use-attribute-sets="__toc__part__content">
             <xsl:copy-of select="$tocItemContent"/>
         </fo:block>
         </xsl:for-each>
     </xsl:template>
-    
+    <!-- Deprecated, use tocText mode instead. -->
     <xsl:template match="text()[. = 'topicPreface']" mode="toc-topic-text">
         <xsl:param name="tocItemContent"/>
         <xsl:param name="currentNode"/>
+        <xsl:call-template name="output-message">
+          <xsl:with-param name="msgcat">DOTX</xsl:with-param>
+          <xsl:with-param name="msgnum">066</xsl:with-param>
+          <xsl:with-param name="msgsev">W</xsl:with-param>
+          <xsl:with-param name="msgparams">%1=toc-topic-text</xsl:with-param>
+        </xsl:call-template>
         <xsl:for-each select="$currentNode">
         <fo:block xsl:use-attribute-sets="__toc__preface__content">
             <xsl:copy-of select="$tocItemContent"/>
         </fo:block>
         </xsl:for-each>
     </xsl:template>
-    
+    <!-- Deprecated, use tocText mode instead. -->
     <xsl:template match="text()[. = 'topicNotices']" mode="toc-topic-text">
+        <xsl:call-template name="output-message">
+          <xsl:with-param name="msgcat">DOTX</xsl:with-param>
+          <xsl:with-param name="msgnum">066</xsl:with-param>
+          <xsl:with-param name="msgsev">W</xsl:with-param>
+          <xsl:with-param name="msgparams">%1=toc-topic-text</xsl:with-param>
+        </xsl:call-template>
         <!-- Disabled, because now the Notices appear before the TOC -->
         <!--<xsl:param name="tocItemContent"/>
         <fo:block xsl:use-attribute-sets="__toc__notices__content">
             <xsl:copy-of select="$tocItemContent"/>
         </fo:block>-->
     </xsl:template>
-    
+    <!-- Deprecated, use tocText mode instead. -->
     <xsl:template match="node()" mode="toc-topic-text">
         <xsl:param name="tocItemContent"/>
         <xsl:param name="currentNode"/>
+        <xsl:call-template name="output-message">
+          <xsl:with-param name="msgcat">DOTX</xsl:with-param>
+          <xsl:with-param name="msgnum">066</xsl:with-param>
+          <xsl:with-param name="msgsev">W</xsl:with-param>
+          <xsl:with-param name="msgparams">%1=toc-topic-text</xsl:with-param>
+        </xsl:call-template>
         <xsl:for-each select="$currentNode">
         <fo:block xsl:use-attribute-sets="__toc__topic__content">
             <xsl:copy-of select="$tocItemContent"/>
         </fo:block>
+        </xsl:for-each>
+    </xsl:template>
+  
+    <xsl:template match="*[contains(@class, ' bookmap/chapter ')] |
+                         opentopic:map/*[contains(@class, ' map/topicref ')]" mode="tocText" priority="-1">
+        <xsl:param name="tocItemContent"/>
+        <xsl:param name="currentNode"/>
+        <xsl:for-each select="$currentNode">
+          <fo:block xsl:use-attribute-sets="__toc__chapter__content">
+              <xsl:copy-of select="$tocItemContent"/>
+          </fo:block>
+        </xsl:for-each>
+    </xsl:template>
+    
+    <xsl:template match="*[contains(@class, ' bookmap/appendix ')]" mode="tocText">
+        <xsl:param name="tocItemContent"/>
+        <xsl:param name="currentNode"/>
+        <xsl:for-each select="$currentNode">
+          <fo:block xsl:use-attribute-sets="__toc__appendix__content">
+              <xsl:copy-of select="$tocItemContent"/>
+          </fo:block>
+        </xsl:for-each>
+    </xsl:template>
+    
+    <xsl:template match="*[contains(@class, ' bookmap/part ')]" mode="tocText">
+        <xsl:param name="tocItemContent"/>
+        <xsl:param name="currentNode"/>
+        <xsl:for-each select="$currentNode">
+          <fo:block xsl:use-attribute-sets="__toc__part__content">
+              <xsl:copy-of select="$tocItemContent"/>
+          </fo:block>
+        </xsl:for-each>
+    </xsl:template>
+    
+    <xsl:template match="*[contains(@class, ' bookmap/preface ')]" mode="tocText">
+        <xsl:param name="tocItemContent"/>
+        <xsl:param name="currentNode"/>
+        <xsl:for-each select="$currentNode">
+          <fo:block xsl:use-attribute-sets="__toc__preface__content">
+              <xsl:copy-of select="$tocItemContent"/>
+          </fo:block>
+        </xsl:for-each>
+    </xsl:template>
+    
+    <xsl:template match="*[contains(@class, ' bookmap/notices ')]" mode="tocText">
+        <xsl:param name="tocItemContent"/>
+        <xsl:param name="currentNode"/>
+        <xsl:for-each select="$currentNode">
+          <fo:block xsl:use-attribute-sets="__toc__notices__content">
+              <xsl:copy-of select="$tocItemContent"/>
+          </fo:block>
+        </xsl:for-each>
+    </xsl:template>
+    
+    <xsl:template match="node()" mode="tocText" priority="-10">
+        <xsl:param name="tocItemContent"/>
+        <xsl:param name="currentNode"/>
+        <xsl:for-each select="$currentNode">
+          <fo:block xsl:use-attribute-sets="__toc__topic__content">
+              <xsl:copy-of select="$tocItemContent"/>
+          </fo:block>
         </xsl:for-each>
     </xsl:template>
 

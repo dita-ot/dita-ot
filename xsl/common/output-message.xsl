@@ -17,6 +17,7 @@
     
     The template takes in the following parameters:
     - msg    = the message to print in the log; default=***
+    - msgcat = message category, default is read from $msgprefix
     - msgnum = the message number (3 digits); default=000
     - msgsev = the severity (I, W, E, or F); default=I (Informational)
   -->
@@ -26,12 +27,13 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:template name="output-message">
       <xsl:param name="msg" select="'***'"/>
+      <xsl:param name="msgcat" select="$msgprefix"/>
       <xsl:param name="msgnum" select="'000'"/>
       <xsl:param name="msgsev" select="'I'"/>
       <xsl:param name="msgparams" select="''"/>
       
       <xsl:variable name="msgid">
-        <xsl:value-of select="$msgprefix"/>
+        <xsl:value-of select="$msgcat"/>
         <xsl:value-of select="$msgnum"/>
         <xsl:value-of select="$msgsev"/>
       </xsl:variable>

@@ -6,8 +6,11 @@
     <title>General Enhancements and Changes</title>
     <refbody>
       <section id="section_h5q_3nt_q2">
-        <p>A new property <codeph>args.rellinks</codeph> can be used to control which related links
-          will be output.</p>
+        <p>New arguments have been added:</p>
+        <ul>
+          <li><codeph>args.rellinks</codeph> controls which related links will be output.</li>
+          <li><codeph>args.filter</codeph> defines the filter file to be used.</li>
+        </ul>
       </section>
       <section>
         <title>PDF2</title>
@@ -18,6 +21,10 @@
   <reference id="reference_yvj_ttj_bd">
     <title>Migration from previous releases</title>
     <refbody>
+      <section>
+        <p>The deprecated property <codeph>dita.input.valfile</codeph> should be replaced with the
+          new argument property <codeph>args.filter</codeph>.</p>
+      </section>
       <section>
         <title>XHTML</title>
         <p>The following deprecated templates will be removed:</p>
@@ -56,6 +63,11 @@
         <p>Custom PDF2 shell stylesheets need to be revised to not include separate IBM and OASIS
           DITA stylesheets. The <filepath><varname>*</varname>_1.0.xsl</filepath> stylesheets have
           been removed and their imports must be removed from shell stylesheets.</p>
+        <p>The following template modes have been deprecated:</p>
+        <ul id="ul_hxz_ks2_gf">
+          <li>toc-prefix-text</li>
+          <li>toc-topic-text</li>
+        </ul>
       </section>
     </refbody>
   </reference>
@@ -71,18 +83,22 @@
           <li>3468355 Refactor log messages and tasks (milestone 1)</li>
           <li>3466533 Reduce topic merge memory consumption (milestone 1)</li>
           <li>3483326 Remove IBM DITA and BookMap demo support from PDF2 (milestone 1)</li>
+          <li>3486110 Move OT version number to configuration (milestone 2)</li>
           <li>3466842 Refactor preprocessing to use SAX filters (in progress)</li>
           <li>3468864 Remove Content object (in progress)</li>
           <li>3460151 Use Job to read/write job configuration files (in progress)</li>
           <li>3469384 Improve filtering (in progress)</li>
           <li>1785391 Make Java code thread-safe (in progress)</li>
           <li>3468246 Clean Ant scripts (in progress)</li>
+          <li>3023241 Consistent Ant property names (in progress)</li>
+          <li>3484284 Remove deprecated code (in progress)</li>
         </ul>
       </section>
       <section>
         <title>Patches</title>
         <ul>
           <li>3470331 Map references with root fragment are not processed (milestone 1)</li>
+          <li>3475092 Key-based mapref results in preprocessing error (milestone 1)</li>
         </ul>
       </section>
       <section>
