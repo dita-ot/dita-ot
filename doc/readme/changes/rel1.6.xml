@@ -101,6 +101,7 @@
             1)</li>
           <li>3468073 Apache FOP: TOCs with uneven right margin (milestone 1)</li>
           <li>3476659 Possible collision in File Extension detection mechanism (milestone 1)</li>
+          <li>3475092 Key-based mapref results in preprocessing error (milestone 1)</li>
           <li>3471364 UNC paths are not supported in input argument (in progress)</li>
         </ul>
       </section>
