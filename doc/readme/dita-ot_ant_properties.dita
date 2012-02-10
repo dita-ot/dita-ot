@@ -77,12 +77,6 @@ following common parameters are available for use by all DITA-OT builds.</p><tab
               <entry id="args.logdir.desc">Defines the location where DITA-OT places log files for
                 your project.</entry>
             </row>
-            <row id="args.outext">
-              <entry><codeph>args.outext</codeph></entry>
-              <entry id="args.outext.desc">Specifies the file extension for HTML files in your
-                project's output. <ph audience="xslt-customizer">Corresponds to XHTML parameter
-                    <codeph>OUTEXT</codeph>.</ph> Default values is ".html".</entry>
-            </row>
             <row id="args.tablelink.style">
               <entry colname="COLSPEC0"><codeph>args.tablelink.style</codeph></entry>
               <entry id="args.tablelink.style.desc" colname="COLSPEC3">Specifies how cross
@@ -92,14 +86,14 @@ following common parameters are available for use by all DITA-OT builds.</p><tab
                     <codeph>TABLELINK</codeph>.</ph><note>This parameter is available for all except
                   the PDF transform.</note></entry>
             </row>
-            <row id="basedir">
+            <!--row id="basedir">
               <entry><codeph>basedir</codeph></entry>
               <entry id="basedir.desc">The directory where your project's ant build script resides.
                 The DITA-OT will look for your .dita files relative to this directory. DITA-OT's
                 default build script sets this as an attribute of the project, but you can also
                 define it as a project property.</entry>
               <?Pub Caret 143?>
-            </row>
+            </row-->
             <row id="dita.ext">
               <entry><codeph>dita.ext</codeph></entry>
               <entry id="dita.ext.desc">Specifies an extension to use for DITA topics; All DITA
@@ -107,13 +101,22 @@ following common parameters are available for use by all DITA-OT builds.</p><tab
                   audience="xslt-customizer">Corresponds to XSLT parameter DITAEXT.</ph> Default
                 value is ".xml"</entry>
             </row>
-            <row id="dita.input.valfile">
+            <row id="args.filter" rev="1.6">
+              <entry colname="COLSPEC0"><codeph>args.filter</codeph></entry>
+              <entry id="args.filter.desc">Defines the path of the filter file to use.
+                Filter files end with the <codeph>.ditaval</codeph> suffix
+                and are used to filter, include and exclude, content in the generated document.
+                Alternatively, you can create multiple versions of your document by creating a
+                different <codeph>.ditamap</codeph> file for each version.</entry>
+            </row>
+            <row id="dita.input.valfile" importance="deprecated">
               <entry colname="COLSPEC0"><codeph>dita.input.valfile</codeph></entry>
               <entry id="dita.input.valfile.desc" colname="COLSPEC3">Defines the location of your
                 project's filter file. Filter files end with the <codeph>.ditaval</codeph> suffix
                 and are used to filter, include and exclude, content in the generated document.
                 Alternatively, you can create multiple versions of your document by creating a
-                different <codeph>.ditamap</codeph> file for each version.</entry>
+                different <codeph>.ditamap</codeph> file for each version.<note type="notice">Deprecated in
+                  favor of <codeph>args.filter</codeph>.</note></entry>
             </row>
             <row id="output.dir">
               <entry><codeph>output.dir</codeph></entry>
@@ -273,6 +276,12 @@ are based on the XHTML transform type, including:</p>
                 than the default XSL transform, located in <codeph>xsl\dita2xhtml.xsl</codeph>.
                 Property must specify the full path and XSL file name.</entry>
             </row>
+            <row id="args.outext">
+              <entry><codeph>args.outext</codeph></entry>
+              <entry id="args.outext.desc">Specifies the file extension for HTML files in your
+                project's output. <ph audience="xslt-customizer">Corresponds to XHTML parameter
+                    <codeph>OUTEXT</codeph>.</ph> Default values is ".html".</entry>
+            </row>
             <row id="generate.copy.outer">
               <entry colname="COLSPEC0"><codeph>generate.copy.outer</codeph></entry>
               <entry id="generate.copy.outer.desc" colname="COLSPEC3">Specifies whether to generate
@@ -326,7 +335,7 @@ are based on the XHTML transform type, including:</p>
           </row>
         </thead>
         <tbody>
-          <row id="args.rellinks">
+          <row id="args.rellinks" rev="1.6">
             <entry><codeph>args.rellinks</codeph></entry>
             <entry id="args.rellinks.desc">Specifies which links to
               include in the output. Values are:<ul>

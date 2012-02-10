@@ -56,7 +56,16 @@
     <reason>The FOP plug-in cannot be found in the default location.</reason>
     <response>Please install the required plug-ins into the dir demo/fo/fop or configure the build file to support your local configuration.</response>
   </message>
-  
+
+  <message id="DOTA011W" type="WARN">
+    <reason>Argument "%1" is deprecated.</reason>
+    <response/>
+  </message>
+  <message id="DOTA012W" type="WARN">
+    <reason>Argument "%1" is deprecated.</reason>
+    <response>Use "%2" instead.</response>
+  </message>
+
   <!-- Begin of Java Messages -->
   <message id="DOTJ001F" type="FATAL">
     <reason>Input argument error: no ':' found in the parameter '%1'.</reason>

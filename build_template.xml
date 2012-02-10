@@ -151,7 +151,7 @@
     <echo level="info">  dita.extname=&lt;ext&gt;</echo>
     <echo level="info">    File extension name to be used in the temp directory. Default is ".xml".</echo>
     <echo level="info"/>
-    <echo level="info">  dita.input.valfile=&lt;file&gt;</echo>
+    <echo level="info">  args.filter=&lt;file&gt;</echo>
     <echo level="info">    Name of the file that contains the filter/flaggin/revision information.</echo>
     <echo level="info"/>
     <echo level="info">  generate.copy.outer={1|2|3}</echo>
