@@ -11,6 +11,7 @@
           <li><codeph>args.rellinks</codeph> controls which related links will be output.</li>
           <li><codeph>args.filter</codeph> defines the filter file to be used.</li>
         </ul>
+        <p>Support for old DITAVAL format has been removed.</p>
       </section>
       <section>
         <title>PDF2</title>
