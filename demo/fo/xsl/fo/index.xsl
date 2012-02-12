@@ -73,30 +73,16 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="*[contains(@class,' topic/topic ')]" mode="index-entries">
         <xsl:variable name="id" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>
-        <xsl:variable name="gid" select="generate-id(ancestor-or-self::*[contains(@class, ' topic/topic ')][1])"/>
-        <xsl:variable name="topicNumber" select="count(exsl:node-set($topicNumbers)/topic[@id = $id][following-sibling::topic[@guid = $gid]]) + 1"/>
-        <xsl:variable name="mapTopics">
-            <xsl:copy-of select="$map//*[@id = $id]"/>
-        </xsl:variable>
-
-        <xsl:variable name="currentMapTopic" select="$mapTopics/*[position() = $topicNumber]"/>
-
-        <xsl:if test="not(contains($currentMapTopic/@otherprops,'noindex'))">
+        <xsl:variable name="mapTopicref" select="key('map-id', $id)"/>
+        <xsl:if test="not(contains($mapTopicref/@otherprops, 'noindex'))">
             <xsl:apply-templates mode="index-entries"/>
         </xsl:if>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/topic ')]" mode="index-postprocess">
         <xsl:variable name="id" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>
-        <xsl:variable name="gid" select="generate-id(ancestor-or-self::*[contains(@class, ' topic/topic ')][1])"/>
-        <xsl:variable name="topicNumber" select="count(exsl:node-set($topicNumbers)/topic[@id = $id][following-sibling::topic[@guid = $gid]]) + 1"/>
-        <xsl:variable name="mapTopics">
-            <xsl:copy-of select="$map//*[@id = $id]"/>
-        </xsl:variable>
-
-        <xsl:variable name="currentMapTopic" select="$mapTopics/*[position() = $topicNumber]"/>
-
-        <xsl:if test="not(contains($currentMapTopic/@otherprops,'noindex'))">
+        <xsl:variable name="mapTopicref" select="key('map-id', $id)"/>
+        <xsl:if test="not(contains($mapTopicref/@otherprops, 'noindex'))">
             <xsl:apply-templates mode="index-entries"/>
         </xsl:if>
     </xsl:template>

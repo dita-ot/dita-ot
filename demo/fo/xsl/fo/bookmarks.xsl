@@ -46,23 +46,16 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:variable name="map" select="//opentopic:map"/>
 
     <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="bookmark">
-        <xsl:variable name="id" select="@id"/>
-        <xsl:variable name="gid" select="generate-id()"/>
-        <xsl:variable name="topicNumber" select="count(exsl:node-set($topicNumbers)/topic[@id = $id][following-sibling::topic[@guid = $gid]]) + 1"/>
+        <xsl:variable name="mapTopicref" select="key('map-id', @id)[1]"/>
         <xsl:variable name="topicTitle">
             <xsl:call-template name="getNavTitle">
-              <xsl:with-param name="topicNumber" select="$topicNumber"/>
+              <xsl:with-param name="topicNumber" select="1"/>
             </xsl:call-template>
         </xsl:variable>
-        <!-- normalize the title bug:3065853 -->
-        <xsl:variable name="normalizedTitle" select="normalize-space($topicTitle)"/>
-        <xsl:variable name="mapTopic">
-            <xsl:copy-of select="$map//*[@id = $id]"/>
-        </xsl:variable>
         
-        <!-- added by William on 2009-05-11 for toc bug start -->
         <xsl:choose>
-          <xsl:when test="($mapTopic/*[position() = $topicNumber][@toc = 'yes' or not(@toc)]) or (not($mapTopic/*))">
+          <xsl:when test="$mapTopicref[@toc = 'yes' or not(@toc)] or
+                          not($mapTopicref)">
             <fo:bookmark>
                 <xsl:attribute name="internal-destination">
                     <xsl:call-template name="generate-toc-id"/>
@@ -71,7 +64,7 @@ See the accompanying license.txt file for applicable licenses.
                         <xsl:attribute name="starting-state">hide</xsl:attribute>
                     </xsl:if>
                 <fo:bookmark-title>
-                    <xsl:value-of select="$normalizedTitle"/>
+                    <xsl:value-of select="normalize-space($topicTitle)"/>
                 </fo:bookmark-title>
                 <xsl:apply-templates mode="bookmark"/>
             </fo:bookmark>
@@ -80,8 +73,6 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:apply-templates mode="bookmark"/>
           </xsl:otherwise>
         </xsl:choose>
-        <!-- added by William on 2009-05-11 for toc bug end -->
-        
     </xsl:template>
 
     <xsl:template match="*" mode="bookmark">

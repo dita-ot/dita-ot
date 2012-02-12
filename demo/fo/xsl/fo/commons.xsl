@@ -77,9 +77,7 @@ See the accompanying license.txt file for applicable licenses.
         <!--BS: uncomment if you need reset page numbering at first chapter-->
 <!--
         <xsl:variable name="id" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>
-        <xsl:variable name="gid" select="generate-id(ancestor-or-self::*[contains(@class, ' topic/topic ')][1])"/>
-        <xsl:variable name="topicNumber" select="count(exsl:node-set($topicNumbers)/topic[@id = $id][following-sibling::topic[@guid = $gid]]) + 1"/>
-        <xsl:variable name="mapTopic" select="($map//*[@id = $id])[position() = $topicNumber]"/>
+        <xsl:variable name="mapTopic" select="key('map-id', $id)"/>
 
         <xsl:if test="not(($mapTopic/preceding::*[contains(@class, ' bookmap/chapter ') or contains(@class, ' bookmap/part ')])
             or ($mapTopic/ancestor::*[contains(@class, ' bookmap/chapter ') or contains(@class, ' bookmap/part ')]))">
@@ -91,15 +89,8 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template name="getTopicrefShortdesc">
         <xsl:variable name="id" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>
-        <xsl:variable name="gid" select="generate-id(ancestor-or-self::*[contains(@class, ' topic/topic ')][1])"/>
-        <xsl:variable name="topicNumber" select="count(exsl:node-set($topicNumbers)/topic[@id = $id][following-sibling::topic[@guid = $gid]]) + 1"/>
-        <xsl:variable name="mapTopic">
-            <xsl:copy-of select="$map//*[@id = $id]"/>
-        </xsl:variable>
-
-        <xsl:if test="$mapTopic/*[position() = $topicNumber]/*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')]">
-            <xsl:copy-of select="$mapTopic/*[position() = $topicNumber]/*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')]"/>
-        </xsl:if>
+        <xsl:variable name="mapTopicref" select="key('map-id', $id)"/>
+        <xsl:copy-of select="$mapTopicref/*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')]"/>
     </xsl:template>
 
     <xsl:template name="processTopic">
@@ -1192,36 +1183,19 @@ See the accompanying license.txt file for applicable licenses.
              this copy of the topic is based on its third appearance in the map. -->
         <xsl:param name="topicNumber" select="number('NaN')"/>
         <xsl:variable name="topicref" select="key('map-id', @id)"/>
+        <!-- FIXME: Deprecated as merging does not generate duplicate IDs. To be removed in future release. -->
         <xsl:variable name="numTopicref" select="$topicref[position()=$topicNumber]"/>
         <xsl:choose>
-            <xsl:when test="not(string(number($topicNumber)) = 'NaN') and 
-                            $topicref and
-                            $numTopicref/@locktitle='yes' and
+            <xsl:when test="$numTopicref/@locktitle='yes' and
                             $numTopicref/*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
-               <xsl:value-of select="$numTopicref/*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]"/>
+               <xsl:apply-templates select="$numTopicref/*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]/node()"/>
             </xsl:when>
-            <xsl:when test="not(string(number($topicNumber)) = 'NaN') and
-                            $topicref and
-                            $numTopicref/@locktitle='yes' and
+            <xsl:when test="$numTopicref/@locktitle='yes' and
                             $numTopicref/@navtitle">
                 <xsl:value-of select="$numTopicref/@navtitle"/>
             </xsl:when>
-            <xsl:when test="string(number($topicNumber)) = 'NaN' and
-                            $topicref and
-                            $topicref/@locktitle='yes' and
-                            $topicref/*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
-                <xsl:value-of select="$topicref/*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]"/>
-            </xsl:when>
-            <xsl:when test="string(number($topicNumber)) = 'NaN' and
-                            $topicref and
-                            $topicref/@locktitle='yes' and
-                            $topicref/@navtitle">
-                <xsl:value-of select="$topicref/@navtitle"/>
-            </xsl:when>
             <xsl:otherwise>
-                <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
-                    <xsl:call-template name="getTitle"/>
-                 </xsl:for-each>
+                <xsl:apply-templates select="*[contains(@class,' topic/title ')]" mode="getTitle"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -2223,20 +2197,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:variable name="topic" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]"/>
         <xsl:variable name="id" select="$topic/@id"/>
         <xsl:variable name="mapTopics" select="key('map-id', $id)"/>
-        <xsl:choose>
-          <xsl:when test="count($mapTopics) = 1">
-            <xsl:apply-templates select="$mapTopics[1]" mode="determineTopicType"/>
-          </xsl:when>
-          <!-- topicmerge.xsl should already rewrite all duplicate IDs, keep for backwards compatibility -->
-          <xsl:when test="count($mapTopics) > 1">
-            <xsl:variable name="gid" select="generate-id($topic)"/>
-            <xsl:variable name="topicNumber" select="count(exsl:node-set($topicNumbers)/topic[@id = $id][following-sibling::topic[@guid = $gid]]) + 1"/>
-            <xsl:variable name="mapTopic">
-              <xsl:copy-of select="$mapTopics"/>
-            </xsl:variable>
-            <xsl:apply-templates select="$mapTopic/*[position() = $topicNumber]" mode="determineTopicType"/>
-          </xsl:when>
-        </xsl:choose>
+        <xsl:apply-templates select="$mapTopics[1]" mode="determineTopicType"/>
       </xsl:variable>
       <xsl:choose>
         <xsl:when test="$foundTopicType!=''">

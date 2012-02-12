@@ -68,6 +68,9 @@
           <li>toc-prefix-text</li>
           <li>toc-topic-text</li>
         </ul>
+        <p>Main FO generation now relies on merging process to rewrite duplicate IDs. The default
+          merging has done this already in previous releses, but now also custom merging needs to
+          fullfill the duplicate ID rewrite requirement.</p>
       </section>
     </refbody>
   </reference>
@@ -92,6 +95,8 @@
           <li>3468246 Clean Ant scripts (in progress)</li>
           <li>3023241 Consistent Ant property names (in progress)</li>
           <li>3484284 Remove deprecated code (in progress)</li>
+          <li>3486511 Improve title numbering in PDF2 (in progress)</li>
+          <li>3486924 Clean PDF2 ID processing (in progress)</li>
         </ul>
       </section>
       <section>

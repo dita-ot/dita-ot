@@ -64,6 +64,8 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:if test="$topicLevel &lt; $tocMaximumLevel">
             <xsl:variable name="mapTopicref" select="key('map-id', @id)[1]"/>
             <xsl:choose>
+              <!-- In a future version, suppressing Notices in the TOC should not be hard-coded. -->
+              <xsl:when test="$mapTopicref/self::*[contains(@class, ' bookmap/notices ')]"/>
               <xsl:when test="$mapTopicref[@toc = 'yes' or not(@toc)] or
                               (not($mapTopicref) and $include = 'true')">
                     <fo:block xsl:use-attribute-sets="__toc__indent">
@@ -91,12 +93,9 @@ See the accompanying license.txt file for applicable licenses.
                             <xsl:with-param name="currentNode" select="."/>
                         </xsl:apply-templates>
                     </fo:block>
-                    <!-- In a future version, suppressing Notices in the TOC should not be hard-coded. -->
-                    <xsl:if test="not($mapTopicref/self::*[contains(@class, ' bookmap/notices ')])">
-                        <xsl:apply-templates mode="toc">
-                            <xsl:with-param name="include" select="'true'"/>
-                        </xsl:apply-templates>
-                    </xsl:if>
+                    <xsl:apply-templates mode="toc">
+                        <xsl:with-param name="include" select="'true'"/>
+                    </xsl:apply-templates>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:apply-templates mode="toc">
