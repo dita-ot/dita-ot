@@ -20,6 +20,7 @@ import java.util.Set;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.module.GenMapAndTopicListModule.KeyDef;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.KeyrefReader;
@@ -80,17 +81,17 @@ final class KeyrefModule implements AbstractPipelineModule {
         // get the key definitions from the dita.list, and the ditamap where it is defined
         // are not handle yet.
         for(final String key: job.getSet(KEY_LIST)){
-            keymap.put(key.substring(0, key.indexOf(EQUAL)),
-                    key.substring(key.indexOf(EQUAL)+1, key.lastIndexOf("(")));
+            final KeyDef keyDef = new KeyDef(key);
+            keymap.put(keyDef.keys, keyDef.href);
             // map file which define the keys
-            final String map = key.substring(key.lastIndexOf("(") + 1, key.lastIndexOf(")"));
+            final String map = keyDef.source;
             // put the keyname into corresponding map which defines it.
             //a map file can define many keys
             if(maps.containsKey(map)){
-                maps.get(map).add(key.substring(0,key.indexOf(EQUAL)));
+                maps.get(map).add(keyDef.keys);
             }else{
                 final Set<String> set = new HashSet<String>();
-                set.add(key.substring(0, key.indexOf(EQUAL)));
+                set.add(keyDef.keys);
                 maps.put(map, set);
             }
         }

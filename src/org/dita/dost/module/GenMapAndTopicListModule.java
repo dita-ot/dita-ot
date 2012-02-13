@@ -1252,6 +1252,11 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             this.href = href;
             this.source = source;
         }
+        /**
+         * Parse key definition from serialized from.
+         * 
+         * @param result serialized key definition
+         */
         public KeyDef(final String result) {
             final int equalIndex = result.indexOf(EQUAL);
             final int leftBracketIndex = result.lastIndexOf(LEFT_BRACKET);
