@@ -623,7 +623,6 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
         String topic = null;
         File inputFile = null;
         File outputFile = null;
-        FileOutputStream fileOutput = null;
 
         try {
             if(filename.endsWith(SHARP)){
@@ -646,15 +645,22 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
             startDOM = false;
             inputFile = new File(file);
             outputFile = new File(file + FILE_EXTENSION_TEMP);
-            fileOutput = new FileOutputStream(outputFile);
-            ditaFileOutput = new OutputStreamWriter(fileOutput, UTF8);
+            ditaFileOutput = new OutputStreamWriter(new FileOutputStream(outputFile), UTF8);
             strOutput = new StringWriter();
             output = ditaFileOutput;
 
             topicIdList.clear();
             reader.parse(inputFile.toURI().toString());
-
-            output.close();
+        } catch (final Exception e) {
+            logger.logException(e);
+        }finally {
+            try{
+                ditaFileOutput.close();
+            } catch (final Exception e) {
+                logger.logException(e);
+            }
+        }
+        try {
             if(!inputFile.delete()){
                 final Properties prop = new Properties();
                 prop.put("%1", inputFile.getPath());
@@ -669,12 +675,6 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
             }
         } catch (final Exception e) {
             logger.logException(e);
-        }finally {
-            try{
-                fileOutput.close();
-            } catch (final Exception e) {
-                logger.logException(e);
-            }
         }
     }
 }

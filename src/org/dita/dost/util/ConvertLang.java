@@ -229,6 +229,7 @@ public final class ConvertLang extends Task {
                 FileUtils.isHHKFile(inputFile.getName())){
 
             final String fileName = inputFile.getAbsolutePath();
+            final File outputFile = new File(fileName + FILE_EXTENSION_TEMP);
             log("Processing " + fileName, Project.MSG_INFO);
             BufferedReader reader = null;
             Writer writer = null;
@@ -238,7 +239,6 @@ public final class ConvertLang extends Task {
                 final InputStreamReader streamReader = new InputStreamReader(inputStream, UTF8);
                 reader = new BufferedReader(streamReader);
 
-                final File outputFile = new File(fileName + FILE_EXTENSION_TEMP);
                 final FileOutputStream outputStream = new FileOutputStream(outputFile);
                 final OutputStreamWriter streamWriter = new OutputStreamWriter(outputStream, UTF8);
                 writer = new BufferedWriter(streamWriter);
@@ -274,10 +274,29 @@ public final class ConvertLang extends Task {
                     }
                     value = reader.readLine();
                 }
-
-                writer.close();
-                reader.close();
-
+            } catch (final FileNotFoundException e) {
+                logger.logException(e);
+            } catch (final UnsupportedEncodingException e) {
+                logger.logException(e);
+            } catch (final IOException e) {
+                logger.logException(e);
+            } finally {
+                if (reader != null) {
+                    try {
+                        reader.close();
+                    } catch (final IOException e) {
+                        logger.logError("Failed to close input stream: " + e.getMessage());
+                    }
+                }
+                if (writer != null) {
+                    try {
+                        writer.close();
+                    } catch (final IOException e) {
+                        logger.logError("Failed to close output stream: " + e.getMessage());
+                    }
+                }
+            }
+            try {
                 //delete old file
                 if (!inputFile.delete()) {
                     final Properties prop = new Properties();
@@ -294,13 +313,7 @@ public final class ConvertLang extends Task {
                     logger.logError(MessageUtils.getMessage("DOTJ009E", prop)
                             .toString());
                 }
-
-
-            } catch (final FileNotFoundException e) {
-                logger.logException(e);
-            } catch (final UnsupportedEncodingException e) {
-                logger.logException(e);
-            } catch (final IOException e) {
+            } catch (final Exception e) {
                 logger.logException(e);
             }
         }
@@ -338,6 +351,7 @@ public final class ConvertLang extends Task {
             convertEntityAndCharset(inputFile, ATTRIBUTE_FORMAT_VALUE_WINDOWS);
             //update language setting of hhp file
             final String fileName = inputFile.getAbsolutePath();
+            final File outputFile = new File(fileName + FILE_EXTENSION_TEMP);
             //get new charset
             final String charset = charsetMap.get(ATTRIBUTE_FORMAT_VALUE_WINDOWS);
             BufferedReader reader = null;
@@ -349,7 +363,6 @@ public final class ConvertLang extends Task {
                 //wrapped into reader
                 reader = new BufferedReader(streamReader);
 
-                final File outputFile = new File(fileName + FILE_EXTENSION_TEMP);
                 final FileOutputStream outputStream = new FileOutputStream(outputFile);
 
                 //convert charset
@@ -395,9 +408,29 @@ public final class ConvertLang extends Task {
                     }
                     value = reader.readLine();
                 }
-
-                writer.close();
-                reader.close();
+            } catch (final FileNotFoundException e) {
+                logger.logException(e);
+            } catch (final UnsupportedEncodingException e) {
+                logger.logException(e);
+            } catch (final IOException e) {
+                logger.logException(e);
+            } finally {
+                if (reader != null) {
+                    try {
+                        reader.close();
+                    } catch (final IOException e) {
+                        logger.logError("Failed to close input stream: " + e.getMessage());
+                    }
+                }
+                if (writer != null) {
+                    try {
+                        writer.close();
+                    } catch (final IOException e) {
+                        logger.logError("Failed to close output stream: " + e.getMessage());
+                    }
+                }
+            }
+            try {
                 //delete old file
                 if (!inputFile.delete()) {
                     final Properties prop = new Properties();
@@ -414,13 +447,7 @@ public final class ConvertLang extends Task {
                     logger.logError(MessageUtils.getMessage("DOTJ009E", prop)
                             .toString());
                 }
-
-
-            } catch (final FileNotFoundException e) {
-                logger.logException(e);
-            } catch (final UnsupportedEncodingException e) {
-                logger.logException(e);
-            } catch (final IOException e) {
+            } catch (final Exception e) {
                 logger.logException(e);
             }
         }
@@ -429,6 +456,7 @@ public final class ConvertLang extends Task {
 
     private void convertEntityAndCharset(final File inputFile, final String format) {
         final String fileName = inputFile.getAbsolutePath();
+        final File outputFile = new File(fileName + FILE_EXTENSION_TEMP);
         BufferedReader reader = null;
         BufferedWriter writer = null;
         try {
@@ -438,7 +466,6 @@ public final class ConvertLang extends Task {
             //wrapped into reader
             reader = new BufferedReader(streamReader);
 
-            final File outputFile = new File(fileName + FILE_EXTENSION_TEMP);
             final FileOutputStream outputStream = new FileOutputStream(outputFile);
             //get new charset
             final String charset = charsetMap.get(format);
@@ -463,8 +490,29 @@ public final class ConvertLang extends Task {
                 }
                 charCode = reader.read();
             }
-            writer.close();
-            reader.close();
+        } catch (final FileNotFoundException e) {
+            logger.logException(e);
+        } catch (final UnsupportedEncodingException e) {
+            logger.logException(e);
+        } catch (final IOException e) {
+            logger.logException(e);
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (final IOException e) {
+                    logger.logError("Failed to close input stream: " + e.getMessage());
+                }
+            }
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (final IOException e) {
+                    logger.logError("Failed to close output stream: " + e.getMessage());
+                }
+            }
+        }
+        try {
             //delete old file
             if (!inputFile.delete()) {
                 final Properties prop = new Properties();
@@ -483,11 +531,7 @@ public final class ConvertLang extends Task {
             }
 
 
-        } catch (final FileNotFoundException e) {
-            logger.logException(e);
-        } catch (final UnsupportedEncodingException e) {
-            logger.logException(e);
-        } catch (final IOException e) {
+        } catch (final Exception e) {
             logger.logException(e);
         }
     }
