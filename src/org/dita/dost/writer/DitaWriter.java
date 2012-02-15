@@ -1313,8 +1313,6 @@ public final class DitaWriter extends AbstractXMLWriter {
 
             //Added on 2010-08-24 for bug:3086552 end
             reader.parse(is);
-            // FIXME
-            output.close();
         } catch (final Exception e) {
             e.printStackTrace();
             logger.logException(e);
