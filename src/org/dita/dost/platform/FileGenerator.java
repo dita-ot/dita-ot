@@ -93,20 +93,19 @@ final class FileGenerator extends DefaultHandler2 {
         if (logger == null) {
             logger = new DITAOTJavaLogger();
         }
-        FileOutputStream fileOutput = null;
         final File outputFile = removeTemplatePrefix(fileName);
         templateFile = fileName;
 
         try{
-            fileOutput = new FileOutputStream(outputFile);
+            final FileOutputStream fileOutput = new FileOutputStream(outputFile);
             output = new OutputStreamWriter(fileOutput, UTF8);
             reader.parse(fileName.toURI().toString());
         } catch (final Exception e){
             logger.logException(e);
         }finally {
-            if (fileOutput != null) {
+            if (output != null) {
                 try {
-                    fileOutput.close();
+                    output.close();
                 }catch (final Exception e) {
                     logger.logException(e);
                 }

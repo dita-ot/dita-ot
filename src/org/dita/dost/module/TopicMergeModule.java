@@ -11,8 +11,11 @@ package org.dita.dost.module;
 
 import static org.dita.dost.util.Constants.*;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
 
@@ -87,18 +90,20 @@ final class TopicMergeModule implements AbstractPipelineModule {
         final StringReader midStream = new StringReader(midResult);
 
         OutputStreamWriter output = null;
+        OutputStream outStream = null;
         try{
             final File outputDir = new File(out).getParentFile();
             if (!outputDir.exists()){
                 outputDir.mkdirs();
             }
+            outStream = new BufferedOutputStream(new FileOutputStream(new File(out)));
             if (style != null){
                 final TransformerFactory factory = TransformerFactory.newInstance();
                 final File styleFile = new File(style);
                 final Transformer transformer = factory.newTransformer(new StreamSource(styleFile.toURI().toString()));
-                transformer.transform(new StreamSource(midStream), new StreamResult(new FileOutputStream(new File(out))));
+                transformer.transform(new StreamSource(midStream), new StreamResult(outStream));
             }else{
-                output = new OutputStreamWriter(new FileOutputStream(out),UTF8);
+                output = new OutputStreamWriter(outStream ,UTF8);
                 output.write(midResult);
                 output.flush();
             }
@@ -106,14 +111,19 @@ final class TopicMergeModule implements AbstractPipelineModule {
             //use java logger to log the exception
             logger.logException(e);
         }finally{
-            try{
-                if (output !=null){
-                    output.close();
+            if (outStream != null) {
+                try {
+                    outStream.close();
+                } catch (final IOException e) {
+                    logger.logError("Failed to close output stream: " + e.getMessage());
                 }
-                midStream.close();
-            }catch (final Exception e){
-                //use java logger to log the exception
-                logger.logException(e);
+            }
+            if (output != null){
+                try{
+                    output.close();
+                }catch (final Exception e){
+                    logger.logException(e);
+                }
             }
         }
 

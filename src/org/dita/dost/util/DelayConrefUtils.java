@@ -16,6 +16,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -304,13 +305,23 @@ public final class DelayConrefUtils {
             assert (false);
         }
         final DOMSource doms = new DOMSource(doc);
+        OutputStream out = null;
         try {
-            final StreamResult sr = new StreamResult(new FileOutputStream(outputFile));
+            out = new FileOutputStream(outputFile);
+            final StreamResult sr = new StreamResult(out);
             t.transform(doms, sr);
         } catch (final TransformerException te) {
             this.javaLogger.logException(te);
         } catch (final IOException te) {
             this.javaLogger.logException(te);
+        } finally {
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (final IOException e) {
+                    javaLogger.logError("Failed to close output stream: " + e.getMessage());
+                }
+            }
         }
     }
 

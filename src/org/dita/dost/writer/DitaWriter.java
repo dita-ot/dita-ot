@@ -1273,7 +1273,6 @@ public final class DitaWriter extends AbstractXMLWriter {
             }
         }
 
-        FileOutputStream fileOutput = null;
         try {
             traceFilename = new File(baseDir, inputFile);
             File outputFile;
@@ -1303,8 +1302,7 @@ public final class DitaWriter extends AbstractXMLWriter {
                 dirFile.mkdirs();
             }
             absolutePath = dirFile.getCanonicalPath();
-            fileOutput = new FileOutputStream(outputFile);
-            output = new OutputStreamWriter(fileOutput, UTF8);
+            output = new OutputStreamWriter(new FileOutputStream(outputFile), UTF8);
 
 
             // start to parse the file and direct to output in the temp
@@ -1320,15 +1318,18 @@ public final class DitaWriter extends AbstractXMLWriter {
 
             //Added on 2010-08-24 for bug:3086552 end
             reader.parse(is);
+            // FIXME
             output.close();
         } catch (final Exception e) {
             e.printStackTrace();
             logger.logException(e);
         }finally {
-            try {
-                fileOutput.close();
-            }catch (final Exception e) {
-                logger.logException(e);
+            if (output != null) {
+                try {
+                    output.close();
+                }catch (final Exception e) {
+                    logger.logException(e);
+                }
             }
         }
     }
