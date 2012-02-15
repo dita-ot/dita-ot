@@ -341,4 +341,6 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Glossary">术语表</variable>
     <variable id="List of Tables">表格清单</variable>
     <variable id="List of Figures">插图清单</variable>
+  <variable id="Option">选项</variable>
+  <variable id="Description">描述</variable>
 </vars>

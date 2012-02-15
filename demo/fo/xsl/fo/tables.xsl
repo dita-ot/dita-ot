@@ -879,12 +879,16 @@ See the accompanying license.txt file for applicable licenses.
                         <fo:table-row xsl:use-attribute-sets="chhead__row">
                             <fo:table-cell xsl:use-attribute-sets="chhead.choptionhd">
                                 <fo:block xsl:use-attribute-sets="chhead.choptionhd__content">
-                                    <xsl:text>Options</xsl:text>
+                                    <xsl:call-template name="insertVariable">
+                                        <xsl:with-param name="theVariableID" select="'Option'"/>
+                                    </xsl:call-template>
                                 </fo:block>
                             </fo:table-cell>
                             <fo:table-cell xsl:use-attribute-sets="chhead.chdeschd">
                                 <fo:block xsl:use-attribute-sets="chhead.chdeschd__content">
-                                    <xsl:text>Description</xsl:text>
+                                    <xsl:call-template name="insertVariable">
+                                        <xsl:with-param name="theVariableID" select="'Description'"/>
+                                    </xsl:call-template>
                                 </fo:block>
                             </fo:table-cell>
                         </fo:table-row>

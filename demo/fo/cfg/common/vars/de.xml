@@ -341,4 +341,6 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Glossary">Glossar</variable>
     <variable id="List of Tables">Tabellenverzeichnis</variable>
     <variable id="List of Figures">Abbildungsverzeichnis</variable>
+  <variable id="Option">Option</variable>
+  <variable id="Description">Bezeichnung</variable>
 </vars>

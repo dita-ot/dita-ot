@@ -415,4 +415,6 @@ See the accompanying license.txt file for applicable licenses.
      
      <!-- The heading string to put at the top of the List of Figures -->
      <variable id="List of Figures">List of Figures</variable>
+  <variable id="Option">Option</variable>
+  <variable id="Description">Description</variable>
 </vars>

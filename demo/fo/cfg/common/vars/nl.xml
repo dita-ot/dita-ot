@@ -117,4 +117,6 @@
   <variable id="Task Result">Resultaten</variable>
   <variable id="Task Example">Voorbeeld</variable>
   <variable id="Task Postreq">Volgende stappen</variable>
+  <variable id="Option">Optie</variable>
+  <variable id="Description">Beschrijving</variable>
 </vars>
