@@ -71,4 +71,28 @@ public final class ModuleFactory {
             throw new DITAOTException(msgBean,e,msg);
         }
     }
+    
+    /**
+     * Create the Module class instance according to moduleName.
+     * 
+     * @param moduleClass module class
+     * @return AbstractPipelineModule
+     * @throws DITAOTException DITAOTException
+     * @since 1.6
+     */
+    public AbstractPipelineModule createModule(final Class<? extends AbstractPipelineModule> moduleClass)
+            throws DITAOTException {
+        try {
+            return (AbstractPipelineModule) moduleClass.newInstance();
+        } catch (final Exception e) {
+            String msg = null;
+            final Properties params = new Properties();
+
+            params.put("%1", moduleClass.getName());
+            final MessageBean msgBean=MessageUtils.getMessage("DOTJ005F", params);
+            msg = msgBean.toString();
+
+            throw new DITAOTException(msgBean,e,msg);
+        }
+    }
 }

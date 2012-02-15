@@ -11,6 +11,7 @@ package org.dita.dost.pipeline;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.module.AbstractPipelineModule;
 
 /**
  * AbstractFacade defines the method of executing each module.
@@ -31,6 +32,18 @@ public interface AbstractFacade {
     AbstractPipelineOutput execute(String pipelineModule,
             AbstractPipelineInput input) throws DITAOTException;
 
+    /**
+     * Excute the specified Java Module.
+     * 
+     * @param pipelineModule pipeline module class 
+     * @param input input
+     * @return AbstractPipelineOutput
+     * @throws DITAOTException DITAOTException
+     * @since 1.6
+     */
+    AbstractPipelineOutput execute(Class<? extends AbstractPipelineModule> pipelineModule,
+            AbstractPipelineInput input) throws DITAOTException;
+    
     public void setLogger(DITAOTLogger logger);
 
 }

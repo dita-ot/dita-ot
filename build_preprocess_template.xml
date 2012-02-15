@@ -40,19 +40,21 @@
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.gen-list.skip"
     description="Generate file list">
-    <pipeline message="Generate list." module="GenMapAndTopicList" taskname="gen-list"
+    <pipeline message="Generate list." taskname="gen-list"
       basedir="${basedir}" inputmap="${args.input}"
       tempdir="${dita.temp.dir}">
-      <param name="ditadir" location="${dita.dir}"/>
-      <param name="ditaval" value="${dita.input.valfile}" if="dita.input.valfile"/>
-      <param name="validate" value="${validate}"/>
-      <param name="generatecopyouter" value="${generate.copy.outer}"/>
-      <param name="outercontrol" value="${outer.control}"/>
-      <param name="onlytopicinmap" value="${onlytopic.in.map}"/>
-      <param name="outputdir" location="${output.dir}"/>
-      <param name="transtype" value="${transtype}"/>
-      <param name="gramcache" value="${args.grammar.cache}"/>
-      <param name="setsystemid" value="${args.xml.systemid.set}"/>
+      <module class="org.dita.dost.module.GenMapAndTopicListModule">
+        <param name="ditadir" location="${dita.dir}"/>
+        <param name="ditaval" value="${dita.input.valfile}" if="dita.input.valfile"/>
+        <param name="validate" value="${validate}"/>
+        <param name="generatecopyouter" value="${generate.copy.outer}"/>
+        <param name="outercontrol" value="${outer.control}"/>
+        <param name="onlytopicinmap" value="${onlytopic.in.map}"/>
+        <param name="outputdir" location="${output.dir}"/>
+        <param name="transtype" value="${transtype}"/>
+        <param name="gramcache" value="${args.grammar.cache}"/>
+        <param name="setsystemid" value="${args.xml.systemid.set}"/>
+      </module>
     </pipeline>
   </target>
 
@@ -66,14 +68,16 @@
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.debug-filter.skip"
     description="Debug and filter input files" >
-    <pipeline message="Debug and filtering." module="DebugAndFilter" taskname="filter"
+    <pipeline message="Debug and filtering." taskname="filter"
       basedir="${basedir}" tempdir="${dita.temp.dir}">
-      <param name="ditaval" value="${dita.input.valfile}" if="dita.input.valfile"/>
-      <param name="ditaext" value="${dita.extname}"/>
-      <param name="ditadir" location="${dita.dir}"/>
-      <param name="validate" value="${validate}"/>
-      <param name="transtype" value="${transtype}"/>
-      <param name="setsystemid" value="${args.xml.systemid.set}"/>
+      <module class="org.dita.dost.module.DebugAndFilterModule">
+        <param name="ditaval" value="${dita.input.valfile}" if="dita.input.valfile"/>
+        <param name="ditaext" value="${dita.extname}"/>
+        <param name="ditadir" location="${dita.dir}"/>
+        <param name="validate" value="${validate}"/>
+        <param name="transtype" value="${transtype}"/>
+        <param name="setsystemid" value="${args.xml.systemid.set}"/>
+      </module>
     </pipeline>
     <!--<property file="${dita.temp.dir}${file.separator}dita.list" />-->
     <xmlpropertyreader file="${dita.temp.dir}${file.separator}dita.xml.properties"/>
@@ -115,8 +119,10 @@
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.conrefpush.skip"
     description="Resolve conref push">
-    <pipeline message="Resolve conref push." module="ConrefPush" taskname="conref-push"
-      basedir="${basedir}" tempdir="${dita.temp.dir}"/>     
+    <pipeline message="Resolve conref push." taskname="conref-push"
+      basedir="${basedir}" tempdir="${dita.temp.dir}">
+      <module class="org.dita.dost.module.ConrefPushModule"/>
+    </pipeline>
   </target>
   
   <target name="conrefpush-check">
@@ -133,9 +139,11 @@
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.move-meta-entries.skip"
     description="Move metadata entries">
-    <pipeline message="Move metadata entries." module="MoveMeta" taskname="move-meta"
+    <pipeline message="Move metadata entries." taskname="move-meta"
       basedir="${basedir}" inputmap="${user.input.file}"
-      tempdir="${dita.temp.dir}" />
+      tempdir="${dita.temp.dir}">
+      <module class="org.dita.dost.module.MoveMetaModule"/>
+    </pipeline>
   </target>
 
   <target name="move-meta-entries-check">
@@ -190,9 +198,11 @@
     unless="preprocess.coderef.skip"
     description="Resolve coderef in input files">
     
-    <pipeline message="Resolve coderef." module="Coderef" taskname="coderef"
+    <pipeline message="Resolve coderef." taskname="coderef"
       basedir="${basedir}"
-      tempdir="${dita.temp.dir}" />
+      tempdir="${dita.temp.dir}">
+      <module class="org.dita.dost.module.CoderefModule"/>
+    </pipeline>
       
   </target>
   
@@ -252,9 +262,11 @@
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.keyref.skip"
     description="Resolve keyref">
-    <pipeline message="Resolve keyref." module="Keyref" taskname="keyref"
+    <pipeline message="Resolve keyref." taskname="keyref"
       basedir="${basedir}" tempdir="${dita.temp.dir}">
-      <param name="ditaext" value="${dita.extname}"/>
+      <module class="org.dita.dost.module.KeyrefModule">
+        <param name="ditaext" value="${dita.extname}"/>
+      </module>
     </pipeline>
   </target>
   
@@ -310,11 +322,13 @@
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.chunk.skip"
     description="Process chunks">
-    <pipeline message="Process chunks." module="Chunk" taskname="chunk"
+    <pipeline message="Process chunks." taskname="chunk"
       basedir="${basedir}" inputmap="${user.input.file}"
       tempdir="${dita.temp.dir}">
-      <param name="ditaext" value="${dita.ext}"/>
-      <param name="transtype" value="${transtype}"/>
+      <module class="org.dita.dost.module.ChunkModule">
+        <param name="ditaext" value="${dita.ext}"/>
+        <param name="transtype" value="${transtype}"/>
+      </module>
     </pipeline>
   	
   	<xmlpropertyreader file="${dita.temp.dir}${file.separator}dita.xml.properties"/>
@@ -372,9 +386,11 @@
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.move-links.skip"
     description="Move the related link information to topics">
-    <pipeline message="Move links." module="MoveLinks" taskname="move-links"
+    <pipeline message="Move links." taskname="move-links"
       inputmap="${user.input.file}" tempdir="${dita.temp.dir}">
-      <param name="maplinks" location="${maplink.workdir}${file.separator}maplinks.unordered"/>
+      <module class="org.dita.dost.module.MoveLinksModule">
+        <param name="maplinks" location="${maplink.workdir}${file.separator}maplinks.unordered"/>
+      </module>
     </pipeline>
   </target>
 

@@ -11,8 +11,13 @@ package org.dita.dost.invoker;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
+
+import org.apache.tools.ant.Project;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
@@ -20,6 +25,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTAntLogger;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.module.AbstractPipelineModule;
 import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.util.StringUtils;
@@ -38,10 +44,12 @@ public final class ExtensibleAntInvoker extends Task {
 
     /** Pipeline. */
     private final PipelineFacade pipeline;
-    /** Pipeline input. */
-    private final PipelineHashIO pipelineInput;
+    /** Pipeline attributes and parameters */
+    private final Map<String, String> attrs = new HashMap<String, String>();
     /** Nested params. */
-    private final ArrayList<Param> params;
+    private final ArrayList<Param> pipelineParams;
+    /** Nested modules. */
+    private final ArrayList<Module> modules;
 
     /**
      * Constructor.
@@ -49,8 +57,8 @@ public final class ExtensibleAntInvoker extends Task {
     public ExtensibleAntInvoker() {
         super();
         pipeline = new PipelineFacade();
-        pipelineInput = new PipelineHashIO();
-        params = new ArrayList<Param>();
+        pipelineParams = new ArrayList<Param>();
+        modules = new ArrayList<Module>();
     }
 
     /**
@@ -58,7 +66,7 @@ public final class ExtensibleAntInvoker extends Task {
      * @param s base directory
      */
     public void setBasedir(final String s) {
-        pipelineInput.setAttribute("basedir", s);
+        attrs.put("basedir", s);
     }
 
     /**
@@ -66,23 +74,24 @@ public final class ExtensibleAntInvoker extends Task {
      * @return base directory
      */
     public String getBasedir() {
-        return pipelineInput.getAttribute("basedir");
+        return attrs.get("basedir");
     }
 
     /**
      * Set module.
      * @param module module name
+     * @deprecated use nested module elements instead
      */
-    public void setModule(final String module) {
-        pipelineInput.setAttribute("module", module);
-    }
-
-    /**
-     * Get module.
-     * @return module name
-     */
-    public String getModule() {
-        return pipelineInput.getAttribute("module");
+    @Deprecated
+    public void setModule(final String module) throws BuildException {
+        log("Module attribute is deprecated, use nested module element instead", Project.MSG_WARN);
+        final Module m = new Module();
+        try {
+            m.setClass((Class<? extends AbstractPipelineModule>) Class.forName("org.dita.dost.module." + module + "Module"));
+        } catch (ClassNotFoundException e) {
+            throw new BuildException("Failed to instantiate module 2: " + e.getMessage(), e);
+        }
+        modules.add(m);
     }
 
     /**
@@ -90,7 +99,7 @@ public final class ExtensibleAntInvoker extends Task {
      * @param m message
      */
     public void setMessage(final String m) {
-        pipelineInput.setAttribute("message", m);
+        attrs.put("message", m);
     }
 
     /**
@@ -98,7 +107,7 @@ public final class ExtensibleAntInvoker extends Task {
      * @return message
      */
     public String getMessage() {
-        return pipelineInput.getAttribute("message");
+        return attrs.get("message");
     }
 
     /**
@@ -106,7 +115,7 @@ public final class ExtensibleAntInvoker extends Task {
      * @param inputdita input data file
      */
     public void setInputdita(final String inputdita) {
-        pipelineInput.setAttribute("inputdita", inputdita);
+        attrs.put("inputdita", inputdita);
     }
 
     /**
@@ -114,7 +123,7 @@ public final class ExtensibleAntInvoker extends Task {
      * @param inputmap input map file
      */
     public void setInputmap(final String inputmap) {
-        pipelineInput.setAttribute("inputmap", inputmap);
+        attrs.put("inputmap", inputmap);
     }
 
     /**
@@ -122,7 +131,7 @@ public final class ExtensibleAntInvoker extends Task {
      * @param tempdir temporary directory
      */
     public void setTempdir(final String tempdir) {
-        pipelineInput.setAttribute("tempDir", tempdir);
+        attrs.put("tempDir", tempdir);
     }
 
     /**
@@ -132,8 +141,11 @@ public final class ExtensibleAntInvoker extends Task {
      * {@code maplinks=XXXX;other=YYYY}
      * 
      * @param extParam extended parameters string
+     * @deprecated use nested parameter elements instead
      */
+    @Deprecated
     public void setExtparam(final String extParam) {
+        log("extparam attribute is deprecated, use nested param element instead", Project.MSG_WARN);
         String keyValueStr = null;
         String attrName = null;
         String attrValue = null;
@@ -167,7 +179,7 @@ public final class ExtensibleAntInvoker extends Task {
                 throw new RuntimeException(msg);
             }
 
-            pipelineInput.setAttribute(attrName, attrValue);
+            attrs.put(attrName, attrValue);
         }
 
     }
@@ -179,34 +191,40 @@ public final class ExtensibleAntInvoker extends Task {
      */
     public Param createParam() {
         final Param p = new Param();
-        params.add(p);
+        pipelineParams.add(p);
         return p;
     }
 
+    /**
+     * Handle nested module elements.
+     * 
+     * @since 1.6
+     */
+    public void addConfiguredModule(final Module m) {
+        modules.add(m);
+    }
+    
     /**
      * Execution point of this invoker.
      * @throws BuildException exception
      */
     @Override
     public void execute() throws BuildException {
-        if (getModule() == null) {
-            throw new BuildException("Module attribute must be specified");
+        if (modules.isEmpty()) {
+            throw new BuildException("Module must be specified");
         }
-        /* Set basedir if not already set. */
-        if (pipelineInput.getAttribute("basedir") == null) {
-            pipelineInput.setAttribute("basedir", getProject().getBaseDir().getAbsolutePath());
+        if (attrs.get("basedir") == null) {
+            attrs.put("basedir", getProject().getBaseDir().getAbsolutePath());
         }
-        /* Set params. */
-        for (final Param p : params) {
+        for (final Param p : pipelineParams) {
             if (!p.isValid()) {
                 throw new BuildException("Incomplete parameter");
             }
-            // Check the "if" attribute.
             final String ifProperty = p.getIf();
             final String unlessProperty = p.getUnless();
             if ((ifProperty == null || getProject().getProperties().containsKey(ifProperty))
                     && (unlessProperty == null || !getProject().getProperties().containsKey(unlessProperty))) {
-                pipelineInput.setAttribute(p.getName(), p.getValue());
+                attrs.put(p.getName(), p.getValue());
             }
         }
 
@@ -214,10 +232,51 @@ public final class ExtensibleAntInvoker extends Task {
         logger.setTask(this);
         pipeline.setLogger(logger);
         try {
-            pipeline.execute(getModule(), pipelineInput);
+            for (final Module m: modules) {
+                final PipelineHashIO pipelineInput = new PipelineHashIO();
+                for (final Map.Entry<String, String> e: attrs.entrySet()) {
+                    pipelineInput.setAttribute(e.getKey(), e.getValue());
+                }
+                for (final Param p : m.params) {
+                    if (!p.isValid()) {
+                        throw new BuildException("Incomplete parameter");
+                    }
+                    final String ifProperty = p.getIf();
+                    final String unlessProperty = p.getUnless();
+                    if ((ifProperty == null || getProject().getProperties().containsKey(ifProperty))
+                            && (unlessProperty == null || !getProject().getProperties().containsKey(unlessProperty))) {
+                        pipelineInput.setAttribute(p.getName(), p.getValue());
+                    }
+                }
+                pipeline.execute(m.getImplementation(), pipelineInput);
+            }
         } catch (final DITAOTException e) {
             throw new BuildException("Failed to run pipeline: " + e.getMessage(), e);
         }
+    }
+    
+    /**
+     * Nested pipeline module element configuration.
+     * 
+     * @since 1.6
+     */
+    public static class Module {
+       
+        public final List<Param> params = new ArrayList<Param>();
+        private Class<? extends AbstractPipelineModule> cls;
+        
+        public void setClass(final Class<? extends AbstractPipelineModule> cls) {
+            this.cls = cls;
+        }
+        
+        public void addConfiguredParam(final Param p) {
+            params.add(p);
+        }
+        
+        public Class<? extends AbstractPipelineModule> getImplementation() {
+            return cls;
+        }
+
     }
 
     /** Nested parameters. */

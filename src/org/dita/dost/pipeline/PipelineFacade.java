@@ -24,6 +24,7 @@ import org.dita.dost.module.ModuleFactory;
 public final class PipelineFacade implements AbstractFacade {
 
     private DITAOTLogger logger;
+    private final ModuleFactory factory = ModuleFactory.instance();
 
     /**
      * Automatically generated constructor: PipelineFacade.
@@ -46,16 +47,21 @@ public final class PipelineFacade implements AbstractFacade {
          * in the future can do more complex things here, like call several
          * modules.
          */
-        AbstractPipelineModule module = null;
-        final ModuleFactory factory = ModuleFactory.instance();
-
-        module = factory.createModule(pipelineModuleName);
-        module.setLogger(logger);
-
+        final AbstractPipelineModule module = factory.createModule(pipelineModuleName);
         if (module != null) {
+            module.setLogger(logger);
             return module.execute(input);
         }
-
+        return null;
+    }
+    
+    public AbstractPipelineOutput execute(final Class<? extends AbstractPipelineModule> moduleClass,
+            final AbstractPipelineInput input) throws DITAOTException {
+        final AbstractPipelineModule module = factory.createModule(moduleClass);
+        if (module != null) {
+            module.setLogger(logger);
+            return module.execute(input);
+        }
         return null;
     }
 
