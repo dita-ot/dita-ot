@@ -137,6 +137,9 @@
     <condition property="noKeyref">
       <equals arg1="${keyreflist}" arg2=""/>
     </condition>
+    <condition property="noCoderef">
+      <equals arg1="${codereflist}" arg2=""/>
+    </condition>
   </target>
 
   <target name="debug"
