@@ -18,7 +18,7 @@
   *-->
 <project>
 
-  <target name="dita2tocjs" depends="dita-preprocess, tocjsInit, map2tocjs, topic2tocjs, tocjsDefaultOutput">
+  <target name="dita2tocjs" depends="build-init, preprocess, tocjsInit, map2tocjs, topic2tocjs, tocjsDefaultOutput">
   </target>
 
   <target name="tocjsInit">
@@ -34,14 +34,14 @@
       </condition>
   </target>
 
-  <target name="topic2tocjs" if="noMap" depends="dita-preprocess">
+  <target name="topic2tocjs" if="noMap">
     <antcall target="dita.map.tocjs">
       <!-- No real support for tocjs on a single topic, only for map -->
     </antcall>
     <echo>The TocJS output type only supports ditamap files as input.</echo>
   </target>
 
-  <target name="map2tocjs" unless="noMap" depends="dita-preprocess">
+  <target name="map2tocjs" unless="noMap">
     <antcall target="dita.map.tocjs">
       <param name="input" value="${dita.temp.dir}${file.separator}${user.input.file}"/>
     </antcall>

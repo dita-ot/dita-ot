@@ -25,6 +25,8 @@
       <section>
         <p>The deprecated property <codeph>dita.input.valfile</codeph> should be replaced with the
           new argument property <codeph>args.filter</codeph>.</p>
+        <p>Target <codeph>dita-preprocess</codeph> has been removed and dependencies should be
+          replaced with a target sequence <codeph>build-init, preprocess</codeph>.</p>
       </section>
       <section>
         <title>XHTML</title>
@@ -88,6 +90,7 @@
           <li>3466533 Reduce topic merge memory consumption (milestone 1)</li>
           <li>3483326 Remove IBM DITA and BookMap demo support from PDF2 (milestone 1)</li>
           <li>3486110 Move OT version number to configuration (milestone 2)</li>
+          <li>3475296 Remove obsolete dita-preprocess target (milestone 2)</li>
           <li>3466842 Refactor preprocessing to use SAX filters (in progress)</li>
           <li>3468864 Remove Content object (in progress)</li>
           <li>3460151 Use Job to read/write job configuration files (in progress)</li>
@@ -98,6 +101,8 @@
           <li>3484284 Remove deprecated code (in progress)</li>
           <li>3486511 Improve title numbering in PDF2 (in progress)</li>
           <li>3486924 Clean PDF2 ID processing (in progress)</li>
+          <li>3487508 Improve PDF2 table customization (in progress)</li>
+          <li>3487941 Improve pipeline module processing (in progress)</li>
         </ul>
       </section>
       <section>
@@ -124,6 +129,9 @@
           <li>3468073 Apache FOP: TOCs with uneven right margin (milestone 1)</li>
           <li>3476659 Possible collision in File Extension detection mechanism (milestone 1)</li>
           <li>3475092 Key-based mapref results in preprocessing error (milestone 1)</li>
+          <li>3487705 Choicetable headings not localized in PDF (milestone 2)</li>
+          <li>3487785 Check all places where output streams are used in dost.jar (milestone 2)</li>
+          <li>3488458 Property noCoderef not declared (milestone 2)</li>
           <li>3471364 UNC paths are not supported in input argument (in progress)</li>
         </ul>
       </section>
