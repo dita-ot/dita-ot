@@ -25,7 +25,12 @@ parameter is defined:<codeblock>&lt;dummy>
 </dlentry><dlentry>
 <dt><codeph>dita.conductor.xhtml.param</codeph></dt>
 <dd>Pass parameters to XHTML and Eclipse Help XSLT</dd>
-</dlentry><dlentry>
+</dlentry>
+  <dlentry>
+  <dt><codeph>dita.conductor.xhtml.toc.param</codeph></dt>
+  <dd>Pass parameters to XHTML TOC XSLT</dd>
+</dlentry>
+  <dlentry>
 <dt><codeph>dita.preprocess.conref.param</codeph></dt>
 <dd>Pass parameters to conref XSLT</dd>
 </dlentry><dlentry>

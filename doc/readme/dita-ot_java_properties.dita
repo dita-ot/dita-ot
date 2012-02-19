@@ -48,7 +48,10 @@
             </row>
             <row>
               <entry><codeph>/basedir</codeph></entry>
-              <entry conref="dita-ot_ant_properties.dita#dita-ot-ant-properties/basedir.desc"/>
+              <entry id="basedir.desc">The directory where your project's ant build script resides.
+                The DITA-OT will look for your .dita files relative to this directory. DITA-OT's
+                default build script sets this as an attribute of the project, but you can also
+                define it as a project property.</entry>
             </row>
             <row>
               <entry><codeph>/filter</codeph></entry>

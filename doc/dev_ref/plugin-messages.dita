@@ -24,8 +24,8 @@ the new messages in an XML file such as <filepath>myMessages.xml</filepath>:</p>
 ID:<ol>
 <li>The prefix DOTX is used by all DITA-OT XSLT transforms, and must
 be part of the ID.</li>
-<li>This is followed by the message number ("my-msg-num" in the sample
-above).</li>
+<li>This is followed by the message number ("my-msg-num" in the sample above). By convention, this
+            should be a three digit integer.</li>
 <li>Finally, a letter corresponds to the severity. This should be
 one of:<ul>
 <li>I = Informational, used with type="INFO"</li>
