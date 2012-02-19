@@ -79,7 +79,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
      * File extension of source file.
      */
     private String extName = null;
-    private String tempDir = "";
+    private String tempDir = null;
 
     /**
      * Update property value.
@@ -161,7 +161,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             final String baseDir = input.getAttribute(ANT_INVOKER_PARAM_BASEDIR);
             tempDir = input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR);
             if (!new File(tempDir).isAbsolute()) {
-                tempDir = new File(baseDir, tempDir).getAbsolutePath();
+                throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
             }
             ditaDir=input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR);
             final String transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);

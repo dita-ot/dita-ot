@@ -9,6 +9,8 @@
  */
 package org.dita.dost.invoker;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +25,6 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTAntLogger;
-import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.AbstractPipelineModule;
 import org.dita.dost.pipeline.PipelineFacade;
@@ -31,7 +32,7 @@ import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.util.StringUtils;
 
 /**
- * Extensible Ant Invoker.
+ * Ant task for executing pipeline modules.
  * 
  * @author Deborah Pickett
  */
@@ -64,17 +65,27 @@ public final class ExtensibleAntInvoker extends Task {
     /**
      * Set base directory.
      * @param s base directory
+     * @deprecated base directory is read from Ant project instead
      */
+    @Deprecated
     public void setBasedir(final String s) {
-        attrs.put("basedir", s);
+        log("basedir attribute is deprecated", Project.MSG_WARN);
+        if (!new File(s).getAbsoluteFile().equals(getProject().getBaseDir().getAbsoluteFile())) {
+            log("Provided base directory " + new File(s).getAbsoluteFile()
+                    + " does not match Ant project base directory "
+                    + getProject().getBaseDir().getAbsoluteFile(), Project.MSG_ERR);
+        }
+        attrs.put(ANT_INVOKER_PARAM_BASEDIR, s);
     }
 
     /**
      * Get base directory
      * @return base directory
+     * @deprecated use {@link org.apache.tools.ant.Project#getBaseDir()} instead
      */
+    @Deprecated
     public String getBasedir() {
-        return attrs.get("basedir");
+        return attrs.get(ANT_INVOKER_PARAM_BASEDIR);
     }
 
     /**
@@ -84,7 +95,7 @@ public final class ExtensibleAntInvoker extends Task {
      */
     @Deprecated
     public void setModule(final String module) throws BuildException {
-        log("Module attribute is deprecated, use nested module element instead", Project.MSG_WARN);
+        log("module attribute is deprecated, use nested module element instead", Project.MSG_WARN);
         final Module m = new Module();
         try {
             m.setClass((Class<? extends AbstractPipelineModule>) Class.forName("org.dita.dost.module." + module + "Module"));
@@ -106,6 +117,7 @@ public final class ExtensibleAntInvoker extends Task {
      * Get message.
      * @return message
      */
+    @Deprecated
     public String getMessage() {
         return attrs.get("message");
     }
@@ -113,25 +125,28 @@ public final class ExtensibleAntInvoker extends Task {
     /**
      * Set input data.
      * @param inputdita input data file
+     * @deprecated use {@link #setInputmap(File)} instead
      */
+    @Deprecated
     public void setInputdita(final String inputdita) {
+        log("inputdita attribute is deprecated", Project.MSG_WARN);
         attrs.put("inputdita", inputdita);
     }
 
     /**
      * Set input map.
-     * @param inputmap input map file
+     * @param inputmap input map file, may be relative or absolute
      */
     public void setInputmap(final String inputmap) {
-        attrs.put("inputmap", inputmap);
+        attrs.put(ANT_INVOKER_PARAM_INPUTMAP, inputmap);
     }
 
     /**
      * Set temporary directory.
      * @param tempdir temporary directory
      */
-    public void setTempdir(final String tempdir) {
-        attrs.put("tempDir", tempdir);
+    public void setTempdir(final File tempdir) {
+        attrs.put(ANT_INVOKER_PARAM_TEMPDIR, tempdir.getAbsolutePath());
     }
 
     /**
@@ -213,8 +228,8 @@ public final class ExtensibleAntInvoker extends Task {
         if (modules.isEmpty()) {
             throw new BuildException("Module must be specified");
         }
-        if (attrs.get("basedir") == null) {
-            attrs.put("basedir", getProject().getBaseDir().getAbsolutePath());
+        if (attrs.get(ANT_INVOKER_PARAM_BASEDIR) == null) {
+            attrs.put(ANT_INVOKER_PARAM_BASEDIR, getProject().getBaseDir().getAbsolutePath());
         }
         for (final Param p : pipelineParams) {
             if (!p.isValid()) {

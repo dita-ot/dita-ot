@@ -32,7 +32,7 @@ public class ModuleFactoryTest {
         final AbstractPipelineModule d = f.createModule("DummyPipeline");
         assertEquals(DummyPipelineModule.class, d.getClass());
         try {
-            f.createModule(null);
+            f.createModule((String) null);
             fail();
         } catch (final DITAOTException e) {
             // NOOP

@@ -25,8 +25,9 @@ import org.dita.dost.util.StringUtils;
 /**
  * The class that ant scripts invokes by the <pipeline> tag.
  * @author Lian, Li
- * 
+ * @deprecated use {@link ExtensibleAntInvoker} instead
  */
+@Deprecated
 public final class AntInvoker extends Task {
 
     /**key value pair separator.*/

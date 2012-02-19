@@ -52,15 +52,14 @@ final class MoveIndexModule implements AbstractPipelineModule {
             throw new IllegalStateException("Logger not set");
         }
         
-        String tempDir = input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR);
-        if (!new File(tempDir).isAbsolute()) {
-            final String baseDir = input.getAttribute(ANT_INVOKER_PARAM_BASEDIR);
-            tempDir = new File(baseDir, tempDir).getAbsolutePath();
+        final File tempDir = new File(input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR));
+        if (!tempDir.isAbsolute()) {
+            throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
         }
         
         Job job = null;
         try{
-            job = new Job(new File(tempDir));
+            job = new Job(tempDir);
         } catch(final IOException e) {
             throw new DITAOTException(e);
         }

@@ -41,7 +41,7 @@
     unless="preprocess.gen-list.skip"
     description="Generate file list">
     <pipeline message="Generate list." taskname="gen-list"
-      basedir="${basedir}" inputmap="${args.input}"
+      inputmap="${args.input}"
       tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.GenMapAndTopicListModule">
         <param name="ditadir" location="${dita.dir}"/>
@@ -69,7 +69,7 @@
     unless="preprocess.debug-filter.skip"
     description="Debug and filter input files" >
     <pipeline message="Debug and filtering." taskname="filter"
-      basedir="${basedir}" tempdir="${dita.temp.dir}">
+      tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.DebugAndFilterModule">
         <param name="ditaval" value="${dita.input.valfile}" if="dita.input.valfile"/>
         <param name="ditaext" value="${dita.extname}"/>
@@ -123,7 +123,7 @@
     unless="preprocess.conrefpush.skip"
     description="Resolve conref push">
     <pipeline message="Resolve conref push." taskname="conref-push"
-      basedir="${basedir}" tempdir="${dita.temp.dir}">
+      tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.ConrefPushModule"/>
     </pipeline>
   </target>
@@ -143,7 +143,7 @@
     unless="preprocess.move-meta-entries.skip"
     description="Move metadata entries">
     <pipeline message="Move metadata entries." taskname="move-meta"
-      basedir="${basedir}" inputmap="${user.input.file}"
+      inputmap="${user.input.file}"
       tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.MoveMetaModule"/>
     </pipeline>
@@ -202,7 +202,6 @@
     description="Resolve coderef in input files">
     
     <pipeline message="Resolve coderef." taskname="coderef"
-      basedir="${basedir}"
       tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.CoderefModule"/>
     </pipeline>
@@ -266,7 +265,7 @@
     unless="preprocess.keyref.skip"
     description="Resolve keyref">
     <pipeline message="Resolve keyref." taskname="keyref"
-      basedir="${basedir}" tempdir="${dita.temp.dir}">
+      tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.KeyrefModule">
         <param name="ditaext" value="${dita.extname}"/>
       </module>
@@ -326,7 +325,7 @@
     unless="preprocess.chunk.skip"
     description="Process chunks">
     <pipeline message="Process chunks." taskname="chunk"
-      basedir="${basedir}" inputmap="${user.input.file}"
+      inputmap="${user.input.file}"
       tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.ChunkModule">
         <param name="ditaext" value="${dita.ext}"/>

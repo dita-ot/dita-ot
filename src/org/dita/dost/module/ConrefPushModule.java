@@ -48,15 +48,14 @@ final class ConrefPushModule implements AbstractPipelineModule {
             throw new IllegalStateException("Logger not set");
         }
         
-        String tempDir = input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR);
-        if (! new File(tempDir).isAbsolute()) {
-            final String basedir = input .getAttribute(ANT_INVOKER_PARAM_BASEDIR);
-            tempDir = new File(basedir, tempDir).getAbsolutePath();
+        final File tempDir = new File(input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR));
+        if (!tempDir.isAbsolute()) {
+            throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
         }
         
         Job job = null;
         try{
-            job = new Job(new File(tempDir));
+            job = new Job(tempDir);
         }catch(final IOException e){
             logger.logException(e);
         }
@@ -81,7 +80,7 @@ final class ConrefPushModule implements AbstractPipelineModule {
             content.setValue(entry.getValue());
             parser.setContent(content);
             //pass the tempdir to ConrefPushParser
-            parser.setTempDir(tempDir);
+            parser.setTempDir(tempDir.getAbsolutePath());
             //FIXME:This writer creates and renames files, have to
             parser.write(entry.getKey());
         }

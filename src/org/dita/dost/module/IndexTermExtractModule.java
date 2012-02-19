@@ -95,9 +95,9 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
     private void parseAndValidateInput(final AbstractPipelineInput input)
             throws DITAOTException {
         final String baseDir = input.getAttribute(ANT_INVOKER_PARAM_BASEDIR);
-        String tempDir = input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR);
-        if (!new File(tempDir).isAbsolute()) {
-            tempDir = new File(baseDir, tempDir).getAbsolutePath();
+        final File tempDir = new File(input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR));
+        if (!tempDir.isAbsolute()) {
+            throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
         }
         String output = input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUT);
         if (!new File(output).isAbsolute()) {
@@ -108,10 +108,10 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
         final String indexclass = input.getAttribute(ANT_INVOKER_EXT_PARAM_INDEXCLASS);
         inputMap = input.getAttribute(ANT_INVOKER_PARAM_INPUTMAP);
         targetExt = input.getAttribute(ANT_INVOKER_EXT_PARAM_TARGETEXT);
-        baseInputDir = tempDir;
+        baseInputDir = tempDir.getAbsolutePath();
         final Job prop;
         try {
-            prop = new Job(new File(tempDir));
+            prop = new Job(tempDir);
         } catch (final Exception e) {
             throw new DITAOTException("Failed to load job: " + e.getMessage(), e);
         }

@@ -356,7 +356,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
 			 logger.logException(e1);
 		}
         if (!new File(tempDir).isAbsolute()) {
-            tempDir = new File(basedir, tempDir).getAbsolutePath();
+            throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
         } else {
             tempDir = FileUtils.removeRedundantNames(tempDir);
         }

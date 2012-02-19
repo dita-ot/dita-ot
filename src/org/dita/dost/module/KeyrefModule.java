@@ -50,15 +50,10 @@ final class KeyrefModule implements AbstractPipelineModule {
         if (logger == null) {
             throw new IllegalStateException("Logger not set");
         }
-        String tempDir = input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR);
+        final File tempDir = new File(input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR));
 
-        //Added by William on 2010-03-30 for bug:2978858 start
-        //get basedir
-        final String baseDir = input.getAttribute(ANT_INVOKER_PARAM_BASEDIR);
-        //Added by William on 2010-03-30 for bug:2978858 end
-
-        if (! new File(tempDir).isAbsolute()){
-            tempDir = new File(baseDir, tempDir).getAbsolutePath();
+        if (!tempDir.isAbsolute()){
+            throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
         }
 
         //Added by Alan Date:2009-08-04 --begin
@@ -68,7 +63,7 @@ final class KeyrefModule implements AbstractPipelineModule {
 
         Job job = null;
         try{
-            job = new Job(new File(tempDir));
+            job = new Job(tempDir);
         }catch(final Exception e){
             logger.logException(e);
         }
@@ -97,7 +92,7 @@ final class KeyrefModule implements AbstractPipelineModule {
         }
         final KeyrefReader reader = new KeyrefReader();
         reader.setLogger(logger);
-        reader.setTempDir(tempDir);
+        reader.setTempDir(tempDir.getAbsolutePath());
         for(final String mapFile: maps.keySet()){
             logger.logInfo("Reading " + new File(tempDir, mapFile).getAbsolutePath());
             reader.setKeys(maps.get(mapFile));
@@ -116,7 +111,7 @@ final class KeyrefModule implements AbstractPipelineModule {
             final KeyrefPaser parser = new KeyrefPaser();
             parser.setLogger(logger);
             parser.setContent(content);
-            parser.setTempDir(tempDir);
+            parser.setTempDir(tempDir.getAbsolutePath());
             parser.setKeyMap(keymap);
             //Added by Alan Date:2009-08-04
             parser.setExtName(extName);
