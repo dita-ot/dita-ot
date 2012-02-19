@@ -570,9 +570,10 @@ public final class KeyrefPaser extends XMLFilterImpl {
                         XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
                     } else {
                         // key does not exist
-                        final Properties prop = new Properties();
-                        prop.put("%1", atts.getValue(ATTRIBUTE_NAME_KEYREF));
-                        logger.logInfo(MessageUtils.getMessage("DOTJ047I", prop).toString());
+                        // Do not log error, key should not need a link
+                        //final Properties prop = new Properties();
+                        //prop.put("%1", atts.getValue(ATTRIBUTE_NAME_KEYREF));
+                        //logger.logInfo(MessageUtils.getMessage("DOTJ047I", prop).toString());
                     }
 
                 }
