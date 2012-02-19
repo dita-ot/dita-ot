@@ -45,7 +45,7 @@
       tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.GenMapAndTopicListModule">
         <param name="ditadir" location="${dita.dir}"/>
-        <param name="ditaval" value="${dita.input.valfile}" if="dita.input.valfile"/>
+        <param name="ditaval" location="${dita.input.valfile}" if="dita.input.valfile"/>
         <param name="validate" value="${validate}"/>
         <param name="generatecopyouter" value="${generate.copy.outer}"/>
         <param name="outercontrol" value="${outer.control}"/>
@@ -71,7 +71,7 @@
     <pipeline message="Debug and filtering." taskname="filter"
       tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.DebugAndFilterModule">
-        <param name="ditaval" value="${dita.input.valfile}" if="dita.input.valfile"/>
+        <param name="ditaval" location="${dita.input.valfile}" if="dita.input.valfile"/>
         <param name="ditaext" value="${dita.extname}"/>
         <param name="ditadir" location="${dita.dir}"/>
         <param name="validate" value="${validate}"/>
@@ -79,10 +79,9 @@
         <param name="setsystemid" value="${args.xml.systemid.set}"/>
       </module>
     </pipeline>
-    <!--<property file="${dita.temp.dir}${file.separator}dita.list" />-->
-    <xmlpropertyreader file="${dita.temp.dir}${file.separator}dita.xml.properties"/>
-    <dirname property="dita.map.output.dir"
-      file="${output.dir}${file.separator}${user.input.file}" />
+    <!--<property file="${dita.temp.dir}/dita.list" />-->
+    <xmlpropertyreader file="${dita.temp.dir}/dita.xml.properties"/>
+    <dirname property="dita.map.output.dir" file="${output.dir}/${user.input.file}" />
     <condition property="noConref">
       <equals arg1="${conreflist}" arg2="" />
     </condition>
@@ -167,10 +166,10 @@
       <not><isset property="dita.preprocess.reloadstylesheet.conref"/></not>
     </condition>
     <xslt processor="trax" basedir="${dita.temp.dir}" taskname="conref"
-      destdir="${dita.temp.dir}" includesfile="${dita.temp.dir}${file.separator}${conreffile}"
+      destdir="${dita.temp.dir}" includesfile="${dita.temp.dir}/${conreffile}"
       classpathref="dost.class.path"
       reloadstylesheet="${dita.preprocess.reloadstylesheet.conref}"
-      style="${dita.script.dir}${file.separator}preprocess${file.separator}conref.xsl" filenameparameter="file-being-processed">
+      style="${dita.script.dir}/preprocess/conref.xsl" filenameparameter="file-being-processed">
       <mapper type="glob" from="*" to="*.cnrf" />
       <param name="DITAEXT" expression="${dita.ext}" />
       <!-- added by William on 2009-06-26 for req #12014 start -->
@@ -226,16 +225,15 @@
     <condition property="dita.preprocess.reloadstylesheet.mapref" value="${dita.preprocess.reloadstylesheet}">
       <not><isset property="dita.preprocess.reloadstylesheet.mapref"/></not>
     </condition>
-    <dirname property="mapref.workdir"
-      file="${dita.temp.dir}${file.separator}${user.input.file}" />
+    <dirname property="mapref.workdir" file="${dita.temp.dir}/${user.input.file}" />
     <xslt taskname="mapref"
     	basedir="${dita.temp.dir}"
     	destdir="${dita.temp.dir}"
-        includesfile="${dita.temp.dir}${file.separator}${fullditamapfile}"
+        includesfile="${dita.temp.dir}/${fullditamapfile}"
     	extension=".ditamap.ref"
         classpathref="dost.class.path"
         reloadstylesheet="${dita.preprocess.reloadstylesheet.mapref}"
-      style="${dita.script.dir}${file.separator}preprocess${file.separator}mapref.xsl" filenameparameter="file-being-processed">
+      style="${dita.script.dir}/preprocess/mapref.xsl" filenameparameter="file-being-processed">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="TRANSTYPE" expression="${transtype}" />
       <!--Added by William on 2010-04-14 for bug:2982485 start -->
@@ -286,19 +284,18 @@
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.mappull.skip"
     description="Pull the navtitle and topicmeta from topics to ditamap">
-    <dirname property="mappull.workdir"
-      file="${dita.temp.dir}${file.separator}${user.input.file}" />
+    <dirname property="mappull.workdir" file="${dita.temp.dir}/${user.input.file}" />
     <condition property="dita.preprocess.reloadstylesheet.mappull" value="${dita.preprocess.reloadstylesheet}">
       <not><isset property="dita.preprocess.reloadstylesheet.mappull"/></not>
     </condition>
     <xslt taskname="mappull"
   	    basedir="${dita.temp.dir}"
     	destdir="${dita.temp.dir}"
-        includesfile="${dita.temp.dir}${file.separator}${fullditamapfile}"
+        includesfile="${dita.temp.dir}/${fullditamapfile}"
     	extension=".ditamap.pull"
         classpathref="dost.class.path"
         reloadstylesheet="${dita.preprocess.reloadstylesheet.mappull}"
-      style="${dita.script.dir}${file.separator}preprocess${file.separator}mappull.xsl">
+      style="${dita.script.dir}/preprocess/mappull.xsl">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="TRANSTYPE" expression="${transtype}" />
       <dita:extension id="dita.preprocess.mappull.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
@@ -333,7 +330,7 @@
       </module>
     </pipeline>
   	
-  	<xmlpropertyreader file="${dita.temp.dir}${file.separator}dita.xml.properties"/>
+  	<xmlpropertyreader file="${dita.temp.dir}/dita.xml.properties"/>
   	<condition property="noTopic">
   	  	<equals arg1="${fullditatopiclist}" arg2="" />
   	</condition>
@@ -354,17 +351,16 @@
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.maplink.skip"
     description="Find and generate related link information">
-    <dirname property="maplink.workdir"
-      file="${dita.temp.dir}/${user.input.file}" />
+    <dirname property="maplink.workdir" file="${dita.temp.dir}/${user.input.file}" />
     <condition property="dita.preprocess.reloadstylesheet.maplink" value="${dita.preprocess.reloadstylesheet}">
       <not><isset property="dita.preprocess.reloadstylesheet.maplink"/></not>
     </condition>
     <xslt taskname="maplink"
-      in="${dita.temp.dir}${file.separator}${user.input.file}"
-      out="${maplink.workdir}${file.separator}maplinks.unordered"
+      in="${dita.temp.dir}/${user.input.file}"
+      out="${maplink.workdir}/maplinks.unordered"
       classpathref="dost.class.path"
       reloadstylesheet="${dita.preprocess.reloadstylesheet.maplink}"
-      style="${dita.script.dir}${file.separator}preprocess${file.separator}maplink.xsl">
+      style="${dita.script.dir}/preprocess/maplink.xsl">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="INPUTMAP" expression="${user.input.file}" />
       <param name="include.rellinks" expression="${include.rellinks}" if="include.rellinks"/>
@@ -391,7 +387,7 @@
     <pipeline message="Move links." taskname="move-links"
       inputmap="${user.input.file}" tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.MoveLinksModule">
-        <param name="maplinks" location="${maplink.workdir}${file.separator}maplinks.unordered"/>
+        <param name="maplinks" location="${maplink.workdir}/maplinks.unordered"/>
       </module>
     </pipeline>
   </target>
@@ -414,11 +410,11 @@
       <not><isset property="dita.preprocess.reloadstylesheet.topicpull"/></not>
     </condition>
     <xslt taskname="topicpull" basedir="${dita.temp.dir}"
-      destdir="${dita.temp.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
+      destdir="${dita.temp.dir}" includesfile="${dita.temp.dir}/${fullditatopicfile}"
       classpathref="dost.class.path"
       reloadstylesheet="${dita.preprocess.reloadstylesheet.topicpull}"
-      style="${dita.script.dir}${file.separator}preprocess${file.separator}topicpull.xsl">
-      <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" if="chunkedtopicfile"/>
+      style="${dita.script.dir}/preprocess/topicpull.xsl">
+      <includesfile name="${dita.temp.dir}/${chunkedtopicfile}" if="chunkedtopicfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="TABLELINK" expression="${args.tablelink.style}" if="args.tablelink.style" />
       <param name="FIGURELINK" expression="${args.figurelink.style}" if="args.figurelink.style" />
@@ -455,8 +451,8 @@
 	    dita:extension="depends org.dita.dost.platform.InsertDependsAction"
 	    unless="preprocess.copy-image.skip"
 	    description="Copy image files">
-	    <copy todir="${output.dir}${file.separator}${uplevels}">
-	      <fileset dir="${user.input.dir}" includesfile="${dita.temp.dir}${file.separator}${imagefile}" />
+	    <copy todir="${output.dir}/${uplevels}">
+	      <fileset dir="${user.input.dir}" includesfile="${dita.temp.dir}/${imagefile}" />
 	    </copy>
   </target>
 	
@@ -468,7 +464,7 @@
 		unless="preprocess.copy-image.skip"
 		description="Copy image files">
 		<copy todir="${output.dir}">
-		   <fileset dir="${user.input.dir}" includesfile="${dita.temp.dir}${file.separator}${imagefile}" />
+		   <fileset dir="${user.input.dir}" includesfile="${dita.temp.dir}/${imagefile}" />
 		</copy>
   </target>
 		 
@@ -505,7 +501,7 @@
     unless="preprocess.copy-html.skip"
     description="Copy html files">
     <copy todir="${output.dir}">
-      <fileset dir="${user.input.dir}" includesfile="${dita.temp.dir}${file.separator}${htmlfile}"></fileset>
+      <fileset dir="${user.input.dir}" includesfile="${dita.temp.dir}/${htmlfile}"/>
     </copy>
   </target>
 
@@ -547,7 +543,7 @@
     unless="preprocess.copy-subsidiary.skip"
     description="Copy subsidiary files">
     <copy todir="${dita.temp.dir}">
-      <fileset dir="${user.input.dir}" includesfile="${dita.temp.dir}${file.separator}${subtargetsfile}"/>
+      <fileset dir="${user.input.dir}" includesfile="${dita.temp.dir}/${subtargetsfile}"/>
     </copy>
   </target>
 
@@ -588,7 +584,7 @@
         <isset property="args.css.present"/>
       </and>
     </condition>
-    <property name="user.csspath.real" value="${output.dir}${file.separator}${user.csspath}"/>
+    <property name="user.csspath.real" location="${output.dir}/${user.csspath}"/>
     <mkdir dir="${user.csspath.real}"/>    
     <!-- Always copy system default css files -->
     <copy todir="${user.csspath.real}">

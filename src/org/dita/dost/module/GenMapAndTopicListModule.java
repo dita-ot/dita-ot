@@ -337,17 +337,15 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         // Set the OutputDir
         final File path = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR));
         if (path.isAbsolute()) {
-            OutputUtils.setOutputDir(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR));
+            OutputUtils.setOutputDir(path.getAbsolutePath());
         } else {
-            final StringBuffer buff = new StringBuffer(input.getAttribute(ANT_INVOKER_PARAM_BASEDIR)).append(
-                    File.separator).append(path);
-            OutputUtils.setOutputDir(buff.toString());
-
+            throw new IllegalArgumentException("Output directory " + tempDir + " must be absolute");
         }
 
         // Resolve relative paths base on the basedir.
         File inFile = new File(ditaInput);
         if (!inFile.isAbsolute()) {
+            // XXX Shouldn't this be resolved to current directory, not Ant script base directory?
             inFile = new File(basedir, ditaInput);
         }
         try {
@@ -361,11 +359,12 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             tempDir = FileUtils.removeRedundantNames(tempDir);
         }
         if (!new File(ditaDir).isAbsolute()) {
-            ditaDir = new File(basedir, ditaDir).getAbsolutePath();
+            throw new IllegalArgumentException("DITA-OT installation directory " + tempDir + " must be absolute");
         } else {
             ditaDir = FileUtils.removeRedundantNames(ditaDir);
         }
         if (ditavalFile != null && !new File(ditavalFile).isAbsolute()) {
+            // XXX Shouldn't this be resolved to current directory, not Ant script base directory?
             ditavalFile = new File(basedir, ditavalFile).getAbsolutePath();
         }
 

@@ -54,7 +54,7 @@ public class TestDitaValReader {
         pipelineInput.setAttribute("inputdir", inputDir.getPath());
         pipelineInput.setAttribute("outputdir", outDir.getAbsolutePath());
         pipelineInput.setAttribute("tempDir", tempDir.getPath());
-        pipelineInput.setAttribute("ditadir", "");
+        pipelineInput.setAttribute("ditadir", new File("").getAbsolutePath());
         pipelineInput.setAttribute("ditaext", ".xml");
         pipelineInput.setAttribute("indextype", "xhtml");
         pipelineInput.setAttribute("encoding", "en-US");

@@ -11,6 +11,7 @@ package org.dita.dost.module;
 
 import static org.dita.dost.util.Constants.*;
 
+import java.io.File;
 import java.util.Map;
 import java.util.Set;
 
@@ -48,7 +49,7 @@ final class MoveLinksModule implements AbstractPipelineModule {
             throw new IllegalStateException("Logger not set");
         }
         
-        final String maplinksFile = input.getAttribute(ANT_INVOKER_PARAM_MAPLINKS);
+        final File maplinksFile = new File(input.getAttribute(ANT_INVOKER_PARAM_MAPLINKS));
         
         final MapLinksReader indexReader = new MapLinksReader();
         indexReader.setLogger(logger);
@@ -56,7 +57,7 @@ final class MoveLinksModule implements AbstractPipelineModule {
                 .append(SLASH).append(TOPIC_LINKPOOL.localName)
                 .append(SLASH).append(TOPIC_LINKLIST.localName)
                 .toString());
-        indexReader.read(maplinksFile);
+        indexReader.read(maplinksFile.getAbsolutePath());
         final Set<Map.Entry<String, String>> mapSet = (Set<Map.Entry<String, String>>) indexReader.getContent().getCollection();
         
         final DitaLinksWriter indexInserter = new DitaLinksWriter();
