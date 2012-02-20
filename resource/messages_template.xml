@@ -16,6 +16,11 @@
     <response>This often means the input file is not specified correctly. Please provide the correct input.</response>
   </message>
   
+  <message id="DOTA069F" type="FATAL">
+    <reason>Input file '%1' not found.</reason>
+    <response>Ensure that file exists and you have permission to access it.</response>
+  </message>
+  
   <message id="DOTA003F" type="FATAL">
     <reason>Can't find the user specified stylesheet '%1'.</reason>
     <response>Please provide the correct stylesheet using Ant parameter 'args.xsl'.</response>
