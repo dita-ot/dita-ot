@@ -287,10 +287,11 @@ are based on the XHTML transform type, including:</p>
               <entry id="generate.copy.outer.desc" colname="COLSPEC3">Specifies whether to generate
                 files for content files that are not located in or beneath the directory containing
                 your <codeph>ditmap</codeph> file. Supported values are:<ul>
-                  <li>"1"  (default) – do not generate outer files</li>
+                  <li>"1" (default) – do not generate outer files</li>
                   <li>"2 – generate outer files</li>
-                  <li>"3" – old solution.</li>
-                </ul></entry>
+                  <li>"3" – shift base directory.</li>
+                </ul><p>See <xref href="dita2xhtml.dita#outer-copy-generation"/> for
+                  details.</p></entry>
             </row>
             <row id="onlytopic.in.map">
               <entry colname="COLSPEC0"><codeph>onlytopic.in.map</codeph></entry>

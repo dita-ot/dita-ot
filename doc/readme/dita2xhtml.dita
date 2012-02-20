@@ -25,5 +25,46 @@ files.</p>
 setting the output type to "web" will run the default XHTML transform.</note><?Pub
 Caret -1?>
 </conbody>
+  <concept id="outer-copy-generation">
+    <title>Outer copy generation</title>
+    <conbody>
+      <p>For the following source structure:</p>
+      <pre>maps/
+  map.ditamap
+topics/
+  concept.dita
+images/
+  graphic.gif</pre>
+      <p>depending on the <codeph>generate.copy.outer</codeph> property, output directory structure
+        will be different for <filepath>out</filepath> directory.</p>
+      <section id="section_cvy_qwq_3f">
+        <title><codeph>1</codeph>: ignore outer files</title>
+        <p>Files which lay outside the output directory are ignored:</p>
+        <pre>out/
+  index.html</pre>
+      </section>
+      <section id="section_cvy_qwq_3e">
+        <title><codeph>2</codeph>: generate outer files</title>
+        <p>Files which lay outside the output directory are generated:</p>
+        <pre>out/
+  index.html
+topics/
+  concept.html
+images/
+  graphic.gif</pre>
+      </section>
+      <section id="section_cvy_qwq_3g">
+        <title><codeph>3</codeph>: shift base directory</title>
+        <p>Base directory is shifted up in the directory tree to cover all output directories:</p>
+        <pre>out/
+  maps/
+    index.html
+  topics/
+    concept.html
+  images/
+    graphic.gif</pre>
+      </section>
+    </conbody>
+  </concept>
 </concept>
 <?Pub *0000001108?>
