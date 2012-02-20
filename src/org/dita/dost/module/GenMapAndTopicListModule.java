@@ -1030,7 +1030,8 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
             // Output plugin id
             final File pluginIdFile = new File(tempDir, FILE_NAME_PLUGIN_XML);
-            DelayConrefUtils.getInstance().writeMapToXML(reader.getPluginMap(), pluginIdFile);
+            final DelayConrefUtils delayConrefUtils = new DelayConrefUtils();
+            delayConrefUtils.writeMapToXML(reader.getPluginMap(), pluginIdFile);
             // write the result into the file
             final StringBuffer result = reader.getResult();
             try {

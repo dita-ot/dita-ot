@@ -346,6 +346,8 @@ public final class DitaWriter extends AbstractXMLWriter {
     private Map<String, Map<String, String>> defaultValueMap = null;
     /** Filter utils */
     private FilterUtils filterUtils;
+    /** Delayed conref utils. */
+    private DelayConrefUtils delayConrefUtils;
     /** XMLReader instance for parsing dita file */
     private XMLReader reader = null;
     
@@ -402,6 +404,10 @@ public final class DitaWriter extends AbstractXMLWriter {
      */
     public void setFilterUtils(final FilterUtils filterUtils) {
         this.filterUtils = filterUtils;
+    }
+    
+    public void setDelayConrefUtils(final DelayConrefUtils delayConrefUtils) {
+        this.delayConrefUtils = delayConrefUtils;
     }
     
     /**
@@ -580,7 +586,7 @@ public final class DitaWriter extends AbstractXMLWriter {
                             boolean keyrefExported = false;
                             List<Boolean> list = null;
                             if(transtype.equals(INDEX_TYPE_ECLIPSEHELP)){
-                                list = DelayConrefUtils.getInstance().checkExport(href, id, key, tempDir);
+                                list = delayConrefUtils.checkExport(href, id, key, tempDir);
                                 idExported = list.get(0).booleanValue();
                                 keyrefExported = list.get(1).booleanValue();
                             }
@@ -636,7 +642,7 @@ public final class DitaWriter extends AbstractXMLWriter {
                             //Added by William on 2009-06-25 for #12014 start
                             final String id = null;
 
-                            final List<Boolean> list = DelayConrefUtils.getInstance().checkExport(href, id, attValue, tempDir);
+                            final List<Boolean> list = delayConrefUtils.checkExport(href, id, attValue, tempDir);
                             final boolean keyrefExported = list.get(1).booleanValue();
                             //key is exported and transtype is eclipsehelp
                             if(keyrefExported && transtype.equals(INDEX_TYPE_ECLIPSEHELP)){

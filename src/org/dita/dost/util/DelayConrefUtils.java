@@ -32,18 +32,17 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 /**
  * 
@@ -53,23 +52,10 @@ import org.xml.sax.SAXException;
  */
 public final class DelayConrefUtils {
 
+    /** Root element of export.xml Document */
     private Document root = null;
 
-    private final DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
-
-    private static DelayConrefUtils instance = null;
-    /**
-     * Return the DelayConrefUtils instance. Singleton.
-     * @return DelayConrefUtils
-     */
-    public static synchronized DelayConrefUtils getInstance(){
-        if(instance == null){
-            instance = new DelayConrefUtils();
-        }
-        return instance;
-    }
-
-
+    private DITAOTLogger logger;
 
     /**
      * Constructor.
@@ -79,7 +65,9 @@ public final class DelayConrefUtils {
         root = null;
     }
 
-
+    public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
 
     /**
      * Find whether an id is refer to a topic in a dita file.
@@ -129,14 +117,8 @@ public final class DelayConrefUtils {
             }
             return false;
 
-        } catch (final FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (final SAXException e) {
-            e.printStackTrace();
-        } catch (final IOException e) {
-            e.printStackTrace();
-        } catch (final ParserConfigurationException e) {
-            e.printStackTrace();
+        } catch (final Exception e) {
+            logger.logError("Failed to read document: " + e.getMessage(), e);
         }
         return false;
     }
@@ -259,7 +241,6 @@ public final class DelayConrefUtils {
      * @param outputFile output xml file
      */
     public void writeMapToXML(final Map<String, Set<String>> m, final File outputFile) {
-
         if (m == null) {
             return;
         }
@@ -310,16 +291,14 @@ public final class DelayConrefUtils {
             out = new FileOutputStream(outputFile);
             final StreamResult sr = new StreamResult(out);
             t.transform(doms, sr);
-        } catch (final TransformerException te) {
-            this.javaLogger.logException(te);
-        } catch (final IOException te) {
-            this.javaLogger.logException(te);
+        } catch (final Exception e) {
+            logger.logError("Failed to process map: " + e.getMessage(), e);
         } finally {
             if (out != null) {
                 try {
                     out.close();
                 } catch (final IOException e) {
-                    javaLogger.logError("Failed to close output stream: " + e.getMessage());
+                    logger.logError("Failed to close output stream: " + e.getMessage());
                 }
             }
         }
