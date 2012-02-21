@@ -75,6 +75,9 @@
         <param name="ditaext" value="${dita.extname}"/>
         <param name="ditadir" location="${dita.dir}"/>
         <param name="validate" value="${validate}"/>
+        <param name="generatecopyouter" value="${generate.copy.outer}"/>
+        <param name="outercontrol" value="${outer.control}"/>
+        <param name="onlytopicinmap" value="${onlytopic.in.map}"/>
         <param name="transtype" value="${transtype}"/>
         <param name="setsystemid" value="${args.xml.systemid.set}"/>
       </module>

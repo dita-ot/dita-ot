@@ -50,6 +50,7 @@ import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.OutputUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.TimingUtils;
 import org.dita.dost.writer.DitaWriter;
@@ -209,6 +210,12 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             fileWriter.setTranstype(transtype);
             fileWriter.setFilterUtils(filterUtils);
             fileWriter.setDelayConrefUtils(new DelayConrefUtils());
+            final OutputUtils outputUtils = new OutputUtils();
+            outputUtils.setGeneratecopyouter(input.getAttribute(ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER));
+            outputUtils.setOutterControl(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTTERCONTROL));
+            outputUtils.setOnlyTopicInMap(input.getAttribute(ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP));
+            outputUtils.setInputMapPathName(inputMap);
+            fileWriter.setOutputUtils(outputUtils);
 
             final Map<String, Set<String>> dic = readMapFromXML(FILE_NAME_SUBJECT_DICTIONARY);
 

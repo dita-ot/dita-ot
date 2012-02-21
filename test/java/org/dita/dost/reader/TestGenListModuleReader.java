@@ -24,6 +24,7 @@ import org.dita.dost.TestUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.GenMapAndTopicListModule.KeyDef;
 import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.OutputUtils;
 
 /**
  * @author william
@@ -50,6 +51,7 @@ public class TestGenListModuleReader {
         reader.setLogger(new TestUtils.TestLogger());
         reader.initXMLReader(ditaDir, validate, new File(rootFile.getPath()).getCanonicalPath(), true);
         reader.setFilterUtils(new FilterUtils());
+        reader.setOutputUtils(new OutputUtils());
     }
 
     @Test

@@ -32,6 +32,7 @@ import org.dita.dost.util.FilterUtils.Action;
 import org.dita.dost.util.FilterUtils.FilterKey;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.OutputUtils;
 import org.dita.dost.writer.DitaWriter;
 import org.junit.After;
 import org.junit.Before;
@@ -129,6 +130,9 @@ public class TestDitaWriter {
         filterUtils.setLogger(new TestUtils.TestLogger());
         filterUtils.setFilterMap(map);
         writer.setFilterUtils(filterUtils);
+        final OutputUtils outputUtils = new OutputUtils();
+        outputUtils.setInputMapPathName(new File(baseDir, inputDir.getPath() + File.separator + "keyword.dita").getAbsolutePath());
+        writer.setOutputUtils(outputUtils);
         writer.setTempDir(tempDir.getAbsolutePath());
         writer.setExtName(".xml");
         writer.write(new File(baseDir, inputDir.getPath()).getAbsolutePath(), "keyword.dita");

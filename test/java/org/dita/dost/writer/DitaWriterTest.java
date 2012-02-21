@@ -74,8 +74,6 @@ public class DitaWriterTest {
                 out.close();
             }
         }
-
-        OutputUtils.setInputMapPathName(new File(srcDir, "main.ditamap").getAbsolutePath());
         final DitaWriter writer = new DitaWriter();
         writer.setLogger(new TestUtils.TestLogger());
         writer.initXMLReader(srcDir.getAbsolutePath(), false, true);
@@ -83,6 +81,9 @@ public class DitaWriterTest {
         final FilterUtils fu = new FilterUtils();
         fu.setLogger(new TestUtils.TestLogger());
         writer.setFilterUtils(fu);
+        final OutputUtils outputUtils = new OutputUtils();
+        outputUtils.setInputMapPathName(new File(srcDir, "main.ditamap").getAbsolutePath());
+        writer.setOutputUtils(outputUtils);
 
         for (final String f: new String[] {"main.ditamap", "keyword.dita"}) {
             writer.setTempDir(tempDir.getAbsolutePath());

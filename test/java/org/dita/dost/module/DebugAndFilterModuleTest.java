@@ -71,8 +71,6 @@ public class DebugAndFilterModuleTest {
         DITAOTFileLogger.getInstance().setLogDir(tmpDir.getAbsolutePath());
         DITAOTFileLogger.getInstance().setLogFile(DebugAndFilterModuleTest.class.getSimpleName() + ".log");
         DitaURIResolverFactory.setPath(tmpDir.getAbsolutePath());
-        OutputUtils.setInputMapPathName(new File(inputDir, "maps").getAbsolutePath());
-        OutputUtils.setOutputDir(outDir.getAbsolutePath());
 
         final PipelineHashIO pipelineInput = new PipelineHashIO();
         pipelineInput.setAttribute("inputmap", inputMap.getPath());

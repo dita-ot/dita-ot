@@ -171,7 +171,8 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
     private DITAOTLogger logger;
 
     private GenListModuleReader reader;
-
+    /** Output utilities */
+    private OutputUtils outputUtils;
     private boolean xmlValidate = true;
 
     private String relativeValue;
@@ -278,6 +279,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             reader.initXMLReader(ditaDir, xmlValidate, rootFile, setSystemid);
             final FilterUtils filterUtils = parseFilterFile();
             reader.setFilterUtils(filterUtils);
+            reader.setOutputUtils(outputUtils);
 
             addToWaitList(inputFile);
             processWaitList();
@@ -330,14 +332,15 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         setSystemid = "yes".equalsIgnoreCase(input.getAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID));
 
         // For the output control
-        OutputUtils.setGeneratecopyouter(input.getAttribute(ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER));
-        OutputUtils.setOutterControl(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTTERCONTROL));
-        OutputUtils.setOnlyTopicInMap(input.getAttribute(ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP));
+        outputUtils = new OutputUtils();
+        outputUtils.setGeneratecopyouter(input.getAttribute(ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER));
+        outputUtils.setOutterControl(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTTERCONTROL));
+        outputUtils.setOnlyTopicInMap(input.getAttribute(ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP));
 
         // Set the OutputDir
         final File path = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR));
         if (path.isAbsolute()) {
-            OutputUtils.setOutputDir(path.getAbsolutePath());
+            outputUtils.setOutputDir(path.getAbsolutePath());
         } else {
             throw new IllegalArgumentException("Output directory " + tempDir + " must be absolute");
         }
@@ -401,7 +404,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         }
 
         // Set the mapDir
-        OutputUtils.setInputMapPathName(inFile.getAbsolutePath());
+        outputUtils.setInputMapPathName(inFile.getAbsolutePath());
     }
 
     private void processWaitList() throws DITAOTException {

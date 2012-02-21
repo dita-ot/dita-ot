@@ -17,15 +17,16 @@ public class TestOutputUtils {
     @Test
     public  void testsetoutercontrol()
     {
-        assertEquals(OutputUtils.OutterControl.WARN, OutputUtils.getOutterControl());
-        OutputUtils.setOutterControl("FAIL");
-        assertEquals(OutputUtils.OutterControl.FAIL, OutputUtils.getOutterControl());
-        OutputUtils.setOutterControl("WARN");
-        assertEquals(OutputUtils.OutterControl.WARN ,OutputUtils.getOutterControl());
-        OutputUtils.setOutterControl("QUIET");
-        assertEquals(OutputUtils.OutterControl.QUIET, OutputUtils.getOutterControl());
+        final OutputUtils outputUtils = new OutputUtils();
+        assertEquals(OutputUtils.OutterControl.WARN, outputUtils.getOutterControl());
+        outputUtils.setOutterControl("FAIL");
+        assertEquals(OutputUtils.OutterControl.FAIL, outputUtils.getOutterControl());
+        outputUtils.setOutterControl("WARN");
+        assertEquals(OutputUtils.OutterControl.WARN ,outputUtils.getOutterControl());
+        outputUtils.setOutterControl("QUIET");
+        assertEquals(OutputUtils.OutterControl.QUIET, outputUtils.getOutterControl());
         try {
-            OutputUtils.setOutterControl(null);
+            outputUtils.setOutterControl(null);
             fail();
         } catch (final NullPointerException e) {}
     }
@@ -34,30 +35,30 @@ public class TestOutputUtils {
     @Test
     public void testsetonlytopicinmap()
     {
+        final OutputUtils outputUtils = new OutputUtils();
+        outputUtils.setOnlyTopicInMap(null);
+        assertEquals(false,outputUtils.getOnlyTopicInMap());
 
-
-        OutputUtils.setOnlyTopicInMap(null);
-        assertEquals(false,OutputUtils.getOnlyTopicInMap());
-
-        OutputUtils.setOnlyTopicInMap("false");
-        assertEquals(false,OutputUtils.getOnlyTopicInMap());
-        OutputUtils.setOnlyTopicInMap("true");
-        assertEquals(true,OutputUtils.getOnlyTopicInMap());
+        outputUtils.setOnlyTopicInMap("false");
+        assertEquals(false,outputUtils.getOnlyTopicInMap());
+        outputUtils.setOnlyTopicInMap("true");
+        assertEquals(true,outputUtils.getOnlyTopicInMap());
 
     }
 
     @Test
     public void testsetgeneratecopyouter()
     {
-        assertEquals(OutputUtils.Generate.NOT_GENERATEOUTTER, OutputUtils.getGeneratecopyouter());
-        OutputUtils.setGeneratecopyouter("1");
-        assertEquals(OutputUtils.Generate.NOT_GENERATEOUTTER, OutputUtils.getGeneratecopyouter());
-        OutputUtils.setGeneratecopyouter("2");
-        assertEquals(OutputUtils.Generate.GENERATEOUTTER, OutputUtils.getGeneratecopyouter());
-        OutputUtils.setGeneratecopyouter("3");
-        assertEquals(OutputUtils.Generate.OLDSOLUTION, OutputUtils.getGeneratecopyouter());
+        final OutputUtils outputUtils = new OutputUtils();
+        assertEquals(OutputUtils.Generate.NOT_GENERATEOUTTER, outputUtils.getGeneratecopyouter());
+        outputUtils.setGeneratecopyouter("1");
+        assertEquals(OutputUtils.Generate.NOT_GENERATEOUTTER, outputUtils.getGeneratecopyouter());
+        outputUtils.setGeneratecopyouter("2");
+        assertEquals(OutputUtils.Generate.GENERATEOUTTER, outputUtils.getGeneratecopyouter());
+        outputUtils.setGeneratecopyouter("3");
+        assertEquals(OutputUtils.Generate.OLDSOLUTION, outputUtils.getGeneratecopyouter());
         try {
-            OutputUtils.setGeneratecopyouter(null);
+            outputUtils.setGeneratecopyouter(null);
             fail();
         } catch (final NumberFormatException e) {}
     }

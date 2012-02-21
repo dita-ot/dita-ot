@@ -70,6 +70,8 @@ public final class GenListModuleReader extends AbstractXMLReader {
     private Map<String, String> catalogMap = null;
     /** Filter utils */
     private FilterUtils filterUtils;
+    /** Output utilities */
+    private OutputUtils outputUtils;
     /** Basedir of the current parsing file */
     private String currentDir = null;
 
@@ -313,6 +315,15 @@ public final class GenListModuleReader extends AbstractXMLReader {
     public void setFilterUtils(final FilterUtils filterUtils) {
         this.filterUtils = filterUtils;
     }
+    
+    /**
+     * Set output utilities.
+     * @param outputUtils output utils
+     */
+    public void setOutputUtils(final OutputUtils outputUtils) {
+        this.outputUtils = outputUtils;
+    }
+
 
     /**
      * Init xml reader used for pipeline parsing.
@@ -905,7 +916,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 
         //Added by William on 2010-03-02 for /onlytopicinmap update start.
         //onlyTopicInMap is on.
-        if(OutputUtils.getOnlyTopicInMap() && this.canResolved()){
+        if(outputUtils.getOnlyTopicInMap() && this.canResolved()){
             //topicref(only defined in ditamap file.)
             if(MAP_TOPICREF.matches(classValue)){
 
@@ -1629,7 +1640,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
         }
     }
     private boolean canResolved(){
-        if ((OutputUtils.getOnlyTopicInMap() == false) || isMapFile() ) {
+        if ((outputUtils.getOnlyTopicInMap() == false) || isMapFile() ) {
             return true;
         } else {
             return false;
@@ -1662,11 +1673,10 @@ public final class GenListModuleReader extends AbstractXMLReader {
         if ((OutputUtils.getGeneratecopyouter() == OutputUtils.Generate.NOT_GENERATEOUTTER)
                 || (OutputUtils.getGeneratecopyouter() == OutputUtils.Generate.GENERATEOUTTER)) {
             if (isOutFile(filename)) {
-                if (OutputUtils.getOutterControl().equals(OutputUtils.OutterControl.FAIL)){
+                if (outputUtils.getOutterControl() == OutputUtils.OutterControl.FAIL){
                     final MessageBean msgBean=MessageUtils.getMessage("DOTJ035F", prop);
                     throw new SAXParseException(null,null,new DITAOTException(msgBean,null,msgBean.toString()));
-                }
-                if (OutputUtils.getOutterControl().equals(OutputUtils.OutterControl.WARN)){
+                } else if (outputUtils.getOutterControl() == OutputUtils.OutterControl.WARN){
                     final String message=MessageUtils.getMessage("DOTJ036W",prop).toString();
                     logger.logWarn(message);
                 }
