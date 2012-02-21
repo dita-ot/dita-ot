@@ -4949,7 +4949,8 @@
   <!-- Add for bodydiv  and sectiondiv-->
   <xsl:template match="*[contains(@class,' topic/bodydiv ') or contains(@class, ' topic/sectiondiv ')]">
     <div>
-    <xsl:apply-templates/>
+      <xsl:call-template name="commonattributes"/>
+      <xsl:apply-templates/>
     </div>
   </xsl:template>
 
