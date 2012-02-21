@@ -1502,6 +1502,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
         if (ATTRIBUTE_NAME_COPY_TO.equals(attrName)
                 && FileUtils.isTopicFile(filename)) {
             final String href = atts.getValue(ATTRIBUTE_NAME_HREF);
+            final String value = FileUtils.normalizeDirectory(currentDir, href);
 
             if (StringUtils.isEmptyString(href)) {
                 final StringBuffer buff = new StringBuffer();
@@ -1522,11 +1523,13 @@ public final class GenListModuleReader extends AbstractXMLReader {
                 final Properties prop = new Properties();
                 prop.setProperty("%1", href);
                 prop.setProperty("%2", filename);
-                logger.logWarn(MessageUtils.getMessage("DOTX065W", prop).toString());
+                if(!value.equals(copytoMap.get(filename))) {
+                	logger.logWarn(MessageUtils.getMessage("DOTX065W", prop).toString());
+                }
                 //edited by Alan on Date:2009-11-02 for Work Item:#1590 end
                 ignoredCopytoSourceSet.add(href);
             } else if (!(atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains("to-content"))){
-                copytoMap.put(filename, FileUtils.normalizeDirectory(currentDir, href));
+                copytoMap.put(filename, value);
             }
 
             final String pathWithoutID = FileUtils.resolveFile(currentDir, attrValue);
