@@ -209,7 +209,7 @@ public final class MergeTopicParser extends AbstractXMLReader {
         dirPath = dir;
         try{
             reader.setErrorHandler(new DITAOTXMLErrorHandler(dir + File.separator + filePath));
-            reader.parse(dir + File.separator + filePath);
+            reader.parse(new File(dir + File.separator + filePath).toURI().toString());
             return retId;
         } catch (final Exception e){
             throw new RuntimeException("Failed to parse " + filename + ": " + e.getMessage(), e);

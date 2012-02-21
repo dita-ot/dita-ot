@@ -1380,11 +1380,12 @@ public final class GenListModuleReader extends AbstractXMLReader {
             filename = FileUtils.normalizeDirectory(currentDir, attrValue);
         }
 
-
-        try{
-            filename = URLDecoder.decode(filename, UTF8);
-        }catch(final UnsupportedEncodingException e){
-
+        if (filename != null) {
+            try{
+                filename = URLDecoder.decode(filename, UTF8);
+            }catch(final UnsupportedEncodingException e){
+    
+            }
         }
 
         if (MAP_TOPICREF.matches(attrClass)) {
@@ -1435,7 +1436,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
         /*
          * Collect non-conref and non-copyto targets
          */
-        if (FileUtils.isValidTarget(filename.toLowerCase()) &&
+        if (filename != null && FileUtils.isValidTarget(filename.toLowerCase()) &&
                 (StringUtils.isEmptyString(atts.getValue(ATTRIBUTE_NAME_COPY_TO)) ||
                         !FileUtils.isTopicFile(atts.getValue(ATTRIBUTE_NAME_COPY_TO).toLowerCase()) ||
                         (atts.getValue(ATTRIBUTE_NAME_CHUNK)!=null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains("to-content")) )

@@ -251,14 +251,15 @@ public final class KeyrefPaser extends AbstractXMLWriter {
     public void endDocument() throws SAXException {
         try {
             output.flush();
-            output.close();
         } catch (final Exception e) {
             logger.logException(e);
         } finally {
-            try {
-                output.close();
-            } catch (final Exception e) {
-                logger.logException(e);
+            if (output != null) {
+                try {
+                    output.close();
+                } catch (final Exception e) {
+                    logger.logException(e);
+                }
             }
         }
     }
@@ -682,13 +683,24 @@ public final class KeyrefPaser extends AbstractXMLWriter {
     public void write(final String filename) throws DITAOTException {
         // added By Alan for ID: 2860433 on 2009-09-17
         this.fileName=filename;
+        final File inputFile = new File(tempDir, filename);
+        filepath = inputFile.getAbsolutePath();
+        final File outputFile = new File(tempDir, filename + ATTRIBUTE_NAME_KEYREF);
         try {
-            final File inputFile = new File(tempDir, filename);
-            filepath = inputFile.getAbsolutePath();
-            final File outputFile = new File(tempDir, filename + ATTRIBUTE_NAME_KEYREF);
             output = new OutputStreamWriter(new FileOutputStream(outputFile),UTF8);
-            parser.parse(inputFile.getAbsolutePath());
-            output.close();
+            parser.parse(inputFile.toURI().toString());
+        } catch (final Exception e) {
+            logger.logException(e);
+        } finally {
+            if (output != null) {
+                try {
+                    output.close();
+                } catch (final Exception ex) {
+                    logger.logException(ex);
+                }
+            }
+        }
+        try {
             if (!inputFile.delete()) {
                 final Properties prop = new Properties();
                 prop.put("%1", inputFile.getPath());
@@ -706,14 +718,7 @@ public final class KeyrefPaser extends AbstractXMLWriter {
 
         } catch (final Exception e) {
             logger.logException(e);
-        } finally {
-            try {
-                output.close();
-            } catch (final Exception ex) {
-                logger.logException(ex);
-            }
         }
-
     }
     
     /**

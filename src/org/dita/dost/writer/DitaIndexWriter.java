@@ -390,7 +390,6 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
         String topic = null;
         File inputFile = null;
         File outputFile = null;
-        FileOutputStream fileOutput = null;
 
         try {
             if(filename.endsWith(SHARP)){
@@ -413,14 +412,23 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
             hasWritten = false;
             inputFile = new File(file);
             outputFile = new File(file + FILE_EXTENSION_TEMP);
-            fileOutput = new FileOutputStream(outputFile);
-            output = new OutputStreamWriter(fileOutput, UTF8);
+            output = new OutputStreamWriter(new FileOutputStream(outputFile), UTF8);
 
             topicIdList.clear();
             reader.setErrorHandler(new DITAOTXMLErrorHandler(file));
             reader.parse(file);
-
-            output.close();
+        } catch (final Exception e) {
+            logger.logException(e);
+        }finally {
+            if (output != null) {
+                try{
+                    output.close();
+                } catch (final Exception e) {
+                    logger.logException(e);
+                }
+            }
+        }
+        try {
             if(!inputFile.delete()){
                 final Properties prop = new Properties();
                 prop.put("%1", inputFile.getPath());
@@ -435,12 +443,6 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
             }
         } catch (final Exception e) {
             logger.logException(e);
-        }finally {
-            try{
-                fileOutput.close();
-            } catch (final Exception e) {
-                logger.logException(e);
-            }
         }
     }
 }

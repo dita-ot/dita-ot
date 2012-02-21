@@ -147,9 +147,8 @@
    <xs:group name="glossdef.content">
      <xs:sequence>
        <xs:choice minOccurs="0" maxOccurs="unbounded">
-       <xs:group ref="section.notitle.cnt" minOccurs="0"/>
-       <xs:group ref="shortdesc" minOccurs="0"/>
-     </xs:choice>
+         <xs:group ref="abstract.cnt" minOccurs="0"/>
+       </xs:choice>
      </xs:sequence>
    </xs:group>
    
@@ -648,7 +647,7 @@
       <xs:documentation>
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="glossAlt.class">
           <xs:attribute ref="class" default="- topic/section concept/section glossentry/glossAlt "/>
@@ -656,7 +655,7 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-  <xs:complexType name="glossAlt.class" mixed="true">
+  <xs:complexType name="glossAlt.class">
     <xs:sequence>
       <xs:group ref="glossAlt.content"/>
     </xs:sequence>

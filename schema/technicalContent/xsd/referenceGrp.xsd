@@ -37,6 +37,14 @@
          </xs:choice>
       </xs:sequence>
    </xs:group>
+   
+   <xs:group name="refbodydiv">
+      <xs:sequence>
+         <xs:choice>
+            <xs:element ref="refbodydiv"/>
+         </xs:choice>
+      </xs:sequence>
+   </xs:group>
 
    <xs:group name="refsyn">
       <xs:sequence>

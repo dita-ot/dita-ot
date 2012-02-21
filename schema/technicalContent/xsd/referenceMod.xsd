@@ -287,6 +287,7 @@
       <xs:group ref="table" minOccurs="0"/>
       <xs:group ref="simpletable" minOccurs="0"/>
       <xs:group ref="properties" minOccurs="0"/>
+      <xs:group ref="refbodydiv" minOccurs="0"/>
       <xs:group ref="section" minOccurs="0"/>
       <xs:group ref="example" minOccurs="0"/>
       <xs:group ref="data.elements.incl" minOccurs="0"/>
@@ -542,4 +543,47 @@
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
    </xs:attributeGroup>
+   
+   <xs:element name="refbodydiv">
+     <xs:annotation>
+       <xs:documentation>
+       </xs:documentation>
+     </xs:annotation>
+     <xs:complexType>
+       <xs:complexContent>
+         <xs:extension base="refbodydiv.class">
+           <xs:attribute ref="class" default="- topic/bodydiv     reference/refbodydiv "/>
+         </xs:extension>
+       </xs:complexContent>
+     </xs:complexType>
+   </xs:element>
+   <xs:complexType name="refbodydiv.class">
+     <xs:sequence>
+       <xs:group ref="bodydiv.content"/>
+     </xs:sequence>
+     <xs:attributeGroup ref="bodydiv.attributes"/>
+   </xs:complexType>
+   
+  <xs:group name="refbodydiv.content">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="refsyn" minOccurs="0"/>
+        <xs:group ref="table" minOccurs="0"/>
+        <xs:group ref="simpletable" minOccurs="0"/>
+        <xs:group ref="refbodydiv" minOccurs="0"/>
+        <xs:group ref="properties" minOccurs="0"/>
+        <xs:group ref="section" minOccurs="0"/>
+        <xs:group ref="example" minOccurs="0"/>
+        <xs:group ref="data.elements.incl" minOccurs="0"/>
+        <xs:group ref="foreign.unknown.incl" minOccurs="0"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+   
+   <xs:attributeGroup name="refbodydiv.attributes">
+     <xs:attribute name="outputclass" type="xs:string"/>
+     <xs:attributeGroup ref="univ-atts"/>
+     <xs:attributeGroup ref="global-atts"/>
+   </xs:attributeGroup>
+   
 </xs:schema>

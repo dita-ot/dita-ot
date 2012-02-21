@@ -69,7 +69,6 @@ public final class FileUtils {
         } else {
             logger.logError("Failed to read supported DITA map extensions from configuration, using defaults.");
             supportedMapExtensions.add(FILE_EXTENSION_DITAMAP);
-            supportedMapExtensions.add(FILE_EXTENSION_XML);
         }
     }
 
@@ -450,17 +449,9 @@ public final class FileUtils {
      * @return processed path
      */
     public static String removeRedundantNames(final String path, final String separator) {
-        StringTokenizer tokenizer = null;
-        final StringBuffer buff = new StringBuffer(path.length());
+        // remove "." from the directory.
         final List<String> dirs = new LinkedList<String>();
-        Iterator<String> iter = null;
-        int dirNum = 0;
-        int i = 0;
-
-        /*
-         * remove "." from the directory.
-         */
-        tokenizer = new StringTokenizer(path, separator);
+        final StringTokenizer tokenizer = new StringTokenizer(path, separator);
         while (tokenizer.hasMoreTokens()) {
             final String token = tokenizer.nextToken();
             if (!(".".equals(token))) {
@@ -468,10 +459,9 @@ public final class FileUtils {
             }
         }
 
-        /*
-         * remove ".." and the dir name before it.
-         */
-        dirNum = dirs.size();
+        // remove ".." and the dir name before it.
+        int dirNum = dirs.size();
+        int i = 0;
         while (i < dirNum) {
             if (i > 0) {
                 final String lastDir = dirs.get(i - 1);
@@ -488,18 +478,22 @@ public final class FileUtils {
             i++;
         }
 
-        /*
-         * restore the directory.
-         */
-        if (path.startsWith(separator)) {
+        // restore the directory.
+        final StringBuffer buff = new StringBuffer(path.length());
+        if (path.startsWith(separator + separator)) {
+            buff.append(separator).append(separator);
+        } else if (path.startsWith(separator)) {
             buff.append(separator);
         }
-        iter = dirs.iterator();
+        final Iterator<String> iter = dirs.iterator();
         while (iter.hasNext()) {
             buff.append(iter.next());
             if (iter.hasNext()) {
                 buff.append(separator);
             }
+        }
+        if (path.endsWith(separator)) {
+            buff.append(separator);
         }
 
         return buff.toString();
@@ -521,10 +515,10 @@ public final class FileUtils {
 
         if (FILE_SEPARATOR.equals(UNIX_SEPARATOR)) {
             return path.startsWith(UNIX_SEPARATOR);
-        }
+        } else 
 
         if (FILE_SEPARATOR.equals(WINDOWS_SEPARATOR) && path.length() > 2) {
-            return path.matches("[a-zA-Z]:\\\\.*");
+            return path.matches("([a-zA-Z]:|\\\\)\\\\.*");
         }
 
         return false;
