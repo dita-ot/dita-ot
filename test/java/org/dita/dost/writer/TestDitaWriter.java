@@ -71,7 +71,6 @@ public class TestDitaWriter {
         pipelineInput.setAttribute("inputdir", inputDir.getPath());
         pipelineInput.setAttribute("outputdir", outDir.getAbsolutePath());
         pipelineInput.setAttribute("tempDir", tempDir.getAbsolutePath());
-        System.err.println(new File("").getAbsolutePath());
         pipelineInput.setAttribute("ditadir", new File("").getAbsolutePath());
         pipelineInput.setAttribute("ditaext", ".xml");
         pipelineInput.setAttribute("indextype", "xhtml");

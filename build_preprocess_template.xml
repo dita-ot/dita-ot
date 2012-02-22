@@ -78,6 +78,7 @@
         <param name="generatecopyouter" value="${generate.copy.outer}"/>
         <param name="outercontrol" value="${outer.control}"/>
         <param name="onlytopicinmap" value="${onlytopic.in.map}"/>
+        <param name="outputdir" location="${output.dir}"/>
         <param name="transtype" value="${transtype}"/>
         <param name="setsystemid" value="${args.xml.systemid.set}"/>
       </module>
