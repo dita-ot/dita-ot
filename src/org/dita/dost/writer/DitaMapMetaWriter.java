@@ -256,7 +256,7 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
             Document doc;
 
             if (strOutput.getBuffer().length() > 0){
-                builder.setErrorHandler(new DITAOTXMLErrorHandler(strOutput.toString()));
+                builder.setErrorHandler(new DITAOTXMLErrorHandler(strOutput.toString(), logger));
                 doc = builder.parse(new InputSource(new StringReader(strOutput.toString())));
             }else {
                 doc = builder.newDocument();

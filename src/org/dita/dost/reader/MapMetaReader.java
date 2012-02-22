@@ -161,7 +161,7 @@ public final class MapMetaReader implements AbstractReader {
             final DocumentBuilderFactory factory = DocumentBuilderFactory
                     .newInstance();
             final DocumentBuilder builder = factory.newDocumentBuilder();
-            builder.setErrorHandler(new DITAOTXMLErrorHandler(filename));
+            builder.setErrorHandler(new DITAOTXMLErrorHandler(filename, logger));
             doc = builder.parse(inputFile);
 
             final Element root = doc.getDocumentElement();

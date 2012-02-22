@@ -253,11 +253,11 @@ public class TestUtils {
     public static class TestLogger implements DITAOTLogger {
 
         public void logInfo(final String msg) {
-            System.out.println(msg);
+            //System.out.println(msg);
         }
 
         public void logWarn(final String msg) {
-            System.err.println(msg);
+            //System.err.println(msg);
         }
 
         public void logError(final String msg) {
@@ -274,7 +274,7 @@ public class TestUtils {
         }
 
         public void logDebug(final String msg) {
-            System.out.println(msg);
+            //System.out.println(msg);
         }
 
         public void logException(final Throwable t) {

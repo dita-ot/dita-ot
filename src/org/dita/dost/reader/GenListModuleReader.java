@@ -605,7 +605,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 
         currentFile=file.getAbsolutePath();
 
-        reader.setErrorHandler(new DITAOTXMLErrorHandler(file.getName()));
+        reader.setErrorHandler(new DITAOTXMLErrorHandler(file.getName(), logger));
         //Added on 2010-08-24 for bug:3086552 start
         final InputSource is = new InputSource(new FileInputStream(file));
         //Set the system ID

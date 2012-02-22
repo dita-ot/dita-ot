@@ -801,7 +801,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                     element.getParentNode().appendChild(siblingStub);
                 }
 
-                reader.setErrorHandler(new DITAOTXMLErrorHandler(currentParsingFile));
+                reader.setErrorHandler(new DITAOTXMLErrorHandler(currentParsingFile, logger));
                 reader.parse(new File(currentParsingFile).toURI().toString());
                 output.flush();
 

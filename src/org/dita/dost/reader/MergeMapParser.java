@@ -121,7 +121,7 @@ public final class MergeMapParser extends XMLFilterImpl {
             setContentHandler(s);
             final File input = new File(filename);
             dirPath = input.getParent();
-            reader.setErrorHandler(new DITAOTXMLErrorHandler(input.getAbsolutePath()));
+            reader.setErrorHandler(new DITAOTXMLErrorHandler(input.getAbsolutePath(), logger));
             topicParser.getContentHandler().startDocument();
             reader.parse(input.toURI().toString());
             topicParser.getContentHandler().endDocument();

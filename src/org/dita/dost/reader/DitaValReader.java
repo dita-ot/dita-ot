@@ -110,7 +110,7 @@ public final class DitaValReader extends AbstractXMLReader {
 
         try {
 
-            reader.setErrorHandler(new DITAOTXMLErrorHandler(ditaVal));
+            reader.setErrorHandler(new DITAOTXMLErrorHandler(ditaVal, logger));
             //Added on 2010-08-24 for bug:3086552 start
             final File file = new File(input);
             final InputSource is = new InputSource(new FileInputStream(file));

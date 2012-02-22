@@ -1318,7 +1318,7 @@ public final class DitaWriter extends AbstractXMLWriter {
 
             // start to parse the file and direct to output in the temp
             // directory
-            reader.setErrorHandler(new DITAOTXMLErrorHandler(traceFilename.getAbsolutePath()));
+            reader.setErrorHandler(new DITAOTXMLErrorHandler(traceFilename.getAbsolutePath(), logger));
             //Added on 2010-08-24 for bug:3086552 start
             final InputSource is = new InputSource(traceFilename.toURI().toString());
             //set system id bug:3086552

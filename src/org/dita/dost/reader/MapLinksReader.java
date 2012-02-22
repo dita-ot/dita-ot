@@ -273,7 +273,7 @@ public final class MapLinksReader extends AbstractXMLReader {
             }
 
             try {
-                reader.setErrorHandler(new DITAOTXMLErrorHandler(filename));
+                reader.setErrorHandler(new DITAOTXMLErrorHandler(filename, logger));
                 final InputSource source=URIResolverAdapter.convertToInputSource(DitaURIResolverFactory.getURIResolver().resolve(filename, null));
                 reader.parse(source);
             } catch (final Exception e) {

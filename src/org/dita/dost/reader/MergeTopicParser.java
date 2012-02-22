@@ -173,7 +173,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
         dirPath = dir;
         try{
             final File f = new File(dir + File.separator + filePath);
-            reader.setErrorHandler(new DITAOTXMLErrorHandler(f.getAbsolutePath()));
+            reader.setErrorHandler(new DITAOTXMLErrorHandler(f.getAbsolutePath(), logger));
             reader.parse(f.toURI().toString());
         } catch (final Exception e){
             throw new RuntimeException("Failed to parse " + filename + ": " + e.getMessage(), e);
