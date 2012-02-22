@@ -142,60 +142,6 @@ public final class ImgUtils {
     }
 
     /**
-     * Get the image width(ODT Transform).
-     * @param dirName -
-     * 				The directory name that will be added to the path
-     * 				of the image file.
-     * @param fileName -
-     * 				The file name of the image file.
-     * @return int -
-     * 				The width of the picture in pixels.
-     */
-    public static int getWidthODT (final String dirName, final String fileName){
-        final DITAOTJavaLogger logger = new DITAOTJavaLogger();
-        File imgInput = new File(dirName+File.separatorChar+fileName);
-        if (checkDirName(dirName))
-        	imgInput = new File(getImageOutPutPath(fileName));      
-        try {
-            final BufferedImage img = ImageIO.read(imgInput);
-            return img.getWidth();
-        }catch (final Exception e){
-            final Properties prop = new Properties();
-            prop.put("%1", dirName+File.separatorChar+fileName);
-            logger.logError(MessageUtils.getMessage("DOTJ023E", prop).toString());
-            logger.logException(e);
-            return -1;
-        }
-    }
-
-    /**
-     * Get the image height(ODT Transform).
-     * @param dirName -
-     * 				The directory name that will be added to the path
-     * 				of the image file.
-     * @param fileName -
-     * 				The file name of the image file.
-     * @return int -
-     * 				The height of the picture in pixels.
-     */
-    public static int getHeightODT (final String dirName, final String fileName){
-        final DITAOTJavaLogger logger = new DITAOTJavaLogger();
-        File imgInput = new File(dirName+File.separatorChar+fileName);
-        if (checkDirName(dirName))
-        	imgInput = new File(getImageOutPutPath(fileName));      
-        try {
-            final BufferedImage img = ImageIO.read(imgInput);
-            return img.getHeight();
-        }catch (final Exception e){
-            final Properties prop = new Properties();
-            prop.put("%1", dirName+File.separatorChar+fileName);
-            logger.logError(MessageUtils.getMessage("DOTJ023E", prop).toString());
-            logger.logException(e);
-            return -1;
-        }
-    }
-
-    /**
      * Get the image binary data, with hexical output. For RTF transformation
      * @param dirName -
      * 				The directory name that will be added to the path
@@ -280,24 +226,4 @@ public final class ImgUtils {
 
     }
 
-    /**
-     * Get the type of image file by extension.
-     * @param fileName -
-     * 				The file name of the image file.
-     * @return int -
-     * 				The type of the picture in RTF specification. (JPG or PNG)
-     */
-    public static String getType (final String fileName){
-        final String name = fileName.toLowerCase();
-        final DITAOTJavaLogger logger = new DITAOTJavaLogger();
-        final Properties prop = new Properties();
-        if (name.endsWith(".jpg")||name.endsWith(".jpeg")){
-            return "jpegblip";
-        }else if (name.endsWith(".gif")||name.endsWith(".png")){
-            return "pngblip";
-        }
-        prop.put("%1", fileName);
-        logger.logWarn(MessageUtils.getMessage("DOTJ024W", prop).toString());
-        return "other";
-    }
 }

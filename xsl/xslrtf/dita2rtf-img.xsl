@@ -26,7 +26,9 @@
   <xsl:variable name="type">
     <xsl:choose>
       <xsl:when test="not(contains(@href,'://'))">
-        <xsl:value-of select="java:getType(string(@href))"/>
+        <xsl:call-template name="getType">
+         <xsl:with-param name="file" select="string(@href)"/>
+       </xsl:call-template>
       </xsl:when>
       <xsl:otherwise/>
     </xsl:choose>
@@ -70,5 +72,33 @@
 <xsl:otherwise><xsl:text>[PIC]</xsl:text><xsl:value-of select="@href"/></xsl:otherwise>
 </xsl:choose>
 </xsl:template>
+
+  <xsl:template name="getType">
+    <xsl:param name="file"/>
+    <xsl:variable name="f">
+      <xsl:call-template name="convert-to-lower">
+        <xsl:with-param name="inputval" select="$file"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="substring($f, string-length($f) - 3) = '.jpg' or
+                      substring($f, string-length($f) - 4) = '.jpg'">
+        <xsl:text>jpegblip</xsl:text>
+      </xsl:when>
+      <xsl:when test="substring($f, string-length($f) - 3) = '.gif' or
+                      substring($f, string-length($f) - 3) = '.png'">
+        <xsl:text>pngblip</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>other</xsl:text>
+        <xsl:call-template name="output-message">
+          <xsl:with-param name="msgcat" select="'DOTJ'"/>
+          <xsl:with-param name="msgnum" select="'024'"/>
+          <xsl:with-param name="msgsev" select="'W'"/>
+          <xsl:with-param name="msgparams" select="concat('%1=', $file)"/>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
 </xsl:stylesheet>

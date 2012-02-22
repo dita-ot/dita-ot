@@ -45,14 +45,6 @@
 <xsl:if test="@href and not(@href='')">
     
     <!-- image meta data -->
-    <xsl:variable name="type">
-      <xsl:choose>
-        <xsl:when test="not(contains(@href,'://'))">
-          <xsl:value-of select="java:getType(string(@href))"/>
-        </xsl:when>
-        <xsl:otherwise/>
-      </xsl:choose>
-    </xsl:variable>
     <xsl:variable name="scale">
       <xsl:choose>
         <xsl:when test="@scale">
@@ -93,7 +85,7 @@
           </xsl:choose>
         </xsl:when>
         <xsl:when test="not(contains(@href,'://'))">
-          <xsl:value-of select="number(java:getHeightODT($OUTPUTDIR, string(@href)) div 96) * $scale"/>
+          <xsl:value-of select="number(java:getHeight($OUTPUTDIR, string(@href)) div 96) * $scale"/>
         </xsl:when>
         <xsl:otherwise/>
       </xsl:choose>
@@ -130,7 +122,7 @@
           </xsl:choose>
         </xsl:when>
         <xsl:when test="not(contains(@href,'://'))">
-          <xsl:value-of select="number(java:getWidthODT($OUTPUTDIR, string(@href)) div 96) * $scale"/>
+          <xsl:value-of select="number(java:getWidth($OUTPUTDIR, string(@href)) div 96) * $scale"/>
         </xsl:when>
         <xsl:otherwise/>
       </xsl:choose>
@@ -161,7 +153,6 @@
           
           <xsl:call-template name="draw_image">
             <xsl:with-param name="height" select="$height"/>
-            <xsl:with-param name="type" select="$type"/>
             <xsl:with-param name="width" select="$width"/>
           </xsl:call-template>
           
@@ -194,7 +185,6 @@
           
           <xsl:call-template name="draw_image">
             <xsl:with-param name="height" select="$height"/>
-            <xsl:with-param name="type" select="$type"/>
             <xsl:with-param name="width" select="$width"/>
           </xsl:call-template>
           
@@ -226,7 +216,6 @@
           
           <xsl:call-template name="draw_image">
             <xsl:with-param name="height" select="$height"/>
-            <xsl:with-param name="type" select="$type"/>
             <xsl:with-param name="width" select="$width"/>
           </xsl:call-template>
           
@@ -257,7 +246,6 @@
         
         <xsl:call-template name="draw_image">
           <xsl:with-param name="height" select="$height"/>
-          <xsl:with-param name="type" select="$type"/>
           <xsl:with-param name="width" select="$width"/>
         </xsl:call-template>
         
@@ -271,12 +259,12 @@
 </xsl:template>
   
   <xsl:template name="draw_image">
-    <xsl:param name="type"/>
+    <xsl:param name="type"/><!-- Deprecated -->
     <xsl:param name="height"/>
     <xsl:param name="width"/>
     
     <xsl:choose>
-      <xsl:when test="not(contains(@href,'://')) and $type and not($type='other') and ($height &gt; 0) and ($width &gt; 0)">
+      <xsl:when test="not(contains(@href,'://')) and ($height &gt; 0) and ($width &gt; 0)">
         <xsl:element name="draw:frame">  
           <xsl:attribute name="text:anchor-type">as-char</xsl:attribute>
           <xsl:attribute name="svg:y">-0.1in</xsl:attribute>
@@ -320,13 +308,13 @@
   
   
   <xsl:template name="draw_image_odt">
-    <xsl:param name="type"/>
+    <xsl:param name="type"/><!-- Deprecated -->
     <xsl:param name="height"/>
     <xsl:param name="width"/>
     <xsl:param name="imgsrc"/>
     <xsl:param name="alttext"/>
     <xsl:choose>
-      <xsl:when test="not(contains($imgsrc,'://')) and $type and not($type='other') and ($height &gt; 0) and ($width &gt; 0)">
+      <xsl:when test="not(contains($imgsrc,'://')) and ($height &gt; 0) and ($width &gt; 0)">
         <xsl:element name="draw:frame">  
           <xsl:attribute name="text:anchor-type">as-char</xsl:attribute>
           <xsl:attribute name="svg:y">-0.1in</xsl:attribute>
