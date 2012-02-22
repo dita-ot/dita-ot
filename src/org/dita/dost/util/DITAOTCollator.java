@@ -39,6 +39,9 @@ public final class DITAOTCollator implements Comparator {
      * @return DITAOTCollator
      */
     public static DITAOTCollator getInstance(final Locale locale) {
+        if (locale == null) {
+            throw new NullPointerException("Locale may not be null");
+        }
         DITAOTCollator instance = null;
         instance = cache.get(locale);
         if (instance == null) {
@@ -50,7 +53,6 @@ public final class DITAOTCollator implements Comparator {
 
     private Object collatorInstance = null;
     private Method compareMethod = null;
-    private final DITAOTJavaLogger logger = new DITAOTJavaLogger();
 
     /**
      * Default Constructor
@@ -89,10 +91,8 @@ public final class DITAOTCollator implements Comparator {
 
         try {
             c = Class.forName("com.ibm.icu.text.Collator");
-            logger.logInfo("Using ICU collator for " + locale.toString());
         } catch (final Exception e) {
             c = Collator.class;
-            logger.logInfo("Using JDK collator for " + locale.toString());
         }
 
         try {
@@ -102,7 +102,7 @@ public final class DITAOTCollator implements Comparator {
             compareMethod = c.getDeclaredMethod("compare", new Class[] {
                     Object.class, Object.class });
         } catch (final Exception e) {
-            logger.logException(e);
+            throw new RuntimeException("Failed to initialize collator: " + e.getMessage(), e);
         }
     }
 

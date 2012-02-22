@@ -224,8 +224,6 @@
         <not><isset property="xml.parser"/></not>
       </and>
     </condition>
-    <available classname="net.sf.saxon.StyleSheet" property="hasSaxon" />
-    <available classname="net.sf.saxon.Transform" property="hasSaxon" />
   </target>
 	
   <!-- property value validation begin -->
@@ -472,13 +470,15 @@
       </not>
     </condition>
 
-    <condition property="xslt.parser" value="SAXON">
-      <isset property="hasSaxon" />
+    <condition property="xslt.parser" value="Saxon" else="Xalan">
+      <or>
+        <available classname="net.sf.saxon.StyleSheet"/>
+        <available classname="net.sf.saxon.Transform"/>
+      </or>
     </condition>
-    <condition property="xslt.parser" value="XALAN">
-      <not>
-        <isset property="xslt.parser" />
-      </not>
+    
+    <condition property="collator" value="ICU" else="JDL">
+      <available classname="com.ibm.icu.text.Collator"/>
     </condition>
   	
   	<!-- Validate the xml file or not,default is validation(true)-->
@@ -554,13 +554,13 @@
     <echo level="info">* outputdir = ${output.dir}</echo>
     <echo level="info">* extname = ${dita.ext}</echo>
     <echo level="info">* clean.temp = ${clean.temp}</echo>
-    <echo level="info">* version = ${otversion}</echo>
-    <echo level="info">* xslt.parser = ${xslt.parser}</echo>
+    <echo level="info">* DITA-OT version = ${otversion}</echo>
+    <echo level="info">* XML parser = ${xml.parser}</echo>
+    <echo level="info">* XSLT processor = ${xslt.parser}</echo>
+    <echo level="info">* collator = ${collator}</echo>
     <echo level="info">*****************************************************************</echo>
   	<echoproperties regex="^(arg|preprocess|dita)" taskname="echo" failonerror="false"/>
   	<echo level="info">*****************************************************************</echo>
-    <echo level="info">* Using ${xml.parser}</echo>
-    <echo level="info">*****************************************************************</echo>
   </target>
 
   <target name="output-msg" depends="output-deprecated-msg, output-css-warn-message"/>
