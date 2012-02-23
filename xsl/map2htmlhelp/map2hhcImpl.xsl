@@ -25,6 +25,7 @@
 
 <!-- Include error message template -->
 <xsl:import href="../common/output-message.xsl"/>
+<xsl:import href="../common/dita-utilities.xsl"/>
 <xsl:import href="../common/dita-textonly.xsl"/>
 
 <xsl:output method="html" indent="no"/>
