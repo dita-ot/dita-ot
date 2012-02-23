@@ -4706,8 +4706,6 @@
     <xsl:if test="$genDefMeta='yes'">
       <meta name="security" content="public" /><xsl:value-of select="$newline"/>
       <meta name="Robots" content="index,follow" /><xsl:value-of select="$newline"/>
-      <meta http-equiv="PICS-Label" content="(PICS-1.1 'http://www.icra.org/ratingsv02.html' l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) 'http://www.rsac.org/ratingsv01.html' l gen true r (n 0 s 0 v 0 l 0) 'http://www.classify.org/safesurf/' l gen true r (SS~~000 1))" />
-      <xsl:value-of select="$newline"/>
     </xsl:if>
   </xsl:template>
   
