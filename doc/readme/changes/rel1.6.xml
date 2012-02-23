@@ -132,6 +132,14 @@
           <li>3487705 Choicetable headings not localized in PDF (milestone 2)</li>
           <li>3487785 Check all places where output streams are used in dost.jar (milestone 2)</li>
           <li>3488458 Property noCoderef not declared (milestone 2)</li>
+          <li>3477022 HTML handling of *div does not generate @outputclass (milestone 2)</li>
+          <li>3484972 Stylesheet imported multiple times in the hierarchy (milestone 2)</li>
+          <li>3491768 Deprecated metadata PICS-Label in XHTML output (milestone 2)</li>
+          <li>3485626 Warning when using @copy-to in reltable (milestone 2)</li>
+          <li>3451621 Revisions on &lt;plentry> use wrong image for nested &lt;pd> (milestone
+            2)</li>
+          <li>3447732 Bug in handling of longdescref (milestone 2)</li>
+          <li>3426920 Image files not copied or referenced correctly for eclipse (milestone 2)</li>
           <li>3471364 UNC paths are not supported in input argument (in progress)</li>
         </ul>
       </section>
