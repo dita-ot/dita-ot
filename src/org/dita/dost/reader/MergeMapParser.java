@@ -231,7 +231,7 @@ public final class MergeMapParser extends XMLFilterImpl {
             final Set<String> chunkedTopicSet = job.getSet(CHUNKED_TOPIC_LIST);
             for (String element: job.getSet(HREF_TARGET_LIST)) {
                 if (!new File(dirPath).equals(new File(tempdir))) {
-                    element = FileUtils.getRelativePathFromMap(new File(dirPath,"a.ditamap").getAbsolutePath(),
+                    element = FileUtils.getRelativePath(new File(dirPath,"a.ditamap").getAbsolutePath(),
                                                                new File(tempdir, element).getAbsolutePath());
                 }
                 if (!util.isVisited(element)) {

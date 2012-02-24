@@ -35,7 +35,7 @@ final class ImportPluginCatalogAction extends ImportAction {
                 location.append("./");
             } else if (f.getLocation().getAbsolutePath().startsWith(f.getDitaDir().getAbsolutePath())) {
                 location.append(
-                        FileUtils.getRelativePathFromMap(
+                        FileUtils.getRelativePath(
                                 new File(f.getDitaDir(), "plugin.xml").toURI().toString(),
                                 f.getLocation().toURI().toString()));
             } else {

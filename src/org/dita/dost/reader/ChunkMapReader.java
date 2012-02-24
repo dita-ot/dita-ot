@@ -144,7 +144,7 @@ public final class ChunkMapReader implements AbstractReader {
                     final String oldpath = newFile.getAbsolutePath();
                     newFile = new File(FileUtils.resolveFile(inputFile.getParentFile().getAbsolutePath(), newFilename));
                     // Mark up the possible name changing, in case that references might be updated.
-                    conflictTable.put(newFile.getAbsolutePath(), FileUtils.removeRedundantNames(oldpath));
+                    conflictTable.put(newFile.getAbsolutePath(), FileUtils.normalize(oldpath));
                 }
                 //change the class attribute to "topicref"
                 final String originClassValue = root.getAttribute(ATTRIBUTE_NAME_CLASS);
@@ -537,11 +537,11 @@ public final class ChunkMapReader implements AbstractReader {
             if(changeTable.containsKey(FileUtils.resolveFile(filePath,hrefValue))){
                 String resulthrefValue = null;
                 if (hrefValue.indexOf(SHARP)!=-1){
-                    resulthrefValue=FileUtils.getRelativePathFromMap(filePath+UNIX_SEPARATOR+"stub.ditamap"
+                    resulthrefValue=FileUtils.getRelativePath(filePath+UNIX_SEPARATOR+"stub.ditamap"
                             ,FileUtils.resolveFile(filePath,hrefValue))
                             + hrefValue.substring(hrefValue.indexOf(SHARP)+1);
                 }else{
-                    resulthrefValue=FileUtils.getRelativePathFromMap(filePath+UNIX_SEPARATOR+"stub.ditamap"
+                    resulthrefValue=FileUtils.getRelativePath(filePath+UNIX_SEPARATOR+"stub.ditamap"
                             ,FileUtils.resolveFile(filePath,hrefValue));
                 }
                 elem.setAttribute(ATTRIBUTE_NAME_HREF, resulthrefValue);

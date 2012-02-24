@@ -196,7 +196,7 @@ final class ChunkModule implements AbstractPipelineModule {
                 final String ditaext = input.getAttribute(ANT_INVOKER_PARAM_DITAEXT);
                 t = changeExtName(t, ditaext, ditaext);
             }
-            t = FileUtils.getRelativePathFromMap(xmlDitalist.getAbsolutePath(), FileUtils.resolveFile(tempDir.getAbsolutePath(), t));
+            t = FileUtils.getRelativePath(xmlDitalist.getAbsolutePath(), FileUtils.resolveFile(tempDir.getAbsolutePath(), t));
             topicList.add(t);
             if (oldTopicList.contains(t)) {
                 oldTopicList.remove(t);
@@ -211,8 +211,8 @@ final class ChunkModule implements AbstractPipelineModule {
             if(entry.getValue().equals(oldFile)){
                 //newly chunked file
                 String newChunkedFile=entry.getValue();
-                newChunkedFile=FileUtils.getRelativePathFromMap(xmlDitalist.getAbsolutePath(), newChunkedFile);
-                final String extName=getExtName(newChunkedFile);
+                newChunkedFile=FileUtils.getRelativePath(xmlDitalist.getAbsolutePath(), newChunkedFile);
+                final String extName = FileUtils.getExtension(newChunkedFile);
                 if(extName!=null && !extName.equalsIgnoreCase("DITAMAP")){
                     chunkedTopicSet.add(newChunkedFile);
                     if (!topicList.contains(newChunkedFile)) {
@@ -256,8 +256,8 @@ final class ChunkModule implements AbstractPipelineModule {
                     if (!FileUtils.fileExists(target.getAbsolutePath())) {
                         // newly chunked file
                         final File from = new File(entry.getValue());
-                        String relativePath = FileUtils.getRelativePathFromMap(xmlDitalist.getAbsolutePath(), from.getAbsolutePath());
-                        final String relativeTargetPath = FileUtils.getRelativePathFromMap(xmlDitalist.getAbsolutePath(), target.getAbsolutePath());
+                        String relativePath = FileUtils.getRelativePath(xmlDitalist.getAbsolutePath(), from.getAbsolutePath());
+                        final String relativeTargetPath = FileUtils.getRelativePath(xmlDitalist.getAbsolutePath(), target.getAbsolutePath());
                         if (relativeTargetPath.lastIndexOf(SLASH)!=-1){
                             relativePath2fix.put(relativeTargetPath, relativeTargetPath.substring(0, relativeTargetPath.lastIndexOf(SLASH)+1));
                         }
@@ -271,7 +271,7 @@ final class ChunkModule implements AbstractPipelineModule {
                         if (chunkedTopicSet.contains(relativePath)){
                             chunkedTopicSet.remove(relativePath);
                         }
-                        relativePath = FileUtils.getRelativePathFromMap(xmlDitalist.getAbsolutePath(), target.getAbsolutePath());
+                        relativePath = FileUtils.getRelativePath(xmlDitalist.getAbsolutePath(), target.getAbsolutePath());
                         topicList.add(relativePath);
                         chunkedTopicSet.add(relativePath);
                     } else {
@@ -321,29 +321,6 @@ final class ChunkModule implements AbstractPipelineModule {
             job.write();
         }catch(final IOException ex){
             logger.logException(ex);
-        }
-    }
-
-    /**
-     * Get file extension
-     * 
-     * @param file filename, may contain a URL fragment
-     * @return file extensions
-     */
-    private String getExtName(final String file){
-        final int index = file.indexOf(SHARP);
-
-        if (file.startsWith(SHARP)) {
-            return null;
-        } else if (index != -1) {
-            final String fileName = file.substring(0, index);
-            final int fileExtIndex = fileName.lastIndexOf(DOT);
-            return (fileExtIndex != -1) ? fileName.substring(fileExtIndex + 1,
-                    fileName.length()) : null;
-        } else {
-            final int fileExtIndex = file.lastIndexOf(DOT);
-            return (fileExtIndex != -1) ? file.substring(fileExtIndex + 1,
-                    file.length()) : null;
         }
     }
 

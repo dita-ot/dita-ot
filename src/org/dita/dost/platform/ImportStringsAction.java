@@ -32,7 +32,7 @@ final class ImportStringsAction extends ImportAction {
             retBuf.append(LINE_SEPARATOR);
             retBuf.append("<stringfile>");
             retBuf.append(StringUtils.escapeXML(
-                    FileUtils.getRelativePathFromMap(
+                    FileUtils.getRelativePath(
                             templateFilePath, value)));
             retBuf.append("</stringfile>");
         }

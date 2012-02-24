@@ -11,8 +11,6 @@ package org.dita.dost.util;
 
 import static org.dita.dost.util.Constants.INT_1024;
 import static org.dita.dost.util.Constants.INT_16;
-import static org.dita.dost.util.Constants.UNIX_SEPARATOR;
-import static org.dita.dost.util.Constants.WINDOWS_SEPARATOR;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -47,8 +45,7 @@ public final class ImgUtils {
 		String uplevelPath = null;
 		String outDir = OutputUtils.getOutputDir();
 		String imgoutDir= null;
-		String filename = fileName.replace(
-				WINDOWS_SEPARATOR, UNIX_SEPARATOR);
+		String filename = FileUtils.separatorsToUnix(fileName);
 
 		imgoutDir = outDir;
 		if (OutputUtils.getGeneratecopyouter() != OutputUtils.Generate.OLDSOLUTION) {
@@ -77,11 +74,9 @@ public final class ImgUtils {
     private static boolean checkDirName(String dirName) {
 		String outDir = OutputUtils.getOutputDir();
 		if (outDir != null) {
-			outDir = new File(outDir).getPath().replace(
-					WINDOWS_SEPARATOR, UNIX_SEPARATOR);
+			outDir = FileUtils.separatorsToUnix(new File(outDir).getPath());
 
-			if (new File(dirName).getPath().replace(WINDOWS_SEPARATOR,
-					UNIX_SEPARATOR).equalsIgnoreCase(outDir)) {
+			if (FileUtils.separatorsToUnix(new File(dirName).getPath()).equalsIgnoreCase(outDir)) {
 				return true;
 			}
 		}

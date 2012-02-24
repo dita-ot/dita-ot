@@ -360,12 +360,12 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         if (!new File(tempDir).isAbsolute()) {
             throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
         } else {
-            tempDir = FileUtils.removeRedundantNames(tempDir);
+            tempDir = FileUtils.normalize(tempDir);
         }
         if (!new File(ditaDir).isAbsolute()) {
             throw new IllegalArgumentException("DITA-OT installation directory " + tempDir + " must be absolute");
         } else {
-            ditaDir = FileUtils.removeRedundantNames(ditaDir);
+            ditaDir = FileUtils.normalize(ditaDir);
         }
         if (ditavalFile != null && !new File(ditavalFile).isAbsolute()) {
             // XXX Shouldn't this be resolved to current directory, not Ant script base directory?
@@ -373,10 +373,10 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         }
 
         baseInputDir = new File(inFile.getAbsolutePath()).getParent();
-        baseInputDir = FileUtils.removeRedundantNames(baseInputDir);
+        baseInputDir = FileUtils.normalize(baseInputDir);
 
         rootFile = inFile.getAbsolutePath();
-        rootFile = FileUtils.removeRedundantNames(rootFile);
+        rootFile = FileUtils.normalize(rootFile);
        
         inputFile = inFile.getName();
         try {
@@ -424,7 +424,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         final File file = new File(currentFile);
         if (file.isAbsolute()) {
             fileToParse = file;
-            currentFile = FileUtils.getRelativePathFromMap(rootFile, currentFile);
+            currentFile = FileUtils.getRelativePath(rootFile, currentFile);
         } else {
             fileToParse = new File(baseInputDir, currentFile);
         }
@@ -631,13 +631,13 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             }
             children.addAll(reader.getSchemeSet());
             // for Linux support
-            currentFile = currentFile.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
+            currentFile = FileUtils.separatorsToUnix(currentFile);
 
             this.schemeDictionary.put(currentFile, children);
             final Set<String> hrfSet = reader.getHrefTargets();
             for (String f: hrfSet) {
                 // for Linux support
-                final String filename = f.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
+                final String filename = FileUtils.separatorsToUnix(f);
 
                 children = this.schemeDictionary.get(filename);
                 if (children == null) {
@@ -649,12 +649,17 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         }
     }
 
+    /**
+     * Categorize current file type
+     * 
+     * @param currentFile file path
+     */
     private void categorizeCurrentFile(final String currentFile) {
         final String lcasefn = currentFile.toLowerCase();
 
         ditaSet.add(currentFile);
 
-        if (FileUtils.isTopicFile(currentFile)) {
+        if (FileUtils.isDITATopicFile(currentFile)) {
             hrefTargetSet.add(currentFile);
         }
 
@@ -756,7 +761,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         // for uplevels (../../)
         // modified start by wxzhang 20070518
         // ".."-->"../"
-        final int lastIndex = FileUtils.removeRedundantNames(file).replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR)
+        final int lastIndex = FileUtils.separatorsToUnix(FileUtils.normalize(file))
                 .lastIndexOf("../");
         // modified end by wxzhang 20070518
         if (lastIndex != -1) {
@@ -778,6 +783,9 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         waitList.add(file);
     }
 
+    /**
+     * Update base directory based on uplevels.
+     */
     private void updateBaseDirectory() {
         baseInputDir = new File(baseInputDir).getAbsolutePath();
 
@@ -788,6 +796,11 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         }
     }
 
+    /**
+     * Get up-levels relative path.
+     * 
+     * @return path to up-level
+     */
     private String getUpdateLevels() {
         int current = uplevels;
         final StringBuffer buff = new StringBuffer();
@@ -857,6 +870,11 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         return buff.toString();
     }
 
+    /**
+     * Parse filter file
+     * 
+     * @return configured filter utility
+     */
     private FilterUtils parseFilterFile() {
         final FilterUtils filterUtils = new FilterUtils();
         filterUtils.setLogger(logger);
@@ -882,6 +900,9 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         handleCopyto();
     }
 
+    /**
+     * Handle copy-to topics.
+     */
     private void handleCopyto() {
         final Map<String, String> tempMap = new HashMap<String, String>();
         final Set<String> pureCopytoSources = new HashSet<String>(INT_128);
@@ -922,6 +943,9 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         fullTopicSet.removeAll(pureCopytoSources);
     }
 
+    /**
+     * Handle topic which are only conref sources from normal processing.
+     */
     private void handleConref() {
         // Get pure conref targets
         final Set<String> pureConrefTargets = new HashSet<String>(INT_128);
@@ -937,6 +961,11 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         fullTopicSet.removeAll(pureConrefTargets);
     }
 
+    /**
+     * Write result files.
+     * 
+     * @throws DITAOTException if writing result files failed
+     */
     private void outputResult() throws DITAOTException {
         final File dir = new File(tempDir);
         if (!dir.exists()) {
@@ -1044,7 +1073,16 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         // added by Willam on 2009-07-17 for req #12014 end
 
     }
-
+    
+    /**
+     * Write map of sets to a file.
+     * 
+     * <p>The serialization format is XML properties format where values are comma
+     * separated lists.</p>
+     * 
+     * @param m map to serialize
+     * @param filename output filename
+     */
     private void writeMapToXML(final Map<String, Set<String>> m, final String filename) {
         if (m == null) {
             return;
@@ -1074,13 +1112,20 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         }
     }
 
+    /**
+     * Add set of values of job configuration
+     * 
+     * @param prop job configuration
+     * @param key list name
+     * @param set values to add
+     */
     private void addSetToProperties(final Job prop, final String key, final Set<String> set) {
         // update value
         final Set<String> newSet = new LinkedHashSet<String>(INT_128);
         for (final String file: set) {
             if (new File(file).isAbsolute()) {
                 // no need to append relative path before absolute paths
-                newSet.add(FileUtils.removeRedundantNames(file));
+                newSet.add(FileUtils.normalize(file));
             } else {
                 // In ant, all the file separator should be slash, so we need to
                 // replace all the back slash with slash.
@@ -1090,14 +1135,11 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
                     final String to = file.substring(0, index);
                     final String source = file.substring(index + 1);
                     
-                    newSet.add(FileUtils.removeRedundantNames(new StringBuffer(prefix).append(to).toString())
-                                  .replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR)
+                    newSet.add(FileUtils.separatorsToUnix(FileUtils.normalize(new StringBuffer(prefix).append(to).toString()))
                             + EQUAL
-                            + FileUtils.removeRedundantNames(new StringBuffer(prefix).append(source).toString())
-                                  .replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR));
+                            + FileUtils.separatorsToUnix(FileUtils.normalize(new StringBuffer(prefix).append(source).toString())));
                 } else {
-                    newSet.add(FileUtils.removeRedundantNames(new StringBuffer(prefix).append(file).toString())
-                                  .replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR));
+                    newSet.add(FileUtils.separatorsToUnix(FileUtils.normalize(new StringBuffer(prefix).append(file).toString())));
                 }
             }
         }
@@ -1112,25 +1154,31 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         }
     }
     
+    /**
+     * Add key definition to job configuration
+     * 
+     * @param prop job configuration
+     * @param key list name
+     * @param set key defintions to add
+     */
     private void addKeyDefSetToProperties(final Job prop, final String key, final Collection<KeyDef> set) {
         // update value
         final Collection<KeyDef> updated = new ArrayList<KeyDef>(set.size());
         for (final KeyDef file: set) {
-            String keys = FileUtils.removeRedundantNames(prefix + file.keys).replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
+            String keys = FileUtils.separatorsToUnix(FileUtils.normalize(prefix + file.keys));
             String href = file.href;
             String source = file.source;
             if (prefix.length() != 0) {
                 // cases where keymap is in map ancestor folder
                 keys = keys.substring(prefix.length());
                 if (href == null) {
-                    // Don't populate href if it's not set
-                    //href = FileUtils.removeRedundantNames(prefix).replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
-                    source = FileUtils.removeRedundantNames(prefix + source).replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
+                    //href = FileUtils.separatorsToUnix(FileUtils.normalize(prefix));
+                    source = FileUtils.separatorsToUnix(FileUtils.normalize(prefix + source));
                 } else {
                     if (!exKeyDefMap.containsKey(file.keys)) {
-                        href = FileUtils.removeRedundantNames(prefix + href).replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
+                        href = FileUtils.separatorsToUnix(FileUtils.normalize(prefix + href));
                     }
-                    source = FileUtils.removeRedundantNames(prefix + source).replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
+                    source = FileUtils.separatorsToUnix(FileUtils.normalize(prefix + source));
                 }
             }
             final KeyDef keyDef = new KeyDef(keys, href, source);
@@ -1161,9 +1209,9 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
      * add FlagImangesSet to Properties, which needn't to change the dir level,
      * just ouput to the ouput dir.
      * 
-     * @param prop
-     * @param key
-     * @param set
+     * @param prop job configuration
+     * @param key list name
+     * @param set relative flag image files
      */
     private void addFlagImagesSetToProperties(final Job prop, final String key, final Set<String> set) {
         String value = null;
@@ -1171,12 +1219,11 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         for (final String file: set) {
             if (new File(file).isAbsolute()) {
                 // no need to append relative path before absolute paths
-                newSet.add(FileUtils.removeRedundantNames(file));
+                newSet.add(FileUtils.normalize(file));
             } else {
                 // In ant, all the file separator should be slash, so we need to
                 // replace all the back slash with slash.
-                newSet.add(FileUtils.removeRedundantNames(new StringBuffer().append(file).toString()).replace(
-                        WINDOWS_SEPARATOR, UNIX_SEPARATOR));
+                newSet.add(FileUtils.separatorsToUnix(FileUtils.normalize(new StringBuffer().append(file).toString())));
             }
         }
 

@@ -253,19 +253,6 @@ public final class FileUtils {
     }
 
     /**
-     * Return if the file is a topic file by extension.
-     * @param lcasefn filename
-     * @return true if is topic file and false otherwise
-     */
-    public static boolean isTopicFile(final String lcasefn) {
-        if(StringUtils.isEmptyString(lcasefn)){
-            return false;
-        }
-        return lcasefn.endsWith(FILE_EXTENSION_DITA)
-                || lcasefn.endsWith(FILE_EXTENSION_XML);
-    }
-
-    /**
      * Return if the file is a valid target file by extension.
      * @param lcasefn filename
      * @return true is the target is valid and false otherwise
@@ -280,22 +267,21 @@ public final class FileUtils {
     }
 
     /**
-     * Get the path of topicFile relative to the input map.
-     * In fact this method can be used to calculate any path of topicFile related to the first parameter.
-     * @param mapFilePathName map file with file path
-     * @param topicFilePathName topic file with file path
-     * @return relative path
+     * Resolves a path reference against a base path.
+     * 
+     * @param basePath base path
+     * @param refPath reference path
+     * @return relative path using {@link Constants#UNIX_SEPARATOR} path separator
      */
-    public static String getRelativePathFromMap(final String mapFilePathName,
-            final String topicFilePathName) {
+    public static String getRelativePath(final String basePath, final String refPath) {
         final StringBuffer upPathBuffer = new StringBuffer(INT_128);
         final StringBuffer downPathBuffer = new StringBuffer(INT_128);
         final StringTokenizer mapTokenizer = new StringTokenizer(
-                removeRedundantNames(mapFilePathName.replace(WINDOWS_SEPARATOR,UNIX_SEPARATOR),
+                normalize(FileUtils.separatorsToUnix(basePath),
                         UNIX_SEPARATOR),
                         UNIX_SEPARATOR);
         final StringTokenizer topicTokenizer = new StringTokenizer(
-                removeRedundantNames(topicFilePathName.replace(WINDOWS_SEPARATOR,UNIX_SEPARATOR),
+                normalize(FileUtils.separatorsToUnix(refPath),
                         UNIX_SEPARATOR),
                         UNIX_SEPARATOR);
 
@@ -315,7 +301,7 @@ public final class FileUtils {
                 if(mapToken.endsWith(COLON) ||
                         topicToken.endsWith(COLON)){
                     //the two files are in different disks under Windows
-                    return topicFilePathName;
+                    return refPath;
                 }
                 upPathBuffer.append("..");
                 upPathBuffer.append(UNIX_SEPARATOR);
@@ -343,11 +329,14 @@ public final class FileUtils {
     }
 
     /**
-     * Get path2Project from the relative path of a file.
-     * @param relativePath relative path
-     * @return path relative to project
+     * Get relative path to base path.
+     * 
+     * <p>For {@code foo/bar/baz.txt} return {@code ../../}</p>
+     * 
+     * @param relativePath relative UNIX path
+     * @return relative UNIX path to base path, {@code null} if reference path was a single file
      */
-    public static String getPathtoProject (final String relativePath){
+    public static String getRelativePath(final String relativePath) {
         final StringTokenizer tokenizer = new StringTokenizer(relativePath, UNIX_SEPARATOR);
         final StringBuffer buffer = new StringBuffer();
         if (tokenizer.countTokens() == 1){
@@ -426,7 +415,7 @@ public final class FileUtils {
             return normilizedPath;
         }
 
-        return FileUtils.removeRedundantNames(normilizedPath);
+        return FileUtils.normalize(normilizedPath);
     }
 
     /**
@@ -436,8 +425,8 @@ public final class FileUtils {
      * @param path input path
      * @return processed path
      */
-    public static String removeRedundantNames(final String path) {
-        return removeRedundantNames(path, File.separator);
+    public static String normalize(final String path) {
+        return normalize(path, File.separator);
     }
 
 
@@ -448,7 +437,7 @@ public final class FileUtils {
      * @param separator directory separator
      * @return processed path
      */
-    public static String removeRedundantNames(final String path, final String separator) {
+    public static String normalize(final String path, final String separator) {
         // remove "." from the directory.
         final List<String> dirs = new LinkedList<String>();
         final StringTokenizer tokenizer = new StringTokenizer(path, separator);
@@ -499,8 +488,14 @@ public final class FileUtils {
         return buff.toString();
     }
 
-
-
+    /**
+     * Translate path separators from Windows to Unix.
+     * @param path
+     * @return
+     */
+    public static String separatorsToUnix(final String path) {
+        return path.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
+    }
 
 
     /**
@@ -568,7 +563,7 @@ public final class FileUtils {
      * @param extName value used to replace with
      * @return replaced value
      */
-    public static String replaceExtName(final String attValue, final String extName){
+    public static String replaceExtension(final String attValue, final String extName){
         String fileName;
         int fileExtIndex;
         int index;
@@ -588,6 +583,29 @@ public final class FileUtils {
             return (fileExtIndex != -1)
                     ? (attValue.substring(0, fileExtIndex) + extName)
                             : attValue;
+        }
+    }
+    
+    /**
+     * Get file extension
+     * 
+     * @param file filename, may contain a URL fragment
+     * @return file extensions, {@code null} if no extension was found
+     */
+    public static String getExtension(final String file){
+        final int index = file.indexOf(SHARP);
+
+        if (file.startsWith(SHARP)) {
+            return null;
+        } else if (index != -1) {
+            final String fileName = file.substring(0, index);
+            final int fileExtIndex = fileName.lastIndexOf(DOT);
+            return (fileExtIndex != -1) ? fileName.substring(fileExtIndex + 1,
+                    fileName.length()) : null;
+        } else {
+            final int fileExtIndex = file.lastIndexOf(DOT);
+            return (fileExtIndex != -1) ? file.substring(fileExtIndex + 1,
+                    file.length()) : null;
         }
     }
 
@@ -616,7 +634,7 @@ public final class FileUtils {
      * @param aURLString Windows, UNIX, or URI path, may contain hash fragment
      * @return filename without path or hash fragment
      */
-    public static String deriveFilename(final String aURLString) {
+    public static String getName(final String aURLString) {
         int pathnameEndIndex;
         if (isWindows()) {
             if (aURLString.contains(SHARP)) {
@@ -664,7 +682,7 @@ public final class FileUtils {
      * @param aURLString UNIX or URI path
      * @return base path
      */
-    public static String derivePath(final String aURLString) {
+    public static String getFullPathNoEndSeparator(final String aURLString) {
         final int pathnameStartIndex = aURLString.indexOf(UNIX_SEPARATOR);
         final int pathnameEndIndex = aURLString.lastIndexOf(UNIX_SEPARATOR);
         String aPath = aURLString.substring(pathnameStartIndex, pathnameEndIndex);

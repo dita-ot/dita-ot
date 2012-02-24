@@ -88,14 +88,6 @@ public class TestFileUtils {
     }
 
     @Test
-    public void testIsTopicFile() {
-        assertTrue(FileUtils.isTopicFile("file.dita")
-                && FileUtils.isTopicFile("file.xml"));
-        assertFalse(FileUtils.isTopicFile("file"));
-        assertFalse(FileUtils.isTopicFile(""));
-    }
-
-    @Test
     public void testIsValidTarget() {
         assertTrue(FileUtils.isValidTarget("file.ditamap"));
         assertTrue(FileUtils.isValidTarget("file.xml"));
@@ -115,22 +107,22 @@ public class TestFileUtils {
 
     @Test
     public void testGetRelativePathFromMap() {
-        assertEquals("../a.dita",FileUtils.getRelativePathFromMap("c:/map/map.ditamap", "c:/a.dita"));
-        assertEquals("../a.dita",FileUtils.getRelativePathFromMap("c:\\map\\map.ditamap", "c:\\a.dita"));
-        assertEquals("d:/a.dita",FileUtils.getRelativePathFromMap("c:/map.ditamap", "d:/a.dita"));
-        assertEquals("d:\\a.dita",FileUtils.getRelativePathFromMap("c:\\map.ditamap", "d:\\a.dita"));
-        assertEquals("a.dita", FileUtils.getRelativePathFromMap("c:/map1/map2/map.ditamap", "c:/map1/map2/a.dita"));
-        assertEquals("a.dita", FileUtils.getRelativePathFromMap("c:\\map1\\map2\\map.ditamap", "c:\\map1\\map2\\a.dita"));
-        assertEquals("../topic/a.dita",FileUtils.getRelativePathFromMap("c:/map1/map.ditamap", "c:/topic/a.dita"));
-        assertEquals("../topic/a.dita",FileUtils.getRelativePathFromMap("c:\\map1\\map.ditamap", "c:\\topic\\a.dita"));
+        assertEquals("../a.dita",FileUtils.getRelativePath("c:/map/map.ditamap", "c:/a.dita"));
+        assertEquals("../a.dita",FileUtils.getRelativePath("c:\\map\\map.ditamap", "c:\\a.dita"));
+        assertEquals("d:/a.dita",FileUtils.getRelativePath("c:/map.ditamap", "d:/a.dita"));
+        assertEquals("d:\\a.dita",FileUtils.getRelativePath("c:\\map.ditamap", "d:\\a.dita"));
+        assertEquals("a.dita", FileUtils.getRelativePath("c:/map1/map2/map.ditamap", "c:/map1/map2/a.dita"));
+        assertEquals("a.dita", FileUtils.getRelativePath("c:\\map1\\map2\\map.ditamap", "c:\\map1\\map2\\a.dita"));
+        assertEquals("../topic/a.dita",FileUtils.getRelativePath("c:/map1/map.ditamap", "c:/topic/a.dita"));
+        assertEquals("../topic/a.dita",FileUtils.getRelativePath("c:\\map1\\map.ditamap", "c:\\topic\\a.dita"));
     }
 
     @Test
     public void testGetPathtoProject() {
-        assertEquals("../../", FileUtils.getPathtoProject("/dir/dir/file.xml"));
-        assertEquals("../../", FileUtils.getPathtoProject("dir/dir/file.xml"));
-        assertEquals("../", FileUtils.getPathtoProject("dir/file.xml"));
-        assertEquals(null, FileUtils.getPathtoProject("file.xml"));
+        assertEquals("../../", FileUtils.getRelativePath("/dir/dir/file.xml"));
+        assertEquals("../../", FileUtils.getRelativePath("dir/dir/file.xml"));
+        assertEquals("../", FileUtils.getRelativePath("dir/file.xml"));
+        assertEquals(null, FileUtils.getRelativePath("file.xml"));
 
     }
 
@@ -188,25 +180,25 @@ public class TestFileUtils {
     }
 
     @Test
-    public void testRemoveRedundantNamesStringStringWindows() {
-        assertEquals("a\\c\\file.xml",FileUtils.removeRedundantNames("a\\b\\..\\c\\file.xml", SEPARATOR_WINDOWS));
-        assertEquals("a\\b\\file.xml",FileUtils.removeRedundantNames("a\\.\\b\\.\\file.xml", SEPARATOR_WINDOWS));
-        assertEquals("..\\a\\file.xml",FileUtils.removeRedundantNames("..\\a\\file.xml", SEPARATOR_WINDOWS));
-        assertEquals("..\\file.xml", FileUtils.removeRedundantNames("a\\..\\..\\file.xml", SEPARATOR_WINDOWS));
-        assertEquals("file.xml", FileUtils.removeRedundantNames("a\\b\\..\\..\\file.xml", SEPARATOR_WINDOWS));
-        assertEquals("\\a\\b\\file.xml", FileUtils.removeRedundantNames("\\a\\.\\b\\c\\..\\file.xml", SEPARATOR_WINDOWS));
-        assertEquals("\\\\server\\dir\\file.xml", FileUtils.removeRedundantNames("\\\\server\\a\\..\\dir\\file.xml", SEPARATOR_WINDOWS));
+    public void testNormalizeStringStringWindows() {
+        assertEquals("a\\c\\file.xml",FileUtils.normalize("a\\b\\..\\c\\file.xml", SEPARATOR_WINDOWS));
+        assertEquals("a\\b\\file.xml",FileUtils.normalize("a\\.\\b\\.\\file.xml", SEPARATOR_WINDOWS));
+        assertEquals("..\\a\\file.xml",FileUtils.normalize("..\\a\\file.xml", SEPARATOR_WINDOWS));
+        assertEquals("..\\file.xml", FileUtils.normalize("a\\..\\..\\file.xml", SEPARATOR_WINDOWS));
+        assertEquals("file.xml", FileUtils.normalize("a\\b\\..\\..\\file.xml", SEPARATOR_WINDOWS));
+        assertEquals("\\a\\b\\file.xml", FileUtils.normalize("\\a\\.\\b\\c\\..\\file.xml", SEPARATOR_WINDOWS));
+        assertEquals("\\\\server\\dir\\file.xml", FileUtils.normalize("\\\\server\\a\\..\\dir\\file.xml", SEPARATOR_WINDOWS));
     }
 
     @Test
-    public void testRemoveRedundantNamesStringStringUnix() {
-        assertEquals("a/c/file.xml",FileUtils.removeRedundantNames("a/b/../c/file.xml", SEPARATOR_UNIX));
-        assertEquals("a/b/file.xml",FileUtils.removeRedundantNames("a/./b/./file.xml", SEPARATOR_UNIX));
-        assertEquals("../a/file.xml",FileUtils.removeRedundantNames("../a/file.xml", SEPARATOR_UNIX));
-        assertEquals("../file.xml", FileUtils.removeRedundantNames("a/../../file.xml", SEPARATOR_UNIX));
-        assertEquals("file.xml", FileUtils.removeRedundantNames("a/b/../../file.xml", SEPARATOR_UNIX));
-        assertEquals("/a/b/file.xml", FileUtils.removeRedundantNames("/a/./b/c/../file.xml", SEPARATOR_UNIX));
-        assertEquals("//server/dir/file.xml", FileUtils.removeRedundantNames("//server/a/../dir/file.xml", SEPARATOR_UNIX));
+    public void testNormalizeStringStringUnix() {
+        assertEquals("a/c/file.xml",FileUtils.normalize("a/b/../c/file.xml", SEPARATOR_UNIX));
+        assertEquals("a/b/file.xml",FileUtils.normalize("a/./b/./file.xml", SEPARATOR_UNIX));
+        assertEquals("../a/file.xml",FileUtils.normalize("../a/file.xml", SEPARATOR_UNIX));
+        assertEquals("../file.xml", FileUtils.normalize("a/../../file.xml", SEPARATOR_UNIX));
+        assertEquals("file.xml", FileUtils.normalize("a/b/../../file.xml", SEPARATOR_UNIX));
+        assertEquals("/a/b/file.xml", FileUtils.normalize("/a/./b/c/../file.xml", SEPARATOR_UNIX));
+        assertEquals("//server/dir/file.xml", FileUtils.normalize("//server/a/../dir/file.xml", SEPARATOR_UNIX));
     }
     
     @Test
@@ -242,19 +234,29 @@ public class TestFileUtils {
     public void testReplaceExtName() {
         // initial the extName of Class DebugAndFilterModule.
         final String extName = ".dita";
-        assertEquals("filename.dita", FileUtils.replaceExtName("filename.xml", extName));
+        assertEquals("filename.dita", FileUtils.replaceExtension("filename.xml", extName));
         // if there is a topic marked with sharp
         assertEquals("filename.dita#topicid", FileUtils
-                .replaceExtName("filename.xml#topicid", extName));
+                .replaceExtension("filename.xml#topicid", extName));
         // if the input just is a topicid
-        assertEquals("#topicid", FileUtils.replaceExtName("#topicid", extName));
+        assertEquals("#topicid", FileUtils.replaceExtension("#topicid", extName));
         // if there is an extra dot.
         assertEquals("file.name.dita", FileUtils
-                .replaceExtName("file.name.xml", extName));
+                .replaceExtension("file.name.xml", extName));
         assertEquals("file.name.dita#topicid", FileUtils
-                .replaceExtName("file.name.xml#topicid", extName));
+                .replaceExtension("file.name.xml#topicid", extName));
         // if there is no extension.
-        assertEquals("file", FileUtils.replaceExtName("file", extName));
+        assertEquals("file", FileUtils.replaceExtension("file", extName));
+    }
+    
+    @Test
+    public void testGetExtName() {
+        assertEquals("xml", FileUtils.getExtension("filename.xml"));
+        assertEquals("xml", FileUtils.getExtension("filename.xml#topicid"));
+        assertEquals(null, FileUtils.getExtension("#topicid"));
+        assertEquals("xml", FileUtils.getExtension("file.name.xml"));
+        assertEquals("xml", FileUtils.getExtension("file.name.xml#topicid"));
+        assertEquals(null, FileUtils.getExtension("file"));
     }
 
     @Test
@@ -266,15 +268,15 @@ public class TestFileUtils {
     
     @Test
     public void testDeriveFilename() {
-        assertEquals("baz.qux", FileUtils.deriveFilename("/foo/bar/baz.qux"));
-        assertEquals("baz.qux", FileUtils.deriveFilename("baz.qux"));
-        assertEquals("", FileUtils.deriveFilename("/foo/bar/"));
+        assertEquals("baz.qux", FileUtils.getName("/foo/bar/baz.qux"));
+        assertEquals("baz.qux", FileUtils.getName("baz.qux"));
+        assertEquals("", FileUtils.getName("/foo/bar/"));
     }
 
     @Test
     public void testDerivePath() {
-        assertEquals("/foo/bar", FileUtils.derivePath("/foo/bar/baz.qux"));
-        assertEquals("foo/bar", FileUtils.derivePath("foo/bar/baz.qux"));
+        assertEquals("/foo/bar", FileUtils.getFullPathNoEndSeparator("/foo/bar/baz.qux"));
+        assertEquals("foo/bar", FileUtils.getFullPathNoEndSeparator("foo/bar/baz.qux"));
         //assertEquals("", FileUtils.derivePath("baz.qux"));
     }
 

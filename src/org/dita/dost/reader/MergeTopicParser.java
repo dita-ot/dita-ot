@@ -124,9 +124,9 @@ public final class MergeTopicParser extends XMLFilterImpl {
         String retAttValue = attValue;
         if (sharpIndex != -1) { // href value refer to an id in a topic
             if (sharpIndex == 0) {
-                pathFromMap = filePath.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
+                pathFromMap = FileUtils.separatorsToUnix(filePath);
             } else {
-                pathFromMap = FileUtils.resolveTopic(new File(filePath).getParent(),attValue.substring(0,sharpIndex)).replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
+                pathFromMap = FileUtils.separatorsToUnix(FileUtils.resolveTopic(new File(filePath).getParent(),attValue.substring(0,sharpIndex)));
             }
             XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OHREF, pathFromMap + attValue.substring(sharpIndex));
             String topicId = attValue.substring(sharpIndex);

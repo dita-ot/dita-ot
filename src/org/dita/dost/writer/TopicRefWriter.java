@@ -305,8 +305,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
              * replace all the backslash with slash in all href and conref
              * attribute
              */
-            attValue = attValue.replace(WINDOWS_SEPARATOR,
-                    UNIX_SEPARATOR);
+            attValue = FileUtils.separatorsToUnix(attValue);
         } else {
             return null;
         }
@@ -370,42 +369,42 @@ public final class TopicRefWriter extends AbstractXMLWriter {
                             if (!StringUtils.isEmptyString(conTarget)) {
                                 if (elementID == null) {
                                     final String idpath = getElementID(changeTarget);
-                                    return FileUtils.getRelativePathFromMap(
+                                    return FileUtils.getRelativePath(
                                             rootPathName, conTarget) + (idpath != null ? SHARP + idpath : "");
                                 }else {
                                     if (conTarget.contains(SHARP)){
                                         //conTarget points to topic
                                         if (!pathtoElem.contains(SLASH)){
                                             //if pathtoElem does no have '/' slash. it means elementID is topic id
-                                            return FileUtils.getRelativePathFromMap(
+                                            return FileUtils.getRelativePath(
                                                     rootPathName, conTarget);
                                         }else{
-                                            return FileUtils.getRelativePathFromMap(
+                                            return FileUtils.getRelativePath(
                                                     rootPathName, conTarget) + SLASH + elementID;
                                         }
 
                                     }else{
-                                        return FileUtils.getRelativePathFromMap(
+                                        return FileUtils.getRelativePath(
                                                 rootPathName, conTarget) + SHARP + pathtoElem;
                                     }
                                 }
                             } else {
                                 if (elementID == null){
-                                    return FileUtils.getRelativePathFromMap(
+                                    return FileUtils.getRelativePath(
                                             rootPathName, changeTarget);
                                 }else{
                                     if (changeTarget.contains(SHARP)){
                                         //changeTarget points to topic
                                         if(!pathtoElem.contains(SLASH)){
                                             //if pathtoElem does no have '/' slash. it means elementID is topic id
-                                            return FileUtils.getRelativePathFromMap(
+                                            return FileUtils.getRelativePath(
                                                     rootPathName, changeTarget);
                                         }else{
-                                            return FileUtils.getRelativePathFromMap(
+                                            return FileUtils.getRelativePath(
                                                     rootPathName, changeTarget) + SLASH + elementID;
                                         }
                                     }else{
-                                        return FileUtils.getRelativePathFromMap(
+                                        return FileUtils.getRelativePath(
                                                 rootPathName, changeTarget) + SHARP + pathtoElem;
                                     }
                                 }
@@ -456,32 +455,6 @@ public final class TopicRefWriter extends AbstractXMLWriter {
     }
 
     /**
-     * Retrive the extension name from the attribute.
-     * @param attValue attribute value
-     * @return String the extension
-     */
-    public String getExtName(final String attValue) {
-        String fileName;
-        int fileExtIndex;
-        int index;
-
-        index = attValue.indexOf(SHARP);
-
-        if (attValue.startsWith(SHARP)) {
-            return null;
-        } else if (index != -1) {
-            fileName = attValue.substring(0, index);
-            fileExtIndex = fileName.lastIndexOf(DOT);
-            return (fileExtIndex != -1) ? fileName.substring(fileExtIndex + 1,
-                    fileName.length()) : null;
-        } else {
-            fileExtIndex = attValue.lastIndexOf(DOT);
-            return (fileExtIndex != -1) ? attValue.substring(fileExtIndex + 1,
-                    attValue.length()) : null;
-        }
-    }
-
-    /**
      * Check whether it is a Topic format
      * @param attrs attributes to check
      * @param valueOfHref href attribute value
@@ -490,7 +463,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
     private boolean notTopicFormat(final Attributes attrs, final String valueOfHref) {
         final String hrefValue = valueOfHref;
         final String formatValue = attrs.getValue(ATTRIBUTE_NAME_FORMAT);
-        final String extOfHref = getExtName(valueOfHref);
+        final String extOfHref = FileUtils.getExtension(valueOfHref);
         if (notLocalURL(hrefValue)) {
             return true;
         } else {

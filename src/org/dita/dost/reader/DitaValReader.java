@@ -182,7 +182,7 @@ public final class DitaValReader extends AbstractXMLReader {
         if (flagImage != null && flagImage.trim().length() > 0) {
             if (new File(flagImage).isAbsolute()) {
                 imageList.add(flagImage);
-                relFlagImageList.add(FileUtils.getRelativePathFromMap(ditaVal, flagImage));
+                relFlagImageList.add(FileUtils.getRelativePath(ditaVal, flagImage));
                 return;
             }
 

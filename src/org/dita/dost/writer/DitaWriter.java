@@ -131,7 +131,7 @@ public final class DitaWriter extends AbstractXMLWriter {
                 String relativePath;
                 final File target = new File(path);
                 if(target.isAbsolute()){
-                    relativePath = FileUtils.getRelativePathFromMap(outputUtils.getInputMapPathName(), path);
+                    relativePath = FileUtils.getRelativePath(outputUtils.getInputMapPathName(), path);
                     attValue = relativePath + topic;
                 }
 
@@ -139,15 +139,15 @@ public final class DitaWriter extends AbstractXMLWriter {
         }else{
             final File target = new File(attValue);
             if(target.isAbsolute()){
-                attValue = FileUtils.getRelativePathFromMap(outputUtils.getInputMapPathName(), attValue);
+                attValue = FileUtils.getRelativePath(outputUtils.getInputMapPathName(), attValue);
             }
         }
         if (attValue != null){
-            attValue = attValue.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
+            attValue = FileUtils.separatorsToUnix(attValue);
         }
 
         if(attValue.indexOf(FILE_EXTENSION_DITAMAP) == -1){
-            return FileUtils.replaceExtName(attValue, extName);
+            return FileUtils.replaceExtension(attValue, extName);
         }
 
         return attValue;
@@ -170,7 +170,7 @@ public final class DitaWriter extends AbstractXMLWriter {
                 return true;
             }
             final String formatValue=attrs.getValue(ATTRIBUTE_NAME_FORMAT);
-            final String extOfHref=getExtName(valueOfHref);
+            final String extOfHref = FileUtils.getExtension(valueOfHref);
             if(formatValue==null && extOfHref!=null && !extOfHref.equalsIgnoreCase("DITA") && !extOfHref.equalsIgnoreCase("XML") ){
                 final DITAOTLogger logger=new DITAOTJavaLogger();
                 final Properties params = new Properties();
@@ -181,31 +181,6 @@ public final class DitaWriter extends AbstractXMLWriter {
         }
 
         return false;
-    }
-    /**
-     * Get file extension name.
-     * 
-     * TODO: move to FileUtils.
-     * 
-     * @param attValue file name
-     * @return extension name
-     */
-    public static String getExtName(final String attValue){
-        final int index = attValue.indexOf(SHARP);
-        if (attValue.startsWith(SHARP)){
-            return null;
-        } else if (index != -1){
-            final String fileName = attValue.substring(0,index);
-            final int fileExtIndex = fileName.lastIndexOf(DOT);
-            return fileExtIndex != -1
-                   ? fileName.substring(fileExtIndex + 1, fileName.length())
-                   : null;
-        } else {
-            final int fileExtIndex = attValue.lastIndexOf(DOT);
-            return fileExtIndex != -1
-                   ? attValue.substring(fileExtIndex + 1, attValue.length())
-                   : null;
-        }
     }
     
     /**
@@ -240,7 +215,7 @@ public final class DitaWriter extends AbstractXMLWriter {
                     //Added by William on 2010-01-05 for bug:2926417 end
                     final File target = new File(path);
                     if(target.isAbsolute()){
-                        relativePath = FileUtils.getRelativePathFromMap(outputUtils.getInputMapPathName(), path);
+                        relativePath = FileUtils.getRelativePath(outputUtils.getInputMapPathName(), path);
                         attValue = relativePath + topic;
                     }
 
@@ -257,7 +232,7 @@ public final class DitaWriter extends AbstractXMLWriter {
                 //Added by William on 2010-01-05 for bug:2926417 end
                 final File target = new File(attValue);
                 if(target.isAbsolute()){
-                    attValue = FileUtils.getRelativePathFromMap(outputUtils.getInputMapPathName(), attValue);
+                    attValue = FileUtils.getRelativePath(outputUtils.getInputMapPathName(), attValue);
                 }
             }
 
@@ -265,14 +240,14 @@ public final class DitaWriter extends AbstractXMLWriter {
              * replace all the backslash with slash in
              * all href and conref attribute
              */
-            attValue = attValue.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
+            attValue = FileUtils.separatorsToUnix(attValue);
         } else {
             return null;
         }
 
         if(checkDITAHREF(atts)){
             if(warnOfNoneTopicFormat(atts,attValue)==false){
-                return FileUtils.replaceExtName(attValue, extName);
+                return FileUtils.replaceExtension(attValue, extName);
             }
 
         }
@@ -718,7 +693,7 @@ public final class DitaWriter extends AbstractXMLWriter {
     private String replaceExtName(String target) {
         final String fileName = FileUtils.resolveFile("", target);
         if(FileUtils.isDITATopicFile(fileName)){
-            target = FileUtils.replaceExtName(target, extName);
+            target = FileUtils.replaceExtension(target, extName);
         }
         return target;
     }
@@ -736,7 +711,7 @@ public final class DitaWriter extends AbstractXMLWriter {
 
         final String keyValue = new File(tempDir, href).getAbsolutePath();
 
-        final String updatedHref = FileUtils.getRelativePathFromMap(filePath, keyValue);
+        final String updatedHref = FileUtils.getRelativePath(filePath, keyValue);
         //Added by William on 2010-05-18 for bug:3001705 end
 
 
@@ -744,10 +719,10 @@ public final class DitaWriter extends AbstractXMLWriter {
         /*prefix = new File(prefix).getParent();
 		if(StringUtils.isEmptyString(prefix)){
 			updatedHref = href;
-			updatedHref = updatedHref.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
+			updatedHref = FileUtils.toUnix(updatedHref);
 		}else{
 			updatedHref = prefix + UNIX_SEPARATOR +href;
-			updatedHref = updatedHref.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
+			updatedHref = FileUtils.toUnix(updatedHref);
 		}*/
 
         return updatedHref;
@@ -1290,7 +1265,7 @@ public final class DitaWriter extends AbstractXMLWriter {
             if (FileUtils.isDITAMapFile(inputFile.toLowerCase())) {
                 outputFile = new File(tempDir, inputFile);
             } else {
-                outputFile = new File(tempDir, FileUtils.replaceExtName(inputFile, extName));
+                outputFile = new File(tempDir, FileUtils.replaceExtension(inputFile, extName));
             }
 
             //when it is not the old solution 3
@@ -1298,14 +1273,14 @@ public final class DitaWriter extends AbstractXMLWriter {
                 if(isOutFile(traceFilename)){
                     path2Project=getRelativePathFromOut(traceFilename.getAbsolutePath());
                 }else{
-                    path2Project=FileUtils.getRelativePathFromMap(traceFilename.getAbsolutePath(), outputUtils.getInputMapPathName());
+                    path2Project=FileUtils.getRelativePath(traceFilename.getAbsolutePath(), outputUtils.getInputMapPathName());
                     path2Project=new File(path2Project).getParent();
                     if(path2Project!=null && path2Project.length()>0){
                         path2Project=path2Project+File.separator;
                     }
                 }
             } else {
-                path2Project = FileUtils.getPathtoProject(inputFile);
+                path2Project = FileUtils.getRelativePath(inputFile);
             }
             counterMap = new HashMap<String, Integer>();
             final File dirFile = outputFile.getParentFile();
@@ -1350,14 +1325,14 @@ public final class DitaWriter extends AbstractXMLWriter {
 
                  path2Project=getRelativePathFromOut(traceFilename.getAbsolutePath());
              }else{
-                 path2Project=FileUtils.getRelativePathFromMap(traceFilename.getAbsolutePath(),inputMap);
+                 path2Project=FileUtils.getRelativePath(traceFilename.getAbsolutePath(),inputMap);
                  path2Project=new File(path2Project).getParent();
                  if(path2Project!=null && path2Project.length()>0){
                      path2Project=path2Project+File.separator;
                  }
              }
          } else {
-             path2Project = FileUtils.getPathtoProject(filename);
+             path2Project = FileUtils.getRelativePath(filename);
          }
     	 return path2Project;
     }
@@ -1369,11 +1344,11 @@ public final class DitaWriter extends AbstractXMLWriter {
     public String getRelativePathFromOut(final String overflowingFile){
         final File mapPathName=new File(outputUtils.getInputMapPathName());
         final File currFilePathName=new File(overflowingFile);
-        final String relativePath=FileUtils.getRelativePathFromMap( mapPathName.toString(),currFilePathName.toString());
+        final String relativePath=FileUtils.getRelativePath( mapPathName.toString(),currFilePathName.toString());
         final String outputDir=outputUtils.getOutputDir();
         final StringBuffer outputPathName=new StringBuffer(outputDir).append(File.separator).append("index.html");
         final String finalOutFilePathName=FileUtils.resolveFile(outputDir,relativePath);
-        final String finalRelativePathName=FileUtils.getRelativePathFromMap(finalOutFilePathName,outputPathName.toString());
+        final String finalRelativePathName=FileUtils.getRelativePath(finalOutFilePathName,outputPathName.toString());
         final String parentDir=new File(finalRelativePathName).getParent();
         final StringBuffer finalRelativePath=new StringBuffer(parentDir);
         if(finalRelativePath.length()>0){
@@ -1385,7 +1360,7 @@ public final class DitaWriter extends AbstractXMLWriter {
     }
 
     private boolean isOutFile(final File filePathName){
-        final String relativePath=FileUtils.getRelativePathFromMap(outputUtils.getInputMapPathName(), filePathName.getPath());
+        final String relativePath=FileUtils.getRelativePath(outputUtils.getInputMapPathName(), filePathName.getPath());
         if(relativePath==null || relativePath.length()==0 || !relativePath.startsWith("..")){
             return false;
         }

@@ -58,8 +58,7 @@ public final class MergeUtils {
      * @return true if find and false otherwise
      */
     public boolean findId(final String id) {
-        return id != null && idMap.containsKey(FileUtils.removeRedundantNames(id.trim().replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR),
-                                                                              UNIX_SEPARATOR));
+        return id != null && idMap.containsKey(FileUtils.normalize(FileUtils.separatorsToUnix(id.trim()), UNIX_SEPARATOR));
     }
 
     /**
@@ -71,10 +70,10 @@ public final class MergeUtils {
         if (id == null) {
             return null;
         }
-        final String localId = id.trim().replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
+        final String localId = FileUtils.separatorsToUnix(id.trim());
         index ++;
         final String newId = "unique_" + Integer.toString(index);
-        idMap.put(FileUtils.removeRedundantNames(localId, UNIX_SEPARATOR), newId);
+        idMap.put(FileUtils.normalize(localId, UNIX_SEPARATOR), newId);
         return newId;
     }
 
@@ -85,9 +84,9 @@ public final class MergeUtils {
      */
     public void addId(final String id, final String value){
         if (id != null && value != null) {
-            final String localId = id.trim().replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
+            final String localId = FileUtils.separatorsToUnix(id.trim());
             final String localValue = value.trim();
-            idMap.put(FileUtils.removeRedundantNames(localId, UNIX_SEPARATOR), localValue);
+            idMap.put(FileUtils.normalize(localId, UNIX_SEPARATOR), localValue);
         }
     }
 
@@ -100,8 +99,8 @@ public final class MergeUtils {
         if (id == null) {
             return null;
         }
-        final String localId = id.trim().replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
-        return idMap.get(FileUtils.removeRedundantNames(localId, UNIX_SEPARATOR));
+        final String localId = FileUtils.separatorsToUnix(id.trim());
+        return idMap.get(FileUtils.normalize(localId, UNIX_SEPARATOR));
     }
 
     /**
@@ -115,8 +114,7 @@ public final class MergeUtils {
         if (idx != -1) {
             localPath=localPath.substring(0, idx);
         }
-        return visitSet.contains(FileUtils.removeRedundantNames(localPath.trim().replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR),
-                                                                UNIX_SEPARATOR));
+        return visitSet.contains(FileUtils.normalize(FileUtils.separatorsToUnix(localPath.trim()), UNIX_SEPARATOR));
     }
 
     /**
@@ -130,8 +128,7 @@ public final class MergeUtils {
         if (idx != -1) {
             localPath=localPath.substring(0, idx);
         }
-        visitSet.add(FileUtils.removeRedundantNames(localPath.trim().replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR),
-                                                    UNIX_SEPARATOR));
+        visitSet.add(FileUtils.normalize(FileUtils.separatorsToUnix(localPath.trim()), UNIX_SEPARATOR));
     }
 
     /**

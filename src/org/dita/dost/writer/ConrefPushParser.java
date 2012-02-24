@@ -243,7 +243,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 
             final Set<String> conreflist = job.getSet(CONREF_LIST);
             // get the reletivePath from tempDir
-            final String reletivePath = filename.substring(FileUtils.removeRedundantNames(tempDir).length() + 1);
+            final String reletivePath = filename.substring(FileUtils.normalize(tempDir).length() + 1);
             for(final String str: conreflist){
                 if(str.equals(reletivePath)){
                     return;

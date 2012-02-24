@@ -350,7 +350,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                     final Element newChild = elem.getOwnerDocument()
                             .createElement(MAP_TOPICREF.localName);
                     newChild.setAttribute(ATTRIBUTE_NAME_HREF,
-                            FileUtils.getRelativePathFromMap(filePath+UNIX_SEPARATOR+"stub.ditamap"
+                            FileUtils.getRelativePath(filePath+UNIX_SEPARATOR+"stub.ditamap"
                                     ,newFileName));
 
                     newChild.setAttribute(ATTRIBUTE_NAME_CLASS,
@@ -472,10 +472,10 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                         output.write(QUOTATION);
                         if(checkHREF(atts)){
                             // if current @href value needs to be updated
-                            String relative = FileUtils.getRelativePathFromMap(outputFile,currentParsingFile);
+                            String relative = FileUtils.getRelativePath(outputFile,currentParsingFile);
                             if (conflictTable.containsKey(outputFile)){
                             	String realoutputfile = conflictTable.get(outputFile);
-                            	relative = FileUtils.getRelativePathFromMap(realoutputfile,currentParsingFile);
+                            	relative = FileUtils.getRelativePath(realoutputfile,currentParsingFile);
                         	}
                             if(attrValue.startsWith(SHARP)){
                                 // if @href refers to a location inside current parsing file
@@ -752,11 +752,11 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                 //change the href value
                 if (StringUtils.isEmptyString(firstTopicID)) {
                     element.setAttribute(ATTRIBUTE_NAME_HREF,
-                            FileUtils.getRelativePathFromMap(filePath+UNIX_SEPARATOR+"stub.ditamap"
+                            FileUtils.getRelativePath(filePath+UNIX_SEPARATOR+"stub.ditamap"
                                     ,outputFileName) + (id == null ? "" : "#"+id));
                 } else {
                     element.setAttribute(ATTRIBUTE_NAME_HREF,
-                            FileUtils.getRelativePathFromMap(filePath+UNIX_SEPARATOR+"stub.ditamap"
+                            FileUtils.getRelativePath(filePath+UNIX_SEPARATOR+"stub.ditamap"
                                     ,outputFileName) + "#" + firstTopicID);
                 }
                 include = false;
@@ -978,7 +978,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                         changeTable.put(path, newpath);
                         // update current element's @href value
                         element.setAttribute(ATTRIBUTE_NAME_HREF,
-                                FileUtils.getRelativePathFromMap(filePath+UNIX_SEPARATOR+"stub.ditamap"
+                                FileUtils.getRelativePath(filePath+UNIX_SEPARATOR+"stub.ditamap"
                                         ,newpath));
                     }
 
@@ -1018,8 +1018,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                         // Added on 2010-11-12 for bug 3090803 start
                         if(currentParsingFileTopicIDChangeTable.size()>0) {
                             String href = element.getAttribute(ATTRIBUTE_NAME_HREF);
-                            href = href.replace(WINDOWS_SEPARATOR,
-                                    UNIX_SEPARATOR);
+                            href = FileUtils.separatorsToUnix(href);
                             final String pathtoElem =
                                     href.contains(SHARP) ? href.substring(href.indexOf(SHARP)+1) : "";
 
@@ -1092,7 +1091,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                         //create a title-only topic when there is a title
                         if(!StringUtils.isEmptyString(navtitleValue)){
                             element.setAttribute(ATTRIBUTE_NAME_HREF,
-                                    FileUtils.getRelativePathFromMap(filePath+UNIX_SEPARATOR+"stub.ditamap", outputFileName));
+                                    FileUtils.getRelativePath(filePath+UNIX_SEPARATOR+"stub.ditamap", outputFileName));
                             //manually create a new topic chunk
                             final StringBuffer buffer = new StringBuffer();
                             buffer.append("<topic id=\"topic\" class=\"- topic/topic \">")
@@ -1189,11 +1188,11 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                             //Added on 20101210 for bug:3126578 start
                             if ((conflictTable.get(outputFileName)!=null)){
                                 final String relativePath = FileUtils
-                                        .getRelativePathFromMap(filePath
+                                        .getRelativePath(filePath
                                                 + UNIX_SEPARATOR + "stub.ditamap",
                                                 conflictTable.get(outputFileName));
                                 String path2project = FileUtils
-                                        .getPathtoProject(relativePath);
+                                        .getRelativePath(relativePath);
                                 if (null==path2project){
                                     path2project="";
                                 }

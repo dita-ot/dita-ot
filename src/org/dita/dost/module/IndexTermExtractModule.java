@@ -170,7 +170,7 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
                 String targetPathFromMapWithoutExt;
                 handler.reset();
                 target = topicList.get(i);
-                targetPathFromMap = FileUtils.getRelativePathFromMap(
+                targetPathFromMap = FileUtils.getRelativePath(
                         inputMap, target);
                 targetPathFromMapWithoutExt = targetPathFromMap
                         .substring(0, targetPathFromMap.lastIndexOf("."));
@@ -203,7 +203,7 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
 
             for (int j = 0; j < ditamapNum; j++) {
                 final String ditamap = ditamapList.get(j);
-                final String currentMapPathName = FileUtils.getRelativePathFromMap(
+                final String currentMapPathName = FileUtils.getRelativePath(
                         inputMap, ditamap);
                 String mapPathFromInputMap = "";
 

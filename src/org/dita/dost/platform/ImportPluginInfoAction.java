@@ -30,7 +30,7 @@ final class ImportPluginInfoAction extends ImportAction {
                 location.append("${dita.dir}");
             } else if (f.getLocation().getAbsolutePath().startsWith(f.getDitaDir().getAbsolutePath())) {
                 location.append("${dita.dir}").append(File.separator)
-                .append(FileUtils.getRelativePathFromMap(
+                .append(FileUtils.getRelativePath(
                         new File(f.getDitaDir(), "plugin.xml").getAbsolutePath(),
                         f.getLocation().getAbsolutePath()));
             } else {

@@ -504,19 +504,19 @@ public final class KeyrefPaser extends XMLFilterImpl {
                             XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
                             XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
                             XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
-                            target_output = FileUtils.getRelativePathFromMap(fileName, target_output);
+                            target_output = FileUtils.getRelativePath(fileName, target_output);
                             target_output = normalizeHrefValue(target_output, tail);
                             XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output);
                         } else if ("".equals(scopeValue) || ATTR_SCOPE_VALUE_LOCAL.equals(scopeValue)){
                         	if (!(MAPGROUP_D_MAPREF.matches(cls)
 									&& FileUtils.isDITAMapFile(target.toLowerCase()))){
-                        		target = FileUtils.replaceExtName(target,extName);
+                        		target = FileUtils.replaceExtension(target,extName);
 							}
                         	
                             final File topicFile = new File(FileUtils.resolveFile(tempDir, target));
                             if (topicFile.exists()) {  
                                 final String topicId = this.getFirstTopicId(topicFile);
-                                target_output = FileUtils.getRelativePathFromMap(filepath, new File(tempDir, target).getAbsolutePath());
+                                target_output = FileUtils.getRelativePath(filepath, new File(tempDir, target).getAbsolutePath());
                                 valid = true;
                                 XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
                                 XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);

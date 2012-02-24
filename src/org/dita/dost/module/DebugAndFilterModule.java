@@ -114,12 +114,12 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                 result.add(file);
             // replace file extension
             } else if (equalIndex == -1){
-                result.add(FileUtils.replaceExtName(file,extName));
+                result.add(FileUtils.replaceExtension(file,extName));
             // replace file extension in both map key and value
             } else {
-                result.add(FileUtils.replaceExtName(file.substring(0, equalIndex), extName) +
+                result.add(FileUtils.replaceExtension(file.substring(0, equalIndex), extName) +
                            EQUAL +
-                           FileUtils.replaceExtName(file.substring(equalIndex+1), extName));
+                           FileUtils.replaceExtension(file.substring(equalIndex+1), extName));
             }
         }
         
@@ -373,7 +373,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                     continue;
                 }
                 visitedSet.add(parent);
-                String tmprel = FileUtils.getRelativePathFromMap(inputMap, parent);
+                String tmprel = FileUtils.getRelativePath(inputMap, parent);
                 tmprel = FileUtils.resolveFile(tempDir, tmprel)+".subm";
                 Document parentRoot = null;
                 if (!FileUtils.fileExists(tmprel)) {
@@ -385,14 +385,14 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                     for (final String childpath: children) {
                         final Document childRoot = builder.parse(new InputSource(new FileInputStream(childpath)));
                         mergeScheme(parentRoot, childRoot);
-                        String rel = FileUtils.getRelativePathFromMap(inputMap, childpath);
+                        String rel = FileUtils.getRelativePath(inputMap, childpath);
                         rel = FileUtils.resolveFile(tempDir, rel)+".subm";
                         generateScheme(rel, childRoot);
                     }
                 }
 
                 //Output parent scheme
-                String rel = FileUtils.getRelativePathFromMap(inputMap, parent);
+                String rel = FileUtils.getRelativePath(inputMap, parent);
                 rel = FileUtils.resolveFile(tempDir, rel)+".subm";
                 generateScheme(rel, parentRoot);
             }
@@ -668,9 +668,9 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
         for (final Map.Entry<String, java.util.Set<String>> entry: dic.entrySet()) {
             //filename will be checked.
             String filename = entry.getKey();
-            if(FileUtils.isTopicFile(filename)){
+            if(FileUtils.isDITATopicFile(filename)){
                 //Replace extension name.
-                filename = FileUtils.replaceExtName(filename, extName);
+                filename = FileUtils.replaceExtension(filename, extName);
             }
             //put the updated value into the result map
             resultMap.put(filename, entry.getValue());

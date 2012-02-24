@@ -215,7 +215,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
                 buffer.append(SLASH);
             }
             buffer.append(href);
-            targetURI = FileUtils.removeRedundantNames(buffer
+            targetURI = FileUtils.normalize(buffer
                     .toString());
         }else{
             targetURI = href;
