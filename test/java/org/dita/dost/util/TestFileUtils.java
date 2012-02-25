@@ -280,6 +280,21 @@ public class TestFileUtils {
         //assertEquals("", FileUtils.derivePath("baz.qux"));
     }
 
+    @Test
+    public void testStripFragment() {
+        assertEquals("foo", FileUtils.stripFragment("foo#bar"));
+        assertEquals("foo", FileUtils.stripFragment("foo#"));
+        assertEquals("foo", FileUtils.stripFragment("foo"));
+    }
+
+    @Test
+    public void testGetFragment() {
+        assertEquals("bar", FileUtils.getFragment("foo#bar"));
+        assertEquals("", FileUtils.getFragment("foo#"));
+        assertNull(FileUtils.getFragment("foo"));
+    }
+
+    
     @AfterClass
     public static void tearDown() throws IOException {
         TestUtils.forceDelete(tempDir);

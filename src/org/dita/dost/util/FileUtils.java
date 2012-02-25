@@ -203,9 +203,7 @@ public final class FileUtils {
         if(lcasefn == null) {
             return false;
         }
-        if (lcasefn.contains(SHARP)){
-            lcasefn = lcasefn.substring(0, lcasefn.indexOf(SHARP));
-        }
+        lcasefn = stripFragment(lcasefn);
 
         return isDITATopicFile(lcasefn) || isDITAMapFile(lcasefn);
     }
@@ -382,12 +380,7 @@ public final class FileUtils {
      * @return resolved topic file
      */
     public static String resolveFile(final String rootPath, final String relativePath) {
-        String begin = relativePath;
-
-        if (relativePath.indexOf(SHARP) != -1) {
-            begin = relativePath.substring(0, relativePath.indexOf('#'));
-        }
-
+        final String begin = stripFragment(relativePath);
         return normalizeDirectory(rootPath, begin);
     }
 
@@ -402,19 +395,11 @@ public final class FileUtils {
      * @return normalized path
      */
     public static String normalizeDirectory(final String basedir, final String filepath) {
-        String normilizedPath = null;
-        final int index = filepath.indexOf(SHARP);
-        final String pathname = (index == -1) ? filepath : filepath.substring(0, index);
-
-        /*
-         * normilize file path using java.io.File
-         */
-        normilizedPath = new File(basedir, pathname).getPath();
-
+        final String pathname = stripFragment(filepath);
+        final String normilizedPath = new File(basedir, pathname).getPath();
         if (basedir == null || basedir.length() == 0) {
             return normilizedPath;
         }
-
         return FileUtils.normalize(normilizedPath);
     }
 
@@ -688,6 +673,36 @@ public final class FileUtils {
         String aPath = aURLString.substring(pathnameStartIndex, pathnameEndIndex);
         aPath = aURLString.substring(0, pathnameEndIndex);
         return aPath;
+    }
+    
+    /**
+     * Strip fragment part from path.
+     * 
+     * @param path path
+     * @return path without path
+     */
+    public static String stripFragment(final String path) {
+        final int i = path.indexOf(SHARP);
+        if (i != -1) {
+           return path.substring(0, i);
+        } else {
+           return path;
+        }
+    }
+    
+    /**
+     * Get fragment part from path.
+     * 
+     * @param path path
+     * @return fragment without {@link Constants#SHARP}, {@code null} if no fragment exists
+     */
+    public static String getFragment(final String path) {
+        final int i = path.indexOf(SHARP);
+        if (i != -1) {
+           return path.substring(i + 1);
+        } else {
+           return null;
+        }
     }
 
 }
