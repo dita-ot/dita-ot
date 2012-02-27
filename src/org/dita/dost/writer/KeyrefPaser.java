@@ -545,7 +545,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
                             XMLUtils.addOrSetAttribute(resAtts, ATTRIBUTE_NAME_HREF, target_output);
                         }
 
-                    } else if(target.length() == 0){
+                    } else if(target == null || target.length() == 0){
                         // Key definition does not carry an href or href equals "".
                         valid = true;
                         XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
