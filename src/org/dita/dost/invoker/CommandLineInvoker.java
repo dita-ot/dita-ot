@@ -58,7 +58,7 @@ public final class CommandLineInvoker {
         paramMap.put("/csspath", "args.csspath");
         paramMap.put("/cssroot", "args.cssroot");
         paramMap.put("/css", "args.css");
-        paramMap.put("/filter", "dita.input.valfile");
+        paramMap.put("/filter", "args.filter");
         paramMap.put("/ditaext", "dita.extname");
         paramMap.put("/outdir", "output.dir");
         paramMap.put("/transtype", "transtype");
