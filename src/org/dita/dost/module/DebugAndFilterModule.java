@@ -83,6 +83,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
     private String extName = null;
     private String tempDir = null;
 
+    private final OutputUtils outputUtils = new OutputUtils();
     /**
      * Update property value.
      *
@@ -210,7 +211,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             fileWriter.setTranstype(transtype);
             fileWriter.setFilterUtils(filterUtils);
             fileWriter.setDelayConrefUtils(new DelayConrefUtils());
-            final OutputUtils outputUtils = new OutputUtils();
+           
             outputUtils.setGeneratecopyouter(input.getAttribute(ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER));
             outputUtils.setOutterControl(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTTERCONTROL));
             outputUtils.setOnlyTopicInMap(input.getAttribute(ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP));
@@ -582,6 +583,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             String workdir = null;
             String path2project = null;  
         	DitaWriter dw = new DitaWriter();
+        	dw.setOutputUtils(outputUtils);
         	path2project = dw.getPathtoProject(copytoTargetFilename, target, inputMapInTemp);
         	workdir = target.getParentFile().getCanonicalPath();
             
