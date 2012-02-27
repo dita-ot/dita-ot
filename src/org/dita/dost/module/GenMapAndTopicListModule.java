@@ -1125,8 +1125,9 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
                 // cases where keymap is in map ancestor folder
                 keys = keys.substring(prefix.length());
                 if (href == null) {
-                    href = FileUtils.removeRedundantNames(prefix).replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
-                    source = FileUtils.removeRedundantNames(source).replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
+                    // Don't populate href if it's not set
+                    //href = FileUtils.removeRedundantNames(prefix).replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
+                    source = FileUtils.removeRedundantNames(prefix + source).replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
                 } else {
                     if (!exKeyDefMap.containsKey(file.keys)) {
                         href = FileUtils.removeRedundantNames(prefix + href).replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
