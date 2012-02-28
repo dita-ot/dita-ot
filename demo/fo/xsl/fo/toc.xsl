@@ -88,10 +88,20 @@ See the accompanying license.txt file for applicable licenses.
                             </fo:inline>
                         </fo:basic-link>
                         </xsl:variable>
-                        <xsl:apply-templates select="$mapTopicref" mode="tocText">
-                            <xsl:with-param name="tocItemContent" select="$tocItemContent"/>
-                            <xsl:with-param name="currentNode" select="."/>
-                        </xsl:apply-templates>
+                        <xsl:choose>
+                          <xsl:when test="not($mapTopicref)">
+                            <xsl:apply-templates select="." mode="tocText">
+                              <xsl:with-param name="tocItemContent" select="$tocItemContent"/>
+                              <xsl:with-param name="currentNode" select="."/>
+                            </xsl:apply-templates>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <xsl:apply-templates select="$mapTopicref" mode="tocText">
+                              <xsl:with-param name="tocItemContent" select="$tocItemContent"/>
+                              <xsl:with-param name="currentNode" select="."/>
+                            </xsl:apply-templates>
+                          </xsl:otherwise>
+                        </xsl:choose>
                     </fo:block>
                     <xsl:apply-templates mode="toc">
                         <xsl:with-param name="include" select="'true'"/>
