@@ -568,6 +568,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
 
         // collect key definitions
         for (final String key: kdMap.keySet()) {
+            // key and value.keys will differ when keydef is a redirect to another keydef
             final KeyDef value = kdMap.get(key);
             if (keysDefMap.containsKey(key)) {
                 // if there already exists duplicated key definition in
@@ -591,8 +592,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
                  * 
                  * logger.logException(e); }
                  */
-
-                keysDefMap.put(key, new KeyDef(value.keys, value.href, currentFile));
+                keysDefMap.put(key, new KeyDef(key, value.href, currentFile));
             }
             // TODO Added by William on 2009-06-09 for scheme key bug(532-547)
             // if the current file is also a schema file

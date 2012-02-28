@@ -560,22 +560,11 @@ public final class KeyrefPaser extends XMLFilterImpl {
                     }
 
                 } else if (currentElement != null && !currentElement.isRefType) {
-                    final String target = keyMap.get(keyName);
-
-                    if (target != null) {
-                        valid = true;
-                        XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
-                        XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
-                        XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
-                        XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
-                    } else {
-                        // key does not exist
-                        // Do not log error, key should not need a link
-                        //final Properties prop = new Properties();
-                        //prop.put("%1", atts.getValue(ATTRIBUTE_NAME_KEYREF));
-                        //logger.logInfo(MessageUtils.getMessage("DOTJ047I", prop).toString());
-                    }
-
+                    valid = true;
+                    XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
+                    XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
+                    XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
+                    XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
                 }
 
 
