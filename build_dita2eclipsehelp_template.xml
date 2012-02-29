@@ -140,16 +140,16 @@
             description="Build Eclipse Help index file">
     	  <echo level="info"> args.eclipsehelp.indexsee = ${args.eclipsehelp.indexsee} </echo>
     	  <pipeline message="Extract index term."
-            module="IndexTermExtract"
-            basedir="${basedir}"
             tempdir="${dita.temp.dir}"
             inputmap="${user.input.file}">
-          <param name="output" location="${output.dir}${file.separator}${user.input.file}"/>
-          <param name="targetext" value="${out.ext}"/>
-          <param name="indextype" value="eclipsehelp"/>
-          <param name="indexclass" value="${dita.eclipsehelp.index.class}"/>
-          <param name="eclipse.indexsee" value="${args.eclipsehelp.indexsee}"/>
-          <param name="encoding" value="${args.dita.locale}" if="args.dita.locale"/>
+    	    <module class="org.dita.dost.module.IndexTermExtractModule">
+            <param name="output" location="${output.dir}${file.separator}${user.input.file}"/>
+            <param name="targetext" value="${out.ext}"/>
+            <param name="indextype" value="eclipsehelp"/>
+            <param name="indexclass" value="${dita.eclipsehelp.index.class}"/>
+            <param name="eclipse.indexsee" value="${args.eclipsehelp.indexsee}"/>
+            <param name="encoding" value="${args.dita.locale}" if="args.dita.locale"/>
+    	    </module>
     	  </pipeline>
     </target>
     
@@ -161,16 +161,16 @@
         description="Build Eclipse Help index file">
     	  <echo level="info"> args.eclipsehelp.indexsee = ${args.eclipsehelp.indexsee} </echo>
         <pipeline message="Extract index term."
-            module="IndexTermExtract"
-            basedir="${basedir}"
             tempdir="${dita.temp.dir}"
             inputmap="${user.input.file}">
-          <param name="output" location="${output.dir}${file.separator}index.xml"/>
-          <param name="targetext" value="${out.ext}"/>
-          <param name="indextype" value="eclipsehelp"/>
-          <param name="indexclass" value="${dita.eclipsehelp.index.class}"/>
-          <param name="eclipse.indexsee" value="${args.eclipsehelp.indexsee}"/>
-          <param name="encoding" value="${args.dita.locale}" if="args.dita.locale"/>
+          <module class="org.dita.dost.module.IndexTermExtractModule">
+            <param name="output" location="${output.dir}${file.separator}index.xml"/>
+            <param name="targetext" value="${out.ext}"/>
+            <param name="indextype" value="eclipsehelp"/>
+            <param name="indexclass" value="${dita.eclipsehelp.index.class}"/>
+            <param name="eclipse.indexsee" value="${args.eclipsehelp.indexsee}"/>
+            <param name="encoding" value="${args.dita.locale}" if="args.dita.locale"/>
+          </module>
         </pipeline>
     </target>
 

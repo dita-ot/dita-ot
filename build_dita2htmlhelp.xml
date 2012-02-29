@@ -123,14 +123,14 @@
             depends="dita.map.htmlhelp.init" if="old.transform"
             description="Build HTMLHelp HHK file">
         <pipeline message="Extract index term."
-                  module="IndexTermExtract"
-                  basedir="${basedir}"
                   tempdir="${dita.temp.dir}"
                   inputmap="${user.input.file}">
-          <param name="output" location="${output.dir}${file.separator}${user.input.file}"/>
-          <param name="targetext" value="${out.ext}"/>
-          <param name="indextype" value="htmlhelp"/>
-          <param name="encoding" value="${args.dita.locale}" if="args.dita.locale"/>
+          <module class="org.dita.dost.module.IndexTermExtractModule">
+            <param name="output" location="${output.dir}${file.separator}${user.input.file}"/>
+            <param name="targetext" value="${out.ext}"/>
+            <param name="indextype" value="htmlhelp"/>
+            <param name="encoding" value="${args.dita.locale}" if="args.dita.locale"/>
+          </module>
         </pipeline>
     </target>
     
@@ -138,14 +138,14 @@
         depends="dita.map.htmlhelp.init" if="inner.transform"
         description="Build HTMLHelp HHK file">
         <pipeline message="Extract index term."
-            module="IndexTermExtract"
-            basedir="${basedir}"
             tempdir="${dita.temp.dir}"
             inputmap="${user.input.file}">
-          <param name="output" location="${output.dir}${file.separator}${dita.map.filename.root}.hhk"/>
-          <param name="targetext" value="${out.ext}"/>
-          <param name="indextype" value="htmlhelp"/>
-          <param name="encoding" value="${args.dita.locale}" if="args.dita.locale"/>
+          <module class="org.dita.dost.module.IndexTermExtractModule">
+            <param name="output" location="${output.dir}${file.separator}${dita.map.filename.root}.hhk"/>
+            <param name="targetext" value="${out.ext}"/>
+            <param name="indextype" value="htmlhelp"/>
+            <param name="encoding" value="${args.dita.locale}" if="args.dita.locale"/>
+          </module>
         </pipeline>
     </target>
 	

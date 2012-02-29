@@ -79,9 +79,11 @@
 
   <!-- added by Alan on Date: 2009-10-21 for RTF output encoding problem-->
   <target name="escapeUnicode">
-    <pipeline message="Escape Unicode" module="EscapeUnicode">
-      <param name="input" value="${input}"/>
-      <param name="output" value="${output}"/>
+    <pipeline message="Escape Unicode">
+      <module class="org.dita.dost.module.EscapeUnicodeModule">
+        <param name="input" value="${input}"/>
+        <param name="output" value="${output}"/>
+      </module>
     </pipeline>
     <move file="${output}" tofile="${input}" overwrite="true"/>
     <delete file="${output}"/>

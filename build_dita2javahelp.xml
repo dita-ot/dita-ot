@@ -171,28 +171,28 @@
     <target name="dita.map.javahelp.index" if="old.transform"
             description="Build JavaHelp Index file">
         <pipeline message="Extract index term."
-                  module="IndexTermExtract"
-                  basedir="${basedir}"
                   tempdir="${dita.temp.dir}"
                   inputmap="${user.input.file}">
-          <param name="output" location="${output.dir}${file.separator}${user.input.file}"/>
-          <param name="targetext" value=".html"/>
-          <param name="indextype" value="javahelp"/>
-          <param name="encoding" value="${args.dita.locale}" if="args.dita.locale"/>
+          <module class="org.dita.dost.module.IndexTermExtractModule">
+            <param name="output" location="${output.dir}${file.separator}${user.input.file}"/>
+            <param name="targetext" value=".html"/>
+            <param name="indextype" value="javahelp"/>
+            <param name="encoding" value="${args.dita.locale}" if="args.dita.locale"/>
+          </module>
         </pipeline>
     </target>
     
     <target name="dita.out.map.javahelp.index" if="inner.transform"
         description="Build JavaHelp Index file">
         <pipeline message="Extract index term."
-            module="IndexTermExtract"
-            basedir="${basedir}"
             tempdir="${dita.temp.dir}"
             inputmap="${user.input.file}">
-          <param name="output" location="${output.dir}${file.separator}${dita.map.filename.root}.xml"/>
-          <param name="targetext" value=".html"/>
-          <param name="indextype" value="javahelp"/>
-          <param name="encoding" value="${args.dita.locale}" if="args.dita.locale"/>
+          <module class="org.dita.dost.module.IndexTermExtractModule">
+            <param name="output" location="${output.dir}${file.separator}${dita.map.filename.root}.xml"/>
+            <param name="targetext" value=".html"/>
+            <param name="indextype" value="javahelp"/>
+            <param name="encoding" value="${args.dita.locale}" if="args.dita.locale"/>
+          </module>
         </pipeline>
     </target>
 
