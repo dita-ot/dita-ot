@@ -128,6 +128,10 @@ public final class DITAOTBuildLogger implements BuildLogger {
             break;
         case Project.MSG_WARN:
             numOfWarnings.incrementAndGet();
+            if(!message.contains("[WARN]")) {
+            	stream.println("Extra warnings counted");
+            	logger.logInfo("Extra warnings counted");
+            }
             break;
         case Project.MSG_INFO:
             numOfInfo.incrementAndGet();
@@ -478,6 +482,9 @@ public final class DITAOTBuildLogger implements BuildLogger {
                 numOfErrors.incrementAndGet();
             } else if (WARN.equals(type)) {
                 numOfWarnings.incrementAndGet();
+                out.println("Extra warnings counted");
+                logger.logInfo("Extra warnings counted");
+
             } else if (INFO.equals(type)) {
                 numOfInfo.incrementAndGet();
             }
