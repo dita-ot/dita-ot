@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -33,6 +34,10 @@ import java.util.Properties;
 import java.util.Set;
 
 import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
@@ -181,8 +186,6 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
 
     private String rootFile;
 
-    private XMLSerializer keydef;
-
     // keydef file from keys used in schema files
     private XMLSerializer schemekeydef;
 
@@ -289,8 +292,6 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             updateBaseDirectory();
             refactoringResult();
             outputResult();
-            keydef.writeEndDocument();
-            keydef.close();
             schemekeydef.writeEndDocument();
             schemekeydef.close();
             // Added by William on 2009-06-25 for req #12014 start
@@ -379,9 +380,6 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
        
         inputFile = inFile.getName();
         try {
-            keydef = XMLSerializer.newInstance(new FileOutputStream(new File(tempDir, "keydef.xml")));
-            keydef.writeStartDocument();
-            keydef.writeStartElement(ELEMENT_STUB);
             // Added by William on 2009-06-09 for scheme key bug
             // create the keydef file for scheme files
             schemekeydef = XMLSerializer.newInstance(new FileOutputStream(new File(tempDir, "schemekeydef.xml")));
@@ -1116,7 +1114,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
     
     private void addKeyDefSetToProperties(final Job prop, final String key, final Collection<KeyDef> set) {
         // update value
-        final Set<String> newSet = new LinkedHashSet<String>(set.size());
+        final Collection<KeyDef> updated = new ArrayList<KeyDef>(set.size());
         for (final KeyDef file: set) {
             String keys = FileUtils.removeRedundantNames(prefix + file.keys).replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
             String href = file.href;
@@ -1136,12 +1134,20 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
                 }
             }
             final KeyDef keyDef = new KeyDef(keys, href, source);
-            newSet.add(keyDef.toString());
-
-            writeKeyDef(keyDef);
+            updated.add(keyDef);
+        }
+        // write key definition
+        try {
+            writeKeydef(new File(tempDir, "keydef.xml"), updated);
+        } catch (final DITAOTException e) {
+            logger.logError("Failed to write key definition file: " + e.getMessage(), e);
+        }
+        // write list file
+        final Set<String> newSet = new LinkedHashSet<String>(set.size());
+        for (final KeyDef keydef: updated) {
+            newSet.add(keydef.toString());
         }
         prop.setSet(key, newSet);
-        // write list file
         final String fileKey = key.substring(0, key.lastIndexOf("list")) + "file";
         prop.setProperty(fileKey, key.substring(0, key.lastIndexOf("list")) + ".list");
         try {
@@ -1150,31 +1156,6 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             logger.logError("Failed to write key list file: " + e.getMessage(), e);
         }
     }
-
-    // Added by William on 2010-06-10 for bug:3013545 start
-    /**
-     * Write keydef into keydef.xml.
-     * 
-     * @param keyName key name.
-     * @param result keydef.
-     */
-    private void writeKeyDef(final KeyDef keyDef) {
-        try {
-            keydef.writeStartElement(ELEMENT_KEYDEF);
-            keydef.writeAttribute(ATTRIBUTE_KEYS, keyDef.keys);
-            if (keyDef.href != null) {
-                keydef.writeAttribute(ATTRIBUTE_HREF, keyDef.href);
-            }
-            if (keyDef.source != null) {
-                keydef.writeAttribute(ATTRIUBTE_SOURCE, keyDef.source);
-            }
-            keydef.writeEndElement();
-        } catch (final SAXException e) {
-            logger.logException(e);
-        }
-    }
-
-    // Added by William on 2010-06-10 for bug:3013545 end
 
     /**
      * add FlagImangesSet to Properties, which needn't to change the dir level,
@@ -1239,6 +1220,69 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
     }
 
     // Nested classes ----------------------------------------------------------
+
+    /**
+     * Read key definition XML configuration file
+     * 
+     * @param keydefFile key definition file
+     * @return list of key definitions
+     * @throws DITAOTException if reading configuration file failed
+     */
+    public static Collection<KeyDef> readKeydef(final File keydefFile) throws DITAOTException {
+        final Collection<KeyDef> res = new ArrayList<KeyDef>();
+        try {
+            final XMLReader parser = StringUtils.getXMLReader();
+            parser.setContentHandler(new DefaultHandler() {
+                @Override
+                public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
+                    final String n = localName != null ? localName : qName;
+                    if (n.equals(ELEMENT_KEYDEF)) {
+                        res.add(new KeyDef(atts.getValue(ATTRIBUTE_KEYS), atts.getValue(ATTRIBUTE_HREF), atts.getValue(ATTRIUBTE_SOURCE)));
+                    }
+                }
+            });
+            parser.parse(keydefFile.toURI().toString());
+        } catch (final Exception e) {
+            throw new DITAOTException("Failed to read key definition file " + keydefFile + ": " + e.getMessage(), e);
+        }
+        return res;
+    }
+    
+    /**
+     * Write key definition XML configuration file
+     * 
+     * @param keydefFile key definition file
+     * @param keydefs list of key definitions
+     * @throws DITAOTException if writing configuration file failed
+     */
+    public static void writeKeydef(final File keydefFile, final Collection<KeyDef> keydefs) throws DITAOTException {
+        XMLSerializer keydef = null;
+        try {
+            keydef = XMLSerializer.newInstance(new FileOutputStream(keydefFile));
+            keydef.writeStartDocument();
+            keydef.writeStartElement(ELEMENT_STUB);
+            for (final KeyDef k: keydefs) {
+                keydef.writeStartElement(ELEMENT_KEYDEF);
+                keydef.writeAttribute(ATTRIBUTE_KEYS, k.keys);
+                if (k.href != null) {
+                    keydef.writeAttribute(ATTRIBUTE_HREF, k.href);
+                }
+                if (k.source != null) {
+                    keydef.writeAttribute(ATTRIUBTE_SOURCE, k.source);
+                }
+                keydef.writeEndElement();
+            }        
+            keydef.writeEndDocument();
+        } catch (final Exception e) {
+            throw new DITAOTException("Failed to write key definition file " + keydefFile + ": " + e.getMessage(), e);
+        } finally {
+            if (keydef != null) {
+                try {
+                    keydef.close();
+                } catch (IOException e) {}
+            }
+        }
+    }
     
     public static class KeyDef {
         public final String keys;
