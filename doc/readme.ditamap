@@ -42,6 +42,10 @@
 <topicref href="readme/DITA-h2d-java.xml" toc="no"></topicref>
 </topicref>
 </topicref>
+<topicref href="readme/DITA-globalization.dita">
+<topicref href="readme/DITA-globalization-xhtml.dita"></topicref>
+<topicref href="readme/DITA-globalization-pdf.dita"></topicref>
+</topicref>
     <topicref href="readme/DITA-log.xml"/>
     <topicref href="readme/DITA-troubleshooting.xml"/>
     <topicref href="readme/DITA-limitations.xml" processing-role="resource-only" toc="no"/>
