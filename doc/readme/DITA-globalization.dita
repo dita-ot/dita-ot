@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "concept.dtd">
+<concept id="dita-globalization" xml:lang="en-us">
+<title>Globalization in the DITA-OT</title>
+<shortdesc>The DITA standard comes with many features to enable globalized
+content, including the xml:lang, translate, and dir attributes. The
+DITA-OT uses these attributes to help publish content that is written
+or translated into many different languages.</shortdesc>
+<conbody>
+<p>As a standard, DITA itself can accommodate content written in any
+language. The toolkit itself generally passes content through unchanged
+into any output format; language support is primarily noticed in a
+few key areas.</p>
+<dl><dlentry>
+<dt>Generated text</dt>
+<dd>Generated text is text that does not appear in the source topics,
+but is placed automatically in the output file. For example, the word
+"Chapter" in a PDF is an example of generated text, as is the phrase
+"Related information" that is placed above a collection of links.
+The toolkit checks for the closest specified xml:lang attribute value
+and uses that to determine what language should be used for generated
+text. If no language is found, the toolkit defaults to US English.</dd>
+</dlentry><dlentry>
+<dt>Index sorting</dt>
+<dd>Indexes can only be sorted based on a single language. The toolkit
+will detect the first language used (generally set on the root element
+of a map) and use that for sorting.</dd>
+</dlentry><dlentry>
+<dt>Text direction</dt>
+<dd>Generally speaking, browsers are able to detect right-to-left
+text and try to do the right thing with it. When the toolkit detects
+supported right-to-left languages in an XHTML build, such as Hebrew
+(xml:lang="he") or Arabic (xml:lang="ar"), it will switch to a different
+CSS file. CSS spacing that is based on the left margin in left-to-right
+output is switched to the right in the right-to-left output, and spacing
+based on the right margin is also switched to the left.</dd>
+</dlentry></dl>
+<section><title>What languages are supported in the toolkit?</title><p>Language
+support varies by output format. When the toolkit was originally created,
+it included support for generated text covering roughly 40 languages,
+including several variants (such as both French and French Canadian).
+The number of languages has increased over time. The list of translations
+for each language was relatively small.</p><p>When the new production-level
+PDF transform was donated much later, it supported fewer languages,
+primarily because it uses a much larger set of generated text. For
+example, PDF output needs a translation of "Chapter" which was not
+part of the original toolkit. The number of supported PDF languages
+has also increased over time, but is still not as complete as the
+support in older transforms.</p></section>
+</conbody>
+</concept><?Pub Caret -3?>
+<?Pub *0000002931?>

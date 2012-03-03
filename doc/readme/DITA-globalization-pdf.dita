@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<?Pub Inc?>
+<reference id="dita-globalization-pdf" xml:lang="en-us">
+<title>Localization in PDF based transforms</title>
+<shortdesc>PDF (PDF2) output is supported for the following languages.</shortdesc>
+<refbody>
+<section><ul>
+<li>Simplified Chinese</li>
+<li>Dutch</li><?Pub Caret 0?>
+<li>English (default)</li>
+<li>Finish</li>
+<li>French</li>
+<li>German</li>
+<li>Hebrew</li>
+<li>Italian</li>
+<li>Japanese</li>
+<li>Romanian</li>
+<li>Russian</li>
+<li>Spanish</li>
+<li>Swedish</li>
+</ul></section>
+</refbody>
+</reference>
+<?Pub *0000000702?>
