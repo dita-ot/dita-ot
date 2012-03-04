@@ -271,6 +271,11 @@ See the accompanying license.txt file for applicable licenses.
                         <prodname>
                             <xsl:value-of select="$productName"/>
                         </prodname>
+                        <heading>
+                            <fo:inline xsl:use-attribute-sets="__body__odd__header__heading">
+                                <fo:retrieve-marker retrieve-class-name="current-header"/>
+                            </fo:inline>
+                        </heading>
                         <pagenum>
                             <fo:inline xsl:use-attribute-sets="__toc__odd__header__pagenum">
                                 <fo:page-number/>
@@ -292,6 +297,11 @@ See the accompanying license.txt file for applicable licenses.
                         <prodname>
                             <xsl:value-of select="$productName"/>
                         </prodname>
+                        <heading>
+                            <fo:inline xsl:use-attribute-sets="__body__even__header__heading">
+                                <fo:retrieve-marker retrieve-class-name="current-header"/>
+                            </fo:inline>
+                        </heading>
                         <pagenum>
                             <fo:inline xsl:use-attribute-sets="__toc__even__header__pagenum">
                                 <fo:page-number/>
@@ -349,6 +359,11 @@ See the accompanying license.txt file for applicable licenses.
                         <prodname>
                             <xsl:value-of select="$productName"/>
                         </prodname>
+                        <heading>
+                            <fo:inline xsl:use-attribute-sets="__body__odd__header__heading">
+                                <fo:retrieve-marker retrieve-class-name="current-header"/>
+                            </fo:inline>
+                        </heading>
                         <pagenum>
                             <fo:inline xsl:use-attribute-sets="__index__odd__header__pagenum">
                                 <fo:page-number/>
@@ -370,6 +385,11 @@ See the accompanying license.txt file for applicable licenses.
                         <prodname>
                             <xsl:value-of select="$productName"/>
                         </prodname>
+                        <heading>
+                            <fo:inline xsl:use-attribute-sets="__body__even__header__heading">
+                                <fo:retrieve-marker retrieve-class-name="current-header"/>
+                            </fo:inline>
+                        </heading>
                         <pagenum>
                             <fo:inline xsl:use-attribute-sets="__index__even__header__pagenum">
                                 <fo:page-number/>
@@ -742,6 +762,11 @@ See the accompanying license.txt file for applicable licenses.
                         <prodname>
                             <xsl:value-of select="$productName"/>
                         </prodname>
+                        <heading>
+                            <fo:inline xsl:use-attribute-sets="__body__odd__header__heading">
+                                <fo:retrieve-marker retrieve-class-name="current-header"/>
+                            </fo:inline>
+                        </heading>
                         <pagenum>
                             <fo:inline xsl:use-attribute-sets="__glossary__odd__header__pagenum">
                                 <fo:page-number/>
@@ -763,6 +788,11 @@ See the accompanying license.txt file for applicable licenses.
                         <prodname>
                             <xsl:value-of select="$productName"/>
                         </prodname>
+                        <heading>
+                            <fo:inline xsl:use-attribute-sets="__body__even__header__heading">
+                                <fo:retrieve-marker retrieve-class-name="current-header"/>
+                            </fo:inline>
+                        </heading>
                         <pagenum>
                             <fo:inline xsl:use-attribute-sets="__glossary__even__header__pagenum">
                                 <fo:page-number/>

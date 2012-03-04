@@ -19,12 +19,12 @@
   <variable id="Preface first header"/>
   <variable id="Toc odd footer"/>
   <variable id="Toc even footer"/>
-  <variable id="Toc odd header"><param ref-name="prodname"/> | <variable id="Table of Contents"/> | <param ref-name="pagenum"/></variable>
-  <variable id="Toc even header"><param ref-name="pagenum"/> | <variable id="Table of Contents"/> | <param ref-name="prodname"/></variable>
+  <variable id="Toc odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
+  <variable id="Toc even header"><param ref-name="pagenum"/> | <param ref-name="heading"/> | <param ref-name="prodname"/></variable>
   <variable id="Index odd footer"/>
   <variable id="Index even footer"/>
-  <variable id="Index odd header"><param ref-name="prodname"/> | <variable id="Index"/> | <param ref-name="pagenum"/></variable>
-  <variable id="Index even header"><param ref-name="pagenum"/> | <variable id="Index"/> | <param ref-name="prodname"/></variable>
+  <variable id="Index odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
+  <variable id="Index even header"><param ref-name="pagenum"/> | <param ref-name="heading"/> | <param ref-name="prodname"/></variable>
   <variable id="Ordered List Number"><param ref-name="number"/>. </variable>
   <variable id="Unordered List bullet">•</variable>
   <variable id="Table of Contents">תוכן העניינים</variable>
@@ -97,8 +97,8 @@
   <variable id="Task Postreq">איך להמשיך</variable>
   <variable id="Glossary odd footer"/>
   <variable id="Glossary even footer"/>
-  <variable id="Glossary odd header"><param ref-name="prodname"/> | <variable id="Glossary"/> | <param ref-name="pagenum"/></variable>
-  <variable id="Glossary even header"><param ref-name="pagenum"/> | <variable id="Glossary"/> | <param ref-name="prodname"/></variable>
+  <variable id="Glossary odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
+  <variable id="Glossary even header"><param ref-name="pagenum"/> | <param ref-name="heading"/> | <param ref-name="prodname"/></variable>
   <variable id="Glossary">מילון מונחים</variable>
   <variable id="List of Tables">רשימת טבלאות</variable>
   <variable id="List of Figures">רשימת איורים</variable>

@@ -18,12 +18,13 @@
   <variable id="Preface first header"/>
   <variable id="Toc odd footer"/>
   <variable id="Toc even footer"/>
-  <variable id="Toc odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;Inhoud&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
-  <variable id="Toc even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;Inhoud&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
+  <!-- Inhoud -->
+  <variable id="Toc odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
+  <variable id="Toc even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
   <variable id="Index odd footer"/>
   <variable id="Index even footer"/>
-  <variable id="Index odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;Index&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
-  <variable id="Index even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;Index&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
+  <variable id="Index odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
+  <variable id="Index even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
   <variable id="Ordered List Number"><param ref-name="number"/>. </variable>
   <variable id="Unordered List bullet">&#x2022;</variable>
   <variable id="Table of Contents">Inhoudsopgave</variable>

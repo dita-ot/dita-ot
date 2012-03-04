@@ -95,11 +95,11 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- The header that appears on the odd-numbered table of contents
          pages. --> 
-    <variable id="Toc odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;TOC&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
+    <variable id="Toc odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
 
     <!-- The header that appears on the odd-numbered table of contents
          pages. --> 
-    <variable id="Toc even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;TOC&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
+    <variable id="Toc even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
 
     <!-- The footer that appears on the odd-numbered index pages. -->
     <variable id="Index odd footer"/>
@@ -108,10 +108,10 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Index even footer"/>
 
     <!-- The header that appears on the odd-numbered index pages. -->
-    <variable id="Index odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;<variable id="Index"/>&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
+    <variable id="Index odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
 
     <!-- The header that appears on the even-numbered index pages. -->
-    <variable id="Index even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<variable id="Index"/>&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
+    <variable id="Index even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
 
     <!-- The formatting used to display ordered lists (e.g., "1., 2." or 
          "1), 2)" -->
@@ -402,10 +402,10 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Glossary even footer"/>
 
     <!-- The header that appears on the odd-numbered glossary pages. -->
-    <variable id="Glossary odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;<variable id="Glossary"/>&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
+    <variable id="Glossary odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
 
     <!-- The header that appears on the even-numbered glossary pages. -->
-    <variable id="Glossary even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<variable id="Glossary"/>&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
+    <variable id="Glossary even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
      
      <!-- The heading string to put at the top of the Glossary -->
      <variable id="Glossary">Glossary</variable>

@@ -12,7 +12,11 @@ version="2.0">
             <fo:page-sequence master-reference="glossary-sequence" xsl:use-attribute-sets="__force__page__count">
                 <xsl:call-template name="insertGlossaryStaticContents"/>
                 <fo:flow flow-name="xsl-region-body">
-
+                    <fo:marker marker-class-name="current-header">
+                      <xsl:call-template name="insertVariable">
+                        <xsl:with-param name="theVariableID" select="'Glossary'"/>
+                      </xsl:call-template>
+                    </fo:marker>
 
                     <fo:block xsl:use-attribute-sets="__glossary__label" id="{$id.glossary}">
                         <xsl:call-template name="insertVariable">

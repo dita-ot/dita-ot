@@ -447,6 +447,11 @@ See the accompanying license.txt file for applicable licenses.
                 <fo:flow flow-name="xsl-region-body">
                     <xsl:call-template name="createTocHeader"/>
                     <fo:block>
+                        <fo:marker marker-class-name="current-header">
+                          <xsl:call-template name="insertVariable">
+                            <xsl:with-param name="theVariableID" select="'Table of Contents'"/>
+                          </xsl:call-template>
+                        </fo:marker>
                         <xsl:copy-of select="exsl:node-set($toc)"/>
                     </fo:block>
                 </fo:flow>
