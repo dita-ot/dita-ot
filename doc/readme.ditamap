@@ -50,4 +50,20 @@
     <topicref href="readme/DITA-troubleshooting.xml"/>
     <topicref href="readme/DITA-limitations.xml" processing-role="resource-only" toc="no"/>
 </topicref>
+<reltable>
+<relrow>
+<relcell>
+<topicref href="readme/DITA-globalization.dita"></topicref>
+</relcell>
+<relcell>
+<topicref format="html"
+href="http://docs.oasis-open.org/dita/v1.2/os/spec/archSpec/translation.html"
+scope="external" type="reference">
+<topicmeta>
+<navtitle>Localization support in the DITA standard</navtitle>
+</topicmeta>
+</topicref>
+</relcell>
+</relrow>
+</reltable>
 </map>

@@ -15,13 +15,14 @@
           <xref format="html" href="http://www.apache.org/licenses/LICENSE-2.0" scope="external"
           >Apache 2.0</xref> open source licenses.</p>
       <note>While the DITA Standard itself is owned and developed by OASIS, the DITA Open Toolkit is
-        an independent, open source implementation of the standard</note>
+        an independent, open source implementation of the standard.</note>
       <p>Key output formats for the toolkit include:</p>
       <ul>
         <li>XHTML</li>
         <li>PDF (formerly known as PDF2)</li>
         <li>ODT (Open Document Format)</li>
         <li>Eclipse Help</li>
+        <li>TocJS (XHTML with a JavaScript frameset)</li>
         <li>HTML Help</li>
         <li>Java Help</li>
         <li>Eclipse Content (normalized DITA plus Eclipse project files)</li>
