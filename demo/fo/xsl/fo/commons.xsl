@@ -66,10 +66,10 @@ See the accompanying license.txt file for applicable licenses.
     
     <xsl:template match="*[@conref]" priority="99">
         <fo:block xsl:use-attribute-sets="__unresolved__conref">
-            <xsl:call-template name="insertReferenceTitle">
+            <xsl:apply-templates select="." mode="insertReferenceTitle">
                 <xsl:with-param name="href" select="@conref"/>
                 <xsl:with-param name="titlePrefix" select="'Content-Reference'"/>
-            </xsl:call-template>
+            </xsl:apply-templates>
         </fo:block>
     </xsl:template>
 
@@ -94,6 +94,12 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template name="processTopic">
+        <xsl:call-template name="output-message">
+          <xsl:with-param name="msgcat">DOTX</xsl:with-param>
+          <xsl:with-param name="msgnum">066</xsl:with-param>
+          <xsl:with-param name="msgsev">W</xsl:with-param>
+          <xsl:with-param name="msgparams">%1=processTopic</xsl:with-param>
+        </xsl:call-template>
         <xsl:apply-templates select="." mode="processTopic"/>
     </xsl:template>
     <xsl:template match="*" mode="processTopic">
@@ -136,7 +142,7 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:otherwise>
         </xsl:choose>
         
-        <xsl:call-template name="buildRelationships"/>
+        <xsl:apply-templates select="." mode="buildRelationships"/>
         <xsl:apply-templates select="*[contains(@class,' topic/topic ')]"/>
         <xsl:apply-templates select="." mode="topicEpilog"/>
     </xsl:template>
@@ -163,12 +169,12 @@ See the accompanying license.txt file for applicable licenses.
                 <fo:page-sequence master-reference="{$page-sequence-reference}" xsl:use-attribute-sets="__force__page__count">
                     <xsl:call-template name="insertBodyStaticContents"/>
                     <fo:flow flow-name="xsl-region-body">
-                        <xsl:call-template name="processTopic"/>
+                        <xsl:apply-templates select="." mode="processTopic"/>
                     </fo:flow>
                 </fo:page-sequence>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:call-template name="processTopic"/>
+                <xsl:apply-templates select="." mode="processTopic"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -218,20 +224,20 @@ See the accompanying license.txt file for applicable licenses.
                             <xsl:call-template name="insertBodyStaticContents"/>
                             <fo:flow flow-name="xsl-region-body">
                                 <xsl:choose>
-                                    <xsl:when test="contains(@class,' concept/concept ')"><xsl:call-template name="processConcept"/></xsl:when>
-                                    <xsl:when test="contains(@class,' task/task ')"><xsl:call-template name="processTask"/></xsl:when>
-                                    <xsl:when test="contains(@class,' reference/reference ')"><xsl:call-template name="processReference"/></xsl:when>
-                                    <xsl:otherwise><xsl:call-template name="processTopic"/></xsl:otherwise>
+                                    <xsl:when test="contains(@class,' concept/concept ')"><xsl:apply-templates select="." mode="processConcept"/></xsl:when>
+                                    <xsl:when test="contains(@class,' task/task ')"><xsl:apply-templates select="." mode="processTask"/></xsl:when>
+                                    <xsl:when test="contains(@class,' reference/reference ')"><xsl:apply-templates select="." mode="processReference"/></xsl:when>
+                                    <xsl:otherwise><xsl:apply-templates select="." mode="processTopic"/></xsl:otherwise>
                                 </xsl:choose>
                             </fo:flow>
                         </fo:page-sequence>
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:choose>
-                            <xsl:when test="contains(@class,' concept/concept ')"><xsl:call-template name="processConcept"/></xsl:when>
-                            <xsl:when test="contains(@class,' task/task ')"><xsl:call-template name="processTask"/></xsl:when>
-                            <xsl:when test="contains(@class,' reference/reference ')"><xsl:call-template name="processReference"/></xsl:when>
-                            <xsl:otherwise><xsl:call-template name="processTopic"/></xsl:otherwise>
+                            <xsl:when test="contains(@class,' concept/concept ')"><xsl:apply-templates select="." mode="processConcept"/></xsl:when>
+                            <xsl:when test="contains(@class,' task/task ')"><xsl:apply-templates select="." mode="processTask"/></xsl:when>
+                            <xsl:when test="contains(@class,' reference/reference ')"><xsl:apply-templates select="." mode="processReference"/></xsl:when>
+                            <xsl:otherwise><xsl:apply-templates select="." mode="processTopic"/></xsl:otherwise>
                         </xsl:choose>
                     </xsl:otherwise>
                 </xsl:choose>
@@ -260,7 +266,7 @@ See the accompanying license.txt file for applicable licenses.
                         </fo:marker>
                         <fo:marker marker-class-name="current-header">
                             <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
-                                <xsl:call-template name="getTitle"/>
+                                <xsl:apply-templates select="." mode="getTitle"/>
                             </xsl:for-each>
                         </fo:marker>
                     </xsl:if>
@@ -277,7 +283,7 @@ See the accompanying license.txt file for applicable licenses.
                         <!-- added by William on 2009-07-02 for indexterm bug:2815485 end-->
                         
                         <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
-                            <xsl:call-template name="getTitle"/>
+                            <xsl:apply-templates select="." mode="getTitle"/>
                         </xsl:for-each>
                     </fo:block>
 
@@ -285,10 +291,10 @@ See the accompanying license.txt file for applicable licenses.
                       <xsl:when test="$chapterLayout='BASIC'">
                           <xsl:apply-templates select="*[not(contains(@class, ' topic/topic ') or contains(@class, ' topic/title ') or
                                                              contains(@class, ' topic/prolog '))]"/>
-                          <xsl:call-template name="buildRelationships"/>
+                          <xsl:apply-templates select="." mode="buildRelationships"/>
                       </xsl:when>
                       <xsl:otherwise>
-                          <xsl:call-template name="createMiniToc"/>
+                          <xsl:apply-templates select="." mode="createMiniToc"/>
                       </xsl:otherwise>
                     </xsl:choose>
 
@@ -311,7 +317,7 @@ See the accompanying license.txt file for applicable licenses.
                         </fo:marker>
                         <fo:marker marker-class-name="current-header">
                             <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
-                                <xsl:call-template name="getTitle"/>
+                                <xsl:apply-templates select="." mode="getTitle"/>
                             </xsl:for-each>
                         </fo:marker>
                     </xsl:if>
@@ -327,7 +333,7 @@ See the accompanying license.txt file for applicable licenses.
                         <xsl:call-template name="pullPrologIndexTerms"/>
                         <!-- added by William on 2009-07-02 for indexterm bug:2815485 end-->
                         <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
-                            <xsl:call-template name="getTitle"/>
+                            <xsl:apply-templates select="." mode="getTitle"/>
                         </xsl:for-each>
                     </fo:block>
 
@@ -335,10 +341,10 @@ See the accompanying license.txt file for applicable licenses.
                       <xsl:when test="$appendixLayout='BASIC'">
                           <xsl:apply-templates select="*[not(contains(@class, ' topic/topic ') or contains(@class, ' topic/title ') or
                                                              contains(@class, ' topic/prolog '))]"/>
-                          <xsl:call-template name="buildRelationships"/>
+                          <xsl:apply-templates select="." mode="buildRelationships"/>
                       </xsl:when>
                       <xsl:otherwise>
-                          <xsl:call-template name="createMiniToc"/>
+                          <xsl:apply-templates select="." mode="createMiniToc"/>
                       </xsl:otherwise>
                     </xsl:choose>
 
@@ -362,7 +368,7 @@ See the accompanying license.txt file for applicable licenses.
                         </fo:marker>
                         <fo:marker marker-class-name="current-header">
                             <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
-                                <xsl:call-template name="getTitle"/>
+                                <xsl:apply-templates select="." mode="getTitle"/>
                             </xsl:for-each>
                         </fo:marker>
                     </xsl:if>
@@ -378,7 +384,7 @@ See the accompanying license.txt file for applicable licenses.
                         <xsl:call-template name="pullPrologIndexTerms"/>
                         <!-- added by William on 2009-07-02 for indexterm bug:2815485 end-->
                         <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
-                            <xsl:call-template name="getTitle"/>
+                            <xsl:apply-templates select="." mode="getTitle"/>
                         </xsl:for-each>
                     </fo:block>
 
@@ -386,10 +392,10 @@ See the accompanying license.txt file for applicable licenses.
                       <xsl:when test="$partLayout='BASIC'">
                           <xsl:apply-templates select="*[not(contains(@class, ' topic/topic ') or contains(@class, ' topic/title ') or
                                                              contains(@class, ' topic/prolog '))]"/>
-                          <xsl:call-template name="buildRelationships"/>
+                          <xsl:apply-templates select="." mode="buildRelationships"/>
                       </xsl:when>
                       <xsl:otherwise>
-                          <xsl:call-template name="createMiniToc"/>
+                          <xsl:apply-templates select="." mode="createMiniToc"/>
                       </xsl:otherwise>
                     </xsl:choose>
 
@@ -428,7 +434,7 @@ See the accompanying license.txt file for applicable licenses.
                         </fo:marker>
                         <fo:marker marker-class-name="current-header">
                             <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
-                                <xsl:call-template name="getTitle"/>
+                                <xsl:apply-templates select="." mode="getTitle"/>
                             </xsl:for-each>
                         </fo:marker>
                     </xsl:if>
@@ -444,7 +450,7 @@ See the accompanying license.txt file for applicable licenses.
                         <xsl:call-template name="pullPrologIndexTerms"/>
                         <!-- added by William on 2009-07-02 for indexterm bug:2815485 end-->
                         <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
-                            <xsl:call-template name="getTitle"/>
+                            <xsl:apply-templates select="." mode="getTitle"/>
                         </xsl:for-each>
                     </fo:block>
 
@@ -452,10 +458,10 @@ See the accompanying license.txt file for applicable licenses.
                       <xsl:when test="$noticesLayout='BASIC'">
                           <xsl:apply-templates select="*[not(contains(@class, ' topic/topic ') or contains(@class, ' topic/title ') or
                                                              contains(@class, ' topic/prolog '))]"/>
-                          <xsl:call-template name="buildRelationships"/>
+                          <xsl:apply-templates select="." mode="buildRelationships"/>
                       </xsl:when>
                       <xsl:otherwise>
-                          <xsl:call-template name="createMiniToc"/>
+                          <xsl:apply-templates select="." mode="createMiniToc"/>
                       </xsl:otherwise>
                     </xsl:choose>
 
@@ -552,6 +558,12 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template name="createMiniToc">
+        <xsl:call-template name="output-message">
+          <xsl:with-param name="msgcat">DOTX</xsl:with-param>
+          <xsl:with-param name="msgnum">066</xsl:with-param>
+          <xsl:with-param name="msgsev">W</xsl:with-param>
+          <xsl:with-param name="msgparams">%1=createMiniToc</xsl:with-param>
+        </xsl:call-template>
         <xsl:apply-templates select="." mode="createMiniToc"/>
     </xsl:template>
     <xsl:template match="*" mode="createMiniToc">
@@ -633,20 +645,26 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:when test="(topicType = 'topicChapter') or (topicType = 'topicAppendix')" />
             <!--   Normal processing         -->
             <xsl:otherwise>
-                <xsl:call-template name="processTopicTitle"/>
+                <xsl:apply-templates select="." mode="processTopicTitle"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
 
     <xsl:template name="processTopicTitle">
+        <xsl:call-template name="output-message">
+          <xsl:with-param name="msgcat">DOTX</xsl:with-param>
+          <xsl:with-param name="msgnum">066</xsl:with-param>
+          <xsl:with-param name="msgsev">W</xsl:with-param>
+          <xsl:with-param name="msgparams">%1=processTopicTitle</xsl:with-param>
+        </xsl:call-template>
         <xsl:apply-templates select="." mode="processTopicTitle"/>
     </xsl:template>
     <xsl:template match="*" mode="processTopicTitle">
         <xsl:variable name="level" select="count(ancestor::*[contains(@class,' topic/topic ')])"/>
         <xsl:variable name="attrSet1">
-            <xsl:call-template name="createTopicAttrsName">
+            <xsl:apply-templates select="." mode="createTopicAttrsName">
                 <xsl:with-param name="theCounter" select="$level"/>
-            </xsl:call-template>
+            </xsl:apply-templates>
         </xsl:variable>
         <xsl:variable name="attrSet2" select="concat($attrSet1, '__content')"/>
         <fo:block>
@@ -662,12 +680,12 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
                 <xsl:if test="$level = 1">
                     <fo:marker marker-class-name="current-header">
-                        <xsl:call-template name="getTitle"/>
+                        <xsl:apply-templates select="." mode="getTitle"/>
                     </fo:marker>
                 </xsl:if>
                 <xsl:if test="$level = 2">
                     <fo:marker marker-class-name="current-h2">
-                        <xsl:call-template name="getTitle"/>
+                        <xsl:apply-templates select="." mode="getTitle"/>
                     </fo:marker>
                 </xsl:if>
                 <fo:inline id="{parent::node()/@id}"/>
@@ -681,7 +699,7 @@ See the accompanying license.txt file for applicable licenses.
                 <!-- added by William on 2009-07-02 for indexterm bug:2815485 start-->
                 <xsl:call-template name="pullPrologIndexTerms"/>
                 <!-- added by William on 2009-07-02 for indexterm bug:2815485 end-->
-                <xsl:call-template name="getTitle"/>
+                <xsl:apply-templates select="." mode="getTitle"/>
             </fo:block>
         </fo:block>
     </xsl:template>
@@ -689,6 +707,12 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="createTopicAttrsName">
         <xsl:param name="theCounter"/>
         <xsl:param name="theName" select="''"/>
+        <xsl:call-template name="output-message">
+          <xsl:with-param name="msgcat">DOTX</xsl:with-param>
+          <xsl:with-param name="msgnum">066</xsl:with-param>
+          <xsl:with-param name="msgsev">W</xsl:with-param>
+          <xsl:with-param name="msgparams">%1=createTopicAttrsName</xsl:with-param>
+        </xsl:call-template>
         <xsl:apply-templates select="." mode="createTopicAttrsName">
           <xsl:with-param name="theCounter" select="$theCounter"/>
           <xsl:with-param name="theName" select="$theName"/>
@@ -699,10 +723,10 @@ See the accompanying license.txt file for applicable licenses.
       <xsl:param name="theName" select="''"/>
         <xsl:choose>
             <xsl:when test="number($theCounter) > 0">
-                <xsl:call-template name="createTopicAttrsName">
+                <xsl:apply-templates select="." mode="createTopicAttrsName">
                     <xsl:with-param name="theCounter" select="number($theCounter) - 1"/>
                     <xsl:with-param name="theName" select="concat($theName, 'topic.')"/>
-                </xsl:call-template>
+                </xsl:apply-templates>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:value-of select="concat($theName, 'title')"/>
@@ -713,7 +737,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class,' topic/section ')]/*[contains(@class,' topic/title ')]">
         <fo:block xsl:use-attribute-sets="section.title">
             <xsl:call-template name="commonattributes"/>
-            <xsl:call-template name="getTitle"/>
+            <xsl:apply-templates select="." mode="getTitle"/>
         </fo:block>
     </xsl:template>
 
@@ -995,6 +1019,12 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template name="processConcept">
+        <xsl:call-template name="output-message">
+          <xsl:with-param name="msgcat">DOTX</xsl:with-param>
+          <xsl:with-param name="msgnum">066</xsl:with-param>
+          <xsl:with-param name="msgsev">W</xsl:with-param>
+          <xsl:with-param name="msgparams">%1=processConcept</xsl:with-param>
+        </xsl:call-template>
         <xsl:apply-templates select="." mode="processConcept"/>
     </xsl:template>
     <xsl:template match="*" mode="processConcept">
@@ -1084,6 +1114,12 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template name="processReference">
+        <xsl:call-template name="output-message">
+          <xsl:with-param name="msgcat">DOTX</xsl:with-param>
+          <xsl:with-param name="msgnum">066</xsl:with-param>
+          <xsl:with-param name="msgsev">W</xsl:with-param>
+          <xsl:with-param name="msgparams">%1=processReference</xsl:with-param>
+        </xsl:call-template>
         <xsl:apply-templates select="." mode="processReference"/>
     </xsl:template>
     <xsl:template match="*" mode="processReference">
@@ -1195,12 +1231,18 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:value-of select="$numTopicref/@navtitle"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:apply-templates select="*[contains(@class,' topic/title ')]" mode="getTitle"/>
+                <xsl:apply-templates select="*[contains(@class,' topic/title ')]" mode="getTitle"/>"
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
     
     <xsl:template name="getTitle"><!-- get fully-processed title content by whatever mechanism -->
+        <xsl:call-template name="output-message">
+          <xsl:with-param name="msgcat">DOTX</xsl:with-param>
+          <xsl:with-param name="msgnum">066</xsl:with-param>
+          <xsl:with-param name="msgsev">W</xsl:with-param>
+          <xsl:with-param name="msgparams">%1=getTitle</xsl:with-param>
+        </xsl:call-template>
         <xsl:apply-templates select="." mode="getTitle"/>
     </xsl:template>
     <xsl:template match="*" mode="getTitle">
@@ -1492,6 +1534,12 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template name="placeNoteContent">
+        <xsl:call-template name="output-message">
+          <xsl:with-param name="msgcat">DOTX</xsl:with-param>
+          <xsl:with-param name="msgnum">066</xsl:with-param>
+          <xsl:with-param name="msgsev">W</xsl:with-param>
+          <xsl:with-param name="msgparams">%1=placeNoteContent</xsl:with-param>
+        </xsl:call-template>
         <xsl:apply-templates select="." mode="placeNoteContent"/>
     </xsl:template>
     <xsl:template match="*" mode="placeNoteContent">
@@ -1630,14 +1678,14 @@ See the accompanying license.txt file for applicable licenses.
                                     </fo:block>
                                 </fo:table-cell>
                                 <fo:table-cell xsl:use-attribute-sets="note__text__entry">
-                                    <xsl:call-template name="placeNoteContent"/>
+                                    <xsl:apply-templates select="." mode="placeNoteContent"/>
                                 </fo:table-cell>
                         </fo:table-row>
                     </fo:table-body>
                 </fo:table>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:call-template name="placeNoteContent"/>
+                <xsl:apply-templates select="." mode="placeNoteContent"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -1675,10 +1723,10 @@ See the accompanying license.txt file for applicable licenses.
                                 <xsl:value-of select="@reftitle"/>
                             </xsl:when>
                             <xsl:when test="not(@type = 'external' or @format = 'html')">
-                                <xsl:call-template name="insertReferenceTitle">
+                                <xsl:apply-templates select="." mode="insertReferenceTitle">
                                     <xsl:with-param name="href" select="@href"/>
                                     <xsl:with-param name="titlePrefix" select="''"/>
-                                </xsl:call-template>
+                                </xsl:apply-templates>
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:value-of select="@href"/>
@@ -1884,24 +1932,24 @@ See the accompanying license.txt file for applicable licenses.
 <!--                <fo:float xsl:use-attribute-sets="image__float">-->
                     <fo:block xsl:use-attribute-sets="image__block">
                         <xsl:call-template name="commonattributes"/>
-                        <xsl:call-template name="placeImage">
+                        <xsl:apply-templates select="." mode="placeImage">
                             <xsl:with-param name="imageAlign" select="@align"/>
                             <xsl:with-param name="href" select="concat($input.dir.url, @href)"/>
                             <xsl:with-param name="height" select="@height"/>
                             <xsl:with-param name="width" select="@width"/>
-                        </xsl:call-template>
+                        </xsl:apply-templates>
                     </fo:block>
 <!--                </fo:float>-->
             </xsl:when>
             <xsl:otherwise>
                 <fo:inline xsl:use-attribute-sets="image__inline">
                     <xsl:call-template name="commonattributes"/>
-                    <xsl:call-template name="placeImage">
+                    <xsl:apply-templates select="." mode="placeImage">
                         <xsl:with-param name="imageAlign" select="@align"/>
                         <xsl:with-param name="href" select="concat($input.dir.url, @href)"/>
                         <xsl:with-param name="height" select="@height"/>
                         <xsl:with-param name="width" select="@width"/>
-                    </xsl:call-template>
+                    </xsl:apply-templates>
                 </fo:inline>
             </xsl:otherwise>
         </xsl:choose>
@@ -1925,6 +1973,12 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:param name="href"/>
         <xsl:param name="height"/>
         <xsl:param name="width"/>
+        <xsl:call-template name="output-message">
+          <xsl:with-param name="msgcat">DOTX</xsl:with-param>
+          <xsl:with-param name="msgnum">066</xsl:with-param>
+          <xsl:with-param name="msgsev">W</xsl:with-param>
+          <xsl:with-param name="msgparams">%1=placeImage</xsl:with-param>
+        </xsl:call-template>
         <xsl:apply-templates select="." mode="placeImage">
             <xsl:with-param name="imageAlign" select="$imageAlign"/>
             <xsl:with-param name="href" select="$href"/>
@@ -2254,6 +2308,12 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template name="processUnknowTopic">
         <xsl:param name="topicType"/>
+        <xsl:call-template name="output-message">
+          <xsl:with-param name="msgcat">DOTX</xsl:with-param>
+          <xsl:with-param name="msgnum">066</xsl:with-param>
+          <xsl:with-param name="msgsev">W</xsl:with-param>
+          <xsl:with-param name="msgparams">%1=processUnknowType</xsl:with-param>
+        </xsl:call-template>
         <xsl:apply-templates select="." mode="processUnknowTopic">
             <xsl:with-param name="topicType" select="$topicType"/>
         </xsl:apply-templates>
@@ -2284,12 +2344,12 @@ See the accompanying license.txt file for applicable licenses.
                         <fo:page-sequence master-reference="{$page-sequence-reference}" xsl:use-attribute-sets="__force__page__count">
                             <xsl:call-template name="insertBodyStaticContents"/>
                             <fo:flow flow-name="xsl-region-body">
-                                <xsl:call-template name="processTopic"/>
+                                <xsl:apply-templates select="." mode="processTopic"/>
                             </fo:flow>
                         </fo:page-sequence>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:call-template name="processTopic"/>
+                        <xsl:apply-templates select="." mode="processTopic"/>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:otherwise>

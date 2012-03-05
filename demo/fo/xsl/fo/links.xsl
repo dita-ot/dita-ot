@@ -97,6 +97,12 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:param name="titlePrefix"/>
 		<xsl:param name="destination"/>
 		<xsl:param name="element"/>
+        <xsl:call-template name="output-message">
+          <xsl:with-param name="msgcat">DOTX</xsl:with-param>
+          <xsl:with-param name="msgnum">066</xsl:with-param>
+          <xsl:with-param name="msgsev">W</xsl:with-param>
+          <xsl:with-param name="msgparams">%1=insertReferenceTitle</xsl:with-param>
+        </xsl:call-template>
         <xsl:apply-templates select="." mode="insertReferenceTitle">
             <xsl:with-param name="href" select="$href"/>
             <xsl:with-param name="titlePrefix" select="$titlePrefix"/>
@@ -231,12 +237,12 @@ See the accompanying license.txt file for applicable licenses.
 		<xsl:variable name="element" select="key('key_anchor',$destination)[1]"/>
 
 		<xsl:variable name="referenceTitle">
-			<xsl:call-template name="insertReferenceTitle">
+			<xsl:apply-templates select="." mode="insertReferenceTitle">
 				<xsl:with-param name="href" select="@href"/>
 				<xsl:with-param name="titlePrefix" select="''"/>
 				<xsl:with-param name="destination" select="$destination"/>
 				<xsl:with-param name="element" select="$element"/>
-			</xsl:call-template>
+			</xsl:apply-templates>
 		</xsl:variable>
 
 		<fo:basic-link xsl:use-attribute-sets="xref">
@@ -592,6 +598,12 @@ See the accompanying license.txt file for applicable licenses.
         <!--Related links-->
 
 	<xsl:template name="buildRelationships">
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgcat">DOTX</xsl:with-param>
+      <xsl:with-param name="msgnum">066</xsl:with-param>
+      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="msgparams">%1=buildRelationships</xsl:with-param>
+    </xsl:call-template>
         <xsl:apply-templates select="." mode="buildRelationships"/>
     </xsl:template>
     <xsl:template match="*" mode="buildRelationships">
