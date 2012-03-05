@@ -989,9 +989,7 @@ See the accompanying license.txt file for applicable licenses.
 
         <!-- If it has a proportional width, translate it to XSL -->
         <xsl:if test="contains($theColwidth, '*')">
-            <xsl:variable name="colfactor">
-                <xsl:value-of select="substring-before($theColwidth, '*')"/>
-            </xsl:variable>
+            <xsl:variable name="colfactor" select="substring-before($theColwidth, '*')"/>
             <xsl:text>proportional-column-width(</xsl:text>
             <xsl:choose>
                 <xsl:when test="not($colfactor = '')">

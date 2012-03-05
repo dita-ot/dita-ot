@@ -2191,6 +2191,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <!--  Layout masters  -->
 
+    <!-- Deprecated -->
     <xsl:template match="*" mode="layout-masters-processing">
         <xsl:element name="{name()}">
             <xsl:apply-templates select="@*" mode="layout-masters-processing"/>
@@ -2198,11 +2199,12 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:element>
     </xsl:template>
 
+    <!-- Deprecated -->
     <xsl:template match="@*" mode="layout-masters-processing">
         <xsl:copy-of select="."/>
     </xsl:template>
 
-
+    <!-- Deprecated -->
     <xsl:template match="@background-image" mode="layout-masters-processing">
         <xsl:attribute name="background-image">
             <xsl:value-of select="concat('url(',$artworkPrefix,substring-after(.,'artwork:'),')')"/>

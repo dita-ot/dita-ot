@@ -44,6 +44,12 @@ See the accompanying license.txt file for applicable licenses.
                   <xsl:text>Layout masters = </xsl:text>
                   <xsl:value-of select="$layout-masters"/>
                 </xsl:comment>
+                <xsl:call-template name="output-message">
+                  <xsl:with-param name="msgcat">DOTX</xsl:with-param>
+                  <xsl:with-param name="msgnum">066</xsl:with-param>
+                  <xsl:with-param name="msgsev">W</xsl:with-param>
+                  <xsl:with-param name="msgparams">%1=layout-masters-processing</xsl:with-param>
+                </xsl:call-template>
                 <xsl:apply-templates select="document($layout-masters)/*" mode="layout-masters-processing"/>
             </xsl:when>
             <xsl:otherwise>

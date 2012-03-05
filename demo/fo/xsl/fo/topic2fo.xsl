@@ -118,9 +118,4 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:output method="xml" encoding="utf-8" indent="no"/>
 
-    <xsl:template match="/">
-        
-        <xsl:call-template name="rootTemplate"/>
-    </xsl:template>
-
 </xsl:stylesheet>

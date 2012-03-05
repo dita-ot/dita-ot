@@ -51,9 +51,7 @@ See the accompanying license.txt file for applicable licenses.
       </xsl:choose>
     </xsl:variable>
     
-    <xsl:variable name="layout-masters">
-        <xsl:value-of select="'cfg:fo/layout-masters.xml'"/>
-    </xsl:variable>
+    <xsl:variable name="layout-masters" select="'cfg:fo/layout-masters.xml'"/>
 
     <xsl:variable name="mapType">
         <xsl:choose>
@@ -124,7 +122,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="*" mode="topicref-validation"/>
 
-    <xsl:template name="rootTemplate">
+    <xsl:template match="/" name="rootTemplate">
         <xsl:call-template name="validateTopicRefs"/>
 
         <fo:root xsl:use-attribute-sets="__fo__root">

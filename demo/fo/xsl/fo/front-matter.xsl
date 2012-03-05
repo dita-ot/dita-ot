@@ -256,7 +256,6 @@ See the accompanying license.txt file for applicable licenses.
 	</xsl:template>
 	
 	<xsl:template match="*[contains(@class, ' topic/topic ')]" mode="process-notices">
-        <xsl:param name="include" select="'true'"/>
         <xsl:variable name="topicType">
             <xsl:call-template name="determineTopicType"/>
         </xsl:variable>

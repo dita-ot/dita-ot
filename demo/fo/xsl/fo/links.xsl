@@ -331,9 +331,7 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:apply-templates>
             </xsl:variable>
 
-            <xsl:variable name="linkTextContent">
-                <xsl:value-of select="$collectedLinks"/>
-            </xsl:variable>
+            <xsl:variable name="linkTextContent" select="string($collectedLinks)"/>
 
             <xsl:if test="normalize-space($linkTextContent)!=''">
                 <fo:block xsl:use-attribute-sets="related-links">
@@ -577,13 +575,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="getDestinationIdImpl">
         <xsl:param name="href"/>
         
-        <xsl:variable name="topic-id">
-            <xsl:value-of select="substring-after($href, '#')"/>
-        </xsl:variable>
+        <xsl:variable name="topic-id" select="substring-after($href, '#')"/>
 
-        <xsl:variable name="element-id">
-            <xsl:value-of select="substring-after($topic-id, '/')"/>
-        </xsl:variable>
+        <xsl:variable name="element-id" select="substring-after($topic-id, '/')"/>
 
         <xsl:choose>
             <xsl:when test="$element-id = ''">

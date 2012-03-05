@@ -52,12 +52,8 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:call-template>
     </xsl:variable>
 
-    <xsl:variable name="locale.lang">
-        <xsl:value-of select="substring-before($locale, '_')"/>
-    </xsl:variable>
-    <xsl:variable name="locale.country">
-        <xsl:value-of select="substring-after($locale, '_')"/>
-    </xsl:variable>
+    <xsl:variable name="locale.lang" select="substring-before($locale, '_')"/>
+    <xsl:variable name="locale.country" select="substring-after($locale, '_')"/>
 
     <xsl:variable name="warn-enabled" select="true()"/>
 
