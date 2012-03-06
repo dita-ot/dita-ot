@@ -22,7 +22,7 @@
   </message>
   
   <message id="DOTA003F" type="FATAL">
-    <reason>Can't find the user specified stylesheet '%1'.</reason>
+    <reason>Cannot find the user specified XSLT stylesheet '%1'.</reason>
     <response>Please provide the correct stylesheet using Ant parameter 'args.xsl'.</response>
   </message>
   
