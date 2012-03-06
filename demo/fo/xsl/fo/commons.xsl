@@ -1231,7 +1231,7 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:value-of select="$numTopicref/@navtitle"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:apply-templates select="*[contains(@class,' topic/title ')]" mode="getTitle"/>"
+                <xsl:apply-templates select="*[contains(@class,' topic/title ')]" mode="getTitle"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>

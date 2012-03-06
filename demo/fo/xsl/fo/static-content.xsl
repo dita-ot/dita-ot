@@ -38,9 +38,13 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertBodyStaticContents">
         <xsl:call-template name="insertBodyFootnoteSeparator"/>
         <xsl:call-template name="insertBodyOddFooter"/>
-        <xsl:call-template name="insertBodyEvenFooter"/>
+        <xsl:if test="$mirror-page-margins">
+          <xsl:call-template name="insertBodyEvenFooter"/>
+        </xsl:if>
         <xsl:call-template name="insertBodyOddHeader"/>
-        <xsl:call-template name="insertBodyEvenHeader"/>
+        <xsl:if test="$mirror-page-margins">
+          <xsl:call-template name="insertBodyEvenHeader"/>
+        </xsl:if>
         <xsl:call-template name="insertBodyFirstHeader"/>
         <xsl:call-template name="insertBodyFirstFooter"/>
         <xsl:call-template name="insertBodyLastHeader"/>
@@ -49,24 +53,36 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template name="insertTocStaticContents">
         <xsl:call-template name="insertTocOddFooter"/>
-        <xsl:call-template name="insertTocEvenFooter"/>
+        <xsl:if test="$mirror-page-margins">
+          <xsl:call-template name="insertTocEvenFooter"/>
+        </xsl:if>
         <xsl:call-template name="insertTocOddHeader"/>
-        <xsl:call-template name="insertTocEvenHeader"/>
+        <xsl:if test="$mirror-page-margins">
+          <xsl:call-template name="insertTocEvenHeader"/>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template name="insertIndexStaticContents">
         <xsl:call-template name="insertIndexOddFooter"/>
-        <xsl:call-template name="insertIndexEvenFooter"/>
+        <xsl:if test="$mirror-page-margins">
+          <xsl:call-template name="insertIndexEvenFooter"/>
+        </xsl:if>
         <xsl:call-template name="insertIndexOddHeader"/>
-        <xsl:call-template name="insertIndexEvenHeader"/>
+        <xsl:if test="$mirror-page-margins">
+          <xsl:call-template name="insertIndexEvenHeader"/>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template name="insertPrefaceStaticContents">
         <xsl:call-template name="insertPrefaceFootnoteSeparator"/>
         <xsl:call-template name="insertPrefaceOddFooter"/>
-        <xsl:call-template name="insertPrefaceEvenFooter"/>
+        <xsl:if test="$mirror-page-margins">
+          <xsl:call-template name="insertPrefaceEvenFooter"/>
+        </xsl:if>
         <xsl:call-template name="insertPrefaceOddHeader"/>
-        <xsl:call-template name="insertPrefaceEvenHeader"/>
+        <xsl:if test="$mirror-page-margins">
+          <xsl:call-template name="insertPrefaceEvenHeader"/>
+        </xsl:if>
         <xsl:call-template name="insertPrefaceFirstHeader"/>
         <xsl:call-template name="insertPrefaceFirstFooter"/>
 <!--        <xsl:call-template name="insertPrefaceLastHeader"/>-->
@@ -76,18 +92,26 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertFrontMatterStaticContents">
         <xsl:call-template name="insertFrontMatterFootnoteSeparator"/>
         <xsl:call-template name="insertFrontMatterOddFooter"/>
-        <xsl:call-template name="insertFrontMatterEvenFooter"/>
+        <xsl:if test="$mirror-page-margins">
+          <xsl:call-template name="insertFrontMatterEvenFooter"/>
+        </xsl:if>
         <xsl:call-template name="insertFrontMatterOddHeader"/>
-        <xsl:call-template name="insertFrontMatterEvenHeader"/>
+        <xsl:if test="$mirror-page-margins">
+          <xsl:call-template name="insertFrontMatterEvenHeader"/>
+        </xsl:if>
 <!--        <xsl:call-template name="insertPrefaceLastHeader"/>-->
 <!--        <xsl:call-template name="insertPrefaceLastFooter"/>-->
     </xsl:template>
 
     <xsl:template name="insertGlossaryStaticContents">
         <xsl:call-template name="insertGlossaryOddFooter"/>
-        <xsl:call-template name="insertGlossaryEvenFooter"/>
+        <xsl:if test="$mirror-page-margins">
+          <xsl:call-template name="insertGlossaryEvenFooter"/>
+        </xsl:if>
         <xsl:call-template name="insertGlossaryOddHeader"/>
-        <xsl:call-template name="insertGlossaryEvenHeader"/>
+        <xsl:if test="$mirror-page-margins">
+          <xsl:call-template name="insertGlossaryEvenHeader"/>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template name="insertBodyOddHeader">

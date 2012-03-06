@@ -71,11 +71,13 @@ See the accompanying license.txt file for applicable licenses.
                 <fo:region-after region-name="last-frontmatter-footer" xsl:use-attribute-sets="region-after"/>
             </fo:simple-page-master>
 
-            <fo:simple-page-master master-name="front-matter-even" xsl:use-attribute-sets="simple-page-master">
-                <fo:region-body xsl:use-attribute-sets="region-body__frontmatter.even"/>
-                <fo:region-before region-name="even-frontmatter-header" xsl:use-attribute-sets="region-before"/>
-                <fo:region-after region-name="even-frontmatter-footer" xsl:use-attribute-sets="region-after"/>
-            </fo:simple-page-master>
+            <xsl:if test="$mirror-page-margins">
+              <fo:simple-page-master master-name="front-matter-even" xsl:use-attribute-sets="simple-page-master">
+                  <fo:region-body xsl:use-attribute-sets="region-body__frontmatter.even"/>
+                  <fo:region-before region-name="even-frontmatter-header" xsl:use-attribute-sets="region-before"/>
+                  <fo:region-after region-name="even-frontmatter-footer" xsl:use-attribute-sets="region-after"/>
+              </fo:simple-page-master>
+            </xsl:if>
 
             <fo:simple-page-master master-name="front-matter-odd" xsl:use-attribute-sets="simple-page-master">
                 <fo:region-body xsl:use-attribute-sets="region-body__frontmatter.odd"/>
@@ -84,11 +86,13 @@ See the accompanying license.txt file for applicable licenses.
             </fo:simple-page-master>
 
             <!--TOC simple masters-->
-            <fo:simple-page-master master-name="toc-even" xsl:use-attribute-sets="simple-page-master">
-                <fo:region-body xsl:use-attribute-sets="region-body.even"/>
-                <fo:region-before region-name="even-toc-header" xsl:use-attribute-sets="region-before"/>
-                <fo:region-after region-name="even-toc-footer" xsl:use-attribute-sets="region-after"/>
-            </fo:simple-page-master>
+            <xsl:if test="$mirror-page-margins">
+              <fo:simple-page-master master-name="toc-even" xsl:use-attribute-sets="simple-page-master">
+                  <fo:region-body xsl:use-attribute-sets="region-body.even"/>
+                  <fo:region-before region-name="even-toc-header" xsl:use-attribute-sets="region-before"/>
+                  <fo:region-after region-name="even-toc-footer" xsl:use-attribute-sets="region-after"/>
+              </fo:simple-page-master>
+            </xsl:if>
 
             <fo:simple-page-master master-name="toc-odd" xsl:use-attribute-sets="simple-page-master">
                 <fo:region-body xsl:use-attribute-sets="region-body.odd"/>
@@ -115,11 +119,13 @@ See the accompanying license.txt file for applicable licenses.
                 <fo:region-after region-name="first-body-footer" xsl:use-attribute-sets="region-after"/>
             </fo:simple-page-master>
 
-            <fo:simple-page-master master-name="body-even" xsl:use-attribute-sets="simple-page-master">
-                <fo:region-body xsl:use-attribute-sets="region-body.even"/>
-                <fo:region-before region-name="even-body-header" xsl:use-attribute-sets="region-before"/>
-                <fo:region-after region-name="even-body-footer" xsl:use-attribute-sets="region-after"/>
-            </fo:simple-page-master>
+            <xsl:if test="$mirror-page-margins">
+              <fo:simple-page-master master-name="body-even" xsl:use-attribute-sets="simple-page-master">
+                  <fo:region-body xsl:use-attribute-sets="region-body.even"/>
+                  <fo:region-before region-name="even-body-header" xsl:use-attribute-sets="region-before"/>
+                  <fo:region-after region-name="even-body-footer" xsl:use-attribute-sets="region-after"/>
+              </fo:simple-page-master>
+            </xsl:if>
 
             <fo:simple-page-master master-name="body-odd" xsl:use-attribute-sets="simple-page-master">
                 <fo:region-body xsl:use-attribute-sets="region-body.odd"/>
@@ -140,11 +146,13 @@ See the accompanying license.txt file for applicable licenses.
                 <fo:region-after region-name="odd-index-footer" xsl:use-attribute-sets="region-after"/>
             </fo:simple-page-master>
 
-            <fo:simple-page-master master-name="index-even" xsl:use-attribute-sets="simple-page-master">
-                <fo:region-body xsl:use-attribute-sets="region-body__index.even"/>
-                <fo:region-before region-name="even-index-header" xsl:use-attribute-sets="region-before"/>
-                <fo:region-after region-name="even-index-footer" xsl:use-attribute-sets="region-after"/>
-            </fo:simple-page-master>
+            <xsl:if test="$mirror-page-margins">
+              <fo:simple-page-master master-name="index-even" xsl:use-attribute-sets="simple-page-master">
+                  <fo:region-body xsl:use-attribute-sets="region-body__index.even"/>
+                  <fo:region-before region-name="even-index-header" xsl:use-attribute-sets="region-before"/>
+                  <fo:region-after region-name="even-index-footer" xsl:use-attribute-sets="region-after"/>
+              </fo:simple-page-master>
+            </xsl:if>
 
             <fo:simple-page-master master-name="index-odd" xsl:use-attribute-sets="simple-page-master">
                 <fo:region-body xsl:use-attribute-sets="region-body__index.odd"/>
@@ -159,11 +167,13 @@ See the accompanying license.txt file for applicable licenses.
                 <fo:region-after region-name="odd-glossary-footer" xsl:use-attribute-sets="region-after"/>
             </fo:simple-page-master>
 
-            <fo:simple-page-master master-name="glossary-even" xsl:use-attribute-sets="simple-page-master">
-                <fo:region-body xsl:use-attribute-sets="region-body.even"/>
-                <fo:region-before region-name="even-glossary-header" xsl:use-attribute-sets="region-before"/>
-                <fo:region-after region-name="even-glossary-footer" xsl:use-attribute-sets="region-after"/>
-            </fo:simple-page-master>
+            <xsl:if test="$mirror-page-margins">
+              <fo:simple-page-master master-name="glossary-even" xsl:use-attribute-sets="simple-page-master">
+                  <fo:region-body xsl:use-attribute-sets="region-body.even"/>
+                  <fo:region-before region-name="even-glossary-header" xsl:use-attribute-sets="region-before"/>
+                  <fo:region-after region-name="even-glossary-footer" xsl:use-attribute-sets="region-after"/>
+              </fo:simple-page-master>
+            </xsl:if>
 
             <fo:simple-page-master master-name="glossary-odd" xsl:use-attribute-sets="simple-page-master">
                 <fo:region-body xsl:use-attribute-sets="region-body.odd"/>
