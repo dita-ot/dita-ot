@@ -33,7 +33,7 @@ version="2.0">
        
     </xsl:template>
 
-    <xsl:template match="*[contains(@class, ' glossentry/glossentry ')]">
+    <xsl:template match="ot-placeholder:glossarylist//*[contains(@class, ' glossentry/glossentry ')]">
         <fo:block>
             <xsl:call-template name="commonattributes"/>
             <fo:block>
