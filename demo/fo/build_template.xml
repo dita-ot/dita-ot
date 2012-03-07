@@ -201,12 +201,24 @@ with those set forth herein.
   <target name="transform.topic2fo.init">
     <taskdef name="detect-lang" classname="com.suite.sol.ditaot.DetectLang"
              classpathref="project.class.path"/>
+    <taskdef name="gen-variable" classname="org.dita.dost.pdf2.VariableFileTask"
+             classpathref="project.class.path"/>
 
     <makeurl file="${inputFile}" property="inputFile.url" validate="true"/>
 
     <!-- Set document.locale from xml:lang -->
     <!-- The map takes precedence, followed by the first topic -->
     <detect-lang documentPath="${inputFile.url}"/>
+    
+    <tempfile property="variable.file" destdir="${dita.temp.dir}" prefix="strings." suffix=".xml"/>
+    <gen-variable file="${variable.file}">
+      <fileset dir="${customization.dir}/common/vars" erroronmissingdir="false">
+        <include name="*.xml"/>
+      </fileset>
+      <fileset dir="${cfg.common.dir}/vars">
+        <include name="*.xml"/>
+      </fileset>
+    </gen-variable>
 
     <condition property="document.locale" value="${default.locale}">
       <not><isset property="document.locale"/></not>
@@ -361,6 +373,7 @@ with those set forth herein.
     
     <makeurl property="customization.dir.url" file="${customization.dir}"/>
     <makeurl property="user.input.dir.url" file="${dita.input.dirname}"/>
+    <makeurl property="variable.file.url" file="${variable.file}"/>
     <!-- must fork or catalog resolution will fail due to sharing of -->
     <!-- resolver and catalogs with the Open Toolkit -->
     <echo level="info" message="Java maximum memory=${maxJavaMemory}"/>
@@ -390,6 +403,7 @@ with those set forth herein.
       <arg line='"pdfFormatter=${pdf.formatter}"'/>
       <arg line='"useFrameIndexMarkup=${org.dita.pdf2.index.frame-markup}"'/>
       <arg line='"bookmap-order=${args.bookmap-order}"'/>
+      <arg line='"variableFiles.url=${variable.file.url}"'/>
       <sysproperty key="xml.catalog.files" value="${xml.catalog.files}"/>
     </java>
   </target>

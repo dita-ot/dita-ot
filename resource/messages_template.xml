@@ -683,6 +683,11 @@
     <reason>Template "%1" is deprecated.</reason>
     <response>Remove references to this template from your custom XSLT or Plug-ins.</response>
   </message>
+  
+  <message id="DOTX067E" type="ERROR">
+    <reason>No string named '%1' was found for language '%2'.</reason>
+    <response>Add a mapping for the string '%1'.</response>
+  </message>
 
   <!-- End of XSL Messages --> 
   

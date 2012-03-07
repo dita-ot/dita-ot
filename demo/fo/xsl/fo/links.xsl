@@ -391,12 +391,12 @@ See the accompanying license.txt file for applicable licenses.
 		<xsl:variable name="element" select="key('key_anchor',$destination)[1]"/>
 
 		<xsl:variable name="referenceTitle">
-            <xsl:call-template name="insertReferenceTitle">
+            <xsl:apply-templates select="." mode="insertReferenceTitle">
                 <xsl:with-param name="href" select="@href"/>
                 <xsl:with-param name="titlePrefix" select="''"/>
                 <xsl:with-param name="destination" select="$destination"/>
                 <xsl:with-param name="element" select="$element"/>
-            </xsl:call-template>
+            </xsl:apply-templates>
         </xsl:variable>
         <xsl:variable name="linkScope">
             <xsl:call-template name="getLinkScope"/>
