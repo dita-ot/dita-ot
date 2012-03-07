@@ -46,7 +46,11 @@
 <topicref href="readme/DITA-globalization-xhtml.dita"></topicref>
 <topicref href="readme/DITA-globalization-pdf.dita"></topicref>
 </topicref>
-    <topicref href="readme/DITA-log.xml"/>
+    <topicref href="readme/DITA-log.xml">
+      <topicref href="readme/DITA-messages.xml"></topicref>
+      <topicref href="readme/DITA-messages-details.xml"
+processing-role="resource-only"></topicref>
+    </topicref>
     <topicref href="readme/DITA-troubleshooting.xml"/>
     <topicref href="readme/DITA-limitations.xml" processing-role="resource-only" toc="no"/>
 </topicref>
