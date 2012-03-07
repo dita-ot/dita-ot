@@ -38,7 +38,7 @@ See the accompanying license.txt file for applicable licenses.
  	extension-element-prefixes="exsl"
 	exclude-result-prefixes="opentopic-vars xs">
 
-  <xsl:param name="variableFiles.url" as="xs:anyURI?"/>
+  <xsl:param name="variableFiles.url" as="xs:string?"/>
   <xsl:variable name="variableFiles" select="document($variableFiles.url)"/>
 
 	<xsl:template name="insertVariable">

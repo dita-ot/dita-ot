@@ -91,6 +91,8 @@
           <li>3483326 Remove IBM DITA and BookMap demo support from PDF2 (milestone 1)</li>
           <li>3486110 Move OT version number to configuration (milestone 2)</li>
           <li>3475296 Remove obsolete dita-preprocess target (milestone 2)</li>
+          <li>3498406 Add index file to PDF2 variables (milestone 3)</li>
+          <li>3498440 Run XSLT with Ant task in PDF2 (milestone 3)</li>
           <li>3466842 Refactor preprocessing to use SAX filters (in progress)</li>
           <li>3468864 Remove Content object (in progress)</li>
           <li>3460151 Use Job to read/write job configuration files (in progress)</li>
@@ -140,6 +142,8 @@
             2)</li>
           <li>3447732 Bug in handling of longdescref (milestone 2)</li>
           <li>3426920 Image files not copied or referenced correctly for eclipse (milestone 2)</li>
+          <li>3494971 Keydefs in non-base folder fails (milestone 3)</li>
+          <li>3441389 Glossentry makes FO file invalid in PDF output (milestone 3)</li>
           <li>3471364 UNC paths are not supported in input argument (in progress)</li>
           <li>3491768 Deprecated metadata PICS-Label in XHTML output (in progress)</li>
         </ul>
