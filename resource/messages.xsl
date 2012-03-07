@@ -21,7 +21,11 @@
      in the DITA-OT, as defined in the file
      DITA-OT/resource/messages.xml
      To regenerate this topic, run the following command:
-     DITA-OT/doc/ant -f build.xml generate-messages
+     DITA-OT/doc/ant -f build.xml generate-msg-topic
+
+     Alternatively, you may use that same build file to
+     create a PDF, XHTML, or HTML Help version of the User Guide, which
+     will update the topic as part of the build.
     </xsl:comment>
     <!-- The title, shortdesc, and overview section in this topic will all
          be overwritten with "conref push", as long as it is built
