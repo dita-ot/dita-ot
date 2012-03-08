@@ -35,7 +35,8 @@
     <xsl:variable name="self" select="generate-id()"/>
 
     <xsl:choose>
-      <xsl:when test="@toc='no'">
+      <xsl:when test="ancestor-or-self::*[@toc][1]/@toc = 'no' or
+                      ancestor-or-self::*[@processing-role][1]/@processing-role = 'resource-only'">
         <!-- Continue to children; if they turn @toc back on, connect to the last @toc=yes parent -->
         <xsl:apply-templates>
           <xsl:with-param name="parent" select="$parent"/>
