@@ -59,9 +59,13 @@ for more information, see the Developer reference section of the User Guide.</p>
                 </xsl:choose>
               </stentry>
               <stentry>
-                <xsl:value-of select="reason"/>
+                <xsl:call-template name="format-message">
+                  <xsl:with-param name="text" select="string(reason)"/>
+                </xsl:call-template>
                 <xsl:text> </xsl:text>
-                <xsl:value-of select="response"/>
+                <xsl:call-template name="format-message">
+                  <xsl:with-param name="text" select="string(response)"/>
+                </xsl:call-template>
               </stentry>
               <stentry id="{@id}-extra">&#xA0;</stentry>
             </strow>
@@ -69,6 +73,25 @@ for more information, see the Developer reference section of the User Guide.</p>
         </simpletable>
       </refbody>
     </reference>
+  </xsl:template>
+  
+  <xsl:template name="format-message">
+    <xsl:param name="text"/>
+    <xsl:choose>
+      <xsl:when test="contains($text, '%') and not(number(substring(substring-after($text, '%'), 1, 1)) = number('NaN'))">
+        <xsl:value-of select="substring-before($text, '%')"/>
+        <varname>
+          <xsl:text>%</xsl:text>
+          <xsl:value-of select="substring(substring-after($text, '%'), 1, 1)"/>
+        </varname>
+        <xsl:call-template name="format-message">
+          <xsl:with-param name="text" select="substring(substring-after($text, '%'), 2)"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$text"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <!-- To create each as a nested topic -->
