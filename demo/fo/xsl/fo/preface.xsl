@@ -62,6 +62,7 @@ See the accompanying license.txt file for applicable licenses.
                      </xsl:call-template>
 
                      <fo:block xsl:use-attribute-sets="topic.title">
+                         <xsl:call-template name="pullPrologIndexTerms"/>
                          <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
                              <xsl:call-template name="getTitle"/>
                          </xsl:for-each>
