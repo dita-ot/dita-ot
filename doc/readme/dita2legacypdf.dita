@@ -6,7 +6,10 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
  "concept.dtd">
 <concept id="dita2legacypdf" xml:lang="en-us">
-<title>DITA to legacypdf (Deprecated)</title>
+<title>DITA to legacy PDF (Deprecated)</title>
+  <titlealts>
+    <navtitle>DITA to legacy PDF</navtitle>
+  </titlealts>
 <shortdesc>The first few versions of the toolkit came with a demo
 PDF build, which was eventually replaced by the much more robust PDF
 Plug-in (also known as PDF2). This code is no longer maintained by

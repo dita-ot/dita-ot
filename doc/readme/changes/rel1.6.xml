@@ -31,6 +31,8 @@
       <section>
         <title>XHTML</title>
         <p>The following deprecated templates will be removed:</p>
+        <draft-comment>That is, they are deprecated in early 1.6 milestones but will be removed
+          completely from final release.</draft-comment>
         <ul id="ul_ywp_gsc_ff">
           <li>revblock-deprecated</li>
           <li>revstyle-deprecated</li>
@@ -51,7 +53,9 @@
       </section>
       <section>
         <title>ODT</title>
-        <p>The following deprecated templates will be removed:</p>
+        <p>The following deprecated templates will be removed:<draft-comment>That is, they are
+            deprecated in early 1.6 milestones but will be removed completely from final
+            release.</draft-comment></p>
         <ul id="ul_ywp_gsc_ff2">
           <li>revblock-deprecated</li>
           <li>revstyle-deprecated</li>
@@ -61,20 +65,35 @@
         <p>The removed templates have been replaced by other templates in earlier releases and
           plug-ins should be changed to use the new templates.</p>
       </section>
-      <section id="section_tqw_bnt_q2">
-        <title>PDF2</title>
-        <p>Custom PDF2 shell stylesheets need to be revised to not include separate IBM and OASIS
-          DITA stylesheets. The <filepath><varname>*</varname>_1.0.xsl</filepath> stylesheets have
-          been removed and their imports must be removed from shell stylesheets.</p>
-        <p>The following template modes have been deprecated:</p>
-        <ul id="ul_hxz_ks2_gf">
+      <section id="section_tqw_bnt_q2"><title>PDF2</title><p>Custom PDF2 shell stylesheets need to
+          be revised to not include separate IBM and OASIS DITA stylesheets. The
+              <filepath><varname>*</varname>_1.0.xsl</filepath> stylesheets have been removed and
+          their imports must be removed from shell stylesheets.</p><p>The following template modes
+          have been deprecated:</p><ul id="ul_hxz_ks2_gf">
           <li>toc-prefix-text</li>
           <li>toc-topic-text</li>
+        </ul><p>The following named templates have been replaced with template modes:</p>
+        <draft-comment>That is, they are deprecated in early 1.6 milestones but will be removed
+          completely from final release.</draft-comment>
+        <ul>
+          <li>processTopic</li>
+          <li>createMiniToc</li>
+          <li>processTopicTitle</li>
+          <li>createTopicAttrsName</li>
+          <li>processConcept</li>
+          <li>processReference</li>
+          <li>getTitle</li>
+          <li>placeNoteContent</li>
+          <li>placeImage</li>
+          <li>processUnknowType</li>
+          <li>insertReferenceTitle</li>
+          <li>buildRelationships</li>
+          <li>processTask</li>
         </ul>
-        <p>Main FO generation now relies on merging process to rewrite duplicate IDs. The default
-          merging has done this already in previous releses, but now also custom merging needs to
-          fullfill the duplicate ID rewrite requirement.</p>
-      </section>
+        <p>Main
+          FO generation now relies on merging process to rewrite duplicate IDs. The default merging
+          has done this already in previous releses, but now also custom merging needs to fullfill
+          the duplicate ID rewrite requirement.</p></section>
     </refbody>
   </reference>
   <reference id="rel1.6">
@@ -144,6 +163,9 @@
           <li>3426920 Image files not copied or referenced correctly for eclipse (milestone 2)</li>
           <li>3494971 Keydefs in non-base folder fails (milestone 3)</li>
           <li>3441389 Glossentry makes FO file invalid in PDF output (milestone 3)</li>
+          <li>3385349 Warning given by Saxon EE when processing flag-rules.xsl (milestone 3)</li>
+          <li>3496831 PDF2: preface titles does not pull indexterms. (milestone 3)</li>
+          <li>3499953 startcmd.bat adds dost.jar twice to the CLASSPATH (milestone 3)</li>
           <li>3471364 UNC paths are not supported in input argument (in progress)</li>
           <li>3491768 Deprecated metadata PICS-Label in XHTML output (in progress)</li>
         </ul>

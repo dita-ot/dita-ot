@@ -6,7 +6,10 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
  "concept.dtd">
 <concept id="dita2odt" xml:lang="en-us">
-<title>DITA to ODT (Open Document Type)</title>
+<title>DITA to Open Document Type</title>
+  <titlealts>
+    <navtitle>DITA to ODT</navtitle>
+  </titlealts>
 <shortdesc>The "odt" transform type produces output files that use
 the Open Document format, which is used by tools such as Open Office. </shortdesc>
 <conbody>

@@ -5,7 +5,10 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
  "..\dtd\concept.dtd">
 <concept id="dita2word" xml:lang="en-us">
-<title>DITA to Word output transform</title>
+<title>DITA to Rich Text Format </title>
+  <titlealts>
+    <navtitle>DITA to RTF</navtitle>
+  </titlealts>
 <shortdesc>The "wordrtf" transform type will produce an RTF file for
 use by <tm tmclass="special" tmowner="Microsoft Corporation" tmtype="reg"
 trademark="Microsoft">Microsoft</tm> Word.</shortdesc>

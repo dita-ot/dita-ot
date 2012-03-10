@@ -28,6 +28,37 @@
   <target name="generate-msg-topic" depends="init, integrate" description="Regenerate message file">
     <xslt in="${message.input}" out="${message.outputtopic}" style="${message.xsl}"/>
   </target>
+  
+  <target name="generate-platform-filter" depends="init" description="Genrate platform filter file">
+    <condition property="platform" value="windows">
+      <and>
+        <os family="windows"/>
+        <not><isset property="platform"/></not>
+     </and>
+    </condition>
+    <condition property="platform" value="osx">
+      <and>
+        <os family="mac"/>
+        <not><isset property="platform"/></not>
+     </and>
+    </condition>
+    <condition property="platform" value="unix">
+      <and>
+        <os family="unix"/>
+        <not><isset property="platform"/></not>
+     </and>
+    </condition>
+    <echoxml file="${doc.dir}/platform.ditaval">
+      <val>
+        <prop action="include" att="platform" val="${platform}"/>
+        <prop action="exclude" att="platform"/>
+      </val>
+    </echoxml>
+  </target>
+  
+  <target name="filter-platform" depends="init, generate-platform-filter" description="Filter output by current platform">
+    <property name="args.filter" location="${doc.dir}/platform.ditaval"/>
+  </target>
 
   <target name="build-pdf" depends="generate-msg-topic" description="Build User Guide to PDF">
     <ant antfile="${basedir}/build.xml">

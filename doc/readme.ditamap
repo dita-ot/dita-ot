@@ -27,7 +27,7 @@
 <topicref href="readme/dita2eclipsehelp.dita"></topicref>
 <topicref href="readme/dita2tocjs.dita"></topicref>
 <topicref href="readme/dita2pdf.dita"></topicref>
-<topicref href="readme/dita2htmlhelp.dita"></topicref>
+<topicref href="readme/dita2htmlhelp.dita" platform="windows"></topicref>
 <topicref href="readme/dita2odt.dita"></topicref>
 <topicref href="readme/dita2docbook.dita"></topicref>
 <topicref href="readme/dita2troff.dita"></topicref>
