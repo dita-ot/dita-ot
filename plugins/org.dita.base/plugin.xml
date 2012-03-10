@@ -77,9 +77,10 @@
   <feature extension="dita.resource.extensions" value=".pdf"/>
   <feature extension="dita.resource.extensions" value=".swf"/>
   <feature extension="dita.basedir-resource-directory" value="true"/>
+  <feature extension="dita.conductor.target.relative" file="conductor.xml"/>
   <template file="../../catalog-dita_template.xml"/>
   <template file="../../build_template.xml"/>
-  <template file="../../build_preprocess_template.xml"/>
+  <template file="build_preprocess_template.xml"/>
   <template file="../../resource/messages_template.xml"/>
   <template file="../../xsl/common/allstrings_template.xml"/>
   <template file="../../xsl/preprocess/maplink_template.xsl"/>

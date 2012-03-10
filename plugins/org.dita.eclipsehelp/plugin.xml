@@ -11,9 +11,9 @@
   <!-- extensions -->
   <feature extension="dita.conductor.transtype.check" value="eclipsehelp"/>
   <require plugin="org.dita.xhtml"/>
-  <feature extension="dita.conductor.target" file="conductor.xml"/>
+  <feature extension="dita.conductor.target.relative" file="conductor.xml"/>
   <feature extension="dita.basedir-resource-directory" value="true"/>
-  <template file="../../build_dita2eclipsehelp_template.xml"/>
+  <template file="build_dita2eclipsehelp_template.xml"/>
   <template file="../../xsl/map2eclipse_template.xsl"/>
   <template file="../../xsl/map2plugin_template.xsl"/>
 </plugin>

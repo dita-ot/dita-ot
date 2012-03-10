@@ -5,6 +5,6 @@
 <!-- (c) Copyright IBM Corp. 2011 All Rights Reserved. -->
 <plugin id="org.dita.troff">
   <feature extension="dita.conductor.transtype.check" value="troff"/>
-  <feature extension="dita.conductor.target" file="conductor.xml"/>
+  <feature extension="dita.conductor.target.relative" file="conductor.xml"/>
   <feature extension="dita.basedir-resource-directory" value="true"/>
 </plugin>

@@ -8,7 +8,7 @@
   <extension-point id="dita.xsl.dynamicdita" name="Dynamic DITA XSLT import"/>
   <!-- extensions -->
   <feature extension="dita.conductor.transtype.check" value="eclipsecontent"/>
-  <feature extension="dita.conductor.target" file="conductor.xml"/>
+  <feature extension="dita.conductor.target.relative" file="conductor.xml"/>
   <feature extension="dita.basedir-resource-directory" value="true"/>
   <template file="../../xsl/dita2dynamicdita_template.xsl"/>
 </plugin>

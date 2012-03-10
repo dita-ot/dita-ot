@@ -29,31 +29,11 @@
 	     <java> task.
 	  -->
 	<property name="maxJavaMemory" value="500m"/>
-
-  <dirname property="ant.file.ditaot-init.dir" file="${ant.file.ditaot-init}" />
-
-  <!-- First try to initialize ${dita.dir} using the special 
-    property passed by Ant's import task. -->
-  <condition property="dita.dir" value="${ant.file.ditaot-init.dir}">
-    <and>
-      <isset property="ant.file.ditaot-init" />
-      <not>
-        <isset property="dita.dir" />
-      </not>
-    </and>
-  </condition>
-
-  <!-- Try to initialize ${dita.dir} again if it was not set. -->
-  <condition property="dita.dir" value="${basedir}">
-    <not>
-      <isset property="dita.dir" />
-    </not>
-  </condition>
   
   <!-- Read configuration properties -->
   <property file="${dita.dir}/lib/org.dita.dost.platform/plugin.properties"/>
   <property file="${dita.dir}/lib/configuration.properties"/>
-	
+		
   <xmlcatalog id="dita.catalog">
     <catalogpath path="${dita.dir}/catalog-dita.xml"/>
   </xmlcatalog>

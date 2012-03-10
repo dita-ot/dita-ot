@@ -7,9 +7,22 @@
   
   <property file="${basedir}/local.properties"/>
   
-  <import file="build_init.xml"/>  
-  <import file="build_preprocess.xml"/>
-        
+  <!-- Initialize DITA-OT base directory -->
+  <dirname property="ant.file.DOST.dir" file="${ant.file.DOST}" />
+  <condition property="dita.dir" value="${ant.file.DOST.dir}">
+    <and>
+      <isset property="ant.file.DOST" />
+      <not>
+        <isset property="dita.dir" />
+      </not>
+    </and>
+  </condition>
+  <condition property="dita.dir" value="${basedir}">
+    <not>
+      <isset property="dita.dir" />
+    </not>
+  </condition>
+  
   <path id="dost.class.path">
     <dita:extension id="dita.conductor.lib.import" behavior="org.dita.dost.platform.ImportAntLibAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
     <pathelement location="${dita.dir}${file.separator}lib${file.separator}dost.jar"/>
