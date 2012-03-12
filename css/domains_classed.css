@@ -57,12 +57,12 @@
 	text-decoration: underline;
 }
 
-*[class~="topic\/sup"] {
+*[class~="hi-d\/sup"] {
   vertical-align: super;
   font-size: smaller;
 }
 
-*[class~="topic\/sup"] {
+*[class~="hi-d\/sub"] {
   vertical-align: sub;
   font-size: smaller;
 }

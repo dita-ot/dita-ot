@@ -57,12 +57,12 @@ u {
 	text-decoration: underline;
 }
 
-/sup {
+sup {
   vertical-align: super;
   font-size: smaller;
 }
 
-sup {
+sub {
   vertical-align: sub;
   font-size: smaller;
 }
