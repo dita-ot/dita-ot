@@ -190,26 +190,26 @@ Schema; if validation against the DTD or Schema is turned off, the class attribu
 map or topic.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ038E-extra" conaction="pushreplace"></stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ039E-extra" conaction="pushreplace">Please see
-the topic on <xref href="http://docs.oasis-open.org/dita/v1.2/os/spec/common/theconactionattribute.html"
+the topic on <xref href="http://docs.oasis-open.org/dita/v1.2/os/spec/common/theconactionattribute.html" format="html"
 scope="external">Conref Push</xref> in the DITA specification for details on
 expected syntax for this function.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ040E-extra" conaction="pushreplace">Please see
-the topic on <xref href="http://docs.oasis-open.org/dita/v1.2/os/spec/common/theconactionattribute.html"
+the topic on <xref href="http://docs.oasis-open.org/dita/v1.2/os/spec/common/theconactionattribute.html" format="html"
 scope="external">Conref Push</xref> in the DITA specification for details on
 expected syntax for this function.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ041E-extra" conaction="pushreplace">The conref
 attribute must be a URI reference to a DITA element. Please see the topic on
-<xref href="http://docs.oasis-open.org/dita/v1.2/os/spec/archSpec/uri-based-addressing.html" scope="external">URI-based
+<xref href="http://docs.oasis-open.org/dita/v1.2/os/spec/archSpec/uri-based-addressing.html" format="html" scope="external">URI-based
 addressing</xref> in the DITA specification for details on the expected syntax.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ042E-extra" conaction="pushreplace">The conref
 push function was used to replace one element with two alternatives. Only one element may directly
 replace another using conref push.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ043W-extra" conaction="pushreplace">The target
 for a conref push action does not exist; please make sure that the syntax is correct and that
-the target exists. See the topic on <xref href="http://docs.oasis-open.org/dita/v1.2/os/spec/archSpec/uri-based-addressing.html" scope="external">URI-based
+the target exists. See the topic on <xref href="http://docs.oasis-open.org/dita/v1.2/os/spec/archSpec/uri-based-addressing.html" format="html" scope="external">URI-based
 addressing</xref> in the DITA specification for details on the expected syntax.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ044W-extra" conaction="pushreplace">Please see
-the topic on <xref href="http://docs.oasis-open.org/dita/v1.2/os/spec/common/theconactionattribute.html"
+the topic on <xref href="http://docs.oasis-open.org/dita/v1.2/os/spec/common/theconactionattribute.html" format="html"
 scope="external">Conref Push</xref> in the DITA specification for details on
 expected syntax for this function.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ045I-extra" conaction="pushreplace"></stentry></strow>
@@ -236,73 +236,152 @@ on the expected syntax.</stentry></strow>
 the DITA-OT supports the extensions "dita" and "xml" for DITA topics, as mandated by the
 DITA Specification. Please verify that your topics use one of these extensions, or configure
 the toolkit to allow additional extensions.</stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX001W-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX002W-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX003I-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX004I-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX005E-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX006E-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX007I-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX008E-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX008W-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX009W-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX010E-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX011W-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX012W-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX013E-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX014E-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX015E-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX016W-extra" conaction="pushreplace"></stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX001W-extra" conaction="pushreplace">This build
+uses generated text, such as the phrase "Related information" that is generated above many
+link groups. The toolkit was unable to locate the string <varname>%1</varname> for your
+specified language, so the string will appear in the default language.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX002W-extra" conaction="pushreplace">This
+requirement comes from Eclipse, which requires a title in some of the project files
+generated from your map.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX005E-extra" conaction="pushreplace">To remove
+this message, provide a navigation title for the referenced object in the map or topic,
+or ensure that you are referencing a valid local DITA target.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX010E-extra" conaction="pushreplace">The conref
+attribute must be a URI reference to a DITA element. Please see the topic on
+<xref href="http://docs.oasis-open.org/dita/v1.2/os/spec/archSpec/uri-based-addressing.html" format="html" scope="external">URI-based
+addressing</xref> in the DITA specification for details on the expected syntax.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX011W-extra" conaction="pushreplace">When pulling content
+with a conref attribute, you may only pull from a single element, but the target ID appears twice
+in the referenced topic.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX013E-extra" conaction="pushreplace">This may
+appear if (for example) you have a <codeph>&lt;ph&gt;</codeph> element that references another phrase,
+but that phrase itself contains a reference to the original. This will result in an infinite loop.
+The toolkit will stop following the conref trail when this is detected; you will need to correct
+the reference in your source files.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX014E-extra" conaction="pushreplace">The conref
+attribute must be a URI reference to a DITA element. Please see the topic on
+<xref href="http://docs.oasis-open.org/dita/v1.2/os/spec/archSpec/uri-based-addressing.html" format="html" scope="external">URI-based
+addressing</xref> in the DITA specification for details on the expected syntax.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX015E-extra" conaction="pushreplace">The conref
+attribute must be a URI reference to a DITA element. Please see the topic on
+<xref href="http://docs.oasis-open.org/dita/v1.2/os/spec/archSpec/uri-based-addressing.html" format="html" scope="external">URI-based
+addressing</xref> in the DITA specification for details on the expected syntax.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX016W-extra" conaction="pushreplace">This warning
+is intended to catch instances where a non-DITA format setting unexpectedly cascades to a
+DITA topic, which will prevent the topic from being processed. To remove this message, set
+the format attribute on the indicated reference.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTX017E-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX018I-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX019W-extra" conaction="pushreplace"></stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX018I-extra" conaction="pushreplace">The type
+attribute in DITA is intended to describe the type of the target; for example, a reference to a
+concept topic may use type="concept". Generally, this attribute
+is optional, and the DITA-OT build will automatically determine the value during processing. In this
+case, the type attribute lists a more general type than what is actually found.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX019W-extra" conaction="pushreplace">The type
+attribute in DITA is intended to describe the type of the target; for example, a reference to a
+concept topic may use type="concept". Generally, this attribute
+is optional, and the DITA-OT build will automatically determine the value during processing. In
+this case, the specified type value does not match the target, which may cause your links to
+sort inappropriately.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTX020E-extra" conaction="pushreplace"></stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTX021E-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX022W-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX023W-extra" conaction="pushreplace"></stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX022W-extra" conaction="pushreplace">The build
+was unable to get a title from the referenced topic; instead, a navigation title will be
+created based on the specified &lt;linktext&gt; element.</stentry></strow>
+<!--<strow><stentry conref="DITA-messages.xml#msgs/DOTX023W-extra" conaction="pushreplace"></stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTX024E-extra" conaction="pushreplace"></stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTX025E-extra" conaction="pushreplace"></stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTX026W-extra" conaction="pushreplace"></stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTX027W-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX028E-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX029I-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX030W-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX031E-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX032E-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX033E-extra" conaction="pushreplace"></stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX028E-extra" conaction="pushreplace"></stentry></strow>-->
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX029I-extra" conaction="pushreplace">For example,
+if a reference to a &lt;reference&gt; topic uses type="topic", any links based on this reference
+will sort as generic topics rather than as reference links.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX030W-extra" conaction="pushreplace">For example,
+this warning will appear if a concept topic is referenced using type="task"; the transform logic
+detected a likely mismatch, and any links to that concept will sort as task links.</stentry></strow>
+<!--<strow><stentry conref="DITA-messages.xml#msgs/DOTX031E-extra" conaction="pushreplace"></stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX032E-extra" conaction="pushreplace"></stentry></strow>-->
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX033E-extra" conaction="pushreplace">An &lt;xref&gt;
+element specifies type="li", which indicates a link to a list item, but the item number could
+not be located. Please specify link text, or ensure that you are referencing an available list item.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTX034E-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX035E-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX036E-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX037W-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX038I-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX039W-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX040I-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX041W-extra" conaction="pushreplace"></stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX035E-extra" conaction="pushreplace">This will
+appear when a cross reference uses type="fn", but the referenced footnote cannot be found.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX036E-extra" conaction="pushreplace">This will
+appear when a cross reference uses type="dlentry", but the referenced definition list entry cannot be found.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX037W-extra" conaction="pushreplace">No title
+was found for the current topic document, so the XHTML output file will set the &lt;title&gt;
+to "***". Note, this is the value that generally appears in the title bar at the top of
+a browser.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX038I-extra" conaction="pushreplace">The 
+&lt;object&gt; element in XHTML does not support using longdescref for accessibility.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX041W-extra" conaction="pushreplace">Because
+of the way XML and DITA are defined, it is generally not possible to prohibit adding a second title
+to a section during editing (or to force that title to come first). However, the DITA specification states that only one title should
+be used. When multiple titles are found, only the first one will appear in the output.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTX042I-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX043I-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX044E-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX045W-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX046W-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX047W-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX048I-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX049I-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX050W-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX051W-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX052W-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX053E-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX054W-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX055W-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX056W-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX057W-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX058W-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX059I-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX060W-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX061W-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX062I-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX063W-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX064W-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX065W-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTX066W-extra" conaction="pushreplace"></stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX043I-extra" conaction="pushreplace">When possible
+the toolkit will remove duplicate links. However, if two links to the same resource use different
+attributes or link text, it is possible for them to appear together. For example, if the same
+link shows up with role="next" and with no specified role, it may show up as both the "Next topic"
+link and as a related link.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX044E-extra" conaction="pushreplace">The
+&lt;area&gt; element in an image map must provide a link target for the specified area.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX045W-extra" conaction="pushreplace">Cross
+reference text inside the &lt;area&gt; element is used to provide accessibility for
+screen readers that can identify different areas of an image map. If text cannot be
+retrieved automatically by referencing a DITA element, ensure that text is provided.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX048I-extra" conaction="pushreplace">The build
+encountered difficulties compiling a CHM (HTML Help) project, caused by missing non-DITA files.
+The CHM file needs to be recompiled manually once all referenced files are present.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX049I-extra" conaction="pushreplace">The PDF, ODT, and Word outputs
+processes cannot automatically convert non-DITA content into DITA in order to merge it with
+the rest of your content. The referenced items are ignored.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX050W-extra" conaction="pushreplace">Eclipse requires
+that an ID be specified when creating an Eclipse Help project; the toolkit expects to locate
+that ID on the root element of your input map.</stentry></strow>
+<!--Cannot find 051, not sure what it means -->
+<!--<strow><stentry conref="DITA-messages.xml#msgs/DOTX051W-extra" conaction="pushreplace"></stentry></strow>-->
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX052W-extra" conaction="pushreplace">The toolkit
+is attempting to add generated text, such as the string "Related information" that appears
+above links. The requested string could not be found. This likely indicates an error in a
+plug-in or XSL override.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX053E-extra" conaction="pushreplace">This will
+occur if a map references another map, and then (in that second map or in another nested map)
+references the original map. This will result in infinite nesting of maps; please correct
+the map structure.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX054W-extra" conaction="pushreplace">This will
+occur when a DITAVAL file contains multiple styling rules that apply to the same element.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX055W-extra" conaction="pushreplace">The "flagit" 
+named template was deprecated in DITA-OT version 1.4, when the OASIS standard formalized the
+DITAVAL syntax. The template is removed in DITA-OT 1.6. Stylesheets
+that used this template need to be updated.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX058W-extra" conaction="pushreplace">Processing
+for acronyms or abbreviated forms will associate the key in &lt;abbreviated-form&gt; element
+with a glossary (glossentry) topic. This message will appear if the key was not found or not associated
+with a glossary topic.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX061W-extra" conaction="pushreplace">According
+to the DITA Specification, references from maps should either go to DITA Maps, DITA Topics, 
+or any non-DITA resource. References below the topic level should only be made from
+cross references inside of a topic. For details, see the href attribute description in
+the OASIS standard's definition of the <xref
+href="http://docs.oasis-open.org/dita/v1.2/os/spec/langref/topicref.html" format="html" scope="external">topicref element</xref>.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX063W-extra" conaction="pushreplace">This will
+appear when generating PDF output that includes a link to a local topic, but the referenced topic is
+not part of the PDF itself. This will result in a broken link.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX064W-extra" conaction="pushreplace">The copy-to
+attribute is used to copy a topic over a document that already exists.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX065W-extra" conaction="pushreplace">Two different
+topics are copied to the same location using copy-to; as a result, one of these files will be over-written.
+Please correct the use of copy-to attributes.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX066W-extra" conaction="pushreplace">This message
+indicates that your custom XSLT or plug-ins rely on templates that will be removed in an
+upcoming release. Typically this occurs when a named template has been converted to a mode template;
+any code that uses the deprecated template should be updated.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX067E-extra" conaction="pushreplace">This PDF build
+uses generated text, such as the phrase "Related information" that is generated above many
+link groups. The toolkit was unable to locate the string <varname>%1</varname> for your
+specified language; support for this string must be added for the specified language.</stentry></strow>
 </simpletable>
 </refbody>
 </reference>

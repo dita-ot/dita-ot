@@ -191,6 +191,7 @@
     <response>Check whether the image exists and was copied to output directory before the final step of output generation.</response>
   </message>
   
+  <!-- This message may no longer appear; if so, we should remove it -->
   <message id="DOTJ024W" type="WARN">
     <reason>Extension name of picture file '%1' is not supported for the current output format.</reason>
     <response>Please convert your picture to JPEG or GIF style.</response>
@@ -370,8 +371,8 @@
   </message>
   
   <message id="DOTX005E" type="ERROR">
-    <reason>Unable to find navigation title, using href instead: '%1'. If the topic is not accessible at build time, provide the navigation title in the map, and set the format or scope attributes to indicate why it is not accessible. Note: '%1' might have been modified to use default dita topic file extension '.dita' or '.xml'.</reason>
-    <response>Provide the navigation title in the map or topic files.</response>
+    <reason>Unable to find navigation title, using href instead: '%1'.</reason>
+    <response>If the topic is not accessible at build time, provide the navigation title in the map, and set the format or scope attributes to indicate why it is not accessible. Note: '%1' might have been modified to use default dita topic file extension '.dita' or '.xml'.</response>
   </message>
   
   <message id="DOTX006E" type="ERROR">
@@ -409,6 +410,7 @@
     <response>Remove the duplicate id in the referenced file.</response>
   </message>
   
+  <!-- This message can no longer appear, though the template for producing it remains in conrefImpl.xsl -->
   <message id="DOTX012W" type="WARN">
     <reason>When you conref another topic or an item in another topic, the domains attribute of the target topic must be equal to or a subset of the current topic's domains attribute.</reason>
     <response>Put your target under an appropriate domain. You can see the messages guide for more help.</response>
@@ -455,7 +457,7 @@
   </message>
   
   <message id="DOTX021E" type="ERROR">
-    <reason>Missing navtitle attribute or element for: '%1' When you set format to a non-DITA resource type, you must provide a local navigation title, since the target is not accessible to DITA-aware transforms.</reason>
+    <reason>Missing navtitle attribute or element for: '%1' When you set the format to a non-DITA resource type, you must provide a local navigation title, since the target is not accessible to DITA-aware transforms.</reason>
     <response>Provide a local navigation title in the ditamap.</response>
   </message>
   
@@ -556,12 +558,12 @@
   
   <message id="DOTX041W" type="WARN">
     <reason>Found more than one title element in a section. Using the first one for the section's title.</reason>
-    <response>Make sure that the title you wish to appear as a title is the first one. Then remove other title elements, or change them to a more appropriate element. As a last resort you could simply make them bold phrases.</response>
+    <response>Make sure that the title you wish to appear as a title is the first one. Then remove other title elements, or change them to a more appropriate element.</response>
   </message>
   
   <message id="DOTX042I" type="INFO">
     <reason>Flagging attribute found on '%1' attribute. Inline phrases cannot be flagged.</reason>
-    <response>If it is important to flag this piece of information, try placing a flag on the block element that contains your phrase. If you just want to have an image next to the image, you may place an image directly into the document.</response>
+    <response>If it is important to flag this piece of information, try placing a flag on the block element that contains your phrase. If you just want to have an image next to the phrase, you may place an image directly into the document.</response>
   </message>
   
   <message id="DOTX043I" type="INFO">
@@ -604,6 +606,8 @@
     <response>Default id "org.sample.help.doc" is used for Eclipse plug-in. If you want to use your own id, please specify it in the id attribute of the map.</response>
   </message>
   
+  <!-- As of March 2012, cannot find this warning in our XSL. Likely should be removed,
+       unless there is another way it is generated. -->
   <message id="DOTX051W" type="WARN">
     <reason>The %1 to '%2' with @format='%3' can not be recognized, output it without creating a hyperlink.</reason>
     <response>Set @format='dita' for %1 to DITA topic, set @format='html' for HTML files, other format is not supported.</response>
@@ -644,6 +648,8 @@
     <response>Specify the glossary id when referring to a glossary in glossentry tag.</response>
   </message>
   
+  <!-- As of March 2012, cannot find this warning in our XSL. Likely should be removed,
+       unless there is another way it is generated. -->
   <message id="DOTX059I" type="INFO">
     <reason>No language specification was found when referring to a glossary, falling back to default language 'en'.</reason>
     <response>Specify language preference when referring to a glossary.</response>
