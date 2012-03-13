@@ -57,8 +57,8 @@
   </message>
   
   <message id="DOTA010E" type="ERROR">
-    <reason>The FOP plug-in cannot be found in the default location.</reason>
-    <response>Please install the required plug-ins into the dir demo/fo/fop or configure the build file to support your local configuration.</response>
+    <reason>The Apache FOP program cannot be found in the default location.</reason>
+    <response>Please place FOP into the default directory demo/fo/fop/ or update the build file to support your local configuration.</response>
   </message>
 
   <message id="DOTA011W" type="WARN">
@@ -207,8 +207,8 @@
   </message>
   
   <message id="DOTJ027W" type="WARN">
-    <reason>The file '%1' contains space in its file name. This file might not be transformed properly.</reason>
-    <response>Some stages in the toolkit do not work well with spaces in the file name. Remove the space in the file name and restart the transformation.</response>
+    <reason>The file '%1' contains a space in its file name. This file might not be transformed properly.</reason>
+    <response>Some stages in the toolkit do not work well with spaces in the file name, so try removing the space in the file name and restart the transformation.</response>
   </message>
 
   <message id="DOTJ028E" type="ERROR">
@@ -238,7 +238,7 @@
   
   <message id="DOTJ033E" type="ERROR">
     <reason>No valid content is found in topicref '%1' during chunk processing.</reason>
-    <response>Please specify an existing and valid topic in topicref.</response>
+    <response>Please specify an existing and valid topic for the topicref.</response>
   </message> 
   
   <message id="DOTJ034F" type="FATAL">
