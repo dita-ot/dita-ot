@@ -361,37 +361,29 @@
           <xsl:when test="contains(substring-after(@conref,'#'),'/')">
             <xsl:choose>
               <xsl:when test="$topicpos='samefile'">
-                <xsl:variable name="topic" select="//*[@id=$elemid][local-name()=$element][ancestor::*[contains(@class, ' topic/topic ')][1][@id=$topicid]]"/>
+                <xsl:variable name="target" select="//*[@id=$elemid][local-name()=$element][ancestor::*[contains(@class, ' topic/topic ')][1][@id=$topicid]]"/>
                 <xsl:choose>
-                  <xsl:when test="$topic">
+                  <xsl:when test="$target">
+                    <xsl:apply-templates select="$target[1]" mode="conref-target">
+                      <xsl:with-param name="source-element">
                         <xsl:choose>
-                            <xsl:when test="not($source-element='')">
-                                 <xsl:apply-templates select="$topic[1]" mode="conref-target">
-                                    <xsl:with-param name="source-element"><xsl:copy-of select="$source-element"/></xsl:with-param>
-                                    <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
-                                    <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-          					                <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
-                                    <xsl:with-param name="conref-ids" select="$updated-conref-ids"/>
-                                    <xsl:with-param name="conrefend" select="$conrefend"/>
-                                   <xsl:with-param name="original-element" select="$original-element"/>
-                                   <xsl:with-param name="original-attributes" select="$original-attributes"/>
-                                 </xsl:apply-templates>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                    <xsl:apply-templates select="$topic[1]" mode="conref-target">
-                                        <xsl:with-param name="source-element"><xsl:call-template name="get-source-attribute"/></xsl:with-param>
-                                        <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
-                                        <xsl:with-param name="WORKDIR" select="$WORKDIR"/>                                  
-                          						  <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
-                                        <xsl:with-param name="conref-ids" select="$updated-conref-ids"/>
-                                        <xsl:with-param name="conrefend" select="$conrefend"/>
-                                        <xsl:with-param name="original-attributes" select="$original-attributes"/>
-                                      <xsl:with-param name="original-element" select="$original-element"/>
-                                    </xsl:apply-templates>
-                            </xsl:otherwise>
+                          <xsl:when test="not($source-element='')">
+                            <xsl:copy-of select="$source-element"/>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <xsl:call-template name="get-source-attribute"/>
+                          </xsl:otherwise>
                         </xsl:choose>
-                     
-                      <xsl:if test="$topic[2]">
+                      </xsl:with-param>
+                      <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
+                      <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
+                      <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
+                      <xsl:with-param name="conref-ids" select="$updated-conref-ids"/>
+                      <xsl:with-param name="conrefend" select="$conrefend"/>
+                      <xsl:with-param name="original-element" select="$original-element"/>
+                      <xsl:with-param name="original-attributes" select="$original-attributes"/>
+                    </xsl:apply-templates>
+                      <xsl:if test="$target[2]">
                         <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
                       </xsl:if>
                   </xsl:when>
@@ -413,40 +405,31 @@
                 <!-- determine wether conref is allowed -->
                 <xsl:choose>
                       <xsl:when test="$isValid='true'">
-                        <xsl:variable name="topic" select="document($file,/)//*[@id=$elemid][local-name()=$element][ancestor::*[contains(@class, ' topic/topic ')][1][@id=$topicid]]"/>
+                        <xsl:variable name="target" select="document($file,/)//*[@id=$elemid][local-name()=$element][ancestor::*[contains(@class, ' topic/topic ')][1][@id=$topicid]]"/>
                         <!-- added by William on 20090808 for req #12008 end-->
                             <xsl:choose>
-                              <xsl:when test="$topic">
-                                    <xsl:choose>
+                              <xsl:when test="$target">
+                                <xsl:apply-templates select="$target[1]" mode="conref-target">
+                                  <xsl:with-param name="source-element">
+                                     <xsl:choose>
                                         <xsl:when test="not($source-element='')">
-                                             <xsl:apply-templates select="$topic[1]" mode="conref-target">
-                                                <xsl:with-param name="source-element"><xsl:copy-of select="$source-element"/></xsl:with-param>
-                                                <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
-                                                <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-                                                 <xsl:with-param name="conref-filename" select="$conref-filename"/>
-                                    					   <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
-                                                 <xsl:with-param name="conref-ids" select="$updated-conref-ids"/>
-                                                 <xsl:with-param name="conrefend" select="$conrefend"/>
-                                               <xsl:with-param name="original-element" select="$original-element"/>
-                                               <xsl:with-param name="original-attributes" select="$original-attributes"/>
-                                              </xsl:apply-templates>
+                                          <xsl:copy-of select="$source-element"/>
                                         </xsl:when>
-                                        <xsl:otherwise>
-                                                <xsl:apply-templates select="$topic[1]" mode="conref-target">
-                                                    <xsl:with-param name="source-element"><xsl:call-template name="get-source-attribute"/></xsl:with-param>
-                                                    <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
-                                                    <xsl:with-param name="conref-filename" select="$conref-filename"/>
-                                                    <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-                                      						  <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
-                                                    <xsl:with-param name="conref-ids" select="$updated-conref-ids"/>
-                                                  <xsl:with-param name="conrefend" select="$conrefend"/>
-                                                  <xsl:with-param name="original-element" select="$original-element"/>
-                                                  <xsl:with-param name="original-attributes" select="$original-attributes"/>
-                                                </xsl:apply-templates>
-                                        </xsl:otherwise>
-                                    </xsl:choose>
-                                  
-                                  <xsl:if test="$topic[2]">
+                                       <xsl:otherwise>
+                                         <xsl:call-template name="get-source-attribute"/>
+                                       </xsl:otherwise>
+                                     </xsl:choose>
+                                  </xsl:with-param>
+                                  <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
+                                  <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
+                                  <xsl:with-param name="conref-filename" select="$conref-filename"/>
+                                  <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
+                                  <xsl:with-param name="conref-ids" select="$updated-conref-ids"/>
+                                  <xsl:with-param name="conrefend" select="$conrefend"/>
+                                  <xsl:with-param name="original-element" select="$original-element"/>
+                                  <xsl:with-param name="original-attributes" select="$original-attributes"/>
+                                </xsl:apply-templates>
+                                  <xsl:if test="$target[2]">
                                     <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
                                   </xsl:if>
                               </xsl:when>
@@ -471,32 +454,25 @@
                 <xsl:variable name="target" select="//*[@id=$topicid][contains(@class, ' topic/topic ')][local-name()=$element]"/>
                 <xsl:choose>
                   <xsl:when test="$target">
+                    <xsl:apply-templates select="$target[1]" mode="conref-target">
+                      <xsl:with-param name="source-element">
                         <xsl:choose>
-                            <xsl:when test="not($source-element='')">
-                                 <xsl:apply-templates select="$target[1]" mode="conref-target">
-                                    <xsl:with-param name="source-element"><xsl:copy-of select="$source-element"/></xsl:with-param>
-                                    <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
-                                    <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-                        					  <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
-                                    <xsl:with-param name="conref-ids" select="$updated-conref-ids"/>
-                                   <xsl:with-param name="conrefend" select="$conrefend"/>
-                                   <xsl:with-param name="original-element" select="$original-element"/>
-                                   <xsl:with-param name="original-attributes" select="$original-attributes"/>
-                                 </xsl:apply-templates>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                    <xsl:apply-templates select="$target[1]" mode="conref-target">
-                                        <xsl:with-param name="source-element"><xsl:call-template name="get-source-attribute"/></xsl:with-param>
-                                        <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
-                                        <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-                          						  <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
-                                        <xsl:with-param name="conref-ids" select="$updated-conref-ids"/>
-                                      <xsl:with-param name="conrefend" select="$conrefend"/>
-                                      <xsl:with-param name="original-element" select="$original-element"/>
-                                      <xsl:with-param name="original-attributes" select="$original-attributes"/>
-                                    </xsl:apply-templates>
-                            </xsl:otherwise>
+                          <xsl:when test="not($source-element='')">
+                            <xsl:copy-of select="$source-element"/>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <xsl:call-template name="get-source-attribute"/>
+                          </xsl:otherwise>
                         </xsl:choose>
+                      </xsl:with-param>
+                      <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
+                      <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
+                      <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
+                      <xsl:with-param name="conref-ids" select="$updated-conref-ids"/>
+                      <xsl:with-param name="conrefend" select="$conrefend"/>
+                      <xsl:with-param name="original-element" select="$original-element"/>
+                      <xsl:with-param name="original-attributes" select="$original-attributes"/>
+                    </xsl:apply-templates>
                       <xsl:if test="$target[2]">
                         <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
                       </xsl:if>
@@ -521,35 +497,26 @@
                           <!-- added by William on 20090808 for req #12008 end-->
                                   <xsl:choose>
                                     <xsl:when test="$target">
+                                      <xsl:apply-templates select="$target[1]" mode="conref-target">
+                                        <xsl:with-param name="source-element">
                                           <xsl:choose>
-                                              <xsl:when test="not($source-element='')">
-                                                   <xsl:apply-templates select="$target[1]" mode="conref-target">
-                                                      <xsl:with-param name="source-element"><xsl:copy-of select="$source-element"/></xsl:with-param>
-                                                      <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
-                                                       <xsl:with-param name="conref-filename" select="$conref-filename"/>
-                                                       <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-                            					                 <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
-                                                       <xsl:with-param name="conref-ids" select="$updated-conref-ids"/>
-                                                     <xsl:with-param name="conrefend" select="$conrefend"/>
-                                                     <xsl:with-param name="original-element" select="$original-element"/>
-                                                     <xsl:with-param name="original-attributes" select="$original-attributes"/>
-                                                    </xsl:apply-templates>
-                                              </xsl:when>
-                                              <xsl:otherwise>
-                                                      <xsl:apply-templates select="$target[1]" mode="conref-target">
-                                                          <xsl:with-param name="source-element"><xsl:call-template name="get-source-attribute"/></xsl:with-param>
-                                                          <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
-                                                          <xsl:with-param name="conref-filename" select="$conref-filename"/>
-                                                          <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-                            						                  <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
-                                                          <xsl:with-param name="conref-ids" select="$updated-conref-ids"/>
-                                                        <xsl:with-param name="conrefend" select="$conrefend"/>
-                                                        <xsl:with-param name="original-element" select="$original-element"/>
-                                                        <xsl:with-param name="original-attributes" select="$original-attributes"/>
-                                                      </xsl:apply-templates>
-                                              </xsl:otherwise>
+                                            <xsl:when test="not($source-element='')">
+                                              <xsl:copy-of select="$source-element"/>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                              <xsl:call-template name="get-source-attribute"/>
+                                            </xsl:otherwise>
                                           </xsl:choose>
-                                        
+                                        </xsl:with-param>
+                                        <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
+                                        <xsl:with-param name="conref-filename" select="$conref-filename"/>
+                                        <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
+                                        <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
+                                        <xsl:with-param name="conref-ids" select="$updated-conref-ids"/>
+                                        <xsl:with-param name="conrefend" select="$conrefend"/>
+                                        <xsl:with-param name="original-element" select="$original-element"/>
+                                        <xsl:with-param name="original-attributes" select="$original-attributes"/>
+                                      </xsl:apply-templates>
                                         <xsl:if test="$target[2]">
                                           <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
                                         </xsl:if>
@@ -603,35 +570,26 @@
                                         <xsl:otherwise>
                                           <!-- added by William on 2009-06-26 for req #12014 end -->
                                           <!-- do the normal process -->
-                                          <xsl:choose>
-                                            <xsl:when test="not($source-element='')">
-                                              <xsl:apply-templates select="$target[1]" mode="conref-target">
-                                                <xsl:with-param name="source-element"><xsl:copy-of select="$source-element"/></xsl:with-param>
-                                                <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
-                                                <xsl:with-param name="conref-filename" select="$conref-filename"/>
-                                                <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-                                                <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
-                                                <xsl:with-param name="conref-ids" select="$updated-conref-ids"/>
-                                                <xsl:with-param name="conrefend" select="$conrefend"/>
-                                                <xsl:with-param name="original-element" select="$original-element"/>
-                                                <xsl:with-param name="original-attributes" select="$original-attributes"/>
-                                              </xsl:apply-templates>
-                                            </xsl:when>
-                                            <xsl:otherwise>
-                                              <xsl:apply-templates select="$target[1]" mode="conref-target">
-                                                <xsl:with-param name="source-element"><xsl:call-template name="get-source-attribute"/></xsl:with-param>
-                                                <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
-                                                <xsl:with-param name="conref-filename" select="$conref-filename"/>
-                                                <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-                                                <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
-                                                <xsl:with-param name="conref-ids" select="$updated-conref-ids"/>
-                                                <xsl:with-param name="conrefend" select="$conrefend"/>
-                                                <xsl:with-param name="original-element" select="$original-element"/>
-                                                <xsl:with-param name="original-attributes" select="$original-attributes"/>
-                                              </xsl:apply-templates>
-                                            </xsl:otherwise>
-                                          </xsl:choose>
-                                          
+                                          <xsl:apply-templates select="$target[1]" mode="conref-target">
+                                            <xsl:with-param name="source-element">
+                                              <xsl:choose>
+                                                <xsl:when test="not($source-element='')">
+                                                  <xsl:copy-of select="$source-element"/>
+                                                </xsl:when>
+                                                <xsl:otherwise>
+                                                  <xsl:call-template name="get-source-attribute"/>
+                                                </xsl:otherwise>
+                                              </xsl:choose>
+                                            </xsl:with-param>
+                                            <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
+                                            <xsl:with-param name="conref-filename" select="$conref-filename"/>
+                                            <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
+                                            <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
+                                            <xsl:with-param name="conref-ids" select="$updated-conref-ids"/>
+                                            <xsl:with-param name="conrefend" select="$conrefend"/>
+                                            <xsl:with-param name="original-element" select="$original-element"/>
+                                            <xsl:with-param name="original-attributes" select="$original-attributes"/>
+                                          </xsl:apply-templates>
                                           <xsl:if test="$target[2]">
                                             <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
                                           </xsl:if>
@@ -661,30 +619,24 @@
                 <xsl:variable name="target" select="//*[@id=$topicid][contains(@class, ' map/topicref ')][local-name()=$element]"/>
                 <xsl:choose>
                   <xsl:when test="$target">
-                    <xsl:choose>
-                      <xsl:when test="not($source-element='')">
-                        <xsl:apply-templates select="$target[1]" mode="conref-target">
-                          <xsl:with-param name="source-element"><xsl:copy-of select="$source-element"/></xsl:with-param>
-                          <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
-                          <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-                          <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
-                          <xsl:with-param name="conrefend" select="$conrefend"/>
-                          <xsl:with-param name="original-element" select="$original-element"/>
-                          <xsl:with-param name="original-attributes" select="$original-attributes"/>
-                        </xsl:apply-templates>
-                      </xsl:when>
-                      <xsl:otherwise>
-                          <xsl:apply-templates select="$target[1]" mode="conref-target">
-                            <xsl:with-param name="source-element"><xsl:call-template name="get-source-attribute"/></xsl:with-param>
-                            <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
-                            <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-                            <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
-                            <xsl:with-param name="conrefend" select="$conrefend"/>
-                            <xsl:with-param name="original-element" select="$original-element"/>
-                            <xsl:with-param name="original-attributes" select="$original-attributes"/>
-                          </xsl:apply-templates>
-                      </xsl:otherwise>
-                    </xsl:choose>
+                    <xsl:apply-templates select="$target[1]" mode="conref-target">
+                      <xsl:with-param name="source-element">
+                        <xsl:choose>
+                          <xsl:when test="not($source-element='')">
+                            <xsl:copy-of select="$source-element"/>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <xsl:call-template name="get-source-attribute"/>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:with-param>
+                      <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
+                      <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
+                      <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
+                      <xsl:with-param name="conrefend" select="$conrefend"/>
+                      <xsl:with-param name="original-element" select="$original-element"/>
+                      <xsl:with-param name="original-attributes" select="$original-attributes"/>
+                    </xsl:apply-templates>
                     <xsl:if test="$target[2]">
                       <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
                     </xsl:if>
@@ -709,32 +661,25 @@
                     <!-- added by William on 20090808 for req #12008 end-->
                           <xsl:choose>
                             <xsl:when test="$target">
-                                <xsl:choose>
-                                  <xsl:when test="not($source-element='')">
-                                    <xsl:apply-templates select="$target[1]" mode="conref-target">
-                                      <xsl:with-param name="source-element"><xsl:copy-of select="$source-element"/></xsl:with-param>
-                                      <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
-                                      <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-                                      <xsl:with-param name="conref-filename" select="$conref-filename"/>
-                                      <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
-                                      <xsl:with-param name="conrefend" select="$conrefend"/>
-                                      <xsl:with-param name="original-element" select="$original-element"/>
-                                      <xsl:with-param name="original-attributes" select="$original-attributes"/>
-                                    </xsl:apply-templates>
-                                  </xsl:when>
-                                  <xsl:otherwise>
-                                    <xsl:apply-templates select="$target[1]" mode="conref-target">
-                                      <xsl:with-param name="source-element"><xsl:call-template name="get-source-attribute"/></xsl:with-param>
-                                      <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
-                                      <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-                                      <xsl:with-param name="conref-filename" select="$conref-filename"/>
-                                      <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
-                                      <xsl:with-param name="conrefend" select="$conrefend"/>   
-                                      <xsl:with-param name="original-element" select="$original-element"/>
-                                      <xsl:with-param name="original-attributes" select="$original-attributes"/>                   
-                                    </xsl:apply-templates>
-                                  </xsl:otherwise>
-                                </xsl:choose>
+                              <xsl:apply-templates select="$target[1]" mode="conref-target">
+                                <xsl:with-param name="source-element">
+                                  <xsl:choose>
+                                    <xsl:when test="not($source-element='')">
+                                      <xsl:copy-of select="$source-element"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                      <xsl:call-template name="get-source-attribute"/>
+                                    </xsl:otherwise>
+                                  </xsl:choose>
+                                </xsl:with-param>
+                                <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
+                                <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
+                                <xsl:with-param name="conref-filename" select="$conref-filename"/>
+                                <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
+                                <xsl:with-param name="conrefend" select="$conrefend"/>
+                                <xsl:with-param name="original-element" select="$original-element"/>
+                                <xsl:with-param name="original-attributes" select="$original-attributes"/>
+                              </xsl:apply-templates>
                                 <xsl:if test="$target[2]">
                                   <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
                               </xsl:if>
@@ -762,30 +707,24 @@
                 <xsl:variable name="target" select="//*[@id=$topicid][local-name()=$element]"/>
                 <xsl:choose>
                   <xsl:when test="$target">
-                    <xsl:choose>
-                      <xsl:when test="not($source-element='')">
-                        <xsl:apply-templates select="($target)[1]" mode="conref-target">
-                         <xsl:with-param name="source-element"><xsl:copy-of select="$source-element"/></xsl:with-param>
-                          <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
-                          <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-                          <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
-                          <xsl:with-param name="conrefend" select="$conrefend"/>
-                          <xsl:with-param name="original-element" select="$original-element"/>
-                          <xsl:with-param name="original-attributes" select="$original-attributes"/>
-                        </xsl:apply-templates>
-                      </xsl:when>
-                      <xsl:otherwise>
-                          <xsl:apply-templates select="($target)[1]" mode="conref-target">
-                            <xsl:with-param name="source-element"><xsl:copy-of select="$source-element"/></xsl:with-param>
-                            <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
-                            <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-                            <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
-                            <xsl:with-param name="conrefend" select="$conrefend"/>
-                            <xsl:with-param name="original-element" select="$original-element"/>
-                            <xsl:with-param name="original-attributes" select="$original-attributes"/>
-                          </xsl:apply-templates>
-                      </xsl:otherwise>
-                    </xsl:choose>
+                    <xsl:apply-templates select="($target)[1]" mode="conref-target">
+                      <xsl:with-param name="source-element">
+                        <xsl:choose>
+                          <xsl:when test="not($source-element='')">
+                            <xsl:copy-of select="$source-element"/>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <xsl:call-template name="get-source-attribute"/>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:with-param>
+                      <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
+                      <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
+                      <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
+                      <xsl:with-param name="conrefend" select="$conrefend"/>
+                      <xsl:with-param name="original-element" select="$original-element"/>
+                      <xsl:with-param name="original-attributes" select="$original-attributes"/>
+                    </xsl:apply-templates>
                     <xsl:if test="($target)[2]">
                       <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
                     </xsl:if>
@@ -810,32 +749,25 @@
                     <!-- added by William on 20090808 for req #12008 end-->
                         <xsl:choose>
                           <xsl:when test="$target">
-                              <xsl:choose>
-                                <xsl:when test="not($source-element='')">
-                                  <xsl:apply-templates select="$target[1]" mode="conref-target">
-                                    <xsl:with-param name="source-element"><xsl:copy-of select="$source-element"/></xsl:with-param>
-                                    <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
-                                    <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-                                    <xsl:with-param name="conref-filename" select="$conref-filename"/>
-                                    <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
-                                    <xsl:with-param name="conrefend" select="$conrefend"/>
-                                    <xsl:with-param name="original-element" select="$original-element"/>
-                                    <xsl:with-param name="original-attributes" select="$original-attributes"/>
-                                  </xsl:apply-templates>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:apply-templates select="$target[1]" mode="conref-target">
-                                      <xsl:with-param name="source-element"><xsl:copy-of select="$source-element"/></xsl:with-param>
-                                      <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
-                                      <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-                                      <xsl:with-param name="conref-filename" select="$conref-filename"/>
-                                      <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
-                                      <xsl:with-param name="conrefend" select="$conrefend"/>
-                                      <xsl:with-param name="original-element" select="$original-element"/>
-                                      <xsl:with-param name="original-attributes" select="$original-attributes"/>
-                                    </xsl:apply-templates>
-                                </xsl:otherwise>
-                              </xsl:choose>
+                            <xsl:apply-templates select="$target[1]" mode="conref-target">
+                              <xsl:with-param name="source-element">
+                                <xsl:choose>
+                                  <xsl:when test="not($source-element='')">
+                                    <xsl:copy-of select="$source-element"/>
+                                  </xsl:when>
+                                  <xsl:otherwise>
+                                    <xsl:call-template name="get-source-attribute"/>
+                                  </xsl:otherwise>
+                                </xsl:choose>
+                              </xsl:with-param>
+                              <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
+                              <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
+                              <xsl:with-param name="conref-filename" select="$conref-filename"/>
+                              <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
+                              <xsl:with-param name="conrefend" select="$conrefend"/>
+                              <xsl:with-param name="original-element" select="$original-element"/>
+                              <xsl:with-param name="original-attributes" select="$original-attributes"/>
+                            </xsl:apply-templates>
                               <xsl:if test="$target[2]">
                                 <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
                             </xsl:if>
@@ -875,35 +807,26 @@
                     <xsl:choose>
                       <!-- to resolve the problem of conref from map to topic -->
                       <xsl:when test="$target">
-                        <xsl:choose>
-                          <xsl:when test="not($source-element='')">
-                            <xsl:apply-templates select="$target[1]" mode="conref-target">
-                              <xsl:with-param name="source-element"><xsl:copy-of select="$source-element"/></xsl:with-param>
-                              <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
-                              <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-                              <xsl:with-param name="conref-filename" select="$conref-filename"/>
-                              <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
-                              <xsl:with-param name="conref-ids" select="$updated-conref-ids"/>
-                              <xsl:with-param name="conrefend" select="$conrefend"/>
-                              <xsl:with-param name="original-element" select="$original-element"/>
-                              <xsl:with-param name="original-attributes" select="$original-attributes"/>
-                            </xsl:apply-templates>
-                          </xsl:when>
-                          <xsl:otherwise>
-                              <xsl:apply-templates select="$target[1]" mode="conref-target">
-                                <xsl:with-param name="source-element"><xsl:call-template name="get-source-attribute"/></xsl:with-param>
-                                <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
-                                <xsl:with-param name="conref-filename" select="$conref-filename"/>
-                                <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-                                <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
-                                <xsl:with-param name="conref-ids" select="$updated-conref-ids"/>
-                                <xsl:with-param name="conrefend" select="$conrefend"/>
-                                <xsl:with-param name="original-element" select="$original-element"/>
-                                <xsl:with-param name="original-attributes" select="$original-attributes"/>
-                              </xsl:apply-templates>
-                          </xsl:otherwise>
-                        </xsl:choose>
-                        
+                        <xsl:apply-templates select="$target[1]" mode="conref-target">
+                          <xsl:with-param name="source-element">
+                            <xsl:choose>
+                              <xsl:when test="not($source-element='')">
+                                <xsl:copy-of select="$source-element"/>
+                              </xsl:when>
+                              <xsl:otherwise>
+                                <xsl:call-template name="get-source-attribute"/>
+                              </xsl:otherwise>
+                            </xsl:choose>
+                          </xsl:with-param>
+                          <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
+                          <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
+                          <xsl:with-param name="conref-filename" select="$conref-filename"/>
+                          <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
+                          <xsl:with-param name="conref-ids" select="$updated-conref-ids"/>
+                          <xsl:with-param name="conrefend" select="$conrefend"/>
+                          <xsl:with-param name="original-element" select="$original-element"/>
+                          <xsl:with-param name="original-attributes" select="$original-attributes"/>
+                        </xsl:apply-templates>
                         <xsl:if test="$target[2]">
                           <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
                         </xsl:if>
