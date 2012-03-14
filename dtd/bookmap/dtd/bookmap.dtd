@@ -131,7 +131,9 @@ PUBLIC "-//OASIS//DTD DITA 1.2 BookMap//EN"                        -->
                          %indexing-d-index-base;
                         ">
 <!ENTITY % keywords     "keywords | 
-                         %delay-d-keywords; |
+                         %delay-d-keywords;
+                        ">
+<!ENTITY % keyword      "keyword | 
                          %pr-d-keyword; | 
                          %sw-d-keyword; |
                          %ui-d-keyword;
