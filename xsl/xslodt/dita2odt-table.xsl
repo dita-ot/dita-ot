@@ -697,7 +697,10 @@
     <xsl:attribute name="office:value-type">string</xsl:attribute>
     <xsl:call-template name="create_style_stable"/>
     
-    <xsl:apply-templates/>
+    <xsl:element name="text:p">
+      <xsl:attribute name="text:style-name">indent_paragraph_style</xsl:attribute>  
+      <xsl:apply-templates/>
+    </xsl:element>
   </xsl:element>
 </xsl:template>
   
