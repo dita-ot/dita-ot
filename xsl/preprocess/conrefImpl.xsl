@@ -76,7 +76,8 @@
 </xsl:template>
     
 <xsl:template name="get-source-attribute">
-    <xsl:apply-templates select="@*" mode="get-source-attribute"></xsl:apply-templates>
+  <xsl:param name="current-node" select="."/>
+    <xsl:apply-templates select="$current-node/@*" mode="get-source-attribute"/>
 </xsl:template>
     
 <xsl:template match="@*" mode="get-source-attribute">
@@ -343,6 +344,7 @@
     </xsl:when>
     <xsl:otherwise>
       <!-- added by William on 2009-06-26 for req #12014 end -->
+      <xsl:variable name="current-element" select="."/>
       <!-- do as usual --> 
         <xsl:variable name="topicpos">
         <xsl:choose>
@@ -361,7 +363,7 @@
           <xsl:when test="contains(substring-after(@conref,'#'),'/')">
             <xsl:choose>
               <xsl:when test="$topicpos='samefile'">
-                <xsl:variable name="target" select="//*[@id=$elemid][local-name()=$element][ancestor::*[contains(@class, ' topic/topic ')][1][@id=$topicid]]"/>
+                <xsl:variable name="target" select="key('id', $elemid)[local-name()=$element][ancestor::*[contains(@class, ' topic/topic ')][1][@id=$topicid]]"/>
                 <xsl:choose>
                   <xsl:when test="$target">
                     <xsl:apply-templates select="$target[1]" mode="conref-target">
@@ -405,7 +407,8 @@
                 <!-- determine wether conref is allowed -->
                 <xsl:choose>
                       <xsl:when test="$isValid='true'">
-                        <xsl:variable name="target" select="document($file,/)//*[@id=$elemid][local-name()=$element][ancestor::*[contains(@class, ' topic/topic ')][1][@id=$topicid]]"/>
+                        <xsl:for-each select="document($file,/)">
+                        <xsl:variable name="target" select="key('id', $elemid)[local-name()=$element][ancestor::*[contains(@class, ' topic/topic ')][1][@id=$topicid]]"/>
                         <!-- added by William on 20090808 for req #12008 end-->
                             <xsl:choose>
                               <xsl:when test="$target">
@@ -416,7 +419,9 @@
                                           <xsl:copy-of select="$source-element"/>
                                         </xsl:when>
                                        <xsl:otherwise>
-                                         <xsl:call-template name="get-source-attribute"/>
+                                         <xsl:call-template name="get-source-attribute">
+                                           <xsl:with-param name="current-node" select="$current-element"/>
+                                         </xsl:call-template>
                                        </xsl:otherwise>
                                      </xsl:choose>
                                   </xsl:with-param>
@@ -436,6 +441,7 @@
                               <xsl:otherwise><xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
                             </xsl:choose>
                         <!-- added by William on 20090808 for req #12008 start-->
+                          </xsl:for-each>
                       </xsl:when>
                       <xsl:otherwise>
                         <xsl:apply-templates select="." mode="ditamsg:domainMismatch"/>
@@ -451,7 +457,7 @@
           <xsl:when test="contains(@class, ' topic/topic ')">
             <xsl:choose>
               <xsl:when test="$topicpos='samefile'">
-                <xsl:variable name="target" select="//*[@id=$topicid][contains(@class, ' topic/topic ')][local-name()=$element]"/>
+                <xsl:variable name="target" select="key('id', $topicid)[contains(@class, ' topic/topic ')][local-name()=$element]"/>
                 <xsl:choose>
                   <xsl:when test="$target">
                     <xsl:apply-templates select="$target[1]" mode="conref-target">
@@ -493,7 +499,8 @@
                       <!-- determine wether conref is allowed -->
                       <xsl:choose>
                         <xsl:when test="$isValid='true'">
-                          <xsl:variable name="target" select="document($file,/)//*[@id=$topicid][contains(@class, ' topic/topic ')][local-name()=$element]"/>
+                          <xsl:for-each select="document($file,/)">
+                          <xsl:variable name="target" select="key('id', $topicid)[contains(@class, ' topic/topic ')][local-name()=$element]"/>
                           <!-- added by William on 20090808 for req #12008 end-->
                                   <xsl:choose>
                                     <xsl:when test="$target">
@@ -504,7 +511,9 @@
                                               <xsl:copy-of select="$source-element"/>
                                             </xsl:when>
                                             <xsl:otherwise>
-                                              <xsl:call-template name="get-source-attribute"/>
+                                              <xsl:call-template name="get-source-attribute">
+                                                <xsl:with-param name="current-node" select="$current-element"/>
+                                              </xsl:call-template>
                                             </xsl:otherwise>
                                           </xsl:choose>
                                         </xsl:with-param>
@@ -524,6 +533,7 @@
                                     <xsl:otherwise><xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
                                   </xsl:choose>
                           <!-- added by William on 20090808 for req #12008 start-->
+                          </xsl:for-each>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:apply-templates select="." mode="ditamsg:domainMismatch"/>
@@ -544,7 +554,8 @@
                   <!-- determine wether conref is allowed -->
                       <xsl:choose>
                         <xsl:when test="$isValid='true'">
-                          <xsl:variable name="target" select="document($file,/)//*[contains(@class, ' topic/topic ')][1][local-name()=$element]"/>
+                          <xsl:for-each select="document($file,/)">
+                          <xsl:variable name="target" select="//*[contains(@class, ' topic/topic ')][1][local-name()=$element]"/>
                           <!-- added by William on 20090808 for req #12008 end-->
                                   <xsl:choose>
                                     <xsl:when test="$target">
@@ -552,7 +563,7 @@
                                       <xsl:variable name="firstTopicId" select="$target/@id"/>
                                       <xsl:choose>
                                         <!-- if the first topic id is exported and transtype is eclipsehelp-->
-                                        <xsl:when test="document($EXPORTFILE, /)//file[@name=$FILENAME]/topicid[@name=$firstTopicId]
+                                        <xsl:when test="document($EXPORTFILE, $current-element)//file[@name=$FILENAME]/topicid[@name=$firstTopicId]
                                           and ($TRANSTYPE = 'eclipsehelp' )">
                                           <!-- just copy -->
                                           <xsl:copy>
@@ -577,7 +588,9 @@
                                                   <xsl:copy-of select="$source-element"/>
                                                 </xsl:when>
                                                 <xsl:otherwise>
-                                                  <xsl:call-template name="get-source-attribute"/>
+                                                  <xsl:call-template name="get-source-attribute">
+                                                    <xsl:with-param name="current-node" select="$current-element"/>
+                                                  </xsl:call-template>
                                                 </xsl:otherwise>
                                               </xsl:choose>
                                             </xsl:with-param>
@@ -601,6 +614,7 @@
                                     <xsl:otherwise><xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
                                   </xsl:choose>
                       <!-- added by William on 20090808 for req #12008 start-->
+                          </xsl:for-each>
                     </xsl:when>
                     <xsl:otherwise>
                       <xsl:apply-templates select="." mode="ditamsg:domainMismatch"/>
@@ -616,7 +630,7 @@
           <xsl:when test="contains(@class, ' map/topicref ')">
             <xsl:choose>
               <xsl:when test="$topicpos='samefile'">
-                <xsl:variable name="target" select="//*[@id=$topicid][contains(@class, ' map/topicref ')][local-name()=$element]"/>
+                <xsl:variable name="target" select="key('id', $topicid)[contains(@class, ' map/topicref ')][local-name()=$element]"/>
                 <xsl:choose>
                   <xsl:when test="$target">
                     <xsl:apply-templates select="$target[1]" mode="conref-target">
@@ -657,7 +671,8 @@
                 <!-- determine wether conref is allowed -->
                 <xsl:choose>
                   <xsl:when test="$isValid='true'">
-                    <xsl:variable name="target" select="document($file,/)//*[@id=$topicid][contains(@class, ' map/topicref ')][local-name()=$element]"/>
+                    <xsl:for-each select="document($file,/)">
+                    <xsl:variable name="target" select="key('id', $topicid)[contains(@class, ' map/topicref ')][local-name()=$element]"/>
                     <!-- added by William on 20090808 for req #12008 end-->
                           <xsl:choose>
                             <xsl:when test="$target">
@@ -668,7 +683,9 @@
                                       <xsl:copy-of select="$source-element"/>
                                     </xsl:when>
                                     <xsl:otherwise>
-                                      <xsl:call-template name="get-source-attribute"/>
+                                      <xsl:call-template name="get-source-attribute">
+                                        <xsl:with-param name="current-node" select="$current-element"/>
+                                      </xsl:call-template>
                                     </xsl:otherwise>
                                   </xsl:choose>
                                 </xsl:with-param>
@@ -687,6 +704,7 @@
                             <xsl:otherwise><xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
                           </xsl:choose>
                     <!-- added by William on 20090808 for req #12008 start-->
+                    </xsl:for-each>
                   </xsl:when>
                   <xsl:otherwise>
                     <xsl:apply-templates select="." mode="ditamsg:domainMismatch"/>
@@ -704,7 +722,7 @@
           <xsl:when test="contains(/*/@class, ' map/map ')">
             <xsl:choose>
               <xsl:when test="$topicpos='samefile'">
-                <xsl:variable name="target" select="//*[@id=$topicid][local-name()=$element]"/>
+                <xsl:variable name="target" select="key('id', $topicid)[local-name()=$element]"/>
                 <xsl:choose>
                   <xsl:when test="$target">
                     <xsl:apply-templates select="($target)[1]" mode="conref-target">
@@ -745,7 +763,8 @@
                 <!-- determine wether conref is allowed -->
                 <xsl:choose>
                   <xsl:when test="$isValid='true'">
-                    <xsl:variable name="target" select="document($file,/)//*[@id=$topicid][local-name()=$element]"/>
+                    <xsl:for-each select="document($file,/)">
+                    <xsl:variable name="target" select="key('id', $topicid)[local-name()=$element]"/>
                     <!-- added by William on 20090808 for req #12008 end-->
                         <xsl:choose>
                           <xsl:when test="$target">
@@ -756,7 +775,9 @@
                                     <xsl:copy-of select="$source-element"/>
                                   </xsl:when>
                                   <xsl:otherwise>
-                                    <xsl:call-template name="get-source-attribute"/>
+                                    <xsl:call-template name="get-source-attribute">
+                                      <xsl:with-param name="current-node" select="$current-element"/>
+                                    </xsl:call-template>
                                   </xsl:otherwise>
                                 </xsl:choose>
                               </xsl:with-param>
@@ -775,6 +796,7 @@
                           <xsl:otherwise><xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
                         </xsl:choose>
                     <!-- added by William on 20090808 for req #12008 start-->
+                    </xsl:for-each>
                   </xsl:when>
                   <xsl:otherwise>
                     <xsl:apply-templates select="." mode="ditamsg:domainMismatch"/>
@@ -802,7 +824,8 @@
             <!-- determine wether conref is allowed -->
             <xsl:choose>
               <xsl:when test="$isValid='true'">
-                <xsl:variable name="target" select="document($file,/)//*[@id=$topicid][local-name()=$element]"/>
+                <xsl:for-each select="document($file,/)">
+                <xsl:variable name="target" select="key('id', $topicid)[local-name()=$element]"/>
                 <!-- added by William on 20090808 for req #12008 end-->
                     <xsl:choose>
                       <!-- to resolve the problem of conref from map to topic -->
@@ -814,7 +837,9 @@
                                 <xsl:copy-of select="$source-element"/>
                               </xsl:when>
                               <xsl:otherwise>
-                                <xsl:call-template name="get-source-attribute"/>
+                                <xsl:call-template name="get-source-attribute">
+                                  <xsl:with-param name="current-node" select="$current-element"/>
+                                </xsl:call-template>
                               </xsl:otherwise>
                             </xsl:choose>
                           </xsl:with-param>
@@ -834,6 +859,7 @@
                       <xsl:otherwise><xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
                     </xsl:choose>
                 <!-- added by William on 20090808 for req #12008 start-->
+                </xsl:for-each>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:apply-templates select="." mode="ditamsg:domainMismatch"/>
