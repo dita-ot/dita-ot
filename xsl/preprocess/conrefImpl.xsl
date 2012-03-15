@@ -1064,7 +1064,7 @@
     <xsl:choose>
       <xsl:when test="../@scope='external'"><xsl:value-of select="."/></xsl:when>
         
-        <xsl:when test="starts-with(.,'http://') or starts-with(.,'ftp://')"><xsl:value-of select="."/></xsl:when>
+        <xsl:when test="starts-with(.,'http://') or starts-with(.,'https://') or starts-with(.,'ftp://')"><xsl:value-of select="."/></xsl:when>
         
         <xsl:when test="starts-with(.,'#')">
             <xsl:choose>
@@ -1131,15 +1131,15 @@
 		<xsl:choose>
 			<xsl:when test="$elemid='#none#' or $elemid=$href-elemid">
 				<xsl:value-of 
-					select="generate-id(//*[@id=$conref-topicid][contains(@class, ' topic/topic ')]//*[@id=$href-elemid])"/>
+					select="generate-id(key('id', $conref-topicid)[contains(@class, ' topic/topic ')]//*[@id=$href-elemid])"/>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of 
-					select="generate-id(//*[@id=$conref-topicid][contains(@class, ' topic/topic ')]//*[@id=$elemid]//*[@id=$href-elemid])"/>
+					select="generate-id(key('id', $conref-topicid)[contains(@class, ' topic/topic ')]//*[@id=$elemid]//*[@id=$href-elemid])"/>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:variable>
-	<xsl:variable name="href-gen-id" select="generate-id(//*[@id=$href-topicid][contains(@class, ' topic/topic ')]//*[@id=$href-elemid])"/>
+	<xsl:variable name="href-gen-id" select="generate-id(key('id', $href-topicid)[contains(@class, ' topic/topic ')]//*[@id=$href-elemid])"/>
 	<xsl:choose>
 		<xsl:when 
 			test="($conref-gen-id='') or (not($conref-gen-id=$href-gen-id))">

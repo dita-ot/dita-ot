@@ -112,6 +112,7 @@
           <li>3475296 Remove obsolete dita-preprocess target (milestone 2)</li>
           <li>3498406 Add index file to PDF2 variables (milestone 3)</li>
           <li>3498440 Run XSLT with Ant task in PDF2 (milestone 3)</li>
+          <li>3501029 Move Ant scripts to plug-in folders (milestone 3)</li>
           <li>3466842 Refactor preprocessing to use SAX filters (in progress)</li>
           <li>3468864 Remove Content object (in progress)</li>
           <li>3460151 Use Job to read/write job configuration files (in progress)</li>
@@ -166,6 +167,7 @@
           <li>3385349 Warning given by Saxon EE when processing flag-rules.xsl (milestone 3)</li>
           <li>3496831 PDF2: preface titles does not pull indexterms. (milestone 3)</li>
           <li>3499953 startcmd.bat adds dost.jar twice to the CLASSPATH (milestone 3)</li>
+          <li>3501182 Typos in domains_(un)classed.css (milestone 3)</li>
           <li>3471364 UNC paths are not supported in input argument (in progress)</li>
           <li>3491768 Deprecated metadata PICS-Label in XHTML output (in progress)</li>
         </ul>
