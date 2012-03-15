@@ -126,13 +126,13 @@
                             <!-- edited by William on 2009-09-01 for updated mapref start-->
                             <xsl:choose>
                                 <xsl:when test="starts-with(@href,'#')">
-                                    <xsl:value-of select="$FILEREF"/><xsl:value-of select="$WORKDIR"/><xsl:value-of select="$file-being-processed"/>
+                                    <xsl:value-of select="concat($FILEREF, $WORKDIR, $file-being-processed)"/>
                                 </xsl:when>   
                                 <xsl:when test="contains(@href, '#')">
-                                    <xsl:value-of select="$FILEREF"/><xsl:value-of select="$WORKDIR"/><xsl:value-of select="substring-before(@href, '#')"/> 
+                                    <xsl:value-of select="concat($FILEREF, $WORKDIR, substring-before(@href, '#'))"/>
                                 </xsl:when>
                                 <xsl:otherwise>
-                                    <xsl:value-of select="$FILEREF"/><xsl:value-of select="$WORKDIR"/><xsl:value-of select="@href"/> 
+                                    <xsl:value-of select="concat($FILEREF, $WORKDIR, @href)"/>
                                 </xsl:otherwise>
                             </xsl:choose>
                             <!-- edited by William on 2009-09-01 for updated mapref end-->
@@ -141,9 +141,7 @@
                 </xsl:variable>
               <xsl:variable name="fileurl">
                 <xsl:call-template name="replace-blank">
-                  <xsl:with-param name="file-origin">
-                    <xsl:value-of select="translate($fileurl-origin,'\','/')"/>
-                  </xsl:with-param>
+                  <xsl:with-param name="file-origin" select="translate($fileurl-origin,'\','/')"/>
                 </xsl:call-template>
               </xsl:variable>
                 <xsl:variable name="file" select="document($fileurl,/)"/>
@@ -172,16 +170,12 @@
                                             <xsl:when test="not($relative-path='#none#' or $relative-path='')">
                                                 <xsl:value-of select="$relative-path"/>
                                                 <xsl:call-template name="find-relative-path">
-                                                    <xsl:with-param name="remainingpath">
-                                                        <xsl:value-of select="@href"/>
-                                                    </xsl:with-param>
+                                                    <xsl:with-param name="remainingpath" select="@href"/>
                                                 </xsl:call-template>
                                             </xsl:when>
                                             <xsl:otherwise>
                                                 <xsl:call-template name="find-relative-path">
-                                                    <xsl:with-param name="remainingpath">
-                                                        <xsl:value-of select="@href"/>
-                                                    </xsl:with-param>
+                                                    <xsl:with-param name="remainingpath" select="@href"/>
                                                 </xsl:call-template>
                                             </xsl:otherwise>
                                         </xsl:choose>
@@ -336,16 +330,12 @@
                                             <xsl:when test="not($relative-path='#none#' or $relative-path='')">
                                                 <xsl:value-of select="$relative-path"/>
                                                 <xsl:call-template name="find-relative-path">
-                                                    <xsl:with-param name="remainingpath">
-                                                        <xsl:value-of select="@href"/>
-                                                    </xsl:with-param>
+                                                    <xsl:with-param name="remainingpath" select="@href"/>
                                                 </xsl:call-template>
                                             </xsl:when>
                                             <xsl:otherwise>
                                                 <xsl:call-template name="find-relative-path">
-                                                    <xsl:with-param name="remainingpath">
-                                                        <xsl:value-of select="@href"/>
-                                                    </xsl:with-param>
+                                                    <xsl:with-param name="remainingpath" select="@href"/>
                                                 </xsl:call-template>
                                             </xsl:otherwise>
                                         </xsl:choose>
@@ -510,7 +500,7 @@
                         </xsl:when>                        
                         <xsl:otherwise>
                             <xsl:attribute name="href">
-                            <xsl:value-of select="$relative-path"/><xsl:value-of select="@href"/>
+                            <xsl:value-of select="concat($relative-path, @href)"/>
                             </xsl:attribute>
                         </xsl:otherwise>
                     </xsl:choose>                    
@@ -959,9 +949,7 @@
                     <xsl:variable name="update-id-path" select="concat($mapref-id-path,' ',generate-id(.),' ')"/>
                   <xsl:variable name="href">
                       <xsl:call-template name="replace-blank">
-                        <xsl:with-param name="file-origin">
-                          <xsl:value-of select="translate(@href,'\','/')"/>
-                        </xsl:with-param>
+                        <xsl:with-param name="file-origin" select="translate(@href,'\','/')"/>
                       </xsl:call-template>
                   </xsl:variable>
                     <xsl:apply-templates select="document($href,/)/*[contains(@class,' map/map ')]" mode="mapref">
@@ -1012,8 +1000,7 @@
             <xsl:attribute name="href">
                 <xsl:choose>
                     <xsl:when test="not(contains(.,'://') or ../@scope='external' or $relative-path='#none#' or $relative-path='')">
-                        <xsl:value-of select="$relative-path"/>
-                        <xsl:value-of select="."/>
+                        <xsl:value-of select="concat($relative-path, .)"/>
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:value-of select="."/>
@@ -1122,7 +1109,7 @@
                 then proceed normally with the table. The value is not specified here on the entry,
                 or it would have been caught in the first xsl:when test. -->
             <xsl:when test="contains(@class,' map/relcell ')">
-                <xsl:variable name="position"><xsl:value-of select="1+count(preceding-sibling::*)"/></xsl:variable>
+                <xsl:variable name="position" select="1+count(preceding-sibling::*)"/>
                 <xsl:variable name="row">
                     <xsl:apply-templates select=".." mode="mappull:inherit-one-level"><xsl:with-param name="attrib" select="$attrib"/></xsl:apply-templates>
                 </xsl:variable>
@@ -1167,7 +1154,7 @@
         <xsl:if test="contains($remainingpath,'/')">
             <xsl:value-of select="substring-before($remainingpath,'/')"/>/<xsl:text/>
             <xsl:call-template name="find-relative-path">
-                <xsl:with-param name="remainingpath"><xsl:value-of select="substring-after($remainingpath,'/')"/></xsl:with-param>
+                <xsl:with-param name="remainingpath" select="substring-after($remainingpath,'/')"/>
             </xsl:call-template>
         </xsl:if>
     </xsl:template>
