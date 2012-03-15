@@ -54,7 +54,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:if test="contains($remainingpath,'/')">
       <xsl:value-of select="substring-before($remainingpath,'/')"/>/<xsl:text/>
       <xsl:call-template name="find-relative-path">
-        <xsl:with-param name="remainingpath"><xsl:value-of select="substring-after($remainingpath,'/')"/></xsl:with-param>
+        <xsl:with-param name="remainingpath" select="substring-after($remainingpath,'/')"/>
       </xsl:call-template>
     </xsl:if>
   </xsl:template>
@@ -164,9 +164,9 @@ Other modes can be found within the code, and may or may not prove useful for ov
             <xsl:when test="$print='no' and ($FINALOUTPUTTYPE='PDF' or $FINALOUTPUTTYPE='IDD')"/>
             <xsl:when test="@href">
               <xsl:call-template name="get-stuff">
-                <xsl:with-param name="type"><xsl:value-of select="$type"/></xsl:with-param>
-                <xsl:with-param name="scope"><xsl:value-of select="$scope"/></xsl:with-param>
-                <xsl:with-param name="format"><xsl:value-of select="$format"/></xsl:with-param>
+                <xsl:with-param name="type" select="$type"/>
+                <xsl:with-param name="scope" select="$scope"/>
+                <xsl:with-param name="format" select="$format"/>
               </xsl:call-template>
             </xsl:when>
           </xsl:choose>
@@ -193,7 +193,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
       <xsl:attribute name="href">
         <xsl:choose>
           <xsl:when test="not(contains(@href,'://') or @scope='external' or $relative-path='#none#' or $relative-path='')">
-            <xsl:value-of select="$relative-path"/><xsl:value-of select="@href"/>
+            <xsl:value-of select="concat($relative-path, @href)"/>
           </xsl:when>
           <xsl:otherwise>
             <xsl:value-of select="@href"/>
@@ -301,7 +301,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
            then proceed normally with the table. The value is not specified here on the entry,
            or it would have been caught in the first xsl:when test. -->
       <xsl:when test="contains(@class,' map/relcell ')">
-        <xsl:variable name="position"><xsl:value-of select="1+count(preceding-sibling::*)"/></xsl:variable>
+        <xsl:variable name="position" select="1+count(preceding-sibling::*)"/>
         <xsl:variable name="row">
           <xsl:apply-templates select=".." mode="mappull:inherit-one-level"><xsl:with-param name="attrib" select="$attrib"/></xsl:apply-templates>
         </xsl:variable>
@@ -413,15 +413,11 @@ Other modes can be found within the code, and may or may not prove useful for ov
       </xsl:when>
       <!--a relative path including a fragment identifier - add the working directory, plus the part before the fragment-->
       <xsl:when test="contains(@href,'#')">
-        <xsl:value-of select="$FILEREF"/>
-        <xsl:value-of select="$WORKDIR"/>
-        <xsl:value-of select="substring-before(@href,'#')"/>
+        <xsl:value-of select="concat($FILEREF, $WORKDIR, substring-before(@href,'#'))"/>
       </xsl:when>
       <!--otherwise a relative path with no fragment, add the working directory plus the url-->
       <xsl:otherwise>
-        <xsl:value-of select="$FILEREF"/>
-        <xsl:value-of select="$WORKDIR"/>
-        <xsl:value-of select="@href"/>
+        <xsl:value-of select="concat($FILEREF, $WORKDIR, @href)"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -521,18 +517,18 @@ Other modes can be found within the code, and may or may not prove useful for ov
           <!--finding type based on name of the target elemenkt in a particular topic in another file-->
           <xsl:when test="$topicpos='otherfile' and $doc//*[contains(@class, ' topic/topic ')][@id=$topicid]">
             <xsl:call-template name="verify-type-value">
-              <xsl:with-param name="type"><xsl:value-of select="$type"/></xsl:with-param>
-              <xsl:with-param name="actual-class"><xsl:value-of select="$doc//*[contains(@class, ' topic/topic ')][@id=$topicid][1]/@class"/></xsl:with-param>
-              <xsl:with-param name="actual-name"><xsl:value-of select="local-name($doc//*[contains(@class, ' topic/topic ')][@id=$topicid][1])"/></xsl:with-param>
+              <xsl:with-param name="type" select="$type"/>
+              <xsl:with-param name="actual-class" select="$doc//*[contains(@class, ' topic/topic ')][@id=$topicid][1]/@class"/>
+              <xsl:with-param name="actual-name" select="local-name($doc//*[contains(@class, ' topic/topic ')][@id=$topicid][1])"/>
             </xsl:call-template>
           </xsl:when>
 
           <!--finding type based on name of the target element in the first topic in another file-->
           <xsl:when test="$topicpos='firstinfile' and $doc//*[contains(@class, ' topic/topic ')]">
             <xsl:call-template name="verify-type-value">
-              <xsl:with-param name="type"><xsl:value-of select="$type"/></xsl:with-param>
-              <xsl:with-param name="actual-class"><xsl:value-of select="$doc//*[contains(@class, ' topic/topic ')][1]/@class"/></xsl:with-param>
-              <xsl:with-param name="actual-name"><xsl:value-of select="local-name($doc//*[contains(@class, ' topic/topic ')][1])"/></xsl:with-param>
+              <xsl:with-param name="type" select="$type"/>
+              <xsl:with-param name="actual-class" select="$doc//*[contains(@class, ' topic/topic ')][1]/@class"/>
+              <xsl:with-param name="actual-name" select="local-name($doc//*[contains(@class, ' topic/topic ')][1])"/>
             </xsl:call-template>
           </xsl:when>
         </xsl:choose>
@@ -746,14 +742,14 @@ Other modes can be found within the code, and may or may not prove useful for ov
             <xsl:copy-of select="@class"/>
             <xsl:for-each select="parent::*">
               <xsl:call-template name="getmetadata">
-                <xsl:with-param name="type"><xsl:value-of select="$type"/></xsl:with-param>
-                <xsl:with-param name="file"><xsl:value-of select="$file"/></xsl:with-param>
-                <xsl:with-param name="topicpos"><xsl:value-of select="$topicpos"/></xsl:with-param>
-                <xsl:with-param name="topicid"><xsl:value-of select="$topicid"/></xsl:with-param>
-                <xsl:with-param name="classval"><xsl:value-of select="$classval"/></xsl:with-param>
-                <xsl:with-param name="scope"><xsl:value-of select="$scope"/></xsl:with-param>
-                <xsl:with-param name="format"><xsl:value-of select="$format"/></xsl:with-param>
-                <xsl:with-param name="navtitle"><xsl:copy-of select="$navtitle"/></xsl:with-param>
+                <xsl:with-param name="type" select="$type"/>
+                <xsl:with-param name="file" select="$file"/>
+                <xsl:with-param name="topicpos" select="$topicpos"/>
+                <xsl:with-param name="topicid" select="$topicid"/>
+                <xsl:with-param name="classval" select="$classval"/>
+                <xsl:with-param name="scope" select="$scope"/>
+                <xsl:with-param name="format" select="$format"/>
+                <xsl:with-param name="navtitle" select="$navtitle"/>
               </xsl:call-template>
             </xsl:for-each>
           </xsl:copy>
@@ -762,14 +758,14 @@ Other modes can be found within the code, and may or may not prove useful for ov
       <xsl:otherwise>
         <topicmeta class="- map/topicmeta ">
           <xsl:call-template name="getmetadata">
-            <xsl:with-param name="type"><xsl:value-of select="$type"/></xsl:with-param>
-            <xsl:with-param name="file"><xsl:value-of select="$file"/></xsl:with-param>
-            <xsl:with-param name="topicpos"><xsl:value-of select="$topicpos"/></xsl:with-param>
-            <xsl:with-param name="topicid"><xsl:value-of select="$topicid"/></xsl:with-param>
-            <xsl:with-param name="classval"><xsl:value-of select="$classval"/></xsl:with-param>
-            <xsl:with-param name="scope"><xsl:value-of select="$scope"/></xsl:with-param>
-            <xsl:with-param name="format"><xsl:value-of select="$format"/></xsl:with-param>
-            <xsl:with-param name="navtitle"><xsl:copy-of select="$navtitle"/></xsl:with-param>
+            <xsl:with-param name="type" select="$type"/>
+            <xsl:with-param name="file" select="$file"/>
+            <xsl:with-param name="topicpos" select="$topicpos"/>
+            <xsl:with-param name="topicid" select="$topicid"/>
+            <xsl:with-param name="classval" select="$classval"/>
+            <xsl:with-param name="scope" select="$scope"/>
+            <xsl:with-param name="format" select="$format"/>
+            <xsl:with-param name="navtitle" select="$navtitle"/>
           </xsl:call-template>
         </topicmeta>
       </xsl:otherwise>
@@ -1272,9 +1268,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
  
   
   <xsl:template match="text() [ancestor::*[contains(@class,' topic/title ')]|ancestor::*[contains(@class,' topic/navtitle ')]]" >
-    <xsl:variable name="text_value">
-      <xsl:value-of select="."/>
-    </xsl:variable>
+    <xsl:variable name="text_value" select="string(.)"/>
     
     <xsl:variable name="pre-text">
       <xsl:choose>   
@@ -1313,9 +1307,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
       </xsl:if>
     </xsl:variable>
     
-    <xsl:variable name="elem-txt">
-         <xsl:value-of select=" concat($pre-text,$end-text)"/>
-    </xsl:variable>
+    <xsl:variable name="elem-txt" select="concat($pre-text, $end-text)"/>
  
     <xsl:value-of select="$elem-txt"/>
   </xsl:template>
