@@ -121,10 +121,7 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Map//EN"                            -->
                         the name of the domain(s) in which the
                         extension was declared                     -->
 <!ENTITY % keywords     "keywords | 
-                         %delay-d-keywords; |
-                         %pr-d-keyword; | 
-                         %sw-d-keyword; |
-                         %ui-d-keyword;
+                         %delay-d-keywords;
                         ">
 <!ENTITY % topicref     "topicref | 
                          (%mapgroup-d-topicref;) |
@@ -132,6 +129,11 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Map//EN"                            -->
                         ">
 <!ENTITY % index-base   "index-base | 
                          %indexing-d-index-base;
+                        ">
+<!ENTITY % keyword      "keyword | 
+                         %pr-d-keyword; | 
+                         %sw-d-keyword; |
+                         %ui-d-keyword;
                         ">
 <!ENTITY % pre          "pre | 
                          %pr-d-pre; | 
