@@ -23,7 +23,7 @@
   <xsl:param name="include.rellinks" select="'#default parent child sibling friend next previous cousin ancestor descendant sample external other'"/>
   <xsl:variable name="include.roles" select="concat(' ', normalize-space($include.rellinks), ' ')"/>
   <xsl:variable name="file-prefix">
-    <xsl:value-of select="$FILEREF"/><xsl:value-of select="$WORKDIR"/>
+    <xsl:value-of select="concat($FILEREF, $WORKDIR)"/>
   </xsl:variable>
   <xsl:variable name="PATHTOMAP">
     <xsl:call-template name="GetPathToMap">
@@ -47,7 +47,7 @@
   </xsl:template>
   
   <xsl:template match="processing-instruction('workdir')" mode="get-work-dir">
-    <xsl:value-of select="."/><xsl:text>/</xsl:text>
+    <xsl:value-of select="concat(., '/')"/>
   </xsl:template>
   
   <!-- Get the relative path that leads to a file. Used to find path from a maplist to a map. -->
@@ -57,14 +57,14 @@
     <xsl:choose>
       <xsl:when test="contains($filename,'/')">
         <xsl:call-template name="getRelativePath">
-          <xsl:with-param name="filename"><xsl:value-of select="substring-after($filename,'/')"/></xsl:with-param>
-          <xsl:with-param name="currentPath"><xsl:value-of select="$currentPath"/><xsl:value-of select="substring-before($filename,'/')"/>/</xsl:with-param>
+          <xsl:with-param name="filename" select="substring-after($filename,'/')"/>
+          <xsl:with-param name="currentPath" select="concat($currentPath, substring-before($filename,'/'), '/')"/>
         </xsl:call-template>
       </xsl:when>
       <xsl:when test="contains($filename,'\')">
         <xsl:call-template name="getRelativePath">
-          <xsl:with-param name="filename"><xsl:value-of select="substring-after($filename,'\')"/></xsl:with-param>
-          <xsl:with-param name="currentPath"><xsl:value-of select="$currentPath"/><xsl:value-of select="substring-before($filename,'\')"/>/</xsl:with-param>
+          <xsl:with-param name="filename" select="substring-after($filename,'\')"/>
+          <xsl:with-param name="currentPath" select="concat($currentPath, substring-before($filename,'\'), '/')"/>
         </xsl:call-template>
       </xsl:when>
       <xsl:otherwise><xsl:value-of select="$currentPath"/></xsl:otherwise>
@@ -97,7 +97,7 @@
     <xsl:variable name="hrefFromOriginalMap">
       <xsl:call-template name="simplifyLink">
         <xsl:with-param name="originalLink">
-          <xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="$use-href"/>
+          <xsl:value-of select="concat($pathFromMaplist, $use-href)"/>
         </xsl:with-param>
       </xsl:call-template>
     </xsl:variable>
@@ -116,7 +116,7 @@
             </xsl:otherwise>
           </xsl:choose>
         </xsl:with-param>
-        <xsl:with-param name="pathFromMaplist"><xsl:value-of select="$pathFromMaplist"/></xsl:with-param>
+        <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
       </xsl:call-template>
     </xsl:variable>
     <!-- If going to print, and @print=no, do not create links for this topicref -->
@@ -694,16 +694,14 @@
             <xsl:when test="@copy-to and not(contains(@chunk, 'to-content'))">
               <xsl:call-template name="simplifyLink">
                 <xsl:with-param name="originalLink">
-                  <xsl:value-of select="$pathBackToMapDirectory"/><xsl:value-of select="@copy-to"/>
+                  <xsl:value-of select="concat($pathBackToMapDirectory, @copy-to)"/>
                 </xsl:with-param>
               </xsl:call-template>
             </xsl:when>
             <!--ref between two local paths - adjust normally-->
             <xsl:otherwise>
               <xsl:call-template name="simplifyLink">
-                <xsl:with-param name="originalLink"><xsl:value-of 
-                  select="$pathBackToMapDirectory"/><xsl:value-of 
-                  select="@href"/></xsl:with-param>
+                <xsl:with-param name="originalLink" select="concat($pathBackToMapDirectory, @href)"/>
               </xsl:call-template>
             </xsl:otherwise>
           </xsl:choose>
@@ -842,9 +840,7 @@
     <xsl:choose>
       <xsl:when test="contains($originalLink,'\')">
         <xsl:call-template name="simplifyLink">
-          <xsl:with-param name="originalLink"> <xsl:value-of 
-            select="substring-before($originalLink,'\')"/>/<xsl:value-of 
-            select="substring-after($originalLink,'\')"/> </xsl:with-param>
+          <xsl:with-param name="originalLink" select="concat(substring-before($originalLink,'\'), '/', substring-after($originalLink,'\'))"/>
         </xsl:call-template>
       </xsl:when>
       <xsl:when test="starts-with($originalLink,'./')">
@@ -854,8 +850,7 @@
         </xsl:call-template>
       </xsl:when>      
       <xsl:when test="not(contains($originalLink,'../'))">
-        <xsl:value-of select="$buildLink"/>
-        <xsl:value-of select="$originalLink"/>
+        <xsl:value-of select="concat($buildLink, $originalLink)"/>
       </xsl:when>
       <xsl:when test="starts-with($originalLink,'../')">
         <xsl:call-template name="simplifyLink">
@@ -983,7 +978,7 @@
             <xsl:with-param name="path" select="concat($PATHTOMAP,$pathFromMaplist)"/>
           </xsl:call-template>
         </xsl:with-param>
-        <xsl:with-param name="remainingPath"><xsl:value-of select="$PATHTOMAP"/><xsl:value-of select="$pathFromMaplist"/></xsl:with-param>
+        <xsl:with-param name="remainingPath" select="concat($PATHTOMAP, $pathFromMaplist)"/>
       </xsl:call-template>
     </xsl:variable>
     <xsl:variable name="pathWithoutRelPaths">
@@ -1001,7 +996,7 @@
     <!-- Now, to get from the target file to any other: it must go up until it hits the common dir.
        Then, it must travel back to the base directory containing the map. At that point, this
        path can be placed in front of any referenced topic, and it will get us to the right spot. -->
-    <xsl:value-of select="$backToCommon"/><xsl:value-of select="$moveToBase"/>
+    <xsl:value-of select="concat($backToCommon, $moveToBase)"/>
   </xsl:template>  
   
   <!-- Count the number of paths removed from the base (1 for each ../ or ..\ at the start of the href) -->
