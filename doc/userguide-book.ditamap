@@ -6,7 +6,7 @@
     <prodinfo>
       <prodname>DITA-OT</prodname>
       <vrmlist>
-        <vrm version="1.5.3"/>
+        <vrm version="1.6"/>
       </vrmlist>
     </prodinfo>
   </bookmeta>
@@ -19,9 +19,10 @@
       <tablelist/>
     </booklists>
   </frontmatter>
-  <chapter navtitle="Getting Started">
+  <!--<chapter navtitle="Getting Started">
     <mapref href="quickstartguide.ditamap"/>
-  </chapter>
+  </chapter>-->
+  <chapter format="ditamap" href="quickstart.ditamap"></chapter>
   <chapter href="readme.ditamap" format="ditamap"/>
   <chapter navtitle="Developer Reference">
     <mapref href="dev_ref/dev_ref.ditamap"/>

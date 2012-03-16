@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
-<map id="mainDITAreadme" title="DITA-Ot Readme map" xml:lang="en-us">
+<map id="mainDITAreadme" title="DITA-OT Readme map" xml:lang="en-us">
   <topicref href="readme/DITA-readme.xml" id="DITA-doc">
     <topicref href="readme/changes/rel1.6.xml" locktitle="yes">
       <topicmeta>
@@ -16,6 +16,7 @@
       <!--topicref href="readme/DITA-setupant.xml" toc="no"/-->
       <topicref href="readme/DITA-antuse.xml"/>
       <topicref href="readme/DITA-antscript.xml"/>
+<topicref href="quickstartguide/concepts/about_antbuildfiles.dita"></topicref>
       <topicref href="readme/dita-ot_ant_properties.dita"/>
     </topicref>
     <topicref href="readme/DITA-javacmd.xml">

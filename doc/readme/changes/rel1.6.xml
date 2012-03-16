@@ -13,10 +13,13 @@
         </ul>
         <p>Support for old DITAVAL format has been removed.</p>
       </section>
-      <section>
-        <title>PDF2</title>
-        <p>Support for IBM DITA and BookMap demo plug-in has been removed from PDF2.</p>
-      </section>
+<section><title>PDF2</title><p>The following deprecated items
+are no longer supported in the PDF transform.</p><ul>
+<li>Support for the beta version of DITA, available from IBM before
+the OASIS standard was created in 2005.</li>
+<li>Support for the "bkinfo" demo plug-in, used to support book metadata
+before OASIS created the BookMap format in 2007.</li>
+</ul></section>
     </refbody>
   </reference>
   <reference id="reference_yvj_ttj_bd">

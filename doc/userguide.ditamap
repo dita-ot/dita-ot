@@ -3,9 +3,12 @@
 <map xml:lang="en-us">
   <title>DITA Open Toolkit <keyword keyref="release.version"/></title>
   <topicref href="DITA-OTProjectHome.xml"/>
-  <topichead navtitle="Getting Started">
+  <!--<topichead navtitle="Quick start">-->
+  <mapref href="quickstart.ditamap"></mapref>
+  <!--</topichead>-->
+  <!--<topichead navtitle="Getting Started">
     <mapref href="quickstartguide.ditamap"/>
-  </topichead>
+  </topichead>-->
   <mapref href="readme.ditamap"/>
   <topichead navtitle="Developer Reference">
     <mapref href="dev_ref/dev_ref.ditamap"/>
