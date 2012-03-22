@@ -131,6 +131,9 @@ public final class DITAOTBuildLogger implements BuildLogger {
             if(!message.contains("[WARN]")) {
             	stream.println("Extra warnings counted");
             	logger.logInfo("Extra warnings counted");
+            } else {
+            	stream.println("Normal warnings counted");
+            	logger.logInfo("Normal warnings counted");
             }
             break;
         case Project.MSG_INFO:
