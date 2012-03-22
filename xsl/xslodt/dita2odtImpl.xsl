@@ -2338,11 +2338,9 @@
   </xsl:variable>
   
   <xsl:choose>
-    <!-- parent is entry, stentry, li, sli add p tag otherwise text is invaild. -->
+    <!-- parent is entry, stentry -->
     <xsl:when test="parent::*[contains(@class, ' topic/entry ')] or
-                    parent::*[contains(@class, ' topic/stentry ')] or
-                    parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')] or 
-                    parent::*[contains(@class, ' topic/sli ')]">
+                    parent::*[contains(@class, ' topic/stentry ')]">
   
         <xsl:choose>
           <xsl:when test="ancestor::*[contains(@class, ' topic/thead ')] or 
@@ -2380,6 +2378,29 @@
           </xsl:otherwise>
         </xsl:choose>
      
+    </xsl:when>
+    <!-- parent is li, sli add p tag otherwise text is invaild. -->
+    <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')] or 
+      parent::*[contains(@class, ' topic/sli ')]">
+      <xsl:element name="text:p">
+        <xsl:attribute name="text:style-name">indent_paragraph_style</xsl:attribute>
+
+          <xsl:element name="text:span">
+            <xsl:call-template name="start_flagging_text_of_table_or_list"/>
+            
+            <xsl:element name="text:span">
+              <xsl:if test="$trueStyleName!=''">
+                <xsl:attribute name="text:style-name">
+                  <xsl:value-of select="$trueStyleName"/>
+                </xsl:attribute>
+              </xsl:if>
+              <xsl:call-template name="gen_txt_content"/>
+            </xsl:element>
+            
+            <xsl:call-template name="end_flagging_text_of_table_or_list"/>
+          </xsl:element>
+      </xsl:element>
+      
     </xsl:when>
     <!-- text is not allowed under these tags -->
     <xsl:when test="parent::*[contains(@class,' topic/ul ')] | parent::*[contains(@class,' topic/ol ')]
