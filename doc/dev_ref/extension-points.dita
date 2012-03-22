@@ -386,6 +386,10 @@ token ::= ( [0..9] | [a..zA..Z] | ’_’ | ’-’ )+</codeblock>
           <dt><codeph>dita.preprocess.topicpull.param</codeph></dt>
           <dd>Pass parameters to topicpull XSLT</dd>
         </dlentry>
+          <dlentry>
+            <dt><codeph>dita.conductor.pdf2.param</codeph></dt>
+            <dd>Pass parameters to PDF2 XSLT</dd>
+          </dlentry>
       </dl>
       </section>
       <example>

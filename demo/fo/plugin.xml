@@ -7,6 +7,7 @@
   <extension-point id="depend.org.dita.pdf2.format" name="Formatting target"/>
   <extension-point id="depend.org.dita.pdf2.format.post" name="Formatting post-target"/>
   <extension-point id="org.dita.pdf2.catalog.relative" name="Configuration XML catalog"/>
+  <extension-point id="dita.conductor.pdf2.param" name="PDF XSLT parameters"/>
   <!-- extensions -->
   <feature extension="dita.conductor.lib.import" file="lib/fo.jar"/>
   <feature extension="dita.conductor.transtype.check" value="pdf2" type="pdf"/>

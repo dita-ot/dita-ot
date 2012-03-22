@@ -17,6 +17,11 @@
 		<li>Support for the beta version of DITA, available from IBM before the OASIS standard was created in 2005.</li>
 		<li>Support for the "bkinfo" demo plug-in, used to support book metadata before OASIS created the BookMap format in 2007.</li>
 		</ul>
+        <p>The following extension-points have been added:</p>
+        <ul id="ul_lhx_1jk_rf">
+          <li><codeph>dita.conductor.pdf2.param</codeph> to add XSLT parameters to XSL FO
+            transformation.</li>
+        </ul>
 	  </section>
     </refbody>
   </reference>
@@ -114,6 +119,7 @@
           <li>3498406 Add index file to PDF2 variables (milestone 3)</li>
           <li>3501029 Move Ant scripts to plug-in folders (milestone 3)</li>
           <li>3498440 Run XSLT with Ant task in PDF2 (milestone 3)</li>
+          <li>3510093 Add XSLT param extension point to PDF2 (milestone 4)</li>
           <li>3466842 Refactor preprocessing to use SAX filters (in progress)</li>
           <li>3468864 Remove Content object (in progress)</li>
           <li>3460151 Use Job to read/write job configuration files (in progress)</li>
