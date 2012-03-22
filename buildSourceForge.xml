@@ -2,7 +2,11 @@
 <project default="generate-sf">
 
   <import file="${basedir}/buildPackage.xml"/>
-  
+
+  <condition property="type-class" value="milestone" else="">
+    <contains string="${version}" substring="M" casesensitive="true"/>
+  </condition>
+
   <target name="generate-sf">
     <ant antfile="${basedir}/build.xml">
       <property name="args.input" location="${doc.dir}/sourceforge/sourceforge.ditamap"/>
@@ -16,7 +20,51 @@
       <property name="transtype" value="tocjs"/>
       <property name="args.csspath" value="css"/>
       <property name="base.temp.dir" location="${work.dir}"/>
+      <property name="args.hide.parent.link" value="yes"/>
     </ant>
+    <echoxml file="${basedir}/out/${version}/header.html">
+      <html>
+        <head>
+          <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+          <title>DITA Open Toolkit ${version} Documentation</title>
+          <link rel="stylesheet" type="text/css" href="../css/header.css"/>
+        </head>
+        <body>
+          <h1 class="${type-class}">DITA Open Toolkit ${version} Documentation</h1>
+        </body>
+      </html>
+    </echoxml>
+    <echoxml file="${basedir}/out/${version}/index.html">
+      <html>
+        <head>
+          <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+          <title>DITA Open Toolkit ${version} Documentation</title>
+          <link rel="stylesheet" type="text/css" href="commonltr.css"/>
+        </head>
+        <frameset rows="40,*">
+          <frame name="tocwin" src="header.html" scrolling="no" frameborder="0"/>
+          <frameset cols="300,*">
+            <frame name="tocwin" src="tocnav.html" frameborder="0"/>
+            <frame name="contentwin" src="DITA-OTProjectHome.html" frameborder="0"/>
+          </frameset>
+        </frameset>
+      </html>
+    </echoxml>
+    <echo append="true" file="${basedir}/out/${version}/css/commonltr.css">
+      @import url('http://fonts.googleapis.com/css?family=Droid+Sans:regular,bold');
+      
+      body {
+        font-family: 'Droid Sans', Helvetica, Arial, serif;
+      }
+      h1, h2, h3, h4, h5, h6,
+      .relinfo > strong {
+        font-family: sans-serif;
+      }
+      .codeblock {
+        background-color: #EEE;
+        padding: 5px;
+      }
+    </echo>
   </target>
 
 </project>
