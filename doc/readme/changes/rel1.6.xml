@@ -13,13 +13,11 @@
         </ul>
         <p>Support for old DITAVAL format has been removed.</p>
       </section>
-<section><title>PDF2</title><p>The following deprecated items
-are no longer supported in the PDF transform.</p><ul>
-<li>Support for the beta version of DITA, available from IBM before
-the OASIS standard was created in 2005.</li>
-<li>Support for the "bkinfo" demo plug-in, used to support book metadata
-before OASIS created the BookMap format in 2007.</li>
-</ul></section>
+      <section><title>PDF2</title><p>The following deprecated items are no longer supported in the PDF transform.</p><ul>
+		<li>Support for the beta version of DITA, available from IBM before the OASIS standard was created in 2005.</li>
+		<li>Support for the "bkinfo" demo plug-in, used to support book metadata before OASIS created the BookMap format in 2007.</li>
+		</ul>
+	  </section>
     </refbody>
   </reference>
   <reference id="reference_yvj_ttj_bd">
@@ -114,8 +112,8 @@ before OASIS created the BookMap format in 2007.</li>
           <li>3486110 Move OT version number to configuration (milestone 2)</li>
           <li>3475296 Remove obsolete dita-preprocess target (milestone 2)</li>
           <li>3498406 Add index file to PDF2 variables (milestone 3)</li>
-          <li>3498440 Run XSLT with Ant task in PDF2 (milestone 3)</li>
           <li>3501029 Move Ant scripts to plug-in folders (milestone 3)</li>
+          <li>3498440 Run XSLT with Ant task in PDF2 (milestone 3)</li>
           <li>3466842 Refactor preprocessing to use SAX filters (in progress)</li>
           <li>3468864 Remove Content object (in progress)</li>
           <li>3460151 Use Job to read/write job configuration files (in progress)</li>
@@ -129,6 +127,8 @@ before OASIS created the BookMap format in 2007.</li>
           <li>3487508 Improve PDF2 table customization (in progress)</li>
           <li>3487941 Improve pipeline module processing (in progress)</li>
           <li>3487222 Avoid strings where other types are more appropriate (in progress)</li>
+          <li>3497122 Document error messages in user guide (in progress)</li>
+          <li>3504442 bookmap.dtd and map.dtd are out of sync with OASIS (in progress)</li>
         </ul>
       </section>
       <section>
@@ -165,14 +165,14 @@ before OASIS created the BookMap format in 2007.</li>
             2)</li>
           <li>3447732 Bug in handling of longdescref (milestone 2)</li>
           <li>3426920 Image files not copied or referenced correctly for eclipse (milestone 2)</li>
-          <li>3494971 Keydefs in non-base folder fails (milestone 3)</li>
+          <li>3494971 Keydefs in non-base folder fails (milestone 3) </li>
+          <li>3491768 Deprecated metadata PICS-Label in XHTML output (milestone 3)</li>
           <li>3441389 Glossentry makes FO file invalid in PDF output (milestone 3)</li>
-          <li>3385349 Warning given by Saxon EE when processing flag-rules.xsl (milestone 3)</li>
+          <li>3385349 Warning given by Saxon EE when processing flag-rules.xsl 	(milestone 3)</li>
           <li>3496831 PDF2: preface titles does not pull indexterms. (milestone 3)</li>
-          <li>3499953 startcmd.bat adds dost.jar twice to the CLASSPATH (milestone 3)</li>
-          <li>3501182 Typos in domains_(un)classed.css (milestone 3)</li>
-          <li>3471364 UNC paths are not supported in input argument (in progress)</li>
-          <li>3491768 Deprecated metadata PICS-Label in XHTML output (in progress)</li>
+          <li>3499953 startcmd.bat adds dost.jar twice to the CLASSPATH  (milestone 3)</li>	
+          <li>3471364 UNC paths are not supported in input argument (in progress)</li>  
+          <li>3501182 Typos in domains_(un)classed.css (in progress)</li>  
         </ul>
       </section>
     </refbody>
