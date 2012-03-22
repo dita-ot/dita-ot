@@ -32,6 +32,7 @@ import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
+import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils.Action;
 import org.dita.dost.util.FilterUtils.FilterKey;
@@ -102,6 +103,12 @@ public final class DitaValReader extends AbstractXMLReader {
 
     public void initXMLReader(final boolean arg_setSystemid) {
         setSystemid = arg_setSystemid;
+        try {
+            Class.forName(RESOLVER_CLASS);
+            reader.setEntityResolver(CatalogUtils.getCatalogResolver());
+        }catch (final ClassNotFoundException e){
+            reader.setEntityResolver(this);
+        }
     }
 
     @Override
