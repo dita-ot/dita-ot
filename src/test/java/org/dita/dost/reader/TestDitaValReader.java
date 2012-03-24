@@ -31,7 +31,7 @@ import org.junit.Test;
 
 public class TestDitaValReader {
 
-    private final File resourceDir = new File("test-stub");
+    private final File resourceDir = TestUtils.testStub;
     private File tempDir;
 
     public DitaValReader reader;

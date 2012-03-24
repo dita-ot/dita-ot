@@ -32,7 +32,7 @@ import org.junit.Test;
 
 public class MergeTopicParserTest {
 
-    private final File resourceDir = new File("test-stub", MergeTopicParserTest.class.getSimpleName());
+    private final File resourceDir = new File(TestUtils.testStub, MergeTopicParserTest.class.getSimpleName());
     private final File srcDir = new File(resourceDir, "src");
     private final File expDir = new File(resourceDir, "exp");
 

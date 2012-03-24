@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.dita.dost.TestUtils;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.XMLReader;
@@ -24,7 +26,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 public class DescParserTest {
 
-    private final File resourceDir = new File("test-stub", DescParserTest.class.getSimpleName());
+    private final File resourceDir = new File(TestUtils.testStub, DescParserTest.class.getSimpleName());
 
     final File base = new File("base", "plugins");
     final String basePrefix = base.getPath() + File.separator;

@@ -27,7 +27,7 @@ import org.dita.dost.util.FileUtils;
 
 public class CoderefResolverTest {
 
-    private static final File resourceDir = new File("test-stub", CoderefResolverTest.class.getSimpleName());
+    private static final File resourceDir = new File(TestUtils.testStub, CoderefResolverTest.class.getSimpleName());
     private static final File srcDir = new File(resourceDir, "src");
     private static final File expDir = new File(resourceDir, "exp");
     private static File tempDir;

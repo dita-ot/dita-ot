@@ -34,7 +34,7 @@ public class TestGenListModuleReader {
 
     public static GenListModuleReader reader;
     
-    private static final File baseDir = new File("test-stub", TestGenListModuleReader.class.getSimpleName());
+    private static final File baseDir = new File(TestUtils.testStub, TestGenListModuleReader.class.getSimpleName());
     private static final File srcDir = new File(baseDir, "src");
     private static final File inputDir = new File(srcDir, "maps");
     private static final File rootFile = new File(inputDir, "root-map-01.ditamap");

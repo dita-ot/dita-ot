@@ -44,7 +44,7 @@ import org.w3c.dom.NodeList;
 
 public class TestDitaWriter {
 
-    private final File resourceDir = new File("test-stub");
+    private final File resourceDir = TestUtils.testStub;
     private File tempDir;
 
     public DitaWriter writer;

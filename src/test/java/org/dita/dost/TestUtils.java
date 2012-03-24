@@ -43,6 +43,8 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 public class TestUtils {
 
+    public static final File testStub = new File("src" + File.separator + "test" + File.separator + "test-stub");
+    
     /**
      * Create temporary directory based on test class.
      * 

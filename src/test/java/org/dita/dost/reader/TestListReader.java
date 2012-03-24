@@ -16,11 +16,12 @@ import java.io.File;
 
 import org.junit.Test;
 
+import org.dita.dost.TestUtils;
 import org.dita.dost.resolver.DitaURIResolverFactory;
 
 public class TestListReader {
 
-    private static final File resourceDir = new File("test-stub", TestListReader.class.getSimpleName());
+    private static final File resourceDir = new File(TestUtils.testStub, TestListReader.class.getSimpleName());
 
     @Test
     public void testread(){

@@ -14,13 +14,15 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.util.Properties;
 
+import org.dita.dost.TestUtils;
+
 import org.junit.Before;
 import org.junit.AfterClass;
 import org.junit.Test;
 
 public class MessageUtilsTest {
 
-    private static final File resourceDir = new File("test-stub", MessageUtilsTest.class.getSimpleName());
+    private static final File resourceDir = new File(TestUtils.testStub, MessageUtilsTest.class.getSimpleName());
 
     @Before
     public void setUp() throws Exception {
@@ -90,8 +92,7 @@ public class MessageUtilsTest {
 
     @AfterClass
     public static void tearDown() throws Exception {
-        final File f = new File("resource/messages.xml");
-        MessageUtils.loadMessages(f.getAbsolutePath());
+        MessageUtils.loadDefaultMessages();
     }
     
 }

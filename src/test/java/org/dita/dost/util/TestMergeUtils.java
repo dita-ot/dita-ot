@@ -18,6 +18,8 @@ import static org.junit.Assert.fail;
 import java.io.File;
 
 import org.junit.After;
+
+import org.dita.dost.TestUtils;
 import org.dita.dost.util.MergeUtils;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -25,7 +27,7 @@ import org.junit.Test;
 
 public class TestMergeUtils {
 
-    private static final File resourceDir = new File("test-stub", TestMergeUtils.class.getSimpleName());
+    private static final File resourceDir = new File(TestUtils.testStub, TestMergeUtils.class.getSimpleName());
     private static final File srcDir = new File(resourceDir, "src");
 
     public static MergeUtils mergeUtils;

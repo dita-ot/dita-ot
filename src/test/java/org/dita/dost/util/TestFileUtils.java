@@ -25,7 +25,7 @@ public class TestFileUtils {
     private static final String SEPARATOR_WINDOWS = "\\";
     private static final String SEPARATOR_UNIX = "/";
 
-    private static final File resourceDir = new File("test-stub", TestFileUtils.class.getSimpleName());
+    private static final File resourceDir = new File(TestUtils.testStub, TestFileUtils.class.getSimpleName());
     private static final File srcDir = new File(resourceDir, "src");
     private static File tempDir;
 

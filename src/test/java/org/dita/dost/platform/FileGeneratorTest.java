@@ -32,7 +32,7 @@ import org.xml.sax.helpers.AttributesImpl;
 
 public class FileGeneratorTest {
 
-    private final File resourceDir = new File("test-stub", FileGeneratorTest.class.getSimpleName());
+    private final File resourceDir = new File(TestUtils.testStub, FileGeneratorTest.class.getSimpleName());
     private File tempDir;
 
     private static File tempFile;

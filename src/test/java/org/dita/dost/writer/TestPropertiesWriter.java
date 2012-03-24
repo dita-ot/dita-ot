@@ -33,7 +33,7 @@ import static org.junit.Assert.assertEquals;
 public class TestPropertiesWriter {
 
     private File tempDir;
-    private final File resourceDir = new File("test-stub" + File.separator + "TestPropertiesWriter");
+    private final File resourceDir = new File(TestUtils.testStub + File.separator + "TestPropertiesWriter");
 
     private File outputFile;
     private File xmlDitalist;

@@ -27,17 +27,19 @@ public class TestCmdInvoker {
     private final PrintStream originalOut = System.out;
 
     private File tempDir;
+    private String ditaArg;
     private String tempArg;
 
     @Before
     public void setUp() throws IOException {
         tempDir = TestUtils.createTempDir(getClass());
+        ditaArg = "/ditadir:" + new File("src", "main").getAbsolutePath();
         tempArg = "/tempdir:" + tempDir.getAbsolutePath();
     }
 
     @Test
     public void testProcessArguments() throws Exception {
-        final String input[] = { "/i:abc.ditamap", "/transtype:xhtml", tempArg };
+        final String input[] = { ditaArg, "/i:abc.ditamap", "/transtype:xhtml", tempArg };
         final CommandLineInvoker test = new CommandLineInvoker();
         test.processArguments(input);
     }
@@ -45,7 +47,7 @@ public class TestCmdInvoker {
     @Test(expected = DITAOTException.class)
     public void testProcessArgsWrongParam() throws Exception {
         final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        final String input[] = { "/i:abc.ditamap", "/abc:def" };
+        final String input[] = { ditaArg, "/i:abc.ditamap", "/abc:def" };
         final CommandLineInvoker test = new CommandLineInvoker();
         try {
             System.setOut(new PrintStream(outContent));
@@ -61,7 +63,7 @@ public class TestCmdInvoker {
     @Test(expected = DITAOTException.class)
     public void testProcessArgsEmptyValue() throws Exception {
         final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        final String input[] = { "/i:" };
+        final String input[] = { ditaArg, "/i:" };
         final CommandLineInvoker test = new CommandLineInvoker();
         try {
             System.setOut(new PrintStream(outContent));
