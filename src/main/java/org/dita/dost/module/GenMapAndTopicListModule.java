@@ -694,6 +694,16 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         }
     }
 
+    /**
+     * Categorize file.
+     * 
+     * If {@code file} parameter contains a pipe character, the pipe character is followed
+     * by the format of the file.
+     * 
+     * TODO: Pass format as separate DITA class parameter.
+     * 
+     * @param file file path with optional format
+     */
     private void categorizeResultFile(String file) {
         // edited by william on 2009-08-06 for bug:2832696 start
         String lcasefn = null;
@@ -722,6 +732,8 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
 
             addToWaitList(file);
         } else if (!FileUtils.isSupportedImageFile(lcasefn)) {
+            // FIXME: Treating all non-image extensions as HTML/resource files is not correct if HTML/resource files
+            //        are defined by the file extension. Correct behaviour would be to remove this else block.
             htmlSet.add(file);
         }
         // edited by william on 2009-08-06 for bug:2832696 end
@@ -748,7 +760,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
     /**
      * Update uplevels if needed.
      * 
-     * @param file
+     * @param file file path
      */
     private void updateUplevels(String file) {
 

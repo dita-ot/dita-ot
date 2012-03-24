@@ -7,7 +7,7 @@
 <project name="build_DITA-OT_package" default="build-all-packages" basedir=".">
   <description>Build source and binary packages for DITA Open Toolkit</description>
 
-  <property file="buildPackage.properties"/>
+  <property file="build.properties"/>
 
   <condition property="HTMLHelpCompiler" value="C:\Program Files\HTML Help Workshop\hhc.exe">
     <available file="C:\Program Files\HTML Help Workshop\hhc.exe"/>
@@ -17,8 +17,8 @@
   </condition>
   <property name="package.name.root" value="DITA-OT"/>
 
-  <property name="src.dir" location="${basedir}"/>
-  <property name="java.dir" location="${src.dir}/src/"/>
+  <property name="src.dir" location="${basedir}/src/main"/>
+  <property name="java.dir" location="${src.dir}/java/"/>
   <property name="lib.dir" location="${src.dir}/lib/"/>
   <property name="doc.dir" location="${src.dir}/doc/"/>
   <property name="dtd.dir" location="${src.dir}/dtd/"/>
@@ -30,7 +30,7 @@
   <property name="ant.dir" location="${src.dir}/ant/"/>
   <property name="resource.dir" location="${src.dir}/resource/"/>
 
-  <property name="top.work.dir" location="${basedir}"/>
+  <property name="top.work.dir" location="${src.dir}"/>
   <property name="package.output.dir" location="${top.work.dir}/build/"/>
   <property name="bin.dir" location="${top.work.dir}/output2/"/>
   <tstamp>
@@ -248,7 +248,7 @@
     <delete dir="${temp.dist.dir}"/>
     <mkdir dir="${temp.dist.dir}"/>
     <copy todir="${temp.dist.dir}">
-      <fileset dir="${basedir}">
+      <fileset dir="${src.dir}">
         <patternset refid="pattern.package.source"/>
       </fileset>
     </copy>
@@ -272,7 +272,7 @@
     <delete dir="${temp.dist.dir}"/>
     <mkdir dir="${temp.dist.dir}"/>
     <copy todir="${temp.dist.dir}">
-      <fileset dir="${basedir}">
+      <fileset dir="${src.dir}">
         <patternset refid="pattern.package.minimum"/>
       </fileset>
     </copy>
@@ -292,7 +292,7 @@
     <delete dir="${temp.dist.dir}"/>
     <mkdir dir="${temp.dist.dir}"/>
     <copy todir="${temp.dist.dir}">
-      <fileset dir="${basedir}">
+      <fileset dir="${src.dir}">
         <patternset refid="pattern.package.standard"/>
       </fileset>
     </copy>
@@ -316,7 +316,7 @@
     <delete dir="${temp.dist.dir}"/>
     <mkdir dir="${temp.dist.dir}"/>
     <copy todir="${temp.dist.dir}">
-      <fileset dir="${basedir}">
+      <fileset dir="${src.dir}">
         <patternset refid="pattern.package.full"/>
       </fileset>
     </copy>
@@ -390,10 +390,10 @@
   </target>
 
   <target name="update-doc">
-    <ant antfile="${basedir}/integrator.xml" target="integrate"/>
+    <ant antfile="${src.dir}/integrator.xml" target="integrate"/>
     <!--mkdir dir="${work.dir}/doc"/-->
     
-    <ant antfile="${basedir}/build.xml">
+    <ant antfile="${src.dir}/build.xml">
       <property name="args.input" location="${doc.dir}/userguide-book.ditamap"/>
       <property name="output.dir" location="${doc.out.dir}"/>
       <property name="outputFile.base" value="userguide"/>
@@ -401,7 +401,7 @@
       <property name="base.temp.dir" location="${work.dir}"/>
     </ant>
 
-    <ant antfile="${basedir}/build.xml">
+    <ant antfile="${src.dir}/build.xml">
       <property name="args.input" location="${doc.dir}/userguide.ditamap"/>
       <property name="output.dir" location="${work.dir}/htmlhelp"/>
       <property name="transtype" value="htmlhelp"/>
@@ -413,7 +413,7 @@
       </fileset>
     </copy>
 
-    <ant antfile="${basedir}/build.xml">
+    <ant antfile="${src.dir}/build.xml">
       <property name="args.input" location="${doc.dir}/userguide.ditamap"/>
       <property name="output.dir" location="${doc.out.dir}/html"/>
       <property name="outputFile.base" value="index"/>
@@ -423,7 +423,7 @@
     </ant>
     <move file="${doc.out.dir}/html/userguide.html" tofile="${doc.out.dir}/html/index.html"/>
     
-    <ant antfile="${basedir}/build.xml">
+    <ant antfile="${src.dir}/build.xml">
       <property name="args.input" location="${doc.dir}/readme/changes/rel1.6.xml"/>
       <property name="output.dir" location="${work.dir}/relnotes"/>
       <property name="args.csspath" value="resource"/>
@@ -450,7 +450,7 @@
 
   <!-- Test -->
   
-  <property name="test.src.dir" location="${basedir}/test"/>
+  <property name="test.src.dir" location="${basedir}/src/test"/>
   <property name="test.java.dir" location="${test.src.dir}/java"/>
   <property name="test.lib.dir" location="${test.src.dir}/lib"/>
   <property name="test.bin.dir" location="${test.src.dir}/build"/>
@@ -481,7 +481,7 @@
     <junit printsummary="yes" haltonfailure="yes">
       <classpath>
         <pathelement location="${bin.dir}"/>
-        <pathelement location="${basedir}"/><!-- resource/messages.xml -->
+        <pathelement location="${src.dir}"/><!-- resource/messages.xml -->
         <pathelement location="${lib.dir}"/><!-- configuration files -->
         <pathelement location="${java.dir}"/><!-- resources -->
         <pathelement location="${lib.dir}/saxon/saxon9.jar"/>
