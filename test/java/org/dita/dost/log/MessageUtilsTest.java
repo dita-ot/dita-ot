@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.util.Properties;
 
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.AfterClass;
 import org.junit.Test;
 
@@ -22,8 +22,8 @@ public class MessageUtilsTest {
 
     private static final File resourceDir = new File("test-stub", MessageUtilsTest.class.getSimpleName());
 
-    @BeforeClass
-    public static void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         final File f = new File(resourceDir, "messages.xml");
         MessageUtils.loadMessages(f.getAbsolutePath());
     }
