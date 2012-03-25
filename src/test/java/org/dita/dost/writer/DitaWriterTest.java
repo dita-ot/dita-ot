@@ -76,7 +76,7 @@ public class DitaWriterTest {
         }
         final DitaWriter writer = new DitaWriter();
         writer.setLogger(new TestUtils.TestLogger());
-        writer.initXMLReader(srcDir.getAbsolutePath(), false, true);
+        writer.initXMLReader(new File("src" + File.separator + "main").getAbsolutePath(), false, true);
         writer.setExtName(".xml");
         final FilterUtils fu = new FilterUtils();
         fu.setLogger(new TestUtils.TestLogger());

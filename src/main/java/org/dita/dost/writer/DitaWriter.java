@@ -348,7 +348,6 @@ public final class DitaWriter extends AbstractXMLWriter {
         rowsMap = new HashMap<String, Integer>();
         colSpanMap = new HashMap<String, Integer>();
         //Added by William on 2009-06-30 for colname bug:2811358 start
-        catalogMap = CatalogUtils.getCatalog(null);
         absolutePath = null;
         path2Project = null;
         counterMap = null;

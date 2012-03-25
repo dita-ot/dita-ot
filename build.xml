@@ -478,7 +478,7 @@
       <fileset dir="${test.log.dir}" erroronmissingdir="false"/>
     </delete>
     <mkdir dir="${test.log.dir}"/>
-    <junit printsummary="yes" haltonfailure="yes">
+    <junit printsummary="yes" haltonfailure="yes" showoutput="true">
       <classpath>
         <pathelement location="${bin.dir}"/>
         <pathelement location="${src.dir}"/><!-- resource/messages.xml -->
