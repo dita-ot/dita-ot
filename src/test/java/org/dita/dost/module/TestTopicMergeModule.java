@@ -65,7 +65,7 @@ public class TestTopicMergeModule {
         pipelineInput.setAttribute("output", tobecomparefile.getPath());
         pipelineInput.setAttribute("outputdir", outDir.getPath());
         pipelineInput.setAttribute("tempDir", temporaryDir.getPath());
-        pipelineInput.setAttribute("ditadir", "");
+        pipelineInput.setAttribute("ditadir", new File("src" + File.separator + "main").getAbsolutePath());
         pipelineInput.setAttribute("ditaext", ".xml");
         pipelineInput.setAttribute("indextype", "xhtml");
         pipelineInput.setAttribute("encoding", "en-US");

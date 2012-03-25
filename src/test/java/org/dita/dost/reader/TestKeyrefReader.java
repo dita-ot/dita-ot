@@ -61,6 +61,7 @@ public class TestKeyrefReader {
         exp.put("escape", "<topicref keys='escape' class='- map/topicref ' navtitle='&amp;&lt;&gt;&quot;&apos;'><topicmeta class='- map/topicmeta '><keywords class='- topic/keywords '><keyword class='- topic/keyword '>&amp;&lt;&gt;&quot;&apos;</keyword></keywords></topicmeta></topicref>");
         
         TestUtils.resetXMLUnit();
+        XMLUnit.setIgnoreWhitespace(true);
         assertEquals(exp.keySet(), act.keySet());
         for (Map.Entry<String, String> e: exp.entrySet()) {
             String ev = e.getValue();

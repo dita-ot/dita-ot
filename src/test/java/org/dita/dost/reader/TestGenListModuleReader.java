@@ -44,7 +44,7 @@ public class TestGenListModuleReader {
         //parser = new ConrefPushParser();
         String ditaDir = "";
         //get absolute path
-        ditaDir = new File("").getAbsolutePath();
+        ditaDir = new File("src" + File.separator + "main").getAbsolutePath();
 
         final boolean validate = false;
         reader = new GenListModuleReader();

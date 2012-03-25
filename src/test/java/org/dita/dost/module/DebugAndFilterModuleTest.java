@@ -49,7 +49,7 @@ public class DebugAndFilterModuleTest {
 
     private final File resourceDir = new File(TestUtils.testStub, DebugAndFilterModuleTest.class.getSimpleName());
     private File tempDir;
-    private final File ditaDir = new File("");
+    private final File ditaDir = new File("src" + File.separator + "main");
     private File tmpDir;
     private File inputDir;
 

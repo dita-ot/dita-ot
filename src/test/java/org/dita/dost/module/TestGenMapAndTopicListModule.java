@@ -80,7 +80,7 @@ public class TestGenMapAndTopicListModule {
         pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_DITADIR, inputDir.getPath());
         pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR, outDir.getPath());
         pipelineInput.setAttribute(ANT_INVOKER_PARAM_TEMPDIR, tempDir.getPath());
-        pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_DITADIR, new File(".").getAbsolutePath());
+        pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_DITADIR, new File("src" + File.separator + "main").getAbsolutePath());
         pipelineInput.setAttribute(ANT_INVOKER_PARAM_DITAEXT, ".xml");
         pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_INDEXTYPE, "xhtml");
         pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_ENCODING, "en-US");
