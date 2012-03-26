@@ -486,7 +486,8 @@
         <pathelement location="${java.dir}"/><!-- resources -->
         <pathelement location="${lib.dir}/saxon/saxon9.jar"/>
         <pathelement location="${lib.dir}/saxon/saxon9-dom.jar"/>
-        <pathelement location="${lib.dir}/xercesImpl-2.9.0.jar"/>
+        <pathelement location="${lib.dir}/xercesImpl.jar"/>
+        <pathelement location="${lib.dir}/xml-apis.jar"/>
         <pathelement location="${test.lib.dir}/junit-4.8.2.jar"/>
         <pathelement location="${test.lib.dir}/htmlparser-1.3.1.jar"/>
         <pathelement location="${test.lib.dir}/xmlunit-1.3.jar"/>
