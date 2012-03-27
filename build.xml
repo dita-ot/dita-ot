@@ -99,7 +99,7 @@
       </manifest>
     </jar>
   </target>
-	
+  
   <patternset id="pattern.global.excludes">
     <exclude name=".*"/>
     <exclude name="build.log"/>
@@ -113,8 +113,8 @@
     <exclude name="demo/enote/**"/>
     <exclude name="demo/faq/**"/>
     <exclude name="demo/java/**"/>
-  	<exclude name="buildSourceForge.xml"/>
-  	<exclude name="doc/sourceforge/**"/>
+    <exclude name="buildSourceForge.xml"/>
+    <exclude name="doc/sourceforge/**"/>
     <exclude name="doc/userguide-orig/**"/>
     <exclude name="doc/ot-userguide/**"/>
     <exclude name="doc/archive/**"/>
@@ -157,7 +157,7 @@
   </patternset>
 
   <patternset id="pattern.package.full">
-  	<patternset refid="pattern.global.excludes"/>
+    <patternset refid="pattern.global.excludes"/>
     <exclude name="buildPackage.*"/>
     <exclude name="lib/log4j.properties"/>
     <include name="*.*"/>
@@ -183,7 +183,7 @@
   </patternset>
 
   <patternset id="pattern.package.standard.base">
-  	<patternset refid="pattern.global.excludes"/>
+    <patternset refid="pattern.global.excludes"/>
     <exclude name="demo/fo/fop/build/"/>
     <exclude name="demo/fo/fop/conf/"/>
     <exclude name="demo/fo/fop/lib/"/>
@@ -515,7 +515,7 @@
       <fileset dir="${test.log.dir}" erroronmissingdir="false"/>
     </delete>
     <mkdir dir="${test.log.dir}"/>
-    <property environment="env"/>
+    <!--property environment="env"/-->
     <junit printsummary="yes" haltonfailure="yes" showoutput="true" dir="${test.suite.dir}">
       <classpath>
         <pathelement location="${bin.dir}"/>
@@ -531,21 +531,17 @@
         <pathelement location="${test.lib.dir}/htmlparser-1.3.1.jar"/>
         <pathelement location="${test.lib.dir}/xmlunit-1.3.jar"/>
         <pathelement location="${test.bin.dir}"/>
+        <!--
         <fileset dir="${env.ANT_HOME}/lib/" includes="*.jar">
           <include name="*.jar"/>
           <include name="optional/*.jar"/>
         </fileset>
+        -->
       </classpath>
       <sysproperty key="dita.dir" value="${src.dir}"/>
+      <sysproperty key="basedir" value="${test.suite.dir}"/>
       <formatter type="plain"/>
-      <test name="org.dita.dost.IntegrationTest" fork="yes" todir="${test.log.dir}"/>
-      <!--
-      <batchtest fork="yes" todir="${test.log.dir}">
-        <fileset dir="${test.bin.dir}">
-          <include name="org/dita/dost/IntegrationTest.class"/>
-        </fileset>
-      </batchtest>
-      -->
+      <test name="org.dita.dost.IntegrationTest" fork="no" todir="${test.log.dir}"/>
     </junit>
   </target>
 
