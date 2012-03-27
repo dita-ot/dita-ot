@@ -1,0 +1,3 @@
+[submodule "src/test/testsuite"]
+	path = src/test/testsuite
+	url = git://dita-ot.git.sourceforge.net/gitroot/dita-ot/testsuite
