@@ -500,11 +500,11 @@
       </classpath>
       <formatter type="plain"/>
       <batchtest fork="yes" todir="${test.log.dir}">
-        <fileset dir="${test.bin.dir}">
-          <include name="**/Test*.class"/>
-          <include name="**/*Test.class"/>
-          <exclude name="org/dita/dost/TestUtils.class"/>
-          <exclude name="org/dita/dost/IntegrationTest.class"/>
+        <fileset dir="${test.java.dir}">
+          <include name="**/Test*.java"/>
+          <include name="**/*Test.java"/>
+          <exclude name="org/dita/dost/TestUtils.java"/>
+          <exclude name="org/dita/dost/IntegrationTest.java"/>
         </fileset>
       </batchtest>
     </junit>
