@@ -1,5 +1,6 @@
 language: java
 before_script:
+  - git submodule update --init --recursive
   - ant jar
   - ant -f src/main/integrator.xml strict
 script: ant test
