@@ -11,15 +11,24 @@ package org.dita.dost.util;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import org.junit.After;
+
+import org.junit.Before;
+
 import org.dita.dost.util.LogUtils;
 import org.junit.Test;
 
 public class TestLogutils {
 
+    @Before
+    public void setUp() {
+        LogUtils.clear();
+    }
+    
     @Test
     public void testclear()
     {
-        LogUtils.clear();
         assertEquals(0,LogUtils.getNumOfFatals());
         assertEquals(0,LogUtils.getNumOfErrors());
         assertEquals(0,LogUtils.getNumOfWarnings());
@@ -39,7 +48,6 @@ public class TestLogutils {
         LogUtils.increaseNumOfErrors();
         LogUtils.increaseNumOfFatals();
         assertTrue(LogUtils.haveFatalOrError());
-        LogUtils.clear();
     }
 
     @Test
@@ -57,4 +65,8 @@ public class TestLogutils {
         assertEquals(1,LogUtils.getNumOfInfo());
     }
 
+    @After
+    public void tearDown() {
+        LogUtils.clear();
+    }
 }
