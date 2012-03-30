@@ -373,6 +373,9 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="note__label__danger">
     </xsl:attribute-set>
+  
+    <xsl:attribute-set name="note__label__warning">
+    </xsl:attribute-set>
 
     <xsl:attribute-set name="note__label__other">
     </xsl:attribute-set>
