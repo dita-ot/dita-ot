@@ -332,6 +332,7 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Task Prereq">开始之前</variable>
     <variable id="Task Context">关于此任务</variable>
     <variable id="Task Steps">过程</variable>
+  <variable id="#steps-unordered-label"><variable id="Task Steps"/></variable>
     <variable id="Task Result">结果</variable>
     <variable id="Task Example">示例</variable>
     <variable id="Task Postreq">下一步做什么</variable>

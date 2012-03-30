@@ -92,6 +92,7 @@
   <variable id="Task Prereq">Înainte de a începe</variable>
   <variable id="Task Context">Despre acest task</variable>
   <variable id="Task Steps">Procedură</variable>
+  <variable id="#steps-unordered-label"><variable id="Task Steps"/></variable>
   <variable id="Task Result">Rezultate</variable>
   <variable id="Task Example">Exemplu</variable>
   <variable id="Task Postreq">Ce se face în continuare</variable>

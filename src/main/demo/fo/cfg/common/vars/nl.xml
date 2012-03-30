@@ -115,6 +115,7 @@
   <variable id="Task Prereq">Voordat u begint</variable>
   <variable id="Task Context">Over deze taak</variable>
   <variable id="Task Steps">Procedure</variable>
+  <variable id="#steps-unordered-label"><variable id="Task Steps"/></variable>
   <variable id="Task Result">Resultaten</variable>
   <variable id="Task Example">Voorbeeld</variable>
   <variable id="Task Postreq">Volgende stappen</variable>

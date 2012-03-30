@@ -332,6 +332,7 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Task Prereq">Vorbereitungen</variable>
     <variable id="Task Context">Warum und wann dieser Vorgang ausgeführt wird</variable>
     <variable id="Task Steps">Prozedur</variable>
+  <variable id="#steps-unordered-label"><variable id="Task Steps"/></variable>
     <variable id="Task Result">Ergebnisse</variable>
     <variable id="Task Example">Beispiel</variable>
     <variable id="Task Postreq">Nächste Maßnahme</variable>

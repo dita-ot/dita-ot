@@ -228,12 +228,32 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class, ' task/steps-unordered ')]">
-        <fo:list-block xsl:use-attribute-sets="steps-unordered">
+  <xsl:template match="*[contains(@class, ' task/steps-unordered ')]">
+    <xsl:choose>
+      <xsl:when test="$GENERATE-TASK-LABELS='YES'">
+        <fo:block>
+          <xsl:apply-templates select="." mode="dita2xslfo:task-heading">
+            <xsl:with-param name="use-label">
+              <xsl:call-template name="insertVariable">
+                <xsl:with-param name="theVariableID" select="'#steps-unordered-label'"/>
+              </xsl:call-template>
+            </xsl:with-param>
+          </xsl:apply-templates>
+          <fo:list-block xsl:use-attribute-sets="steps-unordered">
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
+          </fo:list-block>
+        </fo:block>
+      </xsl:when>
+      <xsl:otherwise>
+        <fo:list-block xsl:use-attribute-sets="steps-unordered">
+          <xsl:call-template name="commonattributes"/>
+          <xsl:apply-templates/>
         </fo:list-block>
-    </xsl:template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
 
     <xsl:template match="*[contains(@class, ' task/steps ')]/*[contains(@class, ' task/step ')]">
         <!-- Switch to variable for the count rather than xsl:number, so that step specializations are also counted -->

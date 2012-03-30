@@ -92,6 +92,7 @@
   <variable id="Task Prereq">Подготовка</variable>
   <variable id="Task Context">Об этой задаче</variable>
   <variable id="Task Steps">Процедура</variable>
+  <variable id="#steps-unordered-label"><variable id="Task Steps"/></variable>
   <variable id="Task Result">Результат</variable>
   <variable id="Task Example">Пример</variable>
   <variable id="Task Postreq">Дальнейшие действия</variable>

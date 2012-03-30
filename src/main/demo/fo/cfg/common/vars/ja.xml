@@ -390,6 +390,7 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Task Prereq">始める前に</variable>
     <variable id="Task Context">このタスクについて</variable>
     <variable id="Task Steps">手順</variable>
+  <variable id="#steps-unordered-label"><variable id="Task Steps"/></variable>
     <variable id="Task Result">タスクの結果</variable>
     <variable id="Task Example">例</variable>
     <variable id="Task Postreq">次のタスク</variable>

@@ -92,6 +92,7 @@
   <variable id="Task Prereq">Innan du börjar</variable>
   <variable id="Task Context">Den här uppgiften</variable>
   <variable id="Task Steps">Arbetsordning</variable>
+  <variable id="#steps-unordered-label"><variable id="Task Steps"/></variable>
   <variable id="Task Result">Resultat</variable>
   <variable id="Task Example">Exempel</variable>
   <variable id="Task Postreq">Och sedan då?</variable>

@@ -92,6 +92,7 @@
   <variable id="Task Prereq">לפני שתתחילו</variable>
   <variable id="Task Context">אודות משימה זו</variable>
   <variable id="Task Steps">נוהל</variable>
+  <variable id="#steps-unordered-label"><variable id="Task Steps"/></variable>
   <variable id="Task Result">תוצאות</variable>
   <variable id="Task Example">דוגמה</variable>
   <variable id="Task Postreq">איך להמשיך</variable>

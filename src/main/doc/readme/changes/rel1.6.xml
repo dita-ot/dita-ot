@@ -176,7 +176,9 @@
           <li>3441389 Glossentry makes FO file invalid in PDF output (milestone 3)</li>
           <li>3385349 Warning given by Saxon EE when processing flag-rules.xsl 	(milestone 3)</li>
           <li>3496831 PDF2: preface titles does not pull indexterms. (milestone 3)</li>
-          <li>3499953 startcmd.bat adds dost.jar twice to the CLASSPATH  (milestone 3)</li>	
+          <li>3499953 startcmd.bat adds dost.jar twice to the CLASSPATH  (milestone 3)</li>
+          <li>3513155 XSL for Warning uses wrong attribute set (milestone 4)</li>
+          <li>3512892 steps-unordered doesn't generate heading (milestone 4)</li>
           <li>3471364 UNC paths are not supported in input argument (in progress)</li>  
           <li>3501182 Typos in domains_(un)classed.css (in progress)</li>  
         </ul>
