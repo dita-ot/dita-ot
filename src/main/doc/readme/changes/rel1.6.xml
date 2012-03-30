@@ -179,6 +179,7 @@
           <li>3499953 startcmd.bat adds dost.jar twice to the CLASSPATH  (milestone 3)</li>
           <li>3513155 XSL for Warning uses wrong attribute set (milestone 4)</li>
           <li>3512892 steps-unordered doesn't generate heading (milestone 4)</li>
+          <li>3511308 choicetable/@product value output in fo:table (milestone 4)</li>
           <li>3471364 UNC paths are not supported in input argument (in progress)</li>  
           <li>3501182 Typos in domains_(un)classed.css (in progress)</li>  
         </ul>

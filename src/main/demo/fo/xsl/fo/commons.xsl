@@ -2189,6 +2189,8 @@ See the accompanying license.txt file for applicable licenses.
         </fo:inline>
     </xsl:template>
 
+    <xsl:template match="@platform | @product | @audience | @otherprops | @importance | @rev | @status"/>
+
     <!--  Layout masters  -->
 
     <!-- Deprecated -->
