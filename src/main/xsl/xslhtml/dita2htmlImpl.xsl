@@ -527,7 +527,7 @@
   <xsl:call-template name="start-revflag">
     <xsl:with-param name="flagrules" select="$flagrules"/>  
   </xsl:call-template>
-  <xsl:call-template name="sect-heading"/>
+  <xsl:apply-templates select="." mode="dita2html:section-heading"/>
   <xsl:apply-templates select="*[not(contains(@class,' topic/title '))] | text() | comment() | processing-instruction()"/>
   <xsl:call-template name="end-revflag">
     <xsl:with-param name="flagrules" select="$flagrules"/>  
@@ -571,7 +571,7 @@
   <xsl:call-template name="start-revflag">
     <xsl:with-param name="flagrules" select="$flagrules"/>  
   </xsl:call-template>
-  <xsl:call-template name="sect-heading"/>
+  <xsl:apply-templates select="." mode="dita2html:section-heading"/>
   <xsl:apply-templates select="*[not(contains(@class,' topic/title '))] | text() | comment() | processing-instruction()"/>	
   <xsl:call-template name="end-revflag">
     <xsl:with-param name="flagrules" select="$flagrules"/>  
@@ -4151,11 +4151,13 @@
 </xsl:template>
 
 <!-- Process a section heading - H4 based on: 1) title element 2) @spectitle attr -->
-<!-- DITA-OT 1.5: Deprecate this template in favor of a moded template, which allows
-     easier generated headings for a specific specialized section                 -->
 <xsl:template name="sect-heading">
   <xsl:param name="defaulttitle"/> <!-- get param by reference -->
-  <!-- Deprecated in favor of the mode template -->
+  <xsl:call-template name="output-message">
+    <xsl:with-param name="msgnum">066</xsl:with-param>
+    <xsl:with-param name="msgsev">W</xsl:with-param>
+    <xsl:with-param name="msgparams">%1=sect-heading</xsl:with-param>
+  </xsl:call-template>
   <xsl:apply-templates select="." mode="dita2html:section-heading">
     <xsl:with-param name="defaulttitle" select="$defaulttitle"/>
   </xsl:apply-templates>

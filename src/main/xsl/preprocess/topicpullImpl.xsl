@@ -2002,6 +2002,11 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <!-- These functions have been deprecated in favor of the refactored templates added in April 2007. -->
   <xsl:template name="inherit">
     <xsl:param name="attrib"/>
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">066</xsl:with-param>
+      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="msgparams">%1=inherit</xsl:with-param>
+    </xsl:call-template>
     <xsl:call-template name="topicpull:inherit">
       <xsl:with-param name="attrib" select="$attrib"/>
     </xsl:call-template>
@@ -2011,6 +2016,11 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:param name="localtype">#none#</xsl:param>
     <xsl:param name="scope">#none#</xsl:param>
     <xsl:param name="format">#none#</xsl:param>
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">066</xsl:with-param>
+      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="msgparams">%1=get-stuff</xsl:with-param>
+    </xsl:call-template>
     <xsl:apply-templates select="." mode="topicpull:get-stuff">
       <xsl:with-param name="localtype" select="$localtype"/>
       <xsl:with-param name="scope" select="$scope"/>
@@ -2023,6 +2033,11 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:param name="actual-class"/>    <!-- Class value of the target element -->
     <xsl:param name="actual-name"/>     <!-- Name of the target element -->
     <xsl:param name="targetting"/>      <!-- Targetting a "topic" or "element" -->
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">066</xsl:with-param>
+      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="msgparams">%1=verify-type-attribute</xsl:with-param>
+    </xsl:call-template>
     <xsl:apply-templates select="." mode="topicpull:verify-type-attribute">
       <xsl:with-param name="type" select="$type"/>
       <xsl:with-param name="actual-class" select="$actual-class"/>
@@ -2033,6 +2048,11 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
 
   <xsl:template name="classval">
     <xsl:param name="type">#none#</xsl:param>
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">066</xsl:with-param>
+      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="msgparams">%1=classval</xsl:with-param>
+    </xsl:call-template>
     <xsl:apply-templates select="." mode="topicpull:get-stuff_classval"><xsl:with-param name="type" select="$type"/></xsl:apply-templates>
   </xsl:template>
 
@@ -2042,6 +2062,11 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:param name="classval">#none#</xsl:param>
     <xsl:param name="topicid">#none#</xsl:param>
     <xsl:param name="elemid">#none#</xsl:param>
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">066</xsl:with-param>
+      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="msgparams">%1=getshortdesc</xsl:with-param>
+    </xsl:call-template>
     <xsl:apply-templates select="." mode="topicpull:getshortdesc">
       <xsl:with-param name="file" select="$file"/>
       <xsl:with-param name="topicpos" select="$topicpos"/>
@@ -2056,6 +2081,11 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:param name="topicpos">#none#</xsl:param>
     <xsl:param name="classval">#none#</xsl:param>
     <xsl:param name="topicid">#none#</xsl:param>
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">066</xsl:with-param>
+      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="msgparams">%1=getlinktext</xsl:with-param>
+    </xsl:call-template>
     <xsl:apply-templates select="." mode="topicpull:getlinktext_topic">
       <xsl:with-param name="file" select="$file"/>
       <xsl:with-param name="topicpos" select="$topicpos"/>
@@ -2069,6 +2099,11 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:param name="classval">#none#</xsl:param>
     <xsl:param name="topicid">#none#</xsl:param>
     <xsl:param name="elemid">#none#</xsl:param>
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">066</xsl:with-param>
+      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="msgparams">%1=getlinktext</xsl:with-param>
+    </xsl:call-template>
     <xsl:apply-templates select="." mode="topicpull:getlinktext_within-topic">
       <xsl:with-param name="file" select="$file"/>
       <xsl:with-param name="topicpos" select="$topicpos"/>
@@ -2083,6 +2118,11 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:param name="classval">#none#</xsl:param>
     <xsl:param name="topicid">#none#</xsl:param>
     <xsl:param name="elemid">#none#</xsl:param>
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">066</xsl:with-param>
+      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="msgparams">%1=blocktext</xsl:with-param>
+    </xsl:call-template>
     <xsl:apply-templates select="." mode="topicpull:getlinktext_within-topic_otherblock">
       <xsl:with-param name="file" select="$file"/>
       <xsl:with-param name="topicpos" select="$topicpos"/>
@@ -2097,6 +2137,11 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:param name="classval">#none#</xsl:param>
     <xsl:param name="topicid">#none#</xsl:param>
     <xsl:param name="elemid">#none#</xsl:param>
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">066</xsl:with-param>
+      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="msgparams">%1=getlinktext</xsl:with-param>
+    </xsl:call-template>
     <xsl:apply-templates select="." mode="topicpull:getlinktext_within-topic_fig">
       <xsl:with-param name="file" select="$file"/>
       <xsl:with-param name="topicpos" select="$topicpos"/>
@@ -2111,6 +2156,11 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:param name="classval">#none#</xsl:param>
     <xsl:param name="topicid">#none#</xsl:param>
     <xsl:param name="elemid">#none#</xsl:param>
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">066</xsl:with-param>
+      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="msgparams">%1=getlinktext</xsl:with-param>
+    </xsl:call-template>
     <xsl:apply-templates select="." mode="topicpull:getlinktext_within-topic_table">
       <xsl:with-param name="file" select="$file"/>
       <xsl:with-param name="topicpos" select="$topicpos"/>
@@ -2125,6 +2175,11 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:param name="classval">#none#</xsl:param>
     <xsl:param name="topicid">#none#</xsl:param>
     <xsl:param name="elemid">#none#</xsl:param>
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">066</xsl:with-param>
+      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="msgparams">%1=getlinktext</xsl:with-param>
+    </xsl:call-template>
     <xsl:apply-templates select="." mode="topicpull:getlinktext_within-topic_li">
       <xsl:with-param name="file" select="$file"/>
       <xsl:with-param name="topicpos" select="$topicpos"/>
@@ -2139,6 +2194,11 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:param name="classval">#none#</xsl:param>
     <xsl:param name="topicid">#none#</xsl:param>
     <xsl:param name="elemid">#none#</xsl:param>
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">066</xsl:with-param>
+      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="msgparams">%1=getlinktext</xsl:with-param>
+    </xsl:call-template>
     <xsl:apply-templates select="." mode="topicpull:getlinktext_within-topic_fn">
       <xsl:with-param name="file" select="$file"/>
       <xsl:with-param name="topicpos" select="$topicpos"/>
@@ -2153,6 +2213,11 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:param name="classval">#none#</xsl:param>
     <xsl:param name="topicid">#none#</xsl:param>
     <xsl:param name="elemid">#none#</xsl:param>
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">066</xsl:with-param>
+      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="msgparams">%1=getlinktext</xsl:with-param>
+    </xsl:call-template>
     <xsl:apply-templates select="." mode="topicpull:getlinktext_within-topic_dlentry">
       <xsl:with-param name="file" select="$file"/>
       <xsl:with-param name="topicpos" select="$topicpos"/>
@@ -2168,6 +2233,11 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:param name="classval">#none#</xsl:param>
     <xsl:param name="topicid">#none#</xsl:param>
     <xsl:param name="elemid">#none#</xsl:param>
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">066</xsl:with-param>
+      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="msgparams">%1=firstclass</xsl:with-param>
+    </xsl:call-template>
     <xsl:variable name="doc" select="document($file,/)"/>
     <xsl:choose>
       <!--look for the target in the same file, and create the topic-level classval if accessible-->
@@ -2185,13 +2255,28 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   </xsl:template>
 
   <xsl:template name="invalid-list-item">
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">066</xsl:with-param>
+      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="msgparams">%1=invalid-list-item</xsl:with-param>
+    </xsl:call-template>
     <xsl:apply-templates select="." mode="ditamsg:crossref-unordered-listitem"/>
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/ol ')]/*[contains(@class,' topic/li ')]" mode="xref" priority="2">
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">066</xsl:with-param>
+      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="msgparams">%1=xref</xsl:with-param>
+    </xsl:call-template>
     <xsl:apply-templates select="." mode="topicpull:li-linktext"/>
   </xsl:template>
   <xsl:template match="*[contains(@class,' topic/fn ')]" mode="xref">
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">066</xsl:with-param>
+      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="msgparams">%1=xref</xsl:with-param>
+    </xsl:call-template>
     <xsl:apply-templates select="." mode="topicpull:fn-linktext"/>
   </xsl:template>
   

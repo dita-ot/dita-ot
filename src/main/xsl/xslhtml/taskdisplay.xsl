@@ -95,12 +95,12 @@
   <xsl:call-template name="start-revflag">
     <xsl:with-param name="flagrules" select="$flagrules"/>
   </xsl:call-template>
-  <xsl:call-template name="sect-heading">
+  <xsl:apply-templates select="." mode="dita2html:section-heading">
     <!-- edited by William on 2009-06-11 for bug:2804442 start-->
      <!--xsl:with-param name="deftitle"></xsl:with-param-->
      <xsl:with-param name="defaulttitle"></xsl:with-param>
     <!-- edited by William on 2009-06-11 for bug:2804442 end--> 
-  </xsl:call-template>
+  </xsl:apply-templates>
   <!-- Title is not allowed now, but if we add it, make sure it is processed as in section -->
   <xsl:apply-templates select="*[not(contains(@class,' topic/title '))] | text() | comment() | processing-instruction()"/>
 
