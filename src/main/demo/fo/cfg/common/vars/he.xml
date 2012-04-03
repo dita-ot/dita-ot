@@ -105,4 +105,7 @@
   <variable id="List of Figures">רשימת איורים</variable>
   <variable id="Option">אופציה</variable>
   <variable id="Description">תיאור</variable>
+  <variable id="#menucascade-separator">&#xA0;&#x202B;&#x3E;&#x202C; </variable>
+  <variable id="#quote-start">„</variable>
+  <variable id="#quote-end">”</variable>
 </vars>

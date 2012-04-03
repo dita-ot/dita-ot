@@ -1746,9 +1746,13 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class,' topic/q ')]">
         <fo:inline xsl:use-attribute-sets="q">
             <xsl:call-template name="commonattributes"/>
-            <xsl:text>&#x201C;</xsl:text>
+            <xsl:call-template name="insertVariable">
+                <xsl:with-param name="theVariableID" select="'#quote-start'"/>
+            </xsl:call-template>
             <xsl:apply-templates/>
-            <xsl:text>&#x201D;</xsl:text>
+            <xsl:call-template name="insertVariable">
+                <xsl:with-param name="theVariableID" select="'#quote-end'"/>
+            </xsl:call-template>
         </fo:inline>
     </xsl:template>
 

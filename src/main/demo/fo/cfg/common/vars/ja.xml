@@ -403,4 +403,7 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="List of Figures">図の一覧</variable>
   <variable id="Option">オプション</variable>
   <variable id="Description">説明</variable>
+  <variable id="#menucascade-separator">&#xA0;&#x3E; </variable>
+  <variable id="#quote-start">「</variable>
+  <variable id="#quote-end">」</variable>
 </vars>

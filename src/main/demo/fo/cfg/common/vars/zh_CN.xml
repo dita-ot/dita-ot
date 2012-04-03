@@ -345,4 +345,7 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="List of Figures">插图清单</variable>
   <variable id="Option">选项</variable>
   <variable id="Description">描述</variable>
+  <variable id="#menucascade-separator">&#xA0;&#x3E; </variable>
+  <variable id="#quote-start">“</variable>
+  <variable id="#quote-end">”</variable>
 </vars>

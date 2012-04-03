@@ -345,4 +345,7 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="List of Figures">Lista delle figure</variable>
   <variable id="Option">Opzione</variable>
   <variable id="Description">Descrizione</variable>
+  <variable id="#menucascade-separator">&#xA0;&#x3E; </variable>
+  <variable id="#quote-start">«</variable>
+  <variable id="#quote-end">»</variable>
 </vars>

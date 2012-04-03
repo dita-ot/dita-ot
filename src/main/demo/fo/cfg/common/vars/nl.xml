@@ -121,4 +121,7 @@
   <variable id="Task Postreq">Volgende stappen</variable>
   <variable id="Option">Optie</variable>
   <variable id="Description">Beschrijving</variable>
+  <variable id="#menucascade-separator">&#xA0;&#x3E; </variable>
+  <variable id="#quote-start">“</variable>
+  <variable id="#quote-end">”</variable>
 </vars>

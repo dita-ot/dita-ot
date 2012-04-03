@@ -105,4 +105,7 @@
   <variable id="List of Figures">Figurförteckning</variable>
   <variable id="Option">Alternativ</variable>
   <variable id="Description">Beskrivning</variable>
+  <variable id="#menucascade-separator">&#xA0;&#x3E; </variable>
+  <variable id="#quote-start">”</variable>
+  <variable id="#quote-end">”</variable>
 </vars>
