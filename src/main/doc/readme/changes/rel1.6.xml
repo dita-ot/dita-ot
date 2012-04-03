@@ -119,6 +119,7 @@
           <li>3498406 Add index file to PDF2 variables (milestone 3)</li>
           <li>3501029 Move Ant scripts to plug-in folders (milestone 3)</li>
           <li>3498440 Run XSLT with Ant task in PDF2 (milestone 3)</li>
+          <li>3504442 bookmap.dtd and map.dtd are out of sync with OASIS (milestone 3)</li>
           <li>3510093 Add XSLT param extension point to PDF2 (milestone 4)</li>
           <li>3466842 Refactor preprocessing to use SAX filters (in progress)</li>
           <li>3468864 Remove Content object (in progress)</li>
@@ -134,7 +135,6 @@
           <li>3487941 Improve pipeline module processing (in progress)</li>
           <li>3487222 Avoid strings where other types are more appropriate (in progress)</li>
           <li>3497122 Document error messages in user guide (in progress)</li>
-          <li>3504442 bookmap.dtd and map.dtd are out of sync with OASIS (in progress)</li>
         </ul>
       </section>
       <section>

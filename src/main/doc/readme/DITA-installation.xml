@@ -71,48 +71,48 @@ within that shell.</stepresult></step>
 <step><cmd>You may now run a build in the <wintitle>Terminal</wintitle> window
 by using Ant or command-line tool.</cmd></step>
 </steps>
-<result><p>The resulting <wintitle>Terminal</wintitle> can be used
-to run as many builds as you want. Once that shell is closed, you
-will need to run <filepath>startcmd.bsh</filepath> again to set up
-a new environment for running builds.</p></result>
+<result><p>The resulting <wintitle>Terminal</wintitle> can be used to run as many builds as you want. Once
+          that shell is closed, you will need to run <filepath>startcmd.sh</filepath> again to set
+          up a new environment for running builds.</p></result>
 </taskbody>
 </task>
 <task id="installation-windows" platform="windows">
 <title>Set up DITA Open Toolkit in Windows</title>
 <taskbody>
-<prereq id="installattion-prereq"><p>The recommended use of the DITA
-Open Toolkit components is inside of the Java environment        
-  because its <xref
-href="DITA-usingtransforms.xml#ditausingxform/preprocess">pre-process
-            architecture</xref> needs Java and Java-based tools. Therefore,
-before installing the           DITA Open Toolkit processing environment,
-ensure that you have installed the following           prerequisite
-tools :<note>See <xref href="DITA-tested.xml">Tested platforms and
-              tools</xref> for detailed information about versions
-of these tools that have been             successfully tested with
-the current toolkit release.</note></p><dl><dlentry id="Prereq"
+<prereq id="installattion-prereq"><p>The recommended use of the DITA Open Toolkit components is inside of the Java environment because
+          its <xref href="DITA-usingtransforms.xml#ditausingxform/preprocess">pre-process
+            architecture</xref> needs Java and Java-based tools. Therefore, before installing the
+          DITA Open Toolkit processing environment, ensure that you have installed the following
+          prerequisite tools:<note>See <xref href="DITA-tested.xml">Tested platforms and
+              tools</xref> for detailed information about versions of these tools that have been
+            successfully tested with the current toolkit release.</note></p><dl><dlentry id="Prereq"
 platform="windows linux">
-<dt id="jdk">Java runtime or development environment <keyword
-keyref="tool.java.version"></keyword></dt>
-<dd>Provides the basic environment for most tools used in this toolkit. <p>You
-can download and install the Java Runtime Environment (JRE) <keyword
-keyref="tool.java.version"></keyword> (or greater) (available from <xref
-format="html"
-href="http://www.oracle.com/technetwork/java/javase/overview/index.html"
-scope="external"></xref>) into a directory of your choice.</p></dd>
-</dlentry><dlentry id="XSLT">
+<dt id="jdk">Java runtime or development environment <keyword keyref="tool.java.version"/> or
+              newer</dt>
+<dd>Provides the basic environment for most tools used in this toolkit. <p>You can download and
+                install the Java Runtime Environment (JRE) <keyword keyref="tool.java.version"/> (or
+                newer) (available from <xref format="html"
+                  href="http://www.oracle.com/technetwork/java/javase/overview/index.html"
+                  scope="external"/>) into a directory of your choice.</p></dd>
+</dlentry>
+          <dlentry>
+            <dt>Apache Xerces <keyword keyref="tool.xerces.version"/>  or newer</dt>
+            <dd>Provides high performance XML parser.</dd>
+          </dlentry>
+          <dlentry>
+            <dt>Apache XML Commons Resolver <keyword keyref="tool.resolver.version"/>  or newer</dt>
+            <dd>Provides XML catalog support.</dd>
+          </dlentry><dlentry id="XSLT">
 <dt id="xslt">XSLT 1.0 compliant transformation engine</dt>
-<dd>Provides the main transformation services via the advanced XSLT
-processor Saxon                 <keyword keyref="tool.saxon.version"></keyword> (or
-greater) or Xalan-J <keyword keyref="tool.xalan.version"></keyword> (or
-greater) in the toolkit.<p>You can download and                 extract
-Saxon (available at <xref format="html"
-href="http://saxon.sourceforge.net/" scope="external"></xref>) or
-the Xalan-J (available at <xref format="html"
-href="http://xml.apache.org/xalan-j/downloads.html" scope="external"></xref>)
-into a                 directory of your choice.</p></dd>
+<dd>Provides the main transformation services via the advanced XSLT processor Saxon <keyword
+                keyref="tool.saxon.version"/> (or newer) or Xalan-J <keyword
+                keyref="tool.xalan.version"/> (or newer) in the toolkit.<p>You can download and
+                extract Saxon (available at <xref format="html" href="http://saxon.sourceforge.net/"
+                  scope="external"/>) or the Xalan-J (available at <xref format="html"
+                  href="http://xml.apache.org/xalan-j/downloads.html" scope="external"/>) into a
+                directory of your choice.</p></dd>
 </dlentry><dlentry id="antbuild">
-<dt>Ant <keyword keyref="tool.ant.version"></keyword> build tool</dt>
+<dt>Ant <keyword keyref="tool.ant.version"/> or newer</dt>
 <dd>Provides the standard setup and sequencing of processing steps.</dd>
 </dlentry></dl>       </prereq>
 <steps>
@@ -152,6 +152,14 @@ set CLASSPATH=%DITA_HOME%\lib\resolver.jar;%CLASSPATH%
 set CLASSPATH=%DITA_HOME%\lib\commons-codec-<keyword
 keyref="tool.codec.version"></keyword>.jar;%CLASSPATH%</codeblock> 
          </stepxmp></step>
+        <step importance="optional">
+          <cmd>Set up XML parser.</cmd>
+          <info>If you use Ant 1.8 or newer,  set up <codeph>CLASSPATH</codeph> to include Apache
+            Xerces. </info>
+          <stepxmp>
+            <codeblock>set CLASSPATH=&lt;xerces_dir>\xercesImpl.jar;&lt;xerces_dir>\xml-apis.jar;%CLASSPATH%</codeblock>
+          </stepxmp>
+        </step>
 <step><cmd>Set up the XSLT processor.</cmd>
 <choices>
 <choice>                 <p>If you use the Saxon, set up <codeph>CLASSPATH</codeph> to
@@ -235,6 +243,14 @@ export CLASSPATH=$DITA_HOME/lib/resolver.jar:$CLASSPATH
 export CLASSPATH=$DITA_HOME/lib/commons-codec-<keyword
 keyref="tool.codec.version"></keyword>.jar:$CLASSPATH</codeblock> 
          </stepxmp></step>
+  <step importance="optional">
+    <cmd>Set up XML parser.</cmd>
+    <info>If you use Ant 1.8 or newer,  set up <codeph>CLASSPATH</codeph> to include Apache
+      Xerces. </info>
+    <stepxmp>
+      <codeblock>export CLASSPATH=&lt;xerces_dir>/xercesImpl.jar:&lt;xerces_dir>/xml-apis.jar:$CLASSPATH</codeblock>
+    </stepxmp>
+  </step>
 <step><cmd>Set up the XSLT processor.</cmd>
 <choices>
 <choice>               <p>If you use the Saxon, set up <codeph>CLASSPATH</codeph> to
