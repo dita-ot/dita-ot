@@ -4,18 +4,18 @@
 #  applicable licenses.
 #  (c) Copyright IBM Corp. 2006 All Rights Reserved.
 
-if  [ "${DITA_HOME:+1}" != "1" ]; then 
-   echo "DITA_HOME environment variable is empty or not set";
-   exit 127;
+realpath() {
+  [[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
+}
+
+if [ "${DITA_HOME:+1}" == "1" ] && [ -e "$DITA_HOME" ]; then
+  export DITA_DIR="$(realpath "$DITA_HOME")"
+else #elif [ "${DITA_HOME:+1}" != "1" ]; then
+  export DITA_DIR="$(dirname "$(realpath "$0")")"
 fi
 
-cd "$DITA_HOME"
-
-# Get the absolute path of DITAOT's home directory
-DITA_DIR="`pwd`"
-
 if [ -f "$DITA_DIR"/tools/ant/bin/ant ] && [ ! -x "$DITA_DIR"/tools/ant/bin/ant ]; then
-chmod +x "$DITA_DIR"/tools/ant/bin/ant
+  chmod +x "$DITA_DIR"/tools/ant/bin/ant
 fi
 
 export ANT_OPTS="-Xmx512m $ANT_OPTS"
@@ -23,13 +23,19 @@ export ANT_OPTS="$ANT_OPTS -Djavax.xml.transform.TransformerFactory=net.sf.saxon
 export ANT_HOME="$DITA_DIR"/tools/ant
 export PATH="$DITA_DIR"/tools/ant/bin:"$PATH"
 
-NEW_CLASSPATH="$DITA_DIR/lib:$DITA_DIR/lib/dost.jar:$DITA_DIR/lib/commons-codec-1.4.jar:$DITA_DIR/lib/resolver.jar:$DITA_DIR/lib/icu4j.jar"
-NEW_CLASSPATH="$DITA_DIR/lib/saxon/saxon9.jar:$DITA_DIR/lib/saxon/saxon9-dom.jar:$NEW_CLASSPATH"
-if test -n "$CLASSPATH"
-then
-export CLASSPATH="$NEW_CLASSPATH":"$CLASSPATH"
+NEW_CLASSPATH="$DITA_DIR/lib/dost.jar"
+NEW_CLASSPATH="$DITA_DIR/lib:$NEW_CLASSPATH"
+NEW_CLASSPATH="$DITA_DIR/lib/commons-codec-1.4.jar:$NEW_CLASSPATH"
+NEW_CLASSPATH="$DITA_DIR/lib/resolver.jar:$NEW_CLASSPATH"
+NEW_CLASSPATH="$DITA_DIR/lib/icu4j.jar:$NEW_CLASSPATH"
+NEW_CLASSPATH="$DITA_DIR/lib/saxon/saxon9.jar:$NEW_CLASSPATH"
+NEW_CLASSPATH="$DITA_DIR/lib/saxon/saxon9-dom.jar:$NEW_CLASSPATH"
+# xercesImpl.jar and xml-apis.jar from Ant 1.7.1
+if test -n "$CLASSPATH"; then
+  export CLASSPATH="$NEW_CLASSPATH":"$CLASSPATH"
 else
-export CLASSPATH="$NEW_CLASSPATH"
+  export CLASSPATH="$NEW_CLASSPATH"
 fi
 
+cd "$DITA_DIR"
 "$SHELL"
