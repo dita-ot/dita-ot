@@ -27,19 +27,6 @@
     <topicref href="articles/DITA-dWarticles.xml"/>
   </topichead>
   <mapref href="keyrefs.ditamap" processing-role="resource-only"/>
+  <mapref href="reltable.ditamap" processing-role="resource-only"/>
   <mapref href="subjectscheme.ditamap" type="subjectScheme" processing-role="resource-only"/>
-  <reltable>
-    <relrow>
-      <relcell>
-        <topicref href="DITA-OTProjectHome.xml"/>
-      </relcell>
-      <relcell>
-        <topicref format="html" href="http://sourceforge.net/news/?group_id=132728" scope="external">
-          <topicmeta>
-            <navtitle>Project News for DITA Open Toolkit</navtitle>
-          </topicmeta>
-        </topicref>
-      </relcell>
-    </relrow>
-  </reltable>
 </map>

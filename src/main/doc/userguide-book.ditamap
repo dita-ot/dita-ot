@@ -12,6 +12,7 @@
   </bookmeta>
   <frontmatter>
     <mapref href="keyrefs.ditamap" processing-role="resource-only"/>
+    <mapref href="reltable.ditamap" processing-role="resource-only"/>
     <mapref href="subjectscheme.ditamap" type="subjectScheme" processing-role="resource-only"/>
     <booklists>
       <toc/>
@@ -22,7 +23,7 @@
   <!--<chapter navtitle="Getting Started">
     <mapref href="quickstartguide.ditamap"/>
   </chapter>-->
-  <chapter format="ditamap" href="quickstart.ditamap"></chapter>
+  <chapter format="ditamap" href="quickstart.ditamap"/>
   <chapter href="readme.ditamap" format="ditamap"/>
   <chapter navtitle="Developer Reference">
     <mapref href="dev_ref/dev_ref.ditamap"/>

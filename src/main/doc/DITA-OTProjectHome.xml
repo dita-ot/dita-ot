@@ -45,12 +45,6 @@
   <related-links>
     <linklist>
       <title>Shortcuts to important information</title>
-      <link format="html" href="http://dita.xml.org/freelinking/DITA-OT%2520Packages"
-        scope="external">
-        <linktext>DITA-OT distribution packages</linktext>
-        <desc>Which package is for you? Find an explanation of the minimal, standard, and "easy
-          install" packages here.</desc>
-      </link>
       <link format="html"
         href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Stable%20Release/"
         scope="external">
@@ -62,17 +56,5 @@
         <linktext>DITA-OT latest development build</linktext>
       </link> 
     </linklist>
-    <link format="html" href="http://dita.xml.org/wiki/the-dita-open-toolkit" scope="external">
-      <linktext>Main DITA-OT page at dita.xml.org</linktext>
-    </link>
-    <link format="html" href="http://dita.xml.org/node/3101" scope="external">
-      <linktext>Information on the <keyword keyref="release.version"/> release</linktext>
-    </link>
-    <!-- TODO: Move this to plug-in usage/installation topic -->
-    <link format="html" importance="deprecated"
-      href="http://dita.xml.org/freelinking/Plugins%2520for%2520the%2520DITA%2520Open%2520Toolkit"
-      scope="external">
-      <linktext>Extending the toolkit with plug-ins</linktext>
-    </link>
   </related-links>
 </topic>

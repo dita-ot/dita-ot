@@ -121,6 +121,8 @@
           <li>3498440 Run XSLT with Ant task in PDF2 (milestone 3)</li>
           <li>3504442 bookmap.dtd and map.dtd are out of sync with OASIS (milestone 3)</li>
           <li>3510093 Add XSLT param extension point to PDF2 (milestone 4)</li>
+          <li>2796964 For PDF output, xml:lang does not work at the element level (milestone 4)</li>
+          <li>3493239 Support localization of quotation marks in quote (milestone 4)</li>
           <li>3466842 Refactor preprocessing to use SAX filters (in progress)</li>
           <li>3468864 Remove Content object (in progress)</li>
           <li>3460151 Use Job to read/write job configuration files (in progress)</li>

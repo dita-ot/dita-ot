@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map id="reltable">
+ <reltable>
+   <relrow>
+     <relcell linking="sourceonly">
+       <topicref href="DITA-OTProjectHome.xml"/>
+     </relcell>
+     <relcell linking="targetonly">
+       <topicref href="readme/distribution_packages.dita"/>
+     </relcell>
+     <relcell linking="targetonly">
+       <topicref format="html" href="http://dita.xml.org/wiki/the-dita-open-toolkit" scope="external">
+         <topicmeta>
+           <linktext>Main DITA-OT page at dita.xml.org</linktext>
+         </topicmeta>
+       </topicref>
+       <topicref format="html" href="http://dita.xml.org/node/3101" scope="external">
+         <topicmeta>
+           <linktext>Information on the <keyword keyref="release.version"/> release</linktext>
+         </topicmeta>
+       </topicref>
+       <topicref format="html" href="http://sourceforge.net/news/?group_id=132728" scope="external">
+         <topicmeta>
+           <linktext>Project News for DITA Open Toolkit</linktext>
+         </topicmeta>
+       </topicref>
+     </relcell>
+   </relrow>
+ </reltable>
+</map>
