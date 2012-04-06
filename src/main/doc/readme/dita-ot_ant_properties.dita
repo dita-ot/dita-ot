@@ -4,9 +4,9 @@
 <reference id="dita-ot-ant-properties" xml:lang="en-us">
 <title>Ant argument properties for DITA-OT</title>
   <titlealts>
-    <navtitle>Ant properties</navtitle>
+    <navtitle>Arguments</navtitle>
   </titlealts>
-<shortdesc>Reference list of DITA-specific Ant properties.</shortdesc>
+<shortdesc>Reference list of DITA-OT specific argument properties.</shortdesc>
 <refbody>
 <section> 	<p>DITA-OT processes your documentation project as an Ant
 project, which allows several Ant build 	properties specific to DITA-OT

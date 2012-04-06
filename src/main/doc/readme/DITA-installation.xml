@@ -48,7 +48,7 @@ up a new environment for running builds.</p></result>
 <task id="Fullsetup-unix" platform="linux osx">
 <title>Installing DITA-OT Full Easy Install package in Linux or OS
 X</title>
-<shortdesc conref="#Fullsetup-windows/what-is-easyinstall"></shortdesc>
+<shortdesc conref="#Fullsetup-windows/what-is-easyinstall"/>
 <taskbody>
 <prereq><p>Before installing DITA Open Toolkit full distribution,
 you need to complete the following           steps:</p><ul>
@@ -78,6 +78,8 @@ by using Ant or command-line tool.</cmd></step>
 </task>
 <task id="installation-windows" platform="windows">
 <title>Set up DITA Open Toolkit in Windows</title>
+  <shortdesc>The following steps guide you to set up the DITA Open Toolkit processing environment in
+      Windows from standard or minimal distribution package.</shortdesc>
 <taskbody>
 <prereq id="installattion-prereq"><p>The recommended use of the DITA Open Toolkit components is inside of the Java environment because
           its <xref href="DITA-usingtransforms.xml#ditausingxform/preprocess">pre-process
@@ -203,8 +205,8 @@ for PDF processing, add AH Formatter installation directory to
 </task>
 <task id="Linuxsetup" platform="linux osx">
 <title>Set up DITA Open Toolkit in Linux or OS X</title>
-<shortdesc> The following steps guide you to set up the DITA Open
-Toolkit processing environment       in Linux or OS X. </shortdesc>
+<shortdesc> The following steps guide you to set up the DITA Open Toolkit processing environment in
+      Linux or OS X from standard or minimal distribution package. </shortdesc>
 <taskbody>
 <prereq conref="#installation-windows/installattion-prereq"
 id="prereq_2nz_y24_12"></prereq>

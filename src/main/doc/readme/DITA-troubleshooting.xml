@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="troubleshooting" xml:lang="en-us">
-<title>Troubleshooting</title>
+<title>Common problems</title>
 <shortdesc>This section is used for identifying problems when installing
      and executing the DITA Open Toolkit.</shortdesc>
 <refbody>
@@ -24,11 +24,9 @@
     </section>
     -->
 <section id="section_stj_4gj_wd">       <title>Out of Memory Error</title> 
-     <p>In some cases, you might receive a message stating the build
-has failed due to an "Out of         Memory" error. In many cases
-this can be solved by switching from Xalan to Saxon as the       
- default processor. Recent versions of the "Full Easy Install" toolkit
-distribution ship with         Saxon instead of Xalan.</p>       <p>If
+     <p>In some cases, you might receive a message stating the build has failed due to an "Out of
+        Memory" error. In many cases this can be solved by switching from Xalan to Saxon as the
+        default processor.</p>       <p>If
 that does not work, please follow the steps below to fix this problem:</p> 
      <ol>
 <li>           <p platform="windows">For Windows, type <codeph>set
