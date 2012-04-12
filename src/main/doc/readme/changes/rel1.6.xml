@@ -33,6 +33,8 @@
           new argument property <codeph>args.filter</codeph>.</p>
         <p>Target <codeph>dita-preprocess</codeph> has been removed and dependencies should be
           replaced with a target sequence <codeph>build-init, preprocess</codeph>.</p>
+        <p>Support for argument <codeph>args.message.file</codeph> has been removed as message
+          configuration has become static configuration.</p>
       </section>
       <section>
         <title>XHTML</title>
@@ -123,6 +125,7 @@
           <li>3510093 Add XSLT param extension point to PDF2 (milestone 4)</li>
           <li>2796964 For PDF output, xml:lang does not work at the element level (milestone 4)</li>
           <li>3493239 Support localization of quotation marks in quote (milestone 4)</li>
+          <li>3517104 Remove support for args.message.file (milestone 4)</li>
           <li>3466842 Refactor preprocessing to use SAX filters (in progress)</li>
           <li>3468864 Remove Content object (in progress)</li>
           <li>3460151 Use Job to read/write job configuration files (in progress)</li>

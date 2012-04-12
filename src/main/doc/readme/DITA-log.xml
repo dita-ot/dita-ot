@@ -58,10 +58,7 @@ are read dynamically from this file. To ensure those messages
 file        should be located properly. In some situations, the toolkit
 may fails        to load the message file due to some exceptions thrown.
 Please refer to        <xref href="DITA-troubleshooting.xml"></xref> for
-detailed information.</p>     <p>For high level users and developers,
-there is a property        <codeph>args.message.file</codeph> in the
-toolkit's ant script, it is        used to config the message file,
-you can override it in your ant script.</p> </section>
+detailed information.</p> </section>
 </refbody>
 </reference>
 <?Pub *0000005341?>

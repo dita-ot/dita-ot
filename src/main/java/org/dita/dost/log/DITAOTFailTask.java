@@ -105,7 +105,7 @@ public final class DITAOTFailTask extends Exit {
             }
         }
         
-        initMessageFile();
+        MessageUtils.loadDefaultMessages();
         final MessageBean msgBean = MessageUtils.getMessage(id, prop);
         final DITAOTLogger logger = new DITAOTAntLogger(getProject());
         if (msgBean != null) {
@@ -129,23 +129,6 @@ public final class DITAOTFailTask extends Exit {
         }
         
         
-    }
-
-    private void initMessageFile() {
-        String messageFile = getProject().getProperty(
-                "args.message.file");
-
-        if(!new File(messageFile).exists()){
-            MessageUtils.loadDefaultMessages();
-            return;
-        }
-
-        if (!new File(messageFile).isAbsolute()) {
-            messageFile = new File(getProject().getBaseDir(), messageFile)
-            .getAbsolutePath();
-        }
-
-        MessageUtils.loadMessages(messageFile);
     }
     
     // Ant Exit class methods --------------------------------------------------

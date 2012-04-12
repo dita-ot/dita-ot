@@ -52,7 +52,7 @@ public final class LogConfigTask extends Task {
         final DITAOTFileLogger logger = DITAOTFileLogger.getInstance();
         final String oldLogDir = logger.getLogDir();
 
-        initMessageFile();
+        MessageUtils.loadDefaultMessages();
         initLogDirectory();
         initLogFile();
 
@@ -99,23 +99,6 @@ public final class LogConfigTask extends Task {
             }
         }
         return false;
-    }
-
-    private void initMessageFile() {
-        String messageFile = getProject().getProperty(
-                "args.message.file");
-
-        if(! new File(messageFile).exists()){
-            MessageUtils.loadDefaultMessages();
-            return;
-        }
-
-        if (!new File(messageFile).isAbsolute()) {
-            messageFile = new File(getProject().getBaseDir(), messageFile)
-            .getAbsolutePath();
-        }
-
-        MessageUtils.loadMessages(messageFile);
     }
 
     private void initLogDirectory() throws BuildException {

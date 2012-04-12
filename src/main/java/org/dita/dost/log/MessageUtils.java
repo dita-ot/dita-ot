@@ -12,6 +12,10 @@ package org.dita.dost.log;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Hashtable;
@@ -47,22 +51,21 @@ public final class MessageUtils {
     // Variables
 
     private static Hashtable<String, MessageBean> hashTable;
-    private static String messageFile;
     private static DITAOTLogger logger = new DITAOTJavaLogger();
     private static MessageUtils utils;
 
     // Constructors
 
     /**
-     * Default Construtor
-     *
+     * Default construtor
      */
     private MessageUtils(){
     }
 
     /**
-     * Internal Singleton getInstance() method, for Classloader to locate the CLASSPATH
-     * @return MessageUtils instance
+     * Get singleton instance.
+     * 
+     * @return MessageUtils singleton instance
      */
     private static synchronized MessageUtils getInstance(){
         if(utils == null){
@@ -86,17 +89,23 @@ public final class MessageUtils {
      * If not exist in the relative path, search the CLASSPATH
      */
     private void loadDefMsg(){
-        if (!new File(defaultResource).exists()) {
-            final URL msg = getClass().getClassLoader().getResource(defaultResource);
+        if (new File(defaultResource).exists()) {
+            loadMessages(defaultResource);
+        } else {
+            final InputStream msg = getClass().getClassLoader().getResourceAsStream(defaultResource);
             if (msg != null) {
                 try {
-                    loadMessages(new File(msg.toURI()).toString());
-                } catch (final URISyntaxException e) {
-                    // NOOP
+                    loadMessages(msg);
+                } catch (Exception e) {
+                    throw new RuntimeException("Failed to load messages configuration file: " + e.getMessage(), e);
+                } finally {
+                    try {
+                        msg.close();
+                    } catch (IOException e) {
+                        // NOOP
+                    }
                 }
             }
-        } else {
-            loadMessages(defaultResource);
         }
     }
 
@@ -105,11 +114,30 @@ public final class MessageUtils {
      * @param newMessageFile message file
      */
     public static void loadMessages(final String newMessageFile) {
-        if (!updateMessageFile(newMessageFile)) {
-            // this message file has been loaded
-            return;
-        }
-
+        InputStream in = null;
+        try {
+            in = new FileInputStream(new File(newMessageFile));
+            getInstance().loadMessages(in);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException("Failed to load messages configuration file: " + e.getMessage(), e);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to load messages configuration file: " + e.getMessage(), e);
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    // NOOP
+                }
+            }
+        }  
+    }
+    
+    /**
+     * Load message from message file.
+     * @param newMessageFile message file
+     */
+    private void loadMessages(final InputStream in) throws Exception {
         // always assign a new instance to hashTable to avoid
         // to reload this method again and again when messages
         // loading failed.
@@ -119,7 +147,7 @@ public final class MessageUtils {
             final DocumentBuilderFactory factory = DocumentBuilderFactory
                     .newInstance();
             final DocumentBuilder builder = factory.newDocumentBuilder();
-            final Document doc = builder.parse(messageFile);
+            final Document doc = builder.parse(in);
 
             final Element messages = doc.getDocumentElement();
             final NodeList messageList = messages.getElementsByTagName(ELEMENT_MESSAGE);
@@ -142,49 +170,15 @@ public final class MessageUtils {
                 hashTable.put(messageBean.getId(), messageBean);
             }
         } catch (final Exception e) {
-            final StringBuffer buff = new StringBuffer(INT_128);
-
-            buff.append("  Failed to load messages from '");
-            buff.append(messageFile);
-            buff.append("' due to exception: ");
-            buff.append(e.getMessage());
-            buff.append(". Please check if there are files 'resource/messages.xml'");
-            buff.append(" and 'resource/messages.dtd' in the directory");
-            buff.append(" that you run the toolkit. If not, please copy them");
-            buff.append(" from the toolkit's root directory.");
-
-            logger.logError(buff.toString());
+            throw new Exception("Failed to read messages configuration file: " + e.getMessage(), e);
         }
-    }
-
-    /**
-     * Update or set message file if new message file is different or old one is {@code null}.
-     * 
-     * @param newMessageFile massage file
-     * @return {@code true} if message file was updated, otherwise {@code false}
-     */
-    private static boolean updateMessageFile(final String newMessageFile) {
-        if (messageFile == null) {
-            messageFile = newMessageFile;
-            return true;
-        }
-
-        final String oldMessagePath = new File(MessageUtils.messageFile).getAbsolutePath();
-        final String newMessagePath = new File(newMessageFile).getAbsolutePath();
-
-        if (oldMessagePath.equalsIgnoreCase(newMessagePath)) {
-            return false;
-        }
-
-        messageFile = newMessageFile;
-        return true;
     }
 
     /**
      * Get the message respond to the given id, if no message found,
      * an empty message with this id will be returned.
      * 
-     * @param id message di
+     * @param id message ID
      * @return messageBean
      */
     public static MessageBean getMessage(final String id) {
