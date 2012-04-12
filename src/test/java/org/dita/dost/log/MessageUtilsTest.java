@@ -22,7 +22,7 @@ import org.junit.Test;
 
 public class MessageUtilsTest {
 
-    private static final File resourceDir = new File(TestUtils.testStub, MessageUtilsTest.class.getSimpleName());
+    private static final File resourceDir = TestUtils.getResourceDir(MessageUtilsTest.class);
 
     @Before
     public void setUp() throws Exception {

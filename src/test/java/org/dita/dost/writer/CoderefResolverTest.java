@@ -13,6 +13,7 @@ import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.AfterClass;
@@ -27,7 +28,7 @@ import org.dita.dost.util.FileUtils;
 
 public class CoderefResolverTest {
 
-    private static final File resourceDir = new File(TestUtils.testStub, CoderefResolverTest.class.getSimpleName());
+    private static final File resourceDir = TestUtils.getResourceDir(CoderefResolverTest.class);
     private static final File srcDir = new File(resourceDir, "src");
     private static final File expDir = new File(resourceDir, "exp");
     private static File tempDir;

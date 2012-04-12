@@ -31,7 +31,7 @@ import org.junit.Test;
 
 public class XMLSerializerTest {
 
-    private final File resourceDir = new File(TestUtils.testStub, XMLSerializerTest.class.getSimpleName());
+    final File resourceDir = TestUtils.getResourceDir(XMLSerializerTest.class);
     private final File srcDir = new File(resourceDir, "src");
     private final File expDir = new File(resourceDir, "exp");
 

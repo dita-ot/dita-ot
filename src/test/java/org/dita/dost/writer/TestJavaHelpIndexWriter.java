@@ -35,7 +35,7 @@ import org.dita.dost.module.ContentImpl;
 public class TestJavaHelpIndexWriter {
 
     private static File tempDir;
-    private static final File resourceDir = new File(TestUtils.testStub, TestJavaHelpIndexWriter.class.getSimpleName());
+    private static final File resourceDir = TestUtils.getResourceDir(TestJavaHelpIndexWriter.class);
     private static final File expDir = new File(resourceDir, "exp");
     private static final File etcDir = new File(resourceDir, "resource");
 

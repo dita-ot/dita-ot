@@ -31,7 +31,7 @@ import org.junit.Test;
 
 public class TestKeyrefReader {
 
-    private static final File resourceDir = new File(TestUtils.testStub, TestKeyrefReader.class.getSimpleName());
+    private static final File resourceDir = TestUtils.getResourceDir(TestKeyrefReader.class);
     private static final File srcDir = new File(resourceDir, "src");
 
     @Test

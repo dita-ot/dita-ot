@@ -21,7 +21,7 @@ import org.dita.dost.resolver.DitaURIResolverFactory;
 
 public class TestListReader {
 
-    private static final File resourceDir = new File(TestUtils.testStub, TestListReader.class.getSimpleName());
+    private static final File resourceDir = TestUtils.getResourceDir(TestListReader.class);
 
     @Test
     public void testread(){

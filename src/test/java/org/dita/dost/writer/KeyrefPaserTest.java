@@ -35,7 +35,7 @@ import org.dita.dost.module.ContentImpl;
 public class KeyrefPaserTest {
 
     private static File tempDir;
-    private static final File resourceDir = new File(TestUtils.testStub, KeyrefPaserTest.class.getSimpleName());
+    private static final File resourceDir = TestUtils.getResourceDir(KeyrefPaserTest.class);
     private static final File srcDir = new File(resourceDir, "src");
     private static final File expDir = new File(resourceDir, "exp");
     private static CatalogResolver resolver;

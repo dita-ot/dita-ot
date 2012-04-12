@@ -29,7 +29,7 @@ import static org.junit.Assert.assertEquals;
 
 public class TestConrefPushReader {
 
-    private static final File resourceDir = new File(TestUtils.testStub, TestConrefPushReader.class.getSimpleName());
+    private static final File resourceDir = TestUtils.getResourceDir(TestConrefPushReader.class);
     private static final File srcDir = new File(resourceDir, "src");
     //private static final File expDir = new File(resourceDir, "exp");
     private static File tempDir;

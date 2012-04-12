@@ -27,7 +27,7 @@ import org.junit.Test;
 
 public class TestMergeUtils {
 
-    private static final File resourceDir = new File(TestUtils.testStub, TestMergeUtils.class.getSimpleName());
+    private static final File resourceDir = TestUtils.getResourceDir(TestMergeUtils.class);
     private static final File srcDir = new File(resourceDir, "src");
 
     public static MergeUtils mergeUtils;

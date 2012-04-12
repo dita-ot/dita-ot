@@ -24,7 +24,7 @@ import org.junit.Test;
 
 public class TestDITAOTCopy {
 
-    private static final File resourceDir = new File(TestUtils.testStub, TestDITAOTCopy.class.getSimpleName());
+    private static final File resourceDir = TestUtils.getResourceDir(TestDITAOTCopy.class);
     private static final File srcDir = new File(resourceDir, "src");
     private static File tempDir;
 

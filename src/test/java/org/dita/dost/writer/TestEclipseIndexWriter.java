@@ -32,7 +32,7 @@ import org.dita.dost.module.ContentImpl;
 public class TestEclipseIndexWriter {
 
     private static File tempDir;
-    private static final File resourceDir = new File(TestUtils.testStub, TestEclipseIndexWriter.class.getSimpleName());
+    private static final File resourceDir = TestUtils.getResourceDir(TestEclipseIndexWriter.class);
     private static final File expDir = new File(resourceDir, "exp");
 
     @BeforeClass

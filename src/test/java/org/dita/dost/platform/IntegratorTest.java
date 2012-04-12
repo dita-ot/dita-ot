@@ -32,7 +32,7 @@ import org.junit.Test;
 
 public class IntegratorTest {
 
-    private final File resourceDir = new File(TestUtils.testStub, IntegratorTest.class.getSimpleName());
+    final File resourceDir = TestUtils.getResourceDir(IntegratorTest.class);
     private final File expDir = new File(resourceDir, "exp");
     private File tempDir;
 

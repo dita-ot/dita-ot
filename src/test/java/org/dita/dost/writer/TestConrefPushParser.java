@@ -44,7 +44,7 @@ import org.xml.sax.SAXException;
 
 public class TestConrefPushParser {
 
-    private static final File resourceDir = new File(TestUtils.testStub, TestConrefPushParser.class.getSimpleName());
+    private static final File resourceDir = TestUtils.getResourceDir(TestConrefPushParser.class);
     private static final File srcDir = new File(resourceDir, "src");
     private static File tempDir;
     private static File inputFile;

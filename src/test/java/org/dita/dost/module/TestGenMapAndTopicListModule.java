@@ -46,7 +46,7 @@ import org.w3c.dom.NodeList;
 
 public class TestGenMapAndTopicListModule {
 
-    private static final File resourceDir = new File(TestUtils.testStub, TestGenMapAndTopicListModule.class.getSimpleName());
+    private static final File resourceDir = TestUtils.getResourceDir(TestGenMapAndTopicListModule.class);
     private static final File srcDir = new File(resourceDir, "src");
     private static final File expDir = new File(resourceDir, "exp");
     

@@ -55,7 +55,7 @@ import org.dita.dost.util.OutputUtils;
 
 public class DitaWriterTest {
 
-    private static final File resourceDir = new File(TestUtils.testStub, DitaWriterTest.class.getSimpleName());
+    private static final File resourceDir = TestUtils.getResourceDir(DitaWriterTest.class);
     private static final File srcDir = new File(resourceDir, "src");
     private static final File expDir = new File(resourceDir, "exp");
     private static File tempDir;

@@ -37,7 +37,7 @@ import org.dita.dost.module.ContentImpl;
 public class TestCHMIndexWriter {
 
     private static File tempDir;
-    private static final File resourceDir = new File(TestUtils.testStub, TestCHMIndexWriter.class.getSimpleName());
+    private static final File resourceDir = TestUtils.getResourceDir(TestCHMIndexWriter.class);
     private static final File expDir = new File(resourceDir, "exp");
 
     @BeforeClass

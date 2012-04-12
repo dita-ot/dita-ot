@@ -26,7 +26,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 public class DescParserTest {
 
-    private final File resourceDir = new File(TestUtils.testStub, DescParserTest.class.getSimpleName());
+    final File resourceDir = TestUtils.getResourceDir(DescParserTest.class);
 
     final File base = new File("base", "plugins");
     final String basePrefix = base.getPath() + File.separator;

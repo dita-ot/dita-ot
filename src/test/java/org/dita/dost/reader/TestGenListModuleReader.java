@@ -21,7 +21,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import org.dita.dost.TestUtils;
-import org.dita.dost.module.Content;
 import org.dita.dost.module.GenMapAndTopicListModule.KeyDef;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.OutputUtils;
@@ -34,7 +33,7 @@ public class TestGenListModuleReader {
 
     public static GenListModuleReader reader;
     
-    private static final File baseDir = new File(TestUtils.testStub, TestGenListModuleReader.class.getSimpleName());
+    private static final File baseDir = TestUtils.getResourceDir(TestGenListModuleReader.class);
     private static final File srcDir = new File(baseDir, "src");
     private static final File inputDir = new File(srcDir, "maps");
     private static final File rootFile = new File(inputDir, "root-map-01.ditamap");

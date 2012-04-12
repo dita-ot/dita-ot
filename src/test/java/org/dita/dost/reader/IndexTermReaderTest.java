@@ -39,7 +39,7 @@ import org.dita.dost.util.StringUtils;
  */
 public class IndexTermReaderTest {
 
-    private final File resourceDir = new File(TestUtils.testStub, IndexTermReaderTest.class.getSimpleName());
+    final File resourceDir = TestUtils.getResourceDir(IndexTermReaderTest.class);
     private File tempDir;
 
     @Before

@@ -33,7 +33,7 @@ import org.junit.Test;
 
 public class TestImgUtils {
 
-    private static final File resourceDir = new File(TestUtils.testStub, TestImgUtils.class.getSimpleName());
+    private static final File resourceDir = TestUtils.getResourceDir(TestImgUtils.class);
     private static final File srcDir = new File(resourceDir, "src");
     private static File tempDir;
 

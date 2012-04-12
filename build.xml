@@ -490,6 +490,7 @@
         <pathelement location="${src.dir}"/><!-- resource/messages.xml -->
         <pathelement location="${lib.dir}"/><!-- configuration files -->
         <pathelement location="${java.dir}"/><!-- resources -->
+        <pathelement location="${test.src.dir}/test-stub"/>
         <pathelement location="${lib.dir}/saxon/saxon9.jar"/>
         <pathelement location="${lib.dir}/saxon/saxon9-dom.jar"/>
         <pathelement location="${lib.dir}/xercesImpl.jar"/>

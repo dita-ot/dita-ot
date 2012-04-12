@@ -30,7 +30,7 @@ import org.xml.sax.SAXException;
 
 public class TestTopicMergeModule {
 
-    private final File resourceDir = new File(TestUtils.testStub, TestTopicMergeModule.class.getSimpleName());
+    final File resourceDir = TestUtils.getResourceDir(TestTopicMergeModule.class);
     private File tempDir;
 
     public TopicMergeModule module;

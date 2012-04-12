@@ -39,7 +39,7 @@ import org.junit.Test;
 
 public class MapMetaReaderTest {
 
-    private static final File resourceDir = new File(TestUtils.testStub, MapMetaReaderTest.class.getSimpleName());
+    private static final File resourceDir = TestUtils.getResourceDir(MapMetaReaderTest.class);
     private static final File srcDir = new File(resourceDir, "src");
     private static final File expDir = new File(resourceDir, "exp");
     private static File tempDir;

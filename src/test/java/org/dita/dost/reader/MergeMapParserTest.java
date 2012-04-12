@@ -28,7 +28,7 @@ import org.junit.Test;
 
 public class MergeMapParserTest {
 
-    private final File resourceDir = new File(TestUtils.testStub, MergeMapParserTest.class.getSimpleName());
+    final File resourceDir = TestUtils.getResourceDir(MergeMapParserTest.class);
     private final File srcDir = new File(resourceDir, "src");
     private final File expDir = new File(resourceDir, "exp");
 

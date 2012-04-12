@@ -18,6 +18,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Writer;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
@@ -44,6 +46,25 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class TestUtils {
 
     public static final File testStub = new File("src" + File.separator + "test" + File.separator + "test-stub");
+    
+    /**
+     * Get test resource directory
+     * 
+     * @param testClass test class
+     * @return resource directory
+     * @throws RuntimeException if retrieving the directory failed
+     */
+    public static File getResourceDir(final Class<?> testClass) throws RuntimeException {
+        final URL dir = ClassLoader.getSystemResource(testClass.getSimpleName());
+        if (dir == null) {
+            throw new RuntimeException("Failed to find resource for " + testClass.getSimpleName());
+        }
+        try {
+            return new File(dir.toURI());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException("Failed to find resource for " + testClass.getSimpleName() + ":" + e.getMessage(), e);
+        }
+    }
     
     /**
      * Create temporary directory based on test class.

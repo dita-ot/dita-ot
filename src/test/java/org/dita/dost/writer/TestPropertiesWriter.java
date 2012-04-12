@@ -19,6 +19,7 @@ import java.util.Properties;
 import org.dita.dost.TestUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
+import org.dita.dost.platform.DescParserTest;
 import org.dita.dost.util.Constants;
 
 import org.dita.dost.writer.PropertiesWriter;
@@ -33,7 +34,7 @@ import static org.junit.Assert.assertEquals;
 public class TestPropertiesWriter {
 
     private File tempDir;
-    private final File resourceDir = new File(TestUtils.testStub + File.separator + "TestPropertiesWriter");
+    private final File resourceDir = TestUtils.getResourceDir(TestPropertiesWriter.class);
 
     private File outputFile;
     private File xmlDitalist;
