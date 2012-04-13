@@ -9,7 +9,7 @@
   <variable id="Body first footer"/>
   <variable id="Body first header"/>
   <variable id="Body odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
-  <variable id="Body even header"><param ref-name="pagenum"/>>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
+  <variable id="Body even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
   <variable id="Preface odd footer"/>
   <variable id="Preface even footer"/>
   <variable id="Preface first footer"/>
