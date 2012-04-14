@@ -69,19 +69,17 @@
 
   <target name="build-java" depends="compile"/>
   <target name="compile" depends="init-java" description="Compile Java">
-    <!-- Copying the files to a build directory before we modify the files -->
-    <copy todir="${build.dir}">
-      <fileset dir="${java.dir}" excludes="com/**,org/dita/dost/junit/**"/>
-    </copy>
-    <javac srcdir="${build.dir}" destdir="${bin.dir}"
-      excludes="com/**,org/dita/dost/junit/**, org/dita/dost/invoker/JavaInvoker.java" debug="on"
-      source="1.5" target="1.5">
+    <javac srcdir="${java.dir}" destdir="${bin.dir}"
+           debug="on"
+           source="1.5" target="1.5">
+      <exclude name="org/dita/dost/invoker/JavaInvoker.java"/>
       <classpath>
+        <pathelement location="${lib.dir}/xercesImpl.jar"/>
+        <pathelement location="${lib.dir}/xml-apis.xml"/>
         <pathelement location="${lib.dir}/resolver.jar"/>
         <pathelement location="${lib.dir}/commons-codec-1.4.jar"/>
       </classpath>
     </javac>
-    <delete dir="${build.dir}" includeemptydirs="yes"/>
   </target>
 
   <target name="package-java" depends="jar"/>
@@ -458,7 +456,7 @@
   <property name="test.log.dir" location="${test.src.dir}/log"/>
   <property name="test.suite.dir" location="${test.src.dir}/testsuite"/>
 
-  <target name="test-compile">
+  <target name="test-compile" depends="compile">
     <delete failonerror="false">
       <fileset dir="${test.bin.dir}" erroronmissingdir="false"/>
     </delete>
@@ -472,6 +470,7 @@
       </src>
       <classpath>
         <pathelement location="${bin.dir}"/>
+        <pathelement location="${lib.dir}/resolver.jar"/>
         <pathelement location="${test.lib.dir}/junit-4.8.2.jar"/>
         <pathelement location="${test.lib.dir}/htmlparser-1.3.1.jar"/>
         <pathelement location="${test.lib.dir}/xmlunit-1.3.jar"/>
