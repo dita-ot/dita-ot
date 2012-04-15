@@ -126,6 +126,7 @@
           <li>2796964 For PDF output, xml:lang does not work at the element level (milestone 4)</li>
           <li>3493239 Support localization of quotation marks in quote (milestone 4)</li>
           <li>3517104 Remove support for args.message.file (milestone 4)</li>
+          <li>3518180 Add automatic font detection to PDF2 (milestone 4)</li>
           <li>3466842 Refactor preprocessing to use SAX filters (in progress)</li>
           <li>3468864 Remove Content object (in progress)</li>
           <li>3460151 Use Job to read/write job configuration files (in progress)</li>

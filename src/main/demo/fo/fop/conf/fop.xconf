@@ -48,6 +48,8 @@ the location of this file.
       </filterList>
 
       <fonts>
+        <!-- automatically detect operating system installed fonts -->
+        <auto-detect/>
         <!-- embedded fonts -->
         <!--
         This information must exactly match the font specified
