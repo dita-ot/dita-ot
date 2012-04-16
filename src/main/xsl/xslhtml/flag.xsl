@@ -951,13 +951,10 @@
     <xsl:call-template name="revstyle-deprecated"/>
   </xsl:when>
   <xsl:when test="exsl:node-set($flagrules)/revprop[@color or @backcolor]">
-   <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-     <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-   </xsl:variable>
    <font>
-    <xsl:call-template name="gen-style"/>
+    <xsl:call-template name="gen-style">
+      <xsl:with-param name="flagrules" select="$flagrules"/>
+    </xsl:call-template>
     <xsl:apply-templates/>
    </font>
   </xsl:when>
