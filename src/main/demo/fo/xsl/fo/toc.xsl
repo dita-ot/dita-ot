@@ -60,7 +60,9 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="toc">
         <xsl:param name="include"/>
-        <xsl:variable name="topicLevel" select="count(ancestor-or-self::*[contains(@class, ' topic/topic ')])"/>
+        <xsl:variable name="topicLevel" as="xs:integer">
+          <xsl:apply-templates select="." mode="get-topic-level"/>
+        </xsl:variable>
         <xsl:if test="$topicLevel &lt; $tocMaximumLevel">
             <xsl:variable name="mapTopicref" select="key('map-id', @id)[1]"/>
             <xsl:choose>
