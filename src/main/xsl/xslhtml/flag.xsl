@@ -811,63 +811,45 @@
 <!-- Output starting & ending flag for "blocked" text.
      Use instead of 'apply-templates' for block areas (P, Note, DD, etc) -->
 <xsl:template name="revblock">
- <xsl:param name="flagrules">
-   <xsl:call-template name="getrules"/>
- </xsl:param>
+ <xsl:param name="flagrules"><xsl:call-template name="getrules"/></xsl:param>
+ <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
  <xsl:choose>
-  <xsl:when test="@rev and not($FILTERFILE='') and ($DRAFT='yes')"> <!-- draft rev mode, add div w/ rev attr value -->
-    <xsl:variable name="revtest"> 
-     <xsl:call-template name="find-active-rev-flag">
-      <xsl:with-param name="allrevs" select="@rev"/>
-     </xsl:call-template>
-    </xsl:variable>
-    <xsl:choose>
-     <xsl:when test="$revtest=1">
-      <div class="{@rev}">
+   <xsl:when test="$revtest=1"> <!-- rev mode with draft -->
+    <div class="{@rev}">
       <xsl:call-template name="start-mark-rev">
-       <xsl:with-param name="revvalue" select="@rev"/>
-       <xsl:with-param name="flagrules" select="$flagrules"/> 
+         <xsl:with-param name="revvalue" select="@rev"/>
+         <xsl:with-param name="flagrules" select="$flagrules"/> 
       </xsl:call-template>
       <xsl:apply-templates/>
       <xsl:call-template name="end-mark-rev">
+        <xsl:with-param name="revvalue" select="@rev"/>
+        <xsl:with-param name="flagrules" select="$flagrules"/> 
+      </xsl:call-template>
+    </div>
+   </xsl:when>
+   <xsl:when test="@rev and not($FILTERFILE='')">    <!-- normal rev mode -->
+     <xsl:call-template name="start-mark-rev">
        <xsl:with-param name="revvalue" select="@rev"/>
        <xsl:with-param name="flagrules" select="$flagrules"/> 
-      </xsl:call-template>
-      </div>
-     </xsl:when>
-     <xsl:otherwise>
-      <xsl:apply-templates/>
-     </xsl:otherwise>
-    </xsl:choose>
-  </xsl:when>
-  <xsl:when test="@rev and not($FILTERFILE='')">    <!-- normal rev mode -->
-   <xsl:call-template name="start-mark-rev">
-    <xsl:with-param name="revvalue" select="@rev"/>
-    <xsl:with-param name="flagrules" select="$flagrules"/> 
-   </xsl:call-template>
-   <xsl:apply-templates/>
-   <xsl:call-template name="end-mark-rev">
-    <xsl:with-param name="revvalue" select="@rev"/>
-    <xsl:with-param name="flagrules" select="$flagrules"/> 
-   </xsl:call-template>
-  </xsl:when>
-  <xsl:otherwise><xsl:apply-templates/></xsl:otherwise>  <!-- rev mode -->
+     </xsl:call-template>
+     <xsl:apply-templates/>
+     <xsl:call-template name="end-mark-rev">
+       <xsl:with-param name="revvalue" select="@rev"/>
+       <xsl:with-param name="flagrules" select="$flagrules"/> 
+     </xsl:call-template>
+   </xsl:when>
+   <xsl:otherwise>
+     <xsl:apply-templates/>
+   </xsl:otherwise>
  </xsl:choose>
 </xsl:template>
 
 <!-- Output starting & ending flag & color for phrase text.
      Use instead of 'apply-templates' for phrase areas (PH, B, DT, etc) -->
 <xsl:template name="revtext">
- <xsl:param name="flagrules">
-   <xsl:call-template name="getrules"/>
- </xsl:param>
- <xsl:variable name="revtest">
-   <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')"> 
-     <xsl:call-template name="find-active-rev-flag">               
-       <xsl:with-param name="allrevs" select="@rev"/>
-     </xsl:call-template>
-   </xsl:if>
- </xsl:variable>
+ <xsl:param name="flagrules"><xsl:call-template name="getrules"/></xsl:param>
+ <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
+
 <xsl:choose>
   <xsl:when test="$revtest=1">   <!-- Rev is active - add the SPAN -->
    <span class="{@rev}">
@@ -1130,11 +1112,19 @@
  </img>
 </xsl:template>
 
+<!-- Shortcut for old multi-line calls to find-active-rev-flag.
+     Return 1 for active revision when draft is on, return 0 otherwise. -->
+<xsl:template match="*" mode="mark-revisions-for-draft">
+  <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
+    <xsl:call-template name="find-active-rev-flag"/>
+  </xsl:if>
+</xsl:template>
+
 <!-- Use @rev to find the first active flagged revision.
      Return 1 for active.
      Return 0 for non-active. -->
 <xsl:template name="find-active-rev-flag">
-  <xsl:param name="allrevs"/>
+  <xsl:param name="allrevs" select="@rev"/>
 
   <!-- Determine the first rev value, which is the value before the first space -->
   <xsl:variable name="firstrev">

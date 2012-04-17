@@ -257,20 +257,8 @@
     <xsl:apply-templates select="." mode="start-stentry-flagging">
       <xsl:with-param name="flagrules" select="$flagrules"/>
     </xsl:apply-templates>
-    <xsl:variable name="revtest">
-      <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')"> 
-        <xsl:call-template name="find-active-rev-flag">               
-          <xsl:with-param name="allrevs" select="@rev"/>
-        </xsl:call-template>
-      </xsl:if>
-    </xsl:variable>
-    <xsl:variable name="revtest-row">
-      <xsl:if test="../@rev and not($FILTERFILE='') and ($DRAFT='yes')"> 
-        <xsl:call-template name="find-active-rev-flag">               
-          <xsl:with-param name="allrevs" select="../@rev"/>
-        </xsl:call-template>
-      </xsl:if>
-    </xsl:variable>
+    <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
+    <xsl:variable name="revtest-row"><xsl:apply-templates select="parent::*" mode="mark-revisions-for-draft"/></xsl:variable>
     <xsl:choose>
      <xsl:when test="$thiscolnum=$localkeycol and $revtest-row=1">
       <strong><span class="{../@rev}">
