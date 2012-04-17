@@ -22,6 +22,12 @@
               href="https://tools.ietf.org/html/bcp47" scope="external">Tags for the Identification
               of Languages</xref>.</stentry>
         </strow>
+        <strow><stentry><codeph>generate-debug-attributes</codeph></stentry><stentry>Generate <codeph>xtrf</codeph> and <codeph>xtrc</codeph> debug attributes. Allowed values are<ul>
+              <li>"true" (default) — debug attribute generation is enabled</li>
+              <li>"false" — debug attribute generation is disabled</li>
+            </ul><note>Disabling debug attributes will reduce the temporary file size and memory
+              consumption. However, log messages will no longer have the source information
+              available and the ability to debug problems may deteriorate.</note></stentry></strow>
       </simpletable>
     </section>
     <section>

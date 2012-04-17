@@ -33,6 +33,7 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.reader.GrammarPoolManager;
 import org.dita.dost.util.CatalogUtils;
+import org.dita.dost.util.Configuration;
 import org.dita.dost.util.DITAAttrUtils;
 import org.dita.dost.util.DelayConrefUtils;
 import org.dita.dost.util.FileUtils;
@@ -80,6 +81,9 @@ public final class DitaWriter extends AbstractXMLWriter {
     public static final String PI_WORKDIR_TARGET = "workdir";
     /** To check the URL of href in topicref attribute */
     private static final String NOT_LOCAL_URL = COLON_DOUBLE_SLASH;
+    
+    /** Generate {@code xtrf} and {@code xtrc} attributes */
+    private final boolean genDebugInfo;
     
     //Added on 2010-08-24 for bug:3086552 start
     private boolean setSystemid = true;
@@ -336,6 +340,9 @@ public final class DitaWriter extends AbstractXMLWriter {
      */
     public DitaWriter() {
         super();
+        
+        genDebugInfo = Boolean.parseBoolean(Configuration.configuration.get("generate-debug-attributes"));
+        
         exclude = false;
         columnNumber = 1;
         columnNumberEnd = 0;
@@ -1179,8 +1186,10 @@ public final class DitaWriter extends AbstractXMLWriter {
                     // write the xtrf and xtrc attributes which contain debug
                     // information if it is dita elements (elements not in foreign/unknown)
                     if (foreignLevel <= 1){
-                        copyAttribute(ATTRIBUTE_NAME_XTRF, traceFilename.getAbsolutePath());
-                        copyAttribute(ATTRIBUTE_NAME_XTRC, qName + COLON + nextValue.toString());
+                        if (genDebugInfo) {
+                            copyAttribute(ATTRIBUTE_NAME_XTRF, traceFilename.getAbsolutePath());
+                            copyAttribute(ATTRIBUTE_NAME_XTRC, qName + COLON + nextValue.toString());
+                        }
                     }
                     output.write(GREATER_THAN);
 

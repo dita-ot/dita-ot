@@ -142,6 +142,7 @@
           <li>3487941 Improve pipeline module processing (in progress)</li>
           <li>3487222 Avoid strings where other types are more appropriate (in progress)</li>
           <li>3497122 Document error messages in user guide (in progress)</li>
+          <li>3518688 Add ability to disable debug attribute generation (in progress)</li>
         </ul>
       </section>
       <section>
