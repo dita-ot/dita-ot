@@ -6,7 +6,7 @@ The DITA Open Toolkit, or DITA-OT for short, is an open source tool that provide
 Prerequisites
 -------------
 
-In order to build DITA-OT, you’ll need:
+In order to build and use DITA-OT, you’ll need:
 
 * Java Development Kit 5.0 or newer
 * Apache Ant 1.7.1 or newer.
@@ -21,7 +21,7 @@ Building
      
 3. Run plug-in installation:
 
-        ant -f src/main/integration.xml
+        ant -f src/main/integrator.xml
 
 Usage
 -----
@@ -42,3 +42,8 @@ Usage
         ant [options]
         
    See [documention](http://dita-ot.sourceforge.net/latest/) for arguments and options.
+
+License
+-------
+
+The DITA Open Toolkit is licensed for use, at the user's election, under the [Common Public License](http://www.opensource.org/licenses/cpl1.0.php) 1.0 (CPL) or [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0).

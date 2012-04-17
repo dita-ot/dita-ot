@@ -1,28 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project default="generate-sf">
 
-  <import file="${basedir}/buildPackage.xml"/>
+  <import file="${basedir}/build.xml"/>
 
   <condition property="type-class" value="milestone" else="">
     <contains string="${version}" substring="M" casesensitive="true"/>
   </condition>
+  <condition property="version-id" value="dev" else="${version}">
+    <contains string="${version}" substring="M" casesensitive="true"/>
+  </condition>
 
   <target name="generate-sf">
-    <ant antfile="${basedir}/build.xml">
+    <ant antfile="${basedir}/src/main/build.xml">
       <property name="args.input" location="${doc.dir}/sourceforge/sourceforge.ditamap"/>
-      <property name="output.dir" location="${basedir}/out"/>
+      <property name="output.dir" location="${basedir}/target/site"/>
       <property name="transtype" value="net.sourceforge.dita-ot.html"/>
       <property name="base.temp.dir" location="${work.dir}"/>
     </ant>
-    <ant antfile="${basedir}/build.xml">
+    <ant antfile="${basedir}/src/main/build.xml">
       <property name="args.input" location="${doc.dir}/userguide.ditamap"/>
-      <property name="output.dir" location="${basedir}/out/${version}"/>
+      <property name="output.dir" location="${basedir}/target/site/${version-id}"/>
       <property name="transtype" value="tocjs"/>
       <property name="args.csspath" value="css"/>
       <property name="base.temp.dir" location="${work.dir}"/>
       <property name="args.hide.parent.link" value="yes"/>
     </ant>
-    <echoxml file="${basedir}/out/${version}/header.html">
+    <!--echoxml file="${basedir}/target/site/${version}/header.html">
       <html>
         <head>
           <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -33,8 +36,8 @@
           <h1 class="${type-class}">DITA Open Toolkit ${version} Documentation</h1>
         </body>
       </html>
-    </echoxml>
-    <echoxml file="${basedir}/out/${version}/index.html">
+    </echoxml-->
+    <echoxml file="${basedir}/target/site/${version-id}/index.html">
       <html>
         <head>
           <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -42,7 +45,7 @@
           <link rel="stylesheet" type="text/css" href="commonltr.css"/>
         </head>
         <frameset rows="40,*">
-          <frame name="tocwin" src="header.html" scrolling="no" frameborder="0"/>
+          <frame name="tocwin" src="/header.php?version=${version-id}" scrolling="no" frameborder="0"/>
           <frameset cols="300,*">
             <frame name="tocwin" src="tocnav.html" frameborder="0"/>
             <frame name="contentwin" src="DITA-OTProjectHome.html" frameborder="0"/>
@@ -50,7 +53,7 @@
         </frameset>
       </html>
     </echoxml>
-    <echo append="true" file="${basedir}/out/${version}/css/commonltr.css">
+    <echo append="true" file="${basedir}/target/site/${version-id}/css/commonltr.css">
       @import url('http://fonts.googleapis.com/css?family=Droid+Sans:regular,bold');
       
       body {
