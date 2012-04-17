@@ -684,13 +684,17 @@ public final class Constants {
     @Deprecated
     public static final String ELEMENT_NAME_PLATFORM = TOPIC_PLATFORM.localName;
     /**product element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_PRODUCT = "product";
     /**otherprops element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_OTHERPROPS = "otherprops";
     //Added by William on 2010-07-16 for bug:3030317 start
     /**props element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_PROPS = "props";
     /**rev element.*/
+    @Deprecated
     public static final String ELEMENT_NAME_REV = "rev";
     //Added by William on 2010-07-16 for bug:3030317 start
     /**tgroup element.*/
@@ -787,6 +791,14 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_DOMAINS = "domains";
     /**props attribute.*/
     public static final String ATTRIBUTE_NAME_PROPS = "props";
+    /**audience attribute.*/
+    public static final String ATTRIBUTE_NAME_AUDIENCE = "audience";
+    /**platform attribute.*/
+    public static final String ATTRIBUTE_NAME_PLATFORM = "platform";
+    /**product attribute.*/
+    public static final String ATTRIBUTE_NAME_PRODUCT = "product";
+    /**otherprops attribute.*/
+    public static final String ATTRIBUTE_NAME_OTHERPROPS = "otherprops";
     /**scope attribute.*/
     public static final String ATTRIBUTE_NAME_SCOPE = "scope";
     /**type attribute.*/

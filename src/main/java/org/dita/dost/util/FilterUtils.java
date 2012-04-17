@@ -81,17 +81,17 @@ public final class FilterUtils {
             return false;
         }
 
-        ret = checkExclude(TOPIC_AUDIENCE.localName,
-                atts.getValue(TOPIC_AUDIENCE.localName))
-                || checkExclude(TOPIC_PLATFORM.localName,
-                        atts.getValue(TOPIC_PLATFORM.localName))
-                        || checkExclude(ELEMENT_NAME_PRODUCT,
-                                atts.getValue(ELEMENT_NAME_PRODUCT))
-                                || checkExclude(ELEMENT_NAME_OTHERPROPS,
-                                        atts.getValue(ELEMENT_NAME_OTHERPROPS))
+        ret = checkExclude(ATTRIBUTE_NAME_AUDIENCE,
+                atts.getValue(ATTRIBUTE_NAME_AUDIENCE))
+                || checkExclude(ATTRIBUTE_NAME_PLATFORM,
+                        atts.getValue(ATTRIBUTE_NAME_PLATFORM))
+                        || checkExclude(ATTRIBUTE_NAME_PRODUCT,
+                                atts.getValue(ATTRIBUTE_NAME_PRODUCT))
+                                || checkExclude(ATTRIBUTE_NAME_OTHERPROPS,
+                                        atts.getValue(ATTRIBUTE_NAME_OTHERPROPS))
                                         //Added by William on 2010-07-16 for bug:3030317 start
-                                        || checkExclude(ELEMENT_NAME_PROPS,
-                                                atts.getValue(ELEMENT_NAME_PROPS));
+                                        || checkExclude(ATTRIBUTE_NAME_PROPS,
+                                                atts.getValue(ATTRIBUTE_NAME_PROPS));
         //Added by William on 2010-07-16 for bug:3030317 end
 
         if(extProps == null){
