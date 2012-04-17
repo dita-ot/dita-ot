@@ -479,14 +479,10 @@
   
 <div class="section">
  <xsl:call-template name="commonattributes"/>
- <xsl:call-template name="gen-style">
-   <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
- </xsl:call-template>
+ <xsl:call-template name="gen-style"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
  <xsl:call-template name="gen-toc-id"/>
  <xsl:call-template name="setidaname"/>
-  <xsl:call-template name="start-flagit">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-  </xsl:call-template>
+ <xsl:call-template name="start-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
  <xsl:variable name="revtest">
    <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')"> 
      <xsl:call-template name="find-active-rev-flag">
@@ -502,9 +498,7 @@
     <xsl:apply-templates select="."  mode="section-fmt" />
    </xsl:otherwise>
  </xsl:choose>
-  <xsl:call-template name="end-flagit">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-  </xsl:call-template>
+  <xsl:call-template name="end-flagit"><xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param></xsl:call-template>
 </div><xsl:value-of select="$newline"/>
 </xsl:template>
 
@@ -666,13 +660,9 @@
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class" select="$type"/>
     </xsl:call-template>
-    <xsl:call-template name="gen-style">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
+    <xsl:call-template name="gen-style"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
     <xsl:call-template name="setidaname"/>
-    <xsl:call-template name="start-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-    </xsl:call-template>
+    <xsl:call-template name="start-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
     <span class="{$type}title">
       <xsl:value-of select="$title"/>
       <xsl:call-template name="getString">
@@ -681,11 +671,9 @@
     </span>
     <xsl:text> </xsl:text>
     <xsl:call-template name="revblock">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
+      <xsl:with-param name="flagrules" select="$flagrules"/>
     </xsl:call-template>
-    <xsl:call-template name="end-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-    </xsl:call-template>
+    <xsl:call-template name="end-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
   </div>
 </xsl:template>
 
@@ -751,9 +739,7 @@
     <xsl:call-template name="commonattributes"/>
     <xsl:attribute name="class">cautiontitle</xsl:attribute>
     <xsl:call-template name="setidaname"/>    
-    <xsl:call-template name="start-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-    </xsl:call-template>
+    <xsl:call-template name="start-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
     <xsl:call-template name="getString">
       <xsl:with-param name="stringName" select="'Caution'"/>
     </xsl:call-template>
@@ -765,15 +751,11 @@
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class" select="'caution'"/>
     </xsl:call-template>
-    <xsl:call-template name="gen-style">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
+    <xsl:call-template name="gen-style"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
     <xsl:call-template name="revblock">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
+      <xsl:with-param name="flagrules" select="$flagrules"/>
     </xsl:call-template>
-    <xsl:call-template name="end-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-    </xsl:call-template>
+    <xsl:call-template name="end-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
   </div>  
 </xsl:template>
 
@@ -785,9 +767,7 @@
     <xsl:call-template name="commonattributes"/>
     <xsl:attribute name="class">dangertitle</xsl:attribute>
     <xsl:call-template name="setidaname"/>
-    <xsl:call-template name="start-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-    </xsl:call-template>
+    <xsl:call-template name="start-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
     <xsl:call-template name="getString">
       <xsl:with-param name="stringName" select="'Danger'"/>
     </xsl:call-template>
@@ -796,15 +776,11 @@
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class" select="'danger'"/>
     </xsl:call-template>
-    <xsl:call-template name="gen-style">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
+    <xsl:call-template name="gen-style"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
     <xsl:call-template name="revblock">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
+      <xsl:with-param name="flagrules" select="$flagrules"/>
     </xsl:call-template>
-    <xsl:call-template name="end-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-    </xsl:call-template>
+    <xsl:call-template name="end-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
   </div>
 </xsl:template>
 
@@ -817,13 +793,9 @@
   </xsl:variable>
 <blockquote>
   <xsl:call-template name="commonattributes"/>
-  <xsl:call-template name="gen-style">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-  </xsl:call-template>
+  <xsl:call-template name="gen-style"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
   <xsl:call-template name="setidaname"/>
-  <xsl:call-template name="start-flagit">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-  </xsl:call-template>
+  <xsl:call-template name="start-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
  <xsl:variable name="revtest">
    <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')"> 
      <xsl:call-template name="find-active-rev-flag">
@@ -839,9 +811,7 @@
     <xsl:apply-templates select="."  mode="lq-fmt" />
    </xsl:otherwise>
  </xsl:choose>
-  <xsl:call-template name="end-flagit">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-  </xsl:call-template>
+  <xsl:call-template name="end-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
 </blockquote><xsl:value-of select="$newline"/>
 </xsl:template>
 
@@ -943,9 +913,7 @@
      <!--br/-->
   <!-- edited by William on 2009-06-16 for bullet bug:2782503 end-->
   
-  <xsl:call-template name="start-flagit">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-  </xsl:call-template>
+  <xsl:call-template name="start-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
   <xsl:choose> <!-- draft rev mode, add div w/ rev attr value -->
    <xsl:when test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
     <xsl:variable name="revtest"> <!-- Flag the revision? 1=yes; 0=no -->
@@ -969,30 +937,19 @@
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/sl ')]" mode="sl-fmt">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-  <xsl:call-template name="start-revflag">
-    <xsl:with-param name="flagrules" select="$flagrules"/>
-  </xsl:call-template>
+  <xsl:variable name="flagrules"><xsl:call-template name="getrules"/></xsl:variable>
+  <xsl:call-template name="start-revflag"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
 <xsl:call-template name="setaname"/>
 <ul class="simple">
   <xsl:call-template name="commonattributes">
     <xsl:with-param name="default-output-class" select="'simple'"/>
   </xsl:call-template>
-  <xsl:call-template name="gen-style">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-  </xsl:call-template>
+  <xsl:call-template name="gen-style"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
   <xsl:apply-templates select="@compact"/>
   <xsl:call-template name="setid"/>
   <xsl:apply-templates/>
 </ul>
-  <xsl:call-template name="end-revflag">
-    <xsl:with-param name="flagrules" select="$flagrules"/>
-  </xsl:call-template>
-  <xsl:call-template name="end-flagit">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-  </xsl:call-template>
+  <xsl:call-template name="end-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
 <xsl:value-of select="$newline"/>
 </xsl:template>
 
@@ -1098,15 +1055,11 @@
   <xsl:if test="$itemgroupcount&gt;'1'">
     <xsl:text> </xsl:text>
   </xsl:if>
-  <xsl:call-template name="start-flagit">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-  </xsl:call-template>
+  <xsl:call-template name="start-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
   <xsl:call-template name="revtext">
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
   </xsl:call-template>
-  <xsl:call-template name="end-flagit">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-  </xsl:call-template>
+  <xsl:call-template name="end-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
 </xsl:template>
 
 <!-- =========== DEFINITION LIST =========== -->
@@ -1187,9 +1140,7 @@
       <xsl:call-template name="parent-id"/>
     </xsl:if>
     <!-- handle non-compact DLs dl/dlentry/dt-->
-    <xsl:call-template name="start-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-    </xsl:call-template>
+    <xsl:call-template name="start-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
     <xsl:call-template name="start-revflag-parent">
       <xsl:with-param name="flagrules" select="$flagrules"/>
     </xsl:call-template>
@@ -1199,9 +1150,7 @@
     <xsl:call-template name="end-revflag-parent">
       <xsl:with-param name="flagrules" select="$flagrules"/>
     </xsl:call-template>
-    <xsl:call-template name="end-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-    </xsl:call-template>
+    <xsl:call-template name="end-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
     <xsl:apply-templates select="." mode="pull-in-title">
       <xsl:with-param name="type" select="' dt '"/>
       <xsl:with-param name="displaytext" select="normalize-space(text())"/>
@@ -1259,9 +1208,7 @@
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
     <xsl:call-template name="setidaname"/>
-    <xsl:call-template name="start-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-    </xsl:call-template>
+    <xsl:call-template name="start-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
     <xsl:call-template name="start-revflag-parent">
       <xsl:with-param name="flagrules" select="$flagrules-parent"/>
     </xsl:call-template>
@@ -1271,9 +1218,7 @@
     <xsl:call-template name="end-revflag-parent">
       <xsl:with-param name="flagrules" select="$flagrules-parent"/>
     </xsl:call-template>
-    <xsl:call-template name="end-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-    </xsl:call-template>
+    <xsl:call-template name="end-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
   </dd>
   <xsl:value-of select="$newline"/>
 </xsl:template>
@@ -1296,9 +1241,7 @@
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="setidaname"/>
-  <xsl:call-template name="start-flagit">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-  </xsl:call-template>
+  <xsl:call-template name="start-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
   <xsl:call-template name="start-revflag-parent">
     <xsl:with-param name="flagrules" select="$flagrules"/>
   </xsl:call-template>
@@ -1310,9 +1253,7 @@
   <xsl:call-template name="end-revflag-parent">
     <xsl:with-param name="flagrules" select="$flagrules"/>
   </xsl:call-template>
-  <xsl:call-template name="end-flagit">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-  </xsl:call-template>
+  <xsl:call-template name="end-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
 </dt><xsl:value-of select="$newline"/>
 </xsl:template>
 
@@ -1329,9 +1270,7 @@
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="setidaname"/>
-  <xsl:call-template name="start-flagit">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-  </xsl:call-template>
+  <xsl:call-template name="start-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
   <xsl:call-template name="start-revflag-parent">
     <xsl:with-param name="flagrules" select="$flagrules"/>
   </xsl:call-template>
@@ -1341,9 +1280,7 @@
   <xsl:call-template name="end-revflag-parent">
     <xsl:with-param name="flagrules" select="$flagrules"/>
   </xsl:call-template>
-  <xsl:call-template name="end-flagit">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-  </xsl:call-template>
+  <xsl:call-template name="end-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
 </dd><xsl:value-of select="$newline"/>
 </xsl:template>
 
@@ -1373,15 +1310,11 @@
         </xsl:call-template>
         <xsl:call-template name="setidaname"/>   
         <xsl:call-template name="flagcheck"/>
-        <xsl:call-template name="start-flagit">
-          <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-        </xsl:call-template>       
+        <xsl:call-template name="start-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>       
         <xsl:call-template name="revtext">
           <xsl:with-param name="flagrules" select="$flagrules"/>
         </xsl:call-template>
-        <xsl:call-template name="end-flagit">
-          <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-        </xsl:call-template>     
+        <xsl:call-template name="end-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>     
       </span>
     </xsl:otherwise>
   </xsl:choose>
@@ -1979,9 +1912,7 @@
     <xsl:otherwise>
      <xsl:choose>
       <xsl:when test="(@placement='break')"><br/>
-        <xsl:call-template name="start-flagit">
-          <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-        </xsl:call-template>
+        <xsl:call-template name="start-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
        <xsl:call-template name="flagcheck"/>
@@ -3264,30 +3195,22 @@
     <xsl:call-template name="getrules"/>
     <xsl:call-template name="getrules-parent"/>
   </xsl:param>
-  <xsl:call-template name="start-flagit">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-  </xsl:call-template>
+  <xsl:call-template name="start-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
   <xsl:call-template name="start-revflag-parent">
     <xsl:with-param name="flagrules" select="$flagrules"/>
   </xsl:call-template>
-  <xsl:call-template name="start-revflag">
-    <xsl:with-param name="flagrules" select="$flagrules"/>
-  </xsl:call-template>
+  <xsl:call-template name="start-revflag"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
 </xsl:template>
 <xsl:template match="*" mode="end-stentry-flagging">
   <xsl:param name="flagrules">
     <xsl:call-template name="getrules"/>
     <xsl:call-template name="getrules-parent"/>
   </xsl:param>
-  <xsl:call-template name="end-revflag">
-    <xsl:with-param name="flagrules" select="$flagrules"/>
-  </xsl:call-template>
+  <xsl:call-template name="end-revflag"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
   <xsl:call-template name="end-revflag-parent">
     <xsl:with-param name="flagrules" select="$flagrules"/>
   </xsl:call-template>
-  <xsl:call-template name="end-flagit">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-  </xsl:call-template>
+  <xsl:call-template name="end-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/stentry ')]" name="topic.stentry">
