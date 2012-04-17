@@ -3140,7 +3140,7 @@
     </xsl:apply-templates>
   </table>
   <xsl:call-template name="end-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
-  </xsl:call-template><xsl:value-of select="$newline"/>
+  <xsl:value-of select="$newline"/>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/strow ')]" name="topic.strow">
