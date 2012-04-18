@@ -18,6 +18,21 @@
   exclude-result-prefixes="exsl dita2html ditamsg">
 
  <!-- ========== Flagging with flags & revisions ========== -->
+
+  <xsl:variable name="documentDomains">
+    <xsl:value-of select="normalize-space(/*[contains(@class,' topic/topic ')]/@domains |
+                                          /dita/*[contains(@class,' topic/topic ')][1]/@domains)"/>
+  </xsl:variable>
+  <xsl:variable name="collectPropsExtensions">
+    <xsl:call-template name="getExtProps">
+      <xsl:with-param name="domains" select="$documentDomains"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <!-- Specialized attributes for analysis by flagging templates. Format is:
+       props attr1,props attr2,props attr3 -->
+  <xsl:variable name="propsExtensions">
+    <xsl:value-of select="substring-after($collectPropsExtensions, ',')"/>
+  </xsl:variable>
  
  <!-- Single template to set flag variables, generate props and revision flagging, and output
   contents. Can be used by any element that does not use any markup between flags and contents. -->
@@ -70,54 +85,45 @@
  -->
 
 <xsl:template name="getrules">
-  <xsl:variable name="domains">
-    <xsl:value-of select="normalize-space(ancestor-or-self::*[contains(@class,' topic/topic ')][1]/@domains)"/>
-  </xsl:variable>
-  <xsl:variable name="tmp_props">
-    <xsl:call-template name="getExtProps">
-      <xsl:with-param name="domains" select="$domains"/>
-    </xsl:call-template>
-  </xsl:variable>
-  <xsl:variable name="props">
-    <xsl:value-of select="substring-after($tmp_props, ',')"/>
-  </xsl:variable>
  <!-- Test for the flagging attributes. If found, call 'gen-prop' with the values to use. Otherwise return -->
-  <xsl:if test="@audience and not($FILTERFILE='')">
-  <xsl:call-template name="gen-prop">
-   <xsl:with-param name="flag-att" select="'audience'"/>
-   <xsl:with-param name="flag-att-val" select="@audience"/>
-  </xsl:call-template>
- </xsl:if>
-  <xsl:if test="@platform and not($FILTERFILE='')">
-  <xsl:call-template name="gen-prop">
-   <xsl:with-param name="flag-att" select="'platform'"/>
-   <xsl:with-param name="flag-att-val" select="@platform"/>
-  </xsl:call-template>
- </xsl:if>
-  <xsl:if test="@product and not($FILTERFILE='')">
-  <xsl:call-template name="gen-prop">
-   <xsl:with-param name="flag-att" select="'product'"/>
-   <xsl:with-param name="flag-att-val" select="@product"/>
-  </xsl:call-template>
- </xsl:if>
-  <xsl:if test="@otherprops and not($FILTERFILE='')">
-  <xsl:call-template name="gen-prop">
-   <xsl:with-param name="flag-att" select="'otherprops'"/>
-   <xsl:with-param name="flag-att-val" select="@otherprops"/>
-  </xsl:call-template>
- </xsl:if>
+  <xsl:if test="normalize-space($FILTERFILE)!=''">
+    <xsl:if test="@audience">
+      <xsl:call-template name="gen-prop">
+        <xsl:with-param name="flag-att" select="'audience'"/>
+        <xsl:with-param name="flag-att-val" select="@audience"/>
+      </xsl:call-template>
+    </xsl:if>
+    <xsl:if test="@platform">
+      <xsl:call-template name="gen-prop">
+        <xsl:with-param name="flag-att" select="'platform'"/>
+        <xsl:with-param name="flag-att-val" select="@platform"/>
+      </xsl:call-template>
+    </xsl:if>
+    <xsl:if test="@product">
+      <xsl:call-template name="gen-prop">
+        <xsl:with-param name="flag-att" select="'product'"/>
+        <xsl:with-param name="flag-att-val" select="@product"/>
+      </xsl:call-template>
+    </xsl:if>
+    <xsl:if test="@otherprops">
+      <xsl:call-template name="gen-prop">
+        <xsl:with-param name="flag-att" select="'otherprops'"/>
+        <xsl:with-param name="flag-att-val" select="@otherprops"/>
+      </xsl:call-template>
+    </xsl:if>
  
- <xsl:if test="@rev and not($FILTERFILE='')">
-  <xsl:call-template name="gen-prop">
-   <xsl:with-param name="flag-att" select="'rev'"/>
-   <xsl:with-param name="flag-att-val" select="@rev"/>
-  </xsl:call-template>
- </xsl:if>
+    <xsl:if test="@rev">
+      <xsl:call-template name="gen-prop">
+        <xsl:with-param name="flag-att" select="'rev'"/>
+        <xsl:with-param name="flag-att-val" select="@rev"/>
+      </xsl:call-template>
+    </xsl:if>
  
-  <xsl:if test="not($props='') and not($FILTERFILE='')">
-    <xsl:call-template name="ext-getrules">
-      <xsl:with-param name="props" select="$props"/>
-    </xsl:call-template>
+    <xsl:if test="$propsExtensions!=''">
+      <xsl:call-template name="ext-getrules">
+        <xsl:with-param name="props" select="$propsExtensions"/>
+      </xsl:call-template>
+    </xsl:if>
   </xsl:if>
 </xsl:template>
 
@@ -243,43 +249,33 @@
 
 <!-- No flagging attrs allowed to process in phrases - output a message when in debug mode. -->
 <xsl:template name="flagcheck">
-  
-  <xsl:variable name="domains">
-    <xsl:value-of select="normalize-space(ancestor-or-self::*[contains(@class,' topic/topic ')][1]/@domains)"/>
-  </xsl:variable>
-  <xsl:variable name="props">
-    <xsl:if test="contains($domains, 'a(props')">
-      <xsl:value-of select="normalize-space(substring-before(substring-after($domains,'a(props'), ')'))"/>
+  <xsl:if test="$DBG='yes' and normalize-space($FILTERFILE)!=''">
+    <xsl:if test="@audience">
+      <xsl:apply-templates select="." mode="ditamsg:cannot-flag-inline-element">
+        <xsl:with-param name="attr-name" select="'audience'"/>
+      </xsl:apply-templates>
     </xsl:if>
-  </xsl:variable>
-  
- <xsl:if test="$DBG='yes' and not($FILTERFILE='')">
-  <xsl:if test="@audience">
-    <xsl:apply-templates select="." mode="ditamsg:cannot-flag-inline-element">
-      <xsl:with-param name="attr-name" select="'audience'"/>
-    </xsl:apply-templates>
+    <xsl:if test="@platform">
+      <xsl:apply-templates select="." mode="ditamsg:cannot-flag-inline-element">
+        <xsl:with-param name="attr-name" select="'platform'"/>
+      </xsl:apply-templates>
+    </xsl:if>
+    <xsl:if test="@product">
+      <xsl:apply-templates select="." mode="ditamsg:cannot-flag-inline-element">
+        <xsl:with-param name="attr-name" select="'product'"/>
+      </xsl:apply-templates>
+    </xsl:if>
+    <xsl:if test="@otherprops">
+      <xsl:apply-templates select="." mode="ditamsg:cannot-flag-inline-element">
+        <xsl:with-param name="attr-name" select="'otherprops'"/>
+      </xsl:apply-templates>
+    </xsl:if>
+    <xsl:if test="$propsExtensions!=''">
+      <xsl:call-template name="ext-flagcheck">
+        <xsl:with-param name="props" select="$propsExtensions"/>
+      </xsl:call-template>
+    </xsl:if>
   </xsl:if>
-  <xsl:if test="@platform">
-    <xsl:apply-templates select="." mode="ditamsg:cannot-flag-inline-element">
-      <xsl:with-param name="attr-name" select="'platform'"/>
-    </xsl:apply-templates>
-  </xsl:if>
-  <xsl:if test="@product">
-    <xsl:apply-templates select="." mode="ditamsg:cannot-flag-inline-element">
-      <xsl:with-param name="attr-name" select="'product'"/>
-    </xsl:apply-templates>
-  </xsl:if>
-  <xsl:if test="@otherprops">
-    <xsl:apply-templates select="." mode="ditamsg:cannot-flag-inline-element">
-      <xsl:with-param name="attr-name" select="'otherprops'"/>
-    </xsl:apply-templates>
-  </xsl:if>
-   <xsl:if test="not($props='')">
-     <xsl:call-template name="ext-flagcheck">
-       <xsl:with-param name="props" select="$props"/>
-     </xsl:call-template>
-   </xsl:if>
- </xsl:if>
 </xsl:template>
 
   <xsl:template name="ext-flagcheck">
@@ -327,56 +323,48 @@
   </xsl:template>
 
 <xsl:template name="getrules-parent">
-  <xsl:variable name="domains">
-    <xsl:value-of select="normalize-space(ancestor::*[contains(@class,' topic/topic ')][1]/@domains)"/>
-  </xsl:variable>
-  <xsl:variable name="props">
-    <xsl:if test="contains($domains, 'a(props')">
-      <xsl:value-of select="normalize-space(substring-before(substring-after($domains,'a(props'), ')'))"/>
-    </xsl:if>
-  </xsl:variable>
-  
  <!-- Test for the flagging attributes on the parent.
    If found and if the filterfile name was passed in,
       call 'gen-prop' with the values to use. Otherwise return -->
-  <xsl:if test="../@audience and not($FILTERFILE='')">
-  <xsl:call-template name="gen-prop">
-   <xsl:with-param name="flag-att" select="'audience'"/>
-   <xsl:with-param name="flag-att-val" select="../@audience"/>
-  </xsl:call-template>
- </xsl:if>
-  <xsl:if test="../@platform and not($FILTERFILE='')">
-  <xsl:call-template name="gen-prop">
-   <xsl:with-param name="flag-att" select="'platform'"/>
-   <xsl:with-param name="flag-att-val" select="../@platform"/>
-  </xsl:call-template>
- </xsl:if>
-  <xsl:if test="../@product and not($FILTERFILE='')">
-  <xsl:call-template name="gen-prop">
-   <xsl:with-param name="flag-att" select="'product'"/>
-   <xsl:with-param name="flag-att-val" select="../@product"/>
-  </xsl:call-template>
- </xsl:if>
-  <xsl:if test="../@otherprops and not($FILTERFILE='')">
-  <xsl:call-template name="gen-prop">
-   <xsl:with-param name="flag-att" select="'otherprops'"/>
-   <xsl:with-param name="flag-att-val" select="../@otherprops"/>
-  </xsl:call-template>
- </xsl:if>
+  <xsl:if test="normalize-space($FILTERFILE)!=''">
+    <xsl:if test="../@audience">
+      <xsl:call-template name="gen-prop">
+        <xsl:with-param name="flag-att" select="'audience'"/>
+        <xsl:with-param name="flag-att-val" select="../@audience"/>
+      </xsl:call-template>
+    </xsl:if>
+    <xsl:if test="../@platform">
+      <xsl:call-template name="gen-prop">
+        <xsl:with-param name="flag-att" select="'platform'"/>
+        <xsl:with-param name="flag-att-val" select="../@platform"/>
+      </xsl:call-template>
+    </xsl:if>
+    <xsl:if test="../@product">
+      <xsl:call-template name="gen-prop">
+        <xsl:with-param name="flag-att" select="'product'"/>
+        <xsl:with-param name="flag-att-val" select="../@product"/>
+      </xsl:call-template>
+    </xsl:if>
+    <xsl:if test="../@otherprops">
+      <xsl:call-template name="gen-prop">
+        <xsl:with-param name="flag-att" select="'otherprops'"/>
+        <xsl:with-param name="flag-att-val" select="../@otherprops"/>
+      </xsl:call-template>
+    </xsl:if>
  
- <xsl:if test="../@rev and not(@rev) and not($FILTERFILE='')">
-  <xsl:call-template name="gen-prop">
-   <xsl:with-param name="flag-att" select="'rev'"/>
-   <xsl:with-param name="flag-att-val" select="../@rev"/>
-  </xsl:call-template>
- </xsl:if>
+    <xsl:if test="../@rev and not(@rev)">
+      <xsl:call-template name="gen-prop">
+        <xsl:with-param name="flag-att" select="'rev'"/>
+        <xsl:with-param name="flag-att-val" select="../@rev"/>
+      </xsl:call-template>
+    </xsl:if>
  
-  <xsl:if test="not($props='') and not($FILTERFILE='')">
-    <xsl:call-template name="ext-getrules-parent">
-      <xsl:with-param name="props" select="$props"/>
-    </xsl:call-template>
+    <xsl:if test="$propsExtensions!=''">
+      <xsl:call-template name="ext-getrules-parent">
+        <xsl:with-param name="props" select="$propsExtensions"/>
+      </xsl:call-template>
+    </xsl:if>
   </xsl:if>
- 
 </xsl:template>
 
   <xsl:template name="ext-getrules-parent">
