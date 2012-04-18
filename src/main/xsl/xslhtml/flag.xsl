@@ -58,13 +58,7 @@
   <xsl:variable name="flagrules">
    <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-   <xsl:call-template name="conflict-check">
-    <xsl:with-param name="flagrules" select="$flagrules"/>
-   </xsl:call-template>
-  </xsl:variable>
   <xsl:call-template name="gen-style">
-   <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="start-flagit">
@@ -818,7 +812,7 @@
    <xsl:when test="@rev and not($FILTERFILE='')">    <!-- normal rev mode -->
      <xsl:call-template name="start-mark-rev">
        <xsl:with-param name="revvalue" select="@rev"/>
-       <xsl:with-param name="flagrules" select="$flagrules"/> 
+       <xsl:with-param name="flagrules" select="$flagrules"/>
      </xsl:call-template>
      <xsl:apply-templates/>
      <xsl:call-template name="end-mark-rev">
@@ -843,22 +837,22 @@
    <span class="{@rev}">
    <xsl:call-template name="start-mark-rev">
     <xsl:with-param name="revvalue" select="@rev"/>
-    <xsl:with-param name="flagrules" select="$flagrules"/> 
+    <xsl:with-param name="flagrules" select="$flagrules"/>
    </xsl:call-template>
    <xsl:call-template name="revstyle">
     <xsl:with-param name="revvalue" select="@rev"/>
-    <xsl:with-param name="flagrules" select="$flagrules"/> 
+    <xsl:with-param name="flagrules" select="$flagrules"/>
    </xsl:call-template>
    <xsl:call-template name="end-mark-rev">
     <xsl:with-param name="revvalue" select="@rev"/>
-    <xsl:with-param name="flagrules" select="$flagrules"/> 
+    <xsl:with-param name="flagrules" select="$flagrules"/>
    </xsl:call-template>
    </span>
   </xsl:when>
   <xsl:when test="@rev and not($FILTERFILE='')">         <!-- normal rev mode -->
    <xsl:call-template name="start-mark-rev">
     <xsl:with-param name="revvalue" select="@rev"/>
-    <xsl:with-param name="flagrules" select="$flagrules"/> 
+    <xsl:with-param name="flagrules" select="$flagrules"/>
    </xsl:call-template>
    <xsl:call-template name="revstyle">
     <xsl:with-param name="revvalue" select="@rev"/>
@@ -866,7 +860,7 @@
    </xsl:call-template>
    <xsl:call-template name="end-mark-rev">
     <xsl:with-param name="revvalue" select="@rev"/>
-    <xsl:with-param name="flagrules" select="$flagrules"/> 
+    <xsl:with-param name="flagrules" select="$flagrules"/>
    </xsl:call-template>
   </xsl:when>
   <xsl:otherwise><xsl:apply-templates/></xsl:otherwise>  <!-- no rev mode -->
@@ -1103,14 +1097,19 @@
 <!-- Shortcut for old multi-line calls to find-active-rev-flag.
      Return 1 for active revision when draft is on, return 0 otherwise. -->
 <xsl:template match="*" mode="mark-revisions-for-draft">
-  <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
-    <xsl:call-template name="find-active-rev-flag"/>
-  </xsl:if>
+  <xsl:choose>
+    <xsl:when test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
+      <xsl:call-template name="find-active-rev-flag"/>
+    </xsl:when>
+    <xsl:otherwise>0</xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <!-- Use @rev to find the first active flagged revision.
      Return 1 for active.
-     Return 0 for non-active. -->
+     Return 0 for non-active. 
+     NOTE: this template is only called when a filter file is available and
+     when there is a revision to evaluate. -->
 <xsl:template name="find-active-rev-flag">
   <xsl:param name="allrevs" select="@rev"/>
 
@@ -1211,19 +1210,22 @@
 
 </xsl:template>
 
- <xsl:template name="conflict-check">
-  <xsl:param name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:param>
-  <xsl:choose>
-   <xsl:when test="exsl:node-set($flagrules)/*">
-    <xsl:apply-templates select="exsl:node-set($flagrules)/*[1]" mode="conflict-check"/>
-   </xsl:when>
-   <xsl:otherwise>
-    <xsl:value-of select="'false'"/>
-   </xsl:otherwise>
-  </xsl:choose>  
- </xsl:template>
+  <xsl:template name="conflict-check">
+    <xsl:param name="flagrules">
+      <xsl:call-template name="getrules"/>
+    </xsl:param>
+    <xsl:choose>
+      <xsl:when test="normalize-space($FILTERFILE)=''">
+        <xsl:value-of select="'false'"/>
+      </xsl:when>
+      <xsl:when test="exsl:node-set($flagrules)/*">
+        <xsl:apply-templates select="exsl:node-set($flagrules)/*[1]" mode="conflict-check"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="'false'"/>
+      </xsl:otherwise>
+    </xsl:choose>  
+  </xsl:template>
  
  <xsl:template match="prop|revprop" mode="conflict-check">
   <xsl:param name="color"/>
@@ -1245,86 +1247,90 @@
   </xsl:choose>
  </xsl:template>
 
- <!-- Currently, gen-style is never called without conflictexist in the OT
-      code, so the default is never used. If we replace the default with the
-      default code used elsewhere, then most or all calls to gen-style can be
-      simplified. -->
- <xsl:template name="gen-style">
-   <xsl:param name="flagrules">
-     <xsl:call-template name="getrules"/>
-   </xsl:param>
-  <xsl:param name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:param>
-  <xsl:variable name="validstyle">
-    <!-- This variable is used to prevent using pre-OASIS or unrecognized ditaval styles -->
-    <xsl:if test="$conflictexist='false' and exsl:node-set($flagrules)/*[@style]">
-      <xsl:choose>
-        <xsl:when test="exsl:node-set($flagrules)/*/@style='italics'">YES</xsl:when>
-        <xsl:when test="exsl:node-set($flagrules)/*/@style='bold'">YES</xsl:when>
-        <xsl:when test="exsl:node-set($flagrules)/*/@style='underline'">YES</xsl:when>
-        <xsl:when test="exsl:node-set($flagrules)/*/@style='double-underline'">YES</xsl:when>
-        <xsl:when test="exsl:node-set($flagrules)/*/@style='overline'">YES</xsl:when>
+ <!-- In earlier versions of the DITA-OT, conflictexist was always passed in as
+      a parameter. Seems it would be better to make it a variable and move into
+      the "if filterfile" section. Leaving alone now in case of any legacy overrides,
+      and only trivial improvement from moving.  -->
+  <xsl:template name="gen-style">
+    <xsl:param name="flagrules">
+      <xsl:call-template name="getrules"/>
+    </xsl:param>
+    <xsl:param name="conflictexist">
+     <xsl:call-template name="conflict-check">
+        <xsl:with-param name="flagrules" select="$flagrules"/>
+      </xsl:call-template>
+    </xsl:param>
+
+    <!-- Skip all further checking if there is no filter file -->
+    <xsl:if test="normalize-space($FILTERFILE)!=''">
+      <xsl:variable name="validstyle">
+        <!-- This variable is used to prevent using pre-OASIS or unrecognized ditaval styles -->
+        <xsl:if test="$conflictexist='false' and exsl:node-set($flagrules)/*[@style]">
+          <xsl:choose>
+            <xsl:when test="exsl:node-set($flagrules)/*/@style='italics'">YES</xsl:when>
+            <xsl:when test="exsl:node-set($flagrules)/*/@style='bold'">YES</xsl:when>
+            <xsl:when test="exsl:node-set($flagrules)/*/@style='underline'">YES</xsl:when>
+            <xsl:when test="exsl:node-set($flagrules)/*/@style='double-underline'">YES</xsl:when>
+            <xsl:when test="exsl:node-set($flagrules)/*/@style='overline'">YES</xsl:when>
+          </xsl:choose>
+        </xsl:if>
+      </xsl:variable>
+      <xsl:choose>  
+        <xsl:when test="$conflictexist='true' and $FILTERDOC/val/style-conflict[@foreground-conflict-color or @background-conflict-color]">
+          <xsl:apply-templates select="." mode="ditamsg:conflict-text-style-applied"/>
+          <xsl:attribute name="style">     
+            <xsl:if test="$FILTERDOC/val/style-conflict[@foreground-conflict-color]">
+              <xsl:text>color:</xsl:text>
+              <xsl:value-of select="$FILTERDOC/val/style-conflict/@foreground-conflict-color"/>
+              <xsl:text>;</xsl:text>
+            </xsl:if>
+            <xsl:if test="$FILTERDOC/val/style-conflict[@background-conflict-color]">
+              <xsl:text>background-color:</xsl:text>
+              <xsl:value-of select="$FILTERDOC/val/style-conflict/@background-conflict-color"/>
+              <xsl:text>;</xsl:text>
+            </xsl:if>     
+          </xsl:attribute>
+        </xsl:when>
+        <xsl:when test="$conflictexist='false' and 
+                        (exsl:node-set($flagrules)/*[@color or @backcolor] or $validstyle='YES')">
+          <xsl:attribute name="style">     
+            <xsl:if test="exsl:node-set($flagrules)/*[@color]">
+              <xsl:text>color:</xsl:text>
+              <xsl:value-of select="exsl:node-set($flagrules)/*[@color]/@color"/>
+              <xsl:text>;</xsl:text>
+            </xsl:if>
+            <xsl:if test="exsl:node-set($flagrules)/*[@backcolor]">
+              <xsl:text>background-color:</xsl:text>
+              <xsl:value-of select="exsl:node-set($flagrules)/*[@backcolor]/@backcolor"/>
+              <xsl:text>;</xsl:text>
+            </xsl:if>     
+            <xsl:if test="exsl:node-set($flagrules)/*/@style='italics'">
+              <xsl:text>font-style:italic;</xsl:text>
+            </xsl:if>     
+            <xsl:if test="exsl:node-set($flagrules)/*/@style='bold'">
+              <xsl:text>font-weight:bold;</xsl:text>
+            </xsl:if>     
+            <xsl:if test="exsl:node-set($flagrules)/*/@style='underline' or 
+                          exsl:node-set($flagrules)/*/@style='double-underline'">
+              <!-- For double-underline, style="border-bottom: 3px double;" seems to work
+                   in some cases, but not in all. For now, treat it as underline. -->
+              <xsl:text>text-decoration:underline;</xsl:text>
+            </xsl:if>     
+            <xsl:if test="exsl:node-set($flagrules)/*/@style='overline'">
+              <xsl:text>text-decoration:overline;</xsl:text>
+            </xsl:if>     
+          </xsl:attribute>
+        </xsl:when>
       </xsl:choose>
     </xsl:if>
-  </xsl:variable>
-  <xsl:choose>  
-   <xsl:when test="$conflictexist='true' and $FILTERDOC/val/style-conflict[@foreground-conflict-color or @background-conflict-color]">
-     <xsl:apply-templates select="." mode="ditamsg:conflict-text-style-applied"/>
-    <xsl:attribute name="style">     
-     <xsl:if test="$FILTERDOC/val/style-conflict[@foreground-conflict-color]">
-      <xsl:text>color:</xsl:text>
-      <xsl:value-of select="$FILTERDOC/val/style-conflict/@foreground-conflict-color"/>
-      <xsl:text>;</xsl:text>
-     </xsl:if>
-     <xsl:if test="$FILTERDOC/val/style-conflict[@background-conflict-color]">
-      <xsl:text>background-color:</xsl:text>
-      <xsl:value-of select="$FILTERDOC/val/style-conflict/@background-conflict-color"/>
-      <xsl:text>;</xsl:text>
-     </xsl:if>     
-    </xsl:attribute>
-   </xsl:when>
-   <xsl:when test="$conflictexist='false' and 
-                   (exsl:node-set($flagrules)/*[@color or @backcolor] or $validstyle='YES')">
-    <xsl:attribute name="style">     
-     <xsl:if test="exsl:node-set($flagrules)/*[@color]">
-      <xsl:text>color:</xsl:text>
-      <xsl:value-of select="exsl:node-set($flagrules)/*[@color]/@color"/>
-      <xsl:text>;</xsl:text>
-     </xsl:if>
-     <xsl:if test="exsl:node-set($flagrules)/*[@backcolor]">
-      <xsl:text>background-color:</xsl:text>
-      <xsl:value-of select="exsl:node-set($flagrules)/*[@backcolor]/@backcolor"/>
-      <xsl:text>;</xsl:text>
-     </xsl:if>     
-     <xsl:if test="exsl:node-set($flagrules)/*/@style='italics'">
-      <xsl:text>font-style:italic;</xsl:text>
-     </xsl:if>     
-     <xsl:if test="exsl:node-set($flagrules)/*/@style='bold'">
-      <xsl:text>font-weight:bold;</xsl:text>
-     </xsl:if>     
-     <xsl:if test="exsl:node-set($flagrules)/*/@style='underline' or 
-                   exsl:node-set($flagrules)/*/@style='double-underline'">
-      <!-- For double-underline, style="border-bottom: 3px double;" seems to work
-           in some cases, but not in all. For now, treat it as underline. -->
-      <xsl:text>text-decoration:underline;</xsl:text>
-     </xsl:if>     
-     <xsl:if test="exsl:node-set($flagrules)/*/@style='overline'">
-      <xsl:text>text-decoration:overline;</xsl:text>
-     </xsl:if>     
-    </xsl:attribute>
-   </xsl:when>
-  </xsl:choose>
- </xsl:template>
+  </xsl:template>
  
- <xsl:template name="start-flagit">
-  <xsl:param name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:param>
-  <xsl:apply-templates select="exsl:node-set($flagrules)/prop[1]" mode="start-flagit"/>
- </xsl:template>
+  <xsl:template name="start-flagit">
+    <xsl:param name="flagrules">
+      <xsl:call-template name="getrules"/>
+    </xsl:param>
+    <xsl:apply-templates select="exsl:node-set($flagrules)/prop[1]" mode="start-flagit"/>
+  </xsl:template>
  
  <xsl:template match="prop" mode="start-flagit">  
   <xsl:choose> <!-- Ensure there's an image to get, otherwise don't insert anything -->
