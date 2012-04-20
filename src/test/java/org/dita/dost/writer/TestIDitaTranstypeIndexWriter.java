@@ -27,8 +27,8 @@ public class TestIDitaTranstypeIndexWriter {
     public void testiditatranstypeindexwriter()
     {
         final String rootpath=System.getProperty("user.dir");
-        final String path=rootpath + File.separator + "test-stub" + File.separator + "index.xml";
-        final String outputfilename="test-stub" + File.separator + "iditatranstypewriter";
+        final String path=rootpath + File.separator + "resources" + File.separator + "index.xml";
+        final String outputfilename="resources" + File.separator + "iditatranstypewriter";
         assertEquals(TestUtils.testStub.getName() + File.separator + "iditatranstypewriter.hhk",idita1.getIndexFileName(outputfilename));
         assertEquals(path,idita2.getIndexFileName(outputfilename));
         assertEquals(TestUtils.testStub.getName() + File.separator + "iditatranstypewriter_index.xml",idita3.getIndexFileName(outputfilename));

@@ -45,7 +45,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 public class TestUtils {
 
-    public static final File testStub = new File("src" + File.separator + "test" + File.separator + "test-stub");
+    public static final File testStub = new File("src" + File.separator + "test" + File.separator + "resources");
     
     /**
      * Get test resource directory
