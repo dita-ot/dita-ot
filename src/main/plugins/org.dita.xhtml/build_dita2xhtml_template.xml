@@ -76,4 +76,32 @@
           <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>
+  
+  <target name="copy-revflag" if="dita.input.valfile">
+    <copy todir="${output.dir}">
+      <fileset dir="${dita.resource.dir}" includes="*.gif" />
+    </copy>
+  </target>
+  
+  <target name="copy-css" unless="user.csspath.url" description="Copy CSS files">
+    <condition property="user.copycss.yes">
+      <and>
+        <equals arg1="${args.copycss}" arg2="yes"/>
+        <isset property="args.css.present"/>
+      </and>
+    </condition>
+    <property name="user.csspath.real" location="${output.dir}/${user.csspath}"/>
+    <mkdir dir="${user.csspath.real}"/>
+    <!-- Always copy system default css files -->
+    <copy todir="${user.csspath.real}">
+      <fileset dir="${dita.resource.dir}" includes="*.css"/>
+    </copy>
+    <!-- Copy user specify css file when required -->
+    <antcall target="copy-css-user"/>
+  </target>
+
+  <target name="copy-css-user" if="user.copycss.yes">
+    <copy file="${args.css.real}" todir="${user.csspath.real}"/>
+  </target>
+  
 </project>
