@@ -45,9 +45,36 @@ you will need to run <filepath>startcmd.bat</filepath> again to set
 up a new environment for running builds.</p></result>
 </taskbody>
 </task>
-<task id="Fullsetup-unix" platform="linux osx">
-<title>Installing DITA-OT Full Easy Install package in Linux or OS
-X</title>
+  <task id="Fullsetup-osx" platform="osx">
+    <title>Installing DITA-OT Full Easy Install package in Mac OS X</title>
+    <shortdesc conref="#Fullsetup-windows/what-is-easyinstall"/>
+    <taskbody>
+      <prereq><p>Before installing DITA Open Toolkit full distribution,
+        you need to complete the following           steps:</p><ul>
+          <li importance="optional">(Optional) Download and configure JavaHelp
+            Compiler properly for             JavaHelp transformation.</li>
+        </ul>       </prereq>
+      <steps id="steps">
+        <stepsection>After installing Java and (if needed) the JavaHelp compiler,
+          you will need to follow these steps to complete your installation.</stepsection>
+        <step><cmd>Download the DITA-OT Full Easy Install package.</cmd></step>
+        <step><cmd>Extract <filepath>DITA-OT<keyword keyref="release.version"></keyword>_full_easy_install_bin.tar.gz</filepath> into
+          the installation directory.</cmd></step>
+        <step><cmd>Run shell script "<filepath>startcmd.sh</filepath>" to
+          set up the necessary             environment variables.</cmd>
+          <stepresult>A new <wintitle>Terminal</wintitle> window will open up,
+            with the environment variables already set to enable DITA-OT to run
+            within that shell.</stepresult></step>
+        <step><cmd>You may now run a build in the <wintitle>Terminal</wintitle> window
+          by using Ant or command-line tool.</cmd></step>
+      </steps>
+      <result id="result"><p>The resulting <wintitle>Terminal</wintitle> can be used to run as many builds as you want. Once
+        that shell is closed, you will need to run <filepath>startcmd.sh</filepath> again to set
+        up a new environment for running builds.</p></result>
+    </taskbody>
+  </task>
+<task id="Fullsetup-unix" platform="linux">
+<title>Installing DITA-OT Full Easy Install package in Linux</title>
 <shortdesc conref="#Fullsetup-windows/what-is-easyinstall"/>
 <taskbody>
 <prereq><p>Before installing DITA Open Toolkit full distribution,
@@ -57,23 +84,12 @@ keyref="tool.java.version"></keyword>).</li>
 <li importance="optional">(Optional) Download and configure JavaHelp
 Compiler properly for             JavaHelp transformation.</li>
 </ul>       </prereq>
-<steps>
-<stepsection>After installing Java and (if needed) the JavaHelp compiler,
-you will need to follow these steps to complete your installation.</stepsection>
-<step><cmd>Download the DITA-OT Full Easy Install package.</cmd></step>
-<step><cmd>Extract <filepath>DITA-OT<keyword keyref="release.version"></keyword>_full_easy_install_bin.tar.gz</filepath> into
-the installation directory.</cmd></step>
-<step><cmd>Run shell script "<filepath>startcmd.sh</filepath>" to
-set up the necessary             environment variables.</cmd>
-<stepresult>A new <wintitle>Terminal</wintitle> window will open up,
-with the environment variables already set to enable DITA-OT to run
-within that shell.</stepresult></step>
-<step><cmd>You may now run a build in the <wintitle>Terminal</wintitle> window
-by using Ant or command-line tool.</cmd></step>
+<steps conref="#Fullsetup-osx/steps">
+<step>
+  <cmd></cmd>
+</step>
 </steps>
-<result><p>The resulting <wintitle>Terminal</wintitle> can be used to run as many builds as you want. Once
-          that shell is closed, you will need to run <filepath>startcmd.sh</filepath> again to set
-          up a new environment for running builds.</p></result>
+<result conref="#Fullsetup-osx/result"/>
 </taskbody>
 </task>
 <task id="installation-windows" platform="windows">
@@ -174,6 +190,12 @@ include Xalan JAR                 files. </p>                 <codeblock>set CLA
              </choice>
 </choices>
 </step>
+        <step importance="optional">
+          <cmd>Set up ICU4J for index processing.</cmd>
+          <stepxmp>
+            <codeblock>set CLASSPATH=&lt;icu4j_dir>\icu4j.jar;%CLASSPATH%</codeblock>
+          </stepxmp>
+        </step>
 <step importance="optional"><cmd>If you need JavaHelp output, set
 up you environment variable <codeph>JHHOME</codeph>.</cmd><stepxmp> 
            <codeblock>set JHHOME=&lt;javahelp_dir&gt;</codeblock> 
@@ -265,6 +287,12 @@ include Xalan JAR files. </p>               <codeblock>export CLASSPATH=&lt;xala
            </choice>
 </choices>
 </step>
+  <step importance="optional">
+    <cmd>Set up ICU4J for index processing.</cmd>
+    <stepxmp>
+      <codeblock>export CLASSPATH=&lt;icu4j_dir>/icu4j.jar:$CLASSPATH</codeblock>
+    </stepxmp>
+  </step>
 <step importance="optional"><cmd>If you need JavaHelp output, set
 up you environment variable <codeph>JHHOME</codeph>.</cmd><stepxmp> 
            <codeblock>export JHHOME=&lt;javahelp_dir&gt;</codeblock> 

@@ -15,11 +15,11 @@
            <linktext>Main DITA-OT page at dita.xml.org</linktext>
          </topicmeta>
        </topicref>
-       <topicref format="html" href="http://dita.xml.org/node/3101" scope="external">
+       <!--topicref format="html" href="http://dita.xml.org/node/3101" scope="external">
          <topicmeta>
            <linktext>Information on the <keyword keyref="release.version"/> release</linktext>
          </topicmeta>
-       </topicref>
+       </topicref-->
        <topicref format="html" href="http://sourceforge.net/news/?group_id=132728" scope="external">
          <topicmeta>
            <linktext>Project News for DITA Open Toolkit</linktext>

@@ -56,6 +56,8 @@
       <p>If both height and width attributes are given, image is scaled nonuniformly.</p>
       <p>If scale attribute is not an unsigned integer, no error or warning is thrown during
         preprocessing.</p>
+      <draft-comment>What's the implementation dependent behaviour for abstract and shortdesc
+        processing?</draft-comment>
     </section>
   </refbody>
 </reference>
