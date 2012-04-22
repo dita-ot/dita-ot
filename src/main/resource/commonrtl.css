@@ -118,6 +118,13 @@ div.imagecenter { text-align: center }
 div.imageright { text-align: right }
 div.imagejustify { text-align: justify }
 
+/* The cell border can be turned on with
+   {border-right:solid}
+   This value creates a very thick border in Firefox (does not match other tables)
+
+   Firefox works with 
+   {border-right:solid 1pt}
+   but this causes a barely visible line in IE */
 .cellrowborder { border-right:none; border-top:none; border-left:solid 1px; border-bottom:solid 1px }
 .row-nocellborder { border-left:none; border-right:none; border-top:none; border-left: hidden; border-bottom:solid 1px}
 .cell-norowborder { border-top:none; border-bottom:none; border-right:none; border-bottom: hidden; border-left:solid 1px}
@@ -125,4 +132,4 @@ div.imagejustify { text-align: justify }
 
 pre.screen { padding: 5px 5px 5px 5px; border: outset; background-color: #CCCCCC; margin-top: 2px; margin-bottom : 2px; white-space: pre}
 
-
+span.filepath, samp.codeph, pre.codeblock { font-family:monospace }
