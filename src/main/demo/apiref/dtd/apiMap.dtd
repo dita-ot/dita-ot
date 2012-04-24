@@ -18,7 +18,7 @@
 <!ENTITY included-domains "&mapgroup-d-att;"                         >
 
 <!--Embed map to get generic elements -->
-<!ENTITY % map-type PUBLIC "-//OASIS//Elements DITA Map//EN" "../../../dtd/map.mod">
+<!ENTITY % map-type PUBLIC "-//OASIS//ELEMENTS DITA Map//EN" "../../../dtd/map.mod">
   %map-type;
 
 <!ENTITY % apimap-type PUBLIC "-//IBM//ELEMENTS DITA API Reference Map//EN" "apiMap.mod">
