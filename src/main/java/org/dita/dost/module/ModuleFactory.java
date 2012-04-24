@@ -83,7 +83,7 @@ public final class ModuleFactory {
     public AbstractPipelineModule createModule(final Class<? extends AbstractPipelineModule> moduleClass)
             throws DITAOTException {
         try {
-            return (AbstractPipelineModule) moduleClass.newInstance();
+            return moduleClass.newInstance();
         } catch (final Exception e) {
             String msg = null;
             final Properties params = new Properties();

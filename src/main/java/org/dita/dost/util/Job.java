@@ -242,7 +242,7 @@ public final class Job {
      * @return the previous value of the specified key in this property list, or {@code null} if it did not have one
      */
     public  Set<String> setSet(final String key, final Set<String> value) {
-        return (Set<String>) StringUtils.restoreSet((String) prop.setProperty(key, StringUtils.assembleString(value, COMMA)));
+        return StringUtils.restoreSet((String) prop.setProperty(key, StringUtils.assembleString(value, COMMA)));
     }
     
     /**
@@ -253,7 +253,7 @@ public final class Job {
      * @return the previous value of the specified key in this property list, or {@code null} if it did not have one
      */
     public Map<String, String> setMap(final String key, final Map<String, String> value) {        
-        return (Map<String, String>) StringUtils.restoreMap((String) prop.setProperty(key, StringUtils.assembleString(value, COMMA)));
+        return StringUtils.restoreMap((String) prop.setProperty(key, StringUtils.assembleString(value, COMMA)));
     }
     
     /**

@@ -9,15 +9,11 @@
  */
 package org.dita.dost.log;
 
-import static org.dita.dost.util.Constants.*;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Properties;
@@ -96,12 +92,12 @@ public final class MessageUtils {
             if (msg != null) {
                 try {
                     loadMessages(msg);
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     throw new RuntimeException("Failed to load messages configuration file: " + e.getMessage(), e);
                 } finally {
                     try {
                         msg.close();
-                    } catch (IOException e) {
+                    } catch (final IOException e) {
                         // NOOP
                     }
                 }
@@ -118,15 +114,15 @@ public final class MessageUtils {
         try {
             in = new FileInputStream(new File(newMessageFile));
             getInstance().loadMessages(in);
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             throw new RuntimeException("Failed to load messages configuration file: " + e.getMessage(), e);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new RuntimeException("Failed to load messages configuration file: " + e.getMessage(), e);
         } finally {
             if (in != null) {
                 try {
                     in.close();
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     // NOOP
                 }
             }

@@ -9,7 +9,6 @@
  */
 package org.dita.dost.exception;
 
-import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
 
 import org.xml.sax.ErrorHandler;

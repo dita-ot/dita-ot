@@ -241,7 +241,7 @@ public final class DitaValReader extends AbstractXMLReader {
             }
             final String attrValue = node.getAttribute(ATTRIBUTE_NAME_CLASS);
             if (attrValue != null && SUBJECTSCHEME_SUBJECTDEF.matches(attrValue)) {
-                String key = node.getAttribute(ATTRIBUTE_NAME_KEYS);
+                final String key = node.getAttribute(ATTRIBUTE_NAME_KEYS);
                 if (!StringUtils.isEmptyString(key)) {
                     final FilterKey k = new FilterKey(attName, key);
                     if (!schemeFilterMap.containsKey(k)) {

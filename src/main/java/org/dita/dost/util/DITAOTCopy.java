@@ -103,7 +103,7 @@ public final class DITAOTCopy extends Task {
 							realDest=new StringBuffer();
 							realDest.append(destDir).append(File.separator)
 									.append(pathTokenizer.nextToken());
-							File temp = new File(realDest.toString());
+							final File temp = new File(realDest.toString());
 							if (temp.getName().equalsIgnoreCase(srcFile.getName())){
 								destFile = temp;
 								break;

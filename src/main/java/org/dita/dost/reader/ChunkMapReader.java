@@ -199,7 +199,7 @@ public final class ChunkMapReader implements AbstractReader {
                     final Node node = list.item(i);
                     if (node.getNodeType() == Node.ELEMENT_NODE){
                         final Element currentElem = (Element) node;
-                        Node classAttr = node.getAttributes().getNamedItem(ATTRIBUTE_NAME_CLASS);
+                        final Node classAttr = node.getAttributes().getNamedItem(ATTRIBUTE_NAME_CLASS);
 
                         String classValue = null;
                         if(classAttr != null){
@@ -406,7 +406,7 @@ public final class ChunkMapReader implements AbstractReader {
                 chunkValue.indexOf(CHUNK_TO_CONTENT) != -1 && (hrefAttr != null || copytoAttr != null || node.hasChildNodes())){
             //if this is the start point of the content chunk
             //TODO very important start point(to-content).
-            processChunk((Element)node,false, chunkByTopic);
+            processChunk(node,false, chunkByTopic);
         }else if(chunkValue != null &&
                 chunkValue.indexOf(CHUNK_TO_NAVIGATION)!=-1 &&
                 INDEX_TYPE_ECLIPSEHELP.equals(transtype)){
@@ -436,7 +436,7 @@ public final class ChunkMapReader implements AbstractReader {
             //chunk "by-topic"
         }else if(chunkByTopic){
             //TODO very important start point(by-topic).
-            processChunk((Element)node,true, chunkByTopic);
+            processChunk(node,true, chunkByTopic);
             if(chunkValue != null &&
                     (chunkValue.contains(CHUNK_BY_TOPIC) ||
                             chunkValue.contains(CHUNK_BY_DOCUMENT))){

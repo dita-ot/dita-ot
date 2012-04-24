@@ -474,7 +474,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                             // if current @href value needs to be updated
                             String relative = FileUtils.getRelativePath(outputFile,currentParsingFile);
                             if (conflictTable.containsKey(outputFile)){
-                            	String realoutputfile = conflictTable.get(outputFile);
+                            	final String realoutputfile = conflictTable.get(outputFile);
                             	relative = FileUtils.getRelativePath(realoutputfile,currentParsingFile);
                         	}
                             if(attrValue.startsWith(SHARP)){
@@ -581,12 +581,6 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
     }
 
     private void updateList(){
-        //in the special case of the concurrence of copy-to and chunk='to-content', @copy-to is handled in chunk module
-        //instead of genlist module and debugandfilter module, so the list should be updated.
-        //and this method is used to update the list file.
-        String key = null;
-        String filename = null;
-        BufferedWriter bufferedWriter = null;
         try{
             // XXX: This may have to use new File(FileUtils.resolveFile(filePath,FILE_NAME_DITA_LIST_XML)).getParent()
             final Job job = new Job(new File(filePath));

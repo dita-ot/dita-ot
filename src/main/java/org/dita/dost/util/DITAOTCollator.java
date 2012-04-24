@@ -15,8 +15,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
 
-import org.dita.dost.log.DITAOTJavaLogger;
-
 /**
  * DITAOTCollator class.
  *

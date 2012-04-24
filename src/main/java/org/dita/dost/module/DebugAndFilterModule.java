@@ -140,7 +140,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
     private String inputDir = null;
 
     //Added on 2010-08-24 for bug:3086552 start
-    private boolean setSystemid = true;
+    private final boolean setSystemid = true;
     //Added on 2010-08-24 for bug:3086552 end
 
     /**
@@ -177,8 +177,8 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 
             final Job job = new Job(new File(tempDir));
 
-            final List<String> parseList = (List<String>) job.getCollection();
-            inputDir = (String) job.getValue();
+            final List<String> parseList = job.getCollection();
+            inputDir = job.getValue();
             inputMap = new File(inputDir + File.separator + job.getInputMap()).getAbsolutePath();
 
             // Output subject schemas
@@ -538,7 +538,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
      * Execute copy-to task, generate copy-to targets base on sources
      */
     private void performCopytoTask(final String tempDir, final Job job) {
-    	Map<String, String> copytoMap  = job.getCopytoMap();
+    	final Map<String, String> copytoMap  = job.getCopytoMap();
     	
     	for (final Map.Entry<String, String> entry: copytoMap.entrySet()) {
             final String copytoTarget = entry.getKey();
@@ -557,7 +557,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                 logger.logWarn(MessageUtils.getMessage("DOTX064W", prop).toString());
                 //edited by Alan on Date:2009-11-02 for Work Item:#1590 end
             }else{
-                String inputMapInTemp = new File(tempDir + File.separator + job.getInputMap()).getAbsolutePath();
+                final String inputMapInTemp = new File(tempDir + File.separator + job.getInputMap()).getAbsolutePath();
                 copyFileWithPIReplaced(srcFile, targetFile, copytoTarget, inputMapInTemp);
             }
         }
@@ -572,7 +572,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
      * @param copytoTargetFilename
      * @param inputMapInTemp
      */
-    public void copyFileWithPIReplaced(final File src, final File target, String copytoTargetFilename, String inputMapInTemp ) {
+    public void copyFileWithPIReplaced(final File src, final File target, final String copytoTargetFilename, final String inputMapInTemp ) {
         BufferedReader bfis = null;
         OutputStreamWriter bfos = null;
         
@@ -582,7 +582,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
         	//calculate workdir and path2project
             String workdir = null;
             String path2project = null;  
-        	DitaWriter dw = new DitaWriter();
+        	final DitaWriter dw = new DitaWriter();
         	dw.setOutputUtils(outputUtils);
         	path2project = dw.getPathtoProject(copytoTargetFilename, target, inputMapInTemp);
         	workdir = target.getParentFile().getCanonicalPath();
