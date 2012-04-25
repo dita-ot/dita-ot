@@ -36,6 +36,9 @@ before running a build. Alternatively, you can add the value
 variable.</p>           <p platform="linux osx">For Linux, type <codeph>export
 ANT_OPTS=$ANT_OPTS               -Xmx256M</codeph> in the command
 prompt before running a build.</p>         </li>
+        <li>Set <codeph>generate-debug-attributes</codeph> configuration option in
+            <filepath>lib/configuration.properties</filepath> to <codeph>true</codeph>. This will
+          disable debug attribute generation and will reduce memory consumption.</li>
 <li>Run the transformation again.</li>
 </ol>     </section>
 <section>       <title>java.io.IOException: Can't store Document</title> 

@@ -20,7 +20,8 @@ the DITA      processing system.</shortdesc>
           <ul>
             <li>Windows XP</li>
             <li>Windows 7</li>
-            <li>OS X 10.6</li>
+            <li>Mac OS X 10.6 </li>
+            <li>Mac OS X 10.7</li>
             <li>SLES 10</li>
           </ul>
         </stentry>
@@ -49,6 +50,7 @@ the DITA      processing system.</shortdesc>
             <li>IBM 1.6</li>
             <li>Oracle 1.5</li>
             <li>Oracle 1.6</li>
+            <li>OpenJDK 1.7</li>
           </ul>
         </stentry>
 </strow>
@@ -61,6 +63,30 @@ the DITA      processing system.</shortdesc>
           </ul>
         </stentry>
 </strow>
+      <strow>
+        <stentry>ICU4J</stentry>
+        <stentry>
+          <ul>
+            <li>ICU4J 3.4.4</li>
+          </ul>
+        </stentry>
+      </strow>
+      <strow>
+        <stentry>XML parser</stentry>
+        <stentry>
+          <ul>
+            <li>Xerces 2.9.0</li>
+            <li>Xerces 2.11.0</li>
+          </ul>
+        </stentry>
+      </strow>
+  <strow>
+    <stentry>XSL processor</stentry>
+    <stentry><ul><li>FOP 1.0</li>
+      <li>AntennaHouse XSL Formatter 5.3</li>
+      <li>AntennaHouse XSL Formatter 6.0</li>
+      <li>RenderX XEP 4.19</li></ul></stentry>
+  </strow>
 </simpletable>
 </body>
 </topic>

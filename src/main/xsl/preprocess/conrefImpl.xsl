@@ -926,7 +926,14 @@
     </xsl:when>
     <xsl:otherwise>
       <xsl:element name="{$original-element}">
-        <xsl:apply-templates select="exsl:node-set($original-attributes)/*[1]/@*" mode="original-attributes"/>
+        <xsl:choose>
+          <xsl:when test="system-property('xsl:version') >= 2.0">
+            <xsl:apply-templates select="$original-attributes/*[1]/@*" mode="original-attributes"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates select="exsl:node-set($original-attributes)/*[1]/@*" mode="original-attributes"/>
+          </xsl:otherwise>
+        </xsl:choose>
         <xsl:for-each select="@*">
             <xsl:variable name="attribute-name"><xsl:text>-</xsl:text><xsl:value-of select="name()"/><xsl:text>-</xsl:text></xsl:variable>
             

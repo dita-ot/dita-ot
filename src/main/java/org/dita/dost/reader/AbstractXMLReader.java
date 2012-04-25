@@ -83,7 +83,7 @@ ContentHandler, LexicalHandler, EntityResolver {
      * @param reader
      * @param grammarPool
      */
-    public void setGrammarPool(final XMLReader reader, XMLGrammarPool grammarPool) {
+    public void setGrammarPool(final XMLReader reader, final XMLGrammarPool grammarPool) {
         try {
             reader.setProperty("http://apache.org/xml/properties/internal/grammar-pool", grammarPool);
             logger.logInfo("Using Xerces grammar pool for DTD and schema caching.");

@@ -486,14 +486,13 @@
     <junit printsummary="yes" haltonfailure="yes" showoutput="true">
       <classpath>
         <pathelement location="${bin.dir}"/>
-        <pathelement location="${src.dir}"/><!-- resource/messages.xml -->
-        <pathelement location="${lib.dir}"/><!-- configuration files -->
         <pathelement location="${java.dir}"/><!-- resources -->
-        <pathelement location="${test.src.dir}/test-stub"/>
+        <pathelement location="${test.src.dir}/resources"/>
         <pathelement location="${lib.dir}/saxon/saxon9.jar"/>
         <pathelement location="${lib.dir}/saxon/saxon9-dom.jar"/>
         <pathelement location="${lib.dir}/xercesImpl.jar"/>
         <pathelement location="${lib.dir}/xml-apis.jar"/>
+        <pathelement location="${lib.dir}/resolver.jar"/>
         <pathelement location="${test.lib.dir}/junit-4.8.2.jar"/>
         <pathelement location="${test.lib.dir}/htmlparser-1.3.1.jar"/>
         <pathelement location="${test.lib.dir}/xmlunit-1.3.jar"/>
@@ -519,9 +518,8 @@
     <junit printsummary="false" haltonfailure="yes" showoutput="false" logfailedtests="true">
       <classpath>
         <pathelement location="${bin.dir}"/>
-        <pathelement location="${src.dir}"/><!-- resource/messages.xml -->
-        <pathelement location="${lib.dir}"/><!-- configuration files -->
         <pathelement location="${java.dir}"/><!-- resources -->
+        <pathelement location="${test.src.dir}/resources"/>
         <pathelement location="${lib.dir}/saxon/saxon9.jar"/>
         <pathelement location="${lib.dir}/saxon/saxon9-dom.jar"/>
         <pathelement location="${lib.dir}/xercesImpl.jar"/>

@@ -53,7 +53,7 @@ public final class CheckLang extends Task {
         logger = new DITAOTAntLogger(getProject());
         logger.logInfo(message);
 
-        final Properties params = new Properties();
+        new Properties();
         //ensure tempdir is absolute
         if (!new File(tempdir).isAbsolute()) {
             tempdir = new File(basedir, tempdir).getAbsolutePath();

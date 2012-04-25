@@ -2,7 +2,6 @@
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"
-    xmlns:exsl="http://exslt.org/common"
     xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links">
     
     <!-- added by William on 2009-07-22 for req #12014 start-->

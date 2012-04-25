@@ -40,7 +40,7 @@ public final class FilterUtils {
     
     private DITAOTLogger logger;
     private Map<FilterKey, Action> filterMap = null;
-    private Set<FilterKey> notMappingRules=new HashSet<FilterKey>();
+    private final Set<FilterKey> notMappingRules=new HashSet<FilterKey>();
 
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
@@ -115,7 +115,7 @@ public final class FilterUtils {
                     if(propStart!=-1) {
                         propStart=propStart+ propName.length() + 1;
                     }
-                    int propEnd = attrPropsValue.indexOf(")", propStart);
+                    final int propEnd = attrPropsValue.indexOf(")", propStart);
                     if (propStart != -1 && propEnd != -1){
                         propValue = attrPropsValue.substring(propStart, propEnd).trim();
                     }
@@ -352,7 +352,7 @@ public final class FilterUtils {
             return result;
         }
         @Override
-        public boolean equals(Object obj) {
+        public boolean equals(final Object obj) {
             if (this == obj) {
                 return true;
             }
@@ -364,7 +364,7 @@ public final class FilterUtils {
                 t.printStackTrace();
                 return false;
             }
-            FilterKey other = (FilterKey) obj;
+            final FilterKey other = (FilterKey) obj;
             if (attribute == null) {
                 if (other.attribute != null) {
                     return false;

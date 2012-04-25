@@ -13,7 +13,6 @@ import static org.dita.dost.util.Constants.COLON;
 
 import java.io.File;
 
-import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.util.FileUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;

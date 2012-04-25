@@ -146,8 +146,7 @@ public final class CommandLineInvoker {
          * validate dita.dir and init log message file
          */
         String inputDitaDir = null;
-        for (int i = 0; i < args.length; i++) {
-            final String arg = args[i];
+        for (final String arg : args) {
             if (arg.startsWith("/ditadir:")) {
                 inputDitaDir = arg.substring(arg.indexOf(":") + 1);
             }
@@ -164,9 +163,7 @@ public final class CommandLineInvoker {
         /*
          * Process input arguments
          */
-        for (int i = 0; i < args.length; i++) {
-            final String arg = args[i];
-
+        for (final String arg : args) {
             if ("-help".equals(arg) || "-h".equals(arg) || "help".equals(arg)) { // plain "help" is a bug, keep for backwards compatibility
                 printUsage();
                 return;

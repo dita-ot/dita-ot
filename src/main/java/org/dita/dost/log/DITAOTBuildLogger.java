@@ -49,10 +49,10 @@ public final class DITAOTBuildLogger implements BuildLogger {
     /** Line separator.*/
     protected static final String LINE_SEP = StringUtils.LINE_SEP;
 
-    private AtomicInteger numOfFatals = new AtomicInteger(0);
-    private AtomicInteger numOfErrors = new AtomicInteger(0);
-    private AtomicInteger numOfWarnings = new AtomicInteger(0);
-    private AtomicInteger numOfInfo = new AtomicInteger(0);
+    private final AtomicInteger numOfFatals = new AtomicInteger(0);
+    private final AtomicInteger numOfErrors = new AtomicInteger(0);
+    private final AtomicInteger numOfWarnings = new AtomicInteger(0);
+    private final AtomicInteger numOfInfo = new AtomicInteger(0);
     
     private final Pattern fatalPattern = Pattern.compile("\\[\\w+F\\]\\[FATAL\\]");
     private final Pattern errorPattern = Pattern.compile("\\[\\w+E\\]\\[ERROR\\]");

@@ -11,6 +11,11 @@
           <li><codeph>args.rellinks</codeph> controls which related links will be output.</li>
           <li><codeph>args.filter</codeph> defines the filter file to be used.</li>
         </ul>
+        <p>New configuration options have been added:</p>
+        <ul id="ul_vzj_f5m_zf">
+          <li><codeph>generate-debug-attributes</codeph> controls debug attribute generation and can
+            be used to reduce memory consumption.</li>
+        </ul>
         <p>Support for old DITAVAL format has been removed.</p>
       </section>
       <section><title>PDF2</title><p>The following deprecated items are no longer supported in the PDF transform.</p><ul>
@@ -40,7 +45,9 @@
         <title>XHTML</title>
         <p>The following deprecated templates will be removed:</p>
         <draft-comment>That is, they are deprecated in early 1.6 milestones but will be removed
-          completely from final release.</draft-comment>
+          completely from final release. Also remove delta.gif and deltaend.gif from resource
+          directory, and copy-revflag Ant target. Document that old flagging syntax is
+          removed</draft-comment>
         <ul id="ul_ywp_gsc_ff">
           <li>revblock-deprecated</li>
           <li>revstyle-deprecated</li>
@@ -62,8 +69,8 @@
       <section>
         <title>ODT</title>
         <p>The following deprecated templates will be removed:<draft-comment>That is, they are
-            deprecated in early 1.6 milestones but will be removed completely from final
-            release.</draft-comment></p>
+            deprecated in early 1.6 milestones but will be removed completely from final release.
+            See XHTML draft comment.</draft-comment></p>
         <ul id="ul_ywp_gsc_ff2">
           <li>revblock-deprecated</li>
           <li>revstyle-deprecated</li>
@@ -128,6 +135,7 @@
           <li>3517104 Remove support for args.message.file (milestone 4)</li>
           <li>3518180 Add automatic font detection to PDF2 (milestone 4)</li>
           <li>3518167 Need extension for determining topic level (milestone 4)</li>
+          <li>3520046 css support for codeph in HTML output (milestone 4)</li>
           <li>3466842 Refactor preprocessing to use SAX filters (in progress)</li>
           <li>3468864 Remove Content object (in progress)</li>
           <li>3460151 Use Job to read/write job configuration files (in progress)</li>

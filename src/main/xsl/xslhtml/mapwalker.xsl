@@ -8,14 +8,7 @@
      first instance technique adapted from Jeni Tennison and Steve Muench -->
 
 <xsl:stylesheet version="1.0" 
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:html="http://www.w3.org/1999/xhtml"
-                xmlns:saxon="http://icl.com/saxon"
-                xmlns:lxslt="http://xml.apache.org/xslt"
-                xmlns:xalanredirect="org.apache.xalan.xslt.extensions.Redirect"
-                xmlns:exsl="http://exslt.org/common"
-                extension-element-prefixes="saxon xalanredirect lxslt exsl"
-				exclude-result-prefixes="html">
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <!-- stylesheet imports -->
 

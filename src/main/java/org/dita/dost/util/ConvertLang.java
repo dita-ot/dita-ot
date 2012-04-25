@@ -107,13 +107,13 @@ public final class ConvertLang extends Task {
         try {
             in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/util/languages.properties");
             entities.load(in);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new RuntimeException("Failed to read language property file: " + e.getMessage(), e);
         } finally {
             if (in != null) {
                 try {
                     in.close();
-                } catch (IOException e) {}
+                } catch (final IOException e) {}
             }
         }
         for (final Entry<Object, Object> e: entities.entrySet()) {
@@ -129,13 +129,13 @@ public final class ConvertLang extends Task {
         try {
             in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/util/entities.properties");
             entities.load(in);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new RuntimeException("Failed to read entities property file: " + e.getMessage(), e);
         } finally {
             if (in != null) {
                 try {
                     in.close();
-                } catch (IOException e) {}
+                } catch (final IOException e) {}
             }
         }
         for (final Entry<Object, Object> e: entities.entrySet()) {
@@ -211,9 +211,9 @@ public final class ConvertLang extends Task {
     private void convertHtmlCharset() {
         final File outputDir = new File(outputdir);
         final File[] files = outputDir.listFiles();
-        for (int i = 0; i < files.length; i++) {
+        for (final File file : files) {
             //Recursive method
-            convertCharset(files[i]);
+            convertCharset(file);
         }
 
     }
@@ -221,8 +221,8 @@ public final class ConvertLang extends Task {
     private void convertCharset(final File inputFile){
         if(inputFile.isDirectory()){
             final File[] files = inputFile.listFiles();
-            for (int i = 0; i < files.length; i++) {
-                convertCharset(files[i]);
+            for (final File file : files) {
+                convertCharset(file);
             }
         }else if(FileUtils.isHTMLFile(inputFile.getName())||
                 FileUtils.isHHCFile(inputFile.getName())||
@@ -322,9 +322,9 @@ public final class ConvertLang extends Task {
     private void updateAllEntitiesAndLangs() {
         final File outputDir = new File(outputdir);
         final File[] files = outputDir.listFiles();
-        for (int i = 0; i < files.length; i++) {
+        for (final File file : files) {
             //Recursive method
-            updateEntityAndLang(files[i]);
+            updateEntityAndLang(file);
         }
 
     }
@@ -333,8 +333,8 @@ public final class ConvertLang extends Task {
         //directory case
         if(inputFile.isDirectory()){
             final File[] files = inputFile.listFiles();
-            for (int i = 0; i < files.length; i++) {
-                updateEntityAndLang(files[i]);
+            for (final File file : files) {
+                updateEntityAndLang(file);
             }
         }
         //html/hhc/hhk file case

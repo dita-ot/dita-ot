@@ -136,8 +136,8 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
             }
         }
 
-        int lastIndexOfDot = output.lastIndexOf(".");
-        String outputRoot = (lastIndexOfDot == -1) ? output : output.substring(0,
+        final int lastIndexOfDot = output.lastIndexOf(".");
+        final String outputRoot = (lastIndexOfDot == -1) ? output : output.substring(0,
                 lastIndexOfDot);
 
         indexTermCollection.setOutputFileRoot(outputRoot);

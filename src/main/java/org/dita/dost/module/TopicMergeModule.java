@@ -92,9 +92,9 @@ final class TopicMergeModule implements AbstractPipelineModule {
             mapParser.setOutputStream(midBuffer);
             mapParser.read(ditaInput, tempdir);
             midBuffer.write("</dita-merge>".getBytes(UTF8));
-        } catch (UnsupportedEncodingException e) {
+        } catch (final UnsupportedEncodingException e) {
             throw new RuntimeException(e);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new DITAOTException("Failed to merge topics: " + e.getMessage(), e);
         } finally {
             if (midBuffer != null) {

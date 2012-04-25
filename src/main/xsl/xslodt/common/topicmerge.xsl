@@ -34,9 +34,7 @@ See the accompanying license.txt file for applicable licenses.
 <!-- An adaptation of the Toolkit topicmerge.xsl for FO plugin use. -->
 
 <xsl:stylesheet version="1.1"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:exsl="http://exslt.org/common"
- 	            extension-element-prefixes="exsl">
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
     <xsl:output indent="no"/>
 

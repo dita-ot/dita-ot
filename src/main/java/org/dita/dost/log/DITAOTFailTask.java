@@ -11,7 +11,6 @@ package org.dita.dost.log;
 
 import static org.dita.dost.log.MessageBean.*;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.StringTokenizer;
@@ -83,7 +82,7 @@ public final class DITAOTFailTask extends Exit {
      */
     @Override
     public void execute() throws BuildException {
-        boolean fail = nestedConditionPresent()
+        final boolean fail = nestedConditionPresent()
                        ? testNestedCondition()
                        : (testIfCondition() && testUnlessCondition());
         if (!fail) {
@@ -153,7 +152,8 @@ public final class DITAOTFailTask extends Exit {
      *
      * @param value message to output
      */
-    public void setMessage(String value) {
+    @Override
+    public void setMessage(final String value) {
         this.message = value;
     }
 
@@ -161,7 +161,8 @@ public final class DITAOTFailTask extends Exit {
      * Only fail if a property of the given name exists in the current project.
      * @param c property name
      */
-    public void setIf(String c) {
+    @Override
+    public void setIf(final String c) {
         ifCondition = c;
     }
 
@@ -170,7 +171,8 @@ public final class DITAOTFailTask extends Exit {
      * exist in the current project.
      * @param c property name
      */
-    public void setUnless(String c) {
+    @Override
+    public void setUnless(final String c) {
         unlessCondition = c;
     }
 
@@ -178,7 +180,8 @@ public final class DITAOTFailTask extends Exit {
      * Set the status code to associate with the thrown Exception.
      * @param i   the <code>int</code> status
      */
-    public void setStatus(int i) {
+    @Override
+    public void setStatus(final int i) {
         status = new Integer(i);
     }
 
@@ -186,7 +189,8 @@ public final class DITAOTFailTask extends Exit {
      * Set a multiline message.
      * @param msg the message to display
      */
-    public void addText(String msg) {
+    @Override
+    public void addText(final String msg) {
         if (message == null) {
             message = "";
         }
@@ -198,6 +202,7 @@ public final class DITAOTFailTask extends Exit {
      * @return <code>ConditionBase</code>.
      * @since Ant 1.6.2
      */
+    @Override
     public ConditionBase createCondition() {
         if (nestedCondition != null) {
             throw new BuildException("Only one nested condition is allowed.");
@@ -234,7 +239,7 @@ public final class DITAOTFailTask extends Exit {
      * @return true if there is none, or it evaluates to true
      */
     private boolean testNestedCondition() {
-        boolean result = nestedConditionPresent();
+        final boolean result = nestedConditionPresent();
 
         if (result && ifCondition != null || unlessCondition != null) {
             throw new BuildException("Nested conditions "

@@ -5,10 +5,10 @@
   <abstract>
     <shortdesc>Reference list of DITA-OT configuration properties.</shortdesc>
     <p>The <filepath>lib/configuration.properties</filepath> file is used to store configuration
-      properties for DITA-OT and plug-ins. The
+      properties for DITA-OT and plug-ins. <ph audience="xslt-customizer">The
         <filepath>lib/org.dita.dost.platform/plugin.properties</filepath> file is used to store
       configuration properties set by the integration process. The file is regenerated from plug-in
-      configuration each time the integration process is run and should not be edited manually.</p>
+      configuration each time the integration process is run and should not be edited manually.</ph></p>
     <p>The configuration properties are available to both Ant and Java processes, but unlike
       argument properties, they cannot be set at run-time. </p>
   </abstract>

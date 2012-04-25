@@ -354,7 +354,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         }
         try {
 			inFile = inFile.getCanonicalFile();
-		} catch (IOException e1) {
+		} catch (final IOException e1) {
 			 logger.logException(e1);
 		}
         if (!new File(tempDir).isAbsolute()) {
@@ -430,7 +430,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         }
         try {
         	fileToParse = fileToParse.getCanonicalFile();
-		} catch (IOException e1) {
+		} catch (final IOException e1) {
 			logger.logError(e1.toString());
 		}
         logger.logInfo("Processing " + fileToParse.getAbsolutePath());
@@ -635,7 +635,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
 
             this.schemeDictionary.put(currentFile, children);
             final Set<String> hrfSet = reader.getHrefTargets();
-            for (String f: hrfSet) {
+            for (final String f: hrfSet) {
                 // for Linux support
                 final String filename = FileUtils.separatorsToUnix(f);
 
@@ -740,14 +740,14 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         if (FileUtils.isSupportedImageFile(lcasefn)) {
         	imageSet.add(file);        	      	
 			try {
-				File image = new File (baseInputDir + File.separator + file).getCanonicalFile(); 
+				final File image = new File (baseInputDir + File.separator + file).getCanonicalFile(); 
 				if (!image.exists()){
-	            	Properties prop = new Properties();
+	            	final Properties prop = new Properties();
 					prop.put("%1", image.getAbsolutePath());
 					logger.logWarn(MessageUtils.getMessage(
 							"DOTX008W", prop).toString());
 	            }
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				logger.logError(e.getMessage());
 			}
         }
@@ -1338,7 +1338,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             if (keydef != null) {
                 try {
                     keydef.close();
-                } catch (IOException e) {}
+                } catch (final IOException e) {}
             }
         }
     }

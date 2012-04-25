@@ -198,7 +198,7 @@ public final class MergeMapParser extends XMLFilterImpl {
                             topicParser.parse(attValue,dirPath);
                             final String fileId = topicParser.getFirstTopicId();
                             util.addId(attValue, fileId);
-                            String firstTopicId = SHARP + fileId;
+                            final String firstTopicId = SHARP + fileId;
                             if (util.getIdValue(attValue) != null) {
                             	attValue = SHARP + util.getIdValue(attValue);
                             } else {

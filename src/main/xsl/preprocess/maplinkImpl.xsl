@@ -129,7 +129,14 @@
           </xsl:apply-templates>
         </maplinks>
       </xsl:variable>
-      <xsl:apply-templates select="exsl:node-set($newlinks)" mode="add-links-to-temp-file"/>
+      <xsl:choose>
+        <xsl:when test="system-property('xsl:version') >= 2.0">
+          <xsl:apply-templates select="$newlinks" mode="add-links-to-temp-file"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="exsl:node-set($newlinks)" mode="add-links-to-temp-file"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:if>
     <xsl:apply-templates>
       <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>

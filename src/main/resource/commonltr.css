@@ -104,7 +104,7 @@ ul.simple { list-style-type: none }
 /* Use CSS to expand lists with @compact="no" */
 .dltermexpand { font-weight: bold; margin-top: 1em; }
 *[compact="yes"]>li { margin-top: 0em;}
-*[compact="no"]>li { margin-top: .53em;}	
+*[compact="no"]>li { margin-top: .53em;}
 .liexpand { margin-top: 1em; margin-bottom: 1em }
 .sliexpand { margin-top: 1em; margin-bottom: 1em }
 .dlexpand { margin-top: 1em; margin-bottom: 1em }
@@ -132,4 +132,4 @@ div.imagejustify { text-align: justify }
 
 pre.screen { padding: 5px 5px 5px 5px; border: outset; background-color: #CCCCCC; margin-top: 2px; margin-bottom : 2px; white-space: pre}
 
-span.filepath { font-family:monospace }
+span.filepath, samp.codeph, pre.codeblock { font-family:monospace }

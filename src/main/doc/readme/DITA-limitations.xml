@@ -8,6 +8,13 @@
 <shortdesc>Below are some known limitations categorized by module
 within the current release of the DITA Open Toolkit.</shortdesc>
 <refbody>
+    <section id="section_zly_11s_zf">
+      <title>General</title>
+      <ol>
+        <li>Multiple instances of DITA-OT cannot be run in parallel in the same JVM. This is due to
+          legacy code using static variables to store state.</li>
+      </ol>
+    </section>
     <section id="section_4pk_gjm_l2">
       <title>Pre-processing</title>
     </section>

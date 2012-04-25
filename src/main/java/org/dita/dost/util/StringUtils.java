@@ -89,7 +89,7 @@ public final class StringUtils {
             return "";
         }
         final StringBuilder buf = new StringBuilder();
-        for (Iterator<Map.Entry<String, String>> i = value.entrySet().iterator(); i.hasNext();) {
+        for (final Iterator<Map.Entry<String, String>> i = value.entrySet().iterator(); i.hasNext();) {
             final Map.Entry<String, String> e = i.next();
             buf.append(e.getKey().toString()).append(EQUAL).append(e.getValue().toString());
             if (i.hasNext()) {
@@ -223,9 +223,9 @@ public final class StringUtils {
 		int count = reader.read(cbuf);*/
         final StringBuffer ret = new StringBuffer(INT_1024);
         String strByte = null;
-        for(int i = 0; i < input.length; i++){
+        for (final byte element : input) {
             ret.append("\\\'");
-            strByte = Integer.toHexString(input[i]);
+            strByte = Integer.toHexString(element);
             ret.append(strByte.substring(strByte.length()-2));
             //System.out.println(Integer.toHexString(input[i]));
             //System.out.println(strByte);

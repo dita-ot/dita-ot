@@ -99,7 +99,7 @@ public final class ExtensibleAntInvoker extends Task {
         final Module m = new Module();
         try {
             m.setClass((Class<? extends AbstractPipelineModule>) Class.forName("org.dita.dost.module." + module + "Module"));
-        } catch (ClassNotFoundException e) {
+        } catch (final ClassNotFoundException e) {
             throw new BuildException("Failed to instantiate module 2: " + e.getMessage(), e);
         }
         modules.add(m);
