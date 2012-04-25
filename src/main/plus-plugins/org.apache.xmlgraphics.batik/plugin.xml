@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin id="batik-1.7">
+    <feature extension="dita.conductor.lib.import" file="batik.jar"/>
+    <feature extension="dita.conductor.lib.import" file="batik-svgpp.jar"/>
+    <feature extension="dita.conductor.lib.import" file="batik-ttfsvg.jar"/>
+    <feature extension="dita.conductor.lib.import" file="batik-rasterizer.jar"/>
+    <feature extension="dita.conductor.lib.import" file="lib/js.jar"/>
+    <feature extension="dita.conductor.lib.import" file="RasterizerTask.jar"/>
+</plugin>
