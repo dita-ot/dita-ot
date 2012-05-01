@@ -95,21 +95,6 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="linkinfo">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="linkinfo">
-    </xsl:attribute-set>
-
-    <xsl:attribute-set name="linkinfo">
-    </xsl:attribute-set>
-
-    <xsl:attribute-set name="linkinfo">
-    </xsl:attribute-set>
-
-    <xsl:attribute-set name="linkinfo">
-    </xsl:attribute-set>
-
-    <xsl:attribute-set name="linkinfo">
-    </xsl:attribute-set>
-
     <xsl:attribute-set name="link">
         <xsl:attribute name="space-after">2pt</xsl:attribute>
         <xsl:attribute name="space-before">2pt</xsl:attribute>
