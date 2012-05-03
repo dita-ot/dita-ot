@@ -1,11 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
- */
-
-/*
- * (c) Copyright IBM Corp. 2011 All Rights Reserved.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 package org.dita.dost.module;
 

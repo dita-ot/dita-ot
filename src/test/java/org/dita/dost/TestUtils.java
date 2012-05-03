@@ -1,11 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
- */
-
-/*
- * (c) Copyright IBM Corp. 2011 All Rights Reserved.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 package org.dita.dost;
 
@@ -20,6 +15,8 @@ import java.io.InputStream;
 import java.io.Writer;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
@@ -43,6 +40,11 @@ import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.XMLFilterImpl;
 import org.xml.sax.helpers.XMLReaderFactory;
 
+/**
+ * Test utilities.
+ * 
+ * @author Jarno Elovirta
+ */
 public class TestUtils {
 
     public static final File testStub = new File("src" + File.separator + "test" + File.separator + "resources");
@@ -305,6 +307,55 @@ public class TestUtils {
             throw new AssertionError("Throwable was thrown: " + t.getMessage());
         }
 
+    }
+    
+    /**
+     * DITA-OT logger that will cache messages.
+     */
+    public static final class CachingLogger implements DITAOTLogger {
+
+        private List<Message> buf = new ArrayList<Message>();
+        
+        public void logInfo(final String msg) {
+            buf.add(new Message(Message.Level.INFO, msg, null));
+        }
+
+        public void logWarn(final String msg) {
+            buf.add(new Message(Message.Level.WARN, msg, null));
+        }
+
+        public void logError(final String msg) {
+            buf.add(new Message(Message.Level.ERROR, msg, null));
+        }
+        
+        public void logError(final String msg, final Throwable t) {
+            buf.add(new Message(Message.Level.ERROR, msg, t));
+        }
+
+        public void logFatal(final String msg) {
+            buf.add(new Message(Message.Level.FATAL, msg, null));
+        }
+
+        public void logDebug(final String msg) {
+            buf.add(new Message(Message.Level.DEBUG, msg, null));
+        }
+
+        public void logException(final Throwable t) {
+            buf.add(new Message(Message.Level.ERROR, t.getMessage(), t));
+        }
+        
+        public static final class Message {
+            public enum Level { DEBUG, INFO, WARN, ERROR, FATAL }
+            public final Level level;
+            public final String message;
+            public final Throwable exception;
+            public Message(final Level level, final String message, final Throwable exception) {
+                this.level = level;
+                this.message = message;
+                this.exception = exception;
+            }
+        }
+        
     }
 
 }

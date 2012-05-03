@@ -1,3 +1,7 @@
+/*
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
+ */
 package org.dita.dost.index;
 
 import static org.junit.Assert.*;

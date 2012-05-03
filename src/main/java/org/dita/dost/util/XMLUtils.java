@@ -1,11 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
- */
-
-/*
- * (c) Copyright IBM Corp. 201 All Rights Reserved.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 package org.dita.dost.util;
 
@@ -22,6 +17,7 @@ import org.xml.sax.helpers.AttributesImpl;
  * XML utility methods.
  * 
  * @since 1.5.4
+ * @author Jarno Elovirta
  */
 public final class XMLUtils {
 

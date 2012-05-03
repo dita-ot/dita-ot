@@ -1,11 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
- */
-
-/*
- * (c) Copyright IBM Corp. 2011 All Rights Reserved.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 package org.dita.dost.platform;
 
@@ -20,6 +15,7 @@ import org.dita.dost.util.StringUtils;
  * List transtypes integration action.
  *
  * @since 1.5.4
+ * @author Jarno Elovirta
  */
 final class ListTranstypeAction extends ImportAction {
 
