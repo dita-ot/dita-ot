@@ -37,8 +37,10 @@
     <topicref href="PdfDefault.dita"/>
     <topicref href="OdtDefault.dita"/>
   </topicref>
-  <topicref href="extending-the-ot.dita"/>
-  <topicref href="plugins-installing.dita"/>
+  <topicref href="extending-the-ot.dita">
+    <topicref href="plugins-installing.dita"/>
+    <topicref href="plugins-removing.dita"/>
+  </topicref>
   <topicset href="plugins-overview.dita" id="plugins">
     <topicref href="plugin-configfile.dita"/>
     <topicref href="plugin-xmlcatalog.dita"/>
