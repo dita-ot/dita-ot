@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    ============================================================
-    Copyright (c) 2007 Antenna House, Inc. All rights reserved.
-    Antenna House is a trademark of Antenna House, Inc.
-    URL    : http://www.antennahouse.com/
-    E-mail : info@antennahouse.com
-    ============================================================
+  This file is part of the DITA Open Toolkit project.
+  See the accompanying license.txt file for applicable licenses.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="2.0">

@@ -1,3 +1,7 @@
+/*
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
+ */
 package org.dita.dost.pdf2;
 
 import static javax.xml.XMLConstants.*;
@@ -20,6 +24,7 @@ import org.dita.dost.util.XMLSerializer;
  * Generate list of variable files.
  * 
  * @since 1.6
+ * @author Jarno Elovirta
  */
 public final class VariableFileTask extends Task {
 
