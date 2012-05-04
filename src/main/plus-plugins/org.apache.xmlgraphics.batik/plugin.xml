@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<plugin id="batik-1.7">
+<plugin id="org.apache.xmlgraphics.batik">
     <feature extension="dita.conductor.lib.import" file="batik.jar"/>
     <feature extension="dita.conductor.lib.import" file="batik-svgpp.jar"/>
     <feature extension="dita.conductor.lib.import" file="batik-ttfsvg.jar"/>
