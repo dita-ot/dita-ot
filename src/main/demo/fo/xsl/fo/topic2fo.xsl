@@ -41,6 +41,8 @@ See the accompanying license.txt file for applicable licenses.
     exclude-result-prefixes="opentopic-index opentopic opentopic-i18n opentopic-func"
     version="2.0">
 
+    <xsl:import href="plugin:org.dita.base:xsl/common/dita-textonly.xsl"/>
+
     <xsl:import href="../common/attr-set-reflection.xsl"/>
     <xsl:import href="../common/vars.xsl"/>
 

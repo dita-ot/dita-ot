@@ -32,12 +32,14 @@ See the accompanying license.txt file for applicable licenses.
 -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:opentopic-i18n="http://www.idiominc.com/opentopic/i18n"
     xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
     xmlns:opentopic="http://www.idiominc.com/opentopic"
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
-    exclude-result-prefixes="opentopic-index opentopic opentopic-i18n opentopic-func"
+    xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+    exclude-result-prefixes="opentopic-index opentopic opentopic-i18n opentopic-func dita-ot xs"
     version="2.0">
     
     <xsl:param name="bookmap-order" select="'discard'"/>
@@ -122,11 +124,78 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="*" mode="topicref-validation"/>
 
+  <xsl:template name="createMetadata">
+	<!-- Override in XSL processor specific stylesheets -->
+  </xsl:template>
+    
+  <xsl:template match="/" mode="dita-ot:title-metadata" as="xs:string?">
+    <xsl:value-of>
+      <xsl:choose>
+        <xsl:when test="exists($map/*[contains(@class, ' bookmap/booktitle ')]/*[contains(@class,' bookmap/mainbooktitle ')])">
+          <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/booktitle ')]/*[contains(@class,' bookmap/mainbooktitle ')][1]" mode="dita-ot:text-only"/>
+        </xsl:when>
+        <xsl:when test="exists($map/*[contains(@class,' topic/title ')])">
+          <xsl:apply-templates select="$map/*[contains(@class,' topic/title ')][1]" mode="dita-ot:text-only"/>
+        </xsl:when>
+        <xsl:when test="exists(//*[contains(@class, ' map/map ')]/@title)">
+          <xsl:value-of select="//*[contains(@class, ' map/map ')]/@title"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="descendant::*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/title ')]" mode="dita-ot:text-only"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:value-of>
+  </xsl:template>
+
+  <xsl:template match="/" mode="dita-ot:author-metadata" as="xs:string?">
+    <xsl:value-of>
+      <xsl:variable name="authorinformation" select="$map/*[contains(@class, ' bookmap/bookmeta ')]/*[contains(@class, ' xnal-d/authorinformation ')]"/>
+      <xsl:choose>
+        <xsl:when test="exists($authorinformation/descendant::*[contains(@class, ' xnal-d/personname ')])">
+          <xsl:for-each select="$authorinformation/descendant::*[contains(@class, ' xnal-d/personname ')][1]">
+            <!-- Requires locale specific processing -->
+            <xsl:apply-templates select="*[contains(@class, ' xnal-d/firstname ')]/node()" mode="dita-ot:text-only"/>
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates select="*[contains(@class, ' xnal-d/lastname ')]/node()" mode="dita-ot:text-only"/>
+          </xsl:for-each>
+        </xsl:when>
+        <xsl:when test="exists($authorinformation/descendant::*[contains(@class, ' xnal-d/organizationname ')])">
+          <xsl:apply-templates select="$authorinformation/descendant::*[contains(@class, ' xnal-d/organizationname ')]" mode="dita-ot:text-only"/>
+        </xsl:when>
+        <xsl:when test="exists($map/*[contains(@class, ' bookmap/bookmeta ')]/*[contains(@class, ' topic/author ')])">
+          <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/bookmeta ')]/*[contains(@class, ' topic/author ')]" mode="dita-ot:text-only"/>
+        </xsl:when>
+      </xsl:choose>
+    </xsl:value-of>
+  </xsl:template>
+
+  <xsl:template match="/" mode="dita-ot:keywords-metadata" as="xs:string*">
+    <xsl:variable name="keywords" select="$map/*[contains(@class, ' bookmap/bookmeta ')]/*[contains(@class, ' topic/keywords ')]/*[contains(@class, 'topic/keyword ')]"/>
+    <xsl:for-each select="$keywords">
+      <xsl:value-of>
+        <xsl:apply-templates select="." mode="dita-ot:text-only"/>
+      </xsl:value-of>
+    </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template match="/" mode="dita-ot:subject-metadata" as="xs:string?">
+    <xsl:value-of>
+      <xsl:choose>
+        <xsl:when test="exists($map/*[contains(@class, ' bookmap/bookmeta ')]/*[contains(@class, ' map/shortdesc ')])">
+          <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/bookmeta ')]/*[contains(@class, ' map/shortdesc ')]" mode="dita-ot:text-only"/>
+        </xsl:when>
+        <xsl:when test="exists($map/*[contains(@class, ' topic/shortdesc ')])">
+          <xsl:apply-templates select="$map/*[contains(@class, ' topic/shortdesc ')]" mode="dita-ot:text-only"/>
+        </xsl:when>
+      </xsl:choose>
+    </xsl:value-of>
+  </xsl:template>
+
     <xsl:template match="/" name="rootTemplate">
         <xsl:call-template name="validateTopicRefs"/>
 
         <fo:root xsl:use-attribute-sets="__fo__root">
-
+            <xsl:call-template name="createMetadata"/>
             <xsl:call-template name="createLayoutMasters"/>
 
             <xsl:call-template name="createBookmarks"/>
