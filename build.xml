@@ -488,7 +488,7 @@
     <junit printsummary="yes" haltonfailure="yes" showoutput="true">
       <classpath>
         <pathelement location="${bin.dir}"/>
-        <pathelement location="${java.dir}"/><!-- resources -->
+        <pathelement location="${src.dir}/resources"/>
         <pathelement location="${test.src.dir}/resources"/>
         <pathelement location="${lib.dir}/saxon/saxon9.jar"/>
         <pathelement location="${lib.dir}/saxon/saxon9-dom.jar"/>
@@ -520,7 +520,7 @@
     <junit printsummary="false" haltonfailure="yes" showoutput="false" logfailedtests="true">
       <classpath>
         <pathelement location="${bin.dir}"/>
-        <pathelement location="${java.dir}"/><!-- resources -->
+        <pathelement location="${src.dir}/resources"/>
         <pathelement location="${test.src.dir}/resources"/>
         <pathelement location="${lib.dir}/saxon/saxon9.jar"/>
         <pathelement location="${lib.dir}/saxon/saxon9-dom.jar"/>
