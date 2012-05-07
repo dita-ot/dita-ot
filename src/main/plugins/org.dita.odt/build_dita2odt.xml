@@ -102,7 +102,7 @@
   	<!--create content.xml -->
   	<!--Change path of ${dita.input.valfile} into url-->
   	<makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
-    <xslt processor="trax" basedir="${dita.temp.dir}"
+    <xslt basedir="${dita.temp.dir}"
       in="${dita.temp.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
       classpathref="dost.class.path"
       out="${output}" style="${args.xsl}" 
@@ -132,7 +132,7 @@
     <dirname file="${output}" property="dita.odt.outputdir" />
   	<!--Change path of ${dita.input.valfile} into url-->
   	<makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
-    <xslt processor="trax" in="${input}" out="${output}" basedir="${dita.temp.dir}"
+    <xslt in="${input}" out="${output}" basedir="${dita.temp.dir}"
       classpathref="dost.class.path"
       style="${args.xsl}"
       filenameparameter="FILENAME"
@@ -153,7 +153,7 @@
       	
   <target name="dita.topic.odt.stylesfile"
     description="Build odt styles.xml file" if="noMap">
-    <xslt processor="trax"
+    <xslt
       in="${dita.temp.dir}${file.separator}${user.input.file}"
       out="${odt.output.tempdir}${file.separator}styles.xml"
       classpathref="dost.class.path"
@@ -164,7 +164,7 @@
 	
   <target name="dita.map.odt.stylesfile"
     description="Build odt styles.xml file" unless="noMap">
-    <xslt processor="trax"
+    <xslt
       in="${dita.temp.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
       out="${odt.output.tempdir}${file.separator}styles.xml"
       classpathref="dost.class.path"
@@ -175,7 +175,7 @@
 	
   <target name="dita.out.odt.manifest.file"
     description="Build odt manifest.xml file">
-    <xslt processor="trax"
+    <xslt
       in="${dita.temp.dir}${file.separator}${user.input.file}"
       out="${odt.output.tempdir}${file.separator}META-INF${file.separator}manifest.xml"
       classpathref="dost.class.path"

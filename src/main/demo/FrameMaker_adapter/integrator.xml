@@ -42,13 +42,13 @@ $Header: /cvsroot/dita-ot/DITA-OT/demo/FrameMaker_adapter/integrator.xml,v 1.3 2
         <isset property="args.xsl"/>
       </not>
     </condition>
-    <xslt processor="trax"
+    <xslt
           in="${input}"
           out="${dita.temp.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
           style="${dita.script.dir}${file.separator}topicmerge.xsl">
       <xmlcatalog refid="dita.catalog" />
     </xslt>
-    <xslt processor="trax"
+    <xslt
   	    in="${dita.temp.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
   		out="${output}"
           style="${args.xsl}">

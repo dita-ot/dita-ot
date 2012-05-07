@@ -34,7 +34,7 @@
     </condition>
   	<!--Change path of ${dita.input.valfile} into url-->
   	<makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
-  	<xslt processor="trax" basedir="${dita.temp.dir}"
+  	<xslt basedir="${dita.temp.dir}"
       destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
       reloadstylesheet="${dita.xhtml.reloadstylesheet}"
       classpathref="dost.class.path"
@@ -89,7 +89,7 @@
     </condition>
   	<!--Change path of ${dita.input.valfile} into url-->
   	<makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
-    <xslt processor="trax" basedir="${dita.temp.dir}"
+    <xslt basedir="${dita.temp.dir}"
       destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
       reloadstylesheet="${dita.xhtml.reloadstylesheet}"
       classpathref="dost.class.path"
@@ -152,7 +152,7 @@
     </condition>
   	<!--Change path of ${dita.input.valfile} into url-->
   	<makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>    
-    <xslt processor="trax" basedir="${dita.temp.dir}"
+    <xslt basedir="${dita.temp.dir}"
       destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
       reloadstylesheet="${dita.xhtml.reloadstylesheet}"
       classpathref="dost.class.path"
@@ -211,7 +211,7 @@
     </condition>
   	<!--Change path of ${dita.input.valfile} into url-->
   	<makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
-    <xslt processor="trax" basedir="${dita.temp.dir}"
+    <xslt basedir="${dita.temp.dir}"
       destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
       reloadstylesheet="${dita.xhtml.reloadstylesheet}"
       classpathref="dost.class.path"
@@ -292,7 +292,7 @@
     </condition>
   	<!--Change path of ${dita.input.valfile} into url-->
   	<makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
-    <xslt processor="trax" basedir="${dita.temp.dir}"
+    <xslt basedir="${dita.temp.dir}"
       destdir="${output.dir}${file.separator}${uplevels}" includesfile="${dita.temp.dir}${file.separator}${outditafilesfile}"
       reloadstylesheet="${dita.xhtml.reloadstylesheet}"
       classpathref="dost.class.path"
@@ -346,7 +346,7 @@
     </condition>
   	<!--Change path of ${dita.input.valfile} into url-->
   	<makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
-    <xslt processor="trax" basedir="${dita.temp.dir}"
+    <xslt basedir="${dita.temp.dir}"
       destdir="${output.dir}${file.separator}${uplevels}" includesfile="${dita.temp.dir}${file.separator}${outditafilesfile}"
       reloadstylesheet="${dita.xhtml.reloadstylesheet}"
       classpathref="dost.class.path"

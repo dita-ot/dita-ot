@@ -46,7 +46,7 @@
     <target name="dita.map.htmlhelp.hhp"
             depends="dita.map.htmlhelp.init" if="old.transform"
             description="Build HTMLHelp HHP file">
-        <xslt processor="trax"
+        <xslt
               basedir="${dita.temp.dir}"
               destdir="${output.dir}"
               includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
@@ -67,7 +67,7 @@
     <target name="dita.out.map.htmlhelp.hhp"
         depends="dita.map.htmlhelp.init" if="inner.transform"
         description="Build HTMLHelp HHP file">
-        <xslt processor="trax"
+        <xslt
             basedir="${dita.temp.dir}"
             destdir="${output.dir}"
             includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
@@ -88,7 +88,7 @@
     <target name="dita.map.htmlhelp.hhc"
             depends="dita.map.htmlhelp.init" if="old.transform"
             description="Build HTMLHelp HHC file">
-        <xslt processor="trax"
+        <xslt
               basedir="${dita.temp.dir}"
               destdir="${output.dir}"
               includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
@@ -105,7 +105,7 @@
     <target name="dita.out.map.htmlhelp.hhc"
         depends="dita.map.htmlhelp.init" if="inner.transform"
         description="Build HTMLHelp HHC file">
-        <xslt processor="trax"
+        <xslt
             basedir="${dita.temp.dir}"
             destdir="${output.dir}"
             includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"

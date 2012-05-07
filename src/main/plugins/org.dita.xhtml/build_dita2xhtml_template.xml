@@ -31,7 +31,7 @@
     <target name="dita.map.xhtml.toc"
             unless="noMap" if="old.transform"
             description="Build HTML TOC file">
-        <xslt processor="trax"
+        <xslt
               basedir="${dita.temp.dir}"
               destdir="${output.dir}"
               includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
@@ -56,7 +56,7 @@
     <target name="dita.out.map.xhtml.toc"
             unless="noMap" if="inner.transform"
             description="Build HTML TOC file,which will adjust the directory">
-        <xslt processor="trax"
+        <xslt
               basedir="${dita.temp.dir}"
               destdir="${output.dir}"
               includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"

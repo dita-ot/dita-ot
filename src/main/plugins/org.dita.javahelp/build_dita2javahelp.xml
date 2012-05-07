@@ -51,7 +51,7 @@
     <target name="dita.map.javahelp.toc"
             depends="dita.map.javahelp.init" if="old.transform"
             description="Build JavaHelp TOC file">
-        <xslt processor="trax"
+        <xslt
               basedir="${dita.temp.dir}"
               destdir="${output.dir}"
               includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
@@ -70,7 +70,7 @@
     <target name="dita.out.map.javahelp.toc"
         depends="dita.map.javahelp.init" if="inner.transform"
         description="Build JavaHelp TOC file">
-        <xslt processor="trax"
+        <xslt
             basedir="${dita.temp.dir}"
             destdir="${output.dir}"
             includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
@@ -89,7 +89,7 @@
     <target name="dita.map.javahelp.map"
             depends="dita.map.javahelp.init" if="old.transform"
             description="Build JavaHelp Map file">
-        <xslt processor="trax"
+        <xslt
               basedir="${dita.temp.dir}"
               destdir="${output.dir}"
               includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
@@ -108,7 +108,7 @@
     <target name="dita.out.map.javahelp.map"
         depends="dita.map.javahelp.init" if="inner.transform"
         description="Build JavaHelp Map file">
-        <xslt processor="trax"
+        <xslt
             basedir="${dita.temp.dir}"
             destdir="${output.dir}"
             includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
@@ -127,7 +127,7 @@
     <target name="dita.map.javahelp.set"
             depends="dita.map.javahelp.init, dita.map.javahelp.map" if="old.transform"
             description="Build JavaHelp Set file">
-        <xslt processor="trax"
+        <xslt
               basedir="${dita.temp.dir}"
               destdir="${output.dir}"
               includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
@@ -149,7 +149,7 @@
     <target name="dita.out.map.javahelp.set"
         depends="dita.map.javahelp.init, dita.out.map.javahelp.map" if="inner.transform"
         description="Build JavaHelp Set file">
-        <xslt processor="trax"
+        <xslt
             basedir="${dita.temp.dir}"
             destdir="${output.dir}"
             includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"

@@ -26,7 +26,7 @@
     </not>
   </condition>
   <mkdir dir="${outputDir}" />
-  <xslt processor="trax"
+  <xslt
         in="${inputDir}${file.separator}${inputMap}"
         out="${outputDir}${file.separator}${mapRoot}.xml"
         style="${args.xsl}">
@@ -42,7 +42,7 @@
       <isset property="args.xsl"/>
     </not>
   </condition>
-  <xslt processor="trax"
+  <xslt
         in="${inputFile}"
         out="${outputFile}"
         style="${args.xsl}">
@@ -58,7 +58,7 @@
     </not>
   </condition>
   <dirname file="${output}" property="dita.rtf.outputdir"/>
-  <xslt processor="trax"
+  <xslt
         in="${input}"
         out="${output}"
         style="${args.xsl}">    
@@ -75,13 +75,13 @@
     </not>
   </condition>
   <dirname file="${output}" property="dita.rtf.outputdir"/>
-  <xslt processor="trax"
+  <xslt
 	    in="${input}"
 	    out="${dita.temp.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
         style="${dita.script.dir}${file.separator}topicmerge.xsl">
     <!--<xmlcatalog refid="dita.catalog" />-->
   </xslt>
-  <xslt processor="trax"
+  <xslt
 	    in="${dita.temp.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
 		out="${output}"
         style="${args.xsl}">
@@ -99,13 +99,13 @@
     </not>
   </condition>
   <dirname file="${dita.temp.dir}${file.separator}${user.input.file}" property="dita.merged.dir"/>
-  <xslt processor="trax"
+  <xslt
 	    in="${input}"
 	    out="${dita.merged.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
         style="${dita.script.dir}${file.separator}topicmerge.xsl">
     <!--<xmlcatalog refid="dita.catalog" />-->
   </xslt>
-  <xslt processor="trax"
+  <xslt
 	    in="${dita.merged.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
       out="${output}"
       style="${args.xsl}">
@@ -152,7 +152,7 @@
       <isset property="args.xsl"/>
     </not>
   </condition>
-  <xslt processor="trax"
+  <xslt
         in="${input}"
         out="${output}"
         style="${args.xsl}">
@@ -177,7 +177,7 @@
       <isset property="args.xsl"/>
     </not>
   </condition>
-  <xslt processor="trax"
+  <xslt
 		basedir="${dita.temp.dir}"
 		destdir="${output.dir}"
         includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
@@ -221,7 +221,7 @@
       <isset property="args.xhtml.contenttarget"/>
     </not>
   </condition>
-  <xslt processor="trax"
+  <xslt
 		basedir="${dita.temp.dir}"
 		destdir="${output.dir}"
         includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
@@ -254,7 +254,7 @@
   <condition property="noPlugin">
     <equals arg1="${dita.eclipse.plugin}" arg2="no"/>
   </condition>
-  <xslt processor="trax"
+  <xslt
     basedir="${dita.temp.dir}"
 		destdir="${output.dir}"
     includesfile="${dita.temp.dir}${file.separator}${fullditamapfile}"
@@ -268,7 +268,7 @@
 </target>
 
   <target name="dita.map.plugin" unless="noPlugin">
-    <xslt processor="trax"
+    <xslt
       in="${dita.temp.dir}${file.separator}${user.input.file}"
       out="${dita.map.output.dir}${file.separator}plugin.xml"
       style="${dita.script.dir}${file.separator}map2plugin.xsl">
@@ -297,7 +297,7 @@
   <condition property="content.link.ext" value=".html?srcext=xml">
 	<equals arg1="${dita.ext}" arg2=".xml"></equals>
   </condition>
-  <xslt processor="trax"
+  <xslt
     basedir="${dita.temp.dir}"
 		destdir="${output.dir}"
         includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
@@ -307,7 +307,7 @@
         <param name="OUTEXT" expression="${content.link.ext}"/>
         <mapper type="glob" from="*${dita.input.filename}" to="*${args.eclipsecontent.toc}.xml"/>
     </xslt>
-    <xslt processor="trax"
+    <xslt
       in="${dita.temp.dir}${file.separator}${user.input.file}"
       out="${dita.map.output.dir}${file.separator}plugin.xml"
       style="${dita.script.dir}${file.separator}map2plugin-cp.xsl">
@@ -343,7 +343,7 @@
       <isset property="out.ext"/>
     </not>
   </condition>
-  <xslt processor="trax"
+  <xslt
     basedir="${dita.temp.dir}"
 		destdir="${output.dir}"
         includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
@@ -353,7 +353,7 @@
         <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
         <mapper type="glob" from="*${dita.input.filename}" to="*${args.javahelp.toc}.xml"/>
     </xslt>
-  <xslt processor="trax"
+  <xslt
     basedir="${dita.temp.dir}"
 		destdir="${output.dir}"
         includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
@@ -365,7 +365,7 @@
     </xslt>
 	
 	<!-- Generate Java Help Set File -->
-	<xslt processor="trax"
+	<xslt
 	      basedir="${dita.temp.dir}"
 	      destdir="${output.dir}"
 	      includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
@@ -400,7 +400,7 @@
       <isset property="args.xsl"/>
     </not>
   </condition>
-  <xslt processor="trax"
+  <xslt
 		basedir="${dita.temp.dir}"
 		destdir="${output.dir}"
         includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
@@ -440,7 +440,7 @@
       <isset property="out.ext"/>
     </not>
   </condition>
-  <xslt processor="trax"
+  <xslt
 		basedir="${dita.temp.dir}"
 		destdir="${output.dir}"
         includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
@@ -460,7 +460,7 @@
     <param name="indextype" value="htmlhelp"/>
     <param name="encoding" value="${args.dita.locale}" if="args.dita.locale"/>
   </pipeline>
-  <xslt processor="trax"
+  <xslt
 		basedir="${dita.temp.dir}"
 		destdir="${output.dir}"
         includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
@@ -489,7 +489,7 @@
 
 <!-- generalize a specialized topic to the base elements -->
 <target name="dita.topic.generalize">
-	<xslt processor="trax"
+	<xslt
 			in="${inputFile}"
 			out="${outputFile}"
 			style="${dita.script.dir}${file.separator}generalize.xsl">
@@ -499,7 +499,7 @@
   
 <!-- restore the specialized elements for a previously generalized topic -->
 	<target name="dita.topic.respecialize">
-		<xslt processor="trax"
+		<xslt
 				in="${inputFile}"
 				out="${outputFile}"
 				style="${dita.script.dir}${file.separator}specialize.xsl">
@@ -509,7 +509,7 @@
 
 	<!-- add the architectural attributes with default values from the document type to the document -->
 	<target name="dita.topic.normalize">
-		<xslt processor="trax"
+		<xslt
 				in="${inputFile}"
 				out="${outputFile}"
 				style="${dita.script.dir}${file.separator}normalize.xsl">
@@ -518,7 +518,7 @@
 	</target>
 
 	<target name="dita.dir.normalize">
-		<xslt processor="trax"
+		<xslt
 				basedir="${inputDir}"
 				destdir="${outputDir}"
 				includes="*.xml"
@@ -530,7 +530,7 @@
 
 	<!-- remove the architectural attributes with default values in the document type from the document -->
 	<target name="dita.topic.denormalize">
-		<xslt processor="trax"
+		<xslt
 				in="${inputFile}"
 				out="${outputFile}"
 				style="${dita.script.dir}${file.separator}pretty.xsl">
@@ -561,7 +561,7 @@
     
   <target name="dita.topic.troff" description="Build troff output from dita topics">
       <!-- step 1 -->
-      <xslt processor="trax"
+      <xslt
   		basedir="${dita.temp.dir}"
   		destdir="${output.dir}"
         includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
@@ -572,7 +572,7 @@
       </xslt>
       
   		<!-- step 2 -->
-  		<xslt processor="trax"
+  		<xslt
           basedir="${outputDir}"
           destdir="${outputDir}"
   		  includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"

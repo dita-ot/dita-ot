@@ -56,7 +56,7 @@
 
     <!-- low-level targets -->
 	<target name="mergeMap">
-      <xslt processor="trax"
+      <xslt
           in="${inputDir}${file.separator}${inputFile}"
           out="${inputDir}${file.separator}${mergedFile}"
           style="${basedir}${file.separator}demo${file.separator}thesaurus${file.separator}xsl${file.separator}mergeMapFinal.xsl">
@@ -65,7 +65,7 @@
 	</target>
 
 	<target name="map2skos">
-      <xslt processor="trax"
+      <xslt
           in="${inputDir}${file.separator}${inputFile}"
           out="${dita.temp.dir}${file.separator}${dita.map.filename.root}.rdf"
           style="${basedir}${file.separator}demo${file.separator}thesaurus${file.separator}xsl${file.separator}dit2skos.xsl">
@@ -73,7 +73,7 @@
         <param name="DITAEXT" expression="${dita.ext}"/>
       </xslt>
 
-      <xslt processor="trax"
+      <xslt
           in="${dita.temp.dir}${file.separator}${dita.map.filename.root}.rdf"
           out="${output.dir}${file.separator}${dita.map.filename.root}.rdf"
           style="${basedir}${file.separator}demo${file.separator}thesaurus${file.separator}xsl${file.separator}compressrdf.xsl">
@@ -82,7 +82,7 @@
 	</target>
 
 	<target name="scheme2nav">
-      <xslt processor="trax"
+      <xslt
           in="${inputDir}${file.separator}${schemeMap}"
           out="${output.dir}${file.separator}${schemeMap}"
           style="${basedir}${file.separator}demo${file.separator}thesaurus${file.separator}xsl${file.separator}stripScheme.xsl">
@@ -91,7 +91,7 @@
 	</target>
 
 	<target name="classify2nav">
-      <xslt processor="trax"
+      <xslt
           in="${inputDir}${file.separator}${classifyMap}"
           out="${output.dir}${file.separator}${classifyMap}"
           style="${basedir}${file.separator}demo${file.separator}thesaurus${file.separator}xsl${file.separator}stripClassify.xsl">
@@ -101,7 +101,7 @@
 	</target>
 
 	<target name="subjects2concept">
-      <xslt processor="trax"
+      <xslt
           in="${inputDir}${file.separator}${schemeMap}"
           out="${output.dir}${file.separator}strippedOUTPUT.txt"
           style="${basedir}${file.separator}demo${file.separator}thesaurus${file.separator}xsl${file.separator}stripConcept.xsl">

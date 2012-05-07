@@ -36,7 +36,7 @@
   <target name="dita.map.eclipsecontent.toc"
     depends="dita.map.eclipsecontent.init"
     description="Build EclipseContent TOC file">
-    <xslt processor="trax" basedir="${dita.temp.dir}"
+    <xslt basedir="${dita.temp.dir}"
       destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
       classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}map2eclipse.xsl">
@@ -67,7 +67,7 @@
   <target name="dita.map.eclipsecontent.plugin"
     depends="dita.map.eclipsecontent.init"
     description="Build EclipseContent plugin file">
-    <xslt processor="trax"
+    <xslt
       in="${dita.temp.dir}${file.separator}${user.input.file}"
       out="${dita.map.output.dir}${file.separator}plugin.xml"
       classpathref="dost.class.path"
@@ -87,7 +87,7 @@
       </fileset>
     </copy>-->
 
-  	<xslt processor="trax" 
+  	<xslt 
           basedir="${dita.temp.dir}" 
           destdir="${output.dir}"
           includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"

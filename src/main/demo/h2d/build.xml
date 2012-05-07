@@ -74,7 +74,7 @@
     <target name="preprocess-batch" 
             if="isInputDir" 
             description="-->Remove xmlns from HTML files">
-      <xslt processor="trax"
+      <xslt
             basedir="${args.input}"
             destdir="${temp.dir}"
             includes="${includes.pattern}"
@@ -92,7 +92,7 @@
             if="isInputDir"
             description="-->Migrate HTML files to DITA files in batches">
 
-        <xslt processor="trax"
+        <xslt
               basedir="${temp.dir}"
               destdir="${args.output}"
               includes="${includes.pattern}"
@@ -119,7 +119,7 @@
             description="-->Remove xmlns from HTML file">
       <basename file="${args.input}" property="filename" />
       <dirname file="${args.input}" property="args.input.dir"/>
-      <xslt processor="trax"
+      <xslt
             basedir="${args.input.dir}"
             destdir="${temp.dir}"
             includes="${filename}"            
@@ -136,7 +136,7 @@
             depends="init, preprocess-single"
             if="isInputFile"
             description="-->Migrate single HTML file to DITA file">
-        <xslt processor="trax"
+        <xslt
               basedir="${temp.dir}"
               includes="${filename}"
               destdir="${args.output}"

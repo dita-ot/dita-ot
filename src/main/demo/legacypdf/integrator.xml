@@ -73,12 +73,12 @@
             </condition>
             <dirname file="${dita.temp.dir}${file.separator}${user.input.file}"
                 property="dita.merged.dir" />
-            <xslt processor="trax" in="${input}"
+            <xslt in="${input}"
                 out="${dita.merged.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
                 style="${dita.script.dir}${file.separator}topicmerge.xsl">
                 <!--<xmlcatalog refid="dita.catalog" />-->
             </xslt>
-            <xslt processor="trax"
+            <xslt
                 in="${dita.merged.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
                 out="${output}" style="${args.xsl}">
                 <!--<xmlcatalog refid="dita.catalog" />-->
@@ -132,7 +132,7 @@
                     <isset property="args.xsl" />
                 </not>
             </condition>
-            <xslt processor="trax" in="${input}" out="${output}"
+            <xslt in="${input}" out="${output}"
                 style="${args.xsl}">
                 <!--<xmlcatalog refid="dita.catalog" />-->
                 <param name="output-related-links"

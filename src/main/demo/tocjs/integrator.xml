@@ -48,7 +48,7 @@
   </target>
 
   <target name="dita.map.tocjs" description="generate merged for tocjs">
-    <xslt processor="trax" in="${input}" out="${output.file}"
+    <xslt in="${input}" out="${output.file}"
       style="${dita.plugin.com.sophos.tocjs.dir}/xsl/tocjs.xsl">
       <param name="contentwin" expression="${content.frame}" if="content.frame"/>
       <param name="ditaext" expression="${dita.extname}"/>
@@ -81,7 +81,7 @@
               <isset property="out.ext" />
           </not>
       </condition>
-      <xslt processor="trax"
+      <xslt
 		basedir="${dita.temp.dir}"
 		destdir="${output.dir}"
         includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"

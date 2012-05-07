@@ -95,7 +95,7 @@
     <target name="dita.map.eclipse.toc" unless="noMap"
             depends="dita.map.eclipse.plugin.init" if="old.transform"
             description="Build EclipseHelp TOC file">
-        <xslt processor="trax"
+        <xslt
               basedir="${dita.temp.dir}"
               destdir="${output.dir}"
               includesfile="${dita.temp.dir}${file.separator}${fullditamapfile}"
@@ -114,7 +114,7 @@
     <target name="dita.out.map.eclipse.toc" unless="noMap"
         depends="dita.map.eclipse.plugin.init" if="inner.transform"
         description="Build EclipseHelp TOC file">
-        <xslt processor="trax"
+        <xslt
             basedir="${dita.temp.dir}"
             destdir="${output.dir}"
             includesfile="${dita.temp.dir}${file.separator}${fullditamapfile}"
@@ -178,7 +178,7 @@
             unless="noPlugin"
             depends="dita.map.eclipse.plugin.init" if="old.transform"
             description="Build Eclipsehelp plugin file">
-        <xslt processor="trax"
+        <xslt
               in="${dita.temp.dir}${file.separator}${user.input.file}"
               out="${dita.map.output.dir}${file.separator}plugin.xml"
               classpathref="dost.class.path"
@@ -204,7 +204,7 @@
         unless="noPlugin"
         depends="dita.map.eclipse.plugin.init" if="inner.transform"
         description="Build Eclipsehelp plugin file">
-        <xslt processor="trax"
+        <xslt
             in="${dita.temp.dir}${file.separator}${user.input.file}"
             out="${output.dir}${file.separator}plugin.xml"
             classpathref="dost.class.path"
@@ -234,7 +234,7 @@
     unless="noPlugin"
     depends="dita.map.eclipse.plugin.init" if="old.transform"
     description="Build Eclipsehelp manifest.mf file">
-    <xslt processor="trax"
+    <xslt
       in="${dita.temp.dir}${file.separator}${user.input.file}"
       out="${dita.map.output.dir}${file.separator}META-INF${file.separator}MANIFEST.MF"
       classpathref="dost.class.path"
@@ -267,7 +267,7 @@
     unless="noPlugin"
     depends="dita.map.eclipse.plugin.init" if="inner.transform"
     description="Build Eclipsehelp manifest.mf file">
-    <xslt processor="trax"
+    <xslt
       in="${dita.temp.dir}${file.separator}${user.input.file}"
       out="${dita.map.output.dir}${file.separator}META-INF${file.separator}MANIFEST.MF"
       classpathref="dost.class.path"
@@ -301,7 +301,7 @@
     unless="noPlugin"
     depends="dita.map.eclipse.plugin.init" if="old.transform"
     description="Create eclipse plugin.properties file">
-    <xslt processor="trax"
+    <xslt
       in="${dita.temp.dir}${file.separator}${user.input.file}"
       out="${output.dir}${file.separator}plugin.properties"
       classpathref="dost.class.path"
@@ -323,7 +323,7 @@
     unless="noPlugin"
     depends="dita.map.eclipse.plugin.init" if="inner.transform"
     description="Create eclipse plugin.properties file">
-    <xslt processor="trax"
+    <xslt
       in="${dita.temp.dir}${file.separator}${user.input.file}"
       out="${output.dir}${file.separator}plugin.properties"
       classpathref="dost.class.path"
