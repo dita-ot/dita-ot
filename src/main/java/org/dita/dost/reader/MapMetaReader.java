@@ -9,16 +9,18 @@
  */
 package org.dita.dost.reader;
 
+import static java.util.Arrays.*;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
+import java.util.List;
 import java.util.Map.Entry;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -47,85 +49,66 @@ public final class MapMetaReader implements AbstractReader {
 
     private final Hashtable<String, Hashtable<String, Element>> resultTable = new Hashtable<String, Hashtable<String, Element>>(INT_16);
 
-    private static final Set<String> uniqueSet;
-
-    static{
-        uniqueSet = new HashSet<String>(INT_16);
-        uniqueSet.add(TOPIC_CRITDATES.matcher);
-        uniqueSet.add(TOPIC_PERMISSIONS.matcher);
-        uniqueSet.add(TOPIC_PUBLISHER.matcher);
-        uniqueSet.add(TOPIC_SOURCE.matcher);
-        uniqueSet.add(MAP_SEARCHTITLE.matcher);
-    }
-
-    private static final Set<String> cascadeSet;
-
-    static{
-        cascadeSet = new HashSet<String>(INT_16);
-        cascadeSet.add(TOPIC_AUDIENCE.matcher);
-        cascadeSet.add(TOPIC_AUTHOR.matcher);
-        cascadeSet.add(TOPIC_CATEGORY.matcher);
-        cascadeSet.add(TOPIC_COPYRIGHT.matcher);
-        cascadeSet.add(TOPIC_CRITDATES.matcher);
-        cascadeSet.add(TOPIC_PERMISSIONS.matcher);
-        cascadeSet.add(TOPIC_PRODINFO.matcher);
-        cascadeSet.add(TOPIC_PUBLISHER.matcher);
-    }
-
-    private static final Set<String> metaSet;
-
-    static{
-        metaSet = new HashSet<String>(INT_16);
-        metaSet.add(MAP_SEARCHTITLE.matcher);
-        metaSet.add(TOPIC_AUTHOR.matcher);
-        metaSet.add(TOPIC_SOURCE.matcher);
-        metaSet.add(TOPIC_PUBLISHER.matcher);
-        metaSet.add(TOPIC_COPYRIGHT.matcher);
-        metaSet.add(TOPIC_CRITDATES.matcher);
-        metaSet.add(TOPIC_PERMISSIONS.matcher);
-        metaSet.add(TOPIC_AUDIENCE.matcher);
-        metaSet.add(TOPIC_CATEGORY.matcher);
-        metaSet.add(TOPIC_KEYWORDS.matcher);
-        metaSet.add(TOPIC_PRODINFO.matcher);
-        metaSet.add(TOPIC_OTHERMETA.matcher);
-        metaSet.add(TOPIC_RESOURCEID.matcher);
-        metaSet.add(TOPIC_DATA.matcher);
-        metaSet.add(TOPIC_DATA_ABOUT.matcher);
-        metaSet.add(TOPIC_FOREIGN.matcher);
-        metaSet.add(TOPIC_UNKNOWN.matcher);
-    }
-
-    private static final Vector<String> metaPos;
-
-    static {
-        metaPos = new Vector<String>(INT_16);
-        metaPos.add(MAP_SEARCHTITLE.matcher);
-        metaPos.add(TOPIC_AUTHOR.matcher);
-        metaPos.add(TOPIC_SOURCE.matcher);
-        metaPos.add(TOPIC_PUBLISHER.matcher);
-        metaPos.add(TOPIC_COPYRIGHT.matcher);
-        metaPos.add(TOPIC_CRITDATES.matcher);
-        metaPos.add(TOPIC_PERMISSIONS.matcher);
-        metaPos.add(TOPIC_AUDIENCE.matcher);
-        metaPos.add(TOPIC_CATEGORY.matcher);
-        metaPos.add(TOPIC_KEYWORDS.matcher);
-        metaPos.add(TOPIC_PRODINFO.matcher);
-        metaPos.add(TOPIC_OTHERMETA.matcher);
-        metaPos.add(TOPIC_RESOURCEID.matcher);
-        metaPos.add(TOPIC_DATA.matcher);
-        metaPos.add(TOPIC_DATA_ABOUT.matcher);
-        metaPos.add(TOPIC_FOREIGN.matcher);
-        metaPos.add(TOPIC_UNKNOWN.matcher);
-        //Added by William on 2009-07-25 for bug:2826143 start
-        metaPos.add(MAP_LINKTEXT.matcher);
-        metaPos.add(MAP_SHORTDESC.matcher);
-        //Added by William on 2009-07-25 for bug:2826143 end
-        //Added by William on 2009-12-21 for bug:2916469 start
-        metaPos.add(TOPIC_NAVTITLE.matcher);
-        metaPos.add(TOPIC_METADATA.matcher);
-        metaPos.add(DELAY_D_EXPORTANCHORS.matcher);
-        //Added by William on 2009-12-21 for bug:2916469 end
-    }
+    public static final Set<String> uniqueSet = Collections.unmodifiableSet(new HashSet<String>(asList(
+            TOPIC_CRITDATES.matcher,
+            TOPIC_PERMISSIONS.matcher,
+            TOPIC_PUBLISHER.matcher,
+            TOPIC_SOURCE.matcher,
+            MAP_SEARCHTITLE.matcher
+            )));
+    private static final Set<String> cascadeSet = Collections.unmodifiableSet(new HashSet<String>(asList(
+            TOPIC_AUDIENCE.matcher,
+            TOPIC_AUTHOR.matcher,
+            TOPIC_CATEGORY.matcher,
+            TOPIC_COPYRIGHT.matcher,
+            TOPIC_CRITDATES.matcher,
+            TOPIC_PERMISSIONS.matcher,
+            TOPIC_PRODINFO.matcher,
+            TOPIC_PUBLISHER.matcher
+            )));
+    private static final Set<String> metaSet = Collections.unmodifiableSet(new HashSet<String>(asList(
+            MAP_SEARCHTITLE.matcher,
+            TOPIC_AUTHOR.matcher,
+            TOPIC_SOURCE.matcher,
+            TOPIC_PUBLISHER.matcher,
+            TOPIC_COPYRIGHT.matcher,
+            TOPIC_CRITDATES.matcher,
+            TOPIC_PERMISSIONS.matcher,
+            TOPIC_AUDIENCE.matcher,
+            TOPIC_CATEGORY.matcher,
+            TOPIC_KEYWORDS.matcher,
+            TOPIC_PRODINFO.matcher,
+            TOPIC_OTHERMETA.matcher,
+            TOPIC_RESOURCEID.matcher,
+            TOPIC_DATA.matcher,
+            TOPIC_DATA_ABOUT.matcher,
+            TOPIC_FOREIGN.matcher,
+            TOPIC_UNKNOWN.matcher
+            )));
+    private static final List<String> metaPos = Collections.unmodifiableList(asList(
+            MAP_SEARCHTITLE.matcher,
+            TOPIC_AUTHOR.matcher,
+            TOPIC_SOURCE.matcher,
+            TOPIC_PUBLISHER.matcher,
+            TOPIC_COPYRIGHT.matcher,
+            TOPIC_CRITDATES.matcher,
+            TOPIC_PERMISSIONS.matcher,
+            TOPIC_AUDIENCE.matcher,
+            TOPIC_CATEGORY.matcher,
+            TOPIC_KEYWORDS.matcher,
+            TOPIC_PRODINFO.matcher,
+            TOPIC_OTHERMETA.matcher,
+            TOPIC_RESOURCEID.matcher,
+            TOPIC_DATA.matcher,
+            TOPIC_DATA_ABOUT.matcher,
+            TOPIC_FOREIGN.matcher,
+            TOPIC_UNKNOWN.matcher,
+            MAP_LINKTEXT.matcher,
+            MAP_SHORTDESC.matcher,
+            TOPIC_NAVTITLE.matcher,
+            TOPIC_METADATA.matcher,
+            DELAY_D_EXPORTANCHORS.matcher
+            ));
 
     private DITAOTLogger logger;
 

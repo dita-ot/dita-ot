@@ -35,6 +35,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
+import org.dita.dost.reader.MapMetaReader;
 import org.dita.dost.util.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -98,16 +99,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
         moveTable.put(TOPIC_UNKNOWN.matcher, asList(TOPIC_PROLOG.localName, TOPIC_UNKNOWN.localName));
     }
 
-    private static final Set<String> uniqueSet;
-
-    static{
-        uniqueSet = new HashSet<String>(INT_16);
-        uniqueSet.add(TOPIC_CRITDATES.matcher);
-        uniqueSet.add(TOPIC_PERMISSIONS.matcher);
-        uniqueSet.add(TOPIC_PUBLISHER.matcher);
-        uniqueSet.add(TOPIC_SOURCE.matcher);
-        uniqueSet.add(MAP_SEARCHTITLE.matcher);
-    }
+    private static final Set<String> uniqueSet = MapMetaReader.uniqueSet;
 
     private static final Hashtable<String, Integer> compareTable;
 
