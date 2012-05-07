@@ -90,7 +90,9 @@
     <copy todir="${bin.dir}">
       <fileset dir="${java.dir}" includes="**/*.properties, **/*.xml"/>
     </copy>
-    <jar destfile="${dost.jar}" basedir="${bin.dir}" includes="**">
+    <jar destfile="${dost.jar}">
+      <fileset dir="${bin.dir}"/>
+      <fileset dir="${src.dir}/resources"/>
       <manifest>
         <attribute name="Implementation-Version" value="${version}"/>
         <attribute name="Main-Class" value="org.dita.dost.invoker.CommandLineInvoker"/>
