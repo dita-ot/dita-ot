@@ -27,9 +27,9 @@
   </topichead>
   <topichead navtitle="Resources">
     <!--topicref navtitle="Developers"/-->
-    <topicref navtitle="Issuer Tracking" scope="external" format="html" href="https://sourceforge.net/tracker/?group_id=132728"/>
+    <topicref navtitle="Issue Tracking" scope="external" format="html" href="https://github.com/dita-ot/dita-ot/issues"/>
     <topicref navtitle="Mailing lists" href="mailing_lists.dita"/>
-    <topicref navtitle="Version Control" scope="external" format="html" href="https://sourceforge.net/scm/?type=git&amp;group_id=132728"/>
+    <topicref navtitle="Version Control" scope="external" format="html" href="https://github.com/dita-ot/dita-ot"/>
     <topicref navtitle="Wiki" href="http://dita.xml.org/wiki/the-dita-open-toolkit" format="html" scope="external"/>
   </topichead>
   <mapref href="../keyrefs.ditamap" processing-role="resource-only"/>

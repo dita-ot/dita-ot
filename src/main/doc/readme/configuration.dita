@@ -58,4 +58,23 @@
       </simpletable>
     </section>
   </refbody>
+  <reference id="integration-configuration">
+    <title>Integration configuration</title>
+    <abstract>The integration process can be configured using the <filepath>integrator.properties</filepath> file.</abstract>
+    <refbody>
+      <simpletable>
+        <strow>
+          <stentry><codeph>plugindirs</codeph></stentry>
+          <stentry>A semicolon-separated list of directory paths
+           to search for plugins to integrate; relative paths are resolved against the DITA-OT base directory. Any immediate
+           subdirectory containing a "plugin.xml" file is
+           integrated.</stentry>
+        </strow>
+        <strow>
+          <stentry><codeph>plugin.ignores</codeph></stentry>
+          <stentry>A semicolon-separated list of directory names to ignore during plug-in integration.</stentry>
+        </strow>
+      </simpletable>
+    </refbody>
+  </reference>
 </reference>

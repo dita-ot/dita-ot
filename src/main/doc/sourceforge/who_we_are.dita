@@ -5,8 +5,8 @@
   <shortdesc>DITA Open Toolkit is maintained and developed by a team of volunteer
     developers.</shortdesc>
   <conbody>
-    <p>The toolkit was originally developed within IBM, but was contributed to SourceForge in 2005
-      and has been updated significantly since that time.</p>
+    <p>The toolkit was originally developed within IBM and was open sourced in 2005. Since that
+      time, DITA-OT has been updated significantly by a various companies and individuals.</p>
     <section id="section_jms_nre_nc">
       <title>Core Committers</title>
       <ul>

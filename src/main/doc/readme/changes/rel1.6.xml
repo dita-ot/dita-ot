@@ -136,6 +136,7 @@
           <li>3518180 Add automatic font detection to PDF2 (milestone 4)</li>
           <li>3518167 Need extension for determining topic level (milestone 4)</li>
           <li>3520046 css support for codeph in HTML output (milestone 4)</li>
+          <li>#1198 Generate PDF metadata from bookmeta (milestone 5)</li>
           <li>3466842 Refactor preprocessing to use SAX filters (in progress)</li>
           <li>3468864 Remove Content object (in progress)</li>
           <li>3460151 Use Job to read/write job configuration files (in progress)</li>
