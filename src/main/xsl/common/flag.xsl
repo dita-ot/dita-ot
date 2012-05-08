@@ -597,36 +597,14 @@
   </xsl:variable>
   <xsl:choose>
    <xsl:when test="$biditest='bidi'">
-    <xsl:choose>
-     <xsl:when test="exsl:node-set($flagrules)/revprop[startflag or endflag]">
-      <!-- new ditaval standard -->
-      <xsl:call-template name="end-revflagit">
-       <xsl:with-param name="flagrules" select="$flagrules"/>
-      </xsl:call-template>
-     </xsl:when>
-     <xsl:otherwise>
-      <!-- old ditaval standard -->
-      <xsl:call-template name="start-rev-art"> <!-- BIDI, use English end graphic for start of change-->
-       <xsl:with-param name="deltaname" select="'deltaend.gif'"/>
-      </xsl:call-template>
-     </xsl:otherwise>
-    </xsl:choose>   
+    <xsl:call-template name="end-revflagit">
+     <xsl:with-param name="flagrules" select="$flagrules"/>
+    </xsl:call-template>  
    </xsl:when>
    <xsl:otherwise>
-    <xsl:choose>
-     <xsl:when test="exsl:node-set($flagrules)/revprop[startflag or endflag]">
-      <!-- new ditaval standard -->
-      <xsl:call-template name="start-revflagit">
-       <xsl:with-param name="flagrules" select="$flagrules"/>
-      </xsl:call-template>
-     </xsl:when>
-     <xsl:otherwise>
-      <!-- old ditaval standard -->
-      <xsl:call-template name="start-rev-art"> <!-- Not BIDI, use English start graphic -->
-       <xsl:with-param name="deltaname" select="'delta.gif'"/>
-      </xsl:call-template>
-     </xsl:otherwise>
-    </xsl:choose>   
+    <xsl:call-template name="start-revflagit">
+     <xsl:with-param name="flagrules" select="$flagrules"/>
+    </xsl:call-template>  
    </xsl:otherwise>
   </xsl:choose>
  </xsl:template>
@@ -643,36 +621,14 @@
   </xsl:variable>
   <xsl:choose>
    <xsl:when test="$biditest='bidi'">
-    <xsl:choose>
-     <xsl:when test="exsl:node-set($flagrules)/revprop[startflag or endflag]">
-      <!-- new ditaval standard -->
-      <xsl:call-template name="start-revflagit">
-       <xsl:with-param name="flagrules" select="$flagrules"/>
-      </xsl:call-template>
-     </xsl:when>
-     <xsl:otherwise>
-      <!-- old ditaval standard -->
-      <xsl:call-template name="end-rev-art"> <!-- BIDI, use English start graphic for end of change-->
-       <xsl:with-param name="deltaname" select="'delta.gif'"/>
-      </xsl:call-template>
-     </xsl:otherwise>
-    </xsl:choose>   
+    <xsl:call-template name="start-revflagit">
+     <xsl:with-param name="flagrules" select="$flagrules"/>
+    </xsl:call-template>  
    </xsl:when>
    <xsl:otherwise>
-    <xsl:choose>
-     <xsl:when test="exsl:node-set($flagrules)/revprop[startflag or endflag]">
-      <!-- new ditaval standard -->
-      <xsl:call-template name="end-revflagit">
-       <xsl:with-param name="flagrules" select="$flagrules"/>
-      </xsl:call-template>
-     </xsl:when>
-     <xsl:otherwise>
-      <!-- old ditaval standard -->
-      <xsl:call-template name="end-rev-art"> <!-- Not BIDI, use English end graphic -->
-       <xsl:with-param name="deltaname" select="'deltaend.gif'"/>
-      </xsl:call-template>
-     </xsl:otherwise>
-    </xsl:choose>   
+    <xsl:call-template name="end-revflagit">
+     <xsl:with-param name="flagrules" select="$flagrules"/>
+    </xsl:call-template>  
    </xsl:otherwise>
   </xsl:choose>
  </xsl:template>
