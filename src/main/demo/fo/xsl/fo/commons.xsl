@@ -245,9 +245,9 @@ See the accompanying license.txt file for applicable licenses.
       <!--BS: skipp abstract (copyright) from usual content. It will be processed from the front-matter-->
       <xsl:when test="$topicType = 'topicAbstract'"/>
       <xsl:otherwise>
-                <xsl:call-template name="processUnknowTopic">
+                <xsl:apply-templates select="." mode="processUnknowTopic">
                     <xsl:with-param name="topicType" select="$topicType"/>
-                </xsl:call-template>
+                </xsl:apply-templates>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>

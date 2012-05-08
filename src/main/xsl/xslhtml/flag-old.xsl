@@ -616,9 +616,6 @@
    <xsl:call-template name="start-mark-rev">
     <xsl:with-param name="revvalue" select="@rev"/>
    </xsl:call-template>
-   <xsl:call-template name="revstyle-deprecated">
-    <xsl:with-param name="revvalue" select="@rev"/>
-   </xsl:call-template>
    <xsl:call-template name="end-mark-rev">
     <xsl:with-param name="revvalue" select="@rev"/>
    </xsl:call-template>
@@ -626,9 +623,6 @@
   </xsl:when>
   <xsl:when test="@rev and not($FILTERFILE='')">         <!-- normal rev mode -->
    <xsl:call-template name="start-mark-rev">
-    <xsl:with-param name="revvalue" select="@rev"/>
-   </xsl:call-template>
-   <xsl:call-template name="revstyle-deprecated">
     <xsl:with-param name="revvalue" select="@rev"/>
    </xsl:call-template>
    <xsl:call-template name="end-mark-rev">
@@ -642,27 +636,11 @@
 <!-- There's a rev attr - test for active rev values -->
 <xsl:template name="start-mark-rev">
  <xsl:param name="revvalue"/>
- <xsl:variable name="revtest">
-  <xsl:call-template name="find-active-rev-flag">
-   <xsl:with-param name="allrevs" select="$revvalue"/>
-  </xsl:call-template>
- </xsl:variable>
-  <xsl:if test="$revtest=1">
-   <xsl:call-template name="start-revision-flag-deprecated"/>
-  </xsl:if>
 </xsl:template>
 
 <!-- There's a rev attr - test for active rev values -->
 <xsl:template name="end-mark-rev">
  <xsl:param name="revvalue"/>
- <xsl:variable name="revtest">
-  <xsl:call-template name="find-active-rev-flag">
-   <xsl:with-param name="allrevs" select="$revvalue"/>
-  </xsl:call-template>
- </xsl:variable>
-  <xsl:if test="$revtest=1">
-   <xsl:call-template name="end-revision-flag-deprecated"/>
-  </xsl:if>
 </xsl:template>
 
 <!-- output the revision color & apply further templates-->

@@ -50,7 +50,7 @@ See the accompanying license.txt file for applicable licenses.
                          </fo:marker>
                          <fo:marker marker-class-name="current-header">
                              <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
-                                 <xsl:call-template name="getTitle"/>
+                                 <xsl:apply-templates select="." mode="getTitle"/>
                              </xsl:for-each>
                          </fo:marker>
                      </xsl:if>
@@ -64,7 +64,7 @@ See the accompanying license.txt file for applicable licenses.
                      <fo:block xsl:use-attribute-sets="topic.title">
                          <xsl:call-template name="pullPrologIndexTerms"/>
                          <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
-                             <xsl:call-template name="getTitle"/>
+                             <xsl:apply-templates select="." mode="getTitle"/>
                          </xsl:for-each>
                      </fo:block>
 
