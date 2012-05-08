@@ -286,183 +286,6 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 <xsl:key name="omit-from-unordered-links" match="*[@role='next']" use="1"/>
 <xsl:key name="omit-from-unordered-links" match="*[@role='previous']" use="1"/>
 <xsl:key name="omit-from-unordered-links" match="*[@role='parent']" use="1"/>
-  
-<!--type templates: concept, task, reference, relinfo-->
-<!-- Deprecated! Use related-links:group-unordered-links template instead. -->
-
-<xsl:template name="concept-links">
-  <xsl:call-template name="output-message">
-    <xsl:with-param name="msgnum">066</xsl:with-param>
-    <xsl:with-param name="msgsev">W</xsl:with-param>
-    <xsl:with-param name="msgparams">%1=concept-links</xsl:with-param>
-  </xsl:call-template>
-     <!-- Deprecated! Use related-links:group-unordered-links template instead. -->
-     <!--related concepts - all the related concept links that haven't already been covered as a child/descendant/ancestor/next/previous/prerequisite, and aren't in a linklist-->
-     <xsl:if test="descendant::*[contains(@class, ' topic/link ')]
-          [not(ancestor::*[contains(@class,' topic/linklist ')])]
-          [not(@role='child' or @role='descendant' or @role='ancestor' or @role='parent' or @role='next' or @role='previous')]
-          [not(@importance='required' and (not(@role) or @role='sibling' or @role='friend' or @role='cousin'))]
-          [@type='concept']">
-          <div class="relconcepts">
-          <strong>
-             <xsl:call-template name="getString">
-                  <xsl:with-param name="stringName" select="'Related concepts'"/>
-               </xsl:call-template>
-          </strong><br/><xsl:value-of select="$newline"/>
-     <!--once the related concepts section is set up, sort links by role within the section, using a shared sorting routine so that it's consistent across sections-->
-       <xsl:call-template name="sort-links-by-role"><xsl:with-param name="type">concept</xsl:with-param></xsl:call-template>
-          </div><xsl:value-of select="$newline"/>
-     </xsl:if>
-</xsl:template>
-
-<xsl:template name="task-links">
-  <xsl:call-template name="output-message">
-    <xsl:with-param name="msgnum">066</xsl:with-param>
-    <xsl:with-param name="msgsev">W</xsl:with-param>
-    <xsl:with-param name="msgparams">%1=task-links</xsl:with-param>
-  </xsl:call-template>
-     <!-- Deprecated! Use related-links:group-unordered-links template instead. -->
-     <!--related tasks - all the related task links that haven't already been covered as a child/descendant/ancestor/next/previous/prerequisite, and aren't in a linklist-->
-     <xsl:if test="descendant::*[contains(@class, ' topic/link ')]
-          [not(ancestor::*[contains(@class,' topic/linklist ')])]
-          [not(@role='child' or @role='descendant' or @role='ancestor' or @role='parent' or @role='next' or @role='previous')]
-          [not(@importance='required' and (not(@role) or @role='sibling' or @role='friend' or @role='cousin'))]
-          [@type='task']">
-          <div class="reltasks">
-          <strong>
-             <xsl:call-template name="getString">
-                  <xsl:with-param name="stringName" select="'Related tasks'"/>
-               </xsl:call-template>
-          </strong><br/><xsl:value-of select="$newline"/>
-     <!--once the related tasks section is set up, sort links by role within the section, using a shared sorting routine so that it's consistent across sections-->
-       <xsl:call-template name="sort-links-by-role"><xsl:with-param name="type">task</xsl:with-param></xsl:call-template>
-          </div><xsl:value-of select="$newline"/>
-     </xsl:if>
-</xsl:template>
-
-
-<xsl:template name="reference-links">
-  <xsl:call-template name="output-message">
-    <xsl:with-param name="msgnum">066</xsl:with-param>
-    <xsl:with-param name="msgsev">W</xsl:with-param>
-    <xsl:with-param name="msgparams">%1=reference-links</xsl:with-param>
-  </xsl:call-template>
-     <!-- Deprecated! Use related-links:group-unordered-links template instead. -->
-     <!--related reference - all the related reference links that haven't already been covered as a child/descendant/ancestor/next/previous/prerequisite, and aren't in a linklist-->
-     <xsl:if test="descendant::*
-          [contains(@class, ' topic/link ')]
-          [not(ancestor::*[contains(@class,' topic/linklist ')])]
-          [not(@role='child' or @role='descendant' or @role='ancestor' or @role='parent' or @role='next' or @role='previous')]
-          [not(@importance='required' and (not(@role) or @role='sibling' or @role='friend' or @role='cousin'))]
-          [@type='reference']">
-          <div class="relref">
-          <strong>
-             <xsl:call-template name="getString">
-                  <xsl:with-param name="stringName" select="'Related reference'"/>
-               </xsl:call-template>
-          </strong><br/><xsl:value-of select="$newline"/>
-     <!--once the related reference section is set up, sort links by role within the section, using a shared sorting routine so that it's consistent across sections-->
-       <xsl:call-template name="sort-links-by-role"><xsl:with-param name="type">reference</xsl:with-param></xsl:call-template>
-          </div><xsl:value-of select="$newline"/>
-     </xsl:if>
-</xsl:template>
-
-
-<xsl:template name="relinfo-links">
-  <xsl:call-template name="output-message">
-    <xsl:with-param name="msgnum">066</xsl:with-param>
-    <xsl:with-param name="msgsev">W</xsl:with-param>
-    <xsl:with-param name="msgparams">%1=relinfo-links</xsl:with-param>
-  </xsl:call-template>
-     <!-- Deprecated! Use related-links:group-unordered-links template instead. -->
-     <!--other info- - not currently sorting by role, since already mixing any number of types in here-->
-     <!--if there are links not covered by any of the other routines - ie, not in a linklist, not a child or descendant, not a concept/task/reference, not ancestor/next/previous, not prerequisite - create a section for them and create the links-->
-     <xsl:if test="descendant::*
-[contains(@class, ' topic/link ')]
-[not(ancestor::*[contains(@class,' topic/linklist ')])]
-          [not(@role='child' or @role='descendant' or @role='ancestor' or @role='parent' or @role='next' or @role='previous' or @type='concept' or @type='task' or @type='reference')]
-          [not(@importance='required' and (not(@role) or @role='sibling' or @role='friend' or @role='cousin'))]">
-          <div class="relinfo">
-          <strong>
-             <xsl:call-template name="getString">
-                  <xsl:with-param name="stringName" select="'Related information'"/>
-               </xsl:call-template>
-          </strong><br/><xsl:value-of select="$newline"/>
-       <!--once section is created, create the links, using the same rules as bove plus a uniqueness check-->
-       <xsl:for-each select="descendant::*
-          [not(ancestor::*[contains(@class,' topic/linklist ')])]
-          [generate-id(.)=generate-id(key('link',concat(ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id, ' ', @href,@type,@role,@platform,@audience,@importance,@outputclass,@keyref,@scope,@format,@otherrole,@product,@otherprops,@rev,@class,child::*))[1])]
-[contains(@class, ' topic/link ')]
-          [(@role and contains($include.roles, concat(' ', @role, ' '))) or
-           (not(@role) and contains($include.roles, ' #default '))]
-          [not(@role='child' or @role='descendant' or @role='ancestor' or @role='parent' or @role='next' or @role='previous' or @type='concept' or @type='task' or @type='reference')]
-          [not(@importance='required' and (not(@role) or @role='sibling' or @role='friend' or @role='cousin'))]">
-          <xsl:apply-templates select="."/>
-       </xsl:for-each>
-          </div><xsl:value-of select="$newline"/>
-     </xsl:if>
-</xsl:template>
-
-
-<!--template used within concept/task/reference sections to sort links-->
-<xsl:template name="sort-links-by-role">
-  <!-- Deprecated! Use related-links:group-unordered-links template instead. -->
-   <xsl:param name="type">topic</xsl:param>
-   <xsl:call-template name="output-message">
-     <xsl:with-param name="msgnum">066</xsl:with-param>
-     <xsl:with-param name="msgsev">W</xsl:with-param>
-     <xsl:with-param name="msgparams">%1=sort-links-by-role</xsl:with-param>
-   </xsl:call-template>
-     <!--create all sibling links of the specified type-->
-     <xsl:call-template name="create-links"><xsl:with-param name="role">sibling</xsl:with-param><xsl:with-param name="type"><xsl:value-of select="$type"/></xsl:with-param></xsl:call-template>
-     <!--create all cousin links of the specified type-->
-     <xsl:call-template name="create-links"><xsl:with-param name="role">cousin</xsl:with-param><xsl:with-param name="type"><xsl:value-of select="$type"/></xsl:with-param></xsl:call-template>
-     <!--create all friend links of the specified type-->
-     <xsl:call-template name="create-links"><xsl:with-param name="role">friend</xsl:with-param><xsl:with-param name="type"><xsl:value-of select="$type"/></xsl:with-param></xsl:call-template>
-     <!--create all links with role="other" of the specified type-->
-     <xsl:call-template name="create-links"><xsl:with-param name="role">other</xsl:with-param><xsl:with-param name="type"><xsl:value-of select="$type"/></xsl:with-param></xsl:call-template>
-        <!--create all links with no role of the specified type-->
-     <xsl:call-template name="create-links"><xsl:with-param name="role">#none#</xsl:with-param><xsl:with-param name="type"><xsl:value-of select="$type"/></xsl:with-param></xsl:call-template>
-</xsl:template>
-
-<xsl:template name="create-links">
-     <!-- Deprecated! Use related-links:group-unordered-links template instead. -->
-     <!--create links of the specified type and role-->
-     <xsl:param name="type">topic</xsl:param>
-     <xsl:param name="role">friend</xsl:param>
-     <xsl:call-template name="output-message">
-       <xsl:with-param name="msgnum">066</xsl:with-param>
-       <xsl:with-param name="msgsev">W</xsl:with-param>
-       <xsl:with-param name="msgparams">%1=create-links</xsl:with-param>
-     </xsl:call-template>
-       <xsl:choose>
-          <!--when processing links with no role, apply templates to links that are unique, not in a linklist, don't have a role attribute, match the specified type, and aren't prerequisites-->
-          <xsl:when test="$role='#none#'">
-               <xsl:for-each select="descendant::*
-               [generate-id(.)=generate-id(key('link',concat(ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id, ' ', @href,@type,@role,@platform,@audience,@importance,@outputclass,@keyref,@scope,@format,@otherrole,@product,@otherprops,@rev,@class,child::*))[1])]
-               [contains(@class, ' topic/link ')]
-               [not(ancestor::*[contains(@class,' topic/linklist ')])]
-               [not(@role)]
-               [@type=$type]
-               [not(@importance='required')]">
-               <xsl:apply-templates select="."/>
-          </xsl:for-each>
-          </xsl:when>
-          <!--when processing links with a specified role, apply templates to links that are unique, not in a linklist, match the specified role and type, and aren't prerequisites-->
-          <xsl:otherwise>
-                <xsl:for-each select="descendant::*
-               [generate-id(.)=generate-id(key('link',concat(ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id, ' ', @href,@type,@role,@platform,@audience,@importance,@outputclass,@keyref,@scope,@format,@otherrole,@product,@otherprops,@rev,@class,child::*))[1])]
-               [not(ancestor::*[contains(@class,' topic/linklist ')])]
-               [contains(@class, ' topic/link ')]
-               [@role=$role]
-               [@type=$type]
-               [not(@importance='required' and (@role='sibling' or @role='friend' or @role='previous' or @role='cousin'))]">
-               <xsl:apply-templates select="."/>
-                </xsl:for-each>
-
-          </xsl:otherwise>
-     </xsl:choose>
-</xsl:template>
 
 <!-- Override no-name group wrapper template for HTML: output "Related Information" in a <div>. -->
   <xsl:template match="*[contains(@class, ' topic/link ')]" mode="related-links:result-group" name="related-links:group-result.">
@@ -908,23 +731,6 @@ Children are displayed in a numbered list, with the target title as the cmd and 
        Can override this template to add hover help to child links. -->
 </xsl:template>
 
-<!-- DEPRECATED: use mode template instead -->
-<xsl:template name="add-linking-attributes">
-  <xsl:call-template name="output-message">
-    <xsl:with-param name="msgnum">066</xsl:with-param>
-    <xsl:with-param name="msgsev">W</xsl:with-param>
-    <xsl:with-param name="msgparams">%1=add-linking-attributes</xsl:with-param>
-  </xsl:call-template>
-  <xsl:if test="@href and normalize-space(@href)!=''">
-    <xsl:attribute name="href">
-      <xsl:call-template name="href" />
-    </xsl:attribute>
-  </xsl:if>
-  <xsl:call-template name="commonattributes"/>
-  <xsl:call-template name="add-link-target-attribute" />
-  <xsl:call-template name="add-user-link-attributes" />
-</xsl:template>
-
 <!-- When converting to mode template, move commonattributes out;
      this template is dedicated to linking based attributes, and
      allows the common linking set to be used when commonattributes
@@ -943,39 +749,12 @@ Children are displayed in a numbered list, with the target title as the cmd and 
   </xsl:if>
 </xsl:template>
 
-<xsl:template name="add-link-target-attribute">
-  <xsl:call-template name="output-message">
-    <xsl:with-param name="msgnum">066</xsl:with-param>
-    <xsl:with-param name="msgsev">W</xsl:with-param>
-    <xsl:with-param name="msgparams">%1=add-link-target-attribute</xsl:with-param>
-  </xsl:call-template>
-  <!-- DEPRECATED: use mode template -->
-  <xsl:apply-templates select="." mode="add-link-target-attribute"/>
-</xsl:template>
 <xsl:template match="*" mode="add-link-target-attribute">
   <xsl:if test="@scope='external' or @type='external' or ((@format='PDF' or @format='pdf') and not(@scope='local'))">
     <xsl:attribute name="target">_blank</xsl:attribute>
   </xsl:if>
 </xsl:template>
 
-<xsl:template name="add-user-link-attributes">
-  <xsl:call-template name="output-message">
-    <xsl:with-param name="msgnum">066</xsl:with-param>
-    <xsl:with-param name="msgsev">W</xsl:with-param>
-    <xsl:with-param name="msgparams">%1=add-user-link-attributes</xsl:with-param>
-  </xsl:call-template>
-  <!-- stub for user values. DEPRECATED - use mode template instead. -->
-  <xsl:apply-templates select="." mode="add-custom-link-attributes"/>
-</xsl:template>
-
-<xsl:template match="*" mode="ditamsg:unknown-extension">
-  <xsl:param name="href" select="@href"/>
-  <xsl:call-template name="output-message">
-    <xsl:with-param name="msgnum">006</xsl:with-param>
-    <xsl:with-param name="msgsev">E</xsl:with-param>
-    <xsl:with-param name="msgparams">%1=<xsl:value-of select="$href"/></xsl:with-param>
-  </xsl:call-template>
-</xsl:template>
 <xsl:template match="*" mode="ditamsg:link-may-be-duplicate">
   <xsl:param name="href" select="@href"/>
   <xsl:param name="outfile" select="concat(substring-before($FILENAME, $DITAEXT), $OUTEXT)"/>

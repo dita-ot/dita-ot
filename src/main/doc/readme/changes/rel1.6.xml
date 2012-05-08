@@ -41,13 +41,33 @@
         <p>Support for argument <codeph>args.message.file</codeph> has been removed as message
           configuration has become static configuration.</p>
       </section>
+      <section id="section_gvw_5xn_2g">
+        <title>Preprocessing</title>
+        <p>The following deprecated templates and modes have been removed in topic pull
+          stylesheets:</p>
+        <ul>
+          <li>inherit</li>
+          <li>get-stuff</li>
+          <li>verify-type-attribute</li>
+          <li>classval</li>
+          <li>getshortdesc</li>
+          <li>getlinktext</li>
+          <li>blocktext</li>
+          <li>figtext</li>
+          <li>tabletext</li>
+          <li>litext</li>
+          <li>fntext</li>
+          <li>dlentrytext</li>
+          <li>firstclass</li>
+          <li>invalid-list-item</li>
+          <li>xref</li>
+        </ul>
+      </section>
       <section>
         <title>XHTML</title>
-        <p>The following deprecated templates will be removed:</p>
-        <draft-comment>That is, they are deprecated in early 1.6 milestones but will be removed
-          completely from final release. Also remove delta.gif and deltaend.gif from resource
-          directory, and copy-revflag Ant target. Document that old flagging syntax is
-          removed</draft-comment>
+        <p>The following deprecated templates have been removed:</p>
+        <draft-comment>Also remove delta.gif and deltaend.gif from resource directory, and
+          copy-revflag Ant target. Document that old flagging syntax is removed</draft-comment>
         <ul id="ul_ywp_gsc_ff">
           <li>revblock-deprecated</li>
           <li>revstyle-deprecated</li>
@@ -68,9 +88,7 @@
       </section>
       <section>
         <title>ODT</title>
-        <p>The following deprecated templates will be removed:<draft-comment>That is, they are
-            deprecated in early 1.6 milestones but will be removed completely from final release.
-            See XHTML draft comment.</draft-comment></p>
+        <p>The following deprecated templates have been removed:</p>
         <ul id="ul_ywp_gsc_ff2">
           <li>revblock-deprecated</li>
           <li>revstyle-deprecated</li>
@@ -87,9 +105,7 @@
           have been deprecated:</p><ul id="ul_hxz_ks2_gf">
           <li>toc-prefix-text</li>
           <li>toc-topic-text</li>
-        </ul><p>The following named templates have been replaced with template modes:</p>
-        <draft-comment>That is, they are deprecated in early 1.6 milestones but will be removed
-          completely from final release.</draft-comment>
+        </ul><p>The following named templates have been removed:</p>
         <ul>
           <li>processTopic</li>
           <li>createMiniToc</li>

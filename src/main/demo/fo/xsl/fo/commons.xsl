@@ -93,15 +93,6 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:copy-of select="$mapTopicref/*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')]"/>
     </xsl:template>
 
-    <xsl:template name="processTopic">
-        <xsl:call-template name="output-message">
-          <xsl:with-param name="msgcat">DOTX</xsl:with-param>
-          <xsl:with-param name="msgnum">066</xsl:with-param>
-          <xsl:with-param name="msgsev">W</xsl:with-param>
-          <xsl:with-param name="msgparams">%1=processTopic</xsl:with-param>
-        </xsl:call-template>
-        <xsl:apply-templates select="." mode="processTopic"/>
-    </xsl:template>
     <xsl:template match="*" mode="processTopic">
         <fo:block xsl:use-attribute-sets="topic">
             <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
@@ -557,15 +548,6 @@ See the accompanying license.txt file for applicable licenses.
       <xsl:message>No topicTitleNumber mode template for <xsl:value-of select="name()"/></xsl:message>
     </xsl:template>
 
-    <xsl:template name="createMiniToc">
-        <xsl:call-template name="output-message">
-          <xsl:with-param name="msgcat">DOTX</xsl:with-param>
-          <xsl:with-param name="msgnum">066</xsl:with-param>
-          <xsl:with-param name="msgsev">W</xsl:with-param>
-          <xsl:with-param name="msgparams">%1=createMiniToc</xsl:with-param>
-        </xsl:call-template>
-        <xsl:apply-templates select="." mode="createMiniToc"/>
-    </xsl:template>
     <xsl:template match="*" mode="createMiniToc">
         <fo:table xsl:use-attribute-sets="__toc__mini__table">
             <fo:table-column xsl:use-attribute-sets="__toc__mini__table__column_1"/>
@@ -650,15 +632,6 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template name="processTopicTitle">
-        <xsl:call-template name="output-message">
-          <xsl:with-param name="msgcat">DOTX</xsl:with-param>
-          <xsl:with-param name="msgnum">066</xsl:with-param>
-          <xsl:with-param name="msgsev">W</xsl:with-param>
-          <xsl:with-param name="msgparams">%1=processTopicTitle</xsl:with-param>
-        </xsl:call-template>
-        <xsl:apply-templates select="." mode="processTopicTitle"/>
-    </xsl:template>
     <xsl:template match="*" mode="processTopicTitle">
         <xsl:variable name="level" as="xs:integer">
           <xsl:apply-templates select="." mode="get-topic-level"/>
@@ -710,20 +683,6 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:value-of select="count(ancestor-or-self::*[contains(@class,' topic/topic ')])"/>
   </xsl:template>
 
-    <xsl:template name="createTopicAttrsName">
-        <xsl:param name="theCounter"/>
-        <xsl:param name="theName" select="''"/>
-        <xsl:call-template name="output-message">
-          <xsl:with-param name="msgcat">DOTX</xsl:with-param>
-          <xsl:with-param name="msgnum">066</xsl:with-param>
-          <xsl:with-param name="msgsev">W</xsl:with-param>
-          <xsl:with-param name="msgparams">%1=createTopicAttrsName</xsl:with-param>
-        </xsl:call-template>
-        <xsl:apply-templates select="." mode="createTopicAttrsName">
-          <xsl:with-param name="theCounter" select="$theCounter"/>
-          <xsl:with-param name="theName" select="$theName"/>
-        </xsl:apply-templates>
-    </xsl:template>
     <xsl:template match="*" mode="createTopicAttrsName">
       <xsl:param name="theCounter"/>
       <xsl:param name="theName" select="''"/>
@@ -1024,15 +983,6 @@ See the accompanying license.txt file for applicable licenses.
 -->
     </xsl:template>
 
-    <xsl:template name="processConcept">
-        <xsl:call-template name="output-message">
-          <xsl:with-param name="msgcat">DOTX</xsl:with-param>
-          <xsl:with-param name="msgnum">066</xsl:with-param>
-          <xsl:with-param name="msgsev">W</xsl:with-param>
-          <xsl:with-param name="msgparams">%1=processConcept</xsl:with-param>
-        </xsl:call-template>
-        <xsl:apply-templates select="." mode="processConcept"/>
-    </xsl:template>
     <xsl:template match="*" mode="processConcept">
         <fo:block xsl:use-attribute-sets="concept">
             <xsl:comment> concept/concept </xsl:comment>
@@ -1121,15 +1071,6 @@ See the accompanying license.txt file for applicable licenses.
       </xsl:choose>
     </xsl:template>
 
-    <xsl:template name="processReference">
-        <xsl:call-template name="output-message">
-          <xsl:with-param name="msgcat">DOTX</xsl:with-param>
-          <xsl:with-param name="msgnum">066</xsl:with-param>
-          <xsl:with-param name="msgsev">W</xsl:with-param>
-          <xsl:with-param name="msgparams">%1=processReference</xsl:with-param>
-        </xsl:call-template>
-        <xsl:apply-templates select="." mode="processReference"/>
-    </xsl:template>
     <xsl:template match="*" mode="processReference">
         <fo:block xsl:use-attribute-sets="reference">
             <xsl:apply-templates select="." mode="commonTopicProcessing"/>
@@ -1246,15 +1187,6 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:choose>
     </xsl:template>
     
-    <xsl:template name="getTitle"><!-- get fully-processed title content by whatever mechanism -->
-        <xsl:call-template name="output-message">
-          <xsl:with-param name="msgcat">DOTX</xsl:with-param>
-          <xsl:with-param name="msgnum">066</xsl:with-param>
-          <xsl:with-param name="msgsev">W</xsl:with-param>
-          <xsl:with-param name="msgparams">%1=getTitle</xsl:with-param>
-        </xsl:call-template>
-        <xsl:apply-templates select="." mode="getTitle"/>
-    </xsl:template>
     <xsl:template match="*" mode="getTitle">
         <xsl:choose>
 <!--             add keycol here once implemented-->
@@ -1545,15 +1477,6 @@ See the accompanying license.txt file for applicable licenses.
         </fo:block>
     </xsl:template>
 
-    <xsl:template name="placeNoteContent">
-        <xsl:call-template name="output-message">
-          <xsl:with-param name="msgcat">DOTX</xsl:with-param>
-          <xsl:with-param name="msgnum">066</xsl:with-param>
-          <xsl:with-param name="msgsev">W</xsl:with-param>
-          <xsl:with-param name="msgparams">%1=placeNoteContent</xsl:with-param>
-        </xsl:call-template>
-        <xsl:apply-templates select="." mode="placeNoteContent"/>
-    </xsl:template>
     <xsl:template match="*" mode="placeNoteContent">
         <fo:block xsl:use-attribute-sets="note">
             <xsl:call-template name="commonattributes"/>
@@ -1984,25 +1907,6 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template name="placeImage">
-        <xsl:param name="imageAlign"/>
-        <xsl:param name="href"/>
-        <xsl:param name="height"/>
-        <xsl:param name="width"/>
-        <xsl:call-template name="output-message">
-          <xsl:with-param name="msgcat">DOTX</xsl:with-param>
-          <xsl:with-param name="msgnum">066</xsl:with-param>
-          <xsl:with-param name="msgsev">W</xsl:with-param>
-          <xsl:with-param name="msgparams">%1=placeImage</xsl:with-param>
-        </xsl:call-template>
-        <xsl:apply-templates select="." mode="placeImage">
-            <xsl:with-param name="imageAlign" select="$imageAlign"/>
-            <xsl:with-param name="href" select="$href"/>
-            <xsl:with-param name="height" select="$height"/>
-            <xsl:with-param name="width" select="$width"/>
-        </xsl:apply-templates>
-    </xsl:template>
-
     <xsl:template match="*" mode="placeImage">
         <xsl:param name="imageAlign"/>
         <xsl:param name="href"/>
@@ -2326,18 +2230,6 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
 
-    <xsl:template name="processUnknowTopic">
-        <xsl:param name="topicType"/>
-        <xsl:call-template name="output-message">
-          <xsl:with-param name="msgcat">DOTX</xsl:with-param>
-          <xsl:with-param name="msgnum">066</xsl:with-param>
-          <xsl:with-param name="msgsev">W</xsl:with-param>
-          <xsl:with-param name="msgparams">%1=processUnknowType</xsl:with-param>
-        </xsl:call-template>
-        <xsl:apply-templates select="." mode="processUnknowTopic">
-            <xsl:with-param name="topicType" select="$topicType"/>
-        </xsl:apply-templates>
-    </xsl:template>
     <xsl:template match="*" mode="processUnknowTopic">
         <xsl:param name="topicType"/>
         <xsl:choose>
