@@ -8,13 +8,13 @@
     
   <xsl:template name="createMetadata">
     <rx:meta-info>
-      <xsl:variable name="title">
+      <xsl:variable name="title" as="xs:string?">
         <xsl:apply-templates select="." mode="dita-ot:title-metadata"/>
       </xsl:variable>
       <xsl:if test="exists($title)">
         <rx:meta-field name="title" value="{$title}"/>
       </xsl:if>
-      <xsl:variable name="author">
+      <xsl:variable name="author" as="xs:string?">
         <xsl:apply-templates select="." mode="dita-ot:author-metadata"/>
       </xsl:variable>
       <xsl:if test="exists($author)">
@@ -28,7 +28,7 @@
           <xsl:attribute name="value" select="$keywords" separator=", "/>
         </rx:meta-field>
       </xsl:if>
-      <xsl:variable name="subject">
+      <xsl:variable name="subject" as="xs:string?">
         <xsl:apply-templates select="." mode="dita-ot:subject-metadata"/>
       </xsl:variable>
       <xsl:if test="exists($subject)">

@@ -7,26 +7,28 @@
                 version="2.0" exclude-result-prefixes="dita-ot xs">
     
   <xsl:template name="createMetadata">
-    <xsl:variable name="title">
+    <xsl:variable name="title" as="xs:string?">
       <xsl:apply-templates select="." mode="dita-ot:title-metadata"/>
     </xsl:variable>
     <xsl:if test="exists($title)">
       <axf:document-info name="title" value="{$title}"/>
     </xsl:if>
     <!--axf:document-info name="subject" value="The document subject"/-->
-    <xsl:variable name="author">
+    <xsl:variable name="author" as="xs:string?">
       <xsl:apply-templates select="." mode="dita-ot:author-metadata"/>
     </xsl:variable>
     <xsl:if test="exists($author)">
       <axf:document-info name="author" value="{$author}"/>
     </xsl:if>
-    <xsl:variable name="keywords">
+    <xsl:variable name="keywords" as="xs:string*">
       <xsl:apply-templates select="." mode="dita-ot:keywords-metadata"/>
     </xsl:variable>
     <xsl:if test="exists($keywords)">
-      <axf:document-info name="keywords" value="{$keywords}"/>
+      <axf:document-info name="keywords">
+        <xsl:value-of select="$keywords" separator=", "/>
+      </axf:document-info>
     </xsl:if>
-    <xsl:variable name="subject">
+    <xsl:variable name="subject" as="xs:string?">
       <xsl:apply-templates select="." mode="dita-ot:subject-metadata"/>
     </xsl:variable>
     <xsl:if test="exists($subject)">
