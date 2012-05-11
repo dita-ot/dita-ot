@@ -2,8 +2,7 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="distribution_packages">
   <title>Distribution packages</title>
-  <shortdesc>DITA-OT is available in three three binary packages, as well as in a source
-    package.</shortdesc>
+  <abstract><shortdesc>DITA-OT is available in three three binary packages.</shortdesc> Source code is available as a Git repository and ZIP downloads. </abstract>
   <conbody>
     <section>
       <title>Minimal package (DITA-OT<keyword keyref="release.version"></keyword>_minimal_bin.zip
@@ -52,19 +51,5 @@ keyref="release.version"></keyword>_full_easy_install_bin.tar.gz</ph>)</title>
         <li>Apache FOP <keyword keyref="tool.fop.version"/></li>
       </ul>
     </section>
-    <section>
-      <title>Source package (DITA-OT<keyword
-keyref="release.version"></keyword>_src.zip or DITA-OT<keyword
-keyref="release.version"></keyword>_src.tar.gz)</title>
-      <p>In addition to the binary versions of the toolkit, there is a source package available that
-        contains all of the source code used in each of the three packages. The demo files, samples,
-        and documentation are not part of the source package.The source package contains the Apache
-        Commons Logging and Apache Catalog Resolver libraries.</p>
-    </section>
   </conbody>
-  <related-links>
-    <link href="https://sourceforge.net/projects/dita-ot/files" scope="external" format="html">
-      <linktext>DITA Open Toolkit distibution package downloads</linktext>
-    </link>
-  </related-links>
 </concept>

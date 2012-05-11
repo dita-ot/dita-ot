@@ -3,9 +3,9 @@
      Sourceforge.net. See the accompanying license.txt file for 
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved. -->
-<!-- build whole bin and source package for DITA Open Toolkit -->
+<!-- build whole binary package for DITA Open Toolkit -->
 <project name="build_DITA-OT_package" default="build-all-packages" basedir=".">
-  <description>Build source and binary packages for DITA Open Toolkit</description>
+  <description>Build binary packages for DITA Open Toolkit</description>
 
   <property file="build.properties"/>
 
@@ -31,7 +31,7 @@
   <property name="resource.dir" location="${src.dir}/resource/"/>
 
   <property name="top.work.dir" location="${src.dir}"/>
-  <property name="package.output.dir" location="${top.work.dir}/build/"/>
+  <property name="package.output.dir" location="${basedir}/target"/>
   <property name="bin.dir" location="${top.work.dir}/output2/"/>
   <tstamp>
     <format property="current.date" pattern="yyyyMMddHHmmssSSS"/>
@@ -45,7 +45,6 @@
   <property name="binary-min" value="DITA-OT${version}_minimal_bin"/>
   <property name="binary-big" value="DITA-OT${version}_full_easy_install_bin"/>
   <property name="binary" value="DITA-OT${version}_standard_bin"/>
-  <property name="source" value="DITA-OT${version}_src"/>
   <property name="win32.zip.suffix" value=".zip"/>
   <property name="linux.zip.suffix" value=".tar.gz"/>
 
@@ -220,16 +219,6 @@
     <exclude name="demo/fo/src/**"/>
   </patternset>
   
-  <patternset id="pattern.package.source">
-    <patternset refid="pattern.package.standard.base"/>
-    <exclude name="src/org/dita/dost/invoker/JavaInvoker.java"/>
-    <exclude name="lib/dost.jar"/>
-    <exclude name="files.txt"/>
-    <exclude name="startcmd.*"/>
-    <include name="src/**"/>
-    <include name="demo/fo/src/**"/>
-  </patternset>
-
   <patternset id="pattern.package.doc">
     <include name="relnotes.html"/>
     <include name="doc/**"/>
@@ -242,30 +231,6 @@
     <exclude name="**/*.temp"/>
     <exclude name="**/*.db"/>
   </patternset>
-
-  <target name="package-source">
-    <fail unless="param.out.file">param.out.file not defined</fail>
-    <property name="temp.dist.dir" location="${work.dir}/${param.out.file}/${package.name.root}${version}"/>
-    <delete dir="${temp.dist.dir}"/>
-    <mkdir dir="${temp.dist.dir}"/>
-    <copy todir="${temp.dist.dir}">
-      <fileset dir="${src.dir}">
-        <patternset refid="pattern.package.source"/>
-      </fileset>
-    </copy>
-    <copy todir="${temp.dist.dir}">
-      <fileset dir="${out.dir}">
-        <patternset refid="pattern.package.doc"/>
-      </fileset>
-    </copy>
-    <ant antfile="${temp.dist.dir}/integrator.xml"/>
-    <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
-      <fileset dir="${work.dir}/${param.out.file}"/>
-    </zip>
-    <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" compression="gzip" longfile="gnu">
-      <tarfileset dir="${work.dir}/${param.out.file}"/>
-    </tar>
-  </target>
 
   <target name="package-binary-minimum">
     <fail unless="param.out.file">param.out.file not defined</fail>
@@ -345,12 +310,6 @@
     </tar>
   </target>
 
-  <target name="build-package-source" depends="jar, update-doc" description="Build source distribution package">
-    <antcall target="package-source">
-      <param name="param.out.file" value="${source}"/>
-    </antcall>
-  </target>
-
   <target name="build-package-binary" depends="jar, update-doc" description="Build binary distribution packages">
     <sequential>
       <antcall target="package-binary-full">
@@ -384,7 +343,7 @@
   </target>
 
   <target name="build-all-packages"
-    depends="init-package, build-package-source, build-package-binary, cleanup" description="Build distribution packages"/>
+    depends="init-package, build-package-binary, cleanup" description="Build distribution packages"/>
 
   <target name="cleanup" unless="skip.cleanup">
     <delete dir="${work.dir}"/>

@@ -27,5 +27,22 @@
        </topicref>
      </relcell>
    </relrow>
+   <relrow>
+     <relcell>
+       <topicref href="readme/distribution_packages.dita"/>
+     </relcell>
+     <relcell>
+         <topicref href="https://sourceforge.net/projects/dita-ot/files" scope="external" format="html">
+           <topicmeta>
+            <linktext>DITA Open Toolkit distibution package downloads</linktext>
+           </topicmeta>
+         </topicref>
+         <topicref href="https://github.com/dita-ot/dita-ot" scope="external" format="html">
+           <topicmeta>
+             <linktext>DITA Open Toolkit source</linktext>
+           </topicmeta>
+         </topicref>
+     </relcell>
+   </relrow>
  </reltable>
 </map>

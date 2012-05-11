@@ -17,6 +17,8 @@
             be used to reduce memory consumption.</li>
         </ul>
         <p>Support for old DITAVAL format has been removed.</p>
+        <p>Source distribution package has been removed in favor or Git and GitHub source
+          downloads.</p>
       </section>
       <section><title>PDF2</title><p>The following deprecated items are no longer supported in the PDF transform.</p><ul>
 		<li>Support for the beta version of DITA, available from IBM before the OASIS standard was created in 2005.</li>
@@ -153,6 +155,7 @@
           <li>3518167 Need extension for determining topic level (milestone 4)</li>
           <li>3520046 css support for codeph in HTML output (milestone 4)</li>
           <li>#1198 Generate PDF metadata from bookmeta (milestone 5)</li>
+          <li>#1273 Remove source distribution builds (milestone 5)</li>
           <li>3466842 Refactor preprocessing to use SAX filters (in progress)</li>
           <li>3468864 Remove Content object (in progress)</li>
           <li>3460151 Use Job to read/write job configuration files (in progress)</li>
