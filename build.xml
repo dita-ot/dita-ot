@@ -15,7 +15,6 @@
   <condition property="HTMLHelpCompiler" value="C:\Program Files (x86)\HTML Help Workshop\hhc.exe">
     <available file="C:\Program Files (x86)\HTML Help Workshop\hhc.exe"/>
   </condition>
-  <property name="package.name.root" value="DITA-OT"/>
 
   <property name="src.dir" location="${basedir}/src/main"/>
   <property name="java.dir" location="${src.dir}/java/"/>
@@ -32,7 +31,7 @@
 
   <property name="top.work.dir" location="${src.dir}"/>
   <property name="package.output.dir" location="${basedir}/target"/>
-  <property name="bin.dir" location="${top.work.dir}/output2/"/>
+  <property name="bin.dir" location="${basedir}/target/classes"/>
   <tstamp>
     <format property="current.date" pattern="yyyyMMddHHmmssSSS"/>
   </tstamp>
@@ -413,7 +412,7 @@
   <property name="test.src.dir" location="${basedir}/src/test"/>
   <property name="test.java.dir" location="${test.src.dir}/java"/>
   <property name="test.lib.dir" location="${test.src.dir}/lib"/>
-  <property name="test.bin.dir" location="${test.src.dir}/build"/>
+  <property name="test.bin.dir" location="${basedir}/target/test-classes"/>
   <property name="test.log.dir" location="${test.src.dir}/log"/>
   <property name="test.suite.dir" location="${test.src.dir}/testsuite"/>
 
@@ -430,11 +429,11 @@
         <pathelement location="${test.suite.dir}/src/main/java"/>
       </src>
       <classpath>
-        <pathelement location="${bin.dir}"/>
-        <pathelement location="${lib.dir}/resolver.jar"/>
         <pathelement location="${test.lib.dir}/junit-4.8.2.jar"/>
         <pathelement location="${test.lib.dir}/htmlparser-1.3.1.jar"/>
         <pathelement location="${test.lib.dir}/xmlunit-1.3.jar"/>
+        <pathelement location="${bin.dir}"/>
+        <pathelement location="${lib.dir}/resolver.jar"/>
       </classpath>
     </javac>
   </target>
@@ -446,18 +445,18 @@
     <mkdir dir="${test.log.dir}"/>
     <junit printsummary="yes" haltonfailure="yes" showoutput="true">
       <classpath>
+        <pathelement location="${test.bin.dir}"/>
+        <pathelement location="${test.src.dir}/resources"/>
+        <pathelement location="${test.lib.dir}/junit-4.8.2.jar"/>
+        <pathelement location="${test.lib.dir}/htmlparser-1.3.1.jar"/>
+        <pathelement location="${test.lib.dir}/xmlunit-1.3.jar"/>
         <pathelement location="${bin.dir}"/>
         <pathelement location="${src.dir}/resources"/>
-        <pathelement location="${test.src.dir}/resources"/>
         <pathelement location="${lib.dir}/saxon/saxon9.jar"/>
         <pathelement location="${lib.dir}/saxon/saxon9-dom.jar"/>
         <pathelement location="${lib.dir}/xercesImpl.jar"/>
         <pathelement location="${lib.dir}/xml-apis.jar"/>
         <pathelement location="${lib.dir}/resolver.jar"/>
-        <pathelement location="${test.lib.dir}/junit-4.8.2.jar"/>
-        <pathelement location="${test.lib.dir}/htmlparser-1.3.1.jar"/>
-        <pathelement location="${test.lib.dir}/xmlunit-1.3.jar"/>
-        <pathelement location="${test.bin.dir}"/>
       </classpath>
       <formatter type="plain"/>
       <batchtest fork="yes" todir="${test.log.dir}">
@@ -478,18 +477,18 @@
     <mkdir dir="${test.log.dir}"/>
     <junit printsummary="false" haltonfailure="yes" showoutput="false" logfailedtests="true">
       <classpath>
+        <pathelement location="${test.bin.dir}"/>
+        <pathelement location="${test.src.dir}/resources"/>
+        <pathelement location="${test.lib.dir}/junit-4.8.2.jar"/>
+        <pathelement location="${test.lib.dir}/htmlparser-1.3.1.jar"/>
+        <pathelement location="${test.lib.dir}/xmlunit-1.3.jar"/>
         <pathelement location="${bin.dir}"/>
         <pathelement location="${src.dir}/resources"/>
-        <pathelement location="${test.src.dir}/resources"/>
         <pathelement location="${lib.dir}/saxon/saxon9.jar"/>
         <pathelement location="${lib.dir}/saxon/saxon9-dom.jar"/>
         <pathelement location="${lib.dir}/xercesImpl.jar"/>
         <pathelement location="${lib.dir}/xml-apis.jar"/>
         <pathelement location="${lib.dir}/resolver.jar"/>
-        <pathelement location="${test.lib.dir}/junit-4.8.2.jar"/>
-        <pathelement location="${test.lib.dir}/htmlparser-1.3.1.jar"/>
-        <pathelement location="${test.lib.dir}/xmlunit-1.3.jar"/>
-        <pathelement location="${test.bin.dir}"/>
       </classpath>
       <sysproperty key="dita.dir" value="${src.dir}"/>
       <sysproperty key="basedir" value="${test.suite.dir}"/>
