@@ -524,10 +524,6 @@
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.copy-flag.skip"
     description="Copy flag files">
-    <copy todir="${dita.map.output.dir}">
-      <fileset dir="${dita.resource.dir}"
-        includes="delta.gif,deltaend.gif" />
-    </copy>
     <dita-ot-copy todir="${output.dir}" includes="${flagimagelist}" relativepaths="${relflagimagelist}" />
   </target>
   

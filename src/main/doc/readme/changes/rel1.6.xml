@@ -68,8 +68,6 @@
       <section>
         <title>XHTML</title>
         <p>The following deprecated templates have been removed:</p>
-        <draft-comment>Also remove delta.gif and deltaend.gif from resource directory, and
-          copy-revflag Ant target. Document that old flagging syntax is removed</draft-comment>
         <ul id="ul_ywp_gsc_ff">
           <li>revblock-deprecated</li>
           <li>revstyle-deprecated</li>
