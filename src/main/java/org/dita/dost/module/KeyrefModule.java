@@ -13,6 +13,7 @@ import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -102,6 +103,7 @@ final class KeyrefModule implements AbstractPipelineModule {
         //Conref Module will change file's content, it is possible that tags with @keyref are copied in
         //while keyreflist is hard update with xslt.
         //bug:3056939
+        final Set<String> resourceOnlyList = job.getSet(RESOURCE_ONLY_LIST);
         final Set<String> conrefList = job.getSet(CONREF_LIST);
         parseList.addAll(conrefList);
         for(final String file: parseList){
@@ -114,7 +116,18 @@ final class KeyrefModule implements AbstractPipelineModule {
             //Added by Alan Date:2009-08-04
             parser.setExtName(extName);
             parser.write(file);
-
+            // validate resource-only list
+            for (final String t: parser.getNormalProcessingRoleTargets()) {
+                if (resourceOnlyList.contains(t)) {
+                    resourceOnlyList.remove(t);
+                }
+            }
+        }
+        job.setSet(RESOURCE_ONLY_LIST, resourceOnlyList);
+        try {
+            job.write();
+        } catch (final IOException e) {
+            throw new DITAOTException("Failed to store job state: " + e.getMessage(), e);
         }
         return null;
     }

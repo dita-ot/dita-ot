@@ -189,7 +189,9 @@ public final class KeyrefPaser extends XMLFilterImpl {
 
     /** File name with relative path to the temporary directory of input file. */
     private String fileName;
-
+    /** Set of link targets which are not resource-only */
+    private Set<String> normalProcessingRoleTargets;
+    
     /**
      * Constructor.
      */
@@ -267,12 +269,20 @@ public final class KeyrefPaser extends XMLFilterImpl {
     }
     
     /**
+     * Get set of link targets which have normal processing role.
+     */
+    public Set<String> getNormalProcessingRoleTargets() {
+        return Collections.unmodifiableSet(normalProcessingRoleTargets);
+    }
+    
+    /**
      * Process key references.
      * 
      * @param filename file to process
      * @throws DITAOTException if key reference resolution failed
      */
     public void write(final String filename) throws DITAOTException {
+        normalProcessingRoleTargets = new HashSet<String>();
         final File inputFile = new File(tempDir, filename);
         filepath = inputFile.getAbsolutePath();
         final File outputFile = new File(tempDir, filename + ATTRIBUTE_NAME_KEYREF);
@@ -524,6 +534,9 @@ public final class KeyrefPaser extends XMLFilterImpl {
                                 XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
                                 target_output = normalizeHrefValue(target_output, tail, topicId);
                                 XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output);
+                                if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE))) {
+                                    normalProcessingRoleTargets.add(FileUtils.stripFragment(target_output));
+                                }
                             } else {
                                 // referenced file does not exist, emits a message.
                                 // Should only emit this if in a debug mode; comment out for now
