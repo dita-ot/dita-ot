@@ -372,7 +372,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
                         if(nodeList.getLength() > 0){
                             if(currentElement != null && !currentElement.isRefType){
                                 // only one keyword or term is used.
-                                nodeToString((Element)nodeList.item(0), false);
+                                domToSax((Element)nodeList.item(0), false);
                             } else if(currentElement != null){
                                 // If the key reference element carries href attribute
                                 // all keyword or term are used.
@@ -385,7 +385,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
                                     for(int index =0; index<nodeList.getLength(); index++){
                                         final Node node = nodeList.item(index);
                                         if(node.getNodeType() == Node.ELEMENT_NODE){
-                                            nodeToString((Element)node, true);
+                                            domToSax((Element)node, true);
                                         }
                                     }
                                 }
@@ -399,7 +399,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
                                 // should pull in the linktext
                                 final NodeList linktext = elem.getElementsByTagName(TOPIC_LINKTEXT.localName);
                                 if(linktext.getLength()>0){
-                                    nodeToString((Element)linktext.item(0), true);
+                                    domToSax((Element)linktext.item(0), true);
                                 }else if (!StringUtils.isEmptyString(elem.getAttribute(ATTRIBUTE_NAME_NAVTITLE))){
                                     final AttributesImpl atts = new AttributesImpl();
                                     XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_CLASS, TOPIC_LINKTEXT.toString());
@@ -413,7 +413,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
                             }else if(currentElement != null && currentElement.isRefType){
                                 final NodeList linktext = elem.getElementsByTagName(TOPIC_LINKTEXT.localName);
                                 if(linktext.getLength()>0){
-                                    nodeToString((Element)linktext.item(0), false);
+                                    domToSax((Element)linktext.item(0), false);
                                 }else{
                                     if (elem.getAttribute(ATTRIBUTE_NAME_NAVTITLE) != null) {
                                         final char[] ch = elem.getAttribute(ATTRIBUTE_NAME_NAVTITLE).toCharArray();
@@ -488,10 +488,10 @@ public final class KeyrefPaser extends XMLFilterImpl {
             final String keyrefValue=atts.getValue(ATTRIBUTE_NAME_KEYREF);
             final int slashIndex=keyrefValue.indexOf(SLASH);
             String keyName= keyrefValue;
-            String tail= "";
+            String elementId= "";
             if (slashIndex != -1) {
                 keyName = keyrefValue.substring(0, slashIndex);
-                tail = keyrefValue.substring(slashIndex);
+                elementId = keyrefValue.substring(slashIndex);
             }
             final String definition = definitionMap.get(keyName);
 
@@ -515,7 +515,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
                             XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
                             XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
                             target_output = FileUtils.getRelativePath(fileName, target_output);
-                            target_output = normalizeHrefValue(target_output, tail);
+                            target_output = normalizeHrefValue(target_output, elementId);
                             XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output);
                         } else if ("".equals(scopeValue) || ATTR_SCOPE_VALUE_LOCAL.equals(scopeValue)){
                         	if (!(MAPGROUP_D_MAPREF.matches(cls)
@@ -532,7 +532,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
                                 XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
                                 XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
                                 XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
-                                target_output = normalizeHrefValue(target_output, tail, topicId);
+                                target_output = normalizeHrefValue(target_output, elementId, topicId);
                                 XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output);
                                 if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE))) {
                                     normalProcessingRoleTargets.add(FileUtils.stripFragment(target_output));
@@ -554,7 +554,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
                             XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
                             XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
                             XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
-                            target_output = normalizeHrefValue(target_output, tail);
+                            target_output = normalizeHrefValue(target_output, elementId);
                             XMLUtils.addOrSetAttribute(resAtts, ATTRIBUTE_NAME_HREF, target_output);
                         }
 
@@ -664,15 +664,15 @@ public final class KeyrefPaser extends XMLFilterImpl {
     }
 
     /**
-     * Serialize DOM node into a string.
+     * Serialize DOM node into a SAX stream.
      * 
      * @param elem element to serialize
-     * @param flag {@code true} to serialize elements, {@code false} to only serialize text nodes.
+     * @param retainElements {@code true} to serialize elements, {@code false} to only serialize text nodes.
      * @return
      */
-    private void nodeToString(final Element elem, final boolean flag) throws SAXException{
-        // use flag to indicate that whether there is need to copy the element name
-        if(flag){
+    private void domToSax(final Element elem, final boolean retainElements) throws SAXException{
+        // use retainElements to indicate that whether there is need to copy the element name
+        if(retainElements){
             final AttributesImpl atts = new AttributesImpl();
             final NamedNodeMap namedNodeMap = elem.getAttributes();
             for(int i=0; i<namedNodeMap.getLength(); i++){
@@ -692,19 +692,19 @@ public final class KeyrefPaser extends XMLFilterImpl {
                 final Element e = (Element) node;
                 //special process for tm tag.
                 if(TOPIC_TM.matches(e)){
-                    nodeToString(e, true);
+                    domToSax(e, true);
                 }else{
                     // If the type of current node is ELEMENT_NODE, process current node.
-                    nodeToString(e, flag);
+                    domToSax(e, retainElements);
                 }
                 // If the type of current node is ELEMENT_NODE, process current node.
-                //stringBuffer.append(nodeToString((Element)node, flag));
+                //stringBuffer.append(nodeToString((Element)node, retainElements));
             } else if(node.getNodeType() == Node.TEXT_NODE){
                 final char[] ch = node.getNodeValue().toCharArray();
                 getContentHandler().characters(ch, 0, ch.length);
             }
         }
-        if(flag) {
+        if(retainElements) {
             getContentHandler().endElement(NULL_NS_URI, elem.getNodeName(), elem.getNodeName());
         }
     }
