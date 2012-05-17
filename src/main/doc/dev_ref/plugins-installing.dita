@@ -7,10 +7,9 @@
   <taskbody>
     <context>
       <p>It is possible to define a plug-in so that it may be installed anywhere, although most
-        expect to be placed in either the <filepath>demo/</filepath> or
-          <filepath>plugins/</filepath> directory inside of the DITA-OT. Most plug-ins do not
-        require a specific install directory and can go in either of the default locations, but some
-        may come with instructions for a particular install directory.</p>
+        expect to be placed in <filepath>plugins/</filepath> directory inside of the DITA-OT. Most
+        plug-ins do not require a specific install directory and can go in either of the default
+        locations, but some may come with instructions for a particular install directory.</p>
     </context>
     <steps>
       <step>

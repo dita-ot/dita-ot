@@ -22,15 +22,14 @@ any Eclipse plug-in.</li>
 in a file named <filepath>index.xml</filepath>.</li>
 <li>Additional control files for Eclipse named <filepath>plugin.properties</filepath> and <filepath>META-INF/MANIFEST.MF</filepath>.</li>
 </ul></p>
-<draft-comment>RDA> The following paragraph correctly describes the
-Eclipse Help specialization, but I'm keeping it out until we have
-more complete documentation. I'd like to get more complete docs on
-this into an upcoming milestone.<p>For more complex plug-ins, the <filepath>demo/</filepath> directory
-in the DITA-OT contains an "Eclipse Map" specialization that gives
-more control over the generated <filepath>plugin.xml</filepath> file.
-The specialization provides additional control over metadata, as well
-as the ability to reference multiple TOC files, index files, and other
-Eclipse extensions.</p></draft-comment><?Pub Caret -1?>
+<draft-comment>RDA> The following paragraph correctly describes the Eclipse Help specialization, but
+      I'm keeping it out until we have more complete documentation. I'd like to get more complete
+      docs on this into an upcoming milestone.<p>For more complex plug-ins, the
+          <filepath>plugins</filepath> directory in the DITA-OT contains an "Eclipse Map"
+        specialization that gives more control over the generated <filepath>plugin.xml</filepath>
+        file. The specialization provides additional control over metadata, as well as the ability
+        to reference multiple TOC files, index files, and other Eclipse
+      extensions.</p></draft-comment><?Pub Caret -1?>
 </conbody>
 <related-links>
 <link format="html" href="http://eclipse.org/" scope="external">

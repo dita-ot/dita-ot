@@ -9,12 +9,12 @@
   <refbody>
     <section>
     <p>Plug-ins may do a number of things, such as adding support for specialized DTDs or Schemas,
-      integrating processing overrides, or providing entirely new output transforms. Extensions are
-      integrated using a file named <filepath>plugin.xml</filepath>, located in the plug-in's root
-      directory; the plug-in directory itself is generally located within the
-        <filepath>demo/</filepath> or <filepath>plugins/</filepath> directory inside of the DITA-OT.
-      This document describes all recognized extension points that are available for use within the
-        <filepath>plugin.xml</filepath> file.</p>
+        integrating processing overrides, or providing entirely new output transforms. Extensions
+        are integrated using a file named <filepath>plugin.xml</filepath>, located in the plug-in's
+        root directory; the plug-in directory itself is generally located within the
+          <filepath>plugins/</filepath> directory inside of the DITA-OT. This document describes all
+        recognized extension points that are available for use within the
+          <filepath>plugin.xml</filepath> file.</p>
     </section>
   </refbody>
   <reference id="topic_yxv_wov_kc">

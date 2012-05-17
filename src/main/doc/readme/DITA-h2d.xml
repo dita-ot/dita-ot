@@ -6,21 +6,18 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="h2d" xml:lang="en-us">
 <title>Migrating HTML to DITA</title>
-<shortdesc>The HTML to DITA migration tool ships in the <filepath>demo/</filepath> directory
-of the toolkit, and does not make use of the common toolkit processing
-for DITA content.</shortdesc>
+<shortdesc>The HTML to DITA migration tool ships in the <filepath>plugins</filepath> directory of
+    the toolkit, and does not make use of the common toolkit processing for DITA
+    content.</shortdesc>
 <conbody>
-<p>The DITA Open Toolkit release 1.2 or above provides a HTML to DITA
-migration tool, which       migrates HTML files to DITA files. This
-migration tool originally comes from the       developerWorks publication
-of Robert D. Anderson's how-to articles with the original h2d code.
-      This migration tool is under <filepath>demo\h2d</filepath> directory.
-You can use it       separately because it is not integrated into
-the main transformation of toolkit. The version       in the toolkit
-is more recent, but the articles should be referenced for information
-on       details of the program, as well as for information on how
-to extend it. There are links to the       articles at the bottom
-of this page.</p>
+<p>The DITA Open Toolkit release 1.2 or above provides a HTML to DITA migration tool, which migrates
+      HTML files to DITA files. This migration tool originally comes from the developerWorks
+      publication of Robert D. Anderson's how-to articles with the original h2d code. This migration
+      tool is under <filepath>plugins\h2d</filepath> directory. You can use it separately because it
+      is not integrated into the main transformation of toolkit. The version in the toolkit is more
+      recent, but the articles should be referenced for information on details of the program, as
+      well as for information on how to extend it. There are links to the articles at the bottom of
+      this page.</p>
 <section>             <title>Preconditions</title>             <p>The
 preconditions to be considered before using the migration        
          tool are listed below:</p>             <ul>

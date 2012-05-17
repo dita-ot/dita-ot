@@ -358,9 +358,9 @@ are based on the XHTML transform type, including:</p>
           </row>
           <row id="args.xsl.pdf">
             <entry><codeph>args.xsl.pdf</codeph></entry>
-            <entry id="args.xsl.pdf.desc">Specifies an XSL file that is used in place of the
-              default XSL transform at <codeph>demo\fo\xsl\fo\topic2fo_shell.xsl</codeph>. You
-              must specify the full path and XSL file name.</entry>
+            <entry id="args.xsl.pdf.desc">Specifies an XSL file that is used in place of the default
+                XSL transform at <codeph>plugins\org.dita.pdf2\xsl\fo\topic2fo_shell.xsl</codeph>.
+                You must specify the full path and XSL file name.</entry>
           </row>
           <row conref="#dita-ot-ant-properties/args.gen.task.lbl">
             <entry colname="COLSPEC0"><codeph>args.gen.task.lbl</codeph></entry>

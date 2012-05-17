@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<plugin id="com.wildbasinmedia.outputclass">
-
-  <!-- Extend the toolkit's XHTML processing to override XHTML output for video inclusion. -->
-  <feature extension="dita.xsl.xhtml" file="xsl/vid_ref.xsl"/>
-
-</plugin>

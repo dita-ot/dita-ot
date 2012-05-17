@@ -19,6 +19,53 @@
         <p>Support for old DITAVAL format has been removed.</p>
         <p>Source distribution package has been removed in favor or Git and GitHub source
           downloads.</p>
+        <p>The <filepath>demo</filepath> folder has been deprecated and the following plug-ins have
+          been moved to <filepath>plugins</filepath> folder:</p>
+        <simpletable id="simpletable_gst_mcz_gg">
+          <sthead>
+            <stentry>old path</stentry>
+            <stentry>new path</stentry>
+          </sthead>
+          <strow>
+            <stentry><filepath>demo/dita11</filepath></stentry>
+            <stentry><filepath>plugins/org.dita.specialization.dita11</filepath></stentry>
+          </strow>
+          <strow>
+            <stentry><filepath>demo/dita132</filepath></stentry>
+            <stentry><filepath>plugins/org.dita.specialization.dita132</filepath></stentry>
+          </strow>
+          <strow>
+            <stentry><filepath>demo/eclipsemap</filepath></stentry>
+            <stentry><filepath>plugins/org.dita.specialization.eclipsemap</filepath></stentry>
+          </strow>
+          <strow>
+            <stentry><filepath>demo/fo</filepath></stentry>
+            <stentry><filepath>plugins/org.dita.pdf2</filepath></stentry>
+          </strow>
+          <strow>
+            <stentry><filepath>demo/tocjs</filepath></stentry>
+            <stentry><filepath>plugins/com.sophos.tocjs</filepath></stentry>
+          </strow>
+        </simpletable>
+        <p>The following plug-ins in the demo folder have been moved to a <xref href="https://github.com/dita-ot/ext-plugins" scope="external" format="html">separate plug-ins
+            Git repository</xref>:</p>
+        <ul>
+          <li><filepath>demo/FrameMaker_adapter</filepath></li>
+          <li><filepath>demo/apiref</filepath></li>
+          <li><filepath>demo/authorinfo</filepath></li>
+          <li><filepath>demo/book</filepath></li>
+          <li><filepath>demo/elementref</filepath></li>
+          <li><filepath>demo/enote</filepath></li>
+          <li><filepath>demo/faq</filepath></li>
+          <li><filepath>demo/h2d</filepath></li>
+          <li><filepath>demo/java</filepath></li>
+          <li><filepath>demo/javaapiref</filepath></li>
+          <li><filepath>demo/legacypdf</filepath></li>
+          <li><filepath>demo/music</filepath></li>
+          <li><filepath>demo/thesaurus</filepath></li>
+          <li><filepath>demo/tutorial</filepath></li>
+          <li><filepath>demo/video</filepath></li>
+        </ul>
       </section>
       <section><title>PDF2</title><p>The following deprecated items are no longer supported in the PDF transform.</p><ul>
 		<li>Support for the beta version of DITA, available from IBM before the OASIS standard was created in 2005.</li>

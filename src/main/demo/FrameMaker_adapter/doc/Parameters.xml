@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<!DOCTYPE dita PUBLIC "-//OASIS//DTD DITA Composite//EN" "ditabase.dtd">
-<!-- Created with XMetaL 4.6 (http://www.xmetal.com) -->
-<dita><concept id="concept_F182BA62631545FF867401C360B2D406"><title>Parameters</title><shortdesc>This section describes each of the parameters that can be used to control various aspects of the FrameMaker adapter.</shortdesc>
-		<conbody><p><?xm-replace_text Paragraph ?></p></conbody></concept></dita>

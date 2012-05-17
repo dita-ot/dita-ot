@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<plugin id="org.dita.legacypdf">
-    <extension-point id="dita.xsl.fo" name="Legacy PDF XSLT import"/>
-    <!--<feature extension="dita.conductor.lib.import" file="fo.jar"/>-->
-    <feature extension="dita.conductor.transtype.check" value="legacypdf" type="value"/>
-  <feature extension="dita.transtype.print" value="legacypdf"/>
-    <feature extension="dita.conductor.target" file="integrator.xml"/>
-    <template file="dita2fo-shell_template.xsl"/>
-</plugin>

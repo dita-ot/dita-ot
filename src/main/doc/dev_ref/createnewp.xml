@@ -9,17 +9,19 @@
 <title>Create new plug-in</title>
 <taskbody>
 <steps>
-<step><cmd>Create a new directory in /demo directory, such as <userinput>/plugin/pluginA</userinput>.</cmd>
-<info>Under the created directory, include the following subdirectories:<lines>demo/
+<step><cmd>Create a new directory in <filepath>/plugins</filepath> directory, such as
+            <userinput>/plugin/pluginA</userinput>.</cmd>
+<info>Under the created directory, include the following
+            subdirectories:<lines>plugins/
       pluginA/
             dtd
             schema
             catalog
             xsl
-            lib</lines><note>Not all above subdirectories are required. However,
-it is strongly suggested to use the structure and those subdirectories above
-to make all files systematically. You also can create files under other directories,
-such as python/ or vb/.</note></info></step>
+            lib</lines><note>Not
+            all above subdirectories are required. However, it is strongly suggested to use the
+            structure and those subdirectories above to make all files systematically. You also can
+            create files under other directories, such as python/ or vb/.</note></info></step>
 <step><cmd>Specify the types of topic, such as task, reference or concept.</cmd>
 <substeps>
 <substep><cmd>Put the dtd files into dtd directory.</cmd></substep>

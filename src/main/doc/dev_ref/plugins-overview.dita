@@ -13,10 +13,10 @@ new output transforms. Plug-ins are the best way to extend the toolkit
 in a way that is consistent, easily sharable, and easy to preserve
 through toolkit upgrades.</shortdesc>
 <refbody>
-<section><p>A plug-in consists of a directory, typically stored directly
-within the <filepath>demo/</filepath> or <filepath>plugins/</filepath> directory
-inside of the DITA-OT. Every plug-in is controlled by a file named <filepath>plugin.xml</filepath>,
-located in the plug-in's root directory.</p><?Pub Caret 158?><p>Benefits
+<section><p>A plug-in consists of a directory, typically stored directly within the
+          <filepath>plugins/</filepath> directory inside of the DITA-OT. Every plug-in is controlled
+        by a file named <filepath>plugin.xml</filepath>, located in the plug-in's root
+        directory.</p><?Pub Caret 158?><p>Benefits
 of extending the toolkit through plug-ins include:<ul>
 <li>Plug-ins are easily sharable with other users, teams, or companies;
 typically, all that is needed is to unzip and run a single integration
