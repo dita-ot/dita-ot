@@ -23,7 +23,6 @@
   <property name="dtd.dir" location="${src.dir}/dtd/"/>
   <property name="schema.dir" location="${src.dir}/schema/"/>
   <property name="xsl.dir" location="${src.dir}/xsl/"/>
-  <property name="demo.dir" location="${src.dir}/demo/"/>
   <property name="sample.dir" location="${src.dir}/samples/"/>
   <property name="css.dir" location="${src.dir}/css/"/>
   <property name="ant.dir" location="${src.dir}/ant/"/>
@@ -105,13 +104,7 @@
     <exclude name="relnotes.txt"/>
     <exclude name="EvaluateOT.html"/>
     <exclude name="lib/commons-logging-1.1.1.jar"/>
-    <exclude name="plugins/cxxapiref/"/>
     <exclude name="plugins/net.sourceforge.dita-ot.html/**"/>
-    <exclude name="demo/book/**"/>
-    <exclude name="demo/elementref/**"/>
-    <exclude name="demo/enote/**"/>
-    <exclude name="demo/faq/**"/>
-    <exclude name="demo/java/**"/>
     <exclude name="buildSourceForge.xml"/>
     <exclude name="doc/sourceforge/**"/>
     <exclude name="doc/userguide-orig/**"/>
@@ -128,19 +121,21 @@
 
   <patternset id="pattern.package.minimum">
     <patternset refid="pattern.global.excludes"/>
-    <exclude name="demo/fo/fop/build/"/>
-    <exclude name="demo/fo/fop/conf/"/>
-    <exclude name="demo/fo/fop/lib/"/>
-    <exclude name="demo/fo/lib/icu4j.jar"/>
-    <exclude name="demo/fo/src/**"/>
+    <exclude name="plugins/org.dita.pdf2/fop/build/"/>
+    <exclude name="plugins/org.dita.pdf2/fop/conf/"/>
+    <exclude name="plugins/org.dita.pdf2/fop/lib/"/>
+    <exclude name="plugins/org.dita.pdf2/lib/icu4j.jar"/>
+    <exclude name="plugins/org.dita.pdf2/src/**"/>
     <exclude name="lib/saxon/*"/>
     <exclude name="lib/icu4j.jar"/>
     <exclude name="lib/log4j.properties"/>
     <exclude name="startcmd.*"/>
     <exclude name="buildPackage.*"/>
-    <include name="demo/tocjs/**"/>
-    <include name="demo/h2d/**"/>
-    <include name="demo/fo/**"/>
+    <include name="plugins/com.sophos.tocjs/**"/>
+    <!-- FIXME
+    include name="demo/h2d/**"/>
+    -->
+    <include name="plugins/org.dita.pdf2/**"/>
     <include name="plugins/org.dita.*/**"/>
     <include name="*.*"/>
     <include name="css/**"/>
@@ -162,14 +157,18 @@
     <include name="*.*"/>
     <include name="ant/**"/>
     <include name="css/**"/>
-    <include name="demo/eclipsemap/**"/>
+    <include name="plugins/org.dita.specialization.eclipsemap/**"/>
+    <!-- FIXME
     <include name="demo/h2d/**"/>
-    <include name="demo/dita11/**"/>
-    <include name="demo/dita132/**"/>
-    <exclude name="demo/fo/src/**"/>
-    <include name="demo/fo/**"/>
+    -->
+    <include name="plugins/org.dita.specialization.dita11/**"/>
+    <include name="plugins/org.dita.specialization.dita132/**"/>
+    <exclude name="plugins/org.dita.pdf2/src/**"/>
+    <include name="plugins/org.dita.pdf2/**"/>
+    <!-- FIXME
     <include name="demo/legacypdf/**"/>
-    <include name="demo/tocjs/**"/>
+    -->
+    <include name="plugins/com.sophos.tocjs/**"/>
     <include name="doc/**"/>
     <include name="dtd/**"/>
     <include name="plugins/**"/>
@@ -183,23 +182,27 @@
 
   <patternset id="pattern.package.standard.base">
     <patternset refid="pattern.global.excludes"/>
-    <exclude name="demo/fo/fop/build/"/>
-    <exclude name="demo/fo/fop/conf/"/>
-    <exclude name="demo/fo/fop/lib/"/>
-    <exclude name="demo/fo/lib/icu4j.jar"/>
+    <exclude name="plugins/org.dita.pdf2/fop/build/"/>
+    <exclude name="plugins/org.dita.pdf2/fop/conf/"/>
+    <exclude name="plugins/org.dita.pdf2/fop/lib/"/>
+    <exclude name="plugins/org.dita.pdf2/lib/icu4j.jar"/>
     <exclude name="lib/saxon/"/>
     <exclude name="lib/icu4j.jar"/>
     <exclude name="lib/log4j.properties"/>
     <include name="*.*"/>
     <include name="ant/**"/>
     <include name="css/**"/>
-    <include name="demo/eclipsemap/**"/>
+    <include name="plugins/org.dita.specialization.eclipsemap/**"/>
+    <!-- FIXME
     <include name="demo/h2d/**"/>
-    <include name="demo/dita11/**"/>
-    <include name="demo/dita132/**"/>
-    <include name="demo/fo/**"/>
+    -->
+    <include name="plugins/org.dita.specialization.dita11/**"/>
+    <include name="plugins/org.dita.specialization.dita132/**"/>
+    <include name="plugins/org.dita.pdf2/**"/>
+    <!-- FIXME
     <include name="demo/legacypdf/**"/>
-    <include name="demo/tocjs/**"/>
+    -->
+    <include name="plugins/com.sophos.tocjs/**"/>
     <include name="doc/**"/>
     <include name="dtd/**"/>
     <include name="plugins/**"/>
@@ -215,7 +218,7 @@
     <exclude name="startcmd.*"/>
     <exclude name="buildPackage.*"/>
     <exclude name="src/**"/>
-    <exclude name="demo/fo/src/**"/>
+    <exclude name="plugins/org.dita.pdf2/src/**"/>
   </patternset>
   
   <patternset id="pattern.package.doc">

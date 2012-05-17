@@ -1,4 +1,0 @@
-<plugin id="com.moldflow.dita.plus-allhtml-topic2html">
-  <template file="build_plus-allhtml-topic2html_template.xml"/>
-  <feature extension="dita.conductor.target.relative" value="build.xml" type="file"/>
-</plugin>
