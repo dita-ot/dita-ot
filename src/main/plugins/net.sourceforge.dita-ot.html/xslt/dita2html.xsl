@@ -8,10 +8,11 @@
                 extension-element-prefixes="saxon"
                 exclude-result-prefixes="java dita-ot ditamsg">
   
-  <xsl:import href="../../../xsl/dita2xhtml.xsl"/>
+  <xsl:import href="plugin:org.dita.xhtml:xsl/dita2xhtml.xsl"/>
   <!--xsl:import href="../../../xsl/map2htmtoc/map2htmtocImpl.xsl"/-->
 
   <xsl:param name="input.map.url"/>
+  <xsl:param name="FILEREF" select="'file:'"/>
 
   <xsl:variable name="input.map" select="document($input.map.url)"/>
 

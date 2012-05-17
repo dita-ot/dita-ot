@@ -25,7 +25,6 @@
   <property name="xsl.dir" location="${src.dir}/xsl/"/>
   <property name="sample.dir" location="${src.dir}/samples/"/>
   <property name="css.dir" location="${src.dir}/css/"/>
-  <property name="ant.dir" location="${src.dir}/ant/"/>
   <property name="resource.dir" location="${src.dir}/resource/"/>
 
   <property name="top.work.dir" location="${src.dir}"/>
@@ -155,7 +154,6 @@
     <exclude name="buildPackage.*"/>
     <exclude name="lib/log4j.properties"/>
     <include name="*.*"/>
-    <include name="ant/**"/>
     <include name="css/**"/>
     <include name="plugins/org.dita.specialization.eclipsemap/**"/>
     <!-- FIXME
@@ -190,7 +188,6 @@
     <exclude name="lib/icu4j.jar"/>
     <exclude name="lib/log4j.properties"/>
     <include name="*.*"/>
-    <include name="ant/**"/>
     <include name="css/**"/>
     <include name="plugins/org.dita.specialization.eclipsemap/**"/>
     <!-- FIXME
@@ -507,5 +504,75 @@
       <fileset dir="${test.log.dir}" erroronmissingdir="false"/>
     </delete>
   </target>
+
+  <!-- Site -->
+  
+  <condition property="type-class" value="milestone" else="">
+    <contains string="${version}" substring="M" casesensitive="true"/>
+  </condition>
+  <condition property="version-id" value="dev" else="${version}">
+    <contains string="${version}" substring="M" casesensitive="true"/>
+  </condition>
+
+  <target name="site" description="Build project website">
+    <ant antfile="${basedir}/src/main/build.xml">
+      <property name="args.input" location="${doc.dir}/sourceforge/sourceforge.ditamap"/>
+      <property name="output.dir" location="${basedir}/target/site"/>
+      <property name="transtype" value="net.sourceforge.dita-ot.html"/>
+      <property name="base.temp.dir" location="${work.dir}"/>
+    </ant>
+    <ant antfile="${basedir}/src/main/build.xml">
+      <property name="args.input" location="${doc.dir}/userguide.ditamap"/>
+      <property name="output.dir" location="${basedir}/target/site/${version-id}"/>
+      <property name="transtype" value="tocjs"/>
+      <property name="args.csspath" value="css"/>
+      <property name="base.temp.dir" location="${work.dir}"/>
+      <property name="args.hide.parent.link" value="yes"/>
+    </ant>
+    <!--echoxml file="${basedir}/target/site/${version}/header.html">
+      <html>
+        <head>
+          <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+          <title>DITA Open Toolkit ${version} Documentation</title>
+          <link rel="stylesheet" type="text/css" href="../css/header.css"/>
+        </head>
+        <body>
+          <h1 class="${type-class}">DITA Open Toolkit ${version} Documentation</h1>
+        </body>
+      </html>
+    </echoxml-->
+    <echoxml file="${basedir}/target/site/${version-id}/index.html">
+      <html>
+        <head>
+          <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+          <title>DITA Open Toolkit ${version} Documentation</title>
+          <link rel="stylesheet" type="text/css" href="commonltr.css"/>
+        </head>
+        <frameset rows="40,*">
+          <frame name="tocwin" src="/header.php?version=${version-id}" scrolling="no" frameborder="0"/>
+          <frameset cols="300,*">
+            <frame name="tocwin" src="tocnav.html" frameborder="0"/>
+            <frame name="contentwin" src="DITA-OTProjectHome.html" frameborder="0"/>
+          </frameset>
+        </frameset>
+      </html>
+    </echoxml>
+    <!--echo append="true" file="${basedir}/target/site/${version-id}/css/commonltr.css">
+      @import url('http://fonts.googleapis.com/css?family=Droid+Sans:regular,bold');
+      
+      body {
+        font-family: 'Droid Sans', Helvetica, Arial, serif;
+      }
+      h1, h2, h3, h4, h5, h6,
+      .relinfo > strong {
+        font-family: sans-serif;
+      }
+      .codeblock {
+        background-color: #EEE;
+        padding: 5px;
+      }
+    </echo-->
+  </target>
+  
 
 </project>
