@@ -24,6 +24,8 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.Stack;
 
+import org.xml.sax.helpers.AttributesImpl;
+
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
@@ -40,6 +42,8 @@ import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.OutputUtils;
 import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.XMLUtils;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -464,84 +468,38 @@ public final class DitaWriter extends AbstractXMLWriter {
     }
 
     /**
-     * Write attribute to output. The method does not escape XML delimiter chacters in the value.
-     * 
-     * @param attQName attribute name
-     * @param attValue attribute value
-     * @throws IOException if writing to output failed
-     */
-    private void copyAttribute(final String attQName, final String attValue) throws IOException{
-        output.write(STRING_BLANK);
-        output.write(attQName);
-        output.write(EQUAL);
-        output.write(QUOTATION);
-        output.write(attValue);
-        output.write(QUOTATION);
-    }
-
-    /**
-     * Process all attributes and write them to output
+     * Process attributes
      * 
      * @param qName element name
-     * @param atts attributes
+     * @param atts input attributes
+     * @param result attributes to write to
      * @throws IOException if writing to output failed
      */
-    private void copyElementAttribute(final String qName, final Attributes atts) throws IOException {
+    private void processAttributes(final String qName, final Attributes atts, final AttributesImpl res) throws IOException {
         // copy the element's attributes
         final int attsLen = atts.getLength();
         boolean conkeyrefValid = false;
         for (int i = 0; i < attsLen; i++) {
             final String attQName = atts.getQName(i);
-            String attValue = atts.getValue(i);
+            String attValue = getAttributeValue(qName, attQName, atts.getValue(i));
             final String nsUri = atts.getURI(i);
 
-            //ignore the xtrf and xtrc attribute ,and not copy
-            if(attQName.equals(ATTRIBUTE_NAME_XTRF)|| attQName.equals(ATTRIBUTE_NAME_XTRC)) {
+            if (attQName.equals(ATTRIBUTE_NAME_XTRF) || attQName.equals(ATTRIBUTE_NAME_XTRC) ||
+                    attQName.equals(ATTRIBUTE_NAME_COLNAME)|| attQName.equals(ATTRIBUTE_NAME_NAMEST) || attQName.equals(ATTRIBUTE_NAME_NAMEEND) ||
+                    ATTRIBUTE_NAME_CONREF.equals(attQName)) {
                 continue;
-            }
-
-            //Probe for default values
-            if (StringUtils.isEmptyString(attValue) && defaultValueMap != null) {
-                final Map<String, String> defaultMap = defaultValueMap.get(attQName);
-                if (defaultMap != null) {
-                    final String defaultValue = defaultMap.get(qName);
-                    if (defaultValue != null) {
-                        attValue = defaultValue;
-                    }
-                }
-            }
-
-            if(ATTRIBUTE_NAME_HREF.equals(attQName)
-                    || ATTRIBUTE_NAME_COPY_TO.equals(attQName)){
-                if(atts.getValue(ATTRIBUTE_NAME_SCOPE)!=null &&
-                        (atts.getValue(ATTRIBUTE_NAME_SCOPE).equalsIgnoreCase(ATTR_SCOPE_VALUE_EXTERNAL) ||
-                                atts.getValue(ATTRIBUTE_NAME_SCOPE).equalsIgnoreCase(ATTR_SCOPE_VALUE_PEER))){
-                    attValue = atts.getValue(i);
-                }else{
+            } else if (ATTRIBUTE_NAME_DITAARCHVERSION.equals(attQName)) {
+                final String attName = ATTRIBUTE_PREFIX_DITAARCHVERSION + COLON + attQName;
+                XMLUtils.addOrSetAttribute(res, attName, attValue);
+                XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION, nsUri);
+            } else if(ATTRIBUTE_NAME_HREF.equals(attQName) || ATTRIBUTE_NAME_COPY_TO.equals(attQName)){
+                if (atts.getValue(ATTRIBUTE_NAME_SCOPE) == null ||
+                        atts.getValue(ATTRIBUTE_NAME_SCOPE).equalsIgnoreCase(ATTR_SCOPE_VALUE_LOCAL)){
                     attValue = replaceHREF(attQName, atts);
-                    //added on 2010-09-02 for bug:3058124(decode escaped string)
                     attValue = URLDecoder.decode(attValue, UTF8);
                 }
-
-            } else if (ATTRIBUTE_NAME_CONREF.equals(attQName)){
-
-                attValue = replaceCONREF(atts);
-                //added on 2010-09-02 for bug:3058124(decode escaped string)
-                attValue = URLDecoder.decode(attValue, UTF8);
-            } else {
-                attValue = atts.getValue(i);
-            }
-
-            if (ATTRIBUTE_NAME_DITAARCHVERSION.equals(attQName)){
-                final String attName = ATTRIBUTE_PREFIX_DITAARCHVERSION + COLON + attQName;
-
-                copyAttribute(attName, attValue);
-                copyAttribute(ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION, nsUri);
-
-            }
-
-            // replace conref with conkeyref(using key definition)
-            if(ATTRIBUTE_NAME_CONKEYREF.equals(attQName) && attValue.length() != 0){
+                XMLUtils.addOrSetAttribute(res, attQName, attValue);
+            } else if(ATTRIBUTE_NAME_CONKEYREF.equals(attQName) && attValue.length() != 0) { // replace conref with conkeyref(using key definition)
                 final int sharpIndex = attValue.indexOf(SHARP);
                 final int slashIndex = attValue.indexOf(SLASH);
                 int keyIndex = -1;
@@ -551,7 +509,6 @@ public final class DitaWriter extends AbstractXMLWriter {
                     keyIndex = slashIndex;
                 }
                 //conkeyref only accept values such as "key" or "key/id"
-                //bug:3081597
                 if(sharpIndex == -1){
                     if(keyIndex != -1){
                         //get keyref value
@@ -560,14 +517,11 @@ public final class DitaWriter extends AbstractXMLWriter {
                         if(key.length() != 0 && keys.containsKey(key)){
 
                             //target = FileUtils.replaceExtName(target);
-                            //Added by William on 2009-06-25 for #12014 start
                             //get key's href
                             final String value = keys.get(key);
                             final String href = value.substring(0, value.lastIndexOf(LEFT_BRACKET));
 
-                            //Added by William on 2010-02-25 for bug:2957456 start
                             final String updatedHref = updateHref(href);
-                            //Added by William on 2010-02-25 for bug:2957456 end
 
                             //get element/topic id
                             final String id = attValue.substring(keyIndex+1);
@@ -584,15 +538,12 @@ public final class DitaWriter extends AbstractXMLWriter {
                             if(idExported && keyrefExported
                                     && transtype.equals(INDEX_TYPE_ECLIPSEHELP)){
                                 //remain the conkeyref attribute.
-                                copyAttribute(ATTRIBUTE_NAME_CONKEYREF, attValue);
-                                //Added by William on 2009-06-25 for #12014 end
+                                XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CONKEYREF, attValue);
                             }else {
                                 //normal process
                                 target = updatedHref;
-                                //Added by William on 2010-05-17 for conkeyrefbug:3001705 start
                                 //only replace extension name of topic files.
                                 target = replaceExtName(target);
-                                //Added by William on 2010-05-17 for conkeyrefbug:3001705 end
                                 String tail ;
                                 if(sharpIndex == -1 ){
                                     if(target.indexOf(SHARP) == -1) {
@@ -610,7 +561,7 @@ public final class DitaWriter extends AbstractXMLWriter {
                                         target = target.substring(0,target.indexOf(SHARP));
                                     }
                                 }
-                                copyAttribute(ATTRIBUTE_NAME_CONREF, target + tail);
+                                XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CONREF, target + tail);
                                 conkeyrefValid = true;
                             }
                         }else{
@@ -625,11 +576,8 @@ public final class DitaWriter extends AbstractXMLWriter {
                             final String value = keys.get(attValue);
                             final String href = value.substring(0, value.lastIndexOf(LEFT_BRACKET));
 
-                            //Added by William on 2010-02-25 for bug:2957456 start
                             final String updatedHref = updateHref(href);
-                            //Added by William on 2010-02-25 for bug:2957456 end
 
-                            //Added by William on 2009-06-25 for #12014 start
                             final String id = null;
 
                             final List<Boolean> list = delayConrefUtils.checkExport(href, id, attValue, tempDir);
@@ -637,16 +585,12 @@ public final class DitaWriter extends AbstractXMLWriter {
                             //key is exported and transtype is eclipsehelp
                             if(keyrefExported && transtype.equals(INDEX_TYPE_ECLIPSEHELP)){
                                 //remain the conkeyref attribute.
-                                copyAttribute(ATTRIBUTE_NAME_CONKEYREF, attValue);
-                                //Added by William on 2009-06-25 for #12014 end
+                                XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CONKEYREF, attValue);
                             }else{
                                 //e.g conref = c.xml
                                 String target = updatedHref;
-                                //Added by William on 2010-05-17 for conkeyrefbug:3001705 start
                                 target = replaceExtName(target);
-                                //Added by William on 2010-05-17 for conkeyrefbug:3001705 end
-                                copyAttribute(ATTRIBUTE_NAME_CONREF, target);
-
+                                XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CONREF, target);
                                 conkeyrefValid = true;
                             }
                         }else{
@@ -661,32 +605,36 @@ public final class DitaWriter extends AbstractXMLWriter {
                     prop.setProperty("%1", attValue);
                     logger.logError(MessageUtils.getMessage("DOTJ046E", prop).toString());
                 }
+            } else {
+                XMLUtils.addOrSetAttribute(res, attQName, attValue);
             }
-
-            // replace '&' with '&amp;'
-            //if (attValue.indexOf('&') > 0) {
-            //attValue = StringUtils.replaceAll(attValue, "&", "&amp;");
-            //}
-            attValue = StringUtils.escapeXML(attValue);
-
-            //output all attributes except colname and conkeyref,
-            // if conkeyrefValid is true, then conref is not copied.
-            if (!ATTRIBUTE_NAME_COLNAME.equals(attQName)
-                    && !ATTRIBUTE_NAME_NAMEST.equals(attQName)
-                    && !ATTRIBUTE_NAME_DITAARCHVERSION.equals(attQName)
-                    && !ATTRIBUTE_NAME_NAMEEND.equals(attQName)
-                    && !ATTRIBUTE_NAME_CONKEYREF.equals(attQName)
-                    && !ATTRIBUTE_NAME_CONREF.equals(attQName) ){
-                copyAttribute(attQName, attValue);
-            }
-
         }
         String conref = atts.getValue(ATTRIBUTE_NAME_CONREF);
         if(conref != null && !conkeyrefValid){
             conref = replaceCONREF(atts);
-            conref = StringUtils.escapeXML(conref);
-            copyAttribute(ATTRIBUTE_NAME_CONREF, conref);
+            XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CONREF, conref);
         }
+    }
+
+    /**
+     * Get attribute value or default if attribute is not defined
+     * 
+     * @param qName element QName
+     * @param atts element attributes
+     * @param i attribute index
+     * @return attribute value or default
+     */
+    private String getAttributeValue(final String elemQName, final String attQName, final String value) {
+        if (StringUtils.isEmptyString(value) && defaultValueMap != null) {
+            final Map<String, String> defaultMap = defaultValueMap.get(attQName);
+            if (defaultMap != null) {
+                final String defaultValue = defaultMap.get(elemQName);
+                if (defaultValue != null) {
+                    return defaultValue;
+                }
+            }
+        }
+        return value;
     }
 
     /**
@@ -738,7 +686,8 @@ public final class DitaWriter extends AbstractXMLWriter {
      * @param atts
      * @throws IOException
      */
-    private void copyElementName(final String qName, final Attributes atts) throws IOException {
+    private AttributesImpl copyElementName(final String qName, final Attributes atts) throws IOException {
+        final AttributesImpl res = new AttributesImpl();
         if (TOPIC_TGROUP.localName.equals(qName)){
 
             //Edited by William on 2009-11-27 for bug:1846993 start
@@ -777,11 +726,9 @@ public final class DitaWriter extends AbstractXMLWriter {
             }
             columnNumberEnd = columnNumber;
             //change the col name of colspec
-            copyAttribute(ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL+columnNumber);
-            //Added by William on 2009-06-30 for colname bug:2811358 start
+            XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL + columnNumber);
             //total columns count
             totalColumns = columnNumberEnd;
-            //Added by William on 2009-06-30 for colname bug:2811358 end
         }else if(TOPIC_ENTRY.localName.equals(qName)){
 
             /*columnNumber = getStartNumber(atts, columnNumberEnd);
@@ -806,12 +753,12 @@ public final class DitaWriter extends AbstractXMLWriter {
             if(columnNumber > columnNumberEnd){
                 //The first row
                 if(rowNumber == 1){
-                    copyAttribute(ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL+columnNumber);
+                    XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL + columnNumber);
                     if (atts.getValue(ATTRIBUTE_NAME_NAMEST) != null){
-                        copyAttribute(ATTRIBUTE_NAME_NAMEST, COLUMN_NAME_COL+columnNumber);
+                        XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_NAMEST, COLUMN_NAME_COL + columnNumber);
                     }
                     if (atts.getValue(ATTRIBUTE_NAME_NAMEEND) != null){
-                        copyAttribute(ATTRIBUTE_NAME_NAMEEND, COLUMN_NAME_COL+getEndNumber(atts, columnNumber));
+                        XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_NAMEEND, COLUMN_NAME_COL + getEndNumber(atts, columnNumber));
                     }
                     //other row
                 }else{
@@ -852,12 +799,12 @@ public final class DitaWriter extends AbstractXMLWriter {
 
                     }
 
-                    copyAttribute(ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL+columnNumber);
+                    XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL + columnNumber);
                     if (atts.getValue(ATTRIBUTE_NAME_NAMEST) != null){
-                        copyAttribute(ATTRIBUTE_NAME_NAMEST, COLUMN_NAME_COL+columnNumber);
+                        XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_NAMEST, COLUMN_NAME_COL + columnNumber);
                     }
                     if (atts.getValue(ATTRIBUTE_NAME_NAMEEND) != null){
-                        copyAttribute(ATTRIBUTE_NAME_NAMEEND, COLUMN_NAME_COL+getEndNumber(atts, columnNumber));
+                        XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_NAMEEND, COLUMN_NAME_COL + getEndNumber(atts, columnNumber));
                     }
                 }
             }
@@ -865,6 +812,7 @@ public final class DitaWriter extends AbstractXMLWriter {
             //Changed on 2010-11-19 for duplicate colname bug:3110418 end
             //Added by William on 2009-06-30 for colname bug:2811358 end
         }
+        return res;
     }
 
    private int getColumnSpan(final Attributes atts) {
@@ -1179,22 +1127,26 @@ public final class DitaWriter extends AbstractXMLWriter {
                 try {
                     output.write(LESS_THAN);
                     output.write(qName);
-                    copyElementName(qName, atts);
-
-                    copyElementAttribute(qName, atts);
-                    // write the xtrf and xtrc attributes which contain debug
-                    // information if it is dita elements (elements not in foreign/unknown)
+                    final AttributesImpl res = copyElementName(qName, atts);
+                    processAttributes(qName, atts, res);
                     if (foreignLevel <= 1){
                         if (genDebugInfo) {
-                            copyAttribute(ATTRIBUTE_NAME_XTRF, traceFilename.getAbsolutePath());
-                            copyAttribute(ATTRIBUTE_NAME_XTRC, qName + COLON + nextValue.toString());
+                            XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_XTRF, traceFilename.getAbsolutePath());
+                            XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_XTRC, qName + COLON + nextValue.toString());
                         }
                     }
+                    for (int i = 0; i < res.getLength(); i++) {
+                        output.write(STRING_BLANK);
+                        output.write(res.getQName(i));
+                        output.write(EQUAL);
+                        output.write(QUOTATION);
+                        output.write(StringUtils.escapeXML(res.getValue(i)));
+                        output.write(QUOTATION);
+                    }
                     output.write(GREATER_THAN);
-
                 } catch (final Exception e) {
                     logger.logException(e);
-                }// try
+                }
             }
         }
     }
