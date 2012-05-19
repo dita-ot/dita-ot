@@ -28,7 +28,8 @@
       </linkinfo>
     </linklist>
     <linklist outputclass="startguide">
-      <link href="1.5.4/quickstartguide/tasks/generating_documents.dita" scope="peer">
+      <!-- /latest/quickstartguide/demostart.dita -->
+      <link href="/latest/quickstartguide/tasks/generating_documents.dita" scope="peer">
         <linktext>Get Started</linktext>
       </link>
       <linkinfo>
@@ -36,7 +37,7 @@
       </linkinfo>
     </linklist>
     <linklist outputclass="documentation">
-      <link href="1.5.4/" scope="peer">
+      <link href="/latest/" scope="peer">
         <linktext>Read the Docs</linktext>
       </link>
       <linkinfo>
