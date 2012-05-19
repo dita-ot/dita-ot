@@ -32,13 +32,14 @@ See the accompanying license.txt file for applicable licenses.
 -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:exsl="http://exslt.org/common"
     xmlns:exslf="http://exslt.org/functions"
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
     xmlns:dita2xslfo="http://dita-ot.sourceforge.net/ns/200910/dita2xslfo"
     extension-element-prefixes="exsl"
-    exclude-result-prefixes="opentopic-func exslf exsl dita2xslfo"
+    exclude-result-prefixes="xs opentopic-func exslf exsl dita2xslfo"
     version="2.0">
 
     <xsl:variable name="tableAttrs" select="'../../cfg/fo/attrs/tables-attr.xsl'"/>
@@ -178,20 +179,21 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- SourceForge bug tracker item 2872988:
          Count the max number of cells in any row of a simpletable -->
-    <xsl:template match="*" mode="count-max-simpletable-cells">
-      <xsl:param name="maxcount">0</xsl:param>
-      <xsl:variable name="newmaxcount">
+    <xsl:template match="*[contains(@class, ' topic/sthead ')] | *[contains(@class, ' topic/strow ')]" mode="count-max-simpletable-cells">
+      <xsl:param name="maxcount" select="0" as="xs:integer"/>
+      <xsl:variable name="newmaxcount" as="xs:integer">
+        <xsl:variable name="row-cell-count" select="count(*[contains(@class, ' topic/stentry ')])"/>
         <xsl:choose>
-          <xsl:when test="count(*)>$maxcount"><xsl:value-of select="count(*)"/></xsl:when>
-          <xsl:otherwise><xsl:value-of select="$maxcount"/></xsl:otherwise>
+          <xsl:when test="$row-cell-count > $maxcount"><xsl:sequence select="$row-cell-count"/></xsl:when>
+          <xsl:otherwise><xsl:sequence select="$maxcount"/></xsl:otherwise>
         </xsl:choose>
       </xsl:variable>
       <xsl:choose>
-        <xsl:when test="not(following-sibling::*)">
+        <xsl:when test="not(following-sibling::*[contains(@class, ' topic/strow ')])">
           <xsl:value-of select="$newmaxcount"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:apply-templates select="following-sibling::*[1]" mode="count-max-simpletable-cells">
+          <xsl:apply-templates select="following-sibling::*[contains(@class, ' topic/strow ')][1]" mode="count-max-simpletable-cells">
             <xsl:with-param name="maxcount" select="$newmaxcount"/>
           </xsl:apply-templates>
         </xsl:otherwise>
@@ -379,9 +381,10 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:call-template name="commonattributes"/>
             <fo:table-row xsl:use-attribute-sets="sthead__row">
                 <xsl:apply-templates/>
-                <xsl:if test="count(*) &lt; $number-cells">
+                <xsl:variable name="row-cell-count" select="count(*[contains(@class, ' topic/stentry ')])"/>
+                <xsl:if test="$row-cell-count &lt; $number-cells">
                   <xsl:apply-templates select="." mode="fillInMissingSimpletableCells">
-                      <xsl:with-param name="fill-in-count" select="$number-cells - count(*)"/>
+                      <xsl:with-param name="fill-in-count" select="$number-cells - $row-cell-count"/>
                   </xsl:apply-templates>
                 </xsl:if>
             </fo:table-row>
@@ -395,9 +398,10 @@ See the accompanying license.txt file for applicable licenses.
         <fo:table-row xsl:use-attribute-sets="strow">
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
-            <xsl:if test="count(*) &lt; $number-cells">
+            <xsl:variable name="row-cell-count" select="count(*[contains(@class, ' topic/stentry ')])"/>
+            <xsl:if test="$row-cell-count &lt; $number-cells">
                 <xsl:apply-templates select="." mode="fillInMissingSimpletableCells">
-                    <xsl:with-param name="fill-in-count" select="$number-cells - count(*)"/>
+                    <xsl:with-param name="fill-in-count" select="$number-cells - $row-cell-count"/>
                 </xsl:apply-templates>
             </xsl:if>
         </fo:table-row>
