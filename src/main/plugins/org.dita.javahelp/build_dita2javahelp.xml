@@ -40,12 +40,6 @@
                 <isset property="args.javahelp.map" />
             </not>
         </condition>
-        <condition property="args.javahelp.helpset"
-                   value="${dita.resource.dir}${file.separator}helpset.hs">
-            <not>
-                <isset property="args.javahelp.helpset" />
-            </not>
-        </condition>
     </target>
 
     <target name="dita.map.javahelp.toc"
