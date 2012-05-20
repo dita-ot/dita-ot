@@ -332,10 +332,17 @@ Before rebuilding, please delete the output or the directory.</echo>
 
 	<target name="prompt.output.web" depends="prompt.output.init"
 		if="isWebOutput">			
-		<copy todir="${prompt.output.directory}">
-			<fileset dir="${dita.resource.dir}"
-				includes="index.html"/>
-		</copy>
+	   <echoxml file="${prompt.output.directory}/index.html">
+			<html>
+				<head>
+					<title>Web Sample</title>
+				</head>
+				<frameset cols="40%,*">
+					<frame name="navwin" src="toc.html" />
+					<frame name="contentwin" src="about:blank" scrolling="auto" />
+				</frameset>
+			</html>
+		</echoxml>
 		<antcall target="dita2xhtml">
 			<param name="args.input"      value="${prompt.ditamap.filename}"/>
 			<param name="output.dir"     value="${prompt.output.directory}"/>
