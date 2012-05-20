@@ -940,7 +940,8 @@ public final class DitaWriter extends AbstractXMLFilter {
             throws SAXException {
         if (!exclude) { // exclude shows whether it's excluded by filtering
             try {
-                getContentHandler().ignorableWhitespace(ch, start, length);
+                // XXX: For some reason, Transformer doesn't output ignorableWhitespace, thus calling characters.
+                getContentHandler().characters(ch, start, length);
             } catch (final Exception e) {
                 logger.logException(e);
             }
