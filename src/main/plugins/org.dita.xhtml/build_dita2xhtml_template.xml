@@ -6,7 +6,7 @@
 <project name="dita2xhtml">
 	
     <target name="dita2xhtml"
-      depends="build-init, preprocess, dita.map.xhtml, copy-revflag, 
+      depends="build-init, preprocess, dita.map.xhtml, 
                      copy-css , dita.topics.xhtml, dita.inner.topics.xhtml, dita.outer.topics.xhtml">
     </target>
 
@@ -76,13 +76,13 @@
           <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>
-  
+    
   <target name="copy-revflag" if="dita.input.valfile">
-    <copy todir="${output.dir}">
-      <fileset dir="${dita.resource.dir}" includes="*.gif" />
-    </copy>
+    <dita-ot-echo id="DOTA069W">
+      <param name="1" value="copy-revflag"/>
+    </dita-ot-echo>
   </target>
-  
+    
   <target name="copy-css" unless="user.csspath.url" description="Copy CSS files">
     <condition property="user.copycss.yes">
       <and>

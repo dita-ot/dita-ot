@@ -711,6 +711,11 @@
     <reason>Ignoring index-see-also '%1' for '%2' because parent indexterm contains indexterm children.</reason>
     <response>According to the DITA Specification, the index-see-also element should be ignored if the parent indexterm contains other indexterm children.</response>
   </message>
+  
+  <message id="DOTA069W" type="WARN">
+    <reason>Target "%1" is deprecated.</reason>
+    <response>Remove references to this target from your custom XSLT or plug-ins.</response>
+  </message>
     
   <!-- Add any messages defined by plugins. -->
   <dita:extension xmlns:dita="http://dita-ot.sourceforge.net"
