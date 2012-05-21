@@ -266,11 +266,11 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:variable name="refID" select="opentopic-index:refID/@value"/>
 
         <xsl:if test="opentopic-func:getIndexEntry($value,$refID)">
-            <xsl:call-template name="make-index-ref">
+            <xsl:apply-templates select="." mode="make-index-ref">
 				<xsl:with-param name="idxs" select="opentopic-index:refID"/>
 				<xsl:with-param name="inner-text" select="opentopic-index:formatted-value"/>
 				<xsl:with-param name="no-page" select="$isNoPage"/>
-			</xsl:call-template>
+			</xsl:apply-templates>
         </xsl:if>
     </xsl:template>
 
@@ -402,11 +402,11 @@ See the accompanying license.txt file for applicable licenses.
 
                                         <xsl:choose>
                                             <xsl:when test="opentopic-func:getIndexEntry($value,$refID)">
-                                                <xsl:call-template name="make-index-ref">
+                                                <xsl:apply-templates select="." mode="make-index-ref">
                                                     <xsl:with-param name="idxs" select="opentopic-index:refID"/>
                                                     <xsl:with-param name="inner-text" select="opentopic-index:formatted-value"/>
                                                     <xsl:with-param name="no-page" select="$isNoPage"/>
-                                                </xsl:call-template>
+                                                </xsl:apply-templates>
                                             </xsl:when>
                                             <xsl:otherwise>
                                                 <xsl:variable name="isNormalChilds">
@@ -419,11 +419,11 @@ See the accompanying license.txt file for applicable licenses.
                                                     </xsl:for-each>
                                                 </xsl:variable>
                                                 <xsl:if test="contains($isNormalChilds,'true ')">
-                                                    <xsl:call-template name="make-index-ref">
+                                                    <xsl:apply-templates select="." mode="make-index-ref">
 <!--                                                    <xsl:with-param name="idxs" select="opentopic-index:refID"/>-->
                                                         <xsl:with-param name="inner-text" select="opentopic-index:formatted-value"/>
                                                         <xsl:with-param name="no-page" select="$isNoPage"/>
-                                                    </xsl:call-template>
+                                                    </xsl:apply-templates>
                                                 </xsl:if>
                                             </xsl:otherwise>
                                         </xsl:choose>
@@ -454,11 +454,11 @@ See the accompanying license.txt file for applicable licenses.
                     <xsl:if test="count(preceding-sibling::opentopic-index:index.entry[@value = $value]) = 0">
                         <xsl:variable name="page-setting" select=" (ancestor-or-self::opentopic-index:index.entry/@no-page | ancestor-or-self::opentopic-index:index.entry/@start-page)[last()]"/>
 		                <xsl:variable name="isNoPage" select=" $page-setting = 'true' and name($page-setting) = 'no-page' "/>
-                        <xsl:call-template name="make-index-ref">
+                        <xsl:apply-templates select="." mode="make-index-ref">
                             <xsl:with-param name="idxs" select="opentopic-index:refID"/>
                             <xsl:with-param name="inner-text" select="opentopic-index:formatted-value"/>
                             <xsl:with-param name="no-page" select="$isNoPage"/>
-                        </xsl:call-template>
+                        </xsl:apply-templates>
 
                     </xsl:if>
 
@@ -512,7 +512,24 @@ See the accompanying license.txt file for applicable licenses.
 		</xsl:choose>
 	</xsl:template>
 
-	<xsl:template name="make-index-ref">
+  <xsl:template name="make-index-ref">
+    <xsl:param name="idxs" select="()"/>
+    <xsl:param name="inner-text" select="()"/>
+    <xsl:param name="no-page"/>
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgcat">DOTX</xsl:with-param>
+      <xsl:with-param name="msgnum">066</xsl:with-param>
+      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="msgparams">%1=make-index-ref</xsl:with-param>
+    </xsl:call-template>
+    <xsl:apply-templates select="." mode="make-index-ref">
+      <xsl:with-param name="idxs" select="$idxs"/>
+      <xsl:with-param name="inner-text" select="$inner-text"/>
+      <xsl:with-param name="no-page" select="$no-page"/>
+    </xsl:apply-templates>
+  </xsl:template>
+
+	<xsl:template match="*" mode="make-index-ref">
 		<xsl:param name="idxs"/>
 		<xsl:param name="inner-text"/>
 		<xsl:param name="no-page"/>

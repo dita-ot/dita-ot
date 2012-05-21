@@ -114,6 +114,10 @@
       </section>
       <section>
         <title>XHTML</title>
+        <p>The following named templates have been deprecated:</p>
+        <ul id="ul_rrg_2wd_3g">
+          <li>make-index-ref</li>
+        </ul>
         <p>The following deprecated templates have been removed:</p>
         <ul id="ul_ywp_gsc_ff">
           <li>revblock-deprecated</li>
