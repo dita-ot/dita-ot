@@ -86,7 +86,11 @@
       <xsl:apply-templates select="." mode="add-xref-highlight-at-end"/>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:apply-templates select="*|text()|comment()|processing-instruction()"/>
+      <span>
+        <xsl:call-template name="commonattributes"/>
+        <xsl:apply-templates select="." mode="add-desc-as-hoverhelp"/>
+        <xsl:apply-templates select="*[not(contains(@class,' topic/desc '))]|text()|comment()|processing-instruction()"/>
+      </span>
     </xsl:otherwise>
   </xsl:choose>
     
