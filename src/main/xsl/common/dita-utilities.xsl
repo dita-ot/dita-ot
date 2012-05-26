@@ -321,4 +321,14 @@
     </xsl:if>
   </xsl:template>
 
+  <xsl:template match="processing-instruction('workdir-uri')" mode="get-work-dir">
+    <xsl:value-of select="."/>
+  </xsl:template>
+
+  <xsl:template match="processing-instruction('path2project')" mode="get-path2project">
+    <xsl:value-of select="."/>
+  </xsl:template>
+
+
 </xsl:stylesheet>
+

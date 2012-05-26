@@ -51,6 +51,8 @@ import org.xml.sax.XMLReader;
 /**
  * ChunkTopicParser class, writing chunking content into relative topic files
  * and then update list. Not reusable and not thread-safe.
+ * 
+ * <p>TODO: Refactor to be a SAX filter.</p>
  */
 public final class ChunkTopicParser extends AbstractXMLWriter {
 
@@ -240,6 +242,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
     public void processingInstruction(final String target, final String data) throws SAXException {
         if(include ||
                 PI_WORKDIR_TARGET.equalsIgnoreCase(target) ||
+                PI_WORKDIR_TARGET_URI.equals(target) ||
                 PI_PATH2PROJ_TARGET.equalsIgnoreCase(target)){
             try {
                 final String pi = (data != null) ? target + STRING_BLANK + data : target;
@@ -337,6 +340,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                     }else{
                         output.write(PI_WORKDIR_HEAD + UNIX_SEPARATOR + filePath + PI_END);
                     }
+                    output.write(LESS_THAN + QUESTION + PI_WORKDIR_TARGET_URI + STRING_BLANK + new File(filePath).toURI().toString() + PI_END);
                     changeTable.put(newFileName,newFileName);
                     if(idValue != null){
                         changeTable.put(currentParsingFile+SHARP+idValue,
@@ -1172,13 +1176,15 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                             // if the output file is newly generated file
                             // write the xml header and workdir PI into new file
                             ditaFileOutput.write(XML_HEAD);
+                            final File workDir = new File(outputFileName).getParentFile().getAbsoluteFile();
                             if(OS_NAME.toLowerCase().indexOf(OS_NAME_WINDOWS)==-1)
                             {
-                                ditaFileOutput.write(PI_WORKDIR_HEAD + new File(outputFileName).getParent() + PI_END);
+                                ditaFileOutput.write(PI_WORKDIR_HEAD + workDir.getAbsolutePath() + PI_END);
                             }else{
-                                ditaFileOutput.write(PI_WORKDIR_HEAD + UNIX_SEPARATOR + new File(outputFileName).getParent() + PI_END);
+                                ditaFileOutput.write(PI_WORKDIR_HEAD + UNIX_SEPARATOR + workDir.getAbsolutePath() + PI_END);
                             }
-
+                            ditaFileOutput.write(LESS_THAN + QUESTION + PI_WORKDIR_TARGET_URI + STRING_BLANK + workDir.toURI().toString() + PI_END);
+                            
                             //Added on 20101210 for bug:3126578 start
                             if ((conflictTable.get(outputFileName)!=null)){
                                 final String relativePath = FileUtils

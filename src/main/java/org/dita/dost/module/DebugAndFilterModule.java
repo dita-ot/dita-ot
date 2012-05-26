@@ -580,12 +580,12 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 
         try {
         	//calculate workdir and path2project
-            String workdir = null;
+            File workdir = null;
             String path2project = null;  
         	final DitaWriter dw = new DitaWriter();
         	dw.setOutputUtils(outputUtils);
         	path2project = dw.getPathtoProject(copytoTargetFilename, target, inputMapInTemp);
-        	workdir = target.getParentFile().getCanonicalPath();
+        	workdir = target.getParentFile();
             
             bfis = new BufferedReader(new InputStreamReader(new FileInputStream(src),UTF8));
             bfos = new OutputStreamWriter(new FileOutputStream(target), UTF8);
@@ -597,14 +597,24 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             		 
                     if (workdir != null) {
                     	if (OS_NAME.toLowerCase().indexOf(OS_NAME_WINDOWS) == -1) {
-							bfos.write(STRING_BLANK + workdir);
+							bfos.write(STRING_BLANK + workdir.getCanonicalPath());
 						} else {
-							bfos.write(STRING_BLANK + UNIX_SEPARATOR + workdir);
+							bfos.write(STRING_BLANK + UNIX_SEPARATOR + workdir.getCanonicalPath());
 						}                    	
                     }
                     bfos.write(QUESTION + GREATER_THAN);
         
             		bfos.write(LINE_SEPARATOR);
+            	} else if(line.indexOf(DitaWriter.PI_WORKDIR_TARGET)!=-1) {
+                    bfos.write(LESS_THAN + QUESTION);
+                    bfos.write(DitaWriter.PI_WORKDIR_TARGET_URI);
+                     
+                    if (workdir != null) {
+                        bfos.write(STRING_BLANK + workdir.toURI().toString());
+                    }
+                    bfos.write(QUESTION + GREATER_THAN);
+        
+                    bfos.write(LINE_SEPARATOR);
             	} else if (line.indexOf(DitaWriter.PI_PATH2PROJ_TARGET)!=-1) {
                		bfos.write(LESS_THAN + QUESTION);
             		bfos.write(DitaWriter.PI_PATH2PROJ_TARGET);

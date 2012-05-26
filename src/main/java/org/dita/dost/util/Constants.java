@@ -836,6 +836,8 @@ public final class Constants {
     /**print attribute.*/
     public static final String ATTRIBUTE_NAME_PRINT = "print";
 
+    /** URI path separator. */
+    public static final String URI_SEPARATOR = "/";
     /** UNIX path separator. */
     public static final String UNIX_SEPARATOR = "/";
     /** Windows path separator. */

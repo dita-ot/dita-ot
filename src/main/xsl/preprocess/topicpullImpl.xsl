@@ -80,11 +80,6 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <xsl:key name="count.topic.table"
            match="*[contains(@class, ' topic/table ')][*[contains(@class, ' topic/title ')]]"
            use="'include'"/>
-
-  <xsl:template match="processing-instruction('workdir')[1]" mode="get-work-dir">
-    <xsl:value-of select="."/>
-    <xsl:text>/</xsl:text>
-  </xsl:template>
   
   <!-- Process a link in the related-links section. Retrieve link text, type, and
        description if possible (and not already specified locally). -->
@@ -542,16 +537,16 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
 	    <xsl:choose>
 	        <xsl:when test="contains(@class, ' topic/link ')">
 	          <xsl:choose>
-	            <xsl:when test="./preceding::processing-instruction('workdir')[1]">
-	              <xsl:apply-templates select="./preceding::processing-instruction('workdir')[1]" mode="get-work-dir"/>
+	            <xsl:when test="./preceding::processing-instruction('workdir-uri')[1]">
+	              <xsl:apply-templates select="./preceding::processing-instruction('workdir-uri')[1]" mode="get-work-dir"/>
 	            </xsl:when>
 	            <xsl:otherwise>
-	              <xsl:apply-templates select="/processing-instruction()" mode="get-work-dir"/>
+	              <xsl:apply-templates select="/processing-instruction('workdir-uri')" mode="get-work-dir"/>
 	            </xsl:otherwise>
 	          </xsl:choose>
 	        </xsl:when>
 	        <xsl:otherwise>
-	            <xsl:apply-templates select="/processing-instruction()" mode="get-work-dir"/>
+	            <xsl:apply-templates select="/processing-instruction('workdir-uri')" mode="get-work-dir"/>
 	        </xsl:otherwise>
 	    </xsl:choose>
 	</xsl:param>
@@ -564,12 +559,10 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
         <xsl:value-of select="@href"/>
       </xsl:when>
       <xsl:when test="contains(@href,'#')">
-        <xsl:value-of select="$FILEREF"/>
         <xsl:value-of select="$WORKDIR"/>
         <xsl:value-of select="substring-before(@href,'#')"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="$FILEREF"/>
         <xsl:value-of select="$WORKDIR"/>
         <xsl:value-of select="@href"/>
       </xsl:otherwise>

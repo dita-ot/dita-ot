@@ -157,15 +157,10 @@
   </xsl:choose>
 </xsl:template>
     
-<xsl:template match="processing-instruction('workdir')" mode="get-work-dir">
-  <xsl:value-of select="."/><xsl:text>/</xsl:text>
-</xsl:template>    
-    
 <xsl:template name="output-toc-entry">
   <xsl:param name="pathFromMaplist"/>
   <xsl:variable name="WORKDIR">
-    <xsl:value-of select="$FILEREF"/>
-    <xsl:apply-templates select="/processing-instruction()" mode="get-work-dir"/>
+    <xsl:apply-templates select="/processing-instruction('workdir-uri')" mode="get-work-dir"/>
   </xsl:variable>
   <xsl:value-of select="$newline"/>
   <!-- if current node is not topicgroup and not empty or current node 

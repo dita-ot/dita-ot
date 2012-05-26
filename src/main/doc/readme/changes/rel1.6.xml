@@ -89,6 +89,8 @@
           replaced with a target sequence <codeph>build-init, preprocess</codeph>.</p>
         <p>Support for argument <codeph>args.message.file</codeph> has been removed as message
           configuration has become static configuration.</p>
+        <p>Processing instruction <codeph>workdir</codeph> has been deprecated in favor of
+          processing instruction <codeph>workdir-uri</codeph>. The only difference between the o</p>
       </section>
       <section id="section_gvw_5xn_2g">
         <title>Preprocessing</title>
@@ -206,6 +208,7 @@
           <li>#1198 Generate PDF metadata from bookmeta (milestone 5)</li>
           <li>#1273 Remove source distribution builds (milestone 5)</li>
           <li>#1203 ditaval flag action screws strow rendering (milestone 5)</li>
+          <li>#1104 DitaWriter workdir PI not a URL (milestone 5)</li>
           <li>3466842 Refactor preprocessing to use SAX filters (in progress)</li>
           <li>3468864 Remove Content object (in progress)</li>
           <li>3460151 Use Job to read/write job configuration files (in progress)</li>

@@ -69,6 +69,8 @@ import org.xml.sax.XMLReader;
  *   <dt>{@link #PI_WORKDIR_TARGET}<dt>
  *   <dd>Absolute system path of the file parent directory. On Windows, a {@code /}
  *     is added to beginning of the path.</dd>
+ *   <dt>{@link #PI_WORKDIR_TARGET_URI}<dt>
+ *   <dd>Absolute URI of the file parent directory.</dd>
  *   <dt>{@link #PI_PATH2PROJ_TARGET}<dt>
  *   <dd>Relative system path to the project root directory, with a trailing directory separator.
  *     When the file is in the project root directory, processing instruction has no value.</dd>
@@ -91,6 +93,7 @@ public final class DitaWriter extends AbstractXMLFilter {
     private static final String COLUMN_NAME_COL = "col";
     public static final String PI_PATH2PROJ_TARGET = "path2project";
     public static final String PI_WORKDIR_TARGET = "workdir";
+    public static final String PI_WORKDIR_TARGET_URI = "workdir-uri";
     /** To check the URL of href in topicref attribute */
     private static final String NOT_LOCAL_URL = COLON_DOUBLE_SLASH;
     
@@ -270,7 +273,7 @@ public final class DitaWriter extends AbstractXMLFilter {
 
         return attValue;
     }
-    private String absolutePath;
+    private File absolutePath;
     private Map<String, String> catalogMap; //map that contains the information from XML Catalog
     private List<String> colSpec;
     private int columnNumber; // columnNumber is used to adjust column name
@@ -998,10 +1001,12 @@ public final class DitaWriter extends AbstractXMLFilter {
             getContentHandler().startDocument();
             if(OS_NAME.toLowerCase().indexOf(OS_NAME_WINDOWS)==-1)
             {
-                getContentHandler().processingInstruction(PI_WORKDIR_TARGET, absolutePath);
+                getContentHandler().processingInstruction(PI_WORKDIR_TARGET, absolutePath.getCanonicalPath());
             }else{
-                getContentHandler().processingInstruction(PI_WORKDIR_TARGET, UNIX_SEPARATOR + absolutePath);
+                getContentHandler().processingInstruction(PI_WORKDIR_TARGET, UNIX_SEPARATOR + absolutePath.getCanonicalPath());
             }
+            getContentHandler().ignorableWhitespace(new char[] { '\n' }, 0, 1);
+            getContentHandler().processingInstruction(PI_WORKDIR_TARGET_URI, absolutePath.toURI().toString());
             getContentHandler().ignorableWhitespace(new char[] { '\n' }, 0, 1);
             if(path2Project != null){
                 getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET, path2Project);
@@ -1175,7 +1180,7 @@ public final class DitaWriter extends AbstractXMLFilter {
             if (!dirFile.exists()) {
                 dirFile.mkdirs();
             }
-            absolutePath = dirFile.getCanonicalPath();
+            absolutePath = dirFile;
             out = new FileOutputStream(outputFile);
 
             // start to parse the file and direct to output in the temp

@@ -34,6 +34,9 @@ import org.xml.sax.XMLReader;
 
 /**
  * TopicRefWriter which updates the linking elements' value according to the mapping table.
+ * 
+ * <p>TODO: Refactor to be a SAX filter.</p>
+ * 
  * @author wxzhang
  * 
  */
@@ -110,6 +113,11 @@ public final class TopicRefWriter extends AbstractXMLWriter {
                 final String tmp = fixpath.substring(0,fixpath.lastIndexOf(SLASH));
                 if (!data.endsWith(tmp)){
                     data = data+File.separator+tmp;
+                }
+            } else if (fixpath != null && target.equals(PI_WORKDIR_TARGET_URI)){
+                final String tmp = fixpath.substring(0, fixpath.lastIndexOf(URI_SEPARATOR) + 1);
+                if (!data.endsWith(tmp)){
+                    data = data + tmp;
                 }
             }
             pi = (data != null) ? target + STRING_BLANK + data

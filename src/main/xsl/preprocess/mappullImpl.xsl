@@ -340,18 +340,13 @@ Other modes can be found within the code, and may or may not prove useful for ov
 
   <!-- RDA: END FUNCTIONS TO IMPROVE OVERRIDE CAPABILITIES FOR INHERITING ATTRIBUTES -->
   
-  <xsl:template match="processing-instruction('workdir')" mode="get-work-dir">
-    <xsl:value-of select="."/>
-    <xsl:text>/</xsl:text>
-  </xsl:template>
-
   <!-- Redirected to mode template to allow overrides -->
   <xsl:template name="verify-type-value">
     <xsl:param name="type"/>         <!-- Specified type on the topicref -->
     <xsl:param name="actual-class"/> <!-- Class value on the target element -->
     <xsl:param name="actual-name"/>  <!-- Name of the target element -->
     <xsl:param name="WORKDIR">
-      <xsl:apply-templates select="/processing-instruction()" mode="get-work-dir"/>
+      <xsl:apply-templates select="/processing-instruction('workdir-uri')" mode="get-work-dir"/>
     </xsl:param>
     <xsl:apply-templates select="." mode="mappull:verify-type-value">
       <xsl:with-param name="type" select="$type"/>
@@ -370,7 +365,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:param name="actual-class"/>  <!-- Class value on the target element -->
     <xsl:param name="actual-name"/>   <!-- Name of the target element -->
     <xsl:param name="WORKDIR">
-      <xsl:apply-templates select="/processing-instruction()" mode="get-work-dir"/>
+      <xsl:apply-templates select="/processing-instruction('workdir-uri')" mode="get-work-dir"/>
     </xsl:param>
     <xsl:choose>
       <!-- The type is correct; concept typed as concept, newtype defined as newtype -->
@@ -400,7 +395,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
   <!--Figure out what portion of the href attribute is the path to the file-->
   <xsl:template match="*" mode="mappull:get-stuff_file">
     <xsl:param name="WORKDIR">
-      <xsl:apply-templates select="/processing-instruction()" mode="get-work-dir"/>
+      <xsl:apply-templates select="/processing-instruction('workdir-uri')" mode="get-work-dir"/>
     </xsl:param>
     <xsl:choose>
       <!--an absolute path using a scheme, eg http, plus a fragment identifier - grab the part before the fragment-->
@@ -413,11 +408,11 @@ Other modes can be found within the code, and may or may not prove useful for ov
       </xsl:when>
       <!--a relative path including a fragment identifier - add the working directory, plus the part before the fragment-->
       <xsl:when test="contains(@href,'#')">
-        <xsl:value-of select="concat($FILEREF, $WORKDIR, substring-before(@href,'#'))"/>
+        <xsl:value-of select="concat($WORKDIR, substring-before(@href,'#'))"/>
       </xsl:when>
       <!--otherwise a relative path with no fragment, add the working directory plus the url-->
       <xsl:otherwise>
-        <xsl:value-of select="concat($FILEREF, $WORKDIR, @href)"/>
+        <xsl:value-of select="concat($WORKDIR, @href)"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -662,7 +657,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:param name="scope">#none#</xsl:param>
     <xsl:param name="format">#none#</xsl:param>
     <xsl:param name="WORKDIR">
-      <xsl:apply-templates select="/processing-instruction()" mode="get-work-dir"/>
+      <xsl:apply-templates select="/processing-instruction('workdir-uri')" mode="get-work-dir"/>
     </xsl:param>
     <xsl:variable name="locktitle">
       <xsl:call-template name="inherit">

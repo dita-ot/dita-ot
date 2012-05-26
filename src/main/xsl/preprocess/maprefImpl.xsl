@@ -37,11 +37,6 @@
         </xsl:copy>
     </xsl:template>
 
-    <xsl:template match="processing-instruction('workdir')" mode="get-work-dir">
-        <xsl:value-of select="."/>
-        <xsl:text>/</xsl:text>
-    </xsl:template>
-
     <xsl:template match="*[contains(@class, ' map/topicref ')]" priority="10">
         <xsl:param name="refclass" select="@class"/> <!-- get the current element's @class value -->
         <xsl:param name="relative-path">#none#</xsl:param>  <!-- need this to resolve multiple mapref -->
@@ -93,7 +88,7 @@
             </xsl:choose>
         </xsl:variable>
         <xsl:variable name="WORKDIR">
-            <xsl:apply-templates select="/processing-instruction()" mode="get-work-dir"/>
+            <xsl:apply-templates select="/processing-instruction('workdir-uri')" mode="get-work-dir"/>
         </xsl:variable>
         <xsl:choose>
             <xsl:when test="@format='ditamap' and contains($mapref-id-path,concat(' ',generate-id(.),' '))">
@@ -126,13 +121,13 @@
                             <!-- edited by William on 2009-09-01 for updated mapref start-->
                             <xsl:choose>
                                 <xsl:when test="starts-with(@href,'#')">
-                                    <xsl:value-of select="concat($FILEREF, $WORKDIR, $file-being-processed)"/>
+                                    <xsl:value-of select="concat($WORKDIR, $file-being-processed)"/>
                                 </xsl:when>   
                                 <xsl:when test="contains(@href, '#')">
-                                    <xsl:value-of select="concat($FILEREF, $WORKDIR, substring-before(@href, '#'))"/>
+                                    <xsl:value-of select="concat($WORKDIR, substring-before(@href, '#'))"/>
                                 </xsl:when>
                                 <xsl:otherwise>
-                                    <xsl:value-of select="concat($FILEREF, $WORKDIR, @href)"/>
+                                    <xsl:value-of select="concat($WORKDIR, @href)"/>
                                 </xsl:otherwise>
                             </xsl:choose>
                             <!-- edited by William on 2009-09-01 for updated mapref end-->

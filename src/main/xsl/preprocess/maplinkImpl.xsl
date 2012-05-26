@@ -18,13 +18,11 @@
   <xsl:param name="DITAEXT" select="'.xml'"/>
   <xsl:param name="FILEREF">file://</xsl:param>
   <xsl:param name="WORKDIR">
-    <xsl:apply-templates select="/processing-instruction()" mode="get-work-dir"/>
+    <xsl:apply-templates select="/processing-instruction('workdir-uri')" mode="get-work-dir"/>
   </xsl:param>
   <xsl:param name="include.rellinks" select="'#default parent child sibling friend next previous cousin ancestor descendant sample external other'"/>
   <xsl:variable name="include.roles" select="concat(' ', normalize-space($include.rellinks), ' ')"/>
-  <xsl:variable name="file-prefix">
-    <xsl:value-of select="concat($FILEREF, $WORKDIR)"/>
-  </xsl:variable>
+  <xsl:variable name="file-prefix" select="$WORKDIR"/>
   <xsl:variable name="PATHTOMAP">
     <xsl:call-template name="GetPathToMap">
       <xsl:with-param name="inputMap" select="$INPUTMAP"/>
@@ -45,11 +43,7 @@
       <xsl:apply-templates/>
     </mapcollection>
   </xsl:template>
-  
-  <xsl:template match="processing-instruction('workdir')" mode="get-work-dir">
-    <xsl:value-of select="concat(., '/')"/>
-  </xsl:template>
-  
+    
   <!-- Get the relative path that leads to a file. Used to find path from a maplist to a map. -->
   <xsl:template name="getRelativePath">
     <xsl:param name="filename"/>

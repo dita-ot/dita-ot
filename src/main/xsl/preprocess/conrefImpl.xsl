@@ -27,6 +27,7 @@
 <!-- Added by William on 2009-07-09 for req #12014 end  -->
 <xsl:param name="PROJDIR" select="'.'"/>
 <xsl:param name="DBG" select="no"/>
+<!-- Deprecated -->
 <xsl:param name="FILEREF">file://</xsl:param>
   
 <!--Added by William on 2010-04-26 for bug:2990162 start-->
@@ -133,11 +134,7 @@
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
-
-<xsl:template match="processing-instruction('workdir')" mode="get-work-dir">
-  <xsl:value-of select="."/><xsl:text>/</xsl:text>
-</xsl:template>
-
+  
 <xsl:template match="@*"  mode="conaction-target">
    <xsl:choose>
        <xsl:when test="name()='conaction' or name()='conref'"></xsl:when>
@@ -170,7 +167,7 @@
   <xsl:param name="source-element"/>
   <xsl:param name="conref-ids"/>
   <xsl:param name="WORKDIR">
-    <xsl:apply-templates select="/processing-instruction()" mode="get-work-dir"/>
+    <xsl:apply-templates select="/processing-instruction('workdir-uri')" mode="get-work-dir"/>
   </xsl:param>
   <xsl:param name="original-element">
     <xsl:call-template name="get-original-element"/>
@@ -206,7 +203,7 @@
   <xsl:variable name="element" select="local-name(.)"/>
   <!--xsl:variable name="domains"><xsl:value-of select="ancestor-or-self::*[@domains][1]/@domains"/></xsl:variable-->
   
-  <xsl:variable name="file-prefix" select="concat($FILEREF, $WORKDIR, $current-relative-path)"/>
+  <xsl:variable name="file-prefix" select="concat($WORKDIR, $current-relative-path)"/>
   
   <xsl:variable name="file-origin">
     <xsl:call-template name="get-file-uri">
@@ -1213,7 +1210,7 @@
   <xsl:param name="topicid"/>
   <xsl:param name="elemid"/>
   <xsl:param name="WORKDIR">
-    <xsl:apply-templates select="/processing-instruction()" mode="get-work-dir"/>
+    <xsl:apply-templates select="/processing-instruction('workdir-uri')" mode="get-work-dir"/>
   </xsl:param>
   <xsl:param name="conref-source-topicid"/>
   <xsl:param name="conref-ids"/>
@@ -1367,7 +1364,7 @@
     <xsl:param name="topicid"/>
     <xsl:param name="elemid"/>
     <xsl:param name="WORKDIR">
-      <xsl:apply-templates select="/processing-instruction()" mode="get-work-dir"/>
+      <xsl:apply-templates select="/processing-instruction('workdir-uri')" mode="get-work-dir"/>
     </xsl:param>
 	<xsl:param name="conref-source-topicid"/>
   <xsl:param name="conref-ids"/>

@@ -72,7 +72,7 @@ public final class ChunkMapReader implements AbstractReader {
     private String transtype = null;
 
     private ProcessingInstruction workdir = null; // Tagsmiths modification
-
+    private ProcessingInstruction workdirUrl = null; // Tagsmiths modification
     private ProcessingInstruction path2proj = null; // Tagsmiths modification
 
     private String processingRole = ATTR_PROCESSING_ROLE_VALUE_NORMAL;
@@ -107,6 +107,8 @@ public final class ChunkMapReader implements AbstractReader {
                     final ProcessingInstruction pi = (ProcessingInstruction) node;
                     if (pi.getNodeName() == PI_WORKDIR_TARGET) {
                         workdir = pi;
+                    } if (pi.getNodeName() == PI_WORKDIR_TARGET_URI) {
+                        workdirUrl = pi;
                     } else if (pi.getNodeName().equals(PI_PATH2PROJ_TARGET)) {
                         path2proj = pi;
                     }
@@ -164,6 +166,16 @@ public final class ChunkMapReader implements AbstractReader {
                     newFileWriter.write(newFile.getParentFile().getAbsolutePath());
                     newFileWriter.write(QUESTION);
                     newFileWriter.write(GREATER_THAN);
+                    
+                    newFileWriter.write(LESS_THAN);
+                    newFileWriter.write(QUESTION);
+                    newFileWriter.write(PI_WORKDIR_TARGET_URI);
+                    newFileWriter.write(STRING_BLANK);
+                    newFileWriter.write(UNIX_SEPARATOR);
+                    newFileWriter.write(newFile.getParentFile().toURI().toString());
+                    newFileWriter.write(QUESTION);
+                    newFileWriter.write(GREATER_THAN);
+                    
                     newFileWriter.write("<dita></dita>");
                     newFileWriter.flush();
                     newFileWriter.close();
@@ -256,6 +268,9 @@ public final class ChunkMapReader implements AbstractReader {
             output.write(XML_HEAD);
             if (workdir != null) {
                 output(workdir, output);
+            }
+            if (workdirUrl != null) {
+                output(workdirUrl, output);
             }
             if (path2proj != null)
             {
