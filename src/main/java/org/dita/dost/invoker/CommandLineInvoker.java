@@ -157,8 +157,7 @@ public final class CommandLineInvoker {
             throw new DITAOTException("Invalid dita-ot home directory '" + ditaDir
                     + "', please specify the correct dita-ot home directory using '/ditadir'.");
         }
-        MessageUtils.loadMessages(new File(new File(ditaDir, "resource"),
-                "messages.xml").getAbsolutePath());
+        MessageUtils.loadDefaultMessages();
 
         /*
          * Process input arguments
