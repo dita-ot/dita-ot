@@ -16,6 +16,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -222,7 +224,6 @@ public final class DitaWriter extends AbstractXMLFilter {
                 String path = attValue.substring(0, sharp_index);
                 final String topic = attValue.substring(sharp_index);
                 if(path.length() != 0){
-                    String relativePath;
                     //Added by William on 2010-01-05 for bug:2926417 start
                     if(path.startsWith("file:/") && path.indexOf("file://") == -1){
                         path = path.substring("file:/".length());
@@ -234,7 +235,7 @@ public final class DitaWriter extends AbstractXMLFilter {
                     //Added by William on 2010-01-05 for bug:2926417 end
                     final File target = new File(path);
                     if(target.isAbsolute()){
-                        relativePath = FileUtils.getRelativePath(outputUtils.getInputMapPathName(), path);
+                        final String relativePath = FileUtils.getRelativePath(outputUtils.getInputMapPathName(), path);
                         attValue = relativePath + topic;
                     }
 
@@ -489,7 +490,11 @@ public final class DitaWriter extends AbstractXMLFilter {
                 if (atts.getValue(ATTRIBUTE_NAME_SCOPE) == null ||
                         atts.getValue(ATTRIBUTE_NAME_SCOPE).equalsIgnoreCase(ATTR_SCOPE_VALUE_LOCAL)){
                     attValue = replaceHREF(attQName, atts);
-                    attValue = URLDecoder.decode(attValue, UTF8);
+                    try {
+                        attValue = new URI(attValue).toASCIIString();
+                    } catch (URISyntaxException e) {
+                        throw new RuntimeException("Unable to parse " + attQName + " '" + attValue + "': " + e.getMessage(), e);
+                    }
                 }
                 XMLUtils.addOrSetAttribute(res, attQName, attValue);
             } else if(ATTRIBUTE_NAME_CONKEYREF.equals(attQName) && attValue.length() != 0) { // replace conref with conkeyref(using key definition)
@@ -1006,7 +1011,7 @@ public final class DitaWriter extends AbstractXMLFilter {
                 getContentHandler().processingInstruction(PI_WORKDIR_TARGET, UNIX_SEPARATOR + absolutePath.getCanonicalPath());
             }
             getContentHandler().ignorableWhitespace(new char[] { '\n' }, 0, 1);
-            getContentHandler().processingInstruction(PI_WORKDIR_TARGET_URI, absolutePath.toURI().toString());
+            getContentHandler().processingInstruction(PI_WORKDIR_TARGET_URI, absolutePath.toURI().toASCIIString());
             getContentHandler().ignorableWhitespace(new char[] { '\n' }, 0, 1);
             if(path2Project != null){
                 getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET, path2Project);
@@ -1187,11 +1192,11 @@ public final class DitaWriter extends AbstractXMLFilter {
             // directory
             reader.setErrorHandler(new DITAOTXMLErrorHandler(traceFilename.getAbsolutePath(), logger));
             //Added on 2010-08-24 for bug:3086552 start
-            final InputSource is = new InputSource(traceFilename.toURI().toString());
+            final InputSource is = new InputSource(traceFilename.toURI().toASCIIString());
             //set system id bug:3086552
             if(setSystemid) {
                 //is.setSystemId(URLUtil.correct(file).toString());
-                is.setSystemId(traceFilename.toURI().toURL().toString());
+                is.setSystemId(traceFilename.toURI().toASCIIString());
             }
 
             // ContentHandler must be reset so e.g. Saxon 9.1 will reassign ContentHandler
