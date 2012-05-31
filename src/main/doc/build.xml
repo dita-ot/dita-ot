@@ -6,8 +6,6 @@
 <project name="build_DITA-OT_docs" default="all" basedir="..">
   <description>Build User Guide for DITA Open Toolkit</description>
 
-  <import file="${basedir}/integrator.xml"/>
-
   <target name="init">
     <condition property="HTMLHelpCompiler" value="C:\Program Files\HTML Help Workshop\hhc.exe">
       <available file="C:\Program Files\HTML Help Workshop\hhc.exe"/>
@@ -22,10 +20,11 @@
     <property name="message.xsl" location="${resource.dir}/messages.xsl"/>
     <property name="message.input" location="${resource.dir}/messages.xml"/>
     <property name="message.outputtopic" location="${doc.dir}/readme/DITA-messages.xml"/>
-    <property name="doc.out.dir" location="${doc.dir}/out"/>
+    <property name="doc.out.dir" location="${doc.dir}"/>
   </target>
 
-  <target name="generate-msg-topic" depends="init, integrate" description="Regenerate message file">
+  <target name="generate-msg-topic" depends="init" description="Regenerate message file">
+    <ant antfile="${basedir}/integrator.xml"/>
     <xslt in="${message.input}" out="${message.outputtopic}" style="${message.xsl}"/>
   </target>
   
