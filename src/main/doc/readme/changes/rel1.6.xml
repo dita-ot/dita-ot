@@ -186,91 +186,89 @@
       <section>
         <title>Feature requests</title>
         <ul>
-          <li>3453816 Deprecate logException and add logError(String, Throwable) (milestone 1)</li>
-          <li>3458065 PDF2 should fully support core default language (milestone 1)</li>
-          <li>3455512 Add switch to ignore links in XHTML (milestone 1)</li>
-          <li>3468355 Refactor log messages and tasks (milestone 1)</li>
-          <li>3466533 Reduce topic merge memory consumption (milestone 1)</li>
-          <li>3483326 Remove IBM DITA and BookMap demo support from PDF2 (milestone 1)</li>
-          <li>3486110 Move OT version number to configuration (milestone 2)</li>
-          <li>3475296 Remove obsolete dita-preprocess target (milestone 2)</li>
-          <li>3498406 Add index file to PDF2 variables (milestone 3)</li>
-          <li>3501029 Move Ant scripts to plug-in folders (milestone 3)</li>
-          <li>3498440 Run XSLT with Ant task in PDF2 (milestone 3)</li>
-          <li>3504442 bookmap.dtd and map.dtd are out of sync with OASIS (milestone 3)</li>
-          <li>3510093 Add XSLT param extension point to PDF2 (milestone 4)</li>
-          <li>2796964 For PDF output, xml:lang does not work at the element level (milestone 4)</li>
-          <li>3493239 Support localization of quotation marks in quote (milestone 4)</li>
-          <li>3517104 Remove support for args.message.file (milestone 4)</li>
-          <li>3518180 Add automatic font detection to PDF2 (milestone 4)</li>
-          <li>3518167 Need extension for determining topic level (milestone 4)</li>
-          <li>3520046 css support for codeph in HTML output (milestone 4)</li>
+          <li>#1057 Deprecate logException and add logError(String, Throwable) (milestone 1)</li>
+          <li>#1059 PDF2 should fully support core default language (milestone 1)</li>
+          <li>#1058 Add switch to ignore links in XHTML (milestone 1)</li>
+          <li>#1158 Refactor log messages and tasks (milestone 1)</li>
+          <li>#1060 Reduce topic merge memory consumption (milestone 1)</li>
+          <li>#1062 Remove IBM DITA and BookMap demo support from PDF2 (milestone 1)</li>
+          <li>#1063 Move OT version number to configuration (milestone 2)</li>
+          <li>#1061 Remove obsolete dita-preprocess target (milestone 2)</li>
+          <li>#1065 Add index file to PDF2 variables (milestone 3)</li>
+          <li>#1067 Move Ant scripts to plug-in folders (milestone 3)</li>
+          <li>#1066 Run XSLT with Ant task in PDF2 (milestone 3)</li>
+          <li>#762 bookmap.dtd and map.dtd are out of sync with OASIS (milestone 3)</li>
+          <li>#1068 Add XSLT param extension point to PDF2 (milestone 4)</li>
+          <li>#948 For PDF output, xml:lang does not work at the element level (milestone 4)</li>
+          <li>#1064 Support localization of quotation marks in quote (milestone 4)</li>
+          <li>#1070 Remove support for args.message.file (milestone 4)</li>
+          <li>#1071 Add automatic font detection to PDF2 (milestone 4)</li>
+          <li>#1182 Need extension for determining topic level (milestone 4)</li>
+          <li>#1262 css support for codeph in HTML output (milestone 4)</li>
           <li>#1198 Generate PDF metadata from bookmeta (milestone 5)</li>
           <li>#1273 Remove source distribution builds (milestone 5)</li>
           <li>#1203 ditaval flag action screws strow rendering (milestone 5)</li>
           <li>#1104 DitaWriter workdir PI not a URL (milestone 5)</li>
-          <li>3466842 Refactor preprocessing to use SAX filters (in progress)</li>
-          <li>3468864 Remove Content object (in progress)</li>
-          <li>3460151 Use Job to read/write job configuration files (in progress)</li>
-          <li>3469384 Improve filtering (in progress)</li>
-          <li>1785391 Make Java code thread-safe (in progress)</li>
-          <li>3468246 Clean Ant scripts (in progress)</li>
-          <li>3023241 Consistent Ant property names (in progress)</li>
-          <li>3484284 Remove deprecated code (in progress)</li>
-          <li>3486511 Improve title numbering in PDF2 (in progress)</li>
-          <li>3486924 Clean PDF2 ID processing (in progress)</li>
-          <li>3487508 Improve PDF2 table customization (in progress)</li>
-          <li>3487941 Improve pipeline module processing (in progress)</li>
-          <li>3487222 Avoid strings where other types are more appropriate (in progress)</li>
-          <li>3497122 Document error messages in user guide (in progress)</li>
-          <li>3518688 Add ability to disable debug attribute generation (in progress)</li>
+          <li>#1252 Document error messages in user guide (milestone 5)</li>
+          <li>#1156 Refactor preprocessing to use SAX filters (in progress)</li>
+          <li>#1159 Remove Content object (in progress)</li>
+          <li>#1155 Use Job to read/write job configuration files (in progress)</li>
+          <li>#1160 Improve filtering (in progress)</li>
+          <li>#1124 Make Java code thread-safe (in progress)</li>
+          <li>#1157 Clean Ant scripts (in progress)</li>
+          <li>#1149 Consistent Ant property names (in progress)</li>
+          <li>#1161 Remove deprecated code (in progress)</li>
+          <li>#1162 Improve title numbering in PDF2 (in progress)</li>
+          <li>#1163 Clean PDF2 ID processing (in progress)</li>
+          <li>#1165 Improve PDF2 table customization (in progress)</li>
+          <li>#1166 Improve pipeline module processing (in progress)</li>
+          <li>#1164 Avoid strings where other types are more appropriate (in progress)</li>
+          <li>#1168 Add ability to disable debug attribute generation (in progress)</li>
         </ul>
       </section>
       <section>
         <title>Patches</title>
         <ul>
-          <li>3470331 Map references with root fragment are not processed (milestone 1)</li>
-          <li>3475092 Key-based mapref results in preprocessing error (milestone 1)</li>
+          <li>#849 Map references with root fragment are not processed (milestone 1)</li>
+          <li>#743 Key-based mapref results in preprocessing error (milestone 1)</li>
         </ul>
       </section>
       <section>
         <title>Bugs</title>
         <ul>
-          <li>3463319 Temp dir with non-ASCII character crashes (milestone 1)</li>
-          <li>3462389 v 1.5.4 fails to create PDF with external topic ref (milestone 1)</li>
-          <li>3477641 [1.5.4]Glosslist no longer visible in Bookmarks (PDF output) (milestone
-            1)</li>
-          <li>3465136 Incorrect image reference does not checked (milestone 1)</li>
-          <li>3455589 Deprecated property breaks Plus plugins (milestone 1)</li>
-          <li>3471937 Info message about inline flagging not displayed (milestone 1)</li>
-          <li>3469425 NullPointerException when absolute path to image (milestone 1)</li>
-          <li>3470580 PDF2 image references broken with uplevels (milestone 1)</li>
-          <li>3468070 1.5.4 looks for lib dir at current dir instead a ${dita.dir} (milestone
-            1)</li>
-          <li>3468073 Apache FOP: TOCs with uneven right margin (milestone 1)</li>
-          <li>3476659 Possible collision in File Extension detection mechanism (milestone 1)</li>
-          <li>3475092 Key-based mapref results in preprocessing error (milestone 1)</li>
-          <li>3487705 Choicetable headings not localized in PDF (milestone 2)</li>
-          <li>3487785 Check all places where output streams are used in dost.jar (milestone 2)</li>
-          <li>3488458 Property noCoderef not declared (milestone 2)</li>
-          <li>3477022 HTML handling of *div does not generate @outputclass (milestone 2)</li>
-          <li>3484972 Stylesheet imported multiple times in the hierarchy (milestone 2)</li>          
-          <li>3485626 Warning when using @copy-to in reltable (milestone 2)</li>
-          <li>3451621 Revisions on &lt;plentry> use wrong image for nested &lt;pd> (milestone
-            2)</li>
-          <li>3447732 Bug in handling of longdescref (milestone 2)</li>
-          <li>3426920 Image files not copied or referenced correctly for eclipse (milestone 2)</li>
-          <li>3494971 Keydefs in non-base folder fails (milestone 3) </li>
-          <li>3491768 Deprecated metadata PICS-Label in XHTML output (milestone 3)</li>
-          <li>3441389 Glossentry makes FO file invalid in PDF output (milestone 3)</li>
-          <li>3385349 Warning given by Saxon EE when processing flag-rules.xsl 	(milestone 3)</li>
-          <li>3496831 PDF2: preface titles does not pull indexterms. (milestone 3)</li>
-          <li>3499953 startcmd.bat adds dost.jar twice to the CLASSPATH  (milestone 3)</li>
-          <li>3513155 XSL for Warning uses wrong attribute set (milestone 4)</li>
-          <li>3512892 steps-unordered doesn't generate heading (milestone 4)</li>
-          <li>3511308 choicetable/@product value output in fo:table (milestone 4)</li>
-          <li>3471364 UNC paths are not supported in input argument (in progress)</li>  
-          <li>3501182 Typos in domains_(un)classed.css (in progress)</li>  
+          <li>#732 Temp dir with non-ASCII character crashes (milestone 1)</li>
+          <li>#729 v 1.5.4 fails to create PDF with external topic ref (milestone 1)</li>
+          <li>#747 [1.5.4]Glosslist no longer visible in Bookmarks (PDF output) (milestone 1)</li>
+          <li>#733 Incorrect image reference does not checked (milestone 1)</li>
+          <li>#725 Deprecated property breaks Plus plugins (milestone 1)</li>
+          <li>#740 Info message about inline flagging not displayed (milestone 1)</li>
+          <li>#738 NullPointerException when absolute path to image (milestone 1)</li>
+          <li>#739 PDF2 image references broken with uplevels (milestone 1)</li>
+          <li>#734 1.5.4 looks for lib dir at current dir instead a ${dita.dir} (milestone 1)</li>
+          <li>#735 Apache FOP: TOCs with uneven right margin (milestone 1)</li>
+          <li>#744 Possible collision in File Extension detection mechanism (milestone 1)</li>
+          <li>#743 Key-based mapref results in preprocessing error (milestone 1)</li>
+          <li>#753 Choicetable headings not localized in PDF (milestone 2)</li>
+          <li>#754 Check all places where output streams are used in dost.jar (milestone 2)</li>
+          <li>#755 Property noCoderef not declared (milestone 2)</li>
+          <li>#745 HTML handling of *div does not generate @outputclass (milestone 2)</li>
+          <li>#750 Stylesheet imported multiple times in the hierarchy (milestone 2)</li>          
+          <li>#752 Warning when using @copy-to in reltable (milestone 2)</li>
+          <li>#722 Revisions on &lt;plentry> use wrong image for nested &lt;pd> (milestone 2)</li>
+          <li>#721 Bug in handling of longdescref (milestone 2)</li>
+          <li>#709 Image files not copied or referenced correctly for eclipse (milestone 2)</li>
+          <li>#758 Keydefs in non-base folder fails (milestone 3) </li>
+          <li>#757 Deprecated metadata PICS-Label in XHTML output (milestone 3)</li>
+          <li>#719 Glossentry makes FO file invalid in PDF output (milestone 3)</li>
+          <li>#677 Warning given by Saxon EE when processing flag-rules.xsl (milestone 3)</li>
+          <li>#759 PDF2: preface titles does not pull indexterms. (milestone 3)</li>
+          <li>#760 startcmd.bat adds dost.jar twice to the CLASSPATH (milestone 3)</li>
+          <li>#765 XSL for Warning uses wrong attribute set (milestone 4)</li>
+          <li>#764 steps-unordered doesn't generate heading (milestone 4)</li>
+          <li>#763 choicetable/@product value output in fo:table (milestone 4)</li>
+          <li>#1229 Typos in domains_(un)classed.css (in progress)</li>
+          <li>#1284 Fix broken references in catalog file for PDF publishing (milestone 5)</li>
+          <li>#1152 UNC paths are not supported in input argument (in progress)</li>  
         </ul>
       </section>
     </refbody>
