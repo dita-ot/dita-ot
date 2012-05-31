@@ -4,7 +4,7 @@
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved. -->
 <!-- build whole binary package for DITA Open Toolkit -->
-<project name="build_DITA-OT_package" default="build-all-packages" basedir=".">
+<project name="build_DITA-OT_package" default="dist" basedir=".">
   <description>Build binary packages for DITA Open Toolkit</description>
 
   <property file="build.properties"/>
@@ -131,13 +131,11 @@
     <exclude name="startcmd.*"/>
     <exclude name="buildPackage.*"/>
     <include name="plugins/com.sophos.tocjs/**"/>
-    <!-- FIXME
-    include name="demo/h2d/**"/>
-    -->
     <include name="plugins/org.dita.pdf2/**"/>
     <include name="plugins/org.dita.*/**"/>
     <include name="*.*"/>
     <include name="css/**"/>
+    <include name="demo/**"/>
     <include name="dtd/**"/>
     <include name="resource/**"/>
     <include name="schema/**"/>
@@ -148,6 +146,9 @@
     <include name="lib/CatalogManager.properties"/>
     <include name="lib/**"/>
   </patternset>
+  <patternset id="pattern.package.ext-plugins.minimum">
+    <include name="h2d/**"/>
+  </patternset>
 
   <patternset id="pattern.package.full">
     <patternset refid="pattern.global.excludes"/>
@@ -156,18 +157,13 @@
     <include name="*.*"/>
     <include name="css/**"/>
     <include name="plugins/org.dita.specialization.eclipsemap/**"/>
-    <!-- FIXME
-    <include name="demo/h2d/**"/>
-    -->
     <include name="plugins/org.dita.specialization.dita11/**"/>
     <include name="plugins/org.dita.specialization.dita132/**"/>
     <exclude name="plugins/org.dita.pdf2/src/**"/>
     <include name="plugins/org.dita.pdf2/**"/>
-    <!-- FIXME
-    <include name="demo/legacypdf/**"/>
-    -->
     <include name="plugins/com.sophos.tocjs/**"/>
     <include name="doc/**"/>
+    <include name="demo/**"/>
     <include name="dtd/**"/>
     <include name="plugins/**"/>
     <include name="resource/**"/>
@@ -177,8 +173,12 @@
     <include name="lib/**"/>
     <patternset refid="pattern.package.ant"/>
   </patternset>
+  <patternset id="pattern.package.ext-plugins.full">
+    <include name="h2d/**"/>
+    <include name="legacypdf/**"/>
+  </patternset>
 
-  <patternset id="pattern.package.standard.base">
+  <patternset id="pattern.package.standard">
     <patternset refid="pattern.global.excludes"/>
     <exclude name="plugins/org.dita.pdf2/fop/build/"/>
     <exclude name="plugins/org.dita.pdf2/fop/conf/"/>
@@ -187,20 +187,19 @@
     <exclude name="lib/saxon/"/>
     <exclude name="lib/icu4j.jar"/>
     <exclude name="lib/log4j.properties"/>
+    <exclude name="startcmd.*"/>
+    <exclude name="buildPackage.*"/>
+    <exclude name="src/**"/>
+    <exclude name="plugins/org.dita.pdf2/src/**"/>
     <include name="*.*"/>
     <include name="css/**"/>
     <include name="plugins/org.dita.specialization.eclipsemap/**"/>
-    <!-- FIXME
-    <include name="demo/h2d/**"/>
-    -->
     <include name="plugins/org.dita.specialization.dita11/**"/>
     <include name="plugins/org.dita.specialization.dita132/**"/>
     <include name="plugins/org.dita.pdf2/**"/>
-    <!-- FIXME
-    <include name="demo/legacypdf/**"/>
-    -->
     <include name="plugins/com.sophos.tocjs/**"/>
     <include name="doc/**"/>
+    <include name="demo/**"/>
     <include name="dtd/**"/>
     <include name="plugins/**"/>
     <include name="resource/**"/>
@@ -209,15 +208,11 @@
     <include name="xsl/**"/>
     <include name="lib/**"/>
   </patternset>
-  
-  <patternset id="pattern.package.standard">
-    <patternset refid="pattern.package.standard.base"/>
-    <exclude name="startcmd.*"/>
-    <exclude name="buildPackage.*"/>
-    <exclude name="src/**"/>
-    <exclude name="plugins/org.dita.pdf2/src/**"/>
+  <patternset id="pattern.package.ext-plugins.standard">
+    <include name="h2d/**"/>
+    <include name="legacypdf/**"/>
   </patternset>
-  
+    
   <patternset id="pattern.package.doc">
     <include name="relnotes.html"/>
     <include name="doc/**"/>
@@ -241,6 +236,11 @@
         <patternset refid="pattern.package.minimum"/>
       </fileset>
     </copy>
+    <copy todir="${temp.dist.dir}/plugins">
+      <fileset dir="${src.dir}/ext-plugins">
+        <patternset refid="pattern.package.ext-plugins.minimum"/>
+      </fileset>
+    </copy>
     <!-- no documentation -->
     <ant antfile="${temp.dist.dir}/integrator.xml"/>
     <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
@@ -259,6 +259,11 @@
     <copy todir="${temp.dist.dir}">
       <fileset dir="${src.dir}">
         <patternset refid="pattern.package.standard"/>
+      </fileset>
+    </copy>
+    <copy todir="${temp.dist.dir}/plugins">
+      <fileset dir="${src.dir}/ext-plugins">
+        <patternset refid="pattern.package.ext-plugins.standard"/>
       </fileset>
     </copy>
     <copy todir="${temp.dist.dir}">
@@ -285,6 +290,11 @@
         <patternset refid="pattern.package.full"/>
       </fileset>
     </copy>
+    <copy todir="${temp.dist.dir}/plugins">
+      <fileset dir="${src.dir}/ext-plugins">
+        <patternset refid="pattern.package.ext-plugins.full"/>
+      </fileset>
+    </copy>
     <copy todir="${temp.dist.dir}">
       <fileset dir="${out.dir}">
         <patternset refid="pattern.package.doc"/>
@@ -309,7 +319,7 @@
     </tar>
   </target>
 
-  <target name="build-package-binary" depends="jar, update-doc" description="Build binary distribution packages">
+  <target name="build-package-binary" depends="jar, update-doc">
     <sequential>
       <antcall target="package-binary-full">
         <param name="param.out.file" value="${binary-big}"/>
@@ -341,7 +351,7 @@
     </sequential>
   </target>
 
-  <target name="build-all-packages"
+  <target name="dist"
     depends="init-package, build-package-binary, cleanup" description="Build distribution packages"/>
 
   <target name="cleanup" unless="skip.cleanup">
@@ -443,7 +453,7 @@
     </javac>
   </target>
 
-  <target name="test" depends="compile, test-compile">
+  <target name="test" depends="compile, test-compile" description="Run unit tests">
     <delete failonerror="false">
       <fileset dir="${test.log.dir}" erroronmissingdir="false"/>
     </delete>
@@ -475,7 +485,7 @@
     </junit>
   </target>
   
-  <target name="integration-test" depends="compile, test-compile">
+  <target name="integration-test" depends="compile, test-compile" description="Run integration tests">
     <delete failonerror="false">
       <fileset dir="${test.log.dir}" erroronmissingdir="false"/>
     </delete>
