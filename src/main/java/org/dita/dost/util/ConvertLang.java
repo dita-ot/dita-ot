@@ -384,21 +384,15 @@ public final class ConvertLang extends Task {
 
                     //meta tag contains charset found
                     if(value.contains("Language=")){
-                        final int insertPoint = value.indexOf("Language=") + "Language=".length();
-                        final String subString = value.substring(0, insertPoint);
-                        //get new lang
-                        final Set<Entry<String, String>> entrySet = langMap.entrySet();
-                        for(final Entry<String, String> entry : entrySet){
-                            if(langcode.startsWith(entry.getKey())){
-                                final String lang = entry.getValue();
-                                //change the language setting
-                                final String newValue = subString + lang;
-                                //write into the output file
-                                writer.write(newValue);
-                                //add line break
-                                writer.write(LINE_SEPARATOR);
-                                break;
-                            }
+                        String newValue = langMap.get(langcode);
+                        if (newValue == null) {
+                            newValue = langMap.get(langcode.split("-")[0]);
+                        }
+                        if (newValue != null) {
+                            writer.write("Language=" + newValue);
+                            writer.write(LINE_SEPARATOR);
+                        } else {
+                            throw new IllegalArgumentException("Unsupported language code '" + langcode + "', unable to map to a Locale ID.");
                         }
 
                     }else{

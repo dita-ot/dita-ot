@@ -71,10 +71,10 @@
 <xsl:param name="target-language">
   <xsl:choose>
     <xsl:when test="/*[contains(@class, ' map/map ')]/@xml:lang">
-      <xsl:value-of select="concat(translate(/*[contains(@class, ' map/map ')]/@xml:lang,$lang-translate-uppercase,$lang-translate-lowercase), '-')"/>
+      <xsl:value-of select="translate(/*[contains(@class, ' map/map ')]/@xml:lang,$lang-translate-uppercase,$lang-translate-lowercase)"/>
     </xsl:when>
     <xsl:when test="document((//*[contains(@class, ' map/topicref ')][@href and @href != '' and not(contains(@href,'://'))][not(@format) or @format='dita' or @format='DITA'][not(@scope) or @scope='local'])[1]/@href, /)//*[contains(@class, ' topic/topic ')][1]/@xml:lang">
-      <xsl:value-of select="concat(translate(document((//*[contains(@class, ' map/topicref ')][@href and @href != ''and not(contains(@href,'://'))][not(@format) or @format='dita' or @format='DITA'][not(@scope) or @scope='local'])[1]/@href, /)//*[contains(@class, ' topic/topic ')][1]/@xml:lang,$lang-translate-uppercase,$lang-translate-lowercase), '-')"/>
+      <xsl:value-of select="translate(document((//*[contains(@class, ' map/topicref ')][@href and @href != ''and not(contains(@href,'://'))][not(@format) or @format='dita' or @format='DITA'][not(@scope) or @scope='local'])[1]/@href, /)//*[contains(@class, ' topic/topic ')][1]/@xml:lang,$lang-translate-uppercase,$lang-translate-lowercase)"/>
     </xsl:when>
     <xsl:otherwise>en-us</xsl:otherwise>
   </xsl:choose>
@@ -98,62 +98,62 @@ Binary Index=No
 </xsl:if>
 <xsl:text>Language=</xsl:text>
 <xsl:choose>
-  <xsl:when test="starts-with($target-language, 'ar-')"><xsl:text>0x0c01 Arabic (EGYPT)</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'be-')"><xsl:text>0x0423 Byelorussian</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'bg-')"><xsl:text>0x0402 Bulgarian</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'ca-')"><xsl:text>0x0403 Catalan</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'cs-')"><xsl:text>0x0405 Czech</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'da-')"><xsl:text>0x0406 Danish</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'de-ch-')"><xsl:text>0x0807 German (SWITZERLAND)</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'de-')"><xsl:text>0x0407 German (GERMANY)</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'el-')"><xsl:text>0x0408 Greek</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'en-gb-')"><xsl:text>0x0809 English (UNITED KINGDOM)</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'ar' or starts-with($target-language, 'ar-')"><xsl:text>0x0c01 Arabic (EGYPT)</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'be' or starts-with($target-language, 'be-')"><xsl:text>0x0423 Byelorussian</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'bg' or starts-with($target-language, 'bg-')"><xsl:text>0x0402 Bulgarian</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'ca' or starts-with($target-language, 'ca-')"><xsl:text>0x0403 Catalan</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'cs' or starts-with($target-language, 'cs-')"><xsl:text>0x0405 Czech</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'da' or starts-with($target-language, 'da-')"><xsl:text>0x0406 Danish</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'de-ch'"><xsl:text>0x0807 German (SWITZERLAND)</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'de' or starts-with($target-language, 'de-')"><xsl:text>0x0407 German (GERMANY)</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'el' or starts-with($target-language, 'el-')"><xsl:text>0x0408 Greek</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'en-gb'"><xsl:text>0x0809 English (UNITED KINGDOM)</xsl:text></xsl:when>
   <!-- en-uk seems to be a common misspelling of en-gb. -->
-  <xsl:when test="starts-with($target-language, 'en-uk-')"><xsl:text>0x0809 English (UNITED KINGDOM)</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'en-us-')"><xsl:text>0x0409 English (United States)</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'en-')"><xsl:text>0x0409 English (United States)</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'es-')"><xsl:text>0x040a Spanish (Spain)</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'et-')"><xsl:text>0x0425 Estonian</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'fi-')"><xsl:text>0x040b Finnish</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'fr-be-')"><xsl:text>0x080c French (BELGIUM)</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'fr-ca-')"><xsl:text>0x0c0c French (CANADA)</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'fr-ch-')"><xsl:text>0x100c French (SWITZERLAND)</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'fr-')"><xsl:text>0x040c French (FRANCE)</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'he-')"><xsl:text>0x040d Hebrew</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'hr-')"><xsl:text>0x041a Croatian</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'hu-')"><xsl:text>0x040e Hungarian</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'is-')"><xsl:text>0x040f Icelandic</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'it-ch-')"><xsl:text>0x0810 Italian (SWITZERLAND)</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'it-')"><xsl:text>0x0410 Italian (ITALY)</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'ja-')"><xsl:text>0x0411 Japanese</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'ko-')"><xsl:text>0x0412 Korean</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'lt-')"><xsl:text>0x0427 Lithuanian</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'lv-')"><xsl:text>0x0426 Latvian (Lettish)</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'mk-')"><xsl:text>0x042f Macedonian</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'nl-be-')"><xsl:text>0x0813 Dutch (Belgium)</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'nl-')"><xsl:text>0x0413 Dutch (Netherlands)</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'no-')"><xsl:text>0x0414 Norwegian (Bokmal)</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'pl-')"><xsl:text>0x0415 Polish</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'pt-br-')"><xsl:text>0x0416 Portuguese (BRAZIL)</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'pt-pt-')"><xsl:text>0x0816 Portuguese (PORTUGAL)</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'pt-')"><xsl:text>0x0416 Portuguese (BRAZIL)</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'ro-')"><xsl:text>0x0418 Romanian</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'ru-')"><xsl:text>0x0419 Russian</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'sk-')"><xsl:text>0x041b Slovak</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'sl-')"><xsl:text>0x0424 Slovenian</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'sr-cyrl-')"><xsl:text>0x0c1a Serbian (Cyrillic)</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'sr-latn-')"><xsl:text>0x081a Serbian (Latin)</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'sr-')"><xsl:text>0x0c1a Serbian (Cyrillic)</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'sv-')"><xsl:text>0x041d Swedish</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'th-')"><xsl:text>0x041e Thai</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'tr-')"><xsl:text>0x041f Turkish</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'uk-')"><xsl:text>0x0422 Ukrainian</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'en-uk'"><xsl:text>0x0809 English (UNITED KINGDOM)</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'en-us'"><xsl:text>0x0409 English (United States)</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'en' or starts-with($target-language, 'en-')"><xsl:text>0x0409 English (United States)</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'es' or starts-with($target-language, 'es-')"><xsl:text>0x040a Spanish (Spain)</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'et' or starts-with($target-language, 'et-')"><xsl:text>0x0425 Estonian</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'fi' or starts-with($target-language, 'fi-')"><xsl:text>0x040b Finnish</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'fr-be'"><xsl:text>0x080c French (BELGIUM)</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'fr-ca'"><xsl:text>0x0c0c French (CANADA)</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'fr-ch'"><xsl:text>0x100c French (SWITZERLAND)</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'fr' or starts-with($target-language, 'fr-')"><xsl:text>0x040c French (FRANCE)</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'he' or starts-with($target-language, 'he-')"><xsl:text>0x040d Hebrew</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'hr' or starts-with($target-language, 'hr-')"><xsl:text>0x041a Croatian</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'hu' or starts-with($target-language, 'hu-')"><xsl:text>0x040e Hungarian</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'is' or starts-with($target-language, 'is-')"><xsl:text>0x040f Icelandic</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'it-ch'"><xsl:text>0x0810 Italian (SWITZERLAND)</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'it' or starts-with($target-language, 'it-')"><xsl:text>0x0410 Italian (ITALY)</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'ja' or starts-with($target-language, 'ja-')"><xsl:text>0x0411 Japanese</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'ko' or starts-with($target-language, 'ko-')"><xsl:text>0x0412 Korean</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'lt' or starts-with($target-language, 'lt-')"><xsl:text>0x0427 Lithuanian</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'lv' or starts-with($target-language, 'lv-')"><xsl:text>0x0426 Latvian (Lettish)</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'mk' or starts-with($target-language, 'mk-')"><xsl:text>0x042f Macedonian</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'nl-be'"><xsl:text>0x0813 Dutch (Belgium)</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'nl' or starts-with($target-language, 'nl-')"><xsl:text>0x0413 Dutch (Netherlands)</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'no' or starts-with($target-language, 'no-')"><xsl:text>0x0414 Norwegian (Bokmal)</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'pl' or starts-with($target-language, 'pl-')"><xsl:text>0x0415 Polish</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'pt-br'"><xsl:text>0x0416 Portuguese (BRAZIL)</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'pt-pt'"><xsl:text>0x0816 Portuguese (PORTUGAL)</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'pt' or starts-with($target-language, 'pt-')"><xsl:text>0x0416 Portuguese (BRAZIL)</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'ro' or starts-with($target-language, 'ro-')"><xsl:text>0x0418 Romanian</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'ru' or starts-with($target-language, 'ru-')"><xsl:text>0x0419 Russian</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'sk' or starts-with($target-language, 'sk-')"><xsl:text>0x041b Slovak</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'sl' or starts-with($target-language, 'sl-')"><xsl:text>0x0424 Slovenian</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'sr-cyrl'"><xsl:text>0x0c1a Serbian (Cyrillic)</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'sr-latn'"><xsl:text>0x081a Serbian (Latin)</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'sr' or starts-with($target-language, 'sr-')"><xsl:text>0x0c1a Serbian (Cyrillic)</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'sv' or starts-with($target-language, 'sv-')"><xsl:text>0x041d Swedish</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'th' or starts-with($target-language, 'th-')"><xsl:text>0x041e Thai</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'tr' or starts-with($target-language, 'tr-')"><xsl:text>0x041f Turkish</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'uk' or starts-with($target-language, 'uk-')"><xsl:text>0x0422 Ukrainian</xsl:text></xsl:when>
   <!-- Use common assumptions about Chinese. -->
-  <xsl:when test="starts-with($target-language, 'zh-cn-')"><xsl:text>0x0804 Chinese (CHINA)</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'zh-hans-')"><xsl:text>0x0804 Chinese (CHINA)</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'zh-tw-')"><xsl:text>0x0404 Chinese (TAIWAN, PROVINCE OF CHINA)</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'zh-hant-')"><xsl:text>0x0404 Chinese (TAIWAN, PROVINCE OF CHINA)</xsl:text></xsl:when>
-  <xsl:when test="starts-with($target-language, 'zh-')"><xsl:text>0x0804 Chinese (CHINA)</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'zh-cn'"><xsl:text>0x0804 Chinese (CHINA)</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'zh-hans'"><xsl:text>0x0804 Chinese (CHINA)</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'zh-tw'"><xsl:text>0x0404 Chinese (TAIWAN, PROVINCE OF CHINA)</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'zh-hant'"><xsl:text>0x0404 Chinese (TAIWAN, PROVINCE OF CHINA)</xsl:text></xsl:when>
+  <xsl:when test="$target-language = 'zh' or starts-with($target-language, 'zh-')"><xsl:text>0x0804 Chinese (CHINA)</xsl:text></xsl:when>
   <!-- DITA standard says untagged language is English. -->
   <xsl:otherwise><xsl:text>0x409 English (United States)</xsl:text></xsl:otherwise>
 </xsl:choose>
