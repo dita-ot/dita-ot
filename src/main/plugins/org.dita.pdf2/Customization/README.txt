@@ -8,7 +8,6 @@ you can currently override include:
 
   - Custom XSL via fo/xsl/custom.xsl, xhtml/xsl/custom.xsl and 
   	fo/attrs/custom.xsl
-  - Layout overrides via fo/layout-masters.xml
   - Font overrides via fo/font-mappings.xml
   - Per-locale variable overrides via common/vars/[locale].xml
   - I18N configuration via fo/i18n/[locale].xml

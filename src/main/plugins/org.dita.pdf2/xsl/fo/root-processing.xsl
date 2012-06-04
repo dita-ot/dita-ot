@@ -53,8 +53,6 @@ See the accompanying license.txt file for applicable licenses.
       </xsl:choose>
     </xsl:variable>
     
-    <xsl:variable name="layout-masters" select="'cfg:fo/layout-masters.xml'"/>
-
     <xsl:variable name="mapType">
         <xsl:choose>
             <xsl:when test="/*[contains(@class, ' map/map ') and contains(@class, ' bookmap/bookmap ')]">

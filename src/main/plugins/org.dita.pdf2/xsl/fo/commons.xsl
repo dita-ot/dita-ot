@@ -2115,6 +2115,12 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- Deprecated -->
     <xsl:template match="*" mode="layout-masters-processing">
+        <xsl:call-template name="output-message">
+            <xsl:with-param name="msgcat">DOTX</xsl:with-param>
+            <xsl:with-param name="msgnum">066</xsl:with-param>
+            <xsl:with-param name="msgsev">W</xsl:with-param>
+            <xsl:with-param name="msgparams">%1=layout-masters-processing</xsl:with-param>
+        </xsl:call-template>
         <xsl:element name="{name()}">
             <xsl:apply-templates select="@*" mode="layout-masters-processing"/>
             <xsl:apply-templates select="*" mode="layout-masters-processing"/>
@@ -2123,11 +2129,23 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- Deprecated -->
     <xsl:template match="@*" mode="layout-masters-processing">
+        <xsl:call-template name="output-message">
+            <xsl:with-param name="msgcat">DOTX</xsl:with-param>
+            <xsl:with-param name="msgnum">066</xsl:with-param>
+            <xsl:with-param name="msgsev">W</xsl:with-param>
+            <xsl:with-param name="msgparams">%1=layout-masters-processing</xsl:with-param>
+        </xsl:call-template>
         <xsl:copy-of select="."/>
     </xsl:template>
 
     <!-- Deprecated -->
     <xsl:template match="@background-image" mode="layout-masters-processing">
+        <xsl:call-template name="output-message">
+            <xsl:with-param name="msgcat">DOTX</xsl:with-param>
+            <xsl:with-param name="msgnum">066</xsl:with-param>
+            <xsl:with-param name="msgsev">W</xsl:with-param>
+            <xsl:with-param name="msgparams">%1=layout-masters-processing</xsl:with-param>
+        </xsl:call-template>
         <xsl:attribute name="background-image">
             <xsl:value-of select="concat('url(',$artworkPrefix,substring-after(.,'artwork:'),')')"/>
         </xsl:attribute>
