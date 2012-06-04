@@ -113,7 +113,9 @@
   </patternset>
   
   <patternset id="pattern.package.ant">
-    <include name="tools/ant/*.*"/>
+    <exclude name="tools/ant/etc/**"/>
+    <exclude name="tools/ant/manual/**"/>
+    <include name="tools/ant/*"/>
     <include name="tools/ant/bin/**"/>
     <include name="tools/ant/lib/**"/>
   </patternset>
