@@ -114,7 +114,7 @@ platform="windows linux">
                   scope="external"/>) into a directory of your choice.</p></dd>
 </dlentry>
           <dlentry>
-            <dt>Apache Xerces <keyword keyref="tool.xerces.version"/>  or newer</dt>
+            <dt>Apache Xerces <keyword keyref="tool.xerces.version.min"/>  or newer</dt>
             <dd>Provides high performance XML parser.</dd>
           </dlentry>
           <dlentry>
@@ -130,7 +130,7 @@ platform="windows linux">
                   href="http://xml.apache.org/xalan-j/downloads.html" scope="external"/>) into a
                 directory of your choice.</p></dd>
 </dlentry><dlentry id="antbuild">
-<dt>Ant <keyword keyref="tool.ant.version"/> or newer</dt>
+<dt>Ant <keyword keyref="tool.ant.version.min"/> or newer</dt>
 <dd>Provides the standard setup and sequencing of processing steps.</dd>
 </dlentry></dl>       </prereq>
 <steps>

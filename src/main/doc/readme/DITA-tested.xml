@@ -59,7 +59,7 @@ the DITA      processing system.</shortdesc>
 <stentry>
           <ul>
             <li>Ant 1.7.1</li>
-            <li>Ant 1.8.2</li>
+            <li>Ant 1.8.2, 1.8.3, 1.8.4</li>
           </ul>
         </stentry>
 </strow>

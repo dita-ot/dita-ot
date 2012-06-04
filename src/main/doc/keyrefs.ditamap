@@ -8,7 +8,7 @@ See the accompanying license.txt file for applicable licenses.
   <keydef keys="release.version">
     <topicmeta>
       <keywords>
-        <keyword>1.6.M4</keyword>
+        <keyword>1.6.M5</keyword>
       </keywords>
     </topicmeta>
   </keydef>
@@ -24,6 +24,14 @@ See the accompanying license.txt file for applicable licenses.
   <keydef keys="tool.ant.version">
     <topicmeta>
       <keywords>
+        <keyword>1.8.4</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <!-- minimum version -->
+  <keydef keys="tool.ant.version.min">
+    <topicmeta>
+      <keywords>
         <keyword>1.7.1</keyword>
       </keywords>
     </topicmeta>
@@ -33,6 +41,14 @@ See the accompanying license.txt file for applicable licenses.
     <topicmeta>
       <keywords>
         <keyword>2.9.0</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <!-- bundled version -->
+  <keydef keys="tool.xerces.version.min">
+    <topicmeta>
+      <keywords>
+        <keyword>2.11.0</keyword>
       </keywords>
     </topicmeta>
   </keydef>

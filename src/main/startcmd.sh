@@ -28,9 +28,10 @@ NEW_CLASSPATH="$DITA_DIR/lib:$NEW_CLASSPATH"
 NEW_CLASSPATH="$DITA_DIR/lib/commons-codec-1.4.jar:$NEW_CLASSPATH"
 NEW_CLASSPATH="$DITA_DIR/lib/resolver.jar:$NEW_CLASSPATH"
 NEW_CLASSPATH="$DITA_DIR/lib/icu4j.jar:$NEW_CLASSPATH"
+NEW_CLASSPATH="$DITA_DIR/lib/xercesImpl.jar:$NEW_CLASSPATH"
+NEW_CLASSPATH="$DITA_DIR/lib/xml-apis.jar:$NEW_CLASSPATH"
 NEW_CLASSPATH="$DITA_DIR/lib/saxon/saxon9.jar:$NEW_CLASSPATH"
 NEW_CLASSPATH="$DITA_DIR/lib/saxon/saxon9-dom.jar:$NEW_CLASSPATH"
-# xercesImpl.jar and xml-apis.jar from Ant 1.7.1
 if test -n "$CLASSPATH"; then
   export CLASSPATH="$NEW_CLASSPATH":"$CLASSPATH"
 else
