@@ -1,48 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
-<map id="reltable">
- <reltable>
-   <relrow>
-     <relcell linking="sourceonly">
-       <topicref href="DITA-OTProjectHome.xml"/>
-     </relcell>
-     <relcell linking="targetonly">
-       <topicref href="readme/distribution_packages.dita"/>
-     </relcell>
-     <relcell linking="targetonly">
-       <topicref format="html" href="http://dita.xml.org/wiki/the-dita-open-toolkit" scope="external">
-         <topicmeta>
-           <linktext>Main DITA-OT page at dita.xml.org</linktext>
-         </topicmeta>
-       </topicref>
-       <!--topicref format="html" href="http://dita.xml.org/node/3101" scope="external">
+<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"
+ "map.dtd">
+<?Pub Sty _display FontColor="red"?>
+<map id="reltable" xml:lang="en-us">
+<reltable>
+<relrow>
+<relcell linking="sourceonly">
+<topicref href="DITA-OTProjectHome.xml"></topicref>
+</relcell>
+<relcell linking="targetonly">
+<topicref href="readme/distribution_packages.dita"></topicref>
+</relcell>
+<relcell linking="targetonly">
+<topicref format="html"
+href="http://dita.xml.org/wiki/the-dita-open-toolkit" scope="external">
+<topicmeta><linktext>Main DITA-OT page at dita.xml.org</linktext>
+</topicmeta>
+</topicref>
+<!--topicref format="html" href="http://dita.xml.org/node/3101" scope="external">
          <topicmeta>
            <linktext>Information on the <keyword keyref="release.version"/> release</linktext>
          </topicmeta>
        </topicref-->
-       <topicref format="html" href="http://sourceforge.net/news/?group_id=132728" scope="external">
-         <topicmeta>
-           <linktext>Project News for DITA Open Toolkit</linktext>
-         </topicmeta>
-       </topicref>
-     </relcell>
-   </relrow>
-   <relrow>
-     <relcell>
-       <topicref href="readme/distribution_packages.dita"/>
-     </relcell>
-     <relcell>
-         <topicref href="https://sourceforge.net/projects/dita-ot/files" scope="external" format="html">
-           <topicmeta>
-            <linktext>DITA Open Toolkit distibution package downloads</linktext>
-           </topicmeta>
-         </topicref>
-         <topicref href="https://github.com/dita-ot/dita-ot" scope="external" format="html">
-           <topicmeta>
-             <linktext>DITA Open Toolkit source</linktext>
-           </topicmeta>
-         </topicref>
-     </relcell>
-   </relrow>
- </reltable>
+<topicref format="html"
+href="http://sourceforge.net/news/?group_id=132728" scope="external">
+<topicmeta><linktext>Project News for DITA Open Toolkit</linktext>
+</topicmeta>
+</topicref>
+</relcell>
+</relrow>
+<relrow>
+<relcell>
+<topicref href="admin/DevelopmentProcess.xml#procedures"></topicref>
+</relcell>
+<relcell format="html" linking="targetonly" scope="external">
+<topicref href="http://github.com/dita-ot/dita-ot/issues"
+navtitle="DITA-OT Issue tracker"></topicref><?Pub Caret -2?>
+<topicref
+href="http://lists.sourceforge.net/lists/listinfo/dita-ot-developer"
+navtitle="Mailing list for project developers"></topicref>
+<topicref href="http://help.github.com/articles/set-up-git"
+navtitle="Setting up Git to work with the project code"></topicref>
+</relcell>
+</relrow>
+<relrow>
+<relcell>
+<topicref href="readme/distribution_packages.dita"></topicref>
+</relcell>
+<relcell>
+<topicref format="html"
+href="https://sourceforge.net/projects/dita-ot/files" scope="external">
+<topicmeta><linktext>DITA Open Toolkit distibution package downloads</linktext>
+</topicmeta>
+</topicref>
+<topicref format="html" href="https://github.com/dita-ot/dita-ot"
+scope="external">
+<topicmeta><linktext>DITA Open Toolkit source</linktext></topicmeta>
+</topicref>
+</relcell>
+</relrow>
+</reltable>
 </map>
+<?Pub *0000002198?>

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Arbortext, Inc., 1988-2010, v.4002-->
+<!--Arbortext, Inc., 1988-2011, v.4002-->
 <!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
  "topic.dtd">
+<?Pub Sty _display FontColor="red"?>
 <topic id="ditaotgoals" xml:lang="en-us">
 <title>Goals and objectives of the DITA Open Toolkit</title>
-  <titlealts>
-    <navtitle>Goals and objectives</navtitle>
-  </titlealts>
+<titlealts>
+<navtitle>Goals and objectives</navtitle>
+</titlealts>
 <shortdesc>The long term goal of the DITA Open Toolkit is to provide
 a high quality        implementation for production level output of
 DITA XML content, built in        a professionally-managed project
@@ -15,37 +16,44 @@ each release.</shortdesc>
 <body>
 <p>The DITA-OT may be used in a variety of ways:<ul>
 <li>It may be integrated as one component in a larger end-to-end production
-pipeline. Either the minimal or standard package may be the most suitable
+pipeline. The minimal or standard packages are generally best suited
 for this use.</li>
 <li>It may be used on its own as a complete DITA production system.
-Users looking for this will most likely use the Full Easy Install
+Users looking for this will most likely want the Full Easy Install
 package.</li>
 <li>It may be integrated into vendor tools such as editors or content
 management systems, to provide an easy DITA production system. The
 minimal package is designed for this type of use.</li>
 </ul></p>
-<section>       <title>Project objectives</title>       <p>The project
-will be managed similarly to any commercial software          development
-project, with requirements gathering, plan validation with       
-  stakeholders, scheduled activities, tests, reviews, and builds,
-with an          emphasis on quality.</p>       <p>The project will
-emplace a process for tracking all contributions. Any          individual
-or any organization can contribute, but the spirit of the        
- community is personal contribution. IBM as Committer is desirous
-that          all major contributors get appropriate recognition in
-press releases,          etc..</p>       <p>The DITA Open Toolkit
-project will track and fix bugs reported against          its products,
-and issue patches based on urgency.</p>       <p>The DITA Open Toolkit
-project will track to major version updates of          the DTDs/Schemas
-by the OASIS DITA TC.</p>       <p>The DITA Open Toolkit project will
-track to bug fixes of the          DTDs/Schemas by the OASIS DITA
-TC as necessary (such fixes tend          to have little impact to
-tools).</p>       <p>The project agrees with the Open Source motto
-of &quot;Release early          and often&quot; to get wide consensus
-on issues. The project works with an Agile development process, releasing
-test builds approximately every three weeks, and encourages feedback
-on test builds while function is being development.</p><?Pub Caret 239?> 
-   </section>
+<section><title>Project objectives</title><p>The project is managed
+similarly to any commercial software development project, with requirements
+gathering, plan validation with stakeholders and contributors, scheduled
+activities, tests, reviews, and builds, with an emphasis on quality.</p><p>The
+project has an established process for tracking all contributions.
+Any individual or any organization can contribute; contributions must
+adhere to the existing toolkit license(s) and should fit in with the
+general goals of the project. All major contributors will get appropriate
+recognition in release announcements and on the project home page.</p><p>Bugs
+and new feature requests may be submitted through the project page
+at github: <xref format="html"
+href="https://github.com/dita-ot/dita-ot/issues" scope="external">DITA-OT
+Issues at github</xref>. The core project contributors will track
+and address bugs reported against its products, and issue patches
+based on urgency. The core contributors will also provide feedback
+on requests for major new features or changes, but may not be able
+to provide development assistance on all requests.</p><p>The DITA
+Open Toolkit project will keep up to date with the latest DITA DTD
+and Schema updates from the OASIS DITA Technical Committee (owners
+of the DITA standard). If bugs are found in the OASIS DTDs or Schemas,
+they will be fixed in the toolkit and reported back to OASIS. As OASIS
+produces drafts of future versions, the DITA-OT will work to create
+early support for new features in order to help test the standard.</p><p>The
+project agrees with the Open Source motto of &quot;Release early and
+often&quot; to get wide consensus on issues. The project works with
+an agile development process, releasing test builds approximately
+every month, and encourages feedback on test builds while function
+is being developed. We typically put out new stable releases approximately
+every six months.</p><?Pub Caret -1?></section>
 </body>
 </topic>
-<?Pub *0000002639?>
+<?Pub *0000003239?>
