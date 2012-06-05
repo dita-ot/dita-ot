@@ -47,7 +47,7 @@ for more information, see the Developer reference section of the User Guide.</p>
           </sthead>
           <xsl:for-each select="/*/message">
             <xsl:sort select="@id"/>
-            <strow>
+            <strow id="{@id}">
               <stentry><msgnum><xsl:value-of select="@id"/></msgnum></stentry>
               <stentry>
                 <xsl:choose>
