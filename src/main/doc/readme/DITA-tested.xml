@@ -68,6 +68,7 @@ the DITA      processing system.</shortdesc>
         <stentry>
           <ul>
             <li>ICU4J 3.4.4</li>
+            <li>ICU4J 49.1</li>
           </ul>
         </stentry>
       </strow>

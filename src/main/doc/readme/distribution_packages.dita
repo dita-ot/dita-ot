@@ -50,7 +50,7 @@ keyref="release.version"></keyword>_full_easy_install_bin.tar.gz</ph>)</title>
         <li>Apache Xerces <keyword keyref="tool.xerces.version"/></li>
         <li>Apache Commons Codec <keyword keyref="tool.codec.version"/></li>
         <li>Apache Catalog Resolver <keyword keyref="tool.resolver.version"/></li>
-        <li>IBM ICU for Java <keyword keyref="tool.icu4j.version"/></li>
+        <li>ICU for Java <keyword keyref="tool.icu4j.version"/></li>
         <li>Apache FOP <keyword keyref="tool.fop.version"/></li>
       </ul>
     </section>
