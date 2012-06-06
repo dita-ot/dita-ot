@@ -14,11 +14,8 @@ Toolkit project      shall accept contributions, license contributions,
 license materials owned      by this project, and manage other intellectual
 property matters.</shortdesc>
 <body>
-<section><title>Overview</title><p>The <xref format="html"
-href="http://www.opensource.org/licenses/cpl1.0.php" scope="external">Common
-Public License</xref> (CPL) and         <xref format="html"
-href="http://www.apache.org/licenses/LICENSE-2.0" scope="external">Apache
-License 2.0</xref>, which are incorporated          herein by reference,
+<section><title>Overview</title><p>The <xref keyref="license-CPL"></xref> (CPL) and
+<xref keyref="license-Apache2.0"></xref>, which are incorporated          herein by reference,
 will serve as the primary licenses under which the          Committer
 will accept contributions of software, documentation,          information
 (including, but not limited to, ideas, concepts, know-how        

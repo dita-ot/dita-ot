@@ -35,9 +35,7 @@ adhere to the existing toolkit license(s) and should fit in with the
 general goals of the project. All major contributors will get appropriate
 recognition in release announcements and on the project home page.</p><p>Bugs
 and new feature requests may be submitted through the project page
-at github: <xref format="html"
-href="https://github.com/dita-ot/dita-ot/issues" scope="external">DITA-OT
-Issues at github</xref>. The core project contributors will track
+at github: <xref keyref="dita-ot-issues"></xref>. The core project contributors will track
 and address bugs reported against its products, and issue patches
 based on urgency. The core contributors will also provide feedback
 on requests for major new features or changes, but may not be able
