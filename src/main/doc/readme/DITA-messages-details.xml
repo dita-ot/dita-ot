@@ -48,52 +48,62 @@ use the following to add additional info to message DOTX001F:
 </ul></stentry>
 </strow>
 <strow>
-<stentry conref="DITA-messages.xml#msgs/DOTA001F-extra" conaction="pushreplace">Additional transform types may be
-available if toolkit plug-ins are installed.</stentry>
+<stentry conref="DITA-messages.xml#msgs/DOTA001F-extra" conaction="pushreplace">Default transformation types
+that ship with the toolkit include xhtml, eclipsehelp, pdf (or pdf2), tocjs, htmlhelp, javahelp, odt, eclipsecontent, troff, docbook, and wordrtf. 
+Additional transformation types may be available if toolkit plug-ins are installed.</stentry>
 </strow>
 <strow>
-<stentry conref="DITA-messages.xml#msgs/DOTA003F-extra" conaction="pushreplace">The args.xsl parameter
-(or the /XSL parameter when using the Java command line) was used to specify an
-alternate stylesheet for generating XSLT, but that stylesheet could not be loaded.
-Please correct the parameter to specify a valid stylesheet.</stentry>
+<stentry conref="DITA-messages.xml#msgs/DOTA002F-extra" conaction="pushreplace">The input parameter
+was not specified, so there is no DITA or DITAMAP file to transform. Ensure the parameter
+is set properly; see <xref href="dita-ot_ant_properties.dita">DITA-OT Ant arguments</xref> or
+<xref href="dita-ot_java_properties.dita">DITA-OT Command line tool arguments</xref>
+if you are unsure how to specify the input file.</stentry>
+</strow>
+<strow>
+<stentry conref="DITA-messages.xml#msgs/DOTA003F-extra" conaction="pushreplace">An alternate
+stylesheet was specified to run in place of the default XSLT output process, but that
+stylesheet could not be loaded. Please correct the parameter to specify a valid stylesheet.</stentry>
 </strow>
 <strow>
 <stentry conref="DITA-messages.xml#msgs/DOTA004F-extra" conaction="pushreplace">This optional parameter is used
-to set an extension used for DITA topic documents in the temporary processing directory. Only
-"dita" and "xml" are used during processing.</stentry>
+to set an extension for DITA topic documents in the temporary processing directory. Only
+"dita", ".dita", "xml", or ".xml" are allowed.</stentry>
 </strow>
 <strow>
 <stentry conref="DITA-messages.xml#msgs/DOTA005W-extra" conaction="pushreplace">These two parameters
-were deprecated several releases ago and should switch to use the <codeph>args.input</codeph> instead.</stentry>
+were deprecated several releases ago; please use the <codeph>args.input</codeph> parameter instead.</stentry>
 </strow>
 <strow>
 <stentry conref="DITA-messages.xml#msgs/DOTA006W-extra" conaction="pushreplace">If the CSSPATH uses an
 absolute path, it should be one that can still be accessed after the files are moved to
-another system (such as <codeph>http://www.example.org/</codeph>).</stentry>
+another system (such as <codeph>http://www.example.org/</codeph>). Absolute paths on the
+local file system will be broken if the content is moved to a new system.</stentry>
 </strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTA007E-extra" conaction="pushreplace">The running footer,
-which should be added to the bottom of each XHTML output topic, cannot be located or read. This is
-usually caused by a typo in the parameter value.</stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTA008E-extra" conaction="pushreplace">The running header,
-which should be added to the top of each XHTML output topic, cannot be located or read. This is
-usually caused by a typo in the parameter value.</stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTA009E-extra" conaction="pushreplace">The running heading info,
-which should be added to the &lt;head&gt; section of each XHTML output topic, cannot be located or read. This is
-usually caused by a typo in the parameter value.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTA007E-extra" conaction="pushreplace">The running footer file,
+which contains content to be added to the bottom of each XHTML output topic, cannot be located or read. This is
+usually caused by a typo in the parameter value. You should also ensure that the value is not specified
+with "file:" as a prefix.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTA008E-extra" conaction="pushreplace">The running header file,
+which contains content to be added to the top of each XHTML output topic, cannot be located or read. This is
+usually caused by a typo in the parameter value. You should also ensure that the value is not specified
+with "file:" as a prefix.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTA009E-extra" conaction="pushreplace">The running heading file,
+which contains content to be added to the &lt;head&gt; section of each XHTML output topic, cannot be located or read. This is
+usually caused by a typo in the parameter value. You should also ensure that the value is not specified
+with "file:" as a prefix.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTA010E-extra" conaction="pushreplace">By default, the
-DITA-OT expects to find Apache FOP at this specific location inside of the PDF plug-in. If you
+DITA-OT expects to find Apache FOP in the <filepath>fop/</filepath> directory inside of the PDF plug-in. If you
 are using an alternate renderer, or if you have placed FOP in a different directory, you will
 need to update your configuration accordingly.</stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTA066F-extra" conaction="pushreplace">A parameter
-was used to specify an alternative to the default XSL-FO stylesheet. The alternative stylesheet
-could not be located. Please verify that you specified the path and file name correctly.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTA066F-extra" conaction="pushreplace">An alternate
+stylesheet was specified to run in place of the default XSL-FO output process, but that
+stylesheet could not be loaded. Please correct the parameter to specify a valid stylesheet.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTA067W-extra" conaction="pushreplace">This
 condition is ignored, as instructed in the OASIS DITA Standard.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTA068W-extra" conaction="pushreplace">This
 condition is ignored, as instructed in the OASIS DITA Standard.</stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTA069F-extra" conaction="pushreplace">The main
-input file could not be located. Please ensure that the file path and file name were
-entered correctly.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTA069F-extra" conaction="pushreplace">Please ensure
+that the input file path and file name were entered correctly.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ001F-extra" conaction="pushreplace">The Java
 based command line tool expects parameters to be specified using the following format:
 <codeph>/parameter:value</codeph></stentry></strow>

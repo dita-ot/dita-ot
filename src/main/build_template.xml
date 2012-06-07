@@ -35,6 +35,7 @@
           <dita:extension id="dita.conductor.transtype.check" behavior="org.dita.dost.platform.CheckTranstypeAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
         </and>
       </condition>
+      <param name="1" value="${transtype}"/>
     </dita-ot-fail>
     <condition property="transtarget" value="pdf2" else="${transtype}">
       <equals arg1="${transtype}" arg2="pdf" casesensitive="false"/>
