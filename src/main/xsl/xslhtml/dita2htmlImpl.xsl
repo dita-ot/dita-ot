@@ -2597,20 +2597,37 @@
     <xsl:variable name="entrypos">    <!-- Current column -->
       <xsl:call-template name="find-entry-start-position"/>
     </xsl:variable>
+    <xsl:variable name="colspec" select="../../../*[contains(@class,' topic/colspec ')][number($entrypos)]"/>
     <xsl:variable name="totalwidth">  <!-- Total width of the column, in units -->
       <xsl:apply-templates select="../../../*[contains(@class,' topic/colspec ')][1]" mode="count-colwidth"/>
     </xsl:variable>
+    <xsl:variable name="proportionalWidth" select="contains($colspec/@colwidth, '*')"/>
     <xsl:variable name="thiswidth">   <!-- Width of this column, in units -->
       <xsl:choose>
-        <xsl:when test="../../../*[contains(@class,' topic/colspec ')][number($entrypos)]/@colwidth">
-          <xsl:value-of select="substring-before(../../../*[contains(@class,' topic/colspec ')][number($entrypos)]/@colwidth,'*')"/>
+        <xsl:when test="$colspec/@colwidth">
+          <xsl:choose>
+            <xsl:when test="$proportionalWidth">
+              <xsl:value-of select="substring-before($colspec/@colwidth, '*')"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="$colspec/@colwidth"/>
+            </xsl:otherwise>
+          </xsl:choose>
         </xsl:when>
         <xsl:otherwise>1</xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
     <!-- Width = width of this column / width of table, times 100 to make a percent -->
     <xsl:attribute name="width">
-      <xsl:value-of select="($thiswidth div $totalwidth) * 100"/><xsl:text>%</xsl:text>
+      <xsl:choose>
+        <xsl:when test="$proportionalWidth">
+          <xsl:value-of select="($thiswidth div $totalwidth) * 100"/>
+          <xsl:text>%</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$thiswidth"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:attribute>
   </xsl:if>
 

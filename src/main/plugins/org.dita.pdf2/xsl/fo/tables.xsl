@@ -1242,7 +1242,7 @@ See the accompanying license.txt file for applicable licenses.
 			<xsl:if test="normalize-space(@colwidth) != ''"> 
 				<xsl:attribute name="column-width">
 					<xsl:choose>
-						<xsl:when test="$tableSpecNonProportional = 'true'">
+						<xsl:when test="not(contains(@colwidth, '*'))">
 							<xsl:call-template name="calculateColumnWidth.nonProportional">
 								<xsl:with-param name="colwidth" select="@colwidth"/>
 							</xsl:call-template>
