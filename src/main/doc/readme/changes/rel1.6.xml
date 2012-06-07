@@ -293,6 +293,7 @@
           <li>#1229 Typos in domains_(un)classed.css (in progress)</li>
           <li>#1284 Fix broken references in catalog file for PDF publishing (milestone 5)</li>
           <li>#1216 Customizing PDF layout-masters in 1.5.3 (milestone 5)</li>
+          <li>#1177 Extension Point @behavior Not Documented (milestone 5)</li>
           <li>#1152 UNC paths are not supported in input argument (in progress)</li>  
         </ul>
       </section>
