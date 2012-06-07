@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Arbortext, Inc., 1988-2011, v.4002-->
 <!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
  "topic.dtd">
 <?Pub Sty _display FontColor="red"?>
@@ -13,112 +12,8 @@ other popular and successful Open Source projects, notably the Eclipse
 development process (for definitions and process statements).</shortdesc>
 <body>
 <section><title>Revision 2.0</title><p>Version 1.0 released February
-27, 2005.</p><p>Version 2.0 released June 5, 2012.</p></section>
-<section><title>Purpose and scope</title><p>This document describes
+27, 2005.</p><p>Version 2.0 released June 29, 2012.</p></section>
+<section><title>Purpose and scope</title><p>This section describes
 the development process of DITA Open Toolkit (DITA-OT) project.</p></section>
 </body>
-<topic id="rolesandresponsibilities">
-<title>Roles and Resposibilities</title>
-<body>
-<p>There are several roles in the DITA Open Toolkit open source project.
-Each has different rights and obligations.</p>
-<dl><dlentry>
-<dt>Project Manager (PM)</dt>
-<dd>An individual responsible for managing this open source project.
-The PM is expected to ensure that<ul>
-<li>All Projects operate effectively by providing leadership to guide
-this project&apos;s overall direction and by removing obstacles, solving
-problems, and resolving conflicts. </li>
-<li>All Project plans, technical documents and reports are publicly
-available.</li>
-<li>All Projects operate using open source rules of engagement: meritocracy,
-transparency, and open participation. These principles work together.
-Anyone can participate in this project. This open interaction, from
-answering questions to reporting bugs to making code contributions
-to creating designs, enables everyone to recognize and utilize the
-contributions.</li>
-</ul></dd>
-</dlentry><dlentry>
-<dt>Committer</dt>
-<dd>A developer who is expected to influence the Project&apos;s development
-and has write access to the source code repository. This position
-reflects a track record of high quality contributions. Committers
-oversee the quality and originality of all contributions.</dd>
-</dlentry><dlentry>
-<dt>Contributor</dt>
-<dd>An individual who contributes code, fixes, tests, documentation,
-or other work that is part of this project. A Contributor does not
-have write access to the source code repository. There is no limit
-to the scope of such contributions, though any contributors expecting
-to donate a large amount of new function to the project is encouraged
-to work together with committers in advance.</dd>
-</dlentry></dl>
-</body>
 </topic>
-<topic id="processlifecycle">
-<title>Process life cycle</title>
-<body>
-<p>The DITA-OT project uses an agile development cycle, with roughly
-four-week development iterations followed by the release of a full
-test build that includes all new functions developed up to that point.
-Roughly twice a year, a final "stable" build will be released.</p>
-<p>Each iteration begins with a meeting of project contributors.
-<xref keyref="contributor-meeting-minutes"></xref> are stored publicly on the
-project wiki at github. Active contributors are directly invited to
-these meetings, but anybody interested in the toolkit's development
-is welcome to attend. If you are interested in contributing or attending
-these meetings, please join the dita-ot-developer mailing list and
-send a note to the list (or list owners): <xref keyref="dita-ot-developer"></xref>.</p>
-<p>Each iteration kick-off meeting will cover the following topics:<ul>
-<li>Discuss any issues from the previous iteration</li>
-<li>Specific plans from each contributor for the upcoming iteration,
-or for new work that will cover multiple iterations</li>
-<li>Design discussion for any significant planned features or fixes</li>
-<li>Longer term plans for contributions to the current or following
-release</li>
-<li>Other project issues or hot topics, as needed, such as changes
-to the test and build process, interest from new contributors, etc</li>
-<li>For the final iteration before a stable build:<ul>
-<li>Evaluate what is allowed in the iteration; the final iteration
-typically has no major changes in order to assure quality in the stable
-build</li>
-<li>Ensure that all release notes are up to date, and other artifacts
-will be ready for a final build</li>
-</ul></li>
-</ul></p>
-<p>When an iteration is complete, the build is uploaded to SourceForge.
-Test builds are placed in the "Latest Test Build" folder; at the end
-of a release cycle, the builds will be loaded to the Stable Release
-folder, and the project information is updated to reflect the latest
-release.</p>
-</body>
-</topic>
-<topic id="procedures">
-<title>Procedures</title>
-<body>
-<section>         <title>Managing requirements/features</title><p>Throughout
-the project lifecycle, requirements or features may be submitted through
-the <xref keyref="dita-ot-issues"></xref>. The project committers
-will have periodic reviews of new feature requests along with other
-contributors and interested parties and (when possible) make plans
-for implementation.</p></section>
-<section><title>Fix bugs</title><p>Anyone can submit bug reports in
-the <xref keyref="dita-ot-issues"></xref>. Project committers will
-determine the owner of the relevant components and assign the bug
-for validation and disposition. Responses, fixes, and workarounds
-are generally quickest if those submitting a defect report are able
-to include sample files or clear instructions for reproducing the
-issue.</p>       </section>
-<section>         <title>Contribute code/bug fixes</title><p>Contributors
-can submit new features, patches, and bug fixes using existing github
-facilities (this is done by creating a "pull request" within github).
-The Committer(s) who owns the relevant components will first do due
-diligence to check code originality and licensing according to the <xref
-href="ContributionPolicy.xml"></xref>. After due diligence, the Committer(s)
-will use his/her own judgment on whether to accept the code into the
-original code base, request updates to the code, or suggest that the
-code be maintained as an external patch or plug-in.</p></section>
-</body>
-</topic>
-</topic><?Pub Caret -3?>
-<?Pub *0000006597?>

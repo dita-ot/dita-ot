@@ -13,13 +13,20 @@
   <topichead navtitle="Developer Reference">
     <mapref href="dev_ref/dev_ref.ditamap"/>
   </topichead>
-  <topichead navtitle="Project Management">
-    <topicref href="admin/DITA-OTProjectGoals.xml"/>
-    <topicref href="admin/DevelopmentProcess.xml"/>
-    <topicref href="admin/ContributionPolicy.xml"/>
-    <topicref href="admin/ContributionForm.xml"/>
-    <topicref href="admin/BugFixGuidelines-NoCLA.xml" toc="no"/>
-  </topichead>
+<topicref href="admin/DITA-OTProjectManagement.xml"
+navtitle="Project Management">
+<topicref href="admin/DITA-OTProjectGoals.xml"></topicref>
+<topicref href="admin/DevelopmentProcess.xml">
+<topicref href="admin/ProjectRoles.xml"></topicref>
+<topicref href="admin/ReleaseLifeCycle.xml"></topicref>
+<topicref href="admin/FixesAndFeatures.xml"></topicref>
+<topicref href="admin/HowToParticipate.xml">
+<topicref href="admin/BugFixGuidelines-NoCLA.xml"></topicref>
+<topicref href="admin/ContributionPolicy.xml"></topicref>
+<topicref href="admin/ContributionForm.xml"></topicref>
+</topicref>
+</topicref>
+</topicref>
   <topichead navtitle="Resources">
     <topicref format="html" href="http://dita.xml.org/wiki/the-dita-open-toolkit" navtitle="Project page at dita.xml.org" scope="external"/>
     <topicref format="html" href="http://groups.yahoo.com/group/dita-users/" navtitle="Yahoo! Group: dita-users" scope="external"/>

@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Arbortext, Inc., 1988-2011, v.4002-->
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"
  "map.dtd">
-<?Pub Sty _display FontColor="red"?>
 <map id="reltable" xml:lang="en-us">
 <reltable>
 <relrow>
@@ -32,16 +30,20 @@ href="http://sourceforge.net/news/?group_id=132728" scope="external">
 </relrow>
 <relrow>
 <relcell>
-<topicref href="admin/DevelopmentProcess.xml#procedures"></topicref>
+<topicref href="admin/FixesAndFeatures.xml"></topicref>
 </relcell>
 <relcell format="html" linking="targetonly" scope="external">
-<topicref href="http://github.com/dita-ot/dita-ot/issues"
-navtitle="DITA-OT Issue tracker"></topicref><?Pub Caret -2?>
-<topicref
-href="http://lists.sourceforge.net/lists/listinfo/dita-ot-developer"
-navtitle="Mailing list for project developers"></topicref>
-<topicref href="http://help.github.com/articles/set-up-git"
-navtitle="Setting up Git to work with the project code"></topicref>
+<topicref keyref="dita-ot-issues"></topicref>
+</relcell>
+</relrow>
+<relrow>
+<relcell>
+<topicref href="admin/HowToParticipate.xml"></topicref><?Pub Caret -1?>
+</relcell>
+<relcell format="html" linking="targetonly" scope="external">
+<topicref keyref="dita-ot-issues"></topicref>
+<topicref keyref="dita-ot-developer"></topicref>
+<topicref keyref="github-help"></topicref>
 </relcell>
 </relrow>
 <relrow>
@@ -62,4 +64,3 @@ scope="external">
 </relrow>
 </reltable>
 </map>
-<?Pub *0000002198?>

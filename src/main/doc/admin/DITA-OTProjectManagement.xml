@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+ "topic.dtd">
+<?Pub Inc?>
+<topic id="ditaopentoolkitprojectmanagement" xml:lang="en-us">
+<title>DITA Open Toolkit Project Management</title>
+<titlealts>
+<navtitle>Project management</navtitle>
+</titlealts>
+<shortdesc>The project is managed similarly to many other commercial
+software development projects, with requirements gathering, plan validation
+with stakeholders and contributors, scheduled activities, tests, reviews,
+and builds, with an emphasis on quality.</shortdesc>
+<body></body>
+</topic><?Pub Caret -3?>
+<?Pub *0000000672?>

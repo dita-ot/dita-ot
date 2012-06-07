@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Arbortext, Inc., 1988-2011, v.4002-->
 <!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
  "topic.dtd">
 <?Pub Sty _display FontColor="red"?>
 <topic id="contribution_policy" xml:lang="en-us">
 <title>DITA Open Toolkit Contribution Policy</title>
 <titlealts>
-<navtitle>Contribution Policy</navtitle>
+<navtitle>Contribution policy</navtitle>
 </titlealts>
 <shortdesc>The purpose of the DITA Open Toolkit Contribution Policy
 is to set      forth the general principles under which the DITA Open
@@ -14,34 +13,34 @@ Toolkit project      shall accept contributions, license contributions,
 license materials owned      by this project, and manage other intellectual
 property matters.</shortdesc>
 <body>
-<section><title>Overview</title><p>The <xref keyref="license-CPL"></xref> (CPL) and
-<xref keyref="license-Apache2.0"></xref>, which are incorporated          herein by reference,
-will serve as the primary licenses under which the          Committer
-will accept contributions of software, documentation,          information
-(including, but not limited to, ideas, concepts, know-how        
- and techniques) and/or other materials (collectively          &quot;Content&quot;)
-to the project from Contributors. A copy of the          CPL and Apache
-License 2.0 can be found at the root directory of the DITA Open Toolkit
-         deliverable package.</p><?Pub Caret -1?>       <p>This Contribution
-Policy should at all times be interpreted in a          manner that
-is consistent with the Purposes of the this project as set       
-  forth in the <xref href="DevelopmentProcess.xml">DITA Open Toolkit
-         Development Process</xref> goals and objectives. This Contribution
-         Policy shall serve as the basis for how non-Committers interact
-with          this project through participation in this project,
-web-sites owned,          controlled, published and/or managed under
-the auspices of the this          project, or otherwise.</p>     
- <p>The Common Public License and Apache License 2.0 shall serve as
-the primary licenses          under which the Committer(s) shall accept
-software, documentation,          information (including, but not
-limited to, ideas, concepts, know-how          and techniques) and/or
-other materials (collectively          &quot;Content&quot;) from contributors
-including, but not limited to,          Contributors and Committers.</p> 
-     <p>The DITA Open Toolkit project provides a process for accepting
-bug          fixes and contributions from parties who have not accepted
-the license          to be Contributors. See <xref
-href="BugFixGuidelines-NoCLA.xml">Due          Diligence for Submission
-of Bug Fixes and Patches from          Non-Committers</xref></p> 
+<section><title>Overview</title><p>The <xref keyref="license-CPL"></xref> (CPL)
+and <xref keyref="license-Apache2.0"></xref>, which are incorporated
+         herein by reference, will serve as the primary licenses under
+which the          Committer will accept contributions of software,
+documentation,          information (including, but not limited to,
+ideas, concepts, know-how          and techniques) and/or other materials
+(collectively          &quot;Content&quot;) to the project from Contributors.
+A copy of the          CPL and Apache License 2.0 can be found at
+the root directory of the DITA Open Toolkit          deliverable package.</p> 
+     <p>This Contribution Policy should at all times be interpreted
+in a          manner that is consistent with the Purposes of the this
+project as set          forth in the <xref href="DevelopmentProcess.xml">DITA
+Open Toolkit          Development Process</xref> goals and objectives.
+This Contribution          Policy shall serve as the basis for how
+non-Committers interact with          this project through participation
+in this project, web-sites owned,          controlled, published and/or
+managed under the auspices of the this          project, or otherwise.</p> 
+     <p>The Common Public License and Apache License 2.0 shall serve
+as the primary licenses          under which the Committer(s) shall
+accept software, documentation,          information (including, but
+not limited to, ideas, concepts, know-how          and techniques)
+and/or other materials (collectively          &quot;Content&quot;)
+from contributors including, but not limited to,          Contributors
+and Committers.</p>       <p>The DITA Open Toolkit project provides
+a process for accepting bug          fixes and contributions from
+parties who have not accepted the license          to be Contributors.
+See <xref href="BugFixGuidelines-NoCLA.xml">Due          Diligence
+for Submission of Bug Fixes and Patches from          Non-Committers</xref></p> 
    </section>
 <section>       <title>DUE DILIGENCE AND RECORD KEEPING</title>  
     <p>The Committer(s), shall be responsible for scrutinizing all
@@ -115,4 +114,3 @@ can be licensed under the terms          of the CPL and Apache License
 2.0.</p>     </section>
 </body>
 </topic>
-<?Pub *0000007156?>
