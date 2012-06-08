@@ -101,7 +101,8 @@ public class FileGeneratorTest {
         public String getResult() {
             final Map<String, String> paramsExp = new HashMap<String, String>();
             paramsExp.put(FileGenerator.PARAM_TEMPLATE, tempFile.getAbsolutePath());
-            paramsExp.put("extension", "element");
+            paramsExp.put("id", "element");
+            paramsExp.put("behavior", this.getClass().getName());
             assertEquals(paramsExp, params);
             final List<String> inputExp = Arrays.asList(new String[] {"foo", "bar", "baz"});
             assertEquals(inputExp, inputs);
