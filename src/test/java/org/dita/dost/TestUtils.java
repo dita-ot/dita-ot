@@ -5,13 +5,16 @@
 package org.dita.dost;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.CharArrayWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Writer;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -257,8 +260,21 @@ public class TestUtils {
         final Transformer serializer = TransformerFactory.newInstance().newTransformer();
         final XMLReader parser = XMLReaderFactory.createXMLReader();
         parser.setEntityResolver(new CatalogResolver());
-        serializer.transform(new SAXSource(parser, new InputSource(src.toURI().toString())),
-                new StreamResult(dst));
+        InputStream in = null;
+        OutputStream out = null;
+        try {
+            in = new BufferedInputStream(new FileInputStream(src));
+            out = new BufferedOutputStream(new FileOutputStream(dst));
+            serializer.transform(new SAXSource(parser, new InputSource(in)),
+                                 new StreamResult(out));
+        } finally {
+            if (in != null) {
+                in.close();
+            }
+            if (out != null) {
+                out.close();
+            }
+        }
     }
 
     /**

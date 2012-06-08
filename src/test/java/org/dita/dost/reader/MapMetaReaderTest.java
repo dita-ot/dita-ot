@@ -44,13 +44,8 @@ public class MapMetaReaderTest {
     @BeforeClass
     public static void setUp() throws Exception{
         tempDir = TestUtils.createTempDir(MapMetaReaderTest.class);
-
-        final TransformerFactory tf = TransformerFactory.newInstance();
-        final XMLReader parser = new ResolvingXMLReader();
-        parser.setEntityResolver(new CatalogResolver());
         for (final File f: srcDir.listFiles()) {
-            tf.newTransformer().transform(new SAXSource(parser, new InputSource(f.toURI().toString())),
-                    new StreamResult(new File(tempDir, f.getName())));
+            TestUtils.normalize(f, new File(tempDir, f.getName()));
         }
 
         reader = new MapMetaReader();
