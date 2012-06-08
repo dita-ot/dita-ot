@@ -226,6 +226,7 @@
           <li>#1070 Remove support for args.message.file (milestone 4)</li>
           <li>#1071 Add automatic font detection to PDF2 (milestone 4)</li>
           <li>#1182 Need extension for determining topic level (milestone 4)</li>
+          <li>#1236 &lt;span&gt; tags added around step when DRAFT on (milestone 4)</li>
           <li>#1262 css support for codeph in HTML output (milestone 4)</li>
           <li>#1198 Generate PDF metadata from bookmeta (milestone 5)</li>
           <li>#1273 Remove source distribution builds (milestone 5)</li>
@@ -234,6 +235,7 @@
           <li>#1252 Document error messages in user guide (milestone 5)</li>
           <li>#1278 Separate core and extra plug-ins (milestone 5)</li>
           <li>#1249 Add Files from Distribution Packages to Git Repo (milestone 5)</li>
+          <li>#1283 xref with desc and no href not handled in XHTML (milestone 5)</li>
           <li>#1156 Refactor preprocessing to use SAX filters (in progress)</li>
           <li>#1159 Remove Content object (in progress)</li>
           <li>#1155 Use Job to read/write job configuration files (in progress)</li>
