@@ -6,7 +6,8 @@
   <titlealts>
     <navtitle>Command line tool arguments</navtitle>
   </titlealts>
-  <shortdesc>Reference list of DITA-specific command line tool arguments.</shortdesc>
+  <shortdesc>Reference list of DITA-specific command line tool arguments. Arguments to the command line
+tool must be specified using the syntax <codeph>/argument:value</codeph>.</shortdesc>
   <refbody>
     <section>
       <title>Parameters available to all transforms</title>

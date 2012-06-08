@@ -24,14 +24,17 @@ invalid or missing content. Results will not be as expected.</li>
 <li>F (Fatal): processing cannot continue; the problem must be resolved
 in order to produce output.</li>
 </ul></p><p>Plug-ins may be used to add additional messages into the
-toolkit; for more information, see the Developer reference section
+toolkit; for more information, see the <xref href="../dev_ref/plugins-overview.dita">Developer reference</xref> section
 of the User Guide. If you would like to rebuild the documentation
-to include any newly integrated messages, first run the following
-command from the <filepath>DITA-OT/doc/</filepath> directory.</p><codeblock>DITA-OT/doc/ant -f build.xml generate-msg-topic</codeblock><p>After
-running the command, rebuild the documentation to your desired output
-format. You an also use that same build file to build the full guide
-to PDF, XHTML, or HTML Help, all of which will automatically 
-recreate this message topic.</p></section>
+to include any newly integrated messages, just run the Ant
+build file <filepath>DITA-OT/doc/build.xml</filepath>. Running the
+following command will rebuild the PDF, XHTML, and HTML Help versions
+inside your <filepath>DITA-OT/doc/</filepath>
+directory:<codeblock>DITA-OT/doc/ant -f build.xml</codeblock></p><p>To
+generate only one type of output, run as follows:<ul>
+<li>For XHTML: <codeph>DITA-OT/doc/ant -f build.xml build-html</codeph></li>
+<li>For PDF: <codeph>DITA-OT/doc/ant -f build.xml build-pdf</codeph></li>
+<li>For HTML Help: <codeph>DITA-OT/doc/ant -f build.xml build-htmlhelp</codeph></li></ul></p></section>
 <simpletable>
 <sthead>
 <stentry>Individual cells in this table may be used to push additional
@@ -59,6 +62,8 @@ is set properly; see <xref href="dita-ot_ant_properties.dita">DITA-OT Ant argume
 <xref href="dita-ot_java_properties.dita">DITA-OT Command line tool arguments</xref>
 if you are unsure how to specify the input file.</stentry>
 </strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTA069F-extra" conaction="pushreplace">Please ensure
+that the input file path and file name were entered correctly.</stentry></strow>
 <strow>
 <stentry conref="DITA-messages.xml#msgs/DOTA003F-extra" conaction="pushreplace">An alternate
 stylesheet was specified to run in place of the default XSLT output process, but that
@@ -102,83 +107,102 @@ stylesheet could not be loaded. Please correct the parameter to specify a valid 
 condition is ignored, as instructed in the OASIS DITA Standard.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTA068W-extra" conaction="pushreplace">This
 condition is ignored, as instructed in the OASIS DITA Standard.</stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTA069F-extra" conaction="pushreplace">Please ensure
-that the input file path and file name were entered correctly.</stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTJ001F-extra" conaction="pushreplace">The Java
-based command line tool expects parameters to be specified using the following format:
-<codeph>/parameter:value</codeph></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTJ002F-extra" conaction="pushreplace">The
-specified parameter is not valid for the Java based command line tool. Please check the
-parameter and try again.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTJ001F-extra" conaction="pushreplace">See
+<xref href="dita-ot_java_properties.dita"></xref> for a list of available
+parameters and values.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTJ002F-extra" conaction="pushreplace">See
+<xref href="dita-ot_java_properties.dita"></xref> for a list of available
+parameters and values.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTJ003F-extra" conaction="pushreplace">See
+<xref href="dita-ot_java_properties.dita"></xref> for a list of available
+parameters and values.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ004F-extra" conaction="pushreplace">The
 transform was unable to create a temporary processing directory; this is usually caused by
 account control settings that prevent creating a temporary directory in the specified
 location. Please verify that you have permission to write to the default location, or
-specify an alternate temporary directory location.</stentry></strow>
+specify an alternate temporary directory location. See <xref href="dita-ot_ant_properties.dita">DITA-OT Ant arguments</xref> or
+<xref href="dita-ot_java_properties.dita">DITA-OT Command line tool arguments</xref>
+for details on how to specify the temporary directory.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ005F-extra" conaction="pushreplace"></stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ006F-extra" conaction="pushreplace">This message
-generally occurs when an Ant build attempts to directly call a DITA-OT pipeline module, instead
+occurs when an Ant build calls a DITA-OT pipeline module directly instead
 of using the default call to that module. Please check that all parameters are set correctly
-in your Ant build.</stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTJ007E-extra" conaction="pushreplace">Conflicting
-rules were found for the same condition in your DITAVAL file; please verify that your file
-only includes one setting per value.</stentry></strow>
+in your Ant build. The syntax for extparam is "name1=value1;name2=value2".</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTJ007E-extra" conaction="pushreplace">If a condition
+is defined more than once (such as setting audience="all" to include, then resetting it to exclude),
+only the first definition will be used.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ008E-extra" conaction="pushreplace">An Ant
 build file is calling the DITA-OT indexing routine with invalid parameters. Please make sure
-you are calling the index module correctly.</stentry></strow>
+the index module is called correctly.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ009E-extra" conaction="pushreplace">The transform
 was unable to create files properly during the transform; results may not be as expected.</stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTJ010E-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTJ011E-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTJ012F-extra" conaction="pushreplace">This may
-occur when you are using a specialized document type, and that document type is not recognized
-by the toolkit. Check to make sure any required plug-ins are integrated. Alternatively, this message may
+<!-- 2012-06-08: seems these messages no longer exists in the code; commenting out. -->
+<!--<strow><stentry conref="DITA-messages.xml#msgs/DOTJ010E-extra" conaction="pushreplace"></stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTJ011E-extra" conaction="pushreplace"></stentry></strow>-->
+<strow><stentry conref="DITA-messages.xml#msgs/DOTJ012F-extra" conaction="pushreplace">This message may
 indicate an invalid input file (such as accidentally specifying a PDF file as input rather
-than a DITA map file), or an input file that uses invalid elements that are not part
-of your document type, or a DITA file that has errors and cannot be parsed as XML.</stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTJ013E-extra" conaction="pushreplace">This may
-occur when you are using a specialized document type, and that document type is not recognized
-by the toolkit. Check to make sure any required plug-ins are integrated. Alternatively, this message may
-indicate a reference to an invalid input file (such as an XML file that appears to be DITA but
-is actually something else), a file that uses invalid elements that are not part
-of your document type, or a DITA file that has errors and cannot be parsed as XML.</stentry></strow>
+than a DITA map file), an input file that uses elements which are not allowed, are not part
+or a DITA file that has errors and cannot be parsed as XML.
+You could also be using a specialized DITA document type that needs external plug-ins in order
+to be parsed correctly. The message issued by the XML parser should provide
+additional information to help diagnose the cause.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTJ013E-extra" conaction="pushreplace">This message may
+indicate a reference to an invalid file (such as accidentally referencing a PDF or unknown
+XML file as if it was DITA), a referenced file that uses elements which are not allowed,
+or a referenced DITA file that has errors and cannot be parsed as XML.
+You could also be using a specialized DITA document type that needs external plug-ins in order
+to be parsed correctly. The message issued by the XML parser should provide
+additional information to help diagnose the cause.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ014W-extra" conaction="pushreplace">An empty
-&lt;indexterm> element was encountered; this will appear in the index as the value ***. This
+&lt;indexterm> element was found, and will appear in the index as ***. This
 index term should be removed from the source.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTJ017W-extra" conaction="pushreplace">The transform
+failed because the input file was not specified; log file names are based on the name
+of the input file, so no log could be generated.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ020W-extra" conaction="pushreplace">This will
 appear when one installed plug-in requires another in order to function correctly, but the
 required plug-in is not found. The installed plug-in will be ignored.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ021W-extra" conaction="pushreplace">This may
 appear if filter conditions on the root element of a topic cause the entire topic to be filtered
-out.</stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTJ022F-extra" conaction="pushreplace">This may
-appear if filter conditions on the root element of the input map or topic cause the entire topic to be filtered
-out.</stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTJ023E-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTJ024W-extra" conaction="pushreplace"><!-- Should remove
-this message from the template file, assuming it really no longer exists. -->This is
-a legacy message and should no longer appear in logs.</stentry></strow>
+out. To remove this message, you could place any filter conditions on the reference to this file,
+which will prevent the build from accessing this file.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTJ022F-extra" conaction="pushreplace">Either the
+input file or the ditaval file should change, otherwise your build is explicitly excluding all
+content.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTJ023E-extra" conaction="pushreplace">Check
+whether the image exists in the source location or already exists in the output directory.</stentry></strow>
+<!--<strow><stentry conref="DITA-messages.xml#msgs/DOTJ024W-extra" conaction="pushreplace">This is
+a legacy message and should no longer appear in logs.</stentry></strow>-->
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ025E-extra" conaction="pushreplace">This message
-should only appear if an Ant build or plug-in is directly calling the toolkit's topic merge
-module. Please verify that the module is called correctly.</stentry></strow>
+should only appear in the following cases: <ul>
+<li>Errors earlier in the transform prevented this step of the transform from running; correct any
+errors and try the build again.</li>
+<li>An Ant build or plug-in is directly calling the toolkit's topic merge
+module, and is doing so improperly; in this case the Ant build or plug-in needs to be fixed.</li>
+<li>In the past, problems have been encountered when calling this module with an absolute path;
+this should no longer be an issue, but may be fixed in older releases by updating the Ant build or plug-in.</li></ul></stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ026E-extra" conaction="pushreplace">This message
 should only appear if an Ant build or plug-in is directly calling the toolkit's topic merge
-module. Please verify that the module is called correctly.</stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTJ027W-extra" conaction="pushreplace"></stentry></strow>
+module, or if earlier errors resulted in problems with some of the content.
+If the topic merge module is called correctly, then this indicates a program error
+that should be reported to the DITA-OT development team, at <xref keyref="dita-ot-issues"></xref>.</stentry></strow>
+<!-- 2012-06-08: This message no longer exists in the code; commenting out. -->
+<!--<strow><stentry conref="DITA-messages.xml#msgs/DOTJ027W-extra" conaction="pushreplace"></stentry></strow>-->
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ028E-extra" conaction="pushreplace">When
 referencing a non-DITA file, the format attribute should indicate the type of file referenced
 (such as "html" for HTML topics or "pdf" for PDF files). Otherwise, the transform may attempt
 to parse the referenced document as a DITA topic.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ029I-extra" conaction="pushreplace">The domains
-attribute is used in specialize DITA documents to help determine which elements are legal.
+attribute is used in specialized DITA documents to help determine which domain elements are legal.
 This message will only appear if DITA specialization was not defined properly.</stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTJ030I-extra" conaction="pushreplace">All elements
-in a DITA specialization must include a class attribute to provide ancestry information.
-This message will only appear a specialized DITA element was not defined with a class attribute.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTJ030I-extra" conaction="pushreplace">All
+specialized DITA elements must define a class attribute to provide ancestry information.
+This message will only appear a specialized DITA element did not define a class attribute.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ031I-extra" conaction="pushreplace">This informational
 message is intended to help you catch filter conditions that may have been specified improperly;
 if the value is correct, no action is needed.</stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTJ032E-extra" conaction="pushreplace"></stentry></strow>
+<!-- 2012-06-08: This message no longer exists in the code; commenting out. -->
+<!--<strow><stentry conref="DITA-messages.xml#msgs/DOTJ032E-extra" conaction="pushreplace"></stentry></strow>-->
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ033E-extra" conaction="pushreplace"></stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ034F-extra" conaction="pushreplace">DITA processing
 is based on class attributes defined for every element. Usually these are defaulted in the DTD or
