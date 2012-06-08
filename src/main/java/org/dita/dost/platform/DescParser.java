@@ -21,6 +21,22 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 final class DescParser extends DefaultHandler{
 
+    private static final String EXTENSION_POINT_ELEM = "extension-point";
+    private static final String EXTENSION_POINT_NAME_ATTR = "name";
+    private static final String EXTENSION_POINT_ID_ATTR = "id";
+    private static final String TEMPLATE_ELEM = "template";
+    private static final String TEMPLATE_FILE_ATTR = "file";
+    private static final String META_ELEM = "meta";
+    private static final String META_VALUE_ATTR = "value";
+    private static final String META_TYPE_ATTR = "type";
+    private static final String REQUIRE_ELEM = "require";
+    private static final String REQUIRE_IMPORTANCE_ATTR = "importance";
+    private static final String REQUIRE_PLUGIN_ATTR = "plugin";
+    private static final String FEATURE_ELEM = "feature";
+    private static final String FEATURE_ID_ATTR = "extension";
+    private static final String PLUGIN_ELEM = REQUIRE_PLUGIN_ATTR;
+    private static final String PLUGIN_ID_ATTR = "id";
+    
     private String currentPlugin = null;
     private final Features features;
 
@@ -47,19 +63,19 @@ final class DescParser extends DefaultHandler{
      */
     @Override
     public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
-        if( "plugin".equals(qName) ){
-            currentPlugin = attributes.getValue("id");
+        if( PLUGIN_ELEM.equals(qName) ){
+            currentPlugin = attributes.getValue(PLUGIN_ID_ATTR);
             features.setPluginId(currentPlugin);
-        } else if ("extension-point".equals(qName)){
+        } else if (EXTENSION_POINT_ELEM.equals(qName)){
             addExtensionPoint(attributes);
-        } else if ("feature".equals(qName)){
-            features.addFeature(attributes.getValue("extension"), attributes);
-        } else if ("require".equals(qName)){
-            features.addRequire(attributes.getValue("plugin"), attributes.getValue("importance"));
-        } else if ("meta".equals(qName)){
-            features.addMeta(attributes.getValue("type"), attributes.getValue("value"));
-        } else if ("template".equals(qName)){
-            features.addTemplate(attributes.getValue("file"));
+        } else if (FEATURE_ELEM.equals(qName)){
+            features.addFeature(attributes.getValue(FEATURE_ID_ATTR), attributes);
+        } else if (REQUIRE_ELEM.equals(qName)){
+            features.addRequire(attributes.getValue(REQUIRE_PLUGIN_ATTR), attributes.getValue(REQUIRE_IMPORTANCE_ATTR));
+        } else if (META_ELEM.equals(qName)){
+            features.addMeta(attributes.getValue(META_TYPE_ATTR), attributes.getValue(META_VALUE_ATTR));
+        } else if (TEMPLATE_ELEM.equals(qName)){
+            features.addTemplate(attributes.getValue(TEMPLATE_FILE_ATTR));
         }
     }
 
@@ -76,14 +92,14 @@ final class DescParser extends DefaultHandler{
      * Add extension point.
      * 
      * @param atts extension point element attributes
-     * @throws NullPointerException if extension ID is {@code null}
+     * @throws IllegalArgumentException if extension ID is {@code null}
      */
     private void addExtensionPoint(final Attributes atts) {
-        final String id = atts.getValue("id");
+        final String id = atts.getValue(EXTENSION_POINT_ID_ATTR);
         if (id == null) {
-            throw new NullPointerException("id attribute not set on extension-point");
+            throw new IllegalArgumentException(EXTENSION_POINT_ID_ATTR + " attribute not set on extension-point");
         }
-        final String name = atts.getValue("name");
+        final String name = atts.getValue(EXTENSION_POINT_NAME_ATTR);
         features.addExtensionPoint(new ExtensionPoint(id, name, currentPlugin));
     }
 }

@@ -3,7 +3,7 @@
      Sourceforge.net. See the accompanying license.txt file for 
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
-<project name="DOST" default="init">
+<project xmlns:dita="http://dita-ot.sourceforge.net" name="DOST" default="init">
   
   <property file="${basedir}/local.properties"/>
   
@@ -24,7 +24,7 @@
   </condition>
   
   <path id="dost.class.path">
-    <dita:extension id="dita.conductor.lib.import" behavior="org.dita.dost.platform.ImportAntLibAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+    <dita:extension id="dita.conductor.lib.import" behavior="org.dita.dost.platform.ImportAntLibAction"/>
     <pathelement location="${dita.dir}${file.separator}lib${file.separator}dost.jar"/>
   </path>
   
@@ -32,7 +32,7 @@
     <dita-ot-fail id="DOTA001F">
       <condition>
         <and>
-          <dita:extension id="dita.conductor.transtype.check" behavior="org.dita.dost.platform.CheckTranstypeAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+          <dita:extension id="dita.conductor.transtype.check" behavior="org.dita.dost.platform.CheckTranstypeAction"/>
         </and>
       </condition>
       <param name="1" value="${transtype}"/>
@@ -58,9 +58,9 @@
       ant all -f build_demo.xml</echo>
   </target>
 
-  <dita:extension id="dita.conductor.plugin" behavior="org.dita.dost.platform.ImportPluginInfoAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
-  <dita:extension id="dita.conductor.target" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
-  <dita:extension id="dita.conductor.target.relative" behavior="org.dita.dost.platform.InsertAntActionRelative" xmlns:dita="http://dita-ot.sourceforge.net"/>
+  <dita:extension id="dita.conductor.plugin" behavior="org.dita.dost.platform.ImportPluginInfoAction"/>
+  <dita:extension id="dita.conductor.target" behavior="org.dita.dost.platform.InsertAction"/>
+  <dita:extension id="dita.conductor.target.relative" behavior="org.dita.dost.platform.InsertAntActionRelative"/>
   
   <target name="help">
     <echo level="info">Mandatory properties:</echo>
@@ -68,7 +68,7 @@
     <echo level="info">  args.input=&lt;file&gt;</echo>
     <echo level="info">    Path and name of the input file.</echo>
     <echo level="info"/>
-    <echo level="info">  transtype={<dita:extension id="dita.conductor.transtype.check" behavior="org.dita.dost.platform.ListTranstypeAction" xmlns:dita="http://dita-ot.sourceforge.net"/>}</echo>
+    <echo level="info">  transtype={<dita:extension id="dita.conductor.transtype.check" behavior="org.dita.dost.platform.ListTranstypeAction" separator="|"/>}</echo>
     <echo level="info">    Transformation type.</echo>
     <echo level="info"/>
     <echo level="info">Optional properties:</echo>

@@ -3,12 +3,11 @@
      Sourceforge.net. See the accompanying license.txt file for 
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2005, 2006 All Rights Reserved. -->
-<!DOCTYPE messages SYSTEM "messages.dtd">
-<messages>
+<messages xmlns:dita="http://dita-ot.sourceforge.net">
   <!-- Start of Ant Messages -->
     <message id="DOTA001F" type="FATAL">
       <reason>"%1" is not a recognized transformation type.</reason>
-      <response>Common transformation types include xhtml, eclipsehelp, pdf, and tocjs; see error message documentation for a more complete list.</response>
+      <response>Supported transformation types are <dita:extension id="dita.conductor.transtype.check" behavior="org.dita.dost.platform.ListTranstypeAction" separator=", "/>.</response>
     </message>
   
   <message id="DOTA002F" type="FATAL">

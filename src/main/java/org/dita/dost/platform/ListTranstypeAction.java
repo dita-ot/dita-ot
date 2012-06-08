@@ -25,13 +25,14 @@ final class ListTranstypeAction extends ImportAction {
      */
     @Override
     public String getResult() {
+        final String separator = paramTable.containsKey("separator") ? paramTable.get("separator") : "|";
         final List<String> v = new ArrayList<String>(valueSet);
         Collections.sort(v);
         final StringBuilder retBuf = new StringBuilder();
         for (final Iterator<String> i = v.iterator(); i.hasNext(); ) {
             retBuf.append(StringUtils.escapeXML(i.next()));
             if (i.hasNext()) {
-                retBuf.append('|');
+                retBuf.append(separator);
             }
         }
         return retBuf.toString();

@@ -32,6 +32,11 @@ import org.xml.sax.ext.DefaultHandler2;
  */
 final class FileGenerator extends DefaultHandler2 {
 
+    private static final String EXTENSION_ID_ATTR = "id";
+    public static final String EXTENSION_ELEM = "extension";
+    public static final String EXTENSION_ATTR = "extension";
+    public static final String BEHAVIOR_ATTR = "behavior";
+    
     public static final String PARAM_LOCALNAME = "localname";
     public static final String PARAM_TEMPLATE = "template";
 
@@ -136,7 +141,7 @@ final class FileGenerator extends DefaultHandler2 {
     @Override
     public void endElement(final String uri, final String localName, final String qName) throws SAXException {
         try{
-            if(!(DITA_OT_NS.equals(uri) && "extension".equals(localName))){
+            if(!(DITA_OT_NS.equals(uri) && EXTENSION_ELEM.equals(localName))){
                 output.write("</");
                 output.write(qName);
                 output.write(">");
@@ -159,13 +164,16 @@ final class FileGenerator extends DefaultHandler2 {
     public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
         IAction action = null;
         try{
-            if(DITA_OT_NS.equals(uri) && "extension".equals(localName)){
+            if(DITA_OT_NS.equals(uri) && EXTENSION_ELEM.equals(localName)){
                 // Element extension: <dita:extension id="extension-point" behavior="classname"/>
-                action = (IAction)Class.forName(attributes.getValue("behavior")).newInstance();
+                action = (IAction)Class.forName(attributes.getValue(BEHAVIOR_ATTR)).newInstance();
                 action.setLogger(logger);
                 action.addParam(PARAM_TEMPLATE, templateFile.getAbsolutePath());
-                final String extension = attributes.getValue("id");
-                action.addParam("extension", extension);
+                for (int i = 0; i <  attributes.getLength(); i++) {
+                    action.addParam(attributes.getLocalName(i), attributes.getValue(i));
+                }
+                final String extension = attributes.getValue(EXTENSION_ID_ATTR);
+                //action.addParam("extension", extension);
                 if(featureTable.containsKey(extension)){
                     action.setInput(featureTable.get(extension));
                 }
@@ -179,9 +187,9 @@ final class FileGenerator extends DefaultHandler2 {
                     if (DITA_OT_NS.equals(attributes.getURI(i)))
                     {
                         // Attribute extension: <element dita:extension="localname classname ..." dita:localname="...">
-                        if (!("extension".equals(attributes.getLocalName(i))))
+                        if (!(EXTENSION_ATTR.equals(attributes.getLocalName(i))))
                         {
-                            final String extensions = attributes.getValue(DITA_OT_NS, "extension");
+                            final String extensions = attributes.getValue(DITA_OT_NS, EXTENSION_ATTR);
                             final StringTokenizer extensionTokenizer = new StringTokenizer(extensions);
                             // Get the classname that implements this localname.
                             while (extensionTokenizer.hasMoreTokens())
