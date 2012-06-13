@@ -156,7 +156,7 @@ additional information to help diagnose the cause.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ014W-extra" conaction="pushreplace">An empty
 &lt;indexterm> element was found, and will appear in the index as ***. This
 index term should be removed from the source.</stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTJ017W-extra" conaction="pushreplace">The transform
+<strow><stentry conref="DITA-messages.xml#msgs/DOTJ017F-extra" conaction="pushreplace">The transform
 failed because the input file was not specified; log file names are based on the name
 of the input file, so no log could be generated.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ020W-extra" conaction="pushreplace">This will
@@ -211,13 +211,13 @@ map or topic.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ035F-extra" conaction="pushreplace">This 
 will appear when a topic is outside the scope of the map; for example, if the main input map references
 <filepath>"../other-directory/some.dita"</filepath>. The result would cause an output file to be
-created outside of the output directory. Please see the documentation for the <codeph>outer.control</codeph>
-parameter for more information.</stentry></strow>
+created outside of the output directory. Please see <xref href="dita-ot_ant_properties.dita">DITA-OT Ant arguments (outer.control and generate.copy.outer)</xref> or
+<xref href="dita-ot_java_properties.dita">DITA-OT Command line tool arguments (/outercontrol and /generateouter)</xref> for more details.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ036W-extra" conaction="pushreplace">This 
 will appear when a topic is outside the scope of the map; for example, if the main input map references
 <filepath>"../other-directory/some.dita"</filepath>. The result would cause an output file to be
-created outside of the output directory. Please see the documentation for the <codeph>outer.control</codeph>
-parameter for more information.</stentry></strow>
+created outside of the output directory.  Please see <xref href="dita-ot_ant_properties.dita">DITA-OT Ant arguments (outer.control and generate.copy.outer)</xref> or
+<xref href="dita-ot_java_properties.dita">DITA-OT Command line tool arguments (/outercontrol and /generateouter)</xref> for more details.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ037W-extra" conaction="pushreplace">DITA processing
 is based on class attributes defined for every element. Usually these are defaulted in the DTD or
 Schema; if validation against the DTD or Schema is turned off, the class attributes must be explicitly included in the
@@ -260,16 +260,24 @@ for details on expected syntax and usage.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ047I-extra" conaction="pushreplace">This message
 is intended to help you locate incorrectly specified keys; if the key was specified correctly,
 this message may be ignored.</stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTJ048I-extra" conaction="pushreplace">This message
+<!--<strow><stentry conref="DITA-messages.xml#msgs/DOTJ048I-extra" conaction="pushreplace">This message
 is intended to help you locate incorrectly specified keys; if the key was specified correctly,
-this message may be ignored.</stentry></strow>
+this message may be ignored.</stentry></strow>-->
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ049W-extra" conaction="pushreplace">A DITA 
-Subject Scheme map has been used to limit values that are available to the specified attribute.
+Subject Scheme map was used to limit values that are available to the specified attribute.
 Please correct the attribute so that it uses one of the allowed values.</stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTJ050W-extra" conaction="pushreplace"></stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTJ050W-extra" conaction="pushreplace">The
+Eclipse index will contain a value such as "See also otherEntry", but otherEntry does not exist in this index.
+The index reference will be broken unless this plug-in is <i>always</i> loaded into Eclipse with
+another plug-in that defines otherEntry as an index term.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ051E-extra" conaction="pushreplace">The target for
-a coderef element, which specifies an external text-based file, could not be located. Please
-verify that the reference is correct.</stentry></strow>
+a coderef element, which specifies an external text-based file, could not be located or loaded. Please
+verify that the reference is correct.<p>Note that for security reasons, references to code samples outside of the scope
+of the map directory are not supported by default, as this could allow a reference to access and
+display any restricted or hidden file on the system. If you are certain that the path is valid and
+the file should be loaded, the current workaround is to set a parameter to allow
+these references. See <xref href="dita-ot_ant_properties.dita">DITA-OT Ant arguments (outer.control and generate.copy.outer)</xref> or
+<xref href="dita-ot_java_properties.dita">DITA-OT Command line tool arguments (/outercontrol and /generateouter)</xref> for details.</p></stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ052E-extra" conaction="pushreplace">The DITA-OT
 supports a special syntax on coderef elements to specify the character set of the target
 document. See <xref href="../dev_ref/extended-functionality.dita"></xref> for details
