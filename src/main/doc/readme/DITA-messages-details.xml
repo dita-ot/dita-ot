@@ -222,7 +222,9 @@ parameter for more information.</stentry></strow>
 is based on class attributes defined for every element. Usually these are defaulted in the DTD or
 Schema; if validation against the DTD or Schema is turned off, the class attributes must be explicitly included in the
 map or topic.</stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTJ038E-extra" conaction="pushreplace"></stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTJ038E-extra" conaction="pushreplace">This appears
+to indicate an error in creating specialized metadata elements. Please verify that the document
+type you are using is complete and complies with DITA Specialization rules.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ039E-extra" conaction="pushreplace">Please see
 the topic on <xref href="http://docs.oasis-open.org/dita/v1.2/os/spec/common/theconactionattribute.html" format="html"
 scope="external">Conref Push</xref> in the DITA specification for details on
@@ -236,19 +238,25 @@ attribute must be a URI reference to a DITA element. Please see the topic on
 <xref href="http://docs.oasis-open.org/dita/v1.2/os/spec/archSpec/uri-based-addressing.html" format="html" scope="external">URI-based
 addressing</xref> in the DITA specification for details on the expected syntax.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ042E-extra" conaction="pushreplace">The conref
-push function was used to replace one element with two alternatives. Only one element may directly
-replace another using conref push.</stentry></strow>
+push function was used to replace a single element with two or more alternatives. Only one element may directly
+replace another using conref push. See <xref href="http://docs.oasis-open.org/dita/v1.2/os/spec/common/theconactionattribute.html" format="html"
+scope="external">Conref Push</xref> in the DITA specification for more information about
+the conref push "replace" function.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ043W-extra" conaction="pushreplace">The target
 for a conref push action does not exist; please make sure that the syntax is correct and that
 the target exists. See the topic on <xref href="http://docs.oasis-open.org/dita/v1.2/os/spec/archSpec/uri-based-addressing.html" format="html" scope="external">URI-based
-addressing</xref> in the DITA specification for details on the expected syntax.</stentry></strow>
+addressing</xref> in the DITA specification for details on the expected syntax. If the syntax
+is correct, it is possible that the target was filtered out of your build using a DITAVAL file.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ044W-extra" conaction="pushreplace">Please see
 the topic on <xref href="http://docs.oasis-open.org/dita/v1.2/os/spec/common/theconactionattribute.html" format="html"
 scope="external">Conref Push</xref> in the DITA specification for details on
 expected syntax for this function.</stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTJ045I-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTJ045W-extra" conaction="pushreplace"></stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTJ046E-extra" conaction="pushreplace"></stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTJ045I-extra" conaction="pushreplace">No response
+is needed if the keys are defined as expected; this is informational only, to help catch
+incorrectly defined keys.</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTJ046E-extra" conaction="pushreplace">See
+<xref href="http://docs.oasis-open.org/dita/v1.2/os/spec/common/theconkeyrefattribute.html" format="html" scope="external">the conkeyref definition</xref>
+for details on expected syntax and usage.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ047I-extra" conaction="pushreplace">This message
 is intended to help you locate incorrectly specified keys; if the key was specified correctly,
 this message may be ignored.</stentry></strow>

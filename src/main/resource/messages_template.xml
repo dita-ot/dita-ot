@@ -16,7 +16,7 @@
   </message>
   
   <message id="DOTA069F" type="FATAL">
-    <reason>Input file '%1' not found.</reason>
+    <reason>Input file '%1' cannot be located or read.</reason>
     <response>Ensure that file was specified properly and that you have permission to access it.</response>
   </message>
   
@@ -71,8 +71,8 @@
 
   <!-- Start of Java Messages -->
   <message id="DOTJ001F" type="FATAL">
-    <reason>Input argument error: no ':' found in the parameter '%1'.</reason>
-    <response>Please add a colon character ':' between the name and value of the parameter '%1'. For detailed information, please refer to the User Guide.</response>
+    <reason>Invalid command line syntax for the parameter '%1'.</reason>
+    <response>Parameters to the command line tool should use the syntax /parameter:value.</response>
   </message>
   
   <message id="DOTJ002F" type="FATAL">
@@ -81,8 +81,8 @@
   </message>
   
   <message id="DOTJ003F" type="FATAL">
-    <reason>Parameter value cannot be null for the parameter '%1'.</reason>
-    <response>Please provide a value for the parameter '%1'.</response>
+    <reason>Parameter '%1' was specified without a value.</reason>
+    <response>Parameters to the command line tool should use the syntax /parameter:value.</response>
   </message>
   
   <message id="DOTJ004F" type="FATAL">
@@ -96,13 +96,13 @@
   </message>
   
   <message id="DOTJ006F" type="FATAL">
-    <reason>Invalid value '%1' for attribute 'extparam' of AntInvoker.</reason>
+    <reason>An Ant build file used the following illegal syntax when calling AntInvoker: extparam='%1'.</reason>
     <response>Please correct the call to AntInvoker when directly calling DITA-OT Java code from Ant; for example, extparam="maplinks=XXXX;other=YYYY".</response>
   </message>
   
   <message id="DOTJ007E" type="ERROR">
     <reason>Duplicate condition in filter file for rule '%1'.</reason>
-    <response>Check to make sure that there are no duplicate rules specified.</response>
+    <response>The first encountered condition will be used.</response>
   </message>
   
   <message id="DOTJ008E" type="ERROR">
@@ -110,60 +110,65 @@
     <response>Please check the code to see whether method setMatch(String matchPattern) is called before read(String filename).</response>
   </message>
   
+  <!-- Would like to improve / shorten DOTJ009E but not sure how to modify. -->
   <message id="DOTJ009E" type="ERROR">
     <reason>Cannot overwrite file '%1' with file '%2'. The modified result may not be consumed by the following steps in the transform pipeline.</reason>
     <response>Check to see whether the file is locked by some other application during the transformation process.</response>
   </message>
   
-  <message id="DOTJ010E" type="ERROR">
+  <!-- 2012-06-08: These messages no longer exist in the code; commenting out. -->
+  <!--<message id="DOTJ010E" type="ERROR">
     <reason>Cannot find %1 in the extparam for index generation.</reason>
     <response>Please specify %1 in the extparam attribute in your Ant call to the toolkit index sort.</response>
   </message>
-  
   <message id="DOTJ011E" type="ERROR">
     <reason>Failed to load the input file '%1' for index generation due the following exception; no index information will be generated.</reason>
     <response>Please ensure '%1' exists and you have permission to access it.</response>
-  </message>
+  </message>-->
   
   <message id="DOTJ012F" type="FATAL">
     <reason>Failed to parse the input file '%1'.</reason>
-    <response>This may indicate that a plug-in for your document type is missing, or that the document is otherwise invalid. Please correct the input based on the following message from the XML parser: </response>
+    <response>The XML parser reported the following error: </response>
   </message>
   
   <message id="DOTJ013E" type="ERROR">
-    <reason>Failed to parse the referenced file '%1' due to the following exception.</reason>
-    <response>This may indicate that a plug-in for your document type is missing, or that the document is otherwise invalid. Please correct the input based on the following message from the XML parser: </response>
+    <reason>Failed to parse the referenced file '%1'.</reason>
+    <response>The XML parser reported the following error: </response>
   </message>
   
   <message id="DOTJ014W" type="WARN">
     <reason>Found an indexterm element with no content. Setting the term to ***.</reason>
-    <response>Please add content to the indexterm.</response>
+    <response></response>
   </message>
   
   <message id="DOTJ015F" type="FATAL">
     <reason>Log directory cannot be null.</reason>
-    <response>Please specify the correct log directory using the Ant parameter 'args.logdir'.</response>
+    <response>Please specify a valid directory for the build log.</response>
   </message>
   
   <message id="DOTJ016F" type="FATAL">
     <reason>Failed to create log directory '%1'.</reason>
-    <response>Please specify the correct log directory using the Ant parameter 'args.logdir'.</response>
+    <response>Please specify a valid directory for the build log.</response>
   </message>
 
+  <!-- DOTJ017F appears if you use the Command line tool and forget to specify an input file:
+       java -jar lib/dost.jar /transtype:xhtml
+       May also appear if you set up Ant properties to create a log, but forget the input file. -->
   <message id="DOTJ017F" type="FATAL">
-    <reason>Failed to initialize log filename with input file.</reason>
-    <response>Please specify input file using the Ant parameter 'args.input'.</response>
+    <reason>No input file was specified; failed to initialize log name based on input file.</reason>
+    <response></response>
   </message>
 
   <message id="DOTJ018I" type="INFO">
-    <reason>Log file '%1' was generated successfully at directory '%2'.</reason>
-    <response>You can find detailed messages from the transformation process in this log file.</response>
+    <reason>Log file '%1' was generated successfully in directory '%2'.</reason>
+    <response>Any messages from the transformation process are available in the log file; additional details about each message are available in the DITA-OT user guide.</response>
   </message>
 
-  <message id="DOTJ019E" type="ERROR">
+  <!-- 2012-06-08: This message no longer exists in the code; commenting out. -->
+  <!--<message id="DOTJ019E" type="ERROR">
     <reason>Failed to generate log file.</reason>
     <response>Please correct any other errors and try the build again.</response>
-  </message>
+  </message>-->
   
   <message id="DOTJ020W" type="WARN">
     <reason>At least one plug-in in '%1' is required by plug-in '%2'. Plug-in '%2' cannot be loaded.</reason>
@@ -171,8 +176,8 @@
   </message>
   
   <message id="DOTJ021W" type="WARN">
-    <reason>File '%1' was excluded from the 'dita.list' file since it is invalid and all its content has been filtered out by the ditaval file.</reason>
-    <response>Please check the file '%1' and the ditaval file to see if this is the intended result. You may want to try placing the filter conditions on any reference to this file to remove the reference itself.</response>
+    <reason>File '%1' will not generate output since it is invalid or all of its content has been filtered out by the ditaval file.</reason>
+    <response>Please check the file '%1' and the ditaval file to see if this is the intended result.</response>
   </message>
   
   <!--message id="DOTJ021E" type="ERROR">
@@ -182,88 +187,95 @@
   
   <message id="DOTJ022F" type="FATAL">
     <reason>Failed to parse the input file '%1' because all of its content has been filtered out.</reason>
-    <response>Please check the input file '%1' and the ditaval file, and ensure that the input is valid. You may want to try placing the conditions on any reference to this file to remove the reference itself.</response>
+    <response>This will happen if the input file has filter conditions on the root element, and a ditaval excludes all content based on those conditions.</response>
   </message>
 
   <message id="DOTJ023E" type="ERROR">
-    <reason>Failed to get the specified image file '%1' for output generation.</reason>
-    <response>Check whether the image exists and was copied to output directory before the final step of output generation.</response>
+    <reason>Failed to get the specified image file '%1', so it will not be included with your output.</reason>
+    <response></response>
   </message>
   
-  <!-- This message may no longer appear; if so, we should remove it -->
-  <message id="DOTJ024W" type="WARN">
+  <!-- 2012-06-08: This message no longer exists in the code; commenting out. -->
+  <!--<message id="DOTJ024W" type="WARN">
     <reason>Extension name of picture file '%1' is not supported for the current output format.</reason>
     <response>Please convert your picture to JPEG or GIF style.</response>
-  </message>
+  </message>-->
   
   <message id="DOTJ025E" type="ERROR">
-    <reason>The input of topic merge cannot be found.</reason>
-    <response>Please check whether the input to the toolkit "topic merge" module uses an absolute path.</response>
+    <reason>The input to the "topic merge" transform process could not be found.</reason>
+    <response>Correct any earlier transform errors and try the build again, or see the DITA-OT User Guide for additional causes.</response>
   </message>
   
   <message id="DOTJ026E" type="ERROR">
-    <reason>The output of topic merge is null.</reason>
-    <response>Please check whether you are calling the toolkit "topic merge" module correctly.</response>
+    <reason>The "topic merge" did not generate any output.</reason>
+    <response>Correct any earlier transform errors and try the build again, or see the DITA-OT User Guide for additional causes.</response>
   </message>
   
-  <message id="DOTJ027W" type="WARN">
+  <!-- 2012-06-08: This message no longer exists in the code; commenting out. -->
+  <!--<message id="DOTJ027W" type="WARN">
     <reason>The file '%1' contains a space in its file name. This file might not be transformed properly.</reason>
     <response>Some stages in the toolkit do not work well with spaces in the file name, so try removing the space in the file name and restart the transformation.</response>
-  </message>
+  </message>-->
 
   <message id="DOTJ028E" type="ERROR">
-    <reason>No format attribute was found on a file reference. If the target '%1'is a DITA file, set the format attribute to "dita". </reason>
-    <response>If it does not reference a DITA file, set the format attribute to an appropriate value. </response>
+    <reason>No format attribute was found on a reference to file '%1', which does not appear to be a DITA file.</reason>
+    <response>If this is not a DITA file, set the format attribute to an appropriate value, otherwise set the format attribute to "dita".</response>
   </message>
   
   <message id="DOTJ029I" type="INFO">
-    <reason>No 'domains' attribute for '%1' element was found. </reason>
-    <response>Please add domains attribute definition in the related DTD or Schema file. </response>
+    <reason>No 'domains' attribute was found for element '&lt;%1&gt;'.</reason>
+    <response>This generally indicates that your DTD or Schema was not developed properly according to the DITA specification.</response>
   </message> 
   
   <message id="DOTJ030I" type="INFO">
-    <reason>No 'class' attribute for '%1' element was found. </reason>
-    <response>Please add a class attribute definition in the related DTD or Schema file. </response>
+    <reason>No 'class' attribute for was found for element '&lt;%1&gt;'.</reason>
+    <response>This generally indicates that your DTD or Schema was not developed properly according to the DITA specification.</response>
   </message> 
   
   <message id="DOTJ031I" type="INFO">
-    <reason>No specified rule for '%1' was found in the ditaval file. This value will use the default action, or a parent prop action if specified. </reason>
-    <response>To remove this message, you can specify a rule for '%1' in the ditaval file. </response>
+    <reason>No specified rule for '%1' was found in the ditaval file. This value will use the default action, or a parent prop action if specified.</reason>
+    <response>To remove this message, you can specify a rule for '%1' in the ditaval file.</response>
   </message> 
   
-  <message id="DOTJ032E" type="ERROR">
+  <!-- 2012-06-08: This message no longer exists in the code; commenting out. -->
+  <!--<message id="DOTJ032E" type="ERROR">
     <reason>An empty @href attribute is found in chunk processing.</reason>
     <response>Please specify a value for the @href attribute, or remove it entirely.</response>
-  </message> 
+  </message> -->
   
+  <!-- 2012-06-12: Still need to reproduce and edit this message -->
   <message id="DOTJ033E" type="ERROR">
     <reason>No valid content is found in topicref '%1' during chunk processing.</reason>
     <response>Please specify an existing and valid topic for the topicref.</response>
   </message> 
   
+  <!-- 2012-06-12: Still need to reproduce and edit this message -->
   <message id="DOTJ034F" type="FATAL">
     <reason>Failed to parse the input file '%1' (the content of the file is not valid).</reason>
     <response>If the input file '%1' does not have a DOCTYPE declaration, please make sure that all class attributes are present in the file.</response>
   </message>
   
+  <!-- 2012-06-12: Still need to edit this message -->
   <message id="DOTJ035F" type="FATAL">
     <reason>The file "%1" referenced by "%2" is outside the scope of the input dita/map directory.</reason>
     <response>If you want to lower the severity level, please use the Ant parameter 'outer.control', and set the value to "warn" or "quiet". Otherwise, move the referenced file "%1" into the input dita/map directory.</response>
   </message>
   
+  <!-- 2012-06-12: Still need to edit this message -->
   <message id="DOTJ036W" type="WARN">
     <reason>The file "%1" referenced by "%2" is outside the scope of the input dita/map directory.</reason>
     <response>If you do not want to see the warning message, please use the Ant parameter 'outer.control', and set the value to "quiet". Otherwise, move the referenced file "%1" into the input dita/map directory.</response>
   </message>
   
+  <!-- 2012-06-12: Still need to edit this message -->
   <message id="DOTJ037W" type="WARN">
     <reason>The XML schema and DTD validation function of the parser is turned off.</reason>
     <response>Please make sure the input is normalized DITA with class attributes included, otherwise it will not be processed correctly.</response>
   </message>
   
   <message id="DOTJ038E" type="ERROR">
-    <reason>The tag "%1" is specialized from non-predefined metadata.</reason>
-    <response>Please make sure that tag "%1" is specialized from some predefined metadata tag.</response>
+    <reason>The tag "%1" is specialized from unrecognized metadata.</reason>
+    <response>Please make sure that tag "%1" is specialized from an existing metadata tag in the core DITA vocabulary.</response>
   </message>
   
   <message id="DOTJ039E" type="ERROR">
@@ -272,54 +284,60 @@
   </message>
   
   <message id="DOTJ040E" type="ERROR">
-    <reason>There is no target specified for conref push action "replace". Found in file="%1", element="%2".</reason>
-    <response>Please add a valid target to the conref attribute on the current element.</response>
+    <reason>An element uses the attribute conaction="replace", but a conref attribute is not found in the expected location. Found in file="%1", element="%2".</reason>
+    <response></response>
   </message>
   
+  <!-- Note, the following message comes from the Java conref-push module, XSL based message later catches regular conref -->
   <message id="DOTJ041E" type="ERROR">
-    <reason>Invalid value "%1" is specified on a conref attribute.</reason>
-    <response>Please update the conref attribute with the correct reference. A valid reference should contain '#'.</response>
+    <reason>The conref attribute "%1" uses invalid syntax.</reason>
+    <response>The value should contain '#' followed by a topic or map ID, optionally followed by '/elemID' for a sub-topic element.</response>
   </message>
   
   <message id="DOTJ042E" type="ERROR">
-    <reason>There is another conref push action "replace" specified for current target "%1".</reason>
+    <reason>Two elements both use conref push to replace the target "%1".</reason>
     <response>Please delete one of the duplicate "replace" actions.</response>
   </message>
   
   <message id="DOTJ043W" type="WARN">
-    <reason>There is no correct target "%1" in "%2" specified for the conref push action.</reason>
-    <response>Please make sure that the target exists and is not filtered out; also, make sure that the target type matches.</response>
+    <reason>The conref push function is trying to replace an element that does not exist (element "%1" in file "%2").</reason>
+    <response></response>
   </message>
   
+  <!-- 2012-06-12: Still need to reproduce and edit this message -->
   <message id="DOTJ044W" type="WARN">
     <reason>There is a redundant conref action "pushbefore". Found in file="%1", element="%2".</reason>
     <response>Please make sure that "mark" and "pushbefore" occur in pairs.</response>
   </message>
   
-  <message id="DOTJ045W" type="WARN">
+  <!-- Default behavior should treat this as an info message, but several releases ago it caused
+       an error. Uncomment if we add an OPTIONAL parameter to report duplicate keys from
+       one map as warnings -->
+  <!--<message id="DOTJ045W" type="WARN">
     <reason>The key "%1" is defined more than once in the same map file. The reference href="%2" is ignored.</reason>
     <response>Please make sure the key name is unique in a single map.</response>
-  </message>
+  </message>-->
   
   <message id="DOTJ045I" type="INFO">
     <reason>The key "%1" is defined more than once in the same map file. The reference href="%2" is ignored.</reason>
-    <response>No response needed if the keys are defined as expected; this is informational only.</response>
+    <response></response>
   </message>
   
   <message id="DOTJ046E" type="ERROR">
-    <reason>Conkeyref="%1" can not be resolved because it does not contain a key or the key is not defined. Using the conref value as fall-back if it exists.</reason>
-    <response>Please make sure the key name does exist.</response>
+    <reason>Conkeyref="%1" can not be resolved because it does not contain a key or the key is not defined.</reason>
+    <response>The build will use the conref attribute for fallback, if one exists.</response>
   </message>
   
   <message id="DOTJ047I" type="INFO">
-    <reason>Unable to find key definition for keyref="%1", href may be used as fall-back if it exists.</reason>
-    <response>Please make sure the key name is correct.</response>
+    <reason>Unable to find key definition for keyref="%1", href may be used as fallback if it exists.</reason>
+    <response></response>
   </message>
   
-  <message id="DOTJ048I" type="INFO">
+  <!-- 2012-06-12: this message is commented out in the Java code; commenting out here as well -->
+  <!--<message id="DOTJ048I" type="INFO">
     <reason>Key definition "%1"="%2" in "%3" has been defined in another file, so it is ignored.</reason>
     <response>Please make sure the key uses the expected value.</response>
-  </message>
+  </message>-->
   
   <message id="DOTJ049W" type="WARN">
   	<reason>Attribute "%1" in element "%2" has been assigned a value of "%3" which does not comply with its subject scheme.</reason>
@@ -701,13 +719,15 @@
     <response></response>
   </message>
     
+  <!-- DOTA067W and DOTA068W actually come from Java code inside the PDF plug-in.
+       DOTA prefix is innacurate. No reason to change at this point. -->
   <message id="DOTA067W" type="WARN">
-    <reason>Ignoring index-see '%1' for '%2' because parent indexterm contains indexterm children.</reason>
+    <reason>Ignoring index-see '%1' inside parent index entry '%2' because the parent indexterm contains indexterm children.</reason>
     <response>According to the DITA Specification, the index-see element should be ignored if the parent indexterm contains other indexterm children.</response>
   </message>
   
   <message id="DOTA068W" type="WARN">
-    <reason>Ignoring index-see-also '%1' for '%2' because parent indexterm contains indexterm children.</reason>
+    <reason>Ignoring index-see-also '%1' inside parent index entry '%2' because the parent indexterm contains indexterm children.</reason>
     <response>According to the DITA Specification, the index-see-also element should be ignored if the parent indexterm contains other indexterm children.</response>
   </message>
   

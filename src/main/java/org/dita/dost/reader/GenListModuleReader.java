@@ -1337,7 +1337,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
                     final Properties prop = new Properties();
                     prop.setProperty("%1", key);
                     prop.setProperty("%2", target);
-                    // DOTJ045W also exists
+                    // DOTJ045W also exists, but is commented out of the messages file
                     logger.logInfo(MessageUtils.getMessage("DOTJ045I", prop).toString());
                 }
                 //restore target
