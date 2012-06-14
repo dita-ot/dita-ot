@@ -1532,8 +1532,12 @@
         <xsl:when test="$glossentry/*[contains(@class, ' glossentry/glossdef ')]">
           <xsl:apply-templates select="$glossentry/*[contains(@class, ' glossentry/glossdef ')]" mode="dita-ot:text-only"/>
         </xsl:when>
+        <xsl:when test="$glossentry//*[contains(@class, ' glossentry/glossSurfaceForm ')][normalize-space(text())!='']">
+          <!-- Second choice: surface form, as it may contain *slightly* more information than the original term -->
+          <xsl:apply-templates select="$glossentry//*[contains(@class, ' glossentry/glossSurfaceForm ')][normalize-space(text())!='']" mode="dita-ot:text-only"/>
+        </xsl:when>
         <xsl:otherwise>
-          <!-- Fall back to term if there is no definition -->
+          <!-- Fall back to term if there is no definition and no surface form -->
           <xsl:apply-templates select="$glossentry//*[contains(@class, ' glossentry/glossterm ')]" mode="dita-ot:text-only"/>
         </xsl:otherwise>
       </xsl:choose>
