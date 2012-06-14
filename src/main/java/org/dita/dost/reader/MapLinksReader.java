@@ -258,27 +258,26 @@ public final class MapLinksReader extends AbstractXMLReader {
 
     @Override
     public void read(final String filename) {
-
         if (matchList.isEmpty()) {
-            logger.logError(MessageUtils.getMessage("DOTJ008E").toString());
-        } else {
-            match = false;
-            needResolveEntity = true;
-            inputFile = new File(filename);
-            filePath = inputFile.getParent();
-            inputFile.getPath();
-            if(indexEntries.length() != 0){
-                //delete all the content in indexEntries
-                indexEntries = new StringBuffer(INT_1024);
-            }
+            throw new IllegalStateException("matchList not initialized");
+        }
 
-            try {
-                reader.setErrorHandler(new DITAOTXMLErrorHandler(filename, logger));
-                final InputSource source=URIResolverAdapter.convertToInputSource(DitaURIResolverFactory.getURIResolver().resolve(filename, null));
-                reader.parse(source);
-            } catch (final Exception e) {
-                logger.logException(e);
-            }
+        match = false;
+        needResolveEntity = true;
+        inputFile = new File(filename);
+        filePath = inputFile.getParent();
+        inputFile.getPath();
+        if(indexEntries.length() != 0){
+            //delete all the content in indexEntries
+            indexEntries = new StringBuffer(INT_1024);
+        }
+
+        try {
+            reader.setErrorHandler(new DITAOTXMLErrorHandler(filename, logger));
+            final InputSource source=URIResolverAdapter.convertToInputSource(DitaURIResolverFactory.getURIResolver().resolve(filename, null));
+            reader.parse(source);
+        } catch (final Exception e) {
+            logger.logException(e);
         }
     }
 

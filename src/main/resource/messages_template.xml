@@ -105,11 +105,6 @@
     <response>The first encountered condition will be used.</response>
   </message>
   
-  <message id="DOTJ008E" type="ERROR">
-    <reason>MapIndexReader is not used correctly. matchList is null.</reason>
-    <response>Please check the code to see whether method setMatch(String matchPattern) is called before read(String filename).</response>
-  </message>
-  
   <!-- Would like to improve / shorten DOTJ009E but not sure how to modify. -->
   <message id="DOTJ009E" type="ERROR">
     <reason>Cannot overwrite file '%1' with file '%2'. The modified result may not be consumed by the following steps in the transform pipeline.</reason>
@@ -396,7 +391,7 @@
   
   <message id="DOTX005E" type="ERROR">
     <reason>Unable to find navigation title, using href instead: '%1'.</reason>
-    <response>If the topic is not accessible at build time, provide the navigation title in the map, and set the format or scope attributes to indicate why it is not accessible. Note: '%1' might have been modified to use default dita topic file extension '.dita' or '.xml'.</response>
+    <response>If the topic is not accessible at build time, provide the navigation title in the map, and set the format or scope attributes to indicate why it is not accessible.</response>
   </message>
   
   <message id="DOTX006E" type="ERROR">
@@ -411,12 +406,12 @@
   
   <message id="DOTX008W" type="WARN">
     <reason>File '%1' does not exist.</reason>
-    <response>Be sure the file '%1' exists or change the href to reference an existing file. Note:'%1' might be changed to use standard dita topic file extension name '.dita' or '.xml'.</response>
+    <response>Be sure the file '%1' exists or change the href to reference an existing file.</response>
   </message>
 
   <message id="DOTX008E" type="ERROR">
     <reason>File '%1' does not exist.</reason>
-    <response>Be sure the file '%1' exists or change the href to reference an existing file. Note:'%1' might be changed to use standard dita topic file extension name '.dita' or '.xml'.</response>
+    <response>Be sure the file '%1' exists or change the href to reference an existing file.</response>
   </message>
 
   <message id="DOTX009W" type="WARN">
@@ -425,12 +420,12 @@
   </message>
   
   <message id="DOTX010E" type="ERROR">
-    <reason>Unable to find target for conref="%1". Check to make sure that the target element is available, and that it is a 'xxxx' element. Note:'%1' might be changed to use default dita topic file extension name '.dita' or '.xml'.</reason>
+    <reason>Unable to find target for conref="%1". Check to make sure that the target element is available, and that it is a 'xxxx' element.</reason>
     <response>Check to make sure the value in the conref attribute is correct.</response>
   </message>
   
   <message id="DOTX011W" type="WARN">
-    <reason>There is more than one possible target for the reference conref="%1". Only the first will be used. Note:'%1' might be changed to use default dita topic file extension name '.dita' or '.xml'.</reason>
+    <reason>There is more than one possible target for the reference conref="%1". Only the first will be used.</reason>
     <response>Remove the duplicate id in the referenced file.</response>
   </message>
   
@@ -441,7 +436,7 @@
   </message>
   
   <message id="DOTX013E" type="ERROR">
-    <reason>A element with a conref attribute indirectly includes itself, which is not possible. Please fix the target of the conref attribute. The conref attribute points to '%1'. Note:'%1' might be changed to use default dita topic file extension name '.dita' or '.xml'.</reason>
+    <reason>A element with a conref attribute indirectly includes itself, which is not possible. Please fix the target of the conref attribute. The conref attribute points to '%1'.</reason>
     <response>Correct the circular conref reference.</response>
   </message>
   
@@ -451,12 +446,12 @@
   </message>
   
   <message id="DOTX015E" type="ERROR">
-    <reason>Incorrectly formed conref attribute: '%1', Make sure the syntax is correct and try again. Note:'%1' might be changed to use default dita topic file extension name '.dita' or '.xml'.</reason>
+    <reason>Incorrectly formed conref attribute: '%1', Make sure the syntax is correct and try again.</reason>
     <response>Change the conref attribute to conform the correct syntax.</response>
   </message>
   
   <message id="DOTX016W" type="WARN">
-    <reason>An href value appears to point to a DITA file, but the format attribute has inherited a value of "%1". If the target '%2'is a DITA file, set the format attribute to "dita". If it does not point to a DITA file, set the format attribute locally. Note:'%2' might be changed to use standard dita topic file extension name '.dita' or '.xml'.</reason>
+    <reason>An href value appears to point to a DITA file, but the format attribute has inherited a value of "%1". If the target '%2'is a DITA file, set the format attribute to "dita". If it does not point to a DITA file, set the format attribute locally.</reason>
     <response>Directly set the format attribute to the correct value instead of inheriting from ancestor.</response>
   </message>
   
@@ -566,7 +561,7 @@
   </message>
   
   <message id="DOTX038I" type="INFO">
-    <reason>The LONGDESCREF attribute on tag '%1' will be ignored. Accessibility needs to be handled another way.</reason>
+    <reason>The longdescref attribute on tag '%1' will be ignored. Accessibility needs to be handled another way.</reason>
     <response>To make the object accessible, you may need to add text before or after the element. You may also be able to handle it with a &lt;param> element inside the object.</response>
   </message>
   
@@ -711,7 +706,7 @@
   
   <message id="DOTX066W" type="WARN">
     <reason>Template "%1" is deprecated.</reason>
-    <response>Remove references to this template from your custom XSLT or Plug-ins.</response>
+    <response>Remove references to this template from your custom XSLT or plug-ins.</response>
   </message>
   
   <message id="DOTX067E" type="ERROR">

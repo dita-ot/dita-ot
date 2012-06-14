@@ -131,9 +131,6 @@ in your Ant build. The syntax for extparam is "name1=value1;name2=value2".</sten
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ007E-extra" conaction="pushreplace">If a condition
 is defined more than once (such as setting audience="all" to include, then resetting it to exclude),
 only the first definition will be used.</stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTJ008E-extra" conaction="pushreplace">An Ant
-build file is calling the DITA-OT indexing routine with invalid parameters. Please make sure
-the index module is called correctly.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ009E-extra" conaction="pushreplace">The transform
 was unable to create files properly during the transform; results may not be as expected.</stentry></strow>
 <!-- 2012-06-08: seems these messages no longer exists in the code; commenting out. -->
@@ -295,19 +292,33 @@ requirement comes from Eclipse, which requires a title in some of the project fi
 generated from your map.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTX005E-extra" conaction="pushreplace">To remove
 this message, provide a navigation title for the referenced object in the map or topic,
-or ensure that you are referencing a valid local DITA target.</stentry></strow>
+or ensure that you are referencing a valid local DITA target.
+<note>Filename might have been modified to use default DITA topic file extension '.dita' or '.xml'.</note>
+</stentry></strow>
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX008W-extra" conaction="pushreplace">
+<note>Filename might have been modified to use default DITA topic file extension '.dita' or '.xml'.</note>
+</stentry></strow>  
+<strow><stentry conref="DITA-messages.xml#msgs/DOTX008E-extra" conaction="pushreplace">
+<note>Filename might have been modified to use default DITA topic file extension '.dita' or '.xml'.</note>
+</stentry></strow>  
 <strow><stentry conref="DITA-messages.xml#msgs/DOTX010E-extra" conaction="pushreplace">The conref
 attribute must be a URI reference to a DITA element. Please see the topic on
 <xref href="http://docs.oasis-open.org/dita/v1.2/os/spec/archSpec/uri-based-addressing.html" format="html" scope="external">URI-based
-addressing</xref> in the DITA specification for details on the expected syntax.</stentry></strow>
+addressing</xref> in the DITA specification for details on the expected syntax.
+<note>Filename might have been modified to use default DITA topic file extension '.dita' or '.xml'.</note>
+</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTX011W-extra" conaction="pushreplace">When pulling content
 with a conref attribute, you may only pull from a single element, but the target ID appears twice
-in the referenced topic.</stentry></strow>
+in the referenced topic.
+<note>Filename might have been modified to use default DITA topic file extension '.dita' or '.xml'.</note>
+</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTX013E-extra" conaction="pushreplace">This may
 appear if (for example) you have a <codeph>&lt;ph&gt;</codeph> element that references another phrase,
 but that phrase itself contains a reference to the original. This will result in an infinite loop.
 The toolkit will stop following the conref trail when this is detected; you will need to correct
-the reference in your source files.</stentry></strow>
+the reference in your source files.
+<note>Filename might have been modified to use default DITA topic file extension '.dita' or '.xml'.</note>
+</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTX014E-extra" conaction="pushreplace">The conref
 attribute must be a URI reference to a DITA element. Please see the topic on
 <xref href="http://docs.oasis-open.org/dita/v1.2/os/spec/archSpec/uri-based-addressing.html" format="html" scope="external">URI-based
@@ -315,11 +326,15 @@ addressing</xref> in the DITA specification for details on the expected syntax.<
 <strow><stentry conref="DITA-messages.xml#msgs/DOTX015E-extra" conaction="pushreplace">The conref
 attribute must be a URI reference to a DITA element. Please see the topic on
 <xref href="http://docs.oasis-open.org/dita/v1.2/os/spec/archSpec/uri-based-addressing.html" format="html" scope="external">URI-based
-addressing</xref> in the DITA specification for details on the expected syntax.</stentry></strow>
+addressing</xref> in the DITA specification for details on the expected syntax.
+<note>Filename might have been modified to use default DITA topic file extension '.dita' or '.xml'.</note>
+</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTX016W-extra" conaction="pushreplace">This warning
 is intended to catch instances where a non-DITA format setting unexpectedly cascades to a
 DITA topic, which will prevent the topic from being processed. To remove this message, set
-the format attribute on the indicated reference.</stentry></strow>
+the format attribute on the indicated reference.
+<note>Filename might have been modified to use default DITA topic file extension '.dita' or '.xml'.</note>
+</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTX017E-extra" conaction="pushreplace"></stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTX018I-extra" conaction="pushreplace">The type
 attribute in DITA is intended to describe the type of the target; for example, a reference to a
