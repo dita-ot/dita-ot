@@ -131,9 +131,6 @@ in your Ant build. The syntax for extparam is "name1=value1;name2=value2".</sten
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ007E-extra" conaction="pushreplace">If a condition
 is defined more than once (such as setting audience="all" to include, then resetting it to exclude),
 only the first definition will be used.</stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTJ008E-extra" conaction="pushreplace">An Ant
-build file is calling the DITA-OT indexing routine with invalid parameters. Please make sure
-the index module is called correctly.</stentry></strow>
 <strow><stentry conref="DITA-messages.xml#msgs/DOTJ009E-extra" conaction="pushreplace">The transform
 was unable to create files properly during the transform; results may not be as expected.</stentry></strow>
 <!-- 2012-06-08: seems these messages no longer exists in the code; commenting out. -->

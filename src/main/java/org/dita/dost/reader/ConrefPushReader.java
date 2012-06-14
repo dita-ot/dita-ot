@@ -181,7 +181,8 @@ public final class ConrefPushReader extends AbstractXMLReader {
 
             }else if (ATTR_CONACTION_VALUE_MARK.equalsIgnoreCase(conactValue)){
                 target = atts.getValue(ATTRIBUTE_NAME_CONREF);
-                if (pushcontent != null && pushcontent.length() > 0 &&
+                if (target != null &&
+                        pushcontent != null && pushcontent.length() > 0 &&
                         ATTR_CONACTION_VALUE_PUSHBEFORE.equals(pushType)){
                     //pushcontent != null means it is pushbefore action
                     //we need to add target and content to pushtable
@@ -340,6 +341,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
             final Properties prop = new Properties();
             prop.put("%1", target);
             logger.logError(MessageUtils.getMessage("DOTJ041E", prop).toString());
+            return;
         }
 
         if (sharpIndex == 0){
@@ -369,6 +371,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
                 final Properties prop = new Properties();
                 prop.put("%1", target);
                 logger.logError(MessageUtils.getMessage("DOTJ042E", prop).toString());
+                return;
             }else{
                 table.put(targetLoc+addon, table.get(targetLoc+addon)+pushcontent);
             }

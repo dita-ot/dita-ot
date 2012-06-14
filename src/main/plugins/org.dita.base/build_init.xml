@@ -151,7 +151,6 @@
   <property name="base.temp.dir" location="${basedir}/temp"/>
   <property name="dita.temp.dir" location="${base.temp.dir}${file.separator}temp${current.date}" />
   <property name="output.dir" location="${basedir}/out" />
-  <property name="dita.extname" value="xml" />
   <property name="dita.script.dir"
     location="${dita.dir}${file.separator}xsl" />
   <property name="dita.resource.dir"
@@ -260,19 +259,8 @@
       </condition>
       <param name="1" location="${args.xsl}"/>
     </dita-ot-fail>
-  	
-    <dita-ot-fail id="DOTA004F">
-      <condition>
-        <not>
-          <or>
-            <contains string="${dita.extname}" substring="dita" />
-            <contains string="${dita.extname}" substring="xml" />
-          </or>
-        </not>
-      </condition>
-      <param name="1" value="${dita.extname}"/>
-    </dita-ot-fail>
-   <dita-ot-fail id="DOTA007E">
+
+    <dita-ot-fail id="DOTA007E">
         <condition>
         	<and>
         	 <isset property="args.ftr" />
@@ -340,16 +328,52 @@
       </and>
     </condition>
 
+    <dita-ot-fail id="DOTA012W">
+      <condition>
+        <isset property="dita.extname"/>
+      </condition>
+      <param name="1" value="dita.extname"/>
+      <param name="2" value="dita.ext"/>
+    </dita-ot-fail>
     <condition property="dita.ext" value=".xml">
       <and>
         <isset property="dita.extname" />
-        <contains string="${dita.extname}" substring="xml" />
+        <contains string="${dita.extname}" substring="xml"/>
       </and>
     </condition>
     <condition property="dita.ext" value=".dita">
       <and>
         <isset property="dita.extname" />
-        <contains string="${dita.extname}" substring="dita" />
+        <contains string="${dita.extname}" substring="dita"/>
+      </and>
+    </condition>
+    <condition property="dita.ext" value=".xml">
+      <not>
+        <isset property="dita.ext"/>
+      </not>
+    </condition>
+    <dita-ot-fail id="DOTA004F">
+      <condition>
+        <not>
+          <or>
+            <contains string="${dita.ext}" substring=".dita" />
+            <contains string="${dita.ext}" substring=".xml" />
+          </or>
+        </not>
+      </condition>
+      <param name="1" value="${dita.ext}"/>
+    </dita-ot-fail>
+    <!-- Declare dita.extname default for backwards-compatibility, to be removed in future releases. -->
+    <condition property="dita.extname" value="xml">
+      <and>
+        <not><isset property="dita.extname"/></not>
+        <equals arg1="${dita.ext}" arg2=".xml"/>
+      </and>
+    </condition>
+    <condition property="dita.extname" value="dita">
+      <and>
+        <not><isset property="dita.extname"/></not>
+        <equals arg1="${dita.ext}" arg2=".dita"/>
       </and>
     </condition>
 

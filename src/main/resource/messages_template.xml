@@ -26,8 +26,8 @@
   </message>
   
   <message id="DOTA004F" type="FATAL">
-    <reason>Invalid dita extension '%1'; supported values are 'dita' and 'xml'.</reason>
-    <response></response>
+    <reason>Invalid DITA topic extension '%1'.</reason>
+    <response>Supported values are '.dita' and '.xml'.</response>
   </message>
   
   <message id="DOTA005W" type="WARN">
@@ -107,11 +107,6 @@
   <message id="DOTJ007E" type="ERROR">
     <reason>Duplicate condition in filter file for rule '%1'.</reason>
     <response>The first encountered condition will be used.</response>
-  </message>
-  
-  <message id="DOTJ008E" type="ERROR">
-    <reason>MapIndexReader is not used correctly. matchList is null.</reason>
-    <response>Please check the code to see whether method setMatch(String matchPattern) is called before read(String filename).</response>
   </message>
   
   <!-- Would like to improve / shorten DOTJ009E but not sure how to modify. -->
@@ -727,7 +722,7 @@
   
   <message id="DOTX066W" type="WARN">
     <reason>Template "%1" is deprecated.</reason>
-    <response>Remove references to this template from your custom XSLT or Plug-ins.</response>
+    <response>Remove references to this template from your custom XSLT or plug-ins.</response>
   </message>
   
   <message id="DOTX067E" type="ERROR">
