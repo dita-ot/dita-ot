@@ -1528,7 +1528,15 @@
   <xsl:choose>
     <xsl:when test="not($m_matched-target='#none#')">
       <xsl:variable name="glossentry" select="exsl:node-set($m_matched-target)/*[contains(@class, ' glossentry/glossentry ')][1]"/>
-      <xsl:apply-templates select="$glossentry//*[contains(@class, ' glossentry/glossdef ')]" mode="dita-ot:text-only"/>
+      <xsl:choose>
+        <xsl:when test="$glossentry/*[contains(@class, ' glossentry/glossdef ')]">
+          <xsl:apply-templates select="$glossentry/*[contains(@class, ' glossentry/glossdef ')]" mode="dita-ot:text-only"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <!-- Fall back to term if there is no definition -->
+          <xsl:apply-templates select="$glossentry//*[contains(@class, ' glossentry/glossterm ')]" mode="dita-ot:text-only"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:when>
     <xsl:when test="normalize-space(text())='' and
                     (boolean(ancestor::*[contains(@class,' topic/copyright ')]) or generate-id(.)=generate-id(key('keyref',@keyref)[1]))">
