@@ -1507,10 +1507,10 @@
       <xsl:variable name="glossentry" select="exsl:node-set($m_matched-target)/*[contains(@class, ' glossentry/glossentry ')][1]"/>
       <xsl:choose>
         <xsl:when test="$glossentry//*[contains(@class, ' glossentry/glossSurfaceForm ')][normalize-space(text())!='']">
-          <xsl:value-of select="$glossentry//*[contains(@class, ' glossentry/glossSurfaceForm ')][normalize-space(text())!='']"/>
+          <xsl:apply-templates select="$glossentry//*[contains(@class, ' glossentry/glossSurfaceForm ')][normalize-space(text())!='']" mode="dita-ot:text-only"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="$glossentry//*[contains(@class, ' glossentry/glossterm ')][normalize-space(text())!='']"/>
+          <xsl:apply-templates select="$glossentry//*[contains(@class, ' glossentry/glossterm ')]" mode="dita-ot:text-only"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:when>
@@ -1522,6 +1522,28 @@
   </xsl:choose>
 </xsl:template>
 
+<xsl:template match="*" mode="getMatchingGlossdef">
+  <xsl:param name="m_matched-target"/>
+  <xsl:param name="m_keys"/>
+  <xsl:choose>
+    <xsl:when test="not($m_matched-target='#none#')">
+      <xsl:variable name="glossentry" select="exsl:node-set($m_matched-target)/*[contains(@class, ' glossentry/glossentry ')][1]"/>
+      <xsl:apply-templates select="$glossentry//*[contains(@class, ' glossentry/glossdef ')]" mode="dita-ot:text-only"/>
+    </xsl:when>
+    <xsl:when test="normalize-space(text())='' and
+                    (boolean(ancestor::*[contains(@class,' topic/copyright ')]) or generate-id(.)=generate-id(key('keyref',@keyref)[1]))">
+      <!-- Already generating a message when looking for the term, do not generate a "missing glossentry" message here too -->
+    </xsl:when>
+    <xsl:when test="boolean(ancestor::*[contains(@class,' topic/copyright ')]) or generate-id(.)=generate-id(key('keyref',@keyref)[1])">
+      <!-- Didn't look up term because it was specified, but this is the first occurrence
+           and the glossentry was not found, so generate "missing glossentry" message -->
+      <xsl:apply-templates select="." mode="ditamsg:no-glossentry-for-key">
+        <xsl:with-param name="matching-keys" select="$m_keys"/>
+      </xsl:apply-templates>
+    </xsl:when>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template match="*" mode="getMatchingAcronym">
   <xsl:param name="m_matched-target"/>
   <xsl:param name="m_keys"/>
@@ -1530,16 +1552,16 @@
       <xsl:variable name="glossentry" select="exsl:node-set($m_matched-target)/*[contains(@class, ' glossentry/glossentry ')][1]"/>
       <xsl:choose>
         <xsl:when test="$glossentry//*[contains(@class, ' glossentry/glossStatus ')][@value='preferred'][1]/preceding-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(text())!='']">
-          <xsl:value-of select="$glossentry//*[contains(@class, ' glossentry/glossStatus ')][@value='preferred'][1]/preceding-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(text())!='']"/>
+          <xsl:apply-templates select="$glossentry//*[contains(@class, ' glossentry/glossStatus ')][@value='preferred'][1]/preceding-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(text())!='']" mode="dita-ot:text-only"/>
         </xsl:when>
         <xsl:when test="$glossentry//*[contains(@class, ' glossentry/glossStatus ')][@value!='prohibited' and @value!='obsolete'][1]/preceding-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(text())!='']">
-          <xsl:value-of select="$glossentry//*[contains(@class, ' glossentry/glossStatus ')][@value!='prohibited' and @value!='obsolete'][1]/preceding-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(text())!='']"/>
+          <xsl:apply-templates select="$glossentry//*[contains(@class, ' glossentry/glossStatus ')][@value!='prohibited' and @value!='obsolete'][1]/preceding-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(text())!='']" mode="dita-ot:text-only"/>
         </xsl:when>
         <xsl:when test="$glossentry//*[contains(@class, ' glossentry/glossAlt ')][1]/*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][not(following-sibling::glossStatus)][normalize-space(text())!='']">
-          <xsl:value-of select="$glossentry//*[contains(@class, ' glossentry/glossAlt ')][1]/*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][count(following-sibling::glossStatus)=0][normalize-space(text())!='']"/>
+          <xsl:apply-templates select="$glossentry//*[contains(@class, ' glossentry/glossAlt ')][1]/*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][count(following-sibling::glossStatus)=0][normalize-space(text())!='']" mode="dita-ot:text-only"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="$glossentry/*[contains(@class, ' glossentry/glossterm ')][normalize-space(text())!='']"/>
+          <xsl:apply-templates select="$glossentry/*[contains(@class, ' glossentry/glossterm ')]" mode="dita-ot:text-only"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:when>
@@ -1618,7 +1640,7 @@
 
       <!-- hovertip text -->
       <xsl:variable name="hovertext">
-        <xsl:apply-templates select="." mode="getMatchingSurfaceForm">
+        <xsl:apply-templates select="." mode="getMatchingGlossdef">
           <xsl:with-param name="m_matched-target" select="$matched-target"/>
           <xsl:with-param name="m_keys" select="$keys"/>
         </xsl:apply-templates>
