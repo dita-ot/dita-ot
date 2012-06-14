@@ -26,8 +26,8 @@
   </message>
   
   <message id="DOTA004F" type="FATAL">
-    <reason>Invalid dita extension '%1'; supported values are 'dita' and 'xml'.</reason>
-    <response></response>
+    <reason>Invalid DITA topic extension '%1'.</reason>
+    <response>Supported values are '.dita' and '.xml'.</response>
   </message>
   
   <message id="DOTA005W" type="WARN">
