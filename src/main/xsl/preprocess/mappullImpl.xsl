@@ -701,14 +701,6 @@ Other modes can be found within the code, and may or may not prove useful for ov
 
     <!--navtitle-->
     <xsl:variable name="navtitle-not-normalized">
-<!--there should not be a warning message now.      
-      <xsl:if test="not(*/*[contains(@class,' topic/navtitle ')]) and @navtitle">
-        <xsl:call-template name="output-message">
-          <xsl:with-param name="msgnum">058</xsl:with-param>
-          <xsl:with-param name="msgsev">W</xsl:with-param>
-        </xsl:call-template>
-      </xsl:if>
--->
       <xsl:choose>
         <xsl:when test="(not(*/*[contains(@class,' topic/navtitle ')]) and not(@navtitle)) or not($locktitle='yes')">
           <xsl:apply-templates select="." mode="mappull:get-stuff_get-navtitle">

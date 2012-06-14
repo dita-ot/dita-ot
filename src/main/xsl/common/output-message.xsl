@@ -68,7 +68,7 @@
       <xsl:variable name="m">
         <xsl:value-of select="$msgcontent"/>
         <xsl:if test="normalize-space($debugloc)">
-          <xsl:value-of select="concat('The location of this problem was at ',$debugloc)"/>
+          <xsl:value-of select="concat(' The location of this problem was at ',$debugloc)"/>
         </xsl:if>
       </xsl:variable>
       <xsl:choose>

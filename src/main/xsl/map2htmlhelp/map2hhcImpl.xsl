@@ -131,17 +131,19 @@
     </xsl:when>
     <xsl:when test="(contains(@format,'htm') or contains(@format,'HTM')) and (@scope='external' or @scope='peer')">
       <!-- The html file is not available, so of course it cannot be included -->
+      <xsl:if test="not(contains(@href,'://'))">
+        <!-- Seems to be a local file, but marked external or peer, so we can't tell if it's available -->
+        <xsl:call-template name="output-message">
+          <xsl:with-param name="msgnum">048</xsl:with-param>
+          <xsl:with-param name="msgsev">I</xsl:with-param>
+          <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
+        </xsl:call-template>
+      </xsl:if>
       <xsl:call-template name="output-toc-entry">
         <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
       </xsl:call-template>
     </xsl:when>    
     <xsl:when test="contains(@format,'htm') or contains(@format,'HTM')">
-      <!-- Including a local HTML file: they must recompile to include it -->
-      <xsl:call-template name="output-message">
-        <xsl:with-param name="msgnum">048</xsl:with-param>
-        <xsl:with-param name="msgsev">I</xsl:with-param>
-        <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
-      </xsl:call-template>
       <xsl:call-template name="output-toc-entry">
         <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
       </xsl:call-template>

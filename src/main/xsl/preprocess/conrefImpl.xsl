@@ -1440,6 +1440,7 @@
   <xsl:call-template name="output-message">
     <xsl:with-param name="msgnum">014</xsl:with-param>
     <xsl:with-param name="msgsev">E</xsl:with-param>
+    <xsl:with-param name="msgparams">%1=<xsl:value-of select="@conref"/></xsl:with-param>
   </xsl:call-template>
 </xsl:template>
 <xsl:template match="*" mode="ditamsg:malformedConref">

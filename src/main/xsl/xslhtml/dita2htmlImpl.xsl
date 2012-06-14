@@ -4730,7 +4730,7 @@
     <xsl:call-template name="output-message">
       <xsl:with-param name="msgnum">058</xsl:with-param>
       <xsl:with-param name="msgsev">W</xsl:with-param>
-      <xsl:with-param name="msgparams">%1=<xsl:value-of select="$matching-keys"/></xsl:with-param>
+      <xsl:with-param name="msgparams">%1=<xsl:value-of select="$matching-keys"/>;%2=<xsl:value-of select="name()"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
   <xsl:template match="*" mode="ditamsg:no-title-for-topic">
