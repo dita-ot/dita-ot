@@ -58,11 +58,11 @@ final class MoveLinksModule implements AbstractPipelineModule {
                 .append(SLASH).append(TOPIC_LINKLIST.localName)
                 .toString());
         indexReader.read(maplinksFile.getAbsolutePath());
-        final Set<Map.Entry<String, String>> mapSet = (Set<Map.Entry<String, String>>) indexReader.getContent().getCollection();
+        final Set<Map.Entry<String, Map<String, String>>> mapSet = (Set<Map.Entry<String, Map<String, String>>>) indexReader.getContent().getCollection();
         
         final DitaLinksWriter indexInserter = new DitaLinksWriter();
         indexInserter.setLogger(logger);
-        for (final Map.Entry<String, String> entry: mapSet) {
+        for (final Map.Entry<String, Map<String, String>> entry: mapSet) {
             logger.logInfo("Processing " + entry.getKey());
             final ContentImpl content = new ContentImpl();
             content.setValue(entry.getValue());
