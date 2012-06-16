@@ -1108,7 +1108,9 @@
     <xsl:call-template name="end-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
     <xsl:apply-templates select="." mode="pull-in-title">
       <xsl:with-param name="type" select="' dt '"/>
-      <xsl:with-param name="displaytext" select="normalize-space(text())"/>
+      <xsl:with-param name="displaytext">
+        <xsl:apply-templates select="."  mode="dita-ot:text-only"/>
+      </xsl:with-param>
     </xsl:apply-templates>
   </dt>
 </xsl:template>
@@ -1506,8 +1508,8 @@
     <xsl:when test="not($m_matched-target='#none#')">
       <xsl:variable name="glossentry" select="exsl:node-set($m_matched-target)/*[contains(@class, ' glossentry/glossentry ')][1]"/>
       <xsl:choose>
-        <xsl:when test="$glossentry//*[contains(@class, ' glossentry/glossSurfaceForm ')][normalize-space(text())!='']">
-          <xsl:apply-templates select="$glossentry//*[contains(@class, ' glossentry/glossSurfaceForm ')][normalize-space(text())!='']" mode="dita-ot:text-only"/>
+        <xsl:when test="$glossentry//*[contains(@class, ' glossentry/glossSurfaceForm ')][normalize-space(.)!='']">
+          <xsl:apply-templates select="$glossentry//*[contains(@class, ' glossentry/glossSurfaceForm ')][normalize-space(.)!='']" mode="dita-ot:text-only"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:apply-templates select="$glossentry//*[contains(@class, ' glossentry/glossterm ')]" mode="dita-ot:text-only"/>
@@ -1532,9 +1534,9 @@
         <xsl:when test="$glossentry/*[contains(@class, ' glossentry/glossdef ')]">
           <xsl:apply-templates select="$glossentry/*[contains(@class, ' glossentry/glossdef ')]" mode="dita-ot:text-only"/>
         </xsl:when>
-        <xsl:when test="$glossentry//*[contains(@class, ' glossentry/glossSurfaceForm ')][normalize-space(text())!='']">
+        <xsl:when test="$glossentry//*[contains(@class, ' glossentry/glossSurfaceForm ')][normalize-space(.)!='']">
           <!-- Second choice: surface form, as it may contain *slightly* more information than the original term -->
-          <xsl:apply-templates select="$glossentry//*[contains(@class, ' glossentry/glossSurfaceForm ')][normalize-space(text())!='']" mode="dita-ot:text-only"/>
+          <xsl:apply-templates select="$glossentry//*[contains(@class, ' glossentry/glossSurfaceForm ')][normalize-space(.)!='']" mode="dita-ot:text-only"/>
         </xsl:when>
         <xsl:otherwise>
           <!-- Fall back to term if there is no definition and no surface form -->
@@ -1542,7 +1544,7 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:when>
-    <xsl:when test="normalize-space(text())='' and
+    <xsl:when test="normalize-space(.)='' and
                     (boolean(ancestor::*[contains(@class,' topic/copyright ')]) or generate-id(.)=generate-id(key('keyref',@keyref)[1]))">
       <!-- Already generating a message when looking for the term, do not generate a "missing glossentry" message here too -->
     </xsl:when>
@@ -1563,14 +1565,14 @@
     <xsl:when test="not($m_matched-target='#none#')">
       <xsl:variable name="glossentry" select="exsl:node-set($m_matched-target)/*[contains(@class, ' glossentry/glossentry ')][1]"/>
       <xsl:choose>
-        <xsl:when test="$glossentry//*[contains(@class, ' glossentry/glossStatus ')][@value='preferred'][1]/preceding-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(text())!='']">
-          <xsl:apply-templates select="$glossentry//*[contains(@class, ' glossentry/glossStatus ')][@value='preferred'][1]/preceding-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(text())!='']" mode="dita-ot:text-only"/>
+        <xsl:when test="$glossentry//*[contains(@class, ' glossentry/glossStatus ')][@value='preferred'][1]/preceding-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(.)!='']">
+          <xsl:apply-templates select="$glossentry//*[contains(@class, ' glossentry/glossStatus ')][@value='preferred'][1]/preceding-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(.)!='']" mode="dita-ot:text-only"/>
         </xsl:when>
-        <xsl:when test="$glossentry//*[contains(@class, ' glossentry/glossStatus ')][@value!='prohibited' and @value!='obsolete'][1]/preceding-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(text())!='']">
-          <xsl:apply-templates select="$glossentry//*[contains(@class, ' glossentry/glossStatus ')][@value!='prohibited' and @value!='obsolete'][1]/preceding-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(text())!='']" mode="dita-ot:text-only"/>
+        <xsl:when test="$glossentry//*[contains(@class, ' glossentry/glossStatus ')][@value!='prohibited' and @value!='obsolete'][1]/preceding-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(.)!='']">
+          <xsl:apply-templates select="$glossentry//*[contains(@class, ' glossentry/glossStatus ')][@value!='prohibited' and @value!='obsolete'][1]/preceding-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(.)!='']" mode="dita-ot:text-only"/>
         </xsl:when>
-        <xsl:when test="$glossentry//*[contains(@class, ' glossentry/glossAlt ')][1]/*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][not(following-sibling::glossStatus)][normalize-space(text())!='']">
-          <xsl:apply-templates select="$glossentry//*[contains(@class, ' glossentry/glossAlt ')][1]/*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][count(following-sibling::glossStatus)=0][normalize-space(text())!='']" mode="dita-ot:text-only"/>
+        <xsl:when test="$glossentry//*[contains(@class, ' glossentry/glossAlt ')][1]/*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][not(following-sibling::glossStatus)][normalize-space(.)!='']">
+          <xsl:apply-templates select="$glossentry//*[contains(@class, ' glossentry/glossAlt ')][1]/*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][count(following-sibling::glossStatus)=0][normalize-space(.)!='']" mode="dita-ot:text-only"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:apply-templates select="$glossentry/*[contains(@class, ' glossentry/glossterm ')]" mode="dita-ot:text-only"/>
@@ -1627,8 +1629,8 @@
       <!-- Text should be displayed -->
       <xsl:variable name="displaytext">
         <xsl:choose>
-          <xsl:when test="normalize-space(text())!=''">
-            <xsl:value-of select="normalize-space(text())"/>
+          <xsl:when test="normalize-space(.)!=''">
+            <xsl:apply-templates select="." mode="dita-ot:text-only"/>
           </xsl:when>
           <xsl:otherwise>
             <xsl:choose>
@@ -1676,7 +1678,9 @@
     </xsl:when>
     <xsl:otherwise>
       <xsl:apply-templates select="." mode="output-term">
-        <xsl:with-param name="displaytext" select="normalize-space(text())"/>
+        <xsl:with-param name="displaytext">
+          <xsl:apply-templates select="."  mode="dita-ot:text-only"/>
+        </xsl:with-param>
       </xsl:apply-templates>
     </xsl:otherwise>
   </xsl:choose>
@@ -4670,10 +4674,10 @@
           </xsl:if>
         </xsl:variable>
         <xsl:if test="not($target='' or contains($target, '://'))">
-          <xsl:value-of select="document(concat($WORKDIR, $PATH2PROJ, $target))//*[contains(@class, ' topic/title ')][normalize-space(text())!=''][1]"/>
+          <xsl:value-of select="document(concat($WORKDIR, $PATH2PROJ, $target))//*[contains(@class, ' topic/title ')][normalize-space(.)!=''][1]"/>
         </xsl:if>
       </xsl:when>
-      <xsl:when test="normalize-space(text())=''">
+      <xsl:when test="normalize-space(.)=''">
         <xsl:value-of select="$displaytext"/>
       </xsl:when>
     </xsl:choose>
@@ -4709,7 +4713,9 @@
                 </xsl:apply-templates>
                 <xsl:apply-templates select="." mode="pull-in-title">
                   <xsl:with-param name="type" select="$type"/>
-                  <xsl:with-param name="displaytext" select="normalize-space(text())"/>
+                  <xsl:with-param name="displaytext">
+                    <xsl:apply-templates select="."  mode="dita-ot:text-only"/>
+                  </xsl:with-param>
                 </xsl:apply-templates>
               </xsl:element>
             </a>
@@ -4722,7 +4728,9 @@
               </xsl:apply-templates>
               <xsl:apply-templates select="." mode="pull-in-title">
                 <xsl:with-param name="type" select="$type"/>
-                <xsl:with-param name="displaytext" select="normalize-space(text())"/>
+                <xsl:with-param name="displaytext">
+                  <xsl:apply-templates select="."  mode="dita-ot:text-only"/>
+                </xsl:with-param>
               </xsl:apply-templates>
             </xsl:element>
           </xsl:otherwise>
