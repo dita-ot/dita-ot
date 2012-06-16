@@ -16,6 +16,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -42,103 +43,115 @@ public final class FileUtils {
     /**
      * Supported DITA topic extensions. File extensions contain a leading dot.
      */
-    private final static List<String> supportedTopicExtensions = new ArrayList<String>();
+    private final static List<String> supportedTopicExtensions;
     static {
+        final List<String> ste = new ArrayList<String>();
         final String extensions = Configuration.configuration.get(CONF_SUPPORTED_TOPIC_EXTENSIONS);
         if (extensions != null && extensions.length()>0) {
             for (final String ext: extensions.split(CONF_LIST_SEPARATOR)) {
-                supportedTopicExtensions.add(ext);
+                ste.add(ext);
             }
         } else {
             logger.logError("Failed to read supported DITA topic extensions from configuration, using defaults.");
-            supportedTopicExtensions.add(FILE_EXTENSION_DITA);
-            supportedTopicExtensions.add(FILE_EXTENSION_XML);
+            ste.add(FILE_EXTENSION_DITA);
+            ste.add(FILE_EXTENSION_XML);
         }
+        supportedTopicExtensions = Collections.unmodifiableList(ste);
     }
-
+    
     /**
      * Supported DITA map extensions. File extensions contain a leading dot.
      */
-    private final static List<String> supportedMapExtensions = new ArrayList<String>();
+    private final static List<String> supportedMapExtensions;
     static {
+        final List<String> sme = new ArrayList<String>();
         final String extensions = Configuration.configuration.get(CONF_SUPPORTED_MAP_EXTENSIONS);
         if (extensions != null && extensions.length()>0) {
             for (final String ext: extensions.split(CONF_LIST_SEPARATOR)) {
-                supportedMapExtensions.add(ext);
+                sme.add(ext);
             }
         } else {
             logger.logError("Failed to read supported DITA map extensions from configuration, using defaults.");
-            supportedMapExtensions.add(FILE_EXTENSION_DITAMAP);
+            sme.add(FILE_EXTENSION_DITAMAP);
         }
+        supportedMapExtensions = Collections.unmodifiableList(sme);
     }
 
     /**
      * Supported image extensions. File extensions contain a leading dot.
      */
-    private final static List<String> supportedImageExtensions = new ArrayList<String>();
+    private final static List<String> supportedImageExtensions;
     static {
+        final List<String> sie = new ArrayList<String>();
         final String imageExtensions = Configuration.configuration.get(CONF_SUPPORTED_IMAGE_EXTENSIONS);
         if (imageExtensions != null && imageExtensions.length()>0) {
             for (final String ext: imageExtensions.split(CONF_LIST_SEPARATOR)) {
-                supportedImageExtensions.add(ext);
+                sie.add(ext);
             }
         } else {
             logger.logError("Failed to read supported image extensions from configuration, using defaults.");
-            supportedImageExtensions.add(FILE_EXTENSION_JPG);
-            supportedImageExtensions.add(FILE_EXTENSION_GIF);
-            supportedImageExtensions.add(FILE_EXTENSION_EPS);
-            supportedImageExtensions.add(FILE_EXTENSION_JPEG);
-            supportedImageExtensions.add(FILE_EXTENSION_PNG);
-            supportedImageExtensions.add(FILE_EXTENSION_SVG);
-            supportedImageExtensions.add(FILE_EXTENSION_TIFF);
-            supportedImageExtensions.add(FILE_EXTENSION_TIF);
+            sie.add(FILE_EXTENSION_JPG);
+            sie.add(FILE_EXTENSION_GIF);
+            sie.add(FILE_EXTENSION_EPS);
+            sie.add(FILE_EXTENSION_JPEG);
+            sie.add(FILE_EXTENSION_PNG);
+            sie.add(FILE_EXTENSION_SVG);
+            sie.add(FILE_EXTENSION_TIFF);
+            sie.add(FILE_EXTENSION_TIF);
         }
+        supportedImageExtensions = Collections.unmodifiableList(sie);
     }
 
     /**
      * Supported HTML extensions. File extensions contain a leading dot.
      */
-    private final static List<String> supportedHTMLExtensions = new ArrayList<String>();
+    private final static List<String> supportedHTMLExtensions;
     static {
+        final List<String> she = new ArrayList<String>();
         final String extensions = Configuration.configuration.get(CONF_SUPPORTED_HTML_EXTENSIONS);
         if (extensions != null && extensions.length()>0) {
             for (final String ext: extensions.split(CONF_LIST_SEPARATOR)) {
-                supportedHTMLExtensions.add(ext);
+                she.add(ext);
             }
         } else {
             logger.logError("Failed to read supported HTML extensions from configuration, using defaults.");
-            supportedHTMLExtensions.add(FILE_EXTENSION_HTML);
-            supportedHTMLExtensions.add(FILE_EXTENSION_HTM);
+            she.add(FILE_EXTENSION_HTML);
+            she.add(FILE_EXTENSION_HTM);
         }
+        supportedHTMLExtensions = Collections.unmodifiableList(she);
     }
 
     /**
      * Supported resource file extensions. File extensions contain a leading dot.
      */
-    private final static List<String> supportedResourceExtensions = new ArrayList<String>();
+    private final static List<String> supportedResourceExtensions;
     static {
+        final List<String> sre = new ArrayList<String>();
         final String extensions = Configuration.configuration.get(CONF_SUPPORTED_RESOURCE_EXTENSIONS);
         if (extensions != null && extensions.length()>0) {
             for (final String ext: extensions.split(CONF_LIST_SEPARATOR)) {
-                supportedResourceExtensions.add(ext);
+                sre.add(ext);
             }
         } else {
             logger.logError("Failed to read supported resource file extensions from configuration, using defaults.");
-            supportedResourceExtensions.add(FILE_EXTENSION_SWF);
-            supportedResourceExtensions.add(FILE_EXTENSION_PDF);
+            sre.add(FILE_EXTENSION_SWF);
+            sre.add(FILE_EXTENSION_PDF);
         }
+        supportedResourceExtensions = Collections.unmodifiableList(sre);
     }
 
     /**
      * Supported extensions. File extensions contain a leading dot.
      */
-    private final static List<String> supportedExtensions = new ArrayList<String>();
+    private final static List<String> supportedExtensions;
     static {
-        supportedExtensions.addAll(supportedTopicExtensions);
-        supportedExtensions.addAll(supportedMapExtensions);
-        supportedExtensions.addAll(supportedImageExtensions);
-        supportedExtensions.addAll(supportedHTMLExtensions);
-        supportedExtensions.addAll(supportedResourceExtensions);
+        final List<String> se = new ArrayList<String>();
+        se.addAll(supportedTopicExtensions);
+        se.addAll(supportedMapExtensions);
+        se.addAll(supportedImageExtensions);
+        se.addAll(supportedHTMLExtensions);
+        se.addAll(supportedResourceExtensions);
+        supportedExtensions = Collections.unmodifiableList(se);
     }
 
     /**

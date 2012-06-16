@@ -20,13 +20,14 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 import java.util.Map.Entry;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -80,53 +81,52 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
     private boolean insideCDATA;
     private final ArrayList<String> topicSpecList;
 
-    private static final Hashtable<String, List<String>> moveTable;
+    private static final Map<String, List<String>> moveTable;
     static{
-        moveTable = new Hashtable<String, List<String>>(INT_32);
-        moveTable.put(MAP_SEARCHTITLE.matcher, asList(MAP_TOPICMETA.localName, MAP_SEARCHTITLE.localName));
-        moveTable.put(TOPIC_AUDIENCE.matcher, asList(MAP_TOPICMETA.localName, TOPIC_AUDIENCE.localName));
-        moveTable.put(TOPIC_AUTHOR.matcher, asList(MAP_TOPICMETA.localName, TOPIC_AUTHOR.localName));
-        moveTable.put(TOPIC_CATEGORY.matcher, asList(MAP_TOPICMETA.localName, TOPIC_CATEGORY.localName));
-        moveTable.put(TOPIC_COPYRIGHT.matcher, asList(MAP_TOPICMETA.localName, TOPIC_COPYRIGHT.localName));
-        moveTable.put(TOPIC_CRITDATES.matcher, asList(MAP_TOPICMETA.localName, TOPIC_CRITDATES.localName));
-        moveTable.put(TOPIC_DATA.matcher, asList(MAP_TOPICMETA.localName, TOPIC_DATA.localName));
-        moveTable.put(TOPIC_DATA_ABOUT.matcher, asList(MAP_TOPICMETA.localName, TOPIC_DATA_ABOUT.localName));
-        moveTable.put(TOPIC_FOREIGN.matcher, asList(MAP_TOPICMETA.localName, TOPIC_FOREIGN.localName));
-        moveTable.put(TOPIC_KEYWORDS.matcher, asList(MAP_TOPICMETA.localName, TOPIC_KEYWORDS.localName));
-        moveTable.put(TOPIC_OTHERMETA.matcher, asList(MAP_TOPICMETA.localName, TOPIC_OTHERMETA.localName));
-        moveTable.put(TOPIC_PERMISSIONS.matcher, asList(MAP_TOPICMETA.localName, TOPIC_PERMISSIONS.localName));
-        moveTable.put(TOPIC_PRODINFO.matcher, asList(MAP_TOPICMETA.localName, TOPIC_PRODINFO.localName));
-        moveTable.put(TOPIC_PUBLISHER.matcher, asList(MAP_TOPICMETA.localName, TOPIC_PUBLISHER.localName));
-        moveTable.put(TOPIC_RESOURCEID.matcher, asList(MAP_TOPICMETA.localName, TOPIC_RESOURCEID.localName));
-        moveTable.put(TOPIC_SOURCE.matcher, asList(MAP_TOPICMETA.localName, TOPIC_SOURCE.localName));
-        moveTable.put(TOPIC_UNKNOWN.matcher, asList(MAP_TOPICMETA.localName, TOPIC_UNKNOWN.localName));
+        final Map<String, List<String>> mt = new HashMap<String, List<String>>(INT_32);
+        mt.put(MAP_SEARCHTITLE.matcher, asList(MAP_TOPICMETA.localName, MAP_SEARCHTITLE.localName));
+        mt.put(TOPIC_AUDIENCE.matcher, asList(MAP_TOPICMETA.localName, TOPIC_AUDIENCE.localName));
+        mt.put(TOPIC_AUTHOR.matcher, asList(MAP_TOPICMETA.localName, TOPIC_AUTHOR.localName));
+        mt.put(TOPIC_CATEGORY.matcher, asList(MAP_TOPICMETA.localName, TOPIC_CATEGORY.localName));
+        mt.put(TOPIC_COPYRIGHT.matcher, asList(MAP_TOPICMETA.localName, TOPIC_COPYRIGHT.localName));
+        mt.put(TOPIC_CRITDATES.matcher, asList(MAP_TOPICMETA.localName, TOPIC_CRITDATES.localName));
+        mt.put(TOPIC_DATA.matcher, asList(MAP_TOPICMETA.localName, TOPIC_DATA.localName));
+        mt.put(TOPIC_DATA_ABOUT.matcher, asList(MAP_TOPICMETA.localName, TOPIC_DATA_ABOUT.localName));
+        mt.put(TOPIC_FOREIGN.matcher, asList(MAP_TOPICMETA.localName, TOPIC_FOREIGN.localName));
+        mt.put(TOPIC_KEYWORDS.matcher, asList(MAP_TOPICMETA.localName, TOPIC_KEYWORDS.localName));
+        mt.put(TOPIC_OTHERMETA.matcher, asList(MAP_TOPICMETA.localName, TOPIC_OTHERMETA.localName));
+        mt.put(TOPIC_PERMISSIONS.matcher, asList(MAP_TOPICMETA.localName, TOPIC_PERMISSIONS.localName));
+        mt.put(TOPIC_PRODINFO.matcher, asList(MAP_TOPICMETA.localName, TOPIC_PRODINFO.localName));
+        mt.put(TOPIC_PUBLISHER.matcher, asList(MAP_TOPICMETA.localName, TOPIC_PUBLISHER.localName));
+        mt.put(TOPIC_RESOURCEID.matcher, asList(MAP_TOPICMETA.localName, TOPIC_RESOURCEID.localName));
+        mt.put(TOPIC_SOURCE.matcher, asList(MAP_TOPICMETA.localName, TOPIC_SOURCE.localName));
+        mt.put(TOPIC_UNKNOWN.matcher, asList(MAP_TOPICMETA.localName, TOPIC_UNKNOWN.localName));
+        moveTable = Collections.unmodifiableMap(mt);
     }
 
-    private static final Set<String> uniqueSet = MapMetaReader.uniqueSet;
-
-    private static final Hashtable<String, Integer> compareTable;
-
+    private static final Map<String, Integer> compareTable;
     static{
-        compareTable = new Hashtable<String, Integer>(INT_32);
-        compareTable.put(MAP_TOPICMETA.localName, 1);
-        compareTable.put(TOPIC_SEARCHTITLE.localName, 2);
-        compareTable.put(TOPIC_SHORTDESC.localName, 3);
-        compareTable.put(TOPIC_AUTHOR.localName, 4);
-        compareTable.put(TOPIC_SOURCE.localName, 5);
-        compareTable.put(TOPIC_PUBLISHER.localName, 6);
-        compareTable.put(TOPIC_COPYRIGHT.localName, 7);
-        compareTable.put(TOPIC_CRITDATES.localName, 8);
-        compareTable.put(TOPIC_PERMISSIONS.localName, 9);
-        compareTable.put(TOPIC_AUDIENCE.localName, 10);
-        compareTable.put(TOPIC_CATEGORY.localName, 11);
-        compareTable.put(TOPIC_KEYWORDS.localName, 12);
-        compareTable.put(TOPIC_PRODINFO.localName, 13);
-        compareTable.put(TOPIC_OTHERMETA.localName, 14);
-        compareTable.put(TOPIC_RESOURCEID.localName, 15);
-        compareTable.put(TOPIC_DATA.localName, 16);
-        compareTable.put(TOPIC_DATA_ABOUT.localName, 17);
-        compareTable.put(TOPIC_FOREIGN.localName, 18);
-        compareTable.put(TOPIC_UNKNOWN.localName, 19);
+        final Map<String, Integer> ct = new HashMap<String, Integer>(INT_32);
+        ct.put(MAP_TOPICMETA.localName, 1);
+        ct.put(TOPIC_SEARCHTITLE.localName, 2);
+        ct.put(TOPIC_SHORTDESC.localName, 3);
+        ct.put(TOPIC_AUTHOR.localName, 4);
+        ct.put(TOPIC_SOURCE.localName, 5);
+        ct.put(TOPIC_PUBLISHER.localName, 6);
+        ct.put(TOPIC_COPYRIGHT.localName, 7);
+        ct.put(TOPIC_CRITDATES.localName, 8);
+        ct.put(TOPIC_PERMISSIONS.localName, 9);
+        ct.put(TOPIC_AUDIENCE.localName, 10);
+        ct.put(TOPIC_CATEGORY.localName, 11);
+        ct.put(TOPIC_KEYWORDS.localName, 12);
+        ct.put(TOPIC_PRODINFO.localName, 13);
+        ct.put(TOPIC_OTHERMETA.localName, 14);
+        ct.put(TOPIC_RESOURCEID.localName, 15);
+        ct.put(TOPIC_DATA.localName, 16);
+        ct.put(TOPIC_DATA_ABOUT.localName, 17);
+        ct.put(TOPIC_FOREIGN.localName, 18);
+        ct.put(TOPIC_UNKNOWN.localName, 19);
+        compareTable = Collections.unmodifiableMap(ct);
     }
 
 
@@ -419,7 +419,7 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
         final NodeList list = entry.getValue().getChildNodes();
         for (int i = 0; i < list.getLength(); i++){
             item = list.item(i);
-            if ((i == 0 && createChild) || uniqueSet.contains(entry.getKey()) ){
+            if ((i == 0 && createChild) || MapMetaReader.uniqueSet.contains(entry.getKey()) ){
                 item = parent.getOwnerDocument().importNode(item,true);
                 parent.replaceChild(item, child);
                 child = item; // prevent insert action still want to operate child after it is removed.
