@@ -301,6 +301,9 @@
           <li>#1207 Table colwidth attribute always treated as proportional (milestone 5)</li>
           <li>#1101 zh-CN file for PDF puts English strings in output (milestone 6)</li>
           <li>#1289 Improve error messages (milestone 6)</li>
+          <li>#1294 Use dita.ext instead of dita.extname (milestone 6)</li>
+          <li>#1297 Mappull doesn't recognize &lt;navtitle> when checking for navtitle for non-DITA
+            resources (milestone 6)</li>
           <li>#1152 UNC paths are not supported in input argument (in progress)</li>  
         </ul>
       </section>
