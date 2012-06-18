@@ -40,7 +40,6 @@
   <xsl:template match="*[contains(@class,' topic/data-about ')]" mode="dita-ot:text-only"/>
   <xsl:template match="*[contains(@class,' topic/unknown ')]" mode="dita-ot:text-only"/>
   <xsl:template match="*[contains(@class,' topic/foreign ')]" mode="dita-ot:text-only"/>
-  <xsl:template match="*[contains(@class,' topic/xref ')]/*[contains(@class,' topic/desc ')]" mode="dita-ot:text-only"/>
 
   <!-- EXCEPTIONS -->
   <xsl:template match="*[contains(@class,' topic/image ')]" mode="dita-ot:text-only">
@@ -57,6 +56,10 @@
       <xsl:when test="@callout">(<xsl:value-of select="@callout"/>)</xsl:when>
       <xsl:otherwise>(<xsl:value-of select="$fnid"/>)</xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="*[contains(@class,' topic/xref ')]" mode="dita-ot:text-only">
+    <xsl:apply-templates select="node()[not(contains(@class,' topic/desc '))]" mode="dita-ot:text-only"/>
   </xsl:template>
 
 
