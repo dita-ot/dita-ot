@@ -40,6 +40,7 @@
   <xsl:template match="*[contains(@class,' topic/data-about ')]" mode="dita-ot:text-only"/>
   <xsl:template match="*[contains(@class,' topic/unknown ')]" mode="dita-ot:text-only"/>
   <xsl:template match="*[contains(@class,' topic/foreign ')]" mode="dita-ot:text-only"/>
+  <xsl:template match="*[contains(@class,' topic/xref ')]/*[contains(@class,' topic/desc ')]" mode="dita-ot:text-only"/>
 
   <!-- EXCEPTIONS -->
   <xsl:template match="*[contains(@class,' topic/image ')]" mode="dita-ot:text-only">
