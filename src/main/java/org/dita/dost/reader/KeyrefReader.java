@@ -11,12 +11,13 @@ package org.dita.dost.reader;
 
 import static org.dita.dost.util.Constants.*;
 
-import java.util.Hashtable;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
 import org.dita.dost.module.Content;
-import org.dita.dost.module.ContentImpl;
 import org.dita.dost.resolver.DitaURIResolverFactory;
 import org.dita.dost.resolver.URIResolverAdapter;
 import org.dita.dost.util.StringUtils;
@@ -50,8 +51,8 @@ public final class KeyrefReader extends AbstractXMLReader {
     }
 
     private final XMLReader reader;
-
-    private final Hashtable<String, String> keyDefTable;
+    /** Key definition map, where map key is the key name and map value is serialized XML definition. */  
+    private final Map<String, String> keyDefTable;
 
     private Stack<KeyDef> keyDefs;
 
@@ -61,7 +62,7 @@ public final class KeyrefReader extends AbstractXMLReader {
      * Constructor.
      */
     public KeyrefReader(){
-        keyDefTable = new Hashtable<String, String>();
+        keyDefTable = new HashMap<String, String>();
         try {
             reader = StringUtils.getXMLReader();
             reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
@@ -104,14 +105,18 @@ public final class KeyrefReader extends AbstractXMLReader {
         }
     }
 
-    /**
-     * @return content collection {@code Hashtable<String, String>}
-     */
     @Override
     public Content getContent() {
-        final Content content = new ContentImpl();
-        content.setValue(keyDefTable);
-        return content;
+        throw new UnsupportedOperationException();
+    }
+    
+    /**
+     * Get key definitions.
+     * 
+     * @return key definition map where map key is key name and map value is serialized XML definition of the key 
+     */
+    public Map<String, String> getKeyDefinition() {
+        return Collections.unmodifiableMap(keyDefTable);
     }
 
     @Override

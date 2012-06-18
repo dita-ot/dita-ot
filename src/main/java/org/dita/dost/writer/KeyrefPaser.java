@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -133,7 +132,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
     private final TransformerFactory tf;
     
     private DITAOTLogger logger;
-    private Hashtable<String, String> definitionMap;
+    private Map<String, String> definitionMap;
     private String tempDir;
 
     /**
@@ -239,17 +238,12 @@ public final class KeyrefPaser extends XMLFilterImpl {
         this.extName = extName;
     }
     
-    /**
-     * Set key definition map.
-     * 
-     * @param content value {@code Hashtable<String, String>}
-     */
-    @SuppressWarnings("unchecked")
     public void setContent(final Content content) {
-        definitionMap = (Hashtable<String, String>) content.getValue();
-        if (definitionMap == null) {
-            throw new IllegalArgumentException("Content value must be non-null Hashtable<String, String>");
-        }
+        throw new UnsupportedOperationException();
+    }
+    
+    public void setKeyDefinition(final Map<String, String> definitionMap) {
+        this.definitionMap = definitionMap;
     }
     
     /**
@@ -497,6 +491,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
 
             // If definition is not null
             if(definition!=null){
+                logger.logInfo("Read definition for key: " + keyName);
                 doc = keyDefToDoc(definition);
                 final Element elem = doc.getDocumentElement();
                 final NamedNodeMap namedNodeMap = elem.getAttributes();

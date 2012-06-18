@@ -13,8 +13,8 @@ import static org.junit.Assert.assertEquals;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,7 +24,6 @@ import org.custommonkey.xmlunit.XMLUnit;
 import org.xml.sax.InputSource;
 
 import org.dita.dost.TestUtils;
-import org.dita.dost.module.Content;
 import org.dita.dost.reader.KeyrefReader;
 import org.dita.dost.resolver.DitaURIResolverFactory;
 import org.junit.Test;
@@ -49,11 +48,9 @@ public class TestKeyrefReader {
         final KeyrefReader keyrefreader = new KeyrefReader();
         keyrefreader.setKeys(set);
         keyrefreader.read(filename.getAbsolutePath());
-        final Content content = keyrefreader.getContent();
-        @SuppressWarnings("unchecked")
-        final Hashtable<String, String> act = (Hashtable<String, String>) content.getValue();
+        final Map<String, String> act= keyrefreader.getKeyDefinition();
 
-        final Hashtable<String, String> exp = new Hashtable<String, String>();
+        final Map<String, String> exp = new HashMap<String, String>();
         exp.put("blatfeference", "<topicref keys='blatview blatfeference blatintro' href='blatview.dita' navtitle='blatview' locktitle='yes' class='- map/topicref '/>");
         exp.put("blatview", "<topicref keys='blatview blatfeference blatintro' href='blatview.dita' navtitle='blatview' locktitle='yes' class='- map/topicref '/>");
         exp.put("blatintro", "<topicref keys='blatview blatfeference blatintro' href='blatview.dita' navtitle='blatview' locktitle='yes' class='- map/topicref '/>");

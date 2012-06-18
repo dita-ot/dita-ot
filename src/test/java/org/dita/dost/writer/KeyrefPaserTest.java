@@ -9,8 +9,8 @@ import static org.custommonkey.xmlunit.XMLAssert.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -33,8 +33,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import org.dita.dost.TestUtils;
-import org.dita.dost.module.Content;
-import org.dita.dost.module.ContentImpl;
 
 public class KeyrefPaserTest {
 
@@ -44,7 +42,7 @@ public class KeyrefPaserTest {
     private static final File expDir = new File(resourceDir, "exp");
     private static CatalogResolver resolver;
 
-    private final static Content content = new ContentImpl();
+    private static Map<String, String> keyDefinition;
     private final static Map<String, String> keymap = new HashMap<String, String>();
 
     @BeforeClass
@@ -68,7 +66,7 @@ public class KeyrefPaserTest {
     public void testTopicWrite() throws Exception {
         final KeyrefPaser parser = new KeyrefPaser();
         parser.setLogger(new TestUtils.TestLogger());
-        parser.setContent(content);
+        parser.setKeyDefinition(keyDefinition);
         parser.setTempDir(tempDir.getAbsolutePath());
         parser.setKeyMap(keymap);
         parser.setExtName(".xml");
@@ -82,7 +80,7 @@ public class KeyrefPaserTest {
     public void testMapWrite() throws Exception {
         final KeyrefPaser parser = new KeyrefPaser();
         parser.setLogger(new TestUtils.TestLogger());
-        parser.setContent(content);
+        parser.setKeyDefinition(keyDefinition);
         parser.setTempDir(tempDir.getAbsolutePath());
         parser.setKeyMap(keymap);
         parser.setExtName(".xml");
@@ -105,7 +103,7 @@ public class KeyrefPaserTest {
         documentBuilder.setEntityResolver(resolver);
         final Document document = documentBuilder.parse(inputSource);
 
-        final Hashtable<String, String> keys = new Hashtable<String, String>();
+        final Map<String, String> keys = new HashMap<String, String>();
         final NodeList keydefs = document.getElementsByTagName("keydef");
         for (int i = 0; i < keydefs.getLength(); i++) {
             final Element keydef = (Element) keydefs.item(i);
@@ -118,7 +116,7 @@ public class KeyrefPaserTest {
             keymap.put(keydef.getAttribute("keys"), keydef.getAttribute("href"));
             keys.put(keydef.getAttribute("keys"), out.toString());
         }
-        content.setValue(keys);
+        keyDefinition = Collections.unmodifiableMap(keys);
     }
 
 }
