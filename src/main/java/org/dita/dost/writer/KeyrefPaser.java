@@ -16,7 +16,6 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -27,8 +26,6 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.Stack;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -132,7 +129,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
     private final TransformerFactory tf;
     
     private DITAOTLogger logger;
-    private Map<String, String> definitionMap;
+    private Map<String, Element> definitionMap;
     private String tempDir;
 
     /**
@@ -184,7 +181,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
     private final Stack<Boolean> hasSubElem;
 
     /** Current key definition. */
-    private Document doc;
+    private Element elem;
 
     /** File name with relative path to the temporary directory of input file. */
     private String fileName;
@@ -242,7 +239,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
         throw new UnsupportedOperationException();
     }
     
-    public void setKeyDefinition(final Map<String, String> definitionMap) {
+    public void setKeyDefinition(final Map<String, Element> definitionMap) {
         this.definitionMap = definitionMap;
     }
     
@@ -336,7 +333,6 @@ public final class KeyrefPaser extends XMLFilterImpl {
             if (!validKeyref.isEmpty() && validKeyref.peek()) {
                 // Key reference is valid,
                 // need to pull matching content from the key definition
-                final Element  elem = doc.getDocumentElement();
                 NodeList nodeList = null;
                 // If current element name doesn't equal the key reference element
                 // just grab the content from the matching element of key definition
@@ -487,13 +483,10 @@ public final class KeyrefPaser extends XMLFilterImpl {
                 keyName = keyrefValue.substring(0, slashIndex);
                 elementId = keyrefValue.substring(slashIndex);
             }
-            final String definition = definitionMap.get(keyName);
+            elem = definitionMap.get(keyName);
 
             // If definition is not null
-            if(definition!=null){
-                logger.logInfo("Read definition for key: " + keyName);
-                doc = keyDefToDoc(definition);
-                final Element elem = doc.getDocumentElement();
+            if(elem!=null){
                 final NamedNodeMap namedNodeMap = elem.getAttributes();
                 // first resolve the keyref attribute
                 if (currentElement != null && currentElement.isRefType) {
@@ -638,25 +631,6 @@ public final class KeyrefPaser extends XMLFilterImpl {
     }
 
     // Private methods ---------------------------------------------------------
-    
-    /**
-     * Read key definition
-     * 
-     * @param key key definition XML string
-     * @return parsed key definition document
-     */
-    private Document keyDefToDoc(final String key) {
-        final InputSource inputSource = new InputSource(new StringReader(key));
-        final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        Document document = null;
-        try {
-            final DocumentBuilder documentBuilder = factory.newDocumentBuilder();
-            document = documentBuilder.parse(inputSource);
-        } catch (final Exception e) {
-            logger.logError("Failed to parse key definition: " + e.getMessage(), e);
-        }
-        return document;
-    }
 
     /**
      * Serialize DOM node into a SAX stream.

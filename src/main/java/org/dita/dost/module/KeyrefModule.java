@@ -20,6 +20,8 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
 
+import org.w3c.dom.Element;
+
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.GenMapAndTopicListModule.KeyDef;
@@ -97,7 +99,7 @@ final class KeyrefModule implements AbstractPipelineModule {
             reader.setKeys(maps.get(mapFile));
             reader.read(mapFile);
         }
-        final Map<String, String> keyDefinition = reader.getKeyDefinition();
+        final Map<String, Element> keyDefinition = reader.getKeyDefinition();
         //get files which have keyref attr
         final Set<String> parseList = job.getSet(KEYREF_LIST);
         //Conref Module will change file's content, it is possible that tags with @keyref are copied in

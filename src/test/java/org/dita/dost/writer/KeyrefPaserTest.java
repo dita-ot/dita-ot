@@ -8,19 +8,12 @@ import static org.custommonkey.xmlunit.XMLAssert.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.custommonkey.xmlunit.XMLUnit;
@@ -42,7 +35,7 @@ public class KeyrefPaserTest {
     private static final File expDir = new File(resourceDir, "exp");
     private static CatalogResolver resolver;
 
-    private static Map<String, String> keyDefinition;
+    private static Map<String, Element> keyDefinition;
     private final static Map<String, String> keymap = new HashMap<String, String>();
 
     @BeforeClass
@@ -103,20 +96,16 @@ public class KeyrefPaserTest {
         documentBuilder.setEntityResolver(resolver);
         final Document document = documentBuilder.parse(inputSource);
 
-        final Map<String, String> keys = new HashMap<String, String>();
+        final Map<String, Element> keys = new HashMap<String, Element>();
         final NodeList keydefs = document.getElementsByTagName("keydef");
         for (int i = 0; i < keydefs.getLength(); i++) {
             final Element keydef = (Element) keydefs.item(i);
-            final Transformer serializer = TransformerFactory.newInstance().newTransformer();
-            final Source source = new DOMSource(keydef);
-            final StringWriter out = new StringWriter();
-            final Result result = new StreamResult(out);
-            serializer.transform(source, result);
-
             keymap.put(keydef.getAttribute("keys"), keydef.getAttribute("href"));
-            keys.put(keydef.getAttribute("keys"), out.toString());
+            final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+            doc.appendChild(doc.importNode(keydef, true));
+            keys.put(keydef.getAttribute("keys"), keydef);
         }
         keyDefinition = Collections.unmodifiableMap(keys);
     }
-
+    
 }

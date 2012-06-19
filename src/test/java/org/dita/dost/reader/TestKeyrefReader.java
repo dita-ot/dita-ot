@@ -8,17 +8,22 @@
  * (c) Copyright IBM Corp. 2010 All Rights Reserved.
  */
 package org.dita.dost.reader;
+
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import static org.junit.Assert.assertEquals;
+
 import java.io.File;
-import java.io.IOException;
 import java.io.StringReader;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.xml.sax.SAXException;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import org.custommonkey.xmlunit.XMLUnit;
 import org.xml.sax.InputSource;
@@ -34,7 +39,7 @@ public class TestKeyrefReader {
     private static final File srcDir = new File(resourceDir, "src");
 
     @Test
-    public void testKeyrefReader() throws IOException, SAXException {
+    public void testKeyrefReader() throws Exception {
         final String path = System.getProperty("user.dir");
         DitaURIResolverFactory.setPath(path);
         final File filename = new File(srcDir, "keyrefreader.xml");
@@ -48,7 +53,7 @@ public class TestKeyrefReader {
         final KeyrefReader keyrefreader = new KeyrefReader();
         keyrefreader.setKeys(set);
         keyrefreader.read(filename.getAbsolutePath());
-        final Map<String, String> act= keyrefreader.getKeyDefinition();
+        final Map<String, Element> act= keyrefreader.getKeyDefinition();
 
         final Map<String, String> exp = new HashMap<String, String>();
         exp.put("blatfeference", "<topicref keys='blatview blatfeference blatintro' href='blatview.dita' navtitle='blatview' locktitle='yes' class='- map/topicref '/>");
@@ -61,11 +66,16 @@ public class TestKeyrefReader {
         XMLUnit.setIgnoreWhitespace(true);
         assertEquals(exp.keySet(), act.keySet());
         for (Map.Entry<String, String> e: exp.entrySet()) {
-            String ev = e.getValue();
-            String av = act.get(e.getKey());
-            assertXMLEqual(new InputSource(new StringReader(ev)),
-                           new InputSource(new StringReader(av)));
+            final Document ev = keyDefToDoc(e.getValue());
+            final Document av = act.get(e.getKey()).getOwnerDocument();
+            assertXMLEqual(ev, av);
         }
+    }
+    
+    private static Document keyDefToDoc(final String key) throws Exception {
+        final InputSource inputSource = new InputSource(new StringReader(key));
+        final DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        return documentBuilder.parse(inputSource);
     }
 
 }
