@@ -2168,6 +2168,11 @@
 
 <!-- =========== CALS (OASIS) TABLE =========== -->
 
+<xsl:template match="*[contains(@class,' topic/table ')]" mode="generate-table-summary-attribute">
+  <!-- Override this to use a local convention for setting table's @summary attribute,
+       until OASIS provides a standard mechanism for setting. -->
+</xsl:template>
+
 <xsl:template match="*[contains(@class,' topic/table ')]" name="topic.table">
  <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
  <xsl:choose>
@@ -2271,6 +2276,7 @@
   </xsl:variable>
   <xsl:call-template name="setid"/>
   <xsl:call-template name="commonattributes"/>
+  <xsl:apply-templates select="." mode="generate-table-summary-attribute"/>
    <xsl:call-template name="gen-style">
      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
    </xsl:call-template>
@@ -2972,6 +2978,11 @@
 
 <!-- =========== SimpleTable - SEMANTIC TABLE =========== -->
 
+<xsl:template match="*[contains(@class,' topic/simpletable ')]" mode="generate-table-summary-attribute">
+  <!-- Override this to use a local convention for setting table's @summary attribute,
+       until OASIS provides a standard mechanism for setting. -->
+</xsl:template>
+
 <xsl:template match="*[contains(@class,' topic/simpletable ')]" name="topic.simpletable">
   <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
  <xsl:choose>
@@ -3021,6 +3032,7 @@
      </xsl:otherwise>
     </xsl:choose>
     <xsl:call-template name="commonattributes"/>
+    <xsl:apply-templates select="." mode="generate-table-summary-attribute"/>
     <xsl:call-template name="gen-style">
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
