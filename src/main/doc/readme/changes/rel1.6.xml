@@ -238,6 +238,7 @@
           <li>#1283 xref with desc and no href not handled in XHTML (milestone 5)</li>
           <li>#1137 Consistent coding conventions for Java code (milestone 6)</li>
           <li>#1153 Remove deprecated Ant files (milestone 6)</li>
+          <li>#1300 Add a hook to set @summary on table in XHTML (milestone 6)</li>
           <li>#1156 Refactor preprocessing to use SAX filters (in progress)</li>
           <li>#1159 Remove Content object (in progress)</li>
           <li>#1155 Use Job to read/write job configuration files (in progress)</li>
@@ -251,7 +252,7 @@
           <li>#1165 Improve PDF2 table customization (in progress)</li>
           <li>#1166 Improve pipeline module processing (in progress)</li>
           <li>#1164 Avoid strings where other types are more appropriate (in progress)</li>
-          <li>#1168 Add configurable optimization (in progress)</li>
+          <li>#1168 Add ability to disable debug attribute generation (in progress)</li>
         </ul>
       </section>
       <section>
@@ -301,6 +302,7 @@
           <li>#1207 Table colwidth attribute always treated as proportional (milestone 5)</li>
           <li>#1101 zh-CN file for PDF puts English strings in output (milestone 6)</li>
           <li>#1289 Improve error messages (milestone 6)</li>
+          <li>#1295 Various errors when using term with keyref in XHTML (milestone 6)</li>
           <li>#1294 Use dita.ext instead of dita.extname (milestone 6)</li>
           <li>#1297 Mappull doesn't recognize &lt;navtitle> when checking for navtitle for non-DITA
             resources (milestone 6)</li>
