@@ -125,7 +125,7 @@ public final class ExtensibleAntInvoker extends Task {
     /**
      * Set input data.
      * @param inputdita input data file
-     * @deprecated use {@link #setInputmap(File)} instead
+     * @deprecated use {@link #setInputmap(String)} instead
      */
     @Deprecated
     public void setInputdita(final String inputdita) {

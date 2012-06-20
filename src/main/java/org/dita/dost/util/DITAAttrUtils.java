@@ -251,13 +251,10 @@ public final class DITAAttrUtils {
 
             return root;
         } catch (final ParserConfigurationException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (final SAXException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (final IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return null;

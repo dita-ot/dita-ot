@@ -551,11 +551,12 @@ public final class IndexTermReader extends AbstractXMLReader {
     }
 
     /**
-     * Trim whitespace from start of the string.
+     * Trim whitespace from start of the string. If last character of termName and
+     * first character of temp is a space character, remove leading string from temp 
      * 
      * @param temp
      * @param termName
-     * @return
+     * @return trimmed temp value
      */
     private String trimSpaceAtStart(final String temp, final String termName) {
         if(termName != null && termName.charAt(termName.length() - 1) == ' ') {

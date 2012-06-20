@@ -35,7 +35,7 @@ import org.dita.dost.util.FileUtils;
  * <pre>format (";" space* "charset=" charset)?</pre>
  * 
  * <p>If no charset if defined or the charset name is not recognized,
- * {@link ava.nio.charset.Charset#defaultCharset() default charset} is used in
+ * {@link java.nio.charset.Charset#defaultCharset() default charset} is used in
  * reading the code file.</p>
  */
 public final class CoderefResolver extends AbstractXMLFilter {

@@ -27,7 +27,6 @@ public final class JavaInvoker {
     /**
      * Remove all files in certain directory
      * @param dir
-     * @author Marshall
      */
     public static void removeFiles(final String dir){
         final File file = new File(dir);

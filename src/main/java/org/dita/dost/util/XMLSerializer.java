@@ -197,7 +197,7 @@ public class XMLSerializer {
      * Write attribute
      * 
      * @param qName attribute name
-     * @param atts attribute value
+     * @param value attribute value
      * @throws SAXException if processing the event failed
      * @throws IllegalStateException if start element is not open
      */
@@ -210,7 +210,7 @@ public class XMLSerializer {
      * 
      * @param uri namespace URI
      * @param qName attribute name
-     * @param atts attribute value
+     * @param value attribute value
      * @throws SAXException if processing the event failed
      * @throws IllegalStateException if start element is not open
      */
@@ -260,7 +260,9 @@ public class XMLSerializer {
     /**
      * Write characters.
      * 
-     * @param text character data
+     * @param ch character data array
+     * @param start start index
+     * @param length length data to write
      * @throws SAXException if processing the event failed
      * @throws IllegalStateException if start element is not open
      */

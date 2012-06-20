@@ -177,8 +177,8 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 
             final Job job = new Job(new File(tempDir));
 
-            final List<String> parseList = job.getCollection();
-            inputDir = job.getValue();
+            final List<String> parseList = job.getReferenceList();
+            inputDir = job.getInputDir();
             inputMap = new File(inputDir + File.separator + job.getInputMap()).getAbsolutePath();
 
             // Output subject schemas

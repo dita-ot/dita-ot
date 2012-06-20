@@ -36,8 +36,11 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 /**
+ * Read Java properties file in XML format. The only reason for not using
+ * Ant's property task is that it only support reading the XML format
+ * when the property file name has the extension {@code .xml}.
+ * 
  * @author wxzhang
- *
  */
 public final class XmlPropertyTask extends Task {
 
@@ -98,9 +101,11 @@ public final class XmlPropertyTask extends Task {
 
     /**
      * Run the task.
+     * 
+     * TODO: validate the source file is valid before opening, print a better error message
+     * TODO: add a verbose level log message listing the name of the file being loaded
+     * 
      * @throws BuildException The exception raised during task execution.
-     * @todo validate the source file is valid before opening, print a better error message
-     * @todo add a verbose level log message listing the name of the file being loaded
      */
     @Override
     public void execute() throws BuildException {

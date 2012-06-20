@@ -283,11 +283,9 @@ public final class Job {
     /**
      * Get reference list.
      * 
-     * <p>TODO: rename to {@code getReferenceList}</p>
-     * 
      * @return reference list
      */
-    public LinkedList<String> getCollection() {
+    public LinkedList<String> getReferenceList() {
         final LinkedList<String> refList = new LinkedList<String>();
         final String liststr = prop.getProperty(FULL_DITAMAP_TOPIC_LIST, "")
                 + COMMA
@@ -304,11 +302,9 @@ public final class Job {
     /**
      * Get input directory.
      * 
-     * <p>TODO: rename to {@code File getInputDir()̋}</p>
-     * 
      * @return absolute input directory path 
      */
-    public String getValue() {
+    public String getInputDir() {
         return prop.getProperty(INPUT_DIR);
     }
 
@@ -330,8 +326,8 @@ public final class Job {
     /**
      * Write list file.
      * 
-     * @param tempDir temporary directory
      * @param prop property name
+     * @param filename list file name
      * @throws IOException if writing fails
      */
     public void writeList(final String prop, final String filename) throws IOException {

@@ -130,12 +130,12 @@ public final class JobTest {
         exp.add("foo2");
         exp.add("bar1");
         exp.add("foo1");
-        assertEquals(exp, job.getCollection());
+        assertEquals(exp, job.getReferenceList());
     }
 
     @Test
     public void testGetValue() {
-        assertEquals("/foo/bar", job.getValue());
+        assertEquals("/foo/bar", job.getInputDir());
     }
 
     @AfterClass

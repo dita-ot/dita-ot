@@ -131,7 +131,7 @@ public final class MessageUtils {
     
     /**
      * Load message from message file.
-     * @param newMessageFile message file
+     * @param in message file input stream
      */
     private void loadMessages(final InputStream in) throws Exception {
         // always assign a new instance to hashTable to avoid

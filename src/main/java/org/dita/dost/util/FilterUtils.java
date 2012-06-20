@@ -130,10 +130,9 @@ public final class FilterUtils {
     /**
      * Check the given extended attribute in propList to see if it was excluded.
      * 
-     * 
      * @param propList
      * @param attValue
-     * @return
+     * @return {@code true} if should be excluded, otherwise {@code false}
      */
     private boolean extCheckExclude(final String[] propList, final String attValue){
         //to check if the value is just only "" or " ",ignore it
@@ -230,7 +229,7 @@ public final class FilterUtils {
      * 
      * @param attName
      * @param attValue
-     * @return
+     * @return {@code true} if should be excluded, otherwise {@code false}
      */
     private boolean checkExclude(final String attName, final String attValue) {
         StringTokenizer tokenizer;

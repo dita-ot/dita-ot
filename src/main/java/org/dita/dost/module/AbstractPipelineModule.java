@@ -30,7 +30,6 @@ public interface AbstractPipelineModule {
      * 
      * @param input input
      * @return output
-     * @author Lian, Li
      * @throws DITAOTException DITAOTException
      */
     AbstractPipelineOutput execute(AbstractPipelineInput input)

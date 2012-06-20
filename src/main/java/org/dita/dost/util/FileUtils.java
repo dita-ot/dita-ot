@@ -488,8 +488,8 @@ public final class FileUtils {
 
     /**
      * Translate path separators from Windows to Unix.
-     * @param path
-     * @return
+     * @param path path to translate
+     * @return UNIX path
      */
     public static String separatorsToUnix(final String path) {
         return path.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);

@@ -458,7 +458,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
     /**
      * Get all targets except copy-to.
      * 
-     * @return set of target file path with option format after {@link STICK}
+     * @return set of target file path with option format after {@link org.dita.dost.util.Constants.STICK STICK}
      */
     public Set<String> getNonCopytoResult() {
         final Set<String> nonCopytoSet = new HashSet<String>(INT_128);

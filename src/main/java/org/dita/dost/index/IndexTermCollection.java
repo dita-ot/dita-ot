@@ -67,7 +67,6 @@ public final class IndexTermCollection {
     /**
      * The only interface to access IndexTermCollection instance.
      * @return Singleton IndexTermCollection instance
-     * @author Marshall
      */
     public static synchronized IndexTermCollection getInstantce(){
         if(collection == null){
@@ -78,7 +77,6 @@ public final class IndexTermCollection {
 
     /**
      * The interface to clear the result in IndexTermCollection instance.
-     * @author Stephen
      */
     public void clear(){
         termList.clear();
@@ -213,13 +211,10 @@ public final class IndexTermCollection {
 
 
             } catch (final ClassNotFoundException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             } catch (final IllegalAccessException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             } catch (final InstantiationException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
 

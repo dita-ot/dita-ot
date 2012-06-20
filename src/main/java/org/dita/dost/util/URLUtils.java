@@ -255,7 +255,6 @@ public final class URLUtils {
      * 				The file name string.
      * @return string -
      * 				URL
-     * @author Zhang Di Hua
      */
     public static String getURL(final String fileName){
 
@@ -266,8 +265,6 @@ public final class URLUtils {
             try {
                 return file.toURI().toURL().toString();
             } catch (final MalformedURLException e) {
-                // TODO Auto-generated catch block
-                //e.printStackTrace();
                 return "";
             }
         }
