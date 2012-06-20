@@ -239,6 +239,7 @@
           <li>#1137 Consistent coding conventions for Java code (milestone 6)</li>
           <li>#1153 Remove deprecated Ant files (milestone 6)</li>
           <li>#1300 Add a hook to set @summary on table in XHTML (milestone 6)</li>
+          <li>#1302 Add a way for cross-references to pick up generated text for sections (milestone 6)</li>
           <li>#1156 Refactor preprocessing to use SAX filters (in progress)</li>
           <li>#1159 Remove Content object (in progress)</li>
           <li>#1155 Use Job to read/write job configuration files (in progress)</li>

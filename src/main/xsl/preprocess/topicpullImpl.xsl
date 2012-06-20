@@ -1273,20 +1273,52 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
         </xsl:variable>
         <xsl:value-of select="normalize-space($target-text)"/>
       </xsl:when>
-      <!--otherwise use the href, unless it contains .dita, in which case defer to the final output pass to decide what to do with the file extension-->
-      <xsl:otherwise>
+
+      <!-- No title or spectitle; check to see if the element provides generated text -->
+      <xsl:when test="$topicpos='samefile' and //*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ') or contains(@class,' topic/related-links ') ] //*[contains(@class, $classval)][@id=$elemid][1]">
+        <xsl:variable name="target-text">
+          <xsl:apply-templates select="//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')  or contains(@class,' topic/related-links ') ]//*[contains(@class, $classval)][@id=$elemid][1]" mode="topicpull:get_generated_text"/>
+        </xsl:variable>
         <xsl:choose>
-          <xsl:when test="starts-with(@href,'#')">
-            <xsl:value-of select="@href"/>
-          </xsl:when>
-          <xsl:when test="contains(@href,$DITAEXT)">#none#</xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="@href"/>
-          </xsl:otherwise>
+          <xsl:when test="$target-text!='#none#'"><xsl:value-of select="normalize-space($target-text)"/></xsl:when>
+          <xsl:otherwise><xsl:apply-templates select="." mode="topicpull:otherblock-linktext-fallback"/></xsl:otherwise>
         </xsl:choose>
-        <xsl:apply-templates select="." mode="ditamsg:cannot-retrieve-linktext"/>
+      </xsl:when>
+
+      <xsl:when test="$topicpos='otherfile' and $doc//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[contains(@class, $classval)  or contains(@class,' topic/related-links ') ][@id=$elemid][1]">
+        <xsl:variable name="target-text">
+          <xsl:apply-templates select="$doc//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')  or contains(@class,' topic/related-links ') ]//*[contains(@class, $classval)][@id=$elemid][1]" mode="topicpull:get_generated_text"/>
+        </xsl:variable>
+        <xsl:choose>
+          <xsl:when test="$target-text!='#none#'"><xsl:value-of select="normalize-space($target-text)"/></xsl:when>
+          <xsl:otherwise><xsl:apply-templates select="." mode="topicpull:otherblock-linktext-fallback"/></xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+
+      <xsl:otherwise>
+        <xsl:apply-templates select="." mode="topicpull:otherblock-linktext-fallback"/>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+
+  <!-- Provide a hook for specializations to give default generated text to new elements.
+       By default, elements with no generated text return #none#. -->
+  <xsl:template match="*" mode="topicpull:get_generated_text">
+    <xsl:text>#none#</xsl:text>
+  </xsl:template>
+
+  <!--No link text found; use the href, unless it contains .dita, in which case defer to the final output pass to decide what to do with the file extension-->
+  <xsl:template match="*" mode="topicpull:otherblock-linktext-fallback">
+    <xsl:choose>
+      <xsl:when test="starts-with(@href,'#')">
+        <xsl:value-of select="@href"/>
+      </xsl:when>
+      <xsl:when test="contains(@href,$DITAEXT)">#none#</xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="@href"/>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:apply-templates select="." mode="ditamsg:cannot-retrieve-linktext"/>
   </xsl:template>
 
   <!-- Pull link text for a figure. Uses mode="topicpull:figure-linktext" to output the text.  -->
