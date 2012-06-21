@@ -2679,6 +2679,9 @@
       <uri name="urn:oasis:names:tc:dita:xsd:ditaval.xsd:1.2" uri="ditaval.xsd"
         xml:base="schema/ditaval/xsd/"/>
 
+  <!-- Java properties file DTD -->
+  <system systemId="http://java.sun.com/dtd/properties.dtd" uri="dtd/properties.dtd"/>
+
    <dita:extension xmlns:dita="http://dita-ot.sourceforge.net" id="dita.specialization.catalog"
                    behavior="org.dita.dost.platform.InsertAction"/>
    <dita:extension xmlns:dita="http://dita-ot.sourceforge.net"
