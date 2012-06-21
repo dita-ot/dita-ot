@@ -317,7 +317,7 @@
                             </xsl:when>
                             <xsl:otherwise>
                                 <!-- reference to file -->
-                                <xsl:apply-templates select="$file/*/*[contains(@class,' map/topicref ')]">
+                                <xsl:apply-templates select="$file/*/*[contains(@class,' map/topicref ')] | $file/*/processing-instruction()">
                                     <xsl:with-param name="refclass" select="$refclass"/>
                                     <xsl:with-param name="mapref-id-path" select="$updated-id-path"/>
                                     <xsl:with-param name="relative-path">
