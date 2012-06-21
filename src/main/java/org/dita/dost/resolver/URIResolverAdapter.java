@@ -39,6 +39,7 @@ public final class URIResolverAdapter {
      * @return InputSource instance if target object is instance of either SAXSource, DOMSource, StreamSource
      *         or their derived class. null, if not.
      */
+    @Deprecated
     public static InputSource convertToInputSource(final Source source) {
         if(source==null){
             return null;
@@ -71,6 +72,7 @@ public final class URIResolverAdapter {
      * @return InputStream instance if target object is instance of either SAXSource, DOMSource, StreamSource
      *         or their derived class. null, if not.
      */
+    @Deprecated
     public static InputStream convertTOInputStream(final Source source){
         final InputSource result=convertToInputSource(source);
         if(result==null){

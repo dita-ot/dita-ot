@@ -175,7 +175,7 @@
   
   <!-- Add by Alan to refacter:URIResolver Date2009-08-07 -->
   <target name="init-URIResolver">
-  	<config-URIResolver basedir="${basedir}" tempdir="${dita.temp.dir}"/>
+  	<config-URIResolver tempdir="${dita.temp.dir}"/>
   </target>
   
   <target name="use-init">

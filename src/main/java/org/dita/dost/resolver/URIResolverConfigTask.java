@@ -19,53 +19,39 @@ import org.apache.tools.ant.Task;
  * @author Alan
  */
 public final class URIResolverConfigTask extends Task {
-    private String basedir = null;
-    private String tempdir = null;
-    /**
-     * Construct a new instance of URIResolverConfigTask.
-     */
-    public URIResolverConfigTask() {
-        // nop
-    }
+    private File basedir = null;
+    private File tempdir = null;
 
     @Override
     public void execute() throws BuildException {
 
-        String path=tempdir;
-        if(!new File(tempdir).isAbsolute()){
-            path=new File(basedir,tempdir).getAbsolutePath();
+        File path=tempdir;
+        if(!tempdir.isAbsolute()){
+            if (basedir == null) {
+                basedir = getProject().getBaseDir();
+            }
+            path=new File(basedir,tempdir.getPath());
         }
-        DitaURIResolverFactory.setPath(path);
+        DitaURIResolverFactory.setPath(path.getAbsolutePath());
         // If you wants to replace the default resolver
         // DitaURIResolverFactory.setURIResolver(/*? extends URIResolver*/
         // resolver);
     }
-    /**
-     * Get basedir.
-     * @return base dir
-     */
-    public String getBasedir() {
-        return basedir;
-    }
+
     /**
      * Set basedir.
      * @param basedir basedir
      */
-    public void setBasedir(final String basedir) {
+    @Deprecated
+    public void setBasedir(final File basedir) {
         this.basedir = basedir;
     }
-    /**
-     * Get tempdir.
-     * @return temp dir
-     */
-    public String getTempdir() {
-        return tempdir;
-    }
+    
     /**
      * Set tempdir.
      * @param tempdir tempdir
      */
-    public void setTempdir(final String tempdir) {
+    public void setTempdir(final File tempdir) {
         this.tempdir = tempdir;
     }
 
