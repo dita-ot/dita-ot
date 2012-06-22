@@ -660,8 +660,14 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 </xsl:template>
 <xsl:template match="*" mode="processlinklist">
          <xsl:param name="default-list-type" select="'linklist'"/>
+         <xsl:variable name="flagrules">
+           <xsl:call-template name="getrules"/>
+         </xsl:variable>
          <xsl:call-template name="commonattributes">
             <xsl:with-param name="default-output-class" select="$default-list-type"/>
+         </xsl:call-template>
+         <xsl:call-template name="start-flagit">
+           <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
          </xsl:call-template>
          <xsl:apply-templates select="*[contains(@class, ' topic/title ')]"/>
          <xsl:apply-templates select="*[contains(@class,' topic/desc ')]"/>
@@ -680,10 +686,24 @@ Children are displayed in a numbered list, with the target title as the cmd and 
              </xsl:choose>
          </xsl:for-each>
          <xsl:apply-templates select="*[contains(@class,' topic/linkinfo ')]"/>
+         <xsl:call-template name="end-flagit">
+           <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
+         </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/linkinfo ')]" name="topic.linkinfo">
-  <xsl:apply-templates/><br/><xsl:value-of select="$newline"/>
+  <xsl:variable name="flagrules">
+    <xsl:call-template name="getrules"/>
+  </xsl:variable>
+  <xsl:call-template name="start-flagit">
+    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
+  </xsl:call-template>
+  <xsl:apply-templates/>
+  <xsl:call-template name="end-flagit">
+    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
+  </xsl:call-template>
+  <br/>
+  <xsl:value-of select="$newline"/>
 </xsl:template>
 
 <xsl:template match="*[contains(@class, ' topic/linklist ')]/*[contains(@class, ' topic/title ')]" name="topic.linklist_title">
@@ -691,7 +711,18 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 </xsl:template>
 
 <xsl:template match="*[contains(@class, ' topic/linklist ')]/*[contains(@class, ' topic/desc ')]" name="topic.linklist_desc">
-  <xsl:apply-templates/><br/><xsl:value-of select="$newline"/>
+  <xsl:variable name="flagrules">
+    <xsl:call-template name="getrules"/>
+  </xsl:variable>
+  <xsl:call-template name="start-flagit">
+    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
+  </xsl:call-template>
+  <xsl:apply-templates/>
+  <xsl:call-template name="end-flagit">
+    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
+  </xsl:call-template>
+  <br/>
+  <xsl:value-of select="$newline"/>
 </xsl:template>
 
 

@@ -310,6 +310,7 @@
             resources (milestone 6)</li>
           <li>#1191 Text only mode outputs desc content in links (milestone 6)</li>
           <li>#1303 Add Java properties file DTD to catalog (milestone 6)</li>
+          <li>#1308 XHTML flag support missing for linklist, linkinfo, linklist/desc (milestone 6)</li>
           <li>#1152 UNC paths are not supported in input argument (in progress)</li>  
         </ul>
       </section>
