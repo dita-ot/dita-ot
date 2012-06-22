@@ -328,7 +328,7 @@
   </xsl:call-template>
   <xsl:call-template name="setidaname"/>
   <xsl:call-template name="start-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
-  <xsl:apply-templates select="." mode="add-add-step-importance-flag"/>
+  <xsl:apply-templates select="." mode="add-step-importance-flag"/>
  <xsl:apply-templates/>
 </div><xsl:value-of select="$newline"/>
   <xsl:call-template name="end-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param></xsl:call-template>
