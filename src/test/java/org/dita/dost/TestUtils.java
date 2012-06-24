@@ -293,6 +293,16 @@ public class TestUtils {
      */
     public static class TestLogger implements DITAOTLogger {
 
+        private boolean failOnError;
+        
+        public TestLogger() {
+            this.failOnError = true;
+        }
+        
+        public TestLogger(final boolean failOnError) {
+            this.failOnError = failOnError;
+        }
+        
         public void logInfo(final String msg) {
             //System.out.println(msg);
         }
@@ -302,12 +312,16 @@ public class TestUtils {
         }
 
         public void logError(final String msg) {
-            throw new AssertionError("Error message was thrown: " + msg);
+            if (failOnError) {
+                throw new AssertionError("Error message was thrown: " + msg);
+            }
         }
 
         public void logError(final String msg, final Throwable t) {
-            t.printStackTrace();
-            throw new AssertionError("Error message was thrown: " + msg);
+            if (failOnError) {
+                t.printStackTrace();
+                throw new AssertionError("Error message was thrown: " + msg);
+            }
         }
         
         public void logFatal(final String msg) {

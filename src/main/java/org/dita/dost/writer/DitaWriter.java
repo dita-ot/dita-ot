@@ -15,10 +15,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,6 +51,7 @@ import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.OutputUtils;
 import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.URLUtils;
 import org.dita.dost.util.XMLUtils;
 
 import org.xml.sax.Attributes;
@@ -101,6 +100,8 @@ public final class DitaWriter extends AbstractXMLFilter {
     
     /** Generate {@code xtrf} and {@code xtrc} attributes */
     private final boolean genDebugInfo;
+    /** Strict processing mode */
+    private final boolean strictProcessing;
     
     //Added on 2010-08-24 for bug:3086552 start
     private boolean setSystemid = true;
@@ -163,7 +164,7 @@ public final class DitaWriter extends AbstractXMLFilter {
                 attValue = FileUtils.getRelativePath(outputUtils.getInputMapPathName(), attValue);
             }
         }
-        if (attValue != null){
+        if (attValue != null && !strictProcessing){
             attValue = FileUtils.separatorsToUnix(attValue);
         }
 
@@ -205,7 +206,7 @@ public final class DitaWriter extends AbstractXMLFilter {
     }
     
     /**
-     * Normalize href attribute.
+     * Normalize and validate href attribute.
      * 
      * @param attName attribute name
      * @param atts attributes
@@ -260,7 +261,26 @@ public final class DitaWriter extends AbstractXMLFilter {
              * replace all the backslash with slash in
              * all href and conref attribute
              */
-            attValue = FileUtils.separatorsToUnix(attValue);
+            if (!strictProcessing) {
+                attValue = FileUtils.separatorsToUnix(attValue);
+            }
+            // validate
+            try {
+                attValue = new URI(attValue).toASCIIString();
+            } catch (final URISyntaxException e) {
+                if (strictProcessing) {
+                    throw new RuntimeException("Unable to parse invalid " + attName + " attribue value '" + attValue + "': " + e.getMessage(), e);
+                } else {
+                    try {
+                        final String origAttValue = attValue;
+                        attValue = new URI(URLUtils.clean(attValue)).toASCIIString();
+                        logger.logError("Unable to parse invalid " + attName + " attribute value '" + origAttValue + "', using '" + attValue + "'");
+                    } catch (final URISyntaxException e1) {
+                        logger.logError("Unable to parse invalid " + attName + " attribute value '" + attValue + "', using invalid value");
+                    }
+                    
+                }
+            }
         } else {
             return null;
         }
@@ -355,6 +375,7 @@ public final class DitaWriter extends AbstractXMLFilter {
         super();
         
         genDebugInfo = Boolean.parseBoolean(Configuration.configuration.get("generate-debug-attributes"));
+        strictProcessing = Boolean.parseBoolean(Configuration.configuration.get("strict-processing-mode"));
         
         exclude = false;
         columnNumber = 1;
@@ -490,11 +511,6 @@ public final class DitaWriter extends AbstractXMLFilter {
                 if (atts.getValue(ATTRIBUTE_NAME_SCOPE) == null ||
                         atts.getValue(ATTRIBUTE_NAME_SCOPE).equalsIgnoreCase(ATTR_SCOPE_VALUE_LOCAL)){
                     attValue = replaceHREF(attQName, atts);
-                    try {
-                        attValue = new URI(attValue).toASCIIString();
-                    } catch (URISyntaxException e) {
-                        throw new RuntimeException("Unable to parse " + attQName + " '" + attValue + "': " + e.getMessage(), e);
-                    }
                 }
                 XMLUtils.addOrSetAttribute(res, attQName, attValue);
             } else if(ATTRIBUTE_NAME_CONKEYREF.equals(attQName) && attValue.length() != 0) { // replace conref with conkeyref(using key definition)

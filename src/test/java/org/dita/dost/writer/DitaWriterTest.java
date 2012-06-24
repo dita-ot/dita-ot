@@ -49,6 +49,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 import org.dita.dost.TestUtils;
+import org.dita.dost.TestUtils.TestLogger;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
 import org.dita.dost.util.DelayConrefUtils;
@@ -307,6 +308,7 @@ public class DitaWriterTest {
         final String attrName;
         public Invoker(final String m, final String attrName, final Class<?>... args) throws Exception {
             writer = new DitaWriter();
+            writer.setLogger(new TestUtils.TestLogger(false));
             writer.setExtName(".dita");
             final OutputUtils outputUtils = new OutputUtils();
             outputUtils.setInputMapPathName(new File(srcDir, "main.ditamap").getAbsolutePath());
