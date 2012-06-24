@@ -15,6 +15,7 @@
         <ul id="ul_vzj_f5m_zf">
           <li><codeph>generate-debug-attributes</codeph> controls debug attribute generation and can
             be used to reduce memory consumption.</li>
+          <li><codeph>processing-mode</codeph> controls error recovery.</li>
         </ul>
         <p>Support for old DITAVAL format has been removed.</p>
         <p>Source distribution package has been removed in favor or Git and GitHub source
@@ -241,20 +242,22 @@
           <li>#1300 Add a hook to set @summary on table in XHTML (milestone 6)</li>
           <li>#1302 Add a way for cross-references to pick up generated text for sections (milestone 6)</li>
           <li>#1266 Honor the map top level processing instruction (milestone 6)</li>
-          <li>#1156 Refactor preprocessing to use SAX filters (in progress)</li>
-          <li>#1159 Remove Content object (in progress)</li>
-          <li>#1155 Use Job to read/write job configuration files (in progress)</li>
-          <li>#1160 Improve filtering (in progress)</li>
-          <li>#1124 Make Java code thread-safe (in progress)</li>
-          <li>#1157 Clean Ant scripts (in progress)</li>
-          <li>#1149 Consistent Ant property names (in progress)</li>
-          <li>#1161 Remove deprecated code (in progress)</li>
-          <li>#1162 Improve title numbering in PDF2 (in progress)</li>
-          <li>#1163 Clean PDF2 ID processing (in progress)</li>
-          <li>#1165 Improve PDF2 table customization (in progress)</li>
-          <li>#1166 Improve pipeline module processing (in progress)</li>
-          <li>#1164 Avoid strings where other types are more appropriate (in progress)</li>
-          <li>#1168 Add ability to disable debug attribute generation (in progress)</li>
+          <li>#1156 Refactor preprocessing to use SAX filters (milestone 6)</li>
+          <li>#1159 Remove Content object (milestone 6)</li>
+          <li>#1155 Use Job to read/write job configuration files (milestone 6)</li>
+          <li>#1160 Improve filtering (milestone 6)</li>
+          <li>#1124 Make Java code thread-safe (milestone 6)</li>
+          <li>#1157 Clean Ant scripts (milestone 6)</li>
+          <li>#1149 Consistent Ant property names (milestone 6)</li>
+          <li>#1161 Remove deprecated code (milestone 6)</li>
+          <li>#1162 Improve title numbering in PDF2 (milestone 6)</li>
+          <li>#1163 Clean PDF2 ID processing (milestone 6)</li>
+          <li>#1165 Improve PDF2 table customization (milestone 6)</li>
+          <li>#1166 Improve pipeline module processing (milestone 6)</li>
+          <li>#1164 Avoid strings where other types are more appropriate (milestone 6)</li>
+          <li>#1168 Add ability to disable debug attribute generation (milestone 6)</li>
+          <li>#1249 Add Files from Distribution Packages to Git Repo (milestone 6)</li>
+          <li>#1243 Support for some kind of die_on_error property (milestone 6)</li>
         </ul>
       </section>
       <section>
@@ -311,7 +314,10 @@
           <li>#1191 Text only mode outputs desc content in links (milestone 6)</li>
           <li>#1303 Add Java properties file DTD to catalog (milestone 6)</li>
           <li>#1308 XHTML flag support missing for linklist, linkinfo, linklist/desc (milestone 6)</li>
-          <li>#1152 UNC paths are not supported in input argument (in progress)</li>  
+          <li>#1307 M5 reports "illegal character" for xref that uses space in directory name
+            (milestone 6)</li>
+          <li>#1152 UNC paths are not supported in input argument (milestone 6)</li>
+          <li>#1072 URLs not decoded by dost.jar (milestone 6)</li>  
         </ul>
       </section>
     </refbody>

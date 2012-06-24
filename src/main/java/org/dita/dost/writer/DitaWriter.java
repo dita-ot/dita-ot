@@ -10,6 +10,7 @@
 package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Configuration.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -100,8 +101,6 @@ public final class DitaWriter extends AbstractXMLFilter {
     
     /** Generate {@code xtrf} and {@code xtrc} attributes */
     private final boolean genDebugInfo;
-    /** Strict processing mode */
-    private final boolean strictProcessing;
     
     //Added on 2010-08-24 for bug:3086552 start
     private boolean setSystemid = true;
@@ -164,7 +163,7 @@ public final class DitaWriter extends AbstractXMLFilter {
                 attValue = FileUtils.getRelativePath(outputUtils.getInputMapPathName(), attValue);
             }
         }
-        if (attValue != null && !strictProcessing){
+        if (attValue != null && processingMode == Mode.LAX){
             attValue = FileUtils.separatorsToUnix(attValue);
         }
 
@@ -261,16 +260,20 @@ public final class DitaWriter extends AbstractXMLFilter {
              * replace all the backslash with slash in
              * all href and conref attribute
              */
-            if (!strictProcessing) {
+            if (processingMode == Mode.LAX) {
                 attValue = FileUtils.separatorsToUnix(attValue);
             }
             // validate
             try {
                 attValue = new URI(attValue).toASCIIString();
             } catch (final URISyntaxException e) {
-                if (strictProcessing) {
+                switch (processingMode) {
+                case STRICT:
                     throw new RuntimeException("Unable to parse invalid " + attName + " attribue value '" + attValue + "': " + e.getMessage(), e);
-                } else {
+                case SKIP:
+                    logger.logError("Unable to parse invalid " + attName + " attribute value '" + attValue + "', using invalid value");
+                    break;
+                case LAX:
                     try {
                         final String origAttValue = attValue;
                         attValue = new URI(URLUtils.clean(attValue)).toASCIIString();
@@ -278,7 +281,7 @@ public final class DitaWriter extends AbstractXMLFilter {
                     } catch (final URISyntaxException e1) {
                         logger.logError("Unable to parse invalid " + attName + " attribute value '" + attValue + "', using invalid value");
                     }
-                    
+                    break;
                 }
             }
         } else {
@@ -375,7 +378,6 @@ public final class DitaWriter extends AbstractXMLFilter {
         super();
         
         genDebugInfo = Boolean.parseBoolean(Configuration.configuration.get("generate-debug-attributes"));
-        strictProcessing = Boolean.parseBoolean(Configuration.configuration.get("strict-processing-mode"));
         
         exclude = false;
         columnNumber = 1;

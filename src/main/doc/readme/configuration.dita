@@ -29,10 +29,11 @@
               consumption. However, log messages will no longer have the source information
               available and the ability to debug problems may deteriorate.</note></stentry></strow>
         <strow>
-          <stentry><codeph>strict-processing-mode</codeph></stentry>
-          <stentry>Strict processing mode. Allowed values are<ul id="ul_hlq_fp3_rg">
-              <li>"true" — enforce strict input validation</li>
-              <li>"false" (default) — lax input validation and error recovery</li>
+          <stentry><codeph>processing-mode</codeph></stentry>
+          <stentry>Error recover mode. Allowed values are<ul id="ul_hlq_fp3_rg">
+              <li>"strict" — enforce strict input validation</li>
+              <li>"skip" — lax input validation with no error recovery</li>
+              <li>"lax" (default) — lax input validation and error recovery</li>
             </ul></stentry>
         </strow>
       </simpletable>

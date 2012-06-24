@@ -101,6 +101,17 @@ public final class Configuration {
         configuration = Collections.unmodifiableMap(c);
     }
 
+    /** Processing mode */
+    public enum Mode {
+        STRICT, SKIP, LAX
+    }
+    
+    public static final Mode processingMode;
+    static {
+        final String mode = Configuration.configuration.get("processing-mode");
+        processingMode = mode != null ? Mode.valueOf(mode.toUpperCase()) : Mode.LAX;
+    }
+    
     /** Private constructor to disallow instance creation. */
     private Configuration() {
     }
