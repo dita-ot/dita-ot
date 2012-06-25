@@ -15,7 +15,7 @@
         <ul id="ul_vzj_f5m_zf">
           <li><codeph>generate-debug-attributes</codeph> controls debug attribute generation and can
             be used to reduce memory consumption.</li>
-          <li><codeph>processing-mode</codeph> controls error recovery.</li>
+          <li><codeph>processing-mode</codeph> controls error recovery behavior.</li>
         </ul>
         <p>Support for old DITAVAL format has been removed.</p>
         <p>Source distribution package has been removed in favor or Git and GitHub source
@@ -258,6 +258,7 @@
           <li>#1168 Add ability to disable debug attribute generation (milestone 6)</li>
           <li>#1249 Add Files from Distribution Packages to Git Repo (milestone 6)</li>
           <li>#1243 Support for some kind of die_on_error property (milestone 6)</li>
+          <li>#1257 Simplify common XHTML code for flag/revision (milestone 6)</li>
         </ul>
       </section>
       <section>
@@ -317,7 +318,8 @@
           <li>#1307 M5 reports "illegal character" for xref that uses space in directory name
             (milestone 6)</li>
           <li>#1152 UNC paths are not supported in input argument (milestone 6)</li>
-          <li>#1072 URLs not decoded by dost.jar (milestone 6)</li>  
+          <li>#1072 URLs not decoded by dost.jar (milestone 6)</li>
+          <li>#1306 Typo in XSLT mode results in extra fallthrough text for step (milestone 6)</li>  
         </ul>
       </section>
     </refbody>

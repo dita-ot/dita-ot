@@ -42,7 +42,7 @@ public class URLUtilsTest {
         assertEquals("foo+bar.dita", URLUtils.clean("foo+bar.dita"));
         assertEquals("foo%20bar.dita", URLUtils.clean("foo%20bar.dita"));
         
-        assertEquals("f%C3%B6%C3%A5.dita", URLUtils.clean("föå.dita"));
+        assertEquals("f%C3%B6%C3%A5.dita", URLUtils.clean("f\u00f6\u00e5.dita"));
         
         assertEquals("foo/bar.dita", URLUtils.clean("foo/bar.dita"));
         assertEquals("foo%5Cbar.dita", URLUtils.clean("foo\\bar.dita"));
