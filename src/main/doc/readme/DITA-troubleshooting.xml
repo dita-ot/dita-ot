@@ -30,15 +30,21 @@
 that does not work, please follow the steps below to fix this problem:</p> 
      <ol>
 <li>           <p platform="windows">For Windows, type <codeph>set
-ANT_OPTS=%ANT_OPTS% -Xmx256M</codeph>             in the command prompt
+ANT_OPTS=%ANT_OPTS% -Xmx512M</codeph>             in the command prompt
 before running a build. Alternatively, you can add the value     
-         <codeph>-Xmx256M</codeph> to the <codeph>ANT_OPTS</codeph> environment
+         <codeph>-Xmx512M</codeph> to the <codeph>ANT_OPTS</codeph> environment
 variable.</p>           <p platform="linux osx">For Linux, type <codeph>export
-ANT_OPTS=$ANT_OPTS               -Xmx256M</codeph> in the command
-prompt before running a build.</p>         </li>
+ANT_OPTS=$ANT_OPTS               -Xmx512M</codeph> in the command
+prompt before running a build.</p>
+<p>This will set the
+Java maximum memory to 512 MB. The amount of memory which can be allocated is limited by
+available system memory and the operating system.</p></li>
         <li>Set <codeph>generate-debug-attributes</codeph> configuration option in
-            <filepath>lib/configuration.properties</filepath> to <codeph>true</codeph>. This will
+            <filepath>lib/configuration.properties</filepath> to <codeph>false</codeph>. This will
           disable debug attribute generation and will reduce memory consumption.</li>
+       <li>Set <codeph>dita.preprocess.reloadstylesheet</codeph> Ant property to
+            <codeph>true</codeph>. This will allow the XSLT processor to release memory when converting
+          multiple files.</li>
 <li>Run the transformation again.</li>
 </ol>     </section>
 <section>       <title>java.io.IOException: Can't store Document</title> 
