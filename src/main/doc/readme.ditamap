@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Arbortext, Inc., 1988-2011, v.4002-->
-<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"
- "map.dtd">
-<?Pub Sty _display FontColor="red"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
 <map id="mainDITAreadme" title="DITA-OT Readme map" xml:lang="en-us">
 <topicref href="readme/DITA-readme.xml" id="DITA-doc">
 <topicref href="readme/changes/rel1.6.xml" locktitle="yes">
@@ -51,16 +48,21 @@
 <topicref href="readme/DITA-h2d-java.xml" toc="no"></topicref>
 </topicref>
 </topicref>
+ 
 <topicref href="readme/DITA-globalization.dita">
-<topicref href="readme/DITA-globalization-xhtml.dita"></topicref>
-<topicref href="readme/DITA-globalization-pdf.dita"></topicref>
+<topicref href="readme/DITA-globalization-xhtml.dita"/>
+<topicref href="readme/DITA-globalization-pdf.dita"/>
 </topicref>
-<topicref href="readme/DITA-messages.xml">
-<topicref href="readme/DITA-messages-details.xml"
-processing-role="resource-only"></topicref>
-</topicref><?Pub Caret -1?>
-<topicref href="readme/DITA-log.xml">
-<topicref href="readme/DITA-troubleshooting.xml"></topicref>
+ 
+<topicref href="readme/t-troubleshooting.dita">
+    <topicref href="readme/DITA-messages.xml">
+     <topicref href="readme/DITA-messages-details.xml" processing-role="resource-only"/>
+    </topicref>
+    <topicref href="readme/DITA-troubleshooting.xml"/>
+    <topicref href="readme/DITA-log.xml"/>
+    <topicref href="readme/t-enabling-debug-mode.dita"/>
+    <topicref href="readme/t-increasing-the-jvm.dita"/>
+    <topicref href="readme/t-building-the-dita-ot-documentation.dita"/>
 </topicref>
 <topicref href="readme/DITA-limitations.xml"
 processing-role="resource-only" toc="no"></topicref>

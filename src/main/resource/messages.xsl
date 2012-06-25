@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- This file is part of the DITA Open Toolkit project hosted on 
+  <!-- This file is part of the DITA Open Toolkit project hosted on 
      Sourceforge.net. See the accompanying license.txt file for 
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2012 All Rights Reserved. -->
@@ -46,7 +46,7 @@
         <section id="overview"><p>Plug-ins may be used to add additional error messages into the toolkit;
 for more information, see the Developer reference section of the User Guide.</p></section>
         <simpletable>
-          <xsl:attribute name="relcolwidth">1* 1* 6* 4*</xsl:attribute>
+          <xsl:attribute name="relcolwidth">1* 1* 4* 6*</xsl:attribute>
           <sthead>
               <stentry>Message ID</stentry>
               <stentry>Severity</stentry>

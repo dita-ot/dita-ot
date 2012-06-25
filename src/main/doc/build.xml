@@ -73,6 +73,7 @@
       <property name="args.input" location="${doc.dir}/userguide.ditamap"/>
       <property name="output.dir" location="${doc.out.dir}/htmlhelp"/>
       <property name="transtype" value="htmlhelp"/>
+      <property name="args.gen.task.lbl" value="YES"/>
     </ant>
   </target>
 
