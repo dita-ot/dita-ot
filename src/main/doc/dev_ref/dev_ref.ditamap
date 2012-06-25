@@ -40,6 +40,7 @@
   <topicref href="extending-the-ot.dita">
     <topicref href="plugins-installing.dita"/>
     <topicref href="plugins-removing.dita"/>
+    <topicref href="../readme/t-building-the-dita-ot-documentation.dita"/>
   </topicref>
   <topicset href="plugins-overview.dita" id="plugins">
     <topicref href="plugin-configfile.dita"/>

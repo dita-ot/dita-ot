@@ -62,7 +62,6 @@
     <topicref href="readme/DITA-log.xml"/>
     <topicref href="readme/t-enabling-debug-mode.dita"/>
     <topicref href="readme/t-increasing-the-jvm.dita"/>
-    <topicref href="readme/t-building-the-dita-ot-documentation.dita"/>
 </topicref>
 <topicref href="readme/DITA-limitations.xml"
 processing-role="resource-only" toc="no"></topicref>
