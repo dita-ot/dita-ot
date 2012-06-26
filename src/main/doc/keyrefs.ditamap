@@ -37,7 +37,7 @@ See the accompanying license.txt file for applicable licenses.
     </topicmeta>
   </keydef>
   <!-- bundled with Ant 1.7.1 -->
-  <keydef keys="tool.xerces.version">
+  <keydef keys="tool.xerces.version.min">
     <topicmeta>
       <keywords>
         <keyword>2.9.0</keyword>
@@ -45,7 +45,7 @@ See the accompanying license.txt file for applicable licenses.
     </topicmeta>
   </keydef>
   <!-- bundled version -->
-  <keydef keys="tool.xerces.version.min">
+  <keydef keys="tool.xerces.version">
     <topicmeta>
       <keywords>
         <keyword>2.11.0</keyword>
