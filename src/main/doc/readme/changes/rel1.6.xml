@@ -2,6 +2,32 @@
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="rel1.5.4" xml:lang="en">
   <title>DITA Open Toolkit Release 1.6</title>
+  <reference id="highlights" xml:lang="en-us">
+  <title>Highlights</title>
+  <refbody>
+  <section><title>Performance improvements</title><p>Release 1.6 contains
+  several updates that together result in significant performance improvements
+  for large documents. For example, building the DITA 1.2 Language Specification
+  to XHTML takes just over 1/3 of the time as with the previous release
+  (tests show an improvement of 288%).</p></section>
+  <section><title>Error message overhaul</title><p>In the recent DITA-OT
+  usage survey, we asked for specific problems encountered when running
+  the DITA-OT. The most frequent response was difficulty understanding
+  and responding to error messages. The latest release addresses this
+  in two ways:<ol>
+  <li>Every message has been reviewed, and nearly every message has
+  been revised for clarification.</li>
+  <li>Messages are now documented in the DITA-OT User Guide. The new
+  documentation contains additional details about nearly every message,
+  including potential remedies and links to helpful information.</li>
+  </ol></p></section>
+  <section><title>Code cleanup</title><p>Of particular interest to developers,
+  much of the deprecated code in the toolkit (some of it unused for
+  5+ years) has been removed. As a result, much of the code is cleaner,
+  faster, and easier to customize. For example, the cleanup of PDF code
+  allowed us to remove the alternate *_1.0.xsl stylesheets.</p></section>
+  </refbody>
+  </reference>
   <reference id="general-enhancements-and-changes">
     <title>General Enhancements and Changes</title>
     <refbody>
@@ -17,7 +43,8 @@
             be used to reduce memory consumption.</li>
           <li><codeph>processing-mode</codeph> controls error recovery behavior.</li>
         </ul>
-        <p>Support for old DITAVAL format has been removed.</p>
+        <p>Support for the old DITAVAL format (used before OASIS
+added DITAVAL to the standard in 2007) has been removed.</p>
         <p>Source distribution package has been removed in favor or Git and GitHub source
           downloads.</p>
         <p>The <filepath>demo</filepath> folder has been deprecated and the following plug-ins have
@@ -79,14 +106,14 @@
         </ul>
       </section>
       <section id="section_cr5_5fh_mg">
-        <p>The following bundled libraries have been update:</p>
+        <p>The following bundled libraries have been updated:</p>
         <ul>
           <li>Ant <keyword keyref="tool.ant.version"/></li>
           <li>ICU4J <keyword keyref="tool.icu4j.version"/></li>
           <li>Apache Xerces <keyword keyref="tool.xerces.version"/></li>
         </ul>
       </section>
-      <section><title>PDF2</title><p>The following deprecated items are no longer supported in the PDF transform.</p><ul>
+      <section><title>PDF2</title><p>The following deprecated items are no longer supported in the PDF transform:</p><ul>
 		<li>Support for the beta version of DITA, available from IBM before the OASIS standard was created in 2005.</li>
 		<li>Support for the "bkinfo" demo plug-in, used to support book metadata before OASIS created the BookMap format in 2007.</li>
           <li>Support for <filepath>layout-masters.xml</filepath> configuration.</li>
@@ -205,6 +232,9 @@
   </reference>
   <reference id="rel1.6">
     <title>Issues</title>
+    <shortdesc>The following items are included in DITA Open Toolkit Release
+1.6. Issue numbers correspond to the tracking number in the <ph><xref
+keyref="dita-ot-issues" scope="external">GitHub issues tracker</xref></ph>.</shortdesc>
     <refbody>
       <section>
         <title>Feature requests</title>
