@@ -2,15 +2,15 @@
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="rel1.5.4" xml:lang="en">
   <title>DITA Open Toolkit Release 1.6</title>
-  <reference id="highlights" xml:lang="en-us">
-  <title>Highlights</title>
+  <reference id="releasehighlights" xml:lang="en-us">
+  <title>Release highlights</title>
   <refbody>
-  <section><title>Performance improvements</title><p>Release 1.6 contains
-  several updates that together result in significant performance improvements
+  <section><dl><dlentry><dt>Performance improvements</dt><dd>DITA-OT 1.6 contains
+  several updates that combine for significant performance improvements
   for large documents. For example, building the DITA 1.2 Language Specification
   to XHTML takes just over 1/3 of the time as with the previous release
-  (tests show an improvement of 288%).</p></section>
-  <section><title>Error message overhaul</title><p>In the recent DITA-OT
+  (tests show an improvement of 288%).</dd></dlentry>
+  <dlentry><dt>Error message overhaul</dt><dd>In the recent DITA-OT
   usage survey, we asked for specific problems encountered when running
   the DITA-OT. The most frequent response was difficulty understanding
   and responding to error messages. The latest release addresses this
@@ -20,12 +20,12 @@
   <li>Messages are now documented in the DITA-OT User Guide. The new
   documentation contains additional details about nearly every message,
   including potential remedies and links to helpful information.</li>
-  </ol></p></section>
-  <section><title>Code cleanup</title><p>Of particular interest to developers,
+  </ol></dd></dlentry>
+  <dlentry><dt>Code cleanup</dt><dd>Of particular interest to developers,
   much of the deprecated code in the toolkit (some of it unused for
   5+ years) has been removed. As a result, much of the code is cleaner,
   faster, and easier to customize. For example, the cleanup of PDF code
-  allowed us to remove the alternate *_1.0.xsl stylesheets.</p></section>
+  allowed us to remove the alternate *_1.0.xsl stylesheets.</dd></dlentry></dl></section>
   </refbody>
   </reference>
   <reference id="general-enhancements-and-changes">
