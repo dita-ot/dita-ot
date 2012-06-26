@@ -52,15 +52,18 @@
 </topicref>
 </topicref>
 <topicref href="readme/DITA-globalization.dita">
-<topicref href="readme/DITA-globalization-xhtml.dita"></topicref>
-<topicref href="readme/DITA-globalization-pdf.dita"></topicref>
+<topicref href="readme/DITA-globalization-xhtml.dita"/>
+<topicref href="readme/DITA-globalization-pdf.dita"/>
 </topicref>
-<topicref href="readme/DITA-messages.xml">
-<topicref href="readme/DITA-messages-details.xml"
-processing-role="resource-only"></topicref>
-</topicref><?Pub Caret -1?>
-<topicref href="readme/DITA-log.xml">
-<topicref href="readme/DITA-troubleshooting.xml"></topicref>
+ 
+<topicref href="readme/troubleshooting-overview.dita">
+    <topicref href="readme/DITA-messages.xml">
+     <topicref href="readme/DITA-messages-details.xml" processing-role="resource-only"/>
+    </topicref>
+    <topicref href="readme/DITA-troubleshooting.xml"/>
+    <topicref href="readme/DITA-log.xml"/>
+    <topicref href="readme/enabling-debug-mode.dita"/>
+    <topicref href="readme/increasing-the-jvm.dita"/>
 </topicref>
 <topicref href="readme/DITA-limitations.xml"
 processing-role="resource-only" toc="no"></topicref>

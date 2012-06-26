@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="t-enabling-debug-mode">
+    <title>Enabling debug mode</title>
+    <shortdesc>When the debug mode is enabled, additional diagnostic information is written to the log file.
+        This information, which includes environment variables and stack trace data, can help you
+        determine the root cause of a problem.</shortdesc>
+    <taskbody>
+        <steps>
+            <step>
+                <cmd>From the command prompt, add the following parameters:</cmd>
+                <choicetable>
+                    <chhead>
+                        <choptionhd>Application</choptionhd>
+                        <chdeschd>Parameters</chdeschd>
+                    </chhead>
+                    <chrow>
+                        <choption>Ant</choption>
+                        <chdesc><codeph>-v -Dargs.debug=yes</codeph></chdesc>
+                    </chrow>
+                    <chrow>
+                        <choption>Command-line tool</choption>
+                        <chdesc><codeph>/d</codeph> or <codeph>-debug</codeph></chdesc>
+                    </chrow>
+                </choicetable>
+                <info><p>You also can add a &lt;property> element to an Ant target in your build file,
+                    for
+                    example:<codeblock>&lt;property name="args.debug" value="yes"/></codeblock></p></info>
+            </step>
+        </steps>
+    </taskbody>
+</task>
