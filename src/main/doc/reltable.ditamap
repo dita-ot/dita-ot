@@ -33,7 +33,7 @@ href="http://sourceforge.net/news/?group_id=132728" scope="external">
 <topicref href="admin/FixesAndFeatures.xml"></topicref>
 </relcell>
 <relcell format="html" linking="targetonly" scope="external">
-<topicref keyref="dita-ot-issues"></topicref>
+<topicref keyref="dita-ot-issues"><topicmeta><linktext>DITA-OT Bug and Feature tracker at GitHub</linktext></topicmeta></topicref>
 </relcell>
 </relrow>
 <relrow>
@@ -41,9 +41,9 @@ href="http://sourceforge.net/news/?group_id=132728" scope="external">
 <topicref href="admin/HowToParticipate.xml"></topicref><?Pub Caret -1?>
 </relcell>
 <relcell format="html" linking="targetonly" scope="external">
-<topicref keyref="dita-ot-issues"></topicref>
-<topicref keyref="dita-ot-developer"></topicref>
-<topicref keyref="github-help"></topicref>
+<topicref keyref="dita-ot-issues"><topicmeta><linktext>DITA-OT Bug and Feature tracker at GitHub</linktext></topicmeta></topicref>
+<topicref keyref="dita-ot-developer"><topicmeta><linktext>Sign up for toolkit developer mailing list</linktext></topicmeta></topicref>
+<topicref keyref="github-help"><topicmeta><linktext>Help with getting started at GitHub</linktext></topicmeta></topicref>
 </relcell>
 </relrow>
 <relrow>
@@ -59,6 +59,18 @@ href="https://sourceforge.net/projects/dita-ot/files" scope="external">
 <topicref format="html" href="https://github.com/dita-ot/dita-ot"
 scope="external">
 <topicmeta><linktext>DITA Open Toolkit source</linktext></topicmeta>
+</topicref>
+</relcell>
+</relrow>
+<relrow>
+<relcell>
+<topicref href="dev_ref/plugin-addgeneratedtext.dita">
+<topicmeta><linktext>How to add support for new languages in XHTML</linktext></topicmeta>
+</topicref>
+</relcell>
+<relcell>
+<topicref href="readme/DITA-globalization-xhtml.dita">
+<topicmeta><linktext>Languages supported by the core toolkit</linktext></topicmeta>
 </topicref>
 </relcell>
 </relrow>

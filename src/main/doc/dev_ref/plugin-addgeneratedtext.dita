@@ -2,16 +2,26 @@
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
  "reference.dtd">
 <reference id="plugin-addgeneratedtext" xml:lang="en-us">
-<title>Modifying or adding new generated text</title>
+<title>Modifying or adding generated text</title>
 <shortdesc>Generated text is the term for strings that are automatically
 added by the build, such as "Note" before the contents of a &lt;note>
 element.</shortdesc>
 <refbody>
-<section><p>The generated text extension point is used to add
-new strings to the default set of generated text. This may also be
-used to override the default strings in the toolkit; for example,
-it could be used to reset the English string "Figure" to "Fig".</p><dl>
-<dlentry>
+<section><p>The generated text extension point is used to add new
+strings to the default set of generated text. There are several reasons
+you may want to use this:<ul>
+<li>It can be used to add new text for your own processing extensions;
+for example, it could be used to add localized versions of the string
+"User response" to aid in rendering troubleshooting information.</li>
+<li>It can be used to override the default strings in the toolkit;
+for example, it could be used to reset the English string "Figure"
+to "Fig".</li>
+<li>It can be used to add support for new languages (for non-PDF transforms
+only; PDF requires more complicated localization support). For example,
+it could be used to add support for Vietnamese or Gaelic; it could
+also be used to support a new variant of a previously supported language,
+such as Australian English.</li>
+</ul></p><dl><dlentry>
 <dt><codeph>dita.xsl.strings</codeph></dt>
 <dd>Add new strings to generated text file. </dd>
 </dlentry></dl>       </section>
@@ -77,5 +87,34 @@ two plug-ins override the same string in the same language, the results
 will be non-deterministic (either string may be used under different
 conditions). Multiple plug-ins should not override the same generated
 text string for a single language.</note></example>
+<example><title>Example: adding a new language</title><p>The process
+for adding a new language is exactly the same as for adding new text,
+except you are effectively just translating an existing strings file.
+To begin, set up the <filepath>xsl/my-new-strings.xml</filepath> file
+in your plug-in as in the previous examples. In this case, the only
+difference is that you are adding a mapping to new languages; for
+example, the following file would be used to set up support for Vietnamese:<codeblock>&lt;?xml version="1.0" encoding="utf-8"?>
+&lt;!-- Map languages with xml:lang="vi" or xml:lang="vi-vn"
+     to the translations in this plug-in. -->
+&lt;langlist>
+  &lt;lang xml:lang="vi"     filename="strings-vi.xml"/>
+  &lt;lang xml:lang="vi-vn"  filename="strings-vi.xml"/>
+&lt;/langlist></codeblock></p><p>Next, copy the file <filepath>xsl/common/strings-en-us.xml</filepath> to
+your plug-in, and rename it to match the language you wish to add.
+For example, to support Vietnamese strings you may want to pick a
+name like <filepath>strings-vi.xml</filepath>. In that file, change
+the <codeph>xml:lang</codeph> attribute on the root element to match
+your new language.</p><p>Once the file is ready, translate the contents
+of each <codeph>&lt;str></codeph> element (be sure to leave the name
+attribute unchanged). Repeat this process for each new language you
+wish to add.</p><p>To integrate the new languages, use the same method
+as above to add these strings to your <filepath>plugin.xml</filepath> file.
+Once this plug-in is integrated, non-PDF builds will include support
+for Vietnamese; instead of generating the English word "Caution",
+the element <codeph>&lt;note type="caution" xml:lang="vi"></codeph> may
+generate something like "<term xml:lang="vi">chú ý</term>".</p><note>If
+two plug-ins override add support for the same language using different
+values, the results will be non-deterministic (translations from either
+plug-in may be picked up under different conditions).</note></example>
 </refbody>
 </reference>

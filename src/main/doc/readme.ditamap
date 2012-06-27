@@ -78,7 +78,7 @@ processing-role="resource-only" toc="no"></topicref>
 href="http://docs.oasis-open.org/dita/v1.2/os/spec/archSpec/translation.html"
 scope="external" type="reference">
 <topicmeta>
-<navtitle>Localization support in the DITA standard</navtitle>
+<linktext>Localization overview in the OASIS DITA standard</linktext>
 </topicmeta>
 </topicref>
 </relcell>

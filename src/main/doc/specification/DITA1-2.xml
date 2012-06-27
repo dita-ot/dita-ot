@@ -11,7 +11,9 @@ DITA 1.2 specification. Initial support for this specification was
 added in version 1.5 of the toolkit; versions 1.5.1 and 1.5.2 contain
 minor modifications to keep up with the latest drafts. The specification
 itself was approved at approximately the same time as DITA-OT 1.5.2,
-which contains the final versions of the DTD and Schemas.</shortdesc>
+which contained the final versions of the DTD and Schemas. DITA-OT 1.6
+updated the DITA 1.2 XSDs to address minor errata in the standard;
+the DTDs remain up to date.</shortdesc>
 <conbody>
 <p>Earlier versions of the DITA Open Toolkit contained a subset of
 the specification material, including descriptions of each DITA element.
