@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!-- (C) Copyright IBM Corporation 2005, 2006. All Rights Reserved. -->
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN"
+ "..\..\..\dtd\task.dtd">
+<task id="createnewp" xml:lang="en-us">
+<title>Create new plug-in</title>
+<taskbody>
+<steps>
+<step><cmd>Create a new directory in <filepath>/plugins</filepath> directory, such as
+            <userinput>/plugin/pluginA</userinput>.</cmd>
+<info>Under the created directory, include the following
+            subdirectories:<lines>plugins/
+      pluginA/
+            dtd
+            schema
+            catalog
+            xsl
+            lib</lines><note>Not
+            all above subdirectories are required. However, it is strongly suggested to use the
+            structure and those subdirectories above to make all files systematically. You also can
+            create files under other directories, such as python/ or vb/.</note></info></step>
+<step><cmd>Specify the types of topic, such as task, reference or concept.</cmd>
+<substeps>
+<substep><cmd>Put the dtd files into dtd directory.</cmd></substep>
+<substep><cmd>Put schema files into schema directory.</cmd></substep>
+</substeps>
+</step>
+<step><cmd>Put the necessary catalog information about the plug-in from your
+own catalog file into catalog directory.</cmd></step>
+<step><cmd>Define the transformation for the new specialization and put it
+into xsl directory.</cmd></step>
+<step><cmd>Provide the Ant script to use the xsl file with preprocess with
+default ant script template, and put it into pluginA root directory.</cmd>
+</step>
+<step><cmd>Put the complied necessary JAR files into lib directory.</cmd>
+</step>
+<step><cmd>Provide a description file named puglin.xml in pluginA root directory.
+It informs the toolkit how to integrate the function of the new plug-in.</cmd>
+<info>This file is an xml file. It's not validated by either dtd file or schema
+file. Following specification shows you how to write the description file: </info>
+<substeps>
+<substep><cmd>An example of the plugin.xml is shown below:</cmd><stepxmp><lines>&lt;plugin id="org.dita.dost.pluginA">
+    &lt;require plugin="base_pluginA"/>
+    &lt;feature extension="dita.conductor.lib.import" value="pluginA.jar" type="file"/>
+    &lt;feature extension="dita.conductor.transtype.check" value="newoutput" type="txt"/>
+    &lt;feature extension="dita.conductor.target" value="pluginA_antscript.xml" type="file"/>
+    &lt;feature extension="dita.specialization.catalog" value="pluginA_catalog-dita.xml" type="file"/>
+    &lt;feature extension="dita.xsl.xhtml" value="xsl/pluginA2xhtml.xsl" type="file"/>
+&lt;/plugin>
+</lines></stepxmp></substep>
+<substep><cmd>Use &lt;plugin>&lt;/plugin> tagsto define the root element for
+plugin.xml. Set the id attribute, which is uniqute and necessary for each
+plug-in.</cmd></substep>
+<substep><cmd>Under &lt;plugin> element, use &lt;require> element to specify
+which plug-in is needed by pluginA. The plugin attribute is used to specify
+the ID of the plug-in which is needed by pluginA. </cmd><info>This element
+is not necessary if pluginA is loaded as an independent plug-in. However,
+pluginA might not function after being loaded if another plug-in is needed,
+which is not specified by a &lt;require> element. </info></substep>
+<substep><cmd>The &lt;feature> tag specifies the extension point that is extended
+and how it's extended in pluginA.</cmd><info> For example, <userinput>&lt;feature
+extension="dita.xsl.xhtml" value="xsl/pluginA2xhtml.xsl" type="file"/></userinput> means
+adding new specific logic transformed from DITA to xhtml into pluginA. The
+logic is written in file xsl/pluginA2xhtml.xsl in pluginA directory. <userinput>type="file"</userinput> means
+that the type of value is file name.</info><info>Another example, <userinput>&lt;feature
+extension="dita.conductor.transtype.check" value="newoutput" type="txt"/></userinput> means
+extending "dita.conductor.transtype.check" in pluginA. Another type of transformation
+output for DITA-OT and the check logic for parameter transtype in DITA-OT
+are to be added. The new transformation output is named <userinput>newoutput</userinput>. <userinput>type="txt"</userinput> means
+the value is text not a file name.</info><info>There are certain <userinput>extension
+point</userinput> which can be defined here. See <xref href="createplugin.xml#createplugin/extpoint"></xref> for
+more details.</info></substep>
+</substeps>
+</step>
+<step><cmd>Package all the subdirectories and files under pluginA to a zip
+binary file. Create a DITA Open Toolkit plug-in file for distribution.</cmd>
+</step>
+<step><cmd>Test the usability of plug-in files when integrating into DITA
+Opent Toolkit base.</cmd></step>
+<step><cmd>Put the zip binary file on a Web site, such as the DITA OT SourceForge
+Web site.</cmd></step>
+</steps>
+</taskbody>
+</task>

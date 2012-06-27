@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  This file is part of the DITA Open Toolkit project.
+  See the accompanying license.txt file for applicable licenses.
+-->
+<plugin id="org.dita.odt">
+  <!-- extension points -->
+  <extension-point id="dita.xsl.odt" name="ODT XSLT import"/>
+  <!-- extensions -->
+  <feature extension="dita.conductor.transtype.check" value="odt"/>
+  <feature extension="dita.transtype.print" value="odt"/>
+  <feature extension="dita.conductor.target.relative" file="conductor.xml"/>
+  <feature extension="dita.basedir-resource-directory" value="true"/>
+  <template file="../../xsl/dita2odt_template.xsl"/>
+</plugin>

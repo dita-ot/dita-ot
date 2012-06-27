@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+ "topic.dtd">
+<topic id="bugfixguidelines" xml:lang="en-us">
+<title>Due diligence for submission of bug fixes and patches from
+non-committers</title>
+<titlealts>
+<navtitle>Bug fix guidelines</navtitle>
+</titlealts>
+<shortdesc>Any organization or individual may submit bug fixes using
+a github "pull request", generally tied to a specific report in the
+project's issue tracker.</shortdesc>
+<body>
+<p>Before committing code from a bug fix or patch provided by a third
+party who has not signed a current contribution form for the project,
+Committers should ask the following questions and follow up as appropriate
+in order to ensure that the code can be contributed to the project: </p>
+<ul>
+<li>What is your name and who is your employer?</li>
+<li>Did you write the code that you wish to contribute to the DITA
+Open          Toolkit project? (If the contributor says no, the code
+should not become a “Contribution” to the project. The contributor
+may be asked to identify the complete details of the code’s source
+and of any licenses or restrictions applicable to the code, but the
+work should be conspicuously marked as “Submitted on behalf of a third-party:
+[name of contributor]”.)</li>
+<li>Do you have the right to grant the copyright and patent licenses
+for the contribution that are set forth in the CPL version 1.0 license
+and Apache License version 2.0?</li>
+<li>Does your employer have any rights to code that you have written,
+for example, through your contract for employment? If so, has your
+employer given you permission to contribute the code on its behalf
+or waived its rights in the code?</li>
+<li>Are you aware of any third-party licenses or other restrictions
+(such as related patents or trademarks) that could apply to your contribution?
+If so, what are they?</li>
+</ul>
+</body>
+</topic>

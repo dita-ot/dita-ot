@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+ "topic.dtd">
+<?Pub Sty _display FontColor="red"?>
+<topic id="development_process" xml:lang="en-us">
+<title>DITA Open Toolkit Development Process</title>
+<titlealts>
+<navtitle>Development Process</navtitle>
+</titlealts>
+<shortdesc>The DITA Open Toolkit development process is modelled after
+other popular and successful Open Source projects, notably the Eclipse
+development process (for definitions and process statements).</shortdesc>
+<body>
+<section><title>Revision 2.0</title><p>Version 1.0 released February
+27, 2005.</p><p>Version 2.0 released June 29, 2012.</p></section>
+<section><title>Purpose and scope</title><p>This section describes
+the development process of DITA Open Toolkit (DITA-OT) project.</p></section>
+</body>
+</topic>

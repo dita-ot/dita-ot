@@ -1,0 +1,69 @@
+/*
+ | This file is part of the DITA Open Toolkit project hosted on 
+ | Sourceforge.net. See the accompanying license.txt file for 
+ | applicable licenses.
+*/
+
+/*
+ | (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
+*/
+
+/* DOMAINS particular support (selection on element names) */
+
+
+/* software domain (sw-d) particular class support */
+
+
+
+/* user interface domain (ui-d) particular class support */
+
+
+screen {
+	display: block;
+	background-color: black;
+	color: lime;
+	white-space: pre;
+	font-family: monospace, "Courier New";
+	font-weight: bold;
+	font-size: 9pt;
+	padding: 4pt;
+	margin-bottom: 6pt;
+}
+
+
+/* programming domain (pr-d) particular class support */
+
+var {
+	font-style: italic;
+}
+
+
+
+/* highlight domain (hi-d) particular class support */
+
+b {
+	font-weight: bold;
+}
+
+i {
+	font-style: italic;
+}
+
+tt {
+	font-family: monospace;
+}
+
+u {
+	text-decoration: underline;
+}
+
+sup {
+  vertical-align: super;
+  font-size: smaller;
+}
+
+sub {
+  vertical-align: sub;
+  font-size: smaller;
+}
+

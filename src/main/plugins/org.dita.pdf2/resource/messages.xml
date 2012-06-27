@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  This file is part of the DITA Open Toolkit project.
+  See the accompanying license.txt file for applicable licenses.
+-->
+<messages>
+  <!-- Java -->
+  <message id="PDFJ001E" type="ERROR">
+    <reason>Index entry '%1' is dropped, because corresponding group is not found.</reason>
+    <response/>
+  </message>
+  <message id="PDFJ002E" type="ERROR">
+    <reason>Build stopped. Problems occured during Index preprocess task. Please check the messages above.</reason>
+    <response/>
+  </message>
+  <!-- XSLT -->
+  <message id="PDFX001W" type="WARN">
+    <reason>There is no index entry found which closing range for ID="%1".</reason>
+    <response/>
+  </message>
+  <message id="PDFX002W" type="WARN">
+    <reason>There are multiple index entry found which is opening range for ID="%1" but there is only one which close it or ranges are overlapping.</reason>
+    <response/>
+  </message>
+  <message id="PDFX003W" type="WARN">
+    <reason>There are multiple index entry found which closing range for ID="%1".</reason>
+    <response/>
+  </message>
+  <message id="PDFX004F" type="FATAL">
+    <reason>Empty href was specified for some topic reference.</reason>
+    <response>Please correct your ditamap or bookmap file.</response>
+  </message>
+  <message id="PDFX005F" type="FATAL">
+    <reason>Topic reference (href : %1) not found.</reason>
+    <response>Reference may be incorrect. Please correct your ditamap or bookmap file.</response>
+  </message>
+  <message id="PDFX006E" type="ERROR">
+    <reason>Number of columns must be specified.</reason>
+    <response/>
+  </message>
+  <message id="PDFX007W" type="WARN">
+    <reason>There is no index entry found which opening range for ID="%1".</reason>
+    <response/>
+  </message>
+  <message id="PDFX008W" type="WARN">
+    <reason>Font definition not found for the logical name or alias '%1'.</reason>
+    <response/>
+  </message>
+  <message id="PDFX009E" type="ERROR">
+    <reason>Attribute set reflection can't handle XSLT element %1.</reason>
+    <response/>
+  </message>
+  <message id="PDFX010W" type="WARN">
+    <reason>Index generation is not supported in FOP.</reason>
+    <response/>
+  </message>
+  <message id="PDFX011E" type="ERROR">
+    <reason>Both index-see and %1 defined for index entry '%2'.</reason>
+    <response>Recovering by treating the index-see as an index-see-also.</response>
+  </message>
+</messages>  

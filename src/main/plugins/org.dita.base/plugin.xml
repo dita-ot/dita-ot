@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  This file is part of the DITA Open Toolkit project.
+  See the accompanying license.txt file for applicable licenses.
+-->
+<plugin id="org.dita.base">
+  <!-- base extension points -->
+  <extension-point id="package.version" name="Plug-in version"/>
+  <extension-point id="package.support.email" name="Plug-in support email"/>
+  <extension-point id="package.support.name" name="Plug-in support name"/>
+  <extension-point id="dita.conductor.plugin" name="Ant conductor plug-in information"/>
+  <extension-point id="dita.catalog.plugin-info" name="Plug-in XML catalog information"/>
+  <extension-point id="dita.image.extensions" name="Image file extension"/>
+  <extension-point id="dita.topic.extensions" name="DITA topic file extension"/>
+  <extension-point id="dita.map.extensions" name="DITA map file extension"/>
+  <extension-point id="dita.html.extensions" name="HTML file extension"/>
+  <extension-point id="dita.resource.extensions" name="Resource file extension"/>
+  <extension-point id="dita.conductor.transtype.check" name="Transtype check"/>
+  <extension-point id="dita.transtype.print" name="Print transtype"/>
+  <extension-point id="dita.conductor.target" name="Ant conductor"/>
+  <extension-point id="dita.conductor.target.relative" name="Ant conductor"/>
+  <extension-point id="dita.specialization.catalog" name="XML catalog"/>
+  <extension-point id="dita.specialization.catalog.relative" name="XML catalog"/>
+  <extension-point id="dita.xsl.strings" name="Generated text"/>
+  <extension-point id="dita.conductor.lib.import" name="Java library import"/>
+  <extension-point id="dita.xsl.messages" name="Diagnostic messages"/>
+  <!-- legacy support -->
+  <extension-point id="dita.basedir-resource-directory" name="Flag to use basedir as resource directory"/>
+  <!-- preprocessing extension points -->
+  <extension-point id="depend.preprocess.pre" name="Preprocessing pre-target"/>
+  <extension-point id="depend.preprocess.clean-temp.pre" name="Clean temp pre-target"/>
+  <extension-point id="depend.preprocess.gen-list.pre" name="Generate list pre-target"/>
+  <extension-point id="depend.preprocess.debug-filter.pre" name="Debug and filter pre-target"/>
+  <extension-point id="depend.preprocess.conrefpush.pre" name="Content reference push pre-target"/>
+  <extension-point id="depend.preprocess.move-meta-entries.pre" name="Move meta entries pre-target"/>
+  <extension-point id="depend.preprocess.conref.pre"  name="Content reference pre-target"/>
+  <extension-point id="depend.preprocess.coderef.pre" name="Code reference pre-target"/>
+  <extension-point id="depend.preprocess.mapref.pre" name="Map reference pre-target"/>
+  <extension-point id="depend.preprocess.keyref.pre" name="Key reference pre-target"/>
+  <extension-point id="depend.preprocess.mappull.pre" name="Map pull pre-target"/>
+  <extension-point id="depend.preprocess.chunk.pre" name="Chunking pre-target"/>
+  <extension-point id="depend.preprocess.maplink.pre" name="Map link pre-target"/>
+  <extension-point id="depend.preprocess.move-links.pre" name="Move links pre-target"/>
+  <extension-point id="depend.preprocess.topicpull.pre" name="Topic pull pre-target"/>
+  <extension-point id="depend.preprocess.copy-files.pre" name="Copy files pre-target"/>
+  <extension-point id="depend.preprocess.copy-image.pre" name="Copy images pre-target"/>
+  <extension-point id="depend.preprocess.copy-html.pre" name="Copy HTML pre-target"/>
+  <extension-point id="depend.preprocess.copy-flag.pre" name="Copy flag pre-target"/>
+  <extension-point id="depend.preprocess.copy-subsidiary.pre" name="Copy subsidiary pre-target"/>
+  <extension-point id="depend.preprocess.copy-generated-files.pre" name="Copy generated files pre-target"/>
+  <extension-point id="depend.preprocess.post" name="Preprocessing post-target"/>
+  <extension-point id="dita.preprocess.conref.param" name="Content reference XSLT parameters"/>
+  <extension-point id="dita.preprocess.mapref.param" name="Map reference XSLT parameters"/>
+  <extension-point id="dita.preprocess.mappull.param" name="Map pull  XSLT parameters"/>
+  <extension-point id="dita.preprocess.maplink.param" name="Map link XSLT parameters"/>
+  <extension-point id="dita.preprocess.topicpull.param" name="Topic pull XSLT parameters"/>
+  <extension-point id="dita.xsl.conref" name="Content reference XSLT import"/>
+  <extension-point id="dita.xsl.topicpull" name="Topic pull XSLT import"/>
+  <extension-point id="dita.xsl.mapref" name="Map reference XSLT import"/>
+  <extension-point id="dita.xsl.mappull" name="Map pull XSLT import"/>
+  <extension-point id="dita.xsl.maplink" name="Map link XSLT import"/>
+  <!-- extensions -->
+  <feature extension="dita.image.extensions" value=".gif"/>
+  <feature extension="dita.image.extensions" value=".eps"/>
+  <feature extension="dita.image.extensions" value=".jpg"/>
+  <feature extension="dita.image.extensions" value=".jpeg"/>
+  <feature extension="dita.image.extensions" value=".png"/>
+  <feature extension="dita.image.extensions" value=".svg"/>
+  <feature extension="dita.image.extensions" value=".tif"/>
+  <feature extension="dita.image.extensions" value=".tiff"/>
+  <feature extension="dita.image.extensions" value=".bmp"/>
+  <feature extension="dita.topic.extensions" value=".dita"/>
+  <feature extension="dita.topic.extensions" value=".xml"/>
+  <feature extension="dita.map.extensions" value=".ditamap"/>
+  <feature extension="dita.html.extensions" value=".html"/>
+  <feature extension="dita.html.extensions" value=".htm"/>
+  <feature extension="dita.resource.extensions" value=".pdf"/>
+  <feature extension="dita.resource.extensions" value=".swf"/>
+  <feature extension="dita.basedir-resource-directory" value="true"/>
+  <feature extension="dita.conductor.target.relative" file="conductor.xml"/>
+  <template file="../../catalog-dita_template.xml"/>
+  <template file="../../build_template.xml"/>
+  <template file="build_preprocess_template.xml"/>
+  <template file="../../resource/messages_template.xml"/>
+  <template file="../../xsl/common/allstrings_template.xml"/>
+  <template file="../../xsl/preprocess/maplink_template.xsl"/>
+  <template file="../../xsl/preprocess/mapref_template.xsl"/>
+  <template file="../../xsl/preprocess/mappull_template.xsl"/>
+  <template file="../../xsl/preprocess/conref_template.xsl"/>
+  <template file="../../xsl/preprocess/topicpull_template.xsl"/>
+</plugin>

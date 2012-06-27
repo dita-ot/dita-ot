@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="chapter1header" xml:lang="en-us">
+<title>Introduction to the DITA Open Toolkit and Ant</title>
+<shortdesc>Understanding the role of DITA Open Toolkit and Ant for technical writers.</shortdesc>
+<body>
+<p> This section describes the role of DITA Open Toolkit, Ant, and
+when DITA-OT is a logical choice for your team. </p>
+</body>
+</topic>

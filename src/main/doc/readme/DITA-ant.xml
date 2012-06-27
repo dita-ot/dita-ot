@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Composite//EN"
+ "../dtd/ditabase.dtd">
+<?Pub Sty _display FontColor="red"?>
+<concept id="DITA-ant" xml:lang="en-us">
+<title>Running DITA-OT from Ant</title>
+<shortdesc>Ant is an open tool that the DITA Open Toolkit uses to
+manage builds.</shortdesc>
+<conbody>
+<section><title>Introduction to Ant</title><p>Ant is a Java-based,
+open source tool provided by the Apache Foundation to declare a sequence
+of build actions. It is well suited for development builds as well
+as document builds. The "Full Easy Install" version of the toolkit
+ships with a copy of Ant.</p><p>The DITA-OT provides a set of XSLT
+scripts for producing different types of documentation, such
+as help output in Eclipse, Java Help and HTML Help, XHTML pages, and
+PDF. The toolkit uses Ant to manage these scripts, as well as to manage
+additional intermediate steps written in Java. </p></section>
+</conbody>
+</concept>

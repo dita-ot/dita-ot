@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2010, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<?Pub Sty _display FontColor="red"?>
+<reference id="limitations" xml:lang="en-us">
+<title>Known Limitations</title>
+<shortdesc>Below are some known limitations categorized by module
+within the current release of the DITA Open Toolkit.</shortdesc>
+<refbody>
+    <section id="section_zly_11s_zf">
+      <title>General</title>
+      <ol>
+        <li>Multiple instances of DITA-OT cannot be run in parallel in the same JVM. This is due to
+          legacy code using static variables to store state.</li>
+      </ol>
+    </section>
+    <section id="section_4pk_gjm_l2">
+      <title>Pre-processing</title>
+    </section>
+<section id="section_j1b_rjm_l2">
+      <ol>
+        <li>Filenames may not contain comma (',') characters.</li>
+        <li>Topic references to DITA maps must use the <codeph>mapref</codeph> element or explicitly
+          define the <codeph>format</codeph> attribute with value "ditamap".</li>
+      </ol>
+    </section>
+    <section id="section_k1b_rjm_l2">
+      <title>Transformation to Word RTF</title>
+      <ol id="wordrtf-limitations">
+        <li>You can change the styles of the output file by using tools in <tm tmclass="special"
+            tmowner="Microsoft Corporation" tmtype="reg" trademark="Microsoft">Microsoft</tm> Word
+          rather than specifying the styles before transforming.</li>
+        <li>Flagging, revision bar and filtering are not supported in Word RTF output.</li>
+        <li>Style attributes for table are not supported in Word RTF output.</li>
+        <li>Complex cases dealing with tables in lists are not supported in Word RTF.</li>
+        <li>There may be no output style applied on contents of some tags in Word RTF output
+          compared with other output.</li>
+      </ol>
+    </section>
+<section>       <title>HTML to DITA migration</title>       <ol id="html2dita-limitations">
+<li>Since Xalan doesn&apos;t allow to set the public and system IDs
+dynamically using a variable, when Xalan is used as the default XSLT
+processor, the output will contain: <codeblock>&lt;!DOCTYPE topic PUBLIC &quot;{$publicid}&quot; &quot;{$systemid}&quot;&gt;</codeblock><p>Suggest
+to use Saxon as the processor to fix this problem. For other information
+on this problem, see the section &quot;Other general migration notes&quot;
+in the first developerWorks article.</p></li>
+</ol>     </section>
+</refbody>
+</reference><?Pub Caret -1?>
+<?Pub *0000002456?>

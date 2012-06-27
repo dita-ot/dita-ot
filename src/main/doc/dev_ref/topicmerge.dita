@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
+ <!--
+  | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+  *-->   
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "concept.dtd">
+<concept id="topicmerge" xml:lang="en-us">
+<title>Topic merge</title>
+<conbody>
+<p>The topic merge feature improves the build speed of DITA files and reduces
+the possibility of meeting the out of memory exception in the build process.
+As illustrated in the following figure, when you run the build in previous
+releases of DITA Open Toolkit, the build speed is slow and you are likely
+to get out of memory exception.</p>
+  <fig>
+<image href="images/outofmemory.jpg" placement="break"><alt>Out of memory exception</alt>
+</image>
+</fig>
+<p>With this enhanced topic merge feature, you will be less likely to meet
+the out of memory exception error when you build output through DITA files.
+The intermediate merged file will keep the structure information in the DITA
+map, and the structured toc will be reflected in the output.</p>
+<p>To know more about this topic feature, you can write a script
+file first. DITA OT 1.3 offers a module, <codeph>TopicMerge</codeph>, that
+helps you implement this feature. You can use this module to generate the
+merged files. A sample usage of this module is as follows.</p>
+<p><lines>sample.xml:</lines><codeblock>&lt;project name="sample"&gt;
+  &lt;property name="dita.dir" value="${basedir}"/&gt;
+  &lt;import file="${dita.dir}${file.separator}build.xml"/&gt;
+
+  &lt;target name="premerge"&gt;  
+      &lt;antcall target="preprocess"&gt;
+      &lt;param name="args.input" value="${input}"/&gt;
+    &lt;param name="output.dir" value="${dita.dir}${file.separator}output"/&gt;
+    &lt;/antcall&gt;
+  &lt;/target&gt;
+  &lt;target name="merge" description="Merge topics" depends="premerge"&gt;
+    &lt;basename property="temp.base" file="${input}" suffix=".ditamap"/&gt;
+    &lt;property name="temp.input" value="${basedir}${file.separator}${dita.temp.dir}${file.separator}${temp.base}"/&gt;
+    &lt;dirname property="temp.dir" file="${temp.input}"/&gt;
+    &lt;pipeline message="topicmerge" module="TopicMerge" 
+      inputmap="${temp.dir}${file.separator}${temp.base}.ditamap" 
+      extparam="output=${dita.dir}${file.separator}output${file.separator}${temp.base}_merged.xml;
+      style=${dita.dir}${file.separator}xsl${file.separator}pretty.xsl" /&gt; 
+  &lt;/target&gt;
+&lt;/project&gt;</codeblock></p>
+  <p>Then, you need to type <codeph>ant -f sample.xml merge -Dinput="C:\DITA-OT<keyword keyref="release.version"/>\test.ditamap</codeph>"
+in the command window.<note>The path for -Dinput must be an absolute path</note></p>
+</conbody>
+</concept>

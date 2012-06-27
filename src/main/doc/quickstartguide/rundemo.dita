@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!-- Copyright IBM Corp. 2012 All Rights Reserved. -->
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN"
+ "task.dtd">
+<task id="rundemo" xml:lang="en-us">
+<title>Running the demo build</title>
+<shortdesc>This topic describes how to run the demo build to verify
+that your copy of the "full easy install" distribution is installed
+properly.</shortdesc>
+<taskbody>
+<prereq>If you have not done so already, run the "startcmd" script
+(<filepath>startcmd.bat</filepath> or <filepath>startcmd.sh</filepath>)
+to set up a build environment for the DITA-OT.</prereq>
+<steps>
+<step><cmd>In the DITA-OT shell, enter the command <codeph>ant -f
+build_demo.xml</codeph></cmd></step>
+<step><cmd>Type <cmdname>Enter</cmdname> at each prompt to select
+the default values.</cmd><info>By default, the demo will build the
+sample map <filepath>samples/hierarchy.ditamap</filepath> to XHTML,
+and place the output in the <filepath>out/</filepath> directory.</info>
+</step>
+<step><cmd>Check the <filepath>out/</filepath> directory to verify
+that the build generated the expected output files.</cmd></step>
+</steps>
+</taskbody>
+</task>

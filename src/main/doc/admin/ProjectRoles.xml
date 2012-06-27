@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+ "topic.dtd">
+<?Pub Inc?>
+<topic id="projectroles" xml:lang="en-us">
+<title>Project roles and responsibilities</title>
+<titlealts>
+<navtitle>Project roles</navtitle>
+</titlealts>
+<shortdesc>There are several roles in the DITA Open Toolkit open source
+project. Each has different rights and obligations.</shortdesc>
+<body>
+<section id="pm"><title>Project manager (PM)</title><p>The project
+manager is n individual responsible for managing this open source
+project. The PM is expected to ensure that<ul>
+<li>All Projects operate effectively by providing leadership to guide
+this project's overall direction and by removing obstacles, solving
+problems, and resolving conflicts. </li>
+<li>All Project plans, technical documents and reports are publicly
+available.</li>
+<li>All Projects operate using open source rules of engagement: meritocracy,
+transparency, and open participation. These principles work together.
+Anyone can participate in this project. This open interaction, from
+answering questions to reporting bugs to making code contributions
+to creating designs, enables everyone to recognize and utilize the
+contributions.</li>
+</ul></p></section>
+<section id="committer"><title>Committer</title><p>A committer is
+expected to influence the Project's development and has write access
+to the source code repository. This position reflects a track record
+of high quality contributions. Committers oversee the quality and
+originality of all contributions.</p></section>
+<section id="contributor"><title>Contributor</title><p>A contributor
+is an individual who contributes code, fixes, tests, documentation,
+or other work that is part of this project. A Contributor does not
+have write access to the source code repository. There is no limit
+to the scope of such contributions, though any contributors expecting
+to donate a large amount of new function to the project is encouraged
+to work together with committers in advance.</p></section>
+</body>
+</topic><?Pub Caret -3?>
+<?Pub *0000002130?>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<?Pub Inc?>
+<reference id="dita-globalization-xhtml" xml:lang="en-us">
+<title>Localization in XHTML based transforms</title>
+<shortdesc>X/HTML based output (such as Eclipse Help, TocJS, and HTML
+Help) is supported for over 50 languages and variants.</shortdesc>
+<refbody>
+<section><p>The following languages and variants are supported in
+all XHTML based output. The recognized xml:lang attribute values are
+shown in parenthesis after each language. When no language is specified,
+the default is English.</p><ul>
+<li>Arabic (ar or ar-eg)</li>
+<li>Belarusian (be or be-by)</li>
+<li>Brazilian Portuguese (pt-br)</li>
+<li>Bulgarian (bg or bg-bg)</li>
+<li>Catalan (ca-es)</li>
+<li>Simplified Chinese (zh-cn or zh-hans)</li>
+<li>Traditional Chinese (zh-tw or zh-hant)</li>
+<li>Croatian (hr or hr-hr)</li>
+<li>Czech (cs or cs-cz)</li>
+<li>Danish (da or da-dk)</li>
+<li>Dutch (nl or nl-nl), Belgian Dutch (nl-be)</li>
+<li>English (en or en-us), British English (en-gb), Canadian English
+(en-ca)</li>
+<li>Estonian (et or et-ee)</li>
+<li>Finnish (fi or fi-fi)</li>
+<li>French (fr or fr-fr), Belgian French (fr-be), Canadian French
+(fr-ca), Swiss French (fr-ch)</li>
+<li>German (de or de-de), Swiss German (de-ch)</li>
+<li>Greek (el or el-gr)</li>
+<li>Hebrew (he or he-il)</li>
+<li>Hindi (hi or hi-hi)</li>
+<li>Hungarian (hu or hu-hu)</li>
+<li>Icelandic (is or is-is)</li>
+<li>Indonesian (id or id-id)</li>
+<li>Italian (it or it-it), Swiss Italian (it-ch)</li>
+<li>Japanese (ja or ja-jp)</li>
+<li>Kazakh (kk or kk-kz)</li>
+<li>Korean (ko or ko-kr)</li>
+<li>Latvian (lv or lv-lv)</li>
+<li>Lithuanian (lt or lt-lt)</li>
+<li>Macedonian (mk or mk-mk)</li>
+<li>Malay (ms or ms-my)</li>
+<li>Norwegian (no or no-no)</li>
+<li>Polish (pl or pl-pl)</li>
+<li>Portuguese (pt or pt-pt)</li>
+<li>Romanian (ro or ro-ro)</li>
+<li>Russian (ru or ru-ru)</li>
+<li>Serbian - Cyrillic script (sr, sr-rs, or sr-sp)</li>
+<li>Serbian - Latin script (sr-latn-rs)</li>
+<li>Slovak (sk or sk-sk)</li>
+<li>Slovenian (sl or sl-si)</li>
+<li>Spanish (es or es-es), Latin American Spanish (es-419)</li>
+<li>Swedish (sv or sv-se)</li>
+<li>Thai (th or th-th)</li>
+<li>Turkish (tr or tr-tr)</li>
+<li>Ukrainian (uk or uk-ua)</li>
+<li>Urdu (ur or ur-pk)</li>
+</ul></section>
+</refbody>
+</reference><?Pub Caret -3?>
+<?Pub *0000002446?>

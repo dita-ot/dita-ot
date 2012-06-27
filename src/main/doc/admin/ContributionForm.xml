@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+ "topic.dtd">
+<?Pub Sty _display FontColor="red"?>
+<topic id="contribution" xml:lang="en-us">
+<title>DITA-OT Contribution Questionnaire Form 1.2</title>
+<titlealts>
+<navtitle>Contribution Questionnaire Form</navtitle>
+</titlealts>
+<body>
+<p>The Contribution Questionnaire is the first step in initiating
+the due        diligence and approval process by the Project Manager
+(PM) for any        significant contribution of content to be committed
+to the project. Prior        to completing this Questionnaire, the
+Committer should have technical        agreement from the PM that
+the new code is required. Once the PM has        approved, the Committer,
+with the assistance of one or more of the        contributors, may
+begin the due diligence and approval process by        completing
+and submitting this questionnaire. </p>
+<p>       <b>What is meant by a significant contribution?</b>     </p>
+<p>Any initial code contribution used to kick off a new project. By
+       definition, this code has been written elsewhere and it needs
+to be        reviewed. </p>
+<p>or </p>
+<p>Any contribution authored by someone other than a committer which
+is        adding new functionality to the codebase. In most cases,
+bug fixes do not        add new functionality although it&apos;s not
+impossible. </p>
+<p>or </p>
+<p>Any contribution containing third-party code maintained by another
+open        source project, individual, group, or organization. In
+addition to        reviewing the contribution, if the license is not
+the Common Public        License (CPL) or Apache License 2.0, the
+PM will need to review and approve the third-party        license
+for compatibility with the CPL or Apache License 2.0. </p>
+<p>       <b>How to send PM this form?</b>     </p>
+<p>Please fill in this form and sign your name and get your employer's
+authorized signature, such as your manager's.       then send a scanned
+copy to Project Manager Robert D Anderson. The scanned copy may be
+sent to rdanderson at users.sourceforge.net.</p><?Pub Caret -1?>
+<p>NOTE: A questionnaire and approval is not required for bug fixes
+or        minor enhancements. If you have any questions, please send
+an email to        the Project Manager.</p>
+<p>       <b>Your Info</b>     </p>
+<p>Please provide your contact details:</p>
+<simpletable expanse="page" relcolwidth="1* 3*">
+<strow>
+<stentry>Name:</stentry>
+<stentry></stentry>
+</strow>
+<strow>
+<stentry>Organization:</stentry>
+<stentry></stentry>
+</strow>
+<strow>
+<stentry>Address:</stentry>
+<stentry></stentry>
+</strow>
+<strow>
+<stentry>Phone Number:</stentry>
+<stentry></stentry>
+</strow>
+<strow>
+<stentry>E-mail:</stentry>
+<stentry></stentry>
+</strow>
+</simpletable>
+<p>       <b>Committer</b>     </p>
+<p>Please provide contact details for the committer who will be  
+     incorporating this contribution into the code base. If this is
+the same        as above, just put &quot;same&quot; in the Name field.</p>
+<simpletable relcolwidth="1* 3*">
+<strow>
+<stentry>Name:</stentry>
+<stentry></stentry>
+</strow>
+<strow>
+<stentry>Organization:</stentry>
+<stentry></stentry>
+</strow>
+<strow>
+<stentry>Address:</stentry>
+<stentry></stentry>
+</strow>
+<strow>
+<stentry>Phone Number:</stentry>
+<stentry></stentry>
+</strow>
+<strow>
+<stentry>E-mail:</stentry>
+<stentry></stentry>
+</strow>
+</simpletable>
+<p>       <b>PM Approval </b>     </p>
+<p>PM Approval is required for all significant contributions. Please
+       provide the contact info of the PM who has given approval for
+this        contribution:</p>
+<simpletable relcolwidth="1* 3*">
+<strow>
+<stentry>Name:</stentry>
+<stentry></stentry>
+</strow>
+<strow>
+<stentry>Phone Number:</stentry>
+<stentry></stentry>
+</strow>
+<strow>
+<stentry>E-mail:</stentry>
+<stentry></stentry>
+</strow>
+</simpletable>
+<p>       <b>Contribution </b>     </p>
+<p>Please provide details about the contribution:</p>
+<simpletable relcolwidth="1* 3*">
+<strow>
+<stentry>Component/Module (if known): </stentry>
+<stentry></stentry>
+</strow>
+<strow>
+<stentry>Contribution Name: </stentry>
+<stentry></stentry>
+</strow>
+<strow>
+<stentry>Contribution Version: </stentry>
+<stentry></stentry>
+</strow>
+<strow>
+<stentry>Contribution Size (in lines of code): </stentry>
+<stentry></stentry>
+</strow>
+<strow>
+<stentry>Contribution Description: </stentry>
+<stentry></stentry>
+</strow>
+<strow>
+<stentry>Does this contribution require any packages maintained by
+a            3rd party? </stentry>
+<stentry></stentry>
+</strow>
+<strow>
+<stentry>Please list all pkgs required by the contribution which are
+           maintained by a 3rd party: (Please list one package per
+line e.g 3rd            party package name v1.0) </stentry>
+<stentry></stentry>
+</strow>
+<strow>
+<stentry>Supporting Information: </stentry>
+<stentry></stentry>
+</strow>
+<strow>
+<stentry>Do you agree to distribute the Contribution under Common
+Public License 1.0? </stentry>
+<stentry></stentry>
+</strow>
+<strow>
+<stentry>Do you agree to distribute the Contribution under Apache
+License 2.0? </stentry>
+<stentry></stentry>
+</strow>
+<strow>
+<stentry>Provide any additional information you may have regarding
+           intellectual property rights (patents, trademarks, etc.)
+related to            the Contribution. If there is more than one
+committer who worked on            this contribution, please list
+their name and email addresses.            </stentry>
+<stentry></stentry>
+</strow>
+</simpletable>
+<p>       <b>Contributor</b>     </p>
+<p>Note: All of the contributors should ensure that they possess the
+       necessary rights to make the contribution under the terms and
+conditions        set out in the <xref href="ContributionPolicy.xml">Contribution
+       Policy</xref>.</p>
+<p>Please provide contact details for the contributor or the primary
+       contributor if there is more than one:</p>
+<simpletable relcolwidth="1* 3*">
+<strow>
+<stentry>Name: </stentry>
+<stentry></stentry>
+</strow>
+<strow>
+<stentry>Organization: </stentry>
+<stentry></stentry>
+</strow>
+<strow>
+<stentry>Phone Number: </stentry>
+<stentry></stentry>
+</strow>
+<strow>
+<stentry>E-mail: </stentry>
+<stentry></stentry>
+</strow>
+<strow>
+<stentry>% of content authored in the contribution: </stentry>
+<stentry></stentry>
+</strow>
+</simpletable>
+<p>If there are other contributors, please provide names, organizations,
+       e-mail, and percentage of content authored in the        contribution:<simpletable
+relcolwidth="1* 3*">
+<strow>
+<stentry>Other        Contributors:</stentry>
+<stentry></stentry>
+</strow>
+</simpletable></p>
+<p>       <b>Cryptography</b>     </p>
+<p>If the contribution deals in any way with cryptography, please
+provide        details:</p>
+<simpletable relcolwidth="1* 3*">
+<strow>
+<stentry>Details:</stentry>
+<stentry></stentry>
+</strow>
+<strow>
+<stentry>Identify the Cryptography algorithm used: </stentry>
+<stentry></stentry>
+</strow>
+</simpletable>
+<p>       <b>Contributor's signature</b>     </p>
+<simpletable relcolwidth="1* 3*">
+<strow>
+<stentry>Name (Type or Print)</stentry>
+<stentry></stentry>
+</strow>
+<strow>
+<stentry>Title</stentry>
+<stentry></stentry>
+</strow>
+<strow>
+<stentry>Signature</stentry>
+<stentry></stentry>
+</strow>
+<strow>
+<stentry>Date</stentry>
+<stentry></stentry>
+</strow>
+</simpletable>
+<p>       <b>Contributor employer's signature</b>     </p>
+<simpletable relcolwidth="1* 3*">
+<strow>
+<stentry>Name (Type or Print)</stentry>
+<stentry></stentry>
+</strow>
+<strow>
+<stentry>Title</stentry>
+<stentry></stentry>
+</strow>
+<strow>
+<stentry>Signature</stentry>
+<stentry></stentry>
+</strow>
+<strow>
+<stentry>Date</stentry>
+<stentry></stentry>
+</strow>
+</simpletable>
+</body>
+</topic>
+<?Pub *0000007761?>

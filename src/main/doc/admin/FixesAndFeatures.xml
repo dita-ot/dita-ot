@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+ "topic.dtd">
+<?Pub Sty _display FontColor="red"?>
+<?Pub Inc?>
+<topic id="fixesandfeatures" xml:lang="en-us">
+<title>Requesting features and reporting defects</title>
+<shortdesc>Defect reports and feature requests may be submitted at
+any time through the project page at github. </shortdesc>
+<body>
+<p>The core project contributors will track and address bugs reported
+against the project, and issue patches based on urgency. The core
+contributors will also provide feedback on requests for new features
+or design changes, but may not be able to provide development assistance
+on all requests.</p>
+<p>All new bug reports or feature requests should be submitted through
+github: <xref keyref="dita-ot-issues"></xref>.</p>
+<section><title>Requesting new features</title><p>Requests for new
+features may be submitted at any time. The project committers will
+have periodic reviews of new feature requests along with other contributors
+and interested parties and (when possible) make plans for implementation.</p><p>Generally,
+if an existing project developer is interested in a new request, the
+item will be assigned to that developer and implemented based on the
+developer's schedule. Otherwise, if the request is valid and in line
+with project goals, it will be left open for an interested party to
+pick up and implement. In some cases requests are best implemented
+as a customization (plug-in) outside of the core tools, in which case
+the request will be closed with suggested alternatives.</p></section>
+<section><title>Defects</title><p>Defect reports may be submitted
+at any time using the same process. Project committers will determine
+the owner of the relevant components and assign the bug for validation
+and disposition. Responses, fixes, and workarounds are generally quickest
+if those submitting a defect report are able to include sample files
+or clear instructions for reproducing the issue.</p><p>If bugs are
+found in the OASIS DTDs or Schemas, they will be fixed in the toolkit
+and reported back to OASIS.</p></section>
+</body><?Pub Caret -2?>
+</topic>
+<?Pub *0000002220?>

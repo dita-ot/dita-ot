@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+    Sourceforge.net. See the accompanying license.txt file for 
+    applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+
+<strings xml:lang="sv-se">        <!-- Swedish -->
+
+<!-- various labels (not author controlled) -->
+<str name="Figure">Figur</str>
+<str name="Table">Tabell</str>
+<str name="Next topic">Nästa avsnitt</str>
+<str name="Previous topic">Föregående avsnitt</str>
+<str name="Parent topic">Överordnat ämne</str>
+<str name="Required cleanup">Korrigering krävs</str>
+<str name="Draft comment">Kommentar till utkast</str>
+<str name="Option">Alternativ</str>
+<str name="Description">Beskrivning</str>
+<str name="Optional">Valfritt</str>
+<str name="Required">Krävs</str>
+<str name="Skip visual syntax diagram">Hoppa över syntaxdiagram</str>
+<str name="Read syntax diagram">Läs syntaxdiagram</str>
+<str name="Start of change">Ändring startar</str>
+<str name="End of change">Ändring slutar</str>
+<str name="Index">Index</str>
+<str name="Special characters">Specialtecken</str>
+<str name="Numerics">Siffror</str>
+<str name="End notes">Noter</str>
+<str name="Artwork">Bild</str>
+<str name="Syntax">Syntax</str>
+<str name="Type">Typ</str>
+<str name="Value">Värde</str>
+<!-- Text that goes before a link to a topic -->
+<str name="intro-to-topic-link"></str>
+
+<!-- peril notice labels -->
+<str name="Note">Anm</str>
+<str name="Notes">Anm</str>
+<str name="Tip">Tips</str>
+<str name="Fastpath">Genväg</str>
+<str name="Important">Viktigt</str>
+<str name="Attention">Varning</str>
+<str name="Caution">Varning - risk för personskada</str>
+<str name="Danger">Varning - livsfara</str>
+<str name="Remember">Glöm inte</str>
+<str name="Restriction">Begränsning</str>
+<str name="Warning">Varning - risk för maskinskada</str>
+
+<!-- default title text for section level generated sections -->
+<str name="Contents">Innehåll</str>
+<str name="Related concepts">Närliggande begrepp</str>
+<str name="Related tasks">Närliggande uppgifter</str>
+<str name="Related reference">Närliggande referens</str>
+<str name="Related information">Närliggande information</str>
+
+<str name="Prerequisite">Läs detta först</str>
+<str name="Prerequisites">Läs detta först</str>
+<str name="or">or</str>
+<str name="figure-number-separator"> </str>
+
+<!--Task section labels -->
+<str name="task_context">Den här uppgiften</str>
+<str name="task_example">Exempel</str>
+<str name="task_postreq">Och sedan då?</str>
+<str name="task_prereq">Innan du börjar</str>
+<str name="task_procedure">Arbetsordning</str>
+<str name="task_results">Resultat</str>
+
+<str name="Copyright">Copyright</str>
+
+<!-- Symbols -->
+<str name="OpenQuote">"</str>
+<str name="CloseQuote">"</str>
+<str name="ColonSymbol">:</str>
+
+</strings>

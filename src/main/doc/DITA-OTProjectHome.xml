@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="dita-otprojecthome" xml:lang="en-us">
+  <title>DITA Open Toolkit <keyword keyref="release.version"/></title>
+  <shortdesc>This document describes the DITA Open Toolkit project—what the project is, and how to
+    use the site.</shortdesc>
+  <body>
+    <section>
+      <title>What is the DITA Open Toolkit?</title>
+      <p>The DITA Open Toolkit, or DITA-OT for short, is a set of Java-based, open source tools that
+        provide processing for DITA maps and topic content. You can download the OT and install it
+        for free on your computer to get started with topic-based writing and publishing. The
+        DITA-OT is licensed under the <xref format="html"
+          href="http://www.opensource.org/licenses/cpl1.0.php" scope="external">CPL 1.0</xref> and
+          <xref format="html" href="http://www.apache.org/licenses/LICENSE-2.0" scope="external"
+          >Apache 2.0</xref> open source licenses.</p>
+      <note>While the DITA Standard itself is owned and developed by OASIS, the DITA Open Toolkit is
+        an independent, open source implementation of the standard.</note>
+      <p>Key output formats for the toolkit include:</p>
+      <ul>
+        <li>XHTML</li>
+        <li>PDF (formerly known as PDF2)</li>
+        <li>ODT (Open Document Format)</li>
+        <li>Eclipse Help</li>
+        <li>TocJS (XHTML with a JavaScript frameset)</li>
+        <li>HTML Help</li>
+        <li>Java Help</li>
+        <li>Eclipse Content (normalized DITA plus Eclipse project files)</li>
+        <li>Word RTF (with some limitations)</li>
+        <li>Docbook</li>
+        <li>Troff</li>
+      </ul>
+    </section>
+    <section>
+      <title>Toolkit documentation</title>
+      <p>There are two primary sources for documentation about the toolkit.</p><p>Stable
+        documentation about toolkit usage, parameters, and project management can be found on this
+        page, using the navigation panel on the left.</p>
+      <p>New information about the latest toolkit builds, plans for the next release, and other
+        changing information can be found on the DITA-OT landing page at the dita.xml.org site (link
+        below). That site also contains the release notes for all upcoming and previous
+        releases.</p>
+    </section>
+  </body>
+  <related-links>
+    <linklist>
+      <title>Shortcuts to important information</title>
+      <link format="html"
+        href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Stable%20Release/"
+        scope="external">
+        <linktext>DITA-OT stable release</linktext>
+      </link>
+      <link format="html"
+        href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Latest%20Test%20Build/"
+        scope="external">
+        <linktext>DITA-OT latest development build</linktext>
+      </link> 
+    </linklist>
+  </related-links>
+</topic>

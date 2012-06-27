@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2010, v.4002-->
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+ "../dtd/topic.dtd">
+<topic id="testedplatformsandtools" xml:lang="en-us">
+<title>Tested platforms and tools</title>
+<shortdesc>See which tools and platforms have been used in testing
+the DITA      processing system.</shortdesc>
+<body>
+<p>The DITA processing system has been tested against the following
+       platforms and tools:</p>
+<simpletable>
+      <sthead>
+        <stentry>Platform or tool</stentry>
+        <stentry>Tested version</stentry>
+      </sthead>
+<strow>
+<stentry>OS</stentry>
+<stentry>
+          <ul>
+            <li>Windows XP</li>
+            <li>Windows 7</li>
+            <li>Mac OS X 10.6 </li>
+            <li>Mac OS X 10.7</li>
+            <li>SLES 10</li>
+          </ul>
+        </stentry>
+</strow>
+<strow>
+<stentry>XSLT processor</stentry>
+<stentry>
+          <ul>
+            <li>Xalan-J 2.6</li>
+            <li>Xalan-J 2.7</li>
+            <li>Xalan-J 2.7.1</li>
+            <li>Saxon 6.5</li>
+            <li>Saxon 9</li>
+            <li>Saxon-B 9.1</li>
+            <li>Saxon-PE/EE 9.3</li>
+          </ul>
+          <note>XSLT 2.0 standard is not officially required in DITA-OT code, due to the reliance by
+            some users on Xalan.</note>
+        </stentry><?Pub Caret 24?>
+</strow>
+<strow>
+<stentry>JDK</stentry>
+<stentry>
+          <ul>
+            <li>IBM 1.5</li>
+            <li>IBM 1.6</li>
+            <li>Oracle 1.5</li>
+            <li>Oracle 1.6</li>
+            <li>OpenJDK 1.7</li>
+          </ul>
+        </stentry>
+</strow>
+<strow>
+<stentry>Ant</stentry>
+<stentry>
+          <ul>
+            <li>Ant 1.7.1</li>
+            <li>Ant 1.8.2, 1.8.3, 1.8.4</li>
+          </ul>
+        </stentry>
+</strow>
+      <strow>
+        <stentry>ICU4J</stentry>
+        <stentry>
+          <ul>
+            <li>ICU4J 3.4.4</li>
+            <li>ICU4J 49.1</li>
+          </ul>
+        </stentry>
+      </strow>
+      <strow>
+        <stentry>XML parser</stentry>
+        <stentry>
+          <ul>
+            <li>Xerces 2.9.0</li>
+            <li>Xerces 2.11.0</li>
+          </ul>
+        </stentry>
+      </strow>
+  <strow>
+    <stentry>XSL processor</stentry>
+    <stentry><ul><li>FOP 1.0</li>
+      <li>AntennaHouse XSL Formatter 5.3</li>
+      <li>AntennaHouse XSL Formatter 6.0</li>
+      <li>RenderX XEP 4.19</li></ul></stentry>
+  </strow>
+</simpletable>
+</body>
+</topic>
+<?Pub *0000001113?>

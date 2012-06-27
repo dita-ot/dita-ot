@@ -1,0 +1,4 @@
+target_topic_2=topics/target-topic-c.xml(maps/root-map-01.ditamap)
+target_topic_1=topics/target-topic a.xml(maps/root-map-01.ditamap)
+target_topic_3=topics/target-topic-c.xml(maps/root-map-01.ditamap)
+target_topic_4=http://www.example.com/?foo=bar&baz=qux#quxx(maps/root-map-01.ditamap)

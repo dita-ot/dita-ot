@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+ "topic.dtd">
+<?Pub Sty _display FontColor="red"?>
+<topic id="ditaotgoals" xml:lang="en-us">
+<title>Goals and objectives of the DITA Open Toolkit</title>
+<titlealts>
+<navtitle>Goals and objectives</navtitle>
+</titlealts>
+<shortdesc>The long term goal of the DITA Open Toolkit is to provide
+a high quality        implementation for production level output of
+DITA XML content, built in        a professionally-managed project
+environment by vetted contributors, and        tested thoroughly for
+each release.</shortdesc>
+<body>
+<p>The DITA-OT is designed to meet the needs of any user trying to
+publish DITA content, from individual users running the tool stand-alone
+up to large software products that treat the toolkit as a bundled
+(often hidden) library used for DITA publishing. Different <xref
+href="../readme/distribution_packages.dita">distribution packages</xref> are
+available to meet the needs of these different audiences.</p>
+<p>The DITA Open Toolkit project will keep up to date with the latest
+DITA DTD and Schema updates from the OASIS DITA Technical Committee
+(owners of the DITA standard). As OASIS produces drafts of future
+versions, the DITA-OT will work to create early support for new features
+in order to help test the standard.</p>
+<p>The project agrees with the Open Source motto of &quot;Release
+early and often&quot; to get wide consensus on issues. The project
+works with an agile development process, releasing test builds approximately
+every month, and encourages feedback on test builds while function
+is being developed. Stable releases are typically issued approximately
+every six months.</p>
+</body>
+</topic>

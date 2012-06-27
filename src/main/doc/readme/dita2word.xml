@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "..\dtd\concept.dtd">
+<concept id="dita2word" xml:lang="en-us">
+<title>DITA to Rich Text Format </title>
+  <titlealts>
+    <navtitle>DITA to RTF</navtitle>
+  </titlealts>
+<shortdesc>The "wordrtf" transform type will produce an RTF file for
+use by <tm tmclass="special" tmowner="Microsoft Corporation" tmtype="reg"
+trademark="Microsoft">Microsoft</tm> Word.</shortdesc>
+<conbody>
+<p>The whole structure of the output file is the same as the structure
+designed in the ditamap file of the DITA source files. To avoid losing
+files in the final output, make sure the ditamap file contains all
+topics which are cross referenced from within any individual topics.</p>
+<!--section><title>Transforming DITA to Word output</title><p>You can
+use an ant script to transform DITA source files to word output. See <xref
+href="ascript.xml#ascript"></xref> for more details.</p><p>You can
+also use the <tm tmclass="special" tmowner="Oracle and/or its affiliates"
+tmtype="tm" trademark="Java">Java</tm> command for transform. See <xref
+href="jcomm.xml#jcomm"></xref> for more details.</p></section-->
+<section>
+  <title>Limitations</title>
+<ol conref="DITA-limitations.xml#limitations/wordrtf-limitations"><li/></ol></section>
+</conbody>
+</concept>

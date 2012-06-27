@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!-- Copyright IBM Corp. 2012 All Rights Reserved. -->
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"
+ "map.dtd">
+<map xml:lang="en-us">
+<title>Quick start: easy installation and demo build</title>
+<topicref collection-type="sequence"
+href="quickstartguide/demostart.dita">
+<topicref href="quickstartguide/installing.dita"></topicref>
+<topicref href="quickstartguide/rundemo.dita"></topicref>
+<topicref href="quickstartguide/runmore.dita"></topicref>
+</topicref>
+</map>

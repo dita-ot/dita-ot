@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!-- Copyright IBM Corp. 2012 All Rights Reserved. -->
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN"
+ "task.dtd">
+<task id="runmore" xml:lang="en-us">
+<title>Building other maps and other formats</title>
+<shortdesc>This topic describes how to move on to building real content
+to any format supported by the DITA-OT.</shortdesc>
+<taskbody>
+<context>Once you have successfully run the default demo build, you
+are ready to move on to testing other maps and transforms. You may
+use the same shell used to run the demo build (you do not need to
+run the <cmdname>startcmd</cmdname> script again unless you closed
+the window after running the demo).</context>
+<steps>
+<step><cmd>In the DITA-OT shell, enter the command <codeph>ant -f
+build_demo.xml</codeph></cmd></step>
+<step><cmd>At the first prompt, enter the name of a map.</cmd><stepxmp>For
+example, you may enter your own map (if you have one); you could also
+rebuild this DITA-OT documentation by entering <filepath>doc/userguide.ditamap</filepath></stepxmp>
+</step>
+<step><cmd>At the next prompt, enter an output directory, or press <cmdname>Enter</cmdname> to
+keep the default value (<filepath>out/</filepath>).</cmd></step>
+<step><cmd>At the third prompt, enter a different output format, such
+as <option>tocjs</option> or <option>pdf</option>.</cmd></step>
+<step><cmd>At the fourth prompt, press <cmdname>Enter</cmdname> to
+continue.</cmd></step>
+</steps>
+<result><p>Once you have gotten the toolkit to run the demo script
+with multiple maps and output formats, you will want to move on to
+more complicated builds that make use of the many toolkit parameters.
+You may also want to set up your environment permanently so that you
+no longer need to run the <cmdname>startcmd</cmdname> script. For
+information about available parameters and the different ways to set
+up your build, please see the main User Guide.</p></result>
+</taskbody>
+</task>

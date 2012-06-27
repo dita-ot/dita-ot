@@ -1,0 +1,580 @@
+<?xml version="1.0"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
+<project name="ditaot-init">
+    
+  <!--<import file="catalog-ant.xml"/>-->
+
+	<!-- Default maximum memory to give to forked Java processes.
+	
+	     Set this higher either in another Ant script or on the
+	     Ant command line using the -D parameter, e.g.:
+	     
+	     ant -DmaxJavaMemory=4G
+	     
+	     Memory values are integers followed by "M" for megabytes,
+	     "G" for gigabytes.
+	     
+	     On 32-bit systems, the largest memory setting will be somewhere
+	     between 1500M and 2000M depending on your system.
+	     
+	     64-bit JVMs can use essentially unlimited memory.
+	     
+	     For memory-intensive process (very large maps), 
+	     2 or 3 gigabytes should be more than sufficient. 
+	     
+	     This value is used in the @maxmemory attribute the of the Ant
+	     <java> task.
+	  -->
+	<property name="maxJavaMemory" value="500m"/>
+  
+  <!-- Read configuration properties -->
+  <property file="${dita.dir}/lib/org.dita.dost.platform/plugin.properties"/>
+  <property file="${dita.dir}/lib/configuration.properties"/>
+		
+  <xmlcatalog id="dita.catalog">
+    <catalogpath path="${dita.dir}/catalog-dita.xml"/>
+  </xmlcatalog>
+
+	<!-- Determine the Java architecture and set the JVM arguments
+	     appropriately.
+	     
+	     Note that the Java architecture is determined by how the
+	     JVM is started, so it is possible for the base Ant
+	     JVM to have been started in 32-bit mode on a 64-bit machine.
+	     
+	     The is64bit and is32bit properties are mutually exclusive.
+	     
+	  -->
+	<condition property="is64bit">
+		<!-- NOTE: The following is not a complete list but should cover
+		           most of the systems Open Toolkit users are likely
+		           to use. Add more values as they become known.
+		-->
+	  <and>
+  		<or>
+  			<os arch="x86_64"/>
+  			<os arch="amd64"/>
+  			<os arch="ppc64"/>
+  		</or>
+	    <not>
+	      <os family="windows"/>
+	    </not>
+	  </and>
+  </condition>
+	
+	<condition property="is32bit">
+		<isfalse value="${is64bit}"/>
+  </condition>
+	
+	
+	<!-- For 64-bit machines, the value -d64 runs the
+	     the JVM in 64-bit mode. This parameter cannot
+	     be specified on 32-bit machines (that is, you cannot
+	     specify -d32 on a 32-bit machine, you get an "unrecognized
+	     option error in that case).
+	  -->
+	<condition property="jvmArchFlag"
+	  value="-d64"
+	  else="">
+		<istrue value="${is64bit}"/>
+	</condition>
+
+	<!-- Base JVM argument line to use with any forked Java processes.
+	
+	     Sets the JVM architecture.
+	     
+	     Use like so:
+	     
+	     <java ...>
+	       <jvmarg line="${baseJVMArgLine}"/>
+	       ...
+	     </java>
+	  -->
+	<property name="baseJVMArgLine" value="${jvmArchFlag} -Xmx${maxJavaMemory}"/>
+
+  <path id="dost.jar.path">
+    <pathelement
+      location="${dita.dir}${file.separator}lib${file.separator}dost.jar" />
+  </path>
+
+  <taskdef name="pipeline"
+    classname="org.dita.dost.invoker.ExtensibleAntInvoker">
+    <classpath refid="dost.jar.path" />
+  </taskdef>
+
+  <taskdef name="ext-pipeline"
+    classname="org.dita.dost.invoker.ExtensibleAntInvoker">
+    <classpath refid="dost.jar.path" />
+  </taskdef>
+
+  <taskdef name="config-logger"
+    classname="org.dita.dost.log.LogConfigTask">
+    <classpath refid="dost.jar.path" />
+  </taskdef>
+
+  <!-- Add by Alan to refacter:URIResolver Date2009-08-07 -->
+  <taskdef name="config-URIResolver"
+  	classname="org.dita.dost.resolver.URIResolverConfigTask">
+  	<classpath refid="dost.jar.path"/>
+  </taskdef>
+	
+  <taskdef name="dita-ot-echo"
+    classname="org.dita.dost.log.DITAOTEchoTask">
+    <classpath refid="dost.jar.path" />
+  </taskdef>
+
+  <taskdef name="dita-ot-fail"
+    classname="org.dita.dost.log.DITAOTFailTask">
+    <classpath refid="dost.jar.path" />
+  </taskdef>
+
+  <taskdef name="dita-ot-copy"
+    classname="org.dita.dost.util.DITAOTCopy">
+    <classpath refid="dost.jar.path" />
+  </taskdef>
+	
+  <taskdef name="xmlpropertyreader"
+  	classname="org.dita.dost.platform.XmlPropertyTask">
+  	<classpath refid="dost.jar.path"/>
+  </taskdef>
+	
+  <typedef name="isabsolute"
+    classname="org.dita.dost.util.IsAbsolute">
+    <classpath refid="dost.jar.path" />
+  </typedef>
+  <tstamp>
+    <format property="current.date" pattern="yyyyMMddHHmmssSSS"/>
+  </tstamp>
+  <property name="base.temp.dir" location="${basedir}/temp"/>
+  <property name="dita.temp.dir" location="${base.temp.dir}${file.separator}temp${current.date}" />
+  <property name="output.dir" location="${basedir}/out" />
+  <property name="dita.script.dir"
+    location="${dita.dir}${file.separator}xsl" />
+  <property name="dita.resource.dir"
+    location="${dita.dir}${file.separator}resource" />
+  <property environment="env" />
+  <property name="dita.empty" value="" />
+  <property name="args.message.file"
+    location="${dita.dir}${file.separator}resource${file.separator}messages.xml" />
+  <!-- property values end -->
+
+  <!-- Changed by Alan to refacter:URIResolver Date2009-08-07 -->
+  <target name="build-init"
+    depends="start-process, init-logger, init-URIResolver, use-init, check-arg, output-msg" />
+    
+  <target name="start-process" description="Processing started" />
+
+  <!-- Only used when invoked with CommandLineInvoker -->
+  <target name="init-logger"
+    description="Initialize log directory and file name">
+    <config-logger />
+  </target>
+  
+  <!-- Add by Alan to refacter:URIResolver Date2009-08-07 -->
+  <target name="init-URIResolver">
+  	<config-URIResolver tempdir="${dita.temp.dir}"/>
+  </target>
+  
+  <target name="use-init">
+    <condition property="xml.parser" value="XMLReader ${org.xml.sax.driver}">
+      <and>
+        <isset property="org.xml.sax.driver"/>
+        <not><isset property="xml.parser"/></not>
+      </and>
+    </condition>
+    <condition property="xml.parser" value="Xerces">
+      <and>
+        <available classname="org.apache.xerces.parsers.SAXParser"/>
+        <not><isset property="xml.parser"/></not>
+      </and>
+    </condition>
+    <condition property="xml.parser" value="Xerces in Sun JDK 1.5">
+      <and>
+        <available classname="com.sun.org.apache.xerces.internal.parsers.SAXParser"/>
+        <not><isset property="xml.parser"/></not>
+      </and>
+    </condition>
+    <condition property="xml.parser" value="Crimson">
+      <and>
+        <available classname="org.apache.crimson.parser.XMLReaderImpl"/>
+        <not><isset property="xml.parser"/></not>
+      </and>
+    </condition>
+  </target>
+	
+  <!-- property value validation begin -->
+  <target name="check-arg" depends="use-init"
+    description="Validate and init input arguments">
+    <!-- begin to check input parameters -->
+    <dita-ot-fail id="DOTA069F">
+      <condition>
+        <and>
+          <isset property="args.input"/>
+          <not>
+            <available file="${args.input}" type="file"/>
+          </not>
+        </and>
+      </condition>
+      <param name="1" location="${args.input}"/>
+    </dita-ot-fail>
+    <dita-ot-fail id="DOTA069F">
+      <condition>
+        <and>
+          <isset property="dita.input"/>
+          <isset property="dita.input.dirname"/>
+          <not>
+            <available file="${dita.input}" filepath="${dita.input.dirname}" type="file"/>
+          </not>
+        </and>
+      </condition>
+      <param name="1" location="${dita.input.dirname}/${dita.input}"/>
+    </dita-ot-fail>
+    <dita-ot-fail id="DOTA002F">
+      <condition>
+        <and>
+          <not>
+            <isset property="args.input"/>
+          </not>
+          <not>
+            <and>
+              <isset property="dita.input"/>
+              <isset property="dita.input.dirname"/>
+            </and>
+          </not>
+        </and>
+      </condition>
+    </dita-ot-fail>
+
+    <dita-ot-fail id="DOTA003F">
+      <condition>
+        <and>
+          <isset property="args.xsl" />
+          <not>
+            <available file="${args.xsl}" type="file" />
+          </not>
+        </and>
+      </condition>
+      <param name="1" location="${args.xsl}"/>
+    </dita-ot-fail>
+
+    <dita-ot-fail id="DOTA007E">
+        <condition>
+        	<and>
+        	 <isset property="args.ftr" />
+        	 <not>
+        	<available file="${args.ftr}" type="file"/>
+        	</not>
+        	</and>
+        </condition>
+     <param name="1" value="${args.ftr}"/>
+     </dita-ot-fail>
+    <dita-ot-fail id="DOTA008E">
+      <condition>
+        <and>
+          <isset property="args.hdr" />
+          <not>
+            <available file="${args.hdr}" type="file"/>
+          </not>
+        </and>
+      </condition>
+      <param name="1" value="${args.hdr}"/>
+    </dita-ot-fail>
+    <dita-ot-fail id="DOTA009E">
+      <condition>
+        <and>
+          <isset property="args.hdf" />
+          <not>
+            <available file="${args.hdf}" type="file"/>
+          </not>
+        </and>
+      </condition>
+      <param name="1" value="${args.hdf}"/>
+    </dita-ot-fail>
+    <!-- end to check input parameters -->
+
+    <!-- begin to init required parameters -->
+
+    <condition property="msg.deprecate">
+      <and>
+        <not>
+          <isset property="args.input" />
+        </not>
+        <isset property="dita.input" />
+        <isset property="dita.input.dirname" />
+      </and>
+    </condition>
+
+    <condition property="args.input"
+      value="${dita.input.dirname}${file.separator}${dita.input}">
+      <not>
+        <isset property="args.input" />
+      </not>
+    </condition>
+
+    <dita-ot-fail id="DOTA012W">
+      <condition>
+        <isset property="dita.input.valfile" />
+      </condition>
+      <param name="1" value="dita.input.valfile"/>
+      <param name="2" value="args.filter"/>
+    </dita-ot-fail>
+    <condition property="dita.input.valfile" value="${args.filter}">
+      <and>
+        <isset property="args.filter"/>
+        <not><isset property="dita.input.valfile"/></not>
+      </and>
+    </condition>
+
+    <dita-ot-fail id="DOTA012W">
+      <condition>
+        <isset property="dita.extname"/>
+      </condition>
+      <param name="1" value="dita.extname"/>
+      <param name="2" value="dita.ext"/>
+    </dita-ot-fail>
+    <condition property="dita.ext" value=".xml">
+      <and>
+        <isset property="dita.extname" />
+        <contains string="${dita.extname}" substring="xml"/>
+      </and>
+    </condition>
+    <condition property="dita.ext" value=".dita">
+      <and>
+        <isset property="dita.extname" />
+        <contains string="${dita.extname}" substring="dita"/>
+      </and>
+    </condition>
+    <condition property="dita.ext" value=".xml">
+      <not>
+        <isset property="dita.ext"/>
+      </not>
+    </condition>
+    <dita-ot-fail id="DOTA004F">
+      <condition>
+        <not>
+          <or>
+            <contains string="${dita.ext}" substring=".dita" />
+            <contains string="${dita.ext}" substring=".xml" />
+          </or>
+        </not>
+      </condition>
+      <param name="1" value="${dita.ext}"/>
+    </dita-ot-fail>
+    <!-- Declare dita.extname default for backwards-compatibility, to be removed in future releases. -->
+    <condition property="dita.extname" value="xml">
+      <and>
+        <not><isset property="dita.extname"/></not>
+        <equals arg1="${dita.ext}" arg2=".xml"/>
+      </and>
+    </condition>
+    <condition property="dita.extname" value="dita">
+      <and>
+        <not><isset property="dita.extname"/></not>
+        <equals arg1="${dita.ext}" arg2=".dita"/>
+      </and>
+    </condition>
+
+    <!-- append a '.' to out.ext if args.outext not contains '.' -->
+    <condition property="out.ext" value=".${args.outext}">
+      <and>
+        <isset property="args.outext" />
+        <not>
+          <contains string="${args.outext}" substring="." />
+        </not>
+      </and>
+    </condition>
+    <condition property="out.ext" value="${args.outext}">
+      <and>
+        <isset property="args.outext" />
+        <contains string="${args.outext}" substring="." />
+      </and>
+    </condition>
+  	
+  	<!-- Added on 2010-08-24 for bug:2994593 enable grammar pool caching by default start-->
+  	<condition property="args.grammar.cache"
+  	      value="yes">
+  		      <not>
+  		        <isset property="args.grammar.cache" />
+  		      </not>
+  	</condition> 	
+  	<!-- Added on 2010-08-24 for bug:2994593 enable grammar pool caching by default end-->
+  	
+  	<!-- Added on 2010-11-16 for bug:3086552 enable system id setting in XMLReader.parse start-->
+  	<condition property="args.xml.systemid.set"
+  	      value="yes">
+  		      <not>
+  		        <isset property="args.xml.systemid.set" />
+  		      </not>
+  	</condition> 	
+  	<!-- Added on 2010-11-16 for bug:3086552 enable system id setting in XMLReader.parse end-->
+  	
+    <basename property="dita.input.filename" file="${args.input}" />
+    <dirname property="dita.input.dirname" file="${args.input}" />
+    <basename property="dita.map.filename.root"
+      file="${dita.input.filename}" suffix=".ditamap" />
+    <basename property="dita.topic.filename.root"
+      file="${dita.input.filename}" suffix="${dita.ext}" />
+    <!-- end to init required parameters -->
+
+    <!-- create required directories -->
+    <mkdir dir="${output.dir}" />
+    <mkdir dir="${dita.temp.dir}" />
+
+    <!-- begin to check and init css relevant properties -->
+    <condition property="user.csspath.url">
+      <or>
+        <contains string="${args.csspath}" substring="http://" />
+        <contains string="${args.csspath}" substring="https://" />
+      </or>
+    </condition>
+    <condition property="args.csspath.absolute">
+      <isabsolute path="${args.csspath}" />
+    </condition>
+    <!-- Set the csspath as default empty directory when there is no user
+      input csspath or user input csspath is a local absolute path. -->
+    <condition property="user.csspath" value="">
+      <or>
+        <not>
+          <isset property="args.csspath" />
+        </not>
+        <isset property="args.csspath.absolute" />
+      </or>
+    </condition>
+    <condition property="user.csspath" value="${args.csspath}/">
+      <not>
+        <isset property="user.csspath" />
+      </not>
+    </condition>
+    <condition property="args.css.real"
+      value="${args.cssroot}${file.separator}${args.css}">
+      <isset property="args.cssroot" />
+    </condition>
+    <condition property="args.css.real" value="${args.css}">
+      <not>
+        <isset property="args.cssroot" />
+      </not>
+    </condition>
+    <available file="${args.css.real}" property="args.css.present"
+      type="file" />
+    <basename property="args.css.file.temp" file="${args.css}" />
+    <condition property="args.css.file" value="${args.css.file.temp}">
+    	<or>
+    		<isset property="args.css.present" />
+    		<isset property="user.csspath.url" />
+    	</or>
+    </condition>
+    <!-- end to check and init css relevant parameters -->
+
+    <condition property="args.logdir" value="${output.dir}">
+      <not>
+        <isset property="args.logdir" />
+      </not>
+    </condition>
+
+    <condition property="xslt.parser" value="Saxon" else="Xalan">
+      <or>
+        <available classname="net.sf.saxon.StyleSheet"/>
+        <available classname="net.sf.saxon.Transform"/>
+      </or>
+    </condition>
+    
+    <condition property="collator" value="ICU" else="JDL">
+      <available classname="com.ibm.icu.text.Collator"/>
+    </condition>
+  	
+  	<!-- Validate the xml file or not,default is validation(true)-->
+  	<condition property="validate" value="true">
+  	   <not>
+  		 <isset property="validate" />
+  	   </not>
+  	</condition>
+    
+    <!-- Related links to output: none, all, nofamily -->
+    <condition property="include.rellinks" value="">
+      <equals arg1="${args.rellinks}" arg2="none"/>
+    </condition>
+    <condition property="include.rellinks" value="#default friend sample external other">
+      <equals arg1="${args.rellinks}" arg2="nofamily"/>
+    </condition>
+    <condition property="include.rellinks" value="#default parent child sibling friend next previous cousin ancestor descendant sample external other">
+      <or>
+        <equals arg1="${args.rellinks}" arg2="all"/>
+        <not><isset property="args.rellinks"/></not>
+      </or>
+    </condition>
+  	
+  	<!--solution for the output control-->
+  	<condition property="generate.copy.outer" value="1">
+  	   <not>
+  		 <isset property="generate.copy.outer" />
+  	   </not>
+  	</condition>
+  	
+  	<condition property="onlytopic.in.map" value="false">
+  	   <not>
+  		 <isset property="onlytopic.in.map" />
+  	   </not>
+	</condition>
+  	<!--
+  	default value : warn
+	fail     :1a) Fail quickly if files are going to be generated/copied outside of that directory
+	warn  :1b) Complete if files will be generated/copied outside, but log a warning
+	quiet  :1c) Quietly finish with only those files (no warning or error)
+  	-->
+  	<condition property="outer.control" value="warn">
+  	   <not>
+  		 <isset property="outer.control" />
+  	   </not>
+  	</condition>
+  	
+  	<!-- Move the outer.transform to build_general.xml -->
+	<!--
+  	<condition property="outer.transform">
+	   <equals arg1="${generate.copy.outer}" arg2="2"></equals>
+	</condition>	
+    -->
+    
+    <condition property="inner.transform">
+	   <or>
+	 	 <equals arg1="${generate.copy.outer}" arg2="1"></equals>
+	     <equals arg1="${generate.copy.outer}" arg2="2"></equals>
+	   </or>
+  	</condition>
+  	
+  	<condition property="old.transform">
+    	<equals arg1="${generate.copy.outer}" arg2="3"></equals>
+    </condition>
+    
+    <!-- output parameters info -->
+    <echo level="info">*****************************************************************</echo>
+    <echo level="info">* basedir = ${basedir}</echo>
+    <echo level="info">* dita.dir = ${dita.dir}</echo>
+    <echo level="info">* input = ${args.input}</echo>
+    <echo level="info">* transtype = ${transtype}</echo>
+    <echo level="info">* tempdir = ${dita.temp.dir}</echo>
+    <echo level="info">* outputdir = ${output.dir}</echo>
+    <echo level="info">* extname = ${dita.ext}</echo>
+    <echo level="info">* clean.temp = ${clean.temp}</echo>
+    <echo level="info">* DITA-OT version = ${otversion}</echo>
+    <echo level="info">* XML parser = ${xml.parser}</echo>
+    <echo level="info">* XSLT processor = ${xslt.parser}</echo>
+    <echo level="info">* collator = ${collator}</echo>
+    <echo level="info">*****************************************************************</echo>
+  	<echoproperties regex="^(arg|preprocess|dita)" taskname="echo" failonerror="false"/>
+  	<echo level="info">*****************************************************************</echo>
+  </target>
+
+  <target name="output-msg" depends="output-deprecated-msg, output-css-warn-message"/>
+  
+  <target name="output-deprecated-msg" if="msg.deprecate">
+    <dita-ot-echo id="DOTA005W" />
+  </target>
+  
+  <target name="output-css-warn-message" if="args.csspath.absolute">
+    <dita-ot-echo id="DOTA006W" />
+  </target>
+
+</project>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  This file is part of the DITA Open Toolkit project.
+  See the accompanying license.txt file for applicable licenses.
+-->
+<plugin id="org.dita.eclipsecontent">
+  <!-- extension points -->
+  <extension-point id="dita.xsl.dynamicdita" name="Dynamic DITA XSLT import"/>
+  <!-- extensions -->
+  <feature extension="dita.conductor.transtype.check" value="eclipsecontent"/>
+  <feature extension="dita.conductor.target.relative" file="conductor.xml"/>
+  <feature extension="dita.basedir-resource-directory" value="true"/>
+  <template file="../../xsl/dita2dynamicdita_template.xsl"/>
+</plugin>

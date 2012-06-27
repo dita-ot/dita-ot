@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN"
+ "task.dtd">
+<task id="installation" xml:lang="en">
+<title>Installing the DITA Open Toolkit</title>
+<titlealts>
+<navtitle>Installing DITA-OT</navtitle>
+</titlealts>
+<shortdesc>This topic explains how to install the DITA Open Toolkit
+processing environment.</shortdesc>
+<task id="Fullsetup-windows" platform="windows" xml:lang="en-us">
+<title>Installing DITA-OT Full Easy Install package in Windows</title>
+<shortdesc id="what-is-easyinstall">The DITA-OT depends on several
+external open source libraries, such as Ant for running builds, ICU
+for sorting indexes, and more. The "full easy install" distribution
+of the DITA-OT includes all of the prerequisite tools - everything
+you need except for Java itself.</shortdesc>
+<taskbody>
+<prereq><p>Before installing DITA Open Toolkit full distribution,
+you need to complete the following           steps:</p><ul>
+<li>Download and configure the Java JRE (the minimum version is <keyword
+keyref="tool.java.version"></keyword>).</li>
+<li importance="optional">(Optional) Download and configure HTMLHelp
+Compiler properly for             HTMLHelp transformation. </li>
+<li importance="optional">(Optional) Download and configure JavaHelp
+Compiler properly for             JavaHelp transformation.</li>
+</ul>       </prereq>
+<steps>
+<stepsection>After installing Java and (if needed) HTML Help or JavaHelp
+compilers, you will need to follow these steps to complete your installation.</stepsection>
+<step><cmd>Download the DITA-OT Full Easy Install package.</cmd></step>
+<step><cmd>Unzip <filepath>DITA-OT<keyword keyref="release.version"></keyword>_full_easy_install_bin.zip</filepath> into
+the installation directory.</cmd></step>
+<step><cmd>Run the batch file "<filepath>startcmd.bat</filepath>"
+to set up the necessary             environment variables.</cmd>
+<stepresult>A new <wintitle>Command Prompt</wintitle> window will
+open up, with the environment variables already set to enable DITA-OT
+to run within that shell.</stepresult></step>
+<step><cmd>You may now run a build in the <wintitle>Command Prompt</wintitle> window
+by using Ant or command-line tool.</cmd></step>
+</steps>
+<result><p>The resulting <wintitle>Command Prompt</wintitle> can be
+used to run as many builds as you want. Once that window is closed,
+you will need to run <filepath>startcmd.bat</filepath> again to set
+up a new environment for running builds.</p></result>
+</taskbody>
+</task>
+  <task id="Fullsetup-osx" platform="osx">
+    <title>Installing DITA-OT Full Easy Install package in Mac OS X</title>
+    <shortdesc conref="#Fullsetup-windows/what-is-easyinstall"/>
+    <taskbody>
+      <prereq><p>Before installing DITA Open Toolkit full distribution,
+        you need to complete the following           steps:</p><ul>
+          <li importance="optional">(Optional) Download and configure JavaHelp
+            Compiler properly for             JavaHelp transformation.</li>
+        </ul>       </prereq>
+      <steps id="steps">
+        <stepsection>After installing Java and (if needed) the JavaHelp compiler,
+          you will need to follow these steps to complete your installation.</stepsection>
+        <step><cmd>Download the DITA-OT Full Easy Install package.</cmd></step>
+        <step><cmd>Extract <filepath>DITA-OT<keyword keyref="release.version"></keyword>_full_easy_install_bin.tar.gz</filepath> into
+          the installation directory.</cmd></step>
+        <step><cmd>Run shell script "<filepath>startcmd.sh</filepath>" to
+          set up the necessary             environment variables.</cmd>
+          <stepresult>A new <wintitle>Terminal</wintitle> window will open up,
+            with the environment variables already set to enable DITA-OT to run
+            within that shell.</stepresult></step>
+        <step><cmd>You may now run a build in the <wintitle>Terminal</wintitle> window
+          by using Ant or command-line tool.</cmd></step>
+      </steps>
+      <result id="result"><p>The resulting <wintitle>Terminal</wintitle> can be used to run as many builds as you want. Once
+        that shell is closed, you will need to run <filepath>startcmd.sh</filepath> again to set
+        up a new environment for running builds.</p></result>
+    </taskbody>
+  </task>
+<task id="Fullsetup-unix" platform="linux">
+<title>Installing DITA-OT Full Easy Install package in Linux</title>
+<shortdesc conref="#Fullsetup-windows/what-is-easyinstall"/>
+<taskbody>
+<prereq><p>Before installing DITA Open Toolkit full distribution,
+you need to complete the following           steps:</p><ul>
+<li>Download and configure the Java JRE (the minimum version is <keyword
+keyref="tool.java.version"></keyword>).</li>
+<li importance="optional">(Optional) Download and configure JavaHelp
+Compiler properly for             JavaHelp transformation.</li>
+</ul>       </prereq>
+<steps conref="#Fullsetup-osx/steps">
+<step>
+  <cmd></cmd>
+</step>
+</steps>
+<result conref="#Fullsetup-osx/result"/>
+</taskbody>
+</task>
+<task id="installation-windows" platform="windows">
+<title>Set up DITA Open Toolkit in Windows</title>
+  <shortdesc>The following steps guide you to set up the DITA Open Toolkit processing environment in
+      Windows from standard or minimal distribution package.</shortdesc>
+<taskbody>
+<prereq id="installattion-prereq"><p>The recommended use of the DITA Open Toolkit components is inside of the Java environment because
+          its <xref href="DITA-usingtransforms.xml#ditausingxform/preprocess">pre-process
+            architecture</xref> needs Java and Java-based tools. Therefore, before installing the
+          DITA Open Toolkit processing environment, ensure that you have installed the following
+          prerequisite tools:<note>See <xref href="DITA-tested.xml">Tested platforms and
+              tools</xref> for detailed information about versions of these tools that have been
+            successfully tested with the current toolkit release.</note></p><dl><dlentry id="Prereq"
+platform="windows linux">
+<dt id="jdk">Java runtime or development environment <keyword keyref="tool.java.version"/> or
+              newer</dt>
+<dd>Provides the basic environment for most tools used in this toolkit. <p>You can download and
+                install the Java Runtime Environment (JRE) <keyword keyref="tool.java.version"/> (or
+                newer) (available from <xref format="html"
+                  href="http://www.oracle.com/technetwork/java/javase/overview/index.html"
+                  scope="external"/>) into a directory of your choice.</p></dd>
+</dlentry>
+          <dlentry>
+            <dt>Apache Xerces <keyword keyref="tool.xerces.version.min"/>  or newer</dt>
+            <dd>Provides high performance XML parser.</dd>
+          </dlentry>
+          <dlentry>
+            <dt>Apache XML Commons Resolver <keyword keyref="tool.resolver.version"/>  or newer</dt>
+            <dd>Provides XML catalog support.</dd>
+          </dlentry><dlentry id="XSLT">
+<dt id="xslt">XSLT 1.0 compliant transformation engine</dt>
+<dd>Provides the main transformation services via the advanced XSLT processor Saxon <keyword
+                keyref="tool.saxon.version"/> (or newer) or Xalan-J <keyword
+                keyref="tool.xalan.version"/> (or newer) in the toolkit.<p>You can download and
+                extract Saxon (available at <xref format="html" href="http://saxon.sourceforge.net/"
+                  scope="external"/>) or the Xalan-J (available at <xref format="html"
+                  href="http://xml.apache.org/xalan-j/downloads.html" scope="external"/>) into a
+                directory of your choice.</p></dd>
+</dlentry><dlentry id="antbuild">
+<dt>Ant <keyword keyref="tool.ant.version.min"/> or newer</dt>
+<dd>Provides the standard setup and sequencing of processing steps.</dd>
+</dlentry></dl>       </prereq>
+<steps>
+<stepsection>           <p>The following steps guide you to set up
+the DITA Open Toolkit processing             environment.</p>    
+    </stepsection>
+<step id="download"><cmd>Download the DITA Open Toolkit package file
+from <xref format="html" href="http://sourceforge.net/projects/dita-ot"
+scope="external">SourceForge</xref>             .</cmd><info>    
+        <note>               <ul>
+<li>It is recommended to download the latest version of the DITA Open
+Toolkit for                   stable usage.</li>
+<li>If you use DITA Open Toolkit full distribution, follow instructions
+in <xref href="#Fullsetup-windows"></xref>.</li>
+</ul>             </note>           </info></step>
+<step><cmd>Unzip the package file into a installation directory of
+your choice. </cmd><stepxmp>             <p>For example <filepath>C:\pkg\DITA-OT<keyword
+keyref="release.version"></keyword></filepath></p>           </stepxmp>
+</step>
+<step><cmd>Verify that  the environment variable <codeph>JAVA_HOME</codeph> has
+been set. </cmd><stepxmp>             <codeblock>set JAVA_HOME=&lt;JRE_dir></codeblock> 
+         </stepxmp></step>
+<step><cmd>Verify that  the environment variable <codeph>ANT_HOME</codeph> has
+been set. </cmd><stepxmp>             <codeblock>set ANT_HOME=&lt;Ant_dir></codeblock> 
+         </stepxmp></step>
+<step><cmd>Verify that the environment variable <codeph>PATH</codeph> includes
+Java and Ant             executables.</cmd><stepxmp>             <codeblock>set PATH=%JAVA_HOME%\bin;%ANT_HOME%\bin;%PATH%</codeblock> 
+         </stepxmp></step>
+<step><cmd>Set up <codeph>DITA_HOME</codeph> environment variable
+to point to DITA-OT             installation directory.</cmd><stepxmp> 
+           <codeblock>set DITA_HOME=&lt;DITA-OT_dir></codeblock> 
+         </stepxmp></step>
+<step><cmd>Set up your environment variable <codeph>CLASSPATH</codeph>.</cmd>
+<stepxmp>             <codeblock>set CLASSPATH=%DITA_HOME%\lib\dost.jar;%CLASSPATH%
+set CLASSPATH=%DITA_HOME%\lib;%CLASSPATH%
+set CLASSPATH=%DITA_HOME%\lib\resolver.jar;%CLASSPATH%
+set CLASSPATH=%DITA_HOME%\lib\commons-codec-<keyword
+keyref="tool.codec.version"></keyword>.jar;%CLASSPATH%</codeblock> 
+         </stepxmp></step>
+        <step importance="optional">
+          <cmd>Set up XML parser.</cmd>
+          <info>If you use Ant 1.8 or newer,  set up <codeph>CLASSPATH</codeph> to include Apache
+            Xerces. </info>
+          <stepxmp>
+            <codeblock>set CLASSPATH=&lt;xerces_dir>\xercesImpl.jar;&lt;xerces_dir>\xml-apis.jar;%CLASSPATH%</codeblock>
+          </stepxmp>
+        </step>
+<step><cmd>Set up the XSLT processor.</cmd>
+<choices>
+<choice>                 <p>If you use the Saxon, set up <codeph>CLASSPATH</codeph> to
+include Saxon JAR                 files. </p>                 <codeblock>set CLASSPATH=&lt;saxon_dir>\saxon9.jar;&lt;saxon_dir>\saxon9-dom.jar;%CLASSPATH%</codeblock> 
+               <p>Set up <codeph>ANT_OPTS</codeph>.</p>          
+      <codeblock>set ANT_OPTS=%ANT_OPTS% -Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl</codeblock> 
+             </choice>
+<choice>                 <p>If you use the Xalan, set up <codeph>CLASSPATH</codeph> to
+include Xalan JAR                 files. </p>                 <codeblock>set CLASSPATH=&lt;xalan_dir&gt;\xalan.jar;%CLASSPATH%</codeblock> 
+             </choice>
+</choices>
+</step>
+        <step importance="optional">
+          <cmd>Set up ICU4J for index processing.</cmd>
+          <stepxmp>
+            <codeblock>set CLASSPATH=&lt;icu4j_dir>\icu4j.jar;%CLASSPATH%</codeblock>
+          </stepxmp>
+        </step>
+<step importance="optional"><cmd>If you need JavaHelp output, set
+up you environment variable <codeph>JHHOME</codeph>.</cmd><stepxmp> 
+           <codeblock>set JHHOME=&lt;javahelp_dir&gt;</codeblock> 
+         </stepxmp></step>
+<step importance="optional"><cmd>If you need Compiled HTML Help output,
+add Microsoft HTML Help Workshop installation directory to       
+     <filepath>local.properties</filepath> as <codeph>hhc.dir</codeph> property.</cmd>
+<stepxmp>             <codeblock>hhc.dir=C:\\Program Files (x86)\\HTML Help Workshop</codeblock> 
+         </stepxmp></step>
+<step importance="optional"><cmd>If you use FOP for PDF processing,
+add FOP installation directory to               <filepath>local.properties</filepath> as <codeph>fop.home</codeph> property.</cmd>
+<stepxmp>             <codeblock>fop.home=C:\\Program Files\\fop</codeblock> 
+         </stepxmp></step>
+<step importance="optional"><cmd>If you use RenderX for PDF processing,
+add RenderX installation directory to             <filepath>local.properties</filepath> as <codeph>xep.dir</codeph> property.</cmd>
+<stepxmp>             <codeblock>xep.dir=C:\\Program Files\\xep</codeblock> 
+         </stepxmp></step>
+<step importance="optional"><cmd>If you use AntennaHouse Formatter
+for PDF processing, add AH Formatter installation directory to   
+         <filepath>local.properties</filepath> as <codeph>axf.path</codeph> property.</cmd>
+<stepxmp>             <codeblock>axf.path=C:\\Program Files\\AHFormatterV6</codeblock> 
+         </stepxmp></step>
+<step><cmd>Test the DITA-OT installation with the demo conversions.</cmd>
+<stepxmp>             <p>Run all demos in the DITA Open Toolkit directory. </p> 
+           <codeblock>C:\pkg\DITA-OT<keyword keyref="release.version"></keyword>>ant -f samples\ant_sample\sample_all.xml</codeblock> 
+         </stepxmp></step>
+</steps>
+</taskbody>
+</task>
+<task id="Linuxsetup" platform="linux osx">
+<title>Set up DITA Open Toolkit in Linux or OS X</title>
+<shortdesc> The following steps guide you to set up the DITA Open Toolkit processing environment in
+      Linux or OS X from standard or minimal distribution package. </shortdesc>
+<taskbody>
+<prereq conref="#installation-windows/installattion-prereq"
+id="prereq_2nz_y24_12"></prereq>
+<steps>
+<step id="download"><cmd>Download the DITA Open Toolkit package file
+from <xref format="html" href="http://sourceforge.net/projects/dita-ot"
+scope="external">SourceForge</xref>             .</cmd><info>    
+        <note>               <ul>
+<li>It is recommended to download the latest version of the DITA Open
+Toolkit for                   stable usage.</li>
+<li>If you use DITA Open Toolkit full distribution, follow instructions
+in <xref href="#Fullsetup-unix"></xref>.</li>
+</ul>             </note>           </info></step>
+<step><cmd>Extract the package file into a installation directory
+of your choice. </cmd><info>             <note>You can extract all
+package files and toolkits either to your private home           
+   directory for exclusive usage or to <filepath>/usr/local/share/</filepath> directory
+              for sharing. </note>           </info></step>
+<step><cmd>Verify that  the environment variable <codeph>JAVA_HOME</codeph> has
+been set. </cmd><stepxmp>             <codeblock>export JAVA_HOME=&lt;JRE_dir&gt;</codeblock> 
+         </stepxmp></step>
+<step><cmd>Verify that  the environment variable <codeph>ANT_HOME</codeph> has
+been set. </cmd><stepxmp>             <codeblock>export ANT_HOME=&lt;Ant_dir&gt;</codeblock> 
+         </stepxmp></step>
+<step><cmd>Verify that the environment variable <codeph>PATH</codeph> includes
+Java and Ant             executables.</cmd><stepxmp>             <codeblock>export PATH=$JAVA_HOME/bin:$ANT_HOME/bin:$PATH</codeblock> 
+         </stepxmp></step>
+<step><cmd>Set up <codeph>DITA_HOME</codeph> environment variable
+to point to DITA-OT             installation directory.</cmd><stepxmp> 
+           <codeblock>export DITA_HOME=&lt;DITA-OT_dir></codeblock> 
+         </stepxmp></step>
+<step><cmd>Set up your environment variable <codeph>CLASSPATH</codeph>.</cmd>
+<stepxmp>             <codeblock>export CLASSPATH=$DITA_HOME/lib/dost.jar:$CLASSPATH
+export CLASSPATH=$DITA_HOME/lib:$CLASSPATH
+export CLASSPATH=$DITA_HOME/lib/resolver.jar:$CLASSPATH
+export CLASSPATH=$DITA_HOME/lib/commons-codec-<keyword
+keyref="tool.codec.version"></keyword>.jar:$CLASSPATH</codeblock> 
+         </stepxmp></step>
+  <step importance="optional">
+    <cmd>Set up XML parser.</cmd>
+    <info>If you use Ant 1.8 or newer,  set up <codeph>CLASSPATH</codeph> to include Apache
+      Xerces. </info>
+    <stepxmp>
+      <codeblock>export CLASSPATH=&lt;xerces_dir>/xercesImpl.jar:&lt;xerces_dir>/xml-apis.jar:$CLASSPATH</codeblock>
+    </stepxmp>
+  </step>
+<step><cmd>Set up the XSLT processor.</cmd>
+<choices>
+<choice>               <p>If you use the Saxon, set up <codeph>CLASSPATH</codeph> to
+include Saxon JAR                 files.</p>                 <codeblock>export CLASSPATH=&lt;saxon_dir>/saxon9.jar:&lt;saxon_dir>/saxon9-dom.jar:$CLASSPATH</codeblock> 
+               <p>Set up <codeph>ANT_OPTS</codeph>.</p>          
+      <codeblock>export ANT_OPTS=$ANT_OPTS -Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl</codeblock> 
+           </choice>
+<choice>               <p>If you use the Xalan, set up <codeph>CLASSPATH</codeph> to
+include Xalan JAR files. </p>               <codeblock>export CLASSPATH=&lt;xalan_dir>/xalan.jar:$CLASSPATH</codeblock> 
+           </choice>
+</choices>
+</step>
+  <step importance="optional">
+    <cmd>Set up ICU4J for index processing.</cmd>
+    <stepxmp>
+      <codeblock>export CLASSPATH=&lt;icu4j_dir>/icu4j.jar:$CLASSPATH</codeblock>
+    </stepxmp>
+  </step>
+<step importance="optional"><cmd>If you need JavaHelp output, set
+up you environment variable <codeph>JHHOME</codeph>.</cmd><stepxmp> 
+           <codeblock>export JHHOME=&lt;javahelp_dir&gt;</codeblock> 
+         </stepxmp></step>
+<step importance="optional"><cmd>If you use FOP for PDF processing,
+add FOP installation directory to             <filepath>local.properties</filepath> as <codeph>fop.home</codeph> property.</cmd>
+<stepxmp>             <codeblock>fop.home=/usr/share/java/fop</codeblock> 
+         </stepxmp></step>
+<step importance="optional"><cmd>If you use RenderX for PDF processing,
+add RenderX installation directory to             <filepath>local.properties</filepath> as <codeph>xep.dir</codeph> property.</cmd>
+<stepxmp>             <codeblock>xep.dir=/usr/share/java/xep</codeblock> 
+         </stepxmp></step>
+<step importance="optional"><cmd>If you use AntennaHouse Formatter
+for PDF processing, add AH Formatter installation directory to   
+         <filepath>local.properties</filepath> as <codeph>axf.path</codeph> property.</cmd>
+<stepxmp>             <codeblock>axf.path=/usr/share/java/AHFormatterV6</codeblock> 
+         </stepxmp></step>
+<step><cmd>Test the DITA-OT installation with the demo conversions.</cmd>
+<stepxmp>             <p>Run all demos in the DITA Open Toolkit directory. </p> 
+           <codeblock>/usr/local/share/DITA-OT<keyword
+keyref="release.version"></keyword>$ ant -f samples/ant_sample/sample_all.xml</codeblock> 
+         </stepxmp></step>
+</steps>
+</taskbody>
+</task>
+</task>

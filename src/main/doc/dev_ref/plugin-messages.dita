@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<?Pub Inc?>
+<reference id="plugin-messages" xml:lang="en-us">
+<title>Adding diagnostic messages</title>
+<shortdesc>Plug-in specific warning and error messages can be added
+to the set of messages supplied by the DITA-OT. These messages can
+then be used by any XSLT override.</shortdesc>
+<refbody>
+<section><dl><dlentry>
+<dt><codeph>dita.xsl.messages</codeph></dt>
+<dd>Add new messages to diagnostic message file.</dd>
+</dlentry></dl></section>
+<example><title>Example</title><p>To add your own messages, create
+the new messages in an XML file such as <filepath>myMessages.xml</filepath>:</p><codeblock>&lt;dummy>
+  &lt;!-- See resource/messages.xml for the details. -->
+  &lt;message id="DOTXmy-msg-numW" type="WARN">
+    &lt;reason>Message text&lt;/reason>
+    &lt;response>How to resolve&lt;/response>
+  &lt;/message>
+&lt;/dummy></codeblock><p>There are three components to the message
+ID:<ol>
+<li>The prefix DOTX is used by all DITA-OT XSLT transforms, and must
+be part of the ID.</li>
+<li>This is followed by the message number ("my-msg-num" in the sample above). By convention, this
+            should be a three digit integer.</li>
+<li>Finally, a letter corresponds to the severity. This should be
+one of:<ul>
+<li>I = Informational, used with type="INFO"</li>
+<li>W = Warning, used with type="WARN"</li>
+<li>E = Error, used with type="ERROR"</li>
+<li>F = Fatal, used with type="FATAL"</li>
+</ul></li>
+</ol></p><p>Once the message file is defined, it is incorporated with
+this extension: </p><codeblock>&lt;plugin id="com.example.newmsg">
+  &lt;feature extension="dita.xsl.messages" file="myMessages.xml"/>
+&lt;/plugin></codeblock><p>XSLT modules can then generate the message
+using the following call: </p><?Pub Caret 67?><codeblock>&lt;xsl:call-template name="output-message">
+  &lt;xsl:with-param name="msgnum">my-msg-num&lt;/xsl:with-param>
+  &lt;xsl:with-param name="msgsev">W&lt;/xsl:with-param>
+&lt;/xsl:call-template>
+</codeblock></example>
+</refbody>
+</reference>
+<?Pub *0000002093?>

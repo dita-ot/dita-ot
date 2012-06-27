@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin id="org.dita.pdf2">
+  <!-- extension points -->
+  <extension-point id="dita.xsl.xslfo" name="PDF XSLT import"/>
+  <extension-point id="org.dita.pdf2.xsl.topicmerge" name="PDF2 topic merge XSLT import"/>
+  <extension-point id="depend.org.dita.pdf2.format.pre" name="Formatting pre-target"/>
+  <extension-point id="depend.org.dita.pdf2.format" name="Formatting target"/>
+  <extension-point id="depend.org.dita.pdf2.format.post" name="Formatting post-target"/>
+  <extension-point id="org.dita.pdf2.catalog.relative" name="Configuration XML catalog"/>
+  <extension-point id="dita.conductor.pdf2.param" name="PDF XSLT parameters"/>
+  <!-- extensions -->
+  <feature extension="dita.conductor.lib.import" file="lib/fo.jar"/>
+  <feature extension="dita.conductor.transtype.check" value="pdf2" type="pdf"/>
+  <feature extension="dita.transtype.print" value="pdf2"/>
+  <feature extension="dita.conductor.target.relative" file="integrator.xml"/>
+  <feature extension="dita.xsl.messages" file="resource/messages.xml"/>
+  <template file="build_template.xml"/>
+  <template file="cfg/catalog_template.xml"/>
+  <template file="xsl/fo/topic2fo_shell_template.xsl"/>
+  <template file="xsl/fo/topic2fo_shell_axf_template.xsl"/>
+  <template file="xsl/fo/topic2fo_shell_fop_template.xsl"/>
+  <template file="xsl/fo/topic2fo_shell_xep_template.xsl"/>
+  <template file="xsl/common/topicmerge_template.xsl"/>
+</plugin>

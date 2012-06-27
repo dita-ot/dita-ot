@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"  "../dtd/map.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
+<map id="keyrefs" title="Key references">
+  <keydef keys="release.version">
+    <topicmeta>
+      <keywords>
+        <keyword>1.6</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <!-- minimum versions -->
+  <keydef keys="tool.java.version">
+    <topicmeta>
+      <keywords>
+        <keyword>1.5</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <!-- bundled -->
+  <keydef keys="tool.ant.version">
+    <topicmeta>
+      <keywords>
+        <keyword>1.8.4</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <!-- minimum version -->
+  <keydef keys="tool.ant.version.min">
+    <topicmeta>
+      <keywords>
+        <keyword>1.7.1</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <!-- bundled with Ant 1.7.1 -->
+  <keydef keys="tool.xerces.version.min">
+    <topicmeta>
+      <keywords>
+        <keyword>2.9.0</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <!-- bundled version -->
+  <keydef keys="tool.xerces.version">
+    <topicmeta>
+      <keywords>
+        <keyword>2.11.0</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <!-- minimum versions -->
+  <keydef keys="tool.xalan.version">
+    <topicmeta>
+      <keywords>
+        <keyword>2.7.1</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <!-- bundled versions -->
+  <keydef keys="tool.fop.version">
+    <topicmeta>
+      <keywords>
+        <keyword>1.0</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <!-- bundled versions -->
+  <keydef keys="tool.saxon.version">
+    <topicmeta>
+      <keywords>
+        <keyword>9.1</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <!-- bundled versions -->
+  <keydef keys="tool.resolver.version">
+    <topicmeta>
+      <keywords>
+        <keyword>1.1</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <!-- bundled versions -->
+  <keydef keys="tool.codec.version">
+    <topicmeta>
+      <keywords>
+        <keyword>1.4</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <!-- bundled versions -->
+  <keydef keys="tool.icu4j.version">
+    <topicmeta>
+      <keywords>
+        <keyword>49.1</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef keys="github-project" href="https://github.com/dita-ot/dita-ot" scope="external" format="html">
+    <topicmeta>
+      <linktext>DITA-OT project on github</linktext>
+    </topicmeta>
+  </keydef>
+  <keydef keys="dita-ot-issues" href="https://github.com/dita-ot/dita-ot/issues" scope="external" format="html">
+    <topicmeta>
+      <linktext>DITA-OT bug and feature tracker</linktext>
+    </topicmeta>
+  </keydef>
+  <keydef keys="github-help" href="https://help.github.com/articles/set-up-git" scope="external" format="html">
+    <topicmeta>
+      <linktext>Setting up Git to work with the project</linktext>
+    </topicmeta>
+  </keydef>
+  <keydef keys="contributor-meeting-minutes" href="https://github.com/dita-ot/dita-ot/wiki/Meeting-minutes" scope="external" format="html">
+    <topicmeta>
+      <linktext>DITA-OT Contributor Meeting Minutes</linktext>
+    </topicmeta>
+  </keydef>
+  <keydef keys="dita-ot-developer" href="https://lists.sourceforge.net/lists/listinfo/dita-ot-developer" scope="external" format="html">
+    <topicmeta>
+      <linktext>Sign-up for DITA-OT Developer Mailing List</linktext>
+    </topicmeta>
+  </keydef>
+
+  <keydef keys="license-CPL" href="http://www.opensource.org/licenses/cpl1.0.php" scope="external" format="html">
+    <topicmeta>
+      <linktext>Common Public License</linktext>
+    </topicmeta>
+  </keydef>
+  <keydef keys="license-Apache2.0" href="http://www.apache.org/licenses/LICENSE-2.0" scope="external" format="html">
+    <topicmeta>
+      <linktext>Apache License 2.0</linktext>
+    </topicmeta>
+  </keydef>
+</map>

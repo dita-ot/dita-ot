@@ -1,0 +1,890 @@
+/*
+ | This file is part of the DITA Open Toolkit project hosted on 
+ | Sourceforge.net. See the accompanying license.txt file for 
+ | applicable licenses.
+*/
+/*
+ | (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
+*/
+
+*[class\~="topic\/ol"] > li > *[class\~="topic\/ol"] > *[class\~="topic\/li"]    {
+  list-style-type: lower-alpha !important;
+}
+
+/* mods to update in topic_classed:
+  box model for link/linklist etc
+      CALS table model
+*/
+/* class-based lookups for DITA */
+author, copyright, critdates, permissions, audience, othermeta, language, category, context, dd, ddhd, desc, dl, dlhead, dlentry, dt, dthd, example, fig, figbody, lq, note, ol, p, prolog, relgroup, longdesc, title, ul    {
+  display: block;
+}
+
+*[class~="topic\/topic"]    {
+  display: block;
+  margin-top: 6pt;
+  margin-bottom: 9pt;
+  font-family: sans-serif;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+*[class~="topic\/topic"] > *[class~="topic\/title"]    {
+  display: block;
+  margin-top: 16pt;
+  margin-bottom: 9pt;
+  font-size: 22pt;
+  font-weight: bold;
+  color: #000001;
+}
+
+* > *[class~="topic\/topic"] > *[class~="topic\/title"]    {
+  margin-top: 20pt;
+  font-size: 18pt;
+  font-weight: bold;
+  color: #000002;
+}
+
+* > * > *[class~="topic\/topic"] > *[class~="topic\/title"]    {
+  margin-top: 20pt;
+  font-size: 16pt;
+  font-weight: bold;
+  color: #000002;
+}
+
+* > * > * > *[class~="topic\/topic"] > *[class~="topic\/title"]    {
+  margin-top: 10pt;
+  font-size: 14pt;
+  font-weight: bold;
+  color: #000000;
+}
+
+*[class~="topic\/searchtitle"]    {
+  margin-top: 6pt;
+  margin-left: 24pt;
+  font-size: 14pt;
+  font-weight: bold;
+  display: block;
+  color: teal;
+}
+
+*[class~="topic\/searchtitle"]:before    {
+  color: blue;
+  font-weight: bold;
+  margin-left: 24pt;
+  display: inline;
+  margin-left: 24pt;
+  content: "Search Title: ";
+}
+
+/* For authoring, call attention to shortdesc by boxing it.
+   For output, its just a paragraph. */
+*[class~="topic\/shortdesc"]    {
+  display: block;
+  margin-top: 6pt;
+  margin-bottom: 6pt;
+  border: thin solid black;
+}
+
+*[class~="topic\/prolog"]    {
+  margin-top: 1pc;
+  margin-left: 24pt;
+  background-color: #99FFCC;
+  padding-top: 3pt;
+  padding-right: 3pt;
+  padding-left: 3pt;
+  padding-bottom: 6pt;
+  border: thin solid olive;
+  margin-bottom: 1pc;
+}
+
+*[class~="topic\/body"]    {
+  display: block;
+  margin-left: 12pt;
+}
+
+/* general setup for section-like divisions and exhibits */
+*[class~="topic\/section"], *[class~="topic\/example"], *[class~="topic\/table"], *[class~="topic\/fig"]    {
+  margin-top: 12pt;
+  display: block;
+}
+
+*[class~="topic\/section"] > *[class~="topic\/title"], *[class~="topic\/example"] > *[class~="topic\/title"]    {
+  display: block;
+  font-weight: bold;
+  margin-top: 6pt;
+  margin-bottom: 2pt;
+}
+
+/*== special content and exhibits ==*/
+*[spectitle]:before    {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 2pt;
+  content: attr(spectitle) ": ";
+}
+
+*[spectitle][class~="topic\/section"]:before, *[spectitle][class~="topic\/example"]:before    {
+  display: block;
+  font-weight: bold;
+  font-size: 11pt;
+  content: attr(spectitle) ": ";
+}
+
+*[specentry]:before    {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 2pt;
+  content: attr(specentry) ": ";
+}
+
+*[conref]:before    {
+  content: "Conref: [" attr(conref) "]";
+}
+
+/*== body content ==*/
+/* apparently not supported in XXE */
+*[class~="topic\/section"] > p:first-child    {
+  display: block;
+  margin-top: 6pt;
+  margin-bottom: 6pt;
+}
+
+*[class~="topic\/section"] > *[class~="topic\/p"]    {
+  display: block;
+  margin-top: 6pt;
+}
+
+*[class~="topic\/p"], *[class~="topic\/note"]    {
+  display: block;
+  margin-bottom: 6pt;
+}
+
+*[class~="topic\/note"] > *[class~="topic\/p"]    {
+  display: block;
+  margin-top: 6pt;
+  margin-bottom: 6pt;
+}
+
+*[type="note"][class~="topic\/note"]:before    {
+  font-weight: bold;
+  content: "Note: ";
+}
+
+*[type="tip"][class~="topic\/note"]:before    {
+  font-weight: bold;
+  content: "Tip: ";
+}
+
+*[type="fastpath"][class~="topic\/note"]:before    {
+  font-weight: bold;
+  content: "Fastpath: ";
+}
+
+/* additional to add here: attention, caution, danger, important, remember, restriction, other */
+note:before    {
+  font-weight: bold;
+  content: attr(type) "Note: ";
+}
+
+/*== list item ==*/
+*[class~="topic\/li"]    {
+  margin-left: 20pt;
+  display: list-item;
+  margin-bottom: 2pt;
+  margin-top: 6pt;
+}
+
+*[class~="topic\/ul"], *[class~="topic\/ol"]    {
+  margin-top: 6pt;
+  margin-bottom: 6pt;
+}
+
+*[class~="topic\/ul"] > *[class~="topic\/li"]    {
+  list-style-type: disc;
+}
+
+*[class~="topic\/ol"] > *[class~="topic\/li"]    {
+  list-style-type: decimal;
+}
+
+*[class~="topic\/ol"] > *[class~="topic\/li"] > *[class~="topic\/ol"] > *[class~="topic\/li"] {
+  list-style-type: lower-alpha;
+}
+
+*[class~="topic\/sl"]    {
+  list-style: none;
+}
+
+*[class~="topic\/sli"]    {
+  display: list-item;
+}
+
+/*== phrase markup ==*/
+*[class\~="hi-d\/b"]  {
+  font-weight: bold;
+}
+*[class\~="hi-d\/i"]    {
+  font-style : italic;
+}
+*[class\~="hi-d\/u"]    {
+  text-decoration : underline;
+}
+*[class\~="hi-d\/tt"], *[class\~="sw-d\/systemoutput"]    {
+  font-family : monospace;
+}
+*[class\~="ui-d\/uicontrol"] , *[class\~="pr-d/parmname"]   {
+  font-weight: bold;
+}
+
+*[class~="topic\/q"]:before    {
+  content: "\"";
+}
+
+*[class~="topic\/q"]:after    {
+  content: "\"";
+}
+
+*[class~="topic\/cite"]    {
+  font-style: italic;
+}
+
+*[class~="topic\/fn"]:before    {
+  color: purple;
+  font-weight: bold;
+  content: " [Footnote: ";
+}
+
+*[class~="topic\/fn"]:after    {
+  color: purple;
+  font-weight: bold;
+  content: "] ";
+}
+
+*[class~="topic\/fn"]    {
+  color: purple;
+  font-weight: bold;
+}
+
+/*== default (preferred) rendering of dl as indented list ==*/
+dl[title]:before, *[title]:before    {
+  font-weight: bold;
+  font-size: 11pt;
+  content: attr(title) ": ";
+}
+
+*[class~="topic\/dlhead"]    {
+  font-weight: bold;
+}
+
+*[class~="topic\/dl"]    {
+  margin-left: 2ex;
+  margin-top: 1.33ex;
+  margin-bottom: 1.33ex;
+}
+
+*[class~="topic\/dt"], *[class~="topic\/dthd"]    {
+  font-weight: bold;
+}
+
+*[class~="topic\/dd"], *[class~="topic\/ddhd"]    {
+  margin-left: 4ex;
+}
+
+/*== line-oriented content ==*/
+*[class~="topic\/pre"]    {
+  display: block;
+  white-space: pre;
+  background-color: #e0e0e0;
+  border: thin solid gray;
+  font-family: Courier;
+  margin-top: 1.33ex;
+  margin-bottom: 1.33ex;
+}
+
+*[class~="topic\/lines"]    {
+  white-space: pre;
+  display: block;
+  font-style: normal;
+}
+
+/*== blocked paragraphs and contexts ==*/
+*[class~="topic\/lq"]    {
+  margin-left: 20pt;
+  display: block;
+  margin-top: 6pt;
+}
+
+*[class~="topic\/p"] > *[class~="topic\/pre"]    {
+  margin-top: 6pt;
+}
+
+/* generic support for the scale attribute (must match an e*/
+/*display-atts:
+scale (50|60|70|80|90|100|110|120|140|160|180|200) #IMPLIED
+frame (top | bottom |topbot | all | sides | none) #IMPLIED
+expanse (page|column|textline) #IMPLIED
+*/
+*[scale="50"]    {
+  font-size: 50%;
+}
+
+*[scale="60"]    {
+  font-size: 60%;
+}
+
+*[scale="70"]    {
+  font-size: 70%;
+}
+
+*[scale="80"]    {
+  font-size: 80%;
+}
+
+*[scale="90"]    {
+  font-size: 90%;
+}
+
+*[scale="100"]    {
+  font-size: 100%;
+}
+
+*[scale="110"]    {
+  font-size: 110%;
+}
+
+*[scale="120"]    {
+  font-size: 120%;
+}
+
+*[scale="140"]    {
+  font-size: 140%;
+}
+
+*[scale="160"]    {
+  font-size: 160%;
+}
+
+*[scale="180"]    {
+  font-size: 180%;
+}
+
+*[scale="200"]    {
+  font-size: 200%;
+}
+
+/*== figure markup ==*/
+*[frame="all"][class~="topic\/fig"]    {
+  border: thin solid black;
+  margin-bottom: 6pt;
+}
+
+/*== compact (for dl and its derivatives; considering deprecation) ==*/
+*[compact="yes"] > *[class~="topic\/li"]    {
+  margin-top: 0pt;
+}
+
+/* == titles for figs, tables == */
+*[class~="topic\/fig"] > *[class~="topic\/title"]    {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 4pt;
+}
+
+*[class~="topic\/fig"] > *[class~="topic\/title"]:before    {
+  font-weight: bold;
+  content: "Figure: ";
+}
+
+*[class~="topic\/table"] > *[class~="topic\/title"]    {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 4pt;
+}
+
+*[class~="topic\/table"] > *[class~="topic\/title"]:before    {
+  font-weight: bold;
+  content: "Table: ";
+}
+
+/*== CALS table markup ==*/
+*[class~="topic\/table"]    {
+  display: block;
+}
+
+*[class~="topic\/thead"] > *[class~="topic\/row"] > *[class~="topic\/entry"]    {
+  font-weight: bold;
+}
+
+*[class~="topic\/tgroup"]    {
+  display: table;
+}
+
+*[class~="topic\/thead"]    {
+  display: table-header-group;
+}
+
+*[class~="topic\/tfoot"]    {
+  display: table-footer-group;
+}
+
+*[class~="topic\/tbody"]    {
+  display: table-row-group;
+}
+
+*[class~="topic\/row"]    {
+  display: table-row;
+}
+
+*[class~="topic\/entry"]    {
+  display: table-cell;
+  border: thin solid black;
+}
+
+/* rendering for context dependent table content */
+/*
+*[class~="topic\/section"] > *[class~="topic\/table"],
+*[class~="topic\/example"] > *[class~="topic\/table"] {
+  margin-top: 0pt;
+}
+*/
+*[class~="topic\/entry"] > *[class~="topic\/image"]    {
+  margin-top: 0pt;
+  margin-bottom: 0pt;
+}
+
+/*== simple table markup ==*/
+*[class~="topic\/simpletable"]    {
+  display: table;
+  border: thin solid gray;
+}
+
+*[class~="topic\/strow"], *[class~="topic\/sthead"]    {
+  display: table-row;
+}
+
+*[class~="topic\/sthead"] > *[class~="topic\/stentry"]    {
+  display: table-cell;
+  font-weight: bold;
+  text-align: center;
+  border: thin solid gray;
+}
+
+*[class~="topic\/strow"] > *[class~="topic\/stentry"]    {
+  display: table-cell;
+  border: thin solid gray;
+}
+
+*[class~="topic\/note"]    {
+  margin-top: 6pt;
+}
+
+/*== frame support for figures, tables ==*/
+fig[frame="topbot"]    {
+  border: thin solid black;
+}
+
+/* index terms in phrase contexts */
+indexterm    {
+  display: block;
+  margin-left: 6pt;
+  border: thin inset gray;
+  color: black;
+  background-color: #ffddff;
+}
+
+indexterm:before    {
+  content: "[index term: ";
+}
+
+indexterm:after    {
+  content: "]";
+}
+
+/*== prolog and metadata ==*/
+*[class~="topic\/author"]:before    {
+  color: blue;
+  font-weight: bold;
+  content: "Author [";
+}
+
+*[class~="topic\/author"]:after    {
+  color: blue;
+  font-weight: bold;
+  content: "]";
+}
+
+*[class~="topic\/copyrholder"]    {
+  display: block;
+}
+
+*[class~="topic\/year"]:before    {
+  content: "Copyright year " attr(year) " ";
+}
+
+*[class~="topic\/copyright"]:before    {
+  color: blue;
+  font-weight: bold;
+  content: "Copyright [";
+}
+
+*[class~="topic\/copyright"]:after    {
+  color: blue;
+  font-weight: bold;
+  content: "]";
+}
+
+*[class~="topic\/critdates"]:before    {
+  color: blue;
+  font-weight: bold;
+  content: "Critical dates [";
+}
+
+*[class~="topic\/critdates"]:after    {
+  color: blue;
+  font-weight: bold;
+  content: "]";
+}
+
+*[class~="topic\/permissions"]:before    {
+  color: blue;
+  font-weight: bold;
+  content: "Permissions [";
+}
+
+*[class~="topic\/permissions"]:after    {
+  color: blue;
+  font-weight: bold;
+  content: "]";
+}
+
+*[class~="topic\/metadata"]    {
+  display: block;
+  background-color: #66FF66;
+  padding-top: 3pt;
+  padding-right: 3pt;
+  padding-left: 3pt;
+  padding-bottom: 6pt;
+  border: thin solid red;
+  margin-top: 2pt;
+  margin-left: 2pt;
+  margin-right: 2pt;
+  margin-bottom: 2pt;
+}
+
+*[class~="topic\/prolog"]:before    {
+  color: black;
+  font-weight: bold;
+  content: "Prolog:";
+}
+
+*[class~="topic\/metadata"]:before    {
+  color: black;
+  font-weight: bold;
+  content: "Metadata:";
+}
+
+*[class~="topic\/prodinfo"]    {
+  background-color: #e0e0e0;
+  display: block;
+  margin-left: 16pt;
+  margin-top: 6pt;
+  border: thin solid black;
+}
+
+*[class~="topic\/category"]:before    {
+  color: blue;
+  font-weight: bold;
+  content: "Category [";
+}
+
+*[class~="topic\/category"]:after    {
+  color: blue;
+  font-weight: bold;
+  content: "]";
+}
+
+*[class~="topic\/audience"]:before    {
+  color: blue;
+  font-weight: bold;
+  content: "Audience [" attr(type) "]";
+}
+
+*[class~="topic\/keywords"]:before    {
+  color: blue;
+  font-weight: bold;
+  content: "Keywords [";
+}
+
+*[class~="topic\/keywords"]:after    {
+  color: blue;
+  font-weight: bold;
+  content: "]";
+}
+
+*[class~="topic\/language"]:before    {
+  color: blue;
+  font-weight: bold;
+  content: "Language [" attr(lang) "]";
+}
+
+*[class~="topic\/othermeta"]:before    {
+  color: blue;
+  font-weight: bold;
+  content: "Other Metadata: name=[" attr(name) "] content=[" attr(content) "]";
+}
+
+/*== image data ==*/
+*[class\~="topic\/image"], *[placement="inline"][class\~="topic\/image"]    {
+  display: inline;
+  plugin-view: "com.morphon.visualplugins.docbook.DocBook_ImageData";
+  x-morphon-docbook-imagedata-xml-file-name: "href";
+}
+
+*[placement="break"][class~="topic\/image"]    {
+  display: block;
+  plugin-view: "com.morphon.visualplugins.docbook.DocBook_ImageData";
+  x-morphon-docbook-imagedata-xml-file-name: "href";
+}
+
+*[class~="topic\/image"][alt]:after {
+ content: "Alt: [" attr(alt) "]";
+}
+
+/*== specially highlighted elements ==*/
+*[class~="topic\/required-cleanup"]    {
+  color: #CC3333;
+  background-color: #FFFF99;
+  border: thick solid black;
+}
+
+*[class~="topic\/draft-comment"]    {
+  display: block;
+  margin-top: 6pt;
+  margin-bottom: 2pt;
+  background-color: #FF99FF;
+  border: thin solid black;
+}
+
+/*  color: #CC3333; */
+*[class~="topic\/draft-comment"]:before    {
+  font-weight: bold;
+  content: "Comment by " attr(reviewer) ": ";
+}
+
+/*== linking in topics ==*/
+*[class~="topic\/related-links"]    {
+  display: block;
+}
+
+*[class~="topic\/related-links"]:before    {
+  display: block;
+  color: black;
+  font-weight: bold;
+  content: "Related Links:";
+}
+
+*[class~="topic\/links"], *[class~="topic\/linklist"], *[class~="topic\/linkpool"]    {
+  margin-top: 1.33ex;
+  margin-bottom: 1.33ex;
+  display: block;
+  margin-left: 2ex;
+}
+
+*[class~="topic\/links"]:before, *[class~="topic\/linklist"]:before, *[class~="topic\/linkpool"]:before    {
+  color: green;
+  font-weight: bold;
+  content: "Links:";
+}
+
+*[class~="topic\/links"] > *[class~="topic\/title"], *[class~="topic\/linklist"] > *[class~="topic\/title"], *[class~="topic\/linkpool"] > *[class~="topic\/title"]    {
+  display: block;
+  font-weight: bold;
+  margin-top: 6pt;
+}
+
+/*== common and separate behaviors of link, xref, cite ==*/
+*[class~="topic\/link"]    {
+  display: block;
+  margin-left: 20pt;
+}
+
+*[class~="topic\/xref"], *[class~="topic\/cite"]    {
+  display: inline;
+}
+
+*[class~="topic\/link"], *[class~="topic\/xref"], *[class~="topic\/cite"]    {
+  text-decoration: underline;
+  color: red;
+}
+
+*[href][class~="topic\/link"], *[href][class~="topic\/xref"], *[href][class~="topic\/cite"]    {
+  text-decoration: underline;
+  color: blue;
+}
+
+*[class~="topic\/xref"]:before    {
+  font-weight: bold;
+  content: "[" attr(type) "--" attr(href) "]";
+}
+
+/* linking in topics */
+*[class~="topic\/link"], *[class~="topic\/xref"]    {
+  text-decoration: underline;
+  color: red;
+}
+
+*[href][class~="topic\/link"], *[href][class~="topic\/xref"]    {
+  text-decoration: underline;
+  color: blue;
+}
+
+*[class~="topic\/link"]    {
+  display: block;
+  margin-left: 20pt;
+}
+
+*[class~="topic\/xref"]:before    {
+  font-weight: bold;
+  content: "[" attr(type) "--" attr(href) "]";
+}
+
+/* rendering support for XML meta elements (comments, PIs) */
+*:comment, *:processing-instruction    {
+  padding: 2px;
+  font-size: smaller;
+  font-family: monospace;
+}
+
+*:comment    {
+  border: thin solid rgb(128, 128, 0);
+  background-color: rgb(192, 192, 128);
+}
+
+*:processing-instruction    {
+  border: thin solid rgb(0, 128, 0);
+  background-color: rgb(192, 255, 192);
+}
+
+*:comment, *:processing-instruction    {
+  display: block;
+  white-space: pre;
+  margin: 2px;
+}
+
+/* process specific behaviors */
+@media morphon {
+  *    {
+    additional-helpset-location: url(dita-help.jar);
+    additional-helpset-mapfile: url(morphon-map.xml);
+    additional-helpset-name: dita-help;
+  }
+  *[class~="topic\/entry"]    {
+    display: table-cell;
+  }
+  *[class~="topic\/xtgroup"]    {
+    table-model: cals;
+  }
+  *[format="GIF"][class~="topic\/image"]    {
+    plugin-view: "com.morphon.visualplugins.docbook.DocBook_ImageData";
+  }
+
+}
+
+@media xxe {
+  /* list item */
+  *[class~="topic\/ul"]    {
+    margin-left: 2ex;
+    margin-top: 1.33ex;
+    margin-bottom: 1.33ex;
+  }
+  *[class~="topic\/ul"] > li    {
+    margin-left: 2.5ex;
+  }
+  *[class~="topic\/ul"] > li:before    {
+    display: marker;
+    content: disc;
+  }
+  *[class~="topic\/ul"] > li *[class~="topic\/ul"] > li:before    {
+    display: marker;
+    content: square;
+  }
+  *[class~="topic\/ul"] > li *[class~="topic\/ul"] > li *[class~="topic\/ul"] > li:before    {
+    display: marker;
+    content: icon(diamond);
+  }
+  *[class~="topic\/ul"] > li *[class~="topic\/ul"] > li *[class~="topic\/ul"] > li *[class~="topic\/ul"] > li:before    {
+    display: marker;
+    content: circle;
+  }
+  *[class~="topic\/ol"]    {
+    margin-left: 2ex;
+    margin-top: 1.33ex;
+    margin-bottom: 1.33ex;
+  }
+  *[class~="topic\/ol"] > li    {
+    margin-left: 6ex;
+  }
+  *[class~="topic\/ol"] > li:before    {
+    display: marker;
+    content: counter(n,decimal);
+    font-weight: bold;
+  }
+  *[style~=lower-alpha][class~="topic\/ol"] > li:before    {
+    display: marker;
+    content: counter(n,lower-alpha);
+  }
+  *[style~=upper-alpha][class~="topic\/ol"] > li:before    {
+    display: marker;
+    content: counter(n,upper-alpha);
+  }
+  *[style~=lower-roman][class~="topic\/ol"] > li:before    {
+    display: marker;
+    content: counter(n,lower-roman);
+  }
+  *[style~=upper-roman][class~="topic\/ol"] > li:before    {
+    display: marker;
+    content: counter(n,upper-roman);
+  }
+  *[class~="topic\/ol"] ul, ul *[class~="topic\/ol"], ul ul, *[class~="topic\/ol"] *[class~="topic\/ol"]    {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+}
+
+/* alternate dl rendering as a table */
+xdl    {
+  display: table;
+}
+
+xdlhead    {
+  display: table-row;
+}
+
+xdthd    {
+  display: table-cell;
+  font-weight: bold;
+  background-color: silver;
+}
+
+xddhd    {
+  content: " - ";
+  display: table-cell;
+  font-weight: bold;
+  background-color: silver;
+}
+
+xdlentry    {
+  display: table-row;
+}
+
+xdt    {
+  display: table-cell;
+  font-weight: bold;
+}
+
+xdd    {
+  display: table-cell;
+}
+

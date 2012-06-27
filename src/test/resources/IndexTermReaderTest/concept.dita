@@ -1,0 +1,23 @@
+<concept xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic concept/concept " domains="(topic concept)                            (topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    " id="concept" ditaarch:DITAArchVersion="1.2">
+  <title class="- topic/title ">Index test</title>
+  <conbody class="- topic/body  concept/conbody ">
+    <p class="- topic/p ">
+      <indexterm class="- topic/indexterm ">Primary</indexterm>
+      <indexterm class="- topic/indexterm ">Primary<indexterm class="- topic/indexterm ">Secondary</indexterm></indexterm>
+      <indexterm class="- topic/indexterm ">Primary<indexterm class="- topic/indexterm ">Secondary<indexterm class="- topic/indexterm ">Tertiary</indexterm></indexterm></indexterm>
+    </p>
+    <p class="- topic/p ">
+      <indexterm class="- topic/indexterm ">Primary normalized</indexterm>
+      <indexterm class="- topic/indexterm ">Primary normalized<indexterm class="- topic/indexterm ">Secondary normalized</indexterm></indexterm>
+      <indexterm class="- topic/indexterm ">Primary normalized<indexterm class="- topic/indexterm ">Secondary normalized<indexterm class="- topic/indexterm ">Tertiary normalized</indexterm></indexterm></indexterm>
+    </p>
+    <p class="- topic/p ">
+      <indexterm class="- topic/indexterm ">  Primary  unnormalized  </indexterm>
+      <indexterm class="- topic/indexterm ">  Primary  unnormalized  
+        <indexterm class="- topic/indexterm ">  Secondary  unnormalized  </indexterm></indexterm>
+      <indexterm class="- topic/indexterm ">  Primary  unnormalized  
+        <indexterm class="- topic/indexterm ">  Secondary  unnormalized  
+          <indexterm class="- topic/indexterm ">  Tertiary  unnormalized  </indexterm></indexterm></indexterm>
+    </p>
+  </conbody>
+</concept>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="plugin-javalib" xml:lang="en-us">
+<title>Adding Java libraries to the classpath</title>
+<shortdesc>If your Ant or XSLT extensions require additional Java
+libraries in the classpath, you can add them to the global DITA-OT
+classpath with the following feature.</shortdesc>
+<refbody>
+<section>       <dl><dlentry>
+<dt><codeph>dita.conductor.lib.import</codeph></dt>
+<dd>Add Java libraries to DITA-OT classpath.</dd>
+</dlentry></dl>       </section>
+<example><title>Example</title><p>The following plug-in adds the compiled
+Java code from <filepath>myJavaLibrary.jar</filepath> into the global
+DITA-OT classpath. XSLT or Ant code can then make use of the added
+code.</p><codeblock>&lt;plugin id="com.example.addjar">
+  &lt;feature extension="dita.conductor.lib.import" file="myJavaLibrary.jar"/>
+&lt;/plugin></codeblock><p>Now assume that in this case myJavaLibrary.jar
+performs some validation step in the middle of processing, and you
+always want it to run immediately before the conref step. In that
+case you need to make use of several features in this plug-in</p><ul>
+<li>The JAR file must be added to the classpath.</li>
+<li>An Ant target must be created that uses this class, and the Ant
+wrapper integrated into the code.</li>
+<li>The Ant target must be added to the dependency chain for conref.</li>
+</ul><p>In this extended example, the files might look something like
+this.</p><codeblock>plugin.xml:
+&lt;?xml version="1.0" encoding="UTF-8"?>
+&lt;plugin id="com.example.samplejava">
+  &lt;!-- Add the JAR file to the DITA-OT CLASSPATH -->
+  <b>&lt;feature extension="dita.conductor.lib.import" file="com.example.sampleValidation.jar"/></b>
+  &lt;!-- Integrate the Ant code -->
+  &lt;feature extension="dita.conductor.target.relative" file="antWrapper.xml"/>
+  &lt;!-- Define the Ant target that is called, and the location (before conref) -->
+  &lt;feature extension="depend.preprocess.conref.pre" value="validateWithJava"/>
+&lt;/plugin>
+
+antWrapper.xml imports the new Ant code:
+&lt;?xml version="1.0" encoding="UTF-8"?>
+&lt;dummy>
+  &lt;import file="calljava-antcode.xml"/>
+&lt;/dummy>
+
+calljava-antcode.xml:
+&lt;?xml version="1.0" encoding="UTF-8"?>
+&lt;project default="validateWithJava">
+  &lt;target name="validateWithJava">
+    &lt;java classname="com.example.sampleValidation">
+      &lt;!-- The class was added to dost.class.path (the DITA-OT classpath) -->
+      &lt;classpath refid="dost.class.path"/>
+    &lt;/java>
+  &lt;/target>
+&lt;/project></codeblock></example>
+</refbody>
+</reference>

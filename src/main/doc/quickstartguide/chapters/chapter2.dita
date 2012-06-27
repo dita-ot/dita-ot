@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="dummychapter1" xml:lang="en-us">
+<title>Running DITA Open Toolkit</title>
+  <titlealts>
+    <navtitle>Running DITA-OT</navtitle>
+  </titlealts>
+<shortdesc>Learn how to run DITA-OT to generate published output documents.</shortdesc>
+</topic>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+ "topic.dtd">
+<?Pub Sty _display FontColor="red"?>
+<topic id="contribution_policy" xml:lang="en-us">
+<title>DITA Open Toolkit Contribution Policy</title>
+<titlealts>
+<navtitle>Contribution policy</navtitle>
+</titlealts>
+<shortdesc>The purpose of the DITA Open Toolkit Contribution Policy
+is to set      forth the general principles under which the DITA Open
+Toolkit project      shall accept contributions, license contributions,
+license materials owned      by this project, and manage other intellectual
+property matters.</shortdesc>
+<body>
+<section><title>Overview</title><p>The <xref keyref="license-CPL"></xref> (CPL)
+and <xref keyref="license-Apache2.0"></xref>, which are incorporated
+         herein by reference, will serve as the primary licenses under
+which the          Committer will accept contributions of software,
+documentation,          information (including, but not limited to,
+ideas, concepts, know-how          and techniques) and/or other materials
+(collectively          &quot;Content&quot;) to the project from Contributors.
+A copy of the          CPL and Apache License 2.0 can be found at
+the root directory of the DITA Open Toolkit          deliverable package.</p> 
+     <p>This Contribution Policy should at all times be interpreted
+in a          manner that is consistent with the Purposes of the this
+project as set          forth in the <xref href="DevelopmentProcess.xml">DITA
+Open Toolkit          Development Process</xref> goals and objectives.
+This Contribution          Policy shall serve as the basis for how
+non-Committers interact with          this project through participation
+in this project, web-sites owned,          controlled, published and/or
+managed under the auspices of the this          project, or otherwise.</p> 
+     <p>The Common Public License and Apache License 2.0 shall serve
+as the primary licenses          under which the Committer(s) shall
+accept software, documentation,          information (including, but
+not limited to, ideas, concepts, know-how          and techniques)
+and/or other materials (collectively          &quot;Content&quot;)
+from contributors including, but not limited to,          Contributors
+and Committers.</p>       <p>The DITA Open Toolkit project provides
+a process for accepting bug          fixes and contributions from
+parties who have not accepted the license          to be Contributors.
+See <xref href="BugFixGuidelines-NoCLA.xml">Due          Diligence
+for Submission of Bug Fixes and Patches from          Non-Committers</xref></p> 
+   </section>
+<section>       <title>DUE DILIGENCE AND RECORD KEEPING</title>  
+    <p>The Committer(s), shall be responsible for scrutinizing all
+Content          contributed to the DITA Open Toolkit project and
+help ensure that the          Contribution Policy licensing requirements
+set forth above are met.          Except as set forth below, the applicable
+Committer shall conduct the          following activities prior to
+uploading any Content into the repository          or otherwise making
+the Content available for distribution: </p>       <ol>
+<li>Contact the potential contributor of the Content through an  
+         appropriate channel of communication and collect/confirm
+the            following:           <ul>
+<li>Contributor&apos;s name, current address, phone            number
+and e-mail address;</li>
+<li>Name and contact information of            the contributor&apos;s
+current employer, if any;</li>
+<li>If the            contributor is not self-employed, the Committer
+must request and            receive a signed <xref
+href="ContributionForm.xml">consent form</xref> (to be provided by
+the Committer) from            the contributor&apos;s employer confirming
+that the employer does not            object to the employee contributing
+the Content. </li>
+<li>Determine            if the Content can be contributed under the
+terms of the CPL and           Apache License 2.0 or the         
+  alternative terms and conditions supplied by the Contributor. This
+           can be done by asking the contributor questions such as; <ol>
+<li>Did            you develop all of the Content from scratch;</li>
+<li>If not, what            materials did you use to develop the Content?</li>
+<li>Did you            reference any confidential information of any
+third party? </li>
+<li>If you referenced third party materials, under what terms did
+you            receive such materials? </li>
+</ol></li>
+<li>If it is determined by            the Committer that the Content
+is not the original work of the            Contributor, collect the
+contact information of the copyright holder            of the original
+or underlying work. The copyright holder of the            Content
+or the underlying work may then need to be contacted to          
+ collect additional information.</li>
+</ul>         </li>
+<li>The <draft-comment>was            &quot;Committer(s)&quot;</draft-comment>Contributor(s)
+shall document            all information requested in (1) above and
+fill in Contribution            Questionnaire (to be provided by the
+Committer) and provide the            completed Contribution Questionnaire
+to the Committer.</li>
+<li>The Committer shall also be responsible for running a scan tool
+to            help ensure that the Content does not include any code
+not identified            by the contributor.</li>
+<li> Based on the information collected, the Committer shall use 
+          his/her reasonable judgment to determine if the Content
+can be            contributed under terms and conditions that are
+consistent with the            licensing requirements of this IP Policy. </li>
+</ol>       <p>If the applicable Committer has any doubts about the
+ability to          distribute the Content under terms and conditions
+that are consistent          with the CPL and Apache License 2.0 or
+the proposed alternative terms and conditions, the          Committer
+may not upload the code to the repository or otherwise          distribute
+the Content. The Committer(s) shall be responsible for          filing/maintaining
+the information collected for future reference as          needed.</p> 
+     <p>The above record keeping requirements shall not apply to</p> 
+     <ul>
+<li>Minor modifications to Content previously contributed to and 
+          accepted by the Committer(s).</li>
+<li>Articles and White Papers</li>
+<li>Information or minor Content modifications provided through bug
+           reports, mailing lists and news groups </li>
+</ul>       <p>While the record keeping requirements do not apply
+to the items listed          above, Committers must conduct reasonable
+due diligence to satisfy          themselves that proposed Contributions
+can be licensed under the terms          of the CPL and Apache License
+2.0.</p>     </section>
+</body>
+</topic>

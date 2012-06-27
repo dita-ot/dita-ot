@@ -1,0 +1,10 @@
+<task xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic task/task " domains="(topic task)                            (topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)                            (topic task strictTaskbody-c)    " id="task" ditaarch:DITAArchVersion="1.2">
+    <title class="- topic/title " id="title">stub for test</title>
+    <taskbody class="- topic/body task/taskbody " id="taskbody">
+        <example class="- topic/example ">
+            <p class="- topic/p ">
+                this is just a stub
+            </p>
+        </example>
+    </taskbody>
+</task>

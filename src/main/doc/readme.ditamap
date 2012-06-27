@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"
+ "map.dtd">
+<?Pub Sty _display FontColor="red"?>
+<map id="mainDITAreadme" title="DITA-OT Readme map" xml:lang="en-us">
+<topicref href="readme/DITA-readme.xml" id="DITA-doc">
+<topicref href="readme/changes/rel1.6.xml" locktitle="yes">
+<topicmeta>
+<navtitle>Release notes</navtitle>
+</topicmeta>
+</topicref>
+<topicref href="specification/DITA1-2.xml"></topicref>
+<topicref href="readme/DITA-tested.xml" toc="no"></topicref>
+<topicref href="readme/distribution_packages.dita"></topicref>
+<topicref href="readme/DITA-installation.xml"></topicref>
+<!--topicref href="readme/DITA-usingtransforms.xml"/-->
+<topicref href="readme/DITA-ant.xml">
+<!--topicref href="readme/DITA-setupant.xml" toc="no"/-->
+<topicref href="readme/DITA-antuse.xml"></topicref>
+<topicref href="readme/DITA-antscript.xml"></topicref>
+<topicref href="quickstartguide/concepts/about_antbuildfiles.dita">
+</topicref>
+</topicref>
+<topicref href="readme/DITA-javacmd.xml">
+<topicref href="readme/dita-ot_java_properties.dita"></topicref>
+</topicref>
+<topicref href="readme/dita-ot_ant_properties.dita"></topicref>
+<topicref href="readme/configuration.dita"></topicref>
+<topicref href="readme/AvailableTransforms.dita">
+<topicref href="readme/dita2xhtml.dita"></topicref>
+<topicref href="readme/dita2eclipsehelp.dita"></topicref>
+<topicref href="readme/dita2tocjs.dita"></topicref>
+<topicref href="readme/dita2pdf.dita">
+<topicref href="readme/dita2pdf-customization.dita"></topicref>
+</topicref>
+<topicref href="readme/dita2htmlhelp.dita" platform="windows">
+</topicref>
+<topicref href="readme/dita2odt.dita"></topicref>
+<topicref href="readme/dita2docbook.dita"></topicref>
+<topicref href="readme/dita2troff.dita"></topicref>
+<topicref href="readme/dita2word.xml">
+<topicref href="readme/ascript.xml#ascript" toc="no"></topicref>
+<topicref href="readme/jcomm.xml#jcomm" toc="no"></topicref>
+</topicref>
+<topicref href="readme/dita2eclipsecontent.dita"></topicref>
+<topicref href="readme/dita2legacypdf.dita" importance="deprecated">
+</topicref>
+<topicref href="readme/DITA-h2d.xml">
+<topicref href="readme/DITA-h2d-ant.xml" toc="no"></topicref>
+<topicref href="readme/DITA-h2d-java.xml" toc="no"></topicref>
+</topicref>
+</topicref>
+<topicref href="readme/DITA-globalization.dita">
+<topicref href="readme/DITA-globalization-xhtml.dita"/>
+<topicref href="readme/DITA-globalization-pdf.dita"/>
+</topicref>
+ 
+<topicref href="readme/troubleshooting-overview.dita">
+    <topicref href="readme/DITA-messages.xml">
+     <topicref href="readme/DITA-messages-details.xml" processing-role="resource-only"/>
+    </topicref>
+    <topicref href="readme/DITA-troubleshooting.xml"/>
+    <topicref href="readme/DITA-log.xml"/>
+    <topicref href="readme/enabling-debug-mode.dita"/>
+    <topicref href="readme/increasing-the-jvm.dita"/>
+</topicref>
+<topicref href="readme/DITA-limitations.xml"
+processing-role="resource-only" toc="no"></topicref>
+</topicref>
+<reltable>
+<relrow>
+<relcell>
+<topicref href="readme/DITA-globalization.dita"></topicref>
+</relcell>
+<relcell>
+<topicref format="html"
+href="http://docs.oasis-open.org/dita/v1.2/os/spec/archSpec/translation.html"
+scope="external" type="reference">
+<topicmeta>
+<linktext>Localization overview in the OASIS DITA standard</linktext>
+</topicmeta>
+</topicref>
+</relcell>
+</relrow>
+</reltable>
+</map>
+<?Pub *0000003312?>

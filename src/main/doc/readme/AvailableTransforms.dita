@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "concept.dtd">
+<concept id="availabletransforms" xml:lang="en-us">
+  <title>Available DITA-OT Transforms</title>
+  <abstract>
+    <shortdesc>The primary purpose of the DITA Open Toolkit is to transform DITA maps and topics
+      into other formats. The toolkit ships with several native transforms, and can be extended to
+      support any other output format with by adding a new plug-in.</shortdesc>
+    <p>The core transforms of the DITA Open Toolkit represent an implementation of all processing
+      defined by OASIS in the DITA specification.</p>
+  </abstract>
+  <conbody>
+    <section id="preprocess">
+      <title>Pre-process</title>
+      <p>A pre-process is done before the main transformation. The input
+        of the pre-process is dita files (maps and topics) and the output of the pre-process is
+        often referred to as "normalized" dita files. The pre-process stage resolves several common
+        DITA behaviors, such as resolving conref attributes, resolving keyref values, and adding
+        links based on the hierarchy and relationship tables in a map. The normalized dita files are
+        in a temporary directory. Most DITA transforms use this common pre-process
+      setup.</p></section>
+    <section>
+      <title>Available core transforms</title>
+      <p>A core DITA transform is the basic set of templates
+        that support all the elements of a topic. This set is the basis for the following processing
+        of any specialized element. Core transforms handle one topic instance, or nested set of
+        topics, at a time.<!-- The DITA Open Toolkit provides several core transforms:--></p>
+      <!--dl id="core-tranforms">
+        <dlentry>
+          <dt>PDF</dt>
+          <dd>PDF output is based on a plug-in that produces XSL-FO output. The XSL-FO output may be
+            converted to PDF using an open source tools (Apache FOP) or using commercial tools such
+            as RenderX or Antenna House Formatter. This transformation type replaced an older demo
+            PDF transform, and is often called "PDF2".</dd>
+        </dlentry>
+        <dlentry>
+          <dt>XHTML</dt>
+          <dd>XHTML output is supported together with a variety of XHTML-based navigation types.
+            Navigation is not required. The XHTML output contains class values based on the DITA
+            elements so CSS files may be used to customize the output style.</dd>
+        </dlentry>
+        <dlentry>
+          <dt>Eclipse Help</dt>
+          <dd>Eclipse output is an XHTML based format that also produces navigation and index files
+            for use with Eclipse information centers.</dd>
+        </dlentry>
+        <dlentry>
+          <dt>TocJS</dt>
+          <dd>The TocJS transformation type includes XHTML output along with JavaScript based frames
+            for navigation, including TOC sections that expand and collapse.</dd>
+        </dlentry>
+        <dlentry platform="windows">
+          <dt>HTML Help</dt>
+          <dd>Microsoft Compiled HTML Help output produces a compiled help
+              (<filepath>.chm</filepath>) file with the XHTML topics, table of contents, and
+            index.</dd>
+        </dlentry>
+        <dlentry>
+          <dt>Java Help</dt>
+          <dd>Java Help includes a table of contents and index for use with the Java Help
+            platform.</dd>
+        </dlentry>
+        <dlentry rev="1.5.2">
+          <dt>OpenDocument (ODT)</dt>
+          <dd>ODT is a document format based on the ODF standard, for use with tools like Open
+            Office. Support for ODT was added in DITA-OT 1.5.2.</dd>
+        </dlentry>
+        <dlentry>
+          <dt>Rich Text Format (RTF)</dt>
+          <dd>RTF output is supported for basic content, but complex markup and some advanced
+            features of DITA may not be supported.</dd>
+        </dlentry>
+        <dlentry>
+          <dt>troff</dt>
+          <dd>troff based man pages are supported; one man page is generated for each input topic.
+            Note that tables are not supported by this transformation type.</dd>
+        </dlentry>
+      </dl-->
+    </section>
+    <section>
+      <title>Invoke the complete transformation</title> 
+      <p>The complete transformation including pre-process can be executed by an Ant script. There
+        are some examples of simple Ant scripts in the directory
+        <filepath>samples/ant_sample</filepath>.</p> 
+    </section>
+  </conbody>
+  <related-links>
+    <link href="DITA-ant.xml"/>
+  </related-links>
+</concept>
