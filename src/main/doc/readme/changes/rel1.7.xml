@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="rel1.7" xml:lang="en">
+  <title>DITA Open Toolkit Release 1.7</title>
+  <reference id="releasehighlights" xml:lang="en-us">
+    <title>Release highlights</title>
+    <refbody>
+      <section/>
+    </refbody>
+  </reference>
+  <reference id="general-enhancements-and-changes">
+    <title>General Enhancements and Changes</title>
+    <refbody>
+      <section id="section_h5q_3nt_q2"/>
+    </refbody>
+  </reference>
+  <reference id="reference_yvj_ttj_bd">
+    <title>Migration from previous releases</title>
+    <refbody>
+      <section/>
+    </refbody>
+  </reference>
+  <reference id="rel1.6">
+    <title>Issues</title>
+    <shortdesc>The following items are included in DITA Open Toolkit Release 1.7. Issue numbers
+      correspond to the tracking number in the <ph><xref keyref="dita-ot-issues" scope="external"
+          >GitHub issues tracker</xref></ph>.</shortdesc>
+    <refbody>
+      <section>
+        <title>Feature requests</title>
+        <ul>
+          <li/>
+        </ul>
+      </section>
+      <section>
+        <title>Patches</title>
+        <ul>
+          <li/>
+        </ul>
+      </section>
+      <section>
+        <title>Bugs</title>
+        <ul>
+          <li/>
+        </ul>
+      </section>
+    </refbody>
+  </reference>
+</reference>
