@@ -9,12 +9,14 @@
     <topicref navtitle="Who We Are" href="who_we_are.dita"/>
   </topichead>
   <topichead navtitle="Download">
+    <topicref navtitle="Release 1.6" scope="external" format="html" href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Stable%20Release/DITA%20Open%20Toolkit%201.6/"/>
     <topicref navtitle="Release 1.5.4" scope="external" format="html" href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Stable%20Release/DITA%20Open%20Toolkit%201.5.4/"/>
     <topicref navtitle="Release 1.5.3" scope="external" format="html" href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Stable%20Release/DITA%20Open%20Toolkit%201.5.3/"/>
     <topicref navtitle="Release 1.5.2" scope="external" format="html" href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Stable%20Release/DITA%20Open%20Toolkit%201.5.2/"/>
     <topicref navtitle="Development Release" scope="external" format="html" href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Latest%20Test%20Build/"/>
   </topichead>
   <topichead navtitle="Documentation">
+    <topicref href="1.6/userguide.html" navtitle="Release 1.6" scope="peer"/>
     <topicref href="1.5.4/userguide.html" navtitle="Release 1.5.4" scope="peer"/>
     <topicref href="1.5.3/" navtitle="Release 1.5.3" scope="peer" format="html"/>
     <topicref href="1.5.2/" navtitle="Release 1.5.2" scope="peer" format="html"/>
