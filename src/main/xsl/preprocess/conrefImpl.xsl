@@ -1033,8 +1033,8 @@
 </xsl:template>
 <xsl:template match="@*" mode="original-attributes">    
     <xsl:variable name="attribute-value" select="."></xsl:variable>
-    <xsl:if test="not($attribute-value='')">
-        <xsl:copy><xsl:value-of select="."/></xsl:copy> 
+    <xsl:if test="not($attribute-value='')"><!-- XXX: Why ignore empty attribute value? -->
+        <xsl:copy/> 
     </xsl:if>
 </xsl:template>
 
