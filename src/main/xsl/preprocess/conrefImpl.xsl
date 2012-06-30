@@ -435,7 +435,7 @@
                                     <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
                                   </xsl:if>
                               </xsl:when>
-                              <xsl:otherwise><xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
+                              <xsl:otherwise><xsl:apply-templates select="$current-element" mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
                             </xsl:choose>
                         <!-- added by William on 20090808 for req #12008 start-->
                           </xsl:for-each>
@@ -527,7 +527,7 @@
                                           <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
                                         </xsl:if>
                                     </xsl:when>
-                                    <xsl:otherwise><xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
+                                    <xsl:otherwise><xsl:apply-templates select="$current-element" mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
                                   </xsl:choose>
                           <!-- added by William on 20090808 for req #12008 start-->
                           </xsl:for-each>
@@ -608,7 +608,7 @@
                                       </xsl:choose>
                                       <!-- added by William on 2009-06-26 for req #12014 end --> 
                                     </xsl:when>
-                                    <xsl:otherwise><xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
+                                    <xsl:otherwise><xsl:apply-templates select="$current-element" mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
                                   </xsl:choose>
                       <!-- added by William on 20090808 for req #12008 start-->
                           </xsl:for-each>
@@ -698,7 +698,7 @@
                                   <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
                               </xsl:if>
                             </xsl:when>
-                            <xsl:otherwise><xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
+                            <xsl:otherwise><xsl:apply-templates select="$current-element" mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
                           </xsl:choose>
                     <!-- added by William on 20090808 for req #12008 start-->
                     </xsl:for-each>
@@ -790,7 +790,7 @@
                                 <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
                             </xsl:if>
                           </xsl:when>
-                          <xsl:otherwise><xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
+                          <xsl:otherwise><xsl:apply-templates select="$current-element" mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
                         </xsl:choose>
                     <!-- added by William on 20090808 for req #12008 start-->
                     </xsl:for-each>
@@ -853,7 +853,7 @@
                           <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
                         </xsl:if>
                       </xsl:when>
-                      <xsl:otherwise><xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
+                      <xsl:otherwise><xsl:apply-templates select="$current-element" mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
                     </xsl:choose>
                 <!-- added by William on 20090808 for req #12008 start-->
                 </xsl:for-each>
