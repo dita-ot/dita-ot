@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
  "reference.dtd">
 <reference id="plugin-addgeneratedtext" xml:lang="en-us">
@@ -113,7 +113,7 @@ Once this plug-in is integrated, non-PDF builds will include support
 for Vietnamese; instead of generating the English word "Caution",
 the element <codeph>&lt;note type="caution" xml:lang="vi"></codeph> may
 generate something like "<term xml:lang="vi">chú ý</term>".</p><note>If
-two plug-ins override add support for the same language using different
+two plug-ins add support for the same language using different
 values, the results will be non-deterministic (translations from either
 plug-in may be picked up under different conditions).</note></example>
 </refbody>
