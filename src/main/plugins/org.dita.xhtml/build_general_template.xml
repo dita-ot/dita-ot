@@ -5,36 +5,29 @@
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <project name="build_generaltargets">
 
-  <!-- Set to "true" if you get out-of-memory errors during preprocess
-    while processing very large (thousands of files) document sets. -->
-  <condition property="dita.xhtml.reloadstylesheet" value="false">
-    <not><isset property="dita.xhtml.reloadstylesheet"/></not>
-  </condition>  
-
-    <!--requirement 3, old solution-->
-  <target name="dita.topics.xhtml" unless="noTopic" if="old.transform"
-    description="Build XHTML output from dita inner and outer topics,which will adjust the directory.">
+  <target name="dita.xhtml.init">
     <condition property="out.ext" value=".html">
       <not>
         <isset property="out.ext" />
       </not>
     </condition>
-  	
-  	<!-- added by William on 2009-07-22 for req #12014 start -->
-    <condition property="transtype.ext" value="_eclipsehelp.xsl" else=".xsl">
-      <equals arg1="eclipsehelp" arg2="${transtype}" casesensitive="no"/>
+    <makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
+    <!-- Set to "true" if you get out-of-memory errors during preprocess
+    while processing very large (thousands of files) document sets. -->
+    <condition property="dita.xhtml.reloadstylesheet" value="false">
+      <not><isset property="dita.xhtml.reloadstylesheet"/></not>
     </condition>
-  	<!-- added by William on 2009-07-22 for req #12014 end -->
-  	
-    <condition property="args.xsl"
-      value="${dita.script.dir}${file.separator}dita2xhtml${transtype.ext}">
+  </target>
+
+    <!--requirement 3, old solution-->
+  <target name="dita.topics.xhtml" unless="noTopic" if="old.transform" depends="dita.xhtml.init"
+    description="Build XHTML output from dita inner and outer topics,which will adjust the directory.">
+    <condition property="args.xsl" value="${dita.plugin.org.dita.xhtml.dir}/xsl/dita2xhtml.xsl">
       <not>
         <isset property="args.xsl" />
       </not>
     </condition>
-  	<!--Change path of ${dita.input.valfile} into url-->
-  	<makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
-  	<xslt basedir="${dita.temp.dir}"
+    <xslt basedir="${dita.temp.dir}"
       destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
       reloadstylesheet="${dita.xhtml.reloadstylesheet}"
       classpathref="dost.class.path"
@@ -74,21 +67,13 @@
     </xslt>
   </target>
 
-  <target name="dita.topics.html" unless="noTopic" if="old.transform"
+  <target name="dita.topics.html" unless="noTopic" if="old.transform" depends="dita.xhtml.init"
     description="Build HTML files from inner and outer dita topics,which will adjust the directory. ">
-    <condition property="out.ext" value=".html">
-      <not>
-        <isset property="out.ext" />
-      </not>
-    </condition>
-    <condition property="args.xsl"
-      value="${dita.script.dir}${file.separator}dita2html.xsl">
+    <condition property="args.xsl" value="${dita.plugin.org.dita.xhtml.dir}/xsl/dita2html.xsl">
       <not>
         <isset property="args.xsl" />
       </not>
     </condition>
-  	<!--Change path of ${dita.input.valfile} into url-->
-  	<makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
     <xslt basedir="${dita.temp.dir}"
       destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
       reloadstylesheet="${dita.xhtml.reloadstylesheet}"
@@ -131,27 +116,13 @@
   
   <!--To generate&copy inner files-->
   <!--requirement 1,2-->
-  <target name="dita.inner.topics.xhtml" unless="noTopic" if="inner.transform"
+  <target name="dita.inner.topics.xhtml" unless="noTopic" if="inner.transform" depends="dita.xhtml.init"
     description="Build XHTML output from inner dita topics">
-    <condition property="out.ext" value=".html">
-      <not>
-        <isset property="out.ext" />
-      </not>
-    </condition>
-    <!-- added by William on 2009-07-22 for req #12014 start -->
-    <condition property="transtype.ext" value="_eclipsehelp.xsl" else=".xsl">
-      <equals arg1="eclipsehelp" arg2="${transtype}" casesensitive="no"/>
-    </condition>
-    <!-- added by William on 2009-07-22 for req #12014 end -->
-    
-    <condition property="args.xsl"
-      value="${dita.script.dir}${file.separator}dita2xhtml${transtype.ext}">
+    <condition property="args.xsl" value="${dita.plugin.org.dita.xhtml.dir}/xsl/dita2xhtml.xsl">
       <not>
         <isset property="args.xsl" />
       </not>
     </condition>
-  	<!--Change path of ${dita.input.valfile} into url-->
-  	<makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>    
     <xslt basedir="${dita.temp.dir}"
       destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
       reloadstylesheet="${dita.xhtml.reloadstylesheet}"
@@ -196,21 +167,13 @@
     </xslt>
   </target>
 
-  <target name="dita.inner.topics.html" unless="noTopic"  if="inner.transform"
+  <target name="dita.inner.topics.html" unless="noTopic"  if="inner.transform" depends="dita.xhtml.init"
     description="Build HTML files from inner dita topics">
-    <condition property="out.ext" value=".html">
-      <not>
-        <isset property="out.ext" />
-      </not>
-    </condition>
-    <condition property="args.xsl"
-      value="${dita.script.dir}${file.separator}dita2html.xsl">
+    <condition property="args.xsl" value="${dita.plugin.org.dita.xhtml.dir}/xsl/dita2html.xsl">
       <not>
         <isset property="args.xsl" />
       </not>
     </condition>
-  	<!--Change path of ${dita.input.valfile} into url-->
-  	<makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
     <xslt basedir="${dita.temp.dir}"
       destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
       reloadstylesheet="${dita.xhtml.reloadstylesheet}"
@@ -270,28 +233,13 @@
 	</condition>	
   </target>	
   	
-  <target name="dita.outer.topics.xhtml" unless="noTopic" if="outer.transform"  depends="checkouterTransform"
+  <target name="dita.outer.topics.xhtml" unless="noTopic" if="outer.transform"  depends="dita.xhtml.init, checkouterTransform"
     description="Build XHTML output from outer dita topics">
-    <condition property="out.ext" value=".html">
-      <not>
-        <isset property="out.ext" />
-      </not>
-    </condition>
-  	
-  	<!-- added by William on 2009-07-22 for req #12014 start -->
-    <condition property="transtype.ext" value="_eclipsehelp.xsl" else=".xsl">
-      <equals arg1="eclipsehelp" arg2="${transtype}" casesensitive="no"/>
-    </condition>
-  	<!-- added by William on 2009-07-22 for req #12014 end -->
-  	
-    <condition property="args.xsl"
-      value="${dita.script.dir}${file.separator}dita2xhtml${transtype.ext}">
+    <condition property="args.xsl" value="${dita.plugin.org.dita.xhtml.dir}/xsl/dita2xhtml.xsl">
       <not>
         <isset property="args.xsl" />
       </not>
     </condition>
-  	<!--Change path of ${dita.input.valfile} into url-->
-  	<makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
     <xslt basedir="${dita.temp.dir}"
       destdir="${output.dir}${file.separator}${uplevels}" includesfile="${dita.temp.dir}${file.separator}${outditafilesfile}"
       reloadstylesheet="${dita.xhtml.reloadstylesheet}"
@@ -331,21 +279,13 @@
     </xslt>
   </target>
 
-  <target name="dita.outer.topics.html" unless="noTopic" if="outer.transform"  depends="checkouterTransform"
+  <target name="dita.outer.topics.html" unless="noTopic" if="outer.transform"  depends="dita.xhtml.init, checkouterTransform"
     description="Build HTML files from outer dita topics">
-    <condition property="out.ext" value=".html">
-      <not>
-        <isset property="out.ext" />
-      </not>
-    </condition>
-    <condition property="args.xsl"
-      value="${dita.script.dir}${file.separator}dita2html.xsl">
+    <condition property="args.xsl" value="${dita.plugin.org.dita.xhtml.dir}/xsl/dita2html.xsl">
       <not>
         <isset property="args.xsl" />
       </not>
     </condition>
-  	<!--Change path of ${dita.input.valfile} into url-->
-  	<makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
     <xslt basedir="${dita.temp.dir}"
       destdir="${output.dir}${file.separator}${uplevels}" includesfile="${dita.temp.dir}${file.separator}${outditafilesfile}"
       reloadstylesheet="${dita.xhtml.reloadstylesheet}"

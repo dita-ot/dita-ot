@@ -5,6 +5,14 @@
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <project name="dita2eclipsehelp">
 	
+  <target name="dita.eclipsehelp.init">
+    <condition property="args.xsl" value="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/dita2xhtml_eclipsehelp.xsl">
+      <not>
+        <isset property="args.xsl" />
+      </not>
+    </condition>
+  </target>
+	
 	   <target name="dita.index.eclipsehelp.init">
 	      <condition property="dita.eclipsehelp.index.class" value="org.dita.dost.writer.EclipseIndexWriter"> 
 	          <not><isset property="dita.eclipsehelp.index.class"></isset></not> 
@@ -14,13 +22,10 @@
 	
     <target name="dita2eclipsehelp"
             unless="noMap"
-        depends="build-init, preprocess, copy-css, 
+        depends="build-init, dita.eclipsehelp.init, preprocess, copy-css, 
                      dita.topics.xhtml, dita.inner.topics.xhtml, dita.outer.topics.xhtml">
       <antcall target="dita.map.eclipse"></antcall>
     </target>
-
-    <!--<target name="dita.map.eclipse"
-        depends="dita.map.eclipse.init, dita.map.eclipse.toc, dita.map.eclipse.index, dita.map.eclipse.plugin, dita.out.map.eclipse.toc, dita.out.map.eclipse.index, dita.out.map.eclipse.plugin" />-->
 
   <target name="dita.map.eclipse"
     depends=" dita.map.eclipse.init, copy-plugin-files, dita.map.eclipse.fragment.language.init, dita.map.eclipse.fragment.language.country.init, dita.map.eclipse.fragment.error">

@@ -13,17 +13,12 @@
     <target name="dita.map.xhtml"
             depends="dita.map.xhtml.init, dita.map.xhtml.toc , dita.out.map.xhtml.toc" />
 
-    <target name="dita.map.xhtml.init" description="">
+    <target name="dita.map.xhtml.init" depends="dita.xhtml.init" unless="noMap">
       <condition property="args.xhtml.toc.xsl" value="${dita.plugin.org.dita.xhtml.dir}/xsl/map2xhtmtoc.xsl">
         <not>
           <isset property="args.xhtml.toc.xsl" />
         </not>
       </condition>
-        <condition property="out.ext" value=".html">
-            <not>
-                <isset property="out.ext" />
-            </not>
-        </condition>
         <condition property="args.xhtml.toc" value="index">
             <not>
                 <isset property="args.xhtml.toc" />
