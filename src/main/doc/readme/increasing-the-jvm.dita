@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="t-increasing-the-JVM">
-    <title>Increasing the JVM</title>
+    <title>Increasing Java memory allocation</title>
     <shortdesc>If you are working with large documents with extensive metadata or key references,
-        you will need to increase the Java Virtual Memory (JVM). You can do this from the
+        you will need to increase the memory allocation for the Java process. You can do this from the
         command-line prompt for a specific session, or you can increase the value of the ANT_OPTS
         environmental variable.</shortdesc>
     <taskbody>
