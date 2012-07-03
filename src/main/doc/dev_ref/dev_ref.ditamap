@@ -58,6 +58,7 @@
     <topicref href="plugin-newextensions.dita"/>
     <topicref href="plugin-sample.dita"/>
   </topicset>
+  <topicref href="ant-properties.dita"/>
   <topicref href="DITA1.2-implementation-dependent-features.dita"> </topicref>
   <topicref href="extended-functionality.dita"/>
   <!-- XXX: is this obsolete? -->
