@@ -220,29 +220,11 @@
       </condition>
       <param name="1" location="${args.input}"/>
     </dita-ot-fail>
-    <dita-ot-fail id="DOTA069F">
-      <condition>
-        <and>
-          <isset property="dita.input"/>
-          <isset property="dita.input.dirname"/>
-          <not>
-            <available file="${dita.input}" filepath="${dita.input.dirname}" type="file"/>
-          </not>
-        </and>
-      </condition>
-      <param name="1" location="${dita.input.dirname}/${dita.input}"/>
-    </dita-ot-fail>
     <dita-ot-fail id="DOTA002F">
       <condition>
         <and>
           <not>
             <isset property="args.input"/>
-          </not>
-          <not>
-            <and>
-              <isset property="dita.input"/>
-              <isset property="dita.input.dirname"/>
-            </and>
           </not>
         </and>
       </condition>
@@ -296,23 +278,6 @@
     <!-- end to check input parameters -->
 
     <!-- begin to init required parameters -->
-
-    <condition property="msg.deprecate">
-      <and>
-        <not>
-          <isset property="args.input" />
-        </not>
-        <isset property="dita.input" />
-        <isset property="dita.input.dirname" />
-      </and>
-    </condition>
-
-    <condition property="args.input"
-      value="${dita.input.dirname}${file.separator}${dita.input}">
-      <not>
-        <isset property="args.input" />
-      </not>
-    </condition>
 
     <dita-ot-fail id="DOTA012W">
       <condition>
@@ -567,12 +532,8 @@
   	<echo level="info">*****************************************************************</echo>
   </target>
 
-  <target name="output-msg" depends="output-deprecated-msg, output-css-warn-message"/>
-  
-  <target name="output-deprecated-msg" if="msg.deprecate">
-    <dita-ot-echo id="DOTA005W" />
-  </target>
-  
+  <target name="output-msg" depends="output-css-warn-message"/>
+    
   <target name="output-css-warn-message" if="args.csspath.absolute">
     <dita-ot-echo id="DOTA006W" />
   </target>

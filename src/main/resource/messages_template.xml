@@ -29,12 +29,7 @@
     <reason>Invalid DITA topic extension '%1'.</reason>
     <response>Supported values are '.dita' and '.xml'.</response>
   </message>
-  
-  <message id="DOTA005W" type="WARN">
-    <reason>The Ant parameters 'dita.input' and 'dita.input.dirname' are deprecated.</reason>
-    <response>Please use the parameter 'args.input' instead.</response>
-  </message>
-  
+    
   <message id="DOTA006W" type="WARN">
     <reason>Absolute paths on the local file system are not supported for the CSSPATH parameter.</reason>
     <response>Please use a relative path or full URI instead.</response>

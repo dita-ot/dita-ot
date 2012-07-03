@@ -17,7 +17,14 @@
   <reference id="reference_yvj_ttj_bd">
     <title>Migration from previous releases</title>
     <refbody>
-      <section/>
+      <section>
+        <p>The following deprecated properties have been removed:</p>
+        <ul>
+          <li><codeph>dita.input</codeph></li>
+          <li><codeph>dita.input.dirname</codeph>
+          </li>
+        </ul>
+      </section>
     </refbody>
   </reference>
   <reference id="rel1.6">
@@ -29,7 +36,7 @@
       <section>
         <title>Feature requests</title>
         <ul>
-          <li/>
+          <li>#1319 Remove deprecated code</li>
         </ul>
       </section>
       <section>

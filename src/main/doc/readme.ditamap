@@ -5,7 +5,7 @@
 <?Pub Sty _display FontColor="red"?>
 <map id="mainDITAreadme" title="DITA-OT Readme map" xml:lang="en-us">
 <topicref href="readme/DITA-readme.xml" id="DITA-doc">
-<topicref href="readme/changes/rel1.6.xml" locktitle="yes">
+<topicref href="readme/changes/rel1.7.xml" locktitle="yes">
 <topicmeta>
 <navtitle>Release notes</navtitle>
 </topicmeta>
