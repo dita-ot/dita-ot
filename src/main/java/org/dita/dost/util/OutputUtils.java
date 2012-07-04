@@ -9,6 +9,8 @@
  */
 package org.dita.dost.util;
 
+import java.io.File;
+
 /**
  * OutputUtils to control the output behavior.
  * @author wxzhang
@@ -53,9 +55,9 @@ public final class OutputUtils {
     private boolean onlytopicinmap=false;//default:only the topic files will be resolved in the map
     private OutterControl outercontrol = OutterControl.WARN;
     /**Output Dir.*/
-    private static String OutputDir=null;
+    private static File OutputDir=null;
     /**Input Map Dir.*/
-    private String InputMapDir=null;
+    private File InputMapDir=null;
 
     /**
      * Retrieve the outercontrol.
@@ -112,30 +114,30 @@ public final class OutputUtils {
 
     /**
      * Get output dir.
-     * @return output dir
+     * @return absolute output dir
      */
-    public static String getOutputDir(){
+    public static File getOutputDir(){
         return OutputDir;
     }
     /**
      * Set output dir.
-     * @param outputDir output dir
+     * @param outputDir absolute output dir
      */
-    public void setOutputDir(final String outputDir){
+    public void setOutputDir(final File outputDir){
         OutputDir=outputDir;
     }
     /**
      * Get input map path.
-     * @return input map path
+     * @return absolute input map path
      */
-    public String getInputMapPathName(){
+    public File getInputMapPathName(){
         return InputMapDir;
     }
     /**
      * Set input map path.
-     * @param inputMapDir input map path
+     * @param inputMapDir absolute input map path
      */
-    public void setInputMapPathName(final String inputMapDir){
+    public void setInputMapPathName(final File inputMapDir){
         InputMapDir=inputMapDir;
     }
 }

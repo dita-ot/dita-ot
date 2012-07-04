@@ -89,7 +89,7 @@ public class DitaWriterTest {
         writer.setFilterUtils(fu);
         writer.setDelayConrefUtils(new DelayConrefUtils());
         final OutputUtils outputUtils = new OutputUtils();
-        outputUtils.setInputMapPathName(new File(srcDir, "main.ditamap").getAbsolutePath());
+        outputUtils.setInputMapPathName(new File(srcDir, "main.ditamap"));
         writer.setOutputUtils(outputUtils);
         
         FileUtils.copyFile(new File(srcDir, FILE_NAME_EXPORT_XML), new File(tempDir, FILE_NAME_EXPORT_XML));
@@ -311,7 +311,7 @@ public class DitaWriterTest {
             writer.setLogger(new TestUtils.TestLogger(false));
             writer.setExtName(".dita");
             final OutputUtils outputUtils = new OutputUtils();
-            outputUtils.setInputMapPathName(new File(srcDir, "main.ditamap").getAbsolutePath());
+            outputUtils.setInputMapPathName(new File(srcDir, "main.ditamap"));
             writer.setOutputUtils(outputUtils);        
             method = DitaWriter.class.getDeclaredMethod(m, args);
             method.setAccessible(true);

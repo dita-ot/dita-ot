@@ -156,21 +156,21 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
     /** Map of all key definitions */
     private final Map<String, KeyDef> keysDefMap;
 
-    /** Basedir for processing */
-    private String baseInputDir;
+    /** Absolute basedir for processing */
+    private File baseInputDir;
 
-    /** Tempdir for processing */
-    private String tempDir;
+    /** Absolute tempdir path for processing */
+    private File tempDir;
 
-    /** ditadir for processing */
-    private String ditaDir;
-
+    /** Absolute ditadir for processing */
+    private File ditaDir;
+    /** Input file name. */
     private String inputFile;
-
-    private String ditavalFile;
+    /** Absolute path for filter file. */
+    private File ditavalFile;
 
     private int uplevels = 0;
-
+    /** Prefix path. Either an empty string or a path which ends in {@link java.io.File.separator File.separator}. */
     private String prefix = "";
 
     private DITAOTLogger logger;
@@ -183,8 +183,8 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
     private String relativeValue;
 
     private String formatRelativeValue;
-
-    private String rootFile;
+    /** Absolute path to input file. */
+    private File rootFile;
 
     // keydef file from keys used in schema files
     private XMLSerializer schemekeydef;
@@ -279,7 +279,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
 
             reader = new GenListModuleReader();
             reader.setLogger(logger);
-            reader.initXMLReader(ditaDir, xmlValidate, rootFile, setSystemid);
+            reader.initXMLReader(ditaDir.getAbsolutePath(), xmlValidate, rootFile.getAbsolutePath(), setSystemid);
             final FilterUtils filterUtils = parseFilterFile();
             reader.setFilterUtils(filterUtils);
             reader.setOutputUtils(outputUtils);
@@ -315,13 +315,15 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         return null;
     }
 
-    private void parseInputParameters(final AbstractPipelineInput input) {
+    private void parseInputParameters(final AbstractPipelineInput input) throws IOException {
         final String basedir = input.getAttribute(ANT_INVOKER_PARAM_BASEDIR);
         final String ditaInput = input.getAttribute(ANT_INVOKER_PARAM_INPUTMAP);
 
-        tempDir = input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR);
-        ditaDir = input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR);
-        ditavalFile = input.getAttribute(ANT_INVOKER_PARAM_DITAVAL);
+        tempDir = new File(input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR));
+        ditaDir = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR));
+        if (input.getAttribute(ANT_INVOKER_PARAM_DITAVAL) != null) {
+            ditavalFile = new File(input.getAttribute(ANT_INVOKER_PARAM_DITAVAL));
+        }
         xmlValidate = Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAM_VALIDATE));
 
         // Added by William on 2009-07-18 for req #12014 start
@@ -341,7 +343,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         // Set the OutputDir
         final File path = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR));
         if (path.isAbsolute()) {
-            outputUtils.setOutputDir(path.getAbsolutePath());
+            outputUtils.setOutputDir(path);
         } else {
             throw new IllegalArgumentException("Output directory " + tempDir + " must be absolute");
         }
@@ -352,31 +354,25 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             // XXX Shouldn't this be resolved to current directory, not Ant script base directory?
             inFile = new File(basedir, ditaInput);
         }
-        try {
-			inFile = inFile.getCanonicalFile();
-		} catch (final IOException e1) {
-			 logger.logException(e1);
-		}
-        if (!new File(tempDir).isAbsolute()) {
+        inFile = inFile.getCanonicalFile();
+        if (!tempDir.isAbsolute()) {
             throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
         } else {
-            tempDir = FileUtils.normalize(tempDir);
+            tempDir = tempDir.getCanonicalFile();
         }
-        if (!new File(ditaDir).isAbsolute()) {
+        if (!ditaDir.isAbsolute()) {
             throw new IllegalArgumentException("DITA-OT installation directory " + tempDir + " must be absolute");
         } else {
-            ditaDir = FileUtils.normalize(ditaDir);
+            ditaDir = ditaDir.getCanonicalFile();
         }
-        if (ditavalFile != null && !new File(ditavalFile).isAbsolute()) {
+        if (ditavalFile != null && !ditavalFile.isAbsolute()) {
             // XXX Shouldn't this be resolved to current directory, not Ant script base directory?
-            ditavalFile = new File(basedir, ditavalFile).getAbsolutePath();
+            ditavalFile = new File(basedir, ditavalFile.getPath()).getAbsoluteFile();
         }
 
-        baseInputDir = new File(inFile.getAbsolutePath()).getParent();
-        baseInputDir = FileUtils.normalize(baseInputDir);
+        baseInputDir = inFile.getParentFile().getCanonicalFile();
 
-        rootFile = inFile.getAbsolutePath();
-        rootFile = FileUtils.normalize(rootFile);
+        rootFile = inFile.getCanonicalFile();
        
         inputFile = inFile.getName();
         try {
@@ -402,7 +398,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         }
 
         // Set the mapDir
-        outputUtils.setInputMapPathName(inFile.getAbsolutePath());
+        outputUtils.setInputMapPathName(inFile);
     }
 
     private void processWaitList() throws DITAOTException {
@@ -424,7 +420,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         final File file = new File(currentFile);
         if (file.isAbsolute()) {
             fileToParse = file;
-            currentFile = FileUtils.getRelativePath(rootFile, currentFile);
+            currentFile = FileUtils.getRelativePath(rootFile.getAbsolutePath(), currentFile);
         } else {
             fileToParse = new File(baseInputDir, currentFile);
         }
@@ -799,11 +795,9 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
      * Update base directory based on uplevels.
      */
     private void updateBaseDirectory() {
-        baseInputDir = new File(baseInputDir).getAbsolutePath();
-
         for (int i = uplevels; i > 0; i--) {
-            final File file = new File(baseInputDir);
-            baseInputDir = file.getParent();
+            final File file = baseInputDir;
+            baseInputDir = baseInputDir.getParentFile();
             prefix = new StringBuffer(file.getName()).append(File.separator).append(prefix).toString();
         }
     }
@@ -895,7 +889,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             ditaValReader.setLogger(logger);
             ditaValReader.initXMLReader(setSystemid);
 
-            ditaValReader.read(ditavalFile);
+            ditaValReader.read(ditavalFile.getAbsolutePath());
             // Store filter map for later use
             filterUtils.setFilterMap(ditaValReader.getFilterMap());
             // Store flagging image used for image copying
@@ -979,7 +973,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
      * @throws DITAOTException if writing result files failed
      */
     private void outputResult() throws DITAOTException {
-        final File dir = new File(tempDir);
+        final File dir = tempDir;
         if (!dir.exists()) {
             dir.mkdirs();
         }
@@ -991,7 +985,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             throw new DITAOTException("Failed to create empty job: " + e.getMessage(), e);
         }
         
-        prop.setProperty(INPUT_DIR, baseInputDir);
+        prop.setProperty(INPUT_DIR, baseInputDir.getAbsolutePath());
         prop.setProperty(INPUT_DITAMAP, prefix + inputFile);
 
         prop.setProperty(INPUT_DITAMAP_LIST_FILE_LIST, USER_INPUT_FILE_LIST_FILE);

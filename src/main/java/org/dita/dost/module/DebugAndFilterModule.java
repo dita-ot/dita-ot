@@ -133,6 +133,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
     
     private DITAOTLogger logger;
 
+    /** Absolute input map path. */
     private String inputMap = null;
 
     private String ditaDir = null;
@@ -215,8 +216,8 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             outputUtils.setGeneratecopyouter(input.getAttribute(ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER));
             outputUtils.setOutterControl(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTTERCONTROL));
             outputUtils.setOnlyTopicInMap(input.getAttribute(ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP));
-            outputUtils.setInputMapPathName(inputMap);
-            outputUtils.setOutputDir(new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR)).getAbsolutePath());
+            outputUtils.setInputMapPathName(new File(inputMap));
+            outputUtils.setOutputDir(new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR)));
             fileWriter.setOutputUtils(outputUtils);
 
             final Map<String, Set<String>> dic = readMapFromXML(FILE_NAME_SUBJECT_DICTIONARY);
