@@ -326,9 +326,29 @@
   </xsl:template>
 
   <xsl:template match="processing-instruction('path2project')" mode="get-path2project">
-    <xsl:value-of select="."/>
+    <xsl:call-template name="get-path2project">
+      <xsl:with-param name="s" select="."/>
+    </xsl:call-template>
   </xsl:template>
 
+  <xsl:template name="get-path2project">
+    <!-- Deal with being handed a Windows backslashed path by accident. -->
+    <!-- This code only changes \ to / and doesn't handle the many other situations
+         where a URI differs from a file path.  Hopefully they don't occur in path2proj anyway. -->
+    <xsl:param name="s"/>
+    <xsl:choose>
+      <xsl:when test="contains($s, '\')">
+        <xsl:value-of select="substring-before($s, '\')"/>
+        <xsl:text>/</xsl:text>
+        <xsl:call-template name="get-path2project">
+          <xsl:with-param name="s" select="substring-after($s, '\')"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$s"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
 </xsl:stylesheet>
 
