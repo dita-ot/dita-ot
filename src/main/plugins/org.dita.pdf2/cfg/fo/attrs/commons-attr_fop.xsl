@@ -7,6 +7,11 @@
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 version="2.0">
 
+  <xsl:attribute-set name="__toc__mini__table">
+    <xsl:attribute name="table-layout">fixed</xsl:attribute>
+    <xsl:attribute name="width">100%</xsl:attribute>
+  </xsl:attribute-set>
+
   <xsl:attribute-set name="note__table">
     <xsl:attribute name="table-layout">fixed</xsl:attribute>
     <xsl:attribute name="width">100%</xsl:attribute>

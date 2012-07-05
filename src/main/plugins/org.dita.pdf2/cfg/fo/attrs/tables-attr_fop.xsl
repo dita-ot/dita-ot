@@ -15,4 +15,21 @@
     <xsl:attribute name="table-layout">fixed</xsl:attribute>
   </xsl:attribute-set>  
 
+  <xsl:attribute-set name="reltable">
+    <xsl:attribute name="table-layout">fixed</xsl:attribute>
+  </xsl:attribute-set>  
+
+  <xsl:attribute-set name="properties">
+    <xsl:attribute name="table-layout">fixed</xsl:attribute>
+  </xsl:attribute-set>  
+
+
+  <xsl:attribute-set name="choicetable">
+    <xsl:attribute name="table-layout">fixed</xsl:attribute>
+  </xsl:attribute-set>  
+
+  <xsl:attribute-set name="table.tgroup">
+    <xsl:attribute name="table-layout">fixed</xsl:attribute>
+  </xsl:attribute-set>  
+
 </xsl:stylesheet>

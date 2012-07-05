@@ -859,7 +859,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <!--  Choicetable processing  -->
-    <xsl:template match="*[contains(@class, ' task/choicetable ')]">
+    <xsl:template match="*[contains(@class, ' task/choicetable ')]" priority="10">
         <fo:table xsl:use-attribute-sets="choicetable">
             <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="univAttrs"/>
@@ -907,7 +907,7 @@ See the accompanying license.txt file for applicable licenses.
         </fo:table>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class, ' task/chhead ')]">
+    <xsl:template match="*[contains(@class, ' task/chhead ')]" priority="10">
         <fo:table-header xsl:use-attribute-sets="chhead">
             <xsl:call-template name="commonattributes"/>
             <fo:table-row xsl:use-attribute-sets="chhead__row">
@@ -916,14 +916,14 @@ See the accompanying license.txt file for applicable licenses.
         </fo:table-header>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class, ' task/chrow ')]">
+    <xsl:template match="*[contains(@class, ' task/chrow ')]" priority="10">
         <fo:table-row xsl:use-attribute-sets="chrow">
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:table-row>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class, ' task/chhead ')]/*[contains(@class, ' task/choptionhd ')]">
+    <xsl:template match="*[contains(@class, ' task/chhead ')]/*[contains(@class, ' task/choptionhd ')]" priority="10">
         <fo:table-cell xsl:use-attribute-sets="chhead.choptionhd">
             <xsl:call-template name="commonattributes"/>
             <fo:block xsl:use-attribute-sets="chhead.choptionhd__content">
@@ -932,7 +932,7 @@ See the accompanying license.txt file for applicable licenses.
         </fo:table-cell>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class, ' task/chhead ')]/*[contains(@class, ' task/chdeschd ')]">
+    <xsl:template match="*[contains(@class, ' task/chhead ')]/*[contains(@class, ' task/chdeschd ')]" priority="10">
         <fo:table-cell xsl:use-attribute-sets="chhead.chdeschd">
             <xsl:call-template name="commonattributes"/>
             <fo:block xsl:use-attribute-sets="chhead.chdeschd__content">
@@ -941,7 +941,7 @@ See the accompanying license.txt file for applicable licenses.
         </fo:table-cell>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class, ' task/chrow ')]/*[contains(@class, ' task/choption ')]">
+    <xsl:template match="*[contains(@class, ' task/chrow ')]/*[contains(@class, ' task/choption ')]" priority="10">
         <xsl:variable name="keyCol" select="ancestor::*[contains(@class, ' task/choicetable ')][1]/@keycol"/>
         <fo:table-cell xsl:use-attribute-sets="chrow.choption">
             <xsl:call-template name="commonattributes"/>
@@ -960,7 +960,7 @@ See the accompanying license.txt file for applicable licenses.
         </fo:table-cell>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class, ' task/chrow ')]/*[contains(@class, ' task/chdesc ')]">
+    <xsl:template match="*[contains(@class, ' task/chrow ')]/*[contains(@class, ' task/chdesc ')]" priority="10">
         <xsl:variable name="keyCol" select="number(ancestor::*[contains(@class, ' task/choicetable ')][1]/@keycol)"/>
         <fo:table-cell xsl:use-attribute-sets="chrow.chdesc">
             <xsl:call-template name="commonattributes"/>
