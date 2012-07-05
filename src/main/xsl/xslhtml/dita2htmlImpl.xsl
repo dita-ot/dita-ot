@@ -2567,6 +2567,7 @@
   </xsl:choose>
     
   <xsl:call-template name="commonattributes"/>
+  <xsl:call-template name="setid"/>
   <xsl:if test="@morerows">
     <xsl:attribute name="rowspan"> <!-- set the number of rows to span -->
       <xsl:value-of select="@morerows+1"/>
