@@ -25,10 +25,8 @@
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0"
-                xmlns:saxon="http://icl.com/saxon"
-                xmlns:xalanredirect="org.apache.xalan.xslt.extensions.Redirect"
                 xmlns:exsl="http://exslt.org/common"
-                extension-element-prefixes="saxon xalanredirect exsl">
+                extension-element-prefixes="exsl">
 
 <!-- Include error message template -->
 <xsl:include href="../common/output-message.xsl"/>

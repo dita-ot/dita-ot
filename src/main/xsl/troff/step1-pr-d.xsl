@@ -5,8 +5,6 @@
 <!-- (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved. -->
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:saxon="http://icl.com/saxon"
-                extension-element-prefixes="saxon"
                 >
 
 <xsl:template match="*[contains(@class, ' pr-d/syntaxdiagram ')]">

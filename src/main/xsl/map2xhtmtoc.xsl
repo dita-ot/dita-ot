@@ -8,11 +8,7 @@
 <!-- Map to XHTML -->
 <xsl:stylesheet version="1.0"
 
-	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-
-	xmlns:saxon="http://icl.com/saxon"
-	xmlns:xt="http://www.jclark.com/xt"
-	extension-element-prefixes="saxon xt">
+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <!--main map to xhtml converter-->
 <xsl:import href="map2htmtoc.xsl"/>
