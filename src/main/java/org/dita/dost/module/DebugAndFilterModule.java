@@ -134,11 +134,11 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
     private DITAOTLogger logger;
 
     /** Absolute input map path. */
-    private String inputMap = null;
-
-    private String ditaDir = null;
-
-    private String inputDir = null;
+    private File inputMap = null;
+    /** Absolute DITA-OT base path. */
+    private File ditaDir = null;
+    /** Absolute input directory path. */
+    private File inputDir = null;
 
     //Added on 2010-08-24 for bug:3086552 start
     private final boolean setSystemid = true;
@@ -167,27 +167,30 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             if (!new File(tempDir).isAbsolute()) {
                 throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
             }
-            ditaDir=input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR);
+            ditaDir=new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR));
             final String transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
             final String ext = input.getAttribute(ANT_INVOKER_PARAM_DITAEXT);
             extName = ext.startsWith(DOT) ? ext : (DOT + ext);
-            String ditavalFile = input.getAttribute(ANT_INVOKER_PARAM_DITAVAL);
-            if (ditavalFile != null && !new File(ditavalFile).isAbsolute()) {
-                ditavalFile = new File(baseDir, ditavalFile).getAbsolutePath();
+            File ditavalFile = null;
+            if (input.getAttribute(ANT_INVOKER_PARAM_DITAVAL) != null ) {
+                ditavalFile = new File(input.getAttribute(ANT_INVOKER_PARAM_DITAVAL));
+                if (!ditavalFile.isAbsolute()) {
+                    ditavalFile = new File(baseDir, ditavalFile.getPath()).getAbsoluteFile();
+                }
+
             }
 
             final Job job = new Job(new File(tempDir));
 
             final List<String> parseList = job.getReferenceList();
-            inputDir = job.getInputDir();
-            inputMap = new File(inputDir + File.separator + job.getInputMap()).getAbsolutePath();
+            inputDir = new File(job.getInputDir());
+            if (!inputDir.isAbsolute()) {
+                inputDir = new File(baseDir, inputDir.getPath()).getAbsoluteFile();
+            }
+            inputMap = new File(inputDir, job.getInputMap()).getAbsoluteFile();
 
             // Output subject schemas
             outputSubjectScheme();
-
-            if (!new File(inputDir).isAbsolute()) {
-                inputDir = new File(baseDir, inputDir).getAbsolutePath();
-            }
             final DitaValReader filterReader = new DitaValReader();
             filterReader.setLogger(logger);
             filterReader.initXMLReader("yes".equals(input.getAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID)));
@@ -195,7 +198,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             final FilterUtils filterUtils = new FilterUtils();
             filterUtils.setLogger(logger);
             if (ditavalFile!=null){
-                filterReader.read(ditavalFile);
+                filterReader.read(ditavalFile.getAbsolutePath());
                 filterUtils.setFilterMap(filterReader.getFilterMap());
             }
             
@@ -203,7 +206,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             fileWriter.setLogger(logger);
             try{
                 final boolean xmlValidate = Boolean.valueOf(input.getAttribute("validate"));
-                fileWriter.initXMLReader(ditaDir,xmlValidate, setSystemid);
+                fileWriter.initXMLReader(ditaDir.getAbsolutePath(),xmlValidate, setSystemid);
             } catch (final SAXException e) {
                 throw new DITAOTException(e.getMessage(), e);
             }
@@ -216,7 +219,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             outputUtils.setGeneratecopyouter(input.getAttribute(ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER));
             outputUtils.setOutterControl(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTTERCONTROL));
             outputUtils.setOnlyTopicInMap(input.getAttribute(ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP));
-            outputUtils.setInputMapPathName(new File(inputMap));
+            outputUtils.setInputMapPathName(inputMap);
             outputUtils.setOutputDir(new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR)));
             fileWriter.setOutputUtils(outputUtils);
 
@@ -237,7 +240,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                     }
                     if (ditavalFile!=null){
                         filterReader.filterReset();
-                        filterReader.read(ditavalFile);
+                        filterReader.read(ditavalFile.getAbsolutePath());
                         final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>();
                         fm.putAll(filterReader.getSchemeFilterMap());
                         fm.putAll(filterUtils.getFilterMap());
@@ -259,7 +262,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                     continue;
                 }
 
-                fileWriter.write(inputDir, filename);
+                fileWriter.write(inputDir.getAbsolutePath(), filename);
             }
 
             updateList(tempDir);
@@ -361,7 +364,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             final DocumentBuilder builder = factory.newDocumentBuilder();
             builder.setEntityResolver(new InternalEntityResolver(
-                    CatalogUtils.getCatalog(ditaDir)));
+                    CatalogUtils.getCatalog(ditaDir.getAbsolutePath())));
 
             while (!queue.isEmpty()) {
                 final String parent = queue.poll();
@@ -374,7 +377,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                     continue;
                 }
                 visitedSet.add(parent);
-                String tmprel = FileUtils.getRelativePath(inputMap, parent);
+                String tmprel = FileUtils.getRelativePath(inputMap.getAbsolutePath(), parent);
                 tmprel = FileUtils.resolveFile(tempDir, tmprel)+".subm";
                 Document parentRoot = null;
                 if (!FileUtils.fileExists(tmprel)) {
@@ -386,14 +389,14 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                     for (final String childpath: children) {
                         final Document childRoot = builder.parse(new InputSource(new FileInputStream(childpath)));
                         mergeScheme(parentRoot, childRoot);
-                        String rel = FileUtils.getRelativePath(inputMap, childpath);
+                        String rel = FileUtils.getRelativePath(inputMap.getAbsolutePath(), childpath);
                         rel = FileUtils.resolveFile(tempDir, rel)+".subm";
                         generateScheme(rel, childRoot);
                     }
                 }
 
                 //Output parent scheme
-                String rel = FileUtils.getRelativePath(inputMap, parent);
+                String rel = FileUtils.getRelativePath(inputMap.getAbsolutePath(), parent);
                 rel = FileUtils.resolveFile(tempDir, rel)+".subm";
                 generateScheme(rel, parentRoot);
             }
