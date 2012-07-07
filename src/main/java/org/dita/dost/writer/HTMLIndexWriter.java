@@ -91,10 +91,10 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter {
     }
 
     /**
-     * Output the given indexterm into the PrintWriter.
+     * Output the given indexterm into the XML writer.
      * 
-     * @param term
-     * @param printWriter
+     * @param term term to serializer
+     * @param serializer XML output to write to
      * @throws SAXException
      */
     private void outputIndexTerm(final IndexTerm term, final XMLSerializer serializer) throws SAXException {

@@ -109,8 +109,8 @@ public final class MergeMapParser extends XMLFilterImpl {
     /**
      * Read map.
      * 
-     * @param input map file path
-     * @param tmpdir temporary directory path, may be {@code null}
+     * @param filename map file path
+     * @param tmpDir temporary directory path, may be {@code null}
      */
     public void read(final String filename, final String tmpDir) {
         tempdir = tmpDir != null ? tmpDir : new File(filename).getParent();

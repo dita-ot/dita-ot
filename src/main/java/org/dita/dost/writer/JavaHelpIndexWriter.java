@@ -67,11 +67,11 @@ public final class JavaHelpIndexWriter extends AbstractExtendDitaWriter {
     }
 
     /**
-     * Output the given indexterm into the PrintWriter.
+     * Output the given indexterm into the XML writer.
      * 
-     * @param term
-     * @param printWriter
-     * @throws SAXException
+     * @param term term to output
+     * @param serializer XML output to write to
+     * @throws SAXException if serializing failed
      */
     private void outputIndexTerm(final IndexTerm term, final XMLSerializer serializer) throws SAXException {
         final List<IndexTermTarget> targets = term.getTargetList();

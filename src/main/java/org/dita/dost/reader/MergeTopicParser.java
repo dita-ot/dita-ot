@@ -95,7 +95,6 @@ public final class MergeTopicParser extends XMLFilterImpl {
      * Get new value for topic id attribute.
      * 
      * @param classValue class value
-     * @return new id value
      */
     private void handleID(final String classValue, final AttributesImpl atts) {
         String idValue = atts.getValue(ATTRIBUTE_NAME_ID);

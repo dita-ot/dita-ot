@@ -458,7 +458,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
     /**
      * Get all targets except copy-to.
      * 
-     * @return set of target file path with option format after {@link org.dita.dost.util.Constants.STICK STICK}
+     * @return set of target file path with option format after {@link org.dita.dost.util.Constants#STICK STICK}
      */
     public Set<String> getNonCopytoResult() {
         final Set<String> nonCopytoSet = new HashSet<String>(INT_128);
@@ -1226,7 +1226,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 
     /**
      * Resolve the publicId used in XMLCatalog.
-     * @see org.dita.dost.reader.AbstractXMLReader#resolveEntity(String, String)
+     * 
      * @param publicId publicId in doctype declarations
      * @param systemId systemId in doctype declarations
      * @throws java.io.IOException if dita-catalog.xml is not available
@@ -1248,6 +1248,9 @@ public final class GenListModuleReader extends AbstractXMLReader {
 
     /**
      * Parse the input attributes for needed information.
+     * 
+     * @param atts all attributes
+     * @param attrName attributes to process
      */
     private void parseAttribute(final Attributes atts, final String attrName) throws SAXException {
         String attrValue = atts.getValue(attrName);
@@ -1397,7 +1400,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
             try{
                 filename = URLDecoder.decode(filename, UTF8);
             }catch(final UnsupportedEncodingException e){
-    
+                logger.logError("Unable to decode URI '" + filename + "': " + e.getMessage());
             }
         }
 
@@ -1620,6 +1623,12 @@ public final class GenListModuleReader extends AbstractXMLReader {
     }
     //Added on 20100826 for bug:3052913 end
 
+    /**
+     * Check if path walks up in parent directories
+     * 
+     * @param toCheckPath path to check
+     * @return {@code true} if path walks up, otherwise {@code false}
+     */
     private boolean isOutFile(final String toCheckPath) {
         if (!toCheckPath.startsWith("..")) {
             return false;
@@ -1628,6 +1637,11 @@ public final class GenListModuleReader extends AbstractXMLReader {
         }
     }
 
+    /**
+     * Check if {@link #currentFile} is a map
+     * 
+     * @return {@code} true if file is map, otherwise {@code false}
+     */
     private boolean isMapFile() {
         final String current=FileUtils.normalize(currentFile);
         if(FileUtils.isDITAMapFile(current)) {

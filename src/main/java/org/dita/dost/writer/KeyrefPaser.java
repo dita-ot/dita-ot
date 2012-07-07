@@ -637,7 +637,6 @@ public final class KeyrefPaser extends XMLFilterImpl {
      * 
      * @param elem element to serialize
      * @param retainElements {@code true} to serialize elements, {@code false} to only serialize text nodes.
-     * @return
      */
     private void domToSax(final Element elem, final boolean retainElements) throws SAXException{
         // use retainElements to indicate that whether there is need to copy the element name

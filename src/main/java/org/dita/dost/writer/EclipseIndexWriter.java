@@ -106,12 +106,12 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
     }
 
     /**
-     * Output the given indexterm into the PrintWriter.
+     * Output the given indexterm into the XML writer.
      * 
-     * @param term
-     * @param printWriter
-     * @param indexsee
-     * @throws SAXException
+     * @param term term to serialize
+     * @param serializer XML output to write to
+     * @param indexsee is term a see term
+     * @throws SAXException if serialization failed
      */
     private void outputIndexTerm(final IndexTerm term, final XMLSerializer serializer, final boolean indexsee) throws SAXException {
         final List<IndexTerm> subTerms = term.getSubTerms();

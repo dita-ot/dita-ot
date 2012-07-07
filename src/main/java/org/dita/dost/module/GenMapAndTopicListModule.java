@@ -135,7 +135,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
     /** Map of all copy-to (target,source) */
     private Map<String, String> copytoMap;
 
-    /** List of files waiting for parsing */
+    /** List of files waiting for parsing. Values are relative system paths. */
     private final List<String> waitList;
 
     /** List of parsed files */
@@ -170,7 +170,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
     private File ditavalFile;
 
     private int uplevels = 0;
-    /** Prefix path. Either an empty string or a path which ends in {@link java.io.File.separator File.separator}. */
+    /** Prefix path. Either an empty string or a path which ends in {@link java.io.File#separator File.separator}. */
     private String prefix = "";
 
     private DITAOTLogger logger;
@@ -415,6 +415,12 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         }
     }
 
+    /**
+     * Read a file and process it for list information.
+     * 
+     * @param currentFile absolute system path of the file to process
+     * @throws DITAOTException
+     */
     private void processFile(String currentFile) throws DITAOTException {
         File fileToParse;
         final File file = new File(currentFile);
@@ -698,7 +704,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
      * 
      * TODO: Pass format as separate DITA class parameter.
      * 
-     * @param file file path with optional format
+     * @param file file system path with optional format
      */
     private void categorizeResultFile(String file) {
         // edited by william on 2009-08-06 for bug:2832696 start
@@ -781,7 +787,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
     /**
      * Add the given file the wait list if it has not been parsed.
      * 
-     * @param file
+     * @param file relative system path
      */
     private void addToWaitList(final String file) {
         if (doneList.contains(file) || waitList.contains(file)) {

@@ -493,7 +493,7 @@ public final class DitaWriter extends AbstractXMLFilter {
      * 
      * @param qName element name
      * @param atts input attributes
-     * @param result attributes to write to
+     * @param res attributes to write to
      * @throws IOException if writing to output failed
      */
     private void processAttributes(final String qName, final Attributes atts, final AttributesImpl res) throws IOException {
@@ -635,9 +635,9 @@ public final class DitaWriter extends AbstractXMLFilter {
     /**
      * Get attribute value or default if attribute is not defined
      * 
-     * @param qName element QName
-     * @param atts element attributes
-     * @param i attribute index
+     * @param elemQName element QName
+     * @param attQName attribute QName
+     * @param value attribute value
      * @return attribute value or default
      */
     private String getAttributeValue(final String elemQName, final String attQName, final String value) {
@@ -1125,7 +1125,7 @@ public final class DitaWriter extends AbstractXMLFilter {
     }
 
     /**
-     * @deprecated use {@link #write(String, String))} instead
+     * @deprecated use {@link #write(String, String)} instead
      */
     @Override
     @Deprecated
