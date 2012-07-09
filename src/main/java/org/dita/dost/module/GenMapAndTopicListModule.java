@@ -47,6 +47,7 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.reader.GenListModuleReader;
+import org.dita.dost.reader.GenListModuleReader.Reference;
 import org.dita.dost.reader.GrammarPoolManager;
 import org.dita.dost.util.DelayConrefUtils;
 import org.dita.dost.util.FileUtils;
@@ -136,10 +137,10 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
     private Map<String, String> copytoMap;
 
     /** List of files waiting for parsing. Values are relative system paths. */
-    private final List<String> waitList;
+    private final List<File> waitList;
 
     /** List of parsed files */
-    private final List<String> doneList;
+    private final List<File> doneList;
 
     /** Set of outer dita files */
     private final Set<String> outDitaFilesSet;
@@ -165,7 +166,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
     /** Absolute ditadir for processing */
     private File ditaDir;
     /** Input file name. */
-    private String inputFile;
+    private File inputFile;
     /** Absolute path for filter file. */
     private File ditavalFile;
 
@@ -239,8 +240,8 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         htmlSet = new HashSet<String>(INT_128);
         hrefTargetSet = new HashSet<String>(INT_128);
         subsidiarySet = new HashSet<String>(INT_16);
-        waitList = new LinkedList<String>();
-        doneList = new LinkedList<String>();
+        waitList = new LinkedList<File>();
+        doneList = new LinkedList<File>();
         conrefTargetSet = new HashSet<String>(INT_128);
         nonConrefCopytoTargetSet = new HashSet<String>(INT_128);
         copytoMap = new HashMap<String, String>();
@@ -374,7 +375,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
 
         rootFile = inFile.getCanonicalFile();
        
-        inputFile = inFile.getName();
+        inputFile = new File(inFile.getName());
         try {
             // Added by William on 2009-06-09 for scheme key bug
             // create the keydef file for scheme files
@@ -406,8 +407,8 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         reader.setTranstype(transtype);
         // Added by William on 2009-07-18 for req #12014 end
 
-        if (FileUtils.isDITAMapFile(inputFile)) {
-            reader.setPrimaryDitamap(inputFile);
+        if (FileUtils.isDITAMapFile(inputFile.getPath())) {
+            reader.setPrimaryDitamap(inputFile.getPath());
         }
 
         while (!waitList.isEmpty()) {
@@ -421,14 +422,14 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
      * @param currentFile absolute system path of the file to process
      * @throws DITAOTException
      */
-    private void processFile(String currentFile) throws DITAOTException {
+    private void processFile(File currentFile) throws DITAOTException {
         File fileToParse;
-        final File file = new File(currentFile);
+        final File file = currentFile;
         if (file.isAbsolute()) {
             fileToParse = file;
-            currentFile = FileUtils.getRelativePath(rootFile.getAbsolutePath(), currentFile);
+            currentFile = new File(FileUtils.getRelativePath(rootFile.getAbsolutePath(), currentFile.getPath()));
         } else {
-            fileToParse = new File(baseInputDir, currentFile);
+            fileToParse = new File(baseInputDir, currentFile.getPath());
         }
         try {
         	fileToParse = fileToParse.getCanonicalFile();
@@ -445,9 +446,9 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             return;
         }
         try {
-            if (FileUtils.isValidTarget(currentFile.toLowerCase())) {
+            if (FileUtils.isValidTarget(currentFile.getPath().toLowerCase())) {
                 reader.setTranstype(transtype);
-                reader.setCurrentDir(new File(currentFile).getParent());
+                reader.setCurrentDir(currentFile.getParent());
                 reader.parse(fileToParse);
 
             } else {
@@ -461,8 +462,8 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
 
             // don't put it into dita.list if it is invalid
             if (reader.isValidInput()) {
-                processParseResult(currentFile);
-                categorizeCurrentFile(currentFile);
+                processParseResult(currentFile.getPath());
+                categorizeCurrentFile(currentFile.getPath());
             } else if (!currentFile.equals(inputFile)) {
                 logger.logWarn(MessageUtils.getMessage("DOTJ021W", params).toString());
             }
@@ -532,9 +533,9 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         // Added by William on 2010-06-09 for bug:3013079 end
 
         // Category non-copyto result and update uplevels accordingly
-        for (final String file: reader.getNonCopytoResult()) {
+        for (final Reference file: reader.getNonCopytoResult()) {
             categorizeResultFile(file);
-            updateUplevels(file);
+            updateUplevels(file.filename);
         }
 
         // Update uplevels for copy-to targets, and store copy-to map.
@@ -706,20 +707,9 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
      * 
      * @param file file system path with optional format
      */
-    private void categorizeResultFile(String file) {
+    private void categorizeResultFile(Reference file) {
         // edited by william on 2009-08-06 for bug:2832696 start
-        String lcasefn = null;
-        String format = null;
-        // has format attribute set
-        if (file.contains(STICK)) {
-            // get lower case file name
-            lcasefn = file.substring(0, file.indexOf(STICK)).toLowerCase();
-            // get format attribute
-            format = file.substring(file.indexOf(STICK) + 1);
-            file = file.substring(0, file.indexOf(STICK));
-        } else {
-            lcasefn = file.toLowerCase();
-        }
+        String lcasefn = file.filename.toLowerCase();
 
         // Added by William on 2010-03-04 for bug:2957938 start
         // avoid files referred by coderef being added into wait list
@@ -729,20 +719,20 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         // Added by William on 2010-03-04 for bug:2957938 end
 
         if (FileUtils.isDITAFile(lcasefn)
-                && (format == null || ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(format) || ATTR_FORMAT_VALUE_DITAMAP
-                .equalsIgnoreCase(format))) {
+                && (file.format == null || ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(file.format) || ATTR_FORMAT_VALUE_DITAMAP
+                .equalsIgnoreCase(file.format))) {
 
-            addToWaitList(file);
+            addToWaitList(new File(file.filename));
         } else if (!FileUtils.isSupportedImageFile(lcasefn)) {
             // FIXME: Treating all non-image extensions as HTML/resource files is not correct if HTML/resource files
             //        are defined by the file extension. Correct behaviour would be to remove this else block.
-            htmlSet.add(file);
+            htmlSet.add(file.filename);
         }
         // edited by william on 2009-08-06 for bug:2832696 end
         if (FileUtils.isSupportedImageFile(lcasefn)) {
-        	imageSet.add(file);        	      	
+        	imageSet.add(file.filename);        	      	
 			try {
-				final File image = new File (baseInputDir + File.separator + file).getCanonicalFile(); 
+				final File image = new File (baseInputDir, file.filename).getCanonicalFile(); 
 				if (!image.exists()){
 	            	final Properties prop = new Properties();
 					prop.put("%1", image.getAbsolutePath());
@@ -755,7 +745,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         }
 
         if (FileUtils.isHTMLFile(lcasefn) || FileUtils.isResourceFile(lcasefn)) {
-            htmlSet.add(file);
+            htmlSet.add(file.filename);
         }
     }
 
@@ -789,7 +779,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
      * 
      * @param file relative system path
      */
-    private void addToWaitList(final String file) {
+    private void addToWaitList(final File file) {
         if (doneList.contains(file) || waitList.contains(file)) {
             return;
         }

@@ -22,6 +22,7 @@ import org.junit.Test;
 
 import org.dita.dost.TestUtils;
 import org.dita.dost.module.GenMapAndTopicListModule.KeyDef;
+import org.dita.dost.reader.GenListModuleReader.Reference;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.OutputUtils;
 
@@ -69,7 +70,7 @@ public class TestGenListModuleReader {
         final Set<String> copytoSet = reader.getIgnoredCopytoSourceSet();
         final Map<String, KeyDef> keyDMap = reader.getKeysDMap();
         final Set<String> nonConref = reader.getNonConrefCopytoTargets();
-        final Set<String> nonCopyTo = reader.getNonCopytoResult();
+        final Set<Reference> nonCopyTo = reader.getNonCopytoResult();
         final Set<String> outDita = reader.getOutDitaFilesSet();
         final Set<String> outFiles = reader.getOutFilesSet();
         final Set<String> resourceOnlySet = reader.getResourceOnlySet();
@@ -98,9 +99,9 @@ public class TestGenListModuleReader {
         assertTrue(nonConref.contains(".." + File.separator + "topics" + File.separator + "target-topic-c.xml"));
         assertTrue(nonConref.contains(".." + File.separator + "topics" + File.separator + "target-topic-a.xml"));
 
-        assertTrue(nonCopyTo.contains(".." + File.separator + "topics" + File.separator + "xreffin-topic-1.xml"));
-        assertTrue(nonCopyTo.contains(".." + File.separator + "topics" + File.separator + "target-topic-c.xml"));
-        assertTrue(nonCopyTo.contains(".." + File.separator + "topics" + File.separator + "target-topic-a.xml"));
+        assertTrue(nonCopyTo.contains(new Reference(".." + File.separator + "topics" + File.separator + "xreffin-topic-1.xml")));
+        assertTrue(nonCopyTo.contains(new Reference(".." + File.separator + "topics" + File.separator + "target-topic-c.xml")));
+        assertTrue(nonCopyTo.contains(new Reference(".." + File.separator + "topics" + File.separator + "target-topic-a.xml")));
 
         assertTrue(outDita.contains(".." + File.separator + "topics" + File.separator + "xreffin-topic-1.xml"));
         assertTrue(outDita.contains(".." + File.separator + "topics" + File.separator + "target-topic-c.xml"));

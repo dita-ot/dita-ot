@@ -36,6 +36,7 @@ import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.GenMapAndTopicListModule.KeyDef;
+import org.dita.dost.reader.GenListModuleReader.Reference;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.DITAAttrUtils;
 import org.dita.dost.util.FileUtils;
@@ -88,7 +89,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
     private boolean hasCodeRef = false;
 
     /** Set of all the non-conref and non-copyto targets refered in current parsing file */
-    private final Set<String> nonConrefCopytoTargets;
+    private final Set<Reference> nonConrefCopytoTargets;
 
     /** Set of conref targets refered in current parsing file */
     private final Set<String> conrefTargets;
@@ -260,7 +261,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
      * Constructor.
      */
     public GenListModuleReader() {
-        nonConrefCopytoTargets = new HashSet<String>(INT_64);
+        nonConrefCopytoTargets = new HashSet<Reference>(INT_64);
         hrefTargets = new HashSet<String>(INT_32);
         hrefTopicSet = new HashSet<String>(INT_32);
         chunkTopicSet = new HashSet<String>(INT_32);
@@ -460,34 +461,30 @@ public final class GenListModuleReader extends AbstractXMLReader {
      * 
      * @return set of target file path with option format after {@link org.dita.dost.util.Constants#STICK STICK}
      */
-    public Set<String> getNonCopytoResult() {
-        final Set<String> nonCopytoSet = new HashSet<String>(INT_128);
+    public Set<Reference> getNonCopytoResult() {
+        final Set<Reference> nonCopytoSet = new HashSet<Reference>(INT_128);
 
         nonCopytoSet.addAll(nonConrefCopytoTargets);
-        nonCopytoSet.addAll(conrefTargets);
-        nonCopytoSet.addAll(copytoMap.values());
-        nonCopytoSet.addAll(ignoredCopytoSourceSet);
+        for (final String f: conrefTargets) {
+            nonCopytoSet.add(new Reference(f));
+        }
+        for (final String f: copytoMap.values()) {
+            nonCopytoSet.add(new Reference(f));
+        }
+        for (final String f: ignoredCopytoSourceSet) {
+            nonCopytoSet.add(new Reference(f));
+        }
         //Added by William on 2010-03-04 for bug:2957938 start
-        addCoderefFiles(nonCopytoSet);
-        //Added by William on 2010-03-04 for bug:2957938 end
-        return nonCopytoSet;
-    }
-
-    /**
-     * Add coderef outside coderef files.
-     * @param nonCopytoSet
-     */
-    private void addCoderefFiles(final Set<String> nonCopytoSet) {
-
         for(final String filename : subsidiarySet){
             //only activated on /generateout:3 & is out file.
             if(isOutFile(filename) && OutputUtils.getGeneratecopyouter()
                     == OutputUtils.Generate.OLDSOLUTION){
-                nonCopytoSet.add(filename);
+                nonCopytoSet.add(new Reference(filename));
             }
         }
         //nonCopytoSet.addAll(subsidiarySet);
-
+        //Added by William on 2010-03-04 for bug:2957938 end
+        return nonCopytoSet;
     }
 
     /**
@@ -532,7 +529,11 @@ public final class GenListModuleReader extends AbstractXMLReader {
      * @return Returns the nonConrefCopytoTargets.
      */
     public Set<String> getNonConrefCopytoTargets() {
-        return nonConrefCopytoTargets;
+        final Set<String> res = new HashSet<String>(nonConrefCopytoTargets.size());
+        for (final Reference r: nonConrefCopytoTargets) {
+            res.add(r.filename);
+        }
+        return res;
     }
 
     /**
@@ -1403,6 +1404,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
                 logger.logError("Unable to decode URI '" + filename + "': " + e.getMessage());
             }
         }
+        // XXX: At this point, filename should be a system path 
 
         if (MAP_TOPICREF.matches(attrClass)) {
             if (ATTR_TYPE_VALUE_SUBJECT_SCHEME.equalsIgnoreCase(attrType)) {
@@ -1460,11 +1462,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
                         && !ATTRIBUTE_NAME_COPY_TO.equals(attrName) &&
                         (canResolved() || FileUtils.isSupportedImageFile(filename.toLowerCase()))) {
             //edited by william on 2009-08-06 for bug:2832696 start
-            if(attrFormat!=null){
-                nonConrefCopytoTargets.add(filename + STICK + attrFormat);
-            }else{
-                nonConrefCopytoTargets.add(filename);
-            }
+            nonConrefCopytoTargets.add(new Reference(filename, attrFormat));
             //nonConrefCopytoTargets.add(filename);
             //edited by william on 2009-08-06 for bug:2832696 end
         }
@@ -1770,6 +1768,57 @@ public final class GenListModuleReader extends AbstractXMLReader {
 
     public void setPrimaryDitamap(final String primaryDitamap) {
         this.primaryDitamap = primaryDitamap;
+    }
+
+    /**
+     * File reference with path and optional format.
+     */
+    public static class Reference {
+        public final String filename;
+        public final String format;
+        public Reference(final String filename, final String format) {
+            this.filename = filename;
+            this.format = format;
+        }
+        public Reference(final String filename) {
+            this(filename, null);
+        }
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + ((filename == null) ? 0 : filename.hashCode());
+            result = prime * result + ((format == null) ? 0 : format.hashCode());
+            return result;
+        }
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (!(obj instanceof Reference)) {
+                return false;
+            }
+            Reference other = (Reference) obj;
+            if (filename == null) {
+                if (other.filename != null) {
+                    return false;
+                }
+            } else if (!filename.equals(other.filename)) {
+                return false;
+            }
+            if (format == null) {
+                if (other.format != null) {
+                    return false;
+                }
+            } else if (!format.equals(other.format)) {
+                return false;
+            }
+            return true;
+        }
     }
 
 }
