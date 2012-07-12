@@ -25,9 +25,17 @@
           </li>
         </ul>
       </section>
+      <section>
+        <title>PDF2</title>
+        <p>The following deprecated XSLT variables have been removed:</p>
+        <ul>
+          <li><codeph>page-margin-left</codeph></li>
+          <li><codeph>page-margin-right</codeph></li>
+        </ul>
+      </section>
     </refbody>
   </reference>
-  <reference id="rel1.6">
+  <reference id="rel1.7.issues">
     <title>Issues</title>
     <shortdesc>The following items are included in DITA Open Toolkit Release 1.7. Issue numbers
       correspond to the tracking number in the <ph><xref keyref="dita-ot-issues" scope="external"

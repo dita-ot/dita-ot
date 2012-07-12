@@ -56,10 +56,6 @@
     <xsl:variable name="page-margins">20mm</xsl:variable>
     
     <!-- Change these if your page has different margins on different sides. -->
-    <!-- legacy parameter -->
-    <xsl:variable name="page-margin-left"/>
-    <!-- legacy parameter -->
-    <xsl:variable name="page-margin-right"/>
     <xsl:variable name="page-margin-inside" select="$page-margins"/>
     <xsl:variable name="page-margin-outside" select="$page-margins"/>
     <xsl:variable name="page-margin-top" select="$page-margins"/>

@@ -27,32 +27,10 @@
       <xsl:value-of select="$page-margin-bottom"/>
     </xsl:attribute>
     <xsl:attribute name="{if ($writing-mode = 'lr') then 'margin-left' else 'margin-right'}">
-      <xsl:choose>
-        <!-- support legacy parameter -->
-        <xsl:when test="normalize-space($page-margin-left)">
-          <xsl:call-template name="output-message">
-            <xsl:with-param name="msg">[WARN]: The $page-margin-left configuration variable has been deprecated. Use $page-margin-inside and $page-margin-outside instead.</xsl:with-param>
-          </xsl:call-template>
-          <xsl:value-of select="$page-margin-left"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="$page-margin-inside"/>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:value-of select="$page-margin-inside"/>
     </xsl:attribute>
     <xsl:attribute name="{if ($writing-mode = 'lr') then 'margin-right' else 'margin-left'}">
-      <xsl:choose>
-        <!-- support legacy parameter -->
-        <xsl:when test="normalize-space($page-margin-right)">
-          <xsl:call-template name="output-message">
-            <xsl:with-param name="msg">[WARN]: The $page-margin-right configuration variable has been deprecated. Use $page-margin-inside and $page-margin-outside instead.</xsl:with-param>
-          </xsl:call-template>
-          <xsl:value-of select="$page-margin-right"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="$page-margin-outside"/>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:value-of select="$page-margin-outside"/>
     </xsl:attribute>
   </xsl:attribute-set>
 
@@ -64,32 +42,10 @@
       <xsl:value-of select="$page-margin-bottom"/>
     </xsl:attribute>
     <xsl:attribute name="{if ($writing-mode = 'lr') then 'margin-left' else 'margin-right'}">
-      <xsl:choose>
-        <!-- support legacy parameter -->
-        <xsl:when test="normalize-space($page-margin-left)">
-          <xsl:call-template name="output-message">
-            <xsl:with-param name="msg">[WARN]: The $page-margin-left configuration variable has been deprecated. Use $page-margin-inside and $page-margin-outside instead.</xsl:with-param>
-          </xsl:call-template>
-          <xsl:value-of select="$page-margin-left"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="$page-margin-outside"/>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:value-of select="$page-margin-outside"/>
     </xsl:attribute>
     <xsl:attribute name="{if ($writing-mode = 'lr') then 'margin-right' else 'margin-left'}">
-      <xsl:choose>
-        <!-- support legacy parameter -->
-        <xsl:when test="normalize-space($page-margin-right)">
-          <xsl:call-template name="output-message">
-            <xsl:with-param name="msg">[WARN]: The $page-margin-right configuration variable has been deprecated. Use $page-margin-inside and $page-margin-outside instead.</xsl:with-param>
-          </xsl:call-template>
-          <xsl:value-of select="$page-margin-right"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="$page-margin-inside"/>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:value-of select="$page-margin-inside"/>
     </xsl:attribute>
   </xsl:attribute-set>
   
