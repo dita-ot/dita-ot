@@ -48,6 +48,7 @@
 	
   <target name="build-java" depends="init-java, check-icu4j, build-xep-java">
     <javac srcdir="${src.dir}" destdir="${bin.dir}"
+      includeantruntime="false"
       debug="on" excludes="com/idiominc/ws/opentopic/fo/xep/**"
       source="1.5" target="1.5">
       <classpath refid="build.class.path"/>
@@ -57,6 +58,7 @@
   <target name="build-xep-java" depends="init-java" if="xep-available">
     <javac srcdir="${src.dir}/com/idiominc/ws/opentopic/fo/xep/"
            destdir="${bin.dir}"
+           includeantruntime="false"
            source="1.5" target="1.5"
       debug="on">
       <classpath refid="build.class.path"/>

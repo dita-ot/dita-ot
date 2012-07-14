@@ -9,6 +9,8 @@
 
   <property file="build.properties"/>
 
+  <import file="${basedir}/src/main/local.properties.xml"/>
+
   <condition property="HTMLHelpCompiler" value="C:\Program Files\HTML Help Workshop\hhc.exe">
     <available file="C:\Program Files\HTML Help Workshop\hhc.exe"/>
   </condition>
@@ -66,15 +68,11 @@
   <target name="build-java" depends="compile"/>
   <target name="compile" depends="init-java" description="Compile Java">
     <javac srcdir="${java.dir}" destdir="${bin.dir}"
+           classpathref="dost.compile.classpath"
+           includeantruntime="false"
            debug="on"
            source="1.5" target="1.5">
       <exclude name="org/dita/dost/invoker/JavaInvoker.java"/>
-      <classpath>
-        <pathelement location="${lib.dir}/xercesImpl.jar"/>
-        <pathelement location="${lib.dir}/xml-apis.xml"/>
-        <pathelement location="${lib.dir}/resolver.jar"/>
-        <pathelement location="${lib.dir}/commons-codec-1.4.jar"/>
-      </classpath>
     </javac>
   </target>
 
@@ -359,9 +357,13 @@
   <target name="cleanup" unless="skip.cleanup">
     <delete dir="${work.dir}"/>
   </target>
+  
+  <target name="top-level-integration" depends="jar">
+    <ant antfile="src/main/integrator.xml"/>
+  </target>
 
-  <target name="update-doc">
-    <ant antfile="${src.dir}/integrator.xml" target="integrate"/>
+  <target name="update-doc" depends="top-level-integration">
+    <ant antfile="${src.dir}/integrator.xml" target="integrate" inheritall="false"/>
     <ant antfile="${doc.dir}/build.xml">
       <property name="basedir" value="${src.dir}"/>
       <property name="output.dir" location="${work.dir}/htmlhelp"/>
@@ -440,6 +442,7 @@
     <mkdir dir="${test.bin.dir}"/>
     <javac destdir="${test.bin.dir}"
            debug="on"
+           includeantruntime="false"
            source="1.5" target="1.5">
       <src>
         <pathelement location="${test.java.dir}"/>
