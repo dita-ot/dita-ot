@@ -203,6 +203,8 @@
         <not><isset property="xml.parser"/></not>
       </and>
     </condition>
+    <fail unless="xml.parser">No XML parser defined.</fail>
+    <echo>xml.parser ${xml.parser}</echo>
   </target>
 	
   <!-- property value validation begin -->
