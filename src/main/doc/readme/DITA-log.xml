@@ -12,7 +12,7 @@
           <dt>Ant</dt>
           <dd>By default, status information is written to the screen. If you issue the
               <parmname>-l</parmname> parameter, the build runs silently and the information is
-            written to a log file with the name and location that you specifed. (You also can use
+            written to a log file with the name and location that you specified. (You also can use
             other Ant loggers; see the Ant documentation for more information.)</dd>
         </dlentry>
         <dlentry>

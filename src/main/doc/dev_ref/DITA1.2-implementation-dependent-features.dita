@@ -29,7 +29,7 @@
       <title>Filtering</title>
       <p>Error recovery:</p>
       <ul>
-        <li>When there are multiple revprop elements with the same val attribute, no error of
+        <li>When there are multiple <codeph>revprop</codeph> elements with the same val attribute, no error of
           warning is thrown</li>
         <li>When multiple prop elements define a duplicate attribute and value combination,
           attribute default, or fall-back behaviour, <keyword>DOTJ007E</keyword> error is
@@ -53,7 +53,7 @@
     </section>
     <section id="section_dco_qgs_qc">
       <title>Image scaling</title>
-      <p>If both height and width attributes are given, image is scaled nonuniformly.</p>
+      <p>If both height and width attributes are given, image is scaled non-uniformly.</p>
       <p>If scale attribute is not an unsigned integer, no error or warning is thrown during
         preprocessing.</p>
       <draft-comment>What's the implementation dependent behaviour for abstract and shortdesc
