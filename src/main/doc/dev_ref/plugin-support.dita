@@ -6,7 +6,7 @@
 <reference id="plugin-support" xml:lang="en-us">
 <title>Version and support information</title>
 <shortdesc>The following extension points are used by convention to
-define version and support info         within a plugin.</shortdesc>
+define version and support info         within a plug-in.</shortdesc>
 <refbody>
 <section>       <ul id="ul_jxr_hlv_mc">
 <li><codeph>package.support.name</codeph></li>

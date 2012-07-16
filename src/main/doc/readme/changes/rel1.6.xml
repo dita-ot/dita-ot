@@ -224,7 +224,7 @@ added DITAVAL to the standard in 2007) has been removed.</p>
         </ul>
         <p>Main
           FO generation now relies on merging process to rewrite duplicate IDs. The default merging
-          has done this already in previous releses, but now also custom merging needs to fullfill
+          has done this already in previous releses, but now also custom merging needs to fulfill
           the duplicate ID rewrite requirement.</p>
         <p>Support for <filepath>layout-masters.xml</filepath> configuration has been removed,
           plug-ins should use <codeph>createDefaultLayoutMasters</codeph> template instead.</p></section>
@@ -352,7 +352,14 @@ keyref="dita-ot-issues" scope="external">GitHub issues tracker</xref></ph>.</sho
           <li>#1152 UNC paths are not supported in input argument (final release)</li>
           <li>#1072 URLs not decoded by dost.jar (final release)</li>
           <li>#1306 Typo in XSLT mode results in extra fallthrough text for step (final
-            release)</li>  
+            release)</li>
+          <li>#1321 Fix path2project separator clean-up (maintenance 1)</li>
+          <li>#1322 Xref to table cell does not properly navigate to it (maintenance 1)</li>
+          <li>#1323 @relcolwidth attribute not taken into account when transforming &lt;choicetable>
+            to PDF using Apache FOP (maintenance 1)</li>
+          <li>#1325 Variable "Index See Also String" missing from Hebrew (maintenance 1)</li>
+          <li>#1329 PDF2 indexing fails for ranges (maintenance 1)</li>
+          <li>#1330 Spaces in Filenames in 1.6 (maintenance 1)</li>
         </ul>
       </section>
     </refbody>

@@ -2,7 +2,7 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="distribution_packages">
   <title>Distribution packages</title>
-  <abstract><shortdesc>DITA-OT is available in three three binary packages.</shortdesc> Source code is available as a Git repository and ZIP downloads. </abstract>
+  <abstract><shortdesc>DITA-OT is available in three binary packages.</shortdesc> Source code is available as a Git repository and ZIP downloads. </abstract>
   <conbody>
     <section>
       <title>Minimal package (DITA-OT<keyword keyref="release.version"></keyword>_minimal_bin.zip
