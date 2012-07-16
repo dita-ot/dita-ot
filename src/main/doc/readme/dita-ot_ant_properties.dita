@@ -254,12 +254,6 @@ are based on the XHTML transform type, including:</p>
                   <codeph>indexterm</codeph> element should appear in the output. Allowed values are
                 "yes" and "no". Default value is "no".</entry>
             </row>
-            <row id="args.xhtml.toc.class">
-              <entry><codeph>args.xhtml.toc.class</codeph></entry>
-              <entry id="args.xhtml.toc.class.desc">String for a CSS class name attribute applied to
-                the TOC (x)HTML output's &lt;body&gt; element. <ph audience="xslt-customizer">Found
-                  in <filepath>map2htmltoc.xsl</filepath>.</ph></entry>
-            </row>
             <row id="args.xhtml.classattr">
               <entry colname="COLSPEC0"><codeph>args.xhtml.classattr</codeph></entry>
               <entry id="args.xhtml.classattr.desc" colname="COLSPEC3">Specifies whether to include
@@ -514,12 +508,18 @@ transform type</title>
             <row id="args.xhtml.contenttarget">
               <entry><codeph>args.xhtml.contenttarget</codeph></entry>
               <entry id="args.xhtml.contenttarget.desc">Specifies the content frame name where links
-                from TOC are opened.</entry>
+                from TOC are opened. Default value is "contentwin".</entry>
             </row>
             <row id="args.xhtml.toc">
               <entry colname="col1"><codeph>args.xhtml.toc</codeph></entry>
-              <entry id="args.xhtml.toc.desc" colname="col3">Specifies the name of the entry point
-                for an XHTML project. Default value is <codeph>index.html</codeph></entry>
+              <entry id="args.xhtml.toc.desc" colname="col3">Specifies the file name of the XHTML TOC, without a file extension
+                Default value is "index".</entry>
+            </row>
+            <row id="args.xhtml.toc.class">
+              <entry><codeph>args.xhtml.toc.class</codeph></entry>
+              <entry id="args.xhtml.toc.class.desc">String for a CSS class name attribute applied to
+                the TOC (x)HTML output's &lt;body&gt; element. <ph audience="xslt-customizer">Found
+                  in <filepath>map2htmltoc.xsl</filepath>.</ph></entry>
             </row>
           </tbody>
         </tgroup>

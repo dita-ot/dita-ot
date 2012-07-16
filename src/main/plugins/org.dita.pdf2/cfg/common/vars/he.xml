@@ -31,7 +31,7 @@
   <variable id="Index">אינדקס</variable>
   <variable id="Index Continued String">המשך</variable>
   <variable id="Index See String">, ראה </variable>
-  <variable id="See Also String">ראה גם </variable>
+  <variable id="Index See Also String">ראה גם </variable>
   <variable id="Table of Contents Chapter">פרק <param ref-name="number"/>. </variable>
   <variable id="Table of Contents Appendix">נספח <param ref-name="number"/>. </variable>
   <variable id="Table of Contents Part">חלק <param ref-name="number"/>. </variable>
