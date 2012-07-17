@@ -8,7 +8,7 @@
 	<description>Build the DITA Demos and Samples</description>
 	<property environment="env"/>
 
-  <import file="${basedir}${file.separator}build.xml"/>
+  <import file="${basedir}/build.xml"/>
   
   <import file="${basedir}/samples/ant_sample/sample_all.xml"/>
 
@@ -39,32 +39,32 @@ http://docs.oasis-open.org/dita/v1.2/spec/DITA1.2-spec.html</echo>
 	<!-- revise below here -->
 
 	<!-- defaults for DITA configuration required by callable targets -->
-	<property name="dita.dir" value="${basedir}"/>
+	<property name="dita.dir" location="${basedir}"/>
 	<property name="dita.script.dir"
-		value="${dita.dir}${file.separator}xsl"/>
+		location="${dita.dir}/xsl"/>
 	<property name="dita.dtd.dir"
-		value="${dita.dir}${file.separator}dtd"/>
+		location="${dita.dir}/dtd"/>
 	<property name="dita.css.dir"
-		value="${dita.dir}${file.separator}css"/>
+		location="${dita.dir}/css"/>
 	<property name="dita.resource.dir"
-		value="${dita.dir}${file.separator}resource"/>
+		location="${dita.dir}/resource"/>
 
 	<!-- defaults for DITA output configuration -->
 	<property name="dita.doc.dir"
-		value="${dita.dir}${file.separator}doc"/>
+		location="${dita.dir}/doc"/>
 	<property name="dita.doc.langref.dir"
-		value="${dita.doc.dir}${file.separator}langref-dita1.1"/>
+		location="${dita.doc.dir}/langref-dita1.1"/>
 	<property name="dita.doc.articles.dir"
-		value="${dita.doc.dir}${file.separator}articles"/>
+		location="${dita.doc.dir}/articles"/>
 	
 	<property name="dita.samples.dir"
-		value="${dita.dir}${file.separator}samples"/>
+		location="${dita.dir}/samples"/>
 
 	<property name="dita.output.dir"
-		value="${dita.dir}${file.separator}out"/>
+		location="${dita.dir}/out"/>
 
 	<property name="dita.output.docbook.dir"
-		value="${dita.output.dir}${file.separator}docbook"/>
+		location="${dita.output.dir}/docbook"/>
 
 
 
@@ -95,8 +95,8 @@ http://docs.oasis-open.org/dita/v1.2/spec/DITA1.2-spec.html</echo>
 		description="Build the articles of dita as document.">
 		<antcall target="dita2xhtml">
 			<param name="args.input"
-				value="${dita.doc.articles.dir}${file.separator}DITA-articles.ditamap"/>
-			<param name="output.dir"     value="${dita.output.doc.articles.dir}"/>
+				location="${dita.doc.articles.dir}/DITA-articles.ditamap"/>
+			<param name="output.dir"     location="${dita.output.doc.articles.dir}"/>
       <param name="transtype" value="xhtml"/>
 		</antcall>
 	</target>
@@ -105,8 +105,8 @@ http://docs.oasis-open.org/dita/v1.2/spec/DITA1.2-spec.html</echo>
 		description="Build the articles of dita as document.">
 		<antcall target="dita2htmlhelp">
 			<param name="args.input"
-				value="${dita.doc.articles.dir}${file.separator}DITA-articles.ditamap"/>
-			<param name="output.dir"     value="${dita.output.doc.articles.dir}"/>
+				location="${dita.doc.articles.dir}/DITA-articles.ditamap"/>
+			<param name="output.dir"     location="${dita.output.doc.articles.dir}"/>
       <param name="transtype" value="htmlhelp"/>
 		</antcall>
 	</target>
@@ -116,8 +116,8 @@ http://docs.oasis-open.org/dita/v1.2/spec/DITA1.2-spec.html</echo>
     	<!-- DOST is the project name of imported build.xml-->
 		<antcall target="DOST.init">
 			<param name="args.input"      
-				value="${dita.doc.articles.dir}${file.separator}DITA-articles.ditamap"/>
-			<param name="output.dir"      value="${dita.output.doc.articles.dir}"/>
+				location="${dita.doc.articles.dir}/DITA-articles.ditamap"/>
+			<param name="output.dir"      location="${dita.output.doc.articles.dir}"/>
       		<param name="transtype" value="pdf"/>
 		</antcall>
 	</target>
@@ -130,8 +130,8 @@ http://docs.oasis-open.org/dita/v1.2/spec/DITA1.2-spec.html</echo>
 	<target name="doc.readme.web" depends="init">
 		<antcall target="dita2xhtml">
 			<param name="args.input"
-				value="${dita.doc.dir}${file.separator}readme.ditamap"/>
-			<param name="output.dir"     value="${dita.output.doc.dir}"/>
+				location="${dita.doc.dir}/readme.ditamap"/>
+			<param name="output.dir"     location="${dita.output.doc.dir}"/>
       <param name="transtype" value="xhtml"/>
 		</antcall>
 	</target>
@@ -139,8 +139,8 @@ http://docs.oasis-open.org/dita/v1.2/spec/DITA1.2-spec.html</echo>
     <target name="doc.readme.chm" depends="init">
 		<antcall target="dita2htmlhelp">
 			<param name="args.input"
-				value="${dita.doc.dir}${file.separator}readme.ditamap"/>
-			<param name="output.dir"     value="${dita.output.doc.dir}"/>
+				location="${dita.doc.dir}/readme.ditamap"/>
+			<param name="output.dir"     location="${dita.output.doc.dir}"/>
       <param name="transtype" value="htmlhelp"/>
 		</antcall>
 	</target>
@@ -149,8 +149,8 @@ http://docs.oasis-open.org/dita/v1.2/spec/DITA1.2-spec.html</echo>
     	<!-- DOST is the project name of imported build.xml-->
 		<antcall target="DOST.init">
 			<param name="args.input"      
-				value="${dita.doc.dir}${file.separator}readme.ditamap"/>
-			<param name="output.dir"      value="${dita.output.doc.dir}"/>
+				location="${dita.doc.dir}/readme.ditamap"/>
+			<param name="output.dir"      location="${dita.output.doc.dir}"/>
       		<param name="transtype" value="pdf"/>
 		</antcall>
 	</target>
@@ -158,8 +158,8 @@ http://docs.oasis-open.org/dita/v1.2/spec/DITA1.2-spec.html</echo>
 	<target name="doc.installguide.web" depends="init">
 		<antcall target="dita2xhtml">
 			<param name="args.input"
-				value="${dita.doc.dir}${file.separator}ot-userguide${file.separator}DITAOT_UGRef_SOURCE${file.separator}installing${file.separator}installing_map.ditamap"/>
-			<param name="output.dir" value="${dita.output.doc.dir}${file.separator}installguide"/>
+				location="${dita.doc.dir}/ot-userguide/DITAOT_UGRef_SOURCE/installing/installing_map.ditamap"/>
+			<param name="output.dir" location="${dita.output.doc.dir}/installguide"/>
       <param name="transtype" value="xhtml"/>
 		</antcall>
 	</target>
@@ -167,8 +167,8 @@ http://docs.oasis-open.org/dita/v1.2/spec/DITA1.2-spec.html</echo>
 	<target name="doc.installguide.chm" depends="init">
 		<antcall target="dita2htmlhelp">
 			<param name="args.input"
-				value="${dita.doc.dir}${file.separator}ot-userguide${file.separator}DITAOT_UGRef_SOURCE${file.separator}installing${file.separator}installing_map.ditamap"/>
-			<param name="output.dir" value="${dita.output.doc.dir}${file.separator}installguide"/>
+				location="${dita.doc.dir}/ot-userguide/DITAOT_UGRef_SOURCE/installing/installing_map.ditamap"/>
+			<param name="output.dir" location="${dita.output.doc.dir}/installguide"/>
       <param name="transtype" value="htmlhelp"/>
 		</antcall>
 	</target>
@@ -177,8 +177,8 @@ http://docs.oasis-open.org/dita/v1.2/spec/DITA1.2-spec.html</echo>
 		<!-- DOST is the project name of imported build.xml-->
 		<antcall target="DOST.init">
 			<param name="args.input"      
-				value="${dita.doc.dir}${file.separator}ot-userguide${file.separator}DITAOT_UGRef_SOURCE${file.separator}installing${file.separator}installing_map.ditamap"/>
-			<param name="output.dir"      value="${dita.output.doc.dir}${file.separator}installguide"/>
+				location="${dita.doc.dir}/ot-userguide/DITAOT_UGRef_SOURCE/installing/installing_map.ditamap"/>
+			<param name="output.dir"      location="${dita.output.doc.dir}/installguide"/>
       		<param name="transtype" value="pdf"/>
 		</antcall>
 	</target>
@@ -186,8 +186,8 @@ http://docs.oasis-open.org/dita/v1.2/spec/DITA1.2-spec.html</echo>
 	<target name="doc.quickstartguide.chm" depends="init">
 		<antcall target="dita2htmlhelp">
 			<param name="args.input"
-			  value="${dita.doc.dir}${file.separator}quickstartguide.ditamap"/>
-			<param name="output.dir" value="${dita.output.doc.dir}"/>
+			  location="${dita.doc.dir}/quickstartguide.ditamap"/>
+			<param name="output.dir" location="${dita.output.doc.dir}"/>
       <param name="transtype" value="htmlhelp"/>
 		</antcall>
 	</target>
@@ -196,8 +196,8 @@ http://docs.oasis-open.org/dita/v1.2/spec/DITA1.2-spec.html</echo>
 		<!-- DOST is the project name of imported build.xml-->
 		<antcall target="DOST.init">
 			<param name="args.input"
-			  value="${dita.doc.dir}${file.separator}quickstartguide.ditamap"/>
-			<param name="output.dir" value="${dita.output.doc.dir}"/>
+			  location="${dita.doc.dir}/quickstartguide.ditamap"/>
+			<param name="output.dir" location="${dita.output.doc.dir}"/>
       		<param name="transtype" value="pdf"/>
 		</antcall>
 	</target>
@@ -216,9 +216,9 @@ http://docs.oasis-open.org/dita/v1.2/spec/DITA1.2-spec.html</echo>
 
 		<antcall target="dita2docbook">
 			<param name="args.input"
-				value="${dita.doc.dir}${file.separator}readme${file.separator}DITA-readme.xml"/>
+				location="${dita.doc.dir}/readme/DITA-readme.xml"/>
 			<param name="output.dir"
-				value="${dita.output.docbook.dir}"/>
+				location="${dita.output.docbook.dir}"/>
       <param name="transtype" value="docbook"/>
 		</antcall>
 	</target>
@@ -241,7 +241,7 @@ Note that relative paths that climb (..) are not supported yet.
 To build the sample, press return without entering anything.</echo>
 		<input message="The DITA map filename: "
 			addproperty="prompt.ditamap.filename"
-			defaultvalue="${dita.samples.dir}${file.separator}hierarchy.ditamap"/>
+			defaultvalue="${dita.samples.dir}/hierarchy.ditamap"/>
 		<fail message="no map entered">
 			<condition>
 				<or>
@@ -344,8 +344,8 @@ Before rebuilding, please delete the output or the directory.</echo>
 			</html>
 		</echoxml>
 		<antcall target="dita2xhtml">
-			<param name="args.input"      value="${prompt.ditamap.filename}"/>
-			<param name="output.dir"     value="${prompt.output.directory}"/>
+			<param name="args.input"      location="${prompt.ditamap.filename}"/>
+			<param name="output.dir"     location="${prompt.output.directory}"/>
 			<param name="args.xhtml.toc" value="toc"/>
 			<param name="dita.temp.dir" value="temp"/>
       <param name="transtype" value="xhtml"/>
@@ -355,8 +355,8 @@ Before rebuilding, please delete the output or the directory.</echo>
 	<target name="prompt.output.eclipse" depends="prompt.output.init"
 		if="isEclipseOutput">
 		<antcall target="dita2eclipsehelp">
-			<param name="args.input"      value="${prompt.ditamap.filename}"/>
-			<param name="output.dir"     value="${prompt.output.directory}"/>
+			<param name="args.input"      location="${prompt.ditamap.filename}"/>
+			<param name="output.dir"     location="${prompt.output.directory}"/>
 			<param name="args.eclipse.toc" value="toc"/>
 			<param name="dita.temp.dir" value="temp"/>
       <param name="transtype" value="eclipsehelp"/>
@@ -366,8 +366,8 @@ Before rebuilding, please delete the output or the directory.</echo>
 	<target name="prompt.output.tocjs" depends="prompt.output.init"
 		if="isTocjsOutput">
 		<antcall target="dita2tocjs">
-			<param name="args.input"      value="${prompt.ditamap.filename}"/>
-			<param name="output.dir"     value="${prompt.output.directory}"/>
+			<param name="args.input"      location="${prompt.ditamap.filename}"/>
+			<param name="output.dir"     location="${prompt.output.directory}"/>
 			<param name="dita.temp.dir" value="temp"/>
       <param name="transtype" value="tocjs"/>
 		</antcall>
@@ -376,8 +376,8 @@ Before rebuilding, please delete the output or the directory.</echo>
 	<target name="prompt.output.javahelp" depends="prompt.output.init"
 		if="isJavaHelpOutput">
 		<antcall target="dita2javahelp">
-			<param name="args.input"      value="${prompt.ditamap.filename}"/>
-			<param name="output.dir"     value="${prompt.output.directory}"/>
+			<param name="args.input"      location="${prompt.ditamap.filename}"/>
+			<param name="output.dir"     location="${prompt.output.directory}"/>
 			<param name="args.javahelp.toc" value="toc"/>
 			<param name="args.javahelp.map" value="map"/>
 			<param name="dita.temp.dir" value="temp"/>
@@ -389,9 +389,9 @@ Before rebuilding, please delete the output or the directory.</echo>
 		if="isHtmlHelpOutput">
 		<antcall target="dita2htmlhelp">
 			<param name="args.input"
-				value="${prompt.ditamap.filename}"/>
+				location="${prompt.ditamap.filename}"/>
 			<param name="output.dir"
-				value="${prompt.output.directory}"/>
+				location="${prompt.output.directory}"/>
 			<param name="dita.temp.dir" value="temp"/>
       <param name="transtype" value="htmlhelp"/>
 		</antcall>
@@ -402,8 +402,8 @@ Before rebuilding, please delete the output or the directory.</echo>
 		<!-- DOST is the project name of imported build.xml-->
 		<antcall target="DOST.init">
 			<param name="args.input"      
-				value="${prompt.ditamap.filename}"/>
-			<param name="output.dir"      value="${prompt.output.directory}"/>
+				location="${prompt.ditamap.filename}"/>
+			<param name="output.dir"      location="${prompt.output.directory}"/>
 			<param name="dita.temp.dir" value="temp"/>
       		<param name="transtype" value="pdf"/>
 		</antcall>
@@ -412,8 +412,8 @@ Before rebuilding, please delete the output or the directory.</echo>
 	<target name="prompt.output.docbook" depends="prompt.output.init"
 		if="isDocbookOutput">
 		<antcall target="dita2docbook">
-			<param name="args.input"       value="${prompt.ditamap.filename}"/>
-			<param name="output.dir"      value="${prompt.output.directory}"/>
+			<param name="args.input"       location="${prompt.ditamap.filename}"/>
+			<param name="output.dir"      location="${prompt.output.directory}"/>
 			<param name="dita.temp.dir" value="temp"/>
       <param name="transtype" value="docbook"/>
 		</antcall>
@@ -422,14 +422,14 @@ Before rebuilding, please delete the output or the directory.</echo>
   <!-- The whole process on which javamerge depends equals to the target "dita-process" in build.xml. -->
   <target name="javamerge"  description="Merge topics" depends="start-process, init-logger, check-arg, output-css-warn-message, preprocess">
 	<basename property="temp.base" file="${user.input.file}" suffix=".ditamap"/>
-    <property name="temp.input" value="${dita.temp.dir}${file.separator}${user.input.file}"/>
-    <property name="temp.output" value="${output.dir}${file.separator}${user.input.file}"/>
+    <property name="temp.input" location="${dita.temp.dir}/${user.input.file}"/>
+    <property name="temp.output" location="${output.dir}/${user.input.file}"/>
     <dirname property="temp.dir" file="${temp.input}"/>
     <dirname property="temp.outdir" file="${temp.output}"/>
     <pipeline message="topicmerge" module="TopicMerge" 
-      inputmap="${temp.dir}${file.separator}${temp.base}.ditamap" 
+      inputmap="${temp.dir}/${temp.base}.ditamap" 
       tempdir="${dita.temp.dir}">
-      <param name="output" location="${temp.outdir}${file.separator}${temp.base}_merged.xml"/>
+      <param name="output" location="${temp.outdir}/${temp.base}_merged.xml"/>
     </pipeline>
   </target>
 	
