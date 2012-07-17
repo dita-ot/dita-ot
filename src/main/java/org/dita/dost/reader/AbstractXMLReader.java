@@ -11,6 +11,7 @@ package org.dita.dost.reader;
 
 import static org.dita.dost.util.Constants.*;
 
+import java.io.File;
 import java.io.IOException;
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
 import org.dita.dost.log.DITAOTJavaLogger;
@@ -42,13 +43,13 @@ ContentHandler, LexicalHandler, EntityResolver {
     /**
      * Initialize XML reader.
      * 
-     * @param ditaDir DITA-OT base directory
+     * @param ditaDir absolute path to DITA-OT base directory
      * @param validate
      * @param inGrammarPool
      * @throws SAXException if initializing reader failed
      */
     @Deprecated
-    public XMLReader initXMLReaderBase(final String ditaDir, final boolean validate,
+    public XMLReader initXMLReaderBase(final File ditaDir, final boolean validate,
             final XMLGrammarPool inGrammarPool) throws SAXException {
         // FIXME: WEK: This is my attempt to factor out common reader initialization
         //             code for the GenListModuleReader and the Debug and filter reader.

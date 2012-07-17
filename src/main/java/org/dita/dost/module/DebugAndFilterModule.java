@@ -71,6 +71,10 @@ import org.xml.sax.SAXException;
  * @author Zhang, Yuan Peng
  */
 final class DebugAndFilterModule implements AbstractPipelineModule {
+    
+    /** Subject scheme file extension */
+    private static final String SUBJECT_SCHEME_EXTENSION = ".subm";
+    
     private static final String [] PROPERTY_UPDATE_LIST = {INPUT_DITAMAP,HREF_TARGET_LIST,
         CONREF_LIST,HREF_DITA_TOPIC_LIST,FULL_DITA_TOPIC_LIST,
         FULL_DITAMAP_TOPIC_LIST,CONREF_TARGET_LIST,COPYTO_SOURCE_LIST,
@@ -81,7 +85,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
      * File extension of source file.
      */
     private String extName = null;
-    private String tempDir = null;
+    private File tempDir = null;
 
     private final OutputUtils outputUtils = new OutputUtils();
     /**
@@ -163,8 +167,8 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 
         try {
             final String baseDir = input.getAttribute(ANT_INVOKER_PARAM_BASEDIR);
-            tempDir = input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR);
-            if (!new File(tempDir).isAbsolute()) {
+            tempDir = new File(input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR));
+            if (!tempDir.isAbsolute()) {
                 throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
             }
             ditaDir=new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR));
@@ -180,7 +184,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 
             }
 
-            final Job job = new Job(new File(tempDir));
+            final Job job = new Job(tempDir);
 
             final List<String> parseList = job.getReferenceList();
             inputDir = new File(job.getInputDir());
@@ -206,7 +210,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             fileWriter.setLogger(logger);
             try{
                 final boolean xmlValidate = Boolean.valueOf(input.getAttribute("validate"));
-                fileWriter.initXMLReader(ditaDir.getAbsolutePath(),xmlValidate, setSystemid);
+                fileWriter.initXMLReader(ditaDir.getAbsoluteFile(),xmlValidate, setSystemid);
             } catch (final SAXException e) {
                 throw new DITAOTException(e.getMessage(), e);
             }
@@ -236,7 +240,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                     fu.setLogger(logger);
                     for (final String schema: schemaSet) {
                         filterReader.loadSubjectScheme(FileUtils.resolveFile(
-                                tempDir, schema)+".subm");
+                                tempDir.getAbsolutePath(), schema) + SUBJECT_SCHEME_EXTENSION);
                     }
                     if (ditavalFile!=null){
                         filterReader.filterReset();
@@ -262,7 +266,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                     continue;
                 }
 
-                fileWriter.write(inputDir.getAbsolutePath(), filename);
+                fileWriter.write(inputDir, filename);
             }
 
             updateList(tempDir);
@@ -272,7 +276,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             //Added by William on 2010-04-16 for cvf flag support end
 
             // reload the property for processing of copy-to
-            performCopytoTask(tempDir, new Job(new File(tempDir)));
+            performCopytoTask(tempDir, new Job(tempDir));
         } catch (final Exception e) {
             e.printStackTrace();
             throw new DITAOTException("Exception doing debug and filter module processing: " + e.getMessage(), e);
@@ -364,7 +368,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             final DocumentBuilder builder = factory.newDocumentBuilder();
             builder.setEntityResolver(new InternalEntityResolver(
-                    CatalogUtils.getCatalog(ditaDir.getAbsolutePath())));
+                    CatalogUtils.getCatalog(ditaDir.getAbsoluteFile())));
 
             while (!queue.isEmpty()) {
                 final String parent = queue.poll();
@@ -378,7 +382,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                 }
                 visitedSet.add(parent);
                 String tmprel = FileUtils.getRelativePath(inputMap.getAbsolutePath(), parent);
-                tmprel = FileUtils.resolveFile(tempDir, tmprel)+".subm";
+                tmprel = FileUtils.resolveFile(tempDir.getAbsolutePath(), tmprel) + SUBJECT_SCHEME_EXTENSION;
                 Document parentRoot = null;
                 if (!FileUtils.fileExists(tmprel)) {
                     parentRoot = builder.parse(new InputSource(new FileInputStream(parent)));
@@ -390,14 +394,14 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                         final Document childRoot = builder.parse(new InputSource(new FileInputStream(childpath)));
                         mergeScheme(parentRoot, childRoot);
                         String rel = FileUtils.getRelativePath(inputMap.getAbsolutePath(), childpath);
-                        rel = FileUtils.resolveFile(tempDir, rel)+".subm";
+                        rel = FileUtils.resolveFile(tempDir.getAbsolutePath(), rel) + SUBJECT_SCHEME_EXTENSION;
                         generateScheme(rel, childRoot);
                     }
                 }
 
                 //Output parent scheme
                 String rel = FileUtils.getRelativePath(inputMap.getAbsolutePath(), parent);
-                rel = FileUtils.resolveFile(tempDir, rel)+".subm";
+                rel = FileUtils.resolveFile(tempDir.getAbsolutePath(), rel) + SUBJECT_SCHEME_EXTENSION;
                 generateScheme(rel, parentRoot);
             }
         } catch (final Exception e) {
@@ -541,7 +545,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
     /**
      * Execute copy-to task, generate copy-to targets base on sources
      */
-    private void performCopytoTask(final String tempDir, final Job job) {
+    private void performCopytoTask(final File tempDir, final Job job) {
     	final Map<String, String> copytoMap  = job.getCopytoMap();
     	
     	for (final Map.Entry<String, String> entry: copytoMap.entrySet()) {
@@ -659,8 +663,8 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
      * @param tempDir temporary directory path
      * @throws IOException 
      */
-    private void updateList(final String tempDir) throws IOException{
-        final Job job = new Job(new File(tempDir));
+    private void updateList(final File tempDir) throws IOException{
+        final Job job = new Job(tempDir);
         for (final String element : PROPERTY_UPDATE_LIST) {
             updateProperty(element, job);
         }
@@ -673,7 +677,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
      * 
      * @param tempDir temporary directory
      */
-    private void updateDictionary(final String tempDir){
+    private void updateDictionary(final File tempDir){
         //orignal map
         final Map<String, Set<String>> dic = readMapFromXML(FILE_NAME_SUBJECT_DICTIONARY);
         //result map
