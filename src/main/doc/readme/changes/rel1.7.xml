@@ -44,7 +44,7 @@
       <section>
         <title>Feature requests</title>
         <ul>
-          <li>#1319 Remove deprecated code</li>
+          <li>#1319 Remove deprecated code (milestone 1)</li>
         </ul>
       </section>
       <section>
@@ -56,7 +56,7 @@
       <section>
         <title>Bugs</title>
         <ul>
-          <li/>
+          <li>#1332 output-deprecated-msg deleted; still referenced (milestone 1)</li>
         </ul>
       </section>
     </refbody>

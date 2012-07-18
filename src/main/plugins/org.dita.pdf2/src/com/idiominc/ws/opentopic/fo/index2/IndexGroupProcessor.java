@@ -184,7 +184,7 @@ public final class IndexGroupProcessor {
     private static String[] getIndexKeysOfIndexesInRange(final String theKey1, final String theKey2, final IndexCollator theCollator, final HashMap<String, IndexEntry> theIndexEntryMap) {
         final ArrayList<String> res = new ArrayList<String>();
         for (final Map.Entry<String, IndexEntry> e : theIndexEntryMap.entrySet()) {
-            final int res1 = theCollator.compare(theKey1, e.getValue());
+            final int res1 = theCollator.compare(theKey1, getValue(e.getValue()));
             if (res1 <= 0) {
                 if (theKey2 == null) {
                     //the right range is not specified

@@ -12,8 +12,8 @@ integrates those changes into the core code.</shortdesc>
 <refbody>
 <section>       <p>The root element of the plugin.xml file is <codeph>&lt;plugin></codeph>,
 and must         specify an <codeph>id</codeph> attribute. The <codeph>id</codeph> attribute
-is used to         identify the plugin, as well as to identify whether
-pre-requisite plugins are available. The           <codeph>id</codeph> attribute
+is used to         identify the plug-in, as well as to identify whether
+pre-requisite plug-ins are available. The           <codeph>id</codeph> attribute
 should follow the syntax rules:</p>       <codeblock>id    ::= token('.'token)*
 token ::= ( [0..9] | [a..zA..Z] | ’_’ | ’-’ )+</codeblock>       <p>The <codeph>&lt;plugin></codeph> element
 supports the following child elements: </p>       <ul>
@@ -102,7 +102,7 @@ keycol="1">
 </ul>       <p>Any extension that is not recognized by the DITA-OT
 is ignored; all elements other than           <codeph>&lt;plugin></codeph> are
 optional. Since version 1.5.3 multiple extension         definitions
-within a plugin configuration file are combined; in older versions
+within a plug-in configuration file are combined; in older versions
 only the last         extension definition is used. </p>       </section>
 </refbody>
 </reference>

@@ -90,7 +90,7 @@ public class TestDitaWriter {
 
         writer = new DitaWriter();
         writer.setLogger(new TestUtils.TestLogger());
-        writer.initXMLReader(new File("src" + File.separator + "main").getAbsolutePath(), false, true);
+        writer.initXMLReader(new File("src" + File.separator + "main").getAbsoluteFile(), false, true);
 
         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setValidating(false);
@@ -132,9 +132,9 @@ public class TestDitaWriter {
         final OutputUtils outputUtils = new OutputUtils();
         outputUtils.setInputMapPathName(new File(baseDir, inputDir.getPath() + File.separator + "keyword.dita"));
         writer.setOutputUtils(outputUtils);
-        writer.setTempDir(tempDir.getAbsolutePath());
+        writer.setTempDir(tempDir.getAbsoluteFile());
         writer.setExtName(".xml");
-        writer.write(new File(baseDir, inputDir.getPath()).getAbsolutePath(), "keyword.dita");
+        writer.write(new File(baseDir, inputDir.getPath()).getAbsoluteFile(), "keyword.dita");
 
         compareKeyword(new File(baseDir, new File(inputDir, "keyword.dita").getPath()),
                 new String[] {"prodname1", "prodname2", "prodname3"},

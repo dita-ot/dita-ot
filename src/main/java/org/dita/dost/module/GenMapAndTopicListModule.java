@@ -280,7 +280,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
 
             reader = new GenListModuleReader();
             reader.setLogger(logger);
-            reader.initXMLReader(ditaDir.getAbsolutePath(), xmlValidate, rootFile.getAbsolutePath(), setSystemid);
+            reader.initXMLReader(ditaDir, xmlValidate, rootFile, setSystemid);
             final FilterUtils filterUtils = parseFilterFile();
             reader.setFilterUtils(filterUtils);
             reader.setOutputUtils(outputUtils);

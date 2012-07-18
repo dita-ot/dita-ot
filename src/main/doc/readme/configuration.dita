@@ -60,7 +60,7 @@
           <stentry>Legacy temporary file mode for generating <filepath>topic.fo</filepath> and
             graphics into output directory. Allowed values are<ul>
               <li>"true" — use output directory for XSL FO file processing</li>
-              <li>"false" (default) — use tempory folder for XSL FO processing</li>
+              <li>"false" (default) — use temporary folder for XSL FO processing</li>
             </ul></stentry>
         </strow>
       </simpletable>
@@ -74,7 +74,7 @@
         <strow>
           <stentry><codeph>plugindirs</codeph></stentry>
           <stentry>A semicolon-separated list of directory paths
-           to search for plugins to integrate; relative paths are resolved against the DITA-OT base directory. Any immediate
+           to search for plug-ins to integrate; relative paths are resolved against the DITA-OT base directory. Any immediate
            subdirectory containing a "plugin.xml" file is
            integrated.</stentry>
         </strow>
