@@ -159,7 +159,7 @@
     <exclude name="lib/saxon/*"/>
     <exclude name="lib/icu4j.jar"/>
     <exclude name="lib/log4j.properties"/>
-    <exclude name="startcmd.*"/>
+    <exclude name="start*"/>
     <exclude name="buildPackage.*"/>
     <include name="plugins/com.sophos.tocjs/**"/>
     <include name="plugins/org.dita.pdf2/**"/>
@@ -186,6 +186,7 @@
     <exclude name="buildPackage.*"/>
     <exclude name="lib/log4j.properties"/>
     <include name="*.*"/>
+    <include name="start*"/>
     <include name="css/**"/>
     <include name="plugins/org.dita.specialization.eclipsemap/**"/>
     <include name="plugins/org.dita.specialization.dita11/**"/>
@@ -218,7 +219,7 @@
     <exclude name="lib/saxon/"/>
     <exclude name="lib/icu4j.jar"/>
     <exclude name="lib/log4j.properties"/>
-    <exclude name="startcmd.*"/>
+    <exclude name="start*"/>
     <exclude name="buildPackage.*"/>
     <exclude name="src/**"/>
     <exclude name="plugins/org.dita.pdf2/src/**"/>
@@ -335,17 +336,21 @@
     <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
       <zipfileset dir="${work.dir}/${param.out.file}">
         <exclude name="*/startcmd.sh"/>
+        <exclude name="*/start"/>
       </zipfileset>
       <zipfileset dir="${work.dir}/${param.out.file}" filemode="755">
         <include name="*/startcmd.sh"/>
+        <include name="*/start"/>
       </zipfileset>
     </zip>
     <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" compression="gzip" longfile="gnu">
       <tarfileset dir="${work.dir}/${param.out.file}">
         <exclude name="*/startcmd.sh"/>
+        <exclude name="*/start"/>
       </tarfileset>
       <tarfileset dir="${work.dir}/${param.out.file}" mode="755">
         <include name="*/startcmd.sh"/>
+        <include name="*/start"/>
       </tarfileset>
     </tar>
   </target>

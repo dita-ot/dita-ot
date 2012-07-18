@@ -1,0 +1,39 @@
+#!/bin/sh
+
+realpath() {
+  [[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
+}
+
+if [ "${DITA_HOME:+1}" == "1" ] && [ -e "$DITA_HOME" ]; then
+  export DITA_DIR="$(realpath "$DITA_HOME")"
+else #elif [ "${DITA_HOME:+1}" != "1" ]; then
+  export DITA_DIR="$(dirname "$(realpath "$0")")"
+fi
+
+if [ -f "$DITA_DIR"/tools/ant/bin/ant ] && [ ! -x "$DITA_DIR"/tools/ant/bin/ant ]; then
+  chmod +x "$DITA_DIR"/tools/ant/bin/ant
+  # Set ANT_HOME to this known distribution
+  export ANT_HOME="$DITA_DIR"/tools/ant
+fi
+
+if [ -z "$ANT_HOME" ]; then
+  # ANT_HOME not defined, and not in tools. Spit the dummy.
+  echo Environment variable ANT_HOME is not defined, and ant is not available in the tools directory of DITA-OT. >&2
+  echo Please download the full-easy distribution of DITA-OT, or install ant an set the ANT_HOME environment variable. >&2
+  exit 1
+fi
+
+export ANT_OPTS="-Xmx512m $ANT_OPTS"
+export ANT_OPTS="$ANT_OPTS -Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl"
+
+#NCP="$DITA_DIR/lib/commons-codec-1.4.jar:$DITA_DIR/lib/resolver.jar:$DITA_DIR/lib/icu4j.jar:$DITA_DIR/lib/saxon/saxon9.jar:$DITA_DIR/lib/saxon/saxon9-dom.jar:$DITA_DIR/lib/xercesImpl.jar:$DITA_DIR/lib/xml-apis.jar"
+NCP="$DITA_DIR/lib/dost.jar:$DITA_DIR/lib/commons-codec-1.4.jar:$DITA_DIR/lib/resolver.jar:$DITA_DIR/lib/icu4j.jar:$DITA_DIR/lib/saxon/saxon9.jar:$DITA_DIR/lib/saxon/saxon9-dom.jar:$DITA_DIR/lib/xercesImpl.jar:$DITA_DIR/lib/xml-apis.jar:"
+# xercesImpl.jar and xml-apis.jar from Ant 1.7.1
+if test -n "$CLASSPATH"; then
+  export CLASSPATH="$NCP":"$CLASSPATH"
+else
+  export CLASSPATH="$NCP"
+fi
+
+cd "$DITA_DIR"
+exec "$ANT_HOME"/bin/ant "$@"
