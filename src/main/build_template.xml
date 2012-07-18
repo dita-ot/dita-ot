@@ -38,10 +38,11 @@
     <matches pattern=".*\bant-launcher\.jar\b.*" string="${java.class.path}"/>
   </condition>
   
-  <!-- Minimal path for ant launcher -->
+  <!-- Minimal path for ant jars. May not need ant.jar for build. -->
   <path id="dost.local.ant.path">
-    <pathelement location="${local.lib.dir}/ant.jar"/>
-    <pathelement location="${local.lib.dir}/ant-launcher.jar"/>
+    <pathelement location="${dost.ant-launcher.jar}"/>
+    <pathelement location="${dost.ant-resolver.jar}"/>
+    <pathelement location="${dost.ant.jar}"/>
   </path>
   
   <path id="dost.class.path">

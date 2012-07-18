@@ -113,6 +113,7 @@ classes are available through that. -->
     <pathelement location="${dost.ant-resolver.jar}"/>
     <pathelement location="${dost.resolver.jar}"/>
     <pathelement location="${dost.ant.jar}"/>
+    <pathelement location="${dost.ant-resolver.jar}"/>
     <pathelement location="${dost.ant-launcher.jar}"/>
   </path>
 
