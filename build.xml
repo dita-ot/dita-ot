@@ -337,20 +337,28 @@
       <zipfileset dir="${work.dir}/${param.out.file}">
         <exclude name="*/startcmd.sh"/>
         <exclude name="*/start"/>
+        <exclude name="**/ant"/>
+        <exclude name="**/antRun"/>
       </zipfileset>
       <zipfileset dir="${work.dir}/${param.out.file}" filemode="755">
         <include name="*/startcmd.sh"/>
         <include name="*/start"/>
+        <include name="*/tools/ant/bin/ant"/>
+        <include name="*/tools/ant/bin/antRun"/>
       </zipfileset>
     </zip>
     <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" compression="gzip" longfile="gnu">
       <tarfileset dir="${work.dir}/${param.out.file}">
         <exclude name="*/startcmd.sh"/>
         <exclude name="*/start"/>
+        <exclude name="*/tools/ant/bin/ant"/>
+        <exclude name="*/tools/ant/bin/antRun"/>
       </tarfileset>
       <tarfileset dir="${work.dir}/${param.out.file}" mode="755">
         <include name="*/startcmd.sh"/>
         <include name="*/start"/>
+        <include name="**/ant"/>
+        <include name="**/antRun"/>
       </tarfileset>
     </tar>
   </target>
