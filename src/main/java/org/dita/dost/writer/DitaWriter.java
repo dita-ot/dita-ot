@@ -343,7 +343,7 @@ public final class DitaWriter extends AbstractXMLFilter {
     /** Contains the attribution specialization paths for {@code props} attribute */
     private String[][] props;
 
-    private String tempDir;
+    private File tempDir;
     private File traceFilename;
 
     private Map<String, String> keys = null;
@@ -440,7 +440,7 @@ public final class DitaWriter extends AbstractXMLFilter {
      * @param validate whether validate
      * @throws SAXException SAXException
      */
-    public void initXMLReader(final String ditaDir, final boolean validate, final boolean arg_setSystemid) throws SAXException {
+    public void initXMLReader(final File ditaDir, final boolean validate, final boolean arg_setSystemid) throws SAXException {
         try {
             reader = StringUtils.getXMLReader();
             if(validate==true){
@@ -455,7 +455,7 @@ public final class DitaWriter extends AbstractXMLFilter {
         }
         setGrammarPool(reader, GrammarPoolManager.getGrammarPool());
         CatalogUtils.setDitaDir(ditaDir);
-        catalogMap = CatalogUtils.getCatalog(ditaDir);
+        catalogMap = CatalogUtils.getCatalog(ditaDir.getAbsoluteFile());
         setSystemid= arg_setSystemid;
     }
     
@@ -1001,9 +1001,12 @@ public final class DitaWriter extends AbstractXMLFilter {
     /**
      * Set temporary directory
      * 
-     * @param tempDir temporary directory
+     * @param tempDir absolute path to temporary directory
      */
-    public void setTempDir(final String tempDir) {
+    public void setTempDir(final File tempDir) {
+        if (!tempDir.isAbsolute()) {
+            throw new IllegalArgumentException("Temporary directory '" + tempDir.toString() + "' must be an absolute path");
+        }
         this.tempDir = tempDir;
     }
 
@@ -1133,29 +1136,25 @@ public final class DitaWriter extends AbstractXMLFilter {
         final int index = filename.indexOf(STICK);
         final String baseDir = filename.substring(0, index);
         inputFile = filename.substring(index + 1);
-        write(baseDir, inputFile);
+        write(new File(baseDir), inputFile);
     }
     
     /**
      * Write output
      * 
-     * @param baseDir base directory path
+     * @param baseDir absolute base directory path
      * @param inFile relative file path
      */
-    public void write(final String baseDir, final String inFile) {
+    public void write(final File baseDir, final String inFile) {
         exclude = false;
 
         inputFile = inFile;
 
         if(null == keys){
             keys = new HashMap<String, String>();
-            if (! new File(tempDir).isAbsolute()){
-                tempDir = new File(tempDir).getAbsolutePath();
-            }
-
             Job job = null;
             try{
-                job = new Job(new File(tempDir));
+                job = new Job(tempDir);
             }catch (final IOException e) {
                 logger.logException(new Exception("Failed to read job configuration file: " + e.getMessage(), e));
             }

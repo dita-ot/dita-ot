@@ -32,6 +32,7 @@ See the accompanying license.txt file for applicable licenses.
 -->
 
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:exsl="http://exslt.org/common"
     xmlns:exslf="http://exslt.org/functions"
@@ -40,7 +41,7 @@ See the accompanying license.txt file for applicable licenses.
     extension-element-prefixes="exsl"
     xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
     xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
-    exclude-result-prefixes="opentopic-index exsl comparer opentopic-func exslf ot-placeholder">
+    exclude-result-prefixes="xs opentopic-index exsl comparer opentopic-func exslf ot-placeholder">
 
     <!-- *************************************************************** -->
     <!-- Create index templates                                          -->
@@ -297,9 +298,25 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:choose>
     </xsl:template>
 
+    <xsl:key name="opentopic-index:index.entry-def"
+             match="opentopic-index:index.groups//opentopic-index:index.entry[empty(ancestor::opentopic-index:see-childs|ancestor::opentopic-index:see-also-childs)]"
+             use="opentopic-index:refID/@value"/>
+
     <xsl:template match="opentopic-index:index.entry" mode="get-see-destination">
-        <xsl:value-of select="concat(@value,':')"/>
-        <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-destination"/>
+      <xsl:variable name="id" as="xs:string">
+        <xsl:value-of>
+          <xsl:apply-templates select="." mode="get-see-destination-id"/>
+        </xsl:value-of>
+      </xsl:variable>
+      <xsl:variable name="ref" select="key('opentopic-index:index.entry-def', $id)"/>
+      <xsl:if test="exists($ref)">
+        <xsl:value-of select="generate-id($ref[1])"/>
+      </xsl:if>
+    </xsl:template>
+
+    <xsl:template match="opentopic-index:index.entry" mode="get-see-destination-id">
+      <xsl:value-of select="concat(@value,':')"/>
+      <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-destination-id"/>
     </xsl:template>
 
     <xsl:template match="opentopic-index:index.entry" mode="get-see-value">
@@ -481,7 +498,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:param name="idxs" select="()"/>
     <xsl:param name="inner-text" select="()"/>
     <xsl:param name="no-page"/>
-    <fo:block xsl:use-attribute-sets="index.term">
+    <fo:block id="{generate-id(.)}" xsl:use-attribute-sets="index.term">
       <xsl:if test="position() = 1">
         <xsl:attribute name="keep-with-previous">always</xsl:attribute>
       </xsl:if>

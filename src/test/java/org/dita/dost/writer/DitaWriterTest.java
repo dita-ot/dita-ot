@@ -81,7 +81,7 @@ public class DitaWriterTest {
         }
         final DitaWriter writer = new DitaWriter();
         writer.setLogger(new TestUtils.TestLogger());
-        writer.initXMLReader(new File("src" + File.separator + "main").getAbsolutePath(), false, true);
+        writer.initXMLReader(new File("src" + File.separator + "main").getAbsoluteFile(), false, true);
         writer.setExtName(".xml");
         writer.setTranstype("xhtml");
         final FilterUtils fu = new FilterUtils();
@@ -95,8 +95,8 @@ public class DitaWriterTest {
         FileUtils.copyFile(new File(srcDir, FILE_NAME_EXPORT_XML), new File(tempDir, FILE_NAME_EXPORT_XML));
 
         for (final String f: new String[] {"main.ditamap", "keyword.dita"}) {
-            writer.setTempDir(tempDir.getAbsolutePath());
-            writer.write(srcDir.getAbsolutePath(), f);
+            writer.setTempDir(tempDir.getAbsoluteFile());
+            writer.write(srcDir.getAbsoluteFile(), f);
         }
         
         TestUtils.resetXMLUnit();
