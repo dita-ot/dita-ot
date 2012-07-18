@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project name="local.properties" basedir=".">
-  
+
   <dirname property="local.basedir" file="${ant.file.local.properties}"/>
 
   <!-- Properties set in local.properties will take precedence over
@@ -50,14 +50,14 @@
     <isset property="localenv.ANT_OPTS"/>
   </condition>
   
-  <condition property="local.ant.home">
-    <available file="${local.tools.dir}/ant"/>
-  </condition>
-  
   <condition property="local.ant.home" value="${localenv.ANT_HOME}">
     <isset property="localenv.ANT_HOME"/>
   </condition>
 
+  <condition property="local.ant.home">
+    <available file="${local.tools.dir}/ant"/>
+  </condition>
+  
   <condition property="dost.ant.jar" value="${local.ant.home}/lib/ant.jar">
     <and>
       <isset property="local.ant.home"/>
@@ -115,7 +115,7 @@ classes are available through that. -->
     <pathelement location="${dost.ant.jar}"/>
     <pathelement location="${dost.ant-launcher.jar}"/>
   </path>
-  
+
   <path id="dost.build.classpath" description="Jars required to build the distributions.">
     <path refid="dost.compile.classpath"/>
     <pathelement location="${dost.target.classes}"/>
@@ -161,7 +161,7 @@ classes are available through that. -->
     <fail unless="dost.ant-resolver.jar" message="ant-apache-resolver.jar not found."/>
     <fail unless="dost.ant.jar" message="ant.jar not found."/>
   </target>
-  
+
   <target name="verify-dost-build-classpath" depends="verify-dost-compile-classpath"/>
 
   <target name="maybe-verify-icu4j" if="dost.icu4j.required">
@@ -173,7 +173,7 @@ classes are available through that. -->
     <fail unless="dost.saxon9-dom.jar" message="saxon9-dom.jar not found."/>
     <fail unless="dost.local.dost.jar" message="dost.jar not found."/>
   </target>
-  
+
   <target name="check-dost-available" description="Is dost.jar on classpath? Set dost.on.classpath">
     <!-- Property dita.build.recursive is true if the build has been recursively called to set classpath -->
     <!-- ant launcher must be available -->
@@ -190,7 +190,7 @@ classes are available through that. -->
       <matches pattern=".*\bdost\.jar\b.*" string="${java.class.path}"/>
     </condition>
   </target>
-    
+
 <!--
   <target name="start-recursive-ant" unless="dost.on.classpath">
     <fail unless="dost.ant.launcher.available">
@@ -273,5 +273,5 @@ FIXME See {reference to dita-ot manual goes here}.
     </java>
   </target>
   -->
-  
+
 </project>

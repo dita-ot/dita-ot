@@ -29,6 +29,17 @@
   <property name="css.dir" location="${src.dir}/css/"/>
   <property name="resource.dir" location="${src.dir}/resource/"/>
 
+  <property name="tools.dir" location="${src.dir}/tools/"/>
+  <condition property="tools.dir.present">
+    <available file="${tools.dir}"/>
+  </condition>
+  <condition property="tools.ant.present">
+    <and>
+      <available file="${tools.dir}/ant/lib/ant.jar"/>
+      <available file="${tools.dir}/ant/lib/ant-launcher.jar"/>
+    </and>
+  </condition>
+
   <property name="top.work.dir" location="${src.dir}"/>
   <property name="package.output.dir" location="${basedir}/target"/>
   <property name="bin.dir" location="${basedir}/target/classes"/>
@@ -47,7 +58,27 @@
   <property name="win32.zip.suffix" value=".zip"/>
   <property name="linux.zip.suffix" value=".tar.gz"/>
 
-  <target name="init-package" depends="clean-package">
+  <target name="mktools-check-ant-access" unless="tools.ant.present">
+    <mkdir dir="${tools.dir}"/>
+    <echo>'ant' not available in src/main/tools directory.</echo>
+    <echo>Attempting to download now.</echo>
+    <get src="http://archive.apache.org/dist/ant/binaries/RELEASE-NOTES-1.6.0.html" dest="${tools.dir}" retries="1" maxtime="5"/>
+    <condition property="ant.accessible" value="true">
+      <available file="${tools.dir}/RELEASE-NOTES-1.6.0.html"/>
+    </condition>
+    <fail unless="ant.accessible">Cannot access the apache-ant archive.
+    Please download ant 1.8.4 or later and install into the src/main/tools directory.</fail>
+  </target>
+
+  <target name="setup-tools-dir" depends="mktools-check-ant-access" unless="tools.ant.present">
+    <get src="http://archive.apache.org/dist/ant/binaries/apache-ant-1.8.4-bin.zip" dest="${tools.dir}" verbose="true"/>
+    <unzip src="${tools.dir}/apache-ant-1.8.4-bin.zip" dest="${tools.dir}"/>
+    <delete file="${tools.dir}/apache-ant-1.8.4-bin.zip"/>
+    <delete file="${tools.dir}/RELEASE-NOTES-1.6.0.html"/>
+    <move file="${tools.dir}/apache-ant-1.8.4" tofile="${tools.dir}/ant"/>
+  </target>
+
+  <target name="init-package" depends="setup-tools-dir, clean-package">
     <mkdir dir="${package.output.dir}"/>
   </target>
 
@@ -93,7 +124,7 @@
       </manifest>
     </jar>
   </target>
-  
+
   <patternset id="pattern.global.excludes">
     <exclude name=".*"/>
     <exclude name="build.log"/>
@@ -109,7 +140,7 @@
     <exclude name="doc/archive/**"/>
     <exclude name="doc/langref-dita1.1/**"/>
   </patternset>
-  
+
   <patternset id="pattern.package.ant">
     <exclude name="tools/ant/etc/**"/>
     <exclude name="tools/ant/manual/**"/>
@@ -212,7 +243,7 @@
     <include name="h2d/**"/>
     <include name="legacypdf/**"/>
   </patternset>
-    
+
   <patternset id="pattern.package.doc">
     <include name="relnotes.html"/>
     <include name="doc/**"/>
@@ -409,7 +440,7 @@
       <property name="base.temp.dir" location="${work.dir}"/>
     </ant>
     <copy file="${work.dir}/relnotes/rel1.6.html" tofile="${out.dir}/relnotes.html"/>
-    
+
     <delete failonerror="yes" includeemptydirs="true">
       <fileset dir="${doc.out.dir}">
         <include name="**/dita.list"/>
@@ -427,7 +458,7 @@
   </target>
 
   <!-- Test -->
-  
+
   <property name="test.src.dir" location="${basedir}/src/test"/>
   <property name="test.java.dir" location="${test.src.dir}/java"/>
   <property name="test.lib.dir" location="${test.src.dir}/lib"/>
@@ -489,7 +520,7 @@
       </batchtest>
     </junit>
   </target>
-  
+
   <target name="integration-test" depends="compile, test-compile" description="Run integration tests">
     <delete failonerror="false">
       <fileset dir="${test.log.dir}" erroronmissingdir="false"/>
@@ -526,7 +557,7 @@
   </target>
 
   <!-- Site -->
-  
+
   <condition property="type-class" value="milestone" else="">
     <contains string="${version}" substring="M" casesensitive="true"/>
   </condition>
@@ -593,6 +624,6 @@
       }
     </echo-->
   </target>
-  
+
 
 </project>
