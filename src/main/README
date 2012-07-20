@@ -1,0 +1,53 @@
+Install
+=======
+
+In an appropriate directory,
+unzip <zip-file>
+or
+tar zxvf <tar.gz-file>
+
+This creates a directory DITA-OT1.7.M1. This is your DITA_DIR.
+
+cd DITA-OT1.7.M1
+
+Unix users
+==========
+
+If you have an ant distribution, the ANT_HOME variable is defined in your environment, and $ANT_HOME/bin is defined in your PATH variable:
+
+ant all -f build_demo.xml
+
+If you have not defined the full CLASSPATH environment yourself, this invokes a series of recursive ant builds, defining its own environment as it executes. On my Mac, it takes a shade under 2 minutes to execute.
+
+If you have no ant distribution, and ANT_HOME is not defined, there are two possibilities. There is a new shell script, called 'start,' in DITA_DIR. It sets up the environment, and passes all of its arguments to the ant startup script. Where you would call
+
+ant <arguments>
+
+just substitute
+
+start <arguments>
+
+To build the demo,
+
+start all -f build_demo.xml
+
+This executes in 38 seconds.
+
+The other alternative is
+
+tools/ant/bin/ant all -f build_demo.xml
+
+This also executes in about 2 minutes. Clearly it makes no sense to do that, but it will run without breaking.
+
+Windows users
+=============
+
+The same considerations concerning environment variables apply. There is a start.bat script in DITA_DIR, but it is a primitive first attempt. Please feel free to modify it to act in the same way as the shell script, above.
+
+Comments
+========
+
+The main time consumer is the multiple recursive ant calls.  It is no doubt possible to reconstruct the build files so that only one recursive call is required, but that would involve more substantial surgery to the build. As it is, the changes are concentrated in src/main/build_template.xml, src/main/local.properties.xml (a new file), and build.xml.
+
+In the medium, I would hope that the build process would be redesigned to make maximum use of XSLT2, and remove most of the Java components.
+
