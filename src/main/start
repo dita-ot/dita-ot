@@ -10,8 +10,10 @@ else #elif [ "${DITA_HOME:+1}" != "1" ]; then
   export DITA_DIR="$(dirname "$(realpath "$0")")"
 fi
 
-if [ -f "$DITA_DIR"/tools/ant/bin/ant ] && [ ! -x "$DITA_DIR"/tools/ant/bin/ant ]; then
-  chmod +x "$DITA_DIR"/tools/ant/bin/ant
+if [ -f "$DITA_DIR"/tools/ant/bin/ant ]; then
+  if [ ! -x "$DITA_DIR"/tools/ant/bin/ant ]; then
+    chmod +x "$DITA_DIR"/tools/ant/bin/ant
+  fi
   # Set ANT_HOME to this known distribution
   export ANT_HOME="$DITA_DIR"/tools/ant
 fi
