@@ -50,12 +50,14 @@
     <pathelement location="${dita.dir}/lib/dost.jar"/>
   </path>
 
-  <target name="start-recursive-ant" unless="dost.on.classpath">
+  <target name="start-recursive-ant" unless="dost.jars.on.classpath">
+    <!--
     <fail unless="dost.ant.launcher.available">
 Ant launcher is not available on the classpath.
 ant.jar or ant-launcher.jar must be on the starting classpath or in the distribution lib directory.
 FIXME See {reference to dita-ot manual goes here}.
     </fail>
+    -->
     
     <propertyset id="dost.properties">
       <propertyref prefix="dost"/>
@@ -111,6 +113,7 @@ FIXME See {reference to dita-ot manual goes here}.
   </target>
 
   <target name="recursive-ant">
+    <echo>dost.run.classpath ${toString:dost.run.classpath}</echo>
     <!-- Start a new instance of ant with necessary properties, and re-invoke this build file. -->
     <java
         classname="org.apache.tools.ant.launch.Launcher"
@@ -135,9 +138,9 @@ FIXME See {reference to dita-ot manual goes here}.
     </java>
   </target>
 
-  <target name="init" depends="check-dost-available, start-recursive-ant, original_init"/>
+  <target name="init" depends="check-dost-jars-available, start-recursive-ant, original_init"/>
   
-  <target name="original_init" if="dost.on.classpath" depends="check-dost-available, verify-dost-run-classpath">
+  <target name="original_init" if="dost.jars.on.classpath" depends="check-dost-jars-available, verify-dost-run-classpath">
     <dita-ot-fail id="DOTA001F">
       <condition>
         <and>

@@ -8,7 +8,7 @@
   <description>Build binary packages for DITA Open Toolkit</description>
 
   <property file="build.properties"/>
-
+  <property name="dost.top.level.build" value="true"/>
   <import file="${basedir}/src/main/local.properties.xml"/>
 
   <condition property="HTMLHelpCompiler" value="C:\Program Files\HTML Help Workshop\hhc.exe">
@@ -97,7 +97,7 @@
   </target>
 
   <target name="build-java" depends="compile"/>
-  <target name="compile" depends="init-java" description="Compile Java">
+  <target name="compile" depends="init-java, verify-dost-compile-classpath" description="Compile Java">
     <javac srcdir="${java.dir}" destdir="${bin.dir}"
            classpathref="dost.compile.classpath"
            includeantruntime="false"

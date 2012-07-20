@@ -54,7 +54,7 @@
     <isset property="localenv.ANT_HOME"/>
   </condition>
 
-  <condition property="local.ant.home">
+  <condition property="local.ant.home" value="${local.tools.dir}/ant">
     <available file="${local.tools.dir}/ant"/>
   </condition>
   
@@ -78,15 +78,6 @@
       <available file="${local.ant.home}/lib/ant-apache-resolver.jar"/>
     </and>
   </condition>
-
-<!--  
-  <property name="lib.ant.jar" location="${local.lib.dir}/ant.jar"/>
-  <property name="lib.ant.jar" location="${local.lib.dir}/ant.jar"/>
-  
-  <condition property="dost.ant.jar" value="${lib.ant.jar}">
-    <available file="${lib.ant.jar}"/>
-  </condition>
--->
 
   <property name="xercesimpl.jar" location="${local.lib.dir}/xercesImpl.jar"/>
   
@@ -175,104 +166,87 @@ classes are available through that. -->
     <fail unless="dost.local.dost.jar" message="dost.jar not found."/>
   </target>
 
-  <target name="check-dost-available" description="Is dost.jar on classpath? Set dost.on.classpath">
-    <!-- Property dita.build.recursive is true if the build has been recursively called to set classpath -->
+  <target name="check-dost-jars-available" description="Are dost jars on classpath? Set dost.jars.on.classpath">
+    <!--
+      Check availability of necessary classes using existing classpath.
+      This accommodates situations in which the invoker has set up a particular java environment
+      which is reflected in the CLASSPATH. If everything is OK, no need to run recursively.
+      
+      Note that the <available/> test will override existing property values, which is an unfortunate
+      irregularity in ant, that will be useful here.
+    -->
+    <available property="dost.tools.ant.target" classname="org.apache.tools.ant.Target"/>
+    <available property="dost.tools.ant.launch" classname="org.apache.tools.ant.launch.Launcher"/>
+    <available property="dost.tools.ant.types.resolver" classname="org.apache.tools.ant.types.resolver.ApacheCatalog"/>
+    <available property="dost.xml.resolver" classname="org.apache.xml.resolver.Catalog"/>
+    <available property="dost.xerces.impl.version" classname="org.apache.xerces.impl.Version"/>
+    <available property="dost.javax.xml.xmlconstants" classname="javax.xml.XMLConstants"/>
+    <available property="dost.commons.codec.encoder" classname="org.apache.commons.codec.Encoder"/>
+    <available property="dost.module.GenMapAndTopicListModule" classname="org.dita.dost.module.GenMapAndTopicListModule"/>
+    <available property="dost.net.sf.saxon.dom.DOMTransform" classname="net.sf.saxon.dom.DOMTransform"/>
+    <available property="dost.net.sf.saxon.Transform" classname="net.sf.saxon.Transform"/>
+    <available property="dost.com.saxonica.Transform" classname="com.saxonica.Transform"/>
+    <condition property="dost.saxon.transform.classname" value="net.sf.saxon.Transform">
+      <available classname="net.sf.saxon.Transform"/>
+    </condition>
+    <condition property="dost.saxon.transform.classname" value="com.saxonica.Transform">
+      <available classname="com.saxonica.Transform"/>
+    </condition>
+    <!-- Using <available/> here to ensure reset of the variable.
+          The use of an unrelated classname to set the property is a kludge, because you cannot
+          specify a variable as the classname.
+    -->
+    <available property="dost.saxon.transform" classname="org.apache.ant.tools.Target" value="${dost.saxon.transform.classname}"/>
+    <available property="dost.saxon.dom.transform" classname="net.sf.saxon.dom.DOMTransform"/>
+    <condition property="dost.jars.are.available">
+      <and>
+        <isset property="dost.tools.ant.target"/>
+        <isset property="dost.tools.ant.launch"/>
+        <isset property="dost.tools.ant.types.resolver"/>
+        <isset property="dost.xml.resolver"/>
+        <isset property="dost.xerces.impl.version"/>
+        <isset property="dost.javax.xml.xmlconstants"/>
+        <isset property="dost.tools.ant.target"/>
+        <isset property="dost.tools.ant.target"/>
+      </and>
+    </condition>
+    <!--
+    
+    -->
     <!-- ant launcher must be available -->
       <!-- Test with ant-launcher classpath first -->
+      <!--
     <available property="dost.ant.launcher.available"
               classname="org.apache.tools.ant.launch.Launcher" classpathref="dost.local.ant.path"/>
     <condition property="dost.using.dost.lib.ant.launcher" value="true" else="false">
       <isset property="dost.ant.launcher.available"/>
     </condition>
+    -->
     <!-- Test with existing classpath -->
+    <!--
     <available property="dost.ant.launcher.available" classname="org.apache.tools.ant.launch.Launcher"/>
-
-    <condition property="dost.on.classpath">
+    -->
+    <condition property="dost.jar.on.cp">
       <matches pattern=".*\bdost\.jar\b.*" string="${java.class.path}"/>
     </condition>
+    
+    <condition property="dost.jar.available">
+      <available classname="org.dita.dost.module.GenMapAndTopicListModule"/>
+    </condition>
+    
+    <condition property="dost.properties.match">
+      <and>
+        <isset property="dost.jar.on.cp"/>
+        <isset property="dost.jar.available"/>
+      </and>
+    </condition>
+    
+    <condition property="dost.jars.on.classpath">
+      <and>
+        <isset property="dost.jars.are.available"/>
+      </and>
+      
+    </condition>
   </target>
-
-<!--
-  <target name="start-recursive-ant" unless="dost.on.classpath">
-    <fail unless="dost.ant.launcher.available">
-Ant launcher is not available on the classpath.
-ant.jar or ant-launcher.jar must be on the starting classpath or in the distribution lib directory.
-FIXME See {reference to dita-ot manual goes here}.
-    </fail>
-    
-    <propertyset id="dost.properties">
-      <propertyref prefix="dost"/>
-    </propertyset>
-    
-    <propertyset id="dita.properties">
-      <propertyref prefix="dita"/>
-    </propertyset>
-    
-    <propertyset id="args.properties">
-      <propertyref prefix="args"/>
-    </propertyset>
-    
-    <propertyset id="version.properties">
-      <propertyref regex=".*version.*"/>
-    </propertyset>
-    
-    <propertyset id="dir.properties">
-      <propertyref regex=".*\bdir\b.*"/>
-    </propertyset>
-    
-    <propertyset id="tmp.properties">
-      <propertyref regex=".*\bte?mp\b.*"/>
-    </propertyset>
-    
-    <propertyset id="parser.properties">
-      <propertyref regex=".*parser.*"/>
-    </propertyset>
-    
-    <propertyset id="execute.properties">
-      <propertyset refid="dost.properties"/>
-      <propertyset refid="dita.properties"/>
-      <propertyset refid="args.properties"/>
-      <propertyset refid="version.properties"/>
-      <propertyset refid="dir.properties"/>
-      <propertyset refid="tmp.properties"/>
-      <propertyset refid="parser.properties"/>
-      <propertyref name="collator"/>
-      <propertyref name="transtype"/>
-    </propertyset>
-    
-    <echo>execute.properties ${toString:execute.properties}</echo>
-    
-    <antcall target="recursive-ant" inheritAll="false" inheritRefs="true">
-      <propertyset refid="execute.properties"/>
-    </antcall>
-    
-  </target>
-  -->
-
-
-  <!-- Start a new instance of ant with necessary properties, and re-invoke this build file. -->
-  <!--
-  <target name="recursive-ant">
-    <java
-        classname="org.apache.tools.ant.launch.Launcher"
-        fork="true"
-        maxmemory="512m"
-        failonerror="true"
-        dir="${ant.file.DOST.dir}"
-        taskname="recursive_ant"
-        newenvironment="true"
-    >
-      <classpath>
-        <path refid="dost.run.classpath" />
-      </classpath>
-      <env key="ANT_OPTS"
-        value="-Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl ${local.ant.opts}"/>
-      <syspropertyset>
-        <propertyref name="execute.properties"/>
-      </syspropertyset>
-      <arg value="original_init"/>
-    </java>
-  </target>
-  -->
 
 </project>
