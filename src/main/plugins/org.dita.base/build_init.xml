@@ -5,8 +5,6 @@
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <project name="ditaot-init">
     
-  <!--<import file="catalog-ant.xml"/>-->
-
 	<!-- Default maximum memory to give to forked Java processes.
 	
 	     Set this higher either in another Ant script or on the
@@ -115,7 +113,6 @@
     <classpath refid="dost.jar.path" />
   </taskdef>
 
-  <!-- Add by Alan to refacter:URIResolver Date2009-08-07 -->
   <taskdef name="config-URIResolver"
   	classname="org.dita.dost.resolver.URIResolverConfigTask">
   	<classpath refid="dost.jar.path"/>
@@ -161,7 +158,6 @@
     location="${dita.dir}${file.separator}resource${file.separator}messages.xml" />
   <!-- property values end -->
 
-  <!-- Changed by Alan to refacter:URIResolver Date2009-08-07 -->
   <target name="build-init"
     depends="start-process, init-logger, init-URIResolver, use-init, check-arg, output-msg" />
     
@@ -173,7 +169,6 @@
     <config-logger />
   </target>
   
-  <!-- Add by Alan to refacter:URIResolver Date2009-08-07 -->
   <target name="init-URIResolver">
   	<config-URIResolver tempdir="${dita.temp.dir}"/>
   </target>
@@ -358,23 +353,19 @@
       </and>
     </condition>
   	
-  	<!-- Added on 2010-08-24 for bug:2994593 enable grammar pool caching by default start-->
   	<condition property="args.grammar.cache"
   	      value="yes">
   		      <not>
   		        <isset property="args.grammar.cache" />
   		      </not>
   	</condition> 	
-  	<!-- Added on 2010-08-24 for bug:2994593 enable grammar pool caching by default end-->
   	
-  	<!-- Added on 2010-11-16 for bug:3086552 enable system id setting in XMLReader.parse start-->
   	<condition property="args.xml.systemid.set"
   	      value="yes">
   		      <not>
   		        <isset property="args.xml.systemid.set" />
   		      </not>
   	</condition> 	
-  	<!-- Added on 2010-11-16 for bug:3086552 enable system id setting in XMLReader.parse end-->
   	
     <basename property="dita.input.filename" file="${args.input}" />
     <dirname property="dita.input.dirname" file="${args.input}" />
@@ -495,13 +486,6 @@
   	   </not>
   	</condition>
   	
-  	<!-- Move the outer.transform to build_general.xml -->
-	<!--
-  	<condition property="outer.transform">
-	   <equals arg1="${generate.copy.outer}" arg2="2"></equals>
-	</condition>	
-    -->
-    
     <condition property="inner.transform">
 	   <or>
 	 	 <equals arg1="${generate.copy.outer}" arg2="1"></equals>

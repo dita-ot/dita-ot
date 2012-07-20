@@ -3,7 +3,7 @@
      Sourceforge.net. See the accompanying license.txt file for 
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
-<project name="dita2eclipsehelp">
+<project xmlns:dita="http://dita-ot.sourceforge.net" name="dita2eclipsehelp">
 	
   <target name="dita.eclipsehelp.init">
     <condition property="args.xsl" value="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/dita2xhtml_eclipsehelp.xsl">
@@ -139,8 +139,7 @@
     
     <target name="dita.map.eclipse.index" unless="noMap"
             if="old.transform"
-      dita:depends="{dita.map.eclipse.index.pre},dita.map.eclipse.plugin.init,dita.index.eclipsehelp.init" 
-    	      xmlns:dita="http://dita-ot.sourceforge.net" 
+      dita:depends="{dita.map.eclipse.index.pre},dita.map.eclipse.plugin.init,dita.index.eclipsehelp.init"  
     	      dita:extension="depends org.dita.dost.platform.InsertDependsAction" 
             description="Build Eclipse Help index file">
     	  <echo level="info"> args.eclipsehelp.indexsee = ${args.eclipsehelp.indexsee} </echo>
@@ -160,8 +159,7 @@
     
     <target name="dita.out.map.eclipse.index" unless="noMap"
         if="inner.transform"
-      dita:depends="{dita.map.eclipse.index.pre},dita.map.eclipse.plugin.init,dita.index.eclipsehelp.init" 
-    	  xmlns:dita="http://dita-ot.sourceforge.net" 
+      dita:depends="{dita.map.eclipse.index.pre},dita.map.eclipse.plugin.init,dita.index.eclipsehelp.init"  
     	  dita:extension="depends org.dita.dost.platform.InsertDependsAction" 
         description="Build Eclipse Help index file">
     	  <echo level="info"> args.eclipsehelp.indexsee = ${args.eclipsehelp.indexsee} </echo>

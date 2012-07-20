@@ -3,7 +3,7 @@
      Sourceforge.net. See the accompanying license.txt file for 
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
-<project name="ditaot-preprocess">
+<project xmlns:dita="http://dita-ot.sourceforge.net" name="ditaot-preprocess">
 
   <!-- Set to "true" if you get out-of-memory errors during preprocess
        while processing very large (thousands of files) document sets. -->
@@ -12,19 +12,14 @@
   </condition>
 
   <target name="preprocess"
-    dita:depends="{depend.preprocess.pre},start-preprocess,gen-list,debug-filter,copy-files,conrefpush,conref,move-meta-entries,keyref,coderef,mapref,mappull,chunk,maplink,move-links,topicpull,{depend.preprocess.post}"
-    xmlns:dita="http://dita-ot.sourceforge.net"
+    dita:depends="{depend.preprocess.pre},gen-list,debug-filter,copy-files,conrefpush,conref,move-meta-entries,keyref,coderef,mapref,mappull,chunk,maplink,move-links,topicpull,{depend.preprocess.post}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     description="Preprocessing ended" />
-
-  <!-- preprocess modules begin -->
-  <target name="start-preprocess" description="Preprocessing started" />
 
   <!-- clean-temp
       Remove anything in the ${dita.temp.dir} directory before starting. -->
   <target name="clean-temp" unless="clean-temp.skip"
     dita:depends="{depend.preprocess.clean-temp.pre}"
-    xmlns:dita="http://dita-ot.sourceforge.net"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     description="Clean temp directory">
     <delete includeemptydirs="true" failonerror="no">
@@ -36,7 +31,6 @@
       Create the manifest files listing which files are referenced by the input file (even indirectly). -->
   <target name="gen-list"
     dita:depends="{depend.preprocess.gen-list.pre}"
-    xmlns:dita="http://dita-ot.sourceforge.net"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.gen-list.skip"
     description="Generate file list">
@@ -64,7 +58,6 @@
       add @xtrf and @xtrc and filter out elements according to valfile, if any. -->
   <target name="debug-filter"
     dita:depends="gen-list,{depend.preprocess.debug-filter.pre}"
-    xmlns:dita="http://dita-ot.sourceforge.net"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.debug-filter.skip"
     description="Debug and filter input files" >
@@ -83,7 +76,6 @@
         <param name="setsystemid" value="${args.xml.systemid.set}"/>
       </module>
     </pipeline>
-    <!--<property file="${dita.temp.dir}/dita.list" />-->
     <xmlpropertyreader file="${dita.temp.dir}/dita.xml.properties"/>
     <dirname property="dita.map.output.dir" file="${output.dir}/${user.input.file}" />
     <condition property="noConref">
@@ -92,11 +84,6 @@
     <condition property="noMap">
       <equals arg1="${fullditamaplist}" arg2="" />
     </condition>
-  	<!--
-    <condition property="noTopic">
-      <equals arg1="${fullditatopiclist}" arg2="" />
-    </condition>
-    -->
     <condition property="noImagelist">
       <equals arg1="${imagelist}" arg2="" />
     </condition>
@@ -121,7 +108,6 @@
       Push information to the specified target -->
   <target name="conrefpush"
     dita:depends="debug-filter,{depend.preprocess.conrefpush.pre},conrefpush-check"
-    xmlns:dita="http://dita-ot.sourceforge.net"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.conrefpush.skip"
     description="Resolve conref push">
@@ -141,7 +127,6 @@
       Push information from <topicmeta> in the map into the corresponding topics. -->
   <target name="move-meta-entries" 
     dita:depends="debug-filter,{depend.preprocess.move-meta-entries.pre},move-meta-entries-check"
-    xmlns:dita="http://dita-ot.sourceforge.net"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.move-meta-entries.skip"
     description="Move metadata entries">
@@ -162,7 +147,6 @@
       Pull elements referenced by conref into their correct place. -->
   <target name="conref" 
     dita:depends="debug-filter,conrefpush,{depend.preprocess.conref.pre},conref-check"
-    xmlns:dita="http://dita-ot.sourceforge.net"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.conref.skip"
     description="Resolve conref in input files">
@@ -176,12 +160,10 @@
       style="${dita.script.dir}/preprocess/conref.xsl" filenameparameter="file-being-processed">
       <mapper type="glob" from="*" to="*.cnrf" />
       <param name="DITAEXT" expression="${dita.ext}" />
-      <!-- added by William on 2009-06-26 for req #12014 start -->
       <param name="BASEDIR" expression="${basedir}"/>
       <param name="TEMPDIR" expression="${dita.temp.dir}"/>
       <param name="TRANSTYPE" expression="${transtype}"/>
-      <!-- added by William on 2009-06-26 for req #12014 end -->
-      <dita:extension id="dita.preprocess.conref.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+      <dita:extension id="dita.preprocess.conref.param" behavior="org.dita.dost.platform.InsertAction"/>
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
     <move todir="${dita.temp.dir}">
@@ -199,7 +181,6 @@
   <!-- coderef -->
   <target name="coderef"
     dita:depends="debug-filter,keyref,{depend.preprocess.coderef.pre},coderef-check"
-    xmlns:dita="http://dita-ot.sourceforge.net"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.coderef.skip"
     description="Resolve coderef in input files">
@@ -222,7 +203,6 @@
       (topicref with format="ditamap") in the input map. -->
   <target name="mapref" 
     dita:depends="coderef,{depend.preprocess.mapref.pre},mapref-check"
-    xmlns:dita="http://dita-ot.sourceforge.net"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.mapref.skip"
     description="Resolve mapref in ditamap">
@@ -240,10 +220,8 @@
       style="${dita.script.dir}/preprocess/mapref.xsl" filenameparameter="file-being-processed">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="TRANSTYPE" expression="${transtype}" />
-      <!--Added by William on 2010-04-14 for bug:2982485 start -->
       <param name="FILEREF" expression="file:"/>
-      <!--Added by William on 2010-04-14 for bug:2982485 end -->
-      <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+      <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction"/>
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
     <move overwrite="true" todir="${dita.temp.dir}">
@@ -262,7 +240,6 @@
        Resolve keyref using key definition in ditamap-->
   <target name="keyref"
     dita:depends="move-meta-entries,{depend.preprocess.keyref.pre},keyref-check"
-    xmlns:dita="http://dita-ot.sourceforge.net"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.keyref.skip"
     description="Resolve keyref">
@@ -284,7 +261,6 @@
       Pull metadata (such as navtitle) into the map from the referenced topics. -->
   <target name="mappull"
     dita:depends="mapref,{depend.preprocess.mappull.pre},mappull-check"
-    xmlns:dita="http://dita-ot.sourceforge.net"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.mappull.skip"
     description="Pull the navtitle and topicmeta from topics to ditamap">
@@ -302,7 +278,7 @@
       style="${dita.script.dir}/preprocess/mappull.xsl">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="TRANSTYPE" expression="${transtype}" />
-      <dita:extension id="dita.preprocess.mappull.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+      <dita:extension id="dita.preprocess.mappull.param" behavior="org.dita.dost.platform.InsertAction"/>
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
     <move overwrite="true" todir="${dita.temp.dir}">
@@ -321,7 +297,6 @@
       Assemble virtual supertopics based on chunk attribute in map. -->
   <target name="chunk" 
     dita:depends="mappull,{depend.preprocess.chunk.pre},chunk-check"
-    xmlns:dita="http://dita-ot.sourceforge.net"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.chunk.skip"
     description="Process chunks">
@@ -351,7 +326,6 @@
     implied by the map (family and reltables). -->
   <target name="maplink"
     dita:depends="chunk,{depend.preprocess.maplink.pre},maplink-check"
-    xmlns:dita="http://dita-ot.sourceforge.net"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.maplink.skip"
     description="Find and generate related link information">
@@ -368,7 +342,7 @@
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="INPUTMAP" expression="${user.input.file}" />
       <param name="include.rellinks" expression="${include.rellinks}" if="include.rellinks"/>
-      <dita:extension id="dita.preprocess.maplink.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+      <dita:extension id="dita.preprocess.maplink.param" behavior="org.dita.dost.platform.InsertAction"/>
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
@@ -384,7 +358,6 @@
       <related-links> sections of the corresponding topics. -->
   <target name="move-links"
     dita:depends="maplink,{depend.preprocess.move-links.pre},move-links-check"
-    xmlns:dita="http://dita-ot.sourceforge.net"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.move-links.skip"
     description="Move the related link information to topics">
@@ -406,7 +379,6 @@
       Populate link text for links within topics (xref, link). -->
   <target name="topicpull"
     dita:depends="debug-filter,{depend.preprocess.topicpull.pre},topicpull-check"
-    xmlns:dita="http://dita-ot.sourceforge.net"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.topicpull.skip"
     description="Pull metadata for link and xref element">
@@ -423,7 +395,7 @@
       <param name="TABLELINK" expression="${args.tablelink.style}" if="args.tablelink.style" />
       <param name="FIGURELINK" expression="${args.figurelink.style}" if="args.figurelink.style" />
       <param name="ONLYTOPICINMAP" expression="${onlytopic.in.map}" if="onlytopic.in.map"/>
-      <dita:extension id="dita.preprocess.topicpull.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+      <dita:extension id="dita.preprocess.topicpull.param" behavior="org.dita.dost.platform.InsertAction"/>
       <mapper type="glob" from="*" to="*.pull" />
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
@@ -443,7 +415,6 @@
       Copy files to the output directory. -->
   <target name="copy-files"
     dita:depends="debug-filter,{depend.preprocess.copy-files.pre},copy-image,copy-html,copy-flag,copy-subsidiary,copy-generated-files"
-    xmlns:dita="http://dita-ot.sourceforge.net"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.copy-files.skip" />
 
@@ -451,7 +422,6 @@
   <target name="copy-image-uplevels"
 		if="image.copy.uplevels"
 	    dita:depends="{depend.preprocess.copy-image.pre},copy-image-check"
-	    xmlns:dita="http://dita-ot.sourceforge.net"
 	    dita:extension="depends org.dita.dost.platform.InsertDependsAction"
 	    unless="preprocess.copy-image.skip"
 	    description="Copy image files">
@@ -463,7 +433,6 @@
   <target name="copy-image-noraml"
 	 	if="image.copy.normal"
 		dita:depends="{depend.preprocess.copy-image.pre},copy-image-check"
-		xmlns:dita="http://dita-ot.sourceforge.net"
 		dita:extension="depends org.dita.dost.platform.InsertDependsAction"
 		unless="preprocess.copy-image.skip"
 		description="Copy image files">
@@ -474,7 +443,6 @@
 		 
   <target name="copy-image"
     dita:depends="{depend.preprocess.copy-image.pre},copy-image-uplevels,copy-image-noraml"
-    xmlns:dita="http://dita-ot.sourceforge.net"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction" 
     description="Copy image files">   
   </target>
@@ -500,7 +468,6 @@
 
   <target name="copy-html"
     dita:depends="{depend.preprocess.copy-html.pre},copy-html-check"
-    xmlns:dita="http://dita-ot.sourceforge.net"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.copy-html.skip"
     description="Copy html files">
@@ -520,7 +487,6 @@
   
   <target name="copy-flag"
     dita:depends="{depend.preprocess.copy-flag.pre},copy-flag-check"
-    xmlns:dita="http://dita-ot.sourceforge.net"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.copy-flag.skip"
     description="Copy flag files">
@@ -538,7 +504,6 @@
   
   <target name="copy-subsidiary"
     dita:depends="{depend.preprocess.copy-subsidiary.pre},copy-subsidiary-check"
-    xmlns:dita="http://dita-ot.sourceforge.net"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.copy-subsidiary.skip"
     description="Copy subsidiary files">
@@ -559,7 +524,6 @@
   
   <target name="copy-generated-files"
     dita:depends="{depend.preprocess.copy-generated-files.pre}"
-    xmlns:dita="http://dita-ot.sourceforge.net"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.copy-generated-files.skip"
     description="Copy generated files">
@@ -568,8 +532,5 @@
         includes="dita.list,property.temp,dita.xml.properties" />
     </copy>
   </target>
-  
-  <!-- depecrated: keep for back-compatibility -->
-  <target name="move-index-entries" depends="move-meta-entries"/>  
-  
+    
 </project>

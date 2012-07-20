@@ -26,7 +26,7 @@ These terms and conditions supersede the terms and conditions in any
 licensing agreement to the extent that such terms and conditions conflict
 with those set forth herein.
 -->
-<project name="dita.build" basedir=".">
+<project xmlns:dita="http://dita-ot.sourceforge.net" name="dita.build" basedir=".">
   
   <import file="${dita.plugin.org.dita.pdf2.dir}/build_fop.xml"/>
   <import file="${dita.plugin.org.dita.pdf2.dir}/build_axf.xml"/>
@@ -100,8 +100,6 @@ with those set forth herein.
       </filterchain>
     </loadfile>
     
-    <!-- legacy property -->
-    <property name="ot.dir" location="${dita.dir}"/>
     <property name="lib.dir" value="${dita.dir}/lib"/>
     <property name="fo.lib.dir" value="${dita.plugin.org.dita.pdf2.dir}/lib"/>
     <property name="merged.file" value="${dita.map.filename.root}_MERGED.xml"/>
@@ -125,14 +123,10 @@ with those set forth herein.
     
     <property name="xsl.dir" value="${dita.plugin.org.dita.pdf2.dir}/xsl"/>
     <property name="xsl.fo.dir" value="${dita.plugin.org.dita.pdf2.dir}/xsl/fo"/>
-    <!-- legacy property -->
-    <property name="xsl.fo.diff.dir" value="${dita.plugin.org.dita.pdf2.dir}/xsl/fo/diff"/>
     <property name="xsl.common.dir" value="${dita.plugin.org.dita.pdf2.dir}/xsl/common"/>
     <property name="cfg.dir" value="${dita.plugin.org.dita.pdf2.dir}/cfg"/>
     <property name="cfg.fo.dir" value="${dita.plugin.org.dita.pdf2.dir}/cfg/fo"/>
     <property name="cfg.common.dir" value="${dita.plugin.org.dita.pdf2.dir}/cfg/common"/>
-    <!-- legacy property -->
-    <property name="dtd.dir" value="${dita.plugin.org.dita.pdf2.dir}/dtd"/>
         
     <path id="project.class.path">
       <pathelement path="${java.class.path}"/>
@@ -387,7 +381,7 @@ with those set forth herein.
       <param name="useFrameIndexMarkup" expression="${org.dita.pdf2.index.frame-markup}"/>
       <param name="bookmap-order" expression="${args.bookmap-order}"/>
       <param name="variableFiles.url" expression="${variable.file.url}"/>
-      <dita:extension id="dita.conductor.pdf2.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+      <dita:extension id="dita.conductor.pdf2.param" behavior="org.dita.dost.platform.InsertAction"/>
       <xmlcatalog>
         <catalogpath path="${xml.catalog.files}"/>
       </xmlcatalog>
@@ -444,7 +438,6 @@ with those set forth herein.
   </target>
 
   <target name="transform.topic2pdf"
-          xmlns:dita="http://dita-ot.sourceforge.net"
           dita:extension="depends org.dita.dost.platform.InsertDependsAction"
           dita:depends="copyCoreArtwork,
                         transform.topic2fo,
@@ -462,7 +455,6 @@ with those set forth herein.
   </target>
 
   <target name="transform.fo2pdf"
-          xmlns:dita="http://dita-ot.sourceforge.net"
           dita:extension="depends org.dita.dost.platform.InsertDependsAction"
           dita:depends="transform.fo2pdf.xep,
                         transform.fo2pdf.ah,
