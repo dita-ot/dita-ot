@@ -32,8 +32,7 @@
         <li>When there are multiple <codeph>revprop</codeph> elements with the same val attribute, no error of
           warning is thrown</li>
         <li>When multiple prop elements define a duplicate attribute and value combination,
-          attribute default, or fall-back behaviour, <keyword>DOTJ007E</keyword> error is
-          thrown.</li>
+          attribute default, or fall-back behaviour, <msgnum>DOTJ007E</msgnum> error is thrown.</li>
       </ul>
     </section>
     <section id="section_kjq_egs_qc">
@@ -58,6 +57,12 @@
         preprocessing.</p>
       <draft-comment>What's the implementation dependent behaviour for abstract and shortdesc
         processing?</draft-comment>
+    </section>
+    <section>
+      <title>Map processing</title>
+      <p>When a <codeph>topicref</codeph> element that references a map contains child
+          <codeph>topicref</codeph> elements, <msgnum>DOTX068W</msgnum> error is thrown and the
+        child <codeph>topicref</codeph> elements are ignored. </p>
     </section>
   </refbody>
 </reference>

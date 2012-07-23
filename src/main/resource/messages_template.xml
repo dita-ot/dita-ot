@@ -724,6 +724,11 @@
     <reason>No string named '%1' was found for language '%2'.</reason>
     <response>Add a mapping for the string '%1'.</response>
   </message>
+  
+  <message id="DOTX068W" type="WARN">
+    <reason>A topicref element that references a map contains child topicref elements.</reason>
+    <response>Child topicref elements are ignored.</response>
+  </message>
 
   <!-- End of XSL Messages --> 
   
