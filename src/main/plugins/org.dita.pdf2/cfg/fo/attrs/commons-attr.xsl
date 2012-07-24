@@ -642,6 +642,9 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="image">
     </xsl:attribute-set>
+    
+    <xsl:attribute-set name="flag.image" use-attribute-sets="image">
+    </xsl:attribute-set>
 
     <xsl:attribute-set name="__unresolved__conref">
         <xsl:attribute name="color">#CC3333</xsl:attribute>
