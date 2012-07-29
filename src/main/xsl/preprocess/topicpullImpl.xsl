@@ -541,12 +541,12 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
 	              <xsl:apply-templates select="./preceding::processing-instruction('workdir-uri')[1]" mode="get-work-dir"/>
 	            </xsl:when>
 	            <xsl:otherwise>
-	              <xsl:apply-templates select="/processing-instruction('workdir-uri')" mode="get-work-dir"/>
+	              <xsl:apply-templates select="/processing-instruction('workdir-uri')[1]" mode="get-work-dir"/>
 	            </xsl:otherwise>
 	          </xsl:choose>
 	        </xsl:when>
 	        <xsl:otherwise>
-	            <xsl:apply-templates select="/processing-instruction('workdir-uri')" mode="get-work-dir"/>
+	            <xsl:apply-templates select="/processing-instruction('workdir-uri')[1]" mode="get-work-dir"/>
 	        </xsl:otherwise>
 	    </xsl:choose>
 	</xsl:param>
