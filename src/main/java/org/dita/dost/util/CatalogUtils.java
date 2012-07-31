@@ -46,8 +46,9 @@ public final class CatalogUtils {
      * Parse the catalog file to get catalog map.
      * @param ditaDir absolute path to directory to find catalog-dita.xml
      * @return catalog map
-     * 
+     * @deprecated use Apache Commons Catalog Resolver instead
      */
+    @Deprecated
     public static synchronized HashMap<String, String> getCatalog(final File ditaDir) {
         if (map != null) {
             return map;

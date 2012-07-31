@@ -295,29 +295,6 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
         return null;
     }
 
-    private static class InternalEntityResolver implements EntityResolver {
-
-        private final Map<String, String> catalogMap;
-
-        public InternalEntityResolver(final Map<String, String> map) {
-            this.catalogMap = map;
-        }
-
-        public InputSource resolveEntity(final String publicId, final String systemId)
-                throws SAXException, IOException {
-            if (catalogMap.get(publicId) != null) {
-                final File dtdFile = new File(catalogMap.get(publicId));
-                return new InputSource(dtdFile.getAbsolutePath());
-            }else if (catalogMap.get(systemId) != null){
-                final File schemaFile = new File(catalogMap.get(systemId));
-                return new InputSource(schemaFile.getAbsolutePath());
-            }
-
-            return null;
-        }
-
-    }
-
     /**
      * Read XML properties file.
      * 
@@ -375,8 +352,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
         try {
             final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             final DocumentBuilder builder = factory.newDocumentBuilder();
-            builder.setEntityResolver(new InternalEntityResolver(
-                    CatalogUtils.getCatalog(ditaDir.getAbsoluteFile())));
+            builder.setEntityResolver(CatalogUtils.getCatalogResolver());
 
             while (!queue.isEmpty()) {
                 final String parent = queue.poll();
