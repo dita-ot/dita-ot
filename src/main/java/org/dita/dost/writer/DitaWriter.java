@@ -33,6 +33,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.xml.resolver.tools.CatalogResolver;
+
 import org.xml.sax.helpers.AttributesImpl;
 
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
@@ -298,7 +300,6 @@ public final class DitaWriter extends AbstractXMLFilter {
         return attValue;
     }
     private File absolutePath;
-    private Map<String, String> catalogMap; //map that contains the information from XML Catalog
     private List<String> colSpec;
     private int columnNumber; // columnNumber is used to adjust column name
     private int columnNumberEnd; //columnNumberEnd is the end value for current entry
@@ -448,14 +449,15 @@ public final class DitaWriter extends AbstractXMLFilter {
                 reader.setFeature(FEATURE_VALIDATION_SCHEMA, true);
             }
             reader.setFeature(FEATURE_NAMESPACE, true);
-            reader.setEntityResolver(CatalogUtils.getCatalogResolver());
+            final CatalogResolver resolver = CatalogUtils.getCatalogResolver();
+            setEntityResolver(resolver);
+            reader.setEntityResolver(resolver);
             setParent(reader);
         } catch (final Exception e) {
             throw new SAXException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
         setGrammarPool(reader, GrammarPoolManager.getGrammarPool());
         CatalogUtils.setDitaDir(ditaDir);
-        catalogMap = CatalogUtils.getCatalog(ditaDir);
         setSystemid= arg_setSystemid;
     }
     
@@ -983,19 +985,6 @@ public final class DitaWriter extends AbstractXMLFilter {
                 logger.logException(e);
             }
         }
-    }
-
-    @Override
-    public InputSource resolveEntity(final String publicId, final String systemId)
-            throws SAXException, IOException {
-        if (catalogMap.get(publicId)!=null){
-            final File dtdFile = new File(catalogMap.get(publicId));
-            return new InputSource(dtdFile.getAbsolutePath());
-        }else if (catalogMap.get(systemId) != null){
-            final File schemaFile = new File(catalogMap.get(systemId));
-            return new InputSource(schemaFile.getAbsolutePath());
-        }
-        return null;
     }
 
     /**
