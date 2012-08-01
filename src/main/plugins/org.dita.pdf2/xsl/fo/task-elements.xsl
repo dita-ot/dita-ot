@@ -27,7 +27,7 @@ These terms and conditions supersede the terms and conditions in any
 licensing agreement to the extent that such terms and conditions conflict
 with those set forth herein.
 
-This file is part of the DITA Open Toolkit project hosted on Sourceforge.net. 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
 -->
 
@@ -243,7 +243,7 @@ See the accompanying license.txt file for applicable licenses.
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-  
+
 
     <xsl:template match="*[contains(@class, ' task/steps ')]/*[contains(@class, ' task/step ')]">
         <!-- Switch to variable for the count rather than xsl:number, so that step specializations are also counted -->
@@ -370,6 +370,130 @@ See the accompanying license.txt file for applicable licenses.
             </fo:list-item-body>
         </fo:list-item>
     </xsl:template>
+
+  <!-- Choice tables -->
+
+  <xsl:template match="*[contains(@class, ' task/choicetable ')]">
+    <fo:table xsl:use-attribute-sets="choicetable">
+      <xsl:call-template name="commonattributes"/>
+      <xsl:call-template name="univAttrs"/>
+      <xsl:call-template name="globalAtts"/>
+
+      <xsl:if test="@relcolwidth">
+        <xsl:variable name="fix-relcolwidth">
+          <xsl:apply-templates select="." mode="fix-relcolwidth"/>
+        </xsl:variable>
+        <xsl:call-template name="createSimpleTableColumns">
+          <xsl:with-param name="theColumnWidthes" select="$fix-relcolwidth"/>
+        </xsl:call-template>
+      </xsl:if>
+
+      <xsl:choose>
+        <xsl:when test="*[contains(@class, ' task/chhead ')]">
+          <xsl:apply-templates select="*[contains(@class, ' task/chhead ')]"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <fo:table-header xsl:use-attribute-sets="chhead">
+            <fo:table-row xsl:use-attribute-sets="chhead__row">
+              <fo:table-cell xsl:use-attribute-sets="chhead.choptionhd">
+                <fo:block xsl:use-attribute-sets="chhead.choptionhd__content">
+                  <xsl:call-template name="insertVariable">
+                    <xsl:with-param name="theVariableID" select="'Option'"/>
+                  </xsl:call-template>
+                </fo:block>
+              </fo:table-cell>
+              <fo:table-cell xsl:use-attribute-sets="chhead.chdeschd">
+                <fo:block xsl:use-attribute-sets="chhead.chdeschd__content">
+                  <xsl:call-template name="insertVariable">
+                    <xsl:with-param name="theVariableID" select="'Description'"/>
+                  </xsl:call-template>
+                </fo:block>
+              </fo:table-cell>
+            </fo:table-row>
+          </fo:table-header>
+        </xsl:otherwise>
+      </xsl:choose>
+
+      <fo:table-body xsl:use-attribute-sets="choicetable__body">
+        <xsl:apply-templates select="*[contains(@class, ' task/chrow ')]"/>
+      </fo:table-body>
+
+    </fo:table>
+  </xsl:template>
+
+  <xsl:template match="*[contains(@class, ' task/chhead ')]">
+    <fo:table-header xsl:use-attribute-sets="chhead">
+      <xsl:call-template name="commonattributes"/>
+      <fo:table-row xsl:use-attribute-sets="chhead__row">
+        <xsl:apply-templates/>
+      </fo:table-row>
+    </fo:table-header>
+  </xsl:template>
+
+  <xsl:template match="*[contains(@class, ' task/chrow ')]">
+    <fo:table-row xsl:use-attribute-sets="chrow">
+      <xsl:call-template name="commonattributes"/>
+      <xsl:apply-templates/>
+    </fo:table-row>
+  </xsl:template>
+
+  <xsl:template match="*[contains(@class, ' task/chhead ')]/*[contains(@class, ' task/choptionhd ')]">
+    <fo:table-cell xsl:use-attribute-sets="chhead.choptionhd">
+      <xsl:call-template name="commonattributes"/>
+      <fo:block xsl:use-attribute-sets="chhead.choptionhd__content">
+        <xsl:apply-templates/>
+      </fo:block>
+    </fo:table-cell>
+  </xsl:template>
+
+  <xsl:template match="*[contains(@class, ' task/chhead ')]/*[contains(@class, ' task/chdeschd ')]">
+    <fo:table-cell xsl:use-attribute-sets="chhead.chdeschd">
+      <xsl:call-template name="commonattributes"/>
+      <fo:block xsl:use-attribute-sets="chhead.chdeschd__content">
+        <xsl:apply-templates/>
+      </fo:block>
+    </fo:table-cell>
+  </xsl:template>
+
+  <xsl:template match="*[contains(@class, ' task/chrow ')]/*[contains(@class, ' task/choption ')]">
+    <xsl:variable name="keyCol" select="ancestor::*[contains(@class, ' task/choicetable ')][1]/@keycol"/>
+    <fo:table-cell xsl:use-attribute-sets="chrow.choption">
+      <xsl:call-template name="commonattributes"/>
+      <xsl:choose>
+        <xsl:when test="$keyCol = 1">
+          <fo:block xsl:use-attribute-sets="chrow.choption__keycol-content">
+            <xsl:apply-templates/>
+          </fo:block>
+        </xsl:when>
+        <xsl:otherwise>
+          <fo:block xsl:use-attribute-sets="chrow.choption__content">
+            <xsl:apply-templates/>
+          </fo:block>
+        </xsl:otherwise>
+      </xsl:choose>
+    </fo:table-cell>
+  </xsl:template>
+
+  <xsl:template match="*[contains(@class, ' task/chrow ')]/*[contains(@class, ' task/chdesc ')]">
+    <xsl:variable name="keyCol" select="number(ancestor::*[contains(@class, ' task/choicetable ')][1]/@keycol)"/>
+    <fo:table-cell xsl:use-attribute-sets="chrow.chdesc">
+      <xsl:call-template name="commonattributes"/>
+      <xsl:choose>
+        <xsl:when test="$keyCol = 2">
+          <fo:block xsl:use-attribute-sets="chrow.chdesc__keycol-content">
+            <xsl:apply-templates/>
+          </fo:block>
+        </xsl:when>
+        <xsl:otherwise>
+          <fo:block xsl:use-attribute-sets="chrow.chdesc__content">
+            <xsl:apply-templates/>
+          </fo:block>
+        </xsl:otherwise>
+      </xsl:choose>
+    </fo:table-cell>
+  </xsl:template>
+
+  <!-- Example -->
 
   <xsl:template match="*[contains(@class, ' topic/example ')]" mode="dita2xslfo:task-heading">
     <xsl:param name="use-label"/>
