@@ -17,62 +17,6 @@
     <!-- XML Exchange Table Model Document Type Definition default is 1 -->
     <xsl:variable name="table.colsep-default" select="'0'"/>
 
-    <!-- General simple table processing -->
-
-    <xsl:template name="createSimpleTableColumns">
-        <xsl:param name="theColumnWidthes" select="'1*'"/>
-
-        <xsl:choose>
-          <xsl:when test="contains($theColumnWidthes, ' ')">
-            <fo:table-column>
-              <xsl:attribute name="column-width">
-                <xsl:call-template name="xcalcColumnWidth">
-                  <xsl:with-param name="theColwidth" select="substring-before($theColumnWidthes, ' ')"/>
-                </xsl:call-template>
-              </xsl:attribute>
-            </fo:table-column>
-
-            <xsl:call-template name="createSimpleTableColumns">
-              <xsl:with-param name="theColumnWidthes" select="substring-after($theColumnWidthes, ' ')"/>
-            </xsl:call-template>
-
-          </xsl:when>
-          <xsl:otherwise>
-            <fo:table-column>
-              <xsl:attribute name="column-width">
-                <xsl:call-template name="xcalcColumnWidth">
-                  <xsl:with-param name="theColwidth" select="$theColumnWidthes"/>
-                </xsl:call-template>
-              </xsl:attribute>
-            </fo:table-column>
-          </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-
-    <xsl:template name="generateSimpleTableHorizontalBorders">
-        <xsl:param name="frame"/>
-        <xsl:choose>
-          <xsl:when test="($frame = 'all') or ($frame = 'topbot') or ($frame = 'sides') or not($frame)">
-            <xsl:call-template name="processAttrSetReflection">
-              <xsl:with-param name="attrSet" select="'__tableframe__bottom'"/>
-              <xsl:with-param name="path" select="$tableAttrs"/>
-            </xsl:call-template>
-          </xsl:when>
-        </xsl:choose>
-    </xsl:template>
-
-    <xsl:template name="generateSimpleTableVerticalBorders">
-        <xsl:param name="frame"/>
-        <xsl:choose>
-          <xsl:when test="($frame = 'all') or ($frame = 'topbot') or ($frame = 'sides') or not($frame)">
-            <xsl:call-template name="processAttrSetReflection">
-              <xsl:with-param name="attrSet" select="'__tableframe__right'"/>
-              <xsl:with-param name="path" select="$tableAttrs"/>
-            </xsl:call-template>
-          </xsl:when>
-        </xsl:choose>
-    </xsl:template>
-
     <!-- SourceForge bug tracker item 2872988:
          Count the number of values in @relcolwidth (to add values if one is missing) -->
     <xsl:template match="*" mode="count-colwidths">
@@ -970,6 +914,621 @@
         <xsl:copy>
             <xsl:apply-templates select="node() | @* | text()" mode="setTableEntriesScale"/>
         </xsl:copy>
+    </xsl:template>
+
+      <!-- SourceForge bug tracker item 2872988:
+             Count the max number of cells in any row of a simpletable -->
+      <xsl:template match="*[contains(@class, ' topic/sthead ')] | *[contains(@class, ' topic/strow ')]" mode="count-max-simpletable-cells">
+        <xsl:param name="maxcount" select="0" as="xs:integer"/>
+        <xsl:variable name="newmaxcount" as="xs:integer">
+          <xsl:variable name="row-cell-count" select="count(*[contains(@class, ' topic/stentry ')])"/>
+          <xsl:choose>
+            <xsl:when test="$row-cell-count > $maxcount">
+              <xsl:sequence select="$row-cell-count"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:sequence select="$maxcount"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <xsl:choose>
+          <xsl:when test="not(following-sibling::*[contains(@class, ' topic/strow ')])">
+            <xsl:value-of select="$newmaxcount"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates select="following-sibling::*[contains(@class, ' topic/strow ')][1]" mode="count-max-simpletable-cells">
+              <xsl:with-param name="maxcount" select="$newmaxcount"/>
+            </xsl:apply-templates>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:template>
+
+      <!--  Simpletable processing  -->
+      <xsl:template match="*[contains(@class, ' topic/simpletable ')]">
+        <xsl:variable name="number-cells">
+          <!-- Contains the number of cells in the widest row -->
+          <xsl:apply-templates select="*[1]" mode="count-max-simpletable-cells"/>
+        </xsl:variable>
+        <fo:table xsl:use-attribute-sets="simpletable">
+          <xsl:call-template name="commonattributes"/>
+          <!-- <xsl:call-template name="univAttrs"/>
+          -->
+          <xsl:call-template name="globalAtts"/>
+          <xsl:call-template name="displayAtts">
+            <xsl:with-param name="element" select="."/>
+          </xsl:call-template>
+
+          <xsl:if test="@relcolwidth">
+            <xsl:variable name="fix-relcolwidth">
+              <xsl:apply-templates select="." mode="fix-relcolwidth">
+                <xsl:with-param name="number-cells" select="$number-cells"/>
+              </xsl:apply-templates>
+            </xsl:variable>
+            <xsl:call-template name="createSimpleTableColumns">
+              <xsl:with-param name="theColumnWidthes" select="$fix-relcolwidth"/>
+            </xsl:call-template>
+          </xsl:if>
+
+          <!-- Toss processing to another template to process the simpletable
+                     heading, and/or create a default table heading row. -->
+          <xsl:apply-templates select="." mode="dita2xslfo:simpletable-heading">
+            <xsl:with-param name="number-cells" select="$number-cells"/>
+          </xsl:apply-templates>
+
+          <fo:table-body xsl:use-attribute-sets="simpletable__body">
+            <xsl:apply-templates select="*[contains(@class, ' topic/strow ')]">
+              <xsl:with-param name="number-cells" select="$number-cells"/>
+            </xsl:apply-templates>
+          </fo:table-body>
+
+        </fo:table>
+      </xsl:template>
+
+      <xsl:template name="createSimpleTableColumns">
+        <xsl:param name="theColumnWidthes" select="'1*'"/>
+
+        <xsl:choose>
+          <xsl:when test="contains($theColumnWidthes, ' ')">
+            <fo:table-column>
+              <xsl:attribute name="column-width">
+                <xsl:call-template name="xcalcColumnWidth">
+                  <xsl:with-param name="theColwidth" select="substring-before($theColumnWidthes, ' ')"/>
+                </xsl:call-template>
+              </xsl:attribute>
+            </fo:table-column>
+
+            <xsl:call-template name="createSimpleTableColumns">
+              <xsl:with-param name="theColumnWidthes" select="substring-after($theColumnWidthes, ' ')"/>
+            </xsl:call-template>
+
+          </xsl:when>
+          <xsl:otherwise>
+            <fo:table-column>
+              <xsl:attribute name="column-width">
+                <xsl:call-template name="xcalcColumnWidth">
+                  <xsl:with-param name="theColwidth" select="$theColumnWidthes"/>
+                </xsl:call-template>
+              </xsl:attribute>
+            </fo:table-column>
+          </xsl:otherwise>
+        </xsl:choose>
+
+      </xsl:template>
+
+      <!-- SourceForge RFE 2874200:
+             Fill in empty cells when one is missing from strow or sthead.
+             Context for this call is strow or sthead. -->
+      <xsl:template match="*" mode="fillInMissingSimpletableCells">
+        <xsl:param name="fill-in-count" select="0"/>
+        <xsl:if test="$fill-in-count >
+          0">
+          <fo:table-cell xsl:use-attribute-sets="strow.stentry">
+            <xsl:call-template name="commonattributes"/>
+            <xsl:variable name="frame">
+              <xsl:choose>
+                <xsl:when test="../@frame">
+                  <xsl:value-of select="../@frame"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="$table.frame-default"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:variable>
+            <xsl:if test="following-sibling::*[contains(@class, ' topic/strow ')]">
+              <xsl:call-template name="generateSimpleTableHorizontalBorders">
+                <xsl:with-param name="frame" select="$frame"/>
+              </xsl:call-template>
+            </xsl:if>
+            <xsl:if test="$frame = 'all' or $frame = 'topbot' or $frame = 'top'">
+              <xsl:call-template name="processAttrSetReflection">
+                <xsl:with-param name="attrSet" select="'__tableframe__top'"/>
+                <xsl:with-param name="path" select="$tableAttrs"/>
+              </xsl:call-template>
+            </xsl:if>
+            <xsl:if test="($frame = 'all') or ($frame = 'topbot') or ($frame = 'sides')">
+              <xsl:call-template name="processAttrSetReflection">
+                <xsl:with-param name="attrSet" select="'__tableframe__left'"/>
+                <xsl:with-param name="path" select="$tableAttrs"/>
+              </xsl:call-template>
+              <xsl:call-template name="processAttrSetReflection">
+                <xsl:with-param name="attrSet" select="'__tableframe__right'"/>
+                <xsl:with-param name="path" select="$tableAttrs"/>
+              </xsl:call-template>
+            </xsl:if>
+            <fo:block>
+              <fo:inline>&#160;</fo:inline>
+            </fo:block>
+            <!-- Non-breaking space --> </fo:table-cell>
+          <xsl:apply-templates select="." mode="fillInMissingSimpletableCells">
+            <xsl:with-param name="fill-in-count" select="$fill-in-count - 1"/>
+          </xsl:apply-templates>
+        </xsl:if>
+      </xsl:template>
+
+      <!-- Specialized simpletable elements may override this rule to add
+             default headings for the table. By default, the existing sthead
+             element is used when specified. -->
+      <xsl:template match="*[contains(@class, ' topic/simpletable ')]" mode="dita2xslfo:simpletable-heading">
+        <xsl:param name="number-cells">
+          <xsl:apply-templates select="*[1]" mode="count-max-simpletable-cells"/>
+        </xsl:param>
+        <xsl:apply-templates select="*[contains(@class, ' topic/sthead ')]">
+          <xsl:with-param name="number-cells" select="$number-cells"/>
+        </xsl:apply-templates>
+      </xsl:template>
+
+      <xsl:template match="*[contains(@class, ' topic/sthead ')]">
+        <xsl:param name="number-cells">
+          <xsl:apply-templates select="../*[1]" mode="count-max-simpletable-cells"/>
+        </xsl:param>
+        <fo:table-header xsl:use-attribute-sets="sthead">
+          <xsl:call-template name="commonattributes"/>
+          <fo:table-row xsl:use-attribute-sets="sthead__row">
+            <xsl:apply-templates/>
+            <xsl:variable name="row-cell-count" select="count(*[contains(@class, ' topic/stentry ')])"/>
+            <xsl:if test="$row-cell-count &lt; $number-cells">
+              <xsl:apply-templates select="." mode="fillInMissingSimpletableCells">
+                <xsl:with-param name="fill-in-count" select="$number-cells - $row-cell-count"/>
+              </xsl:apply-templates>
+            </xsl:if>
+          </fo:table-row>
+        </fo:table-header>
+      </xsl:template>
+
+      <xsl:template match="*[contains(@class, ' topic/strow ')]">
+        <xsl:param name="number-cells">
+          <xsl:apply-templates select="../*[1]" mode="count-max-simpletable-cells"/>
+        </xsl:param>
+        <fo:table-row xsl:use-attribute-sets="strow">
+          <xsl:call-template name="commonattributes"/>
+          <xsl:apply-templates/>
+          <xsl:variable name="row-cell-count" select="count(*[contains(@class, ' topic/stentry ')])"/>
+          <xsl:if test="$row-cell-count &lt; $number-cells">
+            <xsl:apply-templates select="." mode="fillInMissingSimpletableCells">
+              <xsl:with-param name="fill-in-count" select="$number-cells - $row-cell-count"/>
+            </xsl:apply-templates>
+          </xsl:if>
+        </fo:table-row>
+      </xsl:template>
+
+      <xsl:template match="*[contains(@class, ' topic/sthead ')]/*[contains(@class, ' topic/stentry ')]">
+        <fo:table-cell xsl:use-attribute-sets="sthead.stentry">
+          <xsl:call-template name="commonattributes"/>
+          <xsl:variable name="entryCol" select="count(preceding-sibling::*[contains(@class, ' topic/stentry ')]) + 1"/>
+          <xsl:variable name="frame">
+            <xsl:variable name="f" select="ancestor::*[contains(@class, ' topic/simpletable ')][1]/@frame"/>
+            <xsl:choose>
+              <xsl:when test="$f">
+                <xsl:value-of select="$f"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="$table.frame-default"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+
+          <xsl:call-template name="generateSimpleTableHorizontalBorders">
+            <xsl:with-param name="frame" select="$frame"/>
+          </xsl:call-template>
+          <xsl:if test="$frame = 'all' or $frame = 'topbot' or $frame = 'top'">
+            <xsl:call-template name="processAttrSetReflection">
+              <xsl:with-param name="attrSet" select="'__tableframe__top'"/>
+              <xsl:with-param name="path" select="$tableAttrs"/>
+            </xsl:call-template>
+          </xsl:if>
+          <xsl:if test="following-sibling::*[contains(@class, ' topic/stentry ')]">
+            <xsl:call-template name="generateSimpleTableVerticalBorders">
+              <xsl:with-param name="frame" select="$frame"/>
+            </xsl:call-template>
+          </xsl:if>
+
+          <xsl:choose>
+            <xsl:when test="number(ancestor::*[contains(@class, ' topic/simpletable ')][1]/@keycol) = $entryCol">
+              <fo:block xsl:use-attribute-sets="sthead.stentry__keycol-content">
+                <xsl:apply-templates/>
+              </fo:block>
+            </xsl:when>
+            <xsl:otherwise>
+              <fo:block xsl:use-attribute-sets="sthead.stentry__content">
+                <xsl:apply-templates/>
+              </fo:block>
+            </xsl:otherwise>
+          </xsl:choose>
+        </fo:table-cell>
+      </xsl:template>
+
+      <xsl:template match="*[contains(@class, ' topic/strow ')]/*[contains(@class, ' topic/stentry ')]">
+        <fo:table-cell xsl:use-attribute-sets="strow.stentry">
+          <xsl:call-template name="commonattributes"/>
+          <xsl:variable name="entryCol" select="count(preceding-sibling::*[contains(@class, ' topic/stentry ')]) + 1"/>
+          <xsl:variable name="frame">
+            <xsl:variable name="f" select="ancestor::*[contains(@class, ' topic/simpletable ')][1]/@frame"/>
+            <xsl:choose>
+              <xsl:when test="$f">
+                <xsl:value-of select="$f"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="$table.frame-default"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+
+          <xsl:if test="../following-sibling::*[contains(@class, ' topic/strow ')]">
+            <xsl:call-template name="generateSimpleTableHorizontalBorders">
+              <xsl:with-param name="frame" select="$frame"/>
+            </xsl:call-template>
+          </xsl:if>
+          <xsl:if test="following-sibling::*[contains(@class, ' topic/stentry ')]">
+            <xsl:call-template name="generateSimpleTableVerticalBorders">
+              <xsl:with-param name="frame" select="$frame"/>
+            </xsl:call-template>
+          </xsl:if>
+
+          <xsl:choose>
+            <xsl:when test="number(ancestor::*[contains(@class, ' topic/simpletable ')][1]/@keycol) = $entryCol">
+              <fo:block xsl:use-attribute-sets="strow.stentry__keycol-content">
+                <xsl:apply-templates/>
+              </fo:block>
+            </xsl:when>
+            <xsl:otherwise>
+              <fo:block xsl:use-attribute-sets="strow.stentry__content">
+                <xsl:apply-templates/>
+              </fo:block>
+            </xsl:otherwise>
+          </xsl:choose>
+        </fo:table-cell>
+      </xsl:template>
+
+      <xsl:template name="generateSimpleTableHorizontalBorders">
+        <xsl:param name="frame"/>
+        <xsl:choose>
+          <xsl:when test="($frame = 'all') or ($frame = 'topbot') or ($frame = 'sides') or not($frame)">
+            <xsl:call-template name="processAttrSetReflection">
+              <xsl:with-param name="attrSet" select="'__tableframe__bottom'"/>
+              <xsl:with-param name="path" select="$tableAttrs"/>
+            </xsl:call-template>
+          </xsl:when>
+        </xsl:choose>
+      </xsl:template>
+
+      <xsl:template name="generateSimpleTableVerticalBorders">
+        <xsl:param name="frame"/>
+        <xsl:choose>
+          <xsl:when test="($frame = 'all') or ($frame = 'topbot') or ($frame = 'sides') or not($frame)">
+            <xsl:call-template name="processAttrSetReflection">
+              <xsl:with-param name="attrSet" select="'__tableframe__right'"/>
+              <xsl:with-param name="path" select="$tableAttrs"/>
+            </xsl:call-template>
+          </xsl:when>
+        </xsl:choose>
+      </xsl:template>
+
+    <!-- SourceForge bug tracker item 2872988:
+         Count the max number of cells in any row of a simpletable -->
+    <xsl:template match="*[contains(@class, ' topic/sthead ')] | *[contains(@class, ' topic/strow ')]" mode="count-max-simpletable-cells">
+        <xsl:param name="maxcount" select="0" as="xs:integer"/>
+        <xsl:variable name="newmaxcount" as="xs:integer">
+            <xsl:variable name="row-cell-count" select="count(*[contains(@class, ' topic/stentry ')])"/>
+            <xsl:choose>
+                <xsl:when test="$row-cell-count >
+                    $maxcount">
+                    <xsl:sequence select="$row-cell-count"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="$maxcount"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:choose>
+            <xsl:when test="not(following-sibling::*[contains(@class, ' topic/strow ')])">
+                <xsl:value-of select="$newmaxcount"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="following-sibling::*[contains(@class, ' topic/strow ')][1]" mode="count-max-simpletable-cells">
+                    <xsl:with-param name="maxcount" select="$newmaxcount"/>
+                </xsl:apply-templates>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <!--  Simpletable processing  -->
+    <xsl:template match="*[contains(@class, ' topic/simpletable ')]">
+        <xsl:variable name="number-cells">
+            <!-- Contains the number of cells in the widest row -->
+            <xsl:apply-templates select="*[1]" mode="count-max-simpletable-cells"/>
+        </xsl:variable>
+        <fo:table xsl:use-attribute-sets="simpletable">
+            <xsl:call-template name="commonattributes"/>
+            <!-- <xsl:call-template name="univAttrs"/>
+            -->
+            <xsl:call-template name="globalAtts"/>
+            <xsl:call-template name="displayAtts">
+                <xsl:with-param name="element" select="."/>
+            </xsl:call-template>
+
+            <xsl:if test="@relcolwidth">
+                <xsl:variable name="fix-relcolwidth">
+                    <xsl:apply-templates select="." mode="fix-relcolwidth">
+                        <xsl:with-param name="number-cells" select="$number-cells"/>
+                    </xsl:apply-templates>
+                </xsl:variable>
+                <xsl:call-template name="createSimpleTableColumns">
+                    <xsl:with-param name="theColumnWidthes" select="$fix-relcolwidth"/>
+                </xsl:call-template>
+            </xsl:if>
+
+            <!-- Toss processing to another template to process the simpletable
+                 heading, and/or create a default table heading row. -->
+            <xsl:apply-templates select="." mode="dita2xslfo:simpletable-heading">
+                <xsl:with-param name="number-cells" select="$number-cells"/>
+            </xsl:apply-templates>
+
+            <fo:table-body xsl:use-attribute-sets="simpletable__body">
+                <xsl:apply-templates select="*[contains(@class, ' topic/strow ')]">
+                    <xsl:with-param name="number-cells" select="$number-cells"/>
+                </xsl:apply-templates>
+            </fo:table-body>
+
+        </fo:table>
+    </xsl:template>
+
+    <xsl:template name="createSimpleTableColumns">
+        <xsl:param name="theColumnWidthes" select="'1*'"/>
+
+        <xsl:choose>
+            <xsl:when test="contains($theColumnWidthes, ' ')">
+                <fo:table-column>
+                    <xsl:attribute name="column-width">
+                        <xsl:call-template name="xcalcColumnWidth">
+                            <xsl:with-param name="theColwidth" select="substring-before($theColumnWidthes, ' ')"/>
+                        </xsl:call-template>
+                    </xsl:attribute>
+                </fo:table-column>
+
+                <xsl:call-template name="createSimpleTableColumns">
+                    <xsl:with-param name="theColumnWidthes" select="substring-after($theColumnWidthes, ' ')"/>
+                </xsl:call-template>
+
+            </xsl:when>
+            <xsl:otherwise>
+                <fo:table-column>
+                    <xsl:attribute name="column-width">
+                        <xsl:call-template name="xcalcColumnWidth">
+                            <xsl:with-param name="theColwidth" select="$theColumnWidthes"/>
+                        </xsl:call-template>
+                    </xsl:attribute>
+                </fo:table-column>
+            </xsl:otherwise>
+        </xsl:choose>
+
+    </xsl:template>
+
+    <!-- SourceForge RFE 2874200:
+         Fill in empty cells when one is missing from strow or sthead.
+         Context for this call is strow or sthead. -->
+    <xsl:template match="*" mode="fillInMissingSimpletableCells">
+        <xsl:param name="fill-in-count" select="0"/>
+        <xsl:if test="$fill-in-count >
+            0">
+            <fo:table-cell xsl:use-attribute-sets="strow.stentry">
+                <xsl:call-template name="commonattributes"/>
+                <xsl:variable name="frame">
+                    <xsl:choose>
+                        <xsl:when test="../@frame">
+                            <xsl:value-of select="../@frame"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="$table.frame-default"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
+                <xsl:if test="following-sibling::*[contains(@class, ' topic/strow ')]">
+                    <xsl:call-template name="generateSimpleTableHorizontalBorders">
+                        <xsl:with-param name="frame" select="$frame"/>
+                    </xsl:call-template>
+                </xsl:if>
+                <xsl:if test="$frame = 'all' or $frame = 'topbot' or $frame = 'top'">
+                    <xsl:call-template name="processAttrSetReflection">
+                        <xsl:with-param name="attrSet" select="'__tableframe__top'"/>
+                        <xsl:with-param name="path" select="$tableAttrs"/>
+                    </xsl:call-template>
+                </xsl:if>
+                <xsl:if test="($frame = 'all') or ($frame = 'topbot') or ($frame = 'sides')">
+                    <xsl:call-template name="processAttrSetReflection">
+                        <xsl:with-param name="attrSet" select="'__tableframe__left'"/>
+                        <xsl:with-param name="path" select="$tableAttrs"/>
+                    </xsl:call-template>
+                    <xsl:call-template name="processAttrSetReflection">
+                        <xsl:with-param name="attrSet" select="'__tableframe__right'"/>
+                        <xsl:with-param name="path" select="$tableAttrs"/>
+                    </xsl:call-template>
+                </xsl:if>
+                <fo:block>
+                    <fo:inline>&#160;</fo:inline>
+                </fo:block>
+                <!-- Non-breaking space --> </fo:table-cell>
+            <xsl:apply-templates select="." mode="fillInMissingSimpletableCells">
+                <xsl:with-param name="fill-in-count" select="$fill-in-count - 1"/>
+            </xsl:apply-templates>
+        </xsl:if>
+    </xsl:template>
+
+    <!-- Specialized simpletable elements may override this rule to add
+         default headings for the table. By default, the existing sthead
+         element is used when specified. -->
+    <xsl:template match="*[contains(@class, ' topic/simpletable ')]" mode="dita2xslfo:simpletable-heading">
+        <xsl:param name="number-cells">
+            <xsl:apply-templates select="*[1]" mode="count-max-simpletable-cells"/>
+        </xsl:param>
+        <xsl:apply-templates select="*[contains(@class, ' topic/sthead ')]">
+            <xsl:with-param name="number-cells" select="$number-cells"/>
+        </xsl:apply-templates>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class, ' topic/sthead ')]">
+        <xsl:param name="number-cells">
+            <xsl:apply-templates select="../*[1]" mode="count-max-simpletable-cells"/>
+        </xsl:param>
+        <fo:table-header xsl:use-attribute-sets="sthead">
+            <xsl:call-template name="commonattributes"/>
+            <fo:table-row xsl:use-attribute-sets="sthead__row">
+                <xsl:apply-templates/>
+                <xsl:variable name="row-cell-count" select="count(*[contains(@class, ' topic/stentry ')])"/>
+                <xsl:if test="$row-cell-count &lt; $number-cells">
+                    <xsl:apply-templates select="." mode="fillInMissingSimpletableCells">
+                        <xsl:with-param name="fill-in-count" select="$number-cells - $row-cell-count"/>
+                    </xsl:apply-templates>
+                </xsl:if>
+            </fo:table-row>
+        </fo:table-header>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class, ' topic/strow ')]">
+        <xsl:param name="number-cells">
+            <xsl:apply-templates select="../*[1]" mode="count-max-simpletable-cells"/>
+        </xsl:param>
+        <fo:table-row xsl:use-attribute-sets="strow">
+            <xsl:call-template name="commonattributes"/>
+            <xsl:apply-templates/>
+            <xsl:variable name="row-cell-count" select="count(*[contains(@class, ' topic/stentry ')])"/>
+            <xsl:if test="$row-cell-count &lt; $number-cells">
+                <xsl:apply-templates select="." mode="fillInMissingSimpletableCells">
+                    <xsl:with-param name="fill-in-count" select="$number-cells - $row-cell-count"/>
+                </xsl:apply-templates>
+            </xsl:if>
+        </fo:table-row>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class, ' topic/sthead ')]/*[contains(@class, ' topic/stentry ')]">
+        <fo:table-cell xsl:use-attribute-sets="sthead.stentry">
+            <xsl:call-template name="commonattributes"/>
+            <xsl:variable name="entryCol" select="count(preceding-sibling::*[contains(@class, ' topic/stentry ')]) + 1"/>
+            <xsl:variable name="frame">
+                <xsl:variable name="f" select="ancestor::*[contains(@class, ' topic/simpletable ')][1]/@frame"/>
+                <xsl:choose>
+                    <xsl:when test="$f">
+                        <xsl:value-of select="$f"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$table.frame-default"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+
+            <xsl:call-template name="generateSimpleTableHorizontalBorders">
+                <xsl:with-param name="frame" select="$frame"/>
+            </xsl:call-template>
+            <xsl:if test="$frame = 'all' or $frame = 'topbot' or $frame = 'top'">
+                <xsl:call-template name="processAttrSetReflection">
+                    <xsl:with-param name="attrSet" select="'__tableframe__top'"/>
+                    <xsl:with-param name="path" select="$tableAttrs"/>
+                </xsl:call-template>
+            </xsl:if>
+            <xsl:if test="following-sibling::*[contains(@class, ' topic/stentry ')]">
+                <xsl:call-template name="generateSimpleTableVerticalBorders">
+                    <xsl:with-param name="frame" select="$frame"/>
+                </xsl:call-template>
+            </xsl:if>
+
+            <xsl:choose>
+                <xsl:when test="number(ancestor::*[contains(@class, ' topic/simpletable ')][1]/@keycol) = $entryCol">
+                    <fo:block xsl:use-attribute-sets="sthead.stentry__keycol-content">
+                        <xsl:apply-templates/>
+                    </fo:block>
+                </xsl:when>
+                <xsl:otherwise>
+                    <fo:block xsl:use-attribute-sets="sthead.stentry__content">
+                        <xsl:apply-templates/>
+                    </fo:block>
+                </xsl:otherwise>
+            </xsl:choose>
+        </fo:table-cell>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class, ' topic/strow ')]/*[contains(@class, ' topic/stentry ')]">
+        <fo:table-cell xsl:use-attribute-sets="strow.stentry">
+            <xsl:call-template name="commonattributes"/>
+            <xsl:variable name="entryCol" select="count(preceding-sibling::*[contains(@class, ' topic/stentry ')]) + 1"/>
+            <xsl:variable name="frame">
+                <xsl:variable name="f" select="ancestor::*[contains(@class, ' topic/simpletable ')][1]/@frame"/>
+                <xsl:choose>
+                    <xsl:when test="$f">
+                        <xsl:value-of select="$f"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$table.frame-default"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+
+            <xsl:if test="../following-sibling::*[contains(@class, ' topic/strow ')]">
+                <xsl:call-template name="generateSimpleTableHorizontalBorders">
+                    <xsl:with-param name="frame" select="$frame"/>
+                </xsl:call-template>
+            </xsl:if>
+            <xsl:if test="following-sibling::*[contains(@class, ' topic/stentry ')]">
+                <xsl:call-template name="generateSimpleTableVerticalBorders">
+                    <xsl:with-param name="frame" select="$frame"/>
+                </xsl:call-template>
+            </xsl:if>
+
+            <xsl:choose>
+                <xsl:when test="number(ancestor::*[contains(@class, ' topic/simpletable ')][1]/@keycol) = $entryCol">
+                    <fo:block xsl:use-attribute-sets="strow.stentry__keycol-content">
+                        <xsl:apply-templates/>
+                    </fo:block>
+                </xsl:when>
+                <xsl:otherwise>
+                    <fo:block xsl:use-attribute-sets="strow.stentry__content">
+                        <xsl:apply-templates/>
+                    </fo:block>
+                </xsl:otherwise>
+            </xsl:choose>
+        </fo:table-cell>
+    </xsl:template>
+
+    <xsl:template name="generateSimpleTableHorizontalBorders">
+        <xsl:param name="frame"/>
+        <xsl:choose>
+            <xsl:when test="($frame = 'all') or ($frame = 'topbot') or ($frame = 'sides') or not($frame)">
+                <xsl:call-template name="processAttrSetReflection">
+                    <xsl:with-param name="attrSet" select="'__tableframe__bottom'"/>
+                    <xsl:with-param name="path" select="$tableAttrs"/>
+                </xsl:call-template>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:template>
+
+    <xsl:template name="generateSimpleTableVerticalBorders">
+        <xsl:param name="frame"/>
+        <xsl:choose>
+            <xsl:when test="($frame = 'all') or ($frame = 'topbot') or ($frame = 'sides') or not($frame)">
+                <xsl:call-template name="processAttrSetReflection">
+                    <xsl:with-param name="attrSet" select="'__tableframe__right'"/>
+                    <xsl:with-param name="path" select="$tableAttrs"/>
+                </xsl:call-template>
+            </xsl:when>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template name="topicrefAttsNoToc">
