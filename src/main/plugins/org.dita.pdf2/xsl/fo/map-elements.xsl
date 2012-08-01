@@ -16,7 +16,7 @@
 
   <xsl:template match="*[contains(@class,' map/topicmeta ')]/*[contains(@class,' map/searchtitle ')]"/>
 
-  <xsl:template match="*[contains(@class, ' topic/topicmeta ')]">
+  <xsl:template match="*[contains(@class, ' map/topicmeta ')]">
     <!--
     <fo:block xsl:use-attribute-sets="topicmeta">
       <xsl:apply-templates/>
