@@ -199,16 +199,4 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="strow.stentry"></xsl:attribute-set>
 
-    <xsl:attribute-set name="reltable"></xsl:attribute-set>
-
-    <xsl:attribute-set name="reltable__title"></xsl:attribute-set>
-
-    <xsl:attribute-set name="relheader"></xsl:attribute-set>
-
-    <xsl:attribute-set name="relcolspec"></xsl:attribute-set>
-
-    <xsl:attribute-set name="relcell"></xsl:attribute-set>
-
-    <xsl:attribute-set name="relrow"></xsl:attribute-set>
-
 </xsl:stylesheet>

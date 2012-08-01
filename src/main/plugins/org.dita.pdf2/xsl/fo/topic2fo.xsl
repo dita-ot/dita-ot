@@ -68,6 +68,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:import href="front-matter.xsl"/>
     <xsl:import href="preface.xsl"/>
 
+    <xsl:import href="../../cfg/fo/attrs/map-elements-attr.xsl"/>
+    <xsl:import href="map-elements.xsl"/>
+
     <xsl:import href="../../cfg/fo/attrs/task-elements-attr.xsl"/>
     <xsl:import href="task-elements.xsl"/>
 

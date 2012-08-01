@@ -747,14 +747,6 @@ See the accompanying license.txt file for applicable licenses.
         </fo:block>
     </xsl:template>-->
 
-    <xsl:template match="*[contains(@class, ' topic/topicmeta ')]">
-<!--
-        <fo:block xsl:use-attribute-sets="topicmeta">
-            <xsl:apply-templates/>
-        </fo:block>
--->
-    </xsl:template>
-
     <xsl:template match="*[contains(@class, ' topic/tm ')]">
         <fo:inline xsl:use-attribute-sets="tm">
             <xsl:apply-templates/>
@@ -1152,8 +1144,6 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
-
-    <xsl:template match="*[contains(@class,' map/topicmeta ')]/*[contains(@class,' map/searchtitle ')]"/>
 
     <xsl:template match="*[contains(@class,' topic/abstract ')]">
         <fo:block xsl:use-attribute-sets="abstract">
