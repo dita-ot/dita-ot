@@ -99,7 +99,7 @@ See the accompanying license.txt file for applicable licenses.
   <xsl:attribute-set name="table__tableframe__bottom" use-attribute-sets="common.border__bottom">
   </xsl:attribute-set>
 
-  <xsl:attribute-set name="table__tableframe__sides" use-attribute-sets="table__tableframe__right table__tableframe__left"
+  <xsl:attribute-set name="table__tableframe__sides" use-attribute-sets="table__tableframe__right table__tableframe__left">
   </xsl:attribute-set>
 
   <xsl:attribute-set name="table__tableframe__right" use-attribute-sets="common.border__right">
