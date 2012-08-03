@@ -32,6 +32,9 @@
           <li><codeph>page-margin-left</codeph></li>
           <li><codeph>page-margin-right</codeph></li>
         </ul>
+        <p>XSLT stylesheets have been split to separate specialization topic code and new <codeph>xsl:import</codeph> instructions have been
+          added to <filepath>topic2fo.xsl</filepath>. Plug-ins which define their own shell stylesheet should be revised to import all the
+          required stylesheet modules.</p>
       </section>
     </refbody>
   </reference>
@@ -52,12 +55,12 @@
           <li>#1338 Add named error messages (in progress)</li>
         </ul>
       </section>
-      <!--section>
+      <section>
         <title>Patches</title>
         <ul>
-          <li/>
+          <li>#1350 Move table specializations into separate stylesheets (milestone 1)</li>
         </ul>
-      </section-->
+      </section>
       <section>
         <title>Bugs</title>
         <ul>
