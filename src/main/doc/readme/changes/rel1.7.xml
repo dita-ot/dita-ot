@@ -79,6 +79,8 @@
           <li>#1343 Topics with spaces in file name appear twice (milestone 1)</li>
           <li>#1346 Cannot determine the title of a xreffed topic (milestone 1)</li>
           <li>#1348 Topics copied using "copy-to" become not wellformed (DITA OT 1.6.1) (milestone 1)</li>
+          <li>#1349 "Ambiguous rule match" in PDF processing XSLT when &lt;choicetable> is used in topic (milestone
+            1)</li>
         </ul>
       </section>
     </refbody>
