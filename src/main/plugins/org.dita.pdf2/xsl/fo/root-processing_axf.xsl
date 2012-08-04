@@ -25,7 +25,9 @@
     </xsl:variable>
     <xsl:if test="exists($keywords)">
       <axf:document-info name="keywords">
-        <xsl:value-of select="$keywords" separator=", "/>
+        <xsl:attribute name="value">
+          <xsl:value-of select="$keywords" separator=", "/>
+        </xsl:attribute>
       </axf:document-info>
     </xsl:if>
     <xsl:variable name="subject" as="xs:string?">
