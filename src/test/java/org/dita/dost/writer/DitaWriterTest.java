@@ -6,6 +6,7 @@ package org.dita.dost.writer;
 
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.BufferedReader;
@@ -292,7 +293,7 @@ public class DitaWriterTest {
                 Integer c = counter.get(localName);
                 c = c == null ? 1 : c + 1;
                 counter.put(localName, c);
-                assertEquals(localName + ":" + c, xtrc);
+                assertTrue(xtrc.startsWith(localName + ":" + c + ";"));
             }
         }
 

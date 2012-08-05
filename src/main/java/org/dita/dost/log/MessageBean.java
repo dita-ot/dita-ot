@@ -11,6 +11,14 @@ package org.dita.dost.log;
 
 import static org.dita.dost.util.Constants.*;
 
+import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import org.xml.sax.Locator;
+
+import org.xml.sax.Attributes;
+
 /**
  * Class description goes here.
  * 
@@ -31,6 +39,10 @@ public final class MessageBean {
     private String reason;
 
     private String response;
+    private String srcFile;
+    private int srcLine = -1;
+    private int srcColumn = -1;
+    
 
     /**
      * Default constructor.
@@ -136,6 +148,55 @@ public final class MessageBean {
     public void setType(final String mbType) {
         this.type = mbType;
     }
+    
+    /**
+     * Set error location in source document.
+     * @param locator current location during parsing
+     * @return message bean with location set
+     */
+    public MessageBean setLocation(final Locator locator) {
+        if (locator == null) {
+            return this;
+        }
+        final MessageBean ret = new MessageBean(this);
+        if (locator.getSystemId() != null) {
+            URI s;
+            try {
+                s = new URI(locator.getSystemId());
+            } catch (final URISyntaxException e) {
+                throw new RuntimeException("Failed to parse URI '" + locator.getSystemId() + "': " + e.getMessage(), e);
+            }
+            ret.srcFile = new File(s).getAbsolutePath();
+        }
+        ret.srcLine = locator.getLineNumber(); 
+        ret.srcColumn = locator.getColumnNumber();
+        return ret;
+    }
+    
+    /**
+     * Set error location in source document.
+     * @param atts source element attributes
+     * @return message bean with location set
+     */
+    public MessageBean setLocation(final Attributes atts) {
+        final MessageBean ret = new MessageBean(this);
+        final String xtrf = atts.getValue(ATTRIBUTE_NAME_XTRF);
+        if (xtrf != null) {
+            ret.srcFile = xtrf;
+        }
+        final String xtrc = atts.getValue(ATTRIBUTE_NAME_XTRC);
+        if (xtrc != null) {
+            final int sep = xtrc.indexOf(';');
+            if (sep != -1) {
+                final int delim = xtrc.indexOf(COLON, sep + 1);
+                if (delim != -1) {
+                    ret.srcLine = Integer.parseInt(xtrc.substring(sep + 1, delim));
+                    ret.srcColumn = Integer.parseInt(xtrc.substring(delim + 1));
+                }
+            }
+        }
+        return ret;
+    }
 
     /**
      * Generate string for MessageBean.
@@ -146,6 +207,16 @@ public final class MessageBean {
     public String toString() {
         final StringBuffer buff = new StringBuffer(INT_256);
 
+        if (srcFile != null) {
+            buff.append(srcFile);
+            if (srcLine != -1 && srcColumn != -1) {
+                buff.append(':')
+                    .append(Integer.valueOf(srcLine))
+                    .append(':')
+                    .append(Integer.valueOf(srcColumn));
+            }
+            buff.append(": ");
+        }
         buff.append("[").append(id).append("]");
         buff.append("[").append(type).append("] ");
         buff.append(reason);

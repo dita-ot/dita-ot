@@ -224,5 +224,33 @@ public final class MessageUtils {
 
         return new MessageBean(messageBean.getId(), messageBean.getType(), reason, response);
     }
+    
+    /**
+     * Get the message respond to the given id with all of the parameters
+     * are replaced by those in the given 'prop', if no message found,
+     * an empty message with this id will be returned.
+     * 
+     * @param id id
+     * @param prop prop
+     * @return MessageBean
+     */
+    public static MessageBean getMessage(final String id, final String... params) {
+        final MessageBean messageBean = getMessage(id);
+        if (params.length == 0) {
+            return messageBean;
+        }
+        String reason = messageBean.getReason();
+        String response = messageBean.getResponse();
+        for (int i = 0; i < params.length; i++) {
+            final String key = "%" + Integer.toString(i + 1);
+            final String replacement = params[i];
+            reason = StringUtils.replaceAll(reason, key, replacement);
+            if (response != null) {
+                response = StringUtils.replaceAll(response, key, replacement);
+            }
+        }
+
+        return new MessageBean(messageBean.getId(), messageBean.getType(), reason, response);
+    }
 
 }

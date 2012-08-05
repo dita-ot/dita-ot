@@ -33,6 +33,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.xml.sax.Locator;
+
 import org.apache.xml.resolver.tools.CatalogResolver;
 
 import org.xml.sax.helpers.AttributesImpl;
@@ -271,17 +273,17 @@ public final class DitaWriter extends AbstractXMLFilter {
             } catch (final URISyntaxException e) {
                 switch (processingMode) {
                 case STRICT:
-                    throw new RuntimeException("Unable to parse invalid " + attName + " attribue value '" + attValue + "': " + e.getMessage(), e);
+                    throw new RuntimeException(MessageUtils.getMessage("DOTJ054E", attName, attValue).setLocation(locator) + ": " + e.getMessage(), e);
                 case SKIP:
-                    logger.logError("Unable to parse invalid " + attName + " attribute value '" + attValue + "', using invalid value");
+                    logger.logError(MessageUtils.getMessage("DOTJ054E", attName, attValue).setLocation(locator) + ", using invalid value.");
                     break;
                 case LAX:
                     try {
                         final String origAttValue = attValue;
                         attValue = new URI(URLUtils.clean(attValue)).toASCIIString();
-                        logger.logError("Unable to parse invalid " + attName + " attribute value '" + origAttValue + "', using '" + attValue + "'");
+                        logger.logError(MessageUtils.getMessage("DOTJ054E", attName, origAttValue).setLocation(locator) + ", using '" + attValue + "'.");
                     } catch (final URISyntaxException e1) {
-                        logger.logError("Unable to parse invalid " + attName + " attribute value '" + attValue + "', using invalid value");
+                        logger.logError(MessageUtils.getMessage("DOTJ054E", attName, attValue).setLocation(locator) + ", using invalid value.");
                     }
                     break;
                 }
@@ -1104,7 +1106,14 @@ public final class DitaWriter extends AbstractXMLFilter {
                     if (foreignLevel <= 1){
                         if (genDebugInfo) {
                             XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_XTRF, traceFilename.getAbsolutePath());
-                            XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_XTRC, qName + COLON + nextValue.toString());
+                            final StringBuilder xtrc = new StringBuilder(qName).append(COLON).append(nextValue.toString());
+                            if (locator != null) {                                
+                                xtrc.append(';')
+                                    .append(Integer.toString(locator.getLineNumber()))
+                                    .append(COLON)
+                                    .append(Integer.toString(locator.getColumnNumber()));
+                            }
+                            XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_XTRC, xtrc.toString());
                         }
                     }
                     
@@ -1373,10 +1382,17 @@ public final class DitaWriter extends AbstractXMLFilter {
         this.extName = extName;
     }
     //Added by Alan Date:2009-08-04 --end
-
+    
     @Override
     public void setContent(final Content content) {
         throw new UnsupportedOperationException();
     }
 
+    // Locator methods
+    
+    private Locator locator;
+    public void setDocumentLocator(Locator locator) {
+        this.locator = locator;
+    }
+    
 }

@@ -6,6 +6,7 @@ package org.dita.dost.module;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -221,7 +222,7 @@ public class DebugAndFilterModuleTest {
             Integer c = counter.get(localName);
             c = c == null ? 1 : c + 1;
             counter.put(localName, c);
-            assertEquals(localName + ":" + c, xtrc);
+            assertTrue(xtrc.startsWith(localName + ":" + c + ";"));
         }
 
         public void startPrefixMapping(final String arg0, final String arg1) throws SAXException {
