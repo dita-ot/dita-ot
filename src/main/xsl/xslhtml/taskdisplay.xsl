@@ -929,7 +929,7 @@
   <div>
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="setidaname"/>
-    <xsl:text> </xsl:text><xsl:call-template name="flagcheck"/>
+    <xsl:call-template name="flagcheck"/>
     <xsl:call-template name="revblock">
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
