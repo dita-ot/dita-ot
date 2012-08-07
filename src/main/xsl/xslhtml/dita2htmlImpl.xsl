@@ -1279,7 +1279,7 @@
 </xsl:template>
 <xsl:template name="add-br-for-empty-cmd">
   <xsl:if test="contains(@class,' task/cmd ')">
-      <xsl:variable name="text" select="text()"></xsl:variable>
+      <xsl:variable name="text" select="."></xsl:variable>
     <xsl:if test="string-length(normalize-space($text))=0">
         <br/>
       </xsl:if>
