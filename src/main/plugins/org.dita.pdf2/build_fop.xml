@@ -7,7 +7,6 @@
 
   <property name="fop.home" value="${dita.plugin.org.dita.pdf2.dir}/fop"/>
 
-  <!--Added by William on 2009-11-23 for bug:2893745 start -->
   <condition property="hasFopLib">
     <available classname="org.apache.fop.tools.anttasks.Fop">
       <classpath id="project.classpath">
@@ -19,9 +18,7 @@
       </classpath>
     </available>
   </condition>
-  <!--Added by William on 2009-11-23 for bug:2893745 end -->
 
-  <!--Added by William on 2009-11-23 for bug:2893745 start -->
   <target name="checkFOPLib">
     <dita-ot-fail id="DOTA010E">
       <condition>
@@ -31,7 +28,6 @@
       </condition>
     </dita-ot-fail>
   </target>
-  <!--Added by William on 2009-11-23 for bug:2893745 end -->
 
   <target name="transform.fo2pdf.fop.test-use">
     <condition property="use.fop.pdf.formatter">

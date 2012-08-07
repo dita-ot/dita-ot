@@ -557,7 +557,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
                         // key does not exist.
                         final Properties prop = new Properties();
                         prop.put("%1", atts.getValue(ATTRIBUTE_NAME_KEYREF));
-                        logger.logInfo(MessageUtils.getMessage("DOTJ047I", prop).toString());
+                        logger.logInfo(MessageUtils.getMessage("DOTJ047I", prop).setLocation(atts).toString());
                     }
 
                 } else if (currentElement != null && !currentElement.isRefType) {
@@ -619,7 +619,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
                 // key does not exist
                 final Properties prop = new Properties();
                 prop.put("%1", atts.getValue(ATTRIBUTE_NAME_KEYREF));
-                logger.logInfo(MessageUtils.getMessage("DOTJ047I", prop).toString());;
+                logger.logInfo(MessageUtils.getMessage("DOTJ047I", prop).setLocation(atts).toString());
             }
 
             validKeyref.push(valid);

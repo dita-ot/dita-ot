@@ -3,7 +3,7 @@
      Sourceforge.net. See the accompanying license.txt file for 
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
-<project name="build_generaltargets">
+<project xmlns:dita="http://dita-ot.sourceforge.net" name="build_generaltargets">
 
   <target name="dita.xhtml.init">
     <condition property="out.ext" value=".html">
@@ -57,12 +57,10 @@
       <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow" />
       <param name="genDefMeta" expression="${args.gen.default.meta}" if="args.gen.default.meta" />
       <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
-      <!-- added by William on 2009-09-03 for keyref bug #2849078 start -->
       <param name="BASEDIR" expression="${basedir}"/>
       <param name="OUTPUTDIR" expression="${output.dir}"/>
-      <!-- added by William on 2009-09-03 for keyref bug #2849078 end -->
       <param name="DBG" expression="${args.debug}" if="args.debug"/>
-      <dita:extension id="dita.conductor.xhtml.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+      <dita:extension id="dita.conductor.xhtml.param" behavior="org.dita.dost.platform.InsertAction"/>
   	  <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
@@ -104,12 +102,10 @@
       <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow" />
       <param name="genDefMeta" expression="${args.gen.default.meta}" if="args.gen.default.meta" />
       <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
-	  <!-- added by William on 2009-09-03 for keyref bug #2849078 start -->
       <param name="BASEDIR" expression="${basedir}"/>
       <param name="OUTPUTDIR" expression="${output.dir}"/>
-      <!-- added by William on 2009-09-03 for keyref bug #2849078 end -->
       <param name="DBG" expression="${args.debug}" if="args.debug"/>
-	  <dita:extension id="dita.conductor.html.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+	  <dita:extension id="dita.conductor.html.param" behavior="org.dita.dost.platform.InsertAction"/>
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
@@ -153,12 +149,10 @@
       <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow" />
       <param name="genDefMeta" expression="${args.gen.default.meta}" if="args.gen.default.meta" />
       <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
-      <!-- added by William on 2009-09-03 for keyref bug #2849078 start -->
       <param name="BASEDIR" expression="${basedir}"/>
       <param name="OUTPUTDIR" expression="${output.dir}"/>
-      <!-- added by William on 2009-09-03 for keyref bug #2849078 end -->
       <param name="DBG" expression="${args.debug}" if="args.debug"/>
-      <dita:extension id="dita.conductor.xhtml.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+      <dita:extension id="dita.conductor.xhtml.param" behavior="org.dita.dost.platform.InsertAction"/>
       <!--New,To generate&copy all dita files in the inputmap.dir,not all files in dita.temp.dir -->
       <mapper type="regexp" 
         from="^(${tempdirToinputmapdir.relative.value})(.*?)(\.(xml|dita))$$" 
@@ -204,12 +198,10 @@
       <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow" />
       <param name="genDefMeta" expression="${args.gen.default.meta}" if="args.gen.default.meta" />
       <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
-      <!-- added by William on 2009-09-03 for keyref bug #2849078 start -->
       <param name="BASEDIR" expression="${basedir}"/>
       <param name="OUTPUTDIR" expression="${output.dir}"/>
-      <!-- added by William on 2009-09-03 for keyref bug #2849078 end -->
       <param name="DBG" expression="${args.debug}" if="args.debug"/>
-	  <dita:extension id="dita.conductor.html.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+	  <dita:extension id="dita.conductor.html.param" behavior="org.dita.dost.platform.InsertAction"/>
       <mapper type="regexp" 
         from="^(${tempdirToinputmapdir.relative.value})(.*?)(\.(xml|dita))$$" 
         to="\2${out.ext}"/>
@@ -269,12 +261,10 @@
       <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow" />
       <param name="genDefMeta" expression="${args.gen.default.meta}" if="args.gen.default.meta" />
       <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
-      <!-- added by William on 2009-09-03 for keyref bug #2849078 start -->
       <param name="BASEDIR" expression="${basedir}"/>
       <param name="OUTPUTDIR" expression="${output.dir}"/>
-      <!-- added by William on 2009-09-03 for keyref bug #2849078 end -->
       <param name="DBG" expression="${args.debug}" if="args.debug"/>
-      <dita:extension id="dita.conductor.xhtml.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+      <dita:extension id="dita.conductor.xhtml.param" behavior="org.dita.dost.platform.InsertAction"/>
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
@@ -315,12 +305,10 @@
       <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow" />
       <param name="genDefMeta" expression="${args.gen.default.meta}" if="args.gen.default.meta" />
       <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
-      <!-- added by William on 2009-09-03 for keyref bug #2849078 start -->
       <param name="BASEDIR" expression="${basedir}"/>
       <param name="OUTPUTDIR" expression="${output.dir}"/>
-      <!-- added by William on 2009-09-03 for keyref bug #2849078 end -->
       <param name="DBG" expression="${args.debug}" if="args.debug"/>
-	  <dita:extension id="dita.conductor.html.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+	  <dita:extension id="dita.conductor.html.param" behavior="org.dita.dost.platform.InsertAction"/>
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>

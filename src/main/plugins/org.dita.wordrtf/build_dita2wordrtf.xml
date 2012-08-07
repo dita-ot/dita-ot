@@ -77,7 +77,6 @@
     </xslt>
   </target>
 
-  <!-- added by Alan on Date: 2009-10-21 for RTF output encoding problem-->
   <target name="escapeUnicode">
     <pipeline message="Escape Unicode">
       <module class="org.dita.dost.module.EscapeUnicodeModule">

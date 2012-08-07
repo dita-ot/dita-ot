@@ -6,6 +6,7 @@ package org.dita.dost.module;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -98,7 +99,10 @@ public class DebugAndFilterModuleTest {
                 new File("topics", "target-topic-a.xml"),
                 new File("topics", "target-topic-c.xml"),
                 new File("topics", "xreffin-topic-1.xml"),
+                new File("topics", "copy-to.xml"),
         };
+        final Map<File, File> copyto = new HashMap<File, File>();
+        copyto.put(new File("topics", "copy-to.xml"), new File("topics", "xreffin-topic-1.xml"));
         final TestHandler handler = new TestHandler();
         final XMLReader parser = XMLReaderFactory.createXMLReader();
         parser.setContentHandler(handler);
@@ -106,7 +110,7 @@ public class DebugAndFilterModuleTest {
             InputStream in = null;
             try {
                 in = new FileInputStream(new File(tmpDir, f.getPath()));
-                handler.setSource(new File(inputDir, f.getPath()));
+                handler.setSource(new File(inputDir, copyto.containsKey(f) ? copyto.get(f).getPath() : f.getPath()));
                 parser.parse(new InputSource(in));
             } finally {
                 if (in != null) {
@@ -205,6 +209,7 @@ public class DebugAndFilterModuleTest {
         public void startDocument() throws SAXException {
             requiredProcessingInstructions.add("path2project");
             requiredProcessingInstructions.add("workdir");
+            requiredProcessingInstructions.add("workdir-uri");
 
         }
 
@@ -217,7 +222,7 @@ public class DebugAndFilterModuleTest {
             Integer c = counter.get(localName);
             c = c == null ? 1 : c + 1;
             counter.put(localName, c);
-            assertEquals(localName + ":" + c, xtrc);
+            assertTrue(xtrc.startsWith(localName + ":" + c + ";"));
         }
 
         public void startPrefixMapping(final String arg0, final String arg1) throws SAXException {
