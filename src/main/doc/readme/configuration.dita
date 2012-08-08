@@ -28,7 +28,7 @@
             </ul><note>Disabling debug attributes will reduce the temporary file size and memory
               consumption. However, log messages will no longer have the source information
               available and the ability to debug problems may deteriorate.</note></stentry></strow>
-        <strow>
+        <strow id="processing-mode">
           <stentry><codeph>processing-mode</codeph></stentry>
           <stentry>Error recover mode. Allowed values are<ul id="ul_hlq_fp3_rg">
               <li>"strict" — enforce strict input validation</li>
