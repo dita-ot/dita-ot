@@ -33,6 +33,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.Locator;
 
 import org.apache.xml.resolver.tools.CatalogResolver;
@@ -448,7 +449,11 @@ public final class DitaWriter extends AbstractXMLFilter {
             reader = StringUtils.getXMLReader();
             if(validate==true){
                 reader.setFeature(FEATURE_VALIDATION, true);
-                reader.setFeature(FEATURE_VALIDATION_SCHEMA, true);
+                try {
+                    reader.setFeature(FEATURE_VALIDATION_SCHEMA, true);
+                } catch (final SAXNotRecognizedException e) {
+                    // Not Xerces, ignore exception
+                }
             }
             reader.setFeature(FEATURE_NAMESPACE, true);
             final CatalogResolver resolver = CatalogUtils.getCatalogResolver();
