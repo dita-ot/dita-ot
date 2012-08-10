@@ -32,6 +32,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.xpath.*;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
@@ -176,6 +177,18 @@ public final class KeyrefPaser extends XMLFilterImpl {
     private KeyrefInfo currentElement;
 
     private boolean hasChecked;
+    /** Keeps track of whether the current topicref (or a specialization of
+     *  topicref) references a key. As such, we only push/pop from this stack 
+     *  on elements where @class contains ' topic/topicref '.
+     */
+    private final Stack<Boolean> currentTopicrefHasKeyrefStack;
+    private final Stack<String> classStack;
+    /** Keeps track of whether the current topicref references a key definition 
+     *  that has non-topicref subelements, such as <topicmeta>. As such, we 
+     *  only push/pop from this stack on elements where @class contains 
+     *  ' topic/topicref '.
+     */
+    private final Stack<Boolean> useKeydefSubelementsStack;
 
     /** Flag stack to indicate whether key reference element has sub-elements. */
     private final Stack<Boolean> hasSubElem;
@@ -195,10 +208,13 @@ public final class KeyrefPaser extends XMLFilterImpl {
         keyrefLeval = 0;
         keyrefLevalStack = new Stack<Integer>();
         validKeyref = new Stack<Boolean>();
+        currentTopicrefHasKeyrefStack = new Stack<Boolean>();
+        classStack = new Stack<String>();
         empty = true;
         keyMap = new HashMap<String, String>();
         elemName = new Stack<String>();
         hasSubElem = new Stack<Boolean>();
+        useKeydefSubelementsStack = new Stack<Boolean>();
         try {
             parser = StringUtils.getXMLReader();
             parser.setFeature(FEATURE_NAMESPACE_PREFIX, true);
@@ -314,7 +330,9 @@ public final class KeyrefPaser extends XMLFilterImpl {
 
     @Override
     public void characters(final char[] ch, final int start, final int length) throws SAXException {
-        if (keyrefLeval != 0 && new String(ch,start,length).trim().length() == 0) {
+    	DitaClass ditaClass=new DitaClass(classStack.peek());
+    	
+    	if (keyrefLeval != 0 && new String(ch,start,length).trim().length() == 0) {
             if (!hasChecked) {
                 empty = true;
             }
@@ -322,11 +340,38 @@ public final class KeyrefPaser extends XMLFilterImpl {
             hasChecked = true;
             empty = false;
         }
+    	
+    	if(!currentTopicrefHasKeyrefStack.isEmpty() && 
+            currentTopicrefHasKeyrefStack.peek() && 
+            !MAP_TOPICREF.matches(ditaClass) && 
+            !useKeydefSubelementsStack.isEmpty() &&
+            useKeydefSubelementsStack.peek()) {
+          	return;
+        }
+    	
         getContentHandler().characters(ch, start, length);
     }
 
     @Override
     public void endElement(final String uri, final String localName, final String name) throws SAXException {
+        DitaClass ditaClass = new DitaClass(classStack.pop());
+        if(MAP_TOPICREF.matches(ditaClass)) {
+            if(currentTopicrefHasKeyrefStack.pop()) {            
+                useKeydefSubelementsStack.pop();
+            }
+        }
+        else {
+            /* If it's a non-topicref subelement inside a key-referencing topicref,
+             * and the key definition provides those subelements, skip this tag.
+             */
+            if(!currentTopicrefHasKeyrefStack.isEmpty() && 
+                currentTopicrefHasKeyrefStack.peek() && 
+                !MAP_TOPICREF.matches(ditaClass) && 
+                !useKeydefSubelementsStack.isEmpty() &&
+                useKeydefSubelementsStack.peek()) {
+            	return;
+            }
+        }
         if (keyrefLeval != 0 && empty && !elemName.peek().equals(MAP_TOPICREF.localName)) {
             // If current element is in the scope of key reference element
             // and the element is empty
@@ -362,7 +407,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
                         if(nodeList.getLength() > 0){
                             if(currentElement != null && !currentElement.isRefType){
                                 // only one keyword or term is used.
-                                domToSax((Element)nodeList.item(0), false);
+                                domToSax((Element)nodeList.item(0), false, true);
                             } else if(currentElement != null){
                                 // If the key reference element carries href attribute
                                 // all keyword or term are used.
@@ -375,7 +420,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
                                     for(int index =0; index<nodeList.getLength(); index++){
                                         final Node node = nodeList.item(index);
                                         if(node.getNodeType() == Node.ELEMENT_NODE){
-                                            domToSax((Element)node, true);
+                                            domToSax((Element)node, true, true);
                                         }
                                     }
                                 }
@@ -389,7 +434,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
                                 // should pull in the linktext
                                 final NodeList linktext = elem.getElementsByTagName(TOPIC_LINKTEXT.localName);
                                 if(linktext.getLength()>0){
-                                    domToSax((Element)linktext.item(0), true);
+                                    domToSax((Element)linktext.item(0), true, true);
                                 }else if (!StringUtils.isEmptyString(elem.getAttribute(ATTRIBUTE_NAME_NAVTITLE))){
                                     final AttributesImpl atts = new AttributesImpl();
                                     XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_CLASS, TOPIC_LINKTEXT.toString());
@@ -403,7 +448,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
                             }else if(currentElement != null && currentElement.isRefType){
                                 final NodeList linktext = elem.getElementsByTagName(TOPIC_LINKTEXT.localName);
                                 if(linktext.getLength()>0){
-                                    domToSax((Element)linktext.item(0), false);
+                                    domToSax((Element)linktext.item(0), false, true);
                                 }else{
                                     if (elem.getAttribute(ATTRIBUTE_NAME_NAVTITLE) != null) {
                                         final char[] ch = elem.getAttribute(ATTRIBUTE_NAME_NAVTITLE).toCharArray();
@@ -437,6 +482,17 @@ public final class KeyrefPaser extends XMLFilterImpl {
             final Attributes atts) throws SAXException {
         currentElement = null;
         final String cls = atts.getValue(ATTRIBUTE_NAME_CLASS);
+        classStack.push(cls);
+        /* If it's a non-topicref subelement inside a key-referencing topicref,
+         * and the key definition provides those subelements, skip this tag.
+         */
+        if(!currentTopicrefHasKeyrefStack.isEmpty() && 
+            currentTopicrefHasKeyrefStack.peek() && 
+            !MAP_TOPICREF.matches(cls) && 
+            !useKeydefSubelementsStack.isEmpty() &&
+            useKeydefSubelementsStack.peek()) {
+        	return;
+        }
         for (final KeyrefInfo k: keyrefInfos) {
             if (k.type.matches(cls)) {
                 currentElement = k;
@@ -446,6 +502,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
         hasChecked = false;
         empty = true;
         boolean valid = false;
+        NodeList subElements = null;
         if (atts.getIndex(ATTRIBUTE_NAME_KEYREF) == -1) {
             // If the keyrefLeval doesn't equal 0, it means that current element is under the key reference element
             if(keyrefLeval != 0){
@@ -453,12 +510,18 @@ public final class KeyrefPaser extends XMLFilterImpl {
                 hasSubElem.pop();
                 hasSubElem.push(true);
             }
+            if (MAP_TOPICREF.matches(cls)) {
+                currentTopicrefHasKeyrefStack.push(false);              
+            }
         } else {
             // If there is @keyref, use the key definition to do
             // combination.
             // HashSet to store the attributes copied from key
             // definition to key reference.
-
+            if (MAP_TOPICREF.matches(cls)) {
+                currentTopicrefHasKeyrefStack.push(true);
+            }
+            boolean useKeydefSubelements = false;
             elemName.push(name);
             //hasKeyref = true;
             if (keyrefLeval != 0) {
@@ -491,6 +554,17 @@ public final class KeyrefPaser extends XMLFilterImpl {
                 // first resolve the keyref attribute
                 if (currentElement != null && currentElement.isRefType) {
                     String target = keyMap.get(keyName);
+                    XPathFactory xpfactory = XPathFactory.newInstance();
+                    XPath xpath = xpfactory.newXPath();
+                    try {
+                        subElements = (NodeList)xpath.evaluate("/*/*[contains(@class, ' map/topicmeta ')]", elem, XPathConstants.NODESET);
+                    }
+                    catch (XPathExpressionException e){
+                    	throw new SAXException(e);
+                    }
+                    if(subElements!=null && subElements.getLength()>0) {
+                        useKeydefSubelements=true;
+                    }
                     if (target != null && target.length() != 0) {
                         String target_output = target;
                         // if the scope equals local, the target should be verified that
@@ -621,13 +695,18 @@ public final class KeyrefPaser extends XMLFilterImpl {
                 prop.put("%1", atts.getValue(ATTRIBUTE_NAME_KEYREF));
                 logger.logInfo(MessageUtils.getMessage("DOTJ047I", prop).toString());;
             }
-
+            useKeydefSubelementsStack.push(useKeydefSubelements);
             validKeyref.push(valid);
 
 
         }
 
         getContentHandler().startElement(uri, localName, name, resAtts);
+        if(!useKeydefSubelementsStack.isEmpty() && useKeydefSubelementsStack.peek()) {
+            for(int i=0;i<subElements.getLength();i++) {
+                domToSax((Element)subElements.item(i), true, false);
+            }
+        }
     }
 
     // Private methods ---------------------------------------------------------
@@ -637,15 +716,20 @@ public final class KeyrefPaser extends XMLFilterImpl {
      * 
      * @param elem element to serialize
      * @param retainElements {@code true} to serialize elements, {@code false} to only serialize text nodes.
+     * @param changeClassAttrsFromMapToTopic {@code true} to rename class attributes from map/* to topic/* 
+     *                                       when serializing the node, {@code false} to leave class 
+     *                                       attributes as-is. Set to {@code false} when serializing for 
+     *                                       key-referencing topicrefs, as later processing expects the class
+     *                                       attributes to stay as-is (ie map/topicmeta).
      */
-    private void domToSax(final Element elem, final boolean retainElements) throws SAXException{
+    private void domToSax(final Element elem, final boolean retainElements, final boolean changeClassAttrsFromMapToTopic) throws SAXException{
         // use retainElements to indicate that whether there is need to copy the element name
         if(retainElements){
             final AttributesImpl atts = new AttributesImpl();
             final NamedNodeMap namedNodeMap = elem.getAttributes();
             for(int i=0; i<namedNodeMap.getLength(); i++){
                 final Attr a = (Attr) namedNodeMap.item(i);
-                if(a.getNodeName().equals(ATTRIBUTE_NAME_CLASS)) {
+                if(a.getNodeName().equals(ATTRIBUTE_NAME_CLASS) && changeClassAttrsFromMapToTopic) {
                     XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_CLASS, changeclassValue(a.getNodeValue()));
                 } else {
                     XMLUtils.addOrSetAttribute(atts, a);
@@ -660,10 +744,10 @@ public final class KeyrefPaser extends XMLFilterImpl {
                 final Element e = (Element) node;
                 //special process for tm tag.
                 if(TOPIC_TM.matches(e)){
-                    domToSax(e, true);
+                    domToSax(e, true, changeClassAttrsFromMapToTopic);
                 }else{
                     // If the type of current node is ELEMENT_NODE, process current node.
-                    domToSax(e, retainElements);
+                    domToSax(e, retainElements, changeClassAttrsFromMapToTopic);
                 }
                 // If the type of current node is ELEMENT_NODE, process current node.
                 //stringBuffer.append(nodeToString((Element)node, retainElements));
