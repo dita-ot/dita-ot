@@ -342,7 +342,11 @@ public final class GenListModuleReader extends AbstractXMLReader {
         reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
         if(validate==true){
             reader.setFeature(FEATURE_VALIDATION, true);
-            reader.setFeature(FEATURE_VALIDATION_SCHEMA, true);
+            try {
+                reader.setFeature(FEATURE_VALIDATION_SCHEMA, true);
+            } catch (final SAXNotRecognizedException e) {
+                // Not Xerces, ignore exception
+            }
         }else{
             final String msg=MessageUtils.getMessage("DOTJ037W").toString();
             logger.logWarn(msg);

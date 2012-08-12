@@ -29,7 +29,7 @@
       <title>Filtering</title>
       <p>Error recovery:</p>
       <ul>
-        <li>When there are multiple <codeph>revprop</codeph> elements with the same val attribute, no error of
+        <li>When there are multiple <codeph>revprop</codeph> elements with the same val attribute, no error or
           warning is thrown</li>
         <li>When multiple prop elements define a duplicate attribute and value combination,
           attribute default, or fall-back behaviour, <msgnum>DOTJ007E</msgnum> error is thrown.</li>
@@ -46,7 +46,7 @@
         <dlentry>
           <dt>xtrc</dt>
           <dd>element counter that uses the
-            format<codeblock>element-name ":" integer-counter</codeblock></dd>
+            format<codeblock>element-name ":" integer-counter ";" line-number ":" column-number</codeblock></dd>
         </dlentry>
       </dl>
     </section>
@@ -63,6 +63,11 @@
       <p>When a <codeph>topicref</codeph> element that references a map contains child
           <codeph>topicref</codeph> elements, <msgnum>DOTX068W</msgnum> error is thrown and the
         child <codeph>topicref</codeph> elements are ignored. </p>
+    </section>
+    <section id="section_h3h_jsx_1h">
+      <title>Link processing</title>
+      <p>When the value of <codeph>href</codeph> attribute is not a valid URI reference, <msgnum>DOTJ054E</msgnum> error is thrown. Depending on
+        <xref href="../readme/configuration.dita#configuration/processing-mode">error recover mode</xref>, error recover may be attempted.</p>
     </section>
   </refbody>
 </reference>

@@ -11,7 +11,7 @@
       </step>
       <step>
       <cmd>Create a plug-in configuration file <filepath>plugin.xml</filepath>, declare the new
-          transformation type <varname>print-pdf</varname> and dependencies.</cmd>
+          transformation type <keyword>print-pdf</keyword> and dependencies.</cmd>
       <info><fig><codeblock>&lt;?xml version='1.0' encoding='UTF-8'?>
 &lt;plugin id="com.example.print-pdf">
   &lt;require plugin="org.dita.pdf2"/>
@@ -107,7 +107,7 @@
   plugin.xml</codeblock>
     </result>
     <postreq id="postreq_mqj_zz3_tf">
-      <p>Run integration process to install the plug-in and take the <varname>print-pdf</varname>
+      <p>Run integration process to install the plug-in and take the <keyword>print-pdf</keyword>
         transformation type into use.</p>
     </postreq>
   </taskbody>
