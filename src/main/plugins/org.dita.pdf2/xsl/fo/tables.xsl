@@ -114,12 +114,14 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="*[contains(@class, ' topic/dt ')]">
         <fo:block xsl:use-attribute-sets="dlentry.dt__content">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/dd ')]">
         <fo:block xsl:use-attribute-sets="dlentry.dd__content">
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
