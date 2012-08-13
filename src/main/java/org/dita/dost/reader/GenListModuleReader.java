@@ -1345,14 +1345,17 @@ public final class GenListModuleReader extends AbstractXMLReader {
             if(UNIX_SEPARATOR.equals(File.separator)){
                 attrValue = UNIX_SEPARATOR + attrValue;
             }
+        } else if (attrValue.startsWith("file:") && !attrValue.startsWith("file:/")) {
+            attrValue = attrValue.substring("file:".length());
         }
         //Added by William on 2010-01-05 for bug:2926417 end
         final File target=new File(attrValue);
         if(target.isAbsolute() &&
                 !ATTRIBUTE_NAME_DATA.equals(attrName)){
             attrValue=FileUtils.getRelativePath(rootFilePath,attrValue);
-            //for object tag bug:3052156
-        }else if(ATTRIBUTE_NAME_DATA.equals(attrName)){
+        }
+        //for object tag bug:3052156
+        if(ATTRIBUTE_NAME_DATA.equals(attrName)){
             if(!StringUtils.isEmptyString(codebase)){
                 filename = FileUtils.normalizeDirectory(codebase, attrValue);
             }else{
