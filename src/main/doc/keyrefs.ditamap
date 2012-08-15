@@ -12,6 +12,14 @@ See the accompanying license.txt file for applicable licenses.
     href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Stable%20Release/DITA%20Open%20Toolkit%201.6/"/>
   <keydef format="html" keys="download.dita-ot.test-build" scope="external"
     href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Latest%20Test%20Build/DITA%20OT%201.6.M5/"/>
+  <keydef format="html" keys="download.fop" scope="external"
+    href="http://xmlgraphics.apache.org/fop/download.html">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">http://xmlgraphics.apache.org/fop/download.html</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">http://xmlgraphics.apache.org/fop/download.html</linktext>
+    </topicmeta>
+  </keydef>
   <keydef format="html" keys="download.html-help-workshop" scope="external"
     href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms669985%28v=vs.85%29.aspx"/>
   <keydef format="html" keys="download.icu4j" scope="external"
