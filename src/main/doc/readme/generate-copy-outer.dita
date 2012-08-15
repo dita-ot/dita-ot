@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="concept_rcv_xbp_xg">
+ <title><parmname>generate.outer.copy</parmname> parameter</title>
+ <shortdesc>Elaboration on how the <parmname>generate.outer.copy</parmname> parameter
+  functions.</shortdesc>
+ <conbody>
+  <section>
+   <title>Background</title>
+   <p>This is an issue in the following situations:<ul>
+     <li>The DITA map is in a directory that is a peer to directories that contain referenced
+      objects.</li>
+     <li>The DITA map is in a directory that is below the directories that contain the referenced
+      objects.</li>
+    </ul></p>
+   <p>Let's assume that the directory structure for the DITA content looks like the
+    following:<pre>maps
+topics
+images</pre>The DITA map is in the <filepath>maps</filepath>
+    directory, the topics are in the<filepath> topics</filepath> directory, and the images are in
+    the <filepath>images</filepath> directory.</p></section>
+ <section>     <title>Setting the <parmname>generate.outer.copy</parmname> parameter to
+        <option>1</option></title>
+   <p>Let's assume that you run the XHTML transformation and specify an output directory of
+          <filepath>C:\A-test</filepath>. By default, The DITA-OT uses the
+          <parmname>generate.outer.copy</parmname> parameter with a value of <option>1</option>.
+        Output is not built for the topics. You receive only the following
+        output:<pre>A-test
+--- dita.list
+--- dita.xml.properties
+--- index.html
+--- commonltr.css
+--- commonrtl.css</pre>The
+          <filepath>index.html</filepath> file contains the navigation structure, but all the links
+        are broken, since no XHTML files were built for the topics.</p>
+   <p>How do you fix this? By specifying a value of <option>2</option> or <option>3</option> for the
+     <parmname>generate.outer.copy</parmname> parameter. </p>
+  </section>
+  <section>
+   <title>Setting the <parmname>generate.outer.copy</parmname> parameter to
+    <option>2</option></title>
+   <p>Let's assume that you run the XHTML transformation again and specify the following parameters:<ul>
+     <li>The <parmname>generate.outer.copy</parmname> parameter is set to <option>2</option>.</li>
+     <li>The <parmname>output.dir</parmname> parameter is set to
+      <filepath>C:\A-test</filepath>.</li>
+    </ul></p>
+   <p>This is what your output looks
+    like:<pre>C:\A-test
+--- dita.list
+--- dita.xml.properties
+--- index.html
+--- commonltr.css
+--- commonrtl.css
+...
+C:\images
+...
+C:\topics</pre></p>
+   <p>The links in the output all work properly. However, depending on how many other directories
+    are located at the same level of your build system as the output directory, it might not be easy
+    gather all the output together if you need to copy it elsewhere.</p>
+  </section>
+  <section>
+   <title>Setting the <parmname>generate.outer.copy</parmname> parameter to
+    <option>3</option></title>
+   <p>Now your output directory structure looks like
+    this:<pre>C:\A-test
+--- images\
+--- maps\
+--- topics\</pre>The index.html file is in the maps
+    directory, and the CSS and other files are located in the output directory,
+     <filepath>C:\A-test</filepath>. Copying the output directory is simplified.</p>
+  </section>
+ </conbody>
+</concept>

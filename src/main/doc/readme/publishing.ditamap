@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map>
+ <title>Publishing</title>
+ <topicref href="tranforming-dita-content.dita" navtitle="Transforming DITA content">
+  <topicref href="AvailableTransforms.dita">
+   <topicref href="dita2docbook.dita"/>
+   <topicref href="dita2eclipsecontent.dita"/>
+   <topicref href="dita2eclipsehelp.dita"/>
+   <topicref href="dita2htmlhelp.dita" platform="windows"/>
+   <topicref href="dita2legacypdf.dita" importance="deprecated"/>
+   <topicref href="dita2odt.dita"/>
+   <topicref href="dita2pdf.dita"/>
+   <topicref href="dita2word.xml"/>
+   <topicref href="dita2tocjs.dita"/>
+   <topicref href="dita2troff.dita"/>
+   <topicref href="dita2xhtml.dita"/>
+  </topicref>
+  <topicref href="DITA-ant.xml" navtitle="Running DITA-OT from Ant">
+   <topicref href="ant.dita" navtitle="Ant overview"/>
+   <topicref href="DITA-antuse.xml" navtitle="Building output using Ant"/>
+   <topicref href="creating-an-ant-build-script.dita" navtitle="Creating an Ant build script"/>
+   <topicref href="dita-ot_ant_properties.dita" navtitle="Ant parameters">
+    <topicref href="ant-parameters-all-transformation-types.dita"
+     navtitle="All transformation types"/>
+    <topicref href="ant-parameters-common-html-transtypes.dita"
+     navtitle="HTML-based tranformations">
+     <topicref href="generate-copy-outer.dita" toc="no"/>
+    </topicref>
+    <topicref href="ant-parameters-eclipse-content-transformation.dita"
+     navtitle="Eclipse content transformation"/>
+    <topicref href="ant-parameters-eclipse-help-transformation.dita"
+     navtitle="Eclipse help transformation"/>
+    <topicref href="ant-parameters-html-help-transformation.dita"
+     navtitle="HTML Help transformation" platform="windows"/>
+    <topicref href="ant-parameters-javahelp-transformation.dita"
+     navtitle="JavaHelp transformation"/>
+    <topicref href="ant-parameters-legacypdf-transformation.dita"
+     navtitle="Legacy PDF transformation"/>
+    <topicref href="ant-parameters-odt-transformation.dita" navtitle="ODT transformation"/>
+    <topicref href="ant-parameters-other.dita" navtitle="Other"/>
+    <topicref href="ant-parameters-pdf2-transformation.dita" navtitle="PDF2 transformation"/>
+    <topicref href="ant-parameters-xhtml-transformation.dita" navtitle="XHTML transformation"
+    />
+   </topicref>
+  </topicref>
+  <topicref href="DITA-javacmd.xml" navtitle="Running DITA-OT from the command-line tool">
+   <topicref href="command-line-tool.dita" navtitle="Command-line tool"/>
+   <topicref href="building-output-using-cl-tool.dita"
+    navtitle="Building output using the command-line tool"/>
+   <topicref href="dita-ot_java_properties.dita">
+    <topicref href="tool-parameters-all-transformation.dita" navtitle="All transformations"/>
+    <topicref href="tool-parameters-common-html-transformation.dita"
+     navtitle="HTML-based transformations"/>
+    <topicref href="tool-parameters-eclipsecontent-transformation.dita"
+     navtitle="Eclipse content"/>
+    <topicref href="tool-parameters-eclipsehelp-transformation.dita" navtitle="Eclipse help"/>
+    <topicref href="tool-parameters-htmlhelp-transformation.dita" navtitle="HTML help"
+     platform="windows"/>
+    <topicref href="tool-parameters-javahelp-transformation.dita"
+     navtitle="JavaHelp transformation"/>
+    <topicref href="tool-parameters-odt-transformation.dita" navtitle="ODT transformation"/>
+    <topicref href="tool-parameters-other.dita" navtitle="Other"/>
+    <topicref href="tool-parameters-pdf-transformation.dita" navtitle="PDF tranformation"/>
+    <topicref href="tool-parameters-xhtml-transformation.dita" navtitle="XHTML tranformation"
+    />
+   </topicref>
+  </topicref>
+ </topicref>
+</map>
