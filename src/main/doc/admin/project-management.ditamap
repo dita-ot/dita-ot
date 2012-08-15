@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map>
+ <title>Project Management Guidelines</title>
+ <topicref href="DITA-OTProjectManagement.xml" navtitle="Project Management">
+  <topicref href="DITA-OTProjectGoals.xml"/>
+  <topicref href="DevelopmentProcess.xml">
+   <topicref href="ProjectRoles.xml"/>
+   <topicref href="ReleaseLifeCycle.xml"/>
+   <topicref href="FixesAndFeatures.xml"/>
+  </topicref>
+  <topicref href="HowToParticipate.xml">
+   <topicref href="BugFixGuidelines-NoCLA.xml"/>
+   <topicref href="ContributionPolicy.xml"/>
+   <topicref href="ContributionForm.xml"/>
+  </topicref>
+ </topicref>
+</map>
