@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="installing-full-easy" platform="windows" xml:lang="en-us">
+    <title>Installing the full-easy-install package</title>
+    <shortdesc id="what-is-easyinstall">For the simplest installation experience, install the
+        full-easy-install package. This package can be installed on Linux, Mac OSX, and Windows. It
+        contains everything that you need to run the DITA-OT except for Java.</shortdesc>
+    <taskbody>
+        <prereq>
+            <ul>
+                <li>Ensure that you have Java JRE or JDK, version <keyword
+                        keyref="tool.java.version"/> or later installed.</li>
+                <li importance="optional">Ensure that you have HTML Help Workshop installed, if you
+                    want to generate HTML Help.</li>
+            </ul>
+        </prereq>
+        <steps>
+            <step>
+                <cmd>Download the full-easy package from SourceForge.</cmd>
+                <info>You can download either the latest stable release or the latest test
+                    build.</info>
+                <choicetable>
+                    <chhead>
+                        <choptionhd>Download page</choptionhd>
+                        <chdeschd>File names</chdeschd>
+                    </chhead>
+                    <chrow>
+                        <choption><xref keyref="download.dita-ot.stable-release">Latest stable
+                                release</xref></choption>
+                        <chdesc>
+                            <sl>
+                                <sli platform="linux"><filepath>DITA-OT<keyword
+                                            keyref="release.stable-version"
+                                        />_full_easy_install_bin.tar.gz</filepath></sli>
+                                <sli platform="windows"><filepath>DITA-OT<keyword
+                                            keyref="release.stable-version"
+                                        />_full_easy_install_bin.zip</filepath></sli>
+                            </sl>
+                        </chdesc>
+                    </chrow>
+                    <chrow>
+                        <choption><xref keyref="download.dita-ot.test-build">Latest test
+                                build</xref></choption>
+                        <chdesc>
+                            <sl>
+                                <sli platform="linux"><filepath>DITA-OT<keyword
+                                            keyref="release.version"
+                                        />_full_easy_install_bin.tar.gz</filepath></sli>
+                                <sli platform="windows"><filepath>DITA-OT<keyword
+                                            keyref="release.version"
+                                        />_full_easy_install_bin.zip</filepath></sli>
+                            </sl>
+                        </chdesc>
+                    </chrow>
+                </choicetable>
+            </step>
+            <step>
+                <cmd>Extract the contents of the package to the directory where you want to install
+                    the DITA-OT.</cmd>
+            </step>
+            <step>
+                <cmd>Run the <filepath>startcmd</filepath> file that is applicable for your
+                    operating system.</cmd>
+                <stepresult>This defines the necessary environment variables and opens a DOS prompt
+                    or terminal window in which you can invoke the toolkit. You can use the window
+                    to run as many builds as you want; if you close the window, you will need to run
+                    the applicable <filepath>startcmd</filepath> file again.</stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>
