@@ -2,17 +2,17 @@
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
 <map>
  <title>Troubleshooting</title>
- <topicref href="readme/troubleshooting-overview.dita">
-  <topicref href="readme/DITA-messages.xml">
-   <topicref href="readme/DITA-messages-details.xml" processing-role="resource-only"/>
+ <topicref href="troubleshooting-overview.dita">
+  <topicref href="DITA-messages.xml">
+   <topicref href="DITA-messages-details.xml" processing-role="resource-only"/>
   </topicref>
-  <topicref href="readme/DITA-troubleshooting.xml"/>
-  <topicref href="readme/DITA-log.xml"/>
-  <topicref href="readme/accessing-help-from-the-cl-tool.dita"
+  <topicref href="DITA-troubleshooting.xml"/>
+  <topicref href="DITA-log.xml"/>
+  <topicref href="accessing-help-from-the-cl-tool.dita"
    navtitle="Accessing help from the command-line tool"/>
-  <topicref href="readme/determining-version-of-ditaot.dita"
+  <topicref href="determining-version-of-ditaot.dita"
    navtitle="Determining version of the DITA OT"/>
-  <topicref href="readme/enabling-debug-mode.dita"/>
-  <topicref href="readme/increasing-the-jvm.dita"/>
+  <topicref href="enabling-debug-mode.dita"/>
+  <topicref href="increasing-the-jvm.dita"/>
  </topicref>
 </map>

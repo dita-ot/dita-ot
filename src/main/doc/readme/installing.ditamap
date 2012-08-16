@@ -2,7 +2,6 @@
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
 <map>
  <title>Installing</title>
- <mapref href="../keyrefs.ditamap" format="ditamap" processing-role="resource-only"/>
  <topicref href="DITA-installation.xml">
   <topicref href="distribution_packages.dita"/>
   <topicref href="prerequisite-software.dita" navtitle="Prerequisite software"/>

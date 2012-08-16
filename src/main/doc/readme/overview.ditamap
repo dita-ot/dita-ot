@@ -2,13 +2,13 @@
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
 <map>
  <title>Overview of the DITA-OT</title>
- <topicref href="readme/overview-of-dita-ot.dita" navtitle="Overview of the DITA Open Toolkit">
-  <topicref href="readme/changes/rel1.7.xml" locktitle="yes">
+ <topicref href="overview-of-dita-ot.dita" navtitle="Overview of the DITA Open Toolkit">
+  <topicref href="changes/rel1.7.xml" locktitle="yes">
    <topicmeta>
     <navtitle>Release notes</navtitle>
    </topicmeta>
   </topicref>
-  <topicref href="specification/DITA1-2.xml"/>
-  <topicref href="readme/DITA-tested.xml"/>
+  <topicref href="../specification/DITA1-2.xml"/>
+  <topicref href="DITA-tested.xml"/>
  </topicref>
 </map>

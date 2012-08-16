@@ -240,13 +240,5 @@ sr-latn-rs</entry>
 </tgroup>
 </table>
 </refbody>
-<related-links>
-<link href="../dev_ref/plugin-addgeneratedtext.xml">
-<?ditaot usertext?>
-<linktext class="- topic/linktext "><?ditaot usertext?>How to add support for new languages for
-XHTML</linktext>
-<?ditaot genshortdesc?>
-</link>
-</related-links>
 </reference><?Pub Caret -3?>
 <?Pub *0000002446?>

@@ -61,6 +61,7 @@
     <topicref href="plugin-newextensions.dita"/>
     <topicref href="plugin-sample.dita"/>
   </topicset>
+  <topicref href="../readme/dita2pdf-customization.dita"/>
   <topicref href="ant-properties.dita"/>
   <topicref href="DITA1.2-implementation-dependent-features.dita"/>
   <topicref href="extended-functionality.dita"/>
