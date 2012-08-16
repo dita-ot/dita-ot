@@ -10,9 +10,9 @@
 on Unix-style platforms, particularly for programs such as the Man page viewer.</shortdesc>
 <conbody>
 <p>Each DITA topic generally produces one troff output file. The <option>troff</option>
-tranformation supports most common DITA structures, but it does not support &lt;table&gt; or
-&lt;simpletable&gt; elements. Most testing of troff output was performed using the Cygwin Linux
-emulator.</p>
+   transformation supports most common DITA structures, but it does not support &lt;table&gt; or
+   &lt;simpletable&gt; elements. Most testing of troff output was performed using the Cygwin Linux
+   emulator.</p>
 </conbody>
 </concept><?Pub Caret -3?>
 <?Pub *0000000739?>

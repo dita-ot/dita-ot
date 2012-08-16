@@ -22,7 +22,7 @@
         <steps>
             <step>
                 <cmd id="download-minimal-standard">Download the minimal or standard package from
-                    SourceForge.</cmd>
+                        <xref keyref="download.dita-ot.current-release">SourceForge</xref>.</cmd>
                 <info id="recommend-stable-release">For production use, we recommend that you use
                     the latest stable release.</info>
             </step>

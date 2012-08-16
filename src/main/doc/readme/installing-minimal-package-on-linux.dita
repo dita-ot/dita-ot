@@ -8,35 +8,21 @@
             conref="conref-installing.dita#conref-installing/installing-minimal-standard-package"/>
         <steps>
             <step>
-                <cmd>Download the minimal or standard package from SourceForge.</cmd>
+                <cmd conref="conref-installing.dita#conref-installing/download-minimal-standard"/>
                 <choicetable>
                     <chhead>
-                        <choptionhd>Download page</choptionhd>
-                        <chdeschd>File names</chdeschd>
+                        <choptionhd>Package</choptionhd>
+                        <chdeschd>File name</chdeschd>
                     </chhead>
                     <chrow>
-                        <choption><xref keyref="download.dita-ot.stable-release">Latest stable
-                                release</xref></choption>
-                        <chdesc>
-                            <sl>
-                                <sli><filepath>DITA-OT<keyword keyref="release.stable-version"
-                                        />_minimal_bin.tar.gz</filepath></sli>
-                                <sli><filepath>DITA-OT<keyword keyref="release.stable-version"
-                                        />_standard_bin.tar.gz</filepath></sli>
-                            </sl>
-                        </chdesc>
+                        <choption>Minimal</choption>
+                        <chdesc><filepath>DITA-OT<keyword keyref="release.version"
+                                />_minimal_bin.tar.gz</filepath></chdesc>
                     </chrow>
                     <chrow>
-                        <choption><xref keyref="download.dita-ot.test-build">Latest test
-                                build</xref></choption>
-                        <chdesc>
-                            <sl>
-                                <sli><filepath>DITA-OT<keyword keyref="release.version"
-                                        />_minimal_bin.tar.gz</filepath></sli>
-                                <sli><filepath>DITA-OT<keyword keyref="release.version"
-                                        />_standard_bin.tar.gz</filepath></sli>
-                            </sl>
-                        </chdesc>
+                        <choption>Standard</choption>
+                        <chdesc><filepath>DITA-OT<keyword keyref="release.version"
+                                />_standard_bin.tar.gz</filepath></chdesc>
                     </chrow>
                 </choicetable>
                 <info>For production use, we recommend that you use the latest stable

@@ -11,32 +11,18 @@
                 <cmd conref="conref-installing.dita#conref-installing/download-minimal-standard"/>
                 <choicetable>
                     <chhead>
-                        <choptionhd>Download page</choptionhd>
-                        <chdeschd>File names</chdeschd>
+                        <choptionhd>Package</choptionhd>
+                        <chdeschd>File name</chdeschd>
                     </chhead>
                     <chrow>
-                        <choption><xref keyref="download.dita-ot.stable-release">Latest stable
-                                release</xref></choption>
-                        <chdesc>
-                            <sl>
-                                <sli><filepath>DITA-OT<keyword keyref="release.stable-version"
-                                        />_minimal_bin.zip</filepath></sli>
-                                <sli><filepath>DITA-OT<keyword keyref="release.stable-version"
-                                        />_standard_bin.zip</filepath></sli>
-                            </sl>
-                        </chdesc>
+                        <choption>Minimal</choption>
+                        <chdesc><filepath>DITA-OT<keyword keyref="release.version"
+                                />_minimal_bin.zip</filepath></chdesc>
                     </chrow>
                     <chrow>
-                        <choption><xref keyref="download.dita-ot.test-build">Latest test
-                                build</xref></choption>
-                        <chdesc>
-                            <sl>
-                                <sli><filepath>DITA-OT<keyword keyref="release.version"
-                                        />_minimal_bin.zip</filepath></sli>
-                                <sli><filepath>DITA-OT<keyword keyref="release.version"
-                                        />_standard_bin.zip</filepath></sli>
-                            </sl>
-                        </chdesc>
+                        <choption>Standard</choption>
+                        <chdesc><filepath>DITA-OT<keyword keyref="release.version"
+                                />_standard_bin.zip</filepath></chdesc>
                     </chrow>
                 </choicetable>
                 <info conref="conref-installing.dita#conref-installing/recommend-stable-release"/>

@@ -62,7 +62,7 @@ in a Web browser.</cmd>
 </fig>
 </stepresult></step>
 </steps>
-<result>The DITA-OT tranformed the<filepath> hierarchy.ditamap</filepath> file (located in the
+<result>The DITA-OT transformed the<filepath> hierarchy.ditamap</filepath> file (located in the
 samples directory) to XHTML; it wrote the output to the <filepath>out/</filepath>
 directory.</result>
 </taskbody>

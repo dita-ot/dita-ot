@@ -16,41 +16,22 @@
         </prereq>
         <steps>
             <step>
-                <cmd>Download the full-easy package from SourceForge.</cmd>
-                <info>You can download either the latest stable release or the latest test
-                    build.</info>
+                <cmd>Download the full-easy package from <xref
+                        keyref="download.dita-ot.current-release">SourceForge</xref>.</cmd>
                 <choicetable>
                     <chhead>
-                        <choptionhd>Download page</choptionhd>
-                        <chdeschd>File names</chdeschd>
+                        <choptionhd>Operating system</choptionhd>
+                        <chdeschd>File name</chdeschd>
                     </chhead>
-                    <chrow>
-                        <choption><xref keyref="download.dita-ot.stable-release">Latest stable
-                                release</xref></choption>
-                        <chdesc>
-                            <sl>
-                                <sli platform="linux"><filepath>DITA-OT<keyword
-                                            keyref="release.stable-version"
-                                        />_full_easy_install_bin.tar.gz</filepath></sli>
-                                <sli platform="windows"><filepath>DITA-OT<keyword
-                                            keyref="release.stable-version"
-                                        />_full_easy_install_bin.zip</filepath></sli>
-                            </sl>
-                        </chdesc>
+                    <chrow  platform="linux">
+                        <choption>Linux or Mac OSX</choption>
+                        <chdesc><filepath>DITA-OT<keyword keyref="release.stable-version"
+                                />_full_easy_install_bin.tar.gz</filepath></chdesc>
                     </chrow>
-                    <chrow>
-                        <choption><xref keyref="download.dita-ot.test-build">Latest test
-                                build</xref></choption>
-                        <chdesc>
-                            <sl>
-                                <sli platform="linux"><filepath>DITA-OT<keyword
-                                            keyref="release.version"
-                                        />_full_easy_install_bin.tar.gz</filepath></sli>
-                                <sli platform="windows"><filepath>DITA-OT<keyword
-                                            keyref="release.version"
-                                        />_full_easy_install_bin.zip</filepath></sli>
-                            </sl>
-                        </chdesc>
+                    <chrow platform="windows">
+                        <choption>Windows</choption>
+                        <chdesc><filepath>DITA-OT<keyword keyref="release.version"
+                                />_full_easy_install_bin.zip</filepath></chdesc>
                     </chrow>
                 </choicetable>
             </step>
