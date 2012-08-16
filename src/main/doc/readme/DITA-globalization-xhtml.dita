@@ -7,7 +7,7 @@
 <shortdesc>The DITA Open Toolkit (DITA-OT) supports over 50 languages and language variants for the
 HTML- and XHTML-based transformations, for example, Eclipse Help, HTML Help, and TocJS.</shortdesc>
 <refbody>
-<table frame="all">
+<table frame="all" rowsep="1" colsep="1">
 <title>Supported languages: HTML- and XHTML-based transformations</title>
 <tgroup cols="2">
 <colspec colnum="1" colwidth="1.0*"/>
@@ -15,7 +15,7 @@ HTML- and XHTML-based transformations, for example, Eclipse Help, HTML Help, and
 <thead>
 <row>
 <entry>Language</entry>
-<entry >Language code</entry>
+<entry>Language code</entry>
 </row>
 </thead>
 <tbody>
@@ -192,13 +192,12 @@ HTML- and XHTML-based transformations, for example, Eclipse Help, HTML Help, and
 <entry>ru or ru-ru</entry>
 </row>
 <row>
-<entry >Serbian (Cyrillic script)</entry>
+<entry>Serbian (Cyrillic script)</entry>
 <entry>sr, sr-rs, or sr-sp</entry>
 </row>
 <row>
 <entry>Serbian (Latin script)</entry>
-<entry>
-sr-latn-rs</entry>
+<entry> sr-latn-rs</entry>
 </row>
 <row>
 <entry>Slovak</entry>

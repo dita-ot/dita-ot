@@ -25,7 +25,7 @@
                     </chhead>
                     <chrow  platform="linux">
                         <choption>Linux or Mac OSX</choption>
-                        <chdesc><filepath>DITA-OT<keyword keyref="release.stable-version"
+                        <chdesc><filepath>DITA-OT<keyword keyref="release.version"
                                 />_full_easy_install_bin.tar.gz</filepath></chdesc>
                     </chrow>
                     <chrow platform="windows">

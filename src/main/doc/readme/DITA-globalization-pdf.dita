@@ -17,7 +17,7 @@ the Legacy PDF transformation?</li>
 <li>Can someone confirm that the PDF2 transformation actually supports these language codes?</li>
 </ul></draft-comment>
 </section>
-<table frame="all">
+<table frame="all" colsep="1" rowsep="1">
 <title>Supported languages: PDF transformation</title>
 <tgroup cols="2">
 <colspec colname="col1" colnum="1" colwidth="1.0*"/>

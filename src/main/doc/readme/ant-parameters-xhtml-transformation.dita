@@ -14,11 +14,11 @@
     </metadata>
   </prolog>
   <refbody>
-    <table>
+    <table frame="all" colsep="1" rowsep="1">
       <title>Ant parameters: XHTML transformation</title>
       <tgroup cols="2">
-        <colspec colname="col1" colwidth="150*"/>
-        <colspec colname="col3" colwidth="200*"/>
+        <colspec colname="COLSPEC0" colwidth="1.50*"/>
+        <colspec colname="COLSPEC3" colwidth="4*"/>
         <thead>
           <row>
             <entry colname="col1" valign="bottom">Parameters</entry>
