@@ -1,12 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
 <map>
+  <topicref keyref="all" href="a.xml" collection-type="family" format="html" linking="sourceonly" locktitle="yes"
+            navtitle="override"/>
+  <topicref keys="all" href="b.xml" collection-type="choice" format="dita" id="all" linking="normal"
+          locktitle="no" navtitle="all" processing-role="resource-only">
+    <topicmeta>
+      <navtitle>override navtitle</navtitle>
+      <linktext>override linktext</linktext>
+      <searchtitle>override searchtitle</searchtitle>
+      <shortdesc>override shortdesc</shortdesc>
+      <author>override author</author>
+      <source>override source</source>
+      <publisher>override publisher</publisher>
+      <copyright>
+        <copyryear year="2011"/>
+        <copyrholder>override Example</copyrholder>
+      </copyright>
+      <critdates>
+        <created date="2012-08-17"/>
+      </critdates>
+      <permissions view="classified"/>
+      <metadata>
+        <audience name="override-metadata-audience"/>
+        <category>override metadata category</category>
+        <keywords>
+          <keyword>override metadata keywords</keyword>
+        </keywords>
+        <prodinfo>
+          <prodname>override metadata test</prodname>
+          <vrmlist>
+            <vrm version="2"/>
+          </vrmlist>
+        </prodinfo>
+        <othermeta name="override-metadata-othermeta" content="override-metadata-othermeta"/>
+        <data>override metadata data</data>
+        <data-about>
+          <data>override metadata data-about</data>
+        </data-about>
+        <foreign>override metadata foreign</foreign>
+        <unknown>override metadata unknown</unknown>
+      </metadata>
+      <audience name="override-audience"/>
+      <category>override category</category>
+      <keywords>
+        <keyword>override keywords</keyword>
+      </keywords>
+      <exportanchors>
+        <anchorid id="override-anchorid"/>
+      </exportanchors>
+      <prodinfo>
+        <prodname>override test</prodname>
+        <vrmlist>
+          <vrm version="2"/>
+        </vrmlist>
+      </prodinfo>
+      <othermeta name="override-othermeta" content="override-othermeta"/>
+      <resourceid id="override-resourceid"/>
+      <data>override data</data>
+      <data-about>
+        <data>override data-about</data>
+      </data-about>
+      <foreign>override foreign</foreign>
+      <unknown>override unknown</unknown>
+    </topicmeta>
+  </topicref>
   <topicgroup>
     <topicref keyref="topicref"/>
+    <topicref keyref="empty"/>
+    <topicref keyref="author"/>
+    <topicref keyref="data"/>
+    <topicref keyref="data-about"/>
+    <topicref keyref="publisher"/>
+    <topicref keyref="source"/>
+    <topicref keyref="indexterm"/>
+    <topicref keyref="index-base"/>
+    <topicref keyref="indextermref"/>
     <navref keyref="navref"/>      
   </topicgroup>
   <topicgroup>
     <topicref keyref="topicref_link" href="a.xml"/>
+    <topicref keyref="author_link" href="a.xml"/>
+    <topicref keyref="data_link" href="a.xml"/>
+    <topicref keyref="data-about_link" href="a.xml"/>
+    <topicref keyref="publisher_link" href="a.xml"/>
+    <topicref keyref="source_link" href="a.xml"/>
+    <topicref keyref="indexterm_link" href="a.xml"/>
+    <topicref keyref="index-base_link" href="a.xml"/>
+    <topicref keyref="indextermref_link" href="a.xml"/>
     <navref keyref="navref_link" mapref="a.xml"/>
   </topicgroup>  
 </map>

@@ -2,6 +2,67 @@
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
 <map>
   <keydef keys="empty"/>
+  <keydef keys="all" href="a.xml" collection-type="family" format="html" id="override" linking="sourceonly" locktitle="yes" navtitle="override" processing-role="normal">
+    <topicmeta>
+      <navtitle>navtitle</navtitle>
+      <linktext>linktext</linktext>
+      <searchtitle>searchtitle</searchtitle>
+      <shortdesc>shortdesc</shortdesc>
+      <author>author</author>
+      <source>source</source>
+      <publisher>publisher</publisher>
+      <copyright>
+        <copyryear year="2012"/>
+        <copyrholder>Example</copyrholder>
+      </copyright>
+      <critdates>
+        <created date="2012-08-16"/>
+      </critdates>
+      <permissions view="all"/>
+      <metadata>
+        <audience name="metadata-audience"/>
+        <category>metadata category</category>
+        <keywords>
+          <keyword>metadata keywords</keyword>
+        </keywords>
+        <prodinfo>
+          <prodname>metadata test</prodname>
+          <vrmlist>
+            <vrm version="1"/>
+          </vrmlist>
+        </prodinfo>
+        <othermeta name="metadata-othermeta" content="metadata-othermeta"/>
+        <data>metadata data</data>
+        <data-about>
+          <data>metadata data-about</data>
+        </data-about>
+        <foreign>metadata foreign</foreign>
+        <unknown>metadata unknown</unknown>
+      </metadata>
+      <audience name="audience"/>
+      <category>category</category>
+      <keywords>
+        <keyword>keywords</keyword>
+      </keywords>
+      <exportanchors>
+        <anchorid id="anchorid"/>
+      </exportanchors>
+      <prodinfo>
+        <prodname>test</prodname>
+        <vrmlist>
+          <vrm version="1"/>
+        </vrmlist>
+      </prodinfo>
+      <othermeta name="othermeta" content="othermeta"/>
+      <resourceid id="resourceid"/>
+      <data>data</data>
+      <data-about>
+        <data>data-about</data>
+      </data-about>
+      <foreign>foreign</foreign>
+      <unknown>unknown</unknown>
+    </topicmeta>
+  </keydef>
   <topicgroup>
     <keydef keys="author">
       <topicmeta>
