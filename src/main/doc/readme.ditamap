@@ -4,13 +4,13 @@
 <?Pub Sty _display FontColor="red"?>
 <map id="mainDITAreadme" title="DITA-OT Readme map" xml:lang="en-us">
 <title>User Guide</title>
-<mapref href="keyrefs.ditamap" format="ditamap" processing-role="resource-only"/>
 <topicref href="readme/DITA-readme.xml">
 <mapref href="readme/overview.ditamap" format="ditamap"/>
 <mapref href="readme/installing.ditamap" format="ditamap"/>
 <mapref href="readme/publishing.ditamap" format="ditamap"/>
 <mapref href="readme/globalizing.ditamap" format="ditamap"/>
 <mapref href="readme/troubleshooting.ditamap" format="ditamap"/>
+<topicref href="readme/reference.ditamap" format="ditamap"/>
 </topicref>
 <reltable>
 <title>CTR: Ant topics</title>
@@ -30,9 +30,20 @@
 </topicgroup>
 </relcell>
 <relcell>
-<topicref href="readme/dita-ot_ant_properties.dita" navtitle="Ant parameters"/>
+<topicref href="readme/dita-ot_ant_properties.dita" navtitle="Ant parameters" linking="targetonly"/>
 <topicref href="http://ant.apache.org/manual/index.html" navtitle="Apache Ant documentation"
 format="html" scope="external"/>
+</relcell>
+</relrow>
+<relrow>
+<relcell>
+<topicref href="readme/ant.dita" navtitle="Ant overview"/>
+</relcell>
+<relcell>
+<topicref href="readme/DITA-ant.xml"/>
+</relcell>
+<relcell>
+<topicref href="readme/dita-ot_ant_properties.dita" navtitle="Ant parameters"/>
 </relcell>
 </relrow>
 <relrow>
@@ -159,6 +170,18 @@ navtitle="Legacy PDF transformation"/>
 <relcell>
 <topicref href="readme/building-output-using-cl-tool.dita"
 navtitle="Building output using the command-line tool"/>
+</relcell>
+<relcell>
+<topicref href="readme/dita-ot_java_properties.dita" linking="targetonly"/>
+</relcell>
+</relrow>
+<relrow>
+<relcell>
+<topicref href="readme/command-line-tool.dita" navtitle="Command-line tool"/>
+</relcell>
+<relcell>
+<topicref href="readme/DITA-javacmd.xml"
+navtitle="Publishing DITA content from the command-line tool"/>
 </relcell>
 <relcell>
 <topicref href="readme/dita-ot_java_properties.dita"/>
@@ -303,9 +326,10 @@ navtitle="JavaHelp transformation"/>
 <topicref href="readme/tool-parameters-all-transformation.dita" navtitle="All transformations"/>
 </relcell>
 </relrow>
+
 </reltable>
 <reltable>
-<title>Reference to reference: Transformations and common-HTML-tranformations topic</title>
+<title>Reference to reference: Transformations and common-HTML-transformations topic</title>
 <relheader>
 <relcolspec type="reference"/>
 <relcolspec type="reference"/>

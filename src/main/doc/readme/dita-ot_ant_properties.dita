@@ -2,7 +2,7 @@
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
  "reference.dtd">
 <reference id="dita-ot-ant-properties" xml:lang="en-us">
-<title>Ant parameters for the DITA Open Toolkit</title>
+<title>Ant parameters</title>
   <titlealts>
     <navtitle>Ant parameters</navtitle>
   </titlealts>

@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
- "..\dtd\concept.dtd">
-<?Pub Sty _display FontColor="red"?>
-<concept id="usingparameterbuildingtool" xml:lang="en-us">
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="usingparameterbuildingtool" xml:lang="en-us">
 <title>Publishing DITA content from the command-line tool</title>
 <shortdesc>The DITA Open Toolkit (DITA-OT) includes a command-line tool designed for users who are
                 unfamiliar with Ant. You can invoke the DITA-OT from the command-line tool and
                 generate output. This method is less robust than Ant.</shortdesc>
-</concept>
-<?Pub *0000013750?>
+</task>

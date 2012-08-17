@@ -42,7 +42,6 @@
       <topicref href="rebuilding-the-dita-ot-documentation.dita"/>
     </topicref>
     <topicref href="configuring-the-dita-ot.dita">
-      <topicref href="../readme/configuration.dita"/>
       <topicref href="integrators-properties-file.dita"/>
       <topicref href="lib-org.dita.dost.platform-plugin.properties.dita"/>
     </topicref>
