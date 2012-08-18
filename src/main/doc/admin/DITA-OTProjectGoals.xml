@@ -7,28 +7,26 @@
 <titlealts>
 <navtitle>Goals and objectives</navtitle>
 </titlealts>
-<shortdesc>The long term goal of the DITA Open Toolkit is to provide
-a high quality        implementation for production level output of
-DITA XML content, built in        a professionally-managed project
-environment by vetted contributors, and        tested thoroughly for
-each release.</shortdesc>
+<shortdesc>The goal of the DITA Open Toolkit (DITA-OT) is to provide a high-quality implementation
+for production-level output of DITA content, built in a professionally-managed project environment
+by vetted contributors, and tested thoroughly for each release.</shortdesc>
+<prolog>
+<metadata>
+<keywords>
+<indexterm>DITA-OT project<indexterm>goals and objectives</indexterm></indexterm>
+</keywords>
+</metadata>
+</prolog>
 <body>
-<p>The DITA-OT is designed to meet the needs of any user trying to
-publish DITA content, from individual users running the tool stand-alone
-up to large software products that treat the toolkit as a bundled
-(often hidden) library used for DITA publishing. Different <xref
-href="../readme/distribution_packages.dita">distribution packages</xref> are
-available to meet the needs of these different audiences.</p>
-<p>The DITA Open Toolkit project will keep up to date with the latest
-DITA DTD and Schema updates from the OASIS DITA Technical Committee
-(owners of the DITA standard). As OASIS produces drafts of future
-versions, the DITA-OT will work to create early support for new features
-in order to help test the standard.</p>
-<p>The project agrees with the Open Source motto of &quot;Release
-early and often&quot; to get wide consensus on issues. The project
-works with an agile development process, releasing test builds approximately
-every month, and encourages feedback on test builds while function
-is being developed. Stable releases are typically issued approximately
-every six months.</p>
+<p>The DITA-OT is designed to meet the needs of users who want to publish DITA content, from
+individual users running the toolkit in a stand-alone mode to vendors who incorporate the toolkit
+into their software products. The different distribution packages are designed to meet the needs of
+these different audiences.</p>
+<p>The DITA-OT project keeps up to date with the latest DTD and Schema updates from the OASIS DITA
+Technical Committee (TC), which develops and maintains the DITA standard. As the DITA TC produces
+drafts of future versions, the DITA-OT works to create early support for new features and helps to
+test the new draft versions of the standard.</p>
+<p>The project agrees with the open-source motto of <q>Release early and often</q> and seeks to
+develop wide consensus on issues.</p>
 </body>
 </topic>
