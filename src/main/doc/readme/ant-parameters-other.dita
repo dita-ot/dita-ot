@@ -9,10 +9,6 @@
     <section>
       <draft-comment author="Kristen James Eberlein" time="11 August 2012">I've made no attempt to
         work with the content in the topic. Here's what I'd like to know:<ul>
-          <li>Do these parameters apply to all transformation types? If so, I'll move them in to the
-            "All transformations" topic.</li>
-          <li>How specifically does the JavaHelp transformation use the
-              <parmname>args.dita.locale</parmname> parameter?</li>
           <li>When would someone want to use the various <parmname>dita.preprocess</parmname>
             parameters? (Other than if they need to reduce Java memory consumption.) The use cases
             are not clear from the current description.</li>
@@ -20,82 +16,53 @@
       <table>
         <title>Ant parameters: Other</title>
         <tgroup cols="2">
-          <colspec colname="COLNAME0" colwidth="200*"/>
-          <colspec colname="COLNAME3" colwidth="200*"/>
+          <colspec colwidth="1.5*"/>
+          <colspec colwidth="4.0*"/>
           <thead>
             <row>
-              <entry>DITA Ant Property</entry>
+              <entry>Parameter</entry>
               <entry>Description</entry>
             </row>
           </thead>
           <tbody>
-            <row id="args.dita.locale">
-              <entry><codeph>args.dita.locale</codeph></entry>
-              <entry id="args.dita.locale.desc">Specifies the language locale file to use for
-                sorting index entries. The JavaHelp transformation type also uses this
-                parameter.</entry>
-            </row>
-            <row id="cleantemp">
-              <entry><codeph>clean.temp</codeph></entry>
-              <entry id="clean.temp.desc">Specifies whether DITA-OT should delete the files in the
-                temporary directory, <codeph>dita.temp.dir</codeph>, when it finishes a build.
-                Allowed values are "yes" and "no". Default value is "yes".</entry>
-            </row>
-            <row id="dita.dir">
-              <entry><codeph>dita.dir</codeph></entry>
-              <entry id="dita.dir.desc">The location of your DITA-OT installation. Verify that your
-                project's build script points to the correct location.</entry>
-            </row>
-            <row id="dita.extname" importance="deprecated">
-              <entry><codeph>dita.extname</codeph></entry>
-              <entry id="dita.extname.desc">Defines the file extension for content files in the
-                directory specified with the <codeph>dita.temp.dir</codeph> property. Allowed values
-                are ".xml" and ".dita". Default value is ".xml".<note>Deprecated in favor of
-                    <codeph>dita.ext</codeph>.</note></entry>
-            </row>
             <row id="dita.preprocess.reloadstylesheet">
-              <entry><codeph>dita.preprocess.reloadstylesheet</codeph>
+              <entry><parmname>dita.preprocess.reloadstylesheet</parmname>
               </entry>
-              <entry id="dita.preprocess.reloadstylesheet.desc" morerows="5">Instructs the toolkit
-                to reload the XSL stylesheets used for transformation. Allowed values are "true" and
-                "false". Default value is "false".<note type="tip">Set the value to true if you want
-                  to use more than one set of stylesheets to process a group of topics. The
-                  parameter is also useful for writers of toolkit build scripts who experience Java
-                  memory problems during transformation due to large Ant projects. Alternatively,
-                  you can adjust the size of your Java memory heap if setting
+              <entry id="dita.preprocess.reloadstylesheet.desc" morerows="5">Specifies whether the
+                DITA-OT reloads the XSL style sheets that are used for the transformation. The
+                allowed values are <option>true</option> and <option>false</option>; the default
+                value is <option>false</option>.<note type="tip">Set the parameter to
+                    <option>true</option> if you want to use more than one set of style sheets to
+                  process a collection of topics. The parameter also is useful for large projects
+                  that generate Java out-of-memory errors during transformation. Alternatively, you
+                  can adjust the size of your Java memory heap if setting
                     <codeph>dita.preprocess.reloadstylesheet</codeph> for this
                 reason.</note></entry>
             </row>
             <row id="dita.preprocess.reloadstylesheet.conref">
               <entry>
-                <codeph>dita.preprocess.reloadstylesheet.conref</codeph>
+                <parmname>dita.preprocess.reloadstylesheet.conref</parmname>
               </entry>
             </row>
             <row id="dita.preprocess.reloadstylesheet.mapref">
               <entry>
-                <codeph>dita.preprocess.reloadstylesheet.mapref</codeph>
+                <parmname>dita.preprocess.reloadstylesheet.mapref</parmname>
               </entry>
             </row>
             <row id="dita.preprocess.reloadstylesheet.mappull">
               <entry>
-                <codeph>dita.preprocess.reloadstylesheet.mappull</codeph>
+                <parmname>dita.preprocess.reloadstylesheet.mappull</parmname>
               </entry>
             </row>
             <row id="dita.preprocess.reloadstylesheet.maplink">
               <entry>
-                <codeph>dita.preprocess.reloadstylesheet.maplink</codeph>
+                <parmname>dita.preprocess.reloadstylesheet.maplink</parmname>
               </entry>
             </row>
             <row id="dita.preprocess.reloadstylesheet.topicpull">
               <entry>
-                <codeph>dita.preprocess.reloadstylesheet.topicpull</codeph>
+                <parmname>dita.preprocess.reloadstylesheet.topicpull</parmname>
               </entry>
-            </row>
-            <row id="dita.temp.dir">
-              <entry><codeph>dita.temp.dir</codeph></entry>
-              <entry id="dita.temp.dir.desc">Defines the directory where DITA-OT will create a
-                temporary directory to place temporary files generated during the transformation
-                process.</entry>
             </row>
           </tbody>
         </tgroup>
