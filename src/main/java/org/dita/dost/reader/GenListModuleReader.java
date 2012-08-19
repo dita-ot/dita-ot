@@ -810,7 +810,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
                 this.relationGraph.put("ROOT", children);
                 schemeRefSet.add(FileUtils.getRelativePath(rootFilePath.getAbsolutePath(), currentFile.getAbsolutePath()));
             } else if (SUBJECTSCHEME_SCHEMEREF.matches(classValue)) {
-                Set<String> children = this.relationGraph.get(this.currentFile);
+                Set<String> children = this.relationGraph.get(this.currentFile.getAbsolutePath());
                 if (children == null) {
                     children = new LinkedHashSet<String>();
                     this.relationGraph.put(currentFile.getAbsolutePath(), children);

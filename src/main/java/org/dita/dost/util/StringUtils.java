@@ -425,6 +425,7 @@ public final class StringUtils {
      * Return a Java Locale object.
      * @param anEncoding encoding
      * @return locale
+     * @throws NullPointerException when anEncoding parameter is {@code null}
      */
 
     public static Locale getLocale(final String anEncoding){

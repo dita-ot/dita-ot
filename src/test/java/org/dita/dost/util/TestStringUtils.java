@@ -151,6 +151,15 @@ public class TestStringUtils {
         final Locale expected3 = new Locale("zh","cn","gb2312");
         final Locale result3 = StringUtils.getLocale("zh-cn-gb2312");
         assertEquals(expected3, result3);
+        assertNull(StringUtils.getLocale("xx-1234567890"));
+        try {
+            assertNull(StringUtils.getLocale("xx-1234567890-xx"));
+            fail();
+        } catch (final NullPointerException e) {}
+        try {
+            StringUtils.getLocale(null);
+            fail();
+        } catch (final NullPointerException e) {}
     }
 
     @Test

@@ -51,7 +51,7 @@ public final class IndexTermCollection {
     /** The output file name of index term without extension. */
     private String outputFileRoot = null;
     /** The logger. */
-    private DITAOTJavaLogger javaLogger = null;
+    private final DITAOTJavaLogger javaLogger;
 
     //RFE 2987769 Eclipse index-see
     /* Parameters passed in from ANT module */
