@@ -24,10 +24,9 @@
   xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0"
   xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0"
   xmlns:prodtools="http://www.ibm.com/xmlns/prodtools" 
-  xmlns:random="org.dita.dost.util.RandomUtils"
   xmlns:styleUtils="org.dita.dost.util.StyleUtils"
   xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
-  exclude-result-prefixes="styleUtils random ditamsg"
+  exclude-result-prefixes="styleUtils ditamsg"
   version="1.0">
   
   <xsl:output method="xml"/>
@@ -2689,7 +2688,7 @@
 
 <xsl:template name="create_indexterm_content">
   <xsl:variable name="indexId">
-    <xsl:value-of select="concat('IMark', random:getRandomNum())"/>
+    <xsl:value-of select="concat('IMark', generate-id(.))"/>
   </xsl:variable>
   <xsl:variable name="depth">
     <xsl:value-of select="count(ancestor-or-self::*[contains(@class,' topic/indexterm ')])"/>

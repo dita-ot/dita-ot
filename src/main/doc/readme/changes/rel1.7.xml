@@ -81,6 +81,7 @@
           <li>#1348 Topics copied using "copy-to" become not wellformed (DITA OT 1.6.1) (milestone 1)</li>
           <li>#1349 "Ambiguous rule match" in PDF processing XSLT when &lt;choicetable> is used in topic (milestone
             1)</li>
+          <li>#1238 Doesn't work with SAXON 9 HE (9.4.0.3) (in progress)</li>
         </ul>
       </section>
     </refbody>

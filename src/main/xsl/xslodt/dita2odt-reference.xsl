@@ -28,9 +28,8 @@
   xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0"
   xmlns:prodtools="http://www.ibm.com/xmlns/prodtools" 
   version="1.0" 
-  xmlns:random="org.dita.dost.util.RandomUtils"
   xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links"
-  exclude-result-prefixes="random related-links">
+  exclude-result-prefixes="related-links">
   
   <xsl:output method="xml"/>
   <xsl:output indent="yes"/>
@@ -41,7 +40,7 @@
 <!-- Simple Table -->
   <xsl:template match="*[contains(@class,' reference/properties ')]">
   
-  	<xsl:variable name="tablenameId" select="random:getRandomNum()"/>
+  	<xsl:variable name="tablenameId" select="generate-id(.)"/>
     
     <!-- start flagging --> 
   	<xsl:apply-templates select="." mode="start-add-odt-flags">

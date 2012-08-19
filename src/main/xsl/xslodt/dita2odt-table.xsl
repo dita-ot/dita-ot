@@ -27,7 +27,6 @@
   xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0"
   xmlns:prodtools="http://www.ibm.com/xmlns/prodtools"
   version="1.0"
-  xmlns:random="org.dita.dost.util.RandomUtils" exclude-result-prefixes="random"
   >
 
 <xsl:output method="xml"/>
@@ -58,7 +57,7 @@
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/tgroup ')]" name="topic.tgroup">
-  <xsl:variable name="tablenameId" select="random:getRandomNum()"/>
+  <xsl:variable name="tablenameId" select="generate-id(.)"/>
   
   <xsl:variable name="columnNum">
     <xsl:call-template name="count_columns_for_table"/>
@@ -578,7 +577,7 @@
 
 <xsl:template name="create_simpletable">
 
-  <xsl:variable name="tablenameId" select="random:getRandomNum()"/>
+  <xsl:variable name="tablenameId" select="generate-id(.)"/>
   
   <!-- start flagging -->
   <xsl:apply-templates select="." mode="start-add-odt-flags">

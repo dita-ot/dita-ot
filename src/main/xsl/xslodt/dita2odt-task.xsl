@@ -26,11 +26,11 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0"
   xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0"
-  xmlns:prodtools="http://www.ibm.com/xmlns/prodtools" xmlns:random="org.dita.dost.util.RandomUtils"
+  xmlns:prodtools="http://www.ibm.com/xmlns/prodtools"
   xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links"
   xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"
   xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg" version="1.0"
-  exclude-result-prefixes="random related-links dita2html ditamsg">
+  exclude-result-prefixes="related-links dita2html ditamsg">
 
   <xsl:output method="xml"/>
   <xsl:output indent="yes"/>
@@ -638,7 +638,7 @@
         </xsl:call-template>
         <!-- normal process -->
         <!-- start render table -->
-        <xsl:variable name="tablenameId" select="random:getRandomNum()"/>
+        <xsl:variable name="tablenameId" select="generate-id(.)"/>
         <xsl:choose>
           <xsl:when test="not(./*[contains(@class,' task/chhead ')])">
             <!-- start flagging -->
