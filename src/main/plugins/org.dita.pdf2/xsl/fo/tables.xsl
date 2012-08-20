@@ -19,6 +19,155 @@
     <!-- XML Exchange Table Model Document Type Definition default is 1 -->
     <xsl:variable name="table.colsep-default" select="'0'"/>
 
+    <!--Definition list-->
+    <xsl:template match="*[contains(@class, ' topic/dl ')]">
+        <fo:table xsl:use-attribute-sets="dl">
+            <xsl:call-template name="commonattributes"/>
+            <xsl:apply-templates select="*[contains(@class, ' topic/dlhead ')]"/>
+            <fo:table-body xsl:use-attribute-sets="dl__body">
+                <xsl:choose>
+                    <xsl:when test="contains(@otherprops,'sortable')">
+                        <xsl:apply-templates select="*[contains(@class, ' topic/dlentry ')]">
+                            <xsl:sort select="opentopic-func:getSortString(normalize-space( opentopic-func:fetchValueableText(*[contains(@class, ' topic/dt ')]) ))" lang="{$locale}"/>
+                        </xsl:apply-templates>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:apply-templates select="*[contains(@class, ' topic/dlentry ')]"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </fo:table-body>
+        </fo:table>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class, ' topic/dl ')]/*[contains(@class, ' topic/dlhead ')]">
+        <fo:table-header xsl:use-attribute-sets="dl.dlhead">
+            <xsl:call-template name="commonattributes"/>
+            <fo:table-row xsl:use-attribute-sets="dl.dlhead__row">
+                <xsl:apply-templates/>
+            </fo:table-row>
+        </fo:table-header>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class, ' topic/dlhead ')]/*[contains(@class, ' topic/dthd ')]">
+        <fo:table-cell xsl:use-attribute-sets="dlhead.dthd__cell">
+            <xsl:call-template name="commonattributes"/>
+            <fo:block xsl:use-attribute-sets="dlhead.dthd__content">
+                <xsl:apply-templates/>
+            </fo:block>
+        </fo:table-cell>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class, ' topic/dlhead ')]/*[contains(@class, ' topic/ddhd ')]">
+        <fo:table-cell xsl:use-attribute-sets="dlhead.ddhd__cell">
+            <xsl:call-template name="commonattributes"/>
+            <fo:block xsl:use-attribute-sets="dlhead.ddhd__content">
+                <xsl:apply-templates/>
+            </fo:block>
+        </fo:table-cell>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class, ' topic/dlentry ')]">
+        <fo:table-row xsl:use-attribute-sets="dlentry">
+            <xsl:call-template name="commonattributes"/>
+            <fo:table-cell xsl:use-attribute-sets="dlentry.dt">
+                <xsl:apply-templates select="*[contains(@class, ' topic/dt ')]"/>
+            </fo:table-cell>
+            <fo:table-cell xsl:use-attribute-sets="dlentry.dd">
+                <xsl:apply-templates select="*[contains(@class, ' topic/dd ')]"/>
+            </fo:table-cell>
+        </fo:table-row>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class, ' topic/dt ')]">
+        <fo:block xsl:use-attribute-sets="dlentry.dt__content">
+            <xsl:call-template name="commonattributes"/>
+            <xsl:apply-templates/>
+        </fo:block>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class, ' topic/dd ')]">
+        <fo:block xsl:use-attribute-sets="dlentry.dd__content">
+            <xsl:call-template name="commonattributes"/>
+            <xsl:apply-templates/>
+        </fo:block>
+    </xsl:template>
+
+    <!--  Map processing  -->
+    <xsl:template match="*[contains(@class, ' map/map ')]/*[contains(@class, ' map/reltable ')]">
+        <fo:table-and-caption>
+            <fo:table-caption>
+                <fo:block xsl:use-attribute-sets="reltable__title">
+                    <xsl:value-of select="@title"/>
+                </fo:block>
+            </fo:table-caption>
+            <fo:table xsl:use-attribute-sets="reltable">
+                <xsl:call-template name="topicrefAttsNoToc"/>
+                <xsl:call-template name="selectAtts"/>
+                <xsl:call-template name="globalAtts"/>
+
+                <xsl:apply-templates select="relheader"/>
+
+                <fo:table-body>
+                    <xsl:apply-templates select="relrow"/>
+                </fo:table-body>
+
+            </fo:table>
+        </fo:table-and-caption>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class, ' map/relheader ')]">
+        <fo:table-header xsl:use-attribute-sets="relheader">
+            <xsl:call-template name="globalAtts"/>
+            <xsl:apply-templates/>
+        </fo:table-header>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class, ' map/relcolspec ')]">
+        <fo:table-cell xsl:use-attribute-sets="relcolspec">
+            <xsl:apply-templates/>
+        </fo:table-cell>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class, ' map/relrow ')]">
+        <fo:table-row xsl:use-attribute-sets="relrow">
+            <xsl:call-template name="globalAtts"/>
+            <xsl:apply-templates/>
+        </fo:table-row>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class, ' map/relcell ')]">
+        <fo:table-cell xsl:use-attribute-sets="relcell">
+            <xsl:call-template name="globalAtts"/>
+            <xsl:call-template name="topicrefAtts"/>
+
+            <xsl:apply-templates/>
+
+        </fo:table-cell>
+    </xsl:template>
+
+    <!-- SourceForge bug tracker item 2872988:
+         Count the max number of cells in any row of a simpletable -->
+    <xsl:template match="*[contains(@class, ' topic/sthead ')] | *[contains(@class, ' topic/strow ')]" mode="count-max-simpletable-cells">
+      <xsl:param name="maxcount" select="0" as="xs:integer"/>
+      <xsl:variable name="newmaxcount" as="xs:integer">
+        <xsl:variable name="row-cell-count" select="count(*[contains(@class, ' topic/stentry ')])"/>
+        <xsl:choose>
+          <xsl:when test="$row-cell-count > $maxcount"><xsl:sequence select="$row-cell-count"/></xsl:when>
+          <xsl:otherwise><xsl:sequence select="$maxcount"/></xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:choose>
+        <xsl:when test="not(following-sibling::*[contains(@class, ' topic/strow ')])">
+          <xsl:value-of select="$newmaxcount"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="following-sibling::*[contains(@class, ' topic/strow ')][1]" mode="count-max-simpletable-cells">
+            <xsl:with-param name="maxcount" select="$newmaxcount"/>
+          </xsl:apply-templates>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:template>
+
     <!-- SourceForge bug tracker item 2872988:
          Count the number of values in @relcolwidth (to add values if one is missing) -->
     <xsl:template match="*" mode="count-colwidths">
@@ -1241,76 +1390,6 @@
 
     <xsl:template name="globalAtts">
       <!--TODO-->
-    </xsl:template>
-
-    <xsl:template match="*[contains(@class, ' topic/dl ')]">
-        <fo:table xsl:use-attribute-sets="dl">
-            <xsl:call-template name="commonattributes"/>
-            <xsl:apply-templates select="*[contains(@class, ' topic/dlhead ')]"/>
-            <fo:table-body xsl:use-attribute-sets="dl__body">
-                <xsl:choose>
-                    <xsl:when test="contains(@otherprops,'sortable')">
-                        <xsl:apply-templates select="*[contains(@class, ' topic/dlentry ')]">
-                            <xsl:sort select="opentopic-func:getSortString(normalize-space( opentopic-func:fetchValueableText(*[contains(@class, ' topic/dt ')]) ))" lang="{$locale}"/>
-                        </xsl:apply-templates>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:apply-templates select="*[contains(@class, ' topic/dlentry ')]"/>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </fo:table-body>
-        </fo:table>
-    </xsl:template>
-
-    <xsl:template match="*[contains(@class, ' topic/dl ')]/*[contains(@class, ' topic/dlhead ')]">
-        <fo:table-header xsl:use-attribute-sets="dl.dlhead">
-            <xsl:call-template name="commonattributes"/>
-            <fo:table-row xsl:use-attribute-sets="dl.dlhead__row">
-                <xsl:apply-templates/>
-            </fo:table-row>
-        </fo:table-header>
-    </xsl:template>
-
-    <xsl:template match="*[contains(@class, ' topic/dlhead ')]/*[contains(@class, ' topic/dthd ')]">
-        <fo:table-cell xsl:use-attribute-sets="dlhead.dthd__cell">
-            <xsl:call-template name="commonattributes"/>
-            <fo:block xsl:use-attribute-sets="dlhead.dthd__content">
-                <xsl:apply-templates/>
-            </fo:block>
-        </fo:table-cell>
-    </xsl:template>
-
-    <xsl:template match="*[contains(@class, ' topic/dlhead ')]/*[contains(@class, ' topic/ddhd ')]">
-        <fo:table-cell xsl:use-attribute-sets="dlhead.ddhd__cell">
-            <xsl:call-template name="commonattributes"/>
-            <fo:block xsl:use-attribute-sets="dlhead.ddhd__content">
-                <xsl:apply-templates/>
-            </fo:block>
-        </fo:table-cell>
-    </xsl:template>
-
-    <xsl:template match="*[contains(@class, ' topic/dlentry ')]">
-        <fo:table-row xsl:use-attribute-sets="dlentry">
-            <xsl:call-template name="commonattributes"/>
-            <fo:table-cell xsl:use-attribute-sets="dlentry.dt">
-                <xsl:apply-templates select="*[contains(@class, ' topic/dt ')]"/>
-            </fo:table-cell>
-            <fo:table-cell xsl:use-attribute-sets="dlentry.dd">
-                <xsl:apply-templates select="*[contains(@class, ' topic/dd ')]"/>
-            </fo:table-cell>
-        </fo:table-row>
-    </xsl:template>
-
-    <xsl:template match="*[contains(@class, ' topic/dt ')]">
-        <fo:block xsl:use-attribute-sets="dlentry.dt__content">
-            <xsl:apply-templates/>
-        </fo:block>
-    </xsl:template>
-
-    <xsl:template match="*[contains(@class, ' topic/dd ')]">
-        <fo:block xsl:use-attribute-sets="dlentry.dd__content">
-            <xsl:apply-templates/>
-        </fo:block>
     </xsl:template>
 
 </xsl:stylesheet>

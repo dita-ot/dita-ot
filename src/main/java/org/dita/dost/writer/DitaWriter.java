@@ -64,6 +64,9 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
+import org.xml.sax.ext.LexicalHandler;
 
 
 
@@ -1398,6 +1401,73 @@ public final class DitaWriter extends AbstractXMLFilter {
     private Locator locator;
     public void setDocumentLocator(Locator locator) {
         this.locator = locator;
+    }
+    
+    // LexicalHandler methods
+    
+    public void setProperty(String name, Object value) throws SAXNotRecognizedException, SAXNotSupportedException {
+        if (getParent().getClass().getName().equals(SAX_DRIVER_DEFAULT_CLASS) && name.equals(LEXICAL_HANDLER_PROPERTY)) {
+            getParent().setProperty(name, new XercesFixLexicalHandler((LexicalHandler) value));
+        } else {
+            getParent().setProperty(name, value);
+        }
+    }
+    
+    /**
+     * LexicalHandler implementation to work around Xerces bug. When source document root contains
+     * 
+     * <pre>&lt;!--AAA-->
+&lt;!--BBBbbbBBB-->
+&lt;!--CCCCCC--></pre>
+     *
+     * the output will be
+     * 
+     * <pre>&lt;!--CCC-->
+&lt;!--CCCCCCBBB-->
+&lt;!--CCCCCC--></pre>
+     *
+     * This implementation makes a copy of the comment data array and passes the copy forward.
+     * 
+     * @since 1.6
+     */
+    private static final class XercesFixLexicalHandler implements LexicalHandler {
+
+        private final LexicalHandler lexicalHandler;
+        
+        XercesFixLexicalHandler(final LexicalHandler lexicalHandler) {
+            this.lexicalHandler = lexicalHandler;
+        }
+        
+        public void comment(char[] arg0, int arg1, int arg2) throws SAXException {
+            final char[] buf = new char[arg2];
+            System.arraycopy(arg0, arg1, buf, 0, arg2);
+            lexicalHandler.comment(buf, 0, arg2);
+        }
+    
+        public void endCDATA() throws SAXException {
+            lexicalHandler.endCDATA();
+        }
+    
+        public void endDTD() throws SAXException {
+            lexicalHandler.endDTD();
+        }
+    
+        public void endEntity(String arg0) throws SAXException {
+            lexicalHandler.endEntity(arg0);
+        }
+    
+        public void startCDATA() throws SAXException {
+            lexicalHandler.startCDATA();
+        }
+    
+        public void startDTD(String arg0, String arg1, String arg2) throws SAXException {
+            lexicalHandler.startDTD(arg0, arg1, arg2);
+        }
+    
+        public void startEntity(String arg0) throws SAXException {
+            lexicalHandler.startEntity(arg0);
+        }
+    
     }
     
 }

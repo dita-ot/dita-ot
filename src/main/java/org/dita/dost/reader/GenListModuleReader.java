@@ -1352,6 +1352,8 @@ public final class GenListModuleReader extends AbstractXMLReader {
             if(UNIX_SEPARATOR.equals(File.separator)){
                 attrValue = UNIX_SEPARATOR + attrValue;
             }
+        } else if (attrValue.startsWith("file:") && !attrValue.startsWith("file:/")) {
+            attrValue = attrValue.substring("file:".length());
         }
         //Added by William on 2010-01-05 for bug:2926417 end
         final File target=new File(attrValue);
