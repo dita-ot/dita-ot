@@ -10,4 +10,7 @@
   <topicref
     href="../topics/target-topic-c.xml"
     keys="target_topic_2"/>
+  <topicref
+    href="../topics/xreffin-topic-1.xml"
+    copy-to="../topics/copy-to.xml"/>
 </map>

@@ -33,6 +33,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.xml.resolver.tools.CatalogResolver;
+
 import org.xml.sax.helpers.AttributesImpl;
 
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
@@ -59,6 +61,9 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
+import org.xml.sax.ext.LexicalHandler;
 
 
 
@@ -298,7 +303,6 @@ public final class DitaWriter extends AbstractXMLFilter {
         return attValue;
     }
     private File absolutePath;
-    private Map<String, String> catalogMap; //map that contains the information from XML Catalog
     private List<String> colSpec;
     private int columnNumber; // columnNumber is used to adjust column name
     private int columnNumberEnd; //columnNumberEnd is the end value for current entry
@@ -448,14 +452,15 @@ public final class DitaWriter extends AbstractXMLFilter {
                 reader.setFeature(FEATURE_VALIDATION_SCHEMA, true);
             }
             reader.setFeature(FEATURE_NAMESPACE, true);
-            reader.setEntityResolver(CatalogUtils.getCatalogResolver());
+            final CatalogResolver resolver = CatalogUtils.getCatalogResolver();
+            setEntityResolver(resolver);
+            reader.setEntityResolver(resolver);
             setParent(reader);
         } catch (final Exception e) {
             throw new SAXException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
         setGrammarPool(reader, GrammarPoolManager.getGrammarPool());
         CatalogUtils.setDitaDir(ditaDir);
-        catalogMap = CatalogUtils.getCatalog(ditaDir);
         setSystemid= arg_setSystemid;
     }
     
@@ -985,19 +990,6 @@ public final class DitaWriter extends AbstractXMLFilter {
         }
     }
 
-    @Override
-    public InputSource resolveEntity(final String publicId, final String systemId)
-            throws SAXException, IOException {
-        if (catalogMap.get(publicId)!=null){
-            final File dtdFile = new File(catalogMap.get(publicId));
-            return new InputSource(dtdFile.getAbsolutePath());
-        }else if (catalogMap.get(systemId) != null){
-            final File schemaFile = new File(catalogMap.get(systemId));
-            return new InputSource(schemaFile.getAbsolutePath());
-        }
-        return null;
-    }
-
     /**
      * Set temporary directory
      * 
@@ -1391,4 +1383,71 @@ public final class DitaWriter extends AbstractXMLFilter {
         throw new UnsupportedOperationException();
     }
 
+    // LexicalHandler methods
+    
+    public void setProperty(String name, Object value) throws SAXNotRecognizedException, SAXNotSupportedException {
+        if (getParent().getClass().getName().equals(SAX_DRIVER_DEFAULT_CLASS) && name.equals(LEXICAL_HANDLER_PROPERTY)) {
+            getParent().setProperty(name, new XercesFixLexicalHandler((LexicalHandler) value));
+        } else {
+            getParent().setProperty(name, value);
+        }
+    }
+    
+    /**
+     * LexicalHandler implementation to work around Xerces bug. When source document root contains
+     * 
+     * <pre>&lt;!--AAA-->
+&lt;!--BBBbbbBBB-->
+&lt;!--CCCCCC--></pre>
+     *
+     * the output will be
+     * 
+     * <pre>&lt;!--CCC-->
+&lt;!--CCCCCCBBB-->
+&lt;!--CCCCCC--></pre>
+     *
+     * This implementation makes a copy of the comment data array and passes the copy forward.
+     * 
+     * @since 1.6
+     */
+    private static final class XercesFixLexicalHandler implements LexicalHandler {
+
+        private final LexicalHandler lexicalHandler;
+        
+        XercesFixLexicalHandler(final LexicalHandler lexicalHandler) {
+            this.lexicalHandler = lexicalHandler;
+        }
+        
+        public void comment(char[] arg0, int arg1, int arg2) throws SAXException {
+            final char[] buf = new char[arg2];
+            System.arraycopy(arg0, arg1, buf, 0, arg2);
+            lexicalHandler.comment(buf, 0, arg2);
+        }
+    
+        public void endCDATA() throws SAXException {
+            lexicalHandler.endCDATA();
+        }
+    
+        public void endDTD() throws SAXException {
+            lexicalHandler.endDTD();
+        }
+    
+        public void endEntity(String arg0) throws SAXException {
+            lexicalHandler.endEntity(arg0);
+        }
+    
+        public void startCDATA() throws SAXException {
+            lexicalHandler.startCDATA();
+        }
+    
+        public void startDTD(String arg0, String arg1, String arg2) throws SAXException {
+            lexicalHandler.startDTD(arg0, arg1, arg2);
+        }
+    
+        public void startEntity(String arg0) throws SAXException {
+            lexicalHandler.startEntity(arg0);
+        }
+    
+    }
+    
 }

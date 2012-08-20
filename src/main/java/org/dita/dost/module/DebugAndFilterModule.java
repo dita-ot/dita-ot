@@ -10,6 +10,7 @@
 package org.dita.dost.module;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.writer.DitaWriter.*;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -33,8 +34,12 @@ import java.util.StringTokenizer;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.dita.dost.exception.DITAOTException;
@@ -61,6 +66,9 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.XMLFilter;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLFilterImpl;
 
 
 /**
@@ -279,29 +287,6 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
         return null;
     }
 
-    private static class InternalEntityResolver implements EntityResolver {
-
-        private final Map<String, String> catalogMap;
-
-        public InternalEntityResolver(final Map<String, String> map) {
-            this.catalogMap = map;
-        }
-
-        public InputSource resolveEntity(final String publicId, final String systemId)
-                throws SAXException, IOException {
-            if (catalogMap.get(publicId) != null) {
-                final File dtdFile = new File(catalogMap.get(publicId));
-                return new InputSource(dtdFile.getAbsolutePath());
-            }else if (catalogMap.get(systemId) != null){
-                final File schemaFile = new File(catalogMap.get(systemId));
-                return new InputSource(schemaFile.getAbsolutePath());
-            }
-
-            return null;
-        }
-
-    }
-
     /**
      * Read XML properties file.
      * 
@@ -359,8 +344,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
         try {
             final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             final DocumentBuilder builder = factory.newDocumentBuilder();
-            builder.setEntityResolver(new InternalEntityResolver(
-                    CatalogUtils.getCatalog(ditaDir)));
+            builder.setEntityResolver(CatalogUtils.getCatalogResolver());
 
             while (!queue.isEmpty()) {
                 final String parent = queue.poll();
@@ -573,80 +557,67 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
      * @param inputMapInTemp
      */
     public void copyFileWithPIReplaced(final File src, final File target, final String copytoTargetFilename, final String inputMapInTemp ) {
-        BufferedReader bfis = null;
-        OutputStreamWriter bfos = null;
-        
-        
-
+        final DitaWriter dw = new DitaWriter();
+        dw.setOutputUtils(outputUtils);
+        final String path2project = dw.getPathtoProject(copytoTargetFilename, target, inputMapInTemp);
+        final File workdir = target.getParentFile();
         try {
-        	//calculate workdir and path2project
-            File workdir = null;
-            String path2project = null;  
-        	final DitaWriter dw = new DitaWriter();
-        	dw.setOutputUtils(outputUtils);
-        	path2project = dw.getPathtoProject(copytoTargetFilename, target, inputMapInTemp);
-        	workdir = target.getParentFile();
-            
-            bfis = new BufferedReader(new InputStreamReader(new FileInputStream(src),UTF8));
-            bfos = new OutputStreamWriter(new FileOutputStream(target), UTF8);
-            
-            for (String line = bfis.readLine(); line != null; line = bfis.readLine()) {
-            	if(line.indexOf(DitaWriter.PI_WORKDIR_TARGET)!=-1) {
-            		bfos.write(LESS_THAN + QUESTION);
-            		bfos.write(DitaWriter.PI_WORKDIR_TARGET);
-            		 
-                    if (workdir != null) {
-                    	if (OS_NAME.toLowerCase().indexOf(OS_NAME_WINDOWS) == -1) {
-							bfos.write(STRING_BLANK + workdir.getCanonicalPath());
-						} else {
-							bfos.write(STRING_BLANK + UNIX_SEPARATOR + workdir.getCanonicalPath());
-						}                    	
-                    }
-                    bfos.write(QUESTION + GREATER_THAN);
-        
-            		bfos.write(LINE_SEPARATOR);
-            	} else if(line.indexOf(DitaWriter.PI_WORKDIR_TARGET)!=-1) {
-                    bfos.write(LESS_THAN + QUESTION);
-                    bfos.write(DitaWriter.PI_WORKDIR_TARGET_URI);
-                     
-                    if (workdir != null) {
-                        bfos.write(STRING_BLANK + workdir.toURI().toString());
-                    }
-                    bfos.write(QUESTION + GREATER_THAN);
-        
-                    bfos.write(LINE_SEPARATOR);
-            	} else if (line.indexOf(DitaWriter.PI_PATH2PROJ_TARGET)!=-1) {
-               		bfos.write(LESS_THAN + QUESTION);
-            		bfos.write(DitaWriter.PI_PATH2PROJ_TARGET);
-                    if (path2project != null) {
-                    	bfos.write(STRING_BLANK + path2project);
-                    }
-                    bfos.write(QUESTION + GREATER_THAN);       
-                    bfos.write(LINE_SEPARATOR);
-            	} else {           	
-            		bfos.write(line);
-            		bfos.write(LINE_SEPARATOR);
-            	}
-            }
-            bfos.flush();
-        } catch (final IOException ex) {
-            logger.logException(ex);
-        } finally {
-            if (bfis != null) {
-                try {
-                    bfis.close();
-                } catch (final Exception e) {
-                    logger.logException(e);
-                }
-            }
-            if (bfos != null) {
-                try {
-                    bfos.close();
-                } catch (final Exception e) {
-                    logger.logException(e);
-                }
-            }
+            final Transformer serializer = TransformerFactory.newInstance().newTransformer();
+            final XMLFilter filter = new CopyToFilter(StringUtils.getXMLReader(), workdir, path2project);
+            serializer.transform(new SAXSource(filter, new InputSource(src.toURI().toString())),
+                                 new StreamResult(target));
+        } catch (final TransformerConfigurationException e) {
+            logger.logError("Failed to configure serializer: " + e.getMessage(), e);
+        } catch (final TransformerFactoryConfigurationError e) {
+            logger.logError("Failed to configure serializer: " + e.getMessage(), e);
+        } catch (final SAXException e) {
+            logger.logError("Failed to create XML parser: " + e.getMessage(), e);
+        } catch (final TransformerException e) {
+            logger.logError("Failed to rewrite copy-to file: " + e.getMessage(), e);
         }
+    }
+    
+    /**
+     * XML filter to rewrite {@link #PI_WORKDIR_TARGET}, {@link #PI_WORKDIR_TARGET_URI}, and
+     * {@link #PI_PATH2PROJ_TARGET} to reflect copy-to location.
+     */
+    private static final class CopyToFilter extends XMLFilterImpl {
+        
+        private final File workdir;
+        private final String path2project;  
+        
+        CopyToFilter(final XMLReader parent, final File workdir, final String path2project) {
+            super(parent);
+            this.workdir = workdir;
+            this.path2project = path2project;
+        }
+        
+        public void processingInstruction(final String target, final String data) throws SAXException {
+            String d = data;
+            if(target.equals(PI_WORKDIR_TARGET)) {
+                if (workdir != null) {
+                    try {
+                        if (OS_NAME.toLowerCase().indexOf(OS_NAME_WINDOWS) == -1) {
+                            d = workdir.getCanonicalPath();
+                        } else {
+                            d = UNIX_SEPARATOR + workdir.getCanonicalPath();
+                        }
+                    } catch (final IOException e) {
+                        throw new RuntimeException("Failed to get canonical path for working directory: " + e.getMessage(), e);
+                    }
+                }
+            } else if(target.equals(PI_WORKDIR_TARGET_URI)) {
+                if (workdir != null) {
+                    d = workdir.toURI().toString();
+                }
+            } else if (target.equals(PI_PATH2PROJ_TARGET)) {
+                if (path2project != null) {
+                    d = path2project;
+                }
+            }            
+            getContentHandler().processingInstruction(target, d);
+        }
+        
     }
 
     /**

@@ -74,7 +74,6 @@ public final class MergeMapParser extends XMLFilterImpl {
         processLevel = 0;
         util = new MergeUtils();
         topicParser = new MergeTopicParser(util);
-        topicParser.setLogger(logger);
         topicBuffer = new ByteArrayOutputStream();
         try{
             reader = StringUtils.getXMLReader();
@@ -97,6 +96,7 @@ public final class MergeMapParser extends XMLFilterImpl {
     
     public final void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
+        topicParser.setLogger(logger);
     }
 
     /**
@@ -191,13 +191,13 @@ public final class MergeMapParser extends XMLFilterImpl {
                         attValue = SHARP + util.getIdValue(attValue);
                     } else {
                         //parse the topic
-                        util.visit(attValue);
                         String p = null;
                         try {
                             p = FileUtils.normalize(URLDecoder.decode(FileUtils.stripFragment(attValue), UTF8));
                         } catch (UnsupportedEncodingException e) {
                             logger.logError("Unable to parse URI '" + attValue + "': " + e.getMessage(), e);
                         }
+                        util.visit(p);
                         if (p != null) {
                             final File f = new File(dirPath, p);
                             if (f.exists()) {

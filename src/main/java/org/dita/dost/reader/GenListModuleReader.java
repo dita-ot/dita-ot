@@ -66,8 +66,6 @@ public final class GenListModuleReader extends AbstractXMLReader {
     /** XMLReader instance for parsing dita file */
     private XMLReader reader = null;
 
-    /** Map of XML catalog info */
-    private Map<String, String> catalogMap = null;
     /** Filter utils */
     private FilterUtils filterUtils;
     /** Output utilities */
@@ -353,17 +351,11 @@ public final class GenListModuleReader extends AbstractXMLReader {
         setGrammarPool(reader, grammarPool);
 
         CatalogUtils.setDitaDir(ditaDir);
-        catalogMap = CatalogUtils.getCatalog(ditaDir);
         //Added on 2010-08-24 for bug:3086552 start
         setSystemid= arg_setSystemid;
         //Added on 2010-08-24 for bug:3086552 end
 
-        try {
-            Class.forName(RESOLVER_CLASS);
-            reader.setEntityResolver(CatalogUtils.getCatalogResolver());
-        }catch (final ClassNotFoundException e){
-            reader.setEntityResolver(this);
-        }
+        reader.setEntityResolver(CatalogUtils.getCatalogResolver());
     }
 
     /**
@@ -1225,28 +1217,6 @@ public final class GenListModuleReader extends AbstractXMLReader {
     }
 
     /**
-     * Resolve the publicId used in XMLCatalog.
-     * @see org.dita.dost.reader.AbstractXMLReader#resolveEntity(String, String)
-     * @param publicId publicId in doctype declarations
-     * @param systemId systemId in doctype declarations
-     * @throws java.io.IOException if dita-catalog.xml is not available
-     * @exception org.xml.sax.SAXException if dita-catalog.xml is not in valid format.
-     */
-    @Override
-    public InputSource resolveEntity(final String publicId, final String systemId)
-            throws SAXException, IOException {
-        if (catalogMap.get(publicId) != null) {
-            final File dtdFile = new File(catalogMap.get(publicId));
-            return new InputSource(dtdFile.getAbsolutePath());
-        }else if (catalogMap.get(systemId) != null){
-            final File schemaFile = new File(catalogMap.get(systemId));
-            return new InputSource(schemaFile.getAbsolutePath());
-        }
-
-        return null;
-    }
-
-    /**
      * Parse the input attributes for needed information.
      */
     private void parseAttribute(final Attributes atts, final String attrName) throws SAXException {
@@ -1375,14 +1345,17 @@ public final class GenListModuleReader extends AbstractXMLReader {
             if(UNIX_SEPARATOR.equals(File.separator)){
                 attrValue = UNIX_SEPARATOR + attrValue;
             }
+        } else if (attrValue.startsWith("file:") && !attrValue.startsWith("file:/")) {
+            attrValue = attrValue.substring("file:".length());
         }
         //Added by William on 2010-01-05 for bug:2926417 end
         final File target=new File(attrValue);
         if(target.isAbsolute() &&
                 !ATTRIBUTE_NAME_DATA.equals(attrName)){
             attrValue=FileUtils.getRelativePath(rootFilePath,attrValue);
-            //for object tag bug:3052156
-        }else if(ATTRIBUTE_NAME_DATA.equals(attrName)){
+        }
+        //for object tag bug:3052156
+        if(ATTRIBUTE_NAME_DATA.equals(attrName)){
             if(!StringUtils.isEmptyString(codebase)){
                 filename = FileUtils.normalizeDirectory(codebase, attrValue);
             }else{
@@ -1741,13 +1714,6 @@ public final class GenListModuleReader extends AbstractXMLReader {
      */
     public Map<String, Set<String>> getRelationshipGrap() {
         return this.relationGraph;
-    }
-
-    /**
-     * @return the catalogMap
-     */
-    public Map<String, String> getCatalogMap() {
-        return catalogMap;
     }
 
     public String getPrimaryDitamap() {
