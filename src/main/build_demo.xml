@@ -20,7 +20,6 @@
 		<available file="C:\Program Files\HTML Help Workshop\hhc.exe"
 			property="HTMLHelpCompiler"
 			value="C:\Program Files\HTML Help Workshop\hhc.exe"/>
-		<property name="dita.extname" value=".xml"/>
 		<property name="clean.temp" value="true"/>
 	</target>
 
