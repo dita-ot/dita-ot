@@ -106,7 +106,7 @@ final class MoveMetaModule implements AbstractPipelineModule {
             }
         }
 
-        final Map<String, Hashtable<String, Element>> mapSet = metaReader.getMapping();;
+        final Map<String, Hashtable<String, Element>> mapSet = metaReader.getMapping();
         
         //process map first
         final DitaMapMetaWriter mapInserter = new DitaMapMetaWriter();
