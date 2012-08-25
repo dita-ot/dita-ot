@@ -95,7 +95,7 @@
 
   <path id="dost.jar.path">
     <pathelement
-      location="${dita.dir}${file.separator}lib${file.separator}dost.jar" />
+      location="${dita.dir}/lib/dost.jar" />
   </path>
 
   <taskdef name="pipeline"
@@ -146,16 +146,16 @@
     <format property="current.date" pattern="yyyyMMddHHmmssSSS"/>
   </tstamp>
   <property name="base.temp.dir" location="${basedir}/temp"/>
-  <property name="dita.temp.dir" location="${base.temp.dir}${file.separator}temp${current.date}" />
+  <property name="dita.temp.dir" location="${base.temp.dir}/temp${current.date}" />
   <property name="output.dir" location="${basedir}/out" />
   <property name="dita.script.dir"
-    location="${dita.dir}${file.separator}xsl" />
+    location="${dita.dir}/xsl" />
   <property name="dita.resource.dir"
-    location="${dita.dir}${file.separator}resource" />
+    location="${dita.dir}/resource" />
   <property environment="env" />
   <property name="dita.empty" value="" />
   <property name="args.message.file"
-    location="${dita.dir}${file.separator}resource${file.separator}messages.xml" />
+    location="${dita.dir}/resource/messages.xml" />
   <!-- property values end -->
 
   <target name="build-init"
@@ -198,6 +198,8 @@
         <not><isset property="xml.parser"/></not>
       </and>
     </condition>
+    <fail unless="xml.parser">No XML parser defined.</fail>
+    <echo>xml.parser ${xml.parser}</echo>
   </target>
 	
   <!-- property value validation begin -->
@@ -405,7 +407,7 @@
       </not>
     </condition>
     <condition property="args.css.real"
-      value="${args.cssroot}${file.separator}${args.css}">
+      value="${args.cssroot}/${args.css}">
       <isset property="args.cssroot" />
     </condition>
     <condition property="args.css.real" value="${args.css}">

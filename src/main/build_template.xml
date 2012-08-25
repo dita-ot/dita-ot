@@ -4,11 +4,19 @@
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <project xmlns:dita="http://dita-ot.sourceforge.net" name="DOST" default="init">
-  
-  <property file="${basedir}/local.properties"/>
-  
+
+  <property name="src.dir" value="${basedir}"/>
+  <!--<property file="${basedir}/local.properties"/>-->
+
   <!-- Initialize DITA-OT base directory -->
   <dirname property="ant.file.DOST.dir" file="${ant.file.DOST}" />
+  <!-- Set dita.dir here rather than in conditions below -->
+  <property name="dita.dir" value="${ant.file.DOST.dir}"/>
+  <!-- local.properties is read by the imported local.properties.xml -->
+  <import file="${ant.file.DOST.dir}/local.properties.xml"/>
+
+  <!-- ant.file.DOST is set by definition.
+      So, how can ant.file.DOST.dir not be set?
   <condition property="dita.dir" value="${ant.file.DOST.dir}">
     <not>
       <isset property="dita.dir" />
@@ -19,13 +27,117 @@
       <isset property="dita.dir" />
     </not>
   </condition>
+  -->
+  <condition property="dost.ant.jar.on.java.cp">
+    <matches pattern=".*\bant\.jar\b.*" string="${java.class.path}"/>
+  </condition>
+  <condition property="dost.ant-launcher.jar.on.java.cp">
+    <matches pattern=".*\bant-launcher\.jar\b.*" string="${java.class.path}"/>
+  </condition>
+  
+  <!-- Minimal path for ant jars. May not need ant.jar for build. -->
+  <path id="dost.local.ant.path">
+    <pathelement location="${dost.ant-launcher.jar}"/>
+    <pathelement location="${dost.ant-resolver.jar}"/>
+    <pathelement location="${dost.ant.jar}"/>
+  </path>
   
   <path id="dost.class.path">
     <dita:extension id="dita.conductor.lib.import" behavior="org.dita.dost.platform.ImportAntLibAction"/>
-    <pathelement location="${dita.dir}${file.separator}lib${file.separator}dost.jar"/>
+    <pathelement location="${dita.dir}/lib/dost.jar"/>
   </path>
+
+  <target name="start-recursive-ant" unless="dost.jars.on.classpath">
+    <!--
+    <fail unless="dost.ant.launcher.available">
+Ant launcher is not available on the classpath.
+ant.jar or ant-launcher.jar must be on the starting classpath or in the distribution lib directory.
+FIXME See {reference to dita-ot manual goes here}.
+    </fail>
+    -->
+    
+    <propertyset id="dost.properties">
+      <propertyref prefix="dost"/>
+    </propertyset>
+    
+    <propertyset id="dita.properties">
+      <propertyref prefix="dita"/>
+    </propertyset>
+    
+    <propertyset id="args.properties">
+      <propertyref prefix="args"/>
+    </propertyset>
+    
+    <propertyset id="maybe.properties">
+      <propertyref prefix="maybe"/>
+    </propertyset>
+    
+    <propertyset id="version.properties">
+      <propertyref regex=".*version.*"/>
+    </propertyset>
+    
+    <propertyset id="dir.properties">
+      <propertyref regex=".*\bdir\b.*"/>
+    </propertyset>
+    
+    <propertyset id="tmp.properties">
+      <propertyref regex=".*\bte?mp\b.*"/>
+    </propertyset>
+    
+    <propertyset id="parser.properties">
+      <propertyref regex=".*parser.*"/>
+    </propertyset>
+    
+    <propertyset id="execute.properties">
+      <propertyset refid="dost.properties"/>
+      <propertyset refid="dita.properties"/>
+      <propertyset refid="args.properties"/>
+      <propertyset refid="maybe.properties"/>
+      <propertyset refid="version.properties"/>
+      <propertyset refid="dir.properties"/>
+      <propertyset refid="tmp.properties"/>
+      <propertyset refid="parser.properties"/>
+      <propertyref name="collator"/>
+      <propertyref name="transtype"/>
+    </propertyset>
+    
+    <!--<echo>execute.properties ${toString:execute.properties}</echo>-->
+    
+    <antcall target="recursive-ant" inheritAll="false" inheritRefs="true">
+      <propertyset refid="execute.properties"/>
+    </antcall>
+    
+  </target>
+
+  <target name="recursive-ant">
+    <echo>dost.run.classpath ${toString:dost.run.classpath}</echo>
+    <!-- Start a new instance of ant with necessary properties, and re-invoke this build file. -->
+    <java
+        classname="org.apache.tools.ant.launch.Launcher"
+        fork="true"
+        maxmemory="512m"
+        failonerror="true"
+        dir="${ant.file.DOST.dir}"
+        taskname="recursive_ant"
+        newenvironment="true"
+    >
+      <classpath>
+        <path refid="dost.run.classpath" />
+      </classpath>
+      <env key="ANT_OPTS"
+        value="-Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl ${local.ant.opts}"/>
+      <env key="CLASSPATH" value="${toString:dost.run.classpath}"/>
+      <syspropertyset refid="execute.properties"/>
+      <!--<arg value="-verbose"/>-->
+      <arg value="-f"/>
+      <arg value="${ant.file.DOST}"/>
+      <arg value="original_init"/>
+    </java>
+  </target>
+
+  <target name="init" depends="check-dost-jars-available, start-recursive-ant, original_init"/>
   
-  <target name="init">
+  <target name="original_init" if="dost.jars.on.classpath" depends="check-dost-jars-available, verify-dost-run-classpath">
     <dita-ot-fail id="DOTA001F">
       <condition>
         <and>

@@ -4,7 +4,7 @@
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <project name="dita.integrator" default="lax" basedir=".">
-  
+
   <dirname property="ant.file.dita.integrator.dir" file="${ant.file.dita.integrator}"/>
   
   <!-- First try to initialize ${dita.dir} using the special 
@@ -26,7 +26,7 @@
   </condition>
   
   <path id="dost.class.path">
-    <pathelement location="${dita.dir}${file.separator}lib${file.separator}dost.jar"/>
+    <pathelement location="${dita.dir}/lib/dost.jar"/>
   </path>
   
   <condition property="properties" value="${dita.dir}${file.separator}integrator.properties">

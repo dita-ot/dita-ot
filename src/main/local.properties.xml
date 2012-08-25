@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="local.properties" basedir=".">
+
+  <dirname property="local.basedir" file="${ant.file.local.properties}"/>
+
+  <!-- Properties set in local.properties will take precedence over
+       properties of the same name defined in the rest of this file.
+        Any other required properties can be set in local.properties. -->
+  <property file="${local.basedir}/local.properties"/>
+  <property environment="localenv"/>
+  <property name="commons-codec-name" value="commons-codec-1.4.jar"/>
+
+  <property name="dost.target.classes" location="${local.basedir}/target/classes"/>
+
+  <property name="local.lib.dir" location="${local.basedir}/lib"/>
+  <property name="local.tools.dir" location="${local.basedir}/tools"/>
+  <property name="commons-codec.jar" location="${local.lib.dir}/${commons-codec-name}"/>
+  <condition property="dost.commons-codec.jar" value="${commons-codec.jar}">
+    <available file="${commons-codec.jar}"/>
+  </condition>
+  <property name="saxon9.jar" location="${local.lib.dir}/saxon/saxon9.jar"/>
+  <condition property="dost.saxon9.jar" value="${saxon9.jar}">
+    <available file="${saxon9.jar}"/>
+  </condition>
+  <property name="saxon9-dom.jar" location="${local.lib.dir}/saxon/saxon9-dom.jar"/>
+  <condition property="dost.saxon9-dom.jar" value="${saxon9-dom.jar}">
+    <available file="${saxon9-dom.jar}"/>
+  </condition>
+  <property name="resolver.jar" location="${local.lib.dir}/resolver.jar"/>
+  <condition property="dost.resolver.jar" value="${resolver.jar}">
+    <available file="${resolver.jar}"/>
+  </condition>
+  <property name="local.dost.jar" location="${local.lib.dir}/dost.jar"/>
+  <condition property="dost.local.dost.jar" value="${local.dost.jar}">
+    <available file="${local.dost.jar}"/>
+  </condition>
+
+  <!-- If icu4j.jar is not available, set maybe.icu4j.jar to ${dot}, i.e. current basedir value.
+        This should be harmless if set in a classpath. -->
+  <property name="dot" location="${basedir}"/>
+  <property name="icu4j.jar" location="${local.lib.dir}/icu4j.jar"/>
+  <condition property="dost.icu4j.jar" value="${icu4j.jar}" else="${dot}">
+    <available file="${icu4j.jar}"/>
+  </condition>
+  <condition property="maybe.icu4j.jar" value="${icu4j.jar}" else="${dot}">
+    <isset property="dost.icu4j.jar"/>
+  </condition>
+  
+  <condition property="local.ant.opts" else="">
+    <isset property="localenv.ANT_OPTS"/>
+  </condition>
+  
+  <condition property="local.ant.home" value="${localenv.ANT_HOME}">
+    <isset property="localenv.ANT_HOME"/>
+  </condition>
+
+  <condition property="local.ant.home" value="${local.tools.dir}/ant">
+    <available file="${local.tools.dir}/ant"/>
+  </condition>
+  
+  <condition property="dost.ant.jar" value="${local.ant.home}/lib/ant.jar">
+    <and>
+      <isset property="local.ant.home"/>
+      <available file="${local.ant.home}/lib/ant.jar"/>
+    </and>
+  </condition>
+
+  <condition property="dost.ant-launcher.jar" value="${local.ant.home}/lib/ant-launcher.jar">
+    <and>
+      <isset property="local.ant.home"/>
+      <available file="${local.ant.home}/lib/ant-launcher.jar"/>
+    </and>
+  </condition>
+
+  <condition property="dost.ant-resolver.jar" value="${local.ant.home}/lib/ant-apache-resolver.jar">
+    <and>
+      <isset property="local.ant.home"/>
+      <available file="${local.ant.home}/lib/ant-apache-resolver.jar"/>
+    </and>
+  </condition>
+
+  <property name="xercesimpl.jar" location="${local.lib.dir}/xercesImpl.jar"/>
+  
+  <condition property="dost.xercesimpl.jar" value="${xercesimpl.jar}">
+    <available file="${xercesimpl.jar}"/>
+  </condition>
+
+  <property name="xml-apis.jar" location="${local.lib.dir}/xml-apis.jar"/>
+  
+  <condition property="dost.xml-apis.jar" value="${xml-apis.jar}">
+    <available file="${xml-apis.jar}"/>
+  </condition>
+
+  <!-- Note: ant.jar is not on the compile.classpath. The compile succeeds,
+presumably because ant.core.lib is auto-defined, and the relevant ant
+classes are available through that. -->
+
+<!-- Update - it is defined now, and javac has includeantruntime set to false. -->
+
+  <path id="dost.compile.classpath" description="Jars for compile target.">
+    <pathelement location="${dost.xercesimpl.jar}"/>
+    <pathelement location="${dost.xml-apis.jar}"/>
+    <pathelement location="${dost.commons-codec.jar}"/>
+    <pathelement location="${dost.ant-resolver.jar}"/>
+    <pathelement location="${dost.resolver.jar}"/>
+    <pathelement location="${dost.ant.jar}"/>
+    <pathelement location="${dost.ant-resolver.jar}"/>
+    <pathelement location="${dost.ant-launcher.jar}"/>
+  </path>
+
+  <path id="dost.build.classpath" description="Jars required to build the distributions.">
+    <path refid="dost.compile.classpath"/>
+    <pathelement location="${dost.target.classes}"/>
+  </path>
+
+  <path id="dost.run.classpath" description="Jars required to run the distribution, possibly including icu4j.">
+    <path refid="dost.compile.classpath"/>
+    <pathelement location="${dost.saxon9.jar}"/>
+    <pathelement location="${dost.saxon9-dom.jar}"/>
+    <pathelement location="${dost.local.dost.jar}"/>
+    <pathelement location="${maybe.icu4j.jar}"/>
+    <pathelement location="${local.basedir}"/>
+    <pathelement location="${local.lib.dir}"/>
+  </path>
+
+  <!-- This should only be used when icu4j is KNOWN to be present. When in doubt use dost.run.classpath.
+        See condiion settings above. -->
+  <path id="dost.run.with-icu.classpath" description="Jars required to run the distribution, including icu4j.">
+    <path refid="dost.compile.classpath"/>
+    <pathelement location="${dost.icu4j.jar}"/>
+    <pathelement location="${dost.saxon9.jar}"/>
+    <pathelement location="${dost.saxon9-dom.jar}"/>
+    <pathelement location="${dost.local.dost.jar}"/>
+    <pathelement location="${local.basedir}"/>
+    <pathelement location="${local.lib.dir}"/>
+  </path>
+
+  <path id="dost.run.no-icu.classpath" description="Jars required to run the distribution, excluding icu4j.">
+    <path refid="dost.compile.classpath"/>
+    <pathelement location="${dost.saxon9.jar}"/>
+    <pathelement location="${dost.saxon9-dom.jar}"/>
+    <pathelement location="${dost.local.dost.jar}"/>
+    <pathelement location="${local.basedir}"/>
+    <pathelement location="${local.lib.dir}"/>
+  </path>
+
+  <property name="dost.local.imported" value="true"/>
+  
+  <target name="verify-dost-compile-classpath">
+    <fail unless="dost.xercesimpl.jar" message="xercesImpl.jar not found."/>
+    <fail unless="dost.xml-apis.jar" message="xml-apis.jar not found."/>
+    <fail unless="dost.commons-codec.jar" message="${commons-codec-name} not found."/>
+    <fail unless="dost.ant-resolver.jar" message="ant-apache-resolver.jar not found."/>
+    <fail unless="dost.ant.jar" message="ant.jar not found."/>
+  </target>
+
+  <target name="verify-dost-build-classpath" depends="verify-dost-compile-classpath"/>
+
+  <target name="maybe-verify-icu4j" if="dost.icu4j.required">
+    <fail unless="dost.icu4j.jar" message="icu4j.jar not found."/>
+  </target>
+
+  <target name="verify-dost-run-classpath" depends="verify-dost-build-classpath, maybe-verify-icu4j">
+    <fail unless="dost.saxon9.jar" message="saxon9.jar not found."/>
+    <fail unless="dost.saxon9-dom.jar" message="saxon9-dom.jar not found."/>
+    <fail unless="dost.local.dost.jar" message="dost.jar not found."/>
+  </target>
+
+  <target name="check-dost-jars-available" description="Are dost jars on classpath? Set dost.jars.on.classpath">
+    <!--
+      Check availability of necessary classes using existing classpath.
+      This accommodates situations in which the invoker has set up a particular java environment
+      which is reflected in the CLASSPATH. If everything is OK, no need to run recursively.
+      
+      Note that the <available/> test will override existing property values, which is an unfortunate
+      irregularity in ant, that will be useful here.
+    -->
+    <available property="dost.tools.ant.target" classname="org.apache.tools.ant.Target"/>
+    <available property="dost.tools.ant.launch" classname="org.apache.tools.ant.launch.Launcher"/>
+    <available property="dost.tools.ant.types.resolver" classname="org.apache.tools.ant.types.resolver.ApacheCatalog"/>
+    <available property="dost.xml.resolver" classname="org.apache.xml.resolver.Catalog"/>
+    <available property="dost.xerces.impl.version" classname="org.apache.xerces.impl.Version"/>
+    <available property="dost.javax.xml.xmlconstants" classname="javax.xml.XMLConstants"/>
+    <available property="dost.commons.codec.encoder" classname="org.apache.commons.codec.Encoder"/>
+    <available property="dost.module.GenMapAndTopicListModule" classname="org.dita.dost.module.GenMapAndTopicListModule"/>
+    <available property="dost.net.sf.saxon.dom.DOMTransform" classname="net.sf.saxon.dom.DOMTransform"/>
+    <available property="dost.net.sf.saxon.Transform" classname="net.sf.saxon.Transform"/>
+    <available property="dost.com.saxonica.Transform" classname="com.saxonica.Transform"/>
+    <condition property="dost.saxon.transform.classname" value="net.sf.saxon.Transform">
+      <available classname="net.sf.saxon.Transform"/>
+    </condition>
+    <condition property="dost.saxon.transform.classname" value="com.saxonica.Transform">
+      <available classname="com.saxonica.Transform"/>
+    </condition>
+    <!-- Using <available/> here to ensure reset of the variable.
+          The use of an unrelated classname to set the property is a kludge, because you cannot
+          specify a variable as the classname.
+    -->
+    <available property="dost.saxon.transform" classname="org.apache.ant.tools.Target" value="${dost.saxon.transform.classname}"/>
+    <available property="dost.saxon.dom.transform" classname="net.sf.saxon.dom.DOMTransform"/>
+    <condition property="dost.jars.are.available">
+      <and>
+        <isset property="dost.tools.ant.target"/>
+        <isset property="dost.tools.ant.launch"/>
+        <isset property="dost.tools.ant.types.resolver"/>
+        <isset property="dost.xml.resolver"/>
+        <isset property="dost.xerces.impl.version"/>
+        <isset property="dost.javax.xml.xmlconstants"/>
+        <isset property="dost.tools.ant.target"/>
+        <isset property="dost.tools.ant.target"/>
+      </and>
+    </condition>
+    <!--
+    
+    -->
+    <!-- ant launcher must be available -->
+      <!-- Test with ant-launcher classpath first -->
+      <!--
+    <available property="dost.ant.launcher.available"
+              classname="org.apache.tools.ant.launch.Launcher" classpathref="dost.local.ant.path"/>
+    <condition property="dost.using.dost.lib.ant.launcher" value="true" else="false">
+      <isset property="dost.ant.launcher.available"/>
+    </condition>
+    -->
+    <!-- Test with existing classpath -->
+    <!--
+    <available property="dost.ant.launcher.available" classname="org.apache.tools.ant.launch.Launcher"/>
+    -->
+    <condition property="dost.jar.on.cp">
+      <matches pattern=".*\bdost\.jar\b.*" string="${java.class.path}"/>
+    </condition>
+    
+    <condition property="dost.jar.available">
+      <available classname="org.dita.dost.module.GenMapAndTopicListModule"/>
+    </condition>
+    
+    <condition property="dost.properties.match">
+      <and>
+        <isset property="dost.jar.on.cp"/>
+        <isset property="dost.jar.available"/>
+      </and>
+    </condition>
+    
+    <condition property="dost.jars.on.classpath">
+      <and>
+        <isset property="dost.jars.are.available"/>
+      </and>
+      
+    </condition>
+  </target>
+
+</project>

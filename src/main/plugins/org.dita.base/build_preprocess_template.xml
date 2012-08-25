@@ -5,16 +5,35 @@
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <project xmlns:dita="http://dita-ot.sourceforge.net" name="ditaot-preprocess">
 
+  <dirname property="preprocess.basedir" file="${ant.file.ditaot-preprocess}"/>
+  <import file="${preprocess.basedir}/../../local.properties.xml"/>
+
   <!-- Set to "true" if you get out-of-memory errors during preprocess
        while processing very large (thousands of files) document sets. -->
   <condition property="dita.preprocess.reloadstylesheet" value="false">
     <not><isset property="dita.preprocess.reloadstylesheet"/></not>
   </condition>
 
+  <target name="make-dost-available">
+    <available property="dost.jar.available"
+               classname="org.dita.dost.invoker.CommandLineInvoker" classpathref="dost.jar.path"/>
+    <fail unless="dost.jar.available">
+      Class org.dita.dost.invoker.CommandLineInvoker is not accessible to build_preprocess.
+    </fail>
+    <echo>Loading org.dita.dost.invoker.CommandLineInvoker</echo>
+    <java classname="org.dita.dost.invoker.CommandLineInvoker" classpathref="dost.run.classpath">
+      <arg value="/ditadir:${preprocess.basedir}/../.."/>
+      <arg value="-version"/>
+    </java>
+  </target>
+
   <target name="preprocess"
-    dita:depends="{depend.preprocess.pre},gen-list,debug-filter,copy-files,conrefpush,conref,move-meta-entries,keyref,coderef,mapref,mappull,chunk,maplink,move-links,topicpull,{depend.preprocess.post}"
+    dita:depends="{depend.preprocess.pre},start-preprocess,gen-list,debug-filter,copy-files,conrefpush,conref,move-meta-entries,keyref,coderef,mapref,mappull,chunk,maplink,move-links,topicpull,{depend.preprocess.post}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     description="Preprocessing ended" />
+
+  <!-- preprocess modules begin -->
+  <target name="start-preprocess" description="Preprocessing started" depends="make-dost-available" />
 
   <!-- clean-temp
       Remove anything in the ${dita.temp.dir} directory before starting. -->
