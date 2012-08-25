@@ -108,8 +108,8 @@ final class Features {
      * Return the set of all features.
      * @return features
      */
-    public Set<Map.Entry<String,String>> getAllFeatures(){
-        return featureTable.entrySet();
+    public Map<String,String> getAllFeatures(){
+        return featureTable;
     }
 
     void addExtensionPoint(final ExtensionPoint extensionPoint) {

@@ -70,9 +70,9 @@ final class ConrefPushModule implements AbstractPipelineModule {
             reader.read(file.getAbsolutePath());
         }
 
-        final Set<Map.Entry<String, Hashtable<String, String>>> pushSet = (Set<Map.Entry<String, Hashtable<String,String>>>) reader.getContent().getCollection();
+        final Map<String, Hashtable<String, String>> pushSet = reader.getPushMap();
         
-        for (final Map.Entry<String, Hashtable<String,String>> entry: pushSet) {
+        for (final Map.Entry<String, Hashtable<String,String>> entry: pushSet.entrySet()) {
             logger.logInfo("Processing " + new File(tempDir, entry.getKey()).getAbsolutePath());
             final ConrefPushParser parser = new ConrefPushParser();
             parser.setLogger(logger);

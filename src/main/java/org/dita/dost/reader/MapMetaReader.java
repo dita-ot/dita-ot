@@ -451,12 +451,22 @@ public final class MapMetaReader implements AbstractReader {
 
     /**
      * @return content collection {@code Set<Entry<String, Hashtable<String, Element>>>}
+     * @deprecated use {@link #getMapping()} instead
      */
+    @Deprecated
     public Content getContent() {
         final ContentImpl result = new ContentImpl();
         result.setCollection( resultTable.entrySet());
         return result;
     }
 
+    /**
+     * Get metadata for topics
+     * 
+     * @return map of metadata by topic path
+     */
+    public Map<String, Hashtable<String, Element>> getMapping() {
+    	return Collections.unmodifiableMap(resultTable);
+    } 
 
 }

@@ -83,7 +83,7 @@ public class FeaturesTest {
         exp.put("foo", "bar,baz");
         exp.put("bar", "qux");
 
-        assertEquals(exp.entrySet(), f.getAllFeatures());
+        assertEquals(exp, f.getAllFeatures());
     }
 
     @Test

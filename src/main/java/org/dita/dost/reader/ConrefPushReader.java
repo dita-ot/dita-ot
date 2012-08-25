@@ -12,7 +12,9 @@ package org.dita.dost.reader;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Properties;
 
 import org.dita.dost.log.MessageUtils;
@@ -79,13 +81,25 @@ public final class ConrefPushReader extends AbstractXMLReader {
     
     /**
      * @return content collection {@code Set<Entry<String, Hashtable<String, String>>>}
+     * @deprecated use {@link #getPushMap()} instead
      */
     @Override
+    @Deprecated
     public Content getContent() {
         final Content content = new ContentImpl();
         content.setCollection(pushtable.entrySet());
         return content;
     }
+    
+    /**
+     * Get push table
+     * 
+     * @return unmodifiable push table
+     */
+    public Map<String, Hashtable<String, String>> getPushMap() {
+    	return Collections.unmodifiableMap(pushtable);
+    }
+    
     /**
      * @param filename filename
      */

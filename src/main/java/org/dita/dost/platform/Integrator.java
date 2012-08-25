@@ -276,8 +276,8 @@ public final class Integrator {
     private boolean loadPlugin(final String plugin) {
         if (checkPlugin(plugin)) {
             final Features pluginFeatures = pluginTable.get(plugin);
-            final Set<Map.Entry<String, String>> featureSet = pluginFeatures.getAllFeatures();
-            for (final Map.Entry<String, String> currentFeature : featureSet) {
+            final Map<String, String> featureSet = pluginFeatures.getAllFeatures();
+            for (final Map.Entry<String, String> currentFeature : featureSet.entrySet()) {
                 if (!extensionPoints.contains(currentFeature.getKey())) {
                     final String msg = "Plug-in " + plugin + " uses an undefined extension point "
                             + currentFeature.getKey();

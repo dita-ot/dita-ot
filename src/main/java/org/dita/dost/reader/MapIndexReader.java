@@ -13,6 +13,7 @@ import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -185,8 +186,10 @@ public final class MapIndexReader extends AbstractXMLReader {
 
     /**
      * @return content collection {@code Set<Entry<String, String>}
+     * @deprecated use {@link #getMapping()} instead
      */
     @Override
+    @Deprecated
     public Content getContent() {
 
         final ContentImpl result = new ContentImpl();
@@ -194,6 +197,15 @@ public final class MapIndexReader extends AbstractXMLReader {
         return result;
     }
 
+    /**
+     * Get index entries for topics
+     * 
+     * @return map of index entries by topic path
+     */
+    public Map<String, String> getMapping() {
+    	return Collections.unmodifiableMap(map);
+    }
+    
     @Override
     public void ignorableWhitespace(final char[] ch, final int start, final int length)
             throws SAXException {

@@ -13,6 +13,7 @@ import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -236,8 +237,10 @@ public final class MapLinksReader extends AbstractXMLReader {
 
     /**
      * @return content collection {@code Set<Entry<String, Map<String, String>>>}
+     * @deprecated use {@link #getMapping()} instead
      */
     @Override
+    @Deprecated
     public Content getContent() {
 
         final ContentImpl result = new ContentImpl();
@@ -245,6 +248,15 @@ public final class MapLinksReader extends AbstractXMLReader {
         return result;
     }
 
+    /**
+     * Get links for topics
+     * 
+     * @return map of links by topic path
+     */
+    public Map<String, Map<String, String>> getMapping() {
+    	return Collections.unmodifiableMap(map);
+    }
+    
     @Override
     public void ignorableWhitespace(final char[] ch, final int start, final int length)
             throws SAXException {
