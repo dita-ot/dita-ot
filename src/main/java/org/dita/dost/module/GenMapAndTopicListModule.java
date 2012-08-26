@@ -439,7 +439,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
 		}
         logger.logInfo("Processing " + fileToParse.getAbsolutePath());
         final Properties params = new Properties();
-        params.put("%1", file);
+        params.put("%1", file.getAbsolutePath());
 
         if (!fileToParse.exists()) {
             logger.logError(MessageUtils.getMessage("DOTX008E", params).toString());

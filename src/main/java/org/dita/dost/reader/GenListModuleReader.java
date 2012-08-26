@@ -10,6 +10,7 @@
 package org.dita.dost.reader;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Configuration.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -1377,6 +1378,9 @@ public final class GenListModuleReader extends AbstractXMLReader {
                 filename = URLDecoder.decode(filename, UTF8);
             }catch(final UnsupportedEncodingException e){
                 logger.logError("Unable to decode URI '" + filename + "': " + e.getMessage());
+            }
+            if (processingMode == Mode.LAX) {
+            	filename = filename.replace(WINDOWS_SEPARATOR, File.separator);
             }
         }
         // XXX: At this point, filename should be a system path 
