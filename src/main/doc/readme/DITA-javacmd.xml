@@ -1,51 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Arbortext, Inc., 1988-2010, v.4002-->
-<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
- "..\dtd\concept.dtd">
-<?Pub Sty _display FontColor="red"?>
-<concept id="usingparameterbuildingtool" xml:lang="en-us">
-<title>Running DITA-OT from command-line tool</title>
-<shortdesc>The DITA Open Toolkit provides a command-line tool as an alternative for users with
-    little knowledge of Ant. Most parameters available to the Ant builds are also available using
-    the command-line tool.</shortdesc>
-<conbody>
-<note type="important">The command-line tool interface is simply a wrapper around the Ant interface;
-      it takes the simplified parameters as input, converts them to Ant parameters, and then runs an
-      Ant build. This means that applications embedding the toolkit should always invoke Ant
-      directly. For individual builds, the additional Java overhead is minimal, but for repeated or
-      server based builds, it the extra memory usage will become more of an issue.</note>
-<section>       <title>Running command-line tool</title><p>If you
-are using the "Full Easy Install" package, running the startcmd batch
-file will set up a build environment for you and put you in the correct
-directory. If you are not using this method, you must set up all of
-your tools (Ant, XSLT, FOP, etc) before running the build.</p><ol>
-<li>Change into the DITA Open Toolkit installation directory.</li>
-<li>On the command-line, enter the following command:
-          <codeblock>java -jar lib/dost.jar /i:samples/sequence.ditamap /outdir:out /transtype:xhtml</codeblock></li>
-</ol><p>This particular example calls Ant to build the sample <filepath>sequence.ditamap</filepath> file
-        to XHTML. The output is placed in the <filepath>out/</filepath> directory.</p><p>Note:         <ol>
-<li>In this example, the character slash preceded by a space is the
-separator for each parameter.</li>
-<li>Currently, the parameters <codeph>/filter</codeph>, <codeph>/ftr</codeph>,
-             <codeph>/hdr</codeph>, and <codeph>/hdf</codeph> require
-an absolute path.</li>
-<li>The properties file is saved in the <codeph>${args.logdir}</codeph> directory. The following
-            command provides an example using this properties file:
-            <codeblock>ant -propertyfile ${args.logdir}/property.temp</codeblock>
-          </li>
-<li>To see a list of all supported parameters from the command-line tool, run the following command
-            with no additional parameters:<codeblock>java -jar lib/dost.jar</codeblock></li>
-</ol></p>     </section>
-<section>       <title>Supported parameters</title>
-  <p>See <xref href="dita-ot_java_properties.dita"/> for supported command-line tool arguments. To
-        get a full list of arguments, run</p>
-  <codeblock>java -jar lib/dost.jar -help</codeblock>
-</section>
-<section>       <title>Command-line help</title>       <p> You can find the version of toolkit and the usage of the command-line from the command
-        line help by using the following commands:
-        <codeblock>java -jar lib/dost.jar <b>-version</b>
-java -jar lib/dost.jar <b>-h</b>        </codeblock></p>       <p>You can see the brief description of the supported parameters in the command-line window
-        when you type a specified command.</p>     </section>
-</conbody>
-</concept>
-<?Pub *0000013750?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="usingparameterbuildingtool" xml:lang="en-us">
+<title>Publishing DITA content from the command-line tool</title>
+<shortdesc>The DITA Open Toolkit (DITA-OT) includes a command-line tool designed for users who are
+                unfamiliar with Ant. You can invoke the DITA-OT from the command-line tool and
+                generate output. This method is less robust than Ant.</shortdesc>
+</task>

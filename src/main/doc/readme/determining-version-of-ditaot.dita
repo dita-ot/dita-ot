@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="determining-version-of-dita-ot">
+    <title>Determing the version of the DITA Open Toolkit</title>
+    <shortdesc>You can use the command-line tool to determine the version of the DITA
+        OT.</shortdesc>
+    <taskbody>
+        <steps>
+            <step conref="conref-task.dita#conref-task/run-startcmd">
+                <cmd/>
+            </step>
+            <step>
+                <cmd>From the command prompt, issue the following command:</cmd>
+                <info>
+                    <codeblock>java -jar lib/dost.jar -version</codeblock>
+                </info>
+            </step>
+        </steps>
+    </taskbody>
+</task>

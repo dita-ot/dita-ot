@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="tool-parameters-javahelp-transformation">
+  <title>Command-line tool parameters: All HTML-based transformations</title>
+  <titlealts>
+    <navtitle>All HTML-based transformations</navtitle>
+  </titlealts>
+  <shortdesc>Certain parameters apply to all the HTML-based transformation types: Eclipse content,
+    Eclipse help, HTML Help, JavaHelp, TocJS, and XHTML.</shortdesc>
+  <prolog>
+    <metadata>
+      <keywords>
+        <indexterm>command-line
+              tool<indexterm>parameters<indexterm>args.css</indexterm><indexterm>artlbl</indexterm><indexterm>copycss</indexterm><indexterm>csspath</indexterm><indexterm>cssroot</indexterm><indexterm>ftr</indexterm><indexterm>generateouter</indexterm><indexterm>hdf</indexterm><indexterm>hdr</indexterm><indexterm>indexshow</indexterm><indexterm>onlytopicinmap</indexterm><indexterm>outercontrol</indexterm><indexterm>usetasklabels</indexterm><indexterm>xhtmlclass</indexterm><indexterm>xsl</indexterm></indexterm></indexterm>
+      </keywords>
+    </metadata>
+  </prolog>
+  <refbody>
+    <section>
+      <note>You must specify an absolute path as the value for the following parameters:<ul>
+          <li><parmname>ftr</parmname></li>
+          <li><parmname>hdr</parmname></li>
+          <li><parmname>hdf</parmname></li>
+        </ul></note>
+      <table frame="all" colsep="1" rowsep="1">
+        <title>Command-line tool parameters: All HTML-based transformations</title>
+        <tgroup cols="2">
+          <colspec colname="COLSPEC0" colwidth="1.50*"/>
+          <colspec colname="COLSPEC3" colwidth="4*"/>
+          <thead>
+            <row>
+              <entry>Parameters</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry><parmname>args.css</parmname></entry>
+              <entry
+                conref="ant-parameters-common-html-transtypes.dita#ant-parameters-common-html-transtypes/args.css.desc"
+              />
+            </row>
+            <row>
+              <entry><parmname>artlbl</parmname></entry>
+              <entry
+                conref="ant-parameters-common-html-transtypes.dita#ant-parameters-common-html-transtypes/args.artlbl.desc"
+              />
+            </row>
+            <row>
+              <entry><parmname>copycss</parmname></entry>
+              <entry
+                conref="ant-parameters-common-html-transtypes.dita#ant-parameters-common-html-transtypes/args.copycss.desc"
+              />
+            </row>
+            <row>
+              <entry><parmname>csspath</parmname></entry>
+              <entry
+                conref="ant-parameters-common-html-transtypes.dita#ant-parameters-common-html-transtypes/args.csspath.desc"
+              />
+            </row>
+            <row>
+              <entry><parmname>cssroot</parmname></entry>
+              <entry
+                conref="ant-parameters-common-html-transtypes.dita#ant-parameters-common-html-transtypes/args.cssroot.desc"
+              />
+            </row>
+            <row>
+              <entry><parmname>ftr</parmname></entry>
+              <entry
+                conref="ant-parameters-common-html-transtypes.dita#ant-parameters-common-html-transtypes/args.ftr.desc"
+              />
+            </row>
+            <row>
+              <entry><parmname>generateouter</parmname></entry>
+              <entry
+                conref="ant-parameters-common-html-transtypes.dita#ant-parameters-common-html-transtypes/generate.copy.outer.desc"
+              />
+            </row>
+            <row>
+              <entry><parmname>hdf</parmname></entry>
+              <entry
+                conref="ant-parameters-common-html-transtypes.dita#ant-parameters-common-html-transtypes/args.hdf.desc"
+              />
+            </row>
+            <row>
+              <entry><parmname>hdr</parmname></entry>
+              <entry
+                conref="ant-parameters-common-html-transtypes.dita#ant-parameters-common-html-transtypes/args.hdr.desc"
+              />
+            </row>
+            <row>
+              <entry><parmname>indexshow</parmname></entry>
+              <entry
+                conref="ant-parameters-common-html-transtypes.dita#ant-parameters-common-html-transtypes/args.indexshow.desc"
+              />
+            </row>
+            <row>
+              <entry><parmname>onlytopicinmap</parmname></entry>
+              <entry
+                conref="ant-parameters-common-html-transtypes.dita#ant-parameters-common-html-transtypes/onlytopic.in.map.desc"
+              />
+            </row>
+            <row>
+              <entry><parmname>outercontrol</parmname></entry>
+              <entry
+                conref="ant-parameters-common-html-transtypes.dita#ant-parameters-common-html-transtypes/outer.control.desc"
+              />
+            </row>
+            <row>
+              <entry><parmname>usetasklabels</parmname></entry>
+              <entry conref="conref-dita-ot-parameters.dita#conref-dita-ot-parameters/args.gen.task.lbl.desc"/>
+            </row>
+            <row>
+              <entry><parmname>xhtmlclass</parmname></entry>
+              <entry
+                conref="ant-parameters-common-html-transtypes.dita#ant-parameters-common-html-transtypes/args.xhtml.classattr.desc"
+              />
+            </row>
+            <row>
+              <entry><parmname>xsl</parmname></entry>
+              <entry
+                conref="ant-parameters-common-html-transtypes.dita#ant-parameters-common-html-transtypes/args.xsl.desc"
+              />
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+  </refbody>
+</reference>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map>
+ <title>Installing</title>
+ <topicref href="DITA-installation.xml">
+  <topicref href="distribution_packages.dita"/>
+  <topicref href="prerequisite-software.dita" navtitle="Prerequisite software"/>
+  <topicref href="installing-full-easy.dita" navtitle="Installing the full-easy package"/>
+  <topicref href="installing-minimal-package-on-linux.dita"
+   navtitle="Installing minimal package on Linux"/>
+  <topicref href="installing-minimal-package-windows.dita"
+   navtitle="Installing minimal package on Windows"/>
+ </topicref>
+</map>

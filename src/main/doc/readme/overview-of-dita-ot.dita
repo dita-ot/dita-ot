@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="overview-of-dita-ot">
+ <title>Overview of the DITA Open Toolkit</title>
+ <shortdesc>The DITA Open Toolkit (DITA-OT) is an open-source implementation of the OASIS DITA
+  specification, which is developed by the OASIS DITA Technical Committee. The DITA-OT is a set of
+  Java-based, open-source tools and Ant scripts that transform DITA content (maps and topics) into
+  deliverable formats, including Eclipse Help, HTML Help, JavaHelp, PDF, and XHTML.</shortdesc>
+ <conbody>
+  <p>While the DITA standard is owned and developed by OASIS, the DITA-OT project is governed
+   separately; the DITA-OT is an independent, open-source implementation of the DITA standard. The
+   DITA-OT is available without charge and is licensed under the CPL 1.0 and Apache 2.0 open-source
+   licenses.</p>
+ </conbody>
+</concept>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="conref-task">
+    <title>Conref file for tasks</title>
+    <taskbody>
+        <steps>
+            <step id="run-startcmd">
+                <cmd>Run the <filepath>startcmd</filepath> file that is applicable for your
+                    operating system.</cmd>
+                <info>The <filepath>startcmd.bat</filepath> and <filepath>startcmd.sh</filepath>
+                    files are in the directory where you installed the DITA-OT.</info>
+            </step>
+            <step id="if-necessary-run-startcmd">
+                <cmd>If necessary, run the <filepath>startcmd</filepath> file that is applicable for
+                    your operating system.</cmd>
+                <info>You do not need to run the <filepath>startcmd</filepath> file if you already
+                    have a command-prompt or terminal window that was invoked by the
+                        <filepath>startcmd</filepath> file open.</info>
+            </step>
+            <step id="run-demo-build">
+                <cmd id="run-the-following-command">From the DITA-OT shell, enter the following
+                    command:</cmd>
+                <info id="run-demo-build-command">
+                    <codeblock>ant -f build_demo.xml</codeblock>
+                </info>
+                <stepresult>You receive the following
+                    prompt:<codeblock>[echo] Please enter the filename for the DITA map that you 
+[echo] want to build including the directory path (if any). 
+[echo] The filename must have the .ditamap extension. 
+[echo] Note that relative paths that climb (..) are not supported yet. 
+[echo] To build the sample, press return without entering anything. 
+[input] The DITA map filename: [C:\DITA-OT1.6.M5\samples\hierarchy.ditamap]</codeblock></stepresult>
+            </step>
+            <step>
+                <cmd/>
+                <info>
+                    <ul id="basic-variables">
+                        <li><varname>input-file</varname> is the DITA map or DITA file that you want
+                            to process.</li>
+                        <li><varname>transformation-type</varname> is the transformation type.</li>
+                        <li><varname>parameter-name</varname> is the name of an optional
+                            parameter.</li>
+                        <li><varname>value</varname> is an applicable value for the optional
+                            parameter.</li>
+                    </ul>
+                </info>
+                <stepresult id="running-ditaot-results">If you do not specify an output directory,
+                    by default, the DITA-OT writes the output to the
+                            <filepath><varname>installation-directory</varname>\out</filepath>
+                    directory.</stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>
