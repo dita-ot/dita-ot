@@ -2,12 +2,12 @@
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="rel1.7" xml:lang="en">
   <title>DITA Open Toolkit Release 1.7</title>
-  <reference id="releasehighlights" xml:lang="en-us">
+  <!--reference id="releasehighlights" xml:lang="en-us">
     <title>Release highlights</title>
     <refbody>
       <section/>
     </refbody>
-  </reference>
+  </reference-->
   <!--reference id="general-enhancements-and-changes">
     <title>General Enhancements and Changes</title>
     <refbody>
@@ -53,12 +53,14 @@
           <li>#1317 General XHTML improvements (in progress)</li>
           <li>#1324 Avoid strings where other types are more appropriate (in progress)</li>
           <li>#1338 Add named error messages (in progress)</li>
+          <li>#1345 Add source location to error messages (in progress)</li>
         </ul>
       </section>
       <section>
         <title>Patches</title>
         <ul>
           <li>#1350 Move table specializations into separate stylesheets (milestone 1)</li>
+          <li>#1359 Fix text overflow issue in PDF ToC entries with long titles. (milestone 1)</li>
         </ul>
       </section>
       <section>
@@ -81,6 +83,12 @@
           <li>#1348 Topics copied using "copy-to" become not wellformed (DITA OT 1.6.1) (milestone 1)</li>
           <li>#1349 "Ambiguous rule match" in PDF processing XSLT when &lt;choicetable> is used in topic (milestone
             1)</li>
+          <li>#1351 'Unexpected Text' root-processing_axf.xsl bug (milestone 1)</li>
+          <li>#1353 dita2htmlImpl.xsl/add-br-for-empty-cmd ... content match (milestone 1)</li>
+          <li>#1354 xml comment not being stripped correctly in preprocessing (milestone 1)</li>
+          <li>#1357 NPE when image is incorrectly referenced when publishing to HTML (milestone 1)</li>
+          <li>#1358 Cannot cross reference definition list items (dlentry, dt, dd) in PDF (milestone 1)</li>
+          <li>#1371 build_demo uses deprecated Ant property (milestone 1)</li>
           <li>#1238 Doesn't work with SAXON 9 HE (9.4.0.3) (in progress)</li>
         </ul>
       </section>
