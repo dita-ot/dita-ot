@@ -130,6 +130,7 @@
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
             <param name="WORKDIR" expression="${workdir}" if="workdir"/>
+            <dita:extension behavior="org.dita.dost.platform.InsertAction" id="dita.conductor.eclipse.toc.param"/>
             <mapper type="regexp" 
                 from="^(${tempdirToinputmapdir.relative.value})(.*?)(\.ditamap)$$" 
                 to="\2\.xml"/>

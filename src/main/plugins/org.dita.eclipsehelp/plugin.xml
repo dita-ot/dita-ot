@@ -8,6 +8,7 @@
   <extension-point id="dita.xsl.eclipse.plugin" name="Eclipse plugin XSLT import"/>
   <extension-point id="dita.map.eclipse.index.pre" name="Eclipse index extraction pre-target"/>
   <extension-point id="dita.xsl.eclipse.toc" name="Eclipse TOC XSLT import"/>
+  <extension-point id="dita.conductor.eclipse.toc.param" name="Eclipse Help TOC XSLT parameter"/>
   <!-- extensions -->
   <feature extension="dita.conductor.transtype.check" value="eclipsehelp"/>
   <require plugin="org.dita.xhtml"/>
