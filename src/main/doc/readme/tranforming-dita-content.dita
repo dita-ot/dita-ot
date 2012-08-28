@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="tranforming-dita-content">
+    <title>Publishing DITA content</title>
+    <shortdesc>You can use either Ant or the command-line tool to transform DITA content to the
+        various output formats that are supported by the DITA Open Toolkit (DITA-OT).</shortdesc>
+</task>

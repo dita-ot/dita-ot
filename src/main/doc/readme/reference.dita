@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="reference">
+  <title>Reference</title>
+  <shortdesc>This section is designed to help users to locate information easily and quickly. It
+    includes documentation for the DITA Open Toolkit (DITA-OT) parameters and configuration
+    properties. </shortdesc>
+</reference>

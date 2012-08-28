@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="integrators-properties-file.dita">
+  <title><filepath>integrator.properties</filepath> file</title>
+  <shortdesc>The integration process can be configured using the
+      <filepath>integrator.properties</filepath> file.</shortdesc>
+  <refbody>
+    <table frame="all">
+      <title>Properties set in the integrator.properties file</title>
+      <tgroup cols="2">
+        <colspec colname="c1" colnum="1" colwidth="1.0*"/>
+        <colspec colname="c2" colnum="2" colwidth="1.0*"/>
+        <thead>
+          <row>
+            <entry>Property</entry>
+            <entry>Description</entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry><parmname>plugindirs</parmname></entry>
+            <entry>A semicolon-separated list of directory paths that the DITA OT searches for
+              plug-ins to integrate; any relative paths are resolved against the DITA-OT base
+              directory. Any immediate subdirectory that contains a <filepath>plugin.xml</filepath>
+              file is integrated</entry>
+          </row>
+          <row>
+            <entry><parmname>plugin.ignores</parmname></entry>
+            <entry>A semicolon-separated list of directory names to be ignored during plug-in
+              integration.</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+  </refbody>
+</reference>

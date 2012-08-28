@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="ant-parameters-other">
+  <title>Ant parameters: Other</title>
+  <titlealts>
+    <navtitle>Other</navtitle>
+  </titlealts>
+  <refbody>
+    <section>
+      <draft-comment author="Kristen James Eberlein" time="11 August 2012">I've made no attempt to
+        work with the content in the topic. Here's what I'd like to know:<ul>
+          <li>When would someone want to use the various <parmname>dita.preprocess</parmname>
+            parameters? (Other than if they need to reduce Java memory consumption.) The use cases
+            are not clear from the current description.</li>
+        </ul></draft-comment>
+      <table>
+        <title>Ant parameters: Other</title>
+        <tgroup cols="2">
+          <colspec colwidth="1.5*"/>
+          <colspec colwidth="4.0*"/>
+          <thead>
+            <row>
+              <entry>Parameter</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row id="dita.preprocess.reloadstylesheet">
+              <entry><parmname>dita.preprocess.reloadstylesheet</parmname>
+              </entry>
+              <entry id="dita.preprocess.reloadstylesheet.desc" morerows="5">Specifies whether the
+                DITA-OT reloads the XSL style sheets that are used for the transformation. The
+                allowed values are <option>true</option> and <option>false</option>; the default
+                value is <option>false</option>.<note type="tip">Set the parameter to
+                    <option>true</option> if you want to use more than one set of style sheets to
+                  process a collection of topics. The parameter also is useful for large projects
+                  that generate Java out-of-memory errors during transformation. Alternatively, you
+                  can adjust the size of your Java memory heap if setting
+                    <codeph>dita.preprocess.reloadstylesheet</codeph> for this
+                reason.</note></entry>
+            </row>
+            <row id="dita.preprocess.reloadstylesheet.conref">
+              <entry>
+                <parmname>dita.preprocess.reloadstylesheet.conref</parmname>
+              </entry>
+            </row>
+            <row id="dita.preprocess.reloadstylesheet.mapref">
+              <entry>
+                <parmname>dita.preprocess.reloadstylesheet.mapref</parmname>
+              </entry>
+            </row>
+            <row id="dita.preprocess.reloadstylesheet.mappull">
+              <entry>
+                <parmname>dita.preprocess.reloadstylesheet.mappull</parmname>
+              </entry>
+            </row>
+            <row id="dita.preprocess.reloadstylesheet.maplink">
+              <entry>
+                <parmname>dita.preprocess.reloadstylesheet.maplink</parmname>
+              </entry>
+            </row>
+            <row id="dita.preprocess.reloadstylesheet.topicpull">
+              <entry>
+                <parmname>dita.preprocess.reloadstylesheet.topicpull</parmname>
+              </entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+  </refbody>
+</reference>
