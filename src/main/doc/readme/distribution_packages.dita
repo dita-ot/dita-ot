@@ -29,9 +29,9 @@
         </ul></p>
       <p>The minimal package has the following file names:<ul>
           <li><filepath>DITA-OT<keyword keyref="release.version"
-              >1.6M5</keyword>_minimal_bin.zip</filepath></li>
+              ></keyword>_minimal_bin.zip</filepath></li>
           <li><filepath>DITA-OT<keyword keyref="release.version"
-              >1.6M5</keyword>_minimal_bin.tar.gz</filepath></li>
+              ></keyword>_minimal_bin.tar.gz</filepath></li>
         </ul></p>
     </section>
     <section>
@@ -51,9 +51,9 @@
       </ul>
       <p>The standard package has the following file names:<ul>
           <li><filepath>DITA-OT<keyword keyref="release.version"
-              >1.6M5</keyword>_standard_bin.zip</filepath></li>
+              ></keyword>_standard_bin.zip</filepath></li>
           <li><filepath>DITA-OT<keyword keyref="release.version"
-              >1.6M5</keyword>_standard_bin.tar.gz</filepath></li>
+              ></keyword>_standard_bin.tar.gz</filepath></li>
         </ul></p>
     </section>
     <section>
@@ -75,9 +75,9 @@
       </ul>
       <p>The full-easy-install package has the following file names:<ul>
           <li><filepath>DITA-OT<keyword keyref="release.version"
-              >1.6M5</keyword>_full_easy_install_bin.zip</filepath></li>
+              ></keyword>_full_easy_install_bin.zip</filepath></li>
           <li><filepath>DITA-OT<keyword keyref="release.version"
-              >1.6M5</keyword>_full_easy_install_bin.tar.gz</filepath></li>
+              ></keyword>_full_easy_install_bin.tar.gz</filepath></li>
         </ul></p>
     </section>
   </conbody>

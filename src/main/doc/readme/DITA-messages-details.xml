@@ -74,10 +74,10 @@ stylesheet could not be loaded. Please correct the parameter to specify a valid 
 to set an extension for DITA topic documents in the temporary processing directory. Only
 "dita", ".dita", "xml", or ".xml" are allowed.</stentry>
 </strow>
-<strow>
+<!--strow>
 <stentry conref="DITA-messages.xml#msgs/DOTA005W-extra" conaction="pushreplace">These two parameters
 were deprecated several releases ago; please use the <codeph>args.input</codeph> parameter instead.</stentry>
-</strow>
+</strow-->
 <strow>
 <stentry conref="DITA-messages.xml#msgs/DOTA006W-extra" conaction="pushreplace">If the CSSPATH uses an
 absolute path, it should be one that can still be accessed after the files are moved to
