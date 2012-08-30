@@ -1067,35 +1067,6 @@
         </xsl:copy>
     </xsl:template>
 
-
-    <!-- SourceForge bug tracker item 2872988:
-         Count the max number of cells in any row of a simpletable -->
-    <xsl:template match="*[contains(@class, ' topic/sthead ')] | *[contains(@class, ' topic/strow ')]" mode="count-max-simpletable-cells">
-        <xsl:param name="maxcount" select="0" as="xs:integer"/>
-        <xsl:variable name="newmaxcount" as="xs:integer">
-            <xsl:variable name="row-cell-count" select="count(*[contains(@class, ' topic/stentry ')])"/>
-            <xsl:choose>
-                <xsl:when test="$row-cell-count >
-                    $maxcount">
-                    <xsl:sequence select="$row-cell-count"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:sequence select="$maxcount"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-        <xsl:choose>
-            <xsl:when test="not(following-sibling::*[contains(@class, ' topic/strow ')])">
-                <xsl:value-of select="$newmaxcount"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="following-sibling::*[contains(@class, ' topic/strow ')][1]" mode="count-max-simpletable-cells">
-                    <xsl:with-param name="maxcount" select="$newmaxcount"/>
-                </xsl:apply-templates>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-
     <!--  Simpletable processing  -->
     <xsl:template match="*[contains(@class, ' topic/simpletable ')]">
         <xsl:variable name="number-cells">
