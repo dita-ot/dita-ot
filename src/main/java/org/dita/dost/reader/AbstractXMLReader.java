@@ -41,44 +41,6 @@ public abstract class AbstractXMLReader implements AbstractReader,
 ContentHandler, LexicalHandler, EntityResolver {
 
     /**
-     * Initialize XML reader.
-     * 
-     * @param ditaDir absolute path to DITA-OT base directory
-     * @param validate
-     * @param inGrammarPool
-     * @throws SAXException if initializing reader failed
-     */
-    @Deprecated
-    public XMLReader initXMLReaderBase(final File ditaDir, final boolean validate,
-            final XMLGrammarPool inGrammarPool) throws SAXException {
-        // FIXME: WEK: This is my attempt to factor out common reader initialization
-        //             code for the GenListModuleReader and the Debug and filter reader.
-
-        XMLGrammarPool grammarPool = null;
-
-        if (inGrammarPool == null) {
-            grammarPool = GrammarPoolManager.getGrammarPool();
-        } else {
-            grammarPool = inGrammarPool;
-        }
-
-        final DITAOTLogger javaLogger=new DITAOTJavaLogger();
-        final XMLReader reader = StringUtils.getXMLReader();
-        reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-        if(validate==true){
-            reader.setFeature(FEATURE_VALIDATION, true);
-            reader.setFeature(FEATURE_VALIDATION_SCHEMA, true);
-        }else{
-            final String msg=MessageUtils.getMessage("DOTJ037W").toString();
-            javaLogger.logWarn(msg);
-        }
-        setGrammarPool(reader, grammarPool);
-
-        CatalogUtils.setDitaDir(ditaDir);
-        return reader;
-    }
-
-    /**
      * Sets the grammar pool on the parser. Note that this is a Xerces-specific
      * feature.
      * @param reader

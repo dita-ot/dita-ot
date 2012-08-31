@@ -1132,18 +1132,6 @@ public final class DitaWriter extends AbstractXMLFilter {
             }
         }
     }
-
-    /**
-     * @deprecated use {@link #write(String, String)} instead
-     */
-    @Override
-    @Deprecated
-    public void write(final String filename) {
-        final int index = filename.indexOf(STICK);
-        final String baseDir = filename.substring(0, index);
-        inputFile = filename.substring(index + 1);
-        write(new File(baseDir), inputFile);
-    }
     
     /**
      * Write output

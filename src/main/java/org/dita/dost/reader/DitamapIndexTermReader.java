@@ -59,27 +59,15 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
     private boolean indexMoved = true;
     //Added by William on 2010-04-26 for ref:2990783 end
 
-    /**
-     * Create a new instance of sax handler for ditamap.
-     * 
-     * @deprecated use {@link #DitamapIndexTermReader(IndexTermCollection, boolean)} instead
-     */
-    @Deprecated
-    public DitamapIndexTermReader() {
-        super();
-        elementStack = new Stack<Object>();
-        indexTermSpecList = new ArrayList<String>(INT_16);
-        topicrefSpecList = new ArrayList<String>(INT_16);
-        indexSeeSpecList = new ArrayList<String>(INT_16);
-        indexSeeAlsoSpecList = new ArrayList<String>(INT_16);
-        if (result == null) {
-            result = IndexTermCollection.getInstantce();
-        }
-    }
     //Added by William on 2010-04-26 for ref:2990783 start
     public DitamapIndexTermReader(final IndexTermCollection result, final boolean indexMoved) {
-        this();
-        this.result = result;
+        super();
+		elementStack = new Stack<Object>();
+		indexTermSpecList = new ArrayList<String>(INT_16);
+		topicrefSpecList = new ArrayList<String>(INT_16);
+		indexSeeSpecList = new ArrayList<String>(INT_16);
+		indexSeeAlsoSpecList = new ArrayList<String>(INT_16);
+		this.result = result != null ? result : IndexTermCollection.getInstantce();
         this.indexMoved = indexMoved;
     }
     //Added by William on 2010-04-26 for ref:2990783 end

@@ -43,16 +43,6 @@ final class Features {
     private final List<String> templateList;
 
     /**
-     * Default constructor.
-     * 
-     * @deprecated use {@link #Features(File, File)} instead
-     */
-    @Deprecated
-    public Features() {
-        this(null, null);
-    }
-
-    /**
      * Constructor init location.
      * @param location location
      * @param ditaDir base directory

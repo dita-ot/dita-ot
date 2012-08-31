@@ -41,15 +41,6 @@ final class DescParser extends DefaultHandler{
     private final Features features;
 
     /**
-     * DescParser Constructor.
-     * @deprecated use {@link #DescParser(File, File)} instead
-     */
-    @Deprecated
-    public DescParser(){
-        this(null, null);
-    }
-
-    /**
      * Constructor initialize Feature with location.
      * @param location location
      */

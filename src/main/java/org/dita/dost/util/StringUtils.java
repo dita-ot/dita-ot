@@ -353,39 +353,6 @@ public final class StringUtils {
     }
 
     /**
-     * Init sax driver info.
-     * 
-     * @deprecated use {@link #getXMLReader} instead to get the preferred SAX parser
-     */
-    @Deprecated
-    public static void initSaxDriver(){
-        //The default sax driver is set to xerces's sax driver
-        final DITAOTJavaLogger logger = new DITAOTJavaLogger();
-        try {
-            Class.forName(SAX_DRIVER_DEFAULT_CLASS);
-            System.setProperty(SAX_DRIVER_PROPERTY,SAX_DRIVER_DEFAULT_CLASS);
-            logger.logInfo("Using XERCES.");
-        } catch (final ClassNotFoundException e){
-            try{
-                Class.forName(SAX_DRIVER_SUN_HACK_CLASS);
-                System.setProperty(SAX_DRIVER_PROPERTY,SAX_DRIVER_SUN_HACK_CLASS);
-                logger.logInfo("Using XERCES in SUN JDK 1.5");
-            }catch (final ClassNotFoundException ex){
-                try {
-                    Class.forName(SAX_DRIVER_CRIMSON_CLASS);
-                    System.setProperty(SAX_DRIVER_PROPERTY,SAX_DRIVER_CRIMSON_CLASS);
-                    logger.logInfo("Using CRIMSON");
-                }catch (final ClassNotFoundException exc){
-                    logger.logException(e);
-                    logger.logException(ex);
-                    logger.logException(exc);
-                }
-            }
-        }
-
-    }
-
-    /**
      * Get preferred SAX parser.
      * 
      * Preferred XML readers are in order:
