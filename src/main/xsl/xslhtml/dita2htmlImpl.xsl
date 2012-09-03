@@ -797,8 +797,11 @@
     <br/><div style="text-align:right"><a>
      <xsl:attribute name="href">
       <xsl:choose>
-       <xsl:when test="contains(@href,$DITAEXT)">
-        <xsl:value-of select="substring-before(@href,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/><xsl:value-of select="substring-after(@href,$DITAEXT)"/>
+       <xsl:when test="not(@format) or @format = 'dita'">
+        <xsl:call-template name="replace-extension">
+         <xsl:with-param name="filename" select="@href"/>
+         <xsl:with-param name="extension" select="$OUTEXT"/>
+        </xsl:call-template>
        </xsl:when>
        <xsl:otherwise>
         <xsl:value-of select="@href"/>
@@ -2084,8 +2087,12 @@
 <xsl:template match="*[contains(@class,' topic/image ')]/@longdescref">
   <xsl:attribute name="longdesc">
     <xsl:choose>
-      <xsl:when test="contains(.,$DITAEXT)">  <!-- switch extension from .dita -->
-        <xsl:value-of select="substring-before(.,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/><xsl:value-of select="substring-after(.,$DITAEXT)"/>
+      <!-- Guess whether link target is a DITA topic or something else -->
+      <xsl:when test="contains(., '.dita') or contains(., '.xml')">
+        <xsl:call-template name="replace-extension">
+          <xsl:with-param name="filename" select="."/>
+          <xsl:with-param name="extension" select="$OUTEXT"/>
+        </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="."/>
@@ -2098,8 +2105,11 @@
   <xsl:if test="@href and not (@href='')">
     <xsl:attribute name="longdesc">
       <xsl:choose>
-        <xsl:when test="contains(@href,$DITAEXT)">  <!-- switch extension from .dita -->
-          <xsl:value-of select="substring-before(@href,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/><xsl:value-of select="substring-after(@href,$DITAEXT)"/>
+        <xsl:when test="not(@format) or @format = 'dita'">
+          <xsl:call-template name="replace-extension">
+            <xsl:with-param name="filename" select="@href"/>
+            <xsl:with-param name="extension" select="$OUTEXT"/>
+          </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="@href"/>

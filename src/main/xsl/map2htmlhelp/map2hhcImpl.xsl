@@ -283,23 +283,21 @@
               <xsl:when test="contains(@copy-to, $DITAEXT)">
                 <xsl:attribute name="value">
                   <xsl:value-of select="$pathFromMaplist"/>
-                  <xsl:call-template name="getFileName">
+                  <xsl:call-template name="replace-extension">
                     <xsl:with-param name="filename" select="@copy-to"/>
-                    <xsl:with-param name="extension" select="$DITAEXT"/>
+                    <xsl:with-param name="extension" select="$OUTEXT"/>
+                    <xsl:with-param name="ignore-fragment" select="true()"/>
                   </xsl:call-template>
-                  <xsl:value-of select="$OUTEXT"/>
                   <xsl:value-of select="$topicID"/>
                 </xsl:attribute>
               </xsl:when>
               <xsl:when test="contains(@href, $DITAEXT)">
                 <xsl:attribute name="value">
                   <xsl:value-of select="$pathFromMaplist"/>
-                  <xsl:call-template name="getFileName">
+                  <xsl:call-template name="replace-extension">
                     <xsl:with-param name="filename" select="@href"/>
-                    <xsl:with-param name="extension" select="$DITAEXT"/>
+                    <xsl:with-param name="extension" select="$OUTEXT"/>
                   </xsl:call-template>
-                  <xsl:value-of select="$OUTEXT"/>
-                  <xsl:value-of select="$topicID"/>
                 </xsl:attribute>
               </xsl:when>
               <xsl:when test="contains(@href,'.htm') and @scope!='external'">

@@ -208,11 +208,10 @@
                     (not(@format) or @format = 'dita' or @format='ditamap' ) ">
                   <!-- edited by william on 2009-08-06 for bug:2832696 end -->
                     <xsl:if test="not(@scope='external')"><xsl:value-of select="$pathFromMaplist"/></xsl:if>
-                    <xsl:call-template name="getFileName">
+                    <xsl:call-template name="replace-extension">
                       <xsl:with-param name="filename" select="@copy-to"/>
-                      <xsl:with-param name="extension" select="$DITAEXT"/>
+                      <xsl:with-param name="extension" select="$OUTEXT"/>
                     </xsl:call-template>
-                    <xsl:value-of select="$OUTEXT"/>
                     <xsl:if test="not(contains(@copy-to, '#')) and contains(@href, '#')">
                       <xsl:value-of select="concat('#', substring-after(@href, '#'))"/>
                     </xsl:if>
@@ -221,14 +220,10 @@
                   <xsl:when test="contains(@href,$DITAEXT) and (not(@format) or @format = 'dita' or @format='ditamap')">
                   <!-- edited by william on 2009-08-06 for bug:2832696 end -->
                     <xsl:if test="not(@scope='external')"><xsl:value-of select="$pathFromMaplist"/></xsl:if>
-                    <xsl:call-template name="getFileName">
+                    <xsl:call-template name="replace-extension">
                       <xsl:with-param name="filename" select="@href"/>
-                      <xsl:with-param name="extension" select="$DITAEXT"/>
+                      <xsl:with-param name="extension" select="$OUTEXT"/>
                     </xsl:call-template>
-                    <xsl:value-of select="$OUTEXT"/>
-                    <xsl:if test="contains(@href, '#')">
-                      <xsl:value-of select="concat('#', substring-after(@href, '#'))"/>
-                    </xsl:if>
                   </xsl:when>
                   <xsl:otherwise>  <!-- If non-DITA, keep the href as-is -->
                     <xsl:if test="not(@scope='external')"><xsl:value-of select="$pathFromMaplist"/></xsl:if>

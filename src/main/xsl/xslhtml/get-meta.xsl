@@ -241,16 +241,17 @@
 
 <!-- CONTENT: Relation - related-links -->
 <xsl:template match="*[contains(@class,' topic/link ')]/@href" mode="gen-metadata">
- <xsl:variable name="linkmeta">
-  <xsl:value-of select="normalize-space(.)"/>
- </xsl:variable>
+ <xsl:variable name="linkmeta" select="normalize-space(.)"/>
  <xsl:choose>
   <xsl:when test="substring($linkmeta,1,1)='#'" />  <!-- ignore internal file links -->
   <xsl:otherwise>
     <xsl:variable name="linkmeta_ext">
      <xsl:choose>
-      <xsl:when test="contains($linkmeta,$DITAEXT)">
-       <xsl:value-of select="substring-before($linkmeta,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/><xsl:value-of select="substring-after($linkmeta,$DITAEXT)"/>
+      <xsl:when test="not(../@format) or ../@format = 'dita'">
+       <xsl:call-template name="replace-extension">
+        <xsl:with-param name="filename" select="$linkmeta"/>
+        <xsl:with-param name="extension" select="$OUTEXT"/>
+       </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
        <xsl:value-of select="$linkmeta"/>
