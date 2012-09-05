@@ -65,7 +65,7 @@
       tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.DebugAndFilterModule">
         <param name="ditaval" location="${dita.input.valfile}" if="dita.input.valfile"/>
-        <param name="ditaext" value="${dita.ext}"/>
+        <param name="ditaext" value="${dita.ext}" if="dita.ext"/>
         <param name="ditadir" location="${dita.dir}"/>
         <param name="validate" value="${validate}"/>
         <param name="generatecopyouter" value="${generate.copy.outer}"/>
@@ -159,7 +159,7 @@
       reloadstylesheet="${dita.preprocess.reloadstylesheet.conref}"
       style="${dita.script.dir}/preprocess/conref.xsl" filenameparameter="file-being-processed">
       <mapper type="glob" from="*" to="*.cnrf" />
-      <param name="DITAEXT" expression="${dita.ext}" />
+      <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
       <param name="BASEDIR" expression="${basedir}"/>
       <param name="TEMPDIR" expression="${dita.temp.dir}"/>
       <param name="TRANSTYPE" expression="${transtype}"/>
@@ -246,7 +246,7 @@
     <pipeline message="Resolve keyref." taskname="keyref"
       tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.KeyrefModule">
-        <param name="ditaext" value="${dita.ext}"/>
+        <param name="ditaext" value="${dita.ext}" if="dita.ext"/>
       </module>
     </pipeline>
   </target>
@@ -304,7 +304,7 @@
       inputmap="${user.input.file}"
       tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.ChunkModule">
-        <param name="ditaext" value="${dita.ext}"/>
+        <param name="ditaext" value="${dita.ext}" if="dita.ext"/>
         <param name="transtype" value="${transtype}"/>
       </module>
     </pipeline>

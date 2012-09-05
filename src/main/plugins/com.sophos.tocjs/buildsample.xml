@@ -38,7 +38,7 @@
              that HTML conversion, just run the XSLT process to create toctree.js. -->
         <xslt in="${dita.temp.dir}${file.separator}tocjs.ditamap" out="out${file.separator}sample${file.separator}toctree.js" style="${dita.dir}/demo/tocjs/xsl/tocjs.xsl">
             <param name="contentwin" expression="${content.frame}" if="content.frame" /> 
-            <param name="ditaext" expression="${dita.ext}" /> 
+            <param name="ditaext" expression="${dita.ext}" if="dita.ext"/> 
             <param name="htmlext" expression="${out.ext}" /> 
         </xslt>
         <!--<antcall target="dita2tocjs">

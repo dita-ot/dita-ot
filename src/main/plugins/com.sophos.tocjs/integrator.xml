@@ -51,7 +51,7 @@
     <xslt in="${input}" out="${output.file}"
       style="${dita.plugin.com.sophos.tocjs.dir}/xsl/tocjs.xsl">
       <param name="contentwin" expression="${content.frame}" if="content.frame"/>
-      <param name="ditaext" expression="${dita.ext}"/>
+      <param name="ditaext" expression="${dita.ext}" if="dita.ext"/>
       <param name="htmlext" expression="${out.ext}"/>
     </xslt>
   </target>
