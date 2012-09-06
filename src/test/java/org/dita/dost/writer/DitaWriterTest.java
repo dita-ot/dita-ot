@@ -83,7 +83,7 @@ public class DitaWriterTest {
         final DitaWriter writer = new DitaWriter();
         writer.setLogger(new TestUtils.TestLogger());
         writer.initXMLReader(new File("src" + File.separator + "main").getAbsoluteFile(), false, true);
-        writer.setExtName(".xml");
+        writer.setExtName(".dita");
         writer.setTranstype("xhtml");
         final FilterUtils fu = new FilterUtils();
         fu.setLogger(new TestUtils.TestLogger());
@@ -110,7 +110,7 @@ public class DitaWriterTest {
         parser.setContentHandler(handler);
         InputStream in = null;
         try {
-            in = new FileInputStream(new File(tempDir, "keyword.xml"));
+            in = new FileInputStream(new File(tempDir, "keyword.dita"));
             handler.setSource(new File(srcDir, "keyword.dita"));
             parser.parse(new InputSource(in));
         } finally {
@@ -140,15 +140,15 @@ public class DitaWriterTest {
     @Test
     public void testWrite() throws Exception {
         final DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        clean(db.parse(new File(tempDir, "keyword.xml")));
+        clean(db.parse(new File(tempDir, "keyword.dita")));
 
         XMLUnit.setNormalizeWhitespace(true);
         XMLUnit.setIgnoreWhitespace(true);
         XMLUnit.setIgnoreDiffBetweenTextAndCDATA(true);
         XMLUnit.setIgnoreComments(true);
 
-        assertXMLEqual(clean(db.parse(new File(expDir, "keyword.xml"))),
-                clean(db.parse(new File(tempDir, "keyword.xml"))));
+        assertXMLEqual(clean(db.parse(new File(expDir, "keyword.dita"))),
+                clean(db.parse(new File(tempDir, "keyword.dita"))));
         assertXMLEqual(clean(db.parse(new File(expDir, "main.ditamap"))),
                 clean(db.parse(new File(tempDir, "main.ditamap"))));
     }

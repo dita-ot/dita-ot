@@ -19,7 +19,7 @@
     </prolog>
     <body>
       <note conref="#common/disclaimer"/>
-      <note conref="keyword.xml#disclaimer"/>
+      <note conref="keyword.dita#disclaimer"/>
       <lines xml:space="preserve">
         <keyword id="prodname1" product="key1">ThisProduct</keyword>
         <keyword id="prodname2" product="key2">ThisProduct Deluxe</keyword>

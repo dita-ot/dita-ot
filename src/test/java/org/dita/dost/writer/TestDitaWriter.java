@@ -72,7 +72,7 @@ public class TestDitaWriter {
         pipelineInput.setAttribute("outputdir", outDir.getAbsolutePath());
         pipelineInput.setAttribute("tempDir", tempDir.getAbsolutePath());
         pipelineInput.setAttribute("ditadir", new File("src" + File.separator + "main").getAbsolutePath());
-        pipelineInput.setAttribute("ditaext", ".xml");
+        pipelineInput.setAttribute("ditaext", ".dita");
         pipelineInput.setAttribute("indextype", "xhtml");
         pipelineInput.setAttribute("encoding", "en-US");
         pipelineInput.setAttribute("targetext", ".html");
@@ -133,14 +133,14 @@ public class TestDitaWriter {
         outputUtils.setInputMapPathName(new File(baseDir, inputDir.getPath() + File.separator + "keyword.dita"));
         writer.setOutputUtils(outputUtils);
         writer.setTempDir(tempDir.getAbsoluteFile());
-        writer.setExtName(".xml");
+        writer.setExtName(".dita");
         writer.write(new File(baseDir, inputDir.getPath()).getAbsoluteFile(), "keyword.dita");
 
         compareKeyword(new File(baseDir, new File(inputDir, "keyword.dita").getPath()),
                 new String[] {"prodname1", "prodname2", "prodname3"},
                 new String[] {"key1", "key2", "key3"});
 
-        compareKeyword(new File(tempDir, "keyword.xml"),
+        compareKeyword(new File(tempDir, "keyword.dita"),
                 new String[] {"prodname2", "prodname3"},
                 new String[] {"key2", "key3"});
     }
