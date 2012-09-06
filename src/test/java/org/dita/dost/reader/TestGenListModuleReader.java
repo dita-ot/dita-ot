@@ -47,6 +47,7 @@ public class TestGenListModuleReader {
         final boolean validate = false;
         reader = new GenListModuleReader();
         reader.setLogger(new TestUtils.TestLogger());
+        reader.setExtName(".xml");
         reader.initXMLReader(ditaDir, validate, new File(rootFile.getPath()).getCanonicalFile(), true);
         reader.setFilterUtils(new FilterUtils());
         reader.setOutputUtils(new OutputUtils());

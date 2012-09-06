@@ -99,7 +99,7 @@
 <!-- added by William on 2009-06-24 for flag support start -->
 <xsl:param name="FILENAME"/>
 <xsl:param name="FILEDIR"/>
-<xsl:param name="CURRENTFILE" select="concat($FILEDIR, '/', substring-before($FILENAME, '.'), $DITAEXT)"/>
+<xsl:param name="CURRENTFILE" select="concat($FILEDIR, '/', $FILENAME)"/>
 <!-- added by William on 2009-06-24 for flag support end --> 
 
 <!-- the file name containing filter/flagging/revision information
@@ -1595,7 +1595,7 @@
         </xsl:apply-templates>
       </xsl:variable>
 
-      <xsl:variable name="entry-file" select="concat($WORKDIR, $PATH2PROJ, substring-before($target, '.'), $DITAEXT)"/>
+      <xsl:variable name="entry-file" select="concat($WORKDIR, $PATH2PROJ, $target)"/>
       <xsl:variable name="entry-file-uri" select="url:getURL($entry-file)"/>
       
       <!-- Save glossary entry file contents into a variable to workaround the infamous putDocumentCache error in Xalan -->
@@ -4677,10 +4677,10 @@
           <xsl:if test="$keydef">
             <xsl:choose>
               <xsl:when test="contains($keydef/@href, '#')">
-                <xsl:value-of select="concat(substring-before(substring-before($keydef/@href, '#'), '.'), $DITAEXT)"/>
+                <xsl:value-of select="substring-before($keydef/@href, '#')"/>
               </xsl:when>
               <xsl:when test="$keydef/@href">
-                <xsl:value-of select="concat(substring-before($keydef/@href, '.'), $DITAEXT)"/>
+                <xsl:value-of select="$keydef/@href"/>
               </xsl:when>
             </xsl:choose>
           </xsl:if>

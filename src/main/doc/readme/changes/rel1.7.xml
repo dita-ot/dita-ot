@@ -50,6 +50,7 @@
           <li>#1144 Produce HTML5 output (milestone 1)</li>
           <li>#1319 Remove deprecated code (milestone 1)</li>
           <li>#1339 PDF, flagged image : change use-attribute-sets="image" (milestone 1)</li>
+          <li>#1379 Use format attribute to identity DITA topics (milestone 2)</li>
           <li>#1317 General XHTML improvements (in progress)</li>
           <li>#1324 Avoid strings where other types are more appropriate (in progress)</li>
           <li>#1338 Add named error messages (in progress)</li>

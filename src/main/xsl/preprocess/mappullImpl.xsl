@@ -234,11 +234,11 @@ Other modes can be found within the code, and may or may not prove useful for ov
       <xsl:attribute name="format"><xsl:value-of select="$inherited-value"/></xsl:attribute>
       <!-- Warn if non-dita format was inherited, and this is dita.
            Only warn if this was actually inherited (not set locally).  -->
-      <xsl:if test="not(@format) and $inherited-value!='dita' and contains(@href,$DITAEXT)">
+      <!--xsl:if test="not(@format) and $inherited-value!='dita' and contains(@href,$DITAEXT)">        
         <xsl:apply-templates select="." mode="ditamsg:incorect-inherited-format">
           <xsl:with-param name="format" select="$inherited-value"/>
         </xsl:apply-templates>
-      </xsl:if>
+      </xsl:if-->
     </xsl:if>
   </xsl:template>
 
@@ -451,9 +451,9 @@ Other modes can be found within the code, and may or may not prove useful for ov
           <xsl:when test="$scope='external' or $scope='peer' or $type='external' or not($format='#none#' or $format='dita' or $format='DITA')">
             <!-- do nothing - type is unavailable-->
           </xsl:when>
-          <xsl:when test="not(contains($file,$DITAEXT))">
+          <!--xsl:when test="not(contains($file,$DITAEXT))">
             <xsl:apply-templates select="." mode="ditamsg:unknown-extension"/>
-          </xsl:when>
+          </xsl:when-->
 
           <!--finding type based on name of the target element in a particular topic in another file-->
           <xsl:when test="$topicpos='otherfile'">
@@ -589,10 +589,10 @@ Other modes can be found within the code, and may or may not prove useful for ov
         <xsl:apply-templates select="." mode="mappull:get-navtitle-for-non-dita"/>
       </xsl:when>
       <xsl:when test="@href=''"/>
-      <xsl:when test="not(contains($file,$DITAEXT))">
+      <!--xsl:when test="not(contains($file,$DITAEXT))">
         <xsl:value-of select="@href"/>
         <xsl:apply-templates select="." mode="ditamsg:unknown-extension"/>
-      </xsl:when>
+      </xsl:when-->
       <!--grabbing text from a particular topic in another file-->
       <xsl:when test="$topicpos='otherfile'">
         <xsl:choose>
@@ -837,10 +837,10 @@ Other modes can be found within the code, and may or may not prove useful for ov
               <xsl:apply-templates select="." mode="mappull:get-linktext-for-non-dita"/>
             </xsl:when>
             <xsl:when test="@href=''">#none#</xsl:when>
-            <xsl:when test="not(contains($file,$DITAEXT))">
+            <!--xsl:when test="not(contains($file,$DITAEXT))">
               <xsl:text>#none#</xsl:text>
               <xsl:apply-templates select="." mode="ditamsg:unknown-extension"/>
-            </xsl:when>
+            </xsl:when-->
 
             <!--grabbing text from a particular topic in another file-->
             <xsl:when test="$topicpos='otherfile'">
@@ -1148,6 +1148,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
   <!-- Make it easy to override messages. If a product wishes to change or hide
        specific messages, it can override these templates. Longer term, it would
        be good to move messages from each XSL file into a common location. -->
+  <!-- Deprecated -->
   <xsl:template match="*" mode="ditamsg:unknown-extension">
     <xsl:call-template name="output-message">
       <xsl:with-param name="msgnum">006</xsl:with-param>
@@ -1155,6 +1156,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
+  <!-- Deprecated -->
   <xsl:template match="*" mode="ditamsg:incorect-inherited-format">
     <xsl:param name="format"/>
     <xsl:call-template name="output-message">

@@ -40,6 +40,7 @@
       <module class="org.dita.dost.module.GenMapAndTopicListModule">
         <param name="ditadir" location="${dita.dir}"/>
         <param name="ditaval" location="${dita.input.valfile}" if="dita.input.valfile"/>
+        <param name="ditaext" value="${dita.ext}" if="dita.ext"/>
         <param name="validate" value="${validate}"/>
         <param name="generatecopyouter" value="${generate.copy.outer}"/>
         <param name="outercontrol" value="${outer.control}"/>

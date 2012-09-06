@@ -224,6 +224,8 @@ public final class GenListModuleReader extends AbstractXMLReader {
     /** Store the external/peer keydefs */
     private final Map<String, String> exKeysDefMap;
     //Added by William on 2010-06-09 for bug:3013079 end
+    /** File extension of source file. */
+    private String extName = null;
 
     /**
      * Get transtype.
@@ -241,6 +243,14 @@ public final class GenListModuleReader extends AbstractXMLReader {
         this.transtype = transtype;
     }
 
+    /**
+     * Set temporary file extension.
+     * @param extName file extension
+     */
+    public void setExtName(final String extName) {
+    	this.extName = extName;
+    }
+    
     /**
      * @return the pluginMap
      */
@@ -1263,6 +1273,9 @@ public final class GenListModuleReader extends AbstractXMLReader {
         if(ATTRIBUTE_NAME_KEYS.equals(attrName) && attrValue.length() != 0){
 
             String target = atts.getValue(ATTRIBUTE_NAME_HREF);
+			if (target != null && (attrFormat == null || attrFormat.equals(ATTR_FORMAT_VALUE_DITA)) && extName != null) {
+				target = FileUtils.replaceExtension(target, extName);
+			}
 
             final String keyRef = atts.getValue(ATTRIBUTE_NAME_KEYREF);
 

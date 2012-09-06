@@ -11,6 +11,6 @@
     href="topics/target-topic-c.xml"
     keys="target_topic_2 target_topic_3"/>
   <keydef
-    href="http://www.example.com/?foo=bar&amp;baz=qux#quxx" scope="external"
+    href="http://www.example.com/?foo=bar&amp;baz=qux#quxx" scope="external" format="html"
     keys="target_topic_4"/>
 </map>

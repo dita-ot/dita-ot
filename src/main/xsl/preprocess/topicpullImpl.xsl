@@ -635,10 +635,10 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       <!-- If this is an empty href, ignore it; we already put out a message -->
       <xsl:when test="@href=''"/>
       <!--check whether file extension is correct, for targets in other files-->
-      <xsl:when test="not($topicpos='samefile') and not(contains($file,$DITAEXT))">
+      <!--xsl:when test="not($topicpos='samefile') and not(contains($file,$DITAEXT))">
         <xsl:text>#none#</xsl:text>
         <xsl:apply-templates select="." mode="ditamsg:unknown-extension"/>
-      </xsl:when>
+      </xsl:when-->
 
       <!--grab from target topic-->
       <xsl:when test="$elemid='#none#'">
@@ -747,9 +747,9 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:param name="file"/>
     <xsl:param name="topicid"/>
     <xsl:param name="elemid"/>
-    <xsl:if test="$localtype!='#none#' and (contains(@href,$DITAEXT) or starts-with(@href,'#')) and 
+    <xsl:if test="$localtype!='#none#' and 
                   not(@scope='external' or @scope='peer') and 
-                  (not(@format) or @format='dita' or @format='DITA')">
+                  ((not(@format) or @format='dita' or @format='DITA') or starts-with(@href,'#'))">
       <xsl:variable name="doc" select="document($file,/)"/>
       <xsl:choose>
         <!-- If this is an xref, there can't be any elements or text inside -->
@@ -953,10 +953,10 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
 
             <!--when format is DITA, it's a different file, and file extension 
               is wrong, use the href and generate an error -->
-            <xsl:when test="not($topicpos='samefile') and not(contains($file,$DITAEXT))">
+            <!--xsl:when test="not($topicpos='samefile') and not(contains($file,$DITAEXT))">
               <xsl:value-of select="@href"/>
               <xsl:apply-templates select="." mode="ditamsg:unknown-extension"/>
-            </xsl:when>
+            </xsl:when-->
             <!-- otherwise pull text from the target -->
             <xsl:otherwise>
               <xsl:apply-templates select="." mode="topicpull:getlinktext">
@@ -1312,7 +1312,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       <xsl:when test="starts-with(@href,'#')">
         <xsl:value-of select="@href"/>
       </xsl:when>
-      <xsl:when test="contains(@href,$DITAEXT)">#none#</xsl:when>
+      <xsl:when test="not(@format) or @format = 'dita'">#none#</xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="@href"/>
       </xsl:otherwise>
@@ -1443,7 +1443,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       <xsl:when test="starts-with(@href,'#')">
         <xsl:value-of select="@href"/>
       </xsl:when>
-      <xsl:when test="contains(@href,$DITAEXT)">#none#</xsl:when>
+      <xsl:when test="not(@format) or @format = 'dita'">#none#</xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="@href"/>
       </xsl:otherwise>
@@ -1585,7 +1585,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       <xsl:when test="starts-with(@href,'#')">
         <xsl:value-of select="@href"/>
       </xsl:when>
-      <xsl:when test="contains(@href,$DITAEXT)">#none#</xsl:when>
+      <xsl:when test="not(@format) or @format = 'dita'">#none#</xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="@href"/>
       </xsl:otherwise>
@@ -1633,7 +1633,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
           <xsl:when test="starts-with(@href,'#')">
             <xsl:value-of select="@href"/>
           </xsl:when>
-          <xsl:when test="contains(@href,$DITAEXT)">#none#</xsl:when>
+          <xsl:when test="not(@format) or @format = 'dita'">#none#</xsl:when>
           <xsl:otherwise>
             <xsl:value-of select="@href"/>
           </xsl:otherwise>
@@ -1673,7 +1673,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
           <xsl:when test="starts-with(@href,'#')">
             <xsl:value-of select="@href"/>
           </xsl:when>
-          <xsl:when test="contains(@href,$DITAEXT)">#none#</xsl:when>
+          <xsl:when test="not(@format) or @format = 'dita'">#none#</xsl:when>
           <xsl:otherwise>
             <xsl:value-of select="@href"/>
           </xsl:otherwise>
@@ -1734,7 +1734,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
           <xsl:when test="starts-with(@href,'#')">
             <xsl:value-of select="@href"/>
           </xsl:when>
-          <xsl:when test="contains(@href,$DITAEXT)">#none#</xsl:when>
+          <xsl:when test="not(@format) or @format = 'dita'">#none#</xsl:when>
           <xsl:otherwise>
             <xsl:value-of select="@href"/>
           </xsl:otherwise>
@@ -1965,6 +1965,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <!-- Make it easy to override messages. If a product wishes to change or hide
        specific messages, it can override these templates. Longer term, it would
        be good to move messages from each XSL file into a common location. -->
+  <!-- Deprecated -->
   <xsl:template match="*" mode="ditamsg:unknown-extension">
     <xsl:call-template name="output-message">
       <xsl:with-param name="msgnum">006</xsl:with-param>
