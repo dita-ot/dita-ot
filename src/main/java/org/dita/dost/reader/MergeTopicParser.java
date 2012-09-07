@@ -14,6 +14,7 @@ import static javax.xml.XMLConstants.*;
 import static org.dita.dost.reader.MergeMapParser.*;
 
 import java.io.File;
+import java.net.URI;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTLogger;
@@ -258,7 +259,20 @@ public final class MergeTopicParser extends XMLFilterImpl {
      * @return rewritten href value
      */
     private String handleLocalHref(final String attValue) {
-        return FileUtils.resolveTopic(new File(filePath).getParent(),attValue);
+        final File parentFile = new File(filePath).getParentFile();
+        if (parentFile != null) {
+            final URI d = new File(dirPath).toURI();
+            final URI p = new File(dirPath, filePath).getParentFile().toURI();
+            final String b = d.relativize(p).toASCIIString();
+            final StringBuilder ret = new StringBuilder(b);
+            if (!b.endsWith(URI_SEPARATOR)) {
+                ret.append(URI_SEPARATOR);
+            }
+            ret.append(attValue);
+            return FileUtils.normalize(ret.toString(), URI_SEPARATOR);
+        } else {
+            return attValue;
+        }
     }
 
 }
