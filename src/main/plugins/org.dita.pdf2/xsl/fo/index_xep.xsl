@@ -534,7 +534,7 @@ See the accompanying license.txt file for applicable licenses.
 		<xsl:param name="inner-text"/>
 		<xsl:param name="no-page"/>
         <fo:block  xsl:use-attribute-sets="index.term">
-            <xsl:if test="position() = 1">
+            <xsl:if test="empty(preceding-sibling::opentopic-index:index.entry)">
                 <xsl:attribute name="keep-with-previous">always</xsl:attribute>
             </xsl:if>
             <fo:inline>
