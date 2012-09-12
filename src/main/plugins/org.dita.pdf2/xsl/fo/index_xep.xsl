@@ -330,7 +330,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="opentopic-index:see-also-childs" mode="index-postprocess">
-        <fo:block xsl:use-attribute-sets="index.entry__content">
+        <fo:block xsl:use-attribute-sets="index.see-also-entry__content">
             <fo:inline>
                 <xsl:call-template name="insertVariable">
                     <xsl:with-param name="theVariableID" select="'Index See Also String'"/>
@@ -438,7 +438,7 @@ See the accompanying license.txt file for applicable licenses.
                         <fo:table-row>
                             <fo:table-cell>
                                 <fo:block xsl:use-attribute-sets="index.entry__content">
-                                    <xsl:apply-templates mode="index-postprocess"/>
+                                    <xsl:apply-templates select="*[not(self::opentopic-index:see-childs | self::opentopic-index:see-also-childs)]" mode="index-postprocess"/>
                                 </fo:block>
                             </fo:table-cell>
                         </fo:table-row>
