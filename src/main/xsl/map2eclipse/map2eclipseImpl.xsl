@@ -115,7 +115,7 @@
   <xsl:choose>
     <xsl:when test="@type='external' or (@scope='external' and not(@format)) or not(not(@format) or @format='dita' or @format='DITA')"><xsl:value-of select="@href"/></xsl:when> <!-- adding local -->
     <xsl:when test="starts-with(@href,'#')"><xsl:value-of select="@href"/></xsl:when>
-    <xsl:when test="contains(@copy-to, $DITAEXT)">
+    <xsl:when test="@copy-to and (not(@format) or @format = 'dita')">
       <xsl:value-of select="$work.dir"/>
       <xsl:call-template name="replace-extension">
         <xsl:with-param name="filename" select="@copy-to"/>
@@ -123,7 +123,7 @@
         <xsl:with-param name="ignore-fragment" select="true()"/>
       </xsl:call-template>
     </xsl:when>
-    <xsl:when test="contains(@href, $DITAEXT)">
+    <xsl:when test="@href and (not(@format) or @format = 'dita')">
       <xsl:value-of select="$work.dir"/>
       <xsl:call-template name="replace-extension">
         <xsl:with-param name="filename" select="@href"/>
@@ -207,14 +207,14 @@
               <xsl:choose>
                 <xsl:when test="@type='external' or not(not(@format) or @format='dita' or @format='DITA')"><xsl:value-of select="@href"/></xsl:when> <!-- adding local -->
                 <xsl:when test="starts-with(@href,'#')"><xsl:value-of select="@href"/></xsl:when>
-                <xsl:when test="contains(@copy-to, $DITAEXT)">
+                <xsl:when test="@copy-to and (not(@format) or @format = 'dita')">
                   <xsl:call-template name="replace-extension">
                     <xsl:with-param name="filename" select="@copy-to"/>
                     <xsl:with-param name="extension" select="$OUTEXT"/>
                     <xsl:with-param name="ignore-fragment" select="true()"/>
                   </xsl:call-template>
                 </xsl:when>
-                <xsl:when test="contains(@href, $DITAEXT)">
+                <xsl:when test="@href and (not(@format) or @format = 'dita')">
                   <xsl:call-template name="replace-extension">
                     <xsl:with-param name="filename" select="@href"/>
                     <xsl:with-param name="extension" select="$OUTEXT"/>
@@ -238,11 +238,20 @@
                     <xsl:choose>
                       <xsl:when test="@type='external' or (@scope='external' and not(@format)) or not(not(@format) or @format='dita' or @format='DITA')"><xsl:value-of select="@href"/></xsl:when> <!-- adding local -->
                       <xsl:when test="starts-with(@href,'#')"><xsl:value-of select="@href"/></xsl:when>
-                      <xsl:when test="contains(@copy-to, $DITAEXT)">
-                        <xsl:value-of select="$work.dir"/><xsl:value-of select="substring-before(@copy-to, $DITAEXT)"/><xsl:value-of select="$OUTEXT"/>
+                      <xsl:when test="@copy-to and (not(@format) or @format = 'dita')">
+                        <xsl:value-of select="$work.dir"/>
+                        <xsl:call-template name="replace-extension">
+                          <xsl:with-param name="filename" select="@copy-to"/>
+                          <xsl:with-param name="extension" select="$OUTEXT"/>
+                          <xsl:with-param name="ignore-fragment" select="true()"/>
+                        </xsl:call-template>
                       </xsl:when>
-                      <xsl:when test="contains(@href, $DITAEXT)">
-                        <xsl:value-of select="$work.dir"/><xsl:value-of select="substring-before(@href, $DITAEXT)"/><xsl:value-of select="$OUTEXT"/><xsl:value-of select="substring-after(@href, $DITAEXT)"/>
+                      <xsl:when test="@href and (not(@format) or @format = 'dita')">
+                        <xsl:value-of select="$work.dir"/>
+                        <xsl:call-template name="replace-extension">
+                          <xsl:with-param name="filename" select="@href"/>
+                          <xsl:with-param name="extension" select="$OUTEXT"/>
+                        </xsl:call-template>
                       </xsl:when>
                       <xsl:otherwise>
                         <xsl:value-of select="$work.dir"/><xsl:value-of select="@href"/>

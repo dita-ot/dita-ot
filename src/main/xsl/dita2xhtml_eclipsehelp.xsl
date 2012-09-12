@@ -35,7 +35,7 @@
     
     <xsl:param name="FILENAME"/>
     <xsl:param name="FILEDIR"/>
-    <xsl:param name="CURRENTFILE" select="concat($FILEDIR, '/', substring-before($FILENAME, '.'), $DITAEXT)"/>
+    <xsl:param name="CURRENTFILE" select="concat($FILEDIR, '/', $FILENAME)"/>
     
     
     <xsl:template match="*[@conref][@conref!=''][not(@conaction)]">

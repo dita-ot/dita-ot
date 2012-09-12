@@ -465,8 +465,7 @@ Children are displayed in a numbered list, with the target title as the cmd and 
     and process the rest of the href -->
     <!-- for local links respect dita.extname extension 
       and for peer links accept both .xml and .dita bug:3059256-->
-    <xsl:when test="((not(@scope) or @scope='local') and contains(@href,$DITAEXT)) or
-      (@scope='peer' and (contains(@href,'.xml') or contains(@href,'.dita')))">
+    <xsl:when test="(not(@scope) or @scope='local' or @scope='peer') and (not(@format) or @format='dita' or @format='DITA')">
       <xsl:call-template name="replace-extension">
         <xsl:with-param name="filename" select="@href"/>
         <xsl:with-param name="extension" select="$OUTEXT"/>
@@ -912,7 +911,13 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 </xsl:template>
 <xsl:template match="*" mode="ditamsg:link-may-be-duplicate">
   <xsl:param name="href" select="@href"/>
-  <xsl:param name="outfile" select="concat(substring-before($FILENAME, $DITAEXT), $OUTEXT)"/>
+  <xsl:param name="outfile">
+    <xsl:call-template name="replace-extension">
+      <xsl:with-param name="filename" select="$FILENAME"/>
+      <xsl:with-param name="extension" select="$OUTEXT"/>
+      <xsl:with-param name="ignore-fragment" select="true()"/>
+    </xsl:call-template>
+  </xsl:param>
   <xsl:call-template name="output-message">
     <xsl:with-param name="msgnum">043</xsl:with-param>
     <xsl:with-param name="msgsev">I</xsl:with-param>

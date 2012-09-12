@@ -98,7 +98,7 @@
     </xsl:when>
     <!-- topic -->
     <xsl:otherwise>
-      <xsl:value-of select="concat($FILEDIR, '/', substring-before($FILENAME, '.'), $DITAEXT)"/>
+      <xsl:value-of select="concat($FILEDIR, '/', $FILENAME)"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:param>

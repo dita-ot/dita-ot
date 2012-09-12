@@ -14,11 +14,9 @@
 
 <xsl:template match="*[contains(@class,' abbrev-d/abbreviated-form ')]" name="topic.abbreviated-form">
   <xsl:variable name="keys" select="@keyref"/>
-  <xsl:if test="@keyref and document($KEYREF-FILE)//*[@keys=$keys][normalize-space(@href)!='']/@href">
-    <xsl:variable name="target">
-      <xsl:value-of select="document($KEYREF-FILE)//*[@keys=$keys][normalize-space(@href)!='']/@href"/>
-    </xsl:variable>
-    <xsl:variable name="entry-file" select="concat($WORKDIR, $PATH2PROJ, substring-before($target, '.'), $DITAEXT)"/>
+  <xsl:variable name="target" select="$keydefs//*[@keys = $keys and normalize-space(@href)]/@href"/>
+  <xsl:if test="$keys and $target">
+    <xsl:variable name="entry-file" select="concat($WORKDIR, $PATH2PROJ, $target)"/>
     <xsl:variable name="entry-file-contents" select="document($entry-file, /)"/>
     <xsl:choose>
       <xsl:when test="$entry-file-contents//*[contains(@class,' glossentry/glossentry ')]">

@@ -1048,7 +1048,7 @@
             <xsl:attribute name="format"><xsl:value-of select="$inherited-value"/></xsl:attribute>
             <!-- Warn if non-dita format was inherited, and this is dita.
                 Only warn if this was actually inherited (not set locally).  -->
-            <!--xsl:if test="not(@format) and $inherited-value!='dita' and contains(@href,$DITAEXT)">
+            <!--xsl:if test="not(@format) and $inherited-value!='dita' and @href">
                 <xsl:apply-templates select="." mode="ditamsg:incorect-inherited-format">
                     <xsl:with-param name="format" select="$inherited-value"/>
                 </xsl:apply-templates>
