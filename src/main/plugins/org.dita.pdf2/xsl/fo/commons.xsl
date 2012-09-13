@@ -143,33 +143,6 @@ See the accompanying license.txt file for applicable licenses.
            See SourceForge RFE 2928584: Add general model for end-of-topic processing in PDF -->
     </xsl:template>
 
-    <xsl:template match="*" mode="processUnknowTopic">
-        <xsl:param name="topicType"/>
-        <xsl:choose>
-            <xsl:when test="not(ancestor::*[contains(@class,' topic/topic ')])">
-                <xsl:variable name="page-sequence-reference">
-                    <xsl:choose>
-                        <xsl:when test="$mapType = 'bookmap'">
-                            <xsl:value-of select="'body-sequence'"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="'ditamap-body-sequence'"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:variable>
-                <fo:page-sequence master-reference="{$page-sequence-reference}" xsl:use-attribute-sets="__force__page__count">
-                    <xsl:call-template name="insertBodyStaticContents"/>
-                    <fo:flow flow-name="xsl-region-body">
-                        <xsl:apply-templates select="." mode="processTopic"/>
-                    </fo:flow>
-                </fo:page-sequence>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="." mode="processTopic"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-
     <!-- RDA: From RFE 2882109, combining this rule with existing rules for
               concept, task, reference later in this file to reduce duplicated
               code. Continue calling the named process* templates in order to
@@ -236,7 +209,7 @@ See the accompanying license.txt file for applicable licenses.
       <!--BS: skipp abstract (copyright) from usual content. It will be processed from the front-matter-->
       <xsl:when test="$topicType = 'topicAbstract'"/>
       <xsl:otherwise>
-                <xsl:apply-templates select="." mode="processUnknowTopic">
+                <xsl:apply-templates select="." mode="processUnknownTopic">
                     <xsl:with-param name="topicType" select="$topicType"/>
                 </xsl:apply-templates>
             </xsl:otherwise>
@@ -1028,7 +1001,7 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:when>
       <xsl:when test="$topicType = 'topicAbstract'"/>
       <xsl:otherwise>
-                <xsl:call-template name="processUnknowTopic">
+                <xsl:call-template name="processUnknownTopic">
                     <xsl:with-param name="topicType" select="$topicType"/>
                 </xsl:call-template>
             </xsl:otherwise>
@@ -2088,7 +2061,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <!-- BS: Template owerwrited to define new topic types (List's),
-    to create special processing for any of list you should use <template name="processUnknowTopic"/>
+    to create special processing for any of list you should use <template name="processUnknownTopic"/>
     example below.-->
     <!-- RDA: Modified with RFE 2882109. Can now modify results or add new types by matching an element
               with mode="determineTopicType", without overriding the entire determineTopicType template. -->
@@ -2152,7 +2125,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
 
-    <xsl:template match="*" mode="processUnknowTopic">
+    <xsl:template match="*" mode="processUnknownTopic">
         <xsl:param name="topicType"/>
         <xsl:choose>
             <xsl:when test="$topicType = 'topicTocList'">
