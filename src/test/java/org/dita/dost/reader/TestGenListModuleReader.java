@@ -12,6 +12,7 @@ package org.dita.dost.reader;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import java.io.File;
 import java.util.Map;
@@ -114,4 +115,12 @@ public class TestGenListModuleReader {
 
         assertEquals(0, subsidiaryTargets.size());
     }
+    
+    @Test
+    public void testIsValidKeyName() {
+    	assertTrue(GenListModuleReader.isValidKeyName("A"));
+    	assertTrue(GenListModuleReader.isValidKeyName("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:@!$&'()*+,;="));
+    	assertFalse(GenListModuleReader.isValidKeyName("A/B"));
+    }
+    
 }
