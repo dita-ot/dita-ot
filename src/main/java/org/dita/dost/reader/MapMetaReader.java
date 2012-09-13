@@ -11,6 +11,7 @@ package org.dita.dost.reader;
 
 import static java.util.Arrays.*;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.module.GenMapAndTopicListModule.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -316,7 +317,7 @@ public final class MapMetaReader implements AbstractReader {
     private Hashtable<String, Element> cloneElementMap(final Hashtable<String, Element> current) {
         final Hashtable<String, Element> topicMetaTable = new Hashtable<String, Element>(INT_16);
         for (final Entry<String, Element> topicMetaItem: current.entrySet()) {
-            final Element inheritStub = doc.createElement("stub");
+            final Element inheritStub = doc.createElement(ELEMENT_STUB);
             final Node currentStub = topicMetaItem.getValue();
             final NodeList stubChildren = currentStub.getChildNodes();
             for (int i = 0; i < stubChildren.getLength(); i++){
@@ -360,7 +361,7 @@ public final class MapMetaReader implements AbstractReader {
                     //use clone here to prevent the node is removed from original DOM tree;
                     topicMetaTable.get(metaKey).appendChild(node.cloneNode(true));
                 } else{
-                    final Element stub = doc.createElement("stub");
+                    final Element stub = doc.createElement(ELEMENT_STUB);
                     // use clone here to prevent the node is removed from original DOM tree;
                     stub.appendChild(node.cloneNode(true));
                     topicMetaTable.put(metaKey, stub);
@@ -440,7 +441,7 @@ public final class MapMetaReader implements AbstractReader {
                     //use clone here to prevent the node is removed from original DOM tree;
                     globalMeta.get(metaKey).appendChild(node.cloneNode(true));
                 } else if(cascadeSet.contains(metaKey)){
-                    final Element stub = doc.createElement("stub");
+                    final Element stub = doc.createElement(ELEMENT_STUB);
                     stub.appendChild(node.cloneNode(true));
                     globalMeta.put(metaKey, stub);
                 }
