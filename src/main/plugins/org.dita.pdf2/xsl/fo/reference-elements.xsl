@@ -447,7 +447,7 @@ See the accompanying license.txt file for applicable licenses.
       </xsl:when>
       <xsl:when test="$topicType = 'topicAbstract'"/>
       <xsl:otherwise>
-        <xsl:call-template name="processUnknowTopic">
+        <xsl:call-template name="processUnknownTopic">
           <xsl:with-param name="topicType" select="$topicType"/>
         </xsl:call-template>
       </xsl:otherwise>
