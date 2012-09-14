@@ -143,33 +143,6 @@ See the accompanying license.txt file for applicable licenses.
            See SourceForge RFE 2928584: Add general model for end-of-topic processing in PDF -->
     </xsl:template>
 
-    <xsl:template match="*" mode="processUnknowTopic">
-        <xsl:param name="topicType"/>
-        <xsl:choose>
-            <xsl:when test="not(ancestor::*[contains(@class,' topic/topic ')])">
-                <xsl:variable name="page-sequence-reference">
-                    <xsl:choose>
-                        <xsl:when test="$mapType = 'bookmap'">
-                            <xsl:value-of select="'body-sequence'"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="'ditamap-body-sequence'"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:variable>
-                <fo:page-sequence master-reference="{$page-sequence-reference}" xsl:use-attribute-sets="__force__page__count">
-                    <xsl:call-template name="insertBodyStaticContents"/>
-                    <fo:flow flow-name="xsl-region-body">
-                        <xsl:apply-templates select="." mode="processTopic"/>
-                    </fo:flow>
-                </fo:page-sequence>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="." mode="processTopic"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-
     <!-- RDA: From RFE 2882109, combining this rule with existing rules for
               concept, task, reference later in this file to reduce duplicated
               code. Continue calling the named process* templates in order to
