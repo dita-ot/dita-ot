@@ -405,7 +405,7 @@ See the accompanying license.txt file for applicable licenses.
             <fo:table-row>
               <fo:table-cell>
                 <fo:block xsl:use-attribute-sets="index.entry__content">
-                  <xsl:apply-templates select="*[not(self::opentopic-index:see-childs | self::opentopic-index:see-also-childs)]" mode="index-postprocess"/>
+                  <xsl:apply-templates mode="index-postprocess"/>
                 </fo:block>
               </fo:table-cell>
             </fo:table-row>
@@ -528,9 +528,12 @@ See the accompanying license.txt file for applicable licenses.
           </fo:index-page-citation-list>
         </xsl:if>
       </xsl:if>
-      <xsl:for-each select="opentopic-index:see-childs | opentopic-index:see-also-childs">
-        <xsl:apply-templates select="." mode="index-postprocess"/>
-      </xsl:for-each>
+      <xsl:if test="@no-page = 'true'">
+        <xsl:apply-templates select="opentopic-index:see-childs" mode="index-postprocess"/>
+      </xsl:if>
+      <xsl:if test="empty(opentopic-index:index.entry)">
+        <xsl:apply-templates select="opentopic-index:see-also-childs" mode="index-postprocess"/>
+      </xsl:if>
     </fo:block>
   </xsl:template>
 
