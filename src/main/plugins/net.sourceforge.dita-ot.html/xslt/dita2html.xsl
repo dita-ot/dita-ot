@@ -138,25 +138,26 @@
               <a>
                 <xsl:attribute name="href">
                   <xsl:choose>
-                    <xsl:when test="contains(@copy-to, $DITAEXT) and not(contains(@chunk, 'to-content')) and (not(@format) or @format = 'dita' or @format='ditamap' ) ">
+                    <xsl:when test="@copy-to and not(contains(@chunk, 'to-content')) and (not(@format) or @format = 'dita' or @format='ditamap' ) ">
                       <xsl:if test="not(@scope='external')">
                         <xsl:value-of select="$pathFromMaplist"/>
                       </xsl:if>
-                      <xsl:value-of select="java:getFileName(@copy-to,$DITAEXT)"/>
-                      <xsl:value-of select="$OUTEXT"/>
+                      <xsl:call-template name="replace-extension">
+                        <xsl:with-param name="filename" select="@copy-to"/>
+                        <xsl:with-param name="extension" select="$OUTEXT"/>
+                      </xsl:call-template>
                       <xsl:if test="not(contains(@copy-to, '#')) and contains(@href, '#')">
                         <xsl:value-of select="concat('#', substring-after(@href, '#'))"/>
                       </xsl:if>
                     </xsl:when>
-                    <xsl:when test="contains(@href,$DITAEXT) and (not(@format) or @format = 'dita' or @format='ditamap')">
+                    <xsl:when test="not(@scope = 'external') and (not(@format) or @format = 'dita' or @format='ditamap')">
                       <xsl:if test="not(@scope='external')">
                         <xsl:value-of select="$pathFromMaplist"/>
                       </xsl:if>
-                      <xsl:value-of select="java:getFileName(@href,$DITAEXT)"/>
-                      <xsl:value-of select="$OUTEXT"/>
-                      <xsl:if test="contains(@href, '#')">
-                        <xsl:value-of select="concat('#', substring-after(@href, '#'))"/>
-                      </xsl:if>
+                      <xsl:call-template name="replace-extension">
+                        <xsl:with-param name="filename" select="@href"/>
+                        <xsl:with-param name="extension" select="$OUTEXT"/>
+                      </xsl:call-template>
                     </xsl:when>
                     <xsl:otherwise>
                       <xsl:if test="not(@scope='external')">

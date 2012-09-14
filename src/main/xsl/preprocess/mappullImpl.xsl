@@ -491,7 +491,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
         </xsl:choose>
       </xsl:when>
       <!-- Type is set locally for a dita topic; warn if it is not correct. -->
-      <xsl:when test="contains($file,$DITAEXT) and $scope!='external' and $scope!='peer' and ($format='#none#' or $format='dita' or $format='DITA')">
+      <xsl:when test="$scope!='external' and $scope!='peer' and ($format='#none#' or $format='dita' or $format='DITA')">
         <xsl:if test="$topicid!='#none#' and not($doc//*[contains(@class, ' topic/topic ')][@id=$topicid])">
           <!-- topicid does not point to a valid topic -->
           <xsl:call-template name="output-message">

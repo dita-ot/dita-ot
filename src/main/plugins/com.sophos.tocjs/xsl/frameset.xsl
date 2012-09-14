@@ -17,6 +17,10 @@
   -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   
+  <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
+  <xsl:variable name="msgprefix">DOTX</xsl:variable>
+
   <xsl:output encoding="UTF-8"/>
 
   <xsl:param name="CSSPATH"/>
@@ -24,29 +28,39 @@
   <xsl:param name="DITAEXT" select="'.xml'"/>
 
   <xsl:variable name="firsttopic">
+    <xsl:variable name="f" select="/*/*[contains(@class, ' map/topicref ')][1]/descendant-or-self::*[@href][not(@processing-role='resource-only')]"/>
     <xsl:choose>
-      <xsl:when test="/*/*[contains(@class, ' map/topicref ')][1]/descendant-or-self::*[@href][not(@processing-role='resource-only')]">
-        <xsl:value-of select="/*/*[contains(@class, ' map/topicref ')][1]/descendant-or-self::*[@href][not(@processing-role='resource-only')][1]/@href"/>
+      <xsl:when test="$f">
+        <xsl:choose>
+          <xsl:when test="not($f[1]/@format) or $f[1]/@format = 'dita'">
+            <xsl:call-template name="replace-extension">
+              <xsl:with-param name="filename" select="$f[1]/@href"/>
+              <xsl:with-param name="extension" select="$OUTEXT"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$f[1]/@href"/>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="/*/descendant-or-self::*[@href][not(@processing-role='resource-only')][1]/@href"/>
+        <xsl:variable name="f" select="/*/descendant-or-self::*[@href][not(@processing-role='resource-only')]"/>
+        <xsl:choose>
+          <xsl:when test="not($f[1]/@format) or $f[1]/@format = 'dita'">
+            <xsl:call-template name="replace-extension">
+              <xsl:with-param name="filename" select="$f[1]/@href"/>
+              <xsl:with-param name="extension" select="$OUTEXT"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$f[1]/@href"/>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-  <xsl:variable name="firsttopicAsHtml">
-    <xsl:choose>
-      <xsl:when test="contains($firsttopic,$DITAEXT)">
-        <xsl:value-of select="substring-before($firsttopic,$DITAEXT)"/>
-        <xsl:value-of select="$OUTEXT"/>
-        <xsl:if test="starts-with(substring-after($firsttopic,$DITAEXT),'#')">
-          <xsl:value-of select="substring-after($firsttopic,$DITAEXT)"/>
-        </xsl:if>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$firsttopic"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
+  <xsl:variable name="firsttopicAsHtml" select="$firsttopic"/>
+  
 
   <xsl:template match="/">
     <html>
