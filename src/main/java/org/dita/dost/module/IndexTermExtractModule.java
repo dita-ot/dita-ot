@@ -157,8 +157,10 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
         FileInputStream inputStream = null;
         XMLReader xmlReader = null;
         final IndexTermReader handler = new IndexTermReader(indexTermCollection);
+        handler.setLogger(logger);
         final DitamapIndexTermReader ditamapIndexTermReader = new DitamapIndexTermReader(indexTermCollection, true);
-
+        ditamapIndexTermReader.setLogger(logger);
+        
         xmlReader = StringUtils.getXMLReader();
 
         try {

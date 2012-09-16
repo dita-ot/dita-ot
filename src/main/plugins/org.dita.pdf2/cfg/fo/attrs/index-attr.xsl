@@ -75,6 +75,9 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="start-indent">18pt</xsl:attribute>
     </xsl:attribute-set>
 
+  <xsl:attribute-set name="index.see-also-entry__content" use-attribute-sets="index.entry__content">
+  </xsl:attribute-set>
+
   <xsl:attribute-set name="index.see.label">
     <xsl:attribute name="font-style">italic</xsl:attribute>
   </xsl:attribute-set>

@@ -14,6 +14,7 @@ import static javax.xml.XMLConstants.*;
 import static org.dita.dost.reader.MergeMapParser.*;
 
 import java.io.File;
+import java.net.URI;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTLogger;
@@ -21,6 +22,7 @@ import org.dita.dost.util.Configuration;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.MergeUtils;
 import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.URLUtils;
 import org.dita.dost.util.XMLUtils;
 
 import org.xml.sax.Attributes;
@@ -114,6 +116,8 @@ public final class MergeTopicParser extends XMLFilterImpl {
     /**
      * Rewrite local DITA href value.
      *
+     * <p>TODO: return type should be {@link java.util.URI}.</p>
+     *
      * @param sharpIndex hash char index
      * @param attValue href attribute value
      * @return rewritten href value
@@ -127,7 +131,8 @@ public final class MergeTopicParser extends XMLFilterImpl {
             } else {
                 pathFromMap = FileUtils.separatorsToUnix(FileUtils.resolveTopic(new File(filePath).getParent(),attValue.substring(0,sharpIndex)));
             }
-            XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OHREF, pathFromMap + attValue.substring(sharpIndex));
+            pathFromMap = URLUtils.decode(pathFromMap);
+            XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OHREF, URLUtils.clean(pathFromMap + attValue.substring(sharpIndex)));
             String topicId = attValue.substring(sharpIndex);
             final int slashIndex = topicId.indexOf(SLASH);
             final int index = attValue.indexOf(SLASH, sharpIndex);
@@ -141,7 +146,8 @@ public final class MergeTopicParser extends XMLFilterImpl {
             }
         } else { // href value refer to a topic
             pathFromMap = FileUtils.resolveTopic(new File(filePath).getParent(),attValue);
-            XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OHREF, pathFromMap);
+            pathFromMap = URLUtils.decode(pathFromMap);
+            XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OHREF, URLUtils.clean(pathFromMap));
             if (util.findId(pathFromMap)) {
                 retAttValue = SHARP + util.getIdValue(pathFromMap);
             } else {
@@ -157,7 +163,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
 
             }
         }
-        return retAttValue;
+        return URLUtils.clean(retAttValue);
     }
 
     /**
@@ -246,11 +252,26 @@ public final class MergeTopicParser extends XMLFilterImpl {
     /**
      * Rewrite local non-DITA href value.
      * 
+     * <p>TODO: return type should be {@link java.util.URI}.</p>
+     * 
      * @param attValue href attribute value
      * @return rewritten href value
      */
     private String handleLocalHref(final String attValue) {
-        return FileUtils.resolveTopic(new File(filePath).getParent(),attValue);
+        final File parentFile = new File(filePath).getParentFile();
+        if (parentFile != null) {
+            final URI d = new File(dirPath).toURI();
+            final URI p = new File(dirPath, filePath).getParentFile().toURI();
+            final String b = d.relativize(p).toASCIIString();
+            final StringBuilder ret = new StringBuilder(b);
+            if (!b.endsWith(URI_SEPARATOR)) {
+                ret.append(URI_SEPARATOR);
+            }
+            ret.append(attValue);
+            return FileUtils.normalize(ret.toString(), URI_SEPARATOR);
+        } else {
+            return attValue;
+        }
     }
 
 }

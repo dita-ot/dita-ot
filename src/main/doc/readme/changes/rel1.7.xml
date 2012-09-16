@@ -90,6 +90,13 @@
           <li>#1357 NPE when image is incorrectly referenced when publishing to HTML (milestone 1)</li>
           <li>#1358 Cannot cross reference definition list items (dlentry, dt, dd) in PDF (milestone 1)</li>
           <li>#1371 build_demo uses deprecated Ant property (milestone 1)</li>
+          <li>#1365 pdf duplicate see-also entries in Index (milestone 2)</li>
+          <li>#1369 prodinfo seems to lead to "(file) does not exist", where file has spaces in name (milestone 2)</li>
+          <li>#1370 Links to files with spaces in name broken (milestone 2)</li>
+          <li>#1371 build_demo uses deprecated Ant property (milestone 2)</li>
+          <li>#1377 htmlhelp ampersand (&amp;amp;) entity in indexterm does not convert (milestone 2)</li>
+          <li>#1378 dita.out.map.htmlhelp.hhk: target doesn't allow topic with empty indexterm (milestone 2)</li>
+          <li>#1382 Merging uses system path separator when rewriting URIs (milestone 2)</li>
           <li>#1238 Doesn't work with SAXON 9 HE (9.4.0.3) (in progress)</li>
         </ul>
       </section>
