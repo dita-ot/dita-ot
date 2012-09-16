@@ -6,7 +6,6 @@
 <project name="sample_all" default="all" basedir=".">
 
   <property name="args.logdir" value="log"/>
-  <property name="dita.extname" value=".xml"/>
 
   <import file="sample_xhtml.xml"/>
   <import file="sample_tocjs.xml"/>

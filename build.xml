@@ -503,8 +503,8 @@
         <pathelement location="${src.dir}/resources"/>
         <pathelement location="${lib.dir}/saxon/saxon9.jar"/>
         <pathelement location="${lib.dir}/saxon/saxon9-dom.jar"/>
-        <pathelement location="${lib.dir}/xercesImpl.jar"/>
-        <pathelement location="${lib.dir}/xml-apis.jar"/>
+        <!--pathelement location="${lib.dir}/xercesImpl.jar"/>
+        <pathelement location="${lib.dir}/xml-apis.jar"/-->
         <pathelement location="${lib.dir}/resolver.jar"/>
       </classpath>
       <sysproperty key="dita.dir" value="${src.dir}"/>

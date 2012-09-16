@@ -9,10 +9,14 @@
  */
 package org.dita.dost.util;
 
+import static org.dita.dost.util.Constants.UTF8;
+
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.StringTokenizer;
 
 /**
@@ -60,6 +64,23 @@ public final class URLUtils {
         return new URL(correct(url.toString(), false));
     }
 
+    /**
+     * Decodes a application/x-www-form-urlencoded string using UTF-8 encoding scheme.
+     * 
+     * Convenience method for {@link java.util.URLDecoder#decode(String,String) URLDecoder}:
+     * use UTF-8 and do not throw {@link java.io.UnsupportedEncodingException UnsupportedEncodingException}.
+     * 
+     * @param s the string to decode
+     * @return the newly decoded string
+     */
+    public static String decode(final String s) {
+    	try {
+    		return URLDecoder.decode(s, UTF8);
+		} catch (final UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
+    }
+    
     /**
      * Decode UTF8/URL encoded strings.
      * 
