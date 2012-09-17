@@ -7,7 +7,8 @@
 <project name="build_DITA-OT_package" default="dist" basedir=".">
   <description>Build binary packages for DITA Open Toolkit</description>
 
-  <property file="build.properties"/>
+  <property file="${basedir}/src/main/lib/configuration.properties"/>
+  <property file="${basedir}/build.properties"/>
 
   <condition property="HTMLHelpCompiler" value="C:\Program Files\HTML Help Workshop\hhc.exe">
     <available file="C:\Program Files\HTML Help Workshop\hhc.exe"/>
@@ -39,9 +40,9 @@
   <property name="doc.out.dir" location="${out.dir}/doc"/>
 
   <property name="dost.jar" location="${lib.dir}/dost.jar"/>
-  <property name="binary-min" value="DITA-OT${version}_minimal_bin"/>
-  <property name="binary-big" value="DITA-OT${version}_full_easy_install_bin"/>
-  <property name="binary" value="DITA-OT${version}_standard_bin"/>
+  <property name="binary-min" value="DITA-OT${otversion}_minimal_bin"/>
+  <property name="binary-big" value="DITA-OT${otversion}_full_easy_install_bin"/>
+  <property name="binary" value="DITA-OT${otversion}_standard_bin"/>
   <property name="win32.zip.suffix" value=".zip"/>
   <property name="linux.zip.suffix" value=".tar.gz"/>
 
@@ -90,7 +91,7 @@
       <fileset dir="${bin.dir}"/>
       <fileset dir="${src.dir}/resources"/>
       <manifest>
-        <attribute name="Implementation-Version" value="${version}"/>
+        <attribute name="Implementation-Version" value="${otversion}"/>
         <attribute name="Main-Class" value="org.dita.dost.invoker.CommandLineInvoker"/>
       </manifest>
     </jar>
@@ -230,7 +231,7 @@
 
   <target name="package-binary-minimum">
     <fail unless="param.out.file">param.out.file not defined</fail>
-    <property name="temp.dist.dir" location="${work.dir}/${param.out.file}/${package.name.root}${version}"/>
+    <property name="temp.dist.dir" location="${work.dir}/${param.out.file}/${package.name.root}${otversion}"/>
     <delete dir="${temp.dist.dir}"/>
     <mkdir dir="${temp.dist.dir}"/>
     <copy todir="${temp.dist.dir}">
@@ -255,7 +256,7 @@
 
   <target name="package-binary-standard">
     <fail unless="param.out.file">param.out.file not defined</fail>
-    <property name="temp.dist.dir" location="${work.dir}/${param.out.file}/${package.name.root}${version}"/>
+    <property name="temp.dist.dir" location="${work.dir}/${param.out.file}/${package.name.root}${otversion}"/>
     <delete dir="${temp.dist.dir}"/>
     <mkdir dir="${temp.dist.dir}"/>
     <copy todir="${temp.dist.dir}">
@@ -284,7 +285,7 @@
 
   <target name="package-binary-full">
     <fail unless="param.out.file">param.out.file not defined</fail>
-    <property name="temp.dist.dir" location="${work.dir}/${param.out.file}/${package.name.root}${version}"/>
+    <property name="temp.dist.dir" location="${work.dir}/${param.out.file}/${package.name.root}${otversion}"/>
     <delete dir="${temp.dist.dir}"/>
     <mkdir dir="${temp.dist.dir}"/>
     <copy todir="${temp.dist.dir}">
@@ -342,13 +343,13 @@
     </tstamp>
     <sequential>
       <antcall target="package-binary-full">
-        <param name="param.out.file" value="${package.name.root}${version}b${build.number}_full_easy_install_bin.${build.time}"/>
+        <param name="param.out.file" value="${package.name.root}${otversion}b${build.number}_full_easy_install_bin.${build.time}"/>
       </antcall>
       <antcall target="package-binary-standard">
-        <param name="param.out.file" value="${package.name.root}${version}b${build.number}_standard_bin.${build.time}"/>
+        <param name="param.out.file" value="${package.name.root}${otversion}b${build.number}_standard_bin.${build.time}"/>
       </antcall>
       <antcall target="package-binary-minimum">
-        <param name="param.out.file" value="${package.name.root}${version}b${build.number}_minimal_bin.${build.time}"/>
+        <param name="param.out.file" value="${package.name.root}${otversion}b${build.number}_minimal_bin.${build.time}"/>
       </antcall>
     </sequential>
   </target>
@@ -525,10 +526,10 @@
   <!-- Site -->
   
   <condition property="type-class" value="milestone" else="">
-    <contains string="${version}" substring="M" casesensitive="true"/>
+    <contains string="${otversion}" substring="M" casesensitive="true"/>
   </condition>
-  <condition property="version-id" value="dev" else="${version}">
-    <contains string="${version}" substring="M" casesensitive="true"/>
+  <condition property="version-id" value="dev" else="${otversion}">
+    <contains string="${otversion}" substring="M" casesensitive="true"/>
   </condition>
 
   <target name="site" description="Build project website">
@@ -546,15 +547,15 @@
       <property name="base.temp.dir" location="${work.dir}"/>
       <property name="args.hide.parent.link" value="yes"/>
     </ant>
-    <!--echoxml file="${basedir}/target/site/${version}/header.html">
+    <!--echoxml file="${basedir}/target/site/${otversion}/header.html">
       <html>
         <head>
           <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-          <title>DITA Open Toolkit ${version} Documentation</title>
+          <title>DITA Open Toolkit ${otversion} Documentation</title>
           <link rel="stylesheet" type="text/css" href="../css/header.css"/>
         </head>
         <body>
-          <h1 class="${type-class}">DITA Open Toolkit ${version} Documentation</h1>
+          <h1 class="${type-class}">DITA Open Toolkit ${otversion} Documentation</h1>
         </body>
       </html>
     </echoxml-->
@@ -562,7 +563,7 @@
       <html>
         <head>
           <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-          <title>DITA Open Toolkit ${version} Documentation</title>
+          <title>DITA Open Toolkit ${otversion} Documentation</title>
           <link rel="stylesheet" type="text/css" href="commonltr.css"/>
         </head>
         <frameset rows="40,*">
