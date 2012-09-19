@@ -8,12 +8,17 @@
       <section/>
     </refbody>
   </reference-->
-  <!--reference id="general-enhancements-and-changes">
+  <reference id="general-enhancements-and-changes">
     <title>General Enhancements and Changes</title>
     <refbody>
-      <section id="section_h5q_3nt_q2"/>
+      <section>
+        <title>Preprocessing</title>
+        <p>By default, DITA-OT no longer normalizes file extensions to <codeph>.xml</codeph>. Temporary files will retain the original
+          file extensions, unless <keyword>dita.ext</keyword> parameter is used to force file extension normalization to given value.</p>
+        <p>Key name validation has been added. If an invalid key name is found, <msgnum>DOTJ055E</msgnum> error is thrown.</p>
+      </section>
     </refbody>
-  </reference-->
+  </reference>
   <reference id="reference_yvj_ttj_bd">
     <title>Migration from previous releases</title>
     <refbody>
@@ -50,7 +55,10 @@
           <li>#1144 Produce HTML5 output (milestone 1)</li>
           <li>#1319 Remove deprecated code (milestone 1)</li>
           <li>#1339 PDF, flagged image : change use-attribute-sets="image" (milestone 1)</li>
+          <li>#1366 pdf index entries have too many keep-with-previous (milestone 2)</li>
           <li>#1379 Use format attribute to identity DITA topics (milestone 2)</li>
+          <li>#1384 Validate key names (milestone 2)</li>
+          <li>#1388 Remove temporary file file extension normalization (milestone 2)</li>
           <li>#1317 General XHTML improvements (in progress)</li>
           <li>#1324 Avoid strings where other types are more appropriate (in progress)</li>
           <li>#1338 Add named error messages (in progress)</li>

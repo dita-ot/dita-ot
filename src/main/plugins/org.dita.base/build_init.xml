@@ -307,22 +307,6 @@
         <contains string="${dita.extname}" substring="dita"/>
       </and>
     </condition>
-    <condition property="dita.ext" value=".xml">
-      <not>
-        <isset property="dita.ext"/>
-      </not>
-    </condition>
-    <dita-ot-fail id="DOTA004F">
-      <condition>
-        <not>
-          <or>
-            <contains string="${dita.ext}" substring=".dita" />
-            <contains string="${dita.ext}" substring=".xml" />
-          </or>
-        </not>
-      </condition>
-      <param name="1" value="${dita.ext}"/>
-    </dita-ot-fail>
     <!-- Declare dita.extname default for backwards-compatibility, to be removed in future releases. -->
     <condition property="dita.extname" value="xml">
       <and>

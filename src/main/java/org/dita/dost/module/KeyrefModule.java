@@ -61,8 +61,7 @@ final class KeyrefModule implements AbstractPipelineModule {
         }
 
         //Added by Alan Date:2009-08-04 --begin
-        final String ext = input.getAttribute(ANT_INVOKER_PARAM_DITAEXT);
-        final String extName = ext.startsWith(DOT) ? ext : (DOT + ext);
+        final String extName = input.getAttribute(ANT_INVOKER_PARAM_DITAEXT);
         //Added by Alan Date:2009-08-04 --end
 
         Job job = null;

@@ -126,12 +126,22 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                 result.add(file);
             // replace file extension
             } else if (equalIndex == -1){
-                result.add(FileUtils.replaceExtension(file,extName));
+            	if (extName != null) {
+            		result.add(FileUtils.replaceExtension(file,extName));
+            	} else {
+            		result.add(file);
+            	}
             // replace file extension in both map key and value
             } else {
-                result.add(FileUtils.replaceExtension(file.substring(0, equalIndex), extName) +
-                           EQUAL +
-                           FileUtils.replaceExtension(file.substring(equalIndex+1), extName));
+            	if (extName != null) {
+	                result.add(FileUtils.replaceExtension(file.substring(0, equalIndex), extName) +
+	                           EQUAL +
+	                           FileUtils.replaceExtension(file.substring(equalIndex+1), extName));
+            	} else {
+	            	result.add(file.substring(0, equalIndex) +
+	                           EQUAL +
+	                           file.substring(equalIndex+1));
+            	}
             }
         }
         
@@ -182,7 +192,9 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             ditaDir=new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR));
             final String transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
             final String ext = input.getAttribute(ANT_INVOKER_PARAM_DITAEXT);
-            extName = ext.startsWith(DOT) ? ext : (DOT + ext);
+            if (ext != null) {
+            	extName = ext.startsWith(DOT) ? ext : (DOT + ext);
+            }
             File ditavalFile = null;
             if (input.getAttribute(ANT_INVOKER_PARAM_DITAVAL) != null ) {
                 ditavalFile = new File(input.getAttribute(ANT_INVOKER_PARAM_DITAVAL));
@@ -657,9 +669,11 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
         for (final Map.Entry<String, java.util.Set<String>> entry: dic.entrySet()) {
             //filename will be checked.
             String filename = entry.getKey();
-            if(FileUtils.isDITATopicFile(filename)){
-                //Replace extension name.
-                filename = FileUtils.replaceExtension(filename, extName);
+            if (extName != null) {
+	            if(FileUtils.isDITATopicFile(filename)){
+	                //Replace extension name.
+	                filename = FileUtils.replaceExtension(filename, extName);
+	            }
             }
             //put the updated value into the result map
             resultMap.put(filename, entry.getValue());

@@ -506,11 +506,6 @@ public final class KeyrefPaser extends XMLFilterImpl {
                             target_output = normalizeHrefValue(target_output, elementId);
                             XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output);
                         } else if ("".equals(scopeValue) || ATTR_SCOPE_VALUE_LOCAL.equals(scopeValue)){
-                        	if (!(MAPGROUP_D_MAPREF.matches(cls)
-									&& FileUtils.isDITAMapFile(target.toLowerCase()))){
-                        		target = FileUtils.replaceExtension(target,extName);
-							}
-                        	
                             final File topicFile = new File(FileUtils.resolveFile(tempDir, target));
                             if (topicFile.exists()) {  
                                 final String topicId = this.getFirstTopicId(topicFile);
