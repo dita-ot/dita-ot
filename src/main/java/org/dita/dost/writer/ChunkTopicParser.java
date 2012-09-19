@@ -126,7 +126,6 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
     // Added on 2010-11-12 for bug 3090803 end
     private final Random random;
 
-    private static final String ditaarchNSQName = "xmlns:ditaarch";
     private static final String ditaarchNSValue = "http://dita.oasis-open.org/architecture/2005/";
     /**
      * Constructor.
@@ -519,7 +518,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                     //if there is none declaration for ditaarch namespace,
                     //processor need to add it
                     output.write(STRING_BLANK);
-                    output.write(ditaarchNSQName);
+                    output.write(ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION);
                     output.write(EQUAL);
                     output.write(QUOTATION);
                     output.write(ditaarchNSValue);
@@ -1215,12 +1214,14 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                             //Added on 20101210 for bug:3126578 end
                         }
                         if (needWriteDitaTag) {
-                            ditaFileOutput.write("<dita>");
+                            ditaFileOutput.write(LESS_THAN + ELEMENT_NAME_DITA
+                            		+ STRING_BLANK + ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION + EQUAL + QUOTATION + ditaarchNSValue + QUOTATION
+                            		+ STRING_BLANK + ATTRIBUTE_PREFIX_DITAARCHVERSION + COLON + ATTRIBUTE_NAME_DITAARCHVERSION + EQUAL + QUOTATION + "1.2" + QUOTATION + GREATER_THAN);
                         }
                         //write the final result to the output file
                         ditaFileOutput.write(((StringWriter)output).getBuffer().toString());
                         if (needWriteDitaTag) {
-                            ditaFileOutput.write("</dita>");
+                            ditaFileOutput.write(LESS_THAN + SLASH + ELEMENT_NAME_DITA + GREATER_THAN);
                         }
                         ditaFileOutput.flush();
                     } finally {
