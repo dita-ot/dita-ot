@@ -14,7 +14,7 @@
       <section>
         <title>Preprocessing</title>
         <p>By default, DITA-OT no longer normalizes file extensions to <codeph>.xml</codeph>. Temporary files will retain the original
-          file extensions, unless <keyword>dita.ext</keyword> parameter is used to force file extension normalization to given value.</p>
+          file extensions, unless <parmname>dita.ext</parmname> parameter is used to force file extension normalization to given value.</p>
         <p>Key name validation has been added. If an invalid key name is found, <msgnum>DOTJ055E</msgnum> error is thrown.</p>
       </section>
     </refbody>
@@ -31,7 +31,13 @@
         </ul>
       </section>
       <section>
-        <title>PDF2</title>
+        <title>HTML</title>
+        <p>Core TOC generation has been moved to a separate XSLT stylesheet <filepath>xsl/map2htmtoc/map2htmlImpl.xsl</filepath>
+          and the new templates use the mode <codeph>toc</codeph>. Plug-ins which override HTML TOC processing should change
+          the map processing templates to <codeph>toc</codeph> mode.</p>
+      </section>
+      <section>
+        <title>PDF</title>
         <p>The following deprecated XSLT variables have been removed:</p>
         <ul>
           <li><codeph>page-margin-left</codeph></li>
@@ -55,6 +61,7 @@
           <li>#1144 Produce HTML5 output (milestone 1)</li>
           <li>#1319 Remove deprecated code (milestone 1)</li>
           <li>#1339 PDF, flagged image : change use-attribute-sets="image" (milestone 1)</li>
+          <li>#1141 XHTML: ability to include TOC in every topic (milestone 2)</li>
           <li>#1366 pdf index entries have too many keep-with-previous (milestone 2)</li>
           <li>#1379 Use format attribute to identity DITA topics (milestone 2)</li>
           <li>#1384 Validate key names (milestone 2)</li>

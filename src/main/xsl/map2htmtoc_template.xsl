@@ -10,6 +10,7 @@
 <xsl:import href="common/dita-utilities.xsl"/>
 <!-- Import the main ditamap to HTML TOC conversion -->
 <xsl:import href="map2htmtoc/map2htmtocImpl.xsl"/>
+<xsl:import href="map2htmtoc/map2htmlImpl.xsl"/>
 
 <dita:extension id="dita.xsl.htmltoc" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
 
