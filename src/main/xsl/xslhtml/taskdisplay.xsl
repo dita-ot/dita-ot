@@ -905,49 +905,35 @@
   </td><xsl:value-of select="$newline"/>
 </xsl:template>
 
-
-<!-- these para-like items need a leading space -->
 <xsl:template match="*[contains(@class,' task/stepxmp ')]" name="topic.task.stepxmp">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-  <xsl:text> </xsl:text><xsl:call-template name="flagcheck"/>
-  <xsl:call-template name="revblock">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-  </xsl:call-template>
+  <xsl:call-template name="generateItemGroupTaskElement"/>
 </xsl:template>
 
-<!-- these para-like items need a leading space -->
 <xsl:template match="*[contains(@class,' task/stepresult ')]" name="topic.task.stepresult">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-  <xsl:text> </xsl:text><xsl:call-template name="flagcheck"/>
-  <xsl:call-template name="revblock">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-  </xsl:call-template>
+  <xsl:call-template name="generateItemGroupTaskElement"/>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' task/info ')]" name="topic.task.info">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-  <xsl:text> </xsl:text><xsl:call-template name="flagcheck"/>
-  <xsl:call-template name="revblock">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-  </xsl:call-template>
+  <xsl:call-template name="generateItemGroupTaskElement"/>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' task/tutorialinfo ')]" name="topic.task.tutorialinfo">
+  <xsl:call-template name="generateItemGroupTaskElement"/>
+</xsl:template>
+
+<xsl:template name="generateItemGroupTaskElement">
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:text> </xsl:text><xsl:call-template name="flagcheck"/>
-  <xsl:call-template name="revblock">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-  </xsl:call-template>
+  <div>
+    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="setidaname"/>
+    <xsl:call-template name="flagcheck"/>
+    <xsl:call-template name="revblock">
+      <xsl:with-param name="flagrules" select="$flagrules"/>
+    </xsl:call-template>
+  </div>
 </xsl:template>
-
 
 <xsl:template match="*[contains(@class,' task/prereq ')]" mode="dita2html:section-heading">
   <xsl:apply-templates select="." mode="generate-task-label">

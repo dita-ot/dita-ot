@@ -62,6 +62,7 @@
           <li>#1319 Remove deprecated code (milestone 1)</li>
           <li>#1339 PDF, flagged image : change use-attribute-sets="image" (milestone 1)</li>
           <li>#1141 XHTML: ability to include TOC in every topic (milestone 2)</li>
+          <li>#1331 Possibility to customize &lt;stepresult> in HTML output (milestone 2)</li>
           <li>#1366 pdf index entries have too many keep-with-previous (milestone 2)</li>
           <li>#1379 Use format attribute to identity DITA topics (milestone 2)</li>
           <li>#1384 Validate key names (milestone 2)</li>
@@ -77,6 +78,7 @@
         <ul>
           <li>#1350 Move table specializations into separate stylesheets (milestone 1)</li>
           <li>#1359 Fix text overflow issue in PDF ToC entries with long titles. (milestone 1)</li>
+          <li>#1352 Wrap itemgroup task elements into &lt;div> elements #1331 (milestone 2)</li>
         </ul>
       </section>
       <section>
