@@ -242,7 +242,11 @@ public final class Job {
      * @return the previous value of the specified key in this property list, or {@code null} if it did not have one
      */
     public  Set<String> setSet(final String key, final Set<String> value) {
-        return StringUtils.restoreSet((String) prop.setProperty(key, StringUtils.assembleString(value, COMMA)));
+    	final String previous = (String) prop.setProperty(key, StringUtils.assembleString(value, COMMA));
+    	if (previous == null) {
+    		return null;
+    	}
+        return StringUtils.restoreSet(previous);
     }
     
     /**
@@ -252,8 +256,12 @@ public final class Job {
      * @param value property value
      * @return the previous value of the specified key in this property list, or {@code null} if it did not have one
      */
-    public Map<String, String> setMap(final String key, final Map<String, String> value) {        
-        return StringUtils.restoreMap((String) prop.setProperty(key, StringUtils.assembleString(value, COMMA)));
+    public Map<String, String> setMap(final String key, final Map<String, String> value) {
+    	final String previous =  (String) prop.setProperty(key, StringUtils.assembleString(value, COMMA));
+    	if (previous == null) {
+    		return null;
+    	}
+        return StringUtils.restoreMap(previous);
     }
     
     /**
@@ -261,14 +269,14 @@ public final class Job {
      * @return copy-to map
      */
     public Map<String, String> getCopytoMap() {
-        return StringUtils.restoreMap(prop.getProperty(COPYTO_TARGET_TO_SOURCE_MAP_LIST, ""));
+        return getMap(COPYTO_TARGET_TO_SOURCE_MAP_LIST);
     }
 
     /**
      * @return the schemeSet
      */
     public Set<String> getSchemeSet() {
-        return StringUtils.restoreSet(prop.getProperty(SUBJEC_SCHEME_LIST, ""));
+        return getSet(SUBJEC_SCHEME_LIST);
     }
 
     /**
@@ -277,7 +285,7 @@ public final class Job {
      * @return input file path relative to input directory
      */
     public String getInputMap() {
-        return prop.getProperty(INPUT_DITAMAP);
+        return getProperty(INPUT_DITAMAP);
     }
     
     /**
@@ -305,7 +313,7 @@ public final class Job {
      * @return absolute input directory path 
      */
     public String getInputDir() {
-        return prop.getProperty(INPUT_DIR);
+        return getProperty(INPUT_DIR);
     }
 
     // Utility methods

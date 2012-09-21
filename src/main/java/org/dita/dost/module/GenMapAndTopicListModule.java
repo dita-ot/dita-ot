@@ -1021,11 +1021,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         addFlagImagesSetToProperties(prop, REL_FLAGIMAGE_LIST, relFlagImagesSet);
 
         // Convert copyto map into set and output
-        final Set<String> copytoSet = new HashSet<String>(INT_128);
-        for (final Map.Entry<String, String> entry: copytoMap.entrySet()) {
-            copytoSet.add(entry.toString());
-        }
-        addSetToProperties(prop, COPYTO_TARGET_TO_SOURCE_MAP_LIST, copytoSet);
+        addMapToProperties(prop, COPYTO_TARGET_TO_SOURCE_MAP_LIST, copytoMap);
         addKeyDefSetToProperties(prop, KEY_LIST, keysDefMap.values());
 
         try {
@@ -1137,6 +1133,34 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             logger.logError("Failed to write list file: " + e.getMessage(), e);
         }
     }
+    
+    /**
+     * Add map to job configuration
+     * 
+     * @param prop job configuration
+     * @param key list name
+     * @param map values to add
+     */
+    private void addMapToProperties(final Job prop, final String key, final Map<String, String> map) {
+        final Map<String, String> newSet = new HashMap<String, String>(map.size());
+        for (final Map.Entry<String, String> e: map.entrySet()) {
+            String to = e.getKey();
+            if (new File(to).isAbsolute()) {
+            	to = FileUtils.normalize(to);
+            } else {
+            	to = FileUtils.separatorsToUnix(FileUtils.normalize(new StringBuffer(prefix).append(to).toString()));
+            }
+            String source = e.getValue();
+            if (new File(source).isAbsolute()) {
+            	source = FileUtils.normalize(source);
+            } else {
+            	FileUtils.separatorsToUnix(FileUtils.normalize(new StringBuffer(prefix).append(source).toString()));
+            }
+            newSet.put(to, source);
+        }
+        prop.setMap(key, newSet);
+    }
+    
     
     /**
      * Add key definition to job configuration
