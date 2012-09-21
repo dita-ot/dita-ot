@@ -30,6 +30,8 @@
                 xmlns:exsl="http://exslt.org/common"
                 extension-element-prefixes="saxon xalanredirect exsl">
 
+<xsl:import href="utilities.xsl"/>
+  
 <!-- Include error message template -->
 <xsl:include href="../common/output-message.xsl"/>
 
@@ -289,8 +291,12 @@ Default topic=</xsl:text>
   <xsl:if test="string-length($thisFilename)>0">
     <file>
       <xsl:attribute name="href">
-        <xsl:call-template name="removeAllExtraRelpath">
-          <xsl:with-param name="remainingPath" select="$thisFilename"/>
+        <xsl:call-template name="uri2file">
+          <xsl:with-param name="uri">
+           <xsl:call-template name="removeAllExtraRelpath">
+             <xsl:with-param name="remainingPath" select="$thisFilename"/>
+           </xsl:call-template>
+          </xsl:with-param>
         </xsl:call-template>
       </xsl:attribute>
     </file>
@@ -306,6 +312,8 @@ Default topic=</xsl:text>
      ********************************************************************************* -->
 <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="defaulttopic">
   <xsl:param name="pathFromMaplist"/>
+  <xsl:call-template name="uri2file">
+    <xsl:with-param name="uri">
   <xsl:choose>
     <!-- If copy-to is specified, that copy should be used in place of the original -->
     <xsl:when test="contains(@copy-to,$DITAEXT)">
@@ -333,6 +341,8 @@ Default topic=</xsl:text>
     <xsl:when test="contains(@href,'.htm')"><xsl:value-of select="@href"/><xsl:text>
 </xsl:text></xsl:when>
   </xsl:choose>
+    </xsl:with-param>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="*[contains(@class, ' map/reltable ')]">

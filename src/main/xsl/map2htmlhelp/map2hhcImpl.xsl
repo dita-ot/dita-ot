@@ -27,6 +27,7 @@
 <xsl:import href="../common/output-message.xsl"/>
 <xsl:import href="../common/dita-utilities.xsl"/>
 <xsl:import href="../common/dita-textonly.xsl"/>
+<xsl:import href="utilities.xsl"/>
 
 <xsl:output method="html" indent="no"/>
 
@@ -282,6 +283,8 @@
             <xsl:choose> <!-- What if targeting a nested topic? Need to keep the ID? -->
               <xsl:when test="contains(@copy-to, $DITAEXT)">
                 <xsl:attribute name="value">
+                  <xsl:call-template name="uri2file">
+                    <xsl:with-param name="uri">
                   <xsl:value-of select="$pathFromMaplist"/>
                   <xsl:call-template name="getFileName">
                     <xsl:with-param name="filename" select="@copy-to"/>
@@ -289,10 +292,14 @@
                   </xsl:call-template>
                   <xsl:value-of select="$OUTEXT"/>
                   <xsl:value-of select="$topicID"/>
+                    </xsl:with-param>
+                  </xsl:call-template>
                 </xsl:attribute>
               </xsl:when>
               <xsl:when test="contains(@href, $DITAEXT)">
                 <xsl:attribute name="value">
+                  <xsl:call-template name="uri2file">
+                    <xsl:with-param name="uri">
                   <xsl:value-of select="$pathFromMaplist"/>
                   <xsl:call-template name="getFileName">
                     <xsl:with-param name="filename" select="@href"/>
@@ -300,10 +307,18 @@
                   </xsl:call-template>
                   <xsl:value-of select="$OUTEXT"/>
                   <xsl:value-of select="$topicID"/>
+                    </xsl:with-param>
+                  </xsl:call-template>
                 </xsl:attribute>
               </xsl:when>
               <xsl:when test="contains(@href,'.htm') and @scope!='external'">
-                <xsl:attribute name="value"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="@href"/></xsl:attribute>
+                <xsl:attribute name="value">
+                  <xsl:call-template name="uri2file">
+                    <xsl:with-param name="uri">
+                  <xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="@href"/>
+                    </xsl:with-param>
+                  </xsl:call-template>
+                </xsl:attribute>
               </xsl:when>
               <!--<xsl:when test="not(@href) or @href=''">
                 <xsl:variable name="parentHREF" select="parent::*[contains(@class, ' map/topicref ')]/@href"/>
