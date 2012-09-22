@@ -8,6 +8,7 @@ import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.module.GenMapAndTopicListModule.KeyDef;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -19,6 +20,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -69,19 +71,9 @@ public class DitaWriterTest {
     @BeforeClass
     public static void setUp() throws IOException, SAXException {
         tempDir = TestUtils.createTempDir(DitaWriterTest.class);
-        final Properties props = new Properties();
-        props.put("keylist", "keydef=keyword.dita(main.ditamap)");
-        OutputStream out = null;
-        try {
-            out = new FileOutputStream(new File(tempDir, "dita.list"));
-            props.store(out, null);
-        } finally {
-            if (out != null) {
-                out.close();
-            }
-        }
         final DitaWriter writer = new DitaWriter();
         writer.setLogger(new TestUtils.TestLogger());
+        writer.setTempDir(tempDir.getAbsoluteFile());
         writer.initXMLReader(new File("src" + File.separator + "main").getAbsoluteFile(), false, true);
         writer.setExtName(".dita");
         writer.setTranstype("xhtml");
@@ -92,11 +84,11 @@ public class DitaWriterTest {
         final OutputUtils outputUtils = new OutputUtils();
         outputUtils.setInputMapPathName(new File(srcDir, "main.ditamap"));
         writer.setOutputUtils(outputUtils);
+        writer.setKeyDefinitions(Arrays.asList(new KeyDef("keydef", "keyword.dita", "main.ditamap")));
         
         FileUtils.copyFile(new File(srcDir, FILE_NAME_EXPORT_XML), new File(tempDir, FILE_NAME_EXPORT_XML));
 
         for (final String f: new String[] {"main.ditamap", "keyword.dita"}) {
-            writer.setTempDir(tempDir.getAbsoluteFile());
             writer.write(srcDir.getAbsoluteFile(), f);
         }
         

@@ -13,6 +13,7 @@ package org.dita.dost.writer;
 import static org.junit.Assert.assertEquals;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -133,6 +134,7 @@ public class TestDitaWriter {
         outputUtils.setInputMapPathName(new File(baseDir, inputDir.getPath() + File.separator + "keyword.dita"));
         writer.setOutputUtils(outputUtils);
         writer.setTempDir(tempDir.getAbsoluteFile());
+        writer.setKeyDefinitions(Collections.EMPTY_LIST);
         writer.setExtName(".dita");
         writer.write(new File(baseDir, inputDir.getPath()).getAbsoluteFile(), "keyword.dita");
 

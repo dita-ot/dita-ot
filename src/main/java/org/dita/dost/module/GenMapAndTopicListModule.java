@@ -1022,7 +1022,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
 
         // Convert copyto map into set and output
         addMapToProperties(prop, COPYTO_TARGET_TO_SOURCE_MAP_LIST, copytoMap);
-        addKeyDefSetToProperties(prop, KEY_LIST, keysDefMap.values());
+        addKeyDefSetToProperties(prop, keysDefMap);
 
         try {
             logger.logInfo("Serializing job specification");
@@ -1166,19 +1166,17 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
      * Add key definition to job configuration
      * 
      * @param prop job configuration
-     * @param key list name
-     * @param set key defintions to add
+     * @param keydefs key defintions to add
      */
-    private void addKeyDefSetToProperties(final Job prop, final String key, final Collection<KeyDef> set) {
+    private void addKeyDefSetToProperties(final Job prop, final Map<String, KeyDef> keydefs) {
         // update value
-        final Collection<KeyDef> updated = new ArrayList<KeyDef>(set.size());
-        for (final KeyDef file: set) {
-            String keys = FileUtils.separatorsToUnix(FileUtils.normalize(prefix + file.keys));
+        final Collection<KeyDef> updated = new ArrayList<KeyDef>(keydefs.size());
+        for (final KeyDef file: keydefs.values()) {
+            String keys = file.keys;
             String href = file.href;
             String source = file.source;
             if (prefix.length() != 0) {
                 // cases where keymap is in map ancestor folder
-                keys = keys.substring(prefix.length());
                 if (href == null) {
                     //href = FileUtils.separatorsToUnix(FileUtils.normalize(prefix));
                     source = FileUtils.separatorsToUnix(FileUtils.normalize(prefix + source));
@@ -1197,19 +1195,6 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             writeKeydef(new File(tempDir, "keydef.xml"), updated);
         } catch (final DITAOTException e) {
             logger.logError("Failed to write key definition file: " + e.getMessage(), e);
-        }
-        // write list file
-        final Set<String> newSet = new LinkedHashSet<String>(set.size());
-        for (final KeyDef keydef: updated) {
-            newSet.add(keydef.toString());
-        }
-        prop.setSet(key, newSet);
-        final String fileKey = key.substring(0, key.lastIndexOf("list")) + "file";
-        prop.setProperty(fileKey, key.substring(0, key.lastIndexOf("list")) + ".list");
-        try {
-            prop.writeList(key);
-        } catch (final IOException e) {
-            logger.logError("Failed to write key list file: " + e.getMessage(), e);
         }
     }
 

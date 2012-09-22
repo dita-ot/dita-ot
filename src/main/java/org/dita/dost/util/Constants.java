@@ -807,8 +807,6 @@ public final class Constants {
     public static final String REL_FLAGIMAGE_LIST="relflagimagelist";
     /** Property name for conref push list file */
     public static final String CONREF_PUSH_LIST = "conrefpushlist";
-    /** Property name for key list file */
-    public static final String KEY_LIST = "keylist";
     /** Property name for keyref list file */
     public static final String KEYREF_LIST = "keyreflist";
     /** Property name for coderef list file */

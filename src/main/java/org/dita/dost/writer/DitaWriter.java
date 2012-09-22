@@ -19,6 +19,7 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +48,7 @@ import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
+import org.dita.dost.module.GenMapAndTopicListModule.KeyDef;
 import org.dita.dost.reader.GrammarPoolManager;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Configuration;
@@ -357,7 +359,7 @@ public final class DitaWriter extends AbstractXMLFilter {
     private File tempDir;
     private File traceFilename;
 
-    private Map<String, String> keys = null;
+    private Map<String, KeyDef> keys;
 
     //Added by William on 2010-02-25 for bug:2957456 start
     private String inputFile = null;
@@ -443,6 +445,18 @@ public final class DitaWriter extends AbstractXMLFilter {
      */
     public void setOutputUtils(final OutputUtils outputUtils) {
         this.outputUtils = outputUtils;
+    }
+    
+    /**
+     * Set key definitions.
+     * 
+     * @param keydefs key definitions
+     */
+    public void setKeyDefinitions(final Collection<KeyDef> keydefs) {
+    	keys = new HashMap<String, KeyDef>();
+    	for (final KeyDef k: keydefs) {
+    		keys.put(k.keys, k);
+    	}
     }
     
     /**
@@ -547,12 +561,12 @@ public final class DitaWriter extends AbstractXMLFilter {
                         final String key = attValue.substring(0,keyIndex);
                         String target;
                         if(key.length() != 0 && keys.containsKey(key)){
-
+                        	
                             //target = FileUtils.replaceExtName(target);
                             //get key's href
-                            final String value = keys.get(key);
-                            final String href = value.substring(0, value.lastIndexOf(LEFT_BRACKET));
-
+                            final KeyDef value = keys.get(key);
+                            final String href = value.href;
+                            
                             final String updatedHref = updateHref(href);
 
                             //get element/topic id
@@ -605,8 +619,8 @@ public final class DitaWriter extends AbstractXMLFilter {
                         //conkeyref just has keyref
                         if(keys.containsKey(attValue)){
                             //get key's href
-                            final String value = keys.get(attValue);
-                            final String href = value.substring(0, value.lastIndexOf(LEFT_BRACKET));
+                            final KeyDef value = keys.get(attValue);
+                            final String href = value.href;
 
                             final String updatedHref = updateHref(href);
 
@@ -1149,29 +1163,6 @@ public final class DitaWriter extends AbstractXMLFilter {
         exclude = false;
 
         inputFile = inFile;
-
-        if(null == keys){
-            keys = new HashMap<String, String>();
-            Job job = null;
-            try{
-                job = new Job(tempDir);
-            }catch (final IOException e) {
-                logger.logException(new Exception("Failed to read job configuration file: " + e.getMessage(), e));
-            }
-
-            for(final String keyinfo: job.getSet(KEY_LIST)){
-                //get the key name
-                final String key = keyinfo.substring(0, keyinfo.indexOf(EQUAL));
-
-                //Edited by William on 2010-02-25 for bug:2957456 start
-                //value = keyinfo.substring(keyinfo.indexOf(EQUAL)+1, keyinfo.indexOf("("));
-                //get the href value and source file name
-                //e.g topics/target-topic-a.xml(maps/root-map-01.ditamap)
-                final String value = keyinfo.substring(keyinfo.indexOf(EQUAL)+1);
-                //Edited by William on 2010-02-25 for bug:2957456 end
-                keys.put(key, value);
-            }
-        }
 
         OutputStream out = null;
         try {

@@ -276,6 +276,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             fileWriter.setTranstype(transtype);
             fileWriter.setFilterUtils(filterUtils);
             fileWriter.setDelayConrefUtils(new DelayConrefUtils());
+            fileWriter.setKeyDefinitions(GenMapAndTopicListModule.readKeydef(new File(tempDir, "keydef.xml")));
            
             outputUtils.setGeneratecopyouter(input.getAttribute(ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER));
             outputUtils.setOutterControl(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTTERCONTROL));
