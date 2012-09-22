@@ -187,8 +187,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
     /** Absolute path to input file. */
     private File rootFile;
 
-    // keydef file from keys used in schema files
-    private XMLSerializer schemekeydef;
+    private Map<String, KeyDef> schemekeydefMap;
 
     // Added by William on 2009-06-25 for req #12014 start
     /** Export file */
@@ -294,8 +293,6 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             updateBaseDirectory();
             refactoringResult();
             outputResult();
-            schemekeydef.writeEndDocument();
-            schemekeydef.close();
             // Added by William on 2009-06-25 for req #12014 start
             // write the end tag
             export.write("</stub>");
@@ -380,9 +377,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         try {
             // Added by William on 2009-06-09 for scheme key bug
             // create the keydef file for scheme files
-            schemekeydef = XMLSerializer.newInstance(new FileOutputStream(new File(tempDir, "schemekeydef.xml")));
-            schemekeydef.writeStartDocument();
-            schemekeydef.writeStartElement(ELEMENT_STUB);
+        	schemekeydefMap = new HashMap<String, KeyDef>();
 
             // Added by William on 2009-06-25 for req #12014 start
             // create the export file for exportanchors
@@ -394,8 +389,6 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         } catch (final FileNotFoundException e) {
             logger.logException(e);
         } catch (final IOException e) {
-            logger.logException(e);
-        } catch (final SAXException e) {
             logger.logException(e);
         }
 
@@ -579,18 +572,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             // TODO Added by William on 2009-06-09 for scheme key bug(532-547)
             // if the current file is also a schema file
             if (schemeSet.contains(currentFile)) {
-                // write the keydef into the scheme keydef file
-                try {
-                    schemekeydef.writeStartElement(ELEMENT_KEYDEF);
-                    schemekeydef.writeAttribute(ATTRIBUTE_KEYS, key);
-                    if (value.href != null) {
-                        schemekeydef.writeAttribute(ATTRIBUTE_HREF, value.href);
-                    }
-                    schemekeydef.writeAttribute(ATTRIUBTE_SOURCE, currentFile);
-                    schemekeydef.writeEndElement();
-                } catch (final SAXException e) {
-                    logger.logException(e);
-                }
+            	schemekeydefMap.put(key, new KeyDef(key, value.href, currentFile));
             }
 
         }
@@ -1052,6 +1034,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         }
         // added by Willam on 2009-07-17 for req #12014 end
 
+        writeKeydef(new File(tempDir, "schemekeydef.xml"), schemekeydefMap.values());
     }
     
     /**
