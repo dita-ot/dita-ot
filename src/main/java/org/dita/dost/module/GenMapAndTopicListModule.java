@@ -47,6 +47,7 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.reader.GenListModuleReader;
+import org.dita.dost.reader.GenListModuleReader.ExportAnchor;
 import org.dita.dost.reader.GenListModuleReader.Reference;
 import org.dita.dost.reader.GrammarPoolManager;
 import org.dita.dost.util.DelayConrefUtils;
@@ -189,11 +190,6 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
 
     private Map<String, KeyDef> schemekeydefMap;
 
-    // Added by William on 2009-06-25 for req #12014 start
-    /** Export file */
-    private OutputStreamWriter export;
-    // Added by William on 2009-06-25 for req #12014 end
-
     private final Set<String> schemeSet;
 
     private final Map<String, Set<String>> schemeDictionary;
@@ -293,12 +289,6 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             updateBaseDirectory();
             refactoringResult();
             outputResult();
-            // Added by William on 2009-06-25 for req #12014 start
-            // write the end tag
-            export.write("</stub>");
-            // close the steam
-            export.close();
-            // Added by William on 2009-06-25 for req #12014 end
         } catch (final DITAOTException e) {
             throw e;
         } catch (final SAXException e) {
@@ -374,23 +364,8 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         rootFile = inFile.getCanonicalFile();
        
         inputFile = new File(inFile.getName());
-        try {
-            // Added by William on 2009-06-09 for scheme key bug
-            // create the keydef file for scheme files
-        	schemekeydefMap = new HashMap<String, KeyDef>();
-
-            // Added by William on 2009-06-25 for req #12014 start
-            // create the export file for exportanchors
-            // write the head
-            export = new OutputStreamWriter(new FileOutputStream(new File(tempDir, FILE_NAME_EXPORT_XML)));
-            export.write(XML_HEAD);
-            export.write("<stub>");
-            // Added by William on 2009-06-25 for req #12014 end
-        } catch (final FileNotFoundException e) {
-            logger.logException(e);
-        } catch (final IOException e) {
-            logger.logException(e);
-        }
+        // create the keydef file for scheme files
+    	schemekeydefMap = new HashMap<String, KeyDef>();
 
         // Set the mapDir
         outputUtils.setInputMapPathName(inFile);
@@ -1023,13 +998,46 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             // Output plugin id
             final File pluginIdFile = new File(tempDir, FILE_NAME_PLUGIN_XML);
             final DelayConrefUtils delayConrefUtils = new DelayConrefUtils();
-            delayConrefUtils.writeMapToXML(reader.getPluginMap(), pluginIdFile);
-            // write the result into the file
-            final StringBuffer result = reader.getResult();
+            delayConrefUtils.writeMapToXML(reader.getPluginMap(), pluginIdFile);            
+            XMLSerializer export = null;
             try {
-                export.write(result.toString());
-            } catch (final IOException e) {
-                logger.logException(e);
+            	export = XMLSerializer.newInstance(new FileOutputStream(new File(tempDir, FILE_NAME_EXPORT_XML)));
+            	export.writeStartDocument();
+            	export.writeStartElement("stub");
+            	for (final ExportAnchor e: reader.getExportAnchors()) {
+            		export.writeStartElement("file");
+            		export.writeAttribute("name", e.file);
+            		for (final String t: e.topicids) {
+            			export.writeStartElement("topicid");
+                		export.writeAttribute("name", t);
+                		export.writeEndElement();
+            		}
+            		for (final String i: e.ids) {
+            			export.writeStartElement("id");
+                		export.writeAttribute("name", i);
+                		export.writeEndElement();
+            		}
+            		for (final String k: e.keys) {
+            			export.writeStartElement("keyref");
+                		export.writeAttribute("name", k);
+                		export.writeEndElement();
+            		}
+            		export.writeEndElement();
+            	}
+            	export.writeEndElement();
+            	export.writeEndDocument();
+            } catch (final FileNotFoundException e) {
+				throw new DITAOTException("Failed to write export anchor file: " + e.getMessage(), e);
+			} catch (final SAXException e) {
+				throw new DITAOTException("Failed to serialize export anchor file: " + e.getMessage(), e);
+			} finally {
+            	if (export != null) {
+            		try {
+						export.close();
+					} catch (final IOException e) {
+						logger.logError("Failed to close export anchor file: " + e.getMessage(), e);
+					}
+            	}
             }
         }
         // added by Willam on 2009-07-17 for req #12014 end

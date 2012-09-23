@@ -187,8 +187,8 @@ public final class GenListModuleReader extends AbstractXMLReader {
     private Map<String, Set<String>> relationGraph = null;
 
     //Added by William on 2009-06-25 for req #12014 start
-    /** StringBuffer to store <exportanchors> elements */
-    private StringBuffer result = new StringBuffer();
+    private List<ExportAnchor> resultList = new ArrayList<ExportAnchor>();
+    private ExportAnchor currentExportAnchor;
     /** Flag to show whether a file has <exportanchors> tag */
     private boolean hasExport = false;
     /** For topic/dita files whether a </file> tag should be added */
@@ -259,10 +259,12 @@ public final class GenListModuleReader extends AbstractXMLReader {
     }
 
     /**
-     * @return the result
+     * Get export anchors.
+     * 
+     * @return list of export anchors
      */
-    public StringBuffer getResult() {
-        return result;
+    public List<ExportAnchor> getExportAnchors() {
+    	return resultList;
     }
     //Added by William on 2009-06-25 for req #12014 end
 
@@ -689,8 +691,11 @@ public final class GenListModuleReader extends AbstractXMLReader {
                 //Get relative file name
                 final String filename = FileUtils.getRelativePath(
                         rootFilePath.getAbsolutePath(), currentFile.getAbsolutePath());
-                if(result.indexOf(filename + QUESTION) != -1){
-                    result = new StringBuffer(result.toString().replace(filename + QUESTION, topicId));
+                for (final ExportAnchor e: resultList) {
+	                if (e.topicids.contains(filename + QUESTION)) {
+	                	e.topicids.add(topicId);
+	                	e.topicids.remove(filename + QUESTION);
+	                }
                 }
 
             }
@@ -736,12 +741,10 @@ public final class GenListModuleReader extends AbstractXMLReader {
                             editedHref = topicHref;
                         }
                         // editedHref = editedHref.replace(File.separator, "/");
-                        // create file element in the StringBuffer
-                        result.append("<file name=\"" + editedHref + "\">");
+                        currentExportAnchor = new ExportAnchor(editedHref);
                         // if <exportanchors> is defined in topicmeta(topicref),
                         // there is only one topic id
-                        result.append("<topicid name=\"" + topicId + "\"/>");
-
+                        currentExportAnchor.topicids.add(topicId);
                         // If current file is topic file
                     } else if (FileUtils.isDITATopicFile(currentFile.getName())) {
                         String filename = FileUtils.getRelativePath(
@@ -757,12 +760,10 @@ public final class GenListModuleReader extends AbstractXMLReader {
                         // filename = FileUtils.normalizeDirectory(currentDir,
                         // filename);
                         filename = FileUtils.separatorsToUnix(filename);
-                        // create file element in the StringBuffer
-                        result.append("<file name=\"" + filename + "\">");
+                        currentExportAnchor = new ExportAnchor(filename);
                         // if <exportanchors> is defined in metadata(topic),
                         // there can be many topic ids
-                        result.append("<topicid name=\"" + topicId + "\">");
-
+                        currentExportAnchor.topicids.add(topicId);
                         shouldAppendEndTag = true;
                     }
                     // meet <anchorkey> tag
@@ -771,7 +772,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
                     // TODO in topic file is no keys
                     final String keyref = atts
                             .getValue(ATTRIBUTE_NAME_KEYREF);
-                    result.append("<keyref name=\"" + keyref + "\"/>");
+                    currentExportAnchor.keys.add(keyref);
                     // meet <anchorid> tag
                 } else if (DELAY_D_ANCHORID.matches(classValue)) {
                     // create keyref element in the StringBuffer
@@ -792,13 +793,13 @@ public final class GenListModuleReader extends AbstractXMLReader {
                          */
                         // id shouldn't be same as topic id in the case of duplicate insert
                         if (!topicId.equals(id)) {
-                            result.append("<id name=\"" + id + "\"/>");
+                            currentExportAnchor.ids.add(id);
                         }
                     } else if (FileUtils.isDITATopicFile(currentFile.getName())) {
                         // id shouldn't be same as topic id in the case of duplicate insert
                         if (!topicId.equals(id)) {
                             // topic id found
-                            result.append("<id name=\"" + id + "\"/>");
+                            currentExportAnchor.ids.add(id);
                         }
                     }
                 }
@@ -1132,7 +1133,8 @@ public final class GenListModuleReader extends AbstractXMLReader {
         }
         //Added by William on 2009-07-15 for req #12014 start
         if(FileUtils.isDITATopicFile(currentFile.getName()) && shouldAppendEndTag){
-            result.append("</file>");
+            resultList.add(currentExportAnchor);
+            currentExportAnchor = null;
             //should reset
             shouldAppendEndTag = false;
         }
@@ -1207,10 +1209,9 @@ public final class GenListModuleReader extends AbstractXMLReader {
         if(topicMetaSet.contains(qName) && hasExport){
             //If current file is a ditamap file
             if(FileUtils.isDITAMapFile(currentFile.getName())){
-                result.append("</file>");
+                resultList.add(currentExportAnchor);
+                currentExportAnchor = null;
                 //If current file is topic file
-            }else if(FileUtils.isDITATopicFile(currentFile.getName())){
-                result.append("</topicid>");
             }
             hasExport = false;
             topicMetaSet.clear();
@@ -1854,6 +1855,19 @@ public final class GenListModuleReader extends AbstractXMLReader {
             }
             return true;
         }
+    }
+    
+    public static class ExportAnchor {
+    	
+    	public final String file;
+    	public final Set<String> topicids = new HashSet<String>();
+    	public final Set<String> keys = new HashSet<String>();
+    	public final Set<String> ids = new HashSet<String>();
+    	
+    	ExportAnchor(final String file) {
+    		this.file = file;
+    	}
+    	
     }
 
 }
