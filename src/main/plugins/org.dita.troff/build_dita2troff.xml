@@ -12,6 +12,7 @@
   <target name="dita.topic.troff" unless="noTopic" if="old.transform"
     description="Build troff output from dita inner and outer topics,which will adjust the directory.">
     <!-- step 1 -->
+    <property name="dita.ext" value=".dita"/>
     <xslt basedir="${dita.temp.dir}"
       destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
       extension="${dita.ext}"
@@ -38,6 +39,7 @@
     <target name="dita.inner.topic.troff" unless="noTopic" if="inner.transform"
     description="Build troff output from inner dita topics">
     <!-- step 1 -->
+    <property name="dita.ext" value=".dita"/>
     <xslt basedir="${dita.temp.dir}"
       destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}" 
       extension="${dita.ext}"
@@ -71,6 +73,7 @@
   <target name="dita.outer.topic.troff" unless="noTopic" if="outer.transform"  depends="checkouterTransform"
     description="Build troff output from outer dita topics">
     <!-- step 1 -->
+    <property name="dita.ext" value=".dita"/>
     <xslt basedir="${dita.temp.dir}"
       destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${outditafilesfile}"
       extension="${dita.ext}"
