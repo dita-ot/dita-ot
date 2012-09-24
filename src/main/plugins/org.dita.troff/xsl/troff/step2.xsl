@@ -55,7 +55,7 @@
       @scope="" copy through @scope for a link
 -->
 
-<xsl:import href="../common/output-message.xsl"/>
+<xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
 
 <xsl:output method="text"
             encoding="UTF-8"
