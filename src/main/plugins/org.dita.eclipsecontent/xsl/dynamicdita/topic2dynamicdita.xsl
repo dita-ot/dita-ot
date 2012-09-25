@@ -9,8 +9,8 @@
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   
-  <xsl:import href="../common/output-message.xsl"/>
-  <xsl:import href="../common/dita-utilities.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
 
   <xsl:output method="xml"/>
 
