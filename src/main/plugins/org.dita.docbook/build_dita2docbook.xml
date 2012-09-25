@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This file is part of the DITA Open Toolkit project hosted on 
-     Sourceforge.net. See the accompanying license.txt file for 
-     applicable licenses.-->
+<!-- This file is part of the DITA Open Toolkit project.
+     See the accompanying license.txt file for applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <project name="dita2docbook">
 
@@ -31,7 +30,7 @@
   <target name="dita.map.docbook"
     description="Build DocBook output from ditamap">
     <condition property="args.xsl"
-      value="${dita.script.dir}${file.separator}map2docbook.xsl">
+      value="${dita.plugin.org.dita.docbook.dir}/xsl/map2docbook.xsl">
       <not>
         <isset property="args.xsl" />
       </not>
@@ -50,7 +49,7 @@
   <target name="dita.topic.docbook"
     description="Build DocBook output from dita topic">
     <condition property="args.xsl"
-      value="${dita.script.dir}${file.separator}dita2docbook.xsl">
+      value="${dita.plugin.org.dita.docbook.dir}/xsl/dita2docbook.xsl">
       <not>
         <isset property="args.xsl" />
       </not>
