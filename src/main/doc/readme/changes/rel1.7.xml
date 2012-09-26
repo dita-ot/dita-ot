@@ -23,6 +23,9 @@
     <title>Migration from previous releases</title>
     <refbody>
       <section>
+        <p>A new job status file <filepath>.job.xml</filepath> has been introduced and replaces <filepath>dita.list</filepath> and
+          <filepath>dita.xml.properties</filepath> as the normative source for job status. If you have custom processing which modifies
+          the job properties, change you code to modify <filepath>.job.xml</filepath> instead.</p>
         <p>The following deprecated properties have been removed:</p>
         <ul>
           <li><codeph>dita.input</codeph></li>
@@ -74,6 +77,7 @@
           <li>#1379 Use format attribute to identity DITA topics (milestone 2)</li>
           <li>#1384 Validate key names (milestone 2)</li>
           <li>#1388 Remove temporary file file extension normalization (milestone 2)</li>
+          <li>#1391 Add new job status file format (milestone 3)</li>
           <li>#1317 General XHTML improvements (in progress)</li>
           <li>#1324 Avoid strings where other types are more appropriate (in progress)</li>
           <li>#1338 Add named error messages (in progress)</li>
