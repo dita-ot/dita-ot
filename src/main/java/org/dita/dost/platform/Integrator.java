@@ -414,7 +414,7 @@ public final class Integrator {
      * digit         ::= [0..9]
      * alpha         ::= [a..zA..Z]
      * alphanum      ::= alpha | digit
-     * token         ::= ( alphanum | ’_’ | ’-’ )+
+     * token         ::= ( alphanum | '_' | '-' )+
      * symbolic-name ::= token('.'token)*
      * </pre>
      * 
@@ -425,7 +425,7 @@ public final class Integrator {
      * major     ::= number
      * minor     ::=number
      * micro     ::=number
-     * qualifier ::= ( alphanum | ’_’ | '-' )+
+     * qualifier ::= ( alphanum | '_' | '-' )+
      * </pre>
      * 
      * @param f Features to validate
