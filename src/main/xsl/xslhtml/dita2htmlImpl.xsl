@@ -854,7 +854,7 @@
     <!--br/-->
   <!-- edited by William on 2009-06-16 for bullet bug:2782503 end-->
   
-  <xsl:call-template name="start-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param></xsl:call-template>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
  <xsl:call-template name="setaname"/>
  <ul>
    <xsl:call-template name="commonattributes"/>
@@ -865,7 +865,7 @@
    <xsl:call-template name="setid"/>
    <xsl:apply-templates/>
  </ul>
-  <xsl:call-template name="end-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
+ <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
  <xsl:value-of select="$newline"/>
 </xsl:template>
 
@@ -916,7 +916,7 @@
   <!-- edited by William on 2009-06-16 for bullet bug:2782503 start-->
      <!--br/-->
   <!-- edited by William on 2009-06-16 for bullet bug:2782503 end-->
-  <xsl:call-template name="start-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param></xsl:call-template>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
 <xsl:call-template name="setaname"/>
 <ol>
   <xsl:call-template name="commonattributes"/>
@@ -932,7 +932,7 @@
   <xsl:call-template name="setid"/>
   <xsl:apply-templates/>
 </ol>
-  <xsl:call-template name="end-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 <xsl:value-of select="$newline"/>
 </xsl:template>
 
@@ -3632,6 +3632,7 @@
   <xsl:param name="default-output-class"/>
   <xsl:apply-templates select="@xml:lang"/>
   <xsl:apply-templates select="@dir"/>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
   <xsl:apply-templates select="." mode="set-output-class">
     <xsl:with-param name="default" select="$default-output-class"/>
   </xsl:apply-templates>
