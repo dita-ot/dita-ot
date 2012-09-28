@@ -288,39 +288,6 @@
       </and>
     </condition>
 
-    <dita-ot-fail id="DOTA012W">
-      <condition>
-        <isset property="dita.extname"/>
-      </condition>
-      <param name="1" value="dita.extname"/>
-      <param name="2" value="dita.ext"/>
-    </dita-ot-fail>
-    <condition property="dita.ext" value=".xml">
-      <and>
-        <isset property="dita.extname" />
-        <contains string="${dita.extname}" substring="xml"/>
-      </and>
-    </condition>
-    <condition property="dita.ext" value=".dita">
-      <and>
-        <isset property="dita.extname" />
-        <contains string="${dita.extname}" substring="dita"/>
-      </and>
-    </condition>
-    <!-- Declare dita.extname default for backwards-compatibility, to be removed in future releases. -->
-    <condition property="dita.extname" value="xml">
-      <and>
-        <not><isset property="dita.extname"/></not>
-        <equals arg1="${dita.ext}" arg2=".xml"/>
-      </and>
-    </condition>
-    <condition property="dita.extname" value="dita">
-      <and>
-        <not><isset property="dita.extname"/></not>
-        <equals arg1="${dita.ext}" arg2=".dita"/>
-      </and>
-    </condition>
-
     <!-- append a '.' to out.ext if args.outext not contains '.' -->
     <condition property="out.ext" value=".${args.outext}">
       <and>

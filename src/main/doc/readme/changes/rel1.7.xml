@@ -26,14 +26,17 @@
         <p>A new job status file <filepath>.job.xml</filepath> has been introduced and replaces <filepath>dita.list</filepath> and
           <filepath>dita.xml.properties</filepath> as the normative source for job status. If you have custom processing which modifies
           the job properties, change you code to modify <filepath>.job.xml</filepath> instead.</p>
-        <p>The following deprecated properties have been removed:</p>
+        <p>Support for the following deprecated properties have been removed:</p>
         <ul>
           <li><codeph>dita.input</codeph></li>
           <li><codeph>dita.input.dirname</codeph>
+          <li><codeph>dita.extname</codeph>
           </li>
         </ul>
         <p>Stylesheets for the following transtypes have been moved to plug-in specific folders:</p>
         <ul>
+          <li>docbook</li>
+          <li>eclipsecontent</li>
           <li>troff</li>
           <li>wordrtf</li>
         </ul>
