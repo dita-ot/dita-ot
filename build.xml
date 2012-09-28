@@ -68,7 +68,7 @@
   <target name="compile" depends="init-java" description="Compile Java">
     <javac srcdir="${java.dir}" destdir="${bin.dir}"
            debug="on"
-           source="1.5" target="1.5">
+           source="1.6" target="1.6">
       <exclude name="org/dita/dost/invoker/JavaInvoker.java"/>
       <classpath>
         <pathelement location="${lib.dir}/xercesImpl.jar"/>
@@ -441,7 +441,7 @@
     <mkdir dir="${test.bin.dir}"/>
     <javac destdir="${test.bin.dir}"
            debug="on"
-           source="1.5" target="1.5">
+           source="1.6" target="1.6">
       <src>
         <pathelement location="${test.java.dir}"/>
         <pathelement location="${test.suite.dir}/src/main/java"/>

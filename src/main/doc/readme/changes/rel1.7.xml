@@ -12,6 +12,9 @@
     <title>General Enhancements and Changes</title>
     <refbody>
       <section>
+        <p>Minimum Java version requirement has been moved from 5.0 to 6.</p>
+      </section>
+      <section>
         <title>Preprocessing</title>
         <p>By default, DITA-OT no longer normalizes file extensions to <codeph>.xml</codeph>. Temporary files will retain the original
           file extensions, unless <parmname>dita.ext</parmname> parameter is used to force file extension normalization to given value.</p>
@@ -80,6 +83,7 @@
           <li>#1379 Use format attribute to identity DITA topics (milestone 2)</li>
           <li>#1384 Validate key names (milestone 2)</li>
           <li>#1388 Remove temporary file file extension normalization (milestone 2)</li>
+          <li>#1327 Change minimum Java version to 6 (milestone 3)</li>
           <li>#1391 Add new job status file format (milestone 3)</li>
           <li>#1317 General XHTML improvements (in progress)</li>
           <li>#1324 Avoid strings where other types are more appropriate (in progress)</li>
