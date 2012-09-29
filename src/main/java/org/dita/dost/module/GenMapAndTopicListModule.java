@@ -34,6 +34,9 @@ import java.util.Properties;
 import java.util.Set;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.XMLReader;
@@ -41,7 +44,6 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
@@ -57,7 +59,6 @@ import org.dita.dost.util.Job;
 import org.dita.dost.util.OutputUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.TimingUtils;
-import org.dita.dost.util.XMLSerializer;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
@@ -998,10 +999,12 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             // Output plugin id
             final File pluginIdFile = new File(tempDir, FILE_NAME_PLUGIN_XML);
             final DelayConrefUtils delayConrefUtils = new DelayConrefUtils();
-            delayConrefUtils.writeMapToXML(reader.getPluginMap(), pluginIdFile);            
-            XMLSerializer export = null;
+            delayConrefUtils.writeMapToXML(reader.getPluginMap(), pluginIdFile);
+            OutputStream exportStream = null;
+            XMLStreamWriter export = null;
             try {
-            	export = XMLSerializer.newInstance(new FileOutputStream(new File(tempDir, FILE_NAME_EXPORT_XML)));
+            	exportStream = new FileOutputStream(new File(tempDir, FILE_NAME_EXPORT_XML));
+            	export = XMLOutputFactory.newInstance().createXMLStreamWriter(exportStream);
             	export.writeStartDocument();
             	export.writeStartElement("stub");
             	for (final ExportAnchor e: reader.getExportAnchors()) {
@@ -1028,12 +1031,19 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             	export.writeEndDocument();
             } catch (final FileNotFoundException e) {
 				throw new DITAOTException("Failed to write export anchor file: " + e.getMessage(), e);
-			} catch (final SAXException e) {
+			} catch (final XMLStreamException e) {
 				throw new DITAOTException("Failed to serialize export anchor file: " + e.getMessage(), e);
 			} finally {
             	if (export != null) {
             		try {
 						export.close();
+					} catch (final XMLStreamException e) {
+						logger.logError("Failed to close export anchor file: " + e.getMessage(), e);
+					}
+            	}
+            	if (exportStream != null) {
+            		try {
+						exportStream.close();
 					} catch (final IOException e) {
 						logger.logError("Failed to close export anchor file: " + e.getMessage(), e);
 					}
@@ -1287,9 +1297,11 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
      * @throws DITAOTException if writing configuration file failed
      */
     public static void writeKeydef(final File keydefFile, final Collection<KeyDef> keydefs) throws DITAOTException {
-        XMLSerializer keydef = null;
+    	OutputStream out = null;
+    	XMLStreamWriter keydef = null;
         try {
-            keydef = XMLSerializer.newInstance(new FileOutputStream(keydefFile));
+        	out = new FileOutputStream(keydefFile);
+            keydef = XMLOutputFactory.newInstance().createXMLStreamWriter(out);
             keydef.writeStartDocument();
             keydef.writeStartElement(ELEMENT_STUB);
             for (final KeyDef k: keydefs) {
@@ -1304,12 +1316,19 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
                 keydef.writeEndElement();
             }        
             keydef.writeEndDocument();
-        } catch (final Exception e) {
+        } catch (final XMLStreamException e) {
+            throw new DITAOTException("Failed to write key definition file " + keydefFile + ": " + e.getMessage(), e);
+        } catch (final IOException e) {
             throw new DITAOTException("Failed to write key definition file " + keydefFile + ": " + e.getMessage(), e);
         } finally {
             if (keydef != null) {
                 try {
                     keydef.close();
+                } catch (final XMLStreamException e) {}
+            }
+            if (out != null) {
+                try {
+                    out.close();
                 } catch (final IOException e) {}
             }
         }

@@ -9,16 +9,19 @@ import static javax.xml.XMLConstants.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.FileSet;
-
-import org.dita.dost.util.XMLSerializer;
 
 /**
  * Generate list of variable files.
@@ -41,9 +44,11 @@ public final class VariableFileTask extends Task {
             }
         }
         
-        XMLSerializer s = null;
+        OutputStream out = null;
+        XMLStreamWriter s = null;
         try {
-            s = XMLSerializer.newInstance(new FileOutputStream(file));
+        	out = new FileOutputStream(file);
+            s = XMLOutputFactory.newInstance().createXMLStreamWriter(out);
             s.writeStartDocument();
             s.writeStartElement("langlist");
             for (final File f: files) {
@@ -61,7 +66,14 @@ public final class VariableFileTask extends Task {
             if (s != null) {
                 try {
                     s.close();
-                } catch (IOException e) {
+                } catch (final XMLStreamException e) {
+                    getProject().log("Failed to close output writer", Project.MSG_ERR);
+				}
+            }
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (final IOException e) {
                     getProject().log("Failed to close output writer", Project.MSG_ERR);
                 }
             }

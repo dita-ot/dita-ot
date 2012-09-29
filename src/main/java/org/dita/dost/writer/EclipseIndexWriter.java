@@ -19,6 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+
 import org.xml.sax.SAXException;
 
 import org.dita.dost.exception.DITAOTException;
@@ -68,6 +72,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
 
     public void write(final String filename) throws DITAOTException {
         OutputStream out = null;
+        XMLStreamWriter serializer = null;
         try {
             out = new FileOutputStream(filename);
             //boolean for processing indexsee the new markup (Eclipse 3.6 feature).
@@ -79,7 +84,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
                 targetExt = this.getPipelineHashIO().getAttribute(ANT_INVOKER_EXT_PARAM_TARGETEXT);
             }
 
-            final XMLSerializer serializer = XMLSerializer.newInstance(out);
+            serializer = XMLOutputFactory.newInstance().createXMLStreamWriter(out);
 
             serializer.writeStartDocument();
             serializer.writeStartElement("index");
@@ -95,12 +100,19 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
         } catch (final Exception e) {
             throw new DITAOTException(e);
         } finally {
+            if (serializer != null) {
+                try {
+                	serializer.close();
+                } catch (final XMLStreamException e) {
+                    logger.logException(e);
+				}
+            }
             if (out != null) {
                 try {
-                    out.close();
+                	out.close();
                 } catch (final IOException e) {
                     logger.logException(e);
-                }
+				}
             }
         }
     }
@@ -113,7 +125,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
      * @param indexsee is term a see term
      * @throws SAXException if serialization failed
      */
-    private void outputIndexTerm(final IndexTerm term, final XMLSerializer serializer, final boolean indexsee) throws SAXException {
+    private void outputIndexTerm(final IndexTerm term, final XMLStreamWriter serializer, final boolean indexsee) throws XMLStreamException {
         final List<IndexTerm> subTerms = term.getSubTerms();
         final int subTermNum = subTerms.size();
         outputIndexTermStartElement(term, serializer, indexsee);
@@ -168,7 +180,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
      * @param term  The indexterm to be processed.
      * @param printWriter The Writer used for writing content to disk.
      */
-    private void outputIndexEntry(final IndexTerm term, final XMLSerializer serializer) throws SAXException {
+    private void outputIndexEntry(final IndexTerm term, final XMLStreamWriter serializer) throws XMLStreamException {
 
         final List<IndexTermTarget> targets = term.getTargetList();
         final int targetNum = targets.size();
@@ -262,7 +274,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
      */
 
     private void outputIndexEntryEclipseIndexsee(final IndexTerm term,
-            final XMLSerializer serializer) throws SAXException {
+            final XMLStreamWriter serializer) throws XMLStreamException {
         final List<IndexTermTarget> targets = term.getTargetList();
         final int targetNum = targets.size();
 
@@ -315,7 +327,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
      * @param printWriter The Writer used for writing content to disk.
      * @param indexsee Boolean value for using the new markup for see references.
      */
-    private void outputIndexTermStartElement(final IndexTerm term, final XMLSerializer serializer, final boolean indexsee) throws SAXException{
+    private void outputIndexTermStartElement(final IndexTerm term, final XMLStreamWriter serializer, final boolean indexsee) throws XMLStreamException {
         //RFE 2987769 Eclipse index-see
         if (indexsee){
             if (term.getTermPrefix() != null) {
@@ -345,7 +357,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
      * @param printWriter The Writer used for writing content to disk.
      * @param indexsee Boolean value for using the new markup for see references.
      */
-    private void outputIndexTermEndElement(final IndexTerm term, final XMLSerializer serializer, final boolean indexsee) throws SAXException{
+    private void outputIndexTermEndElement(final IndexTerm term, final XMLStreamWriter serializer, final boolean indexsee) throws XMLStreamException {
         if (indexsee){
             if (term.getTermPrefix() != null) {
                 serializer.writeEndElement(); // see
