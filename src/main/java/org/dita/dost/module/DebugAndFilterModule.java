@@ -12,24 +12,19 @@ package org.dita.dost.module;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.writer.DitaWriter.*;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Queue;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -63,7 +58,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLFilter;
@@ -104,19 +98,15 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
         }
         final Map<String, String> result = new HashMap<String, String>();
         for (final Map.Entry<String, String> e: propValues.entrySet()) {
-            final String value = e.getValue();
-            // don't replace DITA map file extensions
-            if (FILE_EXTENSION_DITAMAP.equals("." + FileUtils.getExtension(value))) {
-                result.put(e.getKey(), value);
-            // replace file extension in both map key and value
-            } else {
+            String key = e.getKey();
+            String value = e.getValue();
+            if (!FILE_EXTENSION_DITAMAP.equals("." + FileUtils.getExtension(value))) {
                 if (extName != null) {
-                    result.put(FileUtils.replaceExtension(e.getKey(), extName),
-                               FileUtils.replaceExtension(value, extName));
-                } else {
-                    result.put(e.getKey(), value);
+                    key = FileUtils.replaceExtension(key, extName);
+                    value = FileUtils.replaceExtension(value, extName);
                 }
             }
+            result.put(key, value);
         }
         property.setMap(listName, result);
 //        try {
@@ -139,17 +129,13 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
         }
         final Set<String> result = new HashSet<String>(propValues.size());
         for (final String file: propValues) {
-            // don't replace DITA map file extensions
-            if (FILE_EXTENSION_DITAMAP.equals("." + FileUtils.getExtension(file))) {
-                result.add(file);
-            // replace file extension
-            } else {
+            String f = file;
+            if (!FILE_EXTENSION_DITAMAP.equals("." + FileUtils.getExtension(file))) {
                 if (extName != null) {
-                    result.add(FileUtils.replaceExtension(file,extName));
-                } else {
-                    result.add(file);
+                    f = FileUtils.replaceExtension(f, extName);
                 }
             }
+            result.add(f);
         }
         property.setSet(listName, result);
         try {
@@ -166,20 +152,13 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
      * @param property property to update
      */
     private void updatePropertyString(final String listName, final Job property){
-        final String propValue = property.getProperty(listName);
+        String propValue = property.getProperty(listName);
         if (propValue == null || propValue.trim().length() == 0){
             return;
         }
-        String result;
-        // don't replace DITA map file extensions
-        if (FILE_EXTENSION_DITAMAP.equals("." + FileUtils.getExtension(propValue))) {
-            result = propValue;
-        // replace file extension
-        } else {
+        if (!FILE_EXTENSION_DITAMAP.equals("." + FileUtils.getExtension(propValue))) {
             if (extName != null) {
-                result = FileUtils.replaceExtension(propValue, extName);
-            } else {
-                result = propValue;
+            	propValue = FileUtils.replaceExtension(propValue, extName);
             }
         }
         property.setProperty(listName, propValue);
