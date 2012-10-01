@@ -1,4 +1,4 @@
-DITA Open Toolkit [![Build Status](https://secure.travis-ci.org/dita-ot/dita-ot.png?branch=B_MT1-7)](http://travis-ci.org/dita-ot/dita-ot)
+DITA Open Toolkit [![Build Status](https://secure.travis-ci.org/dita-ot/dita-ot.png?branch=develop)](http://travis-ci.org/dita-ot/dita-ot)
 =================
 
 The DITA Open Toolkit, or DITA-OT for short, is an open source tool that provides processing for OASIS DITA content. See [dita-ot.sf.net](http://dita-ot.sourceforge.net/) for documentation, information about releases, and download packages.
@@ -8,7 +8,7 @@ Prerequisites
 
 In order to build and use DITA-OT, you’ll need:
 
-* Java Development Kit 5.0 or newer
+* Java Development Kit 6 or newer
 * Apache Ant 1.8.2 or newer.
 
 Building
