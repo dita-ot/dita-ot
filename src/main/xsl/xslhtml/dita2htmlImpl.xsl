@@ -1866,15 +1866,7 @@
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/table ')]" name="topic.table">
- <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
- <xsl:choose>
-   <xsl:when test="$revtest=1">   <!-- Rev is active - add the DIV -->
-     <div class="{@rev}"><xsl:apply-templates select="."  mode="table-fmt" /></div>
-   </xsl:when>
-   <xsl:otherwise>  <!-- Rev wasn't active - process normally -->
-     <xsl:apply-templates select="."  mode="table-fmt" />
-   </xsl:otherwise>
- </xsl:choose>
+  <xsl:apply-templates select="."  mode="table-fmt" />
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/table ')]" mode="table-fmt">
@@ -1948,105 +1940,99 @@
 </xsl:template>
 
 <xsl:template name="dotable">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-  <xsl:call-template name="start-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
- <xsl:call-template name="setaname"/>
- <table cellpadding="4" cellspacing="0" summary="">
-  <xsl:variable name="colsep">
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+  <xsl:call-template name="setaname"/>
+  <table cellpadding="4" cellspacing="0" summary="">
+    <xsl:variable name="colsep">
+      <xsl:choose>
+        <xsl:when test="*[contains(@class,' topic/tgroup ')]/@colsep"><xsl:value-of select="*[contains(@class,' topic/tgroup ')]/@colsep"/></xsl:when>
+        <xsl:when test="@colsep"><xsl:value-of select="@colsep"/></xsl:when>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="rowsep">
+      <xsl:choose>
+        <xsl:when test="*[contains(@class,' topic/tgroup ')]/@rowsep"><xsl:value-of select="*[contains(@class,' topic/tgroup ')]/@rowsep"/></xsl:when>
+        <xsl:when test="@rowsep"><xsl:value-of select="@rowsep"/></xsl:when>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:call-template name="setid"/>
+    <xsl:call-template name="commonattributes"/>
+    <xsl:apply-templates select="." mode="generate-table-summary-attribute"/>
+    <xsl:call-template name="setscale"/>
+    <!-- When a table's width is set to page or column, force it's width to 100%. If it's in a list, use 90%.
+         Otherwise, the table flows to the content -->
     <xsl:choose>
-      <xsl:when test="*[contains(@class,' topic/tgroup ')]/@colsep"><xsl:value-of select="*[contains(@class,' topic/tgroup ')]/@colsep"/></xsl:when>
-      <xsl:when test="@colsep"><xsl:value-of select="@colsep"/></xsl:when>
+      <xsl:when test="(@expanse='page' or @pgwide='1')and (ancestor::*[contains(@class,' topic/li ')] or ancestor::*[contains(@class,' topic/dd ')] )">
+        <xsl:attribute name="width">90%</xsl:attribute>
+      </xsl:when>
+      <xsl:when test="(@expanse='column' or @pgwide='0') and (ancestor::*[contains(@class,' topic/li ')] or ancestor::*[contains(@class,' topic/dd ')] )">
+        <xsl:attribute name="width">90%</xsl:attribute>
+      </xsl:when>
+      <xsl:when test="(@expanse='page' or @pgwide='1')">
+        <xsl:attribute name="width">100%</xsl:attribute>
+      </xsl:when>
+      <xsl:when test="(@expanse='column' or @pgwide='0')">
+        <xsl:attribute name="width">100%</xsl:attribute>
+      </xsl:when>
     </xsl:choose>
-  </xsl:variable>
-  <xsl:variable name="rowsep">
     <xsl:choose>
-      <xsl:when test="*[contains(@class,' topic/tgroup ')]/@rowsep"><xsl:value-of select="*[contains(@class,' topic/tgroup ')]/@rowsep"/></xsl:when>
-      <xsl:when test="@rowsep"><xsl:value-of select="@rowsep"/></xsl:when>
+      <xsl:when test="@frame='all' and $colsep='0' and $rowsep='0'">
+        <xsl:attribute name="border">0</xsl:attribute>
+      </xsl:when>
+      <xsl:when test="not(@frame) and $colsep='0' and $rowsep='0'">
+        <xsl:attribute name="border">0</xsl:attribute>
+      </xsl:when>
+      <xsl:when test="@frame='sides'">
+        <xsl:attribute name="frame">vsides</xsl:attribute>
+        <xsl:attribute name="border">1</xsl:attribute>
+      </xsl:when>
+      <xsl:when test="@frame='top'">
+        <xsl:attribute name="frame">above</xsl:attribute>
+        <xsl:attribute name="border">1</xsl:attribute>
+      </xsl:when>
+      <xsl:when test="@frame='bottom'">
+        <xsl:attribute name="frame">below</xsl:attribute>
+        <xsl:attribute name="border">1</xsl:attribute>
+      </xsl:when>
+      <xsl:when test="@frame='topbot'">
+        <xsl:attribute name="frame">hsides</xsl:attribute>
+        <xsl:attribute name="border">1</xsl:attribute>
+      </xsl:when>
+      <xsl:when test="@frame='none'">
+        <xsl:attribute name="frame">void</xsl:attribute>
+        <xsl:attribute name="border">1</xsl:attribute>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:attribute name="frame">border</xsl:attribute>
+        <xsl:attribute name="border">1</xsl:attribute>
+      </xsl:otherwise>
     </xsl:choose>
-  </xsl:variable>
-  <xsl:call-template name="setid"/>
-  <xsl:call-template name="commonattributes"/>
-  <xsl:apply-templates select="." mode="generate-table-summary-attribute"/>
-   <xsl:call-template name="gen-style">
-     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-   </xsl:call-template>
-  <xsl:call-template name="setscale"/>
-  <!-- When a table's width is set to page or column, force it's width to 100%. If it's in a list, use 90%.
-       Otherwise, the table flows to the content -->
-  <xsl:choose>
-   <xsl:when test="(@expanse='page' or @pgwide='1')and (ancestor::*[contains(@class,' topic/li ')] or ancestor::*[contains(@class,' topic/dd ')] )">
-    <xsl:attribute name="width">90%</xsl:attribute>
-   </xsl:when>
-   <xsl:when test="(@expanse='column' or @pgwide='0') and (ancestor::*[contains(@class,' topic/li ')] or ancestor::*[contains(@class,' topic/dd ')] )">
-    <xsl:attribute name="width">90%</xsl:attribute>
-   </xsl:when>
-   <xsl:when test="(@expanse='page' or @pgwide='1')">
-    <xsl:attribute name="width">100%</xsl:attribute>
-   </xsl:when>
-   <xsl:when test="(@expanse='column' or @pgwide='0')">
-    <xsl:attribute name="width">100%</xsl:attribute>
-   </xsl:when>
-  </xsl:choose>
-  <xsl:choose>
-   <xsl:when test="@frame='all' and $colsep='0' and $rowsep='0'">
-    <xsl:attribute name="border">0</xsl:attribute>
-   </xsl:when>
-   <xsl:when test="not(@frame) and $colsep='0' and $rowsep='0'">
-    <xsl:attribute name="border">0</xsl:attribute>
-   </xsl:when>
-   <xsl:when test="@frame='sides'">
-    <xsl:attribute name="frame">vsides</xsl:attribute>
-    <xsl:attribute name="border">1</xsl:attribute>
-   </xsl:when>
-   <xsl:when test="@frame='top'">
-    <xsl:attribute name="frame">above</xsl:attribute>
-    <xsl:attribute name="border">1</xsl:attribute>
-   </xsl:when>
-   <xsl:when test="@frame='bottom'">
-    <xsl:attribute name="frame">below</xsl:attribute>
-    <xsl:attribute name="border">1</xsl:attribute>
-   </xsl:when>
-   <xsl:when test="@frame='topbot'">
-    <xsl:attribute name="frame">hsides</xsl:attribute>
-    <xsl:attribute name="border">1</xsl:attribute>
-   </xsl:when>
-   <xsl:when test="@frame='none'">
-    <xsl:attribute name="frame">void</xsl:attribute>
-    <xsl:attribute name="border">1</xsl:attribute>
-   </xsl:when>
-   <xsl:otherwise>
-    <xsl:attribute name="frame">border</xsl:attribute>
-    <xsl:attribute name="border">1</xsl:attribute>
-   </xsl:otherwise>
-  </xsl:choose>
-  <xsl:choose>
-   <xsl:when test="@frame='all' and $colsep='0' and $rowsep='0'">
-    <xsl:attribute name="border">0</xsl:attribute>
-   </xsl:when>
-   <xsl:when test="not(@frame) and $colsep='0' and $rowsep='0'">
-    <xsl:attribute name="border">0</xsl:attribute>
-   </xsl:when>
-   <xsl:when test="$colsep='0' and $rowsep='0'">
-    <xsl:attribute name="rules">none</xsl:attribute>
-    <xsl:attribute name="border">0</xsl:attribute>
-   </xsl:when>
-   <xsl:when test="$colsep='0'">
-    <xsl:attribute name="rules">rows</xsl:attribute>
-   </xsl:when>
-   <xsl:when test="$rowsep='0'">
-    <xsl:attribute name="rules">cols</xsl:attribute>
-   </xsl:when>
-   <xsl:otherwise>
-    <xsl:attribute name="rules">all</xsl:attribute>
-   </xsl:otherwise>
-  </xsl:choose>
-  <xsl:call-template name="place-tbl-lbl"/>
-  <!-- title and desc are processed elsewhere -->
-  <xsl:apply-templates select="*[contains(@class,' topic/tgroup ')]"/>
- </table><xsl:value-of select="$newline"/>
-  <xsl:call-template name="end-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
+    <xsl:choose>
+      <xsl:when test="@frame='all' and $colsep='0' and $rowsep='0'">
+        <xsl:attribute name="border">0</xsl:attribute>
+      </xsl:when>
+      <xsl:when test="not(@frame) and $colsep='0' and $rowsep='0'">
+        <xsl:attribute name="border">0</xsl:attribute>
+      </xsl:when>
+      <xsl:when test="$colsep='0' and $rowsep='0'">
+        <xsl:attribute name="rules">none</xsl:attribute>
+        <xsl:attribute name="border">0</xsl:attribute>
+      </xsl:when>
+      <xsl:when test="$colsep='0'">
+        <xsl:attribute name="rules">rows</xsl:attribute>
+      </xsl:when>
+      <xsl:when test="$rowsep='0'">
+        <xsl:attribute name="rules">cols</xsl:attribute>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:attribute name="rules">all</xsl:attribute>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:call-template name="place-tbl-lbl"/>
+    <!-- title and desc are processed elsewhere -->
+    <xsl:apply-templates select="*[contains(@class,' topic/tgroup ')]"/>
+    </table><xsl:value-of select="$newline"/>
+    <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/tgroup ')]" name="topic.tgroup">
@@ -2058,14 +2044,10 @@
 <xsl:template match="*[contains(@class,' topic/spanspec ')]"></xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/thead ')]" name="topic.thead">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
   <thead>
-  <xsl:call-template name="commonattributes"/>
-    <xsl:call-template name="gen-style">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
+    <!-- Get style from parent tgroup, then override with thead if specified locally -->
+    <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+    <xsl:call-template name="commonattributes"/>
     <xsl:choose>
      <xsl:when test="@align">
       <xsl:attribute name="align">
@@ -2099,14 +2081,10 @@
 <xsl:template match="*[contains(@class,' topic/tfoot ')]"/>
 
 <xsl:template match="*[contains(@class,' topic/tbody ')]" name="topic.tbody">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
   <tbody>
+    <!-- Get style from parent tgroup, then override with thead if specified locally -->
+    <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
     <xsl:call-template name="commonattributes"/>
-    <xsl:call-template name="gen-style">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
     <xsl:if test="@align">
       <xsl:attribute name="align">
         <xsl:value-of select="@align"/>
@@ -2139,15 +2117,9 @@
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/row ')]" name="topic.row">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
   <tr>
     <xsl:call-template name="setid"/>
     <xsl:call-template name="commonattributes"/>
-    <xsl:call-template name="gen-style">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
     <xsl:if test="@align">
       <xsl:attribute name="align">
         <xsl:value-of select="@align"/>
@@ -2206,11 +2178,6 @@
   <xsl:variable name="this-colname"><xsl:value-of select="@colname"/></xsl:variable>
   <!-- Rowsep/colsep: Skip if the last row or column. Only check the entry and colsep;
     if set higher, will already apply to the whole table. -->
-  
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-    <xsl:call-template name="getrules-parent"/>
-  </xsl:variable>
   
   <xsl:variable name="framevalue">
     <xsl:choose>
@@ -2395,43 +2362,22 @@
     </xsl:otherwise>
   </xsl:choose>
 
+  <!-- Add any flags from tgroup, thead or tbody, and row -->
+  <xsl:apply-templates select="../../../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+  <xsl:apply-templates select="../../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+  <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <xsl:choose>
     <!-- When entry is empty, output a blank -->
     <xsl:when test="not(*|text()|processing-instruction())">
       <xsl:text>&#160;</xsl:text>  <!-- nbsp -->
     </xsl:when>
     <xsl:otherwise>
-      <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
-      <xsl:variable name="revtest-row"><xsl:apply-templates select="parent::*" mode="mark-revisions-for-draft"/></xsl:variable>
-      <xsl:choose>
-        <xsl:when test="$revtest=1">   <!-- Entry Rev is active - add the span -->
-          <span class="{@rev}">
-            <xsl:call-template name="start-revflag">
-              <xsl:with-param name="flagrules" select="$flagrules"/>
-            </xsl:call-template>
-            <xsl:apply-templates/>
-            <xsl:call-template name="end-revflag">
-              <xsl:with-param name="flagrules" select="$flagrules"/>
-            </xsl:call-template>
-          </span>
-        </xsl:when>
-        <xsl:when test="$revtest-row=1">   <!-- Row Rev is active - add the span -->
-          <span class="{../@rev}">
-            <xsl:call-template name="start-revflag-parent">
-              <xsl:with-param name="flagrules" select="$flagrules"/>
-            </xsl:call-template>
-            <xsl:apply-templates/>
-            <xsl:call-template name="end-revflag-parent">
-              <xsl:with-param name="flagrules" select="$flagrules"/>
-            </xsl:call-template>
-          </span>
-        </xsl:when>
-        <xsl:otherwise>  <!-- Rev wasn't active - process normally -->
-          <xsl:apply-templates/>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:apply-templates/>
     </xsl:otherwise>
   </xsl:choose>
+  <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
+  <xsl:apply-templates select="../../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
+  <xsl:apply-templates select="../../../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
 
 <!-- Starting with the first colspec, add up the total width for
@@ -2677,22 +2623,11 @@
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/simpletable ')]" name="topic.simpletable">
-  <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
- <xsl:choose>
-   <xsl:when test="$revtest=1">   <!-- Rev is active - add the DIV -->
-     <div class="{@rev}"><xsl:apply-templates select="."  mode="simpletable-fmt" /></div>
-   </xsl:when>
-   <xsl:otherwise>  <!-- Rev wasn't active - process normally -->
      <xsl:apply-templates select="."  mode="simpletable-fmt" />
-   </xsl:otherwise>
- </xsl:choose>
 </xsl:template>
 <xsl:template match="*[contains(@class,' topic/simpletable ')]" mode="simpletable-fmt">
   <!-- Find the total number of relative units for the table. If @relcolwidth="1* 2* 2*",
        the variable is set to 5. -->
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
   <xsl:variable name="totalwidth">
     <xsl:if test="@relcolwidth">
       <xsl:call-template name="find-total-table-width"/>
@@ -2710,7 +2645,7 @@
     </xsl:choose>
   </xsl:variable>
   <xsl:call-template name="spec-title"/>
-  <xsl:call-template name="start-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <xsl:call-template name="setaname"/>
   <table cellpadding="4" cellspacing="0" summary="">
    <xsl:call-template name="setid"/>
@@ -2726,9 +2661,6 @@
     </xsl:choose>
     <xsl:call-template name="commonattributes"/>
     <xsl:apply-templates select="." mode="generate-table-summary-attribute"/>
-    <xsl:call-template name="gen-style">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
     <xsl:call-template name="setscale"/>
     <xsl:apply-templates select="." mode="dita2html:simpletable-heading">
       <xsl:with-param name="width-multiplier"><xsl:value-of select="$width-multiplier"/></xsl:with-param>
@@ -2737,21 +2669,15 @@
       <xsl:with-param name="width-multiplier"><xsl:value-of select="$width-multiplier"/></xsl:with-param>
     </xsl:apply-templates>
   </table>
-  <xsl:call-template name="end-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
   <xsl:value-of select="$newline"/>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/strow ')]" name="topic.strow">
   <xsl:param name="width-multiplier"/>
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
   <tr>
    <xsl:call-template name="setid"/>
     <xsl:call-template name="commonattributes"/>
-    <xsl:call-template name="gen-style">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
     <xsl:choose>
       <!-- If there are any rows or headers before this, the width values have already been set. -->
       <xsl:when test="preceding-sibling::*">
@@ -2899,10 +2825,6 @@
 <!-- sthead/stentry - bottom align the header text -->
 <xsl:template name="topic.sthead_stentry">
   <xsl:param name="width-multiplier">0</xsl:param>
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-    <xsl:call-template name="getrules-parent"/>
-  </xsl:variable>
   <th valign="bottom">
     <xsl:call-template name="th-align"/>
     <!-- Determine which column this entry is in. -->
@@ -2919,29 +2841,29 @@
     </xsl:variable>
     <xsl:call-template name="output-stentry-id"/>
     <xsl:call-template name="commonattributes"/>
-    <xsl:call-template name="gen-style">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
     <!-- If we calculated a width, create the width attribute. -->
     <xsl:if test="string-length($widthpercent)>0">
       <xsl:attribute name="width">
         <xsl:value-of select="$widthpercent"/><xsl:text>%</xsl:text>
       </xsl:attribute>
     </xsl:if>
-    <xsl:apply-templates select="." mode="start-stentry-flagging">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:apply-templates>
+    <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
     <xsl:choose>
-      <xsl:when test="not(*|text()|processing-instruction()) and @specentry">
-        <xsl:value-of select="@specentry"/>
+      <!-- If there is text, or a PI, or non-flagging element child -->
+      <xsl:when test="*[not(contains(@class,' ditaot-d/startprop ') or contains(@class,' dita-ot/endprop '))] | text() | processing-instruction()">
+        <xsl:apply-templates/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:apply-templates/>
+        <!-- Add flags, then either @specentry or NBSP -->
+        <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+        <xsl:choose>
+          <xsl:when test="@specentry"><xsl:value-of select="@specentry"/></xsl:when>
+          <xsl:otherwise>&#160;</xsl:otherwise>
+        </xsl:choose>
+        <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
       </xsl:otherwise>
      </xsl:choose>
-    <xsl:apply-templates select="." mode="end-stentry-flagging">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:apply-templates>
+     <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
   </th><xsl:value-of select="$newline"/>
 </xsl:template>
 
@@ -2965,17 +2887,10 @@
 <!-- Bold the @keycol column. Get the column's number. When (Nth stentry = the @keycol value) then bold the stentry -->
 <xsl:template name="topic.strow_stentry">
  <xsl:param name="width-multiplier">0</xsl:param>
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-    <xsl:call-template name="getrules-parent"/>
-  </xsl:variable>
   <td valign="top">
     <xsl:call-template name="output-stentry-id"/>
     <xsl:call-template name="set.stentry.headers"/>
     <xsl:call-template name="commonattributes"/>
-    <xsl:call-template name="gen-style">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
     <xsl:variable name="localkeycol">
       <xsl:choose>
         <xsl:when test="ancestor::*[contains(@class,' topic/simpletable ')]/@keycol">
@@ -3002,44 +2917,18 @@
         <xsl:value-of select="$widthpercent"/><xsl:text>%</xsl:text>
       </xsl:attribute>
     </xsl:if>
-    <xsl:apply-templates select="." mode="start-stentry-flagging">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:apply-templates>
-    <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
-    <xsl:variable name="revtest-row"><xsl:apply-templates select="parent::*" mode="mark-revisions-for-draft"/></xsl:variable>
+    <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
     <xsl:choose>
-     <xsl:when test="$thiscolnum=$localkeycol and $revtest-row=1">
-      <strong><span class="{../@rev}">
-<xsl:call-template name="stentry-templates"/>
-      </span></strong>
-     </xsl:when>
-     <xsl:when test="$thiscolnum=$localkeycol and $revtest=1">
-      <strong><span class="{@rev}">
-<xsl:call-template name="stentry-templates"/>
-      </span></strong>
-     </xsl:when>
      <xsl:when test="$thiscolnum=$localkeycol">
       <strong>
-<xsl:call-template name="stentry-templates"/>
+        <xsl:call-template name="stentry-templates"/>
       </strong>
      </xsl:when>
-     <xsl:when test="$revtest-row=1">
-      <span class="{../@rev}">
-<xsl:call-template name="stentry-templates"/>
-      </span>
-     </xsl:when>
-     <xsl:when test="$revtest=1">
-      <span class="{@rev}">
-<xsl:call-template name="stentry-templates"/>
-      </span>
-     </xsl:when>
      <xsl:otherwise>
-<xsl:call-template name="stentry-templates"/>
+       <xsl:call-template name="stentry-templates"/>
      </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates select="." mode="end-stentry-flagging">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:apply-templates>
+    <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
   </td><xsl:value-of select="$newline"/>
 </xsl:template>
 <xsl:template name="stentry-templates">
@@ -4383,7 +4272,6 @@
                  plus move common code to single template -->
   <xsl:template match="*" mode="turning-to-link">
     <xsl:param name="keys">#none#</xsl:param>
-    <xsl:param name="flagrules"></xsl:param>
     <xsl:param name="type"></xsl:param>
     <xsl:variable name="elementName">
       <xsl:choose>
@@ -4405,7 +4293,6 @@
               <xsl:element name="{$elementName}">
                 <xsl:apply-templates select="." mode="common-processing-phrase-within-link">
                   <xsl:with-param name="type" select="$type"/>
-                  <xsl:with-param name="flagrules" select="$flagrules"/>
                 </xsl:apply-templates>
                 <xsl:apply-templates select="." mode="pull-in-title">
                   <xsl:with-param name="type" select="$type"/>
@@ -4420,7 +4307,6 @@
             <xsl:element name="{$elementName}">
               <xsl:apply-templates select="." mode="common-processing-phrase-within-link">
                 <xsl:with-param name="type" select="$type"/>
-                <xsl:with-param name="flagrules" select="$flagrules"/>
               </xsl:apply-templates>
               <xsl:apply-templates select="." mode="pull-in-title">
                 <xsl:with-param name="type" select="$type"/>
@@ -4436,7 +4322,6 @@
         <xsl:element name="{$elementName}">
           <xsl:apply-templates select="." mode="common-processing-phrase-within-link">
             <xsl:with-param name="type" select="$type"/>
-            <xsl:with-param name="flagrules" select="$flagrules"/>
           </xsl:apply-templates>
         </xsl:element>
       </xsl:otherwise>
@@ -4445,20 +4330,13 @@
 
   <xsl:template match="*" mode="common-processing-phrase-within-link">
     <xsl:param name="type"/>
-    <xsl:param name="flagrules"></xsl:param>
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class">
         <xsl:if test="normalize-space($type)!=name()"><xsl:value-of select="$type"/></xsl:if>
       </xsl:with-param>
     </xsl:call-template>
-    <xsl:call-template name="gen-style">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
-    <xsl:call-template name="setidaname"/>   
-    <xsl:call-template name="flagcheck"/>
-    <xsl:call-template name="revtext">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
+    <xsl:call-template name="setidaname"/>
+    <xsl:apply-templates/>
   </xsl:template>
 
   <!-- MESSAGES: Refactoring places each message in a moded template, so that users

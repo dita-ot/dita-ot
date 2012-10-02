@@ -27,6 +27,15 @@
   <xsl:template match="*[contains(@class,' topic/dl ') or
                          contains(@class,' topic/dlentry ') or
                          contains(@class,' topic/dlhead ')]" mode="processFlagsInline">no</xsl:template>
+  <!-- Table flags have to be moved around to maintain XHTML validity -->
+  <xsl:template match="*[contains(@class,' topic/table ') or
+                         contains(@class,' topic/tgroup ') or
+                         contains(@class,' topic/thead ') or
+                         contains(@class,' topic/tbody ') or
+                         contains(@class,' topic/row ') or
+                         contains(@class,' topic/simpletable ') or
+                         contains(@class,' topic/sthead ') or
+                         contains(@class,' topic/strow ')]" mode="processFlagsInline">no</xsl:template>
   <!-- For notes, process out-of-line to keep start flag ahead of generated heading -->
   <xsl:template match="*[contains(@class,' topic/note ')]" mode="processFlagsInline">no</xsl:template>
   <!-- For fig, process out-of-line to keep start flag ahead of generated heading -->
