@@ -20,7 +20,11 @@
 
   <xsl:template match="*" mode="processFlagsInline">yes</xsl:template>
   <xsl:template match="*[contains(@class,' topic/ol ') or
-                         contains(@class,' topic/ul ')]" mode="processFlagsInline">no</xsl:template>
+                         contains(@class,' topic/ul ') or
+                         contains(@class,' topic/sl ')]" mode="processFlagsInline">no</xsl:template>
+  <xsl:template match="*[contains(@class,' topic/dl ') or
+                         contains(@class,' topic/dlentry ')]" mode="processFlagsInline">no</xsl:template>
+
 
   <xsl:template match="*[contains(@class,' ditaot-d/ditaval-startprop ')]">
     <xsl:variable name="processnow">
@@ -46,8 +50,8 @@
     </xsl:if>
   </xsl:template>
   <xsl:template match="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line">
-    <xsl:apply-templates select="prop/endflag" mode="ditaval-outputflag"/>
     <xsl:apply-templates select="revprop/endflag" mode="ditaval-outputflag"/>
+    <xsl:apply-templates select="prop/endflag" mode="ditaval-outputflag"/>
   </xsl:template>
 
   <xsl:template match="startflag|endflag" mode="ditaval-outputflag">

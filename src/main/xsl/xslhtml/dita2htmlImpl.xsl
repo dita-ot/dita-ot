@@ -835,112 +835,70 @@
 <!-- Unordered List -->
 <!-- handle all levels thru browser processing -->
 <xsl:template match="*[contains(@class,' topic/ul ')]" name="topic.ul">
- <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
- <xsl:choose>
-   <xsl:when test="$revtest=1">   <!-- Rev is active - add the DIV -->
-     <div class="{@rev}"><xsl:apply-templates select="."  mode="ul-fmt" /></div>
-   </xsl:when>
-   <xsl:otherwise>  <!-- Rev wasn't active - process normally -->
-     <xsl:apply-templates select="."  mode="ul-fmt" />
-   </xsl:otherwise>
- </xsl:choose>
+  <!-- Starting in DITA-OT 1.7, no longer using extra <div> to preserve @rev.
+       Just continue to "ul-fmt" which is kept for backwards compatibility. -->
+  <xsl:apply-templates select="."  mode="ul-fmt" />
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/ul ')]" mode="ul-fmt">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-  <!-- edited by William on 2009-06-16 for bullet bug:2782503 start-->
-    <!--br/-->
-  <!-- edited by William on 2009-06-16 for bullet bug:2782503 end-->
-  
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
- <xsl:call-template name="setaname"/>
- <ul>
-   <xsl:call-template name="commonattributes"/>
-   <xsl:call-template name="gen-style">
-     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-   </xsl:call-template>
-   <xsl:apply-templates select="@compact"/>
-   <xsl:call-template name="setid"/>
-   <xsl:apply-templates/>
- </ul>
- <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
- <xsl:value-of select="$newline"/>
+  <xsl:call-template name="setaname"/>
+  <ul>
+    <xsl:call-template name="commonattributes"/>
+    <xsl:apply-templates select="@compact"/>
+    <xsl:call-template name="setid"/>
+    <xsl:apply-templates/>
+  </ul>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
+  <xsl:value-of select="$newline"/>
 </xsl:template>
 
 <!-- Simple List -->
 <!-- handle all levels thru browser processing -->
 <xsl:template match="*[contains(@class,' topic/sl ')]" name="topic.sl">
-  <xsl:variable name="flagrules"><xsl:call-template name="getrules"/></xsl:variable>
-  <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
-  <!-- edited by William on 2009-06-16 for bullet bug:2782503 start-->
-     <!--br/-->
-  <!-- edited by William on 2009-06-16 for bullet bug:2782503 end-->
-  
-  <xsl:call-template name="start-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
-  <xsl:choose>
-    <xsl:when test="$revtest=1">  <!-- draft rev mode, add div w/ rev attr value -->
-      <div class="{@rev}"><xsl:apply-templates select="."  mode="sl-fmt" /></div>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:apply-templates select="."  mode="sl-fmt" />
-    </xsl:otherwise>
-  </xsl:choose>
+  <!-- Starting in DITA-OT 1.7, no longer using extra <div> to preserve @rev.
+       Just continue to "sl-fmt" which is kept for backwards compatibility. -->
+  <xsl:apply-templates select="."  mode="sl-fmt" />
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/sl ')]" mode="sl-fmt">
-  <xsl:variable name="flagrules"><xsl:call-template name="getrules"/></xsl:variable>
-  <xsl:call-template name="start-revflag"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
-<xsl:call-template name="setaname"/>
-<ul class="simple">
-  <xsl:call-template name="commonattributes">
-    <xsl:with-param name="default-output-class" select="'simple'"/>
-  </xsl:call-template>
-  <xsl:call-template name="gen-style"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
-  <xsl:apply-templates select="@compact"/>
-  <xsl:call-template name="setid"/>
-  <xsl:apply-templates/>
-</ul>
-  <xsl:call-template name="end-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+  <xsl:call-template name="setaname"/>
+  <ul class="simple">
+    <xsl:call-template name="commonattributes">
+      <xsl:with-param name="default-output-class" select="'simple'"/>
+    </xsl:call-template>
+    <xsl:apply-templates select="@compact"/>
+    <xsl:call-template name="setid"/>
+    <xsl:apply-templates/>
+  </ul>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 <xsl:value-of select="$newline"/>
 </xsl:template>
 
 <!-- Ordered List - 1st level - Handle levels 1 to 9 thru OL-TYPE attribution -->
 <!-- Updated to use a single template, use count and mod to set the list type -->
 <xsl:template match="*[contains(@class,' topic/ol ')]" name="topic.ol">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-<xsl:variable name="olcount" select="count(ancestor-or-self::*[contains(@class,' topic/ol ')])"/>
-  <!-- edited by William on 2009-06-16 for bullet bug:2782503 start-->
-     <!--br/-->
-  <!-- edited by William on 2009-06-16 for bullet bug:2782503 end-->
+  <xsl:variable name="olcount" select="count(ancestor-or-self::*[contains(@class,' topic/ol ')])"/>
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
-<xsl:call-template name="setaname"/>
-<ol>
-  <xsl:call-template name="commonattributes"/>
-  <xsl:call-template name="gen-style">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-  </xsl:call-template>
-  <xsl:apply-templates select="@compact"/>
-  <xsl:choose>
-    <xsl:when test="$olcount mod 3 = 1"/>
-    <xsl:when test="$olcount mod 3 = 2"><xsl:attribute name="type">a</xsl:attribute></xsl:when>
-    <xsl:otherwise><xsl:attribute name="type">i</xsl:attribute></xsl:otherwise>
-  </xsl:choose>
-  <xsl:call-template name="setid"/>
-  <xsl:apply-templates/>
-</ol>
+  <xsl:call-template name="setaname"/>
+  <ol>
+    <xsl:call-template name="commonattributes"/>
+    <xsl:apply-templates select="@compact"/>
+    <xsl:choose>
+      <xsl:when test="$olcount mod 3 = 1"/>
+      <xsl:when test="$olcount mod 3 = 2"><xsl:attribute name="type">a</xsl:attribute></xsl:when>
+      <xsl:otherwise><xsl:attribute name="type">i</xsl:attribute></xsl:otherwise>
+    </xsl:choose>
+    <xsl:call-template name="setid"/>
+    <xsl:apply-templates/>
+  </ol>
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
-<xsl:value-of select="$newline"/>
+  <xsl:value-of select="$newline"/>
 </xsl:template>
 
 <!-- list item -->
 <xsl:template match="*[contains(@class,' topic/li ')]" name="topic.li">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
 <li>
   <xsl:choose>
     <xsl:when test="parent::*/@compact='no'">
@@ -954,42 +912,29 @@
       <xsl:call-template name="commonattributes"/>
     </xsl:otherwise>
   </xsl:choose>
-  <xsl:call-template name="gen-style">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-  </xsl:call-template>
   <xsl:call-template name="setidaname"/>
-  <xsl:apply-templates select="." mode="outputContentsWithFlags">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-  </xsl:apply-templates>
+  <xsl:apply-templates/>
 </li><xsl:value-of select="$newline"/>
 </xsl:template>
 <!-- simple list item -->
 <xsl:template match="*[contains(@class,' topic/sli ')]" name="topic.sli">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-<li>
-  <xsl:choose>
-    <xsl:when test="parent::*/@compact='no'">
-      <xsl:attribute name="class">sliexpand</xsl:attribute>
-      <!-- handle non-compact list items -->
-      <xsl:call-template name="commonattributes">
-        <xsl:with-param name="default-output-class" select="'sliexpand'"/>
-      </xsl:call-template>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:call-template name="commonattributes"/>
-    </xsl:otherwise>
-  </xsl:choose>
-  <xsl:call-template name="commonattributes"/>
-  <xsl:call-template name="gen-style">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-  </xsl:call-template>
-  <xsl:call-template name="setidaname"/>
-  <xsl:apply-templates select="." mode="outputContentsWithFlags">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-  </xsl:apply-templates>
-</li><xsl:value-of select="$newline"/>
+  <li>
+    <xsl:choose>
+      <xsl:when test="parent::*/@compact='no'">
+        <xsl:attribute name="class">sliexpand</xsl:attribute>
+        <!-- handle non-compact list items -->
+        <xsl:call-template name="commonattributes">
+          <xsl:with-param name="default-output-class" select="'sliexpand'"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="commonattributes"/>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="setidaname"/>
+    <xsl:apply-templates/>
+  </li><xsl:value-of select="$newline"/>
 </xsl:template>
 
 <!-- special case of getting the number of a list item referenced by xref -->
@@ -1000,56 +945,51 @@
 
 <!-- list item section is like li/lq but without presentation (indent) -->
 <xsl:template match="*[contains(@class,' topic/itemgroup ')]" name="topic.itemgroup">
-<!-- insert a space before all but the first itemgroups in a LI -->
-<xsl:variable name="itemgroupcount"><xsl:number count="*[contains(@class,' topic/itemgroup ')]"/></xsl:variable>
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-  <xsl:if test="$itemgroupcount&gt;'1'">
+  <!-- insert a space before all but the first itemgroups in a LI -->
+  <xsl:variable name="itemgroupcount"><xsl:number count="*[contains(@class,' topic/itemgroup ')]"/></xsl:variable>
+  <xsl:if test="$itemgroupcount &gt; '1'">
     <xsl:text> </xsl:text>
   </xsl:if>
-  <xsl:call-template name="start-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
-  <xsl:call-template name="revtext">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-  </xsl:call-template>
-  <xsl:call-template name="end-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
+  <!-- DITA-OT 1.6 and earlier created a span/font tag when active revs; otherwise, no wrapper.
+       Maintain that for now, though may want to update in the future to keep a wrapper in all cases.
+       Considering using div instead of span, with a default inline CSS style. -->
+  <xsl:choose>
+    <xsl:when test="*[contains(@class,' ditaot-d/ditaval-startprop ')]/revprop |
+                    *[contains(@class,' ditaot-d/ditaval-startprop ')]/@outputclass">
+      <span>
+        <xsl:call-template name="commonattributes"/>
+        <xsl:apply-templates/>
+      </span>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:apply-templates/>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <!-- =========== DEFINITION LIST =========== -->
 
 <!-- DL -->
 <xsl:template match="*[contains(@class,' topic/dl ')]" name="topic.dl">
- <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
- <xsl:choose>
-   <xsl:when test="$revtest=1">   <!-- Rev is active - add the DIV -->
-     <div class="{@rev}"><xsl:apply-templates select="."  mode="dl-fmt" /></div>
-   </xsl:when>
-   <xsl:otherwise>  <!-- Rev wasn't active - process normally -->
-     <xsl:apply-templates select="."  mode="dl-fmt" />
-   </xsl:otherwise>
- </xsl:choose>
+  <!-- Starting in DITA-OT 1.7, no longer using extra <div> to preserve @rev.
+       Just continue to "dl-fmt" which is kept for backwards compatibility. -->
+  <xsl:apply-templates select="."  mode="dl-fmt" />
 </xsl:template>
 <xsl:template match="*[contains(@class,' topic/dl ')]"  mode="dl-fmt">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-  <xsl:call-template name="start-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param></xsl:call-template>
-<xsl:call-template name="setaname"/>
-<dl>
- <!-- handle DL compacting - default=yes -->
-  <xsl:if test="@compact='no'">
-   <xsl:attribute name="class">dlexpand</xsl:attribute>
-  </xsl:if>
-  <xsl:call-template name="commonattributes"/>
-  <xsl:call-template name="gen-style">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-  </xsl:call-template>
-  <xsl:apply-templates select="@compact"/>
-  <xsl:call-template name="setid"/>
-  <xsl:apply-templates/>
-</dl>
-  <xsl:call-template name="end-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
-<xsl:value-of select="$newline"/>
+  <xsl:call-template name="setaname"/>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+  <dl>
+    <!-- handle DL compacting - default=yes -->
+    <xsl:if test="@compact='no'">
+      <xsl:attribute name="class">dlexpand</xsl:attribute>
+    </xsl:if>
+    <xsl:call-template name="commonattributes"/>
+    <xsl:apply-templates select="@compact"/>
+    <xsl:call-template name="setid"/>
+    <xsl:apply-templates/>
+  </dl>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
+  <xsl:value-of select="$newline"/>
 </xsl:template>
 
 <!-- DL entry -->
@@ -1069,35 +1009,22 @@
       <xsl:otherwise>dlterm</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-    <xsl:call-template name="getrules-parent"/>
-  </xsl:variable>
   <dt class="{$dt-class}">
-    <xsl:apply-templates select="../@xml:lang"/> <!-- Get from DLENTRY, then override with local -->
+    <!-- Get xml:lang and ditaval styling from DLENTRY, then override with local -->
+    <xsl:apply-templates select="../@xml:lang"/> 
+    <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class" select="$dt-class"/>
-    </xsl:call-template>
-    <xsl:call-template name="gen-style">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
     <xsl:call-template name="setidaname"/>
     <!-- handle ID on a DLENTRY -->
     <xsl:if test="$dtcount=1 and parent::*/@id">
       <xsl:call-template name="parent-id"/>
     </xsl:if>
-    <!-- handle non-compact DLs dl/dlentry/dt-->
-    <xsl:call-template name="start-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
-    <xsl:call-template name="start-revflag-parent">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-    <xsl:call-template name="revtext">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-    <xsl:call-template name="end-revflag-parent">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-    <xsl:call-template name="end-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
+    <!-- Use flags from parent dlentry, if present -->
+    <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+    <xsl:apply-templates/>
+    <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
     <xsl:apply-templates select="." mode="pull-in-title">
       <xsl:with-param name="type" select="' dt '"/>
       <xsl:with-param name="displaytext">
@@ -1151,23 +1078,14 @@
     <xsl:if test="$ddcount!=1">  <!-- para space before 2 thru N -->
       <xsl:attribute name="class">ddexpand</xsl:attribute>
     </xsl:if>
-    <xsl:apply-templates select="../@xml:lang"/> <!-- Get from DLENTRY, then override with local -->
+    <!-- Get xml:lang and ditaval styling from DLENTRY, then override with local -->
+    <xsl:apply-templates select="../@xml:lang"/> 
+    <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
     <xsl:call-template name="commonattributes"/>
-    <xsl:call-template name="gen-style">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
     <xsl:call-template name="setidaname"/>
-    <xsl:call-template name="start-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
-    <xsl:call-template name="start-revflag-parent">
-      <xsl:with-param name="flagrules" select="$flagrules-parent"/>
-    </xsl:call-template>
-    <xsl:call-template name="revblock">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
-    <xsl:call-template name="end-revflag-parent">
-      <xsl:with-param name="flagrules" select="$flagrules-parent"/>
-    </xsl:call-template>
-    <xsl:call-template name="end-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
+    <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+    <xsl:apply-templates/>
+    <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
   </dd>
   <xsl:value-of select="$newline"/>
 </xsl:template>
@@ -3645,11 +3563,25 @@
   <xsl:variable name="output-class">
     <xsl:apply-templates select="." mode="get-output-class"/>
   </xsl:variable>
+  <xsl:variable name="draft-revs">
+    <!-- If draft is on, add revisions to default class. Simplifies processing in DITA-OT 1.6 and earlier
+         that created an extra div or span around revised content, just to hold @class with revs. -->
+    <xsl:if test="$DRAFT='yes'">
+      <xsl:for-each select="*[contains(@class,' ditaot-d/ditaval-startprop ')]/revprop">
+        <xsl:value-of select="@val"/>
+        <xsl:text> </xsl:text>
+      </xsl:for-each>
+    </xsl:if>
+  </xsl:variable>
   <xsl:variable name="using-output-class">
     <xsl:choose>
       <xsl:when test="string-length(normalize-space($output-class)) &gt; 0"><xsl:value-of select="$output-class"/></xsl:when>
       <xsl:when test="string-length(normalize-space($default)) &gt; 0"><xsl:value-of select="$default"/></xsl:when>
     </xsl:choose>
+    <xsl:if test="$draft-revs!=''">
+      <xsl:text> </xsl:text>
+      <xsl:value-of select="normalize-space($draft-revs)"/>
+    </xsl:if>
   </xsl:variable>
   <xsl:variable name="ancestry">
     <xsl:if test="$PRESERVE-DITA-CLASS='yes'">
@@ -3666,7 +3598,7 @@
       <xsl:value-of select="$ancestry"/>
       <xsl:if test="string-length(normalize-space($ancestry)) &gt; 0 and 
                     string-length(normalize-space($using-output-class)) &gt; 0"><xsl:text> </xsl:text></xsl:if>
-      <xsl:value-of select="$using-output-class"/>
+      <xsl:value-of select="normalize-space($using-output-class)"/>
       <xsl:if test="string-length(normalize-space(concat($ancestry,$using-output-class))) &gt; 0 and
                     string-length(normalize-space($outputclass-attribute)) &gt; 0"><xsl:text> </xsl:text></xsl:if>
       <xsl:value-of select="$outputclass-attribute"/>
@@ -4777,7 +4709,7 @@
       <xsl:with-param name="flagrules" select="$flagrules"/>
     </xsl:call-template>
   </xsl:template>
-  
+
   <!-- MESSAGES: Refactoring places each message in a moded template, so that users
        may more easily override a message for one or all cases. -->
   <xsl:template match="*" mode="ditamsg:no-glossentry-for-key">
