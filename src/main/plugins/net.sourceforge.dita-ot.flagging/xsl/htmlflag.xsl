@@ -25,9 +25,21 @@
                          contains(@class,' topic/ul ') or
                          contains(@class,' topic/sl ')]" mode="processFlagsInline">no</xsl:template>
   <xsl:template match="*[contains(@class,' topic/dl ') or
-                         contains(@class,' topic/dlentry ')]" mode="processFlagsInline">no</xsl:template>
+                         contains(@class,' topic/dlentry ') or
+                         contains(@class,' topic/dlhead ')]" mode="processFlagsInline">no</xsl:template>
   <!-- For notes, process out-of-line to keep start flag ahead of generated heading -->
   <xsl:template match="*[contains(@class,' topic/note ')]" mode="processFlagsInline">no</xsl:template>
+  <!-- For pre, process out-of-line to keep start flag ahead of block, otherwise it throws off spacing -->
+  <xsl:template match="*[contains(@class,' topic/pre ')]" mode="processFlagsInline">no</xsl:template>
+  <!-- For root topic, process out-of-line to get flags around headers/footers -->
+  <xsl:template match="/*[contains(@class,' topic/topic ')]" mode="processFlagsInline">no</xsl:template>
+  <!-- For body, process out-of-line to get ahead of shortdesc/abstract, after links -->
+  <xsl:template match="*[contains(@class,' topic/body ')]" mode="processFlagsInline">no</xsl:template>
+  <!-- For section or example, process out-of-line to get ahead flags ahead of the title -->
+  <xsl:template match="*[contains(@class,' topic/section ') or 
+                         contains(@class,' topic/example ')]" mode="processFlagsInline">no</xsl:template>
+  <!-- For lq, process out-of-line to get end flags after citation info -->
+  <xsl:template match="*[contains(@class,' topic/lq ')]" mode="processFlagsInline">no</xsl:template>
 
 
   <xsl:template match="*[contains(@class,' ditaot-d/ditaval-startprop ')]">

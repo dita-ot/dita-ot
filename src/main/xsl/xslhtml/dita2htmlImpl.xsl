@@ -299,13 +299,12 @@
           <xsl:otherwise><xsl:value-of select="count(ancestor::*[contains(@class,' topic/topic ')])"/></xsl:otherwise>
       </xsl:choose>
   </xsl:param>
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
  <xsl:choose>
    <xsl:when test="parent::dita and not(preceding-sibling::*)">
      <!-- Do not reset xml:lang if it is already set on <html> -->
      <!-- Moved outputclass to the body tag -->
+     <!-- Keep ditaval based styling at this point (replace DITA-OT 1.6 and earlier call to gen-style) -->
+     <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
    </xsl:when>
    <xsl:otherwise>
      <xsl:call-template name="commonattributes">
@@ -314,11 +313,8 @@
    </xsl:otherwise>
  </xsl:choose>
  <xsl:call-template name="gen-toc-id"/>
-  <xsl:call-template name="gen-style">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-  </xsl:call-template>
   <xsl:call-template name="setidaname"/>
-  <xsl:apply-templates select="." mode="outputContentsWithFlags"/>
+  <xsl:apply-templates/>
 </xsl:template>
 
 
@@ -997,12 +993,6 @@
   <!-- insert a blank line before all but the first DD in a DLENTRY; count which DD this is -->
   <!-- SF Patch 2185423: condensed code so that dd processing is not repeated when $ddcount!=1 -->
   <xsl:variable name="ddcount"><xsl:number count="*[contains(@class,' topic/dd ')]"/></xsl:variable>
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-  <xsl:variable name="flagrules-parent">
-    <xsl:for-each select="parent::*"><xsl:call-template name="getrules"/></xsl:for-each>
-  </xsl:variable>
   <dd>
     <xsl:if test="$ddcount!=1">  <!-- para space before 2 thru N -->
       <xsl:attribute name="class">ddexpand</xsl:attribute>
@@ -1026,58 +1016,34 @@
 
 <!-- DL heading, term -->
 <xsl:template match="*[contains(@class,' topic/dthd ')]" name="topic.dthd">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-    <xsl:call-template name="getrules-parent"/>
-  </xsl:variable>
-<dt>
- <xsl:apply-templates select="../@xml:lang"/> <!-- Get from DLHEAD, then override with local -->
- <xsl:call-template name="commonattributes"/>
-  <xsl:call-template name="gen-style">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-  </xsl:call-template>
-  <xsl:call-template name="setidaname"/>
-  <xsl:call-template name="start-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
-  <xsl:call-template name="start-revflag-parent">
-    <xsl:with-param name="flagrules" select="$flagrules"/>
-  </xsl:call-template>
- <strong>
-   <xsl:call-template name="revtext">
-     <xsl:with-param name="flagrules" select="$flagrules"/>
-   </xsl:call-template>
- </strong>
-  <xsl:call-template name="end-revflag-parent">
-    <xsl:with-param name="flagrules" select="$flagrules"/>
-  </xsl:call-template>
-  <xsl:call-template name="end-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
-</dt><xsl:value-of select="$newline"/>
+  <dt>
+    <!-- Get ditaval style and xml:lang from DLHEAD, then override with local -->
+    <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+    <xsl:apply-templates select="../@xml:lang"/>
+    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="setidaname"/>
+    <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+    <strong>
+      <xsl:apply-templates/>
+    </strong>
+    <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
+  </dt><xsl:value-of select="$newline"/>
 </xsl:template>
 
 <!-- DL heading, description -->
 <xsl:template match="*[contains(@class,' topic/ddhd ')]" name="topic.ddhd">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-    <xsl:call-template name="getrules-parent"/>
-  </xsl:variable>
-<dd>
- <xsl:apply-templates select="../@xml:lang"/> <!-- Get from DLHEAD, then override with local -->
- <xsl:call-template name="commonattributes"/>
-  <xsl:call-template name="gen-style">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-  </xsl:call-template>
-  <xsl:call-template name="setidaname"/>
-  <xsl:call-template name="start-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
-  <xsl:call-template name="start-revflag-parent">
-    <xsl:with-param name="flagrules" select="$flagrules"/>
-  </xsl:call-template>
- <strong><xsl:call-template name="revblock">
-   <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-   </xsl:call-template></strong>
-  <xsl:call-template name="end-revflag-parent">
-    <xsl:with-param name="flagrules" select="$flagrules"/>
-  </xsl:call-template>
-  <xsl:call-template name="end-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
-</dd><xsl:value-of select="$newline"/>
+  <dd>
+    <!-- Get ditaval style and xml:lang from DLHEAD, then override with local -->
+    <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+    <xsl:apply-templates select="../@xml:lang"/>
+    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="setidaname"/>
+    <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+    <strong>
+      <xsl:apply-templates/>
+    </strong>
+    <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
+  </dd><xsl:value-of select="$newline"/>
 </xsl:template>
 
 
@@ -4371,14 +4337,9 @@
     <xsl:apply-templates select="." mode="chapterBody"/>
   </xsl:template>
   <xsl:template match="*" mode="chapterBody">
-    <xsl:variable name="flagrules">
-      <xsl:call-template name="getrules"/>
-    </xsl:variable>
     <body>
       <!-- Already put xml:lang on <html>; do not copy to body with commonattributes -->
-      <xsl:call-template name="gen-style">
-        <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-      </xsl:call-template>
+      <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
       <!--output parent or first "topic" tag's outputclass as class -->
       <xsl:if test="@outputclass">
        <xsl:attribute name="class"><xsl:value-of select="@outputclass" /></xsl:attribute>
@@ -4391,7 +4352,7 @@
       <xsl:apply-templates select="." mode="addAttributesToBody"/>
       <xsl:call-template name="setidaname"/>
       <xsl:value-of select="$newline"/>
-      <xsl:call-template name="start-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
+      <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
       <xsl:call-template name="generateBreadcrumbs"/>
       <xsl:call-template name="gen-user-header"/>  <!-- include user's XSL running header here -->
       <xsl:call-template name="processHDR"/>
@@ -4411,7 +4372,7 @@
       <xsl:call-template name="gen-endnotes"/>    <!-- include footnote-endnotes -->
       <xsl:call-template name="gen-user-footer"/> <!-- include user's XSL running footer here -->
       <xsl:call-template name="processFTR"/>      <!-- Include XHTML footer, if specified -->
-      <xsl:call-template name="end-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
+      <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
     </body>
     <xsl:value-of select="$newline"/>
   </xsl:template>

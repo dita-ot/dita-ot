@@ -32,7 +32,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
 
   <xsl:output method="xml"
               encoding="utf-8"
-              indent="yes"
+              indent="no"
               byte-order-mark="no"
   />
 
