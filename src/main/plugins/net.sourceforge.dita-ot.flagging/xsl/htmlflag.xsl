@@ -47,6 +47,11 @@
   <!-- If a tm symbol is generated, flag should go after -->
   <xsl:template match="*[contains(@class,' topic/tm ')]" mode="processFlagsInline">no</xsl:template>
 
+  <!-- Link processing often works as fallthrough, but often not; do make link processing easier,
+       handle all instances out-of-line. -->
+  <xsl:template match="*[contains(@class,' topic/link ') or
+                         contains(@class,' topic/linklist ')]" mode="processFlagsInline">no</xsl:template>
+
   <xsl:template match="*[contains(@class,' ditaot-d/ditaval-startprop ')]">
     <xsl:variable name="processnow">
       <xsl:apply-templates select="parent::*" mode="processFlagsInline"/>
