@@ -350,14 +350,10 @@
 <!-- =========== BODY/SECTION (not sensitive to nesting depth) =========== -->
 
 <xsl:template match="*[contains(@class,' topic/body ')]" name="topic.body">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
 <div>
   <xsl:call-template name="commonattributes"/>
-  <xsl:call-template name="gen-style"><xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param></xsl:call-template>
   <xsl:call-template name="setidaname"/>
-  <xsl:call-template name="start-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param></xsl:call-template>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <!-- here, you can generate a toc based on what's a child of body -->
   <!--xsl:call-template name="gen-sect-ptoc"/--><!-- Works; not always wanted, though; could add a param to enable it.-->
 
@@ -378,7 +374,7 @@
   <xsl:apply-templates select="following-sibling::*[contains(@class,' topic/related-links ')]" mode="prereqs"/>
 
   <xsl:apply-templates/>
-  <xsl:call-template name="end-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param></xsl:call-template>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </div><xsl:value-of select="$newline"/>
 </xsl:template>
 
@@ -395,7 +391,7 @@
 <xsl:template match="*[contains(@class,' topic/abstract ')]" mode="outofline">
   <div>
     <xsl:call-template name="commonattributes"/>
-    <xsl:apply-templates select="." mode="outputContentsWithFlagsAndStyle"/>
+    <xsl:apply-templates/>
   </div><xsl:value-of select="$newline"/>
 </xsl:template>
 
@@ -425,7 +421,7 @@
                                          contains(@class,' topic/table ') or contains(@class,' topic/ul ')]">
       <div>
         <xsl:call-template name="commonattributes"/>
-        <xsl:apply-templates select="." mode="outputContentsWithFlagsAndStyle"/>
+        <xsl:apply-templates/>
       </div>
     </xsl:when>
     <xsl:when test="following-sibling::*[contains(@class,' topic/p ') or contains(@class,' topic/dl ') or
@@ -436,7 +432,7 @@
                                          contains(@class,' topic/table ') or contains(@class,' topic/ul ')]">
       <div>
         <xsl:call-template name="commonattributes"/>
-        <xsl:apply-templates select="." mode="outputContentsWithFlagsAndStyle"/>
+        <xsl:apply-templates/>
       </div>
     </xsl:when>
     <xsl:otherwise>
@@ -445,7 +441,7 @@
       </xsl:if>
       <span>
         <xsl:call-template name="commonattributes"/>
-        <xsl:apply-templates select="." mode="outputContentsWithFlagsAndStyle"/>
+        <xsl:apply-templates/>
       </span>
     </xsl:otherwise>
   </xsl:choose>
@@ -456,78 +452,43 @@
 <xsl:template match="*[contains(@class,' topic/shortdesc ')]" mode="outofline">
   <p>
     <xsl:call-template name="commonattributes"/>
-    <xsl:apply-templates select="." mode="outputContentsWithFlagsAndStyle"/>
+    <xsl:apply-templates/>
   </p><xsl:value-of select="$newline"/>
 </xsl:template>
 
 <!-- section processor - div with no generated title -->
 <xsl:template match="*[contains(@class,' topic/section ')]" name="topic.section">
-  <xsl:variable name="flagrules"><xsl:call-template name="getrules"/></xsl:variable>
-  <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
-  
-<div class="section">
- <xsl:call-template name="commonattributes"/>
- <xsl:call-template name="gen-style"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
- <xsl:call-template name="gen-toc-id"/>
- <xsl:call-template name="setidaname"/>
- <xsl:call-template name="start-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
- <xsl:choose>
-   <xsl:when test="$revtest=1">   <!-- Rev is active - add the DIV -->
-    <div class="{@rev}"><xsl:apply-templates select="."  mode="section-fmt" /></div>
-   </xsl:when>
-   <xsl:otherwise>  <!-- Rev wasn't active - process normally -->
+  <div class="section">
+    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="gen-toc-id"/>
+    <xsl:call-template name="setidaname"/>
     <xsl:apply-templates select="."  mode="section-fmt" />
-   </xsl:otherwise>
- </xsl:choose>
-  <xsl:call-template name="end-flagit"><xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param></xsl:call-template>
-</div><xsl:value-of select="$newline"/>
+  </div><xsl:value-of select="$newline"/>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/section ')]" mode="section-fmt">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-  <xsl:call-template name="start-revflag">
-    <xsl:with-param name="flagrules" select="$flagrules"/>  
-  </xsl:call-template>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <xsl:apply-templates select="." mode="dita2html:section-heading"/>
   <xsl:apply-templates select="*[not(contains(@class,' topic/title '))] | text() | comment() | processing-instruction()"/>
-  <xsl:call-template name="end-revflag">
-    <xsl:with-param name="flagrules" select="$flagrules"/>  
-  </xsl:call-template>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
 
 <!-- example processor - div with no generated title -->
 <xsl:template match="*[contains(@class,' topic/example ')]" name="topic.example">
-  <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
-<div class="example">
- <xsl:call-template name="commonattributes"/>
- <xsl:call-template name="gen-toc-id"/>
- <xsl:call-template name="setidaname"/>
- <xsl:choose>
-   <xsl:when test="$revtest=1">   <!-- Rev is active - add the DIV -->
-    <div class="{@rev}"><xsl:apply-templates select="."  mode="example-fmt" /></div>
-   </xsl:when>
-   <xsl:otherwise>  <!-- Rev wasn't active - process normally -->
+  <div class="example">
+    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="gen-toc-id"/>
+    <xsl:call-template name="setidaname"/>
     <xsl:apply-templates select="."  mode="example-fmt" />
-   </xsl:otherwise>
- </xsl:choose>
-</div><xsl:value-of select="$newline"/>
+  </div><xsl:value-of select="$newline"/>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/example ')]" mode="example-fmt">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-  <xsl:call-template name="gen-style">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-  </xsl:call-template>
-  <xsl:call-template name="start-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param></xsl:call-template>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <xsl:apply-templates select="." mode="dita2html:section-heading"/>
   <xsl:apply-templates select="*[not(contains(@class,' topic/title '))] | text() | comment() | processing-instruction()"/>	
-  <xsl:call-template name="end-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param></xsl:call-template>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
-
 
 <!-- ===================================================================== -->
 
@@ -552,14 +513,14 @@
      <div class="p">
        <xsl:call-template name="commonattributes"/>
        <xsl:call-template name="setid"/>
-       <xsl:apply-templates select="." mode="outputContentsWithFlagsAndStyle"/>
+       <xsl:apply-templates/>
      </div>
      </xsl:when>
   <xsl:otherwise>
   <p>
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="setid"/>
-    <xsl:apply-templates select="." mode="outputContentsWithFlagsAndStyle"/>
+    <xsl:apply-templates/>
   </p>
   </xsl:otherwise>
  </xsl:choose><xsl:value-of select="$newline"/>
@@ -752,34 +713,15 @@
      @reftitle contains the citation for the excerpt.
      With a link if @href is used.  -->
 <xsl:template match="*[contains(@class,' topic/lq ')]" name="topic.lq">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-  <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
-<blockquote>
-  <xsl:call-template name="commonattributes"/>
-  <xsl:call-template name="gen-style"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
-  <xsl:call-template name="setidaname"/>
-  <xsl:call-template name="start-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
- <xsl:choose>
-   <xsl:when test="$revtest=1">   <!-- Rev is active - add the DIV -->
-    <div class="{@rev}"><xsl:apply-templates select="."  mode="lq-fmt" /></div>
-   </xsl:when>
-   <xsl:otherwise>  <!-- Rev wasn't active - process normally -->
+  <blockquote>
+    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="setidaname"/>
     <xsl:apply-templates select="."  mode="lq-fmt" />
-   </xsl:otherwise>
- </xsl:choose>
-  <xsl:call-template name="end-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
-</blockquote><xsl:value-of select="$newline"/>
+  </blockquote><xsl:value-of select="$newline"/>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/lq ')]" mode="lq-fmt">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-  <xsl:call-template name="start-revflag">
-    <xsl:with-param name="flagrules" select="$flagrules"/>
-  </xsl:call-template>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <xsl:apply-templates/>
   <xsl:choose>
    <xsl:when test="@href"> <!-- Insert citation as link, use @href as-is -->
@@ -813,9 +755,7 @@
    </xsl:when>
    <xsl:otherwise><!--nop - do nothing--></xsl:otherwise>
   </xsl:choose>
-  <xsl:call-template name="end-revflag">
-    <xsl:with-param name="flagrules" select="$flagrules"/>
-  </xsl:call-template>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
 
 
@@ -1609,35 +1549,23 @@
 <!-- =========== RECORD END RESPECTING DATA =========== -->
 <!-- PRE -->
 <xsl:template match="*[contains(@class,' topic/pre ')]" name="topic.pre">
- <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
- <xsl:choose>
-   <xsl:when test="$revtest=1">   <!-- Rev is active - add the DIV -->
-     <div class="{@rev}"><xsl:apply-templates select="."  mode="pre-fmt" /></div>
-   </xsl:when>
-   <xsl:otherwise>  <!-- Rev wasn't active - process normally -->
-     <xsl:apply-templates select="."  mode="pre-fmt" />
-   </xsl:otherwise>
- </xsl:choose>
+  <!-- Starting in DITA-OT 1.7, no longer using extra <div> to preserve @rev.
+       Just continue to "pre-fmt" which is kept for backwards compatibility. -->
+  <xsl:apply-templates select="."  mode="pre-fmt" />
 </xsl:template>
 <xsl:template match="*[contains(@class,' topic/pre ')]" mode="pre-fmt">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-<xsl:if test="contains(@frame,'top')"><hr /></xsl:if>
-  <xsl:call-template name="start-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param></xsl:call-template>
-<xsl:call-template name="spec-title-nospace"/>
-<pre>
-  <xsl:attribute name="class"><xsl:value-of select="name()"/></xsl:attribute>
-  <xsl:call-template name="commonattributes"/>
-  <xsl:call-template name="gen-style">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-  </xsl:call-template>
-  <xsl:call-template name="setscale"/>
-  <xsl:call-template name="setidaname"/>
-  <xsl:apply-templates/>
-</pre>
-  <xsl:call-template name="end-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
-<xsl:if test="contains(@frame,'bot')"><hr /></xsl:if><xsl:value-of select="$newline"/>
+  <xsl:if test="contains(@frame,'top')"><hr /></xsl:if>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+  <xsl:call-template name="spec-title-nospace"/>
+  <pre>
+    <xsl:attribute name="class"><xsl:value-of select="name()"/></xsl:attribute>
+    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="setscale"/>
+    <xsl:call-template name="setidaname"/>
+    <xsl:apply-templates/>
+  </pre>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
+  <xsl:if test="contains(@frame,'bot')"><hr /></xsl:if><xsl:value-of select="$newline"/>
 </xsl:template>
 
 
