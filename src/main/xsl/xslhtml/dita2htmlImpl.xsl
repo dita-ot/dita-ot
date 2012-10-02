@@ -1053,34 +1053,22 @@
 <!-- should not need priority, default is low enough -->
 
 <xsl:template match="*[contains(@class,' topic/ph ')]" name="topic.ph">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
   <xsl:choose>
     <xsl:when test="@keyref">
       <xsl:apply-templates select="." mode="turning-to-link">
         <xsl:with-param name="keys" select="@keyref"/>
-        <xsl:with-param name="flagrules" select="$flagrules"/>
         <xsl:with-param name="type" select="'ph'"/>
       </xsl:apply-templates>
     </xsl:when>
     <xsl:otherwise>
       <span>
         <xsl:call-template name="commonattributes"/>
-        <xsl:call-template name="gen-style">
-          <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-        </xsl:call-template>
-        <xsl:call-template name="setidaname"/>   
-        <xsl:call-template name="flagcheck"/>
-        <xsl:call-template name="start-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>       
-        <xsl:call-template name="revtext">
-          <xsl:with-param name="flagrules" select="$flagrules"/>
-        </xsl:call-template>
-        <xsl:call-template name="end-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>     
+        <xsl:call-template name="setidaname"/> 
+        <xsl:apply-templates/>  
       </span>
     </xsl:otherwise>
   </xsl:choose>
-   <xsl:call-template name="add-br-for-empty-cmd"/>
+  <xsl:call-template name="add-br-for-empty-cmd"/>
 </xsl:template>
 <xsl:template name="add-br-for-empty-cmd">
   <xsl:if test="contains(@class,' task/cmd ')">
@@ -1094,28 +1082,18 @@
 <!-- should not need priority, default is low enough -->
 
 <xsl:template match="*[contains(@class,' topic/keyword ')]" name="topic.keyword">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
   <xsl:choose>
     <xsl:when test="@keyref">
       <xsl:apply-templates select="." mode="turning-to-link">
         <xsl:with-param name="keys" select="@keyref"/>
-        <xsl:with-param name="flagrules" select="$flagrules"/>
         <xsl:with-param name="type" select="'keyword'"/>
       </xsl:apply-templates>
     </xsl:when>
     <xsl:otherwise>
       <span class="keyword">
         <xsl:call-template name="commonattributes"/>
-        <xsl:call-template name="gen-style">
-          <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-        </xsl:call-template>
         <xsl:call-template name="setidaname"/>   
-        <xsl:call-template name="flagcheck"/>
-        <xsl:call-template name="revtext">
-          <xsl:with-param name="flagrules" select="$flagrules"/>
-        </xsl:call-template>
+        <xsl:apply-templates/>  
       </span>
     </xsl:otherwise>
   </xsl:choose>
@@ -1129,6 +1107,7 @@
 <!-- removed priority 1 : should not be needed -->
 <xsl:template match="*[contains(@class,' topic/tm ')]" name="topic.tm">
 
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <xsl:apply-templates/> <!-- output the TM content -->
 
     <!-- Test for TM area's language -->
@@ -1176,6 +1155,7 @@
         </xsl:choose>
       </xsl:if>
     </xsl:if>
+    <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
 
 <!-- Test for in TM area: returns "tm" when parent's @xml:lang needs a trademark language;
@@ -1203,28 +1183,18 @@
 <!-- phrase "semantic" classes -->
 <!-- citations -->
 <xsl:template match="*[contains(@class,' topic/cite ')]" name="topic.cite">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
   <xsl:choose>
     <xsl:when test="@keyref">
       <xsl:apply-templates select="." mode="turning-to-link">
         <xsl:with-param name="keys" select="@keyref"/>
-        <xsl:with-param name="flagrules" select="$flagrules"/>
         <xsl:with-param name="type" select="'cite'"/>
       </xsl:apply-templates>
     </xsl:when>
     <xsl:otherwise>
       <cite>
         <xsl:call-template name="commonattributes"/>
-        <xsl:call-template name="gen-style">
-          <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-        </xsl:call-template>
         <xsl:call-template name="setidaname"/>
-        <xsl:call-template name="flagcheck"/>
-        <xsl:call-template name="revtext">
-          <xsl:with-param name="flagrules" select="$flagrules"/>
-        </xsl:call-template>
+        <xsl:apply-templates/>
       </cite>
     </xsl:otherwise>
   </xsl:choose>
@@ -1232,42 +1202,24 @@
 
 <!-- quotes - only do 1 level, no flip-flopping -->
 <xsl:template match="*[contains(@class,' topic/q ')]" name="topic.q">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-<span class="q">
-  <xsl:call-template name="commonattributes"/>
-  <xsl:call-template name="gen-style">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-  </xsl:call-template>
-  <xsl:call-template name="getString">
-   <xsl:with-param name="stringName" select="'OpenQuote'"/>
-  </xsl:call-template>
-  <xsl:call-template name="flagcheck"/>
-  <xsl:call-template name="revtext">
-    <xsl:with-param name="flagrules" select="$flagrules"/>
-  </xsl:call-template>
-  <xsl:call-template name="getString">
-   <xsl:with-param name="stringName" select="'CloseQuote'"/>
-  </xsl:call-template>
-</span>
+  <span class="q">
+    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="getString">
+      <xsl:with-param name="stringName" select="'OpenQuote'"/>
+    </xsl:call-template>
+    <xsl:apply-templates/>
+    <xsl:call-template name="getString">
+      <xsl:with-param name="stringName" select="'CloseQuote'"/>
+    </xsl:call-template>
+  </span>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/term ')]" mode="output-term">
   <xsl:param name="displaytext" select="''"/>
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
   <dfn class="term">
     <xsl:call-template name="commonattributes"/>
-    <xsl:call-template name="gen-style">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
     <xsl:call-template name="setidaname"/>   
-    <xsl:call-template name="flagcheck"/>
-    <xsl:call-template name="revtext">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
+    <xsl:apply-templates/>
     <xsl:apply-templates select="." mode="pull-in-title">
       <xsl:with-param name="type" select="' term '"/>
       <xsl:with-param name="displaytext" select="normalize-space($displaytext)"/>
@@ -1537,34 +1489,20 @@
 
 <!-- lines - body font -->
 <xsl:template match="*[contains(@class,' topic/lines ')]" name="topic.lines">
- <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
- <xsl:choose>
-   <xsl:when test="$revtest=1">   <!-- Rev is active - add the DIV -->
-     <div class="{@rev}"><xsl:apply-templates select="."  mode="lines-fmt" /></div>
-   </xsl:when>
-   <xsl:otherwise>  <!-- Rev wasn't active - process normally -->
-     <xsl:apply-templates select="."  mode="lines-fmt" />
-   </xsl:otherwise>
- </xsl:choose>
+  <!-- Starting in DITA-OT 1.7, no longer using extra <div> to preserve @rev.
+       Just continue to "lines-fmt" which is kept for backwards compatibility. -->
+  <xsl:apply-templates select="."  mode="lines-fmt" />
 </xsl:template>
 <xsl:template match="*[contains(@class,' topic/lines ')]" mode="lines-fmt">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-<xsl:if test="contains(@frame,'top')"><hr /></xsl:if>
-  <xsl:call-template name="start-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param></xsl:call-template>
-<xsl:call-template name="spec-title-nospace"/>
- <p>
-  <xsl:call-template name="commonattributes"/>
-   <xsl:call-template name="gen-style">
-     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-   </xsl:call-template>
-  <xsl:call-template name="setscale"/>
-  <xsl:call-template name="setidaname"/>
-  <xsl:apply-templates/>
- </p>
-  <xsl:call-template name="end-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
-<xsl:if test="contains(@frame,'bot')"><hr /></xsl:if><xsl:value-of select="$newline"/>
+  <xsl:if test="contains(@frame,'top')"><hr /></xsl:if>
+  <xsl:call-template name="spec-title-nospace"/>
+  <p>
+    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="setscale"/>
+    <xsl:call-template name="setidaname"/>
+    <xsl:apply-templates/>
+  </p>
+  <xsl:if test="contains(@frame,'bot')"><hr /></xsl:if><xsl:value-of select="$newline"/>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/lines ')]//text()">
@@ -1580,15 +1518,7 @@
 
 <!-- =========== FIGURE =========== -->
 <xsl:template match="*[contains(@class,' topic/fig ')]" name="topic.fig">
- <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
- <xsl:choose>
-   <xsl:when test="$revtest=1">   <!-- Rev is active - add the DIV -->
-     <div class="{@rev}"><xsl:apply-templates select="."  mode="fig-fmt" /></div>
-   </xsl:when>
-   <xsl:otherwise>  <!-- Rev wasn't active - process normally -->
-     <xsl:apply-templates select="."  mode="fig-fmt" />
-   </xsl:otherwise>
- </xsl:choose>
+  <xsl:apply-templates select="."  mode="fig-fmt" />
 </xsl:template>
 
 <!-- Determine the default XHTML class attribute for a figure -->
@@ -1607,118 +1537,78 @@
   <xsl:variable name="default-fig-class">
     <xsl:apply-templates select="." mode="dita2html:get-default-fig-class"/>
   </xsl:variable>
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-  <xsl:call-template name="start-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
- <div>
-   <xsl:if test="$default-fig-class!=''">
-     <xsl:attribute name="class"><xsl:value-of select="$default-fig-class"/></xsl:attribute>
-   </xsl:if>
-   <xsl:call-template name="commonattributes">
-     <xsl:with-param name="default-output-class" select="$default-fig-class"/>
-   </xsl:call-template>
-   <xsl:call-template name="gen-style">
-     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-   </xsl:call-template>
-  <xsl:call-template name="setscale"/>
-  <xsl:call-template name="setidaname"/>
-  <xsl:call-template name="place-fig-lbl"/>
-  <xsl:apply-templates select="*[not(contains(@class,' topic/title '))][not(contains(@class,' topic/desc '))] |text()|comment()|processing-instruction()"/>
- </div>
-  <xsl:call-template name="end-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
-<xsl:value-of select="$newline"/>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+  <div>
+    <xsl:if test="$default-fig-class!=''">
+      <xsl:attribute name="class"><xsl:value-of select="$default-fig-class"/></xsl:attribute>
+    </xsl:if>
+    <xsl:call-template name="commonattributes">
+      <xsl:with-param name="default-output-class" select="$default-fig-class"/>
+    </xsl:call-template>
+    <xsl:call-template name="setscale"/>
+    <xsl:call-template name="setidaname"/>
+    <xsl:call-template name="place-fig-lbl"/>
+    <xsl:apply-templates select="*[not(contains(@class,' topic/title '))][not(contains(@class,' topic/desc '))] |text()|comment()|processing-instruction()"/>
+  </div>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
+  <xsl:value-of select="$newline"/>
 </xsl:template>
 
 <!-- should not need priority, default is low enough; was set to 1 -->
 <xsl:template match="*[contains(@class,' topic/figgroup ')]" name="topic.figgroup">
- <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
- <xsl:choose>
-   <xsl:when test="$revtest=1">   <!-- Rev is active - add the DIV -->
-     <div class="{@rev}"><xsl:apply-templates select="."  mode="figgroup-fmt" /></div>
-   </xsl:when>
-   <xsl:otherwise>  <!-- Rev wasn't active - process normally -->
-     <xsl:apply-templates select="."  mode="figgroup-fmt" />
-   </xsl:otherwise>
- </xsl:choose>
+  <xsl:apply-templates select="."  mode="figgroup-fmt" />
 </xsl:template>
 <xsl:template match="*[contains(@class,' topic/figgroup ')]" mode="figgroup-fmt">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-  <xsl:call-template name="start-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
- <span>
-  <xsl:call-template name="commonattributes"/>
-   <xsl:call-template name="gen-style">
-     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-   </xsl:call-template>
-  <xsl:call-template name="setidaname"/>
-  <!-- Allow title to fallthrough -->
-  <xsl:apply-templates/>
- </span>
-  <xsl:call-template name="end-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
+  <!-- Figgroup can contain blocks, maybe this should be a div? -->
+  <span>
+    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="setidaname"/>
+    <!-- Allow title to fallthrough -->
+    <xsl:apply-templates/>
+  </span>
 </xsl:template>
 
 
 <!-- =========== IMAGE/OBJECT =========== -->
 
 <xsl:template match="*[contains(@class,' topic/image ')]" name="topic.image">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
   <!-- build any pre break indicated by style -->
   <xsl:choose>
     <xsl:when test="parent::fig[contains(@frame,'top ')]">
       <!-- NOP if there is already a break implied by a parent property -->
     </xsl:when>
-    <xsl:otherwise>
-     <xsl:choose>
-      <xsl:when test="(@placement='break')"><br/>
-        <xsl:call-template name="start-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise>
-       <xsl:call-template name="flagcheck"/>
-      </xsl:otherwise>
-     </xsl:choose>
-    </xsl:otherwise>
+    <xsl:when test="@placement='break'">
+      <br/>
+    </xsl:when>
   </xsl:choose>
-  <xsl:call-template name="start-revflag">
-    <xsl:with-param name="flagrules" select="$flagrules"/>
-  </xsl:call-template>
   <xsl:call-template name="setaname"/>
   <xsl:choose>
-   <xsl:when test="@placement='break'"><!--Align only works for break-->
-    <xsl:choose>
-     <xsl:when test="@align='left'">
-      <div class="imageleft">
-       <xsl:call-template name="topic-image"/>
-      </div>
-     </xsl:when>
-     <xsl:when test="@align='right'">
-      <div class="imageright">
-       <xsl:call-template name="topic-image"/>
-      </div>
-     </xsl:when>
-     <xsl:when test="@align='center'">
-      <div class="imagecenter">
-       <xsl:call-template name="topic-image"/>
-      </div>
-     </xsl:when>
-     <xsl:otherwise>
+    <xsl:when test="@placement='break'"><!--Align only works for break-->
+      <xsl:choose>
+        <xsl:when test="@align='left'">
+          <div class="imageleft">
+            <xsl:call-template name="topic-image"/>
+          </div>
+        </xsl:when>
+        <xsl:when test="@align='right'">
+          <div class="imageright">
+            <xsl:call-template name="topic-image"/>
+          </div>
+        </xsl:when>
+        <xsl:when test="@align='center'">
+          <div class="imagecenter">
+            <xsl:call-template name="topic-image"/>
+          </div>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="topic-image"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+    <xsl:otherwise>
       <xsl:call-template name="topic-image"/>
-     </xsl:otherwise>
-    </xsl:choose>
-   </xsl:when>
-   <xsl:otherwise>
-    <xsl:call-template name="topic-image"/>
-   </xsl:otherwise>
+    </xsl:otherwise>
   </xsl:choose>
-  <xsl:call-template name="end-revflag">
-    <xsl:with-param name="flagrules" select="$flagrules"/>
-  </xsl:call-template>
-  <xsl:call-template name="end-flagit">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-  </xsl:call-template>
   <!-- build any post break indicated by style -->
   <xsl:if test="not(@placement='inline')"><br/></xsl:if>
   <!-- image name for review -->
@@ -1739,7 +1629,8 @@
     </xsl:call-template>
   </xsl:variable>
   <xsl:variable name="isSVG" select="$ends-with-svg = 'true' or $ends-with-svgz = 'true'"/>
-<xsl:choose>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+  <xsl:choose>
       <xsl:when test="$isSVG">
         <!--<object data="file.svg" type="image/svg+xml" width="500" height="200">-->
         <!-- now invoke the actual content and its alt text -->
@@ -1761,44 +1652,45 @@
           <xsl:apply-templates select="@height|@width"/>
         </embed>
       </xsl:when>
-<xsl:otherwise>
-  <img>
-    <xsl:call-template name="commonattributes">
-      <xsl:with-param name="default-output-class">
-        <xsl:if test="@placement='break'"><!--Align only works for break-->
-         <xsl:choose>
-          <xsl:when test="@align='left'">imageleft</xsl:when>
-          <xsl:when test="@align='right'">imageright</xsl:when>
-          <xsl:when test="@align='center'">imagecenter</xsl:when>
-         </xsl:choose>
-        </xsl:if>
-      </xsl:with-param>
-    </xsl:call-template>
-    <xsl:call-template name="setid"/>
-    <xsl:choose>
-      <xsl:when test="*[contains(@class, ' topic/longdescref ')]">
-        <xsl:apply-templates select="*[contains(@class, ' topic/longdescref ')]"/>
-      </xsl:when>
       <xsl:otherwise>
-        <xsl:apply-templates select="@longdescref"/>
+        <img>
+          <xsl:call-template name="commonattributes">
+            <xsl:with-param name="default-output-class">
+              <xsl:if test="@placement='break'"><!--Align only works for break-->
+                <xsl:choose>
+                  <xsl:when test="@align='left'">imageleft</xsl:when>
+                  <xsl:when test="@align='right'">imageright</xsl:when>
+                  <xsl:when test="@align='center'">imagecenter</xsl:when>
+                </xsl:choose>
+              </xsl:if>
+            </xsl:with-param>
+          </xsl:call-template>
+          <xsl:call-template name="setid"/>
+          <xsl:choose>
+            <xsl:when test="*[contains(@class, ' topic/longdescref ')]">
+              <xsl:apply-templates select="*[contains(@class, ' topic/longdescref ')]"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:apply-templates select="@longdescref"/>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:apply-templates select="@href|@height|@width"/>
+          <!-- Add by Alan for Bug:#2900417 on Date: 2009-11-23 begin -->
+          <xsl:apply-templates select="@scale"/>
+          <!-- Add by Alan for Bug:#2900417 on Date: 2009-11-23 end   -->
+          <xsl:choose>
+            <xsl:when test="*[contains(@class,' topic/alt ')]">
+              <xsl:variable name="alt-content"><xsl:apply-templates select="*[contains(@class,' topic/alt ')]" mode="text-only"/></xsl:variable>
+              <xsl:attribute name="alt"><xsl:value-of select="normalize-space($alt-content)"/></xsl:attribute>
+            </xsl:when>
+            <xsl:when test="@alt">
+              <xsl:attribute name="alt"><xsl:value-of select="@alt"/></xsl:attribute>
+            </xsl:when>
+          </xsl:choose>
+        </img>
       </xsl:otherwise>
-    </xsl:choose>
-    <xsl:apply-templates select="@href|@height|@width"/>
-    <!-- Add by Alan for Bug:#2900417 on Date: 2009-11-23 begin -->
-    <xsl:apply-templates select="@scale"/>
-    <!-- Add by Alan for Bug:#2900417 on Date: 2009-11-23 end   -->
-    <xsl:choose>
-      <xsl:when test="*[contains(@class,' topic/alt ')]">
-        <xsl:variable name="alt-content"><xsl:apply-templates select="*[contains(@class,' topic/alt ')]" mode="text-only"/></xsl:variable>
-        <xsl:attribute name="alt"><xsl:value-of select="normalize-space($alt-content)"/></xsl:attribute>
-      </xsl:when>
-      <xsl:when test="@alt">
-        <xsl:attribute name="alt"><xsl:value-of select="@alt"/></xsl:attribute>
-      </xsl:when>
-    </xsl:choose>
-  </img>
-</xsl:otherwise>
-</xsl:choose>
+  </xsl:choose>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/alt ')]">
@@ -3263,53 +3155,42 @@
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/required-cleanup ')]" name="topic.required-cleanup">
- <xsl:if test="$DRAFT='yes'">
-   <xsl:variable name="flagrules">
-     <xsl:call-template name="getrules"/>
-   </xsl:variable>
-   <xsl:apply-templates select="." mode="ditamsg:required-cleanup-in-content"/>
-  <div>
-   <xsl:call-template name="commonattributes"/>
-    <xsl:call-template name="gen-style">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
-    <xsl:apply-templates select="." mode="default-required-cleanup-style"/>
-    <xsl:call-template name="setidaname"/>
-    <xsl:call-template name="start-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
-     <strong><xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'Required cleanup'"/>
-      </xsl:call-template>
+  <xsl:if test="$DRAFT='yes'">
+    <xsl:apply-templates select="." mode="ditamsg:required-cleanup-in-content"/>
+    <div>
+      <xsl:call-template name="commonattributes"/>
+      <xsl:apply-templates select="." mode="default-required-cleanup-style"/>
+      <xsl:call-template name="setidaname"/>
+      <strong><xsl:call-template name="getString">
+         <xsl:with-param name="stringName" select="'Required cleanup'"/>
+       </xsl:call-template>
        <xsl:call-template name="getString">
         <xsl:with-param name="stringName" select="'ColonSymbol'"/>
-       </xsl:call-template><xsl:text> </xsl:text></strong><xsl:if test="@remap">[<xsl:value-of select="@remap"/>] </xsl:if>
-     <xsl:apply-templates/>
-    <xsl:call-template name="end-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
-  </div><xsl:value-of select="$newline"/>
- </xsl:if>
+       </xsl:call-template><xsl:text> </xsl:text></strong>
+      <xsl:if test="@remap">[<xsl:value-of select="@remap"/>] </xsl:if>
+      <xsl:apply-templates/>
+    </div><xsl:value-of select="$newline"/>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/draft-comment ')]" name="topic.draft-comment">
  <xsl:if test="$DRAFT='yes'">
-   <xsl:variable name="flagrules">
-     <xsl:call-template name="getrules"/>
-   </xsl:variable>
    <xsl:apply-templates select="." mode="ditamsg:draft-comment-in-content"/>
-  <div>
-    <xsl:call-template name="commonattributes"/>
-    <xsl:call-template name="gen-style">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
-    <xsl:apply-templates select="." mode="default-draft-comment-style"/>
-    <xsl:call-template name="setidaname"/>
-    <xsl:call-template name="start-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param></xsl:call-template>
+   <div>
+     <xsl:call-template name="commonattributes"/>
+     <xsl:apply-templates select="." mode="default-draft-comment-style"/>
+     <xsl:call-template name="setidaname"/>
      <strong><xsl:call-template name="getString">
         <xsl:with-param name="stringName" select="'Draft comment'"/>
       </xsl:call-template>
       <xsl:call-template name="getString">
         <xsl:with-param name="stringName" select="'ColonSymbol'"/>
-       </xsl:call-template><xsl:text> </xsl:text></strong><xsl:if test="@author"><xsl:value-of select="@author"/><xsl:text> </xsl:text></xsl:if><xsl:if test="@disposition"><xsl:value-of select="@disposition"/><xsl:text> </xsl:text></xsl:if><xsl:if test="@time"><xsl:value-of select="@time"/></xsl:if><br/>
+       </xsl:call-template><xsl:text> </xsl:text></strong>
+     <xsl:if test="@author"><xsl:value-of select="@author"/><xsl:text> </xsl:text></xsl:if>
+     <xsl:if test="@disposition"><xsl:value-of select="@disposition"/><xsl:text> </xsl:text></xsl:if>
+     <xsl:if test="@time"><xsl:value-of select="@time"/></xsl:if>
+     <br/>
      <xsl:apply-templates/>
-    <xsl:call-template name="end-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
   </div><xsl:value-of select="$newline"/>
  </xsl:if>
 </xsl:template>
@@ -3831,9 +3712,6 @@
 
 <!-- Catch footnotes that should appear at the end of the topic, and output them. -->
 <xsl:template match="*[contains(@class,' topic/fn ')]" mode="genEndnote">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
   <div class="p">
     <xsl:variable name="fnid"><xsl:number from="/" level="any"/></xsl:variable>
     <xsl:variable name="callout"><xsl:value-of select="@callout"/></xsl:variable>
@@ -3845,9 +3723,6 @@
     </xsl:variable>
     
     <xsl:call-template name="commonattributes"/>
-    <xsl:call-template name="gen-style">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
     <xsl:choose>
       <xsl:when test="@id and not(@id='')">
         <xsl:variable name="topicid">
@@ -3880,9 +3755,7 @@
       </xsl:otherwise>
     </xsl:choose>
         
-    <xsl:call-template name="start-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
     <xsl:apply-templates/>
-    <xsl:call-template name="end-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
   </div>
 </xsl:template>
 

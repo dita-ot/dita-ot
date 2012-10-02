@@ -29,6 +29,8 @@
                          contains(@class,' topic/dlhead ')]" mode="processFlagsInline">no</xsl:template>
   <!-- For notes, process out-of-line to keep start flag ahead of generated heading -->
   <xsl:template match="*[contains(@class,' topic/note ')]" mode="processFlagsInline">no</xsl:template>
+  <!-- For fig, process out-of-line to keep start flag ahead of generated heading -->
+  <xsl:template match="*[contains(@class,' topic/fig ')]" mode="processFlagsInline">no</xsl:template>
   <!-- For pre, process out-of-line to keep start flag ahead of block, otherwise it throws off spacing -->
   <xsl:template match="*[contains(@class,' topic/pre ')]" mode="processFlagsInline">no</xsl:template>
   <!-- For root topic, process out-of-line to get flags around headers/footers -->
@@ -40,7 +42,10 @@
                          contains(@class,' topic/example ')]" mode="processFlagsInline">no</xsl:template>
   <!-- For lq, process out-of-line to get end flags after citation info -->
   <xsl:template match="*[contains(@class,' topic/lq ')]" mode="processFlagsInline">no</xsl:template>
-
+  <!-- Image should not hit this in fallthrough, but is explicitly processed before/after <img> -->
+  <xsl:template match="*[contains(@class,' topic/image ')]" mode="processFlagsInline">no</xsl:template>
+  <!-- If a tm symbol is generated, flag should go after -->
+  <xsl:template match="*[contains(@class,' topic/tm ')]" mode="processFlagsInline">no</xsl:template>
 
   <xsl:template match="*[contains(@class,' ditaot-d/ditaval-startprop ')]">
     <xsl:variable name="processnow">
