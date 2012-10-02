@@ -628,16 +628,13 @@
                           substring($type, 2))"/>
       </xsl:call-template>
   </xsl:param>
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
   <div class="{$type}">
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class" select="$type"/>
     </xsl:call-template>
-    <xsl:call-template name="gen-style"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
     <xsl:call-template name="setidaname"/>
-    <xsl:call-template name="start-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
+    <!-- Normal flags go before the generated title; revision flags only go on the content. -->
+    <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]/prop" mode="ditaval-outputflag"/>
     <span class="{$type}title">
       <xsl:value-of select="$title"/>
       <xsl:call-template name="getString">
@@ -645,10 +642,10 @@
       </xsl:call-template>
     </span>
     <xsl:text> </xsl:text>
-    <xsl:call-template name="revblock">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-    <xsl:call-template name="end-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
+    <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]/revprop" mode="ditaval-outputflag"/>
+    <xsl:apply-templates/>
+    <!-- Normal end flags and revision end flags both go out after the content. -->
+    <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
   </div>
 </xsl:template>
 
@@ -707,14 +704,12 @@
 <!-- Caution and Danger both use a div for the title, so they do not
      use the common note processing template. -->
 <xsl:template match="*" mode="process.note.caution">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
   <div class="cautiontitle">
     <xsl:call-template name="commonattributes"/>
     <xsl:attribute name="class">cautiontitle</xsl:attribute>
-    <xsl:call-template name="setidaname"/>    
-    <xsl:call-template name="start-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
+    <xsl:call-template name="setidaname"/>
+    <!-- Normal flags go before the generated title; revision flags only go on the content. -->
+    <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]/prop" mode="ditaval-outputflag"/>
     <xsl:call-template name="getString">
       <xsl:with-param name="stringName" select="'Caution'"/>
     </xsl:call-template>
@@ -726,23 +721,19 @@
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class" select="'caution'"/>
     </xsl:call-template>
-    <xsl:call-template name="gen-style"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
-    <xsl:call-template name="revblock">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-    <xsl:call-template name="end-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
+    <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]/revprop" mode="ditaval-outputflag"/>
+    <xsl:apply-templates/>
+    <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
   </div>  
 </xsl:template>
 
 <xsl:template match="*" mode="process.note.danger">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
   <div class="dangertitle">
     <xsl:call-template name="commonattributes"/>
     <xsl:attribute name="class">dangertitle</xsl:attribute>
     <xsl:call-template name="setidaname"/>
-    <xsl:call-template name="start-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
+    <!-- Normal flags go before the generated title; revision flags only go on the content. -->
+    <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]/prop" mode="ditaval-outputflag"/>
     <xsl:call-template name="getString">
       <xsl:with-param name="stringName" select="'Danger'"/>
     </xsl:call-template>
@@ -751,11 +742,9 @@
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class" select="'danger'"/>
     </xsl:call-template>
-    <xsl:call-template name="gen-style"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
-    <xsl:call-template name="revblock">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-    <xsl:call-template name="end-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
+    <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]/revprop" mode="ditaval-outputflag"/>
+    <xsl:apply-templates/>
+    <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
   </div>
 </xsl:template>
 

@@ -18,12 +18,16 @@
     <xsl:attribute name="style"><xsl:value-of select="."/></xsl:attribute>
   </xsl:template>
 
+  <!-- By default, process flags where encountered: at the start and end of the element content. -->
   <xsl:template match="*" mode="processFlagsInline">yes</xsl:template>
+  <!-- For lists, process out-of-line in order to keep XHTML valid. -->
   <xsl:template match="*[contains(@class,' topic/ol ') or
                          contains(@class,' topic/ul ') or
                          contains(@class,' topic/sl ')]" mode="processFlagsInline">no</xsl:template>
   <xsl:template match="*[contains(@class,' topic/dl ') or
                          contains(@class,' topic/dlentry ')]" mode="processFlagsInline">no</xsl:template>
+  <!-- For notes, process out-of-line to keep start flag ahead of generated heading -->
+  <xsl:template match="*[contains(@class,' topic/note ')]" mode="processFlagsInline">no</xsl:template>
 
 
   <xsl:template match="*[contains(@class,' ditaot-d/ditaval-startprop ')]">
