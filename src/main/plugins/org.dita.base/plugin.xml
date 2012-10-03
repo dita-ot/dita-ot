@@ -42,6 +42,7 @@
   <extension-point id="depend.preprocess.maplink.pre" name="Map link pre-target"/>
   <extension-point id="depend.preprocess.move-links.pre" name="Move links pre-target"/>
   <extension-point id="depend.preprocess.topicpull.pre" name="Topic pull pre-target"/>
+  <extension-point id="depend.preprocess.flag-module.pre" name="Flag module pre-target"/>
   <extension-point id="depend.preprocess.copy-files.pre" name="Copy files pre-target"/>
   <extension-point id="depend.preprocess.copy-image.pre" name="Copy images pre-target"/>
   <extension-point id="depend.preprocess.copy-html.pre" name="Copy HTML pre-target"/>
@@ -54,8 +55,10 @@
   <extension-point id="dita.preprocess.mappull.param" name="Map pull  XSLT parameters"/>
   <extension-point id="dita.preprocess.maplink.param" name="Map link XSLT parameters"/>
   <extension-point id="dita.preprocess.topicpull.param" name="Topic pull XSLT parameters"/>
+  <extension-point id="dita.preprocess.flag-module.param" name="Flag module XSLT parameters"/>
   <extension-point id="dita.xsl.conref" name="Content reference XSLT import"/>
   <extension-point id="dita.xsl.topicpull" name="Topic pull XSLT import"/>
+  <extension-point id="dita.xsl.flag-module" name="Flag module XSLT import"/>
   <extension-point id="dita.xsl.mapref" name="Map reference XSLT import"/>
   <extension-point id="dita.xsl.mappull" name="Map pull XSLT import"/>
   <extension-point id="dita.xsl.maplink" name="Map link XSLT import"/>
@@ -88,4 +91,5 @@
   <template file="../../xsl/preprocess/mappull_template.xsl"/>
   <template file="../../xsl/preprocess/conref_template.xsl"/>
   <template file="../../xsl/preprocess/topicpull_template.xsl"/>
+  <template file="../../xsl/preprocess/flag_template.xsl"/>
 </plugin>
