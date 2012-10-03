@@ -214,10 +214,6 @@
 <xsl:template match="*" mode="propertiesEntry">
   <xsl:param name="width-multiplier">0</xsl:param>
   <xsl:param name="elementType"/>
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-    <xsl:call-template name="getrules-parent"/>
-  </xsl:variable>
   <td valign="top">
     <xsl:call-template name="output-stentry-id"/>
     <xsl:call-template name="addPropertiesHeadersAttribute">
@@ -225,9 +221,6 @@
       <xsl:with-param name="elementType"><xsl:value-of select="$elementType"/></xsl:with-param>
     </xsl:call-template>
     <xsl:call-template name="commonattributes"/>
-    <xsl:call-template name="gen-style">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
     <xsl:variable name="localkeycol">
       <xsl:choose>
         <xsl:when test="ancestor::*[contains(@class,' topic/simpletable ')]/@keycol">
@@ -254,57 +247,34 @@
         <xsl:value-of select="$widthpercent"/><xsl:text>%</xsl:text>
       </xsl:attribute>
     </xsl:if>
-    <xsl:apply-templates select="." mode="start-stentry-flagging">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:apply-templates>
-    <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
-    <xsl:variable name="revtest-row"><xsl:apply-templates select="parent::*" mode="mark-revisions-for-draft"/></xsl:variable>
+    <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
     <xsl:choose>
-     <xsl:when test="$thiscolnum=$localkeycol and $revtest-row=1">
-      <strong><span class="{../@rev}">
-<xsl:call-template name="propentry-templates"/>
-      </span></strong>
-     </xsl:when>
-     <xsl:when test="$thiscolnum=$localkeycol and $revtest=1">
-      <strong><span class="{@rev}">
-<xsl:call-template name="propentry-templates"/>
-      </span></strong>
-     </xsl:when>
      <xsl:when test="$thiscolnum=$localkeycol">
       <strong>
-<xsl:call-template name="propentry-templates"/>
+        <xsl:call-template name="propentry-templates"/>
       </strong>
      </xsl:when>
-     <xsl:when test="$revtest-row=1">
-      <span class="{../@rev}">
-<xsl:call-template name="propentry-templates"/>
-      </span>
-     </xsl:when>
-     <xsl:when test="$revtest=1">
-      <span class="{@rev}">
-<xsl:call-template name="propentry-templates"/>
-      </span>
-     </xsl:when>
      <xsl:otherwise>
-<xsl:call-template name="propentry-templates"/>
+       <xsl:call-template name="propentry-templates"/>
      </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates select="." mode="end-stentry-flagging">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:apply-templates>
+    <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
   </td><xsl:value-of select="$newline"/>
 </xsl:template>
 
 <xsl:template name="propentry-templates">
  <xsl:choose>
-  <xsl:when test="*|text()|processing-instruction()">
+  <xsl:when test="*[not(contains(@class,' ditaot-d/startprop ') or contains(@class,' dita-ot/endprop '))] | text() | processing-instruction()">
    <xsl:apply-templates/>
   </xsl:when>
-  <xsl:when test="@specentry">
-   <xsl:value-of select="@specentry"/>
-  </xsl:when>
   <xsl:otherwise>
-    <xsl:text disable-output-escaping="no">&#xA0;</xsl:text>  <!-- nbsp -->
+    <!-- Add flags, then either @specentry or NBSP -->
+    <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+    <xsl:choose>
+      <xsl:when test="@specentry"><xsl:value-of select="@specentry"/></xsl:when>
+      <xsl:otherwise>&#160;</xsl:otherwise>
+    </xsl:choose>
+    <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
   </xsl:otherwise>
  </xsl:choose>
 </xsl:template>
