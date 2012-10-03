@@ -6,17 +6,18 @@
 <!-- PURPOSE: Replace the XHTML based flagging routines with a common routine.
      Logic for determining what to flag is the same.
      When flags are active:
-     * For styles: only one style can be set per element. Add the style as @ditaval:style
-     * For flags: can have multiple, and they often have child markup that is necessary to preserve.
-       So, use namespaced elements. 
-       For revisions: Create wrapper element <ditaval:startrevprop> and <ditaval:endrevprop>. Each has a copy
-                  of the revision attrs; startrevprop contains startflag children, endrevprop contains endflag children.
-       For props: Create wrapper <ditaval:startprop> and <ditaval:endprop>. Attributes and children work the same
-                  as for revisions.
-       For both: if @imageref on a flag is relative, adjust according to PATH2PROJ.
-     * If there is a style conflict, and the file has <style-conflict>, then:
-       - The calculated style value is added as @ditaval:style-conflict
-       - A copy of <style-conflict> is included as <ditaval:style-conflict>.
+     * Create element <ditaval-startprop> as the first child, and <ditaval-endprop> as the last.
+       These are each pseudo-specializations of <foreign>, with class values
+       "+ topic/foreign ditaot-d/ditaval-startprop "
+       and
+       "+ topic/foreign ditaot-d/ditaval-endprop "
+     * Properties / revisions that are set to "flag" in the ditaval are copied as-is into each
+       element, so that rendering steps can directly access all active flags and revisions.
+     * Relative paths for flagging images are adjusted to be valid from the current topic
+     * If styling is active, only one style can be set per element; the CSS style is calculated
+       in this step and placed on @outputclass of <ditaval-startprop>. 
+     * If there is a style conflict, and the file has <style-conflict>, then a copy of
+       <style-conflict> is included in <ditaval-startprop>.
 LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
               -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
