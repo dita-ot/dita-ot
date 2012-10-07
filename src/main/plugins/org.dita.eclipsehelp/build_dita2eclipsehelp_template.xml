@@ -106,7 +106,7 @@
               includesfile="${dita.temp.dir}${file.separator}${fullditamapfile}"
               extension=".xml"
               classpathref="dost.class.path"
-              style="${dita.script.dir}${file.separator}map2eclipse.xsl">
+              style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2eclipse.xsl">
         	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
             <includesfile name="${dita.temp.dir}${file.separator}${chunkedditamapfile}" if="chunkedditamapfile"/>
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
@@ -124,7 +124,7 @@
             destdir="${output.dir}"
             includesfile="${dita.temp.dir}${file.separator}${fullditamapfile}"
             classpathref="dost.class.path"
-            style="${dita.script.dir}${file.separator}map2eclipse.xsl">
+            style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2eclipse.xsl">
         	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
             <includesfile name="${dita.temp.dir}${file.separator}${chunkedditamapfile}" if="chunkedditamapfile"/>
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
@@ -186,7 +186,7 @@
               in="${dita.temp.dir}${file.separator}${user.input.file}"
               out="${dita.map.output.dir}${file.separator}plugin.xml"
               classpathref="dost.class.path"
-              style="${dita.script.dir}${file.separator}map2plugin.xsl">
+              style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2plugin.xsl">
             <param name="TOCROOT" expression="${args.eclipsehelp.toc}" />
             <param name="version"
                    expression="${args.eclipse.version}"
@@ -212,7 +212,7 @@
             in="${dita.temp.dir}${file.separator}${user.input.file}"
             out="${output.dir}${file.separator}plugin.xml"
             classpathref="dost.class.path"
-            style="${dita.script.dir}${file.separator}map2plugin.xsl">
+            style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2plugin.xsl">
             <param name="TOCROOT" expression="${args.eclipsehelp.toc}" />
             <param name="version"
                 expression="${args.eclipse.version}"
@@ -242,7 +242,7 @@
       in="${dita.temp.dir}${file.separator}${user.input.file}"
       out="${dita.map.output.dir}${file.separator}META-INF${file.separator}MANIFEST.MF"
       classpathref="dost.class.path"
-      style="${dita.script.dir}${file.separator}map2plugin.xsl">
+      style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2plugin.xsl">
       <param name="version"
         expression="${args.eclipse.version}"
         if="args.eclipse.version" />
@@ -275,7 +275,7 @@
       in="${dita.temp.dir}${file.separator}${user.input.file}"
       out="${dita.map.output.dir}${file.separator}META-INF${file.separator}MANIFEST.MF"
       classpathref="dost.class.path"
-      style="${dita.script.dir}${file.separator}map2plugin.xsl">
+      style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2plugin.xsl">
       <param name="version"
         expression="${args.eclipse.version}"
         if="args.eclipse.version" />
@@ -309,7 +309,7 @@
       in="${dita.temp.dir}${file.separator}${user.input.file}"
       out="${output.dir}${file.separator}plugin.properties"
       classpathref="dost.class.path"
-      style="${dita.script.dir}${file.separator}map2plugin.xsl">
+      style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2plugin.xsl">
       <outputproperty value="text" name="method"/>
       <param name="dita.plugin.output" 
       	  expression="dita.eclipse.properties"/>
@@ -331,7 +331,7 @@
       in="${dita.temp.dir}${file.separator}${user.input.file}"
       out="${output.dir}${file.separator}plugin.properties"
       classpathref="dost.class.path"
-      style="${dita.script.dir}${file.separator}map2plugin.xsl">
+      style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2plugin.xsl">
       <outputproperty value="text" name="method"/>
       <param name="dita.plugin.output" expression="dita.eclipse.properties"/>
     	<param name="version"

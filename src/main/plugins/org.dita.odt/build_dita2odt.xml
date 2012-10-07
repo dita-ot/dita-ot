@@ -83,7 +83,7 @@
   <target name="dita.map.odt" description="Build odt content.xml file">
   	
     <condition property="args.xsl"
-      value="${dita.script.dir}${file.separator}dita2odt.xsl">
+      value="${dita.plugin.org.dita.odt.dir}/xsl/dita2odt.xsl">
       <not>
         <isset property="args.xsl" />
       </not>
@@ -124,7 +124,7 @@
   
   <target name="dita.topic.odt" description="Build odt content.xml file">
     <condition property="args.xsl"
-      value="${dita.script.dir}${file.separator}dita2odt.xsl">
+      value="${dita.plugin.org.dita.odt.dir}/xsl/dita2odt.xsl">
       <not>
         <isset property="args.xsl" />
       </not>
@@ -157,7 +157,7 @@
       in="${dita.temp.dir}${file.separator}${user.input.file}"
       out="${odt.output.tempdir}${file.separator}styles.xml"
       classpathref="dost.class.path"
-      style="${dita.script.dir}${file.separator}xslodt${file.separator}dita2odtstyles.xsl">
+      style="${dita.plugin.org.dita.odt.dir}/xsl/xslodt/dita2odtstyles.xsl">
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
@@ -168,7 +168,7 @@
       in="${dita.temp.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
       out="${odt.output.tempdir}${file.separator}styles.xml"
       classpathref="dost.class.path"
-      style="${dita.script.dir}${file.separator}xslodt${file.separator}dita2odtstyles.xsl">
+      style="${dita.plugin.org.dita.odt.dir}/xsl/xslodt/dita2odtstyles.xsl">
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
@@ -179,7 +179,7 @@
       in="${dita.temp.dir}${file.separator}${user.input.file}"
       out="${odt.output.tempdir}${file.separator}META-INF${file.separator}manifest.xml"
       classpathref="dost.class.path"
-      style="${dita.script.dir}${file.separator}xslodt${file.separator}dita2odtmanifest.xsl">
+      style="${dita.plugin.org.dita.odt.dir}/xsl/xslodt/dita2odtmanifest.xsl">
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
    </target>

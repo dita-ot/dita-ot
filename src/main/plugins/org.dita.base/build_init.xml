@@ -33,7 +33,7 @@
   <property file="${dita.dir}/lib/configuration.properties"/>
 		
   <xmlcatalog id="dita.catalog">
-    <catalogpath path="${dita.dir}/catalog-dita.xml"/>
+    <catalogpath path="${dita.plugin.org.dita.base.dir}/catalog-dita.xml"/>
   </xmlcatalog>
 
 	<!-- Determine the Java architecture and set the JVM arguments
@@ -103,6 +103,7 @@
     <classpath refid="dost.jar.path" />
   </taskdef>
 
+  <!-- Deprecated -->
   <taskdef name="ext-pipeline"
     classname="org.dita.dost.invoker.ExtensibleAntInvoker">
     <classpath refid="dost.jar.path" />
@@ -148,14 +149,17 @@
   <property name="base.temp.dir" location="${basedir}/temp"/>
   <property name="dita.temp.dir" location="${base.temp.dir}${file.separator}temp${current.date}" />
   <property name="output.dir" location="${basedir}/out" />
+  <!-- Deprecated -->
   <property name="dita.script.dir"
-    location="${dita.dir}${file.separator}xsl" />
+    location="${dita.plugin.org.dita.base.dir}${file.separator}xsl" />
+  <!-- Deprecated -->
   <property name="dita.resource.dir"
-    location="${dita.dir}${file.separator}resource" />
+    location="${dita.plugin.org.dita.base.dir}${file.separator}resource" />
   <property environment="env" />
   <property name="dita.empty" value="" />
+  <!-- Deprecated -->
   <property name="args.message.file"
-    location="${dita.dir}${file.separator}resource${file.separator}messages.xml" />
+    location="${dita.plugin.org.dita.base.dir}${file.separator}resource${file.separator}messages.xml" />
   <!-- property values end -->
 
   <target name="build-init"
