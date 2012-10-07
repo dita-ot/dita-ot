@@ -1,17 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This file is part of the DITA Open Toolkit project hosted on 
-     Sourceforge.net. See the accompanying license.txt file for 
-     applicable licenses.-->
+<!-- This file is part of the DITA Open Toolkit project.
+     See the accompanying license.txt file for  applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <project name="dita2odt">
-	
-<!--  
-  <target name="dita2odt"
-    depends="build-init, preprocess, map2odt, topic2odt,
-  	dita.topic.odt.stylesfile, dita.map.odt.stylesfile, dita.out.odt.manifest.file, 
-  	dita.odt.package.topic, dita.odt.package.map, clean-up-out-dir">
-  </target>
--->
 	
   <target name="set_odt_output_tempdir">
     <condition property="odt.output.tempdir" value="${dita.map.output.dir}/temp">
@@ -19,7 +10,6 @@
         <isset property="odt.output.tempdir"/>
       </not>
     </condition>
-    
     <copy todir="${odt.output.tempdir}">
       <fileset dir="${dita.map.output.dir}">
         <exclude name="**/*.list"/>
@@ -30,19 +20,16 @@
         <exclude name="temp/**"/>
       </fileset>
     </copy>
-    
   </target>
-	
-  
+
   <target name="clean_output_tempdir" unless="$flag">
-    <delete failonerror="yes" includeemptydirs="true" dir="${odt.output.tempdir}" />   
-  </target>		
-	
-	
+    <delete failonerror="yes" includeemptydirs="true" dir="${odt.output.tempdir}" />
+  </target>
+
   <target name="dita2odt"
     depends="dita2odt.init, build-init, preprocess, set_odt_output_tempdir, dita.odt.package.topic, dita.odt.package.map, move-output-file, clean_output_tempdir">
   </target>
-  
+
   <target name="dita2odt.init">
     <property name="odt.suffix" value=".odt" />
     <condition property="args.rellinks" value="none">
@@ -51,16 +38,13 @@
     <condition property="args.odt.include.rellinks" value="none">
        <not><isset property="args.odt.include.rellinks"></isset></not>
     </condition>
-    <condition property="odt.dir" value="xsl/xslodt">
-      <not><isset property="odt.dir"/></not>
-    </condition>
     <condition property="args.odt.img.embed" value="yes">
       <not>
         <isset property="args.odt.img.embed"/>
       </not>
     </condition>
   </target>
-  
+
   <target name="map2odt" unless="noMap">
     <antcall target="dita.map.odt">
       <param name="input"
@@ -81,7 +65,6 @@
 
   <!-- Build odt content.xml from DITA -->
   <target name="dita.map.odt" description="Build odt content.xml file">
-  	
     <condition property="args.xsl"
       value="${dita.plugin.org.dita.odt.dir}/xsl/dita2odt.xsl">
       <not>
@@ -92,22 +75,22 @@
   	<!--create topic merge file -->  	
   	<dirname property="dita.temp.dir.fullpath" file="${dita.temp.dir}${file.separator}dummy.file"/>
   	<pipeline message="topicmerge"
-  	              inputmap="${dita.temp.dir.fullpath}${file.separator}${user.input.file}"
-  	              tempdir="${dita.temp.dir.fullpath}">
+              inputmap="${dita.temp.dir.fullpath}${file.separator}${user.input.file}"
+              tempdir="${dita.temp.dir.fullpath}">
   	  <module class="org.dita.dost.module.TopicMergeModule">
         <param name="output" location="${dita.temp.dir.fullpath}${file.separator}${dita.map.filename.root}_MERGED.xml"/>
-        <param name="style" location="${dita.dir}/${odt.dir}/common/topicmerge.xsl"/>
+        <param name="style" location="${dita.dir}/xsl/xslodt/common/topicmerge.xsl"/>
   	  </module>
   	</pipeline>
   	<!--create content.xml -->
   	<!--Change path of ${dita.input.valfile} into url-->
   	<makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
     <xslt basedir="${dita.temp.dir}"
-      in="${dita.temp.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
-      classpathref="dost.class.path"
-      out="${output}" style="${args.xsl}" 
-      filenameparameter="FILENAME"
-      filedirparameter="FILEDIR">
+          in="${dita.temp.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
+          classpathref="dost.class.path"
+          out="${output}" style="${args.xsl}"
+          filenameparameter="FILENAME"
+          filedirparameter="FILEDIR">
       <param name="BASEDIR" expression="${basedir}"/>
       <param name="TEMPDIR" expression="${dita.temp.dir}"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
@@ -121,10 +104,9 @@
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
-  
+
   <target name="dita.topic.odt" description="Build odt content.xml file">
-    <condition property="args.xsl"
-      value="${dita.plugin.org.dita.odt.dir}/xsl/dita2odt.xsl">
+    <condition property="args.xsl" value="${dita.plugin.org.dita.odt.dir}/xsl/dita2odt.xsl">
       <not>
         <isset property="args.xsl" />
       </not>
@@ -133,10 +115,10 @@
   	<!--Change path of ${dita.input.valfile} into url-->
   	<makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
     <xslt in="${input}" out="${output}" basedir="${dita.temp.dir}"
-      classpathref="dost.class.path"
-      style="${args.xsl}"
-      filenameparameter="FILENAME"
-      filedirparameter="FILEDIR">
+          classpathref="dost.class.path"
+          style="${args.xsl}"
+          filenameparameter="FILENAME"
+          filedirparameter="FILEDIR">
       <param name="BASEDIR" expression="${basedir}"/>
       <param name="TEMPDIR" expression="${dita.temp.dir}"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
@@ -151,53 +133,45 @@
     </xslt>
   </target>
       	
-  <target name="dita.topic.odt.stylesfile"
-    description="Build odt styles.xml file" if="noMap">
-    <xslt
-      in="${dita.temp.dir}${file.separator}${user.input.file}"
-      out="${odt.output.tempdir}${file.separator}styles.xml"
-      classpathref="dost.class.path"
-      style="${dita.plugin.org.dita.odt.dir}/xsl/xslodt/dita2odtstyles.xsl">
+  <target name="dita.topic.odt.stylesfile" description="Build odt styles.xml file" if="noMap">
+    <xslt in="${dita.temp.dir}${file.separator}${user.input.file}"
+          out="${odt.output.tempdir}${file.separator}styles.xml"
+          classpathref="dost.class.path"
+          style="${dita.plugin.org.dita.odt.dir}/xsl/xslodt/dita2odtstyles.xsl">
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
 	
-  <target name="dita.map.odt.stylesfile"
-    description="Build odt styles.xml file" unless="noMap">
-    <xslt
-      in="${dita.temp.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
-      out="${odt.output.tempdir}${file.separator}styles.xml"
-      classpathref="dost.class.path"
-      style="${dita.plugin.org.dita.odt.dir}/xsl/xslodt/dita2odtstyles.xsl">
+  <target name="dita.map.odt.stylesfile" description="Build odt styles.xml file" unless="noMap">
+    <xslt in="${dita.temp.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
+          out="${odt.output.tempdir}${file.separator}styles.xml"
+          classpathref="dost.class.path"
+          style="${dita.plugin.org.dita.odt.dir}/xsl/xslodt/dita2odtstyles.xsl">
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
 	
-  <target name="dita.out.odt.manifest.file"
-    description="Build odt manifest.xml file">
-    <xslt
-      in="${dita.temp.dir}${file.separator}${user.input.file}"
-      out="${odt.output.tempdir}${file.separator}META-INF${file.separator}manifest.xml"
-      classpathref="dost.class.path"
-      style="${dita.plugin.org.dita.odt.dir}/xsl/xslodt/dita2odtmanifest.xsl">
+  <target name="dita.out.odt.manifest.file" description="Build odt manifest.xml file">
+    <xslt in="${dita.temp.dir}${file.separator}${user.input.file}"
+          out="${odt.output.tempdir}${file.separator}META-INF${file.separator}manifest.xml"
+          classpathref="dost.class.path"
+          style="${dita.plugin.org.dita.odt.dir}/xsl/xslodt/dita2odtmanifest.xsl">
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
    </target>
-   
-   <target name="dita.odt.package.topic" if="noMap" depends="topic2odt,
-  	dita.topic.odt.stylesfile, dita.out.odt.manifest.file"
-     description="Package into odt file">
+
+   <target name="dita.odt.package.topic" if="noMap" depends="topic2odt, dita.topic.odt.stylesfile, dita.out.odt.manifest.file"
+           description="Package into odt file">
      <zip destfile="${odt.output.tempdir}/${dita.topic.filename.root}${odt.suffix}"
-       basedir="${odt.output.tempdir}" 
-	   		excludes="**/*.list, **/*.log, **/*.temp, **/*.properties, **/*.odt">
+          basedir="${odt.output.tempdir}"
+	   		  excludes="**/*.list, **/*.log, **/*.temp, **/*.properties, **/*.odt">
 	   	</zip>
    </target>
-   <target name="dita.odt.package.map" unless="noMap" depends="map2odt, 
-  	dita.map.odt.stylesfile, dita.out.odt.manifest.file"
-    description="Package into odt file">
+   <target name="dita.odt.package.map" unless="noMap" depends="map2odt, dita.map.odt.stylesfile, dita.out.odt.manifest.file"
+          description="Package into odt file">
      <zip destfile="${odt.output.tempdir}/${dita.map.filename.root}${odt.suffix}"
-       basedir="${odt.output.tempdir}"
-	   		excludes="**/*.list, **/*.log, **/*.temp, **/*.properties, **/*.odt"/>
+          basedir="${odt.output.tempdir}"
+          excludes="**/*.list, **/*.log, **/*.temp, **/*.properties, **/*.odt"/>
    </target>
 
   <target name="move-output-file">
@@ -212,5 +186,5 @@
     </move>
     <available property="flag" file="${odt.output.tempdir}" type="dir"/>
   </target>
-  
+
 </project>
