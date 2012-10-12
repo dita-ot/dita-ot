@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This file is part of the DITA Open Toolkit project hosted on 
- Sourceforge.net. See the accompanying license.txt file for 
- applicable licenses.-->
+<!-- This file is part of the DITA Open Toolkit project.
+ See the accompanying license.txt file for applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2007, 2012 -->
 <!-- PURPOSE: Replace the XHTML based flagging routines with a common routine.
      Logic for determining what to flag is the same.
