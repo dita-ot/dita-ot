@@ -11,8 +11,13 @@ package org.dita.dost.util;
 
 import static org.junit.Assert.*;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -230,6 +235,19 @@ public class TestFileUtils {
                 TestUtils.readFileToString(dst));
     }
 
+    @Test
+    public void testCopy() throws IOException {
+    	final Random random = new Random(System.currentTimeMillis());
+    	for (final int len: new int[] { 0, 1024, 1024 * 4, 1024 * 9 }) {
+    		final byte[] list = new byte[len];
+        	random.nextBytes(list);
+    		final ByteArrayInputStream in = new ByteArrayInputStream(list);
+    		final ByteArrayOutputStream out = new ByteArrayOutputStream();
+    		FileUtils.copy(in, out);
+    		assertArrayEquals(list, out.toByteArray());
+    	}
+    }
+    
     @Test
     public void testReplaceExtName() {
         // initial the extName of Class DebugAndFilterModule.
