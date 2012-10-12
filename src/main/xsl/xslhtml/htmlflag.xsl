@@ -90,9 +90,16 @@
   </xsl:template>
 
   <xsl:template match="startflag|endflag" mode="ditaval-outputflag">
-    <img src="{@imageref}">
-      <xsl:apply-templates select="alt-text" mode="ditaval-outputflag"/>
-    </img>
+    <xsl:choose>
+      <xsl:when test="@imageref">
+        <img src="{@imageref}">
+          <xsl:apply-templates select="alt-text" mode="ditaval-outputflag"/>
+        </img>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="alt-text"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
   <xsl:template match="alt-text" mode="ditaval-outputflag">
     <xsl:attribute name="alt">
