@@ -53,13 +53,10 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
 
     private String mapPath = null;
 
-    //Added by William on 2010-04-26 for ref:2990783 start
     private IndexTermCollection result;
     // assumes index terms have been moved by preprocess
     private boolean indexMoved = true;
-    //Added by William on 2010-04-26 for ref:2990783 end
 
-    //Added by William on 2010-04-26 for ref:2990783 start
     public DitamapIndexTermReader(final IndexTermCollection result, final boolean indexMoved) {
         super();
 		elementStack = new Stack<Object>();
@@ -70,13 +67,10 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
 		this.result = result != null ? result : IndexTermCollection.getInstantce();
         this.indexMoved = indexMoved;
     }
-    //Added by William on 2010-04-26 for ref:2990783 end
 
     @Override
     public void characters(final char[] ch, final int start, final int length)
             throws SAXException {
-        //SF Bug 2010062: Do not trim white space from text nodes. Convert newline
-        //                to space, but leave all spaces. Also do not drop space-only nodes.
         String temp = new String(ch, start, length);
         IndexTerm indexTerm = null;
         //boolean withSpace = (ch[start] == '\n' || temp.startsWith(LINE_SEPARATOR));
@@ -88,7 +82,6 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
         //			return;
         //		}
 
-        //TODO Added by William on 2009-05-22 for space bug:2793836 start
         //used for store the space
         final char[] chars = temp.toCharArray();
         char flag = '\n';
@@ -116,7 +109,6 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
             }
         }
         temp = sb.toString();
-        //TODO Added by William on 2009-05-22 for space bug:2793836 end
 
         if (elementStack.empty() || !(elementStack.peek() instanceof IndexTerm)) {
             return;
@@ -161,11 +153,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
                 if(((TopicrefElement)obj).getHref()!=null){
                     genTargets(indexTerm, (TopicrefElement)obj);
                     //IndexTermCollection.getInstantce().addTerm(indexTerm);
-                    //Added by William on 2010-04-26 for ref:2990783 start
                     result.addTerm(indexTerm);
-                    //Added by William on 2010-04-26 for ref:2990783 end
-
-
                 }
             } else {
                 final IndexTerm parentTerm = (IndexTerm) obj;
@@ -365,9 +353,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
             //			return ((TopicrefElement) elementStack.peek()).needExtractTerm();
             // for dita files the indexterm has been moved to its <prolog>
             // therefore we don't need to collect these terms again.
-            //Edited by William on 2010-04-26 for ref:2990783 start
             if (indexMoved && FileUtils.isDITAFile(((TopicrefElement) elementStack.peek()).getHref())){
-                //Edited by William on 2010-04-26 for ref:2990783 end
                 return false;
             }
         }

@@ -178,9 +178,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
     /** Absolute input directory path. */
     private File inputDir = null;
 
-    //Added on 2010-08-24 for bug:3086552 start
     private final boolean setSystemid = true;
-    //Added on 2010-08-24 for bug:3086552 end
 
     /**
      * Default Construtor.
@@ -309,10 +307,8 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             if (extName != null) {
                 updateList(tempDir);
             }
-            //Added by William on 2010-04-16 for cvf flag support start
             //update dictionary.
             updateDictionary(tempDir);
-            //Added by William on 2010-04-16 for cvf flag support end
 
             // reload the property for processing of copy-to
             performCopytoTask(tempDir, new Job(tempDir));
@@ -570,7 +566,6 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             final File targetFile = new File(tempDir, copytoTarget);
 
             if (targetFile.exists()) {
-                //edited by Alan on Date:2009-11-02 for Work Item:#1590 start
                 /*logger
                         .logWarn(new StringBuffer("Copy-to task [copy-to=\"")
                                 .append(copytoTarget)
@@ -578,7 +573,6 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                 final Properties prop = new Properties();
                 prop.setProperty("%1", copytoTarget);
                 logger.logWarn(MessageUtils.getMessage("DOTX064W", prop).toString());
-                //edited by Alan on Date:2009-11-02 for Work Item:#1590 end
             }else{
                 final String inputMapInTemp = new File(tempDir + File.separator + job.getInputMap()).getAbsolutePath();
                 copyFileWithPIReplaced(srcFile, targetFile, copytoTarget, inputMapInTemp);
@@ -686,7 +680,6 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
         job.write();
     }
 
-    //Added by William on 2010-04-16 for cvf flag support start
     /**
      * Update dictionary
      * 
@@ -747,6 +740,5 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             }
         }
     }
-    //Added by William on 2010-04-16 for cvf flag support end
 
 }

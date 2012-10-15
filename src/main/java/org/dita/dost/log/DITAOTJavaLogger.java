@@ -46,9 +46,7 @@ public final class DITAOTJavaLogger implements DITAOTLogger {
      * @param msg message
      */
     public void logWarn(final String msg) {
-        //add by wxzhang 20070514
         LogUtils.increaseNumOfWarnings();
-        //add end by wxzhang 20070514
         System.out.println(msg);
     }
 
@@ -58,9 +56,7 @@ public final class DITAOTJavaLogger implements DITAOTLogger {
      * @param msg message
      */
     public void logError(final String msg) {
-        //add by wxzhang 20070514
         LogUtils.increaseNumOfErrors();
-        //add end by wxzhang 20070514
         System.err.println(msg);
     }
 
@@ -83,9 +79,7 @@ public final class DITAOTJavaLogger implements DITAOTLogger {
      * @param msg message
      */
     public void logFatal(final String msg) {
-        //add by wxzhang 20070514
         LogUtils.increaseNumOfFatals();
-        //add end by wxzhang 20070514
         System.err.println(msg);
     }
 

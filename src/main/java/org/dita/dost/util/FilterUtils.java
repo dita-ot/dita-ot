@@ -89,10 +89,8 @@ public final class FilterUtils {
                                 atts.getValue(ATTRIBUTE_NAME_PRODUCT))
                                 || checkExclude(ATTRIBUTE_NAME_OTHERPROPS,
                                         atts.getValue(ATTRIBUTE_NAME_OTHERPROPS))
-                                        //Added by William on 2010-07-16 for bug:3030317 start
                                         || checkExclude(ATTRIBUTE_NAME_PROPS,
                                                 atts.getValue(ATTRIBUTE_NAME_PROPS));
-        //Added by William on 2010-07-16 for bug:3030317 end
 
         if(extProps == null){
             return ret;

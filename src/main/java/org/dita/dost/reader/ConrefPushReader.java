@@ -45,10 +45,8 @@ public final class ConrefPushReader extends AbstractXMLReader {
     private final Hashtable<String, Hashtable<String, String>> pushtable;
     /** push table.*/
     private final XMLReader reader;
-    //Added by william on 2009-11-8 for ampbug:2893664 start
     /**whether an entity needs to be resolved or not flag. */
     private boolean needResolveEntity = true;
-    //Added by william on 2009-11-8 for ampbug:2893664 end
 
     /**keep the file path of current file under parse
 	filePath is useful to get the absolute path of the target file.*/
@@ -126,12 +124,10 @@ public final class ConrefPushReader extends AbstractXMLReader {
             reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
             reader.setFeature(FEATURE_NAMESPACE, true);
 
-            //Added by william on 2009-11-8 for ampbug:2893664 start
             reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
             reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
             reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
             needResolveEntity = true;
-            //Added by william on 2009-11-8 for ampbug:2893664 end
             reader.setContentHandler(this);
         }catch (final Exception e) {
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
@@ -278,9 +274,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
                 buf.append(STRING_BLANK);
                 buf.append(atts.getQName(index)).append(EQUAL).append(QUOTATION);
                 String value = atts.getValue(index);
-                //Added by william on 2009-11-8 for ampbug:2893664 start
                 value = StringUtils.escapeXML(value);
-                //Added by william on 2009-11-8 for ampbug:2893664 end
                 if (ATTRIBUTE_NAME_HREF.equals(atts.getQName(index)) ||
                         ATTRIBUTE_NAME_CONREF.equals(atts.getQName(index))){
                     // adjust href for pushbefore and replace
@@ -290,7 +284,6 @@ public final class ConrefPushReader extends AbstractXMLReader {
             }
 
         }
-        //Added by William on 2009-10-10 for conrefPush bug:2872954 start
         //id attribute should only be added to the starting element
         //which dosen't have id attribute set
         if(ATTR_CONACTION_VALUE_PUSHREPLACE.equals(pushType) &&
@@ -317,7 +310,6 @@ public final class ConrefPushReader extends AbstractXMLReader {
                 buf.append(id).append(QUOTATION);
             }
         }
-        //Added by William on 2009-10-10 for conrefPush bug:2872954 end
         buf.append(GREATER_THAN);
     }
     /**
@@ -428,7 +420,6 @@ public final class ConrefPushReader extends AbstractXMLReader {
         }
     }
 
-    //Added by william on 2009-11-8 for ampbug:2893664 start
     @Override
     public void startEntity(final String name) throws SAXException {
         try {
@@ -447,5 +438,5 @@ public final class ConrefPushReader extends AbstractXMLReader {
             needResolveEntity = true;
         }
     }
-    //Added by william on 2009-11-8 for ampbug:2893664 end
+
 }

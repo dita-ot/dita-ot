@@ -62,9 +62,7 @@ public final class ChunkMapReader implements AbstractReader {
     private boolean chunkByTopic = false;
 
     private String filePath = null;
-    //edited by william on 2009-09-10 for maintain iteration order start
     private LinkedHashMap<String, String> changeTable = null;
-    //edited by william on 2009-09-10 for maintain iteration order end
 
     private Hashtable<String, String> conflictTable = null;
     private final Random random;
@@ -75,9 +73,9 @@ public final class ChunkMapReader implements AbstractReader {
 
     private String transtype = null;
 
-    private ProcessingInstruction workdir = null; // Tagsmiths modification
-    private ProcessingInstruction workdirUrl = null; // Tagsmiths modification
-    private ProcessingInstruction path2proj = null; // Tagsmiths modification
+    private ProcessingInstruction workdir = null;
+    private ProcessingInstruction workdirUrl = null;
+    private ProcessingInstruction path2proj = null;
 
     private String processingRole = ATTR_PROCESSING_ROLE_VALUE_NORMAL;
     /**
@@ -103,7 +101,6 @@ public final class ChunkMapReader implements AbstractReader {
             final DocumentBuilder builder = factory.newDocumentBuilder();
             final Document doc = builder.parse(inputFile);
 
-            // Start Tagsmiths modification: Added logic to collect the
             // workdir and path2proj processing instructions.
             final NodeList docNodes = doc.getChildNodes();
             for (int i = 0; i < docNodes.getLength(); i++) {
@@ -119,7 +116,6 @@ public final class ChunkMapReader implements AbstractReader {
                     }
                 }
             }
-            // End Tagsmiths modification
 
             //get the document node
             final Element root = doc.getDocumentElement();
@@ -276,7 +272,6 @@ public final class ChunkMapReader implements AbstractReader {
             output = new OutputStreamWriter(
                     new FileOutputStream(file),
                     UTF8);
-            // Start Tagsmiths modification: XML_HEAD and the workdir and
             // path2proj processing instructions were not being sent to output.
             // The follow few lines corrects that problem.
             output.write(XML_HEAD);
@@ -289,7 +284,6 @@ public final class ChunkMapReader implements AbstractReader {
             if (path2proj != null)
             {
                 output(path2proj, output);
-                // End Tagsmiths modification
             }
 
             output(root,output);
@@ -414,10 +408,8 @@ public final class ChunkMapReader implements AbstractReader {
         if(ATTR_SCOPE_VALUE_EXTERNAL.equalsIgnoreCase(scopeValue)
                 || (hrefValue != null && !FileUtils.fileExists(FileUtils.resolveFile(filePath, hrefValue)))
                 || (MAPGROUP_D_TOPICHEAD.matches(classValue) && chunkValue == null)||
-                //added by William on 2009-09-17 for chunk bug #2860199 start
                 ////support topicref without href attribute
                 (MAP_TOPICREF.matches(classValue) && chunkValue == null && hrefValue == null)
-                //added by William on 2009-09-17 for chunk bug #2860199 end
                 ) {
             //|| (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processValue))) {
             //Skip external links or non-existing href files.
@@ -535,12 +527,10 @@ public final class ChunkMapReader implements AbstractReader {
                         //make sure hrefValue make sense and target file
                         //is not generated file or the element is topichead
                         processTopicref(currentElem);
-                        //added by William on 2009-09-18 for chunk bug #2860199 start
                         //support topicref without href attribute
                     }else if(hrefValue.length() == 0){
                         processTopicref(currentElem);
                     }
-                    //added by William on 2009-09-18 for chunk bug #2860199 end
                 }
             }
         }

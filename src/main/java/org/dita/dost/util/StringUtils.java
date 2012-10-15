@@ -35,10 +35,8 @@ import org.dita.dost.log.DITAOTJavaLogger;
  */
 public final class StringUtils {
 
-    //Edited by william on 2009-11-8 for ampbug:2893664 start
     private static final String NOT_RESOLVE_ENTITY_LIST = "|lt|gt|quot|amp|";
     private static final String NOT_RESOLVE_ENTITY_CHAR = "|#38|";
-    //Edited by william on 2009-11-8 for ampbug:2893664 end
 
     /**
      * Private default constructor to make class uninstantiable.
@@ -170,10 +168,8 @@ public final class StringUtils {
         // check whether this entity need resolve
         if (NOT_RESOLVE_ENTITY_LIST.indexOf(STICK + name.trim()
                 + STICK) != -1 ||
-                //Edited by william on 2009-11-8 for ampbug:2893664 start
                 NOT_RESOLVE_ENTITY_CHAR.indexOf(STICK + name.trim()
                         + STICK) != -1 ) {
-            //Edited by william on 2009-11-8 for ampbug:2893664 end
             return false;
         }
         return true;
@@ -473,7 +469,6 @@ public final class StringUtils {
         return aLocale;
     }
 
-    //added by William on 2009-11-26 for bug:1628937 start
     /**
      * Get file's main name.
      * @param input input filename
@@ -488,7 +483,6 @@ public final class StringUtils {
             return input;
         }
     }
-    //added by William on 2009-11-26 for bug:1628937 end
 
     /**
      * Get max value.
