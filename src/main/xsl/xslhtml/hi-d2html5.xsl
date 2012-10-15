@@ -5,16 +5,17 @@
                 version="1.0">
 
   <xsl:template match="*[contains(@class,' hi-d/tt ')]" name="topic.hi-d.tt">
-    <xsl:variable name="flagrules">
-      <xsl:call-template name="getrules"/>
-    </xsl:variable>
     <span style="font-family: monospace">
       <xsl:call-template name="commonattributes"/>
+      <xsl:if test="*[contains(@class,' ditaot-d/ditaval-startprop ')]/@outputclass">
+        <!-- Combine TT style with style from ditaval, if present -->
+        <xsl:attribute name="style">
+          <xsl:text>font-family: monospace; </xsl:text>
+          <xsl:value-of select="*[contains(@class,' ditaot-d/ditaval-startprop ')]/@outputclass"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:call-template name="setidaname"/>
-      <xsl:call-template name="flagcheck"/>
-      <xsl:call-template name="revtext">
-        <xsl:with-param name="flagrules" select="$flagrules"/>
-      </xsl:call-template>
+      <xsl:apply-templates/>
     </span>
   </xsl:template>
 

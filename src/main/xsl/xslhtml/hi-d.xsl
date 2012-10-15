@@ -10,86 +10,50 @@
 <!-- hi-d.ent Phrase domain: b | i | u | tt | sup | sub -->
 
 <xsl:template match="*[contains(@class,' hi-d/b ')]" name="topic.hi-d.b">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
  <strong>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
-  <xsl:call-template name="flagcheck"/>
-  <xsl:call-template name="revtext">
-   <xsl:with-param name="flagrules" select="$flagrules"/>
-  </xsl:call-template>
+  <xsl:apply-templates/>
   </strong>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' hi-d/i ')]" name="topic.hi-d.i">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
  <em>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
-  <xsl:call-template name="flagcheck"/>
-  <xsl:call-template name="revtext">
-   <xsl:with-param name="flagrules" select="$flagrules"/>
-  </xsl:call-template>
+  <xsl:apply-templates/>
   </em>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' hi-d/u ')]" name="topic.hi-d.u">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
  <u>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
-  <xsl:call-template name="flagcheck"/>
-  <xsl:call-template name="revtext">
-   <xsl:with-param name="flagrules" select="$flagrules"/>
-  </xsl:call-template>
+  <xsl:apply-templates/>
   </u>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' hi-d/tt ')]" name="topic.hi-d.tt">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
  <tt>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
-  <xsl:call-template name="flagcheck"/>
-  <xsl:call-template name="revtext">
-   <xsl:with-param name="flagrules" select="$flagrules"/>
-  </xsl:call-template>
+  <xsl:apply-templates/>
   </tt>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' hi-d/sup ')]" name="topic.hi-d.sup">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
  <sup>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
-  <xsl:call-template name="flagcheck"/>
-  <xsl:call-template name="revtext">
-   <xsl:with-param name="flagrules" select="$flagrules"/>
-  </xsl:call-template>
-  </sup>
+  <xsl:apply-templates/>
+ </sup>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' hi-d/sub ')]" name="topic.hi-d.sub">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
  <sub>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
-  <xsl:call-template name="flagcheck"/>
-  <xsl:call-template name="revtext">
-   <xsl:with-param name="flagrules" select="$flagrules"/>
-  </xsl:call-template>
+  <xsl:apply-templates/>
   </sub>
 </xsl:template>
 

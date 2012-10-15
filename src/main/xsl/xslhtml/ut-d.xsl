@@ -13,22 +13,10 @@
 
 <!-- imagemap -->
 <xsl:template match="*[contains(@class,' ut-d/imagemap ')]" name="topic.ut-d.imagemap">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-  
   <div>
     <xsl:call-template name="commonattributes"/>
-    <xsl:call-template name="gen-style">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
     <xsl:call-template name="setidaname"/>
-    <xsl:call-template name="start-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-    </xsl:call-template>
-    <xsl:call-template name="start-revflag">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
+    <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
 
     <!-- the image -->
     <img usemap="#{generate-id()}">
@@ -102,12 +90,7 @@
 
       <xsl:value-of select="$newline"/>
     </map>
-    <xsl:call-template name="end-revflag">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-    <xsl:call-template name="end-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-    </xsl:call-template>
+    <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
   </div>
 </xsl:template>
 

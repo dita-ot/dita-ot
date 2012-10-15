@@ -19,16 +19,10 @@
 <!-- == TASK UNIQUE SUBSTRUCTURES == -->
 
 <xsl:template match="*[contains(@class,' task/taskbody ')]" name="topic.task.taskbody">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
 <div>
   <xsl:call-template name="commonattributes"/>
-  <xsl:call-template name="gen-style">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-  </xsl:call-template>
   <xsl:call-template name="setidaname"/>
-  <xsl:call-template name="start-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <!-- here, you can generate a toc based on what's a child of body -->
   <!--xsl:call-template name="gen-sect-ptoc"/--><!-- Works; not always wanted, though; could add a param to enable it.-->
 
@@ -45,40 +39,22 @@
   </xsl:if>
 
   <xsl:apply-templates/>
-  <xsl:call-template name="end-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param></xsl:call-template>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </div><xsl:value-of select="$newline"/>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' task/prereq ')]" mode="get-output-class">p</xsl:template>
 <xsl:template match="*[contains(@class,' task/prereq ')]" name="topic.task.prereq">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
 <div class="p">
   <xsl:call-template name="commonattributes"/>
-  <xsl:call-template name="gen-style">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-  </xsl:call-template>
   <xsl:call-template name="gen-toc-id"/>
   <xsl:call-template name="setidaname"/>
-  <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
- <xsl:choose>
-   <xsl:when test="$revtest=1">   <!-- Rev is active - add the DIV -->
-    <div class="{@rev}"><xsl:apply-templates select="."   mode="prereq-fmt" /></div>
-   </xsl:when>
-   <xsl:otherwise>  <!-- Rev wasn't active - process normally -->
     <xsl:apply-templates select="."   mode="prereq-fmt" />
-   </xsl:otherwise>
- </xsl:choose>
 </div><xsl:value-of select="$newline"/>
 </xsl:template>
 <xsl:template match="*[contains(@class,' task/prereq ')]" mode="prereq-fmt">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-  <xsl:call-template name="start-revflag">
-    <xsl:with-param name="flagrules" select="$flagrules"/>
-  </xsl:call-template>
+  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <xsl:apply-templates select="." mode="dita2html:section-heading">
     <!-- edited by William on 2009-06-11 for bug:2804442 start-->
      <!--xsl:with-param name="deftitle"></xsl:with-param-->
@@ -91,9 +67,7 @@
 <!-- Insert pre-req links - after prereq section -->
   <xsl:apply-templates select="../following-sibling::*[contains(@class,' topic/related-links ')]" mode="prereqs"/>
 
-  <xsl:call-template name="end-revflag">
-    <xsl:with-param name="flagrules" select="$flagrules"/>
-  </xsl:call-template>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
   <xsl:if test="$link-top-section='yes'"> <!-- optional return to top - not used -->
     <p align="left"><a href="#TOP">
       <!--xsl:value-of select="$deftxt-linktop"/-->
@@ -117,27 +91,14 @@
 
 <xsl:template match="*[contains(@class,' task/steps ')]" name="topic.task.steps">
  <!-- If there's one of these elements somewhere in a step, expand the whole step list -->
- <xsl:variable name="step_expand"> <!-- set & save step_expand=yes/no for expanding/compacting list items -->
-   <xsl:apply-templates select="." mode="make-steps-compact"/>
- </xsl:variable>
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
+  <xsl:variable name="step_expand"> <!-- set & save step_expand=yes/no for expanding/compacting list items -->
+    <xsl:apply-templates select="." mode="make-steps-compact"/>
   </xsl:variable>
-  <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
-  <xsl:call-template name="start-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
- <xsl:choose>
-   <xsl:when test="$revtest=1">   <!-- Rev is active - add the DIV -->
-    <div class="{@rev}"><xsl:apply-templates select="."   mode="steps-fmt">
-     <xsl:with-param name="step_expand" select="$step_expand"/>
-    </xsl:apply-templates></div>
-   </xsl:when>
-   <xsl:otherwise>  <!-- Rev wasn't active - process normally -->
-    <xsl:apply-templates select="."   mode="steps-fmt">
-     <xsl:with-param name="step_expand" select="$step_expand"/>
-    </xsl:apply-templates>
-   </xsl:otherwise>
- </xsl:choose>
-  <xsl:call-template name="end-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param></xsl:call-template>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+  <xsl:apply-templates select="." mode="steps-fmt">
+    <xsl:with-param name="step_expand" select="$step_expand"/>
+  </xsl:apply-templates>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' task/steps ') or contains(@class,' task/steps-unordered ')]"
@@ -149,9 +110,6 @@
       <xsl:otherwise>ul</xsl:otherwise>
     </xsl:choose>
   </xsl:param>
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
   <xsl:apply-templates select="." mode="generate-task-label">
     <xsl:with-param name="use-label">
       <xsl:call-template name="getString">
@@ -197,7 +155,6 @@
   <xsl:call-template name="setaname"/>
   <xsl:element name="{$list-type}">
     <xsl:call-template name="commonattributes"/>
-    <xsl:call-template name="gen-style"/>
     <xsl:call-template name="setid"/>
     <xsl:apply-templates select="*[contains(@class,' task/step ')]" mode="steps">
       <xsl:with-param name="step_expand" select="$step_expand"/>
@@ -252,36 +209,24 @@
   <p>
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="setid"/>
-    <xsl:apply-templates select="." mode="outputContentsWithFlagsAndStyle"/>
+    <xsl:apply-templates/>
   </p>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' task/steps-unordered ')]" name="topic.task.steps-unordered">
- <!-- If there's a block element somewhere in the step list, expand the whole list -->
- <xsl:variable name="step_expand"> <!-- set & save step_expand=yes/no for expanding/compacting list items -->
-   <xsl:apply-templates select="." mode="make-steps-compact"/>
- </xsl:variable>
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
+  <!-- If there's a block element somewhere in the step list, expand the whole list -->
+  <xsl:variable name="step_expand"> <!-- set & save step_expand=yes/no for expanding/compacting list items -->
+    <xsl:apply-templates select="." mode="make-steps-compact"/>
   </xsl:variable>
-  <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
-  <xsl:call-template name="start-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template> 
- <xsl:choose>
-   <xsl:when test="$revtest=1">   <!-- Rev is active - add the DIV -->
-    <div class="{@rev}"><xsl:apply-templates select="."  mode="stepsunord-fmt">
-     <xsl:with-param name="step_expand" select="$step_expand"/>
-    </xsl:apply-templates></div>
-   </xsl:when>
-   <xsl:otherwise>  <!-- Rev wasn't active - process normally -->
-    <xsl:apply-templates select="."  mode="stepsunord-fmt">
-     <xsl:with-param name="step_expand" select="$step_expand"/>
-    </xsl:apply-templates>
-   </xsl:otherwise>
- </xsl:choose>
-  <xsl:call-template name="end-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param></xsl:call-template>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+  <xsl:apply-templates select="."  mode="stepsunord-fmt">
+    <xsl:with-param name="step_expand" select="$step_expand"/>
+  </xsl:apply-templates>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' task/steps ')]" mode="steps-fmt">
+  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
   <xsl:param name="step_expand"/>
   <xsl:apply-templates select="." mode="common-processing-within-steps">
     <xsl:with-param name="step_expand" select="$step_expand"/>
@@ -290,6 +235,7 @@
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' task/steps-unordered ')]" mode="stepsunord-fmt">
+  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
   <xsl:param name="step_expand"/>
   <xsl:apply-templates select="." mode="common-processing-within-steps">
     <xsl:with-param name="step_expand" select="$step_expand"/>
@@ -299,39 +245,22 @@
 
 <!-- only 1 step - output as a para -->
 <xsl:template match="*[contains(@class,' task/step ')]" mode="onestep">
-<xsl:param name="step_expand"/>
-<xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
- <xsl:choose>
-   <xsl:when test="$revtest=1">   <!-- Rev is active - add the DIV -->
-    <div class="{@rev}"><xsl:apply-templates select="."  mode="onestep-fmt">
-     <xsl:with-param name="step_expand" select="$step_expand"/>
-    </xsl:apply-templates></div>
-   </xsl:when>
-   <xsl:otherwise>  <!-- Rev wasn't active - process normally -->
-    <xsl:apply-templates select="."  mode="onestep-fmt">
-     <xsl:with-param name="step_expand" select="$step_expand"/>
-    </xsl:apply-templates>
-   </xsl:otherwise>
- </xsl:choose>
+  <xsl:param name="step_expand"/>
+  <xsl:apply-templates select="."  mode="onestep-fmt">
+    <xsl:with-param name="step_expand" select="$step_expand"/>
+  </xsl:apply-templates>
 </xsl:template>
 <xsl:template match="*[contains(@class,' task/step ')]" mode="onestep-fmt">
-<xsl:param name="step_expand"/>
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-<div class="p">
-  <xsl:call-template name="commonattributes">
-    <xsl:with-param name="default-output-class" select="'p'"/>
-  </xsl:call-template>
-  <xsl:call-template name="gen-style">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-  </xsl:call-template>
-  <xsl:call-template name="setidaname"/>
-  <xsl:call-template name="start-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
-  <xsl:apply-templates select="." mode="add-step-importance-flag"/>
- <xsl:apply-templates/>
-</div><xsl:value-of select="$newline"/>
-  <xsl:call-template name="end-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param></xsl:call-template>
+  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
+  <xsl:param name="step_expand"/>
+  <div class="p">
+    <xsl:call-template name="commonattributes">
+      <xsl:with-param name="default-output-class" select="'p'"/>
+    </xsl:call-template>
+    <xsl:call-template name="setidaname"/>
+    <xsl:apply-templates select="." mode="add-step-importance-flag"/>
+    <xsl:apply-templates/>
+  </div><xsl:value-of select="$newline"/>
 </xsl:template>
 
 <!-- multiple steps - output as list items -->
@@ -345,35 +274,15 @@
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' task/step ')]" mode="steps-fmt">
+  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
   <xsl:param name="step_expand"/>
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-  <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
   <li>
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class"><xsl:if test="$step_expand='yes'">stepexpand</xsl:if></xsl:with-param>
     </xsl:call-template>
-    <xsl:call-template name="gen-style">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
     <xsl:call-template name="setidaname"/>
-    <xsl:choose>
-      <xsl:when test="$revtest=1">
-        <div class="{@rev}">
-          <xsl:call-template name="start-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
-          <xsl:apply-templates select="." mode="add-step-importance-flag"/>
-          <xsl:apply-templates><xsl:with-param name="step_expand" select="$step_expand"/></xsl:apply-templates>
-          <xsl:call-template name="end-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param></xsl:call-template>
-        </div>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:call-template name="start-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
-        <xsl:apply-templates select="." mode="add-step-importance-flag"/>
-        <xsl:apply-templates><xsl:with-param name="step_expand" select="$step_expand"/></xsl:apply-templates>
-        <xsl:call-template name="end-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param></xsl:call-template>
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="." mode="add-step-importance-flag"/>
+    <xsl:apply-templates><xsl:with-param name="step_expand" select="$step_expand"/></xsl:apply-templates>
   </li><xsl:value-of select="$newline"/>
 </xsl:template>
 
@@ -405,37 +314,20 @@
 <!-- nested steps - 1 level of nesting only -->
 <xsl:template match="*[contains(@class,' task/substeps ')]" name="topic.task.substeps">
  <!-- If there's a block element somewhere in the step list, expand the whole list -->
- <xsl:variable name="sub_step_expand"> <!-- set & save sub_step_expand=yes/no for expanding/compacting list items -->
-   <xsl:apply-templates select="." mode="make-steps-compact"/>
- </xsl:variable>
-  <xsl:variable name="flagrules"><xsl:call-template name="getrules"/></xsl:variable>
-  <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
+  <xsl:variable name="sub_step_expand"> <!-- set & save sub_step_expand=yes/no for expanding/compacting list items -->
+    <xsl:apply-templates select="." mode="make-steps-compact"/>
+  </xsl:variable>
   
-  <xsl:call-template name="start-flags-and-rev">
-    <xsl:with-param name="flagrules" select="$flagrules"/>
-  </xsl:call-template>
- <xsl:choose>
-   <xsl:when test="$revtest=1">   <!-- Rev is active - add the DIV -->
-    <div class="{@rev}"><xsl:apply-templates select="." mode="substeps-fmt">
-     <xsl:with-param name="sub_step_expand" select="$sub_step_expand"/>
-    </xsl:apply-templates></div>
-   </xsl:when>
-   <xsl:otherwise>  <!-- Rev wasn't active - process normally -->
-    <xsl:apply-templates select="." mode="substeps-fmt">
-     <xsl:with-param name="sub_step_expand" select="$sub_step_expand"/>
-    </xsl:apply-templates>
-   </xsl:otherwise>
- </xsl:choose>
-  <xsl:call-template name="end-flags-and-rev">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-  </xsl:call-template>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+  <xsl:apply-templates select="." mode="substeps-fmt">
+    <xsl:with-param name="sub_step_expand" select="$sub_step_expand"/>
+  </xsl:apply-templates>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' task/substeps ')]" mode="substeps-fmt">
+  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
 <xsl:param name="sub_step_expand"/>
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
   
 <xsl:call-template name="setaname"/>
 <ol>
@@ -443,9 +335,6 @@
   <xsl:attribute name="type">a</xsl:attribute>            <!-- yup, letter these steps -->
  </xsl:if>                                                <!-- otherwise, default to numbered -->
  <xsl:call-template name="commonattributes"/>
-  <xsl:call-template name="gen-style">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-  </xsl:call-template>
  <xsl:call-template name="setid"/>
  <xsl:apply-templates>
   <xsl:with-param name="sub_step_expand" select="$sub_step_expand"/>
@@ -463,86 +352,45 @@
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' task/substep ')]" mode="substep-fmt">
+  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
   <xsl:param name="sub_step_expand"/>
-  <xsl:variable name="flagrules"><xsl:call-template name="getrules"/></xsl:variable>
-  <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
   <li>
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class"><xsl:if test="$sub_step_expand='yes'">substepexpand</xsl:if></xsl:with-param>
     </xsl:call-template>
-    <xsl:call-template name="gen-style">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
     <xsl:call-template name="setidaname"/>
-    <xsl:choose>
-      <xsl:when test="$revtest=1">
-        <div class="{@rev}">
-          <xsl:call-template name="start-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param></xsl:call-template>
-          <xsl:apply-templates select="." mode="add-step-importance-flag"/>
-          <xsl:apply-templates>
-            <xsl:with-param name="sub_step_expand"/>
-          </xsl:apply-templates>
-          <xsl:call-template name="end-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
-        </div>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:call-template name="start-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param></xsl:call-template>
-        <xsl:apply-templates select="." mode="add-step-importance-flag"/>
-        <xsl:apply-templates>
-          <xsl:with-param name="sub_step_expand"/>
-        </xsl:apply-templates>
-        <xsl:call-template name="end-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="." mode="add-step-importance-flag"/>
+    <xsl:apply-templates>
+      <xsl:with-param name="sub_step_expand"/>
+    </xsl:apply-templates>
   </li><xsl:value-of select="$newline"/>
 </xsl:template>
 
 <!-- choices contain choice items -->
 <xsl:template match="*[contains(@class,' task/choices ')]" name="topic.task.choices">
-  <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
- <xsl:choose>
-   <xsl:when test="$revtest=1">   <!-- Rev is active - add the DIV -->
-    <div class="{@rev}"><xsl:apply-templates select="."  mode="choices-fmt" /></div>
-   </xsl:when>
-   <xsl:otherwise>  <!-- Rev wasn't active - process normally -->
-    <xsl:apply-templates select="."  mode="choices-fmt" />
-   </xsl:otherwise>
- </xsl:choose>
+  <xsl:apply-templates select="."  mode="choices-fmt" />
 </xsl:template>
 <xsl:template match="*[contains(@class,' task/choices ')]" mode="choices-fmt">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-    
-  <xsl:call-template name="start-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
- <xsl:call-template name="setaname"/>
+  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+  <xsl:call-template name="setaname"/>
   <ul>
    <xsl:call-template name="commonattributes"/>
-    <xsl:call-template name="gen-style">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
    <xsl:call-template name="setid"/>
    <xsl:apply-templates/>
   </ul><xsl:value-of select="$newline"/>
-  <xsl:call-template name="end-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param></xsl:call-template>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
 
 <!-- task/choice - fall-thru -->
 
 <!-- choice table is like a simpletable - 2 columns, set heading -->
 <xsl:template match="*[contains(@class,' task/choicetable ')]" name="topic.task.choicetable">
-  <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
- <xsl:choose>
-   <xsl:when test="$revtest=1">   <!-- Rev is active - add the DIV -->
-     <div class="{@rev}"><xsl:apply-templates select="."  mode="choicetable-fmt" /></div>
-   </xsl:when>
-   <xsl:otherwise>  <!-- Rev wasn't active - process normally -->
      <xsl:apply-templates select="."  mode="choicetable-fmt" />
-   </xsl:otherwise>
- </xsl:choose>
 </xsl:template>
 <xsl:template match="*[contains(@class,' task/choicetable ')]" mode="get-output-class">choicetableborder</xsl:template>
 <xsl:template match="*[contains(@class,' task/choicetable ')]" mode="choicetable-fmt">
+  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
  <!-- Find the total number of relative units for the table. If @relcolwidth="1* 2* 2*",
       the variable is set to 5. -->
  <xsl:variable name="totalwidth">
@@ -561,19 +409,13 @@
      <xsl:otherwise>0</xsl:otherwise>
    </xsl:choose>
  </xsl:variable>
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
   
-  <xsl:call-template name="start-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
+ <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
  <xsl:call-template name="setaname"/>
  <xsl:value-of select="$newline"/>
  <table border="1" frame="hsides" rules="rows" cellpadding="4" cellspacing="0" summary="" class="choicetableborder">
   <xsl:call-template name="commonattributes"/>
   <xsl:apply-templates select="." mode="generate-table-summary-attribute"/>
-   <xsl:call-template name="gen-style">
-     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-   </xsl:call-template>
   <xsl:call-template name="setid"/><xsl:value-of select="$newline"/>
   <!--If the choicetable has no header - output a default one-->
   <xsl:choose>
@@ -592,7 +434,9 @@
     </th></tr></thead><xsl:value-of select="$newline"/>
   </xsl:when>
   <xsl:otherwise>
-   <thead><tr><th valign="bottom">     
+   <thead><tr>
+    <xsl:apply-templates select="*[contains(@class,' task/chhead ')]/*[contains(@class,' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+    <th valign="bottom">     
      <xsl:call-template name="th-align"/>
      <xsl:attribute name="id">     
      <xsl:choose>
@@ -630,7 +474,7 @@
     </xsl:apply-templates>
   </tbody>
  </table><xsl:value-of select="$newline"/>
-  <xsl:call-template name="end-flags-and-rev"><xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param></xsl:call-template>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
 
 <!-- headers are called above, hide the fall thru -->
@@ -640,30 +484,14 @@
 
 <!-- Option & Description headers -->
 <xsl:template match="*[contains(@class,' task/chhead ')]/*[contains(@class,' task/choptionhd ')]" mode="chtabhdr">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-    <xsl:call-template name="getrules-parent"/>
-  </xsl:variable>
-  <xsl:apply-templates select="." mode="start-stentry-flagging">
-    <xsl:with-param name="flagrules" select="$flagrules"/>
-  </xsl:apply-templates>
+  <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <xsl:apply-templates/>
-  <xsl:apply-templates select="." mode="end-stentry-flagging">
-    <xsl:with-param name="flagrules" select="$flagrules"/>
-  </xsl:apply-templates>
+  <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
 <xsl:template match="*[contains(@class,' task/chhead ')]/*[contains(@class,' task/chdeschd ')]" mode="chtabhdr">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-    <xsl:call-template name="getrules-parent"/>
-  </xsl:variable>
-  <xsl:apply-templates select="." mode="start-stentry-flagging">
-    <xsl:with-param name="flagrules" select="$flagrules"/>
-  </xsl:apply-templates>
+  <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <xsl:apply-templates/>
-  <xsl:apply-templates select="." mode="end-stentry-flagging">
-    <xsl:with-param name="flagrules" select="$flagrules"/>
-  </xsl:apply-templates>
+  <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' task/chrow ')]" name="topic.task.chrow">
@@ -681,10 +509,6 @@
 <!-- Bold the @keycol column. Get the column's number. When (Nth stentry = the @keycol value) then bold the stentry -->
 <xsl:template match="*[contains(@class,' task/choption ')]" name="topic.task.choption">
  <xsl:param name="width-multiplier">0</xsl:param>
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-    <xsl:call-template name="getrules-parent"/>
-  </xsl:variable>
   
   <td valign="top">
    <!-- Add header attr for column header -->
@@ -713,9 +537,6 @@
     </xsl:choose>
    </xsl:attribute>
     <xsl:call-template name="commonattributes"/>
-    <xsl:call-template name="gen-style">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
     <xsl:variable name="localkeycol">
       <xsl:choose>
         <xsl:when test="ancestor::*[contains(@class,' topic/simpletable ')]/@keycol">
@@ -742,45 +563,19 @@
         <xsl:value-of select="$widthpercent"/><xsl:text>%</xsl:text>
       </xsl:attribute>
     </xsl:if>
-    <xsl:apply-templates select="." mode="start-stentry-flagging">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:apply-templates>
-    <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
-    <xsl:variable name="revtest-row"><xsl:apply-templates select="parent::*" mode="mark-revisions-for-draft"/></xsl:variable>
+    <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
     <!-- Does the column match? Is REV on for entry or row? -->
     <xsl:choose>
-     <xsl:when test="$thiscolnum=$localkeycol and $revtest-row=1">
-      <strong><span class="{../@rev}">
-<xsl:call-template name="stentry-templates"/>
-      </span></strong>
-     </xsl:when>
-     <xsl:when test="$thiscolnum=$localkeycol and $revtest=1">
-      <strong><span class="{@rev}">
-<xsl:call-template name="stentry-templates"/>
-      </span></strong>
-     </xsl:when>
      <xsl:when test="$thiscolnum=$localkeycol">
       <strong>
-<xsl:call-template name="stentry-templates"/>
+        <xsl:call-template name="stentry-templates"/>
       </strong>
      </xsl:when>
-     <xsl:when test="$revtest-row=1">
-      <span class="{../@rev}">
-<xsl:call-template name="stentry-templates"/>
-      </span>
-     </xsl:when>
-     <xsl:when test="$revtest=1">
-      <span class="{@rev}">
-<xsl:call-template name="stentry-templates"/>
-      </span>
-     </xsl:when>
      <xsl:otherwise>
-<xsl:call-template name="stentry-templates"/>
+       <xsl:call-template name="stentry-templates"/>
      </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates select="." mode="end-stentry-flagging">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:apply-templates>
+    <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
   </td><xsl:value-of select="$newline"/>
 </xsl:template>
 
@@ -789,10 +584,6 @@
 <!-- Bold the @keycol column. Get the column's number. When (Nth stentry = the @keycol value) then bold the stentry -->
 <xsl:template match="*[contains(@class,' task/chdesc ')]" name="topic.task.chdesc">
  <xsl:param name="width-multiplier">0</xsl:param>
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-    <xsl:call-template name="getrules-parent"/>
-  </xsl:variable>
     
   <td valign="top">
    <!-- Add header attr, column header then option header -->
@@ -834,9 +625,6 @@
     </xsl:attribute>
    </xsl:if>
    <xsl:call-template name="commonattributes"/>
-    <xsl:call-template name="gen-style">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
     <xsl:variable name="localkeycol">
       <xsl:choose>
         <xsl:when test="ancestor::*[contains(@class,' topic/simpletable ')]/@keycol">
@@ -863,45 +651,19 @@
         <xsl:value-of select="$widthpercent"/><xsl:text>%</xsl:text>
       </xsl:attribute>
     </xsl:if>
-    <xsl:apply-templates select="." mode="start-stentry-flagging">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:apply-templates>
-    <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
-    <xsl:variable name="revtest-row"><xsl:apply-templates select="parent::*" mode="mark-revisions-for-draft"/></xsl:variable>
+    <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
     <!-- Does the column match? Is REV on for entry or row? -->
     <xsl:choose>
-     <xsl:when test="$thiscolnum=$localkeycol and $revtest-row=1">
-      <strong><span class="{../@rev}">
-<xsl:call-template name="stentry-templates"/>
-      </span></strong>
-     </xsl:when>
-     <xsl:when test="$thiscolnum=$localkeycol and $revtest=1">
-      <strong><span class="{@rev}">
-<xsl:call-template name="stentry-templates"/>
-      </span></strong>
-     </xsl:when>
      <xsl:when test="$thiscolnum=$localkeycol">
       <strong>
-<xsl:call-template name="stentry-templates"/>
+        <xsl:call-template name="stentry-templates"/>
       </strong>
      </xsl:when>
-     <xsl:when test="$revtest-row=1">
-      <span class="{../@rev}">
-<xsl:call-template name="stentry-templates"/>
-      </span>
-     </xsl:when>
-     <xsl:when test="$revtest=1">
-      <span class="{@rev}">
-<xsl:call-template name="stentry-templates"/>
-      </span>
-     </xsl:when>
      <xsl:otherwise>
-<xsl:call-template name="stentry-templates"/>
+       <xsl:call-template name="stentry-templates"/>
      </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates select="." mode="end-stentry-flagging">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:apply-templates>
+    <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
   </td><xsl:value-of select="$newline"/>
 </xsl:template>
 
@@ -922,16 +684,10 @@
 </xsl:template>
 
 <xsl:template name="generateItemGroupTaskElement">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
   <div>
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="setidaname"/>
-    <xsl:call-template name="flagcheck"/>
-    <xsl:call-template name="revblock">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
+    <xsl:apply-templates/>
   </div>
 </xsl:template>
 

@@ -1,34 +1,101 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This file is part of the DITA Open Toolkit project hosted on 
- Sourceforge.net. See the accompanying license.txt file for 
- applicable licenses.-->
-<!-- (c) Copyright IBM Corp. 2007, 2009 All Rights Reserved. -->
-<!-- Updates:
-     20090421 robander: Updated so that "flagrules" in all templates
-              specifies a default. Can simplify calls from other XSL
-              to these templates, with a slight trade-off in processing
-              time. Default for "conflictexist" simplifies XSL
-              elsewhere with no processing trade-off.
-     20121003 robander: Flag logic has moved into preprocess, and is now
-              handled using simpler htmlflag.xsl process. All functions in
-              this file are deprecated.
+<!-- This file is part of the DITA Open Toolkit project.
+ See the accompanying license.txt file for applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2007, 2012 -->
+<!-- PURPOSE: Replace the XHTML based flagging routines with a common routine.
+     Logic for determining what to flag is the same.
+     When flags are active:
+     * Create element <ditaval-startprop> as the first child, and <ditaval-endprop> as the last.
+       These are each pseudo-specializations of <foreign>, with class values
+       "+ topic/foreign ditaot-d/ditaval-startprop "
+       and
+       "+ topic/foreign ditaot-d/ditaval-endprop "
+     * Properties / revisions that are set to "flag" in the ditaval are copied as-is into each
+       element, so that rendering steps can directly access all active flags and revisions.
+     * Relative paths for flagging images are adjusted to be valid from the current topic
+     * If styling is active, only one style can be set per element; the CSS style is calculated
+       in this step and placed on @outputclass of <ditaval-startprop>. 
+     * If there is a style conflict, and the file has <style-conflict>, then a copy of
+       <style-conflict> is included in <ditaval-startprop>.
+LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
               -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
   version="1.0" 
   xmlns:exsl="http://exslt.org/common" 
-  xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"
   xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
-  exclude-result-prefixes="exsl dita2html ditamsg">
+  exclude-result-prefixes="exsl ditamsg">
 
  <!-- ========== Flagging with flags & revisions ========== -->
 
-  <xsl:variable name="documentDomains">
-    <xsl:value-of select="normalize-space(/*[contains(@class,' topic/topic ')]/@domains |
-                                          /dita/*[contains(@class,' topic/topic ')][1]/@domains)"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
+
+  <xsl:output method="xml"
+              encoding="utf-8"
+              indent="no"
+              byte-order-mark="no"
+  />
+
+  <xsl:param name="DBG" select="'no'"/>
+  <xsl:param name="DRAFT" select="'no'"/>
+  <xsl:param name="DITAEXT" select="'.dita'"/>
+  <xsl:param name="FILTERFILE"/>
+  <xsl:param name="PATH2PROJ">
+      <xsl:apply-templates select="/processing-instruction('path2project')" mode="get-path2project"/>
+  </xsl:param>
+  <xsl:param name="WORKDIR">
+    <xsl:apply-templates select="/processing-instruction()" mode="get-work-dir"/>
+  </xsl:param>
+  <xsl:param name="FILENAME"/>
+  <xsl:param name="FILEDIR"/>
+  <xsl:param name="CURRENTFILE" select="concat($FILEDIR, '/', substring-before($FILENAME, '.'), $DITAEXT)"/>
+
+  <xsl:variable name="msgprefix">DOTX</xsl:variable>
+
+  <!-- The document tree of filterfile returned by document($FILTERFILE,/)-->
+  <xsl:variable name="FILTERFILEURL">
+    <xsl:choose>
+      <xsl:when test="not($FILTERFILE)"/> <!-- If no filterfile leave empty -->
+      <xsl:when test="starts-with($FILTERFILE,'file:')">
+        <xsl:value-of select="$FILTERFILE"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:choose>
+          <xsl:when test="starts-with($FILTERFILE,'/')">
+            <xsl:text>file://</xsl:text><xsl:value-of select="$FILTERFILE"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text>file:/</xsl:text><xsl:value-of select="$FILTERFILE"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:variable>
+
+  <xsl:variable name="FILTERDOC" select="document($FILTERFILEURL,/)"/>
+
+  <xsl:variable name="GLOBAL-DOMAINS">
+    <xsl:choose>
+      <xsl:when test="/dita">
+        <xsl:value-of select="normalize-space(/dita/*[1]/@domains)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="normalize-space(/*[1]/@domains)"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:variable name="allPropsAndRev">
+    <!-- First include defaults we always check for (not specialized) -->
+    <xsl:text>,audience,platform,product,otherprops,rev</xsl:text>
+    <xsl:call-template name="getExtProps">
+      <xsl:with-param name="domains" select="$GLOBAL-DOMAINS"/>
+    </xsl:call-template>
+  </xsl:variable>
+
   <xsl:variable name="collectPropsExtensions">
     <xsl:call-template name="getExtProps">
-      <xsl:with-param name="domains" select="$documentDomains"/>
+      <xsl:with-param name="domains" select="$GLOBAL-DOMAINS"/>
     </xsl:call-template>
   </xsl:variable>
   <!-- Specialized attributes for analysis by flagging templates. Format is:
@@ -36,21 +103,235 @@
   <xsl:variable name="propsExtensions">
     <xsl:value-of select="substring-after($collectPropsExtensions, ',')"/>
   </xsl:variable>
- 
- <!-- Single template to set flag variables, generate props and revision flagging, and output
-  contents. Can be used by any element that does not use any markup between flags and contents. -->
- <xsl:template match="*" mode="outputContentsWithFlags">
-   <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS -->
-   <xsl:apply-templates/>
- </xsl:template>
- 
- <!-- Single template to set the background style, flag based on props and revisions, and output
-  contents. Can be used by any element that does not use any markup between flags and contents. -->
- <xsl:template match="*" mode="outputContentsWithFlagsAndStyle">
-   <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS -->
-   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
-   <xsl:apply-templates/>
- </xsl:template>
+
+
+  <xsl:template match="/">
+    <!-- Avoid all later checks by adding test here - if no filter file, copy full tree? -->
+    <xsl:apply-templates/>
+  </xsl:template>
+
+  <xsl:template match="*">
+    <xsl:param name="flagrules">
+      <xsl:call-template name="getrules"/>
+    </xsl:param>
+    <xsl:choose>
+      <xsl:when test="exsl:node-set($flagrules)/*">
+        <xsl:variable name="conflictexist">
+         <xsl:call-template name="conflict-check">
+          <xsl:with-param name="flagrules" select="$flagrules"/>
+         </xsl:call-template>
+        </xsl:variable>
+        <xsl:copy>
+          <xsl:apply-templates select="@*"/>
+          <ditaval-startprop class="+ topic/foreign ditaot-d/ditaval-startprop ">
+            <xsl:apply-templates select="." mode="gen-style">
+              <xsl:with-param name="flagrules" select="$flagrules"/>
+              <xsl:with-param name="conflictexist" select="$conflictexist"/>
+            </xsl:apply-templates>
+            <xsl:if test="$conflictexist='true' and $FILTERDOC/val/style-conflict">
+              <xsl:copy-of select="$FILTERDOC/val/style-conflict"/>
+            </xsl:if>
+            <xsl:apply-templates select="." mode="dita-start-flagit">
+              <xsl:with-param name="flagrules" select="$flagrules"/>
+            </xsl:apply-templates>
+            <xsl:apply-templates select="." mode="dita-start-revflag">
+              <xsl:with-param name="flagrules" select="$flagrules"/>
+            </xsl:apply-templates>
+          </ditaval-startprop>
+          <xsl:apply-templates select="*|processing-instruction()|comment()|text()"/>
+          <ditaval-endprop class="+ topic/foreign ditaot-d/ditaval-endprop ">
+            <xsl:apply-templates select="." mode="dita-end-revflag">
+              <xsl:with-param name="flagrules" select="$flagrules"/>
+            </xsl:apply-templates>
+            <xsl:apply-templates select="." mode="dita-end-flagit">
+              <xsl:with-param name="flagrules" select="$flagrules"/>
+            </xsl:apply-templates>
+          </ditaval-endprop>
+        </xsl:copy>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:copy>
+          <xsl:apply-templates select="@*|*|processing-instruction()|comment()|text()"/>
+        </xsl:copy>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="@*|processing-instruction()|comment()|text()">
+    <xsl:copy>
+      <xsl:apply-templates select="@*"/>
+      <xsl:if test="@rev"><xsl:message>HI FOUND A REV</xsl:message></xsl:if>
+      <xsl:apply-templates select="*|processing-instruction()|comment()|text()"/>
+    </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="*" mode="dita-start-flagit">
+   <xsl:param name="flagrules">
+     <xsl:call-template name="getrules"/>
+   </xsl:param>
+   <xsl:apply-templates select="exsl:node-set($flagrules)/prop[1]" mode="start-flagit"/>
+  </xsl:template>
+
+  <xsl:template match="prop" mode="start-flagit">  
+    <xsl:copy>
+      <xsl:copy-of select="@*"/>
+      <xsl:if test="startflag">
+        <startflag>
+          <xsl:copy-of select="startflag/@*"/>
+          <xsl:apply-templates select="startflag/@imageref" mode="adjust-imageref"/>
+          <xsl:copy-of select="startflag/*"/>
+        </startflag>
+      </xsl:if>
+    </xsl:copy>
+   <xsl:apply-templates select="following-sibling::prop[1]" mode="start-flagit"/>
+  </xsl:template>
+
+  <xsl:template match="*" mode="dita-end-flagit">
+   <xsl:param name="flagrules">
+     <xsl:call-template name="getrules"/>
+   </xsl:param>
+   <xsl:apply-templates select="exsl:node-set($flagrules)/prop[last()]" mode="end-flagit"/>
+  </xsl:template>
+
+  <xsl:template match="prop" mode="end-flagit">  
+    <xsl:copy>
+      <xsl:copy-of select="@*"/>
+      <xsl:if test="endflag">
+        <endflag>
+          <xsl:copy-of select="endflag/@*"/>
+          <xsl:apply-templates select="endflag/@imageref" mode="adjust-imageref"/>
+          <xsl:copy-of select="endflag/*"/>
+        </endflag>
+      </xsl:if>
+    </xsl:copy>
+   <xsl:apply-templates select="preceding-sibling::prop[1]" mode="end-flagit"/>
+  </xsl:template>
+
+
+  <!-- Output starting flag only -->
+  <xsl:template match="*" mode="dita-start-revflag">
+   <xsl:param name="flagrules">
+     <xsl:call-template name="getrules"/>
+   </xsl:param>
+   <xsl:if test="@rev and not($FILTERFILE='')">
+    <xsl:call-template name="start-mark-rev">
+     <xsl:with-param name="revvalue" select="@rev"/>
+     <xsl:with-param name="flagrules" select="$flagrules"/>
+    </xsl:call-template>
+   </xsl:if>
+  </xsl:template>
+
+  <!-- Output ending flag only -->
+  <xsl:template match="*" mode="dita-end-revflag">
+   <xsl:param name="flagrules">
+     <xsl:call-template name="getrules"/>
+   </xsl:param>
+   <xsl:if test="@rev and not($FILTERFILE='')">
+    <xsl:call-template name="end-mark-rev">
+     <xsl:with-param name="revvalue" select="@rev"/>
+     <xsl:with-param name="flagrules" select="$flagrules"/>
+    </xsl:call-template>
+   </xsl:if>
+  </xsl:template>
+
+  <!-- This revision is active for this element -->
+  <xsl:template match="revprop" mode="start-revflagit">
+   <xsl:copy>
+     <xsl:copy-of select="@*"/>
+     <xsl:choose>
+       <xsl:when test="startflag">
+         <startflag>
+           <xsl:copy-of select="startflag/@*"/>
+           <xsl:apply-templates select="startflag/@imageref" mode="adjust-imageref"/>
+           <xsl:copy-of select="startflag/*"/>
+         </startflag>
+       </xsl:when>
+       <xsl:otherwise>
+         <!-- Create default start revision reference? -->
+         <xsl:call-template name="default-rev-start"/>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:copy>
+   <xsl:apply-templates select="following-sibling::revprop[1]" mode="start-revflagit"/>
+  </xsl:template>
+
+  <xsl:template match="revprop" mode="end-revflagit">
+    <xsl:copy>
+      <xsl:copy-of select="@*"/>
+      <xsl:choose>
+        <xsl:when test="endflag">
+          <endflag>
+            <xsl:copy-of select="endflag/@*"/>
+            <xsl:apply-templates select="endflag/@imageref" mode="adjust-imageref"/>
+            <xsl:copy-of select="endflag/*"/>
+          </endflag>
+        </xsl:when>
+        <xsl:otherwise>
+          <!-- Create default end revision reference? -->
+          <xsl:call-template name="default-rev-end"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:copy>
+   <xsl:apply-templates select="preceding-sibling::revprop[1]" mode="end-revflagit"/>
+  </xsl:template>
+
+  <!-- output the DEFAULT beginning revision graphic & ALT text.
+       Commented out section shows how to insert a default start flag of "delta.gif"
+       by creating the proper ditaval syntax -->
+  <xsl:template name="default-rev-start">
+    <!--<startflag imageref="{$PATH2PROJ}delta.gif">
+      <alt-text>
+        <xsl:call-template name="getString">
+          <xsl:with-param name="stringName" select="'Start of change'"/>
+        </xsl:call-template>
+      </alt-text>
+    </startflag>-->
+  </xsl:template>
+  <!-- output the DEFAULT ending revision graphic & ALT text -->
+  <xsl:template name="default-rev-end">
+    <!--<endflag imageref="{$PATH2PROJ}deltaend.gif">
+      <alt-text>
+        <xsl:call-template name="getString">
+          <xsl:with-param name="stringName" select="'End of change'"/>
+        </xsl:call-template>
+      </alt-text>
+    </endflag>-->
+  </xsl:template>
+
+  <xsl:template match="@imageref" mode="adjust-imageref">
+    <xsl:if test="string-length($PATH2PROJ) > 0 and
+                  not(contains(.,'://'))">
+      <xsl:attribute name="imageref">
+        <xsl:value-of select="$PATH2PROJ"/>
+        <xsl:value-of select="."/>
+      </xsl:attribute>
+    </xsl:if>
+  </xsl:template>
+
+
+  <!-- ========== COPIED FROM XHTML CODE ========== -->
+  <!-- Test for in BIDI area: returns "bidi" when parent's @xml:lang is a bidi language; otherwise, leave blank -->
+  <xsl:template name="bidi-area">
+   <xsl:param name="parentlang">
+    <xsl:call-template name="getLowerCaseLang"/>
+   </xsl:param>
+   <xsl:variable name="direction">
+     <xsl:apply-templates select="." mode="get-render-direction">
+       <xsl:with-param name="lang" select="$parentlang"/>
+     </xsl:apply-templates>
+   </xsl:variable>
+   <xsl:choose>
+    <xsl:when test="$direction='rtl'">bidi</xsl:when>
+    <xsl:otherwise/>
+   </xsl:choose>
+  </xsl:template>
+
+
+
+
+
+
+
  
  <!-- Flags - based on audience, product, platform, and otherprops in the source
   AND prop elements in the val file:
@@ -59,8 +340,6 @@
  -->
 
 <xsl:template name="getrules">
-  <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS.
-       "getrules" is no longer needed; active flags are already specified as children. -->
  <!-- Test for the flagging attributes. If found, call 'gen-prop' with the values to use. Otherwise return -->
   <xsl:if test="normalize-space($FILTERFILE)!=''">
     <xsl:if test="@audience">
@@ -103,8 +382,6 @@
   </xsl:if>
 </xsl:template>
 
-  <!-- Determine what attributes are defined as extensions of @props. 
-       No longer used by flagging but could be useful as a general utility. -->
   <xsl:template name="getExtProps">
     <xsl:param name="domains"/>
     <xsl:choose>
@@ -119,8 +396,6 @@
   </xsl:template>
 
   <xsl:template name="ext-getrules">
-    <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS.
-         "ext-getrules" is no longer needed; active flags are already specified as children. -->
     <xsl:param name="props"/>
     <xsl:choose>
       <xsl:when test="contains($props,',')">
@@ -166,7 +441,6 @@
   </xsl:template>
   
   <xsl:template name="getPropsValue">
-    <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
     <xsl:param name="propsPath"/>
     <xsl:variable name="propName">
       <xsl:call-template name="getLastPropName">
@@ -187,7 +461,6 @@
   </xsl:template>
   
   <xsl:template name="getGeneralValue">
-    <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
     <xsl:param name="propsPath"/>
     <xsl:param name="propName"/>
     <xsl:variable name="propParentName">
@@ -216,7 +489,6 @@
   </xsl:template>
   
   <xsl:template name="getLastPropName">
-    <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
     <xsl:param name="propsPath"/>
     <xsl:choose>
       <xsl:when test="contains($propsPath,' ')">
@@ -230,14 +502,7 @@
     </xsl:choose>
   </xsl:template>
 
-<!-- No flagging attrs allowed to process in phrases - output a message when in debug mode. -->
-<xsl:template name="flagcheck">
-  <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS.
-       The new process allows flagging on phrases; this check is no longer needed. -->
-</xsl:template>
-
   <xsl:template name="ext-flagcheck">
-    <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
     <xsl:param name="props"/>
     <xsl:choose>
       <xsl:when test="contains($props,',')">
@@ -282,7 +547,6 @@
   </xsl:template>
 
 <xsl:template name="getrules-parent">
-  <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
  <!-- Test for the flagging attributes on the parent.
    If found and if the filterfile name was passed in,
       call 'gen-prop' with the values to use. Otherwise return -->
@@ -328,7 +592,6 @@
 </xsl:template>
 
   <xsl:template name="ext-getrules-parent">
-    <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
     <xsl:param name="props"/>
     <xsl:choose>
       <xsl:when test="contains($props,',')">
@@ -376,7 +639,6 @@
   </xsl:template>
   
   <xsl:template name="getPropsValue-parent">
-    <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
     <xsl:param name="propsPath"/>
     <xsl:variable name="propName">
       <xsl:call-template name="getLastPropName">
@@ -397,7 +659,6 @@
   </xsl:template>
   
   <xsl:template name="getGeneralValue-parent">
-    <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
     <xsl:param name="propsPath"/>
     <xsl:param name="propName"/>
     <xsl:variable name="propParentName">
@@ -428,7 +689,6 @@
 
 <!-- Use passed attr value to mark each active flag. -->
   <xsl:template name="ext-gen-prop">
-    <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
     <xsl:param name="flag-att-path"/>
     <xsl:param name="flag-att-val"/>
     <xsl:variable name="propName">
@@ -458,7 +718,6 @@
   </xsl:template>
 
  <xsl:template name="gen-prop">
-   <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
   <xsl:param name="flag-att"/>     <!-- attribute name -->
   <xsl:param name="flag-att-val"/> <!-- content of attribute -->
   
@@ -552,7 +811,6 @@
  <!-- Added by William on 2009-06-01 for flag process start-->
  <!-- copy needed elements -->
  <xsl:template match="*" mode="copy-element">
-   <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
      <xsl:param name="att"/>
      <xsl:param name="bgcolor"/>
      <xsl:param name="fcolor"/>
@@ -614,7 +872,6 @@
  </xsl:template>
  <!-- check CURRENT File -->
  <xsl:template name="checkFile">
-   <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
     <xsl:param name="in"/>
   <xsl:choose>
    <xsl:when test="starts-with($in, '.\')">
@@ -631,16 +888,13 @@
  </xsl:template>
  <!-- get the scheme list -->
  <xsl:template match="*" mode="check">
-   <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
   <xsl:value-of select="."/>
  </xsl:template>
  <xsl:template match="*" mode="getVal">
-   <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
      <xsl:value-of select="@val"/>
  </xsl:template>
  <!-- get background color -->
  <xsl:template match="*" mode="getBgcolor">
-   <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
   <xsl:choose>
    <xsl:when test="@backcolor">
     <xsl:value-of select="@backcolor"/>
@@ -652,7 +906,6 @@
  </xsl:template>
  <!-- get font color -->
  <xsl:template match="*" mode="getColor">
-   <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
        <xsl:choose>
            <xsl:when test="@color">
             <xsl:value-of select="@color"/>
@@ -664,7 +917,6 @@
  </xsl:template>
  <!-- get font style -->
  <xsl:template match="*" mode="getStyle">
-   <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
   <xsl:choose>
    <xsl:when test="@style">
     <xsl:value-of select="@style"/>
@@ -676,215 +928,298 @@
  </xsl:template>
  <!-- get child nodes -->
  <xsl:template match="*" mode="getChildNode">
-   <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
         <xsl:copy-of select="node()"/>
   </xsl:template>
  <!-- Added by William on 2009-06-01 for flag process end-->
  
  <!-- Shortcuts for generating both rev flags and property flags -->
  <xsl:template name="start-flags-and-rev">
-   <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
-   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+   <xsl:param name="flagrules">
+     <xsl:call-template name="getrules"/>
+   </xsl:param>
+   <xsl:call-template name="start-flagit">
+     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
+   </xsl:call-template>
+   <xsl:call-template name="start-revflag">
+     <xsl:with-param name="flagrules" select="$flagrules"/>
+   </xsl:call-template>
  </xsl:template>
  <xsl:template name="end-flags-and-rev">
-   <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
-   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
+   <xsl:param name="flagrules">
+     <xsl:call-template name="getrules"/>
+   </xsl:param>
+   <xsl:call-template name="end-revflag">
+     <xsl:with-param name="flagrules" select="$flagrules"/>
+   </xsl:call-template>
+   <xsl:call-template name="end-flagit">
+     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
+   </xsl:call-template>
  </xsl:template>
 
 <!-- Output starting flag only -->
 <xsl:template name="start-revflag">
-  <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
-  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]/revprop/startflag" mode="ditaval-outputflag"/>
+ <xsl:param name="flagrules">
+   <xsl:call-template name="getrules"/>
+ </xsl:param>
+ <xsl:if test="@rev and not($FILTERFILE='')">
+  <xsl:call-template name="start-mark-rev">
+   <xsl:with-param name="revvalue" select="@rev"/>
+   <xsl:with-param name="flagrules" select="$flagrules"/>
+  </xsl:call-template>
+ </xsl:if>
 </xsl:template>
 
 <!-- Output ending flag only -->
 <xsl:template name="end-revflag">
-  <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
-  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]/revprop/endflag" mode="ditaval-outputflag"/>
+ <xsl:param name="flagrules">
+   <xsl:call-template name="getrules"/>
+ </xsl:param>
+ <xsl:if test="@rev and not($FILTERFILE='')">
+  <xsl:call-template name="end-mark-rev">
+   <xsl:with-param name="revvalue" select="@rev"/>
+   <xsl:with-param name="flagrules" select="$flagrules"/>
+  </xsl:call-template>
+ </xsl:if>
 </xsl:template>
 
 <!-- for table entries - if the parent (row) has a rev but the cell does not - output the rev -->
 <xsl:template name="start-revflag-parent">
-  <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
-  <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]/revprop/startflag" mode="ditaval-outputflag"/>
+ <xsl:param name="flagrules">
+   <xsl:call-template name="getrules-parent"/>
+ </xsl:param>
+ <xsl:if test="../@rev and not(@rev) and not($FILTERFILE='')">
+  <xsl:call-template name="start-mark-rev">
+   <xsl:with-param name="revvalue" select="../@rev"/>
+   <xsl:with-param name="flagrules" select="$flagrules"/>   
+  </xsl:call-template>
+ </xsl:if>
 </xsl:template>
 <xsl:template name="end-revflag-parent">
-  <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
-  <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-endprop ')]/revprop/endflag" mode="ditaval-outputflag"/>
+ <xsl:param name="flagrules">
+   <xsl:call-template name="getrules-parent"/>
+ </xsl:param>
+ <xsl:if test="../@rev and not(@rev) and not($FILTERFILE='')">
+  <xsl:call-template name="end-mark-rev">
+   <xsl:with-param name="revvalue" select="../@rev"/>
+   <xsl:with-param name="flagrules" select="$flagrules"/> 
+  </xsl:call-template>
+ </xsl:if>
 </xsl:template>
 
 <!-- Output starting & ending flag for "blocked" text.
      Use instead of 'apply-templates' for block areas (P, Note, DD, etc) -->
 <xsl:template name="revblock">
-  <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
-  <!--<xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]/revprop/startflag" mode="ditaval-outputflag"/>-->
-  <xsl:apply-templates/>
-  <!--<xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]/revprop/endflag" mode="ditaval-outputflag"/>-->
+ <xsl:param name="flagrules"><xsl:call-template name="getrules"/></xsl:param>
+ <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
+ <xsl:choose>
+   <xsl:when test="$revtest=1"> <!-- rev mode with draft -->
+    <div class="{@rev}">
+      <xsl:call-template name="start-mark-rev">
+         <xsl:with-param name="revvalue" select="@rev"/>
+         <xsl:with-param name="flagrules" select="$flagrules"/> 
+      </xsl:call-template>
+      <xsl:apply-templates/>
+      <xsl:call-template name="end-mark-rev">
+        <xsl:with-param name="revvalue" select="@rev"/>
+        <xsl:with-param name="flagrules" select="$flagrules"/> 
+      </xsl:call-template>
+    </div>
+   </xsl:when>
+   <xsl:when test="@rev and not($FILTERFILE='')">    <!-- normal rev mode -->
+     <xsl:call-template name="start-mark-rev">
+       <xsl:with-param name="revvalue" select="@rev"/>
+       <xsl:with-param name="flagrules" select="$flagrules"/>
+     </xsl:call-template>
+     <xsl:apply-templates/>
+     <xsl:call-template name="end-mark-rev">
+       <xsl:with-param name="revvalue" select="@rev"/>
+       <xsl:with-param name="flagrules" select="$flagrules"/> 
+     </xsl:call-template>
+   </xsl:when>
+   <xsl:otherwise>
+     <xsl:apply-templates/>
+   </xsl:otherwise>
+ </xsl:choose>
 </xsl:template>
 
 <!-- Output starting & ending flag & color for phrase text.
      Use instead of 'apply-templates' for phrase areas (PH, B, DT, etc) -->
 <xsl:template name="revtext">
-  <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
-  <!--<xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]/revprop/startflag" mode="ditaval-outputflag"/>-->
-  <xsl:apply-templates/>
-  <!--<xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]/revprop/endflag" mode="ditaval-outputflag"/>-->
+ <xsl:param name="flagrules"><xsl:call-template name="getrules"/></xsl:param>
+ <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
+
+<xsl:choose>
+  <xsl:when test="$revtest=1">   <!-- Rev is active - add the SPAN -->
+   <span class="{@rev}">
+   <xsl:call-template name="start-mark-rev">
+    <xsl:with-param name="revvalue" select="@rev"/>
+    <xsl:with-param name="flagrules" select="$flagrules"/>
+   </xsl:call-template>
+   <xsl:call-template name="revstyle">
+    <xsl:with-param name="revvalue" select="@rev"/>
+    <xsl:with-param name="flagrules" select="$flagrules"/>
+   </xsl:call-template>
+   <xsl:call-template name="end-mark-rev">
+    <xsl:with-param name="revvalue" select="@rev"/>
+    <xsl:with-param name="flagrules" select="$flagrules"/>
+   </xsl:call-template>
+   </span>
+  </xsl:when>
+  <xsl:when test="@rev and not($FILTERFILE='')">         <!-- normal rev mode -->
+   <xsl:call-template name="start-mark-rev">
+    <xsl:with-param name="revvalue" select="@rev"/>
+    <xsl:with-param name="flagrules" select="$flagrules"/>
+   </xsl:call-template>
+   <xsl:call-template name="revstyle">
+    <xsl:with-param name="revvalue" select="@rev"/>
+    <xsl:with-param name="flagrules" select="$flagrules"/> 
+   </xsl:call-template>
+   <xsl:call-template name="end-mark-rev">
+    <xsl:with-param name="revvalue" select="@rev"/>
+    <xsl:with-param name="flagrules" select="$flagrules"/>
+   </xsl:call-template>
+  </xsl:when>
+  <xsl:otherwise><xsl:apply-templates/></xsl:otherwise>  <!-- no rev mode -->
+ </xsl:choose>
 </xsl:template>
 
 <!-- There's a rev attr - test for active rev values -->
 <xsl:template name="start-mark-rev">
-  <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
-  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]/revprop/startflag" mode="ditaval-outputflag"/>
+ <xsl:param name="flagrules">
+   <xsl:call-template name="getrules"/>
+ </xsl:param>
+ <xsl:param name="revvalue"/>
+ <xsl:variable name="revtest">
+  <xsl:call-template name="find-active-rev-flag">
+   <xsl:with-param name="allrevs" select="$revvalue"/>
+  </xsl:call-template>
+ </xsl:variable>
+  <xsl:if test="$revtest=1">
+   <xsl:call-template name="start-revision-flag">
+    <xsl:with-param name="flagrules" select="$flagrules"/> 
+   </xsl:call-template>
+  </xsl:if>
 </xsl:template>
 
 <!-- There's a rev attr - test for active rev values -->
 <xsl:template name="end-mark-rev">
-  <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
-  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]/revprop/endflag" mode="ditaval-outputflag"/>
+ <xsl:param name="flagrules">
+   <xsl:call-template name="getrules"/>
+ </xsl:param>
+ <xsl:param name="revvalue"/>
+ <xsl:variable name="revtest">
+  <xsl:call-template name="find-active-rev-flag">
+   <xsl:with-param name="allrevs" select="$revvalue"/>
+  </xsl:call-template>
+ </xsl:variable>
+  <xsl:if test="$revtest=1">
+   <xsl:call-template name="end-revision-flag">
+    <xsl:with-param name="flagrules" select="$flagrules"/> 
+   </xsl:call-template>
+  </xsl:if>
 </xsl:template>
 
 <!-- output the revision color & apply further templates-->
 <xsl:template name="revstyle">
-  <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
-  <span>
-    <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+ <xsl:param name="flagrules">
+   <xsl:call-template name="getrules"/>
+ </xsl:param>
+ <xsl:param name="revvalue"/>
+ <xsl:choose>
+  <xsl:when test="exsl:node-set($flagrules)/revprop[@color or @backcolor]">
+   <font>
+    <xsl:apply-templates select="." mode="gen-style">
+      <xsl:with-param name="flagrules" select="$flagrules"/>
+    </xsl:apply-templates>
     <xsl:apply-templates/>
-  </span>
+   </font>
+  </xsl:when>
+  <xsl:otherwise>
+   <xsl:variable name="revcolor">
+    <xsl:call-template name="find-active-rev-style"> <!-- get 1st active rev color -->
+     <xsl:with-param name="allrevs" select="$revvalue"/>
+    </xsl:call-template>
+   </xsl:variable>
+   <xsl:choose>
+    <xsl:when test="string-length($revcolor)>0"> <!-- if there's a value, there's an active color -->
+     <font>
+      <xsl:attribute name="color">
+       <xsl:value-of select="$revcolor"/>
+      </xsl:attribute>
+      <xsl:apply-templates/>
+     </font>
+    </xsl:when>
+    <xsl:otherwise>
+     <xsl:apply-templates/> <!-- no active rev color - just apply templates -->
+    </xsl:otherwise>
+   </xsl:choose>
+  </xsl:otherwise>
+ </xsl:choose> 
 </xsl:template>
 
 <!-- output the beginning revision graphic & ALT text -->
 <!-- Reverse the artwork for BIDI languages -->
 <xsl:template name="start-revision-flag">
-  <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
+ <xsl:param name="flagrules">
+   <xsl:call-template name="getrules"/>
+ </xsl:param>
  <xsl:variable name="biditest"> 
   <xsl:call-template name="bidi-area"/>
  </xsl:variable>
  <xsl:choose>
   <xsl:when test="$biditest='bidi'">
-    <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]/revprop/endflag" mode="ditaval-outputflag"/>
+    <xsl:call-template name="end-revflagit">
+      <xsl:with-param name="flagrules" select="$flagrules"/>
+    </xsl:call-template>
   </xsl:when>
   <xsl:otherwise>
-    <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]/revprop/startflag" mode="ditaval-outputflag"/>
+    <xsl:call-template name="start-revflagit">
+      <xsl:with-param name="flagrules" select="$flagrules"/>
+    </xsl:call-template>
   </xsl:otherwise>
  </xsl:choose>
 </xsl:template>
 
  <xsl:template name="start-revflagit">
-   <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
-   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]/revprop/startflag" mode="ditaval-outputflag"/>
+  <xsl:param name="flagrules">
+    <xsl:call-template name="getrules"/>
+  </xsl:param>
+  <xsl:apply-templates select="exsl:node-set($flagrules)/revprop[1]" mode="start-revflagit"/>
  </xsl:template>
  
  <xsl:template name="end-revflagit">
-   <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
-   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]/revprop/endflag" mode="ditaval-outputflag"/>
+  <xsl:param name="flagrules">
+    <xsl:call-template name="getrules"/>
+  </xsl:param>
+  <xsl:apply-templates select="exsl:node-set($flagrules)/revprop[last()]" mode="end-revflagit"/>
  </xsl:template>
  
- <xsl:template match="revprop" mode="start-revflagit">
-   <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
-  <xsl:choose> <!-- Ensure there's an image to get, otherwise don't insert anything -->
-   <xsl:when test="startflag/@imageref">
-    <xsl:variable name="imgsrc" select="startflag/@imageref"/>
-    <img>
-     <xsl:attribute name="src">
-      <xsl:if test="string-length($PATH2PROJ) > 0"><xsl:value-of select="$PATH2PROJ"/></xsl:if>
-      <!--
-      <xsl:call-template name="get-file-name">
-       <xsl:with-param name="file-path" select="$imgsrc"/>
-      </xsl:call-template>
-      -->
-      <xsl:value-of select="$imgsrc"/>
-     </xsl:attribute>
-     <xsl:if test="startflag/alt-text">
-      <xsl:attribute name="alt">
-       <xsl:value-of select="startflag/alt-text"/>
-      </xsl:attribute>
-     </xsl:if>     
-    </img>
-   </xsl:when>
-   <xsl:when test="startflag/alt-text">
-    <xsl:value-of select="startflag/alt-text"/>
-   </xsl:when>
-   <xsl:otherwise/> <!-- that flag not active -->
-  </xsl:choose>
-  <xsl:apply-templates select="following-sibling::revprop[1]" mode="start-revflagit"/>
- </xsl:template>
- 
- <xsl:template match="revprop" mode="end-revflagit">
-   <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
-  <xsl:choose> <!-- Ensure there's an image to get, otherwise don't insert anything -->
-   <xsl:when test="endflag/@imageref">
-    <xsl:variable name="imgsrc" select="endflag/@imageref"/>
-    <img>
-     <xsl:attribute name="src">
-      <xsl:if test="string-length($PATH2PROJ) > 0"><xsl:value-of select="$PATH2PROJ"/></xsl:if>
-      <!--
-      <xsl:call-template name="get-file-name">
-       <xsl:with-param name="file-path" select="$imgsrc"/>
-      </xsl:call-template>
-      -->
-      <xsl:value-of select="$imgsrc"/>
-     </xsl:attribute>
-     <xsl:if test="endflag/alt-text">
-      <xsl:attribute name="alt">
-       <xsl:value-of select="endflag/alt-text"/>
-      </xsl:attribute>
-     </xsl:if>     
-    </img>
-   </xsl:when>
-   <xsl:when test="endflag/alt-text">
-    <xsl:value-of select="endflag/alt-text"/>
-   </xsl:when>
-   <xsl:otherwise/> <!-- that flag not active -->
-  </xsl:choose>
-  <xsl:apply-templates select="preceding-sibling::revprop[1]" mode="end-revflagit"/>
- </xsl:template>
-
 <!-- output the ending revision graphic & ALT text -->
 <!-- Reverse the artwork for BIDI languages -->
 <xsl:template name="end-revision-flag">
-  <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
+ <xsl:param name="flagrules">
+   <xsl:call-template name="getrules"/>
+ </xsl:param>
  <xsl:variable name="biditest">
   <xsl:call-template name="bidi-area"/>
  </xsl:variable>
  <xsl:choose>
   <xsl:when test="$biditest='bidi'">
-    <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]/revprop/startflag" mode="ditaval-outputflag"/>
+    <xsl:call-template name="start-revflagit">
+      <xsl:with-param name="flagrules" select="$flagrules"/>
+     </xsl:call-template>
   </xsl:when>
   <xsl:otherwise>
-    <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]/revprop/endflag" mode="ditaval-outputflag"/>
+    <xsl:call-template name="end-revflagit">
+      <xsl:with-param name="flagrules" select="$flagrules"/>
+    </xsl:call-template>
   </xsl:otherwise>
  </xsl:choose>
-</xsl:template>
-
-<!-- output the beginning revision graphic & ALT text -->
-<xsl:template name="start-rev-art">
-  <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
- <xsl:param name="deltaname"/>
-  <img src="{$PATH2PROJ}{$deltaname}">
-  <xsl:attribute name='alt'>
-   <xsl:call-template name="getString">
-    <xsl:with-param name="stringName" select="'Start of change'"/>
-   </xsl:call-template>
-  </xsl:attribute>
- </img>
-</xsl:template>
-<!-- output the ending revision graphic & ALT text -->
-<xsl:template name="end-rev-art">
-  <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
- <xsl:param name="deltaname"/>
- <img src="{$PATH2PROJ}{$deltaname}">
-  <xsl:attribute name='alt'>
-   <xsl:call-template name="getString">
-    <xsl:with-param name="stringName" select="'End of change'"/>
-   </xsl:call-template>
-  </xsl:attribute>
- </img>
 </xsl:template>
 
 <!-- Shortcut for old multi-line calls to find-active-rev-flag.
      Return 1 for active revision when draft is on, return 0 otherwise. -->
 <xsl:template match="*" mode="mark-revisions-for-draft">
-  <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
   <xsl:choose>
     <xsl:when test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
       <xsl:call-template name="find-active-rev-flag"/>
@@ -899,7 +1234,6 @@
      NOTE: this template is only called when a filter file is available and
      when there is a revision to evaluate. -->
 <xsl:template name="find-active-rev-flag">
-  <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
   <xsl:param name="allrevs" select="@rev"/>
 
   <!-- Determine the first rev value, which is the value before the first space -->
@@ -952,7 +1286,6 @@
      Return color setting when active.
      Return null for non-active. -->
 <xsl:template name="find-active-rev-style">
-  <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
   <xsl:param name="allrevs"/>
 
   <!-- Determine the first rev value, which is the value before the first space -->
@@ -1001,7 +1334,6 @@
 </xsl:template>
 
   <xsl:template name="conflict-check">
-    <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
     <xsl:param name="flagrules">
       <xsl:call-template name="getrules"/>
     </xsl:param>
@@ -1019,7 +1351,6 @@
   </xsl:template>
  
  <xsl:template match="prop|revprop" mode="conflict-check">
-   <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
   <xsl:param name="color"/>
   <xsl:param name="backcolor"/>
   
@@ -1039,106 +1370,98 @@
   </xsl:choose>
  </xsl:template>
 
-  <xsl:template name="gen-style">
-    <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS.
-         Style is now determined in pre-process, and added with commonattributes. -->
+ <!-- In earlier versions of the DITA-OT, conflictexist was always passed in as
+      a parameter. Seems it would be better to make it a variable and move into
+      the "if filterfile" section. Leaving alone now in case of any legacy overrides,
+      and only trivial improvement from moving.  -->
+  <xsl:template match="*" mode="gen-style">
+    <xsl:param name="flagrules">
+      <xsl:call-template name="getrules"/>
+    </xsl:param>
+    <xsl:param name="conflictexist">
+     <xsl:call-template name="conflict-check">
+        <xsl:with-param name="flagrules" select="$flagrules"/>
+      </xsl:call-template>
+    </xsl:param>
+
+    <!-- Skip all further checking if there is no filter file -->
+    <xsl:if test="normalize-space($FILTERFILE)!=''">
+      <xsl:variable name="validstyle">
+        <!-- This variable is used to prevent using pre-OASIS or unrecognized ditaval styles -->
+        <xsl:if test="$conflictexist='false' and exsl:node-set($flagrules)/*[@style]">
+          <xsl:choose>
+            <xsl:when test="exsl:node-set($flagrules)/*/@style='italics'">YES</xsl:when>
+            <xsl:when test="exsl:node-set($flagrules)/*/@style='bold'">YES</xsl:when>
+            <xsl:when test="exsl:node-set($flagrules)/*/@style='underline'">YES</xsl:when>
+            <xsl:when test="exsl:node-set($flagrules)/*/@style='double-underline'">YES</xsl:when>
+            <xsl:when test="exsl:node-set($flagrules)/*/@style='overline'">YES</xsl:when>
+          </xsl:choose>
+        </xsl:if>
+      </xsl:variable>
+      <xsl:choose>  
+        <xsl:when test="$conflictexist='true' and $FILTERDOC/val/style-conflict[@foreground-conflict-color or @background-conflict-color]">
+          <xsl:apply-templates select="." mode="ditamsg:conflict-text-style-applied"/>
+          <xsl:attribute name="outputclass">     
+            <xsl:if test="$FILTERDOC/val/style-conflict[@foreground-conflict-color]">
+              <xsl:text>color:</xsl:text>
+              <xsl:value-of select="$FILTERDOC/val/style-conflict/@foreground-conflict-color"/>
+              <xsl:text>;</xsl:text>
+            </xsl:if>
+            <xsl:if test="$FILTERDOC/val/style-conflict[@background-conflict-color]">
+              <xsl:text>background-color:</xsl:text>
+              <xsl:value-of select="$FILTERDOC/val/style-conflict/@background-conflict-color"/>
+              <xsl:text>;</xsl:text>
+            </xsl:if>     
+          </xsl:attribute>
+        </xsl:when>
+        <xsl:when test="$conflictexist='false' and 
+                        (exsl:node-set($flagrules)/*[@color or @backcolor] or $validstyle='YES')">
+          <xsl:attribute name="outputclass">     
+            <xsl:if test="exsl:node-set($flagrules)/*[@color]">
+              <xsl:text>color:</xsl:text>
+              <xsl:value-of select="exsl:node-set($flagrules)/*[@color]/@color"/>
+              <xsl:text>;</xsl:text>
+            </xsl:if>
+            <xsl:if test="exsl:node-set($flagrules)/*[@backcolor]">
+              <xsl:text>background-color:</xsl:text>
+              <xsl:value-of select="exsl:node-set($flagrules)/*[@backcolor]/@backcolor"/>
+              <xsl:text>;</xsl:text>
+            </xsl:if>     
+            <xsl:if test="exsl:node-set($flagrules)/*/@style='italics'">
+              <xsl:text>font-style:italic;</xsl:text>
+            </xsl:if>     
+            <xsl:if test="exsl:node-set($flagrules)/*/@style='bold'">
+              <xsl:text>font-weight:bold;</xsl:text>
+            </xsl:if>     
+            <xsl:if test="exsl:node-set($flagrules)/*/@style='underline' or 
+                          exsl:node-set($flagrules)/*/@style='double-underline'">
+              <!-- For double-underline, style="border-bottom: 3px double;" seems to work
+                   in some cases, but not in all. For now, treat it as underline. -->
+              <xsl:text>text-decoration:underline;</xsl:text>
+            </xsl:if>     
+            <xsl:if test="exsl:node-set($flagrules)/*/@style='overline'">
+              <xsl:text>text-decoration:overline;</xsl:text>
+            </xsl:if>     
+          </xsl:attribute>
+        </xsl:when>
+      </xsl:choose>
+    </xsl:if>
   </xsl:template>
  
   <xsl:template name="start-flagit">
-    <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
     <xsl:param name="flagrules">
       <xsl:call-template name="getrules"/>
     </xsl:param>
     <xsl:apply-templates select="exsl:node-set($flagrules)/prop[1]" mode="start-flagit"/>
   </xsl:template>
  
- <xsl:template match="prop" mode="start-flagit">  
-   <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
-  <xsl:choose> <!-- Ensure there's an image to get, otherwise don't insert anything -->
-   <xsl:when test="startflag/@imageref">
-    <xsl:variable name="imgsrc" select="startflag/@imageref"/>
-    <img>
-     <xsl:attribute name="src">
-      <xsl:if test="string-length($PATH2PROJ) > 0"><xsl:value-of select="$PATH2PROJ"/></xsl:if>
-      <!-- 
-      <xsl:call-template name="get-file-name">
-       <xsl:with-param name="file-path" select="$imgsrc"/>
-      </xsl:call-template>
-      -->
-      <xsl:value-of select="$imgsrc"/>
-     </xsl:attribute>
-     <xsl:if test="startflag/alt-text">
-      <xsl:attribute name="alt">
-       <xsl:value-of select="startflag/alt-text"/>
-      </xsl:attribute>
-     </xsl:if>     
-    </img>
-   </xsl:when>
-   <xsl:when test="startflag/alt-text">
-    <xsl:value-of select="startflag/alt-text"/>
-   </xsl:when>
-   <xsl:when test="@img">
-    <!-- output the flag -->
-    <xsl:variable name="imgsrc" select="@img"/>    
-    <img>
-     <xsl:attribute name="src">
-      <xsl:if test="string-length($PATH2PROJ) > 0"><xsl:value-of select="$PATH2PROJ"/></xsl:if>
-      <!--
-      <xsl:call-template name="get-file-name">
-       <xsl:with-param name="file-path" select="$imgsrc"/>
-      </xsl:call-template>
-      -->
-      <xsl:value-of select="$imgsrc"/>
-     </xsl:attribute>
-     <xsl:attribute name="alt"> <!-- always insert an ALT - if it's blank, assume the user didn't want to fill it. -->
-      <xsl:value-of select="@alt"/>
-     </xsl:attribute>
-    </img>
-   </xsl:when>
-   <xsl:otherwise/> <!-- that flag not active -->
-  </xsl:choose>
-  <xsl:apply-templates select="following-sibling::prop[1]" mode="start-flagit"/>
- </xsl:template>
-
  <xsl:template name="end-flagit">
-   <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
   <xsl:param name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:param>
   <xsl:apply-templates select="exsl:node-set($flagrules)/prop[last()]" mode="end-flagit"/>
  </xsl:template>
  
- <xsl:template match="prop" mode="end-flagit">  
-   <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
-  <xsl:choose> <!-- Ensure there's an image to get, otherwise don't insert anything -->
-   <xsl:when test="endflag/@imageref">
-    <xsl:variable name="imgsrc" select="endflag/@imageref"/>
-    <img>
-     <xsl:attribute name="src">
-      <xsl:if test="string-length($PATH2PROJ) > 0"><xsl:value-of select="$PATH2PROJ"/></xsl:if>
-      <!--
-      <xsl:call-template name="get-file-name">
-       <xsl:with-param name="file-path" select="$imgsrc"/>
-      </xsl:call-template>
-      -->
-      <xsl:value-of select="$imgsrc"/>
-     </xsl:attribute>
-     <xsl:if test="endflag/alt-text">
-      <xsl:attribute name="alt">
-       <xsl:value-of select="endflag/alt-text"/>
-      </xsl:attribute>
-     </xsl:if>     
-    </img>
-   </xsl:when>
-   <xsl:when test="endflag/alt-text">
-    <xsl:value-of select="endflag/alt-text"/>
-   </xsl:when>
-   <!-- not necessary to add logic for @img. original ditaval does not support end flag. -->
-   <xsl:otherwise/> <!-- that flag not active -->
-  </xsl:choose>
-  <xsl:apply-templates select="preceding-sibling::prop[1]" mode="end-flagit"/>
- </xsl:template>
-
  <xsl:template match="*" mode="ditamsg:cannot-flag-inline-element">
    <xsl:param name="attr-name"/>
    <xsl:call-template name="output-message">
