@@ -130,11 +130,9 @@ public final class KeyrefReader extends AbstractXMLReader {
     public void read(final String filename) {
         keyDefs = new Stack<KeyDef>();
         try {
-            //AlanChanged: by refactoring Adding URIResolver Date:2009-08-13 --begin
             /* filename = tempDir + File.separator + filename; */
             final InputSource source = URIResolverAdapter.convertToInputSource(DitaURIResolverFactory.getURIResolver().resolve(filename, null));
             reader.parse(source);
-            //edit by Alan: by refactoring Adding URIResolver Date:2009-08-13 --end
         } catch (final Exception ex) {
             logger.logException(ex);
         } finally {
@@ -186,9 +184,7 @@ public final class KeyrefReader extends AbstractXMLReader {
             keyDefAppend(EQUAL);
             keyDefAppend(QUOTATION);
             String value = atts.getValue(index);
-            //Added by William on 2009-10-15 for ampersand bug:2878492 start
             value = StringUtils.escapeXML(value);
-            //Added by William on 2009-10-15 for ampersand bug:2878492 end
             keyDefAppend(value);
             keyDefAppend(QUOTATION);
         }

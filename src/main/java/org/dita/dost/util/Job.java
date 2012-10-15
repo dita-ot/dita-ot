@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.Collection;
 import java.util.Collections;
@@ -21,6 +22,10 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -273,9 +278,11 @@ public final class Job {
      * @throws IOException if writing configuration files failed
      */
     public void write() throws IOException {
-        XMLSerializer out = null;
+    	OutputStream outStream = null;
+        XMLStreamWriter out = null;
         try {
-            out = XMLSerializer.newInstance(new FileOutputStream(new File(tempDir, JOB_FILE)));
+        	outStream = new FileOutputStream(new File(tempDir, JOB_FILE));
+            out = XMLOutputFactory.newInstance().createXMLStreamWriter(outStream);
             out.writeStartDocument();
             out.writeStartElement(ELEMENT_JOB);
             for (final Map.Entry<String, Object> e: prop.entrySet()) {
@@ -317,12 +324,19 @@ public final class Job {
             out.writeEndDocument();
         } catch (final IOException e) {
             throw new IOException("Failed to write file: " + e.getMessage());
-        } catch (final SAXException e) {
+        } catch (final XMLStreamException e) {
             throw new IOException("Failed to serialize job file: " + e.getMessage());
         } finally {
             if (out != null) {
                 try {
                     out.close();
+                } catch (final XMLStreamException e) {
+                    throw new IOException("Failed to close file: " + e.getMessage());
+                }
+            }
+            if (outStream != null) {
+                try {
+                    outStream.close();
                 } catch (final IOException e) {
                     throw new IOException("Failed to close file: " + e.getMessage());
                 }

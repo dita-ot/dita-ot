@@ -52,11 +52,9 @@ import org.w3c.dom.NodeList;
  * @author Zhang Di Hua
  */
 public final class ConvertLang extends Task {
-    // Added on 2010-11-05 for bug Unnecessary XML declaration in HHP and HHC - ID: 3101964 start
     private static final String tag1 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     private static final String tag2 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>[OPTIONS]";
     private static final String tag3 = "&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;";
-    // Added on 2010-11-05 for bug Unnecessary XML declaration in HHP and HHC - ID: 3101964 end
 
     private String basedir;
 
@@ -198,7 +196,6 @@ public final class ConvertLang extends Task {
         }
     }
 
-    // Added on 2010-11-05 for bug Unnecessary XML declaration in HHP and HHC - ID: 3101964 start
     private String replaceXmlTag(final String source,final String tag){
         final int startPos = source.indexOf(tag);
         final int endPos = startPos + tag.length();
@@ -206,7 +203,6 @@ public final class ConvertLang extends Task {
         sb.append(source.substring(0,startPos)).append(source.substring(endPos));
         return sb.toString();
     }
-    // Added on 2010-11-05 for bug Unnecessary XML declaration in HHP and HHC - ID: 3101964 end
 
     private void convertHtmlCharset() {
         final File outputDir = new File(outputdir);
@@ -258,7 +254,6 @@ public final class ConvertLang extends Task {
                         //add line break
                         writer.write(LINE_SEPARATOR);
                     }else{
-                        // Added on 2010-11-05 for bug Unnecessary XML declaration in HHP and HHC - ID: 3101964 start
                         if(value.contains(tag1)){
                             value = replaceXmlTag(value,tag1);
                         }else if(value.contains(tag2)){
@@ -266,7 +261,6 @@ public final class ConvertLang extends Task {
                         }else if(value.contains(tag3)){
                             value = replaceXmlTag(value,tag3);
                         }
-                        // Added on 2010-11-05 for bug Unnecessary XML declaration in HHP and HHC - ID: 3101964 end
 
                         //other values
                         writer.write(value);
@@ -372,7 +366,6 @@ public final class ConvertLang extends Task {
 
                 String value = reader.readLine();
                 while(value != null){
-                    // Added on 2010-11-05 for bug Unnecessary XML declaration in HHP and HHC - ID: 3101964 start
                     if(value.contains(tag1)){
                         value = replaceXmlTag(value,tag1);
                     }else if(value.contains(tag2)){
@@ -380,7 +373,6 @@ public final class ConvertLang extends Task {
                     }else if(value.contains(tag3)){
                         value = replaceXmlTag(value,tag3);
                     }
-                    // Added on 2010-11-05 for bug Unnecessary XML declaration in HHP and HHC - ID: 3101964 end
 
                     //meta tag contains charset found
                     if(value.contains("Language=")){

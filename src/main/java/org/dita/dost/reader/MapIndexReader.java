@@ -97,11 +97,8 @@ public final class MapIndexReader extends AbstractXMLReader {
             reader = StringUtils.getXMLReader();
             reader.setContentHandler(this);
             reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
-            //Edited by william on 2009-11-8 for ampbug:2893664 start
             reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
             reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
-            //Edited by william on 2009-11-8 for ampbug:2893664 end
-
         } catch (final Exception e) {
             logger.logException(e);
         }

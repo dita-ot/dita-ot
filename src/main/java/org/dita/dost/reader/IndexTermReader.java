@@ -85,11 +85,8 @@ public final class IndexTermReader extends AbstractXMLReader {
     /** Depth inside a "@processing-role" parent */
     private int processRoleLevel = 0;
 
-    //Added by William on 2010-04-26 for ref:2990783 start
     private IndexTermCollection result;
-    //Added by William on 2010-04-26 for ref:2990783 end
 
-    //Added by William on 2010-04-26 for ref:2990783 start
     public IndexTermReader(final IndexTermCollection result) {
         termStack = new Stack<IndexTerm>();
 		topicIdStack = new Stack<String>();
@@ -105,7 +102,6 @@ public final class IndexTermReader extends AbstractXMLReader {
 		processRoleLevel = 0;
 		this.result = result != null ? result : IndexTermCollection.getInstantce();
     }
-    //Added by William on 2010-04-26 for ref:2990783 end
 
     /**
      * Reset the reader.
@@ -152,7 +148,6 @@ public final class IndexTermReader extends AbstractXMLReader {
             } else if (inTitleElement) {
                 temp = trimSpaceAtStart(temp, title);
                 //Always append space if: <title>abc<ph/>df</title>
-                //Updated with SF 2010062 - should only add space if one is in source
                 title = StringUtils.setOrAppend(title, temp, false);
             }
         }
@@ -165,9 +160,7 @@ public final class IndexTermReader extends AbstractXMLReader {
         for(int i=0; i<size; i++){
             final IndexTerm indexterm = indexTermList.get(i);
             //IndexTermCollection.getInstantce().addTerm(indexterm);
-            //Added by William on 2010-04-26 for ref:2990783 start
             result.addTerm(indexterm);
-            //Added by William on 2010-04-26 for ref:2990783 end
         }
     }
 
@@ -192,7 +185,6 @@ public final class IndexTermReader extends AbstractXMLReader {
         // in the list.
         if (indexTermSpecList.contains(localName)) {
             final IndexTerm term = termStack.pop();
-            //SF Bug 2010062: Also set to *** when the term is only white-space.
             if (term.getTermName() == null || term.getTermName().trim().equals("")){
                 if(term.getEndAttribute() != null && !term.hasSubTerms()){
                     return;

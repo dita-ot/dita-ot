@@ -194,12 +194,10 @@ public final class DITAOTBuildLogger implements BuildLogger {
                 }
             }
         }
-        // add by start wxzhang 20070514
         message.append(LINE_SEP);
         message.append("Number of Fatals : ").append(numOfFatals.get()).append(LINE_SEPARATOR);
         message.append("Number of Errors : ").append(numOfErrors.get()).append(LINE_SEPARATOR);
         message.append("Number of Warnings : ").append(numOfWarnings.get()).append(LINE_SEPARATOR);
-        // add by end wxzhang 20070514
         message.append(LINE_SEP);
         message.append("Total time: ");
         message.append(formatTime(System.currentTimeMillis() - startTime));

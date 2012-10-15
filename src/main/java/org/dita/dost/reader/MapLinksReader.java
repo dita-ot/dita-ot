@@ -116,10 +116,8 @@ public final class MapLinksReader extends AbstractXMLReader {
             reader = StringUtils.getXMLReader();
             reader.setContentHandler(this);
             reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
-            //Added by william on 2009-11-8 for ampbug:2893664 start
             reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
             reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
-            //Added by william on 2009-11-8 for ampbug:2893664 end
             reader.setFeature("http://xml.org/sax/features/namespaces", false);
         } catch (final Exception e) {
             logger.logException(e);
@@ -221,10 +219,7 @@ public final class MapLinksReader extends AbstractXMLReader {
                 m.put(frag, indexEntries.toString());
                 map.put(t, m);
             }
-            //TODO Added by William on 2009-06-16 for bug:2791696 reltable bug start
             indexEntries = new StringBuffer(INT_1024);
-            //TODO Added by William on 2009-06-16 for bug:2791696 reltable bug end
-
         }
     }
 

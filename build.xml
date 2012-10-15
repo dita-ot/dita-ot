@@ -68,7 +68,7 @@
   <target name="compile" depends="init-java" description="Compile Java">
     <javac srcdir="${java.dir}" destdir="${bin.dir}"
            debug="on"
-           source="1.5" target="1.5">
+           source="1.6" target="1.6">
       <exclude name="org/dita/dost/invoker/JavaInvoker.java"/>
       <classpath>
         <pathelement location="${lib.dir}/xercesImpl.jar"/>
@@ -322,7 +322,7 @@
     </tar>
   </target>
 
-  <target name="build-package-binary" depends="jar, update-doc">
+  <target name="build-package-binary" depends="jar, jar.plug-ins, update-doc">
     <sequential>
       <antcall target="package-binary-full">
         <param name="param.out.file" value="${binary-big}"/>
@@ -336,7 +336,7 @@
     </sequential>
   </target>
 
-  <target name="build-package-binary-with-buildnum" depends="jar, update-doc">
+  <target name="build-package-binary-with-buildnum" depends="jar, jar.plug-ins, update-doc">
     <buildnumber/>
     <tstamp>
       <format property="build.time" pattern="yyyyMMddhhmm"/>
@@ -352,6 +352,12 @@
         <param name="param.out.file" value="${package.name.root}${otversion}b${build.number}_minimal_bin.${build.time}"/>
       </antcall>
     </sequential>
+  </target>
+	
+  <target name="jar.plug-ins" description="Build plug-in Java libraries">
+    <ant antfile="${src.dir}/plugins/org.dita.pdf2/buildPackage.xml" target="package-java" inheritAll="false">
+  	  <property name="basedir" value="${src.dir}/plugins/org.dita.pdf2"/>
+  	</ant>
   </target>
 
   <target name="dist"
@@ -441,7 +447,7 @@
     <mkdir dir="${test.bin.dir}"/>
     <javac destdir="${test.bin.dir}"
            debug="on"
-           source="1.5" target="1.5">
+           source="1.6" target="1.6">
       <src>
         <pathelement location="${test.java.dir}"/>
         <pathelement location="${test.suite.dir}/src/main/java"/>

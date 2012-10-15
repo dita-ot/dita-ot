@@ -34,6 +34,9 @@ import java.util.Properties;
 import java.util.Set;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.XMLReader;
@@ -41,7 +44,6 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
@@ -57,7 +59,6 @@ import org.dita.dost.util.Job;
 import org.dita.dost.util.OutputUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.TimingUtils;
-import org.dita.dost.util.XMLSerializer;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
@@ -193,27 +194,19 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
     private final Set<String> schemeSet;
 
     private final Map<String, Set<String>> schemeDictionary;
-    // Added by William on 2009-07-18 for req #12014 start
     private String transtype;
-    // Added by William on 2009-07-18 for req #12014 end
 
-    // Added by William on 2010-06-09 for bug:3013079 start
     private final Map<String, String> exKeyDefMap;
-    // Added by William on 2010-06-09 for bug:3013079 end
 
     private static final String moduleStartMsg = "GenMapAndTopicListModule.execute(): Starting...";
 
     private static final String moduleEndMsg = "GenMapAndTopicListModule.execute(): Execution time: ";
 
-    // Added on 2010-08-24 for bug:2994593 start
     /** use grammar pool cache */
     private boolean gramcache = true;
-    // Added on 2010-08-24 for bug:2994593 end
 
-    // Added on 2010-08-24 for bug:3086552 start
     private boolean setSystemid = true;
 
-    // Added on 2010-08-24 for bug:3086552 end
     /**
      * Create a new instance and do the initialization.
      * 
@@ -315,10 +308,8 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         }
         xmlValidate = Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAM_VALIDATE));
 
-        // Added by William on 2009-07-18 for req #12014 start
         // get transtype
         transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
-        // Added by William on 2009-07-18 for req #12014 start
 
         gramcache = "yes".equalsIgnoreCase(input.getAttribute(ANT_INVOKER_EXT_PARAM_GRAMCACHE));
         setSystemid = "yes".equalsIgnoreCase(input.getAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID));
@@ -372,9 +363,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
     }
 
     private void processWaitList() throws DITAOTException {
-        // Added by William on 2009-07-18 for req #12014 start
         reader.setTranstype(transtype);
-        // Added by William on 2009-07-18 for req #12014 end
 
         if (FileUtils.isDITAMapFile(inputFile.getPath())) {
             reader.setPrimaryDitamap(inputFile.getPath());
@@ -475,11 +464,9 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
     private void processParseResult(final String currentFile) {
         final Map<String, String> cpMap = reader.getCopytoMap();
         final Map<String, KeyDef> kdMap = reader.getKeysDMap();
-        // Added by William on 2010-06-09 for bug:3013079 start
         // the reader's reset method will clear the map.
         final Map<String, String> exKdMap = reader.getExKeysDefMap();
         exKeyDefMap.putAll(exKdMap);
-        // Added by William on 2010-06-09 for bug:3013079 end
 
         // Category non-copyto result and update uplevels accordingly
         for (final Reference file: reader.getNonCopytoResult()) {
@@ -493,7 +480,6 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             final String value = cpMap.get(key);
 
             if (copytoMap.containsKey(key)) {
-                // edited by Alan on Date:2009-11-02 for Work Item:#1590 start
                 /*
                  * StringBuffer buff = new StringBuffer();
                  * buff.append("Copy-to task [href=\""); buff.append(value);
@@ -506,14 +492,12 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
                 prop.setProperty("%1", value);
                 prop.setProperty("%2", key);
                 logger.logWarn(MessageUtils.getMessage("DOTX065W", prop).toString());
-                // edited by Alan on Date:2009-11-02 for Work Item:#1590 end
                 ignoredCopytoSourceSet.add(value);
             } else {
                 updateUplevels(key);
                 copytoMap.put(key, value);
             }
         }
-        // TODO Added by William on 2009-06-09 for scheme key bug(497)
         schemeSet.addAll(reader.getSchemeRefSet());
 
         // collect key definitions
@@ -544,7 +528,6 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
                  */
                 keysDefMap.put(key, new KeyDef(key, value.href, currentFile));
             }
-            // TODO Added by William on 2009-06-09 for scheme key bug(532-547)
             // if the current file is also a schema file
             if (schemeSet.contains(currentFile)) {
             	schemekeydefMap.put(key, new KeyDef(key, value.href, currentFile));
@@ -646,15 +629,12 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
      * @param file file system path with optional format
      */
     private void categorizeResultFile(final Reference file) {
-        // edited by william on 2009-08-06 for bug:2832696 start
         String lcasefn = file.filename.toLowerCase();
 
-        // Added by William on 2010-03-04 for bug:2957938 start
         // avoid files referred by coderef being added into wait list
         if (subsidiarySet.contains(lcasefn)) {
             return;
         }
-        // Added by William on 2010-03-04 for bug:2957938 end
 
         if (FileUtils.isDITAFile(lcasefn)
                 && (file.format == null || ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(file.format) || ATTR_FORMAT_VALUE_DITAMAP
@@ -666,7 +646,6 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             //        are defined by the file extension. Correct behaviour would be to remove this else block.
             htmlSet.add(file.filename);
         }
-        // edited by william on 2009-08-06 for bug:2832696 end
         if (FileUtils.isSupportedImageFile(lcasefn)) {
         	imageSet.add(file.filename);        	      	
 			try {
@@ -695,18 +674,14 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
      */
     private void updateUplevels(final String file) {
         String f = file;
-        // Added by william on 2009-08-06 for bug:2832696 start
         if (f.contains(STICK)) {
             f = f.substring(0, f.indexOf(STICK));
         }
-        // Added by william on 2009-08-06 for bug:2832696 end
 
         // for uplevels (../../)
-        // modified start by wxzhang 20070518
         // ".."-->"../"
         final int lastIndex = FileUtils.separatorsToUnix(FileUtils.normalize(f))
                 .lastIndexOf("../");
-        // modified end by wxzhang 20070518
         if (lastIndex != -1) {
             final int newUplevels = lastIndex / 3 + 1;
             uplevels = newUplevels > uplevels ? newUplevels : uplevels;
@@ -993,15 +968,16 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         // Output topic-scheme dictionary
         writeMapToXML(this.schemeDictionary, FILE_NAME_SUBJECT_DICTIONARY);
 
-        // added by Willam on 2009-07-17 for req #12014 start
         if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
             // Output plugin id
             final File pluginIdFile = new File(tempDir, FILE_NAME_PLUGIN_XML);
             final DelayConrefUtils delayConrefUtils = new DelayConrefUtils();
-            delayConrefUtils.writeMapToXML(reader.getPluginMap(), pluginIdFile);            
-            XMLSerializer export = null;
+            delayConrefUtils.writeMapToXML(reader.getPluginMap(), pluginIdFile);
+            OutputStream exportStream = null;
+            XMLStreamWriter export = null;
             try {
-            	export = XMLSerializer.newInstance(new FileOutputStream(new File(tempDir, FILE_NAME_EXPORT_XML)));
+            	exportStream = new FileOutputStream(new File(tempDir, FILE_NAME_EXPORT_XML));
+            	export = XMLOutputFactory.newInstance().createXMLStreamWriter(exportStream);
             	export.writeStartDocument();
             	export.writeStartElement("stub");
             	for (final ExportAnchor e: reader.getExportAnchors()) {
@@ -1028,19 +1004,25 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             	export.writeEndDocument();
             } catch (final FileNotFoundException e) {
 				throw new DITAOTException("Failed to write export anchor file: " + e.getMessage(), e);
-			} catch (final SAXException e) {
+			} catch (final XMLStreamException e) {
 				throw new DITAOTException("Failed to serialize export anchor file: " + e.getMessage(), e);
 			} finally {
             	if (export != null) {
             		try {
 						export.close();
+					} catch (final XMLStreamException e) {
+						logger.logError("Failed to close export anchor file: " + e.getMessage(), e);
+					}
+            	}
+            	if (exportStream != null) {
+            		try {
+						exportStream.close();
 					} catch (final IOException e) {
 						logger.logError("Failed to close export anchor file: " + e.getMessage(), e);
 					}
             	}
             }
         }
-        // added by Willam on 2009-07-17 for req #12014 end
 
         writeKeydef(new File(tempDir, "schemekeydef.xml"), schemekeydefMap.values());
     }
@@ -1287,9 +1269,11 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
      * @throws DITAOTException if writing configuration file failed
      */
     public static void writeKeydef(final File keydefFile, final Collection<KeyDef> keydefs) throws DITAOTException {
-        XMLSerializer keydef = null;
+    	OutputStream out = null;
+    	XMLStreamWriter keydef = null;
         try {
-            keydef = XMLSerializer.newInstance(new FileOutputStream(keydefFile));
+        	out = new FileOutputStream(keydefFile);
+            keydef = XMLOutputFactory.newInstance().createXMLStreamWriter(out);
             keydef.writeStartDocument();
             keydef.writeStartElement(ELEMENT_STUB);
             for (final KeyDef k: keydefs) {
@@ -1304,12 +1288,19 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
                 keydef.writeEndElement();
             }        
             keydef.writeEndDocument();
-        } catch (final Exception e) {
+        } catch (final XMLStreamException e) {
+            throw new DITAOTException("Failed to write key definition file " + keydefFile + ": " + e.getMessage(), e);
+        } catch (final IOException e) {
             throw new DITAOTException("Failed to write key definition file " + keydefFile + ": " + e.getMessage(), e);
         } finally {
             if (keydef != null) {
                 try {
                     keydef.close();
+                } catch (final XMLStreamException e) {}
+            }
+            if (out != null) {
+                try {
+                    out.close();
                 } catch (final IOException e) {}
             }
         }

@@ -141,7 +141,6 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter {
                 final IndexTerm subTerm = subTerms.get(i);
                 subTargets = subTerm.getTargetList();
                 if (subTargets != null && !subTargets.isEmpty()){
-                    // edited by William on 2009-07-13 for indexterm bug:2819853 start
                     //findTargets(subTerm);
                     //add targets(child term)
                     term.addTargets(subTerm.getTargetList());
@@ -152,7 +151,6 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter {
                 }
                 //add target to parent indexterm
                 term.addTargets(subTerm.getTargetList());
-                // edited by William on 2009-07-13 for indexterm bug:2819853 end
             }
 
         }

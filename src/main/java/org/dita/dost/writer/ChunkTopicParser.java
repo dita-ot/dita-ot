@@ -64,16 +64,12 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
     private static final String ATTR_CHUNK_VALUE_SELECT_DOCUMENT = "select-document";
     private static final String PI_END = QUESTION + GREATER_THAN;
     private static final String PI_WORKDIR_HEAD = LESS_THAN + QUESTION + PI_WORKDIR_TARGET + STRING_BLANK;
-    //edited by william on 2009-09-10 for maintain iteration order start
     private LinkedHashMap<String,String> changeTable = null;
-    //edited by william on 2009-09-10 for maintain iteration order start
     private Hashtable<String,String> conflictTable = null;
 
     private Element elem = null;
 
-    //Added by William on 20100628 for bug:3020314 start
     private Element topicDoc = null;
-    //Added by William on 20100628 for bug:3020314 end
 
     private boolean separate = false;
 
@@ -121,9 +117,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 
     private final Map<String,String> copytotarget2source;
 
-    // Added on 2010-11-12 for bug 3090803 start
     private Map<String, String> currentParsingFileTopicIDChangeTable;
-    // Added on 2010-11-12 for bug 3090803 end
     private final Random random;
 
     private static final String ditaarchNSValue = "http://dita.oasis-open.org/architecture/2005/";
@@ -309,12 +303,10 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
         try{
             if(classValue!=null && TOPIC_TOPIC.matches(classValue)){
                 topicSpecSet.add(qName);
-                //Added by William on 20100628 for bug:3020314 start
                 final String id = atts.getValue(ATTRIBUTE_NAME_ID);
                 //search node by id.
                 final Element element = DITAAttrUtils.getInstance().
                         searchForNode(topicDoc, id, ATTRIBUTE_NAME_ID, TOPIC_TOPIC.matcher);
-                //Added by William on 20100628 for bug:3020314 end
 
                 //only by topic
                 if (separate && include && !ATTR_CHUNK_VALUE_SELECT_TOPIC.equals(selectMethod)){
@@ -361,9 +353,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                     newChild.setAttribute(ATTRIBUTE_NAME_CLASS, MAP_TOPICREF.toString());
                     newChild.setAttribute(ATTRIBUTE_NAME_XTRF, ATTR_XTRF_VALUE_GENERATED);
 
-                    //Added by William on 20100628 for bug:3020314 start
                     createTopicMeta(element, newChild);
-                    //Added by William on 20100628 for bug:3020314 end
 
                     if(stub!=null){
                         if (includelevel == 0 && siblingStub != null){
@@ -436,16 +426,12 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                     final String attrName = atts.getQName(i);
                     String attrValue = atts.getValue(i);
 
-                    //Added by William on 2009-08-18 for chunkbug id:2839035 start
                     attrValue = StringUtils.escapeXML(attrValue);
-                    //Added by William on 2009-08-18 for chunkbug id:2839035 end
 
                     if(ATTRIBUTE_NAME_ID.equals(attrName) && TOPIC_TOPIC.matches(classValue)){
                         //change topic @id if there are conflicts.
                         if(topicID.contains(attrValue)){
-                            // Added on 2010-11-12 for bug 3090803 start
                             final String oldAttrValue = attrValue;
-                            // Added on 2010-11-12 for bug 3090803 end
                             attrValue = generateID();
                             topicID.add(attrValue);
 
@@ -460,9 +446,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                                 changeTable.put(currentParsingFile,
                                         outputFile+SHARP+attrValue);
                             }
-                            // Added on 2010-11-12 for bug 3090803 start
                             currentParsingFileTopicIDChangeTable.put(oldAttrValue, attrValue);
-                            // Added on 2010-11-12 for bug 3090803 end
                         } else {
                             topicID.add(attrValue);
                         }
@@ -624,10 +608,8 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 
             job.write();
         }catch (final Exception e){
-            //edited by Alan on Date:2009-11-02 for Work Item:#1590 start
             /*logger.logWarn(e.toString());*/
             logger.logException(e);
-            //edited by Alan on Date:2009-11-02 for Work Item:#1590 end
         } finally {
             if (output != null) {
                 try {
@@ -696,9 +678,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                     } else if (chunkValue.contains(ATTR_CHUNK_VALUE_SELECT_DOCUMENT)) {
                         firstTopicID = this.getFirstTopicId(FileUtils.resolveFile(filePath, parseFilePath));
 
-                        //Added by William on 20100628 for bug:3020314 start
                         topicDoc = DITAAttrUtils.getInstance().getTopicDoc(FileUtils.resolveFile(filePath, parseFilePath));
-                        //Added by William on 20100628 for bug:3020314 end
 
                         if (!StringUtils.isEmptyString(firstTopicID)) {
                             outputFileName = FileUtils.resolveFile(filePath, firstTopicID + ditaext);
@@ -718,9 +698,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                 } else {
                     firstTopicID = this.getFirstTopicId(FileUtils.resolveFile(filePath, parseFilePath));
 
-                    //Added by William on 20100628 for bug:3020314 start
                     topicDoc = DITAAttrUtils.getInstance().getTopicDoc(FileUtils.resolveFile(filePath, parseFilePath));
-                    //Added by William on 20100628 for bug:3020314 end
 
                     if (!StringUtils.isEmptyString(firstTopicID)) {
                         outputFileName = FileUtils.resolveFile(filePath, firstTopicID + ditaext);
@@ -776,7 +754,6 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                 //...
                 //Place stub
                 if(element.hasChildNodes()){
-                    //Added by William on 2010-06-24 for bug:3020313 start
                     final NodeList list = element.getElementsByTagName(MAP_TOPICMETA.localName);
                     if(list.getLength() > 0){
                         final Node node = list.item(0);
@@ -792,7 +769,6 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                         //no topicmeta tag.
                         element.insertBefore(stub,element.getFirstChild());
                     }
-                    //Added by William on 2010-06-24 for bug:3020313 end
 
                     //element.insertBefore(stub,element.getFirstChild());
                 }else{
@@ -859,13 +835,10 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
         final String scopeValue = element.getAttribute(ATTRIBUTE_NAME_SCOPE);
         final String classValue = element.getAttribute(ATTRIBUTE_NAME_CLASS);
         final String processRoleValue = element.getAttribute(ATTRIBUTE_NAME_PROCESSING_ROLE);
-        //Added on 20100818 for bug:3042978 start
         //Get id value
         final String id = element.getAttribute(ATTRIBUTE_NAME_ID);
         //Get navtitle value
         final String navtitle = element.getAttribute(ATTRIBUTE_NAME_NAVTITLE);
-        //Added on 20100818 for bug:3042978 end
-
 
         //file which will be parsed
         String parseFilePath = null;
@@ -1019,13 +992,9 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                     currentParsingFile = FileUtils.resolveFile(filePath,parseFilePath);
 
                     if ( !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processRoleValue)) {
-
-                        // Added on 2010-11-12 for bug 3090803 start
                         currentParsingFileTopicIDChangeTable = new HashMap<String, String>();
-                        // Added on 2010-11-12 for bug 3090803 end
                         //TODO recursive point
                         reader.parse(new File(currentParsingFile).toURI().toString());
-                        // Added on 2010-11-12 for bug 3090803 start
                         if(currentParsingFileTopicIDChangeTable.size()>0) {
                             String href = element.getAttribute(ATTRIBUTE_NAME_HREF);
                             href = FileUtils.separatorsToUnix(href);
@@ -1044,13 +1013,11 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                                     }
                         }
                         currentParsingFileTopicIDChangeTable = null;
-                        // Added on 2010-11-12 for bug 3090803 end
                     }
                     //restore the currentParsingFile
                     currentParsingFile = tempPath;
                 }
 
-                //Added on 20100818 for bug:3042978 start
                 //use @copy-to value(dita spec v1.2)
                 if(outputFileName == null){
                     if (!StringUtils.isEmptyString(copytoValue)){
@@ -1192,7 +1159,6 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                             }
                             ditaFileOutput.write(LESS_THAN + QUESTION + PI_WORKDIR_TARGET_URI + STRING_BLANK + workDir.toURI().toString() + PI_END);
                             
-                            //Added on 20101210 for bug:3126578 start
                             if ((conflictTable.get(outputFileName)!=null)){
                                 final String relativePath = FileUtils
                                         .getRelativePath(filePath + UNIX_SEPARATOR + FILE_NAME_STUB_DITAMAP,
@@ -1211,7 +1177,6 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                                 ditaFileOutput.write(QUESTION);
                                 ditaFileOutput.write(GREATER_THAN);
                             }
-                            //Added on 20101210 for bug:3126578 end
                         }
                         if (needWriteDitaTag) {
                             ditaFileOutput.write(LESS_THAN + ELEMENT_NAME_DITA
@@ -1261,9 +1226,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
         // check whether current href needs to be updated
         String scopeValue = atts.getValue(ATTRIBUTE_NAME_SCOPE);
         String hrefValue = atts.getValue(ATTRIBUTE_NAME_HREF);
-        //Added by William on 2009-08-18 for chunkbug id:2839035 start
         hrefValue = StringUtils.escapeXML(hrefValue);
-        //Added by William on 2009-08-18 for chunkbug id:2839035 end
         if (scopeValue == null){
             scopeValue = ATTR_SCOPE_VALUE_LOCAL;
         }
@@ -1422,7 +1385,5 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 
         }
     }
-    //Added by William on 20100628 for bug:3020314 end
-
 
 }

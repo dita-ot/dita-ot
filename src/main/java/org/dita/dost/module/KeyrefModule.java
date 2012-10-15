@@ -60,9 +60,7 @@ final class KeyrefModule implements AbstractPipelineModule {
             throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
         }
 
-        //Added by Alan Date:2009-08-04 --begin
         final String extName = input.getAttribute(ANT_INVOKER_PARAM_DITAEXT);
-        //Added by Alan Date:2009-08-04 --end
 
         Job job = null;
         try{
@@ -114,7 +112,6 @@ final class KeyrefModule implements AbstractPipelineModule {
             parser.setKeyDefinition(keyDefinition);
             parser.setTempDir(tempDir.getAbsolutePath());
             parser.setKeyMap(keymap);
-            //Added by Alan Date:2009-08-04
             parser.setExtName(extName);
             parser.write(file);
             // validate resource-only list

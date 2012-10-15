@@ -15,6 +15,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -525,16 +527,10 @@ public final class FileUtils {
     public static void copyFile(final File src, final File target) {
         FileInputStream fis = null;
         FileOutputStream fos = null;
-        final byte[] buffer = new byte[INT_1024 * INT_4];
-        int len;
-
         try {
             fis = new FileInputStream(src);
             fos = new FileOutputStream(target);
-            while ((len = fis.read(buffer)) != -1) {
-                fos.write(buffer, 0, len);
-            }
-            fos.flush();
+            copy(fis, fos);
         } catch (final IOException ex) {
             logger.logException(ex);
         } finally {
@@ -553,6 +549,20 @@ public final class FileUtils {
                 }
             }
         }
+    }
+    
+    /**
+     * Copy input stream to output stream
+     * @param fis input stream
+     * @param fos output stream
+     */
+    public static void copy(final InputStream fis, final OutputStream fos) throws IOException {
+        final byte[] buffer = new byte[1024 * 4];
+        int len;
+        while ((len = fis.read(buffer)) != -1) {
+            fos.write(buffer, 0, len);
+        }
+        fos.flush();
     }
 
     /**

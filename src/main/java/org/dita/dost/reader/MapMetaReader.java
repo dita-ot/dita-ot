@@ -166,7 +166,6 @@ public final class MapMetaReader implements AbstractReader {
                 }
             }
 
-            // Fix bug on SourceForge ID:#2891736
             // Indexterm elements with either start or end attribute should not been
             // move to referenced dita file's prolog section.
             // <!--start
@@ -203,7 +202,6 @@ public final class MapMetaReader implements AbstractReader {
         this.logger = logger;
     }
 
-    //added by Alan for bug ID:#2891736 on Date: 2009-11-16 begin
     /**
      * traverse the node tree and remove all indexterm elements with either start or
      * end attribute.
@@ -230,7 +228,6 @@ public final class MapMetaReader implements AbstractReader {
             }
         }
     }
-    //added by Alan for bug ID:#2891736 on Date: 2009-11-16 end
 
     private void handleTopicref(final Node topicref, final Hashtable<String, Element> inheritance) {
         final Node hrefAttr = topicref.getAttributes().getNamedItem(ATTRIBUTE_NAME_HREF);
@@ -276,7 +273,6 @@ public final class MapMetaReader implements AbstractReader {
                 topicPath = FileUtils.resolveTopic(filePath, URLUtils.decode(hrefAttr.getNodeValue()));
             }
 
-            //edited by william on 2009-08-06 for bug:2832696 start
             if(((formatAttr == null || ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatAttr.getNodeValue()))||(formatAttr == null || ATTR_FORMAT_VALUE_DITAMAP.equalsIgnoreCase(formatAttr.getNodeValue())))
                     &&(scopeAttr == null || ATTR_SCOPE_VALUE_LOCAL.equalsIgnoreCase(scopeAttr.getNodeValue()))
                     &&(hrefAttr.getNodeValue().indexOf(INTERNET_LINK_MARK) == -1)){
@@ -312,7 +308,6 @@ public final class MapMetaReader implements AbstractReader {
                             topicref.getFirstChild());
                 }
             }
-            //edited by william on 2009-08-06 for bug:2832696 end
         }
     }
     private Hashtable<String, Element> cloneElementMap(final Hashtable<String, Element> current) {

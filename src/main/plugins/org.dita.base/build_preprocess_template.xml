@@ -158,7 +158,7 @@
       destdir="${dita.temp.dir}" includesfile="${dita.temp.dir}/${conreffile}"
       classpathref="dost.class.path"
       reloadstylesheet="${dita.preprocess.reloadstylesheet.conref}"
-      style="${dita.script.dir}/preprocess/conref.xsl" filenameparameter="file-being-processed">
+      style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/conref.xsl" filenameparameter="file-being-processed">
       <mapper type="glob" from="*" to="*.cnrf" />
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
       <param name="BASEDIR" expression="${basedir}"/>
@@ -218,7 +218,7 @@
     	extension=".ditamap.ref"
         classpathref="dost.class.path"
         reloadstylesheet="${dita.preprocess.reloadstylesheet.mapref}"
-      style="${dita.script.dir}/preprocess/mapref.xsl" filenameparameter="file-being-processed">
+      style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl" filenameparameter="file-being-processed">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="TRANSTYPE" expression="${transtype}" />
       <param name="FILEREF" expression="file:"/>
@@ -276,7 +276,7 @@
     	extension=".ditamap.pull"
         classpathref="dost.class.path"
         reloadstylesheet="${dita.preprocess.reloadstylesheet.mappull}"
-      style="${dita.script.dir}/preprocess/mappull.xsl">
+      style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mappull.xsl">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="TRANSTYPE" expression="${transtype}" />
       <dita:extension id="dita.preprocess.mappull.param" behavior="org.dita.dost.platform.InsertAction"/>
@@ -339,7 +339,7 @@
       out="${maplink.workdir}/maplinks.unordered"
       classpathref="dost.class.path"
       reloadstylesheet="${dita.preprocess.reloadstylesheet.maplink}"
-      style="${dita.script.dir}/preprocess/maplink.xsl">
+      style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/maplink.xsl">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="INPUTMAP" expression="${user.input.file}" />
       <param name="include.rellinks" expression="${include.rellinks}" if="include.rellinks"/>
@@ -390,7 +390,7 @@
       destdir="${dita.temp.dir}" includesfile="${dita.temp.dir}/${fullditatopicfile}"
       classpathref="dost.class.path"
       reloadstylesheet="${dita.preprocess.reloadstylesheet.topicpull}"
-      style="${dita.script.dir}/preprocess/topicpull.xsl">
+      style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/topicpull.xsl">
       <includesfile name="${dita.temp.dir}/${chunkedtopicfile}" if="chunkedtopicfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="TABLELINK" expression="${args.tablelink.style}" if="args.tablelink.style" />

@@ -50,7 +50,7 @@
               destdir="${output.dir}"
               includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
               classpathref="dost.class.path"
-              style="${dita.script.dir}${file.separator}map2javahelptoc.xsl">
+              style="${dita.plugin.org.dita.javahelp.dir}/xsl/map2javahelptoc.xsl">
         	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
@@ -69,7 +69,7 @@
             destdir="${output.dir}"
             includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
             classpathref="dost.class.path"
-            style="${dita.script.dir}${file.separator}map2javahelptoc.xsl">
+            style="${dita.plugin.org.dita.javahelp.dir}/xsl/map2javahelptoc.xsl">
         	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
@@ -88,7 +88,7 @@
               destdir="${output.dir}"
               includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
               classpathref="dost.class.path"
-              style="${dita.script.dir}${file.separator}map2javahelpmap.xsl">
+              style="${dita.plugin.org.dita.javahelp.dir}/xsl/map2javahelpmap.xsl">
         	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
@@ -107,7 +107,7 @@
             destdir="${output.dir}"
             includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
             classpathref="dost.class.path"
-            style="${dita.script.dir}${file.separator}map2javahelpmap.xsl">
+            style="${dita.plugin.org.dita.javahelp.dir}/xsl/map2javahelpmap.xsl">
         	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
@@ -126,7 +126,7 @@
               destdir="${output.dir}"
               includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
               classpathref="dost.class.path"
-              style="${dita.script.dir}${file.separator}map2javahelpset.xsl">
+              style="${dita.plugin.org.dita.javahelp.dir}/xsl/map2javahelpset.xsl">
         	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
             <param name="javahelpmap" expression="${args.javahelp.map}" />
             <param name="javahelptoc" expression="${args.javahelp.toc}" />
@@ -148,7 +148,7 @@
             destdir="${output.dir}"
             includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
             classpathref="dost.class.path"
-            style="${dita.script.dir}${file.separator}map2javahelpset.xsl">
+            style="${dita.plugin.org.dita.javahelp.dir}/xsl/map2javahelpset.xsl">
         	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
             <param name="javahelpmap" expression="${args.javahelp.map}" />
             <param name="javahelptoc" expression="${args.javahelp.toc}" />

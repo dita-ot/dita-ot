@@ -68,9 +68,7 @@ public final class CommandLineInvoker {
         pm.put("/outext", "args.outext");
         pm.put("/copycss", "args.copycss");
         pm.put("/xsl", "args.xsl");
-        //Added by William on 2010-06-21 for bug:3012392 start
         pm.put("/xslpdf", "args.xsl.pdf");
-        //Added by William on 2010-06-21 for bug:3012392 end
         pm.put("/tempdir", "dita.temp.dir");
         pm.put("/cleantemp", "clean.temp");
         pm.put("/foimgext", "args.fo.img.ext");
@@ -203,14 +201,12 @@ public final class CommandLineInvoker {
                 throw new DITAOTException(MessageUtils.getMessage("DOTJ003F", params).toString());
             }
 
-            //Added by William on 2009-11-09 for bug:2893493 start
             if (antArg.equals("clean.temp")
                     && !("yes".equalsIgnoreCase(antArgValue)
                             || "no".equalsIgnoreCase(antArgValue))) {
                 antArgValue = "yes";
 
             }
-            //Added by William on 2009-11-09 for bug:2893493 end
 
             prop.put(antArg, antArgValue);
         }
