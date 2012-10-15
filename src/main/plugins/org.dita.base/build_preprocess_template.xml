@@ -12,7 +12,7 @@
   </condition>
 
   <target name="preprocess"
-    dita:depends="{depend.preprocess.pre},gen-list,debug-filter,copy-files,conrefpush,conref,move-meta-entries,keyref,coderef,mapref,mappull,chunk,maplink,move-links,topicpull,{depend.preprocess.post}"
+    dita:depends="{depend.preprocess.pre},gen-list,debug-filter,copy-files,conrefpush,conref,move-meta-entries,keyref,coderef,mapref,mappull,chunk,maplink,move-links,topicpull,flag-module,{depend.preprocess.post}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     description="Preprocessing ended" />
 
@@ -410,6 +410,56 @@
     <condition property="preprocess.topicpull.skip">
       <isset property="noTopic"/>
     </condition>
+  </target>
+
+  <target name="flag-module" 
+      dita:depends="debug-filter,{depend.preprocess.flag-module.pre},flag-module-check"
+      dita:extension="depends org.dita.dost.platform.InsertDependsAction"
+      description="Add flagging information to topics" 
+      unless="preprocess.flagging.skip">
+    <makeurl file="${args.filter}" property="dita.input.filterfile.url" validate="no"></makeurl>
+    <condition property="dita.preprocess.reloadstylesheet.flag-module" value="${dita.preprocess.reloadstylesheet}">
+      <not><isset property="dita.preprocess.reloadstylesheet.flag-module"></isset></not>
+    </condition>
+    <xslt taskname="preprocess_flag" 
+        basedir="${dita.temp.dir}" 
+        destdir="${dita.temp.dir}" 
+        includesfile="${dita.temp.dir}/${fullditatopicfile}" 
+        classpathref="dost.class.path" 
+        reloadstylesheet="${dita.preprocess.reloadstylesheet.flag-module}" 
+        style="${dita.script.dir}/preprocess/flag.xsl"
+        filenameparameter="FILENAME" 
+        filedirparameter="FILEDIR">
+      <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"></excludesfile>
+      <includesfile name="${dita.temp.dir}/${chunkedtopicfile}" if="chunkedtopicfile"></includesfile>
+
+      <param name="TRANSTYPE" expression="${transtype}"></param>
+      <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"></param>
+      <param name="FILTERFILE" expression="${dita.input.filterfile.url}"></param>
+      <param name="DRAFT" expression="${args.draft}" if="args.draft"></param>
+      <param name="BASEDIR" expression="${basedir}"></param>
+      <param name="OUTPUTDIR" expression="${output.dir}"></param>
+      <param name="DBG" expression="${args.debug}" if="args.debug"></param>
+      <dita:extension id="dita.preprocess.flag-module.param" behavior="org.dita.dost.platform.InsertAction"/>
+
+      <mapper type="glob" from="*" to="*.flag"></mapper>
+      <xmlcatalog refid="dita.catalog"></xmlcatalog>
+    </xslt>
+    <move todir="${dita.temp.dir}">
+      <fileset dir="${dita.temp.dir}" includes="**/*.flag"></fileset>
+      <mapper type="glob" from="*.flag" to="*"></mapper>
+    </move>
+  </target>
+
+  <target name="flag-module-check">
+      <condition property="preprocess.flagging.skip">
+          <or>
+              <isset property="noTopic"/>
+              <not>
+                  <isset property="args.filter"></isset>
+              </not>
+          </or>
+      </condition>
   </target>
   
   <!-- copy-files
