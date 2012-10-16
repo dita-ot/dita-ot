@@ -1328,16 +1328,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
             filename = FileUtils.normalizeDirectory(currentDir, attrValue);
         }
 
-        if (filename != null) {
-            try{
-                filename = URLDecoder.decode(filename, UTF8);
-            }catch(final UnsupportedEncodingException e){
-                logger.logError("Unable to decode URI '" + filename + "': " + e.getMessage());
-            }
-            if (processingMode == Mode.LAX) {
-            	filename = filename.replace(WINDOWS_SEPARATOR, File.separator);
-            }
-        }
+        filename = toFile(filename);
         // XXX: At this point, filename should be a system path 
 
         if (MAP_TOPICREF.matches(attrClass)) {
@@ -1439,7 +1430,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
         if (ATTRIBUTE_NAME_COPY_TO.equals(attrName)
                 && FileUtils.isDITATopicFile(filename)) {
             final String href = atts.getValue(ATTRIBUTE_NAME_HREF);
-            final String value = FileUtils.normalizeDirectory(currentDir, href);
+            final String value = toFile(FileUtils.normalizeDirectory(currentDir, href));
 
             if (StringUtils.isEmptyString(href)) {
                 final StringBuffer buff = new StringBuffer();
@@ -1467,7 +1458,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
                 copytoMap.put(filename, value);
             }
 
-            final String pathWithoutID = FileUtils.resolveFile(currentDir, attrValue);
+            final String pathWithoutID = FileUtils.resolveFile(currentDir, toFile(attrValue));
             if (chunkLevel > 0 && chunkToNavLevel == 0 && topicGroupLevel == 0) {
                 chunkTopicSet.add(pathWithoutID);
             } else {
@@ -1486,6 +1477,29 @@ public final class GenListModuleReader extends AbstractXMLReader {
 
         }
     }
+
+    /**
+     * Convert URI references to file paths.
+     * 
+     * @param filename file reference
+     * @return file path
+     */
+	private String toFile(final String filename) {
+		if (filename == null) {
+			return null;
+		}
+		String f = filename;
+        try{
+            f = URLDecoder.decode(filename, UTF8);
+        }catch(final UnsupportedEncodingException e){
+            logger.logError("Unable to decode URI '" + filename + "': " + e.getMessage());
+        }
+        if (processingMode == Mode.LAX) {
+        	f = f.replace(WINDOWS_SEPARATOR, File.separator);
+        }
+        f = f.replace(URI_SEPARATOR, File.separator);
+        return f;
+	}
 
     /**
      * Validate key name
