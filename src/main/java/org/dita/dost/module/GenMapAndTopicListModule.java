@@ -185,6 +185,8 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
 
     /** Absolute path to input file. */
     private File rootFile;
+    /** File currently being processed */
+    private File currentFile;
 
     private Map<String, KeyDef> schemekeydefMap;
 
@@ -367,7 +369,8 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         }
 
         while (!waitList.isEmpty()) {
-            processFile(waitList.remove(0));
+        	currentFile = waitList.remove(0); 
+            processFile(currentFile);
         }
     }
 
@@ -691,7 +694,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
      * @param file relative system path
      */
     private void addToWaitList(final File file) {
-        if (doneList.contains(file) || waitList.contains(file)) {
+        if (doneList.contains(file) || waitList.contains(file) || file.equals(currentFile)) {
             return;
         }
 
