@@ -297,9 +297,6 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
     }
 
     private void parseInputParameters(final AbstractPipelineInput input) throws IOException {
-        final String basedir = input.getAttribute(ANT_INVOKER_PARAM_BASEDIR);
-        final String ditaInput = input.getAttribute(ANT_INVOKER_PARAM_INPUTMAP);
-
         tempDir = new File(input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR));
         ditaDir = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR));
         if (input.getAttribute(ANT_INVOKER_PARAM_DITAVAL) != null) {
@@ -327,13 +324,32 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             throw new IllegalArgumentException("Output directory " + tempDir + " must be absolute");
         }
 
-        // Resolve relative paths base on the basedir.
+        final String basedir = input.getAttribute(ANT_INVOKER_PARAM_BASEDIR);
+        final String ditaInputDir = input.getAttribute(ANT_INVOKER_EXT_PARAM_INPUTDIR);
+        if (ditaInputDir != null) {
+        	File inDir = new File(ditaInputDir);
+            if (!inDir.isAbsolute()) {
+            	// XXX Shouldn't this be resolved to current directory, not Ant script base directory?
+                inDir = new File(basedir, ditaInputDir);
+            }
+            baseInputDir = inDir.getCanonicalFile();
+        }
+        
+        final String ditaInput = input.getAttribute(ANT_INVOKER_PARAM_INPUTMAP);
         File inFile = new File(ditaInput);
         if (!inFile.isAbsolute()) {
-            // XXX Shouldn't this be resolved to current directory, not Ant script base directory?
-            inFile = new File(basedir, ditaInput);
+        	if (baseInputDir != null) {
+        		inFile = new File(baseInputDir, ditaInput);
+        	} else {
+	            // XXX Shouldn't this be resolved to current directory, not Ant script base directory?
+	            inFile = new File(basedir, ditaInput);
+        	}
         }
         inFile = inFile.getCanonicalFile();
+        if (baseInputDir == null) {
+        	baseInputDir = inFile.getParentFile().getCanonicalFile();
+        }
+
         if (!tempDir.isAbsolute()) {
             throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
         } else {
@@ -349,11 +365,9 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             ditavalFile = new File(basedir, ditavalFile.getPath()).getAbsoluteFile();
         }
 
-        baseInputDir = inFile.getParentFile().getCanonicalFile();
-
         rootFile = inFile.getCanonicalFile();
        
-        inputFile = new File(inFile.getName());
+        inputFile = new File(FileUtils.getRelativePath(new File(baseInputDir, "x").getAbsolutePath(), inFile.getAbsolutePath()));
         // create the keydef file for scheme files
     	schemekeydefMap = new HashMap<String, KeyDef>();
 

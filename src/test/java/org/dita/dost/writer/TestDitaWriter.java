@@ -52,7 +52,7 @@ public class TestDitaWriter {
 
     private final File baseDir = new File(resourceDir, "DITA-OT1.5");
     private final File inputDir = new File("DITAVAL");
-    private final File inputMap = new File(inputDir, "DITAVAL_testdata1.ditamap");
+    private final File inputMap = new File(baseDir, "DITAVAL" + File.separator + "DITAVAL_testdata1.ditamap");
     private final File outDir = new File(tempDir, "out");
     private final File ditavalFile = new File(inputDir, "DITAVAL_1.ditaval");
 
@@ -67,9 +67,9 @@ public class TestDitaWriter {
         final PipelineFacade facade = new PipelineFacade();
         facade.setLogger(new TestUtils.TestLogger());
         pipelineInput = new PipelineHashIO();
-        pipelineInput.setAttribute("inputmap", inputMap.getPath());
+        pipelineInput.setAttribute("inputmap", inputMap.getAbsolutePath());
         pipelineInput.setAttribute("basedir", baseDir.getAbsolutePath());
-        pipelineInput.setAttribute("inputdir", inputDir.getPath());
+        //pipelineInput.setAttribute("inputdir", inputDir.getPath());
         pipelineInput.setAttribute("outputdir", outDir.getAbsolutePath());
         pipelineInput.setAttribute("tempDir", tempDir.getAbsolutePath());
         pipelineInput.setAttribute("ditadir", new File("src" + File.separator + "main").getAbsolutePath());

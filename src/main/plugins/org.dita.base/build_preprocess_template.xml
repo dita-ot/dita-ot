@@ -37,6 +37,7 @@
     <pipeline message="Generate list." taskname="gen-list"
       inputmap="${args.input}"
       tempdir="${dita.temp.dir}">
+      <param name="inputdir" location="${args.input.dir}" if="args.input.dir"/>
       <module class="org.dita.dost.module.GenMapAndTopicListModule">
         <param name="ditadir" location="${dita.dir}"/>
         <param name="ditaval" location="${dita.input.valfile}" if="dita.input.valfile"/>

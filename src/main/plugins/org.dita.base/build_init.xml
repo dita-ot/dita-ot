@@ -213,7 +213,25 @@
         <and>
           <isset property="args.input"/>
           <not>
+            <isset property="args.input.dir"/>
+          </not>
+          <not>
             <available file="${args.input}" type="file"/>
+          </not>
+        </and>
+      </condition>
+      <param name="1" location="${args.input}"/>
+    </dita-ot-fail>
+    <dita-ot-fail id="DOTA069F">
+      <condition>
+        <and>
+          <isset property="args.input"/>
+          <isset property="args.input.dir"/>
+          <not>
+            <or>
+              <available file="${args.input}" type="file"/>
+              <available file="${args.input.dir}/${args.input}" type="file"/>
+            </or>
           </not>
         </and>
       </condition>
@@ -323,6 +341,9 @@
   	</condition> 	
   	
     <basename property="dita.input.filename" file="${args.input}" />
+    <condition property="dita.input.dirname" value="${args.input.dir}">
+      <isset property="args.input.dir"/>
+    </condition>
     <dirname property="dita.input.dirname" file="${args.input}" />
     <basename property="dita.map.filename.root"
       file="${dita.input.filename}" suffix=".ditamap" />
@@ -457,6 +478,7 @@
     <echo level="info">* basedir = ${basedir}</echo>
     <echo level="info">* dita.dir = ${dita.dir}</echo>
     <echo level="info">* input = ${args.input}</echo>
+    <echo level="info">* inputdir = ${dita.input.dirname}</echo>
     <echo level="info">* transtype = ${transtype}</echo>
     <echo level="info">* tempdir = ${dita.temp.dir}</echo>
     <echo level="info">* outputdir = ${output.dir}</echo>

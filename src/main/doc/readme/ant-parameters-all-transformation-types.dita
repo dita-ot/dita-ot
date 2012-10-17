@@ -10,7 +10,7 @@
   <prolog>
     <metadata>
       <keywords>
-        <indexterm>Ant<indexterm>parameters<indexterm>args.debug</indexterm><indexterm>args.draft</indexterm><indexterm>args.figurelink.style</indexterm><indexterm>args.filter</indexterm><indexterm>args.grammar.cache</indexterm><indexterm>args.input</indexterm><indexterm>args.logdir</indexterm><indexterm>args.tablelink.style</indexterm><indexterm>clean.temp</indexterm><indexterm>dita.dir</indexterm><indexterm>dita.ext</indexterm><indexterm>dita.extname</indexterm><indexterm>dita.input.valfile</indexterm><indexterm>dita.temp.dir</indexterm><indexterm>output.dir</indexterm><indexterm>transtype</indexterm><indexterm>validate</indexterm></indexterm></indexterm>
+        <indexterm>Ant<indexterm>parameters<indexterm>args.debug</indexterm><indexterm>args.draft</indexterm><indexterm>args.figurelink.style</indexterm><indexterm>args.filter</indexterm><indexterm>args.grammar.cache</indexterm><indexterm>args.input</indexterm><indexterm>args.input.dir</indexterm><indexterm>args.logdir</indexterm><indexterm>args.tablelink.style</indexterm><indexterm>clean.temp</indexterm><indexterm>dita.dir</indexterm><indexterm>dita.ext</indexterm><indexterm>dita.extname</indexterm><indexterm>dita.input.valfile</indexterm><indexterm>dita.temp.dir</indexterm><indexterm>output.dir</indexterm><indexterm>transtype</indexterm><indexterm>validate</indexterm></indexterm></indexterm>
         <indexterm>XSLT
             parameters<indexterm>DITAEXT</indexterm><indexterm>DRAFT</indexterm><indexterm>FIGURELINK</indexterm><indexterm>TABLELINK</indexterm></indexterm>
       </keywords>
@@ -76,7 +76,15 @@
             <entry><parmname>args.input</parmname></entry>
             <entry id="args.input.desc">Specifies the master file for your documentation project.
               Typically this is a DITA map, however it also can be a DITA topic if you want to
-              transform a single DITA file.</entry>
+              transform a single DITA file. The path can be absolute, relative to <parmname>args.input.dir</parmname>,
+              or relative to the directory where your project's ant build script resides
+              if <parmname>args.input.dir</parmname> is not defined. 
+            </entry>
+          </row>
+          <row id="args.input.dir">
+            <entry><parmname>args.input.dir</parmname></entry>
+            <entry id="args.input.dir.desc">Specifies the base directory for your documentation project.
+              The default value is the parent directory of the file specified by <parmname>args.input</parmname>.</entry>
           </row>
           <row id="args.logdir">
             <entry><parmname>args.logdir</parmname></entry>
