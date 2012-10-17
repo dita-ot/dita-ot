@@ -228,7 +228,7 @@ public final class CommandLineInvoker {
         } else {
             final java.text.DateFormat format = new java.text.SimpleDateFormat("yyyyMMddHHmmssSSS");
             final String timestamp = format.format(new java.util.Date());
-            prop.setProperty("dita.temp.dir", TEMP_DIR_DEFAULT + FILE_SEPARATOR
+            prop.setProperty("dita.temp.dir", TEMP_DIR_DEFAULT + File.separator
                     + "temp" + timestamp);
             tempDir = prop.getProperty("dita.temp.dir");
         }

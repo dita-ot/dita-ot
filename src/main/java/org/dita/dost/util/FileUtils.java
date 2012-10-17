@@ -508,11 +508,11 @@ public final class FileUtils {
             return false;
         }
 
-        if (FILE_SEPARATOR.equals(UNIX_SEPARATOR)) {
+        if (File.separator.equals(UNIX_SEPARATOR)) {
             return path.startsWith(UNIX_SEPARATOR);
         } else 
 
-        if (FILE_SEPARATOR.equals(WINDOWS_SEPARATOR) && path.length() > 2) {
+        if (File.separator.equals(WINDOWS_SEPARATOR) && path.length() > 2) {
             return path.matches("([a-zA-Z]:|\\\\)\\\\.*");
         }
 

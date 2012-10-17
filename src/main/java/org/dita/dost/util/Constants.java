@@ -9,8 +9,6 @@
  */
 package org.dita.dost.util;
 
-import java.io.File;
-
 /**
  * This class contains all the constants used in DITA-OT.
  * 
@@ -859,8 +857,6 @@ public final class Constants {
     /**Constants for extensive params used in ant invoker(gramcache).*/
     public static final String ANT_INVOKER_EXT_PARAM_GRAMCACHE="gramcache";
     public static final String ANT_INVOKER_EXT_PARAN_SETSYSTEMID="setsystemid";
-    /**Constants for file separator.*/
-    public static final String FILE_SEPARATOR = File.separator;
     /**Constants for line separator.*/
     public static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
