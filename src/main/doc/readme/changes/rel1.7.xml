@@ -54,6 +54,22 @@
           the map processing templates to <codeph>toc</codeph> mode.</p>
       </section>
       <section>
+        <title>HTML and extended transform types</title>
+        <p>Flagging logic has been pulled out of the core X/HTML code and moved to a pre-process. This significantly simplifies
+          and optimizes the X/HTML code, while making flagging logic available to any other transform type. The pre-process
+          implements all flagging logic; for each active flag, it adds a DITA-OT specific hint into the intermediate topics
+          (implemented as a specialization of the DITA &lt;foreign&gt; element). As part of this change, all flagging related
+          templates in the XHTML code (such as start-flagit and gen-style) are deprecated.</p>
+        <p>If you override the X/HTML transforms, you may need to update your overrides to use the new flagging logic. In
+          most cases this just means deleting calls to the deprecated templates; in some cases, the calls can be replaced
+          with 2 lines to process flags in new places. You should compare your override to the updated XHTML code and update
+          as needed.</p>
+        <p>Plug-ins that provide support for new transforms need to ensure that they properly support the DITA &lt;foreign&gt;
+          element, which should be ignored by default; if so, this change will have no immediate impact. Support for flagging
+          new transform types may be more easily added based on this update, because there is no need to reimplement flaging logic,
+          but this is not required.</p>
+      </section>
+      <section>
         <title>PDF</title>
         <p>The following deprecated XSLT variables have been removed:</p>
         <ul>
@@ -87,7 +103,7 @@
           <li>#1288 Use strict integration by default (milestone 3)</li>
           <li>#1327 Change minimum Java version to 6 (milestone 3)</li>
           <li>#1391 Add new job status file format (milestone 3)</li>
-          <li>#1313 Separate flagging logic from XHTML code (in progress)</li>
+          <li>#1313 Separate flagging logic from XHTML code (Milestone 3)</li>
           <li>#1317 General XHTML improvements (in progress)</li>
           <li>#1324 Avoid strings where other types are more appropriate (in progress)</li>
           <li>#1338 Add named error messages (in progress)</li>
