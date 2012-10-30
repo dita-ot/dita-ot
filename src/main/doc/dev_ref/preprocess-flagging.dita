@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="flagging" rev="1.7" xml:lang="en-us">
+<title>Flagging in the toolkit</title>
+<shortdesc>Beginning with DITA-OT 1.7, flagging support is implemented
+as a common preprocess module. The module evaluates the DITAVAL against
+all flagging attributes, and adds DITA-OT specific hints in to the
+topic when flags are active. Any extended transform type may use these
+hints to support flagging without adding logic to interpret the DITAVAL.</shortdesc>
+<refbody>
+<section><title>Evaluating the DITAVAL flags</title><p>Flagging is
+implemented as a reusable module during the preprocess stage. If a
+DITAVAL file is not used with a build, this step is skipped with no
+change to the file.</p><p>When a flag is active, relevant sections
+of the DITAVAL itself are copied into the topic as a sub-element of
+the current topic. The active flags are enclosed in a pseudo-specialization
+of the <codeph>&lt;foreign></codeph> element (referred to as a pseudo-specialization
+because it is used only under the covers, with all topic types; it
+is not integrated into any shipped document types).</p><dl><dlentry>
+<dt><codeph>&lt;ditaval-startprop></codeph></dt>
+<dd>When any flag is active on an element, a <codeph>&lt;ditaval-startprop></codeph> element
+will be created as the first child of the flagged element:<codeblock>&lt;ditaval-startprop class="+ topic/foreign ditaot-d/ditaval-startprop "></codeblock><p>The <codeph>&lt;ditaval-startprop></codeph> element
+will contain the following:<ul>
+<li>If the active flags should create a new style, that style is included
+using standard CSS markup on the @outputclass attribute. Output types
+that make use of CSS, such as XHTML, can use this value as-is.</li>
+<li>If styles conflict, and a <codeph>&lt;style-conflict></codeph> element
+exists in the DITAVAL, it will be copied as a child of <codeph>&lt;ditaval-startprop></codeph>.</li>
+<li>Any <codeph>&lt;prop></codeph> or <codeph>&lt;revprop></codeph> elements
+that define active flags will be copied in as children of the <codeph>&lt;ditaval-startprop></codeph> element.
+Any <codeph>&lt;startflag></codeph> children of the properties will
+be included, but <codeph>&lt;endflag></codeph> children will not.</li>
+</ul></p></dd>
+</dlentry><dlentry>
+<dt><codeph>&lt;ditaval-endprop></codeph></dt>
+<dd>When any flag is active on an element, a <codeph>&lt;ditaval-endprop></codeph> element
+will be created as the last child of the flagged element:<codeblock>&lt;ditaval-endprop class="+ topic/foreign ditaot-d/ditaval-endprop "></codeblock><p>CSS
+values and <codeph>&lt;styleconflict></codeph> elements are not included
+on this element.</p><p>Any <codeph>&lt;prop></codeph> or <codeph>&lt;revprop></codeph> elements
+that define active flags will be copied in as children of <codeph>&lt;ditaval-prop></codeph>.
+Any <codeph>&lt;endflag></codeph> children of the properties will
+be included, but <codeph>&lt;startflag></codeph> children will not.</p></dd>
+</dlentry></dl></section>
+<section><title>Supporting flags in overrides or custom transform
+types</title><p>For most transform types, the <codeph>&lt;foreign></codeph> element
+should be ignored by default, because arbitrary non-DITA content may
+not mix well unless coded for ahead of time. If the <codeph>&lt;foreign></codeph> element
+is ignored by default, or if a rule is added to specifically ignore <codeph>&lt;ditaval-startprop></codeph> and <codeph>&lt;ditaval-endprop></codeph>,
+then the added elements will have no impact on a transform. If desired,
+flagging support may be integrated at any time in the future.</p><p>The
+processing described above runs as part of the common preprocess,
+so any transform that uses the default preprocess will get the topic
+updates. To support generating flags as images, XSLT based transforms
+can use default fallthrough processing in most cases. For example,
+if a paragraph is flagged, the first child of <codeph>&lt;p></codeph> will
+contain the start flag information; adding a rule to handle images
+in <codeph>&lt;ditaval-startprop></codeph> will cause the image to
+appear at the start of the paragraph content.</p><p>In some cases
+fallthrough processing will not result in valid output; for those
+cases, the flags must be explicitly processed. This is done in the
+XHTML transform for elements like <codeph>&lt;ol></codeph>, because
+fallthrough processing would place images in between <codeph>&lt;ol></codeph> and <codeph>&lt;li></codeph>.
+To handle this, the code processes <codeph>&lt;ditaval-startprop></codeph> before
+starting the element, and <codeph>&lt;ditaval-endprop></codeph> at
+the end. Fallthrough processing is then disabled for those elements
+as children of <codeph>&lt;ol></codeph>.</p></section>
+<example><title>Example DITAVAL</title><p>Assume the following DITAVAL
+file is in use during a build. This DITAVAL will be used for each
+of the following content examples.</p><codeblock>&lt;?xml version="1.0" encoding="UTF-8"?>
+&lt;val>
+  &lt;!-- Define what happens in the case of conflicting styles -->
+  &lt;style-conflict background-conflict-color="red"/>
+
+  &lt;!-- Define two flagging properties that give styles (no image) -->
+  &lt;prop action="flag" att="audience" style="underline" val="user" backcolor="green"/>
+  &lt;prop action="flag" att="platform" style="overline" val="win" backcolor="blue"/>
+
+  &lt;!-- Define a property that includes start and end image flags -->
+  &lt;prop action="flag" att="platform" val="linux" style="overline" backcolor="blue">
+    &lt;startflag imageref="startlin.png">&lt;alt-text>Start linux&lt;/alt-text>&lt;/startflag>
+    &lt;endflag imageref="endlin.png">&lt;alt-text>End linux&lt;/alt-text>&lt;/endflag>
+  &lt;/prop>
+
+  &lt;!-- Define a revision that includes start and end image flags -->
+  &lt;revprop action="flag" style="double-underline" val="rev2">
+    &lt;startflag imageref="start_rev.gif">&lt;alt-text>ssssssssssstart&lt;/alt-text>&lt;/startflag>
+    &lt;endflag imageref="end_rev.gif">&lt;alt-text>eeeeeeeeeeeeeend&lt;/alt-text>&lt;/endflag>
+  &lt;/revprop>
+&lt;/val></codeblock></example>
+<example><title>Content example 1: adding style</title><p>Now assume
+the following paragraph exists in a topic. Class attributes are included,
+as they would normally be in the middle of the preprocess routine;
+@xtrf and @xtrc are left off for clarity.</p><codeblock>&lt;p audience="user">Simple user; includes style but no images&lt;/p>
+</codeblock><p>Based on the DITAVAL above, audience="user" results
+in a style with underlining and with a green background. The interpreted
+CSS value is added to @outputclass on <codeph>&lt;ditaval-startprop></codeph>,
+and the actual property definition is included at the start and end
+of the element. The output from the flagging step looks like this
+(with newlines added for clarity, and class attributes added as they
+would appear in the temporary file):</p><p>The resulting file after
+the flagging step looks like this; for clarity, newlines are added,
+while @xtrf and @xtrc are removed:</p><codeblock>&lt;p audience="user" class="- topic/p ">
+  <b>&lt;ditaval-startprop class="+ topic/foreign ditaot-d/ditaval-startprop " 
+           outputclass="background-color:green;text-decoration:underline;">
+    &lt;prop action="flag" att="audience" style="underline" val="user" backcolor="green"/>
+  &lt;/ditaval-startprop></b>
+  Simple user; includes style but no images
+  <b>&lt;ditaval-endprop class="+ topic/foreign ditaot-d/ditaval-endprop ">
+    &lt;prop action="flag" att="audience" style="underline" val="user" backcolor="green"/>
+  &lt;/ditaval-endprop></b>
+&lt;/p></codeblock></example>
+<example><title>Content example 2: conflicting styles</title><p>This
+example includes a paragraph with conflicting styles. When the audience
+and platform attributes are both evaluated, the DITAVAL indicates
+that the background color is both green and blue. In this situation,
+the <codeph>&lt;style-conflict></codeph> element is evaluated to determine
+how to style the content.</p><codeblock>&lt;p audience="user" platform="win">Conflicting styles (still no images)&lt;/p>
+</codeblock><p>The <codeph>&lt;style-conflict></codeph> element results
+in a background color of red, so this value is added to @outputclass
+on <codeph>&lt;ditaval-startprop></codeph>. As above, active properties
+are copied into the generated elements; the <codeph>&lt;style-conflict></codeph> element
+itself is also copied into the generated <codeph>&lt;ditaval-startprop></codeph> element.</p><p>The
+resulting file after the flagging step looks like this; for clarity,
+newlines are added, while @xtrf and @xtrc are removed:</p><codeblock>&lt;p audience="user" platform="win" class="- topic/p ">
+  <b>&lt;ditaval-startprop class="+ topic/foreign ditaot-d/ditaval-startprop " 
+           outputclass="background-color:red;">
+    &lt;style-conflict background-conflict-color="red"/>
+    &lt;prop action="flag" att="audience" style="underline" val="user" backcolor="green"/>
+    &lt;prop action="flag" att="platform" style="overline" val="win" backcolor="blue"/>
+  &lt;/ditaval-startprop></b>
+  Conflicting styles (still no images)
+  <b>&lt;ditaval-endprop class="+ topic/foreign ditaot-d/ditaval-endprop ">
+    &lt;prop action="flag" att="platform" style="overline" val="win" backcolor="blue"/>
+    &lt;prop action="flag" att="audience" style="underline" val="user" backcolor="green"/>
+  &lt;/ditaval-endprop></b>
+&lt;/p>
+</codeblock></example>
+<example><title>Content example 3: adding image flags</title><p>This
+example includes image flags for both @platform and @rev, which are
+defined in DITAVAL <codeph>&lt;prop></codeph> and <codeph>&lt;revprop></codeph> elements.</p><codeblock>&lt;ol platform="linux" rev="rev2">
+  &lt;li>Generate images for platform="linux" and rev="2"&lt;/li>
+&lt;/ol></codeblock><p>As above, the <codeph>&lt;ditaval-startprop></codeph> and <codeph>&lt;ditaval-endprop></codeph> nest
+the active property definitions, with the calculated CSS value on
+@outputclass. The <codeph>&lt;ditaval-startprop></codeph> drops the
+ending image, and <codeph>&lt;ditaval-endprop></codeph> drops the
+starting image. To make document-order processing more consistent,
+property flags are always included before revisions in <codeph>&lt;ditaval-startprop></codeph>,
+and the order is reversed for <codeph>&lt;ditaval-endprop></codeph>.</p><p>The
+resulting file after the flagging step looks like this; for clarity,
+newlines are added, while @xtrf and @xtrc are removed:</p><codeblock>&lt;ol platform="linux" rev="rev2" class="- topic/ol ">
+  <b>&lt;ditaval-startprop class="+ topic/foreign ditaot-d/ditaval-startprop " 
+           outputclass="background-color:blue;text-decoration:underline;text-decoration:overline;">
+    &lt;prop action="flag" att="platform" val="linux" style="overline" backcolor="blue">
+      &lt;startflag imageref="startlin.png">&lt;alt-text>Start linux&lt;/alt-text>&lt;/startflag>
+    &lt;/prop>
+    &lt;revprop action="flag" style="double-underline" val="rev2">
+      &lt;startflag imageref="start_rev.gif">&lt;alt-text>ssssssssssstart&lt;/alt-text>&lt;/startflag>
+    &lt;/revprop>
+  &lt;/ditaval-startprop></b>
+  &lt;li class="- topic/li ">Generate images for platform="linux" and rev="2"&lt;/li>
+  <b>&lt;ditaval-endprop class="+ topic/foreign ditaot-d/ditaval-endprop ">
+    &lt;revprop action="flag" style="double-underline" val="rev2">
+      &lt;endflag imageref="end_rev.gif">&lt;alt-text>eeeeeeeeeeeeeend&lt;/alt-text>&lt;/endflag>
+    &lt;/revprop>
+    &lt;prop action="flag" att="platform" val="linux" style="overline" backcolor="blue">
+      &lt;endflag imageref="endlin.png">&lt;alt-text>End linux&lt;/alt-text>&lt;/endflag>
+    &lt;/prop>
+  &lt;/ditaval-endprop></b>
+&lt;/ol></codeblock></example>
+</refbody>
+</reference>

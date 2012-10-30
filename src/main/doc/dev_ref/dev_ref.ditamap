@@ -25,6 +25,9 @@
         <topicref href="preprocess-chunk.dita"/>
         <topicref href="preprocess-maplink.dita"/>
         <topicref href="preprocess-topicpull.dita"/>
+        <topicref href="preprocess-flagging.dita">
+           <topicref rev="1.7" href="flagging-migration.dita"/>
+        </topicref>
       </topicset>
       <topicref collection-type="family" href="XhtmlWithNavigation.dita">
         <topicref href="XhtmlDefault.dita"/>
