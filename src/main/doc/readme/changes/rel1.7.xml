@@ -103,7 +103,8 @@
           <li>#1288 Use strict integration by default (milestone 3)</li>
           <li>#1327 Change minimum Java version to 6 (milestone 3)</li>
           <li>#1391 Add new job status file format (milestone 3)</li>
-          <li>#1313 Separate flagging logic from XHTML code (Milestone 3)</li>
+          <li>#1398 Allow defining source input base directory (Milestone 3)</li>
+          <li>#1313 Separate flagging logic from XHTML code (in progress)</li>
           <li>#1317 General XHTML improvements (in progress)</li>
           <li>#1324 Avoid strings where other types are more appropriate (in progress)</li>
           <li>#1338 Add named error messages (in progress)</li>
@@ -152,6 +153,7 @@
           <li>#1377 htmlhelp ampersand (&amp;amp;) entity in indexterm does not convert (milestone 2)</li>
           <li>#1378 dita.out.map.htmlhelp.hhk: target doesn't allow topic with empty indexterm (milestone 2)</li>
           <li>#1382 Merging uses system path separator when rewriting URIs (milestone 2)</li>
+          <li>#1398 Genlist processes file multiple times (Milestone 3)</li>
           <li>#1238 Doesn't work with SAXON 9 HE (9.4.0.3) (in progress)</li>
         </ul>
       </section>
