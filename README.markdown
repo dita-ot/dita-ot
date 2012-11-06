@@ -36,6 +36,7 @@ Usage
    * `src/main/lib/saxon/saxon9-dom.jar`
    * `src/main/lib/saxon/saxon9.jar`
    * `src/main/lib/resolver.jar`
+   * `src/main/lib/icu4j.jar`
 2. Change directory to `src/main`.
 3. Run DITA-OT with:
 
@@ -64,6 +65,7 @@ Distribution
    * `src/main/lib/saxon/saxon9-dom.jar`
    * `src/main/lib/saxon/saxon9.jar`
    * `src/main/lib/resolver.jar`
+   * `src/main/lib/icu4j.jar`
 
 4. Build distribution packages:
 
