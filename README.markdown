@@ -11,6 +11,8 @@ In order to build and use DITA-OT, you’ll need:
 * Java Development Kit 6 or newer
 * Apache Ant 1.8.2 or newer.
 
+   
+
 Building
 --------
 
@@ -22,7 +24,8 @@ Building
 3. Run plug-in installation:
 
         ant -f src/main/integrator.xml
-
+  Please note that you need to have `src/main/lib/` added to your `CLASSPATH` system variable in order to have no warnings.
+ 
 Usage
 -----
 
