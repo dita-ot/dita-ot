@@ -55,7 +55,7 @@ public final class VariableFileTask extends Task {
                 s.writeStartElement("var");
                 final String n = f.getName();
                 final int i = n.indexOf('.');
-                s.writeAttribute(XML_NS_URI, "xml:lang", n.substring(0, i).replace('_', '-'));
+                s.writeAttribute("xml", XML_NS_URI, "lang", n.substring(0, i).replace('_', '-'));
                 s.writeAttribute("filename", f.toURI().toString());
                 s.writeEndElement();
             }
