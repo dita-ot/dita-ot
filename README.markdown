@@ -11,7 +11,7 @@ In order to build and use DITA-OT, you’ll need:
 * Java Development Kit 6 or newer
 * Apache Ant 1.8.2 or newer.
 
-   
+   Please note that if you receive errors like `unknown protocol: plugin` or `unknown protocol: cfg` then you may have some missing libraries from your `ant` installation. In that case please download a recent distribution of `ant` and use that instead.
 
 Building
 --------
@@ -20,11 +20,13 @@ Building
 2. On root directory, compile Java code:
 
         ant jar
+
+3. Make sure the following files and directories are added to your `CLASSPATH` system variable:
+   * `src/main/lib/`
      
 3. Run plug-in installation:
 
         ant -f src/main/integrator.xml
-  Please note that you need to have `src/main/lib/` added to your `CLASSPATH` system variable in order to have no warnings.
  
 Usage
 -----
@@ -54,11 +56,7 @@ Distribution
 
         ant jar
      
-2. Run plug-in installation:
-
-        ant -f src/main/integrator.xml
-
-3. Add the following files and directories to `CLASSPATH` system variable:
+2. Add the following files and directories to `CLASSPATH` system variable:
    * `src/main/`
    * `src/main/lib/`
    * `src/main/lib/dost.jar`
@@ -70,11 +68,17 @@ Distribution
    * `src/main/lib/resolver.jar`
    * `src/main/lib/icu4j.jar`
 
+3. Run plug-in installation:
+
+        ant -f src/main/integrator.xml
+
 4. Build distribution packages:
 
         ant dist
    
    Distribution packages are build into `target` directory.
+
+   On some systems you may encounter an `java.lang.OutOfMemoryError: Java heap space`. In that case you need to provide more memory to the `ant` process. One way of doing that is by setting the `ANT_OPTS` system variable to specify more memory, for example setting that to `-Xmx1000m` should be enough.
    
 License
 -------
