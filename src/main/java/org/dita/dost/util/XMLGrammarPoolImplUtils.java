@@ -22,6 +22,7 @@ import org.apache.xerces.xni.grammars.XMLGrammarDescription;
 public final class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
 
     private boolean gramCache = true;
+    private static final Grammar[] INITIAL_GRAMMAR_SET = new Grammar[0];
 
 
     /** Constructs a grammar pool with a default number of buckets. */
@@ -44,11 +45,7 @@ public final class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
      */
     @Override
     public Grammar[] retrieveInitialGrammarSet(final String grammarType) {
-        synchronized (fGrammars) {
-
-            final Grammar[] toReturn = new Grammar[0];
-            return toReturn;
-        }
+        return INITIAL_GRAMMAR_SET;
     }
 
     /**
@@ -61,8 +58,10 @@ public final class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
     @Override
     public int hashCode(final XMLGrammarDescription desc) {
         if (desc instanceof XSDDescription) {
-            final String systemId = ((XSDDescription) desc).getLiteralSystemId();
-            return systemId == null ? 0 : systemId.hashCode();
+//            final String systemId = ((XSDDescription) desc).getLiteralSystemId();
+//            return systemId == null ? 0 : systemId.hashCode();
+        	// return -1 for XSD grammar hashcode because we want to disable XSD grammar caching
+        	return -1;
         } else {
             return desc.hashCode();
         }
@@ -87,8 +86,10 @@ public final class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
         if (gramCache) {
             if (desc1 instanceof XSDDescription
                     && desc2 instanceof XSDDescription) {
-                return desc1.getLiteralSystemId().equals(
-                        desc2.getLiteralSystemId());
+//                return desc1.getLiteralSystemId().equals(
+//                        desc2.getLiteralSystemId());
+            	// always return false for XSD grammar to disable XSD grammar caching
+            	return false;
             } else {
                 return desc1.equals(desc2);
             }
