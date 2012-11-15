@@ -13,6 +13,7 @@ import static org.dita.dost.util.Constants.*;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -26,11 +27,8 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.Content;
-import org.dita.dost.module.ContentImpl;
 import org.dita.dost.platform.Integrator;
 import org.dita.dost.util.Configuration;
-import org.dita.dost.writer.PropertiesWriter;
 
 /**
  * Command line tool for running DITA OT.
@@ -251,11 +249,22 @@ public final class CommandLineInvoker {
         /*
          * Output input params into temp property file
          */
-        final PropertiesWriter propWriter = new PropertiesWriter();
-        final Content content = new ContentImpl();
-        content.setValue(prop);
-        propWriter.setContent(content);
-        propWriter.write(propertyFile);
+        FileOutputStream fileOutputStream = null;
+		try {
+		    fileOutputStream = new FileOutputStream(propertyFile);
+		    prop.store(fileOutputStream, null);
+		    fileOutputStream.flush();
+		} catch (final Exception e) {
+		    throw new DITAOTException(e);
+		} finally {
+		    if (fileOutputStream != null) {
+		        try {
+		            fileOutputStream.close();
+		        } catch (final Exception e) {
+		            throw new DITAOTException(e);
+		        }
+		    }
+		}
 
         readyToRun = true;
     }
