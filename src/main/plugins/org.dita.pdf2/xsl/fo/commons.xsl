@@ -1857,6 +1857,9 @@ See the accompanying license.txt file for applicable licenses.
         </fo:inline>
     </xsl:template>
 
+    <xsl:template match="*[contains(@class,' topic/foreign ')]"/>
+    <xsl:template match="*[contains(@class,' topic/unknown ')]"/>
+
     <xsl:template match="*[contains(@class,' topic/draft-comment ')]">
         <xsl:if test="$publishRequiredCleanup = 'yes' or $DRAFT='yes'">
             <fo:block xsl:use-attribute-sets="draft-comment">

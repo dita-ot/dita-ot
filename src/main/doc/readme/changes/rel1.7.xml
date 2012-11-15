@@ -154,6 +154,7 @@
           <li>#1378 dita.out.map.htmlhelp.hhk: target doesn't allow topic with empty indexterm (milestone 2)</li>
           <li>#1382 Merging uses system path separator when rewriting URIs (milestone 2)</li>
           <li>#1398 Genlist processes file multiple times (Milestone 3)</li>
+          <li>#1402 Foreign and Unknown elements not ignored in PDF (Milestone 4)</li>
           <li>#1238 Doesn't work with SAXON 9 HE (9.4.0.3) (in progress)</li>
         </ul>
       </section>
