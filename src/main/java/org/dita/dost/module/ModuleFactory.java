@@ -65,7 +65,7 @@ public final class ModuleFactory {
             final Properties params = new Properties();
 
             params.put("%1", module);
-            final MessageBean msgBean=MessageUtils.getMessage("DOTJ005F", params);
+            final MessageBean msgBean=MessageUtils.getInstance().getMessage("DOTJ005F", params);
             msg = msgBean.toString();
 
             throw new DITAOTException(msgBean,e,msg);
@@ -89,7 +89,7 @@ public final class ModuleFactory {
             final Properties params = new Properties();
 
             params.put("%1", moduleClass.getName());
-            final MessageBean msgBean=MessageUtils.getMessage("DOTJ005F", params);
+            final MessageBean msgBean=MessageUtils.getInstance().getMessage("DOTJ005F", params);
             msg = msgBean.toString();
 
             throw new DITAOTException(msgBean,e,msg);

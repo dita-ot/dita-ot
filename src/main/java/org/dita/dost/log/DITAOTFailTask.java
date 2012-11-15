@@ -104,8 +104,7 @@ public final class DITAOTFailTask extends Exit {
             }
         }
         
-        MessageUtils.loadDefaultMessages();
-        final MessageBean msgBean = MessageUtils.getMessage(id, prop);
+        final MessageBean msgBean = MessageUtils.getInstance().getMessage(id, prop);
         final DITAOTLogger logger = new DITAOTAntLogger(getProject());
         if (msgBean != null) {
             final String type = msgBean.getType();

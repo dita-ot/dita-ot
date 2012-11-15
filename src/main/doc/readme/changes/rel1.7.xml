@@ -46,6 +46,8 @@
           URIs in <codeph>xsl:import</codeph> instructions or use <codeph>dita.plugin.*</codeph> Ant properties.</p>
         <p>The integration process has been changed to use strict mode by default. For old plug-ins which are not valid,
           <keyword>lax</keyword> processing mode can still be used.</p>
+        <p>Plug-ins that use the <codeph>MessageUtils</codeph> Java class must use <codeph>getInstance</codeph> method to
+          access the <codeph>MessageUtils</codeph> instance, as <codeph>getMessage</codeph> methods have been changed to instance methods.</p>
       </section>
       <section>
         <title>HTML</title>

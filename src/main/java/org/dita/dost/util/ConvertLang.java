@@ -296,7 +296,7 @@ public final class ConvertLang extends Task {
                     final Properties prop = new Properties();
                     prop.put("%1", inputFile.getPath());
                     prop.put("%2", outputFile.getPath());
-                    logger.logError(MessageUtils.getMessage("DOTJ009E", prop)
+                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop)
                             .toString());
                 }
                 //rename newly created file to the old file
@@ -304,7 +304,7 @@ public final class ConvertLang extends Task {
                     final Properties prop = new Properties();
                     prop.put("%1", inputFile.getPath());
                     prop.put("%2", outputFile.getPath());
-                    logger.logError(MessageUtils.getMessage("DOTJ009E", prop)
+                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop)
                             .toString());
                 }
             } catch (final Exception e) {
@@ -422,7 +422,7 @@ public final class ConvertLang extends Task {
                     final Properties prop = new Properties();
                     prop.put("%1", inputFile.getPath());
                     prop.put("%2", outputFile.getPath());
-                    logger.logError(MessageUtils.getMessage("DOTJ009E", prop)
+                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop)
                             .toString());
                 }
                 //rename newly created file to the old file
@@ -430,7 +430,7 @@ public final class ConvertLang extends Task {
                     final Properties prop = new Properties();
                     prop.put("%1", inputFile.getPath());
                     prop.put("%2", outputFile.getPath());
-                    logger.logError(MessageUtils.getMessage("DOTJ009E", prop)
+                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop)
                             .toString());
                 }
             } catch (final Exception e) {
@@ -504,7 +504,7 @@ public final class ConvertLang extends Task {
                 final Properties prop = new Properties();
                 prop.put("%1", inputFile.getPath());
                 prop.put("%2", outputFile.getPath());
-                logger.logError(MessageUtils.getMessage("DOTJ009E", prop)
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop)
                         .toString());
             }
             //rename newly created file to the old file
@@ -512,7 +512,7 @@ public final class ConvertLang extends Task {
                 final Properties prop = new Properties();
                 prop.put("%1", inputFile.getPath());
                 prop.put("%2", outputFile.getPath());
-                logger.logError(MessageUtils.getMessage("DOTJ009E", prop)
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop)
                         .toString());
             }
 

@@ -235,13 +235,13 @@ public final class ChunkMapReader implements AbstractReader {
                 final Properties prop = new Properties();
                 prop.put("%1", inputFile.getPath());
                 prop.put("%2", inputFile.getAbsolutePath()+FILE_EXTENSION_CHUNK);
-                logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop).toString());
             }
             if(!new File(inputFile.getAbsolutePath()+FILE_EXTENSION_CHUNK).renameTo(inputFile)){
                 final Properties prop = new Properties();
                 prop.put("%1", inputFile.getPath());
                 prop.put("%2", inputFile.getAbsolutePath()+FILE_EXTENSION_CHUNK);
-                logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop).toString());
             }
 
         }catch (final Exception e){

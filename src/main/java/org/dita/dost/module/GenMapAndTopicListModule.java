@@ -414,13 +414,13 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         params.put("%1", file.getAbsolutePath());
 
         if (!fileToParse.exists()) {
-            logger.logError(MessageUtils.getMessage("DOTX008E", params).toString());
+            logger.logError(MessageUtils.getInstance().getMessage("DOTX008E", params).toString());
             return;
         }
         if (!FileUtils.isValidTarget(file.getPath().toLowerCase())) {
             final Properties prop = new Properties();
             prop.put("%1", fileToParse);
-            logger.logWarn(MessageUtils.getMessage("DOTJ053W", params).toString());
+            logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ053W", params).toString());
         }
         try {
             reader.setTranstype(transtype);
@@ -432,7 +432,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
                 processParseResult(file.getPath());
                 categorizeCurrentFile(file.getPath());
             } else if (!file.equals(inputFile)) {
-                logger.logWarn(MessageUtils.getMessage("DOTJ021W", params).toString());
+                logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ021W", params).toString());
             }
         } catch (final SAXParseException sax) {
             // To check whether the inner third level is DITAOTBuildException
@@ -445,28 +445,28 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             }
             if (file.equals(inputFile)) {
                 // stop the build if exception thrown when parsing input file.
-                final String msg = MessageUtils.getMessage("DOTJ012F", params).toString() + ": " + sax.getMessage();
-                throw new DITAOTException(MessageUtils.getMessage("DOTJ012F", params), sax, msg);
+                final String msg = MessageUtils.getInstance().getMessage("DOTJ012F", params).toString() + ": " + sax.getMessage();
+                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ012F", params), sax, msg);
             }
-            final String buff = MessageUtils.getMessage("DOTJ013E", params).toString() + LINE_SEPARATOR + sax.getMessage();
+            final String buff = MessageUtils.getInstance().getMessage("DOTJ013E", params).toString() + LINE_SEPARATOR + sax.getMessage();
             logger.logError(buff.toString());
         } catch (final Exception e) {
             if (file.equals(inputFile)) {
                 // stop the build if exception thrown when parsing input file.
-                final String msg = MessageUtils.getMessage("DOTJ012F", params).toString() + ": " + e.getMessage();
-                throw new DITAOTException(MessageUtils.getMessage("DOTJ012F", params), e, msg);
+                final String msg = MessageUtils.getInstance().getMessage("DOTJ012F", params).toString() + ": " + e.getMessage();
+                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ012F", params), e, msg);
             }
-            final String buff = MessageUtils.getMessage("DOTJ013E", params).toString() + LINE_SEPARATOR + e.getMessage();
+            final String buff = MessageUtils.getInstance().getMessage("DOTJ013E", params).toString() + LINE_SEPARATOR + e.getMessage();
             logger.logError(buff);
         }
 
         if (!reader.isValidInput() && file.equals(inputFile)) {
             if (xmlValidate == true) {
                 // stop the build if all content in the input file was filtered out.
-                throw new DITAOTException(MessageUtils.getMessage("DOTJ022F", params).toString());
+                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ022F", params).toString());
             } else {
                 // stop the build if the content of the file is not valid.
-                throw new DITAOTException(MessageUtils.getMessage("DOTJ034F", params).toString());
+                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ034F", params).toString());
             }
         }
 
@@ -505,7 +505,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
                 final Properties prop = new Properties();
                 prop.setProperty("%1", value);
                 prop.setProperty("%2", key);
-                logger.logWarn(MessageUtils.getMessage("DOTX065W", prop).toString());
+                logger.logWarn(MessageUtils.getInstance().getMessage("DOTX065W", prop).toString());
                 ignoredCopytoSourceSet.add(value);
             } else {
                 updateUplevels(key);
@@ -525,7 +525,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
                 /*
                  * Properties prop = new Properties(); prop.put("%1", key);
                  * prop.put("%2", value); prop.put("%3", currentFile); logger
-                 * .logInfo(MessageUtils.getMessage("DOTJ048I",
+                 * .logInfo(MessageUtils.getInstance().getMessage("DOTJ048I",
                  * prop).toString());
                  */
             } else {
@@ -667,7 +667,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
 				if (!image.exists()){
 	            	final Properties prop = new Properties();
 					prop.put("%1", image.getAbsolutePath());
-					logger.logWarn(MessageUtils.getMessage(
+					logger.logWarn(MessageUtils.getInstance().getMessage(
 							"DOTX008W", prop).toString());
 	            }
 			} catch (final IOException e) {

@@ -118,7 +118,7 @@ public final class AntInvoker extends Task {
                 final Properties params = new Properties();
 
                 params.put("%1", keyValueStr);
-                msg = MessageUtils.getMessage("DOTJ006F", params).toString();
+                msg = MessageUtils.getInstance().getMessage("DOTJ006F", params).toString();
                 throw new RuntimeException(msg);
             }
 
@@ -131,7 +131,7 @@ public final class AntInvoker extends Task {
                 final Properties params = new Properties();
 
                 params.put("%1", keyValueStr);
-                msg = MessageUtils.getMessage("DOTJ006F", params).toString();
+                msg = MessageUtils.getInstance().getMessage("DOTJ006F", params).toString();
                 throw new RuntimeException(msg);
             }
 

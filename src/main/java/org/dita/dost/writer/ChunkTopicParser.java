@@ -801,13 +801,13 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                         final Properties prop = new Properties();
                         prop.put("%1", currentParsingFile);
                         prop.put("%2", outputFile);
-                        logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
+                        logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop).toString());
                     }
                     if(dotchunk && !new File(outputFile).renameTo(new File(currentParsingFile))){
                         final Properties prop = new Properties();
                         prop.put("%1", currentParsingFile);
                         prop.put("%2", outputFile);
-                        logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
+                        logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop).toString());
                     }
                 }
                 output = tempOutput;
@@ -1122,7 +1122,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                         if(insertpoint==-1 || end==-1){
                             final Properties prop=new Properties();
                             prop.put("%1", hrefValue);
-                            logger.logError(MessageUtils.getMessage("DOTJ033E",prop).toString());
+                            logger.logError(MessageUtils.getInstance().getMessage("DOTJ033E",prop).toString());
                         } else {
                             if (ELEMENT_NAME_DITA.equalsIgnoreCase(parentResult.substring(insertpoint,end).trim())){
                                 insertpoint = parentResult.lastIndexOf("</",insertpoint);

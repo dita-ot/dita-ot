@@ -194,7 +194,7 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
                     final StringBuffer buff=new StringBuffer();
                     String msg = null;
                     params.put("%1", target);
-                    msg = MessageUtils.getMessage("DOTJ013E", params).toString();
+                    msg = MessageUtils.getInstance().getMessage("DOTJ013E", params).toString();
                     logger.logError(buff.append(msg).append(e.getMessage()).toString());
                 }
             }
@@ -226,7 +226,7 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
                     final Properties params = new Properties();
                     String msg = null;
                     params.put("%1", ditamap);
-                    msg = MessageUtils.getMessage("DOTJ013E", params).toString();
+                    msg = MessageUtils.getInstance().getMessage("DOTJ013E", params).toString();
                     logger.logError(msg);
                     logger.logException(e);
                 }

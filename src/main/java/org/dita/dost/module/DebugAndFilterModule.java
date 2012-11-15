@@ -572,7 +572,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                                 .append("\"] which points to an existed file was ignored.").toString());*/
                 final Properties prop = new Properties();
                 prop.setProperty("%1", copytoTarget);
-                logger.logWarn(MessageUtils.getMessage("DOTX064W", prop).toString());
+                logger.logWarn(MessageUtils.getInstance().getMessage("DOTX064W", prop).toString());
             }else{
                 final String inputMapInTemp = new File(tempDir + File.separator + job.getInputMap()).getAbsolutePath();
                 copyFileWithPIReplaced(srcFile, targetFile, copytoTarget, inputMapInTemp);

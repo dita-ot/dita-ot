@@ -371,7 +371,7 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
                         // if there is no generalized tag corresponding this tag
                         final Properties prop=new Properties();
                         prop.put("%1", name);
-                        logger.logError(MessageUtils.getMessage("DOTJ038E", prop).toString());
+                        logger.logError(MessageUtils.getInstance().getMessage("DOTJ038E", prop).toString());
                         break;
                     }
                     if(currentIndex.compareTo(nextIndex) > 0){
@@ -648,13 +648,13 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
                 final Properties prop = new Properties();
                 prop.put("%1", inputFile.getPath());
                 prop.put("%2", outputFile.getPath());
-                logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop).toString());
             }
             if(!outputFile.renameTo(inputFile)){
                 final Properties prop = new Properties();
                 prop.put("%1", inputFile.getPath());
                 prop.put("%2", outputFile.getPath());
-                logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop).toString());
             }
         } catch (final Exception e) {
             logger.logException(e);

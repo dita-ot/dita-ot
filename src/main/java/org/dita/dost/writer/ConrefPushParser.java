@@ -196,7 +196,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
                     key = iterator.next();
                     prop.setProperty("%1", key.substring(0, key.indexOf(STICK)));
                     prop.setProperty("%2", filename);
-                    logger.logWarn(MessageUtils.getMessage("DOTJ043W", prop).toString());
+                    logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ043W", prop).toString());
                 }
             }
             if(hasConref){
@@ -207,13 +207,13 @@ public final class ConrefPushParser extends AbstractXMLWriter {
                 final Properties prop = new Properties();
                 prop.put("%1", inputFile.getPath());
                 prop.put("%2", outputFile.getPath());
-                logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop).toString());
             }
             if(!outputFile.renameTo(inputFile)){
                 final Properties prop = new Properties();
                 prop.put("%1", inputFile.getPath());
                 prop.put("%2", outputFile.getPath());
-                logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop).toString());
             }
         } catch (final Exception e) {
             logger.logException(e);

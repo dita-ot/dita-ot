@@ -156,7 +156,7 @@ public final class IndexDitaProcessor {
                 final Properties prop = new Properties();
                 prop.put("%1", e.getFormattedString());
                 prop.put("%2", textValue);
-                logger.logWarn(MessageUtils.getMessage("DOTA067W", prop).toString());
+                logger.logWarn(MessageUtils.getInstance().getMessage("DOTA067W", prop).toString());
             }
             seeEntry.clear();
         }
@@ -165,7 +165,7 @@ public final class IndexDitaProcessor {
                 final Properties prop = new Properties();
                 prop.put("%1", e.getFormattedString());
                 prop.put("%2", textValue);
-                logger.logWarn(MessageUtils.getMessage("DOTA068W", prop).toString());
+                logger.logWarn(MessageUtils.getInstance().getMessage("DOTA068W", prop).toString());
             }
             seeAlsoEntry.clear();
         }

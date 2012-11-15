@@ -95,13 +95,13 @@ final class MoveMetaModule implements AbstractPipelineModule {
                     final Properties p = new Properties();
                     p.put("%1", oldMap.getPath());
                     p.put("%2", newMap.getAbsolutePath()+".chunk");
-                    logger.logError(MessageUtils.getMessage("DOTJ009E", p).toString());
+                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", p).toString());
                 }
                 if (!newMap.renameTo(oldMap)) {
                     final Properties p = new Properties();
                     p.put("%1", oldMap.getPath());
                     p.put("%2", newMap.getAbsolutePath()+".chunk");
-                    logger.logError(MessageUtils.getMessage("DOTJ009E", p).toString());
+                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", p).toString());
                 }
             }
         }

@@ -158,7 +158,6 @@ public final class CommandLineInvoker {
             throw new DITAOTException("Invalid dita-ot home directory '" + ditaDir
                     + "', please specify the correct dita-ot home directory using '/ditadir'.");
         }
-        MessageUtils.loadDefaultMessages();
 
         /*
          * Process input arguments
@@ -180,7 +179,7 @@ public final class CommandLineInvoker {
                 printUsage();
                 final Properties params = new Properties();
                 params.put("%1", arg);
-                throw new DITAOTException(MessageUtils.getMessage("DOTJ001F", params).toString());
+                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ001F", params).toString());
             }
 
             final String javaArg = arg.substring(0, colonPos);
@@ -190,7 +189,7 @@ public final class CommandLineInvoker {
                 printUsage();
                 final Properties params = new Properties();
                 params.put("%1", javaArg);
-                throw new DITAOTException(MessageUtils.getMessage("DOTJ002F", params).toString());
+                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ002F", params).toString());
             }
 
             String antArgValue = arg.substring(colonPos + 1);
@@ -198,7 +197,7 @@ public final class CommandLineInvoker {
                 printUsage();
                 final Properties params = new Properties();
                 params.put("%1", javaArg);
-                throw new DITAOTException(MessageUtils.getMessage("DOTJ003F", params).toString());
+                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ003F", params).toString());
             }
 
             if (antArg.equals("clean.temp")
@@ -242,7 +241,7 @@ public final class CommandLineInvoker {
             final Properties params = new Properties();
 
             params.put("%1", tempPath.getAbsoluteFile());
-            msg = MessageUtils.getMessage("DOTJ004F", params).toString();
+            msg = MessageUtils.getInstance().getMessage("DOTJ004F", params).toString();
 
             throw new DITAOTException(msg);
         }

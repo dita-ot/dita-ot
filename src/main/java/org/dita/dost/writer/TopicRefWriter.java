@@ -529,7 +529,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
             if (!inputFile.exists()) {
                 final Properties prop = new Properties();
                 prop.put("%1", file);
-                logger.logError(MessageUtils.getMessage("DOTX008E", prop).toString());
+                logger.logError(MessageUtils.getInstance().getMessage("DOTX008E", prop).toString());
                 return;
             }
             outputFile = new File(file + FILE_EXTENSION_TEMP);
@@ -544,14 +544,14 @@ public final class TopicRefWriter extends AbstractXMLWriter {
                 final Properties prop = new Properties();
                 prop.put("%1", inputFile.getPath());
                 prop.put("%2", outputFile.getPath());
-                logger.logError(MessageUtils.getMessage("DOTJ009E", prop)
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop)
                         .toString());
             }
             if (!outputFile.renameTo(inputFile)) {
                 final Properties prop = new Properties();
                 prop.put("%1", inputFile.getPath());
                 prop.put("%2", outputFile.getPath());
-                logger.logError(MessageUtils.getMessage("DOTJ009E", prop)
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop)
                         .toString());
             }
         } catch (final Exception e) {

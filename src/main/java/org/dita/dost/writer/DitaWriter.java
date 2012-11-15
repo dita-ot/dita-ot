@@ -205,7 +205,7 @@ public final class DitaWriter extends AbstractXMLFilter {
                 final DITAOTLogger logger = new DITAOTJavaLogger();
                 final Properties params = new Properties();
                 params.put("%1", hrefValue);
-                logger.logError(MessageUtils.getMessage("DOTJ028E", params).toString());
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ028E", params).toString());
                 return true;
             }
         }
@@ -274,17 +274,17 @@ public final class DitaWriter extends AbstractXMLFilter {
             } catch (final URISyntaxException e) {
                 switch (processingMode) {
                 case STRICT:
-                    throw new RuntimeException(MessageUtils.getMessage("DOTJ054E", attName, attValue).setLocation(locator) + ": " + e.getMessage(), e);
+                    throw new RuntimeException(MessageUtils.getInstance().getMessage("DOTJ054E", attName, attValue).setLocation(locator) + ": " + e.getMessage(), e);
                 case SKIP:
-                    logger.logError(MessageUtils.getMessage("DOTJ054E", attName, attValue).setLocation(locator) + ", using invalid value.");
+                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ054E", attName, attValue).setLocation(locator) + ", using invalid value.");
                     break;
                 case LAX:
                     try {
                         final String origAttValue = attValue;
                         attValue = new URI(URLUtils.clean(attValue)).toASCIIString();
-                        logger.logError(MessageUtils.getMessage("DOTJ054E", attName, origAttValue).setLocation(locator) + ", using '" + attValue + "'.");
+                        logger.logError(MessageUtils.getInstance().getMessage("DOTJ054E", attName, origAttValue).setLocation(locator) + ", using '" + attValue + "'.");
                     } catch (final URISyntaxException e1) {
-                        logger.logError(MessageUtils.getMessage("DOTJ054E", attName, attValue).setLocation(locator) + ", using invalid value.");
+                        logger.logError(MessageUtils.getInstance().getMessage("DOTJ054E", attName, attValue).setLocation(locator) + ", using invalid value.");
                     }
                     break;
                 }
@@ -589,7 +589,7 @@ public final class DitaWriter extends AbstractXMLFilter {
                         }else{
                             final Properties prop = new Properties();
                             prop.setProperty("%1", attValue);
-                            logger.logError(MessageUtils.getMessage("DOTJ046E", prop).toString());
+                            logger.logError(MessageUtils.getInstance().getMessage("DOTJ046E", prop).toString());
                         }
                     }else{
                         //conkeyref just has keyref
@@ -618,14 +618,14 @@ public final class DitaWriter extends AbstractXMLFilter {
                         }else{
                             final Properties prop = new Properties();
                             prop.setProperty("%1", attValue);
-                            logger.logError(MessageUtils.getMessage("DOTJ046E", prop).toString());
+                            logger.logError(MessageUtils.getInstance().getMessage("DOTJ046E", prop).toString());
                         }
                     }
                 }else{
                     //invalid conkeyref value
                     final Properties prop = new Properties();
                     prop.setProperty("%1", attValue);
-                    logger.logError(MessageUtils.getMessage("DOTJ046E", prop).toString());
+                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ046E", prop).toString());
                 }
             } else {
                 XMLUtils.addOrSetAttribute(res, nsUri, atts.getLocalName(i), attQName, atts.getType(i), attValue);
@@ -1037,14 +1037,14 @@ public final class DitaWriter extends AbstractXMLFilter {
             if(attrValue == null && !ELEMENT_NAME_DITA.equals(localName)){
                 final Properties params = new Properties();
                 params.put("%1", localName);
-                logger.logInfo(MessageUtils.getMessage("DOTJ030I", params).toString());
+                logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ030I", params).toString());
             }
             if (attrValue != null && (TOPIC_TOPIC.matches(attrValue)||MAP_MAP.matches(attrValue))){
                 final String domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
                 if(domains == null){
                     final Properties params = new Properties();
                     params.put("%1", localName);
-                    logger.logInfo(MessageUtils.getMessage("DOTJ029I", params).toString());
+                    logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ029I", params).toString());
                 } else {
                     props = StringUtils.getExtProps(domains);
                 }
@@ -1258,7 +1258,7 @@ public final class DitaWriter extends AbstractXMLFilter {
                             prop.put("%3", attrValue);
                             prop.put("%4", StringUtils.assembleString(valueSet,
                                     COMMA));
-                            logger.logWarn(MessageUtils.getMessage("DOTJ049W",
+                            logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ049W",
                                     prop).toString());
                         }
                     }

@@ -52,7 +52,6 @@ public final class LogConfigTask extends Task {
         final DITAOTFileLogger logger = DITAOTFileLogger.getInstance();
         final String oldLogDir = logger.getLogDir();
 
-        MessageUtils.loadDefaultMessages();
         initLogDirectory();
         initLogFile();
 
@@ -112,7 +111,7 @@ public final class LogConfigTask extends Task {
         }
 
         if (logDir == null || "".equals(logDir)) {
-            final MessageBean msgBean=MessageUtils.getMessage("DOTJ015F");
+            final MessageBean msgBean=MessageUtils.getInstance().getMessage("DOTJ015F");
             final String msg = msgBean.toString();
             throw new BuildException(msg,new DITAOTException(msgBean,null,msg));
         }
@@ -128,7 +127,7 @@ public final class LogConfigTask extends Task {
                 final Properties params = new Properties();
                 String msg = null;
                 params.put("%1", logDir);
-                final MessageBean msgBean=MessageUtils.getMessage("DOTJ016F", params);
+                final MessageBean msgBean=MessageUtils.getInstance().getMessage("DOTJ016F", params);
                 msg = msgBean.toString();
                 throw new BuildException(msg,new DITAOTException(msgBean,null,msg));
             }
@@ -148,7 +147,7 @@ public final class LogConfigTask extends Task {
         }
 
         if (input == null) {
-            final MessageBean msgBean=MessageUtils.getMessage("DOTJ017F");
+            final MessageBean msgBean=MessageUtils.getInstance().getMessage("DOTJ017F");
             final String msg = msgBean.toString();
             throw new BuildException(msg,new DITAOTException(msgBean,null,msg));
         }

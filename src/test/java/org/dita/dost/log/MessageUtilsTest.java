@@ -7,6 +7,10 @@ package org.dita.dost.log;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 import org.dita.dost.TestUtils;
@@ -22,18 +26,45 @@ public class MessageUtilsTest {
     @Before
     public void setUp() throws Exception {
         final File f = new File(resourceDir, "messages.xml");
-        MessageUtils.loadMessages(f.getAbsolutePath());
-    }
-
-    @Test
-    public void testLoadDefaultMessages() {
-        MessageUtils.loadDefaultMessages();
+        InputStream in = null;
+		try {
+		    in = new FileInputStream(new File(f.getAbsolutePath()));
+		    MessageUtils.getInstance().loadMessages(in);
+		} catch (final FileNotFoundException e) {
+		    throw new RuntimeException("Failed to load messages configuration file: " + e.getMessage(), e);
+		} catch (final Exception e) {
+		    throw new RuntimeException("Failed to load messages configuration file: " + e.getMessage(), e);
+		} finally {
+		    if (in != null) {
+		        try {
+		            in.close();
+		        } catch (final IOException e) {
+		            // NOOP
+		        }
+		    }
+		}
     }
 
     @Test
     public void testLoadMessages() {
         final File f = new File(resourceDir, "messages.xml");
-        MessageUtils.loadMessages(f.getAbsolutePath());
+        InputStream in = null;
+		try {
+		    in = new FileInputStream(new File(f.getAbsolutePath()));
+		    MessageUtils.getInstance().loadMessages(in);
+		} catch (final FileNotFoundException e) {
+		    throw new RuntimeException("Failed to load messages configuration file: " + e.getMessage(), e);
+		} catch (final Exception e) {
+		    throw new RuntimeException("Failed to load messages configuration file: " + e.getMessage(), e);
+		} finally {
+		    if (in != null) {
+		        try {
+		            in.close();
+		        } catch (final IOException e) {
+		            // NOOP
+		        }
+		    }
+		}
     }
 
     @Test
@@ -43,7 +74,7 @@ public class MessageUtilsTest {
         exp.setType("FATAL");
         exp.setReason("Fatal reason.");
         exp.setResponse("Fatal response.");
-        assertEquals(exp.toString(), MessageUtils.getMessage("XXX123F").toString());
+        assertEquals(exp.toString(), MessageUtils.getInstance().getMessage("XXX123F").toString());
     }
 
     @Test
@@ -56,7 +87,7 @@ public class MessageUtilsTest {
         exp.setType("ERROR");
         exp.setReason("Error foo reason bar baz.");
         exp.setResponse("Error foo response bar baz.");
-        assertEquals(exp.toString(), MessageUtils.getMessage("XXX234E", props).toString());
+        assertEquals(exp.toString(), MessageUtils.getInstance().getMessage("XXX234E", props).toString());
     }
 
     @Test
@@ -68,7 +99,7 @@ public class MessageUtilsTest {
         exp.setType("ERROR");
         exp.setReason("Error foo reason %2.");
         exp.setResponse("Error foo response %2.");
-        assertEquals(exp.toString(), MessageUtils.getMessage("XXX234E", props).toString());
+        assertEquals(exp.toString(), MessageUtils.getInstance().getMessage("XXX234E", props).toString());
     }
 
     @Test
@@ -82,12 +113,12 @@ public class MessageUtilsTest {
         exp.setType("ERROR");
         exp.setReason("Error foo reason bar baz.");
         exp.setResponse("Error foo response bar baz.");
-        assertEquals(exp.toString(), MessageUtils.getMessage("XXX234E", props).toString());
+        assertEquals(exp.toString(), MessageUtils.getInstance().getMessage("XXX234E", props).toString());
     }
 
     @AfterClass
     public static void tearDown() throws Exception {
-        MessageUtils.loadDefaultMessages();
+        MessageUtils.getInstance().loadDefaultMessages();
     }
     
 }

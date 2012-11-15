@@ -154,7 +154,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
                     final Properties prop = new Properties();
                     prop.put("%1", atts.getValue(ATTRIBUTE_NAME_XTRF));
                     prop.put("%2", atts.getValue(ATTRIBUTE_NAME_XTRC));
-                    logger.logWarn(MessageUtils.getMessage("DOTJ044W",prop).toString());
+                    logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ044W",prop).toString());
                 }
                 start = true;
                 level =0;
@@ -169,7 +169,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
                     final Properties prop = new Properties();
                     prop.put("%1", atts.getValue(ATTRIBUTE_NAME_XTRF));
                     prop.put("%2", atts.getValue(ATTRIBUTE_NAME_XTRC));
-                    logger.logError(MessageUtils.getMessage("DOTJ039E", prop).toString());
+                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ039E", prop).toString());
                 }else{
                     putElement(pushcontent, name, atts, true);
                     pushType = ATTR_CONACTION_VALUE_PUSHAFTER;
@@ -183,7 +183,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
                     final Properties prop = new Properties();
                     prop.put("%1", atts.getValue(ATTRIBUTE_NAME_XTRF));
                     prop.put("%2", atts.getValue(ATTRIBUTE_NAME_XTRC));
-                    logger.logError(MessageUtils.getMessage("DOTJ040E", prop).toString());
+                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ040E", prop).toString());
                 }else{
                     pushType = ATTR_CONACTION_VALUE_PUSHREPLACE;
                     putElement(pushcontent, name, atts, true);
@@ -294,7 +294,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
                 //if there is no '#' in target string, report error
                 final Properties prop = new Properties();
                 prop.put("%1", target);
-                logger.logError(MessageUtils.getMessage("DOTJ041E", prop).toString());
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ041E", prop).toString());
             }else{
                 final String targetLoc = target.substring(sharpIndex + 1);
                 String id = "";
@@ -346,7 +346,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
             //if there is no '#' in target string, report error
             final Properties prop = new Properties();
             prop.put("%1", target);
-            logger.logError(MessageUtils.getMessage("DOTJ041E", prop).toString());
+            logger.logError(MessageUtils.getInstance().getMessage("DOTJ041E", prop).toString());
             return;
         }
 
@@ -376,7 +376,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
             if (ATTR_CONACTION_VALUE_PUSHREPLACE.equalsIgnoreCase(type)){
                 final Properties prop = new Properties();
                 prop.put("%1", target);
-                logger.logError(MessageUtils.getMessage("DOTJ042E", prop).toString());
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ042E", prop).toString());
                 return;
             }else{
                 table.put(targetLoc+addon, table.get(targetLoc+addon)+pushcontent);

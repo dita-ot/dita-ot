@@ -209,7 +209,7 @@ public final class DitaValReader extends AbstractXMLReader {
         } else {
             final Properties prop = new Properties();
             prop.put("%1", key);
-            logger.logError(MessageUtils.getMessage("DOTJ007E", prop)
+            logger.logError(MessageUtils.getInstance().getMessage("DOTJ007E", prop)
                     .toString());
         }
     }
@@ -248,7 +248,7 @@ public final class DitaValReader extends AbstractXMLReader {
                     //					else {
                     //						Properties prop = new Properties();
                     //						prop.put("%1", key);
-                    //						logger.logError(MessageUtils.getMessage("DOTJ007E", prop)
+                    //						logger.logError(MessageUtils.getInstance().getMessage("DOTJ007E", prop)
                     //								.toString());
                     //					}
                 }

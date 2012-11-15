@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -11,7 +10,6 @@ package org.dita.dost.log;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Hashtable;
@@ -46,8 +44,8 @@ public final class MessageUtils {
 
     // Variables
 
-    private static Hashtable<String, MessageBean> hashTable;
-    private static DITAOTLogger logger = new DITAOTJavaLogger();
+    private final Hashtable<String, MessageBean> hashTable = new Hashtable<String, MessageBean>();;
+    private final DITAOTLogger logger = new DITAOTJavaLogger();
     private static MessageUtils utils;
 
     // Constructors
@@ -63,9 +61,10 @@ public final class MessageUtils {
      * 
      * @return MessageUtils singleton instance
      */
-    private static synchronized MessageUtils getInstance(){
+    public static synchronized MessageUtils getInstance(){
         if(utils == null){
             utils = new MessageUtils();
+            utils.loadDefaultMessages();
         }
         return utils;
     }
@@ -76,98 +75,67 @@ public final class MessageUtils {
      * Just bypass to invoke member function loadDefMsg().
      *
      */
-    public static void loadDefaultMessages() {
-        getInstance().loadDefMsg();
+    void loadDefaultMessages() {
+		InputStream msg = null;
+		try {
+		    if (new File(MessageUtils.defaultResource).exists()) {
+		    	msg = new FileInputStream(new File(MessageUtils.defaultResource));
+		    } else {
+		    	msg = this.getClass().getClassLoader().getResourceAsStream(MessageUtils.defaultResource);
+			}
+		    if (msg != null) {
+		        loadMessages(msg);
+		    }
+		} catch (final Exception e) {
+		    throw new RuntimeException("Failed to load messages configuration file: " + e.getMessage(), e);
+		} finally {
+			if (msg != null) {
+		        try {
+		            msg.close();
+		        } catch (final IOException e) {
+		            // NOOP
+		        }
+			}
+		}
     }
 
-    /**
-     * Load Default Messages.
-     * If not exist in the relative path, search the CLASSPATH
-     */
-    private void loadDefMsg(){
-        if (new File(defaultResource).exists()) {
-            loadMessages(defaultResource);
-        } else {
-            final InputStream msg = getClass().getClassLoader().getResourceAsStream(defaultResource);
-            if (msg != null) {
-                try {
-                    loadMessages(msg);
-                } catch (final Exception e) {
-                    throw new RuntimeException("Failed to load messages configuration file: " + e.getMessage(), e);
-                } finally {
-                    try {
-                        msg.close();
-                    } catch (final IOException e) {
-                        // NOOP
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Load message from message file.
-     * @param newMessageFile message file
-     */
-    public static void loadMessages(final String newMessageFile) {
-        InputStream in = null;
-        try {
-            in = new FileInputStream(new File(newMessageFile));
-            getInstance().loadMessages(in);
-        } catch (final FileNotFoundException e) {
-            throw new RuntimeException("Failed to load messages configuration file: " + e.getMessage(), e);
-        } catch (final Exception e) {
-            throw new RuntimeException("Failed to load messages configuration file: " + e.getMessage(), e);
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (final IOException e) {
-                    // NOOP
-                }
-            }
-        }  
-    }
-    
     /**
      * Load message from message file.
      * @param in message file input stream
      */
-    private void loadMessages(final InputStream in) throws Exception {
-        // always assign a new instance to hashTable to avoid
-        // to reload this method again and again when messages
-        // loading failed.
-        hashTable = new Hashtable<String, MessageBean>();
-
-        try {
-            final DocumentBuilderFactory factory = DocumentBuilderFactory
-                    .newInstance();
-            final DocumentBuilder builder = factory.newDocumentBuilder();
-            final Document doc = builder.parse(in);
-
-            final Element messages = doc.getDocumentElement();
-            final NodeList messageList = messages.getElementsByTagName(ELEMENT_MESSAGE);
-
-            final int messageListLength = messageList.getLength();
-            for (int i = 0; i < messageListLength; i++) {
-                final Element message = (Element) messageList.item(i);
-                final Node reason = message.getElementsByTagName(ELEMENT_REASON).item(0);
-                final Node response = message.getElementsByTagName(ELEMENT_RESPONSE)
-                        .item(0);
-
-                final NamedNodeMap attrs = message.getAttributes();
-
-                final MessageBean messageBean = new MessageBean(
-                        attrs.getNamedItem(ATTRIBUTE_ID).getNodeValue(),
-                        attrs.getNamedItem(ATTRIBUTE_TYPE).getNodeValue(),
-                        reason.getFirstChild().getNodeValue(),
-                        response.getFirstChild() != null ? response.getFirstChild().getNodeValue() : null);
-
-                hashTable.put(messageBean.getId(), messageBean);
-            }
-        } catch (final Exception e) {
-            throw new Exception("Failed to read messages configuration file: " + e.getMessage(), e);
-        }
+    void loadMessages(final InputStream in) throws Exception {
+    	synchronized (hashTable) {
+    		hashTable.clear();
+	        try {
+	            final DocumentBuilderFactory factory = DocumentBuilderFactory
+	                    .newInstance();
+	            final DocumentBuilder builder = factory.newDocumentBuilder();
+	            final Document doc = builder.parse(in);
+	
+	            final Element messages = doc.getDocumentElement();
+	            final NodeList messageList = messages.getElementsByTagName(ELEMENT_MESSAGE);
+	
+	            final int messageListLength = messageList.getLength();
+	            for (int i = 0; i < messageListLength; i++) {
+	                final Element message = (Element) messageList.item(i);
+	                final Node reason = message.getElementsByTagName(ELEMENT_REASON).item(0);
+	                final Node response = message.getElementsByTagName(ELEMENT_RESPONSE)
+	                        .item(0);
+	
+	                final NamedNodeMap attrs = message.getAttributes();
+	
+	                final MessageBean messageBean = new MessageBean(
+	                        attrs.getNamedItem(ATTRIBUTE_ID).getNodeValue(),
+	                        attrs.getNamedItem(ATTRIBUTE_TYPE).getNodeValue(),
+	                        reason.getFirstChild().getNodeValue(),
+	                        response.getFirstChild() != null ? response.getFirstChild().getNodeValue() : null);
+	
+	                hashTable.put(messageBean.getId(), messageBean);
+	            }
+	        } catch (final Exception e) {
+	            throw new Exception("Failed to read messages configuration file: " + e.getMessage(), e);
+	        }
+    	}
     }
 
     /**
@@ -177,9 +145,9 @@ public final class MessageUtils {
      * @param id message ID
      * @return messageBean
      */
-    public static MessageBean getMessage(final String id) {
+    public MessageBean getMessage(final String id) {
         if (hashTable == null) {
-            loadDefaultMessages();
+        	throw new IllegalStateException("Messages have not been loaded");
         }
 
         final MessageBean hashMessage = hashTable.get(id);
@@ -201,8 +169,10 @@ public final class MessageUtils {
      * @param id id
      * @param prop prop
      * @return MessageBean
+     * @deprected use {@link #getMessage(String, String[])} instead
      */
-    public static MessageBean getMessage(final String id, final Properties prop) {
+    @Deprecated
+    public MessageBean getMessage(final String id, final Properties prop) {
         final MessageBean messageBean = getMessage(id);
 
         if (prop == null || prop.size() == 0) {
@@ -234,7 +204,7 @@ public final class MessageUtils {
      * @param prop prop
      * @return MessageBean
      */
-    public static MessageBean getMessage(final String id, final String... params) {
+    public MessageBean getMessage(final String id, final String... params) {
         final MessageBean messageBean = getMessage(id);
         if (params.length == 0) {
             return messageBean;

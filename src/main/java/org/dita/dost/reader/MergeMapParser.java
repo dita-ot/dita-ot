@@ -215,7 +215,7 @@ public final class MergeMapParser extends XMLFilterImpl {
                                 final String fileName = new File(dirPath, attValue).getAbsolutePath();
                                 final Properties prop = new Properties();
                                 prop.put("%1", fileName);
-                                logger.logError(MessageUtils.getMessage("DOTX008E", prop).toString());
+                                logger.logError(MessageUtils.getInstance().getMessage("DOTX008E", prop).toString());
                             }
                         }
                     }
@@ -253,7 +253,7 @@ public final class MergeMapParser extends XMLFilterImpl {
                             final String fileName = f.getAbsolutePath();
                             final Properties prop = new Properties();
                             prop.put("%1", fileName);
-                            logger.logError(MessageUtils.getMessage("DOTX008E", prop).toString());
+                            logger.logError(MessageUtils.getInstance().getMessage("DOTX008E", prop).toString());
                         }
                     }
 

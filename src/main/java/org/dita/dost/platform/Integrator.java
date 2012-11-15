@@ -338,7 +338,7 @@ public final class Integrator {
                 final Properties prop = new Properties();
                 prop.put("%1", requirement.toString());
                 prop.put("%2", currentPlugin);
-                final String msg = MessageUtils.getMessage("DOTJ020W", prop).toString();
+                final String msg = MessageUtils.getInstance().getMessage("DOTJ020W", prop).toString();
                 if (strict) {
                     throw new RuntimeException(msg);
                 } else {

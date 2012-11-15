@@ -347,7 +347,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
                 // Not Xerces, ignore exception
             }
         }else{
-            final String msg=MessageUtils.getMessage("DOTJ037W").toString();
+            final String msg=MessageUtils.getInstance().getMessage("DOTJ037W").toString();
             logger.logWarn(msg);
         }
         final XMLGrammarPool grammarPool = GrammarPoolManager.getGrammarPool();
@@ -847,7 +847,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
         if(classValue==null && !ELEMENT_NAME_DITA.equals(localName)){
             params.clear();
             params.put("%1", localName);
-            logger.logInfo(MessageUtils.getMessage("DOTJ030I", params).toString());
+            logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ030I", params).toString());
         }
 
         if (classValue != null && TOPIC_TOPIC.matches(classValue)){
@@ -855,7 +855,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
             if(domains==null){
                 params.clear();
                 params.put("%1", localName);
-                logger.logInfo(MessageUtils.getMessage("DOTJ029I", params).toString());
+                logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ029I", params).toString());
             } else {
                 props = StringUtils.getExtProps(domains);
             }
@@ -1249,7 +1249,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
             // Many keys can be defined in a single definition, like keys="a b c", a, b and c are seperated by blank.
             for(final String key: attrValue.split(" ")){
             	if (!isValidKeyName(key)) {
-            		logger.logError(MessageUtils.getMessage("DOTJ055E", key).toString());
+            		logger.logError(MessageUtils.getInstance().getMessage("DOTJ055E", key).toString());
             		continue;
             	}
                 if(!keysDefMap.containsKey(key) && !key.equals("")){
@@ -1282,7 +1282,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
                     prop.setProperty("%1", key);
                     prop.setProperty("%2", target);
                     // DOTJ045W also exists, but is commented out of the messages file
-                    logger.logInfo(MessageUtils.getMessage("DOTJ045I", prop).toString());
+                    logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ045I", prop).toString());
                 }
                 //restore target
                 target = temp;
@@ -1451,7 +1451,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
                 prop.setProperty("%1", href);
                 prop.setProperty("%2", filename);
                 if(!value.equals(copytoMap.get(filename))) {
-                	logger.logWarn(MessageUtils.getMessage("DOTX065W", prop).toString());
+                	logger.logWarn(MessageUtils.getInstance().getMessage("DOTX065W", prop).toString());
                 }
                 ignoredCopytoSourceSet.add(href);
             } else if (!(atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains("to-content"))){
@@ -1667,10 +1667,10 @@ public final class GenListModuleReader extends AbstractXMLReader {
                 || (OutputUtils.getGeneratecopyouter() == OutputUtils.Generate.GENERATEOUTTER)) {
             if (isOutFile(filename)) {
                 if (outputUtils.getOutterControl() == OutputUtils.OutterControl.FAIL){
-                    final MessageBean msgBean=MessageUtils.getMessage("DOTJ035F", prop);
+                    final MessageBean msgBean=MessageUtils.getInstance().getMessage("DOTJ035F", prop);
                     throw new SAXParseException(null,null,new DITAOTException(msgBean,null,msgBean.toString()));
                 } else if (outputUtils.getOutterControl() == OutputUtils.OutterControl.WARN){
-                    final String message=MessageUtils.getMessage("DOTJ036W",prop).toString();
+                    final String message=MessageUtils.getInstance().getMessage("DOTJ036W",prop).toString();
                     logger.logWarn(message);
                 }
                 addToOutFilesSet(filename);

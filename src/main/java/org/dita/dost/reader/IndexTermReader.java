@@ -190,7 +190,7 @@ public final class IndexTermReader extends AbstractXMLReader {
                     return;
                 } else{
                     term.setTermName("***");
-                    logger.logWarn(MessageUtils.getMessage("DOTJ014W").toString());
+                    logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ014W").toString());
                 }
             }
 

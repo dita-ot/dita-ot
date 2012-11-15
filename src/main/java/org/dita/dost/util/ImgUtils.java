@@ -103,7 +103,7 @@ public final class ImgUtils {
         }catch (final Exception e){
             final Properties prop = new Properties();
             prop.put("%1", dirName+File.separatorChar+fileName);
-            logger.logError(MessageUtils.getMessage("DOTJ023E", prop).toString());
+            logger.logError(MessageUtils.getInstance().getMessage("DOTJ023E", prop).toString());
             logger.logException(e);
             return -1;
         }
@@ -131,7 +131,7 @@ public final class ImgUtils {
         }catch (final Exception e){
             final Properties prop = new Properties();
             prop.put("%1", dirName+File.separatorChar+fileName);
-            logger.logError(MessageUtils.getMessage("DOTJ023E", prop).toString());
+            logger.logError(MessageUtils.getInstance().getMessage("DOTJ023E", prop).toString());
             logger.logException(e);
             return -1;
         }
@@ -170,7 +170,7 @@ public final class ImgUtils {
             }
             return ret.toString();
         }catch (final Exception e){
-            logger.logError(MessageUtils.getMessage("DOTJ023E").toString());
+            logger.logError(MessageUtils.getInstance().getMessage("DOTJ023E").toString());
             logger.logException(e);
             return null;
         }finally{
@@ -207,11 +207,11 @@ public final class ImgUtils {
             final String ret = encoder.encodeToString(buff);
             return ret;
         } catch (final FileNotFoundException e) {
-            logger.logError(MessageUtils.getMessage("DOTJ023E").toString());
+            logger.logError(MessageUtils.getInstance().getMessage("DOTJ023E").toString());
             logger.logException(e);
             return null;
         } catch (final IOException e) {
-            logger.logError(MessageUtils.getMessage("DOTJ023E").toString());
+            logger.logError(MessageUtils.getInstance().getMessage("DOTJ023E").toString());
             logger.logException(e);
             return null;
         }finally{
