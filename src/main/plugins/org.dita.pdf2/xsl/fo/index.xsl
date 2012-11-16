@@ -43,6 +43,8 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
     exclude-result-prefixes="xs opentopic-index exsl comparer opentopic-func exslf ot-placeholder">
 
+  <xsl:variable name="index.continued-enabled" select="true()"/>
+
     <!-- *************************************************************** -->
     <!-- Create index templates                                          -->
     <!-- *************************************************************** -->
@@ -352,7 +354,15 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:choose>
       <xsl:when test="opentopic-index:index.entry">
         <fo:table>
+          <xsl:if test="$index.continued-enabled">
+            <fo:table-header>
+              <fo:retrieve-table-marker retrieve-class-name="index-continued" retrieve-position-within-table="last-starting"/>
+            </fo:table-header>
+          </xsl:if>
           <fo:table-body>
+            <xsl:if test="$index.continued-enabled">
+              <fo:marker marker-class-name="index-continued"/>
+            </xsl:if>
             <fo:table-row>
               <fo:table-cell>
                 <fo:block xsl:use-attribute-sets="index-indents" keep-with-next="always">
@@ -396,6 +406,33 @@ See the accompanying license.txt file for applicable licenses.
             </fo:table-row>
           </fo:table-body>
           <fo:table-body>
+            <xsl:if test="$index.continued-enabled">
+              <fo:marker marker-class-name="index-continued">
+                <fo:table-row>
+                  <fo:table-cell>
+                    <fo:block xsl:use-attribute-sets="index-indents" keep-together="always">
+                      <xsl:if test="true() or count(preceding-sibling::opentopic-index:index.entry[@value = $value]) = 0">
+                        <xsl:choose>
+                          <xsl:when test="$useFrameIndexMarkup ne 'true'">
+                            <xsl:apply-templates select="opentopic-index:formatted-value/node()"/>
+                            <fo:inline font-style="italic">
+                              <xsl:text> (</xsl:text>
+                              <xsl:value-of select="$continuedValue"/>
+                              <xsl:text>)</xsl:text>
+                            </fo:inline>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <xsl:call-template name="__formatText">
+                              <xsl:with-param name="text" select="concat(opentopic-index:formatted-value/text(), '&lt;italic&gt; (', $continuedValue, ')')"/>
+                            </xsl:call-template>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:if>
+                    </fo:block>
+                  </fo:table-cell>
+                </fo:table-row>
+              </fo:marker>
+            </xsl:if>
             <fo:table-row>
               <fo:table-cell>
                 <fo:block xsl:use-attribute-sets="index.entry__content">
