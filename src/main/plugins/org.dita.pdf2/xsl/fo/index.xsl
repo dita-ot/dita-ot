@@ -70,7 +70,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="*[contains(@class,' topic/topic ')]" mode="index-entries">
         <xsl:variable name="id" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>
-        <xsl:variable name="mapTopicref" select="key('map-id', $id)"/>
+        <xsl:variable name="mapTopicref" select="key('map-id', $id)[1]"/>
         <xsl:if test="not(contains($mapTopicref/@otherprops, 'noindex'))">
             <xsl:apply-templates mode="index-entries"/>
         </xsl:if>
@@ -78,7 +78,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="*[contains(@class,' topic/topic ')]" mode="index-postprocess">
         <xsl:variable name="id" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>
-        <xsl:variable name="mapTopicref" select="key('map-id', $id)"/>
+        <xsl:variable name="mapTopicref" select="key('map-id', $id)[1]"/>
         <xsl:if test="not(contains($mapTopicref/@otherprops, 'noindex'))">
             <xsl:apply-templates mode="index-entries"/>
         </xsl:if>
@@ -186,10 +186,6 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:when>
         </xsl:choose>
         <!--Insert simple index entry marker-->
-        <!-- edited by william on 2009-07-13 for bug:2819853 start -->
-        <!--xsl:for-each select="descendant::opentopic-index:refID[last()]">
-            <fo:inline index-key="{@value}"/>
-        </xsl:for-each-->
         <xsl:choose>
             <!--xsl:when test="opentopic-index:index.entry"/-->
             <xsl:when test="opentopic-index:index.entry">
@@ -203,7 +199,6 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:for-each>
             </xsl:otherwise>
         </xsl:choose>
-        <!-- edited by william on 2009-07-13 for bug:2819853 end -->
         <xsl:apply-templates/>
     </xsl:if>
   </xsl:template>
@@ -389,7 +384,6 @@ See the accompanying license.txt file for applicable licenses.
                         </xsl:variable>
                         <xsl:if test="contains($isNormalChilds,'true ')">
                           <xsl:apply-templates select="." mode="make-index-ref">
-                            <!--<xsl:with-param name="idxs" select="opentopic-index:refID"/>-->
                             <xsl:with-param name="inner-text" select="opentopic-index:formatted-value"/>
                             <xsl:with-param name="no-page" select="$isNoPage"/>
                           </xsl:apply-templates>
@@ -515,9 +509,13 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:choose>
       </fo:inline>
       <!-- XXX: XEP has this, should base too? -->
-      <!--xsl:for-each select="$idxs">
-        <fo:inline id="{@value}"/>
-      </xsl:for-each-->
+      <!--
+      <xsl:if test="$idxs">
+        <xsl:for-each select="$idxs">
+          <fo:inline id="{@value}"/>
+        </xsl:for-each>
+      </xsl:if>
+      -->
       <xsl:if test="not($no-page)">
         <xsl:if test="$idxs">
           <xsl:copy-of select="$index.separator"/>
