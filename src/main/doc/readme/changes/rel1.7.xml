@@ -93,19 +93,22 @@
       <section>
         <title>Feature requests</title>
         <ul>
-          <li>#1144 Produce HTML5 output (milestone 1)</li>
-          <li>#1319 Remove deprecated code (milestone 1)</li>
-          <li>#1339 PDF, flagged image : change use-attribute-sets="image" (milestone 1)</li>
-          <li>#1141 XHTML: ability to include TOC in every topic (milestone 2)</li>
-          <li>#1331 Possibility to customize &lt;stepresult> in HTML output (milestone 2)</li>
-          <li>#1366 pdf index entries have too many keep-with-previous (milestone 2)</li>
-          <li>#1379 Use format attribute to identity DITA topics (milestone 2)</li>
-          <li>#1384 Validate key names (milestone 2)</li>
-          <li>#1388 Remove temporary file file extension normalization (milestone 2)</li>
-          <li>#1288 Use strict integration by default (milestone 3)</li>
-          <li>#1327 Change minimum Java version to 6 (milestone 3)</li>
-          <li>#1391 Add new job status file format (milestone 3)</li>
+          <li>#1144 Produce HTML5 output (Milestone 1)</li>
+          <li>#1319 Remove deprecated code (Milestone 1)</li>
+          <li>#1339 PDF, flagged image : change use-attribute-sets="image" (Milestone 1)</li>
+          <li>#1141 XHTML: ability to include TOC in every topic (Milestone 2)</li>
+          <li>#1331 Possibility to customize &lt;stepresult> in HTML output (Milestone 2)</li>
+          <li>#1366 pdf index entries have too many keep-with-previous (Milestone 2)</li>
+          <li>#1379 Use format attribute to identity DITA topics (Milestone 2)</li>
+          <li>#1384 Validate key names (Milestone 2)</li>
+          <li>#1388 Remove temporary file file extension normalization (Milestone 2)</li>
+          <li>#1288 Use strict integration by default (Milestone 3)</li>
+          <li>#1327 Change minimum Java version to 6 (Milestone 3)</li>
+          <li>#1391 Add new job status file format (Milestone 3)</li>
           <li>#1398 Allow defining source input base directory (Milestone 3)</li>
+          <li>#1403 Refactor XEP index processing to extend base index processing (Milestone 4)</li>
+          <li>#1405 Provide catalog URL rewrite for common XSL files (Milestone 4)</li>
+          <!--<li>#1406 Bundle FOP 1.1 (Milestone 4)</li>-->
           <li>#1313 Separate flagging logic from XHTML code (in progress)</li>
           <li>#1317 General XHTML improvements (in progress)</li>
           <li>#1324 Avoid strings where other types are more appropriate (in progress)</li>
@@ -117,47 +120,50 @@
       <section>
         <title>Patches</title>
         <ul>
-          <li>#1350 Move table specializations into separate stylesheets (milestone 1)</li>
-          <li>#1359 Fix text overflow issue in PDF ToC entries with long titles. (milestone 1)</li>
-          <li>#1352 Wrap itemgroup task elements into &lt;div> elements #1331 (milestone 2)</li>
+          <li>#1350 Move table specializations into separate stylesheets (Milestone 1)</li>
+          <li>#1359 Fix text overflow issue in PDF ToC entries with long titles. (Milestone 1)</li>
+          <li>#1352 Wrap itemgroup task elements into &lt;div> elements #1331 (Milestone 2)</li>
+          <li>#1400 Updates on the build instructions plus a fix in one of the dost classes that made the build fail (Milestone 4)</li>
+          <li>#1401 Disable XSD Grammar caching (Milestone 4)</li>
         </ul>
       </section>
       <section>
         <title>Bugs</title>
         <ul>
-          <li>#1316 Conref error message missing the @conref value (milestone 1)</li>
-          <li>#1321 Fix path2project separator clean-up (milestone 1)</li>
-          <li>#1322 Xref to table cell does not properly navigate to it (milestone 1)</li>
+          <li>#1316 Conref error message missing the @conref value (Milestone 1)</li>
+          <li>#1321 Fix path2project separator clean-up (Milestone 1)</li>
+          <li>#1322 Xref to table cell does not properly navigate to it (Milestone 1)</li>
           <li>#1323 @relcolwidth attribute not taken into account when transforming &lt;choicetable>
-            to PDF using Apache FOP (milestone 1)</li>
-          <li>#1325 Variable "Index See Also String" missing from Hebrew (milestone 1)</li>
-          <li>#1329 PDF2 indexing fails for ranges (milestone 1)</li>
-          <li>#1330 Spaces in Filenames in 1.6 (milestone 1)</li>
-          <li>#1332 output-deprecated-msg deleted; still referenced (milestone 1)</li>
-          <li>#1335 Link to see/see also in index is broken (milestone 1)</li>
+            to PDF using Apache FOP (Milestone 1)</li>
+          <li>#1325 Variable "Index See Also String" missing from Hebrew (Milestone 1)</li>
+          <li>#1329 PDF2 indexing fails for ranges (Milestone 1)</li>
+          <li>#1330 Spaces in Filenames in 1.6 (Milestone 1)</li>
+          <li>#1332 output-deprecated-msg deleted; still referenced (Milestone 1)</li>
+          <li>#1335 Link to see/see also in index is broken (Milestone 1)</li>
           <li>#1340 The "DitaWriter" class does not properly resolve entities when catalogs are referenced with
-            &lt;nextCatalog> in the catalog-dita.xml (milestone 1)</li>
-          <li>#1343 Topics with spaces in file name appear twice (milestone 1)</li>
-          <li>#1346 Cannot determine the title of a xreffed topic (milestone 1)</li>
-          <li>#1348 Topics copied using "copy-to" become not wellformed (DITA OT 1.6.1) (milestone 1)</li>
-          <li>#1349 "Ambiguous rule match" in PDF processing XSLT when &lt;choicetable> is used in topic (milestone
+            &lt;nextCatalog> in the catalog-dita.xml (Milestone 1)</li>
+          <li>#1343 Topics with spaces in file name appear twice (Milestone 1)</li>
+          <li>#1346 Cannot determine the title of a xreffed topic (Milestone 1)</li>
+          <li>#1348 Topics copied using "copy-to" become not wellformed (DITA OT 1.6.1) (Milestone 1)</li>
+          <li>#1349 "Ambiguous rule match" in PDF processing XSLT when &lt;choicetable> is used in topic (Milestone
             1)</li>
-          <li>#1351 'Unexpected Text' root-processing_axf.xsl bug (milestone 1)</li>
-          <li>#1353 dita2htmlImpl.xsl/add-br-for-empty-cmd ... content match (milestone 1)</li>
-          <li>#1354 xml comment not being stripped correctly in preprocessing (milestone 1)</li>
-          <li>#1357 NPE when image is incorrectly referenced when publishing to HTML (milestone 1)</li>
-          <li>#1358 Cannot cross reference definition list items (dlentry, dt, dd) in PDF (milestone 1)</li>
-          <li>#1371 build_demo uses deprecated Ant property (milestone 1)</li>
-          <li>#1365 pdf duplicate see-also entries in Index (milestone 2)</li>
-          <li>#1369 prodinfo seems to lead to "(file) does not exist", where file has spaces in name (milestone 2)</li>
-          <li>#1370 Links to files with spaces in name broken (milestone 2)</li>
-          <li>#1371 build_demo uses deprecated Ant property (milestone 2)</li>
-          <li>#1377 htmlhelp ampersand (&amp;amp;) entity in indexterm does not convert (milestone 2)</li>
-          <li>#1378 dita.out.map.htmlhelp.hhk: target doesn't allow topic with empty indexterm (milestone 2)</li>
-          <li>#1382 Merging uses system path separator when rewriting URIs (milestone 2)</li>
+          <li>#1351 'Unexpected Text' root-processing_axf.xsl bug (Milestone 1)</li>
+          <li>#1353 dita2htmlImpl.xsl/add-br-for-empty-cmd ... content match (Milestone 1)</li>
+          <li>#1354 xml comment not being stripped correctly in preprocessing (Milestone 1)</li>
+          <li>#1357 NPE when image is incorrectly referenced when publishing to HTML (Milestone 1)</li>
+          <li>#1358 Cannot cross reference definition list items (dlentry, dt, dd) in PDF (Milestone 1)</li>
+          <li>#1371 build_demo uses deprecated Ant property (Milestone 1)</li>
+          <li>#1365 pdf duplicate see-also entries in Index (Milestone 2)</li>
+          <li>#1369 prodinfo seems to lead to "(file) does not exist", where file has spaces in name (Milestone 2)</li>
+          <li>#1370 Links to files with spaces in name broken (Milestone 2)</li>
+          <li>#1371 build_demo uses deprecated Ant property (Milestone 2)</li>
+          <li>#1377 htmlhelp ampersand (&amp;amp;) entity in indexterm does not convert (Milestone 2)</li>
+          <li>#1378 dita.out.map.htmlhelp.hhk: target doesn't allow topic with empty indexterm (Milestone 2)</li>
+          <li>#1382 Merging uses system path separator when rewriting URIs (Milestone 2)</li>
           <li>#1398 Genlist processes file multiple times (Milestone 3)</li>
           <li>#1402 Foreign and Unknown elements not ignored in PDF (Milestone 4)</li>
           <li>#1404 buildsample file in TocJS plug-in hard codes old demo path (Milestone 4)</li>
+          <li>#1237 abbreviated-form is not rendered as link to glossentry (Milestone 4)</li>
           <li>#1238 Doesn't work with SAXON 9 HE (9.4.0.3) (in progress)</li>
         </ul>
       </section>
