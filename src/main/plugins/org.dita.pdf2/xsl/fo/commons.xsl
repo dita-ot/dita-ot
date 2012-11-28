@@ -87,12 +87,6 @@ See the accompanying license.txt file for applicable licenses.
 
     </xsl:template>
 
-    <xsl:template name="getTopicrefShortdesc">
-        <xsl:variable name="id" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>
-        <xsl:variable name="mapTopicref" select="key('map-id', $id)"/>
-        <xsl:copy-of select="$mapTopicref/*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')]"/>
-    </xsl:template>
-
     <xsl:template match="*" mode="processTopic">
         <fo:block xsl:use-attribute-sets="topic">
             <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
@@ -105,34 +99,11 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*" mode="commonTopicProcessing">
-        <xsl:variable name="topicrefShortdesc">
-            <xsl:call-template name="getTopicrefShortdesc"/>
-        </xsl:variable>
         <xsl:apply-templates select="*[contains(@class, ' topic/title ')]"/>
         <xsl:apply-templates select="*[contains(@class, ' topic/prolog ')]"/>
-
-        <xsl:choose>
-            <!-- When topic has an abstract, we cannot override shortdesc -->
-            <xsl:when test="*[contains(@class, ' topic/abstract ')]">
-              <xsl:apply-templates select="*[not(contains(@class, ' topic/title ')) and
-                    not(contains(@class, ' topic/prolog ')) and
-                    not(contains(@class, ' topic/shortdesc ')) and
-                    not(contains(@class, ' topic/topic '))]"/>
-            </xsl:when>
-            <xsl:when test="$topicrefShortdesc/*">
-                <xsl:apply-templates select="$topicrefShortdesc/*"/>
-                <xsl:apply-templates select="*[not(contains(@class, ' topic/title ')) and
-                    not(contains(@class, ' topic/prolog ')) and
-                    not(contains(@class, ' topic/shortdesc ')) and
-                    not(contains(@class, ' topic/topic '))]"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="*[not(contains(@class, ' topic/title ')) and
-                    not(contains(@class, ' topic/prolog ')) and
-                    not(contains(@class, ' topic/topic '))]"/>
-            </xsl:otherwise>
-        </xsl:choose>
-
+        <xsl:apply-templates select="*[not(contains(@class, ' topic/title ')) and
+                                       not(contains(@class, ' topic/prolog ')) and
+                                       not(contains(@class, ' topic/topic '))]"/>
         <xsl:apply-templates select="." mode="buildRelationships"/>
         <xsl:apply-templates select="*[contains(@class,' topic/topic ')]"/>
         <xsl:apply-templates select="." mode="topicEpilog"/>
