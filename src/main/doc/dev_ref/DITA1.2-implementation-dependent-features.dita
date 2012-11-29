@@ -55,8 +55,6 @@
       <p>If both height and width attributes are given, image is scaled non-uniformly.</p>
       <p>If scale attribute is not an unsigned integer, no error or warning is thrown during
         preprocessing.</p>
-      <draft-comment>What's the implementation dependent behaviour for abstract and shortdesc
-        processing?</draft-comment>
     </section>
     <section>
       <title>Map processing</title>
@@ -68,6 +66,11 @@
       <title>Link processing</title>
       <p>When the value of <codeph>href</codeph> attribute is not a valid URI reference, <msgnum>DOTJ054E</msgnum> error is thrown. Depending on
         <xref href="../readme/configuration.dita#configuration/processing-mode">error recover mode</xref>, error recover may be attempted.</p>
+    </section>
+    <section>
+      <title>Copy-to processing</title>
+      <p>When the <codeph>copy-to</codeph> attribute is specified on a <codeph>topicref</codeph>, the content of the
+        <codeph>shortdesc</codeph> element is not used to override the short description of the topic.</p>
     </section>
   </refbody>
 </reference>
