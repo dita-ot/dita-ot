@@ -21,8 +21,11 @@
   
 <!--xsl:param name="WORKDIR" select="'./'"/-->
 <!-- Added by William on 2009-07-09 for req #12014 start  -->
+ <!-- Deprecated -->
  <xsl:param name="BASEDIR"/>
+ <!-- Deprecated -->
  <xsl:param name="TEMPDIR"/>
+ <xsl:param name="EXPORTFILE"/> 
  <xsl:param name="TRANSTYPE"></xsl:param> 
 <!-- Added by William on 2009-07-09 for req #12014 end  -->
 <xsl:param name="PROJDIR" select="'.'"/>
@@ -248,27 +251,6 @@
  
   <!-- replace the extension name -->
   <xsl:variable name="FILENAME" select="concat(substring-before($filename, '.'), '.dita')"/>
-  <!-- get export.xml's path -->
-  <xsl:variable name="tempfiledir">
-    <xsl:choose>
-      <xsl:when test="contains($TEMPDIR, ':\') or contains($TEMPDIR, ':/')">
-        <!--xsl:value-of select="concat($FILEREF,'/')"/-->
-        <xsl:value-of select="concat('file:/', concat($TEMPDIR, '/'))"/>
-      </xsl:when>
-      <xsl:when test="starts-with($TEMPDIR, '/')">
-        <xsl:value-of select="concat('file://', concat($TEMPDIR, '/'))"/>
-      </xsl:when>
-      <xsl:when test="starts-with($BASEDIR, '/')">
-        <xsl:value-of select="concat('file://', concat($BASEDIR, '/'), concat($TEMPDIR, '/'))"/>
-       </xsl:when>
-      <xsl:otherwise>
-        <!--xsl:value-of select="concat($FILEREF,'/')"/-->
-        <xsl:value-of select="concat('file:/', concat($BASEDIR, '/'), concat($TEMPDIR, '/'))"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <!-- get the export.xml -->
-  <xsl:variable name="EXPORTFILE" select="concat($tempfiledir, 'export.xml')"/>
   <!-- added by William on 2009-06-26 for req #12014 end -->
   
   <xsl:variable name="topicid">

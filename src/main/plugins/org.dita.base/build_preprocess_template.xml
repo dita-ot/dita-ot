@@ -155,6 +155,7 @@
     <condition property="dita.preprocess.reloadstylesheet.conref" value="${dita.preprocess.reloadstylesheet}">
       <not><isset property="dita.preprocess.reloadstylesheet.conref"/></not>
     </condition>
+    <makeurl property="exportfile.url" file="${dita.temp.dir}/export.xml" validate="false"/>
     <xslt basedir="${dita.temp.dir}" taskname="conref"
       destdir="${dita.temp.dir}" includesfile="${dita.temp.dir}/${conreffile}"
       classpathref="dost.class.path"
@@ -162,8 +163,11 @@
       style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/conref.xsl" filenameparameter="file-being-processed">
       <mapper type="glob" from="*" to="*.cnrf" />
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
+      <!-- Deprecated -->
       <param name="BASEDIR" expression="${basedir}"/>
+      <!-- Deprecated -->
       <param name="TEMPDIR" expression="${dita.temp.dir}"/>
+      <param name="EXPORTFILE" expression="${exportfile.url}"/>
       <param name="TRANSTYPE" expression="${transtype}"/>
       <dita:extension id="dita.preprocess.conref.param" behavior="org.dita.dost.platform.InsertAction"/>
       <xmlcatalog refid="dita.catalog"/>
