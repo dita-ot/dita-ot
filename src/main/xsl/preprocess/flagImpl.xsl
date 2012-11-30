@@ -39,7 +39,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   <xsl:param name="DBG" select="'no'"/>
   <xsl:param name="DRAFT" select="'no'"/>
   <xsl:param name="DITAEXT" select="'.dita'"/>
-  <xsl:param name="FILTERFILE"/>
+  <xsl:param name="FILTERFILEURL"/>
   <xsl:param name="PATH2PROJ">
       <xsl:apply-templates select="/processing-instruction('path2project')" mode="get-path2project"/>
   </xsl:param>
@@ -51,26 +51,6 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   <xsl:param name="CURRENTFILE" select="concat($FILEDIR, '/', substring-before($FILENAME, '.'), $DITAEXT)"/>
 
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
-
-  <!-- The document tree of filterfile returned by document($FILTERFILE,/)-->
-  <xsl:variable name="FILTERFILEURL">
-    <xsl:choose>
-      <xsl:when test="not($FILTERFILE)"/> <!-- If no filterfile leave empty -->
-      <xsl:when test="starts-with($FILTERFILE,'file:')">
-        <xsl:value-of select="$FILTERFILE"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:choose>
-          <xsl:when test="starts-with($FILTERFILE,'/')">
-            <xsl:text>file://</xsl:text><xsl:value-of select="$FILTERFILE"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:text>file:/</xsl:text><xsl:value-of select="$FILTERFILE"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
 
   <xsl:variable name="FILTERDOC" select="document($FILTERFILEURL,/)"/>
 
@@ -213,7 +193,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
    <xsl:param name="flagrules">
      <xsl:call-template name="getrules"/>
    </xsl:param>
-   <xsl:if test="@rev and not($FILTERFILE='')">
+   <xsl:if test="@rev and not($FILTERFILEURL='')">
     <xsl:call-template name="start-mark-rev">
      <xsl:with-param name="revvalue" select="@rev"/>
      <xsl:with-param name="flagrules" select="$flagrules"/>
@@ -226,7 +206,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
    <xsl:param name="flagrules">
      <xsl:call-template name="getrules"/>
    </xsl:param>
-   <xsl:if test="@rev and not($FILTERFILE='')">
+   <xsl:if test="@rev and not($FILTERFILEURL='')">
     <xsl:call-template name="end-mark-rev">
      <xsl:with-param name="revvalue" select="@rev"/>
      <xsl:with-param name="flagrules" select="$flagrules"/>
@@ -341,7 +321,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
 
 <xsl:template name="getrules">
  <!-- Test for the flagging attributes. If found, call 'gen-prop' with the values to use. Otherwise return -->
-  <xsl:if test="normalize-space($FILTERFILE)!=''">
+  <xsl:if test="normalize-space($FILTERFILEURL)!=''">
     <xsl:if test="@audience">
       <xsl:call-template name="gen-prop">
         <xsl:with-param name="flag-att" select="'audience'"/>
@@ -550,7 +530,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
  <!-- Test for the flagging attributes on the parent.
    If found and if the filterfile name was passed in,
       call 'gen-prop' with the values to use. Otherwise return -->
-  <xsl:if test="normalize-space($FILTERFILE)!=''">
+  <xsl:if test="normalize-space($FILTERFILEURL)!=''">
     <xsl:if test="../@audience">
       <xsl:call-template name="gen-prop">
         <xsl:with-param name="flag-att" select="'audience'"/>
@@ -961,7 +941,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
  <xsl:param name="flagrules">
    <xsl:call-template name="getrules"/>
  </xsl:param>
- <xsl:if test="@rev and not($FILTERFILE='')">
+ <xsl:if test="@rev and not($FILTERFILEURL='')">
   <xsl:call-template name="start-mark-rev">
    <xsl:with-param name="revvalue" select="@rev"/>
    <xsl:with-param name="flagrules" select="$flagrules"/>
@@ -974,7 +954,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
  <xsl:param name="flagrules">
    <xsl:call-template name="getrules"/>
  </xsl:param>
- <xsl:if test="@rev and not($FILTERFILE='')">
+ <xsl:if test="@rev and not($FILTERFILEURL='')">
   <xsl:call-template name="end-mark-rev">
    <xsl:with-param name="revvalue" select="@rev"/>
    <xsl:with-param name="flagrules" select="$flagrules"/>
@@ -987,7 +967,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
  <xsl:param name="flagrules">
    <xsl:call-template name="getrules-parent"/>
  </xsl:param>
- <xsl:if test="../@rev and not(@rev) and not($FILTERFILE='')">
+ <xsl:if test="../@rev and not(@rev) and not($FILTERFILEURL='')">
   <xsl:call-template name="start-mark-rev">
    <xsl:with-param name="revvalue" select="../@rev"/>
    <xsl:with-param name="flagrules" select="$flagrules"/>   
@@ -998,7 +978,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
  <xsl:param name="flagrules">
    <xsl:call-template name="getrules-parent"/>
  </xsl:param>
- <xsl:if test="../@rev and not(@rev) and not($FILTERFILE='')">
+ <xsl:if test="../@rev and not(@rev) and not($FILTERFILEURL='')">
   <xsl:call-template name="end-mark-rev">
    <xsl:with-param name="revvalue" select="../@rev"/>
    <xsl:with-param name="flagrules" select="$flagrules"/> 
@@ -1025,7 +1005,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
       </xsl:call-template>
     </div>
    </xsl:when>
-   <xsl:when test="@rev and not($FILTERFILE='')">    <!-- normal rev mode -->
+   <xsl:when test="@rev and not($FILTERFILEURL='')">    <!-- normal rev mode -->
      <xsl:call-template name="start-mark-rev">
        <xsl:with-param name="revvalue" select="@rev"/>
        <xsl:with-param name="flagrules" select="$flagrules"/>
@@ -1065,7 +1045,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
    </xsl:call-template>
    </span>
   </xsl:when>
-  <xsl:when test="@rev and not($FILTERFILE='')">         <!-- normal rev mode -->
+  <xsl:when test="@rev and not($FILTERFILEURL='')">         <!-- normal rev mode -->
    <xsl:call-template name="start-mark-rev">
     <xsl:with-param name="revvalue" select="@rev"/>
     <xsl:with-param name="flagrules" select="$flagrules"/>
@@ -1221,7 +1201,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
      Return 1 for active revision when draft is on, return 0 otherwise. -->
 <xsl:template match="*" mode="mark-revisions-for-draft">
   <xsl:choose>
-    <xsl:when test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
+    <xsl:when test="@rev and not($FILTERFILEURL='') and ($DRAFT='yes')">
       <xsl:call-template name="find-active-rev-flag"/>
     </xsl:when>
     <xsl:otherwise>0</xsl:otherwise>
@@ -1338,7 +1318,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
       <xsl:call-template name="getrules"/>
     </xsl:param>
     <xsl:choose>
-      <xsl:when test="normalize-space($FILTERFILE)=''">
+      <xsl:when test="normalize-space($FILTERFILEURL)=''">
         <xsl:value-of select="'false'"/>
       </xsl:when>
       <xsl:when test="exsl:node-set($flagrules)/*">
@@ -1385,7 +1365,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
     </xsl:param>
 
     <!-- Skip all further checking if there is no filter file -->
-    <xsl:if test="normalize-space($FILTERFILE)!=''">
+    <xsl:if test="normalize-space($FILTERFILEURL)!=''">
       <xsl:variable name="validstyle">
         <!-- This variable is used to prevent using pre-OASIS or unrecognized ditaval styles -->
         <xsl:if test="$conflictexist='false' and exsl:node-set($flagrules)/*[@style]">

@@ -436,7 +436,7 @@
 
       <param name="TRANSTYPE" expression="${transtype}"></param>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"></param>
-      <param name="FILTERFILE" expression="${dita.input.filterfile.url}"></param>
+      <param name="FILTERFILEURL" expression="${dita.input.filterfile.url}"></param>
       <param name="DRAFT" expression="${args.draft}" if="args.draft"></param>
       <param name="BASEDIR" expression="${basedir}"></param>
       <param name="OUTPUTDIR" expression="${output.dir}"></param>
