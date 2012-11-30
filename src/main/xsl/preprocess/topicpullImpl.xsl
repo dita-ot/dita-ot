@@ -56,6 +56,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <!-- Define the error message prefix identifier -->
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
 
+  <!-- Deprecated -->
   <xsl:param name="FILEREF">file://</xsl:param>
   <!-- The directory where the topic resides, starting with root -->
   <xsl:param name="WORKDIR" select="'./'"/>

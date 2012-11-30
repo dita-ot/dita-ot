@@ -28,6 +28,7 @@
  <xsl:param name="EXPORTFILE"/> 
  <xsl:param name="TRANSTYPE"></xsl:param> 
 <!-- Added by William on 2009-07-09 for req #12014 end  -->
+  <!-- Deprecated -->
 <xsl:param name="PROJDIR" select="'.'"/>
 <xsl:param name="DBG" select="no"/>
 <!-- Deprecated -->

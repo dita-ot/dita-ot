@@ -226,6 +226,7 @@
       style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl" filenameparameter="file-being-processed">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="TRANSTYPE" expression="${transtype}" />
+      <!-- Deprecated -->
       <param name="FILEREF" expression="file:"/>
       <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction"/>
       <xmlcatalog refid="dita.catalog"/>

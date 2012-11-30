@@ -16,6 +16,7 @@
     <xsl:variable name="msgprefix">DOTX</xsl:variable>
     
     <xsl:param name="DITAEXT" select="'.xml'"/>    
+    <!-- Deprecated -->  
     <xsl:param name="FILEREF">file://</xsl:param>
     <!-- The directory where the topic resides, starting with root -->
     <xsl:param name="WORKDIR" select="'./'"/>
