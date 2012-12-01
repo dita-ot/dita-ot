@@ -27,11 +27,11 @@
   version="1.1">
   
   
-  <xsl:import href="common/output-message.xsl"/>
-  <xsl:import href="common/dita-utilities.xsl"/>
-  <xsl:import href="common/related-links.xsl"/>
-  <xsl:import href="common/dita-textonly.xsl"/>
-  <xsl:import href="common/flag.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/related-links.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/dita-textonly.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/flag.xsl"/>
   <!--
   <xsl:import href="xslodt/flag-old.xsl"/>
   -->
