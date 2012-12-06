@@ -1,0 +1,16 @@
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic " domains="(topic hi-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic abbrev-d) (topic pr-d) (topic sw-d) (topic ui-d)" id="topic_zzt_wwn_l3" ditaarch:DITAArchVersion="1.2">
+  <title class="- topic/title ">Topic title</title>
+  <body class="- topic/body ">
+    <p class="- topic/p ">No audience</p>
+    <!--p audience="expert" class="- topic/p ">Expert audience</p-->
+    <p audience="novice" class="- topic/p ">Novice audience</p>
+    <p audience="expert novice" class="- topic/p ">Expert and novice audience</p>
+    <p class="- topic/p ">No platform</p>
+    <!--p platform="windows" class="- topic/p ">Windows platform</p-->
+    <p class="- topic/p " platform="osx">OS X platform</p>
+    <p class="- topic/p " platform="windows osx">Windows and OS X platform</p>
+    <foreign class="- topic/foreign ">
+      <p platform="windows" class="- topic/p ">Foreign Windows</p>
+    </foreign>
+  </body>
+</topic>

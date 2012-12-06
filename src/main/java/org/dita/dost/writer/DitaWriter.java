@@ -64,6 +64,7 @@ import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.XMLFilter;
 import org.xml.sax.XMLReader;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
@@ -333,12 +334,8 @@ public final class DitaWriter extends AbstractXMLFilter {
     private String transtype;
 
     private Map<String, Integer> counterMap;
-    private boolean exclude; // when exclude is true the tag will be excluded.
     private int foreignLevel; // foreign/unknown nesting level
-    private int level;// level is used to count the element level in the filtering
     private String path2Project;
-    /** Contains the attribution specialization paths for {@code props} attribute */
-    private String[][] props;
 
     private File tempDir;
     private File traceFilename;
@@ -372,7 +369,6 @@ public final class DitaWriter extends AbstractXMLFilter {
         
         genDebugInfo = Boolean.parseBoolean(Configuration.configuration.get("generate-debug-attributes"));
         
-        exclude = false;
         columnNumber = 1;
         columnNumberEnd = 0;
         //initialize row number
@@ -387,7 +383,6 @@ public final class DitaWriter extends AbstractXMLFilter {
         counterMap = null;
         traceFilename = null;
         foreignLevel = 0;
-        level = 0;
         tempDir = null;
         colSpec = null;
         //initial the stack
@@ -398,7 +393,6 @@ public final class DitaWriter extends AbstractXMLFilter {
         rowsMapStack = new Stack<Map<String,Integer>>();
         colSpanMapStack = new Stack<Map<String,Integer>>();
 
-        props = null;
         validateMap = null;
     }
 
@@ -477,20 +471,6 @@ public final class DitaWriter extends AbstractXMLFilter {
             logger.logInfo("Using Xerces grammar pool for DTD and schema caching.");
         } catch (final Exception e) {
             logger.logWarn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
-        }
-    }
-
-    @Override
-    public void characters(final char[] ch, final int start, final int length)
-            throws SAXException {
-        if (!exclude) {
-            // exclude shows whether it's excluded by filtering
-            // isEntity shows whether it's an entity.
-            try {
-                getContentHandler().characters(ch, start, length);
-            } catch (final Exception e) {
-                logger.logException(e);
-            }
         }
     }
 
@@ -866,23 +846,9 @@ public final class DitaWriter extends AbstractXMLFilter {
         if (foreignLevel > 0){
             foreignLevel --;
         }
-        if (exclude) {
-            if (level > 0) {
-                // If it is the end of a child of an excluded tag, level
-                // decrease
-                level--;
-            } else {
-                exclude = false;
-            }
-        } else { // exclude shows whether it's excluded by filtering
-            try {
-                getContentHandler().endElement(uri, localName, qName);
-            } catch (final Exception e) {
-                logger.logException(e);
-            }
-        }
+        getContentHandler().endElement(uri, localName, qName);
         //note the tag shouldn't be excluded by filter file(bug:2925636 )
-        if(TOPIC_TGROUP.localName.equals(qName) && !exclude){
+        if(TOPIC_TGROUP.localName.equals(qName)){
             //colSpecStack.pop();
             //rowNumStack.pop();
             //has tgroup tag
@@ -947,30 +913,6 @@ public final class DitaWriter extends AbstractXMLFilter {
         }
     }
 
-    @Override
-    public void ignorableWhitespace(final char[] ch, final int start, final int length)
-            throws SAXException {
-        if (!exclude) { // exclude shows whether it's excluded by filtering
-            try {
-                // XXX: For some reason, Transformer doesn't output ignorableWhitespace, thus calling characters.
-                getContentHandler().characters(ch, start, length);
-            } catch (final Exception e) {
-                logger.logException(e);
-            }
-        }
-    }
-
-    @Override
-    public void processingInstruction(final String target, final String data) throws SAXException {
-        if (!exclude) { // exclude shows whether it's excluded by filtering
-            try {
-                getContentHandler().processingInstruction(target, data);
-            } catch (final Exception e) {
-                logger.logException(e);
-            }
-        }
-    }
-
     /**
      * Set temporary directory
      * 
@@ -982,18 +924,7 @@ public final class DitaWriter extends AbstractXMLFilter {
         }
         this.tempDir = tempDir;
     }
-
-    @Override
-    public void skippedEntity(final String name) throws SAXException {
-        if (!exclude) { // exclude shows whether it's excluded by filtering
-            try {
-                getContentHandler().skippedEntity(name);
-            } catch (final Exception e) {
-                logger.logException(e);
-            }
-        }
-    }
-
+    
     @Override
     public void startDocument() throws SAXException {
         try {
@@ -1039,16 +970,6 @@ public final class DitaWriter extends AbstractXMLFilter {
                 params.put("%1", localName);
                 logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ030I", params).toString());
             }
-            if (attrValue != null && (TOPIC_TOPIC.matches(attrValue)||MAP_MAP.matches(attrValue))){
-                final String domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
-                if(domains == null){
-                    final Properties params = new Properties();
-                    params.put("%1", localName);
-                    logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ029I", params).toString());
-                } else {
-                    props = StringUtils.getExtProps(domains);
-                }
-            }
             if (attrValue != null &&
                     (TOPIC_FOREIGN.matches(attrValue) ||
                             TOPIC_UNKNOWN.matches(attrValue))){
@@ -1068,38 +989,33 @@ public final class DitaWriter extends AbstractXMLFilter {
         }
         counterMap.put(qName, nextValue);
 
-        if (exclude) {
-            // If it is the start of a child of an excluded tag, level increase
-            level++;
-        } else { // exclude shows whether it's excluded by filtering
-            if (foreignLevel <= 1 && filterUtils.needExclude(atts, props)){
-                exclude = true;
-                level = 0;
-            }else{
-                try {
-                    final AttributesImpl res = copyElementName(qName, atts);
-                    processAttributes(qName, atts, res);
-                    if (foreignLevel <= 1){
-                        if (genDebugInfo) {
-                            XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_XTRF, traceFilename.getAbsolutePath());
-                            final StringBuilder xtrc = new StringBuilder(qName).append(COLON).append(nextValue.toString());
-                            if (locator != null) {                                
-                                xtrc.append(';')
-                                    .append(Integer.toString(locator.getLineNumber()))
-                                    .append(COLON)
-                                    .append(Integer.toString(locator.getColumnNumber()));
-                            }
-                            XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_XTRC, xtrc.toString());
-                        }
+        try {
+            final AttributesImpl res = copyElementName(qName, atts);
+            processAttributes(qName, atts, res);
+            if (foreignLevel <= 1){
+                if (genDebugInfo) {
+                    XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_XTRF, traceFilename.getAbsolutePath());
+                    final StringBuilder xtrc = new StringBuilder(qName).append(COLON).append(nextValue.toString());
+                    if (locator != null) {                                
+                        xtrc.append(';')
+                            .append(Integer.toString(locator.getLineNumber()))
+                            .append(COLON)
+                            .append(Integer.toString(locator.getColumnNumber()));
                     }
-                    
-                    getContentHandler().startElement(uri, localName, qName, res);
-                } catch (final Exception e) {
-                    logger.logException(e);
+                    XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_XTRC, xtrc.toString());
                 }
             }
+            
+            getContentHandler().startElement(uri, localName, qName, res);
+        } catch (final Exception e) {
+            logger.logException(e);
         }
     }
+    
+	@Override
+	public void ignorableWhitespace(final char[] ch, final int start, final int length) throws SAXException {
+        getContentHandler().characters(ch, start, length);
+	}
     
     /**
      * Write output
@@ -1108,8 +1024,6 @@ public final class DitaWriter extends AbstractXMLFilter {
      * @param inFile relative file path
      */
     public void write(final File baseDir, final String inFile) {
-        exclude = false;
-
         inputFile = inFile;
 
         OutputStream out = null;
@@ -1161,7 +1075,17 @@ public final class DitaWriter extends AbstractXMLFilter {
             
             final TransformerFactory tf = TransformerFactory.newInstance();
             final Transformer serializer = tf.newTransformer();
-            final Source source = new SAXSource(this, is);
+            XMLFilter xmlSource = this;
+            if (filterUtils != null) {
+                final ProfilingFilter profilingFilter = new ProfilingFilter();
+                profilingFilter.setLogger(logger);
+                profilingFilter.setFilterUtils(filterUtils);
+                profilingFilter.setTranstype(transtype);
+                profilingFilter.setParent(xmlSource.getParent());
+                profilingFilter.setEntityResolver(xmlSource.getEntityResolver());
+                xmlSource.setParent(profilingFilter);
+            }
+            final Source source = new SAXSource(xmlSource, is);
             final Result result = new StreamResult(out);
             serializer.transform(source, result);
         } catch (final Exception e) {

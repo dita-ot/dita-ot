@@ -233,9 +233,10 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             filterReader.setLogger(logger);
             filterReader.initXMLReader("yes".equals(input.getAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID)));
 
-            final FilterUtils filterUtils = new FilterUtils();
-            filterUtils.setLogger(logger);
+            FilterUtils filterUtils = null;
             if (ditavalFile!=null){
+            	filterUtils = new FilterUtils();
+            	filterUtils.setLogger(logger);
                 filterReader.read(ditavalFile.getAbsolutePath());
                 filterUtils.setFilterMap(filterReader.getFilterMap());
             }
@@ -251,7 +252,9 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             fileWriter.setTempDir(tempDir);
             fileWriter.setExtName(extName);
             fileWriter.setTranstype(transtype);
-            fileWriter.setFilterUtils(filterUtils);
+            if (filterUtils != null) {
+            	fileWriter.setFilterUtils(filterUtils);
+            }
             fileWriter.setDelayConrefUtils(new DelayConrefUtils());
             fileWriter.setKeyDefinitions(GenMapAndTopicListModule.readKeydef(new File(tempDir, "keydef.xml")));
            
