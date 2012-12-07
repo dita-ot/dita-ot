@@ -51,11 +51,9 @@ import org.dita.dost.module.GenMapAndTopicListModule.KeyDef;
 import org.dita.dost.reader.GrammarPoolManager;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Configuration;
-import org.dita.dost.util.DITAAttrUtils;
 import org.dita.dost.util.DelayConrefUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
-import org.dita.dost.util.Job;
 import org.dita.dost.util.OutputUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.URLUtils;
@@ -66,7 +64,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLFilter;
 import org.xml.sax.XMLReader;
-import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.ext.LexicalHandler;
 
@@ -343,9 +340,6 @@ public final class DitaWriter extends AbstractXMLFilter {
     private Map<String, KeyDef> keys;
 
     private String inputFile = null;
-
-    //Get DITAAttrUtil
-    private final DITAAttrUtils ditaAttrUtils = DITAAttrUtils.getInstance();
 
     private Map<String, Map<String, Set<String>>> validateMap = null;
     private Map<String, Map<String, String>> defaultValueMap = null;
@@ -825,24 +819,12 @@ public final class DitaWriter extends AbstractXMLFilter {
         } catch (final Exception e) {
             logger.logException(e);
         }
-
-        //@print
-        ditaAttrUtils.reset();
     }
 
 
     @Override
     public void endElement(final String uri, final String localName, final String qName)
             throws SAXException {
-
-        //need to skip the tag
-        if(ditaAttrUtils.needExcludeForPrintAttri(transtype)){
-            //decrease level
-            ditaAttrUtils.decreasePrintLevel();
-            //don't write the end tag
-            return;
-        }
-
         if (foreignLevel > 0){
             foreignLevel --;
         }
@@ -954,13 +936,6 @@ public final class DitaWriter extends AbstractXMLFilter {
     @Override
     public void startElement(final String uri, final String localName, final String qName,
             final Attributes atts) throws SAXException {
-        //increase element level for nested tags.
-        ditaAttrUtils.increasePrintLevel(atts.getValue(ATTRIBUTE_NAME_PRINT));
-
-        if(ditaAttrUtils.needExcludeForPrintAttri(transtype)){
-            return;
-        }
-
         if (foreignLevel > 0){
             foreignLevel ++;
         }else if( foreignLevel == 0){
