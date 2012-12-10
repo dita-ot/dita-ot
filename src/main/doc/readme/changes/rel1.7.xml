@@ -112,6 +112,7 @@
           <li>#1405 Provide catalog URL rewrite for common XSL files (Milestone 4)</li>
           <!--<li>#1406 Bundle FOP 1.1 (Milestone 4)</li>-->
           <li>#1313 Separate flagging logic from XHTML code (Milestone 4)</li>
+          <li>#1312 Refactor preprocessing to use SAX filters (Release candidate)</li>
           <li>#1317 General XHTML improvements (in progress)</li>
           <li>#1324 Avoid strings where other types are more appropriate (in progress)</li>
           <li>#1338 Add named error messages (in progress)</li>
@@ -167,6 +168,7 @@
           <li>#1402 Foreign and Unknown elements not ignored in PDF (Milestone 4)</li>
           <li>#1404 buildsample file in TocJS plug-in hard codes old demo path (Milestone 4)</li>
           <li>#1237 abbreviated-form is not rendered as link to glossentry (Milestone 4)</li>
+          <li>#1413 Mapref resolution cascades role (Release candidate)</li>
         </ul>
       </section>
     </refbody>

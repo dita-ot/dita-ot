@@ -504,8 +504,11 @@
                             <xsl:value-of select="concat($relative-path, @href)"/>
                             </xsl:attribute>
                         </xsl:otherwise>
-                    </xsl:choose>                    
+                    </xsl:choose>
                     <xsl:choose>
+                        <xsl:when test="contains($refclass, ' mapgroup-d/mapref ')">
+                            <xsl:attribute name="class"><xsl:value-of select="@class"/></xsl:attribute>
+                        </xsl:when>
                         <!-- if the element is not at the top level of reference target, @class equals to $refclass -->
                         <xsl:when test="not(contains(@class,substring($refclass, 3)))"> 
                             <xsl:attribute name="class"><xsl:value-of select="$refclass"/></xsl:attribute>
