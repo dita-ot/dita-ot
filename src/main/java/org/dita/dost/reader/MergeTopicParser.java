@@ -237,7 +237,9 @@ public final class MergeTopicParser extends XMLFilterImpl {
                     && attValue.indexOf(COLON_DOUBLE_SLASH) == -1) {
                 final String formatValue = atts.getValue(ATTRIBUTE_NAME_FORMAT);
                 //The scope for @href is local
-                if ((TOPIC_XREF.matches(classValue) || TOPIC_LINK.matches(classValue))
+                if ((TOPIC_XREF.matches(classValue) || TOPIC_LINK.matches(classValue)
+                			// term and keyword are resolved as keyref can make them links
+                			|| TOPIC_TERM.matches(classValue) || TOPIC_KEYWORD.matches(classValue))
                         && (formatValue == null || ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatValue))) {
                     //local xref or link that refers to dita file
                     XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_HREF, handleLocalDita(sharpIndex, attValue, atts));

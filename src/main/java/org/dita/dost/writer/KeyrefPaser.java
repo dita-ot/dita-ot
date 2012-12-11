@@ -116,8 +116,10 @@ public final class KeyrefPaser extends XMLFilterImpl {
         ki.add(new KeyrefInfo(TOPIC_XREF, ATTRIBUTE_NAME_HREF, false));
         ki.add(new KeyrefInfo(TOPIC_CITE, null, false));
         ki.add(new KeyrefInfo(TOPIC_DT, null, false));
-        ki.add(new KeyrefInfo(TOPIC_KEYWORD, null, false));
-        ki.add(new KeyrefInfo(TOPIC_TERM, null, false));
+        // links are processed for glossentry processing
+        ki.add(new KeyrefInfo(TOPIC_KEYWORD, ATTRIBUTE_NAME_HREF, false, false));
+        // links are processed for glossentry processing
+        ki.add(new KeyrefInfo(TOPIC_TERM, ATTRIBUTE_NAME_HREF, false, false));
         ki.add(new KeyrefInfo(TOPIC_PH, null, false));
         ki.add(new KeyrefInfo(TOPIC_INDEXTERM, null, false));
         ki.add(new KeyrefInfo(TOPIC_INDEX_BASE, null, false));
@@ -489,7 +491,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
             if(elem!=null){
                 final NamedNodeMap namedNodeMap = elem.getAttributes();
                 // first resolve the keyref attribute
-                if (currentElement != null && currentElement.isRefType) {
+                if (currentElement != null && currentElement.refAttr != null) {
                     String target = keyMap.get(keyName);
                     if (target != null && target.length() != 0) {
                         String target_output = target;
@@ -730,12 +732,23 @@ public final class KeyrefPaser extends XMLFilterImpl {
          * @param type element type
          * @param refAttr hyperlink attribute name
          * @param isEmpty flag if element is empty
+         * @param isRefType element is a reference type
          */
-        KeyrefInfo(final DitaClass type, final String refAttr, final boolean isEmpty) {
+        KeyrefInfo(final DitaClass type, final String refAttr, final boolean isEmpty, final boolean isRefType) {
             this.type = type;
             this.refAttr = refAttr;
             this.isEmpty = isEmpty;
-            this.isRefType = refAttr != null;
+            this.isRefType = isRefType;
+        }
+        /**
+         * Construct a new key reference info object.
+         * 
+         * @param type element type
+         * @param refAttr hyperlink attribute name
+         * @param isEmpty flag if element is empty
+         */
+        KeyrefInfo(final DitaClass type, final String refAttr, final boolean isEmpty) {
+        	this(type, refAttr, isEmpty, refAttr != null);
         }
     }
     

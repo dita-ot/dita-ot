@@ -44,6 +44,7 @@ See the accompanying license.txt file for applicable licenses.
     exclude-result-prefixes="opentopic exsl opentopic-index exslf opentopic-func dita2xslfo xs"
     version="2.0">
 
+    <xsl:key name="id" match="*[@id]" use="@id"/>
     <xsl:key name="map-id" match="opentopic:map//*[@id]" use="@id"/>
 
     <xsl:variable name="msgprefix" select="'PDFX'"/>
@@ -711,12 +712,34 @@ See the accompanying license.txt file for applicable licenses.
         </fo:inline>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' topic/term ')]">
+  <xsl:template match="*[contains(@class,' topic/term ')]" name="topic.term">
+    <xsl:param name="keys" select="@keyref" as="attribute()?"/>
+    <xsl:param name="contents" as="node()*">
+      <xsl:variable name="target" select="key('id', substring(@href, 2))"/>
+      <xsl:choose>
+        <xsl:when test="not(normalize-space(.)) and $keys and $target/self::*[contains(@class,' topic/topic ')]">
+          <xsl:apply-templates select="$target/*[contains(@class, ' topic/title ')]/node()"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:param>
+    <xsl:choose>
+      <xsl:when test="$keys and @href">
+        <fo:basic-link internal-destination="{substring(@href, 2)}" xsl:use-attribute-sets="xref term">
+          <xsl:call-template name="commonattributes"/>
+          <xsl:copy-of select="$contents"/>
+        </fo:basic-link>
+      </xsl:when>
+      <xsl:otherwise>
         <fo:inline xsl:use-attribute-sets="term">
-            <xsl:call-template name="commonattributes"/>
-            <xsl:apply-templates/>
+          <xsl:call-template name="commonattributes"/>
+          <xsl:copy-of select="$contents"/>
         </fo:inline>
-    </xsl:template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/author ')]">
 <!--
@@ -1627,12 +1650,34 @@ See the accompanying license.txt file for applicable licenses.
         </fo:inline>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' topic/keyword ')]">
+  <xsl:template match="*[contains(@class,' topic/keyword ')]" name="topic.keyword">
+    <xsl:param name="keys" select="@keyref" as="attribute()?"/>
+    <xsl:param name="contents" as="node()*">
+      <xsl:variable name="target" select="key('id', substring(@href, 2))"/>
+      <xsl:choose>
+        <xsl:when test="not(normalize-space(.)) and $keys and $target/self::*[contains(@class,' topic/topic ')]">
+          <xsl:apply-templates select="$target/*[contains(@class, ' topic/title ')]/node()"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:param>
+    <xsl:choose>
+      <xsl:when test="$keys and @href">
+        <fo:basic-link internal-destination="{substring(@href, 2)}" xsl:use-attribute-sets="xref keyword">
+          <xsl:call-template name="commonattributes"/>
+          <xsl:copy-of select="$contents"/>
+        </fo:basic-link>
+      </xsl:when>
+      <xsl:otherwise>
         <fo:inline xsl:use-attribute-sets="keyword">
-            <xsl:call-template name="commonattributes"/>
-            <xsl:apply-templates/>
+          <xsl:call-template name="commonattributes"/>
+          <xsl:copy-of select="$contents"/>
         </fo:inline>
-    </xsl:template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/ph ')]">
         <fo:inline xsl:use-attribute-sets="ph">

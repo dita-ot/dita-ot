@@ -94,9 +94,9 @@
           <keyword>xref keyword</keyword>
         </xref>
         <cite keyref="cite_link">cite keyword</cite>
-        <keyword keyref="keyword_link">keyword keyword</keyword>
+        <keyword keyref="keyword_link" href="a.xml">keyword keyword</keyword>
         <ph keyref="ph_link">ph keyword</ph>
-        <term keyref="term_link">term keyword</term>
+        <term keyref="term_link" href="a.xml">term keyword</term>
         <indexterm keyref="indexterm_link">indexterm keyword</indexterm>
         <indexterm>
           <index-base keyref="index-base_link">index-base keyword</index-base>
@@ -113,10 +113,10 @@
         <keyword>lq keyword</keyword>
       </lq>
       <p>
-        <keyword keyref="keyword_link">original</keyword>
-        <keyword keyref="keyword_link"><text>original</text></keyword>
-        <keyword keyref="keyword_link">keyword keyword</keyword>
-        <keyword keyref="keyword_link"><?original?>keyword keyword</keyword>
+        <keyword keyref="keyword_link" href="a.xml">original</keyword>
+        <keyword keyref="keyword_link" href="a.xml"><text>original</text></keyword>
+        <keyword keyref="keyword_link" href="a.xml">keyword keyword</keyword>
+        <keyword keyref="keyword_link" href="a.xml"><?original?>keyword keyword</keyword>
       </p>
       <p>
         <xref href="a.xml" keyref="missing" scope="external" type="dead" format="dead">missing</xref>

@@ -168,6 +168,7 @@
           <li>#1402 Foreign and Unknown elements not ignored in PDF (Milestone 4)</li>
           <li>#1404 buildsample file in TocJS plug-in hard codes old demo path (Milestone 4)</li>
           <li>#1237 abbreviated-form is not rendered as link to glossentry (Milestone 4)</li>
+          <li>#1193 abbreviated-form not handled at all in PDF output (Release candidate)</li>
           <li>#1413 Mapref resolution cascades role (Release candidate)</li>
         </ul>
       </section>
