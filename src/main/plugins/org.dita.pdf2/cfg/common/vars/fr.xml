@@ -130,13 +130,13 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Index See Also String">Voir aussi </variable>
 
     <!-- The string used to label a chapter within the table of contents. -->
-    <variable id="Table of Contents Chapter">Chapitre&#160;<param ref-name="number"/>:&#160;</variable>
+    <variable id="Table of Contents Chapter">Chapitre&#160;<param ref-name="number"/>&#160;:&#160;</variable>
 
     <!-- The string used to label an appendix within the table of contents. -->
-    <variable id="Table of Contents Appendix">Annexe&#160;<param ref-name="number"/>:&#160;</variable>
+    <variable id="Table of Contents Appendix">Annexe&#160;<param ref-name="number"/>&#160;:&#160;</variable>
 
     <!-- The string used to label an part within the table of contents. -->
-    <variable id="Table of Contents Part">Partie&#160;<param ref-name="number"/>:&#160;</variable>
+    <variable id="Table of Contents Part">Partie&#160;<param ref-name="number"/>&#160;:&#160;</variable>
 
     <!-- The string used to label an preface within the table of contents. -->
     <variable id="Table of Contents Preface">Préface&#160;</variable>
@@ -144,8 +144,9 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- The heading to put at the top of a chapter when creating a
          chapter-level "mini-TOC" -->
-    <variable id="Mini Toc">Sujets :</variable>
+    <variable id="Mini Toc">Sujets&#160;:</variable>
 
+    <variable id="#note-separator">&#xA0;: </variable>
     <!-- Text to use for 'Note' label generated from <note> element. -->
     <variable id="Note">Remarque</variable>
     <!-- Text to use for 'Notice' label generated from <note> element. -->
@@ -185,11 +186,11 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- Text to use for figure titles. Renders as part of <fig>/<title>
           elements. -->
-    <variable id="Figure">Illustration <param ref-name="number"/>: <param ref-name="title"/></variable>
+    <variable id="Figure">Illustration <param ref-name="number"/>&#160;: <param ref-name="title"/></variable>
 
     <!-- Text to use for table titles. Renders as part of <table>/<title> 
          elements. -->
-    <variable id="Table">Table <param ref-name="number"/>: <param ref-name="title"/></variable>
+    <variable id="Table">Table <param ref-name="number"/>&#160;: <param ref-name="title"/></variable>
 
     <!-- Text to use for related links label.
          Renders as part of <related-links> element. -->
@@ -197,11 +198,11 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- Default cross-reference text prefix. Used to generate reference 
          text in case it's not specified in source. -->
-    <variable id="Cross-Reference">Référence croisée vers:</variable>
+    <variable id="Cross-Reference">Référence croisée vers&#160;:</variable>
 
     <!-- Default content-reference text prefix. Used to generate reference 
          text in case target cannot be resolved. -->
-    <variable id="Content-Reference">Référence de contenu vers:</variable>
+    <variable id="Content-Reference">Référence de contenu vers&#160;:</variable>
 
     <!-- Default title text for referenced section title. Used to generate 
          reference text in case reference has no explicit content and
@@ -314,13 +315,13 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Online help prefix">Aide En ligne</variable>
 
     <!-- The search by index field title in online-help output -->
-    <variable id="Search index field title">Recherche du mot-clé:</variable>
+    <variable id="Search index field title">Recherche du mot-clé&#160;:</variable>
 
     <!-- The search by index button title in online-help output -->
     <variable id="Search index button title">Regardez</variable>
 
     <!-- The search by text field title in online-help output -->
-    <variable id="Search text field title">Aide de recherche pour:</variable>
+    <variable id="Search text field title">Aide de recherche pour&#160;:</variable>
 
     <!-- The search by text button title in online-help output -->
     <variable id="Search text button title">Recherche</variable>

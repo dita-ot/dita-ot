@@ -1447,7 +1447,9 @@ See the accompanying license.txt file for applicable licenses.
                         </fo:inline>
                     </xsl:when>
                 </xsl:choose>
-                <xsl:text>: </xsl:text>
+                <xsl:call-template name="insertVariable">
+                  <xsl:with-param name="theVariableID" select="'#note-separator'"/>
+                </xsl:call-template>
             </fo:inline>
             <xsl:text>  </xsl:text>
             <xsl:apply-templates/>
