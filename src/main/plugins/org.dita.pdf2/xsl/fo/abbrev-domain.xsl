@@ -12,7 +12,11 @@
   
   <xsl:param name="first-use-scope" select="'document'"/>
   
-  <xsl:key name="abbreviated-form-keyref" match="*[contains(@class, ' abbrev-d/abbreviated-form ')][empty(ancestor::opentopic:map)][@keyref]" use="@keyref"/>
+  <xsl:key name="abbreviated-form-keyref"
+           match="*[contains(@class, ' abbrev-d/abbreviated-form ')]
+                   [empty(ancestor::opentopic:map) and empty(ancestor::*[contains(@class, ' topic/title ')])]
+                   [@keyref]"
+           use="@keyref"/>
   
   <xsl:template match="*[contains(@class,' abbrev-d/abbreviated-form ')]" name="topic.abbreviated-form">
     <xsl:variable name="keys" select="@keyref"/>
@@ -53,6 +57,9 @@
   <xsl:template match="*[contains(@class,' topic/copyright ')]//*" mode="use-abbreviated-form" as="xs:boolean">
     <xsl:sequence select="false()"/>
   </xsl:template>
+  <xsl:template match="*[contains(@class,' topic/title ')]//*" mode="use-abbreviated-form" as="xs:boolean">
+    <xsl:sequence select="true()"/>
+  </xsl:template>  
 
   <!-- Get element to use as root when  -->
   <xsl:template name="get-first-use-scope-root" as="element()">
