@@ -209,7 +209,7 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' topic/xref ')]">
+    <xsl:template match="*[contains(@class,' topic/xref ')]" name="topic.xref">
         <fo:inline>
             <xsl:call-template name="commonattributes"/>
         </fo:inline>
@@ -433,9 +433,9 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template name="buildBasicLinkDestination">
-        <xsl:param name="scope"/>
-    	<xsl:param name="format"/>
-        <xsl:param name="href"/>
+        <xsl:param name="scope" select="@scope"/>
+    	<xsl:param name="format" select="@format"/>
+        <xsl:param name="href" select="@href"/>
         <xsl:choose>
             <xsl:when test="(contains(@href, '://') and not(starts-with(@href, 'file://')))
             or starts-with(@href, '/') or $scope = 'external' or $format = 'html'">

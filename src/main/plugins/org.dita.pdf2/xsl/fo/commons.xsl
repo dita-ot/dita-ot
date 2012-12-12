@@ -725,10 +725,12 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:otherwise>
       </xsl:choose>
     </xsl:param>
+    <xsl:variable name="topicref" select="key('map-id', substring(@href, 2))"/>
     <xsl:choose>
-      <xsl:when test="$keys and @href">
-        <fo:basic-link internal-destination="{substring(@href, 2)}" xsl:use-attribute-sets="xref term">
+      <xsl:when test="$keys and @href and not($topicref/ancestor-or-self::*[@linking][1]/@linking = ('none', 'sourceonly'))">
+        <fo:basic-link xsl:use-attribute-sets="xref term">
           <xsl:call-template name="commonattributes"/>
+          <xsl:call-template name="buildBasicLinkDestination"/>
           <xsl:copy-of select="$contents"/>
         </fo:basic-link>
       </xsl:when>
@@ -1663,10 +1665,12 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:otherwise>
       </xsl:choose>
     </xsl:param>
+    <xsl:variable name="topicref" select="key('map-id', substring(@href, 2))"/>
     <xsl:choose>
-      <xsl:when test="$keys and @href">
-        <fo:basic-link internal-destination="{substring(@href, 2)}" xsl:use-attribute-sets="xref keyword">
+      <xsl:when test="$keys and @href and not($topicref/ancestor-or-self::*[@linking][1]/@linking = ('none', 'sourceonly'))">
+        <fo:basic-link xsl:use-attribute-sets="xref keyword">
           <xsl:call-template name="commonattributes"/>
+          <xsl:call-template name="buildBasicLinkDestination"/>
           <xsl:copy-of select="$contents"/>
         </fo:basic-link>
       </xsl:when>
