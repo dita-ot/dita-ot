@@ -907,7 +907,7 @@
     <xsl:otherwise>
       <xsl:element name="{$original-element}">
         <xsl:choose>
-          <xsl:when test="system-property('xsl:version') >= 2.0">
+          <xsl:when test="number(system-property('xsl:version')) >= 2.0">
             <xsl:apply-templates select="$original-attributes/*[1]/@*" mode="original-attributes"/>
           </xsl:when>
           <xsl:otherwise>
@@ -1126,7 +1126,10 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:variable>
-	<xsl:variable name="href-gen-id" select="generate-id(key('id', $href-topicid)[contains(@class, ' topic/topic ')]//*[@id=$href-elemid])"/>
+  <xsl:variable name="href-gen-id">
+    <xsl:variable name="topic" select="key('id', $href-topicid)"/>
+    <xsl:value-of select="generate-id($topic[contains(@class, ' topic/topic ')]//*[@id=$href-elemid][generate-id(ancestor::*[contains(@class, ' topic/topic ')][1]) = generate-id($topic)])"/>
+  </xsl:variable>
 	<xsl:choose>
 		<xsl:when 
 			test="($conref-gen-id='') or (not($conref-gen-id=$href-gen-id))">

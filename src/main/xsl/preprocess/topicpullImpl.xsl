@@ -905,7 +905,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
           <xsl:apply-templates select="." mode="topicpull:add-genshortdesc-PI"/>
           <desc class="- topic/desc ">
             <xsl:choose>
-              <xsl:when test="system-property('xsl:version') >= 2.0">
+              <xsl:when test="number(system-property('xsl:version')) >= 2.0">
                 <xsl:apply-templates select="$shortdesc"/>
               </xsl:when>
               <xsl:otherwise>
@@ -1401,7 +1401,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:choose>
       <xsl:when test="$FIGURELINK='TITLE'">
         <xsl:choose>
-          <xsl:when test="system-property('xsl:version') >= 2.0">
+          <xsl:when test="number(system-property('xsl:version')) >= 2.0">
             <xsl:apply-templates select="$figtitle" mode="text-only"/>
           </xsl:when>
           <xsl:otherwise>
@@ -1426,7 +1426,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:choose>
       <xsl:when test="$FIGURELINK='TITLE'">
         <xsl:choose>
-          <xsl:when test="system-property('xsl:version') >= 2.0">
+          <xsl:when test="number(system-property('xsl:version')) >= 2.0">
             <xsl:apply-templates select="$figtitle" mode="text-only"/>
           </xsl:when>
           <xsl:otherwise>
@@ -1543,7 +1543,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:choose>
       <xsl:when test="$TABLELINK='TITLE'">
         <xsl:choose>
-          <xsl:when test="system-property('xsl:version') >= 2.0">
+          <xsl:when test="number(system-property('xsl:version')) >= 2.0">
             <xsl:apply-templates select="$tbltitle" mode="text-only"/>
           </xsl:when>
           <xsl:otherwise>
@@ -1568,7 +1568,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:choose>
       <xsl:when test="$TABLELINK='TITLE'">
         <xsl:choose>
-          <xsl:when test="system-property('xsl:version') >= 2.0">
+          <xsl:when test="number(system-property('xsl:version')) >= 2.0">
             <xsl:apply-templates select="$tbltitle" mode="text-only"/>
           </xsl:when>
           <xsl:otherwise>

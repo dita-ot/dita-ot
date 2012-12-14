@@ -125,7 +125,7 @@
         </maplinks>
       </xsl:variable>
       <xsl:choose>
-        <xsl:when test="system-property('xsl:version') >= 2.0">
+        <xsl:when test="number(system-property('xsl:version')) >= 2.0">
           <xsl:apply-templates select="$newlinks" mode="add-links-to-temp-file"/>
         </xsl:when>
         <xsl:otherwise>
