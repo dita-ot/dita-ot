@@ -730,7 +730,6 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
    <xsl:when test="$FILTERDOC/val/prop[@att=$flag-att][@val=$firstflag][@action='flag']">
     <xsl:copy-of select="$FILTERDOC/val/prop[@att=$flag-att][@val=$firstflag][@action='flag']"/>
    </xsl:when>
-   <!-- Added by William on 2009-06-01 for flag process start-->
    <xsl:when test="$FILTERDOC/val/prop[@att=$flag-att][not(@val=$firstflag)][@action='flag']">
     
     <xsl:for-each select="$FILTERDOC/val/prop[@att=$flag-att][not(@val=$firstflag)][@action='flag']">
@@ -771,7 +770,6 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
            </xsl:if>
         </xsl:for-each>
    </xsl:when>
-   <!-- Added by William on 2009-06-01 for flag process end-->
    <xsl:otherwise/> <!-- that flag not active -->
   </xsl:choose>
   
@@ -780,15 +778,14 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
    <xsl:when test="string-length($moreflags)>0">
     <!-- more values - call it again with remaining values -->
     <xsl:call-template name="gen-prop">
-     <xsl:with-param name="flag-att"><xsl:value-of select="$flag-att"/></xsl:with-param>
-     <xsl:with-param name="flag-att-val"><xsl:value-of select="$moreflags"/></xsl:with-param>
+     <xsl:with-param name="flag-att" select="$flag-att"/>
+     <xsl:with-param name="flag-att-val" select="$moreflags"/>
     </xsl:call-template>
    </xsl:when>
    <xsl:otherwise/> <!-- no more values -->
   </xsl:choose>
  </xsl:template>
  
- <!-- Added by William on 2009-06-01 for flag process start-->
  <!-- copy needed elements -->
  <xsl:template match="*" mode="copy-element">
      <xsl:param name="att"/>
@@ -910,7 +907,6 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
  <xsl:template match="*" mode="getChildNode">
         <xsl:copy-of select="node()"/>
   </xsl:template>
- <!-- Added by William on 2009-06-01 for flag process end-->
  
  <!-- Shortcuts for generating both rev flags and property flags -->
  <xsl:template name="start-flags-and-rev">
@@ -1249,7 +1245,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
      <xsl:when test="string-length($morerevs)>0">
       <!-- more values - call it again with remaining values -->
       <xsl:call-template name="find-active-rev-flag">
-       <xsl:with-param name="allrevs"><xsl:value-of select="$morerevs"/></xsl:with-param>
+       <xsl:with-param name="allrevs" select="$morerevs"/>
       </xsl:call-template>
      </xsl:when>
      <xsl:otherwise> <!-- no more values - none found -->
@@ -1302,7 +1298,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
      <xsl:when test="string-length($morerevs)>0">
       <!-- more values - call it again with remaining values -->
       <xsl:call-template name="find-active-rev-style">
-       <xsl:with-param name="allrevs"><xsl:value-of select="$morerevs"/></xsl:with-param>
+       <xsl:with-param name="allrevs" select="$morerevs"/>
       </xsl:call-template>
      </xsl:when>
      <xsl:otherwise/> <!-- no more values - none found -->
