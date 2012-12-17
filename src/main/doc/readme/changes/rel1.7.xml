@@ -48,6 +48,8 @@
           <keyword>lax</keyword> processing mode can still be used.</p>
         <p>Plug-ins that use the <codeph>MessageUtils</codeph> Java class must use <codeph>getInstance</codeph> method to
           access the <codeph>MessageUtils</codeph> instance, as <codeph>getMessage</codeph> methods have been changed to instance methods.</p>
+        <p>Preprocessing Ant dependecy chain has been cleaned up. Tasks no longer depend on the previous task in the default chain, but
+          rather the whole preprocess dependency chain is defined by <codeph>preprocess</codeph> task.</p>
       </section>
       <section>
         <title>HTML</title>
@@ -83,6 +85,10 @@
           required stylesheet modules.</p>
         <p>PDF processing used to replace topic <codeph>shortdesc</codeph> with map <codeph>shortdesc</codeph>, but this behaviour
         was incorrect and was removed.</p>
+        <p>The following variable strings have been added:</p>
+        <ul>
+          <li><codeph>#note-separator</codeph></li>
+        </ul>
       </section>
     </refbody>
   </reference>
@@ -170,6 +176,7 @@
           <li>#1237 abbreviated-form is not rendered as link to glossentry (Milestone 4)</li>
           <li>#1193 abbreviated-form not handled at all in PDF output (Release candidate)</li>
           <li>#1413 Mapref resolution cascades role (Release candidate)</li>
+          <li>#1416 german translation (Release candidate)</li>
         </ul>
       </section>
     </refbody>
