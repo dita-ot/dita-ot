@@ -48,6 +48,9 @@
           <keyword>lax</keyword> processing mode can still be used.</p>
         <p>Plug-ins that use the <codeph>MessageUtils</codeph> Java class must use <codeph>getInstance</codeph> method to
           access the <codeph>MessageUtils</codeph> instance, as <codeph>getMessage</codeph> methods have been changed to instance methods.</p>
+      </section>
+      <section>
+        <title>Preprocessing</title>
         <p>Preprocessing Ant dependecy chain has been cleaned up. Tasks no longer depend on the previous task in the default chain, but
           rather the whole preprocess dependency chain is defined by <codeph>preprocess</codeph> task.</p>
       </section>
@@ -119,11 +122,11 @@
           <!--<li>#1406 Bundle FOP 1.1 (Milestone 4)</li>-->
           <li>#1313 Separate flagging logic from XHTML code (Milestone 4)</li>
           <li>#1312 Refactor preprocessing to use SAX filters (Release candidate)</li>
-          <li>#1317 General XHTML improvements (in progress)</li>
-          <li>#1324 Avoid strings where other types are more appropriate (in progress)</li>
-          <li>#1338 Add named error messages (in progress)</li>
-          <li>#1345 Add source location to error messages (in progress)</li>
-          <li>#1389 Move stylesheets and resource files to plug-in folder (in progress)</li>
+          <li>#1317 General XHTML improvements (Release candidate)</li>
+          <li>#1324 Avoid strings where other types are more appropriate (Release candidate)</li>
+          <li>#1338 Add named error messages (Release candidate)</li>
+          <li>#1345 Add source location to error messages (Release candidate)</li>
+          <li>#1389 Move stylesheets and resource files to plug-in folder (Release candidate)</li>
         </ul>
       </section>
       <section>
@@ -175,6 +178,7 @@
           <li>#1404 buildsample file in TocJS plug-in hard codes old demo path (Milestone 4)</li>
           <li>#1237 abbreviated-form is not rendered as link to glossentry (Milestone 4)</li>
           <li>#1193 abbreviated-form not handled at all in PDF output (Release candidate)</li>
+          <li>#1409 Stylesheet imported multiple times in the hierarchy (reloaded) (Release candidate)</li>
           <li>#1413 Mapref resolution cascades role (Release candidate)</li>
           <li>#1416 german translation (Release candidate)</li>
         </ul>
