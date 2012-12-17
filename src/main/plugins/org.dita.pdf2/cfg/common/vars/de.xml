@@ -303,7 +303,7 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Forward button title">Vorwärts</variable>
 
     <!-- The title of the "main page" button in online-help output -->
-    <variable id="Main page button title">HauptcSeite</variable>
+    <variable id="Main page button title">Hauptseite</variable>
 
     <!-- The title of the "previous page" button in online-help output -->
     <variable id="Previous page button title">Vorige Seite</variable>
