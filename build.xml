@@ -46,6 +46,8 @@
   <property name="win32.zip.suffix" value=".zip"/>
   <property name="linux.zip.suffix" value=".tar.gz"/>
 
+  <property name="tool.ant.version" value="1.8.4"/>
+
   <target name="init-package" depends="clean-package">
     <mkdir dir="${package.output.dir}"/>
   </target>
@@ -112,14 +114,6 @@
     <exclude name="doc/archive/**"/>
     <exclude name="doc/langref-dita1.1/**"/>
   </patternset>
-  
-  <patternset id="pattern.package.ant">
-    <exclude name="tools/ant/etc/**"/>
-    <exclude name="tools/ant/manual/**"/>
-    <include name="tools/ant/*"/>
-    <include name="tools/ant/bin/**"/>
-    <include name="tools/ant/lib/**"/>
-  </patternset>
 
   <patternset id="pattern.package.minimum">
     <patternset refid="pattern.global.excludes"/>
@@ -174,7 +168,6 @@
     <include name="schema/**"/>
     <include name="xsl/**"/>
     <include name="lib/**"/>
-    <patternset refid="pattern.package.ant"/>
   </patternset>
   <patternset id="pattern.package.ext-plugins.full">
     <include name="h2d/**"/>
@@ -228,6 +221,12 @@
     <exclude name="**/*.temp"/>
     <exclude name="**/*.db"/>
   </patternset>
+
+  <target name="dependencies">
+    <get src="http://www.eu.apache.org/dist/ant/binaries/apache-ant-${tool.ant.version}-bin.zip"
+         dest="${basedir}/target/"
+         skipexisting="true"/>
+  </target>
 
   <target name="package-binary-minimum">
     <fail unless="param.out.file">param.out.file not defined</fail>
@@ -283,7 +282,7 @@
     </tar>
   </target>
 
-  <target name="package-binary-full">
+  <target name="package-binary-full" depends="dependencies">
     <fail unless="param.out.file">param.out.file not defined</fail>
     <property name="temp.dist.dir" location="${work.dir}/${param.out.file}/${package.name.root}${otversion}"/>
     <delete dir="${temp.dist.dir}"/>
@@ -292,6 +291,19 @@
       <fileset dir="${src.dir}">
         <patternset refid="pattern.package.full"/>
       </fileset>
+    </copy>
+    <copy todir="${temp.dist.dir}/tools/ant">
+      <zipfileset src="${basedir}/target/apache-ant-${tool.ant.version}-bin.zip">
+        <exclude name="apache-ant-${tool.ant.version}/etc/**"/>
+        <exclude name="apache-ant-${tool.ant.version}/manual/**"/>
+        <exclude name="apache-ant-${tool.ant.version}/fetch.xml"/>
+        <exclude name="apache-ant-${tool.ant.version}/get-m2.xml"/>
+        <exclude name="apache-ant-${tool.ant.version}/lib/*.pom"/>
+        <include name="apache-ant-${tool.ant.version}/*"/>
+        <include name="apache-ant-${tool.ant.version}/bin/**"/>
+        <include name="apache-ant-${tool.ant.version}/lib/**"/>
+      </zipfileset>
+      <mapper type="glob" from="apache-ant-${tool.ant.version}/*" to="*"/>
     </copy>
     <copy todir="${temp.dist.dir}/plugins">
       <fileset dir="${src.dir}/ext-plugins">
