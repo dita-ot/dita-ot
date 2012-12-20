@@ -156,6 +156,7 @@
   <property name="dita.resource.dir"
     location="${dita.plugin.org.dita.base.dir}${file.separator}resource" />
   <property environment="env" />
+  <!-- Deprecated -->
   <property name="dita.empty" value="" />
   <!-- Deprecated -->
   <property name="args.message.file"

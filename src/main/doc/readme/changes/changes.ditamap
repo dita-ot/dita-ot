@@ -2,6 +2,7 @@
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
 <map>
   <title>DITA-OT release history</title>
+  <topicref href="rel1.6.xml"/>
   <topicref href="rel1.5.4.xml"/>
   <topicref href="rel1.5.3.xml"/>
   <topicref href="rel1.5.2.xml"/>
