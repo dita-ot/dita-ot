@@ -196,7 +196,10 @@ See the accompanying license.txt file for applicable licenses.
             <fo:flow flow-name="xsl-region-body">
                 <fo:block xsl:use-attribute-sets="topic">
                     <xsl:call-template name="commonattributes"/>
-                    <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
+                    <xsl:variable name="level" as="xs:integer">
+                      <xsl:apply-templates select="." mode="get-topic-level"/>
+                    </xsl:variable>
+                    <xsl:if test="$level eq 1">
                         <fo:marker marker-class-name="current-topic-number">
                             <xsl:number format="1"/>
                         </fo:marker>
@@ -249,7 +252,10 @@ See the accompanying license.txt file for applicable licenses.
                     <xsl:call-template name="commonattributes"/>
                     <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
                         <fo:marker marker-class-name="current-topic-number">
-                            <xsl:number format="1"/>
+                            <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id)"/>
+                            <xsl:for-each select="$topicref">
+                              <xsl:number count="*[contains(@class,' bookmap/appendix ')]" format="1"/>
+                            </xsl:for-each>
                         </fo:marker>
                         <fo:marker marker-class-name="current-header">
                             <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
@@ -625,7 +631,9 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
   <xsl:template match="*" mode="get-topic-level" as="xs:integer">
-    <xsl:value-of select="count(ancestor-or-self::*[contains(@class,' topic/topic ')])"/>
+    <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class,' topic/topic ')][1]/@id)"/>
+    <xsl:sequence select="count(ancestor-or-self::*[contains(@class,' topic/topic ')]) -
+                          count($topicref/ancestor-or-self::*[contains(@class,' bookmap/part ')])"/>
   </xsl:template>
 
     <xsl:template match="*" mode="createTopicAttrsName">
