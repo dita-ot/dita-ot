@@ -40,10 +40,8 @@ See the accompanying license.txt file for applicable licenses.
     exclude-result-prefixes="opentopic-mapmerge opentopic-func exslf exsl"
     version="2.0">
 	
-	<!-- added by William on 2009-10-26 for bug:1880097 start -->
 	<xsl:import href="../../../../xsl/common/output-message.xsl"/>
 	<xsl:variable name="msgprefix">DOTX</xsl:variable>
-	<!-- added by William on 2009-10-26 for bug:1880097 end -->
 	
     <xsl:key name="key_anchor" match="*[@id][not(contains(@class,' map/topicref '))]" use="@id"/>
 <!--[not(contains(@class,' map/topicref '))]-->
@@ -93,8 +91,7 @@ See the accompanying license.txt file for applicable licenses.
     <!-- The insertReferenceTitle template is called from <xref> and <link> and is
          used to build link contents (using full FO syntax, not just the text). -->
     <!-- Process any cross reference or link with author-specified text. 
-         The specified text is used as the link text. Added by RDA for
-         SourceForge bug 1880097. -->
+         The specified text is used as the link text. -->
     <xsl:template match="*[processing-instruction()[name()='ditaot'][.='usertext']]" mode="insertReferenceTitle">
         <xsl:apply-templates select="*[not(contains(@class,' topic/desc '))]|text()"/>
     </xsl:template>
@@ -443,13 +440,11 @@ See the accompanying license.txt file for applicable licenses.
                     <xsl:value-of select="concat('url(', $href, ')')"/>
                 </xsl:attribute>
             </xsl:when>
-        	<!-- added by William on 2009-09-09 for xref pdf bug:2854546 start-->
         	<xsl:when test="$scope = 'peer'">
         		<xsl:attribute name="internal-destination">
         			<xsl:value-of select="$href"/>
         		</xsl:attribute>
         	</xsl:when>
-        	<!-- added by William on 2009-09-09 for xref pdf bug:2854546 end-->
         	<xsl:when test="contains($href, '#')">
         		<xsl:attribute name="internal-destination">
         			<xsl:value-of select="opentopic-func:getDestinationId($href)"/>

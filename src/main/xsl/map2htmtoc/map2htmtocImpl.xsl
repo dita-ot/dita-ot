@@ -55,11 +55,9 @@
 <!-- *********************************************************************************
      Setup the HTML wrapper for the table of contents
      ********************************************************************************* -->
-  <!--Added by William on 2009-11-23 for bug:2900047 extension bug start -->
   <xsl:template match="/">
     <xsl:call-template name="generate-toc"/>
   </xsl:template>
-  <!--Added by William on 2009-11-23 for bug:2900047 extension bug end -->
 <!--  -->
 <xsl:template name="generate-toc">
   <html><xsl:value-of select="$newline"/>
@@ -205,10 +203,8 @@
             <xsl:element name="a">
               <xsl:attribute name="href">
                 <xsl:choose>        <!-- What if targeting a nested topic? Need to keep the ID? -->
-                  <!-- edited by william on 2009-08-06 for bug:2832696 start -->
                   <xsl:when test="@copy-to and not(contains(@chunk, 'to-content')) and 
                     (not(@format) or @format = 'dita' or @format='ditamap' ) ">
-                  <!-- edited by william on 2009-08-06 for bug:2832696 end -->
                     <xsl:if test="not(@scope='external')"><xsl:value-of select="$pathFromMaplist"/></xsl:if>
                     <xsl:call-template name="replace-extension">
                       <xsl:with-param name="filename" select="@copy-to"/>
@@ -218,9 +214,7 @@
                       <xsl:value-of select="concat('#', substring-after(@href, '#'))"/>
                     </xsl:if>
                   </xsl:when>
-                  <!-- edited by william on 2009-08-06 for bug:2832696 start -->
                   <xsl:when test="not(@scope = 'external') and (not(@format) or @format = 'dita' or @format='ditamap')">
-                  <!-- edited by william on 2009-08-06 for bug:2832696 end -->
                     <xsl:if test="not(@scope='external')"><xsl:value-of select="$pathFromMaplist"/></xsl:if>
                     <xsl:call-template name="replace-extension">
                       <xsl:with-param name="filename" select="@href"/>

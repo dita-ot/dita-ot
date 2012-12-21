@@ -491,7 +491,6 @@
    <xsl:when test="$FILTERDOC/val/prop[@att=$flag-att][@val=$firstflag][@action='flag']">
     <xsl:copy-of select="$FILTERDOC/val/prop[@att=$flag-att][@val=$firstflag][@action='flag']"/>
    </xsl:when>
-   <!-- Added by William on 2009-06-01 for flag process start-->
    <xsl:when test="$FILTERDOC/val/prop[@att=$flag-att][not(@val=$firstflag)][@action='flag']">
     
     <xsl:for-each select="$FILTERDOC/val/prop[@att=$flag-att][not(@val=$firstflag)][@action='flag']">
@@ -532,7 +531,6 @@
            </xsl:if>
         </xsl:for-each>
    </xsl:when>
-   <!-- Added by William on 2009-06-01 for flag process end-->
    <xsl:otherwise/> <!-- that flag not active -->
   </xsl:choose>
   
@@ -549,7 +547,6 @@
   </xsl:choose>
  </xsl:template>
  
- <!-- Added by William on 2009-06-01 for flag process start-->
  <!-- copy needed elements -->
  <xsl:template match="*" mode="copy-element">
    <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
@@ -679,7 +676,6 @@
    <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
         <xsl:copy-of select="node()"/>
   </xsl:template>
- <!-- Added by William on 2009-06-01 for flag process end-->
  
  <!-- Shortcuts for generating both rev flags and property flags -->
  <xsl:template name="start-flags-and-rev">

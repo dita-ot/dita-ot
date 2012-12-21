@@ -558,7 +558,6 @@
   </xsl:choose>
  </xsl:template>
  
- <!-- Added by William on 2009-06-01 for flag process start-->
  <!-- copy needed elements -->
  <xsl:template match="*" mode="copy-element">
      <xsl:param name="att"/>
@@ -692,7 +691,6 @@
  <xsl:template match="*" mode="getChildNode">
         <xsl:copy-of select="node()"/>
   </xsl:template>
- <!-- Added by William on 2009-06-01 for flag process end-->
  
  <!-- Shortcuts for generating both rev flags and property flags -->
  <xsl:template name="start-flags-and-rev">

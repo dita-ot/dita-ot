@@ -152,11 +152,9 @@ Other modes can be found within the code, and may or may not prove useful for ov
           <xsl:if test="not(@otherprops)">
             <xsl:apply-templates select="." mode="mappull:inherit-and-set-attribute"><xsl:with-param name="attrib">otherprops</xsl:with-param></xsl:apply-templates>
           </xsl:if>
-          <!-- added by William on 2009-09-07 for updated mapref behavior start -->
           <xsl:if test="not(@props)">
             <xsl:apply-templates select="." mode="mappull:inherit-and-set-attribute"><xsl:with-param name="attrib">props</xsl:with-param></xsl:apply-templates>
           </xsl:if>
-          <!-- added by William on 2009-09-07 for updated mapref behavior end -->
           <!--grab type, text and metadata, as long there's an href to grab from, and it's not inaccessible-->
           <xsl:choose>
             <xsl:when test="@href=''">

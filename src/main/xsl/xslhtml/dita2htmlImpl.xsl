@@ -96,11 +96,9 @@
 <!-- the file name (file name and extension only - no path) of the document being transformed.
      Needed to help with debugging.
      default is 'myfile.xml')-->
-<!-- added by William on 2009-06-24 for flag support start -->
 <xsl:param name="FILENAME"/>
 <xsl:param name="FILEDIR"/>
 <xsl:param name="CURRENTFILE" select="concat($FILEDIR, '/', $FILENAME)"/>
-<!-- added by William on 2009-06-24 for flag support end --> 
 
 <!-- the file name containing filter/flagging/revision information
      (file name and extension only - no path).  - testfile: revflag.dita -->
@@ -121,7 +119,6 @@
 <xsl:param name="KEYREF-FILE" select="concat($WORKDIR,$PATH2PROJ,'keydef.xml')"/>
 <xsl:variable name="keydefs" select="document($KEYREF-FILE)"/>
   
-<!-- added by William on 2009-09-03 for keyref bug:2849078 start-->
 <xsl:param name="BASEDIR"/>
   
 <xsl:param name="OUTPUTDIR"/>
@@ -150,7 +147,6 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-<!-- added by William on 2009-09-03 for keyref bug:2849078 end-->
 
 <!-- =========== "GLOBAL" DECLARATIONS (see 35) =========== -->
 
@@ -1685,9 +1681,7 @@
             </xsl:otherwise>
           </xsl:choose>
           <xsl:apply-templates select="@href|@height|@width"/>
-          <!-- Add by Alan for Bug:#2900417 on Date: 2009-11-23 begin -->
           <xsl:apply-templates select="@scale"/>
-          <!-- Add by Alan for Bug:#2900417 on Date: 2009-11-23 end   -->
           <xsl:choose>
             <xsl:when test="*[contains(@class,' topic/alt ')]">
               <xsl:variable name="alt-content"><xsl:apply-templates select="*[contains(@class,' topic/alt ')]" mode="text-only"/></xsl:variable>
@@ -1713,7 +1707,6 @@
   <xsl:attribute name="src"><xsl:value-of select="."/></xsl:attribute>
 </xsl:template>
 
-<!-- Add by Alan for Bug:#2900417 on Date: 2009-11-23 begin -->
 <!-- AM: handling for scale attribute -->
 <xsl:template match="*[contains(@class,' topic/image ')]/@scale">
     <xsl:variable name="width">
@@ -1741,7 +1734,6 @@
       </xsl:attribute>
     </xsl:if>
 </xsl:template>
-<!-- Add by Alan for Bug:#2900417 on Date: 2009-11-23 end -->
 
 <xsl:template match="*[contains(@class,' topic/image ')]/@height">
   <xsl:variable name="height-in-pixel">
@@ -1751,7 +1743,6 @@
   </xsl:variable>
   <xsl:if test="not($height-in-pixel='100%')">
     <xsl:attribute name="height">
-      <!-- Edit by Alan for Bug:#2900417 on Date: 2009-11-23 begin -->
       <!--xsl:choose>
         <xsl:when test="../@scale and string(number(../@scale))!='NaN'">          
           <xsl:value-of select="number($height-in-pixel) * number(../@scale)"/>
@@ -1760,7 +1751,6 @@
           <xsl:value-of select="number($height-in-pixel)"/>
         <!--/xsl:otherwise>
       </xsl:choose-->
-      <!-- Edit by Alan for Bug:#2900417 on Date: 2009-11-23 end -->
     </xsl:attribute>
   </xsl:if>  
 </xsl:template>
@@ -1773,7 +1763,6 @@
   </xsl:variable>
   <xsl:if test="not($width-in-pixel = '100%')">
     <xsl:attribute name="width">
-      <!-- Edit by Alan for Bug:#2900417 on Date: 2009-11-23 begin -->
       <!--xsl:choose>
         <xsl:when test="../@scale and string(number(../@scale))!='NaN'">          
           <xsl:value-of select="number($width-in-pixel) * number(../@scale)"/>
@@ -1782,7 +1771,6 @@
           <xsl:value-of select="number($width-in-pixel)"/>
         <!--/xsl:otherwise>
       </xsl:choose-->
-      <!-- Edit by Alan for Bug:#2900417 on Date: 2009-11-23 end -->
     </xsl:attribute>
   </xsl:if>  
 </xsl:template>
@@ -4084,14 +4072,10 @@
       <xsl:variable name="ditaschtitle"><xsl:apply-templates select="/dita/*[contains(@class,' topic/topic ')][1]/*[contains(@class,' topic/titlealts ')]/*[contains(@class,' topic/searchtitle ')]" mode="text-only"/></xsl:variable>
       <xsl:variable name="maintitle"><xsl:apply-templates select="/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]" mode="text-only"/></xsl:variable>
       <xsl:variable name="ditamaintitle"><xsl:apply-templates select="/dita/*[contains(@class,' topic/topic ')][1]/*[contains(@class,' topic/title ')]" mode="text-only"/></xsl:variable>
-      <!-- edited by William on 2009-05-18 for searchtitle bug start -->
       <xsl:variable name="mapschtitle"><xsl:apply-templates select="/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/titlealts ')]/*[contains(@class,' map/searchtitle ')]" mode="text-only"/></xsl:variable>
-      <!-- edited by William on 2009-05-18 for searchtitile bug end -->
       <xsl:choose>
         <xsl:when test="string-length($schtitle)> 0"><xsl:value-of select="normalize-space($schtitle)"/></xsl:when>
-        <!-- edited by William on 2009-05-18 for searchtitle bug start -->
         <xsl:when test="string-length($mapschtitle)> 0"><xsl:value-of select="normalize-space($mapschtitle)"/></xsl:when>
-        <!-- edited by William on 2009-05-18 for searchtitile bug end -->
         <xsl:when test="string-length($ditaschtitle)> 0"><xsl:value-of select="normalize-space($ditaschtitle)"/></xsl:when>
         <xsl:when test="string-length($maintitle) > 0"><xsl:value-of select="normalize-space($maintitle)"/></xsl:when>
         <xsl:when test="string-length($ditamaintitle)> 0"><xsl:value-of select="normalize-space($ditamaintitle)"/></xsl:when>

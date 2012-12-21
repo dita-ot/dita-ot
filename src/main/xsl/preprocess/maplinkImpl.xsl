@@ -318,11 +318,9 @@
               and descendant::*[contains(@class, ' map/topicref ')][@href][not(@href='')][not(@linking='none')][not(@linking='sourceonly')][not(@processing-role='resource-only')]">
         <linkpool class="- topic/linkpool ">
           <xsl:copy-of select="@xtrf | @xtrc | @collection-type"/>
-          <!-- added by William on 2009-10-14 for relink bug:2866322 start-->
           <xsl:apply-templates select="child::*[contains(@class, ' map/topicref ')]" mode="recusive">
             <xsl:with-param name="pathBackToMapDirectory" select="$pathBackToMapDirectory"/>
           </xsl:apply-templates>
-          <!-- added by William on 2009-10-14 for relink bug:2866322 end-->
           <!--xsl:apply-templates mode="link" 
             select="child::*[@href][not(@href='')][not(@linking='none')][not(@linking='sourceonly')][not(@processing-role='resource-only')]">
             <xsl:with-param name="role">child</xsl:with-param>
@@ -333,7 +331,6 @@
       </xsl:if>
   </xsl:template>
   
-  <!-- added by William on 2009-10-14 for relink bug:2866322 start-->
   <xsl:template match="*" mode="recusive" name="recusive">
     <xsl:param name="pathBackToMapDirectory"/>
     <xsl:choose>
@@ -363,7 +360,6 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-  <!-- added by William on 2009-10-14 for relink bug:2866322 end-->
   
   <!--friends-->
   <xsl:template match="*" mode="link-to-friends"/>
@@ -591,7 +587,6 @@
   <!-- Override this moded template to add your own kinds of links. -->
   <xsl:template match="*" mode="link-to-other"/>
   
-      <!--edited by William on 2009-06-10 for bug:2799543 link bug  start  -->
       <!--xsl:template mode="link" 
       match="*[@href][not(@href='')][not(@linking='none')][not(@linking='sourceonly')][not(@processing-role='resource-only')]"-->
   <xsl:template mode="generate-ordered-links-2" match="*[contains(@class, ' map/relcell ')]">
@@ -662,23 +657,18 @@
   
   <xsl:template mode="link" 
               match="*[@href][not(@href='')][not(@linking='none')][not(@linking='sourceonly')][not(@processing-role='resource-only')]">
-      <!--edited by William on 2009-06-10 for bug:2799543 link bug  end  -->
     <xsl:param name="role">#none#</xsl:param>
     <xsl:param name="otherrole">#none#</xsl:param>
     <xsl:param name="pathBackToMapDirectory"/>
-          <!--Added by William on 2009-06-10 for bug:2799543 link bug  start  -->
           <!-- child found tag -->
           <xsl:param name="found">found</xsl:param>
-          <!--Added by William on 2009-06-10 for bug:2799543 link bug  end  -->
     <!-- If going to print, and @print=no, do not create links for this topicref -->
-          <!--edited by William on 2009-06-10 for bug:2799543 link bug  start  -->
           <!--xsl:if 
           test="not(($FINALOUTPUTTYPE='PDF' or $FINALOUTPUTTYPE='IDD') and @print='no')"--> 
 
     <xsl:if 
               test="not(($FINALOUTPUTTYPE='PDF' or $FINALOUTPUTTYPE='IDD') and @print='no') and 
               not(@processing-role='resource-only') and ($found='found')">
-          <!--edited by William on 2009-06-10 for bug:2799543 link bug  end  -->
       <link class="- topic/link ">
         <xsl:if test="@class">
           <xsl:attribute name="mapclass"><xsl:value-of select="@class"/></xsl:attribute>
@@ -728,32 +718,27 @@
             test="not(($FINALOUTPUTTYPE='PDF' or $FINALOUTPUTTYPE='IDD') and (not(@scope) or @scope='local') and (not(@format) or @format='dita' or @format='DITA') and (not(@locktitle) or @locktitle='no'))">
             <linktext class="- topic/linktext ">
               <xsl:copy-of select="*[contains(@class, ' map/topicmeta ')]/processing-instruction()[name()='ditaot'][.='usertext' or .='gentext']"/>
-              <!-- edited by Alan for bug ID: 2875373 on Date: 2009-10-12 begin-->
               <!-- xsl:value-of 
                 select="normalize-space(*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')])"/ -->
               <xsl:copy-of
                 select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]/node()"/>
-              <!-- edited by Alan for bug ID: 2875373 on Date: 2009-10-12 end-->
             </linktext>
           </xsl:if>
         </xsl:if>
         <xsl:if 
           test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')]">
-          <!-- edited by William on 2009-05-07 for shortdesc bug start -->
           <!--desc class="- topic/desc "-->
           <!-- add desc node and text -->
           <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')]"/>
             <!-- xsl:value-of 
               select="normalize-space(*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')])"/-->
           <!-- /desc-->
-          <!-- edited by William on 2009-05-07 for shortdesc bug start -->
         </xsl:if>
       </link>
     </xsl:if>
 
   </xsl:template>
   
-  <!-- added by William on 2009-05-07 for shortdesc bug start -->
   <!-- create a template to get child nodes and text -->
   <xsl:template match="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')]" name="node">
        <!--xsl:copy-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')]"/-->
@@ -763,7 +748,6 @@
        	<xsl:copy-of select="node()"/>
        </desc>	
   </xsl:template>
-  <!-- added by William on 2009-05-07 for shortdesc bug start -->
   
   <!-- Make sure that pathFromMaplist parameter gets passed down -->
   <xsl:template match="*">

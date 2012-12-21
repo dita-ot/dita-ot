@@ -34,10 +34,8 @@
 	exclude-result-prefixes="opentopic-mapmerge opentopic-func exslf exsl dita-ot"
 	version="1.1">
 	
-	<!-- added by William on 2009-10-26 for bug:1880097 start -->
 	<xsl:import href="../../xsl/common/output-message.xsl"/>
 	<xsl:variable name="msgprefix">DOTX</xsl:variable>
-	<!-- added by William on 2009-10-26 for bug:1880097 end -->
     <!-- 
 	<xsl:include href="../../cfg/fo/attrs/links-attr.xsl"/>
     -->
@@ -520,13 +518,11 @@
                     <xsl:value-of select="$href"/>
                 </xsl:attribute>
             </xsl:when>
-        	<!-- added by William on 2009-09-09 for xref pdf bug:2854546 start-->
         	<xsl:when test="$scope = 'peer'">
         		<xsl:attribute name="xlink:href">
         			<xsl:value-of select="$href"/>
         		</xsl:attribute>
         	</xsl:when>
-        	<!-- added by William on 2009-09-09 for xref pdf bug:2854546 end-->
         	<xsl:when test="contains($href, '#')">
         		<xsl:attribute name="xlink:href">
         			<xsl:value-of select="$href"/>

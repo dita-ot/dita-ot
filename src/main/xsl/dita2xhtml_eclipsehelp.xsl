@@ -4,7 +4,6 @@
     xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"
     xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links">
     
-    <!-- added by William on 2009-07-22 for req #12014 start-->
     <xsl:import href="dita2xhtml.xsl"/>
     
     <xsl:variable name="pluginfilename" select="concat($WORKDIR, $PATH2PROJ, 'pluginId.xml')"/>
@@ -930,7 +929,6 @@
         <xsl:apply-templates/>
     </xsl:template>
     
-    <!-- Added by William on 2009-07-16 for req #12014 start -->
     <xsl:template match="*" mode="conref">
         <!-- file referenced by conref -->
         <xsl:variable name="FILENAME">
@@ -1074,5 +1072,5 @@
             </xsl:attribute>
         </xsl:element>
     </xsl:template>
-    <!-- Added by William on 2009-07-16 for req #12014 end -->    
+    
 </xsl:stylesheet>
