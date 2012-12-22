@@ -195,7 +195,7 @@ public final class MergeMapParser extends XMLFilterImpl {
                         try {
                             p = FileUtils.normalize(URLDecoder.decode(FileUtils.stripFragment(attValue), UTF8));
                         } catch (UnsupportedEncodingException e) {
-                            logger.logError("Unable to parse URI '" + attValue + "': " + e.getMessage(), e);
+                        	throw new RuntimeException(e);
                         }
                         util.visit(p);
                         if (p != null) {

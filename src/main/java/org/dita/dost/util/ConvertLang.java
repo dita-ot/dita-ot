@@ -271,7 +271,7 @@ public final class ConvertLang extends Task {
             } catch (final FileNotFoundException e) {
                 logger.logException(e);
             } catch (final UnsupportedEncodingException e) {
-                logger.logException(e);
+            	throw new RuntimeException(e);
             } catch (final IOException e) {
                 logger.logException(e);
             } finally {
@@ -397,7 +397,7 @@ public final class ConvertLang extends Task {
             } catch (final FileNotFoundException e) {
                 logger.logException(e);
             } catch (final UnsupportedEncodingException e) {
-                logger.logException(e);
+                throw new RuntimeException(e);
             } catch (final IOException e) {
                 logger.logException(e);
             } finally {

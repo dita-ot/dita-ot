@@ -1492,7 +1492,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
         try{
             f = URLDecoder.decode(filename, UTF8);
         }catch(final UnsupportedEncodingException e){
-            logger.logError("Unable to decode URI '" + filename + "': " + e.getMessage());
+        	throw new RuntimeException(e);
         }
         if (processingMode == Mode.LAX) {
         	f = f.replace(WINDOWS_SEPARATOR, File.separator);
