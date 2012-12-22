@@ -20,7 +20,9 @@ import org.xml.sax.SAXException;
 
 /**
  * @author Zhang, Yuan Peng
+ * @deprecated use Apache Commons Catalog Resolver instead
  */
+@Deprecated
 public final class CatalogParser implements ContentHandler{
     private final String catalogDir;
 

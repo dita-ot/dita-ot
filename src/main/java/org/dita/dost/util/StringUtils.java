@@ -487,6 +487,7 @@ public final class StringUtils {
     /**
      * Get max value.
      */
+    @Deprecated
     public static Integer getMax(final String ul_depth, final String ol_depth, final String sl_depth,
             final String dl_depth, final String table_depth, final String stable_depth){
 
@@ -521,6 +522,7 @@ public final class StringUtils {
     /**
      * Get max value.
      */
+    @Deprecated
     public static Integer getMax(final String fn_depth, final String list_depth, final String dlist_depth, final String table_depth, final String stable_depth){
 
         final int fnDepth = Integer.parseInt(fn_depth);
