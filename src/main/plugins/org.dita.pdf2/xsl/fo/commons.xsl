@@ -130,6 +130,9 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:when test="$topicType = 'topicAppendix'">
                 <xsl:call-template name="processTopicAppendix"/>
             </xsl:when>
+            <xsl:when test="$topicType = 'topicAppendices'">
+                <xsl:call-template name="processTopicAppendices"/>
+            </xsl:when>
             <xsl:when test="$topicType = 'topicPart'">
                 <xsl:call-template name="processTopicPart"/>
             </xsl:when>
@@ -289,6 +292,70 @@ See the accompanying license.txt file for applicable licenses.
         </fo:page-sequence>
     </xsl:template>
 
+  <!--  Bookmap appendices processing  -->
+  <xsl:template name="processTopicAppendices">
+    <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="__force__page__count">
+      <xsl:call-template name="startPageNumbering"/>
+      <xsl:call-template name="insertBodyStaticContents"/>
+      <fo:flow flow-name="xsl-region-body">
+        <fo:block xsl:use-attribute-sets="topic">
+          <xsl:call-template name="commonattributes"/>
+          <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
+            <fo:marker marker-class-name="current-topic-number">
+              <xsl:number format="I"/>
+            </fo:marker>
+            <fo:marker marker-class-name="current-header">
+              <xsl:for-each select="*[contains(@class,' topic/title ')]">
+                <xsl:apply-templates select="." mode="getTitle"/>
+              </xsl:for-each>
+            </fo:marker>
+          </xsl:if>
+          
+          <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
+          
+          <xsl:call-template name="insertChapterFirstpageStaticContent">
+            <xsl:with-param name="type" select="'appendices'"/>
+          </xsl:call-template>
+          
+          <fo:block xsl:use-attribute-sets="topic.title">
+            <xsl:call-template name="pullPrologIndexTerms"/>
+            <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
+              <xsl:apply-templates select="." mode="getTitle"/>
+            </xsl:for-each>
+          </fo:block>
+          
+          <xsl:choose>
+            <xsl:when test="$appendicesLayout='BASIC'">
+              <xsl:apply-templates select="*[not(contains(@class, ' topic/topic ') or contains(@class, ' topic/title ') or
+                                                 contains(@class, ' topic/prolog '))]"/>
+              <xsl:apply-templates select="." mode="buildRelationships"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:apply-templates select="." mode="createMiniToc"/>
+            </xsl:otherwise>
+          </xsl:choose>
+                    
+          <xsl:for-each select="*[contains(@class,' topic/topic ')]">
+            <xsl:variable name="topicType">
+              <xsl:call-template name="determineTopicType"/>
+            </xsl:variable>
+            <xsl:if test="$topicType = 'topicSimple'">
+              <xsl:apply-templates select="."/>
+            </xsl:if>
+          </xsl:for-each>
+        </fo:block>
+      </fo:flow>
+    </fo:page-sequence>
+    <xsl:for-each select="*[contains(@class,' topic/topic ')]">
+      <xsl:variable name="topicType">
+        <xsl:call-template name="determineTopicType"/>
+      </xsl:variable>
+      <xsl:if test="not($topicType = 'topicSimple')">
+        <xsl:apply-templates select="."/>
+      </xsl:if>
+    </xsl:for-each>
+  </xsl:template>
+
     <!--  Bookmap Part processing  -->
     <xsl:template name="processTopicPart">
         <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="__force__page__count">
@@ -438,7 +505,20 @@ See the accompanying license.txt file for applicable licenses.
                             </xsl:call-template>
                         </fo:block>
                 </xsl:when>
-
+              <xsl:when test="$type = 'appendices'">
+                <fo:block xsl:use-attribute-sets="__chapter__frontmatter__name__container">
+                  <xsl:call-template name="insertVariable">
+                    <xsl:with-param name="theVariableID" select="'Appendix with number'"/>
+                    <xsl:with-param name="theParameters">
+                      <number>
+                        <fo:block xsl:use-attribute-sets="__chapter__frontmatter__number__container">
+                          <xsl:text>&#xA0;</xsl:text>
+                        </fo:block>
+                      </number>
+                    </xsl:with-param>
+                  </xsl:call-template>
+                </fo:block>
+              </xsl:when>
                 <xsl:when test="$type = 'part'">
                         <fo:block xsl:use-attribute-sets="__chapter__frontmatter__name__container">
                             <xsl:call-template name="insertVariable">
@@ -2102,6 +2182,9 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
     <xsl:template match="*[contains(@class, ' bookmap/preface ')]" mode="determineTopicType">
         <xsl:text>topicPreface</xsl:text>
+    </xsl:template>
+    <xsl:template match="*[contains(@class, ' bookmap/appendices ')]" mode="determineTopicType">
+      <xsl:text>topicAppendices</xsl:text>
     </xsl:template>
     <xsl:template match="*[contains(@class, ' bookmap/part ')]" mode="determineTopicType">
         <xsl:text>topicPart</xsl:text>

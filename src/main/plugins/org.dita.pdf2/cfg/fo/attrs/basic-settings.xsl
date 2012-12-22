@@ -29,6 +29,7 @@
       </xsl:choose>
     </xsl:param>
     <xsl:param name="appendixLayout" select="$chapterLayout"/>
+    <xsl:param name="appendicesLayout" select="$chapterLayout"/>
     <xsl:param name="partLayout" select="$chapterLayout"/>
     <xsl:param name="noticesLayout" select="$chapterLayout"/>
 

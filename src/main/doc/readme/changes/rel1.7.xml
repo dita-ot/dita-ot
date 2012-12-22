@@ -180,6 +180,7 @@
           <li>#1409 Stylesheet imported multiple times in the hierarchy (reloaded) (release candidate)</li>
           <li>#1413 Mapref resolution cascades role (release candidate)</li>
           <li>#1416 german translation (release candidate)</li>
+          <li>#1362 href attribute in appendices element breaks PDF conversion (final release)</li>
           <li>#1418 PDF2 transtype breaks when bookmap has parts (final release)</li>
         </ul>
       </section>
