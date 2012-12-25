@@ -206,7 +206,7 @@
   </target>
 	
   <!-- property value validation begin -->
-  <target name="check-arg" depends="use-init"
+  <target name="check-arg"
     description="Validate and init input arguments">
     <!-- begin to check input parameters -->
     <dita-ot-fail id="DOTA069F">

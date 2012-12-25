@@ -59,7 +59,7 @@
       While copying, populate default attributes like @class,
       add @xtrf and @xtrc and filter out elements according to valfile, if any. -->
   <target name="debug-filter"
-    dita:depends="gen-list,{depend.preprocess.debug-filter.pre}"
+    dita:depends="{depend.preprocess.debug-filter.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.debug-filter.skip"
     description="Debug and filter input files" >
@@ -332,7 +332,7 @@
     Produce maplinks.unordered file, containing all related links
     implied by the map (family and reltables). -->
   <target name="maplink"
-    dita:depends="chunk,{depend.preprocess.maplink.pre},maplink-check"
+    dita:depends="{depend.preprocess.maplink.pre},maplink-check"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.maplink.skip"
     description="Find and generate related link information">
@@ -364,7 +364,7 @@
       Push links from maplinks.unordered file into
       <related-links> sections of the corresponding topics. -->
   <target name="move-links"
-    dita:depends="maplink,{depend.preprocess.move-links.pre},move-links-check"
+    dita:depends="{depend.preprocess.move-links.pre},move-links-check"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.move-links.skip"
     description="Move the related link information to topics">
