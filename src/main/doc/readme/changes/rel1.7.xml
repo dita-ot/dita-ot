@@ -14,7 +14,7 @@
 <refbody>
 <section>         <p>The minimum Java version has changed from 5.0
 to 6.</p><p>Added support for abbreviated-form processing in PDF.</p><p>X/HTML
-processing code nas been streamlined to make it faster and easier
+processing code has been streamlined to make it faster and easier
 to read.</p><p>Ant proprocessing dependencies have been cleaned up
 to make tasks easier to use independently.</p><p>Numerous internal
 improvements not directly visible to most end users; see feature and

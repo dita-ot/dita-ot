@@ -386,6 +386,7 @@
       <property name="output.dir" location="${work.dir}/htmlhelp"/>
       <property name="base.temp.dir" location="${work.dir}"/>
       <property name="preprocess.copy-generated-files.skip" value="true"/>
+      <property name="args.gen.task.lbl" value="YES"/>
     </ant>
     <!--
     <ant antfile="${src.dir}/build.xml">
