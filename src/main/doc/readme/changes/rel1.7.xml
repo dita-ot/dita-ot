@@ -182,6 +182,7 @@
           <li>#1416 german translation (release candidate)</li>
           <li>#1197 Handling of @href on a &lt;glossarylist> (final release)</li>
           <li>#1362 href attribute in appendices element breaks PDF conversion (final release)</li>
+          <li>#1411 Files with ".orig" extension missing from distribution (final release)</li>
           <li>#1418 PDF2 transtype breaks when bookmap has parts (final release)</li>
         </ul>
       </section>
