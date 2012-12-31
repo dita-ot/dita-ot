@@ -248,7 +248,10 @@ See the accompanying license.txt file for applicable licenses.
             <fo:flow flow-name="xsl-region-body">
                 <fo:block xsl:use-attribute-sets="topic">
                     <xsl:call-template name="commonattributes"/>
-                    <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
+                    <xsl:variable name="level" as="xs:integer">
+                      <xsl:apply-templates select="." mode="get-topic-level"/>
+                    </xsl:variable>
+                    <xsl:if test="$level eq 1">
                         <fo:marker marker-class-name="current-topic-number">
                             <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id)"/>
                             <xsl:for-each select="$topicref">
@@ -699,7 +702,8 @@ See the accompanying license.txt file for applicable licenses.
   <xsl:template match="*" mode="get-topic-level" as="xs:integer">
     <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class,' topic/topic ')][1]/@id)"/>
     <xsl:sequence select="count(ancestor-or-self::*[contains(@class,' topic/topic ')]) -
-                          count($topicref/ancestor-or-self::*[contains(@class,' bookmap/part ')])"/>
+                          count($topicref/ancestor-or-self::*[contains(@class,' bookmap/part ') or
+                                                              contains(@class,' bookmap/appendices ')])"/>
   </xsl:template>
 
     <xsl:template match="*" mode="createTopicAttrsName">
