@@ -118,7 +118,6 @@ public final class DitaValReader extends AbstractXMLReader {
         try {
 
             reader.setErrorHandler(new DITAOTXMLErrorHandler(ditaVal, logger));
-            //Added on 2010-08-24 for bug:3086552 start
             final File file = new File(input);
             final InputSource is = new InputSource(new FileInputStream(file));
             //Set the system ID
@@ -126,7 +125,6 @@ public final class DitaValReader extends AbstractXMLReader {
                 //is.setSystemId(URLUtil.correct(file).toString());
                 is.setSystemId(file.toURI().toURL().toString());
             }
-            //Added on 2010-08-24 for bug:3086552 end
             reader.parse(is);
 
         } catch (final Exception e) {
@@ -211,7 +209,7 @@ public final class DitaValReader extends AbstractXMLReader {
         } else {
             final Properties prop = new Properties();
             prop.put("%1", key);
-            logger.logError(MessageUtils.getMessage("DOTJ007E", prop)
+            logger.logError(MessageUtils.getInstance().getMessage("DOTJ007E", prop)
                     .toString());
         }
     }
@@ -250,7 +248,7 @@ public final class DitaValReader extends AbstractXMLReader {
                     //					else {
                     //						Properties prop = new Properties();
                     //						prop.put("%1", key);
-                    //						logger.logError(MessageUtils.getMessage("DOTJ007E", prop)
+                    //						logger.logError(MessageUtils.getInstance().getMessage("DOTJ007E", prop)
                     //								.toString());
                     //					}
                 }

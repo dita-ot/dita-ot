@@ -43,6 +43,8 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
     exclude-result-prefixes="xs opentopic-index exsl comparer opentopic-func exslf ot-placeholder">
 
+  <xsl:variable name="index.continued-enabled" select="true()"/>
+
     <!-- *************************************************************** -->
     <!-- Create index templates                                          -->
     <!-- *************************************************************** -->
@@ -70,7 +72,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="*[contains(@class,' topic/topic ')]" mode="index-entries">
         <xsl:variable name="id" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>
-        <xsl:variable name="mapTopicref" select="key('map-id', $id)"/>
+        <xsl:variable name="mapTopicref" select="key('map-id', $id)[1]"/>
         <xsl:if test="not(contains($mapTopicref/@otherprops, 'noindex'))">
             <xsl:apply-templates mode="index-entries"/>
         </xsl:if>
@@ -78,7 +80,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="*[contains(@class,' topic/topic ')]" mode="index-postprocess">
         <xsl:variable name="id" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>
-        <xsl:variable name="mapTopicref" select="key('map-id', $id)"/>
+        <xsl:variable name="mapTopicref" select="key('map-id', $id)[1]"/>
         <xsl:if test="not(contains($mapTopicref/@otherprops, 'noindex'))">
             <xsl:apply-templates mode="index-entries"/>
         </xsl:if>
@@ -186,10 +188,6 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:when>
         </xsl:choose>
         <!--Insert simple index entry marker-->
-        <!-- edited by william on 2009-07-13 for bug:2819853 start -->
-        <!--xsl:for-each select="descendant::opentopic-index:refID[last()]">
-            <fo:inline index-key="{@value}"/>
-        </xsl:for-each-->
         <xsl:choose>
             <!--xsl:when test="opentopic-index:index.entry"/-->
             <xsl:when test="opentopic-index:index.entry">
@@ -203,7 +201,6 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:for-each>
             </xsl:otherwise>
         </xsl:choose>
-        <!-- edited by william on 2009-07-13 for bug:2819853 end -->
         <xsl:apply-templates/>
     </xsl:if>
   </xsl:template>
@@ -357,7 +354,15 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:choose>
       <xsl:when test="opentopic-index:index.entry">
         <fo:table>
+          <xsl:if test="$index.continued-enabled">
+            <fo:table-header>
+              <fo:retrieve-table-marker retrieve-class-name="index-continued" retrieve-position-within-table="last-starting"/>
+            </fo:table-header>
+          </xsl:if>
           <fo:table-body>
+            <xsl:if test="$index.continued-enabled">
+              <fo:marker marker-class-name="index-continued"/>
+            </xsl:if>
             <fo:table-row>
               <fo:table-cell>
                 <fo:block xsl:use-attribute-sets="index-indents" keep-with-next="always">
@@ -389,7 +394,6 @@ See the accompanying license.txt file for applicable licenses.
                         </xsl:variable>
                         <xsl:if test="contains($isNormalChilds,'true ')">
                           <xsl:apply-templates select="." mode="make-index-ref">
-                            <!--<xsl:with-param name="idxs" select="opentopic-index:refID"/>-->
                             <xsl:with-param name="inner-text" select="opentopic-index:formatted-value"/>
                             <xsl:with-param name="no-page" select="$isNoPage"/>
                           </xsl:apply-templates>
@@ -402,6 +406,33 @@ See the accompanying license.txt file for applicable licenses.
             </fo:table-row>
           </fo:table-body>
           <fo:table-body>
+            <xsl:if test="$index.continued-enabled">
+              <fo:marker marker-class-name="index-continued">
+                <fo:table-row>
+                  <fo:table-cell>
+                    <fo:block xsl:use-attribute-sets="index-indents" keep-together="always">
+                      <xsl:if test="true() or count(preceding-sibling::opentopic-index:index.entry[@value = $value]) = 0">
+                        <xsl:choose>
+                          <xsl:when test="$useFrameIndexMarkup ne 'true'">
+                            <xsl:apply-templates select="opentopic-index:formatted-value/node()"/>
+                            <fo:inline font-style="italic">
+                              <xsl:text> (</xsl:text>
+                              <xsl:value-of select="$continuedValue"/>
+                              <xsl:text>)</xsl:text>
+                            </fo:inline>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <xsl:call-template name="__formatText">
+                              <xsl:with-param name="text" select="concat(opentopic-index:formatted-value/text(), '&lt;italic&gt; (', $continuedValue, ')')"/>
+                            </xsl:call-template>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:if>
+                    </fo:block>
+                  </fo:table-cell>
+                </fo:table-row>
+              </fo:marker>
+            </xsl:if>
             <fo:table-row>
               <fo:table-cell>
                 <fo:block xsl:use-attribute-sets="index.entry__content">
@@ -499,7 +530,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:param name="inner-text" select="()"/>
     <xsl:param name="no-page"/>
     <fo:block id="{generate-id(.)}" xsl:use-attribute-sets="index.term">
-      <xsl:if test="position() = 1">
+      <xsl:if test="empty(preceding-sibling::opentopic-index:index.entry)">
         <xsl:attribute name="keep-with-previous">always</xsl:attribute>
       </xsl:if>
       <fo:inline>
@@ -515,9 +546,13 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:choose>
       </fo:inline>
       <!-- XXX: XEP has this, should base too? -->
-      <!--xsl:for-each select="$idxs">
-        <fo:inline id="{@value}"/>
-      </xsl:for-each-->
+      <!--
+      <xsl:if test="$idxs">
+        <xsl:for-each select="$idxs">
+          <fo:inline id="{@value}"/>
+        </xsl:for-each>
+      </xsl:if>
+      -->
       <xsl:if test="not($no-page)">
         <xsl:if test="$idxs">
           <xsl:copy-of select="$index.separator"/>

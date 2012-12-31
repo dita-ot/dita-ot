@@ -111,8 +111,8 @@ public final class MergeMapParser extends XMLFilterImpl {
     /**
      * Read map.
      * 
-     * @param input map file path
-     * @param tmpdir temporary directory path, may be {@code null}
+     * @param filename map file path
+     * @param tmpDir temporary directory path, may be {@code null}
      */
     public void read(final String filename, final String tmpDir) {
         tempdir = tmpDir != null ? tmpDir : new File(filename).getParent();
@@ -195,7 +195,7 @@ public final class MergeMapParser extends XMLFilterImpl {
                         try {
                             p = FileUtils.normalize(URLDecoder.decode(FileUtils.stripFragment(attValue), UTF8));
                         } catch (UnsupportedEncodingException e) {
-                            logger.logError("Unable to parse URI '" + attValue + "': " + e.getMessage(), e);
+                        	throw new RuntimeException(e);
                         }
                         util.visit(p);
                         if (p != null) {
@@ -215,7 +215,7 @@ public final class MergeMapParser extends XMLFilterImpl {
                                 final String fileName = new File(dirPath, attValue).getAbsolutePath();
                                 final Properties prop = new Properties();
                                 prop.put("%1", fileName);
-                                logger.logError(MessageUtils.getMessage("DOTX008E", prop).toString());
+                                logger.logError(MessageUtils.getInstance().getMessage("DOTX008E", prop).toString());
                             }
                         }
                     }
@@ -253,7 +253,7 @@ public final class MergeMapParser extends XMLFilterImpl {
                             final String fileName = f.getAbsolutePath();
                             final Properties prop = new Properties();
                             prop.put("%1", fileName);
-                            logger.logError(MessageUtils.getMessage("DOTX008E", prop).toString());
+                            logger.logError(MessageUtils.getInstance().getMessage("DOTX008E", prop).toString());
                         }
                     }
 

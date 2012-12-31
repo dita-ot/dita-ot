@@ -12,14 +12,12 @@
   <property name="fo.lib.dir" location="demo/fo/lib"/>	
   
   <property name="fo.jar" location="${lib.dir}/fo.jar" />
-  <property name="ant.jar" location="${classpath.dir}/ant162.jar" />
   <property name="resolver.jar" location="${lib.dir}/resolver.jar" />
   <property name="icu4j.jar" location="${lib.dir}/icu4j.jar" />
   <property name="xep.jar" location="${lib.dir}/xep/lib/xep.jar" />
 
   <path id="build.class.path">
     <pathelement location="${basedir}/../../lib/dost.jar" />
-    <pathelement location="${ant.jar}" />
     <pathelement location="${resolver.jar}" />
     <pathelement location="${icu4j.jar}" />
     <pathelement location="${xep.jar}" />
@@ -49,7 +47,7 @@
   <target name="build-java" depends="init-java, check-icu4j, build-xep-java">
     <javac srcdir="${src.dir}" destdir="${bin.dir}"
       debug="on" excludes="com/idiominc/ws/opentopic/fo/xep/**"
-      source="1.5" target="1.5">
+      source="1.6" target="1.6">
       <classpath refid="build.class.path"/>
     </javac>
   </target>
@@ -57,7 +55,7 @@
   <target name="build-xep-java" depends="init-java" if="xep-available">
     <javac srcdir="${src.dir}/com/idiominc/ws/opentopic/fo/xep/"
            destdir="${bin.dir}"
-           source="1.5" target="1.5"
+           source="1.6" target="1.6"
       debug="on">
       <classpath refid="build.class.path"/>
     </javac>

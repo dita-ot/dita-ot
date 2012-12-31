@@ -43,16 +43,6 @@ final class Features {
     private final List<String> templateList;
 
     /**
-     * Default constructor.
-     * 
-     * @deprecated use {@link #Features(File, File)} instead
-     */
-    @Deprecated
-    public Features() {
-        this(null, null);
-    }
-
-    /**
      * Constructor init location.
      * @param location location
      * @param ditaDir base directory
@@ -108,8 +98,8 @@ final class Features {
      * Return the set of all features.
      * @return features
      */
-    public Set<Map.Entry<String,String>> getAllFeatures(){
-        return featureTable.entrySet();
+    public Map<String,String> getAllFeatures(){
+        return featureTable;
     }
 
     void addExtensionPoint(final ExtensionPoint extensionPoint) {

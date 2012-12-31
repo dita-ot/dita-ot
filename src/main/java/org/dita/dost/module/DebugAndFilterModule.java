@@ -12,24 +12,19 @@ package org.dita.dost.module;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.writer.DitaWriter.*;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Queue;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -63,7 +58,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLFilter;
@@ -79,59 +73,95 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * @author Zhang, Yuan Peng
  */
 final class DebugAndFilterModule implements AbstractPipelineModule {
-    private static final String [] PROPERTY_UPDATE_LIST = {INPUT_DITAMAP,HREF_TARGET_LIST,
-        CONREF_LIST,HREF_DITA_TOPIC_LIST,FULL_DITA_TOPIC_LIST,
-        FULL_DITAMAP_TOPIC_LIST,CONREF_TARGET_LIST,COPYTO_SOURCE_LIST,
-        COPYTO_TARGET_TO_SOURCE_MAP_LIST,OUT_DITA_FILES_LIST,CONREF_PUSH_LIST,
-        KEYREF_LIST,CODEREF_LIST,CHUNK_TOPIC_LIST,HREF_TOPIC_LIST,
-        RESOURCE_ONLY_LIST};
+    
+    /** Subject scheme file extension */
+    private static final String SUBJECT_SCHEME_EXTENSION = ".subm";
+    
     /**
      * File extension of source file.
      */
     private String extName = null;
-    private String tempDir = null;
+    private File tempDir = null;
 
     private final OutputUtils outputUtils = new OutputUtils();
+
     /**
-     * Update property value.
+     * Update property map.
      *
-     * - get property value
-     * - update value
-     * - set property value
-     * - write list file
-     * 
-     * @param listName name of list to update
+     * @param listName name of map to update
      * @param property property to update
      */
-    private void updateProperty (final String listName, final Job property){
-        final String propValue = property.getProperty(listName);
-
-        if (propValue == null || propValue.trim().length() == 0){
-            //if the propValue is null or empty
+    private void updatePropertyMap(final String listName, final Job property){
+        final Map<String, String> propValues = property.getMap(listName);
+        if (propValues == null || propValues.isEmpty()){
             return;
         }
-
-        final StringTokenizer tokenizer = new StringTokenizer(propValue, COMMA);
-        final Set<String> result = new HashSet<String>();
-        while (tokenizer.hasMoreElements()){
-            final String file = (String)tokenizer.nextElement();
-            final int equalIndex = file.indexOf(EQUAL);
-            final int fileExtIndex = file.lastIndexOf(DOT);
-            // don't replace DITA map file extensions
-            if (fileExtIndex != -1 && FILE_EXTENSION_DITAMAP.equalsIgnoreCase(file.substring(fileExtIndex))){
-                result.add(file);
-            // replace file extension
-            } else if (equalIndex == -1){
-                result.add(FileUtils.replaceExtension(file,extName));
-            // replace file extension in both map key and value
-            } else {
-                result.add(FileUtils.replaceExtension(file.substring(0, equalIndex), extName) +
-                           EQUAL +
-                           FileUtils.replaceExtension(file.substring(equalIndex+1), extName));
+        final Map<String, String> result = new HashMap<String, String>();
+        for (final Map.Entry<String, String> e: propValues.entrySet()) {
+            String key = e.getKey();
+            String value = e.getValue();
+            if (!FILE_EXTENSION_DITAMAP.equals("." + FileUtils.getExtension(value))) {
+                if (extName != null) {
+                    key = FileUtils.replaceExtension(key, extName);
+                    value = FileUtils.replaceExtension(value, extName);
+                }
+            }
+            result.put(key, value);
+        }
+        property.setMap(listName, result);
+//        try {
+//            property.writeList(listName);
+//        } catch (final IOException e) {
+//            logger.logError("Failed to write list file: " + e.getMessage(), e);
+//        }
+    }
+    
+    /**
+     * Update property set.
+     *
+     * @param listName name of set to update
+     * @param property property to update
+     */
+    private void updatePropertySet(final String listName, final Job property){
+        final Set<String> propValues = property.getSet(listName);
+        if (propValues == null || propValues.isEmpty()){
+            return;
+        }
+        final Set<String> result = new HashSet<String>(propValues.size());
+        for (final String file: propValues) {
+            String f = file;
+            if (!FILE_EXTENSION_DITAMAP.equals("." + FileUtils.getExtension(file))) {
+                if (extName != null) {
+                    f = FileUtils.replaceExtension(f, extName);
+                }
+            }
+            result.add(f);
+        }
+        property.setSet(listName, result);
+        try {
+            property.writeList(listName);
+        } catch (final IOException e) {
+            logger.logError("Failed to write list file: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * Update property value.
+     * 
+     * @param listName name of value to update
+     * @param property property to update
+     */
+    private void updatePropertyString(final String listName, final Job property){
+        String propValue = property.getProperty(listName);
+        if (propValue == null || propValue.trim().length() == 0){
+            return;
+        }
+        if (!FILE_EXTENSION_DITAMAP.equals("." + FileUtils.getExtension(propValue))) {
+            if (extName != null) {
+            	propValue = FileUtils.replaceExtension(propValue, extName);
             }
         }
-        
-        property.setProperty(listName, StringUtils.assembleString(result, COMMA));
+        property.setProperty(listName, propValue);
         try {
             property.writeList(listName);
         } catch (final IOException e) {
@@ -141,15 +171,14 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
     
     private DITAOTLogger logger;
 
-    private String inputMap = null;
+    /** Absolute input map path. */
+    private File inputMap = null;
+    /** Absolute DITA-OT base path. */
+    private File ditaDir = null;
+    /** Absolute input directory path. */
+    private File inputDir = null;
 
-    private String ditaDir = null;
-
-    private String inputDir = null;
-
-    //Added on 2010-08-24 for bug:3086552 start
     private final boolean setSystemid = true;
-    //Added on 2010-08-24 for bug:3086552 end
 
     /**
      * Default Construtor.
@@ -170,39 +199,45 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 
         try {
             final String baseDir = input.getAttribute(ANT_INVOKER_PARAM_BASEDIR);
-            tempDir = input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR);
-            if (!new File(tempDir).isAbsolute()) {
+            tempDir = new File(input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR));
+            if (!tempDir.isAbsolute()) {
                 throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
             }
-            ditaDir=input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR);
+            ditaDir=new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR));
             final String transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
             final String ext = input.getAttribute(ANT_INVOKER_PARAM_DITAEXT);
-            extName = ext.startsWith(DOT) ? ext : (DOT + ext);
-            String ditavalFile = input.getAttribute(ANT_INVOKER_PARAM_DITAVAL);
-            if (ditavalFile != null && !new File(ditavalFile).isAbsolute()) {
-                ditavalFile = new File(baseDir, ditavalFile).getAbsolutePath();
+            if (ext != null) {
+                extName = ext.startsWith(DOT) ? ext : (DOT + ext);
+            }
+            File ditavalFile = null;
+            if (input.getAttribute(ANT_INVOKER_PARAM_DITAVAL) != null ) {
+                ditavalFile = new File(input.getAttribute(ANT_INVOKER_PARAM_DITAVAL));
+                if (!ditavalFile.isAbsolute()) {
+                    ditavalFile = new File(baseDir, ditavalFile.getPath()).getAbsoluteFile();
+                }
+
             }
 
-            final Job job = new Job(new File(tempDir));
+            final Job job = new Job(tempDir);
 
-            final List<String> parseList = job.getReferenceList();
-            inputDir = job.getInputDir();
-            inputMap = new File(inputDir + File.separator + job.getInputMap()).getAbsolutePath();
+            final Set<String> parseList = job.getReferenceList();
+            inputDir = new File(job.getInputDir());
+            if (!inputDir.isAbsolute()) {
+                inputDir = new File(baseDir, inputDir.getPath()).getAbsoluteFile();
+            }
+            inputMap = new File(inputDir, job.getInputMap()).getAbsoluteFile();
 
             // Output subject schemas
             outputSubjectScheme();
-
-            if (!new File(inputDir).isAbsolute()) {
-                inputDir = new File(baseDir, inputDir).getAbsolutePath();
-            }
             final DitaValReader filterReader = new DitaValReader();
             filterReader.setLogger(logger);
             filterReader.initXMLReader("yes".equals(input.getAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID)));
 
-            final FilterUtils filterUtils = new FilterUtils();
-            filterUtils.setLogger(logger);
+            FilterUtils filterUtils = null;
             if (ditavalFile!=null){
-                filterReader.read(ditavalFile);
+            	filterUtils = new FilterUtils();
+            	filterUtils.setLogger(logger);
+                filterReader.read(ditavalFile.getAbsolutePath());
                 filterUtils.setFilterMap(filterReader.getFilterMap());
             }
             
@@ -210,21 +245,24 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             fileWriter.setLogger(logger);
             try{
                 final boolean xmlValidate = Boolean.valueOf(input.getAttribute("validate"));
-                fileWriter.initXMLReader(ditaDir,xmlValidate, setSystemid);
+                fileWriter.initXMLReader(ditaDir.getAbsoluteFile(),xmlValidate, setSystemid);
             } catch (final SAXException e) {
                 throw new DITAOTException(e.getMessage(), e);
             }
             fileWriter.setTempDir(tempDir);
             fileWriter.setExtName(extName);
             fileWriter.setTranstype(transtype);
-            fileWriter.setFilterUtils(filterUtils);
+            if (filterUtils != null) {
+            	fileWriter.setFilterUtils(filterUtils);
+            }
             fileWriter.setDelayConrefUtils(new DelayConrefUtils());
+            fileWriter.setKeyDefinitions(GenMapAndTopicListModule.readKeydef(new File(tempDir, "keydef.xml")));
            
             outputUtils.setGeneratecopyouter(input.getAttribute(ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER));
             outputUtils.setOutterControl(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTTERCONTROL));
             outputUtils.setOnlyTopicInMap(input.getAttribute(ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP));
             outputUtils.setInputMapPathName(inputMap);
-            outputUtils.setOutputDir(new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR)).getAbsolutePath());
+            outputUtils.setOutputDir(new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR)));
             fileWriter.setOutputUtils(outputUtils);
 
             final Map<String, Set<String>> dic = readMapFromXML(FILE_NAME_SUBJECT_DICTIONARY);
@@ -240,11 +278,11 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                     fu.setLogger(logger);
                     for (final String schema: schemaSet) {
                         filterReader.loadSubjectScheme(FileUtils.resolveFile(
-                                tempDir, schema)+".subm");
+                                tempDir.getAbsolutePath(), schema) + SUBJECT_SCHEME_EXTENSION);
                     }
                     if (ditavalFile!=null){
                         filterReader.filterReset();
-                        filterReader.read(ditavalFile);
+                        filterReader.read(ditavalFile.getAbsolutePath());
                         final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>();
                         fm.putAll(filterReader.getSchemeFilterMap());
                         fm.putAll(filterUtils.getFilterMap());
@@ -269,14 +307,14 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                 fileWriter.write(inputDir, filename);
             }
 
-            updateList(tempDir);
-            //Added by William on 2010-04-16 for cvf flag support start
+            if (extName != null) {
+                updateList(tempDir);
+            }
             //update dictionary.
             updateDictionary(tempDir);
-            //Added by William on 2010-04-16 for cvf flag support end
 
             // reload the property for processing of copy-to
-            performCopytoTask(tempDir, new Job(new File(tempDir)));
+            performCopytoTask(tempDir, new Job(tempDir));
         } catch (final Exception e) {
             e.printStackTrace();
             throw new DITAOTException("Exception doing debug and filter module processing: " + e.getMessage(), e);
@@ -357,8 +395,8 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                     continue;
                 }
                 visitedSet.add(parent);
-                String tmprel = FileUtils.getRelativePath(inputMap, parent);
-                tmprel = FileUtils.resolveFile(tempDir, tmprel)+".subm";
+                String tmprel = FileUtils.getRelativePath(inputMap.getAbsolutePath(), parent);
+                tmprel = FileUtils.resolveFile(tempDir.getAbsolutePath(), tmprel) + SUBJECT_SCHEME_EXTENSION;
                 Document parentRoot = null;
                 if (!FileUtils.fileExists(tmprel)) {
                     parentRoot = builder.parse(new InputSource(new FileInputStream(parent)));
@@ -369,15 +407,15 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                     for (final String childpath: children) {
                         final Document childRoot = builder.parse(new InputSource(new FileInputStream(childpath)));
                         mergeScheme(parentRoot, childRoot);
-                        String rel = FileUtils.getRelativePath(inputMap, childpath);
-                        rel = FileUtils.resolveFile(tempDir, rel)+".subm";
+                        String rel = FileUtils.getRelativePath(inputMap.getAbsolutePath(), childpath);
+                        rel = FileUtils.resolveFile(tempDir.getAbsolutePath(), rel) + SUBJECT_SCHEME_EXTENSION;
                         generateScheme(rel, childRoot);
                     }
                 }
 
                 //Output parent scheme
-                String rel = FileUtils.getRelativePath(inputMap, parent);
-                rel = FileUtils.resolveFile(tempDir, rel)+".subm";
+                String rel = FileUtils.getRelativePath(inputMap.getAbsolutePath(), parent);
+                rel = FileUtils.resolveFile(tempDir.getAbsolutePath(), rel) + SUBJECT_SCHEME_EXTENSION;
                 generateScheme(rel, parentRoot);
             }
         } catch (final Exception e) {
@@ -521,25 +559,23 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
     /**
      * Execute copy-to task, generate copy-to targets base on sources
      */
-    private void performCopytoTask(final String tempDir, final Job job) {
-    	final Map<String, String> copytoMap  = job.getCopytoMap();
-    	
-    	for (final Map.Entry<String, String> entry: copytoMap.entrySet()) {
+    private void performCopytoTask(final File tempDir, final Job job) {
+        final Map<String, String> copytoMap  = job.getCopytoMap();
+        
+        for (final Map.Entry<String, String> entry: copytoMap.entrySet()) {
             final String copytoTarget = entry.getKey();
             final String copytoSource = entry.getValue();
             final File srcFile = new File(tempDir, copytoSource);
             final File targetFile = new File(tempDir, copytoTarget);
 
             if (targetFile.exists()) {
-                //edited by Alan on Date:2009-11-02 for Work Item:#1590 start
                 /*logger
-						.logWarn(new StringBuffer("Copy-to task [copy-to=\"")
-								.append(copytoTarget)
-								.append("\"] which points to an existed file was ignored.").toString());*/
+                        .logWarn(new StringBuffer("Copy-to task [copy-to=\"")
+                                .append(copytoTarget)
+                                .append("\"] which points to an existed file was ignored.").toString());*/
                 final Properties prop = new Properties();
                 prop.setProperty("%1", copytoTarget);
-                logger.logWarn(MessageUtils.getMessage("DOTX064W", prop).toString());
-                //edited by Alan on Date:2009-11-02 for Work Item:#1590 end
+                logger.logWarn(MessageUtils.getInstance().getMessage("DOTX064W", prop).toString());
             }else{
                 final String inputMapInTemp = new File(tempDir + File.separator + job.getInputMap()).getAbsolutePath();
                 copyFileWithPIReplaced(srcFile, targetFile, copytoTarget, inputMapInTemp);
@@ -626,21 +662,33 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
      * @param tempDir temporary directory path
      * @throws IOException 
      */
-    private void updateList(final String tempDir) throws IOException{
-        final Job job = new Job(new File(tempDir));
-        for (final String element : PROPERTY_UPDATE_LIST) {
-            updateProperty(element, job);
-        }
+    private void updateList(final File tempDir) throws IOException{
+        final Job job = new Job(tempDir);
+        updatePropertyString(INPUT_DITAMAP, job);
+        updatePropertySet(HREF_TARGET_LIST, job);
+        updatePropertySet(CONREF_LIST, job);
+        updatePropertySet(HREF_DITA_TOPIC_LIST, job);
+        updatePropertySet(FULL_DITA_TOPIC_LIST, job);
+        updatePropertySet(FULL_DITAMAP_TOPIC_LIST, job);
+        updatePropertySet(CONREF_TARGET_LIST, job);
+        updatePropertySet(COPYTO_SOURCE_LIST, job);
+        updatePropertyMap(COPYTO_TARGET_TO_SOURCE_MAP_LIST, job);
+        updatePropertySet(OUT_DITA_FILES_LIST, job);
+        updatePropertySet(CONREF_PUSH_LIST, job);
+        updatePropertySet(KEYREF_LIST, job);
+        updatePropertySet(CODEREF_LIST, job);
+        updatePropertySet(CHUNK_TOPIC_LIST, job);
+        updatePropertySet(HREF_TOPIC_LIST, job);
+        updatePropertySet(RESOURCE_ONLY_LIST, job);
         job.write();
     }
 
-    //Added by William on 2010-04-16 for cvf flag support start
     /**
      * Update dictionary
      * 
      * @param tempDir temporary directory
      */
-    private void updateDictionary(final String tempDir){
+    private void updateDictionary(final File tempDir){
         //orignal map
         final Map<String, Set<String>> dic = readMapFromXML(FILE_NAME_SUBJECT_DICTIONARY);
         //result map
@@ -649,9 +697,11 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
         for (final Map.Entry<String, java.util.Set<String>> entry: dic.entrySet()) {
             //filename will be checked.
             String filename = entry.getKey();
-            if(FileUtils.isDITATopicFile(filename)){
-                //Replace extension name.
-                filename = FileUtils.replaceExtension(filename, extName);
+            if (extName != null) {
+                if(FileUtils.isDITATopicFile(filename)){
+                    //Replace extension name.
+                    filename = FileUtils.replaceExtension(filename, extName);
+                }
             }
             //put the updated value into the result map
             resultMap.put(filename, entry.getValue());
@@ -693,6 +743,5 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             }
         }
     }
-    //Added by William on 2010-04-16 for cvf flag support end
 
 }

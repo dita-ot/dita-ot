@@ -12,11 +12,12 @@
   <target name="dita.topic.troff" unless="noTopic" if="old.transform"
     description="Build troff output from dita inner and outer topics,which will adjust the directory.">
     <!-- step 1 -->
+    <property name="dita.ext" value=".dita"/>
     <xslt basedir="${dita.temp.dir}"
       destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
       extension="${dita.ext}"
       classpathref="dost.class.path"
-      style="${dita.script.dir}${file.separator}dita2troff-step1-shell.xsl">
+      style="${dita.plugin.org.dita.troff.dir}/xsl/dita2troff-step1-shell.xsl">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" if="chunkedtopicfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
@@ -27,7 +28,7 @@
     <xslt basedir="${dita.map.output.dir}" destdir="${dita.map.output.dir}"
       includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}" includes="${chunkedtopiclist}" extension=".cli"
       classpathref="dost.class.path"
-      style="${dita.script.dir}${file.separator}dita2troff-step2-shell.xsl">
+      style="${dita.plugin.org.dita.troff.dir}/xsl/dita2troff-step2-shell.xsl">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <xmlcatalog refid="dita.catalog"/>
@@ -38,11 +39,12 @@
     <target name="dita.inner.topic.troff" unless="noTopic" if="inner.transform"
     description="Build troff output from inner dita topics">
     <!-- step 1 -->
+    <property name="dita.ext" value=".dita"/>
     <xslt basedir="${dita.temp.dir}"
       destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}" 
       extension="${dita.ext}"
       classpathref="dost.class.path"
-      style="${dita.script.dir}${file.separator}dita2troff-step1-shell.xsl">
+      style="${dita.plugin.org.dita.troff.dir}/xsl/dita2troff-step1-shell.xsl">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" if="chunkedtopicfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
@@ -57,7 +59,7 @@
     <xslt basedir="${output.dir}" destdir="${output.dir}"
       includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}" extension=".cli"
       classpathref="dost.class.path"
-      style="${dita.script.dir}${file.separator}dita2troff-step2-shell.xsl">
+      style="${dita.plugin.org.dita.troff.dir}/xsl/dita2troff-step2-shell.xsl">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" if="chunkedtopicfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
@@ -68,14 +70,15 @@
     </xslt>
   </target>
   
-  <target name="dita.outer.topic.troff" unless="noTopic" if="outer.transform"  depends="checkouterTransform"
+  <target name="dita.outer.topic.troff" unless="noTopic" if="outer.transform"  depends="troff.checkouterTransform"
     description="Build troff output from outer dita topics">
     <!-- step 1 -->
+    <property name="dita.ext" value=".dita"/>
     <xslt basedir="${dita.temp.dir}"
       destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${outditafilesfile}"
       extension="${dita.ext}"
       classpathref="dost.class.path"
-      style="${dita.script.dir}${file.separator}dita2troff-step1-shell.xsl">
+      style="${dita.plugin.org.dita.troff.dir}/xsl/dita2troff-step1-shell.xsl">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <xmlcatalog refid="dita.catalog"/>
@@ -85,10 +88,25 @@
     <xslt basedir="${output.dir}" destdir="${output.dir}${file.separator}${uplevels}"
       includesfile="${dita.temp.dir}${file.separator}${outditafilesfile}" extension=".cli"
       classpathref="dost.class.path"
-      style="${dita.script.dir}${file.separator}dita2troff-step2-shell.xsl">
+      style="${dita.plugin.org.dita.troff.dir}/xsl/dita2troff-step2-shell.xsl">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
+
+  <target name="troff.checkouterTransform">
+    <condition property="outer.transform">
+      <and>
+        <equals arg1="${generate.copy.outer}" arg2="2"/>
+        <and>
+          <isset property="outditafileslist"/>
+          <not>
+            <equals arg1="" arg2="${outditafileslist}"/>
+          </not>
+        </and>
+      </and>
+    </condition>  
+  </target>
+
 </project>

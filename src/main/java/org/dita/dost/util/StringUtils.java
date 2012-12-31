@@ -35,10 +35,8 @@ import org.dita.dost.log.DITAOTJavaLogger;
  */
 public final class StringUtils {
 
-    //Edited by william on 2009-11-8 for ampbug:2893664 start
     private static final String NOT_RESOLVE_ENTITY_LIST = "|lt|gt|quot|amp|";
     private static final String NOT_RESOLVE_ENTITY_CHAR = "|#38|";
-    //Edited by william on 2009-11-8 for ampbug:2893664 end
 
     /**
      * Private default constructor to make class uninstantiable.
@@ -170,10 +168,8 @@ public final class StringUtils {
         // check whether this entity need resolve
         if (NOT_RESOLVE_ENTITY_LIST.indexOf(STICK + name.trim()
                 + STICK) != -1 ||
-                //Edited by william on 2009-11-8 for ampbug:2893664 start
                 NOT_RESOLVE_ENTITY_CHAR.indexOf(STICK + name.trim()
                         + STICK) != -1 ) {
-            //Edited by william on 2009-11-8 for ampbug:2893664 end
             return false;
         }
         return true;
@@ -353,39 +349,6 @@ public final class StringUtils {
     }
 
     /**
-     * Init sax driver info.
-     * 
-     * @deprecated use {@link #getXMLReader} instead to get the preferred SAX parser
-     */
-    @Deprecated
-    public static void initSaxDriver(){
-        //The default sax driver is set to xerces's sax driver
-        final DITAOTJavaLogger logger = new DITAOTJavaLogger();
-        try {
-            Class.forName(SAX_DRIVER_DEFAULT_CLASS);
-            System.setProperty(SAX_DRIVER_PROPERTY,SAX_DRIVER_DEFAULT_CLASS);
-            logger.logInfo("Using XERCES.");
-        } catch (final ClassNotFoundException e){
-            try{
-                Class.forName(SAX_DRIVER_SUN_HACK_CLASS);
-                System.setProperty(SAX_DRIVER_PROPERTY,SAX_DRIVER_SUN_HACK_CLASS);
-                logger.logInfo("Using XERCES in SUN JDK 1.5");
-            }catch (final ClassNotFoundException ex){
-                try {
-                    Class.forName(SAX_DRIVER_CRIMSON_CLASS);
-                    System.setProperty(SAX_DRIVER_PROPERTY,SAX_DRIVER_CRIMSON_CLASS);
-                    logger.logInfo("Using CRIMSON");
-                }catch (final ClassNotFoundException exc){
-                    logger.logException(e);
-                    logger.logException(ex);
-                    logger.logException(exc);
-                }
-            }
-        }
-
-    }
-
-    /**
      * Get preferred SAX parser.
      * 
      * Preferred XML readers are in order:
@@ -425,6 +388,7 @@ public final class StringUtils {
      * Return a Java Locale object.
      * @param anEncoding encoding
      * @return locale
+     * @throws NullPointerException when anEncoding parameter is {@code null}
      */
 
     public static Locale getLocale(final String anEncoding){
@@ -505,7 +469,6 @@ public final class StringUtils {
         return aLocale;
     }
 
-    //added by William on 2009-11-26 for bug:1628937 start
     /**
      * Get file's main name.
      * @param input input filename
@@ -520,11 +483,11 @@ public final class StringUtils {
             return input;
         }
     }
-    //added by William on 2009-11-26 for bug:1628937 end
 
     /**
      * Get max value.
      */
+    @Deprecated
     public static Integer getMax(final String ul_depth, final String ol_depth, final String sl_depth,
             final String dl_depth, final String table_depth, final String stable_depth){
 
@@ -559,6 +522,7 @@ public final class StringUtils {
     /**
      * Get max value.
      */
+    @Deprecated
     public static Integer getMax(final String fn_depth, final String list_depth, final String dlist_depth, final String table_depth, final String stable_depth){
 
         final int fnDepth = Integer.parseInt(fn_depth);

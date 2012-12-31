@@ -276,8 +276,8 @@ public final class Integrator {
     private boolean loadPlugin(final String plugin) {
         if (checkPlugin(plugin)) {
             final Features pluginFeatures = pluginTable.get(plugin);
-            final Set<Map.Entry<String, String>> featureSet = pluginFeatures.getAllFeatures();
-            for (final Map.Entry<String, String> currentFeature : featureSet) {
+            final Map<String, String> featureSet = pluginFeatures.getAllFeatures();
+            for (final Map.Entry<String, String> currentFeature : featureSet.entrySet()) {
                 if (!extensionPoints.contains(currentFeature.getKey())) {
                     final String msg = "Plug-in " + plugin + " uses an undefined extension point "
                             + currentFeature.getKey();
@@ -338,7 +338,7 @@ public final class Integrator {
                 final Properties prop = new Properties();
                 prop.put("%1", requirement.toString());
                 prop.put("%2", currentPlugin);
-                final String msg = MessageUtils.getMessage("DOTJ020W", prop).toString();
+                final String msg = MessageUtils.getInstance().getMessage("DOTJ020W", prop).toString();
                 if (strict) {
                     throw new RuntimeException(msg);
                 } else {
@@ -414,7 +414,7 @@ public final class Integrator {
      * digit         ::= [0..9]
      * alpha         ::= [a..zA..Z]
      * alphanum      ::= alpha | digit
-     * token         ::= ( alphanum | ’_’ | ’-’ )+
+     * token         ::= ( alphanum | '_' | '-' )+
      * symbolic-name ::= token('.'token)*
      * </pre>
      * 
@@ -425,7 +425,7 @@ public final class Integrator {
      * major     ::= number
      * minor     ::=number
      * micro     ::=number
-     * qualifier ::= ( alphanum | ’_’ | '-' )+
+     * qualifier ::= ( alphanum | '_' | '-' )+
      * </pre>
      * 
      * @param f Features to validate

@@ -152,10 +152,8 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
             reader.setContentHandler(this);
             reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
             reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-            //Edited by william on 2009-11-8 for ampbug:2893664 start
             reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
             reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
-            //Edited by william on 2009-11-8 for ampbug:2893664 end
         } catch (final Exception e) {
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
@@ -378,7 +376,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
                         // if there is no generalized tag corresponding this tag
                         final Properties prop=new Properties();
                         prop.put("%1", name);
-                        logger.logError(MessageUtils.getMessage("DOTJ038E", prop).toString());
+                        logger.logError(MessageUtils.getInstance().getMessage("DOTJ038E", prop).toString());
                         break;
                     }
                     if(currentIndex.compareTo(nextIndex) > 0){
@@ -565,15 +563,11 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
                 }
             }
 
-
-
             outputElement(qName, atts);
-
         } catch (final Exception e) {
             logger.logException(e);
         }
     }
-
 
     private void outputElement(final String qName, final Attributes atts) throws IOException {
         final int attsLen = atts.getLength();
@@ -651,13 +645,13 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
                 final Properties prop = new Properties();
                 prop.put("%1", inputFile.getPath());
                 prop.put("%2", outputFile.getPath());
-                logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop).toString());
             }
             if(!outputFile.renameTo(inputFile)){
                 final Properties prop = new Properties();
                 prop.put("%1", inputFile.getPath());
                 prop.put("%2", outputFile.getPath());
-                logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop).toString());
             }
         } catch (final Exception e) {
             logger.logException(e);

@@ -75,12 +75,12 @@ final class TopicMergeModule implements AbstractPipelineModule {
         mapParser.setLogger(logger);
 
         if (ditaInput == null || !new File(ditaInput).exists()){
-            logger.logError(MessageUtils.getMessage("DOTJ025E").toString());
+            logger.logError(MessageUtils.getInstance().getMessage("DOTJ025E").toString());
             return null;
         }
 
         if ( out == null ){
-            logger.logError(MessageUtils.getMessage("DOTJ026E").toString());
+            logger.logError(MessageUtils.getInstance().getMessage("DOTJ026E").toString());
             return null;
         }
 

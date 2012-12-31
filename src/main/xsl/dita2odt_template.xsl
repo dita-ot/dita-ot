@@ -3,15 +3,6 @@
      Sourceforge.net. See the accompanying license.txt file for 
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
-<!DOCTYPE xsl:stylesheet [
-
-  <!ENTITY gt            "&gt;">
-  <!ENTITY lt            "&lt;">
-  <!ENTITY rbl           " ">
-  <!ENTITY nbsp          " ">    <!-- &#160; -->
-  <!ENTITY quot          "&#34;">
-  <!ENTITY copyr         "&#169;">
-]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
   xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
   xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
@@ -36,11 +27,11 @@
   version="1.1">
   
   
-  <xsl:import href="common/output-message.xsl"/>
-  <xsl:import href="common/dita-utilities.xsl"/>
-  <xsl:import href="common/related-links.xsl"/>
-  <xsl:import href="common/dita-textonly.xsl"/>
-  <xsl:import href="common/flag.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/related-links.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/dita-textonly.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/flag.xsl"/>
   <!--
   <xsl:import href="xslodt/flag-old.xsl"/>
   -->
@@ -107,7 +98,7 @@
     </xsl:when>
     <!-- topic -->
     <xsl:otherwise>
-      <xsl:value-of select="concat($FILEDIR, '/', substring-before($FILENAME, '.'), $DITAEXT)"/>
+      <xsl:value-of select="concat($FILEDIR, '/', $FILENAME)"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:param>

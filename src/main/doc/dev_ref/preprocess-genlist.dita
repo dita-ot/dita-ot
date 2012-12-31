@@ -133,14 +133,6 @@ an href attribute</entry>
 <entry colname="col4">Images files that are referenced in the content</entry>
 </row>
 <row>
-<entry colname="col1">keyfile</entry>
-<entry colname="col2"><codeph>key.list</codeph></entry>
-<entry colname="col3">keylist</entry>
-<entry colname="col4">List of keys. The format
-                is:<codeblock>keyname "=" link "(" source ")"</codeblock>Both href and source URLs
-                are relative to base directory.</entry>
-</row>
-<row>
 <entry colname="col1">keyreffile</entry>
 <entry colname="col2"><codeph>keyref.list</codeph></entry>
 <entry colname="col3">keyreflist</entry>

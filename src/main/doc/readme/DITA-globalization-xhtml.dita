@@ -1,65 +1,243 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Arbortext, Inc., 1988-2011, v.4002-->
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
  "reference.dtd">
 <?Pub Inc?>
 <reference id="dita-globalization-xhtml" xml:lang="en-us">
-<title>Localization in XHTML based transforms</title>
-<shortdesc>X/HTML based output (such as Eclipse Help, TocJS, and HTML
-Help) is supported for over 50 languages and variants.</shortdesc>
+<title>Supported languages: HTML-based transformations</title>
+<shortdesc>The DITA Open Toolkit (DITA-OT) supports over 50 languages and language variants for the
+HTML- and XHTML-based transformations, for example, Eclipse Help, HTML Help, and TocJS.</shortdesc>
 <refbody>
-<section><p>The following languages and variants are supported in
-all XHTML based output. The recognized xml:lang attribute values are
-shown in parenthesis after each language. When no language is specified,
-the default is English.</p><ul>
-<li>Arabic (ar or ar-eg)</li>
-<li>Belarusian (be or be-by)</li>
-<li>Brazilian Portuguese (pt-br)</li>
-<li>Bulgarian (bg or bg-bg)</li>
-<li>Catalan (ca-es)</li>
-<li>Simplified Chinese (zh-cn or zh-hans)</li>
-<li>Traditional Chinese (zh-tw or zh-hant)</li>
-<li>Croatian (hr or hr-hr)</li>
-<li>Czech (cs or cs-cz)</li>
-<li>Danish (da or da-dk)</li>
-<li>Dutch (nl or nl-nl), Belgian Dutch (nl-be)</li>
-<li>English (en or en-us), British English (en-gb), Canadian English
-(en-ca)</li>
-<li>Estonian (et or et-ee)</li>
-<li>Finnish (fi or fi-fi)</li>
-<li>French (fr or fr-fr), Belgian French (fr-be), Canadian French
-(fr-ca), Swiss French (fr-ch)</li>
-<li>German (de or de-de), Swiss German (de-ch)</li>
-<li>Greek (el or el-gr)</li>
-<li>Hebrew (he or he-il)</li>
-<li>Hindi (hi or hi-hi)</li>
-<li>Hungarian (hu or hu-hu)</li>
-<li>Icelandic (is or is-is)</li>
-<li>Indonesian (id or id-id)</li>
-<li>Italian (it or it-it), Swiss Italian (it-ch)</li>
-<li>Japanese (ja or ja-jp)</li>
-<li>Kazakh (kk or kk-kz)</li>
-<li>Korean (ko or ko-kr)</li>
-<li>Latvian (lv or lv-lv)</li>
-<li>Lithuanian (lt or lt-lt)</li>
-<li>Macedonian (mk or mk-mk)</li>
-<li>Malay (ms or ms-my)</li>
-<li>Norwegian (no or no-no)</li>
-<li>Polish (pl or pl-pl)</li>
-<li>Portuguese (pt or pt-pt)</li>
-<li>Romanian (ro or ro-ro)</li>
-<li>Russian (ru or ru-ru)</li>
-<li>Serbian - Cyrillic script (sr, sr-rs, or sr-sp)</li>
-<li>Serbian - Latin script (sr-latn-rs)</li>
-<li>Slovak (sk or sk-sk)</li>
-<li>Slovenian (sl or sl-si)</li>
-<li>Spanish (es or es-es), Latin American Spanish (es-419)</li>
-<li>Swedish (sv or sv-se)</li>
-<li>Thai (th or th-th)</li>
-<li>Turkish (tr or tr-tr)</li>
-<li>Ukrainian (uk or uk-ua)</li>
-<li>Urdu (ur or ur-pk)</li>
-</ul></section>
+<table frame="all" rowsep="1" colsep="1">
+<title>Supported languages: HTML- and XHTML-based transformations</title>
+<tgroup cols="2">
+<colspec colnum="1" colwidth="1.0*"/>
+<colspec colnum="2" colwidth="1.0*"/>
+<thead>
+<row>
+<entry>Language</entry>
+<entry>Language code</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry>Arabic</entry>
+<entry>ar or ar-eg</entry>
+</row>
+<row>
+<entry>Belarusian</entry>
+<entry>be or be-by</entry>
+</row>
+<row>
+<entry>Brazilian Portuguese </entry>
+<entry>pt-br</entry>
+</row>
+<row>
+<entry>Bulgarian</entry>
+<entry>bg or bg-bg</entry>
+</row>
+<row>
+<entry>Catalan</entry>
+<entry>ca-es</entry>
+</row>
+<row>
+<entry>Chinese (simplified)</entry>
+<entry>zh-cn or zh-hans</entry>
+</row>
+<row>
+<entry>Chinese (traditional)</entry>
+<entry>zh-tw or zh-hant</entry>
+</row>
+<row>
+<entry>Croatian</entry>
+<entry>hr or hr-hr</entry>
+</row>
+<row>
+<entry>Czech</entry>
+<entry>cs or cs-cz</entry>
+</row>
+<row>
+<entry>Danish</entry>
+<entry>da or da-dk</entry>
+</row>
+<row>
+<entry>Dutch</entry>
+<entry>nl or nl-nl</entry>
+</row>
+<row>
+<entry>Dutch (Belgian)</entry>
+<entry>nl-be</entry>
+</row>
+<row>
+<entry>English (US)</entry>
+<entry>en or en-us</entry>
+</row>
+<row>
+<entry>English (British)</entry>
+<entry>en-gb</entry>
+</row>
+<row>
+<entry>English (Canadian)</entry>
+<entry>en-ca</entry>
+</row>
+<row>
+<entry>Estonian</entry>
+<entry>et or et-ee</entry>
+</row>
+<row>
+<entry>Finnish</entry>
+<entry>fi or fi-fi</entry>
+</row>
+<row>
+<entry>French</entry>
+<entry>fr or fr-fr</entry>
+</row>
+<row>
+<entry>French (Belgian)</entry>
+<entry>fr-be</entry>
+</row>
+<row>
+<entry>French (Canadian)</entry>
+<entry>fr-ca</entry>
+</row>
+<row>
+<entry>French (Swiss)</entry>
+<entry>fr-ch</entry>
+</row>
+<row>
+<entry>German</entry>
+<entry>de or de-de</entry>
+</row>
+<row>
+<entry>German (Swiss)</entry>
+<entry>de-ch</entry>
+</row>
+<row>
+<entry>Greek</entry>
+<entry>el or el-gr</entry>
+</row>
+<row>
+<entry>Hebrew</entry>
+<entry>he or he-il</entry>
+</row>
+<row>
+<entry>Hindi</entry>
+<entry>hi or hi-hi</entry>
+</row>
+<row>
+<entry>Hungarian</entry>
+<entry>hu or hu-hu</entry>
+</row>
+<row>
+<entry>Icelandic</entry>
+<entry>is or is-is</entry>
+</row>
+<row>
+<entry>Indonesian</entry>
+<entry>id or id-id</entry>
+</row>
+<row>
+<entry>Italian</entry>
+<entry>it or it-it</entry>
+</row>
+<row>
+<entry>Italian(Swiss)</entry>
+<entry>it-ch</entry>
+</row>
+<row>
+<entry>Japanese</entry>
+<entry>ja or ja-jp</entry>
+</row>
+<row>
+<entry>Kazakh</entry>
+<entry>kk or kk-kz</entry>
+</row>
+<row>
+<entry>Korean</entry>
+<entry>ko or ko-kr</entry>
+</row>
+<row>
+<entry>Latvian</entry>
+<entry>lv or lv-lv</entry>
+</row>
+<row>
+<entry>Lithuanian</entry>
+<entry>lt or lt-lt</entry>
+</row>
+<row>
+<entry>Macedonian</entry>
+<entry>mk or mk-mk</entry>
+</row>
+<row>
+<entry>Malay</entry>
+<entry>ms or ms-my</entry>
+</row>
+<row>
+<entry>Norwegian</entry>
+<entry>no or no-no</entry>
+</row>
+<row>
+<entry>Polish</entry>
+<entry>pl or pl-pl</entry>
+</row>
+<row>
+<entry>Portuguese</entry>
+<entry>pt or pt-pt</entry>
+</row>
+<row>
+<entry>Romanian</entry>
+<entry>ro or ro-ro</entry>
+</row>
+<row>
+<entry>Russian</entry>
+<entry>ru or ru-ru</entry>
+</row>
+<row>
+<entry>Serbian (Cyrillic script)</entry>
+<entry>sr, sr-rs, or sr-sp</entry>
+</row>
+<row>
+<entry>Serbian (Latin script)</entry>
+<entry> sr-latn-rs</entry>
+</row>
+<row>
+<entry>Slovak</entry>
+<entry>sk or sk-sk</entry>
+</row>
+<row>
+<entry>Slovenian</entry>
+<entry>sl or sl-si</entry>
+</row>
+<row>
+<entry>Spanish</entry>
+<entry>es or es-es</entry>
+</row>
+<row>
+<entry>Spanish (Latin American)</entry>
+<entry>es-419</entry>
+</row>
+<row>
+<entry>Swedish</entry>
+<entry>sv or sv-se</entry>
+</row>
+<row>
+<entry>Thai</entry>
+<entry>th or th-th</entry>
+</row>
+<row>
+<entry>Turkish</entry>
+<entry>tr or tr-tr</entry>
+</row>
+<row>
+<entry>Ukrainian</entry>
+<entry>uk or uk-ua</entry>
+</row>
+<row>
+<entry>Urdu</entry>
+<entry>ur or ur-pk</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
 </refbody>
 </reference><?Pub Caret -3?>
 <?Pub *0000002446?>

@@ -25,18 +25,12 @@ import org.junit.Test;
 public class FeaturesTest {
 
     @Test
-    public void testFeatures() {
-        assertNotNull(new Features());
-    }
-
-    @Test
     public void testFeaturesString() {
         assertNotNull(new Features(new File("base", "plugins"), new File("base")));
     }
 
     @Test
     public void testGetLocation() {
-        assertNull(new Features().getLocation());
         assertEquals(new File("base", "plugins"), new Features(new File("base", "plugins"), new File("base")).getLocation());
     }
 
@@ -83,7 +77,7 @@ public class FeaturesTest {
         exp.put("foo", "bar,baz");
         exp.put("bar", "qux");
 
-        assertEquals(exp.entrySet(), f.getAllFeatures());
+        assertEquals(exp, f.getAllFeatures());
     }
 
     @Test
@@ -104,7 +98,7 @@ public class FeaturesTest {
 
     @Test
     public void testAddRequireString() {
-        final Features f = new Features();
+        final Features f = new Features(new File("base", "plugins"), new File("base"));
         f.addRequire("foo");
         try {
             f.addRequire(null);
@@ -114,7 +108,7 @@ public class FeaturesTest {
 
     @Test
     public void testAddRequireStringString() {
-        final Features f = new Features();
+        final Features f = new Features(new File("base", "plugins"), new File("base"));
         f.addRequire("foo");
         f.addRequire("foo", null);
         try {
@@ -125,7 +119,7 @@ public class FeaturesTest {
 
     @Test
     public void testGetRequireListIter() {
-        final Features f = new Features();
+        final Features f = new Features(new File("base", "plugins"), new File("base"));
         f.addRequire("foo | bar ");
         f.addRequire("baz", "unrequired");
         f.addRequire("qux", "required");
@@ -152,7 +146,7 @@ public class FeaturesTest {
 
     @Test
     public void testAddMeta() {
-        final Features f = new Features();
+        final Features f = new Features(new File("base", "plugins"), new File("base"));
         f.addMeta("foo", "bar");
         f.addMeta("foo", "baz");
         f.addMeta("bar", "baz");
@@ -164,7 +158,7 @@ public class FeaturesTest {
 
     @Test
     public void testGetMeta() {
-        final Features f = new Features();
+        final Features f = new Features(new File("base", "plugins"), new File("base"));
         f.addMeta("foo", "bar");
         f.addMeta("foo", "baz");
         f.addMeta("bar", "baz");
@@ -176,7 +170,7 @@ public class FeaturesTest {
 
     @Test
     public void testAddTemplate() {
-        final Features f = new Features();
+        final Features f = new Features(new File("base", "plugins"), new File("base"));
         f.addTemplate("foo");
         f.addTemplate("foo");
         f.addTemplate("bar");
@@ -185,7 +179,7 @@ public class FeaturesTest {
 
     @Test
     public void testGetAllTemplates() {
-        final Features f = new Features();
+        final Features f = new Features(new File("base", "plugins"), new File("base"));
         f.addTemplate("foo");
         f.addTemplate("foo");
         f.addTemplate("bar");

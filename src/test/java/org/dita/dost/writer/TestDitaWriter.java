@@ -13,6 +13,7 @@ package org.dita.dost.writer;
 import static org.junit.Assert.assertEquals;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -51,7 +52,7 @@ public class TestDitaWriter {
 
     private final File baseDir = new File(resourceDir, "DITA-OT1.5");
     private final File inputDir = new File("DITAVAL");
-    private final File inputMap = new File(inputDir, "DITAVAL_testdata1.ditamap");
+    private final File inputMap = new File(baseDir, "DITAVAL" + File.separator + "DITAVAL_testdata1.ditamap");
     private final File outDir = new File(tempDir, "out");
     private final File ditavalFile = new File(inputDir, "DITAVAL_1.ditaval");
 
@@ -66,13 +67,13 @@ public class TestDitaWriter {
         final PipelineFacade facade = new PipelineFacade();
         facade.setLogger(new TestUtils.TestLogger());
         pipelineInput = new PipelineHashIO();
-        pipelineInput.setAttribute("inputmap", inputMap.getPath());
+        pipelineInput.setAttribute("inputmap", inputMap.getAbsolutePath());
         pipelineInput.setAttribute("basedir", baseDir.getAbsolutePath());
-        pipelineInput.setAttribute("inputdir", inputDir.getPath());
+        //pipelineInput.setAttribute("inputdir", inputDir.getPath());
         pipelineInput.setAttribute("outputdir", outDir.getAbsolutePath());
         pipelineInput.setAttribute("tempDir", tempDir.getAbsolutePath());
         pipelineInput.setAttribute("ditadir", new File("src" + File.separator + "main").getAbsolutePath());
-        pipelineInput.setAttribute("ditaext", ".xml");
+        pipelineInput.setAttribute("ditaext", ".dita");
         pipelineInput.setAttribute("indextype", "xhtml");
         pipelineInput.setAttribute("encoding", "en-US");
         pipelineInput.setAttribute("targetext", ".html");
@@ -90,7 +91,7 @@ public class TestDitaWriter {
 
         writer = new DitaWriter();
         writer.setLogger(new TestUtils.TestLogger());
-        writer.initXMLReader(new File("src" + File.separator + "main").getAbsolutePath(), false, true);
+        writer.initXMLReader(new File("src" + File.separator + "main").getAbsoluteFile(), false, true);
 
         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setValidating(false);
@@ -130,17 +131,18 @@ public class TestDitaWriter {
         filterUtils.setFilterMap(map);
         writer.setFilterUtils(filterUtils);
         final OutputUtils outputUtils = new OutputUtils();
-        outputUtils.setInputMapPathName(new File(baseDir, inputDir.getPath() + File.separator + "keyword.dita").getAbsolutePath());
+        outputUtils.setInputMapPathName(new File(baseDir, inputDir.getPath() + File.separator + "keyword.dita"));
         writer.setOutputUtils(outputUtils);
-        writer.setTempDir(tempDir.getAbsolutePath());
-        writer.setExtName(".xml");
-        writer.write(new File(baseDir, inputDir.getPath()).getAbsolutePath(), "keyword.dita");
+        writer.setTempDir(tempDir.getAbsoluteFile());
+        writer.setKeyDefinitions(Collections.EMPTY_LIST);
+        writer.setExtName(".dita");
+        writer.write(new File(baseDir, inputDir.getPath()).getAbsoluteFile(), "keyword.dita");
 
         compareKeyword(new File(baseDir, new File(inputDir, "keyword.dita").getPath()),
                 new String[] {"prodname1", "prodname2", "prodname3"},
                 new String[] {"key1", "key2", "key3"});
 
-        compareKeyword(new File(tempDir, "keyword.xml"),
+        compareKeyword(new File(tempDir, "keyword.dita"),
                 new String[] {"prodname2", "prodname3"},
                 new String[] {"key2", "key3"});
     }

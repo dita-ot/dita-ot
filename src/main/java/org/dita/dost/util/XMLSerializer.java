@@ -28,6 +28,8 @@ import org.xml.sax.helpers.AttributesImpl;
  * XML serializer. Users a {@link javax.xml.transform.sax.TransformerHandler
  * TransformerHandler} as the underlying serializer.
  * 
+ * <p>When possible, use {@link javax.xml.stream.XMLStreamWriter XMLStreamWriter} instead.</p>
+ * 
  * <p><strong>Not thread-safe.</strong></p>
  * 
  * @since 1.5.3

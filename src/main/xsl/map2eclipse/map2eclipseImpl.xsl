@@ -9,9 +9,9 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 exclude-result-prefixes="dita-ot">
 
-<xsl:import href="../common/output-message.xsl"/>
-<xsl:import href="../common/dita-utilities.xsl"/>
-<xsl:import href="../common/dita-textonly.xsl"/>
+<xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
+<xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
+<xsl:import href="plugin:org.dita.base:xsl/common/dita-textonly.xsl"/>
 
 
 <xsl:output indent="yes"/>
@@ -52,9 +52,7 @@
     <xsl:choose>
       <xsl:when test="*[contains(@class,' topic/title ')]">
         <xsl:attribute name="label">
-        <!-- edited by William on 2009-05-27 for bug:2796993 start-->
           <xsl:value-of select="normalize-space(*[contains(@class,' topic/title ')])"/>
-        <!-- edited by William on 2009-05-27 for bug:2796993 end-->
         </xsl:attribute>
       </xsl:when>
       <xsl:when test="@title">
@@ -89,10 +87,8 @@
   <xsl:attribute name="link_to">
     <xsl:choose>
       <xsl:when test="contains($fix-anchorref,'.ditamap')">
-        <!-- edited  by William on 2009-05-26 for bug:2796614 start-->
 	      <!-- xsl:value-of select="$work.dir"/><xsl:text>/</xsl:text><xsl:value-of select="substring-before($fix-anchorref,'.ditamap')"/>.xml<xsl:value-of select="substring-after($fix-anchorref,'.ditamap')"/ -->
               <xsl:value-of select="$work.dir"/><xsl:value-of select="substring-before($fix-anchorref,'.ditamap')"/>.xml<xsl:value-of select="substring-after($fix-anchorref,'.ditamap')"/>
-        <!-- edited  by William on 2009-05-26 for bug:2796614 end -->
       </xsl:when>
       <xsl:when test="contains($fix-anchorref,'.xml')"><xsl:value-of select="$work.dir"/><xsl:value-of select="$fix-anchorref"/></xsl:when>
       <xsl:otherwise> <!-- should be dita, but name does not include .ditamap -->
@@ -115,11 +111,21 @@
   <xsl:choose>
     <xsl:when test="@type='external' or (@scope='external' and not(@format)) or not(not(@format) or @format='dita' or @format='DITA')"><xsl:value-of select="@href"/></xsl:when> <!-- adding local -->
     <xsl:when test="starts-with(@href,'#')"><xsl:value-of select="@href"/></xsl:when>
-    <xsl:when test="contains(@copy-to, $DITAEXT)">
-      <xsl:value-of select="$work.dir"/><xsl:value-of select="substring-before(@copy-to,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/>
+    <xsl:when test="@copy-to and (not(@format) or @format = 'dita')">
+      <xsl:value-of select="$work.dir"/>
+      <xsl:call-template name="replace-extension">
+        <xsl:with-param name="filename" select="@copy-to"/>
+        <xsl:with-param name="extension" select="$OUTEXT"/>
+        <xsl:with-param name="ignore-fragment" select="true()"/>
+      </xsl:call-template>
     </xsl:when>
-    <xsl:when test="contains(@href, $DITAEXT)">
-      <xsl:value-of select="$work.dir"/><xsl:value-of select="substring-before(@href, $DITAEXT)"/><xsl:value-of select="$OUTEXT"/><!--xsl:value-of select="substring-after(@href, $DITAEXT)"/-->
+    <xsl:when test="@href and (not(@format) or @format = 'dita')">
+      <xsl:value-of select="$work.dir"/>
+      <xsl:call-template name="replace-extension">
+        <xsl:with-param name="filename" select="@href"/>
+        <xsl:with-param name="extension" select="$OUTEXT"/>
+        <xsl:with-param name="ignore-fragment" select="true()"/>
+      </xsl:call-template>
     </xsl:when>
     <!-- If it is a bad value, there will be a message when doing the real topic link -->
     <xsl:otherwise><xsl:value-of select="$work.dir"/><xsl:value-of select="@href"/></xsl:otherwise>
@@ -197,11 +203,18 @@
               <xsl:choose>
                 <xsl:when test="@type='external' or not(not(@format) or @format='dita' or @format='DITA')"><xsl:value-of select="@href"/></xsl:when> <!-- adding local -->
                 <xsl:when test="starts-with(@href,'#')"><xsl:value-of select="@href"/></xsl:when>
-                <xsl:when test="contains(@copy-to, $DITAEXT)">
-                  <xsl:value-of select="substring-before(@copy-to, $DITAEXT)"/><xsl:value-of select="$OUTEXT"/>
+                <xsl:when test="@copy-to and (not(@format) or @format = 'dita')">
+                  <xsl:call-template name="replace-extension">
+                    <xsl:with-param name="filename" select="@copy-to"/>
+                    <xsl:with-param name="extension" select="$OUTEXT"/>
+                    <xsl:with-param name="ignore-fragment" select="true()"/>
+                  </xsl:call-template>
                 </xsl:when>
-                <xsl:when test="contains(@href, $DITAEXT)">
-                  <xsl:value-of select="substring-before(@href, $DITAEXT)"/><xsl:value-of select="$OUTEXT"/><xsl:value-of select="substring-after(@href, $DITAEXT)"/>
+                <xsl:when test="@href and (not(@format) or @format = 'dita')">
+                  <xsl:call-template name="replace-extension">
+                    <xsl:with-param name="filename" select="@href"/>
+                    <xsl:with-param name="extension" select="$OUTEXT"/>
+                  </xsl:call-template>
                 </xsl:when>
                 <xsl:when test="not(@href) or @href=''"/> <!-- P017000: error generated in prior step -->
                 <xsl:otherwise>
@@ -221,11 +234,20 @@
                     <xsl:choose>
                       <xsl:when test="@type='external' or (@scope='external' and not(@format)) or not(not(@format) or @format='dita' or @format='DITA')"><xsl:value-of select="@href"/></xsl:when> <!-- adding local -->
                       <xsl:when test="starts-with(@href,'#')"><xsl:value-of select="@href"/></xsl:when>
-                      <xsl:when test="contains(@copy-to, $DITAEXT)">
-                        <xsl:value-of select="$work.dir"/><xsl:value-of select="substring-before(@copy-to, $DITAEXT)"/><xsl:value-of select="$OUTEXT"/>
+                      <xsl:when test="@copy-to and (not(@format) or @format = 'dita')">
+                        <xsl:value-of select="$work.dir"/>
+                        <xsl:call-template name="replace-extension">
+                          <xsl:with-param name="filename" select="@copy-to"/>
+                          <xsl:with-param name="extension" select="$OUTEXT"/>
+                          <xsl:with-param name="ignore-fragment" select="true()"/>
+                        </xsl:call-template>
                       </xsl:when>
-                      <xsl:when test="contains(@href, $DITAEXT)">
-                        <xsl:value-of select="$work.dir"/><xsl:value-of select="substring-before(@href, $DITAEXT)"/><xsl:value-of select="$OUTEXT"/><xsl:value-of select="substring-after(@href, $DITAEXT)"/>
+                      <xsl:when test="@href and (not(@format) or @format = 'dita')">
+                        <xsl:value-of select="$work.dir"/>
+                        <xsl:call-template name="replace-extension">
+                          <xsl:with-param name="filename" select="@href"/>
+                          <xsl:with-param name="extension" select="$OUTEXT"/>
+                        </xsl:call-template>
                       </xsl:when>
                       <xsl:otherwise>
                         <xsl:value-of select="$work.dir"/><xsl:value-of select="@href"/>
@@ -249,9 +271,7 @@
 	<xsl:apply-templates/>
 </xsl:template-->
   
-<!-- edited by William on 2009-07-23 for bug:2824907 start-->
 <xsl:template match="text()"/>
-<!-- edited by William on 2009-07-23 for bug:2824907 end-->
 
 <!-- do nothing when meeting with reltable -->
 <xsl:template match="*[contains(@class,' map/reltable ')]"/>

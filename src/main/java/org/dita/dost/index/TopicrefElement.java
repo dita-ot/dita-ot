@@ -70,17 +70,6 @@ public final class TopicrefElement {
     }
 
     /**
-     * To see if need to extract indexterm under this topic element.
-     * 
-     * @return true if need, false or else
-     */
-    @Deprecated
-    public boolean needExtractTerm() {
-        return (href != null && format != null && !ATTRIBUTE_FORMAT_VALUE_DITA
-                .equals(format));
-    }
-
-    /**
      * Set navtitle attribute with the given value.
      * @param aNavtitle The navtitle to set.
      */

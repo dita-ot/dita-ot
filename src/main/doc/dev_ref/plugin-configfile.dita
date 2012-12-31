@@ -47,6 +47,26 @@ following attributes are supported:</p>           <simpletable keycol="1">
 <stentry>no</stentry>
 </strow>
 </simpletable>         </li>
+  <li>
+    <p><codeph>extension-point</codeph> defines new a <i>extension point</i> that can be used by other plug-ins. The following attributes are supported:</p>
+    <simpletable keycol="1">
+      <sthead>
+        <stentry>Attribute</stentry>
+        <stentry>Description</stentry>
+        <stentry>Required</stentry>
+      </sthead>
+      <strow>
+        <stentry><codeph>id</codeph></stentry>
+        <stentry>extension point identifier</stentry>
+        <stentry>yes</stentry>
+      </strow>
+      <strow>
+        <stentry><codeph>name</codeph></stentry>
+        <stentry>extension point name</stentry>
+        <stentry>no</stentry>
+      </strow>
+    </simpletable>
+  </li>
 <li>           <p><codeph>&lt;require></codeph> defines plug-in dependencies.
 The following attributes             are supported:</p>           <simpletable
 keycol="1">

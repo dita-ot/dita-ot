@@ -25,7 +25,7 @@ import org.dita.dost.util.DITAOTCollator;
  * 
  * @author Wu, Zhi Qiang
  */
-public final class IndexTerm implements Comparable {
+public final class IndexTerm implements Comparable<IndexTerm> {
     /** The locale of  the indexterm, used for sorting. */
     private static Locale termLocale = null;
 
@@ -287,9 +287,8 @@ public final class IndexTerm implements Comparable {
      * @param obj object to compare with
      * @return int
      */
-    public int compareTo(final Object obj) {
-        return DITAOTCollator.getInstance(termLocale).compare(termKey,
-                ((IndexTerm) obj).getTermKey());
+    public int compareTo(final IndexTerm obj) {
+        return DITAOTCollator.getInstance(termLocale).compare(termKey, obj.getTermKey());
     }
 
     /**

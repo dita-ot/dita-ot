@@ -12,6 +12,7 @@ package org.dita.dost.reader;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import java.io.File;
 import java.util.Map;
@@ -22,6 +23,7 @@ import org.junit.Test;
 
 import org.dita.dost.TestUtils;
 import org.dita.dost.module.GenMapAndTopicListModule.KeyDef;
+import org.dita.dost.reader.GenListModuleReader.Reference;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.OutputUtils;
 
@@ -41,14 +43,13 @@ public class TestGenListModuleReader {
     @BeforeClass
     public static void setUp() throws Exception{
         //parser = new ConrefPushParser();
-        String ditaDir = "";
-        //get absolute path
-        ditaDir = new File("src" + File.separator + "main").getAbsolutePath();
+        File ditaDir = new File("src" + File.separator + "main").getAbsoluteFile();
 
         final boolean validate = false;
         reader = new GenListModuleReader();
         reader.setLogger(new TestUtils.TestLogger());
-        reader.initXMLReader(ditaDir, validate, new File(rootFile.getPath()).getCanonicalPath(), true);
+        reader.setExtName(".xml");
+        reader.initXMLReader(ditaDir, validate, new File(rootFile.getPath()).getCanonicalFile(), true);
         reader.setFilterUtils(new FilterUtils());
         reader.setOutputUtils(new OutputUtils());
     }
@@ -69,7 +70,7 @@ public class TestGenListModuleReader {
         final Set<String> copytoSet = reader.getIgnoredCopytoSourceSet();
         final Map<String, KeyDef> keyDMap = reader.getKeysDMap();
         final Set<String> nonConref = reader.getNonConrefCopytoTargets();
-        final Set<String> nonCopyTo = reader.getNonCopytoResult();
+        final Set<Reference> nonCopyTo = reader.getNonCopytoResult();
         final Set<String> outDita = reader.getOutDitaFilesSet();
         final Set<String> outFiles = reader.getOutFilesSet();
         final Set<String> resourceOnlySet = reader.getResourceOnlySet();
@@ -98,9 +99,9 @@ public class TestGenListModuleReader {
         assertTrue(nonConref.contains(".." + File.separator + "topics" + File.separator + "target-topic-c.xml"));
         assertTrue(nonConref.contains(".." + File.separator + "topics" + File.separator + "target-topic-a.xml"));
 
-        assertTrue(nonCopyTo.contains(".." + File.separator + "topics" + File.separator + "xreffin-topic-1.xml"));
-        assertTrue(nonCopyTo.contains(".." + File.separator + "topics" + File.separator + "target-topic-c.xml"));
-        assertTrue(nonCopyTo.contains(".." + File.separator + "topics" + File.separator + "target-topic-a.xml"));
+        assertTrue(nonCopyTo.contains(new Reference(".." + File.separator + "topics" + File.separator + "xreffin-topic-1.xml")));
+        assertTrue(nonCopyTo.contains(new Reference(".." + File.separator + "topics" + File.separator + "target-topic-c.xml")));
+        assertTrue(nonCopyTo.contains(new Reference(".." + File.separator + "topics" + File.separator + "target-topic-a.xml")));
 
         assertTrue(outDita.contains(".." + File.separator + "topics" + File.separator + "xreffin-topic-1.xml"));
         assertTrue(outDita.contains(".." + File.separator + "topics" + File.separator + "target-topic-c.xml"));
@@ -114,4 +115,12 @@ public class TestGenListModuleReader {
 
         assertEquals(0, subsidiaryTargets.size());
     }
+    
+    @Test
+    public void testIsValidKeyName() {
+    	assertTrue(GenListModuleReader.isValidKeyName("A"));
+    	assertTrue(GenListModuleReader.isValidKeyName("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:@!$&'()*+,;="));
+    	assertFalse(GenListModuleReader.isValidKeyName("A/B"));
+    }
+    
 }

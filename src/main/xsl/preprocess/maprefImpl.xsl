@@ -16,14 +16,12 @@
     <xsl:variable name="msgprefix">DOTX</xsl:variable>
     
     <xsl:param name="DITAEXT" select="'.xml'"/>    
+    <!-- Deprecated -->  
     <xsl:param name="FILEREF">file://</xsl:param>
     <!-- The directory where the topic resides, starting with root -->
     <xsl:param name="WORKDIR" select="'./'"/>
     
-    <!--Added by Jason on 2011-09-07 for bug:3401721 start-->
     <xsl:param name="file-being-processed"/>  
-    <!--Added by Jason on 2011-09-07  for bug:3401721 end-->
-    
     
     <!-- list of attributes that can be overided. -->
     <xsl:variable name="special-atts" select="' href class linking toc print audience product platform otherprops props '"/>
@@ -50,13 +48,11 @@
         <xsl:param name="parent-props">#none#</xsl:param>
         <xsl:param name="parent-processing-role">#none#</xsl:param>
         <xsl:param name="mapref-id-path"/>    <!-- record each target's id of mapref to prevent loop reference -->
-        <!-- added by William on 2009-09-01 for updated mapref behavior start-->
         <!-- params to tell refer type:whole map file or just a branch -->
         <xsl:param name="referTypeFlag">#none#</xsl:param>
         <xsl:param name="parent-importance">#none#</xsl:param>
         <xsl:param name="parent-search">#none#</xsl:param>
         <xsl:param name="parent-rev">#none#</xsl:param>
-        <!-- added by William on 2009-09-01 for updated mapref behavior start-->
         
         <xsl:variable name="filename">
             <xsl:choose>
@@ -99,7 +95,6 @@
                     <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
-            <!-- added by William on 2009-09-01 for updated mapref behavior start-->
             <!-- When scope = peer or scope = external on a mapref, 
                 we should not retrieve or try to access the map -->
             <xsl:when test="@format='ditamap' and (@scope = 'peer' or @scope = 'external')">
@@ -107,7 +102,6 @@
                     <xsl:apply-templates select="*|@*|comment()|text()|processing-instruction()" />
                 </xsl:copy>
             </xsl:when>
-            <!-- added by William on 2009-09-01 for updated mapref behavior end-->
             <xsl:when test="@format='ditamap'">  <!-- it is mapref and pass the loop dependency check -->
                 <!-- update mapref id path -->
                 <xsl:variable name="updated-id-path" select="concat($mapref-id-path,' ',generate-id(.),' ')"/> 
@@ -118,7 +112,6 @@
                             <xsl:value-of select="@href"/>
                         </xsl:when>
                         <xsl:otherwise>
-                            <!-- edited by William on 2009-09-01 for updated mapref start-->
                             <xsl:choose>
                                 <xsl:when test="starts-with(@href,'#')">
                                     <xsl:value-of select="concat($WORKDIR, $file-being-processed)"/>
@@ -130,7 +123,6 @@
                                     <xsl:value-of select="concat($WORKDIR, @href)"/>
                                 </xsl:otherwise>
                             </xsl:choose>
-                            <!-- edited by William on 2009-09-01 for updated mapref end-->
                         </xsl:otherwise>
                     </xsl:choose>                    
                 </xsl:variable>
@@ -274,7 +266,6 @@
                                         <xsl:otherwise>#none#</xsl:otherwise>
                                       </xsl:choose>
                                     </xsl:with-param>
-                                    <!-- added by William on 2009-09-01 for updated mapref behavior start-->
                                     <xsl:with-param name="referTypeFlag" select="'element'"/>
                                     <!-- importance -->
                                     <xsl:with-param name="parent-importance">
@@ -312,7 +303,6 @@
                                             <xsl:otherwise>#none#</xsl:otherwise>
                                         </xsl:choose>
                                     </xsl:with-param>
-                                    <!-- added by William on 2009-09-01 for updated mapref behavior end-->
                                 </xsl:apply-templates>
                             </xsl:when>
                             <xsl:otherwise>
@@ -346,7 +336,6 @@
                                         <xsl:otherwise>#none#</xsl:otherwise>
                                       </xsl:choose>
                                     </xsl:with-param>
-									<!-- edited by William on 2009-05-08 for toc bug start -->
                                     <xsl:with-param name="parent-toc">
                                       <xsl:choose>
                                         <xsl:when test="not($parent-toc='#none#')">
@@ -358,9 +347,7 @@
                                         <xsl:otherwise>#none#</xsl:otherwise>
                                       </xsl:choose>
                                     </xsl:with-param>
-                                    <!-- edited by William on 2009-05-08 for toc bug end-->
                                     
-                                    <!-- added by William on 2009-09-01 for updated mapref behavior start-->
                                     <!-- added additional attributes -->
                                     <xsl:with-param name="parent-linking">
                                         <xsl:choose>
@@ -476,13 +463,17 @@
                                             <xsl:otherwise>#none#</xsl:otherwise>
                                         </xsl:choose>
                                     </xsl:with-param>
-                                    <!-- added by William on 2009-09-01 for updated mapref behavior end-->
                                 </xsl:apply-templates>
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:otherwise>
                 </xsl:choose>
-                    
+              <xsl:if test="*[contains(@class, ' map/topicref ')]">
+                <xsl:call-template name="output-message">
+                  <xsl:with-param name="msgnum">068</xsl:with-param>
+                  <xsl:with-param name="msgsev">W</xsl:with-param>
+                </xsl:call-template>
+              </xsl:if>    
             </xsl:when>
             <xsl:otherwise> <!-- not mapref -->  
                 <xsl:copy>                    
@@ -498,8 +489,11 @@
                             <xsl:value-of select="concat($relative-path, @href)"/>
                             </xsl:attribute>
                         </xsl:otherwise>
-                    </xsl:choose>                    
+                    </xsl:choose>
                     <xsl:choose>
+                        <xsl:when test="contains($refclass, ' mapgroup-d/mapref ')">
+                            <xsl:attribute name="class"><xsl:value-of select="@class"/></xsl:attribute>
+                        </xsl:when>
                         <!-- if the element is not at the top level of reference target, @class equals to $refclass -->
                         <xsl:when test="not(contains(@class,substring($refclass, 3)))"> 
                             <xsl:attribute name="class"><xsl:value-of select="$refclass"/></xsl:attribute>
@@ -508,7 +502,6 @@
                             <xsl:attribute name="class"><xsl:value-of select="@class"/></xsl:attribute>
                         </xsl:otherwise>
                     </xsl:choose>
-                    <!-- edited by William on 2009-09-01 for updated mapref behavior start -->
                     <!-- linking and following attributes processed in the same way -->
                     <xsl:choose>
                         <!-- refer to a map file -->
@@ -565,14 +558,12 @@
                         </xsl:when>
                         <xsl:when test="$referTypeFlag = 'element'">
                             <xsl:choose>
-                                <!-- edited by William on 2009-05-08 for toc bug start -->
                                 <xsl:when test="not($parent-toc='#none#')">
                                     <xsl:attribute name="toc"><xsl:value-of select="$parent-toc"/></xsl:attribute>
                                 </xsl:when>
                                 <xsl:when test="@toc and not(@toc='')">
                                     <xsl:attribute name="toc"><xsl:value-of select="@toc"/></xsl:attribute>
                                 </xsl:when>
-                                <!-- edited by William on 2009-05-08 for toc bug end -->
                             </xsl:choose>
                         </xsl:when>
                         <xsl:otherwise>
@@ -891,7 +882,6 @@
                             </xsl:if>
                         </xsl:otherwise>
                     </xsl:choose>
-                    <!-- edited by William on 2009-09-01 for updated mapref behavior end-->
                     
                     <xsl:apply-templates select="*|@*[not(contains($special-atts,concat(' ',local-name(),' ')))]|comment()|text()|processing-instruction()" >
                         <xsl:with-param name="relative-path" select="$relative-path"/> <!-- pass the relative-path to sub elements -->
@@ -1043,11 +1033,11 @@
             <xsl:attribute name="format"><xsl:value-of select="$inherited-value"/></xsl:attribute>
             <!-- Warn if non-dita format was inherited, and this is dita.
                 Only warn if this was actually inherited (not set locally).  -->
-            <xsl:if test="not(@format) and $inherited-value!='dita' and contains(@href,$DITAEXT)">
+            <!--xsl:if test="not(@format) and $inherited-value!='dita' and @href">
                 <xsl:apply-templates select="." mode="ditamsg:incorect-inherited-format">
                     <xsl:with-param name="format" select="$inherited-value"/>
                 </xsl:apply-templates>
-            </xsl:if>
+            </xsl:if-->
         </xsl:if>
     </xsl:template>
     

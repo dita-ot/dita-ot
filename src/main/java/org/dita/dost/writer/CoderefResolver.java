@@ -118,9 +118,7 @@ public final class CoderefResolver extends AbstractXMLFilter {
                     } else {
                         final Properties prop = new Properties();
                         prop.put("%1", hrefValue);
-                        prop.put("%2", atts.getValue(ATTRIBUTE_NAME_XTRF));
-                        prop.put("%3", atts.getValue(ATTRIBUTE_NAME_XTRC));
-                        logger.logWarn(MessageUtils.getMessage("DOTJ051E",prop).toString());
+                        logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ051E",prop).setLocation(atts).toString());
                     }
                 } else {
                     //logger.logDebug("Code reference target not defined");
@@ -162,7 +160,7 @@ public final class CoderefResolver extends AbstractXMLFilter {
                 } catch (final RuntimeException e) {
                     final Properties prop = new Properties();
                     prop.put("%1", tokens[2].trim());
-                    logger.logError(MessageUtils.getMessage("DOTJ052E",prop).toString());
+                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ052E",prop).toString());
                 }
             }
         }

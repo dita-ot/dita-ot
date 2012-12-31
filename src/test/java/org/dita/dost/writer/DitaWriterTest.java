@@ -6,7 +6,9 @@ package org.dita.dost.writer;
 
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.module.GenMapAndTopicListModule.KeyDef;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -18,6 +20,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -68,35 +71,25 @@ public class DitaWriterTest {
     @BeforeClass
     public static void setUp() throws IOException, SAXException {
         tempDir = TestUtils.createTempDir(DitaWriterTest.class);
-        final Properties props = new Properties();
-        props.put("keylist", "keydef=keyword.dita(main.ditamap)");
-        OutputStream out = null;
-        try {
-            out = new FileOutputStream(new File(tempDir, "dita.list"));
-            props.store(out, null);
-        } finally {
-            if (out != null) {
-                out.close();
-            }
-        }
         final DitaWriter writer = new DitaWriter();
         writer.setLogger(new TestUtils.TestLogger());
-        writer.initXMLReader(new File("src" + File.separator + "main").getAbsolutePath(), false, true);
-        writer.setExtName(".xml");
+        writer.setTempDir(tempDir.getAbsoluteFile());
+        writer.initXMLReader(new File("src" + File.separator + "main").getAbsoluteFile(), false, true);
+        writer.setExtName(".dita");
         writer.setTranstype("xhtml");
         final FilterUtils fu = new FilterUtils();
         fu.setLogger(new TestUtils.TestLogger());
         writer.setFilterUtils(fu);
         writer.setDelayConrefUtils(new DelayConrefUtils());
         final OutputUtils outputUtils = new OutputUtils();
-        outputUtils.setInputMapPathName(new File(srcDir, "main.ditamap").getAbsolutePath());
+        outputUtils.setInputMapPathName(new File(srcDir, "main.ditamap"));
         writer.setOutputUtils(outputUtils);
+        writer.setKeyDefinitions(Arrays.asList(new KeyDef("keydef", "keyword.dita", "main.ditamap")));
         
         FileUtils.copyFile(new File(srcDir, FILE_NAME_EXPORT_XML), new File(tempDir, FILE_NAME_EXPORT_XML));
 
         for (final String f: new String[] {"main.ditamap", "keyword.dita"}) {
-            writer.setTempDir(tempDir.getAbsolutePath());
-            writer.write(srcDir.getAbsolutePath(), f);
+            writer.write(srcDir.getAbsoluteFile(), f);
         }
         
         TestUtils.resetXMLUnit();
@@ -109,7 +102,7 @@ public class DitaWriterTest {
         parser.setContentHandler(handler);
         InputStream in = null;
         try {
-            in = new FileInputStream(new File(tempDir, "keyword.xml"));
+            in = new FileInputStream(new File(tempDir, "keyword.dita"));
             handler.setSource(new File(srcDir, "keyword.dita"));
             parser.parse(new InputSource(in));
         } finally {
@@ -139,15 +132,15 @@ public class DitaWriterTest {
     @Test
     public void testWrite() throws Exception {
         final DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        clean(db.parse(new File(tempDir, "keyword.xml")));
+        clean(db.parse(new File(tempDir, "keyword.dita")));
 
         XMLUnit.setNormalizeWhitespace(true);
         XMLUnit.setIgnoreWhitespace(true);
         XMLUnit.setIgnoreDiffBetweenTextAndCDATA(true);
         XMLUnit.setIgnoreComments(true);
 
-        assertXMLEqual(clean(db.parse(new File(expDir, "keyword.xml"))),
-                clean(db.parse(new File(tempDir, "keyword.xml"))));
+        assertXMLEqual(clean(db.parse(new File(expDir, "keyword.dita"))),
+                clean(db.parse(new File(tempDir, "keyword.dita"))));
         assertXMLEqual(clean(db.parse(new File(expDir, "main.ditamap"))),
                 clean(db.parse(new File(tempDir, "main.ditamap"))));
     }
@@ -292,7 +285,7 @@ public class DitaWriterTest {
                 Integer c = counter.get(localName);
                 c = c == null ? 1 : c + 1;
                 counter.put(localName, c);
-                assertEquals(localName + ":" + c, xtrc);
+                assertTrue(xtrc.startsWith(localName + ":" + c + ";"));
             }
         }
 
@@ -311,7 +304,7 @@ public class DitaWriterTest {
             writer.setLogger(new TestUtils.TestLogger(false));
             writer.setExtName(".dita");
             final OutputUtils outputUtils = new OutputUtils();
-            outputUtils.setInputMapPathName(new File(srcDir, "main.ditamap").getAbsolutePath());
+            outputUtils.setInputMapPathName(new File(srcDir, "main.ditamap"));
             writer.setOutputUtils(outputUtils);        
             method = DitaWriter.class.getDeclaredMethod(m, args);
             method.setAccessible(true);

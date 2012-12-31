@@ -76,11 +76,11 @@ final class MoveIndexModule implements AbstractPipelineModule {
             indexReader.read(new File(tempDir, fileName).getAbsolutePath());
         }
 
-        final Set<Map.Entry<String, String>> mapSet = (Set<Map.Entry<String, String>>) indexReader.getContent().getCollection();
+        final Map<String, String> mapSet = indexReader.getMapping();
         
         final DitaIndexWriter indexInserter = new DitaIndexWriter();
         indexInserter.setLogger(logger);
-        for (final Map.Entry<String, String> entry: mapSet) {
+        for (final Map.Entry<String, String> entry: mapSet.entrySet()) {
             String targetFileName = entry.getKey();
             targetFileName = targetFileName.indexOf(SHARP) != -1
                             ? targetFileName.substring(0, targetFileName.indexOf(SHARP))

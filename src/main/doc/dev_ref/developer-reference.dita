@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="developer-reference">
+ <title>DITA Open Toolkit Developer Reference</title>
+  <titlealts>
+    <navtitle>Developer Reference</navtitle>
+  </titlealts>
+ <shortdesc>The <ph><cite>DITA Open Toolkit Developer Reference</cite> is designed to provide more
+      advanced information about the DITA OT. It is geared to an audience that needs information
+      about the DITA-OT architecture, configuring and extending the DITA-OT, and creating DITA-OT
+      plug-ins.</ph></shortdesc>
+</concept>

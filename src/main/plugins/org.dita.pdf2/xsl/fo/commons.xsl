@@ -27,7 +27,7 @@ These terms and conditions supersede the terms and conditions in any
 licensing agreement to the extent that such terms and conditions conflict
 with those set forth herein.
 
-This file is part of the DITA Open Toolkit project hosted on Sourceforge.net. 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
 -->
 
@@ -44,10 +44,11 @@ See the accompanying license.txt file for applicable licenses.
     exclude-result-prefixes="opentopic exsl opentopic-index exslf opentopic-func dita2xslfo xs"
     version="2.0">
 
+    <xsl:key name="id" match="*[@id]" use="@id"/>
     <xsl:key name="map-id" match="opentopic:map//*[@id]" use="@id"/>
 
     <xsl:variable name="msgprefix" select="'PDFX'"/>
-  
+
     <xsl:variable name="id.toc" select="'ID_TOC_00-0F-EA-40-0D-4D'"/>
     <xsl:variable name="id.index" select="'ID_INDEX_00-0F-EA-40-0D-4D'"/>
     <xsl:variable name="id.lot" select="'ID_LOT_00-0F-EA-40-0D-4D'"/>
@@ -56,14 +57,12 @@ See the accompanying license.txt file for applicable licenses.
 
     <!--  In order to not process any data under opentopic:map  -->
     <xsl:template match="opentopic:map"/>
-    
-    <!-- added by William on 2009-07-07 for bug:2815492 start -->
+
     <!-- get the max chars for shortdesc-->
     <xsl:variable name="maxCharsInShortDesc">
         <xsl:call-template name="getMaxCharsForShortdescKeep"/>
     </xsl:variable>
-    <!-- added by William on 2009-07-07 for bug:2815492 end -->
-    
+
     <xsl:template match="*[@conref]" priority="99">
         <fo:block xsl:use-attribute-sets="__unresolved__conref">
             <xsl:apply-templates select="." mode="insertReferenceTitle">
@@ -87,12 +86,6 @@ See the accompanying license.txt file for applicable licenses.
 
     </xsl:template>
 
-    <xsl:template name="getTopicrefShortdesc">
-        <xsl:variable name="id" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>
-        <xsl:variable name="mapTopicref" select="key('map-id', $id)"/>
-        <xsl:copy-of select="$mapTopicref/*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')]"/>
-    </xsl:template>
-
     <xsl:template match="*" mode="processTopic">
         <fo:block xsl:use-attribute-sets="topic">
             <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
@@ -105,34 +98,11 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*" mode="commonTopicProcessing">
-        <xsl:variable name="topicrefShortdesc">
-            <xsl:call-template name="getTopicrefShortdesc"/>
-        </xsl:variable>
         <xsl:apply-templates select="*[contains(@class, ' topic/title ')]"/>
         <xsl:apply-templates select="*[contains(@class, ' topic/prolog ')]"/>
-        
-        <xsl:choose>
-            <!-- When topic has an abstract, we cannot override shortdesc -->
-            <xsl:when test="*[contains(@class, ' topic/abstract ')]">
-              <xsl:apply-templates select="*[not(contains(@class, ' topic/title ')) and
-                    not(contains(@class, ' topic/prolog ')) and
-                    not(contains(@class, ' topic/shortdesc ')) and
-                    not(contains(@class, ' topic/topic '))]"/>
-            </xsl:when>
-            <xsl:when test="$topicrefShortdesc/*">
-                <xsl:apply-templates select="$topicrefShortdesc/*"/>
-                <xsl:apply-templates select="*[not(contains(@class, ' topic/title ')) and
-                    not(contains(@class, ' topic/prolog ')) and
-                    not(contains(@class, ' topic/shortdesc ')) and
-                    not(contains(@class, ' topic/topic '))]"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="*[not(contains(@class, ' topic/title ')) and
-                    not(contains(@class, ' topic/prolog ')) and
-                    not(contains(@class, ' topic/topic '))]"/>
-            </xsl:otherwise>
-        </xsl:choose>
-        
+        <xsl:apply-templates select="*[not(contains(@class, ' topic/title ')) and
+                                       not(contains(@class, ' topic/prolog ')) and
+                                       not(contains(@class, ' topic/topic '))]"/>
         <xsl:apply-templates select="." mode="buildRelationships"/>
         <xsl:apply-templates select="*[contains(@class,' topic/topic ')]"/>
         <xsl:apply-templates select="." mode="topicEpilog"/>
@@ -141,33 +111,6 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*" mode="topicEpilog">
       <!-- Hook that allows common end-of-topic processing (after nested topics).
            See SourceForge RFE 2928584: Add general model for end-of-topic processing in PDF -->
-    </xsl:template>
-
-    <xsl:template match="*" mode="processUnknowTopic">
-        <xsl:param name="topicType"/>
-        <xsl:choose>
-            <xsl:when test="not(ancestor::*[contains(@class,' topic/topic ')])">
-                <xsl:variable name="page-sequence-reference">
-                    <xsl:choose>
-                        <xsl:when test="$mapType = 'bookmap'">
-                            <xsl:value-of select="'body-sequence'"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="'ditamap-body-sequence'"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:variable>
-                <fo:page-sequence master-reference="{$page-sequence-reference}" xsl:use-attribute-sets="__force__page__count">
-                    <xsl:call-template name="insertBodyStaticContents"/>
-                    <fo:flow flow-name="xsl-region-body">
-                        <xsl:apply-templates select="." mode="processTopic"/>
-                    </fo:flow>
-                </fo:page-sequence>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="." mode="processTopic"/>
-            </xsl:otherwise>
-        </xsl:choose>
     </xsl:template>
 
     <!-- RDA: From RFE 2882109, combining this rule with existing rules for
@@ -186,6 +129,9 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:when>
             <xsl:when test="$topicType = 'topicAppendix'">
                 <xsl:call-template name="processTopicAppendix"/>
+            </xsl:when>
+            <xsl:when test="$topicType = 'topicAppendices'">
+                <xsl:call-template name="processTopicAppendices"/>
             </xsl:when>
             <xsl:when test="$topicType = 'topicPart'">
                 <xsl:call-template name="processTopicPart"/>
@@ -251,7 +197,10 @@ See the accompanying license.txt file for applicable licenses.
             <fo:flow flow-name="xsl-region-body">
                 <fo:block xsl:use-attribute-sets="topic">
                     <xsl:call-template name="commonattributes"/>
-                    <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
+                    <xsl:variable name="level" as="xs:integer">
+                      <xsl:apply-templates select="." mode="get-topic-level"/>
+                    </xsl:variable>
+                    <xsl:if test="$level eq 1">
                         <fo:marker marker-class-name="current-topic-number">
                             <xsl:number format="1"/>
                         </fo:marker>
@@ -269,10 +218,7 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:call-template>
 
                     <fo:block xsl:use-attribute-sets="topic.title">
-                        <!-- added by William on 2009-07-02 for indexterm bug:2815485 start-->
                         <xsl:call-template name="pullPrologIndexTerms"/>
-                        <!-- added by William on 2009-07-02 for indexterm bug:2815485 end-->
-                        
                         <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
                             <xsl:apply-templates select="." mode="getTitle"/>
                         </xsl:for-each>
@@ -302,9 +248,15 @@ See the accompanying license.txt file for applicable licenses.
             <fo:flow flow-name="xsl-region-body">
                 <fo:block xsl:use-attribute-sets="topic">
                     <xsl:call-template name="commonattributes"/>
-                    <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
+                    <xsl:variable name="level" as="xs:integer">
+                      <xsl:apply-templates select="." mode="get-topic-level"/>
+                    </xsl:variable>
+                    <xsl:if test="$level eq 1">
                         <fo:marker marker-class-name="current-topic-number">
-                            <xsl:number format="1"/>
+                            <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id)"/>
+                            <xsl:for-each select="$topicref">
+                              <xsl:number count="*[contains(@class,' bookmap/appendix ')]" format="1"/>
+                            </xsl:for-each>
                         </fo:marker>
                         <fo:marker marker-class-name="current-header">
                             <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
@@ -320,9 +272,7 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:call-template>
 
                     <fo:block xsl:use-attribute-sets="topic.title">
-                        <!-- added by William on 2009-07-02 for indexterm bug:2815485 start-->
                         <xsl:call-template name="pullPrologIndexTerms"/>
-                        <!-- added by William on 2009-07-02 for indexterm bug:2815485 end-->
                         <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
                             <xsl:apply-templates select="." mode="getTitle"/>
                         </xsl:for-each>
@@ -344,6 +294,70 @@ See the accompanying license.txt file for applicable licenses.
             </fo:flow>
         </fo:page-sequence>
     </xsl:template>
+
+  <!--  Bookmap appendices processing  -->
+  <xsl:template name="processTopicAppendices">
+    <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="__force__page__count">
+      <xsl:call-template name="startPageNumbering"/>
+      <xsl:call-template name="insertBodyStaticContents"/>
+      <fo:flow flow-name="xsl-region-body">
+        <fo:block xsl:use-attribute-sets="topic">
+          <xsl:call-template name="commonattributes"/>
+          <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
+            <fo:marker marker-class-name="current-topic-number">
+              <xsl:number format="I"/>
+            </fo:marker>
+            <fo:marker marker-class-name="current-header">
+              <xsl:for-each select="*[contains(@class,' topic/title ')]">
+                <xsl:apply-templates select="." mode="getTitle"/>
+              </xsl:for-each>
+            </fo:marker>
+          </xsl:if>
+          
+          <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
+          
+          <xsl:call-template name="insertChapterFirstpageStaticContent">
+            <xsl:with-param name="type" select="'appendices'"/>
+          </xsl:call-template>
+          
+          <fo:block xsl:use-attribute-sets="topic.title">
+            <xsl:call-template name="pullPrologIndexTerms"/>
+            <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
+              <xsl:apply-templates select="." mode="getTitle"/>
+            </xsl:for-each>
+          </fo:block>
+          
+          <xsl:choose>
+            <xsl:when test="$appendicesLayout='BASIC'">
+              <xsl:apply-templates select="*[not(contains(@class, ' topic/topic ') or contains(@class, ' topic/title ') or
+                                                 contains(@class, ' topic/prolog '))]"/>
+              <xsl:apply-templates select="." mode="buildRelationships"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:apply-templates select="." mode="createMiniToc"/>
+            </xsl:otherwise>
+          </xsl:choose>
+                    
+          <xsl:for-each select="*[contains(@class,' topic/topic ')]">
+            <xsl:variable name="topicType">
+              <xsl:call-template name="determineTopicType"/>
+            </xsl:variable>
+            <xsl:if test="$topicType = 'topicSimple'">
+              <xsl:apply-templates select="."/>
+            </xsl:if>
+          </xsl:for-each>
+        </fo:block>
+      </fo:flow>
+    </fo:page-sequence>
+    <xsl:for-each select="*[contains(@class,' topic/topic ')]">
+      <xsl:variable name="topicType">
+        <xsl:call-template name="determineTopicType"/>
+      </xsl:variable>
+      <xsl:if test="not($topicType = 'topicSimple')">
+        <xsl:apply-templates select="."/>
+      </xsl:if>
+    </xsl:for-each>
+  </xsl:template>
 
     <!--  Bookmap Part processing  -->
     <xsl:template name="processTopicPart">
@@ -371,9 +385,7 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:call-template>
 
                     <fo:block xsl:use-attribute-sets="topic.title">
-                        <!-- added by William on 2009-07-02 for indexterm bug:2815485 start-->
                         <xsl:call-template name="pullPrologIndexTerms"/>
-                        <!-- added by William on 2009-07-02 for indexterm bug:2815485 end-->
                         <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
                             <xsl:apply-templates select="." mode="getTitle"/>
                         </xsl:for-each>
@@ -437,9 +449,7 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:call-template>
 
                     <fo:block xsl:use-attribute-sets="topic.title">
-                        <!-- added by William on 2009-07-02 for indexterm bug:2815485 start-->
                         <xsl:call-template name="pullPrologIndexTerms"/>
-                        <!-- added by William on 2009-07-02 for indexterm bug:2815485 end-->
                         <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
                             <xsl:apply-templates select="." mode="getTitle"/>
                         </xsl:for-each>
@@ -498,7 +508,20 @@ See the accompanying license.txt file for applicable licenses.
                             </xsl:call-template>
                         </fo:block>
                 </xsl:when>
-
+              <xsl:when test="$type = 'appendices'">
+                <fo:block xsl:use-attribute-sets="__chapter__frontmatter__name__container">
+                  <xsl:call-template name="insertVariable">
+                    <xsl:with-param name="theVariableID" select="'Appendix with number'"/>
+                    <xsl:with-param name="theParameters">
+                      <number>
+                        <fo:block xsl:use-attribute-sets="__chapter__frontmatter__number__container">
+                          <xsl:text>&#xA0;</xsl:text>
+                        </fo:block>
+                      </number>
+                    </xsl:with-param>
+                  </xsl:call-template>
+                </fo:block>
+              </xsl:when>
                 <xsl:when test="$type = 'part'">
                         <fo:block xsl:use-attribute-sets="__chapter__frontmatter__name__container">
                             <xsl:call-template name="insertVariable">
@@ -530,20 +553,20 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:choose>
         </fo:block>
     </xsl:template>
-    
+
     <xsl:template match="*[contains(@class, ' bookmap/chapter ')] |
                          opentopic:map/*[contains(@class, ' map/topicref ')]" mode="topicTitleNumber" priority="-1">
       <xsl:number format="1" count="*[contains(@class, ' bookmap/chapter ')]"/>
     </xsl:template>
-    
+
     <xsl:template match="*[contains(@class, ' bookmap/appendix ')]" mode="topicTitleNumber">
       <xsl:number format="A" count="*[contains(@class, ' bookmap/appendix ')]"/>
     </xsl:template>
-    
+
     <xsl:template match="*[contains(@class, ' bookmap/part ')]" mode="topicTitleNumber">
       <xsl:number format="I" count="*[contains(@class, ' bookmap/part ')]"/>
     </xsl:template>
-    
+
     <xsl:template match="*" mode="topicTitleNumber" priority="-10">
       <xsl:message>No topicTitleNumber mode template for <xsl:value-of select="name()"/></xsl:message>
     </xsl:template>
@@ -583,7 +606,6 @@ See the accompanying license.txt file for applicable licenses.
                             </xsl:if>
                             <xsl:apply-templates select="*[contains(@class,' topic/body ')]/*"/>
 
-                            <!-- Added with RFE 2976463 to fix dropped links in topics with a mini-TOC. -->
                             <xsl:if test="*[contains(@class,' topic/related-links ')]//
                                           *[contains(@class,' topic/link ')][not(@role) or @role!='child']">
                                 <xsl:apply-templates select="*[contains(@class,' topic/related-links ')]"/>
@@ -671,16 +693,17 @@ See the accompanying license.txt file for applicable licenses.
                         </xsl:call-template>
                     </xsl:attribute>
                 </fo:inline>
-                <!-- added by William on 2009-07-02 for indexterm bug:2815485 start-->
                 <xsl:call-template name="pullPrologIndexTerms"/>
-                <!-- added by William on 2009-07-02 for indexterm bug:2815485 end-->
                 <xsl:apply-templates select="." mode="getTitle"/>
             </fo:block>
         </fo:block>
     </xsl:template>
 
   <xsl:template match="*" mode="get-topic-level" as="xs:integer">
-    <xsl:value-of select="count(ancestor-or-self::*[contains(@class,' topic/topic ')])"/>
+    <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class,' topic/topic ')][1]/@id)"/>
+    <xsl:sequence select="count(ancestor-or-self::*[contains(@class,' topic/topic ')]) -
+                          count($topicref/ancestor-or-self::*[contains(@class,' bookmap/part ') or
+                                                              contains(@class,' bookmap/appendices ')])"/>
   </xsl:template>
 
     <xsl:template match="*" mode="createTopicAttrsName">
@@ -747,14 +770,6 @@ See the accompanying license.txt file for applicable licenses.
         </fo:block>
     </xsl:template>-->
 
-    <xsl:template match="*[contains(@class, ' topic/topicmeta ')]">
-<!--
-        <fo:block xsl:use-attribute-sets="topicmeta">
-            <xsl:apply-templates/>
-        </fo:block>
--->
-    </xsl:template>
-
     <xsl:template match="*[contains(@class, ' topic/tm ')]">
         <fo:inline xsl:use-attribute-sets="tm">
             <xsl:apply-templates/>
@@ -775,12 +790,36 @@ See the accompanying license.txt file for applicable licenses.
         </fo:inline>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' topic/term ')]">
+  <xsl:template match="*[contains(@class,' topic/term ')]" name="topic.term">
+    <xsl:param name="keys" select="@keyref" as="attribute()?"/>
+    <xsl:param name="contents" as="node()*">
+      <xsl:variable name="target" select="key('id', substring(@href, 2))"/>
+      <xsl:choose>
+        <xsl:when test="not(normalize-space(.)) and $keys and $target/self::*[contains(@class,' topic/topic ')]">
+          <xsl:apply-templates select="$target/*[contains(@class, ' topic/title ')]/node()"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:param>
+    <xsl:variable name="topicref" select="key('map-id', substring(@href, 2))"/>
+    <xsl:choose>
+      <xsl:when test="$keys and @href and not($topicref/ancestor-or-self::*[@linking][1]/@linking = ('none', 'sourceonly'))">
+        <fo:basic-link xsl:use-attribute-sets="xref term">
+          <xsl:call-template name="commonattributes"/>
+          <xsl:call-template name="buildBasicLinkDestination"/>
+          <xsl:copy-of select="$contents"/>
+        </fo:basic-link>
+      </xsl:when>
+      <xsl:otherwise>
         <fo:inline xsl:use-attribute-sets="term">
-            <xsl:call-template name="commonattributes"/>
-            <xsl:apply-templates/>
+          <xsl:call-template name="commonattributes"/>
+          <xsl:copy-of select="$contents"/>
         </fo:inline>
-    </xsl:template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/author ')]">
 <!--
@@ -1077,94 +1116,8 @@ See the accompanying license.txt file for applicable licenses.
         </fo:block>
   </xsl:template>
 
-    <!-- RFE 2882109: Combine this common code with topic/topic rule. -->
-    <!--<xsl:template match="*[contains(@class, ' reference/reference ')]">
-        <xsl:variable name="topicType">
-            <xsl:call-template name="determineTopicType"/>
-        </xsl:variable>
 
-        <xsl:choose>
-            <xsl:when test="$topicType = 'topicChapter'">
-                <xsl:call-template name="processTopicChapter"/>
-            </xsl:when>
-            <xsl:when test="$topicType = 'topicAppendix'">
-                <xsl:call-template name="processTopicAppendix"/>
-            </xsl:when>
-            <xsl:when test="$topicType = 'topicPart'">
-                <xsl:call-template name="processTopicPart"/>
-            </xsl:when>
-            <xsl:when test="$topicType = 'topicPreface'">
-                <xsl:call-template name="processTopicPreface"/>
-            </xsl:when>
-            <xsl:when test="$topicType = 'topicSimple'">
-                <xsl:variable name="page-sequence-reference">
-                    <xsl:choose>
-                        <xsl:when test="$mapType = 'bookmap'">
-                            <xsl:value-of select="'body-sequence'"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="'ditamap-body-sequence'"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:variable>
-                <xsl:choose>
-                    <xsl:when test="not(ancestor::*[contains(@class,' topic/topic ')])">
-                        <fo:page-sequence master-reference="{$page-sequence-reference}" xsl:use-attribute-sets="__force__page__count">
-                            <xsl:call-template name="insertBodyStaticContents"/>
-                            <fo:flow flow-name="xsl-region-body">
-                                <xsl:call-template name="processReference"/>
-                            </fo:flow>
-                        </fo:page-sequence>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:call-template name="processReference"/>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:when>
-      <xsl:when test="$topicType = 'topicAbstract'"/>
-      <xsl:otherwise>
-                <xsl:call-template name="processUnknowTopic">
-                    <xsl:with-param name="topicType" select="$topicType"/>
-                </xsl:call-template>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>-->
-
-    <xsl:template match="*[contains(@class, ' reference/refbody ')]" priority="1">
-      <xsl:variable name="level" as="xs:integer">
-        <xsl:apply-templates select="." mode="get-topic-level"/>
-      </xsl:variable>
-      <xsl:choose>
-        <xsl:when test="not(node())"/>
-        <xsl:when test="$level = 1">
-            <fo:block xsl:use-attribute-sets="body__toplevel refbody">
-                <xsl:call-template name="commonattributes"/>
-                <xsl:apply-templates/>
-            </fo:block>
-        </xsl:when>
-        <xsl:when test="$level = 2">
-            <fo:block xsl:use-attribute-sets="body__secondLevel refbody">
-                <xsl:call-template name="commonattributes"/>
-                <xsl:apply-templates/>
-            </fo:block>
-        </xsl:when>
-        <xsl:otherwise>
-            <fo:block xsl:use-attribute-sets="refbody">
-                <xsl:call-template name="commonattributes"/>
-                <xsl:apply-templates/>
-            </fo:block>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:template>
-
-    <xsl:template match="*[contains(@class, ' reference/refsyn ')]">
-        <fo:block xsl:use-attribute-sets="refsyn">
-            <xsl:call-template name="commonattributes"/>
-            <xsl:apply-templates/>
-        </fo:block>
-    </xsl:template>
-
-    <!-- Gets navigation title of current topic, used for bookmarks/TOC -->    
+    <!-- Gets navigation title of current topic, used for bookmarks/TOC -->
     <xsl:template name="getNavTitle">
         <!-- topicNumber = the # of times this topic has appeared. When topicNumber=3,
              this copy of the topic is based on its third appearance in the map. -->
@@ -1186,7 +1139,7 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-    
+
     <xsl:template match="*" mode="getTitle">
         <xsl:choose>
 <!--             add keycol here once implemented-->
@@ -1225,7 +1178,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- Map uses map/searchtitle, topic uses topic/searchtitle. This will likely be changed
          to a single value in DITA 2.0, but for now, recognize both. -->
-    <xsl:template match="*[contains(@class,' topic/titlealts ')]/*[contains(@class,' topic/searchtitle ')] | 
+    <xsl:template match="*[contains(@class,' topic/titlealts ')]/*[contains(@class,' topic/searchtitle ')] |
                          *[contains(@class,' topic/titlealts ')]/*[contains(@class,' map/searchtitle ')]">
         <fo:block xsl:use-attribute-sets="searchtitle">
             <xsl:call-template name="commonattributes"/>
@@ -1238,8 +1191,6 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
-
-    <xsl:template match="*[contains(@class,' map/topicmeta ')]/*[contains(@class,' map/searchtitle ')]"/>
 
     <xsl:template match="*[contains(@class,' topic/abstract ')]">
         <fo:block xsl:use-attribute-sets="abstract">
@@ -1280,11 +1231,9 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*" mode="format-shortdesc-as-block">
-        <!--Edited by William on 2009-07-07 for bug:2815492 start-->
         <!--fo:block xsl:use-attribute-sets="shortdesc" id="{@id}">
             <xsl:apply-templates/>
         </fo:block-->
-        <!--Bug 2928540: use attribute set topic__shortdesc instead of shortdesc -->
         <!--compare the length of shortdesc with the got max chars-->
         <fo:block xsl:use-attribute-sets="topic__shortdesc">
             <xsl:call-template name="commonattributes"/>
@@ -1295,7 +1244,6 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:if>
             <xsl:apply-templates/>
         </fo:block>
-        <!--Edited by William on 2009-07-07 for bug:2815492 end-->
     </xsl:template>
 
     <xsl:template match="*" mode="format-shortdesc-as-inline">
@@ -1307,7 +1255,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:apply-templates/>
         </fo:inline>
     </xsl:template>
-    
+
     <xsl:template match="*[contains(@class,' map/shortdesc ')]">
         <xsl:apply-templates select="." mode="format-shortdesc-as-block"/>
     </xsl:template>
@@ -1325,8 +1273,7 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-    
-    <!--Added by William on 2009-07-07 for bug:2815492 start -->
+
     <xsl:template name="getMaxCharsForShortdescKeep">
     <!-- These values specify the length of a short description that will
         render with keep-with-next set, which should be (approximately) the
@@ -1352,8 +1299,7 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-    <!--Added by William on 2009-07-07 for bug:2815492 end -->
-    
+
     <!-- this is the fallthrough body for nested topics -->
     <xsl:template match="*[contains(@class,' topic/body ')]">
         <xsl:variable name="level" as="xs:integer">
@@ -1386,9 +1332,9 @@ See the accompanying license.txt file for applicable licenses.
         </fo:block>
     </xsl:template>
 
-  <xsl:template match="*[contains(@class,' topic/section ')][@spectitle != '' 
-                         and not(*[contains(@class, ' topic/title ')])]" 
-    mode="dita2xslfo:section-heading" 
+  <xsl:template match="*[contains(@class,' topic/section ')][@spectitle != ''
+                         and not(*[contains(@class, ' topic/title ')])]"
+    mode="dita2xslfo:section-heading"
     priority="10">
     <fo:block xsl:use-attribute-sets="section.title">
       <xsl:call-template name="commonattributes"/>
@@ -1399,12 +1345,12 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:call-template>
       </xsl:variable>
       <xsl:sequence
-        select="if (not(normalize-space($resolvedVariable))) 
+        select="if (not(normalize-space($resolvedVariable)))
         then $spectitleValue
         else $resolvedVariable"
       />
     </fo:block>
-    
+
   </xsl:template>
     <xsl:template match="*[contains(@class,' topic/section ')]" mode="dita2xslfo:section-heading">
       <!-- Specialized section elements may override this rule to add
@@ -1449,18 +1395,14 @@ See the accompanying license.txt file for applicable licenses.
         </fo:block>
 -->
         <!--xsl:copy-of select="node()"/-->
-        <!-- edited by William on 2009-07-02 for indexterm bug:2815485 start -->
         <!--xsl:apply-templates select="descendant::opentopic-index:index.entry[not(parent::opentopic-index:index.entry)]"/-->
-        <!-- edited by William on 2009-07-02 for indexterm bug:2815485 end -->
     <!--/xsl:template-->
-    
-    <!-- added by William on 2009-07-02 for indexterm bug:2815485 start -->
+
     <xsl:template name="pullPrologIndexTerms">
         <xsl:apply-templates select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/prolog ')]
             //opentopic-index:index.entry[not(parent::opentopic-index:index.entry)]"/>
     </xsl:template>
-    <!-- added by William on 2009-07-02 for indexterm bug:2815485 end -->
-    
+
     <xsl:template match="*[contains(@class, ' topic/metadata ')]">
 <!--
         <fo:block xsl:use-attribute-sets="metadata">
@@ -1574,7 +1516,9 @@ See the accompanying license.txt file for applicable licenses.
                         </fo:inline>
                     </xsl:when>
                 </xsl:choose>
-                <xsl:text>: </xsl:text>
+                <xsl:call-template name="insertVariable">
+                  <xsl:with-param name="theVariableID" select="'#note-separator'"/>
+                </xsl:call-template>
             </fo:inline>
             <xsl:text>  </xsl:text>
             <xsl:apply-templates/>
@@ -1779,12 +1723,36 @@ See the accompanying license.txt file for applicable licenses.
         </fo:inline>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' topic/keyword ')]">
+  <xsl:template match="*[contains(@class,' topic/keyword ')]" name="topic.keyword">
+    <xsl:param name="keys" select="@keyref" as="attribute()?"/>
+    <xsl:param name="contents" as="node()*">
+      <xsl:variable name="target" select="key('id', substring(@href, 2))"/>
+      <xsl:choose>
+        <xsl:when test="not(normalize-space(.)) and $keys and $target/self::*[contains(@class,' topic/topic ')]">
+          <xsl:apply-templates select="$target/*[contains(@class, ' topic/title ')]/node()"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:param>
+    <xsl:variable name="topicref" select="key('map-id', substring(@href, 2))"/>
+    <xsl:choose>
+      <xsl:when test="$keys and @href and not($topicref/ancestor-or-self::*[@linking][1]/@linking = ('none', 'sourceonly'))">
+        <fo:basic-link xsl:use-attribute-sets="xref keyword">
+          <xsl:call-template name="commonattributes"/>
+          <xsl:call-template name="buildBasicLinkDestination"/>
+          <xsl:copy-of select="$contents"/>
+        </fo:basic-link>
+      </xsl:when>
+      <xsl:otherwise>
         <fo:inline xsl:use-attribute-sets="keyword">
-            <xsl:call-template name="commonattributes"/>
-            <xsl:apply-templates/>
+          <xsl:call-template name="commonattributes"/>
+          <xsl:copy-of select="$contents"/>
         </fo:inline>
-    </xsl:template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/ph ')]">
         <fo:inline xsl:use-attribute-sets="ph">
@@ -1979,6 +1947,9 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:call-template name="commonattributes"/>
         </fo:inline>
     </xsl:template>
+
+    <xsl:template match="*[contains(@class,' topic/foreign ')]"/>
+    <xsl:template match="*[contains(@class,' topic/unknown ')]"/>
 
     <xsl:template match="*[contains(@class,' topic/draft-comment ')]">
         <xsl:if test="$publishRequiredCleanup = 'yes' or $DRAFT='yes'">
@@ -2216,6 +2187,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class, ' bookmap/preface ')]" mode="determineTopicType">
         <xsl:text>topicPreface</xsl:text>
     </xsl:template>
+    <xsl:template match="*[contains(@class, ' bookmap/appendices ')]" mode="determineTopicType">
+      <xsl:text>topicAppendices</xsl:text>
+    </xsl:template>
     <xsl:template match="*[contains(@class, ' bookmap/part ')]" mode="determineTopicType">
         <xsl:text>topicPart</xsl:text>
     </xsl:template>
@@ -2285,14 +2259,9 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-    <!-- edited by William on 2009-09-18 for output bug #2860168 start-->
-    <!--xsl:template match="*[contains(@class, ' topic/data ')]">
-        <xsl:apply-templates/>
-      </xsl:template-->
     <xsl:template match="*[contains(@class, ' topic/data ')]"/>
     <xsl:template match="*[contains(@class, ' topic/data ')]" mode="insert-text"/>
     <xsl:template match="*[contains(@class, ' topic/data-about ')]"/>
-    <!-- edited by William on 2009-09-18 for output bug #2860168 end-->
 
     <exslf:function name="opentopic-func:determineTopicType">
       <xsl:variable name="topicType">
@@ -2300,5 +2269,5 @@ See the accompanying license.txt file for applicable licenses.
       </xsl:variable>
       <exslf:result select="string($topicType)"/>
     </exslf:function>
-    
+
 </xsl:stylesheet>

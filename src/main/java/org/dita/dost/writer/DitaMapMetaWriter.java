@@ -50,11 +50,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-
-/*
- * Created on 2011-04-14
- */
-
 /**
  * 
  * @author Jian Le Shen
@@ -151,10 +146,8 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
             reader.setContentHandler(this);
             reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
             reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-            //Edited by william on 2009-11-8 for ampbug:2893664 start
             reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
             reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
-            //Edited by william on 2009-11-8 for ampbug:2893664 end
         } catch (final Exception e) {
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
@@ -304,7 +297,6 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
         output.write("<"+elem.getNodeName());
         final NamedNodeMap attrMap = elem.getAttributes();
         for (int i = 0; i<attrMap.getLength(); i++){
-            //edited on 2010-08-04 for bug:3038941 start
             //get node name
             final String nodeName = attrMap.item(i).getNodeName();
             //escape entity to avoid entity resolving
@@ -313,7 +305,6 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
             output.write(" "+ nodeName
                     +"=\""+ nodeValue
                     +"\"");
-            //edited on 2010-08-04 for bug:3038941 end
         }
         output.write(">");
         final NodeList children = elem.getChildNodes();
@@ -380,7 +371,7 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
                         // if there is no generalized tag corresponding this tag
                         final Properties prop=new Properties();
                         prop.put("%1", name);
-                        logger.logError(MessageUtils.getMessage("DOTJ038E", prop).toString());
+                        logger.logError(MessageUtils.getInstance().getMessage("DOTJ038E", prop).toString());
                         break;
                     }
                     if(currentIndex.compareTo(nextIndex) > 0){
@@ -657,13 +648,13 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
                 final Properties prop = new Properties();
                 prop.put("%1", inputFile.getPath());
                 prop.put("%2", outputFile.getPath());
-                logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop).toString());
             }
             if(!outputFile.renameTo(inputFile)){
                 final Properties prop = new Properties();
                 prop.put("%1", inputFile.getPath());
                 prop.put("%2", outputFile.getPath());
-                logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop).toString());
             }
         } catch (final Exception e) {
             logger.logException(e);

@@ -219,7 +219,7 @@ See the accompanying license.txt file for applicable licenses.
          <xsl:with-param name="attrSet" select="concat('__align__', $imageAlign)"/>
          <xsl:with-param name="path" select="'../../cfg/fo/attrs/commons-attr.xsl'"/>
       </xsl:call-template>
-      <fo:external-graphic src="url({$href})" xsl:use-attribute-sets="image">
+      <fo:external-graphic src="url({$href})" xsl:use-attribute-sets="flag.image">
          <xsl:apply-templates select="suitesol:flagging-inside"/>
          <!--Setting image height if defined-->
          <xsl:if test="$height">

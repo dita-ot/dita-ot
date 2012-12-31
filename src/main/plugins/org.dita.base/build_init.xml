@@ -5,8 +5,6 @@
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <project name="ditaot-init">
     
-  <!--<import file="catalog-ant.xml"/>-->
-
 	<!-- Default maximum memory to give to forked Java processes.
 	
 	     Set this higher either in another Ant script or on the
@@ -35,7 +33,7 @@
   <property file="${dita.dir}/lib/configuration.properties"/>
 		
   <xmlcatalog id="dita.catalog">
-    <catalogpath path="${dita.dir}/catalog-dita.xml"/>
+    <catalogpath path="${dita.plugin.org.dita.base.dir}/catalog-dita.xml"/>
   </xmlcatalog>
 
 	<!-- Determine the Java architecture and set the JVM arguments
@@ -105,6 +103,7 @@
     <classpath refid="dost.jar.path" />
   </taskdef>
 
+  <!-- Deprecated -->
   <taskdef name="ext-pipeline"
     classname="org.dita.dost.invoker.ExtensibleAntInvoker">
     <classpath refid="dost.jar.path" />
@@ -115,7 +114,6 @@
     <classpath refid="dost.jar.path" />
   </taskdef>
 
-  <!-- Add by Alan to refacter:URIResolver Date2009-08-07 -->
   <taskdef name="config-URIResolver"
   	classname="org.dita.dost.resolver.URIResolverConfigTask">
   	<classpath refid="dost.jar.path"/>
@@ -151,17 +149,20 @@
   <property name="base.temp.dir" location="${basedir}/temp"/>
   <property name="dita.temp.dir" location="${base.temp.dir}${file.separator}temp${current.date}" />
   <property name="output.dir" location="${basedir}/out" />
+  <!-- Deprecated -->
   <property name="dita.script.dir"
-    location="${dita.dir}${file.separator}xsl" />
+    location="${dita.plugin.org.dita.base.dir}${file.separator}xsl" />
+  <!-- Deprecated -->
   <property name="dita.resource.dir"
-    location="${dita.dir}${file.separator}resource" />
+    location="${dita.plugin.org.dita.base.dir}${file.separator}resource" />
   <property environment="env" />
+  <!-- Deprecated -->
   <property name="dita.empty" value="" />
+  <!-- Deprecated -->
   <property name="args.message.file"
-    location="${dita.dir}${file.separator}resource${file.separator}messages.xml" />
+    location="${dita.plugin.org.dita.base.dir}${file.separator}resource${file.separator}messages.xml" />
   <!-- property values end -->
 
-  <!-- Changed by Alan to refacter:URIResolver Date2009-08-07 -->
   <target name="build-init"
     depends="start-process, init-logger, init-URIResolver, use-init, check-arg, output-msg" />
     
@@ -173,7 +174,6 @@
     <config-logger />
   </target>
   
-  <!-- Add by Alan to refacter:URIResolver Date2009-08-07 -->
   <target name="init-URIResolver">
   	<config-URIResolver tempdir="${dita.temp.dir}"/>
   </target>
@@ -206,13 +206,16 @@
   </target>
 	
   <!-- property value validation begin -->
-  <target name="check-arg" depends="use-init"
+  <target name="check-arg"
     description="Validate and init input arguments">
     <!-- begin to check input parameters -->
     <dita-ot-fail id="DOTA069F">
       <condition>
         <and>
           <isset property="args.input"/>
+          <not>
+            <isset property="args.input.dir"/>
+          </not>
           <not>
             <available file="${args.input}" type="file"/>
           </not>
@@ -223,26 +226,23 @@
     <dita-ot-fail id="DOTA069F">
       <condition>
         <and>
-          <isset property="dita.input"/>
-          <isset property="dita.input.dirname"/>
+          <isset property="args.input"/>
+          <isset property="args.input.dir"/>
           <not>
-            <available file="${dita.input}" filepath="${dita.input.dirname}" type="file"/>
+            <or>
+              <available file="${args.input}" type="file"/>
+              <available file="${args.input.dir}/${args.input}" type="file"/>
+            </or>
           </not>
         </and>
       </condition>
-      <param name="1" location="${dita.input.dirname}/${dita.input}"/>
+      <param name="1" location="${args.input}"/>
     </dita-ot-fail>
     <dita-ot-fail id="DOTA002F">
       <condition>
         <and>
           <not>
             <isset property="args.input"/>
-          </not>
-          <not>
-            <and>
-              <isset property="dita.input"/>
-              <isset property="dita.input.dirname"/>
-            </and>
           </not>
         </and>
       </condition>
@@ -297,23 +297,6 @@
 
     <!-- begin to init required parameters -->
 
-    <condition property="msg.deprecate">
-      <and>
-        <not>
-          <isset property="args.input" />
-        </not>
-        <isset property="dita.input" />
-        <isset property="dita.input.dirname" />
-      </and>
-    </condition>
-
-    <condition property="args.input"
-      value="${dita.input.dirname}${file.separator}${dita.input}">
-      <not>
-        <isset property="args.input" />
-      </not>
-    </condition>
-
     <dita-ot-fail id="DOTA012W">
       <condition>
         <isset property="dita.input.valfile" />
@@ -325,55 +308,6 @@
       <and>
         <isset property="args.filter"/>
         <not><isset property="dita.input.valfile"/></not>
-      </and>
-    </condition>
-
-    <dita-ot-fail id="DOTA012W">
-      <condition>
-        <isset property="dita.extname"/>
-      </condition>
-      <param name="1" value="dita.extname"/>
-      <param name="2" value="dita.ext"/>
-    </dita-ot-fail>
-    <condition property="dita.ext" value=".xml">
-      <and>
-        <isset property="dita.extname" />
-        <contains string="${dita.extname}" substring="xml"/>
-      </and>
-    </condition>
-    <condition property="dita.ext" value=".dita">
-      <and>
-        <isset property="dita.extname" />
-        <contains string="${dita.extname}" substring="dita"/>
-      </and>
-    </condition>
-    <condition property="dita.ext" value=".xml">
-      <not>
-        <isset property="dita.ext"/>
-      </not>
-    </condition>
-    <dita-ot-fail id="DOTA004F">
-      <condition>
-        <not>
-          <or>
-            <contains string="${dita.ext}" substring=".dita" />
-            <contains string="${dita.ext}" substring=".xml" />
-          </or>
-        </not>
-      </condition>
-      <param name="1" value="${dita.ext}"/>
-    </dita-ot-fail>
-    <!-- Declare dita.extname default for backwards-compatibility, to be removed in future releases. -->
-    <condition property="dita.extname" value="xml">
-      <and>
-        <not><isset property="dita.extname"/></not>
-        <equals arg1="${dita.ext}" arg2=".xml"/>
-      </and>
-    </condition>
-    <condition property="dita.extname" value="dita">
-      <and>
-        <not><isset property="dita.extname"/></not>
-        <equals arg1="${dita.ext}" arg2=".dita"/>
       </and>
     </condition>
 
@@ -393,25 +327,24 @@
       </and>
     </condition>
   	
-  	<!-- Added on 2010-08-24 for bug:2994593 enable grammar pool caching by default start-->
   	<condition property="args.grammar.cache"
   	      value="yes">
   		      <not>
   		        <isset property="args.grammar.cache" />
   		      </not>
   	</condition> 	
-  	<!-- Added on 2010-08-24 for bug:2994593 enable grammar pool caching by default end-->
   	
-  	<!-- Added on 2010-11-16 for bug:3086552 enable system id setting in XMLReader.parse start-->
   	<condition property="args.xml.systemid.set"
   	      value="yes">
   		      <not>
   		        <isset property="args.xml.systemid.set" />
   		      </not>
   	</condition> 	
-  	<!-- Added on 2010-11-16 for bug:3086552 enable system id setting in XMLReader.parse end-->
   	
     <basename property="dita.input.filename" file="${args.input}" />
+    <condition property="dita.input.dirname" value="${args.input.dir}">
+      <isset property="args.input.dir"/>
+    </condition>
     <dirname property="dita.input.dirname" file="${args.input}" />
     <basename property="dita.map.filename.root"
       file="${dita.input.filename}" suffix=".ditamap" />
@@ -530,13 +463,6 @@
   	   </not>
   	</condition>
   	
-  	<!-- Move the outer.transform to build_general.xml -->
-	<!--
-  	<condition property="outer.transform">
-	   <equals arg1="${generate.copy.outer}" arg2="2"></equals>
-	</condition>	
-    -->
-    
     <condition property="inner.transform">
 	   <or>
 	 	 <equals arg1="${generate.copy.outer}" arg2="1"></equals>
@@ -553,6 +479,7 @@
     <echo level="info">* basedir = ${basedir}</echo>
     <echo level="info">* dita.dir = ${dita.dir}</echo>
     <echo level="info">* input = ${args.input}</echo>
+    <echo level="info">* inputdir = ${dita.input.dirname}</echo>
     <echo level="info">* transtype = ${transtype}</echo>
     <echo level="info">* tempdir = ${dita.temp.dir}</echo>
     <echo level="info">* outputdir = ${output.dir}</echo>
@@ -567,12 +494,8 @@
   	<echo level="info">*****************************************************************</echo>
   </target>
 
-  <target name="output-msg" depends="output-deprecated-msg, output-css-warn-message"/>
-  
-  <target name="output-deprecated-msg" if="msg.deprecate">
-    <dita-ot-echo id="DOTA005W" />
-  </target>
-  
+  <target name="output-msg" depends="output-css-warn-message"/>
+    
   <target name="output-css-warn-message" if="args.csspath.absolute">
     <dita-ot-echo id="DOTA006W" />
   </target>

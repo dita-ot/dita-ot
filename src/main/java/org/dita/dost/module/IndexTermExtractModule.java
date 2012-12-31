@@ -181,12 +181,10 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
                         .toString());
 
                 try {
-                    //removed by Alan on Date:2009-11-02 for Work Item:#1590 start
                     /*if(!new File(baseInputDir, target).exists()){
 						logger.logWarn("Cannot find file "+ target);
 						continue;
 					}*/
-                    //removed by Alan on Date:2009-11-02 for Work Item:#1590 end
                     inputStream = new FileInputStream(
                             new File(baseInputDir, target));
                     xmlReader.parse(new InputSource(inputStream));
@@ -196,7 +194,7 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
                     final StringBuffer buff=new StringBuffer();
                     String msg = null;
                     params.put("%1", target);
-                    msg = MessageUtils.getMessage("DOTJ013E", params).toString();
+                    msg = MessageUtils.getInstance().getMessage("DOTJ013E", params).toString();
                     logger.logError(buff.append(msg).append(e.getMessage()).toString());
                 }
             }
@@ -216,12 +214,10 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
 
                 ditamapIndexTermReader.setMapPath(mapPathFromInputMap);
                 try {
-                    //removed by Alan on Date:2009-11-02 for Work Item:#1590 start
                     /*if(!new File(baseInputDir, ditamap).exists()){
 						logger.logWarn("Cannot find file "+ ditamap);
 						continue;
 					}*/
-                    //end by Alan on Date:2009-11-02 for Work Item:#1590 start
                     inputStream = new FileInputStream(new File(baseInputDir,
                             ditamap));
                     xmlReader.parse(new InputSource(inputStream));
@@ -230,7 +226,7 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
                     final Properties params = new Properties();
                     String msg = null;
                     params.put("%1", ditamap);
-                    msg = MessageUtils.getMessage("DOTJ013E", params).toString();
+                    msg = MessageUtils.getInstance().getMessage("DOTJ013E", params).toString();
                     logger.logError(msg);
                     logger.logException(e);
                 }

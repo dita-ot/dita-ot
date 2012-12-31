@@ -79,10 +79,10 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter {
     }
 
     /**
-     * Output the given indexterm into the PrintWriter.
+     * Output the given indexterm into the XML writer.
      * 
-     * @param term
-     * @param printWriter
+     * @param term term to serialize
+     * @param serializer XML output to write to
      * @throws SAXException
      */
     private void outputIndexTerm(final IndexTerm term, final XMLSerializer serializer) throws SAXException {
@@ -131,11 +131,7 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter {
     /**
      * find the targets in its subterms when the current term doesn't have any target
      * 
-     * @param term
-     * The current IndexTerm instance
-     * 
-     * @param targets
-     * The list of targets to store the result found
+     * @param term The current IndexTerm instance
      */
     private void findTargets(final IndexTerm term) {
         final List<IndexTerm> subTerms = term.getSubTerms();
@@ -145,7 +141,6 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter {
                 final IndexTerm subTerm = subTerms.get(i);
                 subTargets = subTerm.getTargetList();
                 if (subTargets != null && !subTargets.isEmpty()){
-                    // edited by William on 2009-07-13 for indexterm bug:2819853 start
                     //findTargets(subTerm);
                     //add targets(child term)
                     term.addTargets(subTerm.getTargetList());
@@ -156,7 +151,6 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter {
                 }
                 //add target to parent indexterm
                 term.addTargets(subTerm.getTargetList());
-                // edited by William on 2009-07-13 for indexterm bug:2819853 end
             }
 
         }

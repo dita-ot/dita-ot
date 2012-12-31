@@ -29,12 +29,7 @@
     <reason>Invalid DITA topic extension '%1'.</reason>
     <response>Supported values are '.dita' and '.xml'.</response>
   </message>
-  
-  <message id="DOTA005W" type="WARN">
-    <reason>The Ant parameters 'dita.input' and 'dita.input.dirname' are deprecated.</reason>
-    <response>Please use the parameter 'args.input' instead.</response>
-  </message>
-  
+    
   <message id="DOTA006W" type="WARN">
     <reason>Absolute paths on the local file system are not supported for the CSSPATH parameter.</reason>
     <response>Please use a relative path or full URI instead.</response>
@@ -357,7 +352,7 @@
   
   <!-- Long term, would like to split this into two messages. One for file not found, another for file outside the scope of the map. -->
   <message id="DOTJ051E" type="ERROR">
-    <reason>Unable to load target for coderef "%1". Found in file="%2", element="%3".</reason>
+    <reason>Unable to load target for coderef "%1".</reason>
     <response></response>
   </message>
 
@@ -369,6 +364,16 @@
   <message id="DOTJ053W" type="WARN">
     <reason>Input file '%1' is not valid DITA file name.</reason>
     <response>Please check '%1' to see if it is correct. The extensions ".dita" or ".xml" are supported for DITA topics.</response>
+  </message>
+  
+  <message id="DOTJ054E" type="ERROR">
+    <reason>Unable to parse invalid %1 attribute value "%2"</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTJ055E" type="ERROR">
+    <reason>Invalid key name "%1".</reason>
+    <response></response>
   </message>
   
   <!-- End of Java Messages -->
@@ -728,6 +733,11 @@
   <message id="DOTX067E" type="ERROR">
     <reason>No string named '%1' was found for language '%2'.</reason>
     <response>Add a mapping for the string '%1'.</response>
+  </message>
+  
+  <message id="DOTX068W" type="WARN">
+    <reason>A topicref element that references a map contains child topicref elements.</reason>
+    <response>Child topicref elements are ignored.</response>
   </message>
 
   <!-- End of XSL Messages --> 

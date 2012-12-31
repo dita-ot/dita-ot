@@ -85,13 +85,13 @@ public class TestStringUtils {
     @Test
     public void testGetAscii() {
         assertEquals("\\'66\\'6f\\'6f", StringUtils.getAscii("foo"));
-        final byte[] nonAscii = "äöå".getBytes(Charset.defaultCharset());
+        final byte[] nonAscii = "\u00e4\u00f6\u00e5".getBytes(Charset.defaultCharset());
         final StringBuilder buf = new StringBuilder();
         for (final byte b: nonAscii) {
             final String s = Integer.toHexString(b);
             buf.append('\\').append('\'').append(s.substring(s.length() - 2));
         }
-        assertEquals(buf.toString(), StringUtils.getAscii("äöå"));
+        assertEquals(buf.toString(), StringUtils.getAscii("\u00e4\u00f6\u00e5"));
     }
 
     @Test
@@ -151,6 +151,15 @@ public class TestStringUtils {
         final Locale expected3 = new Locale("zh","cn","gb2312");
         final Locale result3 = StringUtils.getLocale("zh-cn-gb2312");
         assertEquals(expected3, result3);
+        assertNull(StringUtils.getLocale("xx-1234567890"));
+        try {
+            assertNull(StringUtils.getLocale("xx-1234567890-xx"));
+            fail();
+        } catch (final NullPointerException e) {}
+        try {
+            StringUtils.getLocale(null);
+            fail();
+        } catch (final NullPointerException e) {}
     }
 
     @Test

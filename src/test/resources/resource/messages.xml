@@ -345,6 +345,11 @@
     <response>Please check the file &apos;%1&apos; to see if the file is a valid target. The extensions &quot;.dita&quot; or &quot;.xml&quot; are supported for DITA topics.</response>
   </message>
   
+  <message id="DOTJ054E" type="ERROR">
+    <reason>Unable to parse invalid %1 attribute value "%2"</reason>
+    <response></response>
+  </message>
+  
   <!-- End of Java Messages -->
     
   <!-- Start of XSL Messages -->  

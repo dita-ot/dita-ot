@@ -33,8 +33,8 @@ public final class CatalogUtils {
     private static DITAOTJavaLogger logger = new DITAOTJavaLogger();
     /**apache catalogResolver.*/
     private static CatalogResolver catalogResolver = null;
-    /**directory to find catalog-dita.xml.*/
-    private static String ditaDir;
+    /** Absolute directory to find catalog-dita.xml.*/
+    private static File ditaDir;
     /**
      * Instances should NOT be constructed in standard programming.
      */
@@ -44,24 +44,24 @@ public final class CatalogUtils {
 
     /**
      * Parse the catalog file to get catalog map.
-     * @param ditaDir ditaDir to find catalog-dita.xml
+     * @param ditaDir absolute path to directory to find catalog-dita.xml
      * @return catalog map
      * @deprecated use Apache Commons Catalog Resolver instead
      */
     @Deprecated
-    public static synchronized HashMap<String, String> getCatalog(final String ditaDir) {
+    public static synchronized HashMap<String, String> getCatalog(final File ditaDir) {
         if (map != null) {
             return map;
         }
 
-        final String catalogFilePath = (ditaDir == null) ? FILE_NAME_CATALOG : ditaDir + File.separator + FILE_NAME_CATALOG;
+        final File catalogFilePath = (ditaDir == null) ? new File(FILE_NAME_CATALOG) : new File(ditaDir, FILE_NAME_CATALOG);
 
         map = new HashMap<String, String>();
-        final CatalogParser parser = new CatalogParser(map, ditaDir);
+        final CatalogParser parser = new CatalogParser(map, ditaDir.getAbsolutePath());
         try {
             final XMLReader reader = StringUtils.getXMLReader();
             reader.setContentHandler(parser);
-            reader.parse(catalogFilePath);
+            reader.parse(catalogFilePath.toURI().toASCIIString());
         } catch (final Exception e) {
             logger.logException(e);
         }
@@ -73,19 +73,18 @@ public final class CatalogUtils {
      * Set directory to find catalog-dita.xml.
      * @param ditaDir ditaDir
      */
-    public static synchronized void setDitaDir(final String ditaDir){
+    public static synchronized void setDitaDir(final File ditaDir){
         catalogResolver=null;
         CatalogUtils.ditaDir=ditaDir;
     }
     /**
      * Get the current set directory to find catalog-dita.xml.
      * @return ditaDir, empty string if ditaDir is set to null or "".
+     * @deprecated access ditaDir directly
      */
-    public static String getDitaDir(){
-        if(StringUtils.isEmptyString(ditaDir)){
-            return "";
-        }
-        return ditaDir+File.separator;
+    @Deprecated
+    public static File getDitaDir(){
+        return ditaDir;
     }
     /**
      * Get CatalogResolver.
@@ -101,11 +100,11 @@ public final class CatalogUtils {
             //manager.setVerbosity(10);
             catalogResolver = new CatalogResolver(manager);
 
-            final String catalogFilePath = getDitaDir() + FILE_NAME_CATALOG;
+            final File catalogFilePath = new File(ditaDir, FILE_NAME_CATALOG);
 
             final Catalog catalog = catalogResolver.getCatalog();
             try {
-                catalog.parseCatalog(catalogFilePath);
+                catalog.parseCatalog(catalogFilePath.toURI().toURL());
             } catch (final Exception e) {
                 logger.logException(e);
             }

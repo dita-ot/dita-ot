@@ -89,10 +89,8 @@ public final class FilterUtils {
                                 atts.getValue(ATTRIBUTE_NAME_PRODUCT))
                                 || checkExclude(ATTRIBUTE_NAME_OTHERPROPS,
                                         atts.getValue(ATTRIBUTE_NAME_OTHERPROPS))
-                                        //Added by William on 2010-07-16 for bug:3030317 start
                                         || checkExclude(ATTRIBUTE_NAME_PROPS,
                                                 atts.getValue(ATTRIBUTE_NAME_PROPS));
-        //Added by William on 2010-07-16 for bug:3030317 end
 
         if(extProps == null){
             return ret;
@@ -311,7 +309,7 @@ public final class FilterUtils {
     private void showInfoOfNoRuleMapping(final FilterKey notMappingKey){
         final Properties prop=new Properties();
         prop.put("%1", notMappingKey.toString());
-        logger.logInfo(MessageUtils.getMessage("DOTJ031I", prop).toString());
+        logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ031I", prop).toString());
     }
     private boolean alreadyShowed(final FilterKey notMappingKey){
         if(!notMappingRules.contains(notMappingKey)){

@@ -41,12 +41,6 @@
 
 <!--template for xref-->
 <xsl:template match="*[contains(@class,' topic/xref ')]" name="topic.xref">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-  <xsl:call-template name="start-flags-and-rev">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-  </xsl:call-template>
   <xsl:choose>
     <xsl:when test="@href and normalize-space(@href)!=''">
       <xsl:apply-templates select="." mode="add-xref-highlight-at-start"/>
@@ -94,9 +88,6 @@
     </xsl:otherwise>
   </xsl:choose>
     
-  <xsl:call-template name="end-flags-and-rev">
-    <xsl:with-param name="flagrules" select="$flagrules"/>
-  </xsl:call-template>
 </xsl:template>
 
 <!--create breadcrumbs for each grouping of ancestor links; include previous, next, and ancestor links, sorted by linkpool/related-links parent. If there is more than one linkpool that contains ancestors, multiple breadcrumb trails will be generated-->
@@ -342,17 +333,18 @@ Children are displayed in a numbered list, with the target title as the cmd and 
     and process the rest of the href -->
     <!-- for local links respect dita.extname extension 
       and for peer links accept both .xml and .dita bug:3059256-->
-    <xsl:when test="((not(@scope) or @scope='local') and contains(@href,$DITAEXT)) or
-      (@scope='peer' and (contains(@href,'.xml') or contains(@href,'.dita')))">
-      <!-- Added this variable to support href values such as "com.example.dita.stuff/topic.dita". These
-           previously generated the output extension after the first .dita -->
-      <xsl:variable name="hrefBeforeExtension">
-        <xsl:choose>
-          <xsl:when test="contains(@href,concat($DITAEXT,'#'))"><xsl:value-of select="substring-before(@href,concat($DITAEXT,'#'))"/></xsl:when>
-          <xsl:otherwise><xsl:apply-templates select="." mode="parseHrefUptoExtension"/></xsl:otherwise>
-        </xsl:choose>
-      </xsl:variable>
-      <xsl:value-of select="$hrefBeforeExtension"/><xsl:value-of select="$OUTEXT"/><xsl:call-template name="parsehref"><xsl:with-param name="href" select="substring-after(@href,concat($hrefBeforeExtension,$DITAEXT))"/></xsl:call-template>
+    <xsl:when test="(not(@scope) or @scope='local' or @scope='peer') and (not(@format) or @format='dita' or @format='DITA')">
+      <xsl:call-template name="replace-extension">
+        <xsl:with-param name="filename" select="@href"/>
+        <xsl:with-param name="extension" select="$OUTEXT"/>
+        <xsl:with-param name="ignore-fragment" select="true()"/>
+      </xsl:call-template>
+      <xsl:if test="contains(@href, '#')">
+        <xsl:text>#</xsl:text>
+        <xsl:call-template name="parsehref">
+          <xsl:with-param name="href" select="substring-after(@href, '#')"/>
+        </xsl:call-template>
+      </xsl:if>
     </xsl:when>
     <xsl:otherwise>
       <xsl:apply-templates select="." mode="ditamsg:unknown-extension"/>
@@ -376,38 +368,31 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 
 <!--breadcrumb template: next, prev-->
 <xsl:template match="*[contains(@class, ' topic/link ')][@role='next' or @role='previous']" mode="breadcrumb">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-  <xsl:call-template name="start-flags-and-rev">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-  </xsl:call-template>
-          <a>
-             <xsl:call-template name="commonattributes"/>
-             <xsl:apply-templates select="." mode="add-linking-attributes"/>
-             <xsl:apply-templates select="." mode="add-title-as-hoverhelp"/>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+  <a>
+    <xsl:call-template name="commonattributes"/>
+    <xsl:apply-templates select="." mode="add-linking-attributes"/>
+    <xsl:apply-templates select="." mode="add-title-as-hoverhelp"/>
 
-             <!-- Allow for unknown metadata (future-proofing) -->
-             <xsl:apply-templates select="*[contains(@class,' topic/data ') or contains(@class,' topic/foreign ')]"/>
+    <!-- Allow for unknown metadata (future-proofing) -->
+    <xsl:apply-templates select="*[contains(@class,' topic/data ') or contains(@class,' topic/foreign ')]"/>
 
-          <!--use string as output link text for now, use image eventually-->
-          <xsl:choose>
-          <xsl:when test="@role='next'">
-               <xsl:call-template name="getString">
-                    <xsl:with-param name="stringName" select="'Next topic'"/>
-                    </xsl:call-template>
-          </xsl:when>
-          <xsl:when test="@role='previous'">
-               <xsl:call-template name="getString">
-                    <xsl:with-param name="stringName" select="'Previous topic'"/>
-                    </xsl:call-template>
-          </xsl:when>
-          <xsl:otherwise><!--both role values tested - no otherwise--></xsl:otherwise>
-          </xsl:choose>
-       </a>
-          <xsl:call-template name="end-flags-and-rev">
-            <xsl:with-param name="flagrules" select="$flagrules"/>
-          </xsl:call-template>
+    <!--use string as output link text for now, use image eventually-->
+    <xsl:choose>
+      <xsl:when test="@role='next'">
+        <xsl:call-template name="getString">
+          <xsl:with-param name="stringName" select="'Next topic'"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:when test="@role='previous'">
+        <xsl:call-template name="getString">
+          <xsl:with-param name="stringName" select="'Previous topic'"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise><!--both role values tested - no otherwise--></xsl:otherwise>
+    </xsl:choose>
+  </a>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
 
 <!--prereq template-->
@@ -468,91 +453,77 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 
 <!--basic child processing-->
 <xsl:template match="*[contains(@class, ' topic/link ')][@role='child' or @role='descendant']" priority="2" name="topic.link_child">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
+  <xsl:variable name="el-name">
+    <xsl:choose>
+      <xsl:when test="contains(../@class,' topic/linklist ')">div</xsl:when>
+      <xsl:otherwise>li</xsl:otherwise>
+    </xsl:choose>
   </xsl:variable>
-   <xsl:variable name="el-name">
-       <xsl:choose>
-           <xsl:when test="contains(../@class,' topic/linklist ')">div</xsl:when>
-           <xsl:otherwise>li</xsl:otherwise>
-       </xsl:choose>
-   </xsl:variable>
-   <xsl:element name="{$el-name}">
-       <xsl:attribute name="class">ulchildlink</xsl:attribute>
-       <xsl:call-template name="commonattributes">
-         <xsl:with-param name="default-output-class" select="'ulchildlink'"/>
-       </xsl:call-template>
-       <!-- Allow for unknown metadata (future-proofing) -->
-       <xsl:apply-templates select="*[contains(@class,' topic/data ') or contains(@class,' topic/foreign ')]"/>
-       <xsl:call-template name="start-flags-and-rev">
-         <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-       </xsl:call-template>
-     <strong>
-     <xsl:apply-templates select="." mode="related-links:unordered.child.prefix"/>
-     <xsl:apply-templates select="." mode="add-link-highlight-at-start"/>
-     <a>
-       <xsl:apply-templates select="." mode="add-linking-attributes"/>
-       <xsl:apply-templates select="." mode="add-hoverhelp-to-child-links"/>
+  <xsl:element name="{$el-name}">
+    <xsl:attribute name="class">ulchildlink</xsl:attribute>
+    <xsl:call-template name="commonattributes">
+      <xsl:with-param name="default-output-class" select="'ulchildlink'"/>
+    </xsl:call-template>
+    <!-- Allow for unknown metadata (future-proofing) -->
+    <xsl:apply-templates select="*[contains(@class,' topic/data ') or contains(@class,' topic/foreign ')]"/>
+    <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+    <strong>
+      <xsl:apply-templates select="." mode="related-links:unordered.child.prefix"/>
+      <xsl:apply-templates select="." mode="add-link-highlight-at-start"/>
+      <a>
+        <xsl:apply-templates select="." mode="add-linking-attributes"/>
+        <xsl:apply-templates select="." mode="add-hoverhelp-to-child-links"/>
 
-          <!--use linktext as linktext if it exists, otherwise use href as linktext-->
-          <xsl:choose>
+        <!--use linktext as linktext if it exists, otherwise use href as linktext-->
+        <xsl:choose>
           <xsl:when test="*[contains(@class, ' topic/linktext ')]"><xsl:apply-templates select="*[contains(@class, ' topic/linktext ')]"/></xsl:when>
           <xsl:otherwise><!--use href--><xsl:call-template name="href"/></xsl:otherwise>
-          </xsl:choose>
+        </xsl:choose>
       </a>
-     <xsl:apply-templates select="." mode="add-link-highlight-at-end"/>
-     </strong>
-     <xsl:call-template name="end-flags-and-rev">
-       <xsl:with-param name="flagrules" select="$flagrules"/>
-     </xsl:call-template>
-     <br/><xsl:value-of select="$newline"/>
-     <!--add the description on the next line, like a summary-->
-     <xsl:apply-templates select="*[contains(@class, ' topic/desc ')]"/>
-   </xsl:element><xsl:value-of select="$newline"/>
+      <xsl:apply-templates select="." mode="add-link-highlight-at-end"/>
+    </strong>
+    <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
+    <br/><xsl:value-of select="$newline"/>
+    <!--add the description on the next line, like a summary-->
+    <xsl:apply-templates select="*[contains(@class, ' topic/desc ')]"/>
+  </xsl:element><xsl:value-of select="$newline"/>
 </xsl:template>
 
 
 <!--ordered child processing-->
 <xsl:template match="*[@collection-type='sequence']/*[contains(@class, ' topic/link ')][@role='child' or @role='descendant']" priority="3" name="topic.link_orderedchild">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
+  <xsl:variable name="el-name">
+    <xsl:choose>
+      <xsl:when test="contains(../@class,' topic/linklist ')">div</xsl:when>
+      <xsl:otherwise>li</xsl:otherwise>
+    </xsl:choose>
   </xsl:variable>
-    <xsl:variable name="el-name">
-        <xsl:choose>
-            <xsl:when test="contains(../@class,' topic/linklist ')">div</xsl:when>
-            <xsl:otherwise>li</xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:element name="{$el-name}">
-       <xsl:attribute name="class">olchildlink</xsl:attribute>
-       <xsl:call-template name="commonattributes">
-         <xsl:with-param name="default-output-class" select="'olchildlink'"/>
-       </xsl:call-template>
-       <!-- Allow for unknown metadata (future-proofing) -->
-       <xsl:apply-templates select="*[contains(@class,' topic/data ') or contains(@class,' topic/foreign ')]"/>
-       <xsl:call-template name="start-flags-and-rev">
-         <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-       </xsl:call-template>
-     <xsl:apply-templates select="." mode="related-links:ordered.child.prefix"/>
-     <xsl:apply-templates select="." mode="add-link-highlight-at-start"/>
-     <a>
-          <xsl:apply-templates select="." mode="add-linking-attributes"/>
-          <xsl:apply-templates select="." mode="add-hoverhelp-to-child-links"/>
+  <xsl:element name="{$el-name}">
+    <xsl:attribute name="class">olchildlink</xsl:attribute>
+    <xsl:call-template name="commonattributes">
+      <xsl:with-param name="default-output-class" select="'olchildlink'"/>
+    </xsl:call-template>
+    <!-- Allow for unknown metadata (future-proofing) -->
+    <xsl:apply-templates select="*[contains(@class,' topic/data ') or contains(@class,' topic/foreign ')]"/>
+    <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+    <xsl:apply-templates select="." mode="related-links:ordered.child.prefix"/>
+    <xsl:apply-templates select="." mode="add-link-highlight-at-start"/>
+    <a>
+      <xsl:apply-templates select="." mode="add-linking-attributes"/>
+      <xsl:apply-templates select="." mode="add-hoverhelp-to-child-links"/>
 
-          <!--use linktext as linktext if it exists, otherwise use href as linktext-->
-          <xsl:choose>
-          <xsl:when test="*[contains(@class, ' topic/linktext ')]"><xsl:apply-templates select="*[contains(@class, ' topic/linktext ')]"/></xsl:when>
-          <xsl:otherwise><!--use href--><xsl:call-template name="href"/></xsl:otherwise>
-          </xsl:choose>
-      </a>
-     <xsl:apply-templates select="." mode="add-link-highlight-at-end"/>
-     <xsl:call-template name="end-flags-and-rev">
-       <xsl:with-param name="flagrules" select="$flagrules"/>
-     </xsl:call-template>
-      <br/><xsl:value-of select="$newline"/>
-     <!--add the description on a new line, unlike an info, to avoid issues with punctuation (adding a period)-->
-     <xsl:apply-templates select="*[contains(@class, ' topic/desc ')]"/>
-   </xsl:element><xsl:value-of select="$newline"/>
+      <!--use linktext as linktext if it exists, otherwise use href as linktext-->
+      <xsl:choose>
+        <xsl:when test="*[contains(@class, ' topic/linktext ')]"><xsl:apply-templates select="*[contains(@class, ' topic/linktext ')]"/></xsl:when>
+        <xsl:otherwise><!--use href--><xsl:call-template name="href"/></xsl:otherwise>
+      </xsl:choose>
+    </a>
+    <xsl:apply-templates select="." mode="add-link-highlight-at-end"/>
+    <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
+    <br/><xsl:value-of select="$newline"/>
+    <!--add the description on a new line, unlike an info, to avoid issues with punctuation (adding a period)-->
+    <xsl:apply-templates select="*[contains(@class, ' topic/desc ')]"/>
+  </xsl:element><xsl:value-of select="$newline"/>
 </xsl:template>
 
 <xsl:template match="*[contains(@class, ' topic/link ')]" name="topic.link">
@@ -588,30 +559,23 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 
 <!--creating the actual link-->
 <xsl:template name="makelink">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
   <xsl:call-template name="linkdupinfo"/>
-  <xsl:call-template name="start-flags-and-rev">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-  </xsl:call-template>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <xsl:apply-templates select="." mode="add-link-highlight-at-start"/>
-          <a>
-             <xsl:call-template name="commonattributes"/>
-             <xsl:apply-templates select="." mode="add-linking-attributes"/>
-             <xsl:apply-templates select="." mode="add-desc-as-hoverhelp"/>
-             <!-- Allow for unknown metadata (future-proofing) -->
-             <xsl:apply-templates select="*[contains(@class,' topic/data ') or contains(@class,' topic/foreign ')]"/>
-          <!--use linktext as linktext if it exists, otherwise use href as linktext-->
-          <xsl:choose>
-          <xsl:when test="*[contains(@class, ' topic/linktext ')]"><xsl:apply-templates select="*[contains(@class, ' topic/linktext ')]"/></xsl:when>
-          <xsl:otherwise><!--use href--><xsl:call-template name="href"/></xsl:otherwise>
-          </xsl:choose>
-       </a>
-          <xsl:apply-templates select="." mode="add-link-highlight-at-end"/>
-          <xsl:call-template name="end-flags-and-rev">
-            <xsl:with-param name="flagrules" select="$flagrules"/>
-          </xsl:call-template>
+  <a>
+    <xsl:call-template name="commonattributes"/>
+    <xsl:apply-templates select="." mode="add-linking-attributes"/>
+    <xsl:apply-templates select="." mode="add-desc-as-hoverhelp"/>
+    <!-- Allow for unknown metadata (future-proofing) -->
+    <xsl:apply-templates select="*[contains(@class,' topic/data ') or contains(@class,' topic/foreign ')]"/>
+    <!--use linktext as linktext if it exists, otherwise use href as linktext-->
+    <xsl:choose>
+      <xsl:when test="*[contains(@class, ' topic/linktext ')]"><xsl:apply-templates select="*[contains(@class, ' topic/linktext ')]"/></xsl:when>
+      <xsl:otherwise><!--use href--><xsl:call-template name="href"/></xsl:otherwise>
+    </xsl:choose>
+  </a>
+  <xsl:apply-templates select="." mode="add-link-highlight-at-end"/>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
 
 <!--process linktext elements by explicitly ignoring them and applying templates to their content; otherwise flagged as unprocessed content by the dit2htm transform-->
@@ -660,15 +624,10 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 </xsl:template>
 <xsl:template match="*" mode="processlinklist">
          <xsl:param name="default-list-type" select="'linklist'"/>
-         <xsl:variable name="flagrules">
-           <xsl:call-template name="getrules"/>
-         </xsl:variable>
          <xsl:call-template name="commonattributes">
             <xsl:with-param name="default-output-class" select="$default-list-type"/>
          </xsl:call-template>
-         <xsl:call-template name="start-flagit">
-           <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-         </xsl:call-template>
+         <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
          <xsl:apply-templates select="*[contains(@class, ' topic/title ')]"/>
          <xsl:apply-templates select="*[contains(@class,' topic/desc ')]"/>
          <xsl:for-each select="*[contains(@class,' topic/linklist ')]|*[contains(@class,' topic/link ')]">
@@ -686,22 +645,11 @@ Children are displayed in a numbered list, with the target title as the cmd and 
              </xsl:choose>
          </xsl:for-each>
          <xsl:apply-templates select="*[contains(@class,' topic/linkinfo ')]"/>
-         <xsl:call-template name="end-flagit">
-           <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-         </xsl:call-template>
+         <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/linkinfo ')]" name="topic.linkinfo">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-  <xsl:call-template name="start-flagit">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-  </xsl:call-template>
   <xsl:apply-templates/>
-  <xsl:call-template name="end-flagit">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-  </xsl:call-template>
   <br/>
   <xsl:value-of select="$newline"/>
 </xsl:template>
@@ -711,16 +659,7 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 </xsl:template>
 
 <xsl:template match="*[contains(@class, ' topic/linklist ')]/*[contains(@class, ' topic/desc ')]" name="topic.linklist_desc">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-  <xsl:call-template name="start-flagit">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-  </xsl:call-template>
   <xsl:apply-templates/>
-  <xsl:call-template name="end-flagit">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-  </xsl:call-template>
   <br/>
   <xsl:value-of select="$newline"/>
 </xsl:template>
@@ -792,7 +731,13 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 
 <xsl:template match="*" mode="ditamsg:link-may-be-duplicate">
   <xsl:param name="href" select="@href"/>
-  <xsl:param name="outfile" select="concat(substring-before($FILENAME, $DITAEXT), $OUTEXT)"/>
+  <xsl:param name="outfile">
+    <xsl:call-template name="replace-extension">
+      <xsl:with-param name="filename" select="$FILENAME"/>
+      <xsl:with-param name="extension" select="$OUTEXT"/>
+      <xsl:with-param name="ignore-fragment" select="true()"/>
+    </xsl:call-template>
+  </xsl:param>
   <xsl:call-template name="output-message">
     <xsl:with-param name="msgnum">043</xsl:with-param>
     <xsl:with-param name="msgsev">I</xsl:with-param>

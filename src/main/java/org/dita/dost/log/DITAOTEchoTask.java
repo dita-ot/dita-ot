@@ -94,7 +94,7 @@ public final class DITAOTEchoTask extends Echo {
         }
         
         logger = new DITAOTAntLogger(getProject());
-        final MessageBean msgBean = MessageUtils.getMessage(id, prop);
+        final MessageBean msgBean = MessageUtils.getInstance().getMessage(id, prop);
         if (msgBean != null) {
             final String type = msgBean.getType();
             if(FATAL.equals(type)){

@@ -43,18 +43,17 @@ public final class ImgUtils {
     private static String getImageOutPutPath(final String fileName) {
     	final DITAOTJavaLogger logger = new DITAOTJavaLogger();
 		String uplevelPath = null;
-		final String outDir = OutputUtils.getOutputDir();
-		String imgoutDir= null;
+		final File outDir = OutputUtils.getOutputDir();
 		final String filename = FileUtils.separatorsToUnix(fileName);
 
-		imgoutDir = outDir;
+		File imgoutDir = outDir;
 		if (OutputUtils.getGeneratecopyouter() != OutputUtils.Generate.OLDSOLUTION) {
 			Properties propterties = null;
 			try {
 				propterties = ListUtils.getDitaList();
 				uplevelPath = propterties.getProperty("uplevels");
 				if (uplevelPath != null&&uplevelPath.length()>0){
-					imgoutDir = outDir +File.separator+uplevelPath;
+					imgoutDir = new File(outDir, uplevelPath);
 				}
 
 			} catch (final IOException e) {
@@ -64,7 +63,7 @@ public final class ImgUtils {
 		}
 		String imagePath = null;
 		try {
-			imagePath =new File(imgoutDir+File.separator+filename).getCanonicalPath();
+			imagePath =new File(imgoutDir, filename).getCanonicalPath();
 		} catch (final IOException e) {
 			logger.logException(e);
 		}			
@@ -72,11 +71,11 @@ public final class ImgUtils {
 	}
     
     private static boolean checkDirName(final String dirName) {
-		String outDir = OutputUtils.getOutputDir();
+		File outDir = OutputUtils.getOutputDir();
 		if (outDir != null) {
-			outDir = FileUtils.separatorsToUnix(new File(outDir).getPath());
+			String o = FileUtils.separatorsToUnix(outDir.getAbsolutePath());
 
-			if (FileUtils.separatorsToUnix(new File(dirName).getPath()).equalsIgnoreCase(outDir)) {
+			if (FileUtils.separatorsToUnix(new File(dirName).getPath()).equalsIgnoreCase(o)) {
 				return true;
 			}
 		}
@@ -104,7 +103,7 @@ public final class ImgUtils {
         }catch (final Exception e){
             final Properties prop = new Properties();
             prop.put("%1", dirName+File.separatorChar+fileName);
-            logger.logError(MessageUtils.getMessage("DOTJ023E", prop).toString());
+            logger.logError(MessageUtils.getInstance().getMessage("DOTJ023E", prop).toString());
             logger.logException(e);
             return -1;
         }
@@ -132,7 +131,7 @@ public final class ImgUtils {
         }catch (final Exception e){
             final Properties prop = new Properties();
             prop.put("%1", dirName+File.separatorChar+fileName);
-            logger.logError(MessageUtils.getMessage("DOTJ023E", prop).toString());
+            logger.logError(MessageUtils.getInstance().getMessage("DOTJ023E", prop).toString());
             logger.logException(e);
             return -1;
         }
@@ -171,7 +170,7 @@ public final class ImgUtils {
             }
             return ret.toString();
         }catch (final Exception e){
-            logger.logError(MessageUtils.getMessage("DOTJ023E").toString());
+            logger.logError(MessageUtils.getInstance().getMessage("DOTJ023E").toString());
             logger.logException(e);
             return null;
         }finally{
@@ -208,11 +207,11 @@ public final class ImgUtils {
             final String ret = encoder.encodeToString(buff);
             return ret;
         } catch (final FileNotFoundException e) {
-            logger.logError(MessageUtils.getMessage("DOTJ023E").toString());
+            logger.logError(MessageUtils.getInstance().getMessage("DOTJ023E").toString());
             logger.logException(e);
             return null;
         } catch (final IOException e) {
-            logger.logError(MessageUtils.getMessage("DOTJ023E").toString());
+            logger.logError(MessageUtils.getInstance().getMessage("DOTJ023E").toString());
             logger.logException(e);
             return null;
         }finally{

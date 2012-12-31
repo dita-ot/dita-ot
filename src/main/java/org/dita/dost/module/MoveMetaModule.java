@@ -95,23 +95,23 @@ final class MoveMetaModule implements AbstractPipelineModule {
                     final Properties p = new Properties();
                     p.put("%1", oldMap.getPath());
                     p.put("%2", newMap.getAbsolutePath()+".chunk");
-                    logger.logError(MessageUtils.getMessage("DOTJ009E", p).toString());
+                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", p).toString());
                 }
                 if (!newMap.renameTo(oldMap)) {
                     final Properties p = new Properties();
                     p.put("%1", oldMap.getPath());
                     p.put("%2", newMap.getAbsolutePath()+".chunk");
-                    logger.logError(MessageUtils.getMessage("DOTJ009E", p).toString());
+                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", p).toString());
                 }
             }
         }
 
-        final Set<Entry<String, Hashtable<String, Element>>> mapSet = (Set<Entry<String, Hashtable<String, Element>>>) metaReader.getContent().getCollection();
+        final Map<String, Hashtable<String, Element>> mapSet = metaReader.getMapping();
         
         //process map first
         final DitaMapMetaWriter mapInserter = new DitaMapMetaWriter();
         mapInserter.setLogger(logger);
-        for (final Entry<String,?> entry: mapSet) {
+        for (final Entry<String, Hashtable<String, Element>> entry: mapSet.entrySet()) {
             String targetFileName = entry.getKey();
             targetFileName = targetFileName.indexOf(SHARP) != -1
                              ? targetFileName.substring(0, targetFileName.indexOf(SHARP))
@@ -132,7 +132,7 @@ final class MoveMetaModule implements AbstractPipelineModule {
         //process topic
         final DitaMetaWriter topicInserter = new DitaMetaWriter();
         topicInserter.setLogger(logger);
-        for (final Map.Entry<String,?> entry: mapSet) {
+        for (final Map.Entry<String, Hashtable<String, Element>> entry: mapSet.entrySet()) {
             String targetFileName = entry.getKey();
             targetFileName = targetFileName.indexOf(SHARP) != -1
                              ? targetFileName.substring(0, targetFileName.indexOf(SHARP))

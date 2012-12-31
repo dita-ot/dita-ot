@@ -3,7 +3,7 @@
      Sourceforge.net. See the accompanying license.txt file for 
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
-<project name="dita2xhtml">
+<project xmlns:dita="http://dita-ot.sourceforge.net" name="dita2xhtml">
 	
     <target name="dita2xhtml"
       depends="build-init, preprocess, dita.map.xhtml, 
@@ -13,12 +13,12 @@
     <target name="dita.map.xhtml"
             depends="dita.map.xhtml.init, dita.map.xhtml.toc , dita.out.map.xhtml.toc" />
 
-    <target name="dita.map.xhtml.init" description="">
-        <condition property="out.ext" value=".html">
-            <not>
-                <isset property="out.ext" />
-            </not>
-        </condition>
+    <target name="dita.map.xhtml.init" depends="dita.xhtml.init" unless="noMap">
+      <condition property="args.xhtml.toc.xsl" value="${dita.plugin.org.dita.xhtml.dir}/xsl/map2xhtmtoc.xsl">
+        <not>
+          <isset property="args.xhtml.toc.xsl" />
+        </not>
+      </condition>
         <condition property="args.xhtml.toc" value="index">
             <not>
                 <isset property="args.xhtml.toc" />
@@ -36,7 +36,7 @@
               destdir="${output.dir}"
               includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
               classpathref="dost.class.path"
-              style="${dita.script.dir}${file.separator}map2xhtmtoc.xsl">
+              style="${args.xhtml.toc.xsl}">
         	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
@@ -44,7 +44,7 @@
             <param name="CSS" expression="${args.css.file}" if="args.css.file" />
             <param name="CSSPATH" expression="${user.csspath}" if="user.csspath" />
             <param name="OUTPUTCLASS" expression="${args.xhtml.toc.class}" if="args.xhtml.toc.class" />
-            <dita:extension id="dita.conductor.xhtml.toc.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+            <dita:extension id="dita.conductor.xhtml.toc.param" behavior="org.dita.dost.platform.InsertAction"/>
             <mapper type="glob"
                     from="*${dita.input.filename}"
                     to="*${args.xhtml.toc}${out.ext}" />
@@ -61,7 +61,7 @@
               destdir="${output.dir}"
               includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
               classpathref="dost.class.path"
-              style="${dita.script.dir}${file.separator}map2xhtmtoc.xsl">
+              style="${args.xhtml.toc.xsl}">
         	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
@@ -69,7 +69,7 @@
             <param name="CSS" expression="${args.css.file}" if="args.css.file" />
             <param name="CSSPATH" expression="${user.csspath}" if="user.csspath" />
             <param name="OUTPUTCLASS" expression="${args.xhtml.toc.class}" if="args.xhtml.toc.class" />
-            <dita:extension id="dita.conductor.xhtml.toc.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+            <dita:extension id="dita.conductor.xhtml.toc.param" behavior="org.dita.dost.platform.InsertAction"/>
             <mapper type="glob"
                     from="${user.input.file}"
                     to="${args.xhtml.toc}${out.ext}" />
@@ -94,7 +94,7 @@
     <mkdir dir="${user.csspath.real}"/>
     <!-- Always copy system default css files -->
     <copy todir="${user.csspath.real}">
-      <fileset dir="${dita.resource.dir}" includes="*.css"/>
+      <fileset dir="${dita.plugin.org.dita.xhtml.dir}/resource" includes="*.css"/>
     </copy>
     <!-- Copy user specify css file when required -->
     <antcall target="copy-css-user"/>

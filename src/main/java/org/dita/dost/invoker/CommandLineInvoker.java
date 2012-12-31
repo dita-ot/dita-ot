@@ -13,6 +13,7 @@ import static org.dita.dost.util.Constants.*;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -26,11 +27,8 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.Content;
-import org.dita.dost.module.ContentImpl;
 import org.dita.dost.platform.Integrator;
 import org.dita.dost.util.Configuration;
-import org.dita.dost.writer.PropertiesWriter;
 
 /**
  * Command line tool for running DITA OT.
@@ -68,9 +66,7 @@ public final class CommandLineInvoker {
         pm.put("/outext", "args.outext");
         pm.put("/copycss", "args.copycss");
         pm.put("/xsl", "args.xsl");
-        //Added by William on 2010-06-21 for bug:3012392 start
         pm.put("/xslpdf", "args.xsl.pdf");
-        //Added by William on 2010-06-21 for bug:3012392 end
         pm.put("/tempdir", "dita.temp.dir");
         pm.put("/cleantemp", "clean.temp");
         pm.put("/foimgext", "args.fo.img.ext");
@@ -160,7 +156,6 @@ public final class CommandLineInvoker {
             throw new DITAOTException("Invalid dita-ot home directory '" + ditaDir
                     + "', please specify the correct dita-ot home directory using '/ditadir'.");
         }
-        MessageUtils.loadDefaultMessages();
 
         /*
          * Process input arguments
@@ -182,7 +177,7 @@ public final class CommandLineInvoker {
                 printUsage();
                 final Properties params = new Properties();
                 params.put("%1", arg);
-                throw new DITAOTException(MessageUtils.getMessage("DOTJ001F", params).toString());
+                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ001F", params).toString());
             }
 
             final String javaArg = arg.substring(0, colonPos);
@@ -192,7 +187,7 @@ public final class CommandLineInvoker {
                 printUsage();
                 final Properties params = new Properties();
                 params.put("%1", javaArg);
-                throw new DITAOTException(MessageUtils.getMessage("DOTJ002F", params).toString());
+                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ002F", params).toString());
             }
 
             String antArgValue = arg.substring(colonPos + 1);
@@ -200,17 +195,15 @@ public final class CommandLineInvoker {
                 printUsage();
                 final Properties params = new Properties();
                 params.put("%1", javaArg);
-                throw new DITAOTException(MessageUtils.getMessage("DOTJ003F", params).toString());
+                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ003F", params).toString());
             }
 
-            //Added by William on 2009-11-09 for bug:2893493 start
             if (antArg.equals("clean.temp")
                     && !("yes".equalsIgnoreCase(antArgValue)
                             || "no".equalsIgnoreCase(antArgValue))) {
                 antArgValue = "yes";
 
             }
-            //Added by William on 2009-11-09 for bug:2893493 end
 
             prop.put(antArg, antArgValue);
         }
@@ -232,7 +225,7 @@ public final class CommandLineInvoker {
         } else {
             final java.text.DateFormat format = new java.text.SimpleDateFormat("yyyyMMddHHmmssSSS");
             final String timestamp = format.format(new java.util.Date());
-            prop.setProperty("dita.temp.dir", TEMP_DIR_DEFAULT + FILE_SEPARATOR
+            prop.setProperty("dita.temp.dir", TEMP_DIR_DEFAULT + File.separator
                     + "temp" + timestamp);
             tempDir = prop.getProperty("dita.temp.dir");
         }
@@ -246,7 +239,7 @@ public final class CommandLineInvoker {
             final Properties params = new Properties();
 
             params.put("%1", tempPath.getAbsoluteFile());
-            msg = MessageUtils.getMessage("DOTJ004F", params).toString();
+            msg = MessageUtils.getInstance().getMessage("DOTJ004F", params).toString();
 
             throw new DITAOTException(msg);
         }
@@ -256,11 +249,22 @@ public final class CommandLineInvoker {
         /*
          * Output input params into temp property file
          */
-        final PropertiesWriter propWriter = new PropertiesWriter();
-        final Content content = new ContentImpl();
-        content.setValue(prop);
-        propWriter.setContent(content);
-        propWriter.write(propertyFile);
+        FileOutputStream fileOutputStream = null;
+		try {
+		    fileOutputStream = new FileOutputStream(propertyFile);
+		    prop.store(fileOutputStream, null);
+		    fileOutputStream.flush();
+		} catch (final Exception e) {
+		    throw new DITAOTException(e);
+		} finally {
+		    if (fileOutputStream != null) {
+		        try {
+		            fileOutputStream.close();
+		        } catch (final Exception e) {
+		            throw new DITAOTException(e);
+		        }
+		    }
+		}
 
         readyToRun = true;
     }

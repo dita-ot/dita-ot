@@ -39,7 +39,7 @@
     <xslt basedir="${dita.temp.dir}"
       destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
       classpathref="dost.class.path"
-      style="${dita.script.dir}${file.separator}map2eclipse.xsl">
+      style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2eclipse.xsl">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="OUTEXT" expression="${content.link.ext}" />
@@ -71,7 +71,7 @@
       in="${dita.temp.dir}${file.separator}${user.input.file}"
       out="${dita.map.output.dir}${file.separator}plugin.xml"
       classpathref="dost.class.path"
-      style="${dita.script.dir}${file.separator}map2plugin-cp.xsl">
+      style="${dita.plugin.org.dita.eclipsecontent.dir}/xsl/map2plugin-cp.xsl">
       <param name="TOCROOT" expression="${args.eclipsecontent.toc}" />
       <param name="version" expression="${args.eclipse.version}"
         if="args.eclipse.version" />
@@ -93,7 +93,7 @@
           includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
           classpathref="dost.class.path"
           extension="${dita.ext}" 
-          style="${dita.script.dir}${file.separator}dita2dynamicdita.xsl"
+          style="${dita.plugin.org.dita.eclipsecontent.dir}/xsl/dita2dynamicdita.xsl"
           filenameparameter="FILENAME"
           filedirparameter="FILEDIR">
       <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"></excludesfile>

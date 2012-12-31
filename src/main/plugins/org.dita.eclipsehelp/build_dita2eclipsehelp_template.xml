@@ -3,7 +3,15 @@
      Sourceforge.net. See the accompanying license.txt file for 
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
-<project name="dita2eclipsehelp">
+<project xmlns:dita="http://dita-ot.sourceforge.net" name="dita2eclipsehelp">
+	
+  <target name="dita.eclipsehelp.init">
+    <condition property="args.xsl" value="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/dita2xhtml_eclipsehelp.xsl">
+      <not>
+        <isset property="args.xsl" />
+      </not>
+    </condition>
+  </target>
 	
 	   <target name="dita.index.eclipsehelp.init">
 	      <condition property="dita.eclipsehelp.index.class" value="org.dita.dost.writer.EclipseIndexWriter"> 
@@ -14,13 +22,10 @@
 	
     <target name="dita2eclipsehelp"
             unless="noMap"
-        depends="build-init, preprocess, copy-css, 
+        depends="build-init, dita.eclipsehelp.init, preprocess, copy-css, 
                      dita.topics.xhtml, dita.inner.topics.xhtml, dita.outer.topics.xhtml">
       <antcall target="dita.map.eclipse"></antcall>
     </target>
-
-    <!--<target name="dita.map.eclipse"
-        depends="dita.map.eclipse.init, dita.map.eclipse.toc, dita.map.eclipse.index, dita.map.eclipse.plugin, dita.out.map.eclipse.toc, dita.out.map.eclipse.index, dita.out.map.eclipse.plugin" />-->
 
   <target name="dita.map.eclipse"
     depends=" dita.map.eclipse.init, copy-plugin-files, dita.map.eclipse.fragment.language.init, dita.map.eclipse.fragment.language.country.init, dita.map.eclipse.fragment.error">
@@ -101,7 +106,7 @@
               includesfile="${dita.temp.dir}${file.separator}${fullditamapfile}"
               extension=".xml"
               classpathref="dost.class.path"
-              style="${dita.script.dir}${file.separator}map2eclipse.xsl">
+              style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2eclipse.xsl">
         	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
             <includesfile name="${dita.temp.dir}${file.separator}${chunkedditamapfile}" if="chunkedditamapfile"/>
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
@@ -119,12 +124,13 @@
             destdir="${output.dir}"
             includesfile="${dita.temp.dir}${file.separator}${fullditamapfile}"
             classpathref="dost.class.path"
-            style="${dita.script.dir}${file.separator}map2eclipse.xsl">
+            style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2eclipse.xsl">
         	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
             <includesfile name="${dita.temp.dir}${file.separator}${chunkedditamapfile}" if="chunkedditamapfile"/>
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
             <param name="WORKDIR" expression="${workdir}" if="workdir"/>
+            <dita:extension behavior="org.dita.dost.platform.InsertAction" id="dita.conductor.eclipse.toc.param"/>
             <mapper type="regexp" 
                 from="^(${tempdirToinputmapdir.relative.value})(.*?)(\.ditamap)$$" 
                 to="\2\.xml"/>
@@ -134,8 +140,7 @@
     
     <target name="dita.map.eclipse.index" unless="noMap"
             if="old.transform"
-      dita:depends="{dita.map.eclipse.index.pre},dita.map.eclipse.plugin.init,dita.index.eclipsehelp.init" 
-    	      xmlns:dita="http://dita-ot.sourceforge.net" 
+      dita:depends="{dita.map.eclipse.index.pre},dita.map.eclipse.plugin.init,dita.index.eclipsehelp.init"  
     	      dita:extension="depends org.dita.dost.platform.InsertDependsAction" 
             description="Build Eclipse Help index file">
     	  <echo level="info"> args.eclipsehelp.indexsee = ${args.eclipsehelp.indexsee} </echo>
@@ -155,8 +160,7 @@
     
     <target name="dita.out.map.eclipse.index" unless="noMap"
         if="inner.transform"
-      dita:depends="{dita.map.eclipse.index.pre},dita.map.eclipse.plugin.init,dita.index.eclipsehelp.init" 
-    	  xmlns:dita="http://dita-ot.sourceforge.net" 
+      dita:depends="{dita.map.eclipse.index.pre},dita.map.eclipse.plugin.init,dita.index.eclipsehelp.init"  
     	  dita:extension="depends org.dita.dost.platform.InsertDependsAction" 
         description="Build Eclipse Help index file">
     	  <echo level="info"> args.eclipsehelp.indexsee = ${args.eclipsehelp.indexsee} </echo>
@@ -182,7 +186,7 @@
               in="${dita.temp.dir}${file.separator}${user.input.file}"
               out="${dita.map.output.dir}${file.separator}plugin.xml"
               classpathref="dost.class.path"
-              style="${dita.script.dir}${file.separator}map2plugin.xsl">
+              style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2plugin.xsl">
             <param name="TOCROOT" expression="${args.eclipsehelp.toc}" />
             <param name="version"
                    expression="${args.eclipse.version}"
@@ -208,7 +212,7 @@
             in="${dita.temp.dir}${file.separator}${user.input.file}"
             out="${output.dir}${file.separator}plugin.xml"
             classpathref="dost.class.path"
-            style="${dita.script.dir}${file.separator}map2plugin.xsl">
+            style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2plugin.xsl">
             <param name="TOCROOT" expression="${args.eclipsehelp.toc}" />
             <param name="version"
                 expression="${args.eclipse.version}"
@@ -238,7 +242,7 @@
       in="${dita.temp.dir}${file.separator}${user.input.file}"
       out="${dita.map.output.dir}${file.separator}META-INF${file.separator}MANIFEST.MF"
       classpathref="dost.class.path"
-      style="${dita.script.dir}${file.separator}map2plugin.xsl">
+      style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2plugin.xsl">
       <param name="version"
         expression="${args.eclipse.version}"
         if="args.eclipse.version" />
@@ -271,7 +275,7 @@
       in="${dita.temp.dir}${file.separator}${user.input.file}"
       out="${dita.map.output.dir}${file.separator}META-INF${file.separator}MANIFEST.MF"
       classpathref="dost.class.path"
-      style="${dita.script.dir}${file.separator}map2plugin.xsl">
+      style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2plugin.xsl">
       <param name="version"
         expression="${args.eclipse.version}"
         if="args.eclipse.version" />
@@ -305,7 +309,7 @@
       in="${dita.temp.dir}${file.separator}${user.input.file}"
       out="${output.dir}${file.separator}plugin.properties"
       classpathref="dost.class.path"
-      style="${dita.script.dir}${file.separator}map2plugin.xsl">
+      style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2plugin.xsl">
       <outputproperty value="text" name="method"/>
       <param name="dita.plugin.output" 
       	  expression="dita.eclipse.properties"/>
@@ -327,7 +331,7 @@
       in="${dita.temp.dir}${file.separator}${user.input.file}"
       out="${output.dir}${file.separator}plugin.properties"
       classpathref="dost.class.path"
-      style="${dita.script.dir}${file.separator}map2plugin.xsl">
+      style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2plugin.xsl">
       <outputproperty value="text" name="method"/>
       <param name="dita.plugin.output" expression="dita.eclipse.properties"/>
     	<param name="version"

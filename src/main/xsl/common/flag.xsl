@@ -192,7 +192,6 @@
    <xsl:when test="$FILTERDOC/val/prop[@att=$flag-att][@val=$firstflag][@action='flag']">
     <xsl:copy-of select="$FILTERDOC/val/prop[@att=$flag-att][@val=$firstflag][@action='flag']"/>
    </xsl:when>
-   <!-- Added by William on 2009-06-01 for flag process start-->
    <xsl:when test="$FILTERDOC/val/prop[@att=$flag-att][not(@val=$firstflag)][@action='flag']">
     
     <xsl:for-each select="$FILTERDOC/val/prop[@att=$flag-att][not(@val=$firstflag)][@action='flag']">
@@ -235,7 +234,6 @@
      </xsl:if>
     </xsl:for-each>
    </xsl:when>
-   <!-- Added by William on 2009-06-01 for flag process end-->
    <xsl:otherwise/> <!-- that flag not active -->
   </xsl:choose>
   
@@ -252,7 +250,6 @@
   </xsl:choose>
  </xsl:template>
  
- <!-- Added by William on 2009-06-01 for flag process start-->
  <!-- copy needed elements -->
  <xsl:template match="*" mode="copy-element">
   <xsl:param name="att"/>
@@ -386,7 +383,6 @@
  <xsl:template match="*" mode="getChildNode">
   <xsl:copy-of select="node()"/>
  </xsl:template>
- <!-- Added by William on 2009-06-01 for flag process end-->
  
  <xsl:template name="getPropsValue">
   <xsl:param name="propsPath"/>

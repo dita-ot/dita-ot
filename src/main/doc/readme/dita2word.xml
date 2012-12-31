@@ -9,22 +9,23 @@
   <titlealts>
     <navtitle>DITA to RTF</navtitle>
   </titlealts>
-<shortdesc>The "wordrtf" transform type will produce an RTF file for
-use by <tm tmclass="special" tmowner="Microsoft Corporation" tmtype="reg"
-trademark="Microsoft">Microsoft</tm> Word.</shortdesc>
+<shortdesc>The <option>wordrtf</option> transformation produces an RTF file for use by Microsoft
+    Word.</shortdesc>
 <conbody>
-<p>The whole structure of the output file is the same as the structure
-designed in the ditamap file of the DITA source files. To avoid losing
-files in the final output, make sure the ditamap file contains all
-topics which are cross referenced from within any individual topics.</p>
-<!--section><title>Transforming DITA to Word output</title><p>You can
-use an ant script to transform DITA source files to word output. See <xref
-href="ascript.xml#ascript"></xref> for more details.</p><p>You can
-also use the <tm tmclass="special" tmowner="Oracle and/or its affiliates"
-tmtype="tm" trademark="Java">Java</tm> command for transform. See <xref
-href="jcomm.xml#jcomm"></xref> for more details.</p></section-->
-<section>
-  <title>Limitations</title>
-<ol conref="DITA-limitations.xml#limitations/wordrtf-limitations"><li/></ol></section>
+<p>The structure of the generated RTF file is the same as the navigation structure in the DITA map.
+      To avoid losing files in the final output, make sure the DITA map contains all topics that are
+      referenced from any individual topics.</p>
+    <p>The <option>wordrtf</option> transformation has the following limitations:
+      <ul>
+        <li>Flagging, filtering, and revision bars are not supported.</li>
+        <li>Style attributes for tables are not supported.</li>
+        <li>Tables within list items are not supported.</li>
+        <li>Output styles supported by other DITA-OT transformations, for example, X and Y, are not
+          supported.</li>
+      </ul><draft-comment author="Kristen James Eberlein" time="11 August 2012">What can we replace
+        X and Y with? The original text read "There may be no output style applied on contents of
+        some tags in Word RTF output compared with other output." Also, what does "Style attributes
+        for tables are not supported" mean? </draft-comment>
+    </p>
 </conbody>
 </concept>

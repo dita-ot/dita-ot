@@ -419,7 +419,7 @@ Before rebuilding, please delete the output or the directory.</echo>
 	</target>
   	
   <!-- The whole process on which javamerge depends equals to the target "dita-process" in build.xml. -->
-  <target name="javamerge"  description="Merge topics" depends="start-process, init-logger, check-arg, output-deprecated-msg, output-css-warn-message, preprocess">
+  <target name="javamerge"  description="Merge topics" depends="start-process, init-logger, check-arg, output-css-warn-message, preprocess">
 	<basename property="temp.base" file="${user.input.file}" suffix=".ditamap"/>
     <property name="temp.input" value="${dita.temp.dir}${file.separator}${user.input.file}"/>
     <property name="temp.output" value="${output.dir}${file.separator}${user.input.file}"/>

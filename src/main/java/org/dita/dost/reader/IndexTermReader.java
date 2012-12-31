@@ -85,39 +85,22 @@ public final class IndexTermReader extends AbstractXMLReader {
     /** Depth inside a "@processing-role" parent */
     private int processRoleLevel = 0;
 
-    //Added by William on 2010-04-26 for ref:2990783 start
     private IndexTermCollection result;
-    //Added by William on 2010-04-26 for ref:2990783 end
 
-    //Added by William on 2010-04-26 for ref:2990783 start
     public IndexTermReader(final IndexTermCollection result) {
-        this();
-        this.result = result;
-    }
-    //Added by William on 2010-04-26 for ref:2990783 end
-
-    /**
-     * Constructor.
-     * 
-     * @deprecated use {@link #IndexTermReader(IndexTermCollection)} instead
-     */
-    @Deprecated
-    public IndexTermReader() {
         termStack = new Stack<IndexTerm>();
-        topicIdStack = new Stack<String>();
-        indexTermSpecList = new ArrayList<String>(INT_16);
-        indexSeeSpecList = new ArrayList<String>(INT_16);
-        indexSeeAlsoSpecList = new ArrayList<String>(INT_16);
-        indexSortAsSpecList = new ArrayList<String>(INT_16);
-        topicSpecList = new ArrayList<String>(INT_16);
-        titleSpecList = new ArrayList<String>(INT_16);
-        indexTermList = new ArrayList<IndexTerm>(INT_256);
-        titleMap = new HashMap<String, String>(INT_256);
-        processRoleStack = new Stack<String>();
-        processRoleLevel = 0;
-        if (result == null) {
-            result = IndexTermCollection.getInstantce();
-        }
+		topicIdStack = new Stack<String>();
+		indexTermSpecList = new ArrayList<String>(INT_16);
+		indexSeeSpecList = new ArrayList<String>(INT_16);
+		indexSeeAlsoSpecList = new ArrayList<String>(INT_16);
+		indexSortAsSpecList = new ArrayList<String>(INT_16);
+		topicSpecList = new ArrayList<String>(INT_16);
+		titleSpecList = new ArrayList<String>(INT_16);
+		indexTermList = new ArrayList<IndexTerm>(INT_256);
+		titleMap = new HashMap<String, String>(INT_256);
+		processRoleStack = new Stack<String>();
+		processRoleLevel = 0;
+		this.result = result != null ? result : IndexTermCollection.getInstantce();
     }
 
     /**
@@ -165,7 +148,6 @@ public final class IndexTermReader extends AbstractXMLReader {
             } else if (inTitleElement) {
                 temp = trimSpaceAtStart(temp, title);
                 //Always append space if: <title>abc<ph/>df</title>
-                //Updated with SF 2010062 - should only add space if one is in source
                 title = StringUtils.setOrAppend(title, temp, false);
             }
         }
@@ -178,9 +160,7 @@ public final class IndexTermReader extends AbstractXMLReader {
         for(int i=0; i<size; i++){
             final IndexTerm indexterm = indexTermList.get(i);
             //IndexTermCollection.getInstantce().addTerm(indexterm);
-            //Added by William on 2010-04-26 for ref:2990783 start
             result.addTerm(indexterm);
-            //Added by William on 2010-04-26 for ref:2990783 end
         }
     }
 
@@ -205,13 +185,12 @@ public final class IndexTermReader extends AbstractXMLReader {
         // in the list.
         if (indexTermSpecList.contains(localName)) {
             final IndexTerm term = termStack.pop();
-            //SF Bug 2010062: Also set to *** when the term is only white-space.
             if (term.getTermName() == null || term.getTermName().trim().equals("")){
                 if(term.getEndAttribute() != null && !term.hasSubTerms()){
                     return;
                 } else{
                     term.setTermName("***");
-                    logger.logWarn(MessageUtils.getMessage("DOTJ014W").toString());
+                    logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ014W").toString());
                 }
             }
 
@@ -258,7 +237,7 @@ public final class IndexTermReader extends AbstractXMLReader {
          */
         if (titleSpecList.contains(localName)) {
             inTitleElement = false;
-            if(!titleMap.containsKey(topicIdStack.peek())){
+            if(!topicIdStack.empty() && !titleMap.containsKey(topicIdStack.empty())){
                 //If this is the first topic title
                 if(titleMap.size() == 0) {
                     defaultTitle = title;
@@ -349,7 +328,7 @@ public final class IndexTermReader extends AbstractXMLReader {
          * For title info
          */
         if (titleSpecList.contains(localName)
-                && !titleMap.containsKey(topicIdStack.peek())) {
+                && !topicIdStack.empty() && !titleMap.containsKey(topicIdStack.peek())) {
             inTitleElement = true;
             title = null;
         }

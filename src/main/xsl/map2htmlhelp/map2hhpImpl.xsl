@@ -25,10 +25,8 @@
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0"
-                xmlns:saxon="http://icl.com/saxon"
-                xmlns:xalanredirect="org.apache.xalan.xslt.extensions.Redirect"
                 xmlns:exsl="http://exslt.org/common"
-                extension-element-prefixes="saxon xalanredirect exsl">
+                extension-element-prefixes="exsl">
 
 <!-- Include error message template -->
 <xsl:include href="../common/output-message.xsl"/>
@@ -161,7 +159,7 @@ Binary Index=No
 Default topic=</xsl:text>
 <!-- in a single map, get the first valid topic -->
 <xsl:text/>
-<xsl:apply-templates select="descendant::*[contains(@class, ' map/topicref ')][not(@processing-role='resource-only')][@href][contains(@href,$DITAEXT) or contains(@href,'.htm')][not(contains(@toc,'no'))][not(@processing-role='resource-only')][1]" mode="defaulttopic"/>
+<xsl:apply-templates select="descendant::*[contains(@class, ' map/topicref ')][not(@processing-role='resource-only')][@href][(@href and (not(@format) or @format = 'dita')) or contains(@href,'.htm')][not(contains(@toc,'no'))][not(@processing-role='resource-only')][1]" mode="defaulttopic"/>
 <xsl:text/>
 
 <!-- Get the title, if possible -->
@@ -264,21 +262,21 @@ Default topic=</xsl:text>
     			  and not(@processing-role='resource-only')">
       <xsl:choose>
         <!-- For dita files, change the extension; for HTML files, output the name as-is. Use the copy-to value first. -->
-        <xsl:when test="contains(@copy-to,$DITAEXT)">
+        <xsl:when test="@copy-to and (not(@format) or @format = 'dita')">
           <xsl:value-of select="$pathFromMaplist"/>
-          <xsl:call-template name="getFileName">
+          <xsl:call-template name="replace-extension">
             <xsl:with-param name="filename" select="@copy-to"/>
-            <xsl:with-param name="extension" select="$DITAEXT"/>
+            <xsl:with-param name="extension" select="$OUTEXT"/>
+            <xsl:with-param name="ignore-fragment" select="true()"/>
           </xsl:call-template>
-          <xsl:value-of select="$OUTEXT"/>
         </xsl:when>
-        <xsl:when test="contains(@href,$DITAEXT)">
+        <xsl:when test="@href and (not(@format) or @format = 'dita')">
           <xsl:value-of select="$pathFromMaplist"/>
-          <xsl:call-template name="getFileName">
+          <xsl:call-template name="replace-extension">
             <xsl:with-param name="filename" select="@href"/>
-            <xsl:with-param name="extension" select="$DITAEXT"/>
+            <xsl:with-param name="extension" select="$OUTEXT"/>
+            <xsl:with-param name="ignore-fragment" select="true()"/>
           </xsl:call-template>
-          <xsl:value-of select="$OUTEXT"/>
         </xsl:when>
         <!-- For local HTML files, add any path from the maplist -->
         <xsl:when test="contains(@href,'.htm') and not(@scope='external')"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="@href"/></xsl:when>
@@ -308,22 +306,24 @@ Default topic=</xsl:text>
   <xsl:param name="pathFromMaplist"/>
   <xsl:choose>
     <!-- If copy-to is specified, that copy should be used in place of the original -->
-    <xsl:when test="contains(@copy-to,$DITAEXT)">
+    <xsl:when test="@copy-to and (not(@format) or @format = 'dita')">
       <xsl:if test="not(@scope='external')"><xsl:value-of select="$pathFromMaplist"/></xsl:if>
-      <xsl:call-template name="getFileName">
+      <xsl:call-template name="replace-extension">
         <xsl:with-param name="filename" select="@copy-to"/>
-        <xsl:with-param name="extension" select="$DITAEXT"/>
+        <xsl:with-param name="extension" select="$OUTEXT"/>
+        <xsl:with-param name="ignore-fragment" select="true()"/>
       </xsl:call-template>
-      <xsl:value-of select="$OUTEXT"/><xsl:text>
+      <xsl:text>
 </xsl:text></xsl:when>
     <!-- For dita files, change the extension to OUTEXT -->
-    <xsl:when test="contains(@href,$DITAEXT)">
+    <xsl:when test="@href and (not(@format) or @format = 'dita')">
       <xsl:if test="not(@scope='external')"><xsl:value-of select="$pathFromMaplist"/></xsl:if>
-      <xsl:call-template name="getFileName">
+      <xsl:call-template name="replace-extension">
         <xsl:with-param name="filename" select="@href"/>
-        <xsl:with-param name="extension" select="$DITAEXT"/>
+        <xsl:with-param name="extension" select="$OUTEXT"/>
+        <xsl:with-param name="ignore-fragment" select="true()"/>
       </xsl:call-template>
-      <xsl:value-of select="$OUTEXT"/><xsl:text>
+      <xsl:text>
 </xsl:text></xsl:when>
     <!-- For local HTML files, add any path from the maplist -->
     <xsl:when test="contains(@href,'.htm') and not(@scope='external')">

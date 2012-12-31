@@ -126,13 +126,12 @@ public final class DelayConrefUtils {
      * @param href href
      * @param id id
      * @param key keyname
-     * @param tempDir temp dir
+     * @param tempDir absolute path to temporary director
      * @return result list
      */
-    public List<Boolean> checkExport(String href, final String id, final String key, final String tempDir) {
+    public List<Boolean> checkExport(String href, final String id, final String key, final File tempDir) {
         //parsed export .xml to get exported elements
-        final String exportFile = (new File(tempDir, FILE_NAME_EXPORT_XML)).
-                getAbsolutePath();
+        final File exportFile = new File(tempDir, FILE_NAME_EXPORT_XML);
 
         boolean idExported = false;
         boolean keyrefExported = false;

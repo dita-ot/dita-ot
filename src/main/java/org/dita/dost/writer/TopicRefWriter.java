@@ -74,10 +74,8 @@ public final class TopicRefWriter extends AbstractXMLWriter {
             reader.setContentHandler(this);
             reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
             reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-            //Edited by william on 2009-11-8 for ampbug:2893664 start
             reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
             reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
-            //Edited by william on 2009-11-8 for ampbug:2893664 end
         } catch (final Exception e) {
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
@@ -329,8 +327,6 @@ public final class TopicRefWriter extends AbstractXMLWriter {
         if (checkDITAHREF(atts)) {
             // replace the href value if it's referenced topic is extracted.
             final String rootPathName=currentFilePathName;
-            // Added on 20110125 for bug:Chunking remaps in-file <xref> to
-            // invalid value - ID: 3162808 start
             String changeTargetkey = FileUtils.resolveFile(currentFilePath,
                     attValue);
             String changeTarget = changeTable.get(changeTargetkey);
@@ -353,7 +349,6 @@ public final class TopicRefWriter extends AbstractXMLWriter {
                 }
             }
 
-            // Added on 20110125 for bug:Chunking remaps in-file <xref> to invalid value - ID: 3162808   end
             final String elementID=getElementID(attValue);
             final String pathtoElem =
                     attValue.contains(SHARP) ? attValue.substring(attValue.indexOf(SHARP)+1) : "";
@@ -534,7 +529,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
             if (!inputFile.exists()) {
                 final Properties prop = new Properties();
                 prop.put("%1", file);
-                logger.logError(MessageUtils.getMessage("DOTX008E", prop).toString());
+                logger.logError(MessageUtils.getInstance().getMessage("DOTX008E", prop).toString());
                 return;
             }
             outputFile = new File(file + FILE_EXTENSION_TEMP);
@@ -549,14 +544,14 @@ public final class TopicRefWriter extends AbstractXMLWriter {
                 final Properties prop = new Properties();
                 prop.put("%1", inputFile.getPath());
                 prop.put("%2", outputFile.getPath());
-                logger.logError(MessageUtils.getMessage("DOTJ009E", prop)
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop)
                         .toString());
             }
             if (!outputFile.renameTo(inputFile)) {
                 final Properties prop = new Properties();
                 prop.put("%1", inputFile.getPath());
                 prop.put("%2", outputFile.getPath());
-                logger.logError(MessageUtils.getMessage("DOTJ009E", prop)
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop)
                         .toString());
             }
         } catch (final Exception e) {

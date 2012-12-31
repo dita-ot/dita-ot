@@ -147,11 +147,11 @@ public final class IndexGroupProcessor {
                     final IndexEntry entry = (IndexEntry) indexMap.get(key);
                     final Properties prop = new Properties();
                     prop.put("%1", entry.toString());
-                    logger.logError(MessageUtils.getMessage("PDFJ001E", prop).toString());
+                    logger.logError(MessageUtils.getInstance().getMessage("PDFJ001E", prop).toString());
                 }
             }
             if (IndexPreprocessorTask.failOnError) {
-                logger.logError(MessageUtils.getMessage("PDFJ002E", new Properties()).toString());
+                logger.logError(MessageUtils.getInstance().getMessage("PDFJ002E", new Properties()).toString());
                 IndexPreprocessorTask.processingFaild=true;
             }
         }

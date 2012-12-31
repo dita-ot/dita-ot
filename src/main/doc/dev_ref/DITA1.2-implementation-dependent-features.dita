@@ -29,11 +29,10 @@
       <title>Filtering</title>
       <p>Error recovery:</p>
       <ul>
-        <li>When there are multiple <codeph>revprop</codeph> elements with the same val attribute, no error of
+        <li>When there are multiple <codeph>revprop</codeph> elements with the same val attribute, no error or
           warning is thrown</li>
         <li>When multiple prop elements define a duplicate attribute and value combination,
-          attribute default, or fall-back behaviour, <keyword>DOTJ007E</keyword> error is
-          thrown.</li>
+          attribute default, or fall-back behaviour, <msgnum>DOTJ007E</msgnum> error is thrown.</li>
       </ul>
     </section>
     <section id="section_kjq_egs_qc">
@@ -47,7 +46,7 @@
         <dlentry>
           <dt>xtrc</dt>
           <dd>element counter that uses the
-            format<codeblock>element-name ":" integer-counter</codeblock></dd>
+            format<codeblock>element-name ":" integer-counter ";" line-number ":" column-number</codeblock></dd>
         </dlentry>
       </dl>
     </section>
@@ -56,8 +55,22 @@
       <p>If both height and width attributes are given, image is scaled non-uniformly.</p>
       <p>If scale attribute is not an unsigned integer, no error or warning is thrown during
         preprocessing.</p>
-      <draft-comment>What's the implementation dependent behaviour for abstract and shortdesc
-        processing?</draft-comment>
+    </section>
+    <section>
+      <title>Map processing</title>
+      <p>When a <codeph>topicref</codeph> element that references a map contains child
+          <codeph>topicref</codeph> elements, <msgnum>DOTX068W</msgnum> error is thrown and the
+        child <codeph>topicref</codeph> elements are ignored. </p>
+    </section>
+    <section id="section_h3h_jsx_1h">
+      <title>Link processing</title>
+      <p>When the value of <codeph>href</codeph> attribute is not a valid URI reference, <msgnum>DOTJ054E</msgnum> error is thrown. Depending on
+        <xref href="../readme/configuration.dita#configuration/processing-mode">error recover mode</xref>, error recover may be attempted.</p>
+    </section>
+    <section>
+      <title>Copy-to processing</title>
+      <p>When the <codeph>copy-to</codeph> attribute is specified on a <codeph>topicref</codeph>, the content of the
+        <codeph>shortdesc</codeph> element is not used to override the short description of the topic.</p>
     </section>
   </refbody>
 </reference>

@@ -40,6 +40,7 @@
   <variable id="Preface title">Esipuhe</variable>
   <variable id="Notices title"><!--TODO:Notice--></variable>
   <variable id="Mini Toc"><!--TODO:Topics: --></variable>
+  <variable id="#note-separator">: </variable>
   <variable id="Note">Huomaa</variable>
   <variable id="Notice"><!--TODO:Notice--></variable>
   <variable id="Tip">Vihje</variable>

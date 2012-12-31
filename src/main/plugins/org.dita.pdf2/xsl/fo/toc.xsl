@@ -40,7 +40,7 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
     xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
     extension-element-prefixes="exsl"
-    exclude-result-prefixes="opentopic exslf opentopic-func ot-placeholder"
+    exclude-result-prefixes="xs exsl opentopic exslf opentopic-func ot-placeholder"
     version="2.0">
   
     <xsl:variable name="map" select="//opentopic:map"/>

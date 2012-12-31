@@ -20,19 +20,19 @@
   
   
 <!--xsl:param name="WORKDIR" select="'./'"/-->
-<!-- Added by William on 2009-07-09 for req #12014 start  -->
+ <!-- Deprecated -->
  <xsl:param name="BASEDIR"/>
+ <!-- Deprecated -->
  <xsl:param name="TEMPDIR"/>
+ <xsl:param name="EXPORTFILE"/> 
  <xsl:param name="TRANSTYPE"></xsl:param> 
-<!-- Added by William on 2009-07-09 for req #12014 end  -->
+  <!-- Deprecated -->
 <xsl:param name="PROJDIR" select="'.'"/>
 <xsl:param name="DBG" select="no"/>
 <!-- Deprecated -->
 <xsl:param name="FILEREF">file://</xsl:param>
   
-<!--Added by William on 2010-04-26 for bug:2990162 start-->
 <xsl:param name="file-being-processed"/>  
-<!--Added by William on 2010-04-26 for bug:2990162 end-->
 
 <xsl:variable name="ORIGINAL-DOMAINS" select="/*/@domains|/dita/*[@domains][1]/@domains"/>
 
@@ -219,10 +219,8 @@
       </xsl:with-param>
     </xsl:call-template>
   </xsl:variable>
-  <!-- added by William on 2009-09-14 for bug:2857167 start-->
   <!-- get domains attribute in the target file -->
   <xsl:variable name="domains" select="document($file, /)/*/@domains|/dita/*[@domains][1]/@domains"/>
-  <!-- added by William on 2009-09-14 for bug:2857167 end-->
   <!--the file name is useful to href when resolveing conref -->
   <xsl:variable name="conref-filename">
     <xsl:call-template name="replace-blank">
@@ -242,34 +240,11 @@
     </xsl:choose>
   </xsl:variable>
     
-  <!-- added by William on 2009-06-26 for req #12014 start -->
   <!-- conref file name with relative path -->
   <xsl:variable name="filename" select="substring-after($file-origin, $file-prefix)"/>
  
   <!-- replace the extension name -->
   <xsl:variable name="FILENAME" select="concat(substring-before($filename, '.'), '.dita')"/>
-  <!-- get export.xml's path -->
-  <xsl:variable name="tempfiledir">
-    <xsl:choose>
-      <xsl:when test="contains($TEMPDIR, ':\') or contains($TEMPDIR, ':/')">
-        <!--xsl:value-of select="concat($FILEREF,'/')"/-->
-        <xsl:value-of select="concat('file:/', concat($TEMPDIR, '/'))"/>
-      </xsl:when>
-      <xsl:when test="starts-with($TEMPDIR, '/')">
-        <xsl:value-of select="concat('file://', concat($TEMPDIR, '/'))"/>
-      </xsl:when>
-      <xsl:when test="starts-with($BASEDIR, '/')">
-        <xsl:value-of select="concat('file://', concat($BASEDIR, '/'), concat($TEMPDIR, '/'))"/>
-       </xsl:when>
-      <xsl:otherwise>
-        <!--xsl:value-of select="concat($FILEREF,'/')"/-->
-        <xsl:value-of select="concat('file:/', concat($BASEDIR, '/'), concat($TEMPDIR, '/'))"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <!-- get the export.xml -->
-  <xsl:variable name="EXPORTFILE" select="concat($tempfiledir, 'export.xml')"/>
-  <!-- added by William on 2009-06-26 for req #12014 end -->
   
   <xsl:variable name="topicid">
   <xsl:choose>
@@ -287,7 +262,6 @@
     </xsl:choose>
   </xsl:variable>
   
-  <!-- added by William on 2009-06-26 for req #12014 start -->
   <xsl:choose>
     <!-- exportanchors defined in topicmeta-->
     <xsl:when test=" ($TRANSTYPE = 'eclipsehelp' )
@@ -340,7 +314,6 @@
         </xsl:copy>
     </xsl:when>
     <xsl:otherwise>
-      <!-- added by William on 2009-06-26 for req #12014 end -->
       <xsl:variable name="current-element" select="."/>
       <!-- do as usual --> 
         <xsl:variable name="topicpos">
@@ -390,7 +363,6 @@
                 </xsl:choose>
               </xsl:when>
               <xsl:when test="$topicpos='otherfile'">
-                <!-- added by William on 20090808 for req #12008 start-->
                 <!-- format domains attribute in the source file -->
                 <xsl:variable name ="preDomains" select="normalize-space($ORIGINAL-DOMAINS)"/>
                 <xsl:variable name="isValid">
@@ -406,7 +378,6 @@
                       <xsl:when test="$isValid='true'">
                         <xsl:for-each select="document($file,/)">
                         <xsl:variable name="target" select="key('id', $elemid)[local-name()=$element][ancestor::*[contains(@class, ' topic/topic ')][1][@id=$topicid]]"/>
-                        <!-- added by William on 20090808 for req #12008 end-->
                             <xsl:choose>
                               <xsl:when test="$target">
                                 <xsl:apply-templates select="$target[1]" mode="conref-target">
@@ -435,16 +406,14 @@
                                     <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
                                   </xsl:if>
                               </xsl:when>
-                              <xsl:otherwise><xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
+                              <xsl:otherwise><xsl:apply-templates select="$current-element" mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
                             </xsl:choose>
-                        <!-- added by William on 20090808 for req #12008 start-->
                           </xsl:for-each>
                       </xsl:when>
                       <xsl:otherwise>
                         <xsl:apply-templates select="." mode="ditamsg:domainMismatch"/>
                       </xsl:otherwise>
                 </xsl:choose>
-                <!-- added by William on 20090808 for req #12008 end-->
               </xsl:when>
               <xsl:otherwise/><!--never happens - only other value is firstinfile, but we know there's a # in the conref so it's either samefile or otherfile-->
             </xsl:choose>
@@ -484,7 +453,6 @@
                 </xsl:choose>
               </xsl:when>
               <xsl:when test="$topicpos='otherfile'">
-                      <!-- added by William on 20090808 for req #12008 start-->
                       <!-- format domains attribute in the source file -->
 	                  <xsl:variable name ="preDomains" select="normalize-space($ORIGINAL-DOMAINS)"/>
 	                  <xsl:variable name="isValid">
@@ -498,7 +466,6 @@
                         <xsl:when test="$isValid='true'">
                           <xsl:for-each select="document($file,/)">
                           <xsl:variable name="target" select="key('id', $topicid)[contains(@class, ' topic/topic ')][local-name()=$element]"/>
-                          <!-- added by William on 20090808 for req #12008 end-->
                                   <xsl:choose>
                                     <xsl:when test="$target">
                                       <xsl:apply-templates select="$target[1]" mode="conref-target">
@@ -527,19 +494,16 @@
                                           <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
                                         </xsl:if>
                                     </xsl:when>
-                                    <xsl:otherwise><xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
+                                    <xsl:otherwise><xsl:apply-templates select="$current-element" mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
                                   </xsl:choose>
-                          <!-- added by William on 20090808 for req #12008 start-->
                           </xsl:for-each>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:apply-templates select="." mode="ditamsg:domainMismatch"/>
                         </xsl:otherwise>
                       </xsl:choose>
-                <!-- added by William on 20090808 for req #12008 end-->
               </xsl:when>
               <xsl:when test="$topicpos='firstinfile'">
-                <!-- added by William on 20090808 for req #12008 start-->
                 <!-- format domains attribute in the source file -->
                 <xsl:variable name ="preDomains" select="normalize-space($ORIGINAL-DOMAINS)"/>
                 <xsl:variable name="isValid">
@@ -553,10 +517,8 @@
                         <xsl:when test="$isValid='true'">
                           <xsl:for-each select="document($file,/)">
                           <xsl:variable name="target" select="//*[contains(@class, ' topic/topic ')][1][local-name()=$element]"/>
-                          <!-- added by William on 20090808 for req #12008 end-->
                                   <xsl:choose>
                                     <xsl:when test="$target">
-                                       <!-- added by William on 2009-06-26 for req #12014 start -->
                                       <xsl:variable name="firstTopicId" select="$target/@id"/>
                                       <xsl:choose>
                                         <!-- if the first topic id is exported and transtype is eclipsehelp-->
@@ -576,7 +538,6 @@
                                           </xsl:copy>
                                         </xsl:when>
                                         <xsl:otherwise>
-                                          <!-- added by William on 2009-06-26 for req #12014 end -->
                                           <!-- do the normal process -->
                                           <xsl:apply-templates select="$target[1]" mode="conref-target">
                                             <xsl:with-param name="source-element">
@@ -603,21 +564,17 @@
                                           <xsl:if test="$target[2]">
                                             <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
                                           </xsl:if>
-                                        <!-- added by William on 2009-06-26 for req #12014 start -->
                                         </xsl:otherwise>
                                       </xsl:choose>
-                                      <!-- added by William on 2009-06-26 for req #12014 end --> 
                                     </xsl:when>
-                                    <xsl:otherwise><xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
+                                    <xsl:otherwise><xsl:apply-templates select="$current-element" mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
                                   </xsl:choose>
-                      <!-- added by William on 20090808 for req #12008 start-->
                           </xsl:for-each>
                     </xsl:when>
                     <xsl:otherwise>
                       <xsl:apply-templates select="." mode="ditamsg:domainMismatch"/>
                     </xsl:otherwise>
                   </xsl:choose>
-               <!-- added by William on 20090808 for req #12008 end-->
               </xsl:when>
               <xsl:otherwise/><!--never happens - only three possible values for topicpos, all are tested-->
             </xsl:choose>
@@ -656,7 +613,6 @@
                 </xsl:choose>
               </xsl:when>
               <xsl:when test="$topicpos='otherfile'">
-                <!-- added by William on 20090808 for req #12008 start-->
                 <!-- format domains attribute in the source file -->
                 <xsl:variable name ="preDomains" select="normalize-space($ORIGINAL-DOMAINS)"/>
                 <xsl:variable name="isValid">
@@ -670,7 +626,6 @@
                   <xsl:when test="$isValid='true'">
                     <xsl:for-each select="document($file,/)">
                     <xsl:variable name="target" select="key('id', $topicid)[contains(@class, ' map/topicref ')][local-name()=$element]"/>
-                    <!-- added by William on 20090808 for req #12008 end-->
                           <xsl:choose>
                             <xsl:when test="$target">
                               <xsl:apply-templates select="$target[1]" mode="conref-target">
@@ -698,16 +653,14 @@
                                   <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
                               </xsl:if>
                             </xsl:when>
-                            <xsl:otherwise><xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
+                            <xsl:otherwise><xsl:apply-templates select="$current-element" mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
                           </xsl:choose>
-                    <!-- added by William on 20090808 for req #12008 start-->
                     </xsl:for-each>
                   </xsl:when>
                   <xsl:otherwise>
                     <xsl:apply-templates select="." mode="ditamsg:domainMismatch"/>
                   </xsl:otherwise>
                 </xsl:choose>
-                <!-- added by William on 20090808 for req #12008 end-->
               </xsl:when>        
               <xsl:otherwise>
                 <xsl:apply-templates select="." mode="ditamsg:malformedConrefInMap"/>
@@ -748,7 +701,6 @@
                 </xsl:choose>
               </xsl:when>
               <xsl:when test="$topicpos='otherfile'">
-                <!-- added by William on 20090808 for req #12008 start-->
                 <!-- format domains attribute in the source file -->
                 <xsl:variable name ="preDomains" select="normalize-space($ORIGINAL-DOMAINS)"/>
                 <xsl:variable name="isValid">
@@ -762,7 +714,6 @@
                   <xsl:when test="$isValid='true'">
                     <xsl:for-each select="document($file,/)">
                     <xsl:variable name="target" select="key('id', $topicid)[local-name()=$element]"/>
-                    <!-- added by William on 20090808 for req #12008 end-->
                         <xsl:choose>
                           <xsl:when test="$target">
                             <xsl:apply-templates select="$target[1]" mode="conref-target">
@@ -790,16 +741,14 @@
                                 <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
                             </xsl:if>
                           </xsl:when>
-                          <xsl:otherwise><xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
+                          <xsl:otherwise><xsl:apply-templates select="$current-element" mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
                         </xsl:choose>
-                    <!-- added by William on 20090808 for req #12008 start-->
                     </xsl:for-each>
                   </xsl:when>
                   <xsl:otherwise>
                     <xsl:apply-templates select="." mode="ditamsg:domainMismatch"/>
                   </xsl:otherwise>
                 </xsl:choose>
-                <!-- added by William on 20090808 for req #12008 end-->
               </xsl:when>
               <xsl:otherwise>
                 <xsl:apply-templates select="." mode="ditamsg:malformedConrefInMap"/>
@@ -809,7 +758,6 @@
       
           <!--targetting an element in a map ,and the source is a element  from a topic ,add by wxzhang 20070605-->
           <xsl:when test="substring-after(@conref,'#')!=''">
-            <!-- added by William on 20090808 for req #12008 start-->
             <!-- format domains attribute in the source file -->
             <xsl:variable name ="preDomains" select="normalize-space($ORIGINAL-DOMAINS)"/>
             <xsl:variable name="isValid">
@@ -823,7 +771,6 @@
               <xsl:when test="$isValid='true'">
                 <xsl:for-each select="document($file,/)">
                 <xsl:variable name="target" select="key('id', $topicid)[local-name()=$element]"/>
-                <!-- added by William on 20090808 for req #12008 end-->
                     <xsl:choose>
                       <!-- to resolve the problem of conref from map to topic -->
                       <xsl:when test="$target">
@@ -853,25 +800,21 @@
                           <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
                         </xsl:if>
                       </xsl:when>
-                      <xsl:otherwise><xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
+                      <xsl:otherwise><xsl:apply-templates select="$current-element" mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
                     </xsl:choose>
-                <!-- added by William on 20090808 for req #12008 start-->
                 </xsl:for-each>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:apply-templates select="." mode="ditamsg:domainMismatch"/>
               </xsl:otherwise>
             </xsl:choose>
-            <!-- added by William on 20090808 for req #12008 end--> 
           </xsl:when>
             <xsl:otherwise>
               <xsl:apply-templates select="." mode="ditamsg:malformedConref"/>
             </xsl:otherwise>
           </xsl:choose>
-      <!-- added  by William on 2009-06-26 for req #12014 start -->    
     </xsl:otherwise>
   </xsl:choose>
-  <!-- added  by William on 2009-06-26 for req #12014 end -->
 </xsl:template>
 
 <!-- When an element is the target of a conref, treat everything the same as any other element EXCEPT the attributes.
@@ -924,7 +867,7 @@
     <xsl:otherwise>
       <xsl:element name="{$original-element}">
         <xsl:choose>
-          <xsl:when test="system-property('xsl:version') >= 2.0">
+          <xsl:when test="number(system-property('xsl:version')) >= 2.0">
             <xsl:apply-templates select="$original-attributes/*[1]/@*" mode="original-attributes"/>
           </xsl:when>
           <xsl:otherwise>
@@ -1033,8 +976,8 @@
 </xsl:template>
 <xsl:template match="@*" mode="original-attributes">    
     <xsl:variable name="attribute-value" select="."></xsl:variable>
-    <xsl:if test="not($attribute-value='')">
-        <xsl:copy><xsl:value-of select="."/></xsl:copy> 
+    <xsl:if test="not($attribute-value='')"><!-- XXX: Why ignore empty attribute value? -->
+        <xsl:copy/> 
     </xsl:if>
 </xsl:template>
 
@@ -1143,7 +1086,10 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:variable>
-	<xsl:variable name="href-gen-id" select="generate-id(key('id', $href-topicid)[contains(@class, ' topic/topic ')]//*[@id=$href-elemid])"/>
+  <xsl:variable name="href-gen-id">
+    <xsl:variable name="topic" select="key('id', $href-topicid)"/>
+    <xsl:value-of select="generate-id($topic[contains(@class, ' topic/topic ')]//*[@id=$href-elemid][generate-id(ancestor::*[contains(@class, ' topic/topic ')][1]) = generate-id($topic)])"/>
+  </xsl:variable>
 	<xsl:choose>
 		<xsl:when 
 			test="($conref-gen-id='') or (not($conref-gen-id=$href-gen-id))">
@@ -1234,7 +1180,6 @@
   </xsl:element>
 </xsl:template>
   
-<!-- added by William on 20090804 for req #12008 start-->
   <xsl:template name="checkValid">
     <xsl:param name="sourceDomains"/>
     <xsl:param name="targetDomains"/>
@@ -1354,7 +1299,6 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-  <!-- added by William on 20090804 for req #12008 end-->
 
   
 <!--copy everything else-->
@@ -1386,11 +1330,9 @@
   <xsl:param name="file-prefix"/>
   <xsl:value-of select="$file-prefix"/>    
   <xsl:choose>
-    <!--Added by William on 2010-04-26 for bug:2990162 start-->
     <xsl:when test="starts-with($href,'#')">
       <xsl:value-of select="$file-being-processed"/>
     </xsl:when>    
-    <!--Added by William on 2010-04-26 for bug:2990162 end-->
     <xsl:when test="contains($href,'#')">
       <xsl:value-of select="substring-before($href,'#')"/>
     </xsl:when>
@@ -1450,12 +1392,11 @@
     <xsl:with-param name="msgparams">%1=<xsl:value-of select="@conref"/></xsl:with-param>
   </xsl:call-template>
 </xsl:template>
-<!-- added by William on 2009-08-20 for #12008 start -->
   <xsl:template match="*" mode="ditamsg:parserUnsupported">
     <xsl:call-template name="output-message">
       <xsl:with-param name="msgnum">062</xsl:with-param>
       <xsl:with-param name="msgsev">I</xsl:with-param>
     </xsl:call-template>
   </xsl:template>
-<!-- added by William on 2009-08-20 for #12008 end -->
+
 </xsl:stylesheet>

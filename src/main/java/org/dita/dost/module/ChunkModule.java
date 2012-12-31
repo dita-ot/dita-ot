@@ -76,7 +76,7 @@ final class ChunkModule implements AbstractPipelineModule {
             throw new IllegalStateException("Logger not set");
         }
         final File tempDir = new File(input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR));
-        final String ditaext = input.getAttribute(ANT_INVOKER_PARAM_DITAEXT);
+        final String ditaext = input.getAttribute(ANT_INVOKER_PARAM_DITAEXT) != null ? input.getAttribute(ANT_INVOKER_PARAM_DITAEXT) : ".dita";
         final String transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
 
         if (!tempDir.isAbsolute()) {
@@ -191,10 +191,6 @@ final class ChunkModule implements AbstractPipelineModule {
         for (String t : hrefTopics) {
             if (t.lastIndexOf(SHARP) != -1) {
                 t = t.substring(0, t.lastIndexOf(SHARP));
-            }
-            if (t.lastIndexOf(FILE_EXTENSION_DITAMAP) == -1) {
-                final String ditaext = input.getAttribute(ANT_INVOKER_PARAM_DITAEXT);
-                t = changeExtName(t, ditaext, ditaext);
             }
             t = FileUtils.getRelativePath(xmlDitalist.getAbsolutePath(), FileUtils.resolveFile(tempDir.getAbsolutePath(), t));
             topicList.add(t);
@@ -324,31 +320,4 @@ final class ChunkModule implements AbstractPipelineModule {
         }
     }
 
-    /**
-     * Change file extension.
-     * 
-     * @param filename original file name, may be <code>null</code>
-     * @param from source extension, may be <code>null</code>
-     * @param to destination extension, may be <code>null</code>
-     * @return filename with changed file extension, <code>null</code> if empty input
-     */
-    private String changeExtName(final String filename, String from, String to) {
-        if (StringUtils.isEmptyString(filename)) {
-            return null;
-        }
-        if (filename.indexOf(to) != -1) {
-            return filename;
-        }
-        if (from == null) {
-            from = "";
-        }
-        if (to == null) {
-            to = "";
-        }
-        if (filename.lastIndexOf(from) != -1) {
-            return filename.substring(0, filename.lastIndexOf(from)) + to;
-        } else {
-            return filename + to;
-        }
-    }
 }

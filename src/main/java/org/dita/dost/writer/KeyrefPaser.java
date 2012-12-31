@@ -116,8 +116,10 @@ public final class KeyrefPaser extends XMLFilterImpl {
         ki.add(new KeyrefInfo(TOPIC_XREF, ATTRIBUTE_NAME_HREF, false));
         ki.add(new KeyrefInfo(TOPIC_CITE, null, false));
         ki.add(new KeyrefInfo(TOPIC_DT, null, false));
-        ki.add(new KeyrefInfo(TOPIC_KEYWORD, null, false));
-        ki.add(new KeyrefInfo(TOPIC_TERM, null, false));
+        // links are processed for glossentry processing
+        ki.add(new KeyrefInfo(TOPIC_KEYWORD, ATTRIBUTE_NAME_HREF, false, false));
+        // links are processed for glossentry processing
+        ki.add(new KeyrefInfo(TOPIC_TERM, ATTRIBUTE_NAME_HREF, false, false));
         ki.add(new KeyrefInfo(TOPIC_PH, null, false));
         ki.add(new KeyrefInfo(TOPIC_INDEXTERM, null, false));
         ki.add(new KeyrefInfo(TOPIC_INDEX_BASE, null, false));
@@ -300,13 +302,13 @@ public final class KeyrefPaser extends XMLFilterImpl {
             final Properties prop = new Properties();
             prop.put("%1", inputFile.getPath());
             prop.put("%2", outputFile.getPath());
-            logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
+            logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop).toString());
         }
         if (!outputFile.renameTo(inputFile)) {
             final Properties prop = new Properties();
             prop.put("%1", inputFile.getPath());
             prop.put("%2", outputFile.getPath());
-            logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
+            logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop).toString());
         }
     }
     
@@ -489,7 +491,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
             if(elem!=null){
                 final NamedNodeMap namedNodeMap = elem.getAttributes();
                 // first resolve the keyref attribute
-                if (currentElement != null && currentElement.isRefType) {
+                if (currentElement != null && currentElement.refAttr != null) {
                     String target = keyMap.get(keyName);
                     if (target != null && target.length() != 0) {
                         String target_output = target;
@@ -506,11 +508,6 @@ public final class KeyrefPaser extends XMLFilterImpl {
                             target_output = normalizeHrefValue(target_output, elementId);
                             XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output);
                         } else if ("".equals(scopeValue) || ATTR_SCOPE_VALUE_LOCAL.equals(scopeValue)){
-                        	if (!(MAPGROUP_D_MAPREF.matches(cls)
-									&& FileUtils.isDITAMapFile(target.toLowerCase()))){
-                        		target = FileUtils.replaceExtension(target,extName);
-							}
-                        	
                             final File topicFile = new File(FileUtils.resolveFile(tempDir, target));
                             if (topicFile.exists()) {  
                                 final String topicId = this.getFirstTopicId(topicFile);
@@ -531,7 +528,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
                                 /*Properties prop = new Properties();
 								prop.put("%1", atts.getValue(ATTRIBUTE_NAME_KEYREF));
 								javaLogger
-										.logInfo(MessageUtils.getMessage("DOTJ047I", prop)
+										.logInfo(MessageUtils.getInstance().getMessage("DOTJ047I", prop)
 												.toString());*/
                             }
                         }
@@ -557,7 +554,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
                         // key does not exist.
                         final Properties prop = new Properties();
                         prop.put("%1", atts.getValue(ATTRIBUTE_NAME_KEYREF));
-                        logger.logInfo(MessageUtils.getMessage("DOTJ047I", prop).toString());
+                        logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ047I", prop).setLocation(atts).toString());
                     }
 
                 } else if (currentElement != null && !currentElement.isRefType) {
@@ -619,7 +616,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
                 // key does not exist
                 final Properties prop = new Properties();
                 prop.put("%1", atts.getValue(ATTRIBUTE_NAME_KEYREF));
-                logger.logInfo(MessageUtils.getMessage("DOTJ047I", prop).toString());;
+                logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ047I", prop).setLocation(atts).toString());
             }
 
             validKeyref.push(valid);
@@ -637,7 +634,6 @@ public final class KeyrefPaser extends XMLFilterImpl {
      * 
      * @param elem element to serialize
      * @param retainElements {@code true} to serialize elements, {@code false} to only serialize text nodes.
-     * @return
      */
     private void domToSax(final Element elem, final boolean retainElements) throws SAXException{
         // use retainElements to indicate that whether there is need to copy the element name
@@ -736,12 +732,23 @@ public final class KeyrefPaser extends XMLFilterImpl {
          * @param type element type
          * @param refAttr hyperlink attribute name
          * @param isEmpty flag if element is empty
+         * @param isRefType element is a reference type
          */
-        KeyrefInfo(final DitaClass type, final String refAttr, final boolean isEmpty) {
+        KeyrefInfo(final DitaClass type, final String refAttr, final boolean isEmpty, final boolean isRefType) {
             this.type = type;
             this.refAttr = refAttr;
             this.isEmpty = isEmpty;
-            this.isRefType = refAttr != null;
+            this.isRefType = isRefType;
+        }
+        /**
+         * Construct a new key reference info object.
+         * 
+         * @param type element type
+         * @param refAttr hyperlink attribute name
+         * @param isEmpty flag if element is empty
+         */
+        KeyrefInfo(final DitaClass type, final String refAttr, final boolean isEmpty) {
+        	this(type, refAttr, isEmpty, refAttr != null);
         }
     }
     

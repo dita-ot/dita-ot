@@ -7,7 +7,7 @@
         command-line prompt for a specific session, or you can increase the value of the ANT_OPTS
         environmental variable.</shortdesc>
     <taskbody>
-        <steps>
+        <steps-unordered>
             <step>
                 <cmd>To change the value for an specific session, from the command prompt, issue the
                     following command:</cmd>
@@ -16,18 +16,18 @@
                         <choptionhd>Platform</choptionhd>
                         <chdeschd>Command</chdeschd>
                     </chhead>
-                    <chrow>
+                    <chrow platform="windows">
                         <choption>Windows</choption>
                         <chdesc><codeph>set ANT_OPTS=%ANT_OPTS%
                                 -Xmx<varname>1024</varname>M</codeph></chdesc>
                     </chrow>
-                    <chrow>
-                        <choption>Linux</choption>
+                    <chrow platform="unix">
+                        <choption>Linux/OS X</choption>
                         <chdesc><codeph>export ANT_OPTS=$ANT_OPTS
                                 -Xmx<varname>1024</varname>M</codeph></chdesc>
                     </chrow>
                 </choicetable>
-                <info><p>This increases the JVM to 1024 megabytes. The amount of memory which can 
+                <info><p>This increases the JVM memory allocation to 1024 megabytes. The amount of memory which can 
                 be allocated is limited by available system memory and the operating system.</p></info>
             </step>
             <step>
@@ -36,6 +36,6 @@
                     from the Full Easy Install to set up a toolkit session, edit that file
                     to change the value.</cmd>
             </step>
-        </steps>
+        </steps-unordered>
     </taskbody>
 </task>

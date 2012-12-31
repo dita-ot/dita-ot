@@ -115,8 +115,7 @@ public final class FilePathToURI {
             try {
                 bytes = path.substring(i).getBytes("UTF-8");
             } catch (final java.io.UnsupportedEncodingException e) {
-                // Should never happen
-                return path;
+                throw new RuntimeException(e);
             }
             len = bytes.length;
 

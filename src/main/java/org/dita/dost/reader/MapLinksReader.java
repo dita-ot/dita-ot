@@ -13,6 +13,7 @@ import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -115,10 +116,8 @@ public final class MapLinksReader extends AbstractXMLReader {
             reader = StringUtils.getXMLReader();
             reader.setContentHandler(this);
             reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
-            //Added by william on 2009-11-8 for ampbug:2893664 start
             reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
             reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
-            //Added by william on 2009-11-8 for ampbug:2893664 end
             reader.setFeature("http://xml.org/sax/features/namespaces", false);
         } catch (final Exception e) {
             logger.logException(e);
@@ -220,10 +219,7 @@ public final class MapLinksReader extends AbstractXMLReader {
                 m.put(frag, indexEntries.toString());
                 map.put(t, m);
             }
-            //TODO Added by William on 2009-06-16 for bug:2791696 reltable bug start
             indexEntries = new StringBuffer(INT_1024);
-            //TODO Added by William on 2009-06-16 for bug:2791696 reltable bug end
-
         }
     }
 
@@ -236,8 +232,10 @@ public final class MapLinksReader extends AbstractXMLReader {
 
     /**
      * @return content collection {@code Set<Entry<String, Map<String, String>>>}
+     * @deprecated use {@link #getMapping()} instead
      */
     @Override
+    @Deprecated
     public Content getContent() {
 
         final ContentImpl result = new ContentImpl();
@@ -245,6 +243,15 @@ public final class MapLinksReader extends AbstractXMLReader {
         return result;
     }
 
+    /**
+     * Get links for topics
+     * 
+     * @return map of links by topic path
+     */
+    public Map<String, Map<String, String>> getMapping() {
+    	return Collections.unmodifiableMap(map);
+    }
+    
     @Override
     public void ignorableWhitespace(final char[] ch, final int start, final int length)
             throws SAXException {

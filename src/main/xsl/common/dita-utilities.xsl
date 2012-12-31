@@ -251,6 +251,7 @@
 <!-- Return the portion of an HREF value up to the file's extension. This assumes
      that the file has an extension, and that the topic and/or element ID does not
      contain a period. Written to allow references such as com.example.dita.files/file.dita#topic -->
+<!-- Deprecated: use replace-extension instead -->
 <xsl:template match="*" mode="parseHrefUptoExtension">
   <xsl:param name="href" select="@href"/>
   <xsl:variable name="uptoDot"><xsl:value-of select="substring-before($href,'.')"/></xsl:variable>
@@ -302,6 +303,34 @@
         <xsl:value-of select="$filename"/>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+  
+  <!-- Replace file extension in a URI -->
+  <xsl:template name="replace-extension">
+    <xsl:param name="filename"/>
+    <xsl:param name="extension"/>
+    <xsl:param name="ignore-fragment" select="false()"/>
+    <xsl:variable name="f">
+      <xsl:call-template name="substring-before-last">
+        <xsl:with-param name="text">
+          <xsl:choose>
+            <xsl:when test="contains($filename, '#')">
+              <xsl:value-of select="substring-before($filename, '#')"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="$filename"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:with-param>
+        <xsl:with-param name="delim" select="'.'"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:if test="string($f)">
+      <xsl:value-of select="concat($f, $extension)"/>  
+    </xsl:if>
+    <xsl:if test="not($ignore-fragment) and contains($filename, '#')">
+      <xsl:value-of select="concat('#', substring-after($filename, '#'))"/>
+    </xsl:if>
   </xsl:template>
   
   <xsl:template name="substring-before-last">

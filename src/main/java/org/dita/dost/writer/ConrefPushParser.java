@@ -61,10 +61,8 @@ public final class ConrefPushParser extends AbstractXMLWriter {
     private final XMLReader parser;
     /**output.*/
     private OutputStreamWriter output = null;
-    //Added by william on 2009-11-8 for ampbug:2893664 start
     /**whether an entity needs to be resolved or not flag. */
     private boolean needResolveEntity = true;
-    //Added by william on 2009-11-8 for ampbug:2893664 end
 
     /**topicSpecSet is used to store all kinds of names for elements which is
 	specialized from <topic>. It is useful in endElement(...) because we don't
@@ -143,11 +141,9 @@ public final class ConrefPushParser extends AbstractXMLWriter {
             parser.setFeature(FEATURE_NAMESPACE_PREFIX, true);
             parser.setFeature(FEATURE_NAMESPACE, true);
             parser.setContentHandler(this);
-            //Added by william on 2009-11-8 for ampbug:2893664 start
             parser.setProperty(LEXICAL_HANDLER_PROPERTY,this);
             parser.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
             parser.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
-            //Added by william on 2009-11-8 for ampbug:2893664 end
         }catch (final Exception e) {
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
@@ -200,7 +196,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
                     key = iterator.next();
                     prop.setProperty("%1", key.substring(0, key.indexOf(STICK)));
                     prop.setProperty("%2", filename);
-                    logger.logWarn(MessageUtils.getMessage("DOTJ043W", prop).toString());
+                    logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ043W", prop).toString());
                 }
             }
             if(hasConref){
@@ -211,13 +207,13 @@ public final class ConrefPushParser extends AbstractXMLWriter {
                 final Properties prop = new Properties();
                 prop.put("%1", inputFile.getPath());
                 prop.put("%2", outputFile.getPath());
-                logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop).toString());
             }
             if(!outputFile.renameTo(inputFile)){
                 final Properties prop = new Properties();
                 prop.put("%1", inputFile.getPath());
                 prop.put("%2", outputFile.getPath());
-                logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop).toString());
             }
         } catch (final Exception e) {
             logger.logException(e);
@@ -354,7 +350,6 @@ public final class ConrefPushParser extends AbstractXMLWriter {
      * @return boolean: if type match, return true, else return false
      */
     private boolean isPushedTypeMatch(final String targetClassAttribute, String string) {
-        //This function is added for bug report: Conref Push order of validation - ID: 3344142
         String clazz = "";
         InputSource inputSource = null;
         Document document = null;
@@ -458,9 +453,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
                                 }
                                 if(subNode.getNodeType() == Node.TEXT_NODE){
                                     //stringBuffer.append(subNode.getNodeValue());
-                                    //Added by William on 2009-06-30 for colname bug:2811358 start
                                     stringBuffer.append(StringUtils.escapeXML(subNode.getNodeValue()));
-                                    //Added by William on 2009-06-30 for colname bug:2811358 start
                                 }
                             }
                             stringBuffer.append("</").append(targetElementName).append(GREATER_THAN);
@@ -518,9 +511,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
             }
             if(node.getNodeType() == Node.TEXT_NODE){
                 //stringBuffer.append(node.getNodeValue());
-                //Added by William on 2009-06-30 for colname bug:2811358 start
                 stringBuffer.append(StringUtils.escapeXML(node.getNodeValue()));
-                //Added by William on 2009-06-30 for colname bug:2811358 start
             }
         }
         stringBuffer.append("</").append(generalizedElemName).append(GREATER_THAN);
@@ -557,7 +548,6 @@ public final class ConrefPushParser extends AbstractXMLWriter {
                     String idPath = SHARP+topicId+SLASH+atts.getValue(ATTRIBUTE_NAME_ID);
                     final String defaultidPath = SHARP+atts.getValue(ATTRIBUTE_NAME_ID);
                     String containkey =null;
-                    //Added by William on 2009-10-10 for conrefPush bug:2872954 start
                     //enable conref push at map level
                     if(classValue != null && (MAP_TOPICREF.matches(classValue)
                             || MAP_MAP.matches(classValue))){
@@ -644,10 +634,8 @@ public final class ConrefPushParser extends AbstractXMLWriter {
                         output.write(STRING_BLANK);
                         output.write(atts.getQName(index));
                         output.write("=\"");
-                        //Edited by william on 2009-11-8 for ampbug:2893664 start
                         String value =  atts.getValue(index);
                         value =  StringUtils.escapeXML(value);
-                        //Edited by william on 2009-11-8 for ampbug:2893664 end
                         output.write(value);
                         output.write("\"");
                     }
@@ -693,7 +681,6 @@ public final class ConrefPushParser extends AbstractXMLWriter {
         super.startDocument();
     }
 
-    //Added by william on 2009-11-8 for ampbug:2893664 start
     @Override
     public void startEntity(final String name) throws SAXException {
         try {
@@ -712,5 +699,5 @@ public final class ConrefPushParser extends AbstractXMLWriter {
             needResolveEntity = true;
         }
     }
-    //Added by william on 2009-11-8 for ampbug:2893664 end
+
 }

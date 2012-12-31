@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="lib-org.dita.dost.platform-plugin.properties">
+  <title><filepath>lib/org.dita.dost.platform/plugin.properties</filepath> file</title>
+  <shortdesc><ph audience="xslt-customizer">The
+        <filepath>lib/org.dita.dost.platform/plugin.properties</filepath> file is used to store
+      configuration properties that are set by the integration process. The file is regenerated each
+      time the integration process is run and so should not be edited manually.</ph></shortdesc>
+</reference>
