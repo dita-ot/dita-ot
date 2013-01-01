@@ -49,21 +49,6 @@ public final class DITAOTEchoTask extends Echo {
     }
 
     /**
-     * Set the parameters.
-     * @param params  The prop to set.
-     * @deprecated use nested {@code param} elements instead with {@link #createParam()}
-     */
-    @Deprecated
-    public void setParams(final String params) {
-        final StringTokenizer tokenizer = new StringTokenizer(params, ";");
-        while (tokenizer.hasMoreTokens()) {
-            final String token = tokenizer.nextToken();
-            final int pos = token.indexOf("=");
-            this.prop.put(token.substring(0, pos), token.substring(pos + 1));
-        }
-    }
-
-    /**
      * Handle nested parameters. Add the key/value to the pipeline hash, unless
      * the "if" attribute is set and refers to a unset property.
      * @return parameter

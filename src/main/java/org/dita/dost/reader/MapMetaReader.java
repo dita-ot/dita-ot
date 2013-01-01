@@ -447,14 +447,11 @@ public final class MapMetaReader implements AbstractReader {
     }
 
     /**
-     * @return content collection {@code Set<Entry<String, Hashtable<String, Element>>>}
      * @deprecated use {@link #getMapping()} instead
      */
     @Deprecated
     public Content getContent() {
-        final ContentImpl result = new ContentImpl();
-        result.setCollection( resultTable.entrySet());
-        return result;
+        throw new UnsupportedOperationException();
     }
 
     /**

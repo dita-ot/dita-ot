@@ -58,9 +58,9 @@ public class MapLinksReaderTest {
         XMLUnit.setIgnoreDiffBetweenTextAndCDATA(true);
         XMLUnit.setIgnoreComments(true);
 
-        final Set<Map.Entry<String, Map<String, String>>> mapSet = (Set<Map.Entry<String, Map<String, String>>>) reader.getContent().getCollection();
+        final Map<String, Map<String, String>> mapSet = reader.getMapping();
         
-        for (final Map.Entry<String, Map<String, String>> e: mapSet) {
+        for (final Map.Entry<String, Map<String, String>> e: mapSet.entrySet()) {
             for (final Map.Entry<String, String> ee: e.getValue().entrySet()) {
                 assertEquals(SHARP, ee.getKey());
                 assertXMLEqual(expMap.get(e.getKey()),

@@ -163,10 +163,6 @@
       style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/conref.xsl" filenameparameter="file-being-processed">
       <mapper type="glob" from="*" to="*.cnrf" />
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
-      <!-- Deprecated -->
-      <param name="BASEDIR" expression="${basedir}"/>
-      <!-- Deprecated -->
-      <param name="TEMPDIR" expression="${dita.temp.dir}"/>
       <param name="EXPORTFILE" expression="${exportfile.url}"/>
       <param name="TRANSTYPE" expression="${transtype}"/>
       <dita:extension id="dita.preprocess.conref.param" behavior="org.dita.dost.platform.InsertAction"/>
@@ -226,8 +222,6 @@
       style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl" filenameparameter="file-being-processed">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="TRANSTYPE" expression="${transtype}" />
-      <!-- Deprecated -->
-      <param name="FILEREF" expression="file:"/>
       <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction"/>
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
@@ -433,7 +427,7 @@
         includesfile="${dita.temp.dir}/${fullditatopicfile}" 
         classpathref="dost.class.path" 
         reloadstylesheet="${dita.preprocess.reloadstylesheet.flag-module}" 
-        style="${dita.script.dir}/preprocess/flag.xsl"
+        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/flag.xsl"
         filenameparameter="FILENAME" 
         filedirparameter="FILEDIR">
       <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"></excludesfile>

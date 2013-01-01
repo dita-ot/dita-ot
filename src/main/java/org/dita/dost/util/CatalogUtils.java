@@ -43,33 +43,6 @@ public final class CatalogUtils {
     }
 
     /**
-     * Parse the catalog file to get catalog map.
-     * @param ditaDir absolute path to directory to find catalog-dita.xml
-     * @return catalog map
-     * @deprecated use Apache Commons Catalog Resolver instead
-     */
-    @Deprecated
-    public static synchronized HashMap<String, String> getCatalog(final File ditaDir) {
-        if (map != null) {
-            return map;
-        }
-
-        final File catalogFilePath = (ditaDir == null) ? new File(FILE_NAME_CATALOG) : new File(ditaDir, FILE_NAME_CATALOG);
-
-        map = new HashMap<String, String>();
-        final CatalogParser parser = new CatalogParser(map, ditaDir.getAbsolutePath());
-        try {
-            final XMLReader reader = StringUtils.getXMLReader();
-            reader.setContentHandler(parser);
-            reader.parse(catalogFilePath.toURI().toASCIIString());
-        } catch (final Exception e) {
-            logger.logException(e);
-        }
-
-        return map;
-    }
-
-    /**
      * Set directory to find catalog-dita.xml.
      * @param ditaDir ditaDir
      */
@@ -77,15 +50,7 @@ public final class CatalogUtils {
         catalogResolver=null;
         CatalogUtils.ditaDir=ditaDir;
     }
-    /**
-     * Get the current set directory to find catalog-dita.xml.
-     * @return ditaDir, empty string if ditaDir is set to null or "".
-     * @deprecated access ditaDir directly
-     */
-    @Deprecated
-    public static File getDitaDir(){
-        return ditaDir;
-    }
+
     /**
      * Get CatalogResolver.
      * @return CatalogResolver

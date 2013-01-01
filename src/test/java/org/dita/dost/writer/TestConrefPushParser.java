@@ -105,8 +105,8 @@ public class TestConrefPushParser {
         final ConrefPushReader reader = new ConrefPushReader();
 
         reader.read(inputFile.getAbsolutePath());
-        final Set<Map.Entry<String, Hashtable<String, String>>> pushSet = (Set<Map.Entry<String, Hashtable<String,String>>>) reader.getContent().getCollection();
-        final Iterator<Map.Entry<String, Hashtable<String,String>>> iter = pushSet.iterator();
+        final Map<String, Hashtable<String, String>> pushSet = reader.getPushMap();
+        final Iterator<Map.Entry<String, Hashtable<String,String>>> iter = pushSet.entrySet().iterator();
         if(iter.hasNext()){
             final Map.Entry<String, Hashtable<String,String>> entry = iter.next();
             // initialize the parsed file

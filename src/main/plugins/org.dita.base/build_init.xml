@@ -103,12 +103,6 @@
     <classpath refid="dost.jar.path" />
   </taskdef>
 
-  <!-- Deprecated -->
-  <taskdef name="ext-pipeline"
-    classname="org.dita.dost.invoker.ExtensibleAntInvoker">
-    <classpath refid="dost.jar.path" />
-  </taskdef>
-
   <taskdef name="config-logger"
     classname="org.dita.dost.log.LogConfigTask">
     <classpath refid="dost.jar.path" />
@@ -149,18 +143,7 @@
   <property name="base.temp.dir" location="${basedir}/temp"/>
   <property name="dita.temp.dir" location="${base.temp.dir}${file.separator}temp${current.date}" />
   <property name="output.dir" location="${basedir}/out" />
-  <!-- Deprecated -->
-  <property name="dita.script.dir"
-    location="${dita.plugin.org.dita.base.dir}${file.separator}xsl" />
-  <!-- Deprecated -->
-  <property name="dita.resource.dir"
-    location="${dita.plugin.org.dita.base.dir}${file.separator}resource" />
   <property environment="env" />
-  <!-- Deprecated -->
-  <property name="dita.empty" value="" />
-  <!-- Deprecated -->
-  <property name="args.message.file"
-    location="${dita.plugin.org.dita.base.dir}${file.separator}resource${file.separator}messages.xml" />
   <!-- property values end -->
 
   <target name="build-init"

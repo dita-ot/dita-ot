@@ -69,11 +69,7 @@ public class MessageUtilsTest {
 
     @Test
     public void testGetMessageString() {
-        final MessageBean exp = new MessageBean();
-        exp.setId("XXX123F");
-        exp.setType("FATAL");
-        exp.setReason("Fatal reason.");
-        exp.setResponse("Fatal response.");
+        final MessageBean exp = new MessageBean("XXX123F", "FATAL", "Fatal reason.","Fatal response.");
         assertEquals(exp.toString(), MessageUtils.getInstance().getMessage("XXX123F").toString());
     }
 
@@ -82,11 +78,7 @@ public class MessageUtilsTest {
         final Properties props = new Properties();
         props.put("%1", "foo");
         props.put("%2", "bar baz");
-        final MessageBean exp = new MessageBean();
-        exp.setId("XXX234E");
-        exp.setType("ERROR");
-        exp.setReason("Error foo reason bar baz.");
-        exp.setResponse("Error foo response bar baz.");
+        final MessageBean exp = new MessageBean("XXX234E", "ERROR", "Error foo reason bar baz.", "Error foo response bar baz.");
         assertEquals(exp.toString(), MessageUtils.getInstance().getMessage("XXX234E", props).toString());
     }
 
@@ -94,11 +86,7 @@ public class MessageUtilsTest {
     public void testGetMessageStringMissing() {
         final Properties props = new Properties();
         props.put("%1", "foo");
-        final MessageBean exp = new MessageBean();
-        exp.setId("XXX234E");
-        exp.setType("ERROR");
-        exp.setReason("Error foo reason %2.");
-        exp.setResponse("Error foo response %2.");
+        final MessageBean exp = new MessageBean("XXX234E", "ERROR", "Error foo reason %2.", "Error foo response %2.");
         assertEquals(exp.toString(), MessageUtils.getInstance().getMessage("XXX234E", props).toString());
     }
 
@@ -108,11 +96,7 @@ public class MessageUtilsTest {
         props.put("%1", "foo");
         props.put("%2", "bar baz");
         props.put("%3", "qux");
-        final MessageBean exp = new MessageBean();
-        exp.setId("XXX234E");
-        exp.setType("ERROR");
-        exp.setReason("Error foo reason bar baz.");
-        exp.setResponse("Error foo response bar baz.");
+        final MessageBean exp = new MessageBean("XXX234E", "ERROR", "Error foo reason bar baz.", "Error foo response bar baz.");
         assertEquals(exp.toString(), MessageUtils.getInstance().getMessage("XXX234E", props).toString());
     }
 

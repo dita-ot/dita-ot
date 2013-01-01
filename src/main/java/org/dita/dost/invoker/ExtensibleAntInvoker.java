@@ -63,74 +63,11 @@ public final class ExtensibleAntInvoker extends Task {
     }
 
     /**
-     * Set base directory.
-     * @param s base directory
-     * @deprecated base directory is read from Ant project instead
-     */
-    @Deprecated
-    public void setBasedir(final String s) {
-        log("basedir attribute is deprecated", Project.MSG_WARN);
-        if (!new File(s).getAbsoluteFile().equals(getProject().getBaseDir().getAbsoluteFile())) {
-            log("Provided base directory " + new File(s).getAbsoluteFile()
-                    + " does not match Ant project base directory "
-                    + getProject().getBaseDir().getAbsoluteFile(), Project.MSG_ERR);
-        }
-        attrs.put(ANT_INVOKER_PARAM_BASEDIR, s);
-    }
-
-    /**
-     * Get base directory
-     * @return base directory
-     * @deprecated use {@link org.apache.tools.ant.Project#getBaseDir()} instead
-     */
-    @Deprecated
-    public String getBasedir() {
-        return attrs.get(ANT_INVOKER_PARAM_BASEDIR);
-    }
-
-    /**
-     * Set module.
-     * @param module module name
-     * @deprecated use nested module elements instead
-     */
-    @Deprecated
-    public void setModule(final String module) throws BuildException {
-        log("module attribute is deprecated, use nested module element instead", Project.MSG_WARN);
-        final Module m = new Module();
-        try {
-            m.setClass((Class<? extends AbstractPipelineModule>) Class.forName("org.dita.dost.module." + module + "Module"));
-        } catch (final ClassNotFoundException e) {
-            throw new BuildException("Failed to instantiate module 2: " + e.getMessage(), e);
-        }
-        modules.add(m);
-    }
-
-    /**
      * Set message.
      * @param m message
      */
     public void setMessage(final String m) {
         attrs.put("message", m);
-    }
-
-    /**
-     * Get message.
-     * @return message
-     */
-    @Deprecated
-    public String getMessage() {
-        return attrs.get("message");
-    }
-
-    /**
-     * Set input data.
-     * @param inputdita input data file
-     * @deprecated use {@link #setInputmap(String)} instead
-     */
-    @Deprecated
-    public void setInputdita(final String inputdita) {
-        log("inputdita attribute is deprecated", Project.MSG_WARN);
-        attrs.put("inputdita", inputdita);
     }
 
     /**
@@ -147,56 +84,6 @@ public final class ExtensibleAntInvoker extends Task {
      */
     public void setTempdir(final File tempdir) {
         attrs.put(ANT_INVOKER_PARAM_TEMPDIR, tempdir.getAbsolutePath());
-    }
-
-    /**
-     * Set extra parameter values for input.
-     * 
-     * Value is a key-value pair string separated by ";" e.g.
-     * {@code maplinks=XXXX;other=YYYY}
-     * 
-     * @param extParam extended parameters string
-     * @deprecated use nested parameter elements instead
-     */
-    @Deprecated
-    public void setExtparam(final String extParam) {
-        log("extparam attribute is deprecated, use nested param element instead", Project.MSG_WARN);
-        String keyValueStr = null;
-        String attrName = null;
-        String attrValue = null;
-        final StringTokenizer extParamStrTokenizer = new StringTokenizer(extParam,
-                KEY_VALUE_PAIR_SEPARATOR);
-
-        while (extParamStrTokenizer.hasMoreTokens()) {
-            int p;
-            keyValueStr = extParamStrTokenizer.nextToken();
-            p = keyValueStr.indexOf(KEY_VALUE_EQUAL_SIGN);
-
-            if (p <= 0) {
-                String msg = null;
-                final Properties params = new Properties();
-
-                params.put("%1", keyValueStr);
-                msg = MessageUtils.getInstance().getMessage("DOTJ006F", params).toString();
-                throw new RuntimeException(msg);
-            }
-
-            attrName = keyValueStr.substring(0, p).trim();
-            attrValue = keyValueStr.substring(p + 1).trim();
-
-            if (StringUtils.isEmptyString(attrName) ||
-                    StringUtils.isEmptyString(attrValue)) {
-                String msg = null;
-                final Properties params = new Properties();
-
-                params.put("%1", keyValueStr);
-                msg = MessageUtils.getInstance().getMessage("DOTJ006F", params).toString();
-                throw new RuntimeException(msg);
-            }
-
-            attrs.put(attrName, attrValue);
-        }
-
     }
 
     /**

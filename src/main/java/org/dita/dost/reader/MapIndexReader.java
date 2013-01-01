@@ -182,19 +182,6 @@ public final class MapIndexReader extends AbstractXMLReader {
     }
 
     /**
-     * @return content collection {@code Set<Entry<String, String>}
-     * @deprecated use {@link #getMapping()} instead
-     */
-    @Override
-    @Deprecated
-    public Content getContent() {
-
-        final ContentImpl result = new ContentImpl();
-        result.setCollection( map.entrySet());
-        return result;
-    }
-
-    /**
      * Get index entries for topics
      * 
      * @return map of index entries by topic path

@@ -231,19 +231,6 @@ public final class MapLinksReader extends AbstractXMLReader {
     }
 
     /**
-     * @return content collection {@code Set<Entry<String, Map<String, String>>>}
-     * @deprecated use {@link #getMapping()} instead
-     */
-    @Override
-    @Deprecated
-    public Content getContent() {
-
-        final ContentImpl result = new ContentImpl();
-        result.setCollection( map.entrySet());
-        return result;
-    }
-
-    /**
      * Get links for topics
      * 
      * @return map of links by topic path

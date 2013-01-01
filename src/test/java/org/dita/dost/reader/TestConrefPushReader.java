@@ -55,8 +55,8 @@ public class TestConrefPushReader {
         final ConrefPushReader pushReader = new ConrefPushReader();
         pushReader.read(filename.getAbsolutePath());
         final Content content = pushReader.getContent();
-        final Set<Map.Entry<String, Hashtable<String,String>>> pushSet =(Set<Map.Entry<String, Hashtable<String,String>>>) content.getCollection();
-        final Iterator<Map.Entry<String, Hashtable<String,String>>> it= pushSet.iterator();
+        final Map<String, Hashtable<String,String>> pushSet = pushReader.getPushMap();
+        final Iterator<Map.Entry<String, Hashtable<String,String>>> it= pushSet.entrySet().iterator();
         if (it.hasNext()){
             // pushSet has only one entry, so there is no need to iterate it.
             final Hashtable<String, String> table = it.next().getValue();

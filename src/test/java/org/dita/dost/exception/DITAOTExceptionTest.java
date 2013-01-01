@@ -38,12 +38,12 @@ public class DITAOTExceptionTest {
     @Test
     public void testDITAOTExceptionMessageBeanThrowableString() {
         new DITAOTException(null, null, null);
-        new DITAOTException(new MessageBean(), new RuntimeException(), "test");
+        new DITAOTException(new MessageBean(null, null, null, null), new RuntimeException(), "test");
     }
 
     @Test
     public void testGetMessageBean() {
-        final MessageBean m = new MessageBean();
+        final MessageBean m = new MessageBean(null, null, null, null);
         final DITAOTException e = new DITAOTException(m, null, "test");
         assertSame(m, e.getMessageBean());
     }

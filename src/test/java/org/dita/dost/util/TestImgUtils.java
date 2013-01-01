@@ -40,7 +40,7 @@ public class TestImgUtils {
     @BeforeClass
     public static void setUp() throws IOException {
         tempDir = TestUtils.createTempDir(TestImgUtils.class);
-        final Job job = new Job(new Properties(), tempDir);
+        final Job job = new Job(tempDir);
         job.write();
         DitaURIResolverFactory.setPath(tempDir.getAbsolutePath());
     }

@@ -29,15 +29,14 @@ public final class JobTest {
     @BeforeClass
     public static void setUp() throws IOException {
         tempDir = TestUtils.createTempDir(JobTest.class);
-        final Properties prop = new Properties();
-        prop.setProperty("user.input.dir", "/foo/bar");
-        prop.setProperty(COPYTO_TARGET_TO_SOURCE_MAP_LIST, "foo=bar,baz=qux");
-        prop.setProperty(SUBJEC_SCHEME_LIST, "foo,bar");
-        prop.setProperty(INPUT_DITAMAP, "foo");
-        prop.setProperty(FULL_DITAMAP_TOPIC_LIST, "foo1,bar1");
-        prop.setProperty(CONREF_TARGET_LIST, "foo2,bar2");
-        prop.setProperty(COPYTO_SOURCE_LIST, "foo3,bar3");
-        final Job j = new Job(prop, tempDir);
+        final Job j = new Job(tempDir);
+        j.setProperty("user.input.dir", "/foo/bar");
+        j.setProperty(COPYTO_TARGET_TO_SOURCE_MAP_LIST, "foo=bar,baz=qux");
+        j.setProperty(SUBJEC_SCHEME_LIST, "foo,bar");
+        j.setProperty(INPUT_DITAMAP, "foo");
+        j.setProperty(FULL_DITAMAP_TOPIC_LIST, "foo1,bar1");
+        j.setProperty(CONREF_TARGET_LIST, "foo2,bar2");
+        j.setProperty(COPYTO_SOURCE_LIST, "foo3,bar3");
         j.write();
         job = new Job(tempDir);
     }

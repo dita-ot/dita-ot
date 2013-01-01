@@ -126,20 +126,6 @@ public final class Job {
     }
 
     /**
-     * Create new job configuration instance. Initialise from properties file.
-     *  
-     * @param props properties file
-     * @param tempDir temporary directory
-     * @deprecated use {@link #Job(File)} instead and populate properties with {@link #setProperty(String, String)}
-     */
-    @Deprecated
-    public Job(final Properties props, final File tempDir) {
-        this.tempDir = tempDir;
-        prop = new HashMap<String, Object>();
-        readProperties(props);
-    }
-    
-    /**
      * Read temporary configuration files. If configuration files are not found,
      * assume an empty job object is being created.
      * 
