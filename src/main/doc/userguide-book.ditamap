@@ -6,7 +6,7 @@
     <prodinfo>
       <prodname>DITA-OT</prodname>
       <vrmlist>
-        <vrm version="1.7"/>
+        <vrm version="1.7.1"/>
       </vrmlist>
     </prodinfo>
   </bookmeta>

@@ -229,6 +229,7 @@ candidate)</li>
 <li>#1411 Files with ".orig" extension missing from distribution (final
 release)</li>
 <li>#1418 PDF2 transtype breaks when bookmap has parts (final release)</li>
+<li>#1425 XHTML flagging included before imports (maintenance 1)</li>
 </ul>       </section>
 </refbody>
 </reference>
