@@ -230,6 +230,7 @@ candidate)</li>
 release)</li>
 <li>#1418 PDF2 transtype breaks when bookmap has parts (final release)</li>
 <li>#1425 XHTML flagging included before imports (maintenance 1)</li>
+<li>#1428 Topic level calculated incorrectly for appendices (maintenance 1)</li>
 </ul>       </section>
 </refbody>
 </reference>
