@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="rel1.8" xml:lang="en">
+  <title>DITA Open Toolkit Release 1.8</title>
+  <!--reference id="releasehighlights" xml:lang="en-us">
+    <title>Release highlights</title>
+    <refbody>
+      <section/>
+    </refbody>
+  </reference-->
+  <reference id="general-enhancements-and-changes" xml:lang="en-us">
+    <title>General Enhancements and Changes</title>
+    <refbody/>
+  </reference>
+  <reference id="reference_yvj_ttj_bd">
+    <title>Migration from previous releases</title>
+    <refbody>
+      <section>
+        <title>Preprocessing</title>
+        <p>The following deprecated Ant properties have been removed:</p>
+        <ul id="ul_rp5_hjs_53">
+          <li><codeph>dita.script.dir</codeph>, use <codeph>${dita.plugin.<varname>id</varname>.dir}</codeph>
+            instead</li>
+          <li><codeph>dita.resource.dir</codeph>, use <codeph>${dita.plugin.org.dita.base.dir}/resource</codeph> instead</li>
+          <li><codeph>dita.empty</codeph></li>
+          <li><codeph>args.message.file</codeph></li>
+        </ul>
+      </section>
+      <section>
+        <title>PDF</title>
+        <p>The following deprecated XSLT stylesheets have been removed:</p>
+        <ul id="ul_vmw_v3s_53">
+          <li><filepath>artwork-preprocessor.xsl</filepath></li>
+          <li><filepath>otdita2fo_frontend.xsl</filepath></li>
+        </ul>
+        <p>The following deprecated XSLT templates have been removed:</p>
+        <ul id="ul_bwz_r3s_53">
+          <li><codeph>insertVariable.old</codeph></li>
+        </ul>
+        <p>The following deprecated XSLT modes have been removed:</p>
+        <ul>
+          <li><codeph>layout-masters-processing</codeph></li>
+          <li><codeph>toc-prefix-text</codeph>, use <codeph>tocPrefix</codeph> mode instead</li>
+          <li><codeph>toc-topic-text</codeph>, use <codeph>tocText</codeph> mode instead</li>
+        </ul>
+      </section>
+    </refbody>
+  </reference>
+  <reference id="rel1.8.issues">
+    <title>Issues</title>
+    <shortdesc>The following items are included in DITA Open Toolkit Release 1.8. Issue numbers
+      correspond to the tracking number in the <ph><xref keyref="dita-ot-issues" scope="external"
+          >GitHub issues tracker</xref></ph>.</shortdesc>
+    <refbody>
+      <section>
+        <title>Feature requests</title>
+        <ul>
+          <li/>
+        </ul>
+      </section>
+      <section>
+        <title>Patches</title>
+        <ul>
+          <li/>
+        </ul>
+      </section>
+      <section>
+        <title>Bugs</title>
+        <ul>
+          <li/>
+        </ul>
+      </section>
+    </refbody>
+  </reference>
+</reference>

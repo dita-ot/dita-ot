@@ -1119,20 +1119,15 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- Gets navigation title of current topic, used for bookmarks/TOC -->
     <xsl:template name="getNavTitle">
-        <!-- topicNumber = the # of times this topic has appeared. When topicNumber=3,
-             this copy of the topic is based on its third appearance in the map. -->
-        <xsl:param name="topicNumber" select="number('NaN')"/>
-        <xsl:variable name="topicref" select="key('map-id', @id)"/>
-        <!-- FIXME: Deprecated as merging does not generate duplicate IDs. To be removed in future release. -->
-        <xsl:variable name="numTopicref" select="$topicref[position()=$topicNumber]"/>
+        <xsl:variable name="topicref" select="key('map-id', @id)[1]"/>
         <xsl:choose>
-            <xsl:when test="$numTopicref/@locktitle='yes' and
-                            $numTopicref/*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
-               <xsl:apply-templates select="$numTopicref/*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]/node()"/>
+            <xsl:when test="$topicref/@locktitle='yes' and
+                            $topicref/*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
+               <xsl:apply-templates select="$topicref/*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]/node()"/>
             </xsl:when>
-            <xsl:when test="$numTopicref/@locktitle='yes' and
-                            $numTopicref/@navtitle">
-                <xsl:value-of select="$numTopicref/@navtitle"/>
+            <xsl:when test="$topicref/@locktitle='yes' and
+                            $topicref/@navtitle">
+                <xsl:value-of select="$topicref/@navtitle"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:apply-templates select="*[contains(@class,' topic/title ')]" mode="getTitle"/>
@@ -2081,46 +2076,6 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="@platform | @product | @audience | @otherprops | @importance | @rev | @status"/>
-
-    <!--  Layout masters  -->
-
-    <!-- Deprecated -->
-    <xsl:template match="*" mode="layout-masters-processing">
-        <xsl:call-template name="output-message">
-            <xsl:with-param name="msgcat">DOTX</xsl:with-param>
-            <xsl:with-param name="msgnum">066</xsl:with-param>
-            <xsl:with-param name="msgsev">W</xsl:with-param>
-            <xsl:with-param name="msgparams">%1=layout-masters-processing</xsl:with-param>
-        </xsl:call-template>
-        <xsl:element name="{name()}">
-            <xsl:apply-templates select="@*" mode="layout-masters-processing"/>
-            <xsl:apply-templates select="*" mode="layout-masters-processing"/>
-        </xsl:element>
-    </xsl:template>
-
-    <!-- Deprecated -->
-    <xsl:template match="@*" mode="layout-masters-processing">
-        <xsl:call-template name="output-message">
-            <xsl:with-param name="msgcat">DOTX</xsl:with-param>
-            <xsl:with-param name="msgnum">066</xsl:with-param>
-            <xsl:with-param name="msgsev">W</xsl:with-param>
-            <xsl:with-param name="msgparams">%1=layout-masters-processing</xsl:with-param>
-        </xsl:call-template>
-        <xsl:copy-of select="."/>
-    </xsl:template>
-
-    <!-- Deprecated -->
-    <xsl:template match="@background-image" mode="layout-masters-processing">
-        <xsl:call-template name="output-message">
-            <xsl:with-param name="msgcat">DOTX</xsl:with-param>
-            <xsl:with-param name="msgnum">066</xsl:with-param>
-            <xsl:with-param name="msgsev">W</xsl:with-param>
-            <xsl:with-param name="msgparams">%1=layout-masters-processing</xsl:with-param>
-        </xsl:call-template>
-        <xsl:attribute name="background-image">
-            <xsl:value-of select="concat('url(',$artworkPrefix,substring-after(.,'artwork:'),')')"/>
-        </xsl:attribute>
-    </xsl:template>
 
     <!-- Template to copy original IDs -->
 

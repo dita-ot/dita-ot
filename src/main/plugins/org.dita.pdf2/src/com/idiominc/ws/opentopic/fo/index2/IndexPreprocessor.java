@@ -165,17 +165,6 @@ public final class IndexPreprocessor {
 
         if (checkElementName(theNode)) {
             return processIndexNode(theNode, theTargetDocument, theIndexEntryFoundListener);
-            /*
-            for (int i = 0; i < childNodes.getLength(); i++) {
-				Node child = childNodes.item(i);
-				if (child.getNodeType() == Node.TEXT_NODE) { //Look for the first non-empty text node
-					final String normIndex = IndexStringProcessor.normalizeTextValue(child.getNodeValue());
-					if (normIndex.length() > 0) {
-						return processIndexTextNode(child, theTargetDocument, theIndexEntryFoundListener);
-					}
-				}
-			}
-             */
         } else {
             final Node result = theTargetDocument.importNode(theNode, false);
             for (int i = 0; i < childNodes.getLength(); i++) {
@@ -246,48 +235,6 @@ public final class IndexPreprocessor {
 
     }
 
-    @Deprecated
-    private Node[] processIndexTextNode(final Node theNode, final Document theTargetDocument, final IndexEntryFoundListener theIndexEntryFoundListener) {
-        theNode.normalize();
-
-        boolean ditastyle = false;
-
-        final NodeList childNodes = theNode.getParentNode().getChildNodes();
-        for (int i = 0; i < childNodes.getLength(); i++) {
-            final Node child = childNodes.item(i);
-            if (checkElementName(child)) {
-                ditastyle = true;
-                break;
-            }
-        }
-
-        String[] indexStrings;
-        final ArrayList<Node> res = new ArrayList<Node>();
-        if ((ditastyle)) {
-            final IndexEntry[] indexEntries = indexDitaProcessor.processIndexDitaNode(theNode.getParentNode(),"");
-
-            for (final IndexEntry indexEntrie : indexEntries) {
-                theIndexEntryFoundListener.foundEntry(indexEntrie);
-            }
-
-            final Node[] nodes = transformToNodes(indexEntries, theTargetDocument, null);
-            for (final Node node : nodes) {
-                res.add(node);
-            }
-
-        } else {
-            indexStrings = new String[]{theNode.getNodeValue()};
-            for (final String indexString : indexStrings) {
-                final Node[] nodes = processIndexString(indexString, null, theTargetDocument, theIndexEntryFoundListener);
-                for (final Node node : nodes) {
-                    res.add(node);
-                }
-            }
-        }
-
-        return (Node[]) res.toArray(new Node[res.size()]);
-    }
-
     /**
      * Check if node is an index term element or specialization of one.
      * 
@@ -300,40 +247,6 @@ public final class IndexPreprocessor {
                 || INDEXING_D_INDEX_SEE.matches(node)
                 || INDEXING_D_INDEX_SEE_ALSO.matches(node);
     }
-
-    @Deprecated
-    private String[] createIndexStringFromDitastyleIndex(final Node theNode) {
-        //Go through the childs and append text nodes to the index string
-        //Index elements on the same level will create separate index strings
-        final ArrayList<String> resultList = new ArrayList<String>();
-        if (TOPIC_INDEXTERM.matches(theNode)) //Is index element?
-        {
-            final StringBuffer resIndexString = new StringBuffer();
-            boolean skipCurrentLevel = false;
-            final NodeList childNodes = theNode.getChildNodes();
-            for (int i = 0; i < childNodes.getLength(); i++) { //Go through child nodes to find text nodes
-                final Node child = childNodes.item(i);
-                if (child.getNodeType() == Node.TEXT_NODE) {
-                    final String val = child.getNodeValue();
-                    if (null != val) {
-                        resIndexString.append(val); //append to result index string
-                    }
-                } else if (TOPIC_INDEXTERM.matches(child)) {
-                    skipCurrentLevel = true;		//skip adding current level index string because it has continuation on the descendant level
-                    final String[] indexValues = createIndexStringFromDitastyleIndex(child); //call recursevelly but for the found child
-                    for (final String indexValue : indexValues) {
-                        resultList.add(resIndexString.toString() + VALUE_SEPARATOR + indexValue); //append to result list prefixed by current level
-                    }
-                }
-            }
-            if (!skipCurrentLevel) {
-                //No descendant index elements were found so add this level as final
-                resultList.add(resIndexString.toString());
-            }
-        }
-        return (String[]) resultList.toArray(new String[resultList.size()]); //return result
-    }
-
 
     /**
      * Processes index string and creates nodes with "prefix" in given "namespace_url" from the parsed index entry text.
