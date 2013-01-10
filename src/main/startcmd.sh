@@ -5,7 +5,10 @@
 #  (c) Copyright IBM Corp. 2006 All Rights Reserved.
 
 realpath() {
-  [[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
+  case $1 in
+    /*) echo "$1" ;;
+    *) echo "$PWD/${1#./}" ;;
+  esac
 }
 
 if [ "${DITA_HOME:+1}" == "1" ] && [ -e "$DITA_HOME" ]; then
