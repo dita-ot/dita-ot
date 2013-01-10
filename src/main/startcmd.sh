@@ -11,7 +11,7 @@ realpath() {
   esac
 }
 
-if [ "${DITA_HOME:+1}" == "1" ] && [ -e "$DITA_HOME" ]; then
+if [ "${DITA_HOME:+1}" = "1" ] && [ -e "$DITA_HOME" ]; then
   export DITA_DIR="$(realpath "$DITA_HOME")"
 else #elif [ "${DITA_HOME:+1}" != "1" ]; then
   export DITA_DIR="$(dirname "$(realpath "$0")")"
