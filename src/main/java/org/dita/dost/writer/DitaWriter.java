@@ -444,7 +444,7 @@ public final class DitaWriter extends AbstractXMLFilter {
             final CatalogResolver resolver = CatalogUtils.getCatalogResolver();
             setEntityResolver(resolver);
             reader.setEntityResolver(resolver);
-            setParent(reader);
+            //setParent(reader);
         } catch (final Exception e) {
             throw new SAXException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
@@ -1050,15 +1050,19 @@ public final class DitaWriter extends AbstractXMLFilter {
             
             final TransformerFactory tf = TransformerFactory.newInstance();
             final Transformer serializer = tf.newTransformer();
-            XMLFilter xmlSource = this;
+            XMLReader xmlSource = reader;
             if (filterUtils != null) {
                 final ProfilingFilter profilingFilter = new ProfilingFilter();
                 profilingFilter.setLogger(logger);
                 profilingFilter.setFilterUtils(filterUtils);
                 profilingFilter.setTranstype(transtype);
-                profilingFilter.setParent(xmlSource.getParent());
+                profilingFilter.setParent(xmlSource);
                 profilingFilter.setEntityResolver(xmlSource.getEntityResolver());
-                xmlSource.setParent(profilingFilter);
+                xmlSource = profilingFilter;
+            }
+            {
+	        	this.setParent(xmlSource);
+	        	xmlSource = this;
             }
             final Source source = new SAXSource(xmlSource, is);
             final Result result = new StreamResult(out);
