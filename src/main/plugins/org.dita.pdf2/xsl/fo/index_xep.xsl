@@ -166,9 +166,9 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:apply-templates>
           </xsl:if>
         </fo:block>
-        <fo:block xsl:use-attribute-sets="index.entry__content">
+        <!--fo:block xsl:use-attribute-sets="index.entry__content">
           <xsl:apply-templates mode="index-postprocess"/>
-        </fo:block>
+        </fo:block-->
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>

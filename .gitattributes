@@ -42,6 +42,7 @@
 *.fsx text=auto
 *.hs text=auto
 *.bat text=auto eol=crlf
+*.sh text=auto eol=lf
  
 *.csproj text=auto merge=union
 *.vbproj text=auto merge=union

@@ -20,7 +20,7 @@
       -->
     </linklist>
     <linklist outputclass="download">
-      <link href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Stable%20Release/DITA%20Open%20Toolkit%201.6/" scope="external">
+      <link keyref="download.dita-ot.current-release" scope="external" format="html">
         <linktext>Download</linktext>
       </link>
       <linkinfo>
@@ -36,7 +36,7 @@
       </linkinfo>
     </linklist>
     <linklist outputclass="documentation">
-      <link href="/latest/" scope="external">
+      <link href="/latest/" scope="external" format="html">
         <linktext>Read the Docs</linktext>
       </link>
       <linkinfo>
