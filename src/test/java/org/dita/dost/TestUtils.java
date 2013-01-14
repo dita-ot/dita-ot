@@ -19,6 +19,7 @@ import java.io.Writer;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -384,6 +385,10 @@ public class TestUtils {
                 this.message = message;
                 this.exception = exception;
             }
+        }
+        
+        public List<Message> getMessages() {
+        	return Collections.unmodifiableList(buf);
         }
         
     }

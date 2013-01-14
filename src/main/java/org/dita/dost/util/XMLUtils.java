@@ -11,6 +11,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Node;
 
+import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
 
 /**
@@ -118,4 +119,81 @@ public final class XMLUtils {
         return buf.toString();
     }
 
+    /**
+     * Convenience builder for {@link org.xml.sax.Attributes SAX Attributes}.
+     */
+    public static final class AttributesBuilder {
+    	
+    	final AttributesImpl atts;
+    	
+    	/**
+    	 * Construct empty attributes builder.
+    	 */
+    	public AttributesBuilder() {
+    		atts = new AttributesImpl();
+    	}
+    	
+    	/**
+    	 * Construct attributes builder with initial attribute set.
+    	 * 
+    	 * @param atts initial attributes
+    	 */
+    	public AttributesBuilder(final Attributes atts) {
+    		this.atts = new AttributesImpl(atts);
+    	}
+    	
+        /**
+         * Add or set attribute.
+         * 
+         * @param uri namespace URI
+         * @param localName local name
+         * @param qName qualified name
+         * @param type attribute type
+         * @param value attribute value
+         * @return this builder
+         */
+        public AttributesBuilder add(final String uri, final String localName,
+                final String qName, final String type, final String value) {
+            final int i = atts.getIndex(qName);
+            if (i != -1) {
+                atts.setAttribute(i, uri, localName, qName, type, value);
+            } else {
+                atts.addAttribute(uri, localName, qName, type, value);
+            }
+            return this;
+        }
+        
+        /**
+         * Add or set attribute. Convenience method for {@link #add(AttributesImpl, String, String, String, String, String)}.
+         * 
+         * @param localName local name
+         * @param value attribute value
+         * @return this builder
+         */
+        public AttributesBuilder add(final String localName, final String value) {
+            return add(NULL_NS_URI, localName, localName, "CDATA", value);
+        }
+    	
+        /**
+         * Add or set attribute. Convenience method for {@link #add(AttributesImpl, String, String, String, String, String)}.
+         * 
+         * @param uri namespace URI
+         * @param localName local name
+         * @param value attribute value
+         * @return this builder
+         */
+        public AttributesBuilder add(final String uri, final String localName, final String value) {
+            return add(uri, localName, localName, "CDATA", value);
+        }
+        
+        /**
+         * Returns a newly-created Attributes based on the contents of the builder.
+         * @return new attributes
+         */
+    	public Attributes build() {
+    		return new AttributesImpl(atts);
+    	}
+    	
+    }
+    
 }

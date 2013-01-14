@@ -258,35 +258,6 @@ public final class DitaWriter extends AbstractXMLFilter {
                     attValue = FileUtils.getRelativePath(outputUtils.getInputMapPathName().getAbsolutePath(), attValue);
                 }
             }
-
-            /*
-             * replace all the backslash with slash in
-             * all href and conref attribute
-             */
-            if (processingMode == Mode.LAX) {
-                attValue = FileUtils.separatorsToUnix(attValue);
-            }
-            // validate
-            try {
-                attValue = new URI(attValue).toASCIIString();
-            } catch (final URISyntaxException e) {
-                switch (processingMode) {
-                case STRICT:
-                    throw new RuntimeException(MessageUtils.getInstance().getMessage("DOTJ054E", attName, attValue).setLocation(locator) + ": " + e.getMessage(), e);
-                case SKIP:
-                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ054E", attName, attValue).setLocation(locator) + ", using invalid value.");
-                    break;
-                case LAX:
-                    try {
-                        final String origAttValue = attValue;
-                        attValue = new URI(URLUtils.clean(attValue)).toASCIIString();
-                        logger.logError(MessageUtils.getInstance().getMessage("DOTJ054E", attName, origAttValue).setLocation(locator) + ", using '" + attValue + "'.");
-                    } catch (final URISyntaxException e1) {
-                        logger.logError(MessageUtils.getInstance().getMessage("DOTJ054E", attName, attValue).setLocation(locator) + ", using invalid value.");
-                    }
-                    break;
-                }
-            }
         } else {
             return null;
         }
@@ -952,8 +923,6 @@ public final class DitaWriter extends AbstractXMLFilter {
             }
         }
 
-        validateAttributeValues(qName, atts);
-
         Integer value;
         Integer nextValue;
         if (counterMap.containsKey(qName)) {
@@ -1061,6 +1030,14 @@ public final class DitaWriter extends AbstractXMLFilter {
                 xmlSource = profilingFilter;
             }
             {
+				final ValidationFilter validationFilter = new ValidationFilter();
+				validationFilter.setLogger(logger);
+				validationFilter.setParent(xmlSource);
+				validationFilter.setEntityResolver(xmlSource.getEntityResolver());
+				validationFilter.setValidateMap(validateMap);
+				xmlSource = validationFilter;
+            }
+            {
 	        	this.setParent(xmlSource);
 	        	xmlSource = this;
             }
@@ -1131,46 +1108,6 @@ public final class DitaWriter extends AbstractXMLFilter {
     }
 
     /**
-     * Validate attribute values
-     * 
-     * @param qName element name
-     * @param atts attributes
-     */
-    private void validateAttributeValues(final String qName, final Attributes atts) {
-        if (validateMap == null) {
-            return;
-        }
-        for (int i = 0; i < atts.getLength(); i++) {
-            final String attrName = atts.getQName(i);
-            final String attrValue = atts.getValue(i);
-
-            final Map<String, Set<String>> valueMap = validateMap.get(attrName);
-            if (valueMap != null) {
-                Set<String> valueSet = valueMap.get(qName);
-                if (valueSet == null) {
-                    valueSet = valueMap.get("*");
-                }
-                if (valueSet != null) {
-                    final String[] keylist = attrValue.trim().split("\\s+");
-                    for (final String s : keylist) {
-                        // Warning ? Value not valid.
-                        if (!StringUtils.isEmptyString(s) && !valueSet.contains(s)) {
-                            final Properties prop = new Properties();
-                            prop.put("%1", attrName);
-                            prop.put("%2", qName);
-                            prop.put("%3", attrValue);
-                            prop.put("%4", StringUtils.assembleString(valueSet,
-                                    COMMA));
-                            logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ049W",
-                                    prop).toString());
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    /**
      * @return the validateMap
      */
     public Map<String, Map<String, Set<String>>> getValidateMap() {
@@ -1233,6 +1170,7 @@ public final class DitaWriter extends AbstractXMLFilter {
     private Locator locator;
     public void setDocumentLocator(Locator locator) {
         this.locator = locator;
+        getContentHandler().setDocumentLocator(locator);
     }
     
     // LexicalHandler methods

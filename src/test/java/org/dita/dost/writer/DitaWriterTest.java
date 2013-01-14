@@ -170,15 +170,15 @@ public class DitaWriterTest {
             }
         };
         // same directory path
-        assertEquals("foo%20+%25bar.dita", w.invoke("foo +%25bar.dita"));
+        assertEquals("foo +%25bar.dita", w.invoke("foo +%25bar.dita"));
         assertEquals("foo.dita#bar", w.invoke("foo.dita#bar"));
         // absolute same directory path
         assertEquals("foo.dita", w.invoke(new File(srcDir, "foo.dita").getAbsolutePath()));
         assertEquals("foo.dita#bar", w.invoke(new File(srcDir, "foo.dita").getAbsolutePath() + "#bar"));
         final File sub = new File(srcDir, "sub" + File.separator + "foo +%bar.dita").getAbsoluteFile();
         // absolute sub directory path
-        assertEquals("sub/foo%20+%bar.dita", w.invoke(sub.getAbsolutePath()));
-        assertEquals("sub/foo%20+%bar.dita#bar", w.invoke(sub.getAbsolutePath() + "#bar"));
+        assertEquals("sub/foo +%bar.dita", w.invoke(sub.getAbsolutePath()));
+        assertEquals("sub/foo +%bar.dita#bar", w.invoke(sub.getAbsolutePath() + "#bar"));
         // absolute sub directory URI
         assertEquals("sub/foo%20+%25bar.dita", w.invoke(sub.toURI().toASCIIString()));
         assertEquals("sub/foo%20+%25bar.dita#bar", w.invoke(sub.toURI().toASCIIString() + "#bar"));
