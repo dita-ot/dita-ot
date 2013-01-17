@@ -140,7 +140,6 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   <xsl:template match="@*|processing-instruction()|comment()|text()">
     <xsl:copy>
       <xsl:apply-templates select="@*"/>
-      <xsl:if test="@rev"><xsl:message>HI FOUND A REV</xsl:message></xsl:if>
       <xsl:apply-templates select="*|processing-instruction()|comment()|text()"/>
     </xsl:copy>
   </xsl:template>
