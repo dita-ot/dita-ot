@@ -96,7 +96,7 @@
   <xsl:apply-templates select="." mode="steps-fmt">
     <xsl:with-param name="step_expand" select="$step_expand"/>
   </xsl:apply-templates>
-  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' task/steps ') or contains(@class,' task/steps-unordered ')]"
