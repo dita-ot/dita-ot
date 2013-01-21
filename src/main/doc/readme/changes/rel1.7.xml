@@ -235,6 +235,7 @@ release)</li>
 <li>#1430 PDF transformation: Problems with index in OT 1.7 (maintenance 1)</li>
 <li>#1432 startcmd.sh broken in 1.7 (maintenance 1)</li>
 <li>#1433 Profiling filter included multiple times (maintenance 1)</li>
+<li>#1437 Fatal UTF-8 error in .job.xml (maintenance 2)</li>
 </ul>       </section>
 </refbody>
 </reference>
