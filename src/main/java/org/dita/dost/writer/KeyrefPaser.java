@@ -678,7 +678,16 @@ public final class KeyrefPaser extends XMLFilterImpl {
      * Change map type to topic type. 
      */
     private String changeclassValue(final String classValue){
-        return classValue.replaceAll("map/", "topic/");
+    	final DitaClass cls = new DitaClass(classValue);
+    	if (cls.equals(MAP_LINKTEXT)) {
+    		return TOPIC_LINKTEXT.toString();
+    	} else if (cls.equals(MAP_SEARCHTITLE)) {
+    		return TOPIC_SEARCHTITLE.toString();
+    	} else if (cls.equals(MAP_SHORTDESC)) {
+    		return TOPIC_SHORTDESC.toString();
+    	} else {
+    		return cls.toString();
+    	}
     }
     
     /**
