@@ -14,12 +14,13 @@
 
   <xsl:param name="OUTEXT" select="'.html'"/>
   <xsl:param name="WORKDIR">
-    <xsl:apply-templates select="/processing-instruction('workdir-uri')" mode="get-work-dir"/>
+    <xsl:apply-templates select="/processing-instruction('workdir-uri')[1]" mode="get-work-dir"/>
   </xsl:param>
   <xsl:param name="PATH2PROJ">
-    <xsl:apply-templates select="/processing-instruction('path2project')" mode="get-path2project"/>
+    <xsl:apply-templates select="/processing-instruction('path2project')[1]" mode="get-path2project"/>
   </xsl:param>
   
+  <!-- Deprecated -->
   <xsl:template match="processing-instruction('workdir')" mode="get-work-dir">
     <xsl:value-of select="concat(., '/')"/>
   </xsl:template>  

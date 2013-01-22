@@ -84,7 +84,7 @@
             </xsl:choose>
         </xsl:variable>
         <xsl:variable name="WORKDIR">
-            <xsl:apply-templates select="/processing-instruction('workdir-uri')" mode="get-work-dir"/>
+            <xsl:apply-templates select="/processing-instruction('workdir-uri')[1]" mode="get-work-dir"/>
         </xsl:variable>
         <xsl:choose>
             <xsl:when test="@format='ditamap' and contains($mapref-id-path,concat(' ',generate-id(.),' '))">
