@@ -111,7 +111,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
     /** Set of sources of those copy-to that were ignored */
     private final Set<String> ignoredCopytoSourceSet;
 
-    /** Map of copy-to target to souce	*/
+    /** Map of copy-to target to souce */
     private final Map<String, String> copytoMap;
 
     /** Map of key definitions */
@@ -215,46 +215,6 @@ public final class GenListModuleReader extends AbstractXMLReader {
     private String extName = null;
 
     /**
-     * Get transtype.
-     * @return the transtype
-     */
-    public String getTranstype() {
-        return transtype;
-    }
-
-    /**
-     * Set transtype.
-     * @param transtype the transtype to set
-     */
-    public void setTranstype(final String transtype) {
-        this.transtype = transtype;
-    }
-
-    /**
-     * Set temporary file extension.
-     * @param extName file extension
-     */
-    public void setExtName(final String extName) {
-    	this.extName = extName;
-    }
-    
-    /**
-     * @return the pluginMap
-     */
-    public Map<String, Set<String>> getPluginMap() {
-        return pluginMap;
-    }
-
-    /**
-     * Get export anchors.
-     * 
-     * @return list of export anchors
-     */
-    public List<ExportAnchor> getExportAnchors() {
-    	return resultList;
-    }
-
-    /**
      * Constructor.
      */
     public GenListModuleReader() {
@@ -306,6 +266,46 @@ public final class GenListModuleReader extends AbstractXMLReader {
     }
     
     /**
+     * Get transtype.
+     * @return the transtype
+     */
+    public String getTranstype() {
+        return transtype;
+    }
+
+    /**
+     * Set transtype.
+     * @param transtype the transtype to set
+     */
+    public void setTranstype(final String transtype) {
+        this.transtype = transtype;
+    }
+
+    /**
+     * Set temporary file extension.
+     * @param extName file extension
+     */
+    public void setExtName(final String extName) {
+        this.extName = extName;
+    }
+    
+    /**
+     * @return the pluginMap
+     */
+    public Map<String, Set<String>> getPluginMap() {
+        return pluginMap;
+    }
+
+    /**
+     * Get export anchors.
+     * 
+     * @return list of export anchors
+     */
+    public List<ExportAnchor> getExportAnchors() {
+        return resultList;
+    }
+    
+    /**
      * Set content filter.
      * 
      * @param filterUtils filter utils
@@ -322,96 +322,76 @@ public final class GenListModuleReader extends AbstractXMLReader {
         this.outputUtils = outputUtils;
     }
 
-
     /**
-     * Init xml reader used for pipeline parsing.
-     *
-     * @param ditaDir absolute path to DITA-OT directory
-     * @param validate whether validate input file
-     * @param rootFile absolute path to input file
-     * @throws SAXException parsing exception
-     * @throws IOException if getting canonical file path fails 
+     * Get out file set.
+     * @return out file set
      */
-    public void initXMLReader(final File ditaDir,final boolean validate,final File rootFile, final boolean arg_setSystemid) throws SAXException, IOException {
-        //final DITAOTJavaLogger javaLogger=new DITAOTJavaLogger();
-
-        //to check whether the current parsing file's href value is out of inputmap.dir
-        rootDir=rootFile.getParentFile().getCanonicalFile();
-        rootFilePath=rootFile.getCanonicalFile();
-        reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-        if(validate==true){
-            reader.setFeature(FEATURE_VALIDATION, true);
-            try {
-                reader.setFeature(FEATURE_VALIDATION_SCHEMA, true);
-            } catch (final SAXNotRecognizedException e) {
-                // Not Xerces, ignore exception
-            }
-        }else{
-            final String msg=MessageUtils.getInstance().getMessage("DOTJ037W").toString();
-            logger.logWarn(msg);
-        }
-        final XMLGrammarPool grammarPool = GrammarPoolManager.getGrammarPool();
-        setGrammarPool(reader, grammarPool);
-
-        CatalogUtils.setDitaDir(ditaDir);
-        setSystemid= arg_setSystemid;
-
-        reader.setEntityResolver(CatalogUtils.getCatalogResolver());
+    public Set<String> getOutFilesSet(){
+        return outDitaFilesSet;
     }
 
     /**
+     * @return the hrefTopicSet
+     */
+    public Set<String> getHrefTopicSet() {
+        return hrefTopicSet;
+    }
+
+    /**
+     * @return the chunkTopicSet
+     */
+    public Set<String> getChunkTopicSet() {
+        return chunkTopicSet;
+    }
+    /**
+     * Get scheme set.
+     * @return scheme set
+     */
+    public Set<String> getSchemeSet() {
+        return this.schemeSet;
+    }
+    /**
+     * Get scheme ref set.
+     * @return scheme ref set
+     */
+    public Set<String> getSchemeRefSet() {
+        return this.schemeRefSet;
+    }
+
+    /**
+     * List of files with "@processing-role=resource-only".
+     * @return the resource-only set
+     */
+    public Set<String> getResourceOnlySet() {
+        resourceOnlySet.removeAll(crossSet);
+        return resourceOnlySet;
+    }
+
+    /**
+     * Get document root of the merged subject schema.
+     * @return
+     */
+    //public Document getSchemeRoot() {
+    //    return schemeRoot;
+    //}
+    /**
+     * Get getRelationshipGrap. Keys are paths of normal map files and values
+     * are paths of subject scheme maps. 
      * 
-     * Reset the internal variables.
+     * @return relationship grap
      */
-    public void reset() {
-        hasKeyRef = false;
-        hasConRef = false;
-        hasHref = false;
-        hasCodeRef = false;
-        currentDir = null;
-        insideExcludedElement = false;
-        excludedLevel = 0;
-        foreignLevel = 0;
-        chunkLevel = 0;
-        relTableLevel = 0;
-        chunkToNavLevel = 0;
-        topicGroupLevel = 0;
-        isValidInput = false;
-        hasconaction = false;
-        nonConrefCopytoTargets.clear();
-        hrefTargets.clear();
-        hrefTopicSet.clear();
-        chunkTopicSet.clear();
-        conrefTargets.clear();
-        copytoMap.clear();
-        ignoredCopytoSourceSet.clear();
-        outDitaFilesSet.clear();
-        keysDefMap.clear();
-        keysRefMap.clear();
-        exKeysDefMap.clear();
-        schemeSet.clear();
-        schemeRefSet.clear();
-
-        //clear level
-        level = 0;
-        //clear stack
-        topicrefStack.clear();
-
-
-        //@processing-role
-        processRoleLevel = 0;
-        processRoleStack.clear();
-
-        //reset utils
-        ditaAttrUtils.reset();
-        /*
-         * Don't clean up these sets, we need them through
-         * the whole phase to determine a topic's processing-role.
-         */
-        //resourceOnlySet.clear();
-        //crossSet.clear();
+    public Map<String, Set<String>> getRelationshipGrap() {
+        return this.relationGraph;
     }
 
+    public String getPrimaryDitamap() {
+        return primaryDitamap;
+    }
+
+    public void setPrimaryDitamap(final String primaryDitamap) {
+        this.primaryDitamap = primaryDitamap;
+    }
+    
     /**
      * To see if the parsed file has conref inside.
      * 
@@ -582,6 +562,96 @@ public final class GenListModuleReader extends AbstractXMLReader {
     public boolean hasConaction(){
         return hasconaction;
     }
+    
+    /**
+     * Init xml reader used for pipeline parsing.
+     *
+     * @param ditaDir absolute path to DITA-OT directory
+     * @param validate whether validate input file
+     * @param rootFile absolute path to input file
+     * @throws SAXException parsing exception
+     * @throws IOException if getting canonical file path fails 
+     */
+    public void initXMLReader(final File ditaDir,final boolean validate,final File rootFile, final boolean arg_setSystemid) throws SAXException, IOException {
+        //final DITAOTJavaLogger javaLogger=new DITAOTJavaLogger();
+
+        //to check whether the current parsing file's href value is out of inputmap.dir
+        rootDir=rootFile.getParentFile().getCanonicalFile();
+        rootFilePath=rootFile.getCanonicalFile();
+        reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
+        if(validate==true){
+            reader.setFeature(FEATURE_VALIDATION, true);
+            try {
+                reader.setFeature(FEATURE_VALIDATION_SCHEMA, true);
+            } catch (final SAXNotRecognizedException e) {
+                // Not Xerces, ignore exception
+            }
+        }else{
+            final String msg=MessageUtils.getInstance().getMessage("DOTJ037W").toString();
+            logger.logWarn(msg);
+        }
+        final XMLGrammarPool grammarPool = GrammarPoolManager.getGrammarPool();
+        setGrammarPool(reader, grammarPool);
+
+        CatalogUtils.setDitaDir(ditaDir);
+        setSystemid= arg_setSystemid;
+
+        reader.setEntityResolver(CatalogUtils.getCatalogResolver());
+    }
+
+    /**
+     * 
+     * Reset the internal variables.
+     */
+    public void reset() {
+        hasKeyRef = false;
+        hasConRef = false;
+        hasHref = false;
+        hasCodeRef = false;
+        currentDir = null;
+        insideExcludedElement = false;
+        excludedLevel = 0;
+        foreignLevel = 0;
+        chunkLevel = 0;
+        relTableLevel = 0;
+        chunkToNavLevel = 0;
+        topicGroupLevel = 0;
+        isValidInput = false;
+        hasconaction = false;
+        nonConrefCopytoTargets.clear();
+        hrefTargets.clear();
+        hrefTopicSet.clear();
+        chunkTopicSet.clear();
+        conrefTargets.clear();
+        copytoMap.clear();
+        ignoredCopytoSourceSet.clear();
+        outDitaFilesSet.clear();
+        keysDefMap.clear();
+        keysRefMap.clear();
+        exKeysDefMap.clear();
+        schemeSet.clear();
+        schemeRefSet.clear();
+
+        //clear level
+        level = 0;
+        //clear stack
+        topicrefStack.clear();
+
+
+        //@processing-role
+        processRoleLevel = 0;
+        processRoleStack.clear();
+
+        //reset utils
+        ditaAttrUtils.reset();
+        /*
+         * Don't clean up these sets, we need them through
+         * the whole phase to determine a topic's processing-role.
+         */
+        //resourceOnlySet.clear();
+        //crossSet.clear();
+    }
+
     /**
      * Parse input xml file.
      * 
@@ -603,7 +673,21 @@ public final class GenListModuleReader extends AbstractXMLReader {
         }
         reader.parse(is);
     }
-
+    
+    /**
+     * Check if the current file is a ditamap with "@processing-role=resource-only".
+     */
+    @Override
+    public void startDocument() throws SAXException {
+        final String href = FileUtils.getRelativePath(rootFilePath.getAbsolutePath(), currentFile.getAbsolutePath());
+        if (FileUtils.isDITAMapFile(currentFile.getName())
+                && resourceOnlySet.contains(href)
+                && !crossSet.contains(href)) {
+            processRoleLevel++;
+            processRoleStack.push(ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY);
+        }
+    }
+    
     @Override
     public void startElement(final String uri, final String localName, final String qName,
             final Attributes atts) throws SAXException {
@@ -667,15 +751,15 @@ public final class GenListModuleReader extends AbstractXMLReader {
                 final String filename = FileUtils.getRelativePath(
                         rootFilePath.getAbsolutePath(), currentFile.getAbsolutePath());
                 for (final ExportAnchor e: resultList) {
-	                if (e.topicids.contains(filename + QUESTION)) {
-	                	e.topicids.add(topicId);
-	                	e.topicids.remove(filename + QUESTION);
-	                }
+                    if (e.topicids.contains(filename + QUESTION)) {
+                        e.topicids.add(topicId);
+                        e.topicids.remove(filename + QUESTION);
+                    }
                 }
 
             }
             // WEK: As of 14 Dec 2009, transtype is sometimes null, not sure under what conditions.
-            //			System.out.println(" + [DEBUG] transtype=" + transtype);
+            //            System.out.println(" + [DEBUG] transtype=" + transtype);
             //get plugin id only transtype = eclipsehelp
             if(FileUtils.isDITAMapFile(currentFile.getName())&&
                     rootFilePath.equals(currentFile)&&
@@ -973,6 +1057,90 @@ public final class GenListModuleReader extends AbstractXMLReader {
 
     }
 
+    @Override
+    public void endElement(final String uri, final String localName, final String qName) throws SAXException {
+
+        //subject scheme
+        //if (currentElement != null && currentElement != schemeRoot.getDocumentElement()) {
+        //    currentElement = (Element)currentElement.getParentNode();
+        //}
+
+        //@processing-role
+        if (processRoleLevel > 0) {
+            if (processRoleLevel == processRoleStack.size()) {
+                processRoleStack.pop();
+            }
+            processRoleLevel--;
+        }
+
+        if (foreignLevel > 0){
+            foreignLevel --;
+            return;
+        }
+
+        if (chunkLevel > 0) {
+            chunkLevel--;
+        }
+
+        if (relTableLevel > 0) {
+            relTableLevel--;
+        }
+
+        if (chunkToNavLevel > 0) {
+            chunkToNavLevel--;
+        }
+
+        if (topicGroupLevel > 0) {
+            topicGroupLevel--;
+        }
+
+        if (insideExcludedElement) {
+            // end of the excluded element, mark the flag as false
+            if (excludedLevel == 1) {
+                insideExcludedElement = false;
+            }
+            --excludedLevel;
+        }
+        //<exportanchors> over should write </file> tag
+
+        if(topicMetaSet.contains(qName) && hasExport){
+            //If current file is a ditamap file
+            if(FileUtils.isDITAMapFile(currentFile.getName())){
+                resultList.add(currentExportAnchor);
+                currentExportAnchor = null;
+                //If current file is topic file
+            }
+            hasExport = false;
+            topicMetaSet.clear();
+        }
+
+        if(!topicrefStack.isEmpty() && localName.equals(topicrefStack.peek())){
+            level--;
+            topicrefStack.pop();
+        }
+
+        //decrease element level.
+        ditaAttrUtils.decreasePrintLevel();
+    }
+    
+    /**
+     * Clean up.
+     */
+    @Override
+    public void endDocument() throws SAXException {
+        if (processRoleLevel > 0) {
+            processRoleLevel--;
+            processRoleStack.pop();
+        }
+        if(FileUtils.isDITATopicFile(currentFile.getName()) && shouldAppendEndTag){
+            resultList.add(currentExportAnchor);
+            currentExportAnchor = null;
+            //should reset
+            shouldAppendEndTag = false;
+        }
+        checkMultiLevelKeys(keysDefMap, keysRefMap);
+    }
+    
     /**
      * Method for see whether a branch should be parsed.
      * @param atts {@link Attributes}
@@ -1091,104 +1259,6 @@ public final class GenListModuleReader extends AbstractXMLReader {
     }
 
     /**
-     * Clean up.
-     */
-    @Override
-    public void endDocument() throws SAXException {
-        if (processRoleLevel > 0) {
-            processRoleLevel--;
-            processRoleStack.pop();
-        }
-        if(FileUtils.isDITATopicFile(currentFile.getName()) && shouldAppendEndTag){
-            resultList.add(currentExportAnchor);
-            currentExportAnchor = null;
-            //should reset
-            shouldAppendEndTag = false;
-        }
-        checkMultiLevelKeys(keysDefMap, keysRefMap);
-    }
-
-    /**
-     * Check if the current file is a ditamap with "@processing-role=resource-only".
-     */
-    @Override
-    public void startDocument() throws SAXException {
-        final String href = FileUtils.getRelativePath(rootFilePath.getAbsolutePath(), currentFile.getAbsolutePath());
-        if (FileUtils.isDITAMapFile(currentFile.getName())
-                && resourceOnlySet.contains(href)
-                && !crossSet.contains(href)) {
-            processRoleLevel++;
-            processRoleStack.push(ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY);
-        }
-    }
-
-    @Override
-    public void endElement(final String uri, final String localName, final String qName) throws SAXException {
-
-        //subject scheme
-        //if (currentElement != null && currentElement != schemeRoot.getDocumentElement()) {
-        //	currentElement = (Element)currentElement.getParentNode();
-        //}
-
-        //@processing-role
-        if (processRoleLevel > 0) {
-            if (processRoleLevel == processRoleStack.size()) {
-                processRoleStack.pop();
-            }
-            processRoleLevel--;
-        }
-
-        if (foreignLevel > 0){
-            foreignLevel --;
-            return;
-        }
-
-        if (chunkLevel > 0) {
-            chunkLevel--;
-        }
-
-        if (relTableLevel > 0) {
-            relTableLevel--;
-        }
-
-        if (chunkToNavLevel > 0) {
-            chunkToNavLevel--;
-        }
-
-        if (topicGroupLevel > 0) {
-            topicGroupLevel--;
-        }
-
-        if (insideExcludedElement) {
-            // end of the excluded element, mark the flag as false
-            if (excludedLevel == 1) {
-                insideExcludedElement = false;
-            }
-            --excludedLevel;
-        }
-        //<exportanchors> over should write </file> tag
-
-        if(topicMetaSet.contains(qName) && hasExport){
-            //If current file is a ditamap file
-            if(FileUtils.isDITAMapFile(currentFile.getName())){
-                resultList.add(currentExportAnchor);
-                currentExportAnchor = null;
-                //If current file is topic file
-            }
-            hasExport = false;
-            topicMetaSet.clear();
-        }
-
-        if(!topicrefStack.isEmpty() && localName.equals(topicrefStack.peek())){
-            level--;
-            topicrefStack.pop();
-        }
-
-        //decrease element level.
-        ditaAttrUtils.decreasePrintLevel();
-    }
-
-    /**
      * Parse the input attributes for needed information.
      * 
      * @param atts all attributes
@@ -1228,9 +1298,9 @@ public final class GenListModuleReader extends AbstractXMLReader {
         if(ATTRIBUTE_NAME_KEYS.equals(attrName) && attrValue.length() != 0){
 
             String target = atts.getValue(ATTRIBUTE_NAME_HREF);
-			if (target != null && (attrFormat == null || attrFormat.equals(ATTR_FORMAT_VALUE_DITA)) && extName != null) {
-				target = FileUtils.replaceExtension(target, extName);
-			}
+            if (target != null && (attrFormat == null || attrFormat.equals(ATTR_FORMAT_VALUE_DITA)) && extName != null) {
+                target = FileUtils.replaceExtension(target, extName);
+            }
 
             final String keyRef = atts.getValue(ATTRIBUTE_NAME_KEYREF);
 
@@ -1248,10 +1318,10 @@ public final class GenListModuleReader extends AbstractXMLReader {
 
             // Many keys can be defined in a single definition, like keys="a b c", a, b and c are seperated by blank.
             for(final String key: attrValue.split(" ")){
-            	if (!isValidKeyName(key)) {
-            		logger.logError(MessageUtils.getInstance().getMessage("DOTJ055E", key).toString());
-            		continue;
-            	}
+                if (!isValidKeyName(key)) {
+                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ055E", key).toString());
+                    continue;
+                }
                 if(!keysDefMap.containsKey(key) && !key.equals("")){
                     if(target != null && target.length() != 0){
                         if(attrScope!=null && (attrScope.equals("external") || attrScope.equals("peer"))){
@@ -1291,10 +1361,10 @@ public final class GenListModuleReader extends AbstractXMLReader {
 
 
         /*
-		if (attrValue.startsWith(SHARP)
-				|| attrValue.indexOf(COLON_DOUBLE_SLASH) != -1){
-			return;
-		}
+        if (attrValue.startsWith(SHARP)
+                || attrValue.indexOf(COLON_DOUBLE_SLASH) != -1){
+            return;
+        }
          */
         //external resource is filtered here.
         if ("external".equalsIgnoreCase(attrScope)
@@ -1414,8 +1484,8 @@ public final class GenListModuleReader extends AbstractXMLReader {
 
         //add a warning message for outer files refered by @data
         /*if(ATTRIBUTE_NAME_DATA.equals(attrName)){
-			toOutFile(new File(filename).getPath());
-		}*/
+            toOutFile(new File(filename).getPath());
+        }*/
 
         /*
          * Collect only conref target topic files.
@@ -1440,18 +1510,18 @@ public final class GenListModuleReader extends AbstractXMLReader {
                 logger.logWarn(buff.toString());
             } else if (copytoMap.get(filename) != null){
                 /*StringBuffer buff = new StringBuffer();
-				buff.append("Copy-to task [href=\"");
-				buff.append(href);
-				buff.append("\" copy-to=\"");
-				buff.append(filename);
-				buff.append("\"] which points to another copy-to target");
-				buff.append(" was ignored.");
-				javaLogger.logWarn(buff.toString());*/
+                buff.append("Copy-to task [href=\"");
+                buff.append(href);
+                buff.append("\" copy-to=\"");
+                buff.append(filename);
+                buff.append("\"] which points to another copy-to target");
+                buff.append(" was ignored.");
+                javaLogger.logWarn(buff.toString());*/
                 final Properties prop = new Properties();
                 prop.setProperty("%1", href);
                 prop.setProperty("%2", filename);
                 if(!value.equals(copytoMap.get(filename))) {
-                	logger.logWarn(MessageUtils.getInstance().getMessage("DOTX065W", prop).toString());
+                    logger.logWarn(MessageUtils.getInstance().getMessage("DOTX065W", prop).toString());
                 }
                 ignoredCopytoSourceSet.add(href);
             } else if (!(atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains("to-content"))){
@@ -1484,22 +1554,22 @@ public final class GenListModuleReader extends AbstractXMLReader {
      * @param filename file reference
      * @return file path
      */
-	private String toFile(final String filename) {
-		if (filename == null) {
-			return null;
-		}
-		String f = filename;
+    private String toFile(final String filename) {
+        if (filename == null) {
+            return null;
+        }
+        String f = filename;
         try{
             f = URLDecoder.decode(filename, UTF8);
         }catch(final UnsupportedEncodingException e){
-        	throw new RuntimeException(e);
+            throw new RuntimeException(e);
         }
         if (processingMode == Mode.LAX) {
-        	f = f.replace(WINDOWS_SEPARATOR, File.separator);
+            f = f.replace(WINDOWS_SEPARATOR, File.separator);
         }
         f = f.replace(URI_SEPARATOR, File.separator);
         return f;
-	}
+    }
 
     /**
      * Validate key name
@@ -1507,46 +1577,46 @@ public final class GenListModuleReader extends AbstractXMLReader {
      * @return {@code true} if key name is valid, otherwise {@code false}
      */
     public static boolean isValidKeyName(final String key) {
-    	for (final char c: key.toCharArray()) {
-    		switch(c) {
-    		// disallowed characters
-			case '{':
-			case '}':
-			case '[':
-			case ']':
-			case '/':
-			case '#':
-			case '?':
-				return false;
-			// URI characters
-			case '-':
-			case '.':
-			case '_':
-			case '~':
-			case ':':
-			case '@':
-			case '!':
-			case '$':
-			case '&':
-			case '\'':
-			case '(':
-			case ')':
-			case '*':
-			case '+':
-			case ',':
-			case ';':
-			case '=':
-				break;
-			default:
-				if (!((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9'))) {
-	    			return false;
-	    		}
-				break;
-    		}
-    	}
-		return true;
-	}
-
+        for (final char c: key.toCharArray()) {
+            switch(c) {
+            // disallowed characters
+            case '{':
+            case '}':
+            case '[':
+            case ']':
+            case '/':
+            case '#':
+            case '?':
+                return false;
+            // URI characters
+            case '-':
+            case '.':
+            case '_':
+            case '~':
+            case ':':
+            case '@':
+            case '!':
+            case '$':
+            case '&':
+            case '\'':
+            case '(':
+            case ')':
+            case '*':
+            case '+':
+            case ',':
+            case ';':
+            case '=':
+                break;
+            default:
+                if (!((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9'))) {
+                    return false;
+                }
+                break;
+            }
+        }
+        return true;
+    }
+    
     /**
      * Get multi-level keys list
      */
@@ -1645,19 +1715,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
         }
 
     }
-    /*
-	private Element createElement(String uri, String qName,
-			Attributes atts) {
-		if (schemeRoot != null) {
-			Element element = schemeRoot.createElementNS(uri, qName);
-			for (int i = 0; i < atts.getLength(); i++) {
-				element.setAttribute(atts.getQName(i), atts.getValue(i));
-			}
-			return element;
-		}
-		return null;
-	}
-     */
+    
     private void toOutFile(final String filename) throws SAXException {
         //the filename is a relative path from the dita input file
         final Properties prop=new Properties();
@@ -1679,74 +1737,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
         }
 
     }
-    /**
-     * Get out file set.
-     * @return out file set
-     */
-    public Set<String> getOutFilesSet(){
-        return outDitaFilesSet;
-    }
-
-    /**
-     * @return the hrefTopicSet
-     */
-    public Set<String> getHrefTopicSet() {
-        return hrefTopicSet;
-    }
-
-    /**
-     * @return the chunkTopicSet
-     */
-    public Set<String> getChunkTopicSet() {
-        return chunkTopicSet;
-    }
-    /**
-     * Get scheme set.
-     * @return scheme set
-     */
-    public Set<String> getSchemeSet() {
-        return this.schemeSet;
-    }
-    /**
-     * Get scheme ref set.
-     * @return scheme ref set
-     */
-    public Set<String> getSchemeRefSet() {
-        return this.schemeRefSet;
-    }
-
-    /**
-     * List of files with "@processing-role=resource-only".
-     * @return the resource-only set
-     */
-    public Set<String> getResourceOnlySet() {
-        resourceOnlySet.removeAll(crossSet);
-        return resourceOnlySet;
-    }
-
-    /**
-     * Get document root of the merged subject schema.
-     * @return
-     */
-    //public Document getSchemeRoot() {
-    //	return schemeRoot;
-    //}
-    /**
-     * Get getRelationshipGrap.
-     * @return relationship grap
-     */
-    public Map<String, Set<String>> getRelationshipGrap() {
-        return this.relationGraph;
-    }
-
-    public String getPrimaryDitamap() {
-        return primaryDitamap;
-    }
-
-    public void setPrimaryDitamap(final String primaryDitamap) {
-        this.primaryDitamap = primaryDitamap;
-    }
-
+    
     /**
      * File reference with path and optional format.
      */
@@ -1799,16 +1790,13 @@ public final class GenListModuleReader extends AbstractXMLReader {
     }
     
     public static class ExportAnchor {
-    	
-    	public final String file;
-    	public final Set<String> topicids = new HashSet<String>();
-    	public final Set<String> keys = new HashSet<String>();
-    	public final Set<String> ids = new HashSet<String>();
-    	
-    	ExportAnchor(final String file) {
-    		this.file = file;
-    	}
-    	
+        public final String file;
+        public final Set<String> topicids = new HashSet<String>();
+        public final Set<String> keys = new HashSet<String>();
+        public final Set<String> ids = new HashSet<String>();
+        ExportAnchor(final String file) {
+            this.file = file;
+        }
     }
 
 }
