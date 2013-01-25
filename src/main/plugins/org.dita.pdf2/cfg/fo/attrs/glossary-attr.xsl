@@ -39,11 +39,42 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="font-weight">bold</xsl:attribute>
     </xsl:attribute-set>
 
+    <xsl:attribute-set name="__glossary__group-head">
+       <!-- <xsl:attribute name="font-weight">bold</xsl:attribute>
+            <xsl:attribute name="border-bottom">solid 0.5pt black</xsl:attribute>
+            <xsl:attribute name="end-indent">4cm</xsl:attribute>
+            <xsl:attribute name="space-before">10pt</xsl:attribute>-->
+        <xsl:attribute name="span">all</xsl:attribute>
+    </xsl:attribute-set>
+
     <xsl:attribute-set name="__glossary__term">
         <xsl:attribute name="font-weight">bold</xsl:attribute>
+        <xsl:attribute name="space-before">3pt</xsl:attribute>
+        <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__glossary__def">
-        <xsl:attribute name="margin-left"><xsl:value-of select="$side-col-width"/></xsl:attribute>
     </xsl:attribute-set>
+
+    <xsl:attribute-set name="__glossary__abbrevs">
+        </xsl:attribute-set>
+
+    <xsl:attribute-set name="__glossary__abbrevs-label">
+        <xsl:attribute name="font-weight">bold</xsl:attribute>
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="__glossary__acronyms">
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="__glossary__acronyms-label">
+         <xsl:attribute name="font-weight">bold</xsl:attribute>
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="__glossary__synonyms">
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="__glossary__synonyms-label">
+        <xsl:attribute name="font-weight">bold</xsl:attribute>
+    </xsl:attribute-set>
+                
 </xsl:stylesheet>
