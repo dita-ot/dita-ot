@@ -48,7 +48,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   </xsl:param>
   <xsl:param name="FILENAME"/>
   <xsl:param name="FILEDIR"/>
-  <xsl:param name="CURRENTFILE" select="concat($FILEDIR, '/', substring-before($FILENAME, '.'), $DITAEXT)"/>
+  <xsl:param name="CURRENTFILE" select="concat($FILEDIR, '/', $FILENAME)"/>
 
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
 
