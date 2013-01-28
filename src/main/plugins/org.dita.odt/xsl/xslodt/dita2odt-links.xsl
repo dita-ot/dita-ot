@@ -34,7 +34,7 @@
 	exclude-result-prefixes="opentopic-mapmerge opentopic-func exslf exsl dita-ot"
 	version="1.1">
 	
-	<xsl:import href="../../xsl/common/output-message.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
 	<xsl:variable name="msgprefix">DOTX</xsl:variable>
     <!-- 
 	<xsl:include href="../../cfg/fo/attrs/links-attr.xsl"/>

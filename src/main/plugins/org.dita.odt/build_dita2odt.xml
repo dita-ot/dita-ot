@@ -79,7 +79,7 @@
               tempdir="${dita.temp.dir.fullpath}">
   	  <module class="org.dita.dost.module.TopicMergeModule">
         <param name="output" location="${dita.temp.dir.fullpath}${file.separator}${dita.map.filename.root}_MERGED.xml"/>
-        <param name="style" location="${dita.dir}/xsl/xslodt/common/topicmerge.xsl"/>
+  	    <param name="style" location="${dita.plugin.org.dita.odt.dir}/xsl/xslodt/common/topicmerge.xsl"/>
   	  </module>
   	</pipeline>
   	<!--create content.xml -->
