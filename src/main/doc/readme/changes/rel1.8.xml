@@ -17,6 +17,15 @@
     <title>Migration from previous releases</title>
     <refbody>
       <section>
+      <p>Stylesheets for the following transtypes have moved
+        to plug-in specific folders:</p>
+        <ul>
+          <li>eclipsehelp</li>
+          <li>htmlhelp</li>
+          <li>javahelp</li>
+        </ul>
+      </section>
+      <section>
         <title>Preprocessing</title>
         <p>The following deprecated Ant properties have been removed:</p>
         <ul id="ul_rp5_hjs_53">
@@ -56,7 +65,7 @@
       <section>
         <title>Feature requests</title>
         <ul>
-          <li/>
+          <li>#1447 Move stylesheets and resource files to plug-in folder (milestone 1)</li>
         </ul>
       </section>
       <section>

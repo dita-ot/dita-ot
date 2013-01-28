@@ -8,7 +8,7 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <!-- stylesheet imports -->
-<xsl:import href="xslhtml/map2TOC.xsl"/>
+<xsl:import href="plugin:org.dita.xhtml:xsl/xslhtml/map2TOC.xsl"/>
 
 <!-- default "output extension" processing parameter ('.html')-->
 <xsl:param name="OUTEXT" select="'.html'"/><!-- "htm" and "html" are valid values -->
