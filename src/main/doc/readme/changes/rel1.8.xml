@@ -56,6 +56,14 @@
           <li><codeph>toc-topic-text</codeph>, use <codeph>tocText</codeph> mode instead</li>
         </ul>
       </section>
+      <section>
+        <title>Legacy PDF</title>
+        <p>The following deprecated XSLT stylesheets have been removed:</p>
+        <ul>
+          <li><filepath>dita2fo-shell_template.xsl</filepath></li>
+          <li><filepath>topic2fo-shell.xsl</filepath></li>
+        </ul>
+      </section>
     </refbody>
   </reference>
   <reference id="rel1.8.issues">
