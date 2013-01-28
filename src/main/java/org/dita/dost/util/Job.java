@@ -28,6 +28,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
@@ -136,13 +137,19 @@ public final class Job {
     private void read() throws IOException {
         final File jobFile = new File(tempDir, JOB_FILE);
         if (jobFile.exists()) {
+        	InputStream in = null;
             try {
                 XMLReader parser = StringUtils.getXMLReader();
                 parser.setContentHandler(new JobHandler(prop));
-                parser.parse(jobFile.toURI().toString());
+                in = new FileInputStream(jobFile);
+                parser.parse(new InputSource(in));
             } catch (final SAXException e) {
                 throw new IOException("Failed to read job file: " + e.getMessage());
-            }
+            } finally {
+            	if (in != null) {
+            		in.close();
+            	}
+            } 
             return;
         }
 
@@ -268,7 +275,7 @@ public final class Job {
         XMLStreamWriter out = null;
         try {
         	outStream = new FileOutputStream(new File(tempDir, JOB_FILE));
-            out = XMLOutputFactory.newInstance().createXMLStreamWriter(outStream);
+            out = XMLOutputFactory.newInstance().createXMLStreamWriter(outStream, "UTF-8");
             out.writeStartDocument();
             out.writeStartElement(ELEMENT_JOB);
             for (final Map.Entry<String, Object> e: prop.entrySet()) {

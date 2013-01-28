@@ -167,7 +167,7 @@
   <xsl:param name="source-element"/>
   <xsl:param name="conref-ids"/>
   <xsl:param name="WORKDIR">
-    <xsl:apply-templates select="/processing-instruction('workdir-uri')" mode="get-work-dir"/>
+    <xsl:apply-templates select="/processing-instruction('workdir-uri')[1]" mode="get-work-dir"/>
   </xsl:param>
   <xsl:param name="original-element">
     <xsl:call-template name="get-original-element"/>
@@ -1156,7 +1156,7 @@
   <xsl:param name="topicid"/>
   <xsl:param name="elemid"/>
   <xsl:param name="WORKDIR">
-    <xsl:apply-templates select="/processing-instruction('workdir-uri')" mode="get-work-dir"/>
+    <xsl:apply-templates select="/processing-instruction('workdir-uri')[1]" mode="get-work-dir"/>
   </xsl:param>
   <xsl:param name="conref-source-topicid"/>
   <xsl:param name="conref-ids"/>
@@ -1308,7 +1308,7 @@
     <xsl:param name="topicid"/>
     <xsl:param name="elemid"/>
     <xsl:param name="WORKDIR">
-      <xsl:apply-templates select="/processing-instruction('workdir-uri')" mode="get-work-dir"/>
+      <xsl:apply-templates select="/processing-instruction('workdir-uri')[1]" mode="get-work-dir"/>
     </xsl:param>
 	<xsl:param name="conref-source-topicid"/>
   <xsl:param name="conref-ids"/>

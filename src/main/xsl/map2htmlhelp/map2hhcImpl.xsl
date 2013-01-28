@@ -162,7 +162,7 @@
 <xsl:template name="output-toc-entry">
   <xsl:param name="pathFromMaplist"/>
   <xsl:variable name="WORKDIR">
-    <xsl:apply-templates select="/processing-instruction('workdir-uri')" mode="get-work-dir"/>
+    <xsl:apply-templates select="/processing-instruction('workdir-uri')[1]" mode="get-work-dir"/>
   </xsl:variable>
   <xsl:value-of select="$newline"/>
   <!-- if current node is not topicgroup and not empty or current node 
