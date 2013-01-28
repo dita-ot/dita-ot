@@ -10,7 +10,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   
 <!-- Include error message template -->
-<xsl:import href="common/output-message.xsl"/>
+<xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
 
 <!-- Set the prefix for error message numbers -->
 <xsl:variable name="msgprefix">DOTX</xsl:variable>
