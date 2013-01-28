@@ -4,7 +4,7 @@
     xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"
     xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links">
     
-    <xsl:import href="dita2xhtml.xsl"/>
+    <xsl:import href="plugin:org.dita.xhtml:xsl/dita2xhtml.xsl"/>
     
     <xsl:variable name="pluginfilename" select="concat($WORKDIR, $PATH2PROJ, 'pluginId.xml')"/>
     
