@@ -29,7 +29,7 @@
                 extension-element-prefixes="exsl">
 
 <!-- Include error message template -->
-<xsl:include href="../common/output-message.xsl"/>
+<xsl:include href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
 
 <xsl:output method="text"/>
 
