@@ -41,14 +41,14 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   <xsl:param name="DITAEXT" select="'.dita'"/>
   <xsl:param name="FILTERFILEURL"/>
   <xsl:param name="PATH2PROJ">
-      <xsl:apply-templates select="/processing-instruction('path2project')" mode="get-path2project"/>
+      <xsl:apply-templates select="/processing-instruction('path2project')[1]" mode="get-path2project"/>
   </xsl:param>
   <xsl:param name="WORKDIR">
-    <xsl:apply-templates select="/processing-instruction()" mode="get-work-dir"/>
+    <xsl:apply-templates select="/processing-instruction('workdir-uri')[1]" mode="get-work-dir"/>
   </xsl:param>
   <xsl:param name="FILENAME"/>
   <xsl:param name="FILEDIR"/>
-  <xsl:param name="CURRENTFILE" select="concat($FILEDIR, '/', substring-before($FILENAME, '.'), $DITAEXT)"/>
+  <xsl:param name="CURRENTFILE" select="concat($FILEDIR, '/', $FILENAME)"/>
 
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
 
@@ -140,7 +140,6 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   <xsl:template match="@*|processing-instruction()|comment()|text()">
     <xsl:copy>
       <xsl:apply-templates select="@*"/>
-      <xsl:if test="@rev"><xsl:message>HI FOUND A REV</xsl:message></xsl:if>
       <xsl:apply-templates select="*|processing-instruction()|comment()|text()"/>
     </xsl:copy>
   </xsl:template>

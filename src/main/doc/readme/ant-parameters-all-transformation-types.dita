@@ -175,8 +175,8 @@
           <row id="validate">
             <entry><parmname>validate</parmname></entry>
             <entry id="validate.desc">Specifies whether the DITA-OT validates the content. The
-              allowed values are <option>yes</option> and <option>no</option>; the default value is
-                <option>no</option>.</entry>
+              allowed values are <option>true</option> and <option>false</option>; the default value is
+                <option>true</option>.</entry>
           </row>
         </tbody>
       </tgroup>
