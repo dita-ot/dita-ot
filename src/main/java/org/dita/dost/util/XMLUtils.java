@@ -154,7 +154,7 @@ public final class XMLUtils {
          */
         public AttributesBuilder add(final String uri, final String localName,
                 final String qName, final String type, final String value) {
-            final int i = atts.getIndex(qName);
+            final int i = atts.getIndex(uri, localName);
             if (i != -1) {
                 atts.setAttribute(i, uri, localName, qName, type, value);
             } else {
@@ -184,6 +184,17 @@ public final class XMLUtils {
          */
         public AttributesBuilder add(final String uri, final String localName, final String value) {
             return add(uri, localName, localName, "CDATA", value);
+        }
+        
+        /**
+         * Add or set all attributes.
+         * 
+         * @param a attributes to add or set
+         */
+        public void addAll(Attributes attrs) {
+            for (int i = 0; i < attrs.getLength(); i++) {
+                add(attrs.getURI(i), attrs.getLocalName(i), attrs.getQName(i), attrs.getType(i), attrs.getValue(i));
+            }
         }
         
         /**

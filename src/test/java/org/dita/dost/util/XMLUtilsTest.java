@@ -13,6 +13,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Document;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Attr;
+import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
 import org.junit.Test;
 
@@ -90,6 +91,31 @@ public class XMLUtilsTest {
         root.appendChild(nested);
         root.appendChild(doc.createTextNode(" bar"));
         assertEquals("foo nested bar", XMLUtils.getStringValue(root));
+    }
+    
+    @Test
+    public void testAttributesBuilder() {
+        final XMLUtils.AttributesBuilder b = new XMLUtils.AttributesBuilder(); 
+        assertEquals(0, b.build().getLength());
+        
+        b.add("foo", "bar");
+        b.add("uri", "foo", "prefix:foo", "CDATA", "qux");
+        final Attributes a = b.build();
+        assertEquals("bar", a.getValue("foo"));
+        assertEquals("qux", a.getValue("prefix:foo"));
+        assertEquals(2, a.getLength());
+        
+        b.add("foo", "quxx");
+        final Attributes aa = b.build();
+        assertEquals("quxx", aa.getValue("foo"));
+        assertEquals(2, aa.getLength());
+        
+        final AttributesImpl ai = new AttributesImpl();
+        ai.addAttribute(NULL_NS_URI, "baz", "baz", "CDATA", "all");
+        b.addAll(ai);
+        final Attributes aaa = b.build();
+        assertEquals("all", aaa.getValue("baz"));
+        assertEquals(3, aaa.getLength());
     }
 
 }
