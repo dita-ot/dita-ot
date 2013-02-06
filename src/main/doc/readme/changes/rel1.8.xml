@@ -39,6 +39,11 @@
         </ul>
       </section>
       <section>
+        <title>XHTML</title>
+        <p>XSLT Java extension <codepth>ImgUtils</codepth> has been removed from stylesheets and been replaced with preprocessing module <codeph>ImageMetadataModule</codeph>.
+          The old <codepth>ImgUtils</codepth> Java classes are still included in the build.</p>
+      </section>
+      <section>
         <title>PDF</title>
         <p>The following deprecated XSLT stylesheets have been removed:</p>
         <ul id="ul_vmw_v3s_53">
@@ -77,6 +82,7 @@
         <ul>
           <li>#1447 Move stylesheets and resource files to plug-in folder (milestone 1)</li>
           <li>#1449 Add support for Slovenian (milestone 1)</li>
+          <li>#1453 Add image metadata filter (milestone 1)</li>
         </ul>
       </section>
       <section>

@@ -9,9 +9,8 @@
                 xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
                 xmlns:exsl="http://exslt.org/common"
-                xmlns:java="org.dita.dost.util.ImgUtils"
                 xmlns:url="org.dita.dost.util.URLUtils"
-                exclude-result-prefixes="dita-ot dita2html ditamsg exsl java url">
+                exclude-result-prefixes="dita-ot dita2html ditamsg exsl url">
 
 
 
@@ -1709,22 +1708,8 @@
 
 <!-- AM: handling for scale attribute -->
 <xsl:template match="*[contains(@class,' topic/image ')]/@scale">
-    <xsl:variable name="width">
-      <xsl:choose>
-        <xsl:when test="not(contains(../@href,'://'))">
-          <xsl:value-of select="java:getWidth($OUTPUTDIR, concat($FILEDIR,'/',string(../@href)))"/>
-        </xsl:when>
-        <xsl:otherwise/>
-      </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="height">
-      <xsl:choose>
-        <xsl:when test="not(contains(../@href,'://'))">
-          <xsl:value-of select="java:getHeight($OUTPUTDIR, concat($FILEDIR,'/',string(../@href)))"/>
-        </xsl:when>
-        <xsl:otherwise/>
-      </xsl:choose>
-    </xsl:variable>
+    <xsl:variable name="width" select="../@dita-ot:image-width"/>
+    <xsl:variable name="height" select="../@dita-ot:image-height"/>
     <xsl:if test="not(../@width) and not(../@height)">
       <xsl:attribute name="height">
         <xsl:value-of select="floor(number($height) * number(.) div 100)"/>
