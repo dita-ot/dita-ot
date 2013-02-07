@@ -37,7 +37,7 @@ final class ImageMetadataModule implements AbstractPipelineModule {
     }
 
     /**
-     * Entry point of Coderef Module.
+     * Entry point of image metadata Module.
      * @param input Input parameters and resources.
      * @return null
      * @throws DITAOTException exception
@@ -59,12 +59,15 @@ final class ImageMetadataModule implements AbstractPipelineModule {
             throw new DITAOTException(e);
         }
 
-        final Set<String> codereflist=job.getSet(FULL_DITA_TOPIC_LIST);
+        final Set<String> imagelist = job.getSet(FULL_DITA_TOPIC_LIST);
+        imagelist.removeAll(job.getSet(RESOURCE_ONLY_LIST));
+        imagelist.addAll(job.getSet(CHUNKED_TOPIC_LIST));
+        imagelist.addAll(job.getSet(CHUNKED_DITAMAP_LIST));
         final ImageMetadataFilter writer = new ImageMetadataFilter(new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR)),
                                                                        tempDir,
                                                                        job.getProperty("uplevels"));
         writer.setLogger(logger);
-        for (final String fileName: codereflist) {
+        for (final String fileName: imagelist) {
             writer.write(new File(tempDir,fileName).getAbsolutePath());
         }
 
