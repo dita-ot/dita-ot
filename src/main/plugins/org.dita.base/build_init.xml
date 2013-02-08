@@ -415,6 +415,9 @@
     <condition property="include.rellinks" value="#default friend sample external other">
       <equals arg1="${args.rellinks}" arg2="nofamily"/>
     </condition>
+    <condition property="include.rellinks" value="#default child sibling friend next previous cousin ancestor descendant sample external other">
+      <equals arg1="${args.hide.parent.link}" arg2="yes"/>
+    </condition>
     <condition property="include.rellinks" value="#default parent child sibling friend next previous cousin ancestor descendant sample external other">
       <or>
         <equals arg1="${args.rellinks}" arg2="all"/>

@@ -60,6 +60,16 @@
           <li><codeph>toc-prefix-text</codeph>, use <codeph>tocPrefix</codeph> mode instead</li>
           <li><codeph>toc-topic-text</codeph>, use <codeph>tocText</codeph> mode instead</li>
         </ul>
+        <p>Link generation has been simplified by removing deprecated arguments in favour of <codeph>args.rellinks</codeph>.
+          The following deprecated Ant properties have been removed:</p>
+        <ul>
+          <li><codeph>args.fo.include.rellinks</codeph></li>
+        </ul>
+        <p>The following XSLT parameters have been removed:</p>
+        <ul>
+          <li><codeph>antArgsIncludeRelatedLinks</codeph></li>
+          <li><codeph>disableRelatedLinks</codeph></li>
+        </ul>
       </section>
       <section>
         <title>Legacy PDF</title>
@@ -67,6 +77,22 @@
         <ul>
           <li><filepath>dita2fo-shell_template.xsl</filepath></li>
           <li><filepath>topic2fo-shell.xsl</filepath></li>
+        </ul>
+      </section>
+      <section>
+        <title>ODT</title>
+        <p>Link generation has been simplified by removing deprecated arguments in favour of <codeph>args.rellinks</codeph>.
+          The following deprecated Ant properties have been removed:</p>
+        <ul>
+          <li><codeph>args.odt.include.rellinks</codeph></li>
+        </ul>
+        <p>The following XSLT parameters have been added:</p>
+        <ul>
+          <li><codeph>include.rellinks</codeph></li>
+        </ul>
+        <p>The following XSLT parameters have been removed:</p>
+        <ul>
+          <li><codeph>disableRelatedLinks</codeph></li>
         </ul>
       </section>
     </refbody>

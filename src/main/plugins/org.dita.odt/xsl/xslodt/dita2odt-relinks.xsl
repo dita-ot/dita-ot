@@ -273,7 +273,7 @@
   <xsl:template match="*[contains(@class,' topic/related-links ')]" name="topic.related-links">
     
     
-    <xsl:if test="$disableRelatedLinks = 'no'">
+    <xsl:if test="normalize-space($includeRelatedLinkRoles)">
       <xsl:element name="text:list">
         <xsl:attribute name="text:style-name">list_style_without_bullet</xsl:attribute>
         <xsl:element name="text:list-item">

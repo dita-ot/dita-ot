@@ -353,7 +353,7 @@
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/related-links ')]">
-        <xsl:if test="not($disableRelatedLinks = 'none')">
+      <xsl:if test="normalize-space($includeRelatedLinkRoles)">
             <xsl:variable name="topicType">
                 <xsl:for-each select="parent::*">
                     <xsl:call-template name="determineTopicType"/>
@@ -429,9 +429,7 @@
           </xsl:for-each>
       </xsl:param>
       <xsl:choose>
-      	<xsl:when test="$disableRelatedLinks = 'nofamily' and
-                        (@role='parent' or @role='child' or @role='ancestor' or @role='descendant' or
-                         @role='next' or @role='previous' or @role='sibling' or @role='cousin')">
+        <xsl:when test="not(contains($includeRelatedLinkRoles, concat(' ', @role, ' ')))">
           <!-- Skip link; family links are ignored for 'nofamily' -->
         </xsl:when>
         <xsl:when test="@role='child' and $chapterLayout='MINITOC' and
@@ -674,7 +672,7 @@
 
 		</xsl:for-each>
 -->
-		<xsl:if test="not($disableRelatedLinks = 'none')">
+    <xsl:if test="normalize-space($includeRelatedLinkRoles)">
 			<xsl:variable name="parentCollectionType">
 				<xsl:call-template name="getCollectionType">
 					<xsl:with-param name="nodeType" select="'parent'"/>

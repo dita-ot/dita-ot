@@ -9,7 +9,7 @@
   <prolog>
     <metadata>
       <keywords>
-        <indexterm>Ant<indexterm>parameters<indexterm>args.odt.img.embed</indexterm><indexterm>args.odt.include.rellinks</indexterm><indexterm>args.rellinks</indexterm></indexterm></indexterm>
+        <indexterm>Ant<indexterm>parameters<indexterm>args.odt.img.embed</indexterm><indexterm>args.rellinks</indexterm></indexterm></indexterm>
       </keywords>
     </metadata>
   </prolog>
@@ -30,17 +30,6 @@
             <entry colname="COLSPEC0"><parmname>args.odt.img.embed</parmname></entry>
             <entry id="args.odt.img.embed.desc" colname="COLSPEC3">Determines whether images are
               embedded as binary objects within the ODT file. </entry>
-          </row>
-          <row id="args.odt.include.rellinks" importance="deprecated">
-            <entry><parmname>args.odt.include.rellinks</parmname></entry>
-            <entry id="args.odt.include.rellinks.desc">Specifies which links to include in the ODT
-              file. The following values are supported:<ul>
-                <li><option>none</option> (default) – No links are included.</li>
-                <li><option>all</option> – All links are included.</li>
-                <li><option>nofamily</option> – Hard coded links and relationship-table-based links
-                  are included. Parent, child, next, and previous links are not included.</li>
-              </ul><note type="notice">This parameter is deprecated in favor of the
-                  <parmname>args.rellinks</parmname> parameter.</note></entry>
           </row>
         </tbody>
       </tgroup>

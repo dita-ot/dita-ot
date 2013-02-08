@@ -10,7 +10,7 @@
     <metadata>
       <keywords>
         <indexterm>Ant <indexterm>parameters
-              <indexterm>args.bookmap-order</indexterm><indexterm>args.fo.include.rellinks</indexterm><indexterm>args.fo.userconfig</indexterm><indexterm>args.gen.task.lbl</indexterm><indexterm>args.rellinks</indexterm><indexterm>args.xsl.pdf</indexterm><indexterm>custom.xep.config</indexterm><indexterm>customization.dir</indexterm><indexterm>pdf.formatter</indexterm><indexterm>publish.required.cleanup</indexterm><indexterm>retain.topic.fo</indexterm>
+              <indexterm>args.bookmap-order</indexterm><indexterm>args.fo.userconfig</indexterm><indexterm>args.gen.task.lbl</indexterm><indexterm>args.rellinks</indexterm><indexterm>args.xsl.pdf</indexterm><indexterm>custom.xep.config</indexterm><indexterm>customization.dir</indexterm><indexterm>pdf.formatter</indexterm><indexterm>publish.required.cleanup</indexterm><indexterm>retain.topic.fo</indexterm>
           </indexterm>
         </indexterm>
         <indexterm>XSLT
@@ -36,14 +36,6 @@
             <entry id="args.bookmap-order.desc">Specifies if the frontmatter and backmatter content
               order is retained in bookmap. The allowed values are <option>retain</option> and
                 <option>discard</option>; the default value is <option>discard</option>.</entry>
-          </row>
-          <row id="args.fo.include.rellinks" importance="deprecated">
-            <entry colname="COLSPEC0"><parmname>args.fo.include.rellinks</parmname></entry>
-            <entry id="args.fo.include.rellinks.desc" colname="COLSPEC3">
-              <p conref="conref-dita-ot-parameters.dita#conref-dita-ot-parameters/args.relinks.desc"/>
-              <note type="notice">This parameter is deprecated in favor of the
-                  <parmname>args.rellinks</parmname> parameter.</note>
-            </entry>
           </row>
           <row conref="conref-dita-ot-parameters.dita#conref-dita-ot-parameters/args.fo.userconfig">
             <entry/>

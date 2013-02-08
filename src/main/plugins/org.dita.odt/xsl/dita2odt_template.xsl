@@ -66,7 +66,7 @@
 <dita:extension id="dita.xsl.odt" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
 
 <!-- =========== DEFAULT VALUES FOR EXTERNALLY MODIFIABLE PARAMETERS =========== -->
-<xsl:param name="disableRelatedLinks" select="'none'"/>
+<xsl:param name="include.rellinks"/>
 <xsl:param name="DRAFT" select="'no'"/>
 <xsl:param name="OUTPUTDIR" select="''"/>
 <xsl:param name="FILTERFILE"/>
@@ -120,6 +120,8 @@
 <xsl:param name="BASEDIR"/>
 
 <xsl:param name="TEMPDIR"/>
+  
+<xsl:param name="includeRelatedLinkRoles" select="concat(' ', normalize-space($include.rellinks), ' ')"/>
   
 <xsl:variable name="tempfiledir">
   <xsl:choose>
