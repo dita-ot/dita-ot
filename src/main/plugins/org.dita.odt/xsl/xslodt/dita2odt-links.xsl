@@ -429,9 +429,8 @@
           </xsl:for-each>
       </xsl:param>
       <xsl:choose>
-        <xsl:when test="not(contains($includeRelatedLinkRoles, concat(' ', @role, ' ')))">
-          <!-- Skip link; family links are ignored for 'nofamily' -->
-        </xsl:when>
+        <xsl:when test="(@role and not(contains($includeRelatedLinkRoles, concat(' ', @role, ' ')))) or
+                        (not(@role) and not(contains($includeRelatedLinkRoles, ' #default ')))"/>
         <xsl:when test="@role='child' and $chapterLayout='MINITOC' and
                         ($topicType='topicChapter' or $topicType='topicAppendix' or $topicType='topicPart')">
           <!-- When a minitoc already links to children, do not add them here -->
