@@ -53,6 +53,7 @@ import org.dita.dost.util.Job;
 import org.dita.dost.util.OutputUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.TimingUtils;
+import org.dita.dost.util.URLUtils;
 import org.dita.dost.writer.DitaWriter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -593,6 +594,9 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
      * @param inputMapInTemp
      */
     public void copyFileWithPIReplaced(final File src, final File target, final String copytoTargetFilename, final String inputMapInTemp ) {
+        if (!target.getParentFile().exists() && !target.getParentFile().mkdirs()) {
+            logger.logError("Failed to create copy-to target directory " + target.getParentFile().getAbsolutePath());
+        }
         final DitaWriter dw = new DitaWriter();
         dw.setOutputUtils(outputUtils);
         final String path2project = dw.getPathtoProject(copytoTargetFilename, target, inputMapInTemp);
@@ -649,6 +653,10 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             } else if (target.equals(PI_PATH2PROJ_TARGET)) {
                 if (path2project != null) {
                     d = path2project;
+                }
+            } else if (target.equals(PI_PATH2PROJ_TARGET_URI)) {
+                if (path2project != null) {
+                    d = URLUtils.correct(path2project, true);
                 }
             }            
             getContentHandler().processingInstruction(target, d);
