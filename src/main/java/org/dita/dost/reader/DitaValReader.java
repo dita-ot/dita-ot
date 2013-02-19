@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -56,8 +55,6 @@ import org.xml.sax.XMLReader;
 public final class DitaValReader extends AbstractXMLReader {
     private final Map<FilterKey, Action> filterMap;
 
-    private final Map<FilterKey, Action> schemeFilterMap;
-
     private ContentImpl content;
 
     private XMLReader reader;
@@ -66,15 +63,9 @@ public final class DitaValReader extends AbstractXMLReader {
 
     private String ditaVal = null;
 
+    private Map<String, Map<String, Set<Element>>> bindingMap;
+    
     private final List<String> relFlagImageList;
-
-    private final Map<String, Map<String, Set<Element>>> bindingMap;
-
-    private final Map<String, Map<String, Set<String>>> validValuesMap;
-
-    private final Map<String, Map<String, String>> defaultValueMap;
-
-    private Element schemeRoot = null;
 
     private boolean setSystemid = true;
 
@@ -84,13 +75,9 @@ public final class DitaValReader extends AbstractXMLReader {
     public DitaValReader() {
         super();
         filterMap = new HashMap<FilterKey, Action>();
-        schemeFilterMap = new HashMap<FilterKey, Action>();
         content = null;
         imageList = new ArrayList<String>(INT_256);
         relFlagImageList= new ArrayList<String>(INT_256);
-        validValuesMap = new HashMap<String, Map<String, Set<String>>>();
-        defaultValueMap = new HashMap<String, Map<String, String>>();
-        bindingMap = new HashMap<String, Map<String, Set<Element>>>();
 
         try {
             reader = StringUtils.getXMLReader();
@@ -101,6 +88,10 @@ public final class DitaValReader extends AbstractXMLReader {
 
     }
 
+    public void setSubjectScheme(final Map<String, Map<String, Set<Element>>> bindingMap) {
+        this.bindingMap = bindingMap;
+    }
+    
     public void initXMLReader(final boolean arg_setSystemid) {
         setSystemid = arg_setSystemid;
         reader.setEntityResolver(CatalogUtils.getCatalogResolver());
@@ -149,24 +140,24 @@ public final class DitaValReader extends AbstractXMLReader {
 
         if (ELEMENT_NAME_PROP.equals(qName)) {
             final String attAction = atts.getValue(ELEMENT_NAME_ACTION);
-            final String attName = atts.getValue(ATTRIBUTE_NAME_ATT);
-            final String attValue = atts.getValue(ATTRIBUTE_NAME_VAL);
             //first to check if the att attribute and val attribute are null
             //which is a default action for elements without mapping with the other filter val
-            final FilterKey key = attName != null ? new FilterKey(attName, attValue) : DEFAULT;
             final Action action = attAction != null ? Action.valueOf(attAction.toUpperCase()) : null;
             if (action != null) {
+                final String attName = atts.getValue(ATTRIBUTE_NAME_ATT);
+                final String attValue = atts.getValue(ATTRIBUTE_NAME_VAL);
+                final FilterKey key = attName != null ? new FilterKey(attName, attValue) : DEFAULT;
                 insertAction(action, key);
-            }
-
-            if (attName != null && attValue != null && bindingMap != null && !bindingMap.isEmpty()) {
-                final Map<String, Set<Element>> schemeMap = bindingMap.get(attName);
-                if (schemeMap != null && !schemeMap.isEmpty()) {
-                    for (Set<Element> submap: schemeMap.values()) {                    
-                        for (Element e: submap) {
-                            final Element subRoot = searchForKey(e, attValue);
-                            if (subRoot != null && action != null) {
-                                insertAction(subRoot, attName, action);
+                // Subject scheme
+                if (attName != null && attValue != null && bindingMap != null && !bindingMap.isEmpty()) {
+                    final Map<String, Set<Element>> schemeMap = bindingMap.get(attName);
+                    if (schemeMap != null && !schemeMap.isEmpty()) {
+                        for (Set<Element> submap: schemeMap.values()) {                    
+                            for (Element e: submap) {
+                                final Element subRoot = searchForKey(e, attValue);
+                                if (subRoot != null) {
+                                    insertAction(subRoot, attName, action);
+                                }
                             }
                         }
                     }
@@ -190,23 +181,7 @@ public final class DitaValReader extends AbstractXMLReader {
             relFlagImageList.add(flagImage);
         }
     }
-
-    /**
-     * Insert action into filetermap if key not present in the map
-     * @param action
-     * @param key
-     */
-    private void insertAction(final Action action, final FilterKey key) {
-        if (filterMap.get(key) == null) {
-            filterMap.put(key, action);
-        } else {
-            final Properties prop = new Properties();
-            prop.put("%1", key);
-            logger.logError(MessageUtils.getInstance().getMessage("DOTJ007E", prop)
-                    .toString());
-        }
-    }
-
+    
     /**
      * Insert subject scheme based action into filetermap if key not present in the map
      * 
@@ -241,198 +216,12 @@ public final class DitaValReader extends AbstractXMLReader {
                 final String key = node.getAttribute(ATTRIBUTE_NAME_KEYS);
                 if (!StringUtils.isEmptyString(key)) {
                     final FilterKey k = new FilterKey(attName, key);
-                    if (!schemeFilterMap.containsKey(k)) {
-                        schemeFilterMap.put(k, action);
-                    }
-                    //					else {
-                    //						Properties prop = new Properties();
-                    //						prop.put("%1", key);
-                    //						logger.logError(MessageUtils.getInstance().getMessage("DOTJ007E", prop)
-                    //								.toString());
-                    //					}
-                }
-            }
-        }
-    }
-
-    /**
-     * Return the image list.
-     * @return image list
-     */
-    public List<String> getImageList() {
-        return imageList;
-    }
-
-    /**
-     * Return the filter map.
-     * @return filter map
-     */
-    public Map<FilterKey, Action> getFilterMap() {
-        final Map<FilterKey, Action> res = new HashMap<FilterKey, Action>();
-        res.putAll(schemeFilterMap);
-        res.putAll(filterMap);
-        return Collections.unmodifiableMap(res);
-    }
-    
-    /**
-     * Get subject scheme filter map
-     *  
-     * @return subject scheme filter map
-     */
-    public Map<FilterKey, Action> getSchemeFilterMap() {
-        return Collections.unmodifiableMap(schemeFilterMap);
-    }
-    
-    /**
-     * reset.
-     */
-    public void reset() {
-        schemeFilterMap.clear();
-        validValuesMap.clear();
-        defaultValueMap.clear();
-        bindingMap.clear();
-    }
-    /**
-     * reset filter map.
-     */
-    public void filterReset() {
-        filterMap.clear();
-    }
-    /**
-     * get image list relative to the .ditaval file.
-     * @return image list
-     */
-    public List<String> getRelFlagImageList(){
-        return relFlagImageList;
-    }
-    /**
-     * load schema file.
-     * @param scheme scheme file
-     */
-    public void loadSubjectScheme(final String scheme) {
-
-        if (!FileUtils.fileExists(scheme)) {
-            return;
-        }
-        logger.logDebug("Load subject scheme " + scheme);
-        //schemeFilterMap.clear();
-
-        try {
-            final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            final DocumentBuilder builder = factory.newDocumentBuilder();
-            final Document doc = builder.parse(new InputSource(new FileInputStream(
-                    new File(scheme))));
-            schemeRoot = doc.getDocumentElement();
-            if (schemeRoot == null) {
-                return;
-            }
-            final NodeList rootChildren = schemeRoot.getChildNodes();
-            for (int i = 0; i < rootChildren.getLength(); i++) {
-                if (rootChildren.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                    Element node = (Element)rootChildren.item(i);
-                    String attrValue = node.getAttribute(ATTRIBUTE_NAME_CLASS);
-                    if (SUBJECTSCHEME_ENUMERATIONDEF.matches(attrValue)) {
-                        final NodeList enumChildren = node.getChildNodes();
-                        String elementName = "*";
-                        String attributeName = null;
-                        for (int j = 0; j < enumChildren.getLength(); j++) {
-                            if (enumChildren.item(j).getNodeType() == Node.ELEMENT_NODE) {
-                                node = (Element)enumChildren.item(j);
-                                attrValue = node.getAttribute(ATTRIBUTE_NAME_CLASS);
-                                if (SUBJECTSCHEME_ELEMENTDEF.matches(attrValue)) {
-                                    elementName = node.getAttribute(ATTRIBUTE_NAME_NAME);
-                                } else if (SUBJECTSCHEME_ATTRIBUTEDEF.matches(attrValue)) {
-                                    attributeName = node.getAttribute(ATTRIBUTE_NAME_NAME);
-                                    Map<String, Set<Element>> S = bindingMap.get(attributeName);
-                                    if (S == null) {
-                                        S = new HashMap<String, Set<Element>>();
-                                        bindingMap.put(attributeName, S);
-                                    }
-                                } else if (SUBJECTSCHEME_DEFAULTSUBJECT.matches(attrValue)) {
-                                    // Put default values.
-                                    final String keyValue = node.getAttribute(ATTRIBUTE_NAME_KEYREF);
-                                    if (keyValue != null) {
-                                        Map<String, String> S = defaultValueMap.get(attributeName);
-                                        if (S == null) {
-                                            S = new HashMap<String, String>();
-                                        }
-                                        S.put(elementName, keyValue);
-                                        defaultValueMap.put(attributeName, S);
-                                    }
-                                } else if (SUBJECTSCHEME_SUBJECTDEF.matches(attrValue)) {
-                                    // Search for attributeName in schemeRoot
-                                    String keyValue = node
-                                            .getAttribute(ATTRIBUTE_NAME_KEYREF);
-                                    if (StringUtils.isEmptyString(keyValue)) {
-                                        keyValue = node
-                                                .getAttribute(ATTRIBUTE_NAME_KEYS);
-                                    }
-                                    final Element subTree = searchForKey(schemeRoot,
-                                            keyValue);
-                                    if (subTree != null) {
-                                        Map<String, Set<Element>> S = bindingMap
-                                                .get(attributeName);
-                                        if (S == null) {
-                                            S = new HashMap<String, Set<Element>>();
-                                        }
-                                        Set<Element> A = S.get(elementName);
-                                        if (A == null) {
-                                            A = new HashSet<Element>();
-                                        }
-                                        if (!A.contains(subTree)) {
-                                            // Add sub-tree to valid values map
-                                            this.putValuePairsIntoMap(subTree, elementName, attributeName);
-                                        }
-                                        A.add(subTree);
-                                        S.put(elementName, A);
-                                        bindingMap.put(attributeName, S);
-                                    }
-                                }
-                            }
-                        }
+                    if (!filterMap.containsKey(k)) {
+                        filterMap.put(k, action);
                     }
                 }
             }
-        } catch (final Exception e) {
-            this.logger.logException(e);
         }
-    }
-
-    private void putValuePairsIntoMap(final Element subtree, final String elementName, final String attName) {
-        if (subtree == null || attName == null) {
-            return;
-        }
-
-        Map<String, Set<String>> valueMap = this.validValuesMap.get(attName);
-        if (valueMap == null) {
-            valueMap = new HashMap<String, Set<String>>();
-        }
-
-        Set<String> valueSet = valueMap.get(elementName);
-        if (valueSet == null) {
-            valueSet = new HashSet<String>();
-        }
-
-        final LinkedList<Element> queue = new LinkedList<Element>();
-        queue.offer(subtree);
-
-        while (!queue.isEmpty()) {
-            final Element node = queue.poll();
-            final NodeList children = node.getChildNodes();
-            for (int i = 0; i < children.getLength(); i++) {
-                if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                    queue.offer((Element)children.item(i));
-                }
-            }
-            if (SUBJECTSCHEME_SUBJECTDEF.matches(node)) {
-                final String key = node.getAttribute(ATTRIBUTE_NAME_KEYS);
-                if (!StringUtils.isEmptyString(key)) {
-                    valueSet.add(key);
-                }
-            }
-        }
-        valueMap.put(elementName, valueSet);
-        this.validValuesMap.put(attName, valueMap);
     }
 
     /**
@@ -465,23 +254,56 @@ public final class DitaValReader extends AbstractXMLReader {
         return null;
     }
 
+    
     /**
-     * Get map of valid attribute values based on subject scheme. The
-     * contents of the map is in pseudo-code
-     * {@code Map<AttName, Map<ElemName, <Set<Value>>>}. For default element
-     * mapping, the value is {@code *}.
-     * 
-     * @return valid attribute values
+     * Insert action into filetermap if key not present in the map
+     * @param action
+     * @param key
      */
-    public Map<String, Map<String, Set<String>>> getValidValuesMap() {
-        return validValuesMap;
+    private void insertAction(final Action action, final FilterKey key) {
+        if (filterMap.get(key) == null) {
+            filterMap.put(key, action);
+        } else {
+            final Properties prop = new Properties();
+            prop.put("%1", key);
+            logger.logError(MessageUtils.getInstance().getMessage("DOTJ007E", prop)
+                    .toString());
+        }
+    }
+
+    /**
+     * Return the image list.
+     * @return image list
+     */
+    public List<String> getImageList() {
+        return imageList;
+    }
+
+    /**
+     * Return the filter map.
+     * @return filter map
+     */
+    public Map<FilterKey, Action> getFilterMap() {
+        return Collections.unmodifiableMap(filterMap);
+    }
+    
+    /**
+     * reset.
+     */
+    public void reset() {
     }
     /**
-     * get map of default value.
-     * @return default value map
+     * reset filter map.
      */
-    public Map<String, Map<String, String>> getDefaultValueMap() {
-        return this.defaultValueMap;
+    public void filterReset() {
+        filterMap.clear();
+    }
+    /**
+     * get image list relative to the .ditaval file.
+     * @return image list
+     */
+    public List<String> getRelFlagImageList(){
+        return relFlagImageList;
     }
 
 }

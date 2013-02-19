@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -43,6 +42,7 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.DitaValReader;
+import org.dita.dost.reader.SubjectSchemeReader;
 import org.dita.dost.util.DelayConrefUtils;
 import org.dita.dost.util.FilterUtils.Action;
 import org.dita.dost.util.FilterUtils.FilterKey;
@@ -241,6 +241,8 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                 filterReader.read(ditavalFile.getAbsolutePath());
                 filterUtils.setFilterMap(filterReader.getFilterMap());
             }
+            final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
+            subjectSchemeReader.setLogger(logger);
             
             final DitaWriter fileWriter = new DitaWriter();
             fileWriter.setLogger(logger);
@@ -275,17 +277,18 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                 final Set<String> schemaSet = dic.get(filename);
                 filterReader.reset();
                 if (schemaSet != null) {
+                    subjectSchemeReader.reset();
                     final FilterUtils fu = new FilterUtils();
                     fu.setLogger(logger);
                     for (final String schema: schemaSet) {
-                        filterReader.loadSubjectScheme(FileUtils.resolveFile(
-                                tempDir.getAbsolutePath(), schema) + SUBJECT_SCHEME_EXTENSION);
+                        subjectSchemeReader.loadSubjectScheme(FileUtils.resolveFile(tempDir.getAbsolutePath(), schema) + SUBJECT_SCHEME_EXTENSION);
                     }
                     if (ditavalFile!=null){
                         filterReader.filterReset();
+                        filterReader.setSubjectScheme(subjectSchemeReader.getSubjectSchemeMap());
                         filterReader.read(ditavalFile.getAbsolutePath());
                         final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>();
-                        fm.putAll(filterReader.getSchemeFilterMap());
+                        fm.putAll(filterReader.getFilterMap());
                         fm.putAll(filterUtils.getFilterMap());
                         fu.setFilterMap(Collections.unmodifiableMap(fm));
                     } else {
@@ -293,8 +296,8 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                     }
                     fileWriter.setFilterUtils(fu);
 
-                    fileWriter.setValidateMap(filterReader.getValidValuesMap());
-                    fileWriter.setDefaultValueMap(filterReader.getDefaultValueMap());
+                    fileWriter.setValidateMap(subjectSchemeReader.getValidValuesMap());
+                    fileWriter.setDefaultValueMap(subjectSchemeReader.getDefaultValueMap());
                 } else {
                     fileWriter.setFilterUtils(filterUtils);
                 }
