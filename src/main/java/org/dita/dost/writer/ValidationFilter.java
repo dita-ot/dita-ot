@@ -162,7 +162,9 @@ public final class ValidationFilter extends AbstractXMLFilter {
     }
 
     /**
-     * @param validateMap the validateMap to set
+     * Set valid attribute values.
+     * 
+     * @param validateMap map of valid attribute values
      */
     public void setValidateMap(final Map<String, Map<String, Set<String>>> validateMap) {
         this.validateMap = validateMap;

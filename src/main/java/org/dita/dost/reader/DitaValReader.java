@@ -103,12 +103,7 @@ public final class DitaValReader extends AbstractXMLReader {
 
     public void initXMLReader(final boolean arg_setSystemid) {
         setSystemid = arg_setSystemid;
-        try {
-            Class.forName(RESOLVER_CLASS);
-            reader.setEntityResolver(CatalogUtils.getCatalogResolver());
-        }catch (final ClassNotFoundException e){
-            reader.setEntityResolver(this);
-        }
+        reader.setEntityResolver(CatalogUtils.getCatalogResolver());
     }
 
     @Override
@@ -167,13 +162,11 @@ public final class DitaValReader extends AbstractXMLReader {
             if (attName != null && attValue != null && bindingMap != null && !bindingMap.isEmpty()) {
                 final Map<String, Set<Element>> schemeMap = bindingMap.get(attName);
                 if (schemeMap != null && !schemeMap.isEmpty()) {
-                    final Iterator<Set<Element>> subTreeIter = schemeMap.values().iterator();
-                    while (subTreeIter.hasNext()) {
-                        final Iterator<Element> subTreeSet = subTreeIter.next().iterator();
-                        while (subTreeSet.hasNext()) {
-                            final Element subRoot = this.searchForKey(subTreeSet.next(), attValue);
+                    for (Set<Element> submap: schemeMap.values()) {                    
+                        for (Element e: submap) {
+                            final Element subRoot = searchForKey(e, attValue);
                             if (subRoot != null && action != null) {
-                                this.insertAction(subRoot, attName, action);
+                                insertAction(subRoot, attName, action);
                             }
                         }
                     }
@@ -214,6 +207,13 @@ public final class DitaValReader extends AbstractXMLReader {
         }
     }
 
+    /**
+     * Insert subject scheme based action into filetermap if key not present in the map
+     * 
+     * @param subTree subject scheme definition element
+     * @param attName attribute name
+     * @param action action to insert
+     */
     private void insertAction(final Element subTree, final String attName, final Action action) {
         if (subTree == null || action == null) {
             return;
@@ -237,8 +237,7 @@ public final class DitaValReader extends AbstractXMLReader {
                     queue.offer((Element)children.item(i));
                 }
             }
-            final String attrValue = node.getAttribute(ATTRIBUTE_NAME_CLASS);
-            if (attrValue != null && SUBJECTSCHEME_SUBJECTDEF.matches(attrValue)) {
+            if (SUBJECTSCHEME_SUBJECTDEF.matches(node)) {
                 final String key = node.getAttribute(ATTRIBUTE_NAME_KEYS);
                 if (!StringUtils.isEmptyString(key)) {
                     final FilterKey k = new FilterKey(attName, key);
@@ -291,6 +290,7 @@ public final class DitaValReader extends AbstractXMLReader {
         schemeFilterMap.clear();
         validValuesMap.clear();
         defaultValueMap.clear();
+        bindingMap.clear();
     }
     /**
      * reset filter map.
@@ -314,7 +314,7 @@ public final class DitaValReader extends AbstractXMLReader {
         if (!FileUtils.fileExists(scheme)) {
             return;
         }
-
+        logger.logDebug("Load subject scheme " + scheme);
         //schemeFilterMap.clear();
 
         try {
@@ -331,8 +331,7 @@ public final class DitaValReader extends AbstractXMLReader {
                 if (rootChildren.item(i).getNodeType() == Node.ELEMENT_NODE) {
                     Element node = (Element)rootChildren.item(i);
                     String attrValue = node.getAttribute(ATTRIBUTE_NAME_CLASS);
-                    if (attrValue != null
-                            && SUBJECTSCHEME_ENUMERATIONDEF.matches(attrValue)) {
+                    if (SUBJECTSCHEME_ENUMERATIONDEF.matches(attrValue)) {
                         final NodeList enumChildren = node.getChildNodes();
                         String elementName = "*";
                         String attributeName = null;
@@ -340,19 +339,16 @@ public final class DitaValReader extends AbstractXMLReader {
                             if (enumChildren.item(j).getNodeType() == Node.ELEMENT_NODE) {
                                 node = (Element)enumChildren.item(j);
                                 attrValue = node.getAttribute(ATTRIBUTE_NAME_CLASS);
-                                if (attrValue != null
-                                        && SUBJECTSCHEME_ELEMENTDEF.matches(attrValue)) {
+                                if (SUBJECTSCHEME_ELEMENTDEF.matches(attrValue)) {
                                     elementName = node.getAttribute(ATTRIBUTE_NAME_NAME);
-                                } else if (attrValue != null
-                                        && SUBJECTSCHEME_ATTRIBUTEDEF.matches(attrValue)) {
+                                } else if (SUBJECTSCHEME_ATTRIBUTEDEF.matches(attrValue)) {
                                     attributeName = node.getAttribute(ATTRIBUTE_NAME_NAME);
                                     Map<String, Set<Element>> S = bindingMap.get(attributeName);
                                     if (S == null) {
                                         S = new HashMap<String, Set<Element>>();
                                         bindingMap.put(attributeName, S);
                                     }
-                                } else if (attrValue != null
-                                        && SUBJECTSCHEME_DEFAULTSUBJECT.matches(attrValue)) {
+                                } else if (SUBJECTSCHEME_DEFAULTSUBJECT.matches(attrValue)) {
                                     // Put default values.
                                     final String keyValue = node.getAttribute(ATTRIBUTE_NAME_KEYREF);
                                     if (keyValue != null) {
@@ -363,8 +359,7 @@ public final class DitaValReader extends AbstractXMLReader {
                                         S.put(elementName, keyValue);
                                         defaultValueMap.put(attributeName, S);
                                     }
-                                } else if (attrValue != null
-                                        && SUBJECTSCHEME_SUBJECTDEF.matches(attrValue)) {
+                                } else if (SUBJECTSCHEME_SUBJECTDEF.matches(attrValue)) {
                                     // Search for attributeName in schemeRoot
                                     String keyValue = node
                                             .getAttribute(ATTRIBUTE_NAME_KEYREF);
@@ -429,8 +424,7 @@ public final class DitaValReader extends AbstractXMLReader {
                     queue.offer((Element)children.item(i));
                 }
             }
-            final String attrValue = node.getAttribute(ATTRIBUTE_NAME_CLASS);
-            if (attrValue != null && SUBJECTSCHEME_SUBJECTDEF.matches(attrValue)) {
+            if (SUBJECTSCHEME_SUBJECTDEF.matches(node)) {
                 final String key = node.getAttribute(ATTRIBUTE_NAME_KEYS);
                 if (!StringUtils.isEmptyString(key)) {
                     valueSet.add(key);
@@ -441,6 +435,12 @@ public final class DitaValReader extends AbstractXMLReader {
         this.validValuesMap.put(attName, valueMap);
     }
 
+    /**
+     * Search subject scheme elements for a given key
+     * @param root subject scheme element tree to search through
+     * @param keyValue key to locate
+     * @return element that matches the key, otherwise {@code null}
+     */
     private Element searchForKey(final Element root, final String keyValue) {
         if (root == null || keyValue == null) {
             return null;
@@ -455,8 +455,7 @@ public final class DitaValReader extends AbstractXMLReader {
                     queue.add((Element)children.item(i));
                 }
             }
-            final String attrValue = node.getAttribute(ATTRIBUTE_NAME_CLASS);
-            if (attrValue != null && SUBJECTSCHEME_SUBJECTDEF.matches(attrValue)) {
+            if (SUBJECTSCHEME_SUBJECTDEF.matches(node)) {
                 final String key = node.getAttribute(ATTRIBUTE_NAME_KEYS);
                 if (keyValue.equals(key)) {
                     return node;
@@ -467,7 +466,12 @@ public final class DitaValReader extends AbstractXMLReader {
     }
 
     /**
-     * @return the validValuesMap
+     * Get map of valid attribute values based on subject scheme. The
+     * contents of the map is in pseudo-code
+     * {@code Map<AttName, Map<ElemName, <Set<Value>>>}. For default element
+     * mapping, the value is {@code *}.
+     * 
+     * @return valid attribute values
      */
     public Map<String, Map<String, Set<String>>> getValidValuesMap() {
         return validValuesMap;
