@@ -40,8 +40,8 @@
       </section>
       <section>
         <title>XHTML</title>
-        <p>XSLT Java extension <codepth>ImgUtils</codepth> has been removed from stylesheets and been replaced with preprocessing module <codeph>ImageMetadataModule</codeph>.
-          The old <codepth>ImgUtils</codepth> Java classes are still included in the build.</p>
+        <p>XSLT Java extension <codeph>ImgUtils</codeph> has been removed from stylesheets and been replaced with preprocessing module <codeph>ImageMetadataModule</codeph>.
+          The old <codeph>ImgUtils</codeph> Java classes are still included in the build.</p>
       </section>
       <section>
         <title>PDF</title>
