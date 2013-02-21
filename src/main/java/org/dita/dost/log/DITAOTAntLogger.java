@@ -47,30 +47,37 @@ public final class DITAOTAntLogger implements DITAOTLogger {
         this.target = target;
     }
 
+    @Override
     public void logInfo(final String msg) {
         log(msg, null, Project.MSG_INFO);
     }
 
+    @Override
     public void logWarn(final String msg) {
         log(msg, null, Project.MSG_WARN);
     }
 
+    @Override
     public void logError(final String msg) {
         log(msg, null, Project.MSG_ERR);
     }
 
+    @Override
     public void logError(final String msg, final Throwable t) {
         log(msg, t, Project.MSG_ERR);
     }
     
+    @Override
     public void logFatal(final String msg) {
         log(msg, null, Project.MSG_ERR);
     }
 
+    @Override
     public void logDebug(final String msg) {
         log(msg, null, Project.MSG_VERBOSE);
     }
 
+    @Override
     public void logException(final Throwable t) {
         log(t.getMessage(), t, Project.MSG_ERR);
     }

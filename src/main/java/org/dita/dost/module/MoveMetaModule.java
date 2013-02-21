@@ -52,6 +52,7 @@ final class MoveMetaModule implements AbstractPipelineModule {
         content = new ContentImpl();
     }
 
+    @Override
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
@@ -63,6 +64,7 @@ final class MoveMetaModule implements AbstractPipelineModule {
      * @return null
      * @throws DITAOTException exception
      */
+    @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
         if (logger == null) {
             throw new IllegalStateException("Logger not set");

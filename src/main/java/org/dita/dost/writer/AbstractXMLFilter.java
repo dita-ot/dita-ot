@@ -43,8 +43,10 @@ abstract class AbstractXMLFilter extends XMLFilterImpl implements AbstractWriter
 
     protected DITAOTLogger logger;
 
+    @Override
     public abstract void setContent(Content content);
 
+    @Override
     public void write(final String filename) throws DITAOTException {
         final File inputFile = new File(filename);
         final File outputFile = new File(filename + FILE_EXTENSION_TEMP);
@@ -101,6 +103,7 @@ abstract class AbstractXMLFilter extends XMLFilterImpl implements AbstractWriter
         }
     }
 
+    @Override
     public final void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }

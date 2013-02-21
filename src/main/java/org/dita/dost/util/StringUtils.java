@@ -26,8 +26,6 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import org.dita.dost.log.DITAOTJavaLogger;
-
 /**
  * String relevant utilities.
  * 

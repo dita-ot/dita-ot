@@ -40,27 +40,33 @@ public final class TopicIdParser implements ContentHandler {
         firstId = result;
     }
 
+    @Override
     public void setDocumentLocator(final Locator locator) {
         // NOOP
     }
 
+    @Override
     public void startDocument() throws SAXException {
         isFirstId = true;
     }
 
+    @Override
     public void endDocument() throws SAXException {
         // NOOP
     }
 
+    @Override
     public void startPrefixMapping(final String prefix, final String uri)
             throws SAXException {
         // NOOP
     }
 
+    @Override
     public void endPrefixMapping(final String prefix) throws SAXException {
         // NOOP
     }
 
+    @Override
     public void startElement(final String uri, final String localName, final String qName,
             final Attributes atts) throws SAXException {
         if (isFirstId){
@@ -71,26 +77,31 @@ public final class TopicIdParser implements ContentHandler {
         }
     }
 
+    @Override
     public void endElement(final String uri, final String localName, final String qName)
             throws SAXException {
         // NOOP
     }
 
+    @Override
     public void characters(final char[] ch, final int start, final int length)
             throws SAXException {
         // NOOP
     }
 
+    @Override
     public void ignorableWhitespace(final char[] ch, final int start, final int length)
             throws SAXException {
         // NOOP
     }
 
+    @Override
     public void processingInstruction(final String target, final String data)
             throws SAXException {
         // NOOP
     }
 
+    @Override
     public void skippedEntity(final String name) throws SAXException {
         // NOOP
     }

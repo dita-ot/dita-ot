@@ -69,10 +69,12 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
     public IndexTermExtractModule() {
     }
 
+    @Override
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
 
+    @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input)
             throws DITAOTException {
         if (logger == null) {

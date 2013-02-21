@@ -16,20 +16,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
-import java.util.StringTokenizer;
-
-import org.apache.tools.ant.Project;
-
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTAntLogger;
-import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.AbstractPipelineModule;
 import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
-import org.dita.dost.util.StringUtils;
 
 /**
  * Ant task for executing pipeline modules.
@@ -37,11 +30,6 @@ import org.dita.dost.util.StringUtils;
  * @author Deborah Pickett
  */
 public final class ExtensibleAntInvoker extends Task {
-
-    /** Key value pair separator. */
-    private final static String KEY_VALUE_PAIR_SEPARATOR = ";";
-    /** Equal sign. */
-    private final static String KEY_VALUE_EQUAL_SIGN = "=";
 
     /** Pipeline. */
     private final PipelineFacade pipeline;

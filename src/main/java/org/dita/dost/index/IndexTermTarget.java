@@ -45,7 +45,7 @@ public final class IndexTermTarget {
      * @param name The targetName to set.
      */
     public void setTargetName(final String name) {
-        this.targetName = name;
+        targetName = name;
     }
 
     /**
@@ -62,7 +62,7 @@ public final class IndexTermTarget {
      * @param uri The targetURI to set.
      */
     public void setTargetURI(final String uri) {
-        this.targetURI = uri;
+        targetURI = uri;
     }
 
     /**

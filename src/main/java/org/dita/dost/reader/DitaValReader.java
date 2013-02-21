@@ -16,16 +16,11 @@ import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
@@ -36,7 +31,6 @@ import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils.Action;
 import org.dita.dost.util.FilterUtils.FilterKey;
 import org.dita.dost.util.StringUtils;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -152,8 +146,8 @@ public final class DitaValReader extends AbstractXMLReader {
                 if (attName != null && attValue != null && bindingMap != null && !bindingMap.isEmpty()) {
                     final Map<String, Set<Element>> schemeMap = bindingMap.get(attName);
                     if (schemeMap != null && !schemeMap.isEmpty()) {
-                        for (Set<Element> submap: schemeMap.values()) {                    
-                            for (Element e: submap) {
+                        for (final Set<Element> submap: schemeMap.values()) {                    
+                            for (final Element e: submap) {
                                 final Element subRoot = searchForKey(e, attValue);
                                 if (subRoot != null) {
                                     insertAction(subRoot, attName, action);

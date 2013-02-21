@@ -57,6 +57,7 @@ final class ChunkModule implements AbstractPipelineModule {
         super();
     }
 
+    @Override
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
@@ -70,6 +71,7 @@ final class ChunkModule implements AbstractPipelineModule {
      * @return null
      * @throws DITAOTException exception
      */
+    @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input)
             throws DITAOTException {
         if (logger == null) {
@@ -143,7 +145,7 @@ final class ChunkModule implements AbstractPipelineModule {
         topicRefWriter.setup(conflictTable);
         try{
             for (final String f: job.getSet(FULL_DITAMAP_TOPIC_LIST)) {
-                topicRefWriter.write(tempDir.getAbsolutePath(), f, this.relativePath2fix);
+                topicRefWriter.write(tempDir.getAbsolutePath(), f, relativePath2fix);
             }
         }catch(final DITAOTException ex){
             logger.logException(ex);

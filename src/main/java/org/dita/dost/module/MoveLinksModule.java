@@ -13,8 +13,6 @@ import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
 import java.util.Map;
-import java.util.Set;
-
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
@@ -33,6 +31,7 @@ final class MoveLinksModule implements AbstractPipelineModule {
 
     private DITAOTLogger logger;
 
+    @Override
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
@@ -44,6 +43,7 @@ final class MoveLinksModule implements AbstractPipelineModule {
      * @return always {@code null}
      * @throws DITAOTException if process fails
      */
+    @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
         if (logger == null) {
             throw new IllegalStateException("Logger not set");

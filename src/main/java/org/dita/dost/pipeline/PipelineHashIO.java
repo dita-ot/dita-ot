@@ -38,6 +38,7 @@ AbstractPipelineOutput {
      * @param name name
      * @param value value
      */
+    @Override
     public void setAttribute(final String name, final String value) {
         hash.put(name, value);
     }
@@ -48,6 +49,7 @@ AbstractPipelineOutput {
      * @param name name
      * @return String value
      */
+    @Override
     public String getAttribute(final String name) {
         String value = null;
         value = hash.get(name);

@@ -776,7 +776,7 @@ public final class DitaWriter extends AbstractXMLFilter {
         if ((atts.getValue(ATTRIBUTE_NAME_NAMEST) == null)||(atts.getValue(ATTRIBUTE_NAME_NAMEEND) == null)){
             return 1;
         }else{
-            int ret = colSpec.indexOf(atts.getValue(ATTRIBUTE_NAME_NAMEEND)) - colSpec.indexOf(atts.getValue(ATTRIBUTE_NAME_NAMEST))+1;
+            final int ret = colSpec.indexOf(atts.getValue(ATTRIBUTE_NAME_NAMEEND)) - colSpec.indexOf(atts.getValue(ATTRIBUTE_NAME_NAMEST))+1;
             if(ret <= 0){
                 return 1;
             }
@@ -851,13 +851,13 @@ public final class DitaWriter extends AbstractXMLFilter {
         if (atts.getValue(ATTRIBUTE_NAME_COLNUM) != null){
             return new Integer(atts.getValue(ATTRIBUTE_NAME_COLNUM)).intValue();
         }else if(atts.getValue(ATTRIBUTE_NAME_NAMEST) != null){
-            int ret = colSpec.indexOf(atts.getValue(ATTRIBUTE_NAME_NAMEST)) + 1;
+            final int ret = colSpec.indexOf(atts.getValue(ATTRIBUTE_NAME_NAMEST)) + 1;
             if(ret == 0){
                 return previousEnd + 1;
             }
             return ret;
         }else if(atts.getValue(ATTRIBUTE_NAME_COLNAME) != null){
-            int ret = colSpec.indexOf(atts.getValue(ATTRIBUTE_NAME_COLNAME)) + 1;
+            final int ret = colSpec.indexOf(atts.getValue(ATTRIBUTE_NAME_COLNAME)) + 1;
             if(ret == 0){
                 return previousEnd + 1;
             }
@@ -1058,7 +1058,7 @@ public final class DitaWriter extends AbstractXMLFilter {
      */
     public String getPathtoProject (final String filename, final File traceFilename, final String inputMap) {
     	String path2Project = null;
-    	if(outputUtils.getGeneratecopyouter() != OutputUtils.Generate.OLDSOLUTION){
+    	if(OutputUtils.getGeneratecopyouter() != OutputUtils.Generate.OLDSOLUTION){
             if(isOutFile(traceFilename)){
                 
                 path2Project = getRelativePathFromOut(traceFilename.getAbsolutePath());
@@ -1083,7 +1083,7 @@ public final class DitaWriter extends AbstractXMLFilter {
         final File mapPathName = outputUtils.getInputMapPathName();
         final File currFilePathName = new File(overflowingFile);
         final String relativePath = FileUtils.getRelativePath( mapPathName.toString(),currFilePathName.toString());
-        final String outputDir = outputUtils.getOutputDir().getAbsolutePath();
+        final String outputDir = OutputUtils.getOutputDir().getAbsolutePath();
         final StringBuffer outputPathName = new StringBuffer(outputDir).append(File.separator).append("index.html");
         final String finalOutFilePathName = FileUtils.resolveFile(outputDir,relativePath);
         final String finalRelativePathName = FileUtils.getRelativePath(finalOutFilePathName,outputPathName.toString());
@@ -1172,14 +1172,16 @@ public final class DitaWriter extends AbstractXMLFilter {
     // Locator methods
     
     private Locator locator;
-    public void setDocumentLocator(Locator locator) {
+    @Override
+    public void setDocumentLocator(final Locator locator) {
         this.locator = locator;
         getContentHandler().setDocumentLocator(locator);
     }
     
     // LexicalHandler methods
     
-    public void setProperty(String name, Object value) throws SAXNotRecognizedException, SAXNotSupportedException {
+    @Override
+    public void setProperty(final String name, final Object value) throws SAXNotRecognizedException, SAXNotSupportedException {
         if (getParent().getClass().getName().equals(SAX_DRIVER_DEFAULT_CLASS) && name.equals(LEXICAL_HANDLER_PROPERTY)) {
             getParent().setProperty(name, new XercesFixLexicalHandler((LexicalHandler) value));
         } else {
@@ -1212,33 +1214,40 @@ public final class DitaWriter extends AbstractXMLFilter {
             this.lexicalHandler = lexicalHandler;
         }
         
-        public void comment(char[] arg0, int arg1, int arg2) throws SAXException {
+        @Override
+        public void comment(final char[] arg0, final int arg1, final int arg2) throws SAXException {
             final char[] buf = new char[arg2];
             System.arraycopy(arg0, arg1, buf, 0, arg2);
             lexicalHandler.comment(buf, 0, arg2);
         }
     
+        @Override
         public void endCDATA() throws SAXException {
             lexicalHandler.endCDATA();
         }
     
+        @Override
         public void endDTD() throws SAXException {
             lexicalHandler.endDTD();
         }
     
-        public void endEntity(String arg0) throws SAXException {
+        @Override
+        public void endEntity(final String arg0) throws SAXException {
             lexicalHandler.endEntity(arg0);
         }
     
+        @Override
         public void startCDATA() throws SAXException {
             lexicalHandler.startCDATA();
         }
     
-        public void startDTD(String arg0, String arg1, String arg2) throws SAXException {
+        @Override
+        public void startDTD(final String arg0, final String arg1, final String arg2) throws SAXException {
             lexicalHandler.startDTD(arg0, arg1, arg2);
         }
     
-        public void startEntity(String arg0) throws SAXException {
+        @Override
+        public void startEntity(final String arg0) throws SAXException {
             lexicalHandler.startEntity(arg0);
         }
     

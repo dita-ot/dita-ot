@@ -146,7 +146,7 @@ public final class KeyrefReader extends AbstractXMLReader {
      * @param set keys set
      */
     public void setKeys(final Set<String> set){
-        this.keys = set;
+        keys = set;
     }
 
     @Override

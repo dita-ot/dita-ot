@@ -40,6 +40,7 @@ public final class PipelineFacade implements AbstractFacade {
      * @return AbstractPipelineOutput
      * @throws DITAOTException DITAOTException
      */
+    @Override
     public AbstractPipelineOutput execute(final String pipelineModuleName,
             final AbstractPipelineInput input) throws DITAOTException {
         /*
@@ -55,6 +56,7 @@ public final class PipelineFacade implements AbstractFacade {
         return null;
     }
     
+    @Override
     public AbstractPipelineOutput execute(final Class<? extends AbstractPipelineModule> moduleClass,
             final AbstractPipelineInput input) throws DITAOTException {
         final AbstractPipelineModule module = factory.createModule(moduleClass);
@@ -65,6 +67,7 @@ public final class PipelineFacade implements AbstractFacade {
         return null;
     }
 
+    @Override
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }

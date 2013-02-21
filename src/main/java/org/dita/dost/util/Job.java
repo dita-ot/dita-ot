@@ -141,7 +141,7 @@ public final class Job {
         if (jobFile.exists()) {
         	InputStream in = null;
             try {
-                XMLReader parser = StringUtils.getXMLReader();
+                final XMLReader parser = StringUtils.getXMLReader();
                 parser.setContentHandler(new JobHandler(prop));
                 in = new FileInputStream(jobFile);
                 parser.parse(new InputSource(in));
@@ -211,21 +211,21 @@ public final class Job {
         }
         
         @Override
-        public void characters(char[] ch, int start, int length) throws SAXException {
+        public void characters(final char[] ch, final int start, final int length) throws SAXException {
             if (buf != null) {
                 buf.append(ch, start, length);
             }
         }
 
         @Override
-        public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
+        public void ignorableWhitespace(final char[] ch, final int start, final int length) throws SAXException {
             if (buf != null) {
                 buf.append(ch, start, length);
             }
         }
         
         @Override
-        public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
+        public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
             final String n = localName != null ? localName : qName;
             if (n.equals(ELEMENT_PROPERTY)) {
                 name = atts.getValue(ATTRIBUTE_NAME);
@@ -241,7 +241,7 @@ public final class Job {
         }
         
         @Override
-        public void endElement(String uri, String localName, String qName) throws SAXException {
+        public void endElement(final String uri, final String localName, final String qName) throws SAXException {
             final String n = localName != null ? localName : qName;
             if (n.equals(ELEMENT_PROPERTY)) {
                 name = null;
@@ -455,7 +455,7 @@ public final class Job {
      * @return the previous value of the specified key in this property list, or {@code null} if it did not have one
      */
     public Set<String> setSet(final String key, final Set<String> value) {
-        Object previous = prop.put(key, value);
+        final Object previous = prop.put(key, value);
         if (previous == null) {
             return null;
         } else if (previous instanceof String) { // migration support

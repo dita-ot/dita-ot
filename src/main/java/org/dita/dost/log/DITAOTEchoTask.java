@@ -13,8 +13,6 @@ import static org.dita.dost.log.MessageBean.*;
 
 import java.util.ArrayList;
 import java.util.Properties;
-import java.util.StringTokenizer;
-
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.taskdefs.Echo;
 import org.dita.dost.invoker.ExtensibleAntInvoker.Param;
@@ -45,7 +43,7 @@ public final class DITAOTEchoTask extends Echo {
      * @param identifier The id to set.
      */
     public void setId(final String identifier) {
-        this.id = identifier;
+        id = identifier;
     }
 
     /**

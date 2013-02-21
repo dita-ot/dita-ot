@@ -194,7 +194,7 @@ public final class MergeMapParser extends XMLFilterImpl {
                         String p = null;
                         try {
                             p = FileUtils.normalize(URLDecoder.decode(FileUtils.stripFragment(attValue), UTF8));
-                        } catch (UnsupportedEncodingException e) {
+                        } catch (final UnsupportedEncodingException e) {
                         	throw new RuntimeException(e);
                         }
                         util.visit(p);

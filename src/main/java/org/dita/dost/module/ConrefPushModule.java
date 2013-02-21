@@ -33,6 +33,7 @@ final class ConrefPushModule implements AbstractPipelineModule {
 
     private DITAOTLogger logger;
 
+    @Override
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
@@ -42,6 +43,7 @@ final class ConrefPushModule implements AbstractPipelineModule {
      * @return output
      * @throws DITAOTException exception
      */
+    @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input)
             throws DITAOTException {
         if (logger == null) {

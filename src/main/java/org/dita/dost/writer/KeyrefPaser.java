@@ -44,7 +44,6 @@ import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.XMLUtils;
 
 import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -258,7 +257,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
      * @param map key map
      */
     public void setKeyMap(final Map<String, String> map) {
-        this.keyMap = map;
+        keyMap = map;
     }
     
     /**
@@ -279,7 +278,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
         final File inputFile = new File(tempDir, filename);
         filepath = inputFile.getAbsolutePath();
         final File outputFile = new File(tempDir, filename + ATTRIBUTE_NAME_KEYREF);
-        this.fileName = filename;
+        fileName = filename;
         OutputStream output = null;
         try {
             output = new BufferedOutputStream(new FileOutputStream(outputFile));
@@ -492,7 +491,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
                 final NamedNodeMap namedNodeMap = elem.getAttributes();
                 // first resolve the keyref attribute
                 if (currentElement != null && currentElement.refAttr != null) {
-                    String target = keyMap.get(keyName);
+                    final String target = keyMap.get(keyName);
                     if (target != null && target.length() != 0) {
                         String target_output = target;
                         // if the scope equals local, the target should be verified that

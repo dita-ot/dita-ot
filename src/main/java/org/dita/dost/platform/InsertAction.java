@@ -62,6 +62,7 @@ class InsertAction extends DefaultHandler2 implements IAction {
         }
     }
 
+    @Override
     public void setInput(final String input) {
         final StringTokenizer inputTokenizer = new StringTokenizer(input, Integrator.FEAT_VALUE_SEPARATOR);
         while(inputTokenizer.hasMoreElements()){
@@ -69,10 +70,12 @@ class InsertAction extends DefaultHandler2 implements IAction {
         }
     }
 
+    @Override
     public void addParam(final String name, final String value) {
         paramTable.put(name, value);
     }
 
+    @Override
     public String getResult() {
         try{
             for (final String fileName: fileNameSet) {
@@ -85,9 +88,11 @@ class InsertAction extends DefaultHandler2 implements IAction {
         return retBuf.toString();
     }
 
+    @Override
     public void setFeatures(final Map<String, Features> h) {
     }
 
+    @Override
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }

@@ -14,7 +14,6 @@ import static org.dita.dost.writer.DitaWriter.*;
 import static org.dita.dost.reader.ChunkMapReader.*;
 import static org.dita.dost.module.GenMapAndTopicListModule.*;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -672,8 +671,8 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                     id = parseFilePath.substring(parseFilePath.indexOf(SHARP)+1);
                     if (chunkValue.contains(ATTR_CHUNK_VALUE_SELECT_BRANCH)) {
                         outputFileName = FileUtils.resolveFile(filePath, id + ditaext);
-                        this.targetTopicId = id;
-                        this.startFromFirstTopic = false;
+                        targetTopicId = id;
+                        startFromFirstTopic = false;
                         selectMethod = ATTR_CHUNK_VALUE_SELECT_BRANCH;
                     } else if (chunkValue.contains(ATTR_CHUNK_VALUE_SELECT_DOCUMENT)) {
                         firstTopicID = this.getFirstTopicId(FileUtils.resolveFile(filePath, parseFilePath));
@@ -682,17 +681,17 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 
                         if (!StringUtils.isEmptyString(firstTopicID)) {
                             outputFileName = FileUtils.resolveFile(filePath, firstTopicID + ditaext);
-                            this.targetTopicId = firstTopicID;
+                            targetTopicId = firstTopicID;
                         } else {
                             outputFileName = currentParsingFile + FILE_EXTENSION_CHUNK;
                             dotchunk = true;
-                            this.targetTopicId = null;
+                            targetTopicId = null;
                         }
                         selectMethod = ATTR_CHUNK_VALUE_SELECT_DOCUMENT;
                     } else {
                         outputFileName = FileUtils.resolveFile(filePath, id + ditaext);
-                        this.targetTopicId = id;
-                        this.startFromFirstTopic = false;
+                        targetTopicId = id;
+                        startFromFirstTopic = false;
                         selectMethod = ATTR_CHUNK_VALUE_SELECT_TOPIC;
                     }
                 } else {
@@ -702,11 +701,11 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 
                     if (!StringUtils.isEmptyString(firstTopicID)) {
                         outputFileName = FileUtils.resolveFile(filePath, firstTopicID + ditaext);
-                        this.targetTopicId = firstTopicID;
+                        targetTopicId = firstTopicID;
                     } else {
                         outputFileName = currentParsingFile + FILE_EXTENSION_CHUNK;
                         dotchunk = true;
-                        this.targetTopicId = null;
+                        targetTopicId = null;
                     }
                     selectMethod = ATTR_CHUNK_VALUE_SELECT_DOCUMENT;
                 }

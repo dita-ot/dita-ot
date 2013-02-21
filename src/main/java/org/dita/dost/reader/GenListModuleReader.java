@@ -140,7 +140,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
     /** Relationship graph between subject schema. Keys are paths of subject map files and values
      * are paths of subject scheme maps. A key {@code "ROOT"} contains all subject schemes. */
     private Map<String, Set<String>> schemeRelationGraph = null;
-    private List<ExportAnchor> resultList = new ArrayList<ExportAnchor>();
+    private final List<ExportAnchor> resultList = new ArrayList<ExportAnchor>();
     private ExportAnchor currentExportAnchor;
     /** Flag to show whether a file has <exportanchors> tag */
     private boolean hasExport = false;
@@ -303,7 +303,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
      * @return scheme set
      */
     public Set<String> getSchemeSet() {
-        return this.schemeSet;
+        return schemeSet;
     }
 
     /**
@@ -500,7 +500,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
      * @param dir dir
      */
     public void setCurrentDir(final String dir) {
-        this.currentDir = dir;
+        currentDir = dir;
     }
 
     /**
@@ -790,12 +790,12 @@ public final class GenListModuleReader extends AbstractXMLReader {
             if (children == null || children.isEmpty()) {
                 children = new LinkedHashSet<String>();
             }
-            children.add(this.currentFile.getAbsolutePath());
+            children.add(currentFile.getAbsolutePath());
             schemeRelationGraph.put("ROOT", children);
             schemeRefSet.add(FileUtils.getRelativePath(rootFilePath.getAbsolutePath(),
                     currentFile.getAbsolutePath()));
         } else if (SUBJECTSCHEME_SCHEMEREF.matches(classValue)) {
-            Set<String> children = schemeRelationGraph.get(this.currentFile.getAbsolutePath());
+            Set<String> children = schemeRelationGraph.get(currentFile.getAbsolutePath());
             if (children == null) {
                 children = new LinkedHashSet<String>();
                 schemeRelationGraph.put(currentFile.getAbsolutePath(), children);
@@ -1613,7 +1613,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public boolean equals(final Object obj) {
             if (this == obj) {
                 return true;
             }
@@ -1623,7 +1623,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
             if (!(obj instanceof Reference)) {
                 return false;
             }
-            Reference other = (Reference) obj;
+            final Reference other = (Reference) obj;
             if (filename == null) {
                 if (other.filename != null) {
                     return false;

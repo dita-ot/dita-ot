@@ -71,9 +71,9 @@ public final class ImgUtils {
 	}
     
     private static boolean checkDirName(final String dirName) {
-		File outDir = OutputUtils.getOutputDir();
+		final File outDir = OutputUtils.getOutputDir();
 		if (outDir != null) {
-			String o = FileUtils.separatorsToUnix(outDir.getAbsolutePath());
+			final String o = FileUtils.separatorsToUnix(outDir.getAbsolutePath());
 
 			if (FileUtils.separatorsToUnix(new File(dirName).getPath()).equalsIgnoreCase(o)) {
 				return true;

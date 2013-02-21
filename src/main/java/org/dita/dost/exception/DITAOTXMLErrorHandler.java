@@ -42,6 +42,7 @@ public final class DITAOTXMLErrorHandler implements ErrorHandler {
      * @param saxException Exception
      * @throws SAXException Exception
      */
+    @Override
     public void error(final SAXParseException saxException) throws SAXException {
         throw new SAXExceptionWrapper(filePath, saxException);
         //throw new SAXParseException();
@@ -52,6 +53,7 @@ public final class DITAOTXMLErrorHandler implements ErrorHandler {
      * @param saxException Exception
      * @throws SAXException Exception
      */
+    @Override
     public void fatalError(final SAXParseException saxException) throws SAXException {
         throw new SAXExceptionWrapper(filePath, saxException);
     }
@@ -61,6 +63,7 @@ public final class DITAOTXMLErrorHandler implements ErrorHandler {
      * @param saxException Exception
      * @throws SAXException Exception
      */
+    @Override
     public void warning(final SAXParseException saxException) throws SAXException {
         final String msg = new SAXExceptionWrapper(filePath, saxException).getMessage();
         logger.logWarn(msg);

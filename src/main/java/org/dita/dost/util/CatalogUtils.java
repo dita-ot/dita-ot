@@ -18,7 +18,6 @@ import org.apache.xml.resolver.Catalog;
 import org.apache.xml.resolver.CatalogManager;
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.log.DITAOTJavaLogger;
-import org.xml.sax.XMLReader;
 
 /**
  * General catalog file resolving utilities.
@@ -27,8 +26,6 @@ import org.xml.sax.XMLReader;
  */
 
 public final class CatalogUtils {
-    /**map to keep the resolved catalog mappings.*/
-    private static HashMap<String, String> map=null;
     /**logger to log informations.*/
     private static DITAOTJavaLogger logger = new DITAOTJavaLogger();
     /**apache catalogResolver.*/

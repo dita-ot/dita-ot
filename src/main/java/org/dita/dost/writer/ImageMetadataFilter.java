@@ -46,7 +46,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
     private final String uplevels;
     private File currentFile = null;
     private int depth = 0;
-    private Map<File, Attributes> cache = new HashMap<File, Attributes>();
+    private final Map<File, Attributes> cache = new HashMap<File, Attributes>();
 
     // Constructors ------------------------------------------------------------
 
@@ -104,6 +104,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
         }
     }
     
+    @Override
     public void endElement(final String uri, final String localName, final String name) throws SAXException {
         super.endElement(uri, localName, name);
         if (depth > 0) {

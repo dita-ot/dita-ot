@@ -108,7 +108,7 @@ public final class IndexTerm implements Comparable<IndexTerm> {
      * @param name name to set
      */
     public void setTermName(final String name) {
-        this.termName = name;
+        termName = name;
     }
 
     /**
@@ -124,7 +124,7 @@ public final class IndexTerm implements Comparable<IndexTerm> {
      * @param key The termKey to set.
      */
     public void setTermKey(final String key) {
-        this.termKey = key;
+        termKey = key;
     }
 
     /**
@@ -287,6 +287,7 @@ public final class IndexTerm implements Comparable<IndexTerm> {
      * @param obj object to compare with
      * @return int
      */
+    @Override
     public int compareTo(final IndexTerm obj) {
         return DITAOTCollator.getInstance(termLocale).compare(termKey, obj.getTermKey());
     }

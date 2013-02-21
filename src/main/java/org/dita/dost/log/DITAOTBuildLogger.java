@@ -171,6 +171,7 @@ public final class DITAOTBuildLogger implements BuildLogger {
      * @param event event
      * @see org.apache.tools.ant.BuildListener#buildFinished(org.apache.tools.ant.BuildEvent)
      */
+    @Override
     public void buildFinished(final BuildEvent event) {
         final Throwable error = event.getException();
         final StringBuffer message = new StringBuffer();
@@ -222,6 +223,7 @@ public final class DITAOTBuildLogger implements BuildLogger {
      * @param event event
      * @see org.apache.tools.ant.BuildListener#buildStarted(org.apache.tools.ant.BuildEvent)
      */
+    @Override
     public void buildStarted(final BuildEvent event) {
         startTime = System.currentTimeMillis();
     }
@@ -230,6 +232,7 @@ public final class DITAOTBuildLogger implements BuildLogger {
      * @param event event
      * @see org.apache.tools.ant.BuildListener#messageLogged(org.apache.tools.ant.BuildEvent)
      */
+    @Override
     public void messageLogged(final BuildEvent event) {
         final int priority = event.getPriority();
         // Filter out messages based on priority
@@ -312,6 +315,7 @@ public final class DITAOTBuildLogger implements BuildLogger {
      * @param mode mode
      * @see org.apache.tools.ant.BuildLogger#setEmacsMode(boolean)
      */
+    @Override
     public void setEmacsMode(final boolean mode) {
     }
 
@@ -320,8 +324,9 @@ public final class DITAOTBuildLogger implements BuildLogger {
      * @param errorPrintStream errorPrintStream
      * @see org.apache.tools.ant.BuildLogger#setErrorPrintStream(java.io.PrintStream)
      */
+    @Override
     public void setErrorPrintStream(final PrintStream errorPrintStream) {
-        this.err = new PrintStream(errorPrintStream, true);
+        err = new PrintStream(errorPrintStream, true);
     }
 
     /**
@@ -329,8 +334,9 @@ public final class DITAOTBuildLogger implements BuildLogger {
      * @param level outputlevel
      * @see org.apache.tools.ant.BuildLogger#setMessageOutputLevel(int)
      */
+    @Override
     public void setMessageOutputLevel(final int level) {
-        this.msgOutputLevel = level;
+        msgOutputLevel = level;
     }
 
     /**
@@ -338,8 +344,9 @@ public final class DITAOTBuildLogger implements BuildLogger {
      * @param output output file
      * @see org.apache.tools.ant.BuildLogger#setOutputPrintStream(java.io.PrintStream)
      */
+    @Override
     public void setOutputPrintStream(final PrintStream output) {
-        this.out = new PrintStream(output, true);
+        out = new PrintStream(output, true);
     }
 
     /**
@@ -347,6 +354,7 @@ public final class DITAOTBuildLogger implements BuildLogger {
      * @param event event
      * @see org.apache.tools.ant.BuildListener#targetFinished(org.apache.tools.ant.BuildEvent)
      */
+    @Override
     public void targetFinished(final BuildEvent event) {
     }
 
@@ -354,6 +362,7 @@ public final class DITAOTBuildLogger implements BuildLogger {
      * @param event event
      * @see org.apache.tools.ant.BuildListener#targetStarted(org.apache.tools.ant.BuildEvent)
      */
+    @Override
     public void targetStarted(final BuildEvent event) {
         if (Project.MSG_INFO <= msgOutputLevel
                 && !"".equals(event.getTarget().getName())) {
@@ -372,6 +381,7 @@ public final class DITAOTBuildLogger implements BuildLogger {
      * @param event event
      * @see org.apache.tools.ant.BuildListener#taskFinished(org.apache.tools.ant.BuildEvent)
      */
+    @Override
     public void taskFinished(final BuildEvent event) {
         //captured the error from ant script or others
         //Error or BuildException may be thrown out from ant
@@ -423,6 +433,7 @@ public final class DITAOTBuildLogger implements BuildLogger {
      * 
      * @see org.apache.tools.ant.BuildListener#taskStarted(org.apache.tools.ant.BuildEvent)
      */
+    @Override
     public void taskStarted(final BuildEvent event) {
     }
 

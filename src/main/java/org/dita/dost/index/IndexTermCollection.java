@@ -88,7 +88,7 @@ public final class IndexTermCollection {
      * @return index type
      */
     public String getIndexType() {
-        return this.indexType;
+        return indexType;
     }
 
     /**
@@ -97,7 +97,7 @@ public final class IndexTermCollection {
      * @param type The indexType to set.
      */
     public void setIndexType(final String type) {
-        this.indexType = type;
+        indexType = type;
     }
     /**
      * get index class.
@@ -181,7 +181,7 @@ public final class IndexTermCollection {
      * @throws DITAOTException exception
      */
     public void outputTerms() throws DITAOTException {
-        StringBuffer buff = new StringBuffer(this.outputFileRoot);
+        StringBuffer buff = new StringBuffer(outputFileRoot);
         AbstractWriter abstractWriter = null;
         IDitaTranstypeIndexWriter indexWriter = null;
         final Content content = new ContentImpl();
@@ -207,7 +207,7 @@ public final class IndexTermCollection {
                 }
 
 
-                buff = new StringBuffer(indexWriter.getIndexFileName(this.outputFileRoot));
+                buff = new StringBuffer(indexWriter.getIndexFileName(outputFileRoot));
 
 
             } catch (final ClassNotFoundException e) {
@@ -262,7 +262,7 @@ public final class IndexTermCollection {
      * @param fileRoot The outputFile to set.
      */
     public void setOutputFileRoot(final String fileRoot) {
-        this.outputFileRoot = fileRoot;
+        outputFileRoot = fileRoot;
     }
 
     //RFE 2987769 Eclipse index-see
@@ -279,7 +279,7 @@ public final class IndexTermCollection {
      * @param hashIO The hashmap to set.
      */
     public void setPipelineHashIO(final PipelineHashIO hashIO) {
-        this.pipelineHashIO = hashIO;
+        pipelineHashIO = hashIO;
     }
 
 

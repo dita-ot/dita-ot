@@ -21,7 +21,6 @@ import org.dita.dost.util.Configuration;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.URLUtils;
-import org.dita.dost.util.Configuration.Mode;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
@@ -44,14 +43,14 @@ public final class ValidationFilter extends AbstractXMLFilter {
 	}
 	
 	@Override
-	public void setContent(Content content) {
+	public void setContent(final Content content) {
 		throw new UnsupportedOperationException();
 	}
 
 	// Locator methods
     
 	@Override
-    public void setDocumentLocator(Locator locator) {
+    public void setDocumentLocator(final Locator locator) {
         this.locator = locator;
         getContentHandler().setDocumentLocator(locator);
     }
@@ -98,7 +97,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
 		if (href != null) {
 			try {
 				new URI(href);
-			} catch (URISyntaxException e) {
+			} catch (final URISyntaxException e) {
 				switch (processingMode) {
                 case STRICT:
                     throw new RuntimeException(MessageUtils.getInstance().getMessage("DOTJ054E", ATTRIBUTE_NAME_HREF, href).setLocation(locator) + ": " + e.getMessage(), e);

@@ -32,6 +32,7 @@ final class ImageMetadataModule implements AbstractPipelineModule {
         super();
     }
 
+    @Override
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
@@ -42,6 +43,7 @@ final class ImageMetadataModule implements AbstractPipelineModule {
      * @return null
      * @throws DITAOTException exception
      */
+    @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input)
             throws DITAOTException {
         if (logger == null) {

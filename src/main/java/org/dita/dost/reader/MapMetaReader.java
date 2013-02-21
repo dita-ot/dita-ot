@@ -34,7 +34,6 @@ import javax.xml.transform.stream.StreamResult;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.Content;
-import org.dita.dost.module.ContentImpl;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.URLUtils;
@@ -133,6 +132,7 @@ public final class MapMetaReader implements AbstractReader {
      * read map files.
      * @param filename filename
      */
+    @Override
     public void read(final String filename) {
         final File inputFile = new File(filename);
         filePath = inputFile.getParent();
@@ -198,6 +198,7 @@ public final class MapMetaReader implements AbstractReader {
         }
     }
 
+    @Override
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
@@ -449,6 +450,7 @@ public final class MapMetaReader implements AbstractReader {
     /**
      * @deprecated use {@link #getMapping()} instead
      */
+    @Override
     @Deprecated
     public Content getContent() {
         throw new UnsupportedOperationException();

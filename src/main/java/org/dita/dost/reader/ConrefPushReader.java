@@ -18,8 +18,6 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.Content;
-import org.dita.dost.module.ContentImpl;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
@@ -340,7 +338,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
 
         if (sharpIndex == 0){
             //means conref the file itself
-            target= this.parsefilename+target;
+            target= parsefilename+target;
             sharpIndex = target.indexOf(SHARP);
         }
         final String key = FileUtils.resolveFile(filePath, target);

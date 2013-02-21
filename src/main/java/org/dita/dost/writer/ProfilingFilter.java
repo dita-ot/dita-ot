@@ -41,7 +41,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 	}
 	
 	@Override
-	public void setContent(Content content) {
+	public void setContent(final Content content) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -168,7 +168,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 	}
 
 	@Override
-	public void skippedEntity(String name) throws SAXException {
+	public void skippedEntity(final String name) throws SAXException {
 		if (!exclude) {
         	getContentHandler().skippedEntity(name);
         }

@@ -44,7 +44,7 @@ public final class DITAOTCopy extends Task {
      * @param incld The includes to set.
      */
     public void setIncludes(final String incld) {
-        this.includes = incld;
+        includes = incld;
     }
 
     /**
@@ -52,7 +52,7 @@ public final class DITAOTCopy extends Task {
      * @param destdir the destination directory.
      */
     public void setTodir(final String destdir) {
-        this.destDir = destdir;
+        destDir = destdir;
     }
 
     /**
@@ -60,7 +60,7 @@ public final class DITAOTCopy extends Task {
      * @param relPaths the relative path .
      */
     public void setRelativePaths(final String relPaths) {
-        this.relativePaths = relPaths;
+        relativePaths = relPaths;
     }
 
     /**

@@ -248,10 +248,12 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         resourceOnlySet = new HashSet<String>(INT_128);
     }
 
+    @Override
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
 
+    @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
         if (logger == null) {
             throw new IllegalStateException("Logger not set");
@@ -1064,7 +1066,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             prop.storeToXML(os, null);
             os.close();
         } catch (final IOException e) {
-            this.logger.logException(e);
+            logger.logException(e);
         } finally {
             if (os != null) {
                 try {
@@ -1156,7 +1158,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         // update value
         final Collection<KeyDef> updated = new ArrayList<KeyDef>(keydefs.size());
         for (final KeyDef file: keydefs.values()) {
-            String keys = file.keys;
+            final String keys = file.keys;
             String href = file.href;
             String source = file.source;
             if (prefix.length() != 0) {
@@ -1339,16 +1341,16 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             final int equalIndex = result.indexOf(EQUAL);
             final int leftBracketIndex = result.lastIndexOf(LEFT_BRACKET);
             final int rightBracketIndex = result.lastIndexOf(RIGHT_BRACKET);
-            this.keys = result.substring(0, equalIndex);
+            keys = result.substring(0, equalIndex);
             if (equalIndex + 1 < leftBracketIndex) {
-                this.href = result.substring(equalIndex + 1, leftBracketIndex);
+                href = result.substring(equalIndex + 1, leftBracketIndex);
             } else {
-                this.href = null;
+                href = null;
             }
             if (leftBracketIndex + 1 < rightBracketIndex) {
-                this.source = result.substring(leftBracketIndex + 1, rightBracketIndex);
+                source = result.substring(leftBracketIndex + 1, rightBracketIndex);
             } else {
-                this.source = null;
+                source = null;
             }
         }
         @Override

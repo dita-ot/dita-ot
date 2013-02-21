@@ -11,10 +11,8 @@ package org.dita.dost.util;
 
 import static org.dita.dost.util.Constants.*;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Properties;
 
 import javax.xml.transform.TransformerException;

@@ -13,8 +13,6 @@ import static org.dita.dost.log.MessageBean.*;
 
 import java.util.ArrayList;
 import java.util.Properties;
-import java.util.StringTokenizer;
-
 import org.apache.tools.ant.taskdefs.condition.Condition;
 import org.apache.tools.ant.taskdefs.condition.ConditionBase;
 
@@ -46,7 +44,7 @@ public final class DITAOTFailTask extends Exit {
      * 
      */
     public void setId(final String identifier) {
-        this.id = identifier;
+        id = identifier;
     }
 
     /**
@@ -117,6 +115,7 @@ public final class DITAOTFailTask extends Exit {
     // Ant Exit class methods --------------------------------------------------
     
     private static class NestedCondition extends ConditionBase implements Condition {
+        @Override
         public boolean eval() {
             if (countConditions() != 1) {
                 throw new BuildException(
@@ -138,7 +137,7 @@ public final class DITAOTFailTask extends Exit {
      */
     @Override
     public void setMessage(final String value) {
-        this.message = value;
+        message = value;
     }
 
     /**

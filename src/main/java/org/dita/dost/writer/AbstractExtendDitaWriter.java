@@ -32,20 +32,24 @@ public abstract class AbstractExtendDitaWriter implements AbstractWriter, IExten
      * 
      * @param content The content to output
      */
+    @Override
     public final void setContent(final Content content) {
         termList = (List<IndexTerm>) content.getCollection();
     }
 
+    @Override
     public final void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
 
     // IExtendDitaWriter methods
 
+    @Override
     public final PipelineHashIO getPipelineHashIO() {
         return pipelineHashMap;
     }
 
+    @Override
     public final void setPipelineHashIO(final PipelineHashIO hashIO) {
         pipelineHashMap = hashIO;
     }

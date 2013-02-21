@@ -64,7 +64,7 @@ final class FileGenerator extends DefaultHandler2 {
      * @param featureTbl featureTbl
      */
     public FileGenerator(final Hashtable<String,String> featureTbl, final Map<String,Features> pluginTable) {
-        this.featureTable = featureTbl;
+        featureTable = featureTbl;
         this.pluginTable = pluginTable;
         output = null;
         templateFile = null;

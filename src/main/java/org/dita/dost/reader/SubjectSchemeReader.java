@@ -177,7 +177,7 @@ public class SubjectSchemeReader {
                 }
             }
         } catch (final Exception e) {
-            this.logger.logException(e);
+            logger.logException(e);
         }
     }
     
@@ -223,7 +223,7 @@ public class SubjectSchemeReader {
             return;
         }
 
-        Map<String, Set<String>> valueMap = this.validValuesMap.get(attName);
+        Map<String, Set<String>> valueMap = validValuesMap.get(attName);
         if (valueMap == null) {
             valueMap = new HashMap<String, Set<String>>();
         }

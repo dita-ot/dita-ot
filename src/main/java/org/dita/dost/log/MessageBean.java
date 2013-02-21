@@ -32,13 +32,13 @@ public final class MessageBean {
     public static final String INFO = "INFO";
     public static final String DEBUG = "DEBUG";
     
-    private String id;
+    private final String id;
 
-    private String type;
+    private final String type;
 
-    private String reason;
+    private final String reason;
 
-    private String response;
+    private final String response;
     private String srcFile;
     private int srcLine = -1;
     private int srcColumn = -1;
@@ -51,10 +51,10 @@ public final class MessageBean {
      * @param mbResponse response
      */
     public MessageBean(final String mbId, final String mbType, final String mbReason, final String mbResponse) {
-        this.id = mbId;
-        this.type = mbType;
-        this.reason = mbReason;
-        this.response = mbResponse;
+        id = mbId;
+        type = mbType;
+        reason = mbReason;
+        response = mbResponse;
     }
 
     /**

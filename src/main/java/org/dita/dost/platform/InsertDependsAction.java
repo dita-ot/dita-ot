@@ -40,6 +40,7 @@ final class InsertDependsAction implements IAction {
      * Get result.
      * @return result
      */
+    @Override
     public String getResult() {
         final String localname = paramTable.get(FileGenerator.PARAM_LOCALNAME);
         final StringBuffer result = new StringBuffer();
@@ -85,9 +86,11 @@ final class InsertDependsAction implements IAction {
      * Set input.
      * @param input input
      */
+    @Override
     public void setInput(final String input) {
         value = input;
     }
+    @Override
     public void addParam(final String name, final String value) {
         paramTable.put(name, value);
     }
@@ -95,10 +98,12 @@ final class InsertDependsAction implements IAction {
      * Set the feature table.
      * @param h hastable
      */
+    @Override
     public void setFeatures(final Map<String, Features> h) {
         featureTable = h;
     }
 
+    @Override
     public void setLogger(final DITAOTLogger logger) {
     }
 

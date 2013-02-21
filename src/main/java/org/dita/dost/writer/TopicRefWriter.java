@@ -316,7 +316,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
             return null;
         }
 
-        if (fixpath!=null && attValue.startsWith(this.fixpath)){
+        if (fixpath!=null && attValue.startsWith(fixpath)){
             attValue = attValue.substring(fixpath.length());
         }
 

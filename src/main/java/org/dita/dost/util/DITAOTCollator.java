@@ -71,6 +71,7 @@ public final class DITAOTCollator implements Comparator {
      * Comparing method required to compare.
      * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
      */
+    @Override
     public int compare(final Object source, final Object target) {
         try {
             return ((Integer) compareMethod.invoke(collatorInstance, new Object[] {

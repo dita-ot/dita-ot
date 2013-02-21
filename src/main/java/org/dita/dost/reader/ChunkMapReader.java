@@ -93,6 +93,7 @@ public final class ChunkMapReader implements AbstractReader {
      * read input file.
      * @param filename filename
      */
+    @Override
     public void read(final String filename) {
         final File inputFile = new File(filename);
         filePath = inputFile.getParent();
@@ -261,6 +262,7 @@ public final class ChunkMapReader implements AbstractReader {
 		return prefix + random.nextInt(Integer.MAX_VALUE) + extension;
 	}
 
+    @Override
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
@@ -582,6 +584,7 @@ public final class ChunkMapReader implements AbstractReader {
      * get content.
      * @return content value {@code LinkedHashMap<String, String>}
      */
+    @Override
     public Content getContent() {
         final Content content = new ContentImpl();
         content.setValue(changeTable);
@@ -592,7 +595,7 @@ public final class ChunkMapReader implements AbstractReader {
      * @return conflict table
      */
     public Hashtable<String, String> getConflicTable() {
-        return this.conflictTable;
+        return conflictTable;
     }
     /**
      * Set up environment.

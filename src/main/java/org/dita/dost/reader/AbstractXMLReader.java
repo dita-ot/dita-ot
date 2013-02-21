@@ -9,17 +9,10 @@
  */
 package org.dita.dost.reader;
 
-import static org.dita.dost.util.Constants.*;
-
-import java.io.File;
 import java.io.IOException;
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
-import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
-import org.dita.dost.util.CatalogUtils;
-import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.EntityResolver;
@@ -57,97 +50,119 @@ ContentHandler, LexicalHandler, EntityResolver {
 
     protected DITAOTLogger logger;
 
+    @Override
     public void read(final String filename) {
         // NOOP
     }
 
+    @Override
     public Content getContent() {
         return null;
     }
 
+    @Override
     public final void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
 
+    @Override
     public void setDocumentLocator(final Locator locator) {
         // NOOP
     }
 
+    @Override
     public void startDocument() throws SAXException {
         // NOOP
     }
 
+    @Override
     public void endDocument() throws SAXException {
         // NOOP
     }
 
+    @Override
     public void startPrefixMapping(final String prefix, final String uri)
             throws SAXException {
         // NOOP
     }
 
+    @Override
     public void endPrefixMapping(final String prefix) throws SAXException {
         // NOOP
     }
 
+    @Override
     public void startElement(final String uri, final String localName, final String qName,
             final Attributes atts) throws SAXException {
         // NOOP
     }
 
+    @Override
     public void endElement(final String uri, final String localName, final String qName)
             throws SAXException {
         // NOOP
     }
 
+    @Override
     public void characters(final char[] ch, final int start, final int length)
             throws SAXException {
         // NOOP
     }
 
+    @Override
     public void ignorableWhitespace(final char[] ch, final int start, final int length)
             throws SAXException {
         // NOOP
     }
 
+    @Override
     public void processingInstruction(final String target, final String data)
             throws SAXException {
         // NOOP
     }
 
+    @Override
     public void skippedEntity(final String name) throws SAXException {
         // NOOP
     }
 
+    @Override
     public void startDTD(final String name, final String publicId, final String systemId)
             throws SAXException {
         // NOOP
     }
 
+    @Override
     public void endDTD() throws SAXException {
         // NOOP
     }
 
+    @Override
     public void startEntity(final String name) throws SAXException {
         // NOOP
     }
 
+    @Override
     public void endEntity(final String name) throws SAXException {
         // NOOP
     }
 
+    @Override
     public void startCDATA() throws SAXException {
         // NOOP
     }
 
+    @Override
     public void endCDATA() throws SAXException {
         // NOOP
     }
 
+    @Override
     public void comment(final char[] ch, final int start, final int length) throws SAXException {
         // NOOP
     }
 
+    @Override
     public InputSource resolveEntity(final String publicId, final String systemId)
             throws SAXException, IOException {
         return null;

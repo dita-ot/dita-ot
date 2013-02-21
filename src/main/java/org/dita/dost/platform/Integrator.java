@@ -372,12 +372,15 @@ public final class Integrator {
             final DescParser parser = new DescParser(descFile.getParentFile(), ditaDir);
             reader.setContentHandler(parser);
             reader.setErrorHandler(new ErrorHandler() {
+                @Override
                 public void error(final SAXParseException e) throws SAXException {
                     throw e;
                 }
+                @Override
                 public void fatalError(final SAXParseException e) throws SAXException {
                     throw e;
                 }
+                @Override
                 public void warning(final SAXParseException e) throws SAXException {
                     throw e;
                 }
@@ -493,7 +496,7 @@ public final class Integrator {
      * @param baseDir base directory
      */
     public void setBasedir(final File baseDir) {
-        this.basedir = baseDir;
+        basedir = baseDir;
     }
 
     /**
@@ -511,7 +514,7 @@ public final class Integrator {
      * @param ditadir dita directory
      */
     public void setDitaDir(final File ditadir) {
-        this.ditaDir = ditadir;
+        ditaDir = ditadir;
     }
 
     /**
@@ -529,7 +532,7 @@ public final class Integrator {
      * @param propertiesfile properties file
      */
     public void setProperties(final File propertiesfile) {
-        this.propertiesFile = propertiesfile;
+        propertiesFile = propertiesfile;
     }
 
     /**

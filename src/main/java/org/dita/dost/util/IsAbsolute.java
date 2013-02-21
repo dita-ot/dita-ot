@@ -35,13 +35,14 @@ public final class IsAbsolute implements Condition {
      * @param pth The path to set.
      */
     public void setPath(final String pth) {
-        this.path = pth;
+        path = pth;
     }
 
     /**
      * 
      * @see org.apache.tools.ant.taskdefs.condition.Condition#eval()
      */
+    @Override
     public boolean eval() throws BuildException {
         return new File(path).isAbsolute();
     }

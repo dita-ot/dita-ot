@@ -9,8 +9,6 @@
  */
 package org.dita.dost.index;
 
-import static org.dita.dost.util.Constants.*;
-
 /**
  * This class represent the topicref element in ditamap.
  * 
@@ -48,7 +46,7 @@ public final class TopicrefElement {
      * @param formatValue The format to set.
      */
     public void setFormat(final String formatValue) {
-        this.format = formatValue;
+        format = formatValue;
     }
 
     /**
@@ -66,7 +64,7 @@ public final class TopicrefElement {
      * @param hrefValue The href to set.
      */
     public void setHref(final String hrefValue) {
-        this.href = hrefValue;
+        href = hrefValue;
     }
 
     /**

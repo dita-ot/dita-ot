@@ -191,7 +191,7 @@ public final class XMLUtils {
          * 
          * @param a attributes to add or set
          */
-        public void addAll(Attributes attrs) {
+        public void addAll(final Attributes attrs) {
             for (int i = 0; i < attrs.getLength(); i++) {
                 add(attrs.getURI(i), attrs.getLocalName(i), attrs.getQName(i), attrs.getType(i), attrs.getValue(i));
             }

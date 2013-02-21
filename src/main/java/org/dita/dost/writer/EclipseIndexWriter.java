@@ -29,7 +29,6 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.index.IndexTerm;
 import org.dita.dost.index.IndexTermTarget;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.util.XMLSerializer;
 
 /**
  * This class extends AbstractWriter, used to output index term
@@ -59,7 +58,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
      * @param filePath The file path to where the plugin are created.
      */
     public void setFilePath(final String filePath) {
-        this.filepath = filePath;
+        filepath = filePath;
     }
 
     /**
@@ -70,6 +69,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
         return filepath;
     }
 
+    @Override
     public void write(final String filename) throws DITAOTException {
         OutputStream out = null;
         XMLStreamWriter serializer = null;
@@ -166,6 +166,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
      * @param outputFileRoot root path
      * @return index file name
      */
+    @Override
     public String getIndexFileName(final String outputFileRoot) {
         final File indexDir = new File(outputFileRoot).getParentFile();
         setFilePath(indexDir.getAbsolutePath());
