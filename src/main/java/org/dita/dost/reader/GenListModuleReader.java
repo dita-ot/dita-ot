@@ -135,9 +135,11 @@ public final class GenListModuleReader extends AbstractXMLReader {
     private final Set<String> resourceOnlySet;
     /** Topics with processing role of "normal" */
     private final Set<String> crossSet;
+    /** Subject scheme relative file paths. */
     private final Set<String> schemeRefSet;
-    /** Relationship graph between subject schema */
-    private Map<String, Set<String>> relationGraph = null;
+    /** Relationship graph between subject schema. Keys are paths of subject map files and values
+     * are paths of subject scheme maps. A key {@code "ROOT"} contains all subject schemes. */
+    private Map<String, Set<String>> schemeRelationGraph = null;
     private List<ExportAnchor> resultList = new ArrayList<ExportAnchor>();
     private ExportAnchor currentExportAnchor;
     /** Flag to show whether a file has <exportanchors> tag */
@@ -310,7 +312,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
      * @return scheme ref set
      */
     public Set<String> getSchemeRefSet() {
-        return this.schemeRefSet;
+        return schemeRefSet;
     }
 
     /**
@@ -324,15 +326,16 @@ public final class GenListModuleReader extends AbstractXMLReader {
     }
 
     /**
-     * Get getRelationshipGrap. Keys are paths of normal map files and values
-     * are paths of subject scheme maps.
+     * Get relationship graph between subject schema. Keys are subject map paths and values
+     * are subject scheme paths. A key {@code "ROOT"} contains all subject schemes.
      * 
-     * @return relationship grap
+     * @return relationship graph
      */
     public Map<String, Set<String>> getRelationshipGrap() {
-        return this.relationGraph;
+        return schemeRelationGraph;
     }
 
+    @Deprecated
     public String getPrimaryDitamap() {
         return primaryDitamap;
     }
@@ -482,6 +485,11 @@ public final class GenListModuleReader extends AbstractXMLReader {
         return keysDefMap;
     }
 
+    /**
+     * Map of external/peek key references.
+     * 
+     * @return map of keys to targets
+     */
     public Map<String, String> getExKeysDefMap() {
         return exKeysDefMap;
     }
@@ -773,29 +781,27 @@ public final class GenListModuleReader extends AbstractXMLReader {
         }
 
         // Generate Scheme relationship graph
-        if (classValue != null) {
-            if (SUBJECTSCHEME_SUBJECTSCHEME.matches(classValue)) {
-                if (this.relationGraph == null) {
-                    this.relationGraph = new LinkedHashMap<String, Set<String>>();
-                }
-                // Make it easy to do the BFS later.
-                Set<String> children = this.relationGraph.get("ROOT");
-                if (children == null || children.isEmpty()) {
-                    children = new LinkedHashSet<String>();
-                }
-                children.add(this.currentFile.getAbsolutePath());
-                this.relationGraph.put("ROOT", children);
-                schemeRefSet.add(FileUtils.getRelativePath(rootFilePath.getAbsolutePath(),
-                        currentFile.getAbsolutePath()));
-            } else if (SUBJECTSCHEME_SCHEMEREF.matches(classValue)) {
-                Set<String> children = this.relationGraph.get(this.currentFile.getAbsolutePath());
-                if (children == null) {
-                    children = new LinkedHashSet<String>();
-                    this.relationGraph.put(currentFile.getAbsolutePath(), children);
-                }
-                if (href != null) {
-                    children.add(FileUtils.resolveFile(rootDir.getAbsolutePath(), href));
-                }
+        if (SUBJECTSCHEME_SUBJECTSCHEME.matches(classValue)) {
+            if (schemeRelationGraph == null) {
+                schemeRelationGraph = new LinkedHashMap<String, Set<String>>();
+            }
+            // Make it easy to do the BFS later.
+            Set<String> children = schemeRelationGraph.get("ROOT");
+            if (children == null || children.isEmpty()) {
+                children = new LinkedHashSet<String>();
+            }
+            children.add(this.currentFile.getAbsolutePath());
+            schemeRelationGraph.put("ROOT", children);
+            schemeRefSet.add(FileUtils.getRelativePath(rootFilePath.getAbsolutePath(),
+                    currentFile.getAbsolutePath()));
+        } else if (SUBJECTSCHEME_SCHEMEREF.matches(classValue)) {
+            Set<String> children = schemeRelationGraph.get(this.currentFile.getAbsolutePath());
+            if (children == null) {
+                children = new LinkedHashSet<String>();
+                schemeRelationGraph.put(currentFile.getAbsolutePath(), children);
+            }
+            if (href != null) {
+                children.add(FileUtils.resolveFile(rootDir.getAbsolutePath(), href));
             }
         }
 
@@ -893,7 +899,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
                 if (!StringUtils.isEmptyString(hrefValue)) {
                     // exclude external resources
                     final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
-                    if ("external".equalsIgnoreCase(attrScope) || "peer".equalsIgnoreCase(attrScope)
+                    if (ATTR_SCOPE_VALUE_EXTERNAL.equalsIgnoreCase(attrScope) || ATTR_SCOPE_VALUE_PEER.equalsIgnoreCase(attrScope)
                             || hrefValue.indexOf(COLON_DOUBLE_SLASH) != -1 || hrefValue.startsWith(SHARP)) {
                         return;
                     }
@@ -919,7 +925,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 
                     // exclude external resources
                     final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
-                    if ("external".equalsIgnoreCase(attrScope) || "peer".equalsIgnoreCase(attrScope)
+                    if (ATTR_SCOPE_VALUE_EXTERNAL.equalsIgnoreCase(attrScope) || ATTR_SCOPE_VALUE_PEER.equalsIgnoreCase(attrScope)
                             || conrefValue.indexOf(COLON_DOUBLE_SLASH) != -1 || conrefValue.startsWith(SHARP)) {
                         return;
                     }
@@ -1211,7 +1217,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
                 }
                 if (!keysDefMap.containsKey(key) && !key.equals("")) {
                     if (target != null && target.length() != 0) {
-                        if (attrScope != null && (attrScope.equals("external") || attrScope.equals("peer"))) {
+                        if (attrScope != null && (attrScope.equals(ATTR_SCOPE_VALUE_EXTERNAL) || attrScope.equals(ATTR_SCOPE_VALUE_PEER))) {
                             // store external or peer resources.
                             exKeysDefMap.put(key, target);
                             keysDefMap.put(key, new KeyDef(key, target, null));
@@ -1247,7 +1253,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
         }
 
         // external resource is filtered here.
-        if ("external".equalsIgnoreCase(attrScope) || "peer".equalsIgnoreCase(attrScope)
+        if (ATTR_SCOPE_VALUE_EXTERNAL.equalsIgnoreCase(attrScope) || ATTR_SCOPE_VALUE_PEER.equalsIgnoreCase(attrScope)
                 || attrValue.indexOf(COLON_DOUBLE_SLASH) != -1 || attrValue.startsWith(SHARP)) {
             return;
         }

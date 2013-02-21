@@ -187,11 +187,11 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
     private File rootFile;
     /** File currently being processed */
     private File currentFile;
-
+    /** Subject scheme key map. Key is key value, value is key definition. */
     private Map<String, KeyDef> schemekeydefMap;
-
+    /** Subject scheme relative file paths. */
     private final Set<String> schemeSet;
-
+    /** Subject scheme usage. Key is relative file path, value is set of applicable subject schemes. */
     private final Map<String, Set<String>> schemeDictionary;
     private String transtype;
 
@@ -242,7 +242,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         keyrefSet = new HashSet<String>(INT_128);
         coderefSet = new HashSet<String>(INT_128);
 
-        this.schemeDictionary = new HashMap<String, Set<String>>();
+        schemeDictionary = new HashMap<String, Set<String>>();
 
         // @processing-role
         resourceOnlySet = new HashSet<String>(INT_128);
@@ -561,9 +561,9 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         resourceOnlySet.addAll(reader.getResourceOnlySet());
 
         // Generate topic-scheme dictionary
-        if (reader.getSchemeSet() != null && reader.getSchemeSet().size() > 0) {
+        if (reader.getSchemeSet() != null && !reader.getSchemeSet().isEmpty()) {
             Set<String> children = null;
-            children = this.schemeDictionary.get(currentFile);
+            children = schemeDictionary.get(currentFile);
             if (children == null) {
                 children = new HashSet<String>();
             }
@@ -571,18 +571,18 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             // for Linux support
             final String normalizedCurrentFile = FileUtils.separatorsToUnix(currentFile);
 
-            this.schemeDictionary.put(normalizedCurrentFile, children);
+            schemeDictionary.put(normalizedCurrentFile, children);
             final Set<String> hrfSet = reader.getHrefTargets();
             for (final String f: hrfSet) {
                 // for Linux support
                 final String filename = FileUtils.separatorsToUnix(f);
 
-                children = this.schemeDictionary.get(filename);
+                children = schemeDictionary.get(filename);
                 if (children == null) {
                     children = new HashSet<String>();
                 }
                 children.addAll(reader.getSchemeSet());
-                this.schemeDictionary.put(filename, children);
+                schemeDictionary.put(filename, children);
             }
         }
     }
@@ -977,7 +977,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         // Output relation-graph
         writeMapToXML(reader.getRelationshipGrap(), FILE_NAME_SUBJECT_RELATION);
         // Output topic-scheme dictionary
-        writeMapToXML(this.schemeDictionary, FILE_NAME_SUBJECT_DICTIONARY);
+        writeMapToXML(schemeDictionary, FILE_NAME_SUBJECT_DICTIONARY);
 
         if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
             // Output plugin id
@@ -1035,7 +1035,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             }
         }
 
-        writeKeydef(new File(tempDir, "schemekeydef.xml"), schemekeydefMap.values());
+        writeKeydef(new File(tempDir, SUBJECT_SCHEME_KEYDEF_LIST_FILE), schemekeydefMap.values());
     }
     
     /**
@@ -1176,7 +1176,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         }
         // write key definition
         try {
-            writeKeydef(new File(tempDir, "keydef.xml"), updated);
+            writeKeydef(new File(tempDir, KEYDEF_LIST_FILE), updated);
         } catch (final DITAOTException e) {
             logger.logError("Failed to write key definition file: " + e.getMessage(), e);
         }

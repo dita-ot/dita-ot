@@ -93,6 +93,8 @@ public final class Job {
     public static final String INPUT_DITAMAP_LIST_FILE = "user.input.file.list";
     /** File name for key definition file */
     public static final String KEYDEF_LIST_FILE = "keydef.xml";
+    /** File name for key definition file */
+    public static final String SUBJECT_SCHEME_KEYDEF_LIST_FILE = "schemekeydef.xml";
     /** File name for keyref list file */
     public static final String KEYREF_LIST_FILE = "keyref.list";
     /** File name for key list file */
