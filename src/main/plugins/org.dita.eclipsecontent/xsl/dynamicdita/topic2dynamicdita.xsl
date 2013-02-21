@@ -28,7 +28,7 @@
   <xsl:template match="@xtrf|@xtrc"/>
 
   <!-- Remove DITA-OT processing PI's -->
-  <xsl:template match="processing-instruction()[name()='workdir' or name()='workdir-uri' or name()='path2project']"/>
+  <xsl:template match="processing-instruction()[name()='workdir' or name()='workdir-uri' or name()='path2project' or name()='path2project-uri']"/>
 
   <!-- Remove draft elements unless instructed to leave them in -->
   <xsl:template match="*[contains(@class,' topic/draft-comment ') or

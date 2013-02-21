@@ -354,6 +354,10 @@
     <xsl:value-of select="."/>
   </xsl:template>
 
+  <xsl:template match="processing-instruction('path2project-uri')" mode="get-path2project">
+    <xsl:value-of select="."/>
+  </xsl:template>
+
   <xsl:template match="processing-instruction('path2project')" mode="get-path2project">
     <xsl:call-template name="get-path2project">
       <xsl:with-param name="s" select="."/>
