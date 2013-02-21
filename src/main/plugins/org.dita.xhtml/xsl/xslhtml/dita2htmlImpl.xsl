@@ -9,8 +9,7 @@
                 xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
                 xmlns:exsl="http://exslt.org/common"
-                xmlns:url="org.dita.dost.util.URLUtils"
-                exclude-result-prefixes="dita-ot dita2html ditamsg exsl url">
+                exclude-result-prefixes="dita-ot dita2html ditamsg exsl">
 
 
 
@@ -1361,8 +1360,7 @@
         </xsl:apply-templates>
       </xsl:variable>
 
-      <xsl:variable name="entry-file" select="concat($WORKDIR, $PATH2PROJ, $target)"/>
-      <xsl:variable name="entry-file-uri" select="url:getURL($entry-file)"/>
+      <xsl:variable name="entry-file-uri" select="concat($WORKDIR, $PATH2PROJ, $target)"/>
       
       <!-- Save glossary entry file contents into a variable to workaround the infamous putDocumentCache error in Xalan -->
       <xsl:variable name="entry-file-contents" select="document($entry-file-uri, /)"/>
