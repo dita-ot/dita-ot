@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- $Id: fop.xconf 901793 2010-01-21 17:37:07Z jeremias $ -->
+<!-- $Id: fop.xconf 1339442 2012-05-17 01:42:56Z gadams $ -->
 
 <!--
 
@@ -99,6 +99,7 @@ the location of this file.
       -->
       <images mode="b+w" bits-per-pixel="8"/>
       <renderer-resolution>240</renderer-resolution>
+      <line-width-correction>2.5</line-width-correction>
       <resource-group-file>resources.afp</resource-group-file>
 
       <fonts>

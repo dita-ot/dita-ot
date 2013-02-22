@@ -1,4 +1,4 @@
-$Id: README 960639 2010-07-05 17:03:37Z jeremias $
+$Id: README 1395624 2012-10-08 15:43:53Z vhennebert $
 
 ==============================================================================
   APACHE FOP  -  README
@@ -16,21 +16,21 @@ Contents of this file:
 
 
 What is FOP?
----------------
+------------
 
-Apache FOP is the world's first print formatter driven by XSL formatting 
-objects. It is a Java application that reads a formatting object tree 
-conforming to the XSL 1.1 Recommendation (05 December 2006) and then turns it 
-into a PDF document, certain other output formats or allows you to preview it 
-directly on screen. Some parts of the XSL 1.1 specification (work in progress!)
-have also been implemented.
+Apache FOP is a print formatter driven by XSL formatting objects. It is a Java
+application that reads a formatting object tree conforming to the XSL 1.1
+Recommendation (05 December 2006) and then turns it into a PDF document,
+certain other output formats or allows you to preview it directly on screen.
+Note that not all parts of the XSL 1.1 specification have yet been
+implemented.
 
 Apache FOP is part of Apache's XML Graphics project. The homepage of Apache 
 FOP is http://xmlgraphics.apache.org/fop/.
     
     
 Legal Information
----------------------
+-----------------
 
 Apache FOP is published under the Apache License version 2.0. For the license
 text, please see the following files:
@@ -54,7 +54,7 @@ License version 2.0:
 
     
 Where to get help?
----------------------    
+------------------
     
 http://xmlgraphics.apache.org/fop/gethelp.html
     
@@ -70,7 +70,7 @@ Please report bugs to bugzilla at http://issues.apache.org/bugzilla/
 
 
 How do I build FOP?
-----------------------
+-------------------
 
 If you've downloaded a binary distribution, you don't need to build
 FOP.
@@ -80,7 +80,7 @@ http://xmlgraphics.apache.org/fop/stable/compiling.html
 
 
 How do I run FOP?
---------------------
+-----------------
 
 Simply by typing "fop" on the command-line. Without any parameters you
 will receive a screen with instruction on how to call FOP from the
@@ -92,6 +92,39 @@ http://xmlgraphics.apache.org/fop/stable/running.html
 ==============================================================================
   RELEASE NOTES
 ==============================================================================
+
+Version 1.1
+===========
+
+This release of Apache FOP primarily addresses bug fixes and also adds a number
+of new features. See below for details.
+
+Compliance
+----------
+
+This release implements the XSL 1.0 and 1.1 recommendations to a relatively
+high degree of compliance. See the compliance page
+http://xmlgraphics.apache.org/fop/compliance.html for further details.
+
+Known issues
+------------
+
+A detailed list of known issues in this release is available at
+http://xmlgraphics.apache.org/fop/1.1/knownissues_overview.html.
+
+Major Changes in Version 1.1
+----------------------------
+
+* Adds support for complex scripts.
+* Adds support for TTF fonts in PostScript.
+* Adds support for PDF Object Streams.
+* Adds support for PDF 128-bit encryption.
+
+A more detailed list of changes in this release is available at
+http://xmlgraphics.apache.org/fop/1.1/changes_1.1.html.
+
+A more detailed list of changes in this and earlier releases is available at
+http://xmlgraphics.apache.org/fop/changes.html.
 
 Version 1.0
 ===========
