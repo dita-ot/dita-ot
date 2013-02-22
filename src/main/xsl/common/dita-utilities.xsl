@@ -355,7 +355,13 @@
   </xsl:template>
 
   <xsl:template match="processing-instruction('path2project-uri')" mode="get-path2project">
-    <xsl:value-of select="."/>
+    <xsl:choose>
+      <!-- Backwards compatibility with path2project that is empty when current directory is the root directory -->
+      <xsl:when test=". = './'"/>
+      <xsl:otherwise>
+        <xsl:value-of select="."/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="processing-instruction('path2project')" mode="get-path2project">
