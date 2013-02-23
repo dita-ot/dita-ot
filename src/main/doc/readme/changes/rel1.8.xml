@@ -11,7 +11,16 @@
   </reference-->
   <reference id="general-enhancements-and-changes" xml:lang="en-us">
     <title>General Enhancements and Changes</title>
-    <refbody/>
+    <refbody>
+      <section>
+        <title>Preprocessing</title>
+        <p>Additional validation has been added to check e.g. element ID uniqueness, and <codeph>xml:lang</codeph> and URI syntax.</p>
+      </section>
+      <section>
+        <title>PDF</title>
+        <p>Bundled FOP has been updated from 1.0 to 1.1.</p>
+      </section>
+    </refbody>
   </reference>
   <reference id="reference_yvj_ttj_bd">
     <title>Migration from previous releases</title>
@@ -106,21 +115,30 @@
       <section>
         <title>Feature requests</title>
         <ul>
+          <li>#1406 Bundle FOP 1.1 (milestone 1)</li>
           <li>#1447 Move stylesheets and resource files to plug-in folder (milestone 1)</li>
           <li>#1449 Add support for Slovenian (milestone 1)</li>
           <li>#1453 Add image metadata filter (milestone 1)</li>
+          <li>#1455 Remove deprecated features</li>
         </ul>
       </section>
-      <section>
+      <!--section>
         <title>Patches</title>
         <ul>
           <li/>
         </ul>
-      </section>
+      </section-->
       <section>
         <title>Bugs</title>
         <ul>
-          <li/>
+          <li>#1425 XHTML flagging included before imports (milestone 1)</li>
+          <li>#1428 Topic level calculated incorrectly for appendices (milestone 1)</li>
+          <li>#1427 Fix text overflow issue in lot/lof entries with long titles (milestone 1)</li>
+          <li>#1430 PDF transformation: Problems with index in OT 1.7 (milestone 1)</li>
+          <li>#1432 startcmd.sh broken in 1.7 (milestone 1)</li>
+          <li>#1433 Profiling filter included multiple times (milestone 1)</li>
+          <li>#1437 Fatal UTF-8 error in .job.xml (milestone 1)</li>
+          <li>#1456 XHTML Build failed when referencing subject scheme in different file path (milestone 1)</li>          
         </ul>
       </section>
     </refbody>
