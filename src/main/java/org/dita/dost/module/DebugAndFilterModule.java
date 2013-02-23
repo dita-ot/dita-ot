@@ -544,6 +544,11 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
      */
     private void generateScheme(final String filename, final Document root) throws DITAOTException {
         try {
+            final File f = new File(filename);
+            final File p = f.getParentFile();
+            if (!p.exists() && !p.mkdirs()) {
+                throw new IOException("Failed to make directory " + p.getAbsolutePath());
+            }
             final FileOutputStream file = new FileOutputStream(new File(filename));
             final StreamResult res = new StreamResult(file);
             final DOMSource ds = new DOMSource(root);

@@ -26,7 +26,7 @@ See the accompanying license.txt file for applicable licenses.
     <!-- DITA-OT: Latest stable version -->
     <topicmeta>
       <keywords>
-        <keyword>1.7.2</keyword>
+        <keyword>1.7.3</keyword>
       </keywords>
     </topicmeta>
   </keydef>
@@ -34,7 +34,7 @@ See the accompanying license.txt file for applicable licenses.
     <!-- DITA-OT: Latest test version -->
     <topicmeta>
       <keywords>
-        <keyword>1.7.2</keyword>
+        <keyword>1.7.3</keyword>
       </keywords>
     </topicmeta>
   </keydef>
