@@ -422,13 +422,13 @@
     <move file="${doc.out.dir}/html/userguide.html" tofile="${doc.out.dir}/html/index.html"/>
     -->
     <ant antfile="${src.dir}/build.xml">
-      <property name="args.input" location="${doc.dir}/readme/changes/rel1.7.xml"/>
+      <property name="args.input" location="${doc.dir}/readme/changes/rel1.8.xml"/>
       <property name="output.dir" location="${work.dir}/relnotes"/>
       <property name="args.csspath" value="resource"/>
       <property name="transtype" value="xhtml"/>
       <property name="base.temp.dir" location="${work.dir}"/>
     </ant>
-    <copy file="${work.dir}/relnotes/rel1.7.html" tofile="${out.dir}/relnotes.html"/>
+    <copy file="${work.dir}/relnotes/rel1.8.html" tofile="${out.dir}/relnotes.html"/>
     
     <delete failonerror="yes" includeemptydirs="true">
       <fileset dir="${doc.out.dir}">
