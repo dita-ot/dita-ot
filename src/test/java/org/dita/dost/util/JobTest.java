@@ -82,7 +82,11 @@ public final class JobTest {
         exp.add("foo2");
         exp.add("bar1");
         exp.add("foo1");
-        assertEquals(exp, job.getReferenceList());
+        final Set<String> act = new HashSet<String>();
+        act.addAll(job.getSet(FULL_DITAMAP_TOPIC_LIST));
+        act.addAll(job.getSet(CONREF_TARGET_LIST));
+        act.addAll(job.getSet(COPYTO_SOURCE_LIST));
+        assertEquals(exp, act);
     }
 
     @Test

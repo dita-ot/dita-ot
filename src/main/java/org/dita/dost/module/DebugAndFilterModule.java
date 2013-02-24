@@ -223,8 +223,11 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             }
 
             final Job job = new Job(tempDir);
-
-            final Set<String> parseList = job.getReferenceList();
+            
+            final Set<String> parseList = new HashSet<String>();
+            parseList.addAll(job.getSet(FULL_DITAMAP_TOPIC_LIST));
+            parseList.addAll(job.getSet(CONREF_TARGET_LIST));
+            parseList.addAll(job.getSet(COPYTO_SOURCE_LIST));
             inputDir = new File(job.getInputDir());
             if (!inputDir.isAbsolute()) {
                 inputDir = new File(baseDir, inputDir.getPath()).getAbsoluteFile();

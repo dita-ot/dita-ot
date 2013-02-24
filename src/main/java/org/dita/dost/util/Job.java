@@ -506,19 +506,6 @@ public final class Job {
     public String getInputMap() {
         return getProperty(INPUT_DITAMAP);
     }
-    
-    /**
-     * Get reference list.
-     * 
-     * @return reference list
-     */
-    public Set<String> getReferenceList() {
-        final Set<String> refList = new HashSet<String>();
-        refList.addAll(getSet(FULL_DITAMAP_TOPIC_LIST));
-        refList.addAll(getSet(CONREF_TARGET_LIST));
-        refList.addAll(getSet(COPYTO_SOURCE_LIST));
-        return refList;
-    }
 
     /**
      * Get input directory.
