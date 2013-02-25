@@ -79,10 +79,10 @@
     <xsl:param name="stringName"/>
     <xsl:param name="stringFileList" select="document('allstrings.xml')/allstrings/stringfile"/>
     <xsl:param name="stringFile">#none#</xsl:param>
-    <xsl:variable name="ancestorlang">
+    <xsl:param name="ancestorlang">
       <!-- Get the current language -->
       <xsl:call-template name="getLowerCaseLang"/>
-    </xsl:variable>
+    </xsl:param>
     <xsl:choose>
       <xsl:when test="$stringFile != '#none#'">
         <!-- Use the old getString template interface -->
