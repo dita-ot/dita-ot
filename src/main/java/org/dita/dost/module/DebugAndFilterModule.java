@@ -111,11 +111,6 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             result.put(key, value);
         }
         property.setMap(listName, result);
-//        try {
-//            property.writeList(listName);
-//        } catch (final IOException e) {
-//            logger.logError("Failed to write list file: " + e.getMessage(), e);
-//        }
     }
     
     /**
@@ -140,11 +135,6 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             result.add(f);
         }
         property.setSet(listName, result);
-        try {
-            property.writeList(listName);
-        } catch (final IOException e) {
-            logger.logError("Failed to write list file: " + e.getMessage(), e);
-        }
     }
     
     /**
@@ -164,11 +154,6 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             }
         }
         property.setProperty(listName, propValue);
-        try {
-            property.writeList(listName);
-        } catch (final IOException e) {
-            logger.logError("Failed to write list file: " + e.getMessage(), e);
-        }
     }
     
     private DITAOTLogger logger;

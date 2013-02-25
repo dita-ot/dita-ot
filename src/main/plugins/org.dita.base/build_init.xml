@@ -137,6 +137,20 @@
     classname="org.dita.dost.util.IsAbsolute">
     <classpath refid="dost.jar.path" />
   </typedef>
+  
+  <macrodef name="job-helper" >
+    <attribute name="file"/>
+    <attribute name="property"/>
+    <sequential>
+      <xslt in="${dita.temp.dir}/.job.xml" out="${dita.temp.dir}/@{file}"
+            style="${dita.plugin.org.dita.base.dir}/xsl/job-helper.xsl"
+            force="true" taskname="job-helper">
+        <param name="property" expression="@{property}"/>
+        <outputproperty name="encoding" value="${file.encoding}"/> 
+      </xslt>
+    </sequential>
+  </macrodef>
+  
   <tstamp>
     <format property="current.date" pattern="yyyyMMddHHmmssSSS"/>
   </tstamp>

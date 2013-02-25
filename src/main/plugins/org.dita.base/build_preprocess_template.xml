@@ -52,6 +52,27 @@
         <param name="setsystemid" value="${args.xml.systemid.set}"/>
       </module>
     </pipeline>
+    <!-- generate list files -->
+    <job-helper file="outditafiles.list" property="outditafileslist"/>
+    <job-helper file="fullditamapandtopic.list" property="fullditamapandtopiclist"/>
+    <job-helper file="fullditatopic.list" property="fullditatopiclist"/>
+    <job-helper file="fullditamap.list" property="fullditamaplist"/>
+    <job-helper file="hrefditatopic.list" property="hrefditatopiclist"/>
+    <job-helper file="conref.list" property="conreflist"/>
+    <job-helper file="image.list" property="imagelist"/>
+    <job-helper file="flagimage.list" property="flagimagelist"/>
+    <job-helper file="html.list" property="htmllist"/>
+    <job-helper file="hreftargets.list" property="hreftargetslist"/>
+    <job-helper file="canditopics.list" property="canditopicslist"/>
+    <job-helper file="skipchunk.list" property="skipchunklist"/>
+    <job-helper file="subjectscheme.list" property="subjectschemelist"/>
+    <job-helper file="conreftargets.list" property="conreftargetslist"/>
+    <job-helper file="copytosource.list" property="copytosourcelist"/>
+    <job-helper file="subtargets.list" property="subtargetslist"/>
+    <job-helper file="conrefpush.list" property="conrefpushlist"/>
+    <job-helper file="keyref.list" property="keyreflist"/>
+    <job-helper file="coderef.list" property="codereflist"/>
+    <job-helper file="resourceonly.list" property="resourceonlylist"/>
   </target>
 
   <!-- debug-filter
@@ -78,6 +99,18 @@
         <param name="setsystemid" value="${args.xml.systemid.set}"/>
       </module>
     </pipeline>
+    <job-helper file="user.input.file.list" property="user.input.file"/>
+    <job-helper file="hreftargets.list" property="hreftargetslist"/>
+    <job-helper file="conref.list" property="conreflist"/>
+    <job-helper file="hrefditatopic.list" property="hrefditatopiclist"/>
+    <job-helper file="fullditatopic.list" property="fullditatopiclist"/>
+    <job-helper file="fullditamapandtopic.list" property="fullditamapandtopiclist"/>
+    <job-helper file="conreftargets.list" property="conreftargetslist"/>
+    <job-helper file="conrefpush.list" property="conrefpushlist"/>
+    <job-helper file="keyref.list" property="keyreflist"/>
+    <job-helper file="skipchunk.list" property="skipchunklist"/>
+    <job-helper file="canditopics.list" property="canditopicslist"/>
+    <job-helper file="resourceonly.list" property="resourceonlylist"/>
     <xmlpropertyreader file="${dita.temp.dir}/dita.xml.properties"/>
     <dirname property="dita.map.output.dir" file="${output.dir}/${user.input.file}" />
     <condition property="noConref">
@@ -309,10 +342,18 @@
         <param name="transtype" value="${transtype}"/>
       </module>
     </pipeline>
-  	
+    
+    <job-helper file="fullditatopic.list" property="fullditatopiclist"/>
+    <job-helper file="fullditamap.list" property="fullditamaplist"/>
+    <job-helper file="fullditamapandtopic.list" property="fullditamapandtopiclist"/>
+    <job-helper file="chunkedditamap.list" property="chunkedditamaplist"/>
+    <job-helper file="chunkedtopic.list" property="chunkedtopiclist"/>
+    <job-helper file="resourceonly.list" property="resourceonlylist"/>
+    <job-helper file="copytosource.list" property="copytosourcelist"/>
+    <job-helper file="copytotarget2sourcemap.list" property="copytotarget2sourcemaplist"/>
   	<xmlpropertyreader file="${dita.temp.dir}/dita.xml.properties"/>
   	<condition property="noTopic">
-  	  	<equals arg1="${fullditatopiclist}" arg2="" />
+  	    <equals arg1="${fullditatopiclist}" arg2="" />
   	</condition>
   </target>
 

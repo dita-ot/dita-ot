@@ -600,10 +600,8 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
             //while they are not supposed to be contained, so should be be removed
 
             job.setSet(COPYTO_SOURCE_LIST, copytoSource);
-            job.writeList(COPYTO_SOURCE_LIST);
 
             job.setMap(COPYTO_TARGET_TO_SOURCE_MAP_LIST, copytotarget2source);
-            job.writeList(COPYTO_TARGET_TO_SOURCE_MAP_LIST);
 
             job.write();
         }catch (final Exception e){

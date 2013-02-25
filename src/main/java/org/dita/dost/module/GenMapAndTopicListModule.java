@@ -1113,11 +1113,6 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         // write list file
         final String fileKey = key.substring(0, key.lastIndexOf("list")) + "file";
         prop.setProperty(fileKey, key.substring(0, key.lastIndexOf("list")) + ".list");
-        try {
-            prop.writeList(key);
-        } catch (final IOException e) {
-            logger.logError("Failed to write list file: " + e.getMessage(), e);
-        }
     }
     
     /**
