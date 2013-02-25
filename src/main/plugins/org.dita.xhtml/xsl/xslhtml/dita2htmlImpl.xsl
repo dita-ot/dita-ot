@@ -2704,7 +2704,7 @@
      with nested simpletables. -->
 <xsl:template name="output-stentry-id">
   <!-- Find the position in this row -->
-  <xsl:variable name="thiscolnum"><xsl:number level="single" count="*"/></xsl:variable>
+  <xsl:variable name="thiscolnum"><xsl:number level="single" count="*[contains(@class,' topic/stentry ')]"/></xsl:variable>
   <xsl:choose>
     <xsl:when test="@id">    <!-- If ID is specified, always use it -->
       <xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
@@ -2726,7 +2726,7 @@
      with nested simpletables. -->
 <xsl:template name="set.stentry.headers">
   <xsl:if test="parent::*/parent::*/@keycol | parent::*/parent::*/*[contains(@class,' topic/sthead ')]">
-      <xsl:variable name="thiscolnum"><xsl:number level="single" count="*"/></xsl:variable>
+      <xsl:variable name="thiscolnum"><xsl:number level="single" count="*[contains(@class,' topic/stentry ')]"/></xsl:variable>
 
       <!-- If there is a keycol, and this is not the key column, get the ID for the keycol -->
       <xsl:variable name="keycolhead">
@@ -2745,10 +2745,10 @@
       <xsl:variable name="header">
           <xsl:if test="parent::*/parent::*/*[contains(@class,' topic/sthead ')]">
               <xsl:choose>
-                  <xsl:when test="parent::*/parent::*/*[contains(@class,' topic/sthead ')]/*[number($thiscolnum)]/@id">
-                      <xsl:value-of select="parent::*/parent::*/*[contains(@class,' topic/sthead ')]/*[number($thiscolnum)]/@id"/>
+                  <xsl:when test="parent::*/parent::*/*[contains(@class,' topic/sthead ')]/*[contains(@class,' topic/stentry ')][number($thiscolnum)]/@id">
+                      <xsl:value-of select="parent::*/parent::*/*[contains(@class,' topic/sthead ')]/*[contains(@class,' topic/stentry ')][number($thiscolnum)]/@id"/>
                   </xsl:when>
-                  <xsl:otherwise><xsl:value-of select="generate-id(parent::*/parent::*/*[contains(@class,' topic/sthead ')]/*[number($thiscolnum)])"/></xsl:otherwise>
+                  <xsl:otherwise><xsl:value-of select="generate-id(parent::*/parent::*/*[contains(@class,' topic/sthead ')]/*[contains(@class,' topic/stentry ')][number($thiscolnum)])"/></xsl:otherwise>
               </xsl:choose>
           </xsl:if>
       </xsl:variable>
@@ -2813,7 +2813,7 @@
   <th valign="bottom">
     <xsl:call-template name="th-align"/>
     <!-- Determine which column this entry is in. -->
-    <xsl:variable name="thiscolnum"><xsl:value-of select="number(count(preceding-sibling::*)+1)"/></xsl:variable>
+    <xsl:variable name="thiscolnum"><xsl:value-of select="number(count(preceding-sibling::*[contains(@class,' topic/stentry ')])+1)"/></xsl:variable>
     <!-- If width-multiplier=0, then either @relcolwidth was not specified, or this is not the first
          row, so do not create a width value. Otherwise, find out the relative width of this column. -->
     <xsl:variable name="widthpercent">
@@ -2885,7 +2885,7 @@
       </xsl:choose>
     </xsl:variable>
     <!-- Determine which column this entry is in. -->
-    <xsl:variable name="thiscolnum"><xsl:value-of select="number(count(preceding-sibling::*)+1)"/></xsl:variable>
+    <xsl:variable name="thiscolnum"><xsl:value-of select="number(count(preceding-sibling::*[contains(@class,' topic/stentry ')])+1)"/></xsl:variable>
     <!-- If width-multiplier=0, then either @relcolwidth was not specified, or this is not the first
          row, so do not create a width value. Otherwise, find out the relative width of this column. -->
     <xsl:variable name="widthpercent">

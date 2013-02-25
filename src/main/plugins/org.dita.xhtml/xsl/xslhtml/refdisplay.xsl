@@ -230,7 +230,7 @@
       </xsl:choose>
     </xsl:variable>
     <!-- Determine which column this entry is in. -->
-    <xsl:variable name="thiscolnum"><xsl:value-of select="number(count(preceding-sibling::*)+1)"/></xsl:variable>
+    <xsl:variable name="thiscolnum"><xsl:value-of select="number(count(preceding-sibling::*[contains(@class,' topic/stentry ')])+1)"/></xsl:variable>
     <!-- If width-multiplier=0, then either @relcolwidth was not specified, or this is not the first
          row, so do not create a width value. Otherwise, find out the relative width of this column. -->
     <xsl:variable name="widthpercent">
