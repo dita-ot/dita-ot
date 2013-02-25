@@ -524,6 +524,7 @@ public final class Job {
      * @param prop property name
      * @throws IOException if writing fails
      */
+    @Deprecated
     public void writeList(final String prop) throws IOException {
         final String filename = prop.equals(INPUT_DITAMAP)
                                 ? INPUT_DITAMAP_LIST_FILE
@@ -538,6 +539,7 @@ public final class Job {
      * @param filename list file name
      * @throws IOException if writing fails
      */
+    @Deprecated
     private void writeList(final String prop, final String filename) throws IOException {
         final File listFile = new File(tempDir, filename);
         BufferedWriter topicWriter = null;

@@ -73,6 +73,26 @@
     <job-helper file="keyref.list" property="keyreflist"/>
     <job-helper file="coderef.list" property="codereflist"/>
     <job-helper file="resourceonly.list" property="resourceonlylist"/>
+    <property name="outditafilesfile" value="outditafiles.list"/>
+    <property name="fullditamapandtopicfile" value="fullditamapandtopic.list"/>
+    <property name="fullditatopicfile" value="fullditatopic.list"/>
+    <property name="fullditamapfile" value="fullditamap.list"/>
+    <property name="hrefditatopicfile" value="hrefditatopic.list"/>
+    <property name="conreffile" value="conref.list"/>
+    <property name="imagefile" value="image.list"/>
+    <property name="flagimagefile" value="flagimage.list"/>
+    <property name="htmlfile" value="html.list"/>
+    <property name="hreftargetsfile" value="hreftargets.list"/>
+    <property name="canditopicsfile" value="canditopics.list"/>
+    <property name="skipchunkfile" value="skipchunk.list"/>
+    <property name="subjectschemefile" value="subjectscheme.list"/>
+    <property name="conreftargetsfile" value="conreftargets.list"/>
+    <property name="copytosourcefile" value="copytosource.list"/>
+    <property name="subtargetsfile" value="subtargets.list"/>
+    <property name="conrefpushfile" value="conrefpush.list"/>
+    <property name="keyreffile" value="keyref.list"/>
+    <property name="codereffile" value="coderef.list"/>
+    <property name="resourceonlyfile" value="resourceonly.list"/>
   </target>
 
   <!-- debug-filter

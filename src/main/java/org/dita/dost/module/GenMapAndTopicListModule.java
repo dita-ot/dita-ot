@@ -1110,9 +1110,6 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             }
         }
         prop.setSet(key, newSet);
-        // write list file
-        final String fileKey = key.substring(0, key.lastIndexOf("list")) + "file";
-        prop.setProperty(fileKey, key.substring(0, key.lastIndexOf("list")) + ".list");
     }
     
     /**
