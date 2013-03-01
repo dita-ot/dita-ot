@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -114,12 +113,12 @@ final class ChunkModule implements AbstractPipelineModule {
             logger.logException(e);
         }
 
-        final Content content = mapReader.getContent();
-        if(content.getValue()!=null){
+        final Map<String,String> changeTable = mapReader.getChangeTable();
+        if(changeTable != null){
             // update dita.list to include new generated files
-            updateList((LinkedHashMap<String,String>)content.getValue(), mapReader.getConflicTable(),input);
+            updateList(changeTable, mapReader.getConflicTable(),input);
             // update references in dita files
-            updateRefOfDita(content, mapReader.getConflicTable(),input);
+            updateRefOfDita(changeTable, mapReader.getConflicTable(),input);
         }
 
 
@@ -128,7 +127,7 @@ final class ChunkModule implements AbstractPipelineModule {
         return null;
     }
     //update the href in ditamap and topic files
-    private void updateRefOfDita(final Content changeTable, final Hashtable<String, String> conflictTable, final AbstractPipelineInput input){
+    private void updateRefOfDita(final Map<String,String> changeTable, final Hashtable<String, String> conflictTable, final AbstractPipelineInput input){
         final File tempDir = new File(input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR));
         if (!tempDir.isAbsolute()) {
             throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
@@ -141,7 +140,7 @@ final class ChunkModule implements AbstractPipelineModule {
         }
         final TopicRefWriter topicRefWriter=new TopicRefWriter();
         topicRefWriter.setLogger(logger);
-        topicRefWriter.setContent(changeTable);
+        topicRefWriter.setChangeTable(changeTable);
         topicRefWriter.setup(conflictTable);
         try{
             for (final String f: job.getSet(FULL_DITAMAP_TOPIC_LIST)) {
@@ -154,7 +153,7 @@ final class ChunkModule implements AbstractPipelineModule {
     }
 
 
-    private void updateList(final LinkedHashMap<String, String> changeTable, final Hashtable<String, String> conflictTable, final AbstractPipelineInput input){
+    private void updateList(final Map<String, String> changeTable, final Hashtable<String, String> conflictTable, final AbstractPipelineInput input){
         final File tempDir = new File(input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR));
         if (!tempDir.isAbsolute()) {
             throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");

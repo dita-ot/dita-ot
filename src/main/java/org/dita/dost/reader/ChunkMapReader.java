@@ -17,9 +17,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
@@ -583,13 +585,22 @@ public final class ChunkMapReader implements AbstractReader {
     /**
      * get content.
      * @return content value {@code LinkedHashMap<String, String>}
+     * @deprecated use {@link #getChangeTable()} instead
      */
     @Override
+    @Deprecated
     public Content getContent() {
-        final Content content = new ContentImpl();
-        content.setValue(changeTable);
-        return content;
+        throw new UnsupportedOperationException();
     }
+    
+    /**
+     * Get changed files table.
+     * @return map of changed files
+     */
+    public Map<String, String> getChangeTable() {
+        return Collections.unmodifiableMap(changeTable); 
+    }
+    
     /**
      * get conflict table.
      * @return conflict table

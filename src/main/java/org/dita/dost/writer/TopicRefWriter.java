@@ -17,7 +17,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.Hashtable;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 
@@ -45,7 +44,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
     // To check the URL of href in topicref attribute
     private static final String NOT_LOCAL_URL = COLON_DOUBLE_SLASH;
 
-    private LinkedHashMap<String, String> changeTable = null;
+    private Map<String, String> changeTable = null;
     private Hashtable<String, String> conflictTable = null;
     private OutputStreamWriter output;
     private OutputStreamWriter ditaFileOutput;
@@ -192,7 +191,11 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 
     @Override
     public void setContent(final Content content) {
-        changeTable = (LinkedHashMap<String,String>) content.getValue();
+        throw new UnsupportedOperationException();
+    }
+    
+    public void setChangeTable(final Map<String,String> changeTable) {
+        this.changeTable = changeTable;
     }
 
     @Override
@@ -320,7 +323,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
             attValue = attValue.substring(fixpath.length());
         }
 
-        if(changeTable==null) {
+        if(changeTable==null || changeTable.isEmpty()) {
             return attValue;
         }
 
