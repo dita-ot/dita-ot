@@ -321,7 +321,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
     }
 
     /**
-     * Read a map from XML properties file. Values are split by {@link COMMA} into a set.
+     * Read a map from XML properties file. Values are split by {@link org.dita.dost.util.Constants#COMMA COMMA} into a set.
      * 
      * @param filename XML properties file path, relative to temporary directory
      */
@@ -617,8 +617,14 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
     }
     
     /**
-     * XML filter to rewrite {@link #PI_WORKDIR_TARGET}, {@link #PI_WORKDIR_TARGET_URI}, and
-     * {@link #PI_PATH2PROJ_TARGET} to reflect copy-to location.
+     * XML filter to rewrite processing instructions to reflect copy-to location. The following processing-instructions are 
+     * 
+     * <ul>
+     * <li>{@link DitaWriter#PI_WORKDIR_TARGET PI_WORKDIR_TARGET}</li>
+     * <li>{@link DitaWriter#PI_WORKDIR_TARGET_URI PI_WORKDIR_TARGET_URI}</li>
+     * <li>{@link DitaWriter#PI_PATH2PROJ_TARGET PI_PATH2PROJ_TARGET}</li>
+     * <li>{@link DitaWriter#PI_PATH2PROJ_TARGET_URI PI_PATH2PROJ_TARGET_URI}</li>
+     * </ul>
      */
     private static final class CopyToFilter extends XMLFilterImpl {
         

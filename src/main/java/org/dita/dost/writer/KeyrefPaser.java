@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -261,7 +260,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
     }
     
     /**
-     * Get set of link targets which have normal processing role.
+     * Get set of link targets which have normal processing role. Paths are relative to current file.
      */
     public Set<String> getNormalProcessingRoleTargets() {
         return Collections.unmodifiableSet(normalProcessingRoleTargets);
@@ -519,6 +518,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
                                 target_output = normalizeHrefValue(target_output, elementId, topicId);
                                 XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output);
                                 if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE))) {
+                                    // FIXME: This should be a relative to base directory, not current file
                                     normalProcessingRoleTargets.add(FileUtils.stripFragment(target_output));
                                 }
                             } else {

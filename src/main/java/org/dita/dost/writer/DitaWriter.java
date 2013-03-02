@@ -327,7 +327,7 @@ public final class DitaWriter extends AbstractXMLFilter {
     /**
      * Default constructor of DitaWriter class.
      * 
-     * {@link #initXMLReader(String, boolean, boolean)} must be called after
+     * {@link #initXMLReader(File, boolean, boolean)} must be called after
      * construction to initialize XML parser.
      */
     public DitaWriter() {
@@ -1054,7 +1054,7 @@ public final class DitaWriter extends AbstractXMLFilter {
      * @param filename relative input file path from base directory
      * @param traceFilename absolute input file
      * @param inputMap absolute path to start file
-     * @return
+     * @return path to base directory, {@code null} if not available
      */
     public String getPathtoProject (final String filename, final File traceFilename, final String inputMap) {
     	String path2Project = null;

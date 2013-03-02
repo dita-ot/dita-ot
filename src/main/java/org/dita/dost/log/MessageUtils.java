@@ -169,7 +169,7 @@ public final class MessageUtils {
      * @param id id
      * @param prop prop
      * @return MessageBean
-     * @deprected use {@link #getMessage(String, String[])} instead
+     * @deprecated use {@link #getMessage(String, String[])} instead
      */
     @Deprecated
     public MessageBean getMessage(final String id, final Properties prop) {
@@ -201,7 +201,7 @@ public final class MessageUtils {
      * an empty message with this id will be returned.
      * 
      * @param id id
-     * @param prop prop
+     * @param params message parameters
      * @return MessageBean
      */
     public MessageBean getMessage(final String id, final String... params) {

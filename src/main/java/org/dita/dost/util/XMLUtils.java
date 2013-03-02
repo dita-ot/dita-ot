@@ -164,7 +164,7 @@ public final class XMLUtils {
         }
         
         /**
-         * Add or set attribute. Convenience method for {@link #add(AttributesImpl, String, String, String, String, String)}.
+         * Add or set attribute. Convenience method for {@link #add(String, String, String, String, String)}.
          * 
          * @param localName local name
          * @param value attribute value
@@ -175,7 +175,7 @@ public final class XMLUtils {
         }
     	
         /**
-         * Add or set attribute. Convenience method for {@link #add(AttributesImpl, String, String, String, String, String)}.
+         * Add or set attribute. Convenience method for {@link #add(String, String, String, String, String)}.
          * 
          * @param uri namespace URI
          * @param localName local name
@@ -189,7 +189,7 @@ public final class XMLUtils {
         /**
          * Add or set all attributes.
          * 
-         * @param a attributes to add or set
+         * @param attrs attributes to add or set
          */
         public void addAll(final Attributes attrs) {
             for (int i = 0; i < attrs.getLength(); i++) {
