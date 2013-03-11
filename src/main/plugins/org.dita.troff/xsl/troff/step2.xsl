@@ -371,17 +371,17 @@
   <xsl:choose>
     <xsl:when test="$OUTFORMAT='plaintext'">
       <xsl:call-template name="force-two-newlines"/>
-      <xsl:apply-templates/>
+      <xsl:apply-templates select="*[1]"/>
     </xsl:when>
     <xsl:when test="$OUTFORMAT='troff' or $OUTFORMAT='nroff'">
-      <xsl:value-of select="$newline"/>.SH "<xsl:apply-templates/>"<xsl:value-of select="$newline"/>
+      <xsl:value-of select="$newline"/>.SH "<xsl:apply-templates select="*[1]"/>"<xsl:value-of select="$newline"/>
       <xsl:call-template name="start-bold"/>
-      <xsl:apply-templates>
+      <xsl:apply-templates select="*[1]">
         <xsl:with-param name="current-style" select="'bold'"/>
       </xsl:apply-templates>
       <xsl:call-template name="start-normal"/>
     </xsl:when>
-    <xsl:otherwise><xsl:apply-templates/></xsl:otherwise>
+    <xsl:otherwise><xsl:apply-templates select="*[1]"/></xsl:otherwise>
   </xsl:choose>
   <!-- Do not process following siblings: those come through from section -->
 </xsl:template>

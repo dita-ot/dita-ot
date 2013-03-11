@@ -14,18 +14,22 @@
     <!-- step 1 -->
     <property name="dita.ext" value=".dita"/>
     <xslt basedir="${dita.temp.dir}"
-      destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
+      destdir="${dita.temp.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
       extension="${dita.ext}"
       classpathref="dost.class.path"
       style="${dita.plugin.org.dita.troff.dir}/xsl/dita2troff-step1-shell.xsl">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" if="chunkedtopicfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
+      <mapper type="glob" from="*" to="*.tr1" />
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
-
+    <move todir="${dita.temp.dir}">
+      <fileset dir="${dita.temp.dir}" includes="**/*.tr1" />
+      <mapper type="glob" from="*.tr1" to="*" />
+    </move>
     <!-- step 2 -->
-    <xslt basedir="${dita.map.output.dir}" destdir="${dita.map.output.dir}"
+    <xslt basedir="${dita.temp.dir}" destdir="${output.dir}"
       includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}" includes="${chunkedtopiclist}" extension=".cli"
       classpathref="dost.class.path"
       style="${dita.plugin.org.dita.troff.dir}/xsl/dita2troff-step2-shell.xsl">
@@ -41,7 +45,7 @@
     <!-- step 1 -->
     <property name="dita.ext" value=".dita"/>
     <xslt basedir="${dita.temp.dir}"
-      destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}" 
+      destdir="${dita.temp.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}" 
       extension="${dita.ext}"
       classpathref="dost.class.path"
       style="${dita.plugin.org.dita.troff.dir}/xsl/dita2troff-step1-shell.xsl">
@@ -49,14 +53,19 @@
       <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" if="chunkedtopicfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <!--New,To generate&copy all dita files in the inputmap.dir,not all files in dita.temp.dir -->
-      <mapper type="regexp" 
+      <!--<mapper type="regexp" 
         from="^(${tempdirToinputmapdir.relative.value})(.*?)(\.(xml|dita))$$" 
-        to="\2${dita.ext}"/>
+        to="\2${dita.ext}"/>-->
+      <mapper type="glob" from="*" to="*.tr1" />
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
+    <move todir="${dita.temp.dir}">
+      <fileset dir="${dita.temp.dir}" includes="**/*.tr1" />
+      <mapper type="glob" from="*.tr1" to="*" />
+    </move>
 	<echo level="info">the ditmapoutputdir is ${dita.map.output.dir}</echo>
     <!-- step 2 -->
-    <xslt basedir="${output.dir}" destdir="${output.dir}"
+    <xslt basedir="${dita.temp.dir}" destdir="${output.dir}"
       includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}" extension=".cli"
       classpathref="dost.class.path"
       style="${dita.plugin.org.dita.troff.dir}/xsl/dita2troff-step2-shell.xsl">
@@ -75,15 +84,19 @@
     <!-- step 1 -->
     <property name="dita.ext" value=".dita"/>
     <xslt basedir="${dita.temp.dir}"
-      destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${outditafilesfile}"
+      destdir="${dita.temp.dir}" includesfile="${dita.temp.dir}${file.separator}${outditafilesfile}"
       extension="${dita.ext}"
       classpathref="dost.class.path"
       style="${dita.plugin.org.dita.troff.dir}/xsl/dita2troff-step1-shell.xsl">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
+      <mapper type="glob" from="*" to="*.tr1" />
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
-
+    <move todir="${dita.temp.dir}">
+      <fileset dir="${dita.temp.dir}" includes="**/*.tr1" />
+      <mapper type="glob" from="*.tr1" to="*" />
+    </move>
     <!-- step 2 -->
     <xslt basedir="${output.dir}" destdir="${output.dir}${file.separator}${uplevels}"
       includesfile="${dita.temp.dir}${file.separator}${outditafilesfile}" extension=".cli"
