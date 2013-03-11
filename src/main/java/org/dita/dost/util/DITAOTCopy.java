@@ -85,7 +85,7 @@ public final class DITAOTCopy extends Task {
                     }
                 }
             } catch (final IOException e) {
-                logger.logException(e);
+                logger.logError(e.getMessage(), e) ;
             }
         }else{
             pathTokenizer = new StringTokenizer(relativePaths, COMMA);
@@ -114,7 +114,7 @@ public final class DITAOTCopy extends Task {
                     }
                 }
             } catch (final IOException e) {
-                logger.logException(e);
+                logger.logError(e.getMessage(), e) ;
             }
         }
     }

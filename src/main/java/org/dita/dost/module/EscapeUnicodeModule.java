@@ -93,28 +93,28 @@ final class EscapeUnicodeModule implements AbstractPipelineModule {
                 try {
                     fw.close();
                 } catch (final Exception e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }
             }
             if (br != null) {
                 try {
                     br.close();
                 } catch (final Exception e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }
             }
             if (is != null) {
                 try {
                     is.close();
                 } catch (final Exception e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }
             }
             if (fi != null) {
                 try {
                     fi.close();
                 } catch (final Exception e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }
             }
         }

@@ -207,9 +207,9 @@ public final class GenListModuleReader extends AbstractXMLReader {
         try {
             reader.setProperty(LEXICAL_HANDLER_PROPERTY, this);
         } catch (final SAXNotRecognizedException e1) {
-            logger.logException(e1);
+            logger.logError(e1.getMessage(), e1) ;
         } catch (final SAXNotSupportedException e1) {
-            logger.logException(e1);
+            logger.logError(e1.getMessage(), e1) ;
         }
     }
 
@@ -840,17 +840,13 @@ public final class GenListModuleReader extends AbstractXMLReader {
         }
 
         if (classValue == null && !ELEMENT_NAME_DITA.equals(localName)) {
-            params.clear();
-            params.put("%1", localName);
-            logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ030I", params).toString());
+            logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ030I", localName).toString());
         }
 
         if (classValue != null && TOPIC_TOPIC.matches(classValue)) {
             domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
             if (domains == null) {
-                params.clear();
-                params.put("%1", localName);
-                logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ029I", params).toString());
+                logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ029I", localName).toString());
             } else {
                 props = StringUtils.getExtProps(domains);
             }
@@ -1242,10 +1238,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
                         keysDefMap.put(key, new KeyDef(key, null, null));
                     }
                 } else {
-                    final Properties prop = new Properties();
-                    prop.setProperty("%1", key);
-                    prop.setProperty("%2", target);
-                    logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ045I", prop).toString());
+                    logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ045I", key, target).toString());
                 }
                 // restore target
                 target = temp;
@@ -1375,11 +1368,8 @@ public final class GenListModuleReader extends AbstractXMLReader {
                 buff.append("\"] was ignored.");
                 logger.logWarn(buff.toString());
             } else if (copytoMap.get(filename) != null) {
-                final Properties prop = new Properties();
-                prop.setProperty("%1", href);
-                prop.setProperty("%2", filename);
                 if (!value.equals(copytoMap.get(filename))) {
-                    logger.logWarn(MessageUtils.getInstance().getMessage("DOTX065W", prop).toString());
+                    logger.logWarn(MessageUtils.getInstance().getMessage("DOTX065W", href, filename).toString());
                 }
                 ignoredCopytoSourceSet.add(href);
             } else if (!(atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(
@@ -1569,9 +1559,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 
     private void toOutFile(final String filename) throws SAXException {
         // the filename is a relative path from the dita input file
-        final Properties prop = new Properties();
-        prop.put("%1", FileUtils.normalizeDirectory(rootDir.getAbsolutePath(), filename));
-        prop.put("%2", FileUtils.normalize(currentFile.getAbsolutePath()));
+        final String[] prop = { FileUtils.normalizeDirectory(rootDir.getAbsolutePath(), filename), FileUtils.normalize(currentFile.getAbsolutePath()) };
         if ((OutputUtils.getGeneratecopyouter() == OutputUtils.Generate.NOT_GENERATEOUTTER)
                 || (OutputUtils.getGeneratecopyouter() == OutputUtils.Generate.GENERATEOUTTER)) {
             if (isOutFile(filename)) {

@@ -338,13 +338,13 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             prop.loadFromXML(in);
             in.close();
         } catch (final IOException e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         } finally {
             if (in != null) {
                 try {
                     in.close();
                 } catch (final IOException e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }
             }
         }
@@ -414,7 +414,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                 generateScheme(rel, parentRoot);
             }
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
             throw new DITAOTException(e);
         }
 
@@ -550,7 +550,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                 file.close();
             }
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
             throw new DITAOTException(e);
         }
     }
@@ -573,9 +573,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                         .logWarn(new StringBuffer("Copy-to task [copy-to=\"")
                                 .append(copytoTarget)
                                 .append("\"] which points to an existed file was ignored.").toString());*/
-                final Properties prop = new Properties();
-                prop.setProperty("%1", copytoTarget);
-                logger.logWarn(MessageUtils.getInstance().getMessage("DOTX064W", prop).toString());
+                logger.logWarn(MessageUtils.getInstance().getMessage("DOTX064W", copytoTarget).toString());
             }else{
                 final String inputMapInTemp = new File(tempDir + File.separator + job.getInputMap()).getAbsolutePath();
                 copyFileWithPIReplaced(srcFile, targetFile, copytoTarget, inputMapInTemp);
@@ -746,13 +744,13 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             prop.storeToXML(os, null);
             os.close();
         } catch (final IOException e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         } finally {
             if (os != null) {
                 try {
                     os.close();
                 } catch (final IOException e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }
             }
         }

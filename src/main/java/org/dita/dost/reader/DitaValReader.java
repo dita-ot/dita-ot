@@ -77,7 +77,7 @@ public final class DitaValReader extends AbstractXMLReader {
             reader = StringUtils.getXMLReader();
             reader.setContentHandler(this);
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
 
     }
@@ -108,7 +108,7 @@ public final class DitaValReader extends AbstractXMLReader {
             reader.parse(is);
 
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 
@@ -258,10 +258,7 @@ public final class DitaValReader extends AbstractXMLReader {
         if (filterMap.get(key) == null) {
             filterMap.put(key, action);
         } else {
-            final Properties prop = new Properties();
-            prop.put("%1", key);
-            logger.logError(MessageUtils.getInstance().getMessage("DOTJ007E", prop)
-                    .toString());
+            logger.logError(MessageUtils.getInstance().getMessage("DOTJ007E", key.toString()).toString());
         }
     }
 

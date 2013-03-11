@@ -411,8 +411,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
 			logger.logError(e1.toString());
 		}
         logger.logInfo("Processing " + fileToParse.getAbsolutePath());
-        final Properties params = new Properties();
-        params.put("%1", file.getAbsolutePath());
+        final String[] params = { file.getAbsolutePath() };
 
         if (!fileToParse.exists()) {
             logger.logError(MessageUtils.getInstance().getMessage("DOTX008E", params).toString());
@@ -503,10 +502,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
                  * buff.append(" was ignored.");
                  * logger.logWarn(buff.toString());
                  */
-                final Properties prop = new Properties();
-                prop.setProperty("%1", value);
-                prop.setProperty("%2", key);
-                logger.logWarn(MessageUtils.getInstance().getMessage("DOTX065W", prop).toString());
+                logger.logWarn(MessageUtils.getInstance().getMessage("DOTX065W", value, key).toString());
                 ignoredCopytoSourceSet.add(value);
             } else {
                 updateUplevels(key);
@@ -539,7 +535,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
                  * keydef.write("source=\""+currentFile+"\"/>");
                  * keydef.write("\n"); keydef.flush(); } catch (IOException e) {
                  * 
-                 * logger.logException(e); }
+                 * logger.logError(e.getMessage(), e) ; }
                  */
                 keysDefMap.put(key, new KeyDef(key, value.href, currentFile));
             }
@@ -666,10 +662,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
 			try {
 				final File image = new File (baseInputDir, file.filename).getCanonicalFile(); 
 				if (!image.exists()){
-	            	final Properties prop = new Properties();
-					prop.put("%1", image.getAbsolutePath());
-					logger.logWarn(MessageUtils.getInstance().getMessage(
-							"DOTX008W", prop).toString());
+					logger.logWarn(MessageUtils.getInstance().getMessage("DOTX008W", image.getAbsolutePath()).toString());
 	            }
 			} catch (final IOException e) {
 				logger.logError(e.getMessage());
@@ -921,15 +914,15 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             bufferedWriter.write(prefix + inputFile);
             bufferedWriter.flush();
         } catch (final FileNotFoundException e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         } catch (final IOException e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         } finally {
             if (bufferedWriter != null) {
                 try {
                     bufferedWriter.close();
                 } catch (final IOException e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }
             }
         }
@@ -1065,13 +1058,13 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             prop.storeToXML(os, null);
             os.close();
         } catch (final IOException e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         } finally {
             if (os != null) {
                 try {
                     os.close();
                 } catch (final Exception e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }
             }
         }
@@ -1213,15 +1206,15 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             bufferedWriter.flush();
             bufferedWriter.close();
         } catch (final FileNotFoundException e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         } catch (final IOException e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         } finally {
             if (bufferedWriter != null) {
                 try {
                     bufferedWriter.close();
                 } catch (final IOException e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }
             }
         }

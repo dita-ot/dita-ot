@@ -147,12 +147,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
                     for (final String s : keylist) {
                         // Warning ? Value not valid.
                         if (!StringUtils.isEmptyString(s) && !valueSet.contains(s)) {
-                            final Properties prop = new Properties();
-                            prop.put("%1", attrName);
-                            prop.put("%2", qName);
-                            prop.put("%3", attrValue);
-                            prop.put("%4", StringUtils.assembleString(valueSet, COMMA));
-                            logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ049W", prop).toString());
+                            logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ049W", attrName, qName, attrValue, StringUtils.assembleString(valueSet, COMMA)).toString());
                         }
                     }
                 }

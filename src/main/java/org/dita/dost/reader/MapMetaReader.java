@@ -193,7 +193,7 @@ public final class MapMetaReader implements AbstractReader {
             }
 
         }catch (final Exception e){
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 

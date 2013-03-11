@@ -145,13 +145,11 @@ public final class IndexGroupProcessor {
                 final String key = key2;
                 if (key.length() > 0) {
                     final IndexEntry entry = (IndexEntry) indexMap.get(key);
-                    final Properties prop = new Properties();
-                    prop.put("%1", entry.toString());
-                    logger.logError(MessageUtils.getInstance().getMessage("PDFJ001E", prop).toString());
+                    logger.logError(MessageUtils.getInstance().getMessage("PDFJ001E", entry.toString()).toString());
                 }
             }
             if (IndexPreprocessorTask.failOnError) {
-                logger.logError(MessageUtils.getInstance().getMessage("PDFJ002E", new Properties()).toString());
+                logger.logError(MessageUtils.getInstance().getMessage("PDFJ002E").toString());
                 IndexPreprocessorTask.processingFaild=true;
             }
         }

@@ -531,20 +531,20 @@ public final class FileUtils {
             fos = new FileOutputStream(target);
             copy(fis, fos);
         } catch (final IOException ex) {
-            logger.logException(ex);
+            logger.logError(ex.getMessage(), ex) ;
         } finally {
             if (fis != null) {
                 try {
                     fis.close();
                 } catch (final Exception e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }
             }
             if (fos != null) {
                 try {
                     fos.close();
                 } catch (final Exception e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }
             }
         }

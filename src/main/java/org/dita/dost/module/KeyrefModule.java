@@ -67,7 +67,7 @@ final class KeyrefModule implements AbstractPipelineModule {
         try{
             job = new Job(tempDir);
         }catch(final Exception e){
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
 
         // maps of keyname and target

@@ -202,9 +202,7 @@ public final class DitaWriter extends AbstractXMLFilter {
             final String extOfHref = FileUtils.getExtension(valueOfHref);
             if(formatValue == null && extOfHref != null && !extOfHref.equalsIgnoreCase("DITA") && !extOfHref.equalsIgnoreCase("XML") ){
                 final DITAOTLogger logger = new DITAOTJavaLogger();
-                final Properties params = new Properties();
-                params.put("%1", hrefValue);
-                logger.logError(MessageUtils.getInstance().getMessage("DOTJ028E", params).toString());
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ028E", hrefValue).toString());
                 return true;
             }
         }
@@ -533,9 +531,7 @@ public final class DitaWriter extends AbstractXMLFilter {
                                 conkeyrefValid = true;
                             }
                         }else{
-                            final Properties prop = new Properties();
-                            prop.setProperty("%1", attValue);
-                            logger.logError(MessageUtils.getInstance().getMessage("DOTJ046E", prop).toString());
+                            logger.logError(MessageUtils.getInstance().getMessage("DOTJ046E", attValue).toString());
                         }
                     }else{
                         //conkeyref just has keyref
@@ -562,16 +558,12 @@ public final class DitaWriter extends AbstractXMLFilter {
                                 conkeyrefValid = true;
                             }
                         }else{
-                            final Properties prop = new Properties();
-                            prop.setProperty("%1", attValue);
-                            logger.logError(MessageUtils.getInstance().getMessage("DOTJ046E", prop).toString());
+                            logger.logError(MessageUtils.getInstance().getMessage("DOTJ046E", attValue).toString());
                         }
                     }
                 }else{
                     //invalid conkeyref value
-                    final Properties prop = new Properties();
-                    prop.setProperty("%1", attValue);
-                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ046E", prop).toString());
+                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ046E", attValue).toString());
                 }
             } else {
                 XMLUtils.addOrSetAttribute(res, nsUri, atts.getLocalName(i), attQName, atts.getType(i), attValue);
@@ -789,7 +781,7 @@ public final class DitaWriter extends AbstractXMLFilter {
         try {
             getContentHandler().endDocument();
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 
@@ -902,7 +894,7 @@ public final class DitaWriter extends AbstractXMLFilter {
             getContentHandler().ignorableWhitespace(new char[] { '\n' }, 0, 1);
         } catch (final Exception e) {
             e.printStackTrace();
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 
@@ -915,9 +907,7 @@ public final class DitaWriter extends AbstractXMLFilter {
         }else if( foreignLevel == 0){
             final String attrValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
             if(attrValue == null && !ELEMENT_NAME_DITA.equals(localName)){
-                final Properties params = new Properties();
-                params.put("%1", localName);
-                logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ030I", params).toString());
+                logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ030I", localName).toString());
             }
             if (attrValue != null &&
                     (TOPIC_FOREIGN.matches(attrValue) ||
@@ -955,7 +945,7 @@ public final class DitaWriter extends AbstractXMLFilter {
             
             getContentHandler().startElement(uri, localName, qName, res);
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
     
@@ -1036,13 +1026,13 @@ public final class DitaWriter extends AbstractXMLFilter {
             serializer.transform(source, result);
         } catch (final Exception e) {
             e.printStackTrace();
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }finally {
             if (out != null) {
                 try {
                     out.close();
                 }catch (final Exception e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }
             }
         }

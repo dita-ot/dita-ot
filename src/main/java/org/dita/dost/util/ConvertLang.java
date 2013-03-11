@@ -267,11 +267,11 @@ public final class ConvertLang extends Task {
                     value = reader.readLine();
                 }
             } catch (final FileNotFoundException e) {
-                logger.logException(e);
+                logger.logError(e.getMessage(), e) ;
             } catch (final UnsupportedEncodingException e) {
             	throw new RuntimeException(e);
             } catch (final IOException e) {
-                logger.logException(e);
+                logger.logError(e.getMessage(), e) ;
             } finally {
                 if (reader != null) {
                     try {
@@ -291,22 +291,14 @@ public final class ConvertLang extends Task {
             try {
                 //delete old file
                 if (!inputFile.delete()) {
-                    final Properties prop = new Properties();
-                    prop.put("%1", inputFile.getPath());
-                    prop.put("%2", outputFile.getPath());
-                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop)
-                            .toString());
+                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
                 }
                 //rename newly created file to the old file
                 if (!outputFile.renameTo(inputFile)) {
-                    final Properties prop = new Properties();
-                    prop.put("%1", inputFile.getPath());
-                    prop.put("%2", outputFile.getPath());
-                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop)
-                            .toString());
+                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
                 }
             } catch (final Exception e) {
-                logger.logException(e);
+                logger.logError(e.getMessage(), e) ;
             }
         }
     }
@@ -393,11 +385,11 @@ public final class ConvertLang extends Task {
                     value = reader.readLine();
                 }
             } catch (final FileNotFoundException e) {
-                logger.logException(e);
+                logger.logError(e.getMessage(), e) ;
             } catch (final UnsupportedEncodingException e) {
                 throw new RuntimeException(e);
             } catch (final IOException e) {
-                logger.logException(e);
+                logger.logError(e.getMessage(), e) ;
             } finally {
                 if (reader != null) {
                     try {
@@ -417,22 +409,14 @@ public final class ConvertLang extends Task {
             try {
                 //delete old file
                 if (!inputFile.delete()) {
-                    final Properties prop = new Properties();
-                    prop.put("%1", inputFile.getPath());
-                    prop.put("%2", outputFile.getPath());
-                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop)
-                            .toString());
+                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
                 }
                 //rename newly created file to the old file
                 if (!outputFile.renameTo(inputFile)) {
-                    final Properties prop = new Properties();
-                    prop.put("%1", inputFile.getPath());
-                    prop.put("%2", outputFile.getPath());
-                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop)
-                            .toString());
+                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
                 }
             } catch (final Exception e) {
-                logger.logException(e);
+                logger.logError(e.getMessage(), e) ;
             }
         }
 
@@ -475,11 +459,11 @@ public final class ConvertLang extends Task {
                 charCode = reader.read();
             }
         } catch (final FileNotFoundException e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         } catch (final UnsupportedEncodingException e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         } catch (final IOException e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         } finally {
             if (reader != null) {
                 try {
@@ -499,24 +483,16 @@ public final class ConvertLang extends Task {
         try {
             //delete old file
             if (!inputFile.delete()) {
-                final Properties prop = new Properties();
-                prop.put("%1", inputFile.getPath());
-                prop.put("%2", outputFile.getPath());
-                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop)
-                        .toString());
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
             }
             //rename newly created file to the old file
             if (!outputFile.renameTo(inputFile)) {
-                final Properties prop = new Properties();
-                prop.put("%1", inputFile.getPath());
-                prop.put("%2", outputFile.getPath());
-                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop)
-                        .toString());
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
             }
 
 
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 

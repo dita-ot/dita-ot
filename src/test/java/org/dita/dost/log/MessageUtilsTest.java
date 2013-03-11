@@ -75,29 +75,20 @@ public class MessageUtilsTest {
 
     @Test
     public void testGetMessageStringProperties() {
-        final Properties props = new Properties();
-        props.put("%1", "foo");
-        props.put("%2", "bar baz");
         final MessageBean exp = new MessageBean("XXX234E", "ERROR", "Error foo reason bar baz.", "Error foo response bar baz.");
-        assertEquals(exp.toString(), MessageUtils.getInstance().getMessage("XXX234E", props).toString());
+        assertEquals(exp.toString(), MessageUtils.getInstance().getMessage("XXX234E", "foo", "bar baz").toString());
     }
 
     @Test
     public void testGetMessageStringMissing() {
-        final Properties props = new Properties();
-        props.put("%1", "foo");
         final MessageBean exp = new MessageBean("XXX234E", "ERROR", "Error foo reason %2.", "Error foo response %2.");
-        assertEquals(exp.toString(), MessageUtils.getInstance().getMessage("XXX234E", props).toString());
+        assertEquals(exp.toString(), MessageUtils.getInstance().getMessage("XXX234E", "foo").toString());
     }
 
     @Test
     public void testGetMessageStringExtra() {
-        final Properties props = new Properties();
-        props.put("%1", "foo");
-        props.put("%2", "bar baz");
-        props.put("%3", "qux");
         final MessageBean exp = new MessageBean("XXX234E", "ERROR", "Error foo reason bar baz.", "Error foo response bar baz.");
-        assertEquals(exp.toString(), MessageUtils.getInstance().getMessage("XXX234E", props).toString());
+        assertEquals(exp.toString(), MessageUtils.getInstance().getMessage("XXX234E", "foo", "bar baz", "qux").toString());
     }
 
     @AfterClass

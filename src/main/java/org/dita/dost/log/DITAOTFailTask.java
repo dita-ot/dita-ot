@@ -26,7 +26,6 @@ import org.dita.dost.invoker.ExtensibleAntInvoker.Param;
 public final class DITAOTFailTask extends Exit {
     private String id = null;
 
-    private final Properties prop = new Properties();
     /** Nested params. */
     private final ArrayList<Param> params = new ArrayList<Param>();
 
@@ -74,6 +73,7 @@ public final class DITAOTFailTask extends Exit {
         if (id == null) {
             throw new BuildException("id attribute must be specified");
         }
+        final ArrayList<String> prop = new ArrayList<String>();
         for (final Param p : params) {
             if (!p.isValid()) {
                 throw new BuildException("Incomplete parameter");
@@ -82,11 +82,12 @@ public final class DITAOTFailTask extends Exit {
             final String unlessProperty = p.getUnless();
             if ((ifProperty == null || getProject().getProperties().containsKey(ifProperty))
                     && (unlessProperty == null || !getProject().getProperties().containsKey(unlessProperty))) {
-                prop.put("%" + p.getName(), p.getValue());
+                final int idx = Integer.parseInt(p.getName()) - 1;
+                prop.set(idx, p.getValue());
             }
         }
         
-        final MessageBean msgBean = MessageUtils.getInstance().getMessage(id, prop);
+        final MessageBean msgBean = MessageUtils.getInstance().getMessage(id, prop.toArray(new String[prop.size()]));
         final DITAOTLogger logger = new DITAOTAntLogger(getProject());
         if (msgBean != null) {
             final String type = msgBean.getType();

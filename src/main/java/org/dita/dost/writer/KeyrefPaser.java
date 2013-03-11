@@ -297,16 +297,10 @@ public final class KeyrefPaser extends XMLFilterImpl {
             }
         }
         if (!inputFile.delete()) {
-            final Properties prop = new Properties();
-            prop.put("%1", inputFile.getPath());
-            prop.put("%2", outputFile.getPath());
-            logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop).toString());
+            logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
         }
         if (!outputFile.renameTo(inputFile)) {
-            final Properties prop = new Properties();
-            prop.put("%1", inputFile.getPath());
-            prop.put("%2", outputFile.getPath());
-            logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop).toString());
+            logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
         }
     }
     
@@ -551,9 +545,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
                         XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
                     }else{
                         // key does not exist.
-                        final Properties prop = new Properties();
-                        prop.put("%1", atts.getValue(ATTRIBUTE_NAME_KEYREF));
-                        logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ047I", prop).setLocation(atts).toString());
+                        logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ047I", atts.getValue(ATTRIBUTE_NAME_KEYREF)).setLocation(atts).toString());
                     }
 
                 } else if (currentElement != null && !currentElement.isRefType) {
@@ -613,9 +605,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
                 }
             }else{
                 // key does not exist
-                final Properties prop = new Properties();
-                prop.put("%1", atts.getValue(ATTRIBUTE_NAME_KEYREF));
-                logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ047I", prop).setLocation(atts).toString());
+                logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ047I", atts.getValue(ATTRIBUTE_NAME_KEYREF)).setLocation(atts).toString());
             }
 
             validKeyref.push(valid);

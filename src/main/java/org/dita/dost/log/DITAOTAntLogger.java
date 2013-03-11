@@ -68,18 +68,8 @@ public final class DITAOTAntLogger implements DITAOTLogger {
     }
     
     @Override
-    public void logFatal(final String msg) {
-        log(msg, null, Project.MSG_ERR);
-    }
-
-    @Override
     public void logDebug(final String msg) {
         log(msg, null, Project.MSG_VERBOSE);
-    }
-
-    @Override
-    public void logException(final Throwable t) {
-        log(t.getMessage(), t, Project.MSG_ERR);
     }
 
     private void log(final String msg, final Throwable t, final int level) {

@@ -181,14 +181,14 @@ public final class ChunkMapReader implements AbstractReader {
                     newFileWriter.flush();
                     newFileWriter.close();
                 }catch (final Exception e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }finally{
                     try{
                         if(newFileWriter!=null){
                             newFileWriter.close();
                         }
                     }catch (final Exception e) {
-                        logger.logException(e);
+                        logger.logError(e.getMessage(), e) ;
                     }
                 }
 
@@ -234,20 +234,14 @@ public final class ChunkMapReader implements AbstractReader {
             //write the edited ditamap file to a temp file
             outputMapFile(inputFile.getAbsolutePath()+FILE_EXTENSION_CHUNK,root);
             if(!inputFile.delete()){
-                final Properties prop = new Properties();
-                prop.put("%1", inputFile.getPath());
-                prop.put("%2", inputFile.getAbsolutePath()+FILE_EXTENSION_CHUNK);
-                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop).toString());
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), inputFile.getAbsolutePath()+FILE_EXTENSION_CHUNK).toString());
             }
             if(!new File(inputFile.getAbsolutePath()+FILE_EXTENSION_CHUNK).renameTo(inputFile)){
-                final Properties prop = new Properties();
-                prop.put("%1", inputFile.getPath());
-                prop.put("%2", inputFile.getAbsolutePath()+FILE_EXTENSION_CHUNK);
-                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop).toString());
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), inputFile.getAbsolutePath()+FILE_EXTENSION_CHUNK).toString());
             }
 
         }catch (final Exception e){
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
 
     }
@@ -293,14 +287,14 @@ public final class ChunkMapReader implements AbstractReader {
             output.flush();
             output.close();
         }catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }finally{
             try{
                 if(output!=null){
                     output.close();
                 }
             }catch (final Exception e) {
-                logger.logException(e);
+                logger.logError(e.getMessage(), e) ;
             }
         }
     }
@@ -548,7 +542,7 @@ public final class ChunkMapReader implements AbstractReader {
             chunkParser.setup(changeTable, conflictTable, refFileSet, elem, separate, chunkByTopic, ditaext);
             chunkParser.write(filePath);
         }catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 

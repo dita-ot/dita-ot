@@ -103,14 +103,14 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
                 try {
                 	serializer.close();
                 } catch (final XMLStreamException e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
 				}
             }
             if (out != null) {
                 try {
                 	out.close();
                 } catch (final IOException e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
 				}
             }
         }
@@ -257,9 +257,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
                 }
             }//end for
             if (!foundIndexTerm && foundIndexsee && indexSeeRefTerm != null && !indexSeeRefTerm.equals("***")){
-                final Properties prop=new Properties();
-                prop.put("%1", indexSeeRefTerm.trim());
-                logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ050W", prop).toString());
+                logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ050W", indexSeeRefTerm.trim()).toString());
             }
         }
 

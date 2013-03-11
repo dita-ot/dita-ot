@@ -128,7 +128,7 @@ public final class MergeMapParser extends XMLFilterImpl {
             topicParser.getContentHandler().endDocument();
             output.write(topicBuffer.toByteArray());
         }catch(final Exception e){
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 
@@ -212,9 +212,7 @@ public final class MergeMapParser extends XMLFilterImpl {
                                 XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_FIRST_TOPIC_ID, firstTopicId);
                             } else {
                                 final String fileName = new File(dirPath, attValue).getAbsolutePath();
-                                final Properties prop = new Properties();
-                                prop.put("%1", fileName);
-                                logger.logError(MessageUtils.getInstance().getMessage("DOTX008E", prop).toString());
+                                logger.logError(MessageUtils.getInstance().getMessage("DOTX008E", fileName).toString());
                             }
                         }
                     }
@@ -250,16 +248,14 @@ public final class MergeMapParser extends XMLFilterImpl {
                             topicParser.parse(element, dirPath);
                         } else {
                             final String fileName = f.getAbsolutePath();
-                            final Properties prop = new Properties();
-                            prop.put("%1", fileName);
-                            logger.logError(MessageUtils.getInstance().getMessage("DOTX008E", prop).toString());
+                            logger.logError(MessageUtils.getInstance().getMessage("DOTX008E", fileName).toString());
                         }
                     }
 
                 }
             }
         }catch (final Exception e){
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
         
         getContentHandler().endDocument();

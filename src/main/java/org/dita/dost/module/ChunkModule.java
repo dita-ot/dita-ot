@@ -109,7 +109,7 @@ final class ChunkModule implements AbstractPipelineModule {
                 mapReader.read(mapFile);
             }
         }catch (final Exception e){
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
 
         final Map<String,String> changeTable = mapReader.getChangeTable();
@@ -146,7 +146,7 @@ final class ChunkModule implements AbstractPipelineModule {
                 topicRefWriter.write(tempDir.getAbsolutePath(), f, relativePath2fix);
             }
         }catch(final DITAOTException ex){
-            logger.logException(ex);
+            logger.logError(ex.getMessage(), ex) ;
         }
 
     }
@@ -162,7 +162,7 @@ final class ChunkModule implements AbstractPipelineModule {
         try{
             job = new Job(tempDir);
         }catch(final IOException ex){
-            logger.logException(ex);
+            logger.logError(ex.getMessage(), ex) ;
         }
 
         final Set<String> hrefTopics = job.getSet(HREF_TOPIC_LIST);
@@ -299,7 +299,7 @@ final class ChunkModule implements AbstractPipelineModule {
         try{
             job.write();
         }catch(final IOException ex){
-            logger.logException(ex);
+            logger.logError(ex.getMessage(), ex) ;
         }
     }
 

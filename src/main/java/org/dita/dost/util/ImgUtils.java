@@ -64,7 +64,7 @@ public final class ImgUtils {
 		try {
 			imagePath =new File(imgoutDir, filename).getCanonicalPath();
 		} catch (final IOException e) {
-			logger.logException(e);
+			logger.logError(e.getMessage(), e) ;
 		}			
 		return imagePath;
 	}
@@ -100,10 +100,7 @@ public final class ImgUtils {
             final BufferedImage img = ImageIO.read(imgInput);
             return img.getWidth();
         }catch (final Exception e){
-            final Properties prop = new Properties();
-            prop.put("%1", dirName+File.separatorChar+fileName);
-            logger.logError(MessageUtils.getInstance().getMessage("DOTJ023E", prop).toString());
-            logger.logException(e);
+            logger.logError(MessageUtils.getInstance().getMessage("DOTJ023E", dirName+File.separatorChar+fileName).toString(), e);
             return -1;
         }
     }
@@ -128,10 +125,7 @@ public final class ImgUtils {
             final BufferedImage img = ImageIO.read(imgInput);
             return img.getHeight();
         }catch (final Exception e){
-            final Properties prop = new Properties();
-            prop.put("%1", dirName+File.separatorChar+fileName);
-            logger.logError(MessageUtils.getInstance().getMessage("DOTJ023E", prop).toString());
-            logger.logException(e);
+            logger.logError(MessageUtils.getInstance().getMessage("DOTJ023E", dirName+File.separatorChar+fileName).toString(), e);
             return -1;
         }
     }
@@ -170,13 +164,13 @@ public final class ImgUtils {
             return ret.toString();
         }catch (final Exception e){
             logger.logError(MessageUtils.getInstance().getMessage("DOTJ023E").toString());
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
             return null;
         }finally{
             try{
                 binInput.close();
             }catch(final IOException ioe){
-                logger.logException(ioe);
+                logger.logError(ioe.getMessage(), ioe) ;
             }
         }
     }
@@ -207,17 +201,17 @@ public final class ImgUtils {
             return ret;
         } catch (final FileNotFoundException e) {
             logger.logError(MessageUtils.getInstance().getMessage("DOTJ023E").toString());
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
             return null;
         } catch (final IOException e) {
             logger.logError(MessageUtils.getInstance().getMessage("DOTJ023E").toString());
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
             return null;
         }finally{
             try{
                 file.close();
             }catch(final IOException ioe){
-                logger.logException(ioe);
+                logger.logError(ioe.getMessage(), ioe) ;
             }
         }
 

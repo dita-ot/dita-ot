@@ -104,26 +104,24 @@ public final class CoderefResolver extends AbstractXMLFilter {
                                 }
                             }
                         } catch (final Exception e) {
-                            logger.logException(new Exception("Failed to process code reference " + codeFile));
+                            logger.logError("Failed to process code reference " + codeFile);
                         } finally {
                             if (codeReader != null) {
                                 try {
                                     codeReader.close();
                                 } catch (final IOException e) {
-                                    logger.logException(e);
+                                    logger.logError(e.getMessage(), e) ;
                                 }
                             }
                         }
                     } else {
-                        final Properties prop = new Properties();
-                        prop.put("%1", hrefValue);
-                        logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ051E",prop).setLocation(atts).toString());
+                        logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ051E", hrefValue).setLocation(atts).toString());
                     }
                 } else {
                     //logger.logDebug("Code reference target not defined");
                 }
             } catch (final Exception e) {
-                logger.logException(e);
+                logger.logError(e.getMessage(), e) ;
             }
         } else {
             super.startElement(uri, localName, name, atts);
@@ -157,9 +155,7 @@ public final class CoderefResolver extends AbstractXMLFilter {
                 try {
                     c = Charset.forName(tokens[2].trim());
                 } catch (final RuntimeException e) {
-                    final Properties prop = new Properties();
-                    prop.put("%1", tokens[2].trim());
-                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ052E",prop).toString());
+                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ052E", tokens[2].trim()).toString());
                 }
             }
         }

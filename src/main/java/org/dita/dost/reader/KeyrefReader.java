@@ -133,7 +133,7 @@ public final class KeyrefReader extends AbstractXMLReader {
             final InputSource source = URIResolverAdapter.convertToInputSource(DitaURIResolverFactory.getURIResolver().resolve(filename, null));
             reader.parse(source);
         } catch (final Exception ex) {
-            logger.logException(ex);
+            logger.logError(ex.getMessage(), ex) ;
         } finally {
             keys = null;
         }

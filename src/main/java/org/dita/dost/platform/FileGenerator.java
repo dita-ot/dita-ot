@@ -105,13 +105,13 @@ final class FileGenerator extends DefaultHandler2 {
             output = new OutputStreamWriter(fileOutput, UTF8);
             reader.parse(fileName.toURI().toString());
         } catch (final Exception e){
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }finally {
             if (output != null) {
                 try {
                     output.close();
                 }catch (final Exception e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }
             }
         }
@@ -133,7 +133,7 @@ final class FileGenerator extends DefaultHandler2 {
         try{
             output.write(StringUtils.escapeXML(ch,start,length));
         }catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 
@@ -146,7 +146,7 @@ final class FileGenerator extends DefaultHandler2 {
                 output.write(">");
             }
         }catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 
@@ -155,7 +155,7 @@ final class FileGenerator extends DefaultHandler2 {
         try{
             output.write(ch,start,length);
         }catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 
@@ -226,7 +226,7 @@ final class FileGenerator extends DefaultHandler2 {
             }
         }catch(final Exception e){
             e.printStackTrace();
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 
@@ -236,7 +236,7 @@ final class FileGenerator extends DefaultHandler2 {
             output.flush();
             output.close();
         }catch(final Exception e){
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
 
     }
@@ -252,7 +252,7 @@ final class FileGenerator extends DefaultHandler2 {
             output.write(ch, start, length);
             output.write("-->");
         }catch(final Exception e){
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 
@@ -261,7 +261,7 @@ final class FileGenerator extends DefaultHandler2 {
         try{
             output.write(XML_HEAD);
         }catch(final Exception e){
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
 
     }

@@ -60,12 +60,8 @@ public final class ModuleFactory {
             return (AbstractPipelineModule) Class.forName(
                     module).newInstance();
         } catch (final Exception e) {
-            String msg = null;
-            final Properties params = new Properties();
-
-            params.put("%1", module);
-            final MessageBean msgBean=MessageUtils.getInstance().getMessage("DOTJ005F", params);
-            msg = msgBean.toString();
+            final MessageBean msgBean=MessageUtils.getInstance().getMessage("DOTJ005F", module);
+            final String msg = msgBean.toString();
 
             throw new DITAOTException(msgBean,e,msg);
         }
@@ -84,12 +80,8 @@ public final class ModuleFactory {
         try {
             return moduleClass.newInstance();
         } catch (final Exception e) {
-            String msg = null;
-            final Properties params = new Properties();
-
-            params.put("%1", moduleClass.getName());
-            final MessageBean msgBean=MessageUtils.getInstance().getMessage("DOTJ005F", params);
-            msg = msgBean.toString();
+            final MessageBean msgBean=MessageUtils.getInstance().getMessage("DOTJ005F", moduleClass.getName());
+            final String msg = msgBean.toString();
 
             throw new DITAOTException(msgBean,e,msg);
         }

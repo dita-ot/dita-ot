@@ -324,18 +324,9 @@ public class TestUtils {
                 throw new AssertionError("Error message was thrown: " + msg);
             }
         }
-        
-        public void logFatal(final String msg) {
-            throw new AssertionError("Fatal message was thrown: " + msg);
-        }
 
         public void logDebug(final String msg) {
             //System.out.println(msg);
-        }
-
-        public void logException(final Throwable t) {
-            t.printStackTrace();
-            throw new AssertionError("Throwable was thrown: " + t.getMessage());
         }
 
     }

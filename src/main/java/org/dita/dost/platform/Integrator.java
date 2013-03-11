@@ -108,14 +108,14 @@ public final class Integrator {
                 if (strict) {
                     throw new RuntimeException(e);
                 } else {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }
             } finally {
                 if (propertiesStream != null) {
                     try {
                         propertiesStream.close();
                     } catch (final IOException e) {
-                        logger.logException(e);
+                        logger.logError(e.getMessage(), e) ;
                     }
                 }
             }
@@ -233,14 +233,14 @@ public final class Integrator {
             if (strict) {
                 throw new RuntimeException("Failed to write configuration properties: " + e.getMessage(), e);
             } else {
-                logger.logException(e);
+                logger.logError(e.getMessage(), e) ;
             }
         } finally {
             if (out != null) {
                 try {
                     out.close();
                 } catch (final IOException e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }
             }
         }
@@ -334,10 +334,7 @@ public final class Integrator {
             }
             if (!anyPluginFound && requirement.getRequired()) {
                 // not contain any plugin required by current plugin
-                final Properties prop = new Properties();
-                prop.put("%1", requirement.toString());
-                prop.put("%2", currentPlugin);
-                final String msg = MessageUtils.getInstance().getMessage("DOTJ020W", prop).toString();
+                final String msg = MessageUtils.getInstance().getMessage("DOTJ020W", requirement.toString(), currentPlugin).toString();
                 if (strict) {
                     throw new RuntimeException(msg);
                 } else {
@@ -396,13 +393,13 @@ public final class Integrator {
             if (strict) {
                 throw ex;
             } else {
-                logger.logException(ex);
+                logger.logError(ex.getMessage(), ex) ;
             }
         } catch (final Exception e) {
             if (strict) {
                 throw new RuntimeException(e);
             } else {
-                logger.logException(e);
+                logger.logError(e.getMessage(), e) ;
             }
         }
     }

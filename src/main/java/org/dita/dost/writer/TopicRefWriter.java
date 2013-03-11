@@ -95,7 +95,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
                 output.write(StringUtils.getEntity(name));
             }
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
 
     }
@@ -121,7 +121,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
             output.write(LESS_THAN + QUESTION + pi
                     + QUESTION + GREATER_THAN);
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 
@@ -131,7 +131,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
         try {
             output.write(ch, start, length);
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 
@@ -146,7 +146,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
                     output.write(StringUtils.escapeXML(ch, start, length));
                 }
             } catch (final Exception e) {
-                logger.logException(e);
+                logger.logError(e.getMessage(), e) ;
             }
         }
     }
@@ -164,7 +164,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
         try {
             output.write(CDATA_END);
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 
@@ -173,7 +173,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
         try {
             output.flush();
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 
@@ -184,7 +184,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
             output.write(LESS_THAN + SLASH + qName
                     + GREATER_THAN);
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 
@@ -203,7 +203,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
             insideCDATA = true;
             output.write(CDATA_HEAD);
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 
@@ -214,7 +214,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
             output.write(XML_HEAD);
             output.write(LINE_SEPARATOR);
         }catch(final IOException io){
-            logger.logException(io);
+            logger.logError(io.getMessage(), io) ;
         }
     }
 
@@ -227,7 +227,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
             copyElementAttribute(atts);
             output.write(GREATER_THAN);
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }// try
 
     }
@@ -529,9 +529,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
             }
             inputFile = new File(file);
             if (!inputFile.exists()) {
-                final Properties prop = new Properties();
-                prop.put("%1", file);
-                logger.logError(MessageUtils.getInstance().getMessage("DOTX008E", prop).toString());
+                logger.logError(MessageUtils.getInstance().getMessage("DOTX008E", file).toString());
                 return;
             }
             outputFile = new File(file + FILE_EXTENSION_TEMP);
@@ -543,27 +541,19 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 
             output.close();
             if (!inputFile.delete()) {
-                final Properties prop = new Properties();
-                prop.put("%1", inputFile.getPath());
-                prop.put("%2", outputFile.getPath());
-                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop)
-                        .toString());
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
             }
             if (!outputFile.renameTo(inputFile)) {
-                final Properties prop = new Properties();
-                prop.put("%1", inputFile.getPath());
-                prop.put("%2", outputFile.getPath());
-                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop)
-                        .toString());
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
             }
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         } finally {
             if (fileOutput != null) {
                 try {
                     fileOutput.close();
                 } catch (final Exception e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }
             }
         }

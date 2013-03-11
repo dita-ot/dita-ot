@@ -70,7 +70,7 @@ public final class CheckLang extends Task {
         try{
             job = new Job(new File(tempdir));
         }catch(final IOException e){
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
 
         final LangParser parser = new LangParser();

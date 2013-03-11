@@ -156,7 +156,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                     output.write(StringUtils.escapeXML(ch,start, length));
                 }
             } catch (final Exception e) {
-                logger.logException(e);
+                logger.logError(e.getMessage(), e) ;
             }
         }
     }
@@ -200,7 +200,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                     try {
                         output.close();
                     } catch (final IOException e) {
-                        logger.logException(e);
+                        logger.logError(e.getMessage(), e) ;
                     }
                     output = fileWriterStack.pop();
                     outputFile = outputFileNameStack.pop();
@@ -208,7 +208,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                     stub = stubStack.pop();
                 }
             }catch (final Exception e) {
-                logger.logException(e);
+                logger.logError(e.getMessage(), e) ;
             }
         }
 
@@ -229,7 +229,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
             try {
                 output.write(ch, start, length);
             } catch (final Exception e) {
-                logger.logException(e);
+                logger.logError(e.getMessage(), e) ;
             }
         }
     }
@@ -244,7 +244,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                 output.write(LESS_THAN + QUESTION
                         + pi + QUESTION + GREATER_THAN);
             } catch (final Exception e) {
-                logger.logException(e);
+                logger.logError(e.getMessage(), e) ;
             }
         }
     }
@@ -258,7 +258,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
             try {
                 output.write(StringUtils.getEntity(name));
             } catch (final Exception e) {
-                logger.logException(e);
+                logger.logError(e.getMessage(), e) ;
             }
         }
     }
@@ -511,7 +511,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
             }
 
         }catch(final Exception e){
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
     
@@ -533,7 +533,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                     output.write(StringUtils.getEntity(name));
                 }
             } catch (final Exception e) {
-                logger.logException(e);
+                logger.logError(e.getMessage(), e) ;
             }
         }
     }
@@ -544,7 +544,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
         try{
             output.write(CDATA_END);
         }catch(final Exception e){
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
     @Override
@@ -553,7 +553,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
             insideCDATA = true;
             output.write(CDATA_HEAD);
         }catch(final Exception e){
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
     @Override
@@ -605,13 +605,13 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
             job.write();
         }catch (final Exception e){
             /*logger.logWarn(e.toString());*/
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         } finally {
             if (output != null) {
                 try {
                     output.close();
                 } catch (final IOException e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }
             }
         }
@@ -788,27 +788,21 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 
             }
         }catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }finally{
             try{
                 if(output!=null){
                     output.close();
                     if(dotchunk && !new File(currentParsingFile).delete()){
-                        final Properties prop = new Properties();
-                        prop.put("%1", currentParsingFile);
-                        prop.put("%2", outputFile);
-                        logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop).toString());
+                        logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", currentParsingFile, outputFile).toString());
                     }
                     if(dotchunk && !new File(outputFile).renameTo(new File(currentParsingFile))){
-                        final Properties prop = new Properties();
-                        prop.put("%1", currentParsingFile);
-                        prop.put("%2", outputFile);
-                        logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop).toString());
+                        logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", currentParsingFile, outputFile).toString());
                     }
                 }
                 output = tempOutput;
             }catch (final Exception ex) {
-                logger.logException(ex);
+                logger.logError(ex.getMessage(), ex) ;
             }
 
         }
@@ -1116,9 +1110,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                         final int end = parentResult.indexOf(">",insertpoint);
 
                         if(insertpoint==-1 || end==-1){
-                            final Properties prop=new Properties();
-                            prop.put("%1", hrefValue);
-                            logger.logError(MessageUtils.getInstance().getMessage("DOTJ033E",prop).toString());
+                            logger.logError(MessageUtils.getInstance().getMessage("DOTJ033E", hrefValue).toString());
                         } else {
                             if (ELEMENT_NAME_DITA.equalsIgnoreCase(parentResult.substring(insertpoint,end).trim())){
                                 insertpoint = parentResult.lastIndexOf("</",insertpoint);
@@ -1194,7 +1186,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                 }
             }
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
 
     }
@@ -1259,7 +1251,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
             reader.setContentHandler(parser);
             reader.parse(new File(absolutePathToFile).toURI().toString());
         }catch (final Exception e){
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
         return firstTopicId.toString();
 

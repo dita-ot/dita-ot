@@ -153,19 +153,13 @@ public final class IndexDitaProcessor {
 
         if (!childEntrys.isEmpty() && !seeEntry.isEmpty()) {
             for (final IndexEntry e: seeEntry) {
-                final Properties prop = new Properties();
-                prop.put("%1", e.getFormattedString());
-                prop.put("%2", textValue);
-                logger.logWarn(MessageUtils.getInstance().getMessage("DOTA067W", prop).toString());
+                logger.logWarn(MessageUtils.getInstance().getMessage("DOTA067W", e.getFormattedString(), textValue).toString());
             }
             seeEntry.clear();
         }
         if (!childEntrys.isEmpty() && !seeAlsoEntry.isEmpty()) {
             for (final IndexEntry e: seeAlsoEntry) {
-                final Properties prop = new Properties();
-                prop.put("%1", e.getFormattedString());
-                prop.put("%2", textValue);
-                logger.logWarn(MessageUtils.getInstance().getMessage("DOTA068W", prop).toString());
+                logger.logWarn(MessageUtils.getInstance().getMessage("DOTA068W", e.getFormattedString(), textValue).toString());
             }
             seeAlsoEntry.clear();
         }

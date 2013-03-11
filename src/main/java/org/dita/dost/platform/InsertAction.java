@@ -82,7 +82,7 @@ class InsertAction extends DefaultHandler2 implements IAction {
                 reader.parse(currentFile);
             }
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
         return retBuf.toString();
     }

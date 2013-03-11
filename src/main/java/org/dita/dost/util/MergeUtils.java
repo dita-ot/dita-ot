@@ -160,12 +160,12 @@ public final class MergeUtils {
                     Class.forName(RESOLVER_CLASS);
                     reader.setEntityResolver(CatalogUtils.getCatalogResolver());
                 } catch (final ClassNotFoundException e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }
             }
             reader.parse(new File(localDir, localPath).toURI().toString());
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
         return firstTopicId.toString();
 
