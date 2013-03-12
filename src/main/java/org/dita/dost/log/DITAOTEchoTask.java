@@ -62,22 +62,8 @@ public final class DITAOTEchoTask extends Echo {
      */
     @Override
     public void execute() throws BuildException {
-        final ArrayList<String> prop = new ArrayList<String>();
-        for (final Param p : params) {
-            if (!p.isValid()) {
-                throw new BuildException("Incomplete parameter");
-            }
-            final String ifProperty = p.getIf();
-            final String unlessProperty = p.getUnless();
-            if ((ifProperty == null || getProject().getProperties().containsKey(ifProperty))
-                    && (unlessProperty == null || !getProject().getProperties().containsKey(unlessProperty))) {
-                final int idx = Integer.parseInt(p.getName()) - 1;
-                prop.set(idx, p.getValue());
-            }
-        }
-        
         logger = new DITAOTAntLogger(getProject());
-        final MessageBean msgBean = MessageUtils.getInstance().getMessage(id, prop.toArray(new String[prop.size()]));
+        final MessageBean msgBean = MessageUtils.getInstance().getMessage(id, readParamValues());
         if (msgBean != null) {
             final String type = msgBean.getType();
             if(ERROR.equals(type)){
@@ -92,4 +78,32 @@ public final class DITAOTEchoTask extends Echo {
         }
     }
 
+    /**
+     * Read parameter values to an array.
+     * 
+     * @return parameter values where array index corresponds to parameter name
+     */
+    private String[] readParamValues() throws BuildException {
+        final ArrayList<String> prop = new ArrayList<String>();
+        for (final Param p : params) {
+            if (!p.isValid()) {
+                throw new BuildException("Incomplete parameter");
+            }
+            final String ifProperty = p.getIf();
+            final String unlessProperty = p.getUnless();
+            if ((ifProperty == null || getProject().getProperties().containsKey(ifProperty))
+                    && (unlessProperty == null || !getProject().getProperties().containsKey(unlessProperty))) {
+                final int idx = Integer.parseInt(p.getName()) - 1;
+                if (idx >= prop.size()) {
+                    prop.ensureCapacity(idx + 1);
+                    while (prop.size() < idx + 1) {
+                        prop.add(null);
+                    }
+                }
+                prop.set(idx, p.getValue());
+            }
+        }
+        return prop.toArray(new String[prop.size()]);
+    }
+    
 }
