@@ -5,8 +5,11 @@
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <project name="dita2troff">
 
+  <target name="dita2troff.init">
+    <property name="out.ext" value=".cli"/>
+  </target>
   <target name="dita2troff"
-    depends="build-init, preprocess, dita.topic.troff, dita.inner.topic.troff, dita.outer.topic.troff">
+    depends="dita2troff.init, build-init, preprocess, dita.topic.troff, dita.inner.topic.troff, dita.outer.topic.troff">
   </target>
 
   <target name="dita.topic.troff" unless="noTopic" if="old.transform"
@@ -30,11 +33,12 @@
     </move>
     <!-- step 2 -->
     <xslt basedir="${dita.temp.dir}" destdir="${output.dir}"
-      includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}" includes="${chunkedtopiclist}" extension=".cli"
+      includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}" includes="${chunkedtopiclist}" extension="${out.ext}"
       classpathref="dost.class.path"
       style="${dita.plugin.org.dita.troff.dir}/xsl/dita2troff-step2-shell.xsl">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
+      <param name="OUTFORMAT" expression="${troff.outformat}" if="troff.outformat"/>
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
@@ -66,15 +70,16 @@
 	<echo level="info">the ditmapoutputdir is ${dita.map.output.dir}</echo>
     <!-- step 2 -->
     <xslt basedir="${dita.temp.dir}" destdir="${output.dir}"
-      includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}" extension=".cli"
+      includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}" extension="${out.ext}"
       classpathref="dost.class.path"
       style="${dita.plugin.org.dita.troff.dir}/xsl/dita2troff-step2-shell.xsl">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" if="chunkedtopicfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
+      <param name="OUTFORMAT" expression="${troff.outformat}" if="troff.outformat"/>
       <mapper type="regexp" 
         from="^(${tempdirToinputmapdir.relative.value})(.*?)(\.(xml|dita))$$" 
-        to="\2\.cli"/>
+        to="\2${out.ext}"/>
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
@@ -99,11 +104,12 @@
     </move>
     <!-- step 2 -->
     <xslt basedir="${output.dir}" destdir="${output.dir}${file.separator}${uplevels}"
-      includesfile="${dita.temp.dir}${file.separator}${outditafilesfile}" extension=".cli"
+      includesfile="${dita.temp.dir}${file.separator}${outditafilesfile}" extension="${out.ext}"
       classpathref="dost.class.path"
       style="${dita.plugin.org.dita.troff.dir}/xsl/dita2troff-step2-shell.xsl">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
+      <param name="OUTFORMAT" expression="${troff.outformat}" if="troff.outformat"/>
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
