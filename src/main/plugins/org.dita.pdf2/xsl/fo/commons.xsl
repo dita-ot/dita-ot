@@ -234,6 +234,7 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:choose>
 
                     <xsl:apply-templates select="*[contains(@class,' topic/topic ')]"/>
+                    <xsl:call-template name="pullPrologIndexTerms.end-range"/>
                 </fo:block>
             </fo:flow>
         </fo:page-sequence>
@@ -288,6 +289,7 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:choose>
 
                     <xsl:apply-templates select="*[contains(@class,' topic/topic ')]"/>
+                    <xsl:call-template name="pullPrologIndexTerms.end-range"/>
                 </fo:block>
             </fo:flow>
         </fo:page-sequence>
@@ -344,6 +346,7 @@ See the accompanying license.txt file for applicable licenses.
               <xsl:apply-templates select="."/>
             </xsl:if>
           </xsl:for-each>
+          <xsl:call-template name="pullPrologIndexTerms.end-range"/>
         </fo:block>
       </fo:flow>
     </fo:page-sequence>
@@ -410,6 +413,7 @@ See the accompanying license.txt file for applicable licenses.
                             <xsl:apply-templates select="."/>
                         </xsl:if>
                     </xsl:for-each>
+                    <xsl:call-template name="pullPrologIndexTerms.end-range"/>
                 </fo:block>
             </fo:flow>
         </fo:page-sequence>
@@ -465,6 +469,7 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:choose>
 
                     <xsl:apply-templates select="*[contains(@class,' topic/topic ')]"/>
+                    <xsl:call-template name="pullPrologIndexTerms.end-range"/>
                 </fo:block>
             </fo:flow>
         </fo:page-sequence>
@@ -1395,7 +1400,14 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template name="pullPrologIndexTerms">
         <xsl:apply-templates select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/prolog ')]
-            //opentopic-index:index.entry[not(parent::opentopic-index:index.entry)]"/>
+            //opentopic-index:index.entry[not(parent::opentopic-index:index.entry) and not(@end-range = 'true')]"/>
+    </xsl:template>
+  
+    <xsl:template name="pullPrologIndexTerms.end-range">
+        <xsl:apply-templates select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/
+                                       *[contains(@class, ' topic/prolog ')]/
+                                         descendant::opentopic-index:index.entry[not(parent::opentopic-index:index.entry) and
+                                                                                 @end-range = 'true']"/>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/metadata ')]">

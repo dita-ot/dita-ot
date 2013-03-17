@@ -115,94 +115,81 @@ See the accompanying license.txt file for applicable licenses.
     <!--Skip index entries which shouldn't have a page numbering-->
     </xsl:template>
 
+  <xsl:template match="opentopic-index:index.entry[@start-range='true']" priority="10">
+      <!--Insert ranged index entry start marker-->
+      <xsl:variable name="selfIDs" select="descendant-or-self::opentopic-index:index.entry[last()]/opentopic-index:refID/@value"/>
+      <xsl:for-each select="$selfIDs">
+          <xsl:variable name="selfID" select="."/>
+          <xsl:variable name="followingMarkers" select="following::opentopic-index:index.entry[descendant-or-self::opentopic-index:index.entry[last()]/opentopic-index:refID/@value = $selfID]"/>
+          <xsl:variable name="followingMarker" select="$followingMarkers[@end-range='true'][1]"/>
+          <xsl:variable name="followingStartMarker" select="$followingMarkers[@start-range='true'][1]"/>
+          <xsl:choose>
+              <xsl:when test="not($followingMarker)and empty(ancestor-or-self::*[contains(@class, ' topic/prolog ')])">
+                <xsl:call-template name="output-message">
+                  <xsl:with-param name="msgnum">001</xsl:with-param>
+                  <xsl:with-param name="msgsev">W</xsl:with-param>
+                  <xsl:with-param name="msgparams">%1=<xsl:value-of select="$selfID"/></xsl:with-param>
+                </xsl:call-template>
+               </xsl:when>
+               <xsl:otherwise>
+                  <xsl:choose>
+                      <xsl:when test="$followingStartMarker and $followingStartMarker[following::*[generate-id() = generate-id($followingMarker)]]">
+                        <xsl:call-template name="output-message">
+                          <xsl:with-param name="msgnum">002</xsl:with-param>
+                          <xsl:with-param name="msgsev">W</xsl:with-param>
+                          <xsl:with-param name="msgparams">%1=<xsl:value-of select="$selfID"/></xsl:with-param>
+                        </xsl:call-template>
+                      </xsl:when>
+                      <xsl:otherwise>
+                          <fo:index-range-begin id="{$selfID}_{generate-id()}" index-key="{$selfID}" />
+                      </xsl:otherwise>
+                  </xsl:choose>
+              </xsl:otherwise>
+          </xsl:choose>
+      </xsl:for-each>
+      <xsl:apply-templates/>
+  </xsl:template>
+  <xsl:template match="opentopic-index:index.entry[@end-range='true']" priority="10">
+      <!--Insert ranged index entry end marker-->
+      <xsl:variable name="selfIDs" select="descendant-or-self::opentopic-index:index.entry[last()]/opentopic-index:refID/@value"/>
+      <xsl:for-each select="$selfIDs">
+          <xsl:variable name="selfID" select="."/>
+          <xsl:variable name="precMarkers" select="preceding::opentopic-index:index.entry[(@start-range or @end-range) and descendant-or-self::opentopic-index:index.entry[last()]/opentopic-index:refID/@value = $selfID]"/>
+          <xsl:variable name="precMarker" select="$precMarkers[@start-range='true'][last()]"/>
+          <xsl:variable name="precEndMarker" select="$precMarkers[@end-range='true'][last()]"/>
+          <xsl:choose>
+              <xsl:when test="not($precMarker)">
+                <xsl:call-template name="output-message">
+                  <xsl:with-param name="msgnum">007</xsl:with-param>
+                  <xsl:with-param name="msgsev">W</xsl:with-param>
+                  <xsl:with-param name="msgparams">%1=<xsl:value-of select="$selfID"/></xsl:with-param>
+                </xsl:call-template>
+              </xsl:when>
+              <xsl:otherwise>
+                  <xsl:choose>
+                      <xsl:when test="$precEndMarker and $precEndMarker[preceding::*[generate-id() = generate-id($precMarker)]]">
+                        <xsl:call-template name="output-message">
+                          <xsl:with-param name="msgnum">003</xsl:with-param>
+                          <xsl:with-param name="msgsev">W</xsl:with-param>
+                          <xsl:with-param name="msgparams">%1=<xsl:value-of select="$selfID"/></xsl:with-param>
+                        </xsl:call-template>
+                      </xsl:when>
+                      <xsl:otherwise>
+                          <xsl:for-each select="$precMarker//opentopic-index:refID[@value = $selfID]/@value">
+                              <fo:index-range-end ref-id="{$selfID}_{generate-id()}" />
+                          </xsl:for-each>
+                      </xsl:otherwise>
+                  </xsl:choose>
+              </xsl:otherwise>
+          </xsl:choose>
+      </xsl:for-each>
+      <xsl:apply-templates/>
+  </xsl:template>
   <xsl:template match="opentopic-index:index.entry">
-    <xsl:if test="opentopic-index:refID/@value">
-        <xsl:choose>
-            <xsl:when test="self::opentopic-index:index.entry[@start-range='true']">
-                <!--Insert ranged index entry start marker-->
-                <xsl:variable name="selfIDs" select="descendant-or-self::opentopic-index:index.entry[last()]/opentopic-index:refID/@value"/>
-                <xsl:for-each select="$selfIDs">
-                    <xsl:variable name="selfID" select="."/>
-                    <xsl:variable name="followingMarkers" select="following::opentopic-index:index.entry[descendant-or-self::opentopic-index:index.entry[last()]/opentopic-index:refID/@value = $selfID]"/>
-                    <xsl:variable name="followingMarker" select="$followingMarkers[@end-range='true'][1]"/>
-                    <xsl:variable name="followingStartMarker" select="$followingMarkers[@start-range='true'][1]"/>
-                    <xsl:choose>
-                        <xsl:when test="not($followingMarker)">
-                          <xsl:call-template name="output-message">
-                            <xsl:with-param name="msgnum">001</xsl:with-param>
-                            <xsl:with-param name="msgsev">W</xsl:with-param>
-                            <xsl:with-param name="msgparams">%1=<xsl:value-of select="$selfID"/></xsl:with-param>
-                          </xsl:call-template>
-                         </xsl:when>
-                         <xsl:otherwise>
-                            <xsl:choose>
-                                <xsl:when test="$followingStartMarker and $followingStartMarker[following::*[generate-id() = generate-id($followingMarker)]]">
-                                  <xsl:call-template name="output-message">
-                                    <xsl:with-param name="msgnum">002</xsl:with-param>
-                                    <xsl:with-param name="msgsev">W</xsl:with-param>
-                                    <xsl:with-param name="msgparams">%1=<xsl:value-of select="$selfID"/></xsl:with-param>
-                                  </xsl:call-template>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <fo:index-range-begin id="{$selfID}_{generate-id()}" index-key="{$selfID}" />
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:for-each>
-            </xsl:when>
-            <xsl:when test="self::opentopic-index:index.entry[@end-range='true']">
-                <!--Insert ranged index entry end marker-->
-                <xsl:variable name="selfIDs" select="descendant-or-self::opentopic-index:index.entry[last()]/opentopic-index:refID/@value"/>
-                <xsl:for-each select="$selfIDs">
-                    <xsl:variable name="selfID" select="."/>
-                    <xsl:variable name="precMarkers" select="preceding::opentopic-index:index.entry[(@start-range or @end-range) and descendant-or-self::opentopic-index:index.entry[last()]/opentopic-index:refID/@value = $selfID]"/>
-                    <xsl:variable name="precMarker" select="$precMarkers[@start-range='true'][last()]"/>
-                    <xsl:variable name="precEndMarker" select="$precMarkers[@end-range='true'][last()]"/>
-                    <xsl:choose>
-                        <xsl:when test="not($precMarker)">
-                          <xsl:call-template name="output-message">
-                            <xsl:with-param name="msgnum">007</xsl:with-param>
-                            <xsl:with-param name="msgsev">W</xsl:with-param>
-                            <xsl:with-param name="msgparams">%1=<xsl:value-of select="$selfID"/></xsl:with-param>
-                          </xsl:call-template>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:choose>
-                                <xsl:when test="$precEndMarker and $precEndMarker[preceding::*[generate-id() = generate-id($precMarker)]]">
-                                  <xsl:call-template name="output-message">
-                                    <xsl:with-param name="msgnum">003</xsl:with-param>
-                                    <xsl:with-param name="msgsev">W</xsl:with-param>
-                                    <xsl:with-param name="msgparams">%1=<xsl:value-of select="$selfID"/></xsl:with-param>
-                                  </xsl:call-template>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:for-each select="$precMarker//opentopic-index:refID[@value = $selfID]/@value">
-                                        <fo:index-range-end ref-id="{$selfID}_{generate-id()}" />
-                                    </xsl:for-each>
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:for-each>
-            </xsl:when>
-        </xsl:choose>
-        <!--Insert simple index entry marker-->
-        <xsl:choose>
-            <!--xsl:when test="opentopic-index:index.entry"/-->
-            <xsl:when test="opentopic-index:index.entry">
-                <xsl:for-each select="child::opentopic-index:refID[last()]">
-                    <fo:inline index-key="{@value}"/>
-                </xsl:for-each>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:for-each select="child::opentopic-index:refID[last()]">
-                    <fo:inline index-key="{@value}"/>
-                </xsl:for-each>
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:apply-templates/>
-    </xsl:if>
+      <xsl:for-each select="opentopic-index:refID[last()]">
+          <fo:inline index-key="{@value}"/>
+      </xsl:for-each>
+      <xsl:apply-templates/>
   </xsl:template>
 
     <xsl:template match="opentopic-index:*"/>
