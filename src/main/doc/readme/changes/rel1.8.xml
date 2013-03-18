@@ -79,6 +79,7 @@
           <li><codeph>antArgsIncludeRelatedLinks</codeph></li>
           <li><codeph>disableRelatedLinks</codeph></li>
         </ul>
+        <p>A call to a named template <codeph>pullPrologIndexTerms.end-range</codeph> has been added to <codeph>processTopic*</codeph> templates to handle topic wide index ranges.</p>
       </section>
       <section>
         <title>Legacy PDF</title>
