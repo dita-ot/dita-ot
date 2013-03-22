@@ -9,6 +9,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -31,12 +32,16 @@ public final class JobTest {
         tempDir = TestUtils.createTempDir(JobTest.class);
         final Job j = new Job(tempDir);
         j.setProperty("user.input.dir", "/foo/bar");
-        j.setProperty(COPYTO_TARGET_TO_SOURCE_MAP_LIST, "foo=bar,baz=qux");
-        j.setProperty(SUBJEC_SCHEME_LIST, "foo,bar");
+        final Map<String, String> m = new HashMap<String, String>();
+        m.put("foo", "bar");
+        m.put("baz", "qux");
+        j.setMap(COPYTO_TARGET_TO_SOURCE_MAP_LIST, m);
+        j.setSet(SUBJEC_SCHEME_LIST, new HashSet<String>(Arrays.asList("foo","bar")));
         j.setProperty(INPUT_DITAMAP, "foo");
-        j.setProperty(FULL_DITAMAP_TOPIC_LIST, "foo1,bar1");
-        j.setProperty(CONREF_TARGET_LIST, "foo2,bar2");
-        j.setProperty(COPYTO_SOURCE_LIST, "foo3,bar3");
+        j.setSet(FULL_DITA_TOPIC_LIST, new HashSet<String>(Arrays.asList("foo1", "bar1")));
+        j.setSet(FULL_DITAMAP_LIST, new HashSet<String>(Arrays.asList("foo1", "bar1")));
+        j.setSet(CONREF_TARGET_LIST, new HashSet<String>(Arrays.asList("foo2", "bar2")));
+        j.setSet(COPYTO_SOURCE_LIST, new HashSet<String>(Arrays.asList("foo3", "bar3")));
         j.write();
         job = new Job(tempDir);
     }
