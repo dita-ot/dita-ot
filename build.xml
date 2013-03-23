@@ -389,6 +389,8 @@
       <property name="base.temp.dir" location="${work.dir}"/>
       <property name="preprocess.copy-generated-files.skip" value="true"/>
       <property name="args.gen.task.lbl" value="YES"/>
+      <property name="args.css" value="dita-ot-doc.css"/>
+      <property name="args.cssroot" value="${doc.dir}/resource"/>
     </ant>
     <!--
     <ant antfile="${src.dir}/build.xml">
@@ -568,9 +570,12 @@
       <property name="args.input" location="${doc.dir}/userguide.ditamap"/>
       <property name="output.dir" location="${basedir}/target/site/${version-id}"/>
       <property name="transtype" value="tocjs"/>
+      <property name="args.css" value="dita-ot-doc.css"/>
       <property name="args.csspath" value="css"/>
+      <property name="args.cssroot" value="${doc.dir}/resource"/>
       <property name="base.temp.dir" location="${work.dir}"/>
       <property name="args.hide.parent.link" value="yes"/>
+      <property name="args.gen.task.lbl" value="YES"/>
     </ant>
     <!--echoxml file="${basedir}/target/site/${otversion}/header.html">
       <html>
