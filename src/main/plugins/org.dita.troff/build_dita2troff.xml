@@ -7,6 +7,8 @@
 
   <target name="dita2troff.init">
     <property name="out.ext" value=".cli"/>
+    <property name="troff.step1.xsl" location="${dita.plugin.org.dita.troff.dir}/xsl/dita2troff-step1-shell.xsl"/>
+    <property name="troff.step2.xsl" location="${dita.plugin.org.dita.troff.dir}/xsl/dita2troff-step2-shell.xsl"/>
   </target>
   <target name="dita2troff"
     depends="dita2troff.init, build-init, preprocess, dita.topic.troff, dita.inner.topic.troff, dita.outer.topic.troff">
@@ -20,7 +22,7 @@
       destdir="${dita.temp.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
       extension="${dita.ext}"
       classpathref="dost.class.path"
-      style="${dita.plugin.org.dita.troff.dir}/xsl/dita2troff-step1-shell.xsl">
+      style="${troff.step1.xsl}">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" if="chunkedtopicfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
@@ -35,7 +37,7 @@
     <xslt basedir="${dita.temp.dir}" destdir="${output.dir}"
       includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}" includes="${chunkedtopiclist}" extension="${out.ext}"
       classpathref="dost.class.path"
-      style="${dita.plugin.org.dita.troff.dir}/xsl/dita2troff-step2-shell.xsl">
+      style="${troff.step2.xsl}">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="OUTFORMAT" expression="${troff.outformat}" if="troff.outformat"/>
@@ -52,7 +54,7 @@
       destdir="${dita.temp.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}" 
       extension="${dita.ext}"
       classpathref="dost.class.path"
-      style="${dita.plugin.org.dita.troff.dir}/xsl/dita2troff-step1-shell.xsl">
+      style="${troff.step1.xsl}">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" if="chunkedtopicfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
@@ -72,7 +74,7 @@
     <xslt basedir="${dita.temp.dir}" destdir="${output.dir}"
       includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}" extension="${out.ext}"
       classpathref="dost.class.path"
-      style="${dita.plugin.org.dita.troff.dir}/xsl/dita2troff-step2-shell.xsl">
+      style="${troff.step2.xsl}">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" if="chunkedtopicfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
@@ -92,7 +94,7 @@
       destdir="${dita.temp.dir}" includesfile="${dita.temp.dir}${file.separator}${outditafilesfile}"
       extension="${dita.ext}"
       classpathref="dost.class.path"
-      style="${dita.plugin.org.dita.troff.dir}/xsl/dita2troff-step1-shell.xsl">
+      style="${troff.step1.xsl}">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <mapper type="glob" from="*" to="*.tr1" />
@@ -106,7 +108,7 @@
     <xslt basedir="${output.dir}" destdir="${output.dir}${file.separator}${uplevels}"
       includesfile="${dita.temp.dir}${file.separator}${outditafilesfile}" extension="${out.ext}"
       classpathref="dost.class.path"
-      style="${dita.plugin.org.dita.troff.dir}/xsl/dita2troff-step2-shell.xsl">
+      style="${troff.step2.xsl}">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="OUTFORMAT" expression="${troff.outformat}" if="troff.outformat"/>

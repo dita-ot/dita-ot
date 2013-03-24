@@ -52,6 +52,29 @@ public final class Job {
     private static final String ELEMENT_STRING = "string";
     private static final String ATTRIBUTE_NAME = "name";
     private static final String ELEMENT_PROPERTY = "property";
+
+    private static final String ELEMENT_FILES = "files";
+    private static final String ELEMENT_FILE = "file";
+    private static final String ATTRIBUTE_PATH = "path";
+    private static final String ATTRIBUTE_FORMAT = "format";
+    private static final String ATTRIBUTE_CHUNKED = "chunked";
+    private static final String ATTRIBUTE_HAS_CONREF = "has-conref";
+    private static final String ATTRIBUTE_HAS_KEYREF = "has-keyref";
+    private static final String ATTRIBUTE_HAS_CODEREF = "has-coderef";
+    private static final String ATTRIBUTE_RESOURCE_ONLY = "resource-only";
+    private static final String ATTRIBUTE_TARGET = "target";
+    private static final String ATTRIBUTE_CONREF_TARGET = "conref-target";
+    private static final String ATTRIBUTE_NON_CONREF_TARGET = "non-conref-target";
+    private static final String ATTRIBUTE_CONREF_PUSH = "conrefpush";
+    private static final String ATTRIBUTE_SUBJECT_SCHEME = "subjectscheme";
+    private static final String ATTRIBUTE_HAS_LINK = "has-link";
+    private static final String ATTRIBUTE_COPYTO_SOURCE_LIST = "copy-to-source";
+    private static final String ATTRIBUTE_OUT_DITA_FILES_LIST = "out-dita";
+    private static final String ATTRIBUTE_CHUNKED_DITAMAP_LIST = "chunked-ditamap";
+    private static final String ATTRIBUTE_FLAG_IMAGE_LIST = "flag-image";
+    private static final String ATTRIBUTE_SUBSIDIARY_TARGET_LIST = "subtarget";
+    private static final String ATTRIBUTE_CHUNK_TOPIC_LIST = "skip-chunk";
+    private static final String ATTRIBUTE_ACTIVE = "active";
     
     /** File name for chuncked dita map list file */
     public static final String CHUNKED_DITAMAP_LIST_FILE = "chunkedditamap.list";
@@ -114,6 +137,7 @@ public final class Job {
     
     private final Map<String, Object> prop;
     private final File tempDir;
+    private final Map<String, FileInfo> files = new HashMap<String, FileInfo>();
 
     /**
      * Create new job configuration instance. Initialise by reading temporary configuration files.
@@ -142,7 +166,7 @@ public final class Job {
         	InputStream in = null;
             try {
                 final XMLReader parser = StringUtils.getXMLReader();
-                parser.setContentHandler(new JobHandler(prop));
+                parser.setContentHandler(new JobHandler(prop, files));
                 in = new FileInputStream(jobFile);
                 parser.parse(new InputSource(in));
             } catch (final SAXException e) {
@@ -200,14 +224,16 @@ public final class Job {
     private final static class JobHandler extends DefaultHandler {
 
         private final Map<String, Object> prop;
+        private final Map<String, FileInfo> files;
         private StringBuilder buf;
         private String name;
         private String key;
         private Set<String> set;
         private Map<String, String> map;
         
-        JobHandler(final Map<String, Object> prop) {
+        JobHandler(final Map<String, Object> prop, final Map<String, FileInfo> files) {
             this.prop = prop;
+            this.files = files;
         }
         
         @Override
@@ -237,6 +263,29 @@ public final class Job {
                 map = new HashMap<String, String>();
             } else if (n.equals(ELEMENT_ENTRY)) {
                 key = atts.getValue(ATTRIBUTE_KEY);
+            } else if (n.equals(ELEMENT_FILE)) {
+                final String path = atts.getValue(ATTRIBUTE_PATH);
+                final FileInfo i = new FileInfo(path);
+                i.format = atts.getValue(ATTRIBUTE_FORMAT);
+                i.isChunked = Boolean.parseBoolean(atts.getValue(ATTRIBUTE_CHUNKED));
+                i.hasLink = Boolean.parseBoolean(atts.getValue(ATTRIBUTE_HAS_LINK));
+                i.hasConref = Boolean.parseBoolean(atts.getValue(ATTRIBUTE_HAS_CONREF));
+                i.hasKeyref = Boolean.parseBoolean(atts.getValue(ATTRIBUTE_HAS_KEYREF));
+                i.hasCoderef = Boolean.parseBoolean(atts.getValue(ATTRIBUTE_HAS_CODEREF));
+                i.isResourceOnly = Boolean.parseBoolean(atts.getValue(ATTRIBUTE_RESOURCE_ONLY));
+                i.isTarget = Boolean.parseBoolean(atts.getValue(ATTRIBUTE_TARGET));
+                i.isConrefTarget = Boolean.parseBoolean(atts.getValue(ATTRIBUTE_CONREF_TARGET));
+                i.isNonConrefTarget = Boolean.parseBoolean(atts.getValue(ATTRIBUTE_NON_CONREF_TARGET));
+                i.isConrefPush = Boolean.parseBoolean(atts.getValue(ATTRIBUTE_CONREF_PUSH));
+                i.isSubjectScheme = Boolean.parseBoolean(atts.getValue(ATTRIBUTE_SUBJECT_SCHEME));
+                i.isCopyToSource = Boolean.parseBoolean(atts.getValue(ATTRIBUTE_COPYTO_SOURCE_LIST));
+                i.isActive = Boolean.parseBoolean(atts.getValue(ATTRIBUTE_ACTIVE));
+                i.isOutDita = Boolean.parseBoolean(atts.getValue(ATTRIBUTE_OUT_DITA_FILES_LIST));
+                i.isChunkedDitaMap = Boolean.parseBoolean(atts.getValue(ATTRIBUTE_CHUNKED_DITAMAP_LIST));
+                i.isFlagImage = Boolean.parseBoolean(atts.getValue(ATTRIBUTE_FLAG_IMAGE_LIST));
+                i.isSubtarget = Boolean.parseBoolean(atts.getValue(ATTRIBUTE_SUBSIDIARY_TARGET_LIST));
+                i.isSkipChunk = Boolean.parseBoolean(atts.getValue(ATTRIBUTE_CHUNK_TOPIC_LIST));                
+                files.put(path, i);
             }
         }
         
@@ -315,6 +364,70 @@ public final class Job {
                 }
                 out.writeEndElement(); //property
             }
+            out.writeStartElement(ELEMENT_FILES);
+            for (final FileInfo i: files.values()) {
+                out.writeStartElement(ELEMENT_FILE);
+                out.writeAttribute(ATTRIBUTE_PATH, i.file);
+                if (i.format != null) {
+                	out.writeAttribute(ATTRIBUTE_FORMAT, i.format);
+                }
+                if (i.isChunked) {
+                    out.writeAttribute(ATTRIBUTE_CHUNKED, Boolean.toString(i.isChunked));
+                }
+                if (i.hasLink) {
+                    out.writeAttribute(ATTRIBUTE_HAS_LINK, Boolean.toString(i.hasLink));    
+                }
+                if (i.hasConref) {
+                    out.writeAttribute(ATTRIBUTE_HAS_CONREF, Boolean.toString(i.hasConref));    
+                }
+                if (i.hasKeyref) {
+                    out.writeAttribute(ATTRIBUTE_HAS_KEYREF, Boolean.toString(i.hasKeyref));    
+                }
+                if (i.hasCoderef) {
+                    out.writeAttribute(ATTRIBUTE_HAS_CODEREF, Boolean.toString(i.hasCoderef));    
+                }
+                if (i.isResourceOnly) {
+                    out.writeAttribute(ATTRIBUTE_RESOURCE_ONLY, Boolean.toString(i.isResourceOnly));    
+                }
+                if (i.isTarget) {
+                    out.writeAttribute(ATTRIBUTE_TARGET, Boolean.toString(i.isTarget));    
+                }
+                if (i.isConrefTarget) {
+                    out.writeAttribute(ATTRIBUTE_CONREF_TARGET, Boolean.toString(i.isConrefTarget));    
+                }
+                if (i.isNonConrefTarget) {
+                    out.writeAttribute(ATTRIBUTE_NON_CONREF_TARGET, Boolean.toString(i.isNonConrefTarget));    
+                }
+                if (i.isConrefPush) {
+                    out.writeAttribute(ATTRIBUTE_CONREF_PUSH, Boolean.toString(i.isConrefPush));    
+                }
+                if (i.isSubjectScheme) {
+                    out.writeAttribute(ATTRIBUTE_SUBJECT_SCHEME, Boolean.toString(i.isSubjectScheme));
+                }
+                if (i.isCopyToSource) {
+                    out.writeAttribute(ATTRIBUTE_COPYTO_SOURCE_LIST, Boolean.toString(i.isCopyToSource));
+                }
+                if (i.isOutDita) {
+                    out.writeAttribute(ATTRIBUTE_OUT_DITA_FILES_LIST, Boolean.toString(i.isOutDita));
+                }
+                if (i.isChunkedDitaMap) {
+                    out.writeAttribute(ATTRIBUTE_CHUNKED_DITAMAP_LIST, Boolean.toString(i.isChunkedDitaMap));
+                }
+                if (i.isFlagImage) {
+                    out.writeAttribute(ATTRIBUTE_FLAG_IMAGE_LIST, Boolean.toString(i.isFlagImage));
+                }
+                if (i.isSubtarget) {
+                    out.writeAttribute(ATTRIBUTE_SUBSIDIARY_TARGET_LIST, Boolean.toString(i.isSubtarget));
+                }
+                if (i.isSkipChunk) {
+                    out.writeAttribute(ATTRIBUTE_CHUNK_TOPIC_LIST, Boolean.toString(i.isSkipChunk));
+                }
+                if (i.isActive) {
+                    out.writeAttribute(ATTRIBUTE_ACTIVE, Boolean.toString(i.isActive));
+                }
+                out.writeEndElement(); //file
+            }
+            out.writeEndElement(); //files
             out.writeEndElement(); //job
             out.writeEndDocument();
         } catch (final IOException e) {
@@ -382,7 +495,7 @@ public final class Job {
             }
         }
     }
-        
+    
     /**
      * Searches for the property with the specified key in this property list.
      * 
@@ -426,14 +539,190 @@ public final class Job {
      * @return the value in this property list with the specified key value, empty set if not found
      */
     public Set<String> getSet(final String key) {
-        final Object value = prop.get(key);
-        if (value == null) {
-            return Collections.emptySet();
-        } else if (value instanceof String) { // migration support
-            return StringUtils.restoreSet((String) value);
+        if (key.equals(FULL_DITAMAP_TOPIC_LIST)) {
+            final Set<String> ret = new HashSet<String>();
+            ret.addAll(getSet(FULL_DITA_TOPIC_LIST)); 
+            ret.addAll(getSet(FULL_DITAMAP_LIST));
+            return ret;
+        } else if (key.equals(FULL_DITA_TOPIC_LIST)) {
+            final Set<String> ret = new HashSet<String>();
+            for (final FileInfo f: files.values()) {
+                if (f.isActive && "dita".equals(f.format)) {
+                    ret.add(f.file);
+                }
+            }
+            return ret;
+        } else if (key.equals(FULL_DITAMAP_LIST)) {
+            final Set<String> ret = new HashSet<String>();
+            for (final FileInfo f: files.values()) {
+                if (f.isActive && "ditamap".equals(f.format)) {
+                    ret.add(f.file);
+                }
+            }
+            return ret;
+        } else if (key.equals(HTML_LIST)) {
+            return getFilesByFormat("html");
+        } else if (key.equals(IMAGE_LIST)) {
+            return getFilesByFormat("image");
+        } else if (key.equals(CHUNKED_TOPIC_LIST)) {
+            final Set<String> ret = new HashSet<String>();
+            for (final FileInfo f: files.values()) {
+                if (f.isChunked) {
+                    ret.add(f.file);
+                }
+            }
+            return ret;
+        } else if (key.equals(CONREF_LIST)) {
+            final Set<String> ret = new HashSet<String>();
+            for (final FileInfo f: files.values()) {
+                if (f.hasConref) {
+                    ret.add(f.file);
+                }
+            }
+            return ret;
+        } else if (key.equals(HREF_DITA_TOPIC_LIST)) {
+            final Set<String> ret = new HashSet<String>();
+            for (final FileInfo f: files.values()) {
+                if (f.hasLink) {
+                    ret.add(f.file);
+                }
+            }
+            return ret;
+        } else if (key.equals(KEYREF_LIST)) {
+            final Set<String> ret = new HashSet<String>();
+            for (final FileInfo f: files.values()) {
+                if (f.hasKeyref) {
+                    ret.add(f.file);
+                }
+            }
+            return ret;
+        } else if (key.equals(CODEREF_LIST)) {
+            final Set<String> ret = new HashSet<String>();
+            for (final FileInfo f: files.values()) {
+                if (f.hasCoderef) {
+                    ret.add(f.file);
+                }
+            }
+            return ret;
+        } else if (key.equals(RESOURCE_ONLY_LIST)) {
+            final Set<String> ret = new HashSet<String>();
+            for (final FileInfo f: files.values()) {
+                if (f.isResourceOnly) {
+                    ret.add(f.file);
+                }
+            }
+            return ret;
+        } else if (key.equals(HREF_TARGET_LIST)) {
+            final Set<String> ret = new HashSet<String>();
+            for (final FileInfo f: files.values()) {
+                if (f.isTarget) {
+                    ret.add(f.file);
+                }
+            }
+            return ret;
+        } else if (key.equals(HREF_TOPIC_LIST)) {
+            final Set<String> ret = new HashSet<String>();
+            for (final FileInfo f: files.values()) {
+                if (f.isNonConrefTarget) {
+                    ret.add(f.file);
+                }
+            }
+            return ret;
+        } else if (key.equals(CONREF_TARGET_LIST)) {
+            final Set<String> ret = new HashSet<String>();
+            for (final FileInfo f: files.values()) {
+                if (f.isConrefTarget) {
+                    ret.add(f.file);
+                }
+            }
+            return ret;    
+        } else if (key.equals(CONREF_PUSH_LIST)) {
+            final Set<String> ret = new HashSet<String>();
+            for (final FileInfo f: files.values()) {
+                if (f.isConrefPush) {
+                    ret.add(f.file);
+                }
+            }
+            return ret;
+        } else if (key.equals(SUBJEC_SCHEME_LIST)) {
+            final Set<String> ret = new HashSet<String>();
+            for (final FileInfo f: files.values()) {
+                if (f.isSubjectScheme) {
+                    ret.add(f.file);
+                }
+            }
+            return ret;
+        } else if (key.equals(COPYTO_SOURCE_LIST)) {
+            final Set<String> ret = new HashSet<String>();
+            for (final FileInfo f: files.values()) {
+                if (f.isCopyToSource) {
+                    ret.add(f.file);
+                }
+            }
+            return ret;
+        } else if (key.equals(OUT_DITA_FILES_LIST)) {
+            final Set<String> ret = new HashSet<String>();
+            for (final FileInfo f: files.values()) {
+                if (f.isOutDita) {
+                    ret.add(f.file);
+                }
+            }
+            return ret;
+        } else if (key.equals(CHUNKED_DITAMAP_LIST)) {
+            final Set<String> ret = new HashSet<String>();
+            for (final FileInfo f: files.values()) {
+                if (f.isChunkedDitaMap) {
+                    ret.add(f.file);
+                }
+            }
+            return ret;
+        } else if (key.equals(FLAG_IMAGE_LIST)) {
+            final Set<String> ret = new HashSet<String>();
+            for (final FileInfo f: files.values()) {
+                if (f.isFlagImage) {
+                    ret.add(f.file);
+                }
+            }
+            return ret;
+        } else if (key.equals(SUBSIDIARY_TARGET_LIST)) {
+            final Set<String> ret = new HashSet<String>();
+            for (final FileInfo f: files.values()) {
+                if (f.isSubtarget) {
+                    ret.add(f.file);
+                }
+            }
+            return ret;
+        } else if (key.equals(CHUNK_TOPIC_LIST)) {
+            final Set<String> ret = new HashSet<String>();
+            for (final FileInfo f: files.values()) {
+                if (f.isSkipChunk) {
+                    ret.add(f.file);
+                }
+            }
+            return ret;            
         } else {
-            return (Set<String>) value;
+            final Object value = prop.get(key);
+            if (value == null) {
+                return Collections.emptySet();
+            } else if (value instanceof String) { // migration support
+                return StringUtils.restoreSet((String) value);
+            } else {
+                return (Set<String>) value;
+            }
         }
+    }
+    
+    private Set<String> getFilesByFormat(final String...formats) {
+        final Set<String> ret = new HashSet<String>();
+        for (final FileInfo f: files.values()) {
+            format: for (final String format: formats) {
+                if (format.equals(f.format)) {
+                    ret.add(f.file);
+                    break format;
+                }
+            }
+        }
+        return ret;
     }
     
     /**
@@ -455,15 +744,128 @@ public final class Job {
      * @return the previous value of the specified key in this property list, or {@code null} if it did not have one
      */
     public Set<String> setSet(final String key, final Set<String> value) {
-        final Object previous = prop.put(key, value);
-        if (previous == null) {
-            return null;
-        } else if (previous instanceof String) { // migration support
-            return StringUtils.restoreSet((String) previous);
+        Object previous = null;
+        if (key.equals(FULL_DITAMAP_TOPIC_LIST)) {
+            //throw new RuntimeException(FULL_DITAMAP_TOPIC_LIST + " is a compound set, cannot be directly generated");
+        } else if (key.equals(FULL_DITA_TOPIC_LIST)) {
+            for (FileInfo f: files.values()) {
+                if ("dita".equals(f.format)) {
+                    f.isActive = false;
+                }
+            }
+            for (final String f: value) {
+            	final FileInfo ff = getOrAdd(f);
+            	ff.format = "dita";
+            	ff.isActive = true;
+            }
+        } else if (key.equals(FULL_DITAMAP_LIST)) {
+            for (FileInfo f: files.values()) {
+                if ("ditamap".equals(f.format)) {
+                    f.isActive = false;
+                }
+            }
+            for (final String f: value) {
+                final FileInfo ff = getOrAdd(f);
+                ff.format = "ditamap";
+                ff.isActive = true;
+            }
+        } else if (key.equals(HTML_LIST)) {
+            for (final String f: value) {
+            	getOrAdd(f).format = "html";
+            }
+        } else if (key.equals(IMAGE_LIST)) {
+            for (final String f: value) {
+            	getOrAdd(f).format = "image";
+            }
+        } else if (key.equals(CHUNKED_TOPIC_LIST)) {
+            for (final String f: value) {
+            	getOrAdd(f).isChunked = true;
+            }    
+        } else if (key.equals(CONREF_LIST)) {
+            for (final String f: value) {
+            	getOrAdd(f).hasConref = true;
+            }
+        } else if (key.equals(HREF_DITA_TOPIC_LIST)) {
+            for (final String f: value) {
+            	getOrAdd(f).hasLink = true;
+            }
+        } else if (key.equals(KEYREF_LIST)) {
+            for (final String f: value) {
+            	getOrAdd(f).hasKeyref = true;
+            }
+        } else if (key.equals(CODEREF_LIST)) {
+            for (final String f: value) {
+            	getOrAdd(f).hasCoderef = true;
+            }
+        } else if (key.equals(RESOURCE_ONLY_LIST)) {
+            for (final String f: value) {
+            	getOrAdd(f).isResourceOnly = true;
+            }
+        } else if (key.equals(HREF_TARGET_LIST)) {
+            for (final String f: value) {
+            	getOrAdd(f).isTarget = true;
+            }
+        } else if (key.equals(CONREF_TARGET_LIST)) {
+            for (final String f: value) {
+            	getOrAdd(f).isConrefTarget = true;
+            }
+        } else if (key.equals(HREF_TOPIC_LIST)) {
+            for (final String f: value) {
+            	getOrAdd(f).isNonConrefTarget = true;
+            }
+        } else if (key.equals(CONREF_PUSH_LIST)) {
+            for (final String f: value) {
+            	getOrAdd(f).isConrefPush = true;
+            }
+        } else if (key.equals(SUBJEC_SCHEME_LIST)) {
+            for (final String f: value) {
+                getOrAdd(f).isSubjectScheme = true;
+            }
+        } else if (key.equals(COPYTO_SOURCE_LIST)) {
+            for (final String f: value) {
+                getOrAdd(f).isCopyToSource = true;
+            }
+        } else if (key.equals(OUT_DITA_FILES_LIST)) {
+            for (final String f: value) {
+                getOrAdd(f).isOutDita = true;
+            }
+        } else if (key.equals(CHUNKED_DITAMAP_LIST)) {
+            for (final String f: value) {
+                getOrAdd(f).isChunkedDitaMap = true;
+            }
+        } else if (key.equals(FLAG_IMAGE_LIST)) {
+            for (final String f: value) {
+                getOrAdd(f).isFlagImage = true;
+            }
+        } else if (key.equals(SUBSIDIARY_TARGET_LIST)) {
+            for (final String f: value) {
+                getOrAdd(f).isSubtarget = true;
+            }
+        } else if (key.equals(CHUNK_TOPIC_LIST)) {
+            for (final String f: value) {
+                getOrAdd(f).isSkipChunk = true;
+            }
         } else {
-            return (Set<String>) previous;
+            previous = prop.put(key, value);
+            if (previous == null) {
+                return null;
+            } else if (previous instanceof String) { // migration support
+                return StringUtils.restoreSet((String) previous);
+            } else {
+                return (Set<String>) previous;
+            }
         }
+        return (Set<String>) previous;
     }
+
+	private FileInfo getOrAdd(final String f) {
+		FileInfo i = files.get(f); 
+		if (i == null) {
+			i = new FileInfo(f);
+		    files.put(f, i);
+		}
+		return i;
+	}
     
     /**
      * Set property value.
@@ -496,6 +898,7 @@ public final class Job {
      */
     public Set<String> getSchemeSet() {
         return getSet(SUBJEC_SCHEME_LIST);
+        
     }
 
     /**
@@ -516,6 +919,26 @@ public final class Job {
         return getProperty(INPUT_DIR);
     }
 
+    /**
+     * Get all file info objects
+     * 
+     * @return map of file info objects
+     */
+    public Map<String, FileInfo> getFileInfo() {
+        return Collections.unmodifiableMap(files);
+    }
+    
+    /**
+     * Add a collection of file info objects
+     * 
+     * @param fs file info objects
+     */
+    public void addAll(final Collection<FileInfo> fs) {
+    	for (final FileInfo f: fs) {
+    		files.put(f.file, f);
+    	}
+    }
+    
     // Utility methods
     
     /**
@@ -528,7 +951,7 @@ public final class Job {
     public void writeList(final String prop) throws IOException {
         final String filename = prop.equals(INPUT_DITAMAP)
                                 ? INPUT_DITAMAP_LIST_FILE
-                                : prop.substring(0, prop.lastIndexOf("list"))+ ".list";
+                                : prop.substring(0, prop.lastIndexOf("list")) + ".list";
         writeList(prop, filename);
     }
     
@@ -558,6 +981,135 @@ public final class Job {
                 topicWriter.close();
             }
         }
+    }
+    
+    /**
+     * File info object.
+     */
+    public static final class FileInfo {
+        
+        public final String file;
+    	public String format;
+        public boolean hasConref;
+        public boolean isChunked;
+        public boolean hasLink;
+        public boolean isResourceOnly;
+        public boolean isTarget;
+        public boolean isConrefTarget;
+        public boolean isNonConrefTarget;
+        public boolean isConrefPush;
+        public boolean hasKeyref;
+        public boolean hasCoderef;
+        public boolean isSubjectScheme;
+        public boolean isSkipChunk;
+        public boolean isSubtarget;
+        public boolean isFlagImage;
+        public boolean isChunkedDitaMap;
+        public boolean isOutDita;
+        public boolean isCopyToSource;
+        public boolean isActive;
+        
+        FileInfo(final String file) {
+            this.file = file;
+        }
+        
+        public static class Builder {
+            
+            private String file;
+            private String format;
+            private boolean hasConref;
+            private boolean isChunked;
+            private boolean hasLink;
+            private boolean isResourceOnly;
+            private boolean isTarget;
+            private boolean isConrefTarget;
+            private boolean isNonConrefTarget;
+            private boolean isConrefPush;
+            private boolean hasKeyref;
+            private boolean hasCoderef;
+            private boolean isSubjectScheme;
+            private boolean isSkipChunk;
+            private boolean isSubtarget;
+            private boolean isFlagImage;
+            private boolean isChunkedDitaMap;
+            private boolean isOutDita;
+            private boolean isCopyToSource;
+            private boolean isActive;
+        
+            public Builder() {}
+            public Builder(final FileInfo orig) {
+                file = orig.file;
+                format = orig.format;
+                hasConref = orig.hasConref;
+                isChunked = orig.isChunked;
+                hasLink = orig.hasLink;
+                isResourceOnly = orig.isResourceOnly;
+                isTarget = orig.isTarget;
+                isConrefTarget = orig.isConrefTarget;
+                isNonConrefTarget = orig.isNonConrefTarget;
+                isConrefPush = orig.isConrefPush;
+                hasKeyref = orig.hasKeyref;
+                hasCoderef = orig.hasCoderef;
+                isSubjectScheme = orig.isSubjectScheme;
+                isSkipChunk = orig.isSkipChunk;
+                isSubtarget = orig.isSubtarget;
+                isFlagImage = orig.isFlagImage;
+                isChunkedDitaMap = orig.isChunkedDitaMap;
+                isOutDita = orig.isOutDita;
+                isCopyToSource = orig.isCopyToSource;
+                isActive = orig.isActive;
+            }
+            
+            public Builder file(final String file) { this.file = file; return this; }
+            public Builder format(final String format) { this.format = format; return this; }
+            public Builder hasConref(final boolean hasConref) { this.hasConref = hasConref; return this; }
+            public Builder isChunked(final boolean isChunked) { this.isChunked = isChunked; return this; }
+            public Builder hasLink(final boolean hasLink) { this.hasLink = hasLink; return this; }
+            public Builder isResourceOnly(final boolean isResourceOnly) { this.isResourceOnly = isResourceOnly; return this; }
+            public Builder isTarget(final boolean isTarget) { this.isTarget = isTarget; return this; }
+            public Builder isConrefTarget(final boolean isConrefTarget) { this.isConrefTarget = isConrefTarget; return this; }
+            public Builder isNonConrefTarget(final boolean isNonConrefTarget) { this.isNonConrefTarget = isNonConrefTarget; return this; }
+            public Builder isConrefPush(final boolean isConrefPush) { this.isConrefPush = isConrefPush; return this; }
+            public Builder hasKeyref(final boolean hasKeyref) { this.hasKeyref = hasKeyref; return this; }
+            public Builder hasCoderef(final boolean hasCoderef) { this.hasCoderef = hasCoderef; return this; }
+            public Builder isSubjectScheme(final boolean isSubjectScheme) { this.isSubjectScheme = isSubjectScheme; return this; }
+            public Builder isSkipChunk(final boolean isSkipChunk) { this.isSkipChunk = isSkipChunk; return this; }
+            public Builder isSubtarget(final boolean isSubtarget) { this.isSubtarget = isSubtarget; return this; }
+            public Builder isFlagImage(final boolean isFlagImage) { this.isFlagImage = isFlagImage; return this; }
+            public Builder isChunkedDitaMap(final boolean isChunkedDitaMap) { this.isChunkedDitaMap = isChunkedDitaMap; return this; }
+            public Builder isOutDita(final boolean isOutDita) { this.isOutDita = isOutDita; return this; }
+            public Builder isCopyToSource(final boolean isCopyToSource) { this.isCopyToSource = isCopyToSource; return this; }
+            public Builder isActive(final boolean isActive) { this.isActive = isActive; return this; }
+            
+            public FileInfo build() {
+                if (file == null) {
+                    throw new IllegalArgumentException("file may not be null");
+                }
+                final FileInfo fi = new FileInfo(file);
+                fi.format = format;
+                fi.hasConref = hasConref;
+                fi.isChunked = isChunked;
+                fi.hasLink = hasLink;
+                fi.isResourceOnly = isResourceOnly;
+                fi.isTarget = isTarget;
+                fi.isConrefTarget = isConrefTarget;
+                fi.isNonConrefTarget = isNonConrefTarget;
+                fi.isConrefPush = isConrefPush;
+                fi.hasKeyref = hasKeyref;
+                fi.hasCoderef = hasCoderef;
+                fi.isSubjectScheme = isSubjectScheme;
+                fi.isSkipChunk = isSkipChunk;
+                fi.isSubtarget = isSubtarget;
+                fi.isFlagImage = isFlagImage;
+                fi.isChunkedDitaMap = isChunkedDitaMap;
+                fi.isOutDita = isOutDita;
+                fi.isCopyToSource = isCopyToSource;
+                fi.isActive = isActive;
+                return fi;
+            }
+            
+        }
+        
     }
     
 }

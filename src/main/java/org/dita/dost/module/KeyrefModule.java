@@ -13,6 +13,7 @@ import static org.dita.dost.util.Job.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -99,13 +100,15 @@ final class KeyrefModule implements AbstractPipelineModule {
         }
         final Map<String, Element> keyDefinition = reader.getKeyDefinition();
         //get files which have keyref attr
-        final Set<String> parseList = job.getSet(KEYREF_LIST);
-        //Conref Module will change file's content, it is possible that tags with @keyref are copied in
-        //while keyreflist is hard update with xslt.
-        //bug:3056939
-        final Set<String> resourceOnlyList = job.getSet(RESOURCE_ONLY_LIST);
-        final Set<String> conrefList = job.getSet(CONREF_LIST);
-        parseList.addAll(conrefList);
+        final Map<String, FileInfo> files = job.getFileInfo();
+        final Set<String> parseList = new HashSet<String>();
+        for (final FileInfo f: files.values()) {
+	        //Conref Module will change file's content, it is possible that tags with @keyref are copied in
+	        //while keyreflist is hard update with xslt.
+        	if (f.hasKeyref || f.hasConref) {
+        		parseList.add(f.file);
+        	}
+        }
         for(final String file: parseList){
             logger.logInfo("Processing " + new File(tempDir, file).getAbsolutePath());
             final KeyrefPaser parser = new KeyrefPaser();
@@ -117,12 +120,12 @@ final class KeyrefModule implements AbstractPipelineModule {
             parser.write(file);
             // validate resource-only list
             for (final String t: parser.getNormalProcessingRoleTargets()) {
-                if (resourceOnlyList.contains(t)) {
-                    resourceOnlyList.remove(t);
+                if (files.containsKey(t)) {
+                    files.get(t).isResourceOnly = false;
                 }
             }
         }
-        job.setSet(RESOURCE_ONLY_LIST, resourceOnlyList);
+        job.addAll(files.values());
         try {
             job.write();
         } catch (final IOException e) {
