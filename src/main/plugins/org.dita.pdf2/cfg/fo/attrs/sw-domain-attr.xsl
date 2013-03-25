@@ -37,7 +37,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="font-family">monospace</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="msgblock">
+    <xsl:attribute-set name="msgblock" use-attribute-sets="pre">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="msgnum">

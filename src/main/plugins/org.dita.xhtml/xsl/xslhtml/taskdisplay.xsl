@@ -433,6 +433,9 @@
   </xsl:when>
   <xsl:otherwise>
    <thead><tr>
+     <xsl:for-each select="*[contains(@class,' task/chhead ')]">
+       <xsl:call-template name="commonattributes"/>
+     </xsl:for-each>
     <xsl:apply-templates select="*[contains(@class,' task/chhead ')]/*[contains(@class,' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
     <th valign="bottom">     
      <xsl:call-template name="th-align"/>
