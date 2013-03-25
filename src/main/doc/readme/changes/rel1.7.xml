@@ -237,6 +237,12 @@ release)</li>
 <li>#1433 Profiling filter included multiple times (maintenance 1)</li>
 <li>#1437 Fatal UTF-8 error in .job.xml (maintenance 2)</li>
 <li>#1456 XHTML Build failed when referencing subject scheme in different file path (maintenance 3)</li>
+<li>#1423 Formatting glitch in PDF index (maintenance 4)</li>
+<li>#1468 Reference to remote image does not appear in PDF (maintenance 4)</li>
+<li>#1469 @outputclass and @class values not passed from &lt;chhead> to &lt;tr> in XHTML output (maintenance 4)</li>
+<li>#1472 PDF output: whitespace not preserved in msgblock element (maintenance 4)</li>
+<li>#1475 Error received in console does not point correctly to location of published DITA Map (maintenance 4)</li>
+<li>#1477 Tables: using percentage in colwidth values [PDF2 plugin] (maintenance 4)</li>
 </ul>       </section>
 </refbody>
 </reference>
