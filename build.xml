@@ -29,7 +29,7 @@
   <property name="resource.dir" location="${src.dir}/resource/"/>
 
   <property name="top.work.dir" location="${src.dir}"/>
-  <property name="package.output.dir" location="${basedir}/target"/>
+  <property name="package.output.dir" location="${basedir}/target/dist"/>
   <property name="bin.dir" location="${basedir}/target/classes"/>
   <tstamp>
     <format property="current.date" pattern="yyyyMMddHHmmssSSS"/>
@@ -225,9 +225,11 @@
   </patternset>
 
   <target name="dependencies">
-    <get src="http://www.eu.apache.org/dist/ant/binaries/apache-ant-${tool.ant.version}-bin.zip"
+    <get src="http://archive.apache.org/dist/ant/binaries/apache-ant-${tool.ant.version}-bin.zip"
          dest="${basedir}/target/"
          skipexisting="true"/>
+    <unzip src="${basedir}/target/apache-ant-${tool.ant.version}-bin.zip"
+           dest="${basedir}/src/main/tools"/>
   </target>
 
   <target name="package-binary-minimum">
@@ -294,7 +296,7 @@
         <patternset refid="pattern.package.full"/>
       </fileset>
     </copy>
-    <copy todir="${temp.dist.dir}/tools/ant">
+    <!--copy todir="${temp.dist.dir}/tools/ant">
       <zipfileset src="${basedir}/target/apache-ant-${tool.ant.version}-bin.zip">
         <exclude name="apache-ant-${tool.ant.version}/etc/**"/>
         <exclude name="apache-ant-${tool.ant.version}/manual/**"/>
@@ -305,7 +307,20 @@
         <include name="apache-ant-${tool.ant.version}/bin/**"/>
         <include name="apache-ant-${tool.ant.version}/lib/**"/>
       </zipfileset>
-      <mapper type="glob" from="apache-ant-${tool.ant.version}/*" to="*"/>
+      <mapper type="glob" from="apache-ant-${tool.ant.version}${file.separator}*" to="*"/>
+    </copy-->
+    <mkdir dir="${temp.dist.dir}/tools/ant"/>
+    <copy todir="${temp.dist.dir}/tools/ant">
+      <fileset dir="${basedir}/src/main/tools/apache-ant-${tool.ant.version}">
+       <exclude name="etc/**"/>
+       <exclude name="manual/**"/>
+       <exclude name="fetch.xml"/>
+       <exclude name="get-m2.xml"/>
+       <exclude name="lib/*.pom"/>
+       <include name="*"/>
+       <include name="bin/**"/>
+       <include name="lib/**"/>
+     </fileset>
     </copy>
     <copy todir="${temp.dist.dir}/plugins">
       <fileset dir="${src.dir}/ext-plugins">
