@@ -215,6 +215,8 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
 
   <!-- This revision is active for this element -->
   <xsl:template match="revprop" mode="start-revflagit">
+    <xsl:param name="lang"/>
+    <xsl:param name="biditest"/>
    <xsl:copy>
      <xsl:copy-of select="@*"/>
      <xsl:choose>
@@ -227,14 +229,22 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
        </xsl:when>
        <xsl:otherwise>
          <!-- Create default start revision reference? -->
-         <xsl:call-template name="default-rev-start"/>
+         <xsl:call-template name="default-rev-start">
+           <xsl:with-param name="lang" select="$lang"/>
+           <xsl:with-param name="biditest" select="$biditest"/>
+         </xsl:call-template>
        </xsl:otherwise>
      </xsl:choose>
    </xsl:copy>
-   <xsl:apply-templates select="following-sibling::revprop[1]" mode="start-revflagit"/>
+   <xsl:apply-templates select="following-sibling::revprop[1]" mode="start-revflagit">
+     <xsl:with-param name="lang" select="$lang"/>
+     <xsl:with-param name="biditest" select="$biditest"/>
+   </xsl:apply-templates>
   </xsl:template>
 
   <xsl:template match="revprop" mode="end-revflagit">
+    <xsl:param name="lang"/>
+    <xsl:param name="biditest"/>
     <xsl:copy>
       <xsl:copy-of select="@*"/>
       <xsl:choose>
@@ -247,18 +257,33 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
         </xsl:when>
         <xsl:otherwise>
           <!-- Create default end revision reference? -->
-          <xsl:call-template name="default-rev-end"/>
+          <xsl:call-template name="default-rev-end">
+            <xsl:with-param name="lang" select="$lang"/>
+            <xsl:with-param name="biditest" select="$biditest"/>
+          </xsl:call-template>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:copy>
-   <xsl:apply-templates select="preceding-sibling::revprop[1]" mode="end-revflagit"/>
+   <xsl:apply-templates select="preceding-sibling::revprop[1]" mode="end-revflagit">
+     <xsl:with-param name="lang" select="$lang"/>
+     <xsl:with-param name="biditest" select="$biditest"/>
+   </xsl:apply-templates>
   </xsl:template>
 
   <!-- output the DEFAULT beginning revision graphic & ALT text.
        Commented out section shows how to insert a default start flag of "delta.gif"
        by creating the proper ditaval syntax -->
   <xsl:template name="default-rev-start">
-    <!--<startflag imageref="{$PATH2PROJ}delta.gif">
+    <!--
+    <xsl:param name="lang"/>
+    <xsl:param name="biditest"/>
+    <xsl:param name="startRevImage">
+      <xsl:choose>
+        <xsl:when test="$biditest='bidi'">deltaend.gif</xsl:when>
+        <xsl:otherwise>delta.gif</xsl:otherwise>
+      </xsl:choose>
+    </xsl:param>
+    <startflag imageref="{$PATH2PROJ}{$startRevImage}">
       <alt-text>
         <xsl:call-template name="getString">
           <xsl:with-param name="stringName" select="'Start of change'"/>
@@ -268,7 +293,16 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   </xsl:template>
   <!-- output the DEFAULT ending revision graphic & ALT text -->
   <xsl:template name="default-rev-end">
-    <!--<endflag imageref="{$PATH2PROJ}deltaend.gif">
+    <!--
+    <xsl:param name="lang"/>
+    <xsl:param name="biditest"/>
+    <xsl:param name="endRevImage">
+      <xsl:choose>
+        <xsl:when test="$biditest='bidi'">delta.gif</xsl:when>
+        <xsl:otherwise>deltaend.gif</xsl:otherwise>
+      </xsl:choose>
+    </xsl:param>
+    <endflag imageref="{$PATH2PROJ}{$endRevImage}">
       <alt-text>
         <xsl:call-template name="getString">
           <xsl:with-param name="stringName" select="'End of change'"/>
@@ -723,11 +757,11 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   </xsl:variable>
   
   <xsl:choose> <!-- Ensure there's an image to get, otherwise don't insert anything -->
-   <xsl:when test="$flag-att='rev' and $FILTERDOC/val/revprop[@val=$firstflag][@action='flag']">
-    <xsl:copy-of select="$FILTERDOC/val/revprop[@val=$firstflag][@action='flag']"/>
+   <xsl:when test="$flag-att='rev' and $FILTERDOC/val/revprop[@val=$firstflag][1][@action='flag']">
+    <xsl:copy-of select="$FILTERDOC/val/revprop[@val=$firstflag][1][@action='flag']"/>
    </xsl:when>
-   <xsl:when test="$FILTERDOC/val/prop[@att=$flag-att][@val=$firstflag][@action='flag']">
-    <xsl:copy-of select="$FILTERDOC/val/prop[@att=$flag-att][@val=$firstflag][@action='flag']"/>
+   <xsl:when test="$FILTERDOC/val/prop[@att=$flag-att][@val=$firstflag][1][@action='flag']">
+    <xsl:copy-of select="$FILTERDOC/val/prop[@att=$flag-att][@val=$firstflag][1][@action='flag']"/>
    </xsl:when>
    <xsl:when test="$FILTERDOC/val/prop[@att=$flag-att][not(@val=$firstflag)][@action='flag']">
     
@@ -1138,7 +1172,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
  <xsl:param name="flagrules">
    <xsl:call-template name="getrules"/>
  </xsl:param>
- <xsl:variable name="biditest"> 
+ <!--<xsl:variable name="biditest"> 
   <xsl:call-template name="bidi-area"/>
  </xsl:variable>
  <xsl:choose>
@@ -1147,26 +1181,52 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
       <xsl:with-param name="flagrules" select="$flagrules"/>
     </xsl:call-template>
   </xsl:when>
-  <xsl:otherwise>
+  <xsl:otherwise>-->
     <xsl:call-template name="start-revflagit">
       <xsl:with-param name="flagrules" select="$flagrules"/>
     </xsl:call-template>
-  </xsl:otherwise>
- </xsl:choose>
+  <!--</xsl:otherwise>
+ </xsl:choose>-->
 </xsl:template>
 
  <xsl:template name="start-revflagit">
   <xsl:param name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:param>
-  <xsl:apply-templates select="exsl:node-set($flagrules)/revprop[1]" mode="start-revflagit"/>
+  <xsl:param name="lang">
+    <xsl:call-template name="getLowerCaseLang"/>
+  </xsl:param>
+  <xsl:param name="biditest">
+    <xsl:call-template name="bidi-area">
+      <xsl:with-param name="parentlang" select="$lang"/>
+    </xsl:call-template>
+  </xsl:param>
+  <xsl:if test="exsl:node-set($flagrules)/revprop[1]">
+    <xsl:apply-templates select="exsl:node-set($flagrules)/revprop[1]" mode="start-revflagit">
+      <xsl:with-param name="lang" select="$lang"/>
+      <xsl:with-param name="biditest" select="$biditest"/>
+    </xsl:apply-templates>
+  </xsl:if>
  </xsl:template>
  
  <xsl:template name="end-revflagit">
   <xsl:param name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:param>
-  <xsl:apply-templates select="exsl:node-set($flagrules)/revprop[last()]" mode="end-revflagit"/>
+  <xsl:param name="lang">
+    <xsl:call-template name="getLowerCaseLang"/>
+  </xsl:param>
+  <xsl:param name="biditest">
+    <xsl:call-template name="bidi-area">
+      <xsl:with-param name="parentlang" select="$lang"/>
+    </xsl:call-template>
+  </xsl:param>
+  <xsl:if test="exsl:node-set($flagrules)/revprop[1]">
+    <xsl:apply-templates select="exsl:node-set($flagrules)/revprop[last()]" mode="end-revflagit">
+      <xsl:with-param name="lang" select="$lang"/>
+      <xsl:with-param name="biditest" select="$biditest"/>
+    </xsl:apply-templates>
+  </xsl:if>
  </xsl:template>
  
 <!-- output the ending revision graphic & ALT text -->
@@ -1175,7 +1235,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
  <xsl:param name="flagrules">
    <xsl:call-template name="getrules"/>
  </xsl:param>
- <xsl:variable name="biditest">
+ <!--<xsl:variable name="biditest">
   <xsl:call-template name="bidi-area"/>
  </xsl:variable>
  <xsl:choose>
@@ -1184,12 +1244,12 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
       <xsl:with-param name="flagrules" select="$flagrules"/>
      </xsl:call-template>
   </xsl:when>
-  <xsl:otherwise>
+  <xsl:otherwise>-->
     <xsl:call-template name="end-revflagit">
       <xsl:with-param name="flagrules" select="$flagrules"/>
     </xsl:call-template>
-  </xsl:otherwise>
- </xsl:choose>
+  <!--</xsl:otherwise>
+ </xsl:choose>-->
 </xsl:template>
 
 <!-- Shortcut for old multi-line calls to find-active-rev-flag.
