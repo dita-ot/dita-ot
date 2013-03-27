@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="preprocess-content-changes" rev="1.8" xml:lang="en-us">
+<title>Content changes to files during the preprocess</title>
+<shortdesc>Many changes during the preprocess resolve standard features,
+such as conref, and change content in a way that is expected, compliant
+with the original document type, and often mandated by the specification.
+These changes appear only in the temporary copies of your content
+in the DITA-OT temp directory. This topic covers other, DITA-OT specific
+changes that you may wish to be aware of when working with the temporary
+files.</shortdesc>
+<refbody>
+<section><title>Changes that do not comply with the DITA standard</title><p>The
+DITA-OT may make some non-compliant changes to documents during the
+preprocess, in order to simplify or optimize processing later in the
+processing chain. These changes include:<ul>
+<li><b>Image attributes:</b> The DITA-OT reads image height and width
+information during the preprocess, to enable scaling when images are
+finally rendered. Two attributes (<codeph>dita-ot:image-width</codeph> and <codeph>dita-ot:image-height</codeph>)
+are added to images during the build.</li>
+<li><b>Extra attribute on generated links:</b> When a link is generated
+based on information in the map, that <codeph>&lt;link></codeph> element
+contains a "<codeph>mapclass</codeph>" attribute that indicates the
+class of the topicref used to create the map. This may be used when
+generating links to more easily sort or filter how links are displayed.</li>
+<li><b>DITAVAL elements in unexpected locations:</b> The flagging
+stage of the preprocess creates pseudo-specializations of <codeph>&lt;foreign></codeph> containing
+information for flagging. Because <codeph>&lt;foreign></codeph> is
+allowed virtually everywhere, this is typically not an issue, but
+some flagging may result in these elements in odd locations. For example,
+flagged <codeph>&lt;topic></codeph> or <codeph>&lt;row></codeph> elements
+may contain these specializations as a first and last child, which
+would not comply with the original document type.</li>
+</ul></p></section>
+<section><title>Changes that may not comply with restrictive specializations</title><p>Some
+changes during the DITA-OT process are fine for most document types,
+but may not comply with more restrictive specializations. Most of
+these changes are listed here, though the list may not be exhaustive.
+If you are coding an output transform based on a very restrictive
+specialization, you may want to be aware of these changes (or customize
+preprocess to avoid these changes):<ul>
+<li><b>Links added to topics</b>: The "maplink" step of the preprocess
+will generate contextual links based on your map (such as next/previous
+links), using the standard non-specialized <codeph>&lt;related-links></codeph> elements.
+This may not comply with document types that have specialized or entirely
+removed the <codeph>&lt;related-links></codeph> element.</li>
+<li><b>Metadata cascade</b>: If metadata is specified in a map, it
+will generally cascade to nested <codeph>&lt;topicref></codeph> elements
+or referenced topics. If some of that metadata is specialized, it
+may end up in nested <codeph>&lt;topicref></codeph> elements or in
+topic <codeph>&lt;prolog></codeph> elements that are not intended
+to have the metadata; alternatively, even ordinary metadata could
+cascade into a topic or <codeph>&lt;topicref></codeph> that has been
+specialized to disallow metadata.</li>
+<li><b>Title text in links</b>: By default, links or cross references
+without link text will be updated to include link text (generally
+by pulling a title from the referenced topic). This could result in
+content added to specialized links or cross references which does
+not comply with the original element; for example, if a cross reference <codeph>&lt;myXref></codeph> is
+specialized in a way that does not allow any content, the build will
+still attempt to set link text.</li>
+<li><b>@xtrf / @xtrc</b>: The build adds these two attributes to every
+element, to provide trace-back information in case of errors. These
+are typically defined for every element, but will be added even to
+specializations that forget to define them.</li>
+</ul></p></section>
+<section><title>Other changes or files that are not intended to comply
+existing document types</title><p>Some processes in the toolkit are
+not designed to produce compliant DITA, or documents that comply fully
+with a DITA DTD or XSD. These include: <ul>
+<li><b>Topic merge</b>: The topicmerge process is used by PDF and
+similar transform types to produce one document containing all of
+your content. This document is not DITA; it is a DITA-OT specific
+file that includes both your map and your topics, all in one document.
+The purpose of this file is to simplify processing (such as PDF) that
+places all of your content into one output document.</li>
+<li><b>Chunking</b>: Chunking only occurs when the <codeph>chunk</codeph> attribute
+is used in a map. When used, DITA documents may be split or merged
+in a way that does not comply with any existing document type. For
+example, merging documents may result in a topic that nests concepts,
+tasks, and specialized troubleshooting topics, even if no existing
+DTD or Schema would allow you to author that combination in one document.</li>
+</ul></p></section>
+</refbody>
+</reference>
