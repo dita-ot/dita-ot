@@ -11,7 +11,7 @@ control files that are needed to produce a Microsoft HTML Help file.</shortdesc>
 <conbody>
 <p>In addition to the HTML output and CSS files, this transformation returns the following files,
 where <varname>mapname</varname> is the name of the master DITA map.<simpletable frame="all"
-relcolwidth="1.0* 1.0*">
+relcolwidth="2.0* 3.0*">
 <sthead>
 <stentry>File name</stentry>
 <stentry>Description</stentry>
@@ -30,8 +30,8 @@ relcolwidth="1.0* 1.0*">
 </strow>
 <strow>
 <stentry><filepath><varname>mapname</varname>.chm</filepath></stentry>
-<stentry>Compiled HTML Help<note>This file is generated only
-if the HTML Help Workshop is installed on the build system.</note></stentry>
+<stentry>Compiled HTML Help<note>This file is generated only if the HTML Help Workshop is installed
+on the build system.</note></stentry>
 </strow>
 </simpletable></p>
 </conbody>

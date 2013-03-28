@@ -72,6 +72,10 @@
     <ant antfile="${basedir}/build.xml">
       <property name="args.input" location="${doc.dir}/userguide.ditamap"/>
       <property name="output.dir" location="${doc.out.dir}/htmlhelp"/>
+      <property name="args.gen.task.lbl" value="YES"/>
+      <property name="args.css" value="dita-ot-doc.css"/>
+      <property name="args.cssroot" value="${doc.dir}/resource"/>
+      <property name="args.copycss" value="yes"/>
       <property name="transtype" value="htmlhelp"/>
     </ant>
   </target>
@@ -81,7 +85,10 @@
       <property name="args.input" location="${doc.dir}/userguide.ditamap"/>
       <property name="output.dir" location="${doc.out.dir}/html"/>
       <property name="outputFile.base" value="index"/>
-      <property name="args.csspath" value="css"/>
+      <property name="args.gen.task.lbl" value="YES"/>
+      <property name="args.css" value="dita-ot-doc.css"/>
+      <property name="args.cssroot" value="${doc.dir}/resource"/>
+      <property name="args.copycss" value="yes"/>
       <property name="transtype" value="tocjs"/>
     </ant>
     <move file="${doc.out.dir}/html/userguide.html" tofile="${doc.out.dir}/html/index.html"/>
