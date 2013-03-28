@@ -18,12 +18,12 @@
             <step>
                 <cmd>Download the full-easy package from <xref
                         keyref="download.dita-ot.current-release">SourceForge</xref>.</cmd>
-                <choicetable>
+                <choicetable frame="topbot" relcolwidth="1.50* 4.0*">
                     <chhead>
                         <choptionhd>Operating system</choptionhd>
                         <chdeschd>File name</chdeschd>
                     </chhead>
-                    <chrow  platform="linux">
+                    <chrow platform="linux">
                         <choption>Linux or Mac OSX</choption>
                         <chdesc><filepath>DITA-OT<keyword keyref="release.version"
                                 />_full_easy_install_bin.tar.gz</filepath></chdesc>

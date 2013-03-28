@@ -12,12 +12,7 @@
      contains release notes for all past and upcoming releases.</shortdesc>
    </topicmeta>
   </topicref>
-  <topicref format="html" href="http://sourceforge.net/news/?group_id=132728" scope="external">
-   <topicmeta>
-    <linktext>Project news for the DITA Open Toolkit</linktext>
-    <shortdesc>Short description needed</shortdesc>
-   </topicmeta>
-  </topicref>
+  <!--<topicref format="html" href="http://sourceforge.net/news/?group_id=132728" scope="external"><topicmeta><linktext>Project news for the DITA Open Toolkit</linktext><shortdesc>Short description needed</shortdesc></topicmeta></topicref>-->
   <topicref format="html" href="http://groups.yahoo.com/group/dita-users/"
    navtitle="Yahoo! dita-users group" scope="external">
    <topicmeta>

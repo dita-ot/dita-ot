@@ -9,7 +9,8 @@
       <keywords>
         <indexterm>configuration
             properties<indexterm>default.language</indexterm><indexterm>generate-debug-attributes</indexterm><indexterm>processing-mode</indexterm><indexterm>org.dita.pdf2.index.frame-markup</indexterm><indexterm>org.dita.pdf2.i18n.enabled</indexterm><indexterm>org.dita.pdf2.use-out-temp</indexterm></indexterm>
-        <indexterm>files<indexterm>lib/configuration.properties</indexterm><indexterm>topic.fo</indexterm></indexterm>
+        <indexterm>files<indexterm>lib/configuration.properties file</indexterm><indexterm>topic.fo
+            file</indexterm></indexterm>
         <indexterm>topic.fo<indexterm>location of</indexterm></indexterm>
         <indexterm>PDF processing<indexterm>configuration properties</indexterm></indexterm>
       </keywords>
