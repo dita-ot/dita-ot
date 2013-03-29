@@ -12,9 +12,17 @@
       <ul>
         <li>Robert D Anderson, <xref href="http://www.ibm.com/" format="html" scope="external"
             >IBM</xref> — Project lead, core developer</li>
-        <li>Jarno Elovirta, <xref href="http://www.citec.com/" format="html" scope="external">Citec
-          Information</xref> and individual contributor — Lead developer</li>
-        <li>Kristen James Eberlein, <xref href="http://www.eberleinconsulting.com/" format="html" scope="external">Eberlein Consulting</xref> - Documentation</li>
+        <li>Jarno Elovirta, <xref href="http://www.linkedin.com/in/jelovirt" format="html"
+            scope="external">individual contributor</xref> — Lead developer</li>
+      </ul>
+    </section>
+    <section>
+      <title>Additional Contributors</title>
+      <ul>
+        <li>Kristen James Eberlein, <xref href="http://www.eberleinconsulting.com/" format="html" scope="external">Eberlein Consulting</xref></li>
+        <li>George Bina, <xref href="http://www.sync.ro/" format="html" scope="external">SyncRO Soft</xref></li>
+        <li>Radu Coravu, <xref href="http://www.sync.ro/" format="html" scope="external">SyncRO Soft</xref></li>
+        <li>Eliot Kimber, <xref href="http://www.reallysi.com/" format="html" scope="external">Really Strategies, Inc</xref></li>
       </ul>
     </section>
     <section id="section_pvn_wre_nc">
@@ -32,8 +40,6 @@
             >IBM</xref> — Primary developer through the first several years of the toolkit</li>
         <li>Chris Wong — original contributor of the PDF2 plugin </li>
         <li>Deborah Pickett, Moldflow — Frequent developer and contributor</li>
-        <li>Eliot Kimber, <xref href="http://www.reallysi.com/" format="html" scope="external"
-            >Really Strategies, Inc</xref> — DTD and XML Schema caching</li>
         <li>Dick Johnson and Anna van Raaphorst, <xref href="http://www.vrcommunications.com/"
             format="html" scope="external">VR Communcations, Inc</xref> — Original contributors of
           the DITA User Guide</li>
