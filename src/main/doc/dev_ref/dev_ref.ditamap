@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This file is part of the DITA Open Toolkit project hosted on 
- Sourceforge.net. See the accompanying license.txt file for 
- applicable licenses.-->
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"
  "map.dtd">
 <map xml:lang="en-us">
   <title>Developer's Reference</title>
   <topicref href="developer-reference.dita">
-    <topicref href="DITA-OTArchitecture.dita" navtitle="Complete Process Architecture">
+    <topicref href="DITA-OTArchitecture.dita" navtitle="Architecture of the DITA-OT">
+      <topicref href="processing-structure.dita"/>
       <topicref href="processing-pipeline-modules.dita"/>
       <topicref href="processing-order.dita"/>
-      <topicset chunk="to-content" collection-type="sequence" href="DITA-OTPreprocess.dita"
-        id="preprocess" navtitle="Preprocess Architecture">
+      <topicref collection-type="sequence" href="DITA-OTPreprocess.dita" id="preprocess"
+        navtitle="Pre-processing modules">
         <topicref href="preprocess-genlist.dita"/>
         <topicref href="preprocess-debugfilter.dita"/>
         <topicref href="preprocess-copyfiles.dita"/>
@@ -25,11 +23,9 @@
         <topicref href="preprocess-chunk.dita"/>
         <topicref href="preprocess-maplink.dita"/>
         <topicref href="preprocess-topicpull.dita"/>
-        <topicref href="preprocess-flagging.dita">
-           <topicref rev="1.7" href="flagging-migration.dita"/>
-        </topicref>
-      </topicset>
-      <topicref collection-type="family" href="XhtmlWithNavigation.dita">
+        <topicref href="preprocess-flagging.dita"/>
+      </topicref>
+      <topicref href="XhtmlWithNavigation.dita">
         <topicref href="XhtmlDefault.dita"/>
         <topicref href="XhtmlEclipse.dita"/>
         <topicref href="XhtmlTocjs.dita"/>
@@ -64,6 +60,12 @@
       <topicref href="plugin-newextensions.dita"/>
       <topicref href="plugin-sample.dita"/>
     </topicset>
+    <topichead navtitle="">
+      <topicmeta>
+        <navtitle>Migrating style sheets and XSLT overrides</navtitle>
+      </topicmeta>
+      <topicref rev="1.7" href="flagging-migration.dita"/>
+    </topichead>
     <topicref href="../readme/dita2pdf-customization.dita"/>
     <topicref href="ant-properties.dita"/>
     <topicref href="DITA1.2-implementation-dependent-features.dita"/>

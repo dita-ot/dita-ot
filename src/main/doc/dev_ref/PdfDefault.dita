@@ -1,33 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This file is part of the DITA Open Toolkit project hosted on 
- Sourceforge.net. See the accompanying license.txt file for 
- applicable licenses.-->
-<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
- "reference.dtd">
-<reference id="pdfdefault" xml:lang="en-us">
-<title>PDF output pipeline</title>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "concept.dtd">
+<concept id="pdfdefault" xml:lang="en-us">
+<title>PDF processing modules</title>
 <shortdesc>The <option>PDF</option> (formerly known as <option>PDF2</option>) transformation process
 runs the pre-processing routine and follows it by a series of additional targets. These steps work
 together to create a merged set of content, convert the merged content to XSL-FO, and then format
 the XSL-FO file to PDF.</shortdesc>
-<refbody>
+<conbody>
 <section><p>The PDF process includes many Ant targets. During a typical conversion from map to PDF, the
 following targets are most significant.</p>
 <dl>
 <dlentry>
 <dt>map2pdf2</dt>
-<dd>Creates a merged file by calling a common Java merge module. It then calls
-<codeph>publish.map.pdf</codeph> to do the remainder of the work.</dd>
+<dd>Creates a merged file by calling a common Java merge module. It then calls the
+<codeph>publish.map.pdf</codeph> target to do the remainder of the work.</dd>
 </dlentry>
 <dlentry>
 <dt>publish.map.pdf</dt>
-<dd>Performs some initialization and then calls <codeph>transform.topic2pdf</codeph> to do the
-remainder of processing.</dd>
+<dd>Performs some initialization and then calls the <codeph>transform.topic2pdf</codeph> target to
+do the remainder of processing.</dd>
 </dlentry>
 <dlentry>
 <dt>transform.topic2pdf</dt>
-<dd>Converts the merged file to XSL-FO, generates the PDF, and deletes the topic.fo file, unless
-instructed to keep it. Uses the following targets to perform those tasks:<dl>
+<dd>Converts the merged file to XSL-FO, generates the PDF, and deletes the
+<filepath>topic.fo</filepath> file, unless instructed to keep it. Uses the following targets to
+perform those tasks:<dl>
 <dlentry>
 <dt>transform.topic2fo</dt>
 <dd>Convert the merged file to an XSL-FO file. This process is composed of several Ant
@@ -62,16 +60,16 @@ process that converts <filepath>stage3.fo</filepath> into <filepath>topic.fo</fi
 </dlentry>
 <dlentry>
 <dt>transform.fo2pdf</dt>
-<dd>Converts the <filepath>topic.fo</filepath> file into PDF using the available FO processor
+<dd>Converts the <filepath>topic.fo</filepath> file into PDF using the specified FO processor
 (Antenna House, XEP, or Apache FOP).</dd>
 </dlentry>
 <dlentry>
 <dt>delete.fo2pdf.topic.fo</dt>
 <dd>Deletes the <filepath>topic.fo</filepath> file, unless otherwise specified by setting an Ant
-property or command line option.</dd>
+property or command-line option.</dd>
 </dlentry>
 </dl></dd>
 </dlentry>
 </dl></section>
-</refbody>
-</reference>
+</conbody>
+</concept>
