@@ -10,7 +10,7 @@
     <metadata>
       <keywords>
         <indexterm>command-line
-              tool<indexterm>parameters<indexterm>foincluderellinks</indexterm><indexterm>fooutputrellinks</indexterm><indexterm>fouserconfig</indexterm><indexterm>retaintopicfo</indexterm><indexterm>xslpdf</indexterm></indexterm></indexterm>
+              tool<indexterm>parameters<indexterm>fooutputrellinks</indexterm><indexterm>fouserconfig</indexterm><indexterm>retaintopicfo</indexterm><indexterm>xslpdf</indexterm></indexterm></indexterm>
       </keywords>
     </metadata>
   </prolog>
@@ -28,15 +28,8 @@
         </thead>
         <tbody>
           <row>
-            <entry><parmname>foincluderellinks</parmname></entry>
-            <entry
-              conref="ant-parameters-pdf2-transformation.dita#ant-parameters-pdf2-transformation/args.fo.include.rellinks.desc"
-            />
-          </row>
-          <row>
             <entry><parmname>fooutputrellinks</parmname></entry>
-            <entry
-              conref="ant-parameters-legacypdf-transformation.dita#ant-parameters-legacypdf-transformation/args.fo.output.rel.links.desc"/>
+            <entry conref="ant-parameters-legacypdf-transformation.dita#ant-parameters-legacypdf-transformation/args.fo.output.rel.links.desc"/>
           </row>
           <row>
             <entry><parmname>fouserconfig</parmname></entry>
@@ -44,8 +37,7 @@
           </row>
           <row>
             <entry><parmname>retaintopicfo</parmname></entry>
-            <entry conref="ant-parameters-pdf2-transformation.dita#ant-parameters-pdf2-transformation/retain.topic.fo.desc"
-            />
+            <entry conref="ant-parameters-pdf2-transformation.dita#ant-parameters-pdf2-transformation/retain.topic.fo.desc"/>
           </row>
           <row>
             <entry><parmname>xslpdf</parmname></entry>
