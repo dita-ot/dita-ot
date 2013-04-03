@@ -5,26 +5,11 @@
 <title>XHTML processing modules</title>
 <shortdesc>The DITA-OT ships with several varieties of XHTML output, each of which follows roughly
 the same path through the processing pipeline. All XHTML-based transformation begin with the same
-call to the preprocess module, after which they generate XHTML files and then branch to create the
-transformation-specific navigation files.</shortdesc>
+call to the pre-processing module, after which they generate XHTML files and then branch to create
+the transformation-specific navigation files.</shortdesc>
 <conbody>
 <section>
 <draft-comment author="Kristen Eberlein" time="29 March 2013">Does the content in this section
-pertain to the <codeph>dita.map.xhtml</codeph> target?</draft-comment><p>After the pre-processing operation runs, XHTML-based builds each run a common series of Ant
-targets. Navigation may be created before or after this set of common routines.</p><ul>
-<li>When the <parmname>arg.css</parmname> parameter is passed to the build to add a CSS file, the
-<codeph>copy-css</codeph> target copies the CSS file from its source location to the relative
-location in the output directory.</li>
-<li>When a DITAVAL file is used, the <codeph>copy-revflag</codeph> target copies the default start-
-and end-revision flags into the output directory.</li>
-<li>The <codeph>dita.inner.topics.xhtml</codeph> and <codeph>dita.outer.topics.xhtml</codeph>
-targets are used to convert DITA topics into XHTML files. After the pre-processing is completed,
-each DITA topic in the temporary directory corresponds to one XHTML file.
-The<codeph>dita.inner.topics.xhtml</codeph> target is used to process documents that are in the map
-directory (or subdirectories of the map directory). The <codeph>dita.outer.topics.xhtml</codeph>
-target is used to process documents that are outside of the scope of the map, and thus might end up
-outside of the designated output directory. Various DITA-OT parameters control how documents
-processed by the <codeph>dita.outer.topics.xhtml</codeph> target are handled.</li>
-</ul></section>
+pertain to the <codeph>dita.map.xhtml</codeph> target?</draft-comment></section>
 </conbody>
 </concept>
