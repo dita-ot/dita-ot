@@ -26,6 +26,7 @@
         <topicref href="preprocess-flagging.dita"/>
       </topicref>
       <topicref href="XhtmlWithNavigation.dita">
+        <topicref href="XhtmlCommon.dita"/>
         <topicref href="XhtmlDefault.dita"/>
         <topicref href="XhtmlEclipse.dita"/>
         <topicref href="XhtmlTocjs.dita"/>
@@ -70,10 +71,10 @@
     <topicref href="ant-properties.dita"/>
     <topicref href="DITA1.2-implementation-dependent-features.dita"/>
     <topicref href="extended-functionality.dita"/>
-    <!-- XXX: is this obsolete? -->
-    <topicref href="topicmerge.dita" navtitle="Topic merge"/>
-    <!--The following topic needs o be updated. robert to work with Eric-->
-    <topicref href="workingwithdocplugin.dita" navtitle="Working with documentation plug-in"/>
+    <!-- XXX: is this obsolete? 2 April 2013: Commented out; high priority to write new topic about topic merge-->
+    <!--<topicref href="topicmerge.dita" navtitle="Topic merge"/>-->
+    <!--The following topic needs o be updated. robert to work with Eric. 2 April 2013: Commented out; low priority to write new topic about this-->
+    <!--<topicref href="workingwithdocplugin.dita" navtitle="Working with documentation plug-in"/>-->
     <!-- To be cleaned up:
     DITA-OTArchitecture.xml referenced DITA-OTGenListModule.dita, which is out of date and
     no longer referenced. The topic should be cleaned up or removed. It is also commented 
