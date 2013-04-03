@@ -10,7 +10,7 @@
     <metadata>
       <keywords>
         <indexterm>command-line
-              tool<indexterm>parameters<indexterm>odtimgembed</indexterm><indexterm>odtincluderellinks</indexterm></indexterm></indexterm>
+            tool<indexterm>parameters<indexterm>odtimgembed</indexterm></indexterm></indexterm>
       </keywords>
     </metadata>
   </prolog>
@@ -31,12 +31,6 @@
             <entry><parmname>odtimgembed</parmname></entry>
             <entry
               conref="ant-parameters-odt-transformation.dita#ant-parameters-odt-transformation/args.odt.img.embed.desc"
-            />
-          </row>
-          <row>
-            <entry><parmname>odtincluderellinks</parmname></entry>
-            <entry
-              conref="ant-parameters-odt-transformation.dita#ant-parameters-odt-transformation/args.odt.include.rellinks.desc"
             />
           </row>
         </tbody>

@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This file is part of the DITA Open Toolkit project hosted on 
- Sourceforge.net. See the accompanying license.txt file for 
- applicable licenses.-->
-<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
- "reference.dtd">
-<reference id="preprocess-coderef" xml:lang="en-us">
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "concept.dtd">
+<concept id="preprocess-coderef" xml:lang="en-us">
 <title>Resolve code references (codref)</title>
-<shortdesc>The <codeph>coderef</codeph> module resolves references
-made with the <codeph>&lt;coderef></codeph> element, which was added
-in DITA 1.2. This module is available in DITA-OT 1.5 and later.</shortdesc>
-<refbody>
-<section><p>The <codeph>&lt;coderef></codeph> element is used inside
-of <codeph>&lt;codeblock></codeph> to reference code stored externally
-in non-XML documents. During the pre-process step, this Java module
-pulls the referenced content into the <codeph>&lt;codeblock></codeph> element.</p></section>
-</refbody>
-</reference>
+<shortdesc>The <codeph>coderef</codeph> step resolves references made with the &lt;coderef> element.
+    This step is implemented in Java.</shortdesc>
+<conbody>
+<section><p>The &lt;coderef> is used to reference code stored externally in non-XML documents. During the
+    pre-processing step, the referenced content is pulled into the containing  &lt;codeblock>
+    element.</p></section>
+</conbody>
+</concept>
