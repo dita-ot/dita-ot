@@ -115,11 +115,4 @@ public class TestGenListModuleReader {
         assertEquals(0, subsidiaryTargets.size());
     }
     
-    @Test
-    public void testIsValidKeyName() {
-    	assertTrue(GenListModuleReader.isValidKeyName("A"));
-    	assertTrue(GenListModuleReader.isValidKeyName("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:@!$&'()*+,;="));
-    	assertFalse(GenListModuleReader.isValidKeyName("A/B"));
-    }
-    
 }

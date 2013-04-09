@@ -1207,10 +1207,6 @@ public final class GenListModuleReader extends AbstractXMLReader {
             // Many keys can be defined in a single definition, like
             // keys="a b c", a, b and c are seperated by blank.
             for (final String key : attrValue.split(" ")) {
-                if (!isValidKeyName(key)) {
-                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ055E", key).toString());
-                    continue;
-                }
                 if (!keysDefMap.containsKey(key) && !key.equals("")) {
                     if (target != null && target.length() != 0) {
                         if (attrScope != null && (attrScope.equals(ATTR_SCOPE_VALUE_EXTERNAL) || attrScope.equals(ATTR_SCOPE_VALUE_PEER))) {
@@ -1414,53 +1410,6 @@ public final class GenListModuleReader extends AbstractXMLReader {
         }
         f = f.replace(URI_SEPARATOR, File.separator);
         return f;
-    }
-
-    /**
-     * Validate key name
-     * 
-     * @param key key name
-     * @return {@code true} if key name is valid, otherwise {@code false}
-     */
-    public static boolean isValidKeyName(final String key) {
-        for (final char c : key.toCharArray()) {
-            switch (c) {
-            // disallowed characters
-            case '{':
-            case '}':
-            case '[':
-            case ']':
-            case '/':
-            case '#':
-            case '?':
-                return false;
-                // URI characters
-            case '-':
-            case '.':
-            case '_':
-            case '~':
-            case ':':
-            case '@':
-            case '!':
-            case '$':
-            case '&':
-            case '\'':
-            case '(':
-            case ')':
-            case '*':
-            case '+':
-            case ',':
-            case ';':
-            case '=':
-                break;
-            default:
-                if (!((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9'))) {
-                    return false;
-                }
-                break;
-            }
-        }
-        return true;
     }
 
     /**
