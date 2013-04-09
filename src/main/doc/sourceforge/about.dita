@@ -28,11 +28,11 @@
       </linkinfo>
     </linklist>
     <linklist outputclass="startguide">
-      <link href="/latest/quickstartguide/demostart.dita" scope="peer">
+      <link href="/latest/" scope="peer">
         <linktext>Get Started</linktext>
       </link>
       <linkinfo>
-        <p>Walk through the first steps needed to publish documentation.</p>
+        <p>See the Getting Started overview in the toolkit documentation.</p>
       </linkinfo>
     </linklist>
     <linklist outputclass="documentation">
