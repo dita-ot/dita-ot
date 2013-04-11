@@ -891,10 +891,10 @@ public final class GenListModuleReader extends AbstractXMLReader {
             }
         }
 
-        //onlyTopicInMap is on.
-        if(outputUtils.getOnlyTopicInMap() && this.canResolved()){
-            //topicref(only defined in ditamap file.)
-            if(MAP_TOPICREF.matches(classValue)){
+        // onlyTopicInMap is on.
+        topicref: if (outputUtils.getOnlyTopicInMap() && this.canResolved()) {
+            // topicref(only defined in ditamap file.)
+            if (MAP_TOPICREF.matches(classValue)) {
 
                 //get href attribute value.
                 final String hrefValue = atts.getValue(ATTRIBUTE_NAME_HREF);
@@ -910,7 +910,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
                             || "peer".equalsIgnoreCase(attrScope)
                             || hrefValue.indexOf(COLON_DOUBLE_SLASH) != -1
                             || hrefValue.startsWith(SHARP)) {
-                        return;
+                        break topicref;
                     }
                     //normalize href value.
                     final File target=new File(hrefValue);
@@ -924,9 +924,9 @@ public final class GenListModuleReader extends AbstractXMLReader {
                     fileName = FileUtils.separatorsToUnix(fileName);
 
                     final boolean canParse = parseBranch(atts, hrefValue, fileName);
-                    if(!canParse){
-                        return;
-                    }else{
+                    if (!canParse) {
+                        break topicref;
+                    } else {
                         topicrefStack.push(localName);
                     }
 
@@ -938,7 +938,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
                             || "peer".equalsIgnoreCase(attrScope)
                             || conrefValue.indexOf(COLON_DOUBLE_SLASH) != -1
                             || conrefValue.startsWith(SHARP)) {
-                        return;
+                        break topicref;
                     }
                     //normalize href value.
                     final File target=new File(conrefValue);
@@ -953,9 +953,9 @@ public final class GenListModuleReader extends AbstractXMLReader {
                     fileName = FileUtils.separatorsToUnix(fileName);
 
                     final boolean canParse = parseBranch(atts, conrefValue, fileName);
-                    if(!canParse){
-                        return;
-                    }else{
+                    if (!canParse) {
+                        break topicref;
+                    } else {
                         topicrefStack.push(localName);
                     }
                 }
