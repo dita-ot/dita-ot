@@ -881,7 +881,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
         }
 
         // onlyTopicInMap is on.
-        if (outputUtils.getOnlyTopicInMap() && this.canResolved()) {
+        topicref: if (outputUtils.getOnlyTopicInMap() && this.canResolved()) {
             // topicref(only defined in ditamap file.)
             if (MAP_TOPICREF.matches(classValue)) {
 
@@ -897,7 +897,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
                     final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
                     if (ATTR_SCOPE_VALUE_EXTERNAL.equalsIgnoreCase(attrScope) || ATTR_SCOPE_VALUE_PEER.equalsIgnoreCase(attrScope)
                             || hrefValue.indexOf(COLON_DOUBLE_SLASH) != -1 || hrefValue.startsWith(SHARP)) {
-                        return;
+                        break topicref;
                     }
                     // normalize href value.
                     final File target = new File(hrefValue);
@@ -912,7 +912,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 
                     final boolean canParse = parseBranch(atts, hrefValue, fileName);
                     if (!canParse) {
-                        return;
+                        break topicref;
                     } else {
                         topicrefStack.push(localName);
                     }
@@ -923,7 +923,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
                     final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
                     if (ATTR_SCOPE_VALUE_EXTERNAL.equalsIgnoreCase(attrScope) || ATTR_SCOPE_VALUE_PEER.equalsIgnoreCase(attrScope)
                             || conrefValue.indexOf(COLON_DOUBLE_SLASH) != -1 || conrefValue.startsWith(SHARP)) {
-                        return;
+                        break topicref;
                     }
                     // normalize href value.
                     final File target = new File(conrefValue);
@@ -939,7 +939,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 
                     final boolean canParse = parseBranch(atts, conrefValue, fileName);
                     if (!canParse) {
-                        return;
+                        break topicref;
                     } else {
                         topicrefStack.push(localName);
                     }
