@@ -21,9 +21,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import org.dita.dost.TestUtils;
-import org.dita.dost.module.GenMapAndTopicListModule.KeyDef;
 import org.dita.dost.reader.GenListModuleReader.Reference;
 import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.OutputUtils;
 
 /**

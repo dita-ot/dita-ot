@@ -35,7 +35,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.GenMapAndTopicListModule.KeyDef;
+import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.DITAAttrUtils;
 import org.dita.dost.util.FileUtils;
@@ -1212,7 +1212,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
                         if (attrScope != null && (attrScope.equals(ATTR_SCOPE_VALUE_EXTERNAL) || attrScope.equals(ATTR_SCOPE_VALUE_PEER))) {
                             // store external or peer resources.
                             exKeysDefMap.put(key, target);
-                            keysDefMap.put(key, new KeyDef(key, target, null));
+                            keysDefMap.put(key, new KeyDef(key, target, attrScope, null));
                         } else {
                             String tail = "";
                             if (target.indexOf(SHARP) != -1) {
@@ -1223,7 +1223,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
                                 target = FileUtils.getRelativePath(rootFilePath.getAbsolutePath(), target);
                             }
                             target = FileUtils.normalizeDirectory(currentDir, target);
-                            keysDefMap.put(key, new KeyDef(key, target + tail, null));
+                            keysDefMap.put(key, new KeyDef(key, target + tail, ATTR_SCOPE_VALUE_LOCAL, null));
                         }
                     } else if (!StringUtils.isEmptyString(keyRef)) {
                         // store multi-level keys.
@@ -1231,7 +1231,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
                     } else {
                         // target is null or empty, it is useful in the future
                         // when consider the content of key definition
-                        keysDefMap.put(key, new KeyDef(key, null, null));
+                        keysDefMap.put(key, new KeyDef(key, null, null, null));
                     }
                 } else {
                     logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ045I", key, target).toString());

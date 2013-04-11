@@ -24,11 +24,11 @@ import org.w3c.dom.Element;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.module.GenMapAndTopicListModule.KeyDef;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.KeyrefReader;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.KeyDef;
 import org.dita.dost.writer.KeyrefPaser;
 /**
  * Keyref Module.
@@ -76,7 +76,7 @@ final class KeyrefModule implements AbstractPipelineModule {
         // store the key name defined in a map(keyed by ditamap file)
         final Hashtable<String, Set<String>> maps = new Hashtable<String, Set<String>>();
 
-        for (final KeyDef keyDef: GenMapAndTopicListModule.readKeydef(new File(tempDir, KEYDEF_LIST_FILE))) {
+        for (final KeyDef keyDef: KeyDef.readKeydef(new File(tempDir, KEYDEF_LIST_FILE))) {
             keymap.put(keyDef.keys, keyDef.href);
             // map file which define the keys
             final String map = keyDef.source;
