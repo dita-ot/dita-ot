@@ -72,14 +72,8 @@ public class ValidationFilterTest {
 	
 	@Test
     public void testId() throws SAXException, URISyntaxException {
-        final List<String> res = new ArrayList<String>();
         final ValidationFilter f = new ValidationFilter();
-        f.setContentHandler(new DefaultHandler() {
-            @Override
-            public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
-                res.add(atts.getValue(ATTRIBUTE_NAME_HREF));
-            }
-        });
+        f.setContentHandler(new DefaultHandler());
         final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
         f.setLogger(l);
         
@@ -115,14 +109,8 @@ public class ValidationFilterTest {
 	
 	@Test
     public void testKeys() throws SAXException, URISyntaxException {
-        final List<String> res = new ArrayList<String>();
         final ValidationFilter f = new ValidationFilter();
-        f.setContentHandler(new DefaultHandler() {
-            @Override
-            public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
-                res.add(atts.getValue(ATTRIBUTE_NAME_KEYS));
-            }
-        });
+        f.setContentHandler(new DefaultHandler());
         final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
         f.setLogger(l);
         

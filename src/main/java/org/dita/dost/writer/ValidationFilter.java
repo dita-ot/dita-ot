@@ -30,6 +30,7 @@ import org.xml.sax.helpers.AttributesImpl;
  */
 public final class ValidationFilter extends AbstractXMLFilter {
 
+    private final MessageUtils messageUtils = MessageUtils.getInstance();
 	private final Set<String> topicIds = new HashSet<String>();
 	private Map<String, Map<String, Set<String>>> validateMap = null;
 	private Locator locator;
@@ -46,6 +47,17 @@ public final class ValidationFilter extends AbstractXMLFilter {
 		throw new UnsupportedOperationException();
 	}
 
+    /**
+     * Set valid attribute values.
+     * 
+     * <p>The contents of the map is in pseudo-code
+     * {@code Map<AttName, Map<ElemName, <Set<Value>>>}.
+     * For default element mapping, the value is {@code *}.
+     */
+    public void setValidateMap(final Map<String, Map<String, Set<String>>> validateMap) {
+        this.validateMap = validateMap;
+    }
+	
 	// Locator methods
     
 	@Override
@@ -80,16 +92,15 @@ public final class ValidationFilter extends AbstractXMLFilter {
 			final int i = lang.indexOf('_');
 			if (i != -1) {
 				if (Configuration.processingMode == Configuration.Mode.STRICT) {
-					throw new SAXException(MessageUtils.getInstance().getMessage("DOTJ056E", lang).setLocation(locator).toString());
-				} else {
-					logger.logError(MessageUtils.getInstance().getMessage("DOTJ056E", lang).setLocation(locator).toString());
-					if (Configuration.processingMode == Configuration.Mode.LAX) {
-						if (res == null) {
-							res = new AttributesImpl(atts);
-						}
-						res.setValue(res.getIndex(XML_NS_URI, "lang"), lang.replace('_', '-'));
-					}					
+					throw new SAXException(messageUtils.getMessage("DOTJ056E", lang).setLocation(locator).toString());
 				}
+				logger.logError(messageUtils.getMessage("DOTJ056E", lang).setLocation(locator).toString());
+				if (Configuration.processingMode == Configuration.Mode.LAX) {
+					if (res == null) {
+						res = new AttributesImpl(atts);
+					}
+					res.setValue(res.getIndex(XML_NS_URI, "lang"), lang.replace('_', '-'));
+				}					
 			}
 		}
         return res;
@@ -106,9 +117,9 @@ public final class ValidationFilter extends AbstractXMLFilter {
 			if (id != null) {
 				if (topicIds.contains(id)) {
 					if (Configuration.processingMode == Configuration.Mode.STRICT) {
-						throw new SAXException(MessageUtils.getInstance().getMessage("DOTJ057E", id).setLocation(locator).toString());
+						throw new SAXException(messageUtils.getMessage("DOTJ057E", id).setLocation(locator).toString());
 					} else {
-						logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ057E", id).setLocation(locator).toString());			
+						logger.logWarn(messageUtils.getMessage("DOTJ057E", id).setLocation(locator).toString());			
 					}
 				}
 				topicIds.add(id);
@@ -130,9 +141,9 @@ public final class ValidationFilter extends AbstractXMLFilter {
 			} catch (final URISyntaxException e) {
 				switch (processingMode) {
                 case STRICT:
-                    throw new RuntimeException(MessageUtils.getInstance().getMessage("DOTJ054E", ATTRIBUTE_NAME_HREF, href).setLocation(locator) + ": " + e.getMessage(), e);
+                    throw new RuntimeException(messageUtils.getMessage("DOTJ054E", ATTRIBUTE_NAME_HREF, href).setLocation(locator) + ": " + e.getMessage(), e);
                 case SKIP:
-                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ054E", ATTRIBUTE_NAME_HREF, href).setLocation(locator) + ", using invalid value.");
+                    logger.logError(messageUtils.getMessage("DOTJ054E", ATTRIBUTE_NAME_HREF, href).setLocation(locator) + ", using invalid value.");
                     break;
                 case LAX:
                     try {
@@ -141,9 +152,9 @@ public final class ValidationFilter extends AbstractXMLFilter {
 							res = new AttributesImpl(atts);
 						}
                         res.setValue(res.getIndex(ATTRIBUTE_NAME_HREF), u);
-                        logger.logError(MessageUtils.getInstance().getMessage("DOTJ054E", ATTRIBUTE_NAME_HREF, href).setLocation(locator) + ", using '" + u + "'.");
+                        logger.logError(messageUtils.getMessage("DOTJ054E", ATTRIBUTE_NAME_HREF, href).setLocation(locator) + ", using '" + u + "'.");
                     } catch (final URISyntaxException e1) {
-                        logger.logError(MessageUtils.getInstance().getMessage("DOTJ054E", ATTRIBUTE_NAME_HREF, href).setLocation(locator) + ", using invalid value.");
+                        logger.logError(messageUtils.getMessage("DOTJ054E", ATTRIBUTE_NAME_HREF, href).setLocation(locator) + ", using invalid value.");
                     }
                     break;
                 }
@@ -174,9 +185,8 @@ public final class ValidationFilter extends AbstractXMLFilter {
                     final String attrValue = atts.getValue(i);
                     final String[] keylist = attrValue.trim().split("\\s+");
                     for (final String s : keylist) {
-                        // Warning ? Value not valid.
                         if (!StringUtils.isEmptyString(s) && !valueSet.contains(s)) {
-                            logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ049W", attrName, qName, attrValue, StringUtils.assembleString(valueSet, COMMA)).toString());
+                            logger.logWarn(messageUtils.getMessage("DOTJ049W", attrName, qName, attrValue, StringUtils.assembleString(valueSet, COMMA)).toString());
                         }
                     }
                 }
@@ -192,7 +202,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
         if (keys != null) {
             for (final String key : keys.split(" ")) {
                 if (!isValidKeyName(key)) {
-                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ055E", key).toString());
+                    logger.logError(messageUtils.getMessage("DOTJ055E", key).toString());
                 }
             }
         }
@@ -237,15 +247,6 @@ public final class ValidationFilter extends AbstractXMLFilter {
             }
         }
         return true;
-    }
-    
-    /**
-     * Set valid attribute values.
-     * 
-     * @param validateMap map of valid attribute values
-     */
-    public void setValidateMap(final Map<String, Map<String, Set<String>>> validateMap) {
-        this.validateMap = validateMap;
     }
 	
 }
