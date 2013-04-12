@@ -5,6 +5,7 @@
   <topichead navtitle="About">
     <topicref href="about.dita" navtitle="Overview" locktitle="yes"/>
     <topicref href="features.dita" navtitle="Features"/>
+    <topicref href="get-involved.dita" navtitle="Get involved" locktitle="yes"/>
     <topicref href="license.dita" navtitle="License"/>
     <topicref navtitle="Who We Are" href="who_we_are.dita"/>
   </topichead>

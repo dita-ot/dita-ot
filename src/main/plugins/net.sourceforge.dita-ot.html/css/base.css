@@ -96,7 +96,7 @@ a:hover {
 
 /* About page */
 
-.startguide, .download, .documentation {
+.startguide, .download, .documentation, .contribute {
   width: 120px;
   padding-left: 40px;
   float: left;
@@ -104,12 +104,11 @@ a:hover {
   background-position: left top;
 }
 
-.startguide {
+.startguide, .contribute {
   background-image: url('../images/start-here.png');
 }
 .download {
   background-image: url('../images/go-down.png');
-  
 }
 .documentation {
   background-image: url('../images/text-x-generic.png');
