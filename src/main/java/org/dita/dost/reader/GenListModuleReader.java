@@ -321,8 +321,9 @@ public final class GenListModuleReader extends AbstractXMLReader {
      * @return the resource-only set
      */
     public Set<String> getResourceOnlySet() {
-        resourceOnlySet.removeAll(crossSet);
-        return resourceOnlySet;
+        final Set<String> res = new HashSet<String>(resourceOnlySet);
+        res.removeAll(crossSet);
+        return res;
     }
 
     /**
