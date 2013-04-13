@@ -28,19 +28,20 @@
       </linkinfo>
     </linklist>
     <linklist outputclass="startguide">
-      <link href="/latest/quickstartguide/demostart.dita" scope="peer">
+      <link href="/latest/" scope="external" format="html">
         <linktext>Get Started</linktext>
       </link>
       <linkinfo>
-        <p>Walk through the first steps needed to publish documentation.</p>
+        <p>See the <cite>Getting Started</cite> section in the DITA-OT documentation.</p>
       </linkinfo>
     </linklist>
-    <linklist outputclass="documentation">
-      <link href="/latest/" scope="external" format="html">
-        <linktext>Read the Docs</linktext>
+    <!--<linklist outputclass="documentation"><link href="/latest/" scope="external" format="html"><linktext>Read the Docs</linktext></link><linkinfo><p>Everything you need to know about how to use DITA Open Toolkit.</p></linkinfo></linklist>-->
+    <linklist outputclass="whoweare">
+      <link href="who_we_are.dita">
+        <linktext>Who We Are</linktext>
       </link>
       <linkinfo>
-        <p>Everything you need to know about how to use DITA Open Toolkit.</p>
+        <p>Who we are and how to get involved.</p>
       </linkinfo>
     </linklist>
   </related-links>
