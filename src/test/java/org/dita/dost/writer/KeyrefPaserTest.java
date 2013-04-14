@@ -60,7 +60,8 @@ public class KeyrefPaserTest {
         final KeyrefPaser parser = new KeyrefPaser();
         parser.setLogger(new TestUtils.TestLogger());
         parser.setKeyDefinition(keyDefinition);
-        parser.setTempDir(tempDir.getAbsolutePath());
+        parser.setCurrentFile(new File("a.xml"));
+        parser.setTempDir(tempDir);
         parser.setKeyMap(keymap);
         parser.write(new File("a.xml").getPath());
 
@@ -73,7 +74,8 @@ public class KeyrefPaserTest {
         final KeyrefPaser parser = new KeyrefPaser();
         parser.setLogger(new TestUtils.TestLogger());
         parser.setKeyDefinition(keyDefinition);
-        parser.setTempDir(tempDir.getAbsolutePath());
+        parser.setCurrentFile(new File("b.ditamap"));
+        parser.setTempDir(tempDir);
         parser.setKeyMap(keymap);
         parser.write(new File("b.ditamap").getPath());
 

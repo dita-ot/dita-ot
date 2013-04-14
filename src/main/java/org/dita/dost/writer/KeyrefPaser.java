@@ -109,7 +109,9 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     }
         
     private Map<String, Element> definitionMap;
-    private String tempDir;
+    private File tempDir;
+    /** File name with relative path to the temporary directory of input file. */
+    private File inputFile;
 
     /**
      * It is stack used to store the place of current element
@@ -125,9 +127,6 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      * key reference element.
      */
     private int keyrefLeval;
-
-    /** Relative path of the filename to the temporary directory. */
-    private String filepath;
 
     /**
      * It is used to store the target of the keys
@@ -161,8 +160,6 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     /** Current key definition. */
     private Element elem;
 
-    /** File name with relative path to the temporary directory of input file. */
-    private String fileName;
     /** Set of link targets which are not resource-only */
     private Set<String> normalProcessingRoleTargets;
     
@@ -191,8 +188,15 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      * Set temp dir.
      * @param tempDir temp dir
      */
-    public void setTempDir(final String tempDir) {
+    public void setTempDir(final File tempDir) {
         this.tempDir = tempDir;
+    }
+    
+    /**
+     * Set current file.
+     */
+    public void setCurrentFile(final File inputFile) {
+        this.inputFile = inputFile;
     }
     
     /**
@@ -218,15 +222,17 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      */
     @Override
     public void write(final String filename) throws DITAOTException {
-        normalProcessingRoleTargets = new HashSet<String>();
-        final File inputFile = new File(tempDir, filename);
-        filepath = inputFile.getAbsolutePath();
-        fileName = filename;
-        super.write(filepath);
+        super.write(new File(tempDir, inputFile.getPath()).getAbsolutePath());
     }
-    
+        
     // XML filter methods ------------------------------------------------------
 
+    @Override
+    public void startDocument() throws SAXException {
+        normalProcessingRoleTargets = new HashSet<String>();
+        getContentHandler().startDocument();
+    }
+    
     @Override
     public void characters(final char[] ch, final int start, final int length) throws SAXException {
         if (keyrefLeval != 0 && new String(ch,start,length).trim().length() == 0) {
@@ -417,14 +423,14 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                             XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
                             XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
                             XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
-                            target_output = FileUtils.getRelativePath(fileName, target_output);
+                            target_output = FileUtils.getRelativePath(inputFile.getPath(), target_output);
                             target_output = normalizeHrefValue(target_output, elementId);
                             XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output);
                         } else if ("".equals(scopeValue) || ATTR_SCOPE_VALUE_LOCAL.equals(scopeValue)){
-                            final File topicFile = new File(FileUtils.resolveFile(tempDir, target));
+                            final File topicFile = new File(FileUtils.resolveFile(tempDir.getAbsolutePath(), target));
                             if (topicFile.exists()) {  
                                 final String topicId = this.getFirstTopicId(topicFile);
-                                target_output = FileUtils.getRelativePath(filepath, new File(tempDir, target).getAbsolutePath());
+                                target_output = FileUtils.getRelativePath(new File(tempDir, inputFile.getPath()).getAbsolutePath(), new File(tempDir, target).getAbsolutePath());
                                 valid = true;
                                 XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
                                 XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);

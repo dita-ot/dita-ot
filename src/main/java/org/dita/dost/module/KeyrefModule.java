@@ -13,14 +13,16 @@ import static org.dita.dost.util.Job.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.w3c.dom.Element;
+import org.xml.sax.XMLFilter;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
@@ -29,6 +31,7 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.KeyrefReader;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
+import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.KeyrefPaser;
 /**
  * Keyref Module.
@@ -111,12 +114,18 @@ final class KeyrefModule implements AbstractPipelineModule {
         }
         for(final String file: parseList){
             logger.logInfo("Processing " + new File(tempDir, file).getAbsolutePath());
+            
+            final List<XMLFilter> filters = new ArrayList<XMLFilter>();
             final KeyrefPaser parser = new KeyrefPaser();
             parser.setLogger(logger);
             parser.setKeyDefinition(keyDefinition);
-            parser.setTempDir(tempDir.getAbsolutePath());
+            parser.setTempDir(tempDir);
+            parser.setCurrentFile(new File(file));
             parser.setKeyMap(keymap);
-            parser.write(file);
+            filters.add(parser);
+            
+            XMLUtils.transform(new File(tempDir, file), filters);
+            
             // validate resource-only list
             for (final String t: parser.getNormalProcessingRoleTargets()) {
                 if (files.containsKey(t)) {
