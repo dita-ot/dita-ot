@@ -116,7 +116,6 @@ final class KeyrefModule implements AbstractPipelineModule {
             parser.setKeyDefinition(keyDefinition);
             parser.setTempDir(tempDir.getAbsolutePath());
             parser.setKeyMap(keymap);
-            parser.setExtName(extName);
             parser.write(file);
             // validate resource-only list
             for (final String t: parser.getNormalProcessingRoleTargets()) {

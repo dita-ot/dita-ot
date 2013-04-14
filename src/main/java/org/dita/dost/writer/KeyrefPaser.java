@@ -8,32 +8,20 @@
  */
 package org.dita.dost.writer;
 
+import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.util.Constants.*;
-import static javax.xml.XMLConstants.*;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 import java.util.Stack;
 
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.sax.SAXSource;
-import javax.xml.transform.stream.StreamResult;
-
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.util.DitaClass;
@@ -41,25 +29,20 @@ import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.MergeUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.XMLUtils;
-
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLFilterImpl;
 import org.xml.sax.helpers.AttributesImpl;
-
 
 /**
  * Filter for processing key reference elements in DITA files.
  * Instances are reusable but not thread-safe.
  */
-public final class KeyrefPaser extends XMLFilterImpl {
+public final class KeyrefPaser extends AbstractXMLFilter {
 
     /**
      * Set of attributes which should not be copied from
@@ -124,11 +107,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
         ki.add(new KeyrefInfo(TOPIC_INDEXTERMREF, null, false));
         keyrefInfos = Collections.unmodifiableList(ki);
     }
-    
-    private final XMLReader parser;
-    private final TransformerFactory tf;
-    
-    private DITAOTLogger logger;
+        
     private Map<String, Element> definitionMap;
     private String tempDir;
 
@@ -149,7 +128,6 @@ public final class KeyrefPaser extends XMLFilterImpl {
 
     /** Relative path of the filename to the temporary directory. */
     private String filepath;
-    private String extName;
 
     /**
      * It is used to store the target of the keys
@@ -199,40 +177,6 @@ public final class KeyrefPaser extends XMLFilterImpl {
         keyMap = new HashMap<String, String>();
         elemName = new Stack<String>();
         hasSubElem = new Stack<Boolean>();
-        try {
-            parser = StringUtils.getXMLReader();
-            parser.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-            parser.setFeature(FEATURE_NAMESPACE, true);
-            setParent(parser);
-            tf = TransformerFactory.newInstance();
-        } catch (final Exception e) {
-            throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
-        }
-    }
-    
-    /**
-     * Set logger
-     * 
-     * @param logger output logger
-     */
-    public void setLogger(final DITAOTLogger logger) {
-        this.logger = logger;
-    }
-    
-    /**
-     * Get extension name.
-     * @return extension name
-     */
-    public String getExtName() {
-        return extName;
-    }
-    
-    /**
-     * Set extension name.
-     * @param extName extension name
-     */
-    public void setExtName(final String extName) {
-        this.extName = extName;
     }
     
     public void setContent(final Content content) {
@@ -272,36 +216,13 @@ public final class KeyrefPaser extends XMLFilterImpl {
      * @param filename file to process
      * @throws DITAOTException if key reference resolution failed
      */
+    @Override
     public void write(final String filename) throws DITAOTException {
         normalProcessingRoleTargets = new HashSet<String>();
         final File inputFile = new File(tempDir, filename);
         filepath = inputFile.getAbsolutePath();
-        final File outputFile = new File(tempDir, filename + ATTRIBUTE_NAME_KEYREF);
         fileName = filename;
-        OutputStream output = null;
-        try {
-            output = new BufferedOutputStream(new FileOutputStream(outputFile));
-            final Transformer t = tf.newTransformer();
-            final Source src = new SAXSource(this, new InputSource(inputFile.toURI().toString()));
-            final Result dst = new StreamResult(output); 
-            t.transform(src, dst);
-        } catch (final Exception e) {
-            throw new DITAOTException("Failed to process key references: " + e.getMessage(), e);
-        } finally {
-            if (output != null) {
-                try {
-                    output.close();
-                } catch (final Exception ex) {
-                    logger.logError("Failed to close output stream: " + ex.getMessage(), ex);
-                }
-            }
-        }
-        if (!inputFile.delete()) {
-            logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
-        }
-        if (!outputFile.renameTo(inputFile)) {
-            logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
-        }
+        super.write(filepath);
     }
     
     // XML filter methods ------------------------------------------------------
