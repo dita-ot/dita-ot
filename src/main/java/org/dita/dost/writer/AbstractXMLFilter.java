@@ -24,6 +24,7 @@ import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.xml.sax.InputSource;
+import org.xml.sax.XMLFilter;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLFilterImpl;
 
@@ -32,6 +33,7 @@ import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.XMLUtils;
 
 /**
  * Base for XML filters.
@@ -48,50 +50,8 @@ abstract class AbstractXMLFilter extends XMLFilterImpl implements AbstractWriter
 
     @Override
     public void write(final String filename) throws DITAOTException {
-        final File inputFile = new File(filename);
-        final File outputFile = new File(filename + FILE_EXTENSION_TEMP);
-        InputStream in = null;
-        OutputStream out = null;
         try {
-            final Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            final XMLReader reader = StringUtils.getXMLReader();
-            //reader.setErrorHandler(new DITAOTXMLErrorHandler(filename));
-            setParent(reader);
-            // ContentHandler must be reset so e.g. Saxon 9.1 will reassign ContentHandler
-            // when reusing filter with multiple Transformers.
-            setContentHandler(null);
-            in = new BufferedInputStream(new FileInputStream(inputFile));
-            out = new BufferedOutputStream(new FileOutputStream(outputFile));
-            final Source source = new SAXSource(this, new InputSource(in));
-            final Result result = new StreamResult(out);
-
-            transformer.transform(source, result);
-        } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (final IOException e) {
-                    logger.logError(e.getMessage(), e) ;
-                }
-            }
-            if (out != null) {
-                try {
-                    out.close();
-                } catch (final IOException e) {
-                    logger.logError(e.getMessage(), e) ;
-                }
-            }
-        }
-        // replace original file
-        try {
-            if (!inputFile.delete()) {
-                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
-            }
-            if (!outputFile.renameTo(inputFile)) {
-                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
-            }
+            XMLUtils.transform(new File(filename), java.util.Arrays.asList((XMLFilter) this));
         } catch (final Exception e) {
             logger.logError(e.getMessage(), e) ;
         }
