@@ -23,6 +23,7 @@ import org.junit.BeforeClass;
 
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
+import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.TestUtils;
 import org.dita.dost.util.MergeUtils;
 import org.dita.dost.util.OutputUtils;
@@ -44,6 +45,10 @@ public class MergeTopicParserTest {
             throw new RuntimeException("SAX transformation factory not supported");
         }
         stf = (SAXTransformerFactory) tf;
+        
+        TestUtils.resetXMLUnit();
+        XMLUnit.setIgnoreWhitespace(true);
+        XMLUnit.setIgnoreComments(true);
     }
 
     @Test
