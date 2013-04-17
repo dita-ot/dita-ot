@@ -131,7 +131,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
                 pathFromMap = FileUtils.separatorsToUnix(FileUtils.resolveTopic(new File(filePath).getParent(),attValue.substring(0,sharpIndex)));
             }
             pathFromMap = URLUtils.decode(pathFromMap);
-            XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OHREF, URLUtils.clean(pathFromMap + attValue.substring(sharpIndex)));
+            XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OHREF, URLUtils.clean(pathFromMap + attValue.substring(sharpIndex), false));
             String topicId = attValue.substring(sharpIndex);
             final int slashIndex = topicId.indexOf(SLASH);
             final int index = attValue.indexOf(SLASH, sharpIndex);
@@ -146,7 +146,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
         } else { // href value refer to a topic
             pathFromMap = FileUtils.resolveTopic(new File(filePath).getParent(),attValue);
             pathFromMap = URLUtils.decode(pathFromMap);
-            XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OHREF, URLUtils.clean(pathFromMap));
+            XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OHREF, URLUtils.clean(pathFromMap, false));
             if (util.findId(pathFromMap)) {
                 retAttValue = SHARP + util.getIdValue(pathFromMap);
             } else {
@@ -162,7 +162,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
 
             }
         }
-        return URLUtils.clean(retAttValue);
+        return URLUtils.clean(retAttValue, false);
     }
 
     /**
