@@ -32,6 +32,7 @@
   </topichead>
   <topichead navtitle="Resources">
     <!--topicref navtitle="Developers"/-->
+    <topicref navtitle="DITA Generator" scope="external" format="html" href="http://dita-generator-hrd.appspot.com/" />
     <topicref navtitle="Issue Tracking" scope="external" format="html" href="https://github.com/dita-ot/dita-ot/issues"/>
     <topicref navtitle="Mailing lists" href="mailing_lists.dita"/>
     <topicref navtitle="Version Control" scope="external" format="html" href="https://github.com/dita-ot/dita-ot"/>
