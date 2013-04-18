@@ -293,7 +293,7 @@
             <xs:documentation>The &lt;addressdetails&gt; element contains information about the
                 address of the author or authoring group.</xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="addressdetails.class">
                     <xs:attribute ref="class" default="+ topic/ph xnal-d/addressdetails "/>
@@ -332,7 +332,7 @@
             <xs:documentation>The &lt;administrativearea&gt; element contains information about
                 a county, state, or province. </xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="administrativearea.class">
                     <xs:attribute ref="class" default="+ topic/ph xnal-d/administrativearea "/>
@@ -366,7 +366,7 @@
         <xs:annotation>
             <xs:documentation>A &lt;contactnumber&gt; element contains a telephone number. </xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="contactnumber.class">
                     <xs:attribute ref="class" default="+ topic/data xnal-d/contactnumber "/>
@@ -431,7 +431,7 @@
         <xs:annotation>
             <xs:documentation>The &lt;country&gt; element contains the name of a country. </xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="country.class">
                     <xs:attribute ref="class" default="+ topic/ph xnal-d/country "/>
@@ -465,7 +465,7 @@
         <xs:annotation>
             <xs:documentation>The &lt;emailaddress&gt; element contains an e-mail address. </xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="emailaddress.class">
                     <xs:attribute ref="class" default="+ topic/data xnal-d/emailaddress "/>
@@ -529,7 +529,7 @@
         <xs:annotation>
             <xs:documentation>The &lt;firstname&gt; element contains the person's first name. </xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="firstname.class">
                     <xs:attribute ref="class" default="+ topic/data xnal-d/firstname "/>            
@@ -563,7 +563,7 @@
             <xs:documentation>The &lt;generationidentifier&gt; element contains information about
                 the person's generation, such as: Jr, III, or VIII.</xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="generationidentifier.class">
                     <xs:attribute ref="class" default="+ topic/data xnal-d/generationidentifier "/>
@@ -597,7 +597,7 @@
             <xs:documentation>The &lt;honorific&gt; element contains the person's title, such as:
                 Dr., Mr., Ms., HRH.. or Grand Exalted Wizard. </xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="honorific.class">
                     <xs:attribute ref="class" default="+ topic/data xnal-d/honorific "/>
@@ -630,7 +630,7 @@
         <xs:annotation>
             <xs:documentation>The &lt;lastname&gt; element contains the person's last name. </xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="lastname.class">
                     <xs:attribute ref="class" default="+ topic/data xnal-d/lastname "/>
@@ -665,7 +665,7 @@
                 postal or ZIP code. It can contain the information directly, or by acting
                 as a wrapper for &lt;localityname&gt; and &lt;postalcode&gt;. </xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="locality.class">
                     <xs:attribute ref="class" default="+ topic/ph xnal-d/locality "/>
@@ -702,7 +702,7 @@
             <xs:documentation>The &lt;localityname&gt; element contains the name of the locality
                 or city.</xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="localityname.class">
                     <xs:attribute ref="class" default="+ topic/ph xnal-d/localityname "/>
@@ -737,7 +737,7 @@
             <xs:documentation>The &lt;middlename&gt; element contains the person's middle name or
                 initial. </xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="middlename.class">
                     <xs:attribute ref="class" default="+ topic/data xnal-d/middlename "/>            
@@ -842,7 +842,7 @@
             <xs:documentation>The &lt;organizationname&gt; element contains name information about
                 the authoring organization. </xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="organizationname.class">
                     <xs:attribute ref="class" default="+ topic/ph xnal-d/organizationname "/>
@@ -913,7 +913,7 @@
             <xs:documentation>The &lt;otherinfo&gt; element contains other name information about
                 the author or authoring organization. </xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="otherinfo.class">
                     <xs:attribute ref="class" default="+ topic/data xnal-d/otherinfo "/>
@@ -1020,7 +1020,7 @@
             <xs:documentation>The &lt;postalcode&gt; element contains information about the postal
                 code  or the ZIP code.</xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="postalcode.class">
                     <xs:attribute ref="class" default="+ topic/ph xnal-d/postalcode "/>
@@ -1057,7 +1057,7 @@
             <xs:documentation>The &lt;thoroughfare&gt; element contains information about the thoroughfare
                 - for example, the street, avenue, or boulevard - on which an address is located.</xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="thoroughfare.class">
                     <xs:attribute ref="class" default="+ topic/ph xnal-d/thoroughfare "/>
@@ -1091,7 +1091,7 @@
         <xs:annotation>
             <xs:documentation>The &lt;url&gt; element contains a Uniform Resource Locator (URL). </xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="url.class">
                     <xs:attribute ref="class" default="+ topic/data xnal-d/url "/>                    

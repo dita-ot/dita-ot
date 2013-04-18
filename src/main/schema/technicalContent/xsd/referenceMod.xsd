@@ -87,7 +87,7 @@
         description of the subject's interface or high-level structure.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="refsyn.class">
           <xs:attribute ref="class" default="- topic/section reference/refsyn "/>
@@ -144,7 +144,7 @@
         blank.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="propvalue.class">
           <xs:attribute ref="class" default="- topic/stentry  reference/propvalue "/>
@@ -160,7 +160,7 @@
         of the property type and its listed values (or just the value).
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="propdesc.class">
           <xs:attribute ref="class" default="- topic/stentry  reference/propdesc "/>
@@ -175,7 +175,7 @@
         The proptype element describes the type of property.        
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="proptype.class">
           <xs:attribute ref="class" default="- topic/stentry reference/proptype "/>
@@ -200,7 +200,7 @@
   </xs:element>
    
   <xs:element name="propvaluehd">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="propvaluehd.class">
           <xs:attribute ref="class" default="- topic/stentry  reference/propvaluehd "/>
@@ -210,7 +210,7 @@
   </xs:element>
    
   <xs:element name="propdeschd">
-    <xs:complexType mixed="true">
+    <xs:complexType>
      <xs:complexContent>
        <xs:extension base="propdeschd.class">
          <xs:attribute ref="class" default="- topic/stentry  reference/propdeschd "/>
@@ -220,7 +220,7 @@
   </xs:element>
    
   <xs:element name="proptypehd">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="proptypehd.class">
           <xs:attribute ref="class" default="- topic/stentry reference/proptypehd "/>

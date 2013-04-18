@@ -160,7 +160,7 @@
         The shape element supports the basic functionality of the HTML <q>client-side</q> image map markup.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="shape.class">
           <xs:attribute ref="class" default="+ topic/keyword ut-d/shape "/>
@@ -197,7 +197,7 @@
         The coords element supports the basic functionality of the HTML <q>client-side</q> image map markup.
        </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="coords.class">
           <xs:attribute ref="class" default="+ topic/ph ut-d/coords "/>

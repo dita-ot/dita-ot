@@ -110,7 +110,7 @@
         to document user interface tasks, concepts and reference information.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="uicontrol.class">
           <xs:attribute ref="class" default="+ topic/ph ui-d/uicontrol "/>
@@ -151,7 +151,7 @@
         user interface tasks, concepts and reference information.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="shortcut.class">
           <xs:attribute ref="class" default="+ topic/keyword ui-d/shortcut "/>
@@ -192,7 +192,7 @@
           user interface tasks, concepts and reference information.
         </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="wintitle.class">
           <xs:attribute ref="class" default="+ topic/keyword ui-d/wintitle "/>
@@ -275,7 +275,7 @@
         of a computer screen or user interface panel (window).
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="screen.class">
           <xs:attribute ref="class" default="+ topic/pre ui-d/screen "/>

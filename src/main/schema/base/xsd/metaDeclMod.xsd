@@ -76,7 +76,7 @@
         point to another location where the author information is defined.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType  mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="author.class">
           <xs:attribute ref="class" default="- topic/author "/>
@@ -127,7 +127,7 @@
         can be a string or a URL that points to it.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="source.class">
           <xs:attribute ref="class" default="- topic/source "/>
@@ -169,7 +169,7 @@
         content or subject of the topic available.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="publisher.class">
           <xs:attribute ref="class" default="- topic/publisher "/>
@@ -282,7 +282,7 @@
         topic.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="copyrholder.class">
           <xs:attribute ref="class" default="- topic/copyrholder "/>
@@ -478,7 +478,7 @@
         bar. Topics can belong to multiple categories.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="category.class">
           <xs:attribute ref="class" default="- topic/category "/>
@@ -650,7 +650,7 @@
          element.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="brand.class">
           <xs:attribute ref="class" default="- topic/brand "/>
@@ -685,7 +685,7 @@
         about the product series that the topic supports.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="series.class">
           <xs:attribute ref="class" default="- topic/series "/>
@@ -721,7 +721,7 @@
         being described by the &lt;<keyword>prodinfo</keyword>> element.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="platform.class">
           <xs:attribute ref="class" default="- topic/platform "/>
@@ -758,7 +758,7 @@
         number when a product completes development.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="prognum.class">
           <xs:attribute ref="class" default="- topic/prognum "/>
@@ -793,7 +793,7 @@
         number of a product in the document metadata.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="featnum.class">
           <xs:attribute ref="class" default="- topic/featnum "/>
@@ -836,7 +836,7 @@
         logic is not currently supported in DITA processing.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="component.class">
           <xs:attribute ref="class" default="- topic/component "/>
@@ -871,7 +871,7 @@
         the name of the product that is supported by the information in this topic.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="prodname.class">
           <xs:attribute ref="class" default="- topic/prodname "/>

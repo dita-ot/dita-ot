@@ -272,7 +272,7 @@
         be as well optimized for search summaries)
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="searchtitle.class">
           <xs:attribute ref="class" default="- topic/searchtitle "/>
@@ -353,7 +353,7 @@
         that topic. Sections cannot be nested. A section may have an optional title.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="section.class">
           <xs:attribute ref="class" default="- topic/section "/>
@@ -390,7 +390,7 @@
       </xs:documentation>
     </xs:annotation>
     <xs:complexType>
-      <xs:complexContent mixed="true">
+      <xs:complexContent>
         <xs:extension base="bodydiv.class">
           <xs:attribute ref="class" default="- topic/bodydiv "/>
         </xs:extension>
@@ -438,7 +438,7 @@
       <xs:documentation> 
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="sectiondiv.class">
           <xs:attribute ref="class" default="- topic/sectiondiv "/>
@@ -489,7 +489,7 @@
         as &lt;<keyword>section</keyword>>.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="example.class">
           <xs:attribute ref="class" default="- topic/example "/>
@@ -677,7 +677,7 @@
         a descriptive paragraph following a list of links in a <xref href="linklist.xml">linklist</xref>  element. 
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="linkinfo.class">
           <xs:attribute ref="class" default="- topic/linkinfo "/>
@@ -759,7 +759,7 @@
         reached, such as when it is a peer or external link.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="linktext.class">
           <xs:attribute ref="class" default="- topic/linktext "/>
@@ -847,7 +847,7 @@
   <!--                    LONG NAME: Abstract                        -->
   <!-- <!ELEMENT abstract      (%section.notitle.cnt; | %shortdesc;)*       > -->
   <xs:element name="abstract">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="abstract.class">
           <xs:attribute ref="class" default="- topic/abstract " />
@@ -898,7 +898,7 @@
         searching.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="shortdesc.class">
           <xs:attribute ref="class" default="- topic/shortdesc "/>
