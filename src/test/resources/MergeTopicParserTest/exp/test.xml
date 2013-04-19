@@ -17,6 +17,8 @@
     <xref class="- topic/xref " href="#topic2/a" format="html"/>
     <xref class="- topic/xref " ohref="test2.xml" href="#unique_3"/>
     <xref class="- topic/xref " ohref="test2.xml#concept" href="#unique_4"/>
+    <xref class="- topic/xref " ohref="test.xml#åäö" href="#unique_5"/>
+    <xref class="- topic/xref " ohref="test.xml#åäö" href="#unique_5"/>
     <foreign class="- topic/foreign ">
       <foo xmlns="http://example.com/foo" xmlns:bar="http://example.com/bar" bar:foo="baz"/>
     </foreign>
@@ -34,9 +36,19 @@
     id="unique_2" oid="topic2" ditaarch:DITAArchVersion="1.2" xml:lang="en-us">
     <title class="- topic/title ">Test 2</title>
   </concept>
+  <concept class="- topic/topic concept/concept "
+    domains="(topic concept) (topic hi-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic abbrev-d) (topic pr-d) (topic sw-d) (topic ui-d)"
+    id="unique_5" oid="åäö" ditaarch:DITAArchVersion="1.2" xml:lang="en-us"><!-- non-ASCII ID -->
+    <title class="- topic/title ">Unicode</title>
+  </concept>
   <related-links class="- topic/related-link ">
     <link class="- topic/link " href="#unique_2/a" ohref="test.xml#topic2/a"/>
     <link class="- topic/link " href="#topic2/a" scope="peer"/>
     <link class="- topic/link " href="#topic2/a" format="html"/>
+    <link class="- topic/link " ohref="test.xml#åäö/a" href="#unique_5/a"/>
+    <link class="- topic/link " ohref="test.xml#åäö" href="#unique_5"/>
+    <link class="- topic/link " href="#åäö" scope="peer"/>
+    <link class="- topic/link " href="#åäö" format="html"/>
+    
   </related-links>
 </concept>

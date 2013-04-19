@@ -18,6 +18,8 @@
     <xref class="- topic/xref " href="#topic2/a" format="html"/><!-- skip because of format -->
     <xref class="- topic/xref " href="test2.xml"/>
     <xref class="- topic/xref " href="test2.xml#concept"/>
+    <xref class="- topic/xref " href="test.xml#åäö"/>
+    <xref class="- topic/xref " href="#åäö"/>
     <foreign class="- topic/foreign ">
       <foo xmlns="http://example.com/foo" xmlns:bar="http://example.com/bar" bar:foo="baz"/>
     </foreign>
@@ -35,10 +37,19 @@
     id="topic2" ditaarch:DITAArchVersion="1.2" xml:lang="en-us"><!-- duplicate topic ID gets the same value -->
     <title class="- topic/title ">Test 2</title>
   </concept>
+  <concept class="- topic/topic concept/concept "
+    domains="(topic concept) (topic hi-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic abbrev-d) (topic pr-d) (topic sw-d) (topic ui-d)"
+    id="åäö" ditaarch:DITAArchVersion="1.2" xml:lang="en-us"><!-- non-ASCII ID -->
+    <title class="- topic/title ">Unicode</title>
+  </concept>
   <related-links class="- topic/related-link ">
     <link class="- topic/link " href="#topic2/a"/>
     <link class="- topic/link " href="#topic2/a" scope="peer"/>
     <link class="- topic/link " href="#topic2/a" format="html"/>
+    <link class="- topic/link " href="#åäö/a"/>
+    <link class="- topic/link " href="#åäö"/>
+    <link class="- topic/link " href="#åäö" scope="peer"/>
+    <link class="- topic/link " href="#åäö" format="html"/>
   </related-links>
 </concept>
 </dita>
