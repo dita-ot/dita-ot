@@ -243,6 +243,9 @@ release)</li>
 <li>#1472 PDF output: whitespace not preserved in msgblock element (maintenance 4)</li>
 <li>#1475 Error received in console does not point correctly to location of published DITA Map (maintenance 4)</li>
 <li>#1477 Tables: using percentage in colwidth values [PDF2 plugin] (maintenance 4)</li>
+<li>#1484 Enable default revision markers using active xml:lang value (maintenance 5)</li>
+<li>#1489 External keys are lost if using onlytopic.in.map (maintenance 5)</li>
+<li>#1491 TopicMerge generates invalid xref/@href if it contains Ideographic character (maintenance 5)</li>
 </ul>       </section>
 </refbody>
 </reference>
