@@ -110,9 +110,12 @@ public final class ValidationFilter extends AbstractXMLFilter {
 	 * Validate ID attribute.
 	 */
     private void validateId(final Attributes atts) throws SAXException {
-        if (TOPIC_TOPIC.matches(atts) || MAP_MAP.matches(atts)) {
+        final String cls = atts.getValue(ATTRIBUTE_NAME_CLASS);
+        if (TOPIC_TOPIC.matches(cls) || MAP_MAP.matches(cls)) {
 			topicIds.clear();
-		} else {
+        } else if (TOPIC_RESOURCEID.matches(cls)) {
+            // not considered a normal element ID
+        } else {
 			final String id = atts.getValue(ATTRIBUTE_NAME_ID);
 			if (id != null) {
 				if (topicIds.contains(id)) {
