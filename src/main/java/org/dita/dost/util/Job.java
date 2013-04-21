@@ -795,24 +795,43 @@ public final class Job {
      */
     public static final class FileInfo {
         
+        /** File path. */
         public final String file;
+        /** File format. */
     	public String format;
+    	/** File has a conref. */
         public boolean hasConref;
+        /** File is part of chunk. */
         public boolean isChunked;
+        /** File has links. */
         public boolean hasLink;
+        /** File is resource only. */
         public boolean isResourceOnly;
+        /** File is a link target. */
         public boolean isTarget;
+        /** File is a push conref target. */
         public boolean isConrefTarget;
+        /** File is a target in non-conref link. Opposite of {@link #isSkipTarget}. */
         public boolean isNonConrefTarget;
+        /** File is a push conref source. */
         public boolean isConrefPush;
+        /** File has a keyref. */
         public boolean hasKeyref;
+        /** File has coderef. */
         public boolean hasCoderef;
+        /** File is a subject scheme. */
         public boolean isSubjectScheme;
+        /** File is a target in conref link. Opposite of {@link #isNonConrefTarget}. */
         public boolean isSkipChunk;
+        /** File is a coderef target. */
         public boolean isSubtarget;
+        /** File is a flagging image. */
         public boolean isFlagImage;
+        /** File is a chunked map. */
         public boolean isChunkedDitaMap;
+        /** Source file is outside base directory. */
         public boolean isOutDita;
+        /** File is used only as a source of a copy-to. */
         public boolean isCopyToSource;
         public boolean isActive;
         
