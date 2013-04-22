@@ -36,6 +36,12 @@ public final class IntegratorTask extends Task {
         logger.setTarget(getOwningTarget());
         logger.setTask(this);
         adaptee.setLogger(logger);
+        if (adaptee.getBasedir() == null) {
+            adaptee.setBasedir(getProject().getBaseDir());
+        }
+        if (adaptee.getDitaDir() == null) {
+            adaptee.setDitaDir(getProject().getBaseDir());
+        }
         try {
             adaptee.execute();
         } catch (final Exception e) {
@@ -47,6 +53,7 @@ public final class IntegratorTask extends Task {
      * Return the basedir.
      * @return basedir
      */
+    @Deprecated
     public File getBasedir() {
         return adaptee.getBasedir();
     }
@@ -55,6 +62,7 @@ public final class IntegratorTask extends Task {
      * Set the basedir.
      * @param basedir basedir
      */
+    @Deprecated
     public void setBasedir(final File basedir) {
         adaptee.setBasedir(basedir);
     }
@@ -63,6 +71,7 @@ public final class IntegratorTask extends Task {
      * Return the ditaDir.
      * @return ditaDir
      */
+    @Deprecated
     public File getDitadir() {
         return adaptee.getDitaDir();
     }
@@ -71,6 +80,7 @@ public final class IntegratorTask extends Task {
      * Set the ditaDir.
      * @param ditaDir ditaDir
      */
+    @Deprecated
     public void setDitadir(final File ditaDir) {
         adaptee.setDitaDir(ditaDir);
     }
@@ -79,6 +89,7 @@ public final class IntegratorTask extends Task {
      * Return the properties file.
      * @return file
      */
+    @Deprecated
     public File getProperties() {
         return adaptee.getProperties();
     }

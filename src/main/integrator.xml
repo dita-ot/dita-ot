@@ -18,6 +18,7 @@
   </condition>
   
   <!-- Try to initialize ${dita.dir} again if it was not set. -->
+  <!-- Deprecated -->
   <condition property="dita.dir" value="${basedir}">
     <not>
       <isset property="dita.dir"/>

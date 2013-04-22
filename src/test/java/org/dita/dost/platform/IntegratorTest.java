@@ -77,6 +77,7 @@ public class IntegratorTest {
     }
 
     @Test
+    @Deprecated
     public void testGetProperties() {
         final Integrator i = new Integrator();
         assertNull(i.getProperties());

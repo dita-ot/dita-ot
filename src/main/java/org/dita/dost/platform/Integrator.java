@@ -9,6 +9,7 @@
 package org.dita.dost.platform;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Configuration.*;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -49,6 +50,8 @@ import org.xml.sax.XMLReader;
  */
 public final class Integrator {
 
+    private static final String CONF_PLUGIN_IGNORES = "plugin.ignores";
+    private static final String CONF_PLUGIN_DIRS = "plugindirs";
     /** Feature name for supported image extensions. */
     public static final String FEAT_TOPIC_EXTENSIONS = "dita.topic.extensions";
     /** Feature name for supported image extensions. */
@@ -119,18 +122,20 @@ public final class Integrator {
                     }
                 }
             }
-        } else {
-            // Set reasonable defaults.
-            properties.setProperty("plugindirs", "plugins;demo");
-            properties.setProperty("plugin.ignores", "");
+        }
+        if (!properties.containsKey(CONF_PLUGIN_DIRS)) {
+            properties.setProperty(CONF_PLUGIN_DIRS, configuration.containsKey(CONF_PLUGIN_DIRS) ? configuration.get(CONF_PLUGIN_DIRS) : "plugins;demo");
+        }
+        if (!properties.containsKey(CONF_PLUGIN_IGNORES)) {
+            properties.setProperty(CONF_PLUGIN_IGNORES, configuration.containsKey(CONF_PLUGIN_IGNORES) ? configuration.get(CONF_PLUGIN_IGNORES) : "");
         }
 
         // Get the list of plugin directories from the properties.
-        final String[] pluginDirs = properties.getProperty("plugindirs").split(PARAM_VALUE_SEPARATOR);
+        final String[] pluginDirs = properties.getProperty(CONF_PLUGIN_DIRS).split(PARAM_VALUE_SEPARATOR);
 
         final Set<String> pluginIgnores = new HashSet<String>();
-        if (properties.getProperty("plugin.ignores") != null) {
-            pluginIgnores.addAll(Arrays.asList(properties.getProperty("plugin.ignores").split(PARAM_VALUE_SEPARATOR)));
+        if (properties.getProperty(CONF_PLUGIN_IGNORES) != null) {
+            pluginIgnores.addAll(Arrays.asList(properties.getProperty(CONF_PLUGIN_IGNORES).split(PARAM_VALUE_SEPARATOR)));
         }
 
         for (final String tmpl : properties.getProperty(CONF_TEMPLATES, "").split(PARAM_VALUE_SEPARATOR)) {
@@ -518,6 +523,7 @@ public final class Integrator {
      * 
      * @return properties file
      */
+    @Deprecated
     public File getProperties() {
         return propertiesFile;
     }
