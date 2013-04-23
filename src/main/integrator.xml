@@ -29,6 +29,7 @@
     <pathelement location="${dita.dir}${file.separator}lib${file.separator}dost.jar"/>
   </path>
   
+  <!-- Deprecated -->
   <condition property="properties" value="${dita.dir}${file.separator}integrator.properties">
     <not>
       <isset property="properties"/>
@@ -45,7 +46,7 @@
         <isset property="strict"/>
       </not>
     </condition>
-    <integrate basedir="${basedir}" ditadir="${dita.dir}" properties="${properties}" strict="${strict}"/>
+    <integrate ditadir="${dita.dir}" properties="${properties}" strict="${strict}"/>
   </target>
   
   <target name="lax" description="Run integration in lax mode">

@@ -76,13 +76,13 @@ public final class Integrator {
     private final Map<String, Features> pluginTable;
     private final Set<String> templateSet = new HashSet<String>(INT_16);
     private File ditaDir;
-    private File basedir;
     /** Plugin configuration file. */
     private final Set<File> descSet;
     private final XMLReader reader;
     private DITAOTLogger logger;
     private final Set<String> loadedPlugin;
     private final Hashtable<String, String> featureTable;
+    @Deprecated
     private File propertiesFile;
     private final Set<String> extensionPoints;
     private boolean strict = false;
@@ -95,9 +95,6 @@ public final class Integrator {
     public void execute() {
         if (logger == null) {
             logger = new DITAOTJavaLogger();
-        }
-        if (!ditaDir.isAbsolute()) {
-            ditaDir = new File(basedir, ditaDir.getPath());
         }
 
         // Read the properties file, if it exists.
@@ -301,7 +298,7 @@ public final class Integrator {
             }
 
             for (final String templateName : pluginFeatures.getAllTemplates()) {
-                templateSet.add(FileUtils.getRelativePath(getDitaDir() + File.separator + "dummy",
+                templateSet.add(FileUtils.getRelativePath(ditaDir + File.separator + "dummy",
                         pluginFeatures.getLocation() + File.separator + templateName));
             }
             loadedPlugin.add(plugin);
@@ -483,33 +480,6 @@ public final class Integrator {
     }
 
     /**
-     * Return the basedir.
-     * 
-     * @return base directory
-     */
-    public File getBasedir() {
-        return basedir;
-    }
-
-    /**
-     * Set the basedir.
-     * 
-     * @param baseDir base directory
-     */
-    public void setBasedir(final File baseDir) {
-        basedir = baseDir;
-    }
-
-    /**
-     * Return the ditaDir.
-     * 
-     * @return dita directory
-     */
-    public File getDitaDir() {
-        return ditaDir;
-    }
-
-    /**
      * Set the ditaDir.
      * 
      * @param ditadir dita directory
@@ -518,15 +488,6 @@ public final class Integrator {
         ditaDir = ditadir;
     }
 
-    /**
-     * Return the properties file.
-     * 
-     * @return properties file
-     */
-    @Deprecated
-    public File getProperties() {
-        return propertiesFile;
-    }
 
     /**
      * Set the properties file.

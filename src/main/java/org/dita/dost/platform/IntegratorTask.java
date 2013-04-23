@@ -22,6 +22,7 @@ import org.dita.dost.log.DITAOTAntLogger;
 public final class IntegratorTask extends Task {
 
     private final Integrator adaptee;
+    private File ditaDir;
 
     /**
      * Default Constructor.
@@ -36,12 +37,7 @@ public final class IntegratorTask extends Task {
         logger.setTarget(getOwningTarget());
         logger.setTask(this);
         adaptee.setLogger(logger);
-        if (adaptee.getBasedir() == null) {
-            adaptee.setBasedir(getProject().getBaseDir());
-        }
-        if (adaptee.getDitaDir() == null) {
-            adaptee.setDitaDir(getProject().getBaseDir());
-        }
+        adaptee.setDitaDir(ditaDir != null ? ditaDir : getProject().getBaseDir());
         try {
             adaptee.execute();
         } catch (final Exception e) {
@@ -50,54 +46,22 @@ public final class IntegratorTask extends Task {
     }
 
     /**
-     * Return the basedir.
-     * @return basedir
-     */
-    @Deprecated
-    public File getBasedir() {
-        return adaptee.getBasedir();
-    }
-
-    /**
-     * Set the basedir.
-     * @param basedir basedir
-     */
-    @Deprecated
-    public void setBasedir(final File basedir) {
-        adaptee.setBasedir(basedir);
-    }
-
-    /**
-     * Return the ditaDir.
-     * @return ditaDir
-     */
-    @Deprecated
-    public File getDitadir() {
-        return adaptee.getDitaDir();
-    }
-
-    /**
      * Set the ditaDir.
      * @param ditaDir ditaDir
      */
     @Deprecated
     public void setDitadir(final File ditaDir) {
-        adaptee.setDitaDir(ditaDir);
+        if (!ditaDir.isAbsolute()) {
+            throw new IllegalArgumentException("ditadir attribute value must be an absolute path: " + ditaDir);
+        }
+        this.ditaDir = ditaDir;
     }
-
-    /**
-     * Return the properties file.
-     * @return file
-     */
-    @Deprecated
-    public File getProperties() {
-        return adaptee.getProperties();
-    }
-
+    
     /**
      * Set the properties file.
      * @param propertiesFile propertiesFile
      */
+    @Deprecated
     public void setProperties(final File propertiesFile) {
         adaptee.setProperties(propertiesFile);
     }

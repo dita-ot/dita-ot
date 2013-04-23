@@ -130,6 +130,19 @@
                   directory</li>
               </ul></entry>
           </row>
+          <row id="plugindirs">
+            <entry><parmname>plugindirs</parmname></entry>
+            <entry>A semicolon-separated list of directory paths that the DITA-OT searches for
+              plug-ins to integrate; any relative paths are resolved against the DITA-OT base
+              directory. Any immediate subdirectory that contains a <filepath>plugin.xml</filepath>
+              file is integrated</entry>
+          </row>
+          <row id="plugin.ignores">
+            <entry><parmname>plugin.ignores</parmname></entry>
+            <entry>A semicolon-separated list of directory names to be ignored during plug-in
+              integration; any relative paths are resolved against the DITA-OT base
+              directory.</entry>
+          </row>
         </tbody>
       </tgroup>
     </table>
