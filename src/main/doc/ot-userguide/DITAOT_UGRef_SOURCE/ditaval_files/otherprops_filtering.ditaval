@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<val>
-<prop att="otherprops" val="pdf" action="exclude"></prop>
-<prop att="platform" val="windows" action="include"></prop>
-<prop att="platform" val="linux" action="include"></prop>
-<prop att="platform" val="macos" action="include"></prop>
-</val>
