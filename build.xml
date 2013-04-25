@@ -20,7 +20,7 @@
   <property name="src.dir" location="${basedir}/src/main"/>
   <property name="java.dir" location="${src.dir}/java/"/>
   <property name="lib.dir" location="${src.dir}/lib/"/>
-  <property name="doc.dir" location="${src.dir}/doc/"/>
+  <property name="doc.dir" location="${src.dir}/docsrc/"/>
   <property name="dtd.dir" location="${src.dir}/dtd/"/>
   <property name="schema.dir" location="${src.dir}/schema/"/>
   <property name="xsl.dir" location="${src.dir}/xsl/"/>
@@ -110,11 +110,11 @@
     <exclude name="plugins/org.dita.pdf2/bin/**"/>
     <exclude name="plugins/org.dita.pdf2/lib/xep/**"/>
     <exclude name="buildSourceForge.xml"/>
-    <exclude name="doc/sourceforge/**"/>
-    <exclude name="doc/userguide-orig/**"/>
-    <exclude name="doc/ot-userguide/**"/>
-    <exclude name="doc/archive/**"/>
-    <exclude name="doc/langref-dita1.1/**"/>
+    <exclude name="docsrc/sourceforge/**"/>
+    <exclude name="docsrc/userguide-orig/**"/>
+    <exclude name="docsrc/ot-userguide/**"/>
+    <exclude name="docsrc/archive/**"/>
+    <exclude name="docsrc/langref-dita1.1/**"/>
   </patternset>
 
   <patternset id="pattern.package.minimum">
@@ -161,7 +161,7 @@
     <exclude name="plugins/org.dita.pdf2/src/**"/>
     <include name="plugins/org.dita.pdf2/**"/>
     <include name="plugins/com.sophos.tocjs/**"/>
-    <include name="doc/**"/>
+    <include name="docsrc/**"/>
     <include name="demo/**"/>
     <include name="dtd/**"/>
     <include name="plugins/**"/>
@@ -196,7 +196,7 @@
     <include name="plugins/org.dita.specialization.dita132/**"/>
     <include name="plugins/org.dita.pdf2/**"/>
     <include name="plugins/com.sophos.tocjs/**"/>
-    <include name="doc/**"/>
+    <include name="docsrc/**"/>
     <include name="demo/**"/>
     <include name="dtd/**"/>
     <include name="plugins/**"/>
