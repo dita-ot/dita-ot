@@ -8,15 +8,20 @@
  */
 package org.dita.dost.util;
 
-import static org.dita.dost.util.Constants.UTF8;
+import static org.dita.dost.util.Configuration.processingMode;
+import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.StringTokenizer;
+
+import org.dita.dost.util.Configuration.Mode;
 
 /**
  * Corrects the URLs.
@@ -408,5 +413,80 @@ public final class URLUtils {
         }
         return buffer.toString();
     }
+    
+    /**
+     * Test if URI path is absolute.
+     */
+    public static boolean isAbsolute(final URI uri) {
+        final String p = uri.getPath();
+        return p != null && p.startsWith(URI_SEPARATOR);
+    }
+    
+    /**
+     * Convert URI reference to system file path.
+     */
+    public static File toFile(final URI filename) {
+        if ("file".equals(filename.getScheme()) && filename.getPath() != null) {
+            return new File(filename);
+        } else {
+            return toFile(filename.toString());
+        }
+    }
+    
+    /**
+     * Convert URI references to file paths.
+     * 
+     * @param filename file reference
+     * @return file path
+     */
+    public static File toFile(final String filename) {
+        if (filename == null) {
+            return null;
+        }
+        String f = filename;
+        try {
+            f = URLDecoder.decode(filename, UTF8);
+        } catch (final UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        if (processingMode == Mode.LAX) {
+            f = f.replace(WINDOWS_SEPARATOR, File.separator);
+        }
+        f = f.replace(URI_SEPARATOR, File.separator);
+        return new File(f);
+    }
 
+    /**
+     * Covert file reference to URI.
+     */
+    public static URI toURI(final File file) {
+        if (file.isAbsolute()) {
+            return file.toURI();
+        } else {
+            try {
+                return new URI(clean(file.getPath().replace(WINDOWS_SEPARATOR, URI_SEPARATOR), false));
+            } catch (final URISyntaxException e) {
+                throw new IllegalArgumentException(e.getMessage(), e);
+            }
+        }
+    }
+ 
+    /**
+     * Determines whether the parent directory contains the child element (a file or directory)
+     * 
+     * @param directory the file to consider as the parent
+     * @param child the file to consider as the child
+     * @return true is the candidate leaf is under by the specified composite, otherwise false
+     * @throws IOException
+     */
+    public static boolean directoryContains(final URI directory, final URI child) {
+        final String d = directory.normalize().toString();
+        final String c = child.normalize().toString();
+        if (d.equals(c)) {
+            return false;
+        } else {
+            return c.startsWith(d);
+        }
+    }
+    
 }

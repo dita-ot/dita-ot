@@ -5,6 +5,7 @@
 package org.dita.dost.util;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.*;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -15,6 +16,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Field;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -23,6 +26,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -56,6 +61,7 @@ public final class Job {
 
     private static final String ELEMENT_FILES = "files";
     private static final String ELEMENT_FILE = "file";
+    private static final String ATTRIBUTE_URI = "uri";
     private static final String ATTRIBUTE_PATH = "path";
     private static final String ATTRIBUTE_FORMAT = "format";
     private static final String ATTRIBUTE_CHUNKED = "chunked";
@@ -184,7 +190,7 @@ public final class Job {
     
     private final Map<String, Object> prop;
     private final File tempDir;
-    private final Map<String, FileInfo> files = new HashMap<String, FileInfo>();
+    private final ConcurrentMap<String, FileInfo> files = new ConcurrentHashMap<String, FileInfo>();
 
     /**
      * Create new job configuration instance. Initialise by reading temporary configuration files.
@@ -298,7 +304,7 @@ public final class Job {
         }
         
         @Override
-        public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
+        public void startElement(final String ns, final String localName, final String qName, final Attributes atts) throws SAXException {
             final String n = localName != null ? localName : qName;
             if (n.equals(ELEMENT_PROPERTY)) {
                 name = atts.getValue(ATTRIBUTE_NAME);
@@ -311,8 +317,14 @@ public final class Job {
             } else if (n.equals(ELEMENT_ENTRY)) {
                 key = atts.getValue(ATTRIBUTE_KEY);
             } else if (n.equals(ELEMENT_FILE)) {
+                URI uri = null;
+                try {
+                    uri = new URI(atts.getValue(ATTRIBUTE_URI));
+                } catch (final URISyntaxException e) {
+                    throw new RuntimeException(e);
+                }
                 final String path = atts.getValue(ATTRIBUTE_PATH);
-                final FileInfo i = new FileInfo(path);
+                final FileInfo i = uri != null ? new FileInfo(uri) : new FileInfo(path);
                 i.format = atts.getValue(ATTRIBUTE_FORMAT);
                 try {
                     for (Map.Entry<String, Field> e: attrToFieldMap.entrySet()) {
@@ -403,13 +415,17 @@ public final class Job {
             out.writeStartElement(ELEMENT_FILES);
             for (final FileInfo i: files.values()) {
                 out.writeStartElement(ELEMENT_FILE);
+                out.writeAttribute(ATTRIBUTE_URI, i.uri.toString());
                 out.writeAttribute(ATTRIBUTE_PATH, i.file);
                 if (i.format != null) {
                 	out.writeAttribute(ATTRIBUTE_FORMAT, i.format);
                 }
                 try {
                     for (Map.Entry<String, Field> e: attrToFieldMap.entrySet()) {
-                        out.writeAttribute(e.getKey(), Boolean.toString(e.getValue().getBoolean(i)));
+                        final boolean v = e.getValue().getBoolean(i);
+                        if (v) {
+                            out.writeAttribute(e.getKey(), Boolean.toString(v));
+                        }
                     }
                 } catch (final IllegalAccessException ex) {
                     throw new RuntimeException(ex);
@@ -483,6 +499,22 @@ public final class Job {
                 }
             }
         }
+    }
+    
+    /**
+     * Add file info. If file info with the same file already exists, it will be replaced.
+     */
+    public void add(final FileInfo fileInfo) {
+        files.put(fileInfo.file, fileInfo);
+    }
+    
+    /**
+     * Remove file info.
+     * 
+     * @return removed file info, {@code null} if not found
+     */
+    public FileInfo remove(final FileInfo fileInfo) {
+        return files.remove(fileInfo.file);
     }
     
     /**
@@ -732,7 +764,7 @@ public final class Job {
      * @return map of file info objects
      */
     public Map<String, FileInfo> getFileInfo() {
-        return Collections.unmodifiableMap(files);
+        return Collections.unmodifiableMap(new HashMap<String, FileInfo>(files));
     }
     
     /**
@@ -795,6 +827,8 @@ public final class Job {
      */
     public static final class FileInfo {
         
+        /** File URI. */
+        public final URI uri;
         /** File path. */
         public final String file;
         /** File format. */
@@ -803,7 +837,7 @@ public final class Job {
         public boolean hasConref;
         /** File is part of chunk. */
         public boolean isChunked;
-        /** File has links. */
+        /** File has links. Only applies to topics. */
         public boolean hasLink;
         /** File is resource only. */
         public boolean isResourceOnly;
@@ -835,12 +869,18 @@ public final class Job {
         public boolean isCopyToSource;
         public boolean isActive;
         
+        FileInfo(final URI uri) {
+            this.uri = uri;
+            this.file = toFile(uri).getPath();
+        }
         FileInfo(final String file) {
+            this.uri =  toURI(new File(file));
             this.file = file;
         }
         
         public static class Builder {
             
+            private URI uri;
             private String file;
             private String format;
             private boolean hasConref;
@@ -864,6 +904,7 @@ public final class Job {
         
             public Builder() {}
             public Builder(final FileInfo orig) {
+                uri = orig.uri;
                 file = orig.file;
                 format = orig.format;
                 hasConref = orig.hasConref;
@@ -886,6 +927,35 @@ public final class Job {
                 isActive = orig.isActive;
             }
             
+            /**
+             * Add file info to this builder. Only non-null and true values will be added. 
+             */
+            public Builder add(final FileInfo orig) {
+                if (orig.uri != null) uri = orig.uri;
+                if (orig.file != null) file = orig.file;
+                if (orig.format != null) format = orig.format;
+                if (orig.hasConref) hasConref = orig.hasConref;
+                if (orig.isChunked) isChunked = orig.isChunked;
+                if (orig.hasLink) hasLink = orig.hasLink;
+                if (orig.isResourceOnly) isResourceOnly = orig.isResourceOnly;
+                if (orig.isTarget) isTarget = orig.isTarget;
+                if (orig.isConrefTarget) isConrefTarget = orig.isConrefTarget;
+                if (orig.isNonConrefTarget) isNonConrefTarget = orig.isNonConrefTarget;
+                if (orig.isConrefPush) isConrefPush = orig.isConrefPush;
+                if (orig.hasKeyref) hasKeyref = orig.hasKeyref;
+                if (orig.hasCoderef) hasCoderef = orig.hasCoderef;
+                if (orig.isSubjectScheme) isSubjectScheme = orig.isSubjectScheme;
+                if (orig.isSkipChunk) isSkipChunk = orig.isSkipChunk;
+                if (orig.isSubtarget) isSubtarget = orig.isSubtarget;
+                if (orig.isFlagImage) isFlagImage = orig.isFlagImage;
+                if (orig.isChunkedDitaMap) isChunkedDitaMap = orig.isChunkedDitaMap;
+                if (orig.isOutDita) isOutDita = orig.isOutDita;
+                if (orig.isCopyToSource) isCopyToSource = orig.isCopyToSource;
+                if (orig.isActive) isActive = orig.isActive;
+                return this;
+            }
+            
+            public Builder uri(final URI uri) { this.uri = uri; return this; }
             public Builder file(final String file) { this.file = file; return this; }
             public Builder format(final String format) { this.format = format; return this; }
             public Builder hasConref(final boolean hasConref) { this.hasConref = hasConref; return this; }
@@ -908,10 +978,10 @@ public final class Job {
             public Builder isActive(final boolean isActive) { this.isActive = isActive; return this; }
             
             public FileInfo build() {
-                if (file == null) {
-                    throw new IllegalArgumentException("file may not be null");
+                if (uri == null && file == null) {
+                    throw new IllegalArgumentException("uri and file may not be null");
                 }
-                final FileInfo fi = new FileInfo(file);
+                final FileInfo fi = uri != null ? new FileInfo(uri) : new FileInfo(file);
                 fi.format = format;
                 fi.hasConref = hasConref;
                 fi.isChunked = isChunked;

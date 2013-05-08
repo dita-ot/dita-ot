@@ -32,6 +32,8 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 	private final DITAAttrUtils ditaAttrUtils = DITAAttrUtils.getInstance();
 	/** Filter utils */
 	private FilterUtils filterUtils;
+	/** Flag that an element has been written */
+	private boolean elementOutput;
 
 	/**
 	 * Create new profiling filter.
@@ -61,6 +63,13 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 	 */
 	public void setTranstype(final String transtype) {
 		this.transtype = transtype;
+	}
+	
+	/**
+	 * Get flag whether elements were output.
+	 */
+	public boolean hasElementOutput() {
+	    return elementOutput;
 	}
 
 	// SAX methods
@@ -102,6 +111,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 				exclude = true;
 				level = 0;
 			} else {
+			    elementOutput = true;
 				getContentHandler().startElement(uri, localName, qName, atts);
 			}
 		}

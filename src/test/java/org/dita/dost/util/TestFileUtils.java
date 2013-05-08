@@ -142,7 +142,7 @@ public class TestFileUtils {
             assertEquals("/dir/file.xml", FileUtils.resolveTopic("/dir","file.xml"));
             assertEquals("/dir/file.xml#topicid", FileUtils.resolveTopic("/dir","file.xml#topicid"));
             assertEquals("/file.xml", FileUtils.resolveTopic("/dir","../file.xml"));
-            assertEquals("/file.xml", FileUtils.resolveTopic("","file.xml"));
+            assertEquals("file.xml", FileUtils.resolveTopic("","file.xml"));
             assertEquals("file.xml", FileUtils.resolveTopic(null,"file.xml"));
         }
     }
@@ -159,7 +159,7 @@ public class TestFileUtils {
             assertEquals("/dir/file.xml", FileUtils.resolveFile("/dir","file.xml"));
             assertEquals("/dir/file.xml", FileUtils.resolveFile("/dir","file.xml#topicid"));
             assertEquals("/file.xml", FileUtils.resolveFile("/dir","../file.xml"));
-            assertEquals("/file.xml", FileUtils.resolveFile("","file.xml"));
+            assertEquals("file.xml", FileUtils.resolveFile("","file.xml"));
             assertEquals("file.xml", FileUtils.resolveFile(null,"file.xml"));
         }
     }
@@ -311,6 +311,13 @@ public class TestFileUtils {
         assertNull(FileUtils.getFragment("foo"));
     }
 
+    @Test
+    public void testDirectoryContains() {
+        assertTrue(FileUtils.directoryContains(srcDir, new File(srcDir, "test.txt")));
+        assertFalse(FileUtils.directoryContains(srcDir, srcDir));
+        assertFalse(FileUtils.directoryContains(new File(srcDir, "test"), srcDir));
+        assertFalse(FileUtils.directoryContains(srcDir, new File(srcDir, ".." + File.separator + "test.txt")));
+    }
     
     @AfterClass
     public static void tearDown() throws IOException {
