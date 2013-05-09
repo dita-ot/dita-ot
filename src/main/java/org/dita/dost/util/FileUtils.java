@@ -211,7 +211,7 @@ public final class FileUtils {
     /**
      * Return if the file is a dita file by extension.
      * @param lcasefn file name
-     * @return ture if is DITA file and false otherwise
+     * @return true if is DITA file and false otherwise
      */
     public static boolean isDITAFile(String lcasefn) {
         if(lcasefn == null) {
@@ -410,10 +410,10 @@ public final class FileUtils {
      */
     public static String normalizeDirectory(final String basedir, final String filepath) {
         final String pathname = stripFragment(filepath);
-        final String normilizedPath = new File(basedir, pathname).getPath();
         if (basedir == null || basedir.length() == 0) {
-            return normilizedPath;
+            return pathname;
         }
+        final String normilizedPath = new File(basedir, pathname).getPath();
         return FileUtils.normalize(normilizedPath);
     }
 
@@ -727,4 +727,22 @@ public final class FileUtils {
         }
     }
 
+    /**
+     * Determines whether the parent directory contains the child element (a file or directory)
+     * 
+     * @param directory the file to consider as the parent
+     * @param child the file to consider as the child
+     * @return true is the candidate leaf is under by the specified composite, otherwise false
+     * @throws IOException
+     */
+    public static boolean directoryContains(final File directory, final File child) {
+        final String d = normalize(directory.getAbsolutePath());
+        final String c = normalize(child.getAbsolutePath());
+        if (d.equals(c)) {
+            return false;
+        } else {
+            return c.startsWith(d);
+        }
+    }
+    
 }

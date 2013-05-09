@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="concept_ebr_hbl_vj" xml:lang="en">
+  <title>How to help?</title>
+  <shortdesc>The best ways to contribute are by finding and reporting bugs, participating in
+    community support, and improving the code.</shortdesc>
+  <conbody>
+    <section id="topic_tjp_3bl_vj">
+      <title>Reporting bugs</title>
+      <p>We use <xref href="https://github.com/dita-ot/dita-ot/issues" format="html"
+          scope="external">GitHub</xref> as our issue tracker.</p>
+    </section>
+    <section id="section_pph_5cl_vj">
+      <title>Community support</title>
+      <p>Answer DITA-OT related questions at <xref
+          href="http://tech.groups.yahoo.com/group/dita-users/" scope="external">DITA users
+          group</xref>.</p>
+    </section>
+    <section id="topic_wjp_3bl_vj">
+      <title>Patch the code</title>
+      <p>You can contribute fixes to bugs or new features by sending
+        <xref href="https://help.github.com/articles/using-pull-requests" format="html" scope="external">pull requests</xref> at GitHub.</p>
+    </section>
+  </conbody>
+</concept>

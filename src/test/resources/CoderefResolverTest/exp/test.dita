@@ -9,5 +9,15 @@
 &lt;foo&gt;
   copyright sign: ©; em-dash: —
 &lt;/foo&gt;</codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve">first
+second
+third
+fourth
+fifth</codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve">third
+fourth
+fifth</codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve">second
+third</codeblock>
   </body>
 </topic>

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"  "../dtd/map.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
+<map id="keyrefs" title="Key references">
+  <!--
+ DOWNLOAD URLs -->
+  <keydef format="html" keys="download.ant" scope="external" href="http://ant.apache.org/"/>
+  <keydef format="html" keys="download.dita-ot.current-release" scope="external"
+    href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Stable%20Release/DITA%20Open%20Toolkit%201.7/"/>
+  <keydef format="html" keys="download.fop" scope="external"
+    href="http://xmlgraphics.apache.org/fop/download.html"/>
+  <keydef format="html" keys="download.html-help-workshop" scope="external"
+    href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms669985%28v=vs.85%29.aspx"/>
+  <keydef format="html" keys="download.icu4j" scope="external"
+    href="http://www.icu-project.org/download/"/>
+  <keydef format="html" keys="download.oracle-jdk" scope="external"
+    href="http://www.oracle.com/technetwork/java/javase/overview/index.html"/>
+  <keydef format="html" keys="download.saxon" scope="external" href="http://saxon.sourceforge.net/"/>
+  <keydef format="html" keys="download.xalan" scope="external"
+    href="http://xml.apache.org/xalan-j/downloads.html"/>
+  <!--VERSION NUMBERS: DITA-OT-->
+  <keydef keys="release.stable-version">
+    <!-- DITA-OT: Latest stable version -->
+    <topicmeta>
+      <keywords>
+        <keyword>1.7.3</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef keys="release.version">
+    <!-- DITA-OT: Latest test version -->
+    <topicmeta>
+      <keywords>
+        <keyword>1.8.M2</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <!--VERSION NUMBERS: OTHER APPLICATIONS-->
+  <keydef keys="tool.ant.version">
+    <!-- Ant: Bundled version-->
+    <topicmeta>
+      <keywords>
+        <keyword>1.8.4</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef keys="tool.ant.version.min">
+    <!-- Ant: Minimum version -->
+    <topicmeta>
+      <keywords>
+        <keyword>1.7.1</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef keys="tool.codec.version">
+    <!-- Codec: Bundled version -->
+    <topicmeta>
+      <keywords>
+        <keyword>1.4</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef keys="tool.icu4j.version">
+    <!-- ICU for Java: Bundled version -->
+    <topicmeta>
+      <keywords>
+        <keyword>49.1</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef keys="tool.java.version">
+    <!-- Java-->
+    <topicmeta>
+      <keywords>
+        <keyword>6</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef keys="tool.xerces.version.min">
+    <!-- Xerces: Bundled with Ant 1.7.1 -->
+    <topicmeta>
+      <keywords>
+        <keyword>2.9.0</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef keys="tool.xerces.version">
+    <!-- Xerces: Bundled version-->
+    <topicmeta>
+      <keywords>
+        <keyword>2.11.0</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef keys="tool.xalan.version">
+    <!-- Xalan: Minimum version -->
+    <topicmeta>
+      <keywords>
+        <keyword>2.7.1</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef keys="tool.fop.version">
+    <!-- FOP: Bundled version -->
+    <topicmeta>
+      <keywords>
+        <keyword>1.0</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef keys="tool.resolver.version">
+    <!-- Resolver: Bundled version-->
+    <topicmeta>
+      <keywords>
+        <keyword>1.1</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef keys="tool.saxon.version">
+    <!-- Saxon: Bundled version -->
+    <topicmeta>
+      <keywords>
+        <keyword>9.1</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <!--URLs: Web pages-->
+  <keydef keys="contributor-meeting-minutes"
+    href="https://github.com/dita-ot/dita-ot/wiki/Meeting-minutes" scope="external" format="html">
+    <topicmeta>
+      <linktext>DITA-OT Contributor Meeting Minutes</linktext>
+    </topicmeta>
+  </keydef>
+  <keydef keys="dita-ot-developer"
+    href="https://lists.sourceforge.net/lists/listinfo/dita-ot-developer" scope="external"
+    format="html">
+    <topicmeta>
+      <linktext>Sign-up for DITA-OT Developer Mailing List</linktext>
+    </topicmeta>
+  </keydef>
+  <keydef keys="dita-ot-issues" href="https://github.com/dita-ot/dita-ot/issues" scope="external"
+    format="html">
+    <topicmeta>
+      <linktext>DITA-OT bug and feature tracker</linktext>
+    </topicmeta>
+  </keydef>
+  <keydef keys="github-help" href="https://help.github.com/articles/set-up-git" scope="external"
+    format="html">
+    <topicmeta>
+      <linktext>Setting up Git to work with the project</linktext>
+    </topicmeta>
+  </keydef>
+  <keydef keys="github-project" href="https://github.com/dita-ot/dita-ot" scope="external" format="html">
+    <topicmeta>
+      <linktext>DITA-OT project on github</linktext>
+    </topicmeta>
+  </keydef>
+  <keydef keys="license-Apache2.0" href="http://www.apache.org/licenses/LICENSE-2.0" scope="external"
+    format="html">
+    <topicmeta>
+      <linktext>Apache License 2.0</linktext>
+    </topicmeta>
+  </keydef>
+
+  <keydef keys="license-CPL" href="http://www.opensource.org/licenses/cpl1.0.php" scope="external" format="html">
+    <topicmeta>
+      <linktext>Common Public License</linktext>
+    </topicmeta>
+  </keydef>
+</map>

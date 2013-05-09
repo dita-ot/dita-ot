@@ -35,7 +35,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.GenMapAndTopicListModule.KeyDef;
+import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.DITAAttrUtils;
 import org.dita.dost.util.FileUtils;
@@ -321,8 +321,9 @@ public final class GenListModuleReader extends AbstractXMLReader {
      * @return the resource-only set
      */
     public Set<String> getResourceOnlySet() {
-        resourceOnlySet.removeAll(crossSet);
-        return resourceOnlySet;
+        final Set<String> res = new HashSet<String>(resourceOnlySet);
+        res.removeAll(crossSet);
+        return res;
     }
 
     /**
@@ -881,7 +882,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
         }
 
         // onlyTopicInMap is on.
-        if (outputUtils.getOnlyTopicInMap() && this.canResolved()) {
+        topicref: if (outputUtils.getOnlyTopicInMap() && this.canResolved()) {
             // topicref(only defined in ditamap file.)
             if (MAP_TOPICREF.matches(classValue)) {
 
@@ -897,7 +898,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
                     final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
                     if (ATTR_SCOPE_VALUE_EXTERNAL.equalsIgnoreCase(attrScope) || ATTR_SCOPE_VALUE_PEER.equalsIgnoreCase(attrScope)
                             || hrefValue.indexOf(COLON_DOUBLE_SLASH) != -1 || hrefValue.startsWith(SHARP)) {
-                        return;
+                        break topicref;
                     }
                     // normalize href value.
                     final File target = new File(hrefValue);
@@ -912,7 +913,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 
                     final boolean canParse = parseBranch(atts, hrefValue, fileName);
                     if (!canParse) {
-                        return;
+                        break topicref;
                     } else {
                         topicrefStack.push(localName);
                     }
@@ -923,7 +924,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
                     final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
                     if (ATTR_SCOPE_VALUE_EXTERNAL.equalsIgnoreCase(attrScope) || ATTR_SCOPE_VALUE_PEER.equalsIgnoreCase(attrScope)
                             || conrefValue.indexOf(COLON_DOUBLE_SLASH) != -1 || conrefValue.startsWith(SHARP)) {
-                        return;
+                        break topicref;
                     }
                     // normalize href value.
                     final File target = new File(conrefValue);
@@ -939,7 +940,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 
                     final boolean canParse = parseBranch(atts, conrefValue, fileName);
                     if (!canParse) {
-                        return;
+                        break topicref;
                     } else {
                         topicrefStack.push(localName);
                     }
@@ -1207,16 +1208,12 @@ public final class GenListModuleReader extends AbstractXMLReader {
             // Many keys can be defined in a single definition, like
             // keys="a b c", a, b and c are seperated by blank.
             for (final String key : attrValue.split(" ")) {
-                if (!isValidKeyName(key)) {
-                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ055E", key).toString());
-                    continue;
-                }
                 if (!keysDefMap.containsKey(key) && !key.equals("")) {
                     if (target != null && target.length() != 0) {
                         if (attrScope != null && (attrScope.equals(ATTR_SCOPE_VALUE_EXTERNAL) || attrScope.equals(ATTR_SCOPE_VALUE_PEER))) {
                             // store external or peer resources.
                             exKeysDefMap.put(key, target);
-                            keysDefMap.put(key, new KeyDef(key, target, null));
+                            keysDefMap.put(key, new KeyDef(key, target, attrScope, null));
                         } else {
                             String tail = "";
                             if (target.indexOf(SHARP) != -1) {
@@ -1227,7 +1224,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
                                 target = FileUtils.getRelativePath(rootFilePath.getAbsolutePath(), target);
                             }
                             target = FileUtils.normalizeDirectory(currentDir, target);
-                            keysDefMap.put(key, new KeyDef(key, target + tail, null));
+                            keysDefMap.put(key, new KeyDef(key, target + tail, ATTR_SCOPE_VALUE_LOCAL, null));
                         }
                     } else if (!StringUtils.isEmptyString(keyRef)) {
                         // store multi-level keys.
@@ -1235,7 +1232,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
                     } else {
                         // target is null or empty, it is useful in the future
                         // when consider the content of key definition
-                        keysDefMap.put(key, new KeyDef(key, null, null));
+                        keysDefMap.put(key, new KeyDef(key, null, null, null));
                     }
                 } else {
                     logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ045I", key, target).toString());
@@ -1414,53 +1411,6 @@ public final class GenListModuleReader extends AbstractXMLReader {
         }
         f = f.replace(URI_SEPARATOR, File.separator);
         return f;
-    }
-
-    /**
-     * Validate key name
-     * 
-     * @param key key name
-     * @return {@code true} if key name is valid, otherwise {@code false}
-     */
-    public static boolean isValidKeyName(final String key) {
-        for (final char c : key.toCharArray()) {
-            switch (c) {
-            // disallowed characters
-            case '{':
-            case '}':
-            case '[':
-            case ']':
-            case '/':
-            case '#':
-            case '?':
-                return false;
-                // URI characters
-            case '-':
-            case '.':
-            case '_':
-            case '~':
-            case ':':
-            case '@':
-            case '!':
-            case '$':
-            case '&':
-            case '\'':
-            case '(':
-            case ')':
-            case '*':
-            case '+':
-            case ',':
-            case ';':
-            case '=':
-                break;
-            default:
-                if (!((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9'))) {
-                    return false;
-                }
-                break;
-            }
-        }
-        return true;
     }
 
     /**

@@ -13,21 +13,25 @@ import static org.dita.dost.util.Job.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.w3c.dom.Element;
+import org.xml.sax.XMLFilter;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.module.GenMapAndTopicListModule.KeyDef;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.KeyrefReader;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.KeyDef;
+import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.KeyrefPaser;
 /**
  * Keyref Module.
@@ -75,7 +79,7 @@ final class KeyrefModule implements AbstractPipelineModule {
         // store the key name defined in a map(keyed by ditamap file)
         final Hashtable<String, Set<String>> maps = new Hashtable<String, Set<String>>();
 
-        for (final KeyDef keyDef: GenMapAndTopicListModule.readKeydef(new File(tempDir, KEYDEF_LIST_FILE))) {
+        for (final KeyDef keyDef: KeyDef.readKeydef(new File(tempDir, KEYDEF_LIST_FILE))) {
             keymap.put(keyDef.keys, keyDef.href);
             // map file which define the keys
             final String map = keyDef.source;
@@ -99,30 +103,37 @@ final class KeyrefModule implements AbstractPipelineModule {
         }
         final Map<String, Element> keyDefinition = reader.getKeyDefinition();
         //get files which have keyref attr
-        final Set<String> parseList = job.getSet(KEYREF_LIST);
-        //Conref Module will change file's content, it is possible that tags with @keyref are copied in
-        //while keyreflist is hard update with xslt.
-        //bug:3056939
-        final Set<String> resourceOnlyList = job.getSet(RESOURCE_ONLY_LIST);
-        final Set<String> conrefList = job.getSet(CONREF_LIST);
-        parseList.addAll(conrefList);
+        final Map<String, FileInfo> files = job.getFileInfo();
+        final Set<String> parseList = new HashSet<String>();
+        for (final FileInfo f: files.values()) {
+	        //Conref Module will change file's content, it is possible that tags with @keyref are copied in
+	        //while keyreflist is hard update with xslt.
+        	if (f.hasKeyref || f.hasConref) {
+        		parseList.add(f.file);
+        	}
+        }
         for(final String file: parseList){
             logger.logInfo("Processing " + new File(tempDir, file).getAbsolutePath());
+            
+            final List<XMLFilter> filters = new ArrayList<XMLFilter>();
             final KeyrefPaser parser = new KeyrefPaser();
             parser.setLogger(logger);
             parser.setKeyDefinition(keyDefinition);
-            parser.setTempDir(tempDir.getAbsolutePath());
+            parser.setTempDir(tempDir);
+            parser.setCurrentFile(new File(file));
             parser.setKeyMap(keymap);
-            parser.setExtName(extName);
-            parser.write(file);
+            filters.add(parser);
+            
+            XMLUtils.transform(new File(tempDir, file), filters);
+            
             // validate resource-only list
             for (final String t: parser.getNormalProcessingRoleTargets()) {
-                if (resourceOnlyList.contains(t)) {
-                    resourceOnlyList.remove(t);
+                if (files.containsKey(t)) {
+                    files.get(t).isResourceOnly = false;
                 }
             }
         }
-        job.setSet(RESOURCE_ONLY_LIST, resourceOnlyList);
+        job.addAll(files.values());
         try {
             job.write();
         } catch (final IOException e) {

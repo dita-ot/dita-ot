@@ -5,5 +5,8 @@
   <body class="- topic/body ">
     <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><coderef class="+ topic/xref pr-d/coderef " href="code.xml"/></codeblock>
     <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><coderef class="+ topic/xref pr-d/coderef " href="utf-8.xml" format="xml; charset=UTF-8"/></codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><coderef class="+ topic/xref pr-d/coderef " href="plain.txt#line-range(1, 5)"/></codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><coderef class="+ topic/xref pr-d/coderef " href="plain.txt#line-range(3)"/></codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><coderef class="+ topic/xref pr-d/coderef " href="plain.txt#line-range(2, 3)"/></codeblock>
   </body>
 </topic>

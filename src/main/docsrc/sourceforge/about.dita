@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="about">
+  <title>About</title>
+  <shortdesc>The DITA Open Toolkit, or DITA-OT for short, is a set of Java-based, open source tools
+    that provide processing for DITA maps and topic content.</shortdesc>
+  <conbody>
+    <p>You can download the OT and install it for free on your computer to get started with
+      topic-based writing and publishing.</p>
+  </conbody>
+  <related-links>
+    <linklist outputclass="overview">
+    </linklist>
+    <linklist outputclass="download">
+      <link keyref="download.dita-ot.current-release" scope="external" format="html">
+        <linktext>Download</linktext>
+      </link>
+      <linkinfo>
+        <p>Download and install DITA Open Toolkit <keyword keyref="release.stable-version"/>.</p>
+      </linkinfo>
+    </linklist>
+    <linklist outputclass="documentation">
+      <link href="/latest/" scope="external" format="html">
+        <linktext>Read the Docs</linktext>
+      </link>
+      <linkinfo>
+        <p>Everything you need to know about how to use DITA Open Toolkit.</p>
+      </linkinfo>
+    </linklist>
+    <linklist outputclass="contribute">
+      <link href="get-involved.dita">
+        <linktext>Get Involved</linktext>
+      </link>
+      <linkinfo>
+        <p>Contribute to the community and the project.</p>
+      </linkinfo>
+    </linklist>
+  </related-links>
+</concept>

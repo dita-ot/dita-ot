@@ -55,6 +55,7 @@ import org.dita.dost.util.DelayConrefUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.OutputUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.TimingUtils;
@@ -411,7 +412,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
 			logger.logError(e1.toString());
 		}
         logger.logInfo("Processing " + fileToParse.getAbsolutePath());
-        final String[] params = { file.getAbsolutePath() };
+        final String[] params = { fileToParse.getAbsolutePath() };
 
         if (!fileToParse.exists()) {
             logger.logError(MessageUtils.getInstance().getMessage("DOTX008E", params).toString());
@@ -537,11 +538,11 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
                  * 
                  * logger.logError(e.getMessage(), e) ; }
                  */
-                keysDefMap.put(key, new KeyDef(key, value.href, currentFile));
+                keysDefMap.put(key, new KeyDef(key, value.href, value.scope, currentFile));
             }
             // if the current file is also a schema file
             if (schemeSet.contains(currentFile)) {
-            	schemekeydefMap.put(key, new KeyDef(key, value.href, currentFile));
+            	schemekeydefMap.put(key, new KeyDef(key, value.href, value.scope, currentFile));
             }
 
         }
@@ -1029,7 +1030,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             }
         }
 
-        writeKeydef(new File(tempDir, SUBJECT_SCHEME_KEYDEF_LIST_FILE), schemekeydefMap.values());
+        KeyDef.writeKeydef(new File(tempDir, SUBJECT_SCHEME_KEYDEF_LIST_FILE), schemekeydefMap.values());
     }
     
     /**
@@ -1157,12 +1158,12 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
                     source = FileUtils.separatorsToUnix(FileUtils.normalize(prefix + source));
                 }
             }
-            final KeyDef keyDef = new KeyDef(keys, href, source);
+            final KeyDef keyDef = new KeyDef(keys, href, file.scope, source);
             updated.add(keyDef);
         }
         // write key definition
         try {
-            writeKeydef(new File(tempDir, KEYDEF_LIST_FILE), updated);
+            KeyDef.writeKeydef(new File(tempDir, KEYDEF_LIST_FILE), updated);
         } catch (final DITAOTException e) {
             logger.logError("Failed to write key definition file: " + e.getMessage(), e);
         }
@@ -1224,130 +1225,6 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         // clear set
         set.clear();
         newSet.clear();
-    }
-
-    // Nested classes ----------------------------------------------------------
-
-    /**
-     * Read key definition XML configuration file
-     * 
-     * @param keydefFile key definition file
-     * @return list of key definitions
-     * @throws DITAOTException if reading configuration file failed
-     */
-    public static Collection<KeyDef> readKeydef(final File keydefFile) throws DITAOTException {
-        final Collection<KeyDef> res = new ArrayList<KeyDef>();
-        try {
-            final XMLReader parser = StringUtils.getXMLReader();
-            parser.setContentHandler(new DefaultHandler() {
-                @Override
-                public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
-                    final String n = localName != null ? localName : qName;
-                    if (n.equals(ELEMENT_KEYDEF)) {
-                        res.add(new KeyDef(atts.getValue(ATTRIBUTE_KEYS), atts.getValue(ATTRIBUTE_HREF), atts.getValue(ATTRIUBTE_SOURCE)));
-                    }
-                }
-            });
-            parser.parse(keydefFile.toURI().toString());
-        } catch (final Exception e) {
-            throw new DITAOTException("Failed to read key definition file " + keydefFile + ": " + e.getMessage(), e);
-        }
-        return res;
-    }
-    
-    /**
-     * Write key definition XML configuration file
-     * 
-     * @param keydefFile key definition file
-     * @param keydefs list of key definitions
-     * @throws DITAOTException if writing configuration file failed
-     */
-    public static void writeKeydef(final File keydefFile, final Collection<KeyDef> keydefs) throws DITAOTException {
-    	OutputStream out = null;
-    	XMLStreamWriter keydef = null;
-        try {
-        	out = new FileOutputStream(keydefFile);
-            keydef = XMLOutputFactory.newInstance().createXMLStreamWriter(out);
-            keydef.writeStartDocument();
-            keydef.writeStartElement(ELEMENT_STUB);
-            for (final KeyDef k: keydefs) {
-                keydef.writeStartElement(ELEMENT_KEYDEF);
-                keydef.writeAttribute(ATTRIBUTE_KEYS, k.keys);
-                if (k.href != null) {
-                    keydef.writeAttribute(ATTRIBUTE_HREF, k.href);
-                }
-                if (k.source != null) {
-                    keydef.writeAttribute(ATTRIUBTE_SOURCE, k.source);
-                }
-                keydef.writeEndElement();
-            }        
-            keydef.writeEndDocument();
-        } catch (final XMLStreamException e) {
-            throw new DITAOTException("Failed to write key definition file " + keydefFile + ": " + e.getMessage(), e);
-        } catch (final IOException e) {
-            throw new DITAOTException("Failed to write key definition file " + keydefFile + ": " + e.getMessage(), e);
-        } finally {
-            if (keydef != null) {
-                try {
-                    keydef.close();
-                } catch (final XMLStreamException e) {}
-            }
-            if (out != null) {
-                try {
-                    out.close();
-                } catch (final IOException e) {}
-            }
-        }
-    }
-    
-    public static class KeyDef {
-        public final String keys;
-        public final String href;
-        public final String source;
-        /**
-         * Construct new key definition.
-         * 
-         * @param keys key name
-         * @param href href URI, may be {@code null}
-         * @param source key definition source, may be {@code null}
-         */
-        public KeyDef(final String keys, final String href, final String source) {
-            this.keys = keys;
-            this.href = href;
-            this.source = source;
-        }
-        /**
-         * Parse key definition from serialized from.
-         * 
-         * @param result serialized key definition
-         */
-        public KeyDef(final String result) {
-            final int equalIndex = result.indexOf(EQUAL);
-            final int leftBracketIndex = result.lastIndexOf(LEFT_BRACKET);
-            final int rightBracketIndex = result.lastIndexOf(RIGHT_BRACKET);
-            keys = result.substring(0, equalIndex);
-            if (equalIndex + 1 < leftBracketIndex) {
-                href = result.substring(equalIndex + 1, leftBracketIndex);
-            } else {
-                href = null;
-            }
-            if (leftBracketIndex + 1 < rightBracketIndex) {
-                source = result.substring(leftBracketIndex + 1, rightBracketIndex);
-            } else {
-                source = null;
-            }
-        }
-        @Override
-        public String toString() {
-            final StringBuilder buf = new StringBuilder().append(keys).append(EQUAL);
-            if (href != null) {
-                buf.append(href);
-            }
-            if (source != null) {
-                buf.append(LEFT_BRACKET).append(source).append(RIGHT_BRACKET);
-            }
-            return buf.toString();
-        }
     }
     
 }

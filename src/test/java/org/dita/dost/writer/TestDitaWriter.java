@@ -33,6 +33,7 @@ import org.dita.dost.util.FilterUtils.Action;
 import org.dita.dost.util.FilterUtils.FilterKey;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.OutputUtils;
 import org.dita.dost.writer.DitaWriter;
 import org.junit.After;

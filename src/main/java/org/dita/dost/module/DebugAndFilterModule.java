@@ -51,6 +51,7 @@ import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.OutputUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.TimingUtils;
@@ -250,7 +251,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             	fileWriter.setFilterUtils(filterUtils);
             }
             fileWriter.setDelayConrefUtils(new DelayConrefUtils());
-            fileWriter.setKeyDefinitions(GenMapAndTopicListModule.readKeydef(new File(tempDir, KEYDEF_LIST_FILE)));
+            fileWriter.setKeyDefinitions(KeyDef.readKeydef(new File(tempDir, KEYDEF_LIST_FILE)));
            
             outputUtils.setGeneratecopyouter(input.getAttribute(ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER));
             outputUtils.setOutterControl(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTTERCONTROL));

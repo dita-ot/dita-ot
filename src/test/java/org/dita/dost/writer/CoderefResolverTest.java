@@ -39,13 +39,14 @@ public class CoderefResolverTest {
         FileUtils.copyFile(new File(srcDir, "test.dita"), f);
         FileUtils.copyFile(new File(srcDir, "code.xml"), new File(tempDir, "code.xml"));
         FileUtils.copyFile(new File(srcDir, "utf-8.xml"), new File(tempDir, "utf-8.xml"));
+        FileUtils.copyFile(new File(srcDir, "plain.txt"), new File(tempDir, "plain.txt"));
 
         final CoderefResolver filter = new CoderefResolver();
         filter.setLogger(new TestUtils.TestLogger());
         filter.write(f.getAbsolutePath());
 
         TestUtils.resetXMLUnit();
-        XMLUnit.setIgnoreWhitespace(true);
+        XMLUnit.setIgnoreWhitespace(false);
         assertXMLEqual(new InputSource(new File(expDir, "test.dita").toURI().toString()),
                 new InputSource(f.toURI().toString()));
     }
