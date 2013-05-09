@@ -29,6 +29,7 @@
     <shortdesc>The OASIS DITA Technical Committee develops the DITA standard.</shortdesc>
    </topicmeta>
   </topicref>
+  <topicref href="articles/web-based-resources.dita" print="yes"/>
   <topicref href="articles/DITA-dWarticles.xml"/>
  </topicref>
 </map>

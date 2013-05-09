@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="get-involved">
+ <title>How to Get Involved</title>
+ <shortdesc>The best ways to contribute are by finding and reporting bugs,  participating in the
+  DITA-OT project meetings, and contributing to the code and documentation.</shortdesc>
+ <conbody>
+  <section>
+   <title>Report a bug</title>
+   <p>We use <xref href="https://github.com/dita-ot/dita-ot/issues" format="html" scope="external"
+     >Github</xref> as our issue tracker.</p>
+  </section>
+  <section>
+   <title>Participate in the project meetings</title>
+   <p>The DITA-OT project holds monthly meetings. The meetings usually are held on Tuesday, 10-11 AM
+    ET. To get an invitation, send e-mail to Robert Anderson, project lead and primary
+    contributor.</p>
+  </section>
+  <section>
+   <title>Contribute to the documentation</title>
+   <p>To contribute to the documentation, send e-mail to Kristen Eberlein.</p>
+  </section>
+ </conbody>
+</concept>

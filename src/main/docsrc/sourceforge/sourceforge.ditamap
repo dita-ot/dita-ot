@@ -8,6 +8,7 @@
     <topicref href="get-involved.dita" navtitle="Get involved" locktitle="yes"/>
     <topicref href="license.dita" navtitle="License"/>
     <topicref navtitle="Who We Are" href="who_we_are.dita"/>
+    <topicref href="get-involved.dita" navtitle="Get Involved" locktitle="yes"/>
   </topichead>
   <topichead navtitle="Download">
     <topicref navtitle="Release 1.7" scope="external" format="html" href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Stable%20Release/DITA%20Open%20Toolkit%201.7/"/>
