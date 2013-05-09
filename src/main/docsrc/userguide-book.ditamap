@@ -4,9 +4,9 @@
   <title>DITA Open Toolkit, version <keyword keyref="release.version"/></title>
   <bookmeta>
     <prodinfo>
-      <prodname>DITA-OT</prodname>
+      <prodname>DITA Open Toolkit</prodname>
       <vrmlist>
-        <vrm version="1.7.1"/>
+        <vrm version=""/>
       </vrmlist>
     </prodinfo>
   </bookmeta>
@@ -16,27 +16,11 @@
     <mapref href="subjectscheme.ditamap" type="subjectScheme" processing-role="resource-only"/>
     <booklists>
       <toc/>
-      <figurelist/>
-      <tablelist/>
     </booklists>
   </frontmatter>
   <chapter format="ditamap" href="quickstart.ditamap"/>
   <chapter href="readme.ditamap" format="ditamap"/>
   <chapter navtitle="Developer Reference" href="dev_ref/dev_ref.ditamap" format="ditamap"/>
-  <appendix navtitle="DITA-OT release history">
-    <mapref href="readme/changes/changes.ditamap"/>
-  </appendix>
   <appendix navtitle="Project Management" href="admin/project-management.ditamap" format="ditamap"/>
-  <appendix href="articles/ditaot_topic_developerworks_articles.dita">
-    <topicref href="articles/DITA-rm.xml"/>
-    <topicref href="articles/DITA-dsf.xml"/>
-    <topicref href="articles/DITA-domains.xml"/>
-    <topicref href="articles/DITA-mapdomains.xml"/>
-  </appendix>
-  <backmatter>
-    <booklists>
-      <indexlist/>
-      <!--glossarylist/-->
-    </booklists>
-  </backmatter>
+  <appendix href="dita-resources.ditamap" format="ditamap"/>
 </bookmap>
