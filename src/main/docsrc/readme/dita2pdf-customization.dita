@@ -43,7 +43,7 @@
             <codeblock>&lt;?xml version='1.0' encoding='UTF-8'?>
 &lt;project name="com.example.print-pdf">
   &lt;target name="dita2print-pdf.init">
-    &lt;property name="customization.dir" location="com.example.print-pdf.dir/cfg"/>
+    &lt;property name="customization.dir" location="${dita.plugin.com.example.print-pdf.dir}/cfg"/>
   &lt;/target>
   &lt;target name="dita2print-pdf" depends="dita2print-pdf.init, dita2pdf2"/>
 &lt;/project></codeblock>
