@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="reference_orf_15z_ck">
+  <title>Web-based resources</title>
+  <shortdesc>There are many vital DITA resources online, including the Yahoo! dita-users group and
+    the DITA-OT project page at dita.xml.org.</shortdesc>
+  <refbody>
+    <section>
+      <dl>
+        <dlentry>
+          <dt><xref href="http://dita.xml.org/wiki/the-dita-open-toolkit" format="html"
+              scope="external">DITA-OT project page at dita.xml.org</xref></dt>
+          <dd>The DITA-OT project page at dita.xml.org provides news about the latest toolkit
+            builds, plans for the next milestone release, and other rapidly-changing information. It
+            also contains release notes for all past and upcoming releases.</dd>
+        </dlentry>
+        <dlentry>
+          <dt><xref href="http://groups.yahoo.com/group/dita-users/" format="html" scope="external"
+              >Yahoo! dita-users group</xref></dt>
+          <dd>The DITA-OT project page at dita.xml.org provides news about the latest toolkit
+            builds, plans for the next milestone release, and other rapidly-changing information. It
+            also contains release notes for all past and upcoming releases.</dd>
+        </dlentry>
+        <dlentry>
+          <dt><xref href="http://www.oasis-open.org/committees/dita/" format="html" scope="external"
+              >Home page for the OASIS DITA Technical Committee</xref></dt>
+          <dd>The OASIS DITA Technical Committee develops the DITA standard.</dd>
+        </dlentry>
+      </dl>
+    </section>
+  </refbody>
+</reference>
