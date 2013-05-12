@@ -9,7 +9,7 @@
         <steps>
             <step>
                 <cmd conref="conref-installing.dita#conref-installing/download-minimal-standard"/>
-                <choicetable relcolwidth="1* 4*">
+                <choicetable relcolwidth=".75* 4.25*">
                     <chhead>
                         <choptionhd>Package</choptionhd>
                         <chdeschd>File name</chdeschd>
@@ -76,7 +76,7 @@ set CLASSPATH=%DITA_HOME%\lib\commons-codec-<keyword keyref="tool.codec.version"
             </step>
             <step>
                 <cmd>Set up the XSLT processor:</cmd>
-                <choicetable relcolwidth="1.0* 4.0*">
+                <choicetable relcolwidth=".75* 4.25*">
                     <chhead>
                         <choptionhd>Processor</choptionhd>
                         <chdeschd>Action</chdeschd>
@@ -122,7 +122,7 @@ set CLASSPATH=%DITA_HOME%\lib\commons-codec-<keyword keyref="tool.codec.version"
             </step>
             <step importance="optional">
                 <cmd>For PDF output, set up the XSL-FO processor:</cmd>
-                <choicetable relcolwidth="1.0* 4.0*">
+                <choicetable relcolwidth=".75* 4.25*">
                     <chhead>
                         <choptionhd>Processor</choptionhd>
                         <chdeschd>Action</chdeschd>

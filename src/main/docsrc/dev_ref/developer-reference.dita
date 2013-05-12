@@ -5,8 +5,8 @@
   <titlealts>
     <navtitle>Developer Reference</navtitle>
   </titlealts>
- <shortdesc>The <ph><cite>DITA Open Toolkit Developer Reference</cite> is designed to provide more
-      advanced information about the DITA OT. It is geared to an audience that needs information
+ <shortdesc><ph>The <cite>DITA Open Toolkit Developer Reference</cite> is designed to provide more
+      advanced information about the DITA-OT. It is geared to an audience that needs information
       about the DITA-OT architecture, configuring and extending the DITA-OT, and creating DITA-OT
       plug-ins.</ph></shortdesc>
 </concept>
