@@ -4,6 +4,7 @@
   <title>Customizing PDF output</title>
   <shortdesc>You can build a DITA-OT plug-in that contains a customized PDF
     transformation.</shortdesc>
+  <prolog/>
   <taskbody>
     <context>This topic demonstrates the process of building a plug-in (com.example.print-pdf) that
       creates a new transformation type: <option>print-pdf</option>. The <option>print-pdf</option>
