@@ -1042,10 +1042,10 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         final StringBuffer msg = new StringBuffer();
         msg.append("Usage: dita [options]" + lSep);
         msg.append("Mandatory: " + lSep);
-        msg.append("  -i, -input <file>     input file" + lSep);
-        msg.append("  -t, -transtype <name> transformation type" + lSep);
+        msg.append("  -i, -input <file>      input file" + lSep);
+        msg.append("  -t, -transtype <name>  transformation type" + lSep);
         msg.append("Optional: " + lSep);
-        msg.append("  -o, -output <dir>     output directory" + lSep);
+        msg.append("  -o, -output <dir>      output directory" + lSep);
         msg.append("  -help, -h              print this message" + lSep);
         // msg.append("  -projecthelp, -p       print project help information"
         // + lSep);

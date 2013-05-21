@@ -152,7 +152,7 @@
     <patternset refid="pattern.global.excludes"/>
     <exclude name="buildPackage.*"/>
     <exclude name="lib/log4j.properties"/>
-    <exclude name="lib/saxon*.jar"/>
+    <exclude name="lib/saxon/*"/>
     <exclude name="startcmd.*"/>
     <include name="build_demo.xml"/>
     <exclude name="catalog-dita.txt"/>
@@ -174,7 +174,6 @@
     <include name="samples/**"/>
     <include name="schema/**"/>
     <include name="xsl/**"/>
-    <exclude name="lib/saxon/*"/>
     <include name="lib/**"/>    
   </patternset>
   <patternset id="pattern.package.ext-plugins.client">
@@ -216,7 +215,7 @@
     <exclude name="plugins/org.dita.pdf2/fop/conf/"/>
     <exclude name="plugins/org.dita.pdf2/fop/lib/"/>
     <exclude name="plugins/org.dita.pdf2/lib/icu4j.jar"/>
-    <exclude name="lib/saxon/"/>
+    <exclude name="lib/saxon/*"/>
     <exclude name="lib/icu4j.jar"/>
     <exclude name="lib/log4j.properties"/>
     <exclude name="startcmd.*"/>
@@ -615,7 +614,8 @@
         <pathelement location="${test.lib.dir}/xmlunit-1.3.jar"/>
         <pathelement location="${bin.dir}"/>
         <pathelement location="${src.dir}/resources"/>
-        <pathelement location="${lib.dir}/saxon9he.jar"/>
+        <pathelement location="${lib.dir}/saxon/saxon9.jar"/>
+        <pathelement location="${lib.dir}/saxon/saxon9-dom.jar"/>
         <pathelement location="${lib.dir}/xercesImpl.jar"/>
         <pathelement location="${lib.dir}/xml-apis.jar"/>
         <pathelement location="${lib.dir}/resolver.jar"/>
