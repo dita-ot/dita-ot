@@ -8,12 +8,14 @@
  */
 package org.dita.dost.platform;
 
+import static java.util.Arrays.*;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -46,7 +48,7 @@ final class FileGenerator extends DefaultHandler2 {
     private DITAOTLogger logger;
     private OutputStreamWriter output = null;
     /** Plug-in features. */
-    private final Map<String,String> featureTable;
+    private final Map<String, List<String>> featureTable;
     private final Map<String, Features> pluginTable;
     /** Template file. */
     private File templateFile;
@@ -62,7 +64,7 @@ final class FileGenerator extends DefaultHandler2 {
      * Constructor init featureTable.
      * @param featureTbl featureTbl
      */
-    public FileGenerator(final Hashtable<String,String> featureTbl, final Map<String,Features> pluginTable) {
+    public FileGenerator(final Hashtable<String, List<String>> featureTbl, final Map<String,Features> pluginTable) {
         featureTable = featureTbl;
         this.pluginTable = pluginTable;
         output = null;
@@ -205,7 +207,7 @@ final class FileGenerator extends DefaultHandler2 {
                             action.setFeatures(pluginTable);
                             action.addParam(PARAM_TEMPLATE, templateFile.getAbsolutePath());
                             action.addParam(PARAM_LOCALNAME, attributes.getLocalName(i));
-                            action.setInput(attributes.getValue(i));
+                            action.setInput(asList(attributes.getValue(i).split(Integrator.FEAT_VALUE_SEPARATOR)));
                             output.write(action.getResult());
                         }
                     }

@@ -12,6 +12,7 @@ import static org.dita.dost.util.Constants.*;
 
 import java.util.Hashtable;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -62,11 +63,8 @@ class InsertAction extends DefaultHandler2 implements IAction {
     }
 
     @Override
-    public void setInput(final String input) {
-        final StringTokenizer inputTokenizer = new StringTokenizer(input, Integrator.FEAT_VALUE_SEPARATOR);
-        while(inputTokenizer.hasMoreElements()){
-            fileNameSet.add(inputTokenizer.nextToken());
-        }
+    public void setInput(final List<String> input) {
+        fileNameSet.addAll(input);
     }
 
     @Override
