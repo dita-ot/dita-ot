@@ -4,10 +4,8 @@
   applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved. -->
 
-<xsl:stylesheet version="1.0" 
-                xmlns:exsl="http://exslt.org/common"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                exclude-result-prefixes="exsl">
+<xsl:stylesheet version="2.0" 
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:import href="../common/output-message.xsl"/>
   <xsl:import href="../common/dita-utilities.xsl"/>
   <xsl:output method="xml" encoding="utf-8" indent="no" />
@@ -124,14 +122,7 @@
           </xsl:apply-templates>
         </maplinks>
       </xsl:variable>
-      <xsl:choose>
-        <xsl:when test="number(system-property('xsl:version')) >= 2.0">
-          <xsl:apply-templates select="$newlinks" mode="add-links-to-temp-file"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:apply-templates select="exsl:node-set($newlinks)" mode="add-links-to-temp-file"/>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:apply-templates select="$newlinks" mode="add-links-to-temp-file"/>
     </xsl:if>
     <xsl:apply-templates>
       <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>

@@ -3,11 +3,10 @@
   Sourceforge.net. See the accompanying license.txt file for 
   applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved. -->
-<xsl:stylesheet version="1.0"
+<xsl:stylesheet version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:exsl="http://exslt.org/common"
                 xmlns:related-links="http:// dita-ot.sourceforge.net/ns/200709/related-links"
-                exclude-result-prefixes="related-links exsl"
+                exclude-result-prefixes="related-links"
                 >
 
 <!--
@@ -57,12 +56,18 @@
 <xsl:template name="end-revflag"/>
 <xsl:template name="start-flagit"/>
 <xsl:template name="end-flagit"/>
-<xsl:template name="commonattributes"/>
+<xsl:template name="commonattributes">
+  <xsl:param name="default-output-class"/>
+</xsl:template>
 <xsl:template name="gen-style"/>
 <xsl:template name="getrules"/>
 <xsl:template name="conflict-check"/>
-<xsl:template name="end-flags-and-rev"/>
-<xsl:template name="start-flags-and-rev"/>
+<xsl:template name="end-flags-and-rev">
+  <xsl:param name="flagrules"/>
+</xsl:template>
+<xsl:template name="start-flags-and-rev">
+  <xsl:param name="flagrules"/>
+</xsl:template>
 
 <!-- Copy debug attributes to the elements we are creating -->
 <xsl:template name="debug"><xsl:apply-templates select="@xtrf|@xtrc"/></xsl:template>
@@ -615,7 +620,7 @@
     <xsl:variable name="prereqs">
       <xsl:apply-templates select="following-sibling::*[1][contains(@class,' topic/related-links ')]" mode="prereqs"/>
     </xsl:variable>
-      <xsl:apply-templates select="exsl:node-set($prereqs)" mode="reformat-links"/>
+      <xsl:apply-templates select="$prereqs" mode="reformat-links"/>
   </xsl:if>
 </xsl:template>
 
@@ -647,14 +652,14 @@
 
   <block>
     <xsl:call-template name="debug"/>
-    <xsl:apply-templates select="exsl:node-set($ul-children)" mode="reformat-links"/>
-    <xsl:apply-templates select="exsl:node-set($ol-children)" mode="reformat-links"/>
-    <xsl:apply-templates select="exsl:node-set($next-previous-parent)" mode="reformat-links"/>
-    <xsl:apply-templates select="exsl:node-set($relcon)" mode="reformat-links"/>
-    <xsl:apply-templates select="exsl:node-set($reltask)" mode="reformat-links"/>
-    <xsl:apply-templates select="exsl:node-set($relref)" mode="reformat-links"/>
-    <xsl:apply-templates select="exsl:node-set($relinfo)" mode="reformat-links"/>
-    <xsl:apply-templates select="exsl:node-set($linklists)" mode="reformat-links"/>
+    <xsl:apply-templates select="$ul-children" mode="reformat-links"/>
+    <xsl:apply-templates select="$ol-children" mode="reformat-links"/>
+    <xsl:apply-templates select="$next-previous-parent" mode="reformat-links"/>
+    <xsl:apply-templates select="$relcon" mode="reformat-links"/>
+    <xsl:apply-templates select="$reltask" mode="reformat-links"/>
+    <xsl:apply-templates select="$relref" mode="reformat-links"/>
+    <xsl:apply-templates select="$relinfo" mode="reformat-links"/>
+    <xsl:apply-templates select="$linklists" mode="reformat-links"/>
   </block>
 </xsl:template>
 

@@ -43,13 +43,12 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
 <!-- 20090903 RDA: added <?ditaot gentext?> and <?ditaot linktext?> PIs for RFE 1367897.
                    Allows downstream processes to identify original text vs. generated link text. -->
           
-<xsl:stylesheet version="1.0" 
+<xsl:stylesheet version="2.0" 
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:exsl="http://exslt.org/common"
                 xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
                 xmlns:topicpull="http://dita-ot.sourceforge.net/ns/200704/topicpull"
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
-                exclude-result-prefixes="dita-ot topicpull ditamsg exsl">
+                exclude-result-prefixes="dita-ot topicpull ditamsg">
   <xsl:import href="../common/dita-utilities.xsl"/>
   <xsl:import href="../common/output-message.xsl"/>
   <xsl:import href="../common/dita-textonly.xsl"/>
@@ -902,14 +901,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
         <xsl:if test="not($shortdesc='#none#')">
           <xsl:apply-templates select="." mode="topicpull:add-genshortdesc-PI"/>
           <desc class="- topic/desc ">
-            <xsl:choose>
-              <xsl:when test="number(system-property('xsl:version')) >= 2.0">
-                <xsl:apply-templates select="$shortdesc"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:apply-templates select="exsl:node-set($shortdesc)"/>
-              </xsl:otherwise>
-            </xsl:choose>
+            <xsl:apply-templates select="$shortdesc"/>
           </desc>
         </xsl:if>
       </xsl:otherwise>
@@ -1398,14 +1390,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:param name="figtitle"/>
     <xsl:choose>
       <xsl:when test="$FIGURELINK='TITLE'">
-        <xsl:choose>
-          <xsl:when test="number(system-property('xsl:version')) >= 2.0">
-            <xsl:apply-templates select="$figtitle" mode="text-only"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:apply-templates select="exsl:node-set($figtitle)" mode="text-only"/>
-          </xsl:otherwise>
-        </xsl:choose>
+        <xsl:apply-templates select="$figtitle" mode="text-only"/>
       </xsl:when>
       <xsl:otherwise> <!-- Default: FIGURELINK='NUMBER' -->
         <xsl:value-of select="$figtext"/>
@@ -1423,14 +1408,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:param name="figtitle"/> <!-- Currently unused, but may be picked up by an override -->
     <xsl:choose>
       <xsl:when test="$FIGURELINK='TITLE'">
-        <xsl:choose>
-          <xsl:when test="number(system-property('xsl:version')) >= 2.0">
-            <xsl:apply-templates select="$figtitle" mode="text-only"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:apply-templates select="exsl:node-set($figtitle)" mode="text-only"/>
-          </xsl:otherwise>
-        </xsl:choose>
+        <xsl:apply-templates select="$figtitle" mode="text-only"/>
       </xsl:when>
       <xsl:otherwise> <!-- Default: FIGURELINK='NUMBER' -->
         <xsl:value-of select="$figcount"/>
@@ -1540,14 +1518,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:param name="tbltitle"/> <!-- Currently unused, but may be picked up by an override -->
     <xsl:choose>
       <xsl:when test="$TABLELINK='TITLE'">
-        <xsl:choose>
-          <xsl:when test="number(system-property('xsl:version')) >= 2.0">
-            <xsl:apply-templates select="$tbltitle" mode="text-only"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:apply-templates select="exsl:node-set($tbltitle)" mode="text-only"/>
-          </xsl:otherwise>
-        </xsl:choose>
+        <xsl:apply-templates select="$tbltitle" mode="text-only"/>
       </xsl:when>
       <xsl:otherwise> <!-- Default: TABLELINK='NUMBER' -->
         <xsl:value-of select="$tbltext"/>
@@ -1565,14 +1536,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:param name="tbltitle"/> <!-- Currently unused, but may be picked up by an override -->
     <xsl:choose>
       <xsl:when test="$TABLELINK='TITLE'">
-        <xsl:choose>
-          <xsl:when test="number(system-property('xsl:version')) >= 2.0">
-            <xsl:apply-templates select="$tbltitle" mode="text-only"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:apply-templates select="exsl:node-set($tbltitle)" mode="text-only"/>
-          </xsl:otherwise>
-        </xsl:choose>
+        <xsl:apply-templates select="$tbltitle" mode="text-only"/>
       </xsl:when>
       <xsl:otherwise> <!-- Default: TABLELINK='NUMBER' -->
         <xsl:value-of select="$tblcount"/>

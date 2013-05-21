@@ -5,7 +5,7 @@
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
 <!-- Common utilities that can be used by DITA transforms -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:param name="DEFAULTLANG">en-us</xsl:param>
   <!-- Function to convert a string to lower case -->
   

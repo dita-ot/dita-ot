@@ -4,13 +4,11 @@
   applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
-<xsl:stylesheet version="1.0"
+<xsl:stylesheet version="2.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-  xmlns:exsl="http://exslt.org/common"
   xmlns:conref="http://dita-ot.sourceforge.net/ns/200704/conref"
   xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
-  xmlns:fn="http://www.w3.org/2005/xpath-functions"
-  exclude-result-prefixes="exsl">
+  xmlns:fn="http://www.w3.org/2005/xpath-functions">
 
   <xsl:import href="../common/output-message.xsl"/>
   <xsl:import href="../common/dita-utilities.xsl"/>
@@ -866,14 +864,7 @@
     </xsl:when>
     <xsl:otherwise>
       <xsl:element name="{$original-element}">
-        <xsl:choose>
-          <xsl:when test="number(system-property('xsl:version')) >= 2.0">
-            <xsl:apply-templates select="$original-attributes/*[1]/@*" mode="original-attributes"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:apply-templates select="exsl:node-set($original-attributes)/*[1]/@*" mode="original-attributes"/>
-          </xsl:otherwise>
-        </xsl:choose>
+        <xsl:apply-templates select="$original-attributes/*[1]/@*" mode="original-attributes"/>
         <xsl:for-each select="@*">
             <xsl:variable name="attribute-name"><xsl:text>-</xsl:text><xsl:value-of select="name()"/><xsl:text>-</xsl:text></xsl:variable>
             
