@@ -45,7 +45,8 @@ final class InsertDependsAction implements IAction {
         final String localname = paramTable.get(FileGenerator.PARAM_LOCALNAME);
         final List<String> result = new ArrayList<String>();
 
-        for (final String token: value) {
+        for (final String t: value) {
+            final String token = t.trim();
             // Pieces which are surrounded with braces are extension points.
             if (token.startsWith("{") && token.endsWith("}"))
             {
