@@ -16,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -213,6 +214,7 @@ public final class FileUtils {
      * @param lcasefn file name
      * @return true if is DITA file and false otherwise
      */
+    @Deprecated
     public static boolean isDITAFile(String lcasefn) {
         if(lcasefn == null) {
             return false;
@@ -227,6 +229,7 @@ public final class FileUtils {
      * @param lcasefn file name
      * @return true if is dita file and false otherwise
      */
+    @Deprecated
     public static boolean isDITATopicFile(final String lcasefn) {
         for (final String ext: supportedTopicExtensions) {
             if (lcasefn.endsWith(ext)) {
@@ -241,6 +244,7 @@ public final class FileUtils {
      * @param lcasefn file name
      * @return true if is ditamap file and false otherwise
      */
+    @Deprecated
     public static boolean isDITAMapFile(final String lcasefn) {
         for (final String ext: supportedMapExtensions) {
             if (lcasefn.endsWith(ext)) {

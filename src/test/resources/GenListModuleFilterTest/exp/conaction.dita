@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" ditaarch:DITAArchVersion="1.2"
+  class="- topic/topic " domains="(topic hi-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic abbrev-d) (topic pr-d) (topic sw-d) (topic ui-d)"
+  id="conaction">
+  <title class="- topic/title ">Conref</title>
+  <body class="- topic/body ">
+    <p class="- topic/p " conaction="pushreplace" conref="conction-target.dita#conction-target/p"/>
+  </body>
+</topic>

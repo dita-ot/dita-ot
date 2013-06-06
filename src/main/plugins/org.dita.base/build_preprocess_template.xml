@@ -12,10 +12,68 @@
   </condition>
 
   <target name="preprocess"
-    dita:depends="{depend.preprocess.pre},gen-list,debug-filter,copy-files,conrefpush,conref,move-meta-entries,keyref,coderef,mapref,mappull,chunk,maplink,move-links,topicpull,flag-module,{depend.preprocess.post}"
+    dita:depends="{depend.preprocess.pre},preprocess.init,gen-list,debug-filter,copy-files,conrefpush,conref,move-meta-entries,keyref,coderef,mapref,mappull,chunk,maplink,move-links,topicpull,flag-module,{depend.preprocess.post}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     description="Preprocessing ended" />
-
+  
+  <target name="preprocess.init">
+    <dita-ot-fail id="DOTA069F">
+      <condition>
+        <and>
+          <isset property="args.input"/>
+          <not>
+            <isset property="args.input.dir"/>
+          </not>
+          <not>
+            <available file="${args.input}" type="file"/>
+          </not>
+        </and>
+      </condition>
+      <param name="1" location="${args.input}"/>
+    </dita-ot-fail>
+    <dita-ot-fail id="DOTA069F">
+      <condition>
+        <and>
+          <isset property="args.input"/>
+          <isset property="args.input.dir"/>
+          <not>
+            <or>
+              <available file="${args.input}" type="file"/>
+              <available file="${args.input.dir}/${args.input}" type="file"/>
+            </or>
+          </not>
+        </and>
+      </condition>
+      <param name="1" location="${args.input}"/>
+    </dita-ot-fail>
+    <dita-ot-fail id="DOTA002F">
+      <condition>
+        <and>
+          <not>
+            <isset property="args.input"/>
+          </not>
+          <not>
+            <isset property="args.input.uri"/>
+          </not>
+        </and>
+      </condition>
+    </dita-ot-fail>
+    
+    <basename property="dita.input.filename" file="${args.input}" />
+    <condition property="dita.input.dirname" value="${args.input.dir}">
+      <isset property="args.input.dir"/>
+    </condition>
+    <dirname property="dita.input.dirname" file="${args.input}" />
+    <basename property="dita.map.filename.root" file="${dita.input.filename}" suffix=".ditamap" />
+    <basename property="dita.topic.filename.root" file="${dita.input.filename}" suffix="${dita.ext}" />
+    
+    <echo level="info">*****************************************************************</echo>
+    <echo level="info">* input = ${args.input}</echo>
+    <echo level="info">* inputdir = ${dita.input.dirname}</echo>
+    <echo level="info">* extname = ${dita.ext}</echo>
+    <echo level="info">*****************************************************************</echo>
+  </target>
+  
   <!-- clean-temp
       Remove anything in the ${dita.temp.dir} directory before starting. -->
   <target name="clean-temp" unless="clean-temp.skip"
@@ -29,6 +87,7 @@
 
   <!-- gen-list
       Create the manifest files listing which files are referenced by the input file (even indirectly). -->
+  <!-- Deprecated -->
   <target name="gen-list"
     dita:depends="{depend.preprocess.gen-list.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
@@ -99,6 +158,7 @@
       Copy input files to ${dita.temp.dir} tree.
       While copying, populate default attributes like @class,
       add @xtrf and @xtrc and filter out elements according to valfile, if any. -->
+  <!-- Deprecated -->
   <target name="debug-filter"
     dita:depends="{depend.preprocess.debug-filter.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"

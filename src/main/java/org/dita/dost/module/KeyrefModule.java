@@ -14,6 +14,7 @@ import static org.dita.dost.util.Job.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -32,6 +33,7 @@ import org.dita.dost.reader.KeyrefReader;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.XMLUtils;
+import org.dita.dost.writer.ConkeyrefFilter;
 import org.dita.dost.writer.KeyrefPaser;
 /**
  * Keyref Module.
@@ -78,8 +80,9 @@ final class KeyrefModule implements AbstractPipelineModule {
         final Map<String, String> keymap =new HashMap<String, String>();
         // store the key name defined in a map(keyed by ditamap file)
         final Hashtable<String, Set<String>> maps = new Hashtable<String, Set<String>>();
+        final Collection<KeyDef> keydefs = KeyDef.readKeydef(new File(tempDir, KEYDEF_LIST_FILE));
 
-        for (final KeyDef keyDef: KeyDef.readKeydef(new File(tempDir, KEYDEF_LIST_FILE))) {
+        for (final KeyDef keyDef: keydefs) {
             keymap.put(keyDef.keys, keyDef.href);
             // map file which define the keys
             final String map = keyDef.source;
@@ -116,6 +119,14 @@ final class KeyrefModule implements AbstractPipelineModule {
             logger.logInfo("Processing " + new File(tempDir, file).getAbsolutePath());
             
             final List<XMLFilter> filters = new ArrayList<XMLFilter>();
+            
+            final ConkeyrefFilter conkeyrefFilter = new ConkeyrefFilter();
+            conkeyrefFilter.setLogger(logger);
+            conkeyrefFilter.setKeyDefinitions(keydefs);
+            conkeyrefFilter.setTempDir(tempDir);
+            conkeyrefFilter.setCurrentFile(new File(file));
+            filters.add(conkeyrefFilter);
+            
             final KeyrefPaser parser = new KeyrefPaser();
             parser.setLogger(logger);
             parser.setKeyDefinition(keyDefinition);
