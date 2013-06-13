@@ -185,7 +185,7 @@
      </xs:attributeGroup>
     
     <xs:element name="lomStructure">
-        <xs:complexType>
+        <xs:complexType  mixed="true">
             <xs:complexContent>
                 <xs:extension base="lomStructure.class">
                     <xs:attribute ref="class" default="+ topic/data learningmeta-d/lomStructure "/>
@@ -204,15 +204,12 @@
         <xs:attribute name="value" use="required">
             <xs:simpleType>
                 <xs:restriction base="xs:string">
-                    <xs:enumeration value="mixed"/>
-                    <xs:enumeration value="branshed"/>
-                    <xs:enumeration value="parceled"/>
                     <xs:enumeration value="atomic"/>
                     <xs:enumeration value="collection"/>
                     <xs:enumeration value="networked"/>
                     <xs:enumeration value="linear"/>
                     <xs:enumeration value="hierarchical"/>
-                  <xs:enumeration value="-dita-use-conref-target"/>
+                  <xs:enumeration value=" -dita-use-conref-target"/>
                 </xs:restriction>
             </xs:simpleType>
         </xs:attribute>
@@ -220,7 +217,7 @@
     </xs:attributeGroup>
     
     <xs:element name="lomCoverage">
-        <xs:complexType>
+        <xs:complexType  mixed="true">
         <xs:complexContent>
             <xs:extension base="lomCoverage.class">
                 <xs:attribute ref="class" default="+ topic/data learningmeta-d/lomCoverage "/>
@@ -241,7 +238,7 @@
     </xs:attributeGroup>
     
     <xs:element name="lomAggregationLevel">
-       <xs:complexType>
+       <xs:complexType mixed="true">
         <xs:complexContent>
             <xs:extension base="lomAggregationLevel.class">
                 <xs:attribute ref="class" default="+ topic/data learningmeta-d/lomAggregationLevel "/>
@@ -273,7 +270,7 @@
     </xs:attributeGroup>
     
     <xs:element name="lomTechRequirement">
-        <xs:complexType>
+        <xs:complexType mixed="true">
         <xs:complexContent>
             <xs:extension base="lomTechRequirement.class">
                 <xs:attribute ref="class" default="+ topic/data learningmeta-d/lomTechRequirement "/>
@@ -313,7 +310,7 @@
     </xs:attributeGroup>
     
     <xs:element name="lomInstallationRemarks">
-        <xs:complexType>
+        <xs:complexType mixed="true">
         <xs:complexContent>
             <xs:extension base="lomInstallationRemarks.class">
                 <xs:attribute ref="class" default="+ topic/data learningmeta-d/lomInstallationRemarks "/>
@@ -334,7 +331,7 @@
     </xs:attributeGroup>
     
     <xs:element name="lomOtherPlatformRequirements">
-        <xs:complexType>
+        <xs:complexType mixed="true">
         <xs:complexContent>
             <xs:extension base="lomOtherPlatformRequirements.class">
                 <xs:attribute ref="class" default="+ topic/data learningmeta-d/lomOtherPlatformRequirements "/>
@@ -355,7 +352,7 @@
     </xs:attributeGroup>
     
     <xs:element name="lomInteractivityType">
-        <xs:complexType>
+        <xs:complexType  mixed="true">
         <xs:complexContent>
             <xs:extension base="lomInteractivityType.class">
                 <xs:attribute ref="class" default="+ topic/data learningmeta-d/lomInteractivityType "/>
@@ -385,7 +382,7 @@
     </xs:attributeGroup>
     
     <xs:element name="lomLearningResourceType">
-        <xs:complexType>
+        <xs:complexType  mixed="true">
         <xs:complexContent>
             <xs:extension base="lomLearningResourceType.class">
                 <xs:attribute ref="class" default="+ topic/data learningmeta-d/lomLearningResourceType "/>
@@ -427,7 +424,7 @@
     </xs:attributeGroup>
     
     <xs:element name="lomInteractivityLevel">
-        <xs:complexType>
+        <xs:complexType mixed="true">
         <xs:complexContent>
             <xs:extension base="lomInteractivityLevel.class">
                 <xs:attribute ref="class" default="+ topic/data learningmeta-d/lomInteractivityLevel "/>
@@ -459,7 +456,7 @@
     </xs:attributeGroup>
     
     <xs:element name="lomSemanticDensity">
-        <xs:complexType>
+        <xs:complexType mixed="true">
         <xs:complexContent>
             <xs:extension base="lomSemanticDensity.class">
                 <xs:attribute ref="class" default="+ topic/data learningmeta-d/lomSemanticDensity "/>
@@ -491,7 +488,7 @@
     </xs:attributeGroup>
     
     <xs:element name="lomIntendedUserRole">
-        <xs:complexType>
+        <xs:complexType mixed="true">
         <xs:complexContent>
             <xs:extension base="lomIntendedUserRole.class">
                 <xs:attribute ref="class" default="+ topic/data learningmeta-d/lomIntendedUserRole "/>
@@ -522,7 +519,7 @@
     </xs:attributeGroup>
     
     <xs:element name="lomContext">
-        <xs:complexType>
+        <xs:complexType mixed="true">
         <xs:complexContent>
             <xs:extension base="lomContext.class">
                 <xs:attribute ref="class" default="+ topic/data learningmeta-d/lomContext "/>
@@ -553,7 +550,7 @@
     </xs:attributeGroup>
     
     <xs:element name="lomTypicalAgeRange">
-        <xs:complexType>
+        <xs:complexType mixed="true">
         <xs:complexContent>
             <xs:extension base="lomTypicalAgeRange.class">
                 <xs:attribute ref="class" default="+ topic/data learningmeta-d/lomTypicalAgeRange "/>
@@ -574,7 +571,7 @@
     </xs:attributeGroup>
     
     <xs:element name="lomDifficulty">
-        <xs:complexType>
+        <xs:complexType mixed="true">
         <xs:complexContent>
             <xs:extension base="lomDifficulty.class">
                 <xs:attribute ref="class" default="+ topic/data learningmeta-d/lomDifficulty "/>
@@ -605,7 +602,7 @@
      </xs:attributeGroup>
     
     <xs:element name="lomTypicalLearningTime">
-        <xs:complexType>
+        <xs:complexType mixed="true">
         <xs:complexContent>
             <xs:extension base="lomTypicalLearningTime.class">
                 <xs:attribute ref="class" default="+ topic/data learningmeta-d/lomTypicalLearningTime "/>
