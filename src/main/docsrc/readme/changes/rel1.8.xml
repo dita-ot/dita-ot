@@ -147,6 +147,7 @@
           <li>#1472 PDF output: whitespace not preserved in msgblock element (maintenance 2)</li>
           <li>#1475 Error received in console does not point correctly to location of published DITA Map (maintenance 2)</li>
           <li>#1477 Tables: using percentage in colwidth values [PDF2 plugin] (maintenance 2)</li>
+          <li>#1498 White space will break tocjs</li>
         </ul>
       </section>
     </refbody>

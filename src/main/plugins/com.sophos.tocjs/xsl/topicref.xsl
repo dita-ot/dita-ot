@@ -145,32 +145,31 @@
   <xsl:template name="fix-title">
     <xsl:param name="text"/>
     <xsl:choose>
-      <xsl:when test="contains($text,$quote) and contains($text,$lessthan)">
-        <xsl:variable name="chopquote">
-          <xsl:call-template name="replace-string">
-            <xsl:with-param name="text" select="$text"/>
-            <xsl:with-param name="from" select="$quote"/>
-            <xsl:with-param name="to" select="$quotestring"/>
-          </xsl:call-template>
-        </xsl:variable>
-        <xsl:call-template name="replace-string">
-          <xsl:with-param name="text" select="$chopquote"/>
-          <xsl:with-param name="from" select="$lessthan"/>
-          <xsl:with-param name="to" select="$lessthanstring"/>
+      <xsl:when test="contains($text, '\')">
+        <xsl:call-template name="fix-title">
+          <xsl:with-param name="text" select="substring-before($text, '\')"/>
+        </xsl:call-template>
+        <xsl:text>\\</xsl:text>
+        <xsl:call-template name="fix-title">
+          <xsl:with-param name="text" select="substring-after($text, '\')"/>
         </xsl:call-template>
       </xsl:when>
-      <xsl:when test="contains($text,$quote)">
-        <xsl:call-template name="replace-string">
-          <xsl:with-param name="text" select="$text"/>
-          <xsl:with-param name="from" select="$quote"/>
-          <xsl:with-param name="to" select="$quotestring"/>
+      <xsl:when test="contains($text, '&quot;')">       
+        <xsl:call-template name="fix-title">
+          <xsl:with-param name="text" select="substring-before($text, '&quot;')"/>
+        </xsl:call-template>
+        <xsl:text>\"</xsl:text>
+        <xsl:call-template name="fix-title">
+          <xsl:with-param name="text" select="substring-after($text, '&quot;')"/>
         </xsl:call-template>
       </xsl:when>
-      <xsl:when test="contains($text,$lessthan)">
-        <xsl:call-template name="replace-string">
-          <xsl:with-param name="text" select="$text"/>
-          <xsl:with-param name="from" select="$lessthan"/>
-          <xsl:with-param name="to" select="$lessthanstring"/>
+      <xsl:when test="contains($text, '&#xA;')">       
+        <xsl:call-template name="fix-title">
+          <xsl:with-param name="text" select="substring-before($text, '&#xA;')"/>
+        </xsl:call-template>
+        <xsl:text>\n</xsl:text>
+        <xsl:call-template name="fix-title">
+          <xsl:with-param name="text" select="substring-after($text, '&#xA;')"/>
         </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
