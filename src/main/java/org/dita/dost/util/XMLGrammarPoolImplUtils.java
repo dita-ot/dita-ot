@@ -13,7 +13,6 @@ import org.apache.xerces.impl.xs.XSDDescription;
 import org.apache.xerces.util.XMLGrammarPoolImpl;
 import org.apache.xerces.xni.grammars.Grammar;
 import org.apache.xerces.xni.grammars.XMLGrammarDescription;
-import org.dita.dost.log.DITAOTJavaLogger;
 
 /**
  * Self implemented XML Grammar pool for grammar(schema/dtd) caching.
@@ -24,7 +23,6 @@ public final class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
 
     private boolean gramCache = true;
     private static final Grammar[] INITIAL_GRAMMAR_SET = new Grammar[0];
-    private DITAOTJavaLogger logger = new DITAOTJavaLogger();
 
 
     /** Constructs a grammar pool with a default number of buckets. */
@@ -63,7 +61,7 @@ public final class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
             final String systemId = ((XSDDescription) desc).getLiteralSystemId();          
             
             int hashcode = systemId == null ? 0 : systemId.hashCode();
-            logger.logInfo(systemId + " " + hashcode );
+            
             return hashcode;
         	// return -1 for XSD grammar hashcode because we want to disable XSD grammar caching
 //        	return -1;
