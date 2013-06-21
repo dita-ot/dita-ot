@@ -149,7 +149,7 @@ public final class ExtensibleAntInvoker extends Task {
 	                    final Set<File> inc = readListFile(xm.includes, logger); 
 	                    inc.removeAll(readListFile(xm.excludes, logger));
 	                    x.setIncludes(inc);
-	                    x.setDestinationDir(xm.destDir);
+	                    x.setDestinationDir(xm.destDir != null ? xm.destDir : xm.baseDir);
 	                    x.setSorceDir(xm.baseDir);
                     }
                     x.setFilenameParam(xm.filenameparameter);
