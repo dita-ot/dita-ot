@@ -11,7 +11,7 @@
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <!--main map to xhtml converter-->
-<xsl:import href="map2htmtoc.xsl"/>
+<xsl:import href="map2htmltoc.xsl"/>
 
 
 <xsl:output method="xml" encoding="UTF-8"

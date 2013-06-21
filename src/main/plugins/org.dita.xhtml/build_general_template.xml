@@ -5,10 +5,20 @@
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <project xmlns:dita="http://dita-ot.sourceforge.net" name="build_generaltargets">
 
-  <target name="dita.xhtml.common.init" depends="xhtml.image-metadata">
+  <target name="xhtml.init">
     <condition property="out.ext" value=".html">
       <not>
         <isset property="out.ext" />
+      </not>
+    </condition>
+    <condition property="html-version" value="xhtml">
+      <not>
+        <isset property="html-version"/>
+      </not>
+    </condition>
+    <condition property="args.xsl" value="${dita.plugin.org.dita.xhtml.dir}/xsl/dita2${html-version}.xsl">
+      <not>
+        <isset property="args.xsl" />
       </not>
     </condition>
     <makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
@@ -18,22 +28,13 @@
       <not><isset property="dita.xhtml.reloadstylesheet"/></not>
     </condition>
   </target>
-  
-  <target name="dita.html.init" depends="dita.xhtml.common.init">
-    <condition property="args.xsl" value="${dita.plugin.org.dita.xhtml.dir}/xsl/dita2html.xsl">
-      <not>
-        <isset property="args.xsl" />
-      </not>
-    </condition>
-  </target>
 
-  <target name="dita.xhtml.init" depends="dita.xhtml.common.init">
-    <condition property="args.xsl" value="${dita.plugin.org.dita.xhtml.dir}/xsl/dita2xhtml.xsl">
-      <not>
-        <isset property="args.xsl" />
-      </not>
-    </condition>
-  </target>
+  <target name="xhtml.topics"
+          depends="xhtml.init,
+                   xhtml.image-metadata,
+                   dita.topics.html.common,
+                   dita.inner.topics.html.common,
+                   dita.outer.topics.html.common"/>  
 
   <target name="xhtml.image-metadata" depends="xhtml.image-metadata-check"
           unless="xhtml.image-metadata.skip"
@@ -51,12 +52,6 @@
   </target>
 
   <!--requirement 3, old solution-->
-  
-  <target name="dita.topics.xhtml" depends="dita.xhtml.init, dita.topics.html.common"
-          description="Build XHTML output from dita inner and outer topics,which will adjust the directory."/>
-  
-  <target name="dita.topics.html" depends="dita.html.init, dita.topics.html.common"
-          description="Build HTML output from dita inner and outer topics,which will adjust the directory."/>
   
   <target name="dita.topics.html.common" unless="noTopic" if="old.transform">
     <xslt basedir="${dita.temp.dir}"
@@ -101,12 +96,6 @@
   <!--To generate&copy inner files-->
   <!--requirement 1,2-->
   
-  <target name="dita.inner.topics.xhtml" depends="dita.xhtml.init, dita.inner.topics.html.common"
-          description="Build XHTML files from inner dita topics"/>
-    
-  <target name="dita.inner.topics.html" depends="dita.html.init, dita.inner.topics.html.common"
-          description="Build HTML files from inner dita topics"/>
-      
   <target name="dita.inner.topics.html.common" unless="noTopic" if="inner.transform">
     <xslt basedir="${dita.temp.dir}"
       destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
@@ -167,12 +156,6 @@
 	</condition>	
   </target>	
   	
-  <target name="dita.outer.topics.xhtml" depends="dita.xhtml.init, dita.outer.topics.html.common"
-          description="Build XHTML output from outer dita topics"/>
-  
-  <target name="dita.outer.topics.html" depends="dita.html.init, dita.outer.topics.html.common"
-          description="Build HTML output from outer dita topics"/>
-
   <target name="dita.outer.topics.html.common" unless="noTopic" if="outer.transform" depends="checkouterTransform">
     <xslt basedir="${dita.temp.dir}"
       destdir="${output.dir}${file.separator}${uplevels}" includesfile="${dita.temp.dir}${file.separator}${outditafilesfile}"

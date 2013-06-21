@@ -4,7 +4,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0">
 
-  <xsl:import href="plugin:org.dita.xhtml:xsl/map2htmtoc.xsl"/>
+  <xsl:import href="plugin:org.dita.xhtml:xsl/map2htmltoc.xsl"/>
   <xsl:import href="plugin:org.dita.xhtml:xsl/xslhtml/dita2html5Impl.xsl"/>
 
   <xsl:output method="html"

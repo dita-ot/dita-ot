@@ -2,6 +2,7 @@
 <project>
 
   <target name="net.sourceforge.dita-ot.html.init">
+    <property name="html-version" value="html5"/>
     <property name="args.xsl" location="${dita.plugin.net.sourceforge.dita-ot.html.dir}/xslt/dita2html.xsl"/>
     <property name="args.css.file" value="base.css"/>
     <property name="args.csspath" value="css"/>
@@ -23,9 +24,7 @@
                    copy-revflag, 
                    copy-css,
                    net.sourceforge.dita-ot.html,
-                   dita.topics.xhtml,
-                   dita.inner.topics.xhtml,
-                   dita.outer.topics.xhtml">
+                   xhtml.topics">
     <copy todir="${output.dir}">
       <fileset dir="${dita.plugin.net.sourceforge.dita-ot.html.dir}">
         <include name="css/*.css"/>

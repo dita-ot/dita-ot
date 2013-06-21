@@ -16,5 +16,5 @@
   <template file="build_general_template.xml"/>
   <template file="build_dita2xhtml_template.xml"/>
   <template file="xsl/dita2html-base_template.xsl"/>
-  <template file="xsl/map2htmtoc_template.xsl"/>
+  <template file="xsl/map2htmltoc_template.xsl"/>
 </plugin>
