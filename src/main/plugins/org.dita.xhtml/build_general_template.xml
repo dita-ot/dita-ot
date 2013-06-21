@@ -5,7 +5,7 @@
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <project xmlns:dita="http://dita-ot.sourceforge.net" name="build_generaltargets">
 
-  <target name="dita.xhtml.init" depends="xhtml.image-metadata">
+  <target name="dita.xhtml.common.init" depends="xhtml.image-metadata">
     <condition property="out.ext" value=".html">
       <not>
         <isset property="out.ext" />
@@ -19,6 +19,22 @@
     </condition>
   </target>
   
+  <target name="dita.html.init" depends="dita.xhtml.common.init">
+    <condition property="args.xsl" value="${dita.plugin.org.dita.xhtml.dir}/xsl/dita2html.xsl">
+      <not>
+        <isset property="args.xsl" />
+      </not>
+    </condition>
+  </target>
+
+  <target name="dita.xhtml.init" depends="dita.xhtml.common.init">
+    <condition property="args.xsl" value="${dita.plugin.org.dita.xhtml.dir}/xsl/dita2xhtml.xsl">
+      <not>
+        <isset property="args.xsl" />
+      </not>
+    </condition>
+  </target>
+
   <target name="xhtml.image-metadata" depends="xhtml.image-metadata-check"
           unless="xhtml.image-metadata.skip"
           description="Read image metadata">
@@ -37,11 +53,6 @@
     <!--requirement 3, old solution-->
   <target name="dita.topics.xhtml" unless="noTopic" if="old.transform" depends="dita.xhtml.init"
     description="Build XHTML output from dita inner and outer topics,which will adjust the directory.">
-    <condition property="args.xsl" value="${dita.plugin.org.dita.xhtml.dir}/xsl/dita2xhtml.xsl">
-      <not>
-        <isset property="args.xsl" />
-      </not>
-    </condition>
     <xslt basedir="${dita.temp.dir}"
       destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
       reloadstylesheet="${dita.xhtml.reloadstylesheet}"
@@ -80,13 +91,8 @@
     </xslt>
   </target>
 
-  <target name="dita.topics.html" unless="noTopic" if="old.transform" depends="dita.xhtml.init"
+  <target name="dita.topics.html" unless="noTopic" if="old.transform" depends="dita.html.init"
     description="Build HTML files from inner and outer dita topics,which will adjust the directory. ">
-    <condition property="args.xsl" value="${dita.plugin.org.dita.xhtml.dir}/xsl/dita2html.xsl">
-      <not>
-        <isset property="args.xsl" />
-      </not>
-    </condition>
     <xslt basedir="${dita.temp.dir}"
       destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
       reloadstylesheet="${dita.xhtml.reloadstylesheet}"
@@ -129,11 +135,6 @@
   <!--requirement 1,2-->
   <target name="dita.inner.topics.xhtml" unless="noTopic" if="inner.transform" depends="dita.xhtml.init"
     description="Build XHTML output from inner dita topics">
-    <condition property="args.xsl" value="${dita.plugin.org.dita.xhtml.dir}/xsl/dita2xhtml.xsl">
-      <not>
-        <isset property="args.xsl" />
-      </not>
-    </condition>
     <xslt basedir="${dita.temp.dir}"
       destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
       reloadstylesheet="${dita.xhtml.reloadstylesheet}"
@@ -176,13 +177,8 @@
     </xslt>
   </target>
 
-  <target name="dita.inner.topics.html" unless="noTopic"  if="inner.transform" depends="dita.xhtml.init"
+  <target name="dita.inner.topics.html" unless="noTopic"  if="inner.transform" depends="dita.html.init"
     description="Build HTML files from inner dita topics">
-    <condition property="args.xsl" value="${dita.plugin.org.dita.xhtml.dir}/xsl/dita2html.xsl">
-      <not>
-        <isset property="args.xsl" />
-      </not>
-    </condition>
     <xslt basedir="${dita.temp.dir}"
       destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
       reloadstylesheet="${dita.xhtml.reloadstylesheet}"
@@ -242,11 +238,6 @@
   	
   <target name="dita.outer.topics.xhtml" unless="noTopic" if="outer.transform"  depends="dita.xhtml.init, checkouterTransform"
     description="Build XHTML output from outer dita topics">
-    <condition property="args.xsl" value="${dita.plugin.org.dita.xhtml.dir}/xsl/dita2xhtml.xsl">
-      <not>
-        <isset property="args.xsl" />
-      </not>
-    </condition>
     <xslt basedir="${dita.temp.dir}"
       destdir="${output.dir}${file.separator}${uplevels}" includesfile="${dita.temp.dir}${file.separator}${outditafilesfile}"
       reloadstylesheet="${dita.xhtml.reloadstylesheet}"
@@ -284,13 +275,8 @@
     </xslt>
   </target>
 
-  <target name="dita.outer.topics.html" unless="noTopic" if="outer.transform"  depends="dita.xhtml.init, checkouterTransform"
+  <target name="dita.outer.topics.html" unless="noTopic" if="outer.transform"  depends="dita.html.init, checkouterTransform"
     description="Build HTML files from outer dita topics">
-    <condition property="args.xsl" value="${dita.plugin.org.dita.xhtml.dir}/xsl/dita2html.xsl">
-      <not>
-        <isset property="args.xsl" />
-      </not>
-    </condition>
     <xslt basedir="${dita.temp.dir}"
       destdir="${output.dir}${file.separator}${uplevels}" includesfile="${dita.temp.dir}${file.separator}${outditafilesfile}"
       reloadstylesheet="${dita.xhtml.reloadstylesheet}"
