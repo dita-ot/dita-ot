@@ -28,6 +28,7 @@ import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.MergeUtils;
 import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.URLUtils;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
@@ -417,25 +418,27 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                         // if the scope equals local, the target should be verified that
                         // it exists.
                         final String scopeValue=elem.getAttribute(ATTRIBUTE_NAME_SCOPE);
+                        final String formatValue=elem.getAttribute(ATTRIBUTE_NAME_FORMAT);
                         if (TOPIC_IMAGE.matches(currentElement.type)) {
                             valid = true;
-                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
-                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
-                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
-                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
+//                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
+//                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
+//                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
+//                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
                             target_output = FileUtils.getRelativePath(inputFile.getPath(), target_output);
                             target_output = normalizeHrefValue(target_output, elementId);
                             XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output);
-                        } else if ("".equals(scopeValue) || ATTR_SCOPE_VALUE_LOCAL.equals(scopeValue)){
-                            final File topicFile = new File(FileUtils.resolveFile(tempDir.getAbsolutePath(), target));
+                        } else if (("".equals(scopeValue) || ATTR_SCOPE_VALUE_LOCAL.equals(scopeValue)) &&
+                                ("".equals(formatValue) || ATTR_FORMAT_VALUE_DITA.equals(formatValue)  || ATTR_FORMAT_VALUE_DITAMAP.equals(formatValue))){
+                            final File topicFile = new File(FileUtils.resolveFile(tempDir.getAbsolutePath(), URLUtils.decode(target)));
                             if (topicFile.exists()) {  
                                 final String topicId = this.getFirstTopicId(topicFile);
                                 target_output = FileUtils.getRelativePath(new File(tempDir, inputFile.getPath()).getAbsolutePath(), new File(tempDir, target).getAbsolutePath());
                                 valid = true;
-                                XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
-                                XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
-                                XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
-                                XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
+//                                XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
+//                                XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
+//                                XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
+//                                XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
                                 target_output = normalizeHrefValue(target_output, elementId, topicId);
                                 XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output);
                                 if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE))) {
@@ -455,12 +458,12 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                         // scope equals peer or external
                         else {
                             valid = true;
-                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
-                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
-                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
-                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
+//                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
+//                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
+//                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
+//                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
                             target_output = normalizeHrefValue(target_output, elementId);
-                            XMLUtils.addOrSetAttribute(resAtts, ATTRIBUTE_NAME_HREF, target_output);
+                            XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output);
                         }
 
                     } else if(target == null || target.length() == 0){
@@ -505,7 +508,8 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                             for (int index = 0; index < namedNodeMap.getLength(); index++) {
                                 final Node node = namedNodeMap.item(index);
                                 if (node.getNodeType() == Node.ATTRIBUTE_NODE
-                                        && !no_copy_topic.contains(node.getNodeName())) {
+                                        && !no_copy_topic.contains(node.getNodeName())
+                                        && (node.getNodeName().equals(currentElement.refAttr) || resAtts.getIndex(node.getNodeName()) == -1)) {
                                     XMLUtils.removeAttribute(resAtts, node.getNodeName());
                                     XMLUtils.addOrSetAttribute(resAtts, node);
                                 }

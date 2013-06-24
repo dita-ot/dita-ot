@@ -148,6 +148,7 @@
           <li>#1475 Error received in console does not point correctly to location of published DITA Map (maintenance 2)</li>
           <li>#1477 Tables: using percentage in colwidth values [PDF2 plugin] (maintenance 2)</li>
           <li>#1498 White space will break tocjs</li>
+          <li>#1459 Link not created in the XHTML output for a xref/@keyref element</li>
         </ul>
       </section>
     </refbody>
