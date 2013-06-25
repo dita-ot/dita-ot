@@ -37,7 +37,6 @@ import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.CatalogUtils;
-import org.dita.dost.util.DITAAttrUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.OutputUtils;
@@ -164,8 +163,6 @@ public final class GenListModuleReader extends AbstractXMLReader {
     private final Stack<String> topicrefStack;
     /** Store the primary ditamap file name. */
     private String primaryDitamap = "";
-    /** Get DITAAttrUtil */
-    private final DITAAttrUtils ditaAttrUtils = DITAAttrUtils.getInstance();
     /** Store the external/peer keydefs */
     private final Map<String, String> exKeysDefMap;
     /** File extension of source file. */
@@ -593,7 +590,6 @@ public final class GenListModuleReader extends AbstractXMLReader {
         topicrefStack.clear();
         processRoleLevel = 0;
         processRoleStack.clear();
-        ditaAttrUtils.reset();
         // Don't clean resourceOnlySet por crossSet
     }
 
@@ -638,12 +634,6 @@ public final class GenListModuleReader extends AbstractXMLReader {
         final Properties params = new Properties();
 
         final String printValue = atts.getValue(ATTRIBUTE_NAME_PRINT);
-        // increase element level for nested tags.
-        ditaAttrUtils.increasePrintLevel(printValue);
-        // Exclude the topic if it is needed.
-        if (ditaAttrUtils.needExcludeForPrintAttri(transtype)) {
-            return;
-        }
 
         final String processingRole = atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE);
         final String href = atts.getValue(ATTRIBUTE_NAME_HREF);
@@ -1008,9 +998,6 @@ public final class GenListModuleReader extends AbstractXMLReader {
             level--;
             topicrefStack.pop();
         }
-
-        // decrease element level.
-        ditaAttrUtils.decreasePrintLevel();
     }
 
     /**

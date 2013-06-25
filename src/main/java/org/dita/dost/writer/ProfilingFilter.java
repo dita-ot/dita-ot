@@ -8,7 +8,6 @@ import static org.dita.dost.util.Constants.*;
 
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
-import org.dita.dost.util.DITAAttrUtils;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
@@ -29,7 +28,6 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 	private int level;
 	/** Contains the attribution specialization paths for {@code props} attribute */
 	private String[][] props;
-	private final DITAAttrUtils ditaAttrUtils = DITAAttrUtils.getInstance();
 	/** Filter utils */
 	private FilterUtils filterUtils;
 	/** Flag that an element has been written */
@@ -77,12 +75,6 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 	@Override
 	public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
 			throws SAXException {
-		// increase element level for nested tags.
-		ditaAttrUtils.increasePrintLevel(atts.getValue(ATTRIBUTE_NAME_PRINT));
-		if (ditaAttrUtils.needExcludeForPrintAttri(transtype)) {
-			return;
-		}
-
 		if (foreignLevel > 0) {
 			foreignLevel++;
 		} else if (foreignLevel == 0) {
@@ -120,14 +112,6 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 	@Override
 	public void endElement(final String uri, final String localName, final String qName)
 			throws SAXException {
-		// need to skip the tag
-		if (ditaAttrUtils.needExcludeForPrintAttri(transtype)) {
-			// decrease level
-			ditaAttrUtils.decreasePrintLevel();
-			// don't write the end tag
-			return;
-		}
-
 		if (foreignLevel > 0) {
 			foreignLevel--;
 		}
@@ -158,7 +142,6 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 		if (!exclude) {
         	getContentHandler().endDocument();
         }
-		ditaAttrUtils.reset();
 	}
 
 	@Override

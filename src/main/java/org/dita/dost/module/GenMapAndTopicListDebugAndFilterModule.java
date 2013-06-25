@@ -6,6 +6,7 @@ package org.dita.dost.module;
 
 import static java.util.Arrays.asList;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Configuration.*;
 import static org.dita.dost.util.Job.*;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.writer.GenListModuleFilter.*;
@@ -21,6 +22,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -146,7 +148,7 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
     /** Generate {@code xtrf} and {@code xtrc} attributes */
     private final boolean genDebugInfo = Boolean.parseBoolean(Configuration.configuration.get("generate-debug-attributes"));
     //private boolean setSystemid = true;
-    private final FilterUtils filterUtils = new FilterUtils();
+    private FilterUtils filterUtils = new FilterUtils();
     /** XMLReader instance for parsing dita file */
     private XMLReader reader;
     /** Result job configuration. */
@@ -287,6 +289,7 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
      * Initialize reusable filters.
      */
     private void initFilters() {
+        filterUtils = new FilterUtils(printTranstype.contains(transtype));
         filterUtils.setLogger(logger);
         if (ditavalFile != null) {
             final DitaValReader ditaValReader = new DitaValReader();
@@ -299,7 +302,7 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
             flagImageSet.addAll(ditaValReader.getImageList());
             relFlagImagesSet.addAll(ditaValReader.getRelFlagImageList());
         } else {
-            filterUtils.setFilterMap(null);
+            filterUtils.setFilterMap(Collections.EMPTY_MAP);
         }
         
         listFilter = new GenListModuleFilter();

@@ -51,8 +51,8 @@ public class ProfilingFilterTest {
 		filterUtils.setLogger(new TestUtils.TestLogger());
         test(filterUtils, "topic.dita", "topic1.dita", null);
 
-        test(new FilterUtils(), "map.ditamap", "map_xhtml.ditamap", "xhtml");
-        test(new FilterUtils(), "map.ditamap", "map_pdf.ditamap", "pdf");
+        test(new FilterUtils(false), "map.ditamap", "map_xhtml.ditamap", "xhtml");
+        test(new FilterUtils(true), "map.ditamap", "map_pdf.ditamap", "pdf");
 	}
 	
 	private void test(final FilterUtils filterUtils, final String srcFile, final String expFile, final String transtype) throws Exception {
@@ -60,6 +60,7 @@ public class ProfilingFilterTest {
 		final InputStream src = getClass().getClassLoader().getResourceAsStream("ProfilingFilterTest/src/" + srcFile);
 		final ProfilingFilter f = new ProfilingFilter();
 		f.setParent(StringUtils.getXMLReader());
+		filterUtils.setLogger(new TestUtils.TestLogger());
 		f.setFilterUtils(filterUtils);
 		if (transtype != null) {
 			f.setTranstype(transtype);

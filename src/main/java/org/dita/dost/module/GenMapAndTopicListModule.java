@@ -9,6 +9,7 @@
 package org.dita.dost.module;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Configuration.*;
 import static org.dita.dost.util.Job.*;
 
 import java.io.BufferedWriter;
@@ -21,6 +22,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,10 +38,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.DefaultHandler;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
@@ -801,7 +799,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
      * @return configured filter utility
      */
     private FilterUtils parseFilterFile() {
-        final FilterUtils filterUtils = new FilterUtils();
+        final FilterUtils filterUtils = new FilterUtils(printTranstype.contains(transtype));
         filterUtils.setLogger(logger);
         if (ditavalFile != null) {
             final DitaValReader ditaValReader = new DitaValReader();
@@ -815,7 +813,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             flagImageSet.addAll(ditaValReader.getImageList());
             relFlagImagesSet.addAll(ditaValReader.getRelFlagImageList());
         } else {
-            filterUtils.setFilterMap(null);
+            filterUtils.setFilterMap(Collections.EMPTY_MAP);
         }
         return filterUtils;
     }
