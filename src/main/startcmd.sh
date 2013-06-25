@@ -23,7 +23,6 @@ export ANT_OPTS="$ANT_OPTS -Djavax.xml.transform.TransformerFactory=net.sf.saxon
 export ANT_HOME="$DITA_DIR"/tools/ant
 export PATH="$DITA_DIR"/tools/ant/bin:"$PATH"
 
-NEW_CLASSPATH="$DITA_DIR/lib/dost.jar"
 NEW_CLASSPATH="$DITA_DIR/lib:$NEW_CLASSPATH"
 NEW_CLASSPATH="$DITA_DIR/lib/commons-codec-1.4.jar:$NEW_CLASSPATH"
 NEW_CLASSPATH="$DITA_DIR/lib/resolver.jar:$NEW_CLASSPATH"
@@ -32,6 +31,7 @@ NEW_CLASSPATH="$DITA_DIR/lib/xercesImpl.jar:$NEW_CLASSPATH"
 NEW_CLASSPATH="$DITA_DIR/lib/xml-apis.jar:$NEW_CLASSPATH"
 NEW_CLASSPATH="$DITA_DIR/lib/saxon/saxon9.jar:$NEW_CLASSPATH"
 NEW_CLASSPATH="$DITA_DIR/lib/saxon/saxon9-dom.jar:$NEW_CLASSPATH"
+NEW_CLASSPATH="$DITA_DIR/lib/dost.jar"
 if test -n "$CLASSPATH"; then
   export CLASSPATH="$NEW_CLASSPATH":"$CLASSPATH"
 else
