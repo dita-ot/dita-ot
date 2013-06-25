@@ -9,7 +9,7 @@ See the accompanying license.txt file for applicable licenses.
  DOWNLOAD URLs -->
   <keydef format="html" keys="download.ant" scope="external" href="http://ant.apache.org/"/>
   <keydef format="html" keys="download.dita-ot.current-release" scope="external"
-    href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Stable%20Release/DITA%20Open%20Toolkit%201.7/"/>
+    href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Stable%20Release/DITA%20Open%20Toolkit%201.8/"/>
   <keydef format="html" keys="download.fop" scope="external"
     href="http://xmlgraphics.apache.org/fop/download.html"/>
   <keydef format="html" keys="download.html-help-workshop" scope="external"
@@ -17,7 +17,7 @@ See the accompanying license.txt file for applicable licenses.
   <keydef format="html" keys="download.icu4j" scope="external"
     href="http://www.icu-project.org/download/"/>
   <keydef format="html" keys="download.oracle-jdk" scope="external"
-    href="http://www.oracle.com/technetwork/java/javase/overview/index.html"/>
+    href="http://www.oracle.com/technetwork/java/javase/downloads/index.html"/>
   <keydef format="html" keys="download.saxon" scope="external" href="http://saxon.sourceforge.net/"/>
   <keydef format="html" keys="download.xalan" scope="external"
     href="http://xml.apache.org/xalan-j/downloads.html"/>
@@ -26,7 +26,7 @@ See the accompanying license.txt file for applicable licenses.
     <!-- DITA-OT: Latest stable version -->
     <topicmeta>
       <keywords>
-        <keyword>1.7.5</keyword>
+        <keyword>1.8</keyword>
       </keywords>
     </topicmeta>
   </keydef>
@@ -34,7 +34,7 @@ See the accompanying license.txt file for applicable licenses.
     <!-- DITA-OT: Latest test version -->
     <topicmeta>
       <keywords>
-        <keyword>1.8.M2</keyword>
+        <keyword>1.8</keyword>
       </keywords>
     </topicmeta>
   </keydef>
