@@ -11,7 +11,7 @@
      must be explicitly requested by the HTML code by processing with the "process-exception" mode.
               -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-  version="1.0">
+  version="2.0">
 
   <xsl:template match="*[contains(@class,' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style">
     <!-- Add the pre-calculated CSS style for this element -->

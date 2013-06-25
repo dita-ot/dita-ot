@@ -3,13 +3,14 @@
      Sourceforge.net. See the accompanying license.txt file for 
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
-<xsl:stylesheet version="1.0"
+<xsl:stylesheet version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
                 xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
                 xmlns:exsl="http://exslt.org/common"
-                exclude-result-prefixes="dita-ot dita2html ditamsg exsl">
+                exclude-result-prefixes="xs dita-ot dita2html ditamsg exsl">
 
 
 
@@ -2150,7 +2151,7 @@
     <xsl:if test="../../../../@rowheader = 'firstcol'"><xsl:call-template name="find-entry-start-position"/></xsl:if>
   </xsl:variable>
   <xsl:choose>
-    <xsl:when test="$startpos = 1"><th><xsl:call-template name="doentry"/></th></xsl:when>
+    <xsl:when test="number($startpos) = 1"><th><xsl:call-template name="doentry"/></th></xsl:when>
     <xsl:otherwise><td><xsl:call-template name="doentry"/></td></xsl:otherwise>
   </xsl:choose>
   <xsl:value-of select="$newline"/>
@@ -2170,7 +2171,7 @@
     </xsl:choose>
   </xsl:variable>
   
-  <xsl:variable name="rowsep">
+  <xsl:variable name="rowsep" as="xs:integer">
     <xsl:choose>
       <!-- If there are more rows, keep rows on -->
       <xsl:when test="not(../following-sibling::*)">        
@@ -2185,7 +2186,7 @@
       <xsl:otherwise>1</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-  <xsl:variable name="colsep">
+  <xsl:variable name="colsep" as="xs:integer">
     <xsl:choose>
       <!-- If there are more columns, keep rows on -->
       <xsl:when test="not(following-sibling::*)">
@@ -2201,10 +2202,10 @@
   </xsl:variable>
   
   <xsl:choose>
-    <xsl:when test="$rowsep = '0' and $colsep = '0'"><xsl:attribute name="class">nocellnorowborder</xsl:attribute></xsl:when>
-    <xsl:when test="$rowsep = '1' and $colsep = '0'"><xsl:attribute name="class">row-nocellborder</xsl:attribute></xsl:when>
-    <xsl:when test="$rowsep = '0' and $colsep = '1'"><xsl:attribute name="class">cell-norowborder</xsl:attribute></xsl:when>
-    <xsl:when test="$rowsep = '1' and $colsep = '1'"><xsl:attribute name="class">cellrowborder</xsl:attribute></xsl:when>
+    <xsl:when test="$rowsep = 0 and $colsep = 0"><xsl:attribute name="class">nocellnorowborder</xsl:attribute></xsl:when>
+    <xsl:when test="$rowsep = 1 and $colsep = 0"><xsl:attribute name="class">row-nocellborder</xsl:attribute></xsl:when>
+    <xsl:when test="$rowsep = 0 and $colsep = 1"><xsl:attribute name="class">cell-norowborder</xsl:attribute></xsl:when>
+    <xsl:when test="$rowsep = 1 and $colsep = 1"><xsl:attribute name="class">cellrowborder</xsl:attribute></xsl:when>
   </xsl:choose>
     
   <xsl:call-template name="commonattributes"/>
@@ -3164,7 +3165,9 @@
 </xsl:template>
 
 <!-- Legacy named template for generating HTML4 anchors -->
-<xsl:template name="setanametag"/>
+<xsl:template name="setanametag">
+  <xsl:param name="idvalue"/>
+</xsl:template>
 
 <xsl:template name="parent-id"><!-- if the parent's element has an ID, copy it through as an anchor -->
  <a>
@@ -4200,7 +4203,6 @@
     <xsl:param name="type"/>
     <xsl:param name="displaytext" select="''"/>
     <xsl:param name="keys" select="@keyref"/>
-    <xsl:variable name="TAGS" select="' keyword term '"/>
     <xsl:choose>
       <xsl:when test="$displaytext = '' and $keys != ''">
         <xsl:variable name="target">
@@ -4217,7 +4219,7 @@
           </xsl:if>
         </xsl:variable>
         <xsl:if test="not($target = '' or contains($target, '://'))">
-          <xsl:value-of select="document(concat($WORKDIR, $PATH2PROJ, $target))//*[contains(@class, ' topic/title ')][normalize-space(.) != ''][1]"/>
+          <xsl:value-of select="(document(concat($WORKDIR, $PATH2PROJ, $target))//*[contains(@class, ' topic/title ')][normalize-space(.) != ''])[1]"/>
         </xsl:if>
       </xsl:when>
       <xsl:when test="normalize-space(.) = ''">

@@ -14,7 +14,7 @@
               this file are deprecated.
               -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-  version="1.0" 
+  version="2.0" 
   xmlns:exsl="http://exslt.org/common" 
   xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"
   xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
@@ -689,22 +689,26 @@
 
 <!-- Output starting flag only -->
 <xsl:template name="start-revflag">
+  <xsl:param name="flagrules"/>
   <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]/revprop/startflag" mode="ditaval-outputflag"/>
 </xsl:template>
 
 <!-- Output ending flag only -->
 <xsl:template name="end-revflag">
+  <xsl:param name="flagrules"/>
   <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]/revprop/endflag" mode="ditaval-outputflag"/>
 </xsl:template>
 
 <!-- for table entries - if the parent (row) has a rev but the cell does not - output the rev -->
 <xsl:template name="start-revflag-parent">
+  <xsl:param name="flagrules"/>
   <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
   <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]/revprop/startflag" mode="ditaval-outputflag"/>
 </xsl:template>
 <xsl:template name="end-revflag-parent">
+  <xsl:param name="flagrules"/>
   <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
   <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-endprop ')]/revprop/endflag" mode="ditaval-outputflag"/>
 </xsl:template>
@@ -729,12 +733,14 @@
 
 <!-- There's a rev attr - test for active rev values -->
 <xsl:template name="start-mark-rev">
+  <xsl:param name="revvalue"/>
   <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]/revprop/startflag" mode="ditaval-outputflag"/>
 </xsl:template>
 
 <!-- There's a rev attr - test for active rev values -->
 <xsl:template name="end-mark-rev">
+  <xsl:param name="revvalue"/>
   <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]/revprop/endflag" mode="ditaval-outputflag"/>
 </xsl:template>
