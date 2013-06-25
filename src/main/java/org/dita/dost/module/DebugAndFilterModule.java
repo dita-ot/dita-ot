@@ -284,7 +284,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                         fm.putAll(filterUtils.getFilterMap());
                         fu.setFilterMap(Collections.unmodifiableMap(fm));
                     } else {
-                        fu.setFilterMap(null);
+                        fu.setFilterMap(Collections.EMPTY_MAP);
                     }
                     fileWriter.setFilterUtils(fu);
 
