@@ -13,7 +13,7 @@
       * Topicref with no href or title drops the branch
       * Toc=no drops any nested toc=yes branches (unlike XHTML / others)
   *-->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:variable name="quote">"</xsl:variable>
   <xsl:variable name="quotestring">\"</xsl:variable>

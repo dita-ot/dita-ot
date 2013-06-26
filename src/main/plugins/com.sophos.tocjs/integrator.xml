@@ -54,6 +54,7 @@
       <param name="contentwin" expression="${content.frame}" if="content.frame"/>
       <param name="ditaext" expression="${dita.ext}" if="dita.ext"/>
       <param name="htmlext" expression="${out.ext}"/>
+      <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
 
@@ -92,6 +93,7 @@
         <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
         <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
         <param name="CSSPATH" expression="${CSSPATH}" if="csspath"/>
+        <xmlcatalog refid="dita.catalog"/>
       </xslt>
   </target>
 

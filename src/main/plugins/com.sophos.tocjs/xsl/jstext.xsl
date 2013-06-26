@@ -5,7 +5,7 @@
   
   (C) Copyright Shawn McKenzie, 2007. All Rights Reserved.
   *-->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 
   <!-- this template will stip out funky chars used for js variable names -->
