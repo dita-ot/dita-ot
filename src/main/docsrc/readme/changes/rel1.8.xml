@@ -120,15 +120,17 @@
           <li>#1447 Move stylesheets and resource files to plug-in folder (milestone 1)</li>
           <li>#1449 Add support for Slovenian (milestone 1)</li>
           <li>#1453 Add image metadata filter (milestone 1)</li>
+          <li>#1435 Add validation filter to debug-filter step</li>
           <li>#1455 Remove deprecated features</li>
+          <li>#1460 "Get String" template should use parameter instead of variable</li>
+          <li>#1461 Move file list generation to Ant</li>
+          <li>#1465 New doc topic listing non-standard tweaks to preprocessed files</li>
+          <li>#1480 Correcting values for the @relcolwidth attribute</li>
+          <li>#1492 Line range extension to coderef processing</li>
+          <li>#1494 Move integrator configuration to lib/configuration.properties</li>
+          <li>#1495 Remove ancient doc directories</li>
         </ul>
       </section>
-      <!--section>
-        <title>Patches</title>
-        <ul>
-          <li/>
-        </ul>
-      </section-->
       <section>
         <title>Bugs</title>
         <ul>
@@ -141,14 +143,17 @@
           <li>#1437 Fatal UTF-8 error in .job.xml (milestone 1)</li>
           <li>#1456 XHTML Build failed when referencing subject scheme in different file path (milestone 1)</li>
           <li>#1080 Index page range issues (milestone 2)</li>
-          <li>#1423 Formatting glitch in PDF index (maintenance 2)</li>
-          <li>#1468 Reference to remote image does not appear in PDF (maintenance 2)</li>
-          <li>#1469 @outputclass and @class values not passed from &lt;chhead> to &lt;tr> in XHTML output (maintenance 2)</li>
-          <li>#1472 PDF output: whitespace not preserved in msgblock element (maintenance 2)</li>
-          <li>#1475 Error received in console does not point correctly to location of published DITA Map (maintenance 2)</li>
-          <li>#1477 Tables: using percentage in colwidth values [PDF2 plugin] (maintenance 2)</li>
-          <li>#1498 White space will break tocjs</li>
+          <li>#1423 Formatting glitch in PDF index (milestone 2)</li>
+          <li>#1468 Reference to remote image does not appear in PDF (milestone 2)</li>
+          <li>#1469 @outputclass and @class values not passed from &lt;chhead> to &lt;tr> in XHTML output (milestone 2)</li>
+          <li>#1472 PDF output: whitespace not preserved in msgblock element (milestone 2)</li>
+          <li>#1475 Error received in console does not point correctly to location of published DITA Map (milestone 2)</li>
+          <li>#1477 Tables: using percentage in colwidth values [PDF2 plugin] (milestone 2)</li>
+          <li>#1464 Flagging a simpletable row throws off @keycol counting bug (milestone 2)</li>
           <li>#1459 Link not created in the XHTML output for a xref/@keyref element</li>
+          <li>#1473 Troff output not working in latest build bug troff</li>
+          <li>#1498 White space will break tocjs</li>
+          <li>#1519 Latest code in develop branch fails to build PDF</li>
         </ul>
       </section>
     </refbody>
