@@ -9,8 +9,7 @@
                 xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
                 xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
-                xmlns:exsl="http://exslt.org/common"
-                exclude-result-prefixes="xs dita-ot dita2html ditamsg exsl">
+                exclude-result-prefixes="xs dita-ot dita2html ditamsg">
 
 
 
@@ -1264,7 +1263,7 @@
   <xsl:param name="m_keys"/>
   <xsl:choose>
     <xsl:when test="not($m_matched-target = '#none#')">
-      <xsl:variable name="glossentry" select="exsl:node-set($m_matched-target)/*[contains(@class, ' glossentry/glossentry ')][1]"/>
+      <xsl:variable name="glossentry" select="$m_matched-target/*[contains(@class, ' glossentry/glossentry ')][1]"/>
       <xsl:choose>
         <xsl:when test="$glossentry//*[contains(@class, ' glossentry/glossSurfaceForm ')][normalize-space(.) != '']">
           <xsl:apply-templates select="$glossentry//*[contains(@class, ' glossentry/glossSurfaceForm ')][normalize-space(.) != '']" mode="dita-ot:text-only"/>
@@ -1287,7 +1286,7 @@
   <xsl:param name="m_keys"/>
   <xsl:choose>
     <xsl:when test="not($m_matched-target = '#none#')">
-      <xsl:variable name="glossentry" select="exsl:node-set($m_matched-target)/*[contains(@class, ' glossentry/glossentry ')][1]"/>
+      <xsl:variable name="glossentry" select="$m_matched-target/*[contains(@class, ' glossentry/glossentry ')][1]"/>
       <xsl:choose>
         <xsl:when test="$glossentry/*[contains(@class, ' glossentry/glossdef ')]">
           <xsl:apply-templates select="$glossentry/*[contains(@class, ' glossentry/glossdef ')]" mode="dita-ot:text-only"/>
@@ -1321,7 +1320,7 @@
   <xsl:param name="m_keys"/>
   <xsl:choose>
     <xsl:when test="not($m_matched-target = '#none#')">
-      <xsl:variable name="glossentry" select="exsl:node-set($m_matched-target)/*[contains(@class, ' glossentry/glossentry ')][1]"/>
+      <xsl:variable name="glossentry" select="$m_matched-target/*[contains(@class, ' glossentry/glossentry ')][1]"/>
       <xsl:choose>
         <xsl:when test="$glossentry//*[contains(@class, ' glossentry/glossStatus ')][@value = 'preferred'][1]/preceding-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(.) != '']">
           <xsl:apply-templates select="$glossentry//*[contains(@class, ' glossentry/glossStatus ')][@value = 'preferred'][1]/preceding-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(.) != '']" mode="dita-ot:text-only"/>

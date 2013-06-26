@@ -14,11 +14,10 @@
               this file are deprecated.
               -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-  version="2.0" 
-  xmlns:exsl="http://exslt.org/common" 
+  version="2.0"  
   xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"
   xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
-  exclude-result-prefixes="exsl dita2html ditamsg">
+  exclude-result-prefixes="dita2html ditamsg">
 
  <!-- ========== Flagging with flags & revisions ========== -->
 
@@ -443,7 +442,7 @@
       </xsl:call-template>
     </xsl:variable>
     <xsl:choose>
-      <xsl:when test="exsl:node-set($flag-result)/prop">
+      <xsl:when test="$flag-result/prop">
         <xsl:copy-of select="$flag-result"/>
       </xsl:when>
       <xsl:otherwise>
@@ -1011,8 +1010,8 @@
       <xsl:when test="normalize-space($FILTERFILE)=''">
         <xsl:value-of select="'false'"/>
       </xsl:when>
-      <xsl:when test="exsl:node-set($flagrules)/*">
-        <xsl:apply-templates select="exsl:node-set($flagrules)/*[1]" mode="conflict-check"/>
+      <xsl:when test="$flagrules/*">
+        <xsl:apply-templates select="$flagrules/*[1]" mode="conflict-check"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="'false'"/>
@@ -1051,7 +1050,7 @@
     <xsl:param name="flagrules">
       <xsl:call-template name="getrules"/>
     </xsl:param>
-    <xsl:apply-templates select="exsl:node-set($flagrules)/prop[1]" mode="start-flagit"/>
+    <xsl:apply-templates select="$flagrules/prop[1]" mode="start-flagit"/>
   </xsl:template>
  
  <xsl:template match="prop" mode="start-flagit">  
@@ -1107,7 +1106,7 @@
   <xsl:param name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:param>
-  <xsl:apply-templates select="exsl:node-set($flagrules)/prop[last()]" mode="end-flagit"/>
+  <xsl:apply-templates select="$flagrules/prop[last()]" mode="end-flagit"/>
  </xsl:template>
  
  <xsl:template match="prop" mode="end-flagit">  
