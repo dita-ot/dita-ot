@@ -71,26 +71,26 @@
   <topic id="link">
     <title>With href</title>
     <prolog>
-      <author href="a.xml" keyref="author_link">
+      <author keyref="author_link" scope="external" href="a.xml" type="dead" format="dead">
         <keyword>author keyword</keyword>
       </author>
-      <source href="a.xml" keyref="source_link">
+      <source keyref="source_link" scope="external" href="a.xml" type="dead" format="dead">
         <keyword>source keyword</keyword>
       </source>
-      <publisher href="a.xml" keyref="publisher_link">
+      <publisher keyref="publisher_link" scope="external" href="a.xml" type="dead" format="dead">
         <keyword>publisher keyword</keyword>
       </publisher>
-      <data href="a.xml" keyref="data_link">
+      <data keyref="data_link" scope="external" href="a.xml" type="dead" format="dead">
         <keyword>data keyword</keyword>
       </data>
-      <data-about href="a.xml" keyref="data-about_link">
+      <data-about keyref="data-about_link" scope="external" href="a.xml" type="dead" format="dead">
         <data>data-about data-about</data>
       </data-about>
     </prolog>
     <body>
-      <image href="b.gif" keyref="image_link" placement="inline"/>
+      <image keyref="image_link" placement="inline" scope="external" href="b.gif"/>
       <p>
-        <xref href="a.xml" keyref="xref_link">
+        <xref keyref="xref_link" scope="external" href="a.xml" type="dead" format="dead">
           <keyword>xref keyword</keyword>
         </xref>
         <cite keyref="cite_link">cite keyword</cite>
@@ -109,7 +109,7 @@
           <dd/>
         </dlentry>
       </dl>
-      <lq href="a.xml" keyref="lq_link">
+      <lq keyref="lq_link" scope="external" href="a.xml" type="dead" format="dead">
         <keyword>lq keyword</keyword>
       </lq>
       <p>
@@ -124,7 +124,7 @@
       </p>
     </body>
     <related-links>
-      <link href="a.xml" keyref="link_link">
+      <link keyref="link_link" scope="external" href="a.xml" type="dead" format="dead">
         <linktext>
           <keyword>link keyword</keyword>
         </linktext>

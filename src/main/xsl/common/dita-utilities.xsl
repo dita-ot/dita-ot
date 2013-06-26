@@ -79,10 +79,10 @@
     <xsl:param name="stringName"/>
     <xsl:param name="stringFileList" select="document('allstrings.xml')/allstrings/stringfile"/>
     <xsl:param name="stringFile">#none#</xsl:param>
-    <xsl:variable name="ancestorlang">
+    <xsl:param name="ancestorlang">
       <!-- Get the current language -->
       <xsl:call-template name="getLowerCaseLang"/>
-    </xsl:variable>
+    </xsl:param>
     <xsl:choose>
       <xsl:when test="$stringFile != '#none#'">
         <!-- Use the old getString template interface -->
@@ -352,6 +352,16 @@
 
   <xsl:template match="processing-instruction('workdir-uri')" mode="get-work-dir">
     <xsl:value-of select="."/>
+  </xsl:template>
+
+  <xsl:template match="processing-instruction('path2project-uri')" mode="get-path2project">
+    <xsl:choose>
+      <!-- Backwards compatibility with path2project that is empty when current directory is the root directory -->
+      <xsl:when test=". = './'"/>
+      <xsl:otherwise>
+        <xsl:value-of select="."/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="processing-instruction('path2project')" mode="get-path2project">

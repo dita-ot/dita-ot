@@ -8,7 +8,6 @@ import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.module.GenMapAndTopicListModule.KeyDef;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -58,6 +57,7 @@ import org.dita.dost.module.ContentImpl;
 import org.dita.dost.util.DelayConrefUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.OutputUtils;
 import org.dita.dost.util.XMLUtils;
 
@@ -84,7 +84,7 @@ public class DitaWriterTest {
         final OutputUtils outputUtils = new OutputUtils();
         outputUtils.setInputMapPathName(new File(srcDir, "main.ditamap"));
         writer.setOutputUtils(outputUtils);
-        writer.setKeyDefinitions(Arrays.asList(new KeyDef("keydef", "keyword.dita", "main.ditamap")));
+        writer.setKeyDefinitions(Arrays.asList(new KeyDef("keydef", "keyword.dita", ATTR_SCOPE_VALUE_LOCAL, "main.ditamap")));
         
         FileUtils.copyFile(new File(srcDir, FILE_NAME_EXPORT_XML), new File(tempDir, FILE_NAME_EXPORT_XML));
 
@@ -170,15 +170,15 @@ public class DitaWriterTest {
             }
         };
         // same directory path
-        assertEquals("foo%20+%25bar.dita", w.invoke("foo +%25bar.dita"));
+        assertEquals("foo +%25bar.dita", w.invoke("foo +%25bar.dita"));
         assertEquals("foo.dita#bar", w.invoke("foo.dita#bar"));
         // absolute same directory path
         assertEquals("foo.dita", w.invoke(new File(srcDir, "foo.dita").getAbsolutePath()));
         assertEquals("foo.dita#bar", w.invoke(new File(srcDir, "foo.dita").getAbsolutePath() + "#bar"));
         final File sub = new File(srcDir, "sub" + File.separator + "foo +%bar.dita").getAbsoluteFile();
         // absolute sub directory path
-        assertEquals("sub/foo%20+%bar.dita", w.invoke(sub.getAbsolutePath()));
-        assertEquals("sub/foo%20+%bar.dita#bar", w.invoke(sub.getAbsolutePath() + "#bar"));
+        assertEquals("sub/foo +%bar.dita", w.invoke(sub.getAbsolutePath()));
+        assertEquals("sub/foo +%bar.dita#bar", w.invoke(sub.getAbsolutePath() + "#bar"));
         // absolute sub directory URI
         assertEquals("sub/foo%20+%25bar.dita", w.invoke(sub.toURI().toASCIIString()));
         assertEquals("sub/foo%20+%25bar.dita#bar", w.invoke(sub.toURI().toASCIIString() + "#bar"));

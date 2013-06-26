@@ -48,9 +48,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="bookmark">
         <xsl:variable name="mapTopicref" select="key('map-id', @id)[1]"/>
         <xsl:variable name="topicTitle">
-            <xsl:call-template name="getNavTitle">
-              <xsl:with-param name="topicNumber" select="1"/>
-            </xsl:call-template>
+            <xsl:call-template name="getNavTitle"/>
         </xsl:variable>
         
         <xsl:choose>

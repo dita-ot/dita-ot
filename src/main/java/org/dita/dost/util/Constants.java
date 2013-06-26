@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -759,7 +758,7 @@ public final class Constants {
     public static final String HREF_TARGET_LIST = "hreftargetslist";
     /** Property name for candidate topics list file */
     public static final String HREF_TOPIC_LIST = "canditopicslist";
-    /** Property name for skip chunk list file */
+    /** Property name for skip chunk list file. List of topics that are part of chunk branch. */
     public static final String CHUNK_TOPIC_LIST = "skipchunklist";
     /** Property name for html list file */
     public static final String HTML_LIST = "htmllist";
@@ -775,11 +774,11 @@ public final class Constants {
     public static final String FULL_DITA_TOPIC_LIST = "fullditatopiclist";
     /** Property name for full dita map list file */
     public static final String FULL_DITAMAP_LIST = "fullditamaplist";
-    /** Property name for input file */
+    /** Property name for input file system path */
     public static final String INPUT_DITAMAP = "user.input.file";
     /** Property name for input file list file list file, i.e. file which points to a file which points to the input file */
     public static final String INPUT_DITAMAP_LIST_FILE_LIST = "user.input.file.listfile";
-    /** Property name for input directory */
+    /** Property name for input directory system path */
     public static final String INPUT_DIR = "user.input.dir";
     /** Property name for full dita map and topic list file */
     public static final String FULL_DITAMAP_TOPIC_LIST = "fullditamapandtopiclist";
@@ -791,7 +790,7 @@ public final class Constants {
     public static final String COPYTO_TARGET_TO_SOURCE_MAP_LIST = "copytotarget2sourcemaplist";
     /** Property name for subtargets list file */
     public static final String SUBSIDIARY_TARGET_LIST = "subtargetslist";
-    /** Property name for chunked topic list file */
+    /** Property name for chunked topic list file. List of topics that do not have a chunk attribute. */
     public static final String CHUNKED_TOPIC_LIST="chunkedtopiclist";
     /** Property name for chunked dita map list file */
     public static final String CHUNKED_DITAMAP_LIST="chunkedditamaplist";

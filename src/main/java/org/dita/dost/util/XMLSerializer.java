@@ -55,13 +55,13 @@ public class XMLSerializer {
     // Constructors ------------------------------------------------------------
 
     private XMLSerializer(final OutputStream out) {
-        this.outStream = out;
+        outStream = out;
         transformer = initializeTransformerHandler();
         transformer.setResult(new StreamResult(out));
     }
 
     private XMLSerializer(final Writer out) {
-        this.outWriter = out;
+        outWriter = out;
         transformer = initializeTransformerHandler();
         transformer.setResult(new StreamResult(out));
     }
@@ -356,10 +356,10 @@ public class XMLSerializer {
         QName(final String uri, final String qName) {
             final int i = qName.indexOf(':');
             this.uri = uri != null ? uri : DEFAULT_NS_PREFIX;
-            this.localName = i != -1 ? qName.substring(i + 1) : qName;
-            this.prefix = i != -1 ? qName.substring(0, i) : DEFAULT_NS_PREFIX;
+            localName = i != -1 ? qName.substring(i + 1) : qName;
+            prefix = i != -1 ? qName.substring(0, i) : DEFAULT_NS_PREFIX;
             this.qName = qName;
-            this.mappings = new ArrayList<NamespaceMapping>(5);
+            mappings = new ArrayList<NamespaceMapping>(5);
         }
 
     }

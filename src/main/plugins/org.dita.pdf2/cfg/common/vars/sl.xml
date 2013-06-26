@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+This file is part of the DITA Open Toolkit project. 
+See the accompanying license.txt file for applicable licenses.
+-->
+<vars xmlns="http://www.idiominc.com/opentopic/vars">
+  <variable id="Product Name"/>
+  <variable id="Body odd footer"/>
+  <variable id="Body even footer"/>
+  <variable id="Body first footer"/>
+  <variable id="Body first header"/>
+  <variable id="Body odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
+  <variable id="Body even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
+  <variable id="Preface odd footer"/>
+  <variable id="Preface even footer"/>
+  <variable id="Preface first footer"/>
+  <variable id="Preface odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;Uvod&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
+  <variable id="Preface even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;Uvod&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
+  <variable id="Preface first header"/>
+  <variable id="Toc odd footer"/>
+  <variable id="Toc even footer"/>
+  <variable id="Toc odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
+  <variable id="Toc even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
+  <variable id="Index odd footer"/>
+  <variable id="Index even footer"/>
+  <variable id="Index odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
+  <variable id="Index even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
+  <variable id="Ordered List Number"><param ref-name="number"/>. </variable>
+  <variable id="Unordered List bullet">&#x2022;</variable>
+  <variable id="Table of Contents">Kazalo</variable>
+  <variable id="Index">Stvarno kazalo</variable>
+  <variable id="Index Continued String">Se nadaljuje</variable>
+  <variable id="Index See String">, Gl. </variable>
+  <variable id="Index See Also String">Gl.tudi </variable>
+  <variable id="Table of Contents Chapter">Kazalo poglavja&#xA0;<param ref-name="number"/>:&#xA0;</variable>
+  <variable id="Table of Contents Appendix">Kazalo dodatka&#xA0;<param ref-name="number"/>:&#xA0;</variable>
+  <variable id="Table of Contents Part">Kazalo dela&#xA0;<param ref-name="number"/>:&#xA0;</variable>
+  <variable id="Table of Contents Preface">Kazalo predgovora:&#xA0;</variable>
+  <variable id="Table of Contents Notices"></variable>
+  <variable id="Preface title">Predgovor</variable>
+  <variable id="Notices title">Opozorilo</variable>
+  <variable id="Mini Toc">Teme: </variable>
+  <variable id="#note-separator">: </variable>
+  <variable id="Note">Opomba</variable>
+  <variable id="Notice">Objava</variable>
+  <variable id="Tip">Namig</variable>
+  <variable id="Important">Pomembno</variable>
+  <variable id="Fastpath">Bližnjica</variable>
+  <variable id="Remember">Pomni</variable>
+  <variable id="Attention">Pozor</variable>
+  <variable id="Caution">Previdno</variable>
+  <variable id="Danger">Nevarno</variable>
+  <variable id="Warning">Opozorilo</variable>
+  <variable id="Restriction">Omejitev</variable>
+  <variable id="Figure">Slika <param ref-name="number"/>: <param ref-name="title"/></variable>
+  <variable id="Table">Tabela <param ref-name="number"/>: <param ref-name="title"/></variable>
+  <variable id="Related Links">Sorodne povezave</variable>
+  <variable id="Cross-Reference">Križni sklic na:</variable>
+  <variable id="Content-Reference">Navzkrižni sklic na:</variable>
+  <variable id="Untitled section">Neimenovan odsek.</variable>
+  <variable id="List item">Točka seznama.</variable>
+  <variable id="Foot note">Opomba v nogi.</variable>
+  <variable id="Navigation title">Poimenovanje krmarjenja</variable>
+  <variable id="Search title">Poimenovanje iskanja</variable>
+  <variable id="Chapter with number">Poglavje <param ref-name="number"/></variable>
+  <variable id="Appendix with number">Dodatek <param ref-name="number"/></variable>
+  <variable id="Part with number">Del <param ref-name="number"/></variable>
+  <variable id="Required-Cleanup">[Zahtevano čiščenje]</variable>
+  <variable id="On the page"> na strani <param ref-name="pagenum"/></variable>
+  <variable id="Page"> stran <param ref-name="pagenum"/></variable>
+  <variable id="This link">ta povezava</variable>
+  <variable id="note Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+  <variable id="notice Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+  <variable id="attention Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
+  <variable id="caution Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
+  <variable id="danger Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
+  <variable id="warning Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
+  <variable id="fastpath Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+  <variable id="important Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+  <variable id="remember Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+  <variable id="restriction Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+  <variable id="tip Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+  <variable id="other Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+  <variable id="Parent topic">Nadrejen</variable>
+  <variable id="Next topic">Naprej</variable>
+  <variable id="Previous topic">Nazaj</variable>
+  <variable id="Child topics">Podrejen</variable>
+  <variable id="Related concepts">Sorodni koncepti</variable>
+  <variable id="Related tasks">Sorodna opravila</variable>
+  <variable id="Related references">Sorodne reference</variable>
+  <variable id="Related information">Sorodne informacije</variable>
+  <variable id="Contents button title">Vsebine</variable>
+  <variable id="Index button title">Kazalo</variable>
+  <variable id="Index multiple entries separator">, </variable>
+  <variable id="Search button title">Iskanje</variable>
+  <variable id="Back button title">Nazaj</variable>
+  <variable id="Forward button title">Naprej</variable>
+  <variable id="Main page button title">Domov</variable>
+  <variable id="Previous page button title">Predhodnji</variable>
+  <variable id="Next page button title">Naslednji</variable>
+  <variable id="Online help prefix">Sprotna pomoč</variable>
+  <variable id="Search index field title">Išči ključno besedo:</variable>
+  <variable id="Search index button title">Poglej</variable>
+  <variable id="Search text field title">Iskanje pomoči za:</variable>
+  <variable id="Search text button title">Išči</variable>
+  <variable id="Online Help Search Method Field">Način iskanja</variable>
+  <variable id="Online Help Search Method Or">ali</variable>
+  <variable id="Online Help Search Method And">in</variable>
+  <variable id="Search Highlight Switch">Poudari besedilo v rezultatih iskanja</variable>
+  <variable id="Search index next button title">Prikaži naslednjo</variable>
+  <variable id="Search Whole Words Switch">Najdi samo cele besede</variable>
+  <variable id="Search Case Sensitive Switch">Ujemanje velikosti</variable>
+  <variable id="Search Stopped Message">Iskanje je bilo ustavljeno po 50 zadetkih.</variable>
+  <variable id="Search Excluded Stop Words Message">"Naslednje besede so izključene iz iskanja: "+<param ref-name="stop-words-list"/></variable>
+  <variable id="Search Search in Progress Message">Iskanje v teku...</variable>
+  <variable id="Search Search Give No Results Message">Ni ujemanj.</variable>
+  <variable id="Optional Step">Izbiren:</variable>
+  <variable id="Task Prereq">Predzahteva</variable>
+  <variable id="Task Context">O tem opravilu</variable>
+  <variable id="Task Steps">Postopek</variable>
+  <variable id="#steps-unordered-label"><variable id="Task Steps"/></variable>
+  <variable id="Task Result">Rezultati</variable>
+  <variable id="Task Example">Primer</variable>
+  <variable id="Task Postreq">Kaj storiti zatem</variable>
+  <variable id="Glossary odd footer"/>
+  <variable id="Glossary even footer"/>
+  <variable id="Glossary odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
+  <variable id="Glossary even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
+  <variable id="Glossary">Besednjak</variable>
+  <variable id="List of Tables">Seznam tabel</variable>
+  <variable id="List of Figures">Seznam slik</variable>
+  <variable id="Option">Izbira</variable>
+  <variable id="Description">Opis</variable>
+  <variable id="#menucascade-separator">&#xA0;&#x3E; </variable>
+  <variable id="#quote-start">“</variable>
+  <variable id="#quote-end">”</variable>
+</vars>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
 <map>
-  <topicref keyref="all" href="a.xml" collection-type="family" format="html" linking="sourceonly" locktitle="yes"
-            navtitle="override"/>
+  <topicref keyref="all" href="a.xml" collection-type="family" format="html" linking="sourceonly"
+    locktitle="yes" navtitle="override"/>
   <topicref keys="all" href="b.xml" collection-type="choice" format="dita" id="all" linking="normal"
-          locktitle="no" navtitle="all" processing-role="resource-only">
+    locktitle="no" navtitle="all" processing-role="resource-only">
     <topicmeta>
       <navtitle>override navtitle</navtitle>
       <linktext>override linktext</linktext>
@@ -76,10 +76,10 @@
     <topicref keyref="indexterm"/>
     <topicref keyref="index-base"/>
     <topicref keyref="indextermref"/>
-    <navref keyref="navref"/>      
+    <navref keyref="navref"/>
   </topicgroup>
   <topicgroup>
-    <topicref keyref="topicref_link" href="a.xml"/>
+    <topicref keyref="topicref_link" scope="external" href="a.xml" type="dead" format="dead"/>
     <topicref keyref="author_link" href="a.xml"/>
     <topicref keyref="data_link" href="a.xml"/>
     <topicref keyref="data-about_link" href="a.xml"/>
@@ -89,5 +89,5 @@
     <topicref keyref="index-base_link" href="a.xml"/>
     <topicref keyref="indextermref_link" href="a.xml"/>
     <navref keyref="navref_link" mapref="a.xml"/>
-  </topicgroup>  
+  </topicgroup>
 </map>

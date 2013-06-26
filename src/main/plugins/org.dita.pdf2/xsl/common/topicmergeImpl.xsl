@@ -207,7 +207,7 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:variable>
 
         <xsl:variable name="topic-id">
-            <xsl:value-of select="substring-before($topic-rest, '/')"/>
+            <xsl:value-of select="if (contains($topic-rest, '/')) then substring-before($topic-rest, '/') else $topic-rest"/>
         </xsl:variable>
 
         <xsl:variable name="element-id">

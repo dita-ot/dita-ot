@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "concept.dtd">
+<concept id="odtdefault" xml:lang="en-us">
+<title>Open Document Format processing modules</title>
+<shortdesc>The <option>odt</option> transformation creates a binary file using the OASIS Open
+Document Format. </shortdesc>
+<conbody>
+<section><p>The <option>odt</option> transformation begins with pre-processing. It then runs either the
+<codeph>dita.odt.package.topic</codeph> or <codeph>dita.odt.package.map</codeph> target, depending
+on whether the input to the transformation is a DITA topic or a DITA map. The following description
+focuses on the map process, which is made up of the following targets:<dl>
+<dlentry>
+<dt><codeph>dita.map.odt</codeph></dt>
+<dd>Converts the map into a merged XML file using the Java-based <codeph>topicmerge</codeph> module.
+Then an XSLT process converts the merged file into the <filepath>content.xml</filepath> file.</dd>
+</dlentry>
+<dlentry>
+<dt><codeph>dita.map.odt.stylesfile</codeph></dt>
+<dd>Reads the input DITA map, and then uses XSLT to create a <filepath>styles.xml</filepath> file in
+the temporary directory.</dd>
+</dlentry>
+<dlentry>
+<dt><codeph>dita.out.odt.manifest.file</codeph></dt>
+<dd>Creates the <filepath>manifest.xml</filepath> file</dd>
+</dlentry>
+</dl></p>
+<p>Once these targets have run, the generated files are zipped up together with other required files
+to create the output ODT file.</p></section>
+</conbody>
+</concept>

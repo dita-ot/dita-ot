@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -85,7 +84,7 @@ public final class IndexTermReader extends AbstractXMLReader {
     /** Depth inside a "@processing-role" parent */
     private int processRoleLevel = 0;
 
-    private IndexTermCollection result;
+    private final IndexTermCollection result;
 
     public IndexTermReader(final IndexTermCollection result) {
         termStack = new Stack<IndexTerm>();
@@ -455,7 +454,7 @@ public final class IndexTermReader extends AbstractXMLReader {
      * @param target The parsingFile to set.
      */
     public void setTargetFile(final String target) {
-        this.targetFile = target;
+        targetFile = target;
     }
 
     /**

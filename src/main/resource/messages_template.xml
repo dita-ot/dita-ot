@@ -376,6 +376,16 @@
     <response></response>
   </message>
   
+  <message id="DOTJ056E" type="ERROR">
+    <reason>Invalid xml:lang "%1".</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTJ057E" type="ERROR">
+    <reason>The id attribute value "%1" is not unique within the topic that contains it.</reason>
+    <response></response>
+  </message>
+    
   <!-- End of Java Messages -->
     
   <!-- Start of XSL Messages -->  

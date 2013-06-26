@@ -20,7 +20,7 @@
   <property name="src.dir" location="${basedir}/src/main"/>
   <property name="java.dir" location="${src.dir}/java/"/>
   <property name="lib.dir" location="${src.dir}/lib/"/>
-  <property name="doc.dir" location="${src.dir}/doc/"/>
+  <property name="doc.dir" location="${src.dir}/docsrc/"/>
   <property name="dtd.dir" location="${src.dir}/dtd/"/>
   <property name="schema.dir" location="${src.dir}/schema/"/>
   <property name="xsl.dir" location="${src.dir}/xsl/"/>
@@ -110,11 +110,11 @@
     <exclude name="plugins/org.dita.pdf2/bin/**"/>
     <exclude name="plugins/org.dita.pdf2/lib/xep/**"/>
     <exclude name="buildSourceForge.xml"/>
-    <exclude name="doc/sourceforge/**"/>
-    <exclude name="doc/userguide-orig/**"/>
-    <exclude name="doc/ot-userguide/**"/>
-    <exclude name="doc/archive/**"/>
-    <exclude name="doc/langref-dita1.1/**"/>
+    <exclude name="docsrc/sourceforge/**"/>
+    <exclude name="docsrc/userguide-orig/**"/>
+    <exclude name="docsrc/ot-userguide/**"/>
+    <exclude name="docsrc/archive/**"/>
+    <exclude name="docsrc/langref-dita1.1/**"/>
   </patternset>
 
   <patternset id="pattern.package.minimum">
@@ -161,7 +161,7 @@
     <exclude name="plugins/org.dita.pdf2/src/**"/>
     <include name="plugins/org.dita.pdf2/**"/>
     <include name="plugins/com.sophos.tocjs/**"/>
-    <include name="doc/**"/>
+    <include name="docsrc/**"/>
     <include name="demo/**"/>
     <include name="dtd/**"/>
     <include name="plugins/**"/>
@@ -196,7 +196,7 @@
     <include name="plugins/org.dita.specialization.dita132/**"/>
     <include name="plugins/org.dita.pdf2/**"/>
     <include name="plugins/com.sophos.tocjs/**"/>
-    <include name="doc/**"/>
+    <include name="docsrc/**"/>
     <include name="demo/**"/>
     <include name="dtd/**"/>
     <include name="plugins/**"/>
@@ -404,6 +404,8 @@
       <property name="base.temp.dir" location="${work.dir}"/>
       <property name="preprocess.copy-generated-files.skip" value="true"/>
       <property name="args.gen.task.lbl" value="YES"/>
+      <property name="args.css" value="dita-ot-doc.css"/>
+      <property name="args.cssroot" value="${doc.dir}/resource"/>
     </ant>
     <!--
     <ant antfile="${src.dir}/build.xml">
@@ -437,13 +439,13 @@
     <move file="${doc.out.dir}/html/userguide.html" tofile="${doc.out.dir}/html/index.html"/>
     -->
     <ant antfile="${src.dir}/build.xml">
-      <property name="args.input" location="${doc.dir}/readme/changes/rel1.7.xml"/>
+      <property name="args.input" location="${doc.dir}/readme/changes/rel1.8.xml"/>
       <property name="output.dir" location="${work.dir}/relnotes"/>
       <property name="args.csspath" value="resource"/>
       <property name="transtype" value="xhtml"/>
       <property name="base.temp.dir" location="${work.dir}"/>
     </ant>
-    <copy file="${work.dir}/relnotes/rel1.7.html" tofile="${out.dir}/relnotes.html"/>
+    <copy file="${work.dir}/relnotes/rel1.8.html" tofile="${out.dir}/relnotes.html"/>
     
     <delete failonerror="yes" includeemptydirs="true">
       <fileset dir="${doc.out.dir}">
@@ -583,9 +585,12 @@
       <property name="args.input" location="${doc.dir}/userguide.ditamap"/>
       <property name="output.dir" location="${basedir}/target/site/${version-id}"/>
       <property name="transtype" value="tocjs"/>
+      <property name="args.css" value="dita-ot-doc.css"/>
       <property name="args.csspath" value="css"/>
+      <property name="args.cssroot" value="${doc.dir}/resource"/>
       <property name="base.temp.dir" location="${work.dir}"/>
       <property name="args.hide.parent.link" value="yes"/>
+      <property name="args.gen.task.lbl" value="YES"/>
     </ant>
     <!--echoxml file="${basedir}/target/site/${otversion}/header.html">
       <html>

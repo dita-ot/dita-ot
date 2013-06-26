@@ -103,12 +103,6 @@
     <classpath refid="dost.jar.path" />
   </taskdef>
 
-  <!-- Deprecated -->
-  <taskdef name="ext-pipeline"
-    classname="org.dita.dost.invoker.ExtensibleAntInvoker">
-    <classpath refid="dost.jar.path" />
-  </taskdef>
-
   <taskdef name="config-logger"
     classname="org.dita.dost.log.LogConfigTask">
     <classpath refid="dost.jar.path" />
@@ -143,24 +137,27 @@
     classname="org.dita.dost.util.IsAbsolute">
     <classpath refid="dost.jar.path" />
   </typedef>
+  
+  <macrodef name="job-helper" >
+    <attribute name="file"/>
+    <attribute name="property"/>
+    <sequential>
+      <xslt in="${dita.temp.dir}/.job.xml" out="${dita.temp.dir}/@{file}"
+            style="${dita.plugin.org.dita.base.dir}/xsl/job-helper.xsl"
+            force="true" taskname="job-helper">
+        <param name="property" expression="@{property}"/>
+        <outputproperty name="encoding" value="${file.encoding}"/> 
+      </xslt>
+    </sequential>
+  </macrodef>
+  
   <tstamp>
     <format property="current.date" pattern="yyyyMMddHHmmssSSS"/>
   </tstamp>
   <property name="base.temp.dir" location="${basedir}/temp"/>
   <property name="dita.temp.dir" location="${base.temp.dir}${file.separator}temp${current.date}" />
   <property name="output.dir" location="${basedir}/out" />
-  <!-- Deprecated -->
-  <property name="dita.script.dir"
-    location="${dita.plugin.org.dita.base.dir}${file.separator}xsl" />
-  <!-- Deprecated -->
-  <property name="dita.resource.dir"
-    location="${dita.plugin.org.dita.base.dir}${file.separator}resource" />
   <property environment="env" />
-  <!-- Deprecated -->
-  <property name="dita.empty" value="" />
-  <!-- Deprecated -->
-  <property name="args.message.file"
-    location="${dita.plugin.org.dita.base.dir}${file.separator}resource${file.separator}messages.xml" />
   <!-- property values end -->
 
   <target name="build-init"
@@ -431,6 +428,9 @@
     </condition>
     <condition property="include.rellinks" value="#default friend sample external other">
       <equals arg1="${args.rellinks}" arg2="nofamily"/>
+    </condition>
+    <condition property="include.rellinks" value="#default child sibling friend next previous cousin ancestor descendant sample external other">
+      <equals arg1="${args.hide.parent.link}" arg2="yes"/>
     </condition>
     <condition property="include.rellinks" value="#default parent child sibling friend next previous cousin ancestor descendant sample external other">
       <or>

@@ -12,7 +12,7 @@ public class MessageBeanTest {
 
     @Test
     public void testMessageBean() {
-        final MessageBean m = new MessageBean();
+        final MessageBean m = new MessageBean(null, null, null, null);
         assertNotNull(m);
         assertNull(m.getId());
         assertNull(m.getReason());
@@ -43,66 +43,31 @@ public class MessageBeanTest {
     @Test
     public void testGetId() {
         assertEquals("foo", new MessageBean("foo", "bar", "baz", "qux").getId());
-        assertNull(new MessageBean().getId());
-    }
-
-    @Test
-    public void testSetId() {
-        final MessageBean m = new MessageBean();
-        m.setId("foo");
-        assertEquals("foo", m.getId());
-        m.setId(null);
-        assertNull(m.getId());
+        assertNull(new MessageBean(null, null, null, null).getId());
     }
 
     @Test
     public void testGetReason() {
         assertEquals("baz", new MessageBean("foo", "bar", "baz", "qux").getReason());
-        assertNull(new MessageBean().getReason());
-    }
-
-    @Test
-    public void testSetReason() {
-        final MessageBean m = new MessageBean();
-        m.setReason("baz");
-        assertEquals("baz", m.getReason());
-        m.setReason(null);
-        assertNull(m.getReason());
+        assertNull(new MessageBean(null, null, null, null).getReason());
     }
 
     @Test
     public void testGetResponse() {
         assertEquals("qux", new MessageBean("foo", "bar", "baz", "qux").getResponse());
-        assertNull(new MessageBean().getResponse());
-    }
-
-    @Test
-    public void testSetResponse() {
-        final MessageBean m = new MessageBean();
-        m.setResponse("qux");
-        assertEquals("qux", m.getResponse());
-        m.setResponse(null);
-        assertNull(m.getResponse());
+        assertNull(new MessageBean(null, null, null, null).getResponse());
     }
 
     @Test
     public void testGetType() {
         assertEquals("bar", new MessageBean("foo", "bar", "baz", "qux").getType());
-        assertNull(new MessageBean().getType());
+        assertNull(new MessageBean(null, null, null, null).getType());
     }
 
-    @Test
-    public void testSetType() {
-        final MessageBean m = new MessageBean();
-        m.setType("bar");
-        assertEquals("bar", m.getType());
-        m.setType(null);
-        assertNull(m.getType());
-    }
 
     @Test
     public void testToString() {
-        assertEquals("[null][null] null", new MessageBean().toString());
+        assertEquals("[null][null] null", new MessageBean(null, null, null, null).toString());
         assertEquals("[foo][bar] baz qux", new MessageBean("foo", "bar", "baz", "qux").toString());
         assertEquals("[foo][bar] baz", new MessageBean("foo", "bar", "baz", null).toString());
     }

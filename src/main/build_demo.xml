@@ -39,8 +39,6 @@ http://docs.oasis-open.org/dita/v1.2/spec/DITA1.2-spec.html</echo>
 
 	<!-- defaults for DITA configuration required by callable targets -->
 	<property name="dita.dir" value="${basedir}"/>
-	<property name="dita.script.dir"
-		value="${dita.dir}${file.separator}xsl"/>
 	<property name="dita.dtd.dir"
 		value="${dita.dir}${file.separator}dtd"/>
 	<property name="dita.css.dir"

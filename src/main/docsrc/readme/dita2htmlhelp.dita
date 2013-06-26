@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "concept.dtd">
+<concept id="dita2htmlhelp" xml:lang="en-us">
+<title>DITA to HTML Help (CHM)</title>
+<shortdesc>The <option>htmlhelp</option> transformation generates HTML output, CSS files, and the
+control files that are needed to produce a Microsoft HTML Help file.</shortdesc>
+<conbody>
+<p>In addition to the HTML output and CSS files, this transformation returns the following files,
+where <varname>mapname</varname> is the name of the master DITA map.<simpletable frame="all"
+relcolwidth="2.0* 3.0*">
+<sthead>
+<stentry>File name</stentry>
+<stentry>Description</stentry>
+</sthead>
+<strow>
+<stentry><filepath><varname>mapname</varname>.hhc</filepath></stentry>
+<stentry>Table of contents</stentry>
+</strow>
+<strow>
+<stentry><filepath><varname>mapname</varname>.hhk</filepath></stentry>
+<stentry>Sorted index</stentry>
+</strow>
+<strow>
+<stentry><filepath><varname>mapname</varname>.hhp</filepath></stentry>
+<stentry>HTML Help project file</stentry>
+</strow>
+<strow>
+<stentry><filepath><varname>mapname</varname>.chm</filepath></stentry>
+<stentry>Compiled HTML Help<note>This file is generated only if the HTML Help Workshop is installed
+on the build system.</note></stentry>
+</strow>
+</simpletable></p>
+</conbody>
+</concept>
+

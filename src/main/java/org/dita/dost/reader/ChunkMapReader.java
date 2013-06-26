@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -17,9 +16,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
@@ -93,6 +94,7 @@ public final class ChunkMapReader implements AbstractReader {
      * read input file.
      * @param filename filename
      */
+    @Override
     public void read(final String filename) {
         final File inputFile = new File(filename);
         filePath = inputFile.getParent();
@@ -179,14 +181,14 @@ public final class ChunkMapReader implements AbstractReader {
                     newFileWriter.flush();
                     newFileWriter.close();
                 }catch (final Exception e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }finally{
                     try{
                         if(newFileWriter!=null){
                             newFileWriter.close();
                         }
                     }catch (final Exception e) {
-                        logger.logException(e);
+                        logger.logError(e.getMessage(), e) ;
                     }
                 }
 
@@ -232,20 +234,14 @@ public final class ChunkMapReader implements AbstractReader {
             //write the edited ditamap file to a temp file
             outputMapFile(inputFile.getAbsolutePath()+FILE_EXTENSION_CHUNK,root);
             if(!inputFile.delete()){
-                final Properties prop = new Properties();
-                prop.put("%1", inputFile.getPath());
-                prop.put("%2", inputFile.getAbsolutePath()+FILE_EXTENSION_CHUNK);
-                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop).toString());
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), inputFile.getAbsolutePath()+FILE_EXTENSION_CHUNK).toString());
             }
             if(!new File(inputFile.getAbsolutePath()+FILE_EXTENSION_CHUNK).renameTo(inputFile)){
-                final Properties prop = new Properties();
-                prop.put("%1", inputFile.getPath());
-                prop.put("%2", inputFile.getAbsolutePath()+FILE_EXTENSION_CHUNK);
-                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop).toString());
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), inputFile.getAbsolutePath()+FILE_EXTENSION_CHUNK).toString());
             }
 
         }catch (final Exception e){
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
 
     }
@@ -261,6 +257,7 @@ public final class ChunkMapReader implements AbstractReader {
 		return prefix + random.nextInt(Integer.MAX_VALUE) + extension;
 	}
 
+    @Override
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
@@ -290,14 +287,14 @@ public final class ChunkMapReader implements AbstractReader {
             output.flush();
             output.close();
         }catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }finally{
             try{
                 if(output!=null){
                     output.close();
                 }
             }catch (final Exception e) {
-                logger.logException(e);
+                logger.logError(e.getMessage(), e) ;
             }
         }
     }
@@ -545,7 +542,7 @@ public final class ChunkMapReader implements AbstractReader {
             chunkParser.setup(changeTable, conflictTable, refFileSet, elem, separate, chunkByTopic, ditaext);
             chunkParser.write(filePath);
         }catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 
@@ -581,18 +578,28 @@ public final class ChunkMapReader implements AbstractReader {
     /**
      * get content.
      * @return content value {@code LinkedHashMap<String, String>}
+     * @deprecated use {@link #getChangeTable()} instead
      */
+    @Override
+    @Deprecated
     public Content getContent() {
-        final Content content = new ContentImpl();
-        content.setValue(changeTable);
-        return content;
+        throw new UnsupportedOperationException();
     }
+    
+    /**
+     * Get changed files table.
+     * @return map of changed files
+     */
+    public Map<String, String> getChangeTable() {
+        return Collections.unmodifiableMap(changeTable); 
+    }
+    
     /**
      * get conflict table.
      * @return conflict table
      */
     public Hashtable<String, String> getConflicTable() {
-        return this.conflictTable;
+        return conflictTable;
     }
     /**
      * Set up environment.

@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -11,10 +10,8 @@ package org.dita.dost.util;
 
 import static org.dita.dost.util.Constants.*;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Properties;
 
 import javax.xml.transform.TransformerException;
@@ -64,7 +61,7 @@ public final class ListUtils {
             }
         }catch(final TransformerException e){
             final DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
-            javaLogger.logException(e);
+            javaLogger.logError(e.getMessage(), e) ;
         }
         return properties;
     }

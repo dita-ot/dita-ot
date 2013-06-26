@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -45,7 +44,7 @@ public final class IndexTermTarget {
      * @param name The targetName to set.
      */
     public void setTargetName(final String name) {
-        this.targetName = name;
+        targetName = name;
     }
 
     /**
@@ -62,7 +61,7 @@ public final class IndexTermTarget {
      * @param uri The targetURI to set.
      */
     public void setTargetURI(final String uri) {
-        this.targetURI = uri;
+        targetURI = uri;
     }
 
     /**

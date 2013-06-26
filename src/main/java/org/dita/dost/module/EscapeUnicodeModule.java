@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -30,6 +29,7 @@ final class EscapeUnicodeModule implements AbstractPipelineModule {
 
     private DITAOTLogger logger;
 
+    @Override
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
@@ -41,6 +41,7 @@ final class EscapeUnicodeModule implements AbstractPipelineModule {
      * @return null
      * @throws DITAOTException exception
      */
+    @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input)
             throws DITAOTException {
         if (logger == null) {
@@ -92,28 +93,28 @@ final class EscapeUnicodeModule implements AbstractPipelineModule {
                 try {
                     fw.close();
                 } catch (final Exception e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }
             }
             if (br != null) {
                 try {
                     br.close();
                 } catch (final Exception e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }
             }
             if (is != null) {
                 try {
                     is.close();
                 } catch (final Exception e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }
             }
             if (fi != null) {
                 try {
                     fi.close();
                 } catch (final Exception e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }
             }
         }

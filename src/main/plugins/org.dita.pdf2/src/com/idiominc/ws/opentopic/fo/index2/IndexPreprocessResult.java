@@ -3,7 +3,7 @@ package com.idiominc.ws.opentopic.fo.index2;
 import org.w3c.dom.Document;
 
 /*
-Copyright � 2004-2006 by Idiom Technologies, Inc. All rights reserved.
+Copyright (c) 2004-2006 by Idiom Technologies, Inc. All rights reserved.
 IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
 and WORLDSTART are trademarks of Idiom Technologies, Inc. All other
 trademarks are the property of their respective owners.
@@ -29,7 +29,7 @@ These terms and conditions supersede the terms and conditions in any
 licensing agreement to the extent that such terms and conditions conflict
 with those set forth herein.
 
-This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+This file is part of the DITA Open Toolkit project.
 See the accompanying license.txt file for applicable licenses.
  */
 public class IndexPreprocessResult {

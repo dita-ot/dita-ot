@@ -55,13 +55,13 @@ public final class Configuration {
                 }
             }
         } catch (final IOException e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         } finally {
             if (plugingConfigurationInputStream != null) {
                 try {
                     plugingConfigurationInputStream.close();
                 } catch (final IOException ex) {
-                    logger.logException(ex);
+                    logger.logError(ex.getMessage(), ex) ;
                 }
             }
         }
@@ -84,13 +84,13 @@ public final class Configuration {
                 }
             }
         } catch (final IOException e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         } finally {
             if (configurationInputStream != null) {
                 try {
                     configurationInputStream.close();
                 } catch (final IOException ex) {
-                    logger.logException(ex);
+                    logger.logError(ex.getMessage(), ex) ;
                 }
             }
         }

@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -161,12 +160,12 @@ public final class MergeUtils {
                     Class.forName(RESOLVER_CLASS);
                     reader.setEntityResolver(CatalogUtils.getCatalogResolver());
                 } catch (final ClassNotFoundException e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }
             }
             reader.parse(new File(localDir, localPath).toURI().toString());
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
         return firstTopicId.toString();
 

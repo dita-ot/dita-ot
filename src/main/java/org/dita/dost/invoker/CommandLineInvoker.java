@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -175,9 +174,7 @@ public final class CommandLineInvoker {
             final int colonPos = arg.indexOf(COLON);
             if (colonPos == -1) {
                 printUsage();
-                final Properties params = new Properties();
-                params.put("%1", arg);
-                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ001F", params).toString());
+                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ001F", arg).toString());
             }
 
             final String javaArg = arg.substring(0, colonPos);
@@ -185,17 +182,13 @@ public final class CommandLineInvoker {
 
             if (antArg == null) {
                 printUsage();
-                final Properties params = new Properties();
-                params.put("%1", javaArg);
-                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ002F", params).toString());
+                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ002F", javaArg).toString());
             }
 
             String antArgValue = arg.substring(colonPos + 1);
             if (antArgValue.trim().length() == 0) {
                 printUsage();
-                final Properties params = new Properties();
-                params.put("%1", javaArg);
-                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ003F", params).toString());
+                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ003F", javaArg).toString());
             }
 
             if (antArg.equals("clean.temp")
@@ -236,10 +229,7 @@ public final class CommandLineInvoker {
         }
         if (!(tempPath.exists() || tempPath.mkdirs())) {
             String msg = null;
-            final Properties params = new Properties();
-
-            params.put("%1", tempPath.getAbsoluteFile());
-            msg = MessageUtils.getInstance().getMessage("DOTJ004F", params).toString();
+            msg = MessageUtils.getInstance().getMessage("DOTJ004F", tempPath.getAbsolutePath()).toString();
 
             throw new DITAOTException(msg);
         }
@@ -327,7 +317,7 @@ public final class CommandLineInvoker {
                 try {
                     outReader.close();
                 } catch (final IOException e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }
             }
         }
@@ -343,7 +333,7 @@ public final class CommandLineInvoker {
                 try {
                     errReader.close();
                 } catch (final IOException e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }
             }
         }
@@ -429,7 +419,7 @@ public final class CommandLineInvoker {
                 invoker.startAnt();
             }
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 

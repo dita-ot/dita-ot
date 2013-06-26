@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -67,7 +66,7 @@ public final class URLUtils {
     /**
      * Decodes a application/x-www-form-urlencoded string using UTF-8 encoding scheme.
      * 
-     * Convenience method for {@link java.util.URLDecoder#decode(String,String) URLDecoder}:
+     * Convenience method for {@link java.net.URLDecoder#decode(String,String) URLDecoder}:
      * use UTF-8 and do not throw {@link java.io.UnsupportedEncodingException UnsupportedEncodingException}.
      * 
      * @param s the string to decode

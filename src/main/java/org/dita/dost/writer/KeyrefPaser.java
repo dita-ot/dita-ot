@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -9,59 +8,42 @@
  */
 package org.dita.dost.writer;
 
+import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.util.Constants.*;
-import static javax.xml.XMLConstants.*;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 import java.util.Stack;
 
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.sax.SAXSource;
-import javax.xml.transform.stream.StreamResult;
-
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.MergeUtils;
 import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.URLUtils;
 import org.dita.dost.util.XMLUtils;
-
 import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLFilterImpl;
 import org.xml.sax.helpers.AttributesImpl;
-
 
 /**
  * Filter for processing key reference elements in DITA files.
  * Instances are reusable but not thread-safe.
  */
-public final class KeyrefPaser extends XMLFilterImpl {
+public final class KeyrefPaser extends AbstractXMLFilter {
 
     /**
      * Set of attributes which should not be copied from
@@ -126,13 +108,11 @@ public final class KeyrefPaser extends XMLFilterImpl {
         ki.add(new KeyrefInfo(TOPIC_INDEXTERMREF, null, false));
         keyrefInfos = Collections.unmodifiableList(ki);
     }
-    
-    private final XMLReader parser;
-    private final TransformerFactory tf;
-    
-    private DITAOTLogger logger;
+        
     private Map<String, Element> definitionMap;
-    private String tempDir;
+    private File tempDir;
+    /** File name with relative path to the temporary directory of input file. */
+    private File inputFile;
 
     /**
      * It is stack used to store the place of current element
@@ -148,10 +128,6 @@ public final class KeyrefPaser extends XMLFilterImpl {
      * key reference element.
      */
     private int keyrefLeval;
-
-    /** Relative path of the filename to the temporary directory. */
-    private String filepath;
-    private String extName;
 
     /**
      * It is used to store the target of the keys
@@ -185,8 +161,6 @@ public final class KeyrefPaser extends XMLFilterImpl {
     /** Current key definition. */
     private Element elem;
 
-    /** File name with relative path to the temporary directory of input file. */
-    private String fileName;
     /** Set of link targets which are not resource-only */
     private Set<String> normalProcessingRoleTargets;
     
@@ -201,40 +175,6 @@ public final class KeyrefPaser extends XMLFilterImpl {
         keyMap = new HashMap<String, String>();
         elemName = new Stack<String>();
         hasSubElem = new Stack<Boolean>();
-        try {
-            parser = StringUtils.getXMLReader();
-            parser.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-            parser.setFeature(FEATURE_NAMESPACE, true);
-            setParent(parser);
-            tf = TransformerFactory.newInstance();
-        } catch (final Exception e) {
-            throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
-        }
-    }
-    
-    /**
-     * Set logger
-     * 
-     * @param logger output logger
-     */
-    public void setLogger(final DITAOTLogger logger) {
-        this.logger = logger;
-    }
-    
-    /**
-     * Get extension name.
-     * @return extension name
-     */
-    public String getExtName() {
-        return extName;
-    }
-    
-    /**
-     * Set extension name.
-     * @param extName extension name
-     */
-    public void setExtName(final String extName) {
-        this.extName = extName;
     }
     
     public void setContent(final Content content) {
@@ -249,8 +189,15 @@ public final class KeyrefPaser extends XMLFilterImpl {
      * Set temp dir.
      * @param tempDir temp dir
      */
-    public void setTempDir(final String tempDir) {
+    public void setTempDir(final File tempDir) {
         this.tempDir = tempDir;
+    }
+    
+    /**
+     * Set current file.
+     */
+    public void setCurrentFile(final File inputFile) {
+        this.inputFile = inputFile;
     }
     
     /**
@@ -258,11 +205,11 @@ public final class KeyrefPaser extends XMLFilterImpl {
      * @param map key map
      */
     public void setKeyMap(final Map<String, String> map) {
-        this.keyMap = map;
+        keyMap = map;
     }
     
     /**
-     * Get set of link targets which have normal processing role.
+     * Get set of link targets which have normal processing role. Paths are relative to current file.
      */
     public Set<String> getNormalProcessingRoleTargets() {
         return Collections.unmodifiableSet(normalProcessingRoleTargets);
@@ -274,46 +221,19 @@ public final class KeyrefPaser extends XMLFilterImpl {
      * @param filename file to process
      * @throws DITAOTException if key reference resolution failed
      */
+    @Override
     public void write(final String filename) throws DITAOTException {
-        normalProcessingRoleTargets = new HashSet<String>();
-        final File inputFile = new File(tempDir, filename);
-        filepath = inputFile.getAbsolutePath();
-        final File outputFile = new File(tempDir, filename + ATTRIBUTE_NAME_KEYREF);
-        this.fileName = filename;
-        OutputStream output = null;
-        try {
-            output = new BufferedOutputStream(new FileOutputStream(outputFile));
-            final Transformer t = tf.newTransformer();
-            final Source src = new SAXSource(this, new InputSource(inputFile.toURI().toString()));
-            final Result dst = new StreamResult(output); 
-            t.transform(src, dst);
-        } catch (final Exception e) {
-            throw new DITAOTException("Failed to process key references: " + e.getMessage(), e);
-        } finally {
-            if (output != null) {
-                try {
-                    output.close();
-                } catch (final Exception ex) {
-                    logger.logError("Failed to close output stream: " + ex.getMessage(), ex);
-                }
-            }
-        }
-        if (!inputFile.delete()) {
-            final Properties prop = new Properties();
-            prop.put("%1", inputFile.getPath());
-            prop.put("%2", outputFile.getPath());
-            logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop).toString());
-        }
-        if (!outputFile.renameTo(inputFile)) {
-            final Properties prop = new Properties();
-            prop.put("%1", inputFile.getPath());
-            prop.put("%2", outputFile.getPath());
-            logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop).toString());
-        }
+        super.write(new File(tempDir, inputFile.getPath()).getAbsolutePath());
     }
-    
+        
     // XML filter methods ------------------------------------------------------
 
+    @Override
+    public void startDocument() throws SAXException {
+        normalProcessingRoleTargets = new HashSet<String>();
+        getContentHandler().startDocument();
+    }
+    
     @Override
     public void characters(final char[] ch, final int start, final int length) throws SAXException {
         if (keyrefLeval != 0 && new String(ch,start,length).trim().length() == 0) {
@@ -492,34 +412,37 @@ public final class KeyrefPaser extends XMLFilterImpl {
                 final NamedNodeMap namedNodeMap = elem.getAttributes();
                 // first resolve the keyref attribute
                 if (currentElement != null && currentElement.refAttr != null) {
-                    String target = keyMap.get(keyName);
+                    final String target = keyMap.get(keyName);
                     if (target != null && target.length() != 0) {
                         String target_output = target;
                         // if the scope equals local, the target should be verified that
                         // it exists.
                         final String scopeValue=elem.getAttribute(ATTRIBUTE_NAME_SCOPE);
+                        final String formatValue=elem.getAttribute(ATTRIBUTE_NAME_FORMAT);
                         if (TOPIC_IMAGE.matches(currentElement.type)) {
                             valid = true;
-                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
-                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
-                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
-                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
-                            target_output = FileUtils.getRelativePath(fileName, target_output);
+//                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
+//                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
+//                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
+//                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
+                            target_output = FileUtils.getRelativePath(inputFile.getPath(), target_output);
                             target_output = normalizeHrefValue(target_output, elementId);
                             XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output);
-                        } else if ("".equals(scopeValue) || ATTR_SCOPE_VALUE_LOCAL.equals(scopeValue)){
-                            final File topicFile = new File(FileUtils.resolveFile(tempDir, target));
+                        } else if (("".equals(scopeValue) || ATTR_SCOPE_VALUE_LOCAL.equals(scopeValue)) &&
+                                ("".equals(formatValue) || ATTR_FORMAT_VALUE_DITA.equals(formatValue)  || ATTR_FORMAT_VALUE_DITAMAP.equals(formatValue))){
+                            final File topicFile = new File(FileUtils.resolveFile(tempDir.getAbsolutePath(), URLUtils.decode(target)));
                             if (topicFile.exists()) {  
                                 final String topicId = this.getFirstTopicId(topicFile);
-                                target_output = FileUtils.getRelativePath(filepath, new File(tempDir, target).getAbsolutePath());
+                                target_output = FileUtils.getRelativePath(new File(tempDir, inputFile.getPath()).getAbsolutePath(), new File(tempDir, target).getAbsolutePath());
                                 valid = true;
-                                XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
-                                XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
-                                XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
-                                XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
+//                                XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
+//                                XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
+//                                XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
+//                                XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
                                 target_output = normalizeHrefValue(target_output, elementId, topicId);
                                 XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output);
                                 if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE))) {
+                                    // FIXME: This should be a relative to base directory, not current file
                                     normalProcessingRoleTargets.add(FileUtils.stripFragment(target_output));
                                 }
                             } else {
@@ -535,12 +458,12 @@ public final class KeyrefPaser extends XMLFilterImpl {
                         // scope equals peer or external
                         else {
                             valid = true;
-                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
-                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
-                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
-                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
+//                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
+//                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
+//                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
+//                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
                             target_output = normalizeHrefValue(target_output, elementId);
-                            XMLUtils.addOrSetAttribute(resAtts, ATTRIBUTE_NAME_HREF, target_output);
+                            XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output);
                         }
 
                     } else if(target == null || target.length() == 0){
@@ -552,9 +475,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
                         XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
                     }else{
                         // key does not exist.
-                        final Properties prop = new Properties();
-                        prop.put("%1", atts.getValue(ATTRIBUTE_NAME_KEYREF));
-                        logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ047I", prop).setLocation(atts).toString());
+                        logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ047I", atts.getValue(ATTRIBUTE_NAME_KEYREF)).setLocation(atts).toString());
                     }
 
                 } else if (currentElement != null && !currentElement.isRefType) {
@@ -587,7 +508,8 @@ public final class KeyrefPaser extends XMLFilterImpl {
                             for (int index = 0; index < namedNodeMap.getLength(); index++) {
                                 final Node node = namedNodeMap.item(index);
                                 if (node.getNodeType() == Node.ATTRIBUTE_NODE
-                                        && !no_copy_topic.contains(node.getNodeName())) {
+                                        && !no_copy_topic.contains(node.getNodeName())
+                                        && (node.getNodeName().equals(currentElement.refAttr) || resAtts.getIndex(node.getNodeName()) == -1)) {
                                     XMLUtils.removeAttribute(resAtts, node.getNodeName());
                                     XMLUtils.addOrSetAttribute(resAtts, node);
                                 }
@@ -614,9 +536,7 @@ public final class KeyrefPaser extends XMLFilterImpl {
                 }
             }else{
                 // key does not exist
-                final Properties prop = new Properties();
-                prop.put("%1", atts.getValue(ATTRIBUTE_NAME_KEYREF));
-                logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ047I", prop).setLocation(atts).toString());
+                logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ047I", atts.getValue(ATTRIBUTE_NAME_KEYREF)).setLocation(atts).toString());
             }
 
             validKeyref.push(valid);
@@ -678,7 +598,16 @@ public final class KeyrefPaser extends XMLFilterImpl {
      * Change map type to topic type. 
      */
     private String changeclassValue(final String classValue){
-        return classValue.replaceAll("map/", "topic/");
+    	final DitaClass cls = new DitaClass(classValue);
+    	if (cls.equals(MAP_LINKTEXT)) {
+    		return TOPIC_LINKTEXT.toString();
+    	} else if (cls.equals(MAP_SEARCHTITLE)) {
+    		return TOPIC_SEARCHTITLE.toString();
+    	} else if (cls.equals(MAP_SHORTDESC)) {
+    		return TOPIC_SHORTDESC.toString();
+    	} else {
+    		return cls.toString();
+    	}
     }
     
     /**

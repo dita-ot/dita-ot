@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="installation-windows" platform="windows">
+    <title>Installing the minimal or standard package on Windows</title>
+    <shortdesc conref="conref-installing.dita#conref-installing/installing"/>
+    <taskbody>
+        <prereq
+            conref="conref-installing.dita#conref-installing/installing-minimal-standard-package"/>
+        <steps>
+            <step>
+                <cmd conref="conref-installing.dita#conref-installing/download-minimal-standard"/>
+                <choicetable relcolwidth="1* 4*">
+                    <chhead>
+                        <choptionhd>Package</choptionhd>
+                        <chdeschd>File name</chdeschd>
+                    </chhead>
+                    <chrow>
+                        <choption>Minimal</choption>
+                        <chdesc><filepath>DITA-OT<keyword keyref="release.version"
+                                />_minimal_bin.zip</filepath></chdesc>
+                    </chrow>
+                    <chrow>
+                        <choption>Standard</choption>
+                        <chdesc><filepath>DITA-OT<keyword keyref="release.version"
+                                />_standard_bin.zip</filepath></chdesc>
+                    </chrow>
+                </choicetable>
+                <info conref="conref-installing.dita#conref-installing/recommend-stable-release"/>
+            </step>
+            <step>
+                <cmd conref="conref-installing.dita#conref-installing/extract-contents"/>
+                <stepxmp>For example, <filepath>C:\pkg\DITA-OT<keyword keyref="release.version"
+                        />.</filepath></stepxmp>
+            </step>
+            <step>
+                <cmd>Verify that the <varname>JAVA_HOME</varname> environment variable is set. </cmd>
+                <stepxmp>
+                    <codeblock>set JAVA_HOME=&lt;JRE_dir></codeblock>
+                </stepxmp>
+            </step>
+            <step>
+                <cmd>Verify that the <varname>ANT_HOME</varname> environment variable is set. </cmd>
+                <stepxmp>
+                    <codeblock>set ANT_HOME=&lt;Ant_dir></codeblock>
+                </stepxmp>
+            </step>
+            <step>
+                <cmd>Verify that the <varname>PATH</varname> environment variable includes the Java
+                    and Ant executable files.</cmd>
+                <stepxmp>
+                    <codeblock>set PATH=%JAVA_HOME%\bin;%ANT_HOME%\bin;%PATH%</codeblock>
+                </stepxmp>
+            </step>
+            <step>
+                <cmd>Set the <varname>DITA_HOME</varname> environment variable to point to the
+                    DITA-OT installation directory.</cmd>
+                <stepxmp>
+                    <codeblock>set DITA_HOME=&lt;DITA-OT_dir></codeblock>
+                </stepxmp>
+            </step>
+            <step>
+                <cmd>Set up the <varname>CLASSPATH</varname> environment variable.</cmd>
+                <stepxmp>
+                    <codeblock>set CLASSPATH=%DITA_HOME%\lib\dost.jar;%CLASSPATH%
+set CLASSPATH=%DITA_HOME%\lib;%CLASSPATH%
+set CLASSPATH=%DITA_HOME%\lib\resolver.jar;%CLASSPATH%
+set CLASSPATH=%DITA_HOME%\lib\commons-codec-<keyword keyref="tool.codec.version"/>.jar;%CLASSPATH%</codeblock>
+                </stepxmp>
+            </step>
+            <step importance="optional">
+                <cmd>If you use Ant, version 1.8 or later, set up the <varname>CLASSPATH</varname>
+                    environment variable to include Apache Xerces.</cmd>
+                <stepxmp>
+                    <codeblock>set CLASSPATH=&lt;xerces_dir>\xercesImpl.jar;&lt;xerces_dir>\xml-apis.jar;%CLASSPATH%</codeblock>
+                </stepxmp>
+            </step>
+            <step>
+                <cmd>Set up the XSLT processor:</cmd>
+                <choicetable relcolwidth="1.0* 4.0*">
+                    <chhead>
+                        <choptionhd>Processor</choptionhd>
+                        <chdeschd>Action</chdeschd>
+                    </chhead>
+                    <chrow>
+                        <choption>Saxon</choption>
+                        <chdesc>
+                            <p>Set up the <varname>CLASSPATH</varname> environment variable to
+                                include the Saxon JAR files, for
+                                example:<codeblock>set CLASSPATH=&lt;saxon_dir>\saxon9.jar;&lt;saxon_dir>\saxon9-dom.jar;%CLASSPATH%</codeblock></p>
+                            <p>Set up the <codeph>ANT_OPTS</codeph> environment variable, for
+                                example:
+                                <codeblock>set ANT_OPTS=%ANT_OPTS% -Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl</codeblock></p>
+                        </chdesc>
+                    </chrow>
+                    <chrow>
+                        <choption>Xalan</choption>
+                        <chdesc>Set up the <varname>CLASSPATH</varname> environment variable to
+                            include the Xalan JAR files, for example:
+                            <codeblock>set CLASSPATH=&lt;xalan_dir&gt;\xalan.jar;%CLASSPATH%</codeblock></chdesc>
+                    </chrow>
+                </choicetable>
+            </step>
+            <step importance="optional">
+                <cmd>For index processing, set up ICU for Java.</cmd>
+                <stepxmp>
+                    <codeblock>set CLASSPATH=&lt;icu4j_dir>\icu4j.jar;%CLASSPATH%</codeblock>
+                </stepxmp>
+            </step>
+            <step importance="optional">
+                <cmd>For JavaHelp, set the <varname>JHHOME</varname> environment variable.</cmd>
+                <stepxmp>
+                    <codeblock>set JHHOME=&lt;javahelp_dir&gt;</codeblock>
+                </stepxmp>
+            </step>
+            <step importance="optional">
+                <cmd>For HTML Help, add the installation directory for the HTML Help Workshop to the
+                        <filepath>local.properties</filepath>  file as the <option>hhc.dir</option>
+                    property.</cmd>
+                <stepxmp>
+                    <codeblock>hhc.dir=C:\\Program Files (x86)\\HTML Help Workshop</codeblock>
+                </stepxmp>
+            </step>
+            <step importance="optional">
+                <cmd>For PDF output, set up the XSL-FO processor:</cmd>
+                <choicetable relcolwidth="1.0* 4.0*">
+                    <chhead>
+                        <choptionhd>Processor</choptionhd>
+                        <chdeschd>Action</chdeschd>
+                    </chhead>
+                    <chrow>
+                        <choption>FOP</choption>
+                        <chdesc>
+                            <p>Add the FOP installation directory to the
+                                    <filepath>local.properties</filepath> file as the
+                                    <option>fop.home</option> property, for
+                                example:<codeblock>fop.home=C:\\Program Files\\fop</codeblock></p>
+                        </chdesc>
+                    </chrow>
+                    <chrow>
+                        <choption>RenderX</choption>
+                        <chdesc>Add the RenderX installation directory to the
+                                <filepath>local.properties</filepath> file as the
+                                <option>xep.dir</option> property, for
+                            example:<codeblock>xep.dir=C:\\Program Files\\xep</codeblock></chdesc>
+                    </chrow>
+                    <chrow>
+                        <choption>Antenna House</choption>
+                        <chdesc>Add the AH Formatter installation directory to the
+                                <filepath>local.properties</filepath> file as the
+                                <option>axf.path</option> property, for
+                            example:<codeblock>axf.path=C:\\Program Files\\AHFormatterV6</codeblock></chdesc>
+                    </chrow>
+                </choicetable>
+            </step>
+            <step>
+                <cmd>Test the DITA-OT installation by transforming the sample files.</cmd>
+                <info>The <filepath>samples\ant_sample directory</filepath> contains Ant scripts
+                    designed to build various output formats.</info>
+                <stepxmp>
+                    <codeblock>C:\<varname>DITA-OT</varname><keyword keyref="release.version"/>>ant -f samples\ant_sample\sample_all.xml</codeblock>
+                </stepxmp>
+                <stepresult>The generated output is written to the
+                            <filepath><varname>DITA-dir</varname>\out\samples directory</filepath>.
+                    The following output formats are generated:<ul>
+                        <li>Docbook</li>
+                        <li>Eclipse help</li>
+                        <li>HTML Help</li>
+                        <li>ODT</li>
+                        <li>JavaHelp</li>
+                        <li>PDF</li>
+                        <li>TocJS</li>
+                        <li>TROFF</li>
+                        <li>XHTML</li>
+                    </ul></stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

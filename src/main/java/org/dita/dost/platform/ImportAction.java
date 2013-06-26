@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -46,12 +45,14 @@ abstract class ImportAction implements IAction {
      * get result.
      * @return result
      */
+    @Override
     public abstract String getResult();
 
     /**
      * set input.
      * @param input input
      */
+    @Override
     public void setInput(final String input) {
         final StringTokenizer inputTokenizer = new StringTokenizer(input, Integrator.FEAT_VALUE_SEPARATOR);
         while(inputTokenizer.hasMoreElements()){
@@ -59,6 +60,7 @@ abstract class ImportAction implements IAction {
         }
     }
 
+    @Override
     public void addParam(final String name, final String value) {
         paramTable.put(name, value);
     }
@@ -66,10 +68,12 @@ abstract class ImportAction implements IAction {
      * Set the feature table.
      * @param h hastable
      */
+    @Override
     public void setFeatures(final Map<String, Features> h) {
-        this.featureTable = h;
+        featureTable = h;
     }
 
+    @Override
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }

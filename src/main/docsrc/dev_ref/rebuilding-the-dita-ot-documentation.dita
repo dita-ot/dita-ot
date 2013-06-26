@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="rebuilding-the-dita-ot-documentation">
+    <title>Rebuilding the DITA-OT documentation</title>
+    <shortdesc>The DITA-OT ships with Ant scripts that enable you to rebuild the toolkit
+        documentation. This is especially helpful if your environment contains plug-ins that
+        integrate additional messages into the toolkit. </shortdesc>
+    <taskbody>
+        <steps>
+            <step>
+                <cmd>Change to the <filepath>doc</filepath> directory.</cmd>
+            </step>
+            <step>
+                <cmd>Run the following command:</cmd>
+                <info>
+                    <codeblock>ant -f build.xml <varname>target</varname></codeblock>
+                </info>
+                <info><p>The <varname>target</varname> parameter is optional and specifies a specific
+                    transformation type. It takes the following values:<ul>
+                        <li>build-html</li>
+                        <li>build-htmlhelp</li>
+                        <li>build-pdf</li>
+                    </ul></p><p>If you do not specify an Ant target, all three output formats (XHTML, HTML help, and PDF) are
+                        generated.</p></info>
+            </step>
+        </steps>
+    </taskbody>
+</task>

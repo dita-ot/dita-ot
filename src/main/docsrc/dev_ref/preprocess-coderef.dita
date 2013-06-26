@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "concept.dtd">
+<concept id="preprocess-coderef" xml:lang="en-us">
+<title>Resolve code references (codref)</title>
+<shortdesc>The <codeph>coderef</codeph> step resolves references made with the &lt;coderef> element.
+    This step is implemented in Java.</shortdesc>
+<conbody>
+<section><p>The &lt;coderef> is used to reference code stored externally in non-XML documents. During the
+    pre-processing step, the referenced content is pulled into the containing  &lt;codeblock>
+    element.</p></section>
+</conbody>
+</concept>

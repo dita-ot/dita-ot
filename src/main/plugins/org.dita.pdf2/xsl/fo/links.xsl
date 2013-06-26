@@ -574,7 +574,6 @@ See the accompanying license.txt file for applicable licenses.
 
 		</xsl:for-each>
 -->
-		<xsl:if test="$disableRelatedLinks = 'no'">
 			<xsl:variable name="parentCollectionType">
 				<xsl:call-template name="getCollectionType">
 					<xsl:with-param name="nodeType" select="'parent'"/>
@@ -769,7 +768,6 @@ See the accompanying license.txt file for applicable licenses.
 					</xsl:choose>
 				</xsl:when>
 			</xsl:choose>
-		</xsl:if>
 	</xsl:template>
 
 	<xsl:template name="getCollectionType">

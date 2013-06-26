@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -116,7 +115,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
     /**
      * Rewrite local DITA href value.
      *
-     * <p>TODO: return type should be {@link java.util.URI}.</p>
+     * <p>TODO: return type should be {@link java.net.URI}.</p>
      *
      * @param sharpIndex hash char index
      * @param attValue href attribute value
@@ -254,7 +253,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
     /**
      * Rewrite local non-DITA href value.
      * 
-     * <p>TODO: return type should be {@link java.util.URI}.</p>
+     * <p>TODO: return type should be {@link java.net.URI}.</p>
      * 
      * @param attValue href attribute value
      * @return rewritten href value

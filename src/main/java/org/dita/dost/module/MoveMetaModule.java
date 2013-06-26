@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -52,6 +51,7 @@ final class MoveMetaModule implements AbstractPipelineModule {
         content = new ContentImpl();
     }
 
+    @Override
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
@@ -63,6 +63,7 @@ final class MoveMetaModule implements AbstractPipelineModule {
      * @return null
      * @throws DITAOTException exception
      */
+    @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
         if (logger == null) {
             throw new IllegalStateException("Logger not set");
@@ -92,16 +93,10 @@ final class MoveMetaModule implements AbstractPipelineModule {
             final File newMap = new File(mapFile+".temp");
             if (newMap.exists()) {
                 if (!oldMap.delete()) {
-                    final Properties p = new Properties();
-                    p.put("%1", oldMap.getPath());
-                    p.put("%2", newMap.getAbsolutePath()+".chunk");
-                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", p).toString());
+                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", oldMap.getPath(), newMap.getAbsolutePath()+".chunk").toString());
                 }
                 if (!newMap.renameTo(oldMap)) {
-                    final Properties p = new Properties();
-                    p.put("%1", oldMap.getPath());
-                    p.put("%2", newMap.getAbsolutePath()+".chunk");
-                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", p).toString());
+                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", oldMap.getPath(), newMap.getAbsolutePath()+".chunk").toString());
                 }
             }
         }

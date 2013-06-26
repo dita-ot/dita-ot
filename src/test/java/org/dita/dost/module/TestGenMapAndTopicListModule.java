@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -12,7 +11,6 @@ package org.dita.dost.module;
 import static org.junit.Assert.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.*;
-import static org.dita.dost.module.GenMapAndTopicListModule.KeyDef;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -38,6 +36,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractFacade;
 import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
+import org.dita.dost.util.KeyDef;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -280,37 +279,6 @@ public class TestGenMapAndTopicListModule {
             assertEquals(exp.get(1), el.getAttribute("href"));
             assertEquals(exp.get(2), el.getAttribute("source"));
         }
-    }
-    
-    @Test
-    public void testKeyDefStringStringString() {
-        final KeyDef k = new KeyDef("foo", "bar", "baz");
-        assertEquals("foo", k.keys);
-        assertEquals("bar", k.href);
-        assertEquals("baz", k.source);
-        final KeyDef n = new KeyDef("foo", null, null);
-        assertEquals("foo", n.keys);
-        assertNull(n.href);
-        assertNull(n.source);
-    }
-    
-    @Test
-    public void testKeyDefString() {
-        final KeyDef k = new KeyDef("foo=bar(baz)");
-        assertEquals("foo", k.keys);
-        assertEquals("bar", k.href);
-        assertEquals("baz", k.source);
-        final KeyDef n = new KeyDef("foo=");
-        assertEquals("foo", n.keys);
-        assertNull(n.href);
-        assertNull(n.source);
-    }
-    @Test
-    public void testKeyDefToString() {
-        final KeyDef k = new KeyDef("foo", "bar", "baz");
-        assertEquals("foo=bar(baz)", k.toString());
-        final KeyDef n = new KeyDef("foo", null, null);
-        assertEquals("foo=", n.toString());
     }
         
     private Properties readProperties(final File f)

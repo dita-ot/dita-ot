@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -36,6 +35,7 @@ public final class DITAOTJavaLogger implements DITAOTLogger {
      * 
      * @param msg message
      */
+    @Override
     public void logInfo(final String msg) {
         System.out.println(msg);
     }
@@ -45,6 +45,7 @@ public final class DITAOTJavaLogger implements DITAOTLogger {
      * 
      * @param msg message
      */
+    @Override
     public void logWarn(final String msg) {
         LogUtils.increaseNumOfWarnings();
         System.out.println(msg);
@@ -55,6 +56,7 @@ public final class DITAOTJavaLogger implements DITAOTLogger {
      * 
      * @param msg message
      */
+    @Override
     public void logError(final String msg) {
         LogUtils.increaseNumOfErrors();
         System.err.println(msg);
@@ -66,21 +68,12 @@ public final class DITAOTJavaLogger implements DITAOTLogger {
      * @param msg message
      * @param t exception
      */
+    @Override
     public void logError(final String msg, final Throwable t) {
         logError(t.toString());
         if (debugMode) {
             t.printStackTrace(System.err);
         }
-    }
-    
-    /**
-     * Log fatal error message.
-     * 
-     * @param msg message
-     */
-    public void logFatal(final String msg) {
-        LogUtils.increaseNumOfFatals();
-        System.err.println(msg);
     }
 
     /**
@@ -88,21 +81,11 @@ public final class DITAOTJavaLogger implements DITAOTLogger {
      * 
      * @param msg message
      */
+    @Override
     public void logDebug(final String msg) {
         if (debugMode) {
             System.out.println(msg);
         }
     }
 
-    /**
-     * Log exception.
-     * 
-     * @param t exception
-     */
-    public void logException(final Throwable t) {
-        logError(t.toString());
-        if (debugMode) {
-            t.printStackTrace(System.err);
-        }
-    }
 }

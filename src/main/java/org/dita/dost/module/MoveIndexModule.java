@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -36,6 +35,7 @@ final class MoveIndexModule implements AbstractPipelineModule {
 
     private DITAOTLogger logger;
 
+    @Override
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
@@ -47,6 +47,7 @@ final class MoveIndexModule implements AbstractPipelineModule {
      * @return null
      * @throws DITAOTException exception
      */
+    @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
         if (logger == null) {
             throw new IllegalStateException("Logger not set");

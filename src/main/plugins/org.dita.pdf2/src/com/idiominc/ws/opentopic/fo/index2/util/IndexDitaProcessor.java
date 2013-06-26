@@ -20,7 +20,7 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 
 /*
-Copyright � 2004-2006 by Idiom Technologies, Inc. All rights reserved.
+Copyright (c) 2004-2006 by Idiom Technologies, Inc. All rights reserved.
 IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
 and WORLDSTART are trademarks of Idiom Technologies, Inc. All other
 trademarks are the property of their respective owners.
@@ -46,7 +46,7 @@ These terms and conditions supersede the terms and conditions in any
 licensing agreement to the extent that such terms and conditions conflict
 with those set forth herein.
 
-This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+This file is part of the DITA Open Toolkit project.
 See the accompanying license.txt file for applicable licenses.
  */
 public final class IndexDitaProcessor {
@@ -153,19 +153,13 @@ public final class IndexDitaProcessor {
 
         if (!childEntrys.isEmpty() && !seeEntry.isEmpty()) {
             for (final IndexEntry e: seeEntry) {
-                final Properties prop = new Properties();
-                prop.put("%1", e.getFormattedString());
-                prop.put("%2", textValue);
-                logger.logWarn(MessageUtils.getInstance().getMessage("DOTA067W", prop).toString());
+                logger.logWarn(MessageUtils.getInstance().getMessage("DOTA067W", e.getFormattedString(), textValue).toString());
             }
             seeEntry.clear();
         }
         if (!childEntrys.isEmpty() && !seeAlsoEntry.isEmpty()) {
             for (final IndexEntry e: seeAlsoEntry) {
-                final Properties prop = new Properties();
-                prop.put("%1", e.getFormattedString());
-                prop.put("%2", textValue);
-                logger.logWarn(MessageUtils.getInstance().getMessage("DOTA068W", prop).toString());
+                logger.logWarn(MessageUtils.getInstance().getMessage("DOTA068W", e.getFormattedString(), textValue).toString());
             }
             seeAlsoEntry.clear();
         }

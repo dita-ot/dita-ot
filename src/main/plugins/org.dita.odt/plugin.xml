@@ -10,6 +10,5 @@
   <feature extension="dita.conductor.transtype.check" value="odt"/>
   <feature extension="dita.transtype.print" value="odt"/>
   <feature extension="dita.conductor.target.relative" file="conductor.xml"/>
-  <feature extension="dita.basedir-resource-directory" value="true"/>
-  <template file="../../xsl/dita2odt_template.xsl"/>
+  <template file="xsl/dita2odt_template.xsl"/>
 </plugin>

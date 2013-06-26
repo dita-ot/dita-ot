@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -129,7 +128,7 @@ public final class MergeMapParser extends XMLFilterImpl {
             topicParser.getContentHandler().endDocument();
             output.write(topicBuffer.toByteArray());
         }catch(final Exception e){
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 
@@ -194,7 +193,7 @@ public final class MergeMapParser extends XMLFilterImpl {
                         String p = null;
                         try {
                             p = FileUtils.normalize(URLDecoder.decode(FileUtils.stripFragment(attValue), UTF8));
-                        } catch (UnsupportedEncodingException e) {
+                        } catch (final UnsupportedEncodingException e) {
                         	throw new RuntimeException(e);
                         }
                         util.visit(p);
@@ -213,9 +212,7 @@ public final class MergeMapParser extends XMLFilterImpl {
                                 XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_FIRST_TOPIC_ID, firstTopicId);
                             } else {
                                 final String fileName = new File(dirPath, attValue).getAbsolutePath();
-                                final Properties prop = new Properties();
-                                prop.put("%1", fileName);
-                                logger.logError(MessageUtils.getInstance().getMessage("DOTX008E", prop).toString());
+                                logger.logError(MessageUtils.getInstance().getMessage("DOTX008E", fileName).toString());
                             }
                         }
                     }
@@ -251,16 +248,14 @@ public final class MergeMapParser extends XMLFilterImpl {
                             topicParser.parse(element, dirPath);
                         } else {
                             final String fileName = f.getAbsolutePath();
-                            final Properties prop = new Properties();
-                            prop.put("%1", fileName);
-                            logger.logError(MessageUtils.getInstance().getMessage("DOTX008E", prop).toString());
+                            logger.logError(MessageUtils.getInstance().getMessage("DOTX008E", fileName).toString());
                         }
                     }
 
                 }
             }
         }catch (final Exception e){
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
         
         getContentHandler().endDocument();

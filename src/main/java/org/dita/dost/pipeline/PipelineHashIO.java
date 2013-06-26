@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -38,6 +37,7 @@ AbstractPipelineOutput {
      * @param name name
      * @param value value
      */
+    @Override
     public void setAttribute(final String name, final String value) {
         hash.put(name, value);
     }
@@ -48,6 +48,7 @@ AbstractPipelineOutput {
      * @param name name
      * @return String value
      */
+    @Override
     public String getAttribute(final String name) {
         String value = null;
         value = hash.get(name);

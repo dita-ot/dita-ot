@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -35,13 +34,14 @@ public final class IsAbsolute implements Condition {
      * @param pth The path to set.
      */
     public void setPath(final String pth) {
-        this.path = pth;
+        path = pth;
     }
 
     /**
      * 
      * @see org.apache.tools.ant.taskdefs.condition.Condition#eval()
      */
+    @Override
     public boolean eval() throws BuildException {
         return new File(path).isAbsolute();
     }

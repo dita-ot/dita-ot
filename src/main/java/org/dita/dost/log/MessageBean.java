@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -32,27 +31,16 @@ public final class MessageBean {
     public static final String INFO = "INFO";
     public static final String DEBUG = "DEBUG";
     
-    private String id;
+    private final String id;
 
-    private String type;
+    private final String type;
 
-    private String reason;
+    private final String reason;
 
-    private String response;
+    private final String response;
     private String srcFile;
     private int srcLine = -1;
     private int srcColumn = -1;
-    
-
-    /**
-     * Default constructor.
-     * 
-     * @deprecated use {@link #MessageBean(String, String, String, String)} with {@code null} arguments instead
-     */
-    @Deprecated
-    public MessageBean() {
-        this(null, null, null, null);
-    }
 
     /**
      * Constructor with params to init.
@@ -62,10 +50,10 @@ public final class MessageBean {
      * @param mbResponse response
      */
     public MessageBean(final String mbId, final String mbType, final String mbReason, final String mbResponse) {
-        this.id = mbId;
-        this.type = mbType;
-        this.reason = mbReason;
-        this.response = mbResponse;
+        id = mbId;
+        type = mbType;
+        reason = mbReason;
+        response = mbResponse;
     }
 
     /**
@@ -86,31 +74,11 @@ public final class MessageBean {
     }
 
     /**
-     * Setter funciton of id.
-     * @param mbId The id to set.
-     * @deprecated this setter will be removed in the future when the object is changed to be immutable
-     */
-    @Deprecated
-    public void setId(final String mbId) {
-        this.id = mbId;
-    }
-
-    /**
      * Getter function of reason.
      * @return Returns the reason
      */
     public String getReason() {
         return reason;
-    }
-
-    /**
-     * Setter function of reason.
-     * @param mbReason The reason to set.
-     * @deprecated this setter will be removed in the future when the object is changed to be immutable
-     */
-    @Deprecated
-    public void setReason(final String mbReason) {
-        this.reason = mbReason;
     }
 
     /**
@@ -122,31 +90,11 @@ public final class MessageBean {
     }
 
     /**
-     * Setter function of response.
-     * @param mbResponse The response to set.
-     * @deprecated this setter will be removed in the future when the object is changed to be immutable
-     */
-    @Deprecated
-    public void setResponse(final String mbResponse) {
-        this.response = mbResponse;
-    }
-
-    /**
      * Getter function of type.
      * @return Returns the type.
      */
     public String getType() {
         return type;
-    }
-
-    /**
-     * Setter function of type.
-     * @param mbType The type to set.
-     * @deprecated this setter will be removed in the future when the object is changed to be immutable
-     */
-    @Deprecated
-    public void setType(final String mbType) {
-        this.type = mbType;
     }
     
     /**

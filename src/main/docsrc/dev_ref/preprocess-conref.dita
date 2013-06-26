@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "concept.dtd">
+<concept id="preprocess-conref" xml:lang="en-us">
+<title>Conref (conref)</title>
+<shortdesc>The <codeph>conref</codeph> step resolves conref attributes, processing only the DITA
+    maps or topics that use the @conref attribute. This step is implemented in XSLT.</shortdesc>
+<conbody>
+<section><p>The values of the @id attribute on referenced content are changed as the elements are pulled into
+        the new locations. This ensures that the values of the @id attribute within the referencing
+        topic remain unique.</p><p>If an element is pulled into a new context along with a cross reference that references the
+        target, both the values of the @id and @xref attributes are updated so that they remain
+        valid in the new location. For example, a referenced topic might include a section as in the
+        following example: <fig>
+          <title>Referenced topic that contains a section and cross reference</title>
+          <codeblock>&lt;topic id="referenced_topic">
+  &lt;title>...&lt;/title>
+  &lt;body>
+    &lt;section id="sect">&lt;title>Sample section&lt;/title>
+      &lt;p>Figure &lt;xref href="#referenced_topic/fig"/> contains an code sample that demonstrates ... .&lt;/p>
+      &lt;fig id="fig">&lt;title>Code sample&lt;/title>
+        &lt;codeblock>....&lt;/codeblock>
+      &lt;/fig>
+    &lt;/section>
+  &lt;/body>
+&lt;/topic></codeblock>
+        </fig></p><p>When the section is referenced using a @conref attribute, the value of the @id attribute on the
+        &lt;fig> element is modified to ensure that it remains unique in the new context. At the
+        same time, the &lt;xref> element is also modified so that  it remains valid as a local
+        reference. For example, if the referencing topic has an @id  set to "new_topic", then the
+        conrefed &lt;section> element may look like this in the intermediate document.<fig>
+          <title>Resolved conrefed &lt;section> element after the conref step</title>
+          <codeblock>&lt;section id="sect">&lt;title>Sample section&lt;/title>
+    &lt;p>Figure &lt;xref href="#new_topic/d1e25"/> contains an code sample that demonstrates ... .&lt;/p>
+    &lt;fig id="d1e25">&lt;title>Code sample&lt;/title>
+        &lt;codeblock>....&lt;/codeblock>
+    &lt;/fig>
+&lt;/section></codeblock>
+        </fig></p><p>In this case, the value of the @id attribute on the &lt;fig> element has been changed to a
+        generated value of "d1e25". At the same time, the &lt;xref> element has been updated to use
+        that new generated ID, so that the cross reference remains valid.</p></section>
+</conbody>
+</concept>

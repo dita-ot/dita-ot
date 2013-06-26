@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -33,6 +32,7 @@ final class ConrefPushModule implements AbstractPipelineModule {
 
     private DITAOTLogger logger;
 
+    @Override
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
@@ -42,6 +42,7 @@ final class ConrefPushModule implements AbstractPipelineModule {
      * @return output
      * @throws DITAOTException exception
      */
+    @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input)
             throws DITAOTException {
         if (logger == null) {
@@ -57,7 +58,7 @@ final class ConrefPushModule implements AbstractPipelineModule {
         try{
             job = new Job(tempDir);
         }catch(final IOException e){
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
 
         final Set<String> conrefpushlist = job.getSet(CONREF_PUSH_LIST);

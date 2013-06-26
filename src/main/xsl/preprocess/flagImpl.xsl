@@ -41,7 +41,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   <xsl:param name="DITAEXT" select="'.dita'"/>
   <xsl:param name="FILTERFILEURL"/>
   <xsl:param name="PATH2PROJ">
-      <xsl:apply-templates select="/processing-instruction('path2project')[1]" mode="get-path2project"/>
+      <xsl:apply-templates select="/processing-instruction('path2project-uri')[1]" mode="get-path2project"/>
   </xsl:param>
   <xsl:param name="WORKDIR">
     <xsl:apply-templates select="/processing-instruction('workdir-uri')[1]" mode="get-work-dir"/>
@@ -274,9 +274,9 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
        Commented out section shows how to insert a default start flag of "delta.gif"
        by creating the proper ditaval syntax -->
   <xsl:template name="default-rev-start">
-    <!--
     <xsl:param name="lang"/>
     <xsl:param name="biditest"/>
+    <!--
     <xsl:param name="startRevImage">
       <xsl:choose>
         <xsl:when test="$biditest='bidi'">deltaend.gif</xsl:when>
@@ -293,9 +293,9 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   </xsl:template>
   <!-- output the DEFAULT ending revision graphic & ALT text -->
   <xsl:template name="default-rev-end">
-    <!--
     <xsl:param name="lang"/>
     <xsl:param name="biditest"/>
+    <!--
     <xsl:param name="endRevImage">
       <xsl:choose>
         <xsl:when test="$biditest='bidi'">delta.gif</xsl:when>

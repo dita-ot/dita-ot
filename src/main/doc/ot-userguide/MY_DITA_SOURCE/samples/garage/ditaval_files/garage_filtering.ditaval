@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Filters out topics about "oil" and "snow" from the garage sample. -->
-<val>
-<prop att="otherprops" val="oil" action="exclude"></prop>
-<prop att="otherprops" val="snow" action="exclude"></prop>
-</val>

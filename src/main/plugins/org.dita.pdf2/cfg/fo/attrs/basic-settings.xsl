@@ -33,19 +33,6 @@
     <xsl:param name="partLayout" select="$chapterLayout"/>
     <xsl:param name="noticesLayout" select="$chapterLayout"/>
 
-    <!-- Determine which links are included in the output.
-         none:     no links are included. This is the default, to match previous settings.
-         all:      all links are included. If the original parameter $disableRelatedLinks 
-                   is customized to "no", this is the default, to match previous settings.
-         nofamily: excludes links with @role = parent, child, next, previous, ancestor, descendant, sibling, cousin.
-    -->
-    <xsl:param name="includeRelatedLinks">
-      <xsl:choose>
-        <xsl:when test="$antArgsIncludeRelatedLinks!=''"><xsl:value-of select="$antArgsIncludeRelatedLinks"/></xsl:when>
-        <xsl:when test="$disableRelatedLinks='no'">all</xsl:when>
-        <xsl:otherwise>none</xsl:otherwise>
-      </xsl:choose>
-    </xsl:param>
     <!-- list of supported link roles -->
     <xsl:param name="includeRelatedLinkRoles" select="concat(' ', normalize-space($include.rellinks), ' ')"/>
 

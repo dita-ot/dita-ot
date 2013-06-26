@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="Linuxsetup" platform="linux osx">
+    <title>Installing the minimal or standard package on Linux or Mac OSX</title>
+    <shortdesc conref="conref-installing.dita#conref-installing/installing"/>
+    <taskbody>
+        <prereq
+            conref="conref-installing.dita#conref-installing/installing-minimal-standard-package"/>
+        <steps>
+            <step>
+                <cmd conref="conref-installing.dita#conref-installing/download-minimal-standard"/>
+                <choicetable relcolwidth="1.0* 4.0*">
+                    <chhead>
+                        <choptionhd>Package</choptionhd>
+                        <chdeschd>File name</chdeschd>
+                    </chhead>
+                    <chrow>
+                        <choption>Minimal</choption>
+                        <chdesc><filepath>DITA-OT<keyword keyref="release.version"
+                                />_minimal_bin.tar.gz</filepath></chdesc>
+                    </chrow>
+                    <chrow>
+                        <choption>Standard</choption>
+                        <chdesc><filepath>DITA-OT<keyword keyref="release.version"
+                                />_standard_bin.tar.gz</filepath></chdesc>
+                    </chrow>
+                </choicetable>
+                <info>For production use, we recommend that you use the latest stable
+                    release.</info>
+            </step>
+            <step>
+                <cmd>Extract the contents of the package into an installation directory.</cmd>
+                <info>
+                    <note>You can extract the files either to your private home directory for your
+                        exclusive use or to the <filepath>/usr/local/share/</filepath> directory, if
+                        you want to share the DITA-OT with other users.</note>
+                </info>
+            </step>
+            <step>
+                <cmd>Verify that the <varname>JAVA_HOME</varname> environment variable is set. </cmd>
+                <stepxmp>
+                    <codeblock>export JAVA_HOME=&lt;JRE_dir&gt;</codeblock>
+                </stepxmp>
+            </step>
+            <step>
+                <cmd>Verify that the <varname>ANT_HOME</varname> environment variable is been set. </cmd>
+                <stepxmp>
+                    <codeblock>export ANT_HOME=&lt;Ant_dir&gt;</codeblock>
+                </stepxmp>
+            </step>
+            <step>
+                <cmd>Verify that the <varname>PATH</varname> environment variable includes the Java
+                    and Ant executable files.</cmd>
+                <stepxmp>
+                    <codeblock>export PATH=$JAVA_HOME/bin:$ANT_HOME/bin:$PATH</codeblock>
+                </stepxmp>
+            </step>
+            <step>
+                <cmd>Set the <varname>DITA_HOME</varname> environment variable to point to the
+                    DITA-OT installation directory.</cmd>
+                <stepxmp>
+                    <codeblock>export DITA_HOME=&lt;DITA-OT_dir></codeblock>
+                </stepxmp>
+            </step>
+            <step>
+                <cmd>Set up the <varname>CLASSPATH</varname> environment variable.</cmd>
+                <stepxmp>
+                    <codeblock>export CLASSPATH=$DITA_HOME/lib/dost.jar:$CLASSPATH
+export CLASSPATH=$DITA_HOME/lib:$CLASSPATH
+export CLASSPATH=$DITA_HOME/lib/resolver.jar:$CLASSPATH
+export CLASSPATH=$DITA_HOME/lib/commons-codec-<keyword keyref="tool.codec.version"/>.jar:$CLASSPATH</codeblock>
+                </stepxmp>
+            </step>
+            <step importance="optional">
+                <cmd>If you use Ant, version 1.8 or later, set up the <varname>CLASSPATH</varname>
+                    environment variable to include Apache Xerces.</cmd>
+                <stepxmp>
+                    <codeblock>export CLASSPATH=&lt;xerces_dir>/xercesImpl.jar:&lt;xerces_dir>/xml-apis.jar:$CLASSPATH</codeblock>
+                </stepxmp>
+            </step>
+            <step>
+                <cmd>Set up the XSLT processor:</cmd>
+                <choicetable relcolwidth="1.0* 4.0*">
+                    <chhead>
+                        <choptionhd>Processor</choptionhd>
+                        <chdeschd>Action</chdeschd>
+                    </chhead>
+                    <chrow>
+                        <choption>Saxon</choption>
+                        <chdesc>
+                            <p>Set up the <varname>CLASSPATH</varname> environment variable to
+                                include the Saxon JAR files, for
+                                example:<codeblock>export CLASSPATH=&lt;saxon_dir>/saxon9.jar:&lt;saxon_dir>/saxon9-dom.jar:$CLASSPATH</codeblock></p>
+                            <p>Set up the <codeph>ANT_OPTS</codeph> environment variable, for
+                                example:
+                                <codeblock>export ANT_OPTS=$ANT_OPTS -Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl</codeblock></p>
+                        </chdesc>
+                    </chrow>
+                    <chrow>
+                        <choption>Xalan</choption>
+                        <chdesc>Set up the <varname>CLASSPATH</varname> environment variable to
+                            include the Xalan JAR files, for example:
+                            <codeblock>export CLASSPATH=&lt;xalan_dir>/xalan.jar:$CLASSPATH</codeblock></chdesc>
+                    </chrow>
+                </choicetable>
+            </step>
+            <step importance="optional">
+                <cmd>For index processing, set up ICU for Java.</cmd>
+                <stepxmp>
+                    <codeblock>export CLASSPATH=&lt;icu4j_dir>/icu4j.jar:$CLASSPATH</codeblock>
+                </stepxmp>
+            </step>
+            <step importance="optional">
+                <cmd>For JavaHelp, set the <varname>JHHOME</varname> environment variable.</cmd>
+                <stepxmp>
+                    <codeblock>export JHHOME=&lt;javahelp_dir&gt;</codeblock>
+                </stepxmp>
+            </step>
+            <step importance="optional">
+                <cmd>For PDF output, set up the XSL-FO processor:</cmd>
+                <choicetable relcolwidth="1.0* 4.0*">
+                    <chhead>
+                        <choptionhd>Processor</choptionhd>
+                        <chdeschd>Action</chdeschd>
+                    </chhead>
+                    <chrow>
+                        <choption>FOP</choption>
+                        <chdesc>
+                            <p>Add the FOP installation directory to the
+                                    <filepath>local.properties</filepath> file as the
+                                    <option>fop.home</option> property, for
+                                example:<codeblock>fop.home=/usr/share/java/fop</codeblock></p>
+                        </chdesc>
+                    </chrow>
+                    <chrow>
+                        <choption>RenderX</choption>
+                        <chdesc>Add the RenderX installation directory to the
+                                <filepath>local.properties</filepath> file as the
+                                <option>xep.dir</option> property, for
+                            example:<codeblock>xep.dir=/usr/share/java/xep</codeblock></chdesc>
+                    </chrow>
+                    <chrow>
+                        <choption>Antenna House</choption>
+                        <chdesc>Add the AH Formatter installation directory to the
+                                <filepath>local.properties</filepath> file as the
+                                <option>axf.path</option> property, for
+                            example:<codeblock>axf.path=/usr/share/java/AHFormatterV6</codeblock></chdesc>
+                    </chrow>
+                </choicetable>
+            </step>
+            <step>
+                <cmd>Test the DITA-OT installation by transforming the sample files.</cmd>
+                <info>The <filepath>samples\ant_sample directory</filepath> contains Ant scripts
+                    designed to build various output formats.</info>
+                <stepxmp>
+                    <codeblock>/usr/local/share/DITA-OT<keyword keyref="release.version"/>$ ant -f samples/ant_sample/sample_all.xml</codeblock>
+                </stepxmp>
+                <stepresult>The generated output is written to the
+                            <filepath><varname>DITA-dir</varname>\out\samples directory</filepath>.
+                    The following output formats are generated:<ul>
+                        <li>Docbook</li>
+                        <li>Eclipse help</li>
+                        <li>HTML Help</li>
+                        <li>ODT</li>
+                        <li>JavaHelp</li>
+                        <li>PDF</li>
+                        <li>TocJS</li>
+                        <li>TROFF</li>
+                        <li>XHTML</li>
+                    </ul></stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

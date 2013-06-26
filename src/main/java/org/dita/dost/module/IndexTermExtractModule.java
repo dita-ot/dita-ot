@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -69,10 +68,12 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
     public IndexTermExtractModule() {
     }
 
+    @Override
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
 
+    @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input)
             throws DITAOTException {
         if (logger == null) {
@@ -86,7 +87,7 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
             indexTermCollection.sort();
             indexTermCollection.outputTerms();
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
 
         return null;
@@ -190,11 +191,9 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
                     xmlReader.parse(new InputSource(inputStream));
                     inputStream.close();
                 } catch (final Exception e) {
-                    final Properties params = new Properties();
                     final StringBuffer buff=new StringBuffer();
                     String msg = null;
-                    params.put("%1", target);
-                    msg = MessageUtils.getInstance().getMessage("DOTJ013E", params).toString();
+                    msg = MessageUtils.getInstance().getMessage("DOTJ013E", target).toString();
                     logger.logError(buff.append(msg).append(e.getMessage()).toString());
                 }
             }
@@ -223,12 +222,9 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
                     xmlReader.parse(new InputSource(inputStream));
                     inputStream.close();
                 } 	catch (final Exception e) {
-                    final Properties params = new Properties();
                     String msg = null;
-                    params.put("%1", ditamap);
-                    msg = MessageUtils.getInstance().getMessage("DOTJ013E", params).toString();
-                    logger.logError(msg);
-                    logger.logException(e);
+                    msg = MessageUtils.getInstance().getMessage("DOTJ013E", ditamap).toString();
+                    logger.logError(msg, e) ;
                 }
             }
         } finally {
@@ -236,7 +232,7 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
                 try {
                     inputStream.close();
                 } catch (final IOException e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }
 
             }

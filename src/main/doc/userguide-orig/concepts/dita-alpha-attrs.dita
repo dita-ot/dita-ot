@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved. -->
-<!DOCTYPE concept PUBLIC "-//IBM//DTD DITA Concept//EN"
- "..\dtd\concept.dtd">
-<concept id="dita-alpha-attrs" xml:lang="en-us">
-<title>Sets of attributes by named group</title>
-<shortdesc>Darwin Information Typing Architecture sets of common attributes.</shortdesc>
-<conbody></conbody>
-</concept>

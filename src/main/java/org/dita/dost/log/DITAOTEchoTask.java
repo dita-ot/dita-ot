@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -13,8 +12,6 @@ import static org.dita.dost.log.MessageBean.*;
 
 import java.util.ArrayList;
 import java.util.Properties;
-import java.util.StringTokenizer;
-
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.taskdefs.Echo;
 import org.dita.dost.invoker.ExtensibleAntInvoker.Param;
@@ -29,7 +26,6 @@ import org.dita.dost.log.DITAOTAntLogger;
 public final class DITAOTEchoTask extends Echo {
     private String id = null;
 
-    private final Properties prop = new Properties();
     /** Nested params. */
     private final ArrayList<Param> params = new ArrayList<Param>();
     private DITAOTLogger logger;
@@ -45,22 +41,7 @@ public final class DITAOTEchoTask extends Echo {
      * @param identifier The id to set.
      */
     public void setId(final String identifier) {
-        this.id = identifier;
-    }
-
-    /**
-     * Set the parameters.
-     * @param params  The prop to set.
-     * @deprecated use nested {@code param} elements instead with {@link #createParam()}
-     */
-    @Deprecated
-    public void setParams(final String params) {
-        final StringTokenizer tokenizer = new StringTokenizer(params, ";");
-        while (tokenizer.hasMoreTokens()) {
-            final String token = tokenizer.nextToken();
-            final int pos = token.indexOf("=");
-            this.prop.put(token.substring(0, pos), token.substring(pos + 1));
-        }
+        id = identifier;
     }
 
     /**
@@ -81,25 +62,11 @@ public final class DITAOTEchoTask extends Echo {
      */
     @Override
     public void execute() throws BuildException {
-        for (final Param p : params) {
-            if (!p.isValid()) {
-                throw new BuildException("Incomplete parameter");
-            }
-            final String ifProperty = p.getIf();
-            final String unlessProperty = p.getUnless();
-            if ((ifProperty == null || getProject().getProperties().containsKey(ifProperty))
-                    && (unlessProperty == null || !getProject().getProperties().containsKey(unlessProperty))) {
-                prop.put("%" + p.getName(), p.getValue());
-            }
-        }
-        
         logger = new DITAOTAntLogger(getProject());
-        final MessageBean msgBean = MessageUtils.getInstance().getMessage(id, prop);
+        final MessageBean msgBean = MessageUtils.getInstance().getMessage(id, readParamValues());
         if (msgBean != null) {
             final String type = msgBean.getType();
-            if(FATAL.equals(type)){
-                logger.logFatal(msgBean.toString());
-            } else if(ERROR.equals(type)){
+            if(ERROR.equals(type)){
                 logger.logError(msgBean.toString());
             } else if(WARN.equals(type)){
                 logger.logWarn(msgBean.toString());
@@ -111,4 +78,32 @@ public final class DITAOTEchoTask extends Echo {
         }
     }
 
+    /**
+     * Read parameter values to an array.
+     * 
+     * @return parameter values where array index corresponds to parameter name
+     */
+    private String[] readParamValues() throws BuildException {
+        final ArrayList<String> prop = new ArrayList<String>();
+        for (final Param p : params) {
+            if (!p.isValid()) {
+                throw new BuildException("Incomplete parameter");
+            }
+            final String ifProperty = p.getIf();
+            final String unlessProperty = p.getUnless();
+            if ((ifProperty == null || getProject().getProperties().containsKey(ifProperty))
+                    && (unlessProperty == null || !getProject().getProperties().containsKey(unlessProperty))) {
+                final int idx = Integer.parseInt(p.getName()) - 1;
+                if (idx >= prop.size()) {
+                    prop.ensureCapacity(idx + 1);
+                    while (prop.size() < idx + 1) {
+                        prop.add(null);
+                    }
+                }
+                prop.set(idx, p.getValue());
+            }
+        }
+        return prop.toArray(new String[prop.size()]);
+    }
+    
 }

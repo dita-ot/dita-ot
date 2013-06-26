@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -19,9 +18,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
-import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.Content;
-import org.dita.dost.module.ContentImpl;
 import org.dita.dost.resolver.DitaURIResolverFactory;
 import org.dita.dost.resolver.URIResolverAdapter;
 import org.dita.dost.util.FileUtils;
@@ -100,7 +96,7 @@ public final class MapIndexReader extends AbstractXMLReader {
             reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
             reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
 
     }
@@ -182,19 +178,6 @@ public final class MapIndexReader extends AbstractXMLReader {
     }
 
     /**
-     * @return content collection {@code Set<Entry<String, String>}
-     * @deprecated use {@link #getMapping()} instead
-     */
-    @Override
-    @Deprecated
-    public Content getContent() {
-
-        final ContentImpl result = new ContentImpl();
-        result.setCollection( map.entrySet());
-        return result;
-    }
-
-    /**
      * Get index entries for topics
      * 
      * @return map of index entries by topic path
@@ -234,7 +217,7 @@ public final class MapIndexReader extends AbstractXMLReader {
             final InputSource source=URIResolverAdapter.convertToInputSource(DitaURIResolverFactory.getURIResolver().resolve(filename, null));
             reader.parse(source);
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 

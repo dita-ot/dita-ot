@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "concept.dtd">
+<concept id="preprocess-mappull" xml:lang="en-us">
+<title>Pull content into maps (mappull)</title>
+<shortdesc>The <codeph>mappull</codeph> step pulls content from referenced topics into maps, and
+then cascades data within maps. This step is implemented in XSLT.</shortdesc>
+<conbody>
+<section><p>The <codeph>mappull</codeph> step makes the following changes to the DITA map:<ul>
+<li>Titles are pulled from referenced DITA topics. Unless the @locktitle attribute is set to "yes",
+the pulled titles replace the navigation titles specified on the &lt;topicref> elements.</li>
+<li>The &lt;linktext> element is set based on the title of the referenced topic, unless it is
+already specified locally.</li>
+<li>The &lt;shortdesc> element is set based on the short description of the referenced topic, unless
+it is already specified locally.</li>
+<li>The @type attribute is set on &lt;topicref> elements that reference local DITA topics. The value
+of the @type attribute is set to value of the root element of the topic; for example, a
+&lt;topicref> element that references a task topic is given a @type attribute set to "task"".</li>
+<li>Attributes that cascade, such as @toc and print, are made explicit on any child &lt;topicref
+>elements. This allows future steps to work with the attributes directly, without reevaluating the
+cascading behavior.</li>
+</ul></p></section>
+</conbody>
+</concept>

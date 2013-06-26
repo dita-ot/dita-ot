@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -29,10 +28,12 @@ import org.dita.dost.module.ContentImpl;
 import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.DitaValReader;
+import org.dita.dost.reader.SubjectSchemeReader;
 import org.dita.dost.util.FilterUtils.Action;
 import org.dita.dost.util.FilterUtils.FilterKey;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.OutputUtils;
 import org.dita.dost.writer.DitaWriter;
 import org.junit.After;
@@ -107,9 +108,10 @@ public class TestDitaWriter {
         final DitaValReader filterReader = new DitaValReader();
         filterReader.read(ditavalFile);
         
-        filterReader.loadSubjectScheme(new File(inputDir, "subject_scheme.ditamap").getPath());
-        writer.setValidateMap(filterReader.getValidValuesMap());
-        writer.setDefaultValueMap(filterReader.getDefaultValueMap());
+        final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
+        subjectSchemeReader.loadSubjectScheme(new File(inputDir, "subject_scheme.ditamap").getPath());
+        writer.setValidateMap(subjectSchemeReader.getValidValuesMap());
+        writer.setDefaultValueMap(subjectSchemeReader.getDefaultValueMap());
 
         final Map<FilterKey, Action> map = filterReader.getFilterMap();
         assertEquals(Action.INCLUDE, map.get(new FilterKey("audience", "Cindy")));
