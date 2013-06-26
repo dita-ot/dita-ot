@@ -5,7 +5,7 @@
   <!--
     | (C) Copyright IBM Corporation 2006. All Rights Reserved.
     *-->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:template match="/*[contains(@class,' eclipsemap/plugin ')][*[(contains(@class,'
     eclipsemap/primarytocref ') or contains(@class,' eclipsemap/tocref ')) and @format='ditamap']]">
