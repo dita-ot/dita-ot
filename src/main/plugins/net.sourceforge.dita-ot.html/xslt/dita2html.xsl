@@ -4,7 +4,7 @@
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
                 xmlns:saxon="http://icl.com/saxon"
                 xmlns:java="org.dita.dost.util.StringUtils"
-                version="1.0"
+                version="2.0"
                 extension-element-prefixes="saxon"
                 exclude-result-prefixes="java dita-ot ditamsg">
   
@@ -21,9 +21,7 @@
       <xsl:call-template name="getrules"/>
     </xsl:variable>
     <body>
-      <xsl:call-template name="gen-style">
-        <xsl:with-param name="flagrules" select="$flagrules"/>
-      </xsl:call-template>
+      <xsl:call-template name="gen-style"/>
       <xsl:if test="@outputclass">
         <xsl:attribute name="class">
           <xsl:value-of select="@outputclass"/>
@@ -107,7 +105,9 @@
     </div>
   </xsl:template>
   
-  <xsl:template name="setanametag"/>
+  <xsl:template name="setanametag">
+    <xsl:param name="idvalue"/>
+  </xsl:template>
 
   <xsl:template match="*" mode="add-link-target-attribute"/>
   
