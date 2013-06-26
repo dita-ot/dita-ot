@@ -30,7 +30,7 @@
   xmlns:opentopic="http://www.idiominc.com/opentopic"
   xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
   xmlns:exsl="http://exslt.org/common"
-  version="1.0" 
+  version="2.0" 
   xmlns:random="org.dita.dost.util.RandomUtils"
   xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links"
   exclude-result-prefixes="random related-links dita-ot opentopic exsl">

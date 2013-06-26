@@ -11,7 +11,7 @@
               elsewhere with no processing trade-off.
               -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-  version="1.0" 
+  version="2.0" 
   xmlns:exsl="http://exslt.org/common" 
   xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"
   xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"

@@ -24,7 +24,7 @@
   xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0"
   xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0"
   xmlns:prodtools="http://www.ibm.com/xmlns/prodtools" xmlns:random="org.dita.dost.util.RandomUtils" exclude-result-prefixes="random"
-  version="1.1">
+  version="2.0">
   
   
   <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
