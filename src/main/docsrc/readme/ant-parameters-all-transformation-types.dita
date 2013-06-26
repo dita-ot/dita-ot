@@ -10,7 +10,7 @@
   <prolog>
     <metadata>
       <keywords>
-        <indexterm>Ant<indexterm>parameters<indexterm>args.debug</indexterm><indexterm>args.draft</indexterm><indexterm>args.figurelink.style</indexterm><indexterm>args.filter</indexterm><indexterm>args.grammar.cache</indexterm><indexterm>args.input</indexterm><indexterm>args.input.dir</indexterm><indexterm>args.logdir</indexterm><indexterm>args.tablelink.style</indexterm><indexterm>clean.temp</indexterm><indexterm>dita.dir</indexterm><indexterm>dita.ext</indexterm><indexterm>dita.extname</indexterm><indexterm>dita.input.valfile</indexterm><indexterm>dita.temp.dir</indexterm><indexterm>output.dir</indexterm><indexterm>transtype</indexterm><indexterm>validate</indexterm></indexterm></indexterm>
+        <indexterm>Ant<indexterm>parameters<indexterm>args.debug</indexterm><indexterm>args.draft</indexterm><indexterm>args.figurelink.style</indexterm><indexterm>args.filter</indexterm><indexterm>args.grammar.cache</indexterm><indexterm>args.input</indexterm><indexterm>args.input.dir</indexterm><indexterm>args.logdir</indexterm><indexterm>args.tablelink.style</indexterm><indexterm>clean.temp</indexterm><indexterm>dita.dir</indexterm><indexterm>dita.ext</indexterm><indexterm>dita.extname</indexterm><indexterm>dita.input.valfile</indexterm><indexterm>dita.temp.dir</indexterm><indexterm>generate.copy.outer</indexterm><indexterm>onlytopic.in.map</indexterm><indexterm>output.dir</indexterm><indexterm>transtype</indexterm><indexterm>validate</indexterm></indexterm></indexterm>
         <indexterm>XSLT
             parameters<indexterm>DITAEXT</indexterm><indexterm>DRAFT</indexterm><indexterm>FIGURELINK</indexterm><indexterm>TABLELINK</indexterm></indexterm>
       </keywords>
@@ -147,6 +147,39 @@
               used to include, exclude, or flag content. Filter files must have a .ditaval or
               .DITAVAL extension.<note type="notice">Deprecated in favor of the
                   <parmname>args.filter</parmname> parameter.</note></entry>
+          </row>
+          <row id="generate.copy.outer">
+            <entry colname="COLSPEC0"><parmname>generate.copy.outer</parmname></entry>
+            <entry id="generate.copy.outer.desc" colname="COLSPEC3">Specifies whether to generate
+              output files for content that is not located in or beneath the directory containing
+              the DITA map file. The following values are supported:<ul>
+                <li><option>1</option> (default) – Do not generate output for content that is
+                  located outside the DITA map directory..</li>
+                <li><option>2</option> – Generate output for the content that is located outside the
+                  DITA map directory.</li>
+                <li><option>3</option> – Shift the output directory so that it contains all output
+                  for the publication.</li>
+              </ul><p>See <xref href="generate-copy-outer.dita"/> for more information.</p></entry>
+          </row>
+          <row id="outer.control">
+            <entry colname="COLSPEC0"><parmname>outer.control</parmname></entry>
+            <entry id="outer.control.desc" colname="COLSPEC3">Specifies how the DITA OT handles
+              content files that are located in or below the directory containing the master DITA
+              map. The following values are supported:<ul>
+                <li><option>fail</option> – Fail quickly if files are going to be generated or
+                  copied outside of the directory</li>
+                <li><option>warn</option> (default) – Complete the operation if files will be
+                  generated or copied outside of the directory, but log a warning</li>
+                <li><option>quiet</option> – Quietly finish with only those files; do not generate
+                  warnings or errors.</li>
+              </ul>The <parmname>gen-list-without-flagging</parmname> Ant task generates a harmless
+              warning for content that is located outside the map directory; you can suppress these
+              warnings by setting the property to <option>quiet</option>. <note type="warning"
+                platform="windows">Microsoft HTML Help Compiler cannot produce HTML Help for
+                documentation projects that use outer content. The content files must reside in or
+                below the directory containing the master DITA map file, and the map file cannot
+                specify ".." at the start of the @href attributes for &lt;topicref> elements.</note>
+            </entry>
           </row>
           <row id="output.dir">
             <entry><parmname>output.dir</parmname></entry>

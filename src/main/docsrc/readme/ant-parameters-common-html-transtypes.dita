@@ -10,7 +10,7 @@
   <prolog>
     <metadata>
       <keywords>
-        <indexterm>Ant<indexterm>parameters<indexterm>args.artlbl</indexterm><indexterm>args.breadcrumbs</indexterm><indexterm>args.copycss</indexterm><indexterm>args.css</indexterm><indexterm>args.csspath</indexterm><indexterm>args.cssroot</indexterm><indexterm>args.dita.locale</indexterm><indexterm>args.ftr</indexterm><indexterm>args.gen.default.meta</indexterm><indexterm>args.gen.task.lbl</indexterm><indexterm>args.hdf</indexterm><indexterm>args.hdr</indexterm><indexterm>args.hide.parent.link</indexterm><indexterm>args.outext</indexterm><indexterm>args.rellinks</indexterm><indexterm>args.indexshow</indexterm><indexterm>args.xhtml.classattr</indexterm><indexterm>args.xsl</indexterm><indexterm>generate.copy.outer</indexterm><indexterm>onlytopic.in.map</indexterm><indexterm>outer.control</indexterm></indexterm></indexterm>
+        <indexterm>Ant<indexterm>parameters<indexterm>args.artlbl</indexterm><indexterm>args.breadcrumbs</indexterm><indexterm>args.copycss</indexterm><indexterm>args.css</indexterm><indexterm>args.csspath</indexterm><indexterm>args.cssroot</indexterm><indexterm>args.dita.locale</indexterm><indexterm>args.ftr</indexterm><indexterm>args.gen.default.meta</indexterm><indexterm>args.gen.task.lbl</indexterm><indexterm>args.hdf</indexterm><indexterm>args.hdr</indexterm><indexterm>args.hide.parent.link</indexterm><indexterm>args.outext</indexterm><indexterm>args.rellinks</indexterm><indexterm>args.indexshow</indexterm><indexterm>args.xhtml.classattr</indexterm><indexterm>args.xsl</indexterm><indexterm>outer.control</indexterm></indexterm></indexterm>
         <indexterm>XSLT
             parameters<indexterm>BREADCRUMBS</indexterm><indexterm>CSSPATH</indexterm><indexterm>FTR</indexterm><indexterm>genDefMeta</indexterm><indexterm>GENERATE-TASK-LABELS</indexterm><indexterm>HDR</indexterm><indexterm>NOPARENTLINK</indexterm><indexterm>PRESERVE-DITA-CLASS</indexterm><indexterm>OUTEXT</indexterm></indexterm>
       </keywords>
@@ -147,45 +147,12 @@
               instead of the default XSL transformation (<filepath>xsl\dita2xhtml.xsl</filepath>).
               The parameter must specify a fully qualified file name.</entry>
           </row>
-          <row id="generate.copy.outer">
-            <entry colname="COLSPEC0"><parmname>generate.copy.outer</parmname></entry>
-            <entry id="generate.copy.outer.desc" colname="COLSPEC3">Specifies whether to generate
-              output files for content that is not located in or beneath the directory containing
-              the DITA map file. The following values are supported:<ul>
-                <li><option>1</option> (default) – Do not generate output for content that is
-                  located outside the DITA map directory..</li>
-                <li><option>2</option> – Generate output for the content that is located outside the
-                  DITA map directory.</li>
-                <li><option>3</option> – Shift the output directory so that it contains all output
-                  for the publication.</li>
-              </ul><p>See <xref href="generate-copy-outer.dita"/> for more information.</p></entry>
-          </row>
           <row id="onlytopic.in.map">
             <entry colname="COLSPEC0"><parmname>onlytopic.in.map</parmname></entry>
             <entry id="onlytopic.in.map.desc" colname="COLSPEC3">Specifies whether files that are
               linked to, or referenced with a @conref attribute, generate output. If set to
                 <option>yes</option>, only files that are referenced directly from the map will
               generate output.</entry>
-          </row>
-          <row id="outer.control">
-            <entry colname="COLSPEC0"><parmname>outer.control</parmname></entry>
-            <entry id="outer.control.desc" colname="COLSPEC3">Specifies how the DITA OT handles
-              content files that are located in or below the directory containing the master DITA
-              map. The following values are supported:<ul>
-                <li><option>fail</option> – Fail quickly if files are going to be generated or
-                  copied outside of the directory</li>
-                <li><option>warn</option> (default) – Complete the operation if files will be
-                  generated or copied outside of the directory, but log a warning</li>
-                <li><option>quiet</option> – Quietly finish with only those files; do not generate
-                  warnings or errors.</li>
-              </ul>The <parmname>gen-list-without-flagging</parmname> Ant task generates a harmless
-              warning for content that is located outside the map directory; you can suppress these
-              warnings by setting the property to <option>quiet</option>. <note type="warning"
-                platform="windows">Microsoft HTML Help Compiler cannot produce HTML Help for
-                documentation projects that use outer content. The content files must reside in or
-                below the directory containing the master DITA map file, and the map file cannot
-                specify ".." at the start of the @href attributes for &lt;topicref> elements.</note>
-            </entry>
           </row>
         </tbody>
       </tgroup>
