@@ -1,8 +1,9 @@
 #! /bin/sh
 
-# This file is part of the DITA Open Toolkit project hosted on 
-# Sourceforge.net. See the accompanying license.txt file for 
-# applicable licenses.
+# This file is part of the DITA Open Toolkit project.
+# See the accompanying license.txt file for applicable licenses.
+
+# Derived from Apache Ant command line tool.
 
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
@@ -21,21 +22,10 @@
 
 # Extract launch and ant arguments, (see details below).
 ant_exec_args=
-no_config=false
-ant_exec_debug=false
-show_help=false
 for arg in "$@" ; do
-  if [ "$arg" = "--noconfig" ] ; then
-    no_config=true
-  elif [ "$arg" = "--execdebug" ] ; then
-    ant_exec_debug=true
-  elif [ my"$arg" = my"--h"  -o my"$arg" = my"--help"  ] ; then
-    show_help=true
+  if [ my"$arg" = my"--h"  -o my"$arg" = my"--help"  ] ; then
     ant_exec_args="$ant_exec_args -h"
   else
-    if [  my"$arg" = my"-h"  -o  my"$arg" = my"-help" ] ; then
-      show_help=true
-    fi
     ant_exec_args="$ant_exec_args \"$arg\""
   fi
 done
@@ -182,7 +172,4 @@ if [ -n "$CYGHOME" ]; then
   ant_sys_opts="-Dcygwin.user.home=\"$CYGHOME\""
 fi
 ant_exec_command="exec \"$JAVACMD\" $ANT_OPTS -classpath \"$LOCALCLASSPATH\" -Dant.home=\"$DITA_HOME\" -Ddita.dir=\"$DITA_HOME\" -Dant.library.dir=\"$ANT_LIB\" $ant_sys_opts org.apache.tools.ant.launch.Launcher $ANT_ARGS -cp \"$CLASSPATH\""
-if $ant_exec_debug ; then
-    echo $ant_exec_command $ant_exec_args
-fi
 eval $ant_exec_command "$ant_exec_args"

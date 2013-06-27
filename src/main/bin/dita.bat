@@ -1,8 +1,9 @@
 @echo off
 
-REM This file is part of the DITA Open Toolkit project hosted on 
-REM Sourceforge.net. See the accompanying license.txt file for 
-REM applicable licenses.
+REM This file is part of the DITA Open Toolkit project.
+REM See the accompanying license.txt file for applicable licenses.
+
+REM Derived from Apache Ant command line tool.
 
 REM  Licensed to the Apache Software Foundation (ASF) under one or more
 REM  contributor license agreements.  See the NOTICE file distributed with

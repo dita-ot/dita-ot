@@ -492,7 +492,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 throw new BuildException(msg);
             } else if (arg.equals("-autoproxy")) {
                 proxy = true;
-            } else if (arg.startsWith("-")) {
+            } else if (arg.startsWith("-") || arg.startsWith("/")) {
                 // we don't have any more args to recognize!
                 final String msg = "Unknown argument: " + arg;
                 System.err.println(msg);
@@ -1114,38 +1114,38 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      */
     private static String antVersion = null;
 
-    /**
-     * Returns the Ant version information, if available. Once the information
-     * has been loaded once, it's cached and returned from the cache on future
-     * calls.
-     * 
-     * @return the Ant version information as a String (always non-
-     *         <code>null</code>)
-     * 
-     * @exception BuildException if the version information is unavailable
-     */
-    public static synchronized String getAntVersion() throws BuildException {
-        if (antVersion == null) {
-            try {
-                final Properties props = new Properties();
-                final InputStream in = Main.class.getResourceAsStream("/org/apache/tools/ant/version.txt");
-                props.load(in);
-                in.close();
-
-                final StringBuffer msg = new StringBuffer();
-                msg.append("Apache Ant(TM) version ");
-                msg.append(props.getProperty("VERSION"));
-                msg.append(" compiled on ");
-                msg.append(props.getProperty("DATE"));
-                antVersion = msg.toString();
-            } catch (final IOException ioe) {
-                throw new BuildException("Could not load the version information:" + ioe.getMessage());
-            } catch (final NullPointerException npe) {
-                throw new BuildException("Could not load the version information.");
-            }
-        }
-        return antVersion;
-    }
+//    /**
+//     * Returns the Ant version information, if available. Once the information
+//     * has been loaded once, it's cached and returned from the cache on future
+//     * calls.
+//     * 
+//     * @return the Ant version information as a String (always non-
+//     *         <code>null</code>)
+//     * 
+//     * @exception BuildException if the version information is unavailable
+//     */
+//    public static synchronized String getAntVersion() throws BuildException {
+//        if (antVersion == null) {
+//            try {
+//                final Properties props = new Properties();
+//                final InputStream in = Main.class.getResourceAsStream("/org/apache/tools/ant/version.txt");
+//                props.load(in);
+//                in.close();
+//
+//                final StringBuffer msg = new StringBuffer();
+//                msg.append("Apache Ant(TM) version ");
+//                msg.append(props.getProperty("VERSION"));
+//                msg.append(" compiled on ");
+//                msg.append(props.getProperty("DATE"));
+//                antVersion = msg.toString();
+//            } catch (final IOException ioe) {
+//                throw new BuildException("Could not load the version information:" + ioe.getMessage());
+//            } catch (final NullPointerException npe) {
+//                throw new BuildException("Could not load the version information.");
+//            }
+//        }
+//        return antVersion;
+//    }
 
     /**
      * Prints the description of a project (if there is one) to
