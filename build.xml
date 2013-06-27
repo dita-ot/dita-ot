@@ -281,7 +281,7 @@
       </fileset>
     </copy>
     <!-- no documentation -->
-    <ant antfile="${temp.dist.dir}/integrator.xml"/>
+    <ant antfile="${temp.dist.dir}/integrator.xml" dir="${temp.dist.dir}"/>
     <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
       <fileset dir="${work.dir}/${param.out.file}"/>
     </zip>
@@ -310,7 +310,7 @@
         <patternset refid="pattern.package.doc"/>
       </fileset>
     </copy>
-    <ant antfile="${temp.dist.dir}/integrator.xml"/>
+    <ant antfile="${temp.dist.dir}/integrator.xml" dir="${temp.dist.dir}"/>
     <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
       <fileset dir="${work.dir}/${param.out.file}"/>
     </zip>
@@ -427,7 +427,7 @@
         <patternset refid="pattern.package.doc"/>
       </fileset>
     </copy>
-    <ant antfile="${temp.dist.dir}/integrator.xml"/>
+    <ant antfile="${temp.dist.dir}/integrator.xml" dir="${temp.dist.dir}"/>
     <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
       <zipfileset dir="${work.dir}/${param.out.file}">
         <exclude name="*/startcmd.sh"/>
