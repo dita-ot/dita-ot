@@ -8,7 +8,7 @@
 
   <xsl:import href="dita2html-base.xsl"/>
   
-  <xsl:output method="xml"
+  <xsl:output method="xhtml"
               encoding="UTF-8"
               indent="no"
               doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
