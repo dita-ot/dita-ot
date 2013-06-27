@@ -550,7 +550,7 @@
 <xsl:template name="CheckForPhraseSibling">
   <xsl:choose>
     <xsl:when test="parent::*[contains(@class,' topic/body ') or contains(@class,' topic/topic ')]">no</xsl:when>
-    <xsl:when test="string-length(normalize-space(../text()))>0">yes</xsl:when>
+    <xsl:when test="string-length(normalize-space(../text()[1]))>0">yes</xsl:when>
     <xsl:when test="following-sibling::*[contains(@class,' topic/ph ') or contains(@class,' topic/keyword ') or
                         contains(@class,' topic/q ') or contains(@class,' topic/term ') or
                         contains(@class,' topic/itemgroup ') or contains(@class,' topic/state ') or
