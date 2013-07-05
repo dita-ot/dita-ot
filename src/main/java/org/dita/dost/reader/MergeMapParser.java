@@ -203,6 +203,9 @@ public final class MergeMapParser extends XMLFilterImpl {
                                 topicParser.parse(p,dirPath);
                                 final String fileId = topicParser.getFirstTopicId();
                                 util.addId(attValue, fileId);
+                                if (FileUtils.getFragment(attValue) != null) {
+                                    util.addId(FileUtils.stripFragment(attValue), fileId);
+                                }
                                 final String firstTopicId = SHARP + fileId;
                                 if (util.getIdValue(attValue) != null) {
                                 	attValue = SHARP + util.getIdValue(attValue);
@@ -215,8 +218,8 @@ public final class MergeMapParser extends XMLFilterImpl {
                                 logger.logError(MessageUtils.getInstance().getMessage("DOTX008E", fileName).toString());
                             }
                         }
+                        }
                     }
-                }
                 XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_HREF, attValue);
             }
         }
