@@ -63,9 +63,7 @@ final class MoveLinksModule implements AbstractPipelineModule {
         indexInserter.setLogger(logger);
         for (final Map.Entry<String, Map<String, String>> entry: mapSet.entrySet()) {
             logger.logInfo("Processing " + entry.getKey());
-            final ContentImpl content = new ContentImpl();
-            content.setValue(entry.getValue());
-            indexInserter.setContent(content);
+            indexInserter.setLinks(entry.getValue());
             indexInserter.write(entry.getKey());
         }
         return null;
