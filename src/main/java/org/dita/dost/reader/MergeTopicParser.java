@@ -100,12 +100,11 @@ public final class MergeTopicParser extends XMLFilterImpl {
     private void handleID(final String classValue, final AttributesImpl atts) {
         String idValue = atts.getValue(ATTRIBUTE_NAME_ID);
         if (idValue != null) {
+            XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OID, idValue);
             final String value = filePath + SHARP + idValue;
             if (util.findId(value)) {
-                XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OID, idValue);
                 idValue = util.getIdValue(value);
             } else {
-                XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OID, idValue);
                 idValue = util.addId(value);
             }
             XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_ID, idValue);
@@ -172,8 +171,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
      * @param dir topic directory system path
      */
     public void parse(final String filename,final String dir){
-        final int index = filename.indexOf(SHARP);
-        filePath = index != -1 ? filename.substring(0, index) : filename;
+        filePath = FileUtils.stripFragment(filename);
         dirPath = dir;
         try{
             final File f = new File(dir + File.separator + filePath);

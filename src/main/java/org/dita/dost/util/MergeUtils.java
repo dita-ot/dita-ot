@@ -108,11 +108,7 @@ public final class MergeUtils {
      * @return true if has been visited
      */
     public boolean isVisited(final String path){
-        String localPath = path;
-        final int idx = path.indexOf(SHARP);
-        if (idx != -1) {
-            localPath=localPath.substring(0, idx);
-        }
+        final String localPath = FileUtils.stripFragment(path);
         return visitSet.contains(FileUtils.normalize(FileUtils.separatorsToUnix(localPath.trim()), UNIX_SEPARATOR));
     }
 
@@ -122,11 +118,7 @@ public final class MergeUtils {
      * @param path topic path, may contain a fragment
      */
     public void visit(final String path){
-        String localPath = path;
-        final int idx = path.indexOf(SHARP);
-        if (idx != -1) {
-            localPath=localPath.substring(0, idx);
-        }
+        final String localPath = FileUtils.stripFragment(path);
         visitSet.add(FileUtils.normalize(FileUtils.separatorsToUnix(localPath.trim()), UNIX_SEPARATOR));
     }
 
