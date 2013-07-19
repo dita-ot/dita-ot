@@ -7,7 +7,7 @@
 <map xml:lang="en-us">
 <title>Getting started</title>
  <topicref href="quickstartguide/exploring-the-dita-ot.dita" collection-type="sequence">
-  <topicref href="readme/installing-full-easy.dita"/>
+  <topicref href="readme/installing-full-easy.dita" copy-to="quickstartguide/installing-full-easy.dita"/>
   <topicref href="quickstartguide/rundemo.dita"/>
   <topicref href="quickstartguide/runmore.dita"/>
  </topicref>
