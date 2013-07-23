@@ -522,8 +522,7 @@
                                       <xsl:variable name="firstTopicId" select="$target/@id"/>
                                       <xsl:choose>
                                         <!-- if the first topic id is exported and transtype is eclipsehelp-->
-                                        <xsl:when test="document($EXPORTFILE, $current-element)//file[@name=$FILENAME]/topicid[@name=$firstTopicId]
-                                          and ($TRANSTYPE = 'eclipsehelp' )">
+                                        <xsl:when test="$TRANSTYPE = 'eclipsehelp' and document($EXPORTFILE, $current-element)//file[@name=$FILENAME]/topicid[@name=$firstTopicId]">
                                           <!-- just copy -->
                                           <xsl:copy>
                                             <xsl:apply-templates select="*|@*|comment()|processing-instruction()|text()">
