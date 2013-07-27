@@ -575,7 +575,7 @@
 
   <target name="site" description="Build project website">
     <ant antfile="${basedir}/src/main/build.xml">
-      <property name="args.input" location="${doc.dir}/userguide.ditamap"/>
+      <property name="args.input" location="${doc.dir}/site.ditamap"/>
       <property name="output.dir" location="${basedir}/target/site"/>
       <property name="transtype" value="net.sourceforge.dita-ot.html"/>
       <property name="base.temp.dir" location="${work.dir}"/>

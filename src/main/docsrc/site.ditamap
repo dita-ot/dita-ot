@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map xml:lang="en-US">
+  <title>DITA Open Toolkit <keyword keyref="release.version"/></title>
+  <topicref href="DITA-OTProjectHome.xml" copy-to="index.dita"/>
+  <mapref href="quickstart.ditamap"/>
+  <mapref href="readme.ditamap"/>
+  <mapref href="dev_ref/dev_ref.ditamap"/>
+  <topicgroup>
+   <mapref href="keyrefs.ditamap" processing-role="resource-only"/>
+   <mapref href="subjectscheme.ditamap" type="subjectScheme" processing-role="resource-only"/>
+   <mapref href="reltable.ditamap" processing-role="resource-only"/>
+  </topicgroup>
+</map>
