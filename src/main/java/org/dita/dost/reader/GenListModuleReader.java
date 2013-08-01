@@ -1356,24 +1356,26 @@ public final class GenListModuleReader extends AbstractXMLReader {
         // Collect copy-to (target,source) into hash map
         if (ATTRIBUTE_NAME_COPY_TO.equals(attrName) && FileUtils.isDITATopicFile(filename)) {
             final String href = atts.getValue(ATTRIBUTE_NAME_HREF);
-            final String value = toFile(FileUtils.normalizeDirectory(currentDir, href));
-
-            if (StringUtils.isEmptyString(href)) {
-                final StringBuffer buff = new StringBuffer();
-                buff.append("[WARN]: Copy-to task [href=\"\" copy-to=\"");
-                buff.append(filename);
-                buff.append("\"] was ignored.");
-                logger.logWarn(buff.toString());
-            } else if (copytoMap.get(filename) != null) {
-                if (!value.equals(copytoMap.get(filename))) {
-                    logger.logWarn(MessageUtils.getInstance().getMessage("DOTX065W", href, filename).toString());
+            if (href != null) {
+                final String value = toFile(FileUtils.normalizeDirectory(currentDir, href));
+    
+                if (StringUtils.isEmptyString(href)) {
+                    final StringBuffer buff = new StringBuffer();
+                    buff.append("[WARN]: Copy-to task [href=\"\" copy-to=\"");
+                    buff.append(filename);
+                    buff.append("\"] was ignored.");
+                    logger.logWarn(buff.toString());
+                } else if (copytoMap.get(filename) != null) {
+                    if (!value.equals(copytoMap.get(filename))) {
+                        logger.logWarn(MessageUtils.getInstance().getMessage("DOTX065W", href, filename).toString());
+                    }
+                    ignoredCopytoSourceSet.add(href);
+                } else if (!(atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(
+                        "to-content"))) {
+                    copytoMap.put(filename, value);
                 }
-                ignoredCopytoSourceSet.add(href);
-            } else if (!(atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(
-                    "to-content"))) {
-                copytoMap.put(filename, value);
             }
-
+            
             final String pathWithoutID = FileUtils.resolveFile(currentDir, toFile(attrValue));
             if (chunkLevel > 0 && chunkToNavLevel == 0 && topicGroupLevel == 0) {
                 chunkTopicSet.add(pathWithoutID);

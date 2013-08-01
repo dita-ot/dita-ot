@@ -1272,51 +1272,15 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:apply-templates select="*|comment()|processing-instruction()|text()" />  
   </xsl:template>
   
- 
-  
-  <xsl:template match="text() [ancestor::*[contains(@class,' topic/title ')]|ancestor::*[contains(@class,' topic/navtitle ')]]" >
-    <xsl:variable name="text_value" select="string(.)"/>
-    
-    <xsl:variable name="pre-text">
-      <xsl:choose>   
-        <xsl:when test="starts-with($text_value,'&#10; ')">
-          <xsl:value-of select=" concat('&#10; ',normalize-space($text_value))"/>
-        </xsl:when>
-        <xsl:otherwise>
-           <xsl:choose>
-             <xsl:when test="starts-with($text_value,'&#10;')">
-               <xsl:value-of select="concat('&#10;',normalize-space($text_value))"/>
-             </xsl:when>
-             <xsl:otherwise>
-               <xsl:choose>
-                 <xsl:when test=" starts-with($text_value,' ')">
-                   <xsl:value-of select="concat(' ',normalize-space($text_value))"/>
-                 </xsl:when>
-                 <xsl:otherwise >
-                   <xsl:value-of select="normalize-space($text_value)"/>                   
-                 </xsl:otherwise>
-               </xsl:choose>               
-             </xsl:otherwise>
-           </xsl:choose>          
-        </xsl:otherwise>
-      </xsl:choose>    
-    </xsl:variable>
-   
-    <xsl:variable name="end-text">
-      <xsl:variable name="ends-with-space">
-        <xsl:call-template name="ends-with">
-          <xsl:with-param name="text" select="$text_value"/>
-          <xsl:with-param name="with" select="' '"/>
-        </xsl:call-template>
-      </xsl:variable>
-      <xsl:if test="$ends-with-space = 'true'">
-        <xsl:value-of select="' '"/>
-      </xsl:if>
-    </xsl:variable>
-    
-    <xsl:variable name="elem-txt" select="concat($pre-text, $end-text)"/>
- 
-    <xsl:value-of select="$elem-txt"/>
+  <xsl:template match="*[contains(@class,' topic/title ')]//text() |
+                       *[contains(@class,' topic/navtitle ')]//text()" >
+    <xsl:if test="not(normalize-space(substring(., 1, 1)))">
+      <xsl:text> </xsl:text>
+    </xsl:if>
+    <xsl:value-of select="normalize-space(.)"/>
+    <xsl:if test="not(normalize-space(substring(., string-length(.))))">
+      <xsl:text> </xsl:text>
+    </xsl:if>
   </xsl:template>
-  <!-- Added on 20110125 for bug:Navtitle Construction Does not Preserve Markup - ID: 3157890  end -->
+  
 </xsl:stylesheet>
