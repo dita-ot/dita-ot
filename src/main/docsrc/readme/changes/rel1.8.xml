@@ -154,6 +154,11 @@
           <li>#1473 Troff output not working in latest build bug troff</li>
           <li>#1498 White space will break tocjs</li>
           <li>#1519 Latest code in develop branch fails to build PDF</li>
+          <li>#1528 PDF fails when topic referenced with and without topic ID (maintenance 1)</li>
+          <li>#1529 NPE when topichead has @copy-to and @chunk="to-content" (maintenance 1)</li>
+          <li>#1535 Specialized class cannot be handled during XML parsing (maintenance 1)</li>
+          <li>#1537 Whitespace issue when @conref is preceded by a linefeed in map &lt;title> (maintenance 1)</li>
+          <li>#1538 Incorrect handling of topics outside of map path (maintenance 1)</li>
         </ul>
       </section>
     </refbody>
