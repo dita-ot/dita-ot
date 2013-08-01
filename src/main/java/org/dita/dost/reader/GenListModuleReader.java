@@ -1362,7 +1362,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
                     copytoMap.put(filename, value);
                 }
             }
-
+            
             final String pathWithoutID = FileUtils.resolveFile(currentDir, toFile(attrValue));
             if (chunkLevel > 0 && chunkToNavLevel == 0 && topicGroupLevel == 0) {
                 chunkTopicSet.add(pathWithoutID);

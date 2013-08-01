@@ -278,7 +278,8 @@ public final class DitaWriter extends AbstractXMLFilter {
     private int columnNumberEnd; //columnNumberEnd is the end value for current entry
     /** Stack to store colspec list */
     private final Stack<List<String>> colSpecStack;
-
+    /** Stack for element classes */
+    private final Stack<String> classStack;
     /** Stack to store rowNum */
     private final Stack<Integer> rowNumStack;
     /** Stack to store columnNumber */
@@ -350,6 +351,7 @@ public final class DitaWriter extends AbstractXMLFilter {
         tempDir = null;
         colSpec = null;
         //initial the stack
+        classStack = new Stack<String>();
         colSpecStack = new Stack<List<String>>();
         rowNumStack = new Stack<Integer>();
         columnNumberStack = new Stack<Integer>();
@@ -647,7 +649,8 @@ public final class DitaWriter extends AbstractXMLFilter {
      */
     private AttributesImpl copyElementName(final String qName, final Attributes atts) throws IOException {
         final AttributesImpl res = new AttributesImpl();
-        if (TOPIC_TGROUP.localName.equals(qName)){
+        final String cls = classStack.peek();
+        if (TOPIC_TGROUP.matches(cls)){
 
             //push into the stack.
             if(colSpec != null){
@@ -667,12 +670,12 @@ public final class DitaWriter extends AbstractXMLFilter {
             colSpec = new ArrayList<String>(INT_16);
             //new table initialize the col list
             rowNumber = 0;
-        }else if(TOPIC_ROW.localName.equals(qName)) {
+        }else if(TOPIC_ROW.matches(cls)) {
             columnNumber = 1; // initialize the column number
             columnNumberEnd = 0;
             //store the row number
             rowNumber++;
-        }else if(TOPIC_COLSPEC.localName.equals(qName)){
+        }else if(TOPIC_COLSPEC.matches(cls)){
             columnNumber = columnNumberEnd +1;
             if(atts.getValue(ATTRIBUTE_NAME_COLNAME) != null){
                 colSpec.add(atts.getValue(ATTRIBUTE_NAME_COLNAME));
@@ -684,7 +687,7 @@ public final class DitaWriter extends AbstractXMLFilter {
             XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL + columnNumber);
             //total columns count
             totalColumns = columnNumberEnd;
-        }else if(TOPIC_ENTRY.localName.equals(qName)){
+        }else if(TOPIC_ENTRY.matches(cls)){
 
             /*columnNumber = getStartNumber(atts, columnNumberEnd);
 			if(columnNumber > columnNumberEnd){
@@ -783,6 +786,7 @@ public final class DitaWriter extends AbstractXMLFilter {
         } catch (final Exception e) {
             logger.logError(e.getMessage(), e) ;
         }
+        classStack.clear();
     }
 
 
@@ -794,7 +798,7 @@ public final class DitaWriter extends AbstractXMLFilter {
         }
         getContentHandler().endElement(uri, localName, qName);
         //note the tag shouldn't be excluded by filter file(bug:2925636 )
-        if(TOPIC_TGROUP.localName.equals(qName)){
+        if(TOPIC_TGROUP.matches(classStack.peek())){
             //colSpecStack.pop();
             //rowNumStack.pop();
             //has tgroup tag
@@ -824,6 +828,7 @@ public final class DitaWriter extends AbstractXMLFilter {
                 colSpanMap = null;
             }
         }
+        classStack.pop();
     }
 
     private int getEndNumber(final Attributes atts, final int columnStart) {
@@ -902,6 +907,7 @@ public final class DitaWriter extends AbstractXMLFilter {
     @Override
     public void startElement(final String uri, final String localName, final String qName,
             final Attributes atts) throws SAXException {
+        classStack.push(atts.getValue(ATTRIBUTE_NAME_CLASS));
         if (foreignLevel > 0){
             foreignLevel ++;
         }else if( foreignLevel == 0){

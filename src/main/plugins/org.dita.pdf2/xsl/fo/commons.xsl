@@ -1862,7 +1862,7 @@ See the accompanying license.txt file for applicable licenses.
                         <xsl:call-template name="commonattributes"/>
                         <xsl:apply-templates select="." mode="placeImage">
                             <xsl:with-param name="imageAlign" select="@align"/>
-                            <xsl:with-param name="href" select="if (@scope = 'external') then @href else concat($input.dir.url, @href)"/>
+                            <xsl:with-param name="href" select="if (@scope = 'external' or opentopic-func:isAbsolute(@href)) then @href else concat($input.dir.url, @href)"/>
                             <xsl:with-param name="height" select="@height"/>
                             <xsl:with-param name="width" select="@width"/>
                         </xsl:apply-templates>
@@ -1874,7 +1874,7 @@ See the accompanying license.txt file for applicable licenses.
                     <xsl:call-template name="commonattributes"/>
                     <xsl:apply-templates select="." mode="placeImage">
                         <xsl:with-param name="imageAlign" select="@align"/>
-                        <xsl:with-param name="href" select="if (@scope = 'external') then @href else concat($input.dir.url, @href)"/>
+                        <xsl:with-param name="href" select="if (@scope = 'external' or opentopic-func:isAbsolute(@href)) then @href else concat($input.dir.url, @href)"/>
                         <xsl:with-param name="height" select="@height"/>
                         <xsl:with-param name="width" select="@width"/>
                     </xsl:apply-templates>
@@ -1895,6 +1895,13 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
+  
+  <!-- Test whether URI is absolute -->
+  <xsl:function name="opentopic-func:isAbsolute" as="xs:boolean">
+    <xsl:param name="uri" as="xs:anyURI"/>
+    <xsl:sequence select="some $prefix in ('/', 'file:') satisfies starts-with($uri, $prefix) or
+                          contains($uri, '://')"/>
+  </xsl:function>
 
     <xsl:template match="*" mode="placeImage">
         <xsl:param name="imageAlign"/>
