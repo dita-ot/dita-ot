@@ -2,6 +2,7 @@
  * This file is part of the DITA Open Toolkit project.
  * See the accompanying license.txt file for applicable licenses.
  */
+/* Derived from Apache Ant. */
 /*
  *  Licensed to the Apache Software Foundation (ASF) under one or more
  *  contributor license agreements.  See the NOTICE file distributed with
@@ -61,14 +62,9 @@ import org.apache.tools.ant.util.ProxySetup;
 import org.dita.dost.util.Configuration;
 
 /**
- * Command line entry point into Ant. This class is entered via the canonical
+ * Command line entry point into DITA-OT. This class is entered via the canonical
  * `public static void main` entry point and reads the command line arguments.
  * It then assembles and executes an Ant project.
- * <p>
- * If you integrating Ant into some other tool, this is not the class to use as
- * an entry point. Please see the source code of this class to see how it
- * manipulates the Ant project classes.
- * 
  */
 public class Main extends org.apache.tools.ant.Main implements AntMain {
 
