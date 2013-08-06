@@ -449,6 +449,7 @@ public final class ChunkMapReader implements AbstractReader {
             final Element navref = node.getOwnerDocument().createElement(MAP_NAVREF.localName);
             final String newMapFile = generateFilename("MAPCHUNK", ".ditamap");
             navref.setAttribute(MAPGROUP_D_MAPREF.localName,newMapFile);
+            navref.setAttribute(ATTRIBUTE_NAME_CLASS, MAP_NAVREF.toString());
             //replace node with navref
             node.getParentNode().replaceChild(navref,node);
             root.appendChild(node);
