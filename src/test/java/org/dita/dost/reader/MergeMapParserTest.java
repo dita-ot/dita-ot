@@ -34,7 +34,7 @@ public class MergeMapParserTest {
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
         output.write("<wrapper>".getBytes(UTF8));
         parser.setOutputStream(output);
-        parser.read(new File(srcDir, "test.ditamap").getAbsolutePath(), srcDir.getAbsolutePath());
+        parser.read(new File(srcDir, "test.ditamap").getAbsoluteFile(), srcDir.getAbsoluteFile());
         output.write("</wrapper>".getBytes(UTF8));
         assertXMLEqual(new InputSource(new File(expDir, "merged.xml").toURI().toString()),
                 new InputSource(new ByteArrayInputStream(output.toByteArray())));
@@ -47,7 +47,7 @@ public class MergeMapParserTest {
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
         output.write("<wrapper>".getBytes(UTF8));
         parser.setOutputStream(output);
-        parser.read(new File(srcDir, "space in map name.ditamap").getAbsolutePath(), srcDir.getAbsolutePath());
+        parser.read(new File(srcDir, "space in map name.ditamap").getAbsoluteFile(), srcDir.getAbsoluteFile());
         output.write("</wrapper>".getBytes(UTF8));
         assertXMLEqual(new InputSource(new File(expDir, "merged.xml").toURI().toString()),
                 new InputSource(new ByteArrayInputStream(output.toByteArray())));

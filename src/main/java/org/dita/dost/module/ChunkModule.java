@@ -143,7 +143,7 @@ final class ChunkModule implements AbstractPipelineModule {
         topicRefWriter.setup(conflictTable);
         try{
             for (final String f: job.getSet(FULL_DITAMAP_TOPIC_LIST)) {
-                topicRefWriter.write(tempDir.getAbsolutePath(), f, relativePath2fix);
+                topicRefWriter.write(tempDir.getAbsoluteFile(), new File(f), relativePath2fix);
             }
         }catch(final DITAOTException ex){
             logger.logError(ex.getMessage(), ex) ;

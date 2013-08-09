@@ -126,7 +126,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 	the pushcontent has @conref.*/
     private boolean hasConref = false;
     /**tempDir.*/
-    private String tempDir;
+    private File tempDir;
     /**
      * Constructor.
      */
@@ -164,7 +164,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
      * 
      * @param tempDir tempDir
      */
-    public void setTempDir(final String tempDir){
+    public void setTempDir(final File tempDir){
         this.tempDir = tempDir;
     }
     /**
@@ -227,11 +227,11 @@ public final class ConrefPushParser extends AbstractXMLWriter {
         // this is used to update the conref.list file.
         BufferedWriter bufferedWriter =null;
         try{
-            final Job job = new Job(new File(tempDir));
+            final Job job = new Job(tempDir);
 
             final Set<String> conreflist = job.getSet(CONREF_LIST);
             // get the reletivePath from tempDir
-            final String reletivePath = filename.substring(FileUtils.normalize(tempDir).length() + 1);
+            final String reletivePath = filename.substring(FileUtils.normalize(tempDir.toString()).length() + 1);
             for(final String str: conreflist){
                 if(str.equals(reletivePath)){
                     return;

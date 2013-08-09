@@ -55,8 +55,8 @@ public final class MergeMapParser extends XMLFilterImpl {
     private final XMLReader reader;
     private final MergeTopicParser topicParser;
     private final MergeUtils util;
-    private String dirPath = null;
-    private String tempdir = null;
+    private File dirPath = null;
+    private File tempdir = null;
 
     private final Stack<String> processStack;
     private int processLevel;
@@ -113,18 +113,17 @@ public final class MergeMapParser extends XMLFilterImpl {
      * @param filename map file path
      * @param tmpDir temporary directory path, may be {@code null}
      */
-    public void read(final String filename, final String tmpDir) {
-        tempdir = tmpDir != null ? tmpDir : new File(filename).getParent();
+    public void read(final File filename, final File tmpDir) {
+        tempdir = tmpDir != null ? tmpDir : filename.getParentFile();
         try{
             final TransformerHandler s = stf.newTransformerHandler();
             s.getTransformer().setOutputProperty(OMIT_XML_DECLARATION, "yes");
             s.setResult(new StreamResult(output));
             setContentHandler(s);
-            final File input = new File(filename);
-            dirPath = input.getParent();
-            reader.setErrorHandler(new DITAOTXMLErrorHandler(input.getAbsolutePath(), logger));
+            dirPath = filename.getParentFile();
+            reader.setErrorHandler(new DITAOTXMLErrorHandler(filename.getAbsolutePath(), logger));
             topicParser.getContentHandler().startDocument();
-            reader.parse(input.toURI().toString());
+            reader.parse(filename.toURI().toString());
             topicParser.getContentHandler().endDocument();
             output.write(topicBuffer.toByteArray());
         }catch(final Exception e){
@@ -232,12 +231,12 @@ public final class MergeMapParser extends XMLFilterImpl {
         // compare visitedSet with the list
         // if list item not in visitedSet then call MergeTopicParser to parse it
         try{
-            final Job job = new Job(new File(tempdir));
+            final Job job = new Job(tempdir);
             final Set<String> resourceOnlySet = job.getSet(RESOURCE_ONLY_LIST);
             final Set<String> skipTopicSet = job.getSet(CHUNK_TOPIC_LIST);
             final Set<String> chunkedTopicSet = job.getSet(CHUNKED_TOPIC_LIST);
             for (String element: job.getSet(HREF_TARGET_LIST)) {
-                if (!new File(dirPath).equals(new File(tempdir))) {
+                if (!dirPath.equals(tempdir)) {
                     element = FileUtils.getRelativePath(new File(dirPath,"a.ditamap").getAbsolutePath(),
                                                                new File(tempdir, element).getAbsolutePath());
                 }

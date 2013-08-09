@@ -61,7 +61,7 @@ public class MergeTopicParserTest {
         parser.setContentHandler(s);
         parser.setLogger(new TestUtils.TestLogger());
         s.startDocument();
-        parser.parse("test.xml", srcDir.getAbsolutePath());
+        parser.parse("test.xml", srcDir.getAbsoluteFile());
         s.endDocument();
         assertXMLEqual(new InputSource(new File(expDir, "test.xml").toURI().toString()),
                 new InputSource(new ByteArrayInputStream(output.toByteArray())));
@@ -79,7 +79,7 @@ public class MergeTopicParserTest {
         final Method method = MergeTopicParser.class.getDeclaredMethod("handleLocalHref", String.class);
         method.setAccessible(true);
         
-        parser.parse("test.xml", srcDir.getAbsolutePath());
+        parser.parse("test.xml", srcDir.getAbsoluteFile());
         assertEquals("test.jpg", method.invoke(parser, "test.jpg"));
         assertEquals("test.jpg#foo", method.invoke(parser, "test.jpg#foo"));
         assertEquals("#foo", method.invoke(parser, "#foo"));
@@ -87,7 +87,7 @@ public class MergeTopicParserTest {
         assertEquals("images/test.jpg#foo", method.invoke(parser, "images/test.jpg#foo"));
         assertEquals("../test.jpg", method.invoke(parser, "../test.jpg"));
         
-        parser.parse("src/test.xml", resourceDir.getAbsolutePath());
+        parser.parse("src/test.xml", resourceDir.getAbsoluteFile());
         assertEquals("src/test.jpg", method.invoke(parser, "test.jpg"));
         assertEquals("src/images/test.jpg", method.invoke(parser, "images/test.jpg"));
         assertEquals("test.jpg", method.invoke(parser, "../test.jpg"));

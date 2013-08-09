@@ -130,15 +130,15 @@ public final class MergeUtils {
      * @param useCatalog whether use catalog file for validation
      * @return topic id
      */
-    public static String getFirstTopicId(final String path, final String dir, final boolean useCatalog){
+    public static String getFirstTopicId(final String path, final File dir, final boolean useCatalog){
         final DITAOTLogger logger = new DITAOTJavaLogger();
         String localPath = path;
-        String localDir = dir;
+        File localDir = dir;
         final StringBuffer firstTopicId = new StringBuffer();
 
         if (path != null && dir != null) {
             localPath = localPath.trim();
-            localDir = localDir.trim();
+            localDir = new File(localDir.toString().trim());
         } else {
             return null;
         }

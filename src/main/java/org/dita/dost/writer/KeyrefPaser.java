@@ -626,7 +626,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      * Get first topic id
      */
     private String getFirstTopicId(final File topicFile) {
-        final String path = topicFile.getParent();
+        final File path = topicFile.getParentFile();
         final String name = topicFile.getName();
         final String topicId = MergeUtils.getFirstTopicId(name, path, false);
         return topicId;

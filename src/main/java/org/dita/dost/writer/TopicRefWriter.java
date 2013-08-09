@@ -49,8 +49,8 @@ public final class TopicRefWriter extends AbstractXMLWriter {
     private OutputStreamWriter ditaFileOutput;
     private boolean needResolveEntity;
     private boolean insideCDATA;
-    private String currentFilePath = null;
-    private String currentFilePathName=null;
+    private File currentFilePath = null;
+    private File currentFilePathName=null;
     /** XMLReader instance for parsing dita file */
     private final XMLReader reader;
 
@@ -328,7 +328,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 
         if (checkDITAHREF(atts)) {
             // replace the href value if it's referenced topic is extracted.
-            final String rootPathName=currentFilePathName;
+            final File rootPathName=currentFilePathName;
             String changeTargetkey = FileUtils.resolveFile(currentFilePath,
                     attValue);
             String changeTarget = changeTable.get(changeTargetkey);
@@ -496,20 +496,24 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 
 
 
-    public void write (final String tempDir, final String topicfile,final Map relativePath2fix) throws DITAOTException{
+    public void write (final File tempDir, final File topicfile,final Map relativePath2fix) throws DITAOTException{
         if (relativePath2fix.containsKey(topicfile)){
             fixpath= (String)relativePath2fix.get(topicfile);
         }
-        write(new File(tempDir,topicfile).getAbsolutePath());
+        write(new File(tempDir,topicfile.getPath()).getAbsoluteFile());
         fixpath= null;
     }
 
     @Override
     public void write(final String outputFilename) throws DITAOTException {
-        String filename = outputFilename;
+        throw new UnsupportedOperationException();
+    }
+    
+    public void write(final File outputFilename) throws DITAOTException {
+        String filename = outputFilename.getPath();
         String file = null;
-        currentFilePathName=new File(outputFilename).getAbsolutePath();
-        currentFilePath = new File(outputFilename).getParent();
+        currentFilePathName= outputFilename.getAbsoluteFile();
+        currentFilePath = outputFilename.getParentFile();
         File inputFile = null;
         File outputFile = null;
         FileOutputStream fileOutput = null;

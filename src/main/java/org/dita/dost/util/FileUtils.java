@@ -289,6 +289,17 @@ public final class FileUtils {
      * @param refPath reference path
      * @return relative path using {@link Constants#UNIX_SEPARATOR} path separator
      */
+    public static String getRelativePath(final File basePath, final String refPath) {
+        return getRelativePath(basePath.getPath(), refPath);
+    }
+    
+    /**
+     * Resolves a path reference against a base path.
+     * 
+     * @param basePath base path
+     * @param refPath reference path
+     * @return relative path using {@link Constants#UNIX_SEPARATOR} path separator
+     */
     public static String getRelativePath(final String basePath, final String refPath) {
         final StringBuffer upPathBuffer = new StringBuffer(INT_128);
         final StringBuffer downPathBuffer = new StringBuffer(INT_128);
@@ -376,6 +387,19 @@ public final class FileUtils {
      * @param relativePath relative path
      * @return resolved topic file
      */
+    public static String resolveTopic(final File rootPath, final String relativePath) {
+        return resolveTopic(rootPath.getPath(), relativePath);
+    }
+    
+    /**
+     * Normalize topic path base on current directory and href value, by
+     * replacing "\\" and "\" with {@link File#separator}, and removing ".", ".."
+     * from the file path, with no change to substring behind "#".
+     * 
+     * @param rootPath root path
+     * @param relativePath relative path
+     * @return resolved topic file
+     */
     public static String resolveTopic(final String rootPath, final String relativePath) {
         String begin = relativePath;
         String end = "";
@@ -388,6 +412,19 @@ public final class FileUtils {
         return normalizeDirectory(rootPath, begin) + end;
     }
 
+    /**
+     * Normalize topic path base on current directory and href value, by
+     * replacing "\\" and "\" with {@link File#separator}, and removing ".", "..", and "#"
+     * from the file path.
+     * 
+     * @param rootPath root path
+     * @param relativePath relative path
+     * @return resolved topic file
+     */
+    public static String resolveFile(final File rootPath, final String relativePath) {
+        return resolveFile(rootPath.getPath(), relativePath);
+    }
+    
     /**
      * Normalize topic path base on current directory and href value, by
      * replacing "\\" and "\" with {@link File#separator}, and removing ".", "..", and "#"

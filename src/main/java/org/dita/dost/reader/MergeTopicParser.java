@@ -38,7 +38,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  */
 public final class MergeTopicParser extends XMLFilterImpl {
         
-    private String dirPath = null;
+    private File dirPath = null;
     private String filePath = null;
     private boolean isFirstTopic = false;
     private String rootLang = null;
@@ -170,11 +170,11 @@ public final class MergeTopicParser extends XMLFilterImpl {
      * @param filename relative topic system path, may contain a fragment part
      * @param dir topic directory system path
      */
-    public void parse(final String filename,final String dir){
+    public void parse(final String filename,final File dir){
         filePath = FileUtils.stripFragment(filename);
         dirPath = dir;
         try{
-            final File f = new File(dir + File.separator + filePath);
+            final File f = new File(dir, filePath);
             reader.setErrorHandler(new DITAOTXMLErrorHandler(f.getAbsolutePath(), logger));
             reader.parse(f.toURI().toString());
         } catch (final Exception e){
@@ -259,7 +259,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
     private String handleLocalHref(final String attValue) {
         final File parentFile = new File(filePath).getParentFile();
         if (parentFile != null) {
-            final URI d = new File(dirPath).toURI();
+            final URI d = dirPath.toURI();
             final URI p = new File(dirPath, filePath).getParentFile().toURI();
             final String b = d.relativize(p).toASCIIString();
             final StringBuilder ret = new StringBuilder(b);
