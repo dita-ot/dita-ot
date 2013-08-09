@@ -10,8 +10,10 @@ package org.dita.dost.writer;
 
 import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -133,7 +135,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      * It is used to store the target of the keys
      * In the from the map <keys, target>.
      */
-    private Map<String, String> keyMap;
+    private Map<String, URI> keyMap;
 
     /**
      * It is used to indicate whether the keyref is valid.
@@ -172,7 +174,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         keyrefLevalStack = new Stack<Integer>();
         validKeyref = new Stack<Boolean>();
         empty = true;
-        keyMap = new HashMap<String, String>();
+        keyMap = new HashMap<String, URI>();
         elemName = new Stack<String>();
         hasSubElem = new Stack<Boolean>();
     }
@@ -204,7 +206,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      * Set key map.
      * @param map key map
      */
-    public void setKeyMap(final Map<String, String> map) {
+    public void setKeyMap(final Map<String, URI> map) {
         keyMap = map;
     }
     
@@ -412,9 +414,9 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                 final NamedNodeMap namedNodeMap = elem.getAttributes();
                 // first resolve the keyref attribute
                 if (currentElement != null && currentElement.refAttr != null) {
-                    final String target = keyMap.get(keyName);
-                    if (target != null && target.length() != 0) {
-                        String target_output = target;
+                    final URI target = keyMap.get(keyName);
+                    if (target != null && target.toString().length() != 0) {
+                        URI target_output = target;
                         // if the scope equals local, the target should be verified that
                         // it exists.
                         final String scopeValue=elem.getAttribute(ATTRIBUTE_NAME_SCOPE);
@@ -425,25 +427,24 @@ public final class KeyrefPaser extends AbstractXMLFilter {
 //                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
 //                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
 //                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
-                            target_output = FileUtils.getRelativePath(inputFile.getPath(), target_output);
-                            target_output = normalizeHrefValue(target_output, elementId);
-                            XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output);
+                            target_output = toURI(normalizeHrefValue(FileUtils.getRelativePath(inputFile.getPath(), target_output.toString()), elementId));
+                            XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output.toString());
                         } else if (("".equals(scopeValue) || ATTR_SCOPE_VALUE_LOCAL.equals(scopeValue)) &&
                                 ("".equals(formatValue) || ATTR_FORMAT_VALUE_DITA.equals(formatValue)  || ATTR_FORMAT_VALUE_DITAMAP.equals(formatValue))){
-                            final File topicFile = new File(FileUtils.resolveFile(tempDir.getAbsolutePath(), URLUtils.decode(target)));
+                            final File topicFile = new File(FileUtils.resolveFile(tempDir.getAbsolutePath(), URLUtils.decode(target.toString())));
                             if (topicFile.exists()) {  
                                 final String topicId = this.getFirstTopicId(topicFile);
-                                target_output = FileUtils.getRelativePath(new File(tempDir, inputFile.getPath()).getAbsolutePath(), new File(tempDir, target).getAbsolutePath());
+                                target_output = toURI(FileUtils.getRelativePath(new File(tempDir, inputFile.getPath()).getAbsolutePath(), new File(tempDir.toURI().resolve(target)).getAbsolutePath()));
                                 valid = true;
 //                                XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
 //                                XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
 //                                XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
 //                                XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
-                                target_output = normalizeHrefValue(target_output, elementId, topicId);
-                                XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output);
+                                target_output = toURI(normalizeHrefValue(target_output.toString(), elementId, topicId));
+                                XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output.toString());
                                 if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE))) {
                                     // FIXME: This should be a relative to base directory, not current file
-                                    normalProcessingRoleTargets.add(FileUtils.stripFragment(target_output));
+                                    normalProcessingRoleTargets.add(FileUtils.stripFragment(target_output.toString()));
                                 }
                             } else {
                                 // referenced file does not exist, emits a message.
@@ -462,11 +463,11 @@ public final class KeyrefPaser extends AbstractXMLFilter {
 //                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
 //                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
 //                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
-                            target_output = normalizeHrefValue(target_output, elementId);
-                            XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output);
+                            target_output = toURI(normalizeHrefValue(target_output.toString(), elementId));
+                            XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output.toString());
                         }
 
-                    } else if(target == null || target.length() == 0){
+                    } else if(target == null || target.toString().length() == 0){
                         // Key definition does not carry an href or href equals "".
                         valid = true;
                         XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);

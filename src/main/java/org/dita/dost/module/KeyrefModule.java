@@ -13,6 +13,7 @@ import static org.dita.dost.util.Job.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -77,15 +78,15 @@ final class KeyrefModule implements AbstractPipelineModule {
         }
 
         // maps of keyname and target
-        final Map<String, String> keymap =new HashMap<String, String>();
+        final Map<String, URI> keymap =new HashMap<String, URI>();
         // store the key name defined in a map(keyed by ditamap file)
-        final Hashtable<String, Set<String>> maps = new Hashtable<String, Set<String>>();
+        final Hashtable<URI, Set<String>> maps = new Hashtable<URI, Set<String>>();
         final Collection<KeyDef> keydefs = KeyDef.readKeydef(new File(tempDir, KEYDEF_LIST_FILE));
 
         for (final KeyDef keyDef: keydefs) {
             keymap.put(keyDef.keys, keyDef.href);
             // map file which define the keys
-            final String map = keyDef.source;
+            final URI map = keyDef.source;
             // put the keyname into corresponding map which defines it.
             //a map file can define many keys
             if(maps.containsKey(map)){
@@ -99,8 +100,8 @@ final class KeyrefModule implements AbstractPipelineModule {
         final KeyrefReader reader = new KeyrefReader();
         reader.setLogger(logger);
         reader.setTempDir(tempDir.getAbsolutePath());
-        for(final String mapFile: maps.keySet()){
-            logger.logInfo("Reading " + new File(tempDir, mapFile).getAbsolutePath());
+        for(final URI mapFile: maps.keySet()){
+            logger.logInfo("Reading " + tempDir.toURI().resolve(mapFile).toString());
             reader.setKeys(maps.get(mapFile));
             reader.read(mapFile);
         }

@@ -5,8 +5,10 @@
 package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
+import java.net.URI;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -60,15 +62,12 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
             final int keyIndex = conkeyref.indexOf(SLASH);
             final String key = keyIndex != -1 ? conkeyref.substring(0, keyIndex) : conkeyref;
             if (keys.containsKey(key)) {
-                String target = getRelativePath(keys.get(key).href);
+                URI target = getRelativePath(keys.get(key).href);
                 if (keyIndex != -1) {
-                    if (target.indexOf(SHARP) != -1) {
-                        target = target.substring(0, target.indexOf(SHARP));
-                    }
-                    target = target + SHARP + conkeyref.substring(keyIndex + 1);
+                    target = replaceFragment(target, conkeyref.substring(keyIndex + 1));
                 }
                 resAtts = new AttributesImpl(atts);
-                XMLUtils.addOrSetAttribute(resAtts, ATTRIBUTE_NAME_CONREF, target);
+                XMLUtils.addOrSetAttribute(resAtts, ATTRIBUTE_NAME_CONREF, target.toString());
                 XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_CONKEYREF);
             } else {
                 logger.logError(MessageUtils.getInstance().getMessage("DOTJ046E", conkeyref).toString());
@@ -83,10 +82,10 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
      * @param href href URI
      * @return updated href URI
      */
-    private String getRelativePath(final String href) {
+    private URI getRelativePath(final URI href) {
         final String filePath = new File(tempDir, inputFile.getPath()).getAbsolutePath();
-        final String keyValue = new File(tempDir, href).getAbsolutePath();
-        return FileUtils.getRelativePath(filePath, keyValue);
+        final String keyValue = new File(tempDir.toURI().resolve(stripFragment(href))).getAbsolutePath();
+        return toURI(FileUtils.getRelativePath(filePath, keyValue));
     }
 
 }

@@ -613,7 +613,7 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
             if (!keysDefMap.containsKey(key)) {
 //                updateUplevels(key);
                 // add the ditamap where it is defined.
-                keysDefMap.put(key, new KeyDef(key, value.href, value.scope, currentFile.getPath()));                
+                keysDefMap.put(key, new KeyDef(key, value.href, value.scope, currentFile));                
             }
         }
 
@@ -1099,18 +1099,18 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
         final Collection<KeyDef> updated = new ArrayList<KeyDef>(keydefs.size());
         for (final KeyDef file: keydefs.values()) {
             final String keys = file.keys;
-            String href = file.href;
-            String source = file.source;
+            URI href = file.href;
+            URI source = file.source;
             if (prefix.length() != 0) {
                 // cases where keymap is in map ancestor folder
                 if (href == null) {
                     //href = FileUtils.separatorsToUnix(FileUtils.normalize(prefix));
-                    source = FileUtils.separatorsToUnix(FileUtils.normalize(prefix + source));
+                    source = toURI(FileUtils.normalize(prefix + source.toString()));
                 } else {
                     if (ATTR_SCOPE_VALUE_LOCAL.equals(file.scope)) {
-                        href = FileUtils.separatorsToUnix(FileUtils.normalize(prefix + href));
+                        href = toURI(FileUtils.normalize(prefix + href.toString()));
                     }
-                    source = FileUtils.separatorsToUnix(FileUtils.normalize(prefix + source));
+                    source = toURI(FileUtils.normalize(prefix + source));
                 }
             }
             final KeyDef keyDef = new KeyDef(keys, href, file.scope, source);

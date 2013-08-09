@@ -463,11 +463,18 @@ public final class URLUtils {
         if (file.isAbsolute()) {
             return file.toURI();
         } else {
-            try {
-                return new URI(clean(file.getPath().replace(WINDOWS_SEPARATOR, URI_SEPARATOR), false));
-            } catch (final URISyntaxException e) {
-                throw new IllegalArgumentException(e.getMessage(), e);
-            }
+            return toURI(file.getPath());
+        }
+    }
+    
+    /**
+     * Covert file reference to URI. Fixes directory separators and escapes characters.
+     */
+    public static URI toURI(final String file) {
+        try {
+            return new URI(clean(file.replace(WINDOWS_SEPARATOR, URI_SEPARATOR), false));
+        } catch (final URISyntaxException e) {
+            throw new IllegalArgumentException(e.getMessage(), e);
         }
     }
  
@@ -486,6 +493,29 @@ public final class URLUtils {
             return false;
         } else {
             return c.startsWith(d);
+        }
+    }
+ 
+    /**
+     * Strip fragment part from path.
+     * 
+     * @param path path
+     * @return path without path
+     */
+    public static URI stripFragment(final URI path) {
+        final int i = path.toString().indexOf(SHARP);
+        if (i != -1) {
+           return toURI(path.toString().substring(0, i));
+        } else {
+           return path;
+        }
+    }
+    
+    public static URI replaceFragment(final URI path, final String fragment) {
+        try {
+            return new URI(path.getScheme(), path.getUserInfo(), path.getHost(), path.getPort(), path.getPath(), path.getQuery(), fragment);
+        } catch (final URISyntaxException e) {
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
     

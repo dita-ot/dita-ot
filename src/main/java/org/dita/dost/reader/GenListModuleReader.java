@@ -17,6 +17,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -1219,7 +1220,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
                     } else {
                         // target is null or empty, it is useful in the future
                         // when consider the content of key definition
-                        keysDefMap.put(key, new KeyDef(key, null, null, null));
+                        keysDefMap.put(key, new KeyDef(key, (URI) null, (String) null, (URI) null));
                     }
                 } else {
                     logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ045I", key, target).toString());
