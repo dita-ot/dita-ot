@@ -5,6 +5,8 @@
   <titlealts>
     <navtitle>Other</navtitle>
   </titlealts>
+  <shortdesc>These Ant parameters enable you to reload style sheets that the DITA-OT uses for
+    specific pre-processing stages.</shortdesc>
   <refbody>
     <section>
       <draft-comment author="Kristen James Eberlein" time="11 August 2012">I've made no attempt to
@@ -13,11 +15,11 @@
             parameters? (Other than if they need to reduce Java memory consumption.) The use cases
             are not clear from the current description.</li>
         </ul></draft-comment>
-      <table>
+      <table colsep="1" rowsep="1">
         <title>Ant parameters: Other</title>
         <tgroup cols="2">
-          <colspec colwidth="1.5*"/>
-          <colspec colwidth="4.0*"/>
+          <colspec colwidth="2.0*"/>
+          <colspec colwidth="2.0*"/>
           <thead>
             <row>
               <entry>Parameter</entry>
