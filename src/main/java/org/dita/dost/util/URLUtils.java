@@ -463,18 +463,32 @@ public final class URLUtils {
         if (file.isAbsolute()) {
             return file.toURI();
         } else {
-            return toURI(file.getPath());
+            try {
+                return new URI(clean(file.getPath().replace(WINDOWS_SEPARATOR, URI_SEPARATOR), false));
+            } catch (final URISyntaxException e) {
+                throw new IllegalArgumentException(e.getMessage(), e);
+            }
         }
     }
     
     /**
      * Covert file reference to URI. Fixes directory separators and escapes characters.
+     * 
+     * @param file The string to be parsed into a URI, may be {@code null}
+     * @return URI from parsing the given string, {@code null} if input was {@code null}
      */
     public static URI toURI(final String file) {
+        if (file == null) {
+            return null;
+        }
         try {
-            return new URI(clean(file.replace(WINDOWS_SEPARATOR, URI_SEPARATOR), false));
+            return new URI(file);
         } catch (final URISyntaxException e) {
-            throw new IllegalArgumentException(e.getMessage(), e);
+            try {
+                return new URI(clean(file.replace(WINDOWS_SEPARATOR, URI_SEPARATOR), false));
+            } catch (final URISyntaxException ex) {
+                throw new IllegalArgumentException(ex.getMessage(), ex);
+            }
         }
     }
  
@@ -511,12 +525,12 @@ public final class URLUtils {
         }
     }
     
-    public static URI replaceFragment(final URI path, final String fragment) {
+    public static URI setFragment(final URI path, final String fragment) {
         try {
             return new URI(path.getScheme(), path.getUserInfo(), path.getHost(), path.getPort(), path.getPath(), path.getQuery(), fragment);
         } catch (final URISyntaxException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
     }
-    
+
 }

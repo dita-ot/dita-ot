@@ -64,7 +64,7 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
             if (keys.containsKey(key)) {
                 URI target = getRelativePath(keys.get(key).href);
                 if (keyIndex != -1) {
-                    target = replaceFragment(target, conkeyref.substring(keyIndex + 1));
+                    target = setFragment(target, conkeyref.substring(keyIndex + 1));
                 }
                 resAtts = new AttributesImpl(atts);
                 XMLUtils.addOrSetAttribute(resAtts, ATTRIBUTE_NAME_CONREF, target.toString());
