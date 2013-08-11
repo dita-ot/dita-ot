@@ -10,6 +10,7 @@ package org.dita.dost.reader;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Configuration.*;
+import static org.dita.dost.util.FileUtils.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -1119,10 +1120,9 @@ public final class GenListModuleReader extends AbstractXMLReader {
      * @param fileName
      */
     private void addReferredBranches(final String hrefValue, final String fileName) {
-        String branchId = null;
+        final String branchId = getFragment(hrefValue);
         // href value has branch id.
-        if (hrefValue.contains(SHARP)) {
-            branchId = hrefValue.substring(hrefValue.lastIndexOf(SHARP) + 1);
+        if (branchId != null) {
             // The map contains the file name
             if (vaildBranches.containsKey(fileName)) {
                 final List<String> branchIdList = vaildBranches.get(fileName);
@@ -1204,9 +1204,9 @@ public final class GenListModuleReader extends AbstractXMLReader {
                             keysDefMap.put(key, new KeyDef(key, target, attrScope, null));
                         } else {
                             String tail = "";
-                            if (target.indexOf(SHARP) != -1) {
-                                tail = target.substring(target.indexOf(SHARP));
-                                target = target.substring(0, target.indexOf(SHARP));
+                            if (getFragment(target) != null) {
+                                tail = SHARP + getFragment(target);
+                                target = stripFragment(target);
                             }
                             if (new File(target).isAbsolute()) {
                                 target = FileUtils.getRelativePath(rootFilePath.getAbsolutePath(), target);

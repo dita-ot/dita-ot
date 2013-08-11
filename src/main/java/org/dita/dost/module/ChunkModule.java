@@ -9,6 +9,7 @@
 package org.dita.dost.module;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.FileUtils.*;
 import static org.dita.dost.util.Job.*;
 
 import java.io.File;
@@ -168,7 +169,7 @@ final class ChunkModule implements AbstractPipelineModule {
         final Set<String> hrefTopics = job.getSet(HREF_TOPIC_LIST);
         final Set<String> chunkTopics = job.getSet(CHUNK_TOPIC_LIST);
         for (final String s : chunkTopics) {
-            if (!StringUtils.isEmptyString(s) && !s.contains(SHARP)) {
+            if (!StringUtils.isEmptyString(s) && getFragment(s) == null) {
                 // This entry does not have an anchor, we assume that this topic will
                 // be fully chunked. Thus it should not produce any output.
                 final Iterator<String> hrefit = hrefTopics.iterator();
