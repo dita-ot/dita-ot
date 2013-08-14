@@ -75,18 +75,12 @@
 
   <xsl:template name="getType">
     <xsl:param name="file"/>
-    <xsl:variable name="f">
-      <xsl:call-template name="convert-to-lower">
-        <xsl:with-param name="inputval" select="$file"/>
-      </xsl:call-template>
-    </xsl:variable>
+    <xsl:variable name="f" select="lower-case($file)"/>
     <xsl:choose>
-      <xsl:when test="substring($f, string-length($f) - 3) = '.jpg' or
-                      substring($f, string-length($f) - 4) = '.jpg'">
+      <xsl:when test="ends-with($f, '.jpg') or ends-with($f, '.jpeg')">
         <xsl:text>jpegblip</xsl:text>
       </xsl:when>
-      <xsl:when test="substring($f, string-length($f) - 3) = '.gif' or
-                      substring($f, string-length($f) - 3) = '.png'">
+      <xsl:when test="ends-with($f, '.git') or ends-with($f, '.png')">
         <xsl:text>pngblip</xsl:text>
       </xsl:when>
       <xsl:otherwise>

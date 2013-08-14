@@ -61,18 +61,16 @@
      considered valid for inclusion in the project, so only those will be evaluated to
      find the default topic.
      ********************************************************************************* -->
-<xsl:variable name="lang-translate-uppercase">ABCDEFGHIJKLMNOPQRSTUVWXYZ_</xsl:variable>
-<xsl:variable name="lang-translate-lowercase">abcdefghijklmnopqrstuvwxyz-</xsl:variable>
 <!-- Language is that of map, else first topic with non-empty topicref, else English. --> 
 
 <xsl:template name="setup-options">
 <xsl:param name="target-language">
   <xsl:choose>
     <xsl:when test="/*[contains(@class, ' map/map ')]/@xml:lang">
-      <xsl:value-of select="translate(/*[contains(@class, ' map/map ')]/@xml:lang,$lang-translate-uppercase,$lang-translate-lowercase)"/>
+      <xsl:value-of select="lower-case(/*[contains(@class, ' map/map ')]/@xml:lang)"/>
     </xsl:when>
     <xsl:when test="document((//*[contains(@class, ' map/topicref ')][@href and @href != '' and not(contains(@href,'://'))][not(@format) or @format='dita' or @format='DITA'][not(@scope) or @scope='local'])[1]/@href, /)//*[contains(@class, ' topic/topic ')][1]/@xml:lang">
-      <xsl:value-of select="translate(document((//*[contains(@class, ' map/topicref ')][@href and @href != ''and not(contains(@href,'://'))][not(@format) or @format='dita' or @format='DITA'][not(@scope) or @scope='local'])[1]/@href, /)//*[contains(@class, ' topic/topic ')][1]/@xml:lang,$lang-translate-uppercase,$lang-translate-lowercase)"/>
+      <xsl:value-of select="lower-case(document((//*[contains(@class, ' map/topicref ')][@href and @href != ''and not(contains(@href,'://'))][not(@format) or @format='dita' or @format='DITA'][not(@scope) or @scope='local'])[1]/@href, /)//*[contains(@class, ' topic/topic ')][1]/@xml:lang)"/>
     </xsl:when>
     <xsl:otherwise>en-us</xsl:otherwise>
   </xsl:choose>

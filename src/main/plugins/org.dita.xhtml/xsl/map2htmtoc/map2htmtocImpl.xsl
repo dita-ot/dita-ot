@@ -400,8 +400,8 @@
 <xsl:template name="url-string">
   <xsl:param name="urltext"/>
   <xsl:choose>
-    <xsl:when test="contains($urltext,'http://')">url</xsl:when>
-    <xsl:when test="contains($urltext,'https://')">url</xsl:when>
+    <xsl:when test="starts-with($urltext,'http://')">url</xsl:when>
+    <xsl:when test="starts-with($urltext,'https://')">url</xsl:when>
     <xsl:otherwise/>
   </xsl:choose>
 </xsl:template>
@@ -497,14 +497,6 @@
 <!-- Deprecated: use "toc" mode instead -->
 <xsl:template match="*">
   <xsl:apply-templates/>
-</xsl:template>
-
-<!-- Convert the input value to lowercase & return it -->
-<xsl:template name="convert-to-lower">
- <xsl:param name="inputval"/>
- <xsl:value-of select="translate($inputval,
-                                  '-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
-                                  '-abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz')"/>
 </xsl:template>
 
 <!-- Template to get the relative path to a map -->

@@ -392,11 +392,7 @@
 
 <xsl:template name="getTmValue">
   <!-- Determine the tmclass value; IBM legal only wants some classes processed -->
-  <xsl:variable name="Ltmclass">
-    <xsl:call-template name="convert-to-lower"> <!-- ensure lowercase for comparisons -->
-      <xsl:with-param name="inputval" select="@tmclass"/>
-    </xsl:call-template>
-  </xsl:variable>
+  <xsl:variable name="Ltmclass" select="lower-case(@tmclass)"/>
   <!-- If this is a good class, continue... -->
   <xsl:if test="$Ltmclass='ibm' or $Ltmclass='ibmsub' or $Ltmclass='special'">
     <!-- Test for TM area's language -->

@@ -577,7 +577,7 @@
     <xsl:call-template name="getString">
       <!-- For the parameter, turn "note" into "Note", caution => Caution, etc -->
       <xsl:with-param name="stringName"
-           select="concat(translate(substring($type, 1, 1),'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ'),
+           select="concat(upper-case(substring($type, 1, 1)),
                           substring($type, 2))"/>
       </xsl:call-template>
   </xsl:param>
@@ -1619,19 +1619,7 @@
 </xsl:template>
 
 <xsl:template name="topic-image">
-  <xsl:variable name="ends-with-svg">
-    <xsl:call-template name="ends-with">
-      <xsl:with-param name="text" select="@href"/>
-      <xsl:with-param name="with" select="'.svg'"/>
-    </xsl:call-template>
-  </xsl:variable>
-  <xsl:variable name="ends-with-svgz">
-    <xsl:call-template name="ends-with">
-      <xsl:with-param name="text" select="@href"/>
-      <xsl:with-param name="with" select="'.svgz'"/>
-    </xsl:call-template>
-  </xsl:variable>
-  <xsl:variable name="isSVG" select="$ends-with-svg = 'true' or $ends-with-svgz = 'true'"/>
+  <xsl:variable name="isSVG" select="ends-with(@href, '.svg') or ends-with(@href, '.svgz')"/>
   <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <xsl:choose>
       <xsl:when test="$isSVG">
