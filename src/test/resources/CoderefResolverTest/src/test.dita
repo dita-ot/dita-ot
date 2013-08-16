@@ -8,5 +8,9 @@
     <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><coderef class="+ topic/xref pr-d/coderef " href="plain.txt#line-range(1, 5)"/></codeblock>
     <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><coderef class="+ topic/xref pr-d/coderef " href="plain.txt#line-range(3)"/></codeblock>
     <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><coderef class="+ topic/xref pr-d/coderef " href="plain.txt#line-range(2, 3)"/></codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><coderef class="+ topic/xref pr-d/coderef " href="plain.txt#line=0,5"/></codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><coderef class="+ topic/xref pr-d/coderef " href="plain.txt#line=2,"/></codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><coderef class="+ topic/xref pr-d/coderef " href="plain.txt#line=1,3"/></codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><coderef class="+ topic/xref pr-d/coderef " href="plain.txt#line=1"/></codeblock>
   </body>
 </topic>

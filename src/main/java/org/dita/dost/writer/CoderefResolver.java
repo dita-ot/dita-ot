@@ -150,7 +150,7 @@ public final class CoderefResolver extends AbstractXMLFilter {
     private void copyLines(final BufferedReader codeReader, final Range range) throws IOException, SAXException {
         boolean first = true;
         String line = codeReader.readLine();
-        for (int i = 1; line != null; i++) {
+        for (int i = 0; line != null; i++) {
             if (i >= range.start && i <= range.end) {
                 if (first) {
                     first = false;
@@ -171,18 +171,37 @@ public final class CoderefResolver extends AbstractXMLFilter {
         final int start;
         final int end;
         Range(final String uri) {
-            final Pattern p = Pattern.compile(".+#line-range\\((\\d+)(?:,\\s*(\\d+))?\\)");
-            final Matcher m = p.matcher(uri);
+            // RFC 5147
+            final Matcher m = Pattern.compile(".+#line=(?:(\\d+)|(\\d+)?,(\\d+)?)$").matcher(uri);
             if (m.matches()) {
-                this.start = Integer.parseInt(m.group(1));
-                if (m.group(2) != null) {
-                    this.end = Integer.parseInt(m.group(2));
+                if (m.group(1) != null) {
+                    this.start = Integer.parseInt(m.group(1));
+                    this.end = this.start;
                 } else {
-                    this.end = Integer.MAX_VALUE;
+                    if (m.group(2) != null) {
+                        this.start = Integer.parseInt(m.group(2));
+                    } else {
+                        this.start = 0;
+                    }
+                    if (m.group(3) != null) {
+                        this.end = Integer.parseInt(m.group(3)) - 1;
+                    } else {
+                        this.end = Integer.MAX_VALUE;
+                    }
                 }
             } else {
-                this.start = 0;
-                this.end = Integer.MAX_VALUE;
+                final Matcher mc = Pattern.compile(".+#line-range\\((\\d+)(?:,\\s*(\\d+))?\\)$").matcher(uri);
+                if (mc.matches()) {
+                    this.start = Integer.parseInt(mc.group(1)) - 1;
+                    if (mc.group(2) != null) {
+                        this.end = Integer.parseInt(mc.group(2)) - 1;
+                    } else {
+                        this.end = Integer.MAX_VALUE;
+                    }
+                } else {
+                    this.start = 0;
+                    this.end = Integer.MAX_VALUE;
+                }
             }
         }
     }
