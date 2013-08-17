@@ -159,6 +159,10 @@
           <li>#1535 Specialized class cannot be handled during XML parsing (maintenance 1)</li>
           <li>#1537 Whitespace issue when @conref is preceded by a linefeed in map &lt;title> (maintenance 1)</li>
           <li>#1538 Incorrect handling of topics outside of map path (maintenance 1)</li>
+          <li>#1531 CSS link generated with backslash on Windows (maintenance 2)</li>
+          <li>#1532 Keyref link generated with backslash and %5C on Windows (maintenance 2)</li>
+          <li>#1540 Add missing @class attribute to &lt;navref> in chunking phase (maintenance 2)</li>
+          <li>#1547 startPageNumbering missing from some page sequence (maintenance 2)</li>
         </ul>
       </section>
     </refbody>
