@@ -1211,7 +1211,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
                             if (new File(target).isAbsolute()) {
                                 target = FileUtils.getRelativePath(rootFilePath.getAbsolutePath(), target);
                             }
-                            target = FileUtils.normalizeDirectory(currentDir, target);
+                            target = FileUtils.separatorsToUnix(FileUtils.normalizeDirectory(currentDir, target));
                             keysDefMap.put(key, new KeyDef(key, target + tail, ATTR_SCOPE_VALUE_LOCAL, null));
                         }
                     } else if (!StringUtils.isEmptyString(keyRef)) {

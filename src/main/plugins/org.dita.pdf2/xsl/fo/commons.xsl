@@ -158,6 +158,7 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:choose>
                     <xsl:when test="not(ancestor::*[contains(@class,' topic/topic ')])">
                         <fo:page-sequence master-reference="{$page-sequence-reference}" xsl:use-attribute-sets="__force__page__count">
+                            <xsl:call-template name="startPageNumbering"/>
                             <xsl:call-template name="insertBodyStaticContents"/>
                             <fo:flow flow-name="xsl-region-body">
                                 <xsl:choose>
@@ -243,6 +244,7 @@ See the accompanying license.txt file for applicable licenses.
     <!--  Bookmap Appendix processing  -->
     <xsl:template name="processTopicAppendix">
         <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="__force__page__count">
+            <xsl:call-template name="startPageNumbering"/>
             <xsl:call-template name="insertBodyStaticContents"/>
             <fo:flow flow-name="xsl-region-body">
                 <fo:block xsl:use-attribute-sets="topic">
@@ -429,6 +431,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template name="processTopicNotices">
         <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="__force__page__count">
+            <xsl:call-template name="startPageNumbering"/>
             <xsl:call-template name="insertBodyStaticContents"/>
             <fo:flow flow-name="xsl-region-body">
                 <fo:block xsl:use-attribute-sets="topic">
@@ -2234,6 +2237,7 @@ See the accompanying license.txt file for applicable licenses.
                         </xsl:variable>
 
                         <fo:page-sequence master-reference="{$page-sequence-reference}" xsl:use-attribute-sets="__force__page__count">
+                            <xsl:call-template name="startPageNumbering"/>
                             <xsl:call-template name="insertBodyStaticContents"/>
                             <fo:flow flow-name="xsl-region-body">
                                 <xsl:apply-templates select="." mode="processTopic"/>

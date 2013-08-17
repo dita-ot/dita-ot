@@ -892,7 +892,7 @@ public final class DitaWriter extends AbstractXMLFilter {
             getContentHandler().ignorableWhitespace(new char[] { '\n' }, 0, 1);
             if(path2Project != null){
                 getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET, path2Project);
-                getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET_URI, URLUtils.correct(path2Project, true));
+                getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET_URI, URLUtils.correct(FileUtils.separatorsToUnix(path2Project), true));
             }else{
                 getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET, "");
                 getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET_URI, "." + UNIX_SEPARATOR);
