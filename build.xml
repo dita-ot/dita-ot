@@ -132,7 +132,7 @@
     <include name="plugins/org.dita.*/**"/>
     <include name="*.*"/>
     <include name="css/**"/>
-    <include name="demo/**"/>
+    <exclude name="demo/**"/>
     <include name="dtd/**"/>
     <include name="resource/**"/>
     <include name="schema/**"/>
@@ -194,7 +194,7 @@
     <include name="plugins/org.dita.pdf2/**"/>
     <include name="plugins/com.sophos.tocjs/**"/>
     <include name="docsrc/**"/>
-    <include name="demo/**"/>
+    <exclude name="demo/**"/>
     <include name="dtd/**"/>
     <include name="plugins/**"/>
     <include name="resource/**"/>
@@ -229,7 +229,7 @@
     <include name="plugins/org.dita.pdf2/**"/>
     <include name="plugins/com.sophos.tocjs/**"/>
     <include name="docsrc/**"/>
-    <include name="demo/**"/>
+    <exclude name="demo/**"/>
     <include name="dtd/**"/>
     <include name="plugins/**"/>
     <include name="resource/**"/>
@@ -445,17 +445,12 @@
     </tar>
   </target>
   
-  <target name="build-package-binary-client" depends="jar, jar.plug-ins, update-doc">
+  <target name="build-package-binary" depends="jar, jar.plug-ins, update-doc">
     <mkdir dir="${out.dir}"/>
     <sequential>
       <antcall target="package-binary-client">
         <param name="param.out.file" value="${binary-client}"/>
       </antcall>
-    </sequential>
-  </target>
-
-  <target name="build-package-binary" depends="jar, jar.plug-ins, update-doc">
-    <sequential>
       <antcall target="package-binary-full">
         <param name="param.out.file" value="${binary-big}"/>
       </antcall>
@@ -544,7 +539,7 @@
     <move file="${doc.out.dir}/html/userguide.html" tofile="${doc.out.dir}/html/index.html"/>
     -->
     <ant antfile="${src.dir}/build.xml">
-      <property name="args.input" location="${doc.dir}/readme/changes/rel1.8.xml"/>
+      <property name="args.input" location="${doc.dir}/readme/changes/rel2.0.xml"/>
       <property name="output.dir" location="${work.dir}/relnotes"/>
       <property name="args.csspath" value="resource"/>
       <property name="transtype" value="xhtml"/>

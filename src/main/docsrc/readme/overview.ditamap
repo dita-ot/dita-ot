@@ -3,7 +3,7 @@
 <map>
  <title>Overview of the DITA-OT</title>
  <topicref href="overview-of-dita-ot.dita" navtitle="Overview of the DITA Open Toolkit">
-  <topicref href="changes/rel1.8.xml" locktitle="yes">
+  <topicref href="changes/rel2.0.xml" locktitle="yes">
    <topicmeta>
     <navtitle>Release notes</navtitle>
    </topicmeta>
