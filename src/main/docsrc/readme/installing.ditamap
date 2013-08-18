@@ -5,6 +5,7 @@
  <topicref href="DITA-installation.xml">
   <topicref href="distribution_packages.dita"/>
   <topicref href="prerequisite-software.dita" navtitle="Prerequisite software"/>
+  <topicref href="installing-client.dita"/>
   <topicref href="installing-full-easy.dita" navtitle="Installing the full-easy package"/>
   <topicref href="installing-minimal-package-on-linux.dita"
    navtitle="Installing minimal package on Linux"/>
