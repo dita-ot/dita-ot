@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <stub>
   <keydef keys="target_topic_2" href="topics/target-topic-c.xml" source="maps/root-map-01.ditamap"/>
-  <keydef keys="target_topic_1" href="topics/target-topic a.xml" source="maps/root-map-01.ditamap"/>
+  <keydef keys="target_topic_1" href="topics/target-topic%20a.xml" source="maps/root-map-01.ditamap"/>
   <keydef keys="target_topic_3" href="topics/target-topic-c.xml" source="maps/root-map-01.ditamap"/>
   <keydef keys="target_topic_4" href="http://www.example.com/?foo=bar&amp;baz=qux" source="maps/root-map-01.ditamap"/>
 </stub>

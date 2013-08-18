@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="usingparameterbuildingtool" xml:lang="en-us">
+<title>Publishing DITA content with <cmdname>dita</cmdname> command</title>
+<shortdesc>DITA-OT includes a <cmdname>dita</cmdname> command-line tool. You can invoke the DITA-OT
+    from the command-line tool and generate output.</shortdesc>
+</task>

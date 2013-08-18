@@ -11,8 +11,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -114,6 +116,24 @@ public final class Configuration {
     
     /** Private constructor to disallow instance creation. */
     private Configuration() {
+    }
+    
+    /** List of print-oriented transtypes. */
+    public static final List<String> printTranstype;
+    static {
+        final List<String> types = new ArrayList<String>();
+        final String printTranstypes = Configuration.configuration.get(CONF_PRINT_TRANSTYPES);
+        if (printTranstypes != null) {
+            if (printTranstypes.trim().length() > 0) {
+                for (final String transtype: printTranstypes.split(CONF_LIST_SEPARATOR)) {
+                    types.add(transtype.trim());
+                }
+            }
+        } else {
+            new DITAOTJavaLogger().logError("Failed to read print transtypes from configuration, using defaults.");
+            types.add(TRANS_TYPE_PDF);
+        }
+        printTranstype = Collections.unmodifiableList(types);
     }
 
 }

@@ -3,7 +3,7 @@
  Sourceforge.net. See the accompanying license.txt file for 
  applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2007 All Rights Reserved. -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
 <!-- ========== Flagging with flags & revisions ========== -->
 
 <!-- Flags - based on audience, product, platform, and otherprops in the source

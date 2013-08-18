@@ -32,7 +32,7 @@
 	xmlns:exslf="http://exslt.org/functions"
 	xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
 	exclude-result-prefixes="opentopic-mapmerge opentopic-func exslf exsl dita-ot"
-	version="1.1">
+	version="2.0">
 	
   <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
 	<xsl:variable name="msgprefix">DOTX</xsl:variable>

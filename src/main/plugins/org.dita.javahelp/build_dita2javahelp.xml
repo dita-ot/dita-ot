@@ -5,10 +5,15 @@
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <project name="dita2javahelp">
 
+  <target name="dita2javahelp.init">
+    <property name="html-version" value="html"/>
+  </target>
+    
+
     <target name="dita2javahelp"
             unless="noMap"
-        depends="build-init, preprocess, copy-css, 
-                     dita.topics.html, dita.inner.topics.html, dita.outer.topics.html">
+        depends="dita2javahelp.init, build-init, preprocess, copy-css, 
+                     xhtml.topics">
           <antcall target="dita.map.javahelp"></antcall>
           <antcall target="compile.Java.Help"></antcall>
     </target>
@@ -207,8 +212,5 @@
             <arg value="." />
         </java>
     </target>
-
-    <!-- depecrated: keep for back-compatibility, will be remvoed in a later release -->
-    <target name="dita.topics.javahelp" depends="dita.topics.html" />
 
 </project>

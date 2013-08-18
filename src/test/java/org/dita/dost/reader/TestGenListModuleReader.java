@@ -12,6 +12,7 @@ package org.dita.dost.reader;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
 import java.util.Map;
@@ -91,8 +92,8 @@ public class TestGenListModuleReader {
 
         assertEquals(0, copytoSet.size());
 
-        assertEquals(".." + File.separator + "topics" + File.separator + "target-topic-c.xml",keyDMap.get("target_topic_2").href);
-        assertEquals(".." + File.separator + "topics" + File.separator + "target-topic-a.xml",keyDMap.get("target_topic_1").href);
+        assertEquals(toURI(".." + File.separator + "topics" + File.separator + "target-topic-c.xml") ,keyDMap.get("target_topic_2").href);
+        assertEquals(toURI(".." + File.separator + "topics" + File.separator + "target-topic-a.xml") ,keyDMap.get("target_topic_1").href);
 
         assertTrue(nonConref.contains(".." + File.separator + "topics" + File.separator + "xreffin-topic-1.xml"));
         assertTrue(nonConref.contains(".." + File.separator + "topics" + File.separator + "target-topic-c.xml"));

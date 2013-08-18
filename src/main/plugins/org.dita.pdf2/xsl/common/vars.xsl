@@ -50,9 +50,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:when test="ancestor-or-self::*/@xml:lang">
           <xsl:variable name="tempLang" select="ancestor-or-self::*[@xml:lang][1]/@xml:lang"/>
           <xsl:value-of select="concat(substring($tempLang,1,2),
-                                       translate(substring($tempLang,3),
-                                                 'abcdefghijklmnopqrstuvwxyz',
-                                                 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'))"/>
+                                       upper-case(substring($tempLang,3)))"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="translate($locale, '_', '-')"/>

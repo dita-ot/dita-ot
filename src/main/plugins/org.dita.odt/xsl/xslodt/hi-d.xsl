@@ -28,7 +28,7 @@
      xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0"
      xmlns:prodtools="http://www.ibm.com/xmlns/prodtools"
      xmlns:styleUtils="org.dita.dost.util.StyleUtils" exclude-result-prefixes="styleUtils"
-     version="1.0">
+     version="2.0">
 
 <xsl:output method="xml"/>
 <xsl:output indent="yes"/>

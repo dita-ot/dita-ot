@@ -16,12 +16,15 @@
    <topicref href="dita2troff.dita"/>
    <topicref href="dita2xhtml.dita"/>
   </topicref>
+   <topicref href="dita-command.dita">
+     <topicref href="using-dita-command.dita"/>
+   </topicref>
   <topicref href="DITA-ant.xml" navtitle="Running DITA-OT from Ant">
    <topicref href="ant.dita" navtitle="Ant overview"/>
    <topicref href="DITA-antuse.xml" navtitle="Building output using Ant"/>
    <topicref href="creating-an-ant-build-script.dita" navtitle="Creating an Ant build script"/>
   </topicref>
-  <topicref href="DITA-javacmd.xml" navtitle="Running DITA-OT from the command-line tool">
+  <topicref href="DITA-javacmd.xml" navtitle="Running DITA-OT from the command-line tool" importance="deprecated">
    <topicref href="command-line-tool.dita" navtitle="Command-line tool"/>
    <topicref href="building-output-using-cl-tool.dita"
     navtitle="Building output using the command-line tool"/>

@@ -12,6 +12,7 @@ import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.writer.DitaWriter.*;
 import static org.dita.dost.reader.ChunkMapReader.*;
 import static org.dita.dost.module.GenMapAndTopicListModule.*;
+import static org.dita.dost.util.FileUtils.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -629,8 +630,8 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 
 
         if (copytoValue.length() != 0 && !chunkValue.contains(ATTR_CHUNK_VALUE_TO_CONTENT)){
-            if (hrefValue.indexOf(SHARP)!=-1){
-                parseFilePath = copytoValue + hrefValue.substring(hrefValue.indexOf(SHARP));
+            if (getFragment(hrefValue) != null){
+                parseFilePath = copytoValue + SHARP + getFragment(hrefValue);
             }else{
                 parseFilePath = copytoValue;
             }
@@ -642,9 +643,9 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
         // Because @copy-to should be included in fulltopiclist, and the source of coyy-to should be excluded in fulltopiclist.
         if(copytoValue.length() != 0 && chunkValue.contains(ATTR_CHUNK_VALUE_TO_CONTENT)){
             copyto.add(copytoValue);
-            if(hrefValue.indexOf(SHARP) != -1){
-                copytoSource.add(hrefValue.substring(0, hrefValue.indexOf(SHARP)));
-                copytotarget2source.put(copytoValue, hrefValue.substring(0, hrefValue.indexOf(SHARP)));
+            if(getFragment(hrefValue) != null){
+                copytoSource.add(stripFragment(hrefValue));
+                copytotarget2source.put(copytoValue, stripFragment(hrefValue));
             }else{
                 copytoSource.add(hrefValue);
                 copytotarget2source.put(copytoValue,hrefValue);
@@ -663,9 +664,8 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                  */
                 String id = null;
                 String firstTopicID = null;
-                if (parseFilePath.contains(SHARP)
-                        && parseFilePath.indexOf(SHARP) < parseFilePath.length() - 1) {
-                    id = parseFilePath.substring(parseFilePath.indexOf(SHARP)+1);
+                if (getFragment(parseFilePath) != null) {
+                    id = getFragment(parseFilePath);
                     if (chunkValue.contains(ATTR_CHUNK_VALUE_SELECT_BRANCH)) {
                         outputFileName = FileUtils.resolveFile(filePath, id + ditaext);
                         targetTopicId = id;
@@ -847,8 +847,8 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
         try {
             //Get target chunk file name
             if (copytoValue.length() != 0 && !chunkValue.contains(ATTR_CHUNK_VALUE_TO_CONTENT)){
-                if (hrefValue.indexOf(SHARP)!=-1){
-                    parseFilePath = copytoValue + hrefValue.substring(hrefValue.indexOf(SHARP));
+                if (getFragment(hrefValue) != null){
+                    parseFilePath = copytoValue + SHARP + getFragment(hrefValue);
                 }else{
                     parseFilePath = copytoValue;
                 }
@@ -861,9 +861,9 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
             if(copytoValue.length() != 0 && chunkValue.contains(ATTR_CHUNK_VALUE_TO_CONTENT)
                     && hrefValue.length() != 0){
                 copyto.add(copytoValue);
-                if(hrefValue.indexOf(SHARP) != -1){
-                    copytoSource.add(hrefValue.substring(0, hrefValue.indexOf(SHARP)));
-                    copytotarget2source.put(copytoValue, hrefValue.substring(0, hrefValue.indexOf(SHARP)));
+                if(getFragment(hrefValue) != null){
+                    copytoSource.add(stripFragment(hrefValue));
+                    copytotarget2source.put(copytoValue, stripFragment(hrefValue));
                 }else{
                     copytoSource.add(hrefValue);
                     copytotarget2source.put(copytoValue,hrefValue);
@@ -896,10 +896,9 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                         } else if (hrefValue.length() != 0) {
                             // try to use href value as the new file name
                             if (chunkValue.contains(ATTR_CHUNK_VALUE_SELECT_TOPIC) || chunkValue.contains(ATTR_CHUNK_VALUE_SELECT_BRANCH)) {
-                                if (hrefValue.contains(SHARP)
-                                        && hrefValue.indexOf(SHARP) < hrefValue.length() - 1) {
+                                if (getFragment(hrefValue) != null) {
                                     // if we have an ID here, use it.
-                                    outputFileName = FileUtils.resolveFile(filePath,hrefValue.substring(hrefValue.indexOf(SHARP)+1) + ditaext);
+                                    outputFileName = FileUtils.resolveFile(filePath, getFragment(hrefValue) + ditaext);
                                 } else {
                                     // Find the first topic id in target file if any.
                                     final String firstTopic = this.getFirstTopicId(FileUtils.resolveFile(filePath, hrefValue));
@@ -936,8 +935,8 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                     {
                         final String path = FileUtils.resolveTopic(filePath,parseFilePath);
                         String newpath = null;
-                        if(path.indexOf(SHARP)!=-1){
-                            newpath = outputFileName + path.substring(path.indexOf(SHARP));
+                        if(getFragment(path) != null){
+                            newpath = outputFileName + SHARP + getFragment(path);
                         }else{
                             final String firstTopicID = this.getFirstTopicId(path);
                             if(!StringUtils.isEmptyString(firstTopicID)) {
@@ -955,8 +954,8 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                                         ,newpath));
                     }
 
-                    if(parseFilePath.indexOf(SHARP)!=-1){
-                        targetTopicId = parseFilePath.substring(parseFilePath.indexOf(SHARP)+1);
+                    if(getFragment(parseFilePath) != null){
+                        targetTopicId = getFragment(parseFilePath);
                     }
 
                     if(chunkValue.indexOf("select")!=-1){
@@ -989,7 +988,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                             String href = element.getAttribute(ATTRIBUTE_NAME_HREF);
                             href = FileUtils.separatorsToUnix(href);
                             final String pathtoElem =
-                                    href.contains(SHARP) ? href.substring(href.indexOf(SHARP)+1) : "";
+                                    getFragment(href) != null ? getFragment(href) : "";
 
                                     final String old_elementid =  pathtoElem.contains(SLASH) ? pathtoElem.substring(0, pathtoElem.indexOf(SLASH)) : pathtoElem;
 
@@ -1210,21 +1209,17 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
         this.conflictTable = conflictTable;
     }
 
+    /** Check whether current href needs to be updated */
     private boolean checkHREF(final Attributes atts){
-        // check whether current href needs to be updated
-        String scopeValue = atts.getValue(ATTRIBUTE_NAME_SCOPE);
-        String hrefValue = atts.getValue(ATTRIBUTE_NAME_HREF);
-        hrefValue = StringUtils.escapeXML(hrefValue);
-        if (scopeValue == null){
-            scopeValue = ATTR_SCOPE_VALUE_LOCAL;
-        }
-
+        final String hrefValue = atts.getValue(ATTRIBUTE_NAME_HREF);
         if (hrefValue == null || hrefValue.indexOf(COLON_DOUBLE_SLASH)!=-1){
             return false;
         }
-
-        if (scopeValue != null &&
-                scopeValue.equalsIgnoreCase(ATTR_SCOPE_VALUE_EXTERNAL)){
+        String scopeValue = atts.getValue(ATTRIBUTE_NAME_SCOPE);
+        if (scopeValue == null){
+            scopeValue = ATTR_SCOPE_VALUE_LOCAL;
+        }
+        if (scopeValue != null && scopeValue.equals(ATTR_SCOPE_VALUE_EXTERNAL)){
             return false;
         }
 

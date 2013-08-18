@@ -32,6 +32,22 @@
         <codeblock>&lt;coderef href="Parser.scala#line-range(5, 10)" format="scala"/></codeblock>
         <p>Only lines from 5 to 10 will be included in the output.</p>
       </example>
+      <section>
+        <title>RFC 5147</title>
+        <p>DITA-OT implementes line position and range from <xref
+            href="http://tools.ietf.org/html/rfc5147" scope="external" format="html">RFC
+          5147</xref>. The format for line range is:</p>
+        <codeblock>uri ("#line=" start? "," end? )?</codeblock>
+        <p>Start and end line numbers start from 0 and are inclusive and exclusive, respectively. If
+          the start range is omitted, range starts from the first line; if end range is omitted,
+          range ends in last line of the file. The format for line position is:</p>
+        <codeblock>uri ("#line=" position )?</codeblock>
+        <p>Position line number starts from 0.</p>
+      </section>
+      <example>
+        <codeblock>&lt;coderef href="Parser.scala#line=4,10" format="scala"/></codeblock>
+        <p>Only lines from 5 to 10 will be included in the output.</p>
+      </example>
     </refbody>
   </reference>
 </reference>

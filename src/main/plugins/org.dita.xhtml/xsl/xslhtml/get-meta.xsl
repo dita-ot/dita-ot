@@ -4,12 +4,12 @@
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
-<xsl:stylesheet version="1.0"
+<xsl:stylesheet version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <!-- Get each value in each <keywords>. Nested indexterms should have unique entries. Other
      elements (based on keyword) cannot nest. -->
-<xsl:key name="meta-keywords" match="*[ancestor::*[contains(@class,' topic/keywords ')]]" use="text()"/>
+<xsl:key name="meta-keywords" match="*[ancestor::*[contains(@class,' topic/keywords ')]]" use="text()[1]"/>
 
 <xsl:template name="getMeta">
 
@@ -224,9 +224,9 @@
     <!-- for each item inside keywords (including nested index terms) -->
     <xsl:for-each select="descendant::*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/keywords ')]/descendant-or-self::*">
       <!-- If this is the first term or keyword with this value -->
-      <xsl:if test="generate-id(key('meta-keywords',text())[1])=generate-id(.)">
+      <xsl:if test="generate-id(key('meta-keywords',text()[1])[1])=generate-id(.)">
         <xsl:if test="position()>2"><xsl:text>, </xsl:text></xsl:if>
-        <xsl:value-of select="normalize-space(text())"/>
+        <xsl:value-of select="normalize-space(text()[1])"/>
       </xsl:if>
     </xsl:for-each>
   </xsl:variable>

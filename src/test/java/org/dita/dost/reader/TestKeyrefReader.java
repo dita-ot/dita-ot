@@ -10,6 +10,7 @@ package org.dita.dost.reader;
 
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import static org.junit.Assert.assertEquals;
+import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
 import java.io.StringReader;
@@ -51,7 +52,7 @@ public class TestKeyrefReader {
         set.add("escape");
         final KeyrefReader keyrefreader = new KeyrefReader();
         keyrefreader.setKeys(set);
-        keyrefreader.read(filename.getAbsolutePath());
+        keyrefreader.read(toURI(filename.getAbsolutePath()));
         final Map<String, Element> act= keyrefreader.getKeyDefinition();
 
         final Map<String, String> exp = new HashMap<String, String>();

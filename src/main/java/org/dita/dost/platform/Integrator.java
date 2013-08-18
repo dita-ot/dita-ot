@@ -81,7 +81,7 @@ public final class Integrator {
     private final XMLReader reader;
     private DITAOTLogger logger;
     private final Set<String> loadedPlugin;
-    private final Hashtable<String, String> featureTable;
+    private final Hashtable<String, List<String>> featureTable;
     @Deprecated
     private File propertiesFile;
     private final Set<String> extensionPoints;
@@ -191,7 +191,7 @@ public final class Integrator {
             }
         }
         if (featureTable.containsKey(FEAT_IMAGE_EXTENSIONS)) {
-            for (final String ext : featureTable.get(FEAT_IMAGE_EXTENSIONS).split(FEAT_VALUE_SEPARATOR)) {
+            for (final String ext : featureTable.get(FEAT_IMAGE_EXTENSIONS)) {
                 final String e = ext.trim();
                 if (e.length() != 0) {
                     imgExts.add(e);
@@ -208,7 +208,7 @@ public final class Integrator {
         // print transtypes
         final Set<String> printTranstypes = new HashSet<String>();
         if (featureTable.containsKey(FEAT_PRINT_TRANSTYPES)) {
-            for (final String ext : featureTable.get(FEAT_PRINT_TRANSTYPES).split(FEAT_VALUE_SEPARATOR)) {
+            for (final String ext : featureTable.get(FEAT_PRINT_TRANSTYPES)) {
                 final String e = ext.trim();
                 if (e.length() != 0) {
                     printTranstypes.add(e);
@@ -257,7 +257,7 @@ public final class Integrator {
     private String readExtensions(final String featureName) {
         final Set<String> exts = new HashSet<String>();
         if (featureTable.containsKey(featureName)) {
-            for (final String ext : featureTable.get(featureName).split(FEAT_VALUE_SEPARATOR)) {
+            for (final String ext : featureTable.get(featureName)) {
                 final String e = ext.trim();
                 if (e.length() != 0) {
                     exts.add(e);
@@ -277,8 +277,8 @@ public final class Integrator {
     private boolean loadPlugin(final String plugin) {
         if (checkPlugin(plugin)) {
             final Features pluginFeatures = pluginTable.get(plugin);
-            final Map<String, String> featureSet = pluginFeatures.getAllFeatures();
-            for (final Map.Entry<String, String> currentFeature : featureSet.entrySet()) {
+            final Map<String, List<String>> featureSet = pluginFeatures.getAllFeatures();
+            for (final Map.Entry<String, List<String>> currentFeature : featureSet.entrySet()) {
                 if (!extensionPoints.contains(currentFeature.getKey())) {
                     final String msg = "Plug-in " + plugin + " uses an undefined extension point "
                             + currentFeature.getKey();
@@ -289,9 +289,9 @@ public final class Integrator {
                     }
                 }
                 if (featureTable.containsKey(currentFeature.getKey())) {
-                    final String value = featureTable.remove(currentFeature.getKey());
-                    featureTable.put(currentFeature.getKey(), new StringBuffer(value).append(FEAT_VALUE_SEPARATOR)
-                            .append(currentFeature.getValue()).toString());
+                    final List<String> value = featureTable.get(currentFeature.getKey());
+                    value.addAll(currentFeature.getValue());
+                    featureTable.put(currentFeature.getKey(), value);
                 } else {
                     featureTable.put(currentFeature.getKey(), currentFeature.getValue());
                 }
@@ -441,8 +441,8 @@ public final class Integrator {
                 logger.logWarn(msg);
             }
         }
-        final String version = f.getFeature("package.version");
-        if (version != null && !VERSION_PATTERN.matcher(version).matches()) {
+        final List<String> version = f.getFeature("package.version");
+        if (version != null && !version.isEmpty() && !VERSION_PATTERN.matcher(version.get(0)).matches()) {
             final String msg = "Plug-in version '" + version + "' doesn't follow recommended syntax rules, support for nonconforming version may be removed in future releases.";
             if (strict) {
                 throw new IllegalArgumentException(msg);
@@ -470,7 +470,7 @@ public final class Integrator {
         pluginTable = new HashMap<String, Features>(INT_16);
         descSet = new HashSet<File>(INT_16);
         loadedPlugin = new HashSet<String>(INT_16);
-        featureTable = new Hashtable<String, String>(INT_16);
+        featureTable = new Hashtable<String, List<String>>(INT_16);
         extensionPoints = new HashSet<String>();
         try {
             reader = StringUtils.getXMLReader();
@@ -526,9 +526,9 @@ public final class Integrator {
     static final String getValue(final Map<String, Features> featureTable, final String extension) {
         final List<String> buf = new ArrayList<String>();
         for (final Features f : featureTable.values()) {
-            final String v = f.getFeature(extension);
+            final List<String> v = f.getFeature(extension);
             if (v != null) {
-                buf.add(v);
+                buf.addAll(v);
             }
         }
         if (buf.isEmpty()) {

@@ -8,7 +8,7 @@
 <!-- Need to ensure this comes out with the name "plugin.xml" rather than the default.
      So: use saxon to force the plugin name. -->
 
-<xsl:stylesheet version="1.0" 
+<xsl:stylesheet version="2.0" 
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   
   <xsl:import href="../../../xsl/common/dita-utilities.xsl"/>
@@ -484,7 +484,7 @@
   
   <xsl:template match="@version" mode="eclipse.manifest">
     <xsl:choose>
-      <xsl:when test="(string(number(.)) &lt; 0) or (string(number(.)) = 'NaN')  or (normalize-space(.)='') ">
+      <xsl:when test="(number(.) &lt; 0) or (string(number(.)) = 'NaN')  or (normalize-space(.)='') ">
           <xsl:text>0</xsl:text>
       </xsl:when>
       <xsl:otherwise>
@@ -495,7 +495,7 @@
   
   <xsl:template match="@release" mode="eclipse.manifest">
     <xsl:choose>
-      <xsl:when test="(string(number(.)) &lt; 0) or (string(number(.)) = 'NaN')  or (normalize-space(.)='') ">
+      <xsl:when test="(number(.) &lt; 0) or (string(number(.)) = 'NaN')  or (normalize-space(.)='') ">
           <xsl:text>.</xsl:text><xsl:text>0</xsl:text>
       </xsl:when>
       <xsl:otherwise>
@@ -506,7 +506,7 @@
   
   <xsl:template match="@modification" mode="eclipse.manifest">
     <xsl:choose>
-      <xsl:when test="(string(number(.)) &lt; 0) or (string(number(.)) = 'NaN')  or (normalize-space(.)='') ">
+      <xsl:when test="(number(.) &lt; 0) or (string(number(.)) = 'NaN')  or (normalize-space(.)='') ">
           <xsl:text>.</xsl:text><xsl:text>0</xsl:text>
       </xsl:when>
       <xsl:otherwise>

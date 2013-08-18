@@ -5,6 +5,7 @@
 package org.dita.dost.platform;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map.Entry;
 
 import org.dita.dost.util.FileUtils;
@@ -30,7 +31,9 @@ final class ImportPluginInfoAction extends ImportAction {
             final Features f = e.getValue();
             final String name = "dita.plugin."+ e.getKey() + ".dir";
             final StringBuilder location = new StringBuilder();
-            if (Boolean.parseBoolean(f.getFeature("dita.basedir-resource-directory"))) {
+            
+            final List<String> baseDirValues = f.getFeature("dita.basedir-resource-directory");
+            if (Boolean.parseBoolean(baseDirValues == null || baseDirValues.isEmpty() ? null : baseDirValues.get(0))) {
                 location.append("${dita.dir}");
             } else if (f.getLocation().getAbsolutePath().startsWith(f.getDitaDir().getAbsolutePath())) {
                 location.append("${dita.dir}").append(File.separator)

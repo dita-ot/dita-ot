@@ -12,9 +12,9 @@ import static org.dita.dost.util.Constants.*;
 
 import java.util.Hashtable;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import org.dita.dost.log.DITAOTLogger;
 
@@ -53,11 +53,8 @@ abstract class ImportAction implements IAction {
      * @param input input
      */
     @Override
-    public void setInput(final String input) {
-        final StringTokenizer inputTokenizer = new StringTokenizer(input, Integrator.FEAT_VALUE_SEPARATOR);
-        while(inputTokenizer.hasMoreElements()){
-            valueSet.add(inputTokenizer.nextToken());
-        }
+    public void setInput(final List<String> input) {
+        valueSet.addAll(input);
     }
 
     @Override

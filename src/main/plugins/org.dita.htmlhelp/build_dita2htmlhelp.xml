@@ -7,8 +7,8 @@
 
     <target name="dita2htmlhelp"
             unless="noMap"
-    	depends="build-init, use-init.envhhcdir, use-init.hhcdir, preprocess, copy-css, 
-                     dita.topics.html, dita.inner.topics.html, dita.outer.topics.html">
+        depends="dita2htmlhelp.init, build-init, use-init.envhhcdir, use-init.hhcdir, preprocess, copy-css, 
+    	             xhtml.topics">
         <antcall target="dita.map.htmlhelp"></antcall>
     	
         <antcall target="dita.htmlhelp.convertlang"></antcall>
@@ -16,6 +16,9 @@
     	<antcall target="compile.HTML.Help"></antcall>
     </target>
   
+  <target name="dita2htmlhelp.init">
+    <property name="html-version" value="html"/>
+  </target>
     
   <target name="use-init.envhhcdir" if="env.HHCDIR">
     <available file="${env.HHCDIR}${file.separator}hhc.exe" property="HTMLHelpCompiler"
@@ -184,8 +187,5 @@
             <arg value="${compile.dir}${file.separator}${dita.map.filename.root}.hhp" />
         </exec>
     </target>
-
-    <!-- depecrated: keep for back-compatibility, will be remvoed in a later release -->
-    <target name="dita.topics.htmlhelp" depends="dita.topics.html" />
 
 </project>

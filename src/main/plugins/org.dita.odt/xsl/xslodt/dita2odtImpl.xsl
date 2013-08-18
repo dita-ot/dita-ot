@@ -27,7 +27,7 @@
   xmlns:styleUtils="org.dita.dost.util.StyleUtils"
   xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
   exclude-result-prefixes="styleUtils ditamsg"
-  version="1.0">
+  version="2.0">
   
   <xsl:output method="xml"/>
   <xsl:output indent="yes"/>

@@ -5,6 +5,7 @@
 package org.dita.dost.platform;
 
 import static org.junit.Assert.assertEquals;
+import static java.util.Arrays.*;
 
 import org.dita.dost.TestUtils;
 import org.dita.dost.log.DITAOTLogger;
@@ -31,10 +32,10 @@ public class FileGeneratorTest {
     private File tempDir;
 
     private static File tempFile;
-    private final static Hashtable<String, String> features = new Hashtable<String, String>();
+    private final static Hashtable<String, List<String>> features = new Hashtable<String, List<String>>();
     static {
-        features.put("element", "foo,bar,baz");
-        features.put("attribute", "foo,bar,baz");
+        features.put("element", asList("foo", "bar", "baz"));
+        features.put("attribute", asList("foo", "bar", "baz"));
     }
     private final static Map<String, Features> plugins = new HashMap<String, Features>();
     static {
@@ -78,11 +79,8 @@ public class FileGeneratorTest {
         protected List<String> inputs = new ArrayList<String>();
         protected Map<String, String> params = new HashMap<String, String>();
         protected Map<String, Features> features;
-        public void setInput(final String input) {
-            final StringTokenizer inputTokenizer = new StringTokenizer(input, Integrator.FEAT_VALUE_SEPARATOR);
-            while(inputTokenizer.hasMoreElements()){
-                inputs.add(inputTokenizer.nextToken());
-            }
+        public void setInput(final List<String> input) {
+            inputs.addAll(input);
         }
         public void addParam(final String name, final String value) {
             params.put(name, value);

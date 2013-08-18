@@ -2,7 +2,7 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="distribution_packages">
   <title>Distribution packages</title>
-  <shortdesc>The DITA Open Toolkit is distributed in three packages: minimal, standard, and
+  <shortdesc>The DITA Open Toolkit is distributed in four packages: minimal, standard, client, and
     full-easy-install. The source code is available both as a Git repository and a ZIP file.</shortdesc>
   <prolog>
     <metadata>
@@ -55,6 +55,29 @@
           <li><filepath>DITA-OT<keyword keyref="release.version"
               ></keyword>_standard_bin.tar.gz</filepath></li>
         </ul></p>
+    </section>
+    <section>
+      <title>Client package</title>
+      <p>his package is designed for users who want the simplest installation experience. In
+        addition to the core DITA-OT code and the external libraries that are in the minimal and
+        standard packages, it contains Apache Ant and FOP. The client package also
+        contains scripts for a guided demo of the DITA-OT. The client package includes the
+        following external libraries:</p>
+      <ul>
+        <li>Apache Ant, version <keyword keyref="tool.ant.version"/></li>
+        <li>Apache Catalog Resolver, version <keyword keyref="tool.resolver.version"/></li>
+        <li>Apache Commons Codec, version <keyword keyref="tool.codec.version"/></li>
+        <li>Apache FOP, version <keyword keyref="tool.fop.version"/></li>
+        <li>ICU for Java, version <keyword keyref="tool.icu4j.version"/></li>
+        <li>Apache Xerces, version <keyword keyref="tool.xerces.version"/></li>
+        <li>Saxon, version <keyword keyref="tool.saxon.version"/></li>
+      </ul>
+      <p>The client package has the following file names:<ul>
+        <li><filepath>DITA-OT<keyword keyref="release.version"
+          ></keyword>_client_bin.zip</filepath></li>
+        <li><filepath>DITA-OT<keyword keyref="release.version"
+          ></keyword>_client_bin.tar.gz</filepath></li>
+      </ul></p>
     </section>
     <section>
       <title>Full-easy-install package</title>

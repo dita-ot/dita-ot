@@ -5,18 +5,12 @@
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
 <!-- Common utilities that can be used by DITA transforms -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:param name="DEFAULTLANG">en-us</xsl:param>
   <!-- Function to convert a string to lower case -->
   
   <xsl:variable name="pixels-per-inch" select="number(96)"/>
   
-  <xsl:template name="convert-to-lower">
-    <xsl:param name="inputval"/>
-    <xsl:value-of
-      select="translate($inputval,                                     '._-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+=!@#$%^&amp;*()[]{};:\/&lt;&gt;,~?',                                     '._-abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz+=!@#$%^&amp;*()[]{};:\/&lt;&gt;,~?')"
-    />
-  </xsl:template>
   <!-- Function to determine the current language, and return it in lower case -->
   <xsl:template name="getLowerCaseLang">
     <xsl:variable name="ancestorlangUpper">
@@ -30,10 +24,7 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <xsl:call-template name="convert-to-lower">
-      <!-- ensure lowercase for comparisons -->
-      <xsl:with-param name="inputval" select="$ancestorlangUpper"/>
-    </xsl:call-template>
+    <xsl:value-of select="lower-case($ancestorlangUpper)"/>
   </xsl:template>
 
   <xsl:template match="*" mode="get-first-topic-lang">
@@ -44,9 +35,7 @@
         <xsl:otherwise><xsl:value-of select="$DEFAULTLANG"/></xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <xsl:call-template name="convert-to-lower">
-      <xsl:with-param name="inputval" select="$first-topic-lang"/>
-    </xsl:call-template>
+    <xsl:value-of select="lower-case($first-topic-lang)"/>
   </xsl:template>
 
   <xsl:template match="*" mode="get-render-direction">
@@ -281,13 +270,6 @@
   </xsl:choose>
 </xsl:template>
   
-  <!-- Template returns "true" if $text parameter string ends with the $with parameter string, and otherwise returns "false". -->
-  <xsl:template name="ends-with">
-    <xsl:param name="text"/>
-    <xsl:param name="with"/>
-    <xsl:value-of select="substring($text, string-length($text) - string-length($with) + 1) = $with"/>
-  </xsl:template>
-
   <!-- Get filename base -->
   <xsl:template name="getFileName">
     <xsl:param name="filename"/>

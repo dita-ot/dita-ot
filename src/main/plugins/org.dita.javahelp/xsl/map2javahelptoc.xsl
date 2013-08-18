@@ -4,7 +4,7 @@
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
-<xsl:stylesheet version="1.0" 
+<xsl:stylesheet version="2.0" 
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <!-- stylesheet imports -->
@@ -23,7 +23,7 @@
 />
 
 <xsl:template match="*[contains(@class,' map/map ')]" mode="toctop">
-  <toc version="1.0">
+  <toc version="2.0">
     <xsl:apply-templates select="*[contains(@class,' map/topicref ')]"/>
   </toc>
 </xsl:template>

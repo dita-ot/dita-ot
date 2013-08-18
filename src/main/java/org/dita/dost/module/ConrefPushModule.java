@@ -81,7 +81,7 @@ final class ConrefPushModule implements AbstractPipelineModule {
             content.setValue(entry.getValue());
             parser.setContent(content);
             //pass the tempdir to ConrefPushParser
-            parser.setTempDir(tempDir.getAbsolutePath());
+            parser.setTempDir(tempDir.getAbsoluteFile());
             //FIXME:This writer creates and renames files, have to
             parser.write(entry.getKey());
         }

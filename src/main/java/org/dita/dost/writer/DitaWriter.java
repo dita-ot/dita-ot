@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -487,9 +488,9 @@ public final class DitaWriter extends AbstractXMLFilter {
                             //target = FileUtils.replaceExtName(target);
                             //get key's href
                             final KeyDef value = keys.get(key);
-                            final String href = value.href;
+                            final URI href = value.href;
                             
-                            final String updatedHref = updateHref(href);
+                            final String updatedHref = updateHref(href.toString());
 
                             //get element/topic id
                             final String id = attValue.substring(keyIndex+1);
@@ -498,7 +499,7 @@ public final class DitaWriter extends AbstractXMLFilter {
                             boolean keyrefExported = false;
                             List<Boolean> list = null;
                             if(transtype.equals(INDEX_TYPE_ECLIPSEHELP)){
-                                list = delayConrefUtils.checkExport(href, id, key, tempDir);
+                                list = delayConrefUtils.checkExport(href.toString(), id, key, tempDir);
                                 idExported = list.get(0).booleanValue();
                                 keyrefExported = list.get(1).booleanValue();
                             }
@@ -540,13 +541,13 @@ public final class DitaWriter extends AbstractXMLFilter {
                         if(keys.containsKey(attValue)){
                             //get key's href
                             final KeyDef value = keys.get(attValue);
-                            final String href = value.href;
+                            final URI href = value.href;
 
-                            final String updatedHref = updateHref(href);
+                            final String updatedHref = updateHref(href.toString());
 
                             final String id = null;
 
-                            final List<Boolean> list = delayConrefUtils.checkExport(href, id, attValue, tempDir);
+                            final List<Boolean> list = delayConrefUtils.checkExport(href.toString(), id, attValue, tempDir);
                             final boolean keyrefExported = list.get(1).booleanValue();
                             //key is exported and transtype is eclipsehelp
                             if(keyrefExported && transtype.equals(INDEX_TYPE_ECLIPSEHELP)){

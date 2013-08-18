@@ -5,6 +5,7 @@
 package org.dita.dost.platform;
 
 import static org.junit.Assert.*;
+import static java.util.Arrays.*;
 
 import java.io.File;
 import java.util.Arrays;
@@ -69,26 +70,26 @@ public class DescParserTest {
     @Test
     public void testValueFeature() {
         final Features f = p.getFeatures();
-        assertEquals("foo,bar", f.getFeature("type_text"));
-        assertEquals("foo,bar", f.getFeature("multiple_type_text"));
+        assertEquals(asList("foo", "bar"), f.getFeature("type_text"));
+        assertEquals(asList("foo", "bar"), f.getFeature("multiple_type_text"));
         assertNull(f.getFeature("undefined"));
     }
 
     @Test
     public void testFileValueFeature() {
         final Features f = p.getFeatures();
-        assertEquals(basePrefix + "foo," + basePrefix + "bar",
+        assertEquals(asList(basePrefix + "foo", basePrefix + "bar"),
                 f.getFeature("type_file"));
-        assertEquals(basePrefix + "foo," + basePrefix + "bar",
+        assertEquals(asList(basePrefix + "foo", basePrefix + "bar"),
                 f.getFeature("multiple_type_file"));
     }
 
     @Test
     public void testFileFeature() {
         final Features f = p.getFeatures();
-        assertEquals(basePrefix + "foo," + basePrefix + "bar",
+        assertEquals(asList(basePrefix + "foo", basePrefix + "bar"),
                 f.getFeature("file"));
-        assertEquals(basePrefix + "foo," + basePrefix + "bar",
+        assertEquals(asList(basePrefix + "foo", basePrefix + "bar"),
                 f.getFeature("multiple_file"));
     }
 

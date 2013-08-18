@@ -43,6 +43,15 @@ public interface AbstractFacade {
     AbstractPipelineOutput execute(Class<? extends AbstractPipelineModule> pipelineModule,
             AbstractPipelineInput input) throws DITAOTException;
     
+    /**
+     * Excute the specified Java Module.
+     * 
+     * @param pipelineModule pipeline module 
+     * @param input input
+     */
+    AbstractPipelineOutput execute(AbstractPipelineModule module,
+            AbstractPipelineInput input) throws DITAOTException;
+        
     public void setLogger(DITAOTLogger logger);
 
 }

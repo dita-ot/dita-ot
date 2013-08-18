@@ -9,7 +9,9 @@
 package org.dita.dost.module;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Configuration.*;
 import static org.dita.dost.util.Job.*;
+import static org.dita.dost.util.URLUtils.*;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -19,8 +21,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,10 +40,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.DefaultHandler;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
@@ -538,11 +538,11 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
                  * 
                  * logger.logError(e.getMessage(), e) ; }
                  */
-                keysDefMap.put(key, new KeyDef(key, value.href, value.scope, currentFile));
+                keysDefMap.put(key, new KeyDef(key, value.href, value.scope, toURI(currentFile)));
             }
             // if the current file is also a schema file
             if (schemeSet.contains(currentFile)) {
-            	schemekeydefMap.put(key, new KeyDef(key, value.href, value.scope, currentFile));
+            	schemekeydefMap.put(key, new KeyDef(key, value.href, value.scope, toURI(currentFile)));
             }
 
         }
@@ -801,7 +801,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
      * @return configured filter utility
      */
     private FilterUtils parseFilterFile() {
-        final FilterUtils filterUtils = new FilterUtils();
+        final FilterUtils filterUtils = new FilterUtils(printTranstype.contains(transtype));
         filterUtils.setLogger(logger);
         if (ditavalFile != null) {
             final DitaValReader ditaValReader = new DitaValReader();
@@ -815,7 +815,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             flagImageSet.addAll(ditaValReader.getImageList());
             relFlagImagesSet.addAll(ditaValReader.getRelFlagImageList());
         } else {
-            filterUtils.setFilterMap(null);
+            filterUtils.setFilterMap(Collections.EMPTY_MAP);
         }
         return filterUtils;
     }
@@ -1144,18 +1144,18 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         final Collection<KeyDef> updated = new ArrayList<KeyDef>(keydefs.size());
         for (final KeyDef file: keydefs.values()) {
             final String keys = file.keys;
-            String href = file.href;
-            String source = file.source;
+            URI href = file.href;
+            URI source = file.source;
             if (prefix.length() != 0) {
                 // cases where keymap is in map ancestor folder
                 if (href == null) {
                     //href = FileUtils.separatorsToUnix(FileUtils.normalize(prefix));
-                    source = FileUtils.separatorsToUnix(FileUtils.normalize(prefix + source));
+                    source = toURI(FileUtils.normalize(prefix + source.toString()));
                 } else {
                     if (!exKeyDefMap.containsKey(file.keys)) {
-                        href = FileUtils.separatorsToUnix(FileUtils.normalize(prefix + href));
+                        href = toURI(FileUtils.normalize(prefix + href.toString()));
                     }
-                    source = FileUtils.separatorsToUnix(FileUtils.normalize(prefix + source));
+                    source = toURI(FileUtils.normalize(prefix + source.toString()));
                 }
             }
             final KeyDef keyDef = new KeyDef(keys, href, file.scope, source);

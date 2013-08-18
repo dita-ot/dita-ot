@@ -4,7 +4,7 @@
     applicable licenses.-->
     <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
     
-    <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+    <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
         <xsl:import href="maprefImpl.xsl"/>
         <dita:extension id="dita.xsl.mapref" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
         <xsl:output method="xml" encoding="utf-8" indent="no" />
