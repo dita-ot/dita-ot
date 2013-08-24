@@ -40,6 +40,7 @@ import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.TopicIdParser;
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -48,6 +49,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * ChunkTopicParser class, writing chunking content into relative topic files
@@ -399,11 +401,10 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 
             if(include){
                 includelevel++;
-                output.write(LESS_THAN);
-                output.write(qName);
-                for(int i = 0; i<atts.getLength();i++){
-                    final String attrName = atts.getQName(i);
-                    String attrValue = atts.getValue(i);
+                final AttributesImpl resAtts = new AttributesImpl(atts);
+                for(int i = 0; i < resAtts.getLength(); i++){
+                    final String attrName = resAtts.getQName(i);
+                    String attrValue = resAtts.getValue(i);
 
                     if(ATTRIBUTE_NAME_ID.equals(attrName) && TOPIC_TOPIC.matches(classValue)){
                         //change topic @id if there are conflicts.
@@ -431,7 +432,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                     String value = attrValue;
                     if(ATTRIBUTE_NAME_HREF.equals(attrName)){
                         //update @href value
-                        if(checkHREF(atts)){
+                        if(checkHREF(resAtts)){
                             // if current @href value needs to be updated
                             String relative = FileUtils.getRelativePath(outputFile,currentParsingFile);
                             if (conflictTable.containsKey(outputFile)){
@@ -457,18 +458,18 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                             // if current @href value does not need to be updated
                         }
                     }
-                    writeAttribute(output, attrName, value);
+                    resAtts.setValue(i, value);
                 }
 
                 if (classValue != null &&
                         TOPIC_TOPIC.matches(classValue) &&
-                        atts.getValue("xmlns:ditaarch") == null){
+                        resAtts.getValue("xmlns:ditaarch") == null){
                     //if there is none declaration for ditaarch namespace,
                     //processor need to add it
-                    writeAttribute(output, ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION, ditaarchNSValue);
+                    XMLUtils.addOrSetAttribute(resAtts, ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION, ditaarchNSValue);
                 }
 
-                output.write(GREATER_THAN);
+                writeStartElement(output, qName, resAtts);
             }
 
         }catch(final Exception e){
@@ -481,6 +482,20 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
      */
     private void writeStartDocument(final Writer output) throws IOException {
         output.write(XML_HEAD);
+    }
+    
+    /**
+     * Convenience method to write an end element.
+     * 
+     * @param name element name
+     */
+    private void writeStartElement(final Writer output, final String name, final Attributes atts) throws IOException {
+        output.write(LESS_THAN);
+        output.write(name);
+        for (int i = 0; i < atts.getLength(); i++) {
+            writeAttribute(output, atts.getQName(i), atts.getValue(i));
+        }
+        output.write(GREATER_THAN);
     }
     
     /**
@@ -1139,10 +1154,10 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                             }
                         }
                         if (needWriteDitaTag) {
-                            ditaFileOutput.write(LESS_THAN + ELEMENT_NAME_DITA);
-                            writeAttribute(ditaFileOutput, ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION, ditaarchNSValue);
-                            writeAttribute(ditaFileOutput, ATTRIBUTE_PREFIX_DITAARCHVERSION + COLON + ATTRIBUTE_NAME_DITAARCHVERSION, "1.2");
-                            ditaFileOutput.write(GREATER_THAN);
+                            final AttributesImpl atts = new AttributesImpl();
+                            XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION, ditaarchNSValue);
+                            XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_PREFIX_DITAARCHVERSION + COLON + ATTRIBUTE_NAME_DITAARCHVERSION, "1.2");
+                            writeStartElement(ditaFileOutput, ELEMENT_NAME_DITA, atts);
                         }
                         //write the final result to the output file
                         ditaFileOutput.write(((StringWriter)output).getBuffer().toString());
