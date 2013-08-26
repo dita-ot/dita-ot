@@ -9,6 +9,7 @@
 package org.dita.dost.module;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.FileUtils.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -83,9 +84,7 @@ final class MoveIndexModule implements AbstractPipelineModule {
         indexInserter.setLogger(logger);
         for (final Map.Entry<String, String> entry: mapSet.entrySet()) {
             String targetFileName = entry.getKey();
-            targetFileName = targetFileName.indexOf(SHARP) != -1
-                            ? targetFileName.substring(0, targetFileName.indexOf(SHARP))
-                            : targetFileName;
+            targetFileName = stripFragment(targetFileName);
             if (targetFileName.endsWith(FILE_EXTENSION_DITA) || targetFileName.endsWith(FILE_EXTENSION_XML)){
                 final ContentImpl content = new ContentImpl();
                 content.setValue(entry.getValue());

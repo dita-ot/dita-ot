@@ -8,9 +8,10 @@
  */
 package org.dita.dost.platform;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.StringUtils;
@@ -26,7 +27,7 @@ final class InsertDependsAction implements IAction {
     /** Action parameters. */
     private final Hashtable<String,String> paramTable;
     /** Action value. */
-    private String value;
+    private List<String> value;
     /** Plug-in features. */
     protected Map<String, Features> featureTable = null;
     /**
@@ -42,14 +43,10 @@ final class InsertDependsAction implements IAction {
     @Override
     public String getResult() {
         final String localname = paramTable.get(FileGenerator.PARAM_LOCALNAME);
-        final StringBuffer result = new StringBuffer();
+        final List<String> result = new ArrayList<String>();
 
-        // Parse the attribute value into comma-separated pieces.
-        final StringTokenizer valueTokenizer = new StringTokenizer(value, Integrator.FEAT_VALUE_SEPARATOR);
-        while (valueTokenizer.hasMoreElements())
-        {
-            final String token = valueTokenizer.nextToken().trim();
-
+        for (final String t: value) {
+            final String token = t.trim();
             // Pieces which are surrounded with braces are extension points.
             if (token.startsWith("{") && token.endsWith("}"))
             {
@@ -57,23 +54,20 @@ final class InsertDependsAction implements IAction {
                 final String extensionInputs = Integrator.getValue(featureTable, extension);
                 if (extensionInputs != null)
                 {
-                    if (result.length() != 0) { result.append(Integrator.FEAT_VALUE_SEPARATOR); }
-                    result.append(extensionInputs);
+                    result.add(extensionInputs);
                 }
             }
             else
             {
-                // Other pieces are literal.
-                if (result.length() != 0) { result.append(Integrator.FEAT_VALUE_SEPARATOR); }
-                result.append(token);
+                result.add(token);
             }
         }
-        if (result.length() != 0)
+        if (!result.isEmpty())
         {
             final StringBuilder buf = new StringBuilder();
 
             buf.append(" ").append(localname).append("=\"")
-            .append(StringUtils.escapeXML(result.toString())).append("\"");
+            .append(StringUtils.escapeXML(StringUtils.assembleString(result, ","))).append("\"");
             return buf.toString();
         }
         else
@@ -86,7 +80,7 @@ final class InsertDependsAction implements IAction {
      * @param input input
      */
     @Override
-    public void setInput(final String input) {
+    public void setInput(final List<String> input) {
         value = input;
     }
     @Override

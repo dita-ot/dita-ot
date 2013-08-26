@@ -67,6 +67,13 @@ public final class PipelineFacade implements AbstractFacade {
     }
 
     @Override
+    public AbstractPipelineOutput execute(final AbstractPipelineModule module,
+            final AbstractPipelineInput input) throws DITAOTException {
+        module.setLogger(logger);
+        return module.execute(input);
+    }
+
+    @Override
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }

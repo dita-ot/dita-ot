@@ -179,7 +179,7 @@ public class TestGenMapAndTopicListModule {
         final NodeList nodeList = elem.getElementsByTagName("keydef");
         final Map<String, List<String>> expKeyDef = new HashMap<String, List<String>>();
         expKeyDef.put("target_topic_2", Arrays.asList("target_topic_2", "topics" + UNIX_SEPARATOR + "target-topic-c.xml", "maps" + UNIX_SEPARATOR + "root-map-01.ditamap"));
-        expKeyDef.put("target_topic_1", Arrays.asList("target_topic_1", "topics" + UNIX_SEPARATOR + "target-topic a.xml", "maps" + UNIX_SEPARATOR + "root-map-01.ditamap"));
+        expKeyDef.put("target_topic_1", Arrays.asList("target_topic_1", "topics" + UNIX_SEPARATOR + "target-topic%20a.xml", "maps" + UNIX_SEPARATOR + "root-map-01.ditamap"));
         expKeyDef.put("target_topic_3", Arrays.asList("target_topic_3", "topics" + UNIX_SEPARATOR + "target-topic-c.xml", "maps" + UNIX_SEPARATOR + "root-map-01.ditamap"));
         expKeyDef.put("target_topic_4", Arrays.asList("target_topic_4", "http://www.example.com/?foo=bar&baz=qux#quxx", "maps" + UNIX_SEPARATOR + "root-map-01.ditamap"));
         for(int i = 0; i< nodeList.getLength();i++){
@@ -269,7 +269,7 @@ public class TestGenMapAndTopicListModule {
         final NodeList nodeList = elem.getElementsByTagName("keydef");
         final Map<String, List<String>> expKeyDef = new HashMap<String, List<String>>();
         expKeyDef.put("target_topic_2", Arrays.asList("target_topic_2", "topics" + File.separator + "target-topic-c.xml", "root-map-02.ditamap"));
-        expKeyDef.put("target_topic_1", Arrays.asList("target_topic_1", "topics" + File.separator + "target-topic a.xml", "root-map-02.ditamap"));
+        expKeyDef.put("target_topic_1", Arrays.asList("target_topic_1", "topics" + File.separator + "target-topic%20a.xml", "root-map-02.ditamap"));
         expKeyDef.put("target_topic_3", Arrays.asList("target_topic_3", "topics" + File.separator + "target-topic-c.xml", "root-map-02.ditamap"));
         expKeyDef.put("target_topic_4", Arrays.asList("target_topic_4", "http://www.example.com/?foo=bar&baz=qux#quxx", "root-map-02.ditamap"));
         for(int i = 0; i< nodeList.getLength();i++){

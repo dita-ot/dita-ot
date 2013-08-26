@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  This file is part of the DITA Open Toolkit project.
+  See the accompanying license.txt file for applicable licenses.
+-->
+<plugin id="org.dita.np">
+  <!-- preprocessing extension points -->
+  <extension-point id="depend.preprocess.gen-list-debug-filter.pre" name="Generate list pre-target"/>
+  <!-- extensions -->
+  <feature extension="dita.conductor.target.relative" file="conductor.xml"/>
+  <template file="build_preprocess_template.xml"/>
+</plugin>

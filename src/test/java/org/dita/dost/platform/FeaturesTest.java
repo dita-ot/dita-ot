@@ -9,6 +9,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
+import static java.util.Arrays.*;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -63,7 +64,7 @@ public class FeaturesTest {
         final Features f = new Features(new File("base", "plugins"), new File("base"));
         f.addFeature("foo", "bar", null);
 
-        assertEquals("bar", f.getFeature("foo"));
+        assertEquals(asList("bar"), f.getFeature("foo"));
     }
 
     @Test
@@ -73,9 +74,9 @@ public class FeaturesTest {
         f.addFeature("foo", "baz", null);
         f.addFeature("bar", "qux", null);
 
-        final Map<String, String> exp = new HashMap<String,String>();
-        exp.put("foo", "bar,baz");
-        exp.put("bar", "qux");
+        final Map<String, List<String>> exp = new HashMap<String, List<String>>();
+        exp.put("foo", asList("bar", "baz"));
+        exp.put("bar", asList("qux"));
 
         assertEquals(exp, f.getAllFeatures());
     }
@@ -88,11 +89,11 @@ public class FeaturesTest {
             fail();
         } catch (final NullPointerException e) {}
         f.addFeature("foo", " bar, baz ", null);
-        assertEquals("bar,baz", f.getFeature("foo"));
+        assertEquals(asList("bar", "baz"), f.getFeature("foo"));
         f.addFeature("foo", "bar, baz", "file");
-        assertEquals("bar,baz,"
-                + "base" + File.separator + "plugins" + File.separator + "bar,"
-                + "base" + File.separator + "plugins" + File.separator + "baz",
+        assertEquals(asList("bar","baz",
+                "base" + File.separator + "plugins" + File.separator + "bar",
+                "base" + File.separator + "plugins" + File.separator + "baz"),
                 f.getFeature("foo"));
     }
 

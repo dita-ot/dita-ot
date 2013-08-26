@@ -35,7 +35,7 @@ final class Features {
     private final File location;
     private final File ditaDir;
     private final Map<String, ExtensionPoint> extensionPoints;
-    private final Hashtable<String,String> featureTable;
+    private final Hashtable<String,List<String>> featureTable;
     private final List<PluginRequirement> requireList;
     private final Hashtable<String,String> metaTable;
     private final List<String> templateList;
@@ -49,7 +49,7 @@ final class Features {
         this.location = location;
         this.ditaDir = ditaDir;
         extensionPoints= new HashMap<String, ExtensionPoint>();
-        featureTable = new Hashtable<String,String>(INT_16);
+        featureTable = new Hashtable<String, List<String>>(INT_16);
         requireList = new ArrayList<PluginRequirement>(INT_8);
         metaTable = new Hashtable<String,String>(INT_16);
         templateList = new ArrayList<String>(INT_8);
@@ -88,7 +88,7 @@ final class Features {
      * @param id feature id
      * @return feature name
      */
-    public String getFeature(final String id){
+    public List<String> getFeature(final String id){
         return featureTable.get(id);
     }
 
@@ -96,7 +96,7 @@ final class Features {
      * Return the set of all features.
      * @return features
      */
-    public Map<String,String> getAllFeatures(){
+    public Map<String, List<String>> getAllFeatures(){
         return featureTable;
     }
 
@@ -136,24 +136,21 @@ final class Features {
             isFile = "file".equals(attributes.getValue("type"));
         }
         final StringTokenizer valueTokenizer = new StringTokenizer(value, Integrator.FEAT_VALUE_SEPARATOR);
-        final StringBuffer valueBuffer = new StringBuffer();
+        final List<String> valueBuffer = new ArrayList<String>();
         if (featureTable.containsKey(id)) {
-            valueBuffer.append(featureTable.get(id));
-            valueBuffer.append(Integrator.FEAT_VALUE_SEPARATOR);
+            valueBuffer.addAll(featureTable.get(id));
         }
         while(valueTokenizer.hasMoreElements()){
             final String valueElement = valueTokenizer.nextToken();
             if(valueElement!=null && valueElement.trim().length() != 0){
                 if(isFile && !FileUtils.isAbsolutePath(valueElement)){
-                    valueBuffer.append(location).append(File.separatorChar);
-                }
-                valueBuffer.append(valueElement.trim());
-                if(valueTokenizer.hasMoreElements()){
-                    valueBuffer.append(Integrator.FEAT_VALUE_SEPARATOR);
+                    valueBuffer.add(location + File.separator + valueElement.trim());
+                } else {
+                    valueBuffer.add(valueElement.trim());
                 }
             }
         }
-        featureTable.put(id, valueBuffer.toString());
+        featureTable.put(id, valueBuffer);
     }
 
     /**

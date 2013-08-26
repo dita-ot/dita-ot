@@ -10,16 +10,24 @@ package org.dita.dost.invoker;
 
 import static org.dita.dost.util.Constants.*;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
+import org.apache.tools.ant.types.Mapper;
+import org.apache.tools.ant.types.XMLCatalog;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTAntLogger;
 import org.dita.dost.module.AbstractPipelineModule;
+import org.dita.dost.module.XsltModule;
 import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
 
@@ -93,6 +101,10 @@ public final class ExtensibleAntInvoker extends Task {
         modules.add(m);
     }
     
+    public void addConfiguredXslt(final Xslt xslt) {
+        modules.add(xslt);
+    }
+    
     /**
      * Execution point of this invoker.
      * @throws BuildException exception
@@ -126,22 +138,84 @@ public final class ExtensibleAntInvoker extends Task {
                 for (final Map.Entry<String, String> e: attrs.entrySet()) {
                     pipelineInput.setAttribute(e.getKey(), e.getValue());
                 }
-                for (final Param p : m.params) {
-                    if (!p.isValid()) {
-                        throw new BuildException("Incomplete parameter");
+                if (m instanceof Xslt) {
+                    final Xslt xm = (Xslt) m;
+                    final XsltModule x = new XsltModule();
+                    x.setStyle(xm.style);
+                    if (xm.in != null) {
+                    	x.setSource(xm.in);
+                    	x.setResult(xm.out);
+                    } else {
+	                    final Set<File> inc = readListFile(xm.includes, logger); 
+	                    inc.removeAll(readListFile(xm.excludes, logger));
+	                    x.setIncludes(inc);
+	                    x.setDestinationDir(xm.destDir != null ? xm.destDir : xm.baseDir);
+	                    x.setSorceDir(xm.baseDir);
                     }
-                    final String ifProperty = p.getIf();
-                    final String unlessProperty = p.getUnless();
-                    if ((ifProperty == null || getProject().getProperties().containsKey(ifProperty))
-                            && (unlessProperty == null || !getProject().getProperties().containsKey(unlessProperty))) {
-                        pipelineInput.setAttribute(p.getName(), p.getValue());
+                    x.setFilenameParam(xm.filenameparameter);
+                    x.setFiledirParam(xm.filedirparameter);
+                    x.setReloadstylesheet(xm.reloadstylesheet);
+                    x.setXMLCatalog(xm.xmlcatalog);
+                    if (xm.mapper != null) {
+                    	x.setMapper(xm.mapper.getImplementation());
                     }
+                    for (final Param p : m.params) {
+                        if (!p.isValid()) {
+                            throw new BuildException("Incomplete parameter");
+                        }
+                        if (isValid(p.getIf(), p.getUnless())) {
+                            x.setParam(p.getName(), p.getValue());
+                        }
+                    }
+                    pipeline.execute(x, pipelineInput);
+                } else {
+                    for (final Param p : m.params) {
+                        if (!p.isValid()) {
+                            throw new BuildException("Incomplete parameter");
+                        }
+                        final String ifProperty = p.getIf();
+                        final String unlessProperty = p.getUnless();
+                        if ((ifProperty == null || getProject().getProperties().containsKey(ifProperty))
+                                && (unlessProperty == null || !getProject().getProperties().containsKey(unlessProperty))) {
+                            pipelineInput.setAttribute(p.getName(), p.getValue());
+                        }
+                    }
+                    pipeline.execute(m.getImplementation(), pipelineInput);
                 }
-                pipeline.execute(m.getImplementation(), pipelineInput);
             }
         } catch (final DITAOTException e) {
             throw new BuildException("Failed to run pipeline: " + e.getMessage(), e);
         }
+    }
+    
+    private Set<File> readListFile(final List<Xslt.IncludesFile> includes, final DITAOTAntLogger logger) {
+    	final Set<File> inc = new HashSet<File>();
+    	for (final Xslt.IncludesFile i: includes) {
+            if (!isValid(i.ifProperty, null)) {
+                continue;
+            }
+            BufferedReader r = null;
+            try {
+                r = new BufferedReader(new FileReader(i.file));
+                for (String l = r.readLine(); l != null; l = r.readLine()) {
+                    inc.add(new File(l));
+                }
+            } catch (IOException e) {
+                logger.logError("Failed to read includes file " + i.file + ": " + e.getMessage() , e);
+            } finally {
+                if (r != null) {
+                    try {
+                        r.close();
+                    } catch (IOException e) {}
+                }
+            }
+        }
+    	return inc;
+    }
+    
+    private boolean isValid(final String ifProperty, final String unlessProperty) {
+        return (ifProperty == null || getProject().getProperties().containsKey(ifProperty))
+                && (unlessProperty == null || !getProject().getProperties().containsKey(unlessProperty));
     }
     
     /**
@@ -166,6 +240,121 @@ public final class ExtensibleAntInvoker extends Task {
             return cls;
         }
 
+    }
+    
+    /**
+     * Nested pipeline XSLT element configuration.
+     * @author jelovirt
+     *
+     */
+    public static class Xslt extends Module {
+        
+        private String taskname;
+        private File style;
+        private File baseDir;
+        private File destDir;
+        private File in;
+        private File out;
+        private final List<IncludesFile> includes = new ArrayList<IncludesFile>();
+        private final List<IncludesFile> excludes = new ArrayList<IncludesFile>();
+        private Mapper mapper;
+        private String filenameparameter;
+        private String filedirparameter;
+        private XMLCatalog xmlcatalog;
+        private boolean reloadstylesheet;
+        
+        // Ant setters
+        
+        public void setStyle(final File style) {
+            this.style = style;
+        }
+        
+        public void setBasedir(final File baseDir) {
+            this.baseDir = baseDir;
+        }
+        
+        public void setDestdir(final File destDir) {
+            this.destDir = destDir;
+        }
+        
+        public void setTaskname(final String taskname) {
+            this.taskname = taskname;
+        }
+        
+        public void setClasspathref(final String classpath) {
+        	// Ignore classpathref attribute
+        }
+        
+        public void setExtension(final String extension) {
+        	// Ignore extension attribute
+        }
+        
+        public void setReloadstylesheet(final boolean reloadstylesheet) {
+        	this.reloadstylesheet = reloadstylesheet;
+        }
+        
+        public void setIn(final File in) {
+        	this.in = in;
+        }
+        
+        public void setOut(final File out) {
+        	this.out = out;
+        }
+        
+        public void setIncludesfile(final File includesfile) throws IOException {
+              final IncludesFile i = new IncludesFile();
+              i.setName(includesfile);
+              includes.add(i);
+        }
+        
+        public void setExcludesfile(final File excludesfile) throws IOException {
+            final IncludesFile i = new IncludesFile();
+            i.setName(excludesfile);
+            excludes.add(i);
+        }
+        
+        public void setFilenameparameter(final String filenameparameter) {
+            this.filenameparameter = filenameparameter;
+        }
+        
+        public void setFiledirparameter(final String filedirparameter) {
+            this.filedirparameter = filedirparameter;
+        }
+                
+        public void addConfiguredXmlcatalog(final XMLCatalog xmlcatalog) {
+            this.xmlcatalog = xmlcatalog;
+        }
+        
+        public void addConfiguredMapper(final Mapper mapper) {
+            this.mapper = mapper;
+        }
+        
+        public void addConfiguredIncludesFile(final IncludesFile includesFile) {
+            includes.add(includesFile);
+        }
+        
+        public void addConfiguredExcludesFile(final IncludesFile excludesFile) {
+            excludes.add(excludesFile);
+        }
+        
+        public static class IncludesFile {
+            private File file;
+            private String ifProperty;
+            public void setName(final File file) {
+                this.file = file;
+            }
+            public void setIf(final String ifProperty) {
+                this.ifProperty = ifProperty;
+            }
+        }
+        
+        /*public static class XMLCatalog {
+            private String refid;
+            public void setRefid(final String refid) {
+                this.refid = refid;
+            }
+        }*/
+        
     }
 
     /** Nested parameters. */

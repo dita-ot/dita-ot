@@ -10,6 +10,7 @@ package org.dita.dost.reader;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Configuration.*;
+import static org.dita.dost.util.FileUtils.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,6 +18,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,7 +39,6 @@ import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.CatalogUtils;
-import org.dita.dost.util.DITAAttrUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.OutputUtils;
@@ -164,8 +165,6 @@ public final class GenListModuleReader extends AbstractXMLReader {
     private final Stack<String> topicrefStack;
     /** Store the primary ditamap file name. */
     private String primaryDitamap = "";
-    /** Get DITAAttrUtil */
-    private final DITAAttrUtils ditaAttrUtils = DITAAttrUtils.getInstance();
     /** Store the external/peer keydefs */
     private final Map<String, String> exKeysDefMap;
     /** File extension of source file. */
@@ -593,7 +592,6 @@ public final class GenListModuleReader extends AbstractXMLReader {
         topicrefStack.clear();
         processRoleLevel = 0;
         processRoleStack.clear();
-        ditaAttrUtils.reset();
         // Don't clean resourceOnlySet por crossSet
     }
 
@@ -638,12 +636,6 @@ public final class GenListModuleReader extends AbstractXMLReader {
         final Properties params = new Properties();
 
         final String printValue = atts.getValue(ATTRIBUTE_NAME_PRINT);
-        // increase element level for nested tags.
-        ditaAttrUtils.increasePrintLevel(printValue);
-        // Exclude the topic if it is needed.
-        if (ditaAttrUtils.needExcludeForPrintAttri(transtype)) {
-            return;
-        }
 
         final String processingRole = atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE);
         final String href = atts.getValue(ATTRIBUTE_NAME_HREF);
@@ -1008,9 +1000,6 @@ public final class GenListModuleReader extends AbstractXMLReader {
             level--;
             topicrefStack.pop();
         }
-
-        // decrease element level.
-        ditaAttrUtils.decreasePrintLevel();
     }
 
     /**
@@ -1131,10 +1120,9 @@ public final class GenListModuleReader extends AbstractXMLReader {
      * @param fileName
      */
     private void addReferredBranches(final String hrefValue, final String fileName) {
-        String branchId = null;
+        final String branchId = getFragment(hrefValue);
         // href value has branch id.
-        if (hrefValue.contains(SHARP)) {
-            branchId = hrefValue.substring(hrefValue.lastIndexOf(SHARP) + 1);
+        if (branchId != null) {
             // The map contains the file name
             if (vaildBranches.containsKey(fileName)) {
                 final List<String> branchIdList = vaildBranches.get(fileName);
@@ -1216,9 +1204,9 @@ public final class GenListModuleReader extends AbstractXMLReader {
                             keysDefMap.put(key, new KeyDef(key, target, attrScope, null));
                         } else {
                             String tail = "";
-                            if (target.indexOf(SHARP) != -1) {
-                                tail = target.substring(target.indexOf(SHARP));
-                                target = target.substring(0, target.indexOf(SHARP));
+                            if (getFragment(target) != null) {
+                                tail = SHARP + getFragment(target);
+                                target = stripFragment(target);
                             }
                             if (new File(target).isAbsolute()) {
                                 target = FileUtils.getRelativePath(rootFilePath.getAbsolutePath(), target);
@@ -1232,7 +1220,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
                     } else {
                         // target is null or empty, it is useful in the future
                         // when consider the content of key definition
-                        keysDefMap.put(key, new KeyDef(key, null, null, null));
+                        keysDefMap.put(key, new KeyDef(key, (URI) null, (String) null, (URI) null));
                     }
                 } else {
                     logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ045I", key, target).toString());

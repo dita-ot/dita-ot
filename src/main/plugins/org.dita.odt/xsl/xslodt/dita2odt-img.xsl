@@ -34,7 +34,7 @@
   xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0"
   xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0"
   xmlns:prodtools="http://www.ibm.com/xmlns/prodtools" 
-  version="1.0" 
+  version="2.0" 
   xmlns:java="org.dita.dost.util.ImgUtils" exclude-result-prefixes="java">
 
 <xsl:output method="xml"/>

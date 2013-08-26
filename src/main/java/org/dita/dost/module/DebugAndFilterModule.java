@@ -11,6 +11,7 @@ package org.dita.dost.module;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.writer.DitaWriter.*;
 import static org.dita.dost.util.Job.*;
+import static org.dita.dost.util.Configuration.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -226,10 +227,9 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             filterReader.setLogger(logger);
             filterReader.initXMLReader("yes".equals(input.getAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID)));
 
-            FilterUtils filterUtils = null;
-            if (ditavalFile!=null){
-            	filterUtils = new FilterUtils();
-            	filterUtils.setLogger(logger);
+            FilterUtils filterUtils = new FilterUtils(printTranstype.contains(transtype));
+            filterUtils.setLogger(logger);
+            if (ditavalFile != null){
                 filterReader.read(ditavalFile.getAbsolutePath());
                 filterUtils.setFilterMap(filterReader.getFilterMap());
             }
@@ -270,12 +270,12 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                 filterReader.reset();
                 if (schemaSet != null) {
                     subjectSchemeReader.reset();
-                    final FilterUtils fu = new FilterUtils();
+                    final FilterUtils fu = new FilterUtils(printTranstype.contains(transtype));
                     fu.setLogger(logger);
                     for (final String schema: schemaSet) {
                         subjectSchemeReader.loadSubjectScheme(FileUtils.resolveFile(tempDir.getAbsolutePath(), schema) + SUBJECT_SCHEME_EXTENSION);
                     }
-                    if (ditavalFile!=null){
+                    if (ditavalFile != null){
                         filterReader.filterReset();
                         filterReader.setSubjectScheme(subjectSchemeReader.getSubjectSchemeMap());
                         filterReader.read(ditavalFile.getAbsolutePath());
@@ -284,7 +284,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                         fm.putAll(filterUtils.getFilterMap());
                         fu.setFilterMap(Collections.unmodifiableMap(fm));
                     } else {
-                        fu.setFilterMap(null);
+                        fu.setFilterMap(Collections.EMPTY_MAP);
                     }
                     fileWriter.setFilterUtils(fu);
 

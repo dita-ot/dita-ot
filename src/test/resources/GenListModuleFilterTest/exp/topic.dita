@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?workdir /Users/jelovirt/Work/github/dita-ot/src/test/resources/GenListModuleFilterTest/src/topic.dita?>
+<?workdir-uri file:/Users/jelovirt/Work/github/dita-ot/src/test/resources/GenListModuleFilterTest/src/topic.dita?>
+<?path2project?>
+<?path2project-uri ./?>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" ditaarch:DITAArchVersion="1.2"
+  class="- topic/topic " domains="(topic hi-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic abbrev-d) (topic pr-d) (topic sw-d) (topic ui-d)"
+  id="topic_wjn_ybn_sj">
+  <title class="- topic/title ">Topic title</title>
+  <body class="- topic/body ">
+    <p class="- topic/p ">Topic paragraph</p>
+  </body>
+  <related-links class="- topic/related-links ">
+    <link class="- topic/link " href="topic.dita"/>
+    <link class="- topic/link " href="local.dita"/>
+    <link class="- topic/link " href="peer.dita" scope="peer"/>
+    <link class="- topic/link " href="external.dita" scope="external"/>
+    <link class="- topic/link " href="local.html" format="html"/>
+    <link class="- topic/link " href="peer.html" scope="peer" format="html"/>
+    <link class="- topic/link " href="external.html" scope="external" format="html"/>
+  </related-links>
+</topic>

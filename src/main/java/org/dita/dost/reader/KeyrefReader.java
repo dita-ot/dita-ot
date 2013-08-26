@@ -11,6 +11,7 @@ package org.dita.dost.reader;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.StringReader;
+import java.net.URI;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -125,12 +126,11 @@ public final class KeyrefReader extends AbstractXMLReader {
         return Collections.unmodifiableMap(keyDefTable);
     }
 
-    @Override
-    public void read(final String filename) {
+    public void read(final URI filename) {
         keyDefs = new Stack<KeyDef>();
         try {
             /* filename = tempDir + File.separator + filename; */
-            final InputSource source = URIResolverAdapter.convertToInputSource(DitaURIResolverFactory.getURIResolver().resolve(filename, null));
+            final InputSource source = URIResolverAdapter.convertToInputSource(DitaURIResolverFactory.getURIResolver().resolve(filename.toString(), null));
             reader.parse(source);
         } catch (final Exception ex) {
             logger.logError(ex.getMessage(), ex) ;

@@ -10,6 +10,8 @@ package org.dita.dost.util;
 
 import static org.dita.dost.util.Constants.*;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -34,9 +36,37 @@ public final class FilterUtils {
     public static final FilterKey DEFAULT = new FilterKey(DEFAULT_ACTION, null);
 
     private DITAOTLogger logger;
+    /** Immutable default filter map. */
+    private final Map<FilterKey, Action> defaultFilterMap;
     private Map<FilterKey, Action> filterMap = null;
     private final Set<FilterKey> notMappingRules = new HashSet<FilterKey>();
-
+    
+    @Deprecated
+    public FilterUtils() {
+        defaultFilterMap = Collections.emptyMap();
+        filterMap = defaultFilterMap;
+    }
+    
+    /**
+     * Construct filter utility.
+     * 
+     * @param isPrintType transformation output is print-oriented
+     */
+    public FilterUtils(final boolean isPrintType) {
+        final Map<FilterKey, Action> dfm = new HashMap<FilterKey, Action>();
+        dfm.put(new FilterKey(ATTRIBUTE_NAME_PRINT, ATTR_PRINT_VALUE_YES), Action.INCLUDE);
+        if (isPrintType) {
+            dfm.put(new FilterKey(ATTRIBUTE_NAME_PRINT, ATTR_PRINT_VALUE_PRINT_ONLY), Action.INCLUDE);
+            dfm.put(new FilterKey(ATTRIBUTE_NAME_PRINT, ATTR_PRINT_VALUE_NO), Action.EXCLUDE);
+        } else {
+            dfm.put(new FilterKey(ATTRIBUTE_NAME_PRINT, ATTR_PRINT_VALUE_PRINT_ONLY), Action.EXCLUDE);
+            dfm.put(new FilterKey(ATTRIBUTE_NAME_PRINT, ATTR_PRINT_VALUE_NO), Action.INCLUDE);            
+        }
+        dfm.put(new FilterKey(ATTRIBUTE_NAME_PRINT, null), Action.INCLUDE);
+        defaultFilterMap = Collections.unmodifiableMap(dfm);
+        filterMap = defaultFilterMap;
+    }
+    
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
@@ -47,7 +77,13 @@ public final class FilterUtils {
      * @param filtermap The filterMap to set.
      */
     public void setFilterMap(final Map<FilterKey, Action> filtermap) {
-        filterMap = filtermap;
+        if (!filtermap.isEmpty()) {
+            final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>(defaultFilterMap);
+            fm.putAll(filtermap);
+            filterMap = Collections.unmodifiableMap(fm);
+        } else {
+            filterMap = defaultFilterMap;
+        }
     }
 
     /**
@@ -65,7 +101,7 @@ public final class FilterUtils {
      * @param atts attributes
      * @param extProps {@code props} attribute specializations
      * @return true if any one of attributes 'audience', 'platform', 'product',
-     *         'otherprops' was excluded.
+     *         'otherprops', 'props', or 'print' was excluded.
      */
     public boolean needExclude(final Attributes atts, final String[][] extProps) {
         if (filterMap == null) {
@@ -83,7 +119,8 @@ public final class FilterUtils {
                 || checkExclude(ATTRIBUTE_NAME_PLATFORM, atts.getValue(ATTRIBUTE_NAME_PLATFORM))
                 || checkExclude(ATTRIBUTE_NAME_PRODUCT, atts.getValue(ATTRIBUTE_NAME_PRODUCT))
                 || checkExclude(ATTRIBUTE_NAME_OTHERPROPS, atts.getValue(ATTRIBUTE_NAME_OTHERPROPS))
-                || checkExclude(ATTRIBUTE_NAME_PROPS, atts.getValue(ATTRIBUTE_NAME_PROPS));
+                || checkExclude(ATTRIBUTE_NAME_PROPS, atts.getValue(ATTRIBUTE_NAME_PROPS))
+                || checkExclude(ATTRIBUTE_NAME_PRINT, atts.getValue(ATTRIBUTE_NAME_PRINT));
 
         if (extProps == null) {
             return ret;

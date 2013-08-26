@@ -32,11 +32,11 @@ import org.dita.dost.log.DITAOTAntLogger;
  */
 public final class CheckLang extends Task {
 
-    private String basedir;
+    private File basedir;
 
-    private String tempdir;
+    private File tempdir;
 
-    private String outputdir;
+    private File outputdir;
 
     private String inputmap;
 
@@ -54,12 +54,12 @@ public final class CheckLang extends Task {
 
         new Properties();
         //ensure tempdir is absolute
-        if (!new File(tempdir).isAbsolute()) {
-            tempdir = new File(basedir, tempdir).getAbsolutePath();
+        if (!tempdir.isAbsolute()) {
+            tempdir = new File(basedir, tempdir.getPath()).getAbsoluteFile();
         }
         //ensure outdir is absolute
-        if (!new File(outputdir).isAbsolute()) {
-            outputdir = new File(basedir, outputdir).getAbsolutePath();
+        if (!outputdir.isAbsolute()) {
+            outputdir = new File(basedir, outputdir.getPath()).getAbsoluteFile();
         }
         //ensure inputmap is absolute
         if (!new File(inputmap).isAbsolute()) {
@@ -68,7 +68,7 @@ public final class CheckLang extends Task {
 
         Job job = null;
         try{
-            job = new Job(new File(tempdir));
+            job = new Job(tempdir);
         }catch(final IOException e){
             logger.logError(e.getMessage(), e) ;
         }
@@ -131,11 +131,11 @@ public final class CheckLang extends Task {
         }
     }
 
-    public void setBasedir(final String basedir) {
+    public void setBasedir(final File basedir) {
         this.basedir = basedir;
     }
 
-    public void setTempdir(final String tempdir) {
+    public void setTempdir(final File tempdir) {
         this.tempdir = tempdir;
     }
 
@@ -147,7 +147,7 @@ public final class CheckLang extends Task {
         this.message = message;
     }
 
-    public void setOutputdir(final String outputdir) {
+    public void setOutputdir(final File outputdir) {
         this.outputdir = outputdir;
     }
 

@@ -77,6 +77,7 @@ public final class ChunkMapReader implements AbstractReader {
     private ProcessingInstruction workdir = null;
     private ProcessingInstruction workdirUrl = null;
     private ProcessingInstruction path2proj = null;
+    private ProcessingInstruction path2projUrl = null;
 
     private String processingRole = ATTR_PROCESSING_ROLE_VALUE_NORMAL;
     /**
@@ -109,12 +110,14 @@ public final class ChunkMapReader implements AbstractReader {
                 final Node node = docNodes.item(i);
                 if (node.getNodeType() == Node.PROCESSING_INSTRUCTION_NODE) {
                     final ProcessingInstruction pi = (ProcessingInstruction) node;
-                    if (pi.getNodeName() == PI_WORKDIR_TARGET) {
+                    if (pi.getNodeName().equals(PI_WORKDIR_TARGET)) {
                         workdir = pi;
-                    } if (pi.getNodeName() == PI_WORKDIR_TARGET_URI) {
+                    } else if (pi.getNodeName().equals(PI_WORKDIR_TARGET_URI)) {
                         workdirUrl = pi;
                     } else if (pi.getNodeName().equals(PI_PATH2PROJ_TARGET)) {
                         path2proj = pi;
+                    } else if (pi.getNodeName().equals(PI_PATH2PROJ_TARGET_URI)) {
+                        path2projUrl = pi;
                     }
                 }
             }
@@ -281,6 +284,9 @@ public final class ChunkMapReader implements AbstractReader {
             if (path2proj != null)
             {
                 output(path2proj, output);
+            }
+            if (path2projUrl != null) {
+                output(path2projUrl, output);
             }
 
             output(root,output);

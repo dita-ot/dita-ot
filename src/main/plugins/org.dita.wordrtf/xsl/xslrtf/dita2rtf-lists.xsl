@@ -5,7 +5,7 @@
 <!-- (c) Copyright IBM Corp. 2005, 2006 All Rights Reserved. -->
 <xsl:stylesheet
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	version="1.0" xmlns:random="org.dita.dost.util.RandomUtils" exclude-result-prefixes="random">
+	version="2.0" xmlns:random="org.dita.dost.util.RandomUtils" exclude-result-prefixes="random">
 	
 <!-- single-part lists -->
 

@@ -64,18 +64,14 @@ final class TopicMergeModule implements AbstractPipelineModule {
         if (logger == null) {
             throw new IllegalStateException("Logger not set");
         }
-        final String ditaInput = input
-                .getAttribute(ANT_INVOKER_PARAM_INPUTMAP);
-        final String style = input
-                .getAttribute(ANT_INVOKER_EXT_PARAM_STYLE);
-        final String out = input
-                .getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUT);
-        final String tempdir = input
-                .getAttribute(ANT_INVOKER_PARAM_TEMPDIR);
+        final File ditaInput = new File(input.getAttribute(ANT_INVOKER_PARAM_INPUTMAP));
+        final File style = input.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE) != null ? new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE)) : null;
+        final File out = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUT));
+        final File tempdir = new File(input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR));
         final MergeMapParser mapParser = new MergeMapParser();
         mapParser.setLogger(logger);
 
-        if (ditaInput == null || !new File(ditaInput).exists()){
+        if (ditaInput == null || !ditaInput.exists()){
             logger.logError(MessageUtils.getInstance().getMessage("DOTJ025E").toString());
             return null;
         }
@@ -109,15 +105,14 @@ final class TopicMergeModule implements AbstractPipelineModule {
 
         OutputStream output = null;
         try{
-            final File outputDir = new File(out).getParentFile();
+            final File outputDir = out.getParentFile();
             if (!outputDir.exists()){
                 outputDir.mkdirs();
             }
             output = new BufferedOutputStream(new FileOutputStream(out));
             if (style != null){
                 final TransformerFactory factory = TransformerFactory.newInstance();
-                final File styleFile = new File(style);
-                final Transformer transformer = factory.newTransformer(new StreamSource(styleFile.toURI().toString()));
+                final Transformer transformer = factory.newTransformer(new StreamSource(style.toURI().toString()));
                 transformer.transform(new StreamSource(new ByteArrayInputStream(midBuffer.toByteArray())),
                                       new StreamResult(output));
             }else{

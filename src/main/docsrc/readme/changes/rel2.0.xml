@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="rel2.0" xml:lang="en">
+  <title>DITA Open Toolkit Release 2.0</title>
+  <!--reference id="releasehighlights">
+    <title>Release highlights</title>
+    <refbody>
+      <section/>
+    </refbody>
+  </reference-->
+  <reference id="general-enhancements-and-changes">
+    <title>General Enhancements and Changes</title>
+    <refbody>
+      <section>
+        <draft-comment author="jelovirt">TODO</draft-comment>
+      </section>
+    </refbody>
+  </reference>
+  <reference id="reference_yvj_ttj_bd">
+    <title>Migration from previous releases</title>
+    <refbody>
+      <section>
+        <draft-comment author="jelovirt">TODO</draft-comment>
+      </section>
+    </refbody>
+  </reference>
+  <reference id="rel2.0.issues">
+    <title>Issues</title>
+    <shortdesc>The following items are included in DITA Open Toolkit Release 2.0. Issue numbers
+      correspond to the tracking number in the <ph><xref keyref="dita-ot-issues" scope="external"
+          >GitHub issues tracker</xref></ph>.</shortdesc>
+    <refbody>
+      <section>
+        <title>Feature requests</title>
+        <ul>
+          <li>#1347 Issue with "xsl/dita2xhtml.xsl"? (milestone 1)</li>
+          <li>#1522 Add HTML5 transtype (milestone 1)</li>
+          <li>#1524 Use DITAVAL for print filtering (milestone 1)</li>
+          <li>#1506 New command line tool (in progress)</li>
+          <li>#1507 Convert XSLT to version 2.0 (in progress)</li>
+          <li>#1509 Remove deprecated code (in progress)</li>
+          <li>#1512 Alternative preprocessing plug-in (in progress)</li>
+          <li>#1523 Reduce HTML/XHTML code duplication (in progress)</li>
+          <li>#1544 Use URI and File instead of String (in progress)</li>
+          <li>#1548 Support RFC 5147 in coderef (in progress)</li>
+        </ul>
+      </section>
+      <!--
+      <section>
+        <title>Bugs</title>
+        <ul>
+        </ul>
+      </section>
+      -->
+    </refbody>
+  </reference>
+</reference>

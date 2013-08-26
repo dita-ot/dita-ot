@@ -3,10 +3,9 @@
   <topicref class="- map/topicref " href="one.dita">
     <topicref class="- map/topicref " href="two.dita"/>
   </topicref>
-  <!-- print=no is left for latter processing to take care of -->
-  <topicref class="- map/topicref " href="three.dita" print="no">
+  <!--topicref class="- map/topicref " href="three.dita" print="no">
     <topicref class="- map/topicref " href="four.dita"/>
-  </topicref>
+  </topicref-->
   <topicref class="- map/topicref " href="five.dita" print="printonly">
     <topicref class="- map/topicref " href="six.dita"/>
   </topicref>

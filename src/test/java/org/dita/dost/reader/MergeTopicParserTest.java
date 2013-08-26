@@ -13,6 +13,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.StringReader;
 import java.lang.reflect.Method;
+import java.net.URI;
 
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXTransformerFactory;
@@ -20,8 +21,8 @@ import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
 
 import org.junit.BeforeClass;
-
 import org.xml.sax.InputSource;
+import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.DefaultHandler;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.TestUtils;
@@ -61,14 +62,14 @@ public class MergeTopicParserTest {
         parser.setContentHandler(s);
         parser.setLogger(new TestUtils.TestLogger());
         s.startDocument();
-        parser.parse("test.xml", srcDir.getAbsolutePath());
+        parser.parse("test.xml", srcDir.getAbsoluteFile());
         s.endDocument();
         assertXMLEqual(new InputSource(new File(expDir, "test.xml").toURI().toString()),
                 new InputSource(new ByteArrayInputStream(output.toByteArray())));
 
-        final Method method = MergeTopicParser.class.getDeclaredMethod("handleLocalHref", String.class);
+        final Method method = MergeTopicParser.class.getDeclaredMethod("handleLocalHref", URI.class);
         method.setAccessible(true);
-        assertEquals("images/test.jpg", method.invoke(parser, "images/test.jpg"));
+        assertEquals(new URI("images/test.jpg"), method.invoke(parser, new URI("images/test.jpg")));
     }
 
     @Test
@@ -76,20 +77,21 @@ public class MergeTopicParserTest {
         final MergeTopicParser parser = new MergeTopicParser(new MergeUtils());
         parser.setContentHandler(new DefaultHandler());
         parser.setLogger(new TestUtils.TestLogger());
-        final Method method = MergeTopicParser.class.getDeclaredMethod("handleLocalHref", String.class);
+        final Method method = MergeTopicParser.class.getDeclaredMethod("handleLocalHref", URI.class);
         method.setAccessible(true);
         
-        parser.parse("test.xml", srcDir.getAbsolutePath());
-        assertEquals("test.jpg", method.invoke(parser, "test.jpg"));
-        assertEquals("test.jpg#foo", method.invoke(parser, "test.jpg#foo"));
-        assertEquals("#foo", method.invoke(parser, "#foo"));
-        assertEquals("images/test.jpg", method.invoke(parser, "images/test.jpg"));
-        assertEquals("images/test.jpg#foo", method.invoke(parser, "images/test.jpg#foo"));
-        assertEquals("../test.jpg", method.invoke(parser, "../test.jpg"));
+        parser.parse("test.xml", srcDir.getAbsoluteFile());
+        assertEquals(new URI("test.jpg"), method.invoke(parser, new URI("test.jpg")));
+        assertEquals(new URI("test.jpg#foo"), method.invoke(parser, new URI("test.jpg#foo")));
+        assertEquals(new URI("#foo"), method.invoke(parser, new URI("#foo")));
+        assertEquals(new URI("images/test.jpg"), method.invoke(parser, new URI("images/test.jpg")));
+        assertEquals(new URI("images/test.jpg#foo"), method.invoke(parser, new URI("images/test.jpg#foo")));
+        assertEquals(new URI("../test.jpg"), method.invoke(parser, new URI("../test.jpg")));
         
-        parser.parse("src/test.xml", resourceDir.getAbsolutePath());
-        assertEquals("src/test.jpg", method.invoke(parser, "test.jpg"));
-        assertEquals("src/images/test.jpg", method.invoke(parser, "images/test.jpg"));
-        assertEquals("test.jpg", method.invoke(parser, "../test.jpg"));
+        parser.parse("src/test.xml", resourceDir.getAbsoluteFile());
+        assertEquals(new URI("src/test.jpg"), method.invoke(parser, new URI("test.jpg")));
+        assertEquals(new URI("src/images/test.jpg"), method.invoke(parser, new URI("images/test.jpg")));
+        assertEquals(new URI("test.jpg"), method.invoke(parser, new URI("../test.jpg")));
     }
+    
 }

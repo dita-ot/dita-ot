@@ -5,11 +5,14 @@
 package org.dita.dost.util;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -36,9 +39,9 @@ public class KeyDef {
     private static final String ELEMENT_KEYDEF = "keydef";
     
     public final String keys;
-    public final String href;
+    public final URI href;
     public final String scope;
-    public final String source;
+    public final URI source;
     
     /**
      * Construct new key definition.
@@ -48,24 +51,48 @@ public class KeyDef {
      * @param scope link scope, may be {@code null}
      * @param source key definition source, may be {@code null}
      */
-    public KeyDef(final String keys, final String href, final String scope, final String source) {
+    public KeyDef(final String keys, final URI href, final String scope, final URI source) {
         this.keys = keys;
         this.href = href;
         this.scope = scope;
         this.source = source;
     }
     
+    /**
+     * Construct new key definition.
+     * 
+     * @param keys key name
+     * @param href href URI, may be {@code null}
+     * @param scope link scope, may be {@code null}
+     * @param source key definition source, may be {@code null}
+     */
+    @Deprecated
+    public KeyDef(final String keys, final String href, final String scope, final String source) {
+        this.keys = keys;
+//        try {
+            this.href = href != null ? toURI(href) : null;
+//        } catch (final URISyntaxException e) {
+//            throw new IllegalArgumentException(e.getMessage(), e);
+//        }
+        this.scope = scope;
+//        try {
+            this.source = source != null ? toURI(source) : null;
+//        } catch (final URISyntaxException e) {
+//            throw new IllegalArgumentException(e.getMessage(), e);
+//        }
+    }
+    
     @Override
     public String toString() {
         final StringBuilder buf = new StringBuilder().append(keys).append(EQUAL);
         if (href != null) {
-            buf.append(href);
+            buf.append(href.toString());
         }
         if (scope != null) {
             buf.append(LEFT_BRACKET).append(scope).append(RIGHT_BRACKET);
         }
         if (source != null) {
-            buf.append(LEFT_BRACKET).append(source).append(RIGHT_BRACKET);
+            buf.append(LEFT_BRACKET).append(source.toString()).append(RIGHT_BRACKET);
         }
         return buf.toString();
     }
@@ -119,13 +146,13 @@ public class KeyDef {
                 keydef.writeStartElement(ELEMENT_KEYDEF);
                 keydef.writeAttribute(ATTRIBUTE_KEYS, k.keys);
                 if (k.href != null) {
-                    keydef.writeAttribute(ATTRIBUTE_HREF, k.href);
+                    keydef.writeAttribute(ATTRIBUTE_HREF, k.href.toString());
                 }
                 if (k.scope != null) {
                     keydef.writeAttribute(ATTRIBUTE_SCOPE, k.scope);
                 }
                 if (k.source != null) {
-                    keydef.writeAttribute(ATTRIUBTE_SOURCE, k.source);
+                    keydef.writeAttribute(ATTRIUBTE_SOURCE, k.source.toString());
                 }
                 keydef.writeEndElement();
             }        

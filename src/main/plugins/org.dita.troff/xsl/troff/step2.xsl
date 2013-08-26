@@ -2,7 +2,31 @@
 <!-- This file is part of the DITA Open Toolkit project.
   See the accompanying license.txt file for applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved. -->
-<xsl:stylesheet version="1.0"
+
+<!-- Second step in the DITA to text transform. This takes an intermediate
+     format, and converts it to text output. The text style is determined by
+     the OUTFORMAT parameter. Currently supported values are plaintext, troff,
+     and nroff (troff and nroff match at the moment). 
+
+     The first step creates an intermediate format that uses only a few elements.
+     It has a root <dita> element, and everything else fits in to these elements:
+      <section> : used for <section> and <example>. This can nest any of the following elements.
+      <sectiontitle> : used for the titles of <section> and <example>. This will nest the <text> element.
+      <block> : all other block-like elements. The reason section does not use <block> 
+                is that it maps well to troff-style sections that use the .SH macro
+                for highlighting and indenting. This can nest any number of <block> 
+                or <text> elements. Attributes set lead-in text (such as list item numbers 
+                that must appear before the list item text), as well as indent values.
+                Other attributes are described below.
+      <text> : all text nodes and phrases. This can include text or additional <text> elements.
+
+     Text will be wrapped, with the width determined by the LINELENGTH parameter. 
+     Formatters such as troff may reflow the text as needed. Line breaks should only
+     be forced in pre-formatted text, or between blocks.
+     
+     -->
+
+<xsl:stylesheet version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 >
 
@@ -53,6 +77,7 @@
   <xsl:call-template name="set-default-linelength"/>
   <xsl:apply-templates select="*[1]"/>
 </xsl:template>
+
 
 <!-- Based on step1, section titles should come first in the section. If this is
      a *ROFF format, use the .SH macro to get roff's section-like formatting. -->

@@ -8,6 +8,7 @@
  */
 package org.dita.dost.platform;
 
+import java.util.List;
 import java.util.Map;
 
 import org.dita.dost.log.DITAOTLogger;
@@ -21,7 +22,7 @@ public interface IAction {
      * Set the input string.
      * @param input input
      */
-    void setInput(String input);
+    void setInput(List<String> input);
     /**
      * Add input parameter.
      * @param name parameter name

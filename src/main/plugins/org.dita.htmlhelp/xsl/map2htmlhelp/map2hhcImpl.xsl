@@ -18,7 +18,7 @@
 -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                version="1.0"
+                version="2.0"
                 xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
                 exclude-result-prefixes="dita-ot"
   >

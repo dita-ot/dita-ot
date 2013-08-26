@@ -33,8 +33,10 @@ See the accompanying license.txt file for applicable licenses.
 
 <!-- An adaptation of the Toolkit topicmerge.xsl for FO plugin use. -->
 
-<xsl:stylesheet version="1.1"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="2.0"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                exclude-result-prefixes="xs">
 
     <xsl:output indent="no"/>
 
@@ -105,7 +107,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class,' topic/topic ')] | dita-merge/dita">
 
         <xsl:param name="parentId"/>
-      <xsl:variable name="idcount">
+      <xsl:variable name="idcount" as="xs:integer?">
         <!--for-each is used to change context.  There's only one entry with a key of $parentId-->
         <xsl:for-each select="key('topicref',$parentId)">
           <xsl:value-of select="count(preceding::*[@href = current()/@href][not(ancestor::*[contains(@class, ' map/reltable ')])]) + count(ancestor::*[@href = current()/@href])"/>

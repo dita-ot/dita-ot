@@ -12,9 +12,10 @@
   <extension-point id="dita.xsl.htmltoc" name="HTML/XHTML TOC XSLT import"/>
   <!-- extensions -->
   <feature extension="dita.conductor.transtype.check" value="xhtml"/>
+  <feature extension="dita.conductor.transtype.check" value="html5"/>
   <feature extension="dita.conductor.target.relative" file="conductor.xml"/>
   <template file="build_general_template.xml"/>
   <template file="build_dita2xhtml_template.xml"/>
   <template file="xsl/dita2html-base_template.xsl"/>
-  <template file="xsl/map2htmtoc_template.xsl"/>
+  <template file="xsl/map2htmltoc_template.xsl"/>
 </plugin>

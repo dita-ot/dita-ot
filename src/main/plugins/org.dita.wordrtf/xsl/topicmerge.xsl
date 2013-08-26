@@ -7,7 +7,7 @@
 <!-- book.xsl 
  | Merge DITA topics with "validation" of topic property
  *-->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   
 <!-- Include error message template -->
 <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
@@ -202,9 +202,9 @@
           <xsl:if test="$current-doc and not($current-doc='')">
           <xsl:choose>
             <xsl:when test="$current-doc//*[contains(@class,' topic/topic ')]/@id">
-              <xsl:attribute name="href"><xsl:text>#</xsl:text><xsl:value-of select="generate-id($current-doc//*[contains(@class,' topic/topic ')][1]/@id)"/></xsl:attribute>
+              <xsl:attribute name="href"><xsl:text>#</xsl:text><xsl:value-of select="generate-id(($current-doc//*[contains(@class,' topic/topic ')])[1]/@id)"/></xsl:attribute>
             </xsl:when>
-            <xsl:otherwise><xsl:text>#</xsl:text><xsl:value-of select="generate-id($current-doc//*[contains(@class,' topic/topic ')][1])"/></xsl:otherwise>
+            <xsl:otherwise><xsl:text>#</xsl:text><xsl:value-of select="generate-id(($current-doc//*[contains(@class,' topic/topic ')])[1])"/></xsl:otherwise>
           </xsl:choose>
           </xsl:if>
         </xsl:otherwise>

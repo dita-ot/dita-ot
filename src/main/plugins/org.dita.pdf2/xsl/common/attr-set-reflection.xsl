@@ -34,7 +34,7 @@ See the accompanying license.txt file for applicable licenses.
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:exsl="http://exslt.org/common"
     exclude-result-prefixes="exsl"
-    version='1.0'>
+    version='2.0'>
 
 <!--
 A word of explanation:

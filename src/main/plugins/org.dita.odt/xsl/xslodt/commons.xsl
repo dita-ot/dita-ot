@@ -31,7 +31,7 @@
     xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
     extension-element-prefixes="exsl"
     exclude-result-prefixes="opentopic exsl opentopic-index dita2xslfo"
-    version="1.1">
+    version="2.0">
     
     <xsl:template name="determineTopicType">
         <xsl:variable name="id" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>

@@ -21,8 +21,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.dita.dost.log.DITAOTJavaLogger;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -35,24 +33,6 @@ import org.xml.sax.SAXException;
  *
  */
 public final class DITAAttrUtils {
-
-    /** List of print transtypes. */
-    private static final List<String> printTranstype;
-    static {
-        final List<String> types = new ArrayList<String>();
-        final String printTranstypes = Configuration.configuration.get(CONF_PRINT_TRANSTYPES);
-        if (printTranstypes != null) {
-            if (printTranstypes.trim().length() > 0) {
-                for (final String transtype: printTranstypes.split(CONF_LIST_SEPARATOR)) {
-                    types.add(transtype.trim());
-                }
-            }
-        } else {
-            new DITAOTJavaLogger().logError("Failed to read print transtypes from configuration, using defaults.");
-            types.add(TRANS_TYPE_PDF);
-        }
-        printTranstype = Collections.unmodifiableList(types);
-    }
 
     private static final List<String> excludeList;
     static {
@@ -67,21 +47,8 @@ public final class DITAAttrUtils {
         excludeList = Collections.unmodifiableList(el);
     }
 
-    //Depth inside element for @print.
-    /*e.g for <a print="yes">
-     *            <b/>
-     *        </a>
-     * tag b's printLevel is 2
-     */
-    private int printLevel;
-
     private static DITAAttrUtils util = new DITAAttrUtils();
-    /**
-     * Constructor.
-     */
-    private DITAAttrUtils() {
-        printLevel = 0;
-    }
+
     /**
      * Get an instance.
      * @return an instance.
@@ -90,66 +57,7 @@ public final class DITAAttrUtils {
 
         return util;
     }
-    /**
-     * Increase print level.
-     * @param printValue value of print attribute.
-     * @return whether the level is increased.
-     */
-    public boolean increasePrintLevel(final String printValue){
 
-        if(printValue != null){
-            //@print = "printonly"
-            if(ATTR_PRINT_VALUE_PRINT_ONLY.equals(printValue)){
-                printLevel ++ ;
-                return true;
-                //descendant elements
-            }else if(printLevel > 0){
-                printLevel ++ ;
-                return true;
-            }
-            //@print not set but is descendant tag of "printonly"
-        }else if(printLevel > 0){
-            printLevel ++ ;
-            return true;
-        }
-
-        return false;
-
-    }
-    /**
-     * Decrease print level.
-     * @return boolean
-     */
-    public boolean decreasePrintLevel(){
-        if(printLevel > 0){
-            printLevel --;
-            return true;
-        }else{
-            return false;
-        }
-    }
-    /**
-     * Check whether need to skip for @print.
-     * @param transtype String
-     * @return boolean
-     */
-    public boolean needExcludeForPrintAttri(final String transtype){
-
-        if(printLevel > 0 && !printTranstype.contains(transtype)){
-            return true;
-        }else{
-            return false;
-        }
-
-    }
-    /**
-     * Reset the utils.
-     */
-    public void reset(){
-
-        printLevel = 0;
-
-    }
     /**
      * Search for the special kind of node by specialized value.
      * @param root place may have the node.

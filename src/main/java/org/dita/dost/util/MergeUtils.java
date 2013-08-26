@@ -108,11 +108,7 @@ public final class MergeUtils {
      * @return true if has been visited
      */
     public boolean isVisited(final String path){
-        String localPath = path;
-        final int idx = path.indexOf(SHARP);
-        if (idx != -1) {
-            localPath=localPath.substring(0, idx);
-        }
+        final String localPath = FileUtils.stripFragment(path);
         return visitSet.contains(FileUtils.normalize(FileUtils.separatorsToUnix(localPath.trim()), UNIX_SEPARATOR));
     }
 
@@ -122,11 +118,7 @@ public final class MergeUtils {
      * @param path topic path, may contain a fragment
      */
     public void visit(final String path){
-        String localPath = path;
-        final int idx = path.indexOf(SHARP);
-        if (idx != -1) {
-            localPath=localPath.substring(0, idx);
-        }
+        final String localPath = FileUtils.stripFragment(path);
         visitSet.add(FileUtils.normalize(FileUtils.separatorsToUnix(localPath.trim()), UNIX_SEPARATOR));
     }
 
@@ -138,15 +130,15 @@ public final class MergeUtils {
      * @param useCatalog whether use catalog file for validation
      * @return topic id
      */
-    public static String getFirstTopicId(final String path, final String dir, final boolean useCatalog){
+    public static String getFirstTopicId(final String path, final File dir, final boolean useCatalog){
         final DITAOTLogger logger = new DITAOTJavaLogger();
         String localPath = path;
-        String localDir = dir;
+        File localDir = dir;
         final StringBuffer firstTopicId = new StringBuffer();
 
         if (path != null && dir != null) {
             localPath = localPath.trim();
-            localDir = localDir.trim();
+            localDir = new File(localDir.toString().trim());
         } else {
             return null;
         }
