@@ -13,35 +13,35 @@ import static org.dita.dost.writer.DitaWriter.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.OutputStream;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Properties;
-import java.util.Random;
 import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamWriter;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
 import org.dita.dost.module.Content;
-import org.dita.dost.module.ContentImpl;
 import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.ChunkTopicParser;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.ProcessingInstruction;
-import org.w3c.dom.Text;
 
 /**
  * ChunkMapReader class, read ditamap file for chunking.
@@ -66,7 +66,6 @@ public final class ChunkMapReader implements AbstractReader {
     private LinkedHashMap<String, String> changeTable = null;
 
     private Hashtable<String, String> conflictTable = null;
-    private final Random random;
 
     private Set<String> refFileSet = null;
 
@@ -89,7 +88,6 @@ public final class ChunkMapReader implements AbstractReader {
         changeTable = new LinkedHashMap<String, String>(INT_128);
         refFileSet = new HashSet<String>(INT_128);
         conflictTable = new Hashtable<String, String>(INT_128);
-        random = new Random();
     }
     /**
      * read input file.
@@ -146,7 +144,7 @@ public final class ChunkMapReader implements AbstractReader {
                         0, inputFile.getName().indexOf(FILE_EXTENSION_DITAMAP)) + ditaext;
                 File newFile = new File(inputFile.getParentFile().getAbsolutePath(),newFilename);
                 if (newFile.exists()) {
-                    newFilename = generateFilename("Chunk", ditaext);
+                    newFilename = ChunkFilenameGenerator.generateFilename("Chunk", ditaext);
                     final String oldpath = newFile.getAbsolutePath();
                     newFile = new File(FileUtils.resolveFile(inputFile.getParentFile().getAbsolutePath(), newFilename));
                     // Mark up the possible name changing, in case that references might be updated.
@@ -158,31 +156,18 @@ public final class ChunkMapReader implements AbstractReader {
                 root.setAttribute(ATTRIBUTE_NAME_HREF, newFilename);
 
                 //create the new file
-                OutputStreamWriter newFileWriter = null;
+                OutputStream newFileWriter = null;
                 try{
-                    newFileWriter = new OutputStreamWriter(new FileOutputStream(newFile), UTF8);
-                    newFileWriter.write(XML_HEAD);
-                    newFileWriter.write(LESS_THAN);
-                    newFileWriter.write(QUESTION);
-                    newFileWriter.write(PI_WORKDIR_TARGET);
-                    newFileWriter.write(STRING_BLANK);
-                    newFileWriter.write(UNIX_SEPARATOR);
-                    newFileWriter.write(newFile.getParentFile().getAbsolutePath());
-                    newFileWriter.write(QUESTION);
-                    newFileWriter.write(GREATER_THAN);
-                    
-                    newFileWriter.write(LESS_THAN);
-                    newFileWriter.write(QUESTION);
-                    newFileWriter.write(PI_WORKDIR_TARGET_URI);
-                    newFileWriter.write(STRING_BLANK);
-                    newFileWriter.write(UNIX_SEPARATOR);
-                    newFileWriter.write(newFile.getParentFile().toURI().toString());
-                    newFileWriter.write(QUESTION);
-                    newFileWriter.write(GREATER_THAN);
-                    
-                    newFileWriter.write("<dita></dita>");
+                    newFileWriter = new FileOutputStream(newFile);
+                    final XMLStreamWriter o = XMLOutputFactory.newInstance().createXMLStreamWriter(newFileWriter, UTF8);
+                    o.writeStartDocument();
+                    o.writeProcessingInstruction(PI_WORKDIR_TARGET, UNIX_SEPARATOR + newFile.getParentFile().getAbsolutePath());
+                    o.writeProcessingInstruction(PI_WORKDIR_TARGET_URI, newFile.getParentFile().toURI().toString());
+                    o.writeStartElement(ELEMENT_NAME_DITA);
+                    o.writeEndElement();
+                    o.writeEndDocument();
+                    o.close();
                     newFileWriter.flush();
-                    newFileWriter.close();
                 }catch (final Exception e) {
                     logger.logError(e.getMessage(), e) ;
                 }finally{
@@ -249,49 +234,39 @@ public final class ChunkMapReader implements AbstractReader {
 
     }
     
-    /**
-     * Generate file name
-     * 
-     * @param prefix file name prefix
-     * @param extension file extension
-     * @return generated file name
-     */
-	private String generateFilename(final String prefix, final String extension) {
-		return prefix + random.nextInt(Integer.MAX_VALUE) + extension;
-	}
-
     @Override
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
 
     private void outputMapFile(final String file, final Element root) {
-
-        OutputStreamWriter output = null;
+        Document doc = null;
+        try {
+             doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+        } catch (final ParserConfigurationException e) {
+            throw new RuntimeException("Failed to create empty document: " + e.getMessage(), e);
+        }
+        
+        OutputStream output = null;
         try{
-            output = new OutputStreamWriter(
-                    new FileOutputStream(file),
-                    UTF8);
-            // path2proj processing instructions were not being sent to output.
-            // The follow few lines corrects that problem.
-            output.write(XML_HEAD);
             if (workdir != null) {
-                output(workdir, output);
+                doc.appendChild(doc.importNode(workdir, true));
             }
             if (workdirUrl != null) {
-                output(workdirUrl, output);
+                doc.appendChild(doc.importNode(workdirUrl, true));
             }
             if (path2proj != null)
             {
-                output(path2proj, output);
+                doc.appendChild(doc.importNode(path2proj, true));
             }
             if (path2projUrl != null) {
-                output(path2projUrl, output);
+                doc.appendChild(doc.importNode(path2projUrl, true));
             }
-
-            output(root,output);
-            output.flush();
-            output.close();
+            doc.appendChild(doc.importNode(root, true));
+            
+            final Transformer t = TransformerFactory.newInstance().newTransformer();
+            output = new FileOutputStream(file);
+            t.transform(new DOMSource(doc), new StreamResult(output));
         }catch (final Exception e) {
             logger.logError(e.getMessage(), e) ;
         }finally{
@@ -305,52 +280,6 @@ public final class ChunkMapReader implements AbstractReader {
         }
     }
 
-    private void output(final ProcessingInstruction instruction,final Writer outputWriter) throws IOException{
-        outputWriter.write(LESS_THAN);
-        outputWriter.write(QUESTION);
-        outputWriter.write(instruction.getTarget());
-        outputWriter.write(STRING_BLANK);
-        outputWriter.write(instruction.getData());
-        outputWriter.write(QUESTION);
-        outputWriter.write(GREATER_THAN);
-    }
-
-
-    private void output(final Text text, final Writer outputWriter) throws IOException{
-        outputWriter.write(StringUtils.escapeXML(text.getData()));
-    }
-
-
-    private void output(final Element elem, final Writer outputWriter) throws IOException{
-        outputWriter.write(LESS_THAN);
-        outputWriter.write(elem.getNodeName());
-        final NamedNodeMap attrMap = elem.getAttributes();
-        for (int i = 0; i<attrMap.getLength(); i++){
-            outputWriter.write(STRING_BLANK);
-            outputWriter.write(attrMap.item(i).getNodeName());
-            outputWriter.write(EQUAL);
-            outputWriter.write(QUOTATION);
-            outputWriter.write(StringUtils.escapeXML(attrMap.item(i).getNodeValue()));
-            outputWriter.write(QUOTATION);
-        }
-        outputWriter.write(GREATER_THAN);
-        final NodeList children = elem.getChildNodes();
-        for (int j = 0; j<children.getLength(); j++){
-            final Node child = children.item(j);
-            switch (child.getNodeType()){
-            case Node.TEXT_NODE:
-                output((Text) child, outputWriter); break;
-            case Node.PROCESSING_INSTRUCTION_NODE:
-                output((ProcessingInstruction) child, outputWriter); break;
-            case Node.ELEMENT_NODE:
-                output((Element) child, outputWriter); break;
-            }
-        }
-        outputWriter.write(LESS_THAN);
-        outputWriter.write(SLASH);
-        outputWriter.write(elem.getNodeName());
-        outputWriter.write(GREATER_THAN);
-    }
     //process chunk
     private void processTopicref(final Element node) {
         String hrefValue = null;
@@ -447,7 +376,7 @@ public final class ChunkMapReader implements AbstractReader {
             final Node root = node.getOwnerDocument().getDocumentElement().cloneNode(false);
             //create navref element
             final Element navref = node.getOwnerDocument().createElement(MAP_NAVREF.localName);
-            final String newMapFile = generateFilename("MAPCHUNK", ".ditamap");
+            final String newMapFile = ChunkFilenameGenerator.generateFilename("MAPCHUNK", FILE_EXTENSION_DITAMAP);
             navref.setAttribute(MAPGROUP_D_MAPREF.localName,newMapFile);
             navref.setAttribute(ATTRIBUTE_NAME_CLASS, MAP_NAVREF.toString());
             //replace node with navref

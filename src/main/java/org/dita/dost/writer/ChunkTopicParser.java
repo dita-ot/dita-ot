@@ -27,7 +27,6 @@ import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Random;
 import java.util.Set;
 import java.util.Stack;
 
@@ -35,6 +34,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
+import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
 import org.dita.dost.util.DITAAttrUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
@@ -115,7 +115,6 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
     private final Map<String,String> copytotarget2source;
 
     private Map<String, String> currentParsingFileTopicIDChangeTable;
-    private final Random random;
 
     private static final String ditaarchNSValue = "http://dita.oasis-open.org/architecture/2005/";
     /**
@@ -141,7 +140,6 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
         } catch (final Exception e) {
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
-        random = new Random();
     }
     @Override
     public void characters(final char[] ch, final int start, final int length) throws SAXException {
@@ -410,7 +408,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                         //change topic @id if there are conflicts.
                         if(topicID.contains(attrValue)){
                             final String oldAttrValue = attrValue;
-                            attrValue = generateID();
+                            attrValue = ChunkFilenameGenerator.generateID();
                             topicID.add(attrValue);
 
                             String tmpVal = changeTable.get(currentParsingFile+SHARP+idValue);
@@ -542,15 +540,6 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
         output.write(QUESTION);
         output.write(GREATER_THAN);
     }
-    
-    /**
-     * Generate ID.
-     * 
-     * @return generated ID
-     */
-	private String generateID() {
-		return "unique_" + random.nextInt(Integer.MAX_VALUE);
-	}
 
 	@Override
     public void write(final String filename) throws DITAOTException {
@@ -575,20 +564,14 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
             // XXX: This may have to use new File(FileUtils.resolveFile(filePath,FILE_NAME_DITA_LIST_XML)).getParent()
             final Job job = new Job(new File(filePath));
             final Set<String> copytosourcelist = job.getSet(COPYTO_SOURCE_LIST);
-            final Set<String> copytotarget2sourcemaplist = job.getSet(COPYTO_TARGET_TO_SOURCE_MAP_LIST);
+            final Map<String, String> copytotarget2sourcemaplist = job.getMap(COPYTO_TARGET_TO_SOURCE_MAP_LIST);
             //in the following, all the 4 arrays are updated according to the set copyto and
             //map copytotarget2source.
 
-            //			//copy all the file name in copytosourcelist to a new set
-            for(final String source:copytosourcelist){
-                copytoSource.add(source);
-            }
+            //copy all the file name in copytosourcelist to a new set
+            copytoSource.addAll(copytosourcelist);
             //copy all the copytotarget2sourcemaplist to a new hashmap
-            for(final String target2source:copytotarget2sourcemaplist){
-                if(target2source.indexOf(EQUAL)!=-1) {
-                    copytotarget2source.put(target2source.substring(0, target2source.indexOf(EQUAL)), target2source.substring(target2source.indexOf(EQUAL)-1));
-                }
-            }
+            copytotarget2source.putAll(copytotarget2sourcemaplist);
             //in the case of chunk='to-content' and copy-to='*.dita'
             //the @href value are added in fullditatopic and fullditamapandtopic,
             //while they are not supposed to be contained, so should be be removed
@@ -809,7 +792,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
      * @return generated file name
      */
 	private String generateFilename() {
-		return "Chunk" + random.nextInt(Integer.MAX_VALUE) + ditaext;
+		return ChunkFilenameGenerator.generateFilename("Chunk", ditaext);
 	}
 
     private void processChunk(final Element element, final String outputFile) {
