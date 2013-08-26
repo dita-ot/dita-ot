@@ -20,6 +20,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -40,7 +41,7 @@ import org.w3c.dom.Element;
  * The chunking module class.
  *
  */
-final class ChunkModule implements AbstractPipelineModule {
+final public class ChunkModule implements AbstractPipelineModule {
 
     private DITAOTLogger logger;
 
@@ -303,5 +304,34 @@ final class ChunkModule implements AbstractPipelineModule {
             logger.logError(ex.getMessage(), ex) ;
         }
     }
+    
+    /**
+     * Utility class for generating chunk file names.
+     */
+    public static class ChunkFilenameGenerator {
+        
+        private final static Random random = new Random();
+        
+        /**
+         * Generate file name
+         * 
+         * @param prefix file name prefix
+         * @param extension file extension
+         * @return generated file name
+         */
+        public static String generateFilename(final String prefix, final String extension) {
+            return prefix + random.nextInt(Integer.MAX_VALUE) + extension;
+        }
+        
+        /**
+         * Generate ID.
+         * 
+         * @return generated ID
+         */
+        public static String generateID() {
+            return "unique_" + random.nextInt(Integer.MAX_VALUE);
+        }
+        
+    } 
 
 }

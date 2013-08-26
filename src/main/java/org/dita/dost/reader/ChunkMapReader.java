@@ -19,7 +19,6 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -34,6 +33,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
 import org.dita.dost.module.Content;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.writer.ChunkTopicParser;
@@ -66,7 +66,6 @@ public final class ChunkMapReader implements AbstractReader {
     private LinkedHashMap<String, String> changeTable = null;
 
     private Hashtable<String, String> conflictTable = null;
-    private final Random random;
 
     private Set<String> refFileSet = null;
 
@@ -89,7 +88,6 @@ public final class ChunkMapReader implements AbstractReader {
         changeTable = new LinkedHashMap<String, String>(INT_128);
         refFileSet = new HashSet<String>(INT_128);
         conflictTable = new Hashtable<String, String>(INT_128);
-        random = new Random();
     }
     /**
      * read input file.
@@ -146,7 +144,7 @@ public final class ChunkMapReader implements AbstractReader {
                         0, inputFile.getName().indexOf(FILE_EXTENSION_DITAMAP)) + ditaext;
                 File newFile = new File(inputFile.getParentFile().getAbsolutePath(),newFilename);
                 if (newFile.exists()) {
-                    newFilename = generateFilename("Chunk", ditaext);
+                    newFilename = ChunkFilenameGenerator.generateFilename("Chunk", ditaext);
                     final String oldpath = newFile.getAbsolutePath();
                     newFile = new File(FileUtils.resolveFile(inputFile.getParentFile().getAbsolutePath(), newFilename));
                     // Mark up the possible name changing, in case that references might be updated.
@@ -236,17 +234,6 @@ public final class ChunkMapReader implements AbstractReader {
 
     }
     
-    /**
-     * Generate file name
-     * 
-     * @param prefix file name prefix
-     * @param extension file extension
-     * @return generated file name
-     */
-	private String generateFilename(final String prefix, final String extension) {
-		return prefix + random.nextInt(Integer.MAX_VALUE) + extension;
-	}
-
     @Override
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
@@ -389,7 +376,7 @@ public final class ChunkMapReader implements AbstractReader {
             final Node root = node.getOwnerDocument().getDocumentElement().cloneNode(false);
             //create navref element
             final Element navref = node.getOwnerDocument().createElement(MAP_NAVREF.localName);
-            final String newMapFile = generateFilename("MAPCHUNK", ".ditamap");
+            final String newMapFile = ChunkFilenameGenerator.generateFilename("MAPCHUNK", FILE_EXTENSION_DITAMAP);
             navref.setAttribute(MAPGROUP_D_MAPREF.localName,newMapFile);
             navref.setAttribute(ATTRIBUTE_NAME_CLASS, MAP_NAVREF.toString());
             //replace node with navref
