@@ -33,6 +33,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.module.ChunkModule.ChunkFilenameGeneratorFactory;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
 import org.dita.dost.module.Content;
 import org.dita.dost.util.FileUtils;
@@ -79,6 +80,8 @@ public final class ChunkMapReader implements AbstractReader {
     private ProcessingInstruction path2projUrl = null;
 
     private String processingRole = ATTR_PROCESSING_ROLE_VALUE_NORMAL;
+    private ChunkFilenameGenerator chunkFilenameGenerator = ChunkFilenameGeneratorFactory.newInstance();
+    
     /**
      * Constructor.
      */
@@ -144,7 +147,7 @@ public final class ChunkMapReader implements AbstractReader {
                         0, inputFile.getName().indexOf(FILE_EXTENSION_DITAMAP)) + ditaext;
                 File newFile = new File(inputFile.getParentFile().getAbsolutePath(),newFilename);
                 if (newFile.exists()) {
-                    newFilename = ChunkFilenameGenerator.generateFilename("Chunk", ditaext);
+                    newFilename = chunkFilenameGenerator.generateFilename("Chunk", ditaext);
                     final String oldpath = newFile.getAbsolutePath();
                     newFile = new File(FileUtils.resolveFile(inputFile.getParentFile().getAbsolutePath(), newFilename));
                     // Mark up the possible name changing, in case that references might be updated.
@@ -376,7 +379,7 @@ public final class ChunkMapReader implements AbstractReader {
             final Node root = node.getOwnerDocument().getDocumentElement().cloneNode(false);
             //create navref element
             final Element navref = node.getOwnerDocument().createElement(MAP_NAVREF.localName);
-            final String newMapFile = ChunkFilenameGenerator.generateFilename("MAPCHUNK", FILE_EXTENSION_DITAMAP);
+            final String newMapFile = chunkFilenameGenerator.generateFilename("MAPCHUNK", FILE_EXTENSION_DITAMAP);
             navref.setAttribute(MAPGROUP_D_MAPREF.localName,newMapFile);
             navref.setAttribute(ATTRIBUTE_NAME_CLASS, MAP_NAVREF.toString());
             //replace node with navref
@@ -475,7 +478,7 @@ public final class ChunkMapReader implements AbstractReader {
         try{
             final ChunkTopicParser chunkParser = new ChunkTopicParser();
             chunkParser.setLogger(logger);
-            chunkParser.setup(changeTable, conflictTable, refFileSet, elem, separate, chunkByTopic, ditaext);
+            chunkParser.setup(changeTable, conflictTable, refFileSet, elem, separate, chunkByTopic, ditaext, chunkFilenameGenerator);
             chunkParser.write(filePath);
         }catch (final Exception e) {
             logger.logError(e.getMessage(), e) ;

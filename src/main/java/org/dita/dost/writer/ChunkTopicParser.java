@@ -117,6 +117,9 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
     private Map<String, String> currentParsingFileTopicIDChangeTable;
 
     private static final String ditaarchNSValue = "http://dita.oasis-open.org/architecture/2005/";
+    
+    private ChunkFilenameGenerator chunkFilenameGenerator;
+    
     /**
      * Constructor.
      */
@@ -408,7 +411,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                         //change topic @id if there are conflicts.
                         if(topicID.contains(attrValue)){
                             final String oldAttrValue = attrValue;
-                            attrValue = ChunkFilenameGenerator.generateID();
+                            attrValue = chunkFilenameGenerator.generateID();
                             topicID.add(attrValue);
 
                             String tmpVal = changeTable.get(currentParsingFile+SHARP+idValue);
@@ -792,7 +795,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
      * @return generated file name
      */
 	private String generateFilename() {
-		return ChunkFilenameGenerator.generateFilename("Chunk", ditaext);
+		return chunkFilenameGenerator.generateFilename("Chunk", ditaext);
 	}
 
     private void processChunk(final Element element, final String outputFile) {
@@ -1172,13 +1175,15 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
      * @param ditaext ditaext
      */
     public void setup(final LinkedHashMap<String, String> changeTable, final Hashtable<String, String> conflictTable,
-            final Set<String> refFileSet, final Element elem, final boolean separate, final boolean chunkByTopic, final String ditaext) {
+            final Set<String> refFileSet, final Element elem, final boolean separate, final boolean chunkByTopic, final String ditaext,
+            final ChunkFilenameGenerator chunkFilenameGenerator) {
         // Initialize ChunkTopicParser
         this.changeTable = changeTable;
         this.elem = elem;
         this.separate = separate;
         this.ditaext  = ditaext;
         this.conflictTable = conflictTable;
+        this.chunkFilenameGenerator =  chunkFilenameGenerator;
     }
 
     /** Check whether current href needs to be updated */

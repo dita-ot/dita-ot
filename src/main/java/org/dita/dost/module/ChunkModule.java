@@ -22,6 +22,7 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -31,6 +32,7 @@ import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.ChunkMapReader;
+import org.dita.dost.util.Configuration;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.StringUtils;
@@ -306,11 +308,25 @@ final public class ChunkModule implements AbstractPipelineModule {
     }
     
     /**
-     * Utility class for generating chunk file names.
+     * Factory for chunk filename generator.
      */
-    public static class ChunkFilenameGenerator {
+    public static class ChunkFilenameGeneratorFactory {
         
-        private final static Random random = new Random();
+        public static ChunkFilenameGenerator newInstance() {
+            final String mode = Configuration.configuration.get("chunk.id-generation-scheme");
+            if (mode != null && mode.equals("counter")) {
+                return new CounterChunkFilenameGenerator();
+            } else {
+                return new RandomChunkFilenameGenerator();
+            }
+        }
+        
+    }
+    
+    /**
+     * Generator fror chunk filenames and identifiers.
+     */
+    public static interface ChunkFilenameGenerator {
         
         /**
          * Generate file name
@@ -319,19 +335,35 @@ final public class ChunkModule implements AbstractPipelineModule {
          * @param extension file extension
          * @return generated file name
          */
-        public static String generateFilename(final String prefix, final String extension) {
-            return prefix + random.nextInt(Integer.MAX_VALUE) + extension;
-        }
+        public String generateFilename(final String prefix, final String extension);
         
         /**
          * Generate ID.
          * 
          * @return generated ID
          */
-        public static String generateID() {
+        public String generateID();
+        
+    }
+    
+    public static class RandomChunkFilenameGenerator implements ChunkFilenameGenerator {
+        private final Random random = new Random();
+        public String generateFilename(final String prefix, final String extension) {
+            return prefix + random.nextInt(Integer.MAX_VALUE) + extension;
+        }
+        public String generateID() {
             return "unique_" + random.nextInt(Integer.MAX_VALUE);
         }
-        
-    } 
+    }
+    
+    public static class CounterChunkFilenameGenerator implements ChunkFilenameGenerator {
+        private final AtomicInteger counter = new AtomicInteger();
+        public String generateFilename(final String prefix, final String extension) {
+            return prefix + counter.getAndIncrement() + extension;
+        }
+        public String generateID() {
+            return "unique_" + counter.getAndIncrement();
+        }
+    }
 
 }
