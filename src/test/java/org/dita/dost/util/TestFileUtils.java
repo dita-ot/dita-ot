@@ -136,7 +136,7 @@ public class TestFileUtils {
             assertEquals("c:\\dir\\file.xml", FileUtils.resolveTopic("c:\\dir","file.xml"));
             assertEquals("c:\\dir\\file.xml#topicid", FileUtils.resolveTopic("c:\\dir","file.xml#topicid"));
             assertEquals("c:\\file.xml", FileUtils.resolveTopic("c:\\dir","..\\file.xml"));
-            assertEquals("\\file.xml", FileUtils.resolveTopic("","file.xml"));
+            assertEquals("file.xml", FileUtils.resolveTopic("","file.xml"));
             assertEquals("file.xml", FileUtils.resolveTopic((String) null,"file.xml"));
         } else {
             assertEquals("/dir/file.xml", FileUtils.resolveTopic("/dir","file.xml"));
@@ -153,7 +153,7 @@ public class TestFileUtils {
             assertEquals("c:\\dir\\file.xml", FileUtils.resolveFile("c:\\dir","file.xml"));
             assertEquals("c:\\dir\\file.xml", FileUtils.resolveFile("c:\\dir","file.xml#topicid"));
             assertEquals("c:\\file.xml", FileUtils.resolveFile("c:\\dir","..\\file.xml"));
-            assertEquals("\\file.xml", FileUtils.resolveFile("","file.xml"));
+            assertEquals("file.xml", FileUtils.resolveFile("","file.xml"));
             assertEquals("file.xml", FileUtils.resolveFile((String) null,"file.xml"));
         } else {
             assertEquals("/dir/file.xml", FileUtils.resolveFile("/dir","file.xml"));
@@ -170,14 +170,12 @@ public class TestFileUtils {
             assertEquals("c:\\dir1\\dir2\\file.xml",FileUtils.normalizeDirectory("c:\\dir1", "dir2\\file.xml"));
             assertEquals("c:\\dir1\\file.xml",FileUtils.normalizeDirectory("c:\\dir1\\dir2", "..\\file.xml"));
             assertEquals("\\file.xml",FileUtils.normalizeDirectory("", "\\file.xml#topicid"));
-            //should be c:\\file.xml?
-            assertEquals("\\c:\\file.xml",FileUtils.normalizeDirectory("", "c:\\file.xml"));
+            assertEquals("c:\\file.xml",FileUtils.normalizeDirectory("", "c:\\file.xml"));
             assertEquals("c:\\file.xml",FileUtils.normalizeDirectory(null, "c:\\file.xml#topicid"));
         } else {
             assertEquals("/dir1/dir2/file.xml",FileUtils.normalizeDirectory("/dir1", "dir2/file.xml"));
             assertEquals("/dir1/file.xml",FileUtils.normalizeDirectory("/dir1/dir2", "../file.xml"));
             assertEquals("/file.xml",FileUtils.normalizeDirectory("", "/file.xml#topicid"));
-            //should be /file.xml?
             assertEquals("/file.xml",FileUtils.normalizeDirectory("", "/file.xml"));
             assertEquals("/file.xml",FileUtils.normalizeDirectory(null, "/file.xml#topicid"));
         }
