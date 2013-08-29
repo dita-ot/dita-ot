@@ -491,15 +491,29 @@
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/tbody ')]/*[contains(@class, ' topic/row ')]/*[contains(@class, ' topic/entry ')]">
-        <fo:table-cell xsl:use-attribute-sets="tbody.row.entry">
-            <xsl:call-template name="commonattributes"/>
-            <xsl:call-template name="applySpansAttrs"/>
-            <xsl:call-template name="applyAlignAttrs"/>
-            <xsl:call-template name="generateTableEntryBorder"/>
-            <fo:block xsl:use-attribute-sets="tbody.row.entry__content">
-                <xsl:call-template name="processEntryContent"/>
-            </fo:block>
-        </fo:table-cell>
+        <xsl:choose>
+            <xsl:when test="ancestor::*[contains(@class, ' topic/table ')][1]/@rowheader = 'firstcol'
+                        and count(preceding-sibling::*[contains(@class, ' topic/entry ')]) = 0">
+                <fo:table-cell xsl:use-attribute-sets="tbody.row.entry__firstcol">
+                    <xsl:apply-templates select="." mode="processTableEntry"/>
+                </fo:table-cell>
+            </xsl:when>
+            <xsl:otherwise>
+                <fo:table-cell xsl:use-attribute-sets="tbody.row.entry">
+                    <xsl:apply-templates select="." mode="processTableEntry"/>
+                </fo:table-cell>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <xsl:template match="*" mode="processTableEntry">
+        <xsl:call-template name="commonattributes"/>
+        <xsl:call-template name="applySpansAttrs"/>
+        <xsl:call-template name="applyAlignAttrs"/>
+        <xsl:call-template name="generateTableEntryBorder"/>
+        <fo:block xsl:use-attribute-sets="tbody.row.entry__content">
+            <xsl:call-template name="processEntryContent"/>
+        </fo:block>
     </xsl:template>
 
     <xsl:template name="processEntryContent">
