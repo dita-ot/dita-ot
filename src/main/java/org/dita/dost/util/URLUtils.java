@@ -424,6 +424,8 @@ public final class URLUtils {
     
     /**
      * Convert URI reference to system file path.
+     * 
+     * @filename URI to convert to system file path, may be relative or absolute
      */
     public static File toFile(final URI filename) {
         if ("file".equals(filename.getScheme()) && filename.getPath() != null) {
@@ -439,7 +441,7 @@ public final class URLUtils {
      * @param filename file reference
      * @return file path
      */
-    public static File toFile(final String filename) {
+    private static File toFile(final String filename) {
         if (filename == null) {
             return null;
         }

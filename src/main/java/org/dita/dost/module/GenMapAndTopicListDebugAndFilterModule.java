@@ -127,7 +127,7 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
     private File tempDir;
     /** Absolute ditadir for processing */
     private File ditaDir;
-    /** Input file name. */
+    /** Relative input file */
     private URI inputFile;
     /** Absolute path for filter file. */
     private File ditavalFile;
@@ -460,7 +460,7 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
     /**
      * Read a file and process it for list information.
      * 
-     * @param currentFile system path of the file to process
+     * @param currentFile relative URI of the file to process
      * @throws DITAOTException if processing failed
      */
     private void processFile(final URI currentFile) throws DITAOTException {
@@ -485,7 +485,7 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
             xmlSource.setEntityResolver(CatalogUtils.getCatalogResolver());
             
             final Source source = new SAXSource(xmlSource, new InputSource(fileToParse.toString()));
-            final File outFile = new File(tempDir, toFile(currentFile.getPath()).getPath());
+            final File outFile = new File(tempDir, toFile(currentFile).getPath());
             if (!outFile.getParentFile().exists() && !outFile.getParentFile().mkdirs()) {
                 throw new IOException("Failed to create temporary directory " + outFile.getParentFile().getAbsolutePath());
             }
@@ -731,7 +731,7 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
     /**
      * Add the given file the wait list if it has not been parsed.
      * 
-     * @param file relative system path
+     * @param file relative URI
      */
     private void addToWaitList(final URI file) {
         if (doneList.contains(file) || waitList.contains(file) || file.equals(currentFile)) {

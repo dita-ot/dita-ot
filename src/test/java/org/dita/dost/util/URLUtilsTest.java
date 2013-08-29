@@ -3,6 +3,7 @@ package org.dita.dost.util;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -92,10 +93,12 @@ public class URLUtilsTest {
     }
  
     @Test
-    public void testToFileString() {
-        assertEquals(new File("test.txt"), URLUtils.toFile("test.txt"));
-        assertEquals(new File("foo bar.txt"), URLUtils.toFile("foo%20bar.txt"));
-        assertEquals(new File("foo" + File.separator + "bar.txt"), URLUtils.toFile("foo/bar.txt"));
+    public void testToFileString() throws Exception {
+        final Method method = URLUtils.class.getDeclaredMethod("toFile", String.class);
+        method.setAccessible(true);        
+        assertEquals(new File("test.txt"), method.invoke(null, "test.txt"));
+        assertEquals(new File("foo bar.txt"), method.invoke(null, "foo%20bar.txt"));
+        assertEquals(new File("foo" + File.separator + "bar.txt"), method.invoke(null, "foo/bar.txt"));
     }
     
     @Test
