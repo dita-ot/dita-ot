@@ -73,18 +73,6 @@ See the accompanying license.txt file for applicable licenses.
         </fo:inline>
     </xsl:template>
 
-    <xsl:template name="processCopyrigth">
-        <xsl:apply-templates select="/bookmap/*[contains(@class,' topic/topic ')]" mode="process-preface"/>
-    </xsl:template>
-
-    <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="process-preface">
-        <xsl:param name="include" select="'true'"/>
-        <xsl:variable name="topicType">
-            <xsl:call-template name="determineTopicType"/>
-        </xsl:variable>
-
-    </xsl:template>
-
     <xsl:variable name="map" select="//opentopic:map"/>
 
     <xsl:template name="createFrontMatter">
