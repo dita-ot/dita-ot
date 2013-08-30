@@ -23,16 +23,13 @@
 
   <target name="tocjsInit">
     <property name="html-version" value="xhtml"/>
-      <condition property="dita.plugin.com.sophos.tocjs.copydefaults" value="true">
-          <not>
-              <isset property="output.file" />
-          </not>
-      </condition>
-      <condition property="output.file" value="${output.dir}${file.separator}toctree.js">
-          <not>
-              <isset property="output.file" />
-          </not>
-      </condition>
+    <condition property="dita.plugin.com.sophos.tocjs.copydefaults" value="true">
+        <not>
+            <isset property="output.file" />
+        </not>
+    </condition>
+    <property name="output.file" value="${output.dir}${file.separator}toctree.js"/>
+    <property name="out.ext" value=".html"/>
   </target>
 
   <target name="topic2tocjs" if="noMap">
@@ -78,11 +75,6 @@
 
   <target name="tocjsDefaultFrameset" if="dita.plugin.com.sophos.tocjs.copydefaults">
       <!-- Create the default frameset itself -->
-      <condition property="out.ext" value=".html">
-          <not>
-              <isset property="out.ext" />
-          </not>
-      </condition>
       <xslt
 		basedir="${dita.temp.dir}"
 		destdir="${output.dir}"
