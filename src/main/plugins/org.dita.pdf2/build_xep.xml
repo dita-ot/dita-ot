@@ -89,6 +89,7 @@
     </condition>
   
     <path id="xep.class.path">
+      <fileset dir="${lib.dir}" includes="**/*.jar"/>
       <fileset dir="${xep.dir}/lib" includes="**/*.jar"/>
       <pathelement location="${fo.lib.dir}/fo.jar"/>
     </path>
@@ -102,8 +103,9 @@
     </condition>
     <mkdir dir="${dita.map.output.dir}"/>
     
+    <echo taskname="xeo">Processing ${pdf2.temp.dir}/topic.fo to ${outputFile}</echo>
     <java classname="com.idiominc.ws.opentopic.fo.xep.Runner" resultproperty="errCode"
-          failonerror="${xep.failOnError}" fork="true" maxmemory="${maxJavaMemory}">
+          failonerror="${xep.failOnError}" fork="true" maxmemory="${maxJavaMemory}" taskname="xep">
       <jvmarg line="${baseJVMArgLine}"/>
       <arg value="${pdf2.temp.dir}/topic.fo"/>
       <arg value="${outputFile}"/>
