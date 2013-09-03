@@ -582,7 +582,6 @@
            source="1.6" target="1.6">
       <src>
         <pathelement location="${test.java.dir}"/>
-        <pathelement location="${test.suite.dir}/src/main/java"/>
       </src>
       <classpath>
         <pathelement location="${test.lib.dir}/junit-4.8.2.jar"/>
@@ -626,7 +625,29 @@
     </junit>
   </target>
   
-  <target name="integration-test" depends="compile, test-compile" description="Run integration tests">
+  <property name="integration-test.bin.dir" location="${basedir}/target/integration-test-classes"/>
+  
+  <target name="integration-test-compile" depends="compile, test-compile">
+    <delete failonerror="false">
+      <fileset dir="${integration-test.bin.dir}" erroronmissingdir="false"/>
+    </delete>
+    <mkdir dir="${integration-test.bin.dir}"/>
+    <javac destdir="${integration-test.bin.dir}"
+           debug="on"
+           source="1.6" target="1.6">
+      <src>
+        <pathelement location="${test.suite.dir}/src/main/java"/>
+      </src>
+      <classpath>
+        <pathelement location="${test.lib.dir}/junit-4.8.2.jar"/>
+        <pathelement location="${test.lib.dir}/htmlparser-1.3.1.jar"/>
+        <pathelement location="${test.lib.dir}/xmlunit-1.3.jar"/>
+        <pathelement location="${test.bin.dir}"/>
+      </classpath>
+    </javac>
+  </target>
+  
+  <target name="integration-test" depends="compile, test-compile, integration-test-compile" description="Run integration tests">
     <condition property="only-test.name" value="${only-test}" else="">
       <isset property="only-test"/>
     </condition>
@@ -636,7 +657,7 @@
     <mkdir dir="${test.log.dir}"/>
     <junit printsummary="false" haltonfailure="yes" showoutput="false" logfailedtests="true">
       <classpath>
-        <pathelement location="${test.bin.dir}"/>
+        <pathelement location="${integration-test.bin.dir}"/>
         <pathelement location="${test.src.dir}/resources"/>
         <pathelement location="${test.lib.dir}/junit-4.8.2.jar"/>
         <pathelement location="${test.lib.dir}/htmlparser-1.3.1.jar"/>
@@ -662,6 +683,7 @@
     <delete includeemptydirs="true" failonerror="false">
       <fileset dir="${test.bin.dir}" erroronmissingdir="false"/>
       <fileset dir="${test.log.dir}" erroronmissingdir="false"/>
+      <fileset dir="${integration-test.bin.dir}" erroronmissingdir="false"/>
     </delete>
   </target>
 
