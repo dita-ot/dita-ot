@@ -64,10 +64,6 @@ directory. The DITA files are then imported to your DITA project.</cmd></substep
 </step>
 <step><cmd>Right click <filepath>build.xml</filepath>, select <menucascade><uicontrol>Run As</uicontrol>
   <uicontrol>Ant Build</uicontrol></menucascade>.</cmd>
- <info><note importance="high">If you're using Oracle JDK, please download and use the latest Xalan. The
-            Xalan shipped with Oracle JDK has some issue that will cause the build failure. You can
-            use the latest Xalan by selecting <uicontrol>ANT Build ...</uicontrol> and include the
-            all of Xalan's jar files in Classpath.</note></info>
 <info>After the transformation, the output is in the output directory set in
             <filepath>build.xml</filepath>. Refresh the project after the build is successful.<fig>
             <image href="images/runasant.jpg" placement="break">

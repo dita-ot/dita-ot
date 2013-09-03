@@ -80,29 +80,14 @@ export CLASSPATH=$DITA_HOME/lib/commons-codec-<keyword keyref="tool.codec.versio
             </step>
             <step>
                 <cmd>Set up the XSLT processor:</cmd>
-                <choicetable relcolwidth="1.0* 4.0*">
-                    <chhead>
-                        <choptionhd>Processor</choptionhd>
-                        <chdeschd>Action</chdeschd>
-                    </chhead>
-                    <chrow>
-                        <choption>Saxon</choption>
-                        <chdesc>
-                            <p>Set up the <varname>CLASSPATH</varname> environment variable to
-                                include the Saxon JAR files, for
-                                example:<codeblock>export CLASSPATH=&lt;saxon_dir>/saxon9.jar:&lt;saxon_dir>/saxon9-dom.jar:$CLASSPATH</codeblock></p>
-                            <p>Set up the <codeph>ANT_OPTS</codeph> environment variable, for
-                                example:
-                                <codeblock>export ANT_OPTS=$ANT_OPTS -Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl</codeblock></p>
-                        </chdesc>
-                    </chrow>
-                    <chrow>
-                        <choption>Xalan</choption>
-                        <chdesc>Set up the <varname>CLASSPATH</varname> environment variable to
-                            include the Xalan JAR files, for example:
-                            <codeblock>export CLASSPATH=&lt;xalan_dir>/xalan.jar:$CLASSPATH</codeblock></chdesc>
-                    </chrow>
-                </choicetable>
+                <info>
+                  <p>Set up the <varname>CLASSPATH</varname> environment variable to
+                      include the Saxon JAR files, for
+                      example:<codeblock>export CLASSPATH=&lt;saxon_dir>/saxon9.jar:&lt;saxon_dir>/saxon9-dom.jar:$CLASSPATH</codeblock></p>
+                  <p>Set up the <codeph>ANT_OPTS</codeph> environment variable, for
+                      example:
+                      <codeblock>export ANT_OPTS=$ANT_OPTS -Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl</codeblock></p>
+                </info>
             </step>
             <step importance="optional">
                 <cmd>For index processing, set up ICU for Java.</cmd>
