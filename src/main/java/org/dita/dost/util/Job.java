@@ -641,6 +641,7 @@ public final class Job {
      * @param value property value
      * @return the previous value of the specified key in this property list, or {@code null} if it did not have one
      */
+    @Deprecated
     public Set<String> setSet(final String key, final Set<String> value) {
         Object previous = null;
         if (key.equals(FULL_DITAMAP_TOPIC_LIST)) {
@@ -652,7 +653,7 @@ public final class Job {
                 }
             }
             for (final String f: value) {
-            	final FileInfo ff = getOrAdd(f);
+            	final FileInfo ff = getOrCreateFileInfo(f);
             	ff.format = "dita";
             	ff.isActive = true;
             }
@@ -663,23 +664,23 @@ public final class Job {
                 }
             }
             for (final String f: value) {
-                final FileInfo ff = getOrAdd(f);
+                final FileInfo ff = getOrCreateFileInfo(f);
                 ff.format = "ditamap";
                 ff.isActive = true;
             }
         } else if (key.equals(HTML_LIST)) {
             for (final String f: value) {
-            	getOrAdd(f).format = "html";
+            	getOrCreateFileInfo(f).format = "html";
             }
         } else if (key.equals(IMAGE_LIST)) {
             for (final String f: value) {
-            	getOrAdd(f).format = "image";
+            	getOrCreateFileInfo(f).format = "image";
             }
         } else if (listToFieldMap.containsKey(key)) {
             try {
                 final Field field = listToFieldMap.get(key);
                 for (final String f: value) {
-                    field.setBoolean(getOrAdd(f), true);
+                    field.setBoolean(getOrCreateFileInfo(f), true);
                 }
             } catch (final IllegalAccessException e) {
                 throw new RuntimeException(e);
@@ -696,20 +697,6 @@ public final class Job {
         }
         return (Set<String>) previous;
     }
-    
-    /**
-     * Get or create FileInfo for given path.
-     * @param file system path
-     */
-	private FileInfo getOrAdd(final String file) {
-	    final String f = FileUtils.normalize(file);
-		FileInfo i = files.get(f); 
-		if (i == null) {
-			i = new FileInfo(f);
-		    files.put(f, i);
-		}
-		return i;
-	}
     
     /**
      * Set property value.
@@ -766,10 +753,35 @@ public final class Job {
     /**
      * Get all file info objects
      * 
-     * @return map of file info objects
+     * @return map of file info objects, where the key is the {@link FileInfo#file} value
      */
     public Map<String, FileInfo> getFileInfo() {
         return Collections.unmodifiableMap(new HashMap<String, FileInfo>(files));
+    }
+    
+    /**
+     * Get file info object
+     * 
+     * @param file file system path
+     * @return file info object
+     */
+    public FileInfo getFileInfo(final String file) {
+        final String f = FileUtils.normalize(file);
+        return files.get(f);
+    }
+    
+    /**
+     * Get or create FileInfo for given path.
+     * @param file system path
+     */
+    public FileInfo getOrCreateFileInfo(final String file) {
+        final String f = FileUtils.normalize(file);
+        FileInfo i = files.get(f); 
+        if (i == null) {
+            i = new FileInfo(f);
+            files.put(f, i);
+        }
+        return i;
     }
     
     /**
