@@ -1094,11 +1094,11 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
                     final String to = file.substring(0, index);
                     final String source = file.substring(index + 1);
                     
-                    newSet.add(FileUtils.separatorsToUnix(FileUtils.normalize(new StringBuffer(prefix).append(to).toString()))
+                    newSet.add(FileUtils.normalize(new StringBuffer(prefix).append(to).toString())
                             + EQUAL
-                            + FileUtils.separatorsToUnix(FileUtils.normalize(new StringBuffer(prefix).append(source).toString())));
+                            + FileUtils.normalize(new StringBuffer(prefix).append(source).toString()));
                 } else {
-                    newSet.add(FileUtils.separatorsToUnix(FileUtils.normalize(new StringBuffer(prefix).append(file).toString())));
+                    newSet.add(FileUtils.normalize(new StringBuffer(prefix).append(file).toString()));
                 }
             }
         }
@@ -1119,13 +1119,13 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             if (new File(to).isAbsolute()) {
             	to = FileUtils.normalize(to);
             } else {
-            	to = FileUtils.separatorsToUnix(FileUtils.normalize(new StringBuffer(prefix).append(to).toString()));
+            	to = FileUtils.normalize(new StringBuffer(prefix).append(to).toString());
             }
             String source = e.getValue();
             if (new File(source).isAbsolute()) {
             	source = FileUtils.normalize(source);
             } else {
-            	FileUtils.separatorsToUnix(FileUtils.normalize(new StringBuffer(prefix).append(source).toString()));
+            	source = FileUtils.normalize(new StringBuffer(prefix).append(source).toString());
             }
             newSet.put(to, source);
         }
@@ -1186,7 +1186,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             } else {
                 // In ant, all the file separator should be slash, so we need to
                 // replace all the back slash with slash.
-                newSet.add(FileUtils.separatorsToUnix(FileUtils.normalize(new StringBuffer().append(file).toString())));
+                newSet.add(FileUtils.normalize(new StringBuffer().append(file).toString()));
             }
         }
 

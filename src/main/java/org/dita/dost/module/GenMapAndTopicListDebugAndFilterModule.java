@@ -1074,13 +1074,13 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
             if (new File(to).isAbsolute()) {
                 to = FileUtils.normalize(to);
             } else {
-                to = FileUtils.separatorsToUnix(FileUtils.normalize(prefix + to));
+                to = FileUtils.normalize(prefix + to);
             }
             String source = e.getValue();
             if (new File(source).isAbsolute()) {
                 source = FileUtils.normalize(source);
             } else {
-                FileUtils.separatorsToUnix(FileUtils.normalize(prefix + source));
+                source = FileUtils.normalize(prefix + source);
             }
             newMap.put(to, source);
         }
@@ -1141,7 +1141,7 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
             } else {
                 // In ant, all the file separator should be slash, so we need to
                 // replace all the back slash with slash.
-                newSet.add(FileUtils.separatorsToUnix(FileUtils.normalize(file)));
+                newSet.add(FileUtils.normalize(file));
             }
         }
 
