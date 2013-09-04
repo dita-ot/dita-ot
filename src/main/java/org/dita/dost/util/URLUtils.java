@@ -436,7 +436,7 @@ public final class URLUtils {
     }
     
     /**
-     * Convert URI references to file paths.
+     * Convert URI or chimera references to file paths.
      * 
      * @param filename file reference
      * @return file path
@@ -451,10 +451,7 @@ public final class URLUtils {
         } catch (final UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
-        if (processingMode == Mode.LAX) {
-            f = f.replace(WINDOWS_SEPARATOR, File.separator);
-        }
-        f = f.replace(URI_SEPARATOR, File.separator);
+        f = f.replace(WINDOWS_SEPARATOR, File.separator).replace(UNIX_SEPARATOR, File.separator);
         return new File(f);
     }
 

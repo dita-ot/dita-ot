@@ -445,12 +445,14 @@ public final class FileUtils {
      * 
      * <p>Note: the substring behind "#" will be removed.</p>
      * 
+     * TODO: Return File
+     * 
      * @param basedir base dir
      * @param filepath file path
      * @return normalized path
      */
     public static String normalizeDirectory(final String basedir, final String filepath) {
-        final String pathname = stripFragment(filepath);
+        final String pathname = FileUtils.normalize(stripFragment(filepath));
         if (basedir == null || basedir.length() == 0) {
             return pathname;
         }
@@ -462,6 +464,8 @@ public final class FileUtils {
      * Remove redundant names ".." and "." from the given path.
      * Use platform directory separator.
      * 
+     * TODO: Return File
+     * 
      * @param path input path
      * @return processed path
      */
@@ -471,16 +475,17 @@ public final class FileUtils {
 
 
     /**
-     * Remove redundant names ".." and "." from the given path.
+     * Remove redundant names ".." and "." from the given path and replace directory separators.
      * 
      * @param path input path
      * @param separator directory separator
      * @return processed path
      */
     public static String normalize(final String path, final String separator) {
+        final String p = path.replace(WINDOWS_SEPARATOR, separator).replace(UNIX_SEPARATOR, separator);
         // remove "." from the directory.
         final List<String> dirs = new LinkedList<String>();
-        final StringTokenizer tokenizer = new StringTokenizer(path, separator);
+        final StringTokenizer tokenizer = new StringTokenizer(p, separator);
         while (tokenizer.hasMoreTokens()) {
             final String token = tokenizer.nextToken();
             if (!(".".equals(token))) {
@@ -508,10 +513,10 @@ public final class FileUtils {
         }
 
         // restore the directory.
-        final StringBuffer buff = new StringBuffer(path.length());
-        if (path.startsWith(separator + separator)) {
+        final StringBuffer buff = new StringBuffer(p.length());
+        if (p.startsWith(separator + separator)) {
             buff.append(separator).append(separator);
-        } else if (path.startsWith(separator)) {
+        } else if (p.startsWith(separator)) {
             buff.append(separator);
         }
         final Iterator<String> iter = dirs.iterator();
@@ -521,7 +526,7 @@ public final class FileUtils {
                 buff.append(separator);
             }
         }
-        if (path.endsWith(separator)) {
+        if (p.endsWith(separator)) {
             buff.append(separator);
         }
 

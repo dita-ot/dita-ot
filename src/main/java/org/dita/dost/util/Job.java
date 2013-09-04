@@ -696,8 +696,13 @@ public final class Job {
         }
         return (Set<String>) previous;
     }
-
-	private FileInfo getOrAdd(final String f) {
+    
+    /**
+     * Get or create FileInfo for given path.
+     * @param file system path
+     */
+	private FileInfo getOrAdd(final String file) {
+	    final String f = FileUtils.normalize(file);
 		FileInfo i = files.get(f); 
 		if (i == null) {
 			i = new FileInfo(f);
@@ -870,10 +875,12 @@ public final class Job {
         public boolean isActive;
         
         FileInfo(final URI uri) {
+            if (uri == null) throw new IllegalArgumentException(new NullPointerException());
             this.uri = uri;
             this.file = toFile(uri).getPath();
         }
         FileInfo(final String file) {
+            if (file == null) throw new IllegalArgumentException(new NullPointerException());
             this.uri =  toURI(new File(file));
             this.file = file;
         }
@@ -979,7 +986,7 @@ public final class Job {
             
             public FileInfo build() {
                 if (uri == null && file == null) {
-                    throw new IllegalArgumentException("uri and file may not be null");
+                    throw new IllegalStateException("uri and file may not be null");
                 }
                 final FileInfo fi = uri != null ? new FileInfo(uri) : new FileInfo(file);
                 fi.format = format;

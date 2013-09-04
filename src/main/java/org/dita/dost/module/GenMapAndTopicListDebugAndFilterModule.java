@@ -1054,7 +1054,7 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
                 // no need to append relative path before absolute paths
                 newSet.add(FileUtils.normalize(file));
             } else {
-                newSet.add(FileUtils.separatorsToUnix(FileUtils.normalize(prefix + file)));
+                newSet.add(FileUtils.normalize(prefix + file));
             }
         }
         prop.setSet(key, newSet);
