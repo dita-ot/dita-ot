@@ -1805,45 +1805,6 @@ See the accompanying license.txt file for applicable licenses.
         </fo:inline>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' ut-d/imagemap ')]">
-        <fo:inline>
-            <xsl:call-template name="commonattributes"/>
-        </fo:inline>
-        <xsl:apply-templates select="*[contains(@class,' topic/image ')]"/>
-        <fo:list-block xsl:use-attribute-sets="ol">
-            <xsl:apply-templates select="*[contains(@class,' ut-d/area ')]"/>
-        </fo:list-block>
-    </xsl:template>
-
-    <xsl:template match="*[contains(@class,' ut-d/area ')]">
-        <fo:list-item xsl:use-attribute-sets="ol.li">
-            <xsl:call-template name="commonattributes"/>
-            <fo:list-item-label xsl:use-attribute-sets="ol.li__label">
-                <fo:block xsl:use-attribute-sets="ol.li__label__content">
-                    <xsl:call-template name="insertVariable">
-                        <xsl:with-param name="theVariableID" select="'Ordered List Number'"/>
-                        <xsl:with-param name="theParameters">
-                            <number>
-                                <xsl:number/>
-                            </number>
-                        </xsl:with-param>
-                    </xsl:call-template>
-                </fo:block>
-            </fo:list-item-label>
-
-            <fo:list-item-body xsl:use-attribute-sets="ol.li__body">
-                <fo:block xsl:use-attribute-sets="ol.li__content">
-                    <xsl:apply-templates/>
-                </fo:block>
-            </fo:list-item-body>
-
-        </fo:list-item>
-    </xsl:template>
-
-    <xsl:template match="*[contains(@class,' ut-d/shape ')]"/>
-
-    <xsl:template match="*[contains(@class,' ut-d/coords ')]"/>
-
     <xsl:template match="*[contains(@class,' topic/image ')]">
         <!-- build any pre break indicated by style -->
         <xsl:choose>
