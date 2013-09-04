@@ -932,34 +932,34 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         // output problem
         prop.setProperty("tempdirToinputmapdir.relative.value", formatRelativeValue(prefix));
         prop.setProperty("uplevels", getUpdateLevels());
-        addSetToProperties(prop, OUT_DITA_FILES_LIST, outDitaFilesSet);
+        prop.setSet(OUT_DITA_FILES_LIST, addPrefix(outDitaFilesSet));
 
-        addSetToProperties(prop, FULL_DITAMAP_TOPIC_LIST, ditaSet);
-        addSetToProperties(prop, FULL_DITA_TOPIC_LIST, fullTopicSet);
-        addSetToProperties(prop, FULL_DITAMAP_LIST, fullMapSet);
-        addSetToProperties(prop, HREF_DITA_TOPIC_LIST, hrefTopicSet);
-        addSetToProperties(prop, CONREF_LIST, conrefSet);
-        addSetToProperties(prop, IMAGE_LIST, imageSet);
-        addSetToProperties(prop, FLAG_IMAGE_LIST, flagImageSet);
-        addSetToProperties(prop, HTML_LIST, htmlSet);
-        addSetToProperties(prop, HREF_TARGET_LIST, hrefTargetSet);
-        addSetToProperties(prop, HREF_TOPIC_LIST, hrefWithIDSet);
-        addSetToProperties(prop, CHUNK_TOPIC_LIST, chunkTopicSet);
-        addSetToProperties(prop, SUBJEC_SCHEME_LIST, schemeSet);
-        addSetToProperties(prop, CONREF_TARGET_LIST, conrefTargetSet);
-        addSetToProperties(prop, COPYTO_SOURCE_LIST, copytoSourceSet);
-        addSetToProperties(prop, SUBSIDIARY_TARGET_LIST, subsidiarySet);
-        addSetToProperties(prop, CONREF_PUSH_LIST, conrefpushSet);
-        addSetToProperties(prop, KEYREF_LIST, keyrefSet);
-        addSetToProperties(prop, CODEREF_LIST, coderefSet);
+        prop.setSet(FULL_DITAMAP_TOPIC_LIST, addPrefix(ditaSet));
+        prop.setSet(FULL_DITA_TOPIC_LIST, addPrefix(fullTopicSet));
+        prop.setSet(FULL_DITAMAP_LIST, addPrefix(fullMapSet));
+        prop.setSet(HREF_DITA_TOPIC_LIST, addPrefix(hrefTopicSet));
+        prop.setSet(CONREF_LIST, addPrefix(conrefSet));
+        prop.setSet(IMAGE_LIST, addPrefix(imageSet));
+        prop.setSet(FLAG_IMAGE_LIST, addPrefix(flagImageSet));
+        prop.setSet(HTML_LIST, addPrefix(htmlSet));
+        prop.setSet(HREF_TARGET_LIST, addPrefix(hrefTargetSet));
+        prop.setSet(HREF_TOPIC_LIST, addPrefix(hrefWithIDSet));
+        prop.setSet(CHUNK_TOPIC_LIST, addPrefix(chunkTopicSet));
+        prop.setSet(SUBJEC_SCHEME_LIST, addPrefix(schemeSet));
+        prop.setSet(CONREF_TARGET_LIST, addPrefix(conrefTargetSet));
+        prop.setSet(COPYTO_SOURCE_LIST, addPrefix(copytoSourceSet));
+        prop.setSet(SUBSIDIARY_TARGET_LIST, addPrefix(subsidiarySet));
+        prop.setSet(CONREF_PUSH_LIST, addPrefix(conrefpushSet));
+        prop.setSet(KEYREF_LIST, addPrefix(keyrefSet));
+        prop.setSet(CODEREF_LIST, addPrefix(coderefSet));
 
         // @processing-role
-        addSetToProperties(prop, RESOURCE_ONLY_LIST, resourceOnlySet);
+        prop.setSet(RESOURCE_ONLY_LIST, addPrefix(resourceOnlySet));
 
         addFlagImagesSetToProperties(prop, REL_FLAGIMAGE_LIST, relFlagImagesSet);
 
         // Convert copyto map into set and output
-        addMapToProperties(prop, COPYTO_TARGET_TO_SOURCE_MAP_LIST, copytoMap);
+        prop.setMap(COPYTO_TARGET_TO_SOURCE_MAP_LIST, addPrefix(copytoMap));
         addKeyDefSetToProperties(prop, keysDefMap);
 
         try {
@@ -1072,18 +1072,15 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
     }
 
     /**
-     * Add set of values of job configuration
+     * Add file prefix. For absolute paths the prefix is not added.
      * 
-     * @param prop job configuration
-     * @param key list name
-     * @param set values to add
+     * @param set file paths
+     * @return file paths with prefix
      */
-    private void addSetToProperties(final Job prop, final String key, final Set<String> set) {
-        // update value
-        final Set<String> newSet = new LinkedHashSet<String>(INT_128);
+    private Set<String> addPrefix(final Set<String> set) {
+        final Set<String> newSet = new HashSet<String>(set.size());
         for (final String file: set) {
             if (new File(file).isAbsolute()) {
-                // no need to append relative path before absolute paths
                 newSet.add(FileUtils.normalize(file));
             } else {
                 // In ant, all the file separator should be slash, so we need to
@@ -1102,36 +1099,34 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
                 }
             }
         }
-        prop.setSet(key, newSet);
+        return newSet;
     }
     
     /**
-     * Add map to job configuration
+     * Add file prefix. For absolute paths the prefix is no added.
      * 
-     * @param prop job configuration
-     * @param key list name
-     * @param map values to add
+     * @param map map of file paths
+     * @return file path map with prefix
      */
-    private void addMapToProperties(final Job prop, final String key, final Map<String, String> map) {
-        final Map<String, String> newSet = new HashMap<String, String>(map.size());
+    private Map<String, String> addPrefix(final Map<String, String> map) {
+        final Map<String, String> newMap = new HashMap<String, String>(map.size());
         for (final Map.Entry<String, String> e: map.entrySet()) {
             String to = e.getKey();
             if (new File(to).isAbsolute()) {
-            	to = FileUtils.normalize(to);
+                to = FileUtils.normalize(to);
             } else {
-            	to = FileUtils.normalize(new StringBuffer(prefix).append(to).toString());
+                to = FileUtils.normalize(prefix + to);
             }
             String source = e.getValue();
             if (new File(source).isAbsolute()) {
-            	source = FileUtils.normalize(source);
+                source = FileUtils.normalize(source);
             } else {
-            	source = FileUtils.normalize(new StringBuffer(prefix).append(source).toString());
+                source = FileUtils.normalize(prefix + source);
             }
-            newSet.put(to, source);
+            newMap.put(to, source);
         }
-        prop.setMap(key, newSet);
+        return newMap;
     }
-    
     
     /**
      * Add key definition to job configuration
@@ -1186,7 +1181,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             } else {
                 // In ant, all the file separator should be slash, so we need to
                 // replace all the back slash with slash.
-                newSet.add(FileUtils.normalize(new StringBuffer().append(file).toString()));
+                newSet.add(FileUtils.normalize(file));
             }
         }
 
@@ -1221,10 +1216,6 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         }
 
         prop.setProperty(key, StringUtils.assembleString(newSet, COMMA));
-
-        // clear set
-        set.clear();
-        newSet.clear();
     }
     
 }
