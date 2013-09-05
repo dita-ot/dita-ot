@@ -579,7 +579,9 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
             //the @href value are added in fullditatopic and fullditamapandtopic,
             //while they are not supposed to be contained, so should be be removed
 
-            job.setSet(COPYTO_SOURCE_LIST, copytoSource);
+            for (final String file: copytoSource) {
+                job.getOrCreateFileInfo(file).isCopyToSource = true;
+            }
 
             job.setMap(COPYTO_TARGET_TO_SOURCE_MAP_LIST, copytotarget2source);
 

@@ -36,6 +36,7 @@ import org.dita.dost.util.Configuration;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.writer.TopicRefWriter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -281,24 +282,38 @@ final public class ChunkModule implements AbstractPipelineModule {
             }
         }
 
-        //TODO Remove newly generated files from resource-only list, these new files should not
-        //     excluded from the final outputs.
-        final Set<String> resourceOnlySet = job.getSet(RESOURCE_ONLY_LIST);
-        resourceOnlySet.removeAll(chunkedTopicSet);
-        resourceOnlySet.removeAll(chunkedDitamapSet);
-
-        job.setSet(RESOURCE_ONLY_LIST, resourceOnlySet);
-        job.setSet(FULL_DITA_TOPIC_LIST, topicList);
-        job.setSet(FULL_DITAMAP_LIST, ditamapList);
-        topicList.addAll(ditamapList);
-        job.setSet(FULL_DITAMAP_TOPIC_LIST, topicList);
-
+        for (final String file: chunkedTopicSet) {
+            job.getOrCreateFileInfo(file).isResourceOnly = false;
+        }
+        for (final String file: chunkedDitamapSet) {
+            job.getOrCreateFileInfo(file).isResourceOnly = false;
+        }
+        for (FileInfo f: job.getFileInfo().values()) {
+            if ("dita".equals(f.format) || "ditamap".equals(f.format)) {
+                f.isActive = false;
+            }
+        }
+        for (final String file: topicList) {
+            final FileInfo ff = job.getOrCreateFileInfo(file);
+            ff.format = "dita";
+            ff.isActive = true;
+        }
+        for (final String file: ditamapList) {
+            final FileInfo ff = job.getOrCreateFileInfo(file);
+            ff.format = "ditamap";
+            ff.isActive = true;
+        }
+        
         job.setProperty("chunkedditamapfile", CHUNKED_DITAMAP_LIST_FILE);
         job.setProperty("chunkedtopicfile", CHUNKED_TOPIC_LIST_FILE);
         job.setProperty("resourceonlyfile", RESOURCE_ONLY_LIST_FILE);
 
-        job.setSet(CHUNKED_DITAMAP_LIST, chunkedDitamapSet);
-        job.setSet(CHUNKED_TOPIC_LIST, chunkedTopicSet);
+        for (final String file: chunkedDitamapSet) {
+            job.getOrCreateFileInfo(file).isChunkedDitaMap = true;
+        }
+        for (final String file: chunkedDitamapSet) {
+            job.getOrCreateFileInfo(file).isChunked = true;
+        }
 
         try{
             job.write();

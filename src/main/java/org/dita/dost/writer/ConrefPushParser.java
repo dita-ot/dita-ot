@@ -237,9 +237,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
                     return;
                 }
             }
-            final Set<String> stringBuffer = new HashSet<String>(job.getSet(CONREF_LIST));
-            stringBuffer.add(reletivePath);
-            job.setSet(CONREF_LIST, stringBuffer);
+            job.getOrCreateFileInfo(reletivePath).hasConref = true;
             
             job.write();
 
