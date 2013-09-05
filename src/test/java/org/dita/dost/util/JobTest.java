@@ -54,14 +54,6 @@ public final class JobTest {
     }
 
     @Test
-    public void testGetSchemeSet() {
-        final Set<String> exp = new HashSet<String>();
-        exp.add("foo");
-        exp.add("bar");
-        assertEquals(exp, job.getSchemeSet());
-    }
-
-    @Test
     public void testGetInputMap() {
         assertEquals("foo", job.getInputMap());
     }

@@ -725,14 +725,6 @@ public final class Job {
     }
 
     /**
-     * @return the schemeSet
-     */
-    public Set<String> getSchemeSet() {
-        return getSet(SUBJEC_SCHEME_LIST);
-        
-    }
-
-    /**
      * Get input file
      * 
      * @return input file path relative to input directory
