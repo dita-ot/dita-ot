@@ -30,6 +30,7 @@ import org.dita.dost.reader.DitamapIndexTermReader;
 import org.dita.dost.reader.IndexTermReader;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -120,20 +121,16 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
         /*
          * Parse topic list and ditamap list from the input dita.list file
          */
-        final Set<String> topics = prop.getSet(FULL_DITA_TOPIC_LIST);
-        final Set<String> resource_only_list = prop.getSet(RESOURCE_ONLY_LIST);
-        topicList = new ArrayList<String>(topics.size());
-        for (final String t: topics) {
-            if (!resource_only_list.contains(t)) {
-                topicList.add(t);
+        topicList = new ArrayList<String>();
+        for (final FileInfo f: prop.getFileInfo().values()) {
+            if ("dita".equals(f.format) && f.isActive && !f.isResourceOnly) {
+                topicList.add(f.file);
             }
         }
-
-        final Set<String> maps = prop.getSet(FULL_DITAMAP_LIST);
-        ditamapList = new ArrayList<String>(maps.size());
-        for (final String t: maps) {
-            if (!resource_only_list.contains(t)) {
-                ditamapList.add(t);
+        ditamapList = new ArrayList<String>();
+        for (final FileInfo f: prop.getFileInfo().values()) {
+            if ("ditamap".equals(f.format) && f.isActive && !f.isResourceOnly) {
+                ditamapList.add(f.file);
             }
         }
 

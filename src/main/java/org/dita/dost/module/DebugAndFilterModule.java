@@ -211,10 +211,6 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 
             final Job job = new Job(tempDir);
             
-            final Set<String> parseList = new HashSet<String>();
-            parseList.addAll(job.getSet(FULL_DITAMAP_TOPIC_LIST));
-            parseList.addAll(job.getSet(CONREF_TARGET_LIST));
-            parseList.addAll(job.getSet(COPYTO_SOURCE_LIST));
             inputDir = new File(job.getInputDir());
             if (!inputDir.isAbsolute()) {
                 inputDir = new File(baseDir, inputDir.getPath()).getAbsoluteFile();
@@ -262,45 +258,49 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 
             final Map<String, Set<String>> dic = readMapFromXML(FILE_NAME_SUBJECT_DICTIONARY);
 
-            for (final String filename: parseList) {
-                final File currentFile = new File(inputDir, filename);
-                logger.logInfo("Processing " + currentFile.getAbsolutePath());
-
-                final Set<String> schemaSet = dic.get(filename);
-                filterReader.reset();
-                if (schemaSet != null) {
-                    subjectSchemeReader.reset();
-                    final FilterUtils fu = new FilterUtils(printTranstype.contains(transtype));
-                    fu.setLogger(logger);
-                    for (final String schema: schemaSet) {
-                        subjectSchemeReader.loadSubjectScheme(FileUtils.resolveFile(tempDir.getAbsolutePath(), schema) + SUBJECT_SCHEME_EXTENSION);
-                    }
-                    if (ditavalFile != null){
-                        filterReader.filterReset();
-                        filterReader.setSubjectScheme(subjectSchemeReader.getSubjectSchemeMap());
-                        filterReader.read(ditavalFile.getAbsolutePath());
-                        final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>();
-                        fm.putAll(filterReader.getFilterMap());
-                        fm.putAll(filterUtils.getFilterMap());
-                        fu.setFilterMap(Collections.unmodifiableMap(fm));
+            for (final FileInfo f: job.getFileInfo().values()) {
+                if ((f.isActive && ("dita".equals(f.format) || "ditamap".equals(f.format)))
+                        || f.isConrefTarget || f.isCopyToSource) {
+                    final String filename = f.file;
+                    final File currentFile = new File(inputDir, filename);
+                    logger.logInfo("Processing " + currentFile.getAbsolutePath());
+    
+                    final Set<String> schemaSet = dic.get(filename);
+                    filterReader.reset();
+                    if (schemaSet != null) {
+                        subjectSchemeReader.reset();
+                        final FilterUtils fu = new FilterUtils(printTranstype.contains(transtype));
+                        fu.setLogger(logger);
+                        for (final String schema: schemaSet) {
+                            subjectSchemeReader.loadSubjectScheme(FileUtils.resolveFile(tempDir.getAbsolutePath(), schema) + SUBJECT_SCHEME_EXTENSION);
+                        }
+                        if (ditavalFile != null){
+                            filterReader.filterReset();
+                            filterReader.setSubjectScheme(subjectSchemeReader.getSubjectSchemeMap());
+                            filterReader.read(ditavalFile.getAbsolutePath());
+                            final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>();
+                            fm.putAll(filterReader.getFilterMap());
+                            fm.putAll(filterUtils.getFilterMap());
+                            fu.setFilterMap(Collections.unmodifiableMap(fm));
+                        } else {
+                            fu.setFilterMap(Collections.EMPTY_MAP);
+                        }
+                        fileWriter.setFilterUtils(fu);
+    
+                        fileWriter.setValidateMap(subjectSchemeReader.getValidValuesMap());
+                        fileWriter.setDefaultValueMap(subjectSchemeReader.getDefaultValueMap());
                     } else {
-                        fu.setFilterMap(Collections.EMPTY_MAP);
+                        fileWriter.setFilterUtils(filterUtils);
                     }
-                    fileWriter.setFilterUtils(fu);
-
-                    fileWriter.setValidateMap(subjectSchemeReader.getValidValuesMap());
-                    fileWriter.setDefaultValueMap(subjectSchemeReader.getDefaultValueMap());
-                } else {
-                    fileWriter.setFilterUtils(filterUtils);
+    
+                    if (!new File(inputDir, filename).exists()) {
+                        // This is an copy-to target file, ignore it
+                        logger.logInfo("Ignoring a copy-to file " + filename);
+                        continue;
+                    }
+    
+                    fileWriter.write(inputDir, filename);
                 }
-
-                if (!new File(inputDir, filename).exists()) {
-                    // This is an copy-to target file, ignore it
-                    logger.logInfo("Ignoring a copy-to file " + filename);
-                    continue;
-                }
-
-                fileWriter.write(inputDir, filename);
             }
 
             if (extName != null) {

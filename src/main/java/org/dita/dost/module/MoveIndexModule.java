@@ -23,6 +23,7 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.MapIndexReader;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.writer.DitaIndexWriter;
 
 /**
@@ -72,10 +73,11 @@ final class MoveIndexModule implements AbstractPipelineModule {
                 .append(SLASH).append(MAP_TOPICMETA.localName)
                 .append(SLASH).append(TOPIC_KEYWORDS.localName).toString());
 
-        final Set<String> fullditamaplist = job.getSet(FULL_DITAMAP_LIST);
-        for(final String fileName : fullditamaplist){
-            //FIXME: this reader needs parent directory for further process
-            indexReader.read(new File(tempDir, fileName).getAbsolutePath());
+        for(final FileInfo f: job.getFileInfo().values()){
+            if (f.isActive && "ditamap".equals(f.format)) {
+                //FIXME: this reader needs parent directory for further process
+                indexReader.read(new File(tempDir, f.file).getAbsolutePath());
+            }
         }
 
         final Map<String, String> mapSet = indexReader.getMapping();

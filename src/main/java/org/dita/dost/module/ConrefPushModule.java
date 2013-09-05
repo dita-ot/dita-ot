@@ -22,6 +22,7 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.ConrefPushReader;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.writer.ConrefPushParser;
 /**
  * Conref push module.
@@ -61,14 +62,15 @@ final class ConrefPushModule implements AbstractPipelineModule {
             logger.logError(e.getMessage(), e) ;
         }
 
-        final Set<String> conrefpushlist = job.getSet(CONREF_PUSH_LIST);
         final ConrefPushReader reader = new ConrefPushReader();
         reader.setLogger(logger);
-        for(final String fileName:conrefpushlist){
-            final File file = new File(tempDir,fileName);
-            logger.logInfo("Reading  " + file.getAbsolutePath());
-            //FIXME: this reader calculate parent directory
-            reader.read(file.getAbsolutePath());
+        for(final FileInfo f: job.getFileInfo().values()) {
+            if (f.isConrefPush) {
+                final File file = new File(tempDir, f.file);
+                logger.logInfo("Reading  " + file.getAbsolutePath());
+                //FIXME: this reader calculate parent directory
+                reader.read(file.getAbsolutePath());
+            }
         }
 
         final Map<String, Hashtable<String, String>> pushSet = reader.getPushMap();

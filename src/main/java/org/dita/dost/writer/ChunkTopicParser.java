@@ -38,6 +38,7 @@ import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
 import org.dita.dost.util.DITAAttrUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.TopicIdParser;
 import org.dita.dost.util.XMLUtils;
@@ -566,25 +567,12 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
         try{
             // XXX: This may have to use new File(FileUtils.resolveFile(filePath,FILE_NAME_DITA_LIST_XML)).getParent()
             final Job job = new Job(new File(filePath));
-            final Set<String> copytosourcelist = job.getSet(COPYTO_SOURCE_LIST);
             final Map<String, String> copytotarget2sourcemaplist = job.getMap(COPYTO_TARGET_TO_SOURCE_MAP_LIST);
-            //in the following, all the 4 arrays are updated according to the set copyto and
-            //map copytotarget2source.
-
-            //copy all the file name in copytosourcelist to a new set
-            copytoSource.addAll(copytosourcelist);
-            //copy all the copytotarget2sourcemaplist to a new hashmap
             copytotarget2source.putAll(copytotarget2sourcemaplist);
-            //in the case of chunk='to-content' and copy-to='*.dita'
-            //the @href value are added in fullditatopic and fullditamapandtopic,
-            //while they are not supposed to be contained, so should be be removed
-
             for (final String file: copytoSource) {
                 job.getOrCreateFileInfo(file).isCopyToSource = true;
             }
-
             job.setMap(COPYTO_TARGET_TO_SOURCE_MAP_LIST, copytotarget2source);
-
             job.write();
         }catch (final Exception e){
             /*logger.logWarn(e.toString());*/

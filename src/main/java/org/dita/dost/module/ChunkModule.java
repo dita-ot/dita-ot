@@ -105,9 +105,11 @@ final public class ChunkModule implements AbstractPipelineModule {
             final Document doc = builder.parse(new File(mapFile));
             final Element root = doc.getDocumentElement();
             if(root.getAttribute(ATTRIBUTE_NAME_CLASS).contains(" eclipsemap/plugin ") && transtype.equals(INDEX_TYPE_ECLIPSEHELP)){
-                for (final String ditaMap: job.getSet(FULL_DITAMAP_LIST)) {
-                    mapFile = new File(tempDir, ditaMap).getAbsolutePath();
-                    mapReader.read(mapFile);
+                for (final FileInfo f: job.getFileInfo().values()) {
+                    if (f.isActive && "ditamap".equals(f.format)) {
+                        mapFile = new File(tempDir, f.file).getAbsolutePath();
+                        mapReader.read(mapFile);
+                    }
                 }
             }
             else{

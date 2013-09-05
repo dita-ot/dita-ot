@@ -29,6 +29,7 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.MapMetaReader;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.writer.DitaMapMetaWriter;
 import org.dita.dost.writer.DitaMetaWriter;
 
@@ -84,20 +85,21 @@ final class MoveMetaModule implements AbstractPipelineModule {
 
         final MapMetaReader metaReader = new MapMetaReader();
         metaReader.setLogger(logger);
-        final Set<String> fullditamaplist = job.getSet(FULL_DITAMAP_LIST);
-        for (String mapFile: fullditamaplist) {
-            mapFile = new File(tempDir, mapFile).getAbsolutePath();
-            logger.logInfo("Reading " + mapFile);
-            //FIXME: this reader gets the parent path of input file
-            metaReader.read(mapFile);
-            final File oldMap = new File(mapFile);
-            final File newMap = new File(mapFile+".temp");
-            if (newMap.exists()) {
-                if (!oldMap.delete()) {
-                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", oldMap.getPath(), newMap.getAbsolutePath()+".chunk").toString());
-                }
-                if (!newMap.renameTo(oldMap)) {
-                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", oldMap.getPath(), newMap.getAbsolutePath()+".chunk").toString());
+        for (final FileInfo f: job.getFileInfo().values()) {
+            if (f.isActive && "ditamap".equals(f.format)) {
+                String mapFile = new File(tempDir, f.file).getAbsolutePath();
+                logger.logInfo("Reading " + mapFile);
+                //FIXME: this reader gets the parent path of input file
+                metaReader.read(mapFile);
+                final File oldMap = new File(mapFile);
+                final File newMap = new File(mapFile+".temp");
+                if (newMap.exists()) {
+                    if (!oldMap.delete()) {
+                        logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", oldMap.getPath(), newMap.getAbsolutePath()+".chunk").toString());
+                    }
+                    if (!newMap.renameTo(oldMap)) {
+                        logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", oldMap.getPath(), newMap.getAbsolutePath()+".chunk").toString());
+                    }
                 }
             }
         }
