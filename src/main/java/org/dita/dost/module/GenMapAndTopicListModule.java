@@ -59,6 +59,7 @@ import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.OutputUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.TimingUtils;
+import org.dita.dost.util.Job.FileInfo;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
@@ -932,30 +933,74 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         // output problem
         prop.setProperty("tempdirToinputmapdir.relative.value", formatRelativeValue(prefix));
         prop.setProperty("uplevels", getUpdateLevels());
-        prop.setSet(OUT_DITA_FILES_LIST, addPrefix(outDitaFilesSet));
+        for (final String file: addPrefix(outDitaFilesSet)) {
+            prop.getOrCreateFileInfo(file).isOutDita = true;
+        }
 
-        prop.setSet(FULL_DITAMAP_TOPIC_LIST, addPrefix(ditaSet));
-        prop.setSet(FULL_DITA_TOPIC_LIST, addPrefix(fullTopicSet));
-        prop.setSet(FULL_DITAMAP_LIST, addPrefix(fullMapSet));
-        prop.setSet(HREF_DITA_TOPIC_LIST, addPrefix(hrefTopicSet));
-        prop.setSet(CONREF_LIST, addPrefix(conrefSet));
-        prop.setSet(IMAGE_LIST, addPrefix(imageSet));
-        prop.setSet(FLAG_IMAGE_LIST, addPrefix(flagImageSet));
-        prop.setSet(HTML_LIST, addPrefix(htmlSet));
-        prop.setSet(HREF_TARGET_LIST, addPrefix(hrefTargetSet));
-        prop.setSet(HREF_TOPIC_LIST, addPrefix(hrefWithIDSet));
-        prop.setSet(CHUNK_TOPIC_LIST, addPrefix(chunkTopicSet));
-        prop.setSet(SUBJEC_SCHEME_LIST, addPrefix(schemeSet));
-        prop.setSet(CONREF_TARGET_LIST, addPrefix(conrefTargetSet));
-        prop.setSet(COPYTO_SOURCE_LIST, addPrefix(copytoSourceSet));
-        prop.setSet(SUBSIDIARY_TARGET_LIST, addPrefix(subsidiarySet));
-        prop.setSet(CONREF_PUSH_LIST, addPrefix(conrefpushSet));
-        prop.setSet(KEYREF_LIST, addPrefix(keyrefSet));
-        prop.setSet(CODEREF_LIST, addPrefix(coderefSet));
-
-        // @processing-role
-        prop.setSet(RESOURCE_ONLY_LIST, addPrefix(resourceOnlySet));
-
+        for (FileInfo f: prop.getFileInfo().values()) {
+            if ("dita".equals(f.format) || "ditamap".equals(f.format)) {
+                f.isActive = false;
+            }
+        }
+        for (final String file: addPrefix(fullTopicSet)) {
+            final FileInfo ff = prop.getOrCreateFileInfo(file);
+            ff.format = "dita";
+            ff.isActive = true;
+        }
+        for (final String file: addPrefix(fullMapSet)) {
+            final FileInfo ff = prop.getOrCreateFileInfo(file);
+            ff.format = "ditamap";
+            ff.isActive = true;
+        }        
+        for (final String file: addPrefix(hrefTopicSet)) {
+            prop.getOrCreateFileInfo(file).hasLink = true;
+        }
+        for (final String file: addPrefix(conrefSet)) {
+            prop.getOrCreateFileInfo(file).hasConref = true;
+        }
+        for (final String file: addPrefix(imageSet)) {
+            prop.getOrCreateFileInfo(file).format = "image";
+        }
+        for (final String file: addPrefix(flagImageSet)) {
+            prop.getOrCreateFileInfo(file).isFlagImage = true;
+        }
+        for (final String file: addPrefix(htmlSet)) {
+            prop.getOrCreateFileInfo(file).format = "html";
+        }
+        for (final String file: addPrefix(hrefTargetSet)) {
+            prop.getOrCreateFileInfo(file).isTarget = true;
+        }
+        for (final String file: addPrefix(hrefWithIDSet)) {
+            prop.getOrCreateFileInfo(file).isNonConrefTarget = true;
+        }
+        for (final String file: addPrefix(chunkTopicSet)) {
+            prop.getOrCreateFileInfo(file).isSkipChunk = true;
+        }
+        for (final String file: addPrefix(schemeSet)) {
+            prop.getOrCreateFileInfo(file).isSubjectScheme = true;
+        }
+        for (final String file: addPrefix(conrefTargetSet)) {
+            prop.getOrCreateFileInfo(file).isConrefTarget = true;
+        }
+        for (final String file: addPrefix(copytoSourceSet)) {
+            prop.getOrCreateFileInfo(file).isCopyToSource = true;
+        }
+        for (final String file: addPrefix(subsidiarySet)) {
+            prop.getOrCreateFileInfo(file).isSubtarget = true;
+        }
+        for (final String file: addPrefix(conrefpushSet)) {
+            prop.getOrCreateFileInfo(file).isConrefPush = true;
+        }
+        for (final String file: addPrefix(keyrefSet)) {
+            prop.getOrCreateFileInfo(file).hasKeyref = true;
+        }
+        for (final String file: addPrefix(coderefSet)) {
+            prop.getOrCreateFileInfo(file).hasCoderef = true;
+        }
+        for (final String file: addPrefix(resourceOnlySet)) {
+            prop.getOrCreateFileInfo(file).isResourceOnly = true;
+        }
+        
         addFlagImagesSetToProperties(prop, REL_FLAGIMAGE_LIST, relFlagImagesSet);
 
         // Convert copyto map into set and output

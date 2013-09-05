@@ -927,18 +927,27 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
         // output problem
         prop.setProperty("tempdirToinputmapdir.relative.value", formatRelativeValue(prefix));
         prop.setProperty("uplevels", getUpdateLevels());
-        prop.setSet(OUT_DITA_FILES_LIST, addPrefix(outDitaFilesSet));
-
-//        addSetToProperties(prop, FULL_DITA_TOPIC_LIST, fullTopicSet);
-//        addSetToProperties(prop, FULL_DITAMAP_LIST, fullMapSet);
-        prop.setSet(IMAGE_LIST, addPrefix(imageSet));
-        prop.setSet(FLAG_IMAGE_LIST, addPrefix(flagImageSet));
-        prop.setSet(HTML_LIST, addPrefix(htmlSet));
-        prop.setSet(HREF_TOPIC_LIST, addPrefix(hrefWithIDSet));
-        prop.setSet(COPYTO_SOURCE_LIST, addPrefix(copytoSourceSet));
-
-        // @processing-role
-        prop.setSet(RESOURCE_ONLY_LIST, addPrefix(resourceOnlySet));
+        for (final String file: addPrefix(outDitaFilesSet)) {
+            prop.getOrCreateFileInfo(file).isOutDita = true;
+        }
+        for (final String file: addPrefix(imageSet)) {
+            prop.getOrCreateFileInfo(file).format = "image";
+        }
+        for (final String file: addPrefix(flagImageSet)) {
+            prop.getOrCreateFileInfo(file).isFlagImage = true;
+        }
+        for (final String file: addPrefix(htmlSet)) {
+            prop.getOrCreateFileInfo(file).format = "html";
+        }
+        for (final String file: addPrefix(hrefWithIDSet)) {
+            prop.getOrCreateFileInfo(file).isNonConrefTarget = true;
+        }
+        for (final String file: addPrefix(copytoSourceSet)) {
+            prop.getOrCreateFileInfo(file).isCopyToSource = true;
+        }
+        for (final String file: addPrefix(resourceOnlySet)) {
+            prop.getOrCreateFileInfo(file).isResourceOnly = true;
+        }
 
         addFlagImagesSetToProperties(prop, REL_FLAGIMAGE_LIST, relFlagImagesSet);
 
