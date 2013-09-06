@@ -313,7 +313,7 @@ final public class ChunkModule implements AbstractPipelineModule {
         for (final String file: chunkedDitamapSet) {
             job.getOrCreateFileInfo(file).isChunkedDitaMap = true;
         }
-        for (final String file: chunkedDitamapSet) {
+        for (final String file: chunkedTopicSet) {
             job.getOrCreateFileInfo(file).isChunked = true;
         }
 
