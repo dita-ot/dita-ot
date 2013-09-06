@@ -82,11 +82,6 @@
   </target>
 
   <target name="dita.topics.eclipse.content" unless="noTopic">
-    <!--<copy todir="${output.dir}">
-      <fileset dir="${dita.temp.dir}" includes="${fullditatopiclist} ${chunkedtopiclist}">
-      </fileset>
-    </copy>-->
-
   	<xslt 
           basedir="${dita.temp.dir}" 
           destdir="${output.dir}"
@@ -97,7 +92,6 @@
           filenameparameter="FILENAME"
           filedirparameter="FILEDIR">
       <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"></excludesfile>
-      <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" if="chunkedtopicfile"></includesfile>
       <param name="OUTEXT" expression="${dita.ext}" if="dita.ext"></param>
       <param name="DRAFT" expression="${args.draft}" if="args.draft"></param>
       <param name="DBG" expression="${args.debug}" if="args.debug"></param>

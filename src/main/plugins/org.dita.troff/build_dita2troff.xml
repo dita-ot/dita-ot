@@ -24,7 +24,6 @@
       classpathref="dost.class.path"
       style="${troff.step1.xsl}">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
-      <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" if="chunkedtopicfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <mapper type="glob" from="*" to="*.tr1" />
       <xmlcatalog refid="dita.catalog"/>
@@ -35,7 +34,7 @@
     </move>
     <!-- step 2 -->
     <xslt basedir="${dita.temp.dir}" destdir="${output.dir}"
-      includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}" includes="${chunkedtopiclist}" extension="${out.ext}"
+      includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}" extension="${out.ext}"
       classpathref="dost.class.path"
       style="${troff.step2.xsl}">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
@@ -56,7 +55,6 @@
       classpathref="dost.class.path"
       style="${troff.step1.xsl}">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
-      <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" if="chunkedtopicfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <!--New,To generate&copy all dita files in the inputmap.dir,not all files in dita.temp.dir -->
       <!--<mapper type="regexp" 
@@ -76,7 +74,6 @@
       classpathref="dost.class.path"
       style="${troff.step2.xsl}">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
-      <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" if="chunkedtopicfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="OUTFORMAT" expression="${troff.outformat}" if="troff.outformat"/>
       <mapper type="regexp" 

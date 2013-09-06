@@ -284,12 +284,6 @@ final public class ChunkModule implements AbstractPipelineModule {
             }
         }
 
-        for (final String file: chunkedTopicSet) {
-            job.getOrCreateFileInfo(file).isResourceOnly = false;
-        }
-        for (final String file: chunkedDitamapSet) {
-            job.getOrCreateFileInfo(file).isResourceOnly = false;
-        }
         for (FileInfo f: job.getFileInfo().values()) {
             if ("dita".equals(f.format) || "ditamap".equals(f.format)) {
                 f.isActive = false;
@@ -306,15 +300,17 @@ final public class ChunkModule implements AbstractPipelineModule {
             ff.isActive = true;
         }
         
-        job.setProperty("chunkedditamapfile", CHUNKED_DITAMAP_LIST_FILE);
-        job.setProperty("chunkedtopicfile", CHUNKED_TOPIC_LIST_FILE);
-        job.setProperty("resourceonlyfile", RESOURCE_ONLY_LIST_FILE);
-
         for (final String file: chunkedDitamapSet) {
-            job.getOrCreateFileInfo(file).isChunkedDitaMap = true;
+            final FileInfo f = job.getOrCreateFileInfo(file);
+            f.format = ATTR_FORMAT_VALUE_DITAMAP;
+            f.isResourceOnly = false;
+            f.isActive = true;
         }
         for (final String file: chunkedTopicSet) {
-            job.getOrCreateFileInfo(file).isChunked = true;
+            final FileInfo f = job.getOrCreateFileInfo(file);
+            f.format = ATTR_FORMAT_VALUE_DITA;
+            f.isResourceOnly = false;
+            f.isActive = true;
         }
 
         try{

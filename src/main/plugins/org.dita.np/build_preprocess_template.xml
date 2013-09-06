@@ -109,7 +109,6 @@
     <job-helper file="keyref.list" property="keyreflist"/>
     <job-helper file="outditafiles.list" property="outditafileslist"/>
     <job-helper file="resourceonly.list" property="resourceonlylist"/>
-    <job-helper file="skipchunk.list" property="skipchunklist"/>
     <job-helper file="subjectscheme.list" property="subjectschemelist"/>
     <job-helper file="subtargets.list" property="subtargetslist"/>
     <job-helper file="user.input.file.list" property="user.input.file"/>
@@ -130,7 +129,6 @@
     <property name="keyreffile" value="keyref.list"/>
     <property name="outditafilesfile" value="outditafiles.list"/>
     <property name="resourceonlyfile" value="resourceonly.list"/>
-    <property name="skipchunkfile" value="skipchunk.list"/>
     <property name="subjectschemefile" value="subjectscheme.list"/>
     <property name="subtargetsfile" value="subtargets.list"/>
     <xmlpropertyreader file="${dita.temp.dir}/dita.xml.properties"/>
@@ -181,8 +179,6 @@
     <job-helper file="fullditatopic.list" property="fullditatopiclist"/>
     <job-helper file="fullditamap.list" property="fullditamaplist"/>
     <job-helper file="fullditamapandtopic.list" property="fullditamapandtopiclist"/>
-    <job-helper file="chunkedditamap.list" property="chunkedditamaplist"/>
-    <job-helper file="chunkedtopic.list" property="chunkedtopiclist"/>
     <job-helper file="resourceonly.list" property="resourceonlylist"/>
     <job-helper file="copytosource.list" property="copytosourcelist"/>
     <job-helper file="copytotarget2sourcemap.list" property="copytotarget2sourcemaplist"/>
@@ -309,7 +305,6 @@
             reloadstylesheet="${dita.preprocess.reloadstylesheet.topicpull}"
             style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/topicpull.xsl">
         <includesfile name="${dita.temp.dir}/${fullditatopicfile}"/>
-        <includesfile name="${dita.temp.dir}/${chunkedtopicfile}" if="chunkedtopicfile"/>
         <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
         <param name="TABLELINK" expression="${args.tablelink.style}" if="args.tablelink.style" />
         <param name="FIGURELINK" expression="${args.figurelink.style}" if="args.figurelink.style" />
@@ -344,7 +339,6 @@
             filenameparameter="FILENAME" 
             filedirparameter="FILEDIR">
         <includesfile name="${dita.temp.dir}/${fullditatopicfile}"/>
-        <includesfile name="${dita.temp.dir}/${chunkedtopicfile}" if="chunkedtopicfile"/>
         <excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
         <param name="TRANSTYPE" expression="${transtype}"/>
         <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>

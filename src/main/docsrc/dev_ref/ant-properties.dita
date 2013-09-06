@@ -22,8 +22,6 @@ artworkPrefixUrl
 axf.cmd
 axf.formatter.output-format
 axf.path
-chunkedditamapfile
-chunkedtopicfile
 clean-temp.skip
 clean.temp
 collator
