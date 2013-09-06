@@ -936,12 +936,12 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         for (final String file: addPrefix(outDitaFilesSet)) {
             prop.getOrCreateFileInfo(file).isOutDita = true;
         }
-
-        for (FileInfo f: prop.getFileInfo().values()) {
-            if ("dita".equals(f.format) || "ditamap".equals(f.format)) {
-                f.isActive = false;
-            }
-        }
+//        // XXX: This loop is probably redundant
+//        for (FileInfo f: prop.getFileInfo().values()) {
+//            if ("dita".equals(f.format) || "ditamap".equals(f.format)) {
+//                f.isActive = false;
+//            }
+//        }
         for (final String file: addPrefix(fullTopicSet)) {
             final FileInfo ff = prop.getOrCreateFileInfo(file);
             ff.format = "dita";
