@@ -7,14 +7,12 @@ package org.dita.dost.util;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.lang.reflect.Field;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -22,9 +20,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -142,29 +138,10 @@ public final class Job {
     /** File name for temporary input file list file */
     public static final String USER_INPUT_FILE_LIST_FILE = "usr.input.file.list";
 
-    /** Map of legacy list files to file info boolean fields. */
-    private static final Map<String, Field> listToFieldMap = new HashMap<String, Field>();
     /** Map of serialization attributes to file info boolean fields. */
     private static final Map<String, Field> attrToFieldMap= new HashMap<String, Field>();
     static {
         try {
-            listToFieldMap.put(CHUNKED_TOPIC_LIST, FileInfo.class.getField("isChunked"));
-            listToFieldMap.put(CONREF_LIST, FileInfo.class.getField("hasConref"));
-            listToFieldMap.put(HREF_DITA_TOPIC_LIST, FileInfo.class.getField("hasLink"));
-            listToFieldMap.put(KEYREF_LIST, FileInfo.class.getField("hasKeyref"));
-            listToFieldMap.put(CODEREF_LIST, FileInfo.class.getField("hasCoderef"));
-            listToFieldMap.put(RESOURCE_ONLY_LIST, FileInfo.class.getField("isResourceOnly"));
-            listToFieldMap.put(HREF_TARGET_LIST, FileInfo.class.getField("isTarget"));
-            listToFieldMap.put(CONREF_TARGET_LIST, FileInfo.class.getField("isConrefTarget"));
-            listToFieldMap.put(HREF_TOPIC_LIST, FileInfo.class.getField("isNonConrefTarget"));
-            listToFieldMap.put(CONREF_PUSH_LIST, FileInfo.class.getField("isConrefPush"));
-            listToFieldMap.put(SUBJEC_SCHEME_LIST, FileInfo.class.getField("isSubjectScheme"));
-            listToFieldMap.put(COPYTO_SOURCE_LIST, FileInfo.class.getField("isCopyToSource"));
-            listToFieldMap.put(OUT_DITA_FILES_LIST, FileInfo.class.getField("isOutDita"));
-            listToFieldMap.put(CHUNKED_DITAMAP_LIST, FileInfo.class.getField("isChunkedDitaMap"));
-            listToFieldMap.put(FLAG_IMAGE_LIST, FileInfo.class.getField("isFlagImage"));
-            listToFieldMap.put(SUBSIDIARY_TARGET_LIST, FileInfo.class.getField("isSubtarget"));
-            listToFieldMap.put(CHUNK_TOPIC_LIST, FileInfo.class.getField("isSkipChunk"));
             attrToFieldMap.put(ATTRIBUTE_CHUNKED, FileInfo.class.getField("isChunked"));
             attrToFieldMap.put(ATTRIBUTE_HAS_LINK, FileInfo.class.getField("hasLink"));    
             attrToFieldMap.put(ATTRIBUTE_HAS_CONREF, FileInfo.class.getField("hasConref"));    
@@ -230,47 +207,6 @@ public final class Job {
             	}
             } 
             return;
-        }
-
-        final Properties p = new Properties();
-        final File ditalist = new File(tempDir, FILE_NAME_DITA_LIST);
-        final File xmlDitalist=new File(tempDir, FILE_NAME_DITA_LIST_XML);
-        InputStream in = null;
-        try{
-            if(xmlDitalist.exists()) {
-                in = new FileInputStream(xmlDitalist);
-                p.loadFromXML(in);
-            } else if(ditalist.exists()) {
-                in = new FileInputStream(ditalist);
-                p.load(in);
-            }
-        } catch(final IOException e) {
-            throw new IOException("Failed to read file: " + e.getMessage());
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (final IOException e) {
-                    throw new IOException("Failed to close file: " + e.getMessage());
-                }
-            }
-        }
-        
-        readProperties(p);
-    }
-
-	private void readProperties(final Properties p) {
-		for (final Map.Entry<Object, Object> e: p.entrySet()) {
-            if (((String) e.getValue()).length() > 0) {
-            	final String key = e.getKey().toString();
-            	if (key.equals(COPYTO_TARGET_TO_SOURCE_MAP_LIST)) {
-            		setMap(e.getKey().toString(), StringUtils.restoreMap(e.getValue().toString()));
-            	} else if (key.endsWith("list")) {
-            		setSet(e.getKey().toString(), StringUtils.restoreSet(e.getValue().toString()));
-            	} else {
-            		setProperty(e.getKey().toString(), e.getValue().toString());
-            	}
-            }
         }
     }
     
@@ -454,51 +390,7 @@ public final class Job {
                     throw new IOException("Failed to close file: " + e.getMessage());
                 }
             }
-        }
-
-        final Properties p = new Properties();
-        for (final Map.Entry<String, Object> e: prop.entrySet()) {
-            if (e.getValue() instanceof Set) {
-                p.put(e.getKey(), StringUtils.assembleString((Collection) e.getValue(), COMMA));
-            } else if (e.getValue() instanceof Map) {
-                p.put(e.getKey(), StringUtils.assembleString((Map) e.getValue(), COMMA));
-            } else {
-                p.put(e.getKey(), e.getValue());
-            }
-        }
-        
-        FileOutputStream propertiesOutputStream = null;
-        try {
-            propertiesOutputStream = new FileOutputStream(new File(tempDir, FILE_NAME_DITA_LIST));
-            p.store(propertiesOutputStream, null);
-            propertiesOutputStream.flush();
-        } catch (final IOException e) {
-            throw new IOException("Failed to write file: " + e.getMessage());
-        } finally {
-            if (propertiesOutputStream != null) {
-                try {
-                    propertiesOutputStream.close();
-                } catch (final IOException e) {
-                    throw new IOException("Failed to close file: " + e.getMessage());
-                }
-            }
-        }
-        FileOutputStream xmlOutputStream = null;
-        try {
-            xmlOutputStream = new FileOutputStream(new File(tempDir, FILE_NAME_DITA_LIST_XML));
-            p.storeToXML(xmlOutputStream, null);
-            xmlOutputStream.flush();
-        } catch (final IOException e) {
-            throw new IOException("Failed to write file: " + e.getMessage());
-        } finally {
-            if (xmlOutputStream != null) {
-                try {
-                    xmlOutputStream.close();
-                } catch (final IOException e) {
-                    throw new IOException("Failed to close file: " + e.getMessage());
-                }
-            }
-        }
+        }        
     }
     
     /**
@@ -524,105 +416,9 @@ public final class Job {
      * @return the value in this property list with the specified key value, {@code null} if not found
      */
     public String getProperty(final String key) {
-        final Object value = prop.get(key);
-        if (value == null) {
-            return null;
-        } else if (value instanceof Set) { // migration support
-            return StringUtils.assembleString((Collection) value, COMMA);
-        } else if (value instanceof Map) { // migration support
-            return StringUtils.assembleString((Map) value, COMMA);
-        } else {
-            return (String) value;
-        }
+        return (String) prop.get(key);
     }
-    
-    /**
-     * Searches for the property with the specified key in this property list.
-     * 
-     * @param key property key
-     * @return the value in this property list with the specified key value, empty map if not found
-     */
-    private Map<String, String> getMap(final String key) {
-        final Object value = prop.get(key);
-        if (value == null) {
-            return Collections.emptyMap();
-        } else if (value instanceof String) { // migration support
-            return StringUtils.restoreMap((String) value);
-        } else {
-            return (Map<String, String>) value;
-        }
-    }
-    
-    /**
-     * Searches for the property with the specified key in this property list.
-     * 
-     * @param key property key
-     * @return the value in this property list with the specified key value, empty set if not found
-     */
-    public Set<String> getSet(final String key) {
-        if (key.equals(FULL_DITAMAP_TOPIC_LIST)) {
-            final Set<String> ret = new HashSet<String>();
-            ret.addAll(getSet(FULL_DITA_TOPIC_LIST)); 
-            ret.addAll(getSet(FULL_DITAMAP_LIST));
-            return ret;
-        } else if (key.equals(FULL_DITA_TOPIC_LIST)) {
-            final Set<String> ret = new HashSet<String>();
-            for (final FileInfo f: files.values()) {
-                if (f.isActive && "dita".equals(f.format)) {
-                    ret.add(f.file);
-                }
-            }
-            return ret;
-        } else if (key.equals(FULL_DITAMAP_LIST)) {
-            final Set<String> ret = new HashSet<String>();
-            for (final FileInfo f: files.values()) {
-                if (f.isActive && "ditamap".equals(f.format)) {
-                    ret.add(f.file);
-                }
-            }
-            return ret;
-        } else if (key.equals(HTML_LIST)) {
-            return getFilesByFormat("html");
-        } else if (key.equals(IMAGE_LIST)) {
-            return getFilesByFormat("image");
-        } else if (listToFieldMap.containsKey(key)) {
-            final Set<String> ret = new HashSet<String>();
-            try {
-                final Field field = listToFieldMap.get(key);
-                for (final FileInfo f: files.values()) {
-                    if (field.getBoolean(f)) {
-                        ret.add(f.file);
-                    }
-                }
-            } catch (final IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
-            return ret;            
-        } else {
-            final Object value = prop.get(key);
-            if (value == null) {
-                return Collections.emptySet();
-            } else if (value instanceof String) { // migration support
-                return StringUtils.restoreSet((String) value);
-            } else {
-                return (Set<String>) value;
-            }
-        }
-    }
-    
-    private Set<String> getFilesByFormat(final String...formats) {
-        final Set<String> ret = new HashSet<String>();
-        for (final FileInfo f: files.values()) {
-            format: for (final String format: formats) {
-                if (format.equals(f.format)) {
-                    ret.add(f.file);
-                    break format;
-                }
-            }
-        }
-        return ret;
-    }
-    
+        
     /**
      * Set property value.
      * 
@@ -635,100 +431,24 @@ public final class Job {
     }
     
     /**
-     * Set property value.
-     * 
-     * @param key property key
-     * @param value property value
-     * @return the previous value of the specified key in this property list, or {@code null} if it did not have one
-     */
-    @Deprecated
-    public Set<String> setSet(final String key, final Set<String> value) {
-        Object previous = null;
-        if (key.equals(FULL_DITAMAP_TOPIC_LIST)) {
-            //throw new RuntimeException(FULL_DITAMAP_TOPIC_LIST + " is a compound set, cannot be directly generated");
-        } else if (key.equals(FULL_DITA_TOPIC_LIST)) {
-            for (FileInfo f: files.values()) {
-                if ("dita".equals(f.format)) {
-                    f.isActive = false;
-                }
-            }
-            for (final String f: value) {
-            	final FileInfo ff = getOrCreateFileInfo(f);
-            	ff.format = "dita";
-            	ff.isActive = true;
-            }
-        } else if (key.equals(FULL_DITAMAP_LIST)) {
-            for (FileInfo f: files.values()) {
-                if ("ditamap".equals(f.format)) {
-                    f.isActive = false;
-                }
-            }
-            for (final String f: value) {
-                final FileInfo ff = getOrCreateFileInfo(f);
-                ff.format = "ditamap";
-                ff.isActive = true;
-            }
-        } else if (key.equals(HTML_LIST)) {
-            for (final String f: value) {
-            	getOrCreateFileInfo(f).format = "html";
-            }
-        } else if (key.equals(IMAGE_LIST)) {
-            for (final String f: value) {
-            	getOrCreateFileInfo(f).format = "image";
-            }
-        } else if (listToFieldMap.containsKey(key)) {
-            try {
-                final Field field = listToFieldMap.get(key);
-                for (final String f: value) {
-                    field.setBoolean(getOrCreateFileInfo(f), true);
-                }
-            } catch (final IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
-        } else {
-            previous = prop.put(key, value);
-            if (previous == null) {
-                return null;
-            } else if (previous instanceof String) { // migration support
-                return StringUtils.restoreSet((String) previous);
-            } else {
-                return (Set<String>) previous;
-            }
-        }
-        return (Set<String>) previous;
-    }
-    
-    /**
-     * Set property value.
-     * 
-     * @param key property key
-     * @param value property value
-     * @return the previous value of the specified key in this property list, or {@code null} if it did not have one
-     */
-    private Map<String, String> setMap(final String key, final Map<String, String> value) {        
-        final Object previous = prop.put(key, value);
-        if (previous == null) {
-            return null;
-        } else if (previous instanceof String) { // migration support
-            return StringUtils.restoreMap((String) previous);
-        } else {
-            return (Map<String, String>) previous;
-        }
-    }
-    
-    /**
      * Return the copy-to map.
-     * @return copy-to map
+     * 
+     * @return copy-to map, empty map if no mapping is defined 
      */
     public Map<String, String> getCopytoMap() {
-        return getMap(COPYTO_TARGET_TO_SOURCE_MAP_LIST);
+        final Object value = prop.get(COPYTO_TARGET_TO_SOURCE_MAP_LIST);
+        if (value == null) {
+            return Collections.emptyMap();
+        } else {
+            return Collections.unmodifiableMap((Map<String, String>) value);
+        }
     }
     
     /**
      * Set copy-to map.
      */
     public void setCopytoMap(final Map<String, String> value) {
-        setMap(COPYTO_TARGET_TO_SOURCE_MAP_LIST, value);
+        prop.put(COPYTO_TARGET_TO_SOURCE_MAP_LIST, new HashMap<String, String>(value));
     }
 
     /**

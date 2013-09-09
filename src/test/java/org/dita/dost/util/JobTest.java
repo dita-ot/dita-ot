@@ -9,6 +9,9 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -56,22 +59,6 @@ public final class JobTest {
     @Test
     public void testGetInputMap() {
         assertEquals("foo", job.getInputMap());
-    }
-
-    @Test
-    public void testGetCollection() {
-        final Set<String> exp = new HashSet<String>();
-        exp.add("bar3");
-        exp.add("foo3");
-        exp.add("bar2");
-        exp.add("foo2");
-        exp.add("bar1");
-        exp.add("foo1");
-        final Set<String> act = new HashSet<String>();
-        act.addAll(job.getSet(FULL_DITAMAP_TOPIC_LIST));
-        act.addAll(job.getSet(CONREF_TARGET_LIST));
-        act.addAll(job.getSet(COPYTO_SOURCE_LIST));
-        assertEquals(exp, act);
     }
 
     @Test

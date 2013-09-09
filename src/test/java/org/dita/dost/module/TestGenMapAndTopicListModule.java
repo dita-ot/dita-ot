@@ -36,6 +36,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractFacade;
 import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -168,8 +169,8 @@ public class TestGenMapAndTopicListModule {
                     "maps/root-map-01.ditamap")),
                 readLines(new File(e, "usr.input.file.list")));
         
-        final Properties ditaProps = readProperties(new File(tempDirParallel, FILE_NAME_DITA_LIST));
-        assertEquals(".." + File.separator, ditaProps.getProperty("uplevels"));
+        final Job job = new Job(tempDirParallel);
+        assertEquals(".." + File.separator, job.getProperty("uplevels"));
 
         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         final DocumentBuilder builder = factory.newDocumentBuilder();
@@ -258,8 +259,8 @@ public class TestGenMapAndTopicListModule {
                     "root-map-02.ditamap")),
                 readLines(new File(e, "usr.input.file.list")));
                 
-        final Properties ditaProps = readProperties(new File(tempDirAbove, FILE_NAME_DITA_LIST));
-        assertEquals("", ditaProps.getProperty("uplevels"));
+        final Job job = new Job(tempDirAbove);
+        assertEquals("", job.getProperty("uplevels"));
         
         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         final DocumentBuilder builder = factory.newDocumentBuilder();
