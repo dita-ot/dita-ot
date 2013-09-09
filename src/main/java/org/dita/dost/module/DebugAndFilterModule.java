@@ -95,8 +95,8 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
      * @param listName name of map to update
      * @param property property to update
      */
-    private void updatePropertyMap(final String listName, final Job property){
-        final Map<String, String> propValues = property.getMap(listName);
+    private void updatePropertyMap(final Job property){
+        final Map<String, String> propValues = property.getCopytoMap();
         if (propValues == null || propValues.isEmpty()){
             return;
         }
@@ -112,11 +112,11 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             }
             result.put(key, value);
         }
-        property.setMap(listName, result);
+        property.setCopytoMap(result);
     }
     
     /**
-     * Update property set.
+     * Update file extension in property set. 
      *
      * @param listName name of set to update
      * @param property property to update
@@ -685,7 +685,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
         updatePropertySet(FULL_DITAMAP_TOPIC_LIST, job);
         updatePropertySet(CONREF_TARGET_LIST, job);
         updatePropertySet(COPYTO_SOURCE_LIST, job);
-        updatePropertyMap(COPYTO_TARGET_TO_SOURCE_MAP_LIST, job);
+        updatePropertyMap(job);
         updatePropertySet(OUT_DITA_FILES_LIST, job);
         updatePropertySet(CONREF_PUSH_LIST, job);
         updatePropertySet(KEYREF_LIST, job);

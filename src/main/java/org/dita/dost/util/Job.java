@@ -542,7 +542,7 @@ public final class Job {
      * @param key property key
      * @return the value in this property list with the specified key value, empty map if not found
      */
-    public Map<String, String> getMap(final String key) {
+    private Map<String, String> getMap(final String key) {
         final Object value = prop.get(key);
         if (value == null) {
             return Collections.emptyMap();
@@ -705,7 +705,7 @@ public final class Job {
      * @param value property value
      * @return the previous value of the specified key in this property list, or {@code null} if it did not have one
      */
-    public Map<String, String> setMap(final String key, final Map<String, String> value) {        
+    private Map<String, String> setMap(final String key, final Map<String, String> value) {        
         final Object previous = prop.put(key, value);
         if (previous == null) {
             return null;
@@ -722,6 +722,13 @@ public final class Job {
      */
     public Map<String, String> getCopytoMap() {
         return getMap(COPYTO_TARGET_TO_SOURCE_MAP_LIST);
+    }
+    
+    /**
+     * Set copy-to map.
+     */
+    public void setCopytoMap(final Map<String, String> value) {
+        setMap(COPYTO_TARGET_TO_SOURCE_MAP_LIST, value);
     }
 
     /**
@@ -786,51 +793,7 @@ public final class Job {
     		files.put(f.file, f);
     	}
     }
-    
-    // Utility methods
-    
-    /**
-     * Write list file.
-     * 
-     * @param prop property name
-     * @throws IOException if writing fails
-     */
-    @Deprecated
-    public void writeList(final String prop) throws IOException {
-        final String filename = prop.equals(INPUT_DITAMAP)
-                                ? INPUT_DITAMAP_LIST_FILE
-                                : prop.substring(0, prop.lastIndexOf("list")) + ".list";
-        writeList(prop, filename);
-    }
-    
-    /**
-     * Write list file.
-     * 
-     * @param prop property name
-     * @param filename list file name
-     * @throws IOException if writing fails
-     */
-    @Deprecated
-    private void writeList(final String prop, final String filename) throws IOException {
-        final File listFile = new File(tempDir, filename);
-        BufferedWriter topicWriter = null;
-        try {
-            topicWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(listFile)));
-            final Set<String> topics = getSet(prop);
-            for (final Iterator<String> i = topics.iterator(); i.hasNext();) {
-                topicWriter.write(i.next());
-                if (i.hasNext()) {
-                    topicWriter.write("\n");
-                }
-            }
-            topicWriter.flush();
-        } finally {
-            if (topicWriter != null) {
-                topicWriter.close();
-            }
-        }
-    }
-    
+        
     /**
      * File info object.
      */

@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -106,7 +107,7 @@ final public class ChunkModule implements AbstractPipelineModule {
             final Element root = doc.getDocumentElement();
             if(root.getAttribute(ATTRIBUTE_NAME_CLASS).contains(" eclipsemap/plugin ") && transtype.equals(INDEX_TYPE_ECLIPSEHELP)){
                 for (final FileInfo f: job.getFileInfo().values()) {
-                    if (f.isActive && "ditamap".equals(f.format)) {
+                    if (f.isActive && ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
                         mapFile = new File(tempDir, f.file).getAbsolutePath();
                         mapReader.read(mapFile);
                     }
@@ -149,8 +150,10 @@ final public class ChunkModule implements AbstractPipelineModule {
         topicRefWriter.setChangeTable(changeTable);
         topicRefWriter.setup(conflictTable);
         try{
-            for (final String f: job.getSet(FULL_DITAMAP_TOPIC_LIST)) {
-                topicRefWriter.write(tempDir.getAbsoluteFile(), new File(f), relativePath2fix);
+            for (final FileInfo f: job.getFileInfo().values()) {
+                if (f.isActive && (ATTR_FORMAT_VALUE_DITA.equals(f.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format))) {
+                    topicRefWriter.write(tempDir.getAbsoluteFile(), new File(f.file), relativePath2fix);
+                }
             }
         }catch(final DITAOTException ex){
             logger.logError(ex.getMessage(), ex) ;
@@ -172,29 +175,41 @@ final public class ChunkModule implements AbstractPipelineModule {
             logger.logError(ex.getMessage(), ex) ;
         }
 
-        final Set<String> hrefTopics = job.getSet(HREF_TOPIC_LIST);
-        final Set<String> chunkTopics = job.getSet(CHUNK_TOPIC_LIST);
-        for (final String s : chunkTopics) {
-            if (!StringUtils.isEmptyString(s) && getFragment(s) == null) {
-                // This entry does not have an anchor, we assume that this topic will
-                // be fully chunked. Thus it should not produce any output.
-                final Iterator<String> hrefit = hrefTopics.iterator();
-                while(hrefit.hasNext()) {
-                    final String ent = hrefit.next();
-                    if (FileUtils.resolveFile(tempDir.getAbsolutePath(), ent).equalsIgnoreCase(
-                            FileUtils.resolveFile(tempDir.getAbsolutePath(), s)))  {
-                        // The entry in hrefTopics points to the same target
-                        // as entry in chunkTopics, it should be removed.
-                        hrefit.remove();
+        final Set<String> hrefTopics = new HashSet<String>();
+        for (final FileInfo f: job.getFileInfo().values()) {
+            if (f.isNonConrefTarget) {
+                hrefTopics.add(f.file);
+            }
+        }
+        for (final FileInfo f: job.getFileInfo().values()) {
+            if (f.isSkipChunk) {
+                final String s = f.file;
+                if (!StringUtils.isEmptyString(s) && getFragment(s) == null) {
+                    // This entry does not have an anchor, we assume that this topic will
+                    // be fully chunked. Thus it should not produce any output.
+                    final Iterator<String> hrefit = hrefTopics.iterator();
+                    while(hrefit.hasNext()) {
+                        final String ent = hrefit.next();
+                        if (FileUtils.resolveFile(tempDir.getAbsolutePath(), ent).equalsIgnoreCase(
+                                FileUtils.resolveFile(tempDir.getAbsolutePath(), s)))  {
+                            // The entry in hrefTopics points to the same target
+                            // as entry in chunkTopics, it should be removed.
+                            hrefit.remove();
+                        }
                     }
+                } else if (!StringUtils.isEmptyString(s) && hrefTopics.contains(s)) {
+                    hrefTopics.remove(s);
                 }
-            } else if (!StringUtils.isEmptyString(s) && hrefTopics.contains(s)) {
-                hrefTopics.remove(s);
             }
         }
 
         final Set<String> topicList = new LinkedHashSet<String>(INT_128);
-        final Set<String> oldTopicList = job.getSet(FULL_DITA_TOPIC_LIST);
+        final Set<String> oldTopicList = new HashSet<String>();
+        for (final FileInfo f: job.getFileInfo().values()) {
+            if (f.isActive && ATTR_FORMAT_VALUE_DITA.equals(f.format)) {
+                oldTopicList.add(f.file);
+            }
+        }
         for (String t : hrefTopics) {
             if (t.lastIndexOf(SHARP) != -1) {
                 t = t.substring(0, t.lastIndexOf(SHARP));
@@ -208,7 +223,12 @@ final public class ChunkModule implements AbstractPipelineModule {
 
         final Set<String> chunkedTopicSet=new LinkedHashSet<String>(INT_128);
         final Set<String> chunkedDitamapSet=new LinkedHashSet<String>(INT_128);
-        final Set<String> ditamapList = job.getSet(FULL_DITAMAP_LIST);
+        final Set<String> ditamapList = new HashSet<String>();
+        for (final FileInfo f: job.getFileInfo().values()) {
+            if (f.isActive && ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
+                ditamapList.add(f.file);
+            }
+        }
         for (final Map.Entry<String, String> entry: changeTable.entrySet()) {
             final String oldFile=entry.getKey();
             if(entry.getValue().equals(oldFile)){
@@ -285,18 +305,18 @@ final public class ChunkModule implements AbstractPipelineModule {
         }
 
         for (FileInfo f: job.getFileInfo().values()) {
-            if ("dita".equals(f.format) || "ditamap".equals(f.format)) {
+            if (ATTR_FORMAT_VALUE_DITA.equals(f.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
                 f.isActive = false;
             }
         }
         for (final String file: topicList) {
             final FileInfo ff = job.getOrCreateFileInfo(file);
-            ff.format = "dita";
+            ff.format = ATTR_FORMAT_VALUE_DITA;
             ff.isActive = true;
         }
         for (final String file: ditamapList) {
             final FileInfo ff = job.getOrCreateFileInfo(file);
-            ff.format = "ditamap";
+            ff.format = ATTR_FORMAT_VALUE_DITAMAP;
             ff.isActive = true;
         }
         

@@ -567,12 +567,12 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
         try{
             // XXX: This may have to use new File(FileUtils.resolveFile(filePath,FILE_NAME_DITA_LIST_XML)).getParent()
             final Job job = new Job(new File(filePath));
-            final Map<String, String> copytotarget2sourcemaplist = job.getMap(COPYTO_TARGET_TO_SOURCE_MAP_LIST);
+            final Map<String, String> copytotarget2sourcemaplist = job.getCopytoMap();
             copytotarget2source.putAll(copytotarget2sourcemaplist);
             for (final String file: copytoSource) {
                 job.getOrCreateFileInfo(file).isCopyToSource = true;
             }
-            job.setMap(COPYTO_TARGET_TO_SOURCE_MAP_LIST, copytotarget2source);
+            job.setCopytoMap(copytotarget2source);
             job.write();
         }catch (final Exception e){
             /*logger.logWarn(e.toString());*/

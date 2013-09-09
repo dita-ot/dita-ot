@@ -1004,7 +1004,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         addFlagImagesSetToProperties(prop, REL_FLAGIMAGE_LIST, relFlagImagesSet);
 
         // Convert copyto map into set and output
-        prop.setMap(COPYTO_TARGET_TO_SOURCE_MAP_LIST, addPrefix(copytoMap));
+        prop.setCopytoMap(addPrefix(copytoMap));
         addKeyDefSetToProperties(prop, keysDefMap);
 
         try {
