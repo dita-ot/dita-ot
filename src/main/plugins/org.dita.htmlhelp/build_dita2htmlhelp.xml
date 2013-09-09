@@ -64,7 +64,6 @@
           classpathref="dost.class.path"
           style="${dita.plugin.org.dita.htmlhelp.dir}/xsl/map2hhp.xsl">
       <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
-      <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
       <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
       <param name="HHCNAME" expression="${dita.map.filename.root}.hhc"/>
       <param name="INCLUDEFILE" expression="${args.htmlhelp.includefile}" if="args.htmlhelp.includefile"/>
@@ -80,7 +79,6 @@
           classpathref="dost.class.path"
           style="${dita.plugin.org.dita.htmlhelp.dir}/xsl/map2hhp.xsl">
       <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
-      <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
       <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
       <param name="HHCNAME" expression="${dita.map.filename.root}.hhc"/>
       <param name="INCLUDEFILE" expression="${args.htmlhelp.includefile}" if="args.htmlhelp.includefile"/>
@@ -98,7 +96,6 @@
           classpathref="dost.class.path"
           style="${dita.plugin.org.dita.htmlhelp.dir}/xsl/map2hhc.xsl">
       <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
-      <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
       <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
@@ -112,7 +109,6 @@
           classpathref="dost.class.path"
           style="${dita.plugin.org.dita.htmlhelp.dir}/xsl/map2hhc.xsl">
       <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
-      <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
       <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
       <mapper type="glob" from="${user.input.file}" to="${dita.map.filename.root}.hhc"/>
       <xmlcatalog refid="dita.catalog"/>

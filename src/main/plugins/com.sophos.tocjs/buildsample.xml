@@ -11,7 +11,6 @@
     *-->
 <project name="docondoc" default="sample2tocjs">
     <import file="..${file.separator}..${file.separator}build.xml"/>
-    <property name="dita.ext" value=".xml"/>
     <property name="content.frame" value="contentwin"/>
    
     <target name="sample2html" depends="use-init">
@@ -37,8 +36,7 @@
              will always exist in the temp directory. Rather than calling a new build to repeat
              that HTML conversion, just run the XSLT process to create toctree.js. -->
         <xslt in="${dita.temp.dir}${file.separator}tocjs.ditamap" out="out${file.separator}sample${file.separator}toctree.js" style="${dita.plugin.com.sophos.tocjs.dir}/xsl/tocjs.xsl">
-            <param name="contentwin" expression="${content.frame}" if="content.frame" /> 
-            <param name="ditaext" expression="${dita.ext}" if="dita.ext"/> 
+            <param name="contentwin" expression="${content.frame}" if="content.frame" />  
             <param name="htmlext" expression="${out.ext}" /> 
         </xslt>
         <!--<antcall target="dita2tocjs">

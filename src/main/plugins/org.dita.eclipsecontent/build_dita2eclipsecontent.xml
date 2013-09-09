@@ -25,12 +25,7 @@
         <isset property="args.eclipsecontent.toc" />
       </not>
     </condition>
-    <condition property="content.link.ext" value=".html?srcext=dita">
-      <equals arg1="${dita.ext}" arg2=".dita"></equals>
-    </condition>
-    <condition property="content.link.ext" value=".html?srcext=xml">
-      <equals arg1="${dita.ext}" arg2=".xml"></equals>
-    </condition>
+    <property name="content.link.ext" value=".html?srcext=dita"/>
   </target>
 
   <target name="dita.map.eclipsecontent.toc"
@@ -41,7 +36,6 @@
       classpathref="dost.class.path"
       style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2eclipse.xsl">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
-      <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="OUTEXT" expression="${content.link.ext}" />
       <mapper type="glob" from="*${dita.input.filename}"
         to="*${args.eclipsecontent.toc}.xml" />
@@ -87,12 +81,11 @@
           destdir="${output.dir}"
           includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
           classpathref="dost.class.path"
-          extension="${dita.ext}" 
+          extension=".dita" 
           style="${dita.plugin.org.dita.eclipsecontent.dir}/xsl/dita2dynamicdita.xsl"
           filenameparameter="FILENAME"
           filedirparameter="FILEDIR">
       <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"></excludesfile>
-      <param name="OUTEXT" expression="${dita.ext}" if="dita.ext"></param>
       <param name="DRAFT" expression="${args.draft}" if="args.draft"></param>
       <param name="DBG" expression="${args.debug}" if="args.debug"></param>
   	  <xmlcatalog refid="dita.catalog"/>

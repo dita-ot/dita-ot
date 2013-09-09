@@ -75,7 +75,6 @@ public class DitaWriterTest {
         writer.setLogger(new TestUtils.TestLogger());
         writer.setTempDir(tempDir.getAbsoluteFile());
         writer.initXMLReader(new File("src" + File.separator + "main").getAbsoluteFile(), false, true);
-        writer.setExtName(".dita");
         writer.setTranstype("xhtml");
         final FilterUtils fu = new FilterUtils();
         fu.setLogger(new TestUtils.TestLogger());
@@ -183,7 +182,7 @@ public class DitaWriterTest {
         assertEquals("sub/foo%20+%25bar.dita", w.invoke(sub.toURI().toASCIIString()));
         assertEquals("sub/foo%20+%25bar.dita#bar", w.invoke(sub.toURI().toASCIIString() + "#bar"));
         // unsupported extension
-        assertEquals("foo.dita", w.invoke("foo.bar"));
+        assertEquals("foo.bar", w.invoke("foo.bar"));
     }
     
     @Test
@@ -210,7 +209,7 @@ public class DitaWriterTest {
         assertEquals(srcDir.toURI().toASCIIString() + "sub/foo%20+%25bar.dita", w.invoke(sub.toURI().toASCIIString()));
         assertEquals(srcDir.toURI().toASCIIString() + "sub/foo%20+%25bar.dita#bar", w.invoke(sub.toURI().toASCIIString() + "#bar"));
         // unsupported extension
-        assertEquals("foo.dita", w.invoke("foo.bar"));
+        assertEquals("foo.bar", w.invoke("foo.bar"));
     }
     
     @AfterClass
@@ -302,7 +301,6 @@ public class DitaWriterTest {
         public Invoker(final String m, final String attrName, final Class<?>... args) throws Exception {
             writer = new DitaWriter();
             writer.setLogger(new TestUtils.TestLogger(false));
-            writer.setExtName(".dita");
             final OutputUtils outputUtils = new OutputUtils();
             outputUtils.setInputMapPathName(new File(srcDir, "main.ditamap"));
             writer.setOutputUtils(outputUtils);        

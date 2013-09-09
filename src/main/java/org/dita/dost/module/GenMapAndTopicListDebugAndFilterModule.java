@@ -190,10 +190,6 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
             }
             ditaDir=new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR));
             final String transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
-            final String ext = input.getAttribute(ANT_INVOKER_PARAM_DITAEXT);
-            if (ext != null) {
-                extName = ext.startsWith(DOT) ? ext : (DOT + ext);
-            }
             File ditavalFile = null;
             if (input.getAttribute(ANT_INVOKER_PARAM_DITAVAL) != null ) {
                 ditavalFile = new File(input.getAttribute(ANT_INVOKER_PARAM_DITAVAL));

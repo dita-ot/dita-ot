@@ -44,7 +44,6 @@
 <xsl:param name="INCLUDEFILE" />
 <xsl:param name="HELPALIAS" />
 <xsl:param name="HELPMAP" />
-<xsl:param name="DITAEXT" select="'.xml'"/>
 
 
 <!-- Is there a way to prevent re-issuing the same filename, using keys? Doubt it... -->

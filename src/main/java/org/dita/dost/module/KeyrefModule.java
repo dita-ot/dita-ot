@@ -68,8 +68,6 @@ final class KeyrefModule implements AbstractPipelineModule {
             throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
         }
 
-        final String extName = input.getAttribute(ANT_INVOKER_PARAM_DITAEXT);
-
         Job job = null;
         try{
             job = new Job(tempDir);

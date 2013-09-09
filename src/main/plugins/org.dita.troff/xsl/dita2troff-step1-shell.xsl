@@ -14,8 +14,5 @@
   <xsl:import href="troff/step1-ut-d.xsl"/>
 
   <xsl:param name="DEFAULTLANG" select="'en-us'"/>
-  
-  <!-- DITAEXT file extension name of dita topic file -->
-  <xsl:param name="DITAEXT" select="'.dita'"/>
-  
+    
 </xsl:stylesheet>

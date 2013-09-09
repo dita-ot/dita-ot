@@ -65,12 +65,11 @@
     </condition>
     <dirname property="dita.input.dirname" file="${args.input}" />
     <basename property="dita.map.filename.root" file="${dita.input.filename}" suffix=".ditamap" />
-    <basename property="dita.topic.filename.root" file="${dita.input.filename}" suffix="${dita.ext}" />
+    <basename property="dita.topic.filename.root" file="${dita.input.filename}" suffix=".dita" />
     
     <echo level="info">*****************************************************************</echo>
     <echo level="info">* input = ${args.input}</echo>
     <echo level="info">* inputdir = ${dita.input.dirname}</echo>
-    <echo level="info">* extname = ${dita.ext}</echo>
     <echo level="info">*****************************************************************</echo>
   </target>
   
@@ -100,7 +99,6 @@
         <param name="inputdir" location="${args.input.dir}" if="args.input.dir"/>
         <param name="ditadir" location="${dita.dir}"/>
         <param name="ditaval" location="${dita.input.valfile}" if="dita.input.valfile"/>
-        <param name="ditaext" value="${dita.ext}" if="dita.ext"/>
         <param name="validate" value="${validate}"/>
         <param name="generatecopyouter" value="${generate.copy.outer}"/>
         <param name="outercontrol" value="${outer.control}"/>
@@ -166,7 +164,6 @@
       tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.DebugAndFilterModule">
         <param name="ditaval" location="${dita.input.valfile}" if="dita.input.valfile"/>
-        <param name="ditaext" value="${dita.ext}" if="dita.ext"/>
         <param name="ditadir" location="${dita.dir}"/>
         <param name="validate" value="${validate}"/>
         <param name="generatecopyouter" value="${generate.copy.outer}"/>
@@ -272,7 +269,6 @@
       reloadstylesheet="${dita.preprocess.reloadstylesheet.conref}"
       style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/conref.xsl" filenameparameter="file-being-processed">
       <mapper type="glob" from="*" to="*.cnrf" />
-      <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
       <param name="EXPORTFILE" expression="${exportfile.url}"/>
       <param name="TRANSTYPE" expression="${transtype}"/>
       <dita:extension id="dita.preprocess.conref.param" behavior="org.dita.dost.platform.InsertAction"/>
@@ -330,7 +326,6 @@
         classpathref="dost.class.path"
         reloadstylesheet="${dita.preprocess.reloadstylesheet.mapref}"
       style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl" filenameparameter="file-being-processed">
-      <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="TRANSTYPE" expression="${transtype}" />
       <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction"/>
       <xmlcatalog refid="dita.catalog"/>
@@ -357,7 +352,6 @@
     <pipeline message="Resolve keyref." taskname="keyref"
       tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.KeyrefModule">
-        <param name="ditaext" value="${dita.ext}" if="dita.ext"/>
       </module>
     </pipeline>
   </target>
@@ -387,7 +381,6 @@
         classpathref="dost.class.path"
         reloadstylesheet="${dita.preprocess.reloadstylesheet.mappull}"
       style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mappull.xsl">
-      <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="TRANSTYPE" expression="${transtype}" />
       <dita:extension id="dita.preprocess.mappull.param" behavior="org.dita.dost.platform.InsertAction"/>
       <xmlcatalog refid="dita.catalog"/>
@@ -415,7 +408,6 @@
       inputmap="${user.input.file}"
       tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.ChunkModule">
-        <param name="ditaext" value="${dita.ext}" if="dita.ext"/>
         <param name="transtype" value="${transtype}"/>
       </module>
     </pipeline>
@@ -456,7 +448,6 @@
       classpathref="dost.class.path"
       reloadstylesheet="${dita.preprocess.reloadstylesheet.maplink}"
       style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/maplink.xsl">
-      <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="INPUTMAP" expression="${user.input.file}" />
       <param name="include.rellinks" expression="${include.rellinks}" if="include.rellinks"/>
       <dita:extension id="dita.preprocess.maplink.param" behavior="org.dita.dost.platform.InsertAction"/>
@@ -507,7 +498,6 @@
       classpathref="dost.class.path"
       reloadstylesheet="${dita.preprocess.reloadstylesheet.topicpull}"
       style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/topicpull.xsl">
-      <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="TABLELINK" expression="${args.tablelink.style}" if="args.tablelink.style" />
       <param name="FIGURELINK" expression="${args.figurelink.style}" if="args.figurelink.style" />
       <param name="ONLYTOPICINMAP" expression="${onlytopic.in.map}" if="onlytopic.in.map"/>
@@ -548,7 +538,6 @@
       <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"></excludesfile>
 
       <param name="TRANSTYPE" expression="${transtype}"></param>
-      <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"></param>
       <param name="FILTERFILEURL" expression="${dita.input.filterfile.url}"></param>
       <param name="DRAFT" expression="${args.draft}" if="args.draft"></param>
       <param name="BASEDIR" expression="${basedir}"></param>

@@ -13,7 +13,6 @@
   <xsl:import href="gethref.xsl"/>
  
   <xsl:param name="contentwin"/>
-  <xsl:param name="ditaext"/>
   <xsl:param name="htmlext"/>
   <xsl:output method="text" encoding="UTF-8"/>
 

@@ -22,7 +22,6 @@
 <xsl:param name="WORKDIR" select="''"/>
 <xsl:param name="OUTEXT" select="'.html'"/>
 <xsl:param name="DBG" select="no"/>
-<xsl:param name="DITAEXT" select="'.xml'"/>
 <xsl:variable name="work.dir">
   <xsl:choose>
     <xsl:when test="$WORKDIR and not($WORKDIR='')">

@@ -105,8 +105,6 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
     //siblingStub is similar to stub. The only different is it is used to insert generated topicref sibling to current topicref
     private Element siblingStub = null;
 
-    private String ditaext = null;
-
     private Set<String> topicID;
 
     private final Set<String> copyto;
@@ -298,7 +296,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                     outputFileNameStack.push(outputFile);
 
                     //need generate new file based on new topic id
-                    String newFileName = FileUtils.resolveFile(filePath, idValue + ditaext);
+                    String newFileName = FileUtils.resolveFile(filePath, idValue + FILE_EXTENSION_DITA);
                     if(StringUtils.isEmptyString(idValue) || FileUtils.fileExists(newFileName)) {
                         final String t = newFileName;
                         newFileName = FileUtils.resolveFile(filePath, generateFilename());
@@ -637,7 +635,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                 if (getFragment(parseFilePath) != null) {
                     id = getFragment(parseFilePath);
                     if (chunkValue.contains(ATTR_CHUNK_VALUE_SELECT_BRANCH)) {
-                        outputFileName = FileUtils.resolveFile(filePath, id + ditaext);
+                        outputFileName = FileUtils.resolveFile(filePath, id + FILE_EXTENSION_DITA);
                         targetTopicId = id;
                         startFromFirstTopic = false;
                         selectMethod = ATTR_CHUNK_VALUE_SELECT_BRANCH;
@@ -647,7 +645,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                         topicDoc = DITAAttrUtils.getInstance().getTopicDoc(FileUtils.resolveFile(filePath, parseFilePath));
 
                         if (!StringUtils.isEmptyString(firstTopicID)) {
-                            outputFileName = FileUtils.resolveFile(filePath, firstTopicID + ditaext);
+                            outputFileName = FileUtils.resolveFile(filePath, firstTopicID + FILE_EXTENSION_DITA);
                             targetTopicId = firstTopicID;
                         } else {
                             outputFileName = currentParsingFile + FILE_EXTENSION_CHUNK;
@@ -656,7 +654,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                         }
                         selectMethod = ATTR_CHUNK_VALUE_SELECT_DOCUMENT;
                     } else {
-                        outputFileName = FileUtils.resolveFile(filePath, id + ditaext);
+                        outputFileName = FileUtils.resolveFile(filePath, id + FILE_EXTENSION_DITA);
                         targetTopicId = id;
                         startFromFirstTopic = false;
                         selectMethod = ATTR_CHUNK_VALUE_SELECT_TOPIC;
@@ -667,7 +665,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                     topicDoc = DITAAttrUtils.getInstance().getTopicDoc(FileUtils.resolveFile(filePath, parseFilePath));
 
                     if (!StringUtils.isEmptyString(firstTopicID)) {
-                        outputFileName = FileUtils.resolveFile(filePath, firstTopicID + ditaext);
+                        outputFileName = FileUtils.resolveFile(filePath, firstTopicID + FILE_EXTENSION_DITA);
                         targetTopicId = firstTopicID;
                     } else {
                         outputFileName = currentParsingFile + FILE_EXTENSION_CHUNK;
@@ -785,7 +783,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
      * @return generated file name
      */
 	private String generateFilename() {
-		return chunkFilenameGenerator.generateFilename("Chunk", ditaext);
+		return chunkFilenameGenerator.generateFilename("Chunk", FILE_EXTENSION_DITA);
 	}
 
     private void processChunk(final Element element, final String outputFile) {
@@ -868,12 +866,12 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                             if (chunkValue.contains(ATTR_CHUNK_VALUE_SELECT_TOPIC) || chunkValue.contains(ATTR_CHUNK_VALUE_SELECT_BRANCH)) {
                                 if (getFragment(hrefValue) != null) {
                                     // if we have an ID here, use it.
-                                    outputFileName = FileUtils.resolveFile(filePath, getFragment(hrefValue) + ditaext);
+                                    outputFileName = FileUtils.resolveFile(filePath, getFragment(hrefValue) + FILE_EXTENSION_DITA);
                                 } else {
                                     // Find the first topic id in target file if any.
                                     final String firstTopic = this.getFirstTopicId(FileUtils.resolveFile(filePath, hrefValue));
                                     if (!StringUtils.isEmptyString(firstTopic)) {
-                                        outputFileName = FileUtils.resolveFile(filePath, firstTopic + ditaext);
+                                        outputFileName = FileUtils.resolveFile(filePath, firstTopic + FILE_EXTENSION_DITA);
                                     } else {
                                         outputFileName = FileUtils.resolveFile(filePath,hrefValue);
                                     }
@@ -983,7 +981,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                         outputFileName = FileUtils.resolveFile(filePath, copytoValue);
                         //use id value
                     }else if(!StringUtils.isEmptyString(id)){
-                        outputFileName = FileUtils.resolveFile(filePath, id + ditaext);
+                        outputFileName = FileUtils.resolveFile(filePath, id + FILE_EXTENSION_DITA);
                     }else{
                         // use randomly generated file name
                         outputFileName = FileUtils.resolveFile(filePath, generateFilename());
@@ -1162,16 +1160,14 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
      * @param elem chunking topicref 
      * @param separate separate
      * @param chunkByTopic chunkByTopic
-     * @param ditaext ditaext
      */
     public void setup(final LinkedHashMap<String, String> changeTable, final Hashtable<String, String> conflictTable,
-            final Set<String> refFileSet, final Element elem, final boolean separate, final boolean chunkByTopic, final String ditaext,
+            final Set<String> refFileSet, final Element elem, final boolean separate, final boolean chunkByTopic,
             final ChunkFilenameGenerator chunkFilenameGenerator) {
         // Initialize ChunkTopicParser
         this.changeTable = changeTable;
         this.elem = elem;
         this.separate = separate;
-        this.ditaext  = ditaext;
         this.conflictTable = conflictTable;
         this.chunkFilenameGenerator =  chunkFilenameGenerator;
     }

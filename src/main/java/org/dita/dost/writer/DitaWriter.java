@@ -174,12 +174,6 @@ public final class DitaWriter extends AbstractXMLFilter {
             attValue = FileUtils.separatorsToUnix(attValue);
         }
 
-        if (extName != null) {
-	        if(attValue.indexOf(FILE_EXTENSION_DITAMAP) == -1){
-	            return FileUtils.replaceExtension(attValue, extName);
-	        }
-        }
-
         return attValue;
     }
     private static boolean notLocalURL(final String valueOfURL){
@@ -260,15 +254,6 @@ public final class DitaWriter extends AbstractXMLFilter {
             }
         } else {
             return null;
-        }
-
-        if(checkDITAHREF(atts)){
-            if(warnOfNoneTopicFormat(atts,attValue) == false){
-            	if (extName != null) {
-            		return FileUtils.replaceExtension(attValue, extName);
-            	}
-            }
-
         }
 
         return attValue;
@@ -511,8 +496,6 @@ public final class DitaWriter extends AbstractXMLFilter {
                             }else {
                                 //normal process
                                 target = updatedHref;
-                                //only replace extension name of topic files.
-                                target = replaceExtName(target);
                                 String tail ;
                                 if(sharpIndex == -1 ){
                                     if(target.indexOf(SHARP) == -1) {
@@ -556,7 +539,6 @@ public final class DitaWriter extends AbstractXMLFilter {
                             }else{
                                 //e.g conref = c.xml
                                 String target = updatedHref;
-                                target = replaceExtName(target);
                                 XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CONREF, target);
                                 conkeyrefValid = true;
                             }
@@ -598,22 +580,6 @@ public final class DitaWriter extends AbstractXMLFilter {
             }
         }
         return value;
-    }
-
-    /**
-     * Replace extension name for non-ditamap file.
-     * 
-     * @param target String
-     * @return String
-     */
-    private String replaceExtName(String target) {
-    	if (extName != null) {
-	        final String fileName = FileUtils.resolveFile("", target);
-	        if(FileUtils.isDITATopicFile(fileName)){
-	            target = FileUtils.replaceExtension(target, extName);
-	        }
-    	}
-        return target;
     }
 
     /**
@@ -974,13 +940,6 @@ public final class DitaWriter extends AbstractXMLFilter {
         try {
             traceFilename = new File(baseDir, inputFile);
             File outputFile = new File(tempDir, inputFile);
-            if (extName != null) {
-	            if (FileUtils.isDITAMapFile(inputFile.toLowerCase())) {
-	                outputFile = new File(tempDir, inputFile);
-	            } else {
-	                outputFile = new File(tempDir, FileUtils.replaceExtension(inputFile, extName));
-	            }
-            }
 
             path2Project = getPathtoProject(inputFile, traceFilename, outputUtils.getInputMapPathName().getAbsolutePath());            
             counterMap = new HashMap<String, Integer>();
@@ -1143,22 +1102,6 @@ public final class DitaWriter extends AbstractXMLFilter {
      */
     public void setTranstype(final String transtype) {
         this.transtype = transtype;
-    }
-
-    private String extName;
-    /**
-     * Get extension name.
-     * @return extension name
-     */
-    public String getExtName() {
-        return extName;
-    }
-    /**
-     * Set extension name.
-     * @param extName extension name
-     */
-    public void setExtName(final String extName) {
-        this.extName = extName;
     }
     
     @Override

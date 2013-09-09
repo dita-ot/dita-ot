@@ -331,8 +331,6 @@ Children are displayed in a numbered list, with the target title as the cmd and 
     </xsl:when>
     <!-- It's to a DITA file - process the file name (adding the html extension)
     and process the rest of the href -->
-    <!-- for local links respect dita.extname extension 
-      and for peer links accept both .xml and .dita bug:3059256-->
     <xsl:when test="(not(@scope) or @scope='local' or @scope='peer') and (not(@format) or @format='dita' or @format='DITA')">
       <xsl:call-template name="replace-extension">
         <xsl:with-param name="filename" select="@href"/>

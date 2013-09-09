@@ -82,7 +82,6 @@ final public class ChunkModule implements AbstractPipelineModule {
             throw new IllegalStateException("Logger not set");
         }
         final File tempDir = new File(input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR));
-        final String ditaext = input.getAttribute(ANT_INVOKER_PARAM_DITAEXT) != null ? input.getAttribute(ANT_INVOKER_PARAM_DITAEXT) : ".dita";
         final String transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
 
         if (!tempDir.isAbsolute()) {
@@ -91,7 +90,7 @@ final public class ChunkModule implements AbstractPipelineModule {
         //change to xml property
         final ChunkMapReader mapReader = new ChunkMapReader();
         mapReader.setLogger(logger);
-        mapReader.setup(ditaext, transtype);
+        mapReader.setup(transtype);
 
         Job job = null;
         try{

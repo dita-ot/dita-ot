@@ -50,9 +50,6 @@
 <!-- Integrate support for flagging with dita-ot pseudo-domain -->
 <xsl:include href="xslhtml/htmlflag.xsl"/>  
 
-<!-- DITAEXT file extension name of dita topic file -->
-<xsl:param name="DITAEXT" select="'.xml'"/>    
-     
 <!-- root rule -->
 <xsl:template match="/">
   <xsl:apply-templates/>

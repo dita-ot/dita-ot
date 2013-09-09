@@ -11,7 +11,7 @@
     <metadata>
       <keywords>
         <indexterm>command-line
-              tool<indexterm>parameters<indexterm>basedir</indexterm><indexterm>cleantemp</indexterm><indexterm>debug</indexterm><indexterm>ditadir</indexterm><indexterm>ditaext</indexterm><indexterm>ditalocale</indexterm><indexterm>draft</indexterm><indexterm>filter</indexterm><indexterm>grammarcache</indexterm><indexterm>i</indexterm><indexterm>logdir</indexterm><indexterm>outdir</indexterm><indexterm>outext</indexterm><indexterm>tempdir</indexterm><indexterm>transtype</indexterm><indexterm>validate</indexterm></indexterm></indexterm>
+              tool<indexterm>parameters<indexterm>basedir</indexterm><indexterm>cleantemp</indexterm><indexterm>debug</indexterm><indexterm>ditadir</indexterm><indexterm>ditalocale</indexterm><indexterm>draft</indexterm><indexterm>filter</indexterm><indexterm>grammarcache</indexterm><indexterm>i</indexterm><indexterm>logdir</indexterm><indexterm>outdir</indexterm><indexterm>tempdir</indexterm><indexterm>transtype</indexterm><indexterm>validate</indexterm></indexterm></indexterm>
       </keywords>
     </metadata>
   </prolog>
@@ -50,11 +50,6 @@
             <entry
               conref="ant-parameters-all-transformation-types.dita#ant-parameters-all-transformation-types/dita.dir.desc"/>
           </row>
-            <row importance="deprecated">
-              <entry><parmname>ditaext</parmname></entry>
-              <entry
-                conref="ant-parameters-all-transformation-types.dita#ant-parameters-all-transformation-types/dita.extname.desc"/>
-            </row>
           <row>
             <entry><parmname>ditalocale</parmname></entry>
             <entry conref="ant-parameters-common-html-transtypes.dita#ant-parameters-common-html-transtypes/args.dita.locale.desc"/>
@@ -88,11 +83,6 @@
             <entry><parmname>outdir</parmname></entry>
             <entry
               conref="ant-parameters-all-transformation-types.dita#ant-parameters-all-transformation-types/output.dir.desc"/>
-          </row>
-          <row>
-            <entry><parmname>outext</parmname></entry>
-            <entry
-              conref="ant-parameters-all-transformation-types.dita#ant-parameters-all-transformation-types/dita.ext.desc"/>
           </row>
           <row>
             <entry><parmname>tempdir</parmname></entry>

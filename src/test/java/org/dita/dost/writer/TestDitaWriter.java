@@ -137,7 +137,6 @@ public class TestDitaWriter {
         writer.setOutputUtils(outputUtils);
         writer.setTempDir(tempDir.getAbsoluteFile());
         writer.setKeyDefinitions(Collections.EMPTY_LIST);
-        writer.setExtName(".dita");
         writer.write(new File(baseDir, inputDir.getPath()).getAbsoluteFile(), "keyword.dita");
 
         compareKeyword(new File(baseDir, new File(inputDir, "keyword.dita").getPath()),

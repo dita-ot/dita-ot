@@ -70,8 +70,6 @@ public final class ChunkMapReader implements AbstractReader {
 
     private Set<String> refFileSet = null;
 
-    private String ditaext = null;
-
     private String transtype = null;
 
     private ProcessingInstruction workdir = null;
@@ -144,10 +142,10 @@ public final class ChunkMapReader implements AbstractReader {
 
                 // create the reference to the new file on root element.
                 String newFilename = inputFile.getName().substring(
-                        0, inputFile.getName().indexOf(FILE_EXTENSION_DITAMAP)) + ditaext;
+                        0, inputFile.getName().indexOf(FILE_EXTENSION_DITAMAP)) + FILE_EXTENSION_DITA;
                 File newFile = new File(inputFile.getParentFile().getAbsolutePath(),newFilename);
                 if (newFile.exists()) {
-                    newFilename = chunkFilenameGenerator.generateFilename("Chunk", ditaext);
+                    newFilename = chunkFilenameGenerator.generateFilename("Chunk", FILE_EXTENSION_DITA);
                     final String oldpath = newFile.getAbsolutePath();
                     newFile = new File(FileUtils.resolveFile(inputFile.getParentFile().getAbsolutePath(), newFilename));
                     // Mark up the possible name changing, in case that references might be updated.
@@ -478,7 +476,7 @@ public final class ChunkMapReader implements AbstractReader {
         try{
             final ChunkTopicParser chunkParser = new ChunkTopicParser();
             chunkParser.setLogger(logger);
-            chunkParser.setup(changeTable, conflictTable, refFileSet, elem, separate, chunkByTopic, ditaext, chunkFilenameGenerator);
+            chunkParser.setup(changeTable, conflictTable, refFileSet, elem, separate, chunkByTopic, chunkFilenameGenerator);
             chunkParser.write(filePath);
         }catch (final Exception e) {
             logger.logError(e.getMessage(), e) ;
@@ -542,11 +540,9 @@ public final class ChunkMapReader implements AbstractReader {
     }
     /**
      * Set up environment.
-     * @param ditaext ditaext
      * @param transtype transtype
      */
-    public void setup(final String ditaext, final String transtype) {
-        this.ditaext = ditaext;
+    public void setup(final String transtype) {
         this.transtype = transtype;
 
     }

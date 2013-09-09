@@ -81,82 +81,9 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
     /** Subject scheme file extension */
     private static final String SUBJECT_SCHEME_EXTENSION = ".subm";
     
-    /**
-     * File extension of source file.
-     */
-    private String extName = null;
     private File tempDir = null;
 
     private final OutputUtils outputUtils = new OutputUtils();
-
-    /**
-     * Update property map.
-     *
-     * @param listName name of map to update
-     * @param property property to update
-     */
-    private void updatePropertyMap(final Job property){
-        final Map<String, String> propValues = property.getCopytoMap();
-        if (propValues == null || propValues.isEmpty()){
-            return;
-        }
-        final Map<String, String> result = new HashMap<String, String>();
-        for (final Map.Entry<String, String> e: propValues.entrySet()) {
-            String key = e.getKey();
-            String value = e.getValue();
-            if (!FILE_EXTENSION_DITAMAP.equals("." + FileUtils.getExtension(value))) {
-                if (extName != null) {
-                    key = FileUtils.replaceExtension(key, extName);
-                    value = FileUtils.replaceExtension(value, extName);
-                }
-            }
-            result.put(key, value);
-        }
-        property.setCopytoMap(result);
-    }
-    
-    /**
-     * Update file extension in property set. 
-     *
-     * @param listName name of set to update
-     * @param property property to update
-     */
-    private void updatePropertySet(final String listName, final Job property){
-        final Set<String> propValues = property.getSet(listName);
-        if (propValues == null || propValues.isEmpty()){
-            return;
-        }
-        final Set<String> result = new HashSet<String>(propValues.size());
-        for (final String file: propValues) {
-            String f = file;
-            if (!FILE_EXTENSION_DITAMAP.equals("." + FileUtils.getExtension(file))) {
-                if (extName != null) {
-                    f = FileUtils.replaceExtension(f, extName);
-                }
-            }
-            result.add(f);
-        }
-        property.setSet(listName, result);
-    }
-    
-    /**
-     * Update property value.
-     * 
-     * @param listName name of value to update
-     * @param property property to update
-     */
-    private void updatePropertyString(final String listName, final Job property){
-        String propValue = property.getProperty(listName);
-        if (propValue == null || propValue.trim().length() == 0){
-            return;
-        }
-        if (!FILE_EXTENSION_DITAMAP.equals("." + FileUtils.getExtension(propValue))) {
-            if (extName != null) {
-            	propValue = FileUtils.replaceExtension(propValue, extName);
-            }
-        }
-        property.setProperty(listName, propValue);
-    }
     
     private DITAOTLogger logger;
 
@@ -196,10 +123,6 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             }
             ditaDir=new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR));
             final String transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
-            final String ext = input.getAttribute(ANT_INVOKER_PARAM_DITAEXT);
-            if (ext != null) {
-                extName = ext.startsWith(DOT) ? ext : (DOT + ext);
-            }
             File ditavalFile = null;
             if (input.getAttribute(ANT_INVOKER_PARAM_DITAVAL) != null ) {
                 ditavalFile = new File(input.getAttribute(ANT_INVOKER_PARAM_DITAVAL));
@@ -241,7 +164,6 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                 throw new DITAOTException(e.getMessage(), e);
             }
             fileWriter.setTempDir(tempDir);
-            fileWriter.setExtName(extName);
             fileWriter.setTranstype(transtype);
             if (filterUtils != null) {
             	fileWriter.setFilterUtils(filterUtils);
@@ -302,12 +224,6 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                     fileWriter.write(inputDir, filename);
                 }
             }
-
-            if (extName != null) {
-                updateList(tempDir);
-            }
-            //update dictionary.
-            updateDictionary(tempDir);
 
             // reload the property for processing of copy-to
             performCopytoTask(tempDir, new Job(tempDir));
@@ -669,62 +585,6 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
         
     }
 
-    /**
-     * Read job configuration, update properties, and serialise.
-     * 
-     * @param tempDir temporary directory path
-     * @throws IOException 
-     */
-    private void updateList(final File tempDir) throws IOException{
-        final Job job = new Job(tempDir);
-        updatePropertyString(INPUT_DITAMAP, job);
-        updatePropertySet(HREF_TARGET_LIST, job);
-        updatePropertySet(CONREF_LIST, job);
-        updatePropertySet(HREF_DITA_TOPIC_LIST, job);
-        updatePropertySet(FULL_DITA_TOPIC_LIST, job);
-        updatePropertySet(FULL_DITAMAP_TOPIC_LIST, job);
-        updatePropertySet(CONREF_TARGET_LIST, job);
-        updatePropertySet(COPYTO_SOURCE_LIST, job);
-        updatePropertyMap(job);
-        updatePropertySet(OUT_DITA_FILES_LIST, job);
-        updatePropertySet(CONREF_PUSH_LIST, job);
-        updatePropertySet(KEYREF_LIST, job);
-        updatePropertySet(CODEREF_LIST, job);
-        updatePropertySet(CHUNK_TOPIC_LIST, job);
-        updatePropertySet(HREF_TOPIC_LIST, job);
-        updatePropertySet(RESOURCE_ONLY_LIST, job);
-        job.write();
-    }
-
-    /**
-     * Update dictionary
-     * 
-     * @param tempDir temporary directory
-     */
-    private void updateDictionary(final File tempDir){
-        //orignal map
-        final Map<String, Set<String>> dic = readMapFromXML(FILE_NAME_SUBJECT_DICTIONARY);
-        //result map
-        final Map<String, Set<String>> resultMap = new HashMap<String, Set<String>>();
-        //Iterate the orignal map
-        for (final Map.Entry<String, java.util.Set<String>> entry: dic.entrySet()) {
-            //filename will be checked.
-            String filename = entry.getKey();
-            if (extName != null) {
-                if(FileUtils.isDITATopicFile(filename)){
-                    //Replace extension name.
-                    filename = FileUtils.replaceExtension(filename, extName);
-                }
-            }
-            //put the updated value into the result map
-            resultMap.put(filename, entry.getValue());
-        }
-
-        //Write the updated map into the dictionary file
-        this.writeMapToXML(resultMap, FILE_NAME_SUBJECT_DICTIONARY);
-        //File inputFile = new File(tempDir, FILE_NAME_SUBJECT_DICTIONARY);
-
-    }
     /**
      * Method for writing a map into xml file.
      */

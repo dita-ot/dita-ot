@@ -49,7 +49,6 @@
     <xslt in="${input}" out="${output.file}"
       style="${dita.plugin.com.sophos.tocjs.dir}/xsl/tocjs.xsl">
       <param name="contentwin" expression="${content.frame}" if="content.frame"/>
-      <param name="ditaext" expression="${dita.ext}" if="dita.ext"/>
       <param name="htmlext" expression="${out.ext}"/>
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
@@ -82,7 +81,6 @@
         extension="${out.ext}"
 		style="${dita.plugin.com.sophos.tocjs.dir}${file.separator}xsl${file.separator}frameset.xsl">
   	    <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
-        <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
         <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
         <param name="CSSPATH" expression="${CSSPATH}" if="csspath"/>
         <xmlcatalog refid="dita.catalog"/>

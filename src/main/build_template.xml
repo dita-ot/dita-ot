@@ -151,9 +151,6 @@
     <echo level="info">  dita.temp.dir=&lt;dir&gt;</echo>
     <echo level="info">    Temporary directory.</echo>
     <echo level="info"/>
-    <echo level="info">  dita.extname=&lt;ext&gt;</echo>
-    <echo level="info">    File extension name to be used in the temp directory. Default is ".xml".</echo>
-    <echo level="info"/>
     <echo level="info">  args.filter=&lt;file&gt;</echo>
     <echo level="info">    Name of the file that contains the filter/flaggin/revision information.</echo>
     <echo level="info"/>
