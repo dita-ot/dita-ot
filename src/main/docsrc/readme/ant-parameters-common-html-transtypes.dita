@@ -10,7 +10,7 @@
   <prolog>
     <metadata>
       <keywords>
-        <indexterm>Ant<indexterm>parameters<indexterm>args.artlbl</indexterm><indexterm>args.breadcrumbs</indexterm><indexterm>args.copycss</indexterm><indexterm>args.css</indexterm><indexterm>args.csspath</indexterm><indexterm>args.cssroot</indexterm><indexterm>args.dita.locale</indexterm><indexterm>args.ftr</indexterm><indexterm>args.gen.default.meta</indexterm><indexterm>args.gen.task.lbl</indexterm><indexterm>args.hdf</indexterm><indexterm>args.hdr</indexterm><indexterm>args.hide.parent.link</indexterm><indexterm>args.outext</indexterm><indexterm>args.rellinks</indexterm><indexterm>args.indexshow</indexterm><indexterm>args.xhtml.classattr</indexterm><indexterm>args.xsl</indexterm><indexterm>outer.control</indexterm></indexterm></indexterm>
+        <indexterm>Ant<indexterm>parameters<indexterm>args.artlbl</indexterm><indexterm>args.breadcrumbs</indexterm><indexterm>args.copycss</indexterm><indexterm>args.css</indexterm><indexterm>args.csspath</indexterm><indexterm>args.cssroot</indexterm><indexterm>args.dita.locale</indexterm><indexterm>args.ftr</indexterm><indexterm>args.gen.default.meta</indexterm><indexterm>args.gen.task.lbl</indexterm><indexterm>args.hdf</indexterm><indexterm>args.hdr</indexterm><indexterm>args.hide.parent.link</indexterm><indexterm>args.outext</indexterm><indexterm>args.indexshow</indexterm><indexterm>args.xhtml.classattr</indexterm><indexterm>args.xsl</indexterm><indexterm>outer.control</indexterm></indexterm></indexterm>
         <indexterm>XSLT
             parameters<indexterm>BREADCRUMBS</indexterm><indexterm>CSSPATH</indexterm><indexterm>FTR</indexterm><indexterm>genDefMeta</indexterm><indexterm>GENERATE-TASK-LABELS</indexterm><indexterm>HDR</indexterm><indexterm>NOPARENTLINK</indexterm><indexterm>PRESERVE-DITA-CLASS</indexterm><indexterm>OUTEXT</indexterm></indexterm>
       </keywords>
@@ -112,9 +112,6 @@
               <note type="notice">This parameter is deprecated in favor of the
                   <parmname>args.rellinks</parmname> parameter.</note></entry>
           </row>
-          <row conref="conref-dita-ot-parameters.dita#conref-dita-ot-parameters/args.rellinks">
-            <entry/>
-          </row>
           <row id="args.indexshow">
             <entry colname="COLSPEC0"><parmname>args.indexshow</parmname></entry>
             <entry id="args.indexshow.desc" colname="COLSPEC3">Specifies whether the content of
@@ -146,13 +143,6 @@
             <entry id="args.xsl.desc" colname="COLSPEC3">Specifies a custom XSL file to be used
               instead of the default XSL transformation (<filepath>xsl\dita2xhtml.xsl</filepath>).
               The parameter must specify a fully qualified file name.</entry>
-          </row>
-          <row id="onlytopic.in.map">
-            <entry colname="COLSPEC0"><parmname>onlytopic.in.map</parmname></entry>
-            <entry id="onlytopic.in.map.desc" colname="COLSPEC3">Specifies whether files that are
-              linked to, or referenced with a @conref attribute, generate output. If set to
-                <option>yes</option>, only files that are referenced directly from the map will
-              generate output.</entry>
           </row>
         </tbody>
       </tgroup>

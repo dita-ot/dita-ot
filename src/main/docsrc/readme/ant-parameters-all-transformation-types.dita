@@ -10,7 +10,7 @@
   <prolog>
     <metadata>
       <keywords>
-        <indexterm>Ant<indexterm>parameters<indexterm>args.debug</indexterm><indexterm>args.draft</indexterm><indexterm>args.figurelink.style</indexterm><indexterm>args.filter</indexterm><indexterm>args.grammar.cache</indexterm><indexterm>args.input</indexterm><indexterm>args.input.dir</indexterm><indexterm>args.logdir</indexterm><indexterm>args.tablelink.style</indexterm><indexterm>clean.temp</indexterm><indexterm>dita.dir</indexterm><indexterm>dita.input.valfile</indexterm><indexterm>dita.temp.dir</indexterm><indexterm>generate.copy.outer</indexterm><indexterm>onlytopic.in.map</indexterm><indexterm>output.dir</indexterm><indexterm>transtype</indexterm><indexterm>validate</indexterm></indexterm></indexterm>
+        <indexterm>Ant<indexterm>parameters<indexterm>args.debug</indexterm><indexterm>args.draft</indexterm><indexterm>args.figurelink.style</indexterm><indexterm>args.filter</indexterm><indexterm>args.grammar.cache</indexterm><indexterm>args.input</indexterm><indexterm>args.input.dir</indexterm><indexterm>args.logdir</indexterm><indexterm>args.tablelink.style</indexterm><indexterm>clean.temp</indexterm><indexterm>dita.dir</indexterm><indexterm>dita.input.valfile</indexterm><indexterm>dita.temp.dir</indexterm><indexterm>generate.copy.outer</indexterm><indexterm>onlytopic.in.map</indexterm><indexterm>output.dir</indexterm><indexterm>transtype</indexterm><indexterm>validate</indexterm><indexterm>args.rellinks</indexterm></indexterm></indexterm>
         <indexterm>XSLT
             parameters<indexterm>DRAFT</indexterm><indexterm>FIGURELINK</indexterm><indexterm>TABLELINK</indexterm></indexterm>
       </keywords>
@@ -91,6 +91,9 @@
             <entry id="args.logdir.desc">Specifies the location where the DITA-OT places log files
               for your project.</entry>
           </row>
+          <row conref="conref-dita-ot-parameters.dita#conref-dita-ot-parameters/args.rellinks">
+            <entry/>
+          </row>
           <row id="args.tablelink.style">
             <entry colname="COLSPEC0"><parmname>args.tablelink.style</parmname></entry>
             <entry id="args.tablelink.style.desc" colname="COLSPEC3">Specifies how cross references
@@ -100,14 +103,6 @@
                   <parmname>TABLELINK</parmname>.</ph><note>This parameter is not available for the
                 PDF transformation.</note></entry>
           </row>
-          <!--row id="basedir">
-              <entry><parmname>basedir</parmname></entry>
-              <entry id="basedir.desc">The directory where your project's ant build script resides.
-                The DITA-OT will look for your .dita files relative to this directory. DITA-OT's
-                default build script sets this as an attribute of the project, but you can also
-                define it as a project property.</entry>
-              <?Pub Caret 143?>
-            </row-->
           <row id="cleantemp">
             <entry><parmname>clean.temp</parmname></entry>
             <entry id="clean.temp.desc">Specifies whether the DITA-OT deletes the files in the
@@ -144,6 +139,13 @@
                 <li><option>3</option> – Shift the output directory so that it contains all output
                   for the publication.</li>
               </ul><p>See <xref href="generate-copy-outer.dita"/> for more information.</p></entry>
+          </row>
+          <row id="onlytopic.in.map">
+            <entry colname="COLSPEC0"><parmname>onlytopic.in.map</parmname></entry>
+            <entry id="onlytopic.in.map.desc" colname="COLSPEC3">Specifies whether files that are
+              linked to, or referenced with a @conref attribute, generate output. If set to
+              <option>yes</option>, only files that are referenced directly from the map will
+              generate output.</entry>
           </row>
           <row id="outer.control">
             <entry colname="COLSPEC0"><parmname>outer.control</parmname></entry>
