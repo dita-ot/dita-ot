@@ -48,7 +48,6 @@
   <extension-point id="depend.preprocess.copy-html.pre" name="Copy HTML pre-target"/>
   <extension-point id="depend.preprocess.copy-flag.pre" name="Copy flag pre-target"/>
   <extension-point id="depend.preprocess.copy-subsidiary.pre" name="Copy subsidiary pre-target"/>
-  <extension-point id="depend.preprocess.copy-generated-files.pre" name="Copy generated files pre-target"/>
   <extension-point id="depend.preprocess.post" name="Preprocessing post-target"/>
   <extension-point id="dita.preprocess.conref.param" name="Content reference XSLT parameters"/>
   <extension-point id="dita.preprocess.mapref.param" name="Map reference XSLT parameters"/>

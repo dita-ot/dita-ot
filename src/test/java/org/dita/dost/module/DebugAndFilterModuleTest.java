@@ -75,7 +75,6 @@ public class DebugAndFilterModuleTest {
         pipelineInput.setAttribute("outputdir", outDir.getPath());
         pipelineInput.setAttribute("tempDir", tmpDir.getPath());
         pipelineInput.setAttribute("ditadir", ditaDir.getAbsolutePath());
-        pipelineInput.setAttribute("ditaext", ".xml");
         pipelineInput.setAttribute("indextype", "xhtml");
         pipelineInput.setAttribute("encoding", "en-US");
         pipelineInput.setAttribute("targetext", ".html");
