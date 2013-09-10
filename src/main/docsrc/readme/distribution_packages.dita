@@ -28,9 +28,9 @@
           <li>Apache Xerces, version <keyword keyref="tool.xerces.version"/></li>
         </ul></p>
       <p>The minimal package has the following file names:<ul>
-          <li><filepath>DITA-OT<keyword keyref="release.version"
+          <li><filepath>DITA-OT<keyword keyref="version"
               ></keyword>_minimal_bin.zip</filepath></li>
-          <li><filepath>DITA-OT<keyword keyref="release.version"
+          <li><filepath>DITA-OT<keyword keyref="version"
               ></keyword>_minimal_bin.tar.gz</filepath></li>
         </ul></p>
     </section>
@@ -50,9 +50,9 @@
         <li>Apache Xerces, version <keyword keyref="tool.xerces.version"/></li>
       </ul>
       <p>The standard package has the following file names:<ul>
-          <li><filepath>DITA-OT<keyword keyref="release.version"
+          <li><filepath>DITA-OT<keyword keyref="version"
               ></keyword>_standard_bin.zip</filepath></li>
-          <li><filepath>DITA-OT<keyword keyref="release.version"
+          <li><filepath>DITA-OT<keyword keyref="version"
               ></keyword>_standard_bin.tar.gz</filepath></li>
         </ul></p>
     </section>
@@ -73,9 +73,9 @@
         <li>Saxon, version <keyword keyref="tool.saxon.version"/></li>
       </ul>
       <p>The client package has the following file names:<ul>
-        <li><filepath>DITA-OT<keyword keyref="release.version"
+        <li><filepath>DITA-OT<keyword keyref="version"
           ></keyword>_client_bin.zip</filepath></li>
-        <li><filepath>DITA-OT<keyword keyref="release.version"
+        <li><filepath>DITA-OT<keyword keyref="version"
           ></keyword>_client_bin.tar.gz</filepath></li>
       </ul></p>
     </section>
@@ -97,9 +97,9 @@
         <li>Saxon, version <keyword keyref="tool.saxon.version"/></li>
       </ul>
       <p>The full-easy-install package has the following file names:<ul>
-          <li><filepath>DITA-OT<keyword keyref="release.version"
+          <li><filepath>DITA-OT<keyword keyref="version"
               ></keyword>_full_easy_install_bin.zip</filepath></li>
-          <li><filepath>DITA-OT<keyword keyref="release.version"
+          <li><filepath>DITA-OT<keyword keyref="version"
               ></keyword>_full_easy_install_bin.tar.gz</filepath></li>
         </ul></p>
     </section>

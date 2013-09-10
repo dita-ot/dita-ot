@@ -17,11 +17,11 @@ originally written based on Eclipse 3.3, but much of the information
 still applies.</shortdesc>
 <taskbody>
 <context>You can use a template to develop documentation plug-in with DITA in Eclipse PDE and use
-      DITA-OT <keyword keyref="release.version"/> to build and pack the final plug-in. When you want to develop a documentation
+      DITA-OT <keyword keyref="version"/> to build and pack the final plug-in. When you want to develop a documentation
       plug-in with DITA in Eclipse, you cannot use the previous releases of DITA-OT in Eclipse to
       transform DITA to HTML. Though previous releases of DITA-OT support the feature to transform
       DITA files to Eclipse documentation plug-in, they are not integrated with Eclipse. With
-      DITA-OT <keyword keyref="release.version"/> integrated with WPT, you can develop document plug-ins with DITA in Eclipse PDE
+      DITA-OT <keyword keyref="version"/> integrated with WPT, you can develop document plug-ins with DITA in Eclipse PDE
       and build and pack the final plug-in by taking the following steps.</context>
 <steps>
 <step><cmd rev="r4">Create a new PDE project in Eclipse, and apply the DITA

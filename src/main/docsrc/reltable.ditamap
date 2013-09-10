@@ -18,7 +18,7 @@ href="http://dita.xml.org/wiki/the-dita-open-toolkit" scope="external">
 </topicref>
 <!--topicref format="html" href="http://dita.xml.org/node/3101" scope="external">
          <topicmeta>
-           <linktext>Information on the <keyword keyref="release.version"/> release</linktext>
+           <linktext>Information on the <keyword keyref="version"/> release</linktext>
          </topicmeta>
        </topicref-->
 <topicref format="html"

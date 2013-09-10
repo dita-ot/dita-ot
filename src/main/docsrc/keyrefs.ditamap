@@ -20,7 +20,15 @@ See the accompanying license.txt file for applicable licenses.
     href="http://www.oracle.com/technetwork/java/javase/downloads/index.html"/>
   <keydef format="html" keys="download.saxon" scope="external" href="http://saxon.sourceforge.net/"/>
   <!--VERSION NUMBERS: DITA-OT-->
-  <keydef keys="release.stable-version">
+  <keydef keys="stable-version">
+    <!-- DITA-OT: Latest stable version -->
+    <topicmeta>
+      <keywords>
+        <keyword>1.8.2</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef keys="stable-release">
     <!-- DITA-OT: Latest stable version -->
     <topicmeta>
       <keywords>
@@ -28,11 +36,19 @@ See the accompanying license.txt file for applicable licenses.
       </keywords>
     </topicmeta>
   </keydef>
-  <keydef keys="release.version">
+  <keydef keys="version">
     <!-- DITA-OT: Latest test version -->
     <topicmeta>
       <keywords>
         <keyword>2.0.M1</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef keys="release">
+    <!-- DITA-OT: Latest test version -->
+    <topicmeta>
+      <keywords>
+        <keyword>2.0</keyword>
       </keywords>
     </topicmeta>
   </keydef>

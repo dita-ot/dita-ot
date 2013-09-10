@@ -22,16 +22,16 @@
   <xref href="distribution_packages.dita"/></note>
 <p>Unzip or extract the &quot;full_easy_install&quot; zip file to a convenient directory, such as
       your C: drive&apos;s root directory. The package will create a directory such as
-          <filepath>C:\DITA-OT<keyword keyref="release.version"/>\</filepath> that contains not only
+          <filepath>C:\DITA-OT<keyword keyref="version"/>\</filepath> that contains not only
       the usual Toolkit materials but also all the run-time components needed to run the Toolkit in
       a basic evaluation mode.</p>
 <p>Browse over to this new directory and double-click on the <filepath>startcmd.bat</filepath> file
       in that directory. A new <wintitle>Command Prompt</wintitle> window will open up, with the
       environment variables already set to enable the Toolkit to run within that shell.</p>
-  <p>At the command prompt (usually <filepath>C:\DITA-OT<keyword keyref="release.version"
+  <p>At the command prompt (usually <filepath>C:\DITA-OT<keyword keyref="version"
         />\</filepath> for this version), type &quot;ant samples.web -f build_demo.xml&quot;. After
       a series of processing messages, there should be a new <filepath>out\</filepath> directory in
-      the <filepath>DITA-OT<keyword keyref="release.version"/>\</filepath> directory that contains a
+      the <filepath>DITA-OT<keyword keyref="version"/>\</filepath> directory that contains a
       folder with the resulting HTML output in it. Congratulations on creating your first example of
       DITA output!</p>
 <p>Now try the full set of transforms from a single command: <codeph>ant all -f
@@ -113,7 +113,7 @@ you do not specify a target for <filepath>build_demo.xml</filepath>,
 the default target is <codeph>prompt</codeph>. </p><p>You can also try your hand at modifying some of the sample scripts in the ant directory. These
         represent the kind of driver files that you would create for your own projects. You can
         easily adapt these to process your own test DITA files, for example. Call the other Ant
-        samples after this example: </p><pre platform="windows">C:\DITA-OT<keyword keyref="release.version"/>>ant -f samples\ant_sample\sample_xhtml.xml</pre>
+        samples after this example: </p><pre platform="windows">C:\DITA-OT<keyword keyref="version"/>>ant -f samples\ant_sample\sample_xhtml.xml</pre>
   <note>This is basically the same as running <codeph>ant samples.web -f build_demo.xml</codeph>, but
         intended for you to modify. </note><p>You
 will find the output for this exercise in the <filepath>samples/ant_sample/</filepath> directory

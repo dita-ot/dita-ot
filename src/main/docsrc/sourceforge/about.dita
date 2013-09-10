@@ -16,7 +16,7 @@
         <linktext>Download</linktext>
       </link>
       <linkinfo>
-        <p>Download and install DITA Open Toolkit <keyword keyref="release.stable-version"/>.</p>
+        <p>Download and install DITA Open Toolkit <keyword keyref="release"/>.</p>
       </linkinfo>
     </linklist>
     <linklist outputclass="documentation">

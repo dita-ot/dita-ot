@@ -16,12 +16,12 @@
                     </chhead>
                     <chrow>
                         <choption>Minimal</choption>
-                        <chdesc><filepath>DITA-OT<keyword keyref="release.version"
+                        <chdesc><filepath>DITA-OT<keyword keyref="version"
                                 />_minimal_bin.tar.gz</filepath></chdesc>
                     </chrow>
                     <chrow>
                         <choption>Standard</choption>
-                        <chdesc><filepath>DITA-OT<keyword keyref="release.version"
+                        <chdesc><filepath>DITA-OT<keyword keyref="version"
                                 />_standard_bin.tar.gz</filepath></chdesc>
                     </chrow>
                 </choicetable>
@@ -138,7 +138,7 @@ export CLASSPATH=$DITA_HOME/lib/commons-codec-<keyword keyref="tool.codec.versio
                 <info>The <filepath>samples\ant_sample directory</filepath> contains Ant scripts
                     designed to build various output formats.</info>
                 <stepxmp>
-                    <codeblock>/usr/local/share/DITA-OT<keyword keyref="release.version"/>$ ant -f samples/ant_sample/sample_all.xml</codeblock>
+                    <codeblock>/usr/local/share/DITA-OT<keyword keyref="version"/>$ ant -f samples/ant_sample/sample_all.xml</codeblock>
                 </stepxmp>
                 <stepresult>The generated output is written to the
                             <filepath><varname>DITA-dir</varname>\out\samples directory</filepath>.

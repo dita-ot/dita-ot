@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE bookmap PUBLIC "-//OASIS//DTD DITA BookMap//EN" "bookmap.dtd">
 <bookmap xml:lang="en">
-  <title>DITA Open Toolkit, version <keyword keyref="release.version"/></title>
+  <title>DITA Open Toolkit, version <keyword keyref="release"/></title>
   <bookmeta>
     <prodinfo>
       <prodname>DITA Open Toolkit</prodname>

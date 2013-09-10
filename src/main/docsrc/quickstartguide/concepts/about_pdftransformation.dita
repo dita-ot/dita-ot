@@ -20,7 +20,7 @@
 	by setting the value of the <codeph>clean.temp</codeph> ant property in your build script to "no," as shown in the following code snippet.
 	<codeblock>&lt; property name="clean.temp" value="no"/></codeblock></p>
   <note>The FO Plugin ant build script is located in the
-      following directory: <codeph>DITA-OT<keyword keyref="release.version"/>\demo\fo\build.xml</codeph>.</note>
+      following directory: <codeph>DITA-OT<keyword keyref="version"/>\demo\fo\build.xml</codeph>.</note>
   <p>The following table describes the auto-generated files relevant to debugging PDF transformation errors.</p>
   <table>
   <tgroup cols="2">

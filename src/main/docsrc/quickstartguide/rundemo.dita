@@ -34,7 +34,7 @@ prompt:<codeblock>[echo] Please enter the type of output to generate.
 <option>web</option>.</cmd>
 <info>This will build XHTML files from the DITA source.</info>
 <stepresult>You receive the following
-prompt:<codeblock>[echo] Ready to build C:\DITA-OT1.6.M5\samples\hierarchy.ditamap 
+prompt:<codeblock>[echo] Ready to build C:\DITA-OT<keyword keyref="version"/>\samples\hierarchy.ditamap 
 [echo] for web in out 
 [echo] 
 [input] Continue? (Y, [y], N, n)</codeblock></stepresult>
