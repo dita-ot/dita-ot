@@ -418,6 +418,21 @@ public final class Job {
     public String getProperty(final String key) {
         return (String) prop.get(key);
     }
+    
+    /**
+     * Get a map of string properties.
+     * 
+     * @return map of properties, may be an empty map
+     */
+    public Map<String, String> getProperties() {
+        final Map<String, String> res = new HashMap<String, String>();
+        for (final Map.Entry<String, Object> e: prop.entrySet()) {
+            if (e.getValue() instanceof String) {
+                res.put(e.getKey(), (String) e.getValue());
+            }
+        }
+        return Collections.unmodifiableMap(res);
+    }
         
     /**
      * Set property value.

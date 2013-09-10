@@ -185,7 +185,7 @@
     <job-helper file="keyref.list" property="keyreflist"/>
     <job-helper file="canditopics.list" property="canditopicslist"/>
     <job-helper file="resourceonly.list" property="resourceonlylist"/>
-    <xmlpropertyreader file="${dita.temp.dir}/dita.xml.properties"/>
+    <job-property dir="${dita.temp.dir}"/>
     <dirname property="dita.map.output.dir" file="${output.dir}/${user.input.file}" />
     <condition property="noConref">
       <length file="${dita.temp.dir}/${conreffile}" length="0"/>
@@ -418,7 +418,7 @@
     <job-helper file="resourceonly.list" property="resourceonlylist"/>
     <job-helper file="copytosource.list" property="copytosourcelist"/>
     <job-helper file="copytotarget2sourcemap.list" property="copytotarget2sourcemaplist"/>
-  	<xmlpropertyreader file="${dita.temp.dir}/dita.xml.properties"/>
+    <job-property dir="${dita.temp.dir}"/>
   	<condition property="noTopic">
   	    <length file="${dita.temp.dir}/${fullditatopicfile}" length="0"/>
   	</condition>
