@@ -64,7 +64,7 @@ final class ConrefPushModule implements AbstractPipelineModule {
 
         final ConrefPushReader reader = new ConrefPushReader();
         reader.setLogger(logger);
-        for(final FileInfo f: job.getFileInfo().values()) {
+        for(final FileInfo f: job.getFileInfo()) {
             if (f.isConrefPush) {
                 final File file = new File(tempDir, f.file);
                 logger.logInfo("Reading  " + file.getAbsolutePath());

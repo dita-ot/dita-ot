@@ -73,7 +73,7 @@ final class MoveIndexModule implements AbstractPipelineModule {
                 .append(SLASH).append(MAP_TOPICMETA.localName)
                 .append(SLASH).append(TOPIC_KEYWORDS.localName).toString());
 
-        for(final FileInfo f: job.getFileInfo().values()){
+        for(final FileInfo f: job.getFileInfo()){
             if (f.isActive && "ditamap".equals(f.format)) {
                 //FIXME: this reader needs parent directory for further process
                 indexReader.read(new File(tempDir, f.file).getAbsolutePath());

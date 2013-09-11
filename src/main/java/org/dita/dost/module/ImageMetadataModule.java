@@ -66,7 +66,7 @@ final class ImageMetadataModule implements AbstractPipelineModule {
                                                                        tempDir,
                                                                        job.getProperty("uplevels"));
         writer.setLogger(logger);
-        for (final FileInfo f: job.getFileInfo().values()) {
+        for (final FileInfo f: job.getFileInfo()) {
             if (!f.isResourceOnly && ((f.isActive && "dita".equals(f.format)) || f.isChunked || f.isChunkedDitaMap)) {
                 writer.write(new File(tempDir, f.file).getAbsolutePath());
             }

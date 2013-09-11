@@ -105,7 +105,7 @@ final class KeyrefModule implements AbstractPipelineModule {
         }
         final Map<String, Element> keyDefinition = reader.getKeyDefinition();
         //get files which have keyref attr
-        final Map<String, FileInfo> files = job.getFileInfo();
+        final Map<String, FileInfo> files = job.getFileInfoMap();
         final Set<String> parseList = new HashSet<String>();
         for (final FileInfo f: files.values()) {
 	        //Conref Module will change file's content, it is possible that tags with @keyref are copied in

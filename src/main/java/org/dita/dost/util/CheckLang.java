@@ -87,7 +87,7 @@ public final class CheckLang extends Task {
                 setActiveProjectProperty("htmlhelp.locale", langCode);
             }else{
                 //parse topic files
-                for (final FileInfo f: job.getFileInfo().values()){
+                for (final FileInfo f: job.getFileInfo()){
                     if (f.isActive && ATTR_FORMAT_VALUE_DITA.equals(f.format)) {
                         final File topicFile = new File(tempdir, f.file);
                         if(topicFile.exists()){

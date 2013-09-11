@@ -105,7 +105,7 @@ final public class ChunkModule implements AbstractPipelineModule {
             final Document doc = builder.parse(new File(mapFile));
             final Element root = doc.getDocumentElement();
             if(root.getAttribute(ATTRIBUTE_NAME_CLASS).contains(" eclipsemap/plugin ") && transtype.equals(INDEX_TYPE_ECLIPSEHELP)){
-                for (final FileInfo f: job.getFileInfo().values()) {
+                for (final FileInfo f: job.getFileInfo()) {
                     if (f.isActive && ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
                         mapFile = new File(tempDir, f.file).getAbsolutePath();
                         mapReader.read(mapFile);
@@ -149,7 +149,7 @@ final public class ChunkModule implements AbstractPipelineModule {
         topicRefWriter.setChangeTable(changeTable);
         topicRefWriter.setup(conflictTable);
         try{
-            for (final FileInfo f: job.getFileInfo().values()) {
+            for (final FileInfo f: job.getFileInfo()) {
                 if (f.isActive && (ATTR_FORMAT_VALUE_DITA.equals(f.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format))) {
                     topicRefWriter.write(tempDir.getAbsoluteFile(), new File(f.file), relativePath2fix);
                 }
@@ -175,12 +175,12 @@ final public class ChunkModule implements AbstractPipelineModule {
         }
 
         final Set<String> hrefTopics = new HashSet<String>();
-        for (final FileInfo f: job.getFileInfo().values()) {
+        for (final FileInfo f: job.getFileInfo()) {
             if (f.isNonConrefTarget) {
                 hrefTopics.add(f.file);
             }
         }
-        for (final FileInfo f: job.getFileInfo().values()) {
+        for (final FileInfo f: job.getFileInfo()) {
             if (f.isSkipChunk) {
                 final String s = f.file;
                 if (!StringUtils.isEmptyString(s) && getFragment(s) == null) {
@@ -204,7 +204,7 @@ final public class ChunkModule implements AbstractPipelineModule {
 
         final Set<String> topicList = new LinkedHashSet<String>(INT_128);
         final Set<String> oldTopicList = new HashSet<String>();
-        for (final FileInfo f: job.getFileInfo().values()) {
+        for (final FileInfo f: job.getFileInfo()) {
             if (f.isActive && ATTR_FORMAT_VALUE_DITA.equals(f.format)) {
                 oldTopicList.add(f.file);
             }
@@ -223,7 +223,7 @@ final public class ChunkModule implements AbstractPipelineModule {
         final Set<String> chunkedTopicSet=new LinkedHashSet<String>(INT_128);
         final Set<String> chunkedDitamapSet=new LinkedHashSet<String>(INT_128);
         final Set<String> ditamapList = new HashSet<String>();
-        for (final FileInfo f: job.getFileInfo().values()) {
+        for (final FileInfo f: job.getFileInfo()) {
             if (f.isActive && ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
                 ditamapList.add(f.file);
             }
@@ -303,7 +303,7 @@ final public class ChunkModule implements AbstractPipelineModule {
             }
         }
 
-        for (FileInfo f: job.getFileInfo().values()) {
+        for (FileInfo f: job.getFileInfo()) {
             if (ATTR_FORMAT_VALUE_DITA.equals(f.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
                 f.isActive = false;
             }

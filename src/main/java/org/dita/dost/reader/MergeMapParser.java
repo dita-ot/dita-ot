@@ -233,7 +233,7 @@ public final class MergeMapParser extends XMLFilterImpl {
         // if list item not in visitedSet then call MergeTopicParser to parse it
         try{
             final Job job = new Job(tempdir);
-            for (final FileInfo f: job.getFileInfo().values()) {
+            for (final FileInfo f: job.getFileInfo()) {
                 if (f.isTarget) {
                     String element = f.file;
                     if (!dirPath.equals(tempdir)) {

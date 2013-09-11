@@ -180,7 +180,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 
             final Map<String, Set<String>> dic = readMapFromXML(FILE_NAME_SUBJECT_DICTIONARY);
 
-            for (final FileInfo f: job.getFileInfo().values()) {
+            for (final FileInfo f: job.getFileInfo()) {
                 if ((f.isActive && ("dita".equals(f.format) || "ditamap".equals(f.format)))
                         || f.isConrefTarget || f.isCopyToSource) {
                     final String filename = f.file;

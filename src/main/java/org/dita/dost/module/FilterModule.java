@@ -51,7 +51,7 @@ final class FilterModule implements AbstractPipelineModule {
             throw new DITAOTException(e);
         }
 
-        final Collection<FileInfo> files = job.getFileInfo().values();
+        final Collection<FileInfo> files = job.getFileInfo();
         
         final ProfilingFilter writer = new ProfilingFilter();
         writer.setLogger(logger);

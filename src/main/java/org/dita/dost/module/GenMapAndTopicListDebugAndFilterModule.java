@@ -832,14 +832,14 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
         for (final String dst: copytoMap.keySet()) {
             final String src = copytoMap.get(dst);
             //if (new File(baseInputDir + File.separator + prefix, src).exists()) {
-            if (prop.getFileInfo().containsKey(dst)) {
+            if (prop.getFileInfoMap().containsKey(dst)) {
                 tempMap.put(dst, src);
                 // Add the copy-to target to conreflist when its source has
                 // conref
 //                if (conrefSet.contains(src)) {
 //                    conrefSet.add(dst);
 //                }
-                final FileInfo orig = prop.getFileInfo().get(src);
+                final FileInfo orig = prop.getFileInfoMap().get(src);
                 final FileInfo.Builder b = new FileInfo.Builder(orig);
                 b.uri(toURI(new File(dst)));
                 final FileInfo f = b.build();

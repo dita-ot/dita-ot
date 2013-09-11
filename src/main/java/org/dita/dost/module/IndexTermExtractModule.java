@@ -122,13 +122,13 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
          * Parse topic list and ditamap list from the input dita.list file
          */
         topicList = new ArrayList<String>();
-        for (final FileInfo f: prop.getFileInfo().values()) {
+        for (final FileInfo f: prop.getFileInfo()) {
             if ("dita".equals(f.format) && f.isActive && !f.isResourceOnly) {
                 topicList.add(f.file);
             }
         }
         ditamapList = new ArrayList<String>();
-        for (final FileInfo f: prop.getFileInfo().values()) {
+        for (final FileInfo f: prop.getFileInfo()) {
             if ("ditamap".equals(f.format) && f.isActive && !f.isResourceOnly) {
                 ditamapList.add(f.file);
             }

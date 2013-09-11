@@ -485,12 +485,21 @@ public final class Job {
     }
 
     /**
+     * Get all file info objects as a map
+     * 
+     * @return map of file info objects, where the key is the {@link FileInfo#file} value. May be empty
+     */
+    public Map<String, FileInfo> getFileInfoMap() {
+        return Collections.unmodifiableMap(new HashMap<String, FileInfo>(files));
+    }
+    
+    /**
      * Get all file info objects
      * 
-     * @return map of file info objects, where the key is the {@link FileInfo#file} value
+     * @return collection of file info objects, may be empty
      */
-    public Map<String, FileInfo> getFileInfo() {
-        return Collections.unmodifiableMap(new HashMap<String, FileInfo>(files));
+    public Collection<FileInfo> getFileInfo() {
+        return Collections.unmodifiableCollection(files.values());
     }
     
     /**
