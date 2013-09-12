@@ -499,7 +499,9 @@ public final class Job {
      * @return collection of file info objects, may be empty
      */
     public Collection<FileInfo> getFileInfo() {
-        return Collections.unmodifiableCollection(files.values());
+        // FIXME: For some reason, integration test 3308775 fails if the implementation is e.g.
+        // return Collections.unmodifiableCollection(new ArrayList<FileInfo>(files.values()));
+        return getFileInfoMap().values();
     }
     
     /**
