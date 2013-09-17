@@ -10,8 +10,11 @@ package org.dita.dost.util;
 
 import static org.dita.dost.util.Constants.*;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.CharConversionException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -42,13 +45,16 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * This class is for converting charset and escaping
- * entities in html help component files.
- * 
- * @version 1.0 2010-09-30
- * 
- * @author Zhang Di Hua
- */
+* This class is for converting charset and escaping
+* entities in html help component files.
+*   Version 1.0 of this class was written by Zhang Di Hua in 2010-09-30 
+* 	Version 1.1 modified by Louis Lecaroz in 2013-09-16: Full UTF-8 decoding on 4 bytes managing 1111998 chars instead of 65535, with entities encoding 
+* 		instead of question marks on unknown characters in the destination charset. This is a simplified decoding with limited checkings on malformed UTF-8 contents
+*
+* @version 1.1 2013-09-16
+*
+* @author Zhang Di Hua
+*/
 public final class ConvertLang extends Task {
     private static final String tag1 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     private static final String tag2 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>[OPTIONS]";
@@ -425,14 +431,15 @@ public final class ConvertLang extends Task {
     private void convertEntityAndCharset(final File inputFile, final String format) {
         final String fileName = inputFile.getAbsolutePath();
         final File outputFile = new File(fileName + FILE_EXTENSION_TEMP);
-        BufferedReader reader = null;
+        BufferedInputStream reader= null;
         BufferedWriter writer = null;
         try {
             //prepare for the input and output
-            final FileInputStream inputStream = new FileInputStream(inputFile);
-            final InputStreamReader streamReader = new InputStreamReader(inputStream, UTF8);
+            final FileInputStream inputStream = new FileInputStream(inputFile); // Open in binary instead of UTF8 as we now have our own code to manage a full UTF8 decoding
+            // final InputStreamReader streamReader = new InputStreamReader(inputStream, UTF8); 
             //wrapped into reader
-            reader = new BufferedReader(streamReader);
+            // reader = new BufferedReader(inputStream);
+            reader=new BufferedInputStream(inputStream);
 
             final FileOutputStream outputStream = new FileOutputStream(outputFile);
             //get new charset
@@ -443,20 +450,59 @@ public final class ConvertLang extends Task {
             writer = new BufferedWriter(streamWriter);
 
             //read a character
-            int charCode = reader.read();
-            while(charCode != -1){
-                final String key = String.valueOf(charCode);
-                //Is an entity char
-                if(entityMap.containsKey(key)){
+            for(int byteCode = reader.read(); byteCode!=-1; byteCode = reader.read()) {
+            	ByteArrayOutputStream readBytesList = new ByteArrayOutputStream(); // Used for converting bytes into string
+            	readBytesList.write((byte) byteCode);
+    /*
+            	Le premier octet d’une séquence UTF-8 valide ne peut prendre que les valeurs hexadécimales 00 à 7F ou C2 à F4 :
+
+            	    le premier octet hexadécimal 00 à 7F d’une séquence n’est suivi d’aucun octet de continuation ;
+            	    le premier octet hexadécimal C2 à DF d’une séquence est toujours suivi d’un seul octet de continuation (chacun de valeur hexadécimale entre 80 et BF) ;
+            	    le premier octet hexadécimal E0 à EF d’une séquence est toujours suivi de deux octets de continuation (chacun de valeur hexadécimale entre 80 et BF) ;
+            	        cependant, si le premier octet d’une séquence prend la valeur hexadécimale E0, le premier octet de continuation est restreint à une valeur hexadécimale entre A0 et BF ;
+            	        cependant, si le premier octet d’une séquence prend la valeur hexadécimale ED, le premier octet de continuation est restreint à une valeur hexadécimale entre 80 et 9F ;
+            	    le premier octet hexadécimal F0 à F4 d’une séquence est toujours suivi de trois octets de continuation (chacun de valeur hexadécimale entre 80 et BF) ;
+            	        cependant, si le premier octet d’une séquence prend la valeur hexadécimale F0, le premier octet de continuation est restreint à une valeur hexadécimale entre 90 et BF ;
+            	        cependant, si le premier octet d’une séquence prend la valeur hexadécimale F4, le premier octet de continuation est restreint à une valeur hexadécimale entre 80 et 8F.
+    */
+            	int utfCount=-1;	//  Le premier octet d’une séquence UTF-8 valide ne peut prendre que les valeurs hexadécimales 00 à 7F ou C2 à F4 :
+            	int codePoint=byteCode; // This is the UTF-8 code point value which will contain the numeric value based on the UTF-8 binary coding
+            	for(
+        			int initialUtfCount=(
+            			utfCount=byteCode>=0x00  && byteCode<=0x7F?0:( // 7 Bits code, nothing to do, already done
+            				byteCode>=0xC2 && byteCode<=0xDF?1:( // Sequence of one byte following the starting code
+            					byteCode>=0xE0 && byteCode<=0xEF?2:( // Sequence of two byte following the starting code
+            						byteCode>=0xF0 && byteCode<=0xF4?3:-1 // Sequence of three byte following the starting code
+            					)
+            				)
+            			)
+        			);
+        			utfCount>0; utfCount--
+        		)	{
+            		
+            		// First loop, initialize the codePoint with the first read byte contained in the byteCode after having removd the sequence code
+            		if(initialUtfCount==utfCount)  codePoint=(byteCode&(0xFF>>(utfCount+2)))<<(initialUtfCount*6);
+            		
+            		int nextByteCode=reader.read();
+            		if(nextByteCode==-1) break;
+            		
+            		codePoint|=(nextByteCode&0x3F)<<((utfCount-1)*6); // Add next values in the code point afterin having removed sequence code and shift the content at the right place
+            		readBytesList.write((byte) nextByteCode); 
+         		}
+            	if(utfCount!=0) throw new CharConversionException(); // utfCount must be zero or this means an UTF-8 malformed string 
+            	
+                if(entityMap.containsKey(String.valueOf(codePoint))) {
                     //get related entity
-                    final String value = entityMap.get(key);
+                    final String value = entityMap.get(String.valueOf(codePoint));
                     //write entity into output file
                     writer.write(value);
-                }else{
-                    //normal process
-                    writer.write(charCode);
+                }else {        	
+        			//checking if the unicode char read previously can be converted into the output charset or put its entity instead of a question mark
+                	String originalString= readBytesList.toString(UTF8); // Convert read bytes/UTF-8 sequence into a UTF-16 internal java string        	
+                	String decodedString = new String(originalString.getBytes(charset),charset);
+    	        	if(format.equals(ATTRIBUTE_FORMAT_VALUE_HTML) && !originalString.equals(decodedString)) writer.write("&#"+String.valueOf(codePoint)+";"); // If the decoded string does not match to the original one, there is a matching issue in the destination charset and, let's put its entity value 
+    	        	else writer.write(originalString); // correctly converted, put the corresponding string
                 }
-                charCode = reader.read();
             }
         } catch (final FileNotFoundException e) {
             logger.logError(e.getMessage(), e) ;
