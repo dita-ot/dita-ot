@@ -44,6 +44,12 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.XmlDeclaration;
+import org.jsoup.parser.Parser;
+import org.jsoup.select.Elements;
+
+
 /**
 * This class is for converting charset and escaping
 * entities in html help component files.
@@ -217,6 +223,7 @@ public final class ConvertLang extends Task {
         }
 
     }
+
     //Recursive method
     private void convertCharset(final File inputFile){
         if(inputFile.isDirectory()){
@@ -236,42 +243,32 @@ public final class ConvertLang extends Task {
             try {
                 //prepare for the input and output
                 final FileInputStream inputStream = new FileInputStream(inputFile);
-                final InputStreamReader streamReader = new InputStreamReader(inputStream, UTF8);
-                reader = new BufferedReader(streamReader);
 
+                // Due to the DITA-OT framework, input should XHTML, so, force the XML Parser for analyzing the file
+                org.jsoup.nodes.Document doc = Jsoup.parse(inputStream, UTF8, "", Parser.xmlParser());
+    
+                // Remove XML declaration
+                if(doc.childNodeSize()!=0 &&  doc.childNode(0) instanceof XmlDeclaration) doc.childNode(0).remove();
+                // Set the correct charset in the meta tag
+                doc.head().select("meta[http-equiv]");
+        		final Elements result=doc.head().select("meta[http-equiv~=(?i)content-type]");
+        		for(org.jsoup.nodes.Element entry: result) {
+        			StringBuffer newContentAttributeValue=new StringBuffer();
+        			for(String currentValue:entry.attr("content").split(";")) { 
+        				if(newContentAttributeValue.length()>0) newContentAttributeValue.append(';');
+
+        				String regEx="(?i)^(\\s*charset\\s*)=\\s*(.*)\\s*$";
+        				newContentAttributeValue.append(currentValue.replaceAll(regEx, "$1="+charsetMap.get(ATTRIBUTE_FORMAT_VALUE_HTML)));
+
+        			}
+        			entry.attr("content", newContentAttributeValue.toString());
+        		}
+                //convert charset
                 final FileOutputStream outputStream = new FileOutputStream(outputFile);
                 final OutputStreamWriter streamWriter = new OutputStreamWriter(outputStream, UTF8);
+                //wrapped into writer
                 writer = new BufferedWriter(streamWriter);
-
-                String value = reader.readLine();
-                while(value != null){
-                    //meta tag contains charset found
-                    if(value.contains("<meta http-equiv") && value.contains("charset")){
-                        final int insertPoint = value.indexOf("charset=") + "charset=".length();
-                        final String subString = value.substring(0, insertPoint);
-                        final int remainIndex = value.indexOf(UTF8) + UTF8.length();
-                        final String remainString = value.substring(remainIndex);
-                        //change the charset
-                        final String newValue = subString + charsetMap.get(ATTRIBUTE_FORMAT_VALUE_HTML) + remainString;
-                        //write into the output file
-                        writer.write(newValue);
-                        //add line break
-                        writer.write(LINE_SEPARATOR);
-                    }else{
-                        if(value.contains(tag1)){
-                            value = replaceXmlTag(value,tag1);
-                        }else if(value.contains(tag2)){
-                            value = replaceXmlTag(value,tag2);
-                        }else if(value.contains(tag3)){
-                            value = replaceXmlTag(value,tag3);
-                        }
-
-                        //other values
-                        writer.write(value);
-                        writer.write(LINE_SEPARATOR);
-                    }
-                    value = reader.readLine();
-                }
+        		writer.write(doc.toString());
             } catch (final FileNotFoundException e) {
                 logger.logError(e.getMessage(), e) ;
             } catch (final UnsupportedEncodingException e) {
@@ -454,18 +451,18 @@ public final class ConvertLang extends Task {
             	ByteArrayOutputStream readBytesList = new ByteArrayOutputStream(); // Used for converting bytes into string
             	readBytesList.write((byte) byteCode);
     /*
-            	Le premier octet dâ€™une sÃ©quence UTF-8 valide ne peut prendre que les valeurs hexadÃ©cimales 00 Ã  7F ou C2 Ã  F4 :
+            	Le premier octet d’une séquence UTF-8 valide ne peut prendre que les valeurs hexadécimales 00 à 7F ou C2 à F4 :
 
-            	    le premier octet hexadÃ©cimal 00 Ã  7F dâ€™une sÃ©quence nâ€™est suivi dâ€™aucun octet de continuation ;
-            	    le premier octet hexadÃ©cimal C2 Ã  DF dâ€™une sÃ©quence est toujours suivi dâ€™un seul octet de continuation (chacun de valeur hexadÃ©cimale entre 80 et BF) ;
-            	    le premier octet hexadÃ©cimal E0 Ã  EF dâ€™une sÃ©quence est toujours suivi de deux octets de continuation (chacun de valeur hexadÃ©cimale entre 80 et BF) ;
-            	        cependant, si le premier octet dâ€™une sÃ©quence prend la valeur hexadÃ©cimale E0, le premier octet de continuation est restreint Ã  une valeur hexadÃ©cimale entre A0 et BF ;
-            	        cependant, si le premier octet dâ€™une sÃ©quence prend la valeur hexadÃ©cimale ED, le premier octet de continuation est restreint Ã  une valeur hexadÃ©cimale entre 80 et 9F ;
-            	    le premier octet hexadÃ©cimal F0 Ã  F4 dâ€™une sÃ©quence est toujours suivi de trois octets de continuation (chacun de valeur hexadÃ©cimale entre 80 et BF) ;
-            	        cependant, si le premier octet dâ€™une sÃ©quence prend la valeur hexadÃ©cimale F0, le premier octet de continuation est restreint Ã  une valeur hexadÃ©cimale entre 90 et BF ;
-            	        cependant, si le premier octet dâ€™une sÃ©quence prend la valeur hexadÃ©cimale F4, le premier octet de continuation est restreint Ã  une valeur hexadÃ©cimale entre 80 et 8F.
+            	    le premier octet hexadécimal 00 à 7F d’une séquence n’est suivi d’aucun octet de continuation ;
+            	    le premier octet hexadécimal C2 à DF d’une séquence est toujours suivi d’un seul octet de continuation (chacun de valeur hexadécimale entre 80 et BF) ;
+            	    le premier octet hexadécimal E0 à EF d’une séquence est toujours suivi de deux octets de continuation (chacun de valeur hexadécimale entre 80 et BF) ;
+            	        cependant, si le premier octet d’une séquence prend la valeur hexadécimale E0, le premier octet de continuation est restreint à une valeur hexadécimale entre A0 et BF ;
+            	        cependant, si le premier octet d’une séquence prend la valeur hexadécimale ED, le premier octet de continuation est restreint à une valeur hexadécimale entre 80 et 9F ;
+            	    le premier octet hexadécimal F0 à F4 d’une séquence est toujours suivi de trois octets de continuation (chacun de valeur hexadécimale entre 80 et BF) ;
+            	        cependant, si le premier octet d’une séquence prend la valeur hexadécimale F0, le premier octet de continuation est restreint à une valeur hexadécimale entre 90 et BF ;
+            	        cependant, si le premier octet d’une séquence prend la valeur hexadécimale F4, le premier octet de continuation est restreint à une valeur hexadécimale entre 80 et 8F.
     */
-            	int utfCount=-1;	//  Le premier octet dâ€™une sÃ©quence UTF-8 valide ne peut prendre que les valeurs hexadÃ©cimales 00 Ã  7F ou C2 Ã  F4 :
+            	int utfCount=-1;	//  Le premier octet d’une séquence UTF-8 valide ne peut prendre que les valeurs hexadécimales 00 à 7F ou C2 à F4 :
             	int codePoint=byteCode; // This is the UTF-8 code point value which will contain the numeric value based on the UTF-8 binary coding
             	for(
         			int initialUtfCount=(

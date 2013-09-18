@@ -78,6 +78,7 @@
         <pathelement location="${lib.dir}/xml-apis.xml"/>
         <pathelement location="${lib.dir}/resolver.jar"/>
         <pathelement location="${lib.dir}/commons-codec-1.4.jar"/>
+        <pathelement location="${lib.dir}/jsoup-1.7.2.jar"/>  
       </classpath>
     </javac>
   </target>
